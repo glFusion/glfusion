@@ -1,0 +1,5 @@
+{new_table_row}
+<td style="white-space:nowrap;vertical-align:top;text-align:left;">
+    {subcategories}
+</td>
+{end_of_row}

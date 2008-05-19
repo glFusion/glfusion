@@ -1,0 +1,12 @@
+<h1>{lang_title}</h1>
+<form name="confirm" method="post" action="{s_form_action}">
+<div>
+<input type="hidden" name="aid" value="{aid}"{xhtml}>
+{message}
+<br{xhtml}>
+<br{xhtml}>
+<input type="hidden" name="action" value="{action}"{xhtml}>
+<input type="submit" name="mode" value="{lang_process}"{xhtml}>
+<input type="submit" name="mode" value="{lang_cancel}"{xhtml}>
+</div>
+</form>

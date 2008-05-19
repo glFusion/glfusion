@@ -1,0 +1,372 @@
+/*
+ * +---------------------------------------------------------------------------+
+ * | Media Gallery Plugin 1.6                                                  |
+ * +---------------------------------------------------------------------------+
+ * | $Id:: style.css 2119 2008-04-01 01:38:04Z mevans0263                     $|
+ * | Media Gallery Style Sheet                                                 |
+ * +---------------------------------------------------------------------------+
+ * | Copyright (C) 2004-2008 by the following authors:                         |
+ * |                                                                           |
+ * | Author:                                                                   |
+ * | Mark R. Evans               -    mark@gllabs.org                          |
+ * +---------------------------------------------------------------------------+
+ * |                                                                           |
+ * | This program is free software; you can redistribute it and/or             |
+ * | modify it under the terms of the GNU General Public License               |
+ * | as published by the Free Software Foundation; either version 2            |
+ * | of the License, or (at your option) any later version.                    |
+ * |                                                                           |
+ * | This program is distributed in the hope that it will be useful,           |
+ * | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
+ * | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
+ * | GNU General Public License for more details.                              |
+ * |                                                                           |
+ * | You should have received a copy of the GNU General Public License         |
+ * | along with this program; if not, write to the Free Software Foundation,   |
+ * | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
+ * |                                                                           |
+ * +---------------------------------------------------------------------------+
+ */
+
+/*
+ * mgAdminAlignLeft and mgAdminAlignRight control the alignment
+ * of all the admin screens, if you use a RTL language, you may
+ * want to adjust the mgAdminAlignLeft to actually be right aligned.
+ */
+
+.mgAdminAlignLeft {
+  text-align: left;
+  vertical-align:middle;
+}
+
+.mgAdminAlignRight {
+  text-align: right;
+  vertical-align:middle;
+}
+
+/* Do not change the MI classes, they are used to help
+ * control the frames on images
+ */
+
+.mgPluginMI {
+  padding:0 !important;
+}
+
+.mgPluginMI tr {
+  vertical-align:top;
+}
+.mgPluginMI td {
+  padding:0px !important;
+}
+
+.mgPluginMI img {
+  border:none;
+}
+
+
+/*
+ * the following styles add to the existing .plugin styles
+ * found in the default themes style.css
+ */
+
+.plugin textarea {
+  font-size: 1em;
+}
+.plugin fieldset legend {
+  font-weight:bold;
+  font-size: 1.2em;
+  padding:5px;
+}
+
+/* Media Gallery specific styles */
+
+.mgPluginAdmin ul {
+  list-style-position: outside;
+  margin-left: 0px;
+  padding-left: 15px;
+  list-style: square;
+  vertical-align: middle;
+}
+
+.mgPluginAdmin li {
+  margin: 0px;
+  padding: 0px;
+}
+
+/* Star Rating System */
+.ratingblock {
+	display:block;
+	padding-bottom:0px;
+	margin-bottom:0px;
+	padding-top:2px;
+	margin-top:2px;
+}
+.loading {
+	height: 30px;
+	background: url('images/working.gif') 50% 50% no-repeat;
+}
+.loadingsm {
+	height: 10px;
+	line-height:10px;
+	padding:0;
+	margin:0;
+	background: url('images/working.gif') 50% 50% no-repeat;
+}
+.unit-rating { /* the UL */
+	list-style:none;
+	margin: 0px;
+	padding:0px;
+	height: 30px;
+	position: relative;
+	background: url('images/starrating.png') top left repeat-x;
+}
+.unit-rating li{
+    text-indent: -90000px;
+	padding:0px;
+	margin:0px;
+	/*\*/
+	float: left;
+	/* */
+}
+.unit-rating li a {
+	outline: none;
+	display:block;
+	width:30px;
+	height: 30px;
+	text-decoration: none;
+	text-indent: -9000px;
+ 	z-index: 20;
+	position: absolute;
+	padding: 0px;
+}
+.unit-rating li a:hover{
+	background: url('images/starrating.png') left center;
+	z-index: 2;
+	left: 0px;
+}
+.unit-rating a.r1-unit{left: 0px;}
+.unit-rating a.r1-unit:hover{width:30px;}
+.unit-rating a.r2-unit{left:30px;}
+.unit-rating a.r2-unit:hover{width: 60px;}
+.unit-rating a.r3-unit{left: 60px;}
+.unit-rating a.r3-unit:hover{width: 90px;}
+.unit-rating a.r4-unit{left: 90px;}
+.unit-rating a.r4-unit:hover{width: 120px;}
+.unit-rating a.r5-unit{left: 120px;}
+.unit-rating a.r5-unit:hover{width: 150px;}
+.unit-rating a.r6-unit{left: 150px;}
+.unit-rating a.r6-unit:hover{width: 180px;}
+.unit-rating a.r7-unit{left: 180px;}
+.unit-rating a.r7-unit:hover{width: 210px;}
+.unit-rating a.r8-unit{left: 210px;}
+.unit-rating a.r8-unit:hover{width: 240px;}
+.unit-rating a.r9-unit{left: 240px;}
+.unit-rating a.r9-unit:hover{width: 270px;}
+.unit-rating a.r10-unit{left: 270px;}
+.unit-rating a.r10-unit:hover{width: 300px;}
+.unit-rating li.current-rating {
+	background: url('images/starrating.png') left bottom;
+	position: absolute;
+	height: 30px;
+	display: block;
+	text-indent: -9000px;
+	z-index: 1;
+	left:0px;
+}
+
+
+/* small star rater */
+.small-unit-rating { /* the UL */
+	list-style:none;
+	margin: 0px;
+	padding:0px;
+	height: 10px;
+	position: relative;
+	background: url('images/star_small.png') top left repeat-x;
+}
+.small-unit-rating li{
+    text-indent: -30000px;
+	padding:0px;
+	margin:0px;
+	/*\*/
+	float: left;
+	/* */
+}
+.small-unit-rating li a {
+	outline: none;
+	display:block;
+	width:10px;
+	height: 10px;
+	text-decoration: none;
+	text-indent: -3000px;
+	z-index: 20;
+	position: absolute;
+	padding: 0px;
+}
+.small-unit-rating li a:hover{
+	background: url('images/star_small.png') left center;
+	z-index: 2;
+	left: 0px;
+	line-height:10px
+}
+.small-unit-rating a.r1-unit{left: 0px;}
+.small-unit-rating a.r1-unit:hover{width:10px;}
+.small-unit-rating a.r2-unit{left:10px;}
+.small-unit-rating a.r2-unit:hover{width: 20px;}
+.small-unit-rating a.r3-unit{left: 20px;}
+.small-unit-rating a.r3-unit:hover{width: 30px;}
+.small-unit-rating a.r4-unit{left: 30px;}
+.small-unit-rating a.r4-unit:hover{width: 40px;}
+.small-unit-rating a.r5-unit{left: 40px;}
+.small-unit-rating a.r5-unit:hover{width: 50px;}
+.small-unit-rating a.r6-unit{left: 50px;}
+.small-unit-rating a.r6-unit:hover{width: 60px;}
+.small-unit-rating a.r7-unit{left: 60px;}
+.small-unit-rating a.r7-unit:hover{width: 70px;}
+.small-unit-rating a.r8-unit{left: 70px;}
+.small-unit-rating a.r8-unit:hover{width: 80px;}
+.small-unit-rating a.r9-unit{left: 80px;}
+.small-unit-rating a.r9-unit:hover{width: 90px;}
+.small-unit-rating a.r10-unit{left: 90px;}
+.small-unit-rating a.r10-unit:hover{width: 100px;}
+.small-unit-rating li.current-rating {
+	background: url('images/star_small.png') left bottom;
+	position: absolute;
+	height: 10px;
+	display: block;
+	text-indent: -3000px;
+	z-index: 1;
+	left:0px;
+	padding:0;
+	line-height:10px;
+}
+/* end of small stuff */
+
+.voted {color:#000;}
+.thanks {color:#36AA3D;}
+.static {color:#5D3126;}
+
+/* end of Star rating system */
+
+/*
+ * Standard styles for controlling image drop shadows
+ * and default Media Gallery borders.
+ */
+
+.out {
+  display:block;
+  background:#bbb;
+  border:1px solid #ddd;
+  position:relative;
+  margin:1em 0;
+}
+
+.in2 {
+  display:block;
+  background:#777;
+  border:1px solid #999;
+  position:relative;
+  padding:1px;
+  margin:1px;
+}
+
+.in {
+  text-align:center;
+  background:#fff;
+  border:1px solid #555;
+  position:relative;
+  padding:5px;
+  font-weight:normal;
+}
+
+.ltin {
+  left:-5px;
+}
+
+.tpin {
+  top:-5px;
+}
+
+.rtin {
+  left:5px;
+}
+/*
+ * Slimbox (lightbox) classes, do not change these
+ */
+
+#lbOverlay {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-color: #000;
+  cursor: pointer;
+  z-index:50;
+}
+
+#lbCenter, #lbBottomContainer {
+  position: absolute;
+  left: 50%;
+  overflow: hidden;
+  background-color: #fff;
+  z-index:51;
+}
+
+.lbLoading {
+  background: #fff url(images/loading.gif) no-repeat center;
+}
+
+#lbImage {
+  border: 10px solid #fff;
+  background-repeat: no-repeat;
+}
+
+#lbPrevLink, #lbNextLink {
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 50%;
+  outline: none;
+}
+
+#lbPrevLink {
+  left: 0;
+}
+
+#lbPrevLink:hover {
+  background: transparent url(images/prevlabel.gif) no-repeat 0% 15%;
+}
+
+#lbNextLink {
+  right: 0;
+}
+
+#lbNextLink:hover {
+  background: transparent url(images/nextlabel.gif) no-repeat 100% 15%;
+}
+
+#lbBottom {
+  font-family: Verdana, Helvetica, sans-serif;
+  font-size: 10px;
+  color: #666;
+  line-height: 1.4em;
+  text-align: left;
+  border: 10px solid #fff;
+  border-top-style: none;
+}
+
+#lbCloseLink {
+  display: block;
+  float: right;
+  width: 66px;
+  height: 22px;
+  background: transparent url(images/closelabel.gif) no-repeat center;
+  margin: 5px 0;
+}
+
+#lbCaption, #lbNumber {
+  margin-right: 71px;
+}
+
+#lbCaption {
+  font-weight: bold;
+}

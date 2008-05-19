@@ -1,0 +1,22 @@
+{start_block_mailstory2friend}
+<div class="gllabsform">
+<form action="{site_url}/profiles.php" method="post" name="contact">
+<label for="from">{lang_fromname}:</label>
+<input type="text" id="from" name="from" size="40" maxlength="96" value="{name}"{xhtml}><br{xhtml}>
+<label for="fromemail">{lang_fromemailaddress}:</label>
+<input type="text" id="fromemail" name="fromemail" size="40" maxlength="96" value="{email}"{xhtml}><br{xhtml}>
+<label for="to">{lang_toname}:</label>
+<input type="text" id="to" name="to" size="40" maxlength="96" value="{toname}"{xhtml}><br{xhtml}>
+<label for="toemail">{lang_toemailaddress}:</label>
+<input type="text" id="toemail" name="toemail" size="40" maxlength="96" value="{toemail}"{xhtml}><br{xhtml}>
+<label for="shortmsg">{lang_shortmessage}:</label>
+<textarea id="shortmsg" name="shortmsg" rows="10" cols="50">{shortmsg}</textarea><br{xhtml}>
+<div class="warning">{lang_warning}</div>
+<div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
+
+<input type="hidden" name="sid" value="{story_id}"{xhtml}>
+<input type="hidden" name="what" value="sendstory"{xhtml}>
+<input type="submit" value="{lang_sendmessage}"{xhtml}>
+</form>
+</div>
+{end_block}

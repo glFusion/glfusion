@@ -1,0 +1,6 @@
+<!-- start submissionform_moods.thtml -->
+    <TD class="pluginCellSubTitle">&nbsp;{LANG_MOOD}</TD>
+    <TD class="pluginCellText pluginCellFill"><SELECT NAME="mood" style="width:150px; text-indent: 0px;" tabindex="2">{moodoptions}</SELECT></TD>
+</TR>
+<TR>
+<!-- end submissionform_moods.thtml -->

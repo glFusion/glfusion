@@ -1,0 +1,23 @@
+<!-- start topicfooter.thtml -->
+</table>
+<table border="0" cellspacing="1" cellpadding="2" width="100%">
+    <tr>
+        <td width="95%" class="alignleft" height="24" nowrap style="padding-left:6px;">{page_generated_time}</td>
+        <td nowrap>
+        	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>{newtopic_link}</td>
+                    <td>{replytopic_link}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<p />
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+    <tr>
+        <td class="aligncenter" nowrap>{pagenavigation}</td>
+    </tr>
+</table>
+<p /><br>
+<!-- end topicfooter.thtml -->

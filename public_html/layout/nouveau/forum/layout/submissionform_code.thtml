@@ -1,0 +1,46 @@
+<!-- start submissionform_code.thtml -->
+    <td class="pluginCellSubTitle">&nbsp;{LANG_code}:</td>
+    <td class="pluginCellText pluginCellFill">&nbsp;
+        <input type="button" class="button" accesskey="b" name="addbbcode0" value=" B " style="font-weight:bold; width: 30px" onclick="bbstyle(0)" onmouseover="helpline('b')" {xhtml}>
+        <input type="button" class="button" accesskey="i" name="addbbcode2" value=" i " style="font-style:italic; width: 30px" onclick="bbstyle(2)" onmouseover="helpline('i')" {xhtml}>
+        <input type="button" class="button" accesskey="u" name="addbbcode4" value=" u " style="text-decoration: underline; width: 30px" onclick="bbstyle(4)" onmouseover="helpline('u')" {xhtml}>
+        <input type="button" class="button" accesskey="q" name="addbbcode6" value="Quote" style="width: 50px" onclick="bbstyle(6)" onmouseover="helpline('q')" {xhtml}>
+        <input type="button" class="button" accesskey="c" name="addbbcode8" value="Code" style="width: 40px" onclick="bbstyle(8)" onmouseover="helpline('c')" {xhtml}>
+        <input type="button" class="button" accesskey="l" name="addbbcode10" value="List" style="width: 40px" onclick="bbstyle(10)" onmouseover="helpline('l')" {xhtml}>
+        {hide_imgbutton_begin}
+        <input type="button" class="button" accesskey="p" name="addbbcode14" value="Img" style="width: 40px"  onclick="bbstyle(14)" onmouseover="helpline('p')" {xhtml}>
+        {hide_imgbutton_end}
+        <input type="button" class="button" accesskey="w" name="addbbcode16" value="URL" style="text-decoration: underline; width: 40px" onclick="bbstyle(16)" onmouseover="helpline('w')" {xhtml}>
+        <input type="button" class="button" name="help" value="Help?" style="text-decoration: underline; width: 40px" onclick="poptastic('{site_url}/forum/bbcode.html');" onmouseover="helpline('h')" {xhtml}>
+        <br{xhtml}><br{xhtml}>
+            {LANG_fontcolor}:
+            <select name="addbbcode18" onchange="bbfontstyle('[color=' + this.form.addbbcode18.options[this.form.addbbcode18.selectedIndex].value + ']', '[/color]')" onmouseover="helpline('s')">
+                <option style="color:black;" value="#">{LANG_default}</option>
+                <option style="color:darkred;" value="darkred">{LANG_dkred}</option>
+                <option style="color:red;" value="red">{LANG_red}</option>
+                <option style="color:orange;" value="orange">{LANG_orange}</option>
+                <option style="color:brown;" value="brown">{LANG_brown}</option>
+                <option style="color:yellow;" value="yellow">{LANG_yellow}</option>
+                <option style="color:green;" value="green">{LANG_green}</option>
+                <option style="color:olive;" value="olive">{LANG_olive}</option>
+                <option style="color:cyan;" value="cyan">{LANG_cyan}</option>
+                <option style="color:blue;" value="blue">{LANG_blue}</option>
+                <option style="color:darkblue;" value="darkblue">{LANG_dkblue}</option>
+                <option style="color:indigo;" value="indigo">{LANG_indigo}</option>
+                <option style="color:violet;" value="violet">{LANG_violet}</option>
+                <option style="color:white;" value="white">{LANG_white}</option>
+                <option style="color:black;" value="black">{LANG_black}</option>
+        </select>
+        {LANG_fontsize}:
+        <select name="addbbcode20" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]')" onmouseover="helpline('f')">
+                    <option value="7">{LANG_tiny}</option>
+                    <option value="9">{LANG_small}</option>
+                    <option value="12" selected="selected">{LANG_normal}</option>
+                    <option value="18">{LANG_large}</option>
+                    <option  value="24">{LANG_huge}</option>
+        </select>
+        &nbsp;<a href="javascript:bbstyle(-1)" onmouseover="helpline('a')">{LANG_closetags}</a>
+        <br{xhtml}><br{xhtml}>
+        <input type="text" name="helpbox" size="70" maxlength="100" class="helpline" value="{LANG_codetip}"{xhtml}>
+    </td>
+<!-- end submissionform_code.thtml -->

@@ -1,0 +1,37 @@
+<table width="100%" cellspacing="0" cellpadding="0">
+  <tr class="pluginRow2">
+    <td colspan="2" style="vertical-align:middle;">
+	  <table style="width:100%;border:none;" cellspacing="0" cellpadding="2">
+	    <tr>
+	      <td rowspan="2" align="left" style="width:60px">
+	        <a href="{site_admin_url}/plugins/mediagallery/index.php">
+	          <img src="{site_url}/images/mediagallery.png" style="border:none;" alt=""{xhtml}>
+	        </a>
+	      </td>
+	      <td align="left"><h1>{success_upgrade}</h1></td>
+	    </tr>
+	    <tr>
+	      <td>&nbsp;</td>
+	    </tr>
+	  </table>
+    </td>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;width:75%;">
+        {cache_check}
+        {memory_check}
+       <br{xhtml}>
+        {need_cache}
+        <br{xhtml}>
+        {need_memory}
+        <br{xhtml}>
+        {thank_you}
+        <br{xhtml}>
+        <br{xhtml}>
+        {support}
+    </td>
+    <td class="plugin" style="vertical-align:top;">
+	  {mg_navigation}
+    </td>
+  </tr>
+</table>

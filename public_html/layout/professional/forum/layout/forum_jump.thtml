@@ -1,0 +1,11 @@
+<!-- start forum_jump.thtml -->
+            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <form action="{action}" method="post" name="jumpbox" onsubmit="if(document.jumpbox.forum.value == -1){return false;}" style="margin:0px;padding:2px">
+                            <select name="forum" style="width:170px" onchange="this.form.submit();"><option selected value="-1">{LANG_msg106}{selecthtml}</option></select>
+                         </form>
+                     </td>
+                </tr>
+            </table>
+<!-- end forum_jump.thtml -->

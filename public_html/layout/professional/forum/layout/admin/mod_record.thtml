@@ -1,0 +1,16 @@
+<!-- start mod_record.thtml -->
+<tr class="pluginRow{cssid} aligncenter">
+    <td class="alignleft"><input type="checkbox" NAME="chk_moddelete[]" VALUE="{id}"></td>
+    <td class="alignleft" width="15%">{name}</td>
+    <td class="alignleft" width="15%">{forum}</td>
+    <td><INPUT TYPE="checkbox" NAME="chk_delete{id}" VALUE="1" {delete_yes}></td>
+    <td><INPUT TYPE="checkbox" NAME="chk_ban{id}" VALUE="1" {ban_yes}></td>
+    <td><INPUT TYPE="checkbox" NAME="chk_edit{id}" VALUE="1" {edit_yes}></td>
+    <td><INPUT TYPE="checkbox" NAME="chk_move{id}" VALUE="1" {move_yes}></td>
+    <td><INPUT TYPE="checkbox" NAME="chk_stick{id}" VALUE="1" {stick_yes}></td>
+    <td nowrap>
+        [&nbsp;<a href="#" onClick="document.modform.recid.value='{id}';document.modform.operation.value='update';document.modform.submit();return false;">{LANG_UPDATE}</a>&nbsp;]&nbsp;
+        [&nbsp;<a href="#" onClick="document.modform.recid.value='{id}';document.modform.operation.value='delete';document.modform.submit();return false;">{LANG_DELETE}</a>&nbsp;]
+    </td>
+</tr>
+<!-- end mod_record.thtml -->

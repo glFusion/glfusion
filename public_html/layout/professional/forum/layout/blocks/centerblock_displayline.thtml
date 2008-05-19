@@ -1,0 +1,11 @@
+<!-- start centerblock_displayline.thtml -->
+    <tr class="pluginRow{cssid}" onMouseOver="className='pluginRollOver';" onMouseOut="className='pluginRow{cssid} pluginLinks';">        
+        <td width="25%" class="pluginLinks" onclick="window.location.href='{site_url}/forum/index.php?forum={forum_id}'" onMouseOver="this.style.cursor='pointer';" style="padding-left:6px; height:20px;" TITLE="{LANG_forumjump}">{forum_name}</td>
+        <td width="65%" class="pluginLinks" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}'" onMouseOver="this.style.cursor='pointer';">
+                <a class="tooltip" style="text-decoration:none;" href="{site_url}/forum/viewtopic.php?showtopic={topic_id}">{topic_subject}<span style="left:50px;">{topicinfo}</span></a>
+        </td>
+        <td nowrap class="pluginLinks" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'" onMouseOver="this.style.cursor='pointer';" style="padding-right:6px;">
+            <a class="tooltip" style="text-decoration:none;" href="{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}" rel="nofollow">{date}<span style="left:-100px;">{lastpostinfo}</span></a>
+        </td>
+    </tr>
+<!-- end centerblock_displayline.thtml -->

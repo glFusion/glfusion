@@ -1,0 +1,6 @@
+{new_table_row}
+<td width="{tablewidth}" style="vertical-align:top;">{category_link}</td>
+<td style="white-space:nowrap;vertical-align:top;text-align:left;" align="left">
+    <a href="{site_url}/filemgmt/viewcat.php?cid={cid}"><b>{category_name}</b></a>&nbsp;{num_files}&nbsp;{files_waiting_submission}<br{xhtml}>{subcategories}
+</td>
+{end_of_row}

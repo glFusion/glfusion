@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/.xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>{page_title}{page_site_splitter}{site_name}</title>
+<meta http-equiv="Content-Script-Type" content="text/javascript"{xhtml}>
+<meta http-equiv="Content-Style-Type" content="text/css"{xhtml}>
+<meta http-equiv="Content-Type" content="text/html; charset={charset}"{xhtml}>
+<!-- <meta http-equiv="Pragma" content="no-cache"{xhtml}> -->
+<link rel="SHORTCUT ICON" href="{layout_url}/images/favicon.ico"{xhtml}>
+<!-- Load Stylesheets -->
+<link rel="stylesheet" type="text/css" href="{layout_url}/style.css" title="{theme}"{xhtml}>
+{feed_url}
+{rel_links}
+{mootools}
+{plg_headercode}
+{advanced_editor}
+<!-- Load Common Javascript Libraries -->
+<script type="text/javascript" src="{site_url}/javascript/common.js"></script>
+<script type="text/javascript" src="{layout_url}/js/gl_mooreflection.js"></script>
+{gl_animatedmoomenu} <!-- enables gl_moomenu animation, if you delete it, the menu will still work, it will just instantly appear instead of fading in -->
+{gl_mootips} <!-- enables gl_mootips throughout layout -->
+{gl_moochronometer}<!-- enables gl_moochronometer header rotator - MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating -->
+<!--[if lte IE 6]>
+<link rel="stylesheet" type="text/css" href="{layout_url}/css/ie6.css" title="{theme}"{xthml}>
+<script defer type="text/javascript" src="{layout_url}/js/gl_moopngfix.js"></script>
+<![endif]-->
+<!--[if IE 7]>
+<link rel="stylesheet" type="text/css" href="{layout_url}/css/ie7.css" title="{theme}"{xthml}>
+<![endif]-->
+</head>
+
+<body dir="{direction}" style="background:#000000;">
+<div>
+    <a name="top"></a>
+    <a href="#content-start"> <!-- for screenreaders -->
+        <img class="hidden" src="{layout_url}/images/speck.gif" alt="skip navigation"{xhtml}>
+    </a>
+</div>
+<!-- End of htmlheader.thtml -->

@@ -1,0 +1,157 @@
+Theme: Nouveau v1.0 for Geeklog v1.4.1
+Theme by: Eric Warren - gl Labs (http://www.gllabs.org)
+Last updated: 29 April 2008
+========================================
+Nouveau is a fixed & fluid width, blue and grey neutral theme intended as a suppliment to the
+professional theme that is included in a default Geeklog install. For complete documentation
+please visit http://www.gllabs.org/wiki/doku.php?id=geeklog:themes:nouveau.
+
+Briefly, Nouveau features:
+
+- Small size thanks to using Joe Mucchiello's Caching Template Library found at
+  http://www.gllabs.org/wiki/doku.php?id=geeklog:templatecache. Only .thtml files that
+  differ from the stock Professional theme that ships with Geeklog, are needed to
+  complete this theme. CTL version 2.3.1 or higher is required.
+  
+  *******************************************************************************
+  * Please make sure you have both the Caching Template Library v2.3.1+ and the *
+  * the professional theme installed, as this theme depends on files contained  *
+  * in {public_html}/layout/professional/ directory.                            *
+  *******************************************************************************
+
+- Tableless markup. All appropriate markup is created with <div> tags and other elements.
+
+- SEO friendly where content comes first in the code, followed by side blocks.
+
+- Both Fluid and Fixed width versions of the theme, one line configurable in header.thtml.
+
+- Validates to HTML 4.01 Transitional (for GL v1.4.1 version, GL v1.5 to be HTML 4.01 Strict or
+  XHTML Transitional 1.0 via a switch in the theme's functions.php)
+
+- Support for a 4 level cascading menu in the header.
+
+- MooTools Javascript Library v1.11 integration. (learn more at http://mootools.net) We have also
+  included some MooTools based javascript widgets. For more info on using them, visit:
+  http://www.gllabs.org/wiki/doku.php?id=geeklog:themes:nouveau
+
+- Additional typography elements with enhanced block class styling, quote and code styling, list
+  styling, and more.
+  
+- Extra block styling options for both left and right blocks.
+
+- YUI reset-fonts-grids.css, and base-min.css support.
+
+We have tested it in Firefox 2, IE 6/7, Opera 9, and Safari beta 3 on Windows. In other browsers, your
+mileage may vary. Check out a working demo at http://nouveau.gllabs.org. Download the latest version at http://www.gllabs.org/filemgmt/index.php?id=191. Grab the latest development SVN version at http://geiss.getmyip.com:81/svn/nouveau-ctl/trunk (login/password: everyone/everyone).
+
+As always, we appreciate the years of hard work and dedication of the core Geeklog developers. 
+
+TOC
+===
+-- LICENSE
+-- DEPENDENCIES
+-- INSTALLATION
+-- THINGS FOR YOU TO DO
+-- BUGS
+-- CHANGELOG
+
+LICENSE
+=======
+This work is distributed under the terms of the GPL, which means that you are free
+to use and modify it for any purpose.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of  MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the  GNU General Public License at
+http://www.gnu.org/licenses/gpl-3.0.txt for more details.
+
+Individual files in this archive may fall under other open-source license terms.
+When applicable, those license terms take precedence those declared above.
+
+DEPENDENCIES
+============
+1. Nouveau requires that you have the Caching Template Library v2.3.1 installed. This
+   library speeds up the rendering of your site by compiling templates for faster page
+   loads. Another feature is that one can specify multiple locations to look for
+   templates. Using this feature allows us to only include template files that differ
+   from the stock default theme included with Geeklog. 
+
+   To download the latest version of the CTL (v2.3.1 or higher required), visit:
+   http://www.gllabs.org/filemgmt/index.php?id=192
+   
+   For complete instructions on installing the CTL, visit:
+   http://www.gllabs.org/wiki/doku.php?id=geeklog:templatecache
+
+2. As explained above, you will need to make sure you have the default theme that comes
+   included with Geeklog (currently "professional") installed. Unless you deleted or
+   renamed it, you should be fine. You can always grab a fresh copy of the theme from
+   the Geeklog v1.4.1 tarball at: http://www.geeklog.net/filemgmt/index.php?id=803
+
+3. To use the advanced story editor, edit your {public_html}/admin/story.php file and
+   around line 435 change:
+   
+   && file_exists ($_CONF['path_layout'] . '/admin/story/storyeditor_advanced.thtml')) {
+   to
+   && file_exists ($_CONF['path_html'] . '/layout/professional/admin/story/storyeditor_advanced.thtml')) {
+
+INSTALLATION
+============
+Make sure you have the dependencies installed as noted in the previous section.
+
+Unzip all of the contents of this theme and upload into your public_html/layout/
+directory. Once uploaded, you should have 2 or more folders, including "professional",
+and "nouveau".
+
+If you would like to change the theme for only you, login to your site and click on
+My Account in the User Functions block. Then click on the Layout & Language tab,
+and choose "nouveau" under the Theme dropdown box.
+
+If you would like to make the entire site pick up on the change, edit
+your {path_to_geeklog}/config.php and change the default theme from
+"professional" to "nouveau" like this:
+
+$_CONF['theme']             = 'nouveau';  // default theme
+
+THINGS FOR YOU TO DO
+====================
+1. We have included both fluid (default) and fixed width versions of this theme.
+   In header.thtml, simply change line 2 to your desired layout type:
+
+       <div id="gl_container_fluid"><!-- options are fixed or fluid-->
+	   
+2. We have included several different block styles with this theme. To change styles,
+   open either leftblocks.thtml or rightblocks.thtml and modify class=“gl_blockstyle1”.
+  
+   For documentation and graphic examples, please visit:
+   http://www.gllabs.org/wiki/doku.php?id=geeklog:themes:nouveau#extra_block_styles
+
+3. We've styled the plugin css declarations in style.css, but individual plugins
+   that use their own style.css file will need to be edited manually. Here are
+   the default colors used for this theme:
+ 
+     #0000FF is the color of typical links (blue).
+     #008000 is the color of typical active links (green).
+     #800080 is the color of visited links (purple).
+     #000000/666666 is the color of text (black/grey).
+     #FFFFFF is the color of the main background.
+     #F7F7F7 is the color of the block backgrounds.
+     #CCCCCC is the color of the block header backgrounds.
+
+4. Change the flags in the header to reflect whatever you like. There are more public
+   domain flag icons at http://www.gllabs.org/wiki/doku.php?id=geeklog:themes:nouveau.
+   To use them, simply un-zip them and copy them into /nouveau/images" directory, and
+   make the appropriate changes to header.thtml to pull the new images.
+
+5. Visit http://www.gllabs.org/wiki/doku.php?id=geeklog:themes:nouveau and learn
+   about how to use the additional MooTools javascript widgets included with Nouveau. 
+   From content sliders and news tickers, to custom tool tips, header rotators and more,
+   Nouveau gives you the flexibility and power to make your site unique!
+
+BUGS
+====
+Please report bugs in the support forum at http://www.gllabs.org/forum/index.php?forum=13
+
+CHANGELOG
+=========
+29 April 2008 - v1.0 released.
+

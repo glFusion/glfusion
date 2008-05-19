@@ -1,0 +1,18 @@
+Bad Behavior2 ChangeLog
+
+v2.0.13
+ - Upgraded core Bad Behavior release to v2.0.13
+ - Added the IP address of digg.com services to the whitelist.
+ - Fixed a bug in the blacklist user-agent code that caused the
+   matches to be case insensitive when they should have been
+   case sensitive.
+
+v2.0.11a
+ - Modified uninstall to actually delete the BB2 tables
+ - Modified entry display to include response code
+
+v2.0.11
+ - Upgraded core Bad Behavior release to v2.0.11
+
+v2.0.10
+ - Upgraded core Bad Behavior release to v2.0.10

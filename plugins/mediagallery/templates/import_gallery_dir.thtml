@@ -1,0 +1,18 @@
+<!-- $Id: import_gallery_dir.thtml 870 2007-06-03 20:35:38Z mevans0263 $ -->
+<h1>{import_wizard} Import to Media Gallery Wizard</h1>
+Please enter the directory where Gallery stores its albums (the directory that holds albumdb.dat).
+This directory must be the <b>absolute</b> path on your server, meaning the full path from the root directory.
+<p>
+<form method="post" action="{form_action}">
+<fieldset style="border: none; border-top: 1px solid #000000">
+	<br>
+	<legend>Import Wizard</legend><br><br>
+	<label for="gallerydir">Gallery Album Directory&nbsp;&nbsp;</label>
+	      <input type="text" name="gallerydir" size="80">
+		  <br><br>
+</fieldset>
+<div style="text-align:center;">
+            <input type="submit" value="next"   name="mode" />
+            <input type="submit" value="cancel" name="mode" />
+</div>
+</form>

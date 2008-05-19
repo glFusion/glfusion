@@ -1,0 +1,127 @@
+<script type="text/javascript">
+//<![CDATA[
+function dodisabled(){
+var gfxdriver = document.getElementById('gfxdriver');
+var imageset = document.getElementById('imageset');
+var gfxpath = document.getElementById('gfxpath');
+var gfxformat = document.getElementById('gfxformat');
+  if (gfxdriver.value == "0") {
+    imageset.disabled=true;
+    gfxpath.disabled=true;
+    gfxformat.disabled=false;
+  } else if ( gfxdriver.value == "1") {
+    imageset.disabled=true;
+    gfxpath.disabled=false;
+    gfxformat.disabled=false;
+  } else {
+    imageset.disabled=false;
+    gfxpath.disabled=true;
+    gfxformat.disabled=true;
+  }
+}
+//]]>
+</script>
+
+<h2>{lang_msg}</h2>
+<table width="100%" cellspacing="5" cellpadding="5">
+<tr>
+  <td colspan="2"valign="middle">
+	<table border="0" cellspacing="0" cellpadding="2" width="100%">
+	<tr>
+	  <td rowspan="2" align="left" style="width:60px">
+	    <a href="{site_admin_url}/plugins/captcha/index.php">
+	      <img src="{site_url}/captcha/captcha.png" style="border:none;" alt=""{xhtml}>
+	    </a>
+	  </td>
+	  <td style="text-align:left;"><span style="font-size:1.2em;font-weight:bold;">{lang_admin} - v{version}</span></td>
+	</tr>
+	</table>
+  </td>
+</tr>
+<tr>
+<td>
+{lang_overview}
+</td>
+</tr>
+<tr>
+  <td colspan="2">
+<p style="text-align:left;"><a href="{site_admin_url}/plugins/captcha/logview.php?action=View Log File&amp;log=captcha.log">{lang_view_logfile}</a></p>
+<h1>{lang_settings}</h1>
+<form name="admin" action="{s_form_action}" method="post">
+<fieldset style="border:1px solid #000000;">
+<legend>{lang_configuration}</legend>
+<br{xhtml}>
+<b>{lang_gfx_driver}</b>&nbsp;&nbsp;
+<select name="gfxdriver" id="gfxdriver" onchange="dodisabled()">
+ <option value="0" {gdselected}>{lang_gd_libs}</option>
+ <option value="1" {imselected}>{lang_imagemagick}</option>
+ <option value="2" {noneselected}>{lang_static_images}</option>
+</select>
+<br{xhtml}><br{xhtml}>
+<b>{lang_imageset}</b>&nbsp;&nbsp;
+{selectImageSet}
+<br{xhtml}><br{xhtml}>
+<b>{lang_gfx_format}</b>&nbsp;&nbsp;
+<select name="gfxformat" id="gfxformat">
+ <option value="jpg" {jpgselected}>JPG</option>
+ <option value="png" {pngselected}>PNG</option>
+</select>
+<br{xhtml}><br{xhtml}>
+<b>{lang_convert_path}</b>&nbsp;&nbsp;
+<input type="text" name="gfxpath" id="gfxpath" value="{gfxpath}" size="60"{xhtml}>
+<br{xhtml}><br{xhtml}>
+<label><b>{lang_debug}</b></label>&nbsp;&nbsp;
+<input type="checkbox" name="debug" {debugchecked}{xhtml}>&nbsp;&nbsp;
+<br{xhtml}><br{xhtml}>
+<label><b>{lang_logging}</b></label>&nbsp;&nbsp;
+<input type="checkbox" name="logging" {loggingchecked}{xhtml}>&nbsp;&nbsp;
+<br{xhtml}><br{xhtml}>
+</fieldset>
+<fieldset style="border:1px solid #000000;">
+<legend>{lang_integration}</legend>
+<br{xhtml}>
+<input type="checkbox" name="anononly" {anonchecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_anonymous_only}</b></label>
+<br{xhtml}><br{xhtml}>
+<input type="checkbox" name="remoteusers" {remotechecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_remoteusers}</b></label>
+<br{xhtml}><br{xhtml}>
+<input type="checkbox" name="comment" {commentchecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_comment}</b></label>
+<br{xhtml}><br{xhtml}>
+<input type="checkbox" name="story" {storychecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_story}</b></label>
+<br{xhtml}><br{xhtml}>
+<input type="checkbox" name="registration" {registrationchecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_registration}</b></label>
+<br{xhtml}><br{xhtml}>
+<input type="checkbox" name="contact" {contactchecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_contact}</b></label>
+<br{xhtml}><br{xhtml}>
+<input type="checkbox" name="emailstory" {emailstorychecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_emailstory}</b></label>
+<br{xhtml}><br{xhtml}>
+<input type="checkbox" name="forum" {forumchecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_forum}</b></label>
+<br{xhtml}><br{xhtml}>
+<input type="checkbox" name="mediagallery" {mediagallerychecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_mediagallery}</b></label>
+<br{xhtml}><br{xhtml}>
+<!--
+<input type="checkbox" name="rating" {ratingchecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_rating}</b></label>
+<br{xhtml}><br{xhtml}>
+-->
+</fieldset>
+<div style="text-align:center;">
+<input type="submit" name="mode" value="{lang_save}"{xhtml}>&nbsp;&nbsp;&nbsp;<input type="submit" name="mode" value="{lang_cancel}"{xhtml}>
+</div>
+</form>
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+//<![CDATA[
+dodisabled();
+//]]>
+</script>

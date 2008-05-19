@@ -1,0 +1,26 @@
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+<td rowspan="2" width="60px" align="left"><img src="{img}" border="0" alt=""{xhtml}></td>
+<td align="left"><font size="+1"><b>{install_header}</b></font></td>
+</tr>
+<tr>
+<td><b>{readme}</b>&nbsp;
+</td>
+</tr>
+</table>
+<p>
+  {lang_overview}
+</p>
+
+<p><b>{cp_requirements}</b></p>
+<p>&nbsp;&nbsp;&nbsp;{gl_version}</p>
+<p>&nbsp;&nbsp;&nbsp;{php_version}</p>
+<br{xhtml}>
+{lang_details}
+<br{xhtml}><br{xhtml}>
+{install_doc}
+<br{xhtml}><br{xhtml}>
+<form method='post' action='{cgiurl}'>
+<input type='submit' value='{btnmsg}' name='B1'{xhtml}>
+<input type='hidden' value='{action}' name='action'{xhtml}>
+</form>

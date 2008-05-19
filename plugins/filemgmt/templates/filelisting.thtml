@@ -1,0 +1,43 @@
+{block_header}
+<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFF;border:0px;margin-top:15px;">
+    <tr>
+        <td style="width:100%;text-align:left;">
+            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tr>
+                    <td>{category_path_link}</td>
+                </tr>
+                {!if category_records}
+                <tr>
+                    <td style="width:100%;">
+                        <table border="0" cellspacing="2" cellpadding="0">
+                            <tr>
+                            {category_records}
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                {!endif}
+                <tr>
+                    <td style="width:100%;">{sort_menu}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="width:100%;text-align:left;">
+            <table border="0" cellspacing="2" cellpadding="0" width="100%">
+                <tr>
+                    <td style="width:100%;padding:5px;">{listing_heading}</td>
+                </tr>
+                    {filelisting_records}
+                <tr>
+                    <td style="padding:10px;">{page_navigation}</td>
+                </tr>
+            </table>
+         </td>
+    </tr>
+</table>
+<br{xhtml}>
+{comment_records}
+{block_footer}
+

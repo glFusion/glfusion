@@ -1,0 +1,4 @@
+<p>{lang_results}:</p>
+<table class="admin-list-table">
+    {ping_results}
+</table>

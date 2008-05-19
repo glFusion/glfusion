@@ -1,0 +1,62 @@
+<form name="globalperm" enctype="multipart/form-data"  method="post" action="{s_form_action}">
+<div>
+<input type="hidden" name="action" value="{action}"{xhtml}>
+<input type="hidden" name="album_id" value="0"{xhtml}>
+<input type="hidden" name="admin_menu" value="{admin_menu}"{xhtml}>
+{lang_global_perm_help}
+<br{xhtml}><br{xhtml}>
+  <table width="100%" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+      <th>
+        {lang_attribute}
+      </th>
+      <th align="left">
+        {lang_value}
+      </th>
+      <th>
+        {lang_update}
+      </th>
+    </tr>
+    <tr class="pluginRow1">
+      <td class="mgAdminAlignRight">{lang_group}</td>
+      <td class="mgAdminAlignLeft" style="vertical-align:middle;">{group_select}</td>
+      <td class="mgAdminAlignLeft"><input type="checkbox" name="group_active" value="1"{xhtml}></td>
+    </tr>
+    <tr class="pluginRow2">
+      <td class="mgAdminAlignRight">{lang_permissions}</td>
+      <td class="mgAdminAlignLeft" style="vertical-align:middle;">
+        <br{xhtml}><br{xhtml}>
+   	    {lang_perm_key}
+   	    <br{xhtml}><br{xhtml}>
+        <div style="clear:both;">{permissions_editor}</div>
+        <br{xhtml}><br{xhtml}>
+      </td>
+      <td class="mgAdminAlignLeft"><input type="checkbox" name="perm_active" value="1"{xhtml}></td>
+    </tr>
+    <tr class="pluginRow1">
+     <td class="mgAdminAlignRight">{lang_member_upload}</td>
+     <td class="mgAdminAlignLeft" style="vertical-align:middle;"><input type="checkbox" name="member_upload" value="1"{xhtml}></td>
+     <td class="mgAdminAlignLeft"><input type="checkbox" name="upload_active" value="1"{xhtml}></td>
+    </tr>
+    <tr class="pluginRow2">
+      <td class="mgAdminAlignRight">{lang_moderate_album}</td>
+      <td class="mgAdminAlignLeft" style="vertical-align:middle;"><input type="checkbox" name="moderation" value="1"{xhtml}></td>
+      <td class="mgAdminAlignLeft"><input type="checkbox" name="moderate_active" value="1"{xhtml}></td>
+    </tr>
+    <tr class="pluginRow1">
+      <td class="mgAdminAlignRight">{lang_mod_group}</td>
+      <td class="mgAdminAlignLeft" style="vertical-align:middle;">{mod_group_select}</td>
+      <td class="mgAdminAlignLeft"><input type="checkbox" name="mod_group_active" value="1"{xhtml}></td>
+    </tr>
+    <tr class="pluginRow2">
+      <td class="mgAdminAlignRight">{lang_email_mods_on_submission}</td>
+      <td class="mgAdminAlignLeft" style="vertical-align:middle;"><input type="checkbox" name="email_mod" value="1"{xhtml}></td>
+      <td class="mgAdminAlignLeft"><input type="checkbox" name="email_mod_active" value="1"{xhtml}></td>
+    </tr>
+  </table>
+<div style="text-align:center;">
+  <input type="submit" value="{lang_save}" name="mode"{xhtml}>
+  <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+</div>
+</div>
+</form>

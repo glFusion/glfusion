@@ -1,0 +1,21 @@
+<table width="100%" style="margin-top:10px;">
+    <tr>
+        <td class="pluginTinyText" style="text-align:center;">
+            {LANG_SORTBY}&nbsp;&nbsp;{LANG_TITLE}&nbsp;(<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&orderby=titleA"><img src="{site_url}/filemgmt/images/up.gif" border="0" align="middle" alt=""></a>
+            <a href="{site_url}/filemgmt/viewcat.php?cid={cid}&orderby=titleD">
+                <img src="{site_url}/filemgmt/images/down.gif" border="0" align="middle" alt=""></a>)&nbsp;
+            {LANG_DATE}&nbsp;(<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&orderby=dateA"><img src="{site_url}/filemgmt/images/up.gif" border="0" align="middle" alt=""></a>
+            <a href="{site_url}/filemgmt/viewcat.php?cid={cid}&orderby=dateD">
+                <img src="{site_url}/filemgmt/images/down.gif" border="0" align="middle" alt=""></a>)&nbsp;
+            {LANG_RATING}&nbsp;(<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&orderby=ratingA"><img src="{site_url}/filemgmt/images/up.gif" border="0" align="middle" alt=""></a>
+            <a href="{site_url}/filemgmt/viewcat.php?cid={cid}&orderby=ratingD">
+                <img src="{site_url}/filemgmt/images/down.gif" border="0" align="middle" alt=""></a>)&nbsp;
+            {LANG_POPULARITY}&nbsp;(<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&orderby=hitsA"><img src="{site_url}/filemgmt/images/up.gif" border="0" align="middle" alt=""></a>
+            <a href="{site_url}/filemgmt/viewcat.php?cid={cid}&orderby=hitsD">
+                <img src="{site_url}/filemgmt/images/down.gif" border="0" align="middle" alt=""></a>)
+        </td>
+    </tr>
+    <tr>
+        <td class="pluginTinyText" style="text-align:center;font-weight:bold;">{LANG_CURSORTBY}&nbsp;{orderbyTrans}</td>
+    </tr>
+</table>

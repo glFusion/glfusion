@@ -1,0 +1,100 @@
+body {
+  margin: 1em 5%;
+  background: white;
+  color: black;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: smaller;
+}
+
+h1 {
+  font-size: 1.4em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+h3 {
+  font-size: 1.0em;
+}
+
+h4 {
+  font-size: 0.8em;
+}
+
+img {
+  border:0px;
+}
+
+p, ul, ol, li {
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+}
+ul, ol {
+  margin-left: 0.9em;
+  padding-left: 0.9em;
+}
+
+code, kbd, var {
+  font-family: Courier, "Courier New", monospace;
+}
+
+table {
+  width: 100%;
+}
+
+td, th {
+  vertical-align: top;
+  padding: 4px;
+  line-height: 128%;
+  font-size: smaller;
+}
+
+th {
+  text-align: left;
+  background: silver;
+}
+
+.r2 {
+  background: rgb(240,240,240);
+}
+
+dt {
+  font-weight: bold;
+}
+
+
+.usual {
+  font-size: 100%;
+}
+
+.menu {
+  background: #dddddd;
+  color: black;
+  padding:5px;
+}
+
+.footer {
+  font-size: 90%;
+  background: #dddddd;
+  color: black;
+  padding:5px;
+}
+
+
+.comment {
+  font-size: 80%;
+}
+
+.codeheader		{  font-family: Courier, "Courier New", monospace; }
+
+
+a:link    { color: #2222FF; background: transparent; }
+a:visited { color: #2222FF; background: transparent; }
+a:hover   { color: #5252FF; background: transparent; }
+/*a:hover   { color: #333366; background: #AAAADD; }*/
+a:active  { color: #2222FF; background: transparent; }
+
+/* this is to prevent Mozilla from applying :hover on <a name="..."> */
+a[name]   { color: black; background: transparent; }
+

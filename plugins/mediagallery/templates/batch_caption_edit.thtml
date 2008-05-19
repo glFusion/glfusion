@@ -1,0 +1,16 @@
+{lang_batch_caption_help}
+<br{xhtml}><br{xhtml}>
+<form name="media" method="post" action="{s_form_action}">
+<div>
+<input type="hidden" name="album_id" value="{album_id}"{xhtml}>
+{noitems}
+{mediaitems}
+<br{xhtml}>
+<div style="text-align:center;">
+<input type="hidden" name="action" value="batchcaptionsave"{xhtml}>
+<input type="submit" name="mode"   value="{lang_save_exit}"{xhtml}>
+{input_next}
+<input type="submit" name="mode"   value="{lang_cancel}"{xhtml}>
+</div>
+</div>
+</form>

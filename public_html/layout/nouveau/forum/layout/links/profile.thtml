@@ -1,0 +1,3 @@
+<!-- start profile.thtml -->
+<td style="padding-right:3px;"><a href="{profilelink}">{profilelinkimg}</a></td>
+<!-- end profile.thtml -->

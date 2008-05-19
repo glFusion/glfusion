@@ -1,0 +1,903 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Geeklog Documentation - Theme How-To</title>
+  <link rel="stylesheet" type="text/css" href="docstyle.css" title="Dev Stylesheet">
+</head>
+
+<body>
+<img src="images/newlogo.gif" alt="Geeklog Documentation" width="243" height="90">
+<div class="menu"><a href="index.html">Geeklog Documentation</a> - Theme How-To</div>
+
+<p><small>(see below for a list of <a href="#changes">theme changes</a> in
+recent Geeklog versions)</small></p>
+
+
+<h1>Creating a Theme for Geeklog</h1>
+
+<p>Creating a theme for Geeklog is easy and quite fast. If you can
+manipulate HTML files then you can create a theme! There's no need to learn
+PHP.
+
+<h2>Creating a theme</h2>
+
+<p>First, copy an existing theme that is most similar to what you want to
+implement (if one exists). If what you will do is radically different (and
+we hope so!) then copying any one will do. Copy the existing theme to the
+name you want your theme to have (please, <em>no</em> spaces in the theme name):
+
+<p><kbd>cp -R /path/to/geeklog/public_html/layout/Yahoo /path/to/geeklog/public_html/layout/My_Theme_Name_No_Spaces</kbd>
+
+<p>Change into your new theme directory:
+
+<p><kbd>cd /path/to/geeklog/public_html/layout/My_Theme_Name_No_Spaces</kbd>
+
+<p>Now edit the templates to suit your needs. Keep in mind that templates,
+generally are partial HTML files. The directory you just created holds ALL
+templates Geeklog needs but you will only need to modify a small few to
+make a huge impact on the look.
+
+<p>In particular these are the templates you will undoubtedly want to
+change:
+
+<ul>
+<li>header.thtml
+<li>footer.thtml
+<li>blockheader.thtml
+<li>blockfooter.thtml
+<li>storybody.thtml
+<li>storybodytext.thtml
+<li>featuredstorybody.thtml
+<li>featuredstorybodytext.thtml
+<li>archivestorybody.thtml
+<li>archivestorybodytext.thtml
+<li>style.css
+</ul>
+
+<h3><a name="how-themes-work">How themes work</a></h3>
+
+<p>When rendering a theme, Geeklog starts with <tt>header.thtml</tt> which
+builds the site's header and then goes on to include the left column of blocks
+(look for the variable {left_blocks} and the <tt>leftblocks.thtml</tt> file).
+The middle part of a site consists of the stories which are built using the
+<tt>storytext.thtml</tt> and <tt>storybodytext.thtml</tt> (for normal stories)
+and <tt>featuredstorytext.thtml</tt> and <tt>featuredstorybodytext.thtml</tt>
+(for featured stories) template files. The <tt>footer.thtml</tt> file then
+builds the right column of blocks (variable {right_blocks}, file
+<tt>right_blocks.thtml</tt>) and the site's footer. Blocks themselves consist
+of the <tt>blockheader.thtml</tt> and <tt>blockfooter.thtml</tt> files.
+
+<p>The above only describes how Geeklog's main page and stories are rendered.
+More templates exist for the various editors and lists you will see in Geeklog,
+as well as for the calendar and almost every other part of Geeklog.</p>
+
+<p>There is currently no complete list available that explains which template
+file is used for which part of Geeklog. However, in most cases the use should
+be obvious when you have a look at the file and directory names in your theme's
+layout directory. If you're unsure which template file is used to render a
+certain part of Geeklog, have a look at the URL. You will notice the name of
+a PHP file there, e.g. the <tt>users.php</tt> file when you view a user's
+profile. Open that file and search for '<kbd>.thtml</kbd>'. For the profile
+you will find these lines (in <code>function userprofile()</code>):</p>
+<blockquote><code>
+    $user_templates = new Template ($_CONF['path_layout'] . 'users');<br>
+    $user_templates->set_file (array ('profile'=>'profile.thtml', 'row'=>'commentrow.thtml', 'strow'=>'storyrow.thtml'));
+</code></blockquote>
+<p>You don't need to understand PHP code to see that this uses the template
+files <tt>profile.thtml</tt>, <tt>commentrow.thtml</tt>, and
+<tt>storyrow.thtml</tt>. The first line also indicates that these are taken
+from the <tt>users</tt> directory within the theme's layout directory.</p>
+
+<p>An <a href="themevars.html">incomplete list of variables</a> that can be
+used in templates files is also included.</p>
+
+<h3><a name="testing">Testing a theme and further information</a></h3>
+
+<p>After you have edited your themes, you are now ready to test it out.
+Simply go to http://mygeeklogsite/usersettings.php?mode=preferences - in the
+theme drop-down select your newly created theme (note the name of your theme is
+the <em>same</em> name as the directory for your theme).
+
+<p>Finally, you may want to update the logo and other images in your
+theme's images directory.
+
+<p>For the template system we are using PHPLib's template class (<a
+href="http://phplib.sourceforge.net/">http://phplib.sourceforge.net/</a>).
+Read their documentation and, optionally, look at
+/path/to/geeklog/system/classes/template.class.php to see how it is
+implemented. Even with this knowledge it may not be clear which templates
+are used in conjunction with one another (i.e. <tt>storybody.thtml</tt> and
+<tt>storybodytext.thtml</tt> together make up the complete format of a
+<em>single</em>
+story). If you have questions join our mailing list at <a
+href="http://lists.geeklog.net/listinfo/geeklog-users">http://lists.geeklog.net/listinfo/geeklog-users</a>
+or check us out in IRC at irc.freenode.net in #geeklog.</p>
+
+<h3><a name="tips">Tips and tricks</a></h3>
+
+<p><strong><a name="wysiwyg">Themes and WYSIWYG editors:</a></strong>
+The template files used by Geeklog are not complete HTML files - they contain
+only parts of the HTML that Geeklog puts together to build a proper HTML
+document. This, however, seems to confuse some WYSIWYG HTML editors and some of
+them tend to add the HTML which they think is missing from the file, thus
+making it unusable for Geeklog.<br>
+We suggest you use a simple text editor to edit your themes.</p>
+
+<p><strong><a name="php">PHP in themes:</a></strong>
+You can use PHP in the <em>header</em> of a theme, i.e. in the
+<tt>header.thtml</tt> file. If you want to use custom PHP functions, you can
+put them in the file <tt>functions.php</tt> within your themes directory.</p>
+
+<p><strong><a name="different-look">Different look for left and right blocks:</a></strong>
+You can give the blocks on the left and right a different look. See
+<a href="http://www.geeklog.net/forum/viewtopic.php?showtopic=21070">this story on the Geeklog homepage</a> for details.</p>
+
+<p><strong><a name="polls">Polls:</a></strong>
+To use multi-colored bars in the graphical display of poll results, you can use
+the <code>{answer_counter}</code> and <code>{answer_odd}</code> variables in
+the <tt>pollbooth/pollvotes_bar.thtml</tt> template file.
+<code>{answer_counter}</code> will be replaced with a running number for each
+answer, hence <code>bar{answer_counter}.gif</code> would result in
+<tt>bar1.gif</tt>, <tt>bar2.gif</tt>, etc. Giving each of those GIFs a different
+color would give you a different color for each answer.<br>
+<code>{answer_odd}</code> will alternate between 0 and 1 for every answer, hence
+<code>bar{answer_odd}.gif</code> will result in <tt>bar0.gif</tt> for the first,
+third, fifth, etc. answer and <tt>bar1.gif</tt> for the second, fourth, etc.
+answer.</p>
+
+<p><strong><a name="left-blocks">Left blocks in the right column:</a></strong>
+<code>$_CONF['left_blocks_in_footer']</code> is a
+rather curious option. It makes the <code>{left_blocks}</code> variable
+available in the site's footer (i.e. <tt>footer.thtml</tt>) while at the same
+time disabling it in the header (<tt>header.thtml</tt>).<br>
+The idea is that this can be used for two-column layouts (one column for the
+blocks and one column for the content) but when you want to have the blocks
+on the right side. Simply moving all blocks to the right will not work as
+expected, as you'd end up with <em>no blocks</em> at all on those pages that
+normally only display the left blocks (e.g. <tt>article.php</tt> or the
+admin pages). Setting <code>$_CONF['left_blocks_in_footer'] = 1</code> will
+fix this, so that the blocks, while internally still treated as <em>left</em>
+blocks, will actually be displayed on the <em>right</em>.<br>
+The theme's <tt>header.thtml</tt>, <tt>footer.thtml</tt>, and
+<tt>leftblocks.thtml</tt> will probably need some adjustments. The
+'left_blocks_in_footer' option is therefore not available in the main
+configuration but should instead be set in the theme's <tt>functions.php</tt>
+file.  That way, you can even leave your users a choice between, for example,
+a "normal" theme and one with the blocks on the right.</p>
+
+<p><strong><a name="error-message">Error Message:</a></strong>
+Since Geeklog 1.4.1 it is possible to control what HTML is displayed to
+non-root users in the event of an error occurring (a crash bug). To do
+so, you need to change the function <code>CUSTOM_handleError</code> in
+lib-custom.php to output any HTML you like.</p>
+
+<p><strong><a name="permalink">Adding a "permalink" to stories:</a></strong>
+Many websites offer a so-called permalink, i.e. a link to a permanent URL for
+the story. In Geeklog's default Professional theme, the article's headline
+already provides the same functionality - it links to a permanent URL for the
+story (pointing to article.php). However, since this is not very obvious and
+since visitors often expect to find a "permalink" somewhere on the page, here's
+how to add one yourself:</p>
+<ol>
+<li>Find a place in the story template files. The "story-footer" section in
+<tt>storytext.thtml</tt> may be a good place since it already contains quite a
+few story-related links.</li>
+<li>Once you've found a place to put the permalink entry, enter this piece of
+code:<br>
+<code style="margin-left:2em">&lt;a href="{article_url}"&gt;{lang_permalink}&lt;a&gt;</code><br>
+This will add a link to the article (<code>article_url</code>) using the word
+"Permalink" from the current language file (<code>lang_permalink</code>).</li>
+<li>Try it out. Be aware that at this point, your permalink entry only shows up
+for non-featured articles. You may want to tweak the appearance a bit (using
+CSS) or move the link around.</li>
+<li>Add the same piece of code to the <tt>featuredstorytext.thtml</tt> and
+<tt>archivestorytext.thtml</tt> templates so that the link also appears for
+featured and archived stories.</li>
+</ol>
+
+
+<h2><a name="changes">Theme changes in Geeklog 1.5.0</a></h2>
+
+<h3><a name="xhtml">XHTML support</a></h3>
+
+<p>Geeklog now supports XHTML compliant themes. These themes should define the
+following constant in their <tt>functions.php</tt> file:</p>
+<pre><code>    define('XHTML', ' /'); </code></pre>
+<p>This will ensure that Geeklog switches to XHTML internally. If you want your
+theme be working both as an HTML and an XHTML theme, you should use the
+<code>{xhtml}</code> variable wherever XHTML requires a self-closing tag,
+e.g. <code>&lt;br /&gt;</code> would be written as <code>&lt;br{xhtml}&gt;</code>. If you don't plan to use the theme for HTML, feel free to hard-code your
+theme for XHTML only.</p>
+<p><strong>Note:</strong> If you're using XHTML, it is your responsibility to
+ensure that your site's content (stories, comments, etc.) is XHTML compliant.
+Geeklog does <em>not</em> convert your content to XHTML.</p>
+
+<h3>"Contribute" - User submitted stories</h3>
+
+<p>Geeklog 1.5.0 supports the ability for users to specify story intro text
+  and body text seperately rather than just the intro text. This can be
+turned on and off by changing the templates. The files:</p>
+<ul>
+    <li>submit/submitstory.thtml</li>
+    <li>submit/submitstory_advanced.thtml</li>
+</ul>
+<p>Contain table rows containing the bodytext inputs. Simply removing these
+inputs returns behaviour to the original.</p>
+
+<h3>Admin-Menu, Topic-List &amp; User-Menus</h3>
+
+<p>All the above mentioned items are now lists, using <code>ul</code> and
+<code>li</code> tags. The <code>ul</code> is inserted by the core code, the
+<code>li</code> is in the templates</p>
+
+<h3>Security Changes</h3>
+
+<p>Many forms, particularly in the admin section of the site need a new hidden
+form field in order for saving the form/processing the action to work. Add:</p>
+
+<pre><code>    &lt;input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}&gt;</code></pre>
+<p>To the following templates:</p>
+<ul>
+    <li>admin/plugins/editor.thtml</li>
+    <li>admin/story/storyeditor.thtml</li>
+    <li>admin/story/storyeditor_advanced.thtml</li>
+    <li>admin/config/configuration.thtml (new theme file for 1.5)</li>
+</ul>
+<p>Some plugin specific templates have also been changed, you may also need to check:</p>
+<ul>
+  <li>plugins/staticpages/templates/admin/editor.thtml</li>
+  <li>plugins/staticpages/templates/admin/editor_advanced.thtml</li>
+</ul>
+
+
+<h2><a name="changes141">Theme changes in Geeklog 1.4.1</a></h2>
+
+<p>The css in 1.4.1 has been changed to a wider extent. More and more layout
+components are beeing moved to the stylesheet so more change in looks can be
+achieved with less change in the files. There is a reduction of tables and DIV,
+and a stronger focus on semantics and consistency. Please also notice that the
+styles.css includes additional documentation on the use of classes now.</p>
+
+<p>As usual, any missing new theme files can simply be copied over from the
+default theme (Professional) that ships with Geeklog.</p>
+
+<h3>Header-Tags</h3>
+
+<p>From now on, all headlines in blocks & stories are made with header-tags. The
+biggest title in a story is always h1, in a block always h2.</p>
+
+<h3>Story layout</h3>
+<p>The blocks for stories have no more tables, and the classes have been renamed
+for consistency. There is a box now around the story called class "story" or
+"story-featured". The components inside that box are story-icons,
+story-information, story-body and story-footer. The title is a h1-tag. For
+featured stories, only the outer box has a different class, the rest has to be
+cascaded for changes.</p>
+
+<h3>Blocks</h3>
+<p>The blocks changed in the same way as the stories. There are no more tables,
+only one div-tag as a frame around called block-box, block-box-left or
+block-box-right. The title is a h2-tag and the help icon for the block is a span
+ with a class called block-helpicon. Sub-titles in blocks have the h3-tag (such
+ such as in the What's new or Older Stories block). The changes affect (next to
+ styles.css) the follwing files:</p>
+<ul>
+<li>blockfooter-left.thtml</li>
+<li>blockfooter-related.thtml</li>
+<li>blockfooter-right.thtml</li>
+<li>blockfooter.thtml</li>
+<li>blockheader-left.thtml</li>
+<li>blockheader-message.thtml</li>
+<li>blockheader-related.thtml</li>
+<li>blockheader-right.thtml</li>
+<li>blockheader.thtml</li>
+</ul>
+
+<h3>Admin templates</h3>
+
+<p>Many of the admin template files have had minor changes to tweak appearance
+or functionality. If you didn't modify the admin templates in your theme, the
+easiest way to upgrade your theme's admin templates is to simply replace the
+entire 'admin' directory with the one from Geeklog's Professional theme.</p>
+
+<ul>
+<li>All the "delete" buttons in the admin's editors (story editor, etc.) now
+    pop up a JavaScript confirmation box as a simple measure against
+    accidental deletion. If you'd rather not have that confirmation box,
+    replace the <code>{delete_option}</code> variable with
+    <code>{delete_option_no_confirmation}</code> in the admin templates.</li>
+<li>The order of the save / cancel / delete buttons is now consistent across
+    all admin template files (changed <tt>group/groupeditor.thtml</tt> and
+    <tt>user/edituser.thtml</tt>).</li>
+<li>Changed the top links in <tt>lists/topmenu_nosearch.thtml</tt> and
+    <tt>topic/topiclist.thtml</tt> to be consistent with the other admin areas
+    (i.e. the links are no longer enclosed in square brackets).</li>
+<li>To enable changing the group ownership of "gldefault" blocks, the
+    <tt>defaultblockeditor.thtml</tt> has to be changed to include a
+    <code>{group_dropdown}</code> variable.
+</ul>
+
+<h3>Other theme changes</h3>
+
+<ul>
+<li>There was a div for spreading the with of the blocks to a minimum in the
+    files leftblocks.thtml and rightblocks.thtml. The format of those has been
+    transferred to the stylesheet with the class name block-bg-spreader</li>
+<li>The template for the Polls-plugin has renamed classes block-vote-results to
+    poll-vote-results and block-vote to poll-vote to avoid confustion with
+    block-related classes.</li>
+<li>The template files used by the Calendar plugin are now located in the
+    plugin's directory, (<tt>/path/to/geeklog/plugins/calendar/templates</tt>),
+    so the entire 'calendar' directory can be removed from the theme
+    directory.<br>
+    The <tt>submitevent.thtml</tt>, <tt>editpersonalevent.thtml</tt>,
+    <tt>admin/eventeditor.thtml</tt>, and <tt>dayview/quickaddform.thtml</tt>
+    have also been changed to (optionally) support entering the time in <a
+    href="calendar.html#desc_hour_mode">24 hour mode</a>: A hidden input field
+    "hour_mode" is now required, the am/pm dropdowns are available as variables
+    <code>{startampm_selection}</code>, <code>{endampm_selection}</code>,
+    <code>{ampm_selection}</code>, depending on the template file), and the
+    dropdowns for the minutes are available as variables
+    (<code>{startminute_options}</code>, <code>{endminute_options}</code>,
+    <code>{minute_options}</code>, depending on the template file).</li>
+<li>The variables <code>{author}</code> and <code>{owner}</code> are now
+    available in every template where an object's author (e.g. story or
+    comment author) or owner (e.g. owner of a block) name can be displayed.
+    They will also respect the <a
+    href="config.html#desc_show_fullname">$_CONF['show_fullname']</a> setting,
+    i.e. display either the user's full name or username.</li>
+<li>The Article Author's tag in <tt>storytext.thtml</tt> and
+    <tt>featuredstorytext.thtml</tt> is now called
+    <code>{contributedby_author}.</code></li>
+<li>To enable a remarks field in the answer to polls, the
+    <tt>pollvotes_bar.thtml</tt>, <tt>pollansweroption.thtml</tt> and
+    <tt>polleditor.thtml</tt> were changed. The
+    <tt>pollvotes_bar.thtml</tt> is now colored and has two lines, a class
+    for color coding each line and the <code>{answer_text}</code>. The
+    <tt>polleditor.thtml</tt> has an aditional field to enter the remarks,
+    same as the <tt>pollansweroption.thtml</tt>.
+<li>A user's Account Information page has been redesigned. While there were no
+    technical changes (i.e. template files from earlier versions will still
+    work), some options have been rearranged and a note has been added to tell
+    the user that the current password is required to change those. Affected
+    files in the <tt>preferences</tt> directory: <tt>profile.thtml</tt>,
+    <tt>username.thtml</tt>, and <tt>userphoto.thtml</tt>.</li>
+<li>The <tt>navbar</tt> directory now contains four files,
+    <tt>menuitem.thtml</tt>,<tt>navbar.thtml</tt>,<tt>breadcrumbs.thtml</tt>,<tt>breadcrumb_link</tt> as well as two images,
+    <tt>button.gif</tt> and <tt>button_over.gif</tt>.</li>
+<li>A <a name="captcha"><code>{captcha}</code></a> variable has been added to
+    the following files:
+    <ul>
+    <li><tt>comment/commentform.thtml</tt></li>
+    <li><tt>comment/commentform_advanced.thtml</tt></li>
+    <li><tt>profiles/contactauthorform.thtml</tt></li>
+    <li><tt>profiles/contactuserform.thtml</tt></li>
+    <li><tt>submit/submitstory.thtml</tt></li>
+    <li><tt>submit/submitstory_advanced.thtml</tt></li>
+    <li><tt>users/registrationform.thtml</tt></li>
+    </ul>
+    This variable is supposed to be used by a plugin that implements <a
+    href="http://en.wikipedia.org/wiki/Captcha">CAPTCHA</a>s and will simply be
+    empty when no such plugin is installed.</li>
+</ul>
+
+<h3>Professional theme</h3>
+
+<p>The following changes are specific to the Professional theme. There is
+probably no need to port them over to other themes.</p>
+
+<ul>
+<li>The theme now uses CSS everywhere for spacing and dividers instead of
+    relying on a 1x1 pixel transparent GIF image (<tt>speck.gif</tt>).</li>
+<li>The amount of nested tables has been reduced, e.g. in the block
+    headers.</li>
+<li>Two unused template files, <tt>customlogin-header.thtml</tt> and
+    <tt>customlogin-footer.thtml</tt>, have been removed.</li>
+</ul>
+
+
+<h2><a name="changes140">Theme changes in Geeklog 1.4.0</a></h2>
+
+<p>As usual, any missing new theme files can simply be copied over from the
+default theme (Professional) that ships with Geeklog.</p>
+
+<h3>Admin templates</h3>
+
+<p>Geeklog 1.4.0 comes with revamped Admin sections which required a lot of
+theme changes. We therefore suggest that you simply replace the entire
+<tt>admin</tt> directory of your theme with the <tt>admin</tt> directory
+from Geeklog's default theme (Professional) as it ships with Geeklog 1.4.0
+and apply any modfications you may have made to your Admin templates again
+afterwards.</p>
+
+<p><strong>Note:</strong> The new icons for "Command and Control"
+(<tt>moderation.php</tt>) in the Professional theme use a white background.
+For themes with a dark (or other non-white) background, you can <a
+href="http://www.geeklog.net/filemgmt/singlefile.php?lid=623">download</a> these
+icons as PNGs with alpha transparency (note that Internet Explorer can not
+display images with alpha transparency unless you include a JavaScript "<a
+href="http://homepage.ntlworld.com/bobosola/">hack</a>" into your theme, so you
+may want to convert those icons to normal transparency or simply set the
+background to that of your theme).</p>
+
+
+<h3>Advanced editor</h3>
+
+<p>To use the included advanced editor (FCKeditor) you will need the following
+new template files:</p>
+<ul>
+<li><tt>comment/commentform_advanced.thtml</tt> (for comments)</li>
+<li><tt>submit/submitstory_advanced.thtml</tt> (for story submissions)</li>
+<li><tt>admin/story/storyeditor_advanced.thtml</tt> (Admin's story editor)</li>
+<li><tt>staticpages/templates/admin/editor_advanced.thtml</tt> (for the Static
+    Pages editor, located in <tt>/path/to/geeklog/plugins</tt>)</li>
+<li><tt>advanced_editor_header.thtml</tt> (included by all of the above)</li>
+</ul>
+<p>You also have to add <code>{advanced_editor}</code> to the <code>&lt;head&gt;</code> section of your theme's <tt>header.thtml</tt> file.</p>
+
+<h3>Other changes</h3>
+
+<ul>
+<li>The comment templates <tt>commentbar.thtml</tt> and <tt>thread.thtml</tt>
+    have changed due to changes in the comment handling.</li>
+<li>New directories <tt>trackback</tt> and <tt>admin/trackback</tt> containing
+    several new template files have been added for the trackback support.</li>
+<li>New variables <code>{send_trackback_link}</code>,
+    <code>{send_trackback_url}</code>, and
+    <code>{lang_send_trackback_text}</code> are available in the story and
+    article template files. They provide a complete link as well as the URL and
+    link text allowing you to send a trackback comment for the current
+    story.</li>
+<li>The <tt>links</tt> and <tt>admin/link</tt> directories have been
+    removed. Links are now a plugin and the plugin's templates can be found in
+    <tt>/path/to/geeklog/plugins/links/templates</tt>.</li>
+<li>The <tt>pollbooth</tt> and <tt>admin/poll</tt> directories have been
+    removed. Polls are now a plugin and the plugin's templates can be found in
+    <tt>/path/to/geeklog/plugins/polls/templates</tt>.</li>
+<li>The <tt>preferences/profile.thtml</tt> template now has additional fields
+    for the password change (old password, confirmation field for the new
+    password).</li>
+<li>The search form, <tt>search/searchform.thtml</tt> has a new option for the
+    number of search results per page, while the hard-coded option to search
+    for links has been removed (since Links are in plugin now, it will show up
+    as part of the <code>{plugin_types}</code> option).</li>
+<li>An additional variable, <code>{services}</code>, has to be added to the
+    <tt>loginform.thtml</tt> template file if you plan to allow users to log in
+    to your site using remote authentication.</li>
+<li>If you plan to enable Trackbacks on your site, you may want to add links to
+    a story's trackbacks section to your story template files, e.g.
+    <code>{start_trackbacks_anchortag}{trackbacks_with_count}{end_trackbacks_anchortag}</code>. See the Professional theme's story template files for
+    examples.</li>
+<li>For the site statistics, the file <tt>stats/sitestatistics.thtml</tt> has
+    changed (entries for the links and poll have been removed and a new entry
+    for the number of active users has been added). There is also a new file,
+    <tt>stats/singlesummary.thtml</tt>, that is used for plugin entries.</li>
+<li>The <tt>navbar</tt> directory is now part of a Geeklog theme (previously
+    used by some plugins, e.g. the Forum plugin). It contains two files,
+    <tt>menuitem.thtml</tt> and <tt>navbar.thtml</tt>, as well as two images,
+    <tt>button.gif</tt> and <tt>button_over.gif</tt>.</li>
+</ul>
+
+
+<h2><a name="changes1311">Theme changes in Geeklog 1.3.11</a></h2>
+
+<p>There are no mandatory theme changes in Geeklog 1.3.11, so themes made for Geeklog 1.3.10 will work just fine without any modifications.</p>
+
+<p>A few minor additions / new options have been introduced:</p>
+<ul>
+<li>A new variable, <code>{camera_icon}</code>, can now be used in the story
+    and comment template files to display the small camera icon (the same as in
+    the Who's Online block) to link to the author's user profile (only if they
+    uploaded a userphoto).</li>
+<li>The <code>{layout_url}</code> variable is now available in the templates
+    for the story, link, and event submission forms.</li>
+<li>Also in the submission forms, a variable <code>{separator}</code> is now
+    available in addition to the misspelled <code>{seperator}</code>
+    variable.</li>
+<li>A new variable, <code>{calendar_mode}</code>, can be used in the
+    <tt>calendar/events.thtml</tt> template file to ensure that the "add event"
+    link will take the user to the proper event submission form for either the
+    site calendar or the personal calendar.</li>
+</ul>
+
+<h2><a name="changes1310">Theme changes in Geeklog 1.3.10</a></h2>
+
+<p>General note: To upgrade your custom theme for use with Geeklog 1.3.10, you can simply copy over any new template files from the Geeklog default theme.</p>
+
+<p>The biggest change in Geeklog 1.3.10 is that we now ship it with only one
+default theme (the Professional theme, kindly provided by Victor B. Gonzalez)
+and that the previously included themes are now available as a separate
+download.</p>
+
+<h3>Admin templates</h3>
+
+<p>Most themes don't change the template files in the theme's <tt>admin</tt>
+directory, so you can often save yourself a bit of work by simply replacing
+the entire <tt>admin</tt> directory with the one from the Geeklog 1.3.10
+distribution.</p>
+
+<ul>
+<li>The story editor, <tt>admin/story/storyeditor.thtml</tt> includes new
+    options for the story archiving and for editable story IDs. <em>It is
+    recommended to make a copy of this file and re-apply any changes you may
+    have made to your copy again afterwards!</em></li>
+<li>The list of polls, <tt>admin/poll/polllist.thtml</tt> now supports
+    paging, i.e. uses the {google_paging} variable.</li>
+<li>The list of events uses paging and a row number now (files affected:
+    <tt>admin/event/eventlist.thtml</tt> and
+    <tt>admin/event/listitem.thtml</tt>).</li>
+<li>The plugin editor, <tt>admin/plugins/editor.thml</tt>, now displays 2
+    version numbers for the plugin: The installed version and the (possibly
+    differing) version of the actual code.  In the latter case, it will also
+    display an update button.<br>
+    The list of plugins, <tt>admin/plugins/pluginlist.thtml</tt> and
+    <tt>admin/plugins/listitem.thtml</tt>, also displays the 2 version numbers
+    and now supports paging when more than 25 plugins are installed.</li>
+<li>The topic editor, <tt>admin/topic/topiceditor.thtml</tt>, contained a
+    hard-coded "10" for the default number of stories per pages. The new
+    variable {default_limit} provides the actual default value now.</li>
+<li><tt>admin/mail/mailform.thtml</tt> has been changed to look slightly less
+    ugly ...</li>
+</ul>
+
+<h3>Other templates</h3>
+
+<ul>
+<li>Added two new templates for the new story archive feature. This allows you
+    to theme olderstories differently. By default Geeklog 1.3.10 ships with
+    these template files not themed and the same as a standard story. The new
+    template files are <ul><li>archivestorytext.thtml</li>
+    <li>archivestorybodytext.thtml</li></ul></li>
+<li>Due to various changes in the comment engine, it is recommended that you
+    copy over all the comment template files from the <tt>comment</tt> directory
+    (<tt>comment/reportcomment.thtml</tt> is actually a new file).</li>
+<li>In <tt>calendar/dayview/dayview.thtml</tt>, i.e. in the calendar's day
+    view, the hard-coded am/pm times have been replaced by variables of the
+    form {xx_hour} (where 'xx' is 0-23).</li>
+<li>In the event details template, i.e. in <tt>calendar/eventdetails.thtml</tt>,
+    the event type and an edit icon were added (this change was only made in
+    Geeklog 1.3.10rc3).</li>
+<li>A "location" field was added in the user's profile: Added {lang_location}
+    and {user_location} in <tt>users/profile.thtml</tt> and {lang_location},
+    {lang_location_text}, and {location_value} in
+    <tt>preferences/profile.thtml</tt>.</li>
+</ul>
+
+<h3>Optional changes</h3>
+
+<p>The following is a list of optional changes (mostly new variables that are
+now available). This information is mostly of interest for those who want to
+develop their own themes.</p>
+
+<ul>
+<li>{article_url}, i.e. the full URL to an article, is now also available in
+    <tt>article/printable.thtml</tt>.</li>
+<li>In <tt>links/linkdetails.thtml</tt> the new variable {link_actual_url} now
+    contains the actual link URL (instead of a link to Geeklog's
+    <tt>portal.php</tt>).</li>
+<li>The following variables are now available in <tt>calendar/eventdetails.thtml</tt>:
+    {event_state_name} (full name of the state), {event_state_only} and
+    {event_state_name_only} (abbreviated and full state name without the comma),
+    {event_edit} (link to edit the event, if allowed for the current user),
+    {edit_icon} (same, but with the edit icon instead of a text link),
+    {lang_event_type} and {event_type} for the event type
+<li>The topic image is now available through the {topic_image} variable in
+    <tt>topicoption.thtml</tt> and <tt>topicoption_off.thtml</tt></li>
+<li>Several class names have been introduced so that the various lists that
+    Geeklog uses can now be styled individually: list-feed, list-new-comments,
+    list-new-links, list-new-plugins, list-older-stories, list-personal-events,
+    list-site-events, list-story-options, list-whats-related (the names should
+    be self-explanatory).<br>
+    Use {list_class_name} to get the actual class name, and {list_class} to get
+    class="classname".</li>
+<li>Several class names have been introduced so that the 2 small calendars
+    in the calendar's month view can be styled: .smallcal, .smallcal-headline,
+    .smallcal-week-even, .smallcal-week-odd, .smallcal-week-empty,
+    .smallcal-day-even, .smallcal-day-odd, and .smallcal-day-empty</li>
+</ul>
+
+
+<h2><a name="changes139">Theme changes in Geeklog 1.3.9</a></h2>
+
+<ul>
+<li>In <tt>header.thtml</tt>, you can now use the new variable
+    <code>{allowed_menu_elements}</code> as an alternative to using
+    <code>{menu_elements}</code>. The new variable takes the
+    <code>$_CONF['<i>XXX</i>loginrequired']</code> settings into account, i.e.
+    it will only list those entries that the current user has access to.</li>
+<li>The <tt>admin/syndication</tt> directory, containing
+    <tt>feededitor.thtml</tt>, <tt>listfeeds.thtml</tt>,
+    <tt>listitem.thtml</tt>, and <tt>selecttype.thtml</tt> has been added.</li>
+<li>Template files <tt>comment/comment.thtml</tt> and
+    <tt>comment/thread.thtml</tt> have been added and
+    <tt>comment/startcomment.thtml</tt> has been changed to implement
+    template-driven comments.<br>
+    Please note that <tt>comment/comment.thtml</tt> was changed <em>again</em>
+    in Geeklog 1.3.9rc2.</li>
+<li>A <code>{link_edit}</code> variable has been added to
+    <tt>links/linkdetails.thtml</tt> so that admins can edit links directly
+    from the links section.</li>
+<li>An "edit" icon has been added: <tt>images/edit.gif</tt>. The new variable
+    <code>{edit_icon}</code> can be used as an alternative to
+    <code>{edit_link}</code> in the story template files and in
+    <tt>links/linkdetails.thtml</tt>.</li>
+<li>In the <tt>calendar/calendar.thtml</tt> file, the "mode" parameter has been
+    added to the &lt;&lt; and &gt;&gt; buttons, so that users stay in their
+    personal calendar when browsing through months.</li>
+<li>A new file, <tt>admin/group/groupmembers.thtml</tt>, has been added and
+    <tt>admin/group/listitem.thtml</tt> has been changed for the new
+    alternative option to add users to groups.</li>
+<li>A new file, <tt>admin/block/listside.thtml</tt>, has been added and
+    <tt>admin/block/listitem.thtml</tt> and <tt>admin/block/listblocks.thtml</tt>
+    have been changed for the enhanced block list.</li>
+<li>A <code>{google_paging}</code> variable has been added to
+    <tt>admin/link/linklist.thtml</tt>. Also added a column number to
+    <tt>linklist.thtml</tt> and <tt>admin/link/listitem.thtml</tt>.</li>
+<li>All template files where the user can enter a URL are now using a new
+    variable, <code>{max_url_length}</code>, instead of a hard-coded number of
+    characters for the max. length of the URL. Files affected:
+    <tt>admin/block/blockeditor.thtml</tt>,
+    <tt>admin/event/eventeditor.thtml</tt>,
+    <tt>admin/link/linkeditor.thtml</tt>,
+    <tt>admin/topic/topiceditor.thtml</tt>,
+    <tt>submit/submitevent.thtml</tt>, <tt>submit/submitlink.thtml</tt>.</li>
+<li>The hard-coded <code>&amp;nbsp;</code> has been removed from the
+    <code>{welcome_msg}</code> variable. The blank was then added to the
+    <tt>header.thtml</tt> of the Classic, XSilver, and Yahoo themes (the other
+    themes either look fine without it or didn't use <code>{welcome_msg}</code>
+    in the first place).</li>
+<li>An extra <code>table</code> has been removed from the
+    <tt>users/profile.thtml</tt> file of the XSilver theme so that the
+    username now lines up properly with the other entries.</li>
+</ul>
+
+<h2><a name="changes138">Theme changes in Geeklog 1.3.8</a></h2>
+
+<p>Theme changes in Geeklog 1.3.8 were mostly aimed at moving as much of the
+hard-coded HTML into template files as possible. Other changes were made to
+give theme authors better control over the layout and a small portion of changes
+were done to incorporate new Geeklog features.</p>
+
+<h3>New template files</h3>
+
+<p>This is a list of the new files. You can safely copy these over from one of
+the standard themes that ship with Geeklog (most of these files contain HTML
+that was previously hard-coded into Geeklog).</p>
+
+<pre>
+adminoption_off.thtml
+loginform.thtml
+topicoption.thtml
+topicoption_off.thtml
+useroption_off.thtml
+admin/database/listbackups.thtml
+admin/database/listitem.thtml
+admin/user/edituser.thtml
+admin/user/plainlist.thtml
+comment/commentbar.thtml
+comment/startcomment.thtml
+pollbooth/pollanswer.thtml
+pollbooth/pollblock.thtml
+pollbooth/pollcomments.thtml
+pollbooth/pollresult.thtml
+pollbooth/pollvotes_bar.thtml
+pollbooth/pollvotes_num.thtml
+preferences/boxesblock.thtml
+preferences/commentblock.thtml
+preferences/deleteaccount.thtml
+preferences/digestblock.thtml
+preferences/displayblock.thtml
+preferences/displayprefs.thtml
+preferences/excludeblock.thtml
+preferences/language.thtml
+preferences/privacyblock.thtml
+preferences/profile.thtml
+preferences/theme.thtml
+preferences/username.thtml
+preferences/userphoto.thtml
+search/resultauthdatehits.thtml
+search/resultrowenhanced.thtml
+search/resultsummary.thtml
+search/resulttitle.thtml
+users/newpassword.thtml
+</pre>
+
+<p>Note: <tt>preferences</tt> and <tt>admin/database</tt> are new directores.</p>
+
+
+<h3>Changed / updated template files</h3>
+
+<p>These files have changed since Geeklog 1.3.7, i.e. they may contain new
+variables, table columns, etc. If you haven't changed these files in your
+existing theme, it is probably best to simply copy them over from one of the
+themes that ship with Geeklog (with the exception of <tt>style.css</tt> and
+<tt>header.thtml</tt>, see below).</p>
+
+<pre>
+style.css <em>(see below)</em>
+header.thtml <em>(see below)</em>
+admin/block/blockeditor.thtml
+admin/block/listblocks.thtml
+admin/block/listitem.thtml
+admin/event/eventeditor.thtml
+admin/event/eventlist.thtml
+admin/event/listitem.thtml
+admin/group/grouplist.thtml
+admin/group/listitem.thtml
+admin/story/liststories.thtml
+admin/topic/listitem.thtml
+admin/topic/topiceditor.thtml
+admin/topic/topiclist.thtml
+calendar/editpersonalevent.thtml
+calendar/eventdetails.thtml
+search/searchform.thtml
+search/searchresults.thtml
+submit/submitevent.thtml
+users/getpasswordform.thtml
+</pre>
+
+<p>In <tt>style.css</tt>, four classes have been added that are used in the
+new search code of Geeklog 1.3.8. Instead of copying over the entire file, you
+will probably only want to copy over the code for those four classes:
+<tt>searchAuth</tt>, <tt>searchDate</tt>, <tt>searchHits</tt>,
+<tt>highlight</tt>.</p>
+
+<p>If the <tt>header.thtml</tt> of your theme is using the
+<tt>{menu_elements}</tt> variable, then you do <em>not</em> need to make any
+changes to it. If it is not using that variable, then you will need to make one
+change to it. In that case, search your <tt>header.thtml</tt> for the link
+to the story submission form, i.e. something like</p>
+<pre>
+    &lt;a href="{site_url}/submit.php?type=story"&gt;
+</pre>
+<p>and change it to read</p>
+<pre>
+    &lt;a href="{site_url}/submit.php?type=story{current_topic}"&gt;
+</pre>
+
+
+<h3>Removed template files</h3>
+
+<p>If you have a file named <tt>commentheader.thtml</tt> in your theme
+directory, you can safely remove it. It isn't used at all.</p>
+
+
+<h2><a name="changes137">Theme changes in Geeklog 1.3.7</a></h2>
+
+<p>Please note that all the following changes are <em>optional</em>. Themes
+made for Geeklog 1.3.6 will work just fine with Geeklog 1.3.7 - no changes
+are necessary.</p>
+
+<h3>New features and improvements</h3>
+
+<ul>
+  <li>Theme-based topic icons are now supported by setting <tt>$_THEME_URL</tt>
+    in the theme's <tt>functions.php</tt> file. The variable should point to
+    a directory that has the same hierarchy as Geeklog's images directory
+    (note that the path to topic images is stored relative to Geeklog's
+    public_html directory).<br>
+    <strong>Example:</strong>
+    <code>$_THEME_URL = $_CONF['layout_url'];</code></li>
+  <li>The <code>$_BLOCK_TEMPLATE</code> "hack" can now be applied to the
+    What's Related and Story Options blocks, as well. Use
+    <tt>whats_related_block</tt> and <tt>story_options_block</tt> as the block
+    names.</li>
+  <li>The What's Related and Story Options blocks are now available as
+    separate variables using <tt>{whats_related}</tt> and
+    <tt>{story_options}</tt>, respectively
+    (the <tt>{whats_related_story_options}</tt> variable for both blocks is
+    still available).</li>
+  <li>Several new variables can now be used in the story templates, e.g.
+    <tt>{contributedby_fullname}</tt> for the full name of a story author and
+    <tt>{contributedby_photo}</tt> for his/her user photo.</li>
+  <li>When the new config variable <tt>$_CONF['showfirstasfeatured']</tt> is set
+    to 1, then the first story on <em>every</em> page is rendered using the
+    template files for featured stories, even when the story is not marked as
+    featured.</li>
+</ul>
+
+<h3>Other changes</h3>
+
+<ul>
+  <li>The template file <tt>admin/plugins/installform.thtml</tt> has been
+    removed since it isn't used any more.</li>
+  <li>Two new <em>optional</em> template files,
+    <tt>admin/plugins/newpluginlist.thtml</tt> and
+    <tt>admin/plugins/newlistitem.thml</tt>, have been added to support
+    formatting of the list of plugins which haven't been installed yet. If
+    these files do not exist, hard-coded HTML is used to present the list.</li>
+  <li>The template file <tt>admin/link/listitem.thtml</tt> has been changed
+    so that all the links are clickable.</li>
+  <li><code>COM_pollResults()</code> doesn't use the side block templates any
+    more when called from <tt>pollbooth.php</tt>. Therefore, you can now use
+    different layouts whether the poll results are displayed in a side block
+    or on the separate poll results and comments page.</li>
+  <li>Removed the Normal / Archive / Refreshing drop down menus from the admin
+    story and poll editors of the themes that ship with Geeklog. The setting
+    of this dropdown isn't used in Geeklog anyway and has just confused users
+    in the past ... (files <tt>admin/story/storyeditor.thtml</tt> and
+    <tt>admin/poll/polleditor.thtml</tt>)</li>
+</ul>
+
+
+<h2><a name="changes136">Theme changes in Geeklog 1.3.6</a></h2>
+
+<p>There have been a lot of changes in the themes for 1.3.6 to get rid of the
+last pieces of hard-coded english texts so as to make localisation easier.
+Most of these changes have been made in the Admin editors (<tt>admin</tt>
+directory) and the calendar (<tt>calendar</tt> directory). If you created
+your own theme for an earlier version of Geeklog, we recommend that you copy
+over these two directories from one of the themes that come with Geeklog
+(choose one that is similar to your own theme or which it was originally based
+on). It seems like most Geeklog themes didn't change these files anyway, so
+this shouldn't be too much of a hassle ...</p>
+
+<h3>Other changes</h3>
+<ul>
+  <li>The template file <tt>admin/mail/mailform.thtml</tt> has been added.
+    This form for sending emails to other users of the site was previously
+    hard-coded into Geeklog.<br>
+    If you followed the above advice and copied over the <tt>admin</tt>
+    directory to your theme, you got this file already.</li>
+  <li>Two new files <tt>menuitem_last.thtml</tt> and
+    <tt>menuitem_none.thtml</tt> have been added to give theme authors better
+    control over the items in menu bars ({menu_elements} and {plg_menu_elements}
+    variables in <tt>header.thtml</tt>). The template file
+    <tt>menuitem.thtml</tt> is now used to render the first and any following
+    menu items - with the exception of the last menu item, which is rendered
+    using <tt>menuitem_last.thtml</tt>. If there are no menu elements for a
+    menu bar, <tt>menuitem_none.thtml</tt> is used.</li>
+  <li>New files have been added and the existing files have been changed for
+    the links section (<tt>links</tt> directory). Again, we recommend to just
+    copy over those files from one of the themes that ship with Geeklog.<br>
+    The new files are: <tt>categoryactivecol.thtml</tt>,
+    <tt>categorycol.thtml</tt>, <tt>categorynavigation.thtml</tt>,
+    <tt>categoryrow.thtml</tt>, <tt>pagenavigation.thtml</tt></li>
+  <li>The user profile has been extended to include a list of the last 10
+    stories as well as the total numbers of stories and comments posted by that
+    user. Have a look at the file <tt>users/profile.thtml</tt> to see the
+    changes or just copy that file over from one of the themes that ship with
+    Geeklog. You should also copy over the file <tt>users/storyrow.thtml</tt>
+    which describes the block for the last 1o stories.</li>
+  <li>The Classic theme has been updated to have an "Edit" link (for
+    StoryAdmins) in every story now.<br>
+    Files changed: <tt>storybodytext.thtml</tt>,
+    <tt>featuredstorybodytext.thtml</tt></li>
+  <li>In the Classic and Digital Monochrome themes the "contact" link now
+    points to the form to send an email to the admin user instead of using a
+    <code>mailto:</code> link with the site's email address from the
+    configuration.</li>
+</ul>
+
+<h3>CSS changes</h3>
+<ul>
+<li>The underscore '_' is not a valid character in CSS. Therefore, some class names used by the Geeklog calendar have been changed to use the dash '-' instead. You may need to change your stylesheet accordingly.<br>
+Names that changed: <b>cal-oldday</b>, <b>cal-today</b>,
+<b>cal-futureday</b>, <b>cal-nullday</b>, <b>weekview-curday</b>,
+<b>weekview-offday</b></li>
+<li>A new class named <b>pagenav</b> can be used to format the paged
+  navigation.<br>
+  Please note that this change was made <em>after</em> the release of Geeklog
+  1.3.6rc1 and affects the use of the paged navigation in
+  <tt>admin/user/userslist.thtml</tt> and <tt>links/links.thtml</tt>: In
+  1.3.6rc1, the navigation was wrapped in &lt;p&gt; tags in those files. As
+  of Geeklog 1.3.6 however, the function producing the navigation will wrap
+  it in a &lt;div&gt; automatically.</li>
+</ul>
+
+<p><strong>Note:</strong> Theme authors are encouraged to specify a character
+set in the <tt>header.thtml</tt> of their themes like this:</p>
+<blockquote><code>
+&lt;meta http-equiv="Content-Type" content="text/html; charset={charset}"&gt;
+</code></blockquote>
+<p>Geeklog will replace the <code>{charset}</code> variable with the proper
+character set based on the currently used language file. Also make sure that
+you put the above line <em>before</em> the <code>&lt;title&gt;</code> tag in
+the <code>&lt;head&gt;</code> section of your <tt>header.thtml</tt> file.</p>
+
+<div class="footer">
+    <a href="http://wiki.geeklog.net/">The Geeklog Documentation Project</a><br>
+    All trademarks and copyrights on this page are owned by their respective owners. Geeklog is copyleft.
+</div>
+</body>
+</html>

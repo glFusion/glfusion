@@ -1,0 +1,11 @@
+<table style="width:100%;border:none;margin:0px auto;">
+<!-- BEGIN ImageRow -->
+<!-- BEGIN ImageColumn -->
+<tr>
+<td style="width:{table_column_width};vertical-align:top;">
+{CELL_DISPLAY_IMAGE}
+</td>
+</tr>
+<!-- END ImageColumn -->
+<!-- END ImageRow -->
+</table>

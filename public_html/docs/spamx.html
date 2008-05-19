@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Geeklog Documentation - Geeklog Spam-X Plugin</title>
+  <link rel="stylesheet" type="text/css" href="docstyle.css" title="Dev Stylesheet">
+  <meta name="robots" content="noindex">
+</head>
+
+<body>
+<img src="images/newlogo.gif" alt="Geeklog Documentation" width="243" height="90">
+<div class="menu"><a href="index.html">Geeklog Documentation</a> - Geeklog Spam-X Plugin</div>
+
+<h1>Geeklog Spam-X Plugin</h1>
+
+<p><small>(If you came here looking for Hendrickson Software Components' email spam filter of the same name, please <a href="http://www.hendricom.com/spamcontrol.htm" rel="nofollow">click here</a>.)</small></p>
+
+<h2>Introduction</h2>
+
+<p>The Geeklog Spam-X plugin was created to fight the problem of comment spam
+for Geeklog systems. If you are unfamiliar with comment spam you might see the
+<a href="http://kalsey.com/2003/11/comment_spam_manifesto/">Comment Spam
+Manifesto</a>.</p>
+
+<p>Spam protection in Geeklog is mostly based on the Spam-X plugin, originally
+developed by Tom Willet. It has a modular architecture that allows it to be
+extended with new modules to fight the spammer's latest tricks, should the need
+arise.</p>
+
+<h2><a name="checked">What is being checked for spam?</a></h2>
+
+<p>Geeklog and the Spam-X plugin will check the following for spam:</p>
+
+<ul>
+<li>Story submissions</li>
+<li>Comments</li>
+<li>Trackbacks and Pingbacks</li>
+<li>Event submissions</li>
+<li>Link submissions</li>
+<li>The text sent with the "Email story to a friend" option</li>
+<li>Emails sent to users via the "send email" form from their profile page</li>
+<li>A user's profile</li>
+</ul>
+
+<h2><a name="modules">Module Types</a></h2>
+
+<p>The Spam-X plugin was built to be expandable to easily adapt to changes the
+comment spammers might make.  There are three types of modules: <a
+href="#examine">Examine</a>, <a href="#action">Action</a>, and <a
+href="#admin">Admin</a>. A new module is contained in a file and can simply be
+dropped in and it will be added to the plugin.</p>
+
+<h2><a name="examine">Examine Modules</a></h2>
+
+<p>Geeklog ships with the following examine modules:</p>
+
+<ul>
+<li><a href="#slv">Spam Link Verification (SLV)</a></li>
+<li><a href="#personal">Personal Blacklist</a></li>
+<li><a href="#ip">IP Filter</a></li>
+<li><a href="#ipofurl">IP of URL Filter</a></li>
+<li><a href="#header">HTTP Header Filter</a></li>
+<li><a href="#honeypot">Project Honeypot Filter</a></li>
+</ul>
+
+<h3><a name="slv">Spam Link Verification (SLV)</a></h3>
+
+<p>SLV is a centralized, server-based service that examines posts made on
+websites and detects when certain links show up in unusually high numbers. In
+other words, when a spammer starts spamming a lot of sites with the same URLs
+and those sites all report to SLV, the system will recognize this as a spam
+wave and will flag posts containing these URLs as spam.</p>
+
+<p>In other words still, it's a dynamic blacklist that automatically updates
+itself when a spammer starts spamming for their site. And it can only get
+better (in terms of accuracy and reaction speed) the more sites use it.</p>
+
+<p>SLV is a free service run by Russ Jones at <a
+href="http://www.linksleeve.org/">www.linksleeve.org</a>.
+
+<p><strong><a name="slvprivacy">Privacy Notice:</a></strong>
+It should be stressed that using SLV means that information from your site
+is being sent to a third party's site. In some legislations you may have to
+inform your users about this fact - please check with your local privacy
+laws.</p>
+
+<p>Sending information to an external site may also be undesirable on some
+setups, e.g. on a company intranet. You can disable SLV support by removing the
+four files <tt>SLV.Examine.class.php</tt>, <tt>SLVbase.class.php</tt>,
+<tt>SLVreport.Action.class.php</tt>, and <tt>SLVwhitelist.Admin.class.php</tt>
+ from your Spam-X directory (<tt>/path/to/geeklog/plugins/spamx</tt>). Or you
+can simply disable the Spam-X plugin entirely (or uninstall it).</p>
+
+<p>The SLV Examine and Action modules will extract all URLs from a post and
+only send those to SLV (i.e. the rest of the post's content is not being sent).
+They also remove any links that contain your Geeklog site's URL. In case a post
+does not contain any external links, the modules simply do not contact SLV at
+all.</p>
+
+
+<h3><a name="personal">Personal Blacklist</a></h3>
+
+<p>The Personal Blacklist module lets you add keywords and URLs that typically
+exist in spam posts. When you're being hit by spam, make sure to add the URLs
+of those spam posts to your Personal Blacklist so that they can be filtered out
+automatically, should the spammer try to post them again.</p>
+
+<p>This will also help you get rid of spam that made it through, as you can
+then use the Mass Delete Comments and Mass Delete Trackbacks modules to easily
+remove large numbers of spam posts from your database.</p>
+
+<p>The Personal Blacklist also has an option to import the Geeklog <a
+href="config.html#desc_censorlist">censor list</a> and ban all comments which
+contain one of those words. This or an expanded list might be useful for a
+website that caters to children. Then no comments with offensive language could
+be posted.</p>
+
+<h3><a name="ip">IP Filter</a></h3>
+
+<p>Sometimes you will encounter spam that is coming from one or only a few IP
+addresses. By simply adding those IP addresses to the IP Filter module, any
+posts from these IPs will be blocked automatically.</p>
+
+<p>In addition to single IP addresses, you can also add IP address ranges,
+either in <a href="http://en.wikipedia.org/wiki/CIDR" title="Classless Inter-Domain Routing">CIDR</a> notation or as simple <i>from</i>-<i>to</i> ranges.</p>
+
+<p>Please note that IP addresses aren't really a good filter criterion. While
+some ISPs and hosting services are known to host spammers, it won't help much
+to block an IP address by one of the well-known ISPs. Often, the spammer will
+get a new IP address the next time he connects to the internet, while the
+blocked IP address will be reused and may be used by some innocent user.</p>
+
+<h3><a name="ipofurl">IP of URL Filter</a></h3>
+
+<p>This module is only useful in a few special cases: Here you enter the IP
+address of a webserver that is used to host domains for which you may see spam.
+Some spammers have a lot of their sites on only a few webservers, so instead of
+adding lots of domains to your blacklist, you only add the IP addresses of
+those webservers. The Spam-X module will then check all the URLs in a post to
+see if any of these is hosted on one of those blacklisted webservers.</p>
+
+<h3><a name="header">HTTP Header Filter</a></h3>
+
+<p>This module lets you filter for certain HTTP headers. Every HTTP request
+sent to your site is accompanied by a series of headers identifying, for
+example, the browser that your visitors uses, their preferred language, and
+other information.</p>
+
+<p>With the Header filter module, you can block HTTP requests with certain
+headers. For example, some spammers are using Perl scripts to send their spam
+posts. The user agent (browser identification) sent by Perl scripts is usually
+something like "libwww-perl/5.805" (the version number may vary). So to block
+posts made by this user agent, you would enter:</p>
+
+<table border="0" style="width:15em">
+<tr><td><b>Header:</b></td><td align="left"><kbd>User-Agent</kbd></td></tr>
+<tr><td><b>Content:</b></td><td align="left"><kbd>^libwww-perl</kbd></td></tr>
+</table>
+<p>This would block all posts from user agents beginning with "libwww-perl".</p>
+
+<!-- Currently not shipped with Geeklog
+
+<h3><a name="honeypot">Project Honeypot http:BL Filter</a></h3>
+
+<p><a href="http://www.projecthoneypot.org" title="visit the project honey pot site">ProjectHoneypot.org</a>
+    is a new service providing a way of trapping malicious web users with
+    <a href="http://en.wikipedia.org/wiki/Honeypot_%28computing%29" title="view the wikipedia definition of a Honeypot">honeypots</a>.
+    Essentially this provides traps for email address harvesting bots, spammers,
+    and people trying to exploit web sites. Using the honeypots, the project
+    gathers and maintains an active blacklist of IP addresses categorised by
+    threat type, level and activity.</p>
+
+<p>With the ProjectHoneyPot filter module, you can block posts from known bad
+    ip addresses as identified by the <a href="http://www.projecthoneypot.org/httpbl_configure.php">http:BL</a>
+    blacklist.
+    </p>
+    <p>In order to do so, you must first <a href="http://www.projecthoneypot.org/create_account.php">Register with projectHoneyPot</a>,
+        <a href="http://www.projecthoneypot.org/manage_honey_pots.php">install a honeypot</a> or
+        <a href="http://www.projecthoneypot.org/manage_quicklink.php">quick link</a> and
+        <a href="http://www.projecthoneypot.org/httpbl_configure.php">get an access key</a>
+        for the http:BL.</p>
+    <p>Once you have done this, and inserted appropriate details into the Spam-X
+        config.php file, http:BL blocking will be used for all filtered content
+    automatically.</p>
+
+-->
+
+
+<h2><a name="action">Action Modules</a></h2>
+
+<p>Once one of the <a href="#examine">examine modules</a> detects a spam post,
+the action modules will decide what to do with the spam. Most of the time, you
+will simply want to delete the post then, so this is what the <b>Delete
+Action</b> module does.</p>
+
+<p>As the name implies, the <b>Mail Admin Action</b> module sends an email to
+the site admin when a spam post is encountered. Since this can cause quite a
+lot of emails being sent, it is disabled by default.</p>
+
+<p>Action modules have to be enabled specifically before they are used (examine
+modules, on the other hand, are activated by simply dropping them into the
+Spam-X directory). For this, every action module has a unique number that needs
+to be added up with the number of the other action modules you want to enable
+and entered as the value for the <a href="config.html#desc_spamx">spamx config
+variable</a> in Geeklog's main configuration.</p>
+
+<h3>Example</h3>
+
+<p>The Delete Action module has the value 128, while the Mail Admin Action
+module has the value 8. So to activate both modules, add 128 + 8 = 136 and
+enter that in the Configuration admin panel.</p>
+
+<p>The SLV Examine module is complemented by a <strong>SLV Action</strong>
+module that ensures that SLV is notified of spam posts caught by other examine
+modules. It "piggybacks" on the Delete Action module, i.e. when you activate
+the Delete Action module, you'll also enable the SLV Action module.</p>
+
+
+<h2><a name="admin">Admin Modules</a></h2>
+
+<p>The Admin modules for the <a href="#personal">Personal Blacklist</a>, <a
+href="#ip">IP Filter</a>, <a href="#ipofurl">IP of URL Filter</a>, and <a
+href="#header">HTTP Header Filter</a> modules provide you with a form to add
+new entries. To delete an existing entry, simply click on it.</p>
+
+<p>With the <strong>SLV Whitelist</strong> admin module you can add URLs that
+you don't want to be reported to SLV. This is useful when posts on your site
+happen to contain certain URLs quite often but you don't want those to be
+considered spam by SLV.<br>Note that your site's URL (i.e. <a
+href="config.html#desc_site_url">$_CONF['site_url']</a>) is automatically
+whitelisted, so you don't need to add it here.</p>
+
+<p>The <strong>Log View</strong> module lets you inspect and clear the Spam-X
+logfile. The logfile contains additional information about the spam posts, e.g.
+which IP address they came from, the user id (if posted by a logged-in user),
+and which of the examine modules caught the spam post.</p>
+
+<p>In case a large number of spam posts made it through without being caught,
+the <strong>Mass Delete Comments</strong> and <strong>Mass Delete
+Trackbacks</strong> modules will help you get rid of them easily. Before you
+use these modules, make sure to add the URLs or keywords from those spams to
+your Personal Blacklist.</p>
+
+<h2><a name="mt-blacklist">Note about MT-Blacklist</a></h2>
+
+<p>MT-Blacklist was a blacklist, i.e. a listing of URLs that were used in spam
+posts, originally developed for Movable Type (hence the name) and maintained by
+Jay Allen.</p>
+
+<p>Maintaining a blacklist is a lot of work, and you're continually playing
+catch-up with the spammers. Therefore, Jay Allen eventually <a
+href="http://www.geeklog.net/article.php/mt-blacklist-discontinued">discontinued
+MT-Blacklist</a> on the assumption that new and better methods to detect spam
+are now available.</p>
+
+<p>Starting with Geeklog 1.4.1, Geeklog no longer uses MT-Blacklist. All
+MT-Blacklist entries are removed from the database when you upgrade to
+Geeklog 1.4.1 and the MT-Blacklist examine and admin modules are no longer
+included.</p>
+
+<h2><a name="trackback">Trackback Spam</a></h2>
+
+<p><a href="trackback.html">Trackbacks</a> are also run through Spam-X before
+they will be accepted by Geeklog. There are also some additional checks that
+can be performed on trackbacks: Geeklog can be configured to check if the site
+that supposedly sent the trackback actually contains a link back to your site.
+In addition, Geeklog can also check if the IP address of the site in the
+trackback URL matches the IP address that sent the trackback. Trackbacks that
+fail any of these tests are usually spam. Please refer to the <a
+href="config.html#desc_check_trackback_link">documentation for the
+configuration</a> for more information.</p>
+
+<h2><a name="config.php">Configuration File</a></h2>
+
+<p>The Spam-X plugin's configuration can be changed from the Configuration admin
+panel:</p>
+
+<h3><a name="main">Spam-X Main Settings</a></h3>
+
+<table>
+<tr><th width="25%">Variable</th>
+    <th width="25%">Default Value</th>
+    <th width="50%">Description</th>
+</tr>
+<tr>
+  <td><a name="desc_logging">logging</a></td>
+  <td><code>true</code></td>
+  <td>Whether to log recognized spam posts in the <tt>spamx.log</tt> logfile
+    (if set to <code>true</code>) or not (<code>false</code>).</td>
+</tr>
+<tr class="r2">
+  <td><a name="desc_admin_override">admin_override</a></td>
+  <td>false</td>
+  <td>The Spam-X plugin will filter posts by any user - even site admins. This
+    can be a problem sometimes, e.g. when you want to post a note about spam
+    that itself contains "spammy" URLs or keywords. When this option is set to
+    <code>true</code> then posts made by users in the 'spamx Admin' group are
+    not checked for spam.</td>
+</tr>
+<tr>
+  <td><a name="desc_timeout">timeout</a></td>
+  <td>5</td>
+  <td>Timeout (in seconds) for contacting external services such as SLV.</td>
+</tr>
+<tr class="r2">
+  <td><a name="desc_notification_email">notification_email</a></td>
+  <td><code>$_CONF['site_mail']</code></td>
+  <td>Email address to which spam notifications are sent when the Mail Admin
+    <a href="#action">action module</a> is enabled.</td>
+</tr>
+<tr>
+  <td><a name="desc_action">action</a></td>
+  <td>128</td>
+  <td>This only exists as a fallback in case <a
+    href="config.html#desc_spamx">$_CONF['spamx']</a> in Geeklog's main
+    configuration is not set. I.e. <code>$_CONF['spamx']</code> takes
+    precedence.</td>
+</tr>
+</table>
+
+<h2><a name="more">More Information</a></h2>
+
+<p>Further information as well as a support forum for the Spam-X plugin can be
+found on the <a href="http://www.pigstye.net/gplugs/staticpages/index.php/spamx" rel="nofollow">Spam-X Plugin's Homepage</a> and in the <a
+href="http://wiki.geeklog.net/wiki/index.php/Dealing_with_Spam">Geeklog
+Wiki</a>.</p>
+
+<div class="footer">
+    <a href="http://wiki.geeklog.net/">The Geeklog Documentation Project</a><br>
+    All trademarks and copyrights on this page are owned by their respective owners. Geeklog is copyleft.
+</div>
+</body>
+</html>

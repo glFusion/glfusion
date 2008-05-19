@@ -1,0 +1,19 @@
+<table width="100%" cellspacing="4" border="0" cellpadding="0">
+  <tr class="pluginFooter">
+    <td align="center" colspan="2" style="vertical-align:middle;padding:2px 5px 2px 0px;">
+      &nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="center" style="width:40%;vertical-align:top;padding:2px 5px 2px 0px;">
+      <div style="float:left;">&nbsp;</div>
+    </td>
+    <td style="text-align:right;vertical-align:top;white-space: nowrap;padding:2px 5px 2px 0px;">{jumpbox}</td>
+  </tr>
+  <tr>
+    <td style="text-align:left;vertical-align:bottom;padding:2px 5px 2px 0px;">
+      {album_id_display}&nbsp;
+    </td>
+    <td style="text-align:right;vertical-align:bottom;white-space:nowrap;padding:2px 5px 2px 0px;">&nbsp;</td>
+  </tr>
+</table>

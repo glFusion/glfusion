@@ -1,0 +1,72 @@
+<script type="text/javascript">
+//<![CDATA[
+function doCheckAll()
+{
+  with (document.moderate) {
+    for (var i=0; i < elements.length; i++ ) {
+      if (elements[i].type == 'radio')
+        elements[i].checked = true;
+    }
+  }
+}
+
+function doUnCheckAll()
+{
+  with (document.moderate) {
+    for (var i=0; i < elements.length; i++ ) {
+      if (elements[i].type == 'radio')
+        elements[i].checked = false;
+    }
+  }
+}
+//]]>
+</script>
+<form name="moderate" action="{s_form_action}" method="post">
+<div>
+<input type="hidden" name="album_id" value="{album_id}"{xhtml}>
+<input type="hidden" name="count" value="{queue_count}"{xhtml}>
+<input type="hidden" name="action" value="{action}"{xhtml}>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <th style="text-align:left;width:{media_width}px;"><span style="font-weight:bold;">{lang_item}</span></th>
+    <th><span style="font-weight:bold;">{lang_title}</span></th>
+    <th><span style="font-weight:bold;">{lang_date}</span></th>
+    <th><span style="font-weight:bold;">{lang_album}</span></th>
+    <th style="width:7%;"><span style="font-weight:bold;">{lang_delete}</span></th>
+    <th style="width:7%;"><span style="font-weight:bold;">{lang_approve}</span></th>
+  </tr>
+  <!-- BEGIN QueueRow -->
+  <tr class="pluginRow{row_class}">
+    <td align="center">
+      {media_edit}
+      <img src="{u_thumbnail}" width="{media_width}" height="{media_height}"{xhtml}>
+      </a>
+    </td>
+    <td>{media_title}</td>
+    <td>{media_time}</td>
+    <td>{album_title}</td>
+    <td style="text-align:center;">
+      <input type="radio" name="modaction[{item_number}]" value="delete"{xhtml}>
+    </td>
+    <td style="text-align:center;">
+      <input type="radio" name="modaction[{item_number}]" value="approve"{xhtml}>
+      <input type="hidden" name="id[{item_number}]" value="{media_id}"{xhtml}>
+    </td>
+  </tr>
+  <!-- END QueueRow -->
+  <tr>
+    <td colspan="8" style="text-align:right;">
+      <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}"{xhtml}>
+      <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheckall}"{xhtml}>
+    </td>
+  </tr>
+  <tr><td colspan="8">&nbsp;</td></tr>
+  <tr>
+    <td colspan="8" style="text-align:center;">
+    <input type="submit" name="mode" value="{lang_save}"{xhtml}>
+    <input type="submit" name="mode" value="{lang_cancel}"{xhtml}>
+  </td>
+  </tr>
+</table>
+</div>
+</form>

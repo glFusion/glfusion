@@ -1,0 +1,12 @@
+<!-- start submissionform_anontop.thtml -->
+<script type="text/javascript" src="{layout_url}/forum/javascript/createtopic.js"></script>
+    <table width="100%" border="0" cellspacing="1" cellpadding="4" class="pluginSolidOutline alignleft">
+        <tr>
+            <td colspan="2" class="pluginCellSubTitle" width="120px">&nbsp;<b>{post_message}</b></td>
+        </tr>
+        <tr>
+            <td class="pluginCellSubTitle" width="20%">&nbsp;{LANG_NAME}</td>
+            <td class="pluginCellText pluginCellFill"><input type="text" name="aname" value="{name}" size="40" maxlength="50" tabindex="1"{xhtml}>&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+<!-- end submissionform_anontop.thtml -->

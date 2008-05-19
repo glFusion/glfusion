@@ -1,0 +1,20 @@
+/* History of Changes */
+
+Oct 14/07 - Version 1.5.3
+- Fix for possible remote file include vulneribility
+- Added ability to change the number of categories and subcategories to show
+- Bug fixes in subcategory display and sortable headings
+
+
+April 2/06  -Version 1.5.2
+ - Bug Fix: Search function should not return file listing that have not been approved - pending moderation approval
+ - Bug Fix: Corrected autotag link feature
+ - Bug Fix: Wrong error code being passed to error handler if new file submission is a duplicate file
+ - If user has filemgmt.edit right, show the delete comment feature
+ - Added test for file id is not a new (un-approved) file in main index.php
+ - tweaked the errorhandler display
+
+Mar 26/06  - Change to index.php to support MySQL 5. Need () around multiple tables in FROM Clause
+
+Mar 25/06: Archive Version 1.51c distributed.
+    Change to viewcat.php - corrected bad link in google paging base_url link

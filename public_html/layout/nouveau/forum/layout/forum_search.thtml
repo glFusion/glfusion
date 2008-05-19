@@ -1,0 +1,17 @@
+<!-- start forum_search.thtml -->
+          <form action="index.php" method="post" name="searchbox" onsubmit="return (this.query.value != '');" style="margin:0px;padding:2px;">
+          <input type="hidden" name="op" value="search"{xhtml}><input type="hidden" name="forum" value="{forum}"{xhtml}>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td class="alignleft" width="50%">
+                        <table border="0" cellspacing="2" cellpadding="0">
+                            <tr>
+                                <td><input type="text" name="query" value="" style="width: 165px"{xhtml}></td>
+                                <td><input type="submit" name="btnsubmit" value="{search}"{xhtml}></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+          </form>
+<!-- end forum_search.thtml -->

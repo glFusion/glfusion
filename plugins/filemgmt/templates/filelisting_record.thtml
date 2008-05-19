@@ -1,0 +1,61 @@
+<tr class="pluginRow{cssid}">
+    <td style="margin:0px;padding:0px;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin" style="margin:0px;padding:0px;">
+            <tr>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="4">
+                        <tr>
+                            <td colspan="2" width="65%"><b>{LANG_CATEGORY}</b>{category_path}</td>
+                            <td width="35%" align="right">{LANG_SUBMITTEDBY}{submitter_name}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" width="500"><b><a href="{site_url}/filemgmt/visit.php?lid={lid}" target='_blank'>
+                                <img src="{site_url}/filemgmt/images/download.gif" border="0" title="{LANG_DLNOW}" alt="{LANG_DLNOW}"{xhtml}></a>&nbsp;
+                                <a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" title="{download_title}">{dtitle}</a></b>&nbsp;&nbsp;&nbsp;{image_newdownload}{image_popular}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">{file_description}</td>
+                        </tr>
+                        <tr>
+                            <!-- Enable one the following two table columns to change the filelisting format or alter to meet your needs -->
+
+                            <!-- 1) Enable this row if you just want to show the icon that has to be clicked to view snapshot image -->
+                            <td width="15%" style="display:{show_snapshoticon};">
+                                <a href="{snapshot_url}" target="_blank" title="{LANG_CLICK2SEE}">{snapshot_icon}{LANG_SCREENSHOT}</a>
+                            </td>
+
+                            <!-- 2) Enable this row if you just want to show the a thumbnail image of the download snapshot image -->
+                            <!--
+                            <td width="15%" style="display:{show_snapshoticon};">
+                                <img src="{snapshot_url}" width="75" height="75" alt=""{xhtml}>
+                            </td>
+                            -->
+
+                            <td width="15%" style="display:{show_snapshoticon_na};">{LANG_MD_SCREENSHOT_NA}</td>
+                            <td colspan="2" width="85%" align="right"><b>{LANG_VERSION}:</b>&nbsp;
+                                {version}&nbsp;&nbsp;<b>{LANG_SUBMITDATE}:</b>&nbsp;{datetime}&nbsp;&nbsp;&nbsp;<b>{LANG_RATING}</b>{rating}{votestring}&nbsp;
+                                {begin_dlreport_link}<img src="{site_url}/filemgmt/images/counter.gif" width="14" height="14" border="0" align="middle" title="{download_times}" alt="{download_times}"{xhtml}>{end_dlreport_link}&nbsp;{download_count}&nbsp;&nbsp;
+                                <img src="{site_url}/filemgmt/images/size.gif" width="14" height="14" border="0" align="middle" title="{LANG_FILESIZE}" alt="{LANG_FILESIZE}"{xhtml}>&nbsp;
+                                {file_size}&nbsp;&nbsp;<a href="{homepage_url}" target="_blank"><img src="{site_url}/filemgmt/images/home.gif" width="14" height="14" border="0" align="middle" title="{LANG_HOMEPAGE}:{homepage}" alt=""{xhtml}></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" align="center">
+                                <span style="display:{show_comments};">{comment_link}&nbsp;|&nbsp;</span>
+                                    <a href="{site_url}/filemgmt/visit.php?lid={lid}">{LANG_DOWNLOAD}</a>&nbsp;|&nbsp;
+                                    <a href="{site_url}/filemgmt/index.php?id={lid}">{LANG_FILELINK}</a>&nbsp;|&nbsp;
+                                    <a href="{site_url}/filemgmt/ratefile.php?lid={lid}">{LANG_RATETHISFILE}</a>&nbsp;|&nbsp;
+                                    <a href="{site_url}/filemgmt/brokenfile.php?lid={lid}">{LANG_REPORTBROKEN}</a>
+                                    <span style="display:{show_editlink};">&nbsp;|&nbsp;<a href="{site_admin_url}/plugins/filemgmt/index.php?lid={lid}&amp;op=modDownload">{LANG_EDIT}</a></span>
+                            </td>
+                        </tr>
+                     </table>
+                 </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+
+

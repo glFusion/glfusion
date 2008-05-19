@@ -1,0 +1,20 @@
+{lbslideshow}
+<script type="text/javascript" src="{site_url}/players/audio-player.js"></script>
+  {album_header}
+  {album_body}
+  {album_noimages}
+  {album_footer}
+<!-- JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor -->
+<script type="text/javascript">
+//<![CDATA[
+var el;
+el=document.getElementsByTagName('div');
+for(i=0;i<el.length;i++){
+	if(el[i].className == 'jsenabled_show'){
+		el[i].style.display = '';
+	} else if(el[i].className == 'jsenabled_hide'){
+		el[i].style.display = 'none';
+	}
+}
+//]]>
+</script>

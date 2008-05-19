@@ -1,0 +1,1306 @@
+$Id: ChangeLog 2148 2008-04-30 04:17:34Z mevans0263 $
+
+v1.6.1 - April 29, 2008
+
+[upd] Updated Gallery Remote support to allow fetching images from the
+      server.
+[new] Added new config.php option: $_MG_CONF['update_parent_lastupdated']
+      If set to true, the last updated field for all parent albums
+      will also be updated.
+[fix] Featured albums now support sub albums in dropdown list attribute.
+[fix] Fixed issue where featured album would error if album used custom
+      thumbnail size.
+[fix] Gallery Remote did not automatically sort media on upload.
+[fix] Entering invalid data for Remote Media would cause a 'header already
+      sent error' when Chameleon is selected as the theme.
+[fix] Fixed bug in non-javascript rating calls - resulted in blank screen.
+[new] Added support for new MooMenu inteface for mgMediaBrowser.
+[enh] Modified AJAX rating to use MooTools, eleminating the need for
+      behavior.js.
+[fix] Changed windows.addEvent('domready') to windows.addEvent('load')
+      to resolve domready bug in MooTools v1.11.
+[upd] Updated swfobject.js to v2.0.
+[fix] Improved error checking on profile integration.
+[fix] Some external command-line utilities (like 'ffmpeg.exe') output all info
+      to stderr instead of stdout. This would cause problems with the upload
+      status page. Now redirect all output to stdout.
+[fix] Auto sorting by title was reversed.
+[fix] Fixed issue where auto tags would return the actual auto tag
+      code instead of nothing if the album was hidden, but had access
+      via permissions to the auto tag.
+[new] Implemented a shared global option (for all gllabs plugins)
+      to ensure that the MooTools JS library is loaded only once.
+[fix] Updated auto tag code to support m4v video files.
+[fix] Now properly support m4v video files.  Safari will now download with
+      the correct extension.
+[fix] Fixed a bug where the owner id of an album would reset to admin after
+      edit.
+[fix] Auto play was broken with MGflv player.
+[fix] In FF, using Clean theme, the MGFlv player would not center.
+[fix] Media Gallery would return the wrong path for image files under certain
+      conditions.
+[fix] CTL links pointed to old version, now reference the Caching Template Lib
+      wiki page.
+[fix] Wiki links pointed to old wiki site.
+[fix] Auto tag defaults were coded to only allow 2 characters for entry.
+[fix] Fixed SWF playback error - flashvars variable was not set properly.
+[enh] Made the loading of Mootools optional (in the event that another
+      system loads Mootools.
+[enh] Made lightbox slideshow where it can be disabled - this is used
+      in the event that the slideshow javascript conflicts with something
+      else.  This will automatically disable all lightbox functionality
+      in Media Gallery.
+
+v1.6.0 - March 12, 2008
+
+[fix] Fixed bug with comment display during media view.
+[fix] Added Edit Link to view_image in Clean theme.
+[fix] Main Media Gallery index view did not show the proper number of albums,
+      it was truncating the display by 1.
+[new] Added the ability to specify default thumbnails for non-media
+      file types.
+[fix] Search results did not always have full URL to media for viewing.
+[fix] Lightbox slideshow XML feed did not properly escape HTML entities.
+[fix] Geeklog statistics screen used wrong rating variables
+[fix] Fixed a few outstanding XHTML compliance issues in slideshow and remote
+      media upload screens.
+[fix] Keywords did not properly support multi-words, now use _ to create
+      multi-word keywords.
+
+v1.6.0.rc2 - February 27,2008
+
+[fix] Fixed issue with upgrade adding the same config variable twice.
+[fix] Mootools domready functions would cause intermittent errors with IE.
+      I modified the windows.events.domready() functions in Mootools v1.11
+      if you use Mootools for other items, you will need to apply this fix
+      to your localized copy of Mootools.
+[fix] Added ?ver to all javascript / css files to ensure they are properly
+      loaded after upgrade.
+[fix] Fixed column width / centering issue on main index display if
+      columns > 1
+[fix] Fixed bug where Digibug link did not properly appear.
+[fix] Force the removal of MG cache files in Caching template library after
+      upgrade.
+[fix] Fixed error in polish_utf-8 language file
+[upd] Updated swfobject.js to v2.0rc3
+[fix] Initialize $_MG_CONF['random_skin'] to default incase it has not been
+      set after an upgrade.
+[fix] removed rate_entry.thtml and rate_results.thtml - no longer needed
+
+v1.6.0.rc1 - February 20, 2007
+
+[fix] Fixed cancel button to return to album view instead of back to main
+      index view.
+[fix] Implemented speed limit for rating.
+[fix] Removed pagination / sort box for SimpleViewer theme.
+[fix] Fixed bug where no username would display if $_CONF['show_fullname'] true
+      and the user's full name was empty.
+[new] Moved simpleviewer configuration options to config.php instead of having
+      them hard coded.
+[fix] lib-exif could cause memory exhausted error if no exif data found
+      on very large images.
+[fix] Jpegtran was not working on Win32 environments.
+[new] Added the ability to specify custom MG index thumbnail size.
+[new] Added custom thumbnail size to defaults editor and global album editor.
+[new] Added new option to force thumbnail size appropriatly
+[fix] Fixed an issue where uploading would fail with SAFE MODE violation
+[new] Replaced the JavaScript used for the slideshow auto tag with a
+      MooTools based routine.
+[fix] Fixed an issue where albums would not properly display as sub-albums
+      for users who were not admins.  This only happens when the parent album
+      also contains hidden albums.
+[new] Modified the upgrade to check the environment after upgrade and inform
+      admin if the site needs to have the Caching Template library installed
+      or additional memory allocated in php.ini.
+[upd] Updated filecheck.php to include all files in the Media Gallery release.
+[new] Removed Highslide theme and features (due to licensing restrictions)
+[new] Added new Lightbox theme - click on thumbnail it opens in a lightbox
+[new] Added link:2 parameter to media: auto tag. This will open the item
+      in a lightbox.
+[new] Implemented new icons and graphics by Randy Asher.
+[fix] FTP Import would go into a continuous loop on Windows based
+      servers.
+[chg] FTP Import will now skip Thumbs.db files
+[fix] PodCast theme did not handle sub-albums properly.
+[new] Modified lightbox slideshow to use XML feed - big performance
+      booster for larger albums wanting to use lightbox.
+[new] Initial implementation of clean theme
+[new] New template file - medialink.thtml - this can be used to better control
+      and hook into (using themes) the link to the media item.
+      Template vars available are:
+         - xhtml
+         - href (the actual link not the <a href.. part
+         - hrefdirect - a direct link to the actual media file
+         - caption
+         - id - a unique id
+[upd] Updated album defaults editor to handle all new albun attributes.
+[new] Added a config.php option to disable search integration with Geeklog.
+[new] Log postcards sent in postcard.log
+[new] Moved several configuration options from config.php to online
+      configuration.
+[new] Added feature to set disabled, all, or members only for rating media
+      per album.
+[new] Added the ability to skin the random image block
+[chg] Modifed the main album index to include search box
+[chg] Modified how the 'theme' templates work. Now you only need to copy the
+      modified templates to the skins/ directory.
+[fix] Fixed a small javascript bug with embedded MP3 ribbon player
+[new] Media Gallery now only supports Geeklog v1.4.0 and higher
+[upd] Updated FlowPlayer to v1.21.1
+[new] Replaced obsolete swfix with swfobject javascript
+[new] Implemented an AJAX based rating system (also works if JS disabled).
+[fix] Added subalbum_select to sql_defaults.php
+[chg] MP3 playback will only use the MP3 Flash Player
+[chg] audio: auto tag will only use flash player for mp3, no longer
+      an option to use WMP or QT.
+[new] Media Gallery now uses the standard .plugin styles from the main
+      Geeklog style sheet. This should make theming much easier.
+[new] Implemented HTML 4.01 Strict compliance in the templates.
+[fix] $_MG_CONF['use_default_resolution'] handling was backwards.
+[enh] Enhanced search to use new artist, album and genre fields.
+[new] New set of image handling APIs.
+[new] Media Gallery no longer requires JPG only conversions.  This means
+      you can upload JPG, PNG, BMP and GIF images and they will no longer
+      be converted to JPG format.  When using ImageMagick as the graphics
+      driver, this allows animated GIFs to be used.
+[fix] Updated the profile display to pull attached thumbnails properly for
+      albums.
+[new] Added RSS Children setting per album to allow all media items to be
+      included in rss feed.
+[new] New album configuration - mp3ribbon turns on/off the mp3 ribbon player
+[new] Implemented per album themes
+[enh] Added align:center as a valid alignment for all auto tags.
+[enh] Modified auto tag handling to strip out embedded &nbsp; entries
+      that seem to sneak in when using the Advanced Editor.
+[enh] Modifed podcast RSS feeds to include artist and keywords
+[new] Added new option to hide email from RSS Feeds
+[fix] Fixed issue where rebuild thumbnails did not work
+[new] Added alternate URL support - you can now define an alternate
+      URL for a media item, if selected and alternate urls are enabled,
+      the href will link to the alternate url.
+[fix] Turned advanced error logging on for PHP which uncovered
+      several minor issues.  All have been corrected.
+[new] Enhanced searching - now provides an album view of search
+      results.
+[new] Keywords enhanced to support 'clouds'
+[new] You can now specify a custom thumbnail size for each album.
+      NOTE: If you increase the size over 200 px for existing albums,
+      you will need to rebuild the thumbnails.
+[new] Added 2 new data fields to the album table. tnHeight and tnWidth to
+      support custom sized thumbnails.
+
+[new] Added 3 new data fields for media objects: artist, albumname and genre.
+[new] New auto tag 'playall:#album_id'.  Plays an album of MP3s
+[new] Implemented full album playback for MP3 albums.
+[new] Implemented swffix.js instead of swfobject.js
+[new] Ability for Media Gallery to become the Geeklog index page. Useful if
+      you only want to have an online gallery and not all the other features
+      Geeklog provides.
+[enh] Lightbox slideshow now auto scrolls through all the images like a real
+      slide show should.
+[fix] Disable slideshow link if no image media in album when lightbox
+      slideshow is selected.
+[new] New advanced option to have theme specific template files and style.css
+      file.
+[new] New configuration option to force using the media items upload time as
+      the display time instead of using embedded EXIF/IPTC date/time.
+        $_MG_CONF['use_upload_time']
+[new] New configuration option to select whether MPEG files playback using
+      Windows Media Player or QuickTime Player:
+      	$_MG_CONF['use_wmp_mpeg']
+[new] Added {media_link_start} and {media_link_end} template variables to the
+      album_page_body_media_cell templates.
+[enh] Modified video autotag for FLV video to use standard FLV template.
+[new] Added 2 new templates, view_video.thtml and view_audio.thtml. In media
+      view, MG will use view_video if media type is video and view_audio if
+      media type is audio. All other media types will use view_image.
+[enh] Modified FLV playback to use a common template for all FLV video types.
+[enh] Changed remote url field to be a textbox
+[fix] Batch quota update did not properly update quota
+[fix] TIF files were not being properly processed on upload.
+[fix] Modified RSS feed creation to supress chmod warnings / errors.
+[fix] Fixed issue where MG FLV player would not automatically resize in IE7
+[upd] Updated FlowPlayer to v1.19
+[new] Added option to use FlowPlayer instead of MG FLV Player
+[enh] Modified slideshow auto tag to take src: as a valid parameter
+[fix] Build RSS Feeds using the sites character encoding instead of defaulting
+      to ISO-8859-1
+[enh] Modified the linkid: to now accept album id or media id
+[fix] Modified MSSQL install to work with MSSQL 2000
+[new] New config.php configuration option.  use_default_resolution, if this is
+      set to 1 it will disable MG auto populating the playback height / width,
+      instead MG will use the default settings you have configured.
+[new] Added target: parameter to auto tags
+[fix] slideshow: auto tag did not honor the delay parameter
+[fix] Fixed several hardcoded language tags
+[fix] If alt:1 or linkid: are specified on media items in a hidden album,
+      allow the link.
+
+v1.5.0 - June 24, 2007
+
+[fix] Fixed an issue introduced by the SQL optimizations where
+      the album media count did not properly increment on
+      FTP imports.
+[upd] Updated mootools.js to v1.1
+[upd] Updated slimbox to v1.4.1
+[fix] If LightBox slideshow was selected, the Postcard icon
+      would wrap to second line (replace div with span).
+[fix] If LightBox slideshow was selected, only the first 10
+      thumbnails would display.
+[chg] Modified album / media layout to make better use of header
+      area.
+[new] Added truncate_breadcrumb option to shorten breadcrumb text
+[new] Moved new global config options out of config.php to online
+      configuration.
+[fix] Some OSes have a problem with parenthesis in the file name
+      now filter these out and replace with spaces.
+[fix] Watermarking with 24 bit PNG watermark image with alpha
+      channel did not watermark properly when using GD libs.
+[new] Auto tags (mlink, media, img, oimage, image) have a new
+      parameter:  alt:0/1 if set to 1 will use alternate URL
+      if specified.
+[new] Added support for CAPTCHA (required CAPTCHA v3 plugin)
+      validation when sending postcards
+[fix] Increment views counter when media object is downloaded
+[fix] Profile display would show an empty title if no albums
+      were owned by the user.
+[new] Added global option to turn off member albums for
+      'Remote Users' group.
+[fix] Now list quota in Mb on Member Album User Listing
+[fix] Previous fix to not show album cover if from a hidden
+      album did not check if mediagallery.admin
+[fix] Searching did not return results for hidden albums if you
+      are site admin.
+[fix] The media count displayed after the album name would include
+      hidden albums in the count for non-mediagallery admins
+[new] Experimental Flash Based slideshow
+[enh] Modified auto tag SQL calls to always escape the media_id
+      and album id.  This should not be necessary, but if someone does
+      pass invalid data, it could cause an SQL error.
+[new] Random Image block size is now controlled via the
+      Media Gallery configuration screens.
+[chg] Random Image Block now uses a drop shadow border
+[fix] Statistics would list items the user did not have the
+      privilege to view.
+[fix] No longer use a thumbnail from a child album as the parents
+      cover thumbnail if user does not have privileges to see
+      the child album.
+[fix] Sub-albums of parents with hidden attribute did not appear
+      in the Manage Media album select box.
+[fix] If an album contained a 'hidden' album, it was possible
+      that an image from the 'hidden' album could be used as the
+      album cover for the parent. MG will no longer do this.
+[new] Added linkid: parameter to media,img,image, and oimage tags
+[fix] Postcard retrieval error did not display the number of
+      days a postcard is kept
+[enh] Optimized the album: auto tag code to be much more efficient
+[enh] More SQL optimizations
+[chg] Removed admin only restriction on remote media upload
+[upd] Updated mini-slideshow player
+[new] Added FLV, Remote FLV and Embed Video to allowed media types
+[new] Improved error checking and handling on remote uploads
+[enh] Reworked the admin templates to be completely controlled
+      via CSS and to play nicer with alternate themes
+[new] Implemented an alternate URL field - supported only by
+      mini-slideshow at this time.
+[upd] Wayne added support for noLink parameter on mini-slideshow
+[fix] slideshow auto tag did not honor the border parameter
+[enh] Tweaks all the SQL queries in functions.inc - a little more
+      resource friendly
+[new] Added 'height' auto tag parameter to give more control
+      over how your autotags are displayed.
+[new] Added delay parameter to slideshow / fslideshow auto tags
+[enh] Enhancements to the Media Gallery version check to try more
+      efficient methods and better timeout control.
+[new] Remote Media Support - Media Gallery now supports streaming
+      FLV and any video site that supports embed tags (YouTube, Google)
+[new] Automatically pull embedded thumbnails from MP3 files and
+      use them as attached thumbnails for the audio.
+[new] Automatically populate Artist, Title, Album, Genre into the
+      Media Gallery title, description and keyword fields if they
+      empty.
+[fix] Fixed an issue where you could not delete the Media Gallery
+      plugin if it was disabled.
+[fix] Fixed a few $_REQUEST/$_POST/$_GET that were not properly
+      filtered by COM_applyFilter
+[fix] If install failed, Media Gallery would not display any
+      messages to that effect
+[chg] Replaced old JUPLOAD Java Applet with a new applet from:
+         http://jupload.sourceforge.net
+      This applet appears to work fine across all browser platforms
+[fix] Detect if graphics package is GD libs and if the imagerotate() function
+      exists, if it does not, disable rotate functionality.
+[fix] Popup video/audio player did not recognize all media types
+[fix] LeeG discovered a problem with moderator notifications.  If the user
+      was not directly assigned to the moderator group, no email notification
+      was being sent
+[enh] Disable links to JavaScript based slideshows if JS is disabled in the
+      browser.  Add warning message that enhanced functionality is not
+      available
+[fix] Modified getID3() library to use MG's temp directory, this should
+      resolve the openbase_dir restriction errors
+[fix] Removed hardcoded feature to use sub-albums in dropdown when album
+      display columns > 1.  Also now only show sub-album count when
+      display_columns > 1 (original behaviour).
+[chg] Removed all template headers (makes for much nicer view source
+      experience!) which will reduce the overall page size.
+[new] Replaced greybox slideshow with slimbox slideshow
+[chg] Reverted the auto tag display code back to a table driven format
+[chg] Removed DHTML Goodies Tab Interface, replaced with standard Geeklog Tab
+      interface on admin screens
+[fix] Fixed issue with Gallery Remote detecting if it can add items to a
+      member album
+[fix] Fixed an issue where user quota check did not include the size of the
+      newly uploaded file (typo in code)
+[fix] max_html_size was not properly set on file uploads
+[fix] Fixed issue where album jumpbox was not properly initialized while
+      managing the media
+[fix] Fixed issue where deleting an album and moving the contents to a new
+      album would fail.
+[fix] Removed some unneeded debug messages
+[fix] Fixed issue where FTP media would not display the album select box
+      properly when browsing directories
+[fix] Fixed issue where automatic album sorting after create would not use
+      correct sort field
+[new] Implemented a Flash based mini-slideshow
+[chg] Modified calling external programs to use less memory
+[fix] Fixed bug where FLV playback would not use user specified height / width
+[fix] Fixed bug where batch rebuild/resize images would fail.
+[enh] Added improved error trapping to email moderators
+[fix] Fixed error where exif_display was not honoring default value
+[fix] Added error message if replace media failed.
+[new] Added user to search page.
+[new] Detect installed version and current version, if different, disable
+      random image block, featured albums, whats new
+[new] Added lightbox slideshow feature (well sort of a slideshow, you have to
+      scroll through it manually).
+[fix] Ran all the source files through the Zend analyzer, this turned up
+      small issues (variables assigned but not used, unneeded code, etc.).
+      These have all be cleaned up
+
+v1.4.8b - May 15, 2007
+
+[sec] Fixed a security vulnerability in ftpmedia.php
+[fix] FTP importing did not refresh to album screen (ftpmedia.php)
+[fix] Create Album would sometimes show twice (album.php)
+[fix] In Manage Media, sometimes in a Member Album the destination select box
+      would be empty (mediamanage.php classAlbum.php)
+[fix] Non image media was not being deleted when using FTP import if purge
+      files was true
+[enh] Added error.log message if unable to delete FTP media after upload
+      (lib-upload.php)
+[enh] Enhanced anonymous user checking (index.php)
+
+v1.4.8a - May 7, 2007
+
+[fix] Fixed error where the full image display logic was reversed.
+	  If you have MG configured to show full image only to logged in
+	  users, then anonymous users could view the full image and logged-in
+	  users could not.
+[fix] Fixed an issue where the $podcast attribute was not always initialized
+      which caused SQL errors when trying to create member albums.
+[fix] Fixed issues where moving a media item from the moderation queue did not
+      copy all the necessary fields.
+[fix] Fixed an issue where the [video] auto tag would not properly display
+      or play Windows Media files.
+[fix] Fixed an issue if you preview a media item in the media queue it would
+      loose the attached thumbnail.
+[fix] Fixed an issue where the mg_enroll and mg_randomimage blocks did not
+      install properly with MySQL 5.
+[fix] Fixed an issue with [audio] auto tag would not display / play Windows
+      media audio files.
+
+v1.4.8 - April 27, 2007
+
+[new] Added PODCAST feature to RSS feeds.
+[new] Added the ability to replace existing media items with new file
+[new] Added none frame type (no frame)
+[fix] Fixed Gallery v1 import to use album title instead of album
+      name.
+[fix] If PHP has openbasedir restrictions, errors would occur when
+      trying to edit the config file.
+[enh] Modified how external programs are called to improve error and
+      debug logging.
+[chg] Now call phpinfo.php from the main /mediagallery directory to
+      properly reflect the mediagallery PHP environment.
+[new] Added new Geeklog feature code and group - mediagallery.config and
+      Media Gallery Config group.  A user must be a member of the Media
+      Gallery Config group to now enter the MG configuration screens.
+[enh] Direct pop-up / download for non-image media from album index view
+[enh] Now use CSS for the slideshow, album, image, media and oimage auto tags
+[fix] New comments did not show in What's New unless there was also new media
+[new] Added Coppermine Import
+[new] Modified Member Album User list to allow subsets based
+      on quota and used amounts.
+[new] Added ability to batch update user quotas
+[new] Non media file types will now download directly from
+      album index view (ex; PDF files).
+[enh] If you provide a thumbnail on media upload or have ffmpeg
+      support enabled, these thumbnails will now be used for the
+      album cover.
+[enh] On upload of video, MG will now pre-populate the playback
+      window width and height with the media's resolution.
+[enh] Add proper height to video playback height to allow for
+      player controls (already did for WMP, now for QT).
+[fix] Fixed a few hard coded paths in the source - Thanks Casper
+[chg] For 2 or 3 column MG index, sub albums now show in
+      a dropdown select box.
+[enh] Upgraded swfobject.js to latest prod version 1.5
+[enh] Upgraded flash FLV/MP3 player to support auto play
+[new] Added new auto tag; mlink - places a link only
+      to a media item.
+[new] Sort member album quota report by username
+[new] config.php option to play video/audio in pop-up directly
+      from album view.
+[new] Now Gallery v1 import will also import comments
+[new] Added 'auto' width parameter to video: auto tag,
+      only supported for FLV at the moment.
+[upd] Updated swfobject.js to latest version
+[new] Added support for ffmpeg, this will allow for automatic
+      thumbnail creation for video uploads.
+[new] Much improved audio / video support.  Media Gallery now
+      attempts to read as much meta data from the media item,
+      such as video resolution to automatically play the
+      media at the best resolution and size.
+[new] Ability for mediagallery.admins to see the getID3
+      meta data dump - select the highlighted media id on
+      media view screen.
+[new] Integrated full getid3 library into MG
+[fix] Fixed issue with comments displaying in GL14+
+[new] Added new FLV and MP3 Flash players - THANKS Wayne Patterson!
+[new] Added FLV support
+[fix] Improved how Media Gallery detects anonymous users
+[fix] Removed a diagnostic message in albumedit.php
+[new] Ability to have subalbums list in a select box on main
+      Media Gallery index page.
+[new] Ability to display keywords in album / media display
+       - allow_keywords can be configured per album
+       - allow_keywords default value is set in Album Defaults
+       - allow_keywords can be globally set in Global Album Attr. editor
+[fix] Global edit of group_id did not work properly
+[fix] Did not always properly log album title when usage tracking
+      is enabled.
+[fix] Many code cleanups implemented, no functional changes
+      but removed much old / unneeded code.
+[fix] Auto tags did not react very well to invalid parameters,
+      now perform improved error checking.
+[fix] Mime type for PDF downloads was incorrect
+[fix] Force align=left on Featured Album title
+
+v1.4.7 - December 14, 2006
+
+[fix] Display Options - Only allowed a maximum of 9 rows for the
+      index page.  Now allows up to 999 incase you do not want
+      paging.
+[new] On image auto tags, added the caption as the alt / title tag
+[fix] Under certain circumstances the moderator group id is not
+      properly set before save.
+[chg] Media Gallery will no longer honor the Geeklog $_CONF['loginrequired']
+      setting, instead you will control anonymous access through
+      Media Gallery's System Options.
+[fix] Added proper CSS class to site stats headers to fix alignment
+      issues
+[fix] Featured album did not properly set {site_url} template var
+[fix] Fixed issue in logviewer where currently viewed log file would
+      not properly select if register_globals=off
+[fix] Site stats used some hard coded language string, replaced with
+      language file references.
+[fix] Site stats did not show anything for title if no title entered,
+      now show album title and 'no title available' message.
+[fix] When importing member albums from another gallery system, the member
+      album attribute is not set.  Running Reset Member Album Create Flag
+      should fix this, but there was a bug if the user didn't already exist
+      in the Media Gallery user preference table the flag was not properly
+      set.
+[fix] When editing AV Defaults - MG was not displaying the current settings
+[fix] Fixed alignment issue with auto tags, they would not honor the default
+      setting at all times.
+[new] Added new text string for What's New listing so it can all be
+      capitalized like others.
+[chg] Modified search.php to accept parameters via GET and POST
+[new] Added ability to 'feature' each members album, so whey they log in,
+      their main member album will show on the home page in the featured spot.
+
+v1.4.6 - October 29, 2006
+
+[new] Added global configuration options in config.php to set the default
+      values for each auto tag parameter.
+[new] Added img: auto tag - just returns <img> - link: and src: are valid
+      parameters.
+[new] Added config.php option to disable ImageMagick from using the
+      +profile "*" command line option - found to cause problems with
+      ImageMagick on Solaris.  By removing the +profile "*" command any
+      EXIF/IPTC data will be left in the thumbnail image.  This does not
+      cause a problem, but can increase the size of the thumbnail image.
+[new] Added ability to disable JPG original conversion on a per file basis
+      when using Browser Upload
+[new] Added album usage size to the Batch Delete Album list
+[fix] Fixed hard coded english text in search results
+[fix] Fixed the installation and upgrade to add the media_keywords column
+      to the media queue database table.  This fixes the issue of the SQL
+      error when moderation is turned on.
+[fix] Added safety check to insure album_display_rows is set to a positive
+      value.
+[fix] Fixed issues with tabbed menu interface not properly working with RTL
+      display and IE - disable if RTL
+[fix] Added logic to force display rows / columns to default values if  they
+      are not set, this resolves some random division by 0 errors if this
+      value is not properly set in system options.
+[fix] Fixed some HTML validation issues with auto tags - removed all the
+      align=center parms in the <img> tag.
+[fix] Fixed issue where empty slideshow (no image media) could cause a
+      JavaScript error
+[fix] Cleaned up several HTML validation issues in templates
+[fix] MG would error when listing the user profile if there was a non-image
+      media item in the recent upload list.
+
+v1.4.5 - October 24, 2006
+
+[fix] Fixed a bug in the Gallery v1 import where the anonymous
+      permissions were not set properly
+[fix] Fixed a bug in the Gallery v1 import where the media owner
+      was not set properly
+[new] Added global configuration option to turn off forcing
+      image conversion to JPG
+[fix] Slideshow autotag now honors border:0/1 parameter
+[new] Added template variable {album_owner} in media gallery index
+[new] Added feature to display 'No new media items' in Whats New listing
+      when there are no new media items.
+[fix] Album cover would not properly reset when moving all media
+      out of an album.
+[new] Implemented album, thumbnail and display image skins (selectable per
+      album)
+[fix] Non-admin album owners could not perform the static sort
+      on their albums.
+[upd] Added upgrade script for v1.4.5.
+[enh] Removed most calls to SEC_hasRight('mediagallery.admin') and
+      replaced with a reference to global variable.  This should give
+      a small speedup and reduce the overall server load a bit.
+[enh] Enhanced the upload items by implementing a tabbed interface
+      to select between upload methods.
+[enh] Implemented a tabbed interface to many of the admin screens to
+      make it look / work a little better for input.
+[enh] Cleaned up the album sort screen a bit, remove the album description
+      just use the title and removed the bolding - now looks a little better.
+[sec] Media Gallery did not properly filter out embedded javascript in
+      description fields. If enable_html was true, a potential XSS issue
+      existed.
+[new] Added paging support in Media Manage
+[new] Added support for paging the main index
+[new] Added link:0/1 parameter to image auto tags
+[new] Added autoplay: parameter to audio/video auto tags
+[new] Media Gallery now support using MS SQL as the database system
+      This requires Geeklog v1.4.1
+[fix] Fixed a bug where MG would not use the correct default MP3 player.
+[fix] Deleting an album but moving the contents did not reset
+      the media_count or album cover for destination album.
+[fix] Cleaned up several issues with including modules on Windows platform
+[new] Added ability to review video/audio in media queue and media edit
+[new] Rewrote the core code for creating / editing albums
+[new] Rewrote the core code for permission handling / checking
+[fix] Member albums would not automatically create with MySQL 5
+[enh] Added support for Geeklog v1.4 ADMIN_lists in site statistics
+[upd] Updated the HTML documentation - including updating all links in code
+
+v1.4.4 - September 4, 2006
+
+[fix] Fixed issue with Gallery v2 import on setting album owner
+[enh] Tweaked the Windows Media Player settings for media playback
+[fix] Media Gallery link would show up in Admin Control Block even if user
+      did not have privilege.
+[fix] User profile display did not use generic icons (audio,video, etc).
+[fix] Modified center block function to better handle missing images
+[fix] In some cases, when Preserve Original Filename is enabled and the
+      filename contains non-ASCII characters, Internet Explorer cannot display
+      the images.
+[enh] Added global configuration option to enable/disable MG info in user
+      profile display
+[fix] Fixed issue with audio: auto tag not properly displaying player controls
+[new] Added option to enable/disable using filename as media caption if blank
+[new] Added support that allows you to specify allowed media types per album
+[fix] Fixed EXIF parsing for NIKON D100 camera
+[fix] SQL error when creating an album with MySQL 5 in strict mode
+[new] Can now turn on/off displaying the album description in album view
+[fix] When openbasedir restrictions are in effect in PHP, Media Gallery
+      cannot validate the path to jhead/jpegtrans/zip no longer turn them
+      off automatically.
+[fix] Usage quotas were not always updated properly (recommend rebuilding user
+      quotas)
+[fix] SWF playback using video: auto tag was broken
+[enh] SWF playback will only include the SWFObject.js file once
+[new] Added support for allow_download - Placed a download link on media view
+      page
+[fix] Searching through Geeklog produced SQL error if search string had
+      apostrophes
+[enh] Added media description edit field in Manage Media
+[fix] Fixed a bug in Manage Media where it would fail on non-media items
+[fix] Adjusted the autotag / autotag_ss templates to provide better padding
+[fix] Watermarking images would fail with ImageMagick on Win32 platforms
+[fix] XP Publishing Wizard - Create album did not honor album defaults
+[fix] Media Gallery would display blank screen when saving album
+[fix] Album defaults - Watermarks did not display properly
+[fix] Album defaults - Default Watermark did not save properly
+[fix] MP3 playback in IE did not always work properly
+[fix] If you run Media Gallery from a different directory than mediagallery/
+      FTP uploads would not work
+[new] Added support for importing images from Geeklog stories with automatic
+      replacement of the Geeklog imageX with a Media Gallery autotag
+[chg] Removed extension from filename when using as media_caption
+[new] added support to show the last 5 items uploaded and the albums (max 20)
+      owned by user in profile
+[chg] added align:left/right/none.. parameter to autotags
+[upd] Updated SWFObject to v1.4.4
+[chg] Implemented PHPMailer for moderation emails
+      Modified how the emails are sent - now they send at the end of the batch
+      process
+[fix] XP Publishing Wizard did not display albums that allowed user uploads
+[fix] Force file permissions on RSS files to 664 after create / update
+[chg] link Uploaded By: name to profile
+[new] Display media title in page title in media view
+[new] Display album title in page title in album view
+[new] Display album title in page title for slideshow
+[new] Added support for Gallery Remote
+[upd] Updated fileCheck to include new files
+
+v1.4.3a - July 27, 2006
+
+[fix] added PLG_replaceTags call to autolinks will work with album description
+[fix] Cleaned up a few more minor issues with postcards...
+        - Removed mailto: link on preview for To: email, this caused
+          HTML issues if email address was missing.
+        - Cleaned up the templates a little more to insure text sizes
+          were set appropriately.
+        - Tweaked the error handling code to make it a bit more logical
+[upd] Updated hebrew.php language file
+
+
+v1.4.3 - July 26, 2006
+
+[fix] PostCards did not work well with UTF-8 and RTL languages.
+[fix] Updated postcard templates to use <div> instead of <font>
+[fix] PostCard plain text code had an embedded href, remove - this required
+      a one line change to all language files.
+[fix] Added trailing slash on visit URL in PostCard
+[fix] Stripped and HTML encoded the image <alt> tag on PostCards
+[fix] PostCard functions did not properly honor security settings
+[fix] Removed alt= tag on href in PostCard template
+[fix] Issues including proper EXIF support files when safe_mode=On
+[fix] Fixed issue where warning message would display if no EXIF tags
+      are selected in EXIF/IPTC admin.
+[upd] Added {album_description} tag availability to the album view.  This will
+      allow someone to edit the album templates and place the album
+      description in them if they wish.
+      Added sample HTML to album_page_header.thtml template to use this,
+      uncomment if you want the description displayed above the album
+      contents.
+[upd] Rebuild / initially set disk usage statistics on upgrade
+[upd] Updated Hebrew and German language files
+
+v1.4.2 - July 24, 2006
+
+[fix] Fixed so swf_bgcolor is properly initialized. Defined default value for
+      swf_flashvars.
+[chg] Changed default settings for auto play on all A/V option to true
+[chg] Added dir="ltr" to all path inputs in System Options
+[fix] Improved handling of missing images when album has attached thumbnail
+[fix] Media Gallery Administration had a COM_endBlock() call with no
+      beginBlock call which could cause some strange display issues with
+      themes other than the default professional theme
+[fix] Added bounds checking in System Options for Batch Processing Parameters,
+      will no longer allow 0 as valid values for refresh_time, items_per_cycle
+      and max_execution time.
+[fix] Improved error checking for missing thumbnail on album autotag
+[new] Now include 4Images Import Wizard, updated to support v1.4 of Media
+      Gallery
+[upd] Removed convert_4images.thtml from valid file list in FileCheck
+[upd] german.php language file updated
+[upd] hebrew.php language file updated
+
+v1.4.1 - July 23, 2006
+
+[fix] Tweaked flash playback to use different variable names for
+      SWFObject
+[fix] Fixed a couple more issues with quotes and apostrophes in PostCard
+[fix] Gallery v1 Import site header not called for initial screen
+[fix] Strip HTML and bad words from postcards
+[fix] Fixed issue with rating media, if you rate too fast and receive the
+      speedlimit message, MG shows you rated the media already.
+[fix] Lots of cleanup on error handling to insure site headers are only
+      called once.
+[fix] FTP Import, better handling when no items selected to import
+[fix] Import wizards, cleaned up header calls to insure COM_siteHeader is
+      never called twice (caused problems with other plugins).
+[fix] Cleaned up site statistic and enforced login requirements, if login
+      required and not logged in, no stats displayed.
+[chg] Removed codebase/clsid for SWF files (no longer needed)
+[chg] Added swf_version to AV defaults and swf attributes
+[enh] Added checks to see if plugin is disabled and show message instead of
+      causing an error.
+[fix] Slideshow auto tag did not display properly in new Opera browsers
+[chg] Cleaned up the EXIF/IPTC administration screen, moved select boxes
+      to be next to the tag description.
+
+v1.4.0RC3 - July 20, 2006
+
+[fix] Declared loop variable twice in lib-media.php
+[fix] Referenced some old icons in Media Manage
+[fix] Referenced some old icons in Moderate
+[fix] Referenced some old icons in Batch Caption
+[fix] Hardcoded LTR (Left to Right) on FTP import directory input
+[fix] Changed wmode default (Flash) to transparent
+[fix] Delete full RSS feed if disabled
+[fix] Implemented lwc's patch for flashvars and template changes
+[fix] Fixed norwegian language file, missing menulabel tag
+[fix] Gallery v1 import we now validate the owner_id
+[fix] what's new title length was not being used for media title, only
+      comments
+[fix] Postcard speed limit message did not display properly
+[fix] Postcards with apostophes were being received with them escaped out so
+      What's would look like What\\\'s
+[fix] when setting default sort order for an album, sub-albums were not sorted
+[fix] reworked how albums perms work.  If the parent has lesser perms, the
+      children are updated this also includes the hidden attribute regardless
+      whether the Force Child Update is selected.
+
+
+v1.4.0RC2 - July 18, 2006
+
+[new] Added FileCheck Utility - Identifies and removes old/obsolete files.
+[fix] Cleaned up FTP import file list a bit, no longer print the whole
+      directory name.
+[fix] Missing {site_name} in Postcard preview template
+[fix] Fixed bug in Gallery2 import where it would not find items in sub-albums
+[fix] Fixed issue where mgenroll block was named incorrectly on install
+[fix] Fixed issue where mgenroll block was not named at all on upgrade
+[fix] Put a little better error checking in place in Gallery v1 Import
+      validate we have the correct directory before proceeding
+[fix] Fixed several issues with the Flash playback routines.
+[fix] Removed QTobject, did some strange things with resizing windows, etc.
+[new] Added Album ID display in lower left hand corner of album view page
+[fix] Fixed a security bug in FTP import, would allow ../.. type directories
+      to be entered which allowed browsing above the FTP directory
+[fix] Fixed a bug where default value for swf_allowscriptaccess would not
+      set globally
+[fix] Set default for swf_allowscriptaccess to 'sameDomain'
+[fix] Cleaned up the GD processing to insure proper freeing of used memory
+[fix] Fixed an issue where album autotag did not always work as expected when
+      the album was empty.
+[fix] Fixed an issue where the Chatterblock plugin and Media Gallery would not
+      play nice together, but only when Chatterblock is installed as a LEFT
+      block.
+[fix] The tmp/ and uploads/ directories were empty in the archive and would
+      not always FTP to the server.  Now each includes a README documenting
+      their purpose.
+[fix] Fixed issue where watermark image would not display when editing an
+      album
+
+
+v1.4.0RC1 - July 15, 2006
+
+[fix] In album defaults, cancel errors with page not found.
+[fix] Rotating with GD libs would run out of memory, I was not
+      properly freeing up memory as I should.
+[fix] Several areas in the Administration did not have confirmation messages
+      after performing actions.
+[fix] Fixed issue where MP4 files would not play in popup window
+[chg] Changed out all the video/audio icons, just something I like to do
+      between releases.
+[chg] Changed default thumbnail size for albums to 150x150
+[enh] Tweaked Inmemoriam Import to map features a little better.
+[enh] Geekary import now operational
+[fix] Cleaned up many of the 'require_once' calls in admin.php
+[fix] Watermark upload did not display confirmation message
+[fix] FTP import would fail if filename contained apostrophe
+[fix] Fixed all the language tags reported by Jan
+[fix] Added 'Batch Processing Options' in from of the batch pulldown menu in
+      Media Manage
+[chg] Removed XP Publishing Wizard from Admin screen, now in userland menus
+[fix] Fixed error with quota report showing twice
+[enh] Gallery v2 import now operational
+[enh] Updated XP Publishing wizard to use $_SERVER vars to follow Geeklog's
+      usage
+[fix] Fixed an issue when upgrading from pre 1.2 releases
+[fix] Issue chmod 0664 on newly uploaded watermark files
+
+v1.3.C - July 7, 2006
+
+We have gone to using letters as the last digit in the version number to
+work around a Geeklog bug in comparing plugin version numbers.
+
+[fix] Fixed a typo in download.php I referenced the orig directory as oirg/.
+[fix] Actually, turns out download.php was very broken and did not download
+      any files.
+[fix] Fixed issue where RTL would not look good in AV Default editor
+[fix] Purge Member Albums now resets the member_gallery flag
+[fix] Any album delete will now try to properly reset the member_gallery flag
+[fix] In a previous development version I added the field media_keywords to
+      the media_queue table but neglected to add it to the upgrade routine.
+      I now check for the field, if not there, I add it.
+[fix] Now only show the 'Create Ablum' option off the MG Index page when a
+      user can *REALLY* create an album.
+[fix] Modified the install and upgrade routine to set proper defaults in the
+      mg_userprefs table. Upgrade will now set proper defaults.
+[enh] Use media filename as caption if no caption provided
+[fix] Anytime an album is touched, RSS rebuild will happen
+[fix] Postcard would not send if using SMTP or SENDMAIL as email backends
+[fix] Session count was inconsistent between menu and session list
+[enh] Added reset system options for LWC
+[enh] Inmemoriam Import now functional
+[fix] Changed some language entries that referred to "Member Uploads"
+      to "Logged-In User" or Registered Users to remove confusion with
+      Member Albums
+[fix] Batch session list - when empty now show "No Active sessions found".
+[fix] Fixed a bug in ftpimport.thtml where the submit button did not display
+      in IE
+[fix] Web based uploads were broken when using a non-english language
+[fix] Report quota and usage in Member List in Mb
+
+
+v1.3.11 - July 4, 2006
+
+This version is just a repackaging of v1.3.10 - I found a bug in Geeklog's
+plugin version detection where it would drop the trailing 0, making v1.3.10
+appear to be v1.3.1 and not giving you the option to upgrade.  Bumping the
+version number is the easiest way to fix this.
+
+v1.3.10 - July 4, 2006
+
+[enh]  In some cases the installation would show successful completion
+       but the Media Gallery group and feature id would not be properly
+       set.  Enhanced code to double check and perform semi-manual processing
+       of these variables if necessary.
+[enh]  Cleaned up the installation screen, it just looks a lot better now.
+[enh]  Added XP Publishing Wizard to user upload options
+[new]  Added 'Self Enrollment' feature to Member Albums
+[new]  Added 'Purge Member Albums' to admin screen, lists empty member albums
+       for easy house keeping
+[fix]  Only display postcard icon for media_type=0 (Image)
+[fix]  Fixed issue with auto tag with, the box would always default to 150px
+       wide, now size is based on actual width used.
+[fix]  Changed the language tag for Media Gallery User Preferences to
+       MG User Options
+[fix]  Changed text in moderation screen on button to Approve All
+[enh]  Added Global Album Attribute Editor to Admin Screen
+[enh]  Added Global Album Permissions Editor to Admin Screen
+[enh]  Aded Force Child Update to Member Album edit
+[fix]  Fixed the max filesize display on upload screen
+[fix]  Added kb 0=Unlimited after the max_filesize field in album edit
+[fix]  Added /rss directory to environment check routines
+[fix]  Fixed Custom display image size to remove spaces for RTL display
+[fix]  Tried to be more consistent on naming of QuickTime (now QuickTime
+       Player) and Windows Media Player
+[fix]  Added dynamic text for upload screen if .ZIP file processing enabled,
+       the user will be informed.
+[enh]  Added limited support for .PSD files (experimental) (ImageMagick Only)
+[enh]  Implemented new Javascript implementation of Flash and QuickTime media
+       (experimental)
+
+
+v1.3.9 - June 28, 2006
+
+[new] RSS Feeds (Full and Per Album)
+[new] Electronic PostCard Feature
+[new] Batch Album Delete
+[enh] Gallery v1 Import Routine
+[enh] Added check all / uncheck all on Moderation queue
+[enh] Added a rate limit on moderation emails
+[fix] Member Album Create would sometimes fail
+[fix] Incorrect group_id assigned to new Member Albums
+[fix] Sub-albums with missing thumbnails could cause a broken icon
+[fix] ZIP file uploads were broken
+[fix] fixed issue where I did not properly calculate the number of sub-albums
+      and would display incorrect top/bottom pagination
+[fix] issue when creating member albums that the active flag was not properly set
+[fix] fix to insure that users are properly inserted into mg_userprefs.
+[fix] No longer upsize TGA images on upload
+
+v1.3.8 - June 22, 2006
+
+[new] Media Gallery's admin path is now configurable in config.php
+[new] Member Albums - Media Gallery now supports the concept of Member Albums.
+      These are standard albums that can be automatically created for your
+      site users and they have special features:
+        - quotas
+        - force location to a specific album
+        - no ability to set certain configuration options:
+            - cannot include in random image block
+            - cannot change max filesize allowed
+            - cannot change max resolution allowed
+            - cannot change owner / group permissions
+            - Admin can set all of the above
+[new] Added global static album sorting - now sort by album title, media count
+      or last update.
+[new] Added global statick media sorting.
+[enh] Enhanced media sorting to allow sorting by title or original filename.
+[enh] Global Album Attribute Editor now allows you to specify the starting
+      album and will only make change to that album and its sub-albums.
+[enh] Admin functions now provide feedback when they complete.
+[fix] The duplicate filename detection code was broken, now properly ensures
+      that no duplicate files names are used.
+[fix] Flash(SWF) help text was displayed on QuickTime (MOV) attribute screen.
+[fix] Auto tag captions now wrap to the width of the auto tag.
+[fix] Upgrade routine would always fail when upgrading from v1.3.5.  Worked
+      on second try.
+[fix] Found a few more hard coded language tags, moved to language files.
+
+
+v1.3.7 - June 19, 2006
+
+[fix] Fixed issue where sub-albums did not properly filter hidden albums
+[fix] Fixed issue on audio tag not sizing properly
+[fix] HTML Upload - if album max filesize < php.ini max upload size, use the
+      album setting for msg
+[fix] Cleaned up the language file and added language entries for
+      display_image_sizes
+[enh] FTP Import system re-designed again based on feedback.
+        - Now requires that you setup the FTP directory path in System
+          Configuration defaults to:
+              $_CONF['path'] /plugins/mediagallery/uploads/
+          This is basically a security precaution, it insures that no
+          directory browsing above this directory will ever happen.
+[enh] Added Category and Keyword to HTML upload
+[enh] Streamlined the upgrade code
+[enh] Cleaned up some of the templates - removed colons on prompts
+[new] Added border: option to oimage, media, image, album auto tags.
+
+v1.3.6 - June 15, 2006
+
+[new] Added category system - allows you to setup your own categories and
+      assign media items to that category.
+[new] Added ability to specify keywords for each media item.
+[new] Added Advanced Search option that will use the new category and keyword
+      fields.
+[new] Batch processing system - All batch operations in Media Gallery will
+      now use the interactive batch processing system.  This should keep
+      large batch functions (rotate, import, resize, rebuild, watermarking)
+      from placing too large a load on the server and managing the server
+      timeouts.
+[new] All configuration options are set online - no more editing config.php
+[new] All system defaults are now set online - no more editing config.php
+[new] Added new autotag [oimage] - This auto tag will use the original image
+      to display in the story / staticpage.  See documentation for more info.
+[new] Ability to specify a custom display image size
+[new] Added French and Japanese translations
+[enh] Added ability to sort albums by alpha (title)
+[enh] All auto tags now support a width:XXX parameter where you can specify
+      the image width in pixels.
+[enh] Improved error checking / handling on watermarking operations
+[enh] Enhanced the FTP import system to allow interactive selection of item
+      to import and the ability to place sub directories in different albums
+[enh] Optimized the code to remove several processing bottlenecks.  Results in
+      a much faster system with much less server load.
+[enh] Much better handling of missing thumbnails or display images.
+[fix] Fixed issues with uploading watermarks
+[fix] Fixed issues with NetPBM watermarking
+[fix] Fixed a bug with location of watermarks (placed in the wrong location)
+[fix] Fixed a bug in searching, did not honor the date range passed.
+[fix] Fixed a bug that caused a permission error when trying to reply / view
+      comments
+[fix] Fixed a bug that would not let user change the view of comments.
+[fix] Issue with uploading items with apostrophe's in filename
+[fix] Fixed several language file issues
+
+v1.3.5 - April 23, 2006
+
+[new] Added watermarking support to Media Gallery
+[new] Added album configuration option to auto-sort album after a maintenance
+      event (upload, delete, move).
+[new] Option to preserve the original filename instead of using Media
+      Gallery's internal hash naming convention.  See new config option in
+      config.php - $_MG_CONF['preserve_filename'].
+[new] Added hotlink protection to download.php
+[new] All uploaded images are converted to JPG format if they are a different
+      format.
+[new] Image rotate now rotates the original image too.
+[chg] Media Gallery no longer displays the 'Powered By' line on the
+      'Login Required' message.
+[fix] Fixed several language tags there were hard coded.
+[fix] Fixed a bug where the album cover would not properly reset if multiple
+      images were deleted from the album at one time.
+[fix] Fixed a bug where the album's last_update field was not updated if the
+      newest item in the album was deleted.
+[fix] Fixed a permission issue where album owners would not see the album
+      administration drop down menu if they were just an owner and not a
+      mediagallery.admin.
+[fix] Fixed a permission problem where a moderator could not moderate an
+      album.
+[fix] Fixed shutter speed calculations to work properly all the time in the
+      EXIF routines.
+[fix] Added improved error checking / handling when displaying the username
+      of the user that uploaded the media.  If there was no userid, or the
+      user had been deleted, Media Gallery would give an SQL error.
+
+v1.3.4 - April 1, 2006
+
+[fix] Path checking code in configuration was broken on Windows servers
+[fix] Moved JUPLOAD so that users can upload to albums that allow member
+      uploads
+[fix] Fixed a few issues with moderation
+[fix] Enhanced the error checking, handling and reporting on uploads
+[fix] Skip a few checks if safe_mode enabled
+[fix] Fixed a bug in the install, it left a data element out of the databases
+
+v1.3.3 - March 26, 2006
+
+[fix] - Completed the loop variable support for AV playback
+[new] - Added ability to zoom images in Manage Media view
+[new] - Added album views counting
+[new] - Added ability to select which images will be used in slideshow autotag
+        (Manage Media)
+[new] - You can now upload ZIP files of images, Media Gallery will uncompress
+        and import the images
+[new] - Enhanced FTP Import to now have the ability to process sub-directories
+        too
+[new] - Added the ability to create albums wihing the XP Publishing Wizard
+[new] - Albums can now be hidden, meaning they do not show up in the album
+        list, but can be used in autotags.
+[new] - Added support for JUPLOAD a JAVA based upload applet
+[new] - New config.php variable - $_MG_CONF['title_length'] controls the
+        maximum allowed characters in the What's New Listing
+[new] - Thumbnail JPG quality is now configurable
+[new] - Support for any/all file types.  If Media Gallery does not recognize
+        the file type, it will simply add it to the album and allow users to
+        download it.
+[new] - Added [download] autotag
+[new] - Modified the method Media Gallery uses to view media, now the URL will
+        be static, meaning it will no longer change.
+[new] - Rotating images will now process the original uploaded image too
+[new] - Media Gallery now saves the original filename of each media item.
+        They can also be edited in the Media Edit screen.
+[enh] - Cleaned up how Media Gallery uses icons, created new images/ directory
+        under the mediagallery/ directory.
+[enh] - Enhanced how the 'direct download' mode of AV playback works, now uses
+        the download.php and will force the original filename as the donwload
+        file name. This enforces much stronger security controls.
+
+
+v1.3.2 - March 17, 2006
+
+[fix] fixed issue where SQL error would occur if jhead or jpegtrans not found,
+      didn't declare $_TABLES as global
+[fix] fixed issue where thumbnail create failed in ImageMagick
+[fix] fixed issue where original would not delete if jhead enabled
+[fix] fixed issue where my check for jhead enabled failed due to typo
+[fix] now include lib-exif.php in all the right spots.
+[new] In Manage Media, you can now zoom in on the images
+[new] Started adding loop variable to all AV playback options
+
+v1.3.1 - March 15, 2006
+
+[new] Ability to keep only the display image and thumbnail image
+[new] Ability to choose the size of the display image
+[new] Ability to set limits on the maximum file size accepted for upload
+[new] Ability to set limits on the maximum resolution accepted for upload
+      - automatic resizing to your specified resolution if too big.
+[new] Ability to install Media Gallery in a different directory than
+      /mediagallery
+[new] Added support for JHEAD to keep EXIF/IPTC data when not saving the
+      original image, or when rotating the original image.
+[new] Added support for JPEGTRAN which gives lossless rotations.
+[new] Added 'views' counter for albums
+[new] New auto tags: video and audio
+[new] Full support for auto links, now you can include autotags from Geeklog
+      or other plugins in your album/media titles and descriptions
+[new] Maintenance Routines
+          o Rebuild display images (incase you want to change their size)
+          o Rebuild thumbnails (incase you ever loose them?)
+          o Remove original images (this will delete the originally uploaded
+            image, but first move the EXIF data to the display image).
+[fix] Fix to make sure thumbnails use 100% quality setting when being created.
+[fix] Fixed issues with UTF-8 encoding in pop-up windows
+
+v1.2.6 - March 16, 2006
+
+[fix] cfgedit.php - Called siteHeader() twice causing issues with other
+      plugins.
+[fix] Inmemoriam import (index.php, convert_inmemoriam.thtml) - Many updates
+      / fixes
+[fix] lib-media.php - Fixed issue where EXIF data would not display below
+      media item
+[fix] Set thumbnail quality to 100% instead of 75%
+[fix] Fixed issues with UTF-8 encoding in pop-up windows
+
+v1.2.5 - March 3, 2006
+
+[fix] Album description did not display in the Album Delete Confirmation
+      screen.
+[fix] Fixed a few places (manage media, edit media item) where UTF
+      encoding was not being preserved.
+[fix] Another fix to the Gallery v1 Import code.  In attempting to fix
+      the problem where an embedded Gallery v1 install was conflicting
+      with the import wizard, I completely broke the wizards ability to
+      see the Gallery v1 albums.
+[fix] Updated some fo the error log entries in lib-upload.php to be a bit
+      more consistent.
+[upd] Updated the german.php language file with a few fixes
+[new] $_MG_CONF['enable_media_id'] config option to allow non-admins to
+      see the Media ID  in the media view screen.
+[new] Coppermine v1.4 Import Wizard
+[new] $_MG_CONF['verbose'] config option - surpresses logs in lib-upload
+[new] $_MG_CONF['full_in_popup'] config option - allow full display in
+      pop-up window.
+[new] $_MG_CONF['commentbar'] config option - use Geeklog comment bar
+      instead of 'Post Comment' link.
+
+v1.2.4 - February 19, 2006
+
+[sec] Fixed a SQL injection issue with the XP Publishing Wizard
+      Media Gallery uses the same code as Geeklog and suffered from the
+      SQL injection condition as Geeklog.
+[fix] Fixed an issue with Gallery v1 import using the same class name as
+      the main Media Gallery code, causing a program error.
+
+v1.2.3 - February 12, 2006
+
+[fix] v1.2.2 had a packaging problem and did not include all the new icons
+      in the mediaobjects/ directory.
+[fix] The new showTree() function for use with static pages would show all
+      albums regardless of permissions.  This fix now only shows albums the
+      user has permissions to see.
+
+v1.2.2 - February 11, 2006
+
+[fix] If you select an audio/video file with attached thumbnail as the album
+      cover, Media Gallery would display nothing in the album list.
+      Made several fixes/enhancements to make sure the thumbnail is displayed
+      and to disable selecting an audio/video file without an attached
+      thumbnail as the album cover.
+[fix] If you had double quotes or href's in the album or media title,
+      it would not display properly.
+[fix] Tweaked the slideshow autotag to better handle images that were
+      smaller than 150px in height.
+[sec] Security fix, if comments were enabled in the What's New listing,
+      and you have Log in Required selected, non logged-in users could view
+      the media item by selecting the comment listed in the What's New list.
+[fix] Changed the name of the Album class to mgAlbum so Media Gallery can
+      coexist with a Gallery v1. embedded plugin.
+[new] Added Geekary import wizard
+[new] Updated the function showTree() in the mgAlbum class to give admins
+      the ability to create a static page that shows a list of all albums.
+      See staticpage.txt file for details.
+[upd] hebrew.php language file has been updated.
+[upd] Updated the documentation - added a little more info on FTP import,
+      updated how HTML is handled in titles / descriptions and added the
+      Geekary import section.
+
+v1.2.1 - February 8, 2006 - Final Production Release!
+
+[fix] Slideshow auto tag would only work properly if only 1 per page,
+      now works with unlimited # per page
+[fix] Fixed quality setting in cfgedit to allow 100% to be entered
+[fix] Fixed tagline to properly reference Media Gallery directory,
+      forget to declare $_CONF global
+[fix] Fixed an issue with comments not displaying below media in GL 1.4.0
+
+
+v1.2.0 - February 4, 2006 (Internal Testing/QA Release)
+
+[fix] 'Confirm Delete' was missing from language file
+[fix] 'Edit Item' was missing from language file
+[fix] XP Publishing Wizard would error if source directory had apostrophe's
+[enh] Updated several of the media gallery icons and thumbnails
+[new] Added the image: autotag because I'm such a nice guy and LWC really
+      wanted it.
+[fix] Autotags now fully honor album permissions, if user does not have
+      permissions to the album, MG returns an empty string for the autotag.
+
+
+v1.2.0rc3 - February 2, 2006
+
+[sec] Fixed a security hole where anyone, even anonymous users could
+      create an album if they knew the proper url and post vars
+[fix] Fixed an issue with autotags causing a fatal error if they referenced
+      a non-existent album
+[fix] Fixed User Preference language entries
+[fix] Fixed a problem with calculating the album page number in birdseed.
+[fix] Fixed pop-up window video playback did not honor all new playback
+      attributes
+[fix] Modified the slideshow autotag to force image height to 150px if over
+      that size.
+[fix] Batch moving images did not maintain the media_counts properly
+
+v1.2.0rc2 - January 31, 2006
+
+[fix] slideshow auto tag did not return empty if no media items
+[fix] added several new params to video playback options
+[fix] browsing album, clicking on birdseed did not return to correct page
+[fix] Gallery v1 import was broken, now works again.
+[fix] when deleting media, did not clean out playback options table
+[new] album owner can now be changed in edit album
+[new] added 'Use default album cover' to manage media
+[fix] album paging did not work properly when albums display after media items
+[fix] manage media did not display 'No media items' when album empty
+
+v1.2.0rc1 - January 27, 2006
+
+Media Gallery v1.2.0 has many new features and enhancements over the previous
+release of v0.98c.  This release of Media Gallery is truly what I have
+envisioned for this plugin since the day I originally released version 0.80
+a few months ago.  Below is a quick list of some of the new features and
+enhancements:
+
+    * Album Configuration Options:
+          o Allow Comments
+          o Enable EXIF Display (below image, popup window, none)
+          o Enable Rating
+          o Display Views Counter
+          o Enable Client Side Sorting
+          o Audio / Video Playback Options (inline, popup window, download)
+          o Enable Slideshow
+          o Include in Random Image Block
+          o Enable Online Printing
+          o Display Full Image (Always, Members Only, Never)
+          o Thumbnail size (small, medium, large)
+          o Display Rows
+          o Display Columns
+
+    * User Preference System
+          o Display Rows (use system default or user specified)
+          o Display Columns (use system default or user specified)
+          o Default MP3 Player
+          o Audio / Video Playback Options (inline, popup)
+          o Thumbnail size (small, medium, large)
+
+    * Global Options
+          o Default MP3 Player (Windows Media Player or QuickTime)
+          o Audio / Video Playback Options (by type: MP3, MPG, ASF/WMV,SWF,
+            MOV/MP4)
+
+    * Media Specific Options
+          o Reset Ratings
+          o Reset Views
+          o For MP3,WMV,MOV,SWF Files you can specify several playback options
+
+    * Batch Caption Editor
+    * Enhanced auto tag support for Geeklog integration.  album auto tag
+      supports all images, video and audio types.
+    * New slideshow auto tag for embedding a small slidedown into stories and
+      static pages.
+    * Added support for Digibug - An online photo printing service
+    * Client Side Sorting - User's can now choose to sort their album view by
+      upload time, rating, views, and default (how you sorted them).
+    * View counting is now separate from Usage Tracking so you can now keep
+      track of the number of views and items received without enabling usage
+      tracking.
+    * Global Album Attribute Editor - You can now globally set any of the
+      configuration options listed above under Album Configuration
+    * Global Album Permissions Editor
+    * Force Child Perms Update - If you change the permissions of a parent
+      album, you can force the same permission settings for all children
+      albums.
+    * New EXIF/IPTC System - Supports much more metadata than previous
+      versions, does not require EXIF support to be compiled into PHP.
+      It is configurable by the site admin as to which EXIF tags to display.
+    * Selectable thumbnail sizes (small 100x100, medium 150x150,
+      large 200x200)
+    * Online Configuration of global options
+    * Import script for Inmemoriam Gallery
+    * Template cleanup - ran all templates through tidy a great HTML
+      compliance checker. Fixed several typos and bad HTML code
+    * New media types supported: Targa (tga) and MP4.
+    * Improved documentation.
+
+There are several other small enhancements and a few bug fixes as well.
+Overall, Media Gallery v1.2 is a full featured, configurable online media
+management system for Geeklog.  There are still new features to add, so please
+keep your feedback and suggestions coming in.

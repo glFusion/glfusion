@@ -1,0 +1,960 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- $Id: install_doc.html 88 2006-08-25 00:37:54Z mevans0263 $ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <title>Geeklog CAPTCHA Plugin Installation and Usage</title>
+  <style type="text/css">
+body {
+margin: 1em 5%;
+background: white;
+color: black;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: smaller;
+}
+h1 {
+font-size: 1.4em;
+}
+h2 {
+font-size: 1.2em;
+}
+h3 {
+font-size: 1.0em;
+}
+p, ul, ol, li {
+margin-top: 0.6em;
+margin-bottom: 0.6em;
+}
+ul, ol {
+margin-left: 0.9em;
+padding-left: 0.9em;
+}
+code, kbd, var {
+font-family: Courier, "Courier New", monospace;
+}
+table {
+width: 100%;
+}
+td, th {
+vertical-align: top;
+padding: 4px;
+line-height: 128%;
+font-size: smaller;
+}
+th {
+text-align: left;
+background: silver;
+}
+.r2 {
+background: rgb(240,240,240);
+}
+dt {
+font-weight: bold;
+}
+.usual {
+font-size: 100%;
+}
+.menu {
+font-size: 90%;
+background: #dddddd;
+color: black;
+}
+.footer {
+font-size: 90%;
+background: #dddddd;
+color: black;
+}
+.comment {
+font-size: 80%;
+}
+.codeheader { font-family: Courier, "Courier New", monospace; }
+a:link { color: #2222FF; background: transparent; }
+a:visited { color: #2222FF; background: transparent; }
+a:hover { color: #5252FF; background: transparent; }
+/*a:hover { color: #333366; background: #AAAADD; }*/
+a:active { color: #2222FF; background: transparent; }
+/* this is to prevent Mozilla from applying :hover on <a name="..."> */
+a[name] { color: black; background: transparent; }
+  </style>
+</head>
+
+
+<body style="width: 700px;">
+
+
+
+
+
+
+
+
+<h1>Geeklog CAPTCHA plugin - version 3.0.0</h1>
+
+
+
+
+
+
+
+
+
+<h3>Author: Mark R. Evans &lt;mark@gllabs.org&gt;<span class="email"></span>
+</h3>
+
+
+
+
+
+
+
+
+<h3>Date: June 22, 2007
+</h3>
+CAPTCHA v3.0 requires Geeklog v1.4.1 or higher.<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+With Geeklog v1.4.1, there is full support built into Geeklog to support the CAPTCHA plugin with the following Geeklog features:<br>
+
+
+
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+
+
+  <li>New User Registration</li>
+
+
+
+
+
+
+
+
+  <li>Comments</li>
+
+
+
+
+
+
+
+
+  <li>Email User</li>
+
+
+
+
+
+
+
+
+  <li>Email Story</li>
+
+
+
+
+
+
+
+
+  <li>Story submission</li>
+  <li>Ability to force CAPTCHA for all remote users</li>
+
+
+
+
+
+
+
+
+</ul>
+Beginning with Forum v2.6, there is full support built into the Forum plugin to support the CAPTCHA plugin with forum posts.<br>
+<br>
+Beginning with Media Gallery v1.5.0, there is full support build into
+Media Gallery to support the CAPTCHA plugin when sending electronic
+Postcards.
+
+
+
+
+
+
+
+<h1>Overview</h1>
+
+
+
+
+
+
+
+
+CAPTCHA is a native Geeklog plugin that provides an additional layer of security for spambots. <br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+A CAPTCHA (an acronym for "Completely Automated Public Turing test to
+tell Computers and Humans Apart", trademarked by Carnegie Mellon
+University) is a type of challenge-response test used in computing to
+determine whether or not the user is human.&nbsp; By presenting a
+difficult to read graphic of letters and numbers, it is assumed that
+only a human could read and enter the characters properly.&nbsp; By
+implementing the CAPTCHA test, it should help reduce the number of
+Spambot entries on your site.<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+CAPTCHA implementations are not full-proof, there are many methods to
+bypass them. &nbsp;Although I have not seen any successful attempts to
+bypass this implementation, it should only be used to provide another
+layer of protection to your site. &nbsp;With a layered approach using
+the Bad Behavior Plugin, SpamX Plugin, SLV Enhancement and the CAPTCHA
+plugin, together these can provide a very secure Geeklog
+implementation.<br>
+
+
+
+
+
+
+
+
+<br>
+Beginning with Geeklog v1.4.1 there is support built into Geeklog to
+natively provide a CAPTCHA block for new user registrations, comment
+submissions, email user, email story and story submissions.<br>
+
+
+
+
+
+
+
+
+<h1>Geeklog CAPTCHA Plugin Installation
+</h1>
+
+
+
+
+
+
+
+
+
+<p>The CAPTCHA Plugin follows the standard Geeklog plugins
+procedure, which has not been well documented.&nbsp;
+Below we will document two methods to install the Media Gallery files,
+via
+FTP and via standard shell access to the server.</p>
+
+
+
+
+
+
+
+
+
+<h3>FTP Installation
+</h3>
+
+
+
+
+
+
+
+
+
+<p>If you do not have shell access to your server and can only
+use an FTP client to access your server, follow these instructions.
+&nbsp;If you have shell access to your server, you may want to jump
+down to the&nbsp;<span style="font-weight: bold;">Shell
+Access Installation&nbsp;</span>instructions below.</p>
+
+
+
+
+
+
+
+
+
+<p>To install CAPTCHA, or any Geeklog plugin, you will
+need to un-archive the plugin on your local computer. The CAPTCHA
+distribution will automatically create all the proper directories when
+it is
+un-archived. </p>
+
+
+
+
+
+
+
+
+
+<p>To un-archive a .gz file, you can use later copies of
+WinZIP or WinRAR. </p>
+
+
+
+
+
+
+
+
+
+<ol>
+
+
+
+
+
+
+
+
+
+  <li>Create a temporary
+directory on your local hard drive to hold the Media Gallery files
+(let's use C:\tmp for our example). </li>
+
+
+
+
+
+
+
+
+
+  <li>Open the
+captcha-3.0.0-1.4.1.tar.gz file with WinRAR. </li>
+
+
+
+
+
+
+
+
+
+  <li>Select Extract All
+Files and point to the C:\tmp directory as the destination. </li>
+
+
+
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+<p>Now we should have a local copy of the CAPTCHA Plugin
+in C:\tmp </p>
+
+
+
+
+
+
+
+
+
+<p>The directory should look like this:</p>
+
+
+
+
+
+
+
+
+
+<pre>+tmp\<br> + admin\<br> + docs\<br> + language\<br> + public_html\<br> + templates\<br> + functions.inc<br><br></pre>
+
+
+
+
+
+
+
+
+
+<p>Now that you have a copy on your local hard drive, it is
+time to FTP up to your server. </p>
+
+
+
+
+
+
+
+
+
+<p>Start your FTP program, I recommend FileZilla if you do not
+have a program you use already.&nbsp;
+FileZilla is free and supports many different operating systems
+(Windows, Linux, etc.).</p>
+
+
+
+
+
+
+
+
+
+<p>Connect to your web server with your FTP program.&nbsp; </p>
+
+
+
+
+
+
+
+
+
+<p>Our first FTP will be the entire CAPTCHA distribution
+to your server.&nbsp; You will want to use the
+diagrams below to find the proper directory on your server and move the
+entire c:\tmp\captcha\ directory to the path-to-geeklog/plugins/
+directory.&nbsp; </p>
+
+
+
+
+
+
+
+
+
+<p>To find the path-to-geeklog
+you can look in your Geeklog config.php file and see what directory is
+defined
+in the $_CONF[&lsquo;path&rsquo;] line.</p>
+
+
+
+
+
+
+
+
+
+<p style="width: 600px;"><span style="font-weight: bold;">SPECIAL NOTE:</span> For
+the initial FTP of the CAPTCHA
+distribution, you will want to
+actually drag the <span style="font-weight: bold;">captcha</span>
+folder from your local computer to the plugins
+directory on your server.&nbsp; The remaining
+FTP&rsquo;s below you will actually drag the files, not the parent
+directory.</p>
+
+
+
+
+
+
+
+
+
+<pre>tmp\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path-to-geeklog/<br>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp; + captcha\--+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +-------------&gt;+ plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+
+
+
+
+
+
+
+
+
+<p>Next, you will need to make a sub-directory under the
+public_html
+directory on your server called captcha. For most FTP programs you
+can create directories by highlighting the parent directory,
+public_html
+in this case, then right click the mouse, select New Folder and name it captcha.
+This procedure may be a little different depending on which FTP program
+you are
+using, check their documentation. </p>
+
+
+
+
+
+
+
+
+
+<pre>&nbsp; path-to-geeklog/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + captcha &lt;--- Make this subdirectory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+
+
+
+
+
+
+
+
+
+Next you will need to FTP all the files from the
+c:\tmp\captcha\public_html\* directory to your server. Here you
+will
+want to select all the files and sub-directories in the public_html\
+directory,
+not just the public_html\ folder. Follow the diagram below:
+<pre>tmp\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path-to-geeklog/<br>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>&nbsp;&nbsp; + captcha\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ public_html/*-+&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +--------------&gt;+ captcha/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ sql/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ config.php</pre>
+
+
+
+
+
+
+
+
+
+<p>Next, you will need to make a sub-directory under the
+admin/plugins/
+directory on your server called <span style="font-weight: bold;">captcha</span>. </p>
+
+
+
+
+
+
+
+
+
+<pre>path-to-geeklog/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + admin\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + plugins\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + captcha &lt;--- Make this subdirectory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+
+
+
+
+
+
+
+
+
+<p>Next you will need to FTP all the files from the
+c:\tmp\captcha\admin\* directory to your server. Here you will
+want to
+select all the files and sub-directories in the admin\ directory, not
+just the
+public_html\ folder. Follow the map below: </p>
+
+
+
+
+
+
+
+
+
+<pre>tmp\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path-to-geeklog/<br>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp; + captcha\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ admin/---+&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + logs/<br>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + admin/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;+-----------------------&gt; + captcha/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+
+
+
+
+
+
+
+
+
+<p>Congratulations!&nbsp; You
+should now have all the files uploaded to your server and you are ready
+to skin
+to the Online Installation step
+below.</p>
+
+
+
+
+
+
+
+
+
+<h3>Standard Shell Access Installation
+</h3>
+
+
+
+
+
+
+
+
+
+<ol>
+
+
+
+
+
+
+
+
+
+  <li>It is always a good ideas to perform a site backup. &nbsp;The
+CAPTCHA plugin does not create any database tables, but you should
+always make a backup prior to installing a plugin. </li>
+
+
+
+
+
+
+
+
+
+  <li>Uncompress the CAPTCHA plugin archive while in the path-to-geeklog/plugins
+directory. The archive will create a directory called captcha. </li>
+
+
+
+
+
+
+
+
+
+  <li>In your public_html
+directory, create a directory called <span style="font-weight: bold;">captcha</span>. </li>
+
+
+
+
+
+
+
+
+
+  <li>Under
+public_html/admin/plugins/ directory, create a directory called <span style="font-weight: bold;">captcha</span>. </li>
+
+
+
+
+
+
+
+
+
+  <li>Change to your
+path-to-geeklog/plugins/captcha directory. </li>
+
+
+
+
+
+
+
+
+
+  <li>Copy the files in
+the admin directory to the admin/plugins/captcha directory you
+created in step 4. </li>
+
+
+
+
+
+
+
+
+
+  <li>Copy the files in
+the public_html directory to the public_html/captcha directory you
+created in step 3.</li>
+
+
+
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+<h3>Online Installation
+</h3>
+
+
+
+
+
+
+
+
+
+<p>Now that you have the files loaded on your server, it is
+time to actually perform the CAPTCHA installation into Geeklog. </p>
+
+
+
+
+
+
+
+
+
+<ol start="1" type="1">
+
+
+
+
+
+
+
+
+
+  <li>Go to the plugin
+administration page. The CAPTCHA plugin should show up with a
+link to install it. Click this link. The install page will tell you if
+it was successful or not. If not, examine the Geeklog error.log in
+path-to-geeklog/logs/ to see what the problem was. Fix the problem and
+re-install. </li>
+
+
+
+
+
+
+
+
+
+  <li>Be sure and modify the CAPTCHA config.php file to
+enable CAPTCHA support for the features you wish to use. &nbsp;By
+default, CAPTCHA is turned off for all items. &nbsp;See Configuration
+section below. </li>
+
+
+
+
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+<h2>Upgrade Process</h2>
+
+
+
+Upgrading from v2.0 or later is very simple, just copy the new files
+over to your system per the directions above.  Then enter <b>Admins Only -&gt; Plugins</b>,
+select the CAPTCHA plugin, choose edit and upgrade.
+<br>
+
+
+<br>
+
+
+After upgrading to v3.0.0, you will need to go into the online Administration Screens
+and update your CAPTCHA settings.  Updates are no longer maintained in the config.php file.
+<br>
+
+
+<br>
+
+
+<h3>Upgrading from the original gl-cpatch custom registration</h3>
+
+
+
+
+If you have the gl-captcha custom registration hack already installed,
+there is no need to upgrade to the CAPTCHA plugin unless you are
+running Geeklog v1.4.1+ or Forum 2.6+. &nbsp;The CAPTCHA plugin does
+not offer any new features unless you are running the latest Geeklog or
+Forum releases.<br>
+
+
+
+
+<br>
+
+
+
+
+If you wish to upgrade, you will need to uninstall the existing gl-captcha hack before installing the plugin.<br>
+
+
+
+
+<br>
+
+
+
+
+Follow these steps:<br>
+
+
+
+
+<br>
+
+
+
+
+<ol>
+
+
+
+
+  <li>Disable Geeklog's custom registration (change $_CONF['custom_registration'] to equal false in Geeklog's config.php file.</li>
+
+
+
+
+  <li>Remove the public_html/captcha/ files and directory.</li>
+
+
+
+
+  <li>Remove the /captcha-images/ files and directory.</li>
+
+
+
+
+  <li>Remove the edits to lib-custom.php and memberdetail.thtml that you made to install the gl-captcha hack.</li>
+
+
+
+
+</ol>
+<span style="font-weight: bold;"></span><br>
+
+
+
+
+Keep in mind, you do not have to use Geeklog's custom registration to
+enable CAPTCHA if you are running Geeklog v1.4.1 or greater.<br>
+
+
+</body>
+</html>

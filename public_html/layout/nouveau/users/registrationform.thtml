@@ -1,0 +1,17 @@
+<div class="gllabsform">
+  {start_block}
+  <form action="{site_url}/users.php" method="post">
+  <div style="margin-bottom:10px;">{lang_instructions}</div>
+  <label for="username">{lang_username}:</label>
+  <input type="text" size="16" maxlength="16" id="username" name="username" value="{username}"{xhtml}><br{xhtml}>
+  <label for="email">{lang_email}:</label>
+  <input type="text" size="32" maxlength="96" id="email" name="email" value="{email}"{xhtml}><br{xhtml}>
+  <label for="email_conf">{lang_email_conf}:</label>
+  <input type="text" size="32" maxlength="96" id="email_conf" name="email_conf" value="{email_conf}"{xhtml}><br{xhtml}>
+  <div class="warning">{lang_warning}</div>
+  <div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
+  <input type="hidden" name="mode" value="create"{xhtml}><br{xhtml}>
+  <input type="submit" value="{lang_register}"{xhtml}><br{xhtml}>
+  </form>
+  {end_block}
+</div>

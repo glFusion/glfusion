@@ -1,0 +1,21 @@
+<!-- start navbar.thtml -->
+<table width="100%" border="0" cellspacing="1" cellpadding="0">
+    <tr>
+        <td colspan="5" style="padding-right:5px;">{navmenu}</td>
+	</tr>
+    <tr>
+        <td colspan="5" style="padding-right:5px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <tr>
+                    <td nowrap>
+                        {search_forum}
+                    </td>
+                    <td width="30%" class="alignright" nowrap>
+                        {select_forum}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<!-- end navbar.thtml -->

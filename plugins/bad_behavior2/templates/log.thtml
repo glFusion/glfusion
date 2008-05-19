@@ -1,0 +1,11 @@
+<table border="0" cellspacing="1" cellpadding="3" width="100%">
+    <tr>
+        <th align="right">#</th>
+        <th align="left">{lang_ip}</th>
+        <th align="left">{lang_date}</th>
+        <th align="left">{lang_user_agent}</th>
+        <th align="left">{lang_reason}</th>
+    </tr>
+{log_row}
+</table>
+{google_paging}

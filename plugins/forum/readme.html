@@ -1,0 +1,428 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN"
+    "http://www.w3.org/TR/REC-html40/strict.dtd">
+
+<html>
+<head>
+
+<!-- The embedded style sheet below controls the look and feel of the document. All display fonts are sans-serif, and headings are bold. You can change the styles to suit your needs, or replace them with a link to an external style sheet. -->
+
+<style type="text/css">
+body {
+    margin-left: 20px;
+    margin-right: 25px
+}
+
+h1 {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    border-bottom: thin outset black;
+}
+h2 {
+    margin-bottom:5px;margin-top:0px;
+    font-size: 1em;
+}
+h3 {
+    margin-bottom:5px;margin-top:0px;
+    font-size: 1em;
+}
+h4 {
+    background-color:#FEF1B4;
+    font-size: .9em;
+    padding:5px;
+}
+
+p {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: .8em;
+    color:#1A1A1A;
+    margin-bottom:5px;
+    margin-top:5px;
+}
+p.subheading {
+    font-weight:bold; color:#000;
+    font-size: .95m;
+}
+p.sectionheading {
+    color:#333;
+    background-color:#99CCFF;
+    padding:5px;
+    font-size: .95em;
+}
+li p {
+    font-size: .85em;
+    color:#333;
+}
+
+blockquote {
+    margin:5px 0px 5px 15px ;
+    background-color:#E5EFFF;
+    border:1px solid #C8DAF7;
+    padding:2px;
+    font-size: .9em;
+}
+li blockquote {
+    margin:2px 0px 2px 0px;
+    font-size: 1em;
+}
+.attention {
+    color:#FF3300
+}
+
+ul {
+    margin-top:5px;
+    color:#333;
+}
+    
+li {
+    list-style-type: square;
+    font-size: .85em;
+}
+
+.email {
+    padding-left:10px;
+    padding-bottom:5px;
+    font-size:small;
+    font-weight:normal;
+}
+
+</style>
+
+<title>Portalparts plugin Installation Guide</title>
+</head>
+
+<body>
+<a name="_top"></a>
+<h1>Geeklog Plugins by Portalparts - www.portalparts.com</h1>
+<h2>Geeklog forum plugin - version 2.7</h2>
+<h3>Author: Blaine Lang <span class="email">< blaine@portalparts.com ></span></h3>
+<h3>Date: Sept 9 2007</h3>
+<h4>Requires minimum Geeklog version 1.4 and version 1.4.1+ recommended</h4>
+
+<!-- This document is essentially a "cover page," describing what the chapter is about. It also contains links to other sections -->
+
+<p>This plugin provides a full featured discussion forum with integrated Geeklog features for your community website.</p>
+
+<p class="subheading">Summary of features:
+<ul>
+<li>Integrated Geeklog group security to create restricted forums
+<li>Support for Readonly Forums - example FAQ use
+<li>Support for RSS Feeds - now with enhanced formatting and rich content
+<li>Advanced Moderation features like splitting topics, moving, making sticky
+<li>Integrated BBcode supports using text mode and bbcode tags to format content
+<li>Able to now safely just use <b>text</b> mode for posting and still use bbocode and advanced formatting features
+<li>Enhanced Code Formatting using the Geshi library
+<li>Automatic notification support for complete forums or topics. Able subscribe to a forum but then selectively un-subscribe to topics
+<li>Member listing page - able to view all members or just those with forum activity
+<li>Centerblock for site frontpage or sideblock for users to monitor new posts
+<li>Support for autotags in topic content and can reference other forum topics using an autotag [forum: topicid]
+<li>Integrated SPAMX and content filtering
+<li>Integrated support for Captcha 2.0
+<li>Integration opion with glMessenger for member private messaging and online smilie admin
+<li>Easy online admin administration and member control of user preferences
+<li>Support for Register Globals off and MySql 5
+</ul>
+</p>
+
+<p class="subheading">Summary of version 2.7 changes
+<ul>
+<li>Added logic to support flexible block and menu layout - requires new variables in your themes functions.php
+<li>Added support for member badges - see plugins config.php
+<li>Display topic subject in browsers page title
+<li>Fix to code tracking new posts  - function updateLastPost
+<li>SIG now supports using autotags - example use the MG plugin to show an image in your sig
+<li>Search now will search topic subject
+<li>Removed un-used statusmsg_pause setting
+<li>lib-portalparts.php - function ppGetUserBlocks now uses perm.owner
+<li>Fix to displaying member level 
+<li>Fix to move topic logic - Corrects postcount and viewcount counts that are shown per forum
+<li>Changes to memberlist logic - uses new images and now uses the gf_getImage function to support alternative image types
+</ul>
+</p>
+
+<p style="margin-bottom:0px;">This chapter contains the following sections:</p>
+<ul>
+    <li><a href="#_installation">New installation</a></li>
+    <li><a href="#_update3">Upgrading from version 2.6</a></li>
+    <li><a href="#_update1">Upgrading from version 2.5RC3</a></li>
+    <li><a href="#_update2">Upgrading from version 2.3.2</a></li>
+    <li><a href="#_theming">Themeing Plugin</a></li>
+    <li><a href="#_config">Config.php Settings</a></li>    
+    <li><a href="http://wiki.geeklog.net/index.php/Plugins" target="_new">Plugin Installation Overview Reference</a></li>        
+</ul>
+<p style="margin-bottom:20px;">
+<table>
+    <tr>
+        <td width="60%" style="vertical-align:top;">If you've enjoyed this plugin, please consider supporting my contributions. These projects require considerable time and effort to create for distribution and ongoing support. The intial version of this plugin was released in 2002.</td>
+        <td style="vertical-align:top;"><a href="https://www.paypal.com/xclick/business=paypal%40portalparts.com&item_name=Geeklog+Plugins+and+Blocks&item_number=Geeklog&return=http%3A//www.portalparts.com" target="_new">
+        <img src="https://www.paypal.com/images/x-click-but04.gif" border="0" width="62" height="31"></a></td>
+    </tr>
+</table>
+</p>        
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_installation">1) How to Install</a></p>
+<p class="attention" style="margin-top:5px;">You need to manually create the plugins program directories and copy the files to their appropriate directories.</p>
+<p style="padding:20px;">If you are new to installing a geeklog plugin, I recommend that you review the background documentation on how to install a plugin <a href="http://wiki.geeklog.net/index.php/Plugins">here</a></p>
+<p>Step 0 - Backup your Database
+<ul>
+<li>Make a backup of your current 
+geeklog database using the built-in admin feature. Verify your backup feature is 
+configured correctly and backup file is not 0 bytes. <span class="attention">This is worth the time to verify your backup</span>
+</ul>
+</p>
+<p>Step 1 - Restore the plugin Archive
+<ul>
+<li>Uncompress the archive files into your &lt;geeklog_dir&gt;/plugins directory. It will create a forum subdirectory for the files.
+</ul>
+</p>
+
+<p>Step 2 - Create the required plugin directories
+<ul>
+<li>Create a directory called <b>forum</b> under your public_html directory
+<li>Create a directory called <b>forum</b> under your public_html/admin/plugins directory
+</ul>
+</p>
+
+<p>Step 3 - Copy the the required plugin files
+<ul>
+<li>Copy the files (contents) from the new plugin's public_html directory to the <b>forum</b> directory you just created under your sites main public_html directory
+<li>Copy the files (contents) from the new plugin's admin directory to the <b>forum</b> directory you just created under your sites main public_html/admin/plugins directory
+</ul>
+</p>
+
+<p>Step 4 - Copy the the required theme files
+<ul>
+<li>Copy the directory called <b>forum</b> and contents from the new plugin's themefiles directory to your sites theme's directory. Assuming your site is running the <i>professional</i> theme this  would be <i>public_html/layout/professional</i>. You would then copy the themefiles/forum directry from the plugin archive so that you create a <i>professional/forum</i> directory with all the new layout files from the plugin archive
+</ul>
+</p>
+
+<p>Step 5 - Update or copy the lib-portalparts.php file
+<ul>
+<li>The plugins from portalparts use a number of common functions that are placed in the lib-portalparts.php file. Copy the file from the plugin archive to your system folder where there are other lib-xxxxx.php files
+</ul>
+</p>
+
+<p>Step 6 - Run the plugin install
+<ul>
+<li>Logged in as 'admin' you can access the installer from the plugin editor [<i>admin -> plugins</i>]
+<li>If the files have been copied correctly in step 3 and 4, you will see the new plugin to be installed
+</ul>
+</p>
+
+<p>Step 7 - Update your themes css - <i>style.css</i> file
+<ul>
+<li><blockquote>The forum is using the plugin CSS that is distributed with the GL 1.4.1 professional theme. If you are running a GL 1.4.1 site and using the stock professional theme or a 1.4.1 certified theme, you will only need to add a few new CSS styles <i>declarations</i> for the codeblock and quote formatting feature.</blockquote>
+<li>If you have a GL 1.4 site or using a beta release of GL 1.4.1, then update style.css file using the <b>pre1.4.1_forum.css</b> file in the archive under the themefiles folder. Backup your current style.css file for reference and for many sites, they can just replace all the plugin like CSS declarations. They should all be grouped together in your style.css file.
+<li>Pre 1.4.1 themes will also need to add missing navbar images. Add the images found in archives themefiles/navbar/images folder to the same folder under your site's theme.<br>Add the CSS declarations from the <b>forum.css</b> file in the archive under the themefiles folder.<br><br>
+<li>If you have a GL 1.4.1 final site, then you will only need to add the few additional CSS styles for the codeblock and quote formatting.<br>Add the CSS declarations from the <b>forum.css</b> file in the archive under the themefiles folder.<br>
+</ul>
+</p>
+
+<p>Step 8 - Setup your forums and review Admin Settings
+<ul>
+<li>Create atleast one category which will contain one or more forums
+<li>Create a forum within this category. A forum will then contain many topics which are created by your community of users. The forums are created and so named to organize your topics.
+<li>The forums can be setup to be restricted to site-members only or public access as well other options can be set to control the access to the forums
+<li>Review the optional plugin <a href="#_config">config.php settings</a>
+</ul>
+</p>
+
+
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_update1">2) How to update from version 2.5RC3</a></p>
+<p>Step 0 - Backup your Database.
+<ul>
+<li>Make a backup of your current geeklog database using the built-in admin feature. Verify your backup feature is 
+configured correctly and backup file is not 0 bytes. <div class="attention">The backup is strongly recommended. The update will need to modify your database. Additionally, incase there are any formatting issues with your forum content after the update, you may want to have the option of going back</div>
+</ul>
+</p>
+<p>Step 1 - Disable the forum plugin (optional)
+<p class="attention" style="margin-top:5px;padding-left:25px;">Note: A bug in GL 1.4.1 pre-release may create a SQL error when toggling the enable/disable of the plugin. If this occurs - skip this step and leave it enabled.</p>
+<ul>
+<li>From the Plugin Editor <b>Admin > plugins</b>, disable the forum plugin so any current site users will not be accessing the forum during the update. This is an optional step and not required.
+</ul>
+</p>
+<p>Step 2 - Restore the plugin Archive
+<ul>
+<li>Uncompress the archive files into your &lt;geeklog_dir&gt;/plugins directory. You will need to replace all the files and some directories and files are no longer needed.
+<li>Update all your sites main public_html/forum files. Suggest you delete current files and copy over the new files
+<li>Update all your sites main public_html/admin/plugins/forum files. Suggest you delete current files and copy over the new files
+<li>Update all your sites main public_html/layout/{theme}/forum files. Suggest you delete current files and copy over the new files
+</ul>
+</p>
+<p>Step 3 - Run the plugin update
+<p class="attention" style="margin-top:5px;padding-left:25px;">Note: If the forum was still enabled, the centerblock and sideblock will be disabled once you copy over the new code until you complete the plugin update</p>
+<ul>
+<li>Access the plugin update from the Plugin Editor. The plugin listing will show version 2.5RCx is installed and that an update is recommended. Using the Edit link by the plugin record, access the edit screen where there will now be an <b>update</b> button. Pressing [Update] will execute the needed database changes
+<li>Run the <b>Forum Re-Sync</b> admin feature to complete the update of the new forum fields. From the Admim->Forum screen, access the admin section for <i>forums</i>. You will see that you can Re-Sync each forum or all forums for a category.
+<blockquote>This is a manual task because initial testing on large forums found that an automated update on a site with a large number of forums and possiby thousands of posts per forum could exceed the max-execution time allowed on your webserver</blockquote>
+</ul>
+</p>
+<p>Step 4 - Update your theme and theme css - <i>style.css</i> file
+<ul>
+<li><blockquote>The forum is using the plugin CSS that is distributed with the GL 1.4.1 professional theme. If you are running a GL 1.4.1 site and using the stock professional theme or a 1.4.1 certified theme, you will only need to add a few new CSS styles <i>declarations</i> for the codeblock and quote formatting feature.</blockquote>
+<li>If you have a GL 1.4 site or using a beta release of GL 1.4.1, then update style.css file using the <b>pre1.4.1_forum.css</b> file in the archive under the themefiles folder. Backup your current style.css file for reference and for many sites, they can just replace all the plugin like CSS declarations. They should all be grouped together in your style.css file.
+<li>Pre 1.4.1 themes will also need to add missing navbar images. Add the images found in archives themefiles/navbar/images folder to the same folder under your site's theme.<br>Add the CSS declarations from the <b>forum.css</b> file in the archive under the themefiles folder.<br><br>
+<li>If you have a GL 1.4.1 final site, then you will only need to add the few additional CSS styles for the codeblock and quote formatting.<br>Add the CSS declarations from the <b>forum.css</b> file in the archive under the themefiles folder.<br>
+<li>The forum now is able to appear with leftblocks only (default), noblocks, rightblocks only or both left and right blocks. Setting to noblocks allows the forum to appear the full-width of your theme. Additionally, you can show the usermenu as a horizontal navbar which is necessary if you are not showing left or right blocks. These new settings are expected to be in your themes <i>functions.php</i> file so the layout can be theme specific. Refer to the default professional theme version of <i>functions.php</i> that is in the plugin archive themefiles directory for more details.
+</ul>
+</ul>
+</p>
+<p>Step 5 - Review Admin Settings
+<ul>
+<li>Review the admin settings
+<li>Review the optional plugin <a href="#_config">config.php settings</a>
+</ul>
+</p>
+<p>Congradulations - you should now have your forum updated to version 2.7</p>
+</p>
+
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_update2">3) How to update from version 2.3.x</a></p>
+<p class="attention" style="margin-top:5px;padding-left:25px;">The update process will update your forum to version 2.6 in one step if version 2.3.x detected</p>
+<p>Step 0 - Backup your Database.
+<ul>
+<li>Make a backup of your current geeklog database using the built-in admin feature. Verify your backup feature is 
+configured correctly and backup file is not 0 bytes. <div class="attention">The backup is strongly recommended. The update will need to modify your database. Additionally, incase there are any formatting issues with your forum content after the update, you may want to have the option of going back</div>
+</ul>
+</p>
+<p>Step 1 - Disable the forum plugin (optional)
+<p class="attention" style="margin-top:5px;padding-left:25px;">Note: A bug in GL 1.4.1 pre-release may create a SQL error when toggling the enable/disable of the plugin - skip this step and leave it enabled.</p>
+<ul>
+<li>From the Plugin Editor <b>Admin > plugins</b>, disable the forum plugin so any current site users will not be accessing the forum during the update. This is an optional step and not required.
+</ul>
+</p>
+<p>Step 2 - Restore the plugin Archive
+<ul>
+<li>Uncompress the archive files into your &lt;geeklog_dir&gt;/plugins directory. You will need to replace all the files and some directories and files are no longer needed.
+<li>Update all your sites main public_html/forum files. Suggest you delete current files and copy over the new files
+<li>Update all your sites main public_html/admin/plugins/forum files. Suggest you delete current files and copy over the new files
+<li>Update all your sites main public_html/layout/{theme}/forum files. Suggest you delete current files and copy over the new files
+</ul>
+</p>
+<p>Step 3 - Run the plugin update
+<p class="attention" style="margin-top:5px;padding-left:25px;">Note: If the forum was still enabled, the centerblock and sideblock will be disabled once you copy over the new code until you complete the plugin update</p>
+<ul>
+<li>Access the plugin update from the Plugin Editor. The plugin listing will show version 2.5RCx is installed and that an update is recommended. Using the Edit link by the plugin record, access the edit screen where there will now be an <b>update</b> button. Pressing [Update] will execute the needed database changes
+<li>Run the <b>Forum Re-Sync</b> admin feature to complete the update of the new forum fields. From the Admim->Forum screen, access the admin section for <i>forums</i>. You will see that you can Re-Sync each forum or all forums for a category.
+<blockquote>This is a manual task because initial testing on large forums found that an automated update on a site with a large number of forums and possiby thousands of posts per forum could exceed the max-execution time allowed on your webserver</blockquote>
+</ul>
+</p>
+<p>Step 4 - Update your theme files and theme css - <i>style.css</i> file
+<ul>
+<li><blockquote>The forum is using the plugin CSS that is distributed with the GL 1.4.1 professional theme. If you are running a GL 1.4.1 site and using the stock professional theme or a 1.4.1 certified theme, you will only need to add a few new CSS styles <i>declarations</i> for the codeblock and quote formatting feature.</blockquote>
+<li>If you have a GL 1.4 site or using a beta release of GL 1.4.1, then update style.css file using the <b>pre1.4.1_forum.css</b> file in the archive under the themefiles folder. Backup your current style.css file for reference and for many sites, they can just replace all the plugin like CSS declarations. They should all be grouped together in your style.css file.
+<li>Pre 1.4.1 themes will also need to add missing navbar images. Add the images found in archives themefiles/navbar/images folder to the same folder under your site's theme.<br>Add the CSS declarations from the <b>forum.css</b> file in the archive under the themefiles folder.<br><br>
+<li>If you have a GL 1.4.1 final site, then you will only need to add the few additional CSS styles for the codeblock and quote formatting.<br>Add the CSS declarations from the <b>forum.css</b> file in the archive under the themefiles folder.<br>
+<li>The forum now is able to appear with leftblocks only (default), noblocks, rightblocks only or both left and right blocks. Setting to noblocks allows the forum to appear the full-width of your theme. Additionally, you can show the usermenu as a horizontal navbar which is necessary if you are not showing left or right blocks. These new settings are expected to be in your themes <i>functions.php</i> file so the layout can be theme specific. Refer to the default professional theme version of <i>functions.php</i> that is in the plugin archive themefiles directory for more details.
+</ul>
+</ul>
+</p>
+<p>Step 5 - Review Admin Settings
+<ul>
+<li>Review the admin settings
+<li>Review the optional plugin <a href="#_config">config.php settings</a>
+</ul>
+</p>
+<p>Congradulations - you should now have your forum updated to version 2.7</p>
+</p>
+
+
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_update3">3) How to update from version 2.6</a></p>
+<p class="attention" style="margin-top:5px;padding-left:25px;">The update process will update your forum to version 2.7 in one step if version 2.6 detected. No database updates are made other then changing the version displayed.</p>
+<p>Step 0 - Backup your Database.
+<ul>
+<li>Make a backup of your current geeklog database using the built-in admin feature. 
+</ul>
+</p>
+<p>Step 1 - Disable the forum plugin (optional)
+<p class="attention" style="margin-top:5px;padding-left:25px;">Note: A bug in GL 1.4.1 pre-release may create a SQL error when toggling the enable/disable of the plugin - skip this step and leave it enabled.</p>
+<ul>
+<li>From the Plugin Editor <b>Admin > plugins</b>, disable the forum plugin so any current site users will not be accessing the forum during the update. This is an optional step and not required.
+</ul>
+</p>
+<p>Step 2 - Restore the plugin Archive
+<p class="attention" style="margin-top:5px;padding-left:25px;">Note: Make a copy of your plugins config.php and compare to the new one if you have made changes. Additionally, do the same for your forum theme files if you have made changes that you don't want to loose.</p>
+<ul>
+<li>Uncompress the archive files into your &lt;geeklog_dir&gt;/plugins directory. You will need to replace all the files and some directories and files are no longer needed.
+<li>Update all your sites main public_html/forum files. Suggest you delete current files and copy over the new files
+<li>Update all your sites main public_html/admin/plugins/forum files. Suggest you delete current files and copy over the new files
+<li>Update all your sites main public_html/layout/{theme}/forum files. Suggest you delete current files and copy over the new files
+<li>Update the system/lib-portalparts.php - new version is located in the system folder of the archive
+</ul>
+</p>
+<p>Step 3 - Run the plugin update
+<ul>
+<li>Access the plugin update from the Plugin Editor. The plugin listing will show version 2.6 is installed and that an update is recommended. Using the Edit link by the plugin record, access the edit screen where there will now be an <b>update</b> button. Pressing [Update] will execute the needed database changes
+</ul>
+</p>
+<p>Step 4 - Update your theme
+<ul>
+<li><blockquote>The forum now is able to appear with leftblocks only (default), noblocks, rightblocks only or both left and right blocks. Setting to noblocks allows the forum to appear the full-width of your theme. Additionally, you can show the usermenu as a horizontal navbar which is necessary if you are not showing left or right blocks. These new settings are expected to be in your themes <i>functions.php</i> file so the layout can be theme specific. Refer to the default professional theme version of <i>functions.php</i> that is in the plugin archive themefiles directory for more details.</blockquote>
+</ul>
+</p>
+<p>Step 5 - Review Admin Settings
+<ul>
+<li>Review the admin settings
+<li>Review the optional plugin <a href="#_config">config.php settings</a>
+</ul>
+</p>
+<p>Congradulations - you should now have your forum updated to version 2.6</p>
+</p>
+
+
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_theming">4) Theming the plugin look</a></p>
+<p>The plugin uses the new default plugin CSS declarations that were introduced in GL 1.4. Example of the main CSS decalarations used are:
+<ul>
+<li>.pluginRow1 and .pluginRow2 for the alternating file listing records<blockquote>More detail planned</blockquote>
+</ul>
+</p>
+<p>The templates were copied to your theme directory - folder <i>/forum/layout</i> directory
+<ul>
+<li>Main templates are in the top level layout folder
+<li>Templates for the centerblock and sideblock are located in the <i>blocks </i> subfolder
+<li>The forum footer related templates are located in the <i>footer</i> subfolder
+<li>Templates for most of the links like [new topic], [reply], [profile], [email] etc are themed using the templates under the <i>links</i> subfolder. It's possible to change these links to use images, CSS like buttons etc.
+<li>Templates for pages that show a report if newposts, members, subscriptions  etc are located in the <i>reports</i> folder
+</ul>
+
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_config">5) Config.php Settings</a></p>
+
+<p>Most of the common forum settings are now online settings but there are additional settings in the plugins config.php file
+<ul>
+<li>$CONF_FORUM['mysql4+']<div style="padding-left:20px;">Set to <b>true</b> if your server is running MySQL 4.x or later. Doing so will use optimized SQL queries and will improve performance.</div>
+<li>$CONF_FORUM['pre2.5_mode']<div style="padding-left:20px;">Set to <b>true</b> only for sites that have updated from version 2.3.x or 2.5. If this is a clean install set to <b>false</b> and the forum will skip a few extra tests that are done while displaying a topic.</div>
+<li>$CONF_FORUM['silent_edit_default']<div style="padding-left:20px;">When editing a post, you have a checkbox by the Submit button. If the silent option is not checked, the posted date will be updated and notifications sent out. If checked the Edit/Save is done siliently. This config option sets the default - set to <b>true</b> to have this checked by default.</div>
+<li>$CONF_FORUM['avatar_width']<div style="padding-left:20px;">Able to set the width of the member avatar in pixels. Default is to use the member's uploaded image and size GL site has for creating this thumbnail image. If a value is defined for this setting, the forum will resize the displayed image to this defined width</div>
+<li>$CONF_FORUM['allow_img_bbcode']<div style="padding-left:20px;">The BBCode tag [img] is enabled by default - set this to <b>false</b> to disable it</div>
+<li>$CONF_FORUM['show_moderators']<div style="padding-left:20px;">Disabled by default for performance gains. Enable if you need to show moderators on the main forum index page - set this to <b>true</b> to display moderators</div>
+<li>$CONF_FORUM['imgset']<div style="padding-left:20px;">This option normally will not be changed. It defines the URL to where the theme images are located</div>
+<li>$CONF_FORUM['imgset_path']<div style="padding-left:20px;">This option normally will not be changed. It defines the path to where the theme images are located</div>
+<li>$CONF_FORUM['autoimagetype']<div style="padding-left:20px;">The forum uses a number of icons and you may have a need to use a mixture of image types. Setting this setting to <b>true</b> will invoke a function that will first check for an image of the type set in your themes function.php $_IMAGE_TYPE. If the icon of that image type is not found, then it will use an image of type specified by the $CONF_FORUM['image_type_override'] setting. Set $CONF_FORUM['autoimagetype'] to <b>false</b> to disable this feature and only icons of type set by the themes $_IMAGE_TYPE setting will be used</div>
+<li>$CONF_FORUM['image_type_override']<div style="padding-left:20px;">If the setting above is enabled and the default image type for an icon is not found - you can specify an alternative image type to use in this setting. Example 'gif' or 'jpg' are valid</div>
+<li>$CONF_FORUM['default_Datetime_format']<div style="padding-left:20px;">Default date/time format to use if Forum setting for allow user-dateformat is disabled. Refer to the online <a href="http://ca3.php.net/manual/en/function.strftime.php">php manual</a> for more info on the time format string options.</div>
+<li>$CONF_FORUM['default_Topic_Datetime_format']<div style="padding-left:20px;"> Date format that is shown at the top of of the topic post used if Forum setting for allow user-dateformat is disabled. Refer to the online <a href="http://ca3.php.net/manual/en/function.strftime.php">php manual</a> for more info on the time format string options.</div>
+<li>$CONF_FORUM['contentinfo_numchars']<div style="padding-left:20px;"> Number of characters of the topic contents when hovering over the topic post subject link.</div>
+<li>$CONF_FORUM['linkinfo_width']<div style="padding-left:20px;">Width of pop-up info window that is displayed when hovering over topic posts. Also refer to the CSS declaration <b>tooltip</b></div>
+<li>$CONF_FORUM['quoteformat']<div style="padding-left:20px;">Format style that will be used when using the quote feature. Also refer to the CSS decalaration <b>quotemain</b></div>
+
+<li>$CONF_FORUM['show_popular_perpage']<div style="padding-left:20px;">Set the default number of records to show in the 'Popular Topics' report</b></div>
+
+<li>$CONF_FORUM['show_last_post_count']<div style="padding-left:20px;">Set the default number of records to show in the Members most recent forum posts report</b></div>
+</ul>
+</p>
+
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+</body>
+</html>

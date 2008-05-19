@@ -1,0 +1,37 @@
+<?php
+
+/*
+ * Geeklog site configuration
+ *
+ * You should not need to edit this file. See the installation instructions
+ * for details.
+ *
+ */
+
+if (strpos($_SERVER['PHP_SELF'], 'siteconfig.php') !== false) {
+    die('This file can not be used on its own!');
+}
+
+global $_CONF;
+
+// To disable your site quickly, simply set this flag to false
+$_CONF['site_enabled'] = true;
+
+$_CONF['path'] = '/path/to/Geeklog/';
+$_CONF['path_system'] = $_CONF['path'] . 'system/';
+
+$_CONF['default_charset'] = 'iso-8859-1';
+
+$_CONF_FCK['imagelibrary'] = '/images/library';
+
+
+// Useful Stuff
+
+if (!defined('LB')) {
+  define('LB',"\n");
+}
+if (!defined('VERSION')) {
+  define('VERSION', '1.5.0b1');
+}
+
+?>

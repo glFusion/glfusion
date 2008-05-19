@@ -1,0 +1,49 @@
+<!-- start board_categories.thtml -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:10px; margin-bottom:20px;">
+            <tr>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td height="18" width="10"><img src="{imgset}/forumindex.png" border="0"></td>
+                            <td class="pluginHeader alignleft" nowrap>&nbsp;{catname}:</td>
+                            <td class="alignright" nowrap>{catorder}:&nbsp;{order}&nbsp;&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+               <td style="padding:0px;">
+                    <table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline">
+            <tr>
+                            <td class="pluginCellTitle" width="15%" style="padding-left:5px">{LANG_action}</td>
+                            <td class="pluginCellTitle" width="70%">{LANG_forumdesc}</td>
+                <td class="pluginCellTitle" width="5%" nowrap>{LANG_posts}</td>
+                            <td class="pluginCellTitle" width="10%">{LANG_order}</td>
+                        </tr>
+                        {forum_records}
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="pluginSolidOutline pluginCellSubTitle">
+            <table width="100%" border="0" cellspacing="1" cellpadding="4">
+                        <tr>
+                            <form action="{phpself}" method="post">
+                                <input type="hidden" name="type" value="category">
+                                <input type="hidden" name="forumname" value="{forumname}">
+                                <input type="hidden" name="id" value="{catid}">
+                                <td nowrap>
+                                    <fieldset><legend style="padding-bottom:5px;">Category</legend>
+                                    <input type="submit" name="mode" value="{delete}">&nbsp;
+                                    <input type="submit" name="mode" value="{edit}">&nbsp;
+                                    <input type="submit" name="mode" value="{resync_cat}" style="display:{hide_options};">
+                                   </fieldset>
+                                </td>
+                                <td width="60%" class="alignright" nowrap>[&nbsp;<a href="{phpself}?mode=add&type=forum&category={catid}&catname={catname}">{addforum}</a>&nbsp;]&nbsp;&nbsp;<br><p /></td>
+                            </form>
+                        </tr>
+                    </table>
+                </td>
+            </tr>            
+        </table>
+<!-- end board_categories.thtml -->

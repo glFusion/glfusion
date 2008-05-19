@@ -1,0 +1,511 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- $Id: upgrade.html 2022 2008-02-21 01:21:32Z mevans0263 $ -->
+
+  
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+
+
+  
+  
+  <title>Media Gallery Installation</title>
+</head>
+
+
+<body style="width: 600px;">
+
+
+<h2>Media Gallery Installation
+</h2>
+
+
+<p>Media Gallery follows the standard Geeklog plugins
+procedure, which has not been well documented.&nbsp;
+Below we will document two methods to install the Media Gallery files,
+via
+FTP and via standard shell access to the server.</p>
+<span style="font-weight: bold;">IMPORTANT:</span>
+<p>Media Gallery v1.6.0 only supports Geeklog v1.4.0 or higher.
+&nbsp;Also, Media Gallery 1.6.0 requires that you have the Caching
+Template Library installed on your Geeklog site.</p>
+<p><span style="font-weight: bold;">SPECIAL NOTE FOR cPanel / Fantastico Users</span></p>
+<div class="noteimportant">If you used an automated
+installer, like Fantastic, cPanel, or Plesk) to install your Geeklog
+site, the paths may be a bit different than these instructions. You
+will need to look at your Geeklog config.php to understand exactly
+where your files should be copied. &nbsp;See the&nbsp;<span style="font-weight: bold;">Auto Installed Geeklog&nbsp;</span>section
+below.</div>
+
+
+
+
+
+<h3><a class="mozTocH3" name="mozTocId473182"></a>Auto Installed Geeklog</h3>
+
+
+
+
+
+If you used an automated installed such as Fantastico, cPanel, or Plesk
+to install Geeklog, or you host with a provider that does not allow you
+to store information above the web root, you will need to adjust the
+installation instructions below to ensure the files are copied to the
+proper directory. &nbsp;If you manually installed Geeklog, you can
+skip this section.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+Auto installers generally do not follow the standard Geeklog
+installation procedure and instead place all the Geeklog files in the
+web root (main web directory) of your site. &nbsp;If this is how
+your Geeklog site was installed, you may want to reference this FAQ at
+the Geeklog.net site for some security tips.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+In order to know the exact destination directories on your web server,
+you will need to look at your Geeklog config.php file. &nbsp; There
+are several $_CONF settings that define your Geeklog paths.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+For example, generally when an auto installer was used, or you host
+with a provider that does not allow content outside the web root, the
+value for $_CONF['path'] and $_CONF['path_html'] are the same.
+&nbsp;This means that when you see references to items like this:<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+Create a directory called <span style="font-weight: bold;">mediagallery</span>
+under your <span style="font-weight: bold;">public_html</span>
+directory, you probably do not have a <span style="font-style: italic;">public_html</span>
+directory. &nbsp;Instead you would create the directory in the
+following location:<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+$_CONF['path_html'] /mediagallery<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+Replacing the the <span style="font-weight: bold;">$_CONF['path_html']
+</span>with the actual directory value of the variable, so if
+your $_CONF['path_html'] was set to '/home/www/mysitename/' you would
+create the mediagallery directory at:<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+/home/www/mysitename/mediagallery<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">path-to-geeklog</span><br>
+
+
+
+
+
+<br>
+
+
+
+
+
+You will want to find the value for $_CONF['path'], this is the main
+(or root) directory for Geeklog.&nbsp;Anywhere in the installation
+instructions where you see <span style="font-weight: bold;">path-to-geeklog</span>
+you will replace that with the path defined in $_CONF['path'].<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">public_html</span><br>
+
+
+
+
+
+<br>
+
+
+
+
+
+You will want to find the value for $_CONF['path_html'] in the Geeklog
+config.php, this is the directory where the web server actually looks
+for your HTML pages and your PHP files. &nbsp; Anywhere in the
+installation instructions where you see <span style="font-weight: bold;">public_html</span>, you
+will replace that with the path defined in $_CONF['path_html'].
+
+<h3>FTP Installation
+</h3>
+
+
+<p>If you do not have shell access to your server and can only
+use an FTP client to access your server, follow these instructions.
+&nbsp;If you have shell access to your server, you may want to jump
+down to the&nbsp;<span style="font-weight: bold;">Shell
+Access Installation&nbsp;</span>instructions below.</p>
+
+
+<p>To install Media Gallery, or any Geeklog plugin, you will
+need to un-archive the plugin on your local computer. The Media Gallery
+distribution will automatically create all the proper directories when
+it is
+un-archived. </p>
+
+
+<p>To un-archive a .gz file, you can use later copies of
+WinZIP or WinRAR. </p>
+
+
+<ol>
+
+
+  <li>Create a temporary
+directory on your local hard drive to hold the Media Gallery files
+(let's use C:\tmp for our example). </li>
+
+
+  <li>Open the
+mediagallery-1.6.0-1.4.0.tar.gz file with WinRAR. </li>
+
+
+  <li>Select Extract All
+Files and point to the C:\tmp directory as the destination. </li>
+
+
+</ol>
+
+
+<p>Now we should have a local copy of the Media Gallery Plugin
+in C:\tmp </p>
+
+
+<p>The directory should look like this:</p>
+
+
+<pre>+tmp\<br>    + mediagallery\<br>                  + admin\<br>                  + docs\<br>                  + language\<br>                  + public_html\<br>                  + sql\<br>                  + templates\<br>                  + tmp\<br>                  + uploads\<br>                  + functions.inc<br>                  + </pre>
+
+
+<p>Now that you have a copy on your local hard drive, it is
+time to FTP up to your server. </p>
+
+
+<p>Start your FTP program, I recommend FileZilla if you do not
+have a program you use already.&nbsp;
+FileZilla is free and supports many different operating systems
+(Windows, Linux, etc.).</p>
+
+
+<p>Connect to your web server with your FTP program.&nbsp; </p>
+
+
+<p>Our first FTP will be the entire Media Gallery distribution
+to your server.&nbsp; You will want to use the
+diagrams below to find the proper directory on your server and move the
+entire c:\tmp\mediagallery\ directory to the path-to-geeklog/plugins/
+directory.&nbsp; </p>
+
+
+<p>To find the path-to-geeklog
+you can look in your Geeklog config.php file and see what directory is
+defined
+in the $_CONF[&lsquo;path&rsquo;] line.</p>
+
+
+<p style="width: 600px;"><span style="font-weight: bold;">SPECIAL NOTE:</span> For
+the initial FTP of the Media Gallery
+distribution, you will want to
+actually drag the mediagallery
+folder from your local computer to the plugins
+directory on your server.&nbsp; The remaining
+FTP&rsquo;s below you will actually drag the files, not the parent
+directory.</p>
+
+
+<pre>tmp\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path-to-geeklog/<br>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp; + mediagallery\--+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +-------------&gt;+ plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+
+
+<p>Next, you will need to make a sub-directory under the
+public_html
+directory on your server called mediagallery. For most FTP programs you
+can create directories by highlighting the parent directory,
+public_html
+in this case, then right click the mouse, select New Folder and name it
+mediagallery.
+This procedure may be a little different depending on which FTP program
+you are
+using, check their documentation. </p>
+
+
+<pre>&nbsp; path-to-geeklog/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + mediagallery &lt;--- Make this subdirectory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+
+
+Next you will need to FTP all the files from the
+c:\tmp\mediagallery\public_html\* directory to your server. Here you
+will
+want to select all the files and sub-directories in the public_html\
+directory,
+not just the public_html\ folder. Follow the diagram below:
+<pre>tmp\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path-to-geeklog/<br>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>&nbsp;&nbsp; + mediagallery\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + public_html/*-+&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +--------------&gt;+ mediagallery/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ sql/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+
+
+<p>Next, you will need to make a sub-directory under the
+admin/plugins/
+directory on your server called mediagallery. </p>
+
+
+<pre>path-to-geeklog/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + admin\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + plugins\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + mediagallery &lt;--- Make this subdirectory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+
+
+<p>Next you will need to FTP all the files from the
+c:\tmp\mediagallery\admin\* directory to your server. Here you will
+want to
+select all the files and sub-directories in the admin\ directory, not
+just the
+public_html\ folder. Follow the map below: </p>
+
+
+<pre>tmp\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path-to-geeklog/<br>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp; + mediagallery\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + admin/---+&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + logs/<br>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + admin/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;+-----------------------&gt; + mediagallery/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+
+
+<p>Congratulations!&nbsp; You
+should now have all the files uploaded to your server and you are ready
+to skin
+to the Online Installation step
+below.</p>
+
+
+<h3>Standard Shell Access Installation
+</h3>
+
+
+<ol>
+
+
+  <li>Backup your
+Geeklog database because the Media Gallery plugin adds tables. You can
+do this with the built in database backup facility in the Admin menu. </li>
+
+
+  <li>Uncompress the
+Media Gallery plugin archive while in the path-to-geeklog/plugins
+directory. The archive will create a directory called mediagallery. </li>
+
+
+  <li>In your public_html
+directory, create a directory called mediagallery. </li>
+
+
+  <li>Under
+public_html/admin/plugins/ directory, create a directory called
+mediagallery. </li>
+
+
+  <li>Change to your
+path-to-geeklog/plugins/mediagallery directory. </li>
+
+
+  <li>Copy the files in
+the admin directory to the admin/plugins/mediagallery directory you
+created in step 4. </li>
+
+
+  <li>Copy the files in
+the public_html directory to the public_html/mediagallery directory you
+created in step 3.</li>
+
+
+</ol>
+
+
+<h3>Online Installation
+</h3>
+
+
+<p>Now that you have the files loaded on your server, it is
+time to actually perform the Media Gallery installation into Geeklog. </p>
+
+
+<ol start="1" type="1">
+
+
+  <li>Go to the plugin
+administration page. The Media Gallery plugin should show up with a
+link to install it. Click this link. The install page will tell you if
+it was successful or not. If not, examine the Geeklog error.log in
+path-to-geeklog/logs/ to see what the problem was. Fix the problem and
+re-install. </li>
+
+
+  <li>The install page
+will offer you a link to the configuration page of Media Gallery. You
+should select this link and make the necessary changes to Media Gallery
+configuration to suit your environment. </li>
+
+
+</ol>
+
+
+<h2>Standard Upgrade Process
+</h2>
+
+
+<ol>
+
+
+  <li>BACK
+UP YOUR EXISTING ENVIRONMENT!</li>
+
+
+  <li>SAVE YOUR TEMPLATES IF YOU HAVE
+MADE MODIFICATIONS!
+You will need to re-apply your customizations to the templates after
+the
+upgrade.</li>
+
+
+  <li>Refer
+to the installation instructions for New Installations for detailed
+instructions on uploading the new Media Gallery distribution to your
+server.&nbsp; If you are prompted to overwrite
+existing files, be sure to answer Yes.</li>
+
+
+  <li>Go
+to the Geeklog Plugins Menu (from the Geeklog Administrator&rsquo;s
+menu).</li>
+
+
+  <li>Select
+mediagallery plugin.</li>
+
+
+  <li>You
+should have an UPDATE button, select
+it.</li>
+
+
+  <li>If all goes well, the
+upgrade should be complete. If there were errors, please review your
+logs/error.log and correct any issues and try the UPDATE again. </li>
+
+
+</ol>
+
+
+<h2>Post Upgrade Checks
+</h2>
+
+
+<ul>
+
+
+  <li>Verify
+all Media Gallery configuration settings.&nbsp;
+New in v1.4 is that all configuration options are now configured
+online,
+no longer in the config.php file.&nbsp; Go
+into the Media Gallery Administration
+Screen and select System Options
+and verify all your settings are as you would like.</li>
+
+
+  <li>Verify
+that all your auto tags are
+correctly formatted.&nbsp; Depending on your
+previous version of Media Gallery, there have been several changes to
+how auto
+tags are used.</li>
+
+
+  <li>If
+you are upgrading from a v0.8x or v0.9x of Media Gallery, you should
+rebuild all thumbnails.&nbsp; Media Gallery has the ability to
+display
+larger (200x200 pixel) thumbnails, v0.8x and v0.9x created all
+thumbnails at
+150x150 px size.&nbsp; See the Media Gallery Administration Screen
+for
+the Rebuild All Thumbnail option.</li>
+
+
+</ul>
+
+
+</body>
+</html>

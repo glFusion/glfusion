@@ -1,0 +1,204 @@
+
+List of changed files from v1.5.0 to v1.6.0
+
+  Due to code clean up and fixes, all source files should be replaced
+  during an upgrade to v1.6.0.
+
+List of changed files from v1.4.8b to v1.5.0
+
+  Due to code clean up and fixes, all source files should be replaced
+  during an upgrade to v1.5.0.
+
+List of changed files from v1.4.7 to v1.4.8
+
+ All files have been touched in this release.  There have been
+ several enhancements to the base code which has affected almost
+ all modules
+
+ Please update all files, a version number is now embedded in
+ each file header and this will help in diagnosing issues where
+ an out of date file may be installed.
+
+List of changed files from v1.4.6 to v1.4.7
+
+ plugins/mediagallery/config.php - changed version number
+ plugin/mediagallery/function.php
+
+ public_html/admin/plugins/mediagallery/resetmembers.php
+ public_html/admin/plugins/mediagallery/logview.php
+
+ public_html/mediagallery/index.php
+ public_html/mediagallery/album.php
+ public_html/mediagallery/getcard.php
+ public_html/mediagallery/media.php
+ public_html/mediagallery/popup.php
+ public_html/mediagallery/postcard.php
+ public_html/mediagallery/property.php
+ public_html/mediagallery/search.php
+ public_html/mediagallery/slideshow.php
+ public_html/mediagallery/video.php
+
+ public_html/mediagallery/maint/albumedit.php
+
+ plugins/mediagallery/templates/editavdefaults.thtml
+ plugins/mediagallery/templates/cfgedit.thtml
+
+ plugins/mediagallery/language/* - All language files updated
+
+
+List of changed files from v1.4.5 to v1.4.6
+
+ plugins/mediagallery/config.php - new configuration options
+ plugins/mediagallery/functions.inc
+ plugins/mediagallery/upgrade.inc
+
+ plugins/mediagallery/sql/sql_install.php
+
+ public_html/admin/plugins/mediagallery/index.php
+ public_html/admin/plugins/mediagallery/category.php
+ public_html/admin/plugins/mediagallery/cfgedit.php
+ public_html/admin/plugins/mediagallery/defaults.php
+ public_html/admin/plugins/mediagallery/avdefaults.php
+ public_html/admin/plugins/mediagallery/member.php
+ public_html/admin/plugins/mediagallery/xppubwiz.php
+ public_html/admin/plugins/mediagallery/filecheck.php
+
+ public_html/mediagallery/album.php
+ public_html/mediagallery/classAlbum.php
+ public_html/mediagallery/classMedia.php
+ public_html/mediagallery/common.php
+ public_html/mediagallery/album.php
+ public_html/mediagallery/slideshow.php
+ public_html/mediagallery/lib-upload.php
+ public_html/mediagallery/lib-batch.php
+ public_html/mediagallery/gallery_remote2.php
+ public_html/mediagallery/index.php
+ public_html/mediagallery/lib-batch.php
+ public_html/mediagallery/lib-exif.php
+ public_html/mediagallery/lib-media.php
+ public_html/mediagallery/lib-upload.php
+ public_html/mediagallery/search.php
+ public_html/mediagallery/slideshow.php
+
+ public_html/mediagallery/docs/usage.html
+
+ public_html/mediagallery/maint/albumedit.php
+ public_html/mediagallery/maint/mediamanage.php
+ public_html/mediagallery/maint/sort.php
+ public_html/mediagallery/maint/newmedia.php
+
+ plugins/mediagallery/templates/administration.thtml
+ plugins/mediagallery/templates/album_page_header.thtml
+ plugins/mediagallery/templates/album_page_body_media_cell.thtml
+ plugins/mediagallery/templates/album_page_footer.thtml
+ plugins/mediagallery/templates/albumrow.thtml
+ plugins/mediagallery/templates/autotag.thtml
+ plugins/mediagallery/templates/autotag_ss.thtml
+ plugins/mediagallery/templates/batch_percent.thtml
+ plugins/mediagallery/templates/batch_progress.thtml
+ plugins/mediagallery/templates/cb_featured_album.thtml
+ plugins/mediagallery/templates/cfgedit.thtml
+ plugins/mediagallery/templates/cleanlist.thtml
+ plugins/mediagallery/templates/digibug.thtml
+ plugins/mediagallery/templates/editalbum.thtml
+ plugins/mediagallery/templates/editavdefaults.thtml
+ plugins/mediagallery/templates/editdefaults.thtml
+ plugins/mediagallery/templates/editmember.thtml
+ plugins/mediagallery/templates/gallery_page_header.thtml
+ plugins/mediagallery/templates/gallery_page_body_1.thtml
+ plugins/mediagallery/templates/mediaedit.thtml
+ plugins/mediagallery/templates/mediaitems.thtml
+ plugins/mediagallery/templates/mediamanage.thtml
+ plugins/mediagallery/templates/mg_navigation.thtml
+ plugins/mediagallery/templates/slideshow_empty.thtml (new)
+ plugins/mediagallery/templates/sortalbum.thtml
+ plugins/mediagallery/templates/view_image.thtml
+ plugins/mediagallery/templates/view_asf.thtml
+ plugins/mediagallery/templates/view_mp3.thtml
+
+ plugins/mediagallery/language/* - ALL LANGUAGE FILES UPDATED
+
+List of changed files from v1.4.4 to v1.4.5
+
+ All files have been touched in this release.  There have been
+ several enhancements to the base code which has affected almost
+ all modules
+
+ Please update all files, a version number is now embedded in
+ each file header and this will help in diagnosing issues where
+ an out of date file may be installed.
+
+List of changed files from v1.4.3a to v1.4.4
+
+ All files have been touched in this release.  Many simply
+ had cosmetic changes in the file header to take advantage
+ of new options available via the Source Control System (subversion).
+
+ Please update all files, a version number is now embedded in
+ each file header and this will help in diagnosing issues where
+ an out of date file may be installed.
+
+List of changed files from v1.4.3 to v1.4.3a
+
+ plugins/mediagallery/config.php (updated version number to 1.4.3a)
+
+ public_html/mediagallery/postcard.php
+ public_html/mediagallery/getcard.php
+ public_html/mediagallery/album.php
+
+ plugins/mediagallery/templates/postcard.thtml
+ plugins/mediagallery/templates/pc_preview.thtml
+ plugins/mediagallery/templates/pc_edit.thtml
+ plugins/mediagallery/templates/getcard.thtml
+
+ plugins/mediagallery/language/hebrew.php
+
+List of changed files from v1.4.2 to v1.4.3
+
+ plugins/mediagallery/config.php (updated version number to 1.4.3)
+ plugins/mediagallery/functions.inc
+
+ public_html/mediagallery/postcard.php
+ public_html/mediagallery/getcard.php
+ public_html/mediagallery/exif.php
+ public_html/mediagallery/album.php
+ public_html/mediagallery/lib-exif.php
+
+ plugins/mediagallery/templates/postcard.thtml
+ plugins/mediagallery/templates/pc_preview.thtml
+ plugins/mediagallery/templates/getcard.thtml
+ plugins/mediagallery/templates/album_page_header.thtml
+
+ plugins/mediagallery/language/english.php
+ plugins/mediagallery/language/hebrew.php
+ plugins/mediagallery/language/german.php
+ plugins/mediagallery/language/chinese_simplified_utf-8.php
+ plugins/mediagallery/language/chinese_traditional_utf-8.php
+ plugins/mediagallery/language/french_canada_utf-8.php
+ plugins/mediagallery/language/italian.php
+ plugins/mediagallery/language/japanese.php
+ plugins/mediagallery/language/japanese_utf-8.php
+ plugins/mediagallery/language/norwegian.php
+ plugins/mediagallery/language/turkish.php
+
+List of changed files from v1.4.1 to v1.4.2
+
+ plugins/mediagallery/config.php (updated version number to 1.4.2)
+ plugins/mediagallery/functions.inc
+ plugins/mediagallery/sql/sql_defaults.php
+
+ plugins/mediagallery/language/german.php
+ plugins/mediagallery/language/hebrew.php
+
+ plugins/mediagallery/templates/cfgedit.thtml
+ plugins/mediagallery/templates/convert_4images_settings.thtml
+ plugins/mediagallery/templates/mg_navigation.thtml
+
+ public_html/mediagallery/lib-media.php
+ public_html/mediagallery/classAlbum.php
+
+ public_html/admin/plugins/mediagallery/navigation.php
+ public_html/admin/plugins/mediagallery/cfgedit.php
+ public_html/admin/plugins/mediagallery/filecheck.php
+
+ public_html/admin/plugins/mediagallery/importers/4images/index.php

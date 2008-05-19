@@ -1,0 +1,19 @@
+<h1>Import to Media Gallery Wizard</h1>
+<form name="galselect" action="{form_action}" method="post">
+<input type="hidden" name="gallerydir" value="{configdir}">
+<input type="hidden" name="hostname" value="{hostname}">
+<input type="hidden" name="database" value="{database}">
+<input type="hidden" name="username" value="{username}">
+<input type="hidden" name="password" value="{password}">
+<input type="hidden" name="table_prefix" value="{table_prefix}">
+<input type="hidden" name="column_prefix" value="{column_prefix}">
+<input type="hidden" name="gallery_directory" value="{gallery_directory}">
+Select which Albums you would like to convert.<br>
+<p>
+The albums will be created immediately and all the media items will be placed into
+the batch import queue to be processed.
+{import_list}
+<p>
+<input type="submit" name="mode" value="convert" />
+<input type="submit" name="mode" value="cancel">
+</form>

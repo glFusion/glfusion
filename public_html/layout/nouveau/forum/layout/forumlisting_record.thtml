@@ -1,0 +1,9 @@
+<!-- start forumlisting_record.thtml -->
+            <tr class="pluginRollOut pluginLinks" onmouseover="className='pluginRollOver pluginLinks';" onmouseout="className='pluginRollOut pluginLinks';">
+                <td width="25" style="vertical-align:top;">{folderimg}</td>
+                <td width="60%" class="alignleft pluginCellText" style="vertical-align:top;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='index.php?forum={forum_id}'; this.style.cursor='pointer';"><a class="pluginLinks" style="text-decoration:none;" href="index.php?forum={forum_id}">{forum_name}</a><div style="text-align:left">{forum_desc}</div>{moderator}</td>
+                <td width="5%" class="aligncenter pluginCellText" style="vertical-align:top;">{topics}</td>
+                <td width="5%" class="aligncenter pluginCellText" style="vertical-align:top;">{posts}</td>
+                <td width="5%" class="alignleft pluginCellText" style="vertical-align:top;white-space:nowrap;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'; this.style.cursor='pointer';">{lastpostmsgDate}<br{xhtml}>{lastpostmsgTopic}<br{xhtml}>{lastpostmsgBy}</td>
+            </tr>
+<!-- end forumlisting_record.thtml -->

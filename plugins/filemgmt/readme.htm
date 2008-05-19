@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN"
+    "http://www.w3.org/TR/REC-html40/strict.dtd">
+
+<!-- Created by Scott Nesbitt (September, 2001) and released under the OPL. Feel free to modify this template. -->
+
+<html>
+<head>
+
+<!-- The embedded style sheet below controls the look and feel of the document. All display fonts are sans-serif, and headings are bold. You can change the styles to suit your needs, or replace them with a link to an external style sheet. -->
+
+<style type="text/css">
+body {margin-left: 20px;
+      margin-right: 25px}
+
+h1 {font-family: Helvetica, Arial, sans-serif; /* A large heading, with a rule underneath */
+    font-size: x-large;
+    border-bottom: thin outset black}
+h2 {margin-bottom:5px;margin-top:0px}
+h3 {margin-bottom:5px;margin-top:0px}
+h4 {background-color:#FEF1B4 }
+    
+p {font-family: Helvetica, Arial, sans-serif; font-size: small; color:#1A1A1A; margin-bottom:5px;margin-top:5px}
+p.subheading {font-weight:bold; color:#000}
+p.sectionheading {color:#333; background-color:#99CCFF;font-size:large;padding:5px;}
+.attention {color:#FF3300}
+
+ul {margin-top:5px;color:#333}
+    
+li {font-family: Helvetica, Arial, sans-serif; /* A bullet list with square bullets */
+    font-size: small;
+    list-style-type: square}
+
+.email {padding-left:10px; padding-bottom:5px; font-size:small; font-weight:normal }
+
+</style>
+
+<title>Portalparts plugin Installation Guide</title>
+</head>
+
+<body>
+<a name="_top"></a>
+<h1>Geeklog Plugins by Portalparts - www.portalparts.com</h1>
+<h2>filemgmt - Version 1.5.3</h2>
+<h3>Author: Blaine Lang <span class="email">< blaine@portalparts.com ></span></h3>
+<h3>Date: Oct 14, 2007</h3>
+<h4>Requires: Geeklog Version 1.4 or greater</h4>
+
+<!-- This document is essentially a "cover page," describing what the chapter is about. It also contains links to other sections -->
+
+<p>Plugin adds the ability to upload and manage downloads of files on your website.</p>
+
+<p class="subheading">Summary of features:
+<ul>
+<li>Files can be organized into categories and subcategories
+<li>Categories can be be restricted - access assigned to a group
+<li>Able to restrict access to members only - both overall view access and upload rights available
+<li>Categories and Files can have image thumbnails or snapshots
+<li>File Rating and reporting of broken links
+<li>Automatic flagging of Popular and new files
+<li>Integrated support for comments - optionally per file
+<li>Easy online Administration
+<li>Language Files for Translation and Templates to modify File layout view
+</ul>
+</p>
+
+<p class="subheading">Summary of version 1.5 changes
+<ul>
+<li>Support for GL 1.4 Comment API
+<li>Integrated Category security to restrict access to files for specific Groups only
+<li>Support for autotag -- example [file:10]&nbsp;&nbsp;&nbsp;&nbsp; creates a link 
+to file id 10 with the filename as the link description
+<li>Major overhaul of all screens to clean up HTML and use Generic Plugin CSS
+<li>Support for PHP settings register_globals and register_long_arrays now to be off
+<li>File Listing - main view pages are now templates for end-user theming
+<li>Integrated Update - via plugin Editor
+<li>Admin setup auto determines initial (default) settings for file repository
+<li>Integrated support for glMenu - see www.portalparts.com
+</ul>
+</p>
+
+<p style="margin-bottom:0px;">This chapter contains the following sections:</p>
+<ul>
+	<li><a href="#_installation">New installation</a></li>
+	<li><a href="#_update">Update from version 1.3</a></li>
+	<li><a href="#_theming">Themeing Plugin</a></li>
+	<li><a href="#_config">Config.php Settings</a></li>	
+	<li><a href="http://wiki.geeklog.net/index.php/Plugins" target="_new">Plugin Installation Overview Reference</a></li>		
+</ul>
+<p style="margin-bottom:20px;">
+<table>
+	<tr>
+		<td width="60%" style="vertical-align:top;">If you've enjoyed this plugin, please consider supporting my contributions. These projects require considerable time and effort to create for distribution and ongoing support. The intial version of this plugin was released in 2002.</td>
+		<td style="vertical-align:top;"><a href="https://www.paypal.com/xclick/business=paypal%40portalparts.com&item_name=Geeklog+Plugins+and+Blocks&item_number=Geeklog&return=http%3A//www.portalparts.com" target="_new">
+        <img src="https://www.paypal.com/images/x-click-but04.gif" border="0" width="62" height="31"></a></td>
+	</tr>
+</table>
+</p>		
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_installation">1) How to Install</a></p>
+<p class="attention" style="margin-top:5px;">You need to manually create the plugins program directories and copy the files to their appropriate directories.</p>
+<p>Step 0 - Backup your Database
+<ul>
+<li>Make a backup of your current 
+geeklog database using the built-in admin feature. Verify your backup feature is 
+configured correctly and backup file is not 0 bytes. <span class="attention">This is worth the time to verify your backup</span>
+</ul>
+</p>
+<p>Step 1 - Restore the plugin Archive
+<ul>
+<li>Uncompress the archive files into your &lt;geeklog_dir&gt;/plugins directory. It will create a filemgmt subdirectories for the files.
+</ul>
+</p>
+<p>Step 2 - Create the required plugin directories
+<ul>
+<li>Create a directory called <b>filemgmt</b> under your public_html directory
+<li>Create a directory called <b>filemgmt</b> under your public_html/admin/plugins directory
+</ul>
+</p>
+<p>Step 3 - Copy the the required plugin files
+<ul>
+<li>Copy the files (contents) from the new plugin's public_html directory to the <b>filemgmt</b> directory you just created under your sites main public_html directory
+<li>Copy the files (contents) from the new plugin's admin directory to the <b>filemgmt</b> directory you just created under your sites main public_html/admin/plugins directory
+</ul>
+</p>
+<p>Step 4 - Run the plugin install
+<ul>
+<li>Logged in as 'admin' you can access the installer from the plugin editor [<i>admin -> plugins</i>]
+<li>If the files have been copied correctly in step 3, you will see the new plugin to be installed
+</ul>
+</p>
+<p>Step 5 - Create the required directories for the File Store / Repository
+<p style="margin-left:10px;margin-top:5px;">Create the following directories under public_html. You can change the names and location if you want. It just must be located somewhere under your sites publc_html directory. The actual setup will be defined in the plugins administration settings.
+<p class="attention" style="margin-left:10px;margin-top:5px;">Set directory permission so that your webserver has write access to the directories. This may require write permissions to be 744, 754 or 777 depending on your webserver setup.</p>
+<ul>
+<li>filemgmt_data
+<li>filemgmt_data/files
+<li>filemgmt_data/files/tmp
+<li>filemgmt_data/snaps
+<li>filemgmt_data/snaps/tmp
+<li>filemgmt_data/category_snaps
+</ul>
+</p>
+<p>Step 6 - Set filemgmt Admin Settings
+<p class="attention" style="margin-top:5px;padding-left:10px;">You need to have write access to the <geeklog_dir>/plugins/filemgmt directory to allow the filemgmt admin script to update your sites setup. Needs write access to the file <i>filemgmt.php</i></p>
+<ul>
+<li>Access the filemgmt admin (Admin Menu Block), from there the Settings page
+<li>Review the settings and update as required for your site preferences
+<li>The initial load of this page will invoke a new feature where it will pre-load the default settings for the last six settings (Directories and URL settings for your file repository). If you have used the default directory paths they are most likely correct but verify.
+<li>Note the URL and Path settings end in a forward slash / character
+</ul>
+</p>
+
+
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_update">2) How to update from version 1.3</a></p>
+<p class="attention" style="margin-left:10px;margin-top:5px;">You need to be running Geeklog version 1.4 or later and filemgmt plugin version 1.3</p>
+
+<p>Step 0 - Backup your Database
+<ul>
+<li>Make a backup of your current 
+geeklog database using the built-in admin feature. Verify your backup feature is 
+configured correctly and backup file is not 0 bytes. <span class="attention">This is worth the time to verify your backup</span>
+</ul>
+</p>
+<p>Step 1 - Restore the plugin Archive
+<ul>
+<li>Rename your plugins filemgmt.php - site settings so you don't loose them when you restore the new archive or restore the archive to a temp directory and copy over all the news files except filemgmt.php
+<li>Uncompress the archive files into your &lt;geeklog_dir&gt;/plugins directory. You will need to replace all the files and some directories and files are no longer needed.
+<li>Update all your sites main public_html/filemgmt files. Suggest you delete current files and copy over the new files
+<li>Update all your sites main public_html/admin/plugins/filemgmt files. Suggest you delete current files and copy over the new files
+<li>Remove any filemgmt related CSS from your themes style.css - no longer used
+</ul>
+</p>
+<p>Step 2 - Run the plugin update
+<ul>
+<li>Access the plugin update from the Plugin Editor. The plugin listing will now show a newer version of code is installed and an update is recommended. Using the Edit link by the plugin record, you will access the screen where there will now be an <b>update</b> button. The update will execute the needed database changes.
+</ul>
+</p>
+
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_theming">3) Theming the plugin look</a></p>
+<p>The plugin uses the new default plugin CSS declarations that were introduced in GL 1.4. Example of the main CSS decalarations used are:
+<ul>
+<li>.plugin - for overall look of the main tables
+<li>.pluginRow1 and .pluginRow2 for the alternating file listing records
+</ul>
+</p>
+<p>The templates are located under the main plugins folder <i>plugins/filemgmt/templates</i> directory
+<ul>
+<li>filelisting.thtml - main template, container for category records and file listing records
+<li>filelisting_category.thtml - individual template for each category - top of file listing
+<li>filelisting_record.thtml - format for each individual file listing record. It's now possible by altering this template to have the actual filelisting snaphot image appear as a thumbnail inline in the listing. I've included comments in the template to make this change.
+<li>filelisting_subcategory.thtml - used when viewing a category to format the top category heading
+<li>sortmenu.thtml - used to format the sortable heading when in the category view
+</ul>
+<p>You can change the default number of categories shown per row in the main view
+<div style="padding:5px 0px 5px 10px">Variable: <i>$numCategoriesPerRow</i></div>
+<ul>
+<li>Edit the script public_html/index.php and near the top of the script is this setting - <i>default is 4</i>
+<li>Edit the script public_html/viewcat.php and near the top of the script is this setting - <i>default is 6</i>
+</ul>
+</p>
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+<p class="sectionheading" style="margin-bottom:0px;"><a name="_config">4) Config.php Settins</a></p>
+<p>There are a few config options available for the plugin in the plugins/filemgmt/config.php file. Edit as required for local site preference. The comments in the confg.php should explain their use.
+<p style="padding:10px;">
+// Permissions that will be used for new files into the repository<br>
+$filemgmtFilePermissions = (int) 0755;<br><br>
+// Number of days to show new files listing<br>
+$filemgmtWhatsNewPeriodDays = 14;<br>
+// String Length for Filename Titles in WhatsNewBlock<br>
+$filemgmtWhatsNewTitleLength = 20;<br>
+// Should the Whats New Block show new FileMgmt Comments<br>
+$filemgmt_showWhatsNewComments = true;<br>
+</p>
+</p>
+
+<div style="margin:10px 0px 20px 10px;"><a href="#_top">Goto Top</a></div>
+
+</body>
+</html>

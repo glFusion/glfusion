@@ -1,0 +1,5 @@
+{!if hrefdirect}
+  <a href="{hrefdirect}" rel="lightbox[album]" title="{caption}">
+{!else}
+<a href="{href}">
+{!endif}

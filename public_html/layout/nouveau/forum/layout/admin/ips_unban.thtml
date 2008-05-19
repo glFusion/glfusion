@@ -1,0 +1,12 @@
+<!-- start ips_unban.thtml -->
+<form action="{phpself}" method="post">
+    <input type="hidden" name="mode" value="{mode}"{xhtml}>
+    <input type="hidden" name="sure" value="{sure}"{xhtml}>
+    <input type="hidden" name="ip" value="{ip}"{xhtml}>
+    {msg1}
+<br{xhtml}>
+    {msg2}
+    <br{xhtml}><br{xhtml}>
+<center><input type="submit" value="{ban]"></center>
+</form>
+<!-- start ips_unban.thtml -->

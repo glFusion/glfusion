@@ -1,0 +1,25 @@
+<!-- start topiclist_record.thtml -->
+<tr class="pluginRollOut" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRollOut pluginLinks';">
+    <td width="25" class="aligncenter pluginCol">{folderimg}</td>
+    <td width="65%" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}'">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr class="pluginLinks">
+                        <td style="white-space:nowrap;" width="50%">{moved}<a class="tooltip" style="text-decoration:none;" href="viewtopic.php?showtopic={topic_id}">{subject}<span style="left:50px;">{topicinfo}</span></a></td>
+                        <td colspan="2" class="alignright pluginLinks">{gotomsg}&nbsp;{displaypageslink}</td>
+                </tr>
+        </table>
+    </td>
+    <td class="aligncenter pluginCol" width="45" style="white-space:nowrap;">{views}</td>
+    <td class="aligncenter pluginCol" width="45" style="white-space:nowrap;">{replies}</td>
+    <td width="25%" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{lastpostid}'" title="{LANG_lastpost}">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                            <td style="white-space:nowrap;padding-left:2px;" class="pluginLinks">{LANG_BY}{lastposter}</td>
+                    </tr>
+                    <tr>
+                            <td style="padding-left:2px" class="pluginLinks">{lastdate}</td>
+                    </tr>
+            </table>
+    </td>
+</tr>
+<!-- end topiclist_record.thtml -->

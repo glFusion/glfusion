@@ -1,0 +1,3 @@
+<!-- start newposts.thtml -->
+<td class="pluginButton" nowrap>[&nbsp;<a {newpostslink}{LANG_newposts}</a>&nbsp;]</td>
+<!-- end newposts.thtml -->

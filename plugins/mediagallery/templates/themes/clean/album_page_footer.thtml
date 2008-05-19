@@ -1,0 +1,19 @@
+<table width="100%" cellspacing="4" border="0" cellpadding="0">
+  <tr class="pluginRow2">
+    <td align="center" colspan="2" style="vertical-align:middle;padding:2px 5px 2px 0px;">
+      <span style="font-weight:bold;">{page_number}</span>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" style="width:40%;vertical-align:top;padding:2px 5px 2px 0px;">
+      <div style="float:left;">{bottom_pagination}</div>
+    </td>
+    <td style="text-align:right;vertical-align:top;white-space: nowrap;padding:2px 5px 2px 0px;">{jumpbox}</td>
+  </tr>
+  <tr>
+    <td style="text-align:left;vertical-align:bottom;padding:2px 5px 2px 0px;">
+      {select_adminbox}&nbsp;
+    </td>
+    <td style="text-align:right;vertical-align:top;white-space:nowrap;padding:2px 5px 2px 0px;">{select_sortbox}</td>
+  </tr>
+</table>

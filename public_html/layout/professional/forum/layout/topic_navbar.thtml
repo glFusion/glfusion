@@ -1,0 +1,23 @@
+<!-- start topic_navbar.thtml -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;padding-right:10px;">
+    <tr>
+        <td>{navbreadcrumbsimg}</td>
+        <td class="alignleft" width="95%" nowrap>&nbsp;<a href="{site_url}/forum/index.php">{forum_home}</a>&nbsp;&#62;&nbsp;<a href="{site_url}/forum/index.php">{cat_name}</a>&nbsp;&#62;&nbsp;<a href="{site_url}/forum/index.php?forum={forum_id}">{forum_name}</a></td>
+        <td rowspan="2" class="alignright" width="100%" nowrap>{newtopic_link}</td>
+        <td rowspan="2" class="alignright" style="padding-left:5px;" width="100%" nowrap>{replytopic_link}</td>
+    </tr>
+    <tr>
+        <td colspan="2" style="padding-bottom:5px;">{navtopicimg}&nbsp;<b><a href="viewtopic.php?showtopic={topic_id}">{subject}</a></b></span></td>        
+    </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
+    <tr>
+        <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;" nowrap>{pagenavigation}</td>     
+        <td width="90%" class="alignright pluginBreadCrumbs" nowrap>{subscribe_link}</td>
+        <td class="pluginBreadCrumbs" nowrap>&nbsp;|&nbsp;</td>
+        <td class="pluginBreadCrumbs" style="padding-right:10px;" nowrap>{print_link}</td>
+        {prevtopic_link} {nexttopic_link} 
+    </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="0" class="pluginSolidOutline alignleft"> 
+<!-- end topic_navbar.thtml -->

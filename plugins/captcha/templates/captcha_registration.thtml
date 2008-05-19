@@ -1,0 +1,35 @@
+<script type="text/javascript">
+//<![CDATA[
+var counter = 0;
+function new_captcha()
+{
+    // loads new CAPTCHA image
+    if(document.getElementById)
+    {
+        counter = counter + 1;
+        if ( counter > 5 ) {
+            alert("{lang_too_many}");
+        } else {
+            // extract image name from image source (i.e. cut off ?randomness)
+            thesrc = document.getElementById("captchaimage").src;
+            thesrc = thesrc.substring(0,thesrc.lastIndexOf(".")+4);
+            // add ?(random) to prevent browser/isp caching
+            document.getElementById("captchaimage").src = thesrc+"?"+Math.round(Math.random()*100000);
+        }
+    } else {
+         alert("{lang_reload_failed}");
+    }
+}
+//]]>
+</script>
+<label>{$LANG_CP00[picture]}:<br{xhtml}>
+<a href="javascript:new_captcha();" style="vertical-align:middle;">{lang_reload}</a>
+</label>
+
+<img src="{captcha_image}" id="captchaimage" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}>
+<div style="clear:both;"></div>
+<label for="captcha">{$LANG_CP00[characters]}:</label>
+
+<input type="text" id="captcha" name="captcha" size="25" maxlength="40" value="{captchastring}"{xhtml}>
+<input type="hidden" name="csid" value="{csid}"{xhtml}><br{xhtml}>
+<div style="margin-left: 95px;">{lang_captcha_help}</div>

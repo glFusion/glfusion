@@ -1,0 +1,14 @@
+<!-- start header.thtml -->
+<table width="100%" border="0" cellspacing="1" cellpadding="0">
+    <tr>
+        <td width="14%" class="navbar" nowrap><a href="index.php">{stats}</a></td>
+        <td width="14%" class="navbar" nowrap><a href="settings.php">{settings}</a></td>
+        <td width="14%" class="navbar" nowrap><a href="boards.php">{boardadmin}</a></td>
+        <td width="14%" class="navbar" nowrap><a href="mods.php">{mods}</a></td>
+        <td width="14%" class="navbar" nowrap><a href="migrate.php">{migrate}</a></td>
+        <td width="14%" class="navbar" nowrap><a btn1" href="messages.php">{messages}</a></td>
+        <td width="16%" class="navbar" nowrap><a btn1" href="ips.php">{ipman}</a></td>
+    </tr>
+</table>
+<p />
+<!-- end header.thtml -->

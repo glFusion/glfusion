@@ -1,0 +1,36 @@
+<!-- notifications.thtml -->
+{navmenu}
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td width="95%" class="alignright" style="padding:5px 10px 5px 0px;">
+            <form action="{phpself}" method="post" style="margin:0px;">         
+                <select name="filter" style="width:180px;" onchange="this.form.submit();">{filter_options}</select>
+            </form>
+        </td>
+        <td style="padding:5px 0px 5px 10px;" nowrap>{select_forum}</td>
+    </tr>
+</table>
+<p />
+<form action="{phpself}" method="post" name="notifications" style="margin:0px;">
+<input type="hidden" name="op" value="">
+<table width="100%" border="0" cellspacing="1" cellpadding="3" class="plugin" style="margin-bottom:10px;">
+    <TR>
+        <TD class="pluginCellTitle" width="2%" style="text-align:center;"><img src="{imgset}/trash.gif" TITLE="{LANG_deleteall}" border="0" onClick=' if(confirm("{LANG_DELALLCONFIRM}")) {document.notifications.op.value="delchecked"; document.notifications.submit();}'></td>
+        <TD class="pluginCellTitle" nowrap>{LANG_Heading2}</TD>
+        <TD class="pluginCellTitle" nowrap>{LANG_Heading3}</TD>
+        <TD class="pluginCellTitle" nowrap>{LANG_Heading4}</TD>
+        <TD class="pluginCellTitle" nowrap>{LANG_Heading5}</TD>
+        <TD class="pluginCellTitle">{LANG_Heading6}</TD>
+        <TD class="pluginCellTitle">{LANG_Heading7}</TD>
+        <TD class="pluginCellTitle">{LANG_Heading8}</TD>
+    </TR>
+        {notification_records}
+</table>
+</FORM>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td class="aligncenter">{pagenavigation}</td>
+        <td class="aligncenter">{bottomlink}</td>
+    </tr>
+</table>
+<p />

@@ -1,0 +1,24 @@
+<!-- start forum_rules.thtml -->
+<table width="100%" cellpadding="0" cellspacing="2" border="0" alignright" class="pluginSubTitle">
+    <tr>
+            <td >
+                    {anonymous_msg}&nbsp;{anon_perm_image}
+            </td>
+    </tr>
+    <tr>
+            <td >
+                    {postingperm_msg}&nbsp;{post_perm_image}
+            </td>
+    </tr>
+    <tr>
+            <td >
+                    {html_msg}&nbsp;{html_perm_image}
+            </td >
+    </tr>
+    <tr>
+            <td >
+                    {censor_msg}&nbsp;{censor_perm_image}
+            </td>
+    </tr>
+</table>
+<!-- end forum_rules.thtml -->

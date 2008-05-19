@@ -1,0 +1,3 @@
+<div class="moderation-cc">
+    {cc_rows}
+</div>

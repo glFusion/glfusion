@@ -1,0 +1,7 @@
+<!-- report_record.thtml -->
+<tr class="pluginRow{csscode}">
+    <td style="text-align:left;padding:5px;">{post_start_ahref}{post_subject}{post_end_ahref}</td>
+    <td width="2%" nowrap>{post_replies}</td>
+    <td width="2%" nowrap>{post_views}</td>
+    <td style="text-align:left;padding-left:5px;" width="5%" nowrap>{post_date}</td>
+</tr>
