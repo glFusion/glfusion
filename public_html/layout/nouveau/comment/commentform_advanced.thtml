@@ -1,6 +1,7 @@
  <script type="text/javascript">
     // Setup editor path for FCKeditor JS Functions
     geeklogEditorBasePath = "{site_url}/fckeditor/" ;
+    geeklogStyleBasePath  = "{layout_url}/";
 </script>
 <script type="text/JavaScript" src="{site_url}/javascript/submitcomment_fckeditor.js"></script>
 
@@ -25,10 +26,10 @@
                                                         <td class="alignright" style="vertical-align:top;"><b>{lang_comment}:</b></td>
                                                         <td>
                                                             <div id="text_editor" style="display:{show_texteditor};">
-                                                                <textarea id="comment_text" name="comment" cols="60" rows="10">{comment}</textarea>
+                                                                <textarea id="comment_text" name="comment_text" cols="60" rows="10">{comment}</textarea>
                                                             </div>
                                                             <div  id="html_editor" style="display:{show_htmleditor};">
-                                                                <textarea id="comment_html" name="comment_html" rows="10">{comment}</textarea>
+                                                                <textarea id="comment_html" name="comment_html" rows="10" cols="60">{comment}</textarea>
                                                             </div>
                                                         </td>
                                                     </tr>

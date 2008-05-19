@@ -82,11 +82,23 @@ function handleSubmit()
             if (!isset($commentcode) || ($commentcode != 0)) {
                 return COM_refresh($_CONF['site_url'] . '/index.php');
             }
-
-            $ret = CMT_saveComment ( strip_tags ($_POST['title']), 
-                $_POST['comment'], $sid, COM_applyFilter ($_POST['pid'], true), 
+            if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
+                if ( $_POST['postmode'] == 'html' ) {
+                    $comment = $_POST['comment_html'];
+                } else if ( $_POST['postmode'] == 'text' ) {
+                    $comment = $_POST['comment_text'];
+                }
+            } else {
+                $comment = $_POST['comment'];
+            }
+            $ret = CMT_saveComment ( strip_tags ($_POST['title']),
+                $comment, $sid, COM_applyFilter ($_POST['pid'], true),
                 'article', COM_applyFilter ($_POST['postmode']));
-
+/*
+            $ret = CMT_saveComment ( strip_tags ($_POST['title']),
+                $_POST['comment'], $sid, COM_applyFilter ($_POST['pid'], true),
+                'article', COM_applyFilter ($_POST['postmode']));
+*/
             if ( $ret > 0 ) { // failure //FIXME: some failures should not return to comment form
                 $display .= COM_siteHeader ('menu', $LANG03[1])
                          . CMT_commentForm ($_POST['title'], $_POST['comment'],
@@ -102,7 +114,7 @@ function handleSubmit()
             }
             break;
         default: // assume plugin
-            if ( !($display = PLG_commentSave($type, strip_tags ($_POST['title']), 
+            if ( !($display = PLG_commentSave($type, strip_tags ($_POST['title']),
                                 $_POST['comment'], $sid, COM_applyFilter ($_POST['pid'], true),
                                 COM_applyFilter ($_POST['postmode']))) ) {
                 $display = COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -148,7 +160,7 @@ function handleDelete()
             }
             break;
         default: //assume plugin
-            if ( !($display = PLG_commentDelete($type, 
+            if ( !($display = PLG_commentDelete($type,
                                 COM_applyFilter($_REQUEST['cid'], true), $sid)) ) {
                 $display = COM_refresh ($_CONF['site_url'] . '/index.php');
             }
@@ -181,7 +193,7 @@ function handleView($view = true)
     if ($cid <= 0) {
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
-    
+
     $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = $cid";
     $A = DB_fetchArray( DB_query($sql) );
     $sid   = $A['sid'];
@@ -194,7 +206,7 @@ function handleView($view = true)
     }
     if ( $format != 'threaded' && $format != 'nested' && $format != 'flat' ) {
         if ( $_USER['uid'] > 1 ) {
-            $format = DB_getItem( $_TABLES['usercomment'], 'commentmode', 
+            $format = DB_getItem( $_TABLES['usercomment'], 'commentmode',
                                   "uid = {$_USER['uid']}" );
         } else {
             $format = $_CONF['comment_mode'];
@@ -205,7 +217,7 @@ function handleView($view = true)
         case 'article':
             $sql = 'SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, perm_group, '
                  . "perm_members, perm_anon FROM {$_TABLES['stories']} WHERE (sid = '$sid') "
-                 . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND') 
+                 . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND')
                  . COM_getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
             $result = DB_query ($sql);
             $B = DB_fetchArray ($result);
@@ -237,7 +249,7 @@ function handleView($view = true)
 
         default: // assume plugin
             if ( !($display = PLG_displayComment($type, $sid, $cid, $title,
-                                  COM_applyFilter ($_REQUEST['order']), $format, 
+                                  COM_applyFilter ($_REQUEST['order']), $format,
                                   COM_applyFilter ($_REQUEST['page'], true), $view)) ) {
                 return COM_refresh($_CONF['site_url'] . '/index.php');
             }
@@ -261,13 +273,23 @@ if (!empty ($_REQUEST['mode'])) {
 }
 switch ($mode) {
 case $LANG03[14]: // Preview
+
+    if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
+        if ( $_POST['postmode'] == 'html' ) {
+            $comment = $_POST['comment_html'];
+        } else if ( $_POST['postmode'] == 'text' ) {
+            $comment = $_POST['comment_text'];
+        }
+    } else {
+        $comment = $_POST['comment'];
+    }
     $display .= COM_siteHeader('menu', $LANG03[14])
-             . CMT_commentForm (strip_tags ($_POST['title']), $_POST['comment'],
+             . CMT_commentForm (strip_tags ($_POST['title']), $comment, /*$_POST['comment'], */
                     COM_applyFilter ($_POST['sid']),
                     COM_applyFilter ($_POST['pid'], true),
                     COM_applyFilter ($_POST['type']), $mode,
                     COM_applyFilter ($_POST['postmode']))
-             . COM_siteFooter(); 
+             . COM_siteFooter();
     break;
 
 case $LANG03[11]: // Submit Comment
@@ -310,7 +332,7 @@ default:  // New Comment
         $postmode = COM_applyFilter ($_REQUEST['postmode']);
     }
 
-    if (!empty ($sid) && !empty ($type)) { 
+    if (!empty ($sid) && !empty ($type)) {
         if (empty ($title)) {
             if ($type == 'article') {
                 $title = DB_getItem ($_TABLES['stories'], 'title',
