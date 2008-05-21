@@ -115,7 +115,7 @@ $TEMPLATE_OPTIONS = Array(
                         'site_url' => $_CONF['site_url'],
                         'site_admin_url' => $_CONF['site_admin_url'],
                         'layout_url' => $_CONF['layout_url'],
-                        'xhtml' => (defined('XHTML') ? XHTML : ''),
+                        'xhtml' => (defined('XHTML') ? XHTML : ' /'),
                       ),
     'hook' => Array(),
 );
