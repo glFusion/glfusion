@@ -147,7 +147,7 @@ function INST_installEngine($install_type, $install_step)
                     $glSite_name = $LANG_INSTALL[29];
                     $glSite_slogan = $LANG_INSTALL[30];
                     $glSite_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
-                    $glSite_admin_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
+                    $glSite_admin_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/install.*/', '', $_SERVER['PHP_SELF']) ;
                     $host_name = explode(':', $_SERVER['HTTP_HOST']);
                     $host_name = $host_name[0];
                     $glSite_mail = ($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
@@ -157,7 +157,7 @@ function INST_installEngine($install_type, $install_step)
                 $glSite_name = $LANG_INSTALL[29];
                 $glSite_slogan = $LANG_INSTALL[30];
                 $glSite_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
-                $glSite_admin_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
+                $glSite_admin_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/install.*/', '', $_SERVER['PHP_SELF']) ;
                 $host_name = explode(':', $_SERVER['HTTP_HOST']);
                 $host_name = $host_name[0];
                 $glSite_mail = ($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
@@ -611,13 +611,7 @@ function INST_installEngine($install_type, $install_step)
                             $_CONF['site_url'] =  $site_url;
 
                             // Hook our plugin installs here...
-/* -----------------------------
-                            if ( INST_pluginAutoInstall('chameleon') == true ) {
-                                // force the default theme to be chameleon
-                                $config->set('theme', 'chameleon');
-                                DB_query("UPDATE {$_TABLES['users']} SET theme='chameleon' WHERE uid=2");
-                            }
--------------------------------- */
+
                             INST_pluginAutoInstall('captcha');
                             INST_pluginAutoInstall('bad_behavior2');
                             INST_pluginAutoInstall('filemgmt');
@@ -628,6 +622,8 @@ function INST_installEngine($install_type, $install_step)
                             // Setup nouveau as the default
                             $config->set('theme', 'nouveau');
                             DB_query("UPDATE {$_TABLES['users']} SET theme='nouveau' WHERE uid=2");
+
+                            CTL_clearCache();
 
                             // Now we're done with the installation so redirect the user to success.php
                             header('Location: success.php?type=install&language=' . $language);
@@ -690,12 +686,13 @@ function INST_installEngine($install_type, $install_step)
 
                         // Value Added Release plugin upgrade
 
-//                        INST_pluginAutoUpgrade('chameleon');
                         INST_pluginAutoUpgrade('captcha');
                         INST_pluginAutoUpgrade('bad_behavior2');
                         INST_pluginAutoUpgrade('filemgmt');
                         INST_pluginAutoUpgrade('forum');
                         INST_pluginAutoUpgrade('mediagallery');
+
+                        CTL_clearCache();
 
                         // Great, installation is complete, redirect to success page
                         header('Location: success.php?type=upgrade&language=' . $language);
@@ -1662,6 +1659,38 @@ function INST_pluginAutoUpgrade( $plugin )
         }
     }
     return $rc;
+}
+
+function CTL_clearCacheDirectories($path, $needle = '')
+{
+    if ( $path[strlen($path)-1] != '/' ) {
+        $path .= '/';
+    }
+    if ($dir = @opendir($path)) {
+        while ($entry = readdir($dir)) {
+            if ($entry == '.' || $entry == '..' || is_link($entry) || $entry == '.svn' || $entry == 'index.html') {
+                continue;
+            } elseif (is_dir($path . $entry)) {
+                CTL_clearCacheDirectories($path . $entry, $needle);
+                @rmdir($path . $entry);
+            } elseif (empty($needle) || strpos($entry, $needle) !== false) {
+                unlink($path . $entry);
+            }
+        }
+        @closedir($dir);
+    }
+}
+
+
+function CTL_clearCache($plugin='')
+{
+    global $TEMPLATE_OPTIONS, $_CONF;
+
+    if (!empty($plugin)) {
+        $plugin = '__' . $plugin . '__';
+    }
+
+    CTL_clearCacheDirectories($_CONF['path'] . 'data/layout_cache/', $plugin);
 }
 
 // +---------------------------------------------------------------------------+
