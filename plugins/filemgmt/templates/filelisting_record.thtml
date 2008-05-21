@@ -22,7 +22,7 @@
 
                             <!-- 1) Enable this row if you just want to show the icon that has to be clicked to view snapshot image -->
                             <td width="15%" style="display:{show_snapshoticon};">
-                                <a href="{snapshot_url}" target="_blank" title="{LANG_CLICK2SEE}">{snapshot_icon}{LANG_SCREENSHOT}</a>
+                                <a href="{snapshot_url}" rel="lightbox" target="_blank" title="{LANG_CLICK2SEE}">{snapshot_icon}{LANG_SCREENSHOT}</a>
                             </td>
 
                             <!-- 2) Enable this row if you just want to show the a thumbnail image of the download snapshot image -->
