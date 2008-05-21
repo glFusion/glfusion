@@ -126,12 +126,54 @@ function INST_installEngine($install_type, $install_step)
          */
         case 1:
             require_once $dbconfig_path; // Get the current DB info
+            /*
+             * Try to migrate old values
+             */
+            if ( $install_type == 'upgrade' && $_DB_pass == 'password') {
+                // assume the db config has not been updated
+                if ( file_exists($gl_path . '/config.php' ) ) {
+                    include ($gl_path . '/config.php');
+                    $glSite_name = $_CONF['site_name'];
+                    $glSite_slogan = $_CONF['site_slogan'];
+                    $glSite_url = $_CONF['site_url'];
+                    $glSite_admin_url = $_CONF['site_admin_url'];
+                    $glSite_mail = $_CONF['site_mail'];
+                    if ( $_CONF['default_charset'] == 'utf-8') {
+                        $utf8 = true;
+                    } else {
+                        $utf8 = false;
+                    }
+                } else {
+                    $glSite_name = $LANG_INSTALL[29];
+                    $glSite_slogan = $LANG_INSTALL[30];
+                    $glSite_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
+                    $glSite_admin_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
+                    $host_name = explode(':', $_SERVER['HTTP_HOST']);
+                    $host_name = $host_name[0];
+                    $glSite_mail = ($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
+                    $utf8 = true;
+                }
+            } else {
+                $glSite_name = $LANG_INSTALL[29];
+                $glSite_slogan = $LANG_INSTALL[30];
+                $glSite_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
+                $glSite_admin_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
+                $host_name = explode(':', $_SERVER['HTTP_HOST']);
+                $host_name = $host_name[0];
+                $glSite_mail = ($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
+                $utf8 = true;
+            }
+
+            /* end of migrate attempt
+             *
+             * NEED TO UPDATE the defaults below so they don't overwrite
+             */
 
             // Set all the form values either with their defaults or with received POST data.
             // The only instance where you'd get POST data would be if the user has to
             // go back because they entered incorrect database information.
-            $site_name = (isset($_POST['site_name'])) ? str_replace('\\', '', $_POST['site_name']) : $LANG_INSTALL[29];
-            $site_slogan = (isset($_POST['site_slogan'])) ? str_replace('\\', '', $_POST['site_slogan']) : $LANG_INSTALL[30];
+            $site_name = (isset($_POST['site_name'])) ? str_replace('\\', '', $_POST['site_name']) : $glSite_name;
+            $site_slogan = (isset($_POST['site_slogan'])) ? str_replace('\\', '', $_POST['site_slogan']) : $glSite_slogan;
             $mysql_innodb_selected = '';
             $mysql_selected = '';
             $mssql_selected = '';
@@ -163,18 +205,21 @@ function INST_installEngine($install_type, $install_step)
             $db_pass = isset($_POST['db_pass']) ? $_POST['db_pass'] : ($_DB_pass != 'password' ? $_DB_pass : '');
             $db_prefix = isset($_POST['db_prefix']) ? $_POST['db_prefix'] : $_DB_table_prefix;
 
-            $site_url = isset($_POST['site_url']) ? $_POST['site_url'] : 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
-            $site_admin_url = isset($_POST['site_admin_url']) ? $_POST['site_admin_url'] : 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/install.*/', '', $_SERVER['PHP_SELF']) ;
+            $site_url = isset($_POST['site_url']) ? $_POST['site_url'] : $glSite_url; // 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
+            $site_admin_url = isset($_POST['site_admin_url']) ? $_POST['site_admin_url'] : $glSite_admin_url; //'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/install.*/', '', $_SERVER['PHP_SELF']) ;
             $host_name = explode(':', $_SERVER['HTTP_HOST']);
             $host_name = $host_name[0];
-            $site_mail = isset($_POST['site_mail']) ? $_POST['site_mail'] : ($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
+            $site_mail = isset($_POST['site_mail']) ? $_POST['site_mail'] : $glSite_mail; //($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
             $noreply_mail = isset($_POST['noreply_mail']) ? $_POST['noreply_mail'] : ($_CONF['noreply_mail'] == 'noreply@example.com' ? $_CONF['noreply_mail'] : 'noreply@' . $host_name);
-            if (isset($_POST['utf8']) && ($_POST['utf8'] == 'on')) {
-                $utf8 = true;
-            } else {
-                $utf8 = true;
-                if (strcasecmp($LANG_CHARSET, 'utf-8') == 0) {
+
+            if ( $install_type != 'upgrade' ) {
+                if (isset($_POST['utf8']) && ($_POST['utf8'] == 'on')) {
                     $utf8 = true;
+                } else {
+                    $utf8 = true;
+                    if (strcasecmp($LANG_CHARSET, 'utf-8') == 0) {
+                        $utf8 = true;
+                    }
                 }
             }
 
@@ -1685,7 +1730,7 @@ $display .= '<head>
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="header-logobg-container-inner">
             <tr>
                 <td class="header-logobg-left">
-                    <a href="http://www.gllabs.org/"><img src="layout/glfusion.png" width="243" height="90" alt="gl Labs" border="0"' . XHTML . '></a>
+                    <a href="http://www.gllabs.org/"><img src="layout/glfusionball.png" width="56" height="56" alt="gl Labs" border="0"' . XHTML . '></a>
                 </td>
                 <td class="header-logobg-right">
                     <div class="site-slogan">' . $LANG_INSTALL[2] . ' <br' . XHTML . '><br' . XHTML . '>' . LB;
