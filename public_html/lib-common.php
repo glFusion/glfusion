@@ -282,7 +282,7 @@ require_once( $_CONF['path_system'] . 'lib-sessions.php' );
 *
 */
 
-require_once( $_CONF['path_system'] . 'classes/kses.class.php' );
+// require_once( $_CONF['path_system'] . 'classes/kses.class.php' );
 
 /**
 * Multibyte functions
@@ -2975,39 +2975,8 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
     // strip_tags() gets confused by HTML comments ...
     $str = preg_replace( '/<!--.+?-->/', '', $str );
 
-    if ( $_CONF['use_safe_html_filter'] != 1 ) {
-        $filter = new kses4;
-        if( isset( $_CONF['allowed_protocols'] ) && is_array( $_CONF['allowed_protocols'] ) && ( sizeof( $_CONF['allowed_protocols'] ) > 0 ))
-        {
-            $filter->SetProtocols( $_CONF['allowed_protocols'] );
-        }
-        else
-        {
-            $filter->SetProtocols( array( 'http:', 'https:', 'ftp:' ));
-        }
+    $str = COM_filterHTML( $str );
 
-        if( empty( $permissions) || !SEC_hasRights( $permissions ) ||
-                empty( $_CONF['admin_html'] ))
-        {
-            $html = $_CONF['user_html'];
-        }
-        else
-        {
-            $html = array_merge_recursive( $_CONF['user_html'],
-                                           $_CONF['admin_html'] );
-        }
-
-        foreach( $html as $tag => $attr )
-        {
-            $filter->AddHTML( $tag, $attr );
-        }
-        /* Replace [raw][/raw] with <!--raw--><!--/raw-->, note done "late" because
-         * of the above noted // strip_tags() gets confused by HTML comments ...
-         */
-        $str = $filter->Parse( $str );
-    } else {
-        $str = COM_filterHTML( $str );
-    }
     $str = str_replace('[raw2]','<!--raw--><span class="raw">', $str);
     $str = str_replace('[/raw2]','</span><!--/raw-->', $str);
     return $str;
@@ -3023,6 +2992,39 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 *
 * Long term, we should move to the safe=1 option and forget
 * about manually setting the options.
+*
+* Using safe=1:
+* Safe HTML refers to HTML that is restricted to reduce the vulnerability for
+* scripting attacks (such as XSS) based on HTML code which otherwise may be legal
+* and compliant with the HTML standard specs. When elements such as script and
+* object, and attributes such as onmouseover and style are allowed in the input
+* text, an input writer can introduce HTML code for such attacks. Note that what
+* is considered safe depends on the nature of the web application and the trust-level
+* accorded to its users.
+*
+* htmLawed allows an admin to use $config["safe"] to auto-adjust multiple $config
+* parameters (such as elements which declares the allowed element-set), which
+* otherwise would have to be manually set. The relevant parameters are indicated by
+* " in section 2.2). Thus, one can pass the $config argument with a simpler value.
+*
+* With the value of 1, htmLawed considers CDATA sections and comments as plain
+* text, and disallows the applet, embed, iframe, object and script elements,
+* and the on* attributes like onclick. Further URLs with schemes (see section 3.4.3)
+*  are neutralized so that, e.g., style="moz-binding:url(http://danger)"
+* becomes style="moz-binding:url(denied:http://danger)" while style="moz-binding:url(ok)"
+* remains intact.
+*
+* Admins, however, may still want to completely deny the style attribute, e.g., with code like
+*
+*     $processed = htmLawed($text, array('safe'=>1, 'deny_attribute'=>'on*, style'));
+*
+* There are $config parameters like css_expression that are not affected by
+* the value set for safe but whose default values still contribute towards a more safe output.
+*
+* If a value for a parameter auto-set through safe is still manually
+* provided, then that value can over-ride the auto-set value. E.g., with
+* $config["safe"] = 1 and $config["elements"] = "*+script", script, but not applet, is allowed.
+*
 *
 * @param    string  $str            HTML to check
 * @return   string                  Filtered HTML
@@ -3056,8 +3058,11 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
                                        $_CONF['admin_html'] );
     }
 
-//    $str = kses($str,$html,$allowedProtocols);
-    $str = htmLawed($str,array('safe'=>1));
+    if ( $_CONF['use_safe_html'] == TRUE ) {
+        $str = htmLawed($str,array('safe'=>1,'balance'=>1,'valid_xhtml'=>1));
+    } else {
+        $str = kses($str,$html,$allowedProtocols);
+    }
     return $str;
 }
 
