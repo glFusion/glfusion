@@ -52,9 +52,9 @@ function gf_FormatForPrint( $str, $postmode='html' ) {
         $showtopic['comment'] = str_replace( '<pre class="forumCode">', '[code]', $showtopic['comment'] );
         $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
     }
-    
+
     $str = gf_formatTextBlock($str,$postmode,'preview');
-    
+
     $str = str_replace('{','&#123;',$str);
     $str = str_replace('}','&#125;',$str);
 
@@ -105,10 +105,10 @@ if ($CONF_FORUM['allow_smilies']) {
 }
 
 $A["name"] = COM_checkWords($A["name"]);
-$A["name"] = htmlspecialchars($A["name"],ENT_QUOTES,$CONF_FORUM['charset']);
+$A["name"] = @htmlspecialchars($A["name"],ENT_QUOTES,$CONF_FORUM['charset']);
 
 $A["subject"] = COM_checkWords($A["subject"]);
-$A["subject"] = htmlspecialchars($A["subject"],ENT_QUOTES,$CONF_FORUM['charset']);
+$A["subject"] = @htmlspecialchars($A["subject"],ENT_QUOTES,$CONF_FORUM['charset']);
 
 $A['comment'] = gf_FormatForPrint( $A['comment'], $A['postmode'] );
 

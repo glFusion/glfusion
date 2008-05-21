@@ -212,9 +212,9 @@ while (list($notify_recid,$forum_id,$topic_id,$date_added) = DB_fetchARRAY($noti
         if ($A['subject'] == '') {
             $subject = $LANG_GF01['MISSINGSUBJECT'];
         } elseif(strlen($A['subject']) > 50) {
-            $subject = htmlspecialchars(substr($A['subject'], 0, 50),ENT_QUOTES,$CONF_FORUM['charset']) . ' ...';
+            $subject = @htmlspecialchars(substr($A['subject'], 0, 50),ENT_QUOTES,$CONF_FORUM['charset']) . ' ...';
         } else {
-            $subject = htmlspecialchars($A['subject']);
+            $subject = @htmlspecialchars($A['subject']);
         }
         $topic_link = '<a href="' .$_CONF['site_url']. '/forum/viewtopic.php?showtopic=' .$topic_id. '" title="';
         $topic_link .= $subject. '">' .$subject. '</a>';
@@ -224,7 +224,7 @@ while (list($notify_recid,$forum_id,$topic_id,$date_added) = DB_fetchARRAY($noti
     $report->set_var ('id', $notify_recid);
     $report->set_var ('csscode', $i%2+1);
     $report->set_var ('forum', $forum_name);
-    $report->set_var ('linksubject', htmlspecialchars($subject,ENT_QUOTES,$CONF_FORUM['charset']));
+    $report->set_var ('linksubject', @htmlspecialchars($subject,ENT_QUOTES,$CONF_FORUM['charset']));
     $report->set_var ('is_forum', $is_forum);
     $report->set_var ('topic_link', $topic_link);
     $report->set_var ('topicauthor', $A['name']);

@@ -651,7 +651,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             $postmode = $_POST['postmode'];
         }
         if (strstr($edittopic['comment'],'<pre class="forumCode">') === false) {
-            $comment = htmlspecialchars($comment,ENT_QUOTES, $CONF_FORUM['charset']);
+            $comment = @htmlspecialchars($comment,ENT_QUOTES, $CONF_FORUM['charset']);
         }
         $editpid = $edittopic['pid'];
         $topicnavbar->set_var ('hidden_editpid', $editpid);
@@ -921,7 +921,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         }
         $submissionform_main->set_var ('post_message', $comment);
     } else {
-        $submissionform_main->set_var ('post_message', htmlspecialchars($comment,ENT_QUOTES, $CONF_FORUM['charset']));
+        $submissionform_main->set_var ('post_message', @htmlspecialchars($comment,ENT_QUOTES, $CONF_FORUM['charset']));
     }
 
     $submissionform_main->set_var ('postmode', $postmode);

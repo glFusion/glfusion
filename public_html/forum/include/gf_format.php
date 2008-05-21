@@ -93,7 +93,7 @@ function bbcode_stripcontents ($text) {
 function bbcode_htmlspecialchars($text) {
     global $CONF_FORUM;
 
-    return (htmlspecialchars ($text,ENT_QUOTES, $CONF_FORUM['charset']));
+    return (@htmlspecialchars ($text,ENT_QUOTES, $CONF_FORUM['charset']));
 }
 
 function gf_fixtemplate($text) {
@@ -111,9 +111,9 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
     }
     if (!isset ($attributes['default'])) {
         if ( stristr($content,'http') ) {
-            return '<a href="'.$content.'">'.htmlspecialchars ($content,ENT_QUOTES, $CONF_FORUM['charset']).'</a>';
+            return '<a href="'.$content.'">'.@htmlspecialchars ($content,ENT_QUOTES, $CONF_FORUM['charset']).'</a>';
         } else {
-            return '<a href="http://'.$content.'">'.htmlspecialchars ($content,ENT_QUOTES, $CONF_FORUM['charset']).'</a>';
+            return '<a href="http://'.$content.'">'.@htmlspecialchars ($content,ENT_QUOTES, $CONF_FORUM['charset']).'</a>';
         }
     }
     if ( stristr($attributes['default'],'http') ) {
@@ -167,7 +167,7 @@ function do_bbcode_img ($action, $attributes, $content, $params, $node_object) {
             $align = '';
         }
 
-        return '<img src="'.htmlspecialchars($content,ENT_QUOTES, $CONF_FORUM['charset']).'" ' . $dim . $align . ' alt="">';
+        return '<img src="'.@htmlspecialchars($content,ENT_QUOTES, $CONF_FORUM['charset']).'" ' . $dim . $align . ' alt="">';
     } else {
         return '[img]' . $content . '[/img]';
     }
@@ -214,7 +214,7 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
             $codeblock = '</p>' . geshi_formatted($content,strtoupper($attributes['default'])) . '<p>';
         }
     } else {
-        $codeblock = '<pre class="codeblock">'  . htmlspecialchars($content,ENT_QUOTES, $CONF_FORUM['charset']) . '</pre>';
+        $codeblock = '<pre class="codeblock">'  . @htmlspecialchars($content,ENT_QUOTES, $CONF_FORUM['charset']) . '</pre>';
     }
     $codeblock = str_replace('{','&#123;',$codeblock);
     $codeblock = str_replace('}','&#125;',$codeblock);
