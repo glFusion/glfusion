@@ -12,7 +12,7 @@
                     <a href="#top">Top</a>&nbsp;&nbsp;|&nbsp;
                     <a href="{site_url}/layout/nouveau/extras/terms.php">Terms</a>&nbsp;&nbsp;|&nbsp;
                     <a href="{site_url}/layout/nouveau/extras/privpol.php">Privacy</a>&nbsp;&nbsp;
-                    <a href="{gllabs_url}"><img style="vertical-align:middle" src="{site_url}/layout/nouveau/images/cms-glfusion.gif" alt="{powered_by} glFusion" title="{powered_by} glFusion"{xhtml}></a><br{xhtml}>
+                    <a href="{gllabs_url}"><img style="vertical-align:middle" src="{site_url}/layout/nouveau/images/cms-glfusion.png" alt="{powered_by} glFusion" title="{powered_by} glFusion"{xhtml}></a><br{xhtml}>
                     {execution_textandtime}
                 </div> <!-- end of footerlinks-->
                 <a href="{site_url}/backend/geeklog.rss">
