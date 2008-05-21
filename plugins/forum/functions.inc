@@ -1254,13 +1254,13 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             }
 
             $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}:{$A['views']}, {$LANG_GF01['REPLIES']}:{$A['replies']}<br" . XHTML . ">";
-
             if (empty ($A['last_reply_rec']) OR $A['last_reply_rec'] < 1) {
                 $lastid = $A['id'];
                 $lastpostinfo = wordwrap(strip_tags(substr($A['comment'],0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br />\n");
             } else {
-                $qlreply = DB_query("SELECT uid,name,comment FROM {$_TABLES['gf_topic']} WHERE id={$A['last_reply_rec']}");
+                $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['gf_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
+                $lastid = $B['id'];
                 $lastcomment = $B['comment'];
                 if ($B['uid'] > 1) {
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($B['uid']));
