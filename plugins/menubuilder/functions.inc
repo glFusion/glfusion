@@ -267,7 +267,7 @@ function mb_initMenu() {
     $groups = $_GROUPS;
 
     // Red configuration
-    $result = DB_query("SELECT * FROM {$_TABLES['mb_config']}");
+    $result = DB_query("SELECT * FROM {$_TABLES['mb_config']}",1);
     while ( $C = DB_fetchArray($result) ) {
         $mbMenuConfig[] = $C;
     }
