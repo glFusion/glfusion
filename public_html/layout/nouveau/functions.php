@@ -758,7 +758,7 @@ src="{site_url}/layout/nouveau/js/gl_mooticker.js"></script>
 <div id="gl_mooticker">
    <span class="tickertitle">Latest News:</span>
 EOT;
-		$retval = str_replace('{site_url}',$_CONF['site_url'], $retval);
+		$retval = str_replace('{site_url}',$_CONF['path_layout'] , $retval);
 		$retval .= $B['content'] . '</div>';
 	}
 	return $retval;
