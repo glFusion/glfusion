@@ -1,6 +1,6 @@
 Geeklog History/Changes:
 
-May ??, 2008 (1.5.0b2)
+May 20, 2008 (1.5.0b2)
 ------------
 
 Geeklog 1.5.0 incorporates the following projects implemented during
@@ -29,6 +29,8 @@ Changes since 1.5.0b1:
 - Fixed invalid <brXHTML> tags in some language files (bug #0000621) [Dirk]
 - The URL sent in a user registration notification contained an &amp; where it
   should have been a simple & [Dirk]
+
+- Updated German language files, provided by Markus Wollschläger
 
 Links plugin
 ------------
