@@ -627,7 +627,7 @@ if ($forum == 0) {
                 $forumlisting->set_var ('lastpostmsgDate', $LANG_GF01['nolastpostmsg']);
                 $forumlisting->set_var ('lastpostmsgTopic', '');
                 $forumlisting->set_var ('lastpostmsgBy', '');
-                $folderimg = '<img src="'.gf_getImage('quietforum').'" border="0" align="middle" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'" alt=""' . XHTML . '>';
+                $folderimg = '<img src="'.gf_getImage('quietforum').'" border="0" align="middle" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"' . XHTML . '>';
             }
 
             if ($B['pid'] == 0) {

@@ -747,11 +747,8 @@ function f_forumjump($action='',$selected=0) {
             $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='{$B['grp_id']}'");
             if (SEC_inGroup($B['grp_id'])) {
                 if ($firstforum) {
-                    if ( $initialOptGroup != 0 ) {
-                        $selecthtml .= '</optgroup>';
-                    }
                     $selecthtml .= '<optgroup label="' .$A['cat_name']. '">';
-                    $initialOptGroup++;
+                    $initialOptGroup=1;
                  }
                 $firstforum=false;
                 if ($selected > 0 AND $selected == $B['forum_id']) {
