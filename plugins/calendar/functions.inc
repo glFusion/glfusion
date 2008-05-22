@@ -129,7 +129,7 @@ function phpblock_calendar( $help='', $title='' )
         . "FROM {$_TABLES['events']} "
         . "WHERE dateend >= NOW() AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) "
         . 'ORDER BY datestart,timestart';
-        
+
         if(( $_CA_CONF['personalcalendars'] == 1 ) && !empty( $_USER['uid'] )) {
             $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
             . "FROM {$_TABLES['personal_events']} "
@@ -431,6 +431,17 @@ function plugin_savesubmission_calendar($A)
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
             . plugin_submit_calendar ($A['calendar_type'])
             . COM_siteFooter ();
+
+        return $retval;
+    }
+    $msg = PLG_itemPreSave ('links', $A);
+    if (!empty ($msg)) {
+        $retval .= COM_startBlock($LANG12[22], '',
+                       COM_getBlockTemplate('_msg_block', 'header'))
+                . $msg
+                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
+                . plugin_submit_calendar($A['calendar_type'])
+                . COM_siteFooter();
 
         return $retval;
     }
@@ -770,6 +781,7 @@ function plugin_submit_calendar($mode = 'master')
     $eventform->set_var('lang_htmnotallowed', $LANG_CAL_1[44]);
     $eventform->set_var('lang_submit', $LANG_CAL_1[45]);
     $eventform->set_var('mode', $mode);
+    PLG_templateSetVars ('calendar', $eventform);
     $eventform->set_var('xhtml', XHTML);
     $eventform->parse('theform', 'eventform');
     $retval .= $eventform->finish($eventform->get_var('theform'));

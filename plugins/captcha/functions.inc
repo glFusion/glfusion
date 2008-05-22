@@ -114,7 +114,12 @@ function plugin_itemPreSave_captcha( $type='registration', $content='' ) {
             }
             break;
         case 'rating' :
-            if ( $_CP_CONF['enable_rating'] != 1 ) {
+//            if ( $_CP_CONF['enable_rating'] != 1 ) {
+//                return '';
+//            }
+            break;
+        case 'links' :
+            if ( $_CP_CONF['enable_links'] != 1 ) {
                 return '';
             }
             break;
@@ -184,6 +189,18 @@ function plugin_templatesetvars_captcha($name, &$template) {
                 return;
             }
             break;
+        case 'links' :
+            if ( $_CP_CONF['enable_links'] != 1 ) {
+                $template->set_var('captcha','');
+                return;
+            }
+            break;
+        case 'calendar' :
+            if ( $_CP_CONF['enable_calendar'] != 1 ) {
+                $template->set_var('captcha','');
+                return;
+            }
+            break;
         default :
             $template->set_var('captcha', '');
             return;
@@ -241,6 +258,8 @@ function CAPTCHA_getHTML($csid, $type='general' ) {
             $T->set_file('page', 'captcha_contact.thtml');
             break;
         case 'emailstory' :
+        case 'links' :
+        case 'calendar' :
             $T->set_file('page', 'captcha_emailstory.thtml');
             break;
         case 'forum' :

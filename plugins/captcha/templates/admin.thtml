@@ -107,6 +107,12 @@ var gfxformat = document.getElementById('gfxformat');
 <input type="checkbox" name="mediagallery" {mediagallerychecked}{xhtml}>&nbsp;&nbsp;
 <label><b>{lang_enable_mediagallery}</b></label>
 <br{xhtml}><br{xhtml}>
+<input type="checkbox" name="links" {linkschecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_links}</b></label>
+<br{xhtml}><br{xhtml}>
+<input type="checkbox" name="calendar" {calendarchecked}{xhtml}>&nbsp;&nbsp;
+<label><b>{lang_enable_calendar}</b></label>
+<br{xhtml}><br{xhtml}>
 <!--
 <input type="checkbox" name="rating" {ratingchecked}{xhtml}>&nbsp;&nbsp;
 <label><b>{lang_enable_rating}</b></label>
