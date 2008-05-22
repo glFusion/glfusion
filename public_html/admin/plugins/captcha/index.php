@@ -79,6 +79,8 @@ if ( $mode == $LANG_CP00['save'] && !empty($LANG_CP00['save']) ) {
     $settings['enable_forum']           = isset($_POST['forum']) ? $_POST['forum'] == 'on' ? 1 : 0 : 0;
     $settings['enable_mediagallery']    = isset($_POST['mediagallery']) ? $_POST['mediagallery'] == 'on' ? 1: 0 : 0;
     $settings['enable_rating']          = isset($_POST['rating']) ? $_POST['rating'] == 'on' ? 1: 0 : 0;
+    $settings['enable_links']           = isset($_POST['links']) ? $_POST['links'] == 'on' ? 1: 0 : 0;
+    $settings['enable_calendar']        = isset($_POST['calendar']) ? $_POST['calendar'] == 'on' ? 1: 0 : 0;
     $settings['gfxDriver']              = COM_applyFilter($_POST['gfxdriver']);
     $settings['gfxFormat']              = isset($_POST['gfxformat']) ? COM_applyFilter($_POST['gfxformat']) : '';
     $settings['gfxPath']                = isset($_POST['gfxpath']) ? COM_applyFilter(COM_stripslashes($_POST['gfxpath'])) : '';
@@ -145,6 +147,8 @@ $T->set_var(array(
     'forumchecked'              => ($_CP_CONF['enable_forum'] ? ' checked="checked"' : ''),
     'mediagallerychecked'       => ($_CP_CONF['enable_mediagallery'] ? ' checked="checked"' : ''),
     'ratingchecked'             => ($_CP_CONF['enable_rating'] ? ' checked="checked"' : ''),
+    'linkschecked'              => ($_CP_CONF['enable_links'] ? ' checked="checked"' : ''),
+    'calendarchecked'           => ($_CP_CONF['enable_calendar'] ? ' checked="checked"' : ''),
     'gdselected'                => ($_CP_CONF['gfxDriver'] == 0 ? ' selected="selected"' : ''),
     'imselected'                => ($_CP_CONF['gfxDriver'] == 1 ? ' selected="selected"' : ''),
     'noneselected'              => ($_CP_CONF['gfxDriver'] == 2 ? ' selected="selected"' : ''),
@@ -166,6 +170,8 @@ $T->set_var(array(
     'lang_enable_forum'         => $LANG_CP00['enable_forum'],
     'lang_enable_mediagallery'  => $LANG_CP00['enable_mediagallery'],
     'lang_enable_rating'        => $LANG_CP00['enable_rating'],
+    'lang_enable_links'         => $LANG_CP00['enable_links'],
+    'lang_enable_calendar'      => $LANG_CP00['enable_calendar'],
     'lang_save'                 => $LANG_CP00['save'],
     'lang_cancel'               => $LANG_CP00['cancel'],
     'lang_gfx_driver'           => $LANG_CP00['gfx_driver'],
