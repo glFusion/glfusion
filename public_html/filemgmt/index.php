@@ -243,7 +243,7 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
                     $description = $myts->makeTareaData4Show($description,0); //no html
                     $breakPosition = strpos($description,"<br /><br />");
                     if (($breakPosition > 0) AND ($breakPosition < strlen($description)) AND $mydownloads_trimdesc) {
-                        $description = substr($description, 0,$breakPosition) . "<p align=left><a href=\"{$_CONF[site_url]}/filemgmt/index.php?id=$lid&amp;comments=1\">{$LANG_FILEMGMT['more']}</a></p>";
+                        $description = substr($description, 0,$breakPosition) . "<p style=\"text-align:left;\"><a href=\"{$_CONF[site_url]}/filemgmt/index.php?id=$lid&amp;comments=1\">{$LANG_FILEMGMT['more']}</a></p>";
                     }
                     $result2 = DB_query("SELECT username,fullname,photo  FROM {$_TABLES['users']} WHERE uid = $submitter");
                     list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);

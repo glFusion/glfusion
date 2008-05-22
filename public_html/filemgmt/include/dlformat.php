@@ -35,7 +35,7 @@ if (basename($GLOBALS['PHP_SELF']) == "dlformat.php") {
 
 $path = $mytree->getPathFromId($cid, "title");
 $path = substr($path, 1);
-$path = str_replace("/"," <img src='" .$_CONF[site_url] ."/filemgmt/images/arrow.gif' board='0' alt=''> ",$path);
+$path = str_replace("/"," <img src='" .$_CONF[site_url] ."/filemgmt/images/arrow.gif' alt=''" . XHTML . "> ",$path);
 
 $p->set_var('LANG_CATEGORY',_MD_CATEGORYC);
 $p->set_var('category_path',$path);

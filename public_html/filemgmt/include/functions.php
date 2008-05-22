@@ -51,7 +51,7 @@ function popgraphic($hits) {
         global $_CONF, $mydownloads_popular;
 
         if ($hits >= $mydownloads_popular) {
-            $functionretval = "&nbsp<img src=\"{$_CONF[site_url]}/filemgmt/images/pop.gif\" alt=\"" ._MD_POPULAR . '" >';
+            $functionretval = "&nbsp<img src=\"{$_CONF[site_url]}/filemgmt/images/pop.gif\" alt=\"" ._MD_POPULAR . '"' . XHTML . '>';
         }
         return $functionretval;
 }
