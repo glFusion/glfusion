@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: index.php,v 1.33 2008/04/19 15:05:34 dhaun Exp $
+// $Id: index.php,v 1.35 2008/05/22 17:01:54 dhaun Exp $
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
@@ -329,6 +329,8 @@ function CALENDAR_editEvent ($mode, $A, $msg = '')
     $event_templates->set_var('lang_permissions', $LANG_ACCESS['permissions']);
     $event_templates->set_var('lang_permissionskey', $LANG_ACCESS['permissionskey']);
     $event_templates->set_var('permissions_editor', SEC_getPermissionsHTML($A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']));
+    $event_templates->set_var('gltoken_name', CSRF_TOKEN);
+    $event_templates->set_var('gltoken', SEC_createToken());
     $event_templates->parse('output', 'editor');
     $retval .= $event_templates->finish($event_templates->get_var('output'));
     $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
@@ -572,30 +574,38 @@ $mode = '';
 if (isset($_REQUEST['mode'])) {
     $mode = $_REQUEST['mode'];
 }
-if (isset($_POST["delbutton_x"])) {
-    $mode = batchdeleteexec;
+if (isset($_POST['delbutton_x'])) {
+    $mode = 'batchdeleteexec';
 }
 
 if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     $eid = COM_applyFilter ($_REQUEST['eid']);
     if (!isset ($eid) || empty ($eid) || ($eid == 0)) {
-        COM_errorLog ('Attempted to delete event eid=\''
-                      . $eid . "'");
-        $display .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/calendar/index.php');
-    } else {
+        COM_errorLog ('Attempted to delete event eid=\'' . $eid . "'");
+        $display .= COM_refresh($_CONF['site_admin_url']
+                                . '/plugins/calendar/index.php');
+    } elseif(SEC_checkToken()) {
         $type = '';
         if (isset($_POST['type'])) {
             $type = COM_applyFilter($_POST['type']);
         }
         $display .= CALENDAR_deleteEvent($eid, $type);
+    } else {
+        COM_accessLog("User {$_USER['username']} tried to illegally delete event $eid and failed CSRF checks.");
+        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
     }
-} else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save'])) {
+} elseif (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save']) && SEC_checkToken()) {
     if (!isset ($_POST['allday'])) {
         $_POST['allday'] = '';
     }
     $hour_mode = 12;
     if (isset ($_POST['hour_mode']) && ($_POST['hour_mode'] == 24)) {
         $hour_mode = 24;
+    }
+    if ($hour_mode == 24) {
+        // these aren't set in 24 hour mode
+        $_POST['start_ampm'] = '';
+        $_POST['end_ampm'] = '';
     }
     $display .= CALENDAR_saveEvent (COM_applyFilter ($_POST['eid']),
             $_POST['title'], $_POST['event_type'],
@@ -667,7 +677,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     }
     $display .= CALENDAR_listOld();
     $display .= COM_siteFooter ();
-} else if ($mode == 'batchdeleteexec') {
+} elseif (($mode == 'batchdeleteexec') && SEC_checkToken()) {
     $msg = CALENDAR_deleteOld();
     $display .= COM_siteHeader ('menu', $LANG_CAL_ADMIN[11])
         . COM_showMessage($msg)
