@@ -1,9 +1,9 @@
 <?php
 // +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com | 
+// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
 // +-------------------------------------------------------------------------+
 // | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |    
+// | Date: Mar 18, 2006                                                      |
 // +-------------------------------------------------------------------------+
 // | Copyright (C) 2004 by Consult4Hire Inc.                                 |
 // | Author:                                                                 |
@@ -31,7 +31,7 @@ This file is set via the Filemgmt Plugin Admin menu - Configuration settings.
 The script reads and write to this file - thus needs to be a separate file.
 */
 
-include ("filemgmt.php");
+@include ("filemgmt.php");
 
 $CONF_FM['version'] = '1.5.3';
 
@@ -58,7 +58,7 @@ $filemgmt_showWhatsNewComments = true;
 /* Map any extensions to a new extension or 'reject' if they should not be allowed  */
 /* Any file type not listed will be uploaded using original file extension  */
 
-$_FMDOWNLOAD  = array( 
+$_FMDOWNLOAD  = array(
     'php'   => 'phps',
     'pl'    => 'txt',
     'cgi'   => 'txt',
@@ -71,7 +71,7 @@ $_FMDOWNLOAD  = array(
 
 $CONF_FILEMGMT['glmenutype'] = 'block';      // Set to block or header
 
-$_FMDOWNLOAD['inconlib']    = array( 
+$_FMDOWNLOAD['inconlib']    = array(
         php => "php.gif",
         phps => "php.gif",
         bmp => "bmp.gif",
