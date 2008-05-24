@@ -1754,7 +1754,7 @@ $display .= '<head>
         <div id="gl_header">
             <div class="top-r-corner">
                 <div class="top-l-corner">
-					<div class="floatright" style="color:#FFF;">
+					<div class="floatright install-slogan" style="color:#FFF;">
 						' . $LANG_INSTALL[2] . '
 					</div>
 						<img src="layout/logo.png" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo"' . XHTML . '>
@@ -2089,11 +2089,12 @@ switch ($mode) {
             <div class="install-type-container-outer">
                <div class="install-type-container-inner">
                    <h2>' . $LANG_INSTALL[23] . '</h2>
-                   <div class="install" onmouseover="this.style.background=\'#BBB\'" onmouseout="this.style.background=\'#CCC\'"><a href="' . $req_string
+                   <div class="install floatleft"><a href="' . $req_string
                     . '&amp;op=install">' . $LANG_INSTALL[24] . '</a></div>
-                   <div class="upgrade" onmouseover="this.style.background=\'#BBB\'" onmouseout="this.style.background=\'#CCC\'"><a href="' . $req_string
+                   <div class="upgrade floatright"><a href="' . $req_string
                     . '&amp;op=upgrade">' . $LANG_INSTALL[25] . '</a></div>
-               </div>' . LB;
+               </div>
+			</div>' . LB;
         }
         break;
 

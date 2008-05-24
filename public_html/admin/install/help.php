@@ -65,25 +65,22 @@ $display .= '<head>
 </head>
 
 <body dir="ltr">
-    <div class="header-navigation-container">
-        <div class="header-navigation-line">
-            <a href="' . $LANG_INSTALL[87] . '" class="header-navigation">' . $LANG_INSTALL[1] . '</a>&nbsp;&nbsp;&nbsp;
-        </div>
-    </div>
-    <div class="header-logobg-container-outer">
-        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="header-logobg-container-inner">
-            <tr>
-                <td class="header-logobg-left">
-                    <a href="http://www.geeklog.net/"><img src="layout/logo.png" width="151" height="56" alt="Geeklog" border="0"' . XHTML . '></a>
-                </td>
-                <td class="header-logobg-right">
-                    <div class="site-slogan">' . $LANG_INSTALL[2] . ' <br' . XHTML . '><br' . XHTML . '>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="installation-container">
-        <div class="installation-body-container">
+    <div id="gl_container_fluid">
+        <div id="gl_header">
+            <div class="top-r-corner">
+                <div class="top-l-corner">
+					<div class="floatright install-slogan" style="color:#FFF;">
+						' . $LANG_INSTALL[2] . '
+					</div>
+						<img src="layout/logo.png" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo"' . XHTML . '>
+                </div>
+            </div>
+        </div> <!-- end of gl_header -->
+
+        <div id="gl_moomenu">
+			<a style="float:right;" href="' . $LANG_INSTALL[87] . '">' . $LANG_INSTALL[1] . '</a>
+		</div>
+        <div id="gl_wrapper">
             <h1 class="heading">' . $LANG_HELP[0] . '</h1>
             <h2><a name="site_name">' . $LANG_INSTALL[32] . '</a></h2>
             <p class="indent">' . $LANG_HELP[1] . '</p>
@@ -124,9 +121,13 @@ $display .= '<head>
             <h2><a name="utf8">' . $LANG_INSTALL[92] . '</a></h2>
             <p class="indent">' . $LANG_HELP[13] . '</p>
 
-        </div>
-    </div>
-
+        </div> <!-- end of gl_wrapper -->
+		<div id="gl_footer">
+            <div class="bottom-r-corner">
+                <div class="bottom-l-corner"></div>
+            </div>
+        </div> <!-- end of gl_footer-->
+    </div> <!-- end of gl_container -->
 </body>
 </html>' . LB;
 

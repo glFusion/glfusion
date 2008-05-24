@@ -53,9 +53,10 @@ The basic SEO optimized markup, common to every layout, is the following:
 }
 /*end gl_moochronometer header images*/
 #gl_wrapper {
+  background:#FFF;
   float:left;
-  margin-top:10px;
-  padding:0 20px;
+  padding:10px 20px 20px;
+  width:93%;
 }
 #gl_content { /* standard left & right blocks - switched to dynamically by functions.php*/
   background:#FFFFFF;
@@ -98,7 +99,6 @@ The basic SEO optimized markup, common to every layout, is the following:
 #gl_footer {
   background:#000;
   clear:left;
-  width:100%;
 }
 .top-r-corner {
   background:transparent url(top-r-corner.png) 100% 0 no-repeat;
@@ -341,10 +341,11 @@ margin-left:0em;
  /* End hide from IE-mac */
  .floatleft {
   float:left;
-  padding:0 10px 0 0;
 }
 .floatright {
   float:right;
+}
+.install-slogan {
   padding:40px 30px 0 10px;
 }
 .support a:link,
@@ -1332,52 +1333,43 @@ causes menu shake bug w/javascript animation on 2 line menus in Opera*/
   color:#000000;
   padding: 4px 20px 10px 20px;
   text-align:left;
+  width:100%;
 }
 .install-type-container-outer {
-  background: #1A3955;
-  border: 1px solid;
   height: 130px;
   margin-left: auto;
   margin-right: auto;
   padding: 10px;
+  width:100%;
 }
 .install-type-container-inner {
   margin-left: auto;
   margin-right: auto;
   border: 0px solid;
-  color: #FFFFFF;
 }
 .submit input{
   padding: 0px;
   margin-left: 4.5em;
 }
-.install {
-  position: relative;
-  width: 200px;
-  height: 55px;
-  background-color: #CCC;
-  text-align: center;
-  font-size: 20pt;
-  font-family: "Verdana";
-  padding-top: 20px;
-  border: 1px;
-  border-color: #000;
-  border-style: dashed;
-}
+.install,
 .upgrade {
+  background:url(header-bg.png) 0 0 repeat-x;
+  height:50px;
   position: relative;
-  left: 210px;
-  top: -77px;
   width: 200px;
-  height: 55px;
-  background-color: #CCC;
   text-align: center;
   font-size: 20pt;
   font-family: "Verdana";
-  padding-top: 20px;
-  border: 1px;
-  border-color: #000;
-  border-style: dashed;
+  padding-top: 15px;
+  border: 1px solid #000;
+}
+.install a:link,
+.upgrade a:link{
+  color:#FFF;
+}
+.install a:hover,
+.upgrade a:hover{
+  color:#CCC;
 }
 .file-permission-list {
   padding: 0px;
