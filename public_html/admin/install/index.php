@@ -1750,19 +1750,22 @@ $display .= '<head>
 </head>
 
 <body dir="ltr">
-    <div class="header-navigation-container">
-        <div class="header-navigation-line">
-            <a href="' . $LANG_INSTALL[87] . '" class="header-navigation">' . $LANG_INSTALL[1] . '</a>&nbsp;&nbsp;&nbsp;
-        </div>
-    </div>
-    <div class="header-logobg-container-outer">
-        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="header-logobg-container-inner">
-            <tr>
-                <td class="header-logobg-left">
-                    <a href="http://www.gllabs.org/"><img src="layout/glfusionball.png" width="56" height="56" alt="gl Labs" border="0"' . XHTML . '></a>
-                </td>
-                <td class="header-logobg-right">
-                    <div class="site-slogan">' . $LANG_INSTALL[2] . ' <br' . XHTML . '><br' . XHTML . '>' . LB;
+    <div id="gl_container_fluid">
+        <div id="gl_header">
+            <div class="top-r-corner">
+                <div class="top-l-corner">
+					<div class="floatright" style="color:#FFF;">
+						' . $LANG_INSTALL[2] . '
+					</div>
+						<img src="layout/logo.png" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo"' . XHTML . '>
+                </div>
+            </div>
+        </div> <!-- end of gl_header -->
+
+        <div id="gl_moomenu">
+			<a style="float:right;" href="' . $LANG_INSTALL[87] . '">' . $LANG_INSTALL[1] . '</a>
+		</div>
+        <div id="gl_wrapper">' . LB;
 
 // Show the language drop down selection on the first page
 if ($mode == 'check_permissions') {
@@ -1792,13 +1795,6 @@ if ($mode == 'check_permissions') {
             </form>';
 }
 $display .= '
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="installation-container">
-        <div class="installation-body-container">
             <h1 class="heading">' . $LANG_INSTALL[3] . '</h1>' . LB;
 
 
@@ -1887,8 +1883,7 @@ switch ($mode) {
                       <div style="margin-left: auto; margin-right: auto; width: 1px">
                         <form action="index.php" method="post">
                         <input type="submit" value="&lt;&lt; ' . $LANG_INSTALL[61] . '"' . XHTML . '>
-                        </form>
-                      </div>';
+                        </form>';
         } else {
 
             require_once $_PATH['db-config.php'];  // We need db-config.php the current DB information
@@ -2089,15 +2084,11 @@ switch ($mode) {
                         . '&amp;language=' . $language;
 
             $display .= '
-            <div class="install-type-container-outer">
-               <div class="install-type-container-inner">
                    <h2>' . $LANG_INSTALL[23] . '</h2>
                    <div class="install" onmouseover="this.style.background=\'#BBB\'" onmouseout="this.style.background=\'#CCC\'"><a href="' . $req_string
                     . '&amp;op=install">' . $LANG_INSTALL[24] . '</a></div>
                    <div class="upgrade" onmouseover="this.style.background=\'#BBB\'" onmouseout="this.style.background=\'#CCC\'"><a href="' . $req_string
-                    . '&amp;op=upgrade">' . $LANG_INSTALL[25] . '</a></div>
-               </div>
-            </div>' . LB;
+                    . '&amp;op=upgrade">' . $LANG_INSTALL[25] . '</a>' . LB;
         }
         break;
 
@@ -2159,9 +2150,12 @@ switch ($mode) {
 
 $display .= '
     <br' . XHTML . '><br' . XHTML . '>
-        </div>
-    </div>
-
+		<div id="gl_footer">
+            <div class="bottom-r-corner">
+                <div class="bottom-l-corner"' . XHTML . '>
+            </div>
+        </div> <!-- end of gl_footer-->
+    </div> <!-- end of gl_container -->
 </body>
 </html>' . LB;
 
