@@ -1795,6 +1795,7 @@ if ($mode == 'check_permissions') {
             </form>';
 }
 $display .= '
+        <div class="installation-body-container">
             <h1 class="heading">' . $LANG_INSTALL[3] . '</h1>' . LB;
 
 
@@ -1883,7 +1884,8 @@ switch ($mode) {
                       <div style="margin-left: auto; margin-right: auto; width: 1px">
                         <form action="index.php" method="post">
                         <input type="submit" value="&lt;&lt; ' . $LANG_INSTALL[61] . '"' . XHTML . '>
-                        </form>';
+                        </form>
+                      </div>';
         } else {
 
             require_once $_PATH['db-config.php'];  // We need db-config.php the current DB information
@@ -2084,11 +2086,14 @@ switch ($mode) {
                         . '&amp;language=' . $language;
 
             $display .= '
+            <div class="install-type-container-outer">
+               <div class="install-type-container-inner">
                    <h2>' . $LANG_INSTALL[23] . '</h2>
                    <div class="install" onmouseover="this.style.background=\'#BBB\'" onmouseout="this.style.background=\'#CCC\'"><a href="' . $req_string
                     . '&amp;op=install">' . $LANG_INSTALL[24] . '</a></div>
                    <div class="upgrade" onmouseover="this.style.background=\'#BBB\'" onmouseout="this.style.background=\'#CCC\'"><a href="' . $req_string
-                    . '&amp;op=upgrade">' . $LANG_INSTALL[25] . '</a>' . LB;
+                    . '&amp;op=upgrade">' . $LANG_INSTALL[25] . '</a></div>
+               </div>' . LB;
         }
         break;
 
@@ -2150,9 +2155,11 @@ switch ($mode) {
 
 $display .= '
     <br' . XHTML . '><br' . XHTML . '>
+			</div>
+        </div> <!-- end of gl_wrapper -->
 		<div id="gl_footer">
             <div class="bottom-r-corner">
-                <div class="bottom-l-corner"' . XHTML . '>
+                <div class="bottom-l-corner"></div>
             </div>
         </div> <!-- end of gl_footer-->
     </div> <!-- end of gl_container -->
