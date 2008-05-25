@@ -61,7 +61,7 @@
             </tr>
         </table>
         <!-- Basic textarea field - no editor -->
-        <div id="text_editor" style="width:100%; margin-top:10px; padding-left:10px; border:1px solid #ECE9D8;display:{show_texteditor};">
+        <div id="text_editor" style="width:99%; margin-top:10px; padding-left:10px; border:1px solid #ECE9D8;display:{show_texteditor};">
             {lang_introtext}:
             <img src="{layout_url}/images/expand.png" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('introtext','larger');"{xhtml}>
             <img src="{layout_url}/images/collapse.png" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('introtext','smaller');"{xhtml}>
