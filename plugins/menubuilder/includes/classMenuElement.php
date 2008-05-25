@@ -244,12 +244,13 @@ class mbElement {
 
         if ( $this->label != 'Top Level Menu' ) {
 
-            $style = ($count % 2) + 2;
+            $style = ($count % 2) + 1;
 
-            $retval .= '<tr class="pluginRow' . $style . '">';
+            $retval .= '<tr class="pluginRow' . $style . '" onmouseover="className=\'pluginRollOver\';" onmouseout="className=\'pluginRow' . $style . '\';">';
+
             $retval .= '<td>';
 
-            $elementDetails .= '<b>' . $LANG_MB01['label'] . ':</b> ' . $this->label . '<br' . XHTML . '>';
+            $elementDetails .= $this->label . '::';
             $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b> ' . $LANG_MB_TYPES[$this->type] . '<br' . XHTML . '>';
             switch ($this->type) {
                 case 1 :
@@ -274,22 +275,28 @@ class mbElement {
                     break;
             }
 
-            $moveup = '<a href="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/index.php?mode=move&amp;where=up&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $movedown = '<a href="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/index.php?mode=move&amp;where=down&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $edit   = '<a href="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/index.php?mode=edit&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $delete = '<a href="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/index.php?mode=delete&amp;mid=' . $this->id . '" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');">';
+            $moveup     = '<a href="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/index.php?mode=move&amp;where=up&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
+            $movedown   = '<a href="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/index.php?mode=move&amp;where=down&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
+            $edit       = '<a href="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/index.php?mode=edit&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
+            $delete     = '<a href="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/index.php?mode=delete&amp;mid=' . $this->id . '" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');">';
+            $info       = '<a class="gl_mootip" title="' . $elementDetails . '" href="#"><img src="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/images/info.png" alt=""' . XHTML . '></a>';
 
+            $retval .= "<div style=\"padding:5px;margin-left:" . $px . "px;\">" . ($this->type == 1 ? '<b>' : '') . strip_tags($this->label) . ($this->type == 1 ? '</b>' : '') . '</div>' . LB;
+/* ------------------
             if ( $depth == 0 ) {
-                $retval .= "<div style=\"padding:5px;margin-left:" . $px . "px;\">" . '<a class="tooltip" href="#">+<span style="left:-165px;top:25px;">' . $elementDetails . '</span></a>&nbsp;' . ($this->type == 1 ? '<b>' : '') . strip_tags($this->label) . ($this->type == 1 ? '</b>' : '') . '</div>' . LB;
+                $retval .= "<div style=\"padding:5px;margin-left:" . $px . "px;\">" . ($this->type == 1 ? '<b>' : '') . strip_tags($this->label) . ($this->type == 1 ? '</b>' : '') . '</div>' . LB;
             } else {
                 if ( $level <= $depth ) {
                     $retval .= "<div style=\"padding:5px;margin-left:" . $px . "px;\">" . '+&nbsp;<a href="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/editelement.php?id=' . $this->id . '&amp;page=1">' . strip_tags($this->label) . '</a></div>' . LB;
                 }
             }
-
+---------------------- */
             $retval .= '</td>';
             $retval .= '<td class="aligncenter">';
             $retval .=  '<input type="checkbox" name="enableditem[' . $this->id . ']" onclick="submit()" value="1"' . ($this->active == 1 ? ' checked="checked"' : '') . XHTML . '>';
+            $retval .= '</td>';
+            $retval .= '<td class="aligncenter">';
+            $retval .= $info;
             $retval .= '</td>';
             $retval .= '<td class="aligncenter">' . $edit . '<img src="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/images/edit.png" alt="' . $LANG_MB01['edit'] . '"' . XHTML . '></a></td>';
             $retval .= '<td class="aligncenter">' . $delete . '<img src="' . $_CONF['site_admin_url'] . '/plugins/menubuilder/images/delete.png" alt="' . $LANG_MB01['delete'] . '"' . XHTML . '></a></td>';

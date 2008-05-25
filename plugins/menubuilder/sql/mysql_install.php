@@ -51,7 +51,7 @@ $_SQL['mb_config'] = "CREATE TABLE {$_TABLES['mb_config']} (
     `enabled` TINYINT NOT NULL
 ) AUTO_INCREMENT=1 ;";
 
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['mb_config']} (`id` ,`menu_id` ,`hcolor` ,`hhcolor` ,`htext` ,`hhtext` ,`enabled` )VALUES (NULL , '0', '#000000', '#000000', '#000000', '#000000', '1');";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['mb_config']} (`id` ,`menu_id` ,`hcolor` ,`hhcolor` ,`htext` ,`hhtext` ,`enabled` )VALUES (NULL , '0', '#000000', '#001eff', '#ffffff', '#ffffff', '1');";
 
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['mb_elements']} VALUES(1, 0, 0, 'Home', 2, '0', 10, 1, '', 2);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['mb_elements']} VALUES(2, 0, 0, 'Contribute', 2, '1', 20, 1, '', 13);";

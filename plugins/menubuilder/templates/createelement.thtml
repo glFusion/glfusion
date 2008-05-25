@@ -97,7 +97,8 @@ function toggleFields() {
   {$LANG_MB01[create_element]}
 </div>
   <div class="meform">
-    <form method="post" action="{form_action}" id="newitem" name="newitem">
+    <form method="post" action="{form_action}" id="newitem">
+    <div>
     <input type="hidden" id="menunid" name="menuid" value="{menuid}"{xhtml}>
       <div id="parentdiv" class="required">
         <label for="pid">{$LANG_MB01[parent]}</label>
@@ -153,6 +154,7 @@ function toggleFields() {
       <input type="hidden" id="mode" name="mode" value="save"{xhtml}>
       <input type="submit" id="execute" name="execute" value="{$LANG_MB01[save]}"{xhtml}>&nbsp;&nbsp;
     </div>
+  </div>
   </form>
   </div>
 </div>

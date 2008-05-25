@@ -40,7 +40,7 @@ window.addEvent('domready', function() {
     {$LANG_MB01[configuration]}
   </div>
   <div class="meform">
-    <form method="post" action="{form_action}" id="mbconfig" name="mbconfig">
+    <form method="post" action="{form_action}" id="mbconfig">
       <h1 style="margin:9px;">Menu Color Options</h1>
       <table cellpadding="0" cellspacing="0" class="plugin" style="margin:10px;">
         <tr>

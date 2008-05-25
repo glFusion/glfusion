@@ -1,16 +1,19 @@
-<form method="post" name="menusel" action="{site_admin_url}/plugins/menubuilder/index.php">
-<div style="width:100%;" class="plugin">
-<input type="hidden" id="menu" name="menu" value="{menuid}"{xhtml}>
-  <table style="width:100%;" class="plugin">
+<div class="plugin">
+<form method="post" id="menusel" action="{site_admin_url}/plugins/menubuilder/index.php">
+<div>
+  <table style="width:100%;">
     <tr>
       <th>{$LANG_MB01[menu_element]}</th>
       <th class="aligncenter" style="text-align:center;">{$LANG_MB01[enabled]}</th>
+      <th class="aligncenter" style="text-align:center;">{$LANG_MB01[info]}</th>
       <th class="aligncenter" style="text-align:center;">{$LANG_MB01[edit]}</th>
       <th class="aligncenter" style="text-align:center;">{$LANG_MB01[delete]}</th>
       <th colspan="2" style="text-align:center;">{$LANG_MB01[order]}</th>
     </tr>
     {menu_tree}
   </table>
+  <input type="hidden" id="menu" name="menu" value="{menuid}"{xhtml}>
   <input type="hidden" name="mode" id="mode" value="activate"{xhtml}>
 </div>
 </form>
+</div>

@@ -118,6 +118,7 @@ $LANG_MB01 = array(
     'cancel'            => 'Cancel',
     'action'            => 'Action',
     'first_position'    => 'First Position',
+    'info'              => 'Info',
 );
 
 $LANG_MB_TYPES = array(
