@@ -643,6 +643,8 @@
 			 */
 			function _split2($string)
 			{
+    			global $CONF_FORUM;
+
 				$string = $this->_stripslashes($string);
 
 				if (substr($string, 0, 1) != '<')
@@ -654,7 +656,8 @@
 				if (!preg_match('%^<\s*(/\s*)?([a-zA-Z0-9]+)([^>]*)>?$%', $string, $matches))
 				{
 					# It's seriously malformed
-					return htmlspecialchars($string);
+//					return htmlspecialchars($string);
+                    return @htmlspecialchars ($text,ENT_QUOTES, $CONF_FORUM['charset']);
 				}
 
 				$slash    = trim($matches[1]);

@@ -74,6 +74,15 @@ if (forum_modPermission($forum,$_USER['uid'])) {
 
             $topicparent = DB_getITEM($_TABLES['gf_topic'],"pid","id='$msgid'");
             if ($top == 'yes') {
+                // Need to check for any attachments and delete if required
+                $q1 = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=$msgid OR id=$msgid");
+                while($A = DB_fetchArray($q1)) {
+                    $q2 = DB_query("SELECT id FROM {$_TABLES['gf_attachments']} WHERE topic_id={$A['id']}");
+                    while ($B = DB_fetchArray($q2)) {
+                        forum_delAttachment($B['id']);
+                    }
+                }
+
                 DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id='$msgid')");
                 DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (pid='$msgid')");
                 DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id='$msgid')");
@@ -87,6 +96,15 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                     DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=0 WHERE forum_id=$forum");
                 }
             } else {
+                // Need to check for any attachments and delete if required
+                $q1 = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE id=$msgid");
+                while($A = DB_fetchArray($q1)) {
+                    $q2 = DB_query("SELECT id FROM {$_TABLES['gf_attachments']} WHERE topic_id={$A['id']}");
+                    while ($B = DB_fetchArray($q2)) {
+                        forum_delAttachment($B['id']);
+                    }
+                }
+
                 DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-1 WHERE (id='$topicparent')");
                 DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id='$msgid')");
                 DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count=post_count-1 WHERE forum_id=$forum");
@@ -122,6 +140,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$msgpid";
                 forum_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum);
             }
+            gf_siteFooter();
             exit();
         }
     }
@@ -170,9 +189,9 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                     gf_updateLastPost($forum,$curpostpid);
                     gf_updateLastPost($newforumid,$moveid);
 
-                } else {
-                    $movesql = DB_query("Select id,date from {$_TABLES['gf_topic']} WHERE pid='$curpostpid' AND id >= '$moveid'");
-                    $numreplies = DB_numRows($movesql);
+                } else { // move all posts from this point forward.
+                    $movesql = DB_query("SELECT id,date FROM {$_TABLES['gf_topic']} WHERE pid='$curpostpid' AND id >= '$moveid'");
+                    $numreplies = DB_numRows($movesql); // how many replies are being moved.
                     $topicparent = 0;
                     while($movetopic = DB_fetchArray($movesql)) {
                         if ($topicparent == 0) {
@@ -188,28 +207,32 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                             DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated='$topicdate' WHERE id='$topicparent'");
                         }
                     }
+				    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum and pid=0");
+				    $topic_count = DB_numRows($topicsQuery);
+                    DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topic_count, post_count=post_count-1 WHERE forum_id=$forum");
+
                     // Update the Forum and topic indexes
                     gf_updateLastPost($forum,$curpostpid);
                     gf_updateLastPost($newforumid,$topicparent);
 
                     /* Update the number of replies now in all previous topic post records */
-                    DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-$numreplies WHERE id='$curpostpid' ");
+//                    DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-$numreplies WHERE id='$curpostpid' ");
 
                     // Update Topic and Post Count for the effected forums
-                    DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=topic_count+1, post_count=post_count+$numreplies WHERE forum_id=$newforumid");
-                    DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=topic_count-1, post_count=post_count-$numreplies WHERE forum_id=$forum");
+//                    DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=topic_count+1, post_count=post_count+$numreplies WHERE forum_id=$newforumid");
                 }
                 $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$moveid";
                 forum_statusMessage(sprintf($LANG_GF02['msg183'],$movetoforum),$link,$LANG_GF02['msg183']);
 
             } else {  // Move complete topic
-                $moveResult = DB_query("Select id from {$_TABLES['gf_topic']} WHERE pid=$moveid");
-                $postCount = DB_numRows($moveResult) +1;  // Need to account for the parent post
+                $moveResult = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=$moveid");
+                $postCount = DB_numRows($moveResult)+1;  // Need to account for the parent post
                 while($movetopic = DB_fetchArray($moveResult)) {
                     DB_query("UPDATE {$_TABLES['gf_topic']} SET forum='$newforumid' WHERE id='{$movetopic['id']}'");
                 }
                 // Update any topic subscription records - need to change the forum ID record
                 DB_query("UPDATE {$_TABLES['gf_watch']} SET forum_id = '$newforumid' WHERE topic_id='{$moveid}'");
+                // this moves the parent record.
                 DB_query("UPDATE {$_TABLES['gf_topic']} SET forum = '$newforumid', moved = '1' WHERE id=$moveid");
 
                 // Update the Last Post Information
@@ -217,8 +240,8 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 gf_updateLastPost($forum);
 
                 // Update Topic and Post Count for the effected forums
-                DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=topic_count+1, post_count=post_count+$postCount WHERE forum_id=$newforumid");
-                DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=topic_count-1, post_count=post_count-$postCount WHERE forum_id=$forum");
+//                DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=topic_count+1, post_count=post_count+$postCount WHERE forum_id=$newforumid");
+//                DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=topic_count-1, post_count=post_count-$postCount WHERE forum_id=$forum");
 
                 // Remove any lastviewed records in the log so that the new updated topic indicator will appear
                 DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic='$moveid'");

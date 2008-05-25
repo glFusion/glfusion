@@ -1,14 +1,13 @@
 <!-- start header.thtml -->
-<table width="100%" border="0" cellspacing="1" cellpadding="0">
+<table style="width:100%;border:none;" cellspacing="1" cellpadding="0">
     <tr>
-        <td width="14%" class="navbar" style="white-space:nowrap;"><a href="index.php">{stats}</a></td>
-        <td width="14%" class="navbar" style="white-space:nowrap;"><a href="settings.php">{settings}</a></td>
-        <td width="14%" class="navbar" style="white-space:nowrap;"><a href="boards.php">{boardadmin}</a></td>
-        <td width="14%" class="navbar" style="white-space:nowrap;"><a href="mods.php">{mods}</a></td>
-        <td width="14%" class="navbar" style="white-space:nowrap;"><a href="migrate.php">{migrate}</a></td>
-        <td width="14%" class="navbar" style="white-space:nowrap;"><a btn1" href="messages.php">{messages}</a></td>
-        <td width="16%" class="navbar" style="white-space:nowrap;"><a btn1" href="ips.php">{ipman}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="index.php">{stats}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="settings.php">{settings}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="boards.php">{boardadmin}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="mods.php">{mods}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a href="migrate.php">{migrate}</a></td>
+        <td style="width:14%;white-space:nowrap;" class="navbar"><a btn1" href="messages.php">{messages}</a></td>
+        <td style="width:16%;white-space:nowrap;" class="navbar"><a btn1" href="ips.php">{ipman}</a></td>
     </tr>
 </table>
-<p />
 <!-- end header.thtml -->

@@ -37,20 +37,23 @@ require_once('../lib-common.php'); // Path to your lib-common.php
 require_once ($_CONF['path_html'] . 'forum/include/include_html.php');
 require_once ($_CONF['path_html'] . 'forum/include/gf_showtopic.php');
 require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
+require_once ($_CONF['path_html'] . 'forum/include/lib-uploadfiles.php');
 require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
 
-// Display Common headers
+$retval = '';
+$forumfiles = array();
+
 gf_siteHeader();
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$id = COM_applyFilter($_REQUEST['id'],true);
-$showtopic = COM_applyFilter($_REQUEST['showtopic'],true);
-$editpid = COM_applyFilter($_POST['editpid'],true);
-$forum = COM_applyFilter($_REQUEST['forum'],true);
-$method = COM_applyFilter($_REQUEST['method']);
-$page = COM_applyFilter($_REQUEST['page'],true);
-$notify = COM_applyFilter($_POST['notify']);
-$preview = COM_applyFilter($_REQUEST['preview']);
+$id         = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
+$showtopic  = isset($_REQUEST['showtopic']) ? COM_applyFilter($_REQUEST['showtopic'],true) : 0;
+$editpid    = isset($_POST['editpid']) ? COM_applyFilter($_POST['editpid'],true) : 0;
+$forum      = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
+$method     = isset($_REQUEST['method']) ? COM_applyFilter($_REQUEST['method']) : 0;
+$page       = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
+$notify     = isset($_POST['notify']) ? COM_applyFilter($_POST['notify']) : '';
+$preview    = isset($_REQUEST['preview']) ? COM_applyFilter($_REQUEST['preview']) : '';
 if (isset($_REQUEST['postmode'])) {
     $postmode = COM_applyFilter($_REQUEST['postmode']);
 } else {
@@ -60,22 +63,21 @@ if (isset($_REQUEST['postmode'])) {
         $postmode = 'html';
     }
 }
-
-$postmode_switch = COM_applyFilter($_REQUEST['postmode_switch'],true);
+$postmode_switch = isset($_REQUEST['postmode_switch']) ? COM_applyFilter($_REQUEST['postmode_switch'],true) : 0;
 
 ForumHeader($forum,$showtopic);
 
 //Check is anonymous users can post
 forum_chkUsercanPost();
 
-if(empty($_USER['uid']) OR $_USER['uid'] == 1 ) {
+if(empty($_USER['uid']) || $_USER['uid'] == 1 ) {
     $uid = 1;
 } else {
     $uid = $_USER['uid'];
 }
 
 // ADD EDITED TOPIC
-if (($_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_POST['editpost'] == 'yes')) {
+if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_POST['editpost'] == 'yes')) {
     $editid = COM_applyFilter($_POST['editid'],true);
     $forum = COM_applyFilter($_POST['forum'],true);
     $date = time();
@@ -132,6 +134,17 @@ if (($_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_POST['editpost'] == 'yes'))
             $sql .= "mood='$mood', sticky='$sticky', locked='$locked' WHERE (id='$editid')";
             DB_query($sql);
 
+            /* Check for any uploaded files  - during save of edit */
+            gf_check4files($editid);
+
+            // Check and see if there are no [file] bbcode tags in content and reset the show_inline value
+            // This is needed in case user had used the file bbcode tag and then removed it
+            $imagerecs = '';
+            $imagerecs = implode(',',$forumfiles);
+            $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id=$editid ";
+            if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
+            DB_query($sql);
+
             $topicparent = DB_getITEM($_TABLES['gf_topic'],"pid","id='$editid'");
             if ($topicparent == 0) {
                 $topicparent = $editid;
@@ -165,16 +178,16 @@ if (($_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_POST['editpost'] == 'yes'))
 }
 
 // ADD TOPIC
-if ($_POST['submit'] == $LANG_GF01['SUBMIT']) {
+if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
     $msg = '';
     $date = time();
     $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
     if($method == 'newtopic') {
         if($_POST['aname'] != '') {
-            $name = gf_preparefordb($_POST['aname'],'text');
+            $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['aname']))),'text');
         } else {
-            $name = gf_preparefordb($_POST['name'],'text');
+            $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
         }
 
         if ( function_exists('plugin_itemPreSave_captcha') ) {
@@ -216,9 +229,7 @@ if ($_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     $postmode = gf_chkpostmode($postmode,$postmode_switch);
                     $subject = gf_preparefordb(strip_tags($_POST['subject']),'text');
 
-                    if ( strlen ( $subject ) > 100 ) {
-                        $subject = substr($subject,0,99);
-                    }
+                    $subject = COM_truncate($subject,100);
                     $comment = gf_preparefordb($_POST['comment'],$postmode);
                     $mood = COM_applyFilter($_POST['mood']);
                     $locked = 0;
@@ -236,6 +247,17 @@ if ($_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
                     // Find the id of the last inserted topic
                     list ($lastid) = DB_fetchArray(DB_query("SELECT max(id) FROM {$_TABLES['gf_topic']} "));
+
+                    /* Check for any uploaded files - during add of new topic */
+                    gf_check4files($lastid);
+
+                    // Check and see if there are no [file] bbcode tags in content and reset the show_inline value
+                    // This is needed in case user had used the file bbcode tag and then removed it
+                    $imagerecs = '';
+                    $imagerecs = implode(',',$forumfiles);
+                    $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id=$lastid ";
+                    if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
+                    DB_query($sql);
 
                     // Update forums record
                     DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count=post_count+1, topic_count=topic_count+1, last_post_rec=$lastid WHERE forum_id=$forum");
@@ -283,9 +305,9 @@ if ($_POST['submit'] == $LANG_GF01['SUBMIT']) {
         if ( $msg == '' ) {
             //Add Reply
             if($_POST['aname'] != '') {
-                $name = gf_preparefordb($_POST['aname'],'text');
+                $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['aname']))),'text');
             } else {
-                $name = gf_preparefordb($_POST['name'],'text');
+                $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
             }
             if($name != '' && strlen(trim($_POST['comment'])) > $CONF_FORUM['min_comment_length']) {
 
@@ -327,6 +349,17 @@ if ($_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     // Find the id of the last inserted topic
                     list ($lastid) = DB_fetchArray(DB_query("SELECT max(id) FROM {$_TABLES['gf_topic']} "));
 
+                    /* Check for any uploaded files  - during adding reply post */
+                    gf_check4files($lastid);
+
+                    // Check and see if there are no [file] bbcode tags in content and reset the show_inline value
+                    // This is needed in case user had used the file bbcode tag and then removed it
+                    $imagerecs = '';
+                    $imagerecs = implode(',',$forumfiles);
+                    $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id=$lastid ";
+                    if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
+                    DB_query($sql);
+
                     DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies + 1, lastupdated = $date,last_reply_rec=$lastid WHERE id=$id");
                     DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count=post_count+1, last_post_rec=$lastid WHERE forum_id=$forum");
 
@@ -367,17 +400,18 @@ if ($_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
 
 // EDIT MESSAGE
-$comment = COM_stripslashes( $_POST['comment'] );
+$comment = isset($_POST['comment']) ? COM_stripslashes( $_POST['comment'] ) : '';
 
 if ($id > 0) {
-    $sql  = "SELECT a.forum,a.pid,a.comment,a.date,a.locked,a.subject,a.mood,a.sticky,a.uid,a.name,a.postmode,b.forum_cat,b.forum_name,b.is_readonly,c.cat_name ";
+    $sql  = "SELECT a.forum,a.pid,a.comment,a.date,a.locked,a.subject,a.mood,a.sticky,a.uid,a.name,a.postmode,b.forum_cat,b.forum_name,b.is_readonly,c.cat_name,";
+    $sql .= "b.forum_cat,b.forum_name,b.is_readonly,b.use_attachment_grpid,c.cat_name ";
     $sql .= "FROM {$_TABLES['gf_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON b.forum_id=a.forum ";
     $sql .= "LEFT JOIN {$_TABLES['gf_categories']} c on c.id=b.forum_cat ";
     $sql .= "WHERE a.id=$id";
     $edittopic = DB_fetchArray(DB_query($sql),false);
 } else {
-    $sql  = "SELECT a.forum_name,a.is_readonly,b.cat_name ";
+    $sql  = "SELECT a.forum_name,a.is_readonly,a.use_attachment_grpid,b.cat_name ";
     $sql .= "FROM {$_TABLES['gf_forums']} a ";
     $sql .= "LEFT JOIN {$_TABLES['gf_categories']} b on b.id=a.forum_cat ";
     $sql .= "WHERE a.forum_id=$forum";
@@ -421,19 +455,30 @@ if ($method == 'edit') {
 }
 
 // PREVIEW TOPIC
-if ($_REQUEST['preview'] == $LANG_GF01['PREVIEW']) {
+$numAttachments = 0;
+
+if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']) {
     $previewitem = array();
     if ($method == 'edit') {
         $previewitem['uid']  = $edittopic['uid'];
         $previewitem['name'] = $edittopic['name'];
+        /* Check for any uploaded files */
+        $editpost = COM_applyfilter($_POST['id'],true);
+        $previewitem['id'] = $editpost;
+        gf_check4files($editpost);
+        $numAttachments = DB_count($_TABLES['gf_attachments'],'topic_id',$editpost);
+
     } else {
         if ($uid > 1) {
-            $previewitem['name'] = stripslashes($_POST['aname']);
+            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes($_POST['aname']))));
             $previewitem['uid'] = $_USER['uid'];
         } else {
-            $previewitem['name'] = stripslashes(urldecode($_POST['aname']));
+            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes(urldecode($_POST['aname'])))));
             $previewitem['uid'] = 1;
         }
+        /* Check for any uploaded files */
+        gf_check4files($_POST['uniqueid'],true);
+        $numAttachments = DB_count($_TABLES['gf_attachments'],array('topic_id','tempfile'),array($_POST['uniqueid'],1));
     }
     $previewitem['date'] = time();
     $subject = $_POST['subject'];
@@ -541,7 +586,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     if ($method == 'postreply' OR ($method == 'edit' AND $subject == '')) {
         $subject = $edittopic['subject'];
     } else {
-        $subject = COM_stripslashes($subject);
+        $subject = isset($subject) ? COM_stripslashes($subject) : '';
     }
 
     $topicnavbar = new Template($_CONF['path_layout'] . 'forum/layout');
@@ -552,6 +597,19 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $topicnavbar->set_var ('site_url', $_CONF['site_url']);
     $topicnavbar->set_var ('layout_url', $_CONF['layout_url']);
     $topicnavbar->set_var ('phpself', $_CONF['site_url'] .'/forum/createtopic.php');
+
+    if(empty($subject)) {
+        $topicnavbar->set_var('show_subject','none');
+    }
+
+    if($method == 'newtopic' || $method == 'postreply') {
+        $uniqueid = isset($_POST['uniqueid']) ? COM_applyFilter($_POST['uniqueid'],true) : 0;
+        if ($uniqueid == 0) {
+              $topicnavbar->set_var('uniqueid',mt_rand());
+        } else {
+            $topicnavbar->set_var('uniqueid',$uniqueid);
+        }
+    }
 
     if ($method == 'newtopic' AND $forum > 0 ) {  // User creating a newtopic
         $topicnavbar->set_var ('forum_id', $forum);
@@ -590,12 +648,22 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $topicnavbar->set_var ('LANG_fhelp', $LANG_GF01['f_help']);
     $topicnavbar->set_var ('LANG_hhelp', $LANG_GF01['h_help']);
 
-    if (forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
+    if ( !isset($_USER['uid']) ) {
+        $_USER['uid'] = 1;
+    }
+    if (isset($edittopic['forum']) && forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
         $editmoderator = TRUE;
         $topicnavbar->set_var ('hidden_modedit', '1');
     } else {
         $topicnavbar->set_var ('hidden_modedit', '0');
         $editmoderator = FALSE;
+    }
+
+    if (empty($GLOBALS['gf_errmsg'])) {
+        $topicnavbar->set_var('show_alert','none');
+    } else {
+        $topicnavbar->set_var('show_alert','');
+        $topicnavbar->set_var('error_msg',$GLOBALS['gf_errmsg']);
     }
 
     if($method == 'newtopic') {
@@ -608,12 +676,12 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         if ( $preview != 'Preview' ) {
             $subject = $LANG_GF01['RE'] . $subject;
         }
-        $quoteid = COM_applyFilter($_REQUEST['quoteid'],true);
+        $quoteid = isset($_REQUEST['quoteid']) ? COM_applyFilter($_REQUEST['quoteid'],true) : 0;
         $edittopic['mood'] = '';
         if($quoteid > 0) {
             $quotesql = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$quoteid'");
             $quotearray = DB_fetchArray($quotesql);
-            $quotearray['comment'] = stripslashes($quotearray['comment']);
+            $quotearray['comment'] = $quotearray['comment'];
             if ($CONF_FORUM['pre2.5_mode'] == true ) {
                 if ( $quotearray['postmode'] == 'html' || $quotearray['postmode'] == 'HTML' ) {
                     if (!class_exists('StringParser') ) {
@@ -667,7 +735,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         $submissionformtop->set_var ('layout_url', $_CONF['layout_url']);
         $submissionformtop->set_var ('post_message', $postmessage);
         $submissionformtop->set_var ('LANG_NAME', $LANG_GF02['msg33']);
-        $submissionformtop->set_var ('name', stripcslashes($_POST['aname']));
+        $submissionformtop->set_var ('name', gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes(isset($_POST['aname']) ? $_POST['aname'] : '')))));
         $submissionformtop->parse ('output', 'submissionformtop');
         echo $submissionformtop->finish($submissionformtop->get_var('output'));
 
@@ -697,17 +765,17 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     }
 
     if ($CONF_FORUM['show_moods']) {
-        if ($_POST['mood'] != '') {
-            $edittopic['mood'] = $_POST['mood'];
+        if (isset($_POST['mood']) && $_POST['mood'] != '') {
+            $edittopic['mood'] = COM_applyFilter($_POST['mood']);
         }
-        if ($edittopic['mood'] == '') {
+        if (!isset($edittopic['mood']) || $edittopic['mood'] == '') {
             $moodoptions = '<option value="" selected="selected">' . $LANG_GF01['NOMOOD'] . '</option>';
         }
         if ($dir = @opendir("{$CONF_FORUM['imgset_path']}/moods")) {
             while (($file = readdir($dir)) !== false) {
                 if ((strlen($file) > 3) && eregi('gif',$file)) {
                     $file = str_replace(array('.gif','.jpg'), array('',''), $file);
-                    if($file == $edittopic['mood']) {
+                    if(isset($edittopic['mood']) && $file == $edittopic['mood']) {
                         $moodoptions .= "<option selected=\"selected\">" . $file. "</option>";
                     } else {
                         $moodoptions .= "<option>" .$file. "</option>";
@@ -807,6 +875,9 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             $sql .= "(SELECT id FROM {$_TABLES['gf_watch']} WHERE ((forum_id='{$edittopic['forum']}') AND (topic_id='0') and (uid='$uid')) ) ";
             $notifyquery = DB_query($sql);
         } else {
+            if ( !isset($edittopic['forum']) ) {
+                $edittopic['forum'] = '';
+            }
             $sql = "SELECT id FROM {$_TABLES['gf_watch']} WHERE ((topic_id='$notifyTopicid' AND uid='$uid') ";
             $sql .= "OR ((forum_id='{$edittopic['forum']}') AND (topic_id='0') and (uid='$uid')))";
             $notifyquery = DB_query($sql);
@@ -843,6 +914,9 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             }
             $locked_prompt = $LANG_GF02['msg109']. '<br' . XHTML . '><input type="checkbox" name="locked_switch" ' .$locked_val. ' value="1"' . XHTML . '>';
             $sticky_prompt = $LANG_GF02['msg61']. '<br' . XHTML . '><input type="checkbox" name="sticky_switch" ' .$sticky_val. ' value="1"' . XHTML . '>';
+        } else {
+            $locked_prompt = '';
+            $sticky_prompt = '';
         }
     } else {
         if ($uid > 1) {
@@ -868,6 +942,9 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
     }
 
+    $submissionform_main = new Template($_CONF['path_layout'] . 'forum/layout');
+    $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main.thtml'));
+
     if($method == 'edit') {
         if ($CONF_FORUM['pre2.5_mode']) {
             /* Reformat code blocks - version 2.3.3 and prior */
@@ -880,28 +957,43 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
              $edit_prompt .= 'checked="checked" ';
         }
         $edit_prompt .= 'value="1"' . XHTML . '>';
-
+        $submissionform_main->set_var('attachments',gf_showattachments($id,'edit'));
     } else {
         $edit_prompt = '&nbsp;';
+        $submissionform_main->set_var('attachments','');
+        if ($uniqueid > 0) {
+            $submissionform_main->set_var('attachments',gf_showattachments($uniqueid,'edit'));
+        }
     }
 
     $subject = str_replace('"', '&quot;',$subject);
 
-    $submissionform_main = new Template($_CONF['path_layout'] . 'forum/layout');
-    $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main.thtml'));
-    $submissionform_main->set_unknowns('keep');
+//    $submissionform_main->set_unknowns('keep');
     $submissionform_main->set_var ('LANG_SUBJECT', $LANG_GF01['SUBJECT']);
     $submissionform_main->set_var ('LANG_OPTIONS', $LANG_GF01['OPTIONS']);
-    $submissionform_main->set_var ('mode_prompt', $mode_prompt);
+    $submissionform_main->set_var ('mode_prompt', isset($mode_prompt) ? $mode_prompt : '');
     $submissionform_main->set_var ('notify_prompt', $notify_prompt);
     $submissionform_main->set_var ('locked_prompt', $locked_prompt);
-    $submissionform_main->set_var ('sticky_prompt', $sticky_prompt);
+    $submissionform_main->set_var ('sticky_prompt', isset($sticky_prompt) ? $sticky_prompt : '');
     $submissionform_main->set_var ('edit_prompt', $edit_prompt);
     $submissionform_main->set_var ('LANG_SUBMIT', $LANG_GF01['SUBMIT']);
     $submissionform_main->set_var ('LANG_PREVIEW', $LANG_GF01['PREVIEW']);
     $submissionform_main->set_var ('required', $required);
     $submissionform_main->set_var ('subject', $subject);
     $submissionform_main->set_var ('smilies', $smilies);
+    $submissionform_main->set_var ('LANG_attachments',$LANG_GF10['attachments']);
+    $submissionform_main->set_var ('LANG_maxattachments',sprintf($LANG_GF10['maxattachments'],$CONF_FORUM['maxattachments']));
+    // Check and see if the filemgmt plugin is installed and enabled
+    if (function_exists('filemgmt_buildAccessSql')) {
+        // Generate the select dropdown HTML for the filemgmt categories
+        $submissionform_main->set_var('filemgmt_category_options',gf_makeFilemgmtCatSelect($uid));
+        $submissionform_main->set_var('LANG_usefilemgmt',$LANG_GF10['usefilemgmt']);
+        $submissionform_main->set_var('LANG_description', $LANG_GF10['description']);
+        $submissionform_main->set_var('LANG_category', $LANG_GF10['category']);
+    } else {
+        $submissionform_main->set_var('show_filemgmt_option','none');
+    }
+
     if ($uid == 1) {
         $submissionform_main->set_var ('hide_notify','none');
     }
@@ -909,6 +1001,21 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         plugin_templatesetvars_captcha('forum', $submissionform_main);
     } else {
         $submissionform_main->set_var ('captcha','');
+    }
+
+    // Check and see if user is allowed to add attachments and has not exceeded max allowed
+    if ($method == 'newtopic') {
+        if (!SEC_inGroup($newtopic['use_attachment_grpid'])) {
+            $submissionform_main->set_var('use_attachments','none');
+        } elseif($numAttachments >= $CONF_FORUM['maxattachments']) {
+            $submissionform_main->set_var('show_attachments','none');
+        }
+    } else {
+        if (!SEC_inGroup($edittopic['use_attachment_grpid'])) {
+           $submissionform_main->set_var('use_attachments','none');
+        } elseif ($numAttachments >= $CONF_FORUM['maxattachments']) {
+            $submissionform_main->set_var('show_attachments','none');
+        }
     }
 
     if($method == 'edit') {
@@ -936,6 +1043,9 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
 
     //Topic Review
+    if ( !isset($_POST['editpost']) ) {
+        $_POST['editpost'] = '';
+    }
     if(($method != 'newtopic' && $_POST['editpost'] != 'yes') && ($method == 'postreply' || $preview == 'Preview')) {
         if ($CONF_FORUM['show_topicreview']) {
             echo "<iframe src=\"{$_CONF['site_url']}/forum/viewtopic.php?mode=preview&amp;showtopic=$id&amp;onlytopic=1&amp;lastpost=true\" height=\"300\" width=\"100%\"></iframe>";
@@ -959,7 +1069,7 @@ gf_siteFooter();
 function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
     global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$CONF_FORUM;
 
-    $pid = DB_getItem($_TABLES['gf_topic'],pid,"id='$topicid'");
+    $pid = DB_getItem($_TABLES['gf_topic'],'pid',"id='$topicid'");
     if ($pid == 0) {
       $pid = $topicid;
     }

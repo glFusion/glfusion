@@ -7,7 +7,7 @@
         <td colspan="5" class="pluginHeader" style="padding:5px;text-align:right;white-space:nowrap;">{LANG_ACTIVITY}&nbsp;<input type="checkbox" name="chkactivity" value="1" {chk_activity} onclick="submit();"{xhtml}></td>
     </tr>
 </table>
-<table width="100%" border="0" cellspacing="1" cellpadding="3" class="plugin" style="margin-bottom:10px;">
+<table width="100%" border="0" cellspacing="1" cellpadding="3" class="plugin" style="margin-bottom:10px;">    
     <tr>
         <td width="40" class="pluginBreadCrumbs pluginCellTitle aligncenter" style="padding:2px 0px 2px 5px;"><a href="{phpself}?order=1&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}&amp;chkactivity={chkactivity}">{LANG_Heading1}</a></td>
         <td class="pluginBreadCrumbs pluginCellTitle" style="padding:2px 0px 2px 5px;"><a href="{phpself}?order=2&amp;prevorder={prevorder}&amp;direction={direction}&amp;page={page}&amp;chkactivity={chkactivity}">{LANG_Heading2}</a></td>

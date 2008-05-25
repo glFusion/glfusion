@@ -37,8 +37,8 @@ function gf_RadioButtonSetting(&$template,$title,$help,$parm,$value,$id=1) {
     $template->set_var ('LANG_title', $title);
     $template->set_var ('LANG_description', $help);
     $template->set_var ('parm_name', $parm);
-    $template->set_var ('option_yes', ($value)? 'checked="checked"': '');
-    $template->set_var ('option_no', ($value)? '' : 'checked="checked"');
+    $template->set_var ('option_yes', ($value)? 'CHECKED=CHECKED': '');
+    $template->set_var ('option_no', ($value)? '' : 'CHECKED=CHECKED');
     $template->parse ("group{$id}_options", 'radioBtn_setting',true);
 }
 
@@ -64,7 +64,7 @@ echo COM_siteHeader();
 echo COM_startBlock($LANG_GF92['gfsettings']);
 echo ppNavbar($navbarMenu,$LANG_GF06['2']);
 
-if($_POST['savesettings'] == 'yes'){
+if(isset($_POST['savesettings']) && $_POST['savesettings'] == 'yes'){
 
     $registrationrequired = COM_applyFilter($_POST['registrationrequired'],true);
     $registerpost = COM_applyFilter($_POST['registerpost'],true);
@@ -182,7 +182,7 @@ $CONF_FORUM['views_tobe_popular']     = $A['popular'];              // * Added a
 $CONF_FORUM['show_subject_length']    = $A['viewtopicnumchars'];
 $CONF_FORUM['show_topics_perpage']    = $A['topicsperpage'];
 $CONF_FORUM['show_posts_perpage']     = $A['postsperpage'];
-$CONF_FORUM['statusmsg_pause']        = $A['statusmsg_pause'];      // Added as of Version 2.4
+// $CONF_FORUM['statusmsg_pause']        = $A['statusmsg_pause'];      // Added as of Version 2.4
 
 
 $settings = new Template($_CONF['path_layout'] . 'forum/layout/admin');

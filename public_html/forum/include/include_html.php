@@ -4,14 +4,14 @@
 // | Geeklog Forums Plugin 2.6 for Geeklog - The Ultimate Weblog               |
 // | Release date: Oct 30,2006                                                 |
 // +---------------------------------------------------------------------------+
-// | includehtml.php                                                           |
+// | includehtml.php                                                           |  
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2000,2001,2002,2003 by the following authors:               |
 // | Geeklog Author: Tony Bibbs       - tony@tonybibbs.com                     |
 // +---------------------------------------------------------------------------+
 // | Plugin Authors                                                            |
 // | Blaine Lang,                  blaine@portalparts.com, www.portalparts.com |
-// | Version 1.0 co-developer:     Matthew DeWyer, matt@mycws.com              |
+// | Version 1.0 co-developer:     Matthew DeWyer, matt@mycws.com              |   
 // | Prototype & Concept :         Mr.GxBlock, www.gxblock.com                 |
 // +---------------------------------------------------------------------------+
 // |                                                                           |

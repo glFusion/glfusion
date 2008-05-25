@@ -50,7 +50,7 @@ $LANG_GF00 = array (
     'access_denied_msg' => 'Only Root Users have Access to this Page.  Your user name and IP have been recorded.',
     'admin'             => 'Plugin Admin',
     'install_header'    => 'Install/Uninstall Plugin',
-    'installed'         => 'The Plugin and Block are now installed,<p><i>Enjoy,<br' . XHTML . '><a href="MAILTO:langmail@sympatico.ca">Blaine</a></i>',
+    'installed'         => 'The Plugin and Block are now installed,<p><i>Enjoy,<br><a href="MAILTO:langmail@sympatico.ca">Blaine</a></i>',
     'uninstalled'       => 'The Plugin is Not Installed',
     'install_success'   => 'Installation Successful<p><b>Next Steps</b>:
         <ol><li>Use the Forum Admin to configure your new forum
@@ -62,7 +62,7 @@ $LANG_GF00 = array (
     'uninstall_msg'     => 'Plugin Successfully Uninstalled',
     'install'           => 'Install',
     'uninstall'         => 'UnInstall',
-    'enabled'           => '<br' . XHTML . '>Plugin is installed and enabled.<br' . XHTML . '>Disable first if you want to De-Install it.<p>',
+    'enabled'           => '<br>Plugin is installed and enabled.<br>Disable first if you want to De-Install it.<p>',
     'warning'           => 'Forum De-Install Warning',
     'uploaderr'         => 'File Upload Error'
 );
@@ -183,7 +183,7 @@ $LANG_GF01['forumname']      = '';   // Enter name here if you want it to show i
 $LANG_GF01['category']       = 'Category: ';
 $LANG_GF01['loginreqview']   = '<B>Sorry you must %s register</A> or %s login </A> to use these forums</B>';
 $LANG_GF01['loginreqpost']   = '<B>Sorry you must register or login to post on these forums</B>';
-$LANG_GF01['searchresults']  = '<b>»</b> Your search for <b>%s</b> %s author returned <b>%s</b> results:</b><br' . XHTML . '><br' . XHTML . '>';
+$LANG_GF01['searchresults']  = '<b>»</b> Your search for <b>%s</b> %s author returned <b>%s</b> results:</b><br><br>';
 $LANG_GF01['feature_not_on'] = 'Feature not enabled';
 $LANG_GF01['nolastpostmsg']  = 'N/A';
 $LANG_GF01['no_one']         = 'No one.';
@@ -234,7 +234,7 @@ $LANG_GF01['TOP']            = 'Top of Post';
 $LANG_GF01['PRINTABLE']      = 'Printable Version';
 $LANG_GF01['ForumProfile']   = 'Forum Options';
 $LANG_GF01['USERPREFS']      = 'User Preferences';
-$LANG_GF01['SPEEDLIMIT']     = '"Your last comment was %s seconds ago.<br' . XHTML . '>This site requires at least %s seconds between forum posts."';
+$LANG_GF01['SPEEDLIMIT']     = '"Your last comment was %s seconds ago.<br>This site requires at least %s seconds between forum posts."';
 $LANG_GF01['ACCESSERROR']    = 'ACCESS ERROR';
 $LANG_GF01['LEGEND']         = 'Legend';
 $LANG_GF01['ACTIONS']        = 'Actions';
@@ -253,6 +253,7 @@ $LANG_GF01['INDEXPAGE']      = 'Forum Index';
 $LANG_GF01['FEATURE']        = 'Feature';
 $LANG_GF01['SETTING']        = 'Setting';
 $LANG_GF01['MARKALLREAD']    = 'Mark All Read';
+$LANG_GF01['PREVIEW_HEADER'] = 'Post Preview';
 
 // Language for bbcode toolbar
 $LANG_GF01['CODE']           = 'Code';
@@ -297,26 +298,26 @@ $LANG_GF01['h_help']         = "Click to view more detailed help";
 
 
 $LANG_GF02['msg01']    = 'Sorry you must register to use these forums';
-$LANG_GF02['msg02']    = 'You should not be here!<br' . XHTML . '>Restricted access to this forum only';
+$LANG_GF02['msg02']    = 'You should not be here!<br>Restricted access to this forum only';
 $LANG_GF02['msg03']    = '';
 $LANG_GF02['msg04']    = '';
-$LANG_GF02['msg05']    = '<center><i>Sorry, no topics have been created yet.</center></i>';
+$LANG_GF02['msg05']    = '<CENTER><I>Sorry, no topics have been created yet.</CENTER></I>';
 $LANG_GF02['msg06']    = ' new posts since your last visit';
 $LANG_GF02['msg07']    = 'Online Users:';
-$LANG_GF02['msg08']    = '<br' . XHTML . '><b>Total Registered Users to Date:</b> %s';
-$LANG_GF02['msg09']    = '<br' . XHTML . '><b>Total Posts to Date:</b> %s <br' . XHTML . '>';
-$LANG_GF02['msg10']    = '<b>Total Topics to Date:</b> %s <br' . XHTML . '>';
+$LANG_GF02['msg08']    = '<br><B>Total Registered Users to Date:</B> %s';
+$LANG_GF02['msg09']    = '<br><B>Total Posts to Date:</B> %s <br>';
+$LANG_GF02['msg10']    = '<B>Total Topics to Date:</B> %s <br>';
 $LANG_GF02['msg11']    = 'Back to Forum Index';
 $LANG_GF02['msg12']    = 'Back to Main Homepage';
 $LANG_GF02['msg13']    = 'Registration Required, you currently must register or login to use this feature.';
-$LANG_GF02['msg14']    = 'Sorry, You have been banned from making entries.<br' . XHTML . '>';
+$LANG_GF02['msg14']    = 'Sorry, You have been banned from making entries.<br>';
 $LANG_GF02['msg15']    = 'If you feel this is an error, contact <A HREF="mailto:%s?subject=Forum IP Ban">Site Admin</A>.';
 $LANG_GF02['msg16']    = 'These are the most popular posts, you may order them by views or replies.';
 $LANG_GF02['msg17']    = 'Message Edited, Your message has been edited sucessfully. Returning to your message.';
 $LANG_GF02['msg18']    = 'Error! Not all required fields were completed or were too short in length.';
 $LANG_GF02['msg19']    = 'Your message has been posted.';
 $LANG_GF02['msg20']    = 'Reply Added, Your reply has been posted. Returning to Forum';
-$LANG_GF02['msg21']    = 'Sorry, you are unauthorized to do this. Please <a href="javascript:history.back()">Go Back</a> or <a href="%s/users.php?mode=login">Login</a><br' . XHTML . '><br' . XHTML . '>';
+$LANG_GF02['msg21']    = 'Sorry, you are unauthorized to do this. Please <a href="javascript:history.back()">Go Back</a> or <a href="%s/users.php?mode=login">Login</a><br><br>';
 $LANG_GF02['msg22']    = '- Forum Post Notification';
 $LANG_GF02['msg23a']   = "A reply has been made to the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum. ";
 $LANG_GF02['msg23b']   = "A new topic '%s' has been posted by %s in the %s forum on the %s website. You may view it at:\n%s/forum/viewtopic.php?showtopic=%s\n";
@@ -336,19 +337,19 @@ $LANG_GF02['msg35']    = 'Website:';
 $LANG_GF02['msg36']    = 'Mood:';
 $LANG_GF02['msg37']    = 'Message:';
 $LANG_GF02['msg38']    = 'Notify me of replies ';
-$LANG_GF02['msg39']    = '<br' . XHTML . '>There are no topic reviews for this new topic.';
-$LANG_GF02['msg40']    = '<br' . XHTML . '>Sorry, but you have already asked to be notified of replies to this topic.<br' . XHTML . '><br' . XHTML . '>';
-$LANG_GF02['msg41']    = '<br' . XHTML . '>Thank you! You will now be notified of replies to topic %s .<br' . XHTML . '><br' . XHTML . '>';
+$LANG_GF02['msg39']    = '<br>There are no topic reviews for this new topic.';
+$LANG_GF02['msg40']    = '<br>Sorry, but you have already asked to be notified of replies to this topic.<br><br>';
+$LANG_GF02['msg41']    = '<br>Thank you! You will now be notified of replies to topic %s .<br><br>';
 $LANG_GF02['msg42']    = 'Thank you! You have now deleted notifications on this topic.';
 $LANG_GF02['msg43']    = 'Are you sure you want to delete this notification?.';
 $LANG_GF02['msg44']    = '<p style="margin:0px; padding:5px;">You have no notifications currently.</p>';
 $LANG_GF02['msg45']    = 'Search the Forum';
 $LANG_GF02['msg46']    = 'You can search the forum by entering keywords:';
 $LANG_GF02['msg47']    = 'You can also specify an author to search under:';
-$LANG_GF02['msg48']    = '<br' . XHTML . '>The Chatterblock Plugin needs to be installed first.';
+$LANG_GF02['msg48']    = '<br>The Chatterblock Plugin needs to be installed first.';
 $LANG_GF02['msg49']    = '(Read %s times) ';
 $LANG_GF02['msg50']    = 'Signature n/a';
-$LANG_GF02['msg51']    = "%s\n\n<br' . XHTML . '>[Edited at %s by %s]";
+$LANG_GF02['msg51']    = "%s\n\n<br>[Edited at %s by %s]";
 $LANG_GF02['msg52']    = 'Confirmed:';
 $LANG_GF02['msg53']    = 'Returning to topic..';
 $LANG_GF02['msg54']    = 'Post Edited.';
@@ -362,26 +363,26 @@ $LANG_GF02['msg61']    = 'Sticky Topic';
 $LANG_GF02['msg62']    = 'Notify me of replies';
 $LANG_GF02['msg63']    = 'Profile';
 $LANG_GF02['msg64']    = 'Are you sure you want to delete topic %s titled: %s ?';
-$LANG_GF02['msg65']    = '<br' . XHTML . '>This is a parent topic, so all replies posted to it will also be deleted.';
+$LANG_GF02['msg65']    = '<br>This is a parent topic, so all replies posted to it will also be deleted.';
 $LANG_GF02['msg66']    = 'Confirm Delete Post';
 $LANG_GF02['msg67']    = 'Edit Forum Post';
 $LANG_GF02['msg68']    = 'Note: BE CAREFUL WHEN YOU BAN, only admins have the rights to unban someone.';
 $LANG_GF02['msg69']    = 'Do you really want to ban the ip address: %s?';
 $LANG_GF02['msg70']    = 'Confirm Ban';
-$LANG_GF02['msg71']    = 'No function selected, choose a post and then a moderator function.<br' . XHTML . '>Note: You must be a moderator to perform these functions.';
+$LANG_GF02['msg71']    = 'No function selected, choose a post and then a moderator function.<br>Note: You must be a moderator to perform these functions.';
 $LANG_GF02['msg72']    = 'Warning, you do not have rights to perform this moderation function.';
 $LANG_GF02['msg74']    = 'Latest %s Forum Posts';
 $LANG_GF02['msg75']    = 'Top %s Topics By Views';
 $LANG_GF02['msg76']    = 'Top %s Topics By Posts';
-$LANG_GF02['msg77']    = '<br' . XHTML . '><p style="padding-left:10px;">You should not be here!<br' . XHTML . '>Restricted access to this forum only.<p />';
-$LANG_GF02['msg78']    = '<br' . XHTML . '>You should not be here!<br' . XHTML . '>Invalid Forum.';
+$LANG_GF02['msg77']    = '<br><p style="padding-left:10px;">You should not be here!<br>Restricted access to this forum only.<p />';
+$LANG_GF02['msg78']    = '<br>You should not be here!<br>Invalid Forum.';
 $LANG_GF02['msg81']    = '- Topic Edit Notification';
 $LANG_GF02['msg82']    = '<p>Your message "%s" has been edited by the moderator %s.<p>';
-$LANG_GF02['msg83']    = '<br' . XHTML . '><br' . XHTML . '>You need to be signed in to use this forum feature.<p />';
+$LANG_GF02['msg83']    = '<br><br>You need to be signed in to use this forum feature.<p />';
 $LANG_GF02['msg84']    = 'Mark all topics read';
 $LANG_GF02['msg85']    = 'Page:';
 $LANG_GF02['msg86']    = '&nbsp;Last %s posts&nbsp;';
-$LANG_GF02['msg87']    = '<br' . XHTML . '>Warning: This topic has been locked by the moderator.<br' . XHTML . '>No additional posts are permitted';
+$LANG_GF02['msg87']    = '<br>Warning: This topic has been locked by the moderator.<br>No additional posts are permitted';
 $LANG_GF02['msg88']    = 'Site Members';
 $LANG_GF02['msg88b']   = 'Forum Activity Only';
 $LANG_GF02['msg89']    = 'My Enabled Notifications';
@@ -447,7 +448,7 @@ $LANG_GF02['msg158']   = 'Last 10 Forum posts by ';
 $LANG_GF02['msg159']   = 'Are you sure you want to DELETE these selected Moderator records?';
 $LANG_GF02['msg160']   = 'View last page of topic';
 $LANG_GF02['msg161']   = 'Return to members list';
-$LANG_GF02['msg162']   = 'To return to the forum index now click <a href="%s">here</a><br' . XHTML . '><p />Default is to  return automatically to view your post.<br' . XHTML . '>If you do not wish to wait, click <a href="%s">here</a> now.';
+$LANG_GF02['msg162']   = 'To return to the forum index now click <a href="%s">here</a><br><p />Default is to  return automatically to view your post.<br>If you do not wish to wait, click <a href="%s">here</a> now.';
 $LANG_GF02['msg163']   = 'Post moved';
 $LANG_GF02['msg164']   = 'Mark all Categories and Topics Read';
 $LANG_GF02['msg165']   = 'ERROR<p />Matching <b>QUOTE</b> tag missing. Unable to format message.<p />';
@@ -487,7 +488,9 @@ $LANG_GF02['msg198']   = 'Update your forum settings';
 $LANG_GF02['msg199']   = 'View or remove forum notifications';
 $LANG_GF02['msg200']   = 'Site members report';
 $LANG_GF02['msg201']   = 'Popular topics';
-$LANG_GF02['msg202']   =  'No new posts';
+$LANG_GF02['msg202']   = 'No new posts';
+$LANG_GF02['msg203']   = 'Click to add bookmark';
+$LANG_GF02['msg204']   = 'Click to remove bookmark';
 
 $LANG_GF02['StatusHeading']   = 'Information Only';
 $LANG_GF02['PostReply']   = 'Post New Reply';
@@ -506,8 +509,8 @@ $LANG_GF03 = array (
     'stick'             => 'Make Sticky',
     'unstick'           => 'Un-Stick',
     'movetopic'         => 'Move Topic',
-    'movetopicmsg'      => '<br' . XHTML . '>Topic to be moved: "<b>%s</b>"',
-    'splittopicmsg'     => '<br' . XHTML . '>Create a new Topic with this post: "<b>%s</b>"<br' . XHTML . '><em>By:</em>&nbsp;%s&nbsp <em>On:</em>&nbsp;%s',
+    'movetopicmsg'      => '<br>Topic to be moved: "<b>%s</b>"',
+    'splittopicmsg'     => '<br>Create a new Topic with this post: "<b>%s</b>"<br><em>By:</em>&nbsp;%s&nbsp <em>On:</em>&nbsp;%s',
     'selectforum'       => 'Select new forum:',
     'lockedpost'        => 'Add Reply Post',
     'splitheading'      => 'Split thread option:',
@@ -572,6 +575,13 @@ $LANG_GF08 = array (
     3   => 'Topic Exception Notifications'
 );
 
+/* Attachment support feature */
+$LANG_GF10['attachments']   = 'Attachments';
+$LANG_GF10['maxattachments'] = 'Max %s allowed';
+$LANG_GF10['usefilemgmt']   = 'Store in File Repository';
+$LANG_GF10['category']      = 'Category';
+$LANG_GF10['description']   = 'Description';
+$LANG_GF10['click2download'] = 'Click on image to download';
 
 $LANG_GF90 = array (
     'viewforums'        => 'Index',
@@ -657,7 +667,7 @@ $LANG_GF92 = array (
     'allownotify'        => 'Allow Notification',
     'allownotifydscp'    => 'Do you want to allow people to be notified?',
     'defaultmode'        => 'Default Post Mode',
-    'defaultmodedscp'    => 'Enable HTML Mode as default - set to Yes.<br' . XHTML . '>Enable Text mode as default (safest) - set to No',
+    'defaultmodedscp'    => 'Enable HTML Mode as default - set to Yes.<br>Enable Text mode as default (safest) - set to No',
     'cbsettings'         => 'Centerblock Settings',
     'cbenable'           => 'Enable Centerblock',
     'cbenabledscp'       => '',
@@ -754,7 +764,7 @@ $LANG_GF93 = array (
     'ModBan'             => 'Ban',
     'addmoderator'       => "Add Record",
     'delmoderator'       => " Delete\nSelected",
-    'moderatorwarning'   => '<b>Warning: No Forums Defined</b><br' . XHTML . '><br' . XHTML . '>Setup Forum Categories and Add at least 1 forum<br' . XHTML . '>before attempting to add Modertators',
+    'moderatorwarning'   => '<b>Warning: No Forums Defined</b><br><br>Setup Forum Categories and Add at least 1 forum<br>before attempting to add Modertators',
     'private'            => 'Private Forum',
     'filtertitle'        => 'Select Moderator records to view',
     'addmessage'         => 'Add new Moderator',
@@ -767,8 +777,8 @@ $LANG_GF93 = array (
     'hidden'             => 'Hidden Forum',
     'hiddendscp'         => 'Forum does not show in the forum index',
     'hideposts'          => 'Hide New posts',
-    'hidepostsdscp'      => 'Updates will not show in the New Posts Blocks or RSS Feeds'
-
+    'hidepostsdscp'      => 'Updates will not show in the New Posts Blocks or RSS Feeds',
+    'attachaccess'       => 'Able to add attachments'
 );
 
 $LANG_GF94 = array (

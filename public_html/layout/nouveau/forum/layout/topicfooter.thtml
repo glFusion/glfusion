@@ -2,7 +2,7 @@
 </table>
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
     <tr>
-        <td width="95%" class="alignleft" height="24" style="white-space:nowrap;padding-left:6px;">{page_generated_time}</td>
+        <td class="alignleft" style="width:95%;height:24px;white-space:nowrap;padding-left:6px;">{page_generated_time}</td>
         <td style="white-space:nowrap;">
         	<table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
@@ -13,6 +13,7 @@
         </td>
     </tr>
 </table>
+<br{xhtml}>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
     <tr>
         <td class="aligncenter" style="white-space:nowrap;">{pagenavigation}</td>

@@ -37,11 +37,11 @@ include_once('gf_functions.php');
 require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
 require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
 
-$mode = COM_applyFilter($_REQUEST['mode']);
-$type = COM_applyFilter($_REQUEST['type']);
-$confirm = COM_applyFilter($_POST['confirm'],true);
-$id = COM_applyFilter($_POST['id'],true);
-$catorder = COM_applyFilter($_POST['catorder'],true);
+$mode = isset($_REQUEST['mode']) ? COM_applyFilter($_REQUEST['mode']) : '';
+$type = isset($_REQUEST['type']) ? COM_applyFilter($_REQUEST['type']) : '';
+$confirm = isset($_POST['confirm']) ? COM_applyFilter($_POST['confirm'],true) : 0;
+$id = isset($_POST['id']) ? COM_applyFilter($_POST['id'],true) : 0;
+$catorder = isset($_POST['catorder']) ? COM_applyFilter($_POST['catorder'],true) : 0;
 
 echo COM_siteHeader();
 echo COM_startBlock($LANG_GF93['gfboard']);
@@ -169,7 +169,9 @@ if ($type == "forum") {
             $no_newposts = COM_applyFilter($_POST['no_newposts'],true);
             $privgroup = COM_applyFilter($_POST['privgroup'],true);
             if ($privgroup == 0) $privgroup = 2;
-            if (forum_addForum($name,$category,$dscp,$order,$privgroup,$is_readonly,$is_hidden,$no_newposts) > 0 ) {
+            $attachmentgroup = COM_applyFilter($_POST['attachmentgroup'],true);
+            if ( $attachmentgroup == 0) $privgroup = 1;
+            if (forum_addForum($name,$category,$dscp,$order,$privgroup,$is_readonly,$is_hidden,$no_newposts,$attachmentgroup) > 0 ) {
                 forum_statusMessage($LANG_GF93['forumadded'],$_CONF['site_admin_url'] .'/plugins/forum/boards.php',$LANG_GF93['forumadded']);
             } else {
                 forum_statusMessage($LANG_GF93['forumaddError'],$_CONF['site_admin_url'] .'/plugins/forum/boards.php',$LANG_GF93['forumaddError']);
@@ -186,7 +188,7 @@ if ($type == "forum") {
                 for ($i = 1; $i <= $nrows; $i++) {
                     $G = DB_fetchArray($result);
                     if ($G['grp_id'] == 2) {
-                        $grouplist .= '<option value="' . $G['grp_id'] . '" Selected >' . $G['grp_name'] . '</option>';
+                        $grouplist .= '<option value="' . $G['grp_id'] . '" selected="selected">' . $G['grp_name'] . '</option>';
                     } else {
                         $grouplist .= '<option value="' . $G['grp_id'] . '">' . $G['grp_name'] . '</option>';
                     }
@@ -204,16 +206,19 @@ if ($type == "forum") {
             $boards_addforum->set_var ('LANG_DESCRIPTION', $LANG_GF01['DESCRIPTION']);
             $boards_addforum->set_var ('LANG_NAME', $LANG_GF01['NAME']);
             $boards_addforum->set_var ('LANG_GROUPACCESS', $LANG_GF93['groupaccess']);
-            
-            $boards_addforum->set_var ('LANG_readonly', $LANG_GF93['readonly']); 
-            $boards_addforum->set_var ('LANG_readonlydscp', $LANG_GF93['readonlydscp']); 
-            $boards_addforum->set_var ('LANG_hidden', $LANG_GF93['hidden']); 
-            $boards_addforum->set_var ('LANG_hiddendscp', $LANG_GF93['hiddendscp']); 
-            $boards_addforum->set_var ('LANG_hideposts', $LANG_GF93['hideposts']); 
-            $boards_addforum->set_var ('LANG_hidepostsdscp', $LANG_GF93['hidepostsdscp']);                                                                         
-            
+            $boards_addforum->set_var ('LANG_ATTACHACCESS', $LANG_GF93['attachaccess']);
+
+            $boards_addforum->set_var ('LANG_readonly', $LANG_GF93['readonly']);
+            $boards_addforum->set_var ('LANG_readonlydscp', $LANG_GF93['readonlydscp']);
+            $boards_addforum->set_var ('LANG_hidden', $LANG_GF93['hidden']);
+            $boards_addforum->set_var ('LANG_hiddendscp', $LANG_GF93['hiddendscp']);
+            $boards_addforum->set_var ('LANG_hideposts', $LANG_GF93['hideposts']);
+            $boards_addforum->set_var ('LANG_hidepostsdscp', $LANG_GF93['hidepostsdscp']);
+
             $boards_addforum->set_var ('groupname', $groupname);
             $boards_addforum->set_var ('grouplist', $grouplist);
+            $boards_addforum->set_var ('attachmentgrouplist', $grouplist);
+
             $boards_addforum->set_var ('LANG_CANCEL', $LANG_GF01['CANCEL']);
             $boards_addforum->set_var ('LANG_SAVE', $LANG_GF01['SAVE']);
             $boards_addforum->parse ('output', 'boards_addforum');
@@ -266,8 +271,12 @@ if ($type == "forum") {
         $is_hidden = COM_applyFilter($_POST['is_hidden'],true);
         $no_newposts = COM_applyFilter($_POST['no_newposts'],true);
         if ($privgroup == 0) $privgroup = 2;
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET forum_name='$name',forum_dscp='$dscp', grp_id=$privgroup,
-                is_hidden='$is_hidden', is_readonly='$is_readonly', no_newposts='$no_newposts' WHERE forum_id='$id'");
+        $attachmentgroup = COM_applyFilter($_POST['attachmentgroup'],true);
+        if ( $attachmentgroup == 0) $privgroup = 1;
+        $sql = "UPDATE {$_TABLES['gf_forums']} SET forum_name='$name',forum_dscp='$dscp', grp_id=$privgroup, ";
+        $sql .= "is_hidden='$is_hidden', is_readonly='$is_readonly', no_newposts='$no_newposts',use_attachment_grpid=$attachmentgroup ";
+        $sql .= "WHERE forum_id='$id'";
+        DB_query($sql);
         forum_statusMessage($LANG_GF93['forumedited'],$_CONF['site_admin_url'] .'/plugins/forum/boards.php',$LANG_GF93['forumedited']);
         echo COM_endBlock();
         echo COM_siteFooter();
@@ -277,17 +286,24 @@ if ($type == "forum") {
         gf_resyncforum($id);
 
     } elseif ($mode == $LANG_GF01['EDIT']) {
-        $sql  = "SELECT forum_name,forum_cat,forum_dscp,grp_id,forum_order,is_hidden,is_readonly,no_newposts ";
+        $sql  = "SELECT forum_name,forum_cat,forum_dscp,grp_id,use_attachment_grpid,forum_order,is_hidden,is_readonly,no_newposts ";
         $sql .= "FROM {$_TABLES['gf_forums']} WHERE (forum_id='$id')";
         $resForum  = DB_query($sql);
-        list ($forum_name, $forum_category,$forum_dscp,$privgroup, $forum_order,$is_hidden,$is_readonly,$no_newposts) = DB_fetchArray($resForum);
+        list ($forum_name, $forum_category,$forum_dscp,$privgroup,$attachgroup,$forum_order,$is_hidden,$is_readonly,$no_newposts) = DB_fetchArray($resForum);
         $resGroups = DB_query("SELECT DISTINCT grp_id,grp_name FROM {$_TABLES['groups']}");
         $nrows     = DB_numRows($resGroups);
+        $grouplist = '';
+        $attachgrouplist = '';
         while ( list($grp, $name) = DB_fetchARRAY($resGroups)) {
             if ($grp == $privgroup) {
-                $grouplist .= '<option value="' .$grp. '" Selected >' . $name. '</option>';
+                $grouplist .= '<option value="' .$grp. '" selected="selected">' . $name. '</option>';
             } else {
                 $grouplist .= '<option value="' .$grp. '">' . $name. '</option>';
+            }
+            if ($grp == $attachgroup) {
+                $attachgrouplist .= '<option value="' .$grp. '" selected="selected">' . $name. '</option>';
+            } else {
+                $attachgrouplist .= '<option value="' .$grp. '">' . $name. '</option>';
             }
         }
 
@@ -302,21 +318,24 @@ if ($type == "forum") {
         $boards_edtforum->set_var ('forum_name', $forum_name);
         $boards_edtforum->set_var ('forum_dscp', $forum_dscp);
         $boards_edtforum->set_var ('forum_order', $forum_order);
-        $boards_edtforum->set_var ('chk_hidden', ($is_hidden) ? 'CHECKED=CHECKED' : '');
-        $boards_edtforum->set_var ('chk_readonly', ($is_readonly) ? 'CHECKED=CHECKED' : '');
-        $boards_edtforum->set_var ('chk_newposts', ($no_newposts) ? 'CHECKED=CHECKED' : '');
+        $boards_edtforum->set_var ('chk_hidden', ($is_hidden) ? 'checked="checked"' : '');
+        $boards_edtforum->set_var ('chk_readonly', ($is_readonly) ? 'checked="checked"' : '');
+        $boards_edtforum->set_var ('chk_newposts', ($no_newposts) ? 'checked="checked"' : '');
         $boards_edtforum->set_var ('LANG_DESCRIPTION', $LANG_GF01['DESCRIPTION']);
         $boards_edtforum->set_var ('LANG_NAME', $LANG_GF01['NAME']);
         $boards_edtforum->set_var ('LANG_GROUPACCESS', $LANG_GF93['groupaccess']);
+        $boards_edtforum->set_var ('LANG_ATTACHACCESS', $LANG_GF93['attachaccess']);
 
-        $boards_edtforum->set_var ('LANG_readonly', $LANG_GF93['readonly']); 
-        $boards_edtforum->set_var ('LANG_readonlydscp', $LANG_GF93['readonlydscp']); 
-        $boards_edtforum->set_var ('LANG_hidden', $LANG_GF93['hidden']); 
-        $boards_edtforum->set_var ('LANG_hiddendscp', $LANG_GF93['hiddendscp']); 
-        $boards_edtforum->set_var ('LANG_hideposts', $LANG_GF93['hideposts']); 
-        $boards_edtforum->set_var ('LANG_hidepostsdscp', $LANG_GF93['hidepostsdscp']);  
-        
+        $boards_edtforum->set_var ('LANG_readonly', $LANG_GF93['readonly']);
+        $boards_edtforum->set_var ('LANG_readonlydscp', $LANG_GF93['readonlydscp']);
+        $boards_edtforum->set_var ('LANG_hidden', $LANG_GF93['hidden']);
+        $boards_edtforum->set_var ('LANG_hiddendscp', $LANG_GF93['hiddendscp']);
+        $boards_edtforum->set_var ('LANG_hideposts', $LANG_GF93['hideposts']);
+        $boards_edtforum->set_var ('LANG_hidepostsdscp', $LANG_GF93['hidepostsdscp']);
+
         $boards_edtforum->set_var ('grouplist', $grouplist);
+        $boards_edtforum->set_var ('attachmentgrouplist', $attachgrouplist);
+
         $boards_edtforum->set_var ('LANG_SAVE', $LANG_GF01['SAVE']);
         $boards_edtforum->set_var ('LANG_CANCEL', $LANG_GF01['CANCEL']);
         $boards_edtforum->parse ('output', 'boards_edtforum');
@@ -377,7 +396,7 @@ while ($A = DB_FetchArray($asql)) {
         /* Check if this is a private forum */
         if ($B['grp_id'] != '2') {
             $grp_name = DB_getItem($_TABLES['groups'],'grp_name', "grp_id='{$B['grp_id']}'");
-            $boards->set_var ('forumdscp', "[{$LANG_GF93['private']}&nbsp;-&nbsp;{$grp_name}]<br>{$B['forum_dscp']}");
+            $boards->set_var ('forumdscp', "[{$LANG_GF93['private']}&nbsp;-&nbsp;{$grp_name}]<br" . XHTML . ">{$B['forum_dscp']}");
         } else {
             $boards->set_var ('forumdscp', $B['forum_dscp']);
         }

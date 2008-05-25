@@ -43,6 +43,8 @@ $_TABLES['gf_moderators']   = $_DB_table_prefix . 'forum_moderators';
 $_TABLES['gf_banned_ip']    = $_DB_table_prefix . 'forum_banned_ip';
 $_TABLES['gf_log']          = $_DB_table_prefix . 'forum_log';
 $_TABLES['gf_userinfo']     = $_DB_table_prefix . 'forum_userinfo';
+$_TABLES['gf_attachments']  = $_DB_table_prefix . 'forum_attachments';
+$_TABLES['gf_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
 
 /*
  * If we are being called Geeklog's upgrade routine, there is no
@@ -54,7 +56,7 @@ if (!function_exists('COM_errorLOG') ) {
     }
 }
 
-$CONF_FORUM['version'] = '2.7';
+$CONF_FORUM['version'] = '3.0';
 
 /**
 * Called by the plugin Editor to run the SQL Update for a plugin update
@@ -69,12 +71,10 @@ function plugin_upgrade_forum() {
         case "2.3" :
             if (upgrade_232() == 0 )  {
                 DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.5RC1' WHERE `pi_name` = 'forum' LIMIT 1");
-                if (upgrade_25() == 0 )  {
-                    DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
-                }
+//                if (upgrade_25() == 0 )  {
+//                    DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
+//                }
             }
-            break;
-
         case "2.3.2" :
             if (upgrade_232() == 0 )  {
                 DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.5RC1' WHERE `pi_name` = 'forum' LIMIT 1");
@@ -82,17 +82,13 @@ function plugin_upgrade_forum() {
                     DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
                 }
             }
-            break;
-
         case "2.5RC1" :
-            if (upgrade_25() == 0 )  {
-                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
+        case "2.6" :
+        case "2.7" :
+            if (upgrade_30() == 0 ) {
+                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '3.0', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
             }
             break;
-
-       case "2.6" :
-             DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
-             break;
 
     }
 

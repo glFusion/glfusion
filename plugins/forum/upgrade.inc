@@ -18,14 +18,14 @@ function upgrade_232() {
     // Version 2.3 to 2.3.2 added one field - Add if this field does not exist
     $fields = DB_query("SHOW COLUMNS FROM {$_TABLES['gf_userprefs']}");
     while ($A = DB_fetchArray($fields)) {
-        if (in_array($A['Field'],array('enablenotify'))) {         
+        if (in_array($A['Field'],array('enablenotify'))) {
             $fieldfound = true;
         }
     }
-    if (!$fieldfound) {    
+    if (!$fieldfound) {
         $_SQL[] = "ALTER TABLE {$_TABLES['gf_userprefs']} ADD enablenotify tinyint(1) DEFAULT '1' NOT NULL AFTER viewanonposts";
     }
-    
+
     /* Rename this field */
     $_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} CHANGE  `msgauto` `autorefresh` TINYINT(1) DEFAULT '1' NOT NULL ";
 
@@ -66,9 +66,9 @@ function upgrade_232() {
 
     $_SQL[] = "ALTER TABLE {$_TABLES['gf_moderators']} ADD mod_uid mediumint(8) DEFAULT '0' NOT NULL AFTER mod_id";
     $_SQL[] = "ALTER TABLE {$_TABLES['gf_moderators']} ADD mod_groupid mediumint(8) DEFAULT '0' NOT NULL AFTER mod_uid";
-    
+
     /* Add new userprefs field */
-    $_SQL[] = "ALTER TABLE {$_TABLES['gf_userprefs']} ADD notify_once tinyint(1) DEFAULT '0' NOT NULL AFTER showiframe"; 
+    $_SQL[] = "ALTER TABLE {$_TABLES['gf_userprefs']} ADD notify_once tinyint(1) DEFAULT '0' NOT NULL AFTER showiframe";
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
@@ -81,15 +81,15 @@ function upgrade_232() {
         }
         next($_SQL);
     }
-    
+
     if (!DB_count($_TABLES['blocks'],'phpblockfn','phpblock_forum_menu')) {
         // Add new block definition for Forum Menu
         $fields = 'is_enabled,name,type,title,tid,blockorder,onleft,phpblockfn,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon';
         $sql = "INSERT INTO {$_TABLES['blocks']} ($fields) " ;
-        $sql .= "VALUES (0, 'forum_menu', 'phpblock', 'Forum Menu', 'all', 0, 1, 'phpblock_forum_menu', 2,2,3,2,2,2)";       
+        $sql .= "VALUES (0, 'forum_menu', 'phpblock', 'Forum Menu', 'all', 0, 1, 'phpblock_forum_menu', 2,2,3,2,2,2)";
         DB_query($sql);
     }
-    
+
     // Update the moderator records - now that we have a uid field
     $query = DB_query("SELECT mod_id,mod_username FROM {$_TABLES['gf_moderators']}");
     while ($A = DB_fetchArray($query)) {
@@ -136,12 +136,56 @@ function upgrade_25() {
             break;
         }
         next($_SQL);
-    }    
+    }
 
     COM_errorLog("Success - Completed Forum plugin version 2.6 update",1);
     return 0;
 
 }
 
+function upgrade_30() {
+    global $_TABLES;
 
+    $_SQL = array();
+
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_bookmarks']} (
+      `uid` mediumint(8) NOT NULL,
+      `topic_id` int(11) NOT NULL,
+      `pid` int(11) NOT NULL default '0',
+      KEY `topic_id` (`topic_id`),
+      KEY `pid` (`pid`),
+      KEY `uid` (`uid`)
+    ) TYPE=MyISAM ;";
+
+
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_attachments']} (
+      `id` int(11) NOT NULL auto_increment,
+      `topic_id` int(11) NOT NULL,
+      `repository_id` int(11) default NULL,
+      `filename` varchar(255) NOT NULL,
+      `tempfile` tinyint(1) NOT NULL default '0',
+      `show_inline` tinyint(4) NOT NULL default '0',
+      PRIMARY KEY  (`id`),
+      KEY `topic_id` (`topic_id`)
+    ) Type=MyISAM  AUTO_INCREMENT=1 ;";
+
+    // Set default access to use attachments to be the Root group
+    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD use_attachment_grpid mediumint(8) DEFAULT '1' NOT NULL AFTER grp_id";
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("Forum Plugin 3.05 update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),'1');
+        if (DB_error()) {
+            COM_errorLog("SQL Error during Forum plugin update",1);
+            return 1;
+            break;
+        }
+        next($_SQL);
+    }
+
+    COM_errorLog("Success - Completed Forum plugin version 3.0 update",1);
+    return 0;
+
+}
 ?>

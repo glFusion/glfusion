@@ -4,14 +4,14 @@
 // | Geeklog Forums Plugin 2.6 for Geeklog - The Ultimate Weblog               |
 // | Release date: Oct 30,2006                                                 |
 // +---------------------------------------------------------------------------+
-// | gb_functions.php                                                          | 
+// | gb_functions.php                                                          |
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2000,2001,2002,2003 by the following authors:               |
 // | Geeklog Author: Tony Bibbs       - tony@tonybibbs.com                     |
 // +---------------------------------------------------------------------------+
 // | Plugin Authors                                                            |
 // | Blaine Lang,                  blaine@portalparts.com, www.portalparts.com |
-// | Version 1.0 co-developer:     Matthew DeWyer, matt@mycws.com              |   
+// | Version 1.0 co-developer:     Matthew DeWyer, matt@mycws.com              |
 // | Prototype & Concept :         Mr.GxBlock, www.gxblock.com                 |
 // +---------------------------------------------------------------------------+
 // |                                                                           |
@@ -57,15 +57,15 @@ $navbarMenu = array(
 // Site admin can add common footer code here
 function adminfooter() {
     global $_CONF, $LANG_GF01;
-    
+
     $footertemplate = new Template($_CONF['path_layout'] . 'forum/layout/admin');
     $footertemplate->set_file (array ('footertemplate'=>'footer.thtml'));
-    
+
     $footertemplate->set_var ('forumname', $LANG_GF01['forumname']);
-    
+
     $footertemplate->parse ('output', 'footertemplate');
     echo $footertemplate->finish ($footertemplate->get_var('output'));
-    
+
 }
 
 
@@ -106,9 +106,9 @@ function gf_resyncforum($id) {
         }
         COM_errorLog("$recCount Topic Records Updated");
     } else {
+        DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=0, post_count=0 WHERE forum_id=$id");
         COM_errorLog("No topic records to resync");
     }
 
 }
-
 ?>

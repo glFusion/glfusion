@@ -38,9 +38,9 @@ require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
 require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$id = COM_applyFilter($_REQUEST['id'],true);
-$forum = COM_applyFilter($_REQUEST['forum'],true);
-$topic = COM_applyFilter($_REQUEST['topic'],true);
+$id    = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
+$forum = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
+$topic = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic'],true) : 0;
 
 // Display Common headers
 gf_siteHeader();
@@ -49,11 +49,11 @@ gf_siteHeader();
 forum_chkUsercanAccess(true);
 
 // NOTIFY CODE -> SAVE
-if (($_REQUEST['submit'] == 'save') && ($id != 0)) {
+if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($id != 0)) {
     $sql = "SELECT * FROM {$_TABLES['gf_watch']} WHERE ((topic_id='$id') AND (uid='{$_USER['uid']}') OR ";
     $sql .= "((forum_id='$forum') AND (topic_id='0') and (uid='{$_USER['uid']}')))";
     $notifyquery = DB_query("$sql");
-    $pid = DB_getItem($_TABLES['gf_topic'],pid,"id='$id'");
+    $pid = DB_getItem($_TABLES['gf_topic'],'pid',"id='$id'");
     if ($pid == 0) {
         $pid = $id;
     }
@@ -78,17 +78,15 @@ if (($_REQUEST['submit'] == 'save') && ($id != 0)) {
         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='{$_USER['uid']}' AND forum_id='$forum' and topic_id = '$nid'");
         forum_statusMessage($LANG_GF02['msg142'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$id",$LANG_GF02['msg142']);
     }
-    gf_siteFooter();
     exit();
 
-} elseif (($_REQUEST['submit'] == 'delete') AND ($id != 0))  {
+} elseif ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete') AND ($id != 0))  {
     DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id='$id')");
     $notifytype = COM_applyFilter($_GET['filter']);
     forum_statusMessage($LANG_GF02['msg42'], "{$_CONF['site_url']}/forum/notify.php?filter=$notifytype", $LANG_GF02['msg42']);
-    gf_siteFooter();
     exit();
 
-} elseif (($_REQUEST['submit'] == 'delete2') AND ($id != ''))  {
+} elseif ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete2') AND ($id != ''))  {
     // Check and see if subscribed to complete forum and if so - unsubscribe to just this topic
     if (DB_getItem($_TABLES['gf_watch'], 'topic_id', "id='$id'") == 0 ) {
         $ntopic = -$topic;  // Negative Value
@@ -99,7 +97,6 @@ if (($_REQUEST['submit'] == 'save') && ($id != 0)) {
         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id='$id')");
     }
     forum_statusMessage($LANG_GF02['msg146'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$topic",$LANG_GF02['msg146']);
-    gf_siteFooter();
     exit();
 }
 

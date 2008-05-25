@@ -35,7 +35,7 @@
 include_once('gf_functions.php');
 require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
 
-if ($_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] AND $_POST['selforum'] != "select" AND !empty( $_POST['cb_chkentry']) ) {
+if (isset($_POST['migrate']) && $_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] AND $_POST['selforum'] != "select" AND !empty( $_POST['cb_chkentry']) ) {
     $num_stories = 0;
     $num_posts = 0;
     $forum = COM_applyFilter($_POST['selforum']);
@@ -154,14 +154,14 @@ function prepareStringForDB($message,$postmode="html",$censor=TRUE,$htmlfilter=T
             $message = addslashes(COM_checkHTML($message));
         } elseif (!get_magic_quotes_gpc() ) {
             $message = addslashes($message);
-        }    
+        }
     } else {
         if(get_magic_quotes_gpc() ) {
             $message = @htmlspecialchars($message,ENT_QUOTES,$CONF_FORUM['charset']);
-        } else {    
+        } else {
             $message = addslashes(@htmlspecialchars($message,ENT_QUOTES,$CONF_FORUM['charset']));
-        }    
-    }    
+        }
+    }
     return $message;
 }
 
@@ -239,13 +239,13 @@ function migrate_deletestory ($sid)
 echo COM_siteHeader();
 
 // Check if the number of records was specified to show
-$page = COM_applyFilter($_GET['page'],true);
-$show = COM_applyFilter($_GET['show'],true);
+$page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+$show = isset($_GET['show']) ? COM_applyFilter($_GET['show'],true) : 0;
 if (empty($show)) {
     $show = 20;
 }
 // Check if this is the first page.
-if (empty($page)) {
+if (empty($page) || $page < 1) {
     $page = 1;
 }
 
@@ -261,7 +261,7 @@ if (!empty($_GET['num_stories'])) {
 }
 
 if (!empty($_POST['seltopic']) AND $_POST['seltopic'] != 'all') {
-    $curtopic = $_POST['seltopic']; 
+    $curtopic = $_POST['seltopic'];
     if($_POST['seltopic'] == "submissions") {
         $sql = "select tid,sid,title,date, 0 as comments from {$_TABLES['storysubmission']}";
         $countsql = DB_query("SELECT COUNT(*) FROM {$_TABLES['storysubmission']}");
@@ -271,6 +271,7 @@ if (!empty($_POST['seltopic']) AND $_POST['seltopic'] != 'all') {
     }
 
 } else {
+    $curtopic = '';
     $sql = "select tid,sid,title,date,comments from {$_TABLES['stories']}";
     $countsql = DB_query("SELECT COUNT(*) FROM {$_TABLES['stories']}");
 }
@@ -288,10 +289,10 @@ $p->set_var ('action_url', $_CONF['site_admin_url'] . '/plugins/forum/migrate.ph
 $p->set_var ('filter_topic_selection',migrate_topicsList($curtopic));
 $p->set_var ('select_filter_options',COM_optionList($_TABLES['gf_forums'], "forum_id,forum_name",$_POST['selforum']));
 $p->set_var ('LANG_migrate',$LANG_GF01['MIGRATE_NOW']);
-$p->set_var ('LANG_filterlist',$LANG_GF01['FILTERLIST']); 
-$p->set_var ('LANG_selectforum',$LANG_GF01['SELECTFORUM']); 
-$p->set_var ('LANG_deleteafter',$LANG_GF01['DELETEAFTER']); 
-$p->set_var ('LANG_all',$LANG_GF01['ALL']); 
+$p->set_var ('LANG_filterlist',$LANG_GF01['FILTERLIST']);
+$p->set_var ('LANG_selectforum',$LANG_GF01['SELECTFORUM']);
+$p->set_var ('LANG_deleteafter',$LANG_GF01['DELETEAFTER']);
+$p->set_var ('LANG_all',$LANG_GF01['ALL']);
 
 $p->set_var ('LANG_topic',$LANG_GF01['TOPIC']);
 $p->set_var ('LANG_title',$LANG_GF01['TITLE']);

@@ -131,6 +131,7 @@ if (!isset($_POST['$submit'])) {
 
     $usersettings = new Template($_CONF['path_layout'] . 'forum/layout/userprefs');
     $usersettings->set_file (array ('usersettings'=>'user_settings.thtml'));
+    $usersettings->set_var ('xhtml',XHTML);
     $usersettings->set_var ('phpself', $_CONF['site_url'] .'/forum/userprefs.php');
     $usersettings->set_var ('LANG_feature', $LANG_GF01['FEATURE']);
     $usersettings->set_var ('LANG_setting', $LANG_GF01['SETTING']);

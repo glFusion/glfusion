@@ -47,9 +47,9 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
     echo '</td><tr><td align="middle"><br><input type="button" value="' .$LANG_GF93['back'] .'" onclick="javascript:history.go(-1)">';
     echo '</td></tr></table>';
 } else {
-    $operation = COM_applyFilter($_POST['operation']);
-    $recid = COM_applyFilter($_POST['recid'],true);
-    $id = COM_applyFilter($_POST['recid'],true);
+    $operation = isset($_POST['operation']) ? COM_applyFilter($_POST['operation']) : '';
+    $recid = isset($_POST['recid']) ? COM_applyFilter($_POST['recid'],true) : 0;
+    $id = isset($_POST['recid']) ? COM_applyFilter($_POST['recid'],true) : 0;
 
     switch ($operation) {
 
@@ -189,14 +189,14 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
     } else {
 
         $showforumssql = DB_query("SELECT forum_name,forum_id FROM {$_TABLES['gf_forums']}");
-        $sel_forums = '<option value="0">'.$LANG_GF94['allforums'].'</option>';
-        $selected_forum = COM_applyFilter($_POST['sel_forum'], true);
+        $sel_forums = '<OPTION VALUE="0">'.$LANG_GF94['allforums'].'</OPTION>';
+        $selected_forum = isset($_POST['sel_forum']) ? COM_applyFilter($_POST['sel_forum'], true) : 0;
 
         while($showforum = DB_fetchArray($showforumssql)){
             if ($selected_forum == $showforum['forum_id']) {
-                $sel_forums .= '<option value="' .$showforum['forum_id']. '" selected="selected">' .$showforum['forum_name']. '</option>';
+                $sel_forums .= '<OPTION VALUE="' .$showforum['forum_id']. '" SELECTED="SELECTED">' .$showforum['forum_name']. '</OPTION>';
             } else {
-                $sel_forums .= '<option value="' .$showforum['forum_id']. '">' .$showforum['forum_name']. '</option>';
+                $sel_forums .= '<OPTION VALUE="' .$showforum['forum_id']. '">' .$showforum['forum_name']. '</OPTION>';
             }
         }
 
@@ -205,11 +205,11 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
         $moderators->set_var ('action_url', $_CONF['site_admin_url'] . '/plugins/forum/mods.php');
         $moderators->set_var ('imgset', $CONF_FORUM['imgset']);
         $moderators->set_var ('userfilter', '');
-        if ($_POST['filtermode'] == 'group') {
-            $moderators->set_var ('groupfilter', 'checked="checked"');
+        if (isset($_POST['filtermode']) && $_POST['filtermode'] == 'group') {
+            $moderators->set_var ('groupfilter', 'CHECKED=CHECKED');
             $moderators->set_var ('LANG_HEADING2', $LANG_GF01['GROUP']);
         } else {
-            $moderators->set_var ('userfilter', 'checked="checked"');
+            $moderators->set_var ('userfilter', 'CHECKED=CHECKED');
             $moderators->set_var ('LANG_HEADING2', $LANG_GF01['USER']);
         }
         $moderators->set_var ('LANG_filtertitle', $LANG_GF93['filtertitle'] );
@@ -240,7 +240,7 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
             } else {
                 $sql .= " AND mod_groupid = '0' ";
             }
-        } elseif ($_POST['filtermode'] == 'group') {
+        } elseif (isset($_POST['filtermode']) && $_POST['filtermode'] == 'group') {
             $sql .= " WHERE mod_groupid > '0' ";
         } else {
             $sql .= " WHERE mod_groupid = '0' ";
@@ -252,33 +252,33 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
         while($M = DB_fetchArray($modsql)) {
 
             if ($M['mod_delete'] == "1") {
-                $chk_delete = "checked=\"checked\"";
+                $chk_delete = "checked";
             } else {
                 $chk_delete = "";
             }
             if ($M['mod_ban'] == "1") {
-                $chk_ban = "checked=\"checked\"";
+                $chk_ban = "checked";
             } else {
                 $chk_ban = "";
             }
             if ($M['mod_edit'] == "1") {
-                $chk_edit = "checked=\"checked\"";
+                $chk_edit = "checked";
             } else {
                 $chk_edit = "";
             }
             if ($M['mod_move'] == "1") {
-                $chk_move = "checked=\"checked\"";
+                $chk_move = "checked";
             } else {
                 $chk_move = "";
             }
             if ($M['mod_stick'] == "1") {
-                $chk_stick = "checked=\"checked\"";
+                $chk_stick = "checked";
             } else {
                 $chk_stick = "";
             }
 
             $moderators->set_var ('id', $M['mod_id']);
-            if ($_POST['filtermode'] == 'group') {
+            if (isset($_POST['filtermode']) && $_POST['filtermode'] == 'group') {
                 $moderators->set_var ('name', DB_getItem($_TABLES['groups'],'grp_name', "grp_id='{$M['mod_groupid']}'"));
             } else {
                 $moderators->set_var ('name', $M['mod_username']);
@@ -298,7 +298,7 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
         echo $moderators->finish ($moderators->get_var('output'));
     }
 
-//    echo "</table></form>";
+    echo "</table></form>";
 }
 echo COM_endBlock();
 echo adminfooter();

@@ -1,5 +1,8 @@
 <!-- start navbar.thtml -->
-<table width="100%" border="0" cellspacing="1" cellpadding="0">
+<div>
+  {menu}
+</div>
+<table width="100%" cellspacing="1" cellpadding="0" style="border:none;">
     <tr>
         <td colspan="5" style="padding-right:5px;">{navmenu}</td>
 	</tr>
@@ -10,7 +13,7 @@
                     <td style="white-space:nowrap;">
                         {search_forum}
                     </td>
-                    <td width="30%" class="alignright" style="white-space:nowrap;">
+                    <td style="width:30%;white-space:nowrap;" class="alignright">
                         {select_forum}
                     </td>
                 </tr>

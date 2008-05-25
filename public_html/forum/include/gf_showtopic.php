@@ -50,7 +50,9 @@ include ($_CONF['path'] . 'system/lib-user.php');
 function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     global $CONF_FORUM,$_CONF,$_TABLES,$_USER,$LANG_GF01,$LANG_GF02;
     global $fromblock,$highlight;
-    global $oldPost;
+    global $oldPost,$forumfiles;
+
+    $retval = '';
 
     $oldPost = 0;
 
@@ -73,12 +75,16 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             'website'       =>  'links/website.thtml',
             'quote'         =>  'links/quotetopic.thtml',
             'edit'          =>  'links/edittopic.thtml'));
-
+    $topictemplate->set_var('xhtml',XHTML);
     // if preview, only stripslashes is gpc=on, else assume from db so strip
     if ( $mode == 'preview' ) {
         $showtopic['subject'] = COM_stripslashes($showtopic['subject']);
+        $topictemplate->set_var('show_topicrow1','none');
+        $topictemplate->set_var('show_topicrule','none');
+        $topictemplate->set_var('lang_postpreview',$LANG_GF01['PREVIEW_HEADER']);
     } else {
         $showtopic['subject'] = stripslashes($showtopic['subject']);
+        $topictemplate->set_var('show_topicrow2','none');
     }
 
     $min_height = 50;     // Base minimum  height of topic - will increase if avatar or sig is used
@@ -121,22 +127,26 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             $user_level = sprintf($starimage,gf_getImage('rank_admin','ranks'),$LANG_GF01['admin'],$LANG_GF01['admin']);
             $user_levelname=$LANG_GF01['admin'];
         }
-
         if ($userarray['photo'] != "") {
             $avatar = USER_getPhoto($showtopic['uid'],'','',$CONF_FORUM['avatar_width']);
             $min_height = $min_height + 50;
+        } else {
+            $avatar = '';
         }
+
         $regdate = $LANG_GF01['REGISTERED']. ': ' . strftime('%m/%d/%y',strtotime($userarray['regdate'])). '<br' . XHTML . '>';
         $numposts = $LANG_GF01['POSTS']. ': ' .$posts;
         if (DB_count( $_TABLES['sessions'], 'uid', $showtopic['uid']) > 0 AND DB_getItem($_TABLES['userprefs'],'showonline',"uid={$showtopic['uid']}") == 1) {
             $avatar .= '<br' . XHTML . '>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['ONLINE'];
+            $onlinestatus = $LANG_GF01['ONLINE'];
         } else {
             $avatar .= '<br' . XHTML . '>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['OFFLINE'];
+            $onlinestatus = $LANG_GF01['OFFLINE'];
         }
 
         if($userarray['sig'] != '') {
             $sig = '<hr width="95%" size="1" style="color=:black; text-align:left; margin-left:0; margin-bottom:5;padding:0" noshade>';
-            $sig .= '<b>' .$userarray['sig']. '</b>';
+            $sig .= '<B>' .nl2br($userarray['sig']). '</B>';
             $min_height = $min_height + 30;
         }
 
@@ -182,14 +192,22 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             }
         }
     }
+    // Check and see if there are now no [file] bbcode tags in content and reset the show_inline value
+    // This is needed in case user had used the file bbcode tag and then removed it
+    if ($mode == 'preview' AND strpos($showtopic['comment'],'[file]') === false) {
+        $usql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 ";
+        if (isset($_POST['uniqueid']) AND $_POST['uniqueid'] > 0) {  // User is previewing a new post
+            $usql .= "WHERE topic_id = {$_POST['uniqueid']} AND tempfile=1 ";
+        } else if(isset($showtopic['id'])) {
+             $usql .= "WHERE topic_id = {$showtopic['id']} ";
+        }
+        DB_query($usql);
+    }
 
     $showtopic['comment'] = gf_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode);
     $showtopic['subject'] = gf_formatTextBlock($showtopic['subject'],'text',$mode);
 
-    if(strlen ($showtopic['subject']) > $CONF_FORUM['show_subject_length']) {
-        $showtopic['subject'] = substr("$showtopic[subject]", 0, $CONF_FORUM['show_subject_length']);
-        $showtopic['subject'] .= "...";
-    }
+    $showtopic['subject'] = COM_truncate($showtopic['subject'],$CONF_FORUM['show_subject_length'],'...');
 
     //$intervalTime = $mytimer->stopTimer();
     //COM_errorLog("Show Topic Display Time2: $intervalTime");
@@ -234,6 +252,14 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $is_lockedtopic = DB_getItem($_TABLES['gf_topic'],'locked', "id={$showtopic['pid']}");
         $topictemplate->set_var ('read_msg','');
     }
+    // Bookmark feature
+    if ($_USER['uid'] > 1 ) {
+        if (DB_count($_TABLES['gf_bookmarks'],array('uid','topic_id'),array($_USER['uid'],$showtopic['id']))) {
+            $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""' . XHTML . '>');
+        } else {
+            $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt=""' . XHTML . '>');
+        }
+    }
 
     if ($CONF_FORUM['allow_user_dateformat']) {
         $date = COM_getUserDateTimeFormat($showtopic['date']);
@@ -262,7 +288,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $mod_functions = forum_getmodFunctions($showtopic);
         if($showtopic['uid'] > 1 && $uservalid) {
             $profile_link = "{$_CONF['site_url']}/users.php?mode=profile&amp;uid={$showtopic['uid']}";
-            $profile_linkimg = '<img src="'.gf_getImage('profile_button').'" border="0" align="middle" alt="'.$LANG_GF01['ProfileLink'].'" title="'.$LANG_GF01['ProfileLink'].'"' . XHTML . '>';
+            $profile_linkimg = '<img src="'.gf_getImage('profile_button').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['ProfileLink'].'" title="'.$LANG_GF01['ProfileLink'].'"' . XHTML . '>';
             $topictemplate->set_var ('profilelink', $profile_link);
             $topictemplate->set_var ('profilelinkimg', $profile_linkimg);
             $topictemplate->set_var ('LANG_profile',$LANG_GF01['ProfileLink']);
@@ -281,7 +307,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             }
         }
 
-        if($userarray['email'] != '' && $showtopic["uid"] > 1) {
+        if(isset($userarray['email']) && $userarray['email'] != '' && $showtopic["uid"] > 1) {
             $email_link = "{$_CONF['site_url']}/profiles.php?uid={$showtopic['uid']}";
             $email_linkimg = '<img src="'.gf_getImage('email_button').'" border="0" align="middle" alt="'.$LANG_GF01['EmailLink'].'" title="'.$LANG_GF01['EmailLink'].'"' . XHTML . '>';
             $topictemplate->set_var ('emaillink', $email_link);
@@ -289,7 +315,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             $topictemplate->set_var ('LANG_email', $LANG_GF01['EmailLink']);
             $topictemplate->parse ('email_link', 'email');
         }
-        if($userarray['homepage'] != '') {
+        if(isset($userarray['homepage']) && $userarray['homepage'] != '') {
             $homepage = $userarray['homepage'];
             if(!eregi("http",$homepage)) {
                 $homepage = 'http://' .$homepage;
@@ -318,34 +344,61 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $topictemplate->set_var ('locked_icon', '');
 
         $topictemplate->set_var ('preview_mode', 'none');
+        // Check and see if there are no [file] bbcode tags in content and reset the show_inline value
+        // This is needed in case user had used the file bbcode tag and then removed it
+        $imagerecs = '';
+        if (is_array($forumfiles)) $imagerecs = implode(',',$forumfiles);
+        if (!empty($_POST['uniqueid'])) {
+            $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id={$_POST['uniqueid']} ";
+            if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
+            DB_query($sql);
+        } else if (isset($_POST['id'])) {
+            $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id={$_POST['id']} ";
+            if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
+            DB_query($sql);
+        }
     }
-
     //$intervalTime = $mytimer->stopTimer();
     //COM_errorLog("Show Topic Display Time4: $intervalTime");
 
-    $showtopic['comment'] = str_replace('{','&#123;',$showtopic['comment']);
-    $showtopic['comment'] = str_replace('}','&#125;',$showtopic['comment']);
+//    $showtopic['comment'] = str_replace('{','&#123;',$showtopic['comment']);
+//    $showtopic['comment'] = str_replace('}','&#125;',$showtopic['comment']);
+
+    $uniqueid = isset($_POST['uniqueid']) ? COM_applyFilter($_POST['uniqueid'],true) : 0;
+    if ($showtopic['id'] > 0) {
+        $topictemplate->set_var('attachments',gf_showattachments($showtopic['id']));
+    } elseif ($uniqueid > 0) {
+        $topictemplate->set_var('attachments',gf_showattachments($uniqueid));
+    }
+
+    if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') ) {
+        $iplink = '<a href="' . $_CONF['site_url'] . '/nettools/whois.php?domain=' . $showtopic['ip'] . '">' . $showtopic['ip'] . '</a>';
+        $topictemplate->set_var('ipaddress',$iplink);
+    } else {
+        $topictemplate->set_var('ipaddress','');
+    }
 
     $topictemplate->set_var ('layout_url', $_CONF['layout_url']);
     $topictemplate->set_var ('csscode', $onetwo);
     $topictemplate->set_var ('postmode', $showtopic['postmode']);
     $topictemplate->set_var ('userlink', $userlink);
     $topictemplate->set_var ('lang_forum', $LANG_GF01['FORUM']);
-    $topictemplate->set_var ('user_levelname', $user_levelname);
-    $topictemplate->set_var ('user_level', $user_level);
-    $topictemplate->set_var ('magical_image', $moodimage);
-    $topictemplate->set_var ('avatar', $avatar);
-    $topictemplate->set_var ('regdate', $regdate);
-    $topictemplate->set_var ('numposts', $numposts);
-    $topictemplate->set_var ('location', $location);
+    $topictemplate->set_var ('user_levelname', isset($user_levelname) ? $user_levelname : '');
+    $topictemplate->set_var ('user_level', isset($user_level) ? $user_level : '');
+    $topictemplate->set_var ('magical_image', isset($moodimage) ? $moodimage : '');
+    $topictemplate->set_var ('avatar', isset($avatar) ? $avatar : '');
+    $topictemplate->set_var ('onlinestatus',isset($onlinestatus) ? $onlinestatus : '');
+    $topictemplate->set_var ('regdate', isset($regdate) ? $regdate : '');
+    $topictemplate->set_var ('numposts', isset($numposts) ? $numposts : '');
+    $topictemplate->set_var ('location', isset($location) ? $location  : '');
     $topictemplate->set_var ('site_url', $_CONF['site_url']);
     $topictemplate->set_var ('imgset', $CONF_FORUM['imgset']);
     $topictemplate->set_var ('topic_subject', $showtopic['subject']);
     $topictemplate->set_var ('LANG_ON2', $LANG_GF01['ON2']);
-    $topictemplate->set_var ('mod_functions', $mod_functions);
+    $topictemplate->set_var ('mod_functions', isset($mod_functions) ? $mod_functions : '');
     $topictemplate->set_var ('topic_comment', $showtopic['comment']);
     $topictemplate->set_var ('comment_minheight', "min-height:{$min_height}px");
-    if (trim($sig) != '') {
+    if (isset($sig) && trim($sig) != '') {
         $topictemplate->set_var ('sig', PLG_replaceTags(($sig)));
         $topictemplate->set_var ('show_sig', '');
     } else {
@@ -354,8 +407,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     }
     $topictemplate->set_var ('forumid', $showtopic['forum']);
     $topictemplate->set_var ('topic_id', $showtopic['id']);
-    $topictemplate->set_var ('back_link', $backlink);
-	$topictemplate->set_var ('member_badge',forumPLG_getMemberBadge($showtopic['uid']));
+    $topictemplate->set_var ('back_link', isset($backlink) ? $backlink : '');
+    $topictemplate->set_var ('member_badge',forumPLG_getMemberBadge($showtopic['uid']));
     $topictemplate->parse ('output', 'topictemplate');
     $retval .= $topictemplate->finish ($topictemplate->get_var('output'));
 
@@ -370,6 +423,9 @@ function forum_getmodFunctions($showtopic) {
 
     $retval = '';
     $options = '';
+    if ( !isset($_USER['uid']) ) {
+        $_USER['uid'] = 1;
+    }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_edit')) {
         $options .= '<option value="editpost">' .$LANG_GF03['edit'] . '</option>';
         if ($showtopic['locked'] == 1) {
@@ -403,11 +459,11 @@ function forum_getmodFunctions($showtopic) {
         }
         $retval .= '</select><input type="hidden" name="fortopicid" value="' .$showtopic['id']. '"' . XHTML . '>';
         $retval .= '<input type="hidden" name="forum" value="' .$showtopic['forum']. '"' . XHTML . '>';
-        $retval .= '<input type="hidden" name="msgpid" value="' .$msgpid. '"' . XHTML . '>';
-        $retval .= '<input type="hidden" name="top" value="' .$top. '"' . XHTML . '>';
+        $retval .= '<input type="hidden" name="msgpid" value="' .$msgpid. '"'  . XHTML . '>';
+        $retval .= '<input type="hidden" name="top" value="' .$top. '"'  . XHTML . '>';
         $retval .= '<input type="hidden" name="page" value="' .$page. '"' . XHTML . '>';
         $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'!"' . XHTML . '>';
-        $retval .= '</form>';
+        $retval .= '</div></form>';
     }
     return $retval;
 }

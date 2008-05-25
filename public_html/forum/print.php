@@ -42,15 +42,15 @@ function gf_FormatForPrint( $str, $postmode='html' ) {
 
     // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function
     if ($CONF_FORUM['pre2.5_mode']) {
-        if ( stristr($showtopic['comment'],'[code') == false ) {
-            $showtopic['comment'] = str_replace('<pre>','[code]',$showtopic['comment']);
-            $showtopic['comment'] = str_replace('</pre>','[/code]',$showtopic['comment']);
+        if ( stristr($str,'[code') == false ) {
+            $str = str_replace('<pre>','[code]',$str);
+            $str = str_replace('</pre>','[/code]',$str);
         }
-        $showtopic['comment'] = str_replace(array("<br />\r\n","<br />\n\r","<br />\r","<br />\n"), '<br />', $showtopic['comment'] );
-        $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=\s(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
+        $str = str_replace(array("<br />\r\n","<br />\n\r","<br />\r","<br />\n"), '<br />', $str );
+        $str = preg_replace("/\[QUOTE\sBY=\s(.+?)\]/i","[QUOTE] Quote by $1:",$str);
         /* Reformat code blocks - version 2.3.3 and prior */
-        $showtopic['comment'] = str_replace( '<pre class="forumCode">', '[code]', $showtopic['comment'] );
-        $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
+        $str = str_replace( '<pre class="forumCode">', '[code]', $str );
+        $str = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$str);
     }
 
     $str = gf_formatTextBlock($str,$postmode,'preview');
@@ -108,7 +108,7 @@ $A["name"] = COM_checkWords($A["name"]);
 $A["name"] = @htmlspecialchars($A["name"],ENT_QUOTES,$CONF_FORUM['charset']);
 
 $A["subject"] = COM_checkWords($A["subject"]);
-$A["subject"] = @htmlspecialchars($A["subject"],ENT_QUOTES,$CONF_FORUM['charset']);
+$A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,$CONF_FORUM['charset']));
 
 $A['comment'] = gf_FormatForPrint( $A['comment'], $A['postmode'] );
 

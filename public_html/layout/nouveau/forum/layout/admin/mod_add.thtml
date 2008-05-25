@@ -33,8 +33,8 @@
     </tr>
     <tr style="text-align:left; vertical-align:top;">
         <td width="25%" class="pluginCellText pluginCellFill"style="padding:5px 5px 5px 20px;">
-            <input type="radio" name="modtype" value="user" CHECKED="CHECKED" onclick="toggleModeratorMode('user');">{LANG_user}<br>
-            <input type="radio" name="modtype" value="group" onclick="toggleModeratorMode('group');">{LANG_group}</td>
+            <input type="radio" name="modtype" value="user" CHECKED="CHECKED" onClick="toggleModeratorMode('user');">{LANG_user}<br>
+            <input type="radio" name="modtype" value="group" onClick="toggleModeratorMode('group');">{LANG_group}</td>
         <td width="25%" class="pluginCellText pluginCellFill" style="padding:5px 5px 5px 10px;"><select name="sel_forum[]" style="width:200px;" size="6" multiple>{sel_forums}</select></td>
         <td id="selusers" width="25%" class="pluginCellText pluginCellFill" style="padding:5px 5px 5px 10px;display:;"><select name="sel_user[]" style="width:100px;" size="6" multiple>{sel_users}</select></td>
         <td id="selgroup" width="25%" class="pluginCellText pluginCellFill" style="padding:5px 5px 5px 10px;display:none;"><select name="sel_group" style="width:100px;" >{sel_groups}</select></td>

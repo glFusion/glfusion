@@ -1,46 +1,47 @@
 <!-- start board_forums.thtml -->
 <tr style="padding:0px 0px 5px 2px;">
-    <td class="pluginCellSubTitle">
-        <table border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td style="white-space:nowrap;padding:2px 2px 0px 2;">
+  <td class="pluginCellSubTitle">
+    <table style="border:none;" cellspacing="0" cellpadding="0">
+      <tr>
+        <td style="white-space:nowrap;padding:2px 2px 0px 2;">
 
-              </td>
-              <td style="white-space:nowrap;">
-                <form action="{phpself}" method="post">
-                  <input type="hidden" name="type" value="forum"{xhtml}>
-                  <input type="hidden" name="forumname" value="{forumname}"{xhtml}>
-                  <input type="hidden" name="id" value="{forumid}"{xhtml}>
-                  <input type="submit" name="mode" value="{delete}"{xhtml}>
-                  <input type="submit" name="mode" value="{edit}"{xhtml}>
-                </form>
-              </td>
-              </tr>
-              <tr>
-                <td colspan="2" style="padding: 2px 0px 2px 2px;">
-                <form action="{phpself}" method="post">
-                  <input type="hidden" name="type" value="forum"{xhtml}>
-                  <input type="hidden" name="forumname" value="{forumname}"{xhtml}>
-                  <input type="hidden" name="id" value="{forumid}"{xhtml}>
-                  <input type="submit" name="mode" value="{resync}"{xhtml}>
-                </form>
-                </td>
-              </tr>
-
-        </table>
-    </td>
-    <td class="pluginCellText pluginCellFill" style="vertical-align:top;text-align:left;"><a href="messages.php?forum={forumid}&amp;forumname={forumname}">{forumname}</a><br{xhtml}>{forumdscp}</td>
-    <td class="pluginCellText pluginCellFill aligncenter" style="white-space:nowrap;">{messagecount}</td>
-    <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
-        <!-- CHANGE FORUM ORDER -->
-        <form action="{phpself}" method="post">
-            <input type="hidden" name="type" value="forum"{xhtml}>
-            <input type="hidden" name="mode" value="{edit}"{xhtml}>
-            <input type="hidden" name="what" value="order"{xhtml}>
-            <input type="hidden" name="id" value="{forumid}"{xhtml}>
-            <input type="text" size="2" name="order" value="{forumorder}"{xhtml}>&nbsp;
-            <input type="submit" name="submit" value="{submit}"{xhtml}>
-        </form>
         </td>
+        <td style="white-space:nowrap;">
+          <form action="{phpself}" method="post">
+            <input type="hidden" name="type" value="forum"{xhtml}>
+            <input type="hidden" name="forumname" value="{forumname}"{xhtml}>
+            <input type="hidden" name="id" value="{forumid}"{xhtml}>
+            <input type="submit" name="mode" value="{delete}"{xhtml}>
+            <input type="submit" name="mode" value="{edit}"{xhtml}>
+          </form>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding: 2px 0px 2px 2px;">
+          <form action="{phpself}" method="post">
+            <input type="hidden" name="type" value="forum"{xhtml}>
+            <input type="hidden" name="forumname" value="{forumname}"{xhtml}>
+            <input type="hidden" name="id" value="{forumid}"{xhtml}>
+            <input type="submit" name="mode" value="{resync}"{xhtml}>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </td>
+  <td class="pluginCellText pluginCellFill" style="vertical-align:top;text-align:left;">
+    <a href="messages.php?forum={forumid}&amp;forumname={forumname}">{forumname}</a>
+    <br{xhtml}>{forumdscp}
+  </td>
+  <td class="pluginCellText pluginCellFill aligncenter" style="white-space:nowrap;">{messagecount}</td>
+  <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
+    <form action="{phpself}" method="post">
+      <input type="hidden" name="type" value="forum"{xhtml}>
+      <input type="hidden" name="mode" value="{edit}"{xhtml}>
+      <input type="hidden" name="what" value="order"{xhtml}>
+      <input type="hidden" name="id" value="{forumid}"{xhtml}>
+      <input type="text" size="2" name="order" value="{forumorder}"{xhtml}>&nbsp;
+      <input type="submit" name="submit" value="{submit}"{xhtml}>
+    </form>
+  </td>
 </tr>
 <!-- end board_forums.thtml -->

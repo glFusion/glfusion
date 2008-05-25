@@ -38,8 +38,8 @@ function plugin_install_forum($_DB_table_prefix )
     global $_TABLES, $_CONF;
 
     $pi_name = 'forum';                          // Plugin name
-    $pi_version = '2.7';        // Plugin Version
-    $gl_version = '1.4';                         // GL Version plugin for
+    $pi_version = '3.0';        // Plugin Version
+    $gl_version = '1.5';                         // GL Version plugin for
     $pi_url = 'http://www.portalparts.com/';     // Plugin Homepage
 
     // Adding the Forum Plugin tables to $_TABLES array
@@ -53,6 +53,8 @@ function plugin_install_forum($_DB_table_prefix )
     $_TABLES['gf_banned_ip']    = $_DB_table_prefix . 'forum_banned_ip';
     $_TABLES['gf_log']          = $_DB_table_prefix . 'forum_log';
     $_TABLES['gf_userinfo']     = $_DB_table_prefix . 'forum_userinfo';
+    $_TABLES['gf_attachments']  = $_DB_table_prefix . 'forum_attachments';
+    $_TABLES['gf_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
 
     // Default data
     // Insert table name and sql to insert default data for your plugin.
@@ -62,17 +64,17 @@ function plugin_install_forum($_DB_table_prefix )
     // Example default data
 
     $DEFVALUES['gf_settings'] = "INSERT INTO {$_TABLES['gf_settings']} VALUES (
-    '', 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 5, 0, 40, 10, 10, 20, 20, 20, 60, 60, 1, 0, 0, '', 1, 0, 2, 40, 5, 20, 5, 0, 5, 2, 2, 0, 1, 15, 35, 70, 120, 'Newbie', 'Junior', 'Chatty', 'Regular Member', 'Active Member');";
+    '', 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 5, 0, 40, 10, 10, 20, 20, 20, 60, 60, 1, 0, 0, '', 1, 0, 1, 40, 5, 20, 5, 0, 5, 2, 2, 0, 1, 15, 35, 70, 120, 'Newbie', 'Junior', 'Chatty', 'Regular Member', 'Active Member');";
 
     $DEFVALUES['block1'] = "INSERT INTO {$_TABLES['blocks']} (is_enabled,name,type,title,tid,blockorder,onleft,phpblockfn,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) "
-         . " VALUES ('0','Forum News','phpblock','Forumposts','all',0,0,'phpblock_forum_newposts',2,2,3,3,2,2)";
+         . " VALUES ('1','Forum News','phpblock','Forumposts','all',0,0,'phpblock_forum_newposts',2,2,3,3,2,2)";
 
     $DEFVALUES['block2'] = "INSERT INTO {$_TABLES['blocks']} (is_enabled,name,type,title,tid,blockorder,onleft,phpblockfn,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) "
          . " VALUES (0, 'forum_menu', 'phpblock', 'Forum Menu', 'all', 0, 1, 'phpblock_forum_menu', 2,2,3,2,2,2)";
 
-    $DEFVALUES['f1'] = "INSERT INTO {$_TABLES['gf_categories']} VALUES (0,'General ','General News and Information',1);";
-    $DEFVALUES['f2'] = "INSERT INTO {$_TABLES['gf_forums']} VALUES (0,'General News and Announcements','Site Information',1,1,2,0,1,0,1,1,1);";
-    $DEFVALUES['f3'] = "INSERT INTO {$_TABLES['gf_topic']} VALUES (1,1,0,2,'Admin','1210827078','1210827078',0,NULL,'','Welcome to glFusion','Welcome to glFusion.','text',0,1,'127.0.0.1','',0,0,0);";
+//    $DEFVALUES['f1'] = "INSERT INTO {$_TABLES['gf_categories']} VALUES (0,'General ','General News and Information',1);";
+//    $DEFVALUES['f2'] = "INSERT INTO {$_TABLES['gf_forums']} VALUES (0,'General News and Announcements','Site Information',1,1,2,0,1,0,1,1,1);";
+//    $DEFVALUES['f3'] = "INSERT INTO {$_TABLES['gf_topic']} VALUES (1,1,0,2,'Admin','1210827078','1210827078',0,NULL,'','Welcome to glFusion','Welcome to glFusion.','text',0,1,'127.0.0.1','',0,0,0);";
 
     $NEWFEATURE = array();
     $NEWFEATURE['forum.edit'] = 'Forum Admin';
@@ -81,13 +83,12 @@ function plugin_install_forum($_DB_table_prefix )
     $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
 
     // Create the Plugins Tables
-    require_once($_CONF['path'] . 'plugins/forum/sql/mysql_install_2.6.php');
+    require_once($_CONF['path'] . 'plugins/forum/sql/mysql_install_3.0.php');
 
     for ($i = 1; $i <= count($_SQL); $i++) {
         $progress .= "executing " . current($_SQL) . "<br>\n";
         DB_query(current($_SQL),'1');
         if (DB_error()) {
-            print "Error1";exit;
             $uninstall_plugin ('DeletePlugin');
             return false;
             exit;
@@ -175,10 +176,10 @@ function plugin_install_forum($_DB_table_prefix )
 function plugin_uninstall_forum($installCheck='')
 {
     global $_TABLES, $LANG_GF00;
-
+exit;
     $pi_name='forum';
     $FEATURES = array ('forum.edit', 'forum.user');
-    $TABLES = array ('gf_topic','gf_categories','gf_forums','gf_settings','gf_watch','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo');
+    $TABLES = array ('gf_topic','gf_categories','gf_forums','gf_settings','gf_watch','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo'.'gf_attachments','gf_bookmarks');
 
     // Ok to proceed and delete plugin - Unregister the plugin with Geeklog
      DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'forum'",1);

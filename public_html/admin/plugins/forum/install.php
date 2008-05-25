@@ -47,7 +47,7 @@ require_once($_CONF['path'] . 'plugins/forum/functions.inc');
 
 $pi_name = 'forum';                          // Plugin name
 $pi_version = $CONF_FORUM['version'];        // Plugin Version
-$gl_version = '1.4';                         // GL Version plugin for
+$gl_version = '1.5';                         // GL Version plugin for
 $pi_url = 'http://www.portalparts.com/';     // Plugin Homepage
 
 
@@ -59,10 +59,10 @@ $DEFVALUES = array();
 // Example default data
 
 $DEFVALUES['gf_settings'] = "INSERT INTO {$_TABLES['gf_settings']} VALUES (
-'', 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 5, 0, 40, 10, 10, 20, 20, 20, 60, 60, 1, 0, 0, '', 1, 0, 1, 40, 5, 20, 5, 0, 5, 2, 2, 0, 1, 15, 35, 70, 120, 'Newbie', 'Junior', 'Chatty', 'Regular Member', 'Active Member');";
+'', 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 5, 0, 40, 10, 10, 20, 20, 20, 60, 60, 1, 0, 0, '', 1, 0, 1, 40, 5, 20, 5, 0, 5, 2, 2, 0, 1, 15, 35, 70, 120, 'Newbie', 'Junior', 'Chatty', 'Regular Member', 'Active Member');";
 
 $DEFVALUES['block1'] = "INSERT INTO {$_TABLES['blocks']} (is_enabled,name,type,title,tid,blockorder,onleft,phpblockfn,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) "
-     . " VALUES ('0','Forum News','phpblock','Forumposts','all',0,0,'phpblock_forum_newposts',2,2,3,3,2,2)";
+     . " VALUES ('1','Forum News','phpblock','Forumposts','all',0,0,'phpblock_forum_newposts',2,2,3,3,2,2)";
 
 $DEFVALUES['block2'] = "INSERT INTO {$_TABLES['blocks']} (is_enabled,name,type,title,tid,blockorder,onleft,phpblockfn,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) "
      . " VALUES (0, 'forum_menu', 'phpblock', 'Forum Menu', 'all', 0, 1, 'phpblock_forum_menu', 2,2,3,2,2,2)";
@@ -125,7 +125,7 @@ function plugin_install_now()
     $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
 
     // Create the Plugins Tables
-    require_once($_CONF['path'] . 'plugins/forum/sql/mysql_install_2.6.php');
+    require_once($_CONF['path'] . 'plugins/forum/sql/mysql_install_3.0.php');
 
     for ($i = 1; $i <= count($_SQL); $i++) {
         $progress .= "executing " . current($_SQL) . "<br>\n";
