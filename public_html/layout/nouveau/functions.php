@@ -129,7 +129,8 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
-           $theme_headercode, $theme_layout, $gllabsMooToolsLoaded;
+           $theme_headercode, $theme_layout, $gllabsMooToolsLoaded,
+           $mbMenuConfig;
 
     $theme_what         = $what;
     $theme_pagetitle    = $pagetitle;
@@ -192,6 +193,27 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 	//Enables use of gl_chronometer - a client-side header banner rotator
 	$header->set_var('gl_moochronometer',
 '<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moochronometer.js"></script>');
+
+    // set menu colors
+    if ( function_exists('mb_getMenu') && $mbMenuConfig[0]['enabled'] == 1) {
+        $result = DB_query("SELECT * FROM {$_TABLES['mb_config']} WHERE menu_id=0");
+        list($id,$menu_id,$hcolor,$hhcolor,$htext,$hhtext,$enabled) = DB_fetchArray($result);
+    }
+    if ( $hcolor == '' || $hhcolor == '' || $htext == '' || $hhtext == '' ) {
+        $hcolor = '#AAAAAA';
+        $hhcolor = '#111111';
+        $htext   = '#111111';
+        $hhtext  = '#AAAAAA';
+    }
+    $header->set_var(array(
+        'hcolor'    => $hcolor,
+        'hhcolor'   => $hhcolor,
+        'htext'     => $htext,
+        'hhtext'    => $hhtext,
+    ));
+
+
+
     // get topic if not on home page
     if( !isset( $_GET['topic'] )) {
         if( isset( $_GET['story'] )) {

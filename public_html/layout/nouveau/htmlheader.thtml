@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/.xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>{page_title}{page_site_splitter}{site_name}</title>
@@ -27,6 +27,32 @@
 <!--[if IE 7]>
 <link rel="stylesheet" type="text/css" href="{layout_url}/css/ie7.css" title="{theme}"{xthml}>
 <![endif]-->
+<style type="text/css">
+#gl_moomenu {
+background-color:{hcolor};
+color:{htext};
+}
+#gl_moomenu ul.gl_moomenu {
+background-color:{hcolor};
+color:{htext};
+}
+#gl_moomenu ul {
+background-color:{hcolor};
+color:{htext};
+}
+#gl_moomenu li:hover a,#gl_moomenu li.sfHover a,#gl_moomenu li:hover a:hover,#gl_moomenu li.sfHover a:hover {
+background-color:{hcolor};
+color:{htext};
+}
+#gl_moomenu li:hover li:hover a:hover,#gl_moomenu li.sfHover li.sfHover a:hover {
+background-color:{hhcolor};
+color:{hhtext};
+}
+#gl_moomenu li li a.parent,#gl_moomenu li li a.parent:hover {
+background-color:{hcolor};
+color:{htext};
+}
+</style>
 </head>
 
 <body dir="{direction}" style="background:#000000;">
