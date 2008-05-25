@@ -2,19 +2,19 @@
 
 *****************************************************************/
 
-label,input {
+.glform label, .glform input {
 display:block;
 width:200px;
 float:left;
 margin-bottom:10px;
 }
-label {
+.glform label {
 text-align:right;
 width:200px;
 padding-right:20px;
 }
 
-br {
+.glform br {
 clear:left;
 }
 
@@ -74,7 +74,8 @@ a:link {
   color:#0000FF;
 }
 a:visited {
-  color:#800080;
+  color:#fff;
+  text-decoration:none;
 }
 a:hover {
   color:#008000;

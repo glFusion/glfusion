@@ -233,6 +233,7 @@ function INST_installEngine($install_type, $install_step)
 
             $display .= '
                 <h2>' . $LANG_INSTALL[31] . '</h2>
+                <div class="glform">
                 <form action="index.php" method="post">
                 <input type="hidden" name="mode" value="' . $install_type . '"' . XHTML . '>
                 <input type="hidden" name="step" value="2"' . XHTML . '>
@@ -266,7 +267,7 @@ function INST_installEngine($install_type, $install_step)
             $display .= '
                 <br' . XHTML . '>
                 <input type="submit" name="submit" class="submit" value="' . $buttontext . ' &gt;&gt;"' . XHTML . '>
-                </form>' . LB;
+                </form></div>' . LB;
             break;
 
 
@@ -1798,7 +1799,7 @@ $display .= '<head>
         </div> <!-- end of gl_header -->
 
         <div id="gl_moomenu">
-			<a style="float:right;padding-right:10px;" href="' . $LANG_INSTALL[87] . '">' . $LANG_INSTALL[1] . '</a>
+			<a style="float:right;padding-right:10px;padding-top:5px;vertical-align:middle;" href="' . $LANG_INSTALL[87] . '">' . $LANG_INSTALL[1] . '</a>
 		</div>
         <div id="gl_wrapper">' . LB;
 
