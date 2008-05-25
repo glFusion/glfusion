@@ -31,7 +31,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: lib-plugins.php,v 1.145 2008/05/11 07:25:08 dhaun Exp $
+// $Id: lib-plugins.php,v 1.148 2008/05/24 10:38:55 dhaun Exp $
 
 /**
 * This is the plugin library for Geeklog.  This is the API that plugins can
@@ -2316,12 +2316,40 @@ function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
     switch ($target) {
     case 'item':
         $url = $item_url;
+        if (!empty($msg) && ($plugin != 'story')) {
+            $url .= '&amp;' . $msg;
+        }
+        break;
+
+    case 'home':
+        $url = $_CONF['site_url'] . '/index.php';
         if (!empty($msg)) {
-            $url .= '&' . $msg;
+            $url .= '?' . $msg;
+            if (($plugin != 'story') && ($plugin != 'user')) {
+                $url .= '&amp;plugin=' . $plugin;
+            }
+        }
+        break;
+
+    case 'admin':
+        $url = $_CONF['site_admin_url'] . '/moderation.php';
+        if (!empty($msg)) {
+            $url .= '?' . $msg;
+            if (($plugin != 'story') && ($plugin != 'user')) {
+                $url .= '&amp;plugin=' . $plugin;
+            }
+        }
+        break;
+
+    case 'plugin':
+        $url = $_CONF['site_url'] . "/$plugin/index.php";
+        if (!empty($msg)) {
+            $url .= '?' . $msg;
         }
         break;
 
     case 'list':
+    default:
         if ($plugin == 'story') {
             $url = $_CONF['site_admin_url'] . "/$plugin.php";
         } elseif ($plugin == 'user') {
@@ -2329,23 +2357,6 @@ function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
         } else {
             $url = $_CONF['site_admin_url'] . "/plugins/$plugin/index.php";
         }
-        if (!empty($msg)) {
-            $url .= '?' . $msg;
-        }
-        break;
-
-    case 'home':
-        // the plugins messages are not available, use generic
-        $url = $_CONF['site_url'] . '/index.php?msg=15';
-        break;
-
-    case 'admin':
-        // the plugins messages are not available, use generic
-        $url = $_CONF['site_admin_url'] . '/moderation.php?msg=15';
-        break;
-
-    case 'plugin':
-        $url = $_CONF['site_url'] . "/$plugin/index.php";
         if (!empty($msg)) {
             $url .= '?' . $msg;
         }

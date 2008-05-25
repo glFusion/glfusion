@@ -32,9 +32,14 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: index.php,v 1.27 2008/05/13 19:42:17 dhaun Exp $
+// $Id: index.php,v 1.29 2008/05/24 09:04:59 dhaun Exp $
 
 require_once '../lib-common.php';
+
+if (!in_array('polls', $_PLUGINS)) {
+    echo COM_refresh($_CONF['site_url'] . '/index.php');
+    exit;
+}
 
 
 /**
@@ -133,6 +138,10 @@ $mode = '';
 if (isset ($_REQUEST['mode'])) {
     $mode = COM_applyFilter ($_REQUEST['mode']);
 }
+$msg = 0;
+if (isset($_REQUEST['msg'])) {
+    $msg = COM_applyFilter($_REQUEST['msg'], true);
+}
 
 if (isset($pid)) {
     $questions_sql = "SELECT question,qid FROM {$_TABLES['pollquestions']} "
@@ -141,8 +150,11 @@ if (isset($pid)) {
     $nquestions = DB_numRows($questions);
 }
 if (empty($pid)) {
-    $display .= COM_siteHeader ('menu', $LANG_POLLS['pollstitle'])
-             . polllist ();
+    $display .= COM_siteHeader ('menu', $LANG_POLLS['pollstitle']);
+    if ($msg > 0) {
+        $display .= COM_showMessage($msg, 'polls');
+    }
+    $display .= polllist ();
 } else if ((isset($_POST['aid']) && (count($_POST['aid']) == $nquestions)) && !isset ($_COOKIE['poll-'.$pid])) {
     setcookie ('poll-'.$pid, implode('-',$aid), time() + $_PO_CONF['pollcookietime'],
                $_CONF['cookie_path'], $_CONF['cookiedomain'],
@@ -150,6 +162,9 @@ if (empty($pid)) {
     $display .= COM_siteHeader() . POLLS_pollsave($pid, $aid);
 } else if (isset($pid)) {
     $display .= COM_siteHeader();
+    if ($msg > 0) {
+        $display .= COM_showMessage($msg, 'polls');
+    }
     if (isset($_POST['aid'])) {
         $display .= COM_startBlock (
                 $LANG_POLLS['not_saved'], '',

@@ -34,7 +34,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: index.php,v 1.34 2008/05/02 12:12:05 dhaun Exp $
+// $Id: index.php,v 1.37 2008/05/24 09:49:19 dhaun Exp $
 
 /**
  * This is the links page
@@ -57,10 +57,17 @@
 
 require_once '../lib-common.php';
 
+if (!in_array('links', $_PLUGINS)) {
+    echo COM_refresh($_CONF['site_url'] . '/index.php');
+    exit;
+}
+
 /**
-* create the links list depending on the category given
+* Create the links list depending on the category given
 *
-*  return       string      the links page
+* @param    array   $message    message(s) to display
+* @return   string              the links page
+*
 */
 function links_list($message)
 {
@@ -116,10 +123,15 @@ function links_list($message)
     $display .= COM_siteHeader ('menu', $page_title);
 
     if (is_array($message) && !empty($message[0])) {
-        $display .= COM_startBlock ($message[0], '',
-                COM_getBlockTemplate ('_msg_block', 'header'));
+        $display .= COM_startBlock($message[0], '',
+                                 COM_getBlockTemplate('_msg_block', 'header'));
         $display .= $message[1];
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+    } else if (isset($_REQUEST['msg'])) {
+        $msg = COM_applyFilter($_REQUEST['msg'], true);
+        if ($msg > 0) {
+            $display .= COM_showMessage($msg, 'links');
+        }
     }
 
     $linklist = new Template ($_CONF['path'] . 'plugins/links/templates/');

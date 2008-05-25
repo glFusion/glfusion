@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: moderation.php,v 1.121 2008/05/04 07:32:53 mjervis Exp $
+// $Id: moderation.php,v 1.122 2008/05/23 21:07:14 dhaun Exp $
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
@@ -75,7 +75,7 @@ function render_cc_item (&$template, $url = '', $image = '', $label = '')
 * Prints the command & control block at the top
 *
 * TODO: The moderation items should be displayed with the help of <ul><li>
-* instead of div's.
+* instead of div's. 
 *
 */
 function commandcontrol($token)
@@ -93,7 +93,7 @@ function commandcontrol($token)
     $admin_templates->set_var('site_url', $_CONF['site_url']);
     $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
 
-    $retval .= COM_startBlock ('glFusion ' . VERSION . ' -- ' . $LANG29[34], '',
+    $retval .= COM_startBlock ('Geeklog ' . VERSION . ' -- ' . $LANG29[34], '',
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
     $showTrackbackIcon = (($_CONF['trackback_enabled'] ||
@@ -159,7 +159,7 @@ function commandcontrol($token)
             'lang' => $LANG01[113], 'image' => '/images/icons/docs.'),
         array('condition' => (SEC_inGroup ('Root') &&
                               ($_CONF['link_versionchecker'] == 1)),
-            'url' => 'http://www.gllabs.org/versionchecker.php?version=' . glFusion_VERSION,
+            'url' => 'http://www.geeklog.net/versionchecker.php?version=' . VERSION,
             'lang' => $LANG01[107], 'image' => '/images/icons/versioncheck.'),
         array('condition' => (SEC_inGroup ('Root')),
             'url'=>$_CONF['site_admin_url'] . '/configuration.php',
@@ -665,8 +665,16 @@ function security_check_reminder ()
 
 $display = '';
 $display .= COM_siteHeader ('menu', $LANG29[34]);
-if (isset ($_GET['msg'])) {
-    $display .= COM_showMessage ($_GET['msg']);
+$msg = 0;
+if (isset($_GET['msg'])) {
+    $msg = COM_applyFilter($_GET['msg'], true);
+}
+if ($msg > 0) {
+    $plugin = '';
+    if (isset($_GET['plugin'])) {
+        $plugin = COM_applyFilter($_GET['plugin']);
+    }
+    $display .= COM_showMessage($msg, $plugin);
 }
 
 if (isset ($_POST['mode']) && ($_POST['mode'] == 'moderation') && SEC_checkToken()) {

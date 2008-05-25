@@ -32,9 +32,15 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: event.php,v 1.29 2008/05/22 17:01:54 dhaun Exp $
+// $Id: event.php,v 1.31 2008/05/24 08:28:17 dhaun Exp $
 
 require_once '../lib-common.php';
+
+if (!in_array('calendar', $_PLUGINS)) {
+    echo COM_refresh($_CONF['site_url'] . '/index.php');
+    exit;
+}
+
 require_once $_CONF['path_system'] . 'classes/calendar.class.php';
 
 /**
@@ -458,8 +464,14 @@ default:
             DB_query ("UPDATE {$_TABLES['events']} SET hits = hits + 1 WHERE eid = '$eid'");
         }
 
-        $display .= COM_siteHeader ('menu', $pagetitle);
-        $display .= COM_startBlock ($pagetitle);
+        $display .= COM_siteHeader('menu', $pagetitle);
+        if (isset($_GET['msg'])) {
+            $msg = COM_applyFilter($_GET['msg'], true);
+            if ($msg > 0) {
+                $display .= COM_showMessage($msg, 'calendar');
+            }
+        }
+        $display .= COM_startBlock($pagetitle);
 
     } else {
         $year = 0;
