@@ -396,8 +396,6 @@ function plugin_getheadercode_forum() {
 
     $gf_header = '';
 
-    $gf_header .= LB . "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $_CONF['site_url'] . '/forum/style.css' . "?ver=20080331\"" . XHTML . ">" . LB;
-
     if ( $gllabsMooToolsLoaded != 1 ) {
         $gf_header .= '<script type="text/javascript" src="' . $_CONF['site_url'] . '/forum/js/mootools-release-1.11.packed.js"></script>' . LB;
         $gllabsMooToolsLoaded = 1;
