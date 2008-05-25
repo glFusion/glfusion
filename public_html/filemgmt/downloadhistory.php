@@ -1,10 +1,10 @@
 <?php
 /* Reminder: always indent with 4 spaces (no tabs). */
 // +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com | 
+// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
 // +-------------------------------------------------------------------------+
 // | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |    
+// | Date: Mar 18, 2006                                                      |
 // +-------------------------------------------------------------------------+
 // | Copyright (C) 2004 by Consult4Hire Inc.                                 |
 // | Author:                                                                 |
@@ -33,8 +33,8 @@
 //
 
 require_once("../lib-common.php");
-include_once($_CONF[path_html]."filemgmt/include/header.php");
-include($_CONF[path_html] ."filemgmt/include/functions.php"); 
+include_once($_CONF['path_html']."filemgmt/include/header.php");
+include_once($_CONF['path_html'] ."filemgmt/include/functions.php");
 
 // Comment out the following security check if you want general filemgmt users access to this report
 if (!SEC_hasRights("filemgmt.edit")) {
@@ -45,7 +45,7 @@ if (!SEC_hasRights("filemgmt.edit")) {
 $lid = COM_applyFilter($_GET['lid'],true);
 
 $result=DB_query("SELECT title FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid=$lid");
-list($dtitle)=DB_fetchARRAY($result); 
+list($dtitle)=DB_fetchARRAY($result);
 
 $result=DB_query("SELECT date,uid,remote_ip FROM {$_FM_TABLES['filemgmt_history']} WHERE lid=$lid");
 $display = COM_siteHeader('none');
@@ -61,7 +61,7 @@ $display .= "</tr>";
 $highlight = true;
 while(list($date,$uid,$remote_ip)=DB_fetchARRAY($result)){
     $result2 = DB_query("SELECT username  FROM {$_TABLES['users']} WHERE uid = $uid");
-    list ($username) = DB_fetchARRAY($result2);    
+    list ($username) = DB_fetchARRAY($result2);
     $result2 = DB_query("SELECT username  FROM {$_TABLES['users']} WHERE uid = $uid");
     list ($username) = DB_fetchARRAY($result2);
 

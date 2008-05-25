@@ -31,9 +31,9 @@ This file is set via the Filemgmt Plugin Admin menu - Configuration settings.
 The script reads and write to this file - thus needs to be a separate file.
 */
 
-@include ("filemgmt.php");
+include ("filemgmt.php");
 
-$CONF_FM['version'] = '1.5.3';
+$CONF_FM['version'] = '1.6';
 
 
 $_FM_TABLES['filemgmt_cat']             = $_DB_table_prefix . 'filemgmt_category';
@@ -72,28 +72,28 @@ $_FMDOWNLOAD  = array(
 $CONF_FILEMGMT['glmenutype'] = 'block';      // Set to block or header
 
 $_FMDOWNLOAD['inconlib']    = array(
-        php => "php.gif",
-        phps => "php.gif",
-        bmp => "bmp.gif",
-        gif => "gif.gif",
-        jpg => "jpg.gif",
-        html => "htm.gif",
-        htm => "htm.gif",
-        mov => "mov.gif",
-        mp3 => "mp3.gif",
-        pdf => "pdf.gif",
-        ppt => "ppt.gif",
-        tar => "zip.gif",
-        gz  => "zip.gif",
-        zip => "zip.gif",
-        txt => "txt.gif",
-        doc => "doc.gif",
-        xls => "xls.gif",
-        mpp => "mpp.gif",
-        exe => "exe.gif",
-        swf => "swf.gif",
-        vsd => "visio.gif",
-        none => "file.gif"
+        'php' => "php.gif",
+        'phps' => "php.gif",
+        'bmp' => "bmp.gif",
+        'gif' => "gif.gif",
+        'jpg' => "jpg.gif",
+        'html' => "htm.gif",
+        'htm' => "htm.gif",
+        'mov' => "mov.gif",
+        'mp3' => "mp3.gif",
+        'pdf' => "pdf.gif",
+        'ppt' => "ppt.gif",
+        'tar' => "zip.gif",
+        'gz'  => "zip.gif",
+        'zip' => "zip.gif",
+        'txt' => "txt.gif",
+        'doc' => "doc.gif",
+        'xls' => "xls.gif",
+        'mpp' => "mpp.gif",
+        'exe' => "exe.gif",
+        'swf' => "swf.gif",
+        'vsd' => "visio.gif",
+        'none' => "file.gif"
         );
 
 ?>

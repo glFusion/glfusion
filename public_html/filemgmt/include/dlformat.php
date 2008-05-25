@@ -29,13 +29,16 @@
 // ------------------------------------------------------------------------- //
 
 
-if (basename($GLOBALS['PHP_SELF']) == "dlformat.php") {
-    exit();
+// this file can't be used on its own
+if (strpos ($_SERVER['PHP_SELF'], 'dlformat.php') !== false)
+{
+    die ('This file can not be used on its own.');
 }
+
 
 $path = $mytree->getPathFromId($cid, "title");
 $path = substr($path, 1);
-$path = str_replace("/"," <img src='" .$_CONF[site_url] ."/filemgmt/images/arrow.gif' alt=''" . XHTML . "> ",$path);
+$path = str_replace("/"," <img src='" .$_CONF['site_url'] ."/filemgmt/images/arrow.gif' alt=''" . XHTML . "> ",$path);
 
 $p->set_var('LANG_CATEGORY',_MD_CATEGORYC);
 $p->set_var('category_path',$path);
@@ -88,7 +91,7 @@ $p->set_var('version',$version);
 
 // Check if restricted access has been enabled for download report to admin's only
 if (($hits > 0 && !$mydownloads_dlreport) || ( $hits > 0 && SEC_hasRights('filemgmt.edit'))) {
-    $p->set_var('begin_dlreport_link',"<a href=\"{$_CONF[site_url]}/filemgmt/downloadhistory.php?lid=$lid\" target=\"_blank\">");
+    $p->set_var('begin_dlreport_link',"<a href=\"{$_CONF['site_url']}/filemgmt/downloadhistory.php?lid=$lid\" target=\"_blank\">");
     $p->set_var('end_dlreport_link','</a>');
 } else {
     $p->set_var('begin_dlreport_link','');
@@ -109,9 +112,9 @@ if ($comments) {
         $result4 = DB_query("SELECT cid, UNIX_TIMESTAMP(date) AS day,username FROM {$_TABLES['comments']},{$_TABLES['users']} WHERE {$_TABLES['users']}.uid = {$_TABLES['comments']}.uid AND sid = 'fileid_$lid' ORDER BY date desc LIMIT 1");
         $C = DB_fetchArray($result4);
         $recentPostMessage = $LANG01[27].': '.strftime($_CONF['daytime'],$C['day']). ' ' . $LANG01[104] . ' ' . $C['username'];
-        $comment_link = '<a href="' .$_CONF[site_url] .'/filemgmt/index.php?id=' .$lid.'" title="'.$recentPostMessage.'">' .$commentCount.'&nbsp;' .$LANG01[3]. '</a>';
+        $comment_link = '<a href="' .$_CONF['site_url'] .'/filemgmt/index.php?id=' .$lid.'" title="'.$recentPostMessage.'">' .$commentCount.'&nbsp;' .$LANG01[3]. '</a>';
     } else {
-        $comment_link = '<a href="' .$_CONF[site_url] . '/comment.php?type=filemgmt&amp;sid=fileid_' .$lid.'" title="'.$recentPostMessage.'">' . _MD_ENTERCOMMENT . '</a>';
+        $comment_link = '<a href="' .$_CONF['site_url'] . '/comment.php?type=filemgmt&amp;sid=fileid_' .$lid.'" title="'.$recentPostMessage.'">' . _MD_ENTERCOMMENT . '</a>';
     }
     $p->set_var('comment_link',$comment_link);
     $p->set_var('show_comments','');

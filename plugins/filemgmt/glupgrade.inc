@@ -52,9 +52,9 @@ function plugin_upgrade_filemgmt() {
     include($_CONF['path'] . '/plugins/filemgmt/config.php');
 
     $cur_version = DB_getItem($_TABLES['plugins'],'pi_version', "pi_name='filemgmt'");
-    $gl_version = floatval (VERSION);
-    if ($gl_version >= 1.3) {
-        if ($cur_version == '1.3') {
+
+    switch ( $cur_version ) {
+        case '1.3' :
             DB_query("ALTER TABLE {$_FM_TABLES['filemgmt_cat']} ADD `grp_access` mediumint(8) DEFAULT '2' NOT NULL AFTER imgurl");
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '{$CONF_FM['version']}' WHERE pi_name = 'filemgmt'");
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version = '1.4' WHERE pi_name = 'filemgmt'");
@@ -67,23 +67,14 @@ function plugin_upgrade_filemgmt() {
                     DB_query("UPDATE {$_TABLES['comments']} SET sid='$sid' WHERE cid='$cid'");
                 }
             }
+        case '1.5' :
+        case '1.5.1' :
+        case '1.5.2' :
+        case '1.5.3' :
+            DB_query("ALTER TABLE {$_FM_TABLES['filemgmt_cat']} ADD `grp_writeaccess` MEDIUMINT( 8 ) NOT NULL DEFAULT '1'");
+        default :
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.6' WHERE pi_name = 'filemgmt'");
             return true;
-        } elseif ($cur_version == '1.5') {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '{$CONF_FM['version']}' WHERE pi_name = 'filemgmt'");
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version = '1.4' WHERE pi_name = 'filemgmt'");
-            return true;
-        } elseif ($cur_version == '1.5.1') {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '{$CONF_FM['version']}' WHERE pi_name = 'filemgmt'");
-            return true;
-        } elseif ($cur_version == '1.5.2') {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '{$CONF_FM['version']}' WHERE pi_name = 'filemgmt'");
-            return true;
-        } else {
-            return false;
-        }
-
-    } else {
-        return false;
     }
 }
 ?>

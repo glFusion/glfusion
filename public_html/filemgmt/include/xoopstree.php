@@ -1,10 +1,10 @@
 <?php
  /* Reminder: always indent with 4 spaces (no tabs). */
 // +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com | 
+// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
 // +-------------------------------------------------------------------------+
 // | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |    
+// | Date: Mar 18, 2006                                                      |
 // +-------------------------------------------------------------------------+
 // | Copyright (C) 2004 by Consult4Hire Inc.                                 |
 // | Author:                                                                 |
@@ -59,6 +59,13 @@ class XoopsTree{
         }
     }
 
+    function setGroupUploadAccessFilter($groups) {
+        if (count($groups) == 1) {
+            $this->filtersql = " AND grp_writeaccess = '" . current($groups) ."'";
+        } else {
+            $this->filtersql = " AND grp_writeaccess IN (" . implode(',',array_values($groups)) .")";
+        }
+    }
 
     // returns an array of first child objects for a given id($sel_id)
     function getFirstChild($sel_id, $order=""){
@@ -173,6 +180,8 @@ class XoopsTree{
     while ( list($catid, $name) = DB_fetchARRAY($result) ) {
         if ( $catid == $preset_id ) {
             $sel = " selected='selected'";
+        } else {
+            $sel = '';
         }
         $retval .= "<option value='$catid'$sel>$name</option>\n";
         $sel = "";
@@ -205,7 +214,7 @@ class XoopsTree{
             $path = "<a href=\"{$funcURL}?{$this->id}={$sel_id}\">{$name}</a>&nbsp;:&nbsp;{$path}";
         } else {
             $path = "<a href=\"{$funcURL}&{$this->id}={$sel_id}\">{$name}</a>&nbsp;:&nbsp;{$path}";
-        }                    
+        }
         if ( $parentid == 0 ) {
             return $path;
         }

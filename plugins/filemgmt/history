@@ -1,11 +1,5 @@
 /* History of Changes */
 
-Oct 14/07 - Version 1.5.3
-- Fix for possible remote file include vulneribility
-- Added ability to change the number of categories and subcategories to show
-- Bug fixes in subcategory display and sortable headings
-
-
 April 2/06  -Version 1.5.2
  - Bug Fix: Search function should not return file listing that have not been approved - pending moderation approval
  - Bug Fix: Corrected autotag link feature

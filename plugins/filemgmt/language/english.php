@@ -33,7 +33,7 @@ $LANG_FM00 = array (
     'install_header'    => 'Install/Uninstall Plugin',
     'installed'         => 'The Plugin and Block are now installed,<p><i>Enjoy,<br><a href="MAILTO:blaine@portalparts.com">Blaine</a></i>',
     'uninstalled'       => 'The Plugin is Not Installed',
-    'install_success'   => 'Installation Successful<p><b>Next Steps</b>: 
+    'install_success'   => 'Installation Successful<p><b>Next Steps</b>:
         <ol><li>Use the Filemgmt Admin to complete the plugin configuration</ol>
         <p>Review the <a href="%s">Install Notes</a> for more information.',
     'install_failed'    => 'Installation Failed -- See your error log to find out why.',
@@ -223,6 +223,7 @@ define("_MD_APPROVED", "Your file has been approved");
 define("_MD_ALLPENDING","All file/script information are posted pending verification.");
 define("_MD_DONTABUSE","Username and IP are recorded, so please don't abuse the system.");
 define("_MD_TAKEDAYS","It may take several days for your file/script to be added to our database.");
+define("_MD_FILEAPPROVED", "Your file has been added to the file repository");
 
 define("_MD_RANK","Rank");
 define("_MD_CATEGORY","Category");
@@ -263,8 +264,8 @@ define("_MD_CATEGORYTITLE","File Listing - Category View");
 define("_MD_DLCONF","Downloads Configuration");
 define("_MD_GENERALSET","Configuration Settings");
 define("_MD_ADDMODFILENAME","Add new file");
-define ("_MD_ADDCATEGORYSNAP", "Optional Image: <small>(Top Level Categories only)</small>");
-define ("_MD_ADDIMAGENOTE", "(Image height will be resized to 50)");
+define ("_MD_ADDCATEGORYSNAP", 'Optional Image:<div style="font-size:8pt;">Top Level Categories only</div>');
+define ("_MD_ADDIMAGENOTE", '<span style="font-size:8pt;">Image height will be resized to 50</span>');
 define("_MD_ADDMODCATEGORY","<b>Categories:</b> Add, Modify, and Delete Categories");
 define("_MD_DLSWAITING","Downloads Waiting for Validation");
 define("_MD_BROKENREPORTS","Broken File Reports");
@@ -280,7 +281,8 @@ define("_MD_DELETE","Delete");
 define("_MD_NOSUBMITTED","No New Submitted Downloads.");
 define("_MD_ADDMAIN","Add MAIN Category");
 define("_MD_TITLEC","Title: ");
-define("_MD_CATSEC", "Category Access: ");
+define("_MD_CATSEC", "View Access: ");
+define("_MD_UPLOADSEC", "Upload Access: ");
 define("_MD_IMGURL","<br>Image Filename <font size='-2'> (located in your filemgmt_data/category_snaps directory - Image height will be resized to 50)</font>");
 define("_MD_ADD","Add");
 define("_MD_ADDSUB","Add SUB-Category");
@@ -311,7 +313,7 @@ define("_MD_OWNER","Owner: ");
 define("_MD_NOMODREQ","No Download Modification Request.");
 define("_MD_DBUPDATED","Database Updated Successfully!");
 define("_MD_MODREQDELETED","Modification Request Deleted.");
-define("_MD_IMGURLMAIN","Image (Image height will be resized to 50): ");
+define("_MD_IMGURLMAIN",'Image<div style="font-size:8pt;">Image height will be resized to 50px</div>');
 define("_MD_PARENT","Parent Category:");
 define("_MD_SAVE","Save Changes");
 define("_MD_CATDELETED","Category Deleted.");
@@ -321,7 +323,7 @@ define("_MD_NO","No");
 define("_MD_NEWCATADDED","New Category Added Successfully!");
 define("_MD_CONFIGUPDATED","New configuration saved");
 define("_MD_ERROREXIST","ERROR: The download info you provided is already in the database!");
-define("_MD_ERRORNOFILE","ERROR: File not found on record in the database!");  
+define("_MD_ERRORNOFILE","ERROR: File not found on record in the database!");
 define("_MD_ERRORTITLE","ERROR: You need to enter TITLE!");
 define("_MD_ERRORDESC","ERROR: You need to enter DESCRIPTION!");
 define("_MD_NEWDLADDED","New download added to the database.");
@@ -351,7 +353,9 @@ define("_MD_YOURFILEAT","Your file submitted at %s"); // this is an approved mai
 define("_MD_VISITAT","Visit our downloads section at %s");
 define("_MD_DLRATINGS","Download Rating (total votes: %s)");
 define("_MD_CONFUPDATED","Configuration Updated Successfully!");
-define("_MD_NOFILES","No Files Found");   
+define("_MD_NOFILES","No Files Found");
+define("_MD_APPROVEREQ","* Upload needs to be approved in this category");
+define("_MD_REQUIRED","* Required field");
 
 // Additional Geeklog Defines
 define("_MD_NOVOTE","Not rated yet");
@@ -369,7 +373,4 @@ define("_MD_COMMENTSWANTED","Comments are appreciated");
 define("_MD_CLICK2SEE","Click to see: ");
 define("_MD_CLICK2DL","Click to download: ");
 define("_MD_ORDERBY","Order By: ");
-define("_MD_ORDERBY","Order By: ");
-define("_MD_ORDERBY","Order By: ");
-
 ?>

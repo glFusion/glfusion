@@ -15,7 +15,8 @@ $_SQL[] = "CREATE TABLE {$_FM_TABLES['filemgmt_cat']} (
   pid int(5) unsigned NOT NULL default '0',
   title varchar(50) NOT NULL default '',
   imgurl varchar(150) NOT NULL default '',
- `grp_access` mediumint(8) NOT NULL default '0',
+  `grp_access` mediumint(8) NOT NULL default '0',
+  `grp_writeaccess` mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (cid),
   KEY pid (pid)
 ) TYPE=MyISAM";

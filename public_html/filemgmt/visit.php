@@ -1,9 +1,9 @@
 <?php
 // +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com | 
+// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
 // +-------------------------------------------------------------------------+
 // | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |    
+// | Date: Mar 18, 2006                                                      |
 // +-------------------------------------------------------------------------+
 // | Copyright (C) 2004 by Consult4Hire Inc.                                 |
 // | Author:                                                                 |
@@ -32,8 +32,8 @@
 //
 
 require_once('../lib-common.php');
-include_once($_CONF[path_html]."filemgmt/include/header.php");
-include($_CONF[path_html] ."filemgmt/include/functions.php"); 
+include_once($_CONF['path_html']."filemgmt/include/header.php");
+include_once($_CONF['path_html']."filemgmt/include/functions.php");
 
 if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
 

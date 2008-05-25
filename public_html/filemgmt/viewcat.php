@@ -1,9 +1,9 @@
 <?php
 // +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com | 
+// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
 // +-------------------------------------------------------------------------+
 // | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |    
+// | Date: Mar 18, 2006                                                      |
 // +-------------------------------------------------------------------------+
 // | Copyright (C) 2004 by Consult4Hire Inc.                                 |
 // | Author:                                                                 |
@@ -32,10 +32,10 @@
 //
 
 require_once('../lib-common.php');
-include_once($_CONF[path_html]."filemgmt/include/header.php");
-include($_CONF[path_html] ."filemgmt/include/functions.php"); 
-include_once($_CONF[path_html]."filemgmt/include/xoopstree.php");
-include_once($_CONF[path_html]."filemgmt/include/textsanitizer.php");
+include_once($_CONF['path_html']."filemgmt/include/header.php");
+include_once($_CONF['path_html']."filemgmt/include/functions.php");
+include_once($_CONF['path_html']."filemgmt/include/xoopstree.php");
+include_once($_CONF['path_html']."filemgmt/include/textsanitizer.php");
 
 $_GROUPS = SEC_getUserGroups( $uid );       // List of groups user is a member of
 $numCategoriesPerRow  = 6;
@@ -44,9 +44,9 @@ $myts = new MyTextSanitizer;
 $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],'cid','pid');
 $mytree->setGroupAccessFilter($_GROUPS);
 
-$page = COM_applyFilter($_GET['page'],true);
-$cid  = COM_applyFilter($_GET['cid'],true);
-$orderby  = COM_applyFilter($_GET['orderby'],false);
+$page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+$cid  = isset($_GET['cid']) ? COM_applyFilter($_GET['cid'],true) : 0;
+$orderby  = isset($_GET['orderby']) ? COM_applyFilter($_GET['orderby'],false) : '';
 
 $groupsql = filemgmt_buildAccessSql();
 $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE cid='$cid' $groupsql";
@@ -56,7 +56,7 @@ if ($cid == 0 OR $category_rows == 0) {
     exit;
 }
 
-$display = COM_siteHeader('menu'); 
+$display = COM_siteHeader('menu');
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
@@ -70,18 +70,18 @@ $p->set_var ('site_admin_url',$_CONF['site_admin_url']);
 $p->set_var ('imgset',$_CONF['layout_url'] . '/nexflow/images');
 $p->set_var ('tablewidth', $mydownloads_shotwidth+10);
 $p->set_var('block_header', COM_startBlock(_MD_CATEGORYTITLE));
-$p->set_var('block_footer', COM_endBlock()); 
+$p->set_var('block_footer', COM_endBlock());
 
 $trimDescription=true;    // Set to false if you do not want to auto trim the description and insert the <more..> link
 
-if (!isset($page) OR $page == 0) {
+if (!isset($page) || $page == 0) {
     // If no page sent then assume the first.
     $page = 1;
 }
 $show = $mydownloads_perpage;
 $offset = ($page - 1) * $show;
 
-if(isset($orderby) AND $orderby != "") {
+if(isset($orderby) && $orderby != "") {
     $orderby = convertorderbyin($orderby);
 } else {
     $orderby = "date DESC";
@@ -101,9 +101,10 @@ $arr=$mytree->getFirstChild($cid, 'title');
 $count = 1;
 foreach($arr as $ele) {
     $totalfiles = 0;
+    //debugbreak();
     $chtitle=$myts->makeTboxData4Show($ele['title']);
     $totalfiles = $totalfiles + getTotalItems($ele['cid'], 1);
-    $subcategories = '<a href="' .$_CONF[site_url] .'/filemgmt/viewcat.php?cid=' .$ele['cid'] .'">' .$chtitle .'</a></b>&nbsp;('.$totalfiles.')&nbsp;&nbsp;';
+    $subcategories = '<a href="' .$_CONF['site_url'] .'/filemgmt/viewcat.php?cid=' .$ele['cid'] .'">' .$chtitle .'</a></b>&nbsp;('.$totalfiles.')&nbsp;&nbsp;';
     $p->set_var('subcategories',$subcategories);
     if ($count == $numCategoriesPerRow) {
         $p->set_var('end_of_row','</tr>');
@@ -119,11 +120,25 @@ foreach($arr as $ele) {
     }
 }
 
+// Get a list of subcategories for this category
+$query = DB_query("SELECT cid from  {$_FM_TABLES['filemgmt_cat']} where pid='$cid'");
+$categories = $cid;
+while( list($category) = DB_fetchArray($query)) {
+    $categories = $categories . ",$category";
+}
+$sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
+$sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+$sql .= "WHERE a.cid in ($categories) AND status > 0 $groupsql";
+list($maxrows) = DB_fetchArray(DB_query($sql));
+$numpages = ceil($maxrows / $show);
+
+/*
 $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
 $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
 $sql .= "WHERE a.cid = $cid AND status > 0 $groupsql";
 list($maxrows) = DB_fetchArray(DB_query($sql));
 $numpages = ceil($maxrows / $show);
+*/
 
 if($maxrows > 0) {
     $sql  = "SELECT a.lid, a.cid, a.title, a.url, a.homepage, a.version, a.size, a.submitter, a.logourl, a.status, a.date, a.hits, a.rating, a.votes, a.comments, b.description ";
@@ -134,12 +149,13 @@ if($maxrows > 0) {
     $result = DB_query($sql);
 
     $numrows = DB_numROWS($result);
+
     //if 2 or more items in result, show the sort menu
     if($maxrows > 1){
         $p->set_var('LANG_SORTBY',_MD_SORTBY);
-        $p->set_var('LANG_TITLE',_MD_TITLE);   
-        $p->set_var('LANG_DATE',_MD_DATE);   
-        $p->set_var('LANG_RATING',_MD_RATING);   
+        $p->set_var('LANG_TITLE',_MD_TITLE);
+        $p->set_var('LANG_DATE',_MD_DATE);
+        $p->set_var('LANG_RATING',_MD_RATING);
         $p->set_var('LANG_POPULARITY',_MD_POPULARITY);
         $p->set_var('LANG_CURSORTBY',_MD_CURSORTBY);
         $p->set_var('orderbyTrans',$orderbyTrans = convertorderbytrans($orderby));
@@ -161,11 +177,11 @@ if($maxrows > 0) {
         $result2 = DB_query("SELECT username,fullname,photo  FROM {$_TABLES['users']} WHERE uid = $submitter");
         list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
         $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-        include($_CONF[path_html] ."/filemgmt/include/dlformat.php");
+        include($_CONF['path_html'] ."/filemgmt/include/dlformat.php");
         $p->set_var('cssid',$cssid);
         $p->parse ('filelisting_records', 'records',true);
         $cssid = ($cssid == 2) ? 1 : 2;
-        
+
         // Print Google-like paging navigation
         $base_url = $_CONF['site_url'] . '/filemgmt/viewcat.php?cid='.$cid.'&orderby='.$orderby;
         $p->set_var('page_navigation', COM_printPageNavigation($base_url,$page, $numpages));

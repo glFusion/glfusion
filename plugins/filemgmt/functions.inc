@@ -89,19 +89,19 @@ function plugin_upgrade_filemgmt() {
             }
             return true;
         } elseif ($cur_version == '1.5') {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '{$CONF_FM['version']}' WHERE pi_name = 'filemgmt'");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.1' WHERE pi_name = 'filemgmt'");
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version = '1.4' WHERE pi_name = 'filemgmt'");
-            return true;
         } elseif ($cur_version == '1.5.1') {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '{$CONF_FM['version']}' WHERE pi_name = 'filemgmt'");
-            return true;
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.2' WHERE pi_name = 'filemgmt'");
         } elseif ($cur_version == '1.5.2') {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '{$CONF_FM['version']}' WHERE pi_name = 'filemgmt'");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.3' WHERE pi_name = 'filemgmt'");
+        } elseif ($cur_version == '1.5.3') {
+            DB_query("ALTER TABLE {$_FM_TABLES['filemgmt_cat']} ADD `grp_writeaccess` MEDIUMINT( 8 ) NOT NULL DEFAULT '1'");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.6' WHERE pi_name = 'filemgmt'");
             return true;
         } else {
             return 5;
         }
-
     } else {
         return 3;
     }
@@ -427,7 +427,7 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
         $A = DB_fetchArray($result);
         $thetime = COM_getUserDateTimeFormat($A['day']);
         $url = $_CONF[site_url]. "/filemgmt/index.php?id=".$A['lid'];
-        $row = array("<a href={$url}>{$A['title']}</a>", wordwrap($A['description'],70,"<br" . XHTML . ">"), COM_getDisplayName($A['submitter']), $A['hits']);
+        $row = array("<a href={$url}>{$A['title']}</a>", wordwrap($A['description'],70,"<br>"), COM_getDisplayName($A['submitter']), $A['hits']);
         $plugin_results->addSearchResult($row);
     }
 
@@ -561,11 +561,7 @@ function plugin_uninstall_filemgmt($installCheck='')
 function filemgmt_buildAccessSql($clause='AND') {
     global $_TABLES,$_USER;
 
-    if (DB_getItem($_TABLES['plugins'],'pi_version', "pi_name='filemgmt'") != 1.5) {
-        return '';
-    }
-
-    if (isset($_USER) AND $_USER['uid'] > 1) {
+    if (isset($_USER['uid']) AND $_USER['uid'] > 1) {
         $uid = $_USER['uid'];
     } else {
         $uid = 1;
@@ -604,7 +600,15 @@ function plugin_getfeednames_filemgmt ()
 
 function filemgmt_buildSql ($topic, $limits)
 {
-    $where = '';
+
+    $groups = array ();
+    $usergroups = SEC_getUserGroups(1);
+    foreach ($usergroups as $group) {
+        $groups[] = $group;
+    }
+    $grouplist = implode(',',$groups);
+
+    $where = ' cat.grp_access IN (' . $grouplist . ') ';
     if ($topic > 0) {
         $where = 'cid=' . $topic;
     }
@@ -619,12 +623,12 @@ function filemgmt_buildSql ($topic, $limits)
             }
             $where .= "date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
         } else {
-            $limitsql = ' LIMIT ' . $limits;
+            $limitsql = ' ORDER BY filemgmt.date DESC LIMIT ' . $limits;
         }
     }
     else
     {
-        $limitsql = ' LIMIT 10';
+        $limitsql = ' ORDER BY filedetail.date DESC LIMIT 10';
     }
 
     if (!empty ($where)) {
@@ -632,7 +636,6 @@ function filemgmt_buildSql ($topic, $limits)
     }
 
     $sql = $where . $limitsql;
-
     return $sql;
 }
 
@@ -643,10 +646,11 @@ function plugin_getfeedcontent_filemgmt ($feed, &$link, &$update)
     $content = array ();
     $lids = array ();
 
-    $result = DB_query ("SELECT topic,limits FROM {$_TABLES['syndication']} WHERE fid = $feed");
+    $result = DB_query ("SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = $feed");
     $F = DB_fetchArray ($result);
+    $sql  = "SELECT *,cat.title as cat_title,filedetail.title as file_title FROM {$_FM_TABLES['filemgmt_filedetail']} filedetail LEFT JOIN {$_FM_TABLES['filemgmt_cat']} cat ON filedetail.cid=cat.cid ";
+    $sql .= filemgmt_buildSql( $F['topic'],'' );
 
-    $sql = "SELECT lid,title,submitter,date FROM {$_FM_TABLES['filemgmt_filedetail']}" . filemgmt_buildSql ($F['topic'], $F['limits']);
     $result = DB_query ($sql);
     $num = DB_numRows ($result);
     for ($i = 0; $i < $num; $i++) {
@@ -655,8 +659,8 @@ function plugin_getfeedcontent_filemgmt ($feed, &$link, &$update)
                             "lid = {$A['lid']}");
         $filelink = $_CONF['site_url'] . '/filemgmt/index.php?id='
                   . $A['lid'];
-        $content[] = array ('title'  => $A['title'],
-                            'text'   => $desc,
+        $content[] = array ('title'  => $A['cat_title'] . '::' . $A['file_title'],
+                            'summary'   => $desc,
                             'link'   => $filelink,
                             'uid'    => $A['submitter'],
                             'date'   => $A['date'],
@@ -681,7 +685,10 @@ function plugin_feedupdatecheck_filemgmt ($feed, $topic, $update_data, $limit)
 
     $is_current = true;
 
-    $sql = "SELECT lid FROM {$_FM_TABLES['filemgmt_filedetail']}" . filemgmt_buildSql ($topic, $limits);
+//    $sql = "SELECT lid FROM {$_FM_TABLES['filemgmt_filedetail']}" . filemgmt_buildSql ($topic, $limits);
+    $sql  = "SELECT *,cat.title as cat_title,filedetail.title as file_title FROM {$_FM_TABLES['filemgmt_filedetail']} filedetail LEFT JOIN {$_FM_TABLES['filemgmt_cat']} cat ON filedetail.cid=cat.cid ";
+    $sql .= filemgmt_buildSql( $topic,$limits );
+
     $result = DB_query ($sql);
     $num = DB_numRows ($result);
 
@@ -719,7 +726,6 @@ function plugin_getwhatsnew_filemgmt() {
     global $filemgmtWhatsNewTitleLength,$filemgmtWhatsNewPeriodDays,$filemgmt_showWhatsNewComments;
 
     $retval = '';
-    $nrows2 = 0;
 
     $items = array();
     if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
@@ -774,7 +780,7 @@ function plugin_getwhatsnew_filemgmt() {
         }
     } else {
         $retval .= $LANG_FILEMGMT['no_new_files'] . '<br' . XHTML . '>' . LB;
-        return $retval;
+        return $items;
     }
 }
 

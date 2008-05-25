@@ -1,9 +1,9 @@
 <?php
 // +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com | 
+// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
 // +-------------------------------------------------------------------------+
 // | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |    
+// | Date: Mar 18, 2006                                                      |
 // +-------------------------------------------------------------------------+
 // | Copyright (C) 2004 by Consult4Hire Inc.                                 |
 // | Author:                                                                 |
@@ -34,26 +34,26 @@
 
 class MyTextSanitizer {
 
-    
+
     /*
     * Constructor of this class
     * Gets allowed html tags from admin config settings
-    * <br> should not be allowed since nl2br will be used 
+    * <br> should not be allowed since nl2br will be used
     * when storing data
     */
     function MyTextSanitizer(){
     }
 
-    function &getInstance(){
+    function getInstance(){
         return new MyTextSanitizer();
     }
-            
+
      /*
      * Rewritten by Nathan Codding - Feb 6, 2001.
      * - Goes through the given string, and replaces xxxx://yyyy with an HTML <a> tag linking
      *     to that URL
      * - Goes through the given string, and replaces www.xxxx.yyyy[zzzz] with an HTML <a> tag linking
-     *     to http://www.xxxx.yyyy[/zzzz] 
+     *     to http://www.xxxx.yyyy[/zzzz]
      * - Goes through the given string, and replaces xxxx@yyyy with an HTML mailto: tag linking
      *        to that email address
      * - Only matches these 2 patterns either after a space, or at the beginning of a line
@@ -64,12 +64,12 @@ class MyTextSanitizer {
     function makeClickable($text) {
             // pad it with a space so we can match things at the start of the 1st line.
         $ret = " " . $text;
-    
+
         // matches an "xxxx://yyyy" URL at the start of a line, or after a space.
         // xxxx can only be alpha characters.
         // yyyy is anything up to the first space, newline, or comma.
         $ret = preg_replace("#([\n ])([a-z]+?)://([^, \n\r]+)#i", "\\1<a href=\"\\2://\\3\" target=\"_blank\">\\2://\\3</a>", $ret);
-    
+
         // matches a "www.xxxx.yyyy[/zzzz]" kinda lazy URL thing
         // Must contain at least 2 dots. xxxx contains either alphanum, or "-"
         // yyyy contains either alphanum, "-", or "."
@@ -77,15 +77,15 @@ class MyTextSanitizer {
         // This is slightly restrictive - it's not going to match stuff like "forums.foo.com"
         // This is to keep it from getting annoying and matching stuff that's not meant to be a link.
         $ret = preg_replace("#([\n ])www\.([a-z0-9\-]+)\.([a-z0-9\-.\~]+)((?:/[^, \n\r]*)?)#i", "\\1<a href=\"http://www.\\2.\\3\\4\" target=\"_blank\">www.\\2.\\3\\4</a>", $ret);
-    
+
         // matches an email@domain type address at the start of a line, or after a space.
         // Note: before the @ sign, the only valid characters are the alphanums and "-", "_", or ".".
         // After the @ sign, we accept anything up to the first space, linebreak, or comma.
         $ret = preg_replace("#([\n ])([a-z0-9\-_.]+?)@([^, \n\r]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $ret);
-    
+
         // Remove our padding..
         $ret = substr($ret, 1);
-    
+
         return($ret);
     }
 
@@ -102,15 +102,15 @@ class MyTextSanitizer {
         $replacements[] = "<span style='font-size: \\2;'>\\3</span>";
         $patterns[] = "/\[font=(['\"]?)([^\"']*)\\1](.*)\[\/font\]/sU";
         $replacements[] = "<span style='font-family: \\2;'>\\3</span>";
-        $patterns[] = "/\[email]([^\"]*)\[\/email\]/sU";    
-        $replacements[] = "<a href='mailto:\\1'>\\1</a>"; 
-        $patterns[] = "/\[b](.*)\[\/b\]/sU";    
-        $replacements[] = "<b>\\1</b>"; 
-        $patterns[] = "/\[i](.*)\[\/i\]/sU";    
-        $replacements[] = "<i>\\1</i>"; 
-        $patterns[] = "/\[u](.*)\[\/u\]/sU";    
+        $patterns[] = "/\[email]([^\"]*)\[\/email\]/sU";
+        $replacements[] = "<a href='mailto:\\1'>\\1</a>";
+        $patterns[] = "/\[b](.*)\[\/b\]/sU";
+        $replacements[] = "<b>\\1</b>";
+        $patterns[] = "/\[i](.*)\[\/i\]/sU";
+        $replacements[] = "<i>\\1</i>";
+        $patterns[] = "/\[u](.*)\[\/u\]/sU";
         $replacements[] = "<u>\\1</u>";
-        //$patterns[] = "/\[li](.*)\[\/li\]/sU";    
+        //$patterns[] = "/\[li](.*)\[\/li\]/sU";
         //$replacements[] = "<li>\\1</li>";
         $patterns[] = "/\[img align=(['\"]?)(left|right)\\1]([^\"\(\)\?\&]*)\[\/img\]/sU";
         $replacements[] = "<img src='\\3' align='\\2' alt'/' />";
@@ -140,11 +140,11 @@ class MyTextSanitizer {
         return $input;
     }
 
-    
-    function oopsNl2Br($text) { 
+
+    function oopsNl2Br($text) {
         $text = preg_replace("/(\015\012)|(\015)|(\012)/","<br />",$text);
-        return $text; 
-    } 
+        return $text;
+    }
 
     /*
     * if magic_quotes_gpc is off, add back slashes
@@ -152,7 +152,7 @@ class MyTextSanitizer {
     function oopsAddSlashes($text) {
         if (!get_magic_quotes_gpc()) {
             $text = addslashes($text);
-        } 
+        }
         return $text;
     }
 
@@ -257,7 +257,7 @@ class MyTextSanitizer {
 
     /*
     *  Used when textbox data in DB is to be editted in html form.
-    *  "&amp;" must be converted back to "&" to maintain the correct 
+    *  "&amp;" must be converted back to "&" to maintain the correct
     *  ISO encoding values, which is needed for some multi-bytes chars.
     */
     function makeTboxData4Edit($text){
@@ -266,7 +266,7 @@ class MyTextSanitizer {
         return $text;
     }
 
-    /* 
+    /*
     *  Called when previewing textbox form data submitted from a form.
     *  Smilies can be used if needed
     *  Use makeTboxData4PreviewInForm when textbox data is to be
@@ -296,7 +296,7 @@ class MyTextSanitizer {
     *   Called before displaying textarea form data from DB
     */
     function makeTareaData4Show($text, $allowhtml=1, $smiley=0, $bbcode=0){
-        $text = $this->sanitizeForDisplay($text,$allowhtml,$smiley,$bbcode); 
+        $text = $this->sanitizeForDisplay($text,$allowhtml,$smiley,$bbcode);
         return $text;
     }
 
@@ -311,11 +311,11 @@ class MyTextSanitizer {
     }
 
     /*
-    *   Called when previewing textarea data which was submitted 
+    *   Called when previewing textarea data which was submitted
     *   via an html form
     */
     function makeTareaData4Preview($text, $allowhtml=1, $smiley=0, $bbcode=0){
-        $text = $this->sanitizeForPreview($text,$allowhtml,$smiley,$bbcode); 
+        $text = $this->sanitizeForPreview($text,$allowhtml,$smiley,$bbcode);
         return $text;
     }
 
@@ -334,7 +334,7 @@ class MyTextSanitizer {
     /*
     *  Use this function when you need to output textarea value inside
     *  quotes. For example, meta keywords are saved as textarea value
-    *  but it is displayed inside <meta> tag keywords attribute with 
+    *  but it is displayed inside <meta> tag keywords attribute with
     *  quotes around it. This can be also used for textbox values.
     */
     function makeTareaData4InsideQuotes($text){

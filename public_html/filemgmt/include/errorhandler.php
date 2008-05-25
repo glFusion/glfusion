@@ -1,9 +1,9 @@
 <?php
 // +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com | 
+// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
 // +-------------------------------------------------------------------------+
 // | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |    
+// | Date: Mar 18, 2006                                                      |
 // +-------------------------------------------------------------------------+
 // | Copyright (C) 2004 by Consult4Hire Inc.                                 |
 // | Author:                                                                 |
@@ -91,7 +91,7 @@ class ErrorHandler {
             "1106" => "Upload Add Error: The new file was not created. Check error.log",
             "1107" => "Upload Add Error: The temporary file was not found. Check error.log",
             "1108" => "Duplicate file - already existing in filestore",
-            
+
             "9999" => "OOPS! God Knows"
         );
 
@@ -99,7 +99,7 @@ class ErrorHandler {
         if (!in_array($e_code, $errorno)) {
             $e_code = '9999';
         }
-        include_once($_CONF[path_html]."filemgmt/include/header.php");
+        include_once($_CONF['path_html']."filemgmt/include/header.php");
         $display  = COM_siteHeader('menu');
         $display .= '<table width="100%" class="plugin" border="0" cellspacing="0" cellpadding="1">';
         $display .= '<tr><td class="pluginAlert" style="text-align:right;padding:5px;">File Management Plugin</td>';

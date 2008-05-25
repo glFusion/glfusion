@@ -32,10 +32,10 @@
 // +-------------------------------------------------------------------------+
 //
 require_once("../lib-common.php");
-include_once($_CONF[path_html]."filemgmt/include/header.php");
-include($_CONF[path_html] ."filemgmt/include/functions.php");
-include_once($_CONF[path_html]."filemgmt/include/xoopstree.php");
-include_once($_CONF[path_html]."filemgmt/include/textsanitizer.php");
+include_once($_CONF['path_html']."filemgmt/include/header.php");
+include_once($_CONF['path_html']."filemgmt/include/functions.php");
+include_once($_CONF['path_html']."filemgmt/include/xoopstree.php");
+include_once($_CONF['path_html']."filemgmt/include/textsanitizer.php");
 
 // Setup how many categories you want to show in the category row display
 $numCategoriesPerRow  = 2;
@@ -58,9 +58,9 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
     $mytree->setGroupAccessFilter($_GROUPS);
 
     $display = COM_siteHeader('menu');
-    $lid = COM_applyFilter($_GET['id'],true);
+    $lid = isset($_GET['id']) ? COM_applyFilter($_GET['id'],true) : 0;
     if ($lid == 0) {  // Check if the script is being called from the commentbar
-        $lid = str_replace('fileid_','',$_POST['id']);
+        $lid = str_replace('fileid_','',isset($_POST['id']) ? $_POST['id'] : 0);
     }
 
     $groupsql = filemgmt_buildAccessSql();
@@ -95,14 +95,14 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
         $homepage = $myts->makeTboxData4Show($homepage);
         $version = $myts->makeTboxData4Show($version);
         $size = $myts->makeTboxData4Show($size);
-        $platform = $myts->makeTboxData4Show($platform);
+        $platform = $myts->makeTboxData4Show(isset($platform) ? $platform : '');
         $logourl = $myts->makeTboxData4Show($logourl);
         $datetime = formatTimestamp($time);
-        $description = $myts->makeTareaData4Show($description,0); //no html
+        $description = PLG_replaceTags($myts->makeTareaData4Show($description,0)); //no html
         $result2 = DB_query("SELECT username,fullname,photo FROM {$_TABLES['users']} WHERE uid = $submitter");
         list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
         $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-        include($_CONF[path_html] ."/filemgmt/include/dlformat.php");
+        include($_CONF['path_html'] ."/filemgmt/include/dlformat.php");
 
         $p->set_var('cssid',1);
         $p->parse ('filelisting_records', 'records');
@@ -110,6 +110,9 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
             $delete_option = true;
         } else {
             $delete_option = false;
+        }
+        if ( !isset($title)) {
+            $title = '';
         }
         $p->set_var('comment_records', CMT_userComments( "fileid_{$lid}", $title, 'filemgmt',$_POST['order'],$_POST['mode'],0,1,false,$delete_option));
         $p->parse ('output', 'page');
@@ -129,7 +132,7 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
         $p->set_var ('imgset',$_CONF['layout_url'] . '/nexflow/images');
         $p->set_var ('tablewidth', $mydownloads_shotwidth+10);
 
-        $page = COM_applyFilter($_GET['page'],true);
+        $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
         if (!isset($page) OR $page == 0) {
             $page = 1;
         }
@@ -193,7 +196,7 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
                         if ($space>0) {
                             $subcategories .= ", ";
                         }
-                        $subcategories .= "<a href=\"{$_CONF[site_url]}/filemgmt/viewcat.php?cid={$ele['cid']}\">{$chtitle}</a>";
+                        $subcategories .= "<a href=\"{$_CONF['site_url']}/filemgmt/viewcat.php?cid={$ele['cid']}\">{$chtitle}</a>";
                         $space++;
                         $chcount++;
                     }
@@ -237,10 +240,10 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
                     $homepage = $myts->makeTboxData4Show($homepage);
                     $version = $myts->makeTboxData4Show($version);
                     $size = $myts->makeTboxData4Show($size);
-                    $platform = $myts->makeTboxData4Show($platform);
+                    $platform = $myts->makeTboxData4Show(isset($platform) ? $platform : '');
                     $logourl = $myts->makeTboxData4Show($logourl);
                     $datetime = formatTimestamp($time);
-                    $description = $myts->makeTareaData4Show($description,0); //no html
+                    $description = PLG_replaceTags($myts->makeTareaData4Show($description,0)); //no html
                     $breakPosition = strpos($description,"<br /><br />");
                     if (($breakPosition > 0) AND ($breakPosition < strlen($description)) AND $mydownloads_trimdesc) {
                         $description = substr($description, 0,$breakPosition) . "<p style=\"text-align:left;\"><a href=\"{$_CONF[site_url]}/filemgmt/index.php?id=$lid&amp;comments=1\">{$LANG_FILEMGMT['more']}</a></p>";
@@ -248,7 +251,7 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
                     $result2 = DB_query("SELECT username,fullname,photo  FROM {$_TABLES['users']} WHERE uid = $submitter");
                     list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
                     $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-                    include($_CONF[path_html] ."/filemgmt/include/dlformat.php");
+                    include($_CONF['path_html'] ."/filemgmt/include/dlformat.php");
                     $p->set_var('cssid',$cssid);
                     $p->parse ('filelisting_records', 'records',true);
                     $cssid = ($cssid == 2) ? 1 : 2;

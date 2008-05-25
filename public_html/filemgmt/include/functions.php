@@ -35,13 +35,14 @@
 function newdownloadgraphic($time, $status) {
     global $_CONF;
 
+    $functionretval = '';
     $count = 7;
     $startdate = (time()-(86400 * $count));
     if ($startdate < $time) {
         if($status==1){
-            $functionretval = "&nbsp<img src=\"{$_CONF[site_url]}/filemgmt/images/newred.gif\" alt=\"" ._MD_NEWTHISWEEK . '"' . XHTML . '>';
+            $functionretval = "&nbsp<img src=\"{$_CONF['site_url']}/filemgmt/images/newred.gif\" alt=\"" ._MD_NEWTHISWEEK . '"' . XHTML . '>';
         }elseif($status==2){
-            $functionretval = "&nbsp<img src=\"{$_CONF[site_url]}/filemgmt/images/update.gif\" alt=\"" ._MD_UPTHISWEEK . '"' . XHTML . '>';
+            $functionretval = "&nbsp<img src=\"{$_CONF['site_url']}/filemgmt/images/update.gif\" alt=\"" ._MD_UPTHISWEEK . '"' . XHTML . '>';
             }
         }
         return $functionretval;
@@ -50,8 +51,10 @@ function newdownloadgraphic($time, $status) {
 function popgraphic($hits) {
         global $_CONF, $mydownloads_popular;
 
+        $functionretval = '';
+
         if ($hits >= $mydownloads_popular) {
-            $functionretval = "&nbsp<img src=\"{$_CONF[site_url]}/filemgmt/images/pop.gif\" alt=\"" ._MD_POPULAR . '"' . XHTML . '>';
+            $functionretval = "&nbsp<img src=\"{$_CONF['site_url']}/filemgmt/images/pop.gif\" alt=\"" ._MD_POPULAR . '"' . XHTML . '>';
         }
         return $functionretval;
 }

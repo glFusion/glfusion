@@ -113,6 +113,8 @@ function plugin_install_now()
     global $pi_name, $pi_version, $gl_version, $pi_url, $NEWTABLE, $DEFVALUES, $NEWFEATURE;
     global $_TABLES, $_CONF, $_FM_TABLES;
 
+    $progress = '';
+
     COM_errorLog("Attempting to install the $pi_name Plugin",1);
     $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
 
@@ -131,9 +133,9 @@ function plugin_install_now()
         next($_SQL);
     }
     COM_errorLog("Success - Created $table table",1);
-       
+
     // Insert Default Data
-    
+
     foreach ($DEFVALUES as $table => $sql) {
         COM_errorLog("Inserting default data into $table table",1);
         DB_query($sql,1);
@@ -145,7 +147,7 @@ function plugin_install_now()
         }
         COM_errorLog("Success - inserting data into $table table",1);
     }
-    
+
     // Create the plugin admin security group
     COM_errorLog("Attempting to create $pi_name admin group", 1);
     DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr) "
@@ -157,7 +159,7 @@ function plugin_install_now()
     }
     COM_errorLog('...success',1);
     $group_id = DB_insertId();
-    
+
     // Save the grp id for later uninstall
     COM_errorLog('About to save group_id to vars table for use during uninstall',1);
     DB_query("INSERT INTO {$_TABLES['vars']} VALUES ('{$pi_name}_admingrp_id', $group_id)",1);
@@ -167,7 +169,7 @@ function plugin_install_now()
         exit;
     }
     COM_errorLog('...success',1);
-    
+
     // Add plugin Features
     foreach ($NEWFEATURE as $feature => $desc) {
         COM_errorLog("Adding $feature feature",1);
@@ -190,8 +192,8 @@ function plugin_install_now()
             exit;
         }
         COM_errorLog("Success",1);
-    }        
-    
+    }
+
     // OK, now give Root users access to this plugin now! NOTE: Root group should always be 1
     COM_errorLog("Attempting to give all users in Root group access to $pi_name admin group",1);
     DB_query("INSERT INTO {$_TABLES['group_assignments']} VALUES ($group_id, NULL, 1)");
@@ -221,7 +223,7 @@ function plugin_install_now()
 
 
 
-/* 
+/*
 * Main Function
 */
 

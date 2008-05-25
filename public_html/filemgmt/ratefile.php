@@ -33,7 +33,7 @@
 
 require_once('../lib-common.php');
 include_once($_CONF[path_html]."filemgmt/include/header.php");
-include($_CONF[path_html] ."filemgmt/include/functions.php");
+include_once($_CONF['path_html']."filemgmt/include/functions.php");
 include_once($_CONF[path_html]."filemgmt/include/errorhandler.php");
 include_once($_CONF[path_html]."filemgmt/include/textsanitizer.php");
 

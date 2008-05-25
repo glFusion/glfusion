@@ -39,10 +39,10 @@ function plugin_install_filemgmt($_DB_table_prefix)
 
     require_once($_CONF['path'] . '/plugins/filemgmt/config.php');
 
-    $pi_name = 'filemgmt';                    // Plugin name
-    $pi_version = $CONF_FM['version'];        // Plugin Version
-    $gl_version = '1.4';                      // GL Version plugin for
-    $pi_url = 'http://www.portalparts.com';   // Plugin Homepage
+    $pi_name    = 'filemgmt';                   // Plugin name
+    $pi_version = $CONF_FM['version'];          // Plugin Version
+    $gl_version = '1.5.0';                      // GL Version plugin for
+    $pi_url     = 'http://www.portalparts.com'; // Plugin Homepage
 
     // Default data
     // Insert table name and sql to insert default data for your plugin.

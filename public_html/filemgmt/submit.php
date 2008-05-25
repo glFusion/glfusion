@@ -33,7 +33,7 @@
 
 require_once("../lib-common.php");
 include_once($_CONF[path_html]."filemgmt/include/header.php");
-include($_CONF[path_html] ."filemgmt/include/functions.php");
+include_once($_CONF['path_html']."filemgmt/include/functions.php");
 include_once($_CONF[path_html]."filemgmt/include/xoopstree.php");
 include_once($_CONF[path_html]."filemgmt/include/errorhandler.php");
 include_once($_CONF[path_html]."filemgmt/include/textsanitizer.php");
@@ -98,6 +98,14 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $date = time();
         $tmpfilename = randomfilename();
 
+        // Determine write group access to this category
+        $grp_writeaccess = DB_getItem($_FM_TABLES['filemgmt_cat'],'grp_writeaccess',"cid=$cid");
+        if (SEC_inGroup($grp_writeaccess)) {
+            $directUploadAccess = true;
+        } else {
+            $directUploadAccess = false;
+        }
+
         // Upload New file
         if ($uploadfilename != '') {
             $pos = strrpos($uploadfilename,'.') + 1;
@@ -120,9 +128,18 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             }
             $tmp  = $_FILES["newfile"]['tmp_name'];    // temporary name of file in temporary directory on server
             if (is_uploaded_file ($tmp)) {                               // is this temporary file really uploaded?
-                $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
+                if ($directUploadAccess) {
+                    $returnMove = move_uploaded_file($tmp, "{$filemgmt_FileStore}{$name}");             // move file to your upload directory
+                } else {
+                    $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
+                }
+//                $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
                 if (!$returnMove) {
-                    COM_errorLOG("Filemgmt submit error: Temporary file could not be created: ".$tmp." to ".$filemgmt_FileStore."tmp/".$tmpfilename);
+                    if ($directUploadAccess) {
+                        COM_errorLOG("Filemgmt submit error: Direct upload, file could not be created: $tmp to {$filemgmt_FileStore}{$name}");
+                    } else {
+                        COM_errorLOG("Filemgmt submit error: Temporary file could not be created: $tmp to {$filemgmt_FileStore}tmp}/{$tmpfilename}");
+                    }
                     $eh->show("1102");
                 } else {
                     $AddNewFile = true;
@@ -163,7 +180,11 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $tmpfilename .= ';'.$tmpshotname;
 
             if (is_uploaded_file ($tmp)) {
-                $returnMove = move_uploaded_file($tmp, $filemgmt_SnapStore."tmp/".$tmpshotname);    // move temporary snapfile to your upload directory
+                if ($directUploadAccess) {
+                    $returnMove = move_uploaded_file($tmp, "{$filemgmt_SnapStore}{$tmpshotname}");    // move temporary snapfile to your upload directory
+                } else {
+                    $returnMove = move_uploaded_file($tmp, "{$filemgmt_SnapStore}tmp/{$tmpshotname}");    // move temporary snapfile to your upload directory
+                }
                 if (!$returnMove) {
                     COM_errorLOG("Filemgmt submit error: Temporary file could not be created: ".$tmp." to ".$filemgmt_SnapStore."tmp/".$tmpshotname);
                     $AddNewFile = false;    // Set false again - in case it was set true above for actual file
@@ -175,10 +196,22 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         }
 
         if ($AddNewFile){
-            DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} (cid, title, url, homepage, version, size, platform, logourl, submitter, status, date, hits, rating, votes, comments) VALUES ('$cid', '$title', '$url', '$homepage', '$version', '$size', '$tmpfilename', '$logourl', '$submitter', 0, '$date', 0, 0, 0, '$comments')")  or $eh->show("0013");
+            if ($directUploadAccess) {
+                $status = 1;
+            } else {
+                $status = 0;
+            }
+            $fields = 'cid,title,url,homepage,version,size,platform,logourl,submitter,status,date,hits,rating,votes,comments';
+            $sql = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} ($fields) VALUES ";
+            $sql .= "('$cid','$title','$url','$homepage','$version','$size','$tmpfilename','$logourl','$submitter',$status,'$date',0,0,0,'$comments')";
+            DB_query($sql) or $eh->show("0013");
             $newid = DB_insertID();
             DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
-            redirect_header("index.php",2,_MD_RECEIVED."<br>"._MD_WHENAPPROVED."");
+            if ($directUploadAccess) {
+                redirect_header("index.php",2,_MD_FILEAPPROVED);
+            } else {
+                redirect_header("index.php",2,_MD_RECEIVED."<br>"._MD_WHENAPPROVED."");
+            }
             exit();
         } else {
             redirect_header("index.php",2,_MD_ERRUPLOAD."");
@@ -189,11 +222,13 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
         $display .= COM_siteHeader('menu');
         $display .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
-        $display .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"8\" class=\"plugin\"><tr><td style=\"padding-top:10px;padding-left:50px;\">\n";
+        $display .= "<table width=\"100%\" cellspacing=0 cellpadding=8 class=\"plugin\"><tr><td style=\"padding-top:10px;padding-left:50px;\">\n";
         $display .= "<ul><li>"._MD_SUBMITONCE."</li>\n";
         $display .= "<li>"._MD_ALLPENDING."</li>\n";
         $display .= "<li>"._MD_DONTABUSE."</li>\n";
-        $display .= "<li>"._MD_TAKEDAYS."</li></ul>\n";
+        $display .= "<li>"._MD_TAKEDAYS."</li>\n";
+        $display .= "<li>"._MD_REQUIRED."</li></ul>\n";
+
         $display .= "<form action=\"submit.php\" method=\"post\" enctype='multipart/form-data'> \n";
         $display .= "<table width=\"80%\"><tr>";
         $display .= "<td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_FILETITLE."</b></td><td>";
@@ -202,8 +237,42 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $display .= "<input type=\"file\" name=\"newfile\" size=\"50\" maxlength=\"100\"" . XHTML . ">";
         $display .= "</td></tr>";
         $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_CATEGORY."</b></td><td>";
-        $display .= $mytree->makeMySelBox('title', 'title');
-        $display .= "</td></tr>\n";
+
+        $sql = "SELECT cid,title,grp_writeaccess FROM {$_FM_TABLES['filemgmt_cat']} WHERE pid=0 ";
+        if (count($_GROUPS) == 1) {
+            $sql .= " AND grp_access = '" . current($_GROUPS) ."' ";
+        } else {
+            $sql .= " AND grp_access IN (" . implode(',',array_values($_GROUPS)) .") ";
+        }
+        $sql .= "ORDER BY cid";
+        $query = DB_query($sql);
+        $categorySelectHTML = '<select name="cid">';
+        while (list($cid,$title,$directUploadGroup) = DB_fetchArray($query)) {
+            $categorySelectHTML .= '<option value="'.$cid.'">';
+            if (!SEC_inGroup($directUploadGroup)) {
+                $categorySelectHTML .= "$title *";
+            } else {
+                $categorySelectHTML .= "$title";
+            }
+            $categorySelectHTML .= "</option>\n";
+            $arr = $mytree->getChildTreeArray($cid);
+            foreach ( $arr as $option ) {
+                $option['prefix'] = str_replace(".","--",$option['prefix']);
+                $catpath = $option['prefix']."&nbsp;".$myts->makeTboxData4Show($option[2]);
+                $categorySelectHTML .= '<option value="'.$option[$mytree->id] . '">';
+                if (!SEC_inGroup($option[5])) {
+                    $categorySelectHTML .= "$catpath *";
+                } else {
+                    $categorySelectHTML .= "$catpath";
+                }
+                $categorySelectHTML .= "</option>\n";
+            }
+        }
+        $categorySelectHTML .= '</select>';
+
+        $display .= $categorySelectHTML;
+        $display .= '<span class="pluginTinyText" style="padding-left:5px;">' ._MD_APPROVEREQ ."</span></td></tr>\n";
+
         $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_HOMEPAGEC."</b></td><td>\n";
         $display .= "<input type=\"text\" name=\"homepage\" size=\"50\" maxlength=\"100\"" . XHTML . "></td></tr>\n";
         $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_VERSIONC."</b></td><td>\n";

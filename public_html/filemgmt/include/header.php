@@ -1,9 +1,9 @@
 <?php
 // +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com | 
+// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
 // +-------------------------------------------------------------------------+
 // | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |    
+// | Date: Mar 18, 2006                                                      |
 // +-------------------------------------------------------------------------+
 // | Copyright (C) 2004 by Consult4Hire Inc.                                 |
 // | Author:                                                                 |
@@ -30,6 +30,12 @@
 // |                                                                         |
 // +-------------------------------------------------------------------------+
 //
+
+// this file can't be used on its own
+if (strpos ($_SERVER['PHP_SELF'], 'header.php') !== false)
+{
+    die ('This file can not be used on its own.');
+}
 
 $FilemgmtUser  = false;
 $FilemgmtAdmin = false;
@@ -65,11 +71,9 @@ function OpenTable($width="99%") {
  $retval .= "<table width='100%' border='0' cellspacing='1' cellpadding='8'><tr><td valign='top'>\n";
  return $retval;
 }
- 
+
 function CloseTable() {
- $retval .= "</td></tr></table></td></tr></table>\n";
+ $retval = "</td></tr></table></td></tr></table>\n";
  return $retval;
 }
-
-
 ?>
