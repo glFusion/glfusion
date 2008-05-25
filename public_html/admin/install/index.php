@@ -37,7 +37,7 @@
 // | Please read docs/install.html which describes how to install Geeklog.     |
 // +---------------------------------------------------------------------------+
 //
-// $Id: index.php,v 1.40 2008/05/11 07:25:08 dhaun Exp $
+// $Id: index.php,v 1.41 2008/05/24 19:12:02 dhaun Exp $
 
 // this should help expose parse errors even when
 // display_errors is set to Off in php.ini
@@ -239,28 +239,28 @@ function INST_installEngine($install_type, $install_step)
                 <input type="hidden" name="language" value="' . $language . '"' . XHTML . '>
                 <input type="hidden" name="dbconfig_path" value="' . $dbconfig_path . '"' . XHTML . '>
 
-                <p><label>' . $LANG_INSTALL[32] . ' ' . INST_helpLink('site_name') . '</label> <input type="text" name="site_name" value="' . $site_name . '" size="40"' . XHTML . '></p>
+                <p><label>' . $LANG_INSTALL[32] . ' ' . INST_helpLink('site_name') . '</label> <input type="text" name="site_name" value="' . $site_name . '" size="40"' . XHTML . '></p><br />
                 <p><label>' . $LANG_INSTALL[33] . ' ' . INST_helpLink('site_slogan') . '</label> <input type="text" name="site_slogan" value="' . $site_slogan . '" size="40"' . XHTML . '></p><br' . XHTML . '>
                 <p><label>' . $LANG_INSTALL[34] . ' ' . INST_helpLink('db_type') . '</label> <select name="db_type">
                     <option value="mysql"' . $mysql_selected . '>' . $LANG_INSTALL[35] . '</option>
                     ' . ($install_type == 'install' ? '<option value="mysql-innodb"' . $mysql_innodb_selected . '>' . $LANG_INSTALL[36] . '</option>' : '') . '
-                    <option value="mssql"' . $mssql_selected . '>' . $LANG_INSTALL[37] . '</option></select> ' . $innodbnote . '</p>
-                <p><label>' . $LANG_INSTALL[39] . ' ' . INST_helpLink('db_host') . '</label> <input type="text" name="db_host" value="'. $db_host .'" size="20"' . XHTML . '></p>
-                <p><label>' . $LANG_INSTALL[40] . ' ' . INST_helpLink('db_name') . '</label> <input type="text" name="db_name" value="'. $db_name . '" size="20"' . XHTML . '></p>
-                <p><label>' . $LANG_INSTALL[41] . ' ' . INST_helpLink('db_user') . '</label> <input type="text" name="db_user" value="' . $db_user . '" size="20"' . XHTML . '></p>
-                <p><label>' . $LANG_INSTALL[42] . ' ' . INST_helpLink('db_pass') . '</label> <input type="password" name="db_pass" value="' . $db_pass . '" size="20"' . XHTML . '></p>
-                <p><label>' . $LANG_INSTALL[43] . ' ' . INST_helpLink('db_prefix') . '</label> <input type="text" name="db_prefix" value="' . $db_prefix . '" size="20"' . XHTML . '></p>
+                    <option value="mssql"' . $mssql_selected . '>' . $LANG_INSTALL[37] . '</option></select> ' . $innodbnote . '</p><br />
+                <p><label>' . $LANG_INSTALL[39] . ' ' . INST_helpLink('db_host') . '</label> <input type="text" name="db_host" value="'. $db_host .'" size="20"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[40] . ' ' . INST_helpLink('db_name') . '</label> <input type="text" name="db_name" value="'. $db_name . '" size="20"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[41] . ' ' . INST_helpLink('db_user') . '</label> <input type="text" name="db_user" value="' . $db_user . '" size="20"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[42] . ' ' . INST_helpLink('db_pass') . '</label> <input type="password" name="db_pass" value="' . $db_pass . '" size="20"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[43] . ' ' . INST_helpLink('db_prefix') . '</label> <input type="text" name="db_prefix" value="' . $db_prefix . '" size="20"' . XHTML . '></p><br />
 
                 <br' . XHTML . '>
                 <h2>' . $LANG_INSTALL[44] . '</h2>
-                <p><label>' . $LANG_INSTALL[45] . ' ' . INST_helpLink('site_url') . '</label> <input type="text" name="site_url" value="' . $site_url . '" size="50"' . XHTML . '>  &nbsp; ' . $LANG_INSTALL[46] . '</p>
-                <p><label>' . $LANG_INSTALL[47] . ' ' . INST_helpLink('site_admin_url') . '</label> <input type="text" name="site_admin_url" value="' . $site_admin_url . '" size="50"' . XHTML . '>  &nbsp; ' . $LANG_INSTALL[46] . '</p>
-                <p><label>' . $LANG_INSTALL[48] . ' ' . INST_helpLink('site_mail') . '</label> <input type="text" name="site_mail" value="' . $site_mail . '" size="50"' . XHTML . '></p>
-                <p><label>' . $LANG_INSTALL[49] . ' ' . INST_helpLink('noreply_mail') . '</label> <input type="text" name="noreply_mail" value="' . $noreply_mail . '" size="50"' . XHTML . '></p>';
+                <p><label>' . $LANG_INSTALL[45] . ' ' . INST_helpLink('site_url') . '</label> <input type="text" name="site_url" value="' . $site_url . '" size="50"' . XHTML . '>  &nbsp; ' . $LANG_INSTALL[46] . '</p><br />
+                <p><label>' . $LANG_INSTALL[47] . ' ' . INST_helpLink('site_admin_url') . '</label> <input type="text" name="site_admin_url" value="' . $site_admin_url . '" size="50"' . XHTML . '>  &nbsp; ' . $LANG_INSTALL[46] . '</p><br />
+                <p><label>' . $LANG_INSTALL[48] . ' ' . INST_helpLink('site_mail') . '</label> <input type="text" name="site_mail" value="' . $site_mail . '" size="50"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[49] . ' ' . INST_helpLink('noreply_mail') . '</label> <input type="text" name="noreply_mail" value="' . $noreply_mail . '" size="50"' . XHTML . '></p><br />';
 
             if ($install_type == 'install') {
                 $display .= '
-                    <p><label>' . $LANG_INSTALL[92] . ' ' . INST_helpLink('utf8') . '</label> <input type="checkbox" name="utf8"' . ($utf8 ? ' checked="checked"' : '') . XHTML . '></p>';
+                    <p><label>' . $LANG_INSTALL[92] . ' ' . INST_helpLink('utf8') . '</label> <input type="checkbox" name="utf8"' . ($utf8 ? ' checked="checked"' : '') . XHTML . '></p><br />';
             }
 
             $display .= '
@@ -1031,6 +1031,41 @@ function INST_getDefaultLanguage($langpath, $language, $utf8 = false)
 
 
 /**
+ * Make a nice display name from the language filename
+ *
+ * @param    string  $file   filename without the extension
+ * @return   string          language name to display to the user
+ * @note     This code is a straight copy from MBYTE_languageList()
+ *
+ */
+function INST_prettifyLanguageName($filename)
+{
+    $langfile = str_replace ('_utf-8', '', $filename);
+    $uscore = strpos ($langfile, '_');
+    if ($uscore === false) {
+        $lngname = ucfirst ($langfile);
+    } else {
+        $lngname = ucfirst (substr ($langfile, 0, $uscore));
+        $lngadd = substr ($langfile, $uscore + 1);
+        $lngadd = str_replace ('utf-8', '', $lngadd);
+        $lngadd = str_replace ('_', ', ', $lngadd);
+        $word = explode (' ', $lngadd);
+        $lngadd = '';
+        foreach ($word as $w) {
+            if (preg_match ('/[0-9]+/', $w)) {
+                $lngadd .= strtoupper ($w) . ' ';
+            } else {
+                $lngadd .= ucfirst ($w) . ' ';
+            }
+        }
+        $lngname .= ' (' . trim ($lngadd) . ')';
+    }
+
+    return $lngname;
+}
+
+
+/**
  * Check if a table exists
  *
  * @param   string $table   Table name
@@ -1787,7 +1822,7 @@ if ($mode == 'check_permissions') {
 
     foreach (glob('language/*.php') as $filename) {
         $filename = preg_replace('/.php/', '', preg_replace('/language\//', '', $filename));
-        $display .= '<option value="' . $filename . '"' . (($filename == $language) ? ' selected="selected"' : '') . '>' . ucfirst($filename) . '</option>' . LB;
+        $display .= '<option value="' . $filename . '"' . (($filename == $language) ? ' selected="selected"' : '') . '>' . INST_prettifyLanguageName($filename) . '</option>' . LB;
     }
 
     $display .= '</select>
@@ -2089,10 +2124,12 @@ switch ($mode) {
             <div class="install-type-container-outer">
                <div class="install-type-container-inner">
                    <h2>' . $LANG_INSTALL[23] . '</h2>
+                   <div style="width:50%;text-align:center;">
                    <div class="install floatleft"><a href="' . $req_string
                     . '&amp;op=install">' . $LANG_INSTALL[24] . '</a></div>
                    <div class="upgrade floatright"><a href="' . $req_string
                     . '&amp;op=upgrade">' . $LANG_INSTALL[25] . '</a></div>
+                    </div>
                </div>
 			</div>' . LB;
         }

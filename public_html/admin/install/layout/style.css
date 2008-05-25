@@ -2,6 +2,23 @@
 
 *****************************************************************/
 
+label,input {
+display:block;
+width:200px;
+float:left;
+margin-bottom:10px;
+}
+label {
+text-align:right;
+width:200px;
+padding-right:20px;
+}
+
+br {
+clear:left;
+}
+
+
 #gl_container_fluid {
   background:#FFFFFF; /*needs to be set here*/
   min-width:720px;
