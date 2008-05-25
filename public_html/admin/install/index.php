@@ -1763,7 +1763,7 @@ $display .= '<head>
         </div> <!-- end of gl_header -->
 
         <div id="gl_moomenu">
-			<a style="float:right;" href="' . $LANG_INSTALL[87] . '">' . $LANG_INSTALL[1] . '</a>
+			<a style="float:right;padding-right:10px;" href="' . $LANG_INSTALL[87] . '">' . $LANG_INSTALL[1] . '</a>
 		</div>
         <div id="gl_wrapper">' . LB;
 
