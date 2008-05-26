@@ -63,18 +63,20 @@ function plugin_install_forum($_DB_table_prefix )
 
     // Example default data
 
-    $DEFVALUES['gf_settings'] = "INSERT INTO {$_TABLES['gf_settings']} VALUES (
-    '', 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 5, 0, 40, 10, 10, 20, 20, 20, 60, 60, 1, 0, 0, '', 1, 0, 1, 40, 5, 20, 5, 0, 5, 2, 2, 0, 1, 15, 35, 70, 120, 'Newbie', 'Junior', 'Chatty', 'Regular Member', 'Active Member');";
+    $DEFVALUES['gf_settings'] = "INSERT INTO {$_TABLES['gf_settings']}
+        (`slogan`, `registrationrequired`, `registerpost`, `allowhtml`, `glfilter`, `use_geshi_formatting`, `censor`, `showmood`, `allowsmilies`, `allowavatar`, `allow_notify`, `post_htmlmode`, `allow_userdatefmt`, `showiframe`, `autorefresh`, `refresh_delay`, `xtrausersettings`, `viewtopicnumchars`, `topicsperpage`, `postsperpage`, `messagesperpage`, `searchesperpage`, `popular`, `speedlimit`, `edit_timewindow`, `use_spamxfilter`, `use_smiliesplugin`, `use_pmplugin`, `imgset`, `cb_enable`, `cb_homepage`, `cb_where`, `cb_subjectsize`, `cb_numposts`, `sb_subjectsize`, `sb_numposts`, `sb_latestposts`, `min_comment_len`, `min_name_len`, `min_subject_len`, `html_newline`, `level1`, `level2`, `level3`, `level4`, `level5`, `level1name`, `level2name`, `level3name`, `level4name`, `level5name`)
+        VALUES ('',0,0,0,1,1,1,1,1,1,1,0,0,1,1,5,0,40,10,10,20,20,20,60,60,1,0,0,'',1,1,2,40,10,20,5,0,5,2,2,0,1,15,35,70,120,'Newbie','Junior','Chatty','Regular Member','Active Member');";
 
     $DEFVALUES['block1'] = "INSERT INTO {$_TABLES['blocks']} (is_enabled,name,type,title,tid,blockorder,onleft,phpblockfn,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) "
-         . " VALUES ('1','Forum News','phpblock','Forumposts','all',0,0,'phpblock_forum_newposts',2,2,3,3,2,2)";
+         . " VALUES ('0','Forum News','phpblock','Forumposts','all',0,0,'phpblock_forum_newposts',2,2,3,3,2,2)";
 
     $DEFVALUES['block2'] = "INSERT INTO {$_TABLES['blocks']} (is_enabled,name,type,title,tid,blockorder,onleft,phpblockfn,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) "
          . " VALUES (0, 'forum_menu', 'phpblock', 'Forum Menu', 'all', 0, 1, 'phpblock_forum_menu', 2,2,3,2,2,2)";
 
-//    $DEFVALUES['f1'] = "INSERT INTO {$_TABLES['gf_categories']} VALUES (0,'General ','General News and Information',1);";
-//    $DEFVALUES['f2'] = "INSERT INTO {$_TABLES['gf_forums']} VALUES (0,'General News and Announcements','Site Information',1,1,2,0,1,0,1,1,1);";
-//    $DEFVALUES['f3'] = "INSERT INTO {$_TABLES['gf_topic']} VALUES (1,1,0,2,'Admin','1210827078','1210827078',0,NULL,'','Welcome to glFusion','Welcome to glFusion.','text',0,1,'127.0.0.1','',0,0,0);";
+    $DEFVALUES['d1'] = "INSERT INTO {$_TABLES['gf_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";
+    $DEFVALUES['d2'] = "INSERT INTO {$_TABLES['gf_forums']} (`forum_order`, `forum_name`, `forum_dscp`, `forum_id`, `forum_cat`, `grp_id`, `use_attachment_grpid`, `is_hidden`, `is_readonly`, `no_newposts`, `topic_count`, `post_count`, `last_post_rec`) VALUES (0,'News and Announcements','Site News and Special Announcements',1,1,2,1,0,1,0,1,1,1);";
+    $DEFVALUES['d3'] = "INSERT INTO {$_TABLES['gf_moderators']} (`mod_id`, `mod_uid`, `mod_groupid`, `mod_username`, `mod_forum`, `mod_delete`, `mod_ban`, `mod_edit`, `mod_move`, `mod_stick`) VALUES (1,2,0,'Admin','1',1,1,1,1,1);";
+    $DEFVALUES['d4'] = "INSERT INTO {$_TABLES['gf_topic']} (`id`, `forum`, `pid`, `uid`, `name`, `date`, `lastupdated`, `last_reply_rec`, `email`, `website`, `subject`, `comment`, `postmode`, `replies`, `views`, `ip`, `mood`, `sticky`, `moved`, `locked`) VALUES (1,1,0,2,'Admin','1211775931','1211775931',0,NULL,'','Welcome to glFusion','Welcome to glFusion!  We hope you enjoy using your new glFusion site.\r\n\r\nglFusion is designed to provide you with features, functionality, and style, all in an easy to use package.\r\n\r\nYou can visit the [url=http://www.gllabs.org/wiki/]gl Fusion Wiki[/url] for the latest information on features and how to use them.\r\n\r\nThanks and enjoy!\r\nThe gl Labs Team\r\n','text',0,1,'127.0.0.1','',0,0,0);";
 
     $NEWFEATURE = array();
     $NEWFEATURE['forum.edit'] = 'Forum Admin';

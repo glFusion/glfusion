@@ -53,6 +53,10 @@ function plugin_install_filemgmt($_DB_table_prefix)
     $NEWFEATURE['filemgmt.edit']   = "filemgmt Admin Rights";
     $NEWFEATURE['filemgmt.upload'] = "filemgmt File Upload Rights";
 
+    $DEFVALUES['d1'] = "INSERT INTO {$_FM_TABLES['filemgmt_cat']} (`cid`, `pid`, `title`, `imgurl`, `grp_access`, `grp_writeaccess`) VALUES (1,0,'General','',2,2);";
+    $DEFVALUES['d2'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (`lid`, `description`) VALUES (1,'glFusion Documentation in PDF format');";
+    $DEFVALUES['d3'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} (`lid`, `cid`, `title`, `url`, `homepage`, `version`, `size`, `platform`, `logourl`, `submitter`, `status`, `date`, `hits`, `rating`, `votes`, `comments`) VALUES (1,1,'glFusion Documentation','glfusion.pdf','http://www.gllabs.org','v1.5.0',352654,'','',2,1,1211776507,0,0.0000,0,1);";
+
     $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
 
     // Create the Plugins Tables
