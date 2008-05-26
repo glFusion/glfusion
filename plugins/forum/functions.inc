@@ -317,8 +317,8 @@ function plugin_showstats_forum($showsitestats)
         $retval .= "<td align='right'>" . $total_pages . "&nbsp;&nbsp;</td></tr></table>";
     } else {
         $header_arr = array(
-            array('text' => $LANG_GF01['TOPICSUBJECT'], 'field' => 'topicsubject'),
-            array('text' => $LANG_GF01['VIEWS'], 'field' => 'views'),
+            array('text' => $LANG_GF01['TOPICSUBJECT'], 'field' => 'topicsubject','header_class' => 'stats-header-title'),
+            array('text' => $LANG_GF01['VIEWS'], 'field' => 'views','field_class'=>'stats-list-count'),
         );
         $data_arr = array();
         $text_arr = array('has_menu'     => false,
@@ -351,8 +351,8 @@ function plugin_showstats_forum($showsitestats)
             $retval .= $LANG_GF00['statsheading3'];
         }
         $header_arr = array(
-            array('text' => $LANG_GF01['TOPICSUBJECT'], 'field' => 'topicsubject'),
-            array('text' => $LANG_GF01['REPLIES'], 'field' => 'replies'),
+            array('text' => $LANG_GF01['TOPICSUBJECT'], 'field' => 'topicsubject','header_class' => 'stats-header-title'),
+            array('text' => $LANG_GF01['REPLIES'], 'field' => 'replies','field_class' => 'stats-list-count'),
         );
         $data_arr = array();
         $text_arr = array('has_menu'     => false,

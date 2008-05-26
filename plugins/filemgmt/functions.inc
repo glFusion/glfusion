@@ -307,29 +307,32 @@ global $LANG_FILEMGMT, $_FM_TABLES, $_CONF;
         $retval .= "<tr><td>" . $LANG_FILEMGMT['nofiles'] . "</td>";
         $retval .= "<td align='right'>" . $total_files . " (" .$total_downloads .")&nbsp;&nbsp;&nbsp;</td></tr></table>";
     } else {
+        $header_arr = array(
+            array('text' => 'File Name', 'field' => 'title','header_class' => 'stats-header-title'),
+            array('text' => 'Hits', 'field' => 'hits','field_class' => 'stats-list-count'),
+        );
+        $data_arr = array();
+        $text_arr = array('has_menu'     => false,
+                          'title'        => 'Top Ten Downloaded Files',
+        );
+
         $sql  = "SELECT a.lid, a.title, hits from {$_FM_TABLES['filemgmt_filedetail']} a ";
         $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
         $sql .= filemgmt_buildAccessSql('WHERE');
         $sql .= " AND hits > 0 ORDER BY hits desc LIMIT 10";
         $result = DB_query($sql);
         $nrows  = DB_numRows($result);
-        $retval .= COM_startBlock($LANG_FILEMGMT['StatsMsg1']);
         if ($nrows > 0) {
-            $stat_templates->set_var('item_label',"Page Title");
-            $stat_templates->set_var('stat_name',"Hits");
             for ($i = 0; $i < $nrows && $i < 10; $i++) {
                 list ($lid, $title,$hits) = DB_fetchARRAY($result);
-                $stat_templates->set_var('item_url', $_CONF[site_url]. "/filemgmt/index.php?id=".$lid);
-                $stat_templates->set_var('item_text', $title);
-                $stat_templates->set_var('item_stat', $hits);
-                $stat_templates->parse('stat_row','statrow',true);
+                $S['title'] = '<a href="' . $_CONF['site_url'] . '/filemgmt/index.php?id=' . $lid . '">' . $title . '</a>';
+                $S['hits']  = @number_format($hits);
+                $data_arr[$i] = $S;
             }
-            $stat_templates->parse('output','itemstats');
-            $retval .= $stat_templates->finish($stat_templates->get_var('output'));
+            $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
         } else {
-            $retval .= $LANG_FILEMGMT['StatsMsg2'];
+            $retval .= $LANG_FILEMGMT['nofiles'];
         }
-        $retval .= COM_endBlock();
     }
     return $retval;
 }
