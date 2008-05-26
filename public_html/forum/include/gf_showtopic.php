@@ -447,7 +447,7 @@ function forum_getmodFunctions($showtopic) {
     }
 
     if ($options != '') {
-        $retval .= '<form action="moderation.php" method="post" style="margin:0px;"><select name="modfunction">';
+        $retval .= '<form action="moderation.php" method="post" style="margin:0px;"><div><select name="modfunction">';
         $retval .= $options;
 
         if ($showtopic['pid'] == 0) {
