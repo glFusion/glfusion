@@ -1340,10 +1340,10 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
             if (empty ($A['last_reply_rec']) || $A['last_reply_rec'] < 1) {
                 $lastid = $A['id'];
-//                $lastpostinfo = wordwrap(strip_tags(substr($A['comment'],0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
+                $lastpostinfo = wordwrap(strip_tags(substr($A['comment'],0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
                 $testText = gf_formatTextBlock($A['comment'],'text','text');
                 $testText = strip_tags($testText);
-                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['gf_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1354,16 +1354,15 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 } else {
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
                 }
-//                $lastpostinfo = wordwrap(strip_tags(substr($lastcomment,0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
+                $lastpostinfo = wordwrap(strip_tags(substr($lastcomment,0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
                 $testText = gf_formatTextBlock($B['comment'],'text','text');
-//                $testText = str_replace('"',"'",$testText);
                 $testText = strip_tags($testText);
-// echo $testText;exit;
-                $lastpostinfo = preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...'));
+                $lastpostinfogll = preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...'));
             }
 
             $cssid = ($cssid ==1) ? 2: 1;
             $block->set_var ('lastpostinfo', $lastpostinfo);
+            $block->set_var ('lastpostinfogll', $lastpostinfogll);
             $block->set_var ('lastpostid', $lastid);
             $block->set_var ('topicinfo', $topicinfo);
             $block->set_var ('cssid', $cssid);
