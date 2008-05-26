@@ -1836,6 +1836,7 @@ padding:0;
 .gftool-tip {
 color:#fff;
 width:200px;
+overflow:hidden;
 z-index:13000;
 }
 
