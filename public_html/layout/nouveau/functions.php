@@ -194,6 +194,19 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 	$header->set_var('gl_moochronometer',
 '<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moochronometer.js"></script>');
 
+    $header->set_var(array(
+        'mbgcolor'  => '#151515',
+        'mtext'     => '#CCCCCC',
+        'mhtext'    => '#FFFFFF',
+        'shtext'    => '#679ef1',
+        'sblcolor'  => '#333333',
+        'sbrcolor'  => '#000000',
+        'sbgcolor'  => '#151515',
+        'sbtcolor'  => '#333333',
+        'sbbcolor'  => '#000000',
+        'spimage'   => 'url(images/gl_moomenu1-parent.png) 95% 50% norepeat',
+    ));
+/*-----------------------
     // set menu colors
     if ( function_exists('mb_getMenu') && $mbMenuConfig[0]['enabled'] == 1) {
         $result = DB_query("SELECT * FROM {$_TABLES['mb_config']} WHERE menu_id=0");
@@ -211,8 +224,7 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         'htext'     => $htext,
         'hhtext'    => $hhtext,
     ));
-
-
+-------------------------- */
 
     // get topic if not on home page
     if( !isset( $_GET['topic'] )) {
