@@ -37,8 +37,8 @@ function gf_RadioButtonSetting(&$template,$title,$help,$parm,$value,$id=1) {
     $template->set_var ('LANG_title', $title);
     $template->set_var ('LANG_description', $help);
     $template->set_var ('parm_name', $parm);
-    $template->set_var ('option_yes', ($value)? 'CHECKED=CHECKED': '');
-    $template->set_var ('option_no', ($value)? '' : 'CHECKED=CHECKED');
+    $template->set_var ('option_yes', ($value)? 'checked="checked"': '');
+    $template->set_var ('option_no', ($value)? '' : 'checked="checked"');
     $template->parse ("group{$id}_options", 'radioBtn_setting',true);
 }
 

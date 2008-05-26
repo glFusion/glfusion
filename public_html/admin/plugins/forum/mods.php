@@ -189,14 +189,14 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
     } else {
 
         $showforumssql = DB_query("SELECT forum_name,forum_id FROM {$_TABLES['gf_forums']}");
-        $sel_forums = '<OPTION VALUE="0">'.$LANG_GF94['allforums'].'</OPTION>';
+        $sel_forums = '<option value="0">'.$LANG_GF94['allforums'].'</option>';
         $selected_forum = isset($_POST['sel_forum']) ? COM_applyFilter($_POST['sel_forum'], true) : 0;
 
         while($showforum = DB_fetchArray($showforumssql)){
             if ($selected_forum == $showforum['forum_id']) {
-                $sel_forums .= '<OPTION VALUE="' .$showforum['forum_id']. '" SELECTED="SELECTED">' .$showforum['forum_name']. '</OPTION>';
+                $sel_forums .= '<option value="' .$showforum['forum_id']. '" selected="selected">' .$showforum['forum_name']. '</option>';
             } else {
-                $sel_forums .= '<OPTION VALUE="' .$showforum['forum_id']. '">' .$showforum['forum_name']. '</OPTION>';
+                $sel_forums .= '<option value="' .$showforum['forum_id']. '">' .$showforum['forum_name']. '</option>';
             }
         }
 
@@ -206,10 +206,10 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
         $moderators->set_var ('imgset', $CONF_FORUM['imgset']);
         $moderators->set_var ('userfilter', '');
         if (isset($_POST['filtermode']) && $_POST['filtermode'] == 'group') {
-            $moderators->set_var ('groupfilter', 'CHECKED=CHECKED');
+            $moderators->set_var ('groupfilter', 'checked="checked"');
             $moderators->set_var ('LANG_HEADING2', $LANG_GF01['GROUP']);
         } else {
-            $moderators->set_var ('userfilter', 'CHECKED=CHECKED');
+            $moderators->set_var ('userfilter', 'checked="checked"');
             $moderators->set_var ('LANG_HEADING2', $LANG_GF01['USER']);
         }
         $moderators->set_var ('LANG_filtertitle', $LANG_GF93['filtertitle'] );
@@ -252,27 +252,27 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
         while($M = DB_fetchArray($modsql)) {
 
             if ($M['mod_delete'] == "1") {
-                $chk_delete = "checked";
+                $chk_delete = "checked=\"checked\"";
             } else {
                 $chk_delete = "";
             }
             if ($M['mod_ban'] == "1") {
-                $chk_ban = "checked";
+                $chk_ban = "checked=\"checked\"";
             } else {
                 $chk_ban = "";
             }
             if ($M['mod_edit'] == "1") {
-                $chk_edit = "checked";
+                $chk_edit = "checked=\"checked\"";
             } else {
                 $chk_edit = "";
             }
             if ($M['mod_move'] == "1") {
-                $chk_move = "checked";
+                $chk_move = "checked=\"checked\"";
             } else {
                 $chk_move = "";
             }
             if ($M['mod_stick'] == "1") {
-                $chk_stick = "checked";
+                $chk_stick = "checked=\"checked\"";
             } else {
                 $chk_stick = "";
             }
@@ -297,8 +297,6 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
         $moderators->parse ('output', 'moderators');
         echo $moderators->finish ($moderators->get_var('output'));
     }
-
-    echo "</table></form>";
 }
 echo COM_endBlock();
 echo adminfooter();
