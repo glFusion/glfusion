@@ -242,4 +242,50 @@ function upgrade_25() {
     return 0;
 
 }
+
+function upgrade_30() {
+    global $_TABLES;
+
+    $_SQL = array();
+
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_bookmarks']} (
+      `uid` mediumint(8) NOT NULL,
+      `topic_id` int(11) NOT NULL,
+      `pid` int(11) NOT NULL default '0',
+      KEY `topic_id` (`topic_id`),
+      KEY `pid` (`pid`),
+      KEY `uid` (`uid`)
+    ) TYPE=MyISAM ;";
+
+
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_attachments']} (
+      `id` int(11) NOT NULL auto_increment,
+      `topic_id` int(11) NOT NULL,
+      `repository_id` int(11) default NULL,
+      `filename` varchar(255) NOT NULL,
+      `tempfile` tinyint(1) NOT NULL default '0',
+      `show_inline` tinyint(4) NOT NULL default '0',
+      PRIMARY KEY  (`id`),
+      KEY `topic_id` (`topic_id`)
+    ) Type=MyISAM  AUTO_INCREMENT=1 ;";
+
+    // Set default access to use attachments to be the Root group
+    $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD use_attachment_grpid mediumint(8) DEFAULT '1' NOT NULL AFTER grp_id";
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("Forum Plugin 3.05 update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),'1');
+        if (DB_error()) {
+            COM_errorLog("SQL Error during Forum plugin update",1);
+            return 1;
+            break;
+        }
+        next($_SQL);
+    }
+
+    COM_errorLog("Success - Completed Forum plugin version 3.0 update",1);
+    return 0;
+
+}
 ?>
