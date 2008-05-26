@@ -28,29 +28,36 @@
 <link rel="stylesheet" type="text/css" href="{layout_url}/css/ie7.css" title="{theme}"{xthml}>
 <![endif]-->
 <style type="text/css">
-#gl_moomenu {
-background-color:{hcolor};
-color:{htext};
-}
+#gl_moomenu,
+#gl_moomenu ul,
 #gl_moomenu ul.gl_moomenu {
-background-color:{hcolor};
-color:{htext};
+background:{mbgcolor}{mbgimage};  /*main menu background*/
 }
-#gl_moomenu ul {
-background-color:{hcolor};
-color:{htext};
+#gl_moomenu a {
+color:{mtext};  /*color of main menu links*/
 }
-#gl_moomenu li:hover a,#gl_moomenu li.sfHover a,#gl_moomenu li:hover a:hover,#gl_moomenu li.sfHover a:hover {
-background-color:{hcolor};
-color:{htext};
+#gl_moomenu li:hover a,
+#gl_moomenu li.sfHover a,
+#gl_moomenu li:hover a:hover,
+#gl_moomenu li.sfHover a:hover {
+color:{mhtext};  /*color of main menu hover links and sub menu default links*/
 }
-#gl_moomenu li:hover li:hover a:hover,#gl_moomenu li.sfHover li.sfHover a:hover {
-background-color:{hhcolor};
-color:{hhtext};
+#gl_moomenu li:hover li:hover a:hover,
+#gl_moomenu li.sfHover li.sfHover a:hover {
+color:{shtext};  /*color of sub menu hover links*/
 }
-#gl_moomenu li li a.parent,#gl_moomenu li li a.parent:hover {
-background-color:{hcolor};
-color:{htext};
+#gl_moomenu ul ul {
+background:{sbgcolor};  /*color of sub menu background*/
+border-left:1px solid {sblcolor};  /*color of sub menu left border*/
+border-right:1px solid {sbrcolor};  /*color of sub menu right border*/
+}
+#gl_moomenu li li {
+border-top:1px solid {sbtcolor};  /*color of sub menu top border*/
+border-bottom:1px solid {sbbcolor};  /*color of sub menu bottom border*/
+}
+#gl_moomenu li li a.parent,
+#gl_moomenu li li a.parent:hover {
+background:{spimage};  /*image for sub menu parent menu*/
 }
 </style>
 </head>
