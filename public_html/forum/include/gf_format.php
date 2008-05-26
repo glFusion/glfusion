@@ -388,28 +388,7 @@ function gf_cleanHTML($message) {
         return $message;
     }
 
-    if (!class_exists('ksesf4') ) {
-        require_once ($_CONF['path_html'] . 'forum/include/ksesf.class.php');
-    }
-
-    $filter = new ksesf4;
-    if( isset( $_CONF['allowed_protocols'] ) && is_array( $_CONF['allowed_protocols'] ) && ( sizeof( $_CONF['allowed_protocols'] ) > 0 )) {
-        $filter->SetProtocols( $_CONF['allowed_protocols'] );
-    } else {
-        $filter->SetProtocols( array( 'http:', 'https:', 'ftp:' ));
-    }
-
-    if( !SEC_hasRights( 'story.edit' ) || empty ( $_CONF['admin_html'] )) {
-        $html = $_CONF['user_html'];
-    } else {
-        $html = array_merge( $_CONF['user_html'], $_CONF['admin_html'] );
-    }
-
-    foreach( $html as $tag => $attr ) {
-        $filter->AddHTML( $tag, $attr );
-    }
-
-    return $filter->Parse( $message );
+    return COM_filterHTML( $message);
 }
 
 
@@ -420,7 +399,7 @@ function gf_preparefordb($message,$postmode) {
     if(get_magic_quotes_gpc() ) {
        $message = stripslashes($message);
     }
-/*
+
     if ( $CONF_FORUM['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML') ) {
         $message = gf_checkHTMLforSQL($message,$postmode);
     }
@@ -428,7 +407,7 @@ function gf_preparefordb($message,$postmode) {
     if ($CONF_FORUM['use_censor']) {
         $message = COM_checkWords($message);
     }
-*/
+
     $message = addslashes($message);
     return $message;
 }
@@ -477,24 +456,6 @@ function gf_checkHTML($str) {
         require_once ($_CONF['path_html'] . 'forum/include/ksesf.class.php');
     }
     return COM_filterHTML($str);
-
-    $filter = new ksesf4;
-    if( isset( $_CONF['allowed_protocols'] ) && is_array( $_CONF['allowed_protocols'] ) && ( sizeof( $_CONF['allowed_protocols'] ) > 0 )) {
-        $filter->SetProtocols( $_CONF['allowed_protocols'] );
-    } else {
-        $filter->SetProtocols( array( 'http:', 'https:', 'ftp:' ));
-    }
-
-    if( !SEC_hasRights( 'story.edit' ) || empty ( $_CONF['admin_html'] )) {
-        $html = $_CONF['user_html'];
-    } else {
-        $html = array_merge( $_CONF['user_html'], $_CONF['admin_html'] );
-    }
-
-    foreach( $html as $tag => $attr ) {
-        $filter->AddHTML( $tag, $attr );
-    }
-    return $filter->Parse( $str );
 }
 
 
@@ -539,13 +500,11 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
 
 //    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<div style="margin:20px; margin-top:5px; "><table cellpadding="6" cellspacing="0" border="0" width="100%"><tr bgcolor="#E1E4F2" ><td style="border:1px inset;background:#E1E4F2;"><div style="font-style:italic;background:#E1E4F2;">', 'end_tag' => '</div></td></tr></table></div>'),
 //                      'inline', array('listitem','block','inline','link'), array());
-
-
-    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<blockquote><div><cite>&nbsp;</cite>', 'end_tag' => '</div></blockquote>'),
-                      'inline', array('listitem','block','inline','link'), array());
-
-//    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<div class="quotemain">', 'end_tag' => '</div>'),
+//    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<blockquote><div><cite>&nbsp;</cite>', 'end_tag' => '</div></blockquote>'),
 //                      'inline', array('listitem','block','inline','link'), array());
+
+    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<div class="quotemain">', 'end_tag' => '</div>'),
+                      'inline', array('listitem','block','inline','link'), array());
     $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
     $bbcode->addCode ('link', 'callback_replace_single', 'do_bbcode_url', array (),
@@ -1092,14 +1051,14 @@ function gf_showattachments($topic,$mode='') {
             list($testaccess_cnt) = DB_fetchArray(DB_query($sql));
         }
         if ($lid > 0 AND (!$filemgmtSupport OR $testaccess_cnt == 0 OR DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",$lid ) == 0)) {
-            $retval .= "<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\">Insufficent Access";
+            $retval .= "<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">Insufficent Access";
         } elseif (!empty($field_value)) {
-            $retval .= "<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\">";
+            $retval .= "<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">";
             $retval .= "<a href=\"{$_CONF['site_url']}/forum/getattachment.php?id=$id\" target=\"_new\">";
             $retval .= "{$filename[1]}</a>&nbsp;";
             if ($mode == 'edit') {
                 $retval .= "<a href=\"#\" onClick='ajaxDeleteFile($topic,$id);'>";
-                $retval .= "<img src=\"{$CONF_FORUM['imgset']}/delete.gif\" border=\"0\"></a>";
+                $retval .= "<img src=\"{$CONF_FORUM['imgset']}/delete.gif\" border=\"0\" alt=\"\"" . XHTML . "></a>";
             }
         } else {
             $retval .= 'N/A&nbsp;';
