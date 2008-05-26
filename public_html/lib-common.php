@@ -3054,8 +3054,8 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
     }
     else
     {
-        $html = array_merge_recursive( $_CONF['user_html'],
-                                       $_CONF['admin_html'] );
+        $html = array_merge( $_CONF['user_html'],
+                             $_CONF['admin_html'] );
     }
 
     if ( $_CONF['use_safe_html'] == TRUE ) {
