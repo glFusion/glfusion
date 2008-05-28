@@ -780,7 +780,7 @@ function gl_mootickerRSS() {
 	if ( $B['is_enabled'] == 0 ) {
 		$retval = <<<EOT
 <script type="text/javascript"
-src="{site_url}/layout/nouveau/js/gl_mooticker.js"></script>
+src="{layout_url}/js/gl_mooticker.js"></script>
 <script type="text/javascript">
          window.addEvent('domready', function() {
                  var x = new MooTicker('gl_mooticker', {
@@ -792,7 +792,7 @@ src="{site_url}/layout/nouveau/js/gl_mooticker.js"></script>
 <div id="gl_mooticker">
    <span class="tickertitle">Latest News:</span>
 EOT;
-		$retval = str_replace('{site_url}',$_CONF['path_layout'] , $retval);
+		$retval = str_replace('{layout_url}',$_CONF['layout_url'] , $retval);
 		$retval .= $B['content'] . '</div>';
 	}
 	return $retval;
