@@ -828,6 +828,17 @@ font-size:.85em;
 padding:0 3px;
 }
 
+.sysmessage {
+padding-bottom:10px;
+}
+
+.sysmessage img {
+border:none;
+float:left;
+margin-right:10px;
+vertical-align:middle;
+}
+
 .warning {
 background:transparent;
 color:red;
