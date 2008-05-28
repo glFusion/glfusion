@@ -421,7 +421,6 @@ font-family:arial,verdana,tahoma,helvetica,sans-serif;
 th {
 background-color:#DAE0ED;
 color:#000;
-font-size:larger;
 font-weight:700;
 padding-left:3px;
 text-align:left;
@@ -464,9 +463,7 @@ text-align:left;
 }
 
 .admin-list-headerfield {
-font-size:larger;
-padding-left:5px;
-padding-right:5px;
+padding:3px 5px;
 text-align:left;
 }
 
