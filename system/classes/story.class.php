@@ -53,7 +53,7 @@
  * Constants for stories:
  * Loading from database:
  */
-define('STORY_INVALID_SID', -1);
+define('STORY_INVALID_SID', -6);
 
 define('STORY_PERMISSION_DENIED', -2);
 define('STORY_EDIT_DENIED', -3);
@@ -682,6 +682,8 @@ class Story
     {
         global $_TABLES;
 
+        $retval = STORY_LOADED_OK;
+
         /* magic_quotes_gpc cleanup routine now in submitstory() in
          * /public_html/admin/story.php
          */
@@ -700,15 +702,15 @@ class Story
         if ($result && (DB_numRows($result) > 0)) {
             /* Sid exists! Is it our article? */
             if ($this->_sid != $this->_originalSid) {
-                return STORY_DUPLICATE_SID;
-            }
-
-            $article = DB_fetchArray($result);
-            /* Check Security */
-            if (SEC_hasAccess($article['owner_id'], $article['group_id'],
-                    $article['perm_owner'], $article['perm_group'],
-                    $article['perm_members'], $article['perm_anon']) < 3) {
-                return STORY_EXISTING_NO_EDIT_PERMISSION;
+                $retval = STORY_DUPLICATE_SID;
+            } else {
+                $article = DB_fetchArray($result);
+                /* Check Security */
+                if (SEC_hasAccess($article['owner_id'], $article['group_id'],
+                        $article['perm_owner'], $article['perm_group'],
+                        $article['perm_members'], $article['perm_anon']) < 3) {
+                    return STORY_EXISTING_NO_EDIT_PERMISSION;
+                }
             }
         }
 
@@ -749,8 +751,7 @@ class Story
         }
 
         $this->_sanitizeData();
-
-        return STORY_LOADED_OK;
+        return $retval;
     }
 
     /**
