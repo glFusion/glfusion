@@ -1043,7 +1043,7 @@ font-size:smaller;
 }
 
 #navcontainer {
-background:#F4F4F4;
+background:transparent;
 border-bottom:1px solid #CCC;
 float:left;
 font-size:93%;
