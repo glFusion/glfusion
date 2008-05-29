@@ -245,7 +245,7 @@ function INST_installEngine($install_type, $install_step)
                 <p><label>' . $LANG_INSTALL[34] . ' ' . INST_helpLink('db_type') . '</label> <select name="db_type">
                     <option value="mysql"' . $mysql_selected . '>' . $LANG_INSTALL[35] . '</option>
                     ' . ($install_type == 'install' ? '<option value="mysql-innodb"' . $mysql_innodb_selected . '>' . $LANG_INSTALL[36] . '</option>' : '') . '
-                    <option value="mssql"' . $mssql_selected . '>' . $LANG_INSTALL[37] . '</option></select> ' . $innodbnote . '</p><br />
+                    </select> ' . $innodbnote . '</p><br />
                 <p><label>' . $LANG_INSTALL[39] . ' ' . INST_helpLink('db_host') . '</label> <input type="text" name="db_host" value="'. $db_host .'" size="50"' . XHTML . '></p><br />
                 <p><label>' . $LANG_INSTALL[40] . ' ' . INST_helpLink('db_name') . '</label> <input type="text" name="db_name" value="'. $db_name . '" size="50"' . XHTML . '></p><br />
                 <p><label>' . $LANG_INSTALL[41] . ' ' . INST_helpLink('db_user') . '</label> <input type="text" name="db_user" value="' . $db_user . '" size="50"' . XHTML . '></p><br />
@@ -1807,8 +1807,8 @@ $display .= '<head>
 					<div class="floatright install-slogan" style="color:#FFF;">
 						' . $LANG_INSTALL[2] . '
 					</div>
-                    <div class="floatleft" style="position:absolute;">
-                      <img src="layout/logo.png" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo"' . XHTML . '>
+                    <div class="floatleft">
+                      <img src="layout/logo.png" height="100" width="370" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo"' . XHTML . '>
                     </div>
                 </div>
             </div>
