@@ -262,7 +262,7 @@ margin-left:0em;
 }
 /* Header ***************************************/
 #header-site-logo {
-  margin:-1px 0 -25px /* <-- adjust this to move the SLOGAN up or down */ 15px;
+  margin:0 0 -25px /* <-- adjust this to move the SLOGAN up or down */ 15px;
   z-index:90;
 }
 /*GL_MOOMENU CSS**************************/
