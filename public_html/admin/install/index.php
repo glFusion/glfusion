@@ -239,7 +239,7 @@ function INST_installEngine($install_type, $install_step)
                 <input type="hidden" name="step" value="2"' . XHTML . '>
                 <input type="hidden" name="language" value="' . $language . '"' . XHTML . '>
                 <input type="hidden" name="dbconfig_path" value="' . $dbconfig_path . '"' . XHTML . '>
-
+                <br />
                 <p><label>' . $LANG_INSTALL[32] . ' ' . INST_helpLink('site_name') . '</label> <input type="text" name="site_name" value="' . $site_name . '" size="40"' . XHTML . '></p><br />
                 <p><label>' . $LANG_INSTALL[33] . ' ' . INST_helpLink('site_slogan') . '</label> <input type="text" name="site_slogan" value="' . $site_slogan . '" size="40"' . XHTML . '></p><br' . XHTML . '>
                 <p><label>' . $LANG_INSTALL[34] . ' ' . INST_helpLink('db_type') . '</label> <select name="db_type">
@@ -1807,7 +1807,9 @@ $display .= '<head>
 					<div class="floatright install-slogan" style="color:#FFF;">
 						' . $LANG_INSTALL[2] . '
 					</div>
-						<img src="layout/logo.png" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo"' . XHTML . '>
+                    <div class="floatleft" style="position:absolute;">
+                      <img src="layout/logo.png" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo"' . XHTML . '>
+                    </div>
                 </div>
             </div>
         </div> <!-- end of gl_header -->
@@ -2139,12 +2141,10 @@ switch ($mode) {
             <div class="install-type-container-outer">
                <div class="install-type-container-inner">
                    <h2>' . $LANG_INSTALL[23] . '</h2>
-                   <div style="width:50%;text-align:center;">
-                   <div class="install floatleft"><a href="' . $req_string
+                   <div class="install floatleft" style="margin-left:10px;margin-bottom:10px;"><a href="' . $req_string
                     . '&amp;op=install">' . $LANG_INSTALL[24] . '</a></div>
-                   <div class="upgrade floatright"><a href="' . $req_string
+                   <div class="upgrade floatleft" style="margin-left:10px;"><a href="' . $req_string
                     . '&amp;op=upgrade">' . $LANG_INSTALL[25] . '</a></div>
-                    </div>
                </div>
 			</div>' . LB;
         }

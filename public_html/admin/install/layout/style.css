@@ -21,7 +21,7 @@ clear:left;
 
 #gl_container_fluid {
   background:#FFFFFF; /*needs to be set here*/
-  min-width:720px;
+  min-width:540px;
   margin:20px 20px;
 }
 #gl_header {
@@ -305,7 +305,6 @@ margin-left:0em;
 .installation-body-container {
   background:#FFFFFF;
   color:#000000;
-  padding: 4px 20px 10px 20px;
   text-align:left;
   width:100%;
 }
