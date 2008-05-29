@@ -1,0 +1,160 @@
+<script type="text/javascript">
+<!--
+window.addEvent('load',function() {
+    $('menutype').addEvent('change',toggleFields);
+    $('pid').addEvent('change',function(){
+         var option_id = this.getValue();
+         var url = 'getorder.php?optionid='+option_id;
+         new Ajax(url, {
+              method: 'get',
+              update: $('displayafter')
+         }).request();
+    });
+    $('urldiv').style.display='none';
+    $('glcorediv').style.display='none';
+    $('plugin').style.display='none';
+    $('staticpage').style.display='none';
+    $('glfunctions').style.display='none';
+    $('phpdiv').style.display='none';
+
+    var myValidator = new fValidator("newitem");
+
+});
+function toggleFields() {
+    selected = $('menutype').getValue();
+
+    switch( selected ) {
+        case '1' : // sub
+            $('urldiv').style.display='none';
+            $('glcorediv').style.display='none';
+            $('plugin').style.display='none';
+            $('staticpage').style.display='none';
+            $('glfunctions').style.display='none';
+            $('phpdiv').style.display='none';
+            break;
+        case '2' : // gl actioin
+            $('urldiv').style.display='none';
+            $('glcorediv').style.display='none';
+            $('plugin').style.display='none';
+            $('staticpage').style.display='none';
+            $('glfunctions').style.display='';
+            $('phpdiv').style.display='none';
+            break;
+        case '3' : // gl menus
+            $('urldiv').style.display='none';
+            $('glcorediv').style.display='';
+            $('plugin').style.display='none';
+            $('staticpage').style.display='none';
+            $('glfunctions').style.display='none';
+            $('phpdiv').style.display='none';
+            break;
+        case '4' : // plugins
+            $('urldiv').style.display='none';
+            $('glcorediv').style.display='none';
+            $('plugin').style.display='';
+            $('staticpage').style.display='none';
+            $('glfunctions').style.display='none';
+            $('phpdiv').style.display='none';
+            break;
+        case '5' :  // static pages
+            $('urldiv').style.display='none';
+            $('glcorediv').style.display='none';
+            $('plugin').style.display='none';
+            $('staticpage').style.display='';
+            $('glfunctions').style.display='none';
+            $('phpdiv').style.display='none';
+            break;
+        case '6' : // url
+            $('urldiv').style.display='';
+            $('glcorediv').style.display='none';
+            $('plugin').style.display='none';
+            $('staticpage').style.display='none';
+            $('glfunctions').style.display='none';
+            $('phpdiv').style.display='none';
+            break;
+        case '7' :  // php function
+            $('urldiv').style.display='none';
+            $('glcorediv').style.display='none';
+            $('plugin').style.display='none';
+            $('staticpage').style.display='none';
+            $('glfunctions').style.display='none';
+            $('phpdiv').style.display='';
+            break;
+        case '8' :
+            $('urldiv').style.display='none';
+            $('glcorediv').style.display='none';
+            $('plugin').style.display='none';
+            $('staticpage').style.display='none';
+            $('glfunctions').style.display='';
+            $('phpdiv').style.display='none';
+            break;
+    }
+}
+-->
+</script>
+<div class="plugin">
+<div class="pluginCellTitle" style="padding:5px;">
+  {$LANG_ST01[create_element]}
+</div>
+  <div class="meform">
+    <form method="post" action="{form_action}" id="newitem">
+    <div>
+    <input type="hidden" id="menunid" name="menuid" value="{menuid}"{xhtml}>
+      <div id="parentdiv" class="required">
+        <label for="pid">{$LANG_ST01[parent]}</label>
+        {parent_select}
+      </div>
+      <div class="required">
+        <label for="menulabel">{$LANG_ST01[label]}</label>
+        <input class="fValidate['required']" type="text" id="menulabel" name="menulabel" size="48" value="{menulabel}"{xhtml}>
+      </div>
+      <div id="displayafter" class="required">
+        <label for="menuorder">{$LANG_ST01[display_after]}</label>
+        {order_select}
+      </div>
+      <div class="required">
+        <label for="menutype">{$LANG_ST01[type]}</label>
+        {type_select}
+      </div>
+      <div id="urldiv" class="required">
+        <label for="menuurl">{$LANG_ST01[url]}</label>
+        <input type="text" id="menuurl" name="menuurl" size="48" value="{menuurl}"{xhtml}>
+      </div>
+      <div id="phpdiv" class="required">
+        <label for="phpfunction">{$LANG_ST01[php]}</label>
+        <input type="text" id="phpfunction" name="phpfunction" size="48" value="{phpfunction}"{xhtml}>
+      </div>
+      <div id="glcorediv" class="optional">
+        <label for="gltype">{$LANG_ST01[coretype]}</label>
+        {gl_select}
+      </div>
+      <div id="plugin" class="optional">
+        <label for="gltype">{$LANG_ST01[plugins]}</label>
+        {plugin_select}
+      </div>
+      <div id="staticpage" class="optional">
+        {!if sp_select}
+          <label for="spname">{$LANG_ST01[static_pages]}</label>
+          {sp_select}
+        {!endif}
+      </div>
+      <div id="glfunctions" class="optional">
+        <label for="glfunction">{$LANG_ST01[geeklog_function]}</label>
+        {glfunction_select}
+      </div>
+      <div class="required">
+        <label for="menuactive">{$LANG_ST01[active]}</label>
+        <input type="checkbox" id="menuactive" name="menuactive" value="1"{xhtml}>
+      </div>
+      <div class="required">
+        <label for="group">{$LANG_ST01[permission]}</label>
+        {group_select}
+      </div>
+    <div style="text-align:center;padding:5px;">
+      <input type="hidden" id="mode" name="mode" value="save"{xhtml}>
+      <input type="submit" id="execute" name="execute" value="{$LANG_ST01[save]}"{xhtml}>&nbsp;&nbsp;
+    </div>
+  </div>
+  </form>
+  </div>
+</div>

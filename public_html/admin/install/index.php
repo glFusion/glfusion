@@ -246,11 +246,11 @@ function INST_installEngine($install_type, $install_step)
                     <option value="mysql"' . $mysql_selected . '>' . $LANG_INSTALL[35] . '</option>
                     ' . ($install_type == 'install' ? '<option value="mysql-innodb"' . $mysql_innodb_selected . '>' . $LANG_INSTALL[36] . '</option>' : '') . '
                     <option value="mssql"' . $mssql_selected . '>' . $LANG_INSTALL[37] . '</option></select> ' . $innodbnote . '</p><br />
-                <p><label>' . $LANG_INSTALL[39] . ' ' . INST_helpLink('db_host') . '</label> <input type="text" name="db_host" value="'. $db_host .'" size="20"' . XHTML . '></p><br />
-                <p><label>' . $LANG_INSTALL[40] . ' ' . INST_helpLink('db_name') . '</label> <input type="text" name="db_name" value="'. $db_name . '" size="20"' . XHTML . '></p><br />
-                <p><label>' . $LANG_INSTALL[41] . ' ' . INST_helpLink('db_user') . '</label> <input type="text" name="db_user" value="' . $db_user . '" size="20"' . XHTML . '></p><br />
-                <p><label>' . $LANG_INSTALL[42] . ' ' . INST_helpLink('db_pass') . '</label> <input type="password" name="db_pass" value="' . $db_pass . '" size="20"' . XHTML . '></p><br />
-                <p><label>' . $LANG_INSTALL[43] . ' ' . INST_helpLink('db_prefix') . '</label> <input type="text" name="db_prefix" value="' . $db_prefix . '" size="20"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[39] . ' ' . INST_helpLink('db_host') . '</label> <input type="text" name="db_host" value="'. $db_host .'" size="50"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[40] . ' ' . INST_helpLink('db_name') . '</label> <input type="text" name="db_name" value="'. $db_name . '" size="50"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[41] . ' ' . INST_helpLink('db_user') . '</label> <input type="text" name="db_user" value="' . $db_user . '" size="50"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[42] . ' ' . INST_helpLink('db_pass') . '</label> <input type="password" name="db_pass" value="' . $db_pass . '" size="50"' . XHTML . '></p><br />
+                <p><label>' . $LANG_INSTALL[43] . ' ' . INST_helpLink('db_prefix') . '</label> <input type="text" name="db_prefix" value="' . $db_prefix . '" size="50"' . XHTML . '></p><br />
 
                 <br' . XHTML . '>
                 <h2>' . $LANG_INSTALL[44] . '</h2>
@@ -613,12 +613,12 @@ function INST_installEngine($install_type, $install_step)
 
                             // Hook our plugin installs here...
 
+                            INST_pluginAutoInstall('sitetailor');
                             INST_pluginAutoInstall('captcha');
                             INST_pluginAutoInstall('bad_behavior2');
                             INST_pluginAutoInstall('filemgmt');
                             INST_pluginAutoInstall('forum');
                             INST_pluginAutoInstall('mediagallery');
-                            INST_pluginAutoInstall('menubuilder');
 
                             // Setup nouveau as the default
                             $config->set('theme', 'nouveau');
@@ -687,6 +687,7 @@ function INST_installEngine($install_type, $install_step)
 
                         // Value Added Release plugin upgrade
 
+                        INST_pluginAutoUpgrade('sitetailor',1);
                         INST_pluginAutoUpgrade('captcha');
                         INST_pluginAutoUpgrade('bad_behavior2');
                         INST_pluginAutoUpgrade('filemgmt');
@@ -1662,12 +1663,18 @@ function INST_setDefaultCharset($siteconfig_path, $charset)
 function INST_pluginAutoInstall( $plugin )
 {
     global $_CONF, $_TABLES, $_DB_table_prefix;
+    global $pi_name, $pi_version, $gl_version, $pi_url;
+    global $DEFVALUES, $NEWFEATURE;
+    global $_DB_dbms;
 
     $rc = false;
 
     if ( file_exists($_CONF['path'] . '/plugins/' . $plugin . '/install.inc') ) {
         require_once($_CONF['path'] . '/plugins/' . $plugin . '/install.inc');
         $plgInstallFunction = 'plugin_install_' . $plugin;
+        if ( !function_exists($plgInstallFunction) ) {
+            $plgInstallFunction = 'glfusion_install_' . $plugin;
+        }
         $rc = $plgInstallFunction($_DB_table_prefix);
     }
     return $rc;
@@ -1681,7 +1688,7 @@ function INST_pluginAutoInstall( $plugin )
 *
 */
 
-function INST_pluginAutoUpgrade( $plugin )
+function INST_pluginAutoUpgrade( $plugin, $forceInstall = 0 )
 {
     global $_CONF, $_TABLES, $_DB_table_prefix;
 
@@ -1692,6 +1699,10 @@ function INST_pluginAutoUpgrade( $plugin )
         if ( function_exists( 'plugin_upgrade_' . $plugin ) ) {
             $plgUpgradeFunction = 'plugin_upgrade_' . $plugin;
             $rc = $plgUpgradeFunction();
+        } else {
+            if ( $forceInstall == 1 ) {
+                INST_pluginAutoInstall( $plugin );
+            }
         }
     }
     return $rc;

@@ -1,0 +1,2 @@
+<a href="{site_url}">
+<img src="{site_logo}" alt="{site_name}" title="{site_name}" id="header-site-logo"{xhtml}></a>

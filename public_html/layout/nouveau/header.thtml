@@ -13,8 +13,9 @@
 							</div>
 						</form>
 					</div> <!-- end of header-flag-n-search  -->
+					{logo_block}
                     <!-- Build the CSS logo -->
-                    <div style="padding-top:30px;padding-left:20px;padding-bottom:15px;">
+<!--                    <div style="padding-top:30px;padding-left:20px;padding-bottom:15px;">
                      <div style="position:relative;margin:0;line-height:1em;
                       height:2.66em;width:2.66em;background-color:#690;
                       border:0.2em solid #f6f6f6;">
@@ -41,7 +42,7 @@
                        </a>
                       </h2>
                      </div>
-                    </div>
+                    </div>  -->
 
 <!--
 

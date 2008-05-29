@@ -1,0 +1,24 @@
+<div class="plugin">
+<form method="post" id="newmenuelement" action="{site_admin_url}/plugins/sitetailor/index.php">
+<input type="hidden" name="mode" value="new"{xhtml}>
+<input type="submit" id="submit" name="submit" value="New Menu Element"{xhtml}>
+</form>
+
+<form method="post" id="menusel" action="{site_admin_url}/plugins/sitetailor/index.php">
+<div>
+  <table style="width:100%;">
+    <tr>
+      <th>{$LANG_ST01[menu_element]}</th>
+      <th class="aligncenter" style="text-align:center;">{$LANG_ST01[enabled]}</th>
+      <th class="aligncenter" style="text-align:center;">{$LANG_ST01[info]}</th>
+      <th class="aligncenter" style="text-align:center;">{$LANG_ST01[edit]}</th>
+      <th class="aligncenter" style="text-align:center;">{$LANG_ST01[delete]}</th>
+      <th colspan="2" style="text-align:center;">{$LANG_ST01[order]}</th>
+    </tr>
+    {menu_tree}
+  </table>
+  <input type="hidden" id="menu" name="menu" value="{menuid}"{xhtml}>
+  <input type="hidden" name="mode" value="activate"{xhtml}>
+</div>
+</form>
+</div>

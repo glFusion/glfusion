@@ -148,7 +148,7 @@ $LANG01 = array(
     104 => 'by',
     105 => 'Mail Users',
     106 => 'Views:',
-    107 => 'GL Version Test',
+    107 => 'Upgrade Check',
     108 => 'Clear Cache',
     109 => 'Report abuse',
     110 => 'Report this post to the site admin',
@@ -1177,7 +1177,8 @@ $MESSAGE = array(
     93 => 'Database back up was successful.',
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
-    96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.'
+    96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
+    500 => 'The Template Cache has been successfully cleared',
 );
 
 ###############################################################################
@@ -1618,7 +1619,7 @@ $LANG_confignames['Core'] = array(
     'date' => "Date Format",
     'daytime' => "Daytime Format",
     'shortdate' => "Short Date Format",
-    'dateonly' => "Date Only Format", 
+    'dateonly' => "Date Only Format",
     'timeonly' => "Time Only Format",
     'week_start' => "Week Start",
     'hour_mode' => "Hour Mode",

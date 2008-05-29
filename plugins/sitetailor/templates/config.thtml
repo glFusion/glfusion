@@ -1,0 +1,93 @@
+<script type="text/javascript">
+<!--
+window.addEvent('domready', function() {
+	var hb = new MooRainbow('myRainbow', {
+		'startColor': {hcolorrgb},
+		'onChange': function(color) {
+			$('hcolor').value = color.hex;
+            $('hsample_1').setStyle('background-color',color.hex);
+		}
+	});
+	var hhb = new MooRainbow('mrheadbghover', {
+	    'id' : 'mooRainbow2',
+		'startColor': {hhcolorrgb},
+		'onChange': function(color) {
+			$('hhcolor').value = color.hex;
+            $('hsample_2').setStyle('background-color',color.hex);
+		}
+	});
+	var ht = new MooRainbow('mrhtext', {
+	    'id' : 'mooRainbow3',
+		'startColor': {htextrgb},
+		'onChange': function(color) {
+			$('htext').value = color.hex;
+            $('htsample_1').setStyle('background-color',color.hex);
+		}
+	});
+	var hht = new MooRainbow('mrhhtext', {
+	    'id' : 'mooRainbow4',
+		'startColor': {hhtextrgb},
+		'onChange': function(color) {
+			$('hhtext').value = color.hex;
+            $('htsample_2').setStyle('background-color',color.hex);
+		}
+	});
+});
+-->
+</script>
+<div class="plugin">
+  <div class="pluginCellTitle" style="padding:5px;">
+    {$LANG_ST01[configuration]}
+  </div>
+  <div class="meform">
+    <form method="post" action="{form_action}" id="mbconfig">
+      <h1 style="margin:9px;">Menu Color Options</h1>
+      <table cellpadding="0" cellspacing="0" class="plugin" style="margin:10px;">
+        <tr>
+          <th>Menu Area</th>
+          <th>Standard Color</th>
+          <th>Hover Color</th>
+        </tr>
+        <tr>
+          <td style="width=150px;">Background:</td>
+          <td>
+            <input id="hcolor" name="hcolor" type="text" size="13" value="{hcolor}" {xhtml}>&nbsp;
+            <input type="text" id="hsample_1" size="1" maxlength="1" value="" style="background-color:{hcolor};"{xhtml}>
+            <img id="myRainbow" src="{site_admin_url}/plugins/menubuilder/images/rainbow.png" alt="[hb]" width="16" height="16"{xhtml}>
+          </td>
+          <td>
+            <input id="hhcolor" name="hhcolor" type="text" size="13" value="{hhcolor}"{xhtml}>&nbsp;
+            <input type="text" id="hsample_2" size="1" maxlength="1" value="" style="background-color:{hhcolor};"{xhtml}>
+            <img id="mrheadbghover" src="{site_admin_url}/plugins/menubuilder/images/rainbow.png" alt="[hhb]" width="16" height="16"{xhtml}>
+          </td>
+        </tr>
+        <tr>
+          <td style="width=150px;">Text:</td>
+          <td>
+            <input id="htext" name="htext" type="text" size="13" value="{htext}" {xhtml}>&nbsp;
+            <input type="text" id="htsample_1" size="1" maxlength="1" value="" style="background-color:{htext};"{xhtml}>
+            <img id="mrhtext" src="{site_admin_url}/plugins/menubuilder/images/rainbow.png" alt="[ht]" width="16" height="16"{xhtml}>
+          </td>
+          <td>
+            <input id="hhtext" name="hhtext" type="text" size="13" value="{hhtext}" {xhtml}>&nbsp;
+            <input type="text" id="htsample_2" size="1" maxlength="1" value="" style="background-color:{hhtext};"{xhtml}>
+            <img id="mrhhtext" src="{site_admin_url}/plugins/menubuilder/images/rainbow.png" alt="[hht]" width="16" height="16"{xhtml}>
+          </td>
+        </tr>
+      </table>
+      <h1 style="margin:9px;">Menu Status</h1>
+      <table cellpadding="0" cellspacing="0" class="plugin" style="margin:10px;border:none;">
+        <tr>
+          <td style="width=150px;">Menu Active:</td>
+          <td>
+            <input type="checkbox" name="menuenabled" id="menuenabled" value="1"{enabled}{xhtml}>
+          </td>
+        </tr>
+      </table>
+      <div style="text-align:center;padding:5px;">
+        <input type="hidden" id="mode" name="mode" value="savecfg"{xhtml}>
+        <input type="submit" id="execute" name="execute" value="{$LANG_ST01[save]}"{xhtml}>
+      </div>
+    </form>
+  </div>
+</div>

@@ -415,7 +415,9 @@ function nouveau_siteFooter( $rightblock = -1, $custom = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
-           $theme_pagetitle, $theme_headercode, $theme_layout,$mbMenuConfig;
+           $theme_pagetitle, $theme_headercode, $theme_layout,$mbMenuConfig,
+           $_ST_CONF;
+
 
     $what       = $theme_what;
     $pagetitle  = $theme_pagetitle;
@@ -498,6 +500,45 @@ function nouveau_siteFooter( $rightblock = -1, $custom = '' )
 
     $theme->set_var( 'welcome_msg', $msg );
     $theme->set_var( 'datetime', $curtime[0] );
+
+    /*
+     * New Logo Processing
+     */
+
+    if ( $_ST_CONF['use_graphic_logo'] == 1 && file_exists($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']) ) {
+        $L = new Template( $_CONF['path_layout'] );
+        $L->set_file( array(
+            'logo'          => 'logo-graphic.thtml',
+        ));
+        $L->set_var( 'xhtml', XHTML);
+        $L->set_var( 'site_url', $_CONF['site_url'] );
+        $L->set_var( 'layout_url', $_CONF['layout_url'] );
+        $L->set_var( 'site_name', $_CONF['site_name'] );
+        $site_logo = $_CONF['site_url'] . '/images/' . $_ST_CONF['logo_name'];
+        $L->set_var( 'site_logo', $site_logo);
+        if ($_ST_CONF['display_site_slogan']) {
+            $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
+        }
+        $L->parse('output','logo');
+        $theme->set_var('logo_block',$L->finish($L->get_var('output')));
+    } else {
+        $L = new Template( $_CONF['path_layout'] );
+        $L->set_file( array(
+            'logo'          => 'logo-text.thtml',
+        ));
+        $L->set_var( 'xhtml',XHTML);
+        $L->set_var( 'site_name', $_CONF['site_name'] );
+        $L->set_var( 'site_url', $_CONF['site_url'] );
+        $L->set_var( 'layout_url', $_CONF['layout_url'] );
+        if ($_ST_CONF['display_site_slogan']) {
+            $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
+        }
+        $L->parse('output','logo');
+        $theme->set_var('logo_block',$L->finish($L->get_var('output')));
+    }
+
+
+
     $theme->set_var( 'site_logo', $_CONF['layout_url']
                                    . '/images/logo.' . $_IMAGE_TYPE );
 
@@ -520,8 +561,8 @@ function nouveau_siteFooter( $rightblock = -1, $custom = '' )
         'lang_newuser'      => $LANG12[3],
     ));
 
-    if ( function_exists('mb_getMenu') && $mbMenuConfig[0]['enabled'] == 1) {
-        $theme->set_var('gllabs_menu',mb_getMenu(0,"gl_moomenu",'',"parent"));
+    if ( function_exists('st_getMenu') && $mbMenuConfig[0]['enabled'] == 1) {
+        $theme->set_var('gllabs_menu',st_getMenu(0,"gl_moomenu",'',"parent"));
     } else {
         $theme->set_var('gllabs_menu','');
     }

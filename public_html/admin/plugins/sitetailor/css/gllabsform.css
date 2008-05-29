@@ -1,0 +1,245 @@
+/* form.css */
+
+meform.* {
+  margin: 0;
+  padding: 0;
+}
+
+div.meform form {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  min-width: 560px;
+}
+
+div.meform form fieldset {
+  clear: both;
+  font-size: 100%;
+  border-color: #000000;
+  border-width: 1px 0 0 0;
+  border-style: solid none none none;
+  padding: 10px;
+  margin: 0 0 0 0;
+}
+
+div.meform form fieldset legend {
+  font-size: 150%;
+  font-weight: normal;
+  color: #000000;
+  margin: 0 0 0 0;
+  padding: 0 5px;
+}
+
+div.meform label {
+  font-size: 100%;
+}
+
+div.meform label u {
+  font-style: normal;
+  text-decoration: underline;
+}
+
+div.meform input, div.meform select, div.meform textarea {
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 100%;
+  color: #000000;
+}
+
+div.meform textarea {
+  overflow: auto;
+}
+
+div.meform form div {
+  clear: left;
+  display: block;
+/*  width: 354px; */
+  height: expression('1%');
+  margin: 5px 0 0 0;
+  padding: 1px 3px;
+}
+
+div.meform form fieldset div.notes {
+  float: right;
+  width: 158px;
+  height: auto;
+  margin: 0 0 10px 10px;
+  padding: 5px;
+  border: 1px solid #666666;
+  background-color: #ffffe1;
+  color: #666666;
+  font-size: 88%;
+}
+
+div.meform form fieldset div.notes h4 {
+  background-image: url(/images/icon_info.gif);
+  background-repeat: no-repeat;
+  background-position: top left;
+  padding: 3px 0 3px 27px;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: #666666;
+  color: #666666;
+  font-size: 110%;
+}
+
+div.meform form fieldset div.notes p {
+  margin: 0em 0em 1.2em 0em;
+  color: #666666;
+}
+
+div.meform form fieldset div.notes p.last {
+  margin: 0em;
+}
+
+div.meform form div fieldset {
+  clear: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #666666;
+  margin: 0 0 0 144px;
+  padding: 0 5px 5px 5px;
+  width: 197px;
+}
+
+div.meform form div fieldset legend {
+  font-size: 100%;
+  padding: 0 3px 0 9px;
+}
+
+div.meform form div.required fieldset legend {
+  font-weight: bold;
+}
+
+div.meform form div label {
+  display: block;
+  float: left;
+  width: 130px;
+  padding: 3px 5px;
+  margin: 0 0 5px 0;
+  text-align: right;
+}
+
+div.meform form div.optional label, label.optional {
+  font-weight: normal;
+}
+
+div.meform form div.required label, label.required {
+  font-weight: bold;
+}
+
+div.meform form div label.labelCheckbox, form div label.labelRadio {
+  float: none;
+  display: block;
+  width: 200px;
+  height: expression('1%');
+  padding: 0;
+  margin: 0 0 5px 142px;
+  text-align: left;
+}
+
+div.meform form div fieldset label.labelCheckbox, form div fieldset label.labelRadio {
+  margin: 0 0 5px 0;
+  width: 170px;
+}
+
+div.meform form div img {
+  border: 1px solid #000000;
+}
+
+div.meform p.error {
+  background-color: #ff0000;
+  background-image: url(/images/icon_error.gif);
+  background-repeat: no-repeat;
+  background-position: 3px 3px;
+  color: #ffffff;
+  padding: 3px 3px 5px 27px;
+  border: 1px solid #000000;
+  margin: auto 100px;
+}
+
+div.meform form div.error {
+  background-color: #ffffe1;
+  background-image: url(/images/required_bg.gif);
+  background-repeat: no-repeat;
+  background-position: top left;
+  color: #666666;
+  border: 1px solid #ff0000;
+}
+
+div.meform form div.error p.error {
+  background-image: url(/images/icon_error.gif);
+  background-position: top left;
+  background-color: transparent;
+  border-style: none;
+  font-size: 88%;
+  font-weight: bold;
+  margin: 0 0 0 118px;
+  width: 200px;
+  color: #ff0000;
+}
+
+div.meform form div select, form div textarea {
+  width: 200px;
+  padding: 1px 3px;
+  margin: 0 0 0 0;
+}
+
+div.meform form div input.inputText, form div input.inputPassword {
+  width: 200px;
+  padding: 1px 3px;
+  margin: 0 0 0 0;
+}
+
+div.meform form div input.inputFile {
+  width: 211px;
+}
+
+div.meform form div select.selectOne, form div select.selectMultiple {
+  width: 211px;
+  padding: 1px 3px;
+}
+
+div.meform form div input.inputCheckbox, form div input.inputRadio, input.inputCheckbox, input.inputRadio {
+  display: inline;
+  height: auto;
+  width: auto;
+  background-color: transparent;
+  border-width: 0;
+  padding: 0;
+  margin: 0 0 0 140px;
+}
+
+div.meform form div.submit {
+  width: 214px;
+  padding: 0 0 0 146px;
+}
+
+div.meform form div.submit div {
+  display: inline;
+  float: left;
+  text-align: left;
+  width: auto;
+  padding: 0;
+  margin: 0;
+}
+
+div.meform form div input.inputSubmit, form div input.inputButton, input.inputSubmit, input.inputButton {
+  background-color: #cccccc;
+  color: #000000;
+  width: auto;
+  padding: 0 6px;
+  margin: 0;
+}
+
+div.meform form div.submit div input.inputSubmit, form div.submit div input.inputButton {
+  float: right;
+  margin: 0 0 0 5px;
+}
+
+div.meform form div small {
+  display: block;
+  margin: 0 0 5px 142px;
+  padding: 1px 3px;
+  font-size: 88%;
+  height: expression('1%');
+}
