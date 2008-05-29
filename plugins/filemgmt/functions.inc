@@ -783,7 +783,7 @@ function plugin_getwhatsnew_filemgmt() {
         }
     } else {
         $retval .= $LANG_FILEMGMT['no_new_files'] . '<br' . XHTML . '>' . LB;
-        return $items;
+        return $retval;
     }
 }
 
