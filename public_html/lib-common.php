@@ -52,7 +52,7 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 */
 
 if (!defined('glFusion_VERSION')) {
-  define('glFusion_VERSION', '1.5.0b1');
+  define('glFusion_VERSION', '1.5.0rc1');
 }
 
 /**
