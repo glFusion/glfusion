@@ -75,7 +75,7 @@ function render_cc_item (&$template, $url = '', $image = '', $label = '')
 * Prints the command & control block at the top
 *
 * TODO: The moderation items should be displayed with the help of <ul><li>
-* instead of div's. 
+* instead of div's.
 *
 */
 function commandcontrol($token)
@@ -126,7 +126,10 @@ function commandcontrol($token)
                         'lang' => $LANG01[116], 'image' => '/images/icons/trackback.'),
                   array('condition' => SEC_hasRights('plugin.edit'),
                         'url' => $_CONF['site_admin_url'] . '/plugins.php',
-                        'lang' => $LANG01[98], 'image' => '/images/icons/plugins.')
+                        'lang' => $LANG01[98], 'image' => '/images/icons/plugins.'),
+                  array('condition' => SEC_inGroup('Root'),
+                        'url' => $_CONF['site_admin_url'] . '/clearctl.php',
+                        'lang' => 'Clear Template Cache', 'image' => '/images/icons/ctl.')
     );
     $admin_templates->set_var('cc_icon_width', floor(100/ICONS_PER_ROW));
 
