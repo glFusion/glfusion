@@ -1808,7 +1808,7 @@ $display .= '<head>
 						' . $LANG_INSTALL[2] . '
 					</div>
                     <div class="floatleft">
-                      <img src="layout/logo.png" height="100" width="370" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo"' . XHTML . '>
+                      <img src="layout/logo.jpg" height="100" width="370" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo"' . XHTML . '>
                     </div>
                 </div>
             </div>
