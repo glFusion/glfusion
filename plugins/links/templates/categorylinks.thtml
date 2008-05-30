@@ -1,4 +1,4 @@
 <h3>{link_category}</h3>
-<ul>
+<ul class="top10links">
   {link_details}
 </ul>
