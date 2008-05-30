@@ -474,7 +474,7 @@ function listBrokenDownloads() {
     $display .= filemgmt_navbar($LANG_FM02['nav5']);
 
     if ($totalbrokendownloads==0) {
-        $display .= _MD_NOBROKEN;
+        $display .= '<div style="padding:20px">' . _MD_NOBROKEN . '</div>';
     } else {
         $display .= '<form method="post" action="index.php">';
         $display .= '<input type="hidden" name="op" value="">';
