@@ -100,17 +100,17 @@ function DIR_lastDayOfMonth ($month, $year)
 */
 function DIR_topicList ($topic = 'all', $year = 0, $month = 0, $standalone = false)
 {
-    global $_CONF, $LANG21;
+    global $_CONF, $LANG21, $LANG09;
 
     $retval = '';
 
     $url = $_CONF['site_url'] . '/' . THIS_SCRIPT;
     $retval .= '<form action="' . $url . '" method="post"';
     if (!$standalone) {
-        $retval .= ' style="display:inline; float:right"' . LB;
+        $retval .= ' class="floatright"' . LB;
     }
-    $retval .= '><div>' . LB;
-    $retval .= '<select name="topic" onchange="this.form.submit()">' . LB;
+    $retval .= '><div style="margin-top:-7px">' . LB;
+    $retval .= $LANG09[3] .': <select name="topic" onchange="this.form.submit()">' . LB;
     $retval .= '<option value="all"';
     if ($topic == 'all') {
         $retval .= ' selected="selected"';
@@ -254,11 +254,11 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
     $retval = '';
 
     if ($main) {
-        $retval .= '<div><h1 style="display:inline">' . $LANG_MONTH[$month]
-                . ' ' . $year . '</h1> ' . DIR_topicList ($topic, $year, $month)
+        $retval .= '<div><h2>' . $LANG_MONTH[$month]
+                . ' ' . $year . '</h2> ' . DIR_topicList ($topic, $year, $month)
                 . '</div>' . LB;
     } else {
-        $retval .= '<h1>' . $LANG_MONTH[$month] . ' ' . $year . '</h1>' . LB;
+        $retval .= '<h2>' . $LANG_MONTH[$month] . ' ' . $year . '</h2>' . LB;
     }
 
     $start = sprintf ('%04d-%02d-01 00:00:00', $year, $month);
@@ -332,7 +332,7 @@ function DIR_displayYear ($topic, $year, $main = false)
     $retval = '';
 
     if ($main) {
-        $retval .= '<div><h1 style="display:inline">' . $year . '</h1> '
+        $retval .= '<div><h2>' . $year . '</h2> '
                 . DIR_topicList ($topic, $year) . '</div>' . LB;
     } else {
         $retval .= '<h2>' . $year . '</h2>' . LB;
@@ -429,8 +429,8 @@ function DIR_displayAll ($topic, $list_current_month = false)
         $retval .= '<hr' . XHTML . '>' . LB;
     }
 
-    $retval .= '<div><h1 style="display:inline">' . $LANG_DIR['title']
-            . '</h1> ' . DIR_topicList ($topic) . '</div>' . LB;
+    $retval .= '<div><h2>' . $LANG_DIR['title']
+            . '</h2> ' . DIR_topicList ($topic) . '</div>' . LB;
 
     $yearsql = array();
     $yearsql['mysql'] = "SELECT DISTINCT YEAR(date) AS year,date FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW())" . COM_getTopicSql ('AND') . COM_getPermSql ('AND')  . COM_getLangSQL ('sid', 'AND');
