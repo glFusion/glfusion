@@ -872,16 +872,16 @@ padding:2px 5px;
 }
 
 .pluginBG {
-background:#7398BA;
+background:#3667C0;
 color:#FEFEFE;
 }
 
 .pluginAltBG {
-background:#7398BA;
+background:#3667C0;
 }
 
 .pluginCellTitle {
-background:#7398BA;
+background:#3667C0;
 color:#FFF;
 font-weight:700;
 padding:5px;
@@ -903,20 +903,20 @@ padding:3px 0;
 }
 
 .pluginFooter,.pluginFooter td {
-background:#507AA1;
+background:#3667C0;
 color:#FFF;
 }
 
 .pluginAlert {
-background:#FEF1B4;
-color:#D8010E;
+background:#3667C0;
+color:#FFF;
 font-weight:700;
 padding:5px 15px;
 }
 
 .pluginInfo {
-background:#FEF1B4;
-color:#707070;
+background:#3667C0;
+color:#FFF;
 font-weight:400;
 padding:5px 15px;
 }
@@ -944,8 +944,8 @@ background:#1A3955;
 }
 
 .pluginTitle {
-background:#507AA1;
-color:#F5F9FF;
+background:#3667C0;
+color:#FFF;
 padding:4px 6px;
 }
 
@@ -1061,7 +1061,6 @@ padding:0 0 0 5px;
 
 #navcontainer a span {
 background:url(../professional/navbar/images/tabrightJ.gif) no-repeat right top;
-color:#24618E;
 display:block;
 float:none;
 padding:5px 15px 4px 6px;
