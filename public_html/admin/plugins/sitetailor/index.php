@@ -106,7 +106,7 @@ function ST_saveLogo() {
         if ( $ext != 'unknown' ) {
             $imgInfo = @getimagesize($file['tmp_name']);
             if ( $imgInfo[0] > $_ST_CONF['max_logo_width'] || $imgInfo[1] > $_ST_CONF['max_logo_height'] ) {
-                $retval = 3;
+                $retval = 4;
             } else {
                 $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
                 $rc = move_uploaded_file($file['tmp_name'], $_CONF['path_html'] . 'images/' . $newlogoname);
@@ -551,7 +551,6 @@ function ST_changeActiveStatusElement ($bid_arr)
 }
 
 
-
 /**
 * Recursivly deletes all elements and child elements
 *
@@ -636,8 +635,6 @@ function ST_saveMenuConfig($menu_id=0) {
     $smh    = COM_applyFilter($_POST['smhcolor']);
     $sms    = COM_applyFilter($_POST['smscolor']);
 
-//    $enabled = COM_applyFilter($_POST['menuenabled'],true);
-
     DB_query("UPDATE {$_TABLES['st_menu_config']} SET tmbg='$tmbg',tmh='$tmh',tmt='$tmt',tmth='$tmth',smth='$smth',smbg='$smbg',smh='$smh',sms='$sms' WHERE menu_id=" . $menu_id);
     return;
 }
@@ -694,22 +691,22 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
         case 'menu' :
             // display the tree
             $content = ST_displayTree( $menu_id );
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'logo' :
             $content    = ST_logoEdit ( );
-            $currentSelect = 'Logo';
+            $currentSelect = $LANG_ST01['logo'];
             break;
         case 'savelogo' :
             $rc = ST_saveLogo();
             $content = COM_showMessage( $rc, 'sitetailor' );
             $content .= ST_logoEdit( );
-            $currentSelect = 'Logo';
+            $currentSelect = $LANG_ST01['logo'];
             break;
         case 'new' :
             $menu = COM_applyFilter($_GET['menu'],true);
             $content = ST_createElement ( $menu );
-            $currentSelect = 'Menu Builder'; // $LANG_ST01['add_new'];
+            $currentSelect = $LANG_ST01['menu_builder']; // $LANG_ST01['add_new'];
             break;
         case 'move' :
             // do something with the direction
@@ -718,51 +715,51 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
             $menu_id   = COM_applyFilter($_GET['menu'],true);
             ST_moveElement( $menu_id, $mid, $direction );
             $content = ST_displayTree( $menu_id );
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'edit' :
             // call the editor
             $mid       = COM_applyFilter($_GET['mid'],true);
             $menu_id   = COM_applyFilter($_GET['menu'],true);
             $content = ST_editElement( $menu_id, $mid );
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'saveedit' :
             ST_saveEditMenuElement();
             $content = ST_displayTree( $menu_id );
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'save' :
             // save the new or edited element
             ST_saveNewMenuElement();
             $content = ST_displayTree( $menu_id );
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'activate' :
             ST_changeActiveStatusElement ($_POST['enableditem']);
             st_initMenu();
             $content = ST_displayTree( $menu_id );
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'delete' :
             // delete the element
             $id        = COM_applyFilter($_GET['mid'],true);
-            $menu      = 0;
+            $menu_id   = 0;
             ST_deleteChildElements( $id, $menu );
             st_initMenu();
             $content = ST_displayTree( $menu_id );
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'config' :
             $content = ST_menuConfig($menu_id);
             $currentSelect = $LANG_ST01['configuration'];
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'savecfg' :
             ST_saveMenuConfig($menu_id);
             st_initMenu();
             $content = ST_menuConfig( $menu_id );
-            $currentSelect = 'Menu Colors';
+            $currentSelect = $LANG_ST01['menu_colors'];
             break;
         case 'disablemenu' :
             $action = COM_applyFilter($_POST['menuactive'],true);
@@ -773,25 +770,25 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
             exit;
             st_initMenu();
             $content = ST_displayTree( $menu_id );
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'newmenu' :
             $content = 'We will create a new menu here';
             break;
         case 'menucolor' :
             $content = ST_menuConfig($menu_id);
-            $currentSelect = 'Menu Colors';
+            $currentSelect = $LANG_ST01['menu_colors'];
             break;
         default :
             // display the tree
             $content = ST_displayTree( $menu_id );
-            $currentSelect = 'Menu Builder';
+            $currentSelect = $LANG_ST01['menu_builder'];
             break;
     }
 } else {
     // display the tree
     $content = ST_displayTree( $menu_id );
-    $currentSelect = 'Menu Builder';
+    $currentSelect = $LANG_ST01['menu_builder'];
 }
 
 /*
@@ -802,9 +799,9 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
 include_once $_CONF['path_system']."classes/navbar.class.php";
 
 $navbar = new navbar;
-$navbar->add_menuitem('Menu Builder',$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=menu');
-$navbar->add_menuitem('Menu Colors',$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=menucolor');
-$navbar->add_menuitem('Logo',$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=logo');
+$navbar->add_menuitem($LANG_ST01['menu_builder'],$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=menu');
+$navbar->add_menuitem($LANG_ST01['menu_colors'],$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=menucolor');
+$navbar->add_menuitem($LANG_ST01['logo'],$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=logo');
 $navbar->set_selected($currentSelect);
 
 $display = COM_siteHeader();
