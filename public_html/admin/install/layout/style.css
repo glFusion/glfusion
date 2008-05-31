@@ -2,7 +2,7 @@
 
 *****************************************************************/
 
-.glform label, .glform input {
+.glform label, .glform label-left, .glform label-right .glform input {
 display:block;
 width:200px;
 float:left;
@@ -341,18 +341,18 @@ margin-left:0em;
   color:#FFF;
 }
 .upgrade-rtl {
-  position: relative; 
-  right: 230px; 
+  position: relative;
+  right: 230px;
   top: -77px;
-  width: 220px; 
-  height: 55px; 
-  background-color: #CCC; 
+  width: 220px;
+  height: 55px;
+  background-color: #CCC;
   text-align: center;
-  font-size: 20pt; 
+  font-size: 20pt;
   font-family: "Verdana";
-  padding-top: 20px; 
+  padding-top: 20px;
   border: 1px;
-  border-color: #000; 
+  border-color: #000;
   border-style: dashed;
 }
 .install a:hover,
