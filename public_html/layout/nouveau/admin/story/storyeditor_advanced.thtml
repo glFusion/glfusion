@@ -234,7 +234,7 @@
             <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
         </div>
     </form>
-    <div id="preview" style="width:95%; border:1px dashed grey;padding:5px;margin:10px;display:{show_preview};">
+    <div id="preview" style="width:96%; border:1px dashed grey;padding:5px;margin:10px;display:{show_preview};">
         {preview_content}
     </div>
 
