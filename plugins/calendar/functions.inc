@@ -34,7 +34,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: functions.inc,v 1.87 2008/05/22 17:01:54 dhaun Exp $
+// $Id: functions.inc,v 1.88 2008/05/31 07:55:07 dhaun Exp $
 
 if (strpos($_SERVER['PHP_SELF'], 'functions.inc') !== false) {
     die ('This file can not be used on its own.');
@@ -47,14 +47,6 @@ if (file_exists($langfile)) {
     require_once $langfile;
 } else {
     require_once $plugin_path . 'language/english.php';
-}
-
-/*
-* As of Geeklog 1.5, the plugin's config.php is not needed any more and
-* should be removed after upgrading.
-*/
-if (file_exists($plugin_path . 'config.php')) {
-    include_once $plugin_path . 'config.php';
 }
 
 /*
@@ -129,7 +121,7 @@ function phpblock_calendar( $help='', $title='' )
         . "FROM {$_TABLES['events']} "
         . "WHERE dateend >= NOW() AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) "
         . 'ORDER BY datestart,timestart';
-
+        
         if(( $_CA_CONF['personalcalendars'] == 1 ) && !empty( $_USER['uid'] )) {
             $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
             . "FROM {$_TABLES['personal_events']} "
@@ -431,17 +423,6 @@ function plugin_savesubmission_calendar($A)
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
             . plugin_submit_calendar ($A['calendar_type'])
             . COM_siteFooter ();
-
-        return $retval;
-    }
-    $msg = PLG_itemPreSave ('links', $A);
-    if (!empty ($msg)) {
-        $retval .= COM_startBlock($LANG12[22], '',
-                       COM_getBlockTemplate('_msg_block', 'header'))
-                . $msg
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
-                . plugin_submit_calendar($A['calendar_type'])
-                . COM_siteFooter();
 
         return $retval;
     }
@@ -809,7 +790,6 @@ function plugin_submit_calendar($mode = 'master')
         $eventform->set_var('hidden_fields', '');
     }
     $eventform->set_var('xhtml', XHTML);
-    PLG_templateSetVars ('calendar', $eventform);
     $eventform->parse('theform', 'eventform');
     $retval .= $eventform->finish($eventform->get_var('theform'));
     $retval .= COM_endBlock();
