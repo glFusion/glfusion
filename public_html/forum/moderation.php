@@ -264,7 +264,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
         $subject = DB_getITEM($_TABLES['gf_topic'],"subject","id='$msgpid'");
         $alertmessage .= sprintf($LANG_GF02['msg64'],$fortopicid,$subject);
 
-        $promptform  = '<p><form action="' .$_CONF['site_url'] . '/forum/moderation.php" method="post">';
+        $promptform  = '<div><form action="' .$_CONF['site_url'] . '/forum/moderation.php" method="post">';
         $promptform .= '<input type="hidden" name="modconfirmdelete" value="1"' . XHTML . '>';
         $promptform .= '<input type="hidden" name="msgid"  value="' .$fortopicid. '"' . XHTML . '>';
         $promptform .= '<input type="hidden" name="forum"  value="' .$forum. '"' . XHTML . '>';
@@ -272,7 +272,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
         $promptform .= '<input type="hidden" name="top" value="' .$top. '"' . XHTML . '>';
         $promptform .= '<center><input type="submit" name="submit" value="' .$LANG_GF01['CONFIRM']. '"' . XHTML . '>&nbsp;&nbsp;';
         $promptform .= '<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '></center>';
-        $promptform .= '</center></form></p>';
+        $promptform .= '</form></div>';
         alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
 
     } elseif($modfunction == 'editpost' AND forum_modPermission($forum,$_USER['uid'],'mod_edit') AND $fortopicid != 0) {
