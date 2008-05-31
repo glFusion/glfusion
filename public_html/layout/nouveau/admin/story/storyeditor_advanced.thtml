@@ -61,7 +61,7 @@
             </tr>
         </table>
         <!-- Basic textarea field - no editor -->
-        <div id="text_editor" style="width:98%; margin-top:10px; padding:10px;">
+        <div id="text_editor" style="width:98%; margin-top:10px; padding:10px;display:{show_texteditor};">
             {lang_introtext}:
             <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('introtext','larger');"{xhtml}>
             <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('introtext','smaller');"{xhtml}>
@@ -76,7 +76,7 @@
             </div>
         </div>
         <!-- HTML Editor -->
-        <div id="html_editor" style="margin-top:10px; padding:5px; border:1px solid #ECE9D8;">
+        <div id="html_editor" style="margin-top:10px; padding:5px; border:1px solid #ECE9D8;display:{show_htmleditor};">
             {lang_introtext}:
             <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','larger');"{xhtml}>
             <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','smaller');"{xhtml}>
