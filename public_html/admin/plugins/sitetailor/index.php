@@ -784,11 +784,14 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
             break;
         default :
             // display the tree
-            $content = '';
+            $content = ST_displayTree( $menu_id );
+            $currentSelect = 'Menu Builder';
             break;
     }
 } else {
-    $content = '';
+    // display the tree
+    $content = ST_displayTree( $menu_id );
+    $currentSelect = 'Menu Builder';
 }
 
 /*
