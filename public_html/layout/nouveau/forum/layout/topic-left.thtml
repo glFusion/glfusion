@@ -3,6 +3,7 @@
     <td colspan="2" style="padding:5px 0px 5px 10px;">{lang_postpreview}</td>
 </tr>
 <tr class="pluginRow{csscode}" style="display:{show_topicrow1};">
+<td style="height:30px;padding-left:6px; padding-right:6px;">{userlink}{topic_post_link_begin}{topic_post_link_end}</td>
   <td style="padding-left:6px; padding-right:6px;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
@@ -20,24 +21,13 @@
       </tr>
     </table>
   </td>
-  <td style="height:30px;padding-left:6px; padding-right:6px;">{userlink}{topic_post_link_begin}{topic_post_link_end}</td>
+
 </tr>
 <tr class="pluginRow{csscode}" style="display:{show_topicrow2};">
   <td style="padding-left:6px; padding-right:6px;">{userlink}</td>
   <td style="padding:0px 6px 5px 6px;">{preview_topic_subject}</td>
 </tr>
 <tr class="pluginRow{csscode}">
-  <td style="width:100%;vertical-align:top; padding:6px;" class="pluginRow{csscode}">
-    <div style="{comment_minheight};">
-      {topic_comment}
-    </div>
-    <div style="clear:both;"></div>
-    {attachments}
-    <div style="min-height:45px;padding-top:10px;display:{show_sig};">
-      {sig}<br{xhtml}>
-      {remote_ip}
-    </div>
-  </td>
   <td style="vertical-align:top; padding:6px;white-space:nowrap;">
     <div>
       {user_level}<br{xhtml}>
@@ -56,8 +46,21 @@
     </div>
     <div style="background:transparent; width:110px; height:1px;"></div>
   </td>
+  <td style="width:100%;vertical-align:top; padding:6px;" class="pluginRow{csscode}">
+    <div style="{comment_minheight};">
+      {topic_comment}
+    </div>
+    <div style="clear:both;"></div>
+    {attachments}
+    <div style="min-height:45px;padding-top:10px;display:{show_sig};">
+      {sig}<br{xhtml}>
+      {remote_ip}
+    </div>
+  </td>
+
 </tr>
 <tr class="pluginRow{csscode}" style="display:{preview_mode};">
+  <td style="height:30px;">&nbsp;</td>
   <td style="padding-left:6px; padding-right:6px;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
@@ -90,7 +93,7 @@
       </tr>
     </table>
   </td>
-  <td style="height:30px;">&nbsp;</td>
+
 </tr>
 <tr>
   <td colspan="2" class="pluginSolidOutline"><div style="background:transparent;width:1px;height:10px;display:{show_topicrule}"></div></td>
