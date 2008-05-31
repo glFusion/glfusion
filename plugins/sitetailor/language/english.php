@@ -77,7 +77,7 @@ $LANG_ST01 = array (
     'use_graphic_logo'  => 'Use Graphic Logo',
     'use_text_logo'     => 'Use Text Logo',
     'display_site_slogan'   => 'Display Site Slogan',
-    'upload_logo'       => 'Upload new logo graphic',
+    'upload_logo'       => 'Upload New Logo',
     'current_logo'      => 'Current Logo',
     'no_logo_graphic'   => 'No Logo Graphic available',
     'logo_help'         => 'Uploaded graphic logo images are not resized, the standard size for Site Tailor logo is 100 pixels tall by 580 pixels wide',
@@ -127,6 +127,19 @@ $LANG_ST01 = array (
     'action'            => 'Action',
     'first_position'    => 'First Position',
     'info'              => 'Info',
+    'non-logged-in'     => 'Non Logged-In Users Only',
+    'target'            => 'URL Window',
+    'same_window'       => 'Same Window',
+    'new_window'        => 'New Window',
+    'menu_color_options'    => 'Menu Color Options',
+    'top_menu_bg'       => 'Top Menu BG',
+    'top_menu_hover'    => 'Top Menu Hover',
+    'top_menu_text'     => 'Top Menu Text',
+    'top_menu_text_hover'   => 'Top Menu Text Hover / Sub Menu Text',
+    'sub_menu_text_hover'   => 'Sub Menu Text Hover',
+    'sub_menu_bg'           => 'Sub Menu BG',
+    'sub_menu_highlight'    => 'Sub Menu Highlight',
+    'sub_menu_shadow'       => 'Sub Menu Shadow',
 );
 
 
@@ -167,4 +180,6 @@ $LANG_ST_GLTYPES = array(
 );
 
 $PLG_sitetailor_MESSAGE1 = 'Site Tailor Logo Options Successfully Saved.';
+$PLG_sitetailor_MESSAGE2 = 'Uploaded logo was not a JPG, GIF, or PNG image.';
+$PLG_sitetailor_MESSAGE3 = 'Logo exceeds the maximum allowed height or width.';
 ?>

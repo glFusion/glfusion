@@ -12,6 +12,7 @@ function toggleFields() {
     switch( selected ) {
         case '1' : // sub
             $('urldiv').style.display='none';
+            $('targetdiv').style.display='none';
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
@@ -20,6 +21,7 @@ function toggleFields() {
             break;
         case '2' : // gl actioin
             $('urldiv').style.display='none';
+            $('targetdiv').style.display='none';
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
@@ -28,6 +30,7 @@ function toggleFields() {
             break;
         case '3' : // gl menus
             $('urldiv').style.display='none';
+            $('targetdiv').style.display='none';
             $('glcorediv').style.display='';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
@@ -36,6 +39,7 @@ function toggleFields() {
             break;
         case '4' : // plugins
             $('urldiv').style.display='none';
+            $('targetdiv').style.display='none';
             $('glcorediv').style.display='none';
             $('plugin').style.display='';
             $('staticpage').style.display='none';
@@ -44,6 +48,7 @@ function toggleFields() {
             break;
         case '5' :  // static pages
             $('urldiv').style.display='none';
+            $('targetdiv').style.display='none';
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='';
@@ -52,6 +57,7 @@ function toggleFields() {
             break;
         case '6' : // url
             $('urldiv').style.display='';
+            $('targetdiv').style.display='';
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
@@ -60,6 +66,7 @@ function toggleFields() {
             break;
         case '7' :  // php function
             $('urldiv').style.display='none';
+            $('targetdiv').style.display='none';
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
@@ -68,6 +75,7 @@ function toggleFields() {
             break;
         case '8' :
             $('urldiv').style.display='none';
+            $('targetdiv').style.display='none';
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
@@ -84,7 +92,7 @@ function toggleFields() {
 <div class="pluginCellTitle" style="padding:5px;">
   {$LANG_ST01[edit_element]}
 </div>
-<div class="meform">
+<div class="glfform">
   <form method="post" action="{form_action}">
     <input type="hidden" id="menu" name="menu" value="{menu}"{xhtml}>
     <input type="hidden" id="id" name="id" value="{mid}"{xhtml}>
@@ -108,6 +116,12 @@ function toggleFields() {
         <label for="menuurl">{$LANG_ST01[url]}</label>
         <input type="text" id="menuurl" name="menuurl" size="48" value="{menuurl}"{xhtml}>
       </div>
+
+      <div id="targetdiv" class="required">
+        <label for="urltarget">{$LANG_ST01[target]}</label>
+        {target_select}
+      </div>
+
       <div id="phpdiv" class="required">
         <label for="phpfunction">{$LANG_ST01[php]}</label>
         <input type="text" id="phpfunction" name="phpfunction" size="48" value="{phpfunction}"{xhtml}>

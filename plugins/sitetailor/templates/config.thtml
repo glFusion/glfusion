@@ -1,89 +1,140 @@
 <script type="text/javascript">
 <!--
 window.addEvent('domready', function() {
-	var hb = new MooRainbow('myRainbow', {
-		'startColor': {hcolorrgb},
+	var tmbg = new MooRainbow('tmbgrb', {
+		'startColor': {tmbgcolorrgb},
 		'onChange': function(color) {
-			$('hcolor').value = color.hex;
-            $('hsample_1').setStyle('background-color',color.hex);
+			$('tmbgcolor').value = color.hex;
+            $('tmbg_sample').setStyle('background-color',color.hex);
 		}
 	});
-	var hhb = new MooRainbow('mrheadbghover', {
+
+	var tmh = new MooRainbow('tmhrb', {
 	    'id' : 'mooRainbow2',
-		'startColor': {hhcolorrgb},
+		'startColor': {tmhcolorrgb},
 		'onChange': function(color) {
-			$('hhcolor').value = color.hex;
-            $('hsample_2').setStyle('background-color',color.hex);
+			$('tmhcolor').value = color.hex;
+            $('tmh_sample').setStyle('background-color',color.hex);
 		}
 	});
-	var ht = new MooRainbow('mrhtext', {
+
+	var tmt = new MooRainbow('tmtrb', {
 	    'id' : 'mooRainbow3',
-		'startColor': {htextrgb},
+		'startColor': {tmtcolorrgb},
 		'onChange': function(color) {
-			$('htext').value = color.hex;
-            $('htsample_1').setStyle('background-color',color.hex);
+			$('tmtcolor').value = color.hex;
+            $('tmt_sample').setStyle('background-color',color.hex);
 		}
 	});
-	var hht = new MooRainbow('mrhhtext', {
+	var tmth = new MooRainbow('tmthrb', {
 	    'id' : 'mooRainbow4',
-		'startColor': {hhtextrgb},
+		'startColor': {tmthcolorrgb},
 		'onChange': function(color) {
-			$('hhtext').value = color.hex;
-            $('htsample_2').setStyle('background-color',color.hex);
+			$('tmthcolor').value = color.hex;
+            $('tmth_sample').setStyle('background-color',color.hex);
+		}
+	});
+	var smth = new MooRainbow('smthrb', {
+	    'id' : 'mooRainbow5',
+		'startColor': {smthcolorrgb},
+		'onChange': function(color) {
+			$('smthcolor').value = color.hex;
+            $('smth_sample').setStyle('background-color',color.hex);
+		}
+	});
+	var smbg = new MooRainbow('smbgrb', {
+	    'id' : 'mooRainbow6',
+		'startColor': {smbgcolorrgb},
+		'onChange': function(color) {
+			$('smbgcolor').value = color.hex;
+            $('smbg_sample').setStyle('background-color',color.hex);
+		}
+	});
+	var smh = new MooRainbow('smhrb', {
+	    'id' : 'mooRainbow7',
+		'startColor': {smhcolorrgb},
+		'onChange': function(color) {
+			$('smhcolor').value = color.hex;
+            $('smh_sample').setStyle('background-color',color.hex);
+		}
+	});
+	var sms = new MooRainbow('smsrb', {
+	    'id' : 'mooRainbow8',
+		'startColor': {smscolorrgb},
+		'onChange': function(color) {
+			$('smscolor').value = color.hex;
+            $('sms_sample').setStyle('background-color',color.hex);
 		}
 	});
 });
+
+
 -->
 </script>
 <div class="plugin">
   <div class="pluginCellTitle" style="padding:5px;">
     {$LANG_ST01[configuration]}
   </div>
-  <div class="meform">
+  <div class="glfform">
     <form method="post" action="{form_action}" id="mbconfig">
-      <h1 style="margin:9px;">Menu Color Options</h1>
-      <table cellpadding="0" cellspacing="0" class="plugin" style="margin:10px;">
-        <tr>
-          <th>Menu Area</th>
-          <th>Standard Color</th>
-          <th>Hover Color</th>
-        </tr>
-        <tr>
-          <td style="width=150px;">Background:</td>
-          <td>
-            <input id="hcolor" name="hcolor" type="text" size="13" value="{hcolor}" {xhtml}>&nbsp;
-            <input type="text" id="hsample_1" size="1" maxlength="1" value="" style="background-color:{hcolor};"{xhtml}>
-            <img id="myRainbow" src="{site_admin_url}/plugins/menubuilder/images/rainbow.png" alt="[hb]" width="16" height="16"{xhtml}>
-          </td>
-          <td>
-            <input id="hhcolor" name="hhcolor" type="text" size="13" value="{hhcolor}"{xhtml}>&nbsp;
-            <input type="text" id="hsample_2" size="1" maxlength="1" value="" style="background-color:{hhcolor};"{xhtml}>
-            <img id="mrheadbghover" src="{site_admin_url}/plugins/menubuilder/images/rainbow.png" alt="[hhb]" width="16" height="16"{xhtml}>
-          </td>
-        </tr>
-        <tr>
-          <td style="width=150px;">Text:</td>
-          <td>
-            <input id="htext" name="htext" type="text" size="13" value="{htext}" {xhtml}>&nbsp;
-            <input type="text" id="htsample_1" size="1" maxlength="1" value="" style="background-color:{htext};"{xhtml}>
-            <img id="mrhtext" src="{site_admin_url}/plugins/menubuilder/images/rainbow.png" alt="[ht]" width="16" height="16"{xhtml}>
-          </td>
-          <td>
-            <input id="hhtext" name="hhtext" type="text" size="13" value="{hhtext}" {xhtml}>&nbsp;
-            <input type="text" id="htsample_2" size="1" maxlength="1" value="" style="background-color:{hhtext};"{xhtml}>
-            <img id="mrhhtext" src="{site_admin_url}/plugins/menubuilder/images/rainbow.png" alt="[hht]" width="16" height="16"{xhtml}>
-          </td>
-        </tr>
-      </table>
-      <h1 style="margin:9px;">Menu Status</h1>
-      <table cellpadding="0" cellspacing="0" class="plugin" style="margin:10px;border:none;">
-        <tr>
-          <td style="width=150px;">Menu Active:</td>
-          <td>
-            <input type="checkbox" name="menuenabled" id="menuenabled" value="1"{enabled}{xhtml}>
-          </td>
-        </tr>
-      </table>
+    <input type="hidden" name="mid" id="mid" value="{menu_id}"{xhtml}>
+      <h1 style="margin:9px;">{$LANG_ST01[menu_color_options]}</h1>
+      <div>
+        <label>{$LANG_ST01[top_menu_bg]}:</label>
+        <input id="tmbgcolor" name="tmbgcolor" type="hidden" size="7" value="{tmbgcolor}" {xhtml}>&nbsp;
+        <input type="text" id="tmbg_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{tmbgcolor};"{xhtml}>
+        <img id="tmbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[tmbgrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+      </div>
+
+      <div>
+        <label>{$LANG_ST01[top_menu_hover]}:</label>
+        <input id="tmhcolor" name="tmhcolor" type="hidden" size="7" value="{tmhcolor}"{xhtml}>&nbsp;
+        <input type="text" id="tmh_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{tmhcolor};"{xhtml}>
+        <img id="tmhrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[tmhrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+      </div>
+
+      <div>
+        <label>{$LANG_ST01[top_menu_text]}</label>
+        <input id="tmtcolor" name="tmtcolor" type="hidden" size="7" value="{tmtcolor}" {xhtml}>&nbsp;
+        <input type="text" id="tmt_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{tmtcolor};"{xhtml}>
+        <img id="tmtrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[tmtrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+      </div>
+
+      <div>
+        <label>{$LANG_ST01[top_menu_text_hover]}</label>
+        <input id="tmthcolor" name="tmthcolor" type="hidden" size="7" value="{tmthcolor}" {xhtml}>&nbsp;
+        <input type="text" id="tmth_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{tmthcolor};"{xhtml}>
+        <img id="tmthrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[tmthrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+      </div>
+
+      <div>
+        <label>{$LANG_ST01[sub_menu_text_hover]}</label>
+        <input id="smthcolor" name="smthcolor" type="hidden" size="7" value="{smthcolor}" {xhtml}>&nbsp;
+        <input type="text" id="smth_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{smthcolor};"{xhtml}>
+        <img id="smthrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[smthrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+      </div>
+
+      <div>
+        <label>{$LANG_ST01[sub_menu_bg]}</label>
+        <input id="smbgcolor" name="smbgcolor" type="hidden" size="7" value="{smbgcolor}" {xhtml}>&nbsp;
+        <input type="text" id="smbg_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{smbgcolor};"{xhtml}>
+        <img id="smbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[smbgrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+      </div>
+
+      <div>
+        <label>{$LANG_ST01[sub_menu_highlight]}</label>
+        <input id="smhcolor" name="smhcolor" type="hidden" size="7" value="{smhcolor}" {xhtml}>&nbsp;
+        <input type="text" id="smh_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{smhcolor};"{xhtml}>
+        <img id="smhrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[smhrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+      </div>
+
+      <div>
+        <label>{$LANG_ST01[sub_menu_shadow]}</label>
+        <input id="smscolor" name="smscolor" type="hidden" size="7" value="{smscolor}" {xhtml}>&nbsp;
+        <input type="text" id="sms_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{smscolor};"{xhtml}>
+        <img id="smsrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[smsrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+      </div>
+
       <div style="text-align:center;padding:5px;">
         <input type="hidden" id="mode" name="mode" value="savecfg"{xhtml}>
         <input type="submit" id="execute" name="execute" value="{$LANG_ST01[save]}"{xhtml}>

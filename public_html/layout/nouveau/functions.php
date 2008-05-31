@@ -194,37 +194,39 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 	$header->set_var('gl_moochronometer',
 '<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moochronometer.js"></script>');
 
+    $tmbg = '#151515';
+    $tmh  = '#679ef1';
+    $tmt  = '#e8e8e8';
+    $tmth = '#ffffff';
+    $smth = '#ffe600';
+    $smbg = '#151515';
+    $smh  = '#000000';
+    $sms  = '#333333';
+
+    // set menu colors
+    if ( function_exists('st_getMenu') ) { // && $mbMenuConfig[0]['enabled'] == 1) {
+        $result = DB_query("SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=0",1);
+        if ( DB_numRows($result) > 0 ) {
+            list($id,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$enabled) = DB_fetchArray($result);
+        }
+    }
+
     $header->set_var(array(
-        'mbgcolor'  => '#151515',
-        'mtext'     => '#CCCCCC',
-        'mhtext'    => '#FFFFFF',
-        'shtext'    => '#679ef1',
-        'sblcolor'  => '#333333',
-        'sbrcolor'  => '#000000',
-        'sbgcolor'  => '#151515',
-        'sbtcolor'  => '#333333',
-        'sbbcolor'  => '#000000',
+        'mbgcolor'  => $tmbg,
+        'mbghcolor' => $tmh,
+        'mtext'     => $tmt,
+        'mhtext'    => $tmth,
+        'shtext'    => $smth,
+        'sbhcolor'  => $smh,
+        'sbscolor'  => $sms,
+        'sblcolor'  => $sms,
+        'sbrcolor'  => $sms,
+        'sbgcolor'  => $smbg,
+        'sbtcolor'  => $sms,
+        'sbbcolor'  => $sms,
+        'tmh'       => $tmh,
         'spimage'   => 'url(images/gl_moomenu1-parent.png) 95% 50% norepeat',
     ));
-/*-----------------------
-    // set menu colors
-    if ( function_exists('mb_getMenu') && $mbMenuConfig[0]['enabled'] == 1) {
-        $result = DB_query("SELECT * FROM {$_TABLES['mb_config']} WHERE menu_id=0");
-        list($id,$menu_id,$hcolor,$hhcolor,$htext,$hhtext,$enabled) = DB_fetchArray($result);
-    }
-    if ( $hcolor == '' || $hhcolor == '' || $htext == '' || $hhtext == '' ) {
-        $hcolor = '#AAAAAA';
-        $hhcolor = '#111111';
-        $htext   = '#111111';
-        $hhtext  = '#AAAAAA';
-    }
-    $header->set_var(array(
-        'hcolor'    => $hcolor,
-        'hhcolor'   => $hhcolor,
-        'htext'     => $htext,
-        'hhtext'    => $hhtext,
-    ));
--------------------------- */
 
     // get topic if not on home page
     if( !isset( $_GET['topic'] )) {
@@ -510,12 +512,26 @@ function nouveau_siteFooter( $rightblock = -1, $custom = '' )
         $L->set_file( array(
             'logo'          => 'logo-graphic.thtml',
         ));
+
+        $imgInfo = @getimagesize($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
+        $dimension = $imgInfo[3];
+
+
+
         $L->set_var( 'xhtml', XHTML);
         $L->set_var( 'site_url', $_CONF['site_url'] );
         $L->set_var( 'layout_url', $_CONF['layout_url'] );
         $L->set_var( 'site_name', $_CONF['site_name'] );
         $site_logo = $_CONF['site_url'] . '/images/' . $_ST_CONF['logo_name'];
         $L->set_var( 'site_logo', $site_logo);
+        $L->set_var( 'dimension', $dimension );
+        if ( $imgInfo[1] != 100 ) {
+            $delta = 100 - $imgInfo[1];
+            $newMargin = $delta;
+            $L->set_var( 'delta', 'style="padding-top:' . $newMargin . 'px;"');
+        } else {
+            $L->set_var('delta','');
+        }
         if ($_ST_CONF['display_site_slogan']) {
             $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
         }

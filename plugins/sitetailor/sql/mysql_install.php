@@ -48,17 +48,21 @@ $_SQL['st_menu_elements'] = "CREATE TABLE {$_TABLES['st_menu_elements']} (
 ) AUTO_INCREMENT=1 ;";
 
 $_SQL['st_menu_config'] = "CREATE TABLE {$_TABLES['st_menu_config']} (
-    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-    `menu_id` INT NOT NULL ,
-    `hcolor` CHAR( 7 ) NOT NULL ,
-    `hhcolor` CHAR( 7 ) NOT NULL ,
-    `htext` CHAR( 7 ) NOT NULL ,
-    `hhtext` CHAR( 7 ) NOT NULL ,
-    `enabled` TINYINT NOT NULL
+  `id` int(11) NOT NULL auto_increment,
+  `menu_id` int(11) NOT NULL,
+  `tmbg` char(7) NOT NULL,
+  `tmh` char(7) NOT NULL,
+  `tmt` char(7) NOT NULL,
+  `tmth` char(7) NOT NULL,
+  `smth` char(7) NOT NULL,
+  `smbg` char(7) NOT NULL,
+  `smh` char(7) NOT NULL,
+  `sms` char(7) NOT NULL,
+  `enabled` tinyint(4) NOT NULL,
+  PRIMARY KEY( `id` )
 ) AUTO_INCREMENT=1 ;";
 
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_config']} (`id` ,`menu_id` ,`hcolor` ,`hhcolor` ,`htext` ,`hhtext` ,`enabled` )VALUES (NULL , '0', '#000000', '#001eff', '#ffffff', '#ffffff', '1');";
-
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_config']} VALUES (1,0,'#151515','#679ef1','#e8e8e8','#ffffff','#ffe600','#151515','#000000','#333333',1);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(1, 0, 0, 'Home', 2, '0', 10, 1, '', 2);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(2, 0, 0, 'Contribute', 2, '1', 20, 1, '', 13);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(3, 0, 0, 'Search', 2, '4', 30, 1, '', 2);";

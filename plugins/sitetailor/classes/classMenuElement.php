@@ -42,6 +42,7 @@ class mbElement {
     var $order;             // order of display (1 to ....)
     var $active;            // active entry or inactive
     var $url;               // URL to go on click
+    var $target;            // Target window for URL
     var $group_id;          // group membership
     var $access;            // derived access level
     var $children;          // this elements child elements
@@ -67,6 +68,7 @@ class mbElement {
         $this->order            = $element['element_order'];
         $this->active           = $element['element_active'];
         $this->url              = (!empty($element['element_url']) && $element['element_url'] != ' ') ? $element['element_url'] : '';
+        $this->target           = $element['element_target'];
         $this->group_id         = $element['group_id'];
         $this->perm_owner       = 3;
         $this->perm_group       = $element['perm_group'];
@@ -85,8 +87,8 @@ class mbElement {
         $this->label            = addslashes($this->label);
         $this->url              = addslashes($this->url);
 
-        $sqlFieldList  = 'id,pid,menu_id,element_label,element_type,element_subtype,element_order,element_active,element_url,group_id';
-        $sqlDataValues = "$this->id,$this->pid,'$this->menu_id','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url',$this->group_id";
+        $sqlFieldList  = 'id,pid,menu_id,element_label,element_type,element_subtype,element_order,element_active,element_url,element_target,group_id';
+        $sqlDataValues = "$this->id,$this->pid,'$this->menu_id','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url','$this->target',$this->group_id";
         DB_save($_TABLES['st_menu_elements'], $sqlFieldList, $sqlDataValues);
     }
 
@@ -131,8 +133,16 @@ class mbElement {
         if ($meadmin || $root) {
             $this->access = 3;
         } else {
-            if ( in_array( $this->group_id, $groups ) ) {
-                $this->access = 3;
+            if ( $this->group_id == 998 ) {
+                if( COM_isAnonUser() ) {
+                    $this->access = 3;
+                } else {
+                    $this->access = 0;
+                }
+            } else {
+                if ( in_array( $this->group_id, $groups ) ) {
+                    $this->access = 3;
+                }
             }
         }
     }
@@ -754,7 +764,7 @@ class mbElement {
                 if ( $this->type == 1 && $parentaclass != '' ) {
                     $retval .= "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
                 } else {
-                    $retval .= "<li>" . '<a href="' . $this->url . '">' . strip_tags($this->label) . '</a></li>' . LB;
+                    $retval .= "<li>" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a></li>' . LB;
                 }
             }
 

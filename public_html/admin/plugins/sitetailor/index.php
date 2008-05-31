@@ -76,6 +76,8 @@ function ST_logoEdit() {
 function ST_saveLogo() {
     global $_CONF, $_TABLES, $_ST_CONF, $LANG_ST01;
 
+    $retval = 1;
+
     $logo   = isset($_POST['usegraphic']) ? COM_applyFilter($_POST['usegraphic'],true) : 0;
     $slogan = isset($_POST['siteslogan']) ? COM_applyFilter($_POST['siteslogan'],true) : 0;
     $logo_name = $_ST_CONF['logo_name'];
@@ -83,11 +85,36 @@ function ST_saveLogo() {
     $file = array();
     $file = $_FILES['newlogo'];
     if ( isset($file['tmp_name']) && $file['tmp_name'] != '' ) {
-        $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . '.png';
-        $rc = move_uploaded_file($file['tmp_name'], $_CONF['path_html'] . 'images/' . $newlogoname);
-        if ( $rc ) {
-            @unlink($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
-            $logo_name = $newlogoname;
+        switch ( $file['type'] ) {
+            case 'image/png' :
+            case 'image/x-png' :
+                $ext = '.png';
+                break;
+            case 'image/gif' :
+                $ext = '.gif';
+                break;
+            case 'image/jpg' :
+            case 'image/jpeg' :
+            case 'image/pjpeg' :
+                $ext = '.jpg';
+                break;
+            default :
+                $ext = 'unknown';
+                $retval = 2;
+                break;
+        }
+        if ( $ext != 'unknown' ) {
+            $imgInfo = @getimagesize($file['tmp_name']);
+            if ( $imgInfo[0] > $_ST_CONF['max_logo_width'] || $imgInfo[1] > $_ST_CONF['max_logo_height'] ) {
+                $retval = 3;
+            } else {
+                $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
+                $rc = move_uploaded_file($file['tmp_name'], $_CONF['path_html'] . 'images/' . $newlogoname);
+                if ( $rc ) {
+                    @unlink($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
+                    $logo_name = $newlogoname;
+                }
+            }
         }
     }
     DB_save($_TABLES['st_config'],"config_name,config_value","'use_graphic_logo','$logo'");
@@ -98,11 +125,11 @@ function ST_saveLogo() {
     $_ST_CONF['display_site_slogan'] = $slogan;
     $_ST_CONF['logo_name'] = $logo_name;
 
-    return;
+    return $retval;
 }
 
 function ST_displayTree( $menu_id ) {
-    global $_CONF, $LANG_ST00, $_ST_CONF, $ST_menuElements;
+    global $_CONF, $LANG_ST00, $_ST_CONF, $ST_menuElements, $mbMenuConfig;
 
     $retval = '';
 
@@ -117,6 +144,7 @@ function ST_displayTree( $menu_id ) {
         'version'           => $_ST_CONF['version'],
         'menu_tree'         => $ST_menuElements[$menu_id][0]->editTree(0,2),
         'menuid'            => $menu_id,
+        'menuactive'        => $mbMenuConfig[$menu_id]['enabled'] == 1 ? ' checked="checked"' : ' ',
         'xhtml'             => XHTML,
     ));
 
@@ -234,7 +262,10 @@ function ST_createElement ( $menu ) {
     // build group select
 
     $usergroups = SEC_getUserGroups();
+    $usergroups[$LANG_ST01['non-logged-in']] = 998;
+    ksort($usergroups);
     $group_select .= '<select id="group" name="group">' . LB;
+
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
         $group_select .= '>' . key($usergroups) . '</option>' . LB;
@@ -280,6 +311,8 @@ function ST_saveNewMenuElement ( ) {
     $E['pid']           = COM_applyFilter($_POST['pid'],true);
     $E['element_label'] = COM_applyFilter($_POST['menulabel']);
     $E['element_type']  = COM_applyFilter($_POST['menutype'],true);
+
+    $E['element_target']  = COM_applyFilter($_POST['urltarget']);
     switch($E['element_type']) {
         case 2 :
             $E['element_subtype'] = COM_applyFilter($_POST['glfunction']);
@@ -295,6 +328,7 @@ function ST_saveNewMenuElement ( ) {
             break;
         case 6 :
             $E['element_subtype'] = COM_applyFilter($_POST['menuurl']);
+
             break;
         case 7 :
             $E['element_subtype'] = COM_applyFilter($_POST['phpfunction']);
@@ -397,7 +431,10 @@ function ST_editElement( $menu, $mid ) {
     // build group select
 
     $usergroups = SEC_getUserGroups();
+    $usergroups[$LANG_ST01['non-logged-in']] = 998;
+    ksort($usergroups);
     $group_select .= '<select id="group" name="group">' . LB;
+
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
         if ($ST_menuElements[$menu][$mid]->group_id==$usergroups[key($usergroups)] ) {
@@ -407,6 +444,11 @@ function ST_editElement( $menu, $mid ) {
         next($usergroups);
     }
     $group_select .= '</select>' . LB;
+
+    $target_select = '<select id="urltarget" name="urltarget">' . LB;
+    $target_select .= '<option value=""' . ($ST_menuElements[$menu][$mid]->target == "" ? ' selected="selected"' : '') . '>' . $LANG_ST01['same_window'] . '</option>' . LB;
+    $target_select .= '<option value="_blank"' . ($ST_menuElements[$menu][$mid]->target == "_blank" ? ' selected="selected"' : '') . '>' . $LANG_ST01['new_window'] . '</option>' . LB;
+    $target_select .= '</select>' . LB;
 
     if ( $ST_menuElements[$menu][$mid]->active ) {
         $active_selected = ' checked="checked"';
@@ -433,6 +475,7 @@ function ST_editElement( $menu, $mid ) {
         'glfunction_select' => $glfunction_select,
         'parent_select'     => $parent_select,
         'group_select'      => $group_select,
+        'target_select'     => $target_select,
         'active_selected'   => $active_selected,
         'menu'              => $menu,
         'mid'               => $mid,
@@ -452,6 +495,7 @@ function ST_saveEditMenuElement ( ) {
     $pid           = COM_applyFilter($_POST['pid'],true);
     $label         = addslashes(COM_applyFilter($_POST['menulabel']));
     $type          = COM_applyFilter($_POST['menutype'],true);
+    $target        = COM_applyFilter($_POST['urltarget']);
 
     switch($type) {
         case 2 :
@@ -479,7 +523,7 @@ function ST_saveEditMenuElement ( ) {
     $active     = COM_applyFilter($_POST['menuactive'],true);
     $url        = addslashes(COM_applyFilter($_POST['menuurl']));
     $group_id   = COM_applyFilter($_POST['group'],true);
-    $sql        = "UPDATE {$_TABLES['st_menu_elements']} SET pid=$pid, element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url',group_id=$group_id WHERE id=$id";
+    $sql        = "UPDATE {$_TABLES['st_menu_elements']} SET pid=$pid, element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url', element_target='$target', group_id=$group_id WHERE id=$id";
 
     DB_query($sql);
     st_initMenu();
@@ -526,20 +570,24 @@ function ST_deleteChildElements( $id, $menu_id ){
     DB_query( $sql );
 }
 
-function ST_menuConfig( ) {
+function ST_menuConfig( $mid ) {
     global $_CONF, $_TABLES, $_ST_CONF, $ST_menuElements;
     global $LANG_ST00, $LANG_ST01, $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION;
 
     $retval = '';
 
-    $sql = "SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=0";
+    $sql = "SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=" . $mid;
     $result = DB_query($sql);
-    list($cid,$menu_id,$hcolor,$hhcolor,$htext,$hhtext,$enabled) = DB_fetchArray($result);
+    list($cid,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$enabled) = DB_fetchArray($result);
 
-    $hcolorRGB  = '[' . ST_hexrgb($hcolor,'r') . ',' . ST_hexrgb($hcolor,'g') . ',' . ST_hexrgb($hcolor,'b') . ']';
-    $hhcolorRGB = '[' . ST_hexrgb($hhcolor,'r') . ',' . ST_hexrgb($hhcolor,'g') . ',' . ST_hexrgb($hhcolor,'b') . ']';
-    $htextRGB   = '[' . ST_hexrgb($htext,'r') . ',' . ST_hexrgb($htext,'g') . ',' . ST_hexrgb($htext,'b') . ']';
-    $hhtextRGB  = '[' . ST_hexrgb($hhtext,'r') . ',' . ST_hexrgb($hhtext,'g') . ',' . ST_hexrgb($hhtext,'b') . ']';
+    $tmbgRGB    = '[' . ST_hexrgb($tmbg,'r') . ',' . ST_hexrgb($tmbg,'g') . ',' . ST_hexrgb($tnbg,'b') . ']';
+    $tmhRGB     = '[' . ST_hexrgb($tmh,'r')  . ',' . ST_hexrgb($tmh,'g')  . ',' . ST_hexrgb($tmh,'b')  . ']';
+    $tmtRGB     = '[' . ST_hexrgb($tmt,'r')  . ',' . ST_hexrgb($tmt,'g')  . ',' . ST_hexrgb($tmt,'b')  . ']';
+    $tmthRGB    = '[' . ST_hexrgb($tmth,'r') . ',' . ST_hexrgb($tmth,'g') . ',' . ST_hexrgb($tmth,'b') . ']';
+    $smthRGB    = '[' . ST_hexrgb($smth,'r') . ',' . ST_hexrgb($smth,'g') . ',' . ST_hexrgb($smth,'b') . ']';
+    $smbgRGB    = '[' . ST_hexrgb($smbg,'r') . ',' . ST_hexrgb($smbg,'g') . ',' . ST_hexrgb($smbg,'b') . ']';
+    $smhRGB     = '[' . ST_hexrgb($smh,'r')  . ',' . ST_hexrgb($smh,'g')  . ',' . ST_hexrgb($smh,'b')  . ']';
+    $smsRGB     = '[' . ST_hexrgb($sms,'r')  . ',' . ST_hexrgb($sms,'g')  . ',' . ST_hexrgb($sms,'b')  . ']';
 
     $menuenabled_check = ($enabled == 1 ? ' checked="checked"' : '');
 
@@ -550,14 +598,23 @@ function ST_menuConfig( ) {
         'site_admin_url'    => $_CONF['site_admin_url'],
         'site_url'          => $_CONF['site_url'],
         'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php',
-        'hcolor'            => $hcolor,
-        'hcolorrgb'         => $hcolorRGB,
-        'hhcolorrgb'        => $hhcolorRGB,
-        'htextrgb'          => $htextRGB,
-        'hhtextrgb'         => $hhtextRGB,
-        'hhcolor'           => $hhcolor,
-        'htext'             => $htext,
-        'hhtext'            => $hhtext,
+        'menu_id'           => $mid,
+        'tmbgcolor'         => $tmbg,
+        'tmbgcolorrgb'      => $tmbgRGB,
+        'tmhcolor'          => $tmh,
+        'tmhcolorrgb'       => $tmhRGB,
+        'tmtcolor'          => $tmt,
+        'tmtcolorrgb'       => $tmtRGB,
+        'tmthcolor'         => $tmth,
+        'tmthcolorrgb'      => $tmthRGB,
+        'smthcolor'         => $smth,
+        'smthcolorrgb'      => $smthRGB,
+        'smbgcolor'         => $smbg,
+        'smbgcolorrgb'      => $smbgRGB,
+        'smhcolor'          => $smh,
+        'smhcolorrgb'       => $smhRGB,
+        'smscolor'          => $sms,
+        'smscolorrgb'       => $smsRGB,
         'enabled'           => ($enabled == 1 ? ' checked="checked"' : ''),
         'xhtml'             => XHTML,
     ));
@@ -567,18 +624,21 @@ function ST_menuConfig( ) {
     return $retval;
 }
 
-function ST_saveMenuConfig( ) {
+function ST_saveMenuConfig($menu_id=0) {
     global $_CONF, $_TABLES, $_ST_CONF, $ST_menuElements;
-    global $LANG_ST00, $LANG_ST01, $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION;
 
-    $menu_id = 0;
-    $hcolor  = COM_applyFilter($_POST['hcolor']);
-    $hhcolor = COM_applyFilter($_POST['hhcolor']);
-    $htext   = COM_applyFilter($_POST['htext']);
-    $hhtext  = COM_applyFilter($_POST['hhtext']);
-    $enabled = COM_applyFilter($_POST['menuenabled'],true);
+    $tmbg   = COM_applyFilter($_POST['tmbgcolor']);
+    $tmh    = COM_applyFilter($_POST['tmhcolor']);
+    $tmt    = COM_applyFilter($_POST['tmtcolor']);
+    $tmth   = COM_applyFilter($_POST['tmthcolor']);
+    $smth   = COM_applyFilter($_POST['smthcolor']);
+    $smbg   = COM_applyFilter($_POST['smbgcolor']);
+    $smh    = COM_applyFilter($_POST['smhcolor']);
+    $sms    = COM_applyFilter($_POST['smscolor']);
 
-    DB_query("UPDATE {$_TABLES['st_menu_config']} SET hcolor='$hcolor',hhcolor='$hhcolor',htext='$htext',hhtext='$hhtext',enabled=$enabled WHERE menu_id=0");
+//    $enabled = COM_applyFilter($_POST['menuenabled'],true);
+
+    DB_query("UPDATE {$_TABLES['st_menu_config']} SET tmbg='$tmbg',tmh='$tmh',tmt='$tmt',tmth='$tmth',smth='$smth',smbg='$smbg',smh='$smh',sms='$sms' WHERE menu_id=" . $menu_id);
     return;
 }
 
@@ -622,9 +682,14 @@ if ( isset($_GET['mode']) ) {
     $mode = '';
 }
 
-$menu_id = 0;
+if ( isset($_REQUEST['mid']) ) {
+    $menu_id = COM_applyFilter($_REQUEST['mid'],true);
+} else {
+    $menu_id = 0;
+}
 
 if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
+
     switch ( $mode ) {
         case 'menu' :
             // display the tree
@@ -636,8 +701,8 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
             $currentSelect = 'Logo';
             break;
         case 'savelogo' :
-            ST_saveLogo();
-            $content = COM_showMessage( 1, 'sitetailor' );
+            $rc = ST_saveLogo();
+            $content = COM_showMessage( $rc, 'sitetailor' );
             $content .= ST_logoEdit( );
             $currentSelect = 'Logo';
             break;
@@ -689,15 +754,33 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
             $currentSelect = 'Menu Builder';
             break;
         case 'config' :
-            $content = ST_menuConfig();
+            $content = ST_menuConfig($menu_id);
             $currentSelect = $LANG_ST01['configuration'];
             $currentSelect = 'Menu Builder';
             break;
         case 'savecfg' :
-            ST_saveMenuConfig();
+            ST_saveMenuConfig($menu_id);
+            st_initMenu();
+            $content = ST_menuConfig( $menu_id );
+            $currentSelect = 'Menu Colors';
+            break;
+        case 'disablemenu' :
+            $action = COM_applyFilter($_POST['menuactive'],true);
+            $mid    = COM_applyFilter($_POST['menutodisable'],true);
+            $sql = "UPDATE {$_TABLES['st_menu_config']} SET enabled = " . $action . " WHERE menu_id=" . $mid . ";";
+            DB_query($sql);
+            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=menu&amp;mid=' . $mid);
+            exit;
             st_initMenu();
             $content = ST_displayTree( $menu_id );
             $currentSelect = 'Menu Builder';
+            break;
+        case 'newmenu' :
+            $content = 'We will create a new menu here';
+            break;
+        case 'menucolor' :
+            $content = ST_menuConfig($menu_id);
+            $currentSelect = 'Menu Colors';
             break;
         default :
             // display the tree
@@ -717,6 +800,7 @@ include_once $_CONF['path_system']."classes/navbar.class.php";
 
 $navbar = new navbar;
 $navbar->add_menuitem('Menu Builder',$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=menu');
+$navbar->add_menuitem('Menu Colors',$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=menucolor');
 $navbar->add_menuitem('Logo',$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=logo');
 $navbar->set_selected($currentSelect);
 

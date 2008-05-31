@@ -17,6 +17,7 @@
 <!-- Load Common Javascript Libraries -->
 <script type="text/javascript" src="{site_url}/javascript/common.js"></script>
 <script type="text/javascript" src="{layout_url}/js/gl_mooreflection.js"></script>
+<script type="text/javascript" src="{layout_url}/js/fValidator.js"></script>
 {gl_animatedmoomenu} <!-- enables gl_moomenu animation, if you delete it, the menu will still work, it will just instantly appear instead of fading in -->
 {gl_mootips} <!-- enables gl_mootips throughout layout -->
 <!-- {gl_moochronometer} --><!-- enables gl_moochronometer header rotator - MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating -->
@@ -31,37 +32,40 @@
 #gl_moomenu,
 #gl_moomenu ul,
 #gl_moomenu ul.gl_moomenu {
-background:{mbgcolor}{mbgimage};  /*main menu background*/
+background:{mbgcolor}{mbgimage};  /*Top Menu BG*/
 }
 #gl_moomenu a {
-color:{mtext};  /*color of main menu links*/
+color:{mtext};  /*Top Menu Text*/
+}
+.gl_moomenu li:hover {
+background:{mbghcolor}{mhimage};  /*Top Menu Hover*/
 }
 #gl_moomenu li:hover a,
 #gl_moomenu li.sfHover a,
 #gl_moomenu li:hover a:hover,
 #gl_moomenu li.sfHover a:hover {
-color:{mhtext};  /*color of main menu hover links and sub menu default links*/
+color:{mhtext};  /*Top Menu Text Hover / Sub Menu Text*/
 }
 #gl_moomenu li:hover li:hover a:hover,
 #gl_moomenu li.sfHover li.sfHover a:hover {
-color:{shtext};  /*color of sub menu hover links*/
+color:{shtext};  /*Sub Menu Text Hover*/
 }
 #gl_moomenu ul ul {
-background:{sbgcolor};  /*color of sub menu background*/
-border-left:1px solid {sblcolor};  /*color of sub menu left border*/
-border-right:1px solid {sbrcolor};  /*color of sub menu right border*/
+background:{sbgcolor};  /*Sub Menu BG*/
+border-left:1px solid {sbhcolor};  /*Sub Menu Highlight*/
+border-right:1px solid {sbscolor};  /*Sub Menu Shadow*/
 }
 #gl_moomenu li li {
-border-top:1px solid {sbtcolor};  /*color of sub menu top border*/
-border-bottom:1px solid {sbbcolor};  /*color of sub menu bottom border*/
+border-top:1px solid {sbhcolor};  /*Sub Menu Highlight*/
+border-bottom:1px solid {sbscolor};  /*Sub Menu Shadow*/
 }
 #gl_moomenu li li a.parent,
 #gl_moomenu li li a.parent:hover {
-background:{spimage};  /*image for sub menu parent menu*/
+background:{spimage};  /*image for sub menu parent menu - the blue orb*/
 }
 </style>
-</head>
 
+</head>
 <body dir="{direction}" style="background:#000000;">
 <div>
   <a name="top"></a>

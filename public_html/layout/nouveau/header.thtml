@@ -1,6 +1,5 @@
 <!-- Start of header.thtml -->
     <div id="gl_container_fluid"><!-- options: fixed | fluid-->
-
         <div id="gl_header">
             <div class="top-r-corner">
                 <div class="top-l-corner">
@@ -14,45 +13,9 @@
 						</form>
 					</div> <!-- end of header-flag-n-search  -->
 					{logo_block}
-                    <!-- Build the CSS logo -->
-<!--                    <div style="padding-top:30px;padding-left:20px;padding-bottom:15px;">
-                     <div style="position:relative;margin:0;line-height:1em;
-                      height:2.66em;width:2.66em;background-color:#690;
-                      border:0.2em solid #f6f6f6;">
-
-                      <span style="position:absolute;top:-0.5em;
-                       right:-0.5em;height:2em;width:2em;line-height:1em;
-                       background-color:#8b0;border:0.2em solid #f6f6f6;">
-
-                       <span style="position:absolute;top:-0.4em;right:-0.4em;
-                        height:1.25em;width:1.25em;line-height:1em;
-                        background-color:#ad0;border:0.2em solid #f6f6f6;">
-                       </span>
-
-                      </span>
-
-                      <h2 style="position:absolute;left:2em;top:0;margin:0;
-                       padding:0;font:2em arial,sans-serif;
-                       line-height:1.2em;color:#666;width:8em;">
-
-                       <a href="{site_url}" rel="bookmark"
-                       title="{site_slogan}"
-                       style="font-style:italic;font-weight:bold;color:#FFF; text-decoration:none;border:0;">
-                       {site_name}
-                       </a>
-                      </h2>
-                     </div>
-                    </div>  -->
-
-<!--
-
-					<a href="{site_url}">
-						<img src="{layout_url}/images/logo.png" alt="{site_name}" title="{site_name}" id="header-site-logo"{xhtml}></a>
--->
                 </div>
             </div>
         </div> <!-- end of gl_header -->
-
 		<!-- start of gl_menu -->
         <div id="gl_moomenu">
 			{!if gllabs_menu}
