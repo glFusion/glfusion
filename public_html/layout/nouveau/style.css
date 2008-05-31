@@ -2056,7 +2056,7 @@ background-position:0 0;
 background-position:0 -17px;
 }
 
-#AdminsOnly ul,#UserFunctions ul,#Topics ul,.checkboxes-list {
+.blocklist ul {
 list-style:none;
 margin:0;
 padding:0;
