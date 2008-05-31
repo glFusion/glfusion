@@ -42,6 +42,7 @@ $_SQL['st_menu_elements'] = "CREATE TABLE {$_TABLES['st_menu_elements']} (
     `element_order` int(11) NOT NULL,
     `element_active` tinyint(4) NOT NULL,
     `element_url` varchar(255) NOT NULL,
+    `element_target` varchar(255) NOT NULL,
     `group_id` mediumint(9) NOT NULL,
     PRIMARY KEY( `id` ),
     INDEX ( `pid` )

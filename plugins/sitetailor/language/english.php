@@ -140,6 +140,9 @@ $LANG_ST01 = array (
     'sub_menu_bg'           => 'Sub Menu BG',
     'sub_menu_highlight'    => 'Sub Menu Highlight',
     'sub_menu_shadow'       => 'Sub Menu Shadow',
+    'menu_builder'      => 'Menu Builder',
+    'logo'              => 'Logo',
+    'menu_colors'       => 'Menu Colors',
 );
 
 
@@ -181,5 +184,6 @@ $LANG_ST_GLTYPES = array(
 
 $PLG_sitetailor_MESSAGE1 = 'Site Tailor Logo Options Successfully Saved.';
 $PLG_sitetailor_MESSAGE2 = 'Uploaded logo was not a JPG, GIF, or PNG image.';
-$PLG_sitetailor_MESSAGE3 = 'Logo exceeds the maximum allowed height or width.';
+$PLG_sitetailor_MESSAGE3 = 'There was a problem upgrading Site Tailor, please check the error log file.';
+$PLG_sitetailor_MESSAGE4 = 'Logo exceeds the maximum allowed height or width.';
 ?>

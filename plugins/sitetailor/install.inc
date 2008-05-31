@@ -35,7 +35,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
 require_once($_CONF['path'] . '/plugins/sitetailor/config.php');
 
 $pi_name    = 'sitetailor';             // Plugin name  Must be 15 chars or less
-$pi_version = $_ST_CONF['version'];     // Plugin Version
+$pi_version = '1.0.0';     // Plugin Version
 $gl_version = '1.5.0';                  // GL Version plugin for
 $pi_url     = 'http://www.gllabs.org';  // Plugin Homepage
 
