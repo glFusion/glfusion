@@ -1,20 +1,36 @@
-<div class="gllabsform">
-  <form action="{site_url}/profiles.php" method="post" name="contact">
+<script type="text/javascript">
+<!--
+window.addEvent('domready',function() {
+    var myValidator = new fValidator("contact");
+});
+-->
+</script>
+<div class="glfform">
+  <form action="{site_url}/profiles.php" method="post" id="contact">
     <div class="pluginInfo" style="margin-bottom:10px;">{lang_description}</div>
+    <div>
       <label for="author">{lang_username}</label>
-      <input type="text" id="author" name="author" size="32" value="{username}" maxlength="32"{xhtml}><br{xhtml}>
+      <input class="fValidate['required']" type="text" id="author" name="author" size="32" value="{username}" maxlength="32"{xhtml}>
+    </div>
+    <div>
       <label for="authoremail">{lang_useremail}</label>
-      <input type="text" id="authoremail" name="authoremail" size="32" value="{useremail}" maxlength="96"{xhtml}><br{xhtml}>
+      <input class="fValidate['required','email']" type="text" id="authoremail" name="authoremail" size="32" value="{useremail}" maxlength="96"{xhtml}>
+    </div>
+    <div>
       <label for="subject">{lang_subject}</label>
-      <input type="text" id="subject" name="subject" size="32" maxlength="96" value="{subject}"{xhtml}><br{xhtml}>
+      <input class="fValidate['required']" type="text" id="subject" name="subject" size="32" maxlength="96" value="{subject}"{xhtml}>
+    </div>
+    <div>
       <label for="message">{lang_message}</label>
-      <textarea id="message" name="message" rows="10" cols="50">{message}</textarea><div style="margin-left:95px;font-weight:bold;">{lang_nohtml}</div><br{xhtml}>
-      <div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
-      <br{xhtml}>
-      <div style="padding:5px;">
-        <input type="hidden" name="what" value="contact"{xhtml}>
-        <input type="hidden" name="uid" value="{uid}"{xhtml}>
-        <input type="submit" value="{lang_submit}"{xhtml}>
-      </div>
+      <textarea class="fValidate['required']" id="message" name="message" rows="10" cols="80">{message}</textarea>
+    </div>
+    <div style="margin-left:95px;font-weight:bold;">{lang_nohtml}</div>
+    <div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
+    <br{xhtml}>
+    <div style="padding:5px;">
+      <input type="hidden" name="what" value="contact"{xhtml}>
+      <input type="hidden" name="uid" value="{uid}"{xhtml}>
+      <input type="submit" value="{lang_submit}"{xhtml}>
+    </div>
   </form>
 </div>
