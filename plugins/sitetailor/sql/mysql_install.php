@@ -62,7 +62,7 @@ $_SQL['st_menu_config'] = "CREATE TABLE {$_TABLES['st_menu_config']} (
   PRIMARY KEY( `id` )
 ) AUTO_INCREMENT=1 ;";
 
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_config']} VALUES (1,0,'#151515','#679ef1','#e8e8e8','#ffffff','#ffe600','#151515','#000000','#333333',1);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_config']} VALUES (1,0,'#151515','#3667c0','#e8e8e8','#ffffff','#ffe600','#151515','#000000','#333333',1);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(1, 0, 0, 'Home', 2, '0', 10, 1, '', 2);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(2, 0, 0, 'Contribute', 2, '1', 20, 1, '', 13);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(3, 0, 0, 'Search', 2, '4', 30, 1, '', 2);";
