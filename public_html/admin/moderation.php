@@ -162,7 +162,7 @@ function commandcontrol($token)
             'lang' => $LANG01[113], 'image' => '/images/icons/docs.'),
         array('condition' => (SEC_inGroup ('Root') &&
                               ($_CONF['link_versionchecker'] == 1)),
-            'url' => 'http://www.geeklog.net/versionchecker.php?version=' . VERSION,
+            'url' => 'http://www.gllabs.org/versionchecker.php?version=' . glfusion_VERSION,
             'lang' => $LANG01[107], 'image' => '/images/icons/versioncheck.'),
         array('condition' => (SEC_inGroup ('Root')),
             'url'=>$_CONF['site_admin_url'] . '/configuration.php',
