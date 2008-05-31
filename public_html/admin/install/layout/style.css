@@ -340,6 +340,21 @@ margin-left:0em;
 .upgrade a:link{
   color:#FFF;
 }
+.upgrade-rtl {
+  position: relative; 
+  right: 230px; 
+  top: -77px;
+  width: 220px; 
+  height: 55px; 
+  background-color: #CCC; 
+  text-align: center;
+  font-size: 20pt; 
+  font-family: "Verdana";
+  padding-top: 20px; 
+  border: 1px;
+  border-color: #000; 
+  border-style: dashed;
+}
 .install a:hover,
 .upgrade a:hover{
   color:#CCC;
