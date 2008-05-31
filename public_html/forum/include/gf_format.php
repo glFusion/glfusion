@@ -497,13 +497,7 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
                       'list', array ('inline','block', 'listitem'), array ());
     $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
                       'listitem', array ('list'), array ());
-
-//    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<div style="margin:20px; margin-top:5px; "><table cellpadding="6" cellspacing="0" border="0" width="100%"><tr bgcolor="#E1E4F2" ><td style="border:1px inset;background:#E1E4F2;"><div style="font-style:italic;background:#E1E4F2;">', 'end_tag' => '</div></td></tr></table></div>'),
-//                      'inline', array('listitem','block','inline','link'), array());
-//    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<blockquote><div><cite>&nbsp;</cite>', 'end_tag' => '</div></blockquote>'),
-//                      'inline', array('listitem','block','inline','link'), array());
-
-    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '<div class="quotemain">', 'end_tag' => '</div>'),
+    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain">', 'end_tag' => '</div><p>'),
                       'inline', array('listitem','block','inline','link'), array());
     $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
@@ -877,9 +871,6 @@ function f_whosonline(){
 function f_forumrules() {
     global $_CONF,$_USER,$LANG_GF01,$LANG_GF02,$CONF_FORUM,$canPost;
 
-//    if ( $CONF_FORUM['registered_to_post'] AND ($_USER['uid'] < 2 OR empty($_USER['uid'])) ) {
-//        $postperm_msg = $LANG_GF01['POST_PERM_MSG2'];
-// -- REMOVE $canPost above...
     if ( ($CONF_FORUM['registered_to_post'] AND ($_USER['uid'] < 2 OR empty($_USER['uid'])) ) || $canPost == 0 ) {
         $postperm_msg = $LANG_GF01['POST_PERM_MSG1'];
         $post_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""' . XHTML . '>';
@@ -941,6 +932,36 @@ function f_forumrules() {
 function gf_updateLastPost($forumid,$topicparent=0) {
     global $_TABLES;
 
+    if ($topicparent == 0) {
+        // Get the last topic in this forum
+        $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE forum=$forumid");
+        list($topicparent) = DB_fetchArray($query);
+        if ($topicparent > 0) {
+            $lastrecid = $topicparent;
+            DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=$lastrecid WHERE forum_id=$forumid");
+        }
+    } else {
+        $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE pid=$topicparent");
+        list($lastrecid) = DB_fetchArray($query);
+    }
+
+    if ($lastrecid == NULL AND $topicparent > 0) {
+        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$topicparent");
+        DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$topicparent, lastupdated='$topicdatecreated' WHERE id={$topicparent}");
+    } elseif ($topicparent > 0) {
+        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$lastrecid");
+        DB_query("UPDATE {$_TABLES['gf_topic']}  SET last_reply_rec=$lastrecid, lastupdated=$topicdatecreated WHERE id={$topicparent}");
+    }
+    if ($topicparent > 0) {
+        // Recalculate and Update the number of replies
+        $numreplies = DB_Count($_TABLES['gf_topic'], "pid", $topicparent);
+        DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '$numreplies' WHERE id=$topicparent");
+    }
+
+/* ---------------------------------------------------------------------------
+
+
+
     $lastrecid = NULL;
     $last_reply_rec = 0;
 
@@ -970,6 +991,7 @@ function gf_updateLastPost($forumid,$topicparent=0) {
         $numreplies = DB_Count($_TABLES['gf_topic'], "pid", $topicparent);
         DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '$numreplies' WHERE id=$topicparent");
     }
+------------------------ */
     /*
      * new stuff - probably get rid of everything above...
      *
@@ -978,6 +1000,7 @@ function gf_updateLastPost($forumid,$topicparent=0) {
      * gf_topics has id, pid, forum, lastupdated, last_reply_rec, replies
      *
      */
+/* ---------------
     // Pull max ID for a specific forum and update forum.last_post_rec;
     $topicsQuery = DB_query("SELECT MAX(id) as maxid FROM {$_TABLES['gf_topic']} WHERE forum=$forumid");
     $lasttopic = 0;
@@ -1020,6 +1043,7 @@ function gf_updateLastPost($forumid,$topicparent=0) {
         $numreplies = DB_Count($_TABLES['gf_topic'], "pid", $topicparent);
         DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '$numreplies' WHERE id='$topicparent'");
     }
+--------------- */
 }
 
 function gf_showattachments($topic,$mode='') {
