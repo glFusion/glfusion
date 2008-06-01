@@ -129,15 +129,17 @@ function INST_installEngine($install_type, $install_step)
             /*
              * Try to migrate old values
              */
-            if ( $install_type == 'upgrade' && $_DB_pass == 'password') {
+            if ( $install_type == 'upgrade' && ( $_DB_pass == 'password' || $_DB_pass == '' )) {
                 // assume the db config has not been updated
-                if ( file_exists($gl_path . '/config.php' ) ) {
-                    include ($gl_path . '/config.php');
-                    $glSite_name = $_CONF['site_name'];
-                    $glSite_slogan = $_CONF['site_slogan'];
-                    $glSite_url = $_CONF['site_url'];
-                    $glSite_admin_url = $_CONF['site_admin_url'];
-                    $glSite_mail = $_CONF['site_mail'];
+                $configPath = preg_replace('/\/db-config.php.*/', '/config.php', $dbconfig_path);
+
+                if ( file_exists($configPath ) ) {
+                    include ($configPath);
+                    $glSite_name        = $_CONF['site_name'];
+                    $glSite_slogan      = $_CONF['site_slogan'];
+                    $glSite_url         = $_CONF['site_url'];
+                    $glSite_admin_url   = $_CONF['site_admin_url'];
+                    $glSite_mail        = $_CONF['site_mail'];
                     if ( $_CONF['default_charset'] == 'utf-8') {
                         $utf8 = true;
                     } else {
@@ -1966,6 +1968,85 @@ switch ($mode) {
             $_PERMS                 = array('db-config.php', 'siteconfig.php', 'error.log', 'access.log',
                                             'rdf', 'userphotos', 'articles', 'topics', 'backups', 'data');
 
+
+            // db-config.php
+            if (!$dbconfig_file = @fopen($_PATH['db-config.php'], 'a')) {
+                $_PERMS['db-config.php'] = sprintf("%3o", @fileperms($_PATH['db-config.php']) & 0777);
+                $display_permissions    .= '<p><label class="file-permission-list"><code>' . $_PATH['db-config.php']
+                                        . '</code></label><span class="error">' . $LANG_INSTALL[12] . ' 777</span> ('
+                                        . $LANG_INSTALL[13] . ' ' . $_PERMS['db-config.php'] . ')</p>' . LB ;
+                $failed++;
+            } else {
+                fclose($dbconfig_file);
+            }
+
+            // siteconfig.php
+            if ( !file_exists($_PATH['public_html/'] . 'siteconfig.php' ) ) {
+                if (!$siteconfig_file = @fopen($_PATH['public_html/'] . 'siteconfig.php', 'a')) {
+                    $_PERMS['siteconfig.php'] = sprintf("%3o", @fileperms($_PATH['public_html/'] . 'siteconfig.php') & 0777);
+                    $display_permissions    .= '<p><label class="file-permission-list"><code>' . $_PATH['public_html/']
+                                            . 'siteconfig.php</code></label><span class="error">' . $LANG_INSTALL[500]
+                                            . '</p>' . LB ;
+                    $failed++;
+                } else {
+                    @fclose($siteconfig_file);
+                    $siteconfig_path = $_PATH['public_html/'] . 'siteconfig.php.dist';
+                    $siteconfig_file = @fopen($siteconfig_path, 'r');
+                    $siteconfig_data = @fread($siteconfig_file, filesize($siteconfig_path));
+                    fclose($siteconfig_file);
+
+                    $siteconfig_path = $_PATH['public_html/'] . 'siteconfig.php';
+                    // $_CONF['path']
+
+                    $siteconfig_file = @fopen($siteconfig_path, 'w');
+                    if (!@fwrite($siteconfig_file, $siteconfig_data)) {
+                        $display_permissions    .= '<p><label class="file-permission-list"><code>' . $_PATH['public_html/']
+                                                . 'siteconfig.php</code></label><span class="error">' . $LANG_INSTALL[12]
+                                                . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['siteconfig.php'] . ')</p>' . LB ;
+                        $failed++;
+                    }
+                    @fclose ($siteconfig_file);
+                }
+            } else {
+                if (!$siteconfig_file = @fopen($_PATH['public_html/'] . 'siteconfig.php', 'a')) {
+                    $_PERMS['siteconfig.php'] = sprintf("%3o", @fileperms($_PATH['public_html/'] . 'siteconfig.php') & 0777);
+                    $display_permissions    .= '<p><label class="file-permission-list"><code>' . $_PATH['public_html/']
+                                            . 'siteconfig.php</code></label><span class="error">' . $LANG_INSTALL[12]
+                                            . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['siteconfig.php'] . ')</p>' . LB ;
+                    $failed++;
+                } else {
+                    @fclose($siteconfig_file);
+                }
+            }
+
+            // lib-custom.php
+            if ( !file_exists($gl_path . 'system/lib-custom.php' ) ) {
+                if (!$libcustom_file = @fopen($gl_path . 'system/lib-custom.php', 'a')) {
+                    $_PERMS['lib-custom.php'] = sprintf("%3o", @fileperms($gl_path . 'system/lib-custom.php') & 0777);
+                    $display_permissions    .= '<p><label class="file-permission-list"><code>' . $gl_path
+                                            . 'system/lib-custom.php</code></label><span class="error">' . $LANG_INSTALL[501]
+                                            . '</p>' . LB ;
+                    $failed++;
+                } else {
+                    @fclose($libcustom_file);
+                    $libcustom_path = $gl_path . 'system/lib-custom.php.dist';
+                    $libcustom_file = @fopen($libcustom_path, 'r');
+                    $libcustom_data = @fread($libcustom_file, filesize($libcustom_path));
+                    @fclose($libcustom_file);
+
+                    $libcustom_path = $gl_path . 'system/lib-custom.php';
+
+                    $libcustom_file = @fopen($libcustom_path, 'w');
+                    if (!@fwrite($libcustom_file, $libcustom_data)) {
+                        $display_permissions    .= '<p><label class="file-permission-list"><code>' . $gl_path
+                                                . 'system/lib-custom.php</code></label><span class="error">' . $LANG_INSTALL[12]
+                                                . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['lib-custom.php'] . ')</p>' . LB ;
+                        $failed++;
+                    }
+                    @fclose ($libcustom_file);
+                }
+            }
+
             // backend directory & geeklog.rss
             if (!$file = @fopen($_CONF['rdf_file'], 'w')) {
                 // Permissions are incorrect
@@ -2008,17 +2089,6 @@ switch ($mode) {
                 // Permissions are correct
                 fclose($file);
                 unlink($data_path . 'test.txt');
-            }
-
-            // db-config.php
-            if (!$dbconfig_file = @fopen($_PATH['db-config.php'], 'a')) {
-                $_PERMS['db-config.php'] = sprintf("%3o", @fileperms($_PATH['db-config.php']) & 0777);
-                $display_permissions    .= '<p><label class="file-permission-list"><code>' . $_PATH['db-config.php']
-                                        . '</code></label><span class="error">' . $LANG_INSTALL[12] . ' 777</span> ('
-                                        . $LANG_INSTALL[13] . ' ' . $_PERMS['db-config.php'] . ')</p>' . LB ;
-                $failed++;
-            } else {
-                fclose($dbconfig_file);
             }
 
             // articles directory
@@ -2075,54 +2145,18 @@ switch ($mode) {
                 fclose($err_file);
             }
 
-            // lib-custom.php
-            if ( !file_exists($gl_path . 'system/lib-custom.php') ){
-                if ( file_exists($gl_path . 'system/lib-custom.php.dist') ) {
-                    $custom_path = $gl_path . 'system/lib-custom.php.dist';
-                    $custom_file = fopen($custom_path, 'r');
-                    $custom_data = @fread($custom_file, filesize($custom_path));
-                    fclose($custom_file);
-
-                    $custom_path = $gl_path . 'system/lib-custom.php';
-                    $custom_file = fopen($custom_path, 'w');
-                    if (!fwrite($custom_file, $custom_data)) {
-                        exit ($LANG_INSTALL[26] . ' ' . $gl_path . 'system/lib-custom.php' . $LANG_INSTALL[28]);
-                    }
-                    fclose ($custom_file);
-                }
-            }
-
-
-            // siteconfig.php
-            if ( !file_exists($_PATH['public_html/'] . 'siteconfig.php') ){
-                if ( file_exists($_PATH['public_html/'] . '/siteconfig.php.dist') ) {
-                    $siteconfig_path = $_PATH['public_html/'] . 'siteconfig.php.dist';
-                    $siteconfig_file = fopen($siteconfig_path, 'r');
-                    $siteconfig_data = @fread($siteconfig_file, filesize($siteconfig_path));
-                    fclose($siteconfig_file);
-
-                    $siteconfig_path = $_PATH['public_html/'] . 'siteconfig.php';
-                    // $_CONF['path']
-
-                    $siteconfig_file = fopen($siteconfig_path, 'w');
-                    if (!fwrite($siteconfig_file, $siteconfig_data)) {
-                        exit ($LANG_INSTALL[26] . ' ' . $_PATH['public_html/'] . $LANG_INSTALL[28]);
-                    }
-                    fclose ($siteconfig_file);
-                    require_once $siteconfig_path;
-                }
-            }
-
-            if (!$siteconfig_file = @fopen($_PATH['public_html/'] . 'siteconfig.php', 'a')) {
-                $_PERMS['siteconfig.php'] = sprintf("%3o", @fileperms($_PATH['public_html/'] . 'siteconfig.php') & 0777);
-                $display_permissions    .= '<p><label class="file-permission-list"><code>' . $_PATH['public_html/']
-                                        . 'siteconfig.php</code></label><span class="error">' . $LANG_INSTALL[12]
-                                        . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['siteconfig.php'] . ')</p>' . LB ;
-                $failed++;
+            // Template Caching Directory
+            if (!$file = @fopen($gl_path . 'data/layout_cache/test.txt', 'w')) {
+                // Permissions are incorrect
+                $_PERMS['ctl']    = sprintf("%3o", @fileperms($gl_path . 'data/layout_cache/') & 0777);
+                $display_permissions    .= '<p><label class="file-permission-list"><code>' . $gl_path
+                                        . 'data/layout_cache/</code></label><span class="error">' . $LANG_INSTALL[14]
+                                        . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['ctl'] . ') </p>' . LB;
             } else {
-                fclose($siteconfig_file);
+                // Permissions are correct
+                @fclose($file);
+                @unlink($_CONF['path'] . 'data/layout_cache/test.txt');
             }
-
 
             $display .= $LANG_INSTALL[9] . '<br' . XHTML . '><br' . XHTML . '>' . LB;
 

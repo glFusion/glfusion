@@ -8,7 +8,7 @@ width:200px;
 float:left;
 margin-bottom:10px;
 }
-.glform label {
+.glform label .glform label-left .glform label-right {
 text-align:right;
 width:200px;
 padding-right:20px;
@@ -18,6 +18,9 @@ padding-right:20px;
 clear:left;
 }
 
+.glform p {
+clear:left;
+}
 
 #gl_container_fluid {
   background:#FFFFFF; /*needs to be set here*/

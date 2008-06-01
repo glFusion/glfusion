@@ -142,7 +142,9 @@ $LANG_INSTALL = array(
     89 => 'Current Version:',
     90 => 'Empty database?',
     91 => 'It appears that either your database is empty or the database credentials you entered are incorrect. Or maybe you wanted to perform a New Install (instead of an Upgrade)? Please go back and try again.',
-    92 => 'Use UTF-8'
+    92 => 'Use UTF-8',
+    500 => 'does not exist, please copy siteconfig.php.dist to siteconfig.php and change the permissions to 777.',
+    501 => 'does not exist, please copy lib-custom.php.dist to lib-custom.php.',
 );
 
 // +---------------------------------------------------------------------------+
