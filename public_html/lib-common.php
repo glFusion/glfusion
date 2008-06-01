@@ -33,7 +33,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: lib-common.php,v 1.701 2008/05/31 18:38:48 blaine Exp $
+// $Id: lib-common.php,v 1.702 2008/06/01 07:39:17 dhaun Exp $
 
 // Prevent PHP from reporting uninitialized variables
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
@@ -52,7 +52,7 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 */
 
 if (!defined('glFusion_VERSION')) {
-  define('glFusion_VERSION', '1.5.0rc1');
+  define('glFusion_VERSION', '1.0.0rc2');
 }
 
 /**
@@ -4452,8 +4452,8 @@ function COM_showMessage($msg, $plugin = '')
         $retval .= COM_startBlock($MESSAGE[40] . ' - ' . $timestamp, '',
                                   COM_getBlockTemplate('_msg_block', 'header'))
                 . '<p class="sysmessage"><img src="' . $_CONF['layout_url']
-                . '/images/sysmessage.' . $_IMAGE_TYPE . '" alt="" '
-                . XHTML . '>' . $message . '</p>'
+                . '/images/sysmessage.' . $_IMAGE_TYPE . '" alt="" ' . XHTML
+                . '>' . $message . '</p>'
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
     }
 
