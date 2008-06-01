@@ -1,0 +1,187 @@
+<script type="text/javascript">
+var FCK = opener.FCKeditorAPI.GetInstance('{instance}') ;
+</script>
+<script language="JavaScript">
+function dodisabled(){
+	var autotag = '';
+    // see which auto tag is selected, if any
+    if ( document.mediabrowser.autotag != undefined ) {
+        for (i=0;i<document.mediabrowser.autotag.length;i++) {
+            if ( document.mediabrowser.autotag[i].checked ) {
+                autotag = document.mediabrowser.autotag[i].value;
+            }
+        }
+        switch ( autotag ) {
+            case 'album' :
+            case 'media' :
+                document.mediabrowser.autoplay.disabled = true;
+                document.mediabrowser.border.disabled = false;
+                document.mediabrowser.alignment.disabled = false;
+                document.mediabrowser.source.disabled = false;
+                document.mediabrowser.link.disabled = false;
+                document.mediabrowser.caption.disabled = false;
+                document.mediabrowser.delay.disabled = true;
+                document.mediabrowser.alturl.disabled = false;
+                break;
+            case 'slideshow' :
+                document.mediabrowser.autoplay.disabled = true;
+                document.mediabrowser.border.disabled = false;
+                document.mediabrowser.alignment.disabled = false;
+                document.mediabrowser.source.disabled = false;
+                document.mediabrowser.link.disabled = false;
+                document.mediabrowser.caption.disabled = false;
+                document.mediabrowser.delay.disabled = false;
+                document.mediabrowser.alturl.disabled = true;
+                break;
+            case 'fslideshow' :
+                document.mediabrowser.autoplay.disabled = true;
+                document.mediabrowser.border.disabled = true;
+                document.mediabrowser.alignment.disabled = false;
+                document.mediabrowser.source.disabled = false;
+                document.mediabrowser.link.disabled = false;
+                document.mediabrowser.caption.disabled = false;
+                document.mediabrowser.delay.disabled = false;
+                document.mediabrowser.alturl.disabled = true;
+                break;
+            case 'img' :
+                document.mediabrowser.autoplay.disabled = true;
+                document.mediabrowser.border.disabled = true;
+                document.mediabrowser.alignment.disabled = false;
+                document.mediabrowser.source.disabled = false;
+                document.mediabrowser.link.disabled = false;
+                document.mediabrowser.caption.disabled = true;
+                document.mediabrowser.delay.disabled = true;
+                document.mediabrowser.alturl.disabled = false;
+                break;
+            case 'mlink' :
+                document.mediabrowser.autoplay.disabled = true;
+                document.mediabrowser.border.disabled = true;
+                document.mediabrowser.alignment.disabled = true;
+                document.mediabrowser.source.disabled = true;
+                document.mediabrowser.link.disabled = true;
+                document.mediabrowser.caption.disabled = false;
+                document.mediabrowser.delay.disabled = true;
+                document.mediabrowser.alturl.disabled = false;
+                break;
+            case 'video' :
+            case 'audio' :
+                document.mediabrowser.autoplay.disabled = false;
+                document.mediabrowser.border.disabled = false;
+                document.mediabrowser.alignment.disabled = false;
+                document.mediabrowser.source.disabled = true;
+                document.mediabrowser.link.disabled = true;
+                document.mediabrowser.caption.disabled = true;
+                document.mediabrowser.delay.disabled = true;
+                document.mediabrowser.alturl.disabled = true;
+                break;
+            case 'playall' :
+                document.mediabrowser.autoplay.disabled = false;
+                document.mediabrowser.border.disabled = true;
+                document.mediabrowser.alignment.disabled = false;
+                document.mediabrowser.source.disabled = true;
+                document.mediabrowser.link.disabled = true;
+                document.mediabrowser.caption.disabled = true;
+                document.mediabrowser.delay.disabled = true;
+                document.mediabrowser.alturl.disabled = true;
+                break;
+            default :
+                document.mediabrowser.autoplay.disabled = true;
+                document.mediabrowser.border.disabled = false;
+                document.mediabrowser.alignment.disabled = false;
+                document.mediabrowser.source.disabled = false;
+                document.mediabrowser.link.disabled = false;
+                document.mediabrowser.caption.disabled = false;
+                document.mediabrowser.delay.disabled = true;
+                document.mediabrowser.alturl.disabled = false;
+                break;
+
+        }
+    }
+}
+</script>
+
+<form name="mediabrowser" method="post" action="{s_form_action}">
+<input type="hidden" name="i" value="{instance}">
+<input type="hidden" name="refresh" value="1">
+<fieldset>
+  <legend>{lang_current_album}</legend>
+  {jumpbox}
+</fieldset>
+<p>
+<fieldset>
+  <legend>{lang_autotag_attr}</legend>
+  <input type="radio" name="autotag" value="album" onChange="dodisabled()" {albumon}>&nbsp;{lang_album}&nbsp;&nbsp;
+  <input type="radio" name="autotag" value="slideshow" onChange="dodisabled()" {slideshowon}>&nbsp;{lang_slideshow}&nbsp;&nbsp;
+  <input type="radio" name="autotag" value="fslideshow" onChange="dodisabled()" {fslideshowon}>&nbsp;{lang_fslideshow}&nbsp;&nbsp;
+  <input type="radio" name="autotag" value="media" onChange="dodisabled()" {mediaon}>&nbsp;{lang_media}&nbsp;&nbsp;
+  <p>
+  <input type="radio" name="autotag" value="mlink" onChange="dodisabled()" {mlinkon}>&nbsp;{lang_mlink}&nbsp;&nbsp;
+  <input type="radio" name="autotag" value="img" onChange="dodisabled()" {imgon}>&nbsp;{lang_img}&nbsp;&nbsp;
+  <input type="radio" name="autotag" value="video" onChange="dodisabled()" {videoon}>&nbsp;{lang_video}&nbsp;&nbsp;
+  <input type="radio" name="autotag" value="audio" onChange="dodisabled()" {audioon}>&nbsp;{lang_audio}&nbsp;&nbsp;
+  <input type="radio" name="autotag" value="playall" onChange="dodisabled()" {playallon}>&nbsp;{lang_playall}
+  <p>
+  {lang_width} <input type="text" name="width" size="3" maxsize="3" value="{width}">&nbsp;&nbsp;
+  {lang_height} <input type="text" name="height" size="3" maxsize="3" value="{height}">&nbsp;&nbsp;
+
+  {lang_border} <select name="border">
+                  <option value="0" {border_no}>{lang_no}</option>
+                  <option value="1" {border_yes}>{lang_yes}</option>
+                </select>
+                &nbsp;&nbsp;
+
+  {lang_alignment} <select name="alignment">
+                     <option value="auto" {align_auto}>{lang_auto}</option>
+                     <option value="none" {align_none}>{lang_none}</option>
+                     <option value="left" {align_left}>{lang_left}</option>
+                     <option value="right" {align_right}>{lang_right}</option>
+                   </select>
+                   &nbsp;&nbsp;
+  <p>
+  {lang_source} <select name="source">
+                  <option value="tn" {src_tn}>{lang_thumbnail}</option>
+                  <option value="disp" {src_disp}>{lang_display}</option>
+                  <option value="orig" {src_orig}>{lang_original}</option>
+                </select>
+                &nbsp;&nbsp;
+
+  {lang_link} <select name="link">
+                <option value="0" {link_no}>{lang_no}</option>
+                <option value="1" {link_yes}>{lang_yes}</option>
+              </select>
+              &nbsp;&nbsp;
+
+  {lang_autoplay} <select name="autoplay">
+                    <option value="0" {autoplay_no}>{lang_no}</option>
+                    <option value="1" {autoplay_yes}>{lang_yes}</option>
+                   </select>
+              &nbsp;&nbsp;
+
+  {lang_delay}
+                    <input type="text" name="delay" size="3" maxsize="3" value="{delay}">&nbsp;&nbsp;
+  {destination}
+
+  {lang_alturl}
+                  <select name="alturl">
+                    <option value="0" {alturl_no}>{lang_no}</option>
+                    <option value="1" {alturl_yes}>{lang_yes}</option>
+                  </select>
+                  &nbsp;&nbsp;
+
+<p>
+{lang_caption} <input type="text" name="caption" size="80" maxsize="120" value="{caption}">
+</fieldset>
+<p>
+<fieldset>
+  <legend>{lang_thumbnails}</legend>
+  {album_body}
+</fieldset>
+<p>
+<fieldset>
+  <legend>{lang_navigation}</legend>
+  {bottom_pagination}
+</fieldset>
+<p>
+<input type="button" name="button" value="{lang_insert}" onClick="return insertImage(this.form);">
+<input type="button" name="cancel" value="{lang_cancel}" onClick="javascript:window.close();">
+</form>
