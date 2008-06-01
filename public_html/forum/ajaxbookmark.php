@@ -41,7 +41,7 @@ if ($_USER['uid'] > 1 AND $id >= 1) {
         $pid = DB_getItem($_TABLES['gf_topic'],'pid',"id=$id");
         DB_query("INSERT INTO {$_TABLES['gf_bookmarks']} (uid,topic_id,pid) VALUES ({$_USER['uid']},$id,$pid)");
     }
-    $html = '<a href="#" onClick="ajax_toggleForumBookmark('.$id.');return false;">'.$bookmarkimg.'</a>';
+    $html = '<a href="#" onclick="ajax_toggleForumBookmark('.$id.');return false;">'.$bookmarkimg.'</a>';
     $html = htmlentities ($html);
 
     $retval = "<result>";

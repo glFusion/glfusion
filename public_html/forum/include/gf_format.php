@@ -957,93 +957,6 @@ function gf_updateLastPost($forumid,$topicparent=0) {
         $numreplies = DB_Count($_TABLES['gf_topic'], "pid", $topicparent);
         DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '$numreplies' WHERE id=$topicparent");
     }
-
-/* ---------------------------------------------------------------------------
-
-
-
-    $lastrecid = NULL;
-    $last_reply_rec = 0;
-
-    // update the gf_forum last_post_rec
-    // Get the last topic in this forum
-
-    $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE forum=$forumid");
-    list($last_reply_rec) = DB_fetchArray($query);
-    if ($last_reply_rec > 0) {
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=$last_reply_rec WHERE forum_id=$forumid");
-    }
-
-    // Now update the gf_topic last reply rec if needed
-
-    $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE pid=$topicparent");
-    list($lastrecid) = DB_fetchArray($query);
-
-    if ($lastrecid == 0 AND $topicparent > 0) {
-        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$topicparent");
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$topicparent, lastupdated='$topicdatecreated' WHERE id={$topicparent}");
-    } elseif ($topicparent > 0) {
-        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$lastrecid");
-        DB_query("UPDATE {$_TABLES['gf_topic']}  SET last_reply_rec=$lastrecid, lastupdated=$topicdatecreated WHERE id={$topicparent}");
-    }
-    if ($topicparent > 0) {
-        // Recalculate and Update the number of replies
-        $numreplies = DB_Count($_TABLES['gf_topic'], "pid", $topicparent);
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '$numreplies' WHERE id=$topicparent");
-    }
------------------------- */
-    /*
-     * new stuff - probably get rid of everything above...
-     *
-     * gf_forums has forum_id, topic count and post_count and last_post_rec
-     *
-     * gf_topics has id, pid, forum, lastupdated, last_reply_rec, replies
-     *
-     */
-/* ---------------
-    // Pull max ID for a specific forum and update forum.last_post_rec;
-    $topicsQuery = DB_query("SELECT MAX(id) as maxid FROM {$_TABLES['gf_topic']} WHERE forum=$forumid");
-    $lasttopic = 0;
-    if ( DB_numRows($topicsQuery) > 0 ) {
-        $lasttopic   = DB_fetchArray($topicsQuery);
-        if ( $lasttopic == NULL || $lasttopic['maxid'] == '' ) {
-            $lasttopic['maxid'] = 0;
-        }
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec = {$lasttopic['maxid']} WHERE forum_id=$forumid");
-    } else {
-        DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec = 0 WHERE forum_id=$forumid");
-    }
-
-    // now update post_count
-    $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forumid);
-    // Update the forum definition record to know the number of posts
-    if ( $postCount == NULL || $postCount == '' ) {
-        $postCount = 0;
-    }
-    DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count = '$postCount' WHERE forum_id=$forumid");
-
-    // now update topic_count
-    $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forumid and pid=0");
-    $numTopics   = DB_numRows($topicsQuery);
-    DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count = '$numTopics' WHERE forum_id=$forumid");
-
-    // now, if parent topic id given, update the topic specific records in gf_topics
-
-    if ( $topicparent > 0 ) {
-        $lsql = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE pid=$topicparent");
-        $lastrec = DB_fetchArray($lsql);
-        if ($lastrec['maxid'] != NULL) {
-            $latest = DB_getITEM($_TABLES['gf_topic'],date,"id={$lastrec['maxid']}");
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated = '$latest' where id='$topicparent'");
-        } else {
-            $latest = DB_getITEM($_TABLES['gf_topic'],date,"id=$topicparent");
-            DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated = '$latest' WHERE id='$topicparent'");
-        }
-        // Recalculate and Update the number of replies
-        $numreplies = DB_Count($_TABLES['gf_topic'], "pid", $topicparent);
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '$numreplies' WHERE id='$topicparent'");
-    }
---------------- */
 }
 
 function gf_showattachments($topic,$mode='') {
@@ -1064,8 +977,9 @@ function gf_showattachments($topic,$mode='') {
         $filemgmtSupport = false;
     }
 
+    $retval .= '<div id="fileattachlist">';
     while (list($id,$lid,$field_value) =  DB_fetchArray($query)) {
-        $retval .= '<div class="forum_attachment">';
+        $retval .= '<div class="tblforumfile">';
         $filename = explode(':',$field_value);
         if ($filemgmtSupport AND $lid > 0) {   // Check and see if user has access to file
             $groupsql = filemgmt_buildAccessSql();
@@ -1081,7 +995,7 @@ function gf_showattachments($topic,$mode='') {
             $retval .= "<a href=\"{$_CONF['site_url']}/forum/getattachment.php?id=$id\" target=\"_new\">";
             $retval .= "{$filename[1]}</a>&nbsp;";
             if ($mode == 'edit') {
-                $retval .= "<a href=\"#\" onClick='ajaxDeleteFile($topic,$id);'>";
+                $retval .= "<a href=\"#\" onclick='ajaxDeleteFile($topic,$id);'>";
                 $retval .= "<img src=\"{$CONF_FORUM['imgset']}/delete.gif\" border=\"0\" alt=\"\"" . XHTML . "></a>";
             }
         } else {
@@ -1089,7 +1003,7 @@ function gf_showattachments($topic,$mode='') {
         }
         $retval .= '</div>';
     }
-
+    $retval .= '</div>';
     return $retval;
 }
 

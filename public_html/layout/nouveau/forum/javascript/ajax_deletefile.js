@@ -1,43 +1,45 @@
 var xmlhttp = null;
 
-
 /* Only really need the record id of the result to delete, but the fieldid is used to re-create the html.
 *  Need to re-attach / replace the HTML for the file listing
 *  The fieldid is part of the ID field used to define the DOM attrbute (table)
 */
 function ajaxDeleteFile(topic, fileid) {
 
-    if (confirm('Delete file')) {
+    if (confirm('Are you sure you want to Delete the File?')) {
         //alert('field:'+fieldid+',rec:'+rec);
 
         xmlhttp = new XMLHttpRequest();
         var qs = '?topic=' + topic + '&id=' + fileid;
         xmlhttp.open('GET', site_url + '/forum/ajaxdelfile.php' + qs, true);
-        xmlhttp.onreadystatechange = function() {
-          if (xmlhttp.readyState == 4) {
-            receiveFileListing(xmlhttp.responseXML);
-          }
-        };
+        xmlhttp.onreadystatechange = handleResponse;
+
         xmlhttp.send(null);
     }
 }
 
-function receiveFileListing(dom) {
+function handleResponse() {
+    if (xmlhttp.readyState == 4 ) {
+        if (xmlhttp.status == 200 ) {
 
-    var ocontent = dom.getElementsByTagName('content');
+            var response = xmlhttp.responseText;
+            var update = new Array();
 
-    // Get HTML content returned and updated displayed Template Variables
-    var obj = document.getElementById('tblforumfile');
-    if (obj.parentNode) {
-        // Check for chunks of data returning - look into using the DOM normalize method
-        html = ocontent[0].childNodes[0].nodeValue;
-        if (ocontent[0].childNodes[1]) {
-            html = html + ocontent[0].childNodes[1].nodeValue;
+            changeText('fileattachlist',response);
         }
-        if (ocontent[0].childNodes[2]) {
-            html = html + ocontent[0].childNodes[2].nodeValue;
-        }
-        obj.parentNode.innerHTML = html;
     }
+}
 
+function changeText ( div2show, text ) {
+    // Detect Browser
+    var IE = (document.all) ? 1 : 0;
+    var DOM = 0;
+    if ( parseInt(navigator.appVersion) >= 5) {DOM=1};
+
+    if (DOM) {
+        var viewer = document.getElementById(div2show);
+        viewer.innerHTML = text;
+    } else if (IE) {
+        document.all[div2show].innerHTML = text;
+    }
 }
