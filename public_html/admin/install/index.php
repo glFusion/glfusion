@@ -2153,7 +2153,7 @@ switch ($mode) {
                    <h2>' . $LANG_INSTALL[23] . '</h2>
                    <div class="install floatleft" style="margin-left:10px;margin-bottom:10px;"><a href="' . $req_string
                     . '&amp;op=install">' . $LANG_INSTALL[24] . '</a></div>
-                   <div class="' . $upgr_class . '" floatleft" style="margin-left:10px;"><a href="' . $req_string
+                   <div class="' . $upgr_class . ' floatleft" style="margin-left:10px;"><a href="' . $req_string
                     . '&amp;op=upgrade">' . $LANG_INSTALL[25] . '</a></div>
                </div>
 			</div>' . LB;
