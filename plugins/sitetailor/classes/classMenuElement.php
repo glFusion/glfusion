@@ -742,6 +742,12 @@ class mbElement {
                 $this->url = $_CONF['site_url'] . '/staticpages/index.php?page=' . $this->subtype;
                 break;
             case '6' : // external URL
+                /*
+                 * Check to see if any internal macros
+                 */
+                $this->url = str_replace("%site_url%", $_CONF['site_url'],$this->url);
+                $this->url = str_replace("%site_admin_url%", $_CONF['site_admin_url'], $this->url);
+
                 break;
             case '7' : // php function
                 $functionName = $this->subtype;
