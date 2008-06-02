@@ -76,7 +76,7 @@ window.addEvent('domready', function() {
     {$LANG_ST01[configuration]}
   </div>
   <div class="glfform">
-    <form method="post" action="{form_action}" id="mbconfig">
+    <form method="post" action="{form_action}" id="mbconfig" enctype="multipart/form-data" >
     <input type="hidden" name="mid" id="mid" value="{menu_id}"{xhtml}>
       <h1 style="margin:9px;">{$LANG_ST01[menu_color_options]}</h1>
       <div>
@@ -84,6 +84,7 @@ window.addEvent('domready', function() {
         <input id="tmbgcolor" name="tmbgcolor" type="hidden" size="7" value="{tmbgcolor}" {xhtml}>&nbsp;
         <input type="text" id="tmbg_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{tmbgcolor};"{xhtml}>
         <img id="tmbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[tmbgrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+        &nbsp;&nbsp;<span>{$LANG_ST01[not_used]}</span>
       </div>
 
       <div>
@@ -91,6 +92,7 @@ window.addEvent('domready', function() {
         <input id="tmhcolor" name="tmhcolor" type="hidden" size="7" value="{tmhcolor}"{xhtml}>&nbsp;
         <input type="text" id="tmh_sample" size="1" maxlength="1" value="" style="vertical-align:middle;background-color:{tmhcolor};"{xhtml}>
         <img id="tmhrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[tmhrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
+        &nbsp;&nbsp;<span>{$LANG_ST01[not_used]}</span>
       </div>
 
       <div>
@@ -135,6 +137,30 @@ window.addEvent('domready', function() {
         <img id="smsrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="[smsrb]" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
+<h1 style="margin:9px;">{$LANG_ST01[menu_graphics]}</h1>
+
+      <div>
+        <label>{$LANG_ST01[graphics_or_colors]}</label>
+        {$LANG_ST01[graphics]}:&nbsp;<input type="radio" name="gorc" value="1" {graphics_selected}{xhtml}>&nbsp;&nbsp;&nbsp;
+        {$LANG_ST01[colors]}:&nbsp;<input type="radio" name="gorc" value="0" {colors_selected}{xhtml}>
+      </div>
+      <div>
+        <label>{$LANG_ST01[menu_bg_image]}</label>
+        <input type="file" id="bgimg" name="bgimg" size="20" value=""{xhtml}>
+        &nbsp;{$LANG_ST01[currently]}:&nbsp;
+        <span style="background:url({site_url}/images/menu/{menu_bg_filename}) repeat;height:16px;width:16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </div>
+      <div>
+        <label>{$LANG_ST01[menu_hover_image]}</label>
+        <input type="file" id="hvimg" name="hvimg" size="20" value=""{xhtml}>
+        &nbsp;{$LANG_ST01[currently]}:&nbsp;
+        <span style="background:url({site_url}/images/menu/{menu_hover_filename}) repeat;height:16px;width:16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </div>
+      <div>
+        <label>{$LANG_ST01[parent_item_image]}</label>
+        <input type="file" id="piimg" name="piimg" size="20" value=""{xhtml}>
+        &nbsp;{$LANG_ST01[currently]}:&nbsp;<img id="cpiimage" src="{site_url}/images/menu/{menu_parent_filename}" width="16" height="16" style="vertical-align:middle;border:none;" alt="" {xhtml}>
+      </div>
       <div style="text-align:center;padding:5px;">
         <input type="hidden" id="mode" name="mode" value="savecfg"{xhtml}>
         <input type="submit" id="execute" name="execute" value="{$LANG_ST01[save]}"{xhtml}>

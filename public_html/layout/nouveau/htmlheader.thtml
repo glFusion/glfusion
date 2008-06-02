@@ -32,13 +32,13 @@
 #gl_moomenu,
 #gl_moomenu ul,
 #gl_moomenu ul.gl_moomenu {
-background:{mbgcolor}{mbgimage};  /*Top Menu BG*/
+background:{mbgcolor} {menu_bg};  /*Top Menu BG*/
 }
 #gl_moomenu a {
 color:{mtext};  /*Top Menu Text*/
 }
 .gl_moomenu li:hover {
-background:{mbghcolor}{mhimage};  /*Top Menu Hover*/
+background:{mbghcolor} {menu_hover_bg};  /*Top Menu Hover*/
 }
 #gl_moomenu li:hover a,
 #gl_moomenu li.sfHover a,

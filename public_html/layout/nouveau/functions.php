@@ -211,12 +211,12 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if ( function_exists('st_getMenu') ) { // && $mbMenuConfig[0]['enabled'] == 1) {
         $result = DB_query("SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=0",1);
         if ( DB_numRows($result) > 0 ) {
-            list($id,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$enabled) = DB_fetchArray($result);
+            list($id,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$enabled) = DB_fetchArray($result);
         }
     }
 
     $header->set_var(array(
-        'mbgcolor'  => $tmbg,
+        'mbgcolor'  => ($mbMenuConfig[0]['gorc'] == 1 ? '' : $tmbg),
         'mbghcolor' => $tmh,
         'mtext'     => $tmt,
         'mhtext'    => $tmth,
@@ -229,7 +229,10 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         'sbtcolor'  => $sms,
         'sbbcolor'  => $sms,
         'tmh'       => $tmh,
-        'spimage'   => 'url(images/gl_moomenu1-parent.png) 95% 50% norepeat',
+        'menu_bg'       => ($mbMenuConfig[0]['gorc'] == 1 ? 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['bgimage'] . ') repeat' : ''),
+        'menu_hover_bg' => 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['hoverimage'] . ') repeat',
+        'spimage'       => 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['parentimage'] . ') 95% 50% norepeat',
+
     ));
 
     // get topic if not on home page

@@ -143,6 +143,15 @@ $LANG_ST01 = array (
     'menu_builder'      => 'Menu Builder',
     'logo'              => 'Logo',
     'menu_colors'       => 'Menu Colors',
+    'menu_graphics'     => 'Menu Graphics',
+    'graphics_or_colors'    => 'Use Graphics or Colors?',
+    'graphics'              => 'Graphics',
+    'colors'                => 'Colors',
+    'menu_bg_image'         => 'Menu Background Image',
+    'currently'             => 'Currently',
+    'menu_hover_image'      => 'Menu Hover Image',
+    'parent_item_image'     => 'Parent Item Image',
+    'not_used'              => 'Not used if <b>Use Graphics</b> is selected below.',
 );
 
 

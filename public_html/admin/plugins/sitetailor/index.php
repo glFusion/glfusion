@@ -577,7 +577,7 @@ function ST_menuConfig( $mid ) {
 
     $sql = "SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=" . $mid;
     $result = DB_query($sql);
-    list($cid,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$enabled) = DB_fetchArray($result);
+    list($cid,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$bgimage,$hoverimage,$parentimage,$enabled) = DB_fetchArray($result);
 
     $tmbgRGB    = '[' . ST_hexrgb($tmbg,'r') . ',' . ST_hexrgb($tmbg,'g') . ',' . ST_hexrgb($tnbg,'b') . ']';
     $tmhRGB     = '[' . ST_hexrgb($tmh,'r')  . ',' . ST_hexrgb($tmh,'g')  . ',' . ST_hexrgb($tmh,'b')  . ']';
@@ -615,6 +615,11 @@ function ST_menuConfig( $mid ) {
         'smscolor'          => $sms,
         'smscolorrgb'       => $smsRGB,
         'enabled'           => ($enabled == 1 ? ' checked="checked"' : ''),
+        'graphics_selected' => ($gorc == 1 ? ' checked="checked"' : ''),
+        'colors_selected'   => ($gorc == 0 ? ' checked="checked"' : ''),
+        'menu_bg_filename'  => $bgimage,
+        'menu_hover_filename' => $hoverimage,
+        'menu_parent_filename' => $parentimage,
         'xhtml'             => XHTML,
     ));
     $T->parse('output', 'admin');
@@ -624,7 +629,7 @@ function ST_menuConfig( $mid ) {
 }
 
 function ST_saveMenuConfig($menu_id=0) {
-    global $_CONF, $_TABLES, $_ST_CONF, $ST_menuElements;
+    global $_CONF, $_TABLES, $_ST_CONF, $ST_menuElements, $mbMenuConfig;
 
     $tmbg   = COM_applyFilter($_POST['tmbgcolor']);
     $tmh    = COM_applyFilter($_POST['tmhcolor']);
@@ -634,8 +639,111 @@ function ST_saveMenuConfig($menu_id=0) {
     $smbg   = COM_applyFilter($_POST['smbgcolor']);
     $smh    = COM_applyFilter($_POST['smhcolor']);
     $sms    = COM_applyFilter($_POST['smscolor']);
+    $gorc   = isset($_POST['gorc']) ? COM_applyFilter($_POST['gorc'],true) : 0;
 
-    DB_query("UPDATE {$_TABLES['st_menu_config']} SET tmbg='$tmbg',tmh='$tmh',tmt='$tmt',tmth='$tmth',smth='$smth',smbg='$smbg',smh='$smh',sms='$sms' WHERE menu_id=" . $menu_id);
+    DB_query("UPDATE {$_TABLES['st_menu_config']} SET tmbg='$tmbg',tmh='$tmh',tmt='$tmt',tmth='$tmth',smth='$smth',smbg='$smbg',smh='$smh',sms='$sms',gorc='$gorc' WHERE menu_id=" . $menu_id);
+
+    $file = array();
+    $file = $_FILES['bgimg'];
+    if ( isset($file['tmp_name']) && $file['tmp_name'] != '' ) {
+
+        switch ( $file['type'] ) {
+            case 'image/png' :
+            case 'image/x-png' :
+                $ext = '.png';
+                break;
+            case 'image/gif' :
+                $ext = '.gif';
+                break;
+            case 'image/jpg' :
+            case 'image/jpeg' :
+            case 'image/pjpeg' :
+                $ext = '.jpg';
+                break;
+            default :
+                $ext = 'unknown';
+                $retval = 2;
+                break;
+        }
+        if ( $ext != 'unknown' ) {
+            $imgInfo = @getimagesize($file['tmp_name']);
+            if ( $imgInfo != false ) {
+                $newFilename = 'menu_bg' . substr(md5(uniqid(rand())),0,8) . $ext;
+//                $newFilename = 'menu_bg' . $ext;
+                $rc = move_uploaded_file($file['tmp_name'],$_CONF['path_html'] . 'images/menu/' . $newFilename);
+                if ( $rc ) {
+                    @unlink($_CONF['path_html'] . '/menu/images/' . $mbMenuConfig[$menu_id]['bgimage']);
+                    DB_query("UPDATE {$_TABLES['st_menu_config']} SET bgimage='$newFilename' WHERE menu_id=" . $menu_id);
+                }
+            }
+        }
+    }
+    $file = array();
+    $file = $_FILES['hvimg'];
+    if ( isset($file['tmp_name']) && $file['tmp_name'] != '' ) {
+        switch ( $file['type'] ) {
+            case 'image/png' :
+            case 'image/x-png' :
+                $ext = '.png';
+                break;
+            case 'image/gif' :
+                $ext = '.gif';
+                break;
+            case 'image/jpg' :
+            case 'image/jpeg' :
+            case 'image/pjpeg' :
+                $ext = '.jpg';
+                break;
+            default :
+                $ext = 'unknown';
+                $retval = 2;
+                break;
+        }
+        if ( $ext != 'unknown' ) {
+            $imgInfo = @getimagesize($file['tmp_name']);
+            if ( $imgInfo != false ) {
+                $newFilename = 'menu_hover_bg' . substr(md5(uniqid(rand())),0,8) . $ext;
+                $rc = move_uploaded_file($file['tmp_name'],$_CONF['path_html'] . 'images/menu/' . $newFilename);
+                if ( $rc ) {
+                    @unlink($_CONF['path_html'] . '/menu/images/' . $mbMenuConfig[$menu_id]['hoverimage']);
+                    DB_query("UPDATE {$_TABLES['st_menu_config']} SET hoverimage='$newFilename' WHERE menu_id=" . $menu_id);
+                }
+            }
+        }
+    }
+    $file = array();
+    $file = $_FILES['piimg'];
+    if ( isset($file['tmp_name']) && $file['tmp_name'] != '' ) {
+        switch ( $file['type'] ) {
+            case 'image/png' :
+            case 'image/x-png' :
+                $ext = '.png';
+                break;
+            case 'image/gif' :
+                $ext = '.gif';
+                break;
+            case 'image/jpg' :
+            case 'image/jpeg' :
+            case 'image/pjpeg' :
+                $ext = '.jpg';
+                break;
+            default :
+                $ext = 'unknown';
+                $retval = 2;
+                break;
+        }
+        if ( $ext != 'unknown' ) {
+            $imgInfo = @getimagesize($file['tmp_name']);
+            if ( $imgInfo != false ) {
+                $newFilename = 'menu_parent' . substr(md5(uniqid(rand())),0,8) . $ext;
+                $rc = move_uploaded_file($file['tmp_name'],$_CONF['path_html'] . 'images/menu/' . $newFilename);
+                if ( $rc ) {
+                    @unlink($_CONF['path_html'] . '/menu/images/' . $mbMenuConfig[$menu_id]['parentimage']);
+                    DB_query("UPDATE {$_TABLES['st_menu_config']} SET parentimage='$newFilename' WHERE menu_id=" . $menu_id);
+                }
+            }
+        }
+    }
     return;
 }
 
