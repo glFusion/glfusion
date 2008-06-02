@@ -50,7 +50,7 @@ function install_config()
     $c->add('site_name','','text',0,0,NULL,60,TRUE);
     $c->add('site_slogan','','text',0,0,NULL,70,TRUE);
     $c->add('microsummary_short','GL: ','text',0,0,NULL,80,TRUE);
-    $c->add('site_disabled_msg','Geeklog Site is down. Please come back soon.','text',0,0,NULL,510,TRUE);
+    $c->add('site_disabled_msg','glFusion Site is down. Please come back soon.','text',0,0,NULL,510,TRUE);
     $c->add('copyrightyear','2008','text',0,0,NULL,1440,FALSE);
     $c->add('url_rewrite',FALSE,'select',0,0,1,1800,TRUE);
 
@@ -126,7 +126,7 @@ function install_config()
     $c->add('sg_theme', NULL, 'subgroup', 2, 0, NULL, 0, TRUE);
 
     $c->add('fs_theme', NULL, 'fieldset', 2, 10, NULL, 0, TRUE);
-    $c->add('theme','professional','select',2,10,NULL,190,TRUE);
+    $c->add('theme','nouveau','select',2,10,NULL,190,TRUE);
     $c->add('menu_elements',array('home','contribute','search','stats','directory','plugins'),'%text',2,10,NULL,200,TRUE);
     $c->add('path_themes','','text',2,10,NULL,210,TRUE);
 
