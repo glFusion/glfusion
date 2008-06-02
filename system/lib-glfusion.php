@@ -37,7 +37,7 @@ function phpblock_blogroll ()
 
     // configuration options:
 
-    $cat = 'xxxxxxxxxxxxx';     // Category to take links from
+    $cat = 'blog-roll';     // Category to take links from
     $directlink = false;        // Use direct links (true) or portal.php (false)
     $random = false;            // Random order (true) or sort by $sort (false)
     $sort = 'date';             // Sort by ... e.g. 'date', 'title', 'url'
@@ -45,58 +45,61 @@ function phpblock_blogroll ()
     // === you shouldn't need to change anything below this line ==============
     $retval = '';
 
-    $result = DB_query ("SELECT lid,url,title,description,hits FROM {$_TABLES['links']} WHERE category = '$cat'" . COM_getPermSql ('AND') . " ORDER BY $sort");
-    $numLinks = DB_numRows ($result);
+    if ( function_exists('LINKS_countLinksAndClicks') ) {
 
-    $links = array ();
-    for ($i = 0; $i < $numLinks; $i++) {
-        $A = DB_fetchArray ($result);
+        $result = DB_query ("SELECT lid,url,title,description,hits FROM {$_TABLES['links']} WHERE cid = '$cat'" . COM_getPermSql ('AND') . " ORDER BY $sort");
+        $numLinks = DB_numRows ($result);
 
-        if ($directlink) {
-            $url = $A['url'];
-            $link = '<a href="' . $url . '">';
+        $links = array ();
+        for ($i = 0; $i < $numLinks; $i++) {
+            $A = DB_fetchArray ($result);
 
-        } else {
-            $url = $_CONF['site_url']
-                 . COM_buildUrl ('/portal.php?what=link&item=' . $A['lid']);
-            $link = '<a href="' . $url . '" title="' . $A['url'] . '">';
+            if ($directlink) {
+                $url = $A['url'];
+                $link = '<a href="' . $url . '">';
 
-        }
-        $links[] = $link . stripslashes ($A['title']) . '</a>' . ' (' . ($A['hits']) . ')' . '<br><i>' . ($A['description']) . '<br><br></i>';
-    }
+            } else {
+                $url = $_CONF['site_url']
+                     . COM_buildUrl ('/links/portal.php?what=link&amp;item=' . $A['lid']);
+                $link = '<a href="' . $url . '" title="' . $A['url'] . '">';
 
-    if (count ($links) > 0) {
-
-        if ($random) {
-            $min = 0;
-            $max = count ($links) - 1;
-
-            $newlist = array ();
-            do {
-                $r = rand ($min, $max);
-
-                if (!empty ($links[$r])) {
-                    $newlist[] = $links[$r];
-                    unset ($links[$r]);
-                }
-
-                if ($r == $min) {
-                    $min = $r + 1;
-                } else if ($r == $max) {
-                    $max = $r - 1;
-                }
-                if ($min == $max) {
-                    if (!empty ($links[$min])) {
-                        $newlist[] = $links[$min];
-                    }
-                    break;
-                }
             }
-            while ($max > $min);
+            $links[] = $link . $A['title'] . '</a>'; // . ' (' . ($A['hits']) . ')' . '<br' . XHTML . '><em>' . ($A['description']) . '</em><br' . XHTML . '><br' . XHTML . '>';
+        }
 
-            $retval = COM_makeList ($newlist, 'list-blogroll');
-        } else {
-            $retval = COM_makeList ($links, 'list-blogroll');
+        if (count ($links) > 0) {
+
+            if ($random) {
+                $min = 0;
+                $max = count ($links) - 1;
+
+                $newlist = array ();
+                do {
+                    $r = rand ($min, $max);
+
+                    if (!empty ($links[$r])) {
+                        $newlist[] = $links[$r];
+                        unset ($links[$r]);
+                    }
+
+                    if ($r == $min) {
+                        $min = $r + 1;
+                    } else if ($r == $max) {
+                        $max = $r - 1;
+                    }
+                    if ($min == $max) {
+                        if (!empty ($links[$min])) {
+                            $newlist[] = $links[$min];
+                        }
+                        break;
+                    }
+                }
+                while ($max > $min);
+
+                $retval = COM_makeList ($newlist, 'list-blogroll');
+            } else {
+                $retval = COM_makeList ($links, 'list-blogroll');
+            }
         }
     }
 
