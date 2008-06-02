@@ -25,7 +25,8 @@ clear:left;
 #gl_container_fluid {
   background:#FFFFFF; /*needs to be set here*/
   min-width:540px;
-  margin:20px 20px;
+  margin:20px 20px !important;
+  margin:20px 20px 30px 20px;
 }
 #gl_header {
   background:url(header-bg.png) 0 0 repeat-x;
@@ -45,6 +46,7 @@ clear:left;
 #gl_footer {
   background:#000;
   clear:left;
+  height:40px;
 }
 .top-r-corner {
   background:transparent url(top-r-corner.png) 100% 0 no-repeat;
@@ -55,11 +57,13 @@ clear:left;
   height:100px;
 }
 .bottom-r-corner {
-  background:#FFF url(bottom-r-corner.png) 100% 0 no-repeat;
+  background:#FFF url(bottom-r-corner.png) 100% 0 no-repeat !important;
+  background:#FFF url(bottom-r-corner.png) 100% 10px no-repeat;
   height:5px;
 }
 .bottom-l-corner {
-  background:transparent url(bottom-l-corner.png) 0 0 no-repeat;
+  background:transparent url(bottom-l-corner.png) 0 0 no-repeat !important;
+  background:transparent url(bottom-l-corner.png) 0 10px no-repeat;
   height:5px;
 }
 /* GLOBAL SEMANTICS ***********************************************/
@@ -265,7 +269,7 @@ margin-left:0em;
 }
 /* Header ***************************************/
 #header-site-logo {
-  margin:0 0 -25px /* <-- adjust this to move the SLOGAN up or down */ 15px;
+  margin:0 0 -5px /* <-- adjust this to move the SLOGAN up or down */ 5px;
   z-index:90;
 }
 /*GL_MOOMENU CSS**************************/
