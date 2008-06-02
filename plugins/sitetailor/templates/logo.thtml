@@ -13,12 +13,10 @@
           <label>{$LANG_ST01[use_text_logo]}:</label>
           <input type="radio" name="usegraphic" value="0" {text_logo_selected}{xhtml}>
         </div>
-<!--
         <div class="required">
           <label for="siteslogan">{$LANG_ST01[display_site_slogan]}:</label>
           <input type="checkbox" name="siteslogan" id="siteslogan" value="1" {slogan_selected}{xhtml}>
         </div>
--->
         <div class="required">
           <label for="newlogo">{$LANG_ST01[upload_logo]}:</label>
           <input type="file" name="newlogo" id="newlogo"{xhtml}>
