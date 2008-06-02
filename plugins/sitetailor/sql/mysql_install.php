@@ -63,21 +63,15 @@ $_SQL['st_menu_config'] = "CREATE TABLE {$_TABLES['st_menu_config']} (
   PRIMARY KEY( `id` )
 ) AUTO_INCREMENT=1 ;";
 
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_config']} (`id`, `config_name`, `config_value`) VALUES (1,'use_graphic_logo','0'),(2,'display_site_slogan','0'),(3,'logo_name','logo1234.png');";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_config']} VALUES (1,0,'#151515','#3667c0','#e8e8e8','#ffffff','#ffe600','#151515','#000000','#333333',1);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_config']} (`id`, `config_name`, `config_value`) VALUES (1,'use_graphic_logo','1'),(2,'display_site_slogan','1'),(3,'logo_name','logo1234.png');";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_config']} VALUES (1,0,'#151515','#3667c0','#CCCCCC','#ffffff','#679EF1','#151515','#333333','#000000',1);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(1, 0, 0, 'Home', 2, '0', 10, 1, '','', 2);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(2, 0, 0, 'Contribute', 2, '1', 20, 1, '','', 13);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(3, 0, 0, 'Search', 2, '4', 30, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(4, 0, 0, 'Plugins', 1, '', 50, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(5, 4, 0, 'Links', 4, 'links', 10, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(6, 4, 0, 'Polls', 4, 'polls', 20, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(7, 4, 0, 'Calendar', 4, 'calendar', 30, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(8, 4, 0, 'Downloads', 4, 'filemgmt', 40, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(9, 4, 0, 'Forum', 4, 'forum', 50, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(10, 4, 0, 'Media Gallery', 4, 'mediagallery', 60, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(11, 0, 0, 'Directory', 2, '2', 40, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(12, 0, 0, 'Preferences', 2, '3', 60, 1, '','', 13);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(13, 0, 0, 'Site Stats', 2, '5', 70, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(14, 0, 0, 'Topics', 3, '3', 80, 1, '','', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(15, 0, 0, 'Admin Options', 3, '2', 90, 1, '','', 1);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(4, 0, 0, 'Plugins', 3, '5', 50, 1, '','', 2);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(5, 0, 0, 'Directory', 2, '2', 40, 1, '','', 2);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(6, 0, 0, 'Preferences', 2, '3', 60, 1, '','', 13);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(7, 0, 0, 'Site Stats', 2, '5', 70, 1, '','', 2);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(8, 0, 0, 'Topics', 3, '3', 80, 1, '','', 2);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(9, 0, 0, 'Admin Options', 3, '2', 90, 1, '','', 1);";
 ?>
