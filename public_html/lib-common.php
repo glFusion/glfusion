@@ -242,6 +242,13 @@ require_once( $_CONF['path_system'] . 'lib-security.php' );
 require_once( $_CONF['path_system'] . 'lib-syndication.php' );
 
 /**
+* This is the glFusion customization library
+*
+*/
+
+require_once( $_CONF['path_system'] . 'lib-glfusion.php' );
+
+/**
  *These variables were taken out of the configuration and placed here since they
  *are necessary to change with the themes, not whole sites. They should now be
  *overridden by setting them to a different value than here in the theme's
