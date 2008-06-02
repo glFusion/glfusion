@@ -27,7 +27,7 @@
 FCKConfig.CustomConfigurationsPath = '' ;
 
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
-FCKConfig.EditorAreaStyles = '' ;
+FCKConfig.EditorAreaStyles = 'body { background:transparent;color:#000;margin-bottom:30px;} h1 {background:transparent;color:#000;font-size:1.4em;font-weight:700;margin:0 5px 0 0;} ul { list-style-position:outside;margin-left:5px;padding-left:15px;list-style:disc;vertical-align:middle;}' ;
 FCKConfig.ToolbarComboPreviewCSS = '' ;
 
 FCKConfig.DocType = '' ;
