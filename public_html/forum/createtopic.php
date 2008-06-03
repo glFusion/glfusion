@@ -275,6 +275,9 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','$nlastid','$uid',now() )");
                     }
 
+                    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+                    CACHE_clean_directories($path_cache, 'instance__' . $_CONF['theme'] . '__glfusionforum');
+
                     COM_updateSpeedlimit ('forum');
 
                     // Insert a new log record for all logged in users that posted so it does not appear as new
@@ -381,6 +384,9 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='$forum' and topic_id = '$nid'");
                         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','$nid','$uid',now() )");
                     }
+                    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+                    CACHE_clean_directories($path_cache, 'instance__' . $_CONF['theme'] . '__glfusionforum');
+
                     COM_updateSpeedlimit ('forum');
                     $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$id&amp;lastpost=true#$lastid";
                     forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19'],true,$forum);

@@ -155,7 +155,7 @@ function ST_displayTree( $menu_id ) {
 }
 
 function ST_moveElement( $menu, $mid, $direction ) {
-    global $_CONF, $_TABLES, $_ST_CONF, $ST_menuElements;
+    global $_CONF, $_TABLES, $_ST_CONF, $ST_menuElements,$TEMPLATE_OPTIONS;
 
     switch ( $direction ) {
         case 'up' :
@@ -169,6 +169,9 @@ function ST_moveElement( $menu, $mid, $direction ) {
             break;
     }
     $pid = $ST_menuElements[$menu][$mid]->pid;
+
+    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+    CACHE_clean_directories($path_cache, 'instance__');
 
     st_initMenu();
     $ST_menuElements[$menu][$pid]->reorderMenu();
@@ -299,7 +302,7 @@ function ST_createElement ( $menu ) {
 }
 
 function ST_saveNewMenuElement ( ) {
-    global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF, $ST_menuElements;
+    global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF, $ST_menuElements,$TEMPLATE_OPTIONS;
 
     $meadmin = SEC_hasRights('sitetailor.admin');
     $root    = SEC_inGroup('Root');
@@ -351,6 +354,9 @@ function ST_saveNewMenuElement ( ) {
     $element->saveElement();
     $pid = $E['pid'];
     $menuname = $E['menu_name'];
+
+    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+    CACHE_clean_directories($path_cache, 'instance__');
 
     st_initMenu();
 
@@ -488,7 +494,7 @@ function ST_editElement( $menu, $mid ) {
 }
 
 function ST_saveEditMenuElement ( ) {
-    global $_TABLES;
+    global $_TABLES,$TEMPLATE_OPTIONS;
 
     $id            = COM_applyFilter($_POST['id'],true);
     $menu_id       = COM_applyFilter($_POST['menu']);
@@ -526,6 +532,10 @@ function ST_saveEditMenuElement ( ) {
     $sql        = "UPDATE {$_TABLES['st_menu_elements']} SET pid=$pid, element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url', element_target='$target', group_id=$group_id WHERE id=$id";
 
     DB_query($sql);
+
+    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+    CACHE_clean_directories($path_cache, 'instance__');
+
     st_initMenu();
 }
 
@@ -535,7 +545,7 @@ function ST_saveEditMenuElement ( ) {
 */
 function ST_changeActiveStatusElement ($bid_arr)
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES,$TEMPLATE_OPTIONS;
     // first, disable all on the requested side
     $sql = "UPDATE {$_TABLES['st_menu_elements']} SET element_active = '0' WHERE menu_id=0;";
     DB_query($sql);
@@ -547,6 +557,10 @@ function ST_changeActiveStatusElement ($bid_arr)
             DB_query($sql);
         }
     }
+
+    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+    CACHE_clean_directories($path_cache, 'instance__');
+
     return;
 }
 
@@ -556,7 +570,7 @@ function ST_changeActiveStatusElement ($bid_arr)
 *
 */
 function ST_deleteChildElements( $id, $menu_id ){
-    global $ST_menuElements, $_CONF, $_TABLES, $_USER;
+    global $ST_menuElements, $_CONF, $_TABLES, $_USER,$TEMPLATE_OPTIONS;
 
     $sql = "SELECT * FROM {$_TABLES['st_menu_elements']} WHERE pid=" . $id . " AND menu_id='" . $menu_id . "'";
     $aResult = DB_query( $sql );
@@ -567,6 +581,10 @@ function ST_deleteChildElements( $id, $menu_id ){
     }
     $sql = "DELETE FROM " . $_TABLES['st_menu_elements'] . " WHERE id=" . $id;
     DB_query( $sql );
+
+    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+    CACHE_clean_directories($path_cache, 'instance__');
+
 }
 
 function ST_menuConfig( $mid ) {
@@ -629,7 +647,7 @@ function ST_menuConfig( $mid ) {
 }
 
 function ST_saveMenuConfig($menu_id=0) {
-    global $_CONF, $_TABLES, $_ST_CONF, $ST_menuElements, $mbMenuConfig;
+    global $_CONF, $_TABLES, $_ST_CONF, $ST_menuElements, $mbMenuConfig,$TEMPLATE_OPTIONS;
 
     $tmbg   = COM_applyFilter($_POST['tmbg_sample']);
     $tmh    = COM_applyFilter($_POST['tmh_sample']);
@@ -744,6 +762,10 @@ function ST_saveMenuConfig($menu_id=0) {
             }
         }
     }
+
+    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+    CACHE_clean_directories($path_cache, 'instance__');
+
     return;
 }
 

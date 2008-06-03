@@ -4139,6 +4139,22 @@ function COM_emailUserTopics()
 function COM_whatsNewBlock( $help = '', $title = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_WHATSNEW, $page, $newstories;
+    global $_GROUPS;
+
+    foreach ($_GROUPS as $group) {
+        $groups .= $group;
+    }
+    $hash = md5($groups);
+    $cacheInstance = $_CONF['theme'] . '__' . 'glfusionwn' . $hash;
+
+    $retval = CACHE_check_instance($cacheInstance, 0);
+    if ( $retval ) {
+        $lu = CACHE_get_instance_update($cacheInstance, 0);
+        $now = time();
+        if (( $now - $lu ) < 36000 ) {
+            return $retval;
+        }
+    }
 
     $retval = COM_startBlock( $title, $help,
                        COM_getBlockTemplate( 'whats_new_block', 'header' ));
@@ -4363,6 +4379,7 @@ function COM_whatsNewBlock( $help = '', $title = '' )
     }
 
     $retval .= COM_endBlock( COM_getBlockTemplate( 'whats_new_block', 'footer' ));
+    CACHE_create_instance($cacheInstance, $retval, 0);
 
     return $retval;
 }

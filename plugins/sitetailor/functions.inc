@@ -249,9 +249,21 @@ function st_initMenu() {
 
 function st_getMenu($name=0,$ulclass='',$liclass='',$parentclass='', $selected='') {
     global $ST_menuElements;
+    global $_GROUPS;
 
+    foreach ($_GROUPS as $group) {
+        $groups .= $group;
+    }
+    $hash = md5($groups);
+    $cacheInstance = $_CONF['theme'] . '__' . 'glfusionmenu' . $name . '_' . $hash;
+
+    $retval = CACHE_check_instance($cacheInstance, 0);
+    if ( $retval ) {
+            return $retval;
+    }
     $retval = '';
     $retval = $ST_menuElements[$name][0]->showTree($name,$ulclass,$liclass,$parentclass,$selected);
+    CACHE_create_instance($cacheInstance, $retval, 0);
     return $retval;
 }
 

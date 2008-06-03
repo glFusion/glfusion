@@ -1234,7 +1234,7 @@ function phpblock_forum_newposts() {
 function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 {
     global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM;
-    global $LANG_GF02, $mode, $order,$pi_version;
+    global $LANG_GF02, $mode, $order,$pi_version, $_GROUPS;
 
     require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
 
@@ -1245,7 +1245,6 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
         return;
     }
-
     $retval = '';
 
     // Retrieve Centerblock Settings
@@ -1274,7 +1273,20 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     }
 
     if ($cb_enable AND ($cb_where == $where)) {
+        $groups = implode($_GROUPS,'');
 
+        $hash = md5($groups);
+        $cacheInstance = $_CONF['theme'] . '__' . 'glfusionforum' . $hash;
+
+        $retval = '';
+        $retval = CACHE_check_instance($cacheInstance, 0);
+        if ( $retval ) {
+            $lu = CACHE_get_instance_update($cacheInstance, 0);
+            $now = time();
+            if (( $now - $lu ) < 36000 ) {
+                return $retval;
+            }
+        }
         $block = new Template ($_CONF['path_layout'] . 'forum/layout/blocks');
         $block->set_file (array ('block'=>'centerblock.thtml','record' => 'centerblock_displayline.thtml'));
         $block->set_var ('phpself', $_CONF['site_url'] .'/index.php');
@@ -1381,6 +1393,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
         $block->parse ('output', 'block');
         $retval .= $block->finish ($block->get_var ('output'));
+        CACHE_create_instance($cacheInstance, $retval, 0);
     }
 
     return $retval;
