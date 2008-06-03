@@ -4141,12 +4141,9 @@ function COM_whatsNewBlock( $help = '', $title = '' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_WHATSNEW, $page, $newstories;
     global $_GROUPS;
 
-    foreach ($_GROUPS as $group) {
-        $groups .= $group;
-    }
+    $groups = implode($_GROUPS,'');
     $hash = md5($groups);
-    $cacheInstance = $_CONF['theme'] . '__' . 'glfusionwn' . $hash;
-
+    $cacheInstance = 'whatsnew' . $hash . '__' . $_CONF['theme'];
     $retval = CACHE_check_instance($cacheInstance, 0);
     if ( $retval ) {
         $lu = CACHE_get_instance_update($cacheInstance, 0);

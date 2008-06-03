@@ -276,7 +276,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     }
 
                     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-                    CACHE_clean_directories($path_cache, 'instance__' . $_CONF['theme'] . '__glfusionforum');
+                    CACHE_clean_directories($path_cache, 'instance__forumcb');
 
                     COM_updateSpeedlimit ('forum');
 
@@ -385,7 +385,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','$nid','$uid',now() )");
                     }
                     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-                    CACHE_clean_directories($path_cache, 'instance__' . $_CONF['theme'] . '__glfusionforum');
+                    CACHE_clean_directories($path_cache, 'instance__forumcb');
 
                     COM_updateSpeedlimit ('forum');
                     $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$id&amp;lastpost=true#$lastid";

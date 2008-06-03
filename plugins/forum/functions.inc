@@ -1276,16 +1276,19 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $groups = implode($_GROUPS,'');
 
         $hash = md5($groups);
-        $cacheInstance = $_CONF['theme'] . '__' . 'glfusionforum' . $hash;
+        $cacheInstance = 'forumcb' . $hash . '__' . $_CONF['theme'];
 
         $retval = '';
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval ) {
+            return $retval;
+/* ----------------------------------------------------------------
             $lu = CACHE_get_instance_update($cacheInstance, 0);
             $now = time();
             if (( $now - $lu ) < 36000 ) {
                 return $retval;
             }
+------------------------------------------------------------------- */
         }
         $block = new Template ($_CONF['path_layout'] . 'forum/layout/blocks');
         $block->set_file (array ('block'=>'centerblock.thtml','record' => 'centerblock_displayline.thtml'));

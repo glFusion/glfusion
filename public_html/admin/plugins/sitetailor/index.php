@@ -171,7 +171,7 @@ function ST_moveElement( $menu, $mid, $direction ) {
     $pid = $ST_menuElements[$menu][$mid]->pid;
 
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__');
+    CACHE_clean_directories($path_cache, 'instance__stmenu');
 
     st_initMenu();
     $ST_menuElements[$menu][$pid]->reorderMenu();
@@ -356,7 +356,7 @@ function ST_saveNewMenuElement ( ) {
     $menuname = $E['menu_name'];
 
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__');
+    CACHE_clean_directories($path_cache, 'instance__stmenu');
 
     st_initMenu();
 
@@ -534,7 +534,7 @@ function ST_saveEditMenuElement ( ) {
     DB_query($sql);
 
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__');
+    CACHE_clean_directories($path_cache, 'instance__stmenu');
 
     st_initMenu();
 }
@@ -559,7 +559,7 @@ function ST_changeActiveStatusElement ($bid_arr)
     }
 
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__');
+    CACHE_clean_directories($path_cache, 'instance__stmenu');
 
     return;
 }
@@ -583,7 +583,7 @@ function ST_deleteChildElements( $id, $menu_id ){
     DB_query( $sql );
 
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__');
+    CACHE_clean_directories($path_cache, 'instance__stmenu');
 
 }
 
@@ -764,7 +764,7 @@ function ST_saveMenuConfig($menu_id=0) {
     }
 
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__');
+    CACHE_clean_directories($path_cache, 'instance__stmenu');
 
     return;
 }
