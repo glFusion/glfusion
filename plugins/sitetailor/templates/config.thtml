@@ -465,7 +465,7 @@ function hsv(a){
         <input id="tmbgcolor" name="tmbgcolor" type="hidden" size="7" value="{tmbgcolor}" {xhtml}>&nbsp;
         <input type="text" name="tmbg_sample" id="tmbg_sample" size="7" maxlength="7" value="{tmbgcolor}" style="vertical-align:middle;background-color:{tmbgcolor};"{xhtml}>
         <img id="tmbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
-        &nbsp;&nbsp;<span>{$LANG_ST01[not_used]}</span>
+        &nbsp;&nbsp;<span style="font-style:italic">{$LANG_ST01[not_used]}</span>
       </div>
 
       <div>
@@ -473,7 +473,7 @@ function hsv(a){
         <input id="tmhcolor" name="tmhcolor" type="hidden" size="7" value="{tmhcolor}"{xhtml}>&nbsp;
         <input type="text" name="tmh_sample" id="tmh_sample" size="7" maxlength="7" value="{tmhcolor}" style="vertical-align:middle;background-color:{tmhcolor};"{xhtml}>
         <img id="tmhrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
-        &nbsp;&nbsp;<span>{$LANG_ST01[not_used]}</span>
+        &nbsp;&nbsp;<span style="font-style:italic">{$LANG_ST01[not_used]}</span>
       </div>
 
       <div>
