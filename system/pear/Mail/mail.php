@@ -16,7 +16,7 @@
 // | Author: Chuck Hagenbuch <chuck@horde.org>                            |
 // +----------------------------------------------------------------------+
 //
-// $Id: mail.php,v 1.18 2006/09/13 05:32:08 jon Exp $
+// $Id$
 
 /**
  * internal PHP-mail() implementation of the PEAR Mail:: interface.

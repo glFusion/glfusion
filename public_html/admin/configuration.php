@@ -29,7 +29,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: configuration.php,v 1.13 2008/05/03 15:09:13 mjervis Exp $
+// $Id$
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';

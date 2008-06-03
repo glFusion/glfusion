@@ -9,7 +9,7 @@
  * 
  * Licensed under GNU General Public License
  *
- * $Id: ukrainian_koi8-u.php,v 1.8 2008/05/02 15:08:10 dhaun Exp $
+ * $Id$
  */
 
 global $LANG32;

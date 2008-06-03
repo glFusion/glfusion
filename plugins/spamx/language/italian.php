@@ -11,7 +11,7 @@
  *
  * Licensed under GNU General Public License
  *
- * $Id: italian.php,v 1.10 2008/05/02 15:08:10 dhaun Exp $
+ * $Id$
  */
 
 global $LANG32;

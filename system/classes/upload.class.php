@@ -30,7 +30,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: upload.class.php,v 1.50 2007/11/25 06:59:56 ospiess Exp $
+// $Id$
 
 /**
 * This class will allow you to securely upload one or more files from a form

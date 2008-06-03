@@ -29,7 +29,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: lib-database.php,v 1.52 2008/04/12 11:21:46 dhaun Exp $
+// $Id$
 
 /**
 * This is the high-level database layer for Geeklog (for the low-level stuff,

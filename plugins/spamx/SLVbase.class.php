@@ -9,7 +9,7 @@
 *
 * Licensed under the GNU General Public License
 *
-* $Id: SLVbase.class.php,v 1.6 2007/02/04 22:09:29 dhaun Exp $
+* $Id$
 */
 
 if (strpos ($_SERVER['PHP_SELF'], 'SLVbase.class.php') !== false) {

@@ -12,7 +12,7 @@
 * 
 * @license LGPL
 * 
-* @version $Id: Toc.php,v 1.4 2005/05/28 21:33:02 pmjones Exp $
+* @version $Id$
 * 
 */
 

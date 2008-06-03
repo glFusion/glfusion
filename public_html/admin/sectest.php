@@ -30,7 +30,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: sectest.php,v 1.13 2007/12/09 18:05:39 dhaun Exp $
+// $Id$
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';

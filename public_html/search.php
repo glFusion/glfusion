@@ -31,7 +31,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: search.php,v 1.57 2005/11/14 11:36:41 dhaun Exp $
+// $Id$
 
 require_once('lib-common.php');
 require_once($_CONF['path_system'] . 'classes/search.class.php');

@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: portal.php,v 1.9 2008/05/24 08:57:35 dhaun Exp $
+// $Id$
 
 /** 
  * Geeklog portal page that tracks link click throughs. 

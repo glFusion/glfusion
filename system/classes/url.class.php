@@ -30,7 +30,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: url.class.php,v 1.11 2006/09/09 12:52:06 dhaun Exp $
+// $Id$
 
 /**
 * This class will allow you to use friendlier URL's, like:

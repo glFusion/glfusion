@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: group.php,v 1.102 2008/05/18 11:37:20 dhaun Exp $
+// $Id$
 
 /**
 * This file is the Geeklog Group administration page

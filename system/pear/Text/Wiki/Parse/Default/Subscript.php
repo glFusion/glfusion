@@ -12,7 +12,7 @@
 * 
 * @license LGPL
 * 
-* @version $Id: Subscript.php,v 1.1 2005/02/24 17:24:56 pmjones Exp $
+* @version $Id$
 * 
 */
 

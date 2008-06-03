@@ -41,7 +41,7 @@ define('TEMPLATE_VERSION','2.3.1');
  * (C) Copyright 1999-2000 NetUSE GmbH
  *                    Kristian Koehntopp
  *
- * $Id: template.class.php,v 1.6 2003/06/06 19:09:50 dhaun Exp $
+ * $Id$
  *
  */
 

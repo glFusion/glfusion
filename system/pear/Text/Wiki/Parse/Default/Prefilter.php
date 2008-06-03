@@ -12,7 +12,7 @@
 * 
 * @license LGPL
 * 
-* @version $Id: Prefilter.php,v 1.4 2006/12/08 08:30:37 justinpatrin Exp $
+* @version $Id$
 * 
 */
 

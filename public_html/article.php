@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: article.php,v 1.96 2008/05/18 19:29:30 dhaun Exp $
+// $Id$
 
 /**
 * This page is responsible for showing a single article in different modes which

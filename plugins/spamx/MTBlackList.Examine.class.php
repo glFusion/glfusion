@@ -13,7 +13,7 @@
  * The MT-Blacklist was maintained by Jay Allen
  * http://www.jayallen.org/comment_spam/
  *
- * $Id: MTBlackList.Examine.class.php,v 1.11 2006/06/25 08:40:54 dhaun Exp $
+ * $Id$
  */
 
 if (strpos ($_SERVER['PHP_SELF'], 'MTBlackList.Examine.class.php') !== false) {

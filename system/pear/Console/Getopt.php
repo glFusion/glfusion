@@ -16,7 +16,7 @@
 // | Author: Andrei Zmievski <andrei@php.net>                             |
 // +----------------------------------------------------------------------+
 //
-// $Id: Getopt.php,v 1.4 2007/06/12 14:58:56 cellog Exp $
+// $Id$
 
 require_once 'PEAR.php';
 

@@ -30,7 +30,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: lib-sessions.php,v 1.45 2008/05/11 07:25:08 dhaun Exp $
+// $Id$
 
 /**
 * This is the session management library for Geeklog.  Some of this code was

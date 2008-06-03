@@ -29,7 +29,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: mysql.class.php,v 1.27 2007/11/25 06:59:56 ospiess Exp $
+// $Id$
 
 /**
 * This file is the mysql implementation of the Geeklog abstraction layer.

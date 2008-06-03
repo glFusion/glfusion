@@ -10,7 +10,7 @@
 *
 * Licensed under GNU General Public License
 *
-* $Id: MassDelete.Admin.class.php,v 1.21 2008/05/23 08:59:12 dhaun Exp $
+* $Id$
 */
 
 if (strpos($_SERVER['PHP_SELF'], 'MassDelete.Admin.class.php') !== false) {

@@ -12,7 +12,7 @@
 * 
 * @license LGPL
 * 
-* @version $Id: Freelink.php,v 1.8 2006/12/08 08:23:51 justinpatrin Exp $
+* @version $Id$
 * 
 */
 

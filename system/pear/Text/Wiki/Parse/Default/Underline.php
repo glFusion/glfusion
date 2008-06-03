@@ -12,7 +12,7 @@
 * 
 * @license LGPL
 * 
-* @version $Id: Underline.php,v 1.1 2005/07/10 20:40:20 justinpatrin Exp $
+* @version $Id$
 * 
 */
 

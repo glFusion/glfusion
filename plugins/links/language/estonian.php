@@ -26,7 +26,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 ###############################################################################
-# $Id: estonian.php,v 1.6 2008/05/24 07:35:54 dhaun Exp $
+# $Id$
 
 /** 
  * This is the estonian language page for the Geeklog links Plug-in! 

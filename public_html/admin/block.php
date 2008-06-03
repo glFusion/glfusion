@@ -33,7 +33,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: block.php,v 1.123 2008/05/18 08:19:35 dhaun Exp $
+// $Id$
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';

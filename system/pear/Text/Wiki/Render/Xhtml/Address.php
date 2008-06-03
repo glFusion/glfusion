@@ -14,7 +14,7 @@
  *
  * @license    http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
  *
- * @version    CVS: $Id: Address.php,v 1.1 2007/02/01 09:33:00 mic Exp $
+ * @version    CVS: $Id$
  *
  * @link       http://pear.php.net/package/Text_Wiki
  *

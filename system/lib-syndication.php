@@ -30,7 +30,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: lib-syndication.php,v 1.40 2008/02/17 15:02:36 dhaun Exp $
+// $Id$
 
 // set to true to enable debug output in error.log
 $_SYND_DEBUG = false;

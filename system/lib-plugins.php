@@ -31,7 +31,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: lib-plugins.php,v 1.148 2008/05/24 10:38:55 dhaun Exp $
+// $Id$
 
 /**
 * This is the plugin library for Geeklog.  This is the API that plugins can

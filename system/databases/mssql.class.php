@@ -30,7 +30,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: mssql.class.php,v 1.9 2008/05/24 15:42:26 mjervis Exp $
+// $Id$
 
 /**
 * This file is the mssql implementation of the Geeklog abstraction layer.

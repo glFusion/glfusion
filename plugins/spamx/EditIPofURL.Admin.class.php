@@ -10,7 +10,7 @@
 *
 * Licensed under GNU General Public License
 *
-* $Id: EditIPofURL.Admin.class.php,v 1.11 2008/05/23 08:59:12 dhaun Exp $
+* $Id$
 */
 
 if (strpos($_SERVER['PHP_SELF'], 'EditIPofURL.Admin.class.php') !== false) {

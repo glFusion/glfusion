@@ -3,7 +3,7 @@
 // | Media Gallery Plugin 1.6                                                  |
 // | lib-rating.php - The function that draws the rating bar.                  |
 // +---------------------------------------------------------------------------+
-// | $Id:: rater.php 2118 2008-04-01 01:37:05Z mevans0263                     $|
+// | $Id::                                                                    $|
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2006,2007,2008 by the following authors:                    |
 // |                                                                           |

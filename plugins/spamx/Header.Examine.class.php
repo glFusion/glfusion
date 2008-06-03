@@ -11,7 +11,7 @@
 *
 * Licensed under the GNU General Public License
 *
-* $Id: Header.Examine.class.php,v 1.5 2006/12/10 08:57:49 dhaun Exp $
+* $Id$
 */
 
 if (strpos ($_SERVER['PHP_SELF'], 'Header.Examine.class.php') !== false) {

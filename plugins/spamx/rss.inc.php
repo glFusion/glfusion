@@ -5,7 +5,7 @@
  * 
  * @param items $ array of blacklisted sites
  *
- * $Id: rss.inc.php,v 1.3 2005/04/10 10:02:46 dhaun Exp $
+ * $Id$
  */
 
 function Spamx_rss($items)

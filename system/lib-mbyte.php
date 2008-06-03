@@ -29,7 +29,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: lib-mbyte.php,v 1.20 2008/02/16 16:45:03 dhaun Exp $
+// $Id$
 
 if (strpos($_SERVER['PHP_SELF'], 'lib-mbyte.php') !== false) {
     die('This file can not be used on its own!');

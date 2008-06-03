@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------+
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
-// | $Id:: filecheck.php 2145 2008-04-30 04:14:13Z mevans0263                 $|
+// | $Id::                                                                    $|
 // |                                                                           |
 // | this program will scan your media gallery installation directories        |
 // | and locate old, stale files from previous installations.                  |

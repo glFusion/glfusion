@@ -33,7 +33,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: comment.php,v 1.115 2008/05/23 10:50:51 dhaun Exp $
+// $Id$
 
 /**
 * This file is responsible for letting user enter a comment and saving the

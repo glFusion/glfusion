@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: calendar.class.php,v 1.8 2006/05/14 17:58:52 ospiess Exp $
+// $Id$
 
 /**
 * This file contains the two classes used to help support the calendar pages.

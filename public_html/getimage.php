@@ -29,7 +29,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: getimage.php,v 1.8 2007/11/25 06:55:07 ospiess Exp $
+// $Id$
 
 /**
 * For really strict webhosts, this file an be used to show images in pages that

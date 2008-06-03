@@ -12,7 +12,7 @@
  * 
  * Licensed under GNU General Public License
  *
- * $Id: japanese.php,v 1.9 2008/05/28 19:02:25 dhaun Exp $
+ * $Id$
  */
 
 global $LANG32;

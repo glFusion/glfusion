@@ -9,7 +9,7 @@
  * 
  * Licensed under GNU General Public License
  *
- * $Id: DeleteComment.Action.class.php,v 1.6 2006/08/22 17:57:54 dhaun Exp $
+ * $Id$
  */
 
 if (strpos ($_SERVER['PHP_SELF'], 'DeleteComment.Action.class.php') !== false) {

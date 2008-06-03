@@ -12,7 +12,7 @@
 * 
 * @license LGPL
 * 
-* @version $Id: Blockquote.php,v 1.4 2006/10/21 05:56:28 justinpatrin Exp $
+* @version $Id$
 * 
 */
 

@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: moderation.php,v 1.122 2008/05/23 21:07:14 dhaun Exp $
+// $Id$
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';

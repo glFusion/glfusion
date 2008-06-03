@@ -30,7 +30,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: syndication.php,v 1.54 2008/05/18 08:19:35 dhaun Exp $
+// $Id$
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';

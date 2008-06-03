@@ -10,7 +10,7 @@
 *
 * Licensed under GNU General Public License
 *
-* $Id: SLVwhitelist.Admin.class.php,v 1.7 2008/05/23 08:59:12 dhaun Exp $
+* $Id$
 */
 
 if (strpos($_SERVER['PHP_SELF'], 'SLVwhitelist.Admin.class.php') !== false) {

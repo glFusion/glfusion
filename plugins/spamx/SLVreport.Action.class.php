@@ -9,7 +9,7 @@
 *
 * Licensed under the GNU General Public License
 *
-* $Id: SLVreport.Action.class.php,v 1.1 2006/08/27 09:30:19 dhaun Exp $
+* $Id$
 */
 
 if (strpos ($_SERVER['PHP_SELF'], 'SLVreport.Action.class.php') !== false) {

@@ -9,7 +9,7 @@
 *
 * Licensed under GNU General Public License
 *
-* $Id: IPofUrl.Examine.class.php,v 1.5 2006/06/25 08:40:54 dhaun Exp $
+* $Id$
 */
 
 if (strpos ($_SERVER['PHP_SELF'], 'IPofUrl.Examine.class.php') !== false) {

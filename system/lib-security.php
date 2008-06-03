@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: lib-security.php,v 1.70 2008/05/24 16:16:14 mjervis Exp $
+// $Id$
 
 /**
 * This is the security library for Geeklog.  This is used to implement Geeklog's

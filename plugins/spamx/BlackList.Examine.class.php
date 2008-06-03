@@ -9,7 +9,7 @@
  * 
  * Licensed under GNU General Public License
  *
- * $Id: BlackList.Examine.class.php,v 1.12 2006/12/10 08:57:49 dhaun Exp $
+ * $Id$
  */
 
 if (strpos ($_SERVER['PHP_SELF'], 'BlackList.Examine.class.php') !== false) {

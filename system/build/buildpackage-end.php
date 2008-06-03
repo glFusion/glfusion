@@ -25,7 +25,7 @@
  *
  * @author Christian Weiske <cweiske@cweiske.de>
  * @author Tony Bibbs <tony.bibbs@geeklog.net>
- * @version $Id: buildpackage-end.php,v 1.1 2007/03/19 18:40:39 tony Exp $
+ * @version $Id$
  * @copyright The Geeklog Development Team, 2007
  * @todo chmod directories as said in public_html/docs/install.html
  * 

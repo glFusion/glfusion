@@ -4,7 +4,7 @@
 // | This page handles the 'AJAX' type response if the user has                |
 // | Javascript enabled.                                                       |
 // +---------------------------------------------------------------------------+
-// | $Id:: rater_rpc.php 2118 2008-04-01 01:37:05Z mevans0263                 $|
+// | $Id::                                                                    $|
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2006,2007,2008 by the following authors:                    |
 // |                                                                           |

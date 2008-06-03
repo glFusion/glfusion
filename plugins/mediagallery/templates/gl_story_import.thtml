@@ -1,4 +1,4 @@
-<!-- $Id: gl_story_import.thtml 870 2007-06-03 20:35:38Z mevans0263 $ -->
+<!-- $Id$ -->
 <h1>Geeklog Story Image Import to Media Gallery Wizard</h1>
 <form name="galselect" action="{form_action}" method="post">
 This will import images used in your Geeklog stories into Media Gallery

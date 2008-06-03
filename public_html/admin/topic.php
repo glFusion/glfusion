@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: topic.php,v 1.80 2008/05/18 16:58:51 dhaun Exp $
+// $Id$
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';

@@ -34,7 +34,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: ProjectHoneyPot.Examine.class.php,v 1.3 2008/02/02 20:03:06 dhaun Exp $
+// $Id$
 
 if (strpos ($_SERVER['PHP_SELF'], 'ProjectHoneyPot.Examine.class.php') !== false) {
     die ('This file can not be used on its own!');

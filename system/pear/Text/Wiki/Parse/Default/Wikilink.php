@@ -12,7 +12,7 @@
 *
 * @license LGPL
 *
-* @version $Id: Wikilink.php,v 1.9 2006/12/08 08:23:51 justinpatrin Exp $
+* @version $Id$
 *
 */
 

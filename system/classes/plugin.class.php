@@ -29,7 +29,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: plugin.class.php,v 1.10 2006/07/09 13:45:54 dhaun Exp $
+// $Id$
 
 /**
 * This is a poorly thought out class that is used pretty much as a structure

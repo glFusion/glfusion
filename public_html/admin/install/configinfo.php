@@ -30,7 +30,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: configinfo.php,v 1.7 2008/05/11 07:25:08 dhaun Exp $
+// $Id$
 
 /**
 * This script will display file and permission information based on settings in

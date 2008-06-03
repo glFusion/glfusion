@@ -29,7 +29,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: story.class.php,v 1.27 2008/05/24 19:46:13 dhaun Exp $
+// $Id$
 
 /**
  * This file provides a class to represent a story, or article. It provides a

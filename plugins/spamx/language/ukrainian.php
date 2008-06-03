@@ -9,7 +9,7 @@
  * 
  * Licensed under GNU General Public License
  *
- * $Id: ukrainian.php,v 1.7 2008/05/02 15:08:10 dhaun Exp $
+ * $Id$
  */
 
 global $LANG32;

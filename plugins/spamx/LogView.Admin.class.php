@@ -9,7 +9,7 @@
  *
  * Licensed under GNU General Public License
  *
- * $Id: LogView.Admin.class.php,v 1.10 2007/11/25 06:56:05 ospiess Exp $
+ * $Id$
  */
 
 if (strpos ($_SERVER['PHP_SELF'], 'LogView.Admin.class.php') !== false) {

@@ -15,7 +15,7 @@
  * Based on MT-Blacklist Updater by
  * Cheah Chu Yeow (http://blog.codefront.net/)
  *
- * $Id: Import.Admin.class.php,v 1.14 2007/11/25 06:56:05 ospiess Exp $
+ * $Id$
  */
 
 if (strpos($_SERVER['PHP_SELF'], 'Import.Admin.class.php') !== false) {

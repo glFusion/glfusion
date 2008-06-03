@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: index.php,v 1.57 2008/05/24 09:04:59 dhaun Exp $
+// $Id$
 
 // Set this to true if you want to log debug messages to error.log
 $_POLL_VERBOSE = false;

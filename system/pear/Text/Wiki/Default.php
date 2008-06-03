@@ -9,7 +9,7 @@
  * @package    Text_Wiki
  * @author     Justin Patrin <justinpatrin@php.net>
  * @license    http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
- * @version    CVS: $Id: Default.php,v 1.1 2006/03/01 16:58:17 justinpatrin Exp $
+ * @version    CVS: $Id$
  * @link       http://pear.php.net/package/Text_Wiki
  */
 

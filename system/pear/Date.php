@@ -41,7 +41,7 @@
  * @copyright  1997-2006 Baba Buehler, Pierre-Alain Joye
  * @license    http://www.opensource.org/licenses/bsd-license.php
  *             BSD License
- * @version    CVS: $Id: Date.php,v 1.41 2006/11/22 00:28:03 firman Exp $
+ * @version    CVS: $Id$
  * @link       http://pear.php.net/package/Date
  */
 

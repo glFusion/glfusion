@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: user.php,v 1.205 2008/05/22 12:06:06 dhaun Exp $
+// $Id$
 
 // Set this to true to get various debug messages from this script
 $_USER_VERBOSE = false;

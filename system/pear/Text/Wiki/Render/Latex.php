@@ -4,7 +4,7 @@
 * 
 * Formats parsed Text_Wiki for LaTeX rendering.
 * 
-* $Id: Latex.php,v 1.2 2004/09/25 19:05:13 pmjones Exp $
+* $Id$
 * 
 * @author Jeremy Cowgar <jeremy@cowgar.com>
 * 

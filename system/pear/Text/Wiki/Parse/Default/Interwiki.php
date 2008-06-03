@@ -12,7 +12,7 @@
 * 
 * @license LGPL
 * 
-* @version $Id: Interwiki.php,v 1.4 2005/02/23 17:38:29 pmjones Exp $
+* @version $Id$
 * 
 */
 

@@ -9,7 +9,7 @@
  * 
  * Licensed under GNU General Public License
  *
- * $Id: english_utf-8.php,v 1.11 2008/04/13 11:59:08 dhaun Exp $
+ * $Id$
  */
 
 global $LANG32;

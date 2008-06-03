@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: submit.php,v 1.122 2008/03/24 18:36:52 dhaun Exp $
+// $Id$
 
 require_once 'lib-common.php';
 require_once $_CONF['path_system'] . 'lib-story.php';

@@ -26,7 +26,7 @@
  *
  * @author Christian Weiske <cweiske@cweiske.de>
  * @author Tony Bibbs <tony.bibbs@geeklog.net>
- * @version $Id: buildpackage.php,v 1.2 2007/08/05 09:33:02 dhaun Exp $
+ * @version $Id$
  * @copyright The Geeklog Development Team, 2007
  * @todo chmod directories as said in public_html/docs/install.html
  * 

@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: usersettings.php,v 1.173 2008/05/31 19:49:36 blaine Exp $
+// $Id$
 
 require_once ('lib-common.php');
 require_once ($_CONF['path_system'] . 'lib-user.php');

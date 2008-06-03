@@ -10,7 +10,7 @@
 *
 * Licensed under GNU General Public License
 *
-* $Id: EditIP.Admin.class.php,v 1.12 2008/05/23 08:59:12 dhaun Exp $
+* $Id$
 */
 
 if (strpos($_SERVER['PHP_SELF'], 'EditIP.Admin.class.php') !== false) {

@@ -12,7 +12,7 @@
 * 
 * @license LGPL
 * 
-* @version $Id: Colortext.php,v 1.3 2005/02/23 17:38:29 pmjones Exp $
+* @version $Id$
 * 
 */
 

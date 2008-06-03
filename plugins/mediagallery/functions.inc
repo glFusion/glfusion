@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------+
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
-// | $Id:: functions.inc 2146 2008-04-30 04:15:34Z mevans0263                 $|
+// | $Id::                                                                    $|
 // | This file does two things: 1) it implements the necessary Geeklog Plugin  |
 // | API method and 2) implements all the common code needed by the media      |
 // | gallery PHP files.                                                        |

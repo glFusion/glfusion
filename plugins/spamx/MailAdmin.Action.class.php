@@ -9,7 +9,7 @@
  * 
  * Licensed under GNU General Public License
  *
- * $Id: MailAdmin.Action.class.php,v 1.14 2008/01/26 17:17:41 dhaun Exp $
+ * $Id$
  */
 
 if (strpos ($_SERVER['PHP_SELF'], 'MailAdmin.Action.class.php') !== false) {

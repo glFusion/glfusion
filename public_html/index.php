@@ -32,7 +32,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: index.php,v 1.98 2008/02/20 20:07:58 mjervis Exp $
+// $Id$
 
 require_once ('lib-common.php');
 require_once ($_CONF['path_system'] . 'lib-story.php');

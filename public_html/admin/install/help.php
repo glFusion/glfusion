@@ -37,7 +37,7 @@
 // | Please read docs/install.html which describes how to install Geeklog.     |
 // +---------------------------------------------------------------------------+
 //
-// $Id: help.php,v 1.6 2008/05/31 21:36:15 dhaun Exp $
+// $Id$
 
 if (!defined ("LB")) {
     define("LB", "\n");

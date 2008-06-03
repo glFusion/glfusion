@@ -29,7 +29,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: downloader.class.php,v 1.14 2007/11/25 06:59:56 ospiess Exp $
+// $Id$
 
 /**
 * This class allows you to download a file from outside the web tree.  Many hooks

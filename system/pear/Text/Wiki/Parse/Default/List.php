@@ -12,7 +12,7 @@
 *
 * @license LGPL
 *
-* @version $Id: List.php,v 1.7 2005/11/06 20:44:09 toggg Exp $
+* @version $Id$
 *
 */
 

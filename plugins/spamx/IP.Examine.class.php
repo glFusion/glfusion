@@ -9,7 +9,7 @@
 *
 * Licensed under GNU General Public License
 *
-* $Id: IP.Examine.class.php,v 1.11 2007/05/05 18:28:39 dhaun Exp $
+* $Id$
 */
 
 if (strpos ($_SERVER['PHP_SELF'], 'IP.Examine.class.php') !== false) {

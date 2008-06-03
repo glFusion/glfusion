@@ -29,7 +29,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: install.php,v 1.97 2008/03/21 12:39:12 dhaun Exp $
+// $Id$
 
 // This file still exists for backwards compatibility 
 header('Location: index.php');

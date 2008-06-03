@@ -31,7 +31,7 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-// $Id: auth.inc.php,v 1.39 2008/03/09 17:05:00 dhaun Exp $
+// $Id$
 
 // this file can't be used on its own
 if (strpos($_SERVER['PHP_SELF'], 'auth.inc.php') !== false) {
