@@ -7,11 +7,10 @@ window.addEvent('domready', function() {
 			$('tmbgcolor').value = color.hex;
 			$('tmbg_sample').value = color.hex;
             $('tmbg_sample').setStyle('background-color',color.hex);
-            var c=color.hex.hexToRgb(true);
-            var d=hsv(c);
-            if(d[2]<127) $('tmbg_sample').setStyle('color','#fff');
-            else $('tmbg_sample').setStyle('color','#000');
             $('tmbg_sample').fireEvent('focus');
+		},
+		'onComplete': function() {
+		    $('tmbg_sample').fireEvent('focus');
 		}
 
 	});
@@ -24,6 +23,9 @@ window.addEvent('domready', function() {
 			$('tmh_sample').value = color.hex;
             $('tmh_sample').setStyle('background-color',color.hex);
             $('tmh_sample').fireEvent('focus');
+		},
+		'onComplete': function() {
+		    $('tmh_sample').fireEvent('focus');
 		}
 	});
 
@@ -35,6 +37,9 @@ window.addEvent('domready', function() {
 			$('tmt_sample').value = color.hex;
             $('tmt_sample').setStyle('background-color',color.hex);
             $('tmt_sample').fireEvent('focus');
+		},
+		'onComplete': function() {
+		    $('tmt_sample').fireEvent('focus');
 		}
 	});
 	var tmth = new MooRainbow('tmthrb', {
@@ -45,6 +50,9 @@ window.addEvent('domready', function() {
 			$('tmth_sample').value = color.hex;
             $('tmth_sample').setStyle('background-color',color.hex);
             $('tmth_sample').fireEvent('focus');
+		},
+		'onComplete': function() {
+		    $('tmth_sample').fireEvent('focus');
 		}
 	});
 	var smth = new MooRainbow('smthrb', {
@@ -55,6 +63,9 @@ window.addEvent('domready', function() {
 			$('smth_sample').value = color.hex;
             $('smth_sample').setStyle('background-color',color.hex);
             $('smth_sample').fireEvent('focus');
+		},
+		'onComplete': function() {
+		    $('smth_sample').fireEvent('focus');
 		}
 	});
 	var smbg = new MooRainbow('smbgrb', {
@@ -65,6 +76,9 @@ window.addEvent('domready', function() {
 			$('smbg_sample').value = color.hex;
             $('smbg_sample').setStyle('background-color',color.hex);
             $('smbg_sample').fireEvent('focus');
+		},
+		'onComplete': function() {
+		    $('smbg_sample').fireEvent('focus');
 		}
 	});
 	var smh = new MooRainbow('smhrb', {
@@ -75,6 +89,9 @@ window.addEvent('domready', function() {
 			$('smh_sample').value = color.hex;
             $('smh_sample').setStyle('background-color',color.hex);
             $('smh_sample').fireEvent('focus');
+		},
+		'onComplete': function() {
+		    $('smh_sample').fireEvent('focus');
 		}
 	});
 	var sms = new MooRainbow('smsrb', {
@@ -85,6 +102,9 @@ window.addEvent('domready', function() {
 			$('sms_sample').value = color.hex;
             $('sms_sample').setStyle('background-color',color.hex);
             $('sms_sample').fireEvent('focus');
+		},
+		'onComplete': function() {
+		    $('sms_sample').fireEvent('focus');
 		}
 	});
 
@@ -102,7 +122,6 @@ window.addEvent('domready', function() {
 	    var c = new Color(v);
 	    var x = c.hex;
 	    if ( l ) {
-	        tmbg.manualSet(x,'hex');
 	        $('tmbg_sample').setStyle('background-color',x);
 	        var z=c.hex.hexToRgb(true);
             var d=hsv(z);
@@ -115,6 +134,70 @@ window.addEvent('domready', function() {
 	        $('tmbg_sample').fireEvent('focus');
 	    }
 
+	 });
+	$('tmbg_sample').addEvent('change',function(){
+	    var l = $('tmbg_sample').value.length;
+	    var v = $('tmbg_sample').value;
+	    var c = new Color(v);
+	    var x = c.hex;
+	    if ( l ) {
+	        tmbg.manualSet(x,'hex');
+	    }
+	 });
+
+	$('tmt_sample').addEvent('change',function(){
+	    var l = $('tmt_sample').value.length;
+	    var v = $('tmt_sample').value;
+	    var c = new Color(v);
+	    var x = c.hex;
+	    if ( l ) {
+	        tmt.manualSet(x,'hex');
+	    }
+	 });
+	$('tmth_sample').addEvent('change',function(){
+	    var l = $('tmth_sample').value.length;
+	    var v = $('tmth_sample').value;
+	    var c = new Color(v);
+	    var x = c.hex;
+	    if ( l ) {
+	        tmth.manualSet(x,'hex');
+	    }
+	 });
+	$('smth_sample').addEvent('change',function(){
+	    var l = $('smth_sample').value.length;
+	    var v = $('smth_sample').value;
+	    var c = new Color(v);
+	    var x = c.hex;
+	    if ( l ) {
+	        smth.manualSet(x,'hex');
+	    }
+	 });
+	$('smbg_sample').addEvent('change',function(){
+	    var l = $('smbg_sample').value.length;
+	    var v = $('smbg_sample').value;
+	    var c = new Color(v);
+	    var x = c.hex;
+	    if ( l ) {
+	        smbg.manualSet(x,'hex');
+	    }
+	 });
+	$('smh_sample').addEvent('change',function(){
+	    var l = $('smh_sample').value.length;
+	    var v = $('smh_sample').value;
+	    var c = new Color(v);
+	    var x = c.hex;
+	    if ( l ) {
+	        smh.manualSet(x,'hex');
+	    }
+	 });
+	$('sms_sample').addEvent('change',function(){
+	    var l = $('sms_sample').value.length;
+	    var v = $('sms_sample').value;
+	    var c = new Color(v);
+	    var x = c.hex;
+	    if ( l ) {
+	        sms.manualSet(x,'hex');
+	    }
 	 });
 
     var v = $('tmh_sample').value;
@@ -131,7 +214,6 @@ window.addEvent('domready', function() {
 	    var c = new Color(v);
 	    var x = c.hex;
 	    if ( l ) {
-	        tmh.manualSet(x,'hex');
 	        $('tmh_sample').setStyle('background-color',x);
 	        var z=c.hex.hexToRgb(true);
             var d=hsv(z);
@@ -145,6 +227,16 @@ window.addEvent('domready', function() {
 	    }
 
 	 });
+	$('tmh_sample').addEvent('change',function(){
+	    var l = $('tmh_sample').value.length;
+	    var v = $('tmh_sample').value;
+	    var c = new Color(v);
+	    var x = c.hex;
+	    if ( l ) {
+	        tmh.manualSet(x,'hex');
+	    }
+	 });
+
     var v = $('tmt_sample').value;
     var c = new Color(v);
     var x = c.hex;
@@ -159,7 +251,6 @@ window.addEvent('domready', function() {
 	    var c = new Color(v);
 	    var x = c.hex;
 	    if ( l ) {
-	        tmt.manualSet(x,'hex');
 	        $('tmt_sample').setStyle('background-color',x);
 	        var z=c.hex.hexToRgb(true);
             var d=hsv(z);
@@ -188,7 +279,6 @@ window.addEvent('domready', function() {
 	    var c = new Color(v);
 	    var x = c.hex;
 	    if ( l ) {
-	        tmth.manualSet(x,'hex');
 	        $('tmth_sample').setStyle('background-color',x);
 	        var z=c.hex.hexToRgb(true);
             var d=hsv(z);
@@ -217,7 +307,6 @@ window.addEvent('domready', function() {
 	    var c = new Color(v);
 	    var x = c.hex;
 	    if ( l ) {
-	        smth.manualSet(x,'hex');
 	        $('smth_sample').setStyle('background-color',x);
 	        var z=c.hex.hexToRgb(true);
             var d=hsv(z);
@@ -246,7 +335,6 @@ window.addEvent('domready', function() {
 	    var c = new Color(v);
 	    var x = c.hex;
 	    if ( l ) {
-	        smbg.manualSet(x,'hex');
 	        $('smbg_sample').setStyle('background-color',x);
 	        var z=c.hex.hexToRgb(true);
             var d=hsv(z);
@@ -275,7 +363,6 @@ window.addEvent('domready', function() {
 	    var c = new Color(v);
 	    var x = c.hex;
 	    if ( l ) {
-	        smh.manualSet(x,'hex');
 	        $('smh_sample').setStyle('background-color',x);
 	        var z=c.hex.hexToRgb(true);
             var d=hsv(z);
@@ -304,7 +391,6 @@ window.addEvent('domready', function() {
 	    var c = new Color(v);
 	    var x = c.hex;
 	    if ( l ) {
-	        sms.manualSet(x,'hex');
 	        $('sms_sample').setStyle('background-color',x);
 	        var z=c.hex.hexToRgb(true);
             var d=hsv(z);
