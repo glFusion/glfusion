@@ -38,9 +38,9 @@ function phpblock_blogroll ()
     // configuration options:
 
     $cat = 'blog-roll';     // Category to take links from
-    $directlink = false;        // Use direct links (true) or portal.php (false)
-    $random = false;            // Random order (true) or sort by $sort (false)
-    $sort = 'date';             // Sort by ... e.g. 'date', 'title', 'url'
+    $directlink = false;    // Use direct links (true) or portal.php (false)
+    $random = false;        // Random order (true) or sort by $sort (false)
+    $sort = 'date';         // Sort by ... e.g. 'date', 'title', 'url'
 
     // === you shouldn't need to change anything below this line ==============
     $retval = '';
@@ -105,4 +105,70 @@ function phpblock_blogroll ()
 
     return $retval;
 }
+
+/*
+ *  Story Picker Block - by Joe Mucchiello
+ *  Make a list of n number of story headlines linked to their articles.
+ *  Block does not appear if there are no stories in the current topic.
+ *  If no topic is selected, all stories are listed.
+ *
+ *  Required Block Settings:
+ *      Block Name = storypicker
+ *      Topic = All
+ *      Block Type = PHP Block
+ *      Block Function = phpblock_storypicker
+ *
+ *  Issues:
+ *      Does not handle stories that may have expired.
+ */
+function phpblock_storypicker() {
+    global $_TABLES, $_CONF, $topic;
+
+    $LANG_STORYPICKER = Array('choose' => 'Choose a story');
+    $max_stories = 5; //how many stories to display in the list
+
+    $topicsql = '';
+    $sid = '';
+    if (isset($_GET['story'])) {
+        $sid = COM_applyFilter($_GET['story']);
+        $stopic = DB_getItem($_TABLES['stories'], 'tid', 'sid = \''.addslashes($sid).'\'');
+        if (!empty($stopic)) {
+            $topic = $stopic;
+        } else {
+            $sid = '';
+        }
+    }
+
+    if (empty($topic) && isset($_REQUEST['topic'])) {
+        $topic = COM_applyFilter($_REQUEST['topic']);
+    }
+    if (!empty($topic)) {
+        $topicsql = " AND tid = '$topic'";
+    }
+    if (empty($topicsql)) {
+        $topic = DB_getItem($_TABLES['topics'], 'tid', 'archive_flag = 1');
+        if (empty($topic)) {
+            $topicsql = '';
+        } else {
+            $topicsql = " AND tid <> '$topic'";
+        }
+    }
+    $sql = 'SELECT sid, title FROM ' .$_TABLES['stories']
+         . ' WHERE draft_flag = 0 AND date <= now()'
+         . COM_getPermSQL(' AND')
+         . COM_getTopicSQL(' AND')
+         . $topicsql
+         . ' ORDER BY date DESC LIMIT ' . $max_stories;
+
+    $res = DB_query($sql);
+    $list = '';
+    while ($A = DB_fetchArray($res)) {
+        $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
+        $list .= '<li><a href=' . $url .'>'
+		//uncomment the 2 lines below to limit of characters displayed in the title
+		. htmlspecialchars(COM_truncate($A['title'],41,'...')) . "</a></li>\n";
+    }
+    return $list;
+}
+
 ?>
