@@ -631,14 +631,14 @@ function ST_menuConfig( $mid ) {
 function ST_saveMenuConfig($menu_id=0) {
     global $_CONF, $_TABLES, $_ST_CONF, $ST_menuElements, $mbMenuConfig;
 
-    $tmbg   = COM_applyFilter($_POST['tmbgcolor']);
-    $tmh    = COM_applyFilter($_POST['tmhcolor']);
-    $tmt    = COM_applyFilter($_POST['tmtcolor']);
-    $tmth   = COM_applyFilter($_POST['tmthcolor']);
-    $smth   = COM_applyFilter($_POST['smthcolor']);
-    $smbg   = COM_applyFilter($_POST['smbgcolor']);
-    $smh    = COM_applyFilter($_POST['smhcolor']);
-    $sms    = COM_applyFilter($_POST['smscolor']);
+    $tmbg   = COM_applyFilter($_POST['tmbg_sample']);
+    $tmh    = COM_applyFilter($_POST['tmh_sample']);
+    $tmt    = COM_applyFilter($_POST['tmt_sample']);
+    $tmth   = COM_applyFilter($_POST['tmth_sample']);
+    $smth   = COM_applyFilter($_POST['smth_sample']);
+    $smbg   = COM_applyFilter($_POST['smbg_sample']);
+    $smh    = COM_applyFilter($_POST['smh_sample']);
+    $sms    = COM_applyFilter($_POST['sms_sample']);
     $gorc   = isset($_POST['gorc']) ? COM_applyFilter($_POST['gorc'],true) : 0;
 
     DB_query("UPDATE {$_TABLES['st_menu_config']} SET tmbg='$tmbg',tmh='$tmh',tmt='$tmt',tmth='$tmth',smth='$smth',smbg='$smbg',smh='$smh',sms='$sms',gorc='$gorc' WHERE menu_id=" . $menu_id);
