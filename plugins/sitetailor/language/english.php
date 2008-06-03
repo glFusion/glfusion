@@ -152,6 +152,7 @@ $LANG_ST01 = array (
     'menu_hover_image'      => 'Menu Hover Image',
     'parent_item_image'     => 'Parent Item Image',
     'not_used'              => 'Not used if <b>Use Graphics</b> is selected below.',
+	'select_color'			=> 'Select Color',
 );
 
 
