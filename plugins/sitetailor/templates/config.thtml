@@ -11,6 +11,7 @@ window.addEvent('domready', function() {
             var d=hsv(c);
             if(d[2]<127) $('tmbg_sample').setStyle('color','#fff');
             else $('tmbg_sample').setStyle('color','#000');
+            $('tmbg_sample').fireEvent('focus');
 		}
 
 	});
@@ -22,6 +23,7 @@ window.addEvent('domready', function() {
 			$('tmhcolor').value = color.hex;
 			$('tmh_sample').value = color.hex;
             $('tmh_sample').setStyle('background-color',color.hex);
+            $('tmh_sample').fireEvent('focus');
 		}
 	});
 
@@ -32,6 +34,7 @@ window.addEvent('domready', function() {
 			$('tmtcolor').value = color.hex;
 			$('tmt_sample').value = color.hex;
             $('tmt_sample').setStyle('background-color',color.hex);
+            $('tmt_sample').fireEvent('focus');
 		}
 	});
 	var tmth = new MooRainbow('tmthrb', {
@@ -41,6 +44,7 @@ window.addEvent('domready', function() {
 			$('tmthcolor').value = color.hex;
 			$('tmth_sample').value = color.hex;
             $('tmth_sample').setStyle('background-color',color.hex);
+            $('tmth_sample').fireEvent('focus');
 		}
 	});
 	var smth = new MooRainbow('smthrb', {
@@ -50,6 +54,7 @@ window.addEvent('domready', function() {
 			$('smthcolor').value = color.hex;
 			$('smth_sample').value = color.hex;
             $('smth_sample').setStyle('background-color',color.hex);
+            $('smth_sample').fireEvent('focus');
 		}
 	});
 	var smbg = new MooRainbow('smbgrb', {
@@ -59,6 +64,7 @@ window.addEvent('domready', function() {
 			$('smbgcolor').value = color.hex;
 			$('smbg_sample').value = color.hex;
             $('smbg_sample').setStyle('background-color',color.hex);
+            $('smbg_sample').fireEvent('focus');
 		}
 	});
 	var smh = new MooRainbow('smhrb', {
@@ -68,6 +74,7 @@ window.addEvent('domready', function() {
 			$('smhcolor').value = color.hex;
 			$('smh_sample').value = color.hex;
             $('smh_sample').setStyle('background-color',color.hex);
+            $('smh_sample').fireEvent('focus');
 		}
 	});
 	var sms = new MooRainbow('smsrb', {
@@ -77,6 +84,7 @@ window.addEvent('domready', function() {
 			$('smscolor').value = color.hex;
 			$('sms_sample').value = color.hex;
             $('sms_sample').setStyle('background-color',color.hex);
+            $('sms_sample').fireEvent('focus');
 		}
 	});
 
