@@ -104,6 +104,34 @@ if (array_key_exists('form_submit', $_POST) && $tokenstate) {
     $result = null;
     if (! array_key_exists('form_reset', $_POST)) {
         $result = $config->updateConfig($_POST, $conf_group);
+        /*
+         * An ugly hack to get the proper theme selected
+         */
+        if( $_CONF['allow_user_themes'] == 1 )
+        {
+            if( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] ))
+            {
+                $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
+                if( is_dir( $_CONF['path_themes'] . $theme ))
+                {
+                    $_USER['theme'] = $theme;
+                }
+            }
+
+            if( !empty( $_USER['theme'] ))
+            {
+                if( is_dir( $_CONF['path_themes'] . $_USER['theme'] ))
+                {
+                    $_CONF['theme'] = $_USER['theme'];
+                    $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
+                    $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
+                }
+                else
+                {
+                    $_USER['theme'] = $_CONF['theme'];
+                }
+            }
+        }
     }
     echo $config->get_ui($conf_group, $_POST['sub_group'], $result);
 } else {
