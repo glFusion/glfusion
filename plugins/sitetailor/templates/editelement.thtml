@@ -98,64 +98,64 @@ function toggleFields() {
     <input type="hidden" id="id" name="id" value="{mid}"{xhtml}>
 
       <div class="required">
-        <label for="pid">{$LANG_ST01[parent]}</label>
+        <label for="pid">{$LANG_ST01[parent]}:</label>
         {parent_select}
       </div>
 
       <div class="required">
-        <label for="menulabel">{$LANG_ST01[label]}</label>
+        <label for="menulabel">{$LANG_ST01[label]}:</label>
         <input type="text" id="menulabel" name="menulabel" size="48" value="{menulabel}"{xhtml}>
       </div>
 
       <div class="required">
-        <label for="menutype">{$LANG_ST01[type]}</label>
+        <label for="menutype">{$LANG_ST01[type]}:</label>
         {type_select}
       </div>
 
       <div id="urldiv" class="required">
-        <label for="menuurl">{$LANG_ST01[url]}</label>
+        <label for="menuurl">{$LANG_ST01[url]}:</label>
         <input type="text" id="menuurl" name="menuurl" size="48" value="{menuurl}"{xhtml}>
       </div>
 
       <div id="targetdiv" class="required">
-        <label for="urltarget">{$LANG_ST01[target]}</label>
+        <label for="urltarget">{$LANG_ST01[target]}:</label>
         {target_select}
       </div>
 
       <div id="phpdiv" class="required">
-        <label for="phpfunction">{$LANG_ST01[php]}</label>
+        <label for="phpfunction">{$LANG_ST01[php]}:</label>
         <input type="text" id="phpfunction" name="phpfunction" size="48" value="{phpfunction}"{xhtml}>
       </div>
-      <div id="glcorediv" class="optional">
-        <label for="gltype">{$LANG_ST01[coretype]}</label>
+      <div id="glcorediv" class="optional required">
+        <label for="gltype">{$LANG_ST01[coretype]}:</label>
         {gl_select}
       </div>
 
-      <div id="plugin" class="optional">
-        <label for="gltype">{$LANG_ST01[plugins]}</label>
+      <div id="plugin" class="optional required">
+        <label for="gltype">{$LANG_ST01[plugins]}:</label>
         {plugin_select}
       </div>
 
-      <div id="staticpage" class="optional">
-        <label for="spname">{$LANG_ST01[static_pages]}</label>
+      <div id="staticpage" class="optional required">
+        <label for="spname">{$LANG_ST01[static_pages]}:</label>
         {sp_select}
       </div>
 
-      <div id="glfunc" class="optional">
-        <label for="spname">{$LANG_ST01[geeklog_function]}</label>
+      <div id="glfunc" class="optional required">
+        <label for="spname">{$LANG_ST01[geeklog_function]}:</label>
         {glfunction_select}
       </div>
 
       <div class="required">
-        <label for="menuactive">{$LANG_ST01[active]}</label>
+        <label for="menuactive">{$LANG_ST01[active]}:</label>
         <input type="checkbox" id="menuactive" name="menuactive" value="1" {active_selected} {xhtml}>
       </div>
 
       <div class="required">
-        <label for="group">{$LANG_ST01[permission]}</label>
+        <label for="group">{$LANG_ST01[permission]}:</label>
         {group_select}
       </div>
-    <div style="text-align:center;padding:5px;">
+    <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
       <input type="hidden" id="mode" name="mode" value="saveedit"{xhtml}>
       <input type="submit" id="execute" name="execute" value="{$LANG_ST01[save]}"{xhtml}>&nbsp;&nbsp;
       <input type="submit" id="cancel" name="cancel" value="{$LANG_ST01[cancel]}"{xhtml}>

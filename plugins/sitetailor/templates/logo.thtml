@@ -29,7 +29,7 @@
           {current_logo_graphic}
         </p>
       </fieldset>
-      <div style="text-align:center;padding:5px;">
+      <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
         <input type="hidden" id="mode" name="mode" value="savelogo"{xhtml}>
         <input type="submit" id="execute" name="execute" value="{$LANG_ST01[save]}"{xhtml}>
       </div>

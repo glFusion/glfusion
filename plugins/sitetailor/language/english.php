@@ -147,10 +147,10 @@ $LANG_ST01 = array (
     'graphics_or_colors'    => 'Use Graphics or Colors?',
     'graphics'              => 'Graphics',
     'colors'                => 'Colors',
-    'menu_bg_image'         => 'Menu Background Image',
+    'menu_bg_image'         => 'Top Menu BG Image',
     'currently'             => 'Currently',
-    'menu_hover_image'      => 'Menu Hover Image',
-    'parent_item_image'     => 'Parent Item Image',
+    'menu_hover_image'      => 'Top Menu Hover Image',
+    'parent_item_image'     => 'Sub Menu Parent Indicator',
     'not_used'              => 'Not used if Use Graphics is selected below.',
 	'select_color'			=> 'Select Color',
 );
