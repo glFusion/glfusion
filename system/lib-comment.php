@@ -774,6 +774,11 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             } else {
                 $comment_template->set_file('form','commentform.thtml');
             }
+            if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
+                $comment_template->set_var('geeklogStyleBasePath',$_CONF['layout_url']);
+            } else {
+                $comment_template->set_var('geeklogStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+            }
             $comment_template->set_var('xhtml', XHTML);
             $comment_template->set_var('site_url', $_CONF['site_url']);
             $comment_template->set_var('site_admin_url', $_CONF['site_admin_url']);
