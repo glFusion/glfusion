@@ -5,9 +5,9 @@
 <script type="text/javascript">
     // Setup editor path for FCKeditor JS Functions
     geeklogEditorBasePath = "{site_url}/fckeditor/" ;
-    geeklogStyleBasePath  = "{layout_url}/";
+    geeklogStyleBasePath  = "{geeklogStyleBasePath}/";
 </script>
-<script type="text/JavaScript" src="{site_url}/javascript/staticpages_fckeditor.js"></script>
+<script type="text/javascript" src="{site_url}/javascript/staticpages_fckeditor.js"></script>
 
   {start_block_editor}
   <form action="{site_admin_url}/plugins/staticpages/index.php" method="post" onsubmit='set_postcontent();'>
@@ -121,7 +121,7 @@
               <td colspan="2"><hr{xhtml}></td>
           </tr>
           <tr>
-              <td colspan="2"><b>{lang_accessrights}<b></td>
+              <td colspan="2"><b>{lang_accessrights}</b></td>
           </tr>
           <tr>
               <td align="right">{lang_owner}:</td>
