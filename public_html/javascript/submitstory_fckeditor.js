@@ -7,14 +7,17 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 
+    var undefined;
 
     window.onload = function() {
         var oFCKeditor1 = new FCKeditor( 'introhtml' ) ;
         oFCKeditor1.BasePath = geeklogEditorBasePath;
         oFCKeditor1.Config['CustomConfigurationsPath'] = geeklogEditorBaseUrl + '/fckeditor/myconfig.js';
         oFCKeditor1.ToolbarSet = 'editor-toolbar1' ;
-        oFCKeditor1.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
-        oFCKeditor1.Config['StylesXmlPath'] = geeklogStyleBasePath + 'fckstyles.xml';
+        if ( undefined != window.geeklogStyleBasePath ) {
+            oFCKeditor1.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
+            oFCKeditor1.Config['StylesXmlPath'] = geeklogStyleBasePath + 'fckstyles.xml';
+        }
         oFCKeditor1.Height = 300 ;
         oFCKeditor1.ReplaceTextarea() ;
 
@@ -22,8 +25,10 @@
         oFCKeditor2.BasePath = geeklogEditorBasePath ;
         oFCKeditor2.Config['CustomConfigurationsPath'] = geeklogEditorBaseUrl + '/fckeditor/myconfig.js';
         oFCKeditor2.ToolbarSet = 'editor-toolbar1' ;
-        oFCKeditor2.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
-        oFCKeditor2.Config['StylesXmlPath'] = geeklogStyleBasePath + 'fckstyles.xml';
+        if ( undefined != window.geeklogStyleBasePath ) {
+            oFCKeditor2.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
+            oFCKeditor2.Config['StylesXmlPath'] = geeklogStyleBasePath + 'fckstyles.xml';
+        }
         oFCKeditor2.Height = 300 ;
         oFCKeditor2.ReplaceTextarea() ;
     }

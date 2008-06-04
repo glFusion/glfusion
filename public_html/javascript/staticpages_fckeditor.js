@@ -6,14 +6,16 @@
 // | Javascript functions for FCKEditor Integration into Geeklog               |
 // |                                                                           |
 // +---------------------------------------------------------------------------+
-
+    var undefined;
 
     window.onload = function() {
         var oFCKeditor1 = new FCKeditor( 'sp_content' ) ;
         oFCKeditor1.BasePath = geeklogEditorBasePath;
         oFCKeditor1.Config['CustomConfigurationsPath'] = geeklogEditorBaseUrl + '/fckeditor/myconfig.js';
-        oFCKeditor1.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
-        oFCKeditor1.Config['StylesXmlPath'] = geeklogStyleBasePath + 'fckstyles.xml';
+        if ( undefined != window.geeklogStyleBasePath ) {
+            oFCKeditor1.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
+            oFCKeditor1.Config['StylesXmlPath'] = geeklogStyleBasePath + 'fckstyles.xml';
+        }
         oFCKeditor1.ToolbarSet = 'editor-toolbar3' ;
         oFCKeditor1.Height = 200 ;
         oFCKeditor1.AutoGrowMax = 1200

@@ -7,11 +7,15 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 
+    var undefined;
+
     window.onload = function() {
         var oFCKeditor1 = new FCKeditor( 'comment_html' ) ;
         oFCKeditor1.BasePath = geeklogEditorBasePath;
         oFCKeditor1.Config['CustomConfigurationsPath'] = geeklogEditorBaseUrl + '/fckeditor/myconfig.js';
-        oFCKeditor1.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
+        if ( undefined != window.geeklogStyleBasePath ) {
+            oFCKeditor1.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
+        }
         oFCKeditor1.ToolbarSet = 'editor-toolbar1' ;
         oFCKeditor1.Height = 200 ;
         oFCKeditor1.ReplaceTextarea() ;
