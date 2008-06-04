@@ -1022,7 +1022,7 @@ if ($forum > 0) {
             $record['subject'] = COM_checkWords($record['subject']);
         }
         if (( isset($record['filename']) && $record['filename'] != '' ) || (isset($lastreply['filename']) && $lastreply['filename'] != '' ))  {
-            $subject = $subject . "&nbsp;<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\" alt=\"\">";
+            $subject = $subject . "&nbsp;<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">";
         }
         if($record['uid'] > 1) {
             $firstposterName = COM_getDisplayName($record['uid']);
@@ -1031,8 +1031,8 @@ if ($forum > 0) {
         }
         $topicinfo =  "{$LANG_GF01['STARTEDBY']}{$firstposterName}, {$firstdate}::";
 //        $topicinfo .= wordwrap(strip_tags(substr($record['comment'],0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br />\n");
-//$topicinfo .= preg_replace('#\r?\n#','<br>',strip_tags(substr($record['comment'],0,$CONF_FORUM['contentinfo_numchars']). '...'));
-$topicinfo .= htmlspecialchars(preg_replace('#\r?\n#','<br>',substr(strip_tags($record['comment']),0,$CONF_FORUM['contentinfo_numchars']) . '...'));
+//      $topicinfo .= preg_replace('#\r?\n#','<br>',strip_tags(substr($record['comment'],0,$CONF_FORUM['contentinfo_numchars']). '...'));
+        $topicinfo .= htmlspecialchars(preg_replace('#\r?\n#','<br>',substr(strip_tags($record['comment']),0,$CONF_FORUM['contentinfo_numchars']) . '...'));
         $topiclisting->set_var ('folderimg', $folderimg);
         $topiclisting->set_var ('topicinfo', $topicinfo);
         $topiclisting->set_var ('topic_id', $record['id']);
