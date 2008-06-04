@@ -153,6 +153,10 @@ $LANG_ST01 = array (
     'parent_item_image'     => 'Sub Menu Parent Indicator',
     'not_used'              => 'Not used if Use Graphics is selected below.',
 	'select_color'			=> 'Select Color',
+	'menu_alignment'		=> 'Menu Alignment',
+	'alignment_question'	=> 'Align the Top Menu to the',
+	'align_left'			=> 'Left',
+	'align_right'			=> 'Right',
 );
 
 
