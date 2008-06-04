@@ -1519,7 +1519,7 @@ function forumPLG_restoreEmoticons($str) {
 function forumPLG_getPMlink($member) {
     global $_TABLES,$_CONF;
     if (DB_getItem($_TABLES['plugins'],'pi_enabled',"pi_name='messenger'") == 1) {
-        return "{$_CONF['site_url']}/messenger/index.php?action=newpm&toname={$member};";
+        return "{$_CONF['site_url']}/messenger/index.php?action=newpm&amp;toname={$member};";
     } else {
         return '';
     }
