@@ -277,12 +277,12 @@ function install_config()
     $c->add('sg_misc', NULL, 'subgroup', 7, 0, NULL, 0, TRUE);
 
     $c->add('fs_cookies', NULL, 'fieldset', 7, 30, NULL, 0, TRUE);
-    $c->add('cookie_session','gl_session','text',7,30,NULL,530,TRUE);
-    $c->add('cookie_name','geeklog','text',7,30,NULL,540,TRUE);
-    $c->add('cookie_password','password','text',7,30,NULL,550,TRUE);
-    $c->add('cookie_theme','theme','text',7,30,NULL,560,TRUE);
-    $c->add('cookie_language','language','text',7,30,NULL,570,TRUE);
-    $c->add('cookie_tzid','timezone','text',7,30,NULL,575,TRUE);
+    $c->add('cookie_session','glf_session','text',7,30,NULL,530,TRUE);
+    $c->add('cookie_name','glfusion','text',7,30,NULL,540,TRUE);
+    $c->add('cookie_password','glf_password','text',7,30,NULL,550,TRUE);
+    $c->add('cookie_theme','glf_theme','text',7,30,NULL,560,TRUE);
+    $c->add('cookie_language','glf_language','text',7,30,NULL,570,TRUE);
+    $c->add('cookie_tzid','glf_timezone','text',7,30,NULL,575,TRUE);
     $c->add('cookie_ip',0,'select',7,30,0,580,TRUE);
     $c->add('default_perm_cookie_timeout',28800,'text',7,30,NULL,590,TRUE);
     $c->add('session_cookie_timeout',7200,'text',7,30,NULL,600,TRUE);
