@@ -145,6 +145,9 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
             if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
             DB_query($sql);
 
+            $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+            CACHE_clean_directories($path_cache, 'instance__forumcb');
+
             $topicparent = DB_getITEM($_TABLES['gf_topic'],"pid","id='$editid'");
             if ($topicparent == 0) {
                 $topicparent = $editid;
