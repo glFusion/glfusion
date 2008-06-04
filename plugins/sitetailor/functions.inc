@@ -53,7 +53,7 @@ function plugin_getheadercode_sitetailor() {
     $st_header = '';
 
     if ( $_ST_CONF['load_mootools'] != false && $gllabsMooToolsLoaded != 1) {
-        $st_header .= '<script type="text/javascript" src="' . $_CONF['site_url'] . '/sitetailor/js/mootools-release-1.11.packed.js?ver=0"></script>' . LB;
+        $st_header .= '<script type="text/javascript" src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/js/mootools-release-1.11.packed.js?ver=0"></script>' . LB;
         $gllabsMooToolsLoaded = 1;
     }
     $st_header .= '<script type="text/javascript" src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/js/fValidator.js?ver=1"></script>' . LB;

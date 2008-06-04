@@ -28,6 +28,7 @@
 
 $_ST_CONF['max_logo_height'] = 150;
 $_ST_CONF['max_logo_width']  = 500;
+$_ST_CONF['load_mootools']   = true;
 
 /* ------------------------------------------------------------------------
  * DO NOT CHANGE ANY SETTINGS BELOW THIS LINE.
