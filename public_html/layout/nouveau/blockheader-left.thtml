@@ -2,4 +2,4 @@
     <span class="block-helpicon">
         {block_help}
     </span>
-    <h2>{block_title}</h2>
+    <h2 class="block-title-left">{block_title}</h2>
