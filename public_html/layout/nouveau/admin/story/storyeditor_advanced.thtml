@@ -7,7 +7,7 @@
 <script type="text/javascript">
     // Setup editor path for FCKeditor JS Functions
     geeklogEditorBasePath = "{site_url}/fckeditor/";
-    geeklogStyleBasePath  = "{layout_url}/";
+    geeklogStyleBasePath  = "{geeklogStyleBasePath}/";
 </script>
 <script type="text/javascript" src="{site_url}/javascript/advanced_editor.js"></script>
 <script type="text/javascript" src="{site_url}/javascript/storyeditor_fckeditor.js"></script>
