@@ -184,7 +184,7 @@ $notifications = DB_query($sql);
 $nrows = DB_numRows($notifications);
 $numpages = ceil($nrows / $show);
 $offset = ($page - 1) * $show;
-$base_url = $_CONF['site_url'] . "/forum/notify.php?filter={$notifytype}&forum=$forum&show={$show}";
+$base_url = $_CONF['site_url'] . "/forum/notify.php?filter={$notifytype}&amp;forum=$forum&amp;show={$show}";
 
 $sql .= " LIMIT $offset, $show";
 $notifications = DB_query($sql);

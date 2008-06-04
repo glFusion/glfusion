@@ -10,9 +10,9 @@
                 <tr>
                     <td style="width:100%;">
                         <table border="0" cellspacing="2" cellpadding="0">
-                            <tr>
+                          <tr>
                             {category_records}
-                            </tr>
+{final_end_row}
                         </table>
                     </td>
                 </tr>

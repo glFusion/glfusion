@@ -128,7 +128,7 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     } else {
         $offset = 0;
     }
-    $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&mode=$mode&show=$show";
+    $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
 } else {
     if ($page == 0) {
         $page = 1;
@@ -138,7 +138,7 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     } else {
         $offset = 0;
     }
-    $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&mode=$mode&show=$show";
+    $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
 
     if (isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
         $order = 'DESC';
@@ -391,7 +391,7 @@ if ($mode != 'preview') {
         }
     }
 } else {
-    $base_url .= '&onlytopic=1';
+    $base_url .= '&amp;onlytopic=1';
     $topic_footer = new Template($_CONF['path_layout'] . 'forum/layout');
     $topic_footer->set_file (array ('topicfooter'=>'topicfooter_preview.thtml'));
     $topic_footer->set_var('xhtml',XHTML);

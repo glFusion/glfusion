@@ -215,8 +215,9 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
                 }
             }
         }
-
-
+        if ($count != $numCategoriesPerRow) {
+            $p->set_var('final_end_row','</tr>');
+        }
         $offset = ($page - 1) * $show;
 
         $sql = "SELECT d.lid, d.cid, d.title, url, homepage, version, size, platform, submitter, logourl, status, ";

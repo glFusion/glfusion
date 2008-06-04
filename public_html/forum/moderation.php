@@ -277,11 +277,11 @@ if (forum_modPermission($forum,$_USER['uid'])) {
 
     } elseif($modfunction == 'editpost' AND forum_modPermission($forum,$_USER['uid'],'mod_edit') AND $fortopicid != 0) {
         $page = COM_applyFilter($_REQUEST['page'],true);
-        echo COM_refresh("createtopic.php?method=edit&id=$fortopicid&page=$page");
+        echo COM_refresh("createtopic.php?method=edit&amp;id=$fortopicid&amp;page=$page");
         echo $LANG_GF02['msg110'];
 
     } elseif($modfunction == 'lockedpost' AND forum_modPermission($forum,$_USER['uid'],'mod_edit') AND $fortopicid != 0) {
-        echo COM_refresh("createtopic.php?method=postreply&id=$fortopicid");
+        echo COM_refresh("createtopic.php?method=postreply&amp;id=$fortopicid");
         echo $LANG_GF02['msg173'];
 
     } elseif($modfunction == 'movetopic' AND forum_modPermission($forum,$_USER['uid'],'mod_move') AND $fortopicid != 0) {
