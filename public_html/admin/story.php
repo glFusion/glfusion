@@ -297,6 +297,11 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
         && file_exists ($_CONF['path_layout'] . 'admin/story/storyeditor_advanced.thtml')) {
         $advanced_editormode = true;
         $story_templates->set_file(array('editor'=>'storyeditor_advanced.thtml'));
+        if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
+            $story_templates->set_var('geeklogStyleBasePath',$_CONF['layout_url']);
+        } else {
+            $story_templates->set_var('geeklogStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+        }
         $story_templates->set_var ( 'xhtml', XHTML );
         $story_templates->set_var ('change_editormode', 'onchange="change_editmode(this);"');
 
