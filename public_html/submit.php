@@ -142,6 +142,11 @@ function submitstory($topic = '')
     if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) &&
         file_exists ($_CONF['path_layout'] . 'submit/submitstory_advanced.thtml')) {
         $storyform->set_file('storyform','submitstory_advanced.thtml');
+        if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
+            $storyform->set_var('geeklogStyleBasePath',$_CONF['layout_url']);
+        } else {
+            $storyform->set_var('geeklogStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+        }
         $storyform->set_var ('change_editormode', 'onchange="change_editmode(this);"');
         $storyform->set_var ('lang_expandhelp', $LANG24[67]);
         $storyform->set_var ('lang_reducehelp', $LANG24[68]);
