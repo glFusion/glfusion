@@ -40,6 +40,9 @@ color:{mtext};  /*Top Menu Text*/
 .gl_moomenu li:hover {
 background:{mbghcolor} {menu_hover_bg};  /*Top Menu Hover*/
 }
+#gl_moomenu li {
+float:{malign};  /*Top Menu alignment*/
+}
 #gl_moomenu li:hover a,
 #gl_moomenu li.sfHover a,
 #gl_moomenu li:hover a:hover,
