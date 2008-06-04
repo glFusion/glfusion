@@ -103,6 +103,11 @@ function form ($A, $error = false)
             file_exists ($template_path . '/editor_advanced.thtml'))
         {
             $sp_template->set_file ('form', 'editor_advanced.thtml');
+            if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
+                $sp_template->set_var('geeklogStyleBasePath',$_CONF['layout_url']);
+            } else {
+                $sp_template->set_var('geeklogStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+            }
             $sp_template->set_var ('lang_expandhelp', $LANG24[67]);
             $sp_template->set_var ('lang_reducehelp', $LANG24[68]);
             $sp_template->set_var ('lang_toolbar', $LANG24[70]);
