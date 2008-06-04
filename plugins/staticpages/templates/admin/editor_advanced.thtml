@@ -5,6 +5,7 @@
 <script type="text/javascript">
     // Setup editor path for FCKeditor JS Functions
     geeklogEditorBasePath = "{site_url}/fckeditor/" ;
+    geeklogStyleBasePath  = "{layout_url}/";
 </script>
 <script type="text/JavaScript" src="{site_url}/javascript/staticpages_fckeditor.js"></script>
 
@@ -67,13 +68,13 @@
              </tr>
              <tr id="advanced_editarea" style="display:{show_adveditor};">
                 <td colspan="2" style="margin-top:10px;border:1px solid #CCC;">
-                  <textarea id="adv_content" name="sp_content">{sp_content}</textarea>
+                  <textarea id="adv_content" name="sp_content" cols="45" rows="24">{sp_content}</textarea>
                   <div class="warningsmall" style="padding:10px;">{lang_allowedhtml}</div>
                 </td>
              </tr>
              <tr id="html_editarea" style="display:{show_htmleditor};">
                 <td colspan="2" style="margin-top:10px;border:1px solid #CCC;">
-                  <textarea id="html_content" name="sp_content" cols="45" rows="24" style="width:100%" wrap="virtual">{sp_content}</textarea>
+                  <textarea id="html_content" name="sp_content" cols="45" rows="24" style="width:100%">{sp_content}</textarea>
                   <div class="warningsmall" style="padding:10px;">{lang_allowedhtml}</div>
                 </td>
              </tr>
