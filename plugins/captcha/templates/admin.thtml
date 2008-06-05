@@ -48,70 +48,70 @@ var gfxformat = document.getElementById('gfxformat');
 <p style="text-align:left;"><a href="{site_admin_url}/plugins/captcha/logview.php?action=View Log File&amp;log=captcha.log">{lang_view_logfile}</a></p>
 <h1>{lang_settings}</h1>
 <form name="admin" action="{s_form_action}" method="post">
-<fieldset style="border:1px solid #000000;">
+<fieldset style="border:1px solid #000000;padding:10px;">
 <legend>{lang_configuration}</legend>
 <br{xhtml}>
-<b>{lang_gfx_driver}</b>&nbsp;&nbsp;
+{lang_gfx_driver}:&nbsp;&nbsp;
 <select name="gfxdriver" id="gfxdriver" onchange="dodisabled()">
  <option value="0" {gdselected}>{lang_gd_libs}</option>
  <option value="1" {imselected}>{lang_imagemagick}</option>
  <option value="2" {noneselected}>{lang_static_images}</option>
 </select>
 <br{xhtml}><br{xhtml}>
-<b>{lang_imageset}</b>&nbsp;&nbsp;
+{lang_imageset}:&nbsp;&nbsp;
 {selectImageSet}
 <br{xhtml}><br{xhtml}>
-<b>{lang_gfx_format}</b>&nbsp;&nbsp;
+{lang_gfx_format}:&nbsp;&nbsp;
 <select name="gfxformat" id="gfxformat">
  <option value="jpg" {jpgselected}>JPG</option>
  <option value="png" {pngselected}>PNG</option>
 </select>
 <br{xhtml}><br{xhtml}>
-<b>{lang_convert_path}</b>&nbsp;&nbsp;
+{lang_convert_path}:&nbsp;&nbsp;
 <input type="text" name="gfxpath" id="gfxpath" value="{gfxpath}" size="60"{xhtml}>
 <br{xhtml}><br{xhtml}>
-<label><b>{lang_debug}</b></label>&nbsp;&nbsp;
+<label>{lang_debug}:</label>&nbsp;&nbsp;
 <input type="checkbox" name="debug" {debugchecked}{xhtml}>&nbsp;&nbsp;
 <br{xhtml}><br{xhtml}>
-<label><b>{lang_logging}</b></label>&nbsp;&nbsp;
+<label>{lang_logging}:</label>&nbsp;&nbsp;
 <input type="checkbox" name="logging" {loggingchecked}{xhtml}>&nbsp;&nbsp;
 <br{xhtml}><br{xhtml}>
 </fieldset>
-<fieldset style="border:1px solid #000000;">
+<fieldset style="border:1px solid #000000;margin-top:10px;padding:10px;">
 <legend>{lang_integration}</legend>
 <br{xhtml}>
 <input type="checkbox" name="anononly" {anonchecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_anonymous_only}</b></label>
+<label>{lang_anonymous_only}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="remoteusers" {remotechecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_remoteusers}</b></label>
+<label>{lang_remoteusers}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="comment" {commentchecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_enable_comment}</b></label>
+<label>{lang_enable_comment}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="story" {storychecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_enable_story}</b></label>
+<label>{lang_enable_story}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="registration" {registrationchecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_enable_registration}</b></label>
+<label>{lang_enable_registration}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="contact" {contactchecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_enable_contact}</b></label>
+<label>{lang_enable_contact}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="emailstory" {emailstorychecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_enable_emailstory}</b></label>
+<label>{lang_enable_emailstory}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="forum" {forumchecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_enable_forum}</b></label>
+<label>{lang_enable_forum}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="mediagallery" {mediagallerychecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_enable_mediagallery}</b></label>
+<label>{lang_enable_mediagallery}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="links" {linkschecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_enable_links}</b></label>
+<label>{lang_enable_links}</label>
 <br{xhtml}><br{xhtml}>
 <input type="checkbox" name="calendar" {calendarchecked}{xhtml}>&nbsp;&nbsp;
-<label><b>{lang_enable_calendar}</b></label>
+<label>{lang_enable_calendar}</label>
 <br{xhtml}><br{xhtml}>
 <!--
 <input type="checkbox" name="rating" {ratingchecked}{xhtml}>&nbsp;&nbsp;
@@ -119,7 +119,7 @@ var gfxformat = document.getElementById('gfxformat');
 <br{xhtml}><br{xhtml}>
 -->
 </fieldset>
-<div style="text-align:center;">
+<div style="text-align:center;padding-top:20px;padding-bottom:10px;">
 <input type="submit" name="mode" value="{lang_save}"{xhtml}>&nbsp;&nbsp;&nbsp;<input type="submit" name="mode" value="{lang_cancel}"{xhtml}>
 </div>
 </form>
