@@ -59,7 +59,7 @@ if ($type == 'install') {
     ' . $LANG_SUCCESS[8] . ' <strong>' . $LANG_SUCCESS[9] . '</strong></p> <br' . XHTML . '>';
 }
 
-$display .= '<h2>' . $LANG_SUCCESS[10] . '</h2>
+$display .= '<h2 style="color:red">' . $LANG_SUCCESS[10] . '</h2>
 <p>' . $LANG_SUCCESS[11] . ' <strong>' . (($type == 'upgrade') ? '2' : '3') . '</strong> ' . $LANG_SUCCESS[12] . ':</p>
 <ol>
 <li style="padding-bottom:3px">' . $LANG_SUCCESS[13] . ' <tt>' . $_CONF['path_html'] . 'admin/install</tt>.</li>';
