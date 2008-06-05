@@ -92,6 +92,8 @@ function plugin_install_captcha($_DB_table_prefix)
                     " ('enable_mediagallery', '1'), " .
                     " ('enable_rating', '1'), " .
                     " ('enable_story', '1'), " .
+                    " ('enable_calendar', '1'), " .
+                    " ('enable_links', '1'), " .
                     " ('gfxDriver', '2'), " .
                     " ('gfxFormat', 'jpg'), " .
                     " ('imageset','default'), " .
