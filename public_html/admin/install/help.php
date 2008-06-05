@@ -46,7 +46,7 @@ if ( !defined( 'XHTML' ) ) {
 	define( 'XHTML', ' /' );
 }
 
-$language = (isset( $_GET['language'] ) && !empty( $_GET['language'] )) ? COM_applyFilter($_GET['language']) : 'english';
+$language = (isset( $_GET['language'] ) && !empty( $_GET['language'] )) ? preg_replace("/[^0-9a-zA-Z]/","",$_GET['language']) : 'english';
 require_once( 'language/' . $language . '.php' );
 
 // $display holds all the outputted HTML and content
