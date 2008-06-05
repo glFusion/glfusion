@@ -1031,11 +1031,12 @@ if ($forum > 0) {
             $firstposterName = $record['name'];
         }
         $topicinfo =  "{$LANG_GF01['STARTEDBY']}{$firstposterName}, {$firstdate}::";
-//        $topicinfo .= wordwrap(strip_tags(substr($record['comment'],0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br />\n");
+        $topicinfo .= wordwrap(strip_tags(substr($record['comment'],0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br />\n");
 //      $topicinfo .= preg_replace('#\r?\n#','<br>',strip_tags(substr($record['comment'],0,$CONF_FORUM['contentinfo_numchars']). '...'));
-        $topicinfo .= htmlspecialchars(preg_replace('#\r?\n#','<br>',substr(strip_tags($record['comment']),0,$CONF_FORUM['contentinfo_numchars']) . '...'));
+        $topicinfoglf .= htmlspecialchars(preg_replace('#\r?\n#','<br>',substr(strip_tags($record['comment']),0,$CONF_FORUM['contentinfo_numchars']) . '...'));
         $topiclisting->set_var ('folderimg', $folderimg);
         $topiclisting->set_var ('topicinfo', $topicinfo);
+        $topiclisting->set_var ('topicinfoglf', $topicinfoglf);
         $topiclisting->set_var ('topic_id', $record['id']);
         $topiclisting->set_var ('subject', $subject);
         $topiclisting->set_var('author',$record['uid'] > 1 ? '<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $record['uid'] . '">' . $record['name'] . '</a>' : $record['name']);
