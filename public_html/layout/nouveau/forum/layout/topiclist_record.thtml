@@ -4,7 +4,7 @@
     <td style="width:65%;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}'">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr class="pluginLinks">
-                        <td style="width:50%;white-space:nowrap;">{moved}<a class="gf_mootip" style="text-decoration:none;" href="viewtopic.php?showtopic={topic_id}" title="{topicinfo}">{subject}</a></td>
+                        <td style="width:50%;white-space:nowrap;">{moved}<a class="gf_mootip" style="text-decoration:none;" href="viewtopic.php?showtopic={topic_id}" title="{topicinfoglf}">{subject}</a></td>
                         <td colspan="2" class="alignright pluginLinks">{gotomsg}&nbsp;{displaypageslink}</td>
                 </tr>
         </table>
