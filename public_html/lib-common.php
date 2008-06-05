@@ -4173,11 +4173,19 @@ function COM_whatsNewBlock( $help = '', $title = '' )
             $archsql = " AND (tid <> '" . addslashes( $archivetid ) . "')";
         }
 
+        /*
+         * glFusion modification - retrieve new stories
+         * as a list instead of just a count.
+         */
+
         // Find the newest stories
-        $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) AND (date <= NOW()) AND (draft_flag = 0)" . $archsql . COM_getPermSQL( 'AND' ) . $topicsql . COM_getLangSQL( 'sid', 'AND' );
+//        $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) AND (date <= NOW()) AND (draft_flag = 0)" . $archsql . COM_getPermSQL( 'AND' ) . $topicsql . COM_getLangSQL( 'sid', 'AND' );
+        $sql = "SELECT * FROM {$_TABLES['stories']} WHERE (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) AND (date <= NOW()) AND (draft_flag = 0)" . $archsql . COM_getPermSQL( 'AND' ) . $topicsql . COM_getLangSQL( 'sid', 'AND' ) . ' ORDER BY date DESC';
+
         $result = DB_query( $sql );
-        $A = DB_fetchArray( $result );
-        $nrows = $A['count'];
+        $nrows  = DB_numRows( $result );
+//        $A = DB_fetchArray( $result );
+//        $nrows = $A['count'];
 
         if( empty( $title ))
         {
@@ -4198,8 +4206,15 @@ function COM_whatsNewBlock( $help = '', $title = '' )
             }
             else
             {
-                $retval .= COM_createLink($newmsg, $_CONF['site_url']
-                    . '/index.php?display=new') . '<br' . XHTML . '>';
+                $retval .= '<ul>';
+                while ($A=DB_fetchArray($result)) {
+                    $retval .= '<li>' . COM_createLink(COM_truncate($A['title'],$_CONF['title_trim_length'] ,'...'),
+                        $_CONF['site_url'] . '/article.php?story=' . $A['sid']) . '</li>';
+                }
+                $retval .= '</ul>';
+
+//                $retval .= COM_createLink($newmsg, $_CONF['site_url']
+//                    . '/index.php?display=new') . '<br' . XHTML . '>';
             }
         }
         else
