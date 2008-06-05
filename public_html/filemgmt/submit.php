@@ -222,7 +222,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
         $display .= COM_siteHeader('menu');
         $display .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
-        $display .= "<table width=\"100%\" cellspacing=0 cellpadding=8 class=\"plugin\"><tr><td style=\"padding-top:10px;padding-left:50px;\">\n";
+        $display .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"8\" class=\"plugin\"><tr><td style=\"padding-top:10px;padding-left:50px;\">\n";
         $display .= "<ul><li>"._MD_SUBMITONCE."</li>\n";
         $display .= "<li>"._MD_ALLPENDING."</li>\n";
         $display .= "<li>"._MD_DONTABUSE."</li>\n";
@@ -283,7 +283,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $display .= "<tr><td align=\"right\" style=\"white-space:nowrap;\"><b>"._MD_SHOTIMAGE."</b></td><td>\n";
         $display .= "<input type=\"file\" name=\"newfileshot\" size=\"50\" maxlength=\"60\"" . XHTML . "></td></tr>\n";
         $display .= "<tr><td align=\"right\"></td><td>";
-        $display .= "</td></tr><tr><td align='right'><b>"._MD_COMMENTOPTION."</b></td><td>";
+        $display .= "</td></tr><tr><td style=\"text-align:right;\"><b>"._MD_COMMENTOPTION."</b></td><td>";
         $display .= "<input type=\"radio\" name=\"commentoption\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
         $display .= "<input type=\"radio\" name=\"commentoption\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
         $display .= "</td></tr>\n";
