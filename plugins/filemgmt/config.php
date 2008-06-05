@@ -31,7 +31,7 @@ This file is set via the Filemgmt Plugin Admin menu - Configuration settings.
 The script reads and write to this file - thus needs to be a separate file.
 */
 
-include ("filemgmt.php");
+@include ("filemgmt.php");
 
 $CONF_FM['version'] = '1.6';
 
