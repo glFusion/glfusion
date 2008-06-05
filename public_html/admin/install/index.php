@@ -1696,14 +1696,17 @@ function INST_pluginAutoUpgrade( $plugin, $forceInstall = 0 )
 
     $rc = false;
 
-    if ( file_exists($_CONF['path'] . '/plugins/' . $plugin . '/glupgrade.inc') ) {
-        require_once($_CONF['path'] . '/plugins/' . $plugin . '/glupgrade.inc');
-        if ( function_exists( 'plugin_upgrade_' . $plugin ) ) {
-            $plgUpgradeFunction = 'plugin_upgrade_' . $plugin;
-            $rc = $plgUpgradeFunction();
-        } else {
-            if ( $forceInstall == 1 ) {
-                INST_pluginAutoInstall( $plugin );
+    $active = DB_getItem($_TABLES['plugins'],'pi_enabled','pi_name="' . $plugin . '"');
+    if ( $active || $forceInstall == 1) {
+        if ( file_exists($_CONF['path'] . '/plugins/' . $plugin . '/glupgrade.inc') ) {
+            require_once($_CONF['path'] . '/plugins/' . $plugin . '/glupgrade.inc');
+            if ( function_exists( 'plugin_upgrade_' . $plugin ) ) {
+                $plgUpgradeFunction = 'plugin_upgrade_' . $plugin;
+                $rc = $plgUpgradeFunction();
+            } else {
+                if ( $forceInstall == 1 ) {
+                    INST_pluginAutoInstall( $plugin );
+                }
             }
         }
     }
