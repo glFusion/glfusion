@@ -63,12 +63,13 @@ $_SQL['st_menu_config'] = "CREATE TABLE {$_TABLES['st_menu_config']} (
   `bgimage` varchar(255) NOT NULL,
   `hoverimage` varchar(255) NOT NULL,
   `parentimage` varchar(255) NOT NULL,
+  `alignment` tinyint(4) NOT NULL,
   `enabled` tinyint(4) NOT NULL,
   PRIMARY KEY( `id` )
 ) AUTO_INCREMENT=1 ;";
 
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_config']} (`id`, `config_name`, `config_value`) VALUES (1,'use_graphic_logo','1'),(2,'display_site_slogan','1'),(3,'logo_name','logo1234.png');";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_config']} VALUES (1,0,'#151515','#3667c0','#CCCCCC','#ffffff','#679EF1','#151515','#333333','#000000',1,'menu_bg.gif','menu_hover_bg.gif','menu_parent.png',1);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_config']} VALUES (1,0,'#151515','#3667c0','#CCCCCC','#ffffff','#679EF1','#151515','#333333','#000000',1,'menu_bg.gif','menu_hover_bg.gif','menu_parent.png',1,1);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(1, 0, 0, 'Home', 2, '0', 10, 1, '','', 2);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(2, 0, 0, 'Contribute', 2, '1', 20, 1, '','', 13);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} VALUES(3, 0, 0, 'Search', 2, '4', 30, 1, '','', 2);";

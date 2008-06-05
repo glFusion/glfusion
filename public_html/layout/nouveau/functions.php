@@ -211,7 +211,7 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if ( function_exists('st_getMenu') ) { // && $mbMenuConfig[0]['enabled'] == 1) {
         $result = DB_query("SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=0",1);
         if ( DB_numRows($result) > 0 ) {
-            list($id,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$enabled) = DB_fetchArray($result);
+            list($id,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$bgimage,$hoverimage,$parentimage,$alignment,$enabled) = DB_fetchArray($result);
         }
     }
 
@@ -232,6 +232,7 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         'menu_bg'       => ($mbMenuConfig[0]['gorc'] == 1 ? 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['bgimage'] . ') repeat' : ''),
         'menu_hover_bg' => 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['hoverimage'] . ') repeat',
         'spimage'       => 'transparent url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['parentimage'] . ') no-repeat scroll 95% 50%',
+        'malign'        => ($alignment == 1 ? 'left' : 'right'),
 
     ));
 

@@ -542,13 +542,13 @@ function hsv(a){
         <input type="file" id="piimg" name="piimg" size="20" value=""{xhtml}>
         &nbsp;{$LANG_ST01[currently]}:&nbsp;<img id="cpiimage" src="{site_url}/images/menu/{menu_parent_filename}" width="12" height="12" style="vertical-align:middle;border:none;" alt="" {xhtml}>
       </div>
-	  
+
 <h1 style="margin:9px;">{$LANG_ST01[menu_alignment]}</h1>
 
       <div>
         <label>{$LANG_ST01[alignment_question]}:</label>
-        &nbsp;&nbsp;&nbsp;{$LANG_ST01[align_left]}:&nbsp;<input type="radio" name="malign" value="1" {left_alignment}{xhtml}>&nbsp;&nbsp;&nbsp;
-        {$LANG_ST01[align_right]}:&nbsp;<input type="radio" name="malign" value="0" {right_alignment}{xhtml}>
+        &nbsp;&nbsp;&nbsp;{$LANG_ST01[align_left]}:&nbsp;<input type="radio" name="malign" value="1" {alignment_left_checked}{xhtml}>&nbsp;&nbsp;&nbsp;
+        {$LANG_ST01[align_right]}:&nbsp;<input type="radio" name="malign" value="0" {alignment_right_checked}{xhtml}>
       </div>
       <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
         <input type="hidden" id="mode" name="mode" value="savecfg"{xhtml}>

@@ -595,7 +595,7 @@ function ST_menuConfig( $mid ) {
 
     $sql = "SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=" . $mid;
     $result = DB_query($sql);
-    list($cid,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$bgimage,$hoverimage,$parentimage,$enabled) = DB_fetchArray($result);
+    list($cid,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$bgimage,$hoverimage,$parentimage,$alignment,$enabled) = DB_fetchArray($result);
 
     $tmbgRGB    = '[' . ST_hexrgb($tmbg,'r') . ',' . ST_hexrgb($tmbg,'g') . ',' . ST_hexrgb($tnbg,'b') . ']';
     $tmhRGB     = '[' . ST_hexrgb($tmh,'r')  . ',' . ST_hexrgb($tmh,'g')  . ',' . ST_hexrgb($tmh,'b')  . ']';
@@ -607,6 +607,8 @@ function ST_menuConfig( $mid ) {
     $smsRGB     = '[' . ST_hexrgb($sms,'r')  . ',' . ST_hexrgb($sms,'g')  . ',' . ST_hexrgb($sms,'b')  . ']';
 
     $menuenabled_check = ($enabled == 1 ? ' checked="checked"' : '');
+    $alignment_left_checked  = ($alignment == 1 ? ' checked="checked"' : '');
+    $alignment_right_checked = ($alignment == 0 ? ' checked="checked"' : '');
 
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
     $T->set_file( array( 'admin' => 'config.thtml'));
@@ -638,6 +640,8 @@ function ST_menuConfig( $mid ) {
         'menu_bg_filename'  => $bgimage,
         'menu_hover_filename' => $hoverimage,
         'menu_parent_filename' => $parentimage,
+        'alignment_left_checked'    => $alignment_left_checked,
+        'alignment_right_checked'   => $alignment_right_checked,
         'xhtml'             => XHTML,
     ));
     $T->parse('output', 'admin');
@@ -658,8 +662,9 @@ function ST_saveMenuConfig($menu_id=0) {
     $smh    = COM_applyFilter($_POST['smh_sample']);
     $sms    = COM_applyFilter($_POST['sms_sample']);
     $gorc   = isset($_POST['gorc']) ? COM_applyFilter($_POST['gorc'],true) : 0;
+    $malign = isset($_POST['malign']) ? COM_applyFilter($_POST['malign'],true) : 0;
 
-    DB_query("UPDATE {$_TABLES['st_menu_config']} SET tmbg='$tmbg',tmh='$tmh',tmt='$tmt',tmth='$tmth',smth='$smth',smbg='$smbg',smh='$smh',sms='$sms',gorc='$gorc' WHERE menu_id=" . $menu_id);
+    DB_query("UPDATE {$_TABLES['st_menu_config']} SET tmbg='$tmbg',tmh='$tmh',tmt='$tmt',tmth='$tmth',smth='$smth',smbg='$smbg',smh='$smh',sms='$sms',gorc='$gorc',alignment='$malign' WHERE menu_id=" . $menu_id);
 
     $file = array();
     $file = $_FILES['bgimg'];
