@@ -61,15 +61,15 @@ if ($type == 'install') {
 
 $display .= '<h2>' . $LANG_SUCCESS[10] . '</h2>
 <p>' . $LANG_SUCCESS[11] . ' <strong>' . (($type == 'upgrade') ? '2' : '3') . '</strong> ' . $LANG_SUCCESS[12] . ':</p>
-<ul>
-<li>' . $LANG_SUCCESS[13] . ' <tt>' . $_CONF['path_html'] . 'admin/install</tt>.</li>';
+<ol>
+<li style="padding-bottom:3px">' . $LANG_SUCCESS[13] . ' <tt>' . $_CONF['path_html'] . 'admin/install</tt>.</li>';
 
 if ($type == 'install') {
-    $display .= "<li><a href=\"{$_CONF['site_url']}/usersettings.php?mode=edit\">" . $LANG_SUCCESS[14] . ' <strong>' . $LANG_SUCCESS[7] . '</strong> ' . $LANG_SUCCESS[15] . '</a></li>';
+    $display .= "<li style=\"padding-bottom:3px\"><a href=\"{$_CONF['site_url']}/usersettings.php?mode=edit\">" . $LANG_SUCCESS[14] . ' <strong>' . $LANG_SUCCESS[7] . '</strong> ' . $LANG_SUCCESS[15] . '</a></li>';
 }
 
-$display .= '<li>' . $LANG_SUCCESS[16] . ' <tt>' . $_CONF['path'] . 'db-config.php</tt> ' . $LANG_SUCCESS[17] . ' <tt>' . $_CONF['path_html'] . 'siteconfig.php</tt> ' . $LANG_SUCCESS[18] . ' 755.</li>
-</ul>';
+$display .= '<li style="padding-bottom:3px">' . $LANG_SUCCESS[16] . ' <tt>' . $_CONF['path'] . 'db-config.php</tt> ' . $LANG_SUCCESS[17] . ' <tt>' . $_CONF['path_html'] . 'siteconfig.php</tt> ' . $LANG_SUCCESS[18] . ' 755.</li>
+</ol>';
 
 // note for those upgrading from Geeklog 1.2.5-1 or older
 if (DB_count ($_TABLES['users'], 'username', 'NewAdmin') > 0) {
