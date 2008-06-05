@@ -923,6 +923,7 @@ function plugin_submit_links()
     $linkform->set_var('lang_submit', $LANG12[8]);
     $linkform->set_var('max_url_length', 255);
     $linkform->set_var('xhtml', XHTML);
+    PLG_templateSetVars ('links', $linkform);
     $linkform->parse('theform', 'linkform');
     $retval .= $linkform->finish($linkform->get_var('theform'));
     $retval .= COM_endBlock();
@@ -952,7 +953,18 @@ function plugin_save_submit_links($A)
         COM_updateSpeedlimit('submit');
         COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');
     }
+    /* check CAPTCHA */
+    $msg = PLG_itemPreSave ('links', $A);
+    if (!empty ($msg)) {
+        $retval .= COM_startBlock($LANG12[22], '',
+                       COM_getBlockTemplate('_msg_block', 'header'))
+                . $msg
+                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
+                . plugin_submit_links()
+                . COM_siteFooter();
 
+        return $retval;
+    }
     $A['cid'] = strip_tags(COM_stripslashes($A['categorydd']));
 
     $validcat = false;

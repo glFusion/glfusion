@@ -426,6 +426,17 @@ function plugin_savesubmission_calendar($A)
 
         return $retval;
     }
+    $msg = PLG_itemPreSave ('links', $A);
+    if (!empty ($msg)) {
+        $retval .= COM_startBlock($LANG12[22], '',
+                       COM_getBlockTemplate('_msg_block', 'header'))
+                . $msg
+                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
+                . plugin_submit_calendar($A['calendar_type'])
+                . COM_siteFooter();
+
+        return $retval;
+    }
     // check ok, proceed to saving
     if (isset($A['end_year'])) {
         $A['end_year'] = COM_applyFilter($A['end_year'], true);
@@ -781,6 +792,7 @@ function plugin_submit_calendar($mode = 'master')
     $eventform->set_var('lang_htmnotallowed', $LANG_CAL_1[44]);
     $eventform->set_var('lang_submit', $LANG_CAL_1[45]);
     $eventform->set_var('mode', $mode);
+    PLG_templateSetVars ('calendar', $eventform);
     if ($mode == 'personal') {
         $token = SEC_createToken();
         $hidden_fields = '<input type="hidden" name="' . CSRF_TOKEN
