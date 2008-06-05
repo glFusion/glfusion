@@ -67,22 +67,15 @@ function plugin_upgrade_forum() {
     $curversion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name = 'forum'");
 
     switch ($curversion) {
-
         case "2.3" :
-            if (upgrade_232() == 0 )  {
-                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.5RC1' WHERE `pi_name` = 'forum' LIMIT 1");
-//                if (upgrade_25() == 0 )  {
-//                    DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
-//                }
-            }
         case "2.3.2" :
             if (upgrade_232() == 0 )  {
                 DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.5RC1' WHERE `pi_name` = 'forum' LIMIT 1");
-                if (upgrade_25() == 0 )  {
-                    DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
-                }
             }
         case "2.5RC1" :
+            if (upgrade_25() == 0 )  {
+                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
+            }
         case "2.6" :
         case "2.7" :
             if (upgrade_30() == 0 ) {
