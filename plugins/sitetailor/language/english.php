@@ -52,8 +52,8 @@ $LANG_ST00 = array (
     'success_upgrade'   => 'Site Tailor Successfully Upgraded',
     'template_cache'    => 'Template Cache Library Installed',
     'env_check'         => 'Environment Check',
-    'gl_version_error'  => 'Site Tailor version is not v1.5.0 or higher',
-    'gl_version_ok'     => 'Site Tailor version is v1.5.0 or higher',
+    'gl_version_error'  => 'glFusion version is not v1.0.0 or higher',
+    'gl_version_ok'     => 'glFusion version is v1.0.0 or higher',
     'tc_error'          => 'Caching Template Library is not installed',
     'tc_ok'             => 'Caching Template Library is installed',
     'ml_error'          => 'php.ini <strong>memory_limit</strong> is less than 48M.',
@@ -157,6 +157,7 @@ $LANG_ST01 = array (
 	'alignment_question'	=> 'Align the Top Menu to the',
 	'align_left'			=> 'Left',
 	'align_right'			=> 'Right',
+	'blocks'                => 'Block Styles',
 );
 
 
