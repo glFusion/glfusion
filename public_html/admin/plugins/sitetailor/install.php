@@ -116,6 +116,9 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'sitetailor') == 0) {
     $T->set_var('btnmsg', $LANG_ST00['install']);
     $T->set_var('action','install');
 
+    if ( !defined('glFusion_VERSION') ) {
+        define('glFusion_VERSION', '0.0.0');
+    }
     $gl_version     = glFusion_VERSION;
     $php_version    = phpversion();
     if (is_array($TEMPLATE_OPTIONS)) {
@@ -126,7 +129,7 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'sitetailor') == 0) {
     $memory_limit = SITETAILOR_return_bytes(ini_get('memory_limit'));
 
     $glversion = explode(".", glFusion_VERSION);
-    if ( $glversion[1] < 4 ) {
+    if ( $glversion[0] < 1 || $glversion[1] < 0 ) {
         $versionCheck = '<div style="background-color:#ffff00;color:#000000;vertical-align:middle;padding:5px;"><img src="images/redX.png" alt="error" style="padding:5px;vertical-align:middle;">&nbsp;' . $LANG_ST00['gl_version_error'] . '</div>';
         $errCheck++;
     } else {
