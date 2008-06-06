@@ -343,13 +343,13 @@ if ( $A = DB_fetchArray( $result ) ) {
     if (!isset ($_CONF['hide_no_news_msg']) ||
             ($_CONF['hide_no_news_msg'] == 0)) {
         $display .= COM_startBlock ($LANG05[1], '',
-                    COM_getBlockTemplate ('', 'header')) . $LANG05[2];
+                    COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2];
         if (!empty ($topic)) {
             $topicname = DB_getItem ($_TABLES['topics'], 'topic',
                                      "tid = '$topic'");
             $display .= sprintf ($LANG05[3], $topicname);
         }
-        $display .= COM_endBlock (COM_getBlockTemplate ('', 'footer'));
+        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     }
 
     $display .= PLG_showCenterblock (3, $page, $topic); // bottom blocks
