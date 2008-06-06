@@ -3848,6 +3848,9 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
             $retval .= '&lt;' . $tag . '&gt;, ';
         }
     }
+    if ( $_CONF['use_safe_html'] == 1 ) {
+        $retval = '<span class="warningsmall">' . $LANG01[31] . ' ';
+    }
 
     $retval .= '[code], [raw]';
 
