@@ -142,6 +142,9 @@ if($topic)
             . '/index.php?display=microsummary" title="Microsummary"' . XHTML . '>';
 }
 $display .= COM_siteHeader('menu', '', $header);
+
+$display .= glfusion_SecurityCheck();
+
 if (isset ($_GET['msg'])) {
     $plugin = '';
     if (isset ($_GET['plugin'])) {
