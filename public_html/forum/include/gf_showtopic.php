@@ -145,8 +145,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         }
 
         if($userarray['sig'] != '') {
-            $sig = '<hr width="95%" size="1" style="color=:black; text-align:left; margin-left:0; margin-bottom:5;padding:0" noshade>';
-            $sig .= '<B>' .nl2br($userarray['sig']). '</B>';
+            $sig = '<hr style="width:95%;color=:black;text-align:left;margin-left:0; margin-bottom:5;padding:0" noshade="noshade"' . XHTML . '>';
+            $sig .= '<b>' .nl2br($userarray['sig']). '</b>';
             $min_height = $min_height + 30;
         }
 

@@ -257,7 +257,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
     if($modfunction == 'deletepost' AND forum_modPermission($forum,$_USER['uid'],'mod_delete') AND $fortopicid != 0) {
 
         if ($top == 'yes') {
-            $alertmessage = $LANG_GF02['msg65'] . "<p>";
+            $alertmessage = $LANG_GF02['msg65'] . "<br" . XHTML . ">";
         } else {
             $alertmessage = '';
         }
@@ -323,7 +323,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
             if (DB_getItem($_TABLES['gf_topic'],"pid","id='$fortopicid'") == 0) {
                 $promptform .= '</div><div style="padding:20 0 5 20px;">';
                 $promptform .= '<input type="submit" name="submit" value="' .$LANG_GF03['movetopic']. '"' . XHTML . '>';
-                $promptform .= '&nbsp;&nbsp;<input type="submit" hame="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '></div>';
+                $promptform .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '></div>';
                 $promptform .= '</form></div>';
                 $alertmessage = sprintf($LANG_GF03['movetopicmsg'],$topictitle);
                 alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
@@ -331,8 +331,8 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 $poster   = DB_getItem($_TABLES['gf_topic'],"name","id='$fortopicid'");
                 $postdate = COM_getUserDateTimeFormat(DB_getItem($_TABLES['gf_topic'],"date","id='$fortopicid'"));
                 $promptform .= '<div style="padding-top:10px;">'.$LANG_GF03['splitheading'] .'<br' . XHTML . '>';
-                $promptform .= '<input type="radio" name="splittype" value="remaining" CHECKED>'.$LANG_GF03['splitopt1'] .'<br' . XHTML . '>';
-                $promptform .= '<input type="radio" name="splittype" value="single">'.$LANG_GF03['splitopt2'] .'</div>';
+                $promptform .= '<input type="radio" name="splittype" value="remaining" checked="checked">'.$LANG_GF03['splitopt1'] .'<br' . XHTML . '>';
+                $promptform .= '<input type="radio" name="splittype" value="single"' . XHTML . '>'.$LANG_GF03['splitopt2'] .'</div>';
                 $promptform .= '</div><div style="padding:20 0 5 20px;">';
                 $promptform .= '<input type="submit" name="submit" value="' .$LANG_GF03['movetopic']. '"' . XHTML . '>';
                 $promptform .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '></div>';
@@ -354,14 +354,14 @@ if (forum_modPermission($forum,$_USER['uid'])) {
         $alertmessage =  '<p>' .$LANG_GF02['msg68'] . '</p><p>';
         $alertmessage .= sprintf($LANG_GF02['msg69'],$forumpostipnum['ip']) . '</p>';
 
-        $promptform  = '<p><form action="' .$_CONF['site_url'] . '/forum/moderation.php" method="post">';
+        $promptform  = '<div><form action="' .$_CONF['site_url'] . '/forum/moderation.php" method="post">';
         $promptform .= '<input type="hidden" name="hostip" value="' .$forumpostipnum['ip']. '"' . XHTML . '>';
         $promptform .= '<input type="hidden" name="confirmbanip" value="1"' . XHTML . '>';
         $promptform .= '<input type="hidden" name="forum" value="' .$forum. '"' . XHTML . '>';
         $promptform .= '<input type="hidden" name="fortopicid" value="' .$fortopicid. '"' . XHTML . '>';
         $promptform .= '<center><input type="submit" name="submit" value="' .$LANG_GF01['CONFIRM']. '"' . XHTML . '>';
         $promptform .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '>';
-        $promptform .= '</center></form></p>';
+        $promptform .= '</center></form></div>';
         alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
 
     } else {

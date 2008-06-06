@@ -78,12 +78,14 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($id != 0))
         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='{$_USER['uid']}' AND forum_id='$forum' and topic_id = '$nid'");
         forum_statusMessage($LANG_GF02['msg142'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$id",$LANG_GF02['msg142']);
     }
+    echo COM_siteFooter();
     exit();
 
 } elseif ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete') AND ($id != 0))  {
     DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id='$id')");
     $notifytype = COM_applyFilter($_GET['filter']);
     forum_statusMessage($LANG_GF02['msg42'], "{$_CONF['site_url']}/forum/notify.php?filter=$notifytype", $LANG_GF02['msg42']);
+    echo COM_siteFooter();
     exit();
 
 } elseif ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete2') AND ($id != ''))  {
@@ -97,6 +99,7 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($id != 0))
         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id='$id')");
     }
     forum_statusMessage($LANG_GF02['msg146'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$topic",$LANG_GF02['msg146']);
+    echo COM_siteFooter();
     exit();
 }
 
