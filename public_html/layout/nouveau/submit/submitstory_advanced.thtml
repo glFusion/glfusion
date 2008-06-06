@@ -1,64 +1,69 @@
-                            <script type="text/javascript">
-                                // Setup editor path for FCKeditor JS Functions
-                                geeklogEditorBasePath = "{site_url}/fckeditor/" ;
-                                geeklogStyleBasePath  = "{geeklogStyleBasePath}/";
-                            </script>
-                            <script type="text/javascript" src="{site_url}/javascript/submitstory_fckeditor.js"></script>
-                            <form action="{site_url}/submit.php" method="post" onsubmit='set_postcontent();'>
-                                <table cellspacing="0" cellpadding="3">
-                                    <tr>
-                                        <td class="alignright"><b>{lang_username}:</b></td>
-                                        <td>{story_username} [ <a href="{status_url}" rel="nofollow">{lang_loginout}</a>{separator}{create_account} ]</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="alignright"><b>{lang_title}:</b></td>
-                                        <td><input type="text" size="36" maxlength="96" name="title" value="{story_title}"{xhtml}></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="alignright"><b>{lang_topic}:</b></td>
-                                        <td>
-                                            <select name="tid">
-                                                {story_topic_options}
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="alignright" style="vertical-align:top;"><b>{lang_story}:</b></td>
-                                        <td style="vertical-align:top;">
-                                        <div id="text_editor" style="width:90%; margin-top:10px; padding-left:10px;display:{show_texteditor};">
-                                            {lang_introtext}:
-                                            <textarea id="introtext"  style="width:100%; padding:5px 10px 5px 10px;" name="introtext" cols="45" rows="14">{story_introtext}</textarea>
-                                            {lang_bodytext}:
-                                            <textarea id="bodytext" style="padding:5px 10px 5px 10px; width:100%;" name="bodytext" cols="45" rows="14">{story_bodytext}</textarea>
-                                        </div>
-                                        <!-- HTML Editor -->
-                                        <div id="html_editor" style="margin-top:10px; padding-left:10px;display:{show_htmleditor};">
-                                            {lang_introtext}:
-                                            <textarea id="introhtml" style="padding:5px 10px 5px 10px;" name="introhtml" cols="45" rows="12">{story_introtext}</textarea>
-                                            {lang_bodytext}:
-                                            <textarea id="bodyhtml" style="padding:5px 10px 5px 10px;" name="bodyhtml" cols="45" rows="20">{story_bodytext}</textarea>
-                                        </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="alignright" style="vertical-align:top;"><b>{lang_postmode}:</b></td>
-                                        <td style="vertical-align:top;">
-                                            <select id="sel_editmode" name="postmode" {change_editormode}>
-                                                {story_postmode_options}
-                                            </select>
-                                            <br{xhtml}><span class="warningsmall">{allowed_html}</span>
-                                        </td>
-                                    </tr>
-                                    {captcha}
-                                    <tr>
-                                        <td class="aligncenter" colspan="2">
-                                            <input type="hidden" name="type" value="story"{xhtml}>
-                                            <input type="hidden" name="uid" value="{story_uid}"{xhtml}>
-                                            <input type="hidden" name="sid" value="{story_sid}"{xhtml}>
-                                            <input type="hidden" name="date" value="{story_date}"{xhtml}>
-                                            {save_button}
-                                            <input name="mode" type="submit" value="{lang_preview}"{xhtml}>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
+        <script type="text/javascript">
+            // Setup editor path for FCKeditor JS Functions
+            geeklogEditorBasePath = "{site_url}/fckeditor/" ;
+            geeklogStyleBasePath  = "{geeklogStyleBasePath}/";
+        </script>
+        <script type="text/javascript" src="{site_url}/javascript/submitstory_fckeditor.js"></script>
+        <form action="{site_url}/submit.php" method="post" onsubmit='set_postcontent();'>
+            <table cellspacing="0" cellpadding="3">
+                <tr>
+                    <td class="alignright"><b>{lang_username}:</b></td>
+                    <td>{story_username} [ <a href="{status_url}" rel="nofollow">{lang_loginout}</a>{separator}{create_account} ]</td>
+                </tr>
+                <tr>
+                    <td class="alignright"><b>{lang_title}:</b></td>
+                    <td><input type="text" size="36" maxlength="96" name="title" value="{story_title}"{xhtml}></td>
+                </tr>
+                <tr>
+                    <td class="alignright"><b>{lang_topic}:</b></td>
+                    <td>
+                        <select name="tid">
+                            {story_topic_options}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="alignright" style="vertical-align:top;"><b>{lang_story}:</b></td>
+                    <td style="vertical-align:top;">
+                    <div id="text_editor" style="width:90%; margin-top:10px; padding-left:10px;display:{show_texteditor};">
+                        {lang_introtext}:
+                        <textarea id="introtext"  style="width:100%; padding:5px 10px 5px 10px;" name="introtext" cols="45" rows="14">{story_introtext}</textarea>
+                        {lang_bodytext}:
+                        <textarea id="bodytext" style="padding:5px 10px 5px 10px; width:100%;" name="bodytext" cols="45" rows="14">{story_bodytext}</textarea>
+                    </div>
+                    <!-- HTML Editor -->
+                    <div id="html_editor" style="margin-top:10px; padding-left:10px;display:{show_htmleditor};">
+                        <div style="vertical-align:top;">
+                          {lang_introtext}:<br{xhtml}>
+                          <textarea id="introhtml" style="width:90%;padding:5px 10px 5px 10px;" name="introhtml" cols="45" rows="12">{story_introtext}</textarea>
+                        </div>
+                        <div style="clear:both;"></div>
+                        <div style="vertical-align:top;">
+                          {lang_bodytext}:<br{xhtml}>
+                          <textarea id="bodyhtml" style="width:90%;padding:5px 10px 5px 10px;" name="bodyhtml" cols="45" rows="20">{story_bodytext}</textarea>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="alignright" style="vertical-align:top;"><b>{lang_postmode}:</b></td>
+                    <td style="vertical-align:top;">
+                        <select id="sel_editmode" name="postmode" {change_editormode}>
+                            {story_postmode_options}
+                        </select>
+                        <br{xhtml}><span class="warningsmall">{allowed_html}</span>
+                    </td>
+                </tr>
+                {captcha}
+                <tr>
+                    <td class="aligncenter" colspan="2">
+                        <input type="hidden" name="type" value="story"{xhtml}>
+                        <input type="hidden" name="uid" value="{story_uid}"{xhtml}>
+                        <input type="hidden" name="sid" value="{story_sid}"{xhtml}>
+                        <input type="hidden" name="date" value="{story_date}"{xhtml}>
+                        {save_button}
+                        <input name="mode" type="submit" value="{lang_preview}"{xhtml}>
+                    </td>
+                </tr>
+            </table>
+        </form>
