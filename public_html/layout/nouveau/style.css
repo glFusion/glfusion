@@ -224,7 +224,8 @@ overflow:hidden;
 #gl_content {
 background:#FFF;
 height:1%;
-margin:0 192px;
+/* margin:0 192px; */
+margin:0 15.79em;
 }
 #gl_content-full {
 background:#FFF;
@@ -234,27 +235,32 @@ margin:0 10px;
 #gl_content-wide-left {
 background:#FFF;
 height:1%;
-margin:0 10px 0 192px;
+/* margin:0 10px 0 192px; */
+margin:0 0.82em 0 15.79em;
 }
 #gl_content-wide-right {
 background:#FFF;
 height:1%;
-margin:0 192px 0 10px;
+/* margin:0 192px 0 10px; */
+margin:0 15.79em 0 0.82em;
 }
 #gl_navigation {
 background:#F7F7F7;
 border:1px solid #CCC;
 float:left;
 margin-left:-100%;
-width:180px;
+width:14.80em; /* 180px; */
 height:1%;
+overflow:hidden;
 }
 #gl_extra {
 background:#F7F7F7;
 border:1px solid #CCC;
 float:left;
-margin-left:-182px;
-width:180px;
+/* margin-left:-182px; */
+margin-left: -14.97em;
+/* width:180px; */
+width:14.80em;
 height:1%;
 z-index:10;
 }
