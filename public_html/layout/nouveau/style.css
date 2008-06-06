@@ -195,8 +195,8 @@ zoom:1;
 
 #gl_container_fixed {
 background:#FFF;
-min-width:720px;
-width:780px;
+min-width:920px;
+width:980px;
 margin:20px auto auto;
 }
 
@@ -207,7 +207,7 @@ margin:20px;
 }
 
 #gl_header {
-background:url(images/header-bg.png) 0 0 repeat-x;
+background:url(images/header-bg-day.jpg) 0 0 repeat-x;
 height:100px;
 }
 
@@ -1010,7 +1010,7 @@ margin:0 5px 0 0;
 }
 
 .story-body {
-margin-bottom:15px;
+margin-bottom:10px;
 padding:3px;
 }
 
@@ -1025,7 +1025,7 @@ vertical-align:middle;
 .story-featured {
 background:transparent;
 color:#000;
-margin-bottom:30px;
+margin-bottom:10px;
 margin-top:10px;
 }
 
@@ -1042,6 +1042,7 @@ color:#666;
 font-size:.85em;
 text-align:center;
 padding:3px;
+clear:both;
 }
 
 .story-icons {
@@ -1344,18 +1345,20 @@ overflow:auto;
 blockquote {
 background:transparent url(images/quote-l.png) no-repeat scroll left top;
 color:#666;
-font-size:120%;
+font-size:1.2em;
 font-style:italic;
-line-height:150%;
+line-height:1.5em;
 padding-left:60px;
 width:auto;
 margin:0;
+min-height:3.0em;
 }
 
 blockquote p {
 background:transparent url(images/quote-r.png) no-repeat scroll right bottom;
 padding-right:60px;
 margin:10px;
+min-height:3.0em;
 }
 
 ul.arrow li {
