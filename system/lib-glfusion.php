@@ -31,6 +31,20 @@ if (strpos ($_SERVER['PHP_SELF'], 'lib-glfusion.php') !== false) {
     die ('This file can not be used on its own!');
 }
 
+function glfusion_SecurityCheck() {
+    global $_CONF,$LANG01;
+
+    if (!SEC_inGroup ('Root')) {
+        return;
+    }
+
+    $retval = '';
+    if ( file_exists($_CONF['path_html'] . 'admin/install/') ) {
+        $retval = '<p style="width:100%;text-align:center;"><span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">' . $LANG01[500] . '</span></p>';
+    }
+    return $retval;
+}
+
 function phpblock_blogroll ()
 {
     global $_CONF, $_TABLES;
