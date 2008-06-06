@@ -1104,16 +1104,16 @@ padding:2px 5px;
 }
 
 .pluginBG {
-background:#3667C0;
+background:#4D77CC;
 color:#FEFEFE;
 }
 
 .pluginAltBG {
-background:#3667C0;
+background:#4D77CC;
 }
 
 .pluginCellTitle {
-background:#3667C0;
+background:#4D77CC;
 color:#FFF;
 font-weight:700;
 padding:5px;
@@ -1135,19 +1135,19 @@ padding:3px 0;
 }
 
 .pluginFooter,.pluginFooter td {
-background:#3667C0;
+background:#4D77CC;
 color:#FFF;
 }
 
 .pluginAlert {
-background:#3667C0;
+background:#4D77CC;
 color:#FFF;
 font-weight:700;
 padding:5px 15px;
 }
 
 .pluginInfo {
-background:#3667C0;
+background:#4D77CC;
 color:#FFF;
 font-weight:400;
 padding:5px 15px;
@@ -1176,7 +1176,7 @@ background:#1A3955;
 }
 
 .pluginTitle {
-background:#3667C0;
+background:#4D77CC;
 color:#FFF;
 padding:4px 6px;
 }
@@ -1289,6 +1289,7 @@ float:left;
 text-decoration:none;
 margin:0;
 padding:0 0 0 5px;
+color:#4D77CC;
 }
 
 #navcontainer a span {
