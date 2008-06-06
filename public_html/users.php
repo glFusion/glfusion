@@ -823,9 +823,12 @@ function displayLoginErrorAndAbort($msg, $message_title, $message_text)
                 . $message_text
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
                 . COM_siteFooter();
-
-        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
-        header('Status: 403 Forbidden');
+    /*
+     * some themes may have already called COM_siteHeader(), so we can
+     * send the 403 code.
+     */
+//        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+//        header('Status: 403 Forbidden');
         echo $retval;
     }
 
