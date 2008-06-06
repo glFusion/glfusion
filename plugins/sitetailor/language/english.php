@@ -73,6 +73,7 @@ $LANG_ST00 = array (
 );
 
 $LANG_ST01 = array (
+    'javascript_required' => 'Site Tailor Requires that you have JavaScript enabled.',
     'logo_options'      => 'Site Tailor Logo Options',
     'use_graphic_logo'  => 'Use Graphic Logo',
     'use_text_logo'     => 'Use Text Logo',

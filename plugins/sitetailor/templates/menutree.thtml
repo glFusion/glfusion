@@ -1,3 +1,7 @@
+<!-- Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it -->
+<script type="text/javascript">
+    document.getElementById('sitetailor').style.display=''
+</script>
 <div class="plugin">
 <table style="border:none;width:100%">
   <tr>
