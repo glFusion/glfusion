@@ -133,7 +133,8 @@ require_once $_CONF['path_system'] . 'databases/'. $_DB_dbms . '.class.php';
 // Instantiate the database object
 $_DB = new database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
                     $_CONF['default_charset']);
-
+unset($_DB_user);
+unset($_DB_pass);
 // +---------------------------------------------------------------------------+
 // | These are the library functions.  In all cases they turn around and make  |
 // | calls to the DBMS specific functions.  These ARE to be used directly in   |
