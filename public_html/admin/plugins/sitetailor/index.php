@@ -940,9 +940,16 @@ $navbar->add_menuitem($LANG_ST01['logo'],$_CONF['site_admin_url'] . '/plugins/si
 $navbar->set_selected($currentSelect);
 
 $display = COM_siteHeader();
+$display .= '<noscript>' . LB;
+$display .= '    <div class="pluginAlert aligncenter" style="border:1px dashed #ccc;margin-top:10px;padding:15px;">' . LB;
+$display .= '    <p>' . $LANG_ST01['javascript_required'] . '</p>' . LB;
+$display .= '    </div>' . LB;
+$display .= '</noscript>' . LB;
+$display .= '<div id="sitetailor" style="display:none;">' . LB;
 $display .= '<h1>' . $LANG_ST00['menulabel'] . '</h1>';
 $display .= $navbar->generate();
 $display .= $content;
+$display .= '</div>';
 $display .= COM_siteFooter();
 echo $display;
 exit;
