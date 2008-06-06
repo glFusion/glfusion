@@ -324,7 +324,7 @@ function editfeed ($fid = 0, $type = '')
     $feed_template->set_var ('feed_limits', $limits);
     $feed_template->set_var ('feed_limits_what', $selection);
 
-    if ($A['type'] == 'geeklog') {
+    if ($A['type'] == 'geeklog' || $A['type'] == 'glfusion') {
         $options = get_geeklogFeeds ();
     } else {
         $result = DB_query("SELECT pi_enabled FROM {$_TABLES['plugins']} WHERE pi_name='{$A['type']}'");
@@ -382,11 +382,11 @@ function newfeed ()
         // none of the installed plugins are supporting feeds
         // - go directly to the feed editor
         $retval = COM_siteHeader ('menu', $LANG33[11])
-                . editfeed (0, 'geeklog')
+                . editfeed (0, 'glfusion')
                 . COM_siteFooter ();
     } else {
         $selection = '<select name="type">' . LB;
-        $selection .= '<option value="geeklog">Geeklog</option>' . LB;
+        $selection .= '<option value="glfusion">glFusion</option>' . LB;
         foreach ($plugins as $p) {
             $selection .= '<option value="' . $p . '">' . ucwords ($p)
                        . '</option>' . LB;
