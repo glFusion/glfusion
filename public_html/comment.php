@@ -94,14 +94,10 @@ function handleSubmit()
             $ret = CMT_saveComment ( strip_tags ($_POST['title']),
                 $comment, $sid, COM_applyFilter ($_POST['pid'], true),
                 'article', COM_applyFilter ($_POST['postmode']));
-/*
-            $ret = CMT_saveComment ( strip_tags ($_POST['title']),
-                $_POST['comment'], $sid, COM_applyFilter ($_POST['pid'], true),
-                'article', COM_applyFilter ($_POST['postmode']));
-*/
+
             if ( $ret > 0 ) { // failure //FIXME: some failures should not return to comment form
                 $display .= COM_siteHeader ('menu', $LANG03[1])
-                         . CMT_commentForm ($_POST['title'], $_POST['comment'],
+                         . CMT_commentForm ($_POST['title'], $comment,
                            $sid, COM_applyFilter($_POST['pid']), $type,
                            $LANG03[14], COM_applyFilter($_POST['postmode']))
                          . COM_siteFooter();
@@ -114,8 +110,17 @@ function handleSubmit()
             }
             break;
         default: // assume plugin
+            if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
+                if ( $_POST['postmode'] == 'html' ) {
+                    $comment = $_POST['comment_html'];
+                } else if ( $_POST['postmode'] == 'text' ) {
+                    $comment = $_POST['comment_text'];
+                }
+            } else {
+                $comment = $_POST['comment'];
+            }
             if ( !($display = PLG_commentSave($type, strip_tags ($_POST['title']),
-                                $_POST['comment'], $sid, COM_applyFilter ($_POST['pid'], true),
+                                $comment, $sid, COM_applyFilter ($_POST['pid'], true),
                                 COM_applyFilter ($_POST['postmode']))) ) {
                 $display = COM_refresh ($_CONF['site_url'] . '/index.php');
             }
@@ -164,7 +169,7 @@ function handleDelete()
         break;
 
     default: // assume plugin
-        if (!($display = PLG_commentDelete($type, 
+        if (!($display = PLG_commentDelete($type,
                             COM_applyFilter($_REQUEST['cid'], true), $sid))) {
             $display = COM_refresh($_CONF['site_url'] . '/index.php');
         }
