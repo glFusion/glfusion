@@ -251,7 +251,7 @@ function INST_installEngine($install_type, $install_step)
                 <p><label class="' . $label_dir . '">' . $LANG_INSTALL[39] . ' ' . INST_helpLink('db_host') . '</label> <input type="text" name="db_host" value="'. $db_host .'" size="20"' . XHTML . '></p>
                 <p><label class="' . $label_dir . '">' . $LANG_INSTALL[40] . ' ' . INST_helpLink('db_name') . '</label> <input type="text" name="db_name" value="'. $db_name . '" size="20"' . XHTML . '></p>
                 <p><label class="' . $label_dir . '">' . $LANG_INSTALL[41] . ' ' . INST_helpLink('db_user') . '</label> <input type="text" name="db_user" value="' . $db_user . '" size="20"' . XHTML . '></p>
-                <p><label class="' . $label_dir . '">' . $LANG_INSTALL[42] . ' ' . INST_helpLink('db_pass') . '</label> <input type="password" name="db_pass" value="' . /*$db_pass*/ '' . '" size="20"' . XHTML . '></p>
+                <p><label class="' . $label_dir . '">' . $LANG_INSTALL[42] . ' ' . INST_helpLink('db_pass') . '</label> <input type="password" name="db_pass" value="" size="20"' . XHTML . '></p>
                 <p><label class="' . $label_dir . '">' . $LANG_INSTALL[43] . ' ' . INST_helpLink('db_prefix') . '</label> <input type="text" name="db_prefix" value="' . $db_prefix . '" size="20"' . XHTML . '></p>
 
                 <br' . XHTML . '>
@@ -392,16 +392,16 @@ function INST_installEngine($install_type, $install_step)
                         require $dbconfig_path;
                         require_once $siteconfig_path;
                         require_once $_CONF['path_system'] . 'lib-database.php';
-                        $req_string = 'index.php?mode=' . $install_type . '&amp;step=3&amp;dbconfig_path=' . $dbconfig_path
-                                    . '&amp;language=' . $language
-                                    . '&amp;site_name=' . urlencode($site_name)
-                                    . '&amp;site_slogan=' . urlencode($site_slogan)
-                                    . '&ampsite_url=' . urlencode($site_url)
-                                    . '&amp;site_admin_url=' . urlencode($site_admin_url)
-                                    . '&amp;site_mail=' . urlencode($site_mail)
-                                    . '&amp;noreply_mail=' . urlencode($noreply_mail);
+                        $req_string = 'index.php?mode=' . $install_type . '&step=3&dbconfig_path=' . $dbconfig_path
+                                    . '&language=' . $language
+                                    . '&site_name=' . urlencode($site_name)
+                                    . '&site_slogan=' . urlencode($site_slogan)
+                                    . '&site_url=' . urlencode($site_url)
+                                    . '&site_admin_url=' . urlencode($site_admin_url)
+                                    . '&site_mail=' . urlencode($site_mail)
+                                    . '&noreply_mail=' . urlencode($noreply_mail);
                         if ($utf8) {
-                            $req_string .= '&amp;utf8=true';
+                            $req_string .= '&utf8=true';
                         }
 
                         switch ($install_type) {
@@ -493,7 +493,7 @@ function INST_installEngine($install_type, $install_step)
                                     $curv = $old_versions[count($old_versions) - 1];
                                 } else {
                                     // Continue on to step 3 where the upgrade will happen
-                                    header('Location: ' . $req_string . '&amp;version=' . $curv);
+                                    header('Location: ' . $req_string . '&version=' . $curv);
                                 }
                             }
                             break;
@@ -629,7 +629,7 @@ function INST_installEngine($install_type, $install_step)
                             CTL_clearCache();
 
                             // Now we're done with the installation so redirect the user to success.php
-                            header('Location: success.php?type=install&amp;language=' . $language);
+                            header('Location: success.php?type=install&language=' . $language);
                         } else {
                             $display .= "<h2>" . $LANG_INSTALL[67] . "</h2><p>" . $LANG_INSTALL[68] . "</p>";
                         }
