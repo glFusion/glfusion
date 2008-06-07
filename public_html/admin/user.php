@@ -395,6 +395,10 @@ function listusers()
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
+
+    $retval .= COM_startBlock($LANG28[11], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG28[12],
@@ -402,10 +406,9 @@ function listusers()
     );
 
     $text_arr = array(
-        'has_extras'   => true,
-        'title'        => $LANG28[11],
-        'form_url'     => $_CONF['site_admin_url'] . "/user.php",
-        'help_url'     => ''
+        'has_extras' => true,
+        'form_url'   => $_CONF['site_admin_url'] . '/user.php',
+        'help_url'   => ''
     );
 
     if ($_CONF['lastlogin']) {
@@ -420,8 +423,10 @@ function listusers()
                        'query_fields' => array('username', 'email', 'fullname'),
                        'default_filter' => "AND {$_TABLES['users']}.uid > 1");
 
-    $retval .= ADMIN_list ("user", "ADMIN_getListField_users", $header_arr, $text_arr,
-                            $query_arr, $defsort_arr);
+    $retval .= ADMIN_list('user', 'ADMIN_getListField_users', $header_arr,
+                          $text_arr, $query_arr, $defsort_arr);
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
     return $retval;
 }
 
@@ -827,9 +832,9 @@ function batchdelete()
         $_CONF['layout_url'] . '/images/icons/user.' . $_IMAGE_TYPE
     );
 
-    $user_templates->set_var('lang_reminder',$LANG28[77]);
-    $user_templates->set_var('action_reminder',$LANG28[78]);
-    $user_templates->parse('test','reminder');
+    $user_templates->set_var('lang_reminder', $LANG28[77]);
+    $user_templates->set_var('action_reminder', $LANG28[78]);
+    $user_templates->parse('test', 'reminder');
 
     $form_arr['top'] = $user_templates->get_var('test');
     $token = SEC_createToken();
@@ -840,10 +845,10 @@ function batchdelete()
                            $listoptions, $form_arr);
 
     // $display .= "<input type=\"hidden\" name=\"mode\" value=\"batchdeleteexec\"" . XHTML . "></form>" . LB;
-    return $display;
-//
 
+    return $display;
 }
+
 /**
 * This function deletes the users selected in the batchdeletelist function
 *
@@ -853,6 +858,7 @@ function batchdelete()
 function batchdeleteexec()
 {
     global $_CONF, $LANG28;
+
     $msg = '';
     $user_list = array();
     if (isset($_POST['delitem'])) {
@@ -879,9 +885,9 @@ function batchdeleteexec()
     // zero were deleted instead of just leaving this message away.
     COM_numberFormat($c); // just in case we have more than 999 ...
     $msg .= "{$LANG28[71]}: $c<br" . XHTML . ">\n";
+
     return $msg;
 }
-
 
 
 /**
@@ -893,6 +899,7 @@ function batchdeleteexec()
 function batchreminders()
 {
     global $_CONF, $_TABLES, $LANG04, $LANG28;
+
     $msg = '';
     $user_list = array();
     if (isset($_POST['delitem'])) {
@@ -957,8 +964,8 @@ function batchreminders()
     // zero where deleted instead of just leaving this message away.
     COM_numberFormat($c); // just in case we have more than 999)..
     $msg .= "{$LANG28[80]}: $c<br" . XHTML . ">\n";
-    return $msg;
 
+    return $msg;
 }
 
 
@@ -994,9 +1001,9 @@ function importusers()
     $upload->setPath ($_CONF['path_data']);
     $upload->setAllowedMimeTypes (array ('text/plain' => '.txt'));
     $upload->setFileNames ('user_import_file.txt');
-    if ($upload->uploadFiles ()) {
+    if ($upload->uploadFiles()) {
         // Good, file got uploaded, now install everything
-        $thefile =  current ($_FILES);
+        $thefile = current($_FILES);
         $filename = $_CONF['path_data'] . 'user_import_file.txt';
         if (!file_exists($filename)) { // empty upload form
             $retval = COM_refresh($_CONF['site_admin_url']
@@ -1101,7 +1108,7 @@ function importusers()
 * @return   string      HTML for import form
 *
 */
-function display_batchAddform ()
+function display_batchAddform()
 {
     global $_CONF, $LANG28;
 
@@ -1139,7 +1146,7 @@ function deleteUser ($uid)
 
 // MAIN
 $mode = '';
-if (isset ($_REQUEST['mode'])) {
+if (isset($_REQUEST['mode'])) {
     $mode = $_REQUEST['mode'];
 }
 
