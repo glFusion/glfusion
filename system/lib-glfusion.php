@@ -47,11 +47,11 @@ function glfusion_SecurityCheck() {
 
 function phpblock_blogroll ()
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $_ST_CONF;
 
     // configuration options:
 
-    $cat = 'blog-roll';     // Category to take links from
+    $cat = $_ST_CONF['blogroll-category']; // Category to take links from
     $directlink = false;    // Use direct links (true) or portal.php (false)
     $random = false;        // Random order (true) or sort by $sort (false)
     $sort = 'date';         // Sort by ... e.g. 'date', 'title', 'url'
