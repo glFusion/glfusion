@@ -253,7 +253,7 @@ $LANG_configsections['links'] = array(
 $LANG_confignames['links'] = array(
     'linksloginrequired' => 'Lingid vajavad sisselogimist?',
     'linksubmission' => 'Luba linkide puhver?',
-    'Uute linkide intervall',
+    'newlinksinterval' => 'Uute linkide intervall',
     'hidenewlinks' => 'Peida uued lingid',
     'hidelinksmenu' => 'Peida linkide menüüpunkt',
     'linkcols' => 'Kategooriaid veerus',
