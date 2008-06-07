@@ -163,6 +163,28 @@ FCKEnterKey.prototype.DoBackspace = function()
 		return false ;
 	}
 
+	// On IE, it is better for us handle the deletion if the caret is preceeded
+	// by a <br> (#1383).
+	if ( FCKBrowserInfo.IsIE )
+	{
+		var previousElement = FCKDomTools.GetPreviousSourceElement( oRange.StartNode, true ) ;
+
+		if ( previousElement && previousElement.nodeName.toLowerCase() == 'br' )
+		{
+			// Create a range that starts after the <br> and ends at the
+			// current range position.
+			var testRange = oRange.Clone() ;
+			testRange.SetStart( previousElement, 4 ) ;
+
+			// If that range is empty, we can proceed cleaning that <br> manually.
+			if ( testRange.CheckIsEmpty() )
+			{
+				previousElement.parentNode.removeChild( previousElement ) ;
+				return true ;
+			}
+		}
+	}
+
 	var oStartBlock = oRange.StartBlock ;
 	var oEndBlock = oRange.EndBlock ;
 

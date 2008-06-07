@@ -96,11 +96,11 @@ FCKEditingArea.prototype.Start = function( html, secondCall )
 		var sOverrideError = '<script type="text/javascript" _fcktemp="true">window.onerror=function(){return true;};</script>' ;
 
 		oIFrame.frameBorder = 0 ;
-		oIFrame.width = oIFrame.height = '100%' ;
+		oIFrame.style.width = oIFrame.style.height = '100%' ;
 
 		if ( FCK_IS_CUSTOM_DOMAIN && FCKBrowserInfo.IsIE )
 		{
-			window._FCKHtmlToLoad = sOverrideError + html ;
+			window._FCKHtmlToLoad = html.replace( /<head>/i, '<head>' + sOverrideError ) ;
 			oIFrame.src = 'javascript:void( (function(){' +
 				'document.open() ;' +
 				'document.domain="' + document.domain + '" ;' +
@@ -132,7 +132,7 @@ FCKEditingArea.prototype.Start = function( html, secondCall )
 			var oDoc = this.Window.document ;
 
 			oDoc.open() ;
-			oDoc.write( sOverrideError + html ) ;
+			oDoc.write( html.replace( /<head>/i, '<head>' + sOverrideError ) ) ;
 			oDoc.close() ;
 		}
 

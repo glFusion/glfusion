@@ -187,34 +187,7 @@ function OpenFileBrowser( url, width, height )
 	sOptions += ",left=" + iLeft ;
 	sOptions += ",top=" + iTop ;
 
-	// The "PreserveSessionOnFileBrowser" because the above code could be
-	// blocked by popup blockers.
-	if ( oEditor.FCKConfig.PreserveSessionOnFileBrowser && oEditor.FCKBrowserInfo.IsIE )
-	{
-		// The following change has been made otherwise IE will open the file
-		// browser on a different server session (on some cases):
-		// http://support.microsoft.com/default.aspx?scid=kb;en-us;831678
-		// by Simone Chiaretta.
-		var oWindow = oEditor.window.open( url, 'FCKBrowseWindow', sOptions ) ;
-
-		if ( oWindow )
-		{
-			// Detect Yahoo popup blocker.
-			try
-			{
-				var sTest = oWindow.name ; // Yahoo returns "something", but we can't access it, so detect that and avoid strange errors for the user.
-				oWindow.opener = window ;
-			}
-			catch(e)
-			{
-				alert( oEditor.FCKLang.BrowseServerBlocked ) ;
-			}
-		}
-		else
-			alert( oEditor.FCKLang.BrowseServerBlocked ) ;
-    }
-    else
-		window.open( url, 'FCKBrowseWindow', sOptions ) ;
+	window.open( url, 'FCKBrowseWindow', sOptions ) ;
 }
 
 /**

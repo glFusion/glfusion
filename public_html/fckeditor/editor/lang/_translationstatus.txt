@@ -44,6 +44,7 @@ fo.js      Found: 396   Missing: 15
 fr-ca.js   Found: 411   Missing: 0
 fr.js      Found: 411   Missing: 0
 gl.js      Found: 381   Missing: 30
+gu.js      Found: 411   Missing: 0
 he.js      Found: 411   Missing: 0
 hi.js      Found: 411   Missing: 0
 hr.js      Found: 411   Missing: 0

@@ -150,6 +150,7 @@ FCK.InsertHtml = function( html )
 	html = FCK.ProtectTags( html ) ;
 
 //	FCK.Focus() ;
+	FCKSelection.Restore() ;
 	FCK.EditorWindow.focus() ;
 
 	FCKUndo.SaveUndoStep() ;

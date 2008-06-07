@@ -75,15 +75,6 @@ var FCKDialog = ( function()
 			} ) ;
 	}
 
-	var resetStyles = function( element )
-	{
-		element.style.cssText = 'margin:0;' +
-			'padding:0;' +
-			'border:0;' +
-			'background-color:transparent;' +
-			'background-image:none;' ;
-	}
-
 	return {
 		/**
 		 * Opens a dialog window using the standard dialog template.
@@ -113,7 +104,7 @@ var FCKDialog = ( function()
 
 			// Setup the IFRAME that will hold the dialog.
 			var dialog = topDocument.createElement( 'iframe' ) ;
-			resetStyles( dialog ) ;
+			FCKTools.ResetStyles( dialog ) ;
 			dialog.src = FCKConfig.BasePath + 'fckdialog.html' ;
 
 			// Dummy URL for testing whether the code in fckdialog.js alone leaks memory.
@@ -179,7 +170,7 @@ var FCKDialog = ( function()
 		{
 			// Setup the DIV that will be used to cover.
 			cover = topDocument.createElement( 'div' ) ;
-			resetStyles( cover ) ;
+			FCKTools.ResetStyles( cover ) ;
 			FCKDomTools.SetElementStyles( cover,
 				{
 					'position' : 'absolute',
@@ -195,7 +186,7 @@ var FCKDialog = ( function()
 			if ( FCKBrowserInfo.IsIE && !FCKBrowserInfo.IsIE7 )
 			{
 				var iframe = topDocument.createElement( 'iframe' ) ;
-				resetStyles( iframe ) ;
+				FCKTools.ResetStyles( iframe ) ;
 				iframe.hideFocus = true ;
 				iframe.frameBorder = 0 ;
 				iframe.src = FCKTools.GetVoidUrl() ;
@@ -218,12 +209,23 @@ var FCKDialog = ( function()
 			topDocument.body.appendChild( cover ) ;
 
 			FCKFocusManager.Lock() ;
+
+			// Prevent the user from refocusing the disabled
+			// editing window by pressing Tab. (Bug #2065)
+			var el = FCK.ToolbarSet.CurrentInstance.GetInstanceObject( 'frameElement' ) ;
+			el._fck_originalTabIndex = el.tabIndex ;
+			el.tabIndex = -1 ;
 		},
 
 		HideMainCover : function()
 		{
 			FCKDomTools.RemoveNode( cover ) ;
 			FCKFocusManager.Unlock() ;
+
+			// Revert the tab index hack. (Bug #2065)
+			var el = FCK.ToolbarSet.CurrentInstance.GetInstanceObject( 'frameElement' ) ;
+			el.tabIndex = el._fck_originalTabIndex ;
+			FCKDomTools.ClearElementJSProperty( el, '_fck_originalTabIndex' ) ;
 		},
 
 		GetCover : function()

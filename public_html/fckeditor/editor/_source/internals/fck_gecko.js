@@ -361,7 +361,21 @@ FCK.InsertHtml = function( html )
 	this.EditorDocument.execCommand( 'inserthtml', false, html ) ;
 	this.Focus() ;
 
+	// Save the caret position before calling document processor.
+	var range = new FCKDomRange( this.EditorWindow ) ;
+	range.MoveToSelection() ;
+	var bookmark = range.CreateBookmark() ;
+
 	FCKDocumentProcessor.Process( FCK.EditorDocument ) ;
+
+	// Restore caret position, ignore any errors in case the document
+	// processor removed the bookmark <span>s for some reason.
+	try
+	{
+		range.MoveToBookmark( bookmark ) ;
+		range.Select() ;
+	}
+	catch ( e ) {}
 
 	// For some strange reason the SaveUndoStep() call doesn't activate the undo button at the first InsertHtml() call.
 	this.Events.FireEvent( "OnSelectionChange" ) ;
@@ -401,6 +415,12 @@ FCK.CreateLink = function( url, noUndo )
 	// Creates the array that will be returned. It contains one or more created links (see #220).
 	var aCreatedLinks = new Array() ;
 
+	// Only for Safari, a collapsed selection may create a link. All other
+	// browser will have no links created. So, we check it here and return
+	// immediatelly, having the same cross browser behavior.
+	if ( FCKSelection.GetSelection().isCollapsed )
+		return aCreatedLinks ;
+
 	FCK.ExecuteNamedCommand( 'Unlink', null, false, !!noUndo ) ;
 
 	if ( url.length > 0 )
@@ -419,12 +439,6 @@ FCK.CreateLink = function( url, noUndo )
 		{
 			var oLink = oLinksInteractor.snapshotItem( i ) ;
 			oLink.href = url ;
-
-			// It may happen that the browser (aka Safari) decides to use the
-			// URL as the link content to not leave it empty. In this case,
-			// let's reset it.
-			if ( sTempUrl == oLink.innerHTML )
-				oLink.innerHTML = '' ;
 
 			aCreatedLinks.push( oLink ) ;
 		}

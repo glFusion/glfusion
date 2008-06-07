@@ -154,6 +154,8 @@ function GetRootPath()
 		global $_SERVER;
 	}
 	$sRealPath = realpath( './' ) ;
+	// #2124 ensure that no slash is at the end
+	$sRealPath = rtrim($sRealPath,"\\/");
 
 	$sSelfPath = $_SERVER['PHP_SELF'] ;
 	$sSelfPath = substr( $sSelfPath, 0, strrpos( $sSelfPath, '/' ) ) ;
@@ -279,36 +281,7 @@ function SendUploadResults( $errorNumber, $fileUrl = '', $fileName = '', $custom
 {
 	echo <<<EOF
 <script type="text/javascript">
-(function()
-{
-	var d = document.domain ;
-
-	while ( true )
-	{
-		// Test if we can access a parent property.
-		try
-		{
-			var test = window.top.opener.document.domain ;
-			break ;
-		}
-		catch( e ) {}
-
-		// Remove a domain part: www.mytest.example.com => mytest.example.com => example.com ...
-		d = d.replace( /.*?(?:\.|$)/, '' ) ;
-
-		if ( d.length == 0 )
-			break ;		// It was not able to detect the domain.
-
-		try
-		{
-			document.domain = d ;
-		}
-		catch (e)
-		{
-			break ;
-		}
-	}
-})() ;
+(function(){var d=document.domain;while (true){try{var A=window.parent.document.domain;break;}catch(e) {};d=d.replace(/.*?(?:\.|$)/,'');if (d.length==0) break;try{document.domain=d;}catch (e){break;}}})();
 
 EOF;
 	$rpl = array( '\\' => '\\\\', '"' => '\\"' ) ;

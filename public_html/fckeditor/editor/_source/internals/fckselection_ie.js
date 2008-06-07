@@ -260,7 +260,10 @@ FCKSelection.Restore = function()
 		{
 			// Don't repeat the restore process if the editor document is already selected.
 			if ( this._GetSelectionDocument( FCK.EditorDocument.selection ) == FCK.EditorDocument )
+			{
+				FCK.IsSelectionChangeLocked = false ;
 				return ;
+			}
 			this.SelectionData.select() ;
 		}
 		catch ( e ) {}

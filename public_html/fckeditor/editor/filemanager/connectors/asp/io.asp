@@ -25,6 +25,12 @@ function CombinePaths( sBasePath, sFolder)
 	CombinePaths =  RemoveFromEnd( sBasePath, "/" ) & "/" & RemoveFromStart( sFolder, "/" )
 end function
 
+function CombineLocalPaths( sBasePath, sFolder)
+	sFolder = replace(sFolder, "/", "\")
+	' The RemoveFrom* functions use RegExp, so we must escape the \
+	CombineLocalPaths =  RemoveFromEnd( sBasePath, "\\" ) & "\" & RemoveFromStart( sFolder, "\\" )
+end function
+
 Function GetResourceTypePath( resourceType, sCommand )
 	if ( sCommand = "QuickUpload") then
 		GetResourceTypePath = ConfigQuickUploadPath.Item( resourceType )
@@ -69,7 +75,7 @@ Function ServerMapFolder( resourceType, folderPath, sCommand )
 	CreateServerFolder sResourceTypePath
 
 	' Return the resource type directory combined with the required path.
-	ServerMapFolder = CombinePaths( sResourceTypePath, folderPath )
+	ServerMapFolder = CombineLocalPaths( sResourceTypePath, folderPath )
 End Function
 
 Sub CreateServerFolder( folderPath )
@@ -78,6 +84,10 @@ Sub CreateServerFolder( folderPath )
 
 	Dim sParent
 	sParent = oFSO.GetParentFolderName( folderPath )
+
+	' If folderPath is a network path (\\server\folder\) then sParent is an empty string.
+	' Get out.
+	if (sParent = "") then exit sub
 
 	' Check if the parent exists, or create it.
 	If ( NOT oFSO.FolderExists( sParent ) ) Then CreateServerFolder( sParent )

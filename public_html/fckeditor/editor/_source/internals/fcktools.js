@@ -738,3 +738,12 @@ FCKTools.GetVoidUrl = function()
 
 	return "javascript: void(0);" ;		// All other browsers.
 }
+
+FCKTools.ResetStyles = function( element )
+{
+	element.style.cssText = 'margin:0;' +
+		'padding:0;' +
+		'border:0;' +
+		'background-color:transparent;' +
+		'background-image:none;' ;
+}

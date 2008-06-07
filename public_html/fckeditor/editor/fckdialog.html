@@ -27,6 +27,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="robots" content="noindex, nofollow" />
 		<script type="text/javascript">
+// <![CDATA[
+
 // Domain relaxation logic.
 (function()
 {
@@ -187,6 +189,19 @@ var Sizer = function()
 		retval.RefreshSize = function()
 		{
 			FCKTools.SetTimeout( originalRefreshSize, 1, retval ) ;
+		}
+	}
+
+	/**
+	 * IE6 has a similar bug where it sometimes thinks $('contents') has an
+	 * offsetHeight of 0 (#2114).
+	 */
+	if ( FCKBrowserInfo.IsIE && !FCKBrowserInfo.IsIE7 )
+	{
+		var originalRefreshContainerSize = retval.RefreshContainerSize ;
+		retval.RefreshContainerSize = function()
+		{
+			FCKTools.SetTimeout( originalRefreshContainerSize, 1, retval ) ;
 		}
 	}
 
@@ -617,7 +632,7 @@ var onReadyRegister = function()
 		E.FCKLanguageManager.TranslatePage( document ) ;
 
 		// Create the IFRAME that holds the dialog contents.
-		$( 'innerContents' ).innerHTML = '<iframe id="frmMain" src="' + Args().Page + '" name="frmMain" frameborder="0" width="100%" height="100%" scrolling="auto" style="visibility: hidden;" allowtransparency="true"></iframe>' ;
+		$( 'innerContents' ).innerHTML = '<iframe id="frmMain" src="' + Args().Page + '" name="frmMain" frameborder="0" width="100%" height="100%" scrolling="auto" style="visibility: hidden;" allowtransparency="true"><\/iframe>' ;
 	} ;
 
 	window.InnerDialogLoaded = function()
@@ -727,6 +742,7 @@ var onReadyRegister = function()
 		}
 	} ;
 })() ;
+// ]]>
 		</script>
 	</head>
 	<body onload="Init();" class="PopupBody">
@@ -734,7 +750,9 @@ var onReadyRegister = function()
 			<div id="header">
 				<div id="TitleArea" class="PopupTitle PopupTitleBorder">
 					<script type="text/javascript">
+// <![CDATA[
 document.write( Args().Title ) ;
+// ]]>
 					</script>
 					<div id="closeButton" onclick="Cancel();"></div>
 				</div>
@@ -772,12 +790,14 @@ document.write( Args().Title ) ;
 		<div class="cover" id="cover" style="display:none"></div>
 		<div id="throbberBlock" style="position: absolute; visibility: hidden"></div>
 		<script type="text/javascript">
+// <![CDATA[
 			// Set the class name for language direction.
 			document.body.className += ' ' + langDir ;
 
 			var cover = $( 'cover' ) ;
 			cover.style.backgroundColor = FCKConfig.BackgroundBlockerColor ;
 			FCKDomTools.SetOpacity( cover, FCKConfig.BackgroundBlockerOpacity ) ;
+// ]]>
 		</script>
 	</body>
 </html>
