@@ -698,6 +698,12 @@ function INST_installEngine($install_type, $install_step)
 
                         CTL_clearCache();
 
+                        /*
+                         * Insert some blocks
+                         */
+
+                        DB_query("INSERT INTO {$_TABLES['blocks']} (`is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES (0,'blogroll_block','phpblock','Blog Roll','all',30,'',0,'','0000-00-00 00:00:00',NULL,NULL,0,0,'phpblock_blogroll','',2,4,3,3,2,2);",1);
+
                         // Great, installation is complete, redirect to success page
                         header('Location: success.php?type=upgrade&language=' . $language);
                     } else {

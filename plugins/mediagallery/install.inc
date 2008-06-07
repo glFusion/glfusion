@@ -86,8 +86,8 @@ function plugin_install_mediagallery($_DB_table_prefix)
 
     // create random image block
 
-    DB_query("INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, help, group_id, owner_id, perm_owner, perm_group, perm_members,perm_anon) VALUES (0, 'mgrandom', 'phpblock', '" . $LANG_MG00['mg_block_header'] . "', 'all', 0, '', '', 0, 1, 'phpblock_mg_randommedia','', 4, 2, 3, 3, 2, 2);",1);
-    DB_query("INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, help, group_id, owner_id, perm_owner, perm_group, perm_members,perm_anon) VALUES (0, 'mgenroll', 'phpblock', '" . $LANG_MG00['mg_enroll_header'] . "', 'all', 0, '', '', 0, 1, 'phpblock_mg_maenroll','', 4, 2, 3, 3, 2, 0);",1);
+    DB_query("INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, help, group_id, owner_id, perm_owner, perm_group, perm_members,perm_anon) VALUES (0, 'mgrandom', 'phpblock', 'Random Image', 'all', 0, '', '', 0, 1, 'phpblock_mg_randommedia','', 4, 2, 3, 3, 2, 2);",1);
+    DB_query("INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, help, group_id, owner_id, perm_owner, perm_group, perm_members,perm_anon) VALUES (0, 'mgenroll', 'phpblock', 'Member Album Enroll', 'all', 0, '', '', 0, 1, 'phpblock_mg_maenroll','', 4, 2, 3, 3, 2, 0);",1);
 
 
     // Create the plugin admin security group
