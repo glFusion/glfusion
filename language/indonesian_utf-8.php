@@ -80,7 +80,7 @@ $LANG01 = array(
     37 => 'Tidak ada artikel dari user',
     38 => 'Sindikasi Isi',
     39 => 'Ulangi/Refresh',
-    40 => 'Anda memiliki<tt>register_globals = Off</tt> pada <tt>php.ini</tt>. Sedangkan, Geeklog membutuhkan <tt>register_globals</tt> menjadi <strong>on</strong>. Sebelum lanjut, silahkan diset <strong>on</strong> dulu dan restart web server anda.',
+    40 => 'Anda memiliki<tt>register_globals = Off</tt> pada <tt>php.ini</tt>. Sedangkan, glFusion membutuhkan <tt>register_globals</tt> menjadi <strong>on</strong>. Sebelum lanjut, silahkan diset <strong>on</strong> dulu dan restart web server anda.',
     41 => 'User Tamu',
     42 => 'Penanggung jawab:',
     43 => 'Balas ke yang ini',
@@ -170,7 +170,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -660,7 +661,7 @@ $LANG21 = array(
     27 => 'Blok PHP',
     28 => 'Opsi Blok PHP',
     29 => 'Fungsi Block',
-    30 => 'Jika anda ingin memiliki blok dengan PHP kode, masukkan nama fungsi diatas.  Fungsi anda harus diawali (prefix) "phpblock_" (mis. phpblock_getweather).  Jika tidak ada prefix, fungsi anda tidak akan terbuat.  Kami lakukan ini untuk menjaga orang-orang yang akan meng-hack instalasi Geeklog dengan memasukkan fungsi pemanggilan arbitrary yang dapat membahayakan system anda.  Yakinkan bahwa anda tidak memasukkan kurung kosong "()" setelah nama fungsi tersebut.  Terakhir, Disarankan anda memasukkan kode blok PHP anda ke /path/to/geeklog/system/lib-custom.php.  Ini akan mempermudah anda disaat anda meng upgrade dengan versi yang baru.',
+    30 => 'Jika anda ingin memiliki blok dengan PHP kode, masukkan nama fungsi diatas.  Fungsi anda harus diawali (prefix) "phpblock_" (mis. phpblock_getweather).  Jika tidak ada prefix, fungsi anda tidak akan terbuat.  Kami lakukan ini untuk menjaga orang-orang yang akan meng-hack instalasi glFusion dengan memasukkan fungsi pemanggilan arbitrary yang dapat membahayakan system anda.  Yakinkan bahwa anda tidak memasukkan kurung kosong "()" setelah nama fungsi tersebut.  Terakhir, Disarankan anda memasukkan kode blok PHP anda ke /path/to/glfusion/system/lib-custom.php.  Ini akan mempermudah anda disaat anda meng upgrade dengan versi yang baru.',
     31 => 'Error pada PHP Blok.  Fungsi, %s, tidak ada.',
     32 => 'Error ada yang kosong',
     33 => 'Anda harus memasukkan URL ke RSS file untuk portal blck',
@@ -698,7 +699,7 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -858,7 +859,7 @@ $LANG28 = array(
     22 => 'Error',
     23 => 'Batch Add',
     24 => 'Batch Import of Users',
-    25 => 'Anda dapat mengimport batch users ke Geeklog.  File yang diimpor harus tab-delimited text file dan harus emiliki susunan field: nama lengkap, nama user, alamat email.  Setiap user yang anda impor akan diemail dengan password acak.  Anda ahrus memmasukkan satu user per baris.  Kegagalan mengikuti instruksi ini akan menyebabkan masalah yang mungkin di butuhkan pada pekerjaan manual jadi double klik untuk mengecek!',
+    25 => 'Anda dapat mengimport batch users ke glFusion.  File yang diimpor harus tab-delimited text file dan harus emiliki susunan field: nama lengkap, nama user, alamat email.  Setiap user yang anda impor akan diemail dengan password acak.  Anda ahrus memmasukkan satu user per baris.  Kegagalan mengikuti instruksi ini akan menyebabkan masalah yang mungkin di butuhkan pada pekerjaan manual jadi double klik untuk mengecek!',
     26 => '',
     27 => '',
     28 => 'Klik disini untuk menghapus',
@@ -983,7 +984,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Menginstall plugins dapat menyebabkan kegagalan dalam penginstalan Geeklog dan mungki juga system ada.  Penting bagi anda untuk menginstall plugin yang hanya didownload dari <a href="http://www.geeklog.net">Geeklog Homepage</a> yang dimana plug ini tersebut telah kami uji dengan menggunakan berbagai macam system.  Singkatnya kami tidak bertanggung jawab atas kerusakan yang terjadi pada saat anda menginstall plugin maka sebaiknya ikuti instruksi penginstallan yang disertakan dalam plugin yang anda download.',
+    1 => 'Menginstall plugins dapat menyebabkan kegagalan dalam penginstalan glFusion dan mungki juga system ada.  Penting bagi anda untuk menginstall plugin yang hanya didownload dari <a href="http://www.gllabs.org">glFusion Homepage</a> yang dimana plug ini tersebut telah kami uji dengan menggunakan berbagai macam system.  Singkatnya kami tidak bertanggung jawab atas kerusakan yang terjadi pada saat anda menginstall plugin maka sebaiknya ikuti instruksi penginstallan yang disertakan dalam plugin yang anda download.',
     2 => 'Disclaimer Penginstallan Plug-in',
     3 => 'Formulir Penginstallan Plug-in',
     4 => 'File Plug-in',
@@ -991,7 +992,7 @@ $LANG32 = array(
     6 => 'Perhatian: Plug-in telah diinstall!',
     7 => 'The plug-in yang ada install sudah ada.  Silahkan hapus dulu sebelum anda menginstall lagi',
     8 => 'Pengecekan kompatibelitas Plugin gagal',
-    9 => 'Plugin ini membutuhkan Geeklog versi terbaru. maka upgradelah <a href="http://www.geeklog.net">Geeklog</a> anda dan plugin yg ingin anda install.',
+    9 => 'Plugin ini membutuhkan glFusion versi terbaru. maka upgradelah <a href="http://www.gllabs.org">glFusion</a> anda dan plugin yg ingin anda install.',
     10 => '<br' . XHTML . '><b>Belum ada plugin yang terinstall.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Untuk memodifikasi dan menghapus plugin selahkan klik nomer yang bersangkutan di bawah ini. Untuk mengetahui lebih jauh, klik nama plugin tersebut. Untuk menginstall atau upgrade silahkan baca dokumentasi.',
     12 => 'tidak ada plugin yang disediakan oleh plugineditor()',
@@ -1000,7 +1001,7 @@ $LANG32 = array(
     15 => 'Admin Home',
     16 => 'Nama Plug-in',
     17 => 'Versi Plug-in',
-    18 => 'Versi Geeklog',
+    18 => 'Versi glFusion',
     19 => 'Diizinkan',
     20 => 'Ya',
     21 => 'Tidak',
@@ -1011,7 +1012,7 @@ $LANG32 = array(
     26 => 'Nama Plug-in',
     27 => 'Homepage Plug-in',
     28 => 'Versi Plug-in',
-    29 => 'Versi Geeklog',
+    29 => 'Versi glFusion',
     30 => 'Hapus Plug-in?',
     31 => 'Apakah anda yakin ?  Dengan melakukan ini itu anda menghapus semua struktur dan file yang berhubungan dengan plug in yang bersangkutan.  Jika anda yakin, klik sekali lagi Hapus dibawah ini.',
     32 => '<p><b>Error AutoLink tag not correct format</b></p>',
@@ -1176,7 +1177,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1355,8 +1357,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Select Trackback URL',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1582,8 +1584,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1771,7 +1773,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

@@ -169,7 +169,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -659,7 +660,7 @@ $LANG21 = array(
     27 => 'Cadre PHP',
     28 => 'Option du cadre PHP',
     29 => 'Cadre fonction',
-    30 => 'Si vous voulez que l\'un de vos cadres utilise du PHP, saisissez le nom de la fonction à utiliser.  Le nom de la fonction doit commencer par "phpblock_" (ex: phpblock_getweather).  Si ce n\'est pas le cas, votre fonction NE SERA PAS appellée.  Nous faisons ça pour des raisons de sécurité.  Ne mettez pas de parenthèses vides "()" après le nom de votre fonction.  Enfin, nous vous recommandons de mettre tout le code des cadre PHP dans /path/to/geeklog/system/lib-custom.php.  Cela permettera de garder votre code même après une mise à jour de geeklog.',
+    30 => 'Si vous voulez que l\'un de vos cadres utilise du PHP, saisissez le nom de la fonction à utiliser.  Le nom de la fonction doit commencer par "phpblock_" (ex: phpblock_getweather).  Si ce n\'est pas le cas, votre fonction NE SERA PAS appellée.  Nous faisons ça pour des raisons de sécurité.  Ne mettez pas de parenthèses vides "()" après le nom de votre fonction.  Enfin, nous vous recommandons de mettre tout le code des cadre PHP dans /path/to/glfusion/system/lib-custom.php.  Cela permettera de garder votre code même après une mise à jour de geeklog.',
     31 => 'Erreur dans le cadre PHP.  La fonction, %s, n\'existe pas.',
     32 => 'Erreur: champs manquant',
     33 => 'Vous devez mettre l\'URL dans le fichier .rdf pour le cadre portail.',
@@ -697,7 +698,7 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -982,7 +983,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Installer des plugin peut causer des domages à geeklog.  Il est important de n\'installer que des plugins provenant de <a href="http://www.geeklog.net" target="_blank">Geeklog</a> car nous les testons et les approuvons pour plusieurs systèmes.  Installer des plugins requiert l\'exécution de plusieurs commandes systèmes qui peuvent poser des problèmes de sécurité particulièrement si vous utilisez des plugin provenant de tierse partie.  Vous êtes averti des domages que peut causer l\'installation d\'un plugin.  En d\'autres termes, vous installez des plugin à vos propres risques.  Les instructions d\'installation des plugins sont incluses dans chaque plugin.',
+    1 => 'Installer des plugin peut causer des domages à geeklog.  Il est important de n\'installer que des plugins provenant de <a href="http://www.gllabs.org" target="_blank">glFusion</a> car nous les testons et les approuvons pour plusieurs systèmes.  Installer des plugins requiert l\'exécution de plusieurs commandes systèmes qui peuvent poser des problèmes de sécurité particulièrement si vous utilisez des plugin provenant de tierse partie.  Vous êtes averti des domages que peut causer l\'installation d\'un plugin.  En d\'autres termes, vous installez des plugin à vos propres risques.  Les instructions d\'installation des plugins sont incluses dans chaque plugin.',
     2 => 'Instructions d\'installation d\'un plugin',
     3 => 'Formulaire d\'installation d\'un plugin',
     4 => 'Fichier de plugin',
@@ -990,7 +991,7 @@ $LANG32 = array(
     6 => 'Attention: plugin déjà installé!',
     7 => 'Le plugin que vous essayer d\'installer existe déjà.  Veuillez supprimer le plugin avant de le réinstaller.',
     8 => 'Test de compatibilité du plugin échoué',
-    9 => 'Ce plugin requiert une version plus récente de geeklog. Vous pouvez mettre à jour votre <a href="http://www.geeklog.net">Geeklog</a> ou obtenir une autre version du plugin.',
+    9 => 'Ce plugin requiert une version plus récente de geeklog. Vous pouvez mettre à jour votre <a href="http://www.gllabs.org">glFusion</a> ou obtenir une autre version du plugin.',
     10 => '<br' . XHTML . '><b>Aucun plugin n\'est actuellement installé.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Cliquez sur le numéro du plugin pour le modifier ou le supprimer. Pour en savoir d\'avantage sur les plugins, cliquez sur le nom du plugin et vous serez dirigé vers le site web du plugin. Pour installer ou mettre à jour un plugin veuillez vous référer à la documentation du plugin.',
     12 => 'Aucun nom de plugin n\'a été passé à plugineditor()',
@@ -999,7 +1000,7 @@ $LANG32 = array(
     15 => 'Accueil Admin',
     16 => 'Nom du plugin',
     17 => 'Version du plugin',
-    18 => 'Version de Geeklog',
+    18 => 'Version de glFusion',
     19 => 'Activé',
     20 => 'Oui',
     21 => 'Non',
@@ -1010,7 +1011,7 @@ $LANG32 = array(
     26 => 'Nom du plugin',
     27 => 'Site web du plugin',
     28 => 'Version du plugin',
-    29 => 'Version de Geeklog',
+    29 => 'Version de glFusion',
     30 => 'Supprimer le plugin ?',
     31 => 'Etes-vous sûr de vouloir supprimer ce plugin ?  Toutes les données, fichiers et structures utilisés par ce plugin seront détruits.  Si vous êtes sûr cliquez sur le bouton Supprimer.',
     32 => '<p><b>Error AutoLink tag not correct format</b></p>',
@@ -1057,7 +1058,7 @@ $LANG33 = array(
     34 => 'Entries',
     35 => 'Hours',
     36 => 'Select type of feed',
-    37 => 'You have at least one plugin installed that supports content syndication. Below you will need to select whether you want to create a Geeklog feed or a feed from one of the plugins.',
+    37 => 'You have at least one plugin installed that supports content syndication. Below you will need to select whether you want to create a glFusion feed or a feed from one of the plugins.',
     38 => 'Error: Missing Fields',
     39 => 'Please fill in the Feed Title, Description, and Filename.',
     40 => 'Please enter a  number of entries or number of hours.',
@@ -1175,7 +1176,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1253,7 +1255,7 @@ $LANG_DB_BACKUP = array(
     'last_ten_backups' => '10 dernieres sauvegardes',
     'do_backup' => 'Faire une sauvegarde',
     'backup_successful' => 'Sauvegarde de la base de donnée effectuée avec succès',
-    'db_explanation' => 'Cliquez sur le bouton ci-dessous pour effectuer une sauvegarde de votre système Geeklog',
+    'db_explanation' => 'Cliquez sur le bouton ci-dessous pour effectuer une sauvegarde de votre système glFusion',
     'not_found' => "Chemin incorecte ou le fichier mysqldump n'est pas exécutable.<br" . XHTML . ">Vérifiez le paramètre <strong>\$_DB_mysqldump_path</strong> dans le fichier config.php.<br" . XHTML . ">Ce paramètre est actuellement positionné à : <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Sauvegarde échouée: la taille du fichier était de 0 octets.',
     'path_not_found' => "{$_CONF['backup_path']} n'existe pas ou n'est pas un répertoire.",
@@ -1354,8 +1356,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Select Trackback URL',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1581,8 +1583,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1770,7 +1772,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

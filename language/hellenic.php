@@ -6,8 +6,8 @@
 # Revision No: 5 
 # Date 21/04/2005
 #
-# + Compatible with Geeklog 1.3.11 + other corrections
-# + Geeklog?s new URL added
+# + Compatible with glFusion 1.3.11 + other corrections
+# + glFusion?s new URL added
 # + Formalization of the language completed
 # + Language is now more ?Modern Greek Friendly?
 # + Removal of the most pre-modern Greek (before 1981) words.
@@ -88,7 +88,7 @@ $LANG01 = array(
     37 => 'Δεν έχει γίνει εισαγωγή άρθρων από τους χρήστες',
     38 => 'Κοινοπραξίες Περιεχομένου',
     39 => 'ανανέωση',
-    40 => 'Η μεταβλητή <tt>register_globals</tt> είναι <tt>ανενεργή</tt> στο αρχείο <tt>php.ini</tt>. Το Geeklog, για την ομαλή λειτουργεία του, απαιτεί η μεταβλητή <tt>register_globals</tt> να είναι <strong>ενεργοποιημένη</strong>. Πρίν να μπορέσετε να συνεχίσετε, παρακαλώ να θέσετε την μεταβλητή στην τιμή <strong>on</strong> και να επανεκινήσετε τον Εξυπηρετητή WWW.',
+    40 => 'Η μεταβλητή <tt>register_globals</tt> είναι <tt>ανενεργή</tt> στο αρχείο <tt>php.ini</tt>. Το glFusion, για την ομαλή λειτουργεία του, απαιτεί η μεταβλητή <tt>register_globals</tt> να είναι <strong>ενεργοποιημένη</strong>. Πρίν να μπορέσετε να συνεχίσετε, παρακαλώ να θέσετε την μεταβλητή στην τιμή <strong>on</strong> και να επανεκινήσετε τον Εξυπηρετητή WWW.',
     41 => 'Επισκέπτες',
     42 => 'Συγγραφέας:',
     43 => 'Απαντήστε σε αυτό',
@@ -178,7 +178,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -668,7 +669,7 @@ $LANG21 = array(
     27 => 'Ομάδα PHP',
     28 => 'Επιλογές Ομάδας PHP',
     29 => 'Λειτουργίες ομάδας ',
-    30 => 'Αν επιθυμείτε κάποια από τις ομάδες να συμπεριλαμβάνει κώδικα στην γλώσσα PHP, εισάγετε το όνομα της ρουτίνας στο παραπάνω κουτί. Η ρουτίνα σας πρέπει να αρχίζει με το πρόθεμα "phpblock " ( για παράδειγμα phpblock_getweather). Εάν το πρόθεμα αυτό παραλειφθεί, η ρουτίνα σας δεν θα εκτελεστεί. Προτείνετε να τοποθετήσετε τον κωδικά σας στον ακόλουθο κατάλογο /διαδρομή/για/το/geeklog/system/lib-custom.php.',
+    30 => 'Αν επιθυμείτε κάποια από τις ομάδες να συμπεριλαμβάνει κώδικα στην γλώσσα PHP, εισάγετε το όνομα της ρουτίνας στο παραπάνω κουτί. Η ρουτίνα σας πρέπει να αρχίζει με το πρόθεμα "phpblock " ( για παράδειγμα phpblock_getweather). Εάν το πρόθεμα αυτό παραλειφθεί, η ρουτίνα σας δεν θα εκτελεστεί. Προτείνετε να τοποθετήσετε τον κωδικά σας στον ακόλουθο κατάλογο /διαδρομή/για/το/glfusion/system/lib-custom.php.',
     31 => 'Σφάλμα στην ομάδα PHP.  Η ρουτίνα %s, είναι ανύπαρκτη.',
     32 => 'Σφάλμα, λείπουν πεδίο(α)',
     33 => 'Πρέπει να πληκτρολογήσετε το URL για το .rdf αρχείο των ομάδων πύλης ',
@@ -706,7 +707,7 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -866,7 +867,7 @@ $LANG28 = array(
     22 => 'Σφάλμα',
     23 => 'Πρόσθεση συνόλου',
     24 => 'Εισαγωγή συνόλου χρηστών',
-    25 => "Υπάρχει η δυνατότητα να προσθέσετε χρήστες στο Geeklog. Το αρχείο εισαγωγής χρηστών πρέπει να είναι διαμορφωμένο ακολούθως: πλήρες όνομα, όνομα χρήστη, ηλεκτρονική διεύθυνση. Κάθε χρήστης που θα εισάγεται θα λαμβάνει ένα μήνυμα με τον τυχαίο κωδικού του. Πρέπει να έχετε έναν χρήστης σε κάθε γραμμή. \nΟποιαδήποτε παρατυπία, ίσως οδηγήσει σε προβλήματα, όπότε ελέγξτε δύο φορές τις γραμμές εισαγωγής σας.",
+    25 => "Υπάρχει η δυνατότητα να προσθέσετε χρήστες στο glFusion. Το αρχείο εισαγωγής χρηστών πρέπει να είναι διαμορφωμένο ακολούθως: πλήρες όνομα, όνομα χρήστη, ηλεκτρονική διεύθυνση. Κάθε χρήστης που θα εισάγεται θα λαμβάνει ένα μήνυμα με τον τυχαίο κωδικού του. Πρέπει να έχετε έναν χρήστης σε κάθε γραμμή. \nΟποιαδήποτε παρατυπία, ίσως οδηγήσει σε προβλήματα, όπότε ελέγξτε δύο φορές τις γραμμές εισαγωγής σας.",
     26 => '',
     27 => '',
     28 => 'Πατήστε εδώ να διαγράψετε την φωτογραφία',
@@ -991,7 +992,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Η εγκατάσταση των εξωτερικών προγραμμάτων θα μπορούσε να προκαλέσει ζημιά στην εγκατάσταση του Geeklog και πιθανόν στο σύστημα σας. Είναι σημαντικό να σιγουρευτείτε ότι τα εξωτερικά προγράμματα προέρχονται από την ιστοσελίδα <a href="http://www.geeklog.net" target="_blank">Geeklog Homepage</a> επειδή στην σελίδα μας τα εξωτερικά προγράμματα είναι ελεγχόμενα. Είναι επίσης σημαντικό να καταλάβετε ότι η εγκατάσταση ενός εξωτερικού προγράμματος απαιτεί την εκτέλεση μερικών εντολών του συστήματος αρχείων που θα μπορούσε να επιφέρει προβλήματα ασφαλείας ειδικά αν προέρχεται το εξωτερικό πρόγραμμα από τρίτο κατασκευαστή. Ακόμα και με την παρούσα προειδοποίηση δεν εγγυόμαστε ότι η εγκατάσταση των  εξωτερικών προγραμμάτων θα είναι επιτυχής ούτε αποδεχόμαστε ευθύνη για τυχόν ζημιές από την εγκατάσταση. Η εγκατάσταση είναι δικό σας ρίσκο. Οδηγίες για την εγκατάσταση εξωτερικών προγραμμάτων μπορούν να βρεθούν σε κάθενα απο αυτά. ',
+    1 => 'Η εγκατάσταση των εξωτερικών προγραμμάτων θα μπορούσε να προκαλέσει ζημιά στην εγκατάσταση του glFusion και πιθανόν στο σύστημα σας. Είναι σημαντικό να σιγουρευτείτε ότι τα εξωτερικά προγράμματα προέρχονται από την ιστοσελίδα <a href="http://www.gllabs.org" target="_blank">glFusion Homepage</a> επειδή στην σελίδα μας τα εξωτερικά προγράμματα είναι ελεγχόμενα. Είναι επίσης σημαντικό να καταλάβετε ότι η εγκατάσταση ενός εξωτερικού προγράμματος απαιτεί την εκτέλεση μερικών εντολών του συστήματος αρχείων που θα μπορούσε να επιφέρει προβλήματα ασφαλείας ειδικά αν προέρχεται το εξωτερικό πρόγραμμα από τρίτο κατασκευαστή. Ακόμα και με την παρούσα προειδοποίηση δεν εγγυόμαστε ότι η εγκατάσταση των  εξωτερικών προγραμμάτων θα είναι επιτυχής ούτε αποδεχόμαστε ευθύνη για τυχόν ζημιές από την εγκατάσταση. Η εγκατάσταση είναι δικό σας ρίσκο. Οδηγίες για την εγκατάσταση εξωτερικών προγραμμάτων μπορούν να βρεθούν σε κάθενα απο αυτά. ',
     2 => 'Αποποίηση ευθυνών εγκατάστασης εξωτερικών προγραμμάτων',
     3 => 'Φόρμα εγκατάστασης εξωτερικών προγραμμάτων',
     4 => 'Αρχείο εξωτερικών προγραμμάτων',
@@ -999,7 +1000,7 @@ $LANG32 = array(
     6 => 'ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Το εξωτερικό πρόγραμμα είναι ήδη εγκατεστημένο',
     7 => 'Το εξωτερικό πρόγραμμα που προσπαθείτε να εγκαταστήσετε είναι ήδη εγκατεστημένο. Παρακαλώ, σβήστε το και ξαναπροσπαθήστε.',
     8 => 'H εξέταση συμβατότητας για εξωτερικό πρόγραμμα απέτυχε',
-    9 => 'Αυτό το εξωτερικό πρόγραμμα απαιτεί νεότερη έκδοση του Geeklog. Η αναβαθμίστε την έκδοση σας του <a href="http://www.geeklog.net">Geeklog</a> η βρείτε μία νεότερη έκδοση του.',
+    9 => 'Αυτό το εξωτερικό πρόγραμμα απαιτεί νεότερη έκδοση του glFusion. Η αναβαθμίστε την έκδοση σας του <a href="http://www.gllabs.org">glFusion</a> η βρείτε μία νεότερη έκδοση του.',
     10 => '<br' . XHTML . '><b>Δεν υπάρχουν εγκατεστημένα εξωτερικά προγράμματα.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Για να επεξεργαστείτε η να διαγράψετε ένα εξωτερικό πρόγραμμα, επιλέξτε το παρακάτω με βάση την αριθμό του. Για να μάθετε περισσότερα για ένα συγκεκριμένο εξωτερικό πρόγραμμα, επιλέξτε το όνομα του και θα οδηγηθείτε στην ιστοσελίδα του. Για να to αναβαθμίσετε  συμβουλευτείτε το εγχειρίδιο χρήσης. ',
     12 => 'Δεν δόθηκε το όνομα του εξωτερικού προγράμμaτος στον plugineditor()',
@@ -1008,7 +1009,7 @@ $LANG32 = array(
     15 => 'Σελίδα διαχείρισης',
     16 => 'Όνομα εξωτερικού προγράμματος',
     17 => 'Έκδοση εξωτερικού προγράμματος',
-    18 => 'Έκδοση Geeklog',
+    18 => 'Έκδοση glFusion',
     19 => 'Ενεργό',
     20 => 'Ναι',
     21 => 'Όχι',
@@ -1019,7 +1020,7 @@ $LANG32 = array(
     26 => 'Όνομα εξωτερικού προγράμματος',
     27 => 'Ιστοσελίδα εξωτερικού προγράμματος',
     28 => 'Έκδοση εξωτερικού προγράμματος',
-    29 => 'Έκδοση Geeklog',
+    29 => 'Έκδοση glFusion',
     30 => 'Διαγραφή εξωτερικού προγράμματος;',
     31 => 'Είστε σίγουρος/η ότι επιθυμείτε να διαγράψετε αυτό το εξωτερικό πρόγραμμα; Αν το διαγράψετε όλα τα αρχεία, τα δεδομένα και οι δομές δεδομένων που χρησιμοποιεί θα διαγραφούν επίσης. Εάν είστε σίγουρος/η επιλέξτε την επιλογή διαγραφή οπό την παρακάτω φόρμα.',
     32 => '<p><b>Σφάλμα, η διαμόρφωση του "AutoLink tag" δεν είναι σωστή</b></p>',
@@ -1066,7 +1067,7 @@ $LANG33 = array(
     34 => 'Εισαγωγές',
     35 => 'Ώρες',
     36 => 'Επιλέξτε τύπο ροής',
-    37 => 'Έχετε τουλάχιστον ένα εξωτερικό πρόγραμμα εγκατεστημένο που υποστηρίζει κοινοπραξία. Παρακάτω, θα μπορείτε να επιλέξετε αν θέλετε να δημιουργηθεί μία ροή δεδομένων για το Geeklog ή για τα εξωτερικά προγράμματα.',
+    37 => 'Έχετε τουλάχιστον ένα εξωτερικό πρόγραμμα εγκατεστημένο που υποστηρίζει κοινοπραξία. Παρακάτω, θα μπορείτε να επιλέξετε αν θέλετε να δημιουργηθεί μία ροή δεδομένων για το glFusion ή για τα εξωτερικά προγράμματα.',
     38 => 'Σφάλμα: Κάποια πεδία δεν έχουν συμπληρωθεί',
     39 => 'Παρακαλώ, συμπληρώστε τα πεδία Τίτλος Ροής, Περιγραφή και Όνομα αρχείου.',
     40 => 'Παρακαλώ, εισάγετε τον αριθμό των εγγραφών η τον αριθμό των ωρών.',
@@ -1184,7 +1185,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1262,7 +1264,7 @@ $LANG_DB_BACKUP = array(
     'last_ten_backups' => 'Τελευταία 10 αντίγραφα ασφαλείας',
     'do_backup' => 'Δημιουργία αντιγράφων ασφαλείας',
     'backup_successful' => 'Τα αντίγραφα ασφαλείας της βάσης δεδομένων ήταν επιτυχημένα',
-    'db_explanation' => 'Για να δημιουργήσετε ένα νέο αντίγραφο ασφάλειας του συστήματος Geeklog, πατήστε το παρακάτω κουμπί',
+    'db_explanation' => 'Για να δημιουργήσετε ένα νέο αντίγραφο ασφάλειας του συστήματος glFusion, πατήστε το παρακάτω κουμπί',
     'not_found' => "Λάθος διαδρομή ή το πρόγραμμα mysqldump δεν είναι εκτελέσημο. <br" . XHTML . ">Check <strong>\$_DB_mysqldump_path</strong> definition in config.php.<br" . XHTML . ">Η μεταβλητή ορίζεται ως: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Η αποθήκευση αντιγράφων απέτυχε: Το μέγεθος του αρχείου ήταν 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} δεν υπάρχει ή δεν είναι κατάλογος",
@@ -1363,8 +1365,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Select Trackback URL',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1590,8 +1592,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1779,7 +1781,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

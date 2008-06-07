@@ -173,7 +173,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => '用OpenID 登入:',
     129 => '設定',
-    130 => '網路服務'
+    130 => '網路服務',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -663,7 +664,7 @@ $LANG21 = array(
     27 => 'PHP 組件',
     28 => 'PHP 元件選項',
     29 => '元件函數',
-    30 => '如果你想用自己的 PHP 函數元件，請在上面輸入函數的名字。為防止執行任性的編碼，PHP 元件函數名必須以 "phpblock_" 作開始 (e.g. phpblock_getweather)。請不要把空的圓括號 "()" 放在函數後。最後，建議你把所有的 PHP 組件放在 /path/to/geeklog/system/lib-custom.php 裏以方便系統升級。',
+    30 => '如果你想用自己的 PHP 函數元件，請在上面輸入函數的名字。為防止執行任性的編碼，PHP 元件函數名必須以 "phpblock_" 作開始 (e.g. phpblock_getweather)。請不要把空的圓括號 "()" 放在函數後。最後，建議你把所有的 PHP 組件放在 /path/to/glfusion/system/lib-custom.php 裏以方便系統升級。',
     31 => 'PHP 元件錯誤︰函數 %s 並不存在。',
     32 => '錯誤︰缺少欄位元。',
     33 => '在入口元件你必須把 URL 輸入到 .rdf 檔案',
@@ -994,7 +995,7 @@ $LANG32 = array(
     6 => '警告︰插件已經被安裝過！',
     7 => '你想安裝的插件已經存在，請先把它刪除再安裝。',
     8 => '插件不能通過相容性校驗。',
-    9 => '這插件要求一個更新版本的志樂. 你可以升級你的<a href="http://www.geeklog.net">志樂</a>或是另找一個適合的版本。',
+    9 => '這插件要求一個更新版本的志樂. 你可以升級你的<a href="http://www.gllabs.org">志樂</a>或是另找一個適合的版本。',
     10 => '<br' . XHTML . '><b>沒有安裝的插件。</b><br' . XHTML . '><br' . XHTML . '>',
     11 => '若想修改或刪除插件，點擊以下插件的名稱。這會顯示插件的詳細內容和製作者的網站。安裝的版本和從代碼中來的版本都會顯出來。這會讓你知道此插件是否應該更新。若要安裝或升級插件請諮詢它的說明文件。',
     12 => 'plugineditor() 找不到插件名',
@@ -1179,7 +1180,8 @@ $MESSAGE = array(
     94 => '備份失敗: 文件小於 1kb',
     95 => '有錯誤。',
     96 => '對不起, 你沒權進入設定管理區。 請注意所有登入企圖都被記錄。',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1774,7 +1776,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => '主題默認許可設定',
     'atom_max_stories' => 'Webservices Feed裏的文章數定',
     'disable_webservices' => '關閉 Webservices?',
-    'restrict_webservices' => '限制 Webservices?'
+    'restrict_webservices' => '限制 Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

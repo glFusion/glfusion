@@ -68,7 +68,7 @@ $LANG01 = array(
     37 => 'كاربر هيچ مقاله اي ندارد',
     38 => 'ظرفيت سنديكا',
     39 => 'بازيابي دوباره',
-    40 => 'شما داريد <tt>register_globals = Off</tt>در داخل <tt>php.ini</tt>. هنوز, Geeklog نياز دارد به <tt>register_globals</tt> اين را بايد <strong>on</strong>. پيش از ادامه آنرا تغيير دهيد به <strong>on</strong> و وب سرور خود را دوباره راه اندازي كنيد.',
+    40 => 'شما داريد <tt>register_globals = Off</tt>در داخل <tt>php.ini</tt>. هنوز, glFusion نياز دارد به <tt>register_globals</tt> اين را بايد <strong>on</strong>. پيش از ادامه آنرا تغيير دهيد به <strong>on</strong> و وب سرور خود را دوباره راه اندازي كنيد.',
     41 => 'كاربران ناشناس',
     42 => 'نوشته شده توسط:',
     43 => 'پاسخ دادن به اين',
@@ -158,7 +158,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -648,7 +649,7 @@ $LANG21 = array(
     27 => 'PHPبلاک',
     28 => ' گزينه هاي بلاکPHP ',
     29 => 'توابع بلاک',
-    30 => 'اگر شما ميخواهيد يک بلاک کد پي اچ پي توسط خودتان را استفاده کنيد . وارد کنيد نام تابع را در بالا . نام تابع شما بايد با پيشوند(مثال) phpblock_? phpblock_getweather  باشد. اگر شما تابعي با اين پيشوند نداشته باشيد در نتيجه اين تابع صدا نزده خواهد شد ما اين کار را انجام ميدهيم که افرادي که ميخواهند هک کنند جيک لاگ شما را  از طريق قرار دادن توابع دلبخواهي که ميتواند وارد کنند و زيان آور باشد براي سيستم شما نتواننداین کار راانجام دهند. اطمينان حاصل کنيد که دو پرانتز "()" خالي بعد از تابعتان نيست .در اخر لازم است تمام توابع بلاک خود را در اين مسير قرار دهيد. اين به شما اجازه ميدهد موقع آپديت کردن به مشکلي بر نخوريد   /path/to/geeklog/system/lib-custom.php.',
+    30 => 'اگر شما ميخواهيد يک بلاک کد پي اچ پي توسط خودتان را استفاده کنيد . وارد کنيد نام تابع را در بالا . نام تابع شما بايد با پيشوند(مثال) phpblock_? phpblock_getweather  باشد. اگر شما تابعي با اين پيشوند نداشته باشيد در نتيجه اين تابع صدا نزده خواهد شد ما اين کار را انجام ميدهيم که افرادي که ميخواهند هک کنند جيک لاگ شما را  از طريق قرار دادن توابع دلبخواهي که ميتواند وارد کنند و زيان آور باشد براي سيستم شما نتواننداین کار راانجام دهند. اطمينان حاصل کنيد که دو پرانتز "()" خالي بعد از تابعتان نيست .در اخر لازم است تمام توابع بلاک خود را در اين مسير قرار دهيد. اين به شما اجازه ميدهد موقع آپديت کردن به مشکلي بر نخوريد   /path/to/glfusion/system/lib-custom.php.',
     31 => 'پیام خطادر پی اچ پی بلاک..  تابع , %s, وجود ندارد.',
     32 => 'خطاي گم شدن فيلد يا فيلدها',
     33 => 'شما بايد "يو آر ال" را براي فايل :"Rss" برا ي پورتال بلاک وارد کنيد ',
@@ -686,7 +687,7 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -971,7 +972,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'نصب كردن پلاگينها ميتواند به سيستم "جيك لاگ " شما آسيب برساند و فايلهاي نصب شما را از بين ببرد.بسيار مهم است كه شما پلاگينها را حتما از سايت    <a href="http://www.geeklog.net">جيك لاگ</a> دريافت كنيد تمام پلاگينهاي سايت تست شده براي انواع سيستم عاملها وجود دارندپلاگينها يك برنامه اجرايي را از طرق سايت اجرا ميكنند كه ميتواند براي امنيت مخاطره آميز باشد مخصوصا اگر آنها را از سايتهاي ديگر دريافت كنيد.اين كار شما را ما تضمين نميكنيم  چون ممكن است سايت شما با مشكل مواجه شود شما ميتوانيد انها را با مسيوليت خودتان نصب كنيد  پس در استفاده آنها بسيار هوشيار باشيد  ',
+    1 => 'نصب كردن پلاگينها ميتواند به سيستم "جيك لاگ " شما آسيب برساند و فايلهاي نصب شما را از بين ببرد.بسيار مهم است كه شما پلاگينها را حتما از سايت    <a href="http://www.gllabs.org">جيك لاگ</a> دريافت كنيد تمام پلاگينهاي سايت تست شده براي انواع سيستم عاملها وجود دارندپلاگينها يك برنامه اجرايي را از طرق سايت اجرا ميكنند كه ميتواند براي امنيت مخاطره آميز باشد مخصوصا اگر آنها را از سايتهاي ديگر دريافت كنيد.اين كار شما را ما تضمين نميكنيم  چون ممكن است سايت شما با مشكل مواجه شود شما ميتوانيد انها را با مسيوليت خودتان نصب كنيد  پس در استفاده آنها بسيار هوشيار باشيد  ',
     2 => 'نويسنده پلاگين در استفاده شما از آن مسيوليتي ندارد',
     3 => 'نصب پلاگين از',
     4 => 'فايل پلاگين',
@@ -979,7 +980,7 @@ $LANG32 = array(
     6 => 'اخطار: آين پلاگين قبلا نصب نشده',
     7 => 'اين پلاگين كه شما در حال سعي در نصب آن هستيد قبلا نصب شده ؟ لطفا پلاگين را قبل از نصب دوباره آن پاك كنيد',
     8 => 'چك كردن سازش پذيري پلاگين شكست خورد',
-    9 => 'اين پلاگين يك ورژن جديد از "جيك لاگ " را نياز دارد. ميتوانيد "جيك لاگ " خود را به روز كنيد از سايت<a href="http://www.geeklog.net">جيك لاگ</a> يا يك ورژن ديگر از پلاگين را نصب كنيد',
+    9 => 'اين پلاگين يك ورژن جديد از "جيك لاگ " را نياز دارد. ميتوانيد "جيك لاگ " خود را به روز كنيد از سايت<a href="http://www.gllabs.org">جيك لاگ</a> يا يك ورژن ديگر از پلاگين را نصب كنيد',
     10 => '<br' . XHTML . '><b>هم اكنون هيچ پلاگيني نصب نشده است </b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'براي تغيير يا پاك كردن پلاگين روي آن پلاگين در زير كليك كنيد. اينكارنمايش خواهد دادجزييات پلاگين را از قبيل "وب سايت نويسنده" .همچنين ورژن نصب شده و ورژن قبلي كه از آن ارتقا داده شده. اين به شما ميگويد كه آيا پلاگين احتياج به جديد شدن دارد يا خير . براي نصب نسخه به روز شده به مستندات آن مراجه كنيد',
     12 => 'هيچ پلاگيني براي ويرايشگر پلاگين آماده نيست',
@@ -1164,7 +1165,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1343,8 +1345,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Select Trackback URL',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1570,8 +1572,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1759,7 +1761,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

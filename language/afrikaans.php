@@ -2,7 +2,7 @@
 
 ###############################################################################
 # afrikaans.php
-# Hierdie is die Afrikaanse taallêer vir Geeklog 1.4
+# Hierdie is die Afrikaanse taallêer vir glFusion 1.4
 # Opgestel deur Renier Maritz epos:renier@gigaskills.co.za
 #
 # Kopiereg (C) 2000 Jason Whittenburg
@@ -170,7 +170,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -660,7 +661,7 @@ $LANG21 = array(
     27 => 'PHP-Blok',
     28 => 'PHP-Blok Opsies',
     29 => 'Blokfunksie',
-    30 => 'As jy sou wou h&ecirc; dat een van jou blokke PHP-kode gebruik, tik die naam van die funksie hierbo in.  Jou funksie moet begin met die voorvoegsel "phpblock_" (bv. phpblock_kryweer).  As dit nie hierdie voorvoegsel het nie, sal jou funksie nie uitgevoer word nie.  Ons doen dit om te keer dat mense wat dalk onregmatige toegang tot jou stelsel se installasie verkry het daarvan te weerhou om willekeurig kode uit te voer wat skadelik mag wees vir jou stelsel.  Maak seker dat jy le&euml; hakies "()" agter jou funksie naam bysit.  Verder word jy ook aangeraai dat jy al jou PHP-Blok kode in /pad/na/geeklog/system/lib-custom.php stoor.  Dit sal dit vir jou moontlik maak om jou kode te behou al gradeer jy na \'n nuwe weergawe van Geeklog op.',
+    30 => 'As jy sou wou h&ecirc; dat een van jou blokke PHP-kode gebruik, tik die naam van die funksie hierbo in.  Jou funksie moet begin met die voorvoegsel "phpblock_" (bv. phpblock_kryweer).  As dit nie hierdie voorvoegsel het nie, sal jou funksie nie uitgevoer word nie.  Ons doen dit om te keer dat mense wat dalk onregmatige toegang tot jou stelsel se installasie verkry het daarvan te weerhou om willekeurig kode uit te voer wat skadelik mag wees vir jou stelsel.  Maak seker dat jy le&euml; hakies "()" agter jou funksie naam bysit.  Verder word jy ook aangeraai dat jy al jou PHP-Blok kode in /pad/na/glfusion/system/lib-custom.php stoor.  Dit sal dit vir jou moontlik maak om jou kode te behou al gradeer jy na \'n nuwe weergawe van glFusion op.',
     31 => 'Fout in PHP-Blok. Funksie, %s, bestaan nie.',
     32 => 'Fout Vermiste Veld(e)',
     33 => 'Jy moet die URL na die RSS l&ecirc;er vir portaalblokke insleutel',
@@ -672,7 +673,7 @@ $LANG21 = array(
     39 => 'Kant',
     40 => 'Links',
     41 => 'Regs',
-    42 => 'U moet die bloktitel en blokvolgorde insleutel vir Geeklog se standaardblokke.',
+    42 => 'U moet die bloktitel en blokvolgorde insleutel vir glFusion se standaardblokke.',
     43 => 'Slegs Tuisblad',
     44 => '',
     45 => "U probeer om toegang tot 'n blok te verkry waartoe u nie regte het nie.  Hierdie poging is aangeteken. Gaan terug na die <a href=\"{$_CONF['site_admin_url']}/block.php\">blokadministrasieskerm</a>.",
@@ -698,7 +699,7 @@ $LANG21 = array(
     65 => 'Volgorde',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -858,7 +859,7 @@ $LANG28 = array(
     22 => 'Fout',
     23 => 'Lysbyvoeging',
     24 => 'Voer Lys van Gebruikers in',
-    25 => 'Jy kan \'n lys van gebruikers in Geeklog invoer.  Die invoerl&ecirc;er moet \'n tab-geskeide teksl&ecirc;er wees en moet die velde in die volgende volgorde h&ecirc;: volle naam, gebruikersnaam, epos-adres,.  Aan elke gebruiker wat jy so invoer sal \'n lukraak geskepte wagwoord gepos word.  Daar moet slegs een gebruiker per lyn verskyn.  As jy in gebreke bly om die aanwysings te volg kan baie probleme veroorsaak word wat baie werk kan verg om die inskrywings weer na te gaan!',
+    25 => 'Jy kan \'n lys van gebruikers in glFusion invoer.  Die invoerl&ecirc;er moet \'n tab-geskeide teksl&ecirc;er wees en moet die velde in die volgende volgorde h&ecirc;: volle naam, gebruikersnaam, epos-adres,.  Aan elke gebruiker wat jy so invoer sal \'n lukraak geskepte wagwoord gepos word.  Daar moet slegs een gebruiker per lyn verskyn.  As jy in gebreke bly om die aanwysings te volg kan baie probleme veroorsaak word wat baie werk kan verg om die inskrywings weer na te gaan!',
     26 => '',
     27 => '',
     28 => 'Merk hier om die prent te verwyder',
@@ -983,7 +984,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Die installasie van proppe kan moontlik skade aan u Geeklog installasie verrig en dalk selfs aan u stelsel.  Dit is daarom belangrik dat u slegs proppe installeer wat afgelaai is vanaf die <a href="http://www.geeklog.net">Geeklog Tuisblad</a> aangesien ons alle proppe wat aaan ons gestuur word deeglik toets op \'n verkseidenheid bedryfstelsels.  Dit is belangrik dat u daarop let dat die prop installasieproses die uitvoer van \'n l&ecirc;erstelsel bevele vereis wat kan aanleiding gee tot sekuriteitsprobleme veral as u proppe vanaf derdeparty werwe gebruik.  Selfs met die waarskuwing kan ons nie die sukses aldan mislukking van enige installasie waarborg nie en aanvaar ons nie verantwoordelikheid vir skade wat veroorsaak word deur die installasie van \'n Geeklog prop nie.  Met ander woorde, u installeer op eie verantwoordelikheid.  Vir die versigtiges is aanwysings ingesluit oor hoe om \'n prop handmatig te installeer ook by elke proppakket ingesluit.',
+    1 => 'Die installasie van proppe kan moontlik skade aan u glFusion installasie verrig en dalk selfs aan u stelsel.  Dit is daarom belangrik dat u slegs proppe installeer wat afgelaai is vanaf die <a href="http://www.gllabs.org">glFusion Tuisblad</a> aangesien ons alle proppe wat aaan ons gestuur word deeglik toets op \'n verkseidenheid bedryfstelsels.  Dit is belangrik dat u daarop let dat die prop installasieproses die uitvoer van \'n l&ecirc;erstelsel bevele vereis wat kan aanleiding gee tot sekuriteitsprobleme veral as u proppe vanaf derdeparty werwe gebruik.  Selfs met die waarskuwing kan ons nie die sukses aldan mislukking van enige installasie waarborg nie en aanvaar ons nie verantwoordelikheid vir skade wat veroorsaak word deur die installasie van \'n glFusion prop nie.  Met ander woorde, u installeer op eie verantwoordelikheid.  Vir die versigtiges is aanwysings ingesluit oor hoe om \'n prop handmatig te installeer ook by elke proppakket ingesluit.',
     2 => 'Prop Installasie Vrywaring',
     3 => 'Prop Installasie Vorm',
     4 => 'Propl&ecirc;er',
@@ -991,7 +992,7 @@ $LANG32 = array(
     6 => 'Waarskuwing: Prop reeds ge&iuml;nstalleer!',
     7 => 'Die prop wat u probeer installeer bestaan reeds.  Verwyder asseblief die prop alvorens u dit herinstalleer',
     8 => 'Prop Versoenbaarheidstoets het Misluk',
-    9 => 'Hierdie prop vereis \'n nuwer weergawe van Geeklog. Gradeer of u kopie van <a href="http://www.geeklog.net">Geeklog</a> op of kry \'n nuwer weergawe van die prop.',
+    9 => 'Hierdie prop vereis \'n nuwer weergawe van glFusion. Gradeer of u kopie van <a href="http://www.gllabs.org">glFusion</a> op of kry \'n nuwer weergawe van die prop.',
     10 => '<br' . XHTML . '><b>Daar is tans geen proppe ge&iuml;nstalleer nie.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Om \'n prop te wysig of te verwyder,  kliek op daardie prop se ikoon hieronder. Dit sal die prop se besonderhede vertoon, insluitend die samesteller se webwerf.  Beide die ge&iuml;nstalleerde weergawe en die weergawe wat vanaf die prop se eie kode teruggestuur is, word vertoon.  Dit sal u in staat stel om vas te stel of die prop opgegradeer moet word.  Vir aanwysings oor hoe om \'n prop te installeer of op te gradeer raadpleeg daardie prop se dokumentasie.',
     12 => 'geen propnaam is aan plugineditor() verskaf nie',
@@ -1000,7 +1001,7 @@ $LANG32 = array(
     15 => 'Admin Tuiste',
     16 => 'Propnaam',
     17 => 'Prop weergawe',
-    18 => 'Geeklog Weergawe',
+    18 => 'glFusion Weergawe',
     19 => 'Aktief',
     20 => 'Ja',
     21 => 'Nee',
@@ -1011,7 +1012,7 @@ $LANG32 = array(
     26 => 'Propnaam',
     27 => 'Prop Tuisblad',
     28 => 'Ge&iuml;nstalleerde Weergawe',
-    29 => 'Geeklog Weergawe',
+    29 => 'glFusion Weergawe',
     30 => 'Verwyder Prop?',
     31 => 'Is u seker dat u hierdie prop wil verwyder?  Deur dit te doen verwyder u al die data en datastrukture wat deur hierdie prop gebruik word.  As u seker is, kliek dan weer op verwyder in die onderstaande vorm.',
     32 => '<p><b>Fout AutoLink tag nie in korrekte formaat</b></p>',
@@ -1058,7 +1059,7 @@ $LANG33 = array(
     34 => 'Inskrywings',
     35 => 'Ure',
     36 => 'Kies jou soort nuusvoer',
-    37 => 'U het ten minste een prop ge&iuml;nstalleer wat inhoudsindikasie ondersteun. Hieronder moet u kies of u \'n Geeklog nuusvoer wil h&ecirc; of \'n voer vanaf een van die proppe.',
+    37 => 'U het ten minste een prop ge&iuml;nstalleer wat inhoudsindikasie ondersteun. Hieronder moet u kies of u \'n glFusion nuusvoer wil h&ecirc; of \'n voer vanaf een van die proppe.',
     38 => 'Fout: Vermiste Velde',
     39 => 'Vul asseblief die Nuusvoer se Titel, Beskrywing en L&ecirc;ernaam in.',
     40 => 'Vul asseblief die aantal inskrywings of aantal ure in.',
@@ -1176,7 +1177,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1355,8 +1357,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Onbekende fout.',
     'select_url' => 'Kies Terugspoor URL',
     'not_found' => 'Terugspoor URL nie gevind',
-    'autodetect_failed' => 'Geeklog kon nie die Terugspoor URL opspoor vir die inskrywing waarna u, u kommentaar wil stuur nie.  Sleutel dit asseblief per hand hieronder in.',
-    'trackback_explain' => 'Kies asseblief uit die skakels hieronder die URL waarheen u, u Terugspoorkommentaar wil stuur. Geeklog sal dan poog om die korrekte Terugspoor URL vir daardie inskrywing op te spoor. Of u kan <a href="%s">dit met die hand insleutel</a> as u dit reeds ken.',
+    'autodetect_failed' => 'glFusion kon nie die Terugspoor URL opspoor vir die inskrywing waarna u, u kommentaar wil stuur nie.  Sleutel dit asseblief per hand hieronder in.',
+    'trackback_explain' => 'Kies asseblief uit die skakels hieronder die URL waarheen u, u Terugspoorkommentaar wil stuur. glFusion sal dan poog om die korrekte Terugspoor URL vir daardie inskrywing op te spoor. Of u kan <a href="%s">dit met die hand insleutel</a> as u dit reeds ken.',
     'no_links_trackback' => 'Geen skakels opgespoor nie.  U kan nie \'n Terugspoorkommentaar vir hierdie inskrywing stuur nie.',
     'pingback' => 'Skakelkennisgewing',
     'pingback_results' => 'Skakelkennisgewing resultate',
@@ -1582,8 +1584,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1771,7 +1773,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

@@ -83,7 +83,7 @@ $LANG01 = array(
     37 => 'Ni člankov',
     38 => 'Združevanje vsebine (Syndication)',
     39 => 'Osveži',
-    40 => 'Izključene so <tt>register_globals = Off</tt> v <tt>php.ini</tt>. Geeklog zahteva <tt>register_globals</tt> <strong>vključene</strong>. Preden nadaljuješ, jih prosim <strong>vključi</strong> in ponovno zaženi spletni strežnik.',
+    40 => 'Izključene so <tt>register_globals = Off</tt> v <tt>php.ini</tt>. glFusion zahteva <tt>register_globals</tt> <strong>vključene</strong>. Preden nadaljuješ, jih prosim <strong>vključi</strong> in ponovno zaženi spletni strežnik.',
     41 => 'Gostje',
     42 => 'Prispeval/a:',
     43 => 'Odgovori na to',
@@ -173,7 +173,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Prijavi se z OpenID:',
     129 => 'Nastavitve',
-    130 => 'Spletne storitve'
+    130 => 'Spletne storitve',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -663,7 +664,7 @@ $LANG21 = array(
     27 => 'Blok PHP',
     28 => 'Nastavitve bloka PHP',
     29 => 'Funkcije bloka',
-    30 => 'Če želiš, da blok uporablja kodo PHP, zgoraj vpiši ime funkcije. Ime funkcije se mora začeti s "phpblock_" (npr. phpblock_getweather). Brez te predpone funkcija NE bo klicana. Zaradi tega tisti, ki bi morda vdrli v to namestitev Geekloga, ne bi mogli poljubno spreminjati kode in škodovati sistemu. Pazi, da za ime funkcije ne vstaviš praznih oklepajev "()". Priporočamo, da vso kodo svojega bloka PHP, vpisujete v /pot/do/geekloga/system/lib-custom.php. Tako se bo ta koda brez težav ohranila tudi po nadgradnji Geekloga.',
+    30 => 'Če želiš, da blok uporablja kodo PHP, zgoraj vpiši ime funkcije. Ime funkcije se mora začeti s "phpblock_" (npr. phpblock_getweather). Brez te predpone funkcija NE bo klicana. Zaradi tega tisti, ki bi morda vdrli v to namestitev glFusiona, ne bi mogli poljubno spreminjati kode in škodovati sistemu. Pazi, da za ime funkcije ne vstaviš praznih oklepajev "()". Priporočamo, da vso kodo svojega bloka PHP, vpisujete v /pot/do/geekloga/system/lib-custom.php. Tako se bo ta koda brez težav ohranila tudi po nadgradnji glFusiona.',
     31 => 'Napaka v bloku PHP. Funkcija %s ne obstaja.',
     32 => 'Napaka. Manjkajo podatki.',
     33 => 'Vnesi naslov URL v datoteko .rdf za blok na portalu',
@@ -675,7 +676,7 @@ $LANG21 = array(
     39 => 'Stran',
     40 => 'Levo',
     41 => 'Desno',
-    42 => 'Vnesite ime bloka in vrstni red za prednastavljene bloke Geekloga.',
+    42 => 'Vnesite ime bloka in vrstni red za prednastavljene bloke glFusiona.',
     43 => 'Samo domača stran',
     44 => '',
     45 => "Do tega bloka nimaš dostopa. Poskus je bil zabeležen v bazo podatkov. Prosim vrni se na <a href=\"{$_CONF['site_url']}/admin/block.php\">zaslon za skrbništvo blokov</a>.",
@@ -701,7 +702,7 @@ $LANG21 = array(
     65 => 'naročilo',
     66 => 'Samodejni ukazi',
     67 => 'Potrdi za odobritev samodejnih ukazov',
-    68 => 'Združena vsebina tega bloka je predolga za prikaz. Prosim nastavi največje število člankov za uvoz, v nastavitvah bloka, ali nastavi najvišje število (global maximum) v nastavitvah Geekloga (Geeklog Configuration).'
+    68 => 'Združena vsebina tega bloka je predolga za prikaz. Prosim nastavi največje število člankov za uvoz, v nastavitvah bloka, ali nastavi najvišje število (global maximum) v nastavitvah glFusiona (glFusion Configuration).'
 );
 
 ###############################################################################
@@ -861,7 +862,7 @@ $LANG28 = array(
     22 => 'Napaka',
     23 => 'Zaporedno dodajanje',
     24 => 'Zaporedni uvoz uporabnikov',
-    25 => 'V Geeklog lahko uvoziš zaporedje uporabnikov. Datoteka za uvoz mora biti navadna tekstovna datoteka, razdeljena s tabulatorji. Polja naj si sledijo v naslednjem vrstnem redu: celotno ime, uporabniško ime, e-naslov.  Vsak uporabnik bo prejel e-pošto z naključnim geslom. Vsak uporabnik naj bo vpisan v svoji vrstici. Če teh navodil ne upoštevaš, lahko nastanejo precejšnje težave, ki bodo zahtevale ročno obdelavo, zato pred uvozom še enkrat preveri vpise v datoteki.',
+    25 => 'V glFusion lahko uvoziš zaporedje uporabnikov. Datoteka za uvoz mora biti navadna tekstovna datoteka, razdeljena s tabulatorji. Polja naj si sledijo v naslednjem vrstnem redu: celotno ime, uporabniško ime, e-naslov.  Vsak uporabnik bo prejel e-pošto z naključnim geslom. Vsak uporabnik naj bo vpisan v svoji vrstici. Če teh navodil ne upoštevaš, lahko nastanejo precejšnje težave, ki bodo zahtevale ročno obdelavo, zato pred uvozom še enkrat preveri vpise v datoteki.',
     26 => '',
     27 => '',
     28 => 'Izbris slike potrdi tu',
@@ -986,7 +987,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Namestitev vtičnikov (plugins) lahko Geeklogu in tvojemu sistemu povzroči škodo. Pomembno je, da namestiš samo vtičnike, ki jih preneseš z <a href="http://www.geeklog.net" target="_blank">Geeklogove domače strani</a>, saj smo samo te dodobra preizkusili na različnih operacijskih sistemih. Pomembno je razumeti, da je namestitev vtičnikov postopek, ki zahteva izvajanje nekaterih ukazov na ravni datotečnega sistema. Ti lahko vodijo do varnostnih lukenj, posebej če uporabljaš vtičnik s spletnih mest tretjih oseb. Kljub temu opozorilu ne jamčimo za uspeh nobene namestitve niti nismo odgovorni za škodo, povzročeno z namestitvijo vtičnika za Geeklog. Z drugimi besedami – nameščaš na lastno odgovornost. V paket vsakega vtičnika so vključena navodila za njegovo ročno namestitev.',
+    1 => 'Namestitev vtičnikov (plugins) lahko glFusionu in tvojemu sistemu povzroči škodo. Pomembno je, da namestiš samo vtičnike, ki jih preneseš z <a href="http://www.gllabs.org" target="_blank">glFusionove domače strani</a>, saj smo samo te dodobra preizkusili na različnih operacijskih sistemih. Pomembno je razumeti, da je namestitev vtičnikov postopek, ki zahteva izvajanje nekaterih ukazov na ravni datotečnega sistema. Ti lahko vodijo do varnostnih lukenj, posebej če uporabljaš vtičnik s spletnih mest tretjih oseb. Kljub temu opozorilu ne jamčimo za uspeh nobene namestitve niti nismo odgovorni za škodo, povzročeno z namestitvijo vtičnika za glFusion. Z drugimi besedami – nameščaš na lastno odgovornost. V paket vsakega vtičnika so vključena navodila za njegovo ročno namestitev.',
     2 => 'Zavrnitev namestitve vtičnika',
     3 => 'Obrazec za namestitev vtičnika',
     4 => 'Datoteka vtičnika',
@@ -994,7 +995,7 @@ $LANG32 = array(
     6 => 'Opozorilo: Vtičnik je že nameščen.',
     7 => 'Vtičnik, ki ga skušaš namestiti, je že nameščen. Pred ponovno namestitvijo prosim izbriši stari vtičnik.',
     8 => 'Test združljivost vtičnika ni uspel',
-    9 => 'Ta vtičnik zahteva novejšo verzijo Geekloga. Namesti novo različico <a href="http://www.geeklog.net">Geekloga</a> ali najdi novejšo različico vtičnika.',
+    9 => 'Ta vtičnik zahteva novejšo verzijo glFusiona. Namesti novo različico <a href="http://www.gllabs.org">glFusiona</a> ali najdi novejšo različico vtičnika.',
     10 => '<br' . XHTML . '><b>Trenutno ni nameščenih nobenih vtičnikov.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Za spremembo ali izbris vtičnika klikni njegovo ikono za urejanje spodaj. Prikazale se bodo podrobnosti o vtičniku, vključno z avtorjevo spletno stranjo. Prikazani sta nameščena in iz vtičnikove kode vrnjena različica. Tako bo lažje vedeti, ali je treba vtičnik nadgraditi ali ne. Za namestitev ali nadgradnjo vtičnika poglej v njegovo dokumentacijo.',
     12 => 'nobeno ime vtičnika ni bilo poslano v urejevalnik vtičnikov ()',
@@ -1003,7 +1004,7 @@ $LANG32 = array(
     15 => 'Skrbnikova stran',
     16 => 'Ime vtičnika',
     17 => 'Različica vtičnika',
-    18 => 'Različica Geekloga',
+    18 => 'Različica glFusiona',
     19 => 'Omogočeno',
     20 => 'Da',
     21 => 'Ne',
@@ -1014,7 +1015,7 @@ $LANG32 = array(
     26 => 'Ime vtičnika',
     27 => 'Domača stran vtičnika',
     28 => 'Različica vtičnika',
-    29 => 'Različica Geekloga',
+    29 => 'Različica glFusiona',
     30 => 'Izbriši vtičnik?',
     31 => 'Hočeš res odstraniti ta vtičnik?  S tem bodo iz baze izbrisani tudi vsi podatki, ki jih uporablja.',
     32 => '<p><b>Napaka AutoLink tag ni v pravem formatu</b></p>',
@@ -1061,7 +1062,7 @@ $LANG33 = array(
     34 => 'Vpisi',
     35 => 'Ure',
     36 => 'Izberi tip združene vsebine',
-    37 => 'Nameščen imaš vsaj en vtičnik, ki podpira združevanje vsebine. Spodaj je treba izbrati, ali hočeš ustvariti združeno vsebino za Geeklog ali za katerega od vtičnikov.',
+    37 => 'Nameščen imaš vsaj en vtičnik, ki podpira združevanje vsebine. Spodaj je treba izbrati, ali hočeš ustvariti združeno vsebino za glFusion ali za katerega od vtičnikov.',
     38 => 'Napaka: Manjkajoča polja',
     39 => 'Izpolni polja Naslov združene vsebine, Opis, Ime datoteke.',
     40 => 'Vpiši število vpisov ali število ur.',
@@ -1179,7 +1180,8 @@ $MESSAGE = array(
     94 => 'Varnostna kopija baze podatkov NI uspela: Datoteka je manjša kot 1kb',
     95 => 'Prišlo je do napake.',
     96 => 'Žal, nimaš dostopa do strani z nastavitvami!   Vedi da so vsi poskusi za dostop do zaščitenih lastnosti strani zabeleženi.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1257,7 +1259,7 @@ $LANG_DB_BACKUP = array(
     'last_ten_backups' => 'Zadnjih 10 varnostnih kopij',
     'do_backup' => 'Naredi varnostno kopijo',
     'backup_successful' => 'Varnostno shranjevanje baze podatkov je bilo uspešno.',
-    'db_explanation' => 'Če hočeš ustvariti novo varnostno kopijo baze podatkov sistema Geeklog , klikni "Ustvari" zgoraj.',
+    'db_explanation' => 'Če hočeš ustvariti novo varnostno kopijo baze podatkov sistema glFusion , klikni "Ustvari" zgoraj.',
     'not_found' => "Napačna pot ali pa orodje mysqldump ni izvršljivo.<br" . XHTML . ">Preveri definicijo <strong>\$_DB_mysqldump_path</strong> v config.php.<br" . XHTML . ">Spremenljivka je trenutno definirana kot: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Varnostno kopiranje neuspešno: Velikost datoteke je 0 bajtov',
     'path_not_found' => "{$_CONF['backup_path']} ne obstaja ali pa ni direktorij",
@@ -1358,8 +1360,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Select Trackback URL',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1585,8 +1587,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Nastavitve Geekloga'
+    'label' => 'glFusion',
+    'title' => 'Nastavitve glFusiona'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1774,7 +1776,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Prednastavljena dovoljenja rubrike',
     'atom_max_stories' => 'Največje število člankov v Webservices Feed',
     'disable_webservices' => 'Onemogoči Webservices?',
-    'restrict_webservices' => 'Omeji Webservices?'
+    'restrict_webservices' => 'Omeji Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

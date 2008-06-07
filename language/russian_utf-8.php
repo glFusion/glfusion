@@ -7,7 +7,7 @@
 # 01/10/2003 R.03-1
 # Thanks goes to Marina Prince & Frederick Ouano (RussianHouston.com)
 # for completing the project.
-# This version has been tested to work with Geeklog v.1.3.6
+# This version has been tested to work with glFusion v.1.3.6
 #
 # Copyright (c) 2002 Konstantin Komash, Zoya Koneva
 # komash@profit.ru
@@ -96,7 +96,7 @@ $LANG01 = array(
     37 => 'Статей нет',
     38 => 'Синдикация',
     39 => 'Обновить',
-    40 => 'Выставлен флаг <tt>register_globals = Off</tt> в вашем <tt>php.ini</tt>. Но Geeklog обязывает, чтобы <tt>register_globals</tt> был включен (<strong>on</strong>). Включите его в <strong>php.ini</strong> и перезагрузите HTTP сервер.',
+    40 => 'Выставлен флаг <tt>register_globals = Off</tt> в вашем <tt>php.ini</tt>. Но glFusion обязывает, чтобы <tt>register_globals</tt> был включен (<strong>on</strong>). Включите его в <strong>php.ini</strong> и перезагрузите HTTP сервер.',
     41 => 'Гости',
     42 => 'Автор:',
     43 => 'Ответить на это',
@@ -186,7 +186,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -676,7 +677,7 @@ $LANG21 = array(
     27 => 'Блок PHP',
     28 => 'Свойства Блока PHP',
     29 => 'Функция блока',
-    30 => 'Если Вы хотите, что бы один из блоков использовал PHP код, введите имя функции выше. Ваша функция должна начинаться с префикса "phpblock_" (например phpblock_getweather).  Если она не имеет указанного префикса, она НЕ будет вызвана.  Это сделано для того, что бы не позволить людям, которые могут взломать Ваш Geeklog, вызывать функции, которые могут быть опасны для Вашей системы.  Не помещайте пустые скобки "()" после имени Вашей функции.  Мы рекомендуем размещать код Ваших функций в /path/to/geeklog/system/lib-custom.php.  Это позволит Вам сохранить код даже в случае перехода на новую версию GeekLog.',
+    30 => 'Если Вы хотите, что бы один из блоков использовал PHP код, введите имя функции выше. Ваша функция должна начинаться с префикса "phpblock_" (например phpblock_getweather).  Если она не имеет указанного префикса, она НЕ будет вызвана.  Это сделано для того, что бы не позволить людям, которые могут взломать Ваш glFusion, вызывать функции, которые могут быть опасны для Вашей системы.  Не помещайте пустые скобки "()" после имени Вашей функции.  Мы рекомендуем размещать код Ваших функций в /path/to/glfusion/system/lib-custom.php.  Это позволит Вам сохранить код даже в случае перехода на новую версию GeekLog.',
     31 => 'Ошибка в Блоке PHP.  Функция %s не существует.',
     32 => 'Ошибка потеряно(ы) поле(я)',
     33 => 'Введите URL к .rdf файлу для портального блока',
@@ -714,7 +715,7 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -999,7 +1000,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Установка плагина может повредить установленному у Вас Geeklog-у или даже Вашей системе.  Важно, что бы Вы устанавливали только плагины, скачанные с <a href="http://WWW.geeklog.net" target="_blank">Geeklog Homepage</a> т.к. мы тестируем все присланные нам плагины на различных операционных системах. Важно, что бы Вы понимали, что установка плагина требует исполнения некоторых системных команд, которые могут вызвать проблемы с безопастностью, особенно это касается плагинов, скачаных не с нашего сайта.  Даже после этого предупреждения мы не можем гарантировать успешность инсталяции и не несём ответственности за проблемы, вызванные установкой Geeklog-плагина. Иначе говоря, Вы устанавливаете плагин на свой собственный риск. Руководство по ручной установке плагина включено в каждый инсталляционный пакет.',
+    1 => 'Установка плагина может повредить установленному у Вас glFusion-у или даже Вашей системе.  Важно, что бы Вы устанавливали только плагины, скачанные с <a href="http://WWW.geeklog.net" target="_blank">glFusion Homepage</a> т.к. мы тестируем все присланные нам плагины на различных операционных системах. Важно, что бы Вы понимали, что установка плагина требует исполнения некоторых системных команд, которые могут вызвать проблемы с безопастностью, особенно это касается плагинов, скачаных не с нашего сайта.  Даже после этого предупреждения мы не можем гарантировать успешность инсталяции и не несём ответственности за проблемы, вызванные установкой glFusion-плагина. Иначе говоря, Вы устанавливаете плагин на свой собственный риск. Руководство по ручной установке плагина включено в каждый инсталляционный пакет.',
     2 => 'Предупреждение о установке плагинов',
     3 => 'Форма установки плагина',
     4 => 'Файл плагина',
@@ -1007,7 +1008,7 @@ $LANG32 = array(
     6 => 'Предупреждение: Плагин уже установлен!',
     7 => 'Плагин, который Вы пытаетесь установить, уже существует. Перед тем, как переустановить плагин, удалите его.',
     8 => 'Проверка совместимости плагина провалилась',
-    9 => 'Плагин требует более новой версии Geeklog-а. Обновите Вашу копию с <a href=http://www.geeklog.net>Geeklog</a> или попробуйте найти другую версию плагина.',
+    9 => 'Плагин требует более новой версии glFusion-а. Обновите Вашу копию с <a href=http://www.gllabs.org>glFusion</a> или попробуйте найти другую версию плагина.',
     10 => '<br' . XHTML . '><b>В системе нет установленных плагинов.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Для изменения или удаления плагина, нажмите на его номер ниже. Для получения информации о плагине, нажмите на его имя, и вы будете направлены вебсайт плагина. Для установки или обновления плагина нажмите кнопку "Новый плагин" выше.',
     12 => 'имя плагина не передано в plugineditor()',
@@ -1016,7 +1017,7 @@ $LANG32 = array(
     15 => 'Home администратора',
     16 => 'Наименование плагина',
     17 => 'Версия плагина',
-    18 => 'Версия Geeklog',
+    18 => 'Версия glFusion',
     19 => 'Разрешено',
     20 => 'Да',
     21 => 'Нет',
@@ -1027,7 +1028,7 @@ $LANG32 = array(
     26 => 'Наименование плагина',
     27 => 'Homepage плагина',
     28 => 'Версия плагина',
-    29 => 'Версия Geeklog',
+    29 => 'Версия glFusion',
     30 => 'Удалить плагин?',
     31 => 'Вы уверены, что хотите удалить этот плагин? Продолжив, Вы удалите все файлы и данные, которые данный плагин использовал.  Если Вы уверены, нажмите кнопку "Удалить" ниже.',
     32 => '<p><b>Ошибка: неверный формат тега AutoLink</b></p>',
@@ -1074,7 +1075,7 @@ $LANG33 = array(
     34 => 'Записи',
     35 => 'Часы',
     36 => 'Выберите тип синопсиса',
-    37 => 'Установите хотя бы один модуль, поддерживающий синдикацию контента. Укажите ниже, хотите ли вы создать синопсис Geeklog, или синопсис от одного из модулей.',
+    37 => 'Установите хотя бы один модуль, поддерживающий синдикацию контента. Укажите ниже, хотите ли вы создать синопсис glFusion, или синопсис от одного из модулей.',
     38 => 'Ошибка: не все необходимые поля заполнены',
     39 => 'Укажите заголовок, описание и имя файла.',
     40 => 'Укажите либо количество записей, либо количество часов.',
@@ -1192,7 +1193,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1270,7 +1272,7 @@ $LANG_DB_BACKUP = array(
     'last_ten_backups' => 'Последние 10 бэкапов',
     'do_backup' => 'Сделать Бэкап',
     'backup_successful' => 'Резервное копирование базы данных успешно завершено.',
-    'db_explanation' => 'Для создания новой резервной копии Вашей системы Geeklog, нажмите кнопку ниже',
+    'db_explanation' => 'Для создания новой резервной копии Вашей системы glFusion, нажмите кнопку ниже',
     'not_found' => "Неправильный путь или утилита mysqldump не может выполняться.<br" . XHTML . ">Проверьте <strong>\$_DB_mysqldump_path</strong> определение в файле config.php.<br" . XHTML . ">Переменная в данный момент установлена в: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Неудачный бэкап: Размер файла 0 байт',
     'path_not_found' => "{$_CONF['backup_path']} не существует или не является директорией",
@@ -1371,8 +1373,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Select Trackback URL',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1598,8 +1600,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1787,7 +1789,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

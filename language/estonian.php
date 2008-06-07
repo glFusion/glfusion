@@ -81,7 +81,7 @@ $LANG01 = array(
     37 => 'Pole kasutaja lugusid',
     38 => 'Sisu jagamine',
     39 => 'Värskenda',
-    40 => 'Sul on <tt>php.ini</tt> failis <tt>register_globals = Off</tt>. Kuid Geeklogi jaoks peab olema <tt>register_globals</tt> = <strong>on</strong>. Enne jätkamist sea selle väärtuseks <strong>"on"</strong> ja taaskäivita veebiserver.',
+    40 => 'Sul on <tt>php.ini</tt> failis <tt>register_globals = Off</tt>. Kuid glFusioni jaoks peab olema <tt>register_globals</tt> = <strong>on</strong>. Enne jätkamist sea selle väärtuseks <strong>"on"</strong> ja taaskäivita veebiserver.',
     41 => 'Külaliskasutajaid',
     42 => 'Autoriks:',
     43 => 'Vasta sellele',
@@ -171,7 +171,8 @@ $LANG01 = array(
     127 => 'Püsilink',
     128 => 'Logi sisse OpenID abiga:',
     129 => 'Seadistus',
-    130 => 'Veebiteenused'
+    130 => 'Veebiteenused',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -661,7 +662,7 @@ $LANG21 = array(
     27 => 'PHP blokk',
     28 => 'PHP bloki valikud',
     29 => 'Bloki funktsioon',
-    30 => 'Kui sa soovid oma blokis kasutada PHP käske, sisesta allolevasse kasti PHP funktsiooni nimi. See peab algama eesliitega "phpblock_" (n. phpblock_getweather). Ilma selle eesliiteta funktsiooni ei käivitata. Me oleme lisanud selle kitsenduse kaitsmaks sinu saiti juhuks, kui keegi on sellele sisse häkkinud ja lisanud lehe koodi kontrollimata käske. Jälgi, et sa ei lisaks funktsiooni nime lõppu sulge "()". On soovitav panna oma PHP blokkide jaoks mõeldud funktsioonid faili /path/to/geeklog/system/lib-custom.php. See lubab säilitada lisatud PHP blockide funktsioonid ka Geeklogi uuendamisel.',
+    30 => 'Kui sa soovid oma blokis kasutada PHP käske, sisesta allolevasse kasti PHP funktsiooni nimi. See peab algama eesliitega "phpblock_" (n. phpblock_getweather). Ilma selle eesliiteta funktsiooni ei käivitata. Me oleme lisanud selle kitsenduse kaitsmaks sinu saiti juhuks, kui keegi on sellele sisse häkkinud ja lisanud lehe koodi kontrollimata käske. Jälgi, et sa ei lisaks funktsiooni nime lõppu sulge "()". On soovitav panna oma PHP blokkide jaoks mõeldud funktsioonid faili /path/to/glfusion/system/lib-custom.php. See lubab säilitada lisatud PHP blockide funktsioonid ka glFusioni uuendamisel.',
     31 => 'Viga PHP blokis.  Funktsiooni %s pole olemas.',
     32 => 'Viga: puuduvad väljad',
     33 => 'Sa pead portaalbloki jaoks sisestama RSS faili URL-i.',
@@ -673,7 +674,7 @@ $LANG21 = array(
     39 => 'Külg',
     40 => 'Vasak',
     41 => 'Parem',
-    42 => 'Sa pead Geeklogi vaikeblokkide jaoks sisestama bloki tiitli ja järjekorra.',
+    42 => 'Sa pead glFusioni vaikeblokkide jaoks sisestama bloki tiitli ja järjekorra.',
     43 => 'Ainult avaleht',
     44 => '',
     45 => "Sa üritasid ligi pääseda blokile, milleks polnud sul õigust. See katse logiti. Palun <a href=\"{$_CONF['site_admin_url']}/block.php\">mine tagasi blokkide administreerimislehele. </a>",
@@ -699,7 +700,7 @@ $LANG21 = array(
     65 => 'Järjekord',
     66 => 'Autosildid',
     67 => 'Autosiltide lubamiseks tee märge',
-    68 => 'See lõim on antud portaalblokis näitamiseks liiga pikk.  Palun määra blokihalduslehel imporditavate  artiklite maksimum kas antud portaalbloki jaoks või  siis üldine Geeklogi maksimum.'
+    68 => 'See lõim on antud portaalblokis näitamiseks liiga pikk.  Palun määra blokihalduslehel imporditavate  artiklite maksimum kas antud portaalbloki jaoks või  siis üldine glFusioni maksimum.'
 );
 
 ###############################################################################
@@ -859,7 +860,7 @@ $LANG28 = array(
     22 => 'Viga',
     23 => 'Masslisamine',
     24 => 'Mass kasutajate importimine',
-    25 => 'Sa võid Geeklogi importida korraga mitu kasutajat. Imporditavas tekstifailis peab väljade eraldajaks olema tabulaator ja selles peavad väljad olema järgmises järjekorras: täisnimi, kasutajanimi, E-postiaadress. Igale imporditud kasutajale saadetakse E-postiga salasõnageneraatoriga genereeritud juhuslik salasõna. Ühel real tohib olla vaid täpselt üks kasutaja. Selle reegli rikkumine toob kaasa probleeme, mille kõrvaldamine nõuab lehe käsitsi häälestamist, nii et kontrolli hoolikalt ja mitu korda imporditava faili sissekandeid!',
+    25 => 'Sa võid glFusioni importida korraga mitu kasutajat. Imporditavas tekstifailis peab väljade eraldajaks olema tabulaator ja selles peavad väljad olema järgmises järjekorras: täisnimi, kasutajanimi, E-postiaadress. Igale imporditud kasutajale saadetakse E-postiga salasõnageneraatoriga genereeritud juhuslik salasõna. Ühel real tohib olla vaid täpselt üks kasutaja. Selle reegli rikkumine toob kaasa probleeme, mille kõrvaldamine nõuab lehe käsitsi häälestamist, nii et kontrolli hoolikalt ja mitu korda imporditava faili sissekandeid!',
     26 => '',
     27 => '',
     28 => 'Pildi kustutamiseks märgi see',
@@ -984,7 +985,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Pluginate installeerimine võib kahjustada sinu Geeklogi installatsiooni ja lisaks kahjustada ka sinu süsteemi. On oluline, et sa installeeriksid vaid <a href="http://www.geeklog.net">Geeklogi kodulehelt</a> laetud pluginaid, sest me kontrollime hoolikalt meie lehele laetud pluginaid erinevates operatsioonisüsteemides. On oluline mõista, et plugina installeerimine nõuab mitmete süsteemikäskude kasutamist, mis võib kaasa tuua turvalisusprobleeme, eriti siis, kui sa kasutad kolmandatelt lehtedelt laetud pluginaid. Sellest hoiatusest hoolimata ei taga me plugina installeerimise edukust ega vastuta selle installeerimise tagajärjena põhjustatud kahju eest. Teiste sõnadega - installeeri oma vastutusel. Lisaks on iga plugina paketi juures juhend, kuidas installeerida plugin käsitsi.',
+    1 => 'Pluginate installeerimine võib kahjustada sinu glFusioni installatsiooni ja lisaks kahjustada ka sinu süsteemi. On oluline, et sa installeeriksid vaid <a href="http://www.gllabs.org">glFusioni kodulehelt</a> laetud pluginaid, sest me kontrollime hoolikalt meie lehele laetud pluginaid erinevates operatsioonisüsteemides. On oluline mõista, et plugina installeerimine nõuab mitmete süsteemikäskude kasutamist, mis võib kaasa tuua turvalisusprobleeme, eriti siis, kui sa kasutad kolmandatelt lehtedelt laetud pluginaid. Sellest hoiatusest hoolimata ei taga me plugina installeerimise edukust ega vastuta selle installeerimise tagajärjena põhjustatud kahju eest. Teiste sõnadega - installeeri oma vastutusel. Lisaks on iga plugina paketi juures juhend, kuidas installeerida plugin käsitsi.',
     2 => 'Plug-in Installation Disclaimer',
     3 => 'Plugina installeerimisvorm',
     4 => 'Plugina fail',
@@ -992,7 +993,7 @@ $LANG32 = array(
     6 => 'Hoiatus, plugin on juba installeeritud!',
     7 => 'Plugin, mida sa soovid installeerida, on juba installeeritud. Palun kustuta see plugin enne taasinstalleerimist.',
     8 => 'Plugina sobivuse kontroll  ebaõnnestus',
-    9 => 'See plugin vajab uuemat Geeklogi versiooni. Kas uuenda <a href="http://www.geeklog.net">Geeklog</a> või hangi plugina sobiv versioon.',
+    9 => 'See plugin vajab uuemat glFusioni versiooni. Kas uuenda <a href="http://www.gllabs.org">glFusion</a> või hangi plugina sobiv versioon.',
     10 => '<br<b>Hetkel pole installeeritud ühtegi pluginat.</b><br<br',
     11 => 'Plugina muutmiseks või kustutamiseks klõpsa allpool selle nimel. Sulle näidatakse plugina kohta täpsemat infot koos autori veebilehe aadressiga. Näidatakse nii installeeritud versiooni numbrit kui ka plugina koodist saadud plugina versioon. Selle põhjal saad otsustada, kas plugin vajab uuendamist või mitte. Plugina installeerimise või uuendamise kohta loe täpsemalt plugina dokumentatsioonist.',
     12 => 'plugineditor () ei saanud plugina nime',
@@ -1001,7 +1002,7 @@ $LANG32 = array(
     15 => 'Admin avaleht',
     16 => 'Plugina nimi',
     17 => 'Plugina versioon',
-    18 => 'Geeklogi versioon',
+    18 => 'glFusioni versioon',
     19 => 'Kasutuses',
     20 => 'Ja',
     21 => 'Ei',
@@ -1012,7 +1013,7 @@ $LANG32 = array(
     26 => 'Plugina nimi',
     27 => 'Plugina koduleht',
     28 => 'Installeeritud versioonid',
-    29 => 'Geeklogi versioon',
+    29 => 'glFusioni versioon',
     30 => 'Kustuta plugin?',
     31 => 'Kas sa oled kindel, et soovid  kustutada  selle plugina?  Jätkates kustutad sa ka kõik selle pluginaga seotud andmed ja andmestruktuurid. Kui sa oled kindel, siis klõpsa uuesti allpool "kustuta" nuppu.',
     32 => '<p><b>Viga: AutoLink silt on ebakorrektse formaadiga</b></p>',
@@ -1059,7 +1060,7 @@ $LANG33 = array(
     34 => 'Kanded',
     35 => 'tundi',
     36 => 'Vali lõime tüüp',
-    37 => 'Sa oled installeerinud vähemalt ühe plugina, mis toetab sisu jaotamist. Allpool pead sa valima, kas lood Geeklogi lõime või mõne plugina poolt toetatud lõime.',
+    37 => 'Sa oled installeerinud vähemalt ühe plugina, mis toetab sisu jaotamist. Allpool pead sa valima, kas lood glFusioni lõime või mõne plugina poolt toetatud lõime.',
     38 => 'Viga: puuduvad väljad',
     39 => 'Palun täida lõime tiitli, kirjelduse ja faili nime väljad.',
     40 => 'Palun sisesta lugude  või tundide arv.',
@@ -1177,7 +1178,8 @@ $MESSAGE = array(
     94 => 'Varundamine ebaõnnestus: faili suurus on alla 1kb',
     95 => 'Oli viga.',
     96 => 'Sul pole ligipääsu admistreerimislehele.  Pane tähele, et kõik õigustamata katsed sellele lehele ligi pääseda logitakse.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1255,7 +1257,7 @@ $LANG_DB_BACKUP = array(
     'last_ten_backups' => 'Viimased 10 varundamist',
     'do_backup' => 'Varunda',
     'backup_successful' => 'Andmebaasi varundamine oli edukas.',
-    'db_explanation' => 'Sinu Geeklogist uue varukoopia tegemiseks klõpsa allolevat nuppu',
+    'db_explanation' => 'Sinu glFusionist uue varukoopia tegemiseks klõpsa allolevat nuppu',
     'not_found' => "Ebakorrektne tee programmini või mysqldump pole käivitatav.<brKontrolli seadistuses <strong>\$_DB_mysqldump_path</strong> definitsiooni.<brHetkel on muutuja väärtuseks: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Varundamine ebaõnnestus, faili suurus on 0 baiti',
     'path_not_found' => "{$_CONF['backup_path']} pole olemas või pole kataloog.",
@@ -1356,8 +1358,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Määratlemata viga.',
     'select_url' => 'Vali trackbacki URL',
     'not_found' => 'Ei leidnud trackback URL-i',
-    'autodetect_failed' => 'Geeklog ei suutnud tuvastada saadetava kommentaari jaoks trackback URL-i. Palun kirjuta see käsitsi allolevasse vormi.',
-    'trackback_explain' => 'Vali allolevast loetelust link, kuhu soovid oma trackback kommentaari saata. Pärast seda üritab Geeklog tuvastada trackback kommentaari jaoks õige URL-i. Kui sa tead õiget URL-i, võid sa <a href="%s">sisestada selle käsitsi. </a>',
+    'autodetect_failed' => 'glFusion ei suutnud tuvastada saadetava kommentaari jaoks trackback URL-i. Palun kirjuta see käsitsi allolevasse vormi.',
+    'trackback_explain' => 'Vali allolevast loetelust link, kuhu soovid oma trackback kommentaari saata. Pärast seda üritab glFusion tuvastada trackback kommentaari jaoks õige URL-i. Kui sa tead õiget URL-i, võid sa <a href="%s">sisestada selle käsitsi. </a>',
     'no_links_trackback' => 'Ei leidnud linke. Sa ei saa selle sisestuse kohta saata trackback kommentaari.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback tulemused',
@@ -1583,8 +1585,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog seadistus'
+    'label' => 'glFusion',
+    'title' => 'glFusion seadistus'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1772,7 +1774,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Rubriigi vaikimisi õigused',
     'atom_max_stories' => 'Maks. lugusid veebiteenuste lõimedes',
     'disable_webservices' => 'Keela veebiteenused?',
-    'restrict_webservices' => 'Piira veebiteenused?'
+    'restrict_webservices' => 'Piira veebiteenused?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

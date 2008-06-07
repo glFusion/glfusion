@@ -2,7 +2,7 @@
 
 ###############################################################################
 # korean.php
-# This is the english language page for Geeklog!
+# This is the english language page for glFusion!
 # Special thanks to Mischa Polivanov for his work on this project
 #
 # Copyright (C) 2000 Jason Whittenburg
@@ -81,7 +81,7 @@ $LANG01 = array(
     37 => '-',
     38 => 'RSS 배신',
     39 => '갱신',
-    40 => '당신의 <tt>php.ini</tt>에서 off 로 되어 있는 것 같습니다. Geeklog는 <tt>register_globals가</tt>으로 되어야만 합니다. Geeklog를 사용하기 위해서는 <strong>on</strong> 으로 하여 웹서버를 재기동해 주시기 바랍니다.',
+    40 => '당신의 <tt>php.ini</tt>에서 off 로 되어 있는 것 같습니다. glFusion는 <tt>register_globals가</tt>으로 되어야만 합니다. glFusion를 사용하기 위해서는 <strong>on</strong> 으로 하여 웹서버를 재기동해 주시기 바랍니다.',
     41 => '손님',
     42 => '글쓴이',
     43 => '덧글추가',
@@ -171,7 +171,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -661,7 +662,7 @@ $LANG21 = array(
     27 => 'PHP 블로그',
     28 => 'PHP 블로그옵션',
     29 => '관수',
-    30 => 'PHP를 이용한 블로그를 사용 할 경우 접두자 [phpblock_](예 phpblock_themetester)의 PHP 관수명을 입력하시기 바랍니다.  이 접두자가 붙어 있지 않은 관수는 불러낼 수 없습니다.  이것은 악의를 가진 사용자가 사이트에 유해한 관수를 정의하는 것을 피하기 위한 것입니다.  관수명에 0은 필요 없습니다.  모든 PHP블럭관수는  /path/to/geeklog/system/lib-custom.php에 정리하시기 바랍니다.  그러면 Geeklog를 업그레이드 하여도 계속적으로 사용 할 수 있습니다.',
+    30 => 'PHP를 이용한 블로그를 사용 할 경우 접두자 [phpblock_](예 phpblock_themetester)의 PHP 관수명을 입력하시기 바랍니다.  이 접두자가 붙어 있지 않은 관수는 불러낼 수 없습니다.  이것은 악의를 가진 사용자가 사이트에 유해한 관수를 정의하는 것을 피하기 위한 것입니다.  관수명에 0은 필요 없습니다.  모든 PHP블럭관수는  /path/to/glfusion/system/lib-custom.php에 정리하시기 바랍니다.  그러면 glFusion를 업그레이드 하여도 계속적으로 사용 할 수 있습니다.',
     31 => 'PHP블로그에 에러가 있습니다.  %s가 존재하지 않습니다.',
     32 => '에러. 미입력 항목이 있습니다.',
     33 => '포탈블로그 rdf파일에는 URL을 입력할 필요 있습니다',
@@ -699,7 +700,7 @@ $LANG21 = array(
     65 => '순서',
     66 => '자동태그',
     67 => '자동태그체크',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -859,7 +860,7 @@ $LANG28 = array(
     22 => '에러',
     23 => '일괄등록',
     24 => '사용자 일괄등록',
-    25 => '사용자를 Geeklog에 일괄등록 할 수 있습니다(중복체크 첨부).  일괄등록하는 파일은 사용자는 한 줄에 한명씩, 각 사용자의 데이터는 탭(tab) 활용으로 [성명, 사용자 이름, 메일주소] 순 입니다.  사용자의 비밀번호는 무작위로 결정됩니다. 파일은 반드시 본 사이트와 동일한 문자코드의 텍스트 형식으로 저장해 주시기 바랍니다.',
+    25 => '사용자를 glFusion에 일괄등록 할 수 있습니다(중복체크 첨부).  일괄등록하는 파일은 사용자는 한 줄에 한명씩, 각 사용자의 데이터는 탭(tab) 활용으로 [성명, 사용자 이름, 메일주소] 순 입니다.  사용자의 비밀번호는 무작위로 결정됩니다. 파일은 반드시 본 사이트와 동일한 문자코드의 텍스트 형식으로 저장해 주시기 바랍니다.',
     26 => '',
     27 => '',
     28 => '화면 삭제일 경우 체크',
@@ -984,7 +985,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Geeklog 와 최악의 경우 시스템에 악영향을 주는 경우가 있습니다. 악영향을 피하기 위해서 Geeklog의 홈페이지에서는 다양한 OS로 검토한 플러그인 만을 게재하고 있으므로<a href=\"http://www.geeklog.net\" target=\"_blank\">Geeklog 홈페이지</a>에서만 다운로드 하시기 바랍니다. 플러그인 인스트롤에 관해서는 시스템의 명령에 따라 실행할 필요가 있으므로, 특히 공식 사이트 이외에서 다운로드 할 경우는 이 점에 주의 바랍니다. 또한 그러한 주의는 플러인의 인스트롤 성공과 플러그인으로 인한 영향에 관해서 우리들은 아무런 보증을 하지 않습니다.  플러그인 인스트롤 방법은 각기 인스트롤에 같이 꾸려져 있습니다.',
+    1 => 'glFusion 와 최악의 경우 시스템에 악영향을 주는 경우가 있습니다. 악영향을 피하기 위해서 glFusion의 홈페이지에서는 다양한 OS로 검토한 플러그인 만을 게재하고 있으므로<a href=\"http://www.gllabs.org\" target=\"_blank\">glFusion 홈페이지</a>에서만 다운로드 하시기 바랍니다. 플러그인 인스트롤에 관해서는 시스템의 명령에 따라 실행할 필요가 있으므로, 특히 공식 사이트 이외에서 다운로드 할 경우는 이 점에 주의 바랍니다. 또한 그러한 주의는 플러인의 인스트롤 성공과 플러그인으로 인한 영향에 관해서 우리들은 아무런 보증을 하지 않습니다.  플러그인 인스트롤 방법은 각기 인스트롤에 같이 꾸려져 있습니다.',
     2 => '플러그인 인스트롤에 관한 주의',
     3 => '플러그인 인스트롤 양식',
     4 => '플러그인 파일',
@@ -992,7 +993,7 @@ $LANG32 = array(
     6 => '주의 : 플러그인은 이미 인스트롤 되어 있습니다.',
     7 => '인스트롤 하려는 플러그인은 이미 존재하고 있습니다.  재인스트롤 하기 전에 일단 삭제해 주시기 바랍니다.',
     8 => '플러그인의 호환성 체크에 실패 하였습니다.',
-    9 => '이 플러그인은 새로운 버젼의 Geeklog가 필요합니다. <a href=http://www.geeklog.net>Geeklog</a>를 업그레이드 할지 새로운 버젼의 플러그인을 준비하시기 바랍니다.',
+    9 => '이 플러그인은 새로운 버젼의 glFusion가 필요합니다. <a href=http://www.gllabs.org>glFusion</a>를 업그레이드 할지 새로운 버젼의 플러그인을 준비하시기 바랍니다.',
     10 => '<br' . XHTML . '><b> 플러그인은 인스트롤 되지 않습니다 </b><br' . XHTML . '><br' . XHTML . '>, <br' . XHTML . '><b>',
     11 => '플러그인을 수정, 삭제할 경우에는 플러그인의 편집 아이콘을 클릭하시기 바랍니다.  플러그인 작자페이지 링크도 같이 표시 됩니다.  플러그인 버젼은 인스트롤 중의 것과 파일에서 구할 수 있는 것이 표시 됩니다.  이들로 부터 플러그인 갱신에 대한 판단을 할 수 있습니다.',
     12 => '플러그인 에디터 ()에 플러그인 이름이 전해지지 않았습니다.',
@@ -1059,7 +1060,7 @@ $LANG33 = array(
     34 => '건',
     35 => '시간이내',
     36 => '피드 종류를 선택하시기 바랍니다',
-    37 => 'RSS 배신을 유효하게 하기 위해서는 관련된 플러그인을 적어도 한가지는 인스트롤 해 두시기 바랍니다.  아래에는 Geeklog의 피이드를 작성할지, 플러그인으로 취득한 피이드를 작성할지 여부를 선택 하시기 바랍니다.',
+    37 => 'RSS 배신을 유효하게 하기 위해서는 관련된 플러그인을 적어도 한가지는 인스트롤 해 두시기 바랍니다.  아래에는 glFusion의 피이드를 작성할지, 플러그인으로 취득한 피이드를 작성할지 여부를 선택 하시기 바랍니다.',
     38 => '에러 : 입력하지 않은 항목이 있습니다.',
     39 => '피이드의 제목, 설명. 파일명을 입력하시기 바랍니다.',
     40 => '입장수 혹은 취득한 시간을 입력하기바랍니다.',
@@ -1177,7 +1178,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1255,7 +1257,7 @@ $LANG_DB_BACKUP = array(
     'last_ten_backups' => '이전 백업수（10）',
     'do_backup' => '백업 실행',
     'backup_successful' => '데이터베이스 백업을 완료 하였습니다',
-    'db_explanation' => 'Geeklog를 백업하기 위해서는 다음의 단추를 클릭하시기 바랍니다.',
+    'db_explanation' => 'glFusion를 백업하기 위해서는 다음의 단추를 클릭하시기 바랍니다.',
     'not_found' => "패스 지정에 잘못이 있으므로 mysqdump가 실행 가능해지지 않습니다.<br" . XHTML . "><strong>\$_DB_mysqldump_path</strong>의 설정을 config.php로 체크하시기 바랍니다.  <br" . XHTML . "> 현재의 설정은 \n<var>{$_DB_mysqldump_path}</var>입니다.",
     'zero_size' => '백업에 실패했습니다.  파일의 크기가 0 바이트(bytes) 입니다.',
     'path_not_found' => "{$_CONF['backup_path']} 는 존재하지 않으며 디랙토리는 아닙니다.",
@@ -1583,8 +1585,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1772,7 +1774,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

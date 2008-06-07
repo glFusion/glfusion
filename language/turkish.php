@@ -80,7 +80,7 @@ $LANG01 = array(
     37 => 'Kullanýcýlardan hiç bir yazý gelmemiþ',
     38 => 'Content Syndication',
     39 => 'Yenile',
-    40 => 'php.ini parametlerinizden <tt>register_globals = Off</tt> konumundadýr. ancak, Geeklog  için <tt>register_globals</tt>parametresinin <strong>on</strong> konumunda olmasý gerekmektedir. Before you continue, please set it to <strong>on</strong> and restart your web server.Lütfen servis saðlayýcýnýz ile kontakt kurunuz',
+    40 => 'php.ini parametlerinizden <tt>register_globals = Off</tt> konumundadýr. ancak, glFusion  için <tt>register_globals</tt>parametresinin <strong>on</strong> konumunda olmasý gerekmektedir. Before you continue, please set it to <strong>on</strong> and restart your web server.Lütfen servis saðlayýcýnýz ile kontakt kurunuz',
     41 => 'Misafirler',
     42 => 'Yazar:',
     43 => 'Cevap Ver',
@@ -170,7 +170,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -660,7 +661,7 @@ $LANG21 = array(
     27 => 'PHP Blok',
     28 => 'PHP Blok Özellikleri',
     29 => 'Blok Fonksiyonu',
-    30 => 'Eðer bloklarýnýzdan birinin PHP kodu kullanmasýný istiyorsanýz, PHP fonksiyonunun adýný yukarýya giriniz. Fonksiyon adýnýz "phpblock_" ile baþlamalýdýr(örn. phpblock_getweather). Eðer bu þekilde baþlamýyorsa, fonkisyonunuz çaðrýlmayacaktýr. Bunu yapmamýzýn nedeni, Geeklog sürümünü deðiþtiren insanlarýn sisteme zarar verebilecek fonksiyonlarý kullanmalarýný önlemek içindir. Fonkisyon adýndan sonra boþ parantez  "()" koymamaya dikkat edin. Son olarak, tüm PHP kodlarýnýzý /path/to/geeklog/system/lib-custom.php dosyasýna koymanýzý öneririz. Bu sayede sistemin yeni sürümünü yükleseniz bile yazdýðýný kiþisel PHP kodlarý silinmez.',
+    30 => 'Eðer bloklarýnýzdan birinin PHP kodu kullanmasýný istiyorsanýz, PHP fonksiyonunun adýný yukarýya giriniz. Fonksiyon adýnýz "phpblock_" ile baþlamalýdýr(örn. phpblock_getweather). Eðer bu þekilde baþlamýyorsa, fonkisyonunuz çaðrýlmayacaktýr. Bunu yapmamýzýn nedeni, glFusion sürümünü deðiþtiren insanlarýn sisteme zarar verebilecek fonksiyonlarý kullanmalarýný önlemek içindir. Fonkisyon adýndan sonra boþ parantez  "()" koymamaya dikkat edin. Son olarak, tüm PHP kodlarýnýzý /path/to/glfusion/system/lib-custom.php dosyasýna koymanýzý öneririz. Bu sayede sistemin yeni sürümünü yükleseniz bile yazdýðýný kiþisel PHP kodlarý silinmez.',
     31 => 'PHP Bloðunda hata. %s fonksiyonu yok.',
     32 => 'Hata: Eksik alan(lar)',
     33 => 'Portal Bloklarý için .rdf dosyasýna olan adresi girmeniz gerekmektedir.',
@@ -672,7 +673,7 @@ $LANG21 = array(
     39 => 'Kenar',
     40 => 'Sol',
     41 => 'Sað',
-    42 => 'Geeklog varsayýlan bloklarý için, blok sýrasý ve güvenlik seviyesini girmelisiniz',
+    42 => 'glFusion varsayýlan bloklarý için, blok sýrasý ve güvenlik seviyesini girmelisiniz',
     43 => 'Sadece Ana Sayfa',
     44 => '',
     45 => "Eriþim hakkýnýz olmayan bir yazýya eriþmek istiyorsunuz. Bu eyleminiz kayýtlara eklenmiþtir. Lütfen <a href=\"{$_CONF['site_admin_url']}/alan.php\">kontrol ana sayfasýna geri dönün</a>.",
@@ -698,7 +699,7 @@ $LANG21 = array(
     65 => 'Sýra',
     66 => 'Autotaglar',
     67 => 'Autýtag izini için iþaretleyin',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -858,7 +859,7 @@ $LANG28 = array(
     22 => 'Hata',
     23 => 'Birden Fazla Kullanýcý Ekleme',
     24 => 'Birden Fazla Kullanýcý Ekleme',
-    25 => 'Geeklog programýna birden fazla kullanýcýyý ekleyebilirsiniz. Sekme ile ayrýlmýþ bir metin dosyasýnýn içine alanlarý þu sýra ile ekleyin: gerçek adý, kullanýcý adý, email adresi.  Eklenen her kullanýcýya rasgele atanmýþ bir þifre, kullanýcýnýn email adresine gönderilecektir. Her satýra sadece bir kullanýcý adýnýn eklenmiþ olmasýna dikkat ediniz. Herhangi bir yanlýþlýkta eklenen her kullanýcýyý tek tek düzeltmek zorunda kalabilirsiniz. Bu yüzden dosyanýzý iki kere kontrol edin!',
+    25 => 'glFusion programýna birden fazla kullanýcýyý ekleyebilirsiniz. Sekme ile ayrýlmýþ bir metin dosyasýnýn içine alanlarý þu sýra ile ekleyin: gerçek adý, kullanýcý adý, email adresi.  Eklenen her kullanýcýya rasgele atanmýþ bir þifre, kullanýcýnýn email adresine gönderilecektir. Her satýra sadece bir kullanýcý adýnýn eklenmiþ olmasýna dikkat ediniz. Herhangi bir yanlýþlýkta eklenen her kullanýcýyý tek tek düzeltmek zorunda kalabilirsiniz. Bu yüzden dosyanýzý iki kere kontrol edin!',
     26 => '',
     27 => '',
     28 => 'Resmi silmek için burayý seçin',
@@ -983,7 +984,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Sisteme eklenti (plug-in) yükleyerek Geeklog\'un çalýþmasýný ve belki sisteminizi bozabilirsiniz. Sadece <a href="http://www.geeklog.net" target="_blank">Geeklog Ana Sayfasý</a>\'ndan yüklediðiniz eklentileri yüklemeniz tavsiye edilir, çünkü bize ulaþan tüm eklentileri çeþitli iþletim sistemleriyle ayrýntýlý testlere sokuyoruz. Özellikle üçüncü firmalardan yüklediðiniz eklentilerin yüklenirken sisteminize zarar verebilecek programlar çalýþtýrabileceðini ve bunlarýn güvenlik açýklarýna neden olabileceðini anlamanýz önemlidir. Bu uyarýya raðmen, biz bu eklentinin yüklenmesinin baþarýyla tamamlanacaðýný garanti etmiyoruz, ve sisteminizde doðacak herhangi bir hasardan dolayý sorumluluk kabul etmiyoruz. Baþka bir deyiþle eklentiyi yüklerken doðacak tüm riskler size aittir.  Ayrýntýlarý öðrenmek isteyenler için her eklenti paketinde yüklemenin el ile yapýlabilmesi için ayrýntýlar ve adýmlar mevcuttur.',
+    1 => 'Sisteme eklenti (plug-in) yükleyerek glFusion\'un çalýþmasýný ve belki sisteminizi bozabilirsiniz. Sadece <a href="http://www.gllabs.org" target="_blank">glFusion Ana Sayfasý</a>\'ndan yüklediðiniz eklentileri yüklemeniz tavsiye edilir, çünkü bize ulaþan tüm eklentileri çeþitli iþletim sistemleriyle ayrýntýlý testlere sokuyoruz. Özellikle üçüncü firmalardan yüklediðiniz eklentilerin yüklenirken sisteminize zarar verebilecek programlar çalýþtýrabileceðini ve bunlarýn güvenlik açýklarýna neden olabileceðini anlamanýz önemlidir. Bu uyarýya raðmen, biz bu eklentinin yüklenmesinin baþarýyla tamamlanacaðýný garanti etmiyoruz, ve sisteminizde doðacak herhangi bir hasardan dolayý sorumluluk kabul etmiyoruz. Baþka bir deyiþle eklentiyi yüklerken doðacak tüm riskler size aittir.  Ayrýntýlarý öðrenmek isteyenler için her eklenti paketinde yüklemenin el ile yapýlabilmesi için ayrýntýlar ve adýmlar mevcuttur.',
     2 => 'Eklenti Yükleme ile Ýlgili Yükümler',
     3 => 'Eklenti Yükleme Formu',
     4 => 'Eklenti Dosyasý',
@@ -991,7 +992,7 @@ $LANG32 = array(
     6 => 'Uyarý: Eklenti zaten yüklenmiþ!',
     7 => 'Yüklemeye çalýþtýðýnýz eklenti zaten yüklenmiþ. Eðer yeniden yüklemek istiyorsanýz, eklentiyi önce silin.',
     8 => 'Eklenti uyumluluk kontrolü baþarýsýz.',
-    9 => 'Bu eklenti Geeklog\'un yeni bir versiyonun istemekte. Elinizdeki kopyayý ya <a href="http://www.geeklog.net">Geeklog</a> adresinden yenileyin ya da eklentinin yeni bir versiyonunu bulmalýsýnýz.',
+    9 => 'Bu eklenti glFusion\'un yeni bir versiyonun istemekte. Elinizdeki kopyayý ya <a href="http://www.gllabs.org">glFusion</a> adresinden yenileyin ya da eklentinin yeni bir versiyonunu bulmalýsýnýz.',
     10 => '<br' . XHTML . '><b>Þu anda hiç bir eklenti yüklenmemiþ.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Bir eklentiyi deðiþtirmek veya silmek istiyorsanýz eklentinin numarasýna basýn. Eklenti hakkýnda daha fazla bilgi edinmek için eklentinin adýna basýn. Bu eklentinin web sitesini açar. Bir eklenti yüklemek veya sürümünü yenilemek için dokümantasyonuna baþvurun.',
     12 => 'plugineditor()\'e hiç bir eklenti adý saðlanmadý',
@@ -1000,7 +1001,7 @@ $LANG32 = array(
     15 => 'Kontrol Ana Sayfasý',
     16 => 'Eklenti Adý',
     17 => 'Eklenti Sürümü',
-    18 => 'Geeklog Sürümü',
+    18 => 'glFusion Sürümü',
     19 => 'Kullanýmda',
     20 => 'Evet',
     21 => 'Hayýr',
@@ -1011,7 +1012,7 @@ $LANG32 = array(
     26 => 'Eklenti adý',
     27 => 'Eklenti Web Sitesi',
     28 => 'Eklenti Sürümü',
-    29 => 'Geeklog Sürümü',
+    29 => 'glFusion Sürümü',
     30 => 'Eklentiyi Sil?',
     31 => 'Bu eklentiyi silmek istediðinizden eminmisiniz? Bunu yaparsanýz eklentinin kullandýðý tüm veriler ve veri yapýlarý da silinecektir. Eminseniz Sil düðmesine bir daha basýnýz.',
     32 => '<p><b>Hata: AutoLink tag doðru formatta deðil</b></p>',
@@ -1058,7 +1059,7 @@ $LANG33 = array(
     34 => 'Entries',
     35 => 'Saat',
     36 => 'feedin Tipini seçin',
-    37 => 'You have at least one plugin installed that supports content syndication. Below you will need to select whether you want to create a Geeklog feed or a feed from one of the plugins.',
+    37 => 'You have at least one plugin installed that supports content syndication. Below you will need to select whether you want to create a glFusion feed or a feed from one of the plugins.',
     38 => 'Hata: Boþ Býrakýlan Alanlar',
     39 => 'Lütfen Feed Baþlýðý, Açýklama ve Dosya Adý alanlarýný doldurunuz.',
     40 => 'Lütfen bir sayý girin of entries or number of Saat.',
@@ -1176,7 +1177,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1254,7 +1256,7 @@ $LANG_DB_BACKUP = array(
     'last_ten_backups' => 'Son 10 yedekleme',
     'do_backup' => 'Yedekleme Yap',
     'backup_successful' => 'Veritabaný yedeklemesi baþarýyla sonuçlandý.',
-    'db_explanation' => 'Geeklog sisteminin yeni bir yedeðini almak için, aþaðýdaki butona basýn.',
+    'db_explanation' => 'glFusion sisteminin yeni bir yedeðini almak için, aþaðýdaki butona basýn.',
     'not_found' => "Hatalý adres veya mysqldump programý çalýþtýrýlýnamýyor.<br" . XHTML . ">config.php dosyanýzdaki <strong>\$_DB_mysqldump_path</strong> deðiþkenini kontrol edin.<br" . XHTML . ">Deðiþken þu anki deðeri: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Yedekleme baþarýsýz: Dosya boyutu 0 bayt idi.',
     'path_not_found' => "{$_CONF['backup_path']} adresi yok veya bir klasör deðil",
@@ -1355,8 +1357,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Trackback URLsi Seçiniz',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to Gönder your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to Gönder your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to Gönder your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to Gönder your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not Gönder a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1582,8 +1584,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1771,7 +1773,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

@@ -84,7 +84,7 @@ $LANG01 = array(
     37 => 'Inga artiklar',
     38 => 'Content Syndication',
     39 => 'Uppdatera',
-    40 => 'Du har <tt>register_globals = Off</tt> i din <tt>php.ini</tt>. Geeklog kräver att <tt>register_globals</tt> är påslaget. Innan du fortsätter så måste du sätta det till <strong>on</strong> och starta om din webbserver.',
+    40 => 'Du har <tt>register_globals = Off</tt> i din <tt>php.ini</tt>. glFusion kräver att <tt>register_globals</tt> är påslaget. Innan du fortsätter så måste du sätta det till <strong>on</strong> och starta om din webbserver.',
     41 => 'Gäster',
     42 => 'Skrivet av:',
     43 => 'Svara på detta',
@@ -174,7 +174,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -664,7 +665,7 @@ $LANG21 = array(
     27 => 'PHP-block',
     28 => 'PHP-blockinställningar',
     29 => 'Blockfunktion',
-    30 => 'Om du vill använda PHP-kod i ditt block, ange namnet på funktionen ovan.  Din funktion måste börja med prefixet "phpblock_" (t.ex. phpblock_getweather).  Om det inte har detta prefix kommer funktionen inte att kallas.  Detta görs för att förhindra personer som eventuellt har hackat din Geeklog-installation från att exekvera godtycklig kod som kan skada ditt system.  Sätt inte tomma parenteser "()" efter ditt funktionsnamn.  Slutligen rekommenderas du att lägga alla dina PHP-block i /path/to/geeklog/system/lib-custom.php.  Då kommer koden att vara kvar även när du uppdaterar till en ny version av GeekLog.',
+    30 => 'Om du vill använda PHP-kod i ditt block, ange namnet på funktionen ovan.  Din funktion måste börja med prefixet "phpblock_" (t.ex. phpblock_getweather).  Om det inte har detta prefix kommer funktionen inte att kallas.  Detta görs för att förhindra personer som eventuellt har hackat din glFusion-installation från att exekvera godtycklig kod som kan skada ditt system.  Sätt inte tomma parenteser "()" efter ditt funktionsnamn.  Slutligen rekommenderas du att lägga alla dina PHP-block i /path/to/glfusion/system/lib-custom.php.  Då kommer koden att vara kvar även när du uppdaterar till en ny version av GeekLog.',
     31 => 'Fel i PHP-block.  Funktionen \"%s\" existerar inte.',
     32 => 'Fel: Fält saknas',
     33 => 'Du måste ange länken till .rdf-filen för portalblock',
@@ -676,7 +677,7 @@ $LANG21 = array(
     39 => 'Sida',
     40 => 'Vänster',
     41 => 'Höger',
-    42 => 'Du måste ange blockordning och säkerhetsnivå för Geeklog:s standardblock',
+    42 => 'Du måste ange blockordning och säkerhetsnivå för glFusion:s standardblock',
     43 => 'Endast hemsidan',
     44 => '',
     45 => "Du äger inte tillgång till detta block.  Denna incident har loggats.  Gå tillbaka till <a href=\"{$_CONF['site_admin_url']}/block.php\">blockadministrationen</a>.",
@@ -702,7 +703,7 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -862,7 +863,7 @@ $LANG28 = array(
     22 => 'Fel',
     23 => 'Lägg till i klump',
     24 => 'Klumpimportering av användare',
-    25 => 'Du kan importera en klump användare till Geeklog.  Importfilen måste vara en tab-separerad textfil innehållande följande fält: för- och efternamn, användarnamn epostadress.  Varje användare du importerar kommer att få ett slumpmässigt lösenord via epost.  Du måste ange en användare per rad.  Om du inte följer dessa instruktioner så kan det bli strul som bara kan rättas till manuellt.  Var med andra ord mycket noggrann!',
+    25 => 'Du kan importera en klump användare till glFusion.  Importfilen måste vara en tab-separerad textfil innehållande följande fält: för- och efternamn, användarnamn epostadress.  Varje användare du importerar kommer att få ett slumpmässigt lösenord via epost.  Du måste ange en användare per rad.  Om du inte följer dessa instruktioner så kan det bli strul som bara kan rättas till manuellt.  Var med andra ord mycket noggrann!',
     26 => '',
     27 => '',
     28 => 'Klicka här för att radera denna bild',
@@ -987,7 +988,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Att installera en insticksmodul kan skada din Geeklog-installation och möjligtvis även ditt system.  Det är viktigt att du bara installerar instickmoduler som du laddat hem från <a href="http://www.geeklog.net" target="_blank">Geeklog:s hemsida</a> eftersom vi testar alla våra insticksmoduler på ett flertal operativsystem.  Det är viktigt att du förstår att installationsprocessen kräver att ett fåtal filsystemskommandon kommer att exekveras.  Detta <EM>kan</EM> leda till säkerhetsproblem -- särskilt om insticksmodulen kommer från en tredje part.  Trots denna varning kan vi inte garantera någon installation.  Vi kan inte heller hållas skadeståndsskyldiga för eventuell skada som installationen av insticksmodulen kan orsaka.  Med andra ord: installera på egen risk!  För den försiktige finns det manuella installationsinstruktioner med varje insticksmodul.',
+    1 => 'Att installera en insticksmodul kan skada din glFusion-installation och möjligtvis även ditt system.  Det är viktigt att du bara installerar instickmoduler som du laddat hem från <a href="http://www.gllabs.org" target="_blank">glFusion:s hemsida</a> eftersom vi testar alla våra insticksmoduler på ett flertal operativsystem.  Det är viktigt att du förstår att installationsprocessen kräver att ett fåtal filsystemskommandon kommer att exekveras.  Detta <EM>kan</EM> leda till säkerhetsproblem -- särskilt om insticksmodulen kommer från en tredje part.  Trots denna varning kan vi inte garantera någon installation.  Vi kan inte heller hållas skadeståndsskyldiga för eventuell skada som installationen av insticksmodulen kan orsaka.  Med andra ord: installera på egen risk!  För den försiktige finns det manuella installationsinstruktioner med varje insticksmodul.',
     2 => 'Insticksmodul installationsvarning',
     3 => 'Insticksmodul installationsformulär',
     4 => 'Insticksmodulsfil',
@@ -995,7 +996,7 @@ $LANG32 = array(
     6 => 'Varning:  insticksmodul redan installerad!',
     7 => 'Insticksmodulen du försöker installera existerar redan.  Radera insticksmodulen innan du försöker installera den igen',
     8 => 'Kompatibilitetstest för insticksmodul misslyckades',
-    9 => 'Denna insticksmodul kräver en nyare version av Geeklog.  Du måste antingen uppgradera din <a href="http://www.geeklog.net">Geeklog-installation</a> eller hämta en nyare version av insticksmodulen.',
+    9 => 'Denna insticksmodul kräver en nyare version av glFusion.  Du måste antingen uppgradera din <a href="http://www.gllabs.org">glFusion-installation</a> eller hämta en nyare version av insticksmodulen.',
     10 => '<br' . XHTML . '><b>Inga insticksmoduler är installerade.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Klicka på insticksmodulens namn för att få information om den modulen, inklusive en länk till insticksmodulens webbsajt.  Både den installerade versionen och versionen som insticksmodulen själv rapporterar kommer att visas.  Detta hjälper dig att se om en insticksmodul behöver uppgraderas.  Läs insticksmodulens manual om du vill ha information om hur man installerar eller uppgraderar den.',
     12 => 'inget namn på insticksmodul skickades till plugineditor()',
@@ -1004,7 +1005,7 @@ $LANG32 = array(
     15 => 'Administratörsmeny',
     16 => 'Namn på insticksmodul',
     17 => 'Version på insticksmodul',
-    18 => 'Geeklog-version',
+    18 => 'glFusion-version',
     19 => 'Aktiverad',
     20 => 'Ja',
     21 => 'Nej',
@@ -1015,7 +1016,7 @@ $LANG32 = array(
     26 => 'Namn på insticksmodul',
     27 => 'Insticksmodulens hemsida',
     28 => 'Installerad version',
-    29 => 'Geeklog-version',
+    29 => 'glFusion-version',
     30 => 'Radera insticksmodul?',
     31 => 'Är du säker på att du vill radera denna insticksmodu?  Om du gör det så kommer du att radera alla filer, data, och datastrukturer som denna insticksmodul använder.  Om du är säker, klicka "radera" igen nedan.',
     32 => '<p><b>Error AutoLink märkord har inte korrekt format</b></p>',
@@ -1062,7 +1063,7 @@ $LANG33 = array(
     34 => 'Inlägg',
     35 => 'Timmar',
     36 => 'Kanaltyp',
-    37 => 'Du har åtminstone en insticksmodul som stöder innehållskanaler.  Nedan måste du välja om du vill skapa en Geeklog-kanal eller en kanal från en av insticksmodulerna.',
+    37 => 'Du har åtminstone en insticksmodul som stöder innehållskanaler.  Nedan måste du välja om du vill skapa en glFusion-kanal eller en kanal från en av insticksmodulerna.',
     38 => 'Error: Fält saknas',
     39 => 'Fyll i Kanaltitel, beskrivning och filnamn.',
     40 => 'Fyll antingen i antal inlägg eller ett antal timmar.',
@@ -1180,7 +1181,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1258,7 +1260,7 @@ $LANG_DB_BACKUP = array(
     'last_ten_backups' => 'Senaste tio säkerhetskopiorna',
     'do_backup' => 'Starta säkerhetskopiering',
     'backup_successful' => 'Databasbackup genomförd.',
-    'db_explanation' => 'Klicka nedan för att skapa en säkerhetskopia av ditt Geeklog-system',
+    'db_explanation' => 'Klicka nedan för att skapa en säkerhetskopia av ditt glFusion-system',
     'not_found' => "Felaktig sökväg eller så är inte mysqldump-programmet exekverbart.<BR>Kontrollera <strong>\$_DB_mysqldump_path</strong>-definitionen i config.php.<BR>Variabeln är för närvarande definierad som: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Säkerhetskopiering misslyckades:  filstorleken är noll',
     'path_not_found' => "{$_CONF['backup_path']} existerar inte eller är inte en katalog",
@@ -1359,8 +1361,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Select Trackback URL',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1586,8 +1588,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1775,7 +1777,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

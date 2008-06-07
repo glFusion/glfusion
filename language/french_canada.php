@@ -173,7 +173,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -663,7 +664,7 @@ $LANG21 = array(
     27 => 'Bloc PHP',
     28 => 'Option du bloc PHP',
     29 => 'Bloc fonction',
-    30 => 'Si vous voulez que l\'un de vos blocs utilise du PHP, saisissez le nom de la fonction &agrave; utiliser.  Le nom de la fonction doit commencer par \'phpblock_\' (ex: phpblock_getweather).  Si ce n\'est pas le cas, votre fonction NE SERA PAS appell&eacute;e, ceci pour des raisons de s&eacute;curit&eacute;.  Ne mettez pas de parenth&egrave;ses vides \'()\' apr&egrave;s le nom de votre fonction.  Enfin, nous vous recommandons de mettre tout le code des bloc PHP dans /path/to/geeklog/system/lib-custom.php.  Cela permettera de garder votre code même apr&egrave;s une mise &agrave; jour du syst&egrave;me.',
+    30 => 'Si vous voulez que l\'un de vos blocs utilise du PHP, saisissez le nom de la fonction &agrave; utiliser.  Le nom de la fonction doit commencer par \'phpblock_\' (ex: phpblock_getweather).  Si ce n\'est pas le cas, votre fonction NE SERA PAS appell&eacute;e, ceci pour des raisons de s&eacute;curit&eacute;.  Ne mettez pas de parenth&egrave;ses vides \'()\' apr&egrave;s le nom de votre fonction.  Enfin, nous vous recommandons de mettre tout le code des bloc PHP dans /path/to/glfusion/system/lib-custom.php.  Cela permettera de garder votre code même apr&egrave;s une mise &agrave; jour du syst&egrave;me.',
     31 => 'Erreur dans le bloc PHP.  La fonction, %s, n\'existe pas.',
     32 => 'Erreur: champs manquant',
     33 => 'Vous devez mettre l\'URL dans le fichier .rdf pour le bloc portail.',
@@ -701,7 +702,7 @@ $LANG21 = array(
     65 => 'Commandez',
     66 => 'Autotags',
     67 => 'V&eacute;rifiez si vous acceptez les autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -986,7 +987,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'L\'installation de plugins peut endommager le syst&egrave;me.  Il est important de n\'installer que des plugins approuv&eacute;s par <a href=\'http://www.geeklog.net\' target=\'_blank\'>le syst&egrave;me</a> car nous les testons sur plusieurs syst&egrave;mes. Installer des plugins requiert l\'ex&eacute;cution de plusieurs commandes syst&egrave;mes qui peuvent poser des probl&egrave;mes de s&eacute;curit&eacute;, particuli&egrave;rement si vous utilisez des plugins de provenances inconnues. Vous êtes averti des domages que peut causer l\'installation d\'un plugin. En d\'autres termes, vous installez des plugins &agrave; vos propres risques. Les instructions d\'installation des plugins sont incluses dans chaque plugin.',
+    1 => 'L\'installation de plugins peut endommager le syst&egrave;me.  Il est important de n\'installer que des plugins approuv&eacute;s par <a href=\'http://www.gllabs.org\' target=\'_blank\'>le syst&egrave;me</a> car nous les testons sur plusieurs syst&egrave;mes. Installer des plugins requiert l\'ex&eacute;cution de plusieurs commandes syst&egrave;mes qui peuvent poser des probl&egrave;mes de s&eacute;curit&eacute;, particuli&egrave;rement si vous utilisez des plugins de provenances inconnues. Vous êtes averti des domages que peut causer l\'installation d\'un plugin. En d\'autres termes, vous installez des plugins &agrave; vos propres risques. Les instructions d\'installation des plugins sont incluses dans chaque plugin.',
     2 => 'Instructions d\'installation d\'un plugin',
     3 => 'Formulaire d\'installation d\'un plugin',
     4 => 'Fichier du plugin',
@@ -994,7 +995,7 @@ $LANG32 = array(
     6 => 'Attention: plugin d&eacute;j&agrave; install&eacute;!',
     7 => 'Le plugin que vous essayez d\'installer existe d&eacute;j&agrave;.  Veuillez supprimer le plugin avant de le r&eacute;installer.',
     8 => 'Test de compatibilit&eacute; du plugin &eacute;chou&eacute;',
-    9 => 'Ce plugin requiert une version plus r&eacute;cente du syst&egrave;me. Vous pouvez mettre &agrave; jour votre <a href=\'http://www.geeklog.net\'>syst&egrave;me</a> ou obtenir une autre version du plugin.',
+    9 => 'Ce plugin requiert une version plus r&eacute;cente du syst&egrave;me. Vous pouvez mettre &agrave; jour votre <a href=\'http://www.gllabs.org\'>syst&egrave;me</a> ou obtenir une autre version du plugin.',
     10 => '<br' . XHTML . '><b>Aucun plugin n\'est actuellement install&eacute;.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Cliquez sur le num&eacute;ro du plugin pour le modifier ou le supprimer. Pour en savoir d\'avantage sur les plugins, cliquez sur le nom du plugin et vous serez redirig&eacute; vers le site web du plugin. Pour installer ou mettre &agrave; jour un plugin veuillez vous r&eacute;f&eacute;rer &agrave; la documentation du plugin.',
     12 => 'Aucun nom de plugin n\'a &eacute;t&eacute; pass&eacute; &agrave; plugineditor()',
@@ -1179,7 +1180,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1585,8 +1587,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1774,7 +1776,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

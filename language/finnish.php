@@ -5,8 +5,8 @@
 # This is the Finnish language page for GeekLog!
 #
 # Copyright (C) 2004 Jussi Josefsson
-# 20031012 - Version 1.0 - Geeklog 1.3.8
-# 20040217 - Version 1.1 - Geeklog 1.3.9rc1
+# 20031012 - Version 1.0 - glFusion 1.3.8
+# 20040217 - Version 1.1 - glFusion 1.3.9rc1
 # ihra@iki.fi
 #
 # This program is free software; you can redistribute it and/or
@@ -81,7 +81,7 @@ $LANG01 = array(
     37 => 'Ei k‰ytt‰j‰n kirjoituksia',
     38 => 'Content Syndication',
     39 => 'Virkist‰',
-    40 => 'You have <tt>register_globals = Off</tt> in your <tt>php.ini</tt>. However, Geeklog requires <tt>register_globals</tt> to be <strong>on</strong>. Before you continue, please set it to <strong>on</strong> and restart your web server.',
+    40 => 'You have <tt>register_globals = Off</tt> in your <tt>php.ini</tt>. However, glFusion requires <tt>register_globals</tt> to be <strong>on</strong>. Before you continue, please set it to <strong>on</strong> and restart your web server.',
     41 => 'Vieraita sivustolla',
     42 => 'Tekij‰:',
     43 => 'Vastaa t‰h‰n',
@@ -171,7 +171,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -661,7 +662,7 @@ $LANG21 = array(
     27 => 'PHP lohko',
     28 => 'PHP lohkon asetukset',
     29 => 'Lohkon toiminnot',
-    30 => 'Jos haluat lohkon k‰ytt‰v‰n PHP koodia, syˆt‰ funktion nimi ylh‰‰lle. Funktion tai toiminteen tulee alkaa "phpblock_" (esimerkiksi phpblock_getweather). Jos aliohjelmassa ei ole t‰t‰ alkulausetta, funktiota ei kutsuta.  T‰m‰ tehd‰‰n ep‰m‰‰r‰isten aliohjelmakutsujen est‰miseksi jos henkilˆt ovat hakkeroineet Geeklogin asennuksen. Varmista ettet laita tyhji‰ sulkuja "()" funktion nimen per‰‰n. Lopuksi on suositeltavaa laittaa kaikki PHP koodisi tiedostoon /path/to/geeklog/system/lib-custom.php.  T‰ll‰ varmistut ett‰ koodisi s‰ilyy vaikka p‰ivitt‰isit Geeklogin uudempaan versioon.',
+    30 => 'Jos haluat lohkon k‰ytt‰v‰n PHP koodia, syˆt‰ funktion nimi ylh‰‰lle. Funktion tai toiminteen tulee alkaa "phpblock_" (esimerkiksi phpblock_getweather). Jos aliohjelmassa ei ole t‰t‰ alkulausetta, funktiota ei kutsuta.  T‰m‰ tehd‰‰n ep‰m‰‰r‰isten aliohjelmakutsujen est‰miseksi jos henkilˆt ovat hakkeroineet glFusionin asennuksen. Varmista ettet laita tyhji‰ sulkuja "()" funktion nimen per‰‰n. Lopuksi on suositeltavaa laittaa kaikki PHP koodisi tiedostoon /path/to/glfusion/system/lib-custom.php.  T‰ll‰ varmistut ett‰ koodisi s‰ilyy vaikka p‰ivitt‰isit glFusionin uudempaan versioon.',
     31 => 'Virhe PHP lohkossa.  Funktio, %s, ei ole olemassa.',
     32 => 'Virhe puuttuva kentt‰',
     33 => 'Sinun tulee syˆtt‰‰ URL .rdf tiedostoon sivuston lohkoa varten',
@@ -673,7 +674,7 @@ $LANG21 = array(
     39 => 'Sivu',
     40 => 'Vasen',
     41 => 'Oikea',
-    42 => 'Lajitteluj‰rjestys ja turvallisuustaso tulee syˆtt‰‰ Geeklogin oletuslohkoja varten',
+    42 => 'Lajitteluj‰rjestys ja turvallisuustaso tulee syˆtt‰‰ glFusionin oletuslohkoja varten',
     43 => 'Vain kotisivu',
     44 => '',
     45 => "Olet yritt‰m‰ss‰ k‰ytt‰‰ lohkoa johon sinulla ei ole oikeuksia. Yritys on kirjattu lokitiedostoon.  <a href=\"{$_CONF['site_admin_url']}/block.php\">Siirry takaisin yll‰pidon valikkoon</a>.",
@@ -699,7 +700,7 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -859,7 +860,7 @@ $LANG28 = array(
     22 => 'Virhe',
     23 => 'Kimppalis‰ys',
     24 => 'Tuo lauma k‰ytt‰ji‰',
-    25 => 'Voit tuoda Geeklogiin suuremman m‰‰r‰n k‰ytt‰ji‰. Tuontitiedoston tulee olla sarkain-eroteltu teksti-tiedosto jossa kenttien tulee olla seuraavassa j‰rjestyksess‰: koko nimi, k‰ytt‰j‰tunnus, s‰hkˆposti-osoite. Tuomillesi henkilˆille postitetaan satunnaisesti generoitu salasana s‰hkˆpostitse. Tiedostossa tulee olla yksi k‰ytt‰j‰ per rivi. Virheet tuonnissa voivat aiheuttaa ongelmia joiden selvitt‰minen vaatii k‰sityˆt‰ joten tarkista syˆtteesi tarkasti!',
+    25 => 'Voit tuoda glFusioniin suuremman m‰‰r‰n k‰ytt‰ji‰. Tuontitiedoston tulee olla sarkain-eroteltu teksti-tiedosto jossa kenttien tulee olla seuraavassa j‰rjestyksess‰: koko nimi, k‰ytt‰j‰tunnus, s‰hkˆposti-osoite. Tuomillesi henkilˆille postitetaan satunnaisesti generoitu salasana s‰hkˆpostitse. Tiedostossa tulee olla yksi k‰ytt‰j‰ per rivi. Virheet tuonnissa voivat aiheuttaa ongelmia joiden selvitt‰minen vaatii k‰sityˆt‰ joten tarkista syˆtteesi tarkasti!',
     26 => '',
     27 => '',
     28 => 'Klikkaa t‰h‰n tuhotaksesi t‰m‰n kuvan',
@@ -984,7 +985,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Laajennusten asentaminen voi vahingoittaa Geeklogia ja mahdollisesti j‰rjestelm‰‰si. K‰yt‰ vain <a href="http://www.geeklog.net" target="_blank">Geeklogin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l‰hetetyt laajennukset usealla k‰yttˆj‰rjestelm‰ll‰. On t‰rke‰‰ ymm‰rt‰‰ laajennuksien asentamisen vaativan joidenkin k‰yttˆj‰rjestelmi‰k‰skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k‰ytt‰ji‰ laajennuksista, emme takaa asennuksen onnistumista emmek‰ ota vastuuta Geeklogin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n‰it‰ omalla vastuullasi. Varovaisille; k‰sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
+    1 => 'Laajennusten asentaminen voi vahingoittaa glFusionia ja mahdollisesti j‰rjestelm‰‰si. K‰yt‰ vain <a href="http://www.gllabs.org" target="_blank">glFusionin kotisivulta</a> ladattuja laajennuksia, koska testaamme sivustollemme l‰hetetyt laajennukset usealla k‰yttˆj‰rjestelm‰ll‰. On t‰rke‰‰ ymm‰rt‰‰ laajennuksien asentamisen vaativan joidenkin k‰yttˆj‰rjestelmi‰k‰skyjen ajamisen, jotka voivat johtaa turvallisuusongelmiin, varsinkin kolmansien osapuolien laajennusten tapauksessa. Vaikka varoitammekin k‰ytt‰ji‰ laajennuksista, emme takaa asennuksen onnistumista emmek‰ ota vastuuta glFusionin laajennusten aiheuttamista vahingoista. Toisinsanoen, asenna n‰it‰ omalla vastuullasi. Varovaisille; k‰sin tapahtuvaan asennukseen tulee ohjeet jokaisessa laajennuspaketissa.',
     2 => 'Huomioi laajennuksia asentaessasi',
     3 => 'Laajennuksien asentamislomake',
     4 => 'Laajennustiedosto',
@@ -992,7 +993,7 @@ $LANG32 = array(
     6 => 'Varoitus: laajennus on jo asennettu!',
     7 => 'Laajennus jonka asentamista yrit‰t, on jo asennettu. Poista laajennus ennen sen uudelleenasentamista',
     8 => 'Laajennuksen yhteensopivuustesti ep‰onnistui',
-    9 => 'Laajennus vaatii uudemman version Geeklogista. P‰ivit‰ <a href="http://www.geeklog.net">Geeklog-j‰rjestelm‰si</a> tai hanki uudempi versio laajennuksesta.',
+    9 => 'Laajennus vaatii uudemman version glFusionista. P‰ivit‰ <a href="http://www.gllabs.org">glFusion-j‰rjestelm‰si</a> tai hanki uudempi versio laajennuksesta.',
     10 => '<br' . XHTML . '><b>Laajennuksia ei ole t‰ll‰ hetkell‰ asennettuna.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Muokataksesi tai poistaaksesi laajennuksen, valitse laajennuksen numero. Halutessasi lis‰tietoja laajennuksesta, valitse laajennuksen nimi alta ja sinut ohjataa laajennuksen kotisivulle. Asentaaksesi tai p‰ivitt‰‰ksesi laajennuksen, lue laajennuksen dokumentaatio.',
     12 => 'laajennuksen nime‰ ei ole l‰hetetty plugineditor()',
@@ -1001,7 +1002,7 @@ $LANG32 = array(
     15 => 'Hallinnon sivu',
     16 => 'Laajennuksen nimi',
     17 => 'Laajennuksen versio',
-    18 => 'Geeklogin versio',
+    18 => 'glFusionin versio',
     19 => 'P‰‰ll‰',
     20 => 'Kyll‰',
     21 => 'Ei',
@@ -1012,7 +1013,7 @@ $LANG32 = array(
     26 => 'Laajennuksen nimi',
     27 => 'Laajennuksen kotisivu',
     28 => 'Laajennuksen versio',
-    29 => 'Geeklogin versio',
+    29 => 'glFusionin versio',
     30 => 'Poista laajennus?',
     31 => 'Oletko varma ett‰ haluat poistaa laajennuksen? Poistamalla poistat myˆs kaiken tiedot ja tietorakenteen jotka liittyv‰t t‰h‰n laajennukseen. Jos olet varma, valitse poista uudelleen alta lˆytyv‰st‰ lomakkeesta.',
     32 => '<p><b>Error AutoLink tag not correct format</b></p>',
@@ -1059,7 +1060,7 @@ $LANG33 = array(
     34 => 'Kirjauksia',
     35 => 'Tuntia',
     36 => 'Valitse syˆtteen tyyppi',
-    37 => 'V‰hint‰‰n yksi syˆtett‰ tai sis‰llˆn jakamista tukeva laajennus on asennettu. Alta voit valita haluatko luoda syˆtteen Geeklogista vai jostain laajennuksesta.',
+    37 => 'V‰hint‰‰n yksi syˆtett‰ tai sis‰llˆn jakamista tukeva laajennus on asennettu. Alta voit valita haluatko luoda syˆtteen glFusionista vai jostain laajennuksesta.',
     38 => 'Virhe: puuttuvia kentti‰',
     39 => 'T‰yt‰ syˆtteen otsikko, kuvaus ja tiedoston nimi.',
     40 => 'Syˆt‰ kirjauksien m‰‰r‰ tai tuntien lukum‰‰r‰.',
@@ -1177,7 +1178,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1255,7 +1257,7 @@ $LANG_DB_BACKUP = array(
     'last_ten_backups' => 'Viimeiset 10 varmuuskopiota',
     'do_backup' => 'Tee varmuuskopio',
     'backup_successful' => 'Tietokannan varmistus onnistui.',
-    'db_explanation' => 'Luodaksesi uuden varmuuskopion Geeklogista, klikkaa alta lˆytyv‰‰ nappia',
+    'db_explanation' => 'Luodaksesi uuden varmuuskopion glFusionista, klikkaa alta lˆytyv‰‰ nappia',
     'not_found' => "Viallinen polku tai mysqldump apuohjelma ei ole suoritettavissa.<br" . XHTML . ">Tarkista <strong>\$_DB_mysqldump_path</strong> m‰‰ritys config.php -tiedostossa.<br" . XHTML . ">Muuttujan nykyinen m‰‰rittely: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Varmuuskopiointi ep‰onnistui: tiedoston koko 0 tavua',
     'path_not_found' => "{$_CONF['backup_path']} ei ole olemassa tai ei ole hakemisto",
@@ -1356,8 +1358,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Select Trackback URL',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1583,8 +1585,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1772,7 +1774,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

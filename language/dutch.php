@@ -86,7 +86,7 @@ $LANG01 = array(
     37 => 'Geen artikelen',
     38 => 'Content Syndication',
     39 => 'vernieuwen',
-    40 => 'De instelling <tt>register_globals = Off</tt> is aanwezig in <tt>php.ini</tt>. Geeklog echter vereist dat <tt>register_globals</tt> ingesteld is op <strong>on</strong>. Voordat u verder gaat, gelieve dit op <strong>on</strong> in te stellen en herstart uw web server.',
+    40 => 'De instelling <tt>register_globals = Off</tt> is aanwezig in <tt>php.ini</tt>. glFusion echter vereist dat <tt>register_globals</tt> ingesteld is op <strong>on</strong>. Voordat u verder gaat, gelieve dit op <strong>on</strong> in te stellen en herstart uw web server.',
     41 => 'Gast(en)',
     42 => 'Geschreven door:',
     43 => 'Hierop reageren',
@@ -176,7 +176,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Login with OpenID:',
     129 => 'Configuration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -666,7 +667,7 @@ $LANG21 = array(
     27 => 'PHP Blok',
     28 => 'PHP Blok opties',
     29 => 'Blok Menu',
-    30 => 'Indien u PHP code wenst te gebruiken in een van de blokken, vul dan de naam van de php-funktie hierboven in. Deze naam moet beginnen met de prefix \'phpblock_\' (e.g. phpblock_hello_world). Zonder deze prefix wordt de funktie NIET aangeroepen. Dit is een beveiligingsmaatregel om niet zomaar willekeurige kode te moeten accepteren, die wellicht de integriteit kunnen schaden.<br' . XHTML . '>Zorg er ook voor dat er \'lege haakjes\' \'()\' staan achter de funktienaam in de broncode.<br' . XHTML . '>Tenslotte: het wordt aanbevolen dat alle PHP-blok-code in /pad/naar/geeklog/system/lib-custom.php wordt opgenomen. Bij nieuwe versies blijft de code gehandhaafd.',
+    30 => 'Indien u PHP code wenst te gebruiken in een van de blokken, vul dan de naam van de php-funktie hierboven in. Deze naam moet beginnen met de prefix \'phpblock_\' (e.g. phpblock_hello_world). Zonder deze prefix wordt de funktie NIET aangeroepen. Dit is een beveiligingsmaatregel om niet zomaar willekeurige kode te moeten accepteren, die wellicht de integriteit kunnen schaden.<br' . XHTML . '>Zorg er ook voor dat er \'lege haakjes\' \'()\' staan achter de funktienaam in de broncode.<br' . XHTML . '>Tenslotte: het wordt aanbevolen dat alle PHP-blok-code in /pad/naar/glfusion/system/lib-custom.php wordt opgenomen. Bij nieuwe versies blijft de code gehandhaafd.',
     31 => 'Fout in PHP Blok. Funktie, %s, bestaat niet.',
     32 => 'Fout: niet alle velden doorgegeven.',
     33 => 'Er wordt een URL gevraagd voor het .rdf bestand (portaal blokken)',
@@ -704,7 +705,7 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Controleer om autotags toe te staan',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -989,7 +990,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Het installeren van plugins kan het portaal als geheel beschadigen en, mogelijk ook, de achterliggende databases. Het is zeer belangrijk dat u alleen plugins van <a href="http://www.geeklog.net">Geeklog Homepage</a> instaleerd, omdat deze degelijk getest zijn. Het is ook belangrijk dat u inziet dat de installatie enige \'onveilige\' commando\'s bevat die kunnen leiden tot beveiligingsproblemen. Dit vergt bijzondere aandacht voor plugins van derden. Zelfs indien u deze waarschuwing ter harte neemt, kan de veiligheid en correctheid van de installatieprocedure niet gegarandeerd worden. De verantwoordelijkheid ligt exclusief bij U! Anders gezegd: installeer op eigen risico. Wees voorzichtig en lees de installatievoorschriften die bij elke plugin meekomen. Tenslotte: volg deze op.',
+    1 => 'Het installeren van plugins kan het portaal als geheel beschadigen en, mogelijk ook, de achterliggende databases. Het is zeer belangrijk dat u alleen plugins van <a href="http://www.gllabs.org">glFusion Homepage</a> instaleerd, omdat deze degelijk getest zijn. Het is ook belangrijk dat u inziet dat de installatie enige \'onveilige\' commando\'s bevat die kunnen leiden tot beveiligingsproblemen. Dit vergt bijzondere aandacht voor plugins van derden. Zelfs indien u deze waarschuwing ter harte neemt, kan de veiligheid en correctheid van de installatieprocedure niet gegarandeerd worden. De verantwoordelijkheid ligt exclusief bij U! Anders gezegd: installeer op eigen risico. Wees voorzichtig en lees de installatievoorschriften die bij elke plugin meekomen. Tenslotte: volg deze op.',
     2 => 'plugin Installatie Disclaimer',
     3 => 'plugin Installatie Formulier',
     4 => 'plugin File',
@@ -997,7 +998,7 @@ $LANG32 = array(
     6 => 'Waarschuwing: Deze plugin is al Actief!',
     7 => 'De plugin die u probeert te installeren is er al. gelieve eerst deze plugin te verwijderen voordat u de installatie opnieuw probeert.',
     8 => 'Plugin Compatibility Check Failed',
-    9 => 'Deze plugin vereist een latere versie van Geeklog. Gelieve deze versie van <a href=http://www.geeklog.net>Geeklog</a> te upgraden of een nieuwere versie op te halen van deze plugin.',
+    9 => 'Deze plugin vereist een latere versie van glFusion. Gelieve deze versie van <a href=http://www.gllabs.org>glFusion</a> te upgraden of een nieuwere versie op te halen van deze plugin.',
     10 => '<br' . XHTML . '><strong>Er zijn geen plugins actief op dit moment.</strong><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Om een plugin te wijzigen of te verwijderen, klik op het nummer van deze plugin\'s hieronder. Dit laat u de detailles zien, inclusief de website van de auteur. Tevens worden de versies van de plugins getoond. Dit helpt u bij de vraag of plugin\'s ge-upgrade moeten worden. Raadpleeg de documentatie voordat u een plugin installeert of upgrade. Om een introductie over deze plugin op te vragen, klik op de naam van de plugin, dit brengt u naar de website van de plugin.',
     12 => 'geen Naam voor de plugin gevonden door de plugineditor()',
@@ -1006,7 +1007,7 @@ $LANG32 = array(
     15 => 'Beheerder Home',
     16 => 'plugin Naam',
     17 => 'plugin Versie',
-    18 => 'Geeklog Versie',
+    18 => 'glFusion Versie',
     19 => 'Toestaan',
     20 => 'Ja',
     21 => 'Nee',
@@ -1017,7 +1018,7 @@ $LANG32 = array(
     26 => 'plugin Naam',
     27 => 'plugin Homepage',
     28 => 'Geinstalleerde versie',
-    29 => 'Geeklog Versie',
+    29 => 'glFusion Versie',
     30 => 'plugin Verwijderen?',
     31 => 'Weet u het zeker dat deze plugin verwijderd mag worden? Let op! Hiermee worden tevens alle bestanden, data en structuren verwijderd die deze plugin gebruikt. Alleen als u zeker bent, klikt u nogmaals op \'Verwijderen\' in het formulier hieronder.',
     32 => '<p><b>Fout, AutoLinktag heeft niet het juiste formaat</b></p>',
@@ -1064,7 +1065,7 @@ $LANG33 = array(
     34 => 'Entries',
     35 => 'Uren',
     36 => 'Selecteer type van feed',
-    37 => 'Er is minstens een plugin actief die content syndication ondersteunt. Het is nodig dat u hieronder aangeeft of er sprake is van een Geeklog feed of van een feed uit een van de plugins.',
+    37 => 'Er is minstens een plugin actief die content syndication ondersteunt. Het is nodig dat u hieronder aangeeft of er sprake is van een glFusion feed of van een feed uit een van de plugins.',
     38 => 'Fout: Niet alles ingevuld',
     39 => 'Gelieve de \'Feed Titel\', \'beschrijving\', en \'Filename\' in te vullen.',
     40 => 'Gelieve het \'aantal entries\' of \'aantal uren\' op te geven.',
@@ -1182,7 +1183,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1588,8 +1590,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1777,7 +1779,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

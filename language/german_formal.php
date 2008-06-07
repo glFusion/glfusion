@@ -3,7 +3,7 @@
 ###############################################################################
 # german_formal.php
 #
-# This is the German language file for Geeklog, addressing the user as "Sie"
+# This is the German language file for glFusion, addressing the user as "Sie"
 # (formal German). See german.php for a language file addressing the user with
 # the more informal "Du".
 #
@@ -84,7 +84,7 @@ $LANG01 = array(
     37 => 'Keine Artikel.',
     38 => 'Newsfeed',
     39 => 'Neuladen',
-    40 => 'Sie haben <tt>register_globals = Off</tt> in Ihrer <tt>php.ini</tt>. Für Geeklog muss <tt>register_globals</tt> jedoch auf <strong>on</strong> stehen. Bitte ändern Sie dies auf <strong>on</strong> und starten Sie Ihren Webserver neu.',
+    40 => 'Sie haben <tt>register_globals = Off</tt> in Ihrer <tt>php.ini</tt>. Für glFusion muss <tt>register_globals</tt> jedoch auf <strong>on</strong> stehen. Bitte ändern Sie dies auf <strong>on</strong> und starten Sie Ihren Webserver neu.',
     41 => 'Gäste',
     42 => 'Autor:',
     43 => 'Antwort schreiben',
@@ -174,7 +174,8 @@ $LANG01 = array(
     127 => 'Permalink',
     128 => 'Einloggen mit OpenID:',
     129 => 'Konfiguration',
-    130 => 'Webservices'
+    130 => 'Webservices',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -664,7 +665,7 @@ $LANG21 = array(
     27 => 'PHP-Block',
     28 => 'PHP-Block: Optionen',
     29 => 'Block-Funktion',
-    30 => 'Wenn einer Ihrer Blöcke PHP-Code verwenden soll, geben Sie hier bitte den Namen der Funktion ein. Der Funktionsname muss mit "phpblock_" (z.B. phpblock_getweather) beginnen. Wenn diese Namenskonvention nicht eingehalten wird, wird die Funktion NICHT aufgerufen. Das soll verhindern, dass Hacker evtl. gefährlichen Code einschleusen können. Den Funktionsnamen NICHT mit einem Klammerpaar "()" abschliessen. Ferner wird empfohlen, all Ihren Code für PHP-Blöcke in der Datei /pfad/zu/geeklog/system/lib-custom.php abzulegen. Dort kann der Code auch dann unverändert bleiben, wenn Sie auf eine neuere Geeklog-Version umsteigen.',
+    30 => 'Wenn einer Ihrer Blöcke PHP-Code verwenden soll, geben Sie hier bitte den Namen der Funktion ein. Der Funktionsname muss mit "phpblock_" (z.B. phpblock_getweather) beginnen. Wenn diese Namenskonvention nicht eingehalten wird, wird die Funktion NICHT aufgerufen. Das soll verhindern, dass Hacker evtl. gefährlichen Code einschleusen können. Den Funktionsnamen NICHT mit einem Klammerpaar "()" abschliessen. Ferner wird empfohlen, all Ihren Code für PHP-Blöcke in der Datei /pfad/zu/glfusion/system/lib-custom.php abzulegen. Dort kann der Code auch dann unverändert bleiben, wenn Sie auf eine neuere glFusion-Version umsteigen.',
     31 => 'Fehler in PHP-Block: Funktion %s existiert nicht.',
     32 => 'Fehler: Nicht alle Felder ausgefüllt',
     33 => 'Für Portal-Blöcke muss ein Titel und eine URL zur RSS-Datei angegeben werden.',
@@ -676,7 +677,7 @@ $LANG21 = array(
     39 => 'Seite',
     40 => 'links',
     41 => 'rechts',
-    42 => 'Für Geeklog-Default-Blöcke muss ein Block-Titel und die Block-Reihenfolge angegeben werden.',
+    42 => 'Für glFusion-Default-Blöcke muss ein Block-Titel und die Block-Reihenfolge angegeben werden.',
     43 => 'Nur auf der Startseite',
     44 => '',
     45 => "Sie haben keine Zugriffsrechte für diesen Block. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/block.php\">Zurück zum Administrator-Menü</a>.",
@@ -702,7 +703,7 @@ $LANG21 = array(
     65 => 'Reihenfolge',
     66 => 'Autotags',
     67 => 'Ankreuzen, um Autotags zu interpretieren',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -862,7 +863,7 @@ $LANG28 = array(
     22 => 'Fehler',
     23 => 'Import',
     24 => 'Mehrfach-Import von Usern',
-    25 => 'Hier können Userdaten aus einer Datei in Geeklog importiert werden. Die Import-Datei muss ein Textfile sein, bei dem die Datensätze durch Tabs getrennt sind. Zudem müssen die Felder in der Reihenfolge Richtiger Name - Username - E-Mail-Adresse vorliegen. Jeder so importierte User bekommt eine E-Mail mit einem Zufallspasswort zugeschickt. Pro Zeile darf nur ein User stehen. Wenn sich die Importdatei nicht an dieses Format hält, kann es zu Problemen kommen, die nur in mühseliger Handarbeit behoben werden können. Also die Einträge lieber zweimal überprüfen ...',
+    25 => 'Hier können Userdaten aus einer Datei in glFusion importiert werden. Die Import-Datei muss ein Textfile sein, bei dem die Datensätze durch Tabs getrennt sind. Zudem müssen die Felder in der Reihenfolge Richtiger Name - Username - E-Mail-Adresse vorliegen. Jeder so importierte User bekommt eine E-Mail mit einem Zufallspasswort zugeschickt. Pro Zeile darf nur ein User stehen. Wenn sich die Importdatei nicht an dieses Format hält, kann es zu Problemen kommen, die nur in mühseliger Handarbeit behoben werden können. Also die Einträge lieber zweimal überprüfen ...',
     26 => '',
     27 => '',
     28 => 'Ankreuzen, um dieses Bild zu löschen:',
@@ -987,7 +988,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Installing plugins could possibly cause damage to your Geeklog installation and, possibly, to your system.  It is important that you only install plugins downloaded from the <a href="http://www.geeklog.net">Geeklog Homepage</a> as we thoroughly test all plugins submitted to our site on a variety of operating systems.  It is important that you understand that the plugin installation process will require the execution of a few filesystem commands which could lead to security problems particularly if you use plugins from third party sites.  Even with this warning you are getting, we do not gaurantee the success of any installation nor are we liable for damage caused by installing a Geeklog plugin.  In other words, install at your own risk.  For the wary, directions on how to manually install a plugin is included with each plugin package.',
+    1 => 'Installing plugins could possibly cause damage to your glFusion installation and, possibly, to your system.  It is important that you only install plugins downloaded from the <a href="http://www.gllabs.org">glFusion Homepage</a> as we thoroughly test all plugins submitted to our site on a variety of operating systems.  It is important that you understand that the plugin installation process will require the execution of a few filesystem commands which could lead to security problems particularly if you use plugins from third party sites.  Even with this warning you are getting, we do not gaurantee the success of any installation nor are we liable for damage caused by installing a glFusion plugin.  In other words, install at your own risk.  For the wary, directions on how to manually install a plugin is included with each plugin package.',
     2 => 'Plugin-Installation -- Disclaimer',
     3 => 'Plugin-Installationsformular',
     4 => 'Plugin-Datei',
@@ -995,7 +996,7 @@ $LANG32 = array(
     6 => 'Warnung: Plugin schon installiert!',
     7 => 'Das Plugin, das Sie installieren wollen, ist schon vorhanden. Bitte löschen Sie es, bevor Sie noch einmal versuchen, es zu installieren',
     8 => 'Plugin-Kompatibilitätstest fehlgeschlagen',
-    9 => 'Dieses Plugin benötigt eine neuere Version von Geeklog. Abhilfe schafft ein Update von <a href="http://www.geeklog.net/">Geeklog</a> oder evtl. eine andere Version dieses Plugins.',
+    9 => 'Dieses Plugin benötigt eine neuere Version von glFusion. Abhilfe schafft ein Update von <a href="http://www.gllabs.org/">glFusion</a> oder evtl. eine andere Version dieses Plugins.',
     10 => '<br' . XHTML . '><b>Es sind derzeit keine Plugins installiert.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Um ein Plugin zu ändern oder zu löschen, auf das Ändern-Icon klicken. Es werden dann auch weitere Details, inkl. der Homepage des Plugins, angezeigt. Wenn in der Liste (s.u.) zwei Versionsnummern für ein Plugin angezeigt werden, bedeutet das, dass für das Plugin noch ein Update durchgeführt werden muss. Um ein Plugin zu installieren oder aktualisieren bitte auch immer dessen Dokumentation lesen.',
     12 => '(kein Name angegeben)',
@@ -1004,7 +1005,7 @@ $LANG32 = array(
     15 => 'Admin Home',
     16 => 'Name des Plugins',
     17 => 'Plugin-Version',
-    18 => 'Geeklog-Version',
+    18 => 'glFusion-Version',
     19 => 'Aktiv',
     20 => 'Ja',
     21 => 'Nein',
@@ -1015,7 +1016,7 @@ $LANG32 = array(
     26 => 'Name des Plugins',
     27 => 'Plugin-Homepage',
     28 => 'Plugin-Version',
-    29 => 'Geeklog-Version',
+    29 => 'glFusion-Version',
     30 => 'Plugin löschen?',
     31 => 'Sind Sie sicher, dass Sie dieses Plugin löschen wollen? Dies wird alle Daten und Datenstrukturen löschen, die dieses Plugin benutzt. Wenn Sie sicher sind, dann klicken Sie jetzt bitte noch einmal auf Löschen.',
     32 => '<p><b>Fehler: Ungültiges Format für Autolink.</b></p>',
@@ -1062,7 +1063,7 @@ $LANG33 = array(
     34 => 'Einträge',
     35 => 'Stunden',
     36 => 'Art des Newsfeeds festlegen',
-    37 => 'Sie haben (mindestens) ein Plugin installiert, das Newsfeeds unterstützt. Bitte wählen Sie zunächst aus, ob Sie einen Feed für Geeklog oder für ein Plugin anlegen wollen.',
+    37 => 'Sie haben (mindestens) ein Plugin installiert, das Newsfeeds unterstützt. Bitte wählen Sie zunächst aus, ob Sie einen Feed für glFusion oder für ein Plugin anlegen wollen.',
     38 => 'Fehler: Nicht alle Felder ausgefüllt',
     39 => 'Bitte die Felder Newsfeeds-Titel, Beschreibung und Dateiname ausfüllen.',
     40 => 'Bitte ein Limit (Anzahl Einträge oder Anzahl Stunden) eingeben.',
@@ -1180,7 +1181,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Dateigröße unter 1kb',
     95 => 'Es gab einen Fehler.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1359,8 +1361,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Fehler nicht näher spezifiziert.',
     'select_url' => 'Trackback-URL auswählen',
     'not_found' => 'Trackback-URL nicht gefunden',
-    'autodetect_failed' => 'Geeklog konnte keine Trackback-URL für den Beitrag finden, zu dem der Kommentar gesendet werden sollte. Bitte geben Sie die Trackback-URL von Hand ein.',
-    'trackback_explain' => 'Aus den unten aufgeführten Links können Sie jetzt den Beitrag auswählen, zu dem Ihr Kommentar gesendet werden soll. Geeklog wird versuchen, die Trackback-URL selbst zu ermitteln. Andernfalls können Sie die Trackback-URL aber auch <a href="%s">von Hand eingeben</a>.',
+    'autodetect_failed' => 'glFusion konnte keine Trackback-URL für den Beitrag finden, zu dem der Kommentar gesendet werden sollte. Bitte geben Sie die Trackback-URL von Hand ein.',
+    'trackback_explain' => 'Aus den unten aufgeführten Links können Sie jetzt den Beitrag auswählen, zu dem Ihr Kommentar gesendet werden soll. glFusion wird versuchen, die Trackback-URL selbst zu ermitteln. Andernfalls können Sie die Trackback-URL aber auch <a href="%s">von Hand eingeben</a>.',
     'no_links_trackback' => 'Keine Links gefunden. Für diesen Beitrag können keine Trackback-Kommentare gesendet werden.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback-Ergebnisse',
@@ -1586,8 +1588,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Konfiguration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Konfiguration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1641,7 +1643,7 @@ $LANG_confignames['Core'] = array(
     'language_files' => 'Sprachdateien',
     'languages' => 'Sprachen',
     'timezone' => 'Zeitzone',
-    'site_disabled_msg' => 'Anzeige bei Abschaltung von Geeklog oder URL',
+    'site_disabled_msg' => 'Anzeige bei Abschaltung von glFusion oder URL',
     'rootdebug' => 'Root Debugging',
     'cookie_session' => 'Session Cookie Name',
     'cookie_name' => 'Permanent Cookie Name',
@@ -1775,7 +1777,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Grundeinstellung Kategorierechte',
     'atom_max_stories' => 'Max. Artikel im Webservices-Feed',
     'disable_webservices' => 'Webservices ausschalten?',
-    'restrict_webservices' => 'Webservices beschränken?'
+    'restrict_webservices' => 'Webservices beschränken?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(

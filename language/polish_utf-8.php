@@ -80,7 +80,7 @@ $LANG01 = array(
     37 => 'Brak artykułów użytkownika',
     38 => 'Syndykacja Treści',
     39 => 'Odśwież',
-    40 => 'Masz <tt>register_globals = Off</tt> w pliku <tt>php.ini</tt>. Niestety, Geeklog wymaga <tt>register_globals</tt> aby były ustawione na <strong>on</strong>. Proszę zminieć ustawienia na <strong>on</strong> i restartować serwer www.',
+    40 => 'Masz <tt>register_globals = Off</tt> w pliku <tt>php.ini</tt>. Niestety, glFusion wymaga <tt>register_globals</tt> aby były ustawione na <strong>on</strong>. Proszę zminieć ustawienia na <strong>on</strong> i restartować serwer www.',
     41 => 'Gość',
     42 => 'Autor:',
     43 => 'Odpowiedz',
@@ -170,7 +170,8 @@ $LANG01 = array(
     127 => 'Stały odnośnik',
     128 => 'Zaloguj z OpenID:',
     129 => 'Konfiguracja',
-    130 => 'Usługi Web-owe'
+    130 => 'Usługi Web-owe',
+    500 => 'Please remove the admin/install/ directory!'
 );
 
 ###############################################################################
@@ -660,7 +661,7 @@ $LANG21 = array(
     27 => 'Blok PHP',
     28 => 'Opcje Bloku PHP',
     29 => 'Funkcje Bloku',
-    30 => 'Jeśli chcesz aby twój blok obsługiwał kod PHP, wpisz nazwę funkcji powyżej.  Nazwa funkcji musi rozpoczynać się prefiksem "phpblock_" (np. phpblock_getweather).  Jeżeli nie będzie prefiksu, twoja funkcja NIE zostanie wywołana.  Związane jest to z uniemożliwieniem \'wrzucania\' skryptów przez hakerów, które mogą uszkodzić twój system.  Upewnij się, że nie ma pustych nawiasów "()" po nazwie funkcji.  Na koniec, zalecamy umieszczenie całego kodu PHP Block w /ścieżka/do/geeklog/system/lib-custom.php.  Pozwoli to na zachowanie wersji kodu bez zmian nawet przy aktualizacji Geekloga.',
+    30 => 'Jeśli chcesz aby twój blok obsługiwał kod PHP, wpisz nazwę funkcji powyżej.  Nazwa funkcji musi rozpoczynać się prefiksem "phpblock_" (np. phpblock_getweather).  Jeżeli nie będzie prefiksu, twoja funkcja NIE zostanie wywołana.  Związane jest to z uniemożliwieniem \'wrzucania\' skryptów przez hakerów, które mogą uszkodzić twój system.  Upewnij się, że nie ma pustych nawiasów "()" po nazwie funkcji.  Na koniec, zalecamy umieszczenie całego kodu PHP Block w /ścieżka/do/glfusion/system/lib-custom.php.  Pozwoli to na zachowanie wersji kodu bez zmian nawet przy aktualizacji glFusiona.',
     31 => 'Błąd w Bloku PHP.  Funkcja, %s, nie istnieje.',
     32 => 'Błąd. Puste pole(a)',
     33 => 'Musisz wpisać URL do pliku .rdf dla bloków portalowych',
@@ -672,7 +673,7 @@ $LANG21 = array(
     39 => 'Strona',
     40 => 'Lewa',
     41 => 'Prawa',
-    42 => 'Musisz wpisać porządek bloku i poziom zabezpieczeń dla domyślnych bloków Geekloga',
+    42 => 'Musisz wpisać porządek bloku i poziom zabezpieczeń dla domyślnych bloków glFusiona',
     43 => 'Tylko Strona Główna',
     44 => '',
     45 => "Próbujesz wyedytować blok, do którego nie masz uprawnień.  Ta próba została zapisana w logu. Proszę <a href=\"{$_CONF['site_admin_url']}/block.php\">wrócić do ekranu administrowania blokami</a>.",
@@ -698,7 +699,7 @@ $LANG21 = array(
     65 => 'Sorotwanie',
     66 => 'Autotagi',
     67 => 'Zaznacz aby włączyć autotagi',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in Geeklog Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
 );
 
 ###############################################################################
@@ -858,7 +859,7 @@ $LANG28 = array(
     22 => 'Błąd',
     23 => 'Dodanie Grupowe',
     24 => 'Grupowy Import Użytkowników',
-    25 => 'Można zaimportować grupowo użytkowników do Geekloga.  Plik tekstowy musi być rozdzielany znakami tabulacji oraz musi mieć następującą strukturę: imię i nazwisko, login, adres email.  Każdy zaimportowany użytkownik dostanie mailem hasło.  W jednej linii może występować tylko jeden użytkownik.  Nie zastosowanie do tych instrukcji spowoduje problemy, które mogą wymagać ręcznej obróbki dlatego sprawdź dwa razy zawarte informacje!',
+    25 => 'Można zaimportować grupowo użytkowników do glFusiona.  Plik tekstowy musi być rozdzielany znakami tabulacji oraz musi mieć następującą strukturę: imię i nazwisko, login, adres email.  Każdy zaimportowany użytkownik dostanie mailem hasło.  W jednej linii może występować tylko jeden użytkownik.  Nie zastosowanie do tych instrukcji spowoduje problemy, które mogą wymagać ręcznej obróbki dlatego sprawdź dwa razy zawarte informacje!',
     26 => '',
     27 => '',
     28 => 'Zaznacz tutaj aby usunąć obrazek',
@@ -983,7 +984,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Instalowanie pluginów może spowodować uszkodzenie twojej instalacji Geekloga jak również systemu.  Ważne jest aby instalować pluginy ściągnięte z <a href="http://www.geeklog.net" target="_blank">Geeklog Homepage</a> ponieważ są one szczegółowo przez nas testowane na różnych systemach operacyjnych.  Ważne abyś miał świadomość, że instalacja pluginu wymaga wykonania kilku komend filesystemu, co wiąże się z bezpieczeństwem systemu, zwłaszcza gdy pluginy pochodzą od osób trzecich.  Pomimo tego ostrzeżenia, nie gwarantujemy sukcesu instalacyjnego ani nie możemy być pociągnięci do odpowiedzialności za jakiekolwiek szkody wynikłe z instalacji jakiegokolwiek pluginu.  Instalacja na własne ryzyko.  Instrukcje dotyczące ręcznej instalacji pluginu znajdują się w każdym pakiecie z pluginem.',
+    1 => 'Instalowanie pluginów może spowodować uszkodzenie twojej instalacji glFusiona jak również systemu.  Ważne jest aby instalować pluginy ściągnięte z <a href="http://www.gllabs.org" target="_blank">glFusion Homepage</a> ponieważ są one szczegółowo przez nas testowane na różnych systemach operacyjnych.  Ważne abyś miał świadomość, że instalacja pluginu wymaga wykonania kilku komend filesystemu, co wiąże się z bezpieczeństwem systemu, zwłaszcza gdy pluginy pochodzą od osób trzecich.  Pomimo tego ostrzeżenia, nie gwarantujemy sukcesu instalacyjnego ani nie możemy być pociągnięci do odpowiedzialności za jakiekolwiek szkody wynikłe z instalacji jakiegokolwiek pluginu.  Instalacja na własne ryzyko.  Instrukcje dotyczące ręcznej instalacji pluginu znajdują się w każdym pakiecie z pluginem.',
     2 => 'Umowa Instalacyjna Pluginów',
     3 => 'Plugin Formularz Instalacyjny',
     4 => 'Plugin Plik',
@@ -991,7 +992,7 @@ $LANG32 = array(
     6 => 'Ostrzeżenie: Plugin Już Zainstalowany!',
     7 => 'Plugin, który próbujesz zainstalować już istnieje.  Proszę wykasować istniejący plugin i zainstalować go ponownie',
     8 => 'Sprawdzanie Kompatybilności Pluginu Zakończone Niepowodzeniem',
-    9 => 'Ten plugin wymaga nowszej wersji Geekloga. Albo uaktualnij swoją kopię <a href=http://www.geeklog.net>Geekloga</a> albo ściągnij nowszą wersję tego pluginu.',
+    9 => 'Ten plugin wymaga nowszej wersji glFusiona. Albo uaktualnij swoją kopię <a href=http://www.gllabs.org>glFusiona</a> albo ściągnij nowszą wersję tego pluginu.',
     10 => '<br' . XHTML . '><b>Brak zainstalowanych pluginów.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Aby zmodyfikować lub wykasować plugin, kliknij na nazwę pluginu. Zobaczysz więcej informacji włącznie z adresem strony autora. Widoczne są wersje zainstalowana i wersja kodu. To pomoże stwierdzić czy dany plugin wymaga aktualizacji. Aby zainstalować lub uaktualnić dany plugin proszę zapoznać się z dołączoną do niego instrukcją.',
     12 => 'brak nazwy pluginu dla plugineditor()',
@@ -1058,7 +1059,7 @@ $LANG33 = array(
     34 => 'Tytułów',
     35 => 'Godzin',
     36 => 'Wybierz rodzaj pliku',
-    37 => 'Masz zainstalowany co najmniej jeden plugin zarządzający syndykacją treści. Poniżej należy wybrać opcję czy chcesz stworzyć plik Geeklogowy czy też plik dla jednego z pluginów.',
+    37 => 'Masz zainstalowany co najmniej jeden plugin zarządzający syndykacją treści. Poniżej należy wybrać opcję czy chcesz stworzyć plik glFusionowy czy też plik dla jednego z pluginów.',
     38 => 'Błąd: Brakujące Pola',
     39 => 'Wpisz Tytuł Pliku, Opis i Nazwę Pliku.',
     40 => 'Proszę podać liczbę tytułów lub czas w godzinach.',
@@ -1176,7 +1177,8 @@ $MESSAGE = array(
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message'
+    97 => 'Not all required fields have been passed validation - default custom membership message',
+    500 => 'The Template Cache has been successfully cleared'
 );
 
 ###############################################################################
@@ -1355,8 +1357,8 @@ $LANG_TRB = array(
     'error_unspecified' => 'Unspecified error.',
     'select_url' => 'Select Trackback URL',
     'not_found' => 'Trackback URL not found',
-    'autodetect_failed' => 'Geeklog could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. Geeklog will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
     'pingback' => 'Pingback',
     'pingback_results' => 'Pingback results',
@@ -1582,8 +1584,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'Geeklog',
-    'title' => 'Geeklog Configuration'
+    'label' => 'glFusion',
+    'title' => 'glFusion Configuration'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1771,7 +1773,8 @@ $LANG_confignames['Core'] = array(
     'default_permissions_topic' => 'Topic Default Permissions',
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
-    'restrict_webservices' => 'Restrict Webservices?'
+    'restrict_webservices' => 'Restrict Webservices?',
+    'use_safe_html' => 'Use Safe HTML Mode?'
 );
 
 $LANG_configsubgroups['Core'] = array(
