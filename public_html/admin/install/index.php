@@ -1020,6 +1020,11 @@ function INST_personalizeAdminAccount($site_mail, $site_url)
 */
 function INST_getDefaultLanguage($langpath, $language, $utf8 = false)
 {
+    $pos = strpos($language, '_utf-8');
+    if ($pos !== false) {
+        $language = substr($language, 0, $pos);
+    }
+
     if ($utf8) {
         $lngname = $language . '_utf-8';
     } else {
