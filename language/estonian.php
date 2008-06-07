@@ -1437,8 +1437,6 @@ $LANG_WHATSNEW = array (
     # %n    amount, "2", "20" etc
     # %t    time, "2" (weeks)
     # %s    scale, "hrs", "weeks"
-
-$LANG_WHATSNEW = array(
     'new_string' => '%n uut %i viimase %t %s jooksul',
     'new_last' => ' viimase %t %s jooksul',
     'minutes' => 'minuti',
