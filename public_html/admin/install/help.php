@@ -46,8 +46,22 @@ if ( !defined( 'XHTML' ) ) {
 	define( 'XHTML', ' /' );
 }
 
-$language = (isset( $_GET['language'] ) && !empty( $_GET['language'] )) ? preg_replace("/[^0-9a-zA-Z]/","",$_GET['language']) : 'english';
-require_once( 'language/' . $language . '.php' );
+$language = 'english';
+if (isset($_GET['language'])) {
+    $lng = $_GET['language'];
+} else if (isset($_COOKIE['language'])) {
+    // Okay, so the name of the language cookie is configurable, so it may not
+    // be named 'language' after all. Still worth a try ...
+    $lng = $_COOKIE['language'];
+} else {
+    $lng = $language;
+}
+// sanitize value and check for file
+$lng = preg_replace('/[^a-z0-9\-_]/', '', $lng);
+if (!empty($lng) && is_file('language/' . $lng . '.php')) {
+    $language = $lng;
+}
+require_once 'language/' . $language . '.php';
 
 // $display holds all the outputted HTML and content
 if ( defined( 'XHTML' ) ) {
