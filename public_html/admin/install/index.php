@@ -1781,7 +1781,6 @@ if (isset($_POST['language'])) {
     // Okay, so the name of the language cookie is configurable, so it may not
     // be named 'language' after all. Still worth a try ...
     $lng = $_COOKIE['language'];
-    $lng = str_replace('_utf-8', '', $lng); // for now
 } else {
     $lng = $language;
 }
