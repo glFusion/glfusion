@@ -939,6 +939,14 @@ float:right;
 white-space:nowrap;
 }
 
+.list-blogroll li {
+background:transparent url(images/bullet-star.png) no-repeat scroll 0 30%;
+padding-bottom:5px;
+padding-left:12px;
+margin-left:-10px;
+font-size:0.85em;
+}
+
 .moderation-cc-row {
 clear:both;
 height:80px;
