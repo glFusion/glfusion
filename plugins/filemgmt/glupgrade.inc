@@ -47,7 +47,7 @@ if (!function_exists('COM_errorLOG') ) {
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function plugin_upgrade_filemgmt() {
-    global $_TABLES,$_CONF, $_FM_TABLES,$CONF_FM;
+    global $_TABLES,$_CONF, $_FM_TABLES,$CONF_FM,$_DB_table_prefix;;
 
     include($_CONF['path'] . '/plugins/filemgmt/config.php');
 
