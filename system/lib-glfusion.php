@@ -51,7 +51,7 @@ function phpblock_blogroll ()
 
     // configuration options:
 
-    $cat = $_ST_CONF['blogroll-category']; // Category to take links from
+    $cat = $_ST_CONF['blogroll_category']; // Category to take links from
     $directlink = false;    // Use direct links (true) or portal.php (false)
     $random = false;        // Random order (true) or sort by $sort (false)
     $sort = 'date';         // Sort by ... e.g. 'date', 'title', 'url'
