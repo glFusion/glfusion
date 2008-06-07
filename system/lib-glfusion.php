@@ -78,7 +78,7 @@ function phpblock_blogroll ()
                 $link = '<a href="' . $url . '" title="' . $A['url'] . '">';
 
             }
-            $links[] = $link . $A['title'] . '</a>'; // . ' (' . ($A['hits']) . ')' . '<br' . XHTML . '><em>' . ($A['description']) . '</em><br' . XHTML . '><br' . XHTML . '>';
+            $links[] = $link . COM_truncate($A['title'],25,'...') . '</a>'; // . ' (' . ($A['hits']) . ')' . '<br' . XHTML . '><em>' . ($A['description']) . '</em><br' . XHTML . '><br' . XHTML . '>';
         }
 
         if (count ($links) > 0) {
