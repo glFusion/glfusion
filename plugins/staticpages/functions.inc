@@ -338,8 +338,8 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
     $content = SP_render_content (stripslashes ($A['sp_content']), $A['sp_php']);
     $spage->set_var('content', $content );
 
+    $spage->set_var('info_separator', 'hidden');
     if ($A['sp_format'] <> 'blankpage') {
-        $spage->set_var('info_separator','hidden');
         $curtime = COM_getUserDateTimeFormat ($A['sp_date']);
         if ($_SP_CONF['show_date'] == 1) {
             $lastupdate = $LANG_STATIC['lastupdated']. ' ' . $curtime[0];
