@@ -5,14 +5,17 @@
 <div class="plugin">
 <table style="border:none;width:100%">
   <tr>
-    <td style="text-align:left;">
+    <td style="width:58px">
+	  <img style="vertical-align:middle" src="{site_admin_url}/plugins/sitetailor/images/sitetailor-menubuilder.png"{xhtml}>
+	</td>
+    <td style="text-align:left;vertical-align:middle">
       <form method="post" id="newmenuelement" action="{site_admin_url}/plugins/sitetailor/index.php">
         <input type="hidden" name="mode" value="new"{xhtml}>
         <input type="hidden" id="menumid" name="menumid" value="{menuid}"{xhtml}>
         <input type="button" id="newelement" name="newelement" value="{$LANG_ST01[add_new]}"onclick="submit()"{xhtml}>
       </form>
     </td>
-    <td style="text-align:right;">
+    <td style="text-align:right;vertical-align:middle">
       <form method="post" id="activemenu" action="{site_admin_url}/plugins/sitetailor/index.php">
       <input type="hidden" name="mode" value="disablemenu"{xhtml}>
       <input type="hidden" id="menutodisable" name="menutodisable" value="{menuid}"{xhtml}>
