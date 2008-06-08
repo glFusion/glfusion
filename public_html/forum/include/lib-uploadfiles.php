@@ -49,7 +49,7 @@ function gf_check4files($id,$tempfile=false) {
         }
 
         if ( gf_uploadfile($filename,$uploadfile,$CONF_FORUM['allowablefiletypes']) ) {
-            if (array_key_exists($uploadfile['type'],$CONF_FORUM['inlineimageypes']) AND function_exists(MG_resizeImage)) {
+            if (array_key_exists($uploadfile['type'],$CONF_FORUM['inlineimageypes']) AND function_exists('MG_resizeImage')) {
                 if ($_POST['chk_usefilemgmt'] == 1) {
                     $srcImage = "{$filemgmt_FileStore}{$filename}";
                     $destImage = "{$CONF_FORUM['uploadpath']}/tn/{$filename}";
@@ -87,6 +87,7 @@ function gf_check4files($id,$tempfile=false) {
         } else {
             COM_errorlog("upload error:" . $GLOBALS['gf_errmsg']);
             $errmsg = $GLOBALS['gf_errmsg'];
+            $filelinks = -1;
         }
     }
 

@@ -253,7 +253,12 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     list ($lastid) = DB_fetchArray(DB_query("SELECT max(id) FROM {$_TABLES['gf_topic']} "));
 
                     /* Check for any uploaded files - during add of new topic */
-                    gf_check4files($lastid);
+                    $rc = gf_check4files($lastid);
+                    if ( $rc == -1 ) {
+                        $uploadErrorMessage = $GLOBALS['gf_errmsg'];
+                    } else {
+                        $uploadErrorMessage = '';
+                    }
 
                     // Check and see if there are no [file] bbcode tags in content and reset the show_inline value
                     // This is needed in case user had used the file bbcode tag and then removed it
@@ -288,7 +293,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     if ($uid != '1') {
                         DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('$_USER[uid]','$forum','$lastid','$date')");
                     }
-                    forum_statusMessage($LANG_GF02['msg19'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$lastid",$LANG_GF02['msg19']);
+                    forum_statusMessage($LANG_GF02['msg19'] . '<br' . XHTML . '><br' . XHTML . '>' . $uploadErrorMessage, $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$lastid",$LANG_GF02['msg19']);
                 }
 
             } else {
