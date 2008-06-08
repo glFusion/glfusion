@@ -3269,7 +3269,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     {
         $headers['X-Priority'] = $priority;
     }
-    $headers['X-Mailer'] = 'Geeklog ' . VERSION;
+    $headers['X-Mailer'] = 'glFusion ' . glFusion_VERSION;
 
     if (!empty($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['SERVER_ADDR']) &&
             ($_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR'])) {
