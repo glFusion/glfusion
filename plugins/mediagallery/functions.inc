@@ -1391,7 +1391,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                     'dropshadow'    => 'true',
                     'delay'         => $delay,
                     'nolink'        => ($MG_albums[$parm1]->hidden || $enable_link == 0) ? 'true' : 'false',
-                    'showtitle'     => ( $showtitle == 'bottom' || $showtitle == 'top' ) ? '&amp;showTitle=' . $showtitle : '',
+                    'showtitle'     => ( $showtitle == 'bottom' || $showtitle == 'top' ) ? '&showTitle=' . $showtitle : '',
                     'width'         => $width,
                     'height'        => $height,
                     'xhtml'         => XHTML,

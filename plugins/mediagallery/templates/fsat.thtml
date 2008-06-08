@@ -3,7 +3,7 @@
 	var params = {};
 	var attributes = {};
 	flashvars.action="true";
-	flashvars.xmlUrl="{movie}&amp;showDropShadow={dropshadow}&amp;dely={delay}&amp;transInType=Fade&amp;transOutType=Fade&amp;noLink={nolink}{showtitle}";
+	flashvars.xmlUrl="{movie}&showDropShadow={dropshadow}&dely={delay}&transInType=Fade&transOutType=Fade&noLink={nolink}{showtitle}";
     swfobject.embedSWF("{site_url}/players/minislideshow.swf", "{id}", "{width}", "{height}", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
 </script>
 <div id="{id}">
