@@ -977,7 +977,7 @@ function gf_showattachments($topic,$mode='') {
         $filemgmtSupport = false;
     }
 
-    $retval .= '<div id="fileattachlist">';
+//    $retval .= '<div id="fileattachlist">';
     while (list($id,$lid,$field_value) =  DB_fetchArray($query)) {
         $retval .= '<div class="tblforumfile">';
         $filename = explode(':',$field_value);
@@ -1003,7 +1003,7 @@ function gf_showattachments($topic,$mode='') {
         }
         $retval .= '</div>';
     }
-    $retval .= '</div>';
+//    $retval .= '</div>';
     return $retval;
 }
 

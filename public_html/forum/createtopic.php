@@ -972,12 +972,12 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
              $edit_prompt .= 'checked="checked" ';
         }
         $edit_prompt .= 'value="1"' . XHTML . '>';
-        $submissionform_main->set_var('attachments',gf_showattachments($id,'edit'));
+        $submissionform_main->set_var('attachments','<div id="fileattachlist">' . gf_showattachments($id,'edit') . '</div>');
     } else {
         $edit_prompt = '&nbsp;';
         $submissionform_main->set_var('attachments','');
         if ($uniqueid > 0) {
-            $submissionform_main->set_var('attachments',gf_showattachments($uniqueid,'edit'));
+            $submissionform_main->set_var('attachments','<div id="fileattachlist">' . gf_showattachments($uniqueid,'edit') . '</div>');
         }
     }
 
