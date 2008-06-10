@@ -946,7 +946,7 @@ $display .= '    <p>' . $LANG_ST01['javascript_required'] . '</p>' . LB;
 $display .= '    </div>' . LB;
 $display .= '</noscript>' . LB;
 $display .= '<div id="sitetailor" style="display:none;">' . LB;
-$display .= '<span><img style="vertical-align:middle;padding-right:10px;float:left;" src="images/sitetailor.png" /><h1 style="float:left">' . $LANG_ST00['menulabel'] . '</h1></span>';
+$display .= '<span><img style="vertical-align:middle;padding-right:10px;float:left;" src="images/sitetailor.png" alt=""' . XHTML . '></span><h1 style="float:left">' . $LANG_ST00['menulabel'] . '</h1>';
 $display .= $navbar->generate();
 $display .= $content;
 $display .= '</div>';

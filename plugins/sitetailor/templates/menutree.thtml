@@ -6,7 +6,7 @@
 <table style="border:none;width:100%">
   <tr>
     <td style="width:58px">
-	  <img style="vertical-align:middle" src="{site_admin_url}/plugins/sitetailor/images/sitetailor-menubuilder.png"{xhtml}>
+	  <img style="vertical-align:middle" src="{site_admin_url}/plugins/sitetailor/images/sitetailor-menubuilder.png" alt=""{xhtml}>
 	</td>
     <td style="text-align:left;vertical-align:middle">
       <form method="post" id="newmenuelement" action="{site_admin_url}/plugins/sitetailor/index.php">
