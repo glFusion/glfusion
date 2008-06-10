@@ -84,34 +84,7 @@ $_BLOCK_TEMPLATE['admin_block'] = 'blockheader-list.thtml,blockfooter-list.thtml
 $_BLOCK_TEMPLATE['section_block'] = 'blockheader-list.thtml,blockfooter-list.thtml';
 // $_BLOCK_TEMPLATE['user_block'] = 'blockheader-list.thtml,blockfooter-list.thtml';
 
-//Cacthing Template Library code that allows a theme to do away with redundant .thtml files.
-//If the CTL doesn't find the needed .thtml file in the current theme directory, it will look
-//for it in the default layout/professional/directory. This way, layouts can be more
-//streamlined and not have to include a lot of redundant files.
-//
-//For more information, see the latest documentation avavilable from gllabs.org:
-//http://www.gllabs.org/wiki/doku.php?id=geeklog:templatecache
-//                                                                        |
-//Authors: Joe Mucchiello     - joe AT throwingdice DOT com
-/*
-$TEMPLATE_OPTIONS['hook']['set_root'] = 'Template_set_root_missingfiles';
 
-function Template_set_root_missingfiles($root)
-{
-    global $_CONF;
-    $ret = Array();
-    foreach ($root as $r) {
-         $ret[] = $r;
-         // if the file is supposed to be in path_layout
-         // also look in professional directory
-         if (strpos($r, $_CONF['path_layout']) === 0) {
-            $ret[] = $_CONF['path_themes'] . 'professional/' .
-            substr($r, strlen($_CONF['path_layout']));
-         }
-    }
-    return $ret;
-}
-*/
 /**
 * Returns the site header
 *
@@ -328,8 +301,8 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var( 'site_name', $_CONF['site_name']);
 
     if( isset( $_CONF['advanced_editor'] ) && ( $_CONF['advanced_editor'] == 1 )
-            && file_exists( $_CONF['path_html']
-                            . 'layout/professional/advanced_editor_header.thtml' )) {
+            && file_exists( $_CONF['path_layout']
+                            . 'advanced_editor_header.thtml' )) {
         $header->set_file( 'editor'  , 'advanced_editor_header.thtml');
         $header->set_var('xthml',XHTML);
         $header->parse( 'advanced_editor', 'editor' );
@@ -753,82 +726,6 @@ function nouveau_siteFooter( $rightblock = -1, $custom = '' )
     return $retval;
 }
 
-/**
-* Get the current character set
-*
-* @return   string      character set, e.g. 'utf-8'
-*
-* Uses (if available, and in this order)
-* - $LANG_CHARSET (from the current language file)
-* - $_CONF['default_charset'] (from config.php)
-* - 'iso-8859-1' (hard-coded fallback)
-*
-*/
-if ( !function_exists('COM_getCharset') ) {
-    function COM_getCharset()
-    {
-        global $_CONF, $LANG_CHARSET;
-
-        if( empty( $LANG_CHARSET )) {
-            $charset = $_CONF['default_charset'];
-            if( empty( $charset )) {
-                $charset = 'iso-8859-1';
-            }
-        } else {
-            $charset = $LANG_CHARSET;
-        }
-
-        return $charset;
-    }
-}
-
-/**
-  * Checks to see if a specified user, or the current user if non-specified
-  * is the anonymous user.
-  *
-  * @param  int $uid    ID of the user to check, or none for the current user.
-  * @return boolean     true if the user is the anonymous user.
-  */
-if ( !function_exists('COM_isAnonUser') ) {
-    function COM_isAnonUser($uid = '')
-    {
-        global $_USER;
-
-        /* If no user was specified, fail over to the current user if there is one */
-        if( empty( $uid ) )
-        {
-            if( isset( $_USER['uid'] ) )
-            {
-                $uid = $_USER['uid'];
-            }
-        }
-
-        if( !empty( $uid ) )
-        {
-            return ($uid == 1);
-        } else {
-            return true;
-        }
-    }
-}
-//Caching Template Library code to pull redundant images from the layout/professional/ directory, so we don't have to duplicate them in our theme
-function Template_finish_missingfiles($str)
-{
-    global $_CONF;
-    return preg_replace_callback('#<img (.*)src="'.preg_quote($_CONF['layout_url']).'/([^"]*)"#i', 'missingfile_check', $str);
-}
-
-$TEMPLATE_OPTIONS['hook']['finish'] = 'Template_finish_missingfiles';
-
-function missingfile_check($match)
-{
-    global $_CONF;
-    if (file_exists($_CONF['path_layout'].$match[2])) {
-        return $match[0];
-    } else {
-        return '<img ' . $match[1] . 'src="' . $_CONF['site_url'] . '/layout/professional/' . $match[2] . '"';
-    }
-}
 
 // A portal staticpage (that bases itself on a user created proper portal block called gl_mootickerRSS)
 //modified from LWC's forum post http://www.geeklog.net/forum/viewtopic.php?showtopic=67396 by Mark R. Evans and Joe Mucchiello
