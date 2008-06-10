@@ -602,7 +602,7 @@ padding:5px;
 }
 
 form fieldset div.notes h4 {
-background:url(../professional/images/icon_info.png) no-repeat top left;
+background:url(images/icon_info.png) no-repeat top left;
 border-bottom:1px solid #666;
 color:#666;
 font-size:1.3em;
@@ -1234,7 +1234,7 @@ text-decoration:underline;
 }
 
 a.pluginButton:link,a.pluginButton:visited {
-background:transparent url(../professional/navbar/images/button_over.gif) center repeat-x;
+background:transparent url(navbar/images/button_over.gif) center repeat-x;
 color:#000;
 display:block;
 height:19px;
@@ -1244,7 +1244,7 @@ text-decoration:none;
 }
 
 a.pluginButton:hover {
-background:transparent url(../professional/navbar/images/button_over.gif) center repeat-x;
+background:transparent url(navbar/images/button_over.gif) center repeat-x;
 color:blue;
 display:block;
 height:19px;
@@ -1299,7 +1299,7 @@ width:100%;
 }
 
 #navcontainer a {
-background:url(../professional/navbar/images/tableftJ.gif) no-repeat left top;
+background:url(navbar/images/tableftJ.gif) no-repeat left top;
 float:left;
 text-decoration:none;
 margin:0;
@@ -1308,7 +1308,7 @@ color:#4D77CC;
 }
 
 #navcontainer a span {
-background:url(../professional/navbar/images/tabrightJ.gif) no-repeat right top;
+background:url(navbar/images/tabrightJ.gif) no-repeat right top;
 display:block;
 float:none;
 padding:5px 15px 4px 6px;
@@ -1324,13 +1324,13 @@ background-position:0 -42px;
 }
 
 #navcontainer a#current span {
-background:url(../professional/navbar/images/tabrightI.gif) no-repeat left top;
+background:url(navbar/images/tabrightI.gif) no-repeat left top;
 background-position:100% -42px;
 color:#FFF;
 }
 
 #navcontainer a:link#current,#navcontainer a:visited#current,#navcontainer a:hover#current {
-background:url(../professional/navbar/images/tableftI.gif) no-repeat left top;
+background:url(navbar/images/tableftI.gif) no-repeat left top;
 background-position:0 -42px;
 }
 
