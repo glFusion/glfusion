@@ -15,7 +15,7 @@
                     <a href="{gllabs_url}"><img style="vertical-align:middle" src="{layout_url}/images/cms-glfusion.png" alt="{powered_by} glFusion" title="{powered_by} glFusion"{xhtml}></a><br{xhtml}>
                     {execution_textandtime}
                 </div> <!-- end of footerlinks-->
-                <a href="{site_url}/backend/glfusion.rss">
+                <a href="{rss_url}">
                     <img class="reflect footer-rss" src="{layout_url}/images/rss.gif" alt="RSS" title="RSS"{xhtml}></a>
                 {copyright_notice}
             </div> <!-- end of footer-copyright -->
