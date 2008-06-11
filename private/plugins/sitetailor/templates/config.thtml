@@ -557,6 +557,7 @@ function hsv(a){
       <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
         <input type="hidden" id="mode" name="mode" value="savecfg"{xhtml}>
         <input type="submit" id="execute" name="execute" value="{$LANG_ST01[save]}"{xhtml}>
+        <input type="reset"  id="reset"   name="reset"   value="{$LANG_ST01[reset]}"{xhtml}>
       </div>
     </form>
   </div>

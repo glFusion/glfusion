@@ -159,6 +159,7 @@ $LANG_ST01 = array (
 	'align_left'			=> 'Left',
 	'align_right'			=> 'Right',
 	'blocks'                => 'Block Styles',
+	'reset'                 => 'Reset Form',
 );
 
 
