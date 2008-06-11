@@ -322,9 +322,9 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
 
         if ($story->EditElements('advanced_editor_mode') == 1 OR $story->EditElements('postmode') == 'adveditor') {
             $story_templates->set_var ('show_texteditor', 'none');
-            $story_templates->set_var ('show_htmleditor', 'inline');
+            $story_templates->set_var ('show_htmleditor', '');
         } else {
-            $story_templates->set_var ('show_texteditor', 'inline');
+            $story_templates->set_var ('show_texteditor', '');
             $story_templates->set_var ('show_htmleditor', 'none');
         }
     } else {
@@ -594,7 +594,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     if ($story->EditElements('advanced_editor_mode') == 1 OR $story->EditElements('postmode') == 'adveditor' OR $story->EditElements('postmode') == 'plaintext') {
         $story_templates->set_var ('show_allowedhtml', 'none');
     } else {
-        $story_templates->set_var ('show_allowedhtml', 'inline');
+        $story_templates->set_var ('show_allowedhtml', '');
     }
 
     $fileinputs = '';

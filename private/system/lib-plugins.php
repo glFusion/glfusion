@@ -1428,7 +1428,7 @@ function PLG_collectTags()
 
     // Determine which Core Modules and Plugins support AutoLinks
     //                        'tag'   => 'module'
-    $autolinkModules = array ('story' => 'geeklog');
+    $autolinkModules = array ('story' => 'glfusion');
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_autotags_' . $pi_name;
@@ -1533,8 +1533,8 @@ function PLG_replaceTags($content, $plugin = '')
     if (count ($tags) > 0) {       // Found the [tag] - Now process them all
         foreach ($tags as $autotag) {
             $function = 'plugin_autotags_' . $autotag['module'];
-            if (($autotag['module'] == 'geeklog') AND
-                    (empty ($plugin) OR ($plugin == 'geeklog'))) {
+            if (($autotag['module'] == 'glfusion') AND
+                    (empty ($plugin) OR ($plugin == 'glfusion'))) {
                 $url = '';
                 $linktext = $autotag['parm2'];
                 if ($autotag['tag'] == 'story') {

@@ -188,7 +188,7 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
 */
 function SYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = '', $updated_id = '' )
 {
-    $is_current = true; 
+    $is_current = true;
 
     switch( $topic )
     {
@@ -435,13 +435,13 @@ function SYND_updateFeed( $fid )
                                           . '/classes/syndication/' );
         $format = explode( '-', $A['format'] );
         $feed = $factory->writer( $format[0], $format[1] );
-        
+
         if( $feed )
         {
             $feed->encoding = $A['charset'];
             $feed->lang = $A['language'];
 
-            if( $A['type'] == 'geeklog' )
+            if( $A['type'] == 'glfusion' )
             {
                 if( $A['topic'] == '::all')
                 {
@@ -490,7 +490,7 @@ function SYND_updateFeed( $fid )
             $feed->copyright = 'Copyright ' . strftime( '%Y' ) . ' '
                              . $_CONF['site_name'];
             $feed->sitecontact = $_CONF['site_mail'];
-            $feed->system = 'Geeklog';
+            $feed->system = 'glFusion';
 
             /* Gather any other stuff */
             $feed->namespaces = PLG_getFeedNSExtensions($A['type'], $format[0], $format[1], $A['topic'], $fid);
@@ -538,7 +538,7 @@ function SYND_updateFeed( $fid )
                 $filename = substr( $_CONF['rdf_file'], $pos + 1 );
             }
             $feed->url = SYND_getFeedUrl( $filename );
-            
+
             $feed->extensions = PLG_getFeedExtensionTags($A['type'], $format[0], $format[1], $A['topic'], $fid, $feed);
 
             /* Inject the self reference for Atom into RSS feeds. Illogical?

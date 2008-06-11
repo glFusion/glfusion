@@ -1068,7 +1068,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         $content = $args['content'];
     } else if (!empty($args['summary'])) {
         $content = $args['summary'];
-    }   
+    }
     if (!empty($content)) {
         $parts = explode('[page_break]', $content);
         if (count($parts) == 1) {
@@ -1394,7 +1394,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
 
         // update feed(s) and Older Stories block
-        COM_rdfUpToDateCheck ('geeklog', $story->DisplayElements('tid'), $sid);
+        COM_rdfUpToDateCheck ('glfusion', $story->DisplayElements('tid'), $sid);
         COM_olderStuff ();
 
         if ($story->type == 'submission') {

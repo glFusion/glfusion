@@ -31,6 +31,24 @@ if (strpos ($_SERVER['PHP_SELF'], 'lib-glfusion.php') !== false) {
     die ('This file can not be used on its own!');
 }
 
+$TEMPLATE_OPTIONS['hook']['set_root'] = 'glf_template_set_root';
+
+function glf_template_set_root($root) {
+    global $_CONF;
+
+    $retval = array();
+
+    if (!is_array($root)) {
+        $root = array($root);
+    }
+
+    foreach( $root as $r ) {
+        $retval[] = $r . 'custom/';
+        $retval[] = $r;
+    }
+    return $retval;
+}
+
 function glfusion_SecurityCheck() {
     global $_CONF,$LANG01;
 
