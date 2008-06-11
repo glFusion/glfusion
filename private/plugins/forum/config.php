@@ -150,7 +150,7 @@ $CONF_FORUM['allowablefiletypes']    = array(
         'application/vnd.visio'             => '.vsd',
         'text/plain'                        => '.txt',
         'application/x-pangaeacadsolutions' => '.dwg',
-        'application/octet-stream'          => '.vsd,.fla,.psd,.xls,.doc,.ppt,.pdf,.swf,.mpp,.txt,.dwg'
+        'application/octet-stream'          => '.zip,.vsd,.fla,.psd,.xls,.doc,.ppt,.pdf,.swf,.mpp,.txt,.dwg'
         );
 
 // Identify the MIME types that will support inline image use and auto generation of the thumbnails
