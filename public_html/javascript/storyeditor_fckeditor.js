@@ -42,7 +42,7 @@
         } else if (obj.value == 'adveditor') {
             document.getElementById('text_editor').style.display='none';
             document.getElementById('html_editor').style.display='';
-            document.getElementById('editor_mode').style.display='none';
+            document.getElementById('editor_mode').style.display='';
             swapEditorContent('adveditor','introhtml');
             swapEditorContent('adveditor','bodyhtml');
         } else {

@@ -19,7 +19,7 @@
     </script>
     {navbar}
     <form name="frmstory" action="{site_admin_url}/story.php" method="post" enctype="multipart/form-data" onsubmit='set_postcontent();'>
-        <table id='adveditor' cellspacing="0" cellpadding="3" style="width:100%; margin-top:10px; border:1px solid #ECE9D8;">
+        <table id="adveditor" cellspacing="0" cellpadding="3" style="width:100%; margin-top:10px; border:1px solid #ECE9D8;">
             <tr>
                 <td style="width:20%;" class="alignright">{lang_author}:</td>
                 <td>{story_author}<input type="hidden" name="uid" value="{story_uid}"{xhtml}></td>
@@ -61,7 +61,7 @@
             </tr>
         </table>
         <!-- Basic textarea field - no editor -->
-        <div id="text_editor" style="width:98%; margin-top:10px; padding:10px;display:{show_texteditor};">
+        <div id="text_editor" style="width:98%;margin-top:10px;padding:10px;display:{show_texteditor};">
             {lang_introtext}:
             <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('introtext','larger');"{xhtml}>
             <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeTextAreaSize('introtext','smaller');"{xhtml}>
@@ -89,17 +89,17 @@
                 </select>
             </span>
             <div style="padding:5px;">
-            <textarea id="introhtml" style="width:98%;padding:5px 5px 5px 10px;" name="introhtml" cols="80" rows="12">{story_introtext}</textarea><br{xhtml}>
+              <textarea id="introhtml" style="width:98%;padding:5px 5px 5px 10px;" name="introhtml" cols="80" rows="12">{story_introtext}</textarea><br{xhtml}>
             </div>
             {lang_bodytext}:
             <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="lang_expandhelp" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','larger');"{xhtml}>
             <img src="{layout_url}/images/collapse.png" style="vertical-align:middle;" title="{lang_reducehelp}" alt="" onclick="changeHTMLTextAreaSize('bodyhtml','smaller');"{xhtml}>
             <div>
-            <textarea id="bodyhtml" style="width:98%;padding:5px 5px 5px 10px;" name="bodyhtml" cols="80" rows="12">{story_bodytext}</textarea>
+              <textarea id="bodyhtml" style="width:98%;padding:5px 5px 5px 10px;" name="bodyhtml" cols="80" rows="12">{story_bodytext}</textarea>
             </div>
         </div>
 
-        <div id="editor_mode" style="margin-top:10px; padding:10px; border:1px solid #ECE9D8; display:{show_allowedhtml};">
+        <div id="editor_mode" style="margin-top:10px; padding:10px; border:1px solid #ECE9D8; display:'';">
             {lang_allowed_html}
         </div>
 
@@ -251,7 +251,6 @@
             document.frmstory.expire_ampm.disabled=true;
             document.frmstory.storycode10.disabled=true;
             document.frmstory.storycode11.disabled=true;
-
         }
     </script>
 </div>

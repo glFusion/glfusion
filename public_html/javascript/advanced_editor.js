@@ -31,7 +31,7 @@
         // Reset the current selected navbar tab
         var navbar = document.getElementById('current');
         if (navbar) navbar.id = '';
-        // Cycle thru the navlist child elements - buiding an array of just the link items 
+        // Cycle thru the navlist child elements - buiding an array of just the link items
         var navbar = document.getElementById('navlist');
         var menuitems = new Array(8);
         var item = 0;
@@ -84,7 +84,6 @@
             document.getElementById('se_bottom').style.display = '';
             document.getElementById('text_editor').style.display = 'none';
             document.getElementById('html_editor').style.display = 'none';
-            document.getElementById('editor_mode').style.display = 'none';
             document.getElementById('preview').style.display = 'none';
         }
 
