@@ -314,6 +314,9 @@ function editpoll ($pid = '')
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home']));
 
+    $retval .= COM_startBlock ($LANG25[5], '',
+                               COM_getBlockTemplate ('_admin_block', 'header'));
+
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG_POLLS['editinstructions'],
@@ -346,9 +349,6 @@ function editpoll ($pid = '')
             return $retval;
         }
     }
-
-    $retval .= COM_startBlock ($LANG25[5], '',
-                               COM_getBlockTemplate ('_admin_block', 'header'));
 
     if (!empty ($pid) AND ($access == 3) AND !empty ($T['owner_id'])) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']

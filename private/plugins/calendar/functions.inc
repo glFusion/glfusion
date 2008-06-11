@@ -426,17 +426,6 @@ function plugin_savesubmission_calendar($A)
 
         return $retval;
     }
-    $msg = PLG_itemPreSave ('links', $A);
-    if (!empty ($msg)) {
-        $retval .= COM_startBlock($LANG12[22], '',
-                       COM_getBlockTemplate('_msg_block', 'header'))
-                . $msg
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
-                . plugin_submit_calendar($A['calendar_type'])
-                . COM_siteFooter();
-
-        return $retval;
-    }
     // check ok, proceed to saving
     if (isset($A['end_year'])) {
         $A['end_year'] = COM_applyFilter($A['end_year'], true);
@@ -792,7 +781,6 @@ function plugin_submit_calendar($mode = 'master')
     $eventform->set_var('lang_htmnotallowed', $LANG_CAL_1[44]);
     $eventform->set_var('lang_submit', $LANG_CAL_1[45]);
     $eventform->set_var('mode', $mode);
-    PLG_templateSetVars ('calendar', $eventform);
     if ($mode == 'personal') {
         $token = SEC_createToken();
         $hidden_fields = '<input type="hidden" name="' . CSRF_TOKEN
@@ -1001,12 +989,14 @@ function CALENDAR_listevents()
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
+
+    $retval .= COM_startBlock($LANG_CAL_ADMIN[11], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
     $retval .= ADMIN_createMenu($menu_arr, $LANG_CAL_ADMIN[12], plugin_geticon_calendar());
 
     $text_arr = array(
-        'has_extras'   => true,
-        'title' => $LANG_CAL_ADMIN[11],
-        'form_url' => $_CONF['site_admin_url'] . "/plugins/calendar/index.php"
+        'has_extras' => true,
+        'form_url'   => $_CONF['site_admin_url'] . '/plugins/calendar/index.php'
     );
 
     $sql = "SELECT {$_TABLES['events']}.*, {$_TABLES['users']}.username, {$_TABLES['users']}.fullname "
@@ -1025,6 +1015,8 @@ function CALENDAR_listevents()
     $retval .= ADMIN_list ('calendar', 'plugin_getListField_calendar',
                            $header_arr, $text_arr, $query_arr,
                            $defsort_arr);
+
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
 }
