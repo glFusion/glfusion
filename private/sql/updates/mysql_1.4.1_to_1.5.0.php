@@ -297,7 +297,7 @@ function create_ConfValues()
 
     $c->add('fs_cookies', NULL, 'fieldset', 7, 30, NULL, 0, TRUE);
     $c->add('cookie_session','gl_session','text',7,30,NULL,530,TRUE);
-    $c->add('cookie_name','geeklog','text',7,30,NULL,540,TRUE);
+    $c->add('cookie_name','glfusion','text',7,30,NULL,540,TRUE);
     $c->add('cookie_password','password','text',7,30,NULL,550,TRUE);
     $c->add('cookie_theme','theme','text',7,30,NULL,560,TRUE);
     $c->add('cookie_language','language','text',7,30,NULL,570,TRUE);
