@@ -944,18 +944,10 @@ function plugin_save_submit_links($A)
 
     $retval = '';
 
-    // pseudo-formatted link description for the spam check
-    $spamcheck = '<p>'. COM_createLink($A['title'], $A['url']) .' ('
-               . $A['categorydd'] . ')<br' . XHTML . '>' . $A['description']
-               . '</p>';
-    $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
-    if ($result > 0) {
-        COM_updateSpeedlimit('submit');
-        COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');
-    }
     /* check CAPTCHA */
     $msg = PLG_itemPreSave ('links', $A);
     if (!empty ($msg)) {
+        $retval = COM_siteHeader();
         $retval .= COM_startBlock($LANG12[22], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
                 . $msg
@@ -965,6 +957,17 @@ function plugin_save_submit_links($A)
 
         return $retval;
     }
+
+    // pseudo-formatted link description for the spam check
+    $spamcheck = '<p>'. COM_createLink($A['title'], $A['url']) .' ('
+               . $A['categorydd'] . ')<br' . XHTML . '>' . $A['description']
+               . '</p>';
+    $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
+    if ($result > 0) {
+        COM_updateSpeedlimit('submit');
+        COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');
+    }
+
     $A['cid'] = strip_tags(COM_stripslashes($A['categorydd']));
 
     $validcat = false;
@@ -977,6 +980,7 @@ function plugin_save_submit_links($A)
         }
     }
     if (!$validcat) {
+        $retval = COM_siteHeader();
         $retval .= COM_startBlock($LANG12[22], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
                 . $LANG12[23]
@@ -1030,7 +1034,9 @@ function plugin_save_submit_links($A)
             LINKS_sendNotification($_TABLES['links'], $A);
         }
         COM_rdfUpToDateCheck('links', $A['cid'], $A['lid']);
-
+        if ( function_exists('glf_clearCacheInstance') ) {
+            glf_clearCacheInstance('whatsnew');
+        }
         $retval = COM_refresh($_CONF['site_url']
                               . '/index.php?msg=4&amp;plugin=links');
     }
