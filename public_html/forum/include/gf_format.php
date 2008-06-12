@@ -460,7 +460,7 @@ function gf_checkHTML($str) {
 
 
 function gf_formatTextBlock($str,$postmode='html',$mode='') {
-    global $CONF_FORUM;
+    global $_CONF, $CONF_FORUM;
 
     $bbcode = new StringParser_BBCode ();
     $bbcode->setGlobalCaseSensitive (false);
@@ -497,7 +497,7 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
                       'list', array ('inline','block', 'listitem'), array ());
     $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
                       'listitem', array ('list'), array ());
-    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain">', 'end_tag' => '</div><p>'),
+    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['layout_url'] . '/forum/image_set/img_quote.gif" />', 'end_tag' => '</div><p>'),
                       'inline', array('listitem','block','inline','link'), array());
     $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
