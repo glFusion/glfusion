@@ -49,6 +49,15 @@ function glf_template_set_root($root) {
     return $retval;
 }
 
+function glf_clearCacheInstance($instance) {
+    global $TEMPLATE_OPTIONS;
+
+    $cacheInstance = 'instance__' . $instance;
+
+    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
+    CACHE_clean_directories($path_cache, $cacheInstance);
+}
+
 function glfusion_SecurityCheck() {
     global $_CONF,$LANG01;
 

@@ -977,6 +977,9 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             CMT_sendNotification ($title, $comment, $uid, $_SERVER['REMOTE_ADDR'],
                               $type, $cid);
         }
+        if ( function_exists('glf_clearCacheInstance') ) {
+            glf_clearCacheInstance('whatsnew');
+        }
     } else {
         COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with invalid $title and/or $comment.');
