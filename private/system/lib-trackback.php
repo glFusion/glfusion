@@ -311,7 +311,9 @@ function TRB_saveTrackbackComment ($sid, $type, $url, $title = '', $blog = '', $
     if ($type == 'article') {
         DB_query ("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks + 1 WHERE (sid = '$sid')");
     }
-
+    if ( function_exists('glf_clearCacheInstance') ) {
+        glf_clearCacheInstance('whatsnew');
+    }
     return $comment_id;
 }
 
@@ -330,6 +332,9 @@ function TRB_deleteTrackbackComment ($cid)
 
     $cid = addslashes ($cid);
     DB_delete ($_TABLES['trackback'], 'cid', $cid);
+    if ( function_exists('glf_clearCacheInstance') ) {
+        glf_clearCacheInstance('whatsnew');
+    }
 }
 
 /**
