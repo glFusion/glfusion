@@ -1916,11 +1916,11 @@ switch ($mode) {
             } else {
                 // If the script was not able to locate all the system files/directories ask the user to enter their location
                 $display .= '<h2>' . $LANG_INSTALL[7] . '</h2>
-                    <p>' . $LANG_INSTALL[8] . '</p>
+                    <p style="margin-bottom:20px;">' . $LANG_INSTALL[8] . '</p>
                     <form action="index.php" method="post">
                     <input type="hidden" name="mode" value="check_permissions"' . XHTML . '>
                     ' . $form_fields . '
-                    <input type="submit" name="submit" class="submit" value="Next &gt;&gt;"' . XHTML . '>
+                    <input style="margin-top:10px;float:right" type="submit" name="submit" class="submit" value="Next &gt;&gt;"' . XHTML . '>
                     </form>' . LB;
             }
         }
