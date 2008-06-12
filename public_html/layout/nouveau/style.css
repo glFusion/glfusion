@@ -2137,7 +2137,7 @@ border:solid #cccccc 1px;
 .ng-cal-previous-td, .ng-cal-next-td {
 width:20px;
 height:20px;
-color:#336699;
+color:#4D77CC;
 border:solid #cccccc 1px;
 text-align:center;
 }
@@ -2147,7 +2147,7 @@ font-weight:bold;
 padding:3px;
 }
 .ng-cal {
-border:solid #5fd7d6 1px;
+border:solid #DAE0ED 1px;
 border-collapse:collapse;
 margin:5px;
 margin-top:0px;
@@ -2156,14 +2156,14 @@ background-color:#FFFFFF;
 .ng-cal * {font-size:8pt;}
 .ng-cal td {
 padding:3px;
-border:solid #9eefee 1px;
+border:solid #DAE0ED 1px;
 }
 .ng-cal .ng-days-name-td {
-background:#9eefee;
-border:solid #5fd7d6 1px;
+background:#DAE0ED;
+border:solid #DAE0ED 1px;
 }
 .ng-month-name-th {
-background:#2f99b4;
+background:#4D77CC;
 font-weight:bold;
 padding:3px;
 color:#ffffff;
