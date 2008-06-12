@@ -1700,14 +1700,14 @@ background-position:0 -51px;
 .gl_slide {
 margin:0 auto;
 }
-/*
+
 hr {
 clear:both;
 height:0;
 border:0;
 display:none;
 }
-*/
+
 ul#gl_slide-toolbar {
 text-align:center;
 list-style:none;
@@ -1919,12 +1919,17 @@ padding:5px;
 }
 
 .quotemain {
-background:#FAFCFE url(forum/image_set/img_quote.gif) no-repeat top right;
-border:1px dotted #000;
-border-left:4px solid #8394B2;
+background:#FAFCFE;
+border:1px solid #8394B2;
+border-left:5px solid #8394B2;
 color:#465584;
 margin:5px auto 8px;
 padding:4px;
+}
+
+.quotemain img {
+float:right;
+padding:5px;
 }
 
 div .php {
@@ -2112,81 +2117,4 @@ padding:8px 8px 4px;
 font-size:11px;
 background:url(images/gl_mootip_bg200.png) bottom right;
 padding:4px 8px 8px;
-}
-
-/*
-Default style for the nogray calendar
-the default class prefix is ng-
-
-made by Wesam Saif
-http://www.nogray.com
-support@nogray.com
-
-*/
-
-.ng-cal-header-table {
-margin:5px;
-border-collapse:collapse;
-background:#efefef;
-border:solid #cccccc 1px;
-}
-.ng-cal-previous-td, .ng-cal-next-td {
-width:20px;
-height:20px;
-color:#336699;
-border:solid #cccccc 1px;
-text-align:center;
-}
-.ng-cal-header-td {
-text-align:center;
-font-weight:bold;
-padding:3px;
-}
-.ng-cal {
-border:solid #5fd7d6 1px;
-border-collapse:collapse;
-margin:5px;
-margin-top:0px;
-background-color:#FFFFFF;
-}
-.ng-cal * {font-size:8pt;}
-.ng-cal td {
-padding:3px;
-border:solid #9eefee 1px;
-}
-.ng-cal .ng-days-name-td {
-background:#9eefee;
-border:solid #5fd7d6 1px;
-}
-.ng-month-name-th {
-background:#2f99b4;
-font-weight:bold;
-padding:3px;
-color:#ffffff;
-text-align:center;
-}
-.ng-weekend, .ng-dayOff, .ng-dateOff {color:#999999;}
-.ng-outOfRange {
-color:#999999;
-background:#efefef;
-text-decoration:line-through;
-}
-.ng-mouse-over {
-font-weight:bold;
-background:#faedd6;
-}
-.ng-selected-day {
-background:#ffbb45;
-font-weight:bold;
-}
-.ng-close-link, .ng-clear-link  {
-padding:3px;
-text-align:center;
-color:#666666;
-text-decoration:none;
-font-size:8pt;
-background:#efefef;
-border:solid #cccccc 1px;
-float:right;
-margin-right:5px;
 }
