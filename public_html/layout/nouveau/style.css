@@ -2132,7 +2132,7 @@ support@nogray.com
 margin:5px;
 border-collapse:collapse;
 background:#efefef;
-border:solid #cccccc 1px;
+border:solid #CCCCCC 1px;
 }
 .ng-cal-previous-td, .ng-cal-next-td {
 width:20px;
@@ -2177,10 +2177,10 @@ text-decoration:line-through;
 }
 .ng-mouse-over {
 font-weight:bold;
-background:#faedd6;
+background:#DAE0ED;
 }
 .ng-selected-day {
-background:#ffbb45;
+background:#CCCCCC;
 font-weight:bold;
 }
 .ng-close-link, .ng-clear-link  {
