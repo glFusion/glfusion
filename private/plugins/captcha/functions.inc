@@ -114,12 +114,17 @@ function plugin_itemPreSave_captcha( $type='registration', $content='' ) {
             }
             break;
         case 'rating' :
-//            if ( $_CP_CONF['enable_rating'] != 1 ) {
-//                return '';
-//            }
+            if ( $_CP_CONF['enable_rating'] != 1 ) {
+                return '';
+            }
             break;
         case 'links' :
             if ( $_CP_CONF['enable_links'] != 1 ) {
+                return '';
+            }
+            break;
+        case 'calendar' :
+            if ( $_CP_CONF['enable_calendar'] != 1 ) {
                 return '';
             }
             break;
