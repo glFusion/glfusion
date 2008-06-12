@@ -1900,7 +1900,7 @@ switch ($mode) {
                 // If the file/directory is not located in the default location
                 // or in public_html have the user enter its location.
                 $form_fields .= '<p><label>db-config.php</label> <input type="text" name="dbconfig_path" value="/path/to/'
-                            . $dbconfig_file . '" size="25"' . XHTML . '></p>'  . LB;
+                            . $dbconfig_file . '" size="65"' . XHTML . '></p>'  . LB;
                 $num_errors++;
             } else {
                 // See whether the file/directory is located in the default place or in public_html
@@ -1979,7 +1979,7 @@ switch ($mode) {
             $display_permissions    = '<br' . XHTML . '><p><label class="file-permission-list"><b>' . $LANG_INSTALL[10]
                                     . '</b></label> <b>' . $LANG_INSTALL[11] . '</b></p>' . LB;
             $_PERMS                 = array('db-config.php', 'siteconfig.php', 'error.log', 'access.log',
-                                            'rdf', 'userphotos', 'articles', 'topics', 'backups', 'data');
+                                            'rdf', 'userphotos', 'articles', 'topics', 'backups', 'data','fm','ctl');
 
 
             // db-config.php
@@ -2169,6 +2169,20 @@ switch ($mode) {
                 // Permissions are correct
                 @fclose($file);
                 @unlink($_CONF['path'] . 'data/layout_cache/test.txt');
+            }
+
+            // FileMgmt Plugin Directory
+            if (!$file = @fopen($gl_path . 'plugins/filemgmt/test.txt', 'w')) {
+                // Permissions are incorrect
+                $_PERMS['fm']      = sprintf("%3o", @fileperms($gl_path . 'plugins/filemgmt/') & 0777);
+                $display_permissions    .= '<p><label class="file-permission-list"><code>' . $gl_path
+                                        . 'plugins/filemgmt/</code></label><span class="error">' . $LANG_INSTALL[14]
+                                        . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['fm'] . ') </p>' . LB;
+                $failed++;
+            } else {
+                // Permissions are correct
+                fclose($file);
+                @unlink($gl_path . 'plugins/filemgmt/test.txt');
             }
 
             $display .= $LANG_INSTALL[9] . '<br' . XHTML . '><br' . XHTML . '>' . LB;
