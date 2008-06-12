@@ -4142,7 +4142,11 @@ function COM_emailUserTopics()
 function COM_whatsNewBlock( $help = '', $title = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_WHATSNEW, $page, $newstories;
-    global $_GROUPS;
+    global $_GROUPS, $_ST_CONF;
+
+    if ( !isset($_ST_CONF['whatsnew_cache_time']) ) {
+        $_ST_CONF['whatsnew_cache_time'] = 3600;
+    }
 
     $groups = implode($_GROUPS,'');
     $hash = md5($groups);
@@ -4151,11 +4155,10 @@ function COM_whatsNewBlock( $help = '', $title = '' )
     if ( $retval ) {
         $lu = CACHE_get_instance_update($cacheInstance, 0);
         $now = time();
-        if (( $now - $lu ) < 36000 ) {
+        if (( $now - $lu ) < $_ST_CONF['whatsnew_cache_time'] ) {
             return $retval;
         }
     }
-
     $retval = COM_startBlock( $title, $help,
                        COM_getBlockTemplate( 'whats_new_block', 'header' ));
 
