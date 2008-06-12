@@ -80,6 +80,7 @@
             document.getElementById('preview').style.display = '';
             document.getElementById('editor_mode').style.display = 'none';
         } else {
+            document.getElementById('editor_mode').style.display = 'none';
             document.getElementById('se_options').style.display = '';
             document.getElementById('se_bottom').style.display = '';
             document.getElementById('text_editor').style.display = 'none';
