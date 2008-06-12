@@ -334,13 +334,12 @@ function savesubmission($type, $A)
 {
     global $_CONF, $_TABLES, $_USER, $LANG12;
 
-    $retval = COM_siteHeader ();
-
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
 
     $last = COM_checkSpeedlimit ('submit');
 
     if ($last > 0) {
+        $retval = COM_siteHeader ();
         $retval .= COM_startBlock ($LANG12[26], '',
                            COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[30]
@@ -375,6 +374,7 @@ function savesubmission($type, $A)
     if (!empty ($A['title']) && !empty ($A['introtext'])) {
         $retval = savestory ($A);
     } else {
+        $retval = COM_siteHeader ();
         $retval .= COM_startBlock ($LANG12[22], '',
                            COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[23] // return missing fields error
