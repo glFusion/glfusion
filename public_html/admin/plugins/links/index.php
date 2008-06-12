@@ -319,7 +319,9 @@ function savelink ($lid, $old_lid, $cid, $categorydd, $url, $description, $title
         // Get category for rdf check
         $category = DB_getItem ($_TABLES['linkcategories'],"category","cid='{$cid}'");
         COM_rdfUpToDateCheck ('links', $category, $lid);
-
+        if ( function_exists('glf_clearCacheInstance') ) {
+            glf_clearCacheInstance('whatsnew');
+        }
         return PLG_afterSaveSwitch (
             $_LI_CONF['aftersave'],
             COM_buildURL ("{$_CONF['site_url']}/links/portal.php?what=link&item=$lid"),
