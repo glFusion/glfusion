@@ -2131,29 +2131,33 @@ support@nogray.com
 .ng-cal-header-table {
 margin:5px;
 border-collapse:collapse;
-background:#efefef;
+background:#4D77CC;
 border:solid #CCCCCC 1px;
 }
 .ng-cal-previous-td, .ng-cal-next-td {
 width:20px;
 height:20px;
-color:#4D77CC;
-border:solid #cccccc 1px;
+color:#FFF;
 text-align:center;
 }
 .ng-cal-header-td {
 text-align:center;
 font-weight:bold;
 padding:3px;
+color:#FFF;
 }
 .ng-cal {
 border:solid #DAE0ED 1px;
 border-collapse:collapse;
-margin:5px;
+margin:5px auto;
+margin-top:-5px;
 margin-top:0px;
 background-color:#FFFFFF;
+text-align:center;
 }
-.ng-cal * {font-size:8pt;}
+.ng-cal * {
+font-size:8pt;
+}
 .ng-cal td {
 padding:3px;
 border:solid #DAE0ED 1px;
@@ -2168,6 +2172,7 @@ font-weight:bold;
 padding:3px;
 color:#ffffff;
 text-align:center;
+display:none;
 }
 .ng-weekend, .ng-dayOff, .ng-dateOff {color:#999999;}
 .ng-outOfRange {
