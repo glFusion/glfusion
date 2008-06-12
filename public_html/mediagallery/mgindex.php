@@ -210,8 +210,9 @@ function MG_index() {
 	                $k = ($i+$_MG_CONF['album_display_columns']) - $j;
 	                $m = $k % $_MG_CONF['album_display_columns'];
                     for ( $z = $m; $z > 0; $z--) {
-                        $T->set_var('AColumn','');
-                        $T->parse('AColumn', 'AlbumColumn',true);
+// - commented out appears to cause problems where an album will get skipped
+//                      $T->set_var('AColumn','');
+//                      $T->parse('AColumn', 'AlbumColumn',true);
                         $needFinalParse = 1;
                     }
                     if ( $needFinalParse == 1 ) {
