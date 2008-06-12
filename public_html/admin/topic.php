@@ -288,7 +288,7 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id
         // update feed(s) and Older Stories block
         COM_rdfUpToDateCheck ('glfusion', $tid);
         COM_olderStuff ();
-
+        CACHE_remove_instance('stmenu');
         $retval = COM_refresh ($_CONF['site_admin_url'] . '/topic.php?msg=13');
     } else {
         $retval .= COM_siteHeader('menu', $LANG27[1]);
@@ -441,7 +441,7 @@ function deleteTopic ($tid)
     // update feed(s) and Older Stories block
     COM_rdfUpToDateCheck ('glfusion');
     COM_olderStuff ();
-
+    CACHE_remove_instance('stmenu');
     return COM_refresh ($_CONF['site_admin_url'] . '/topic.php?msg=14');
 }
 

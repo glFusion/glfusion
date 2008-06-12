@@ -546,7 +546,7 @@ function submitstaticpage ($sp_id, $sp_uid, $sp_title, $sp_content, $sp_hits,
                  );
 
     PLG_invokeService('staticpages', 'submit', $args, $retval, $svc_msg);
-
+    CACHE_remove_instance('stmenu');
     return $retval;
 }
 

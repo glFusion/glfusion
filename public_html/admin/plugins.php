@@ -179,6 +179,7 @@ function changePluginStatus ($pi_name_arr)
             DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '{$P['pi_name']}'");
         }
     }
+    CACHE_remove_instance('stmenu');
 }
 
 
@@ -228,7 +229,7 @@ function saveplugin($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepag
         $retval .= plugineditor ($pi_name);
         $retval .= COM_siteFooter ();
     }
-
+    CACHE_remove_instance('stmenu');
     return $retval;
 }
 
@@ -335,7 +336,7 @@ function do_update ($pi_name)
     } else {  // Plugin function returned a false
         $retval .= COM_showMessage(95);
     }
-
+    CACHE_remove_instance('stmenu');
     return $retval;
 }
 
@@ -372,7 +373,7 @@ function do_uninstall ($pi_name)
     } else {
         $retval .= COM_showMessage (95);
     }
-
+    CACHE_remove_instance('stmenu');
     return $retval;
 }
 
