@@ -345,6 +345,10 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
                              " WHERE album_id=" . $row['album_id'] );
                 }
 
+                if ( function_exists('glf_clearCacheInstance') ) {
+                    glf_clearCacheInstance('whatsnew');
+                }
+
                 // email the owner / uploader that the item has been approved.
 
                 COM_clearSpeedlimit(600,'mgapprove');
