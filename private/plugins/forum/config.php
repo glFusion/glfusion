@@ -130,6 +130,7 @@ $CONF_FORUM['max_uploadfile_size']      = '6553600';     // 6.400 MB
 $CONF_FORUM['allowablefiletypes']    = array(
         'application/x-gzip-compressed'     => '.tgz',
         'application/x-zip-compressed'      => '.zip',
+        'application/zip'                   => '.zip',
         'application/x-tar'                 => '.tar',
         'text/plain'                        => '.php,.txt,.inc',
         'text/html'                         => '.html,.htm',
