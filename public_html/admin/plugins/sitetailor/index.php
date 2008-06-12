@@ -170,7 +170,7 @@ function ST_moveElement( $menu, $mid, $direction ) {
     }
 
     $pid = $ST_menuElements[$menu][$mid]->pid;
-    glf_clearCacheInstance('stmenu');
+    CACHE_remove_instance('stmenu');
 
     st_initMenu();
     $ST_menuElements[$menu][$pid]->reorderMenu();
@@ -354,7 +354,7 @@ function ST_saveNewMenuElement ( ) {
     $pid = $E['pid'];
     $menuname = $E['menu_name'];
 
-    glf_clearCacheInstance('stmenu');
+    CACHE_remove_instance('stmenu');
 
     st_initMenu();
 
@@ -532,7 +532,7 @@ function ST_saveEditMenuElement ( ) {
 
     DB_query($sql);
 
-    glf_clearCacheInstance('stmenu');
+    CACHE_remove_instance('stmenu');
 
     st_initMenu();
 }
@@ -555,7 +555,7 @@ function ST_changeActiveStatusElement ($bid_arr)
             DB_query($sql);
         }
     }
-    glf_clearCacheInstance('stmenu');
+    CACHE_remove_instance('stmenu');
 
     return;
 }
@@ -578,7 +578,7 @@ function ST_deleteChildElements( $id, $menu_id ){
     $sql = "DELETE FROM " . $_TABLES['st_menu_elements'] . " WHERE id=" . $id;
     DB_query( $sql );
 
-    glf_clearCacheInstance('stmenu');
+    CACHE_remove_instance('stmenu');
 
 }
 
@@ -762,7 +762,7 @@ function ST_saveMenuConfig($menu_id=0) {
             }
         }
     }
-    glf_clearCacheInstance('stmenu');
+    CACHE_remove_instance('stmenu');
 
     return;
 }

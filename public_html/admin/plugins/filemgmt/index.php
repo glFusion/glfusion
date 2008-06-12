@@ -920,9 +920,7 @@ function addDownload() {
         $sql .= "('$cid','$title','$url','$homepage','$version','$size','$logourl','$submitter',1,UNIX_TIMESTAMP(),0,0,0,'$commentoption')";
         DB_query($sql);
         $newid = DB_insertID();
-        if ( function_exists('glf_clearCacheInstance') ) {
-            glf_clearCacheInstance('whatsnew');
-        }
+        CACHE_remove_instance('whatsnew');
         DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')");
         if (isset($duplicatefile) && $duplicatefile) {
             redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_NEWDLADDED_DUPFILE);
@@ -1022,9 +1020,7 @@ function approve(){
     if ($AddNewFile) {
         DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', size='$size', logourl='$logourl', status=1, date=".time() .", comments='$commentoption' where lid='$lid'");
         DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' where lid='$lid'");
-        if ( function_exists('glf_clearCacheInstance') ) {
-            glf_clearCacheInstance('whatsnew');
-        }
+        CACHE_remove_instance('whatsnew');
         // Send a email to submitter notifying them that file was approved
         if ($filemgmt_Emailoption) {
             $result = DB_query("SELECT username, email FROM {$_TABLES['users']} a, {$_FM_TABLES['filemgmt_filedetail']} b WHERE a.uid=b.submitter and b.lid='$lid'");

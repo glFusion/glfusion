@@ -1034,9 +1034,7 @@ function plugin_save_submit_links($A)
             LINKS_sendNotification($_TABLES['links'], $A);
         }
         COM_rdfUpToDateCheck('links', $A['cid'], $A['lid']);
-        if ( function_exists('glf_clearCacheInstance') ) {
-            glf_clearCacheInstance('whatsnew');
-        }
+        CACHE_remove_instance('whatsnew');
         $retval = COM_refresh($_CONF['site_url']
                               . '/index.php?msg=4&amp;plugin=links');
     }

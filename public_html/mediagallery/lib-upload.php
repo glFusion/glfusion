@@ -1206,9 +1206,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         require_once($_MG_CONF['path_html'] . 'maint/rssfeed.php');
         MG_buildFullRSS( );
         MG_buildAlbumRSS( $albums );
-        if ( function_exists('glf_clearCacheInstance') ) {
-            glf_clearCacheInstance('whatsnew');
-        }
+        CACHE_remove_instance('whatsnew');
     }
     COM_errorLog("MG Upload: Successfully uploaded a media object");
     @unlink($tmpPath);

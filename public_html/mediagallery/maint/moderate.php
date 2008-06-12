@@ -345,9 +345,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
                              " WHERE album_id=" . $row['album_id'] );
                 }
 
-                if ( function_exists('glf_clearCacheInstance') ) {
-                    glf_clearCacheInstance('whatsnew');
-                }
+                CACHE_remove_instance('whatsnew');
 
                 // email the owner / uploader that the item has been approved.
 

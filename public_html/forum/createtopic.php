@@ -146,11 +146,7 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
             if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
             DB_query($sql);
 
-            if ( function_exists('glf_clearCacheInstance') ) {
-                glf_clearCacheInstance('forumcb');
-            }
-//            $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-//            CACHE_clean_directories($path_cache, 'instance__forumcb');
+            CACHE_remove_instance('forumcb');
 
             $topicparent = DB_getITEM($_TABLES['gf_topic'],"pid","id='$editid'");
             if ($topicparent == 0) {
@@ -286,9 +282,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='$forum' and topic_id = '$nlastid'");
                         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','$nlastid','$uid',now() )");
                     }
-                    if ( function_exists('glf_clearCacheInstance') ) {
-                        glf_clearCacheInstance('forumcb');
-                    }
+                    CACHE_remove_instance('forumcb');
 
                     COM_updateSpeedlimit ('forum');
 
@@ -396,9 +390,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='$forum' and topic_id = '$nid'");
                         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','$nid','$uid',now() )");
                     }
-                    if ( function_exists('glf_clearCacheInstance') ) {
-                        glf_clearCacheInstance('forumcb');
-                    }
+                    CACHE_remove_instance('forumcb');
 
                     COM_updateSpeedlimit ('forum');
                     $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$id&amp;lastpost=true#$lastid";
