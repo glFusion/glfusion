@@ -31,6 +31,7 @@ $_ST_CONF['max_logo_width']  = 500;
 $_ST_CONF['load_mootools']   = true;
 
 $_ST_CONF['blogroll_category'] = 'blog-roll';
+$_ST_CONF['whatsnew_cache_time'] = 3600;
 
 /* ------------------------------------------------------------------------
  * DO NOT CHANGE ANY SETTINGS BELOW THIS LINE.
