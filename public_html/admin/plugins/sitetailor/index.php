@@ -168,10 +168,9 @@ function ST_moveElement( $menu, $mid, $direction ) {
             DB_query("UPDATE {$_TABLES['st_menu_elements']} SET element_order=" . $neworder . " WHERE id=" . $mid);
             break;
     }
-    $pid = $ST_menuElements[$menu][$mid]->pid;
 
-    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__stmenu');
+    $pid = $ST_menuElements[$menu][$mid]->pid;
+    glf_clearCacheInstance('stmenu');
 
     st_initMenu();
     $ST_menuElements[$menu][$pid]->reorderMenu();
@@ -355,8 +354,7 @@ function ST_saveNewMenuElement ( ) {
     $pid = $E['pid'];
     $menuname = $E['menu_name'];
 
-    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__stmenu');
+    glf_clearCacheInstance('stmenu');
 
     st_initMenu();
 
@@ -534,8 +532,7 @@ function ST_saveEditMenuElement ( ) {
 
     DB_query($sql);
 
-    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__stmenu');
+    glf_clearCacheInstance('stmenu');
 
     st_initMenu();
 }
@@ -558,9 +555,7 @@ function ST_changeActiveStatusElement ($bid_arr)
             DB_query($sql);
         }
     }
-
-    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__stmenu');
+    glf_clearCacheInstance('stmenu');
 
     return;
 }
@@ -583,8 +578,7 @@ function ST_deleteChildElements( $id, $menu_id ){
     $sql = "DELETE FROM " . $_TABLES['st_menu_elements'] . " WHERE id=" . $id;
     DB_query( $sql );
 
-    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__stmenu');
+    glf_clearCacheInstance('stmenu');
 
 }
 
@@ -768,9 +762,7 @@ function ST_saveMenuConfig($menu_id=0) {
             }
         }
     }
-
-    $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
-    CACHE_clean_directories($path_cache, 'instance__stmenu');
+    glf_clearCacheInstance('stmenu');
 
     return;
 }
