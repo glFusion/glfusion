@@ -181,6 +181,13 @@ if( !function_exists( 'is_a' ))
     PHP_Compat::loadFunction( 'is_a' );
 }
 
+if( !function_exists( 'file_put_contents' ))
+{
+    require_once( 'PHP/Compat.php' );
+
+    PHP_Compat::loadFunction( 'file_put_contents' );
+}
+
 
 /**
 * Include page time -- used to time how fast each page was created
