@@ -97,8 +97,12 @@ function links_list($message)
             $page_title = $LANG_LINKS[114];
         }
     } else {
-        $category = DB_getItem($_TABLES['linkcategories'], 'category',
-                               "cid = '{$cat}'");
+        if ($cid == $_LI_CONF['root']) {
+            $category = $LANG_LINKS['root'];
+        } else {
+            $category = DB_getItem($_TABLES['linkcategories'], 'category',
+                                   "cid = '{$cat}'");
+        }
         if ($page > 1) {
             $page_title = sprintf ($LANG_LINKS[114] . ': %s (%d)', $category,
                                                                    $page);
