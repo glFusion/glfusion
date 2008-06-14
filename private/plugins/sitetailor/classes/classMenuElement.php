@@ -761,11 +761,12 @@ class mbElement {
             default : // unknown
                 break;
         }
-
+        if ( $this->id != 0 && $this->group_id == 998 && SEC_inGroup('Root') ) {
+            return $retval;
+        }
         if ( $this->type == 3 || $this->type == 7) {
             $retval .= $menu;
         } else {
-
             if ( $this->id != 0 && $this->access > 0 ) {
                 if ( $this->type == 1 && $parentaclass != '' ) {
                     $retval .= "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
@@ -776,25 +777,23 @@ class mbElement {
 
             if ( !empty($this->children)) {
                 $howmany = $this->getChildcount();
-
                 if ( $howmany > 0 ) {
-
-                $children = $this->getChildren();
-                if ( $this->id == 0 && $ulclass != '' ) {
-                    $retval .= '<ul class="' . $ulclass . '">' . LB;
-                } else {
-                    $retval .= '<ul>' . LB;
-                }
-                foreach($children as $child) {
-                    $meLevel++;
-                    $retval .= $ST_menuElements[$this->menu_id][$child]->showTree($depth,$ulclass,$liclass,$parentaclass,$selected);
-                    $meLevel--;
-                }
-                if ( $this->id == 0 && $ulclass != '' ) {
-                    $retval .= '</ul>' . LB;
-                } else {
-                    $retval .= '</ul>' . LB . '</li>' . LB;
-                }
+                    $children = $this->getChildren();
+                    if ( $this->id == 0 && $ulclass != '' ) {
+                        $retval .= '<ul class="' . $ulclass . '">' . LB;
+                    } else {
+                        $retval .= '<ul>' . LB;
+                    }
+                    foreach($children as $child) {
+                        $meLevel++;
+                        $retval .= $ST_menuElements[$this->menu_id][$child]->showTree($depth,$ulclass,$liclass,$parentaclass,$selected);
+                        $meLevel--;
+                    }
+                    if ( $this->id == 0 && $ulclass != '' ) {
+                        $retval .= '</ul>' . LB;
+                    } else {
+                        $retval .= '</ul>' . LB . '</li>' . LB;
+                    }
                 }
             }
         }
