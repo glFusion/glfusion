@@ -1,0 +1,339 @@
+/***************************************************** BEGIN #FFF ******************/
+body,
+#gl_container_fixed,
+#gl_container_fluid,
+#gl_content,
+#gl_content-full,
+#gl_content-wide-left,
+#gl_content-wide-right,
+.bottom-r-corner,
+.commentbar-line3,
+#header-textbox,
+#header-textbox:focus,
+#navcontainer a,
+.pluginBG,
+.pluginRow1,
+.pluginRow1 td,
+.pluginRow1 .pluginRollOut,
+.pluginRow2 .pluginRollOut,
+.pluginRollOut,
+.ng-cal {
+	background-color:#FFF;
+}
+
+.commentbar-line2,
+.commentbar-line3 {
+	border-bottom:1px solid #FFF;
+}
+
+#gl_moospring .gl_moospring1,
+#gl_moospring .gl_moospring2,
+#gl_moospring .gl_moospring3 {
+	border-right:1px solid #FFF;
+}
+
+.commentbar-line2 {
+	border-top:1px solid #FFF;
+}
+
+div.glfform p.error,
+#header-site-slogan,
+.pluginCellTitle,
+.pluginFooter,
+.pluginFooter td,
+.pluginAlert,
+.pluginInfo,
+.pluginTitle,
+#navcontainer a:hover span,
+#navcontainer a#current span,
+#gl_moorotator .gl_moorotatortext,
+.gl_moorotatortext a,
+.gl_moorotatortext a:hover,
+#gl_slide-toolbar li,
+.tool-tip,
+.pluginAltBG td,
+.pluginAltText,
+.pluginBreadCrumbs,
+.pluginBreadCrumbs A:link,
+.pluginBreadCrumbs A:visited,
+.pluginBreadCrumbs A:hover,
+.gftool-tip,
+.ng-cal-previous-td,
+.ng-cal-next-td,
+.ng-cal-header-td,
+.ng-month-name-th {
+	color:#FFF;
+}
+/*****************************************************BEGIN #000 ******************/
+#gl_footer {
+	background-color:#000;
+}
+
+div.glfform form fieldset,
+div.glfform p.error,
+.morph-start,
+.codeblock {
+	border:1px solid #000;
+}
+
+div.glfform,
+form,
+fieldset,
+legend,
+div.glfform input,
+div.glfform select,
+div.glfform textarea,
+div.glfform form div input.inputSubmit,
+form div input.inputButton,
+input.inputSubmit,
+input.inputButton,
+a:link.non-ul,
+a:visited.non-ul,
+a:hover.non-ul,
+a:active.non-ul,
+input,
+submit,
+td,
+select,
+textarea,
+th,
+.block-box-left h2,
+.block-box-right h2,
+.block-box-left h3,
+.block-box-right h3
+.block-content,
+.block-content-left,
+.block-content-right,
+.commentbar-line1,
+.commentbar-line3,
+#gl_slide-toolbar li.active,
+#gl_slide-toolbar li.current,
+#header-textbox,
+#header-textbox:focus,
+.highlight,
+.searchauth,
+.story,
+.story h1,
+.story-featured,
+.story-featured h1,
+.plugin,
+.plugin th,
+.pluginSubTable,
+.pluginCellSubTitle,
+.pluginRow2,
+.pluginRow2 td,
+.pluginRow1 .pluginRollOver,
+.pluginRow2 .pluginRollOver,
+.pluginRollOver,
+.pluginLinks A:hover,
+a.pluginButton:link,
+a.pluginButton:visited,
+a.tooltip,
+.poll-vote,
+.poll-vote-results,
+.codeblock,
+.searchdate,
+.searchhits,
+.pluginRow1,
+.pluginRow1 td,
+.pluginRow1 .pluginRollOut,
+.pluginRow2 .pluginRollOut,
+.pluginRollOut,
+.pluginLinks A:link,
+.pluginLinks A:visited {
+	color:#000;
+}
+/***************************************************** BEGIN #666 ******************/
+div.glfform form fieldset div.notes,
+div.glfform form fieldset div.notes h4,
+div.glfform form div fieldset,
+form fieldset div.notes {
+	border:1px solid #666;
+}
+
+form fieldset div.notes h4 {
+	border-bottom:1px solid #666;
+}
+
+blockquote,
+div.glfform form fieldset div.notes,
+div.glfform form fieldset div.notes h4,
+div.glfform form fieldset div.notes p,
+div.glfform form div.error,
+form fieldset div.notes,
+form fieldset div.notes h4,
+form fieldset div.notes p,
+.fieldhelp,
+#footer-copyright,
+.ng-close-link,
+.ng-clear-link, 
+q,
+.pluginCellText,
+.story-footer,
+.story-icons,
+.story-information {
+	color:#666;
+}
+/***************************************************** BEGIN #CCC ******************/
+#gl_slide-toolbar li.current,
+div.glfform form div input.inputSubmit,
+form div input.inputButton,
+input.inputSubmit,
+input.inputButton,
+.block-box-left h2,
+.block-box-right h2,
+.pluginSubTable,
+.pluginSolidOutline,
+.ng-selected-day {
+	background-color:#CCC;
+}
+
+.admin-menu,
+#gl_extra,
+#gl_navigation,
+.plugin,
+.pluginSubTable,
+.story-featured pre .story-body pre,
+div#frame,
+.ng-cal-header-table,
+.ng-close-link,
+.ng-clear-link {
+	border:1px solid #CCC;
+}
+
+.searchform-box,
+.welcomeanddate-text,
+#navcontainer {
+	border-bottom:1px solid #CCC;
+}
+/***************************************************** BEGIN #4D77CC ***************/
+.ng-cal-header-table,
+.ng-month-name-th,
+.pluginAlert,
+.pluginAltBG,
+.pluginBG,
+.pluginCellTitle,
+.pluginFooter,
+.pluginFooter td,
+.pluginInfo,
+.pluginTitle {
+	background-color:#4D77CC;
+}
+/***************************************************** BEGIN #E5E5E5 ***************/
+.commentbar-line2,
+.pluginRow1 .pluginRollOver,
+.pluginRow2 .pluginRollOver,
+.pluginRollOver,
+.searchform-box  {
+	background-color:#E5E5E5;
+}
+
+.commenttitle {
+	border:1px solid #E5E5E5;
+}
+
+.commentbar-line3 {
+	border-top:1px solid #E5E5E5;
+}
+/***************************************************** BEGIN #F2F2F2 ***************/
+.commenttitle,
+#gl_extra,
+#gl_navigation,
+.ng-outOfRange,
+.ng-close-link,
+.ng-clear-link,
+.plugin,
+.pluginCellFill,
+.pluginCellSubTitle,
+.story-featured pre .story-body pre {
+	background-color:#F2F2F2;
+}
+/***************************************************** BEGIN #FF0000 ***************/
+div.glfform p.error {
+	background-color:#FF0000;
+}
+
+div.glfform form div.error {
+	border:1px solid #FF0000;
+}
+
+div.glfform form div.error p.error,
+a:active,
+.warning,
+.warningsmall {
+	color:#FF0000;
+}
+/***************************************************** BEGIN #DAE0ED ***************/
+a.tooltip:hover span,
+.ng-cal .ng-days-name-td,
+.ng-mouse-over,
+.pluginSubTable th,
+.quotemain,
+th {
+	background-color:#DAE0ED;
+}
+
+.ng-cal,
+.ng-cal td,
+.ng-cal .ng-days-name-td {
+	border:1px solid #DAE0ED;
+}
+/***************************************************** BEGIN #ECE9D8 ***************/
+.codeblock,
+div.glfform form fieldset div.notes,
+div.glfform form div.error,
+form fieldset div.notes {
+	background-color:#ECE9D8;
+}
+/***************************************************** BEGIN #999 ***************/
+h3,
+.ng-weekend,
+.ng-dayOff,
+.ng-dateOff,
+.ng-outOfRange {
+	color:#999;
+}
+/***************************************************** BEGIN #B7C1DC ***************/
+.plugin th {
+	background-color:#B7C1DC;
+}
+
+a.tooltip:hover span,
+.quotemain {
+	border:1px solid #B7C1DC;
+}
+
+
+a:link,
+a.pluginButton:hover {
+	color:#0000FF;
+}
+a:visited {
+	color:#800080;
+}
+a:hover {
+	color:#008000;
+}
+.footerlinks a:link,
+.footerlinks a:visited ,
+.tool-title,
+.gftool-title{
+	color:#679EF1;
+}
+.footerlinks a:hover {
+	color:#66CDF5;
+}
+.highlight {
+	background-color:#FFFF00;
+}
+
+a.tooltip:hover span
+.pluginHeader,
+.pluginSolidFill,
+.quotemain {
+	color:#465584;
+}
+.pluginRow2,
+.pluginRow2 td {
+	background-color:#F1F5FA;
+}

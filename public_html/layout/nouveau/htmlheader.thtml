@@ -67,7 +67,7 @@ border-bottom:1px solid {sbscolor};  /*Sub Menu Shadow*/
 background:{spimage};  /*image for sub menu parent menu - the blue orb*/
 }
 </style>
-
+<link rel="stylesheet" type="text/css" href="{layout_url}/style-colors.css" title="{theme}"{xthml}>
 </head>
 <body dir="{direction}" style="background:#000000;">
 <div>
