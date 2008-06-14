@@ -1,7 +1,7 @@
 <!-- start centerblock_displayline.thtml -->
     <tr class="pluginRow{cssid}" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRow{cssid} pluginLinks';">
-        <td class="pluginLinks" onclick="window.location.href='{site_url}/forum/index.php?forum={forum_id}'" onmouseover="this.style.cursor='pointer';" style="width:25%;padding-left:6px; height:20px;" title="{LANG_forumjump}">{forum_name}</td>
-        <td style="width:65%;" class="pluginLinks" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}'" onmouseover="this.style.cursor='pointer';">
+        <td class="pluginLinks" onclick="window.location.href='{site_url}/forum/index.php?forum={forum_id}'" onmouseover="this.style.cursor='pointer';" style="width:30%;padding-right:5px;padding-left:6px; height:20px;" title="{LANG_forumjump}">{forum_name}</td>
+        <td style="width:60%;" class="pluginLinks" onclick="window.location.href='{site_url}/forum/viewtopic.php?showtopic={topic_id}'" onmouseover="this.style.cursor='pointer';">
             <a class="gf_mootip" style="text-decoration:none;" href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{topic_subject}::{topicinfo}">{topic_subject}</a>
         </td>
         <td class="pluginLinks" style="padding-right:6px;white-space:nowrap;">
