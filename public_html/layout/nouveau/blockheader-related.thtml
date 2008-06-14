@@ -1,4 +1,4 @@
-<div class="block-box-left">
+<div class="block-box-comment">
     <span class="block-helpicon">
         {block_help}
     </span>
