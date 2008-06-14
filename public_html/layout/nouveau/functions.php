@@ -129,7 +129,7 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 	$header->set_var('gl_animatedmoomenu',
 '<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moomenu.js"></script>
 <script type="text/javascript">
-	window.addEvent(\'load\', function() {
+	window.addEvent(\'domready\', function() {
 		new moomenu($E(\'ul.gl_moomenu\'), {
 			bgiframe: false,
 			delay: 50,
@@ -147,7 +147,7 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 	//Enables use of mootips
 	$header->set_var('gl_mootips',
 '<script type="text/javascript">
-	window.addEvent(\'load\', function() {
+	window.addEvent(\'domready\', function() {
 		var Tips1 = new Tips($$(\'.gl_mootip\')); //enables use of tooltips
 		var Tips2 = new Tips($$(\'.gl_mootipfade\'), { //enables use of fade in/out tooltips
 			initialize:function(){
