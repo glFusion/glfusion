@@ -2,9 +2,9 @@
 <html>
 <head>
 
-  
-  
-  <title>Geeklog Documentation - Installation Instructions</title>
+
+
+  <title>glFusion Documentation - Installation Instructions</title>
   <link rel="stylesheet" type="text/css" href="docstyle.css" title="Dev Stylesheet">
 </head>
 
@@ -24,14 +24,14 @@
   <li><a href="#glossary">Glossary</a></li>
 
   <li><a href="#installation_requirements">Installation Requirements</a>
-    
+
     <ul>
 
       <li><a href="#preinstall">Required Software</a></li>
 
       <li><a href="#things_you_should_know">Things You Should Know</a></li>
 
-    
+
     </ul>
   </li>
 
@@ -48,7 +48,7 @@
 <h2><a name="glossary">Glossary</a></h2>
 
 
-    
+
 <ul>
 
         <li type="disc">Directory: Same as a folder.</li>
@@ -59,32 +59,32 @@ the drive letter (<code>c:/inetpub/wwwroot/</code>), on *nix paths start at root
 
         <li type="disc">URL: Uniform Resource Locator, the address of a specific piece of information on the web (<code>http://www.foo.com/</code>)</li>
 
-    
+
 </ul>
 
-    
+
 
 <h2><a name="installation_requirements">Installation Requirements</a></h2>
 
 
-    
+
 <h3><a name="preinstall">Required Software</a></h3>
 
 
-        
+
 <p>To install and use glFusion you will need to have a server running
 Apache or Microsoft IIS with PHP 4.1.0 or higher installed. You will
 also need&nbsp;<a href="http://dev.mysql.com/downloads/" target="_blank">MySQL 3.23.2</a> or greater.</p>
 
 
-    
+
 <h3><a name="things_you_should_know">Things You Should Know</a></h3>
 
 
-    
+
 <p>Before installing glFusion for the first time, please make sure you:</p>
 
-    
+
 <ul>
 
         <li>Know how to determine the path of your root web directory. (<a href="#glossary">What is a path?</a>)
@@ -97,29 +97,29 @@ also need&nbsp;<a href="http://dev.mysql.com/downloads/" target="_blank">MySQL 3
     </li>
 </ul>
 
-    
+
 
 <h2><a name="install">New Installation</a></h2>
 
 
-    
+
 <ol>
 
         <li>
-            
+
     <p>Download the current version of glFusion from <a href="http://www.gllabs.org" target="_blank">www.gllabs.org</a>.</p>
 
         </li>
 
         <li>
-            
+
     <p>Unpack the downloaded tarball file by running: </p>
 
-            
+
     <p><code>tar -zxvf glfusion-1.0.0.tar.gz</code> </p>
 
-            
-            
+
+
     <p><strong>Note:</strong> Some users have reported that WinZip
 corrupts certain glFusion files during decompression. This will cause
 errors during the installation process. You are strongly urged not to
@@ -128,7 +128,7 @@ use WinZip. Try <a href="http://www.7-zip.org/" target="_blank">7-Zip</a> or <a 
         </li>
 
         <li>
-            
+
     <p>Create a blank MySQL or Microsoft SQL database and a user
 account with privileges to modify it. Your hosting provider may have
 already set up a database and account for you, contact them if you need
@@ -137,11 +137,11 @@ assistance with this step.</p>
         </li>
 
         <li>
-            
+
     <p>Place the contents of <code>glfusion-1.0.0/public_html/</code> into your web root directory on your web server. The web root directory is often named "public_html", "htdocs", or "www".</p>
 
-        
-            
+
+
     <p>Next, place the remaining contents of <code>glfusion-1.0.0/</code>
 into either the parent directory of your root web directory
 (recommended) or any other non public folder and the installation
@@ -150,11 +150,11 @@ be asked to specify their paths during installation. This is done as a
 security measure to prevent access to glFusion system files by Internet
 users. </p>
 
-            
-            
+
+
     <p><strong>Note:</strong> If your hosting provider does not allow you to place files outside of your root web directory:</p>
 
-            
+
     <ul>
 
                 <li>Create an inconspicuous directory (i.e. don't name it "glfusion") in your root web directory.</li>
@@ -163,30 +163,30 @@ users. </p>
 
                 <li>Password protect it using an .htaccess file or similar.</li>
 
-            
+
     </ul>
 
         </li>
 
         <li>
-            
+
     <p>Open your browser and navigate to the glFusion installation wizard file <code>admin/install/index.php</code>
 on your web server. The path to this file will depend on where you
 chose to put the glFusion files on your web server. The default
 location is: </p>
 
-            
-            
+
+
     <p><code>http://[your_glfusion_site]/admin/install/index.php</code></p>
 
-            
-            
+
+
     <p>The glFusion installation wizard was designed to automate the install process. Simply follow the installation steps.</p>
 
         </li>
 
         <li>
-            
+
     <p>Once you have completed the installation be sure to delete the <code>admin/install</code>
 directory. Also, read the first story on your glFusion site to learn
 how to log in as the administrator and change the default password.<br>
@@ -194,52 +194,52 @@ how to log in as the administrator and change the default password.<br>
     </p>
 
         </li>
-        
-    
+
+
 </ol>
 
-   
+
 
 <h2><a name="upgrade">Upgrading</a></h2>
 
 
-    
-<p>Upgrading is no different than a New Installation except your database already exists and needs to be updated.</p>
- 
 
-    
+<p>Upgrading is no different than a New Installation except your database already exists and needs to be updated.</p>
+
+
+
 <p>Take extreme care to back up any files from your current glFusion
 installation that have any custom code in them, especially
 lib-custom.php (where all custom code should reside). Be sure to back
 up any modified themes, images, and static pages from your current
 installation.</p>
 
-            
-    
+
+
 <p>Also, please be sure to back up your database. We can't stress the importance of backing up your files and database enough. </p>
 
 
-    
+
 <p><strong>YOU HAVE BEEN WARNED.</strong></p>
 
-    
+
 <ol>
 
         <li>
-            
+
     <p>Download the current version of glFusion from <a href="http://www.gllabs.org">gl Labs</a>.</p>
 
         </li>
 
         <li>
-            
+
     <p>Unpack the downloaded distribution file by running: </p>
 
-            
+
     <p><code>tar -zxvf glfusion-1.0.0.tar.gz</code> </p>
 
-            
-            
+
+
     <p><strong>Note:</strong> Some users have reported that WinZip
 corrupts certain glFusion files during decompression. This will cause
 errors during the installation process. You are strongly urged not to
@@ -248,13 +248,13 @@ use WinZip. Try <a href="http://www.7-zip.org/" target="_blank">7-Zip</a> or <a 
         </li>
 
         <li>
-            
-    <p>Place the contents of <code>glfusion-1.0.0/</code> into the same directory your old installation was located. For instance, if your old glFusion was in <code>/usr/home/www/geeklog/</code>, then your new installation should also be in <code>/usr/home/www/geeklog/</code>.</p>
+
+    <p>Place the contents of <code>glfusion-1.0.0/</code> into the same directory your old installation was located. For instance, if your old glFusion was in <code>/usr/home/www/glfuson/</code>, then your new installation should also be in <code>/usr/home/www/glfusion/</code>.</p>
 
         </li>
 
         <li>
-            
+
     <p><strong>When upgrading from Geeklog 1.4.1 or earlier</strong>: Put the <tt>config.php</tt> files from your old install back into their place now (the main <tt>config.php</tt>
 and those for the plugins). The install script will read these files
 during the upgrade to pre-populate the new Configuration admin panel
@@ -264,39 +264,39 @@ settings for glFusion and the pre-installed plugins.</p>
         </li>
 
         <li>
-            
+
     <p>Open your browser and navigate to the glFusion installation wizard file <code>admin/install/index.php</code>
 on your web server. The path to this file will depend on where you
 chose to put the glFusion files on your web server. The default
 location is: </p>
 
-            
-            
+
+
     <p><code>http://[your_glfusion_site]/admin/install/index.php</code></p>
 
-            
-            
+
+
     <p>The glFusion installation wizard was designed to automate the upgrade process. Simply follow the installation steps.</p>
 
         </li>
 
         <li>
-            
+
     <p>Once you have completed the upgrade be sure to delete the <code>admin/install</code> directory.</p>
 
         </li>
-        
-    
+
+
 </ol>
 
-   
+
 
 <h2><a name="installprob">Common Problems and Troubleshooting</a></h2>
 
 
-    
+
 <p>Before you go any further, please open siteconfig.php and <strong>double check your paths!</strong> Bad paths, or typos in the paths, will cause all sorts of errors in glFusion.</p>
-   
+
 
 <p>When you get an error message, please read it carefully. Even if
 you're not familiar with PHP, it will give you a hint about what is
@@ -310,24 +310,24 @@ first error - the others will often go away automatically once you've
 fixed the first one.</p>
 
 
-    
+
 <h3>Common errors (Line numbers will vary):</h3>
 
-        
+
 <ul>
 
             <li>
     <p><strong>Error:</strong> <code>Parse error: parse error in /path/to/your/siteconfig.php on line 20</code></p>
 
-                
+
     <p><strong>Answer:</strong> A parse error usually hints at a typo
 you've made. Check the file at the given line (the actual error may be
 in the line preceding the one mentioned in the error message).</p>
 
-                
+
     <p>Common problems are:</p>
 
-                
+
     <ul>
 
                     <li>not enclosing paths in single quotes properly</li>
@@ -341,19 +341,19 @@ in the line preceding the one mentioned in the error message).</p>
             </li>
 
             <li>
-                
+
     <p><strong>Error:</strong> <code>Warning:
 main(some/path/to/system/databases/mysql.class.php): failed to open
 stream: No such file or directory in
 /path/to/your/system/lib-database.php on line 100</code></p>
 
-                
+
     <p><code>Fatal error: main(): Failed opening required
 'some/path/to/system/databases/mysql.class.php'
 (include_path='.:/some/other/path/') in
 /some/path/to/system/lib-database.php on line 100</code></p>
 
-                
+
     <p><strong>Answer:</strong> The path that you've entered for the <code>$_CONF['path']</code> variable in siteconfig.php is not correct. Make sure you typed it correctly. Also make sure it uses an <em>absolute</em>
 path, i.e. one that starts at the root of your file system (and that it
 starts with a / under Unix/Linux or a drive letter under Windows).</p>
@@ -361,10 +361,10 @@ starts with a / under Unix/Linux or a drive letter under Windows).</p>
             </li>
 
             <li>
-                
+
     <p><strong>Error:</strong> <code>1050: Table 'gl_access' already exists</code></p>
 
-                
+
     <p><strong>Answer:</strong> You must have run the install script
 once before (possibly unsuccessfully). To be on the safe side, drop the
 database and create a new, empty database and try running the install
@@ -373,43 +373,43 @@ script again.</p>
             </li>
 
             <li>
-                
+
     <p><strong>Error:</strong> <code>Parse error: parse error in ../../lib-common.php on line 2231 </code></p>
 
-                
+
     <p><code>Fatal error: Cannot instantiate non-existent class: template in ../../lib-common.php on line 335 </code></p>
 
 
-                
+
     <p>Or:</p>
 
-                
+
     <p><code>Parse error: parse error in /path/to/glfusion/public_html/lib-common.php on line 3036</code></p>
 
-                
+
     <p><code>Fatal error: Call to undefined function: plg_showcenterblock() in /path/to/glfusion/public_html/index.php on line 67</code></p>
 
 
-                
+
     <p>Or:</p>
 
-                
+
     <p><code>Parse error: parse error, unexpected T_CONSTANT_ENCAPSED_STRING in /path/to/glfusion/public_html/lib-common.php on line 3815</code></p>
 
-                
+
     <p><code>Fatal error: Cannot instantiate non-existent class: template in /path/to/glfusion/public_html/lib-common.php on line 709</code></p>
 
 
-                
+
     <p></p>
     <p><strong>Answer:</strong> All of the above cases (and similar
 "parse error" messages you may get for lib-common.php, typically with a
 line number in the 3000 or 4000 range) indicate a corrupted <code>lib-common.php</code> file.</p>
 
-                
+
     <p>As noted at the top of this document this is usually caused by one of the following:</p>
 
-                
+
     <ul>
 
                     <li>Uncompressing the tarball with certain versions of WinZip (try using <a href="http://www.7-zip.org/" target="_blank">7-Zip</a> or <a href="http://www.rarlab.com/" target="_blank">WinRAR</a> instead)</li>
@@ -418,13 +418,13 @@ line number in the 3000 or 4000 range) indicate a corrupted <code>lib-common.php
 
                     <li>Editing the lib-common.php with "on-site" text editors built into tools like Cpanel (again, use a simple text editor instead)</li>
 
-                
+
     </ul>
 
             </li>
 
             <li>
-                
+
     <p><strong>Error:</strong> <code>Warning: mysql_connect(): Access
 denied for user: 'username@localhost' (Using password: YES) in
 /path/to/glfusion/system/databases/mysql.class.php on line 104<br>
@@ -432,29 +432,29 @@ denied for user: 'username@localhost' (Using password: YES) in
 Cannnot connect to DB server</code></p>
 
 
-                
+
     <p><strong>Answer:</strong> First of all, make sure the database settings in <code>siteconfig.php</code>
 are correct, specifically the name and password of your MySQL user, the
 name of your database, and the name of your MySQL server.</p>
 
 
-                
+
     <p>If you're running your own server, you may need to give your
 MySQL user proper permissions. Log in to MySQL as the MySQL root user
 and issue these commands:</p>
 
 
-                
+
     <p><code>GRANT ALL PRIVILEGES ON <em>[database_name]</em> TO <em>[user@host]</em> IDENTIFIED BY '<em>[password]</em>';<br>
 
                 FLUSH PRIVILEGES;</code></p>
 
-                
-                
+
+
     <p>Replace the <em>[lower-case]</em> strings with the actual values.</p>
 
-                
-                
+
+
     <p>If you want (or need) to be more restrictive with database
 permissions: You will need to at least grant the ALTER, CREATE, DELETE,
 INSERT, SELECT, and UPDATE permissions to your database user. ALTER and
@@ -464,26 +464,26 @@ glFusion, as well as for installing plugins and other add-ons.</p>
             </li>
 
             <li>
-                
+
     <p><strong>Error:</strong> <code>Warning: fopen("/some/path/logs/error.log", "a") - Permission denied in /some/path/public_html/lib-common.php on line 1440</code></p>
 
-                
+
     <p><strong>Answer:</strong> Make sure that the logs/ directory AND
 the files in it have permissions of at least 775. You may need to make
 the permissions 777 if 775 isn't working for you. For good measure,
 make sure the <code>public_html/backend</code> directory and the glfusion.rss file have the same 775 or 777 permissions.</p>
 
-    
-                
+
+
     <p><strong>Tip:</strong> Use the script that is located at <code>http://yourglfusionsite/admin/install/check.php</code> to test if all the permissions have been set up correctly.</p>
 
             </li>
 
             <li>
-                
+
     <p><strong>Whenever someone tries to log in or out, the following error is produced:</strong></p>
 
-                
+
     <p><code>Cannot add header information - headers already sent by
 (output started at
 /usr###/home/&lt;userid&gt;/public_html/glfusion/siteconfig.php:589) in
@@ -491,29 +491,29 @@ make sure the <code>public_html/backend</code> directory and the glfusion.rss fi
 on line 133</code></p>
 
 
-                
+
     <p><strong>Answer:</strong> Make sure that your siteconfig.php file does not contain any "whitespace" after the closing <code>?&gt;</code> at the end of the file. I.e. there should not be anything (not even blanks or empty lines) after those two characters.</p>
 
 
             </li>
 
-        
+
 </ul>
 
 
-        
+
 <p>If you still have problems, please do one or more of the following:</p>
 
-        
+
 <ol>
 
             <li>
-                
+
     <p>Go to <a href="http://www.gllabs.org">http://www.gllabs.org</a> and check out the Support section. The Support site includes&nbsp;a <a href="http://www.gllabs.org/search.php">search system</a> (try searching for the error message, if you get one).</p>
 
             </li>
   <li>
-                
+
     <p>Try entering the text of the error message on Google. Chances
 are you will find someone else who had the same problem and fixed it.
 And sometimes searching for a specific error will cause Google to bring
@@ -521,7 +521,7 @@ up broken pages that have the same error.</p>
 
             </li>
 
-        
+
 </ol>
 
 
@@ -529,9 +529,9 @@ up broken pages that have the same error.</p>
 <div class="footer">
     <a href="http://www.gllabs.org/wiki/doku.php?id=glfusion:start">The glFusion Documentation Project</a><br>
 
-    All trademarks and copyrights on this page are owned by their respective owners. Geeklog is copyleft. <br>
+    All trademarks and copyrights on this page are owned by their respective owners. Geeklog and glFusion are copyleft. <br>
 
-    Extended version of this document created by Jason C. Levine and Matt West
+    Extended version of this document created by Jason C. Levine and Matt West - edited by the gl Labs team.
 </div>
 
 
