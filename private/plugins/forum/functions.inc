@@ -401,7 +401,7 @@ function plugin_getheadercode_forum() {
         $gllabsMooToolsLoaded = 1;
     }
     $gf_header .= '<script type="text/javascript">' . LB;
-    $gf_header .= '	window.addEvent(\'load\', function() {' . LB;
+    $gf_header .= '	window.addEvent(\'domready\', function() {' . LB;
     $gf_header .= '		var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
     $gf_header .= '	});' . LB;
     $gf_header .= '</script>' . LB;
