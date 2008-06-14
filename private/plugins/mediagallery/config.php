@@ -214,7 +214,7 @@ $_MG_CONF['disable_lightbox'] = false;
  * albums, set this to true.
  */
 
-$_MG_CONF['update_parent_lastupdated'] = true;
+$_MG_CONF['update_parent_lastupdated'] = false;
 
 /* ------------------------------------------------------------------------
  * DO NOT CHANGE ANY SETTINGS BELOW THIS LINE.
