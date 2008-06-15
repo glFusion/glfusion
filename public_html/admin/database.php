@@ -42,7 +42,7 @@ require_once $_CONF['path_system'] . 'lib-security.php';
 * This page allows all Root admins to create a database backup.  This will not
 * allow the removal of past backups.  It's pretty simple actually.  The admin
 * clicks a button, we do a mysqldump to a file in the following format:
-* geeklog_db_backup_YYYY_MM_DD.sql  That's it.
+* glfusion_db_backup_YYYY_MM_DD.sql  That's it.
 */
 
 /**
@@ -173,7 +173,7 @@ function dobackup()
 
     if (is_dir($_CONF['backup_path'])) {
         $curdatetime = date('Y_m_d_H_i_s');
-        $backupfile = "{$_CONF['backup_path']}geeklog_db_backup_{$curdatetime}.sql";
+        $backupfile = "{$_CONF['backup_path']}glfusion_db_backup_{$curdatetime}.sql";
         $command = $_DB_mysqldump_path . " -h$_DB_host -u$_DB_user";
         if (!empty($_DB_pass)) {
             $command .= " -p$_DB_pass";
