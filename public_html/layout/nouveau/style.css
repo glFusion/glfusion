@@ -287,8 +287,8 @@ div.glfform form fieldset {
   clear: both;
   font-size: 100%;
   border-color: #000000;
-  border-width: 1px 0 0 0;
-  border-style: solid none none none;
+  border-width: 0 0 0 0 !important;
+  border-style: solid none none none !important;
   padding: 10px;
   margin: 0 0 0 0;
 }
