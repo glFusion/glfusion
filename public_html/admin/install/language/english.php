@@ -59,7 +59,7 @@ $LANG_INSTALL = array(
     5 => 'Sorry, but glFusion requires at least PHP 4.1.0 to run (you have version ',
     6 => '). Please <a href="http://www.php.net/downloads.php">upgrade your PHP</a> install or ask your hosting service to do it for you.',
     7 => 'Unable to locate glFusion files',
-    8 => 'The installation script was unable to locate the db-config.php file. This is probably because you have moved them from their default location or did not rename db-config.php.dist to db-config.php when you uploaded the glFusion files. Please ensure that you renamed the db-config file and specify the path to the db-config.php file (do not include the filename db-config.php in the path).',
+    8 => 'The installation script was unable to locate the db-config.php file. This is probably because you have moved it from its default location or did not rename db-config.php.dist to db-config.php when you uploaded the glFusion files. Please ensure that you renamed the db-config file and specify the path to the db-config.php file (do not include the filename db-config.php in the path).',
     9 => 'Welcome and thank you for choosing glFusion!',
     10 => 'File/Directory',
     11 => 'Permissions',
