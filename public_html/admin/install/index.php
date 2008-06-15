@@ -1900,7 +1900,7 @@ switch ($mode) {
                 // If the file/directory is not located in the default location
                 // or in public_html have the user enter its location.
                 $form_fields .= '<p><label>db-config.php</label> <input type="text" name="dbconfig_path" value="/path/to/'
-                            . $dbconfig_file . '" size="65"' . XHTML . '></p>'  . LB;
+                            . $dbconfig_file . '" size="65"' . XHTML . '>&nbsp;&nbsp;Examples: <b>/usr/bin/glfusion/private/</b> or <b>C:/glFusion/private/</b></p>'  . LB;
                 $num_errors++;
             } else {
                 // See whether the file/directory is located in the default place or in public_html
