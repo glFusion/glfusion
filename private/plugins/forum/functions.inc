@@ -1282,13 +1282,6 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval ) {
             return $retval;
-/* ----------------------------------------------------------------
-            $lu = CACHE_get_instance_update($cacheInstance, 0);
-            $now = time();
-            if (( $now - $lu ) < 36000 ) {
-                return $retval;
-            }
-------------------------------------------------------------------- */
         }
         $block = new Template ($_CONF['path_layout'] . 'forum/layout/blocks');
         $block->set_file (array ('block'=>'centerblock.thtml','record' => 'centerblock_displayline.thtml'));
@@ -1324,6 +1317,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         }
         $cssid = 0;
         while ($A = DB_fetchArray ($result)) {
+            $A['subject'] = @htmlspecialchars($A['subject'],ENT_COMPAT,$CONF_FORUM['charset']);
             if ($CONF_FORUM['use_censor']) {
                 $A['subject'] = COM_checkWords($A['subject']);
                 $A['comment'] = COM_checkWords($A['comment']);
