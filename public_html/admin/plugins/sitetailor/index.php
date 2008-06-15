@@ -344,7 +344,7 @@ function ST_saveNewMenuElement ( ) {
     $E['element_order'] = $aorder + 1;
 
     $E['element_active']    = COM_applyFilter($_POST['menuactive'],true);
-    $E['element_url']       = COM_applyFilter($_POST['menuurl']);
+    $E['element_url']       = trim(COM_applyFilter($_POST['menuurl']));
     $E['group_id']          = COM_applyFilter($_POST['group'],true);
 
     $element->constructor( $E, $meadmin, $root, $groups );
@@ -497,10 +497,12 @@ function ST_saveEditMenuElement ( ) {
     $id            = COM_applyFilter($_POST['id'],true);
     $menu_id       = COM_applyFilter($_POST['menu']);
     $pid           = COM_applyFilter($_POST['pid'],true);
-//    $label         = addslashes(COM_applyFilter($_POST['menulabel']));
     $label         = addslashes(htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel']))));
     $type          = COM_applyFilter($_POST['menutype'],true);
     $target        = COM_applyFilter($_POST['urltarget']);
+
+    if ( $type == 0 )
+        $type = 1;
 
     switch($type) {
         case 2 :
@@ -526,7 +528,7 @@ function ST_saveEditMenuElement ( ) {
             break;
     }
     $active     = COM_applyFilter($_POST['menuactive'],true);
-    $url        = addslashes(COM_applyFilter($_POST['menuurl']));
+    $url        = trim(addslashes(COM_applyFilter($_POST['menuurl'])));
     $group_id   = COM_applyFilter($_POST['group'],true);
     $sql        = "UPDATE {$_TABLES['st_menu_elements']} SET pid=$pid, element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url', element_target='$target', group_id=$group_id WHERE id=$id";
 

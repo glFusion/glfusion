@@ -14,7 +14,7 @@ window.addEvent('load',function() {
               update: $('displayafter')
          }).request();
     });
-    $('urldiv').style.display='none';
+    $('urldiv').style.display='';
     $('targetdiv').style.display='none';
     $('glcorediv').style.display='none';
     $('plugin').style.display='none';
@@ -30,7 +30,7 @@ function toggleFields() {
 
     switch( selected ) {
         case '1' : // sub
-            $('urldiv').style.display='none';
+            $('urldiv').style.display='';
             $('targetdiv').style.display='none';
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';

@@ -264,6 +264,8 @@ class mbElement {
         // need to build the URL
         switch ( $this->type ) {
             case '1' : // subtype - do nothing
+                $this->url = str_replace("%site_url%", $_CONF['site_url'],$this->url);
+                $this->url = str_replace("%site_admin_url%", $_CONF['site_admin_url'], $this->url);
                 break;
             case '2' : // geeklog action
                 switch ($this->subtype) {
@@ -769,7 +771,7 @@ class mbElement {
         } else {
             if ( $this->id != 0 && $this->access > 0 ) {
                 if ( $this->type == 1 && $parentaclass != '' ) {
-                    $retval .= "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                    $retval .= "<li>" . '<a class="' . $parentaclass . '" href="' . ($this->url == '' ? '#' : $this->url) . '">' . strip_tags($this->label) . '</a>' . LB;
                 } else {
                     $retval .= "<li>" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a></li>' . LB;
                 }
