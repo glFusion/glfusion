@@ -62,13 +62,13 @@ function add_element(tbl, arr_name, index, disp_type, def_val, deletable){
   deleteButton.value = "x";
   deleteButton.onclick =
     function(){
-        remove(this)
+        glfremove(this)
     };
   paramCell.appendChild(deleteButton);
  }
 }
 
-function remove(self){
+function glfremove(self){
  cell = self.parentNode.parentNode;
  cell.parentNode.removeChild(cell);
 }
@@ -103,7 +103,7 @@ function add_array(tbl, arr_name, arr_index, key_names, arr_type, deletable){
    deleteButton.type = "button";
    deleteButton.value = "x";
    deleteButton.onclick = function(){
-    remove(this);
+    glfremove(this);
     };
    arrayCell.appendChild(deleteButton);
   }
