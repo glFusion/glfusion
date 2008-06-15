@@ -962,7 +962,7 @@ function INST_createDatabaseStructures ($use_innodb = false)
                 DB_query ("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('database_engine', 'InnoDB')");
             }
             break;
-        case 'mssql';
+        case 'mssql':
             foreach ($_SQL as $sql) {
                 $_DB->dbQuery($sql, 0, 1);
             }
