@@ -284,14 +284,18 @@
 	window.addEvent("domready", function(){
 		var today = new Date();
 
+		var sYear = document.getElementById('publish_year').value;
+		var sMonth = document.getElementById('publish_month').value;
+		var sDay   = document.getElementById('publish_day').value;
+
         var calender1 = new Calendar("calendar1", "toggler",
            {inputField:{date:'publish_day',
         	month:'publish_month',
         	year:'publish_year'},
         	inputType:'select',
         	idPrefix:'cal1',
-        	startDate:new Date(2007,0,1),
-        	selectedDate:today,
+        	startDate:new Date(sYear-1,0,1),
+        	selectedDate: new Date(sYear,sMonth-1,sDay),
         	allowDaysOffSelection:true,
         	allowWeekendSelection:true,
         	allowDatesOffSelection:true,
