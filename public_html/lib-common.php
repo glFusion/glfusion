@@ -4001,7 +4001,7 @@ function COM_hit()
 
 function COM_emailUserTopics()
 {
-    global $_CONF, $_TABLES, $LANG08, $LANG24;
+    global $_CONF, $_TABLES, $LANG04, $LANG08, $LANG24;
 
     $subject = strip_tags( $_CONF['site_name'] . $LANG08[30] . strftime( '%Y-%m-%d', time() ));
 

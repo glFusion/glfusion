@@ -301,7 +301,7 @@ function ST_createElement ( $menu ) {
 }
 
 function ST_saveNewMenuElement ( ) {
-    global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF, $ST_menuElements,$TEMPLATE_OPTIONS;
+    global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF, $ST_menuElements,$TEMPLATE_OPTIONS, $_GROUPS;
 
     $meadmin = SEC_hasRights('sitetailor.admin');
     $root    = SEC_inGroup('Root');
@@ -474,7 +474,6 @@ function ST_editElement( $menu, $mid ) {
         'type_select'       => $type_select,
         'gl_select'         => $gl_select,
         'plugin_select'     => $plugin_select,
-        'order_select'      => $order_select,
         'sp_select'         => $sp_select,
         'glfunction_select' => $glfunction_select,
         'parent_select'     => $parent_select,
@@ -594,7 +593,7 @@ function ST_menuConfig( $mid ) {
     $result = DB_query($sql);
     list($cid,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$bgimage,$hoverimage,$parentimage,$alignment,$enabled) = DB_fetchArray($result);
 
-    $tmbgRGB    = '[' . ST_hexrgb($tmbg,'r') . ',' . ST_hexrgb($tmbg,'g') . ',' . ST_hexrgb($tnbg,'b') . ']';
+    $tmbgRGB    = '[' . ST_hexrgb($tmbg,'r') . ',' . ST_hexrgb($tmbg,'g') . ',' . ST_hexrgb($tmbg,'b') . ']';
     $tmhRGB     = '[' . ST_hexrgb($tmh,'r')  . ',' . ST_hexrgb($tmh,'g')  . ',' . ST_hexrgb($tmh,'b')  . ']';
     $tmtRGB     = '[' . ST_hexrgb($tmt,'r')  . ',' . ST_hexrgb($tmt,'g')  . ',' . ST_hexrgb($tmt,'b')  . ']';
     $tmthRGB    = '[' . ST_hexrgb($tmth,'r') . ',' . ST_hexrgb($tmth,'g') . ',' . ST_hexrgb($tmth,'b') . ']';
@@ -898,9 +897,6 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
             DB_query($sql);
             echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=menu&amp;mid=' . $mid);
             exit;
-            st_initMenu();
-            $content = ST_displayTree( $menu_id );
-            $currentSelect = $LANG_ST01['menu_builder'];
             break;
         case 'newmenu' :
             $content = 'We will create a new menu here';

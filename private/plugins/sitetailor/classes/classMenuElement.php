@@ -253,6 +253,7 @@ class mbElement {
 
     function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$selected='' ) {
         global $_SP_CONF,$_USER, $_TABLES, $LANG01, $_CONF,$ST_menuElements, $meLevel;
+        global $_DB_dbms;
 
         $retval = '';
         $menu = '';
@@ -260,6 +261,19 @@ class mbElement {
         if ( $this->active != 1 && $this->id != 0 ) {
             return '';
         }
+
+        if (isset($_REQUEST['topic']) ){
+            $topic = COM_applyFilter($_REQUEST['topic']);
+        } else {
+            $topic = '';
+        }
+
+        if( COM_isAnonUser() ) {
+            $anon = 1;
+        } else {
+            $anon = 0;
+        }
+        $allowed = true;
 
         // need to build the URL
         switch ( $this->type ) {
@@ -287,7 +301,7 @@ class mbElement {
                     case 2: // directory
                         $this->url = $_CONF['site_url'] . '/directory.php';
                         if( !empty( $topic )) {
-                            $this->url = COM_buildUrl( $url . '?topic='
+                            $this->url = COM_buildUrl( $this->url . '?topic='
                                                  . urlencode( $topic ));
                         }
                         if( $anon && ( $_CONF['loginrequired'] ||
@@ -297,12 +311,24 @@ class mbElement {
                         break;
                     case 3: // prefs
                         $this->url = $_CONF['site_url'] . '/usersettings.php?mode=edit';
+                        if( $anon && ( $_CONF['loginrequired'] ||
+                                $_CONF['profileloginrequired'] )) {
+                            $allowed = false;
+                        }
                         break;
                     case 4: // search
                         $this->url = $_CONF['site_url'] . '/search.php';
+                        if( $anon && ( $_CONF['loginrequired'] ||
+                                $_CONF['searchloginrequired'] )) {
+                            $allowed = false;
+                        }
                         break;
                     case 5: // stats
                         $this->url = $_CONF['site_url'] . '/stats.php';
+                        if( $anon && ( $_CONF['loginrequired'] ||
+                                $_CONF['statsloginrequired'] )) {
+                            $allowed = false;
+                        }
                         break;
                     default : // unknown?
                         $this->url = $_CONF['site_url'] . '/';
@@ -764,6 +790,9 @@ class mbElement {
                 break;
         }
         if ( $this->id != 0 && $this->group_id == 998 && SEC_inGroup('Root') ) {
+            return $retval;
+        }
+        if ( $allowed == 0 ) {
             return $retval;
         }
         if ( $this->type == 3 || $this->type == 7) {

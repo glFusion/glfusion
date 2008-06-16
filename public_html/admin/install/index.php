@@ -1156,7 +1156,7 @@ function INST_checkInnodbUpgrade($_SQL)
 function INST_doDatabaseUpgrades($current_gl_version, $use_innodb = false)
 {
     global $_TABLES, $_CONF, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
-           $dbconfig_path, $siteconfig_path, $html_path;
+           $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
 
     $_DB->setDisplayError (true);
 

@@ -468,7 +468,7 @@ function nouveau_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'layout_url', $_CONF['layout_url'] );
     $theme->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
     $theme->set_var( 'site_name', $_CONF['site_name'] );
-    if ($use_slogan) {
+    if ($_ST_CONF['display_site_slogan']) {
         $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
     }
 
