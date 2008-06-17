@@ -263,7 +263,7 @@ function ST_createElement ( $menu ) {
 
     // build group select
 
-    $usergroups = SEC_getUserGroups();
+    $usergroups = SEC_getUserGroups(2);
     $usergroups[$LANG_ST01['non-logged-in']] = 998;
     ksort($usergroups);
     $group_select .= '<select id="group" name="group">' . LB;
@@ -434,7 +434,7 @@ function ST_editElement( $menu, $mid ) {
 
     // build group select
 
-    $usergroups = SEC_getUserGroups();
+    $usergroups = SEC_getUserGroups(2);
     $usergroups[$LANG_ST01['non-logged-in']] = 998;
     ksort($usergroups);
     $group_select .= '<select id="group" name="group">' . LB;
