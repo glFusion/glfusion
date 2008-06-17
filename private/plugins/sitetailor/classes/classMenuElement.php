@@ -253,7 +253,7 @@ class mbElement {
 
     function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$selected='' ) {
         global $_SP_CONF,$_USER, $_TABLES, $LANG01, $_CONF,$ST_menuElements, $meLevel;
-        global $_DB_dbms;
+        global $_DB_dbms,$_GROUPS;
 
         $retval = '';
         $menu = '';
@@ -274,6 +274,14 @@ class mbElement {
             $anon = 0;
         }
         $allowed = true;
+
+        if ( $this->id != 0 && !SEC_inGroup($this->group_id) ) {
+            return '';
+        }
+
+        if ( $this->group_id == 1 && !isset($_GROUPS['Root']) ) {
+            return '';
+        }
 
         // need to build the URL
         switch ( $this->type ) {
@@ -789,7 +797,7 @@ class mbElement {
             default : // unknown
                 break;
         }
-        if ( $this->id != 0 && $this->group_id == 998 && SEC_inGroup('Root') ) {
+        if ( $this->id != 0 && $this->group_id == 998 && (SEC_inGroup('Root') || SEC_inGroup('sitetailor Admin')) ) {
             return $retval;
         }
         if ( $allowed == 0 ) {
