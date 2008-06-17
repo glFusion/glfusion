@@ -8,7 +8,7 @@
 <!-- <meta http-equiv="Pragma" content="no-cache"{xhtml}> -->
 <link rel="SHORTCUT ICON" href="{layout_url}/images/favicon.ico"{xhtml}>
 <!-- Load Stylesheets -->
-<link rel="stylesheet" type="text/css" href="{layout_url}/style.css" title="{theme}"{xhtml}>
+<link rel="stylesheet" type="text/css" href="{layout_url}/style.css?ver=100" title="{theme}"{xhtml}>
 {feed_url}
 {rel_links}
 {mootools}
