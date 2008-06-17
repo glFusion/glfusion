@@ -668,7 +668,7 @@ class Story
             /* there might be a submission, clean it up */
             DB_delete($_TABLES['storysubmission'], 'sid', $checksid);
         }
-
+        CACHE_remove_instance('whatsnew');
         return STORY_SAVED;
     }
 

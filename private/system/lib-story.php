@@ -993,7 +993,7 @@ function STORY_deleteStory($sid)
     $output = '';
 
     PLG_invokeService('story', 'delete', $args, $output, $svc_msg);
-
+    CACHE_remove_instance('whatsnew');
     return $output;
 }
 

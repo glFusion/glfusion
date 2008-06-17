@@ -221,7 +221,7 @@ function MG_batchDeleteMedia( $album_id, $actionURL = '' ) {
     require_once($_MG_CONF['path_html'] . 'maint/rssfeed.php');
     MG_buildFullRSS( );
     MG_buildAlbumRSS( $album_id );
-
+    CACHE_remove_instance('whatsnew');
     echo COM_refresh($actionURL);
     exit;
 }
@@ -373,7 +373,7 @@ function MG_batchMoveMedia( $album_id, $actionURL = '' ) {
     MG_buildFullRSS( );
     MG_buildAlbumRSS( $album_id );
     MG_buildAlbumRSS( $destination );
-
+    CACHE_remove_instance('whatsnew');
     echo COM_refresh($actionURL);
     exit;
 }
@@ -520,7 +520,7 @@ function MG_deleteAlbum( $album_id, $target_id, $actionURL='' ) {
     MG_buildFullRSS( );
     if ( $target_id != 0 )
         MG_buildAlbumRSS( $target_id );
-
+    CACHE_remove_instance('whatsnew');
     echo COM_refresh($actionURL);
     exit;
 }

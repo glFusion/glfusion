@@ -545,7 +545,7 @@ case 'day':
         }
     }
     $thedate = COM_getUserDateTimeFormat(mktime(0,0,0,$month,$day,$year));
-    $cal_templates->set_var('week_num',strftime('%V',$thedate[1]));
+    $cal_templates->set_var('week_num',@strftime('%V',$thedate[1]));
     if ($mode == 'personal') {
         $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['personal_events']} "
                 . "WHERE (uid = {$_USER['uid']}) "

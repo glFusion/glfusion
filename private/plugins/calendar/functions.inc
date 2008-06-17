@@ -180,7 +180,7 @@ function phpblock_calendar( $help='', $title='' )
                     if( !$headline ) {
                         if($z == 2) {
                             if( $numRows > 0 ) {
-                                $retval .= '<p><b>' . $LANG_CAL_1[23] . '</b><br' . XHTML . '>';
+                                $retval .= '<p><b>' . $LANG_CAL_1[23] . '</b></p>';
                             }
                         } else {
                             if( $totalrows > 0 ) {
@@ -254,7 +254,7 @@ function phpblock_calendar( $help='', $title='' )
                             $newevent_url .= 'mode=personal&amp;';
                         }
 
-                        $newevent_url .= 'eid=' . $theEvent['eid'] . '"';
+                        $newevent_url .= 'eid=' . $theEvent['eid'] /*. '"' */;
                         $attr = array();
                         if( $todaysEvent ) {
                             $attr = array('class' => $todaysClassName);

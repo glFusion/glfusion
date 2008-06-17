@@ -705,6 +705,7 @@ function submitstory($type='')
      * Do it HERE on $args */
 
     PLG_invokeService('story', 'submit', $args, $output, $svc_msg);
+//    CACHE_remove_instance('whatsnew');
     echo $output;
 }
 

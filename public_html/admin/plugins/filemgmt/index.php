@@ -616,6 +616,7 @@ function modDownloadS() {
    		DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', size='$size', status=1, date=".time().", comments='$commentoption' WHERE lid='{$_POST['lid']}'");
 	}
     DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' WHERE lid='{$_POST['lid']}'");
+    CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_url']}/filemgmt/index.php",2,_MD_DBUPDATED);
     exit();
 }
@@ -652,6 +653,7 @@ function delDownload() {
             $err=@unlink ($tmpsnap);
         }
     }
+    CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_url']}/filemgmt/index.php",2,_MD_FILEDELETED);
     exit();
 }
@@ -717,6 +719,7 @@ function delNewDownload() {
             $err=@unlink ($tmpshotname);
             //COM_errorLOG("Delete submitted snapshot: ".$tmpshotname." Return status of unlink is: ".$err);
         }
+        CACHE_remove_instance('whatsnew');
         redirect_header("index.php?op=listNewDownloads",1,_MD_FILEDELETED);
     } else {
         redirect_header("index.php?op=listNewDownloads",1,_MD_ERRORNOFILE);
@@ -759,6 +762,7 @@ function modCatS() {
     $sql .= "SET title='$title', imgurl='$imgurl', pid='$sid', grp_access=$grp_access, grp_writeaccess=$write_access ";
     $sql .= "where cid='$cid'";
     DB_query($sql);
+    CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_DBUPDATED);
     exit();
 }
@@ -827,6 +831,7 @@ function delCat() {
         }
     }
     DB_query("DELETE FROM {$_FM_TABLES['filemgmt_cat']} WHERE cid='$cid'");
+    CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?op=categoryConfigAdmin",2,_MD_CATDELETED);
     exit();
 
@@ -865,6 +870,7 @@ function addCat() {
         $sql .= "VALUES ('$pid', '$title', '$imgurl',$grp_access,$write_access)";
         DB_query($sql);
     }
+    CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?op=categoryConfigAdmin",2,_MD_NEWCATADDED);
     exit();
 }
@@ -920,8 +926,8 @@ function addDownload() {
         $sql .= "('$cid','$title','$url','$homepage','$version','$size','$logourl','$submitter',1,UNIX_TIMESTAMP(),0,0,0,'$commentoption')";
         DB_query($sql);
         $newid = DB_insertID();
-        CACHE_remove_instance('whatsnew');
         DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')");
+        CACHE_remove_instance('whatsnew');
         if (isset($duplicatefile) && $duplicatefile) {
             redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_NEWDLADDED_DUPFILE);
         } elseif (isset($duplicatesnap) && $duplicatesnap) {
@@ -1037,6 +1043,7 @@ function approve(){
             }
          }
     }
+    CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?op=listNewDownloads",2,_MD_NEWDLADDED);
     exit();
 }
@@ -1331,6 +1338,7 @@ function filemgmtConfigChange($op='') {
 
         fwrite($file, $content);
         fclose($file);
+        CACHE_remove_instance('whatsnew');
 
 }
 

@@ -457,7 +457,7 @@ function deleteLink($lid, $type = '')
         }
 
         DB_delete($_TABLES['links'], 'lid', $lid);
-
+        CACHE_remove_instance('whatsnew');
         return COM_refresh($_CONF['site_admin_url']
                            . '/plugins/links/index.php?msg=3');
     } elseif ($type == 'submission') {

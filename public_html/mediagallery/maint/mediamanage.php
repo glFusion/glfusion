@@ -448,7 +448,7 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
     }
     require_once($_MG_CONF['path_html'] . 'maint/rssfeed.php');
     MG_buildAlbumRSS( $album_id );
-
+    CACHE_remove_instance('whatsnew');
     echo COM_refresh($actionURL);
     exit;
 }
@@ -1388,6 +1388,7 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     } else {
 	    require_once($_MG_CONF['path_html'] . 'maint/rssfeed.php');
     	MG_buildAlbumRSS( $album_id );
+    	CACHE_remove_instance('whatsnew');
         echo COM_refresh($actionURL);
     }
     exit;

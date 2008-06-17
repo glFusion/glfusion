@@ -160,6 +160,7 @@ function handleDelete()
             $comments = DB_count($_TABLES['comments'], 'sid', $sid);
             DB_change($_TABLES['stories'], 'comments', $comments,
                       'sid', $sid);
+            CACHE_remove_instance('whatsnew');
             $display .= COM_refresh(COM_buildUrl ($_CONF['site_url']
                                     . "/article.php?story=$sid") . '#comments');
         } else {
@@ -171,6 +172,7 @@ function handleDelete()
     default: // assume plugin
         if (!($display = PLG_commentDelete($type,
                             COM_applyFilter($_REQUEST['cid'], true), $sid))) {
+            CACHE_remove_instance('whatsnew');
             $display = COM_refresh($_CONF['site_url'] . '/index.php');
         }
         break;

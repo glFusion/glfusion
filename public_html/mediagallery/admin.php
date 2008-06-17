@@ -326,6 +326,7 @@ if (($mode == 'edit') ) {
                 require_once($_MG_CONF['path_html'] . 'maint/albumedit.php');
                 $display = MG_siteHeader();
                 $display .= MG_saveAlbum( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
+                CACHE_remove_instance('whatsnew');
                 break;
             case 'remoteupload' :
             	require_once($_MG_CONF['path_html'] . 'maint/remote.php');
@@ -358,11 +359,13 @@ if (($mode == 'edit') ) {
                 require_once($_MG_CONF['path_html'] . 'maint/moderate.php');
                 $display = MG_siteHeader();
                 $display .= MG_saveModeration( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id  );
+                CACHE_remove_instance('whatsnew');
                 break;
             case 'media' :
                 require_once($_MG_CONF['path_html'] . 'maint/mediamanage.php');
                 $display  = MG_siteHeader();
                 $display .= MG_saveMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
+                CACHE_remove_instance('whatsnew');
                 break;
             case 'albumsort' :
                 require_once($_MG_CONF['path_html'] . 'maint/sort.php');
@@ -379,6 +382,7 @@ if (($mode == 'edit') ) {
                 $display = MG_siteHeader();
                 $media_id = $_POST['mid'];
                 $display .= MG_saveMediaEdit( $album_id, $media_id, $_MG_CONF['site_url'] . '/admin.php?mode=media&album_id=' . $album_id);
+                CACHE_remove_instance('whatsnew');
                 break;
             case 'globalattr' :
                 require_once($_MG_CONF['path_html'] . 'maint/global.php');
@@ -389,6 +393,7 @@ if (($mode == 'edit') ) {
                 require_once($_MG_CONF['path_html'] . 'maint/global.php');
                 $display = MG_siteHeader();
                 $display .= MG_saveGlobalAlbumPerm();
+                CACHE_remove_instance('whatsnew');
                 break;
             case 'watermark' :
                 require_once($_MG_CONF['path_html'] . 'lib-upload.php');
@@ -419,6 +424,7 @@ if (($mode == 'edit') ) {
                 require_once($_MG_CONF['path_html'] . 'maint/batch.php');
                 $display = MG_siteHeader();
                 $display .= MG_batchDeleteMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
+                CACHE_remove_instance('whatsnew');
                 break;
             case 'album' :
                 require_once($_MG_CONF['path_html'] . 'maint/batch.php');
@@ -431,6 +437,7 @@ if (($mode == 'edit') ) {
                     $target_id = COM_applyFilter($_POST['target'], true);
                     $display = MG_siteHeader();
                     $display .= MG_deleteAlbum($album_id, $target_id, $_MG_CONF['site_url'] . '/index.php');
+                    CACHE_remove_instance('whatsnew');
                 } else {
                     $display .= MG_errorHandler( $LANG_MG02['no_target_album']);
                 }
