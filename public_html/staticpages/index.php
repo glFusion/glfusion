@@ -43,7 +43,7 @@ if (!in_array('staticpages', $_PLUGINS)) {
 
 // MAIN
 
-COM_setArgNames(array('page', 'mode'));
+COM_setArgNames(array('page', 'disp_mode'));
 $page = COM_applyFilter(COM_getArgument('page'));
 $display_mode = COM_applyFilter(COM_getArgument('disp_mode'));
 
