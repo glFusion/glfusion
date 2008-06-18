@@ -1375,8 +1375,22 @@ function service_submit_story($args, &$output, &$svc_msg)
             }
         }
     }
+    if ( $args['type'] == 'submission' ) {
+        $story->_sid = addslashes($story->_sid);
+        $story->_tid = $story->_tid;
+        $story->_title = addslashes($story->_title);
+        $story->_introtext = addslashes($story->_introtext);
+        $story->_bodytext = addslashes($story->_bodytext);
+        $story->_postmode = addslashes($story->_postmode);
+        $story->_date = date('Y-m-d H:i:s', $story->_date);
 
-    $result = $story->saveToDatabase();
+        DB_save($_TABLES['storysubmission'], 'sid,tid,uid,title,introtext,bodytext,date,postmode',
+                    "{$story->_sid},'{$story->_tid}',{$story->_uid},'{$story->_title}'," .
+                    "'{$story->_introtext}','{$story->_bodytext}','{$story->_date}','{$story->_postmode}'");
+        $result = STORY_SAVED;
+    } else {
+        $result = $story->saveToDatabase();
+    }
 
     if ($result == STORY_SAVED) {
         // see if any plugins want to act on that story
