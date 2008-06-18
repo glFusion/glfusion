@@ -267,6 +267,15 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
             $fulltext = trim( $fulltext );
             $fulltext = preg_replace( "/(\015)/", "", $fulltext );
 
+            if($row['postmode']=='plaintext'){
+    	        if(!empty($storytext)){
+                    $storytext = nl2br($storytext);
+                }
+                if (!empty($fulltext)){
+                    $fulltext = nl2br($fulltext);
+                }
+            }
+
             $storylink = COM_buildUrl( $_CONF['site_url']
                                        . '/article.php?story=' . $row['sid'] );
             $extensionTags = PLG_getFeedElementExtensions('article', $row['sid'], $feedType, $feedVersion, $tid, $fid);
@@ -373,6 +382,15 @@ function SYND_getFeedContentAll( $limit, &$link, &$update, $contentLength, $feed
         $storytext = SYND_truncateSummary( $fulltext, $contentLength );
         $fulltext = trim( $fulltext );
         $fulltext = preg_replace( "/(\015)/", "", $fulltext );
+
+        if($row['postmode']=='plaintext'){
+            if(!empty($storytext)){
+                $storytext = nl2br($storytext);
+            }
+            if (!empty($fulltext)){
+                $fulltext = nl2br($fulltext);
+            }
+        }
 
         $storylink = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
                                    . $row['sid'] );
