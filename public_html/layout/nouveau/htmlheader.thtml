@@ -9,6 +9,7 @@
 <link rel="SHORTCUT ICON" href="{layout_url}/images/favicon.ico"{xhtml}>
 <!-- Load Stylesheets -->
 <link rel="stylesheet" type="text/css" href="{layout_url}/style.css?ver=100" title="{theme}"{xhtml}>
+<link rel="stylesheet" type="text/css" href="{layout_url}/style-colors.css" title="{theme}"{xthml}>
 {feed_url}
 {rel_links}
 {mootools}
@@ -67,7 +68,6 @@ border-bottom:1px solid {sbscolor};  /*Sub Menu Shadow*/
 background:{spimage};  /*image for sub menu parent menu - the blue orb*/
 }
 </style>
-<link rel="stylesheet" type="text/css" href="{layout_url}/style-colors.css" title="{theme}"{xthml}>
 </head>
 <body dir="{direction}" style="background:#000000;">
 <div>
