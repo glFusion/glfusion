@@ -659,12 +659,12 @@ class Story
         DB_query($sql);
 
         /* Clean up the old story */
-        if ($oldArticleExists) {
+        if ($oldArticleExists && !empty($checksid)) {
             $sql = "DELETE FROM {$_TABLES['stories']} WHERE sid='$checksid'";
             DB_query($sql);
         }
 
-        if ($this->type == 'submission') {
+        if ($this->type == 'submission'  && !empty($checksid) ) {
             /* there might be a submission, clean it up */
             DB_delete($_TABLES['storysubmission'], 'sid', $checksid);
         }
