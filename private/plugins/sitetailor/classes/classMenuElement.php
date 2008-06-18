@@ -275,7 +275,7 @@ class mbElement {
         }
         $allowed = true;
 
-        if ( $this->id != 0 && !SEC_inGroup($this->group_id) ) {
+        if ( $this->group_id != 998 && $this->id != 0 && !SEC_inGroup($this->group_id) ) {
             return '';
         }
 
