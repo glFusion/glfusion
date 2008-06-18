@@ -1385,8 +1385,13 @@ function service_submit_story($args, &$output, &$svc_msg)
         $story->_date = date('Y-m-d H:i:s', $story->_date);
 
         DB_save($_TABLES['storysubmission'], 'sid,tid,uid,title,introtext,bodytext,date,postmode',
-                    "{$story->_sid},'{$story->_tid}',{$story->_uid},'{$story->_title}'," .
+                    "'{$story->_sid}','{$story->_tid}',{$story->_uid},'{$story->_title}'," .
                     "'{$story->_introtext}','{$story->_bodytext}','{$story->_date}','{$story->_postmode}'");
+
+        if ( $args['old_sid'] != $story->_sid && !empty($args['old_sid'])) {
+            $old_sid = COM_applyFilter($args['old_sid']);
+            DB_delete($_TABLES['storysubmission'], 'sid', $old_sid);
+        }
         $result = STORY_SAVED;
     } else {
         $result = $story->saveToDatabase();
