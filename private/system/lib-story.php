@@ -1375,6 +1375,7 @@ function service_submit_story($args, &$output, &$svc_msg)
             }
         }
     }
+
     if ( $args['type'] == 'submission' ) {
         $story->_sid = addslashes($story->_sid);
         $story->_tid = $story->_tid;
@@ -1384,13 +1385,25 @@ function service_submit_story($args, &$output, &$svc_msg)
         $story->_postmode = addslashes($story->_postmode);
         $story->_date = date('Y-m-d H:i:s', $story->_date);
 
+        if ( $args['old_sid'] != $story->_sid && !empty($args['old_sid'])) {
+            $testsid = DB_getItem( $_TABLES['storysubmission'], 'sid', "sid = '{$story->_sid}'" );
+            if ( $testsid != '' ) {
+                $output .= COM_siteHeader ('menu', $LANG24[5]);
+                $output .= COM_errorLog ($LANG24[24], 2);
+                $output .= storyeditor ($args['old_sid'],'editsubmission');
+                $output .= COM_siteFooter ();
+                return PLG_RET_ERROR;
+            }
+        }
         DB_save($_TABLES['storysubmission'], 'sid,tid,uid,title,introtext,bodytext,date,postmode',
                     "'{$story->_sid}','{$story->_tid}',{$story->_uid},'{$story->_title}'," .
                     "'{$story->_introtext}','{$story->_bodytext}','{$story->_date}','{$story->_postmode}'");
 
-        if ( $args['old_sid'] != $story->_sid && !empty($args['old_sid'])) {
-            $old_sid = COM_applyFilter($args['old_sid']);
-            DB_delete($_TABLES['storysubmission'], 'sid', $old_sid);
+        if (!DB_error()) {
+            if ( $args['old_sid'] != $story->_sid && !empty($args['old_sid'])) {
+                $old_sid = COM_applyFilter($args['old_sid']);
+                DB_delete($_TABLES['storysubmission'], 'sid', $old_sid);
+            }
         }
         $result = STORY_SAVED;
     } else {
