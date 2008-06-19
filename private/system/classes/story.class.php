@@ -663,11 +663,14 @@ class Story
             $sql = "DELETE FROM {$_TABLES['stories']} WHERE sid='$checksid'";
             DB_query($sql);
         }
-
-        if ($this->type == 'submission'  && !empty($checksid) ) {
-            /* there might be a submission, clean it up */
-            DB_delete($_TABLES['storysubmission'], 'sid', $checksid);
+        if ( $this->type == 'submission' ) {
+            if ( !empty($checksid) ) {
+                DB_delete($_TABLES['storysubmission'], 'sid', $checksid);
+            } else {
+                DB_delete($_TABLES['storysubmission'], 'sid', $this->_sid);
+            }
         }
+
         CACHE_remove_instance('whatsnew');
         return STORY_SAVED;
     }
