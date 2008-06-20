@@ -272,7 +272,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var( 'story_page', $story_page );
             }
 
-            $article->set_var( 'story_introtext', $introtext . '<br' . XHTML . '><br' . XHTML . '>'
+            $article->set_var( 'story_introtext', $introtext . '<br' . XHTML . '>'
                                . $bodytext );
             $article->set_var( 'story_text_no_br', $introtext . $bodytext );
         }
