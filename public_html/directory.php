@@ -288,9 +288,6 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
                     $entries = array ();
                 }
 
-                $curtime = COM_getUserDateTimeFormat ($A['day']);
-                $day = $curtime[0];
-
                 $day = strftime ($_CONF['shortdate'], $A['day']);
 
                 $retval .= '<h2>' . $day . '</h2>' . LB;
