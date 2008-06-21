@@ -1079,6 +1079,12 @@ function SEC_encryptPassword($password)
 function SEC_createToken($ttl = 1200)
 {
     global $_USER, $_TABLES;
+
+    static $last_token;
+
+    if (isset($last_token)) {
+        return $last_token;
+    }
     
     /* Figure out the full url to the current page */
     $pageURL = COM_getCurrentURL();
@@ -1103,6 +1109,8 @@ function SEC_createToken($ttl = 1200)
            . "VALUES ('$token', NOW(), {$_USER['uid']}, '$pageURL', $ttl)";
     DB_Query($sql);
            
+    $last_token = $token;
+
     /* And return the token to the user */
     return $token;
 }
