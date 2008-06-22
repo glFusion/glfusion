@@ -289,16 +289,12 @@ function links_edit_category($cid, $pid)
 
 function links_save_category($cid, $old_cid, $pid, $category, $description, $tid, $owner_id, $group_id, $perm_owner, $perm_group, $perm_members, $perm_anon)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG_LINKS, $LANG_LINKS_ADMIN, $_LI_CONF;
+    global $_CONF, $_TABLES, $_USER, $LANG_LINKS, $LANG_LINKS_ADMIN, $_LI_CONF,
+           $PLG_links_MESSAGE17;
 
     // Convert array values to numeric permission values
     if (is_array($perm_owner) OR is_array($perm_group) OR is_array($perm_members) OR is_array($perm_anon)) {
         list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
-    }
-
-    // Check cid to make sure not illegal
-    if (($cid == $_LI_CONF['root']) || ($cid == 'user')) {
-        return 11;
     }
 
     // clean 'em up
@@ -310,6 +306,24 @@ function links_save_category($cid, $old_cid, $pid, $category, $description, $tid
 
     if (empty($category) || empty($description)) {
         return 7;
+    }
+
+    // Check cid to make sure not illegal
+    if (($cid == addslashes($_LI_CONF['root'])) || ($cid == 'user')) {
+        return 11;
+    }
+
+    if (!empty($cid) && ($cid != $old_cid)) {
+        // this is either a new category or an attempt to change the cid
+        // - check that cid doesn't exist yet
+        $ctrl = DB_getItem($_TABLES['linkcategories'], 'cid', "cid = '$cid'");
+        if (!empty($ctrl)) {
+            if (isset($PLG_links_MESSAGE17)) {
+                return 17;
+            } else {
+                return 11;
+            }
+        }
     }
 
     // Check that they didn't delete the cid. If so, get the hidden one
