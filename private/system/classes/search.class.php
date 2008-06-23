@@ -303,13 +303,12 @@ class Search {
                 // get rows
                 $A['title'] = str_replace ('$', '&#36;', $A['title']);
                 $thetime = COM_getUserDateTimeFormat ($A['day']);
-                if (empty($this->_query)) {
-                    $articleUrl = COM_buildUrl($_CONF['site_url']
-                                    . '/article.php?story=' . $A['sid']);
-                } else {
-                    $articleUrl = $_CONF['site_url'] . '/article.php?story='
-                        . $A['sid'] . '&amp;query=' . urlencode($this->_query);
+                $articleUrl = COM_buildUrl($_CONF['site_url']
+                                    . '/article.php?sotry=' . $A['sid']);
+                if (!empty($this->_query)) {
+                    $articleUrl .= (strpos($articleUrl,'?') ? '&amp;' : '?') .'query=' . urlencode($this->_query);
                 }
+
                 $author = htmlspecialchars($this->_displayName($A['username'],
                                                                $A['fullname']));
                 if ($A['uid'] == 1) {
