@@ -350,7 +350,7 @@ function do_update ($pi_name)
 */
 function do_uninstall ($pi_name)
 {
-    global $_CONF, $LANG32, $LANG08, $MESSAGE, $_IMAGE_TYPE;
+    global $_CONF, $_DB_table_prefix, $_TABLES, $LANG32, $LANG08, $MESSAGE, $_IMAGE_TYPE;
 
     $retval = '';
 
