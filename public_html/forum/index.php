@@ -706,9 +706,10 @@ if ($forum == 0) {
                     $forumlisting->set_var ('LANG_newposts', $LANG_GF02['msg112']);
                     $viewnewpostslink = true;
                     $forumlisting->parse ('newposts_link','newposts');
-                } else {
-                    $forumlisting->set_var ('newposts_link', '');
                 }
+//                else {
+//                    $forumlisting->set_var ('newposts_link', '');
+//                }
             } else {
                 $forumlisting->set_var ('newposts_link', '');
                 $forumlisting->set_var ('markread_link', "");
