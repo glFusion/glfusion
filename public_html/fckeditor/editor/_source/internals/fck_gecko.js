@@ -104,7 +104,7 @@ FCK.InitializeBehaviors = function()
 
 			// only perform the patched behavior if we're in an <a> tag, or the End key is pressed.
 			var parentTag = node.parentNode.tagName.toLowerCase() ;
-			if ( ! (  parentTag == 'a' || String(node.parentNode.contentEditable) == 'false' ||
+			if ( ! (  parentTag == 'a' || ( !FCKBrowserInfo.IsOpera && String(node.parentNode.contentEditable) == 'false' ) ||
 					( ! ( FCKListsLib.BlockElements[parentTag] || FCKListsLib.NonEmptyBlockElements[parentTag] )
 					  && keyCode == 35 ) ) )
 				return ;

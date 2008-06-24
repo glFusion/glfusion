@@ -246,6 +246,7 @@ FCKEditingArea.prototype.MakeEditable = function()
 			if ( this._BodyHTML )
 			{
 				oDoc.body.innerHTML = this._BodyHTML ;
+				oDoc.body.offsetLeft ;		// Don't remove, this is a hack to fix Opera 9.50, see #2264.
 				this._BodyHTML = null ;
 			}
 

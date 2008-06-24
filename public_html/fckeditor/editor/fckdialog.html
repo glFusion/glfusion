@@ -247,10 +247,13 @@ var Throbber = function()
 
 			var throbberParent = $( 'throbberBlock' ) ;
 
-			// Create the throbber blocks.
-			var classIds = [ 1,2,3,4,5,4,3,2 ] ;
-			while ( classIds.length > 0 )
-				throbberParent.appendChild( document.createElement( 'div' ) ).className = ' throbber_' + classIds.shift() ;
+			if (throbberParent.childNodes.length == 0)
+			{
+				// Create the throbber blocks.
+				var classIds = [ 1,2,3,4,5,4,3,2 ] ;
+				while ( classIds.length > 0 )
+					throbberParent.appendChild( document.createElement( 'div' ) ).className = ' throbber_' + classIds.shift() ;
+			}
 
 			// Center the throbber.
 			var frm = $( 'contents' ) ;
@@ -262,6 +265,10 @@ var Throbber = function()
 
 			// Show it.
 			throbberParent.style.visibility = ''  ;
+
+			// Hide tabs and buttons:
+			$( 'Tabs' ).style.visibility = 'hidden' ;
+			$( 'PopupButtons' ).style.visibility = 'hidden' ;
 
 			// Setup the animation interval.
 			timer = setInterval( updateThrobber, 100 ) ;
@@ -275,9 +282,11 @@ var Throbber = function()
 				timer = null ;
 			}
 
-			var throbberParent = document.getElementById( 'throbberBlock' ) ;
-			if ( throbberParent )
-				FCKDomTools.RemoveNode( throbberParent ) ;
+			$( 'throbberBlock' ).style.visibility = 'hidden' ;
+
+			// Show tabs and buttons:
+			$( 'Tabs' ).style.visibility = '' ;
+			$( 'PopupButtons' ).style.visibility = '' ;
 		}
 	} ;
 }() ;

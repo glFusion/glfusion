@@ -224,37 +224,9 @@ end function
 Sub SendUploadResults( errorNumber, fileUrl, fileName, customMsg )
 	Response.Clear
 	Response.Write "<script type=""text/javascript"">"
-	Response.Write "(function()"
-	Response.Write "{"
-	Response.Write "var d = document.domain ;"
-
-	Response.Write " while ( true )"
-	Response.Write "	{"
-	' Test if we can access a parent property.
-	Response.Write "		try"
-	Response.Write "		{"
-	Response.Write "			var test = window.top.opener.document.domain ;"
-	Response.Write "			break ;"
-	Response.Write "		}"
-	Response.Write "		catch( e ) {}"
-
-	' Remove a domain part: www.mytest.example.com => mytest.example.com => example.com ...
-	Response.Write "		d = d.replace( /.*?(?:\.|$)/, '' ) ;"
-
-	Response.Write "		if ( d.length == 0 )"
-	' It was not able to detect the domain.
-	Response.Write "			break ;"
-	Response.Write ""
-	Response.Write "		try"
-	Response.Write "		{"
-	Response.Write "			document.domain = d ;"
-	Response.Write "		}"
-	Response.Write "		catch (e)"
-	Response.Write "		{"
-	Response.Write "			break ;"
-	Response.Write "		}"
-	Response.Write "	}"
-	Response.Write "})() ;"
+	' Minified version of the document.domain automatic fix script (#1919).
+	' The original script can be found at _dev/domain_fix_template.js
+	Response.Write "(function(){var d=document.domain;while (true){try{var A=window.parent.document.domain;break;}catch(e) {};d=d.replace(/.*?(?:\.|$)/,'');if (d.length==0) break;try{document.domain=d;}catch (e){break;}}})();"
 
 	Response.Write "window.parent.OnUploadCompleted(" & errorNumber & ",""" & Replace( fileUrl, """", "\""" ) & """,""" & Replace( fileName, """", "\""" ) & """,""" & Replace( customMsg , """", "\""" ) & """) ;"
 	Response.Write "</script>"

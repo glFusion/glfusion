@@ -279,11 +279,13 @@ function SanitizeFileName( $sNewFileName )
 // This is the function that sends the results of the uploading process.
 function SendUploadResults( $errorNumber, $fileUrl = '', $fileName = '', $customMsg = '' )
 {
+	// Minified version of the document.domain automatic fix script (#1919).
+	// The original script can be found at _dev/domain_fix_template.js
 	echo <<<EOF
 <script type="text/javascript">
 (function(){var d=document.domain;while (true){try{var A=window.parent.document.domain;break;}catch(e) {};d=d.replace(/.*?(?:\.|$)/,'');if (d.length==0) break;try{document.domain=d;}catch (e){break;}}})();
-
 EOF;
+
 	$rpl = array( '\\' => '\\\\', '"' => '\\"' ) ;
 	echo 'window.parent.OnUploadCompleted(' . $errorNumber . ',"' . strtr( $fileUrl, $rpl ) . '","' . strtr( $fileName, $rpl ) . '", "' . strtr( $customMsg, $rpl ) . '") ;' ;
 	echo '</script>' ;

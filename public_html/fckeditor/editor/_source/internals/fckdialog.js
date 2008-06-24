@@ -105,7 +105,7 @@ var FCKDialog = ( function()
 			// Setup the IFRAME that will hold the dialog.
 			var dialog = topDocument.createElement( 'iframe' ) ;
 			FCKTools.ResetStyles( dialog ) ;
-			dialog.src = FCKConfig.BasePath + 'fckdialog.html' ;
+			dialog.src = FCKConfig.FullBasePath + 'fckdialog.html' ;
 
 			// Dummy URL for testing whether the code in fckdialog.js alone leaks memory.
 			// dialog.src = 'about:blank';

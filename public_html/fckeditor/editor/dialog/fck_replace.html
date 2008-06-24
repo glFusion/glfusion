@@ -59,8 +59,8 @@ function OnDialogTabChange( tabCode )
 
 GetNextNonEmptyTextNode = function( node, stopNode )
 {
-	var node ;
-	while ( ( node = FCKDomTools.GetNextSourceNode( node, false, 3, stopNode ) ) && node && node.length < 1 ) ;
+	while ( ( node = FCKDomTools.GetNextSourceNode( node, false, 3, stopNode ) ) && node && node.length < 1 )
+		1 ;
 	return node ;
 }
 

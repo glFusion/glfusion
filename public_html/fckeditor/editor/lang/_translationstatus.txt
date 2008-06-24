@@ -49,7 +49,7 @@ he.js      Found: 411   Missing: 0
 hi.js      Found: 411   Missing: 0
 hr.js      Found: 411   Missing: 0
 hu.js      Found: 411   Missing: 0
-it.js      Found: 396   Missing: 15
+it.js      Found: 410   Missing: 1
 ja.js      Found: 411   Missing: 0
 km.js      Found: 370   Missing: 41
 ko.js      Found: 390   Missing: 21
