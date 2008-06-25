@@ -657,7 +657,7 @@ class Story
         $sql .= ') ' . $values . ')';
 
         DB_query($sql);
-
+        CACHE_remove_instance('story_');
         /* Clean up the old story */
         if ($oldArticleExists && !empty($checksid)) {
             $sql = "DELETE FROM {$_TABLES['stories']} WHERE sid='$checksid'";
@@ -815,6 +815,10 @@ class Story
         $this->_sid = COM_applyFilter($array['sid']);
         $this->_uid = COM_applyFilter($array['uid'], true);
         $this->_unixdate = COM_applyFilter($array['date'], true);
+
+        if (!isset($array['bodytext'])) {
+            $array['bodytext'] = '';
+        }
 
         /* Then load the title, intro and body */
         if (($array['postmode'] == 'html') || ($array['postmode'] == 'adveditor')) {
