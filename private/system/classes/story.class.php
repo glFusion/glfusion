@@ -657,7 +657,7 @@ class Story
         $sql .= ') ' . $values . ')';
 
         DB_query($sql);
-        CACHE_remove_instance('story_');
+        CACHE_remove_instance('story_'.$this->_sid);
         /* Clean up the old story */
         if ($oldArticleExists && !empty($checksid)) {
             $sql = "DELETE FROM {$_TABLES['stories']} WHERE sid='$checksid'";

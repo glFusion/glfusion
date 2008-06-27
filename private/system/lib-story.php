@@ -114,7 +114,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     {
         $article_filevar = 'article';
     }
-    $instance_id = 'story_'.$article_filevar.'_'.$index.$mode.'_'.$story->getSid();
+    $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar;
     if ( !empty($query) || !$article->check_instance($instance_id,$article_filevar)) {
     // end of instance cache
 
@@ -1011,7 +1011,7 @@ function STORY_deleteStory($sid)
 
     PLG_invokeService('story', 'delete', $args, $output, $svc_msg);
     CACHE_remove_instance('whatsnew');
-    CACHE_remove_instance('story_');
+    CACHE_remove_instance('story_'.$sid);
     return $output;
 }
 

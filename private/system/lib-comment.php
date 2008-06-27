@@ -972,7 +972,9 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         DB_unlockTable ($_TABLES['comments']);
 
         CACHE_remove_instance('whatsnew');
-        CACHE_remove_instance('story_');
+        if ($type == 'article') {
+            CACHE_remove_instance('story_'.$sid);
+        }
 
         // Send notification of comment if no errors and notications enabled for comments
         if (($ret == 0) && isset ($_CONF['notification']) &&
