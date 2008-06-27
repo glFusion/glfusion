@@ -971,6 +971,9 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         $cid = DB_insertId();
         DB_unlockTable ($_TABLES['comments']);
 
+        CACHE_remove_instance('whatsnew');
+        CACHE_remove_instance('story_');
+
         // Send notification of comment if no errors and notications enabled for comments
         if (($ret == 0) && isset ($_CONF['notification']) &&
                 in_array ('comment', $_CONF['notification'])) {
@@ -1096,6 +1099,9 @@ function CMT_deleteComment ($cid, $sid, $type)
     }
 
     DB_unlockTable ($_TABLES['comments']);
+
+    CACHE_remove_instance('whatsnew');
+    CACHE_remove_instance('story_');
 
     return $ret;
 }
