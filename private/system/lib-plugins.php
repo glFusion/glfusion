@@ -205,7 +205,7 @@ function PLG_uninstall ($type)
         // removing tables
         for ($i=0; $i < count($remvars['tables']); $i++) {
             COM_errorLog ("Dropping table {$_TABLES[$remvars['tables'][$i]]}", 1);
-            DB_query ("DROP TABLE {$_TABLES[$remvars['tables'][$i]]}");
+            DB_query ("DROP TABLE {$_TABLES[$remvars['tables'][$i]]}", 1    );
             COM_errorLog ('...success', 1);
         }
 
