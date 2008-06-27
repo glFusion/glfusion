@@ -119,13 +119,13 @@ function phpblock_calendar( $help='', $title='' )
 
         $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
         . "FROM {$_TABLES['events']} "
-        . "WHERE dateend >= NOW() AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) "
+        . "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) "
         . 'ORDER BY datestart,timestart';
-
+        
         if(( $_CA_CONF['personalcalendars'] == 1 ) && !empty( $_USER['uid'] )) {
             $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
             . "FROM {$_TABLES['personal_events']} "
-            . "WHERE uid = {$_USER['uid']} AND dateend >= NOW()  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) "
+            . "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) "
             . 'ORDER BY datestart, dateend';
         }
 
