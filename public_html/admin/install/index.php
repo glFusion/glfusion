@@ -1098,6 +1098,11 @@ function INST_checkTableExists ($table)
         if (DB_numRows ($result) > 0) {
             $exists = true;
         }
+    } elseif ($_DB_dbms == 'mssql') {
+        $result = DB_Query("SELECT 1 FROM sysobjects WHERE name='{$_TABLES[$table]}' AND xtype='U'");
+        if (DB_numRows ($result) > 0) {
+            $exists = true;
+        }
     }
 
     return $exists;
