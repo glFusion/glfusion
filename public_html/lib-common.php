@@ -3815,15 +3815,15 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
     {
         if( !$list_only )
         {
-            $retval .= '<span class="warningsmall">' . $LANG01[123] . ',</span> ';
+            $retval .= '<span class="warningsmall">' . $LANG01[123] . '</span>, ';
         }
-        $retval .= '<div dir="ltr" class="warningsmall">';
+
     }
     else
     {
         if( !$list_only )
         {
-            $retval .= '<span class="warningsmall">' . $LANG01[31] . '</span> ';
+            $retval .= '<span class="warningsmall">' . $LANG01[31] . ' ';
         }
 
         $allow_page_break = false;
@@ -3850,7 +3850,6 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
             }
         }
 
-        $retval .= '<div dir="ltr" class="warningsmall">';
         foreach( $html as $tag => $attr )
         {
             $retval .= '&lt;' . $tag . '&gt;, ';
@@ -3873,7 +3872,11 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
     {
         $retval .= ', [' . $tag . ':]';
     }
-    $retval .= '</div>';
+
+    if( !$list_only )
+    {
+        $retval .= '</span>';
+    }
 
     return $retval;
 }
