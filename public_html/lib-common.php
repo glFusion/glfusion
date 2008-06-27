@@ -6104,11 +6104,13 @@ function COM_displayMessageAndAbort( $msg, $plugin = '', $http_status = 200, $ht
              . COM_showMessage( $msg, $plugin )
              . COM_siteFooter( true );
 
+/* -----------------------------------------------------
     if( $http_status != 200 )
     {
         header( "HTTP/1.1 $http_status $http_text" );
         header( "Status: $http_status $http_text" );
     }
+-------------------------------------------------------- */
     echo $display;
     exit;
 }
