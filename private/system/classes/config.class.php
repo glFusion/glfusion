@@ -611,7 +611,7 @@ class config {
                 if (!empty($GLOBALS['_CONF']['site_url'])) {
                     $baseUrl = $GLOBALS['_CONF']['site_url'];
                 } else {
-                    $baseUrl = 'http://www.geeklog.net';
+                    $baseUrl = 'http://www.gllabs.org';
                 }
                 if ($group == 'Core') {
                     $descUrl = $baseUrl . '/docs/config.html#desc_' . $o;
