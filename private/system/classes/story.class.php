@@ -645,7 +645,11 @@ class Story
                 $sql .= $fieldname . ', ';
                 if (($fieldname == 'date') || ($fieldname == 'expire')) {
                     // let the DB server do this conversion (cf. timezone hack)
-                    $values .= 'FROM_UNIXTIME(' . $this->{$varname} . '), ';
+                    if (!empty($this->{$varname})) {
+                        $values .= 'FROM_UNIXTIME(' . $this->{$varname} . '), ';
+                    } else {
+                        $values .= "'0000-00-00 00:00:00', ";
+                    }
                 } else {
                     $values .= '\'' . addslashes($this->{$varname}) . '\', ';
                 }
