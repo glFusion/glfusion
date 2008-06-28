@@ -355,8 +355,6 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
         }
     }
 
-
-
     $retval .= $spage->finish($spage->parse('output', 'page'));
     if (($A['sp_inblock'] == 1) && ($A['sp_format'] != 'blankpage')) {
         $retval .= COM_endBlock (COM_getBlockTemplate ('_staticpages_block',
@@ -1082,9 +1080,7 @@ function plugin_autouninstall_staticpages ()
         /* give the full name of the block, including 'phpblock_', etc */
         'php_blocks' => array('phpblock_calendar'),
         /* give all vars with their name */
-        'vars'=> array(),
-        /* give the full name of the plugins config data to be removed from the config table */
-        'config_data' => array('staticpages')
+        'vars'=> array()
     );
 
     return $out;
