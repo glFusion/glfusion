@@ -1,0 +1,179 @@
+glFusion ChangeLog
+
+v1.0.1
+------------
+- Fixed an error when saving a user submitted story directly to the
+  story table (instead of the submission table).  Invalid date for expire
+  date.
+        private/system/classes/story.class.php
+
+- Fixed reference to geeklog.net in config.class.php for the help  links
+        private/system/classes/config.class.php
+
+- Fixed a layout issue with the typography styles (class="arrow"...).
+  The margin-left was set to -2em which prevented the bullets from showing.
+  Changed to 2em which seems to clear it up.
+        public_html/layout/nouveau/style.css
+
+- Updated PLG_uninstall to supress errors for table drop.
+        private/system/lib-plugins.php
+
+- Fixed INST_checkTableExists for MS SQL Support.
+        public_html/admin/install/index.php
+
+- COM_displayErrorandAbort() sends an HTTP header which conflicts with the
+  header sent in COM_siteHeader().  Example, user used trackback URL for a
+  calendar event instead of proper URL, gives Output already started error.
+  Removed the additional header() calls.
+        public_html/lib-common.php
+
+- New comments were not clearing the instance cache for the story or the
+  what's new block. Also deleted comments did not update instance cache
+        private/system/lib-comment.php
+
+- Search results return duplicate entries for stories when URL rewrite enabled.
+        private/system/classes/search.class.php
+
+- Implemented instance caching on stories.
+        private/system/lib-story.php
+        private/system/classes/story.class.php
+
+- Unable to delete some plugins because $_DB_table_prefix and $_TABLES
+  is not defined in plugins.php
+        public_html/admin/plugins.php
+
+- Changed SEC_createToken so that it will only return one token per page
+  (effectively making it a singleton). This fixes the problem of not being able
+  to delete comments when you also have trackbacks for the same article
+        private/system/lib-security.php
+
+- Approving a story submission by saving it from the Admin's story editor left
+  a duplicate in the submission queue, unless you changed the story ID at the
+  same time
+        private/system/lib-story.php
+        private/system/classes/story.class.php
+
+- Removed extra <br> between introtext and body text when viewing the full story
+        private/system/lib-story.php
+
+- Removed unnecessary code ($day is overwritten in the next line).
+        public_html/directory.php
+
+- Installation would fail when MySQL in strict mode when trying to insert the
+  default story into the database (expire field was '').
+        private/sql/mysql_tableanddata.php
+
+Calendar plugin
+---------------
+- Calendar block now includes events from the current day (in progress or all
+  day events.
+        private/plugins/calendar/functions.inc
+
+Forum plugin
+------------
+- Fixed issue where the 'View all New Posts' link was not being displayed.
+        public_html/forum/index.php
+
+Links plugin
+------------
+- Fixed SQL error when trying to change a category id to an already existing id
+- Fixed new category silently overwriting an existing category if they had the
+  same id
+        private/plugins/links/language/english.php
+        private/plugins/links/language/english_utf-8.php
+        public_html/admin/plugins/links/category.php
+
+
+FCKEditor
+---------
+- Updated to v2.6.1 Production Release (Opera 9.50 fixes, upload fix)
+        public_html\fckeditor\_whatsnew.html
+        public_html\fckeditor\_whatsnew_history.html
+        public_html\fckeditor\editor\_source\classes\fckeditingarea.js
+        public_html\fckeditor\editor\_source\commandclasses\fckfitwindow.js
+        public_html\fckeditor\editor\_source\fckeditorapi.js
+        public_html\fckeditor\editor\_source\internals\fck_gecko.js
+        public_html\fckeditor\editor\_source\internals\fckbrowserinfo.js
+        public_html\fckeditor\editor\_source\internals\fckdialog.js
+        public_html\fckeditor\editor\dialog\common\fck_dialog_common.js
+        public_html\fckeditor\editor\dialog\fck_about.html
+        public_html\fckeditor\editor\dialog\fck_flash\fck_flash.js
+        public_html\fckeditor\editor\dialog\fck_image\fck_image.js
+        public_html\fckeditor\editor\dialog\fck_link\fck_link.js
+        public_html\fckeditor\editor\dialog\fck_replace.html
+        public_html\fckeditor\editor\fckdialog.html
+        public_html\fckeditor\editor\fckeditor.html
+        public_html\fckeditor\editor\fckeditor.original.html
+        public_html\fckeditor\editor\filemanager\browser\default\browser.html
+        public_html\fckeditor\editor\filemanager\browser\default\frmactualfolder.html
+        public_html\fckeditor\editor\filemanager\browser\default\js\common.js
+        public_html\fckeditor\editor\filemanager\connectors\asp\basexml.asp
+        public_html\fckeditor\editor\filemanager\connectors\asp\io.asp
+        public_html\fckeditor\editor\filemanager\connectors\cfm\cf5_upload.cfm
+        public_html\fckeditor\editor\filemanager\connectors\cfm\cf_io.cfm
+        public_html\fckeditor\editor\filemanager\connectors\lasso\upload.lasso
+        public_html\fckeditor\editor\filemanager\connectors\perl\commands.pl
+        public_html\fckeditor\editor\filemanager\connectors\php\io.php
+        public_html\fckeditor\editor\filemanager\connectors\py\fckoutput.py
+        public_html\fckeditor\editor\js\fckeditorcode_gecko.js
+        public_html\fckeditor\editor\js\fckeditorcode_ie.js
+        public_html\fckeditor\editor\lang\_translationstatus.txt
+        public_html\fckeditor\editor\lang\it.js
+        public_html\fckeditor\fckeditor.js
+
+    Deleted (Removed)
+
+        public_html\fckeditor\editor\lang\_getfontformat.html
+        public_html\fckeditor\editor\filemanager\connectors\php\sanitizer.php
+        public_html\fckeditor\editor\dialog\fck_find.html
+
+Documentation
+-------------
+- Updated history document to reflect changes from Geeklog core
+        public_html/docs/history
+
+
+v1.0.0 - June 18, 2008
+
+- [General] Fixed error where static pages would not print with url rewrite on
+- [General] Fixed issue where RSS feed did not put <br> on plain text posts
+- [Themes]  In both Professional and Nouveau add ?ver=100 to style.css to force reload.
+- [Install] New install, set the time for the sample PDF file in FileMgmt to install date.
+- [Plugin]  Calendar - Fixed a XHTML error on Upcoming Event block
+- [General] Added additional CACHE_remove_instance('whatsnew'); to stories, comments, file mgmt, media gallery.
+- [Plugin]  Site Tailor - sitetailor.admin could not completely admister menus.
+- [General] Datepicker only went back 1 year, made it difficult to edit older stories.
+            Datepicker code would also force the date today.
+- [General] Conflict with remove() javascript function caused X to fail in configuration.
+- [General] Added the custom/ directories to each theme directory
+- [General] Menu would display non-logged in user only options to root users
+- [Plugin]  Media Gallery - Set default value for 'Update Parent Time on Upload' to false.
+- [General] PHP5 compatibility check, ensure file_put_contents() is available on PHP4
+- [General] Better styling on datapicker icon and pop-up
+
+v1.0.0rc2 - June 11, 2008
+
+- [Style]   Commented out the style for <hr> it was breaking the calendar display [mark]
+- [Plugin]  Calendar - I broke CAPTCHA support with the previous core sync [mark]
+- [Plugin]  Calendar - Add personal event submission broken [mark]
+- [Plugin]  Media Gallery - Fixed error where an album would get dropped from the main index if the columns set to 4 [mark]
+- [Genera]  Enhanced the What's New caching, now Media Gallery, Links, Comments, and Trackbacks will force a cache rebuild upon save [mark]
+- [Plugin]  Forum quote background image and text [eric]
+- [General] Cache Timeout should be configurable for What's New Block [mark]
+- [Install] Added a permission check on install to ensure FileMgmt config directory is writable.[mark]
+- [Plugin]  Media Gallery: Fixed bug in main album index where an album would disappear from the display. [mark]
+- [Plugin]  Site Tailor: Now accepts quotes in label. [mark]
+- [General] Footer RSS feed was hard coded to glfusion.rss, now uses the filename from the configuration [mark]
+- [General] Implemented a method to have custom/ template themes. [mark]
+- [General] RSS feed was not updating properly. [mark]
+- [General] Nouveua has a old copy of style.css in the css/ directory, removed it. [mark]
+- [General] Forum plugin uses id=fileattachlist multiple times when displaying topic, removed the <div> [mark]
+- [Theme]   Noveau's style.css has references to professional theme's images. [mark]
+- [General] Site Tailor - sitetailor.png missing alt="" [mark]
+- [Install] Link in default featured story to change password not resolving properly, removed link. [mark]
+- [General] Noveau's functions.php still requires the professional theme be installed [mark]
+- [Theme]   When Advanced Editor is used, there was a 'ghost' box at bottom of page [mark]
+- [Install] Modifed distribution to use private/ and public_html/ folders. [mark]
+
+v1.0.0rc1 - June 8, 2008
+- Initial Public Release
