@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- Allow remote users to use the webservices
+        private/system/lib-webservices.
+
+- Updated hebrew-utf_8.php
+        private/language/hebrew-utf_8.php
+
 - Fixed an error when saving a user submitted story directly to the
   story table (instead of the submission table).  Invalid date for expire
   date.
@@ -83,6 +89,11 @@ Links plugin
         private/plugins/links/language/english_utf-8.php
         public_html/admin/plugins/links/category.php
 
+Staticpages plugin
+- Removed unused 'config_data' entry from the plugin uninstall function
+        private/plugins/staticpages/functions.inc
+- Fixed E_ALL errors
+        private/plugins/staticpages/services.inc.php
 
 FCKEditor
 ---------
