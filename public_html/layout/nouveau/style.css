@@ -1514,18 +1514,18 @@ text-decoration:none;
 white-space:nowrap;
 display:block;
 float:left;
-line-height:27px;
+line-height:2.2em;
 font-weight:700;
 color:#ccc;
-height:27px;
+height:2.2em;
 font-size:1em;
-padding:0 15px;
+padding:0 1.2em;
 }
 
 #gl_moomenu {
 /* background:url(images/gl_moomenu1-bg.gif) repeat; */
 /*background:transparent url(images/horiz-menu-bg.png) repeat-x scroll 0pt; */
-height:27px;
+height:2.2em;
 position:relative;
 z-index:50;
 margin:0;
@@ -1586,16 +1586,16 @@ font-weight:400;
 display:block;
 text-decoration:none;
 float:none;
-height:30px;
-line-height:30px;
-text-indent:18px;
+height:2.3em;
+line-height:2.3em;
+text-indent:1.3em;
 width:98%;
 margin:0;
 padding:0;
 }
 
 .gl_moomenu {
-line-height:1;
+line-height:2.3em;
 float:left;
 margin-bottom:1.5em;
 position:relative;
@@ -1621,13 +1621,13 @@ z-index:51;
 float:none;
 left:-999em;
 position:absolute;
-width:177px;
+width:14.6em;
 z-index:50;
 }
 
 .gl_moomenu li:hover ul,.gl_moomenu li.sfHover ul {
 left:-1px;
-top:27px;
+top:2.2em;
 }
 
 .gl_moomenu li:hover li ul,.gl_moomenu li.sfHover li ul,.gl_moomenu li li:hover li ul,.gl_moomenu li li.sfHover li ul,.gl_moomenu li li li:hover li ul,.gl_moomenu li li li.sfHover li ul {
@@ -1635,7 +1635,7 @@ top:-999em;
 }
 
 .gl_moomenu li li:hover ul,.gl_moomenu li li.sfHover ul,.gl_moomenu li li li:hover ul,.gl_moomenu li li li.sfHover ul,.gl_moomenu li li li li:hover ul,.gl_moomenu li li li li.sfHover ul {
-left:178px;
+left:14.65em;
 top:-1px;
 z-index:50;
 }
