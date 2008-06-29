@@ -2,6 +2,15 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- Fixed output already sent errors when using the custom glFusion / Nouveau
+  functions.php (speed limit on login attempts).
+        public_html/layout/nouveau/functions.php
+
+- OpenID logins succeed for first timers even when
+  $_CONF['disable_new_user_registration'] is true. No longer allow user to
+  login if they do not have an existing record in the user table.
+        private/system/classes/openidhelper.class.php
+
 - Allow remote users to use the webservices
         private/system/lib-webservices.
 
