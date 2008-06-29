@@ -69,7 +69,7 @@ class SimpleActionHandler extends ActionHandler {
     // Callbacks.
     function doValidLogin($login)
     {
-        global $_TABLES, $status, $uid;
+        global $_CONF, $_TABLES, $status, $uid;
 
         // Remote auth precludes usersubmission,
         // and integrates user activation, see?;
@@ -88,6 +88,13 @@ class SimpleActionHandler extends ActionHandler {
         $nrows = DB_numRows($result);
         if (!($tmp == 0) || !($nrows == 1)) {
             // First time login with this OpenID, creating account...
+
+            if ( $_CONF['disable_new_user_registration'] ) {
+                // not strictly correct - just to signal a failed login attempt
+                $status = USER_ACCOUNT_DISABLED;
+                $uid = 0;
+                return;
+            }
 
             if (empty($openid_nickname)) {
                 $openid_nickname = $this->makeUsername($this->query['openid_identity']);
