@@ -2,6 +2,13 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- Fixed broken images:
+        public_html/images/openid_login.icon.png
+        public_html/images/right_arrow.png
+
+- Removed old, commented out code. Cosmetic update only.
+        public_html/article.php
+
 - Fixed output already sent errors when using the custom glFusion / Nouveau
   functions.php (speed limit on login attempts).
         public_html/layout/nouveau/functions.php
