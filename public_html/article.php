@@ -125,12 +125,6 @@ if ($A['count'] > 0) {
             }
         }
     }
-
-    /*$access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
-            $A['perm_owner'], $A['perm_group'], $A['perm_members'],
-            $A['perm_anon']);
-    if (($access == 0) OR !SEC_hasTopicAccess ($A['tid']) OR
-        (($A['draft_flag'] == 1) AND !SEC_hasRights ('story.edit'))) {*/
     if ($output == STORY_PERMISSION_DENIED) {
         $display .= COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
                  . COM_startBlock ($LANG_ACCESS['accessdenied'], '',
