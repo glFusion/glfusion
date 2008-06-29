@@ -109,6 +109,13 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
            $theme_headercode, $theme_layout, $gllabsMooToolsLoaded,
            $mbMenuConfig;
 
+    static $headerCalled = 0;
+
+    if ( $headerCalled == 1 ) {
+        return '';
+    }
+    $headerCalled = 1;
+
     $theme_what         = $what;
     $theme_pagetitle    = $pagetitle;
     $theme_headercode   = $headercode;
