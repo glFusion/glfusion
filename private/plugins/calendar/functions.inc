@@ -98,7 +98,7 @@ function plugin_getmenuitems_calendar ()
 */
 function phpblock_calendar( $help='', $title='' )
 {
-    global $_CONF, $_TABLES, $_USER, $_CA_CONF, $LANG_CAL_1;
+    global $_CONF, $_TABLES, $_USER, $_CA_CONF, $LANG_CAL_1, $_DB_dbms;
 
     $retval = '';
 
@@ -118,15 +118,23 @@ function phpblock_calendar( $help='', $title='' )
         }
 
         $eventSql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
-        . "FROM {$_TABLES['events']} "
-        . "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) "
-        . 'ORDER BY datestart,timestart';
+        . "FROM {$_TABLES['events']} ";
+        if($_DB_dbms == 'mssql') {
+            $eventSql .= "WHERE dateend >= DATEADD(hh, 24, NOW()) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
+        } else {
+            $eventSql .= "WHERE dateend >= (getUTCDate() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";            
+        }
+        $eventSql .= 'ORDER BY datestart,timestart';
         
         if(( $_CA_CONF['personalcalendars'] == 1 ) && !empty( $_USER['uid'] )) {
             $personaleventsql = 'SELECT eid,title,url,datestart,dateend,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon '
-            . "FROM {$_TABLES['personal_events']} "
-            . "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) "
-            . 'ORDER BY datestart, dateend';
+            . "FROM {$_TABLES['personal_events']} ";
+            if($_DB_dbms == 'mssql') {
+                $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= DATEADD(hh, 24, getUTCDate())  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
+            } else {
+                $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
+            }
+            $personaleventsql .= 'ORDER BY datestart, dateend';
         }
 
         $allEvents = DB_query( $eventSql );
