@@ -182,6 +182,7 @@ input.inputSubmit,
 input.inputButton,
 .block-box-left h2,
 .block-box-right h2,
+.commentbar-line2,
 .pluginSubTable,
 .pluginSolidOutline,
 .ng-selected-day {
@@ -220,7 +221,6 @@ div#frame,
 	background-color:#4D77CC;
 }
 /***************************************************** BEGIN #E5E5E5 ***************/
-.commentbar-line2,
 .pluginRow1 .pluginRollOver,
 .pluginRow2 .pluginRollOver,
 .pluginRollOver,
@@ -230,10 +230,6 @@ div#frame,
 
 .commenttitle {
 	border:1px solid #E5E5E5;
-}
-
-.commentbar-line3 {
-	border-top:1px solid #E5E5E5;
 }
 /***************************************************** BEGIN #F2F2F2 ***************/
 .commenttitle,
