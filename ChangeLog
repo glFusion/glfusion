@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- MSSQL Isntaller fixes.
+        private/sql/mssql_tableanddata.php
+
+- MSSQL issues resolved in calendar plugin and in CSRF tokens.
+        private/system/lib-security.php
+
 - Switched menu units from px to em to scale properly (Eric)
         public_html/layout/nouveau/style.css
 
@@ -117,6 +123,9 @@ v1.0.1
 
 Calendar plugin
 ---------------
+- MSSQL issues resolved in calendar plugin and in CSRF tokens.
+        private/plugins/calendar/functions.inc
+
 - Calendar block now includes events from the current day (in progress or all
   day events.
         private/plugins/calendar/functions.inc
