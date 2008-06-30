@@ -2,6 +2,36 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- Switched menu units from px to em to scale properly (Eric)
+        public_html/layout/nouveau/style.css
+
+- Added default moospring images (Eric)
+        public_html/layout/nouveau/images/grabit.jpg
+        public_html/layout/nouveau/images/joinus.jpg
+        public_html/layout/nouveau/images/readit.jpg
+        public_html/layout/nouveau/images/sayit.jpg
+
+- Updated icons in Command n Control to reflect those in gl Labs wiki (Eric)
+        public_html/admin/plugins/spamx/images/spamx.png
+        public_html/calendar/images/calendar.png
+        public_html/filemgmt/images/filemgmt.jpg
+        public_html/layout/nouveau/images/icons/block.png
+        public_html/layout/nouveau/images/icons/configuration.png
+        public_html/layout/nouveau/images/icons/database.png
+        public_html/layout/nouveau/images/icons/docs.png
+        public_html/layout/nouveau/images/icons/event.png
+        public_html/layout/nouveau/images/icons/group.png
+        public_html/layout/nouveau/images/icons/mail.png
+        public_html/layout/nouveau/images/icons/plugins.png
+        public_html/layout/nouveau/images/icons/story.png
+        public_html/layout/nouveau/images/icons/topic.png
+        public_html/layout/nouveau/images/icons/user.png
+        public_html/layout/nouveau/images/icons/versioncheck.png
+        public_html/staticpages/images/staticpages.png
+
+- Fix for story instance caching, now use permission hash in instance name.
+        private/system/lib-story.php
+
 - Fixed broken images:
         public_html/images/openid_login.icon.png
         public_html/images/right_arrow.png
