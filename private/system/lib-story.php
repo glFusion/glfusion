@@ -67,7 +67,7 @@ define('STORY_MAX_ID_LENGTH', 40);
 function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $query='')
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG05, $LANG11, $LANG_TRB,
-           $_IMAGE_TYPE, $mode;
+           $_IMAGE_TYPE, $mode, $_GROUPS;
 
     static $storycounter = 0;
 
@@ -114,7 +114,9 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     {
         $article_filevar = 'article';
     }
-    $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar;
+    $groups = implode($_GROUPS,'');
+    $hash = md5($groups);
+    $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar.$hash;
     if ( !empty($query) || !$article->check_instance($instance_id,$article_filevar)) {
     // end of instance cache
 
