@@ -719,7 +719,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $newcomment = $comment;
             if (!empty ($sig)) {
                 if (($postmode == 'html') || ($fakepostmode == 'html')) {
-                    $newcomment .= '<p>---<br' . XHTML . '>' . nl2br ($sig);
+                    $newcomment .= '<p>---<br' . XHTML . '>' . nl2br ($sig) . '</p>';
                 } else {
                     $newcomment .= LB . LB . '---' . LB . $sig;
                 }
@@ -925,7 +925,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     }
     if (!empty ($sig)) {
         if ($postmode == 'html') {
-            $comment .= '<p>---<br' . XHTML . '>' . nl2br($sig);
+            $comment .= '<p>---<br' . XHTML . '>' . nl2br($sig) . '</p>';
         } else {
             $comment .= LB . LB . '---' . LB . $sig;
         }
