@@ -304,7 +304,7 @@ class Search {
                 $A['title'] = str_replace ('$', '&#36;', $A['title']);
                 $thetime = COM_getUserDateTimeFormat ($A['day']);
                 $articleUrl = COM_buildUrl($_CONF['site_url']
-                                    . '/article.php?sotry=' . $A['sid']);
+                                    . '/article.php?story=' . $A['sid']);
                 if (!empty($this->_query)) {
                     $articleUrl .= (strpos($articleUrl,'?') ? '&amp;' : '?') .'query=' . urlencode($this->_query);
                 }
