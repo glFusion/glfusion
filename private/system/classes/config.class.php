@@ -112,7 +112,9 @@ class config {
         $result = DB_query($sql_query);
         while ($row = DB_fetchArray($result)) {
             if ($row[1] !== 'unset') {
-                $this->config_array[$row[2]][$row[0]] = unserialize($row[1]);
+                if(!array_key_exists($row[2], $this->config_array) || !array_key_exists($row[0], $this->config_array[$row[2]])) {
+                    $this->config_array[$row[2]][$row[0]] = unserialize($row[1]);
+                }
             }
         }
         $this->_post_configuration();
