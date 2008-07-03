@@ -52,10 +52,6 @@ class mbElement {
         $this->id               = 0;
         $this->menu_id          = 0;
         $this->group_id         = 0;
-        $this->perm_owner       = 3;
-        $this->perm_group       = 2;
-        $this->perm_members     = 2;
-        $this->perm_anon        = 2;
     }
 
     function constructor( $element, $meadmin, $root, $groups ) {
@@ -70,10 +66,6 @@ class mbElement {
         $this->url              = (!empty($element['element_url']) && $element['element_url'] != ' ') ? $element['element_url'] : '';
         $this->target           = $element['element_target'];
         $this->group_id         = $element['group_id'];
-        $this->perm_owner       = 3;
-        $this->perm_group       = $element['perm_group'];
-        $this->perm_members     = $element['perm_members'];
-        $this->perm_anon        = $element['perm_anon'];
         $this->setAccessRights($meadmin,$root,$groups);
     }
 
