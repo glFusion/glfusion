@@ -495,6 +495,8 @@ class Story
                     return STORY_PERMISSION_DENIED;
                 } elseif ($this->_access == 2 && $mode != 'view') {
                     return STORY_EDIT_DENIED;
+                } elseif ((($this->_access == 2) && ($mode == 'view')) && (($this->_draft_flag == 1) || ($this->_date > time()))) {
+                    return STORY_INVALID_SID;
                 }
             } else {
                 return STORY_INVALID_SID;
@@ -713,11 +715,20 @@ class Story
             } else {
                 $article = DB_fetchArray($result);
                 /* Check Security */
+
+                $access = SEC_hasAccess($article['owner_id'], $article['group_id'], $article['perm_owner'], $article['perm_group'],
+                                    $article['perm_members'], $article['perm_anon']);
+                $taccess = min($access, SEC_hasTopicAccess($this->_tid));
+                if ( $taccess < 3 ) {
+                    return STORY_EXISTING_NO_EDIT_PERMISSION;
+                }
+/* -----------------------------
                 if (SEC_hasAccess($article['owner_id'], $article['group_id'],
                         $article['perm_owner'], $article['perm_group'],
                         $article['perm_members'], $article['perm_anon']) < 3) {
                     return STORY_EXISTING_NO_EDIT_PERMISSION;
                 }
+-------------------------------- */
             }
         }
 
@@ -808,6 +819,9 @@ class Story
     function loadSubmission()
     {
         $array = $_POST;
+
+        $this->_expire = time();
+        $this->_expiredate = 0;
 
         // Handle Magic GPC Garbage:
         while (list($key, $value) = each($array))

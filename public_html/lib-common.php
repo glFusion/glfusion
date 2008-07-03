@@ -1627,13 +1627,13 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
 * @return   string  Formated HTML of option values
 *
 */
-function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = false )
+function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = false, $access = 2 )
 {
     global $_TABLES;
 
     $retval = '';
 
-    $topics = COM_topicArray($selection, $sortcol, $ignorelang);
+    $topics = COM_topicArray($selection, $sortcol, $ignorelang, $access);
     foreach ($topics as $tid => $topic) {
         $retval .= '<option value="' . $tid . '"';
         if ($tid == $selected) {
@@ -1656,7 +1656,7 @@ function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = 
 * @see function COM_topicList
 *
 */
-function COM_topicArray($selection, $sortcol = 0, $ignorelang = false)
+function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access = 2)
 {
     global $_TABLES;
 
@@ -1667,9 +1667,9 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false)
 
     $sql = "SELECT $selection FROM {$_TABLES['topics']}";
     if ($ignorelang) {
-        $sql .= COM_getPermSQL();
+        $sql .= COM_getPermSQL('WHERE',0,3);
     } else {
-        $permsql = COM_getPermSQL();
+        $permsql = COM_getPermSQL('WHERE',0,3);
         if (empty($permsql)) {
             $sql .= COM_getLangSQL('tid');
         } else {
@@ -3052,7 +3052,16 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
     }
 
     if ( $_CONF['use_safe_html'] == TRUE ) {
-        $str = htmLawed($str,array('safe'=>1,'balance'=>1,'valid_xhtml'=>1));
+        $str = htmLawed($str,array('safe'=>1,'elements'=>'*+embed+object','balance'=>1,'valid_xhtml'=>0));
+/*        $str = htmLawed($str,
+                array(  'comments'=>0,
+                        'cdata'=>0,
+                        'balance'=>1,
+                        'valid_xhtml'=>0,
+                        'deny_attribute'=>'on*',
+                        'elements'=>'*-applet-iframe-object-script',
+                        'scheme'=>'href: ftp, http, https, mailto,; *:file, http, https'));
+*/
     } else {
         $str = kses($str,$html,$allowedProtocols);
     }

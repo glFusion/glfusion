@@ -528,7 +528,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
         $story->setTid($currenttopic);
     }
     $story_templates->set_var ('topic_options',
-                               COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true));
+                               COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3));
     $story_templates->set_var('lang_show_topic_icon', $LANG24[56]);
     if ($story->EditElements('show_topic_icon') == 1) {
         $story_templates->set_var('show_topic_icon_checked', 'checked="checked"');
