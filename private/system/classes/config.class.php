@@ -156,7 +156,17 @@ class config {
     {
         global $_TABLES, $_DB, $_DB_dbms;
 
-        $escaped_val = addslashes(serialize($value));
+        if ( $name == 'language_files' ) {
+            if ( count($value) < 1 ) {
+                $escaped_val = 'unset';
+            } else {
+                $escaped_val = addslashes(serialize($value));
+            }
+        } else {
+            $escaped_val = addslashes(serialize($value));
+        }
+
+//        $escaped_val = addslashes(serialize($value));
         $escaped_name = addslashes($name);
         $escaped_grp = addslashes($group);
         $sql_query = "UPDATE {$_TABLES['conf_values']} " .
