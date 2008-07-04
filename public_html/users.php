@@ -658,7 +658,8 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
     }
 
     // OpenID remote authentification.
-    if ($_CONF['user_login_method']['openid'] && !$_CONF['usersubmission']) {
+    if ($_CONF['user_login_method']['openid'] && ($_CONF['usersubmission'] == 0)
+            && !$_CONF['disable_new_user_registration']) {
         $user_templates->set_file('openid_login', '../loginform_openid.thtml');
         $user_templates->set_var('lang_openid_login', $LANG01[128]);
         $user_templates->set_var('input_field_size', 40);
@@ -815,9 +816,9 @@ function displayLoginErrorAndAbort($msg, $message_title, $message_text)
             function_exists('CUSTOM_loginErrorHandler')) {
         // Typically this will be used if you have a custom main site page
         // and need to control the login process
-        $display .= CUSTOM_loginErrorHandler($msg);
+        CUSTOM_loginErrorHandler($msg);
     } else {
-        $retval .= COM_siteHeader('menu', $message_title)
+        $retval = COM_siteHeader('menu', $message_title)
                 . COM_startBlock($message_title, '',
                                  COM_getBlockTemplate('_msg_block', 'header'))
                 . $message_text
@@ -1063,7 +1064,10 @@ default:
         //pass $loginname by ref so we can change it ;-)
         $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
 
-    } elseif (($_CONF['usersubmission'] == 0) && $_CONF['user_login_method']['openid'] && (isset($_GET['openid_login']) && ($_GET['openid_login'] == '1'))) {
+    } elseif ($_CONF['user_login_method']['openid'] &&
+            ($_CONF['usersubmission'] == 0) &&
+            !$_CONF['disable_new_user_registration'] &&
+            (isset($_GET['openid_login']) && ($_GET['openid_login'] == '1'))) {
         // Here we go with the handling of OpenID authentification.
 
         $query = array_merge($_GET, $_POST);
