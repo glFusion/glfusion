@@ -9,6 +9,9 @@ v1.0.1
         public_html/layout/nouveau/style.css
         public_html/layout/nouveau/style-colors.css
 
+- Fixed a HTML validation bug where the closing paragraph tag wasn't created.
+        private/system/lib-comment.php
+
 - Allow overriding of rootdebug or other core config variables in
   siteconfig.php for emergency debugging.
         private/system/classes/config.class.php
