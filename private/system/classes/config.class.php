@@ -168,7 +168,6 @@ class config {
             $escaped_val = addslashes(serialize($value));
         }
 
-//        $escaped_val = addslashes(serialize($value));
         $escaped_name = addslashes($name);
         $escaped_grp = addslashes($group);
         $sql_query = "UPDATE {$_TABLES['conf_values']} " .
@@ -181,8 +180,10 @@ class config {
         } else {
             DB_query($sql_query);
         }
-        $this->config_array[$group][$name] = $value;
-        $this->_post_configuration();
+        if ( $name != 'theme' )  {
+            $this->config_array[$group][$name] = $value;
+            $this->_post_configuration();
+        }
     }
 
     /**
