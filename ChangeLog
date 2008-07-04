@@ -2,6 +2,32 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- Allow overriding of rootdebug or other core config variables in
+  siteconfig.php for emergency debugging.
+        private/system/classes/config.class.php
+        public_html/siteconfig.php.dist
+
+- Fixed a security issue that allowed users to view future stories
+  and draft stories if they knew the story id.
+        private/system/classes/story.class.php
+
+- Updated htmLawed to v1.1
+        private/system/classes/htmLawed.php
+
+- Coded a ugly fix to the configuration routine to 'unset' language files
+  used for multi-lingual sites. If you now delete all the attributes, the
+  main setting will revert back to 'unset'.
+        private/system/classes/config.class.php
+
+- Users with story.edit permission could post stories to topics they
+  did not have write permissions to.  Now only present a list of topics
+  the user has permission to write. Also added additional check in
+  story.class.php to validate the user has the necessary topic permissions
+  when editing / saving a story.
+        public_html/lib-common.php
+        public_html/admin/story.php
+        private/system/classes/story.class.php
+
 - MSSQL Isntaller fixes.
         private/sql/mssql_tableanddata.php
 
@@ -10,6 +36,7 @@ v1.0.1
 
 - Switched menu units from px to em to scale properly (Eric)
         public_html/layout/nouveau/style.css
+        public_html/layout/nouveau/css/ie6.css
 
 - Added default moospring images (Eric)
         public_html/layout/nouveau/images/grabit.jpg
@@ -144,7 +171,13 @@ Links plugin
         private/plugins/links/language/english_utf-8.php
         public_html/admin/plugins/links/category.php
 
+Site Tailor plugin
+------------------
+- Fixed a E_ALL error - removed references to individual perm_ options
+        private/plugins/sitetailor/classes/classMenuElement.php
+
 Staticpages plugin
+------------------
 - Removed unused 'config_data' entry from the plugin uninstall function
         private/plugins/staticpages/functions.inc
 - Fixed E_ALL errors
@@ -197,7 +230,10 @@ Documentation
 -------------
 - Updated history document to reflect changes from Geeklog core
         public_html/docs/history
-
+- Added missing config.html documentation file
+        public_html/docs/config.html
+- Updated main documentation index page
+        public_html/docs/index.html
 
 v1.0.0 - June 18, 2008
 
