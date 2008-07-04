@@ -3,6 +3,8 @@ Geeklog History/Changes:
 ??? ??, 2008 (1.5.1)
 ------------
 
+- Enabled siteconfig.php to override database config in core, primarily for
+  rootdebug. [bug 0000673] [Mike]
 - Allow remote users to use the webservices (bug #0000640). Due to the
   authentication it is not possible for OpenID users to use the webservices.
   Other remote users will have to use the form username@servicename for their
