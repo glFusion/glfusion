@@ -3507,7 +3507,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
         $commonsql .= " AND (bid NOT IN ($BOXES) OR bid = '-1')";
     }
 
-    $commonsql .= ' ORDER BY blockorder,title asc';
+    $commonsql .= ' ORDER BY blockorder,title ASC';
 
     $blocksql['mysql'] .= $commonsql;
     $blocksql['mssql'] .= $commonsql;
@@ -3572,6 +3572,29 @@ function COM_formatBlock( $A, $noboxes = false )
     global $_CONF, $_TABLES, $_USER, $LANG21;
 
     $retval = '';
+
+    $lang = COM_getLanguageId();
+    if (!empty($lang)) {
+
+        $blocksql['mssql']  = "SELECT bid, is_enabled, name, type, title, tid, blockorder, cast(content as text) as content, ";
+        $blocksql['mssql'] .= "rdfurl, rdfupdated, rdflimit, onleft, phpblockfn, help, owner_id, ";
+        $blocksql['mssql'] .= "group_id, perm_owner, perm_group, perm_members, perm_anon, allow_autotags,UNIX_TIMESTAMP(rdfupdated) AS date ";
+
+        $blocksql['mysql'] = "SELECT *,UNIX_TIMESTAMP(rdfupdated) AS date ";
+
+        $commonsql = "FROM {$_TABLES['blocks']} WHERE name = '"
+                   . $A['name'] . '_' . $lang . "'";
+
+        $blocksql['mysql'] .= $commonsql;
+        $blocksql['mssql'] .= $commonsql;
+        $result = DB_query( $blocksql );
+
+        if (DB_numRows($result) == 1) {
+            // overwrite with data for language-specific block
+            $A = DB_fetchArray($result);
+        }
+    }
+
     if( $A['type'] == 'portal' )
     {
         if( COM_rdfCheck( $A['bid'], $A['rdfurl'], $A['date'], $A['rdflimit'] ))
@@ -6317,20 +6340,21 @@ function COM_getLanguage()
 * @return   string              language ID, e.g 'en'; empty string on error
 *
 */
-function COM_getLanguageId( $language = '' )
+function COM_getLanguageId($language = '')
 {
     global $_CONF;
 
-    if( empty( $language ))
-    {
+    if (empty($language)) {
         $language = COM_getLanguage();
     }
 
-    $lang_id = array_search( $language, $_CONF['language_files'] );
-    if( $lang_id === false)
-    {
+    $lang_id = false;
+    if (isset($_CONF['language_files'])) {
+        $lang_id = array_search($language, $_CONF['language_files']);
+    }
+    if ($lang_id === false) {
         // that looks like a misconfigured $_CONF['language_files'] array ...
-        COM_errorLog( 'Language "' . $language . '" not found in $_CONF[\'language_files\'] array!' );
+        COM_errorLog('Language "' . $language . '" not found in $_CONF[\'language_files\'] array!');
 
         $lang_id = ''; // not much we can do here ...
     }
@@ -6570,8 +6594,8 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
         if($_CONF['rootdebug'] || SEC_inGroup('Root'))
         {
             echo("
-                An error has occurred:<br" . XHTML . ">
-                $errno - $errstr @ $errfile line $errline<br" . XHTML . ">
+                An error has occurred:<br>
+                $errno - $errstr @ $errfile line $errline<br>
             <pre>");
             ob_start();
             var_dump($errcontext);
