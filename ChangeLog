@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- Fixed a bug that would cause the header to not load properly when changing
+  the theme.
+        private/system/classes/config.class.php
+
 - Updated layout and spacing of comments to be more visually pleasing (Eric)
         public_html/layout/nouveau/comment/comment.thtml
         public_html/layout/nouveau/comment/commentbar.thtml
