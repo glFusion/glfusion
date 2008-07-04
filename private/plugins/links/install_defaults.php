@@ -56,6 +56,7 @@ global $_LI_DEFAULT;
 /**
 * the link plugin's config array
 */
+global $_LI_DEFAULT;
 $_LI_DEFAULT = array();
 
 /**

@@ -47,6 +47,7 @@ if (strpos($_SERVER['PHP_SELF'], 'install_defaults.php') !== false) {
  */
 
 global $_PO_DEFAULT;
+$_PO_DEFAULT = array();
 
 // when set to 1 will only allow logged-in users to view the list of past polls
 $_PO_DEFAULT['pollsloginrequired'] = 0;

@@ -47,6 +47,7 @@ if (strpos($_SERVER['PHP_SELF'], 'install_defaults.php') !== false) {
  */
 
 global $_SPX_DEFAULT;
+$_SPX_DEFAULT = array();
 
 // Default Spam-X Action
 $_SPX_DEFAULT['action'] = 128; // Default is to ignore (delete) the post

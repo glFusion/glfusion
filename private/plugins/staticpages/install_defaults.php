@@ -48,6 +48,7 @@ if (strpos($_SERVER['PHP_SELF'], 'install_defaults.php') !== false) {
  */
 
 global $_SP_DEFAULT;
+$_SP_DEFAULT = array();
 
 // If you don't plan on using PHP code in static pages, you should set this
 // to 0, thus disabling the execution of PHP.
