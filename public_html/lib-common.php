@@ -2363,7 +2363,7 @@ function COM_userMenu( $help='', $title='' )
         }
 
         // OpenID remote authentification.
-        if ($_CONF['user_login_method']['openid'] && !$_CONF['usersubmission']) {
+        if ($_CONF['user_login_method']['openid'] && ($_CONF['usersubmission'] == 0) && !$_CONF['disable_new_user_registration']) {
             $login->set_file('openid_login', 'loginform_openid.thtml');
             $login->set_var('lang_openid_login', $LANG01[128]);
             $login->set_var('input_field_size', 18);
@@ -6262,30 +6262,23 @@ function COM_getLanguageFromBrowser()
 
     $retval = '';
 
-    if( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ))
-    {
-        $accept = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
-        foreach( $accept as $l )
-        {
-            $l = explode( ';', trim( $l ));
+    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        $accept = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        foreach ($accept as $l) {
+            $l = explode(';', trim($l));
             $l = $l[0];
-            if( array_key_exists( $l, $_CONF['language_files'] ))
-            {
+            if (array_key_exists($l, $_CONF['language_files'])) {
                 $retval = $_CONF['language_files'][$l];
                 break;
-            }
-            else
-            {
-                $l = explode( '-', $l );
+            } else {
+                $l = explode('-', $l);
                 $l = $l[0];
-                if( array_key_exists( $l, $_CONF['language_files'] ))
-                {
+                if (array_key_exists($l, $_CONF['language_files'])) {
                     $retval = $_CONF['language_files'][$l];
                     break;
                 }
             }
         }
-
     }
 
     return $retval;
@@ -6303,24 +6296,17 @@ function COM_getLanguage()
 
     $langfile = '';
 
-    if( !empty( $_USER['language'] ))
-    {
+    if (!empty($_USER['language'])) {
         $langfile = $_USER['language'];
-    }
-    else if( !empty( $_COOKIE[$_CONF['cookie_language']] ))
-    {
+    } elseif (!empty($_COOKIE[$_CONF['cookie_language']])) {
         $langfile = $_COOKIE[$_CONF['cookie_language']];
-    }
-    else
-    {
+    } elseif (isset($_CONF['languages'])) {
         $langfile = COM_getLanguageFromBrowser();
     }
 
     $langfile = COM_sanitizeFilename($langfile);
-    if( !empty( $langfile ))
-    {
-        if( is_file( $_CONF['path_language'] . $langfile . '.php' ))
-        {
+    if (!empty($langfile)) {
+        if (is_file($_CONF['path_language'] . $langfile . '.php')) {
             return $langfile;
         }
     }
@@ -6348,15 +6334,16 @@ function COM_getLanguageId($language = '')
         $language = COM_getLanguage();
     }
 
-    $lang_id = false;
+    $lang_id = '';
     if (isset($_CONF['language_files'])) {
         $lang_id = array_search($language, $_CONF['language_files']);
-    }
-    if ($lang_id === false) {
-        // that looks like a misconfigured $_CONF['language_files'] array ...
-        COM_errorLog('Language "' . $language . '" not found in $_CONF[\'language_files\'] array!');
 
-        $lang_id = ''; // not much we can do here ...
+        if ($lang_id === false) {
+            // that looks like a misconfigured $_CONF['language_files'] array
+            COM_errorLog('Language "' . $language . '" not found in $_CONF[\'language_files\'] array!');
+
+            $lang_id = ''; // not much we can do here ...
+        }
     }
 
     return $lang_id;
