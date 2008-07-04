@@ -420,7 +420,7 @@ function ST_editElement( $menu, $mid ) {
         } else {
             $label = $sp_label;
         }
-        $sp_select .= '<option value="' . $sp_id . '">' . $label . '</option>' . LB;
+        $sp_select .= '<option value="' . $sp_id . '"' . ($ST_menuElements[$menu][$mid]->subtype == $sp_id ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
     }
     $sp_select .= '</select>' . LB;
 

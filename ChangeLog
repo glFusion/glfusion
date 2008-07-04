@@ -187,6 +187,9 @@ Links plugin
 
 Site Tailor plugin
 ------------------
+- Fixed error where static pages would reset when edited.
+        public_html/admin/plugins/sitetailor/index.php
+
 - Fixed a E_ALL error - removed references to individual perm_ options
         private/plugins/sitetailor/classes/classMenuElement.php
 
