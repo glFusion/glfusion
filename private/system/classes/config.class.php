@@ -102,7 +102,7 @@ class config {
      * track of this reference, and the set function will mutate it.
      *
      * @return array(string => mixed)      This is a reference to the
-     *                              config array
+     *                                     config array
      */
     function &initConfig()
     {
@@ -611,7 +611,8 @@ class config {
         } else {
             if ($allow_reset) {
                 $t->set_var('unset_link',
-                        "(<a href='#' onClick='unset(\"{$name}\");'>X</a>)");
+                        "(<a href='#' onClick='unset(\"{$name}\");' title='"
+                        . $LANG_CONFIG['disable'] . "'>X</a>)");
             }
             if (($a = strrchr($name, '[')) !== FALSE) {
                 $on = substr($a, 1, -1);
