@@ -811,6 +811,7 @@ class Story
 
         // Use what we have:
         $this->_tid = $topic;
+        $this->_date = time();
     }
 
     /**
@@ -819,8 +820,9 @@ class Story
     function loadSubmission()
     {
         $array = $_POST;
-
+        
         $this->_expire = time();
+        $this->_date = time();
         $this->_expiredate = 0;
 
         // Handle Magic GPC Garbage:
