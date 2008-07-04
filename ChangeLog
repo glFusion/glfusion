@@ -2,6 +2,15 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- Allow to unset Configuration options again after they have been "restored",
+  i.e. enabled
+        private/system/classes/config.class.php
+
+- Adopted hack to allow multilingual blocks
+        public_html/layout/professional/functions.php
+        public_html/layout/nouveau/functions.php
+        public_html/lib-common.php
+
 - Fixed a bug that would cause the header to not load properly when changing
   the theme.
         private/system/classes/config.class.php
@@ -27,11 +36,6 @@ v1.0.1
 
 - Updated htmLawed to v1.1
         private/system/classes/htmLawed.php
-
-- Coded a ugly fix to the configuration routine to 'unset' language files
-  used for multi-lingual sites. If you now delete all the attributes, the
-  main setting will revert back to 'unset'.
-        private/system/classes/config.class.php
 
 - Users with story.edit permission could post stories to topics they
   did not have write permissions to.  Now only present a list of topics
