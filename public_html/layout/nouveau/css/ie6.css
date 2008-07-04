@@ -1,5 +1,5 @@
 /* IE 6 ONLY LAYOUT  STYLESHEET*************************************************
-This file only contains CSS fixes for the IE 6 browser. For regular style info use style.css 
+This file only contains CSS fixes for the IE 6 browser. For regular style info use style.css
  */
 
 #gl_navigation { /*the leftblocks*/
@@ -13,7 +13,7 @@ This file only contains CSS fixes for the IE 6 browser. For regular style info u
   border-bottom:0px;
 }
 #gl_moomenu {
-  height:27px; /*set to 54px if you use 2 row menus*/
+  height:2.2em; /*set to 54px if you use 2 row menus*/
   background:url(../images/gl_moomenu1-bg.png)repeat;
 }
 .gl_moomenu li:hover,
@@ -23,6 +23,9 @@ This file only contains CSS fixes for the IE 6 browser. For regular style info u
 #gl_moomenu li li a.parent,
 #gl_moomenu li li a.parent:hover {
   background:url(../images/gl_moomenu1-parent_ie6.gif) 95% 50% no-repeat;
+}
+.gl_moomenu li ul {
+width:177px;
 }
 .block-columnpad {
   background:#F7F7F7;
@@ -39,10 +42,10 @@ pre {
   font-size:80%;
   overflow:scroll;
 }
-div#frame div.button#left { 
+div#frame div.button#left {
   background: url(../images/prev_ie6.png) no-repeat;
 }
-div#frame div.button#right { 
+div#frame div.button#right {
   background: url(../images/next_ie6.png) no-repeat;
 }
 #gl_mooticker ul {
