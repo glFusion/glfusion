@@ -2,6 +2,28 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- Added a title to the (X) option
+        private/language/english.php
+        private/language/english_utf-8.php
+        private/system/classes/config.class.php
+
+- Hide the database password when the database backup failed and we're logging
+  the mysqldump command
+        public_html/admin/database.php
+
+- E_ALL fix + CUSTOM_loginErrorHandler isn't supposed to return anything
+        public_html/users.php
+
+- Hebrew language file update
+        private/language/hebrew_utf-8.php
+
+- Fixed issue where global array was not properly defined for plugins
+        private/plugins/calendar/install_defaults.php
+        private/links/calendar/install_defaults.php
+        private/polls/calendar/install_defaults.php
+        private/spamx/calendar/install_defaults.php
+        private/staticpages/calendar/install_defaults.php
+
 - Allow to unset Configuration options again after they have been "restored",
   i.e. enabled
         private/system/classes/config.class.php
@@ -32,6 +54,7 @@ v1.0.1
 
 - Fixed a security issue that allowed users to view future stories
   and draft stories if they knew the story id.
+- PHP 5.0 compatibility for story submissions
         private/system/classes/story.class.php
 
 - Updated htmLawed to v1.1
@@ -188,6 +211,11 @@ Links plugin
         private/plugins/links/language/english.php
         private/plugins/links/language/english_utf-8.php
         public_html/admin/plugins/links/category.php
+
+Polls plugin
+------------
+- Updated hebrew language file
+        private/plugins/polls/language/hebrew_utf-8.php
 
 Site Tailor plugin
 ------------------
