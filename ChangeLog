@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.0.1
 ------------
+- Made the default advanced editor style more closely match the Nouveau theme (Eric)
+		public_html/fckeditor/fckconfig.js
+
+- Added the gl_moochronometer css (Eric)
+		public_html/layout/nouveau/style.css
+
 - Added a title to the (X) option
         private/language/english.php
         private/language/english_utf-8.php
