@@ -211,6 +211,24 @@ background:url(images/header-bg-day.jpg) 0 0 repeat-x;
 height:100px;
 }
 
+/*gl_moochronometer header images*/
+#dawn #gl_header {
+  background:url(images/header-bg-dawn.jpg) 0 0 repeat-x;
+}
+#day #gl_header {
+  background:url(images/header-bg-day.jpg) 0 0 repeat-x;
+}
+#afternoon #gl_header {
+  background:url(images/header-bg-afternoon.jpg) 0 0 repeat-x;
+}
+#dusk #gl_header {
+  background:url(images/header-bg-dusk.jpg) 0 0 repeat-x;
+}
+#night #gl_header {
+  background:url(images/header-bg-night.jpg) 0 0 repeat-x;
+}
+/*end gl_moochronometer header images*/
+
 #gl_wrapper {
 float:left;
 margin-top:10px;
