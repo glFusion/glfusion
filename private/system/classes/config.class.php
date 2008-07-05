@@ -854,9 +854,9 @@ class config {
         global $_DB, $_DB_dbms;
 
         if ($_DB_dbms == 'mssql') {
-            $sql_query = str_replace("\\'", "''", $sql_query);
+            $sql_query = str_replace("\\'", "''", $sql);
             $sql_query = str_replace('\\"', '"', $sql_query);
-            $_DB->dbQuery($sql, 0, 1);
+            $_DB->dbQuery($sql_query, 0, 1);
         } else {
             DB_query($sql);
         }
