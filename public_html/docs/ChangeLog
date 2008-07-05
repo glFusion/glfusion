@@ -1,5 +1,10 @@
 glFusion ChangeLog
 
+v1.1.0
+------------
+- Bumped version number to 1.1.0svn
+        public_html/lib-common.php
+
 v1.0.1
 ------------
 - Made the default advanced editor style more closely match the Nouveau theme (Eric)
@@ -7,6 +12,9 @@ v1.0.1
 
 - Added the gl_moochronometer css (Eric)
 		public_html/layout/nouveau/style.css
+
+- Fixed a bug in MSSQL escape code in config.class.php
+        private/system/classes/config.class.php
 
 - Added a title to the (X) option
         private/language/english.php
@@ -197,6 +205,9 @@ v1.0.1
 
 Calendar plugin
 ---------------
+- Calendar search did not honor the author field.
+        private/plugins/calendar/functions.inc
+
 - MSSQL issues resolved in calendar plugin and in CSRF tokens.
         private/plugins/calendar/functions.inc
 
