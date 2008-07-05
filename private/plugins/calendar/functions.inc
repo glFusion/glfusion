@@ -1638,6 +1638,10 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
         $sql .= "OR title LIKE '%$mysearchterm%') ";
     }
 
+    if ( $author != 0 ) {
+        $sql .= " AND owner_id=" . $author . " ";
+    }
+
     if (!empty($datestart) AND !empty($dateend)) {
         $delim = substr($datestart, 4, 1);
         if (!empty($delim)) {
