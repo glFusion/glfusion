@@ -116,7 +116,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     }
     $groups = implode($_GROUPS,'');
     $hash = md5($groups);
-    $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar.$hash;
+    $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar.$hash.'_'.$_CONF['theme'];
     if ( !empty($query) || !$article->check_instance($instance_id,$article_filevar)) {
     // end of instance cache
 
