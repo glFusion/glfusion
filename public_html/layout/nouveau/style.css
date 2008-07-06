@@ -528,6 +528,10 @@ div.glfform form div small {
   height: expression('1%');
 }
 
+div.glfform form div.fValidator-msg {
+margin-left: 235px;
+color: #DF3737;
+}
 
 .top-r-corner {
 background:transparent url(images/top-r-corner.png) 100% 0 no-repeat;
