@@ -523,9 +523,9 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
 
             $uid = USER_createAccount ($username, $email, $passwd, $fullname,
                                        $homepage);
-            if (($uid > 1) && ($_CONF['usersubmission'] == 1)) {
-                // we don't want to queue new users created by a User Admin
-                DB_query ("UPDATE {$_TABLES['users']} SET status = " . USER_ACCOUNT_AWAITING_ACTIVATION . " WHERE uid = $uid");
+            if ($uid > 1) {
+                // use the status value set by admin
+                DB_query ("UPDATE {$_TABLES['users']} SET status = " . $userstatus . " WHERE uid = $uid");
             }
         } else {
             $fullname = addslashes ($fullname);
