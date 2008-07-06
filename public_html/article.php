@@ -289,6 +289,17 @@ if ($A['count'] > 0) {
             $story_template->set_var ('pdf_story_url', $printUrl);
             $story_template->set_var ('lang_pdf_story', $LANG11[5]);
         }
+        if ($_CONF['backend'] == 1) {
+            $tid = $story->displayElements('tid');
+            $result = DB_query("SELECT filename, title FROM {$_TABLES['syndication']} WHERE type = 'glfusion' AND topic = '$tid' AND is_enabled = 1");
+            $feeds = DB_numRows($result);
+            for ($i = 0; $i < $feeds; $i++) {
+                list($filename, $title) = DB_fetchArray($result);
+                $feedUrl = SYND_getFeedUrl($filename);
+                $feedTitle = $LANG11[6] . "'". $title . "'";
+                $story_options[] = COM_createLink($feedTitle, $feedUrl,array("type" =>"application/rss+xml"));
+            }
+        }
         $related = STORY_whatsRelated ($story->displayElements('related'),
                         $story->displayElements('uid'), $story->displayElements('tid'));
         if (!empty ($related)) {

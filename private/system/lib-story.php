@@ -501,6 +501,26 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             {
                 $article->set_var( 'pdf_icon', '' );
             }
+            if ($_CONF['backend'] == 1) {
+                $tid = $story->displayElements('tid');
+                $result = DB_query("SELECT filename, title FROM {$_TABLES['syndication']} WHERE type = 'glfusion' AND topic = '$tid' AND is_enabled = 1");
+                $feeds = DB_numRows($result);
+                for ($i = 0; $i < $feeds; $i++) {
+                    list($filename, $title) = DB_fetchArray($result);
+                    $feedUrl = SYND_getFeedUrl($filename);
+                    $feedTitle = $LANG11[6] . $title;
+                }
+                if ( $feeds > 0 ) {
+                    $feedicon = '<img src="'. $_CONF['layout_url'] . '/images/rss_small.'
+                             . $_IMAGE_TYPE . '" alt="'. $feedTitle
+                             .'" title="'. $feedTitle .'"' . XHTML . '>';
+                    $article->set_var( 'feed_icon',COM_createLink($feedicon, $feedUrl,array("type" =>"application/rss+xml")));
+                } else {
+                    $article->set_var( 'feed_icon', '' );
+                }
+            } else {
+                $article->set_var( 'feed_icon', '' );
+            }
             $article->set_var( 'story_display', 'index' );
 
             $storycounter++;

@@ -3,6 +3,7 @@
         {email_icon}
         {print_icon}
         {pdf_icon}
+        {feed_icon}
         {edit_icon}
     </span>
     <h1>{story_title_link}</h1>

@@ -68,6 +68,7 @@ function changeFeedStatus($fid_arr)
                 DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '1' WHERE fid = '$fid'");
             }
         }
+        CACHE_remove_instance('story');
     }
 }
 
@@ -508,7 +509,7 @@ function savefeed ($A)
         $A['fid'] = DB_insertId ();
     }
     SYND_updateFeed ($A['fid']);
-
+    CACHE_remove_instance('story');
     return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php?msg=58');
 }
 
@@ -525,7 +526,7 @@ function deletefeed ($fid)
 
     if ($fid > 0) {
         DB_delete ($_TABLES['syndication'], 'fid', $fid);
-
+        CACHE_remove_instance('story');
         return COM_refresh ($_CONF['site_admin_url']
                             . '/syndication.php?msg=59');
     }
