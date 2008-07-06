@@ -219,7 +219,7 @@ function addMode ($mode, $more = true)
 */
 function getDeleteImageLink($mode, $A, $token)
 {
-    global $_CONF, $LANG_CAL_ADMIN, $LANG_CAL_2, $_IMAGE_TYPE;
+    global $_CONF, $LANG_ADMIN, $LANG_CAL_2, $_IMAGE_TYPE;
 
     $retval = '';
     $img = '<img src="' . $_CONF['site_url']
@@ -238,7 +238,7 @@ function getDeleteImageLink($mode, $A, $token)
         if (SEC_hasAccess($A['owner_id'], $A['group_id'], $A['perm_owner'],
                 $A['perm_group'], $A['perm_members'], $A['perm_anon']) == 3) {
             $retval = COM_createLink($img, $_CONF['site_admin_url']
-                    . '/plugins/calendar/index.php?mode=' . $LANG_CAL_ADMIN[22]
+                    . '/plugins/calendar/index.php?mode=' . $LANG_ADMIN['delete']
                     . '&amp;eid=' . $A['eid'] . '&amp;' . CSRF_TOKEN . '='
                     . $token);
         }
