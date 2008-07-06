@@ -7,30 +7,22 @@ v1.1.0
 
 v1.0.1
 ------------
-- Fixed issue with IE7 displaying drop down menu with new em measurements
-        public_html/layout/nouveau/css/ie7.css
+- Fixed issue where menu option Graphics or color was not being honored
+  in Nouveau theme.
+        public_html/layout/nouveau/functions.php
 
-- Implemented the ability to subscribe to a topic in the story display
-        public_html/article.php
-        public_html/admin/syndication.php
+- Added theme name to instance id for cached stories.
         private/system/lib-story.php
-        private/language/english.php
-        private/language/english_utf-8.php
-        public_html/layout/nouveau/article.thtml
-        public_html/layout/nouveau/featuredstorytext.thtml
-        public_html/layout/nouveau/storytext.thtml
-        public_html/layout/nouveau/images/rss_small.png
-        private/language/english.php
-        private/language/english_utf-8.php
+
+- If admin creates a user, use the user status (active, awaiting approval)
+  specified by admin during the create.
+        public_html/admin/user.php
 
 - Made the default advanced editor style more closely match the Nouveau theme (Eric)
 		public_html/fckeditor/fckconfig.js
 
 - Added the gl_moochronometer css (Eric)
 		public_html/layout/nouveau/style.css
-
-- Fixed a bug in MSSQL escape code in config.class.php
-        private/system/classes/config.class.php
 
 - Added a title to the (X) option
         private/language/english.php
@@ -221,13 +213,6 @@ v1.0.1
 
 Calendar plugin
 ---------------
-- Fix a language inconsistency which caused the inability to delete calendar
-  events in the day and week views.
-        public_html/calendar/index.php
-
-- Calendar search did not honor the author field.
-        private/plugins/calendar/functions.inc
-
 - MSSQL issues resolved in calendar plugin and in CSRF tokens.
         private/plugins/calendar/functions.inc
 
@@ -256,6 +241,10 @@ Polls plugin
 
 Site Tailor plugin
 ------------------
+- Fixed bug where no groups would display if default admin user has been
+  deleted.
+        public_html/admin/plugins/sitetailor/index.php
+
 - Fixed error where static pages would reset when edited.
         public_html/admin/plugins/sitetailor/index.php
 
