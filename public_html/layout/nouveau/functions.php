@@ -215,7 +215,7 @@ function nouveau_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         'sbbcolor'  => $sms,
         'tmh'       => $tmh,
         'menu_bg'       => ($mbMenuConfig[0]['gorc'] == 1 ? 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['bgimage'] . ') repeat' : ''),
-        'menu_hover_bg' => 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['hoverimage'] . ') repeat',
+        'menu_hover_bg' => ($mbMenuConfig[0]['gorc'] == 1 ? 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['hoverimage'] . ') repeat' : ''),
         'spimage'       => 'transparent url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['parentimage'] . ') no-repeat scroll 95% 50%',
         'malign'        => ($alignment == 1 ? 'left' : 'right'),
 
