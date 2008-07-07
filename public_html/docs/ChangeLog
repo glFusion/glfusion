@@ -2,11 +2,22 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Implemented glFusion CSS layout driven header / footer functions.
+        public_html/lib-common.php
+        public_html/layout/nouveau/functions.php
+        public_html/layout/professional/functions.php
+
 - Bumped version number to 1.1.0svn
         public_html/lib-common.php
 
 v1.0.1
 ------------
+- Allow creation of banned users, i.e. ban the user on account creation
+        public_html/admin/users.php
+
+- Minor improvements in the error handling
+        public_html/lib-common.php
+
 - Fixed issue where menu option Graphics or color was not being honored
   in Nouveau theme.
         public_html/layout/nouveau/functions.php

@@ -801,12 +801,12 @@ case 'week':
     break;
 
 case 'addentry':
-//    if (SEC_checkToken()) {
+    if (SEC_checkToken()) {
         $display .= plugin_submit_calendar($mode);
         $display .= COM_siteFooter();
-//    } else {
-//        $display = COM_refresh($_CONF['site_url'] . '/calendar/index.php');
-//    }
+    } else {
+        $display = COM_refresh($_CONF['site_url'] . '/calendar/index.php');
+    }
     break;
 
 case 'savepersonal':

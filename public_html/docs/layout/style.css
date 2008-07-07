@@ -174,3 +174,7 @@ h5 {
     border-bottom:none;
     font-weight:bold;
 }
+
+.col0 {
+    width:25%;
+}
