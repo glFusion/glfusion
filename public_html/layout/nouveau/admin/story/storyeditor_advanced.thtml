@@ -1,24 +1,4 @@
 <script src="{site_url}/javascript/nogray_date_calendar_vs1_min.js" type="text/javascript"></script>
-<style>
-/* table list */
-.table_list {border-collapse:collapse;
-	border:solid #cccccc 1px;
-	width:100%;}
-.table_list td {padding:5px;
-	border:solid #efefef 1px;}
-.table_list th {background:#75b2d1;
-	padding:5px;
-	color:#ffffff;}
-.table_list tr.odd {background:#e1eff5;}
-/* calendar styles */
-#calendar1, #calendar2, #calendar3 {border:solid #666666 1px;
-	background:#ffffff;
-	padding-bottom:5px;
-	padding-top:5px;}
-#calendar1 {width:183px;}
-#calendar1 .ng-cal-header-table {width:173px;}
-#inter_cal .ng-cal-header-table, #inter_cal2 .ng-cal-header-table {width:95%;}
-</style>
 <!-- Hide the Advanced Editor as Javascript is required. If JS is not enabled then the message below in the <nonscript> tags will be displayed -->
 <noscript>
     <div class="pluginAlert aligncenter" style="border:1px dashed #ccc;margin-top:10px;padding:15px;">{lang_nojavascript}
@@ -147,7 +127,7 @@
                                 <a href="#" id="toggler">
                                 <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
                                 </a>
-                                <div id="calendar1"></div>
+                                <span id="calendar1"></span>
 
                                 &nbsp;&nbsp;
                                 <select name="publish_hour">

@@ -2221,3 +2221,40 @@ border:solid #cccccc 1px;
 float:right;
 margin-right:5px;
 }
+/* table list */
+.table_list {
+border-collapse:collapse;
+border:solid #ccc 1px;
+width:100%;
+}
+.table_list td {
+padding:5px;
+border:solid #efefef 1px;
+}
+.table_list th {
+background:#75b2d1;
+padding:5px;
+color:#ffffff;
+}
+.table_list tr.odd {
+background:#e1eff5;
+}
+/* calendar styles */
+#calendar1,
+#calendar2,
+#calendar3 {
+border:solid #666 1px;
+background:#fff;
+padding-bottom:5px;
+padding-top:5px;
+}
+#calendar1 {
+width:183px;
+}
+#calendar1 .ng-cal-header-table {
+width:173px;
+}
+#inter_cal .ng-cal-header-table,
+#inter_cal2 .ng-cal-header-table {
+width:95%;
+}

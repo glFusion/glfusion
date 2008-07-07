@@ -12,6 +12,11 @@ v1.1.0
 
 v1.0.1
 ------------
+- Fixed xhtml validation bug (issue 176) (Eric)
+		public_html/layout/nouveau/style.css
+		public_html/layout/nouveau/style-colors.css
+		public_html/layout/nouveau/admin/story/storyeditor_advanced.thtml
+
 - Allow creation of banned users, i.e. ban the user on account creation
         public_html/admin/users.php
 
