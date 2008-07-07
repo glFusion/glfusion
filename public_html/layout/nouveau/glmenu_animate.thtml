@@ -1,0 +1,17 @@
+<script type="text/javascript" src="{layout_url}/js/gl_moomenu.js"></script>
+<script type="text/javascript">
+	window.addEvent('domready', function() {
+		new moomenu($E('ul.gl_moomenu'), {
+			bgiframe: false,
+			delay: 50,
+			animate: {
+				props: ['opacity', 'width', 'height'],
+				opts: {
+					duration:300,
+					fps: 100,
+					transition: Fx.Transitions.Quad.easeOut
+				}
+			}
+		});
+	});
+</script>
