@@ -855,12 +855,12 @@ function COM_renderMenu( &$header, $plugin_menu )
 *
 */
 
-function COM_siteHeader( $what = 'menu', $pagetitle = '', $headercode = '' )
+function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
-           $_IMAGE_TYPE, $topic, $_COM_VERBOSE;
-
-    // If the theme implemented this for us then call their version instead.
+           $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
+           $theme_headercode, $theme_layout, $gllabsMooToolsLoaded,
+           $mbMenuConfig;
 
     $function = $_CONF['theme'] . '_siteHeader';
 
@@ -869,72 +869,122 @@ function COM_siteHeader( $what = 'menu', $pagetitle = '', $headercode = '' )
         return $function( $what, $pagetitle, $headercode );
     }
 
-    // send out the charset header
-    header( 'Content-Type: text/html; charset=' . COM_getCharset());
+    static $headerCalled = 0;
 
-    // If we reach here then either we have the default theme OR
-    // the current theme only needs the default variable substitutions
+    if ( $headerCalled == 1 ) {
+        return '';
+    }
+    $headerCalled = 1;
+
+    $theme_what         = $what;
+    $theme_pagetitle    = $pagetitle;
+    $theme_headercode   = $headercode;
 
     $header = new Template( $_CONF['path_layout'] );
     $header->set_file( array(
-        'header'        => 'header.thtml',
-        'menuitem'      => 'menuitem.thtml',
-        'menuitem_last' => 'menuitem_last.thtml',
-        'menuitem_none' => 'menuitem_none.thtml',
-        'leftblocks'    => 'leftblocks.thtml',
-        'rightblocks'   => 'rightblocks.thtml'
-        ));
-    $header->set_var( 'xhtml', XHTML );
+        'header'        => 'htmlheader.thtml',
+    ));
+    $header->set_var('xhtml',XHTML);
+
+    // determine if MooTools is already loaded..
+    if ( $gllabsMooToolsLoaded != 1 ) {
+        $header->set_var('mootools',
+            '<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/mootools-release-1.11.packed.js"></script>');
+        $gllabsMooToolsLoaded = 1;
+    }
+	//Fade in animation for the gl_moomenu
+    $animate = new Template( $_CONF['path_layout'] );
+    $animate->set_file( array(
+        'menu'        => 'glmenu_animate.thtml',
+    ));
+    $animate->parse( 'menu_js', 'menu' );
+    $header->set_var('gl_animatedmoomenu',$animate->finish( $animate->get_var( 'menu_js' )));
+
+	//Enables use of mootips
+    $tips = new Template( $_CONF['path_layout'] );
+    $tips->set_file( array(
+        'tips'        => 'gltips.thtml',
+    ));
+    $tips->parse( 'tips_js', 'tips' );
+    $header->set_var('gl_mootips',$tips->finish( $tips->get_var( 'tips_js' )));
+
+	//Enables use of gl_chronometer - a client-side header banner rotator
+	$header->set_var('gl_moochronometer',
+'<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moochronometer.js"></script>');
+
+    $tmbg = '#151515';
+    $tmh  = '#679ef1';
+    $tmt  = '#e8e8e8';
+    $tmth = '#ffffff';
+    $smth = '#ffe600';
+    $smbg = '#151515';
+    $smh  = '#000000';
+    $sms  = '#333333';
+
+    // set menu colors
+    if ( function_exists('st_getMenu') ) { // && $mbMenuConfig[0]['enabled'] == 1) {
+        $result = DB_query("SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=0",1);
+        if ( DB_numRows($result) > 0 ) {
+            list($id,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$bgimage,$hoverimage,$parentimage,$alignment,$enabled) = DB_fetchArray($result);
+        }
+    }
+
+    $header->set_var(array(
+        'mbgcolor'  => ($mbMenuConfig[0]['gorc'] == 1 ? '' : $tmbg),
+        'mbghcolor' => $tmh,
+        'mtext'     => $tmt,
+        'mhtext'    => $tmth,
+        'shtext'    => $smth,
+        'sbhcolor'  => $smh,
+        'sbscolor'  => $sms,
+        'sblcolor'  => $sms,
+        'sbrcolor'  => $sms,
+        'sbgcolor'  => $smbg,
+        'sbtcolor'  => $sms,
+        'sbbcolor'  => $sms,
+        'tmh'       => $tmh,
+        'menu_bg'       => ($mbMenuConfig[0]['gorc'] == 1 ? 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['bgimage'] . ') repeat' : ''),
+        'menu_hover_bg' => ($mbMenuConfig[0]['gorc'] == 1 ? 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['hoverimage'] . ') repeat' : ''),
+        'spimage'       => 'transparent url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['parentimage'] . ') no-repeat scroll 95% 50%',
+        'malign'        => ($alignment == 1 ? 'left' : 'right'),
+
+    ));
 
     // get topic if not on home page
-    if( !isset( $_GET['topic'] ))
-    {
-        if( isset( $_GET['story'] ))
-        {
+    if( !isset( $_GET['topic'] )) {
+        if( isset( $_GET['story'] )) {
             $sid = COM_applyFilter( $_GET['story'] );
-        }
-        elseif( isset( $_GET['sid'] ))
-        {
+        } elseif( isset( $_GET['sid'] )) {
             $sid = COM_applyFilter( $_GET['sid'] );
-        }
-        elseif( isset( $_POST['story'] ))
-        {
+        } elseif( isset( $_POST['story'] )) {
             $sid = COM_applyFilter( $_POST['story'] );
         }
         if( empty( $sid ) && $_CONF['url_rewrite'] &&
-                ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false ))
-        {
+                ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
             $sid = COM_applyFilter( COM_getArgument( 'story' ));
         }
-        if( !empty( $sid ))
-        {
+        if( !empty( $sid )) {
             $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='$sid'" );
         }
-    }
-    else
-    {
+    } else {
         $topic = COM_applyFilter( $_GET['topic'] );
     }
 
     $feed_url = array();
-    if( $_CONF['backend'] == 1 ) // add feed-link to header if applicable
-    {
+    if( $_CONF['backend'] == 1 ) { // add feed-link to header if applicable
         $baseurl = SYND_getFeedUrl();
 
         $sql = 'SELECT format, filename, title, language FROM '
              . $_TABLES['syndication'] . " WHERE (header_tid = 'all')";
-        if( !empty( $topic ))
-        {
+        if( !empty( $topic )) {
             $sql .= " OR (header_tid = '" . addslashes( $topic ) . "')";
         }
         $result = DB_query( $sql );
         $numRows = DB_numRows( $result );
-        for( $i = 0; $i < $numRows; $i++ )
-        {
+        for( $i = 0; $i < $numRows; $i++ ) {
             $A = DB_fetchArray( $result );
-            if ( !empty( $A['filename'] ))
-            {
+            if ( !empty( $A['filename'] )) {
                 $format = explode( '-', $A['format'] );
                 $format_type = strtolower( $format[0] );
                 $format_name = ucwords( $format[0] );
@@ -949,115 +999,90 @@ function COM_siteHeader( $what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var( 'feed_url', implode( LB, $feed_url ));
 
     $relLinks = array();
-    if( !COM_onFrontpage() )
-    {
+    if( !COM_onFrontpage() ) {
         $relLinks['home'] = '<link rel="home" href="' . $_CONF['site_url']
                           . '/" title="' . $LANG01[90] . '"' . XHTML . '>';
     }
     $loggedInUser = !COM_isAnonUser();
     if( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
-                ( $_CONF['searchloginrequired'] == 0 )))
-    {
+                ( $_CONF['searchloginrequired'] == 0 ))) {
         if(( substr( $_SERVER['PHP_SELF'], -strlen( '/search.php' ))
-                != '/search.php' ) || isset( $_GET['mode'] ))
-        {
+                != '/search.php' ) || isset( $_GET['mode'] )) {
             $relLinks['search'] = '<link rel="search" href="'
                                 . $_CONF['site_url'] . '/search.php" title="'
                                 . $LANG01[75] . '"' . XHTML . '>';
         }
     }
     if( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
-                ( $_CONF['directoryloginrequired'] == 0 )))
-    {
+                ( $_CONF['directoryloginrequired'] == 0 ))) {
         if( strpos( $_SERVER['PHP_SELF'], '/article.php' ) !== false ) {
             $relLinks['contents'] = '<link rel="contents" href="'
                         . $_CONF['site_url'] . '/directory.php" title="'
                         . $LANG01[117] . '"' . XHTML . '>';
         }
     }
-    if (!$_CONF['disable_webservices']) {
-        $relLinks['service'] = '<link rel="service" '
-                    . 'type="application/atomsvc+xml" ' . 'href="'
-                    . $_CONF['site_url'] . '/webservices/atom/?introspection" '
-                    . 'title="' . $LANG01[130] . '"' . XHTML . '>';
-    }
-    // TBD: add a plugin API and a lib-custom.php function
+
     $header->set_var( 'rel_links', implode( LB, $relLinks ));
 
-    if( empty( $pagetitle ) && isset( $_CONF['pagetitle'] ))
-    {
+    if( empty( $pagetitle ) && isset( $_CONF['pagetitle'] )) {
         $pagetitle = $_CONF['pagetitle'];
     }
-    if( empty( $pagetitle ))
-    {
-        if( empty( $topic ))
-        {
+    if( empty( $pagetitle )) {
+        if( empty( $topic )) {
             $pagetitle = $_CONF['site_slogan'];
-        }
-        else
-        {
-            $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
+        } else {
+            $pagetitle = stripslashes(DB_getItem( $_TABLES['topics'], 'topic',
                                                    "tid = '$topic'" ));
         }
     }
-    if( !empty( $pagetitle ))
-    {
+    if( !empty( $pagetitle )) {
         $header->set_var( 'page_site_splitter', ' - ');
-    }
-    else
-    {
-        $header->set_var( 'page_site_splitter', '');
     }
     $header->set_var( 'page_title', $pagetitle );
     $header->set_var( 'site_name', $_CONF['site_name']);
 
-    $langAttr = '';
-    if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] ))
-    {
-        $langId = COM_getLanguageId();
+    if( isset( $_CONF['advanced_editor'] ) && ( $_CONF['advanced_editor'] == 1 )
+            && file_exists( $_CONF['path_layout']
+                            . 'advanced_editor_header.thtml' )) {
+        $header->set_file( 'editor'  , 'advanced_editor_header.thtml');
+        $header->set_var('xthml',XHTML);
+        $header->parse( 'advanced_editor', 'editor' );
+
+    } else {
+        $header->set_var( 'xhtml', XHTML );
+        $header->set_var( 'advanced_editor', '' );
     }
-    else
-    {
+
+    $langAttr = '';
+    if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] )) {
+        $langId = COM_getLanguageId();
+    } else {
         // try to derive the language id from the locale
         $l = explode( '.', $_CONF['locale'] );
         $langId = $l[0];
     }
-    if( !empty( $langId ))
-    {
+    if( !empty( $langId )) {
         $l = explode( '-', str_replace( '_', '-', $langId ));
-        if(( count( $l ) == 1 ) && ( strlen( $langId ) == 2 ))
-        {
+        if(( count( $l ) == 1 ) && ( strlen( $langId ) == 2 )) {
             $langAttr = 'lang="' . $langId . '"';
-        }
-        else if( count( $l ) == 2 )
-        {
-            if(( $l[0] == 'i' ) || ( $l[0] == 'x' ))
-            {
+        } else if( count( $l ) == 2 ) {
+            if(( $l[0] == 'i' ) || ( $l[0] == 'x' )) {
                 $langId = implode( '-', $l );
                 $langAttr = 'lang="' . $langId . '"';
-            }
-            else if( strlen( $l[0] ) == 2 )
-            {
+            } else if( strlen( $l[0] ) == 2 ) {
                 $langId = implode( '-', $l );
                 $langAttr = 'lang="' . $langId . '"';
-            }
-            else
-            {
+            } else {
                 $langId = $l[0];
             }
         }
     }
-    $header->set_var('lang_id', $langId );
-    if (!empty($_CONF['languages']) && !empty($_CONF['language_files'])) {
-        $header->set_var('lang_attribute', $langAttr);
-    } else {
-        $header->set_var('lang_attribute', '');
-    }
+    $header->set_var( 'lang_id', $langId );
+    $header->set_var( 'lang_attribute', $langAttr );
 
     $header->set_var( 'background_image', $_CONF['layout_url']
                                           . '/images/bg.' . $_IMAGE_TYPE );
     $header->set_var( 'site_url', $_CONF['site_url'] );
-    $header->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $header->set_var( 'layout_url', $_CONF['layout_url'] );
     $header->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
     $header->set_var( 'site_name', $_CONF['site_name'] );
@@ -1066,213 +1091,35 @@ function COM_siteHeader( $what = 'menu', $pagetitle = '', $headercode = '' )
                            strlen( $_CONF['path_html'] ) - 1 );
     $header->set_var( 'rdf_file', $rdf );
     $header->set_var( 'rss_url', $rdf );
-
-    $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
-
-    if( !empty( $_USER['username'] ))
-    {
-        $msg .= ', ' . COM_getDisplayName( $_USER['uid'], $_USER['username'],
-                                           $_USER['fullname'] );
-    }
-
-    $curtime =  COM_getUserDateTimeFormat();
-
-    $header->set_var( 'welcome_msg', $msg );
-    $header->set_var( 'datetime', $curtime[0] );
-    $header->set_var( 'site_logo', $_CONF['layout_url']
-                                   . '/images/logo.' . $_IMAGE_TYPE );
     $header->set_var( 'css_url', $_CONF['layout_url'] . '/style.css' );
     $header->set_var( 'theme', $_CONF['theme'] );
 
     $header->set_var( 'charset', COM_getCharset());
-    if( empty( $LANG_DIRECTION ))
-    {
+    if( empty( $LANG_DIRECTION )) {
         // default to left-to-right
         $header->set_var( 'direction', 'ltr' );
-    }
-    else
-    {
+    } else {
         $header->set_var( 'direction', $LANG_DIRECTION );
-    }
-
-    // Now add variables for buttons like e.g. those used by the Yahoo theme
-    $header->set_var( 'button_home', $LANG_BUTTONS[1] );
-    $header->set_var( 'button_contact', $LANG_BUTTONS[2] );
-    $header->set_var( 'button_contribute', $LANG_BUTTONS[3] );
-    $header->set_var( 'button_sitestats', $LANG_BUTTONS[7] );
-    $header->set_var( 'button_personalize', $LANG_BUTTONS[8] );
-    $header->set_var( 'button_search', $LANG_BUTTONS[9] );
-    $header->set_var( 'button_advsearch', $LANG_BUTTONS[10] );
-    $header->set_var( 'button_directory', $LANG_BUTTONS[11] );
-
-    // Get plugin menu options
-    $plugin_menu = PLG_getMenuItems();
-
-    if( $_COM_VERBOSE )
-    {
-        COM_errorLog( 'num plugin menu items in header = ' . count( $plugin_menu ), 1 );
-    }
-
-    // Now add nested template for menu items
-    COM_renderMenu( $header, $plugin_menu );
-
-    if( count( $plugin_menu ) == 0 )
-    {
-        $header->parse( 'plg_menu_elements', 'menuitem_none', true );
-    }
-    else
-    {
-        $count_plugin_menu = count( $plugin_menu );
-        for( $i = 1; $i <= $count_plugin_menu; $i++ )
-        {
-            $header->set_var( 'menuitem_url', current( $plugin_menu ));
-            $header->set_var( 'menuitem_text', key( $plugin_menu ));
-
-            if( $i == $count_plugin_menu )
-            {
-                $header->parse( 'plg_menu_elements', 'menuitem_last', true );
-            }
-            else
-            {
-                $header->parse( 'plg_menu_elements', 'menuitem', true );
-            }
-
-            next( $plugin_menu );
-        }
-    }
-
-    // Call to plugins to set template variables in the header
-    PLG_templateSetVars( 'header', $header );
-
-    if( $_CONF['left_blocks_in_footer'] == 1 )
-    {
-        $header->set_var( 'left_blocks', '' );
-        $header->set_var( 'geeklog_blocks', '' );
-    }
-    else
-    {
-        $lblocks = '';
-
-        /* Check if an array has been passed that includes the name of a plugin
-         * function or custom function
-         * This can be used to take control over what blocks are then displayed
-         */
-        if( is_array( $what ))
-        {
-            $function = $what[0];
-            if( function_exists( $function ))
-            {
-                $lblocks = $function( $what[1], 'left' );
-            }
-            else
-            {
-                $lblocks = COM_showBlocks( 'left', $topic );
-            }
-        }
-        else if( $what <> 'none' )
-        {
-            // Now show any blocks -- need to get the topic if not on home page
-            $lblocks = COM_showBlocks( 'left', $topic );
-        }
-
-        if( empty( $lblocks ))
-        {
-            $header->set_var( 'left_blocks', '' );
-            $header->set_var( 'geeklog_blocks', '' );
-        }
-        else
-        {
-            $header->set_var( 'geeklog_blocks', $lblocks );
-            $header->parse( 'left_blocks', 'leftblocks', true );
-            $header->set_var( 'geeklog_blocks', '');
-        }
-    }
-
-    if( $_CONF['right_blocks_in_footer'] == 1 )
-    {
-        $header->set_var( 'right_blocks', '' );
-        $header->set_var( 'geeklog_blocks', '' );
-    }
-    else
-    {
-        $rblocks = '';
-
-        /* Check if an array has been passed that includes the name of a plugin
-         * function or custom function
-         * This can be used to take control over what blocks are then displayed
-         */
-        if( is_array( $what ))
-        {
-            $function = $what[0];
-            if( function_exists( $function ))
-            {
-                $rblocks = $function( $what[1], 'right' );
-            }
-            else
-            {
-                $rblocks = COM_showBlocks( 'right', $topic );
-            }
-        }
-        else if( $what <> 'none' )
-        {
-            // Now show any blocks -- need to get the topic if not on home page
-            $rblocks = COM_showBlocks( 'right', $topic );
-        }
-
-        if( empty( $rblocks ))
-        {
-            $header->set_var( 'right_blocks', '' );
-            $header->set_var( 'geeklog_blocks', '' );
-        }
-        else
-        {
-            $header->set_var( 'geeklog_blocks', $rblocks, true );
-            $header->parse( 'right_blocks', 'rightblocks', true );
-        }
-    }
-
-    if( isset( $_CONF['advanced_editor'] ) && ( $_CONF['advanced_editor'] == 1 )
-            && file_exists( $_CONF['path_layout']
-                            . 'advanced_editor_header.thtml' ))
-    {
-        $header->set_file( 'editor'  , 'advanced_editor_header.thtml');
-        $header->parse( 'advanced_editor', 'editor' );
-
-    }
-    else
-    {
-         $header->set_var( 'advanced_editor', '' );
     }
 
     // Call any plugin that may want to include extra Meta tags
     // or Javascript functions
     $header->set_var( 'plg_headercode', $headercode . PLG_getHeaderCode() );
 
-    // The following lines allow users to embed PHP in their templates.  This
-    // is almost a contradition to the reasons for using templates but this may
-    // prove useful at times ...
-    // Don't use PHP in templates if you can live without it!
+    // Call to plugins to set template variables in the header
+    PLG_templateSetVars( 'header', $header );
 
-    $tmp = $header->parse( 'index_header', 'header' );
+    $header->parse( 'index_header', 'header' );
+    $retval = $header->finish( $header->get_var( 'index_header' ));
 
-    $xml_declaration = '';
-    if ( get_cfg_var('short_open_tag') == '1' )
-    {
-        if ( preg_match( '/(<\?xml[^>]*>)(.*)/s', $tmp, $match ) )
-        {
-            $xml_declaration = $match[1] . LB;
-            $tmp = $match[2];
-        }
-    }
+    // send out the charset header
+    header( 'Content-Type: text/html; charset=' . COM_getCharset());
+    echo $retval;
 
+    // Start caching / capturing output from Geeklog / plugins
     ob_start();
-    eval( '?>' . $tmp );
-    $retval = $xml_declaration . ob_get_contents();
-    ob_end_clean();
-
-    return $retval;
+    return '';
 }
-
 
 /**
 * Returns the site footer
@@ -1288,25 +1135,14 @@ function COM_siteHeader( $what = 'menu', $pagetitle = '', $headercode = '' )
 */
 function COM_siteFooter( $rightblock = -1, $custom = '' )
 {
-    global $_CONF, $_TABLES, $LANG01, $_PAGE_TIMER, $topic, $LANG_BUTTONS;
-
-    // use the right blocks here only if not in header already
-    if ($_CONF['right_blocks_in_footer'] == 1)
-    {
-        if( $rightblock < 0)
-        {
-            if( isset( $_CONF['show_right_blocks'] ))
-            {
-                $rightblock = $_CONF['show_right_blocks'];
-            }
-            else
-            {
-                $rightblock = false;
-            }
-        }
-    }
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
+           $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
+           $theme_pagetitle, $theme_headercode, $theme_layout,$mbMenuConfig,
+           $_ST_CONF;
 
     // If the theme implemented this for us then call their version instead.
+
+    COM_hit();
 
     $function = $_CONF['theme'] . '_siteFooter';
 
@@ -1315,132 +1151,327 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         return $function( $rightblock, $custom );
     }
 
-    COM_hit();
+    $what       = $theme_what;
+    $pagetitle  = $theme_pagetitle;
+    $themecode  = $theme_headercode;
 
-    // Set template directory
-    $footer = new Template( $_CONF['path_layout'] );
+    // Grab any content that was cached by the system
 
-    // Set template file
-    $footer->set_file( array(
-            'footer'      => 'footer.thtml',
-            'rightblocks' => 'rightblocks.thtml',
-            'leftblocks'  => 'leftblocks.thtml'
-            ));
+    $content = ob_get_contents();
+    ob_end_clean();
+
+    $theme = new Template( $_CONF['path_layout'] );
+    $theme->set_file( array(
+        'header'        => 'header.thtml',
+        'footer'        => 'footer.thtml',
+        'menuitem'      => 'menuitem.thtml',
+        'menuitem_last' => 'menuitem_last.thtml',
+        'menuitem_none' => 'menuitem_none.thtml',
+        'leftblocks'    => 'leftblocks.thtml',
+        'rightblocks'   => 'rightblocks.thtml',
+    ));
+    $theme->set_var('xhtml',XHTML);
+
+    // get topic if not on home page
+    if( !isset( $_GET['topic'] )) {
+        if( isset( $_GET['story'] )) {
+            $sid = COM_applyFilter( $_GET['story'] );
+        } elseif( isset( $_GET['sid'] )) {
+            $sid = COM_applyFilter( $_GET['sid'] );
+        } elseif( isset( $_POST['story'] )) {
+            $sid = COM_applyFilter( $_POST['story'] );
+        }
+        if( empty( $sid ) && $_CONF['url_rewrite'] &&
+                ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
+            COM_setArgNames( array( 'story', 'mode' ));
+            $sid = COM_applyFilter( COM_getArgument( 'story' ));
+        } if( !empty( $sid )) {
+            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='$sid'" );
+        }
+    } else {
+        $topic = COM_applyFilter( $_GET['topic'] );
+    }
+
+    $loggedInUser = !COM_isAnonUser();
+    if( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
+                ( $_CONF['searchloginrequired'] == 0 ))) {
+        if(( substr( $_SERVER['PHP_SELF'], -strlen( '/search.php' ))
+                != '/search.php' ) || isset( $_GET['mode'] )) {
+            $relLinks['search'] = '<link rel="search" href="'
+                                . $_CONF['site_url'] . '/search.php" title="'
+                                . $LANG01[75] . '"' . XHTML . '>';
+        }
+    }
+    if( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
+                ( $_CONF['directoryloginrequired'] == 0 ))) {
+        if( strpos( $_SERVER['PHP_SELF'], '/article.php' ) !== false ) {
+            $relLinks['contents'] = '<link rel="contents" href="'
+                        . $_CONF['site_url'] . '/directory.php" title="'
+                        . $LANG01[117] . '"' . XHTML . '>';
+        }
+    }
+    $theme->set_var( 'site_name', $_CONF['site_name']);
+    $theme->set_var( 'background_image', $_CONF['layout_url']
+                                          . '/images/bg.' . $_IMAGE_TYPE );
+    $theme->set_var( 'site_url', $_CONF['site_url'] );
+    $theme->set_var( 'layout_url', $_CONF['layout_url'] );
+    $theme->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
+    $theme->set_var( 'site_name', $_CONF['site_name'] );
+    if ($_ST_CONF['display_site_slogan']) {
+        $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
+    }
+
+    $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
+
+    if( !empty( $_USER['username'] )) {
+        $msg .= ', ' . COM_getDisplayName( $_USER['uid'], $_USER['username'],
+                                           $_USER['fullname'] );
+    }
+
+    $curtime =  COM_getUserDateTimeFormat();
+
+    $theme->set_var( 'welcome_msg', $msg );
+    $theme->set_var( 'datetime', $curtime[0] );
+
+    /*
+     * New Logo Processing
+     */
+
+    if ( $_ST_CONF['use_graphic_logo'] == 1 && file_exists($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']) ) {
+        $L = new Template( $_CONF['path_layout'] );
+        $L->set_file( array(
+            'logo'          => 'logo-graphic.thtml',
+        ));
+
+        $imgInfo = @getimagesize($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
+        $dimension = $imgInfo[3];
+
+
+
+        $L->set_var( 'xhtml', XHTML);
+        $L->set_var( 'site_url', $_CONF['site_url'] );
+        $L->set_var( 'layout_url', $_CONF['layout_url'] );
+        $L->set_var( 'site_name', $_CONF['site_name'] );
+        $site_logo = $_CONF['site_url'] . '/images/' . $_ST_CONF['logo_name'];
+        $L->set_var( 'site_logo', $site_logo);
+        $L->set_var( 'dimension', $dimension );
+        if ( $imgInfo[1] != 100 ) {
+            $delta = 100 - $imgInfo[1];
+            $newMargin = $delta;
+            $L->set_var( 'delta', 'style="padding-top:' . $newMargin . 'px;"');
+        } else {
+            $L->set_var('delta','');
+        }
+        if ($_ST_CONF['display_site_slogan']) {
+            $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
+        }
+        $L->parse('output','logo');
+        $theme->set_var('logo_block',$L->finish($L->get_var('output')));
+    } else {
+        $L = new Template( $_CONF['path_layout'] );
+        $L->set_file( array(
+            'logo'          => 'logo-text.thtml',
+        ));
+        $L->set_var( 'xhtml',XHTML);
+        $L->set_var( 'site_name', $_CONF['site_name'] );
+        $L->set_var( 'site_url', $_CONF['site_url'] );
+        $L->set_var( 'layout_url', $_CONF['layout_url'] );
+        if ($_ST_CONF['display_site_slogan']) {
+            $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
+        }
+        $L->parse('output','logo');
+        $theme->set_var('logo_block',$L->finish($L->get_var('output')));
+    }
+
+
+
+    $theme->set_var( 'site_logo', $_CONF['layout_url']
+                                   . '/images/logo.' . $_IMAGE_TYPE );
+
+    $theme->set_var( 'charset', COM_getCharset());
+
+    // Now add variables for buttons like e.g. those used by the Yahoo theme
+    $theme->set_var( 'button_home', $LANG_BUTTONS[1] );
+    $theme->set_var( 'button_contact', $LANG_BUTTONS[2] );
+    $theme->set_var( 'button_contribute', $LANG_BUTTONS[3] );
+    $theme->set_var( 'button_sitestats', $LANG_BUTTONS[7] );
+    $theme->set_var( 'button_personalize', $LANG_BUTTONS[8] );
+    $theme->set_var( 'button_search', $LANG_BUTTONS[9] );
+    $theme->set_var( 'button_advsearch', $LANG_BUTTONS[10] );
+    $theme->set_var( 'button_directory', $LANG_BUTTONS[11] );
+
+    $theme->set_var( array (
+        'lang_login'        => $LANG01[58],
+        'lang_myaccount'    => $LANG01[48],
+        'lang_logout'       => $LANG01[35],
+        'lang_newuser'      => $LANG12[3],
+    ));
+
+    if ( function_exists('st_getMenu') && $mbMenuConfig[0]['enabled'] == 1) {
+        $theme->set_var('gllabs_menu',st_getMenu(0,"gl_moomenu",'',"parent"));
+    } else {
+        $theme->set_var('gllabs_menu','');
+    }
+
+    // Get plugin menu options
+    $plugin_menu = PLG_getMenuItems();
+
+    if( $_COM_VERBOSE ) {
+        COM_errorLog( 'num plugin menu items in header = ' . count( $plugin_menu ), 1 );
+    }
+
+    // Now add nested template for menu items
+    COM_renderMenu( $theme, $plugin_menu );
+
+    if( count( $plugin_menu ) == 0 ) {
+        $theme->parse( 'plg_menu_elements', 'menuitem_none', true );
+    } else {
+        $count_plugin_menu = count( $plugin_menu );
+        for( $i = 1; $i <= $count_plugin_menu; $i++ ) {
+            $theme->set_var( 'menuitem_url', current( $plugin_menu ));
+            $theme->set_var( 'menuitem_text', key( $plugin_menu ));
+
+            if( $i == $count_plugin_menu ) {
+                $theme->parse( 'plg_menu_elements', 'menuitem_last', true );
+            } else {
+                $theme->parse( 'plg_menu_elements', 'menuitem', true );
+            }
+            next( $plugin_menu );
+        }
+    }
+
+    $lblocks = '';
+
+    /* Check if an array has been passed that includes the name of a plugin
+     * function or custom function
+     * This can be used to take control over what blocks are then displayed
+     */
+    if( is_array( $what )) {
+        $function = $what[0];
+        if( function_exists( $function )) {
+            $lblocks = $function( $what[1], 'left' );
+        } else {
+            $lblocks = COM_showBlocks( 'left', $topic );
+        }
+    } else if( $what <> 'none' ) {
+        // Now show any blocks -- need to get the topic if not on home page
+        $lblocks = COM_showBlocks( 'left', $topic );
+    }
+
+    /* Now build footer */
+
+    if( empty( $lblocks )) {
+        $theme->set_var( 'left_blocks', '' );
+        $theme->set_var( 'geeklog_blocks', '' );
+    } else {
+        $theme->set_var( 'geeklog_blocks', $lblocks );
+    }
 
     // Do variable assignments
-    $footer->set_var( 'xhtml', XHTML );
-    $footer->set_var( 'site_url', $_CONF['site_url']);
-    $footer->set_var( 'site_admin_url', $_CONF['site_admin_url']);
-    $footer->set_var( 'layout_url',$_CONF['layout_url']);
-    $footer->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
-    $footer->set_var( 'site_name', $_CONF['site_name'] );
-    $footer->set_var( 'site_slogan', $_CONF['site_slogan'] );
+
+    $theme->set_var( 'site_url', $_CONF['site_url']);
+    $theme->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
+    $theme->set_var( 'site_name', $_CONF['site_name'] );
+    $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
     $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,
-                           strlen( $_CONF['path_html'] ) - 1 );
-    $footer->set_var( 'rdf_file', $rdf );
-    $footer->set_var( 'rss_url', $rdf );
+                          strlen( $_CONF['path_html'] ) - 1 );
+    $theme->set_var( 'rdf_file', $rdf );
+    $theme->set_var( 'rss_url', $rdf );
 
     $year = date( 'Y' );
     $copyrightyear = $year;
-    if( !empty( $_CONF['copyrightyear'] ))
-    {
+    if( !empty( $_CONF['copyrightyear'] )) {
         $copyrightyear = $_CONF['copyrightyear'];
     }
-    $footer->set_var( 'copyright_notice', '&nbsp;' . $LANG01[93] . ' &copy; '
+    $theme->set_var( 'copyright_notice', '&nbsp;' . $LANG01[93] . ' &copy; '
             . $copyrightyear . ' ' . $_CONF['site_name'] . '<br' . XHTML . '>&nbsp;'
             . $LANG01[94] );
-    $footer->set_var( 'copyright_msg', $LANG01[93] . ' &copy; '
+    $theme->set_var( 'copyright_msg', $LANG01[93] . ' &copy; '
             . $copyrightyear . ' ' . $_CONF['site_name'] );
-    $footer->set_var( 'current_year', $year );
-    $footer->set_var( 'lang_copyright', $LANG01[93] );
-    $footer->set_var( 'trademark_msg', $LANG01[94] );
-    $footer->set_var( 'powered_by', $LANG01[95] );
-    $footer->set_var( 'geeklog_url', 'http://www.geeklog.net/' );
-    $footer->set_var( 'geeklog_version', VERSION );
-    $footer->set_var( 'gllabs_url', 'http://www.gllabs.org/' );
-    $footer->set_var( 'glfusion_version', glFusion_VERSION );
+    $theme->set_var( 'current_year', $year );
+    $theme->set_var( 'lang_copyright', $LANG01[93] );
+    $theme->set_var( 'trademark_msg', $LANG01[94] );
+    $theme->set_var( 'powered_by', $LANG01[95] );
+    $theme->set_var( 'geeklog_url', 'http://www.geeklog.net/' );
+    $theme->set_var( 'geeklog_version', VERSION );
+    $theme->set_var( 'gllabs_url', 'http://www.gllabs.org/' );
+    $theme->set_var( 'glfusion_version', glFusion_VERSION );
+
 
     /* Check if an array has been passed that includes the name of a plugin
      * function or custom function.
      * This can be used to take control over what blocks are then displayed
      */
-    if( is_array( $custom ))
-    {
+    if( is_array( $custom )) {
         $function = $custom['0'];
-        if( function_exists( $function ))
-        {
+        if( function_exists( $function )) {
             $rblocks = $function( $custom['1'], 'right' );
         }
-    }
-    elseif( $rightblock )
-    {
+    } elseif( $rightblock == 1 ) {
+        $rblocks = '';
+
         $rblocks = COM_showBlocks( 'right', $topic );
-    }
-    if( $rightblock && !empty( $rblocks ))
-    {
-        $footer->set_var( 'geeklog_blocks', $rblocks );
-        $footer->parse( 'right_blocks', 'rightblocks', true );
-    }
-    else
-    {
-        $footer->set_var( 'geeklog_blocks', '' );
-        $footer->set_var( 'right_blocks', '' );
-    }
 
-    if( $_CONF['left_blocks_in_footer'] == 1 )
-    {
-        $lblocks = '';
-
-        /* Check if an array has been passed that includes the name of a plugin
-         * function or custom function
-         * This can be used to take control over what blocks are then displayed
-         */
-        if( is_array( $custom ))
-        {
-            $function = $custom[0];
-            if( function_exists( $function ))
-            {
-                $lblocks = $function( $custom[1], 'left' );
+        if( empty( $rblocks )) {
+            $theme->set_var( 'geeklog_rblocks', '');
+            $theme->set_var( 'right_blocks','');
+            if ( empty($lblocks) ) {
+                $theme->set_var( 'centercolumn','gl_content-full' );
+            } else {
+                $theme->set_var( 'centercolumn','gl_content-wide-left' );
+            }
+        } else {
+            $theme->set_var( 'geeklog_rblocks', $rblocks);
+            if ( empty($lblocks) ) {
+                $theme->set_var( 'centercolumn','gl_content-wide-right' );
+            } else {
+                $theme->set_var( 'centercolumn','gl_content' );
             }
         }
-        else
-        {
-            $lblocks = COM_showBlocks( 'left', $topic );
-        }
-
-        if( empty( $lblocks ))
-        {
-            $footer->set_var( 'left_blocks', '' );
-            $footer->set_var( 'geeklog_blocks', '');
-        }
-        else
-        {
-            $footer->set_var( 'geeklog_blocks', $lblocks);
-            $footer->parse( 'left_blocks', 'leftblocks', true );
-            $footer->set_var( 'geeklog_blocks', '');
+    } else {
+        $theme->set_var( 'geeklog_rblocks', '');
+        $theme->set_var( 'right_blocks', '' );
+        if( empty( $lblocks )) {
+            $theme->set_var( 'centercolumn','gl_content-full' );
+        } else {
+            $theme->set_var( 'centercolumn','gl_content-wide-left' );
         }
     }
 
-    // Global centerspan variable set in index.php
-    if( isset( $GLOBALS['centerspan'] ))
-    {
-        $footer->set_var( 'centerblockfooter-span', '</td></tr></table>' );
+    if ( !empty( $lblocks) ) {
+        $theme->parse( 'left_blocks', 'leftblocks', true );
+        $theme->set_var( 'geeklog_blocks', '');
+    }
+    if ( !empty ($rblocks) ) {
+        $theme->parse( 'right_blocks', 'rightblocks', true );
+        $theme->set_var( 'geeklog_rblocks', '');
     }
 
     $exectime = $_PAGE_TIMER->stopTimer();
     $exectext = $LANG01[91] . ' ' . $exectime . ' ' . $LANG01[92];
 
-    $footer->set_var( 'execution_time', $exectime );
-    $footer->set_var( 'execution_textandtime', $exectext );
+    $theme->set_var( 'execution_time', $exectime );
+    $theme->set_var( 'execution_textandtime', $exectext );
+
+    $theme->set_var('content',$content);
 
     // Call to plugins to set template variables in the footer
-    PLG_templateSetVars( 'footer', $footer );
+    PLG_templateSetVars( 'header', $theme );
+    PLG_templateSetVars( 'footer', $theme );
 
     // Actually parse the template and make variable substitutions
-    $footer->parse( 'index_footer', 'footer' );
+    $theme->parse( 'index_footer', 'footer' );
 
-    // Return resulting HTML
-    return $footer->finish( $footer->get_var( 'index_footer' ));
+    // The following lines allow users to embed PHP in their templates.  This
+    // is almost a contradition to the reasons for using templates but this may
+    // prove useful at times ...
+    // Don't use PHP in templates if you can live without it!
+
+    $tmp = $theme->finish($theme->parse( 'index_header', 'header' ));
+    $retval = eval( '?>' . $tmp );
+
+    $retval .= $theme->finish( $theme->get_var( 'index_footer' ));
+    return $retval;
 }
 
 /**
@@ -1667,9 +1698,9 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
 
     $sql = "SELECT $selection FROM {$_TABLES['topics']}";
     if ($ignorelang) {
-        $sql .= COM_getPermSQL('WHERE',0,3);
+        $sql .= COM_getPermSQL('WHERE',0,$access);
     } else {
-        $permsql = COM_getPermSQL('WHERE',0,3);
+        $permsql = COM_getPermSQL('WHERE',0,$access);
         if (empty($permsql)) {
             $sql .= COM_getLangSQL('tid');
         } else {
@@ -1922,6 +1953,10 @@ function COM_errorLog( $logentry, $actionid = '' )
 
         $timestamp = strftime( '%c' );
 
+        if (!isset($_CONF['path_log']) && ($actionid != 2)) {
+            $actionid = 3;
+        }
+
         switch( $actionid )
         {
             case 1:
@@ -1943,6 +1978,10 @@ function COM_errorLog( $logentry, $actionid = '' )
                         . nl2br( $logentry )
                         . COM_endBlock( COM_getBlockTemplate( '_msg_block',
                                                               'footer' ));
+                break;
+
+            case 3:
+                $retval = nl2br($logentry);
                 break;
 
             default:
@@ -6576,7 +6615,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     /*
      * If we have a root user, then output detailed error message:
      */
-    if( ( is_array($_USER) && function_exists('SEC_inGroup') ) || $_CONF['rootdebug'] )
+    if( ( is_array($_USER) && function_exists('SEC_inGroup') ) || (isset($_CONF['rootdebug']) && $_CONF['rootdebug']) )
     {
         if($_CONF['rootdebug'] || SEC_inGroup('Root'))
         {
@@ -6602,7 +6641,9 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     {
         if( array_key_exists('path_system', $_CONF) )
         {
-            require_once($_CONF['path_system'].'lib-custom.php');
+            if (file_exists($_CONF['path_system'].'lib-custom.php')) {
+                require_once($_CONF['path_system'].'lib-custom.php');
+            }
             if( function_exists('CUSTOM_handleError') )
             {
                 CUSTOM_handleError($errno, $errstr, $errfile, $errline, $errcontext);
@@ -6615,16 +6656,20 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     COM_errorLog("$errno - $errstr @ $errfile line $errline", 1);
 
     /* Does the theme implement an error message html file? */
-    if(file_exists($_CONF['path_layout'].'errormessage.html'))
-    {
+    if (!empty($_CONF['path_layout']) &&
+            file_exists($_CONF['path_layout'] . 'errormessage.html')) {
         // NOTE: NOT A TEMPLATE! JUST HTML!
-        include($_CONF['path_layout'].'errormessage.html');
+        include $_CONF['path_layout'] . 'errormessage.html';
     } else {
         /* Otherwise, display simple error message */
+        $title = "An Error Occurred";
+        if (!empty($_CONF['site_name'])) {
+            $title = $_CONF['site_name'] . ' - ' . $title;
+        }
         echo("
         <html>
             <head>
-                <title>{$_CONF['site_name']} - An Error Occurred</title>
+                <title>{$title}</title>
             </head>
             <body>
             <div style=\"width: 100%; text-align: center;\">
