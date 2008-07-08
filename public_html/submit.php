@@ -299,7 +299,7 @@ function savestory ($A)
 
     COM_updateSpeedlimit ('submit');
 
-    $result = $story->SaveSubmission();
+    $result = $story->saveSubmission();
     if( $result == STORY_NO_ACCESS_TOPIC )
     {
         // user doesn't have access to this topic - bail

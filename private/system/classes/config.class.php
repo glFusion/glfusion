@@ -108,8 +108,8 @@ class config {
     {
         global $_TABLES;
 
-        $sql_query = "SELECT name, value, group_name FROM {$_TABLES['conf_values']} WHERE (type <> 'subgroup') AND (type <> 'fieldset')";
-        $result = DB_query($sql_query);
+        $sql = "SELECT name, value, group_name FROM {$_TABLES['conf_values']} WHERE (type <> 'subgroup') AND (type <> 'fieldset')";
+        $result = DB_query($sql);
         while ($row = DB_fetchArray($result)) {
             if ($row[1] !== 'unset') {
                 if (!array_key_exists($row[2], $this->config_array) ||
@@ -162,10 +162,10 @@ class config {
         $escaped_val = addslashes(serialize($value));
         $escaped_name = addslashes($name);
         $escaped_grp = addslashes($group);
-        $sql_query = "UPDATE {$_TABLES['conf_values']} " .
-            "SET value = '{$escaped_val}' WHERE " .
-            "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
-        $this->_DB_escapedQuery($sql_query);
+        $sql = "UPDATE {$_TABLES['conf_values']} " .
+               "SET value = '{$escaped_val}' WHERE " .
+               "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
+        $this->_DB_escapedQuery($sql);
         if ( $name != 'theme' )  {
             $this->config_array[$group][$name] = $value;
             $this->_post_configuration();
@@ -188,10 +188,10 @@ class config {
         $escaped_val = addslashes(serialize($value));
         $escaped_name = addslashes($name);
         $escaped_grp = addslashes($group);
-        $sql_query = "UPDATE {$_TABLES['conf_values']} " .
-            "SET default_value = '{$escaped_val}' WHERE " .
-            "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
-        $this->_DB_escapedQuery($sql_query);
+        $sql = "UPDATE {$_TABLES['conf_values']} " .
+               "SET default_value = '{$escaped_val}' WHERE " .
+               "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
+        $this->_DB_escapedQuery($sql);
     }
 
     function restore_param($name, $group)
@@ -285,9 +285,9 @@ class config {
                        $fieldset,
                        serialize($default_value));
         $Qargs = array_map('addslashes', $Qargs);
-        $sql_query = vsprintf($format, $Qargs);
+        $sql = vsprintf($format, $Qargs);
 
-        $this->_DB_escapedQuery($sql_query);
+        $this->_DB_escapedQuery($sql);
 
         $this->config_array[$group][$param_name] = $default_value;
     }
@@ -854,9 +854,9 @@ class config {
         global $_DB, $_DB_dbms;
 
         if ($_DB_dbms == 'mssql') {
-            $sql_query = str_replace("\\'", "''", $sql);
-            $sql_query = str_replace('\\"', '"', $sql_query);
-            $_DB->dbQuery($sql_query, 0, 1);
+            $sql = str_replace("\\'", "''", $sql);
+            $sql = str_replace('\\"', '"', $sql);
+            $_DB->dbQuery($sql, 0, 1);
         } else {
             DB_query($sql);
         }
