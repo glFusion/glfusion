@@ -1179,7 +1179,7 @@ $MESSAGE = array(
     94 => 'הגיבוי נכשל. גודל הקובץ היה פחות מ-1kb',
     95 => 'חלה תקלה.',
     96 => 'מצטערים, אין לכם גישה לעמוד ניהול המערכת. אנא שימו לב שכל נסיונות הגישה ליכולות לא מורשות מתועדות.',
-    97 => 'לא כל השדות הנדרשים הצליחו לעבור אימות - הודעת ברירת המחדל של רישום מותאם אישית באתר'
+    97 => 'לא כל השדות הנדרשים הצליחו לעבור אימות - הודעת ברירת המחדל של רישום מותאם אישית באתר',
     500 => 'The Template Cache has been successfully cleared'
 );
 
@@ -1425,7 +1425,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1481,7 +1481,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

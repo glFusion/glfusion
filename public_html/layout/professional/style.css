@@ -274,9 +274,6 @@ select {
   text-decoration: line-through;
 }
 /* Blocks *********************************************************************/
-.block-box-left {
-  margin:10px;
-}
 .block-box-left,
 .block-box-right,
 .block-box {

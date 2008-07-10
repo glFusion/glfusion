@@ -773,6 +773,7 @@ function SEC_checkUserStatus($userid)
             exit;
         }
     }
+    return $status;
 }
 
 /**

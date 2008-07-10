@@ -557,6 +557,16 @@ class Story
             $this->_statuscode = STORY_ARCHIVE_ON_EXPIRE;
         }
 
+        if ( $this->_featured != 1 ) {
+            $this->_featured = 0;
+        }
+        if ( $this->_statuscode == '' ) {
+            $this->_statuscode = 0;
+        }
+        if ( $this->_owner_id == '' ) {
+            $this->_owner_id = 1;
+        }
+
         /* if a featured, non-draft, that goes live straight away, unfeature
          * other stories:
          */
@@ -722,13 +732,6 @@ class Story
                 if ( $taccess < 3 ) {
                     return STORY_EXISTING_NO_EDIT_PERMISSION;
                 }
-/* -----------------------------
-                if (SEC_hasAccess($article['owner_id'], $article['group_id'],
-                        $article['perm_owner'], $article['perm_group'],
-                        $article['perm_members'], $article['perm_anon']) < 3) {
-                    return STORY_EXISTING_NO_EDIT_PERMISSION;
-                }
--------------------------------- */
             }
         }
 
@@ -744,10 +747,6 @@ class Story
         $topic = DB_fetchArray($topic);
         $this->_topic = $topic['topic'];
         $this->_imageurl = $topic['imageurl'];
-
-        //$title = COM_stripSlashes( $array['title'] );
-        //$intro = COM_stripSlashes( $array['introtext'] );
-        //$body = COM_stripSlashes( $array['bodytext'] );
 
         /* Then load the title, intro and body */
         if (($array['postmode'] == 'html') || ($array['postmode'] == 'adveditor') || ($array['postmode'] == 'wikitext')) {
@@ -820,7 +819,7 @@ class Story
     function loadSubmission()
     {
         $array = $_POST;
-        
+
         $this->_expire = time();
         $this->_date = time();
         $this->_expiredate = 0;

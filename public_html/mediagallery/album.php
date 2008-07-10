@@ -173,6 +173,19 @@ if ($MG_albums[$album_id]->albums_first == 1 ) {
     $subRows = 0;
     if ( !empty($MG_albums[$album_id]->children ) ) {
         $children = $MG_albums[$album_id]->getChildren();
+        /*
+         * remove hidden albums since we don't need them here.
+         */
+        $realChildCount = count($children);
+        if ( $realChildCount != $cCount ) {
+            for ($i=0;$i<$realChildCount; $i++) {
+                if ( $MG_albums[$children[$i]]->hidden == 1 && $MG_albums[$children[$i]]->access != 3 ) {
+                    unset($MG_albums[$album_id]->children[$children[$i]]);
+                }
+            }
+            $children = $MG_albums[$album_id]->getChildren();
+        }
+
         for ($i=$begin; $i < $begin+$end; $i++ ) {
             if ( $i >= $cCount) {
                 continue;
@@ -244,6 +257,20 @@ if ($MG_albums[$album_id]->albums_first == 0 && !empty($MG_albums[$album_id]->ch
         $numToProcess = $end - $mediaRows;
         $subRows = 0;
         $children = $MG_albums[$album_id]->getChildren();
+
+        /*
+         * remove hidden albums since we don't need them here.
+         */
+
+        $realChildCount = count($children);
+        if ( $realChildCount != $cCount ) {
+            for ($i=0;$i<$realChildCount; $i++) {
+                if ( $MG_albums[$children[$i]]->hidden == 1 && $MG_albums[$children[$i]]->access != 3 ) {
+                    unset($MG_albums[$album_id]->children[$children[$i]]);
+                }
+            }
+            $children = $MG_albums[$album_id]->getChildren();
+        }
         $endPoint = $startingPoint + $numToProcess;
         if ( $endPoint > count($children) ) {
             $endPoint = count($children);

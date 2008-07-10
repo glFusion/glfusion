@@ -11,34 +11,66 @@ v1.1.0
         public_html/lib-common.php
 
 v1.0.1
-------------
+------
+- Added new VideoEmbed plugin for FCKeditor
+        public_html/fckeditor/fckconfig.js
+        public_html/fckeditor/myconfig.js
+        public_html/fckeditor/editor/plugins/video/fckplugin.js
+        public_html/fckeditor/editor/plugins/video/readme.txt
+        public_html/fckeditor/editor/plugins/video/video.php
+        public_html/fckeditor/editor/plugins/video/css/style.css
+        public_html/fckeditor/editor/plugins/video/images/video.gif
+        public_html/fckeditor/editor/plugins/video/jscripts/functions.js
+        public_html/fckeditor/editor/plugins/video/langs/english.php
+        public_html/fckeditor/editor/plugins/video/templates/embed.thtml
+        public_html/fckeditor/editor/plugins/video/templates/embed_body.thtml
+
+- Changed 'domready' events to 'load' events to solve IE domready bug.
+        public_html/layout/nouveau/functions.php
+
+- Fixed language file errors - missing comma caused error
+        private/language/german.php
+        private/language/german_formal.php
+        private/language/german_formal_utf-8.php
+        private/language/hebrew_utf-8.php
+
+- Terminate a user's session if banned
+        public_html/admin/user.php
+        private/system/lib-security.php
+        private/system/lib-sessions.php
+
+- Stylesheet clean up
+        public_html/layout/professional/style.css
+
 - Fixed xhtml validation bug (issue 176) (Eric)
 		public_html/layout/nouveau/style.css
 		public_html/layout/nouveau/style-colors.css
 		public_html/layout/nouveau/admin/story/storyeditor_advanced.thtml
 
-- Allow creation of banned users, i.e. ban the user on account creation
-        public_html/admin/users.php
+- Fixed issue with IE7 displaying drop down menu with new em measurements
+        public_html/layout/nouveau/css/ie7.css
 
-- Minor improvements in the error handling
-        public_html/lib-common.php
-
-- Fixed issue where menu option Graphics or color was not being honored
-  in Nouveau theme.
-        public_html/layout/nouveau/functions.php
-
-- Added theme name to instance id for cached stories.
+- Implemented the ability to subscribe to a topic in the story display
+        public_html/article.php
+        public_html/admin/syndication.php
         private/system/lib-story.php
-
-- If admin creates a user, use the user status (active, awaiting approval)
-  specified by admin during the create.
-        public_html/admin/user.php
+        private/language/english.php
+        private/language/english_utf-8.php
+        public_html/layout/nouveau/article.thtml
+        public_html/layout/nouveau/featuredstorytext.thtml
+        public_html/layout/nouveau/storytext.thtml
+        public_html/layout/nouveau/images/rss_small.png
+        private/language/english.php
+        private/language/english_utf-8.php
 
 - Made the default advanced editor style more closely match the Nouveau theme (Eric)
 		public_html/fckeditor/fckconfig.js
 
 - Added the gl_moochronometer css (Eric)
 		public_html/layout/nouveau/style.css
+
+- Fixed a bug in MSSQL escape code in config.class.php
+        private/system/classes/config.class.php
 
 - Added a title to the (X) option
         private/language/english.php
@@ -229,6 +261,13 @@ v1.0.1
 
 Calendar plugin
 ---------------
+- Fix a language inconsistency which caused the inability to delete calendar
+  events in the day and week views.
+        public_html/calendar/index.php
+
+- Calendar search did not honor the author field.
+        private/plugins/calendar/functions.inc
+
 - MSSQL issues resolved in calendar plugin and in CSRF tokens.
         private/plugins/calendar/functions.inc
 
@@ -250,6 +289,12 @@ Links plugin
         private/plugins/links/language/english_utf-8.php
         public_html/admin/plugins/links/category.php
 
+Media Gallery plugin
+--------------------
+- Fixed an issue where hidden albums would prevent other sub-albums
+  from displaying.
+        public_html/mediagallery/album.php
+
 Polls plugin
 ------------
 - Updated hebrew language file
@@ -257,9 +302,9 @@ Polls plugin
 
 Site Tailor plugin
 ------------------
-- Fixed bug where no groups would display if default admin user has been
-  deleted.
-        public_html/admin/plugins/sitetailor/index.php
+- Fixed error where the menu hover image was used regardless of the Graphics/
+  Color setting.
+        public_html/layout/nouveau/functions.php
 
 - Fixed error where static pages would reset when edited.
         public_html/admin/plugins/sitetailor/index.php
@@ -325,6 +370,14 @@ Documentation
         public_html/docs/config.html
 - Updated main documentation index page
         public_html/docs/index.html
+- Updated the online help documents
+        public_html/help/advancedsearch.html
+        public_html/help/cceventsubmission.html
+        public_html/help/cclinksubmission.html
+        public_html/help/ccstorysubmission.html
+        public_html/help/submitevent.html
+        public_html/help/submitlink.html
+        public_html/help/submitstory.html
 
 v1.0.0 - June 18, 2008
 

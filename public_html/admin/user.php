@@ -567,6 +567,9 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
                    && ($userstatus == USER_ACCOUNT_ACTIVE) ) {
                 USER_createAndSendPassword ($username, $email, $uid);
             }
+            if ($userstatus == USER_ACCOUNT_DISABLED) {
+                SESS_endUserSession($uid);
+            }
             $userChanged = true;
         }
 
