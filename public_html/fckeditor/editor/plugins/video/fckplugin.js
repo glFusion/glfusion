@@ -41,6 +41,6 @@ videoCommand.Execute=function() {
 FCKCommands.RegisterCommand('video', videoCommand ); //otherwise our command will not be found
 
 var ovideo = new FCKToolbarButton('video', 'Insert Embedded Video');
-ovideo.IconPath = FCKPlugins.Items['video'].Path + 'images/video.gif'; //specifies the image used in the toolbar
+ovideo.IconPath = FCKPlugins.Items['video'].Path + 'images/video.png'; //specifies the image used in the toolbar
 
 FCKToolbarItems.RegisterItem( 'video', ovideo );

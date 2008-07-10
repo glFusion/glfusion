@@ -42,6 +42,6 @@ mediagalleryCommand.Execute=function() {
 FCKCommands.RegisterCommand('mediagallery', mediagalleryCommand ); //otherwise our command will not be found
 
 var omediagallery = new FCKToolbarButton('mediagallery', 'Insert Media Gallery Auto Tag');
-omediagallery.IconPath = FCKPlugins.Items['mediagallery'].Path + 'images/mediagallery.gif'; //specifies the image used in the toolbar
+omediagallery.IconPath = FCKPlugins.Items['mediagallery'].Path + 'images/mediagallery.png'; //specifies the image used in the toolbar
 
 FCKToolbarItems.RegisterItem( 'mediagallery', omediagallery );
