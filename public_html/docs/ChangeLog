@@ -325,6 +325,40 @@ Staticpages plugin
 
 FCKEditor
 ---------
+- Updated to v2.6.2 Production Release (FF3 Fixes)
+        public_html\fckeditor\editor\_source\classes\fckstyle.js
+        public_html\fckeditor\editor\_source\internals\fckdomtools.js
+        public_html\fckeditor\editor\filemanager\browser\default\frmactualfolder.html
+        public_html\fckeditor\editor\_source\internals\fckselection_ie.js
+        public_html\fckeditor\editor\filemanager\browser\default\js\common.js
+        public_html\fckeditor\editor\_source\classes\fckiecleanup.js
+        public_html\fckeditor\editor\filemanager\browser\default\browser.html
+        public_html\fckeditor\editor\js\fckeditorcode_ie.js
+        public_html\fckeditor\fckpackager.xml
+        public_html\fckeditor\editor\_source\internals\fckdocumentprocessor.js
+        public_html\fckeditor\_whatsnew.html
+        public_html\fckeditor\editor\fckeditor.html
+        public_html\fckeditor\fckconfig.js
+        public_html\fckeditor\editor\_source\fckeditorapi.js
+        public_html\fckeditor\editor\fckeditor.original.html
+        public_html\fckeditor\editor\js\fckadobeair.js
+        public_html\fckeditor\editor\_source\internals\fckdebug.js
+        public_html\fckeditor\editor\plugins\dragresizetable\fckplugin.js
+        public_html\fckeditor\editor\_source\internals\fck_ie.js
+        public_html\fckeditor\editor\_source\internals\fckselection_gecko.js
+        public_html\fckeditor\editor\filemanager\browser\default\js\fckxml.js
+        public_html\fckeditor\editor\_source\internals\fckdialog.js
+        public_html\fckeditor\editor\_source\internals\fcktools.js
+        public_html\fckeditor\_whatsnew_history.html
+        public_html\fckeditor\fckeditor.js
+        public_html\fckeditor\editor\dialog\fck_about.html
+        public_html\fckeditor\editor\_source\internals\fckconfig.js
+        public_html\fckeditor\editor\js\fckeditorcode_gecko.js
+        public_html\fckeditor\editor\_source\internals\fck.js
+        public_html\fckeditor\editor\_source\classes\fckenterkey.js
+        public_html\fckeditor\editor\_source\internals\fck_gecko.js
+        public_html\fckeditor\editor\_source\classes\fckdomrange.js
+
 - Updated to v2.6.1 Production Release (Opera 9.50 fixes, upload fix)
         public_html\fckeditor\_whatsnew.html
         public_html\fckeditor\_whatsnew_history.html
