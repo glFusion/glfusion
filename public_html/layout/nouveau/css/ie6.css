@@ -4,13 +4,18 @@ This file only contains CSS fixes for the IE 6 browser. For regular style info u
 
 #gl_navigation { /*the leftblocks*/
   background:#000;
-  border-bottom:0px;
-  border-left:0px;
-  border-top:0px;
+  border-bottom:0;
+  border-left:0;
+  border-top:0;
+}
+#gl_container_fixed #gl_navigation {
+  padding-left:0;
+}
+#gl_container_fluid #gl_navigation{
   padding-left:40px;
 }
 #gl_extra { /*the rightblocks*/
-  border-bottom:0px;
+  border-bottom:0;
 }
 #gl_moomenu {
   height:2.2em; /*set to 54px if you use 2 row menus*/
@@ -25,7 +30,7 @@ This file only contains CSS fixes for the IE 6 browser. For regular style info u
   background:url(../images/gl_moomenu1-parent_ie6.gif) 95% 50% no-repeat;
 }
 .gl_moomenu li ul {
-width:177px;
+  width:177px;
 }
 .block-columnpad {
   background:#F7F7F7;

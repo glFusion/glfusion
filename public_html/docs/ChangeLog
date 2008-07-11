@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Fix IE6 gl_navigation column differences in fixed vs. fluid gl_container layouts (issue 189) (Eric)
+		public_html/layout/nouveau/css/ie6.css
+
 - Implemented glFusion CSS layout driven header / footer functions.
         public_html/lib-common.php
         public_html/layout/nouveau/functions.php
