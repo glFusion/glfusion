@@ -147,7 +147,7 @@ FCKSelection.HasAncestorNode = function( nodeTagName )
 
 	while ( oContainer )
 	{
-		if ( oContainer.tagName == nodeTagName ) return true ;
+		if ( oContainer.nodeName.IEquals( nodeTagName ) ) return true ;
 		oContainer = oContainer.parentNode ;
 	}
 

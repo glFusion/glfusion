@@ -45,7 +45,7 @@ var FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
 {
 	var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'IMG' ) ;
 	oImg.className = fakeClass ;
-	oImg.src = FCKConfig.FullBasePath + 'images/spacer.gif' ;
+	oImg.src = FCKConfig.BasePath + 'images/spacer.gif' ;
 	oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
 	oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
 	return oImg ;

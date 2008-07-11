@@ -98,14 +98,17 @@ var FCKDialog = ( function()
 
 			// Calculate the dialog position, centering it on the screen.
 			var viewSize = FCKTools.GetViewPaneSize( topWindow ) ;
-			var scrollPosition = FCKTools.GetScrollPosition( topWindow ) ;
+			var scrollPosition = { 'X' : 0, 'Y' : 0 } ;
+			var useAbsolutePosition = FCKBrowserInfo.IsIE && ( !FCKBrowserInfo.IsIE7 || !FCKTools.IsStrictMode( topWindow.document ) ) ;
+			if ( useAbsolutePosition )
+				scrollPosition = FCKTools.GetScrollPosition( topWindow ) ;
 			var iTop  = Math.max( scrollPosition.Y + ( viewSize.Height - height - 20 ) / 2, 0 ) ;
 			var iLeft = Math.max( scrollPosition.X + ( viewSize.Width - width - 20 )  / 2, 0 ) ;
 
 			// Setup the IFRAME that will hold the dialog.
 			var dialog = topDocument.createElement( 'iframe' ) ;
 			FCKTools.ResetStyles( dialog ) ;
-			dialog.src = FCKConfig.FullBasePath + 'fckdialog.html' ;
+			dialog.src = FCKConfig.BasePath + 'fckdialog.html' ;
 
 			// Dummy URL for testing whether the code in fckdialog.js alone leaks memory.
 			// dialog.src = 'about:blank';
@@ -114,7 +117,7 @@ var FCKDialog = ( function()
 			dialog.allowTransparency = true ;
 			FCKDomTools.SetElementStyles( dialog,
 					{
-						'position'	: 'absolute',
+						'position'	: ( useAbsolutePosition ) ? 'absolute' : 'fixed',
 						'top'		: iTop + 'px',
 						'left'		: iLeft + 'px',
 						'width'		: width + 'px',

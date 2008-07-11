@@ -671,9 +671,22 @@ var FCK =
 		// object that may internally supply this feature.
 		var range = new FCKDomRange( this.EditorWindow ) ;
 
+		// Move to the selection and delete it.
+		range.MoveToSelection() ;
+		range.DeleteContents() ;
+
 		if ( FCKListsLib.BlockElements[ elementName ] != null )
 		{
-			range.SplitBlock() ;
+			if ( range.StartBlock )
+			{
+				if ( range.CheckStartOfBlock() )
+					range.MoveToPosition( range.StartBlock, 3 ) ;
+				else if ( range.CheckEndOfBlock() )
+					range.MoveToPosition( range.StartBlock, 4 ) ;
+				else
+					range.SplitBlock() ;
+			}
+
 			range.InsertNode( element ) ;
 
 			var next = FCKDomTools.GetNextSourceElement( element, false, null, [ 'hr','br','param','img','area','input' ], true ) ;
@@ -703,9 +716,7 @@ var FCK =
 		}
 		else
 		{
-			// Delete the current selection and insert the node.
-			range.MoveToSelection() ;
-			range.DeleteContents() ;
+			// Insert the node.
 			range.InsertNode( element ) ;
 
 			// Move the selection right after the new element.

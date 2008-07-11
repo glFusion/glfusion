@@ -863,6 +863,12 @@ FCKDomRange.prototype =
 		this.ExtractContents().AppendTo( oFixedBlock ) ;
 		FCKDomTools.TrimNode( oFixedBlock ) ;
 
+		// If the fixed block is empty (not counting bookmark nodes)
+		// Add a <br /> inside to expand it.
+		if ( FCKDomTools.CheckIsEmptyElement(oFixedBlock, function( element ) { return element.getAttribute('_fck_bookmark') != 'true' ; } )
+				&& FCKBrowserInfo.IsGeckoLike )
+				FCKTools.AppendBogusBr( oFixedBlock ) ;
+
 		// Insert the fixed block into the DOM.
 		this.InsertNode( oFixedBlock ) ;
 

@@ -81,7 +81,7 @@ FCKTools.AppendStyleSheet = function( domDocument, cssFileOrArrayOrDef )
 	if ( typeof( cssFileOrArrayOrDef ) == 'string' )
 	{
 		// Test if the passed argument is an URL.
-		if ( /[\\\/\.]\w*$/.test( cssFileOrArrayOrDef ) )
+		if ( /[\\\/\.][^{}]*$/.test( cssFileOrArrayOrDef ) )
 		{
 			// The string may have several URLs separated by comma.
 			return this.AppendStyleSheet( domDocument, cssFileOrArrayOrDef.split(',') ) ;
@@ -126,7 +126,7 @@ FCKTools.GetStyleHtml = (function()
 		if ( typeof( cssFileOrArrayOrDef ) == 'string' )
 		{
 			// Test if the passed argument is an URL.
-			if ( /[\\\/\.]\w*$/.test( cssFileOrArrayOrDef ) )
+			if ( /[\\\/\.][^{}]*$/.test( cssFileOrArrayOrDef ) )
 			{
 				// The string may have several URLs separated by comma.
 				return this.GetStyleHtml( cssFileOrArrayOrDef.split(','), markTemp ) ;

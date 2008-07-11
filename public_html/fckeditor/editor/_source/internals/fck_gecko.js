@@ -349,6 +349,8 @@ FCK._ExecPaste = function()
 // selected content if any.
 FCK.InsertHtml = function( html )
 {
+	var doc = FCK.EditorDocument ;
+
 	html = FCKConfig.ProtectedSource.Protect( html ) ;
 	html = FCK.ProtectEvents( html ) ;
 	html = FCK.ProtectUrls( html ) ;
@@ -357,8 +359,23 @@ FCK.InsertHtml = function( html )
 	// Save an undo snapshot first.
 	FCKUndo.SaveUndoStep() ;
 
+	if ( FCKBrowserInfo.IsGecko )
+	{
+		// Using the following trick, &nbsp; present at the beginning and at
+		// the end of the HTML are preserved (#2248).
+		html = '<span id="__fakeFCKRemove1__" style="display:none;">fakeFCKRemove</span>' + html + '<span id="__fakeFCKRemove2__" style="display:none;">fakeFCKRemove</span>' ;
+	}
+
 	// Insert the HTML code.
-	this.EditorDocument.execCommand( 'inserthtml', false, html ) ;
+	doc.execCommand( 'inserthtml', false, html ) ;
+
+	if ( FCKBrowserInfo.IsGecko )
+	{
+		// Remove the fake nodes.
+		FCKDomTools.RemoveNode( doc.getElementById('__fakeFCKRemove1__') ) ;
+		FCKDomTools.RemoveNode( doc.getElementById('__fakeFCKRemove2__') ) ;
+	}
+
 	this.Focus() ;
 
 	// Save the caret position before calling document processor.
@@ -366,7 +383,7 @@ FCK.InsertHtml = function( html )
 	range.MoveToSelection() ;
 	var bookmark = range.CreateBookmark() ;
 
-	FCKDocumentProcessor.Process( FCK.EditorDocument ) ;
+	FCKDocumentProcessor.Process( doc ) ;
 
 	// Restore caret position, ignore any errors in case the document
 	// processor removed the bookmark <span>s for some reason.
