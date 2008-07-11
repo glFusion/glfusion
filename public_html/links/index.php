@@ -110,7 +110,7 @@ function links_list($message)
             $page_title = sprintf ($LANG_LINKS[114] . ': %s', $category);
         }
     }
-    
+
     // Check has access to this category
     if ($cid != $_LI_CONF['root']) {
         $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['linkcategories']} WHERE cid='{$cat}'");
@@ -313,8 +313,8 @@ function links_list($message)
             }
         }
         if ($pages > 0) {
-            if (($_LI_CONF['linkcols'] > 0) && isset($currentcategory)) {
-                $catlink = '?category=' . urlencode ($currentcategory);
+            if (($_LI_CONF['linkcols'] > 0) && isset($currentcid)) {
+                $catlink = '?category=' . $currentcid;
             } else {
                 $catlink = '';
             }

@@ -550,7 +550,8 @@ $LANG11 = array(
     2 => 'An einen Freund schicken',
     3 => 'Druckfähige Version',
     4 => 'Optionen',
-    5 => 'Als PDF'
+    5 => 'Als PDF',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1426,7 +1427,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1482,7 +1483,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1583,7 +1584,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Änderungen speichern',
     'reset_form' => 'Angaben zurücksetzen',
     'changes_made' => 'Änderungen wurden erfolgreich übernommen',
-    'title' => 'Konfigurations-Manager'
+    'title' => 'Konfigurations-Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

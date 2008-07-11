@@ -547,7 +547,8 @@ $LANG11 = array(
     2 => 'Pošli e-mailom',
     3 => 'Verzia pre tlač',
     4 => 'Voľby článku',
-    5 => 'PDF Story Format'
+    5 => 'PDF Story Format',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1580,7 +1581,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Save Changes',
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
-    'title' => 'Configuration Manager'
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

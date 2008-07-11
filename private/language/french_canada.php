@@ -550,7 +550,8 @@ $LANG11 = array(
     2 => 'Envoyer cet article &agrave; un ami',
     3 => 'Version imprimable',
     4 => 'Option des articles',
-    5 => 'Article en format PDF'
+    5 => 'Article en format PDF',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1583,7 +1584,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Save Changes',
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
-    'title' => 'Configuration Manager'
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

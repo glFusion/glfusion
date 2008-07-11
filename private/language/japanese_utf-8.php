@@ -554,7 +554,8 @@ $LANG11 = array(
     2 => '友達に記事をメールする',
     3 => '印刷フォームページ',
     4 => '記事のオプション',
-    5 => 'PDF 記事フォーマット'
+    5 => 'PDF 記事フォーマット',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1587,7 +1588,8 @@ $LANG_CONFIG = array(
     'save_changes' => '変更を保存する',
     'reset_form' => 'フォームを初期化する',
     'changes_made' => '変更が完了しました',
-    'title' => 'コンフィギュレーション管理'
+    'title' => 'コンフィギュレーション管理',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

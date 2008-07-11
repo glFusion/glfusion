@@ -560,7 +560,8 @@ $LANG11 = array(
     2 => 'Send  artikkelen til en venn',
     3 => 'utskriftsvennlig format',
     4 => 'Valg',
-    5 => 'PDF Story Format'
+    5 => 'PDF Story Format',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1593,7 +1594,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Save Changes',
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
-    'title' => 'Configuration Manager'
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

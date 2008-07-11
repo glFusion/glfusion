@@ -547,7 +547,8 @@ $LANG11 = array(
     2 => 'Epos Artikel aan \'n Vriend',
     3 => 'Drukbare artikelformaat',
     4 => 'Artikelopsies',
-    5 => 'PDF Artikelformaat'
+    5 => 'PDF Artikelformaat',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1580,7 +1581,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Save Changes',
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
-    'title' => 'Configuration Manager'
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

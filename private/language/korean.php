@@ -548,7 +548,8 @@ $LANG11 = array(
     2 => '친구에게 메일로 기사보내기',
     3 => '인쇄용 페이지',
     4 => '기사 옵션',
-    5 => 'PDF 스토리 포멧'
+    5 => 'PDF 스토리 포멧',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1581,7 +1582,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Save Changes',
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
-    'title' => 'Configuration Manager'
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

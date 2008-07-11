@@ -548,7 +548,8 @@ $LANG11 = array(
     2 => 'Lähetä artikkeli ystävälle',
     3 => 'Tulostettava versio artikkelista',
     4 => 'Artikkelien asetukset',
-    5 => 'PDF Story Format'
+    5 => 'PDF Story Format',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1581,7 +1582,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Save Changes',
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
-    'title' => 'Configuration Manager'
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

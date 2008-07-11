@@ -282,6 +282,10 @@ Forum plugin
 
 Links plugin
 ------------
+- Fixed error where the category name was passed in the URL instead of the
+  category id.
+        public_html/links/index.php
+
 - Fixed SQL error when trying to change a category id to an already existing id
 - Fixed new category silently overwriting an existing category if they had the
   same id

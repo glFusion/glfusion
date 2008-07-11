@@ -550,7 +550,8 @@ $LANG11 = array(
     2 => '寄文章给朋友',
     3 => '可印的文章格式',
     4 => '文章选项',
-    5 => 'PDF 文章版本'
+    5 => 'PDF 文章版本',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1583,7 +1584,8 @@ $LANG_CONFIG = array(
     'save_changes' => '存续所更改的',
     'reset_form' => '恢复表格原状',
     'changes_made' => '更改已成功地安置于',
-    'title' => '设定管理'
+    'title' => '设定管理',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

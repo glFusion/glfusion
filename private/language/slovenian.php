@@ -550,7 +550,8 @@ $LANG11 = array(
     2 => 'Pošlji èlanek prijatelju po e-pošti',
     3 => 'Za tisk prijazna stran',
     4 => 'Dodatne možnosti',
-    5 => 'Èlanek v formatu PDF'
+    5 => 'Èlanek v formatu PDF',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1583,7 +1584,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Shrani spremembe',
     'reset_form' => 'Ponastavi obrazec',
     'changes_made' => 'Spremembe so bile uspešno izvedene nad',
-    'title' => 'Upravljavec nastavitev'
+    'title' => 'Upravljavec nastavitev',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

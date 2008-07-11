@@ -549,7 +549,8 @@ $LANG11 = array(
     2 => 'שליחת המאמר לחבר',
     3 => 'גירסה להדפסה',
     4 => 'אפשרויות למאמר זה',
-    5 => 'המאמר בפורמט PDF'
+    5 => 'המאמר בפורמט PDF',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1425,7 +1426,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1481,7 +1482,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1582,7 +1583,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'שמירת שינויים',
     'reset_form' => 'איפוס הטופס',
     'changes_made' => 'השינויים בוצעו בהצלחה אצל',
-    'title' => 'ניהול ההגדרות'
+    'title' => 'ניהול ההגדרות',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

@@ -555,7 +555,8 @@ $LANG11 = array(
     2 => 'Στείλτε το άρθρο σε έναν φίλο/φίλη μέσω ηλεκτρονικού ταχυδρομίου',
     3 => 'Διαμόρφωση άρθρου για εκτύπωση',
     4 => 'Μενού επιλογών άρθρου',
-    5 => 'Άρθρο σε μορφή PDF'
+    5 => 'Άρθρο σε μορφή PDF',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1588,7 +1589,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Save Changes',
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
-    'title' => 'Configuration Manager'
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

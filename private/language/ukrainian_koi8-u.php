@@ -551,7 +551,8 @@ $LANG11 = array(
     2 => 'В╕д╕слати статтю ',
     3 => 'Форма статт╕ для друку',
     4 => 'Параметри',
-    5 => 'Формат статт╕ PDF'
+    5 => 'Формат статт╕ PDF',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1584,7 +1585,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Save Changes',
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
-    'title' => 'Configuration Manager'
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(

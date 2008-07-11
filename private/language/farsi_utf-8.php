@@ -535,7 +535,8 @@ $LANG11 = array(
     2 => 'ميل کردن مقاله به دوستان',
     3 => 'مقاله قابل چاپ',
     4 => 'اختيارات مقاله',
-    5 => 'قالبPdfمقاله'
+    5 => 'قالبPdfمقاله',
+    6 => 'Subscribe to '
 );
 
 ###############################################################################
@@ -1568,7 +1569,8 @@ $LANG_CONFIG = array(
     'save_changes' => 'Save Changes',
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
-    'title' => 'Configuration Manager'
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option'
 );
 
 $LANG_configsections['Core'] = array(
