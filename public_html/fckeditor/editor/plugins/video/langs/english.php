@@ -34,7 +34,7 @@
 $LANG_ve = array (
     'insert'			=> 'Insert',
     'cancel'			=> 'Cancel',
-    'title'             => 'Video Embed',
+    'title'             => 'Embed Video',
     'help'              => 'Paste the embedded video string below',
     'alignment'         => 'Alignment',
     'right'             => 'Right',

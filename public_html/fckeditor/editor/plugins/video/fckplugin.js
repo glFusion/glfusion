@@ -35,7 +35,7 @@ videoCommand.GetState=function() {
 videoCommand.Execute=function() {
     //open a popup window when the button is clicked
 
-    window.open(FCKPlugins.Items['video'].Path + 'video.php?i=' + FCK.Name, 'video', 'width=540,height=250,resizable=yes,scrollbars=yes,scrolling=yes,location=no,toolbar=no');
+    window.open(FCKPlugins.Items['video'].Path + 'video.php?i=' + FCK.Name, 'video', 'width=533,height=230,resizable=yes,scrollbars=yes,scrolling=yes,location=no,toolbar=no');
 }
 
 FCKCommands.RegisterCommand('video', videoCommand ); //otherwise our command will not be found

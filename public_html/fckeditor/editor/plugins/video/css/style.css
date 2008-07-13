@@ -1,8 +1,10 @@
 body
 {
-	background-color: #f1f1e3;
-	margin-top:0;
-	margin-bottom:0;
+  background: #8cb2fd; /* #f7f8fd; */
+  color:#000000;
+  font:.8em arial,sans-serif,verdana,tahoma,helvetica;
+  margin:10px;
+  text-align:left;
 }
 
 form
@@ -19,8 +21,8 @@ h1
 
 .Frame
 {
-	background-color: #f1f1e3;
-	border: thin inset #f1f1e3;
+	background-color: #8cb2fd;
+	border: thin inset #8cb2fd;
 }
 
 body.FileArea

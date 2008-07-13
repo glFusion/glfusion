@@ -3,14 +3,16 @@ var FCK = opener.FCKeditorAPI.GetInstance('{instance}') ;
 </script>
 <form name="embedvideo" method="post" action="{s_form_action}">
 <input type="hidden" name="i" value="{instance}">
-<h1>{lang_title}</h1>
-<div style="font-weight:bold;">{lang_help}</div>
+<h1 style="float:left;vertical-align:middle;">{lang_title}</h1>
+<div style="float:right;vertical-align:middle;padding-top:7px;margin-right:20px;">{lang_help}</div>
 <textarea name="embedstring" cols="60" rows="7"></textarea>
-<p>
-<span style="font-weight:bold;">{lang_alignment}:&nbsp;</span>{align_select}
-</p>
-<p>
+<div style="margin-left:10px;margin-right:15px;">
+<div style="float:left;padding-top:5px;">
+{lang_alignment}:&nbsp;{align_select}
+</div>
+<div style="float:right;margin-left:10px;margin-right:10px;padding-top:5px;">
 <input class="button" type="button" name="button" value="{lang_insert}" onClick="return insertEmbed(this.form);">
 <input class="button" type="button" name="cancel" value="{lang_cancel}" onClick="javascript:window.close();">
-</p>
+</div>
+</div>
 </form>
