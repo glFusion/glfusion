@@ -2,16 +2,16 @@
 
 /* Reminder: always indent with 4 spaces (no tabs). */
 // +---------------------------------------------------------------------------+
-// | Geeklog 1.4                                                               |
+// | glFusion                                                                  |
 // +---------------------------------------------------------------------------+
 // | lib-custom.php                                                            |
 // |                                                                           |
-// | Your very own custom Geeklog library.                                     |
+// | Your very own custom glFusion library.                                    |
 // |                                                                           |
 // | This is the file where you should put all of your custom code.  When      |
 // | possible you should not alter lib-common.php but, instead, put code here. |
-// | This will make upgrading to future versions of Geeklog easier for you     |
-// | because you will always be guaranteed that the Geeklog developers will    |
+// | This will make upgrading to future versions of glFusion easier for you    |
+// | because you will always be guaranteed that the glFusion developers will   |
 // | NOT add required code to this file.                                       |
 // |                                                                           |
 // | NOTE: we have already gone through the trouble of making sure that we     |
@@ -53,6 +53,19 @@ if (strpos ($_SERVER['PHP_SELF'], 'lib-custom.php') !== false) {
 // using COM_errorLog().  To see an example of how to do this, look in
 // lib-common.php and see how $_COM_VERBOSE was used throughout the code
 $_CST_VERBOSE = false;
+
+/**
+ * Sample User Create Hook
+ *
+ * This example will automatically add a user to a group when their account
+ * is initially created.
+ *
+ */
+/* ------ Commented out by default -------- */
+//function CUSTOM_userCreateHook($uid)
+//{
+//    SEC_addUserToGroup($uid, 'Place Group Name Here');
+//}
 
 /**
 * Sample PHP Block function
@@ -136,7 +149,7 @@ function CUSTOM_templateSetVars ($templatename, &$template)
     located under the theme_dir/custom directory.
     Sample is provided under /system with the distribution.
 
-    Functions have been provided that are called from the Core Geeklog user and admin functions
+    Functions have been provided that are called from the Core glFusion user and admin functions
     - This works with User Moderation as well
     - Admin will see the new registration info when checking a member's profile only
     - All other users will see the standard User profile with the optional extended custom information
@@ -332,11 +345,11 @@ function CUSTOM_userForm ($msg = '')
 }
 
 /**
-* Geeklog is about to create a new user or edit an existing user.
+* glFusion is about to create a new user or edit an existing user.
 * This is the custom code's last chance to do any form validation,
 * e.g. to check if all required data has been entered.
 *
-* @param    string  $username   username that Geeklog would use for the new user* @param    string  $email      email address of that user
+* @param    string  $username   username that glFusion would use for the new user* @param    string  $email      email address of that user
 * @return   mixed               Creating a new user: An error message or an empty string for "OK".
 *                               Edit user function under My Account:  the script expects a message number,
 *                                 that will map to the GLOBALS $MESSAGE define in the site language files
@@ -402,11 +415,8 @@ function CUSTOM_showBlocks($showblocks)
 
 /**
 * This is an example of a custom email function. When this function is NOT
-* commented out, Geeklog would send all emails through this function
+* commented out, glFusion would send all emails through this function
 * instead of sending them through COM_mail in lib-common.php.
-*
-* This is basically a re-implementation of the way emails were sent
-* prior to Geeklog 1.3.9 (Geeklog uses PEAR::Mail as of version 1.3.9).
 *
 */
 /*
@@ -419,7 +429,7 @@ function CUSTOM_mail($to, $subject, $message, $from = '', $html = false, $priori
     }
 
     $headers  = 'From: ' . $from . "\r\n"
-              . 'X-Mailer: Geeklog ' . VERSION . "\r\n";
+              . 'X-Mailer: glFusion ' . glFusion_VERSION . "\r\n";
 
     if ($priority > 0) {
         $headers .= 'X-Priority: ' . $priority . "\r\n";

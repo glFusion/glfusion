@@ -1,19 +1,19 @@
 <?php
 
 $_SQL[] = "CREATE TABLE {$_TABLES['trackback']} (
-  cid int(10) unsigned NOT NULL auto_increment, 
-  sid varchar(40) NOT NULL, 
+  cid int(10) unsigned NOT NULL auto_increment,
+  sid varchar(40) NOT NULL,
   url varchar(255) default NULL,
   title varchar(128) default NULL,
-  blog varchar(80) default NULL, 
+  blog varchar(80) default NULL,
   excerpt text,
   date datetime default NULL,
   type varchar(30) NOT NULL default 'article',
   ipaddress varchar(15) NOT NULL default '',
   PRIMARY KEY (cid),
-  INDEX trackback_sid(sid), 
-  INDEX trackback_url(url), 
-  INDEX trackback_date(date), 
+  INDEX trackback_sid(sid),
+  INDEX trackback_url(url),
+  INDEX trackback_date(date),
   INDEX trackback_type(type)
 ) TYPE=MyISAM";
 
@@ -89,12 +89,12 @@ $_SQL[] = "UPDATE {$_TABLES['syndication']} SET format='RSS-0.9x' WHERE format='
 $_SQL[] = "UPDATE {$_TABLES['syndication']} SET format='RSS-2.0' WHERE format='rss2'";
 
 // add links plugin
-$_SQL[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('links', '1.0', '1.4.0', 1, 'http://www.geeklog.net/')";
+$_SQL[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('links', '1.0', '1.4.0', 1, 'http://www.gllabs.org/')";
 // update links feeds to links plugin
 $_SQL[] = "UPDATE {$_TABLES['syndication']} SET type = 'links', topic = 'all' WHERE topic = '::links';";
 
 // add polls plugin
-$_SQL[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version,pi_enabled, pi_homepage) VALUES ('polls', '1.0', '1.4.0', '1', 'http://www.geeklog.net/')";
+$_SQL[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version,pi_enabled, pi_homepage) VALUES ('polls', '1.0', '1.4.0', '1', 'http://www.gllabs.org/')";
 
 // updates core -> plugin
 $_SQL[] = "UPDATE {$_TABLES['blocks']} SET type = 'phpblock', phpblockfn ='phpblock_polls' WHERE name = 'poll_block';";
@@ -112,7 +112,7 @@ $_SQL[] = "UPDATE {$_TABLES['features']} SET ft_name = 'links.submit', ft_gl_cor
 $_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.3', pi_gl_version = '1.4.0' WHERE pi_name = 'spamx'";
 
 // Static Pages plugin is version 1.4.2 now
-$_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.4.2', pi_gl_version = '1.4.0', pi_homepage = 'http://www.geeklog.net/' WHERE pi_name = 'staticpages'";
+$_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.4.2', pi_gl_version = '1.4.0', pi_homepage = 'http://www.gllabs.org/' WHERE pi_name = 'staticpages'";
 
 // update poll(s) comments
 $_SQL[] = "UPDATE {$_TABLES['comments']} SET type = 'polls' WHERE type = 'poll'";

@@ -56,7 +56,7 @@ CREATE TABLE features (
   PRIMARY KEY  (ft_id),
   KEY ft_name (ft_name)
 ) TYPE=MyISAM;
-                        
+
 CREATE TABLE group_assignments (
   ug_main_grp_id mediumint(8) NOT NULL default '0',
   ug_uid mediumint(8) unsigned default NULL,
@@ -115,7 +115,7 @@ CREATE TABLE plugins (
   pi_homepage varchar(128) NOT NULL default '',
   PRIMARY KEY  (pi_name)
 ) TYPE=MyISAM;
-                                                                                                        
+
 ALTER TABLE stories ADD numemails mediumint(8) unsigned NOT NULL default '0';
 ALTER TABLE stories ADD owner_id mediumint(8) NOT NULL default '0';
 ALTER TABLE stories ADD group_id mediumint(8) NOT NULL default '2';
@@ -182,7 +182,7 @@ INSERT INTO features (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (13,'plugin.e
 INSERT INTO features (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (14,'group.edit','Ability to edit groups',1) ;
 INSERT INTO features (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (15,'group.delete','Ability to delete groups',1) ;
 INSERT INTO features (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (16,'block.delete','Ability to delete a block',1) ;
-INSERT INTO users (username, fullname, passwd, email, homepage, sig, regdate, cookietimeout, theme) VALUES ('NewAdmin','Geeklog SuperUser','5f4dcc3b5aa765d61d8327deb882cf99','root@localhost','http://geekog.sourceforge.net','','0000-00-00 00:00:00',0,NULL) ;
+INSERT INTO users (username, fullname, passwd, email, homepage, sig, regdate, cookietimeout, theme) VALUES ('NewAdmin','glFusion SuperUser','5f4dcc3b5aa765d61d8327deb882cf99','root@localhost','http://geekog.sourceforge.net','','0000-00-00 00:00:00',0,NULL) ;
 INSERT INTO group_assignments (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,1,NULL) ;
 INSERT INTO group_assignments (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,1) ;
 INSERT INTO group_assignments (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (3,NULL,1) ;

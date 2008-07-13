@@ -21,3 +21,10 @@ FCKConfig.ToolbarSets["editor-toolbar3"] = [
     'OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','-','About'],
     ['Style','-','FontFormat','-','FontName','-','FontSize']
 ] ;
+
+FCKConfig.ToolbarSets["editor-toolbar4"] = [
+    ['Source','-','Undo','Redo','-','Link','Unlink','-','Bold','Italic','Underline','StrikeThrough',
+    '-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull',
+    '-','OrderedList','UnorderedList','Outdent','Indent'],
+    ['PasteText','PasteWord','-','FontName','FontSize','TextColor','BGColor','-','Rule','-','video','Table','FitWindow','-','About']
+] ;

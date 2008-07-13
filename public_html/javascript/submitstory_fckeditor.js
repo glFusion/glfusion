@@ -13,7 +13,7 @@
         var oFCKeditor1 = new FCKeditor( 'introhtml' ) ;
         oFCKeditor1.BasePath = geeklogEditorBasePath;
         oFCKeditor1.Config['CustomConfigurationsPath'] = geeklogEditorBaseUrl + '/fckeditor/myconfig.js';
-        oFCKeditor1.ToolbarSet = 'editor-toolbar1' ;
+        oFCKeditor1.ToolbarSet = 'editor-toolbar4' ;
         if ( undefined != window.geeklogStyleBasePath ) {
             oFCKeditor1.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
             oFCKeditor1.Config['StylesXmlPath'] = geeklogStyleBasePath + 'fckstyles.xml';
@@ -24,7 +24,7 @@
         var oFCKeditor2 = new FCKeditor( 'bodyhtml' ) ;
         oFCKeditor2.BasePath = geeklogEditorBasePath ;
         oFCKeditor2.Config['CustomConfigurationsPath'] = geeklogEditorBaseUrl + '/fckeditor/myconfig.js';
-        oFCKeditor2.ToolbarSet = 'editor-toolbar1' ;
+        oFCKeditor2.ToolbarSet = 'editor-toolbar4' ;
         if ( undefined != window.geeklogStyleBasePath ) {
             oFCKeditor2.Config['EditorAreaCSS'] = geeklogStyleBasePath + 'style.css';
             oFCKeditor2.Config['StylesXmlPath'] = geeklogStyleBasePath + 'fckstyles.xml';

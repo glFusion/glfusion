@@ -451,7 +451,7 @@ function plugin_cclabel_filemgmt()
 {
     global $LANG_FILEMGMT, $_CONF;
     if (SEC_hasRights('filemgmt.edit')) {
-        return array($LANG_FILEMGMT['plugin_name'],$_CONF['site_admin_url'] . '/plugins/filemgmt/index.php',$_CONF['site_url'] . '/filemgmt/images/filemgmt.jpg');
+        return array($LANG_FILEMGMT['plugin_name'],$_CONF['site_admin_url'] . '/plugins/filemgmt/index.php',$_CONF['site_url'] . '/filemgmt/images/filemgmt.png');
     } else {
         return false;
     }

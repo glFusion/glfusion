@@ -2,20 +2,6 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
-- Made all Command n Control icons have a transparent background (issue 191) (Eric)
-		public_html/captcha/captcha.png
-		public_html/filemgmt/images/filemgmt.png
-		public_html/forum/images/forum.png
-		public_html/layout/nouveau/images/icons/configuration.png
-		public_html/layout/nouveau/images/icons/docs.png
-		public_html/layout/nouveau/images/icons/logout.png
-		public_html/layout/nouveau/images/icons/trackback.png
-		public_html/links/images/links.png
-		public_html/polls/images/polls.png
-
-- Fix IE6 gl_navigation column differences in fixed vs. fluid gl_container layouts (issue 189) (Eric)
-		public_html/layout/nouveau/css/ie6.css
-
 - Implemented glFusion CSS layout driven header / footer functions.
         public_html/lib-common.php
         public_html/layout/nouveau/functions.php
@@ -26,6 +12,29 @@ v1.1.0
 
 v1.0.1
 ------
+- More branding issues
+        private/sql/updates/1.2.5-1_to_1.3.sql
+        private/sql/updates/mssql_1.4.1_to_1.5.0.php
+        private/sql/updates/mysql_1.2.5-1_to_1.3.php
+        private/sql/updates/mysql_1.3.11_to_1.4.0.php
+        private/sql/updates/mysql_1.4.0_to_1.4.1.php
+        private/sql/updates/mysql_1.4.1_to_1.5.0.php
+
+- New advanced editor toolbar.  Modified user submitted story editor
+  menu to have more advanced features, but it is missing the
+  image / mediagallery insert.
+        public_html/fckeditor/myconfig.js
+        public_html/javascript/submitstory_fckeditor.js
+
+- New user create / delete hooks CUSTOM_createUserHook($uid) and
+  CUSTOM_deleteUserHook($uid)
+        private/system/lib-user.php
+        private/system/lib-custom.php.dist
+
+- Fix IE6 gl_navigation column differences in fixed vs. fluid gl_container
+  layouts (issue 189) (Eric)
+		public_html/layout/nouveau/css/ie6.css
+
 - Added new VideoEmbed plugin for FCKeditor
         public_html/fckeditor/fckconfig.js
         public_html/fckeditor/myconfig.js

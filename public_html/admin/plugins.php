@@ -180,6 +180,7 @@ function changePluginStatus ($pi_name_arr)
         }
     }
     CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('whatsnew');
 }
 
 
@@ -374,6 +375,7 @@ function do_uninstall ($pi_name)
         $retval .= COM_showMessage (95);
     }
     CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('whatsnew');
     return $retval;
 }
 

@@ -192,7 +192,7 @@ $_SQL[81] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl
 $_SQL[82] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (14,'group.edit','Ability to edit groups',1) ";$_SQL[83] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (15,'group.delete','Ability to delete groups',1) ";
 $_SQL[84] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (16,'block.delete','Ability to delete a block',1) ";
 
-$_SQL[320] = "INSERT INTO {$_TABLES['users']} (username, fullname, passwd, email, homepage, sig, regdate, cookietimeout, theme) VALUES ('NewAdmin','Geeklog SuperUser','5f4dcc3b5aa765d61d8327deb882cf99','root@localhost','http://geekog.sourceforge.net','','0000-00-00 00:00:00',0,NULL) ";
+$_SQL[320] = "INSERT INTO {$_TABLES['users']} (username, fullname, passwd, email, homepage, sig, regdate, cookietimeout, theme) VALUES ('NewAdmin','glFusion SuperUser','5f4dcc3b5aa765d61d8327deb882cf99','root@localhost','http://geekog.sourceforge.net','','0000-00-00 00:00:00',0,NULL) ";
 $_SQL[87] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,1,NULL) ";
 $_SQL[88] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,1) ";
 $_SQL[89] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (3,NULL,1) ";

@@ -30,7 +30,7 @@ $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VA
 
 // add the 'Webservices Users' group
 $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Webservices Users', 'Can use the Webservices API (if restricted)', 0)";
- 
+
 // add the security tokens table:
 $_SQL[] = "
 CREATE TABLE [dbo].[{$_TABLES['tokens']}] (
@@ -41,7 +41,7 @@ CREATE TABLE [dbo].[{$_TABLES['tokens']}] (
     [ttl] numeric(8,0) NOT NULL DEFAULT 1
 ) ON [PRIMARY]
 ";
- 
+
 $_SQL[] = "ALTER TABLE [dbo].[{$_TABLES['tokens']}] ADD
     CONSTRAINT [PK_gl_tokens] PRIMARY KEY  CLUSTERED
     (
@@ -68,7 +68,7 @@ function create_ConfValues()
           [fieldset] [int] NULL )
         ON [PRIMARY]
         ");
-        
+
     DB_Query ("
         ALTER function [DESCRIBE](@d as varchar(100)='', @c as varchar(100)=null)
         RETURNS table AS
@@ -100,7 +100,7 @@ function create_ConfValues()
     $c->add('site_name','','text',0,0,NULL,60,TRUE);
     $c->add('site_slogan','','text',0,0,NULL,70,TRUE);
     $c->add('microsummary_short','GL: ','text',0,0,NULL,80,TRUE);
-    $c->add('site_disabled_msg','Geeklog Site is down. Please come back soon.','text',0,0,NULL,510,TRUE);
+    $c->add('site_disabled_msg','glFusion Site is down. Please come back soon.','text',0,0,NULL,510,TRUE);
     $c->add('copyrightyear','2008','text',0,0,NULL,1440,FALSE);
     $c->add('url_rewrite',FALSE,'select',0,0,1,1800,TRUE);
 
@@ -328,7 +328,7 @@ function create_ConfValues()
 
     $c->add('fs_cookies', NULL, 'fieldset', 7, 30, NULL, 0, TRUE);
     $c->add('cookie_session','gl_session','text',7,30,NULL,530,TRUE);
-    $c->add('cookie_name','geeklog','text',7,30,NULL,540,TRUE);
+    $c->add('cookie_name','glfusion','text',7,30,NULL,540,TRUE);
     $c->add('cookie_password','password','text',7,30,NULL,550,TRUE);
     $c->add('cookie_theme','theme','text',7,30,NULL,560,TRUE);
     $c->add('cookie_language','language','text',7,30,NULL,570,TRUE);
@@ -424,10 +424,10 @@ function upgrade_PollsPlugin()
         [qid] [int] NOT NULL DEFAULT 0,
         [pid] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
         [question] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
-        CONSTRAINT [PK_gl_pollquestions] PRIMARY KEY  CLUSTERED 
+        CONSTRAINT [PK_gl_pollquestions] PRIMARY KEY  CLUSTERED
 	    (
 		    [qid]
-	    )  ON [PRIMARY] 
+	    )  ON [PRIMARY]
     ) ON [PRIMARY]";
     // in 1.4.1, "don't display poll" was equivalent to "closed"
     $P_SQL[] = "UPDATE {$_TABLES['polltopics']} SET is_open = 0 WHERE display = 0";
