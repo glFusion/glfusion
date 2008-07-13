@@ -2,6 +2,17 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Made all Command n Control icons have a transparent background (issue 191) (Eric)
+		public_html/captcha/captcha.png
+		public_html/filemgmt/images/filemgmt.png
+		public_html/forum/images/forum.png
+		public_html/layout/nouveau/images/icons/configuration.png
+		public_html/layout/nouveau/images/icons/docs.png
+		public_html/layout/nouveau/images/icons/logout.png
+		public_html/layout/nouveau/images/icons/trackback.png
+		public_html/links/images/links.png
+		public_html/polls/images/polls.png
+
 - Fix IE6 gl_navigation column differences in fixed vs. fluid gl_container layouts (issue 189) (Eric)
 		public_html/layout/nouveau/css/ie6.css
 
