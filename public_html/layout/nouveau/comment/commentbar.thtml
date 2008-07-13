@@ -4,7 +4,7 @@
     
 </div>
 <div class="commentbar-line2 block-box-comment">
-	<form style="float:right; margin:6px; margin-right:10px;" action="{site_url}/comment.php" method="post">
+	<form style="float:right; margin-top:2px; margin-bottom:3px; margin-right:10px;" action="{site_url}/comment.php" method="post">
         <div>
             <input type="hidden" name="sid" value="{sid}"{xhtml}>
             <input type="hidden" name="pid" value="0"{xhtml}>
@@ -13,7 +13,7 @@
             <input type="{reply_hidden_or_submit}" name="reply" value="{lang_reply}"{xhtml}>
         </div>
     </form>
-    <form style="float:right; margin:6px;" action="{parent_url}" method="post">
+    <form style="float:right; margin-top:2px; margin-bottom:3px;" action="{parent_url}" method="post">
         <div>
             {hidden_field}
             {order_selector}
@@ -23,7 +23,7 @@
         </div>
     </form>
 	
-	<h2 style="padding:0px 10px;">{num_comments} {lang_comments}</h2>
+	<h2 style="padding:0px 10px; margin:5px;">{num_comments} {lang_comments}</h2>
 </div>
 <div class="commentbar-line3" style="clear:both; text-align:center; margin-bottom:10px;">
     {lang_disclaimer}

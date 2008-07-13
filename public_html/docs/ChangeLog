@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Adjusted layout of comments for better readability (Eric)
+		public_html/layout/nouveau/comment/comment.thtml
+		public_html/layout/nouveau/comment/commentbar.thtml
+		public_html/layout/nouveau/comment/thread.thtml
+
 - Implemented glFusion CSS layout driven header / footer functions.
         public_html/lib-common.php
         public_html/layout/nouveau/functions.php
