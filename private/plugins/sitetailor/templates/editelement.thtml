@@ -115,7 +115,10 @@ function toggleFields() {
         <label for="menutype">{$LANG_ST01[type]}:</label>
         {type_select}
       </div>
-
+      <div id="displayafter" class="required">
+        <label for="menuorder">{$LANG_ST01[display_after]}:</label>
+        {order_select}
+      </div>
       <div id="urldiv" class="required">
         <label for="menuurl">{$LANG_ST01[url]}:</label>
         <input type="text" id="menuurl" name="menuurl" size="48" value="{menuurl}"{xhtml}>

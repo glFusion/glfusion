@@ -464,6 +464,20 @@ function ST_editElement( $menu, $mid ) {
         $active_selected = '';
     }
 
+    $order_select = '<select id="menuorder" name="menuorder">' . LB;
+    $order_select .= '<option value="0">' . $LANG_ST01['first_position'] . '</option>' . LB;
+    $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['st_menu_elements']} WHERE menu_id='" . $menu . "' AND pid=0 ORDER BY element_order ASC");
+    $order = 10;
+
+    while ($row = DB_fetchArray($result)) {
+        if ( $ST_menuElements[$menu][$mid]->order != $order ) {
+            $test_order = $order + 10;
+            $order_select .= '<option value="' . $row['id'] . '"' . ($ST_menuElements[$menu][$mid]->order == $test_order ? ' selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
+        }
+        $order += 10;
+    }
+    $order_select .= '</select>' . LB;
+
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
     $T->set_file( array( 'admin' => 'editelement.thtml'));
 
@@ -473,6 +487,7 @@ function ST_editElement( $menu, $mid ) {
         'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php',
         'menulabel'         => $ST_menuElements[$menu][$mid]->label,
         'menuorder'         => $ST_menuElements[$menu][$mid]->order,
+        'order_select'      => $order_select,
         'menuurl'           => $ST_menuElements[$menu][$mid]->url,
         'phpfunction'       => $ST_menuElements[$menu][$mid]->subtype,
         'type_select'       => $type_select,
@@ -495,7 +510,7 @@ function ST_editElement( $menu, $mid ) {
 }
 
 function ST_saveEditMenuElement ( ) {
-    global $_TABLES,$TEMPLATE_OPTIONS;
+    global $_TABLES,$TEMPLATE_OPTIONS,$ST_menuElements;
 
     $id            = COM_applyFilter($_POST['id'],true);
     $menu_id       = COM_applyFilter($_POST['menu']);
@@ -533,11 +548,20 @@ function ST_saveEditMenuElement ( ) {
     $active     = COM_applyFilter($_POST['menuactive'],true);
     $url        = trim(addslashes(COM_applyFilter($_POST['menuurl'])));
     $group_id   = COM_applyFilter($_POST['group'],true);
-    $sql        = "UPDATE {$_TABLES['st_menu_elements']} SET pid=$pid, element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url', element_target='$target', group_id=$group_id WHERE id=$id";
+
+    $aid                = COM_applyFilter($_POST['menuorder'],true);
+    $aorder             = DB_getItem($_TABLES['st_menu_elements'],'element_order','id=' . $aid);
+    $neworder = $aorder + 1;
+
+    $sql        = "UPDATE {$_TABLES['st_menu_elements']} SET pid=$pid, element_order=$neworder, element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url', element_target='$target', group_id=$group_id WHERE id=$id";
 
     DB_query($sql);
 
     CACHE_remove_instance('stmenu');
+
+    st_initMenu();
+
+    $ST_menuElements[$menu_id][$pid]->reorderMenu();
 
     st_initMenu();
 }
