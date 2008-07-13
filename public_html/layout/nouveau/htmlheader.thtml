@@ -67,6 +67,7 @@ border-bottom:1px solid {sbscolor};  /*Sub Menu Shadow*/
 #gl_moomenu li li a.parent:hover {
 background:{spimage};  /*image for sub menu parent menu - the blue orb*/
 }
+.gl_moomenu {float:{menualign};}
 </style>
 </head>
 <body dir="{direction}" style="background:#000000;">
