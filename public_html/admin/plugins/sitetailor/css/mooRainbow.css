@@ -38,6 +38,7 @@ left: 152px;
 width: 19px;
 height: 5px;
 z-index:100;
+margin-top:3px;
 }
 .moor-chooseColor { /* Top Box Color, the choosen one */
 margin-left: 173px; 

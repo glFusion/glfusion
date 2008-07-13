@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Fixed slider height issue in menu colorpicker (Eric)
+		public_html/admin/plugins/sitetailor/css/mooRainbow.css
+
 - Adjusted layout of comments for better readability (Eric)
 		public_html/layout/nouveau/comment/comment.thtml
 		public_html/layout/nouveau/comment/commentbar.thtml
