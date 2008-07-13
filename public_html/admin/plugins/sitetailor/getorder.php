@@ -41,6 +41,11 @@ if (!isset($_REQUEST['optionid']) ) {
     echo "";
     exit;
 }
+if ( isset($_REQUEST['edit']) ) {
+    $edit = 1;
+} else {
+    $edit = 0;
+}
 
 $menu = 0;
 
@@ -49,11 +54,11 @@ $id_sent    = preg_replace("/[^0-9a-zA-Z]/","",$_REQUEST['optionid']);
 
 $order_select = '<label for="menuorder">' . $LANG_ST01['display_after'] . '</label>';
 $order_select .= '<select id="menuorder" name="menuorder">' . LB;
-if ( $id_sent == 0 ) {
-    $order_select .= '<option value="0">' . $LANG_ST01['top_level'] . '</option>' . LB;
-} else {
+//if ( $id_sent == 0 ) {
+//    $order_select .= '<option value="0">' . $LANG_ST01['top_level'] . '</option>' . LB;
+//} else {
     $order_select .= '<option value="0">' . $LANG_ST01['first_position'] . '</option>' . LB;
-}
+//}
 $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['st_menu_elements']} WHERE menu_id='" . $menu . "' AND pid=" . $id_sent . ' ORDER BY element_order ASC');
 while ($row = DB_fetchArray($result)) {
     $order_select .= '<option value="' . $row['id'] . '">' . $row['element_label'] . '</option>' . LB;

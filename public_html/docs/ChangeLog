@@ -336,8 +336,14 @@ Polls plugin
 
 Site Tailor plugin
 ------------------
+- Added Reset To Defaults button on menu configuration editor
+        public_html/admin/plugins/sitetailor/index.php
+        private/plugins/sitetailor/language/english.php
+        private/plugins/sitetailor/templates/config.thtml
+
 - Added Display After field when editing a menu item
         public_html/admin/plugins/sitetailor/index.php
+        public_html/admin/plugins/sitetailor/getorder.php
         private/plugins/sitetailor/templates/editelement.thtml
 
 - Fixed error where the menu hover image was used regardless of the Graphics/

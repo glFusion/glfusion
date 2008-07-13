@@ -842,7 +842,7 @@ if ( isset($_REQUEST['mid']) ) {
     $menu_id = 0;
 }
 
-if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
+if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
 
     switch ( $mode ) {
         case 'menu' :
@@ -940,6 +940,12 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) ) {
             break;
     }
 } else {
+    if ( isset($_POST['defaults']) ) {
+        DB_query("REPLACE INTO {$_TABLES['st_menu_config']} VALUES (1,0,'#151515','#3667c0','#CCCCCC','#ffffff','#679EF1','#151515','#333333','#000000',1,'menu_bg.gif','menu_hover_bg.gif','menu_parent.png',1,1)");
+//        copy($_CONF['path_html'] . 'images/menu/menu_bg.gif.orig',$_CONF['path_html'] . 'images/menu/menu_bg.gif');
+//        copy($_CONF['path_html'] . 'images/menu/menu_hover_bg.gif.orig',$_CONF['path_html'] . 'images/menu/menu_hover_bg.gif');
+//        copy($_CONF['path_html'] . 'images/menu/menu_parent.png.orig',$_CONF['path_html'] . 'images/menu/menu_parent.png');
+    }
     // display the tree
     $content = ST_displayTree( $menu_id );
     $currentSelect = $LANG_ST01['menu_builder'];

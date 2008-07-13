@@ -160,6 +160,8 @@ $LANG_ST01 = array (
 	'align_right'			=> 'Right',
 	'blocks'                => 'Block Styles',
 	'reset'                 => 'Reset Form',
+	'defaults'              => 'Reset To Default Values',
+	'confirm_reset'         => 'This will reset the menu colors and graphics to the installation values. Are you sure you want to continue?',
 );
 
 
