@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Updated glFusion Wiki link to point to the gllabs wiki root instead of gllabs.org (Eric)
+		public_html/docs/config.html
+		public_html/docs/index.html
+		public_html/docs/install.html
+
 - Fixed slider height issue and added border in menu colorpicker (Eric)
 		public_html/admin/plugins/sitetailor/css/mooRainbow.css
 
