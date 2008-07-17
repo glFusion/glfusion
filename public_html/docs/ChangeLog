@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Added IE6 warning javascript (Eric)
+		public_html/layout/nouveau/css/ie6.css
+		public_html/layout/nouveau/js/ie6warning.js
+		public_html/layout/nouveau/htmlheader.thtml
+
 - Updated some Command n Control icons - thx EdCates! (Eric)
 		public_html/forum/images/forum.png
 		public_html/layout/nouveau/images/icons/docs.png

@@ -24,6 +24,7 @@
 <!-- {gl_moochronometer} --><!-- enables gl_moochronometer header rotator - MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating -->
 <!--[if lte IE 6]>
 <link rel="stylesheet" type="text/css" href="{layout_url}/css/ie6.css" title="{theme}"{xthml}>
+<script defer type="text/javascript" src="{layout_url}/js/ie6warning.js"></script>
 <script defer type="text/javascript" src="{layout_url}/js/gl_moopngfix.js"></script>
 <![endif]-->
 <!--[if IE 7]>
