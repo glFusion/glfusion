@@ -2,11 +2,11 @@
 
 /* Reminder: always indent with 4 spaces (no tabs). */
 // +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
+// | glFusion 1.0                                                              |
 // +---------------------------------------------------------------------------+
 // | sectest.php                                                               |
 // |                                                                           |
-// | Does a quick security check of the Geeklog install                        |
+// | Does a quick security check of the glFusion install                       |
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2002-2007 by the following authors:                         |
 // |                                                                           |
@@ -63,7 +63,7 @@ function doHeadRequest ($url, &$errmsg)
 
     $req = new HTTP_Request ($url);
     $req->setMethod (HTTP_REQUEST_METHOD_HEAD);
-    $req->addHeader ('User-Agent', 'Geeklog/' . VERSION);
+    $req->addHeader ('User-Agent', 'glFusion/' . glFusion_VERSION);
     $response = $req->sendRequest ();
     if (PEAR::isError ($response)) {
         $errmsg = $response->getMessage();
@@ -88,11 +88,11 @@ function urlToCheck()
         // not good ...
         $url = $_CONF['site_url'];
     } else if (substr ($_CONF['path'], 0, strlen ($_CONF['path_html'])) == $_CONF['path_html']) {
-        // "geeklog" dir in the document root
+        // "glfusion" dir in the document root
         $rest = substr ($_CONF['path'], -(strlen ($_CONF['path']) - strlen ($_CONF['path_html'])));
         $url = $_CONF['site_url'] . '/' . $rest;
     } else {
-        // check for sites like www.example.com/geeklog
+        // check for sites like www.example.com/glfusion
         $u = $_CONF['site_url'];
         if (substr ($u, -1) == '/') {
             $u = substr ($u, 0, -1);
@@ -271,7 +271,7 @@ function checkDefaultPassword ()
 }
 
 // MAIN
-$display = COM_siteHeader ('menu', 'Geeklog Security Check');
+$display = COM_siteHeader ('menu', 'glFusion Security Check');
 $display .= '<div dir="ltr">' . LB;
 $display .= COM_startBlock ('Results of the Security Check');
 
@@ -356,9 +356,9 @@ if (empty ($LANG_DIRECTION)) {
                   . '</strong>';
 }
 
-$display .= '<p>To stay informed about new Geeklog releases and possible '
+$display .= '<p>To stay informed about new glFusion releases and possible '
     . 'security issues, we suggest that you subscribe to the (low-traffic) '
-    . COM_createLink('geeklog-announce', 'http://lists.geeklog.net/mailman/listinfo/geeklog-announce')
+    . COM_createLink('gllabs-announce', 'https://lists.sourceforge.net/lists/listinfo/gllabs-announce')
     . ' mailing list and/or use the ' . $versioncheck
     . ' option in your Admin menu from time to time to check for available updates.</p>';
 

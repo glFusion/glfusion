@@ -332,7 +332,9 @@ function ST_saveNewMenuElement ( ) {
             break;
         case 6 :
             $E['element_subtype'] = COM_applyFilter($_POST['menuurl']);
-
+            if(!strpos($E['element_subtype'], "http")) {
+                $E['element_subtype'] = 'http://' . $E['element_subtype'];
+            }
             break;
         case 7 :
             $E['element_subtype'] = COM_applyFilter($_POST['phpfunction']);
@@ -347,6 +349,9 @@ function ST_saveNewMenuElement ( ) {
 
     $E['element_active']    = COM_applyFilter($_POST['menuactive'],true);
     $E['element_url']       = trim(COM_applyFilter($_POST['menuurl']));
+    if ( !strpos($E['element_url'],"http")) {
+        $E['element_url'] = 'http://' . $E['element_url'];
+    }
     $E['group_id']          = COM_applyFilter($_POST['group'],true);
 
     $element->constructor( $E, $meadmin, $root, $groups );
@@ -537,6 +542,9 @@ function ST_saveEditMenuElement ( ) {
             break;
         case 6 :
             $subtype = COM_applyFilter($_POST['menuurl']);
+            if ( !strpos($subtype,"http")) {
+                $subtype = 'http://' . $subtype;
+            }
             break;
         case 7 :
             $subtype = COM_applyFilter($_POST['phpfunction']);
@@ -547,6 +555,9 @@ function ST_saveEditMenuElement ( ) {
     }
     $active     = COM_applyFilter($_POST['menuactive'],true);
     $url        = trim(addslashes(COM_applyFilter($_POST['menuurl'])));
+    if ( !strpos($url,"http")) {
+        $url = 'http://' . $url;
+    }
     $group_id   = COM_applyFilter($_POST['group'],true);
 
     $aid                = COM_applyFilter($_POST['menuorder'],true);
@@ -836,10 +847,13 @@ if ( isset($_GET['mode']) ) {
     $mode = '';
 }
 
-if ( isset($_REQUEST['mid']) ) {
-    $menu_id = COM_applyFilter($_REQUEST['mid'],true);
+if ( isset($_REQUEST['menumid']) ) {
+    $menu_id = COM_applyFilter($_REQUEST['menumid'],true);
 } else {
     $menu_id = 0;
+}
+if ( isset($_REQUEST['mid']) ) {
+    $mid = COM_applyFilter($_REQUEST['mid'],true);
 }
 
 if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
@@ -902,7 +916,9 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             // delete the element
             $id        = COM_applyFilter($_GET['mid'],true);
             $menu_id   = 0;
-            ST_deleteChildElements( $id, $menu );
+            ST_deleteChildElements( $id, $menu_id );
+            st_initMenu();
+            $ST_menuElements[$menu_id][0]->reorderMenu();
             st_initMenu();
             $content = ST_displayTree( $menu_id );
             $currentSelect = $LANG_ST01['menu_builder'];
@@ -942,9 +958,6 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
 } else {
     if ( isset($_POST['defaults']) ) {
         DB_query("REPLACE INTO {$_TABLES['st_menu_config']} VALUES (1,0,'#151515','#3667c0','#CCCCCC','#ffffff','#679EF1','#151515','#333333','#000000',1,'menu_bg.gif','menu_hover_bg.gif','menu_parent.png',1,1)");
-//        copy($_CONF['path_html'] . 'images/menu/menu_bg.gif.orig',$_CONF['path_html'] . 'images/menu/menu_bg.gif');
-//        copy($_CONF['path_html'] . 'images/menu/menu_hover_bg.gif.orig',$_CONF['path_html'] . 'images/menu/menu_hover_bg.gif');
-//        copy($_CONF['path_html'] . 'images/menu/menu_parent.png.orig',$_CONF['path_html'] . 'images/menu/menu_parent.png');
     }
     // display the tree
     $content = ST_displayTree( $menu_id );

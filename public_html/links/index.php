@@ -314,7 +314,7 @@ function links_list($message)
         }
         if ($pages > 0) {
             if (($_LI_CONF['linkcols'] > 0) && isset($currentcid)) {
-                $catlink = '?category=' . $currentcid;
+                $catlink = '?category=' . urlencode($currentcid);
             } else {
                 $catlink = '';
             }

@@ -1643,7 +1643,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         if ( $_MG_CONF['discard_original'] == 1 ) {
             foreach ($_MG_CONF['validExtensions'] as $ext ) {
                 if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $media[$mediaObject]['media_filename'][0] .'/' . $media[$mediaObject]['media_filename'] . $ext) ) {
-                    $sf_picture = $_MG_CONF['path_mediaobjects'] . 'disp/' . $media[$mediaObject]['media_filename'][0] .'/' . $media[$mediaObject]['media_filename'] . $ext;
+                    $sf_picture = $_MG_CONF['mediaobjects_url'] . '/disp/' . $media[$mediaObject]['media_filename'][0] .'/' . $media[$mediaObject]['media_filename'] . $ext;
                     $media_size_orig = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $media[$mediaObject]['media_filename'][0] . '/' . $media[$mediaObject]['media_filename'] . $ext);
                     break;
                 }
@@ -1651,7 +1651,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         } else {
             foreach ($_MG_CONF['validExtensions'] as $ext ) {
                 if ( file_exists($_MG_CONF['path_mediaobjects'] . 'orig/' . $media[$mediaObject]['media_filename'][0] .'/' . $media[$mediaObject]['media_filename'] . $ext) ) {
-                    $sf_picture = $_MG_CONF['path_mediaobjects'] . 'orig/' . $media[$mediaObject]['media_filename'][0] .'/' . $media[$mediaObject]['media_filename'] . $ext;
+                    $sf_picture = $_MG_CONF['mediaobjects_url'] . '/orig/' . $media[$mediaObject]['media_filename'][0] .'/' . $media[$mediaObject]['media_filename'] . $ext;
                     $media_size_orig = @getimagesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $media[$mediaObject]['media_filename'][0] . '/' . $media[$mediaObject]['media_filename'] . $ext);
                     break;
                 }
@@ -1660,7 +1660,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
         foreach ($_MG_CONF['validExtensions'] as $ext ) {
             if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $media[$mediaObject]['media_filename'][0] .'/' . $media[$mediaObject]['media_filename'] . $ext) ) {
-                $tnImage = $_MG_CONF['path_mediaobjects'] . 'tn/' . $media[$mediaObject]['media_filename'][0] .'/' . $media[$mediaObject]['media_filename'] . $ext;
+                $tnImage = $_MG_CONF['mediaobjects_url'] . '/tn/' . $media[$mediaObject]['media_filename'][0] .'/' . $media[$mediaObject]['media_filename'] . $ext;
                 $media_size_tn = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $media[$mediaObject]['media_filename'][0] . '/' . $media[$mediaObject]['media_filename'] . $ext);
                 break;
             }

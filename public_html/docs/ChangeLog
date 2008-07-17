@@ -2,6 +2,20 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Implemented glFusion CSS layout driven header / footer functions.
+        public_html/lib-common.php
+        public_html/layout/nouveau/functions.php
+        public_html/layout/professional/functions.php
+
+- Bumped version number to 1.1.0svn
+        public_html/lib-common.php
+
+v1.0.1
+------
+- New template variable for front page - page_title_and_site_name
+        public_html/lib-common.php
+        public_html/layout/professional/header.thtml
+
 - Added IE6 warning javascript (Eric)
 		public_html/layout/nouveau/css/ie6.css
 		public_html/layout/nouveau/js/ie6warning.js
@@ -31,16 +45,6 @@ v1.1.0
 		public_html/layout/nouveau/comment/commentbar.thtml
 		public_html/layout/nouveau/comment/thread.thtml
 
-- Implemented glFusion CSS layout driven header / footer functions.
-        public_html/lib-common.php
-        public_html/layout/nouveau/functions.php
-        public_html/layout/professional/functions.php
-
-- Bumped version number to 1.1.0svn
-        public_html/lib-common.php
-
-v1.0.1
-------
 - Fixed menu alignment
         public_html/layout/nouveau/functions.php
         public_html/layout/nouveau/htmlheader.thtml
@@ -354,6 +358,10 @@ Links plugin
 
 Media Gallery plugin
 --------------------
+- Fixed issue where the absolute path to images was passed to DigiBug instead
+  of using the URL.
+        public_html/mediagallery/lib-media.php
+
 - Fixed an issue where hidden albums would prevent other sub-albums
   from displaying.
         public_html/mediagallery/album.php

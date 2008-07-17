@@ -1041,6 +1041,20 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var( 'page_title', $pagetitle );
     $header->set_var( 'site_name', $_CONF['site_name']);
 
+    if (COM_onFrontpage()) {
+        $title_and_name = $_CONF['site_name'];
+        if (!empty($pagetitle)) {
+            $title_and_name .= ' - ' . $pagetitle;
+        }
+    } else {
+        $title_and_name = '';
+        if (!empty($pagetitle)) {
+            $title_and_name = $pagetitle . ' - ';
+        }
+        $title_and_name .= $_CONF['site_name'];
+    }
+    $header->set_var('page_title_and_site_name', $title_and_name);
+
     if( isset( $_CONF['advanced_editor'] ) && ( $_CONF['advanced_editor'] == 1 )
             && file_exists( $_CONF['path_layout']
                             . 'advanced_editor_header.thtml' )) {
