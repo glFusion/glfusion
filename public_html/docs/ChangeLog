@@ -2,6 +2,17 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Updated some Command n Control icons - thx EdCates! (Eric)
+		public_html/forum/images/forum.png
+		public_html/layout/nouveau/images/icons/docs.png
+		public_html/layout/nouveau/images/icons/mail.png
+		public_html/layout/nouveau/images/icons/plugins.png
+		public_html/layout/nouveau/images/icons/syndication.png
+		public_html/layout/nouveau/images/icons/topic.png
+		public_html/layout/nouveau/images/icons/versioncheck.png
+		public_html/polls/images/polls.png
+		public_html/staticpages/images/staticpages.png
+
 - Updated glFusion Wiki link to point to the gllabs wiki root instead of gllabs.org (Eric)
 		public_html/docs/config.html
 		public_html/docs/index.html
