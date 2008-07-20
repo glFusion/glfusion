@@ -56,7 +56,7 @@ function MG_versionCheck() {
     $errno = 0;
     $errstr = $version_info = '';
 
-    $version_info = MG_readRemoteURL("http://www.gllabs.org/updatecheck/15x.txt");
+    $version_info = MG_readRemoteURL("http://www.glfusion.org/updatecheck/16x.txt");
     if ( $version_info == false ) {
         $version_msg = $LANG_MG01['no_version_info'];
         return $version_msg;

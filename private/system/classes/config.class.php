@@ -159,6 +159,15 @@ class config {
     {
         global $_TABLES;
 
+        if ($group == 'Core') {
+            $fn = 'configmanager_' . $name . '_validate';
+        } else {
+            $fn = 'plugin_configmanager_' . $name . '_' . $group . '_validate';
+        }
+        if (function_exists($fn)) {
+            $value = $fn($value);
+        }
+
         $escaped_val = addslashes(serialize($value));
         $escaped_name = addslashes($name);
         $escaped_grp = addslashes($group);

@@ -152,7 +152,7 @@ function redirect_header($url, $time=3, $message=''){
     }
     $display .= "<br" . XHTML . "><b>\n";
     $display .= sprintf(_IFNOTRELOAD,$url);
-    $display .= "\n";
+    $display .= "</b>\n";
     $display .= "</center></div>\n";
     $display .= COM_endBlock();
     $display .= COM_siteFooter(false);

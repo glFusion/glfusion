@@ -265,7 +265,7 @@ if ($op == 'search') {
         $direction = ($direction == "ASC") ? "ASC" : "DESC";
     }
 
-    $query = addslashes($_REQUEST['query']);
+    $query = addslashes(strip_tags(COM_stripslashes($_REQUEST['query'])));
 
     $report->set_var ('imgset', $CONF_FORUM['imgset']);
     $report->set_var ('layout_url', $_CONF['layout_url']);

@@ -2,12 +2,18 @@
 
 /* Reminder: always indent with 4 spaces (no tabs). */
 // +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
+// | glFusion CMS                                                              |
 // +---------------------------------------------------------------------------+
 // | lib-common.php                                                            |
 // |                                                                           |
-// | Geeklog common library.                                                   |
+// | glFusion common library.                                                  |
 // +---------------------------------------------------------------------------+
+// |                                                                           |
+// |                                                                           |
+// |                                                                           |
+// +---------------------------------------------------------------------------+
+// | Original code developed by the Geeklog team                               |
+// |                                                                           |
 // | Copyright (C) 2000-2008 by the following authors:                         |
 // |                                                                           |
 // | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                    |
@@ -52,7 +58,7 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 */
 
 if (!defined('glFusion_VERSION')) {
-  define('glFusion_VERSION', '1.1.0svn');
+  define('glFusion_VERSION', '1.1.0.svn');
 }
 
 /**

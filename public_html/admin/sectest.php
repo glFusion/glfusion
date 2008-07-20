@@ -178,6 +178,7 @@ function doTest ($baseurl, $urltocheck, $what)
     $retval = '';
 
     $retval .= '<li>';
+
     $retcode = doHeadRequest ($baseurl . $urltocheck, $errmsg);
     if ($retcode == 777) {
         $retval .= $errmsg;
@@ -292,10 +293,10 @@ if (!empty ($url)) {
 
     $urls = array
         (
-        array ('db-config.php',                     'db-config.php'),
-        array ('logs/error.log',                    'logs directory'),
-        array ('plugins/staticpages/functions.inc', 'plugins directory'),
-        array ('system/lib-security.php',           'system directory')
+        array ('/private/db-config.php',                     'db-config.php'),
+        array ('/private/logs/error.log',                    'logs directory'),
+        array ('/private/plugins/staticpages/functions.inc', 'plugins directory'),
+        array ('/private/system/lib-security.php',           'system directory')
         );
 
     foreach ($urls as $tocheck) {
@@ -358,7 +359,7 @@ if (empty ($LANG_DIRECTION)) {
 
 $display .= '<p>To stay informed about new glFusion releases and possible '
     . 'security issues, we suggest that you subscribe to the (low-traffic) '
-    . COM_createLink('gllabs-announce', 'https://lists.sourceforge.net/lists/listinfo/gllabs-announce')
+    . COM_createLink('glfusion-announce', 'https://lists.sourceforge.net/lists/listinfo/glfusion-announce')
     . ' mailing list and/or use the ' . $versioncheck
     . ' option in your Admin menu from time to time to check for available updates.</p>';
 

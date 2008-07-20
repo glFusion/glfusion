@@ -879,6 +879,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     if ( $keywords == '*' ) {
         $keywords = '';
     }
+    $keywords = strip_tags(COM_stripslashes($keywords));
 
     // build the query and put into our database...
 

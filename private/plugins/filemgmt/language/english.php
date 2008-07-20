@@ -359,7 +359,7 @@ define("_MD_REQUIRED","* Required field");
 
 // Additional Geeklog Defines
 define("_MD_NOVOTE","Not rated yet");
-define("_IFNOTRELOAD","If the page does not automatically reload, please click <a href=%s>here</a>");
+define("_IFNOTRELOAD","If the page does not automatically reload, please click <a href=\"%s\">here</a>");
 define("_GL_ERRORNOACCESS","ERROR: No access to this Document Repository Section");
 define("_GL_ERRORNOUPLOAD","ERROR: You do not have upload privilages");
 define("_GL_ERRORNOADMIN","ERROR: This function is restricted");

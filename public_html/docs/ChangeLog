@@ -12,6 +12,20 @@ v1.1.0
 
 v1.0.1
 ------
+- Fixed a small style issue
+        public_html/layout/nouveau/style.css
+        public_html/layout/nouveau/js/gl_mooslide.js
+
+- Updated install SQL to point to proper web site
+        private/sql/mysql_tableanddata.php
+
+- Updated Security Check to point to correct mailing list
+        public_html/admin/sectest.php
+
+- Improved configuration data validation
+        private/system/classes/config.class.php
+        public_html/admin/configuration.php
+
 - New template variable for front page - page_title_and_site_name
         public_html/lib-common.php
         public_html/layout/professional/header.thtml
@@ -338,8 +352,23 @@ Calendar plugin
   day events.
         private/plugins/calendar/functions.inc
 
+FileMgmt plugin
+---------------
+- Fixed style issue where admin confirmation screen would set whole site
+  to bold.
+        public_html/filemgmt/include/function.php
+        private/plugins/filemgmt/language/english.php
+
+- Reworked the configuration files to solve some integrated installation
+  issues.
+        private/plugins/filemgmt/filemgmt.php
+        private/plugins/filemgmt/config.php
+
 Forum plugin
 ------------
+- Fixed a potential security issues with XSS on search field.
+        public_html/forum/index.php
+
 - Fixed issue where the 'View all New Posts' link was not being displayed.
         public_html/forum/index.php
 
@@ -358,6 +387,13 @@ Links plugin
 
 Media Gallery plugin
 --------------------
+- Modified URLs to reflect new www.glfusion.org website.
+        public_html/mediagallery/common.php
+        public_html/admin/plugins/mediagallery/index.php
+
+- Improved the filtering on search items
+        public_html/mediagallery/search.php
+
 - Fixed issue where the absolute path to images was passed to DigiBug instead
   of using the URL.
         public_html/mediagallery/lib-media.php

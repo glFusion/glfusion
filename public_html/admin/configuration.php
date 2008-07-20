@@ -87,6 +87,185 @@ function configmanager_select_theme_helper()
     return $themes;
 }
 
+
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_html_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_log_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_language_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_backup_path_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_data_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_images_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_pear_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_mysqldump_path_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_path_themes_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] != '/' ) {
+        return $value . '/';
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_site_url_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] == '/' ) {
+        return (substr($value,0,strlen($value)-1));
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_site_admin_url_validate($value)
+{
+    $value = trim($value);
+    if ( $value[strlen($value)-1] == '/' ) {
+        return (substr($value,0,strlen($value)-1));
+    }
+    return $value;
+}
+/**
+* Validate function: Validate input
+*
+* @return   string      validated ata
+*
+*/
+
+function configmanager_rdf_file_validate($value)
+{
+    $value = trim($value);
+    return $value;
+}
+
 $tokenstate = SEC_checkToken();
 
 // MAIN

@@ -7,7 +7,7 @@
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2005-2008 by the following authors:                         |
 // |                                                                           |
-// | Mark R. Evans              - mark@gllabs.org                              |
+// | Mark R. Evans              - mark@glfusion.org                            |
 // +---------------------------------------------------------------------------+
 // |                                                                           |
 // | This program is free software; you can redistribute it and/or             |
@@ -262,7 +262,7 @@ function MG_siteHeader($title='', $meta='') {
 function MG_siteFooter() {
     global $_CONF, $_MG_CONF;
 
-    $retval = '<br' . XHTML . '><div style="text-align:center;"><a href="http://www.gllabs.org"><img src="' . MG_getImageFile('powerby_mg.png') . '" alt="" style="border:none;"' . XHTML . '></a></div><br' . XHTML . '>';
+    $retval = '<br' . XHTML . '><div style="text-align:center;"><a href="http://www.glfusion.org"><img src="' . MG_getImageFile('powerby_mg.png') . '" alt="" style="border:none;"' . XHTML . '></a></div><br' . XHTML . '>';
 
     switch( $_MG_CONF['displayblocks'] ) {
         case 0 : // left only

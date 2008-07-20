@@ -1721,14 +1721,14 @@ background-position:0 -51px;
 .gl_slide {
 margin:0 auto;
 }
-/*
-hr {
+
+#gl_slide_hr hr {
 clear:both;
 height:0;
 border:0;
 display:none;
 }
-*/
+
 ul#gl_slide-toolbar {
 text-align:center;
 list-style:none;
