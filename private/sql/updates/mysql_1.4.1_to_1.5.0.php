@@ -26,6 +26,9 @@ $_SQL[] = "INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VA
 // add the 'Webservices Users' group
 $_SQL[] = "INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr, grp_gl_core) VALUES ('Webservices Users', 'Can use the Webservices API (if restricted)', 0)";
 
+// fixup syndication
+$_SQL[] = "UPDATE {$_TABLES['syndication']} SET type='glfusion' WHERE type='geeklog'";
+
 // add the security tokens table:
 $_SQL[] = "
 CREATE TABLE {$_TABLES['tokens']} (
@@ -394,7 +397,7 @@ function upgrade_PollsPlugin()
         ) TYPE=MyISAM";
     // in 1.4.1, "don't display poll" was equivalent to "closed"
     $P_SQL[] = "UPDATE {$_TABLES['polltopics']} SET is_open = 0 WHERE display = 0";
-    $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1', pi_gl_version = '1.5.0' WHERE pi_name = 'polls'";
+    $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1', pi_gl_version = '1.0.0', pi_homepage='http://www.glfusion.org' WHERE pi_name = 'polls'";
 
     $P_SQL = INST_checkInnodbUpgrade($P_SQL);
     foreach ($P_SQL as $sql) {
@@ -457,7 +460,7 @@ function upgrade_StaticpagesPlugin()
     $P_SQL[] = "ALTER TABLE {$_TABLES['staticpage']} ADD commentcode tinyint(4) NOT NULL default '0' AFTER sp_label";
     // disable comments on all existing static pages
     $P_SQL[] = "UPDATE {$_TABLES['staticpage']} SET commentcode = -1";
-    $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0', pi_gl_version = '1.5.0' WHERE pi_name = 'staticpages'";
+    $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0', pi_gl_version = '1.0.0', pi_homepage='http://www.glfusion.org' WHERE pi_name = 'staticpages'";
 
     foreach ($P_SQL as $sql) {
         $rst = DB_query($sql);
@@ -500,7 +503,7 @@ function upgrade_CalendarPlugin()
     $P_SQL[] = "ALTER TABLE {$_TABLES['events']} CHANGE state state varchar(40) default NULL";
     $P_SQL[] = "ALTER TABLE {$_TABLES['eventsubmission']} CHANGE state state varchar(40) default NULL";
     $P_SQL[] = "ALTER TABLE {$_TABLES['personal_events']} CHANGE state state varchar(40) default NULL";
-    $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.2', pi_gl_version = '1.5.0' WHERE pi_name = 'calendar'";
+    $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.2', pi_gl_version = '1.0.0', pi_homepage='http://www.glfusion.org' WHERE pi_name = 'calendar'";
 
     foreach ($P_SQL as $sql) {
         $rst = DB_query($sql);
@@ -552,7 +555,7 @@ function upgrade_SpamXPlugin()
         return false;
     }
 
-    $sql = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1', pi_gl_version = '1.5.0' WHERE pi_name = 'spamx'";
+    $sql = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1', pi_gl_version = '1.0.0',pi_homepage='http://www.glfusion.org' WHERE pi_name = 'spamx'";
     $rst = DB_query($sql);
     if (DB_error()) {
         echo "There was an error upgrading the Spam-X plugin";
@@ -625,7 +628,7 @@ function upgrade_LinksPlugin()
     $P_SQL[] = "ALTER TABLE {$_TABLES['linksubmission']} CHANGE category cid varchar(32) NOT NULL";
     $P_SQL[] = "ALTER TABLE {$_TABLES['links']} CHANGE category cid varchar(32) NOT NULL";
     $P_SQL[] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('{$root}', 'root', 'Root', 'Website root', NULL, NOW(), NOW(), 5, 2, 3, 3, 2, 2)";
-    $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.0', pi_gl_version='1.5.0' WHERE pi_name='links'";
+    $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.0', pi_gl_version='1.0.0',pi_homepage='http://www.glfusion.org' WHERE pi_name='links'";
 
     $P_SQL = INST_checkInnodbUpgrade($P_SQL);
     foreach ($P_SQL as $sql) {

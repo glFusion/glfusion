@@ -215,7 +215,7 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
                 }
             }
         }
-        if ($count != $numCategoriesPerRow) {
+        if ($count != $numCategoriesPerRow  && $count != 0) {
             $p->set_var('final_end_row','</tr>');
         }
         $offset = ($page - 1) * $show;

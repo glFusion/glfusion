@@ -12,6 +12,10 @@ v1.1.0
 
 v1.0.1
 ------
+- Tweaks to upgrade / install SQL to support glFusion
+        private/sql/mysql_tableanddata.php
+        private/sql/updates/mysql_1.4.1_to_1.5.0.php
+
 - Fixed a small style issue
         public_html/layout/nouveau/style.css
         public_html/layout/nouveau/js/gl_mooslide.js
@@ -354,10 +358,15 @@ Calendar plugin
 
 FileMgmt plugin
 ---------------
+- Fixed XHTML issues
+        public_html/filemgmt/index.php
+        public_html/filemgmt/viewcat.php
+
 - Fixed style issue where admin confirmation screen would set whole site
   to bold.
         public_html/filemgmt/include/function.php
         private/plugins/filemgmt/language/english.php
+
 
 - Reworked the configuration files to solve some integrated installation
   issues.
@@ -366,6 +375,12 @@ FileMgmt plugin
 
 Forum plugin
 ------------
+- Fixed some more XHTML layout issues
+        public_html/layout/nouveau/forum/layout/admin/messages.thtml
+        public_html/layout/nouveau/forum/layout/admin/migrate_records.thtml
+        public_html/layout/nouveau/forum/layout/admin/migratestories.thtml
+        public_html/admin/plugins/forum/messages.php
+
 - Fixed a potential security issues with XSS on search field.
         public_html/forum/index.php
 

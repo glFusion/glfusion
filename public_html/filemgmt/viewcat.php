@@ -104,7 +104,7 @@ foreach($arr as $ele) {
     //debugbreak();
     $chtitle=$myts->makeTboxData4Show($ele['title']);
     $totalfiles = $totalfiles + getTotalItems($ele['cid'], 1);
-    $subcategories = '<a href="' .$_CONF['site_url'] .'/filemgmt/viewcat.php?cid=' .$ele['cid'] .'">' .$chtitle .'</a></b>&nbsp;('.$totalfiles.')&nbsp;&nbsp;';
+    $subcategories = '<a href="' .$_CONF['site_url'] .'/filemgmt/viewcat.php?cid=' .$ele['cid'] .'">' .$chtitle .'</a>&nbsp;('.$totalfiles.')&nbsp;&nbsp;';
     $p->set_var('subcategories',$subcategories);
     if ($count == $numCategoriesPerRow) {
         $p->set_var('end_of_row','</tr>');
@@ -118,6 +118,9 @@ foreach($arr as $ele) {
         $p->set_var('new_table_row','');
         $count++;
     }
+}
+if ($count != $numCategoriesPerRow  && $count != 0) {
+    $p->set_var('final_end_row','</tr>');
 }
 
 // Get a list of subcategories for this category
@@ -190,7 +193,7 @@ if($maxrows > 0) {
     $p->parse ('output', 'page');
     $display .= $p->finish ($p->get_var('output'));
 }  else {
-    $p->set_var('filelisting_records','<div class="pluginAlert" style="width:500px;padding:10px;margin:10px;border:1px dashed #CCC;">'._MD_NOFILES.'</div>');
+    $p->set_var('filelisting_records','<tr><td><div class="pluginAlert" style="width:500px;padding:10px;margin:10px;border:1px dashed #CCC;">'._MD_NOFILES.'</div></td></tr>');
     $p->parse ('output', 'page');
     $display .= $p->finish ($p->get_var('output'));
 }

@@ -12,7 +12,7 @@
 // +---------------------------------------------------------------------------+
 // | Plugin Authors                                                            |
 // | Blaine Lang,                  blaine@portalparts.com, www.portalparts.com |
-// | Version 1.0 co-developer:     Matthew DeWyer, matt@mycws.com              |   
+// | Version 1.0 co-developer:     Matthew DeWyer, matt@mycws.com              |
 // | Prototype & Concept :         Mr.GxBlock, www.gxblock.com                 |
 // +---------------------------------------------------------------------------+
 // |                                                                           |
@@ -55,14 +55,14 @@ function selectHTML_forum($selected='') {
             $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='{$B['grp_id']}'");
             if (SEC_inGroup($groupname)) {
                 if ($firstforum) {
-                    $selectHTML .= '<OPTION value="-1">-------------------';
-                    $selectHTML .= '<OPTION value="-1">' .$A['cat_name']. '';
+                    $selectHTML .= '<option value="-1">-------------------</option>';
+                    $selectHTML .= '<option value="-1">' .$A['cat_name']. '</option>';
                  }
                 $firstforum = false;
-                if ($B['forum_id'] == $selected) { 
-                    $selectHTML .= LB .'<OPTION value="' .$B['forum_id']. '" SELECTED>&nbsp;&#187&nbsp;&nbsp;' .$B['forum_name']. '';
+                if ($B['forum_id'] == $selected) {
+                    $selectHTML .= LB .'<option value="' .$B['forum_id']. '" selected="selected">&nbsp;&#187&nbsp;&nbsp;' .$B['forum_name']. '</option>';
                 } else {
-                    $selectHTML .= LB .'<OPTION value="' .$B['forum_id']. '">&nbsp;&#187&nbsp;&nbsp;' .$B['forum_name']. '';
+                    $selectHTML .= LB .'<option value="' .$B['forum_id']. '">&nbsp;&#187&nbsp;&nbsp;' .$B['forum_name']. '</option>';
                 }
             }
         }
@@ -76,16 +76,16 @@ function selectHTML_members($selected='') {
     $sql  = "SELECT  user.uid,user.username FROM {$_TABLES[users]} user, {$_TABLES[gf_topic]} topic ";
     $sql .= "WHERE user.uid <> 1 AND user.uid=topic.uid GROUP by uid ORDER BY user.username";
     $memberlistsql = DB_query($sql);
-    if ($selected == 1) { 
-        $selectHTML .= LB .'<OPTION value="1" SELECTED>' .$LANG_GF02['msg177']. '</OPTION>';
+    if ($selected == 1) {
+        $selectHTML .= LB .'<option value="1" selected="selected">' .$LANG_GF02['msg177']. '</option>';
     } else {
-        $selectHTML .= LB .'<OPTION value="1">' .$LANG_GF02['msg177']. '</OPTION>';
+        $selectHTML .= LB .'<option value="1">' .$LANG_GF02['msg177']. '</option>';
     }
     while($A = DB_fetchArray($memberlistsql)) {
-        if ($A['uid'] == $selected) { 
-            $selectHTML .= LB .'<OPTION value="' .$A['uid']. '" SELECTED>' .$A['username']. '</OPTION>';
+        if ($A['uid'] == $selected) {
+            $selectHTML .= LB .'<option value="' .$A['uid']. '" selected="selected">' .$A['username']. '</option>';
         } else {
-            $selectHTML .= LB .'<OPTION value="' .$A['uid']. '">' .$A['username']. '</OPTION>';
+            $selectHTML .= LB .'<option value="' .$A['uid']. '">' .$A['username']. '</option>';
         }
     }
     return $selectHTML;
@@ -144,7 +144,7 @@ $report = new Template($_CONF['path_layout'] . 'forum/layout/admin');
 $report->set_file (array ('messages'=>'messages.thtml', 'records' => 'message_line.thtml'));
 $report->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/messages.php');
 $report->set_var ('site_url', $_CONF['site_url']);
-$report->set_var ('imgset', $CONF_FORUM['imgset']); 
+$report->set_var ('imgset', $CONF_FORUM['imgset']);
 $report->set_var ('LANG_deleteall', $LANG_GF01['DELETEALL']);
 $report->set_var ('LANG_DELCONFIRM', $LANG_GF01['DELCONFIRM']);
 $report->set_var ('LANG_DELALLCONFIRM', $LANG_GF01['DELALLCONFIRM']);
@@ -191,7 +191,7 @@ if ($num_messages == 0) {
     while($A = DB_fetchArray($query)){
         $report->set_var ('id', $A['id']);
         if ($A['uid'] > 1) {
-               $report->set_var ('name', '<A HREF="' .$_CONF['site_url']. '/users.php?mode=profile&uid=' .$A['uid']. '">' .$A['name']. '</a>');
+               $report->set_var ('name', '<a href="' .$_CONF['site_url']. '/users.php?mode=profile&amp;uid=' .$A['uid']. '">' .$A['name']. '</a>');
         } else {
             $report->set_var ('name', $A['name']);
         }
