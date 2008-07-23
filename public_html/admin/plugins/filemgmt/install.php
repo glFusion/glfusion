@@ -1,7 +1,7 @@
 <?php
 
 // +---------------------------------------------------------------------------+
-// | Universal Plugin Install Script 1.4 for Geeklog - The Ultimate Weblog     |
+// | FileMgmt Plugin Installation                                              |
 // +---------------------------------------------------------------------------+
 // | install.php                                                               |
 // |                                                                           |
@@ -55,8 +55,8 @@ require_once($_CONF['path'] . 'plugins/filemgmt/functions.inc');
 
 $pi_name = 'filemgmt';                    // Plugin name
 $pi_version = $CONF_FM['version'];        // Plugin Version
-$gl_version = '1.4';                      // GL Version plugin for
-$pi_url = 'http://www.portalparts.com';   // Plugin Homepage
+$gl_version = '1.0.0';                    // GL Version plugin for
+$pi_url = 'http://www.glfusion.org';      // Plugin Homepage
 
 
 // Default data
@@ -73,16 +73,16 @@ $NEWFEATURE['filemgmt.upload'] = "filemgmt File Upload Rights";
 
 /**
 * Checks the requirements for this plugin and if it is compatible with this
-* version of Geeklog.
+* version of glFusion.
 *
 * @return   boolean     true = proceed with install, false = not compatible
 *
 */
-function plugin_compatible_with_this_geeklog_version ()
+function plugin_compatible_with_this_glfusion_version ()
 {
-    // Check for version 1.4+
-    $gl_version = floatval (VERSION);
-    if ($gl_version >= 1.3) {
+    // Check for version 1.0+
+    $gl_version = floatval (glFusion_VERSION);
+    if ($gl_version >= 1.0.0) {
         return true;
     } else {
         return false;
@@ -102,7 +102,7 @@ if (!SEC_inGroup('Root')) {
 }
 
 /**
-* Creates the datastructures for this plugin into the Geeklog database
+* Creates the datastructures for this plugin into the glFusion database
 * Note: Corresponding uninstall routine is in functions.inc
 * @return    boolean    True if successful False otherwise
 */
@@ -203,8 +203,8 @@ function plugin_install_now()
         exit;
     }
 
-    // Register the plugin with Geeklog
-    COM_errorLog("Registering $pi_name plugin with Geeklog", 1);
+    // Register the plugin with glFusion
+    COM_errorLog("Registering $pi_name plugin with glFusion", 1);
     DB_delete($_TABLES['plugins'],'pi_name',$pi_name);
     DB_query("INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_homepage, pi_enabled) "
         . "VALUES ('$pi_name', '$pi_version', '$gl_version', '$pi_url', 1)");
@@ -214,8 +214,6 @@ function plugin_install_now()
         return false;
         exit;
     }
-
-
 
     COM_errorLog("Succesfully installed the $pi_name Plugin!",1);
     return true;
@@ -241,7 +239,7 @@ if ($_REQUEST['action'] == 'uninstall') {
 
 } else if (DB_count ($_TABLES['plugins'], 'pi_name', $pi_name) == 0) {
     // plugin not installed
-    if (plugin_compatible_with_this_geeklog_version ()) {
+    if (plugin_compatible_with_this_glfusion_version ()) {
         if (plugin_install_now ()) {
             $display = COM_refresh ($_CONF['site_admin_url']
                                     . '/plugins.php?msg=44');
@@ -250,7 +248,7 @@ if ($_REQUEST['action'] == 'uninstall') {
                                     . '/plugins.php?msg=72');
         }
     } else {
-        // plugin needs a newer version of Geeklog
+        // plugin needs a newer version of glFusion
         $display .= COM_siteHeader ('menu', $LANG32[8])
                  . COM_startBlock ($LANG32[8])
                  . '<p>' . $LANG32[9] . '</p>'

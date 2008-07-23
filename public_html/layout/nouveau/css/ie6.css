@@ -63,7 +63,7 @@ div#frame div.button#right {
 
 /* ie6 warning  javascript*/
 #iewarn {
-	background:#C6D3DA url(../images/error.png) 10px 20px no-repeat;
+	background:#C6D3DA url(../images/noie6.png) 10px 20px no-repeat;
 	position:relative;
 	z-index:1;
 	opacity:0;
@@ -75,7 +75,7 @@ div#frame div.button#right {
 	position:relative;
 	border-top:5px solid #95B8C9;
 	border-bottom:5px solid #95B8C9;
-	padding:10px 80px 10px 210px;	
+	padding:10px 80px 10px 210px;
 }
 #iewarn h4 {
 	color:#e2494b;
@@ -87,7 +87,7 @@ div#frame div.button#right {
 	font-weight:bold;
 }
 #iewarn_close {
-	background:url(../images/close.png) 50% 50% no-repeat;
+	background:url(../images/ie6close.png) 50% 50% no-repeat;
 	display:block;
 	cursor:pointer;
 	position:absolute;

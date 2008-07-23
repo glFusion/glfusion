@@ -7,7 +7,7 @@
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2008 by the following authors:                              |
 // |                                                                           |
-// | Author: Mark R. Evans - mark@gllabs.org                                   |
+// | Author: Mark R. Evans - mark AT glfusion DOT org                          |
 // +---------------------------------------------------------------------------+
 // |                                                                           |
 // | This program is free software; you can redistribute it and/or             |
@@ -41,8 +41,8 @@ function plugin_install_filemgmt($_DB_table_prefix)
 
     $pi_name    = 'filemgmt';                   // Plugin name
     $pi_version = $CONF_FM['version'];          // Plugin Version
-    $gl_version = '1.5.0';                      // GL Version plugin for
-    $pi_url     = 'http://www.portalparts.com'; // Plugin Homepage
+    $gl_version = '1.0.0';                      // GL Version plugin for
+    $pi_url     = 'http://www.glfusion.com'; // Plugin Homepage
 
     // Default data
     // Insert table name and sql to insert default data for your plugin.
@@ -144,15 +144,19 @@ function plugin_install_filemgmt($_DB_table_prefix)
     $fmconfig_data = str_replace("##SNAPURL##", $_CONF['site_url'] . "/filemgmt_data/snaps/", $fmconfig_data); // Filestore
     $fmconfig_data = str_replace("##CATURL##", $_CONF['site_url'] . "/filemgmt_data/category_snaps/", $fmconfig_data); // Filestore
 
-    // Write our changes to db-config.php
-    $fmconfig_file = fopen($fmconfig_path, 'w');
-    if (!fwrite($fmconfig_file, $fmconfig_data)) {
+    // Write our changes to filemgmt.php
+    $fmconfig_file = @fopen($fmconfig_path, 'w');
+    if ( $fmconfig_file == false ) {
+        $uninstall_plugin();
+        return false;
+    }
+    if (!@fwrite($fmconfig_file, $fmconfig_data)) {
         $uninstall_plugin ();
         return false;
     }
     fclose($fmconfig_file);
 
-    // Register the plugin with Geeklog
+    // Register the plugin with glFusion
     DB_delete($_TABLES['plugins'],'pi_name',$pi_name);
     DB_query("INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_homepage, pi_enabled) "
         . "VALUES ('$pi_name', '$pi_version', '$gl_version', '$pi_url', 1)");
@@ -166,7 +170,7 @@ function plugin_install_filemgmt($_DB_table_prefix)
 }
 
 /**
-* Removes the datastructures for this plugin from the Geeklog database
+* Removes the datastructures for this plugin from the glFusion database
 * This may get called by the install routine to undue anything created during the install.
 * Added check to see that plugin is first disabled.
 */
@@ -178,7 +182,7 @@ function plugin_uninstall_filemgmt()
     $FEATURES = array ('filemgmt.edit', 'filemgmt.user','filemgmt.upload');
     $TABLES = array ('filemgmt_cat','filemgmt_filedetail','filemgmt_filedesc','filemgmt_brokenlinks','filemgmt_votedata','filemgmt_history');
 
-    // Ok to proceed and delete plugin - Unregister the plugin with Geeklog
+    // Ok to proceed and delete plugin - Unregister the plugin with glFusion
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'filemgmt'",1);
     // Drop tables
     foreach($TABLES as $table) {
