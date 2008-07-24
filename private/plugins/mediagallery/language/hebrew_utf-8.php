@@ -12,7 +12,7 @@
 // +---------------------------------------------------------------------------|
 // |                                                                           |
 // | If you translate this file, please consider uploading a copy at           |
-// |    http://www.gllabs.org so others can benefit from your                  |
+// |    http://www.glfusion.org so others can benefit from your                  |
 // |    translation.  Thank you!                                               |
 // |                                                                           |
 // | This program is free software; you can redistribute it and/or             |
@@ -74,7 +74,7 @@ $LANG_MG00 = array (
     'no_access'			=> 'בחרתם באלבום עם גישה מוגבלת. אנא ביחרו באלבום אחר',
     'overview'			=> 'גלריית המדיה היא plugin טבעי של תוכנת הניהול שמעניק גלריית מולטימדיה מלאת יכולות לאתר שמשתמש בתוכנת הניהול. גלריית המדיה תומכת במגוון סוגי תמונות, וידאו ואודיו ויש בה יכולות מתקדמות כדי שהצגת המולטימדיה שלכם תהיה בסביבה יציבה שהיא פשוטה וקלה לתיחזוק.',
     'preinstall_check'	=> 'לגלריית המדיה יש את הדרישות הבאות:',
-    'geeklog_check'		=> 'Geeklog v1.4.0 או חדש יותר, הגירסה המדווחת היא <b>%s</b>.',
+    'geeklog_check'		=> 'glFusion v1.0.0 או חדש יותר, הגירסה המדווחת היא <b>%s</b>.',
     'php_check'			=> 'PHP v4.3.0 או חדש יותר, הגירסה המדווחת היא <b>%s</b>.',
     'preinstall_confirm' => "בשביל פרטים מלאים על התקנת גלריית המדיה, אנא פנו <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">למסמך ההתקנה</a>.",
     'filecheck'         => 'כלי בדיקת קבצים',
@@ -84,18 +84,18 @@ $LANG_MG00 = array (
     /* --- New in v1.6.0 --- */
     'template_cache'    => 'Template Cache Library Installed',
     'env_check'         => 'Environment Check',
-    'gl_version_error'  => 'Geeklog version is not v1.4.0 or higher',
-    'gl_version_ok'     => 'Geeklog version is v1.4.0 or higher',
+    'gl_version_error'  => 'glFusion version is not v1.0.0 or higher',
+    'gl_version_ok'     => 'glFusion version is v1.0.0 or higher',
     'tc_error'          => 'Caching Template Library is not installed',
     'tc_ok'             => 'Caching Template Library is installed',
     'ml_error'          => 'php.ini <strong>memory_limit</strong> is less than 48M.',
     'ml_ok'             => 'php.ini <strong>memory_limit</strong> is 48M or greater.',
     'recheck_env'       => 'Recheck Environment',
     'fix_install'       => 'Please fix the issues above before installing.',
-    'need_cache'        => 'Media Gallery v1.6 requires that you have the <a href="http://www.gllabs.org/wiki/doku.php?id=geeklog:templatecache">Caching Template Library Enhancement</a> installed.  Please download and install the library.',
+    'need_cache'        => 'Media Gallery v1.6 requires that you have the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:templatecache">Caching Template Library Enhancement</a> installed.  Please download and install the library.',
     'need_memory'       => 'Media Gallery v1.6 recommends that you have at least 48M of memory configured for the <strong>memory_limit</strong> setting in php.ini.',
     'thank_you'         => 'Thank you for upgrading to the latest release of Media Gallery. Please double check your System Configuration Options, there are many new features in this release that you may need to configure.',
-    'support'           => 'For support, questions or enhancement requests, please visit <a href="http://www.gllabs.org">gl Labs</a>.  For the latest documentation, please visist the <a href="http://www.gllabs.org/wiki/doku.php?id=mediagallery:start">gl Labs Wiki</a>.',
+    'support'           => 'For support, questions or enhancement requests, please visit <a href="http://www.glfusion.org">glFusion</a>.  For the latest documentation, please visist the <a href="http://www.glfusion.org/wiki/doku.php?id=mediagallery:start">glFusion Wiki</a>.',
     'success_upgrade'   => 'Media Gallery Successfully Upgraded',
 );
 
@@ -286,7 +286,7 @@ $LANG_MG01 = array (
     'gallery_import'              => 'Gallery v1.x',
     'fourimages_import'              => '4images',
     'xppubwizard_install'		=> 'התקנת XP Publishing Wizard',
-    'log_viewer'	              => 'צפייה ביומן Geeklog',
+    'log_viewer'	              => 'צפייה ביומן glFusion',
     'select_date'	              => 'ביחרו תאריך',
     'ss_enable'                 => 'איפשור מצגת שקופיות',
     'ri_enable'                 => 'כיללו בקוביית המידע של תמונה אקראית',
@@ -569,7 +569,7 @@ $LANG_MG01 = array (
     'reset_defaults'            => 'איפוס ברירות המחדל',
     'reset_defaults_details'    => 'אפסו את *כל* אפשרויות המערכת, את ברירות המחדל של האלבומים ואת ברירות המחדל של המדיה לברירות המחדל של ההתקנה. דבר זה משפיע רק על הגדרות ברירת המחדל, זה לא משפיע על שום אלבומים קיימים. השתמשו בזהירות!',
     'force_child_update'        => 'כפיית ההרשאות לכל תת האלבומים',
-    'gl_story'                  => 'מאמרים ב-Geeklog',
+    'gl_story'                  => 'מאמרים ב-glFusion',
     'allow_download'            => 'אפשרו הורדת מדיה',
     'display_album_desc'        => 'הציגו תיאורי אלבומים',
     'jpg'                       => 'JPEG',
@@ -621,7 +621,7 @@ $LANG_MG01 = array (
     'podcast'                   => 'אלבום פודקאסט',
     'autotag_caption'           => 'השתמשו בכותרת מדיה / אלבום כטקסט לתגים האוטומטיים',
     'popup_from_album'          => 'נגנו מדיית אודיו / וידאו ישר מהצגת האלבום',
-    'out_of_date'               => 'ההתקנה שלכם לא נראית מעודכנת. שידרוגים קיימים לגירסה שלכם של גלריית המדיה, אנא בקרו את <a href="http://www.gllabs.org">http://www.gllabs.org/</a> כדי להשיג את הגירסה הכי מעודכנת.<br><br>הגירסה הכי אחרונה היא גלריית המדיה %s אתם מריצים את גלריית המדיה %s',
+    'out_of_date'               => 'ההתקנה שלכם לא נראית מעודכנת. שידרוגים קיימים לגירסה שלכם של גלריית המדיה, אנא בקרו את <a href="http://www.glfusion.org">http://www.glfusion.org/</a> כדי להשיג את הגירסה הכי מעודכנת.<br><br>הגירסה הכי אחרונה היא גלריית המדיה %s אתם מריצים את גלריית המדיה %s',
     /* --- Modified in version 1.5.0 --- */
     'jpg_quality'               => 'הצגת איכות JPG',
     /* --- New in version 1.5.0 --- */
@@ -691,7 +691,7 @@ $LANG_MG01 = array (
     'search_av_playback'        => 'Search Results Audio/Video Playback Type',
     'search_views'              => 'Show Views Counter in Search Results',
     'search_rating'             => 'Show Rating in Search Results',
-    'gallery_only'              => 'Media Gallery Replaces Geeklog Index Page',
+    'gallery_only'              => 'Media Gallery Replaces glFusion Index Page',
 );
 
 // error messages
@@ -888,7 +888,7 @@ $LANG_MG03 = array (
     'published'				=> 'פורסם על ידי',
     'on'					=> 'ב:',
     'no_flash'              => '<div style="width:200px;border:1px solid;text-align:center;">כנראה שאין לכם את plugin הפלאש מותקן, או שהגירסה שיש לכם אינה מעודכנת ולא יכולה לנגן את הפריט המבוקש.<br><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
-    'tagline'               => 'הגלריה פועלת על <a href="http://www.gllabs.org" target="_new">Media Gallery</a>',
+    'tagline'               => 'הגלריה פועלת על <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     /* ---new in v1.5.0 --- */
     'xp_pub_url'			=> 'הורדת <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url'         => 'הורדת <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -1285,7 +1285,7 @@ $LANG_MG07 = array (
 $LANG_MG08 = array (
     'success'               => 'Plugin גלריית המדיה הותקן בהצלחה.',
     'review'                => 'אנא עיברו על <b>אפשרויות המערכת</b> ועל <b>ברירות מחדל המערכת</b> כדי להשלים את ההתקנה והכיוון.',
-    'support'				=> 'בשביל תמיכה בגלריית המדיה, אנא בקרו באתר gl Labs שב-<a href="http://www.gllabs.org">www.gllabs.org</a>.<br><br>באתר התמיכה של גלריית המדיה ניתנים גם:<ul><li>דוקומנטציית Wiki</li><li>פורומי תמיכה</li><li>רשימת תפוצה של הכרזות <b>ביטחון</b> והכרזות עידכונים</li><li>... ועוד הרבה דברים</li></ul>',
+    'support'				=> 'בשביל תמיכה בגלריית המדיה, אנא בקרו באתר glFusion שב-<a href="http://www.glfusion.org">www.glfusion.org</a>.<br><br>באתר התמיכה של גלריית המדיה ניתנים גם:<ul><li>דוקומנטציית Wiki</li><li>פורומי תמיכה</li><li>רשימת תפוצה של הכרזות <b>ביטחון</b> והכרזות עידכונים</li><li>... ועוד הרבה דברים</li></ul>',
 );
 
 $LANG_MG09 = array (

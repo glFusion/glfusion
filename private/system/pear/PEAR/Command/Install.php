@@ -36,7 +36,7 @@ require_once 'PEAR/Command/Common.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: 1.7.1
+ * @version    Release: 1.7.2
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
@@ -900,7 +900,7 @@ Run post-installation scripts in package <package>, if any exist.
                 if (isset($parsed['group'])) {
                     $group = $info->getDependencyGroup($parsed['group']);
                     if ($group) {
-                        $installed = &$reg->getInstalledGroup($group);
+                        $installed = $reg->getInstalledGroup($group);
                         if ($installed) {
                             foreach ($installed as $i => $p) {
                                 $newparams[] = &$installed[$i];

@@ -43,7 +43,7 @@ define('PEAR_REGISTRY_ERROR_CHANNEL_FILE', -6);
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: 1.7.1
+ * @version    Release: 1.7.2
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -141,15 +141,20 @@ class PEAR_Registry extends PEAR
                            $pecl_channel = false)
     {
         parent::PEAR();
+        $this->setInstallDir($pear_install_dir);
+        $this->_pearChannel = $pear_channel;
+        $this->_peclChannel = $pecl_channel;
+        $this->_config = false;
+    }
+
+    function setInstallDir($pear_install_dir = PEAR_INSTALL_DIR)
+    {
         $ds = DIRECTORY_SEPARATOR;
         $this->install_dir = $pear_install_dir;
         $this->channelsdir = $pear_install_dir.$ds.'.channels';
         $this->statedir = $pear_install_dir.$ds.'.registry';
         $this->filemap  = $pear_install_dir.$ds.'.filemap';
         $this->lockfile = $pear_install_dir.$ds.'.lock';
-        $this->_pearChannel = $pear_channel;
-        $this->_peclChannel = $pecl_channel;
-        $this->_config = false;
     }
 
     function hasWriteAccess()
@@ -175,9 +180,12 @@ class PEAR_Registry extends PEAR
         return is_writeable($this->install_dir);
     }
 
-    function setConfig(&$config)
+    function setConfig(&$config, $resetInstallDir = true)
     {
         $this->_config = &$config;
+        if ($resetInstallDir) {
+            $this->setInstallDir($config->get('php_dir'));
+        }
     }
 
     function _initializeChannelDirs()

@@ -10,7 +10,7 @@
 // | Copyright (C) 2002 by the following authors:                              |
 // |                                                                           |
 // | Author:                                                                   |
-// | Mark R. Evans               -    mark@gllabs.org                          |
+// | Mark R. Evans               -    mark@glfusion.org                        |
 // | Translator:                                                               |
 // | Samuel M. Stone             -    sam@stonemicro.com                       |
 // +---------------------------------------------------------------------------|
@@ -73,7 +73,7 @@ $LANG_MG00 = array (
     'none_rated'        => '沒有媒體專案曾被評價',
     'no_viewed_items'   => '沒有媒體項目曾被觀看',
     'no_access'         => '你選了一個有限制的影集.  請選另外一個影集',
-    'overview'          => '媒體畫廊是個志樂(Geeklog)的插件，供給你的志樂網站能有多媒體的功能在一個非常容易管理的環境.',
+    'overview'          => '媒體畫廊是個志樂(glFusion)的插件，供給你的志樂網站能有多媒體的功能在一個非常容易管理的環境.',
     'preinstall_check'  => '媒體畫廊有以下的要求:',
     'geeklog_check'     => '志樂 v1.4.0 或以上, 你現在的版本是 <b>%s</b>.',
     'php_check'         => 'PHP v4.3.0 或以上, 你現在的版本是 <b>%s</b>.',
@@ -92,10 +92,10 @@ $LANG_MG00 = array (
     'ml_ok'             => 'php.ini <strong>memory_limit</strong> 是48M 或以上.',
     'recheck_env'       => '重新檢查環境',
     'fix_install'       => '請先將問題處理後再安裝.',
-    'need_cache'        => '媒體畫廊 v1.6 需要 <a href="http://www.gllabs.org/wiki/doku.php?id=geeklog:templatecache">Caching Template Library Enhancement</a> 安裝好.  請下載安裝此配件.',
+    'need_cache'        => '媒體畫廊 v1.6 需要 <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:templatecache">Caching Template Library Enhancement</a> 安裝好.  請下載安裝此配件.',
     'need_memory'       => '媒體畫廊 v1.6 建議最少要有 48M 的記憶力設定在 php.ini 的 <strong>memory_limit</strong>.',
     'thank_you'         => '謝謝你更新到最新的媒體畫廊. 請注意察看 系統設定選項, 那有很多的新功能可能需要你設定.',
-    'support'           => '若需要科技幫助, 有疑問或提供建議, 請流覽 <a href="http://www.gllabs.org">GL Labs</a>.  若需要最新的使用說明, 請流覽<a href="http://www.gllabs.org/wiki/doku.php?id=mediagallery:start">GL Labs Wiki</a>.',
+    'support'           => '若需要科技幫助, 有疑問或提供建議, 請流覽 <a href="http://www.glfusion.org">glFusion Site</a>.  若需要最新的使用說明, 請流覽<a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:mediagallery">glFusion Wiki</a>.',
     'success_upgrade'   => '媒體畫廊以更新成功。',
 );
 
@@ -623,7 +623,7 @@ $LANG_MG01 = array (
     'replace_file'              => '替換檔案',
     'autotag_caption'           => '用媒體 / 影集標題來作自動插圖的標題',
     'popup_from_album'          => '播放音 / 影媒體 在影集中',
-    'out_of_date'               => '你的安裝不是最新的. 有新的媒體畫廊版本可下載, 請到 <a href="http://www.gllabs.org">http://www.gllabs.org/</a> 來下載新軟體.<br' . XHTML . '><br' . XHTML . '>最新的媒體畫廊是 %s 你是在用 %s',
+    'out_of_date'               => '你的安裝不是最新的. 有新的媒體畫廊版本可下載, 請到 <a href="http://www.glfusion.org">http://www.glfusion.org/</a> 來下載新軟體.<br' . XHTML . '><br' . XHTML . '>最新的媒體畫廊是 %s 你是在用 %s',
     'jpg_quality'               => '顯示 JPG 質量',
     'js_slideshow'              => 'Java程式',
     'lightbox'                  => '光框',
@@ -890,7 +890,7 @@ $LANG_MG03 = array (
     'published'             => '上載於',
     'on'                    => '在',
     'no_flash'              => '<div style="width:200px;">你沒有安裝 Flash Plugin, 或者你的版本已經太老而不能播放此媒體.請點擊下面來安裝新的 Flash Plugin.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
-    'tagline'               => '這媒體文庫動力於 <a href="http://www.gllabs.org" target="_new">媒體畫廊</a>',
+    'tagline'               => '這媒體文庫動力於 <a href="http://www.glfusion.org" target="_new">媒體畫廊</a>',
     'xp_pub_url'            => '下載 <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url'         => '下載 <a href="%s">xppubwiz.reg (Windows Vista)</a>',
     /* --- changed in v1.6.0 -- */
@@ -1286,7 +1286,7 @@ $LANG_MG07 = array (
 $LANG_MG08 = array (
     'success'               => '媒體畫廊插件已成功安裝.',
     'review'                => '起讀<b>系統選項</b> 和 <b>系統默認</b> 來完成安裝和設置.',
-    'support'               => '媒體畫廊的科技支持, 請流覽 <a href="http://www.gllabs.org">www.gllabs.org</a>.<br' . XHTML . '><br' . XHTML . '>這媒體畫廊的網站也有:<ul><li>說明書 Wiki</li><li>論壇</li><li> 通知 <b>安全</b> 的電信和更新通告</li><li>... 等等</li></ul>',
+    'support'               => '媒體畫廊的科技支持, 請流覽 <a href="http://www.glfusion.org">www.glfusion.org</a>.<br' . XHTML . '><br' . XHTML . '>這媒體畫廊的網站也有:<ul><li>說明書 Wiki</li><li>論壇</li><li> 通知 <b>安全</b> 的電信和更新通告</li><li>... 等等</li></ul>',
 );
 
 $LANG_MG09 = array (

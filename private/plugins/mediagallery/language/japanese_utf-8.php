@@ -8,7 +8,7 @@
 // | Copyright (C) 2002,2005,2006 by the following authors:                    |
 // |                                                                           |
 // | Author:                                                                   |
-// | Mark R. Eavns               -    mark@gllabs.org                          |
+// | Mark R. Eavns               -    mark@glfusion.org                        |
 // | Translator:                                                               |
 // | mystral_kk                  -    mystral_kk AT ddlinks DOT net            |
 // +---------------------------------------------------------------------------|
@@ -79,9 +79,9 @@ $LANG_MG00 = array (
     'cvtmsg8'           => '<br><br>%d 個のメディアアイテムを処理済み - 残り %d 個...',
     'no_viewed_items'   => '閲覧されたメディアアイテムはありません。',
     'no_access'         => 'You have selected and album that has restricted access.  Please choose a different album',
-    'overview'          => 'メディアギャラリはGeeklog専用のプラグインで、マルチメディアをサポートしあなたのサイトをより強化するためのものです。メディアギャラリは様々な画像フォーマットをサポートしビデオやオーディオなど、あなたの持つマルチメディアアイテムを簡単に維持する環境を提供します。',
+    'overview'          => 'メディアギャラリはglFusion専用のプラグインで、マルチメディアをサポートしあなたのサイトをより強化するためのものです。メディアギャラリは様々な画像フォーマットをサポートしビデオやオーディオなど、あなたの持つマルチメディアアイテムを簡単に維持する環境を提供します。',
     'preinstall_check'  => 'メディアギャラリを使用するための必須条件：',
-    'geeklog_check'     => 'Geeklog v1.4.0 かそれ以上のバージョン。あなたの使用しているバージョンは<b>%s</b>です',
+    'geeklog_check'     => 'glFusion v1.4.0 かそれ以上のバージョン。あなたの使用しているバージョンは<b>%s</b>です',
     'php_check'         => 'PHP v4.3.0かそれ以上のバージョン。あなたの使用しているバージョンは<b>%s</b>です。',
     'preinstall_confirm' => "メディアギャラリについての詳細についてはこちらの <a href=\"{$_CONF['site_admin_url']}/plugins/mediagallery/install_doc.html\">インストールマニュアル</a>を参照してください。",
     'filecheck'         => 'FileCheck Utility',
@@ -91,18 +91,18 @@ $LANG_MG00 = array (
     /* --- New in v1.6.0 --- */
     'template_cache'    => 'Template Cache Library Installed',
     'env_check'         => 'Environment Check',
-    'gl_version_error'  => 'Geeklog version is not v1.4.0 or higher',
-    'gl_version_ok'     => 'Geeklog version is v1.4.0 or higher',
+    'gl_version_error'  => 'glFusion version is not v1.0.0 or higher',
+    'gl_version_ok'     => 'glFusion version is v1.0.0 or higher',
     'tc_error'          => 'Caching Template Library is not installed',
     'tc_ok'             => 'Caching Template Library is installed',
     'ml_error'          => 'php.ini <strong>memory_limit</strong> is less than 48M.',
     'ml_ok'             => 'php.ini <strong>memory_limit</strong> is 48M or greater.',
     'recheck_env'       => 'Recheck Environment',
     'fix_install'       => 'Please fix the issues above before installing.',
-    'need_cache'        => 'Media Gallery v1.6 requires that you have the <a href="http://www.gllabs.org/wiki/doku.php?id=geeklog:templatecache">Caching Template Library Enhancement</a> installed.  Please download and install the library.',
+    'need_cache'        => 'Media Gallery v1.6 requires that you have the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:templatecache">Caching Template Library Enhancement</a> installed.  Please download and install the library.',
     'need_memory'       => 'Media Gallery v1.6 recommends that you have at least 48M of memory configured for the <strong>memory_limit</strong> setting in php.ini.',
     'thank_you'         => 'Thank you for upgrading to the latest release of Media Gallery. Please double check your System Configuration Options, there are many new features in this release that you may need to configure.',
-    'support'           => 'For support, questions or enhancement requests, please visit <a href="http://www.gllabs.org">gl Labs</a>.  For the latest documentation, please visist the <a href="http://www.gllabs.org/wiki/doku.php?id=mediagallery:start">gl Labs Wiki</a>.',
+    'support'           => 'For support, questions or enhancement requests, please visit <a href="http://www.glfusion.org">glFusion</a>.  For the latest documentation, please visist the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:mediagallery">glFusion Wiki</a>.',
     'success_upgrade'   => 'Media Gallery Successfully Upgraded',
 );
 
@@ -188,11 +188,11 @@ $LANG_MG01 = array (
     'graphicspackage_help'      => 'サムネイル画像作成とメディアアイテム処理に使う，サーバーにインストールされているグラフィックパッケージを選択してください。',
     'graphicspackage_path_prompt' => 'グラフィックパッケージのパス',
     'graphicspackage_path_help'   => 'インストールされているグラフィックパッケージのパスを入力してください。',
-    'displayblock_prompt'       => 'Geeklog のブロックに表示',
-    'displayblock_help'         => 'Geeklog のブロックに表示する方法(左/右/両方/なし)を選択してください。',
+    'displayblock_prompt'       => 'glFusion のブロックに表示',
+    'displayblock_help'         => 'glFusion のブロックに表示する方法(左/右/両方/なし)を選択してください。',
     'static_sort_help'          => 'この処理により手動で行ったソートは全て無効になります。',
     'htmlallowed'               => 'タイトルでのHTML使用を許可する',
-    'whatsnew'                  => 'Geeklog の新着情報に載せる',
+    'whatsnew'                  => 'glFusion の新着情報に載せる',
     'dfid'                      => '日付形式',
     'general_options'           => '一般的なオプション',
     'display_options'           => '表示オプション',
@@ -293,7 +293,7 @@ $LANG_MG01 = array (
     'gallery_import'            => 'Gallery v1.x インポートウィザード',
     'fourimages_import'         => '4images インポートウィザード',
     'xppubwizard_install'       => 'XP Publishing ウィザードをインストール',
-    'log_viewer'                => 'Geeklog のログ閲覧',
+    'log_viewer'                => 'glFusion のログ閲覧',
     'select_date'               => '日付選択',
     'ss_enable'                 => 'スライドショーを許可',
     'ri_enable'                 => 'ランダム表示ブロックを許可',
@@ -577,7 +577,7 @@ $LANG_MG01 = array (
     'subalbums'                 => 'Sub Albums',
     'rss_options'               => 'RSS Options',
     'filecheck'                 => 'FileCheck',
-    'gl_story'                  => 'Geeklog Stories',
+    'gl_story'                  => 'glFusion Stories',
     'allow_download'            => 'ダウンロードを許可する',
     'display_album_desc'        => 'アルバムを開いたときにも説明を表示する',
     'jpg'                       => 'JPEG',
@@ -629,7 +629,7 @@ $LANG_MG01 = array (
     'podcast'                   => 'ポッドキャストアルバムにする',
     'autotag_caption'           => 'Use media / album title as caption for autotags',
     'popup_from_album'          => '音楽/ビデオをアルバムから直接再生する',
-    'out_of_date'               => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="http://www.gllabs.org">http://www.gllabs.org/</a> to obtain the latest version.<br><br>The latest available version is Media Gallery %s You are running Media Gallery %s',
+    'out_of_date'               => 'Your installation does not seem to be up to date. Updates are available for your version of Media Gallery, please visit <a href="http://www.glfusion.org">http://www.glfusion.org/</a> to obtain the latest version.<br><br>The latest available version is Media Gallery %s You are running Media Gallery %s',
     /* --- Modified in v1.5.0 --- */
     'jpg_quality'               => '表示する時のJPEGクオリティ',
     /* --- New in version 1.5.0 --- */
@@ -699,7 +699,7 @@ $LANG_MG01 = array (
     'search_av_playback'        => 'Search Results Audio/Video Playback Type',
     'search_views'              => 'Show Views Counter in Search Results',
     'search_rating'             => 'Show Rating in Search Results',
-    'gallery_only'              => 'Media Gallery Replaces Geeklog Index Page',
+    'gallery_only'              => 'Media Gallery Replaces glFusion Index Page',
 );
 
 // error messages
@@ -894,7 +894,7 @@ $LANG_MG03 = array (
     'published'             => 'Published by',
     'on'                    => 'On',
     'no_flash'              => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
-    'tagline'               => 'Gallery powered by <a href="http://www.gllabs.org" target="_new">Media Gallery</a>',
+    'tagline'               => 'Gallery powered by <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     /* --- new in v1.5.0 --- */
     'xp_pub_url'            => 'Download <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url'         => 'Download <a href="%s">xppubwiz.reg (Windows Vista)</a>',
@@ -1204,7 +1204,7 @@ $LANG_MG05 = array (
 $LANG_MG06 = array (
     'title'                 => 'メディアギャラリXP公開ウィザード',
     'welcome'               => 'ようこそ，',
-    'info_text'             => 'メディアギャラリXP公開ウィザードはアップロード時のエラーを報告しません。エラーが発生した時には，単にそのファイルをスキップします。<p>アルバムにアップロードされなかったファイルがある場合にはGeeklogのエラーログを確認してください。',
+    'info_text'             => 'メディアギャラリXP公開ウィザードはアップロード時のエラーを報告しません。エラーが発生した時には，単にそのファイルをスキップします。<p>アルバムにアップロードされなかったファイルがある場合にはglFusionのエラーログを確認してください。',
     'no_albums'             => 'アルバムがないか，アルバムをアップロードする権限がありません。',
     'select_album'          => 'メディアを公開するアルバムを選択してください。'
 );
@@ -1291,7 +1291,7 @@ $LANG_MG07 = array (
 $LANG_MG08 = array (
     'success'               => 'メディアギャラリプラグインは正常にインストールされました',
     'review'                => '<b>設定</b>と<b>システム標準設定</b>をし、設定を完了してください。',
-    'support'               => 'メディアギャラリのサポートについては gl Labs のホームページにお願いします。ホームページは <a href="http://www.gllabs.org">www.gllabs.org</a>（英語）
+    'support'               => 'メディアギャラリのサポートについては glFusion のホームページにお願いします。ホームページは <a href="http://www.glfusion.org">www.glfusion.org</a>（英語）
 <br><br>メディアギャラリについてのサポートの追加情報:<ul><li>Wikiのドキュメント</li><li>サポートフォーラム</li><li>メーリングリストでの<b>セキュリティ情報</b>とアップデートアナウンス</li><li>... その他</li></ul>',
 );
 

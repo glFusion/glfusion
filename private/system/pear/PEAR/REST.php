@@ -34,7 +34,7 @@ require_once 'PEAR/XMLParser.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: 1.7.1
+ * @version    Release: 1.7.2
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -59,14 +59,14 @@ class PEAR_REST
      *                    parsed using PEAR_XMLParser
      * @return string|array
      */
-    function retrieveCacheFirst($url, $accept = false, $forcestring = false)
+    function retrieveCacheFirst($url, $accept = false, $forcestring = false, $channel = false)
     {
         $cachefile = $this->config->get('cache_dir') . DIRECTORY_SEPARATOR .
             md5($url) . 'rest.cachefile';
         if (file_exists($cachefile)) {
             return unserialize(implode('', file($cachefile)));
         }
-        return $this->retrieveData($url, $accept, $forcestring);
+        return $this->retrieveData($url, $accept, $forcestring, $channel);
     }
 
     /**
@@ -77,7 +77,7 @@ class PEAR_REST
      *                    parsed using PEAR_XMLParser
      * @return string|array
      */
-    function retrieveData($url, $accept = false, $forcestring = false)
+    function retrieveData($url, $accept = false, $forcestring = false, $channel = false)
     {
         $cacheId = $this->getCacheId($url);
         if ($ret = $this->useLocalCache($url, $cacheId)) {
@@ -85,7 +85,7 @@ class PEAR_REST
         }
         if (!isset($this->_options['offline'])) {
             $trieddownload = true;
-            $file = $this->downloadHttp($url, $cacheId ? $cacheId['lastChange'] : false, $accept);
+            $file = $this->downloadHttp($url, $cacheId ? $cacheId['lastChange'] : false, $accept, $channel);
         } else {
             $trieddownload = false;
             $file = false;
@@ -266,7 +266,7 @@ class PEAR_REST
      *
      * @access public
      */
-    function downloadHttp($url, $lastmodified = null, $accept = false)
+    function downloadHttp($url, $lastmodified = null, $accept = false, $channel = false)
     {
         $info = parse_url($url);
         if (!isset($info['scheme']) || !in_array($info['scheme'], array('http', 'https'))) {
@@ -305,11 +305,10 @@ class PEAR_REST
         }
         If (isset($proxy['host'])) {
             $request = "GET $url HTTP/1.1\r\n";
-            $request .= 'Host: ' . $proxy['host'] . ":$port\r\n";
         } else {
             $request = "GET $path HTTP/1.1\r\n";
-            $request .= "Host: $host:$port\r\n";
         }
+        $request .= "Host: $host:$port\r\n";
 
         $ifmodifiedsince = '';
         if (is_array($lastmodified)) {
@@ -323,9 +322,9 @@ class PEAR_REST
             $ifmodifiedsince = ($lastmodified ? "If-Modified-Since: $lastmodified\r\n" : '');
         }
         $request .= $ifmodifiedsince .
-            "User-Agent: PEAR/1.7.1/PHP/" . PHP_VERSION . "\r\n";
-        $username = $this->config->get('username');
-        $password = $this->config->get('password');
+            "User-Agent: PEAR/1.7.2/PHP/" . PHP_VERSION . "\r\n";
+        $username = $this->config->get('username', null, $channel);
+        $password = $this->config->get('password', null, $channel);
         if ($username && $password) {
             $tmp = base64_encode("$username:$password");
             $request .= "Authorization: Basic $tmp\r\n";

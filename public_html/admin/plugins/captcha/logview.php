@@ -3,7 +3,7 @@
 // | CAPTCHA v3 Plugin                                                         |
 // +---------------------------------------------------------------------------+
 // | $Id::                                                                    $|
-// | This Geeklog log file viewer.                                             |
+// | This glFusion log file viewer.                                            |
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2003 by the following authors:                              |
 // |                                                                           |
@@ -64,7 +64,7 @@ $T->set_var(array(
     'version'           => $_CP_CONF['version'],
 ));
 
-$retval .= "<br" . XHTML . "><p>Views/Clear the Geeklog Log Files.</p>";
+$retval .= "<br" . XHTML . "><p>Views/Clear the glFusion Log Files.</p>";
 $retval .= "<form method=\"post\" action=\"{$path}/plugins/captcha/logview.php\">";
 $retval .= "File:&nbsp;&nbsp;&nbsp;";
 $files = array();

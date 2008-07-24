@@ -100,15 +100,15 @@ $LANG_FILEMGMT = array(
     'install_skip' => '... skipped as per filemgmt.cfg',
     'access_denied_msg' => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
     'installation_complete' => 'Installation Complete',
-    'installation_complete_msg' => 'The data structures for the File Mgmt plugin for Geeklog have been successfully installed into your database!  If you ever need to uninstall this plugin, please read the README document that came with this plugin.',
+    'installation_complete_msg' => 'The data structures for the File Mgmt plugin for glFusion have been successfully installed into your database!  If you ever need to uninstall this plugin, please read the README document that came with this plugin.',
     'installation_failed' => 'Installation Failed',
-    'installation_failed_msg' => 'The installation of the File Mgmt plugin failed.  Please see your Geeklog error.log file for diagnostic information',
+    'installation_failed_msg' => 'The installation of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
     'system_locked' => 'System Locked',
     'system_locked_msg' => 'The File Mgmt plugin has already been installed and is locked.  If you are trying to uninstall this plugin, please read the README document that shipped with this plugin',
     'uninstall_complete' => 'Uninstall Complete',
-    'uninstall_complete_msg' => 'The datastructures for the File Mgmt plugin have been successfully removed from your Geeklog database<br><br>You will need to manually remove all files in your file repository.',
+    'uninstall_complete_msg' => 'The datastructures for the File Mgmt plugin have been successfully removed from your glFusion database<br><br>You will need to manually remove all files in your file repository.',
     'uninstall_failed' => 'Uninstall Failed.',
-    'uninstall_failed_msg' => 'The uninstall of the File Mgmt plugin failed.  Please see your Geeklog error.log file for diagnostic information',
+    'uninstall_failed_msg' => 'The uninstall of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
     'install_noop' => 'Plugin Install',
     'install_noop_msg' => 'The filemgmt plugin install executed but there was nothing to do.<br><br>Check your plugin install.cfg file.',
     'all_html_allowed' => 'All HTML is allowed',
@@ -118,7 +118,7 @@ $LANG_FILEMGMT = array(
 );
 
 $PLG_filemgmt_MESSAGE1 = 'Filemgmt Plugin Install Aborted<br>File: plugins/filemgmt/filemgmt.php is not writeable';
-$PLG_filemgmt_MESSAGE3 = 'This plugin requires Geeklog Version 1.4 or greater, upgrade aborted.';
+$PLG_filemgmt_MESSAGE3 = 'This plugin requires glFusion Version 1.0 or greater, upgrade aborted.';
 $PLG_filemgmt_MESSAGE4 = 'Plugin version 1.5 code not detected - upgrade aborted.';
 $PLG_filemgmt_MESSAGE5 = 'Filemgmt Plugin Upgrade Aborted<br>Current plugin version is not 1.3';
 
@@ -357,7 +357,7 @@ define("_MD_NOFILES","No Files Found");
 define("_MD_APPROVEREQ","* Upload needs to be approved in this category");
 define("_MD_REQUIRED","* Required field");
 
-// Additional Geeklog Defines
+// Additional glFusion Defines
 define("_MD_NOVOTE","Not rated yet");
 define("_IFNOTRELOAD","If the page does not automatically reload, please click <a href=\"%s\">here</a>");
 define("_GL_ERRORNOACCESS","ERROR: No access to this Document Repository Section");

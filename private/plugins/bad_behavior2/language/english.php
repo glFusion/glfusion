@@ -1,7 +1,7 @@
 <?php
 /* Reminder: always indent with 4 spaces (no tabs). */
 // +---------------------------------------------------------------------------+
-// | Bad Behavior plugin 2.0.10 for Geeklog 1.4.x                              |
+// | Bad Behavior plugin 2.0.10 for glFusion 1.0.x                             |
 // +---------------------------------------------------------------------------+
 // | english.php                                                               |
 // |                                                                           |
@@ -10,7 +10,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                   |
 // | Copyright (C) 2005-2007 Michael Hampton                                   |
 // +---------------------------------------------------------------------------+
-// | Geeklog plugin wrapper                                                    |
+// | glFusion plugin wrapper                                                   |
 // | Copyright (C) 2005-2007 by Dirk Haun <dirk AT haun-online DOT de>         |
 // | Bad Behavior 2.0.10 wrapper upgrades                                      |
 // | Copyright (c) 2007 Mark R. Evans <mark AT gllabs DOT org>                 |

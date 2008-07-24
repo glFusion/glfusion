@@ -116,7 +116,7 @@ if (extension_loaded('mbstring') && (2 & ini_get('mbstring.func_overload'))) {
  * @package     HTTP_Request
  * @author      Richard Heyes <richard@phpguru.org>
  * @author      Alexey Borzov <avb@php.net>
- * @version     Release: 1.4.2
+ * @version     Release: 1.4.3
  */
 class HTTP_Request
 {
@@ -682,10 +682,12 @@ class HTTP_Request
         $host = isset($this->_proxy_host) ? $this->_proxy_host : $this->_url->host;
         $port = isset($this->_proxy_port) ? $this->_proxy_port : $this->_url->port;
 
-        // 4.3.0 supports SSL connections using OpenSSL. The function test determines
-        // we running on at least 4.3.0
-        if (strcasecmp($this->_url->protocol, 'https') == 0 AND function_exists('file_get_contents') AND extension_loaded('openssl')) {
-            if (isset($this->_proxy_host)) {
+        if (strcasecmp($this->_url->protocol, 'https') == 0) {
+            // Bug #14127, don't try connecting to HTTPS sites without OpenSSL
+            if (version_compare(PHP_VERSION, '4.3.0', '<') || !extension_loaded('openssl')) {
+                return PEAR::raiseError('Need PHP 4.3.0 or later with OpenSSL support for https:// requests',
+                                        HTTP_REQUEST_ERROR_URL);
+            } elseif (isset($this->_proxy_host)) {
                 return PEAR::raiseError('HTTPS proxies are not supported', HTTP_REQUEST_ERROR_PROXY);
             }
             $host = 'ssl://' . $host;
@@ -837,6 +839,17 @@ class HTTP_Request
     }
 
     /**
+    * Returns the response reason phrase
+    *
+    * @access public
+    * @return mixed     Response reason phrase, false if not set
+    */
+    function getResponseReason()
+    {
+        return isset($this->_response->_reason) ? $this->_response->_reason : false;
+    }
+
+    /**
     * Returns either the named header or all if no name given
     *
     * @access public
@@ -923,9 +936,8 @@ class HTTP_Request
             }
         }
 
-        // No post data or wrong method, so simply add a final CRLF
-        if (in_array($this->_method, $this->_bodyDisallowed) || 
-            (HTTP_REQUEST_METHOD_POST != $this->_method && 0 == strlen($this->_body))) {
+        // Method does not allow a body, simply add a final CRLF
+        if (in_array($this->_method, $this->_bodyDisallowed)) {
 
             $request .= "\r\n";
 
@@ -986,10 +998,10 @@ class HTTP_Request
                         "\r\n\r\n";
             $request .= $this->_body;
 
-        // Terminate headers with CRLF on POST request with no body, too
+        // No body: send a Content-Length header nonetheless (request #12900)
         } else {
 
-            $request .= "\r\n";
+            $request .= "Content-Length: 0\r\n\r\n";
         }
         
         return $request;
@@ -1096,7 +1108,7 @@ class HTTP_Request
  * @package     HTTP_Request
  * @author      Richard Heyes <richard@phpguru.org>
  * @author      Alexey Borzov <avb@php.net>
- * @version     Release: 1.4.2
+ * @version     Release: 1.4.3
  */
 class HTTP_Response
 {
@@ -1118,6 +1130,12 @@ class HTTP_Response
     */
     var $_code;
     
+    /**
+    * Response reason phrase
+    * @var string
+    */
+    var $_reason;
+
     /**
     * Response headers
     * @var array
@@ -1186,11 +1204,12 @@ class HTTP_Response
     {
         do {
             $line = $this->_sock->readLine();
-            if (sscanf($line, 'HTTP/%s %s', $http_version, $returncode) != 2) {
+            if (!preg_match('!^(HTTP/\d\.\d) (\d{3})(?: (.+))?!', $line, $s)) {
                 return PEAR::raiseError('Malformed response', HTTP_REQUEST_ERROR_RESPONSE);
             } else {
-                $this->_protocol = 'HTTP/' . $http_version;
-                $this->_code     = intval($returncode);
+                $this->_protocol = $s[1];
+                $this->_code     = intval($s[2]);
+                $this->_reason   = empty($s[3])? null: $s[3];
             }
             while ('' !== ($header = $this->_sock->readLine())) {
                 $this->_processHeader($header);
@@ -1229,7 +1248,7 @@ class HTTP_Response
                     $data = $this->_sock->read(min(4096, $this->_toRead));
                     $this->_toRead -= HTTP_REQUEST_MBSTRING? mb_strlen($data, 'iso-8859-1'): strlen($data);
                 }
-                if ('' == $data) {
+                if ('' == $data && (!$this->_chunkLength || $this->_sock->eof())) {
                     break;
                 } else {
                     $hasBody = true;
@@ -1467,7 +1486,8 @@ class HTTP_Response
         $dataSize = $tmp[2];
 
         // finally, call the gzinflate() function
-        $unpacked = @gzinflate(substr($data, $headerLength, -8), $dataSize);
+        // don't pass $dataSize to gzinflate, see bugs #13135, #14370
+        $unpacked = gzinflate(substr($data, $headerLength, -8));
         if (false === $unpacked) {
             return PEAR::raiseError('_decodeGzip(): gzinflate() call failed', HTTP_REQUEST_ERROR_GZIP_READ);
         } elseif ($dataSize != strlen($unpacked)) {

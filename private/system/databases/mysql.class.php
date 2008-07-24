@@ -41,7 +41,7 @@
 class database {
 
     // PRIVATE PROPERTIES
-    
+
     /**
     * @access private
     */
@@ -84,6 +84,8 @@ class database {
     var $_mysql_version = 0;
 
     // PRIVATE METHODS
+
+    var $_no_fail = 0;
 
     /**
     * Logs messages
@@ -255,6 +257,10 @@ class database {
             $this->_errorlog("\n*** sql to execute is $sql ***");
         }
 
+        if ( $this->_no_fail == 1 ) {
+            $ignore_errors = 1;
+        }
+
         // Run query
         if ($ignore_errors == 1) {
             $result = @mysql_query($sql,$this->_db);
@@ -348,7 +354,7 @@ class database {
             }
         } else {
             // just regular string values, build sql
-            if (!empty($id) && ( isset($value) || $value != "")) { 
+            if (!empty($id) && ( isset($value) || $value != "")) {
                 $sql .= " WHERE $id = '$value'";
             }
         }
@@ -387,7 +393,7 @@ class database {
             $sql = "UPDATE $table SET $item_to_set = $value_to_set";
         } else {
             $sql = "UPDATE $table SET $item_to_set = '$value_to_set'";
-        } 
+        }
 
         if (is_array($id) || is_array($value)) {
             if (is_array($id) && is_array($value) && count($id) == count($value)) {
@@ -409,7 +415,7 @@ class database {
             }
         } else {
             // These are regular strings, build sql
-            if (!empty($id) && ( isset($value) || $value != "")) { 
+            if (!empty($id) && ( isset($value) || $value != "")) {
                 $sql .= " WHERE $id = '$value'";
             }
         }
@@ -465,7 +471,7 @@ class database {
                 return false;
             }
         } else {
-            if (!empty($id) && ( isset($value) || $value != "")) { 
+            if (!empty($id) && ( isset($value) || $value != "")) {
                 $sql .= " WHERE $id = '$value'";
             }
         }
@@ -526,7 +532,7 @@ class database {
                 return false;
             }
         } else {
-            if (!empty($id) && ( isset($value) || $value != "")) { 
+            if (!empty($id) && ( isset($value) || $value != "")) {
                 $sql .= " WHERE $id = '$value'";
             }
         }
@@ -687,7 +693,7 @@ class database {
     function dbError($sql='')
     {
         if (mysql_errno()) {
-            $this->_errorlog(@mysql_errno() . ': ' . @mysql_error() . ". SQL in question: $sql");        
+            $this->_errorlog(@mysql_errno() . ': ' . @mysql_error() . ". SQL in question: $sql");
             if ($this->_display_error) {
                 return  @mysql_errno() . ': ' . @mysql_error();
             } else {

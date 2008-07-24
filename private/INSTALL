@@ -1,7 +1,10 @@
-Installation instructions for Geeklog can be found in the docs directory,
+Installation instructions for glFusion can be found in the docs directory,
 specifically in
 
     public_html/docs/install.html
 
 That document also includes a section on common installation problems.
 
+Full documentation for glFusion is available online at the glFusion Home Page:
+
+http://www.glfusion.org/wiki/doku.php?id=glfusion:start

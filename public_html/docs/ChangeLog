@@ -12,6 +12,14 @@ v1.1.0
 
 v1.0.1
 ------
+- Added a new configuration option to prevent SQL errors
+  in the event there is a unknown site issue. This will
+  allow the site to continue to load and possibly help
+  in diagnosing the problem.
+        private/system/databases/mysql.class.php
+        private/system/lib-database.php
+        public_html/siteconfig.php.dist
+
 - Tweaks to upgrade / install SQL to support glFusion
         private/sql/mysql_tableanddata.php
         private/sql/updates/mysql_1.4.1_to_1.5.0.php
@@ -358,6 +366,10 @@ Calendar plugin
 
 FileMgmt plugin
 ---------------
+- Improved error checking on installation
+        private/plugins/filemgmt/install.inc
+        public_html/admin/plugins/filemgmt/install.php
+
 - Fixed XHTML issues
         public_html/filemgmt/index.php
         public_html/filemgmt/viewcat.php
@@ -544,6 +556,14 @@ Documentation
         public_html/help/submitevent.html
         public_html/help/submitlink.html
         public_html/help/submitstory.html
+
+
+Removed Files
+    private\plugins\bad_behavior2\ChangeLog
+    private\plugins\bad_behavior2\INSTALL.txt
+    private\plugins\captcha\ChangeLog
+    private\plugins\captcha\README
+
 
 v1.0.0 - June 18, 2008
 

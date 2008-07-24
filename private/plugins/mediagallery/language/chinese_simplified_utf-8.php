@@ -1,16 +1,16 @@
 <?php
 
 // +---------------------------------------------------------------------------+
-// | 媒体画廊 Plugin 1.6                                                        |
+// | 媒体画廊 Plugin 1.6                                                         |
 // +---------------------------------------------------------------------------+
 // | $Id::                                                                    $|
 // | This is the Chinese Simplified UTF-8 language page                        |
-// | for the 媒体画廊 Plug-in!                                                 |
+// | for the 媒体画廊 Plug-in!                                                  |
 // +---------------------------------------------------------------------------|
 // | Copyright (C) 2002 by the following authors:                              |
 // |                                                                           |
 // | Author:                                                                   |
-// | Mark R. Evans               -    mark@gllabs.org                          |
+// | Mark R. Evans               -    mark@glfusion.org                        |
 // | Translator:                                                               |
 // | Samuel M. Stone             -    sam@stonemicro.com                       |
 // +---------------------------------------------------------------------------|
@@ -73,7 +73,7 @@ $LANG_MG00 = array (
     'none_rated'        => '没有媒体项目曾被评价',
     'no_viewed_items'   => '没有媒体项目曾被观看',
     'no_access'         => '你选了一个有限制的影集.  请选另外一个影集',
-    'overview'          => '媒体画廊是个志乐(Geeklog)的插件，供给你的志乐网站能有多媒体的功能在一个非常容易管理的环境.',
+    'overview'          => '媒体画廊是个志乐(glFusion)的插件，供给你的志乐网站能有多媒体的功能在一个非常容易管理的环境.',
     'preinstall_check'  => '媒体画廊有以下的要求:',
     'geeklog_check'     => '志乐 v1.4.0 或以上, 你现在的版本是 <b>%s</b>.',
     'php_check'         => 'PHP v4.3.0 或以上, 你现在的版本是 <b>%s</b>.',
@@ -92,10 +92,10 @@ $LANG_MG00 = array (
     'ml_ok'             => 'php.ini <strong>memory_limit</strong> 是48M 或以上.',
     'recheck_env'       => '重新检查环境',
     'fix_install'       => '请先将问题处理后再安装.',
-    'need_cache'        => '媒体画廊 v1.6 需要 <a href="http://www.gllabs.org/wiki/doku.php?id=geeklog:templatecache">Caching Template Library Enhancement</a> 安装好.  请下载安装此配件.',
+    'need_cache'        => '媒体画廊 v1.6 需要 <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:templatecache">Caching Template Library Enhancement</a> 安装好.  请下载安装此配件.',
     'need_memory'       => '媒体画廊 v1.6 建议最少要有 48M 的记忆力设定在 php.ini 的 <strong>memory_limit</strong>.',
     'thank_you'         => '谢谢你更新到最新的媒体画廊. 请注意察看 系统设定选项, 那有很多的新功能可能需要你设定.',
-    'support'           => '若需要科技帮助, 有疑问或提供建议, 请浏览 <a href="http://www.gllabs.org">GL Labs</a>.  若需要最新的使用说明, 请浏览<a href="http://www.gllabs.org/wiki/doku.php?id=mediagallery:start">GL Labs Wiki</a>.',
+    'support'           => '若需要科技帮助, 有疑问或提供建议, 请浏览 <a href="http://www.glfusion">glFusion Site</a>.  若需要最新的使用说明, 请浏览<a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:mediagallery">glFusion Wiki</a>.',
     'success_upgrade'   => '媒体画廊以更新成功。',
 );
 
@@ -623,7 +623,7 @@ $LANG_MG01 = array (
     'replace_file'              => '替换档案',
     'autotag_caption'           => '用媒体 / 影集标题来作自动插图的标题',
     'popup_from_album'          => '播放音 / 影媒体 在影集中',
-    'out_of_date'               => '你的安装不是最新的. 有新的媒体画廊版本可下载, 请到 <a href="http://www.gllabs.org">http://www.gllabs.org/</a> 来下载新软件.<br' . XHTML . '><br' . XHTML . '>最新的媒体画廊是 %s 你是在用 %s',
+    'out_of_date'               => '你的安装不是最新的. 有新的媒体画廊版本可下载, 请到 <a href="http://www.glfusion.org">http://www.glfusion.org/</a> 来下载新软件.<br' . XHTML . '><br' . XHTML . '>最新的媒体画廊是 %s 你是在用 %s',
     'jpg_quality'               => '显示 JPG 质量',
     'js_slideshow'              => 'Java程序',
     'lightbox'                  => '光框',
@@ -890,7 +890,7 @@ $LANG_MG03 = array (
     'published'             => '上载于',
     'on'                    => '在',
     'no_flash'              => '<div style="width:200px;">你没有安装 Flash Plugin, 或者你的版本已经太老而不能播放此媒体.请点击下面来安装新的 Flash Plugin.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
-    'tagline'               => '这媒体文库动力于 <a href="http://www.gllabs.org" target="_new">媒体画廊</a>',
+    'tagline'               => '这媒体文库动力于 <a href="http://www.glfusion.org" target="_new">媒体画廊</a>',
     'xp_pub_url'            => '下载 <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url'         => '下载 <a href="%s">xppubwiz.reg (Windows Vista)</a>',
     /* --- changed in v1.6.0 -- */
@@ -1286,7 +1286,7 @@ $LANG_MG07 = array (
 $LANG_MG08 = array (
     'success'               => '媒体画廊插件已成功安装.',
     'review'                => '起读<b>系统选项</b> 和 <b>系统默认</b> 来完成安装和设置.',
-    'support'               => '媒体画廊的科技支持, 请浏览 <a href="http://www.gllabs.org">www.gllabs.org</a>.<br' . XHTML . '><br' . XHTML . '>这媒体画廊的网站也有:<ul><li>说明书 Wiki</li><li>论坛</li><li> 通知 <b>安全</b> 的电信和更新通告</li><li>... 等等</li></ul>',
+    'support'               => '媒体画廊的科技支持, 请浏览 <a href="http://www.glfusion.org">www.glfusion.org</a>.<br' . XHTML . '><br' . XHTML . '>这媒体画廊的网站也有:<ul><li>说明书 Wiki</li><li>论坛</li><li> 通知 <b>安全</b> 的电信和更新通告</li><li>... 等等</li></ul>',
 );
 
 $LANG_MG09 = array (

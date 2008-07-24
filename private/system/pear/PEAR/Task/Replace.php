@@ -30,7 +30,7 @@ require_once 'PEAR/Task/Common.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: 1.7.1
+ * @version    Release: 1.7.2
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -47,7 +47,7 @@ class PEAR_Task_Replace extends PEAR_Task_Common
      * @param PEAR_Config
      * @static
      */
-    function validateXml($pkg, $xml, &$config, $fileXml)
+    function validateXml($pkg, $xml, $config, $fileXml)
     {
         if (!isset($xml['attribs'])) {
             return array(PEAR_TASK_ERROR_NOATTRIBS);

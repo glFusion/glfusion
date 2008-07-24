@@ -42,7 +42,7 @@ define('PEAR_INSTALLER_NOBINARY', -240);
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: 1.7.1
+ * @version    Release: 1.7.2
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
@@ -473,8 +473,9 @@ class PEAR_Installer extends PEAR_Downloader
      * @param array options from command-line
      * @access private
      */
-    function _installFile2(&$pkg, $file, $atts, $tmp_path, $options)
+    function _installFile2(&$pkg, $file, &$real_atts, $tmp_path, $options)
     {
+        $atts = $real_atts;
         if (!isset($this->_registry)) {
             $this->_registry = &$this->config->getRegistry();
         }
@@ -602,6 +603,8 @@ class PEAR_Installer extends PEAR_Downloader
                         }
                     }
                 }
+            } else {
+                $real_atts['attribs']['md5sum'] = md5_file($dest_file);
             }
             // }}}
             // {{{ set file permissions
@@ -1290,6 +1293,12 @@ class PEAR_Installer extends PEAR_Downloader
         if (PEAR::isError($filelist)) {
             return $filelist;
         }
+        $p = &$installregistry->getPackage($pkgname, $channel);
+        if (empty($options['register-only']) && $p) {
+            $dirtree = $p->getDirTree();
+        } else {
+            $dirtree = false;
+        }
         $pkg->resetFilelist();
         $pkg->setLastInstalledVersion($installregistry->packageInfo($pkg->getPackage(),
             'version', $pkg->getChannel()));
@@ -1365,6 +1374,15 @@ class PEAR_Installer extends PEAR_Downloader
             }
             $ret = $installregistry->addPackage2($pkg);
         } else {
+            if ($dirtree) {
+                $this->startFileTransaction();
+                // attempt to delete empty directories
+                uksort($dirtree, array($this, '_sortDirs'));
+                foreach($dirtree as $dir => $notused) {
+                    $this->addFileOperation('rmdir', array($dir));
+                }
+                $this->commitFileTransaction();
+            }
             $usechannel = $channel;
             if ($channel == 'pecl.php.net') {
                 $test = $installregistry->packageExists($pkgname, $channel);

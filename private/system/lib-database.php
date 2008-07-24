@@ -135,6 +135,11 @@ $_DB = new database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
                     $_CONF['default_charset']);
 unset($_DB_user);
 unset($_DB_pass);
+
+if ( $_CONF['no_fail_sql'] == 1 ) {
+    $_DB->_no_fail = 1;
+}
+
 // +---------------------------------------------------------------------------+
 // | These are the library functions.  In all cases they turn around and make  |
 // | calls to the DBMS specific functions.  These ARE to be used directly in   |

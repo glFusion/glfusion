@@ -1,8 +1,7 @@
 <?php
 /* Reminder: always indent with 4 spaces (no tabs). */
 // +---------------------------------------------------------------------------+
-// | Geeklog Forums Plugin 2.0 for Geeklog - The Ultimate Weblog               |
-// | Official release date: Feb 7,2003                                         |
+// | glFusion Forums Plugin 3.0 for glFusion                                   |
 // +---------------------------------------------------------------------------+
 // | English.php                                                               |
 // | Language defines for all text                                             |
@@ -195,7 +194,7 @@ $LANG_GF01['DELALL_PM']      = 'Delete All';
 $LANG_GF01['DELOLDER_PM']    = 'Delete older';
 $LANG_GF01['members']        = 'Members';
 $LANG_GF01['save_sucess']    = 'Save Sucessful';
-$LANG_GF01['trademark']      = '<BR><CENTER><B>Geeklog Forum Project version 2.0</B> &copy; 2002</B></CENTER>';
+$LANG_GF01['trademark']      = '<BR><CENTER><B>glFusion Forum Project version 2.0</B> &copy; 2002</B></CENTER>';
 $LANG_GF01['back2top']       = 'Back to top';
 $LANG_GF01['POSTMODE']       = 'Post Mode:';
 $LANG_GF01['TEXTMODE']       = 'Text Mode:';
@@ -623,10 +622,10 @@ $LANG_GF92 = array (
     'savesettings'       => '    Update Settings    ',
     'allowhtml'          => 'Allow HTML',
     'allowhtmldscp'      => 'Enable HTML to be used in posts. If set to NO then users will only be able to post in TEXT Mode but still use bbcode',
-    'glfilter'           => 'Geeklog Filter',
-    'glfilterdscp'       => 'Enable Geeklog filtering of HTML',
+    'glfilter'           => 'glFusion Filter',
+    'glfilterdscp'       => 'Enable glFusion filtering of HTML',
     'censor'             => 'Censor',
-    'censordscp'         => 'Enable Geeklog filtering of bad words',
+    'censordscp'         => 'Enable glFusion filtering of bad words',
     'showmoods'          => 'Allow Moods',
     'showmoodsdscp'      => 'Enable moods to be selected per post',
     'allowsmilies'       => 'Allow Smilies',

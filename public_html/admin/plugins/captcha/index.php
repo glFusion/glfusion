@@ -157,7 +157,7 @@ $T->set_var(array(
     'loggingchecked'            => ($_CP_CONF['logging'] ? ' checked="checked"' : ''),
     'gfxpath'                   => $_CP_CONF['gfxPath'],
     'debugchecked'              => ($_CP_CONF['debug'] ? ' checked="checked"' : ''),
-    'lang_overview'             => sprintf($LANG_CP00['captcha_info'], 'http://www.gllabs.org/wiki/doku.php?id=captcha:start'),
+    'lang_overview'             => sprintf($LANG_CP00['captcha_info'], 'http://www.glfusion.org/wiki/doku.php?id=glfusion:captcha'),
     'lang_view_logfile'         => $LANG_CP00['view_logfile'],
     'lang_admin'                => $LANG_CP00['admin'],
     'lang_settings'             => $LANG_CP00['enabled_header'],

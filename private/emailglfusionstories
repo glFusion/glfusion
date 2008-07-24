@@ -1,6 +1,6 @@
-#!/usr/local/bin/php -q 
+#!/usr/local/bin/php -q
 <?php
-// This code snippet is responsible for emailing Geeklog stories to users 
+// This code snippet is responsible for emailing glFusion stories to users
 // for the topics they select.
 //
 // For this script to work you must have compiled PHP so it can also be
@@ -9,7 +9,7 @@
 // flags for this file.
 
 // Change this path to point to your lib-common.php file
-include('/path/to/geeklog/lib-common.php');
+include('/path/to/glfusion/public_html/lib-common.php');
 
 COM_emailUserTopics();
 ?>

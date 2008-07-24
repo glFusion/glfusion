@@ -3,7 +3,7 @@
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
 // | $Id::                                                                    $|
-// | This Geeklog log file viewer.                                             |
+// | This glFusion log file viewer.                                            |
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2003-2008 by the following authors:                         |
 // |                                                                           |
@@ -69,7 +69,7 @@ $T->set_var(array(
     'version'           => $_MG_CONF['version'],
 ));
 
-$retval .= "<br /><p>Views/Clear the Geeklog Log Files.<p>";
+$retval .= "<br /><p>Views/Clear the glFusion Log Files.<p>";
 $retval .= "<form method=\"post\" action=\"{$path}logview.php\">";
 $retval .= "File:&nbsp;&nbsp;&nbsp;";
 $files = array();

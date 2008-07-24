@@ -52,7 +52,7 @@
  * @category    HTTP
  * @package     HTTP_Request
  * @author      Alexey Borzov <avb@php.net>
- * @version     Release: 1.4.2
+ * @version     Release: 1.4.3
  */
 class HTTP_Request_Listener 
 {

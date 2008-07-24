@@ -251,7 +251,7 @@ if (getenv('PHP_PEAR_SIG_KEYDIR')) {
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2008 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: 1.7.1
+ * @version    Release: 1.7.2
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 0.1
  */
@@ -299,7 +299,7 @@ class PEAR_Config extends PEAR
     var $_channelConfigInfo = array(
         'php_dir', 'ext_dir', 'doc_dir', 'bin_dir', 'data_dir', 'cfg_dir',
         'test_dir', 'www_dir', 'php_bin', 'username', 'password', 'verbose',
-        'preferred_state', 'umask', 'preferred_mirror',
+        'preferred_state', 'umask', 'preferred_mirror', 'php_ini'
         );
 
     /**
@@ -643,7 +643,7 @@ class PEAR_Config extends PEAR
         }
 
         $this->_registry['default'] = &new PEAR_Registry($this->configuration['default']['php_dir']);
-        $this->_registry['default']->setConfig($this);
+        $this->_registry['default']->setConfig($this, false);
         $this->_regInitialized['default'] = false;
         //$GLOBALS['_PEAR_Config_instance'] = &$this;
     }
@@ -759,7 +759,7 @@ class PEAR_Config extends PEAR
         $this->_setupChannels();
         if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
             $this->_registry[$layer] = &new PEAR_Registry($phpdir);
-            $this->_registry[$layer]->setConfig($this);
+            $this->_registry[$layer]->setConfig($this, false);
             $this->_regInitialized[$layer] = false;
         } else {
             unset($this->_registry[$layer]);
@@ -917,7 +917,7 @@ class PEAR_Config extends PEAR
         $this->_setupChannels();
         if (!$this->_noRegistry && ($phpdir = $this->get('php_dir', $layer, 'pear.php.net'))) {
             $this->_registry[$layer] = &new PEAR_Registry($phpdir);
-            $this->_registry[$layer]->setConfig($this);
+            $this->_registry[$layer]->setConfig($this, false);
             $this->_regInitialized[$layer] = false;
         } else {
             unset($this->_registry[$layer]);
@@ -1558,7 +1558,7 @@ class PEAR_Config extends PEAR
                   $value != $this->_registry[$layer]->install_dir) {
                 $this->_registry[$layer] = &new PEAR_Registry($value);
                 $this->_regInitialized[$layer] = false;
-                $this->_registry[$layer]->setConfig($this);
+                $this->_registry[$layer]->setConfig($this, false);
             }
         }
         return true;
@@ -1584,7 +1584,7 @@ class PEAR_Config extends PEAR
                 if (!is_object($this->_registry[$layer])) {
                     if ($phpdir = $this->get('php_dir', $layer, 'pear.php.net')) {
                         $this->_registry[$layer] = &new PEAR_Registry($phpdir);
-                        $this->_registry[$layer]->setConfig($this);
+                        $this->_registry[$layer]->setConfig($this, false);
                         $this->_regInitialized[$layer] = false;
                     } else {
                         unset($this->_registry[$layer]);
@@ -2068,7 +2068,7 @@ class PEAR_Config extends PEAR
         }
         $this->_registry[$layer] = &$reg;
         if (is_object($reg)) {
-            $this->_registry[$layer]->setConfig($this);
+            $this->_registry[$layer]->setConfig($this, false);
         }
         return true;
     }
@@ -2153,7 +2153,7 @@ class PEAR_Config extends PEAR
                 }
                 $this->_registry[$layer] =
                     &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
-                $this->_registry[$layer]->setConfig($this);
+                $this->_registry[$layer]->setConfig($this, false);
                 $this->_regInitialized[$layer] = false;
             }
         }

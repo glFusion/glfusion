@@ -53,12 +53,12 @@ $LANG_GF00 = array (
     'install_header'    => 'Install/Uninstall Plugin',
     'installed'         => 'The Plugin and Block are now installed,<p><i>Enjoy,<br><a href="MAILTO:langmail@sympatico.ca">Blaine</a></i>',
     'uninstalled'       => 'The Plugin is Not Installed',
-    'install_success'   => 'Installation Successful<p><b>Next Steps</b>: 
+    'install_success'   => 'Installation Successful<p><b>Next Steps</b>:
         <ol><li>Use the Forum Admin to configure your new forum
         <li>Review Forum Settings and personalize
         <li>Create at least one Forum and one Category</ol>
         <p>Review the <a href="%s">Install Notes</a> for more information.',
-        
+
     'install_failed'    => 'Installation Failed -- See your error log to find out why.',
     'uninstall_msg'     => 'Plugin Successfully Uninstalled',
     'install'           => 'Install',
@@ -74,7 +74,7 @@ $PLG_forum_MESSAGE2 = 'Forum Plugin upgrade: We are unable to update this versio
 
 $LANG_GF01['LOGIN']          = 'Login';
 $LANG_GF01['FORUM']          = 'Forum';
-$LANG_GF01['ALL']            = 'All'; 
+$LANG_GF01['ALL']            = 'All';
 $LANG_GF01['YES']            = 'Ja';
 $LANG_GF01['NO']             = 'Nein';
 $LANG_GF01['NEW']            = 'Neu';
@@ -158,12 +158,12 @@ $LANG_GF01['HTML']           = 'HTML';
 $LANG_GF01['FULLHTML']       = 'HTML';
 $LANG_GF01['WORDS']          = 'Wörter';
 $LANG_GF01['SMILIES']        = 'Smilies';
-$LANG_GF01['MIGRATE_NOW']    = 'Migrate Now'; 
+$LANG_GF01['MIGRATE_NOW']    = 'Migrate Now';
 $LANG_GF01['FILTERLIST']     = 'Gefiltertes';
 $LANG_GF01['SELECTFORUM']    = 'Select Forum';
 $LANG_GF01['DELETEAFTER']    = 'Delete after';
 $LANG_GF01['TITLE']          = 'Title';
-$LANG_GF01['COMMENTS']       = 'Kommentare'; 
+$LANG_GF01['COMMENTS']       = 'Kommentare';
 $LANG_GF01['SUBMISSIONS']    = 'Submissions';
 
 $LANG_GF01['HTML_FILTER_MSG']  = 'Gefiltertes HTML erlaubt';
@@ -212,7 +212,7 @@ $LANG_GF01['CONTENT']        = 'Inhalt';
 $LANG_GF01['QUOTE_begin']    = '[Zitat&nbsp;';
 $LANG_GF01['QUOTE_by'   ]    = 'von&nbsp;';
 $LANG_GF01['RESYNC']         = "ReSync";
-$LANG_GF01['RESYNCCAT']      = "ReSync Category Forums";  
+$LANG_GF01['RESYNCCAT']      = "ReSync Category Forums";
 $LANG_GF01['PROFILE']        = "Profil";
 $LANG_GF01['DELETECONFIRM']  = "Are you sure you want to DELETE this record?";
 $LANG_GF01['website']        = 'Website';
@@ -318,7 +318,7 @@ $LANG_GF02['msg17']    = 'Message Edited, Your message has been edited sucessful
 $LANG_GF02['msg18']    = 'Fehler! Es wurden nicht alle benötigten Felder ausgefüllt oder die Einträge waren zu kurz.';
 $LANG_GF02['msg19']    = 'Dein Beitrag wurde veröffentlicht.';
 $LANG_GF02['msg20']    = 'Reply Added, Your reply has been posted. Returning to Forum';
-$LANG_GF02['msg21']    = 'Sorry, you are unauthorized to do this. Please <a href="javascript:history.back()">Go Back</a> or <a href="%s/users.php?mode=login">Login</a><br><br>'; 
+$LANG_GF02['msg21']    = 'Sorry, you are unauthorized to do this. Please <a href="javascript:history.back()">Go Back</a> or <a href="%s/users.php?mode=login">Login</a><br><br>';
 $LANG_GF02['msg22']    = '- Neuer Beitrag im Forum';
 $LANG_GF02['msg23a']   = "Zum Thema '%s' hat %s eine Antwort geschrieben.\n\nDas Thema wurde von %s im %s-Forum begonnen. ";
 $LANG_GF02['msg23b']   = "Ein neues Thema, '%s', wurde von %s im %s-Forum auf der %s-Website begonnen. Du kannst den Beitrag hier lesen:\n%s/forum/viewtopic.php?showtopic=%s\n";
@@ -601,7 +601,7 @@ $LANG_GF91 = array (
     'avgvmsg'            => 'Average views per:'
 );
 
-// Settings.php 
+// Settings.php
 $LANG_GF92 = array (
     'gfsettings'         => 'Discussion Forum Settings',
     'gensettings'        => 'General Settings',
@@ -615,10 +615,10 @@ $LANG_GF92 = array (
     'savesettings'       => '    Update Settings    ',
     'allowhtml'          => 'Allow HTML',
     'allowhtmldscp'      => 'Enable HTML to be used in posts. If set to NO then users will only be able to post in TEXT Mode but still use bbcode',
-    'glfilter'           => 'Geeklog Filter',
-    'glfilterdscp'       => 'Enable Geeklog filtering of HTML',
+    'glfilter'           => 'glFusion Filter',
+    'glfilterdscp'       => 'Enable glFusion filtering of HTML',
     'censor'             => 'Censor',
-    'censordscp'         => 'Enable Geeklog filtering of bad words',
+    'censordscp'         => 'Enable glFusion filtering of bad words',
     'showmoods'          => 'Allow Moods',
     'showmoodsdscp'      => 'Enable moods to be selected per post',
     'allowsmilies'       => 'Allow Smilies',
@@ -649,9 +649,9 @@ $LANG_GF92 = array (
     'lev2'               => 'Level 2',
     'lev2dscp'           => 'Rank 2 - Desciption and post threshold',
     'lev3'               => 'Level 3',
-    'lev3dscp'           => 'Rank 3 - Desciption and post threshold ',    
+    'lev3dscp'           => 'Rank 3 - Desciption and post threshold ',
     'lev4'               => 'Level 4',
-    'lev4dscp'           => 'Rank 4 - Desciption and post threshold',    
+    'lev4dscp'           => 'Rank 4 - Desciption and post threshold',
     'lev5'               => 'Level 5',
     'lev5dscp'           => 'Rank 5 - Desciption and post threshold',
     'setsave'            => 'Settings Saved',
