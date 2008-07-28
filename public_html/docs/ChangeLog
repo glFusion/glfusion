@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Updated default header logo
+		public_html/images/logo1234.png
+
 - Implemented glFusion CSS layout driven header / footer functions.
         public_html/lib-common.php
         public_html/layout/nouveau/functions.php
