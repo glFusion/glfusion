@@ -1,12 +1,16 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Site Tailor Pluign                                                       |
+// | Site Tailor Plugin - glFusion CMS                                        |
+// +--------------------------------------------------------------------------+
+// | config.php                                                               |
+// |                                                                          |
+// | Configuration options                                                    |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
-// | Mark R. Evans              - mark at gllabs.org                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -24,7 +28,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-//
 
 $_ST_CONF['max_logo_height'] = 150;
 $_ST_CONF['max_logo_width']  = 500;
@@ -40,7 +43,7 @@ $_ST_CONF['whatsnew_cache_time'] = 3600;
 $_ST_CONF['sitetailor']   = $LANG_ST00['menulabel'];
 $_ST_CONF['version']      = '1.0.0';
 $_ST_CONF['pi_name']      = 'sitetailor';
-$_ST_CONF['gl_version']   = '1.5.0';
+$_ST_CONF['gl_version']   = '1.0.0';
 
 $_ST_table_prefix = $_DB_table_prefix;
 

@@ -1,49 +1,46 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | glFusion                                                                  |
-// +---------------------------------------------------------------------------+
-// | lib-custom.php                                                            |
-// |                                                                           |
-// | Your very own custom glFusion library.                                    |
-// |                                                                           |
-// | This is the file where you should put all of your custom code.  When      |
-// | possible you should not alter lib-common.php but, instead, put code here. |
-// | This will make upgrading to future versions of glFusion easier for you    |
-// | because you will always be guaranteed that the glFusion developers will   |
-// | NOT add required code to this file.                                       |
-// |                                                                           |
-// | NOTE: we have already gone through the trouble of making sure that we     |
-// | always include this file when lib-common.php is included some place so    |
-// | you will have access to lib-common.php.  It follows then that you should  |
-// | not include lib-common.php in this file.                                  |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2007 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// |          Blaine Lang      - blaine AT portalparts DOT com                 |
-// |          Dirk Haun        - dirk AT haun-online DOT de                    |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | lib-custom.php                                                           |
+// |                                                                          |
+// | Your very own custom glFusion library.                                   |
+// |                                                                          |
+// | This is the file where you should put all of your custom code.  When     |
+// | possible you should not alter lib-common.php but, instead, put code here.|
+// | This will make upgrading to future versions of glFusion easier for you   |
+// | because you will always be guaranteed that the glFusion developers will  |
+// | NOT add required code to this file.                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Blaine Lang      - blaine AT portalparts DOT com                |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'lib-custom.php') !== false) {
     die ('This file can not be used on its own!');

@@ -2,7 +2,7 @@
 
 /**
  * File: spanish_utf-8.php
- * This is the Spanish language page for the Geeklog Spam-X Plug-in!
+ * This is the Spanish language page for the glFusion Spam-X Plug-in!
  * 
  * Copyright (C) 2004-2005 by the following authors:
  * Author        Tom Willett        tomw AT pigstye DOT net
@@ -44,7 +44,7 @@ $LANG_SX00 = array(
     'adminc' => 'Comandos de Administración:',
     'mblack' => 'Mi Lista Negra:',
     'rlinks' => 'Enlaces Relacionados:',
-    'e3' => 'Para añadir las palabras desde la lista de palabras censuradas de Geeklogs CensorList Pulsa el Botón:',
+    'e3' => 'Para añadir las palabras desde la lista de palabras censuradas de glFusions CensorList Pulsa el Botón:',
     'addcen' => 'Añadir Lista de Palabras Censuradas',
     'addentry' => 'Añadir dato',
     'e1' => 'Para Borrar el dato cliquéalo.',
@@ -104,7 +104,7 @@ $LANG_SX00 = array(
     'initial_import' => 'Importar la lista Negra-MT inicial',
     'import_success' => '<p>Se ha importado con éxito los datos de la Lista Negra de %d.',
     'import_failure' => '<p><strong>Error:</strong> No se han encontrado datos.',
-    'allow_url_fopen' => '<p>Lo sentimos, la configuración de tu servidor de web no permite la lectura de ficheros remotos (<code>allow_url_fopen</code> is off). Por favor, descarga la Lista Negra desde el siguiente URL y súbelo al directorio de "datos" de Geeklog\'s, <tt>%s</tt>, antes de intentarlo de nuevo:',
+    'allow_url_fopen' => '<p>Lo sentimos, la configuración de tu servidor de web no permite la lectura de ficheros remotos (<code>allow_url_fopen</code> is off). Por favor, descarga la Lista Negra desde el siguiente URL y súbelo al directorio de "datos" de glFusion\'s, <tt>%s</tt>, antes de intentarlo de nuevo:',
     'documentation' => 'Documentación del Plugin de Spam-X',
     'emailmsg' => "Un nuevo comentario de spam ha sido enviado en/desde \"%s\"\nUser UID:\"%s\"\n\nContent:\"%s\"",
     'emailsubject' => 'Spam post at %s',

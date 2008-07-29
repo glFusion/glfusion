@@ -2,7 +2,7 @@
 
 ###############################################################################
 # estonian_utf-8.php
-# This is the estonian language page for the Geeklog Polls Plug-in
+# This is the estonian language page for the glFusion Polls Plug-in
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

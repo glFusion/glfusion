@@ -2,7 +2,7 @@
 
 ###############################################################################
 # finnish.php
-# This is the Finnish language page for GeekLog!
+# This is the Finnish language page for glFusion!
 #
 # Copyright (C) 2004 Jussi Josefsson
 # 20031012 - Version 1.0 - glFusion 1.3.8
@@ -1425,7 +1425,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1481,7 +1481,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

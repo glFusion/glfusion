@@ -1,42 +1,46 @@
 <?php
-
-// Reminder: always indent with 4 spaces (no tabs).
-// +---------------------------------------------------------------------------+
-// | Links Plugin 2.0                                                          |
-// +---------------------------------------------------------------------------+
-// | functions.inc                                                             |
-// |                                                                           |
-// | This file does two things: 1) it implements the necessary Geeklog Plugin  |
-// | API method and 2) implements all the common code needed by the Links      |
-// | Plugins' PHP files.                                                       |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs         - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg       - mlimburg AT users.sourceforge DOT net       |
-// |          Jason Whittenburg  - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun          - dirk AT haun-online DOT de                  |
-// |          Trinity Bays       - trinity93 AT gmail DOT com                  |
-// |          Oliver Spiesshofer - oliver AT spiesshofer DOT com               |
-// |          Euan McKay         - info AT heatherengineering DOT com          |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is licensed under the terms of the GNU General Public License|
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                      |
-// | See the GNU General Public License for more details.                      |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | Links Plugin - glFusion CMS                                              |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | This file does two things: 1) it implements the necessary glFusion Plugin|
+// | API method and 2) implements all the common code needed by the Links     |
+// | Plugins' PHP files.                                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs         - tony AT tonybibbs DOT com                  |
+// |          Mark Limburg       - mlimburg AT users.sourceforge DOT net      |
+// |          Jason Whittenburg  - jwhitten AT securitygeeks DOT com          |
+// |          Dirk Haun          - dirk AT haun-online DOT de                 |
+// |          Trinity Bays       - trinity93 AT gmail DOT com                 |
+// |          Oliver Spiesshofer - oliver AT spiesshofer DOT com              |
+// |          Euan McKay         - info AT heatherengineering DOT com         |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos($_SERVER['PHP_SELF'], 'functions.inc') !== false) {
     die('This file can not be used on its own.');
@@ -64,7 +68,7 @@ if (!isset($_LI_CONF['linksloginrequired'])) {
 $_LI_CONF['version'] = '2.0.0';
 
 // +---------------------------------------------------------------------------+
-// | Geeklog Plugin API Implementation                                         |
+// | glFusion Plugin API Implementation                                        |
 // +---------------------------------------------------------------------------+
 
 /**
@@ -308,7 +312,7 @@ function plugin_statssummary_links ()
 }
 
 /**
-* Geeklog is asking us to provide any items that show up in the type
+* glFusion is asking us to provide any items that show up in the type
 * drop-down on search.php.  Let's users search for links.
 *
 * @return   array   (plugin name/entry title) pair for the dropdown
@@ -720,7 +724,7 @@ function plugin_upgrade_links()
 }
 
 /**
-* Geeklog informs us that we're about to be enabled or disabled
+* glFusion informs us that we're about to be enabled or disabled
 *
 * @param    boolean     $enable     true = we're being enabled, false = disabled
 * @return   void
@@ -1211,7 +1215,7 @@ function links_validateUrl($url)
 
     $req = new HTTP_Request($url);
     $req->setMethod(HTTP_REQUEST_METHOD_HEAD);
-    $req->addHeader('User-Agent', 'Geeklog/' . VERSION);
+    $req->addHeader('User-Agent', 'glFusion/' . VERSION);
 
     $response = $req->sendRequest();
     if (PEAR::isError($response)) {
@@ -1237,9 +1241,7 @@ function links_validateUrl($url)
 *
 * Note: A plugin should use its name as a prefix for the names of its
 * template variables, e.g. 'links_xxx' and 'lang_links_xxx'.
-* 'button_links' is an exception, as such a variable existed for header.thtml
-* in Geeklog 1.3.11 and earlier, where the Links section was an integral part
-* of Geeklog. It is added here for backward-compatibility.
+* 'button_links' is an exception
 *
 */
 function plugin_templatesetvars_links ($templatename, &$template)

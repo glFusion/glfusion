@@ -1,43 +1,43 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Static Pages Plugin 1.5                                                   |
-// +---------------------------------------------------------------------------+
-// | install.php                                                               |
-// |                                                                           |
-// | This file installs and removes the data structures for the                |
-// | Static pages plugin for Geeklog.                                          |
-// +---------------------------------------------------------------------------+
-// | Based on the Universal Plugin and prior work by the following authors:    |
-// | Upgraded for GL version 1.5 online config manager                         |
-// |                                                                           |
-// | Copyright (C) 2002-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                    |
-// |          Tom Willett       - tom AT pigstye DOT net                       |
-// |          Blaine Lang       - blaine AT portalparts DOT com                |
-// |          Dirk Haun         - dirk AT haun-online DOT de                   |
-// |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net     |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | Static Pages Plugin - glFusion CMS                                       |
+// +--------------------------------------------------------------------------+
+// | install.php                                                              |
+// |                                                                          |
+// | This file installs and removes the data structures for the               |
+// | Static pages plugin for glFusion.                                        |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
+// |          Tom Willett       - tom AT pigstye DOT net                      |
+// |          Blaine Lang       - blaine AT portalparts DOT com               |
+// |          Dirk Haun         - dirk AT haun-online DOT de                  |
+// |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net    |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
 
@@ -48,8 +48,8 @@ require_once '../../../lib-common.php';
 $pi_display_name = 'Static Page';
 $pi_name         = 'staticpages';
 $pi_version      = '1.5.0';
-$gl_version      = '1.5.0';
-$pi_url          = 'http://www.geeklog.net/';
+$gl_version      = '1.0.0';
+$pi_url          = 'http://www.glfusion.org/';
 
 $base_path = $_CONF['path'] . 'plugins/' . $pi_name . '/';
 
@@ -78,12 +78,12 @@ $DEFVALUES = array();
 
 /**
 * Checks the requirements for this plugin and if it is compatible with this
-* version of Geeklog.
+* version of glFusion.
 *
 * @return   boolean     true = proceed with install, false = not compatible
 *
 */
-function plugin_compatible_with_this_geeklog_version()
+function plugin_compatible_with_this_glfusion_version()
 {
     if (!function_exists('SEC_getGroupDropdown')) {
         return false;
@@ -146,7 +146,7 @@ if (!SEC_inGroup('Root')) {
 
 
 /**
-* Puts the datastructures for this plugin into the Geeklog database
+* Puts the datastructures for this plugin into the glFusion database
 *
 */
 function plugin_install_now()
@@ -270,8 +270,8 @@ function plugin_install_now()
         }
     }
 
-    // Finally, register the plugin with Geeklog
-    COM_errorLog("Registering $pi_display_name plugin with Geeklog", 1);
+    // Finally, register the plugin with glFusion
+    COM_errorLog("Registering $pi_display_name plugin with glFusion", 1);
 
     // silently delete an existing entry
     DB_delete($_TABLES['plugins'], 'pi_name', $pi_name);
@@ -315,8 +315,8 @@ if (SEC_checkToken()) {
         }
     } else if (DB_count($_TABLES['plugins'], 'pi_name', $pi_name) == 0) {
         // plugin not installed
-    
-        if (plugin_compatible_with_this_geeklog_version()) {
+
+        if (plugin_compatible_with_this_glfusion_version()) {
             if (plugin_install_now()) {
                 $display = COM_refresh($_CONF['site_admin_url']
                                        . '/plugins.php?msg=44');
@@ -325,7 +325,7 @@ if (SEC_checkToken()) {
                                        . '/plugins.php?msg=72');
             }
         } else {
-            // plugin needs a newer version of Geeklog
+            // plugin needs a newer version of glFusion
             $display .= COM_siteHeader('menu', $LANG32[8])
                      . COM_startBlock($LANG32[8])
                      . '<p>' . $LANG32[9] . '</p>'

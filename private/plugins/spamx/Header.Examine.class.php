@@ -2,7 +2,7 @@
 
 /**
 * File: Header.Examine.class.php
-* This is the HTTP Header Examine class for the Geeklog Spam-X plugin
+* This is the HTTP Header Examine class for the glFusion Spam-X plugin
 *
 * Copyright (C) 2005-2006 by the following authors:
 * Author    Dirk Haun <dirk AT haun-online DOT de>
@@ -78,7 +78,7 @@ class Header extends BaseCommand {
                     if (preg_match ("#$value#i", $content)) {
                         $ans = 1; // quit on first positive match
                         SPAMX_log ($LANG_SX00['foundspam'] . $entry .
-                                   $LANG_SX00['foundspam2'] . $uid . 
+                                   $LANG_SX00['foundspam2'] . $uid .
                                    $LANG_SX00['foundspam3'] .
                                    $_SERVER['REMOTE_ADDR']);
                         break;

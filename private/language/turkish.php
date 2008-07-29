@@ -2,7 +2,7 @@
 
 ###############################################################################
 # turkish.php
-# This is the turkish language page for GeekLog 1.4.0
+# This is the turkish language page for glFusion 1.0.0
 # Translated by Kemal CELLAT
 # kemal@moderntalking.biz
 # http://www.moderntalking.biz
@@ -1424,7 +1424,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1480,7 +1480,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

@@ -1,55 +1,58 @@
 <?php
+// +--------------------------------------------------------------------------+
+// | Links Plugin - glFusion CMS                                              |
+// +--------------------------------------------------------------------------+
+// | portal.php                                                               |
+// |                                                                          |
+// | Portal page that tracks link click throughs.                             |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
+// |          Mark Limburg      - mlimburg AT users.sourceforge DOT net       |
+// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
+// |          Dirk Haun         - dirk AT haun-online DOT de                  |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | portal.php                                                                |
-// |                                                                           |
-// | Geeklog portal page that tracks link click throughs.                      |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                    |
-// |          Mark Limburg      - mlimburg AT users.sourceforge DOT net        |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com            |
-// |          Dirk Haun         - dirk AT haun-online DOT de                   |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
-
-/** 
- * Geeklog portal page that tracks link click throughs. 
- * 
+/**
+ * glFusion portal page that tracks link click throughs.
+ *
  * @package Links
  * @subpackage public_html
  * @filesource
  * @version 2.0
  * @since GL 1.4.0
  * @copyright Copyright &copy; 2005-2008
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author Trinity Bays <trinity93 AT gmail.com>
  * @author Tony Bibbs <tony AT tonybibbs DOT com>
  * @author Tom Willett <twillett AT users DOT sourceforge DOT net>
  * @author Blaine Lang <langmail AT sympatico DOT ca>
  * @author Dirk Haun <dirk AT haun-online DOT de>
- * 
+ *
  */
 
 require_once '../lib-common.php';

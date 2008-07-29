@@ -1,38 +1,41 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | lib-user.php                                                              |
-// |                                                                           |
-// | User-related functions needed in more than one place.                     |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2007 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                    |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net    |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com            |
-// |          Dirk Haun         - dirk AT haun-online DOT de                   |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | lib-user.php                                                             |
+// |                                                                          |
+// | User-related functions needed in more than one place.                    |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
+// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
+// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
+// |          Dirk Haun         - dirk AT haun-online DOT de                  |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'lib-user.php') !== false) {
     die ('This file can not be used on its own!');
@@ -85,6 +88,10 @@ function USER_deleteAccount ($uid)
 
     // let plugins update their data for this user
     PLG_deleteUser ($uid);
+
+    if ( function_exists('CUSTOM_userDeleteHook')) {
+        CUSTOM_userDeleteHook($uid);
+    }
 
     // Call custom account profile delete function if enabled and exists
     if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userDelete')) {
@@ -325,6 +332,9 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     if ($_CONF['custom_registration'] && (function_exists ('CUSTOM_userCreate'))) {
         CUSTOM_userCreate ($uid);
     }
+    if ( function_exists('CUSTOM_userCreateHook') ) {
+        CUSTOM_userCreateHook($uid);
+    }
     PLG_createUser ($uid);
 
     // Notify the admin?
@@ -501,7 +511,7 @@ function USER_deletePhoto ($photo, $abortonerror = true)
 /**
 * Add user to group if user does not belong to specified group
 *
-* This is part of the Geeklog user implementation. This function
+* This is part of the glFusion user implementation. This function
 * looks up whether a user belongs to a specified group and if not
 * adds them to the group
 *
@@ -536,7 +546,7 @@ function USER_addGroup ($groupid, $uid = '')
 /**
 * Delete from group if user belongs to specified group
 *
-* This is part of the Geeklog user implementation. This function
+* This is part of the glFusion user implementation. This function
 * looks up whether a user belongs to a specified group and if so
 * removes them from the group
 *
@@ -588,8 +598,10 @@ function USER_emailMatches ($email, $domain_list)
 
         // Note: We should already have made sure that $email is a valid address
         $email_domain = substr ($email, strpos ($email, '@') + 1);
+        $email_domain = trim($email_domain);
 
         foreach ($domains as $domain) {
+            $domain = trim($domain);
             if (preg_match ("#$domain#i", $email_domain)) {
                 $match_found = true;
                 break;

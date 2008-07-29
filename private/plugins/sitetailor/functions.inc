@@ -1,12 +1,18 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Site Tailor Plugin                                                       |
+// | Site Tailor Plugin - glFusion CMS                                        |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | This file does two things: 1) it implements the necessary glFusion Plugin|
+// | API method and 2) implements all the common code needed by the Site      |
+// | Tailor plugin' PHP files.                                                |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
-// | Mark R. Evans              - mark at gllabs.org                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -24,7 +30,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-//
 
 if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
 {
@@ -149,7 +154,7 @@ function plugin_autouninstall_sitetailor() {
 }
 
 /**
-* Removes the data structures for this plugin from the Geeklog database.
+* Removes the data structures for this plugin from the glFusion database.
 * This routine will get called from the Plugin install program if user select De-Install or if Delete is used in the Plugin Editor.
 * The Plugin Installer will also call this routine upon and install error to remove anything it has created.
 * The Plugin installer will pass the optional parameter which will then double check that plugin has first been disabled.

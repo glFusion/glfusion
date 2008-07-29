@@ -3,7 +3,7 @@
 ###############################################################################
 # english.php
 #
-# This is the English language file for the Geeklog Polls plugin
+# This is the English language file for the glFusion Polls plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony AT tonybibbs DOT com

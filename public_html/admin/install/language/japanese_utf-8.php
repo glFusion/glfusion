@@ -1,55 +1,58 @@
 <?php
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | japanese.php                                                             |
+// |                                                                          |
+// | Japanese language file for the glFusion installation script              |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
+// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
+// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
+// |          Dirk Haun         - dirk AT haun-online DOT de                  |
+// |          Randy Kolenko     - randy AT nextide DOT ca                     |
+// |          Matt West         - matt AT mattdanger DOT net                  |
+// |          geeklog.jp group  - info AT geeklog DOT jp                      |
+// |          mystral-kk        - glFusion AT mystral-kk DOT net              |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | glFusion 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | japanese_utf-8.php                                                        |
-// |                                                                           |
-// | Japanese language file for the glFusion installation script                |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                    |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net    |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com            |
-// |          Dirk Haun         - dirk AT haun-online DOT de                   |
-// |          Randy Kolenko     - randy AT nextide DOT ca                      |
-// |          Matt West         - matt AT mattdanger DOT net                   |
-// |          glFusion.jp group  - info AT glFusion DOT jp                       |
-// |          mystral-kk        - glFusion AT mystral-kk DOT net                |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id: japanese_utf-8.php,v 1.2 2008/06/03 19:28:46 dhaun Exp $
-
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
 
 $LANG_CHARSET = 'utf-8';
 
-// +---------------------------------------------------------------------------+
-// | Array Format:                                                             |
-// | $LANG_NAME[XX]: $LANG - variable name                                     |
-// |                 NAME  - where array is used                               |
-// |                 XX    - phrase id number                                  |
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
+// | Array Format:                                                            |
+// | $LANG_NAME[XX]: $LANG - variable name                                    |
+// |                 NAME  - where array is used                              |
+// |                 XX    - phrase id number                                 |
+// +--------------------------------------------------------------------------+
 
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
 // install.php
 
 $LANG_INSTALL = array(

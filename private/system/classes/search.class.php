@@ -1,36 +1,39 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | search.php                                                                |
-// |                                                                           |
-// | Geeklog search class.                                                     |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT geeklog DOT net                       |
-// |          Dirk Haun        - dirk AT haun-online DOT de                    |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | search.php                                                               |
+// |                                                                          |
+// | glFusion search class.                                                   |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT geeklog DOT net                      |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'search.class.php') !== false) {
     die ('This file can not be used on its own.');
@@ -39,7 +42,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'search.class.php') !== false) {
 require_once ($_CONF['path_system'] . 'classes/plugin.class.php');
 
 /**
-* Geeklog Search Class
+* glFusion Search Class
 *
 * @author Tony Bibbs <tony AT geeklog DOT net>
 * @package net.geeklog.search
@@ -702,7 +705,7 @@ class Search {
     /**
     * Determines if any advanced search criteria were supplied
     *
-    * Geeklog allows admins to lock down the access anonymous users have
+    * glFusion allows admins to lock down the access anonymous users have
     * to the search page.  This method helps facilitate checking if an
     * anonymous user is attempting to illegally access privilege search
     * capabilities
@@ -725,7 +728,7 @@ class Search {
     * Shows an error message to anonymous users
     *
     * This is called when anonymous users attempt to access search
-    * functionality that has been locked down by the Geeklog admin.
+    * functionality that has been locked down by the glFusion admin.
     *
     * @author Tony Bibbs <tony AT geeklog DOT net>
     * @access private
@@ -757,7 +760,7 @@ class Search {
     /**
     * Determines if user is allowed to perform a search
     *
-    * Geeklog has a number of settings that may prevent
+    * glFusion has a number of settings that may prevent
     * the access anonymous users have to the search engine.
     * This performs those checks
     *
@@ -794,7 +797,7 @@ class Search {
     /**
     * Determines if user is allowed to use the search form
     *
-    * Geeklog has a number of settings that may prevent
+    * glFusion has a number of settings that may prevent
     * the access anonymous users have to the search engine.
     * This performs those checks
     *

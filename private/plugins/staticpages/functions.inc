@@ -1,40 +1,43 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Static Pages Plugin 1.5                                                   |
-// +---------------------------------------------------------------------------+
-// | functions.inc                                                             |
-// |                                                                           |
-// | This file does two things: 1) it implements the necessary Geeklog Plugin  |
-// | API method and 2) implements all the common code needed by the Static     |
-// | Pages' PHP files.                                                         |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net     |
-// |          Blaine Lang      - blaine AT portalparts DOT com                 |
-// |          Dirk Haun        - dirk AT haun-online DOT de                    |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | Static Pages Plugin - glFusion CMS                                       |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | This file does two things: 1) it implements the necessary glFusion Plugin|
+// | API method and 2) implements all the common code needed by the Static    |
+// | Pages' PHP files.                                                        |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
+// |          Blaine Lang      - blaine AT portalparts DOT com                |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos($_SERVER['PHP_SELF'], 'functions.inc') !== false) {
     die('This file can not be used on its own.');
@@ -68,7 +71,7 @@ $_SP_CONF['version'] = '1.5.0';
 include_once $plugin_path . 'services.inc.php';
 
 // +---------------------------------------------------------------------------+
-// | Geeklog Plugin API Implementations                                        |
+// | glFusion Plugin API Implementations                                       |
 // +---------------------------------------------------------------------------+
 
 /**
@@ -108,11 +111,11 @@ function plugin_getmenuitems_staticpages()
 }
 
 /**
-* Geeklog is checking to see if this plugin supports comments, tell it no.
+* glFusion is checking to see if this plugin supports comments, tell it no.
 *
 * NOTE: to support comments you must used the same date/time based ID for your
 * widget.  In other words, to make primary keys for your plugin you should call
-* makesid().  Comments are keyed off of that...it is a limitation on how Geeklog
+* makesid().  Comments are keyed off of that...it is a limitation on how glFusion
 * does comments.
 *
 */
@@ -535,7 +538,7 @@ function plugin_statssummary_staticpages ()
 }
 
 /**
-* Geeklog is asking us to provide any new items that show up in the type
+* glFusion is asking us to provide any new items that show up in the type
 * drop-down on search.php.  Let's let users search static pages!
 *
 */

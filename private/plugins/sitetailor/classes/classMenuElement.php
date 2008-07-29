@@ -1,12 +1,16 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Site Tailor Plugin                                                       |
+// | Site Tailor Plugin - glFusion CMS                                        |
+// +--------------------------------------------------------------------------+
+// | classMenuElement.php                                                     |
+// |                                                                          |
+// | Menu elements class / functions                                          |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
-// | Mark R. Evans              - mark at gllabs.org                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -24,7 +28,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-//
 
 // this file can't be used on its own
 if (strpos ($_SERVER['PHP_SELF'], 'classMenuElement.php') !== false)
@@ -281,7 +284,7 @@ class mbElement {
                 $this->url = str_replace("%site_url%", $_CONF['site_url'],$this->url);
                 $this->url = str_replace("%site_admin_url%", $_CONF['site_admin_url'], $this->url);
                 break;
-            case '2' : // geeklog action
+            case '2' : // glfusion action
                 switch ($this->subtype) {
                     case 0: // home
                         $this->url = $_CONF['site_url'] . '/';
@@ -335,7 +338,7 @@ class mbElement {
                         break;
                 }
                 break;
-            case '3' : // geeklog menu
+            case '3' : // glfusion menu
                 switch ($this->subtype) {
                     case 1 : // user menu
                         if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
@@ -410,7 +413,7 @@ class mbElement {
                             $num_plugins = count( $plugin_options );
 
                             /*
-                             * Build the standard Geeklog admin options
+                             * Build the standard glFusion admin options
                              */
 
                             /*

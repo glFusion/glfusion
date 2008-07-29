@@ -46,7 +46,7 @@
 
 
 
-  <title>Geeklog CAPTCHA Plugin Installation and Usage</title>
+  <title>glFusion CAPTCHA Plugin Installation and Usage</title>
   <style type="text/css">
 body {
 margin: 1em 5%;
@@ -131,7 +131,7 @@ a[name] { color: black; background: transparent; }
 
 
 
-<h1>Geeklog CAPTCHA plugin - version 3.0.0</h1>
+<h1>glFusion CAPTCHA plugin - version 3.0.0</h1>
 
 
 
@@ -153,7 +153,7 @@ a[name] { color: black; background: transparent; }
 
 <h3>Date: June 22, 2007
 </h3>
-CAPTCHA v3.0 requires Geeklog v1.4.1 or higher.<br>
+CAPTCHA v3.0 requires glFusion v1.0.0 or higher.<br>
 
 
 
@@ -171,7 +171,7 @@ CAPTCHA v3.0 requires Geeklog v1.4.1 or higher.<br>
 
 
 
-With Geeklog v1.4.1, there is full support built into Geeklog to support the CAPTCHA plugin with the following Geeklog features:<br>
+With glFusion v1.0.0, there is full support built into glFusion to support the CAPTCHA plugin with the following glFusion features:<br>
 
 
 
@@ -257,7 +257,7 @@ Postcards.
 
 
 
-CAPTCHA is a native Geeklog plugin that provides an additional layer of security for spambots. <br>
+CAPTCHA is a native glFusion plugin that provides an additional layer of security for spambots. <br>
 
 
 
@@ -305,7 +305,7 @@ bypass them. &nbsp;Although I have not seen any successful attempts to
 bypass this implementation, it should only be used to provide another
 layer of protection to your site. &nbsp;With a layered approach using
 the Bad Behavior Plugin, SpamX Plugin, SLV Enhancement and the CAPTCHA
-plugin, together these can provide a very secure Geeklog
+plugin, together these can provide a very secure glFusion
 implementation.<br>
 
 
@@ -316,7 +316,7 @@ implementation.<br>
 
 
 <br>
-Beginning with Geeklog v1.4.1 there is support built into Geeklog to
+Beginning with glFusion v1.0.0 there is support built into glFusion to
 natively provide a CAPTCHA block for new user registrations, comment
 submissions, email user, email story and story submissions.<br>
 
@@ -327,7 +327,7 @@ submissions, email user, email story and story submissions.<br>
 
 
 
-<h1>Geeklog CAPTCHA Plugin Installation
+<h1>glFusion CAPTCHA Plugin Installation
 </h1>
 
 
@@ -338,7 +338,7 @@ submissions, email user, email story and story submissions.<br>
 
 
 
-<p>The CAPTCHA Plugin follows the standard Geeklog plugins
+<p>The CAPTCHA Plugin follows the standard glFusion plugins
 procedure, which has not been well documented.&nbsp;
 Below we will document two methods to install the Media Gallery files,
 via
@@ -377,7 +377,7 @@ Access Installation&nbsp;</span>instructions below.</p>
 
 
 
-<p>To install CAPTCHA, or any Geeklog plugin, you will
+<p>To install CAPTCHA, or any glFusion plugin, you will
 need to un-archive the plugin on your local computer. The CAPTCHA
 distribution will automatically create all the proper directories when
 it is
@@ -524,7 +524,7 @@ FileZilla is free and supports many different operating systems
 <p>Our first FTP will be the entire CAPTCHA distribution
 to your server.&nbsp; You will want to use the
 diagrams below to find the proper directory on your server and move the
-entire c:\tmp\captcha\ directory to the path-to-geeklog/plugins/
+entire c:\tmp\captcha\ directory to the path-to-glfusion/plugins/
 directory.&nbsp; </p>
 
 
@@ -535,8 +535,8 @@ directory.&nbsp; </p>
 
 
 
-<p>To find the path-to-geeklog
-you can look in your Geeklog config.php file and see what directory is
+<p>To find the path-to-glfusion
+you can look in your glFusion config.php file and see what directory is
 defined
 in the $_CONF[&lsquo;path&rsquo;] line.</p>
 
@@ -565,7 +565,7 @@ directory.</p>
 
 
 
-<pre>tmp\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path-to-geeklog/<br>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp; + captcha\--+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +-------------&gt;+ plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
+<pre>tmp\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path-to-glfusion/<br>&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp; + captcha\--+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + backups/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + data/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + include/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + language/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + logs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + pdfs/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +-------------&gt;+ plugins/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + public_html/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + sql/<br>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ system/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + config.php</pre>
 
 
 

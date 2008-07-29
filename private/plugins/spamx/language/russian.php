@@ -2,7 +2,7 @@
 
 /**
  * File: russian.php
- * This is the Russian-1251 language page for the Geeklog Spam-X Plug-in!
+ * This is the Russian-1251 language page for the glFusion Spam-X Plug-in!
  * 
  * Copyright (C) 2006 by the following authors:
  * Author        Pavel Kovalenko        rumata AT dragons DOT ru
@@ -44,7 +44,7 @@ $LANG_SX00 = array(
     'adminc' => 'Команды:',
     'mblack' => 'Мой черный список:',
     'rlinks' => 'Похожие ссылки:',
-    'e3' => 'Для добавления слов из Geeklogs CensorList нажмите кнопку:',
+    'e3' => 'Для добавления слов из glFusions CensorList нажмите кнопку:',
     'addcen' => 'Добавить список запрещенных слов',
     'addentry' => 'Добавить запись',
     'e1' => 'Для удаления записи нажмите на нее.',

@@ -2,7 +2,7 @@
 
 ###############################################################################
 # bosnian.php
-# This is the bosnian language page for GeekLog!
+# This is the bosnian language page for glFusion!
 # Special thanks to me and no one else for work on this project :)
 #
 # Copyright (C) 2004 Kenan 'bX' Hodzic
@@ -1428,7 +1428,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1484,7 +1484,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

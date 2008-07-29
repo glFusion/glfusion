@@ -3,7 +3,7 @@
 ###############################################################################
 # chinese_traditional_utf-8.php
 # This is the Chinese Traditional UTF-8 language page for 
-# the Geeklog Polls Plug-in!
+# the glFusion Polls Plug-in!
 #
 # Last updated on January 10, 2006
 #

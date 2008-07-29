@@ -2,7 +2,7 @@
 
 /**
  * File: english.php
- * This is the English language file for the Geeklog Spam-X plugin
+ * This is the English language file for the glFusion Spam-X plugin
  * 
  * Copyright (C) 2004-2008 by the following authors:
  * Author        Tom Willett        tomw AT pigstye DOT net
@@ -44,7 +44,7 @@ $LANG_SX00 = array (
     'adminc' => 'Administration Commands:',
     'mblack' => 'My Blacklist:',
     'rlinks' => 'Related Links:',
-    'e3' => 'To Add the words from Geeklogs CensorList Press the Button:',
+    'e3' => 'To Add the words from glFusions CensorList Press the Button:',
     'addcen' => 'Add Censor List',
     'addentry' => 'Add Entry',
     'e1' => 'To Delete an entry click it.',
@@ -104,7 +104,7 @@ $LANG_SX00 = array (
     'initial_import' => 'Initial MT-Blacklist Import',
     'import_success' => '<p>Successfully imported %d blacklist entries.',
     'import_failure' => '<p><strong>Error:</strong> No entries found.',
-    'allow_url_fopen' => '<p>Sorry, your webserver configuration does not allow reading of remote files (<code>allow_url_fopen</code> is off). Please download the blacklist from the following URL and upload it into Geeklog\'s "data" directory, <tt>%s</tt>, before trying again:',
+    'allow_url_fopen' => '<p>Sorry, your webserver configuration does not allow reading of remote files (<code>allow_url_fopen</code> is off). Please download the blacklist from the following URL and upload it into glFusion\'s "data" directory, <tt>%s</tt>, before trying again:',
     'documentation' => 'Spam-X Plugin Documentation',
     'emailmsg' => "A new spam post has been submitted at \"%s\"\nUser UID: \"%s\"\n\nContent:\"%s\"",
     'emailsubject' => 'Spam post at %s',

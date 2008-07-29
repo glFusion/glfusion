@@ -2,7 +2,7 @@
 
 /**
 * File: SLV.Examine.class.php
-* This is the Spam Link Verification Examine class for the Geeklog Spam-X plugin
+* This is the Spam Link Verification Examine class for the glFusion Spam-X plugin
 *
 * Copyright (C) 2006 by the following authors:
 * Author        Dirk Haun       dirk AT haun-online DOT de

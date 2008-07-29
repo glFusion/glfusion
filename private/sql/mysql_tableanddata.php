@@ -1,4 +1,41 @@
 <?php
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | mysql_tableanddata.php                                                   |
+// |                                                                          |
+// | glFusion installation SQL                                                |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
+// |          Blaine Lang      - blaine AT portalparts DOT com                |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 $_SQL[] = "
 CREATE TABLE {$_TABLES['access']} (
@@ -912,7 +949,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_g
 
 $_DATA[] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('site', 'root', 'Root', 'Website root', NULL, NOW(), NOW(), 2, 5, 3, 3, 2, 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('blog-roll', 'site', 'Blog Roll', 'glFusion Related Sites', NULL, NOW(), NOW(), 2, 5, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('gllabs.org', 'blog-roll', 'http://www.glfusion.org/', 'Visit gl Labs - A site dedicated to enhancing Geeklog.', 'gl Labs - Enhancing Geeklog', 123, NOW(), 1, 5, 3, 3, 2, 2);";
+$_DATA[] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('gllabs.org', 'blog-roll', 'http://www.glfusion.org/', 'Visit gl Labs - A site dedicated to enhancing glFusion.', 'gl Labs - Enhancing glFusion', 123, NOW(), 1, 5, 3, 3, 2, 2);";
 
 $_DATA[] = "INSERT INTO {$_TABLES['maillist']} (code, name) VALUES (0,'Don\'t Email') ";
 $_DATA[] = "INSERT INTO {$_TABLES['maillist']} (code, name) VALUES (1,'Email Headlines Each Night') ";
@@ -925,20 +962,20 @@ $_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_versio
 $_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('polls', '2.0.1', '1.0.0', '1', 'http://www.glfusion.org/')";
 $_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('calendar', '1.0.2', '1.0.0', '1', 'http://www.glfusion.org/')";
 
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('geeklogfeaturepoll', 0, 1, 'CTL Support', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('geeklogfeaturepoll', 0, 2, 'Integrated Plugins', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('geeklogfeaturepoll', 0, 3, 'Nouveau Theme', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('geeklogfeaturepoll', 0, 4, 'Enhanced Security', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('geeklogfeaturepoll', 0, 5, 'Other', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('geeklogfeaturepoll', 1, 1, 'Media Gallery', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('geeklogfeaturepoll', 1, 2, 'Site Tailor', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('geeklogfeaturepoll', 1, 3, 'Forum', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('geeklogfeaturepoll', 1, 4, 'File Management', 0, '');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 1, 'CTL Support', 0, '');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 2, 'Integrated Plugins', 0, '');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 3, 'Nouveau Theme', 0, '');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 4, 'Enhanced Security', 0, '');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 5, 'Other', 0, '');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 1, 1, 'Media Gallery', 0, '');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 1, 2, 'Site Tailor', 0, '');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 1, 3, 'Forum', 0, '');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 1, 4, 'File Management', 0, '');";
 
-$_DATA[] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`) VALUES ('geeklogfeaturepoll', 0, 'What is the best new feature of glFusion?');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`) VALUES ('geeklogfeaturepoll', 1, 'What is your favorite plugin?');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`) VALUES ('glfusionfeaturepoll', 0, 'What is the best new feature of glFusion?');";
+$_DATA[] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`) VALUES ('glfusionfeaturepoll', 1, 'What is your favorite plugin?');";
 
-$_DATA[] = "INSERT INTO `{$_TABLES['polltopics']}` (`pid`, `topic`, `voters`, `questions`, `date`, `display`, `is_open`, `hideresults`, `commentcode`, `statuscode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES ('geeklogfeaturepoll', 'Tell us your opinion about glFusion', 0, 2, '2007-01-16 12:24:22', 1, 1, 1, 0, 0, 2, 8, 3, 2, 2, 2);";
+$_DATA[] = "INSERT INTO `{$_TABLES['polltopics']}` (`pid`, `topic`, `voters`, `questions`, `date`, `display`, `is_open`, `hideresults`, `commentcode`, `statuscode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES ('glfusionfeaturepoll', 'Tell us your opinion about glFusion', 0, 2, '2007-01-16 12:24:22', 1, 1, 1, 0, 0, 2, 8, 3, 2, 2, 2);";
 
 $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('plaintext','Plain Old Text') ";
 $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('html','HTML Formatted') ";

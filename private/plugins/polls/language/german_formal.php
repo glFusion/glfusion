@@ -3,7 +3,7 @@
 ###############################################################################
 # german_formal.php
 #
-# This is the German language file for the Geeklog Polls Plugin,
+# This is the German language file for the glFusion Polls Plugin,
 # addressing the user as "Sie" (formal German).
 #
 # Authors: Dirk Haun <dirk AT haun-online DOT de>

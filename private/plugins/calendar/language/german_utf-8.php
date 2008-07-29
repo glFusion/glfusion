@@ -3,7 +3,7 @@
 ###############################################################################
 # german_utf-8.php
 #
-# This is the German language file for the Geeklog Calendar Plugin
+# This is the German language file for the glFusion Calendar Plugin
 #
 # Authors: Dirk Haun <dirk AT haun-online DOT de>
 #          Markus Wollschläger

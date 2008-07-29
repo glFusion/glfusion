@@ -2,7 +2,7 @@
 
 ###############################################################################
 # spanish.php
-# This is the spanish language page for the Geeklog Polls Plug-in!
+# This is the spanish language page for the glFusion Polls Plug-in!
 #
 # Copyright (C) 2007 José R. Valverde
 # jrvalverde@cnb.uam.es

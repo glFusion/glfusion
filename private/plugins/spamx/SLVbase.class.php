@@ -46,7 +46,7 @@ class SLVbase {
     * @return   boolean         true = spam found, false = no spam
     *
     * Note: Also returns 'false' in case of problems communicating with SLV.
-    *       Error messages are logged in Geeklog's error.log
+    *       Error messages are logged in glFusion's error.log
     *
     */
     function CheckForSpam ($post)

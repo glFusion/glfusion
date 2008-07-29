@@ -3,7 +3,7 @@
 ###############################################################################
 # dutch.php
 #
-# This is a complete dutch language page for GeekLog !
+# This is a complete dutch language page for glFusion !
 # Please contact Ronald <rlwedelschaap@edelaer.com> if you think anything
 # important is missing ...
 #
@@ -1430,7 +1430,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1486,7 +1486,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

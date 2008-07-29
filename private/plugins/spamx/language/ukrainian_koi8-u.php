@@ -2,7 +2,7 @@
 
 /**
  * File: ukrainian.php
- * This is the Ukrainian language page for the Geeklog Spam-X Plug-in!
+ * This is the Ukrainian language page for the glFusion Spam-X Plug-in!
  * 
  * Copyright (C) 2006 by Vitaliy Biliyenko
  * v.lokki@gmail.com
@@ -44,7 +44,7 @@ $LANG_SX00 = array(
     'adminc' => 'Команди адм╕н╕стрування:',
     'mblack' => 'М╕й чорний список:',
     'rlinks' => 'Спор╕днен╕ посилання:',
-    'e3' => 'Щоб додати слова з цензорного списку Geeklog, натисн╕ть кнопку:',
+    'e3' => 'Щоб додати слова з цензорного списку glFusion, натисн╕ть кнопку:',
     'addcen' => 'Додати цензорний список',
     'addentry' => 'Додати запис',
     'e1' => 'Щоб вилучити запис, натисн╕ть його.',
@@ -104,7 +104,7 @@ $LANG_SX00 = array(
     'initial_import' => 'Початковий ╕мпорт MT-Blacklist',
     'import_success' => '<p>Усп╕шно ╕мпортовано %d запис╕в чорного списку.',
     'import_failure' => '<p><strong>Помилка:</strong> Не знайдено запис╕в.',
-    'allow_url_fopen' => '<p>Вибачте, конф╕гурац╕я вашого вебсервера не дозволя╓ читати в╕ддален╕ файли (<code>allow_url_fopen</code> ма╓ значення off). Будь-ласка, завантажте чорний список з наступного URL ╕ пом╕ст╕ть його в каталог "data" вашого Geeklog, <tt>%s</tt>, перш н╕ж пробувати знову:',
+    'allow_url_fopen' => '<p>Вибачте, конф╕гурац╕я вашого вебсервера не дозволя╓ читати в╕ддален╕ файли (<code>allow_url_fopen</code> ма╓ значення off). Будь-ласка, завантажте чорний список з наступного URL ╕ пом╕ст╕ть його в каталог "data" вашого glFusion, <tt>%s</tt>, перш н╕ж пробувати знову:',
     'documentation' => 'Документац╕я модуля Spam-X',
     'emailmsg' => "Новий спам-пост було над╕слано на \"%s\"\nUID користувача: \"%s\"\n\nЗм╕ст:\"%s\"",
     'emailsubject' => 'Спам-пост на %s',

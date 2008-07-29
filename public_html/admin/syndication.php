@@ -1,36 +1,39 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | syndication.php                                                           |
-// |                                                                           |
-// | Geeklog content syndication administration                                |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2003-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Dirk Haun         - dirk AT haun-online DOT de                   |
-// |          Michael Jervis    - mike AT fuckingbrit DOT com                  |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | syndication.php                                                          |
+// |                                                                          |
+// | glFusion content syndication administration                              |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
+// |          Michael Jervis    - mike AT fuckingbrit DOT com                 |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
@@ -94,12 +97,12 @@ function find_feedFormats ()
 }
 
 /**
-* Create a list of feed types that Geeklog offers.
+* Create a list of feed types that glFusion offers.
 *
 * @return   string   an array with id/name pairs for every feed
 *
 */
-function get_geeklogFeeds ()
+function get_glFusionFeeds ()
 {
     global $_CONF, $_TABLES, $LANG33;
 
@@ -186,7 +189,7 @@ function listfeeds()
 * Display the feed editor.
 *
 * @param    int      $fid    feed id (0 for new feeds)
-* @param    string   $type   type of feed, e.g. 'geeklog'
+* @param    string   $type   type of feed, e.g. 'glfusion'
 * @return   string           HTML for the feed editor
 *
 */
@@ -328,7 +331,7 @@ function editfeed ($fid = 0, $type = '')
     $feed_template->set_var ('feed_limits_what', $selection);
 
     if ($A['type'] == 'geeklog' || $A['type'] == 'glfusion') {
-        $options = get_geeklogFeeds ();
+        $options = get_glfusionFeeds ();
     } else {
         $result = DB_query("SELECT pi_enabled FROM {$_TABLES['plugins']} WHERE pi_name='{$A['type']}'");
         if($result)
@@ -369,7 +372,7 @@ function editfeed ($fid = 0, $type = '')
 /**
 * Create a new feed. This is an extra step to take once you have a plugin
 * installed that supports the new Feed functions in the Plugin API. This
-* will let you select for which plugin (or Geeklog) you're creating the feed.
+* will let you select for which plugin (or glFusion) you're creating the feed.
 *
 * @return   string   HTML for the complete page (selection or feed editor)
 *

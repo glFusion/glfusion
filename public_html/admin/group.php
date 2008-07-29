@@ -1,48 +1,51 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | group.php                                                                 |
-// |                                                                           |
-// | Geeklog group administration page.                                        |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                    |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net    |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com            |
-// |          Dirk Haun         - dirk AT haun-online DOT de                   |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | group.php                                                                |
+// |                                                                          |
+// | glFusion group administration page.                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
+// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
+// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
+// |          Dirk Haun         - dirk AT haun-online DOT de                  |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /**
-* This file is the Geeklog Group administration page
+* This file is the glFusion Group administration page
 *
 * @author   Tony Bibbs  <tony@tonybibbs.com>
 *
 */
 
 /**
-* Geeklog common function library
+* glFusion common function library
 */
 require_once '../lib-common.php';
 
@@ -135,7 +138,7 @@ function editgroup($grp_id = '')
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
     if (!empty($grp_id)) {
-        // Groups tied to Geeklog's functionality shouldn't be deleted
+        // Groups tied to glFusion's functionality shouldn't be deleted
         if ($A['grp_gl_core'] != 1) {
             $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                        . '" name="mode"%s' . XHTML . '>';
@@ -307,7 +310,7 @@ function getIndirectFeatures ($grp_id)
 * with feature.
 *
 * @param    mixed       $grp_id     ID to print rights for
-* @param    boolean     $core       indicates if group is a core Geeklog group
+* @param    boolean     $core       indicates if group is a core glFusion group
 * @return   string      HTML for rights
 *
 */
@@ -415,7 +418,7 @@ function printrights ($grp_id = '', $core = 0)
 * @param    string  $grp_name       Group Name
 * @param    string  $grp_descr      Description of group
 * @param    boolean $grp_admin      Flag that indicates this is an admin use group
-* @param    boolean $grp_gl_core    Flag that indicates if this is a core Geeklog group
+* @param    boolean $grp_gl_core    Flag that indicates if this is a core glFusion group
 * @param    array   $features       Features the group has access to
 * @param    array   $groups         Groups this group will belong to
 * @return   string                  HTML refresh or error message

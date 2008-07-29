@@ -2,7 +2,7 @@
 
 ###############################################################################
 # dutch.php
-# This is the Dutch language file for the Geeklog Polls plugin
+# This is the Dutch language file for the glFusion Polls plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

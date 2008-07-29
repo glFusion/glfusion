@@ -2,7 +2,7 @@
 
 ###############################################################################
 # italian.php
-# Traduzione italiana per GeekLog!
+# Traduzione italiana per glFusion!
 # Special thanks to Mischa Polivanov for his work on this project
 #
 # Copyright (C) 2002 quess65 webmaster@dynamikteam.net
@@ -148,7 +148,7 @@ $LANG01 = array(
     104 => 'da',
     105 => 'Invio E-mail',
     106 => 'Visualizzazioni',
-    107 => 'Test Versione GeekLog',
+    107 => 'Test Versione glFusion',
     108 => 'Svuota Cache',
     109 => 'Segnala abuso',
     110 => 'Segnala questo inserimento all\'ammin. del sito',
@@ -1425,7 +1425,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1481,7 +1481,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

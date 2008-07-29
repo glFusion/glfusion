@@ -2,8 +2,8 @@
 
 ###############################################################################
 # hellenic.php
-# This is the Hellenic language page for GeekLog!
-# Revision No: 5 
+# This is the Hellenic language page for glFusion!
+# Revision No: 5
 # Date 21/04/2005
 #
 # + Compatible with glFusion 1.3.11 + other corrections
@@ -11,7 +11,7 @@
 # + Formalization of the language completed
 # + Language is now more ?Modern Greek Friendly?
 # + Removal of the most pre-modern Greek (before 1981) words.
-#  
+#
 #
 # Copyright (C) 2002-2005 Master of Death
 # mzozd@ad2u.gr & mzozd@hotmail.com
@@ -682,7 +682,7 @@ $LANG21 = array(
     39 => 'Διάταξη',
     40 => 'Αριστερά',
     41 => 'Δεξιά',
-    42 => 'Πρέπει να ορίσετε την σειρά και το επίπεδο ασφαλείας για τις κοινές ομάδες του GeekLog',
+    42 => 'Πρέπει να ορίσετε την σειρά και το επίπεδο ασφαλείας για τις κοινές ομάδες του glFusion',
     43 => 'Αρχική σελίδα μόνο',
     44 => '',
     45 => "Τα δικαιώματα σας δεν αρκούν για να προσπελάσετε αυτήν την ομάδα\nΗ απόπειρα έχει καταχωρηθεί. Παρακαλώ, <a ref=\"{$_CONF['site_admin_url']}/block.php\"> πηγαίνετε πίσω στην σελίδα διαχείρησης</a>.",
@@ -1432,7 +1432,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1488,7 +1488,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

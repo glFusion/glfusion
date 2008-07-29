@@ -2,10 +2,10 @@
 
 ###############################################################################
 # slovenian_utf-8.php
-# language file for geeklog version 1.5 by mb
+# language file for glFusion version 1.0 by mb
 # gape@gape.org ; za pripombe, predloge ipd ... piši na email
 #
-# This is the slovenian language page for GeekLog!
+# This is the slovenian language page for glFusion!
 # Special thanks to Mischa Polivanov for his work on this project
 #
 # Copyright (C) 2000 Jason Whittenburg
@@ -665,7 +665,7 @@ $LANG21 = array(
     27 => 'Blok PHP',
     28 => 'Nastavitve bloka PHP',
     29 => 'Funkcije bloka',
-    30 => 'Če želiš, da blok uporablja kodo PHP, zgoraj vpiši ime funkcije. Ime funkcije se mora začeti s "phpblock_" (npr. phpblock_getweather). Brez te predpone funkcija NE bo klicana. Zaradi tega tisti, ki bi morda vdrli v to namestitev glFusiona, ne bi mogli poljubno spreminjati kode in škodovati sistemu. Pazi, da za ime funkcije ne vstaviš praznih oklepajev "()". Priporočamo, da vso kodo svojega bloka PHP, vpisujete v /pot/do/geekloga/system/lib-custom.php. Tako se bo ta koda brez težav ohranila tudi po nadgradnji glFusiona.',
+    30 => 'Če želiš, da blok uporablja kodo PHP, zgoraj vpiši ime funkcije. Ime funkcije se mora začeti s "phpblock_" (npr. phpblock_getweather). Brez te predpone funkcija NE bo klicana. Zaradi tega tisti, ki bi morda vdrli v to namestitev glFusiona, ne bi mogli poljubno spreminjati kode in škodovati sistemu. Pazi, da za ime funkcije ne vstaviš praznih oklepajev "()". Priporočamo, da vso kodo svojega bloka PHP, vpisujete v /pot/do/glfusion/system/lib-custom.php. Tako se bo ta koda brez težav ohranila tudi po nadgradnji glFusiona.',
     31 => 'Napaka v bloku PHP. Funkcija %s ne obstaja.',
     32 => 'Napaka. Manjkajo podatki.',
     33 => 'Vnesi naslov URL v datoteko .rdf za blok na portalu',
@@ -1427,7 +1427,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1483,7 +1483,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

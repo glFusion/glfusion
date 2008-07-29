@@ -1,92 +1,47 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.4.1, 1.5                                                        |
-// +---------------------------------------------------------------------------+
-// | template_new.class.php                                                    |
-// |                                                                           |
-// | Fork of phplib's template library.                                        |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2007-2008 by the following additional authors               |
-// |                                                                           |
-// | Authors: Joe Mucchiello     - joe AT throwingdice DOT com                 |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-// | Latest documentation avavilable from gllabs.org:                          |
-// |  http://www.gllabs.org/wiki/doku.php?id=geeklog:templatecache             |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | template_new.class.php                                                   |
+// |                                                                          |
+// | glFusion template library.                                               |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Joe Mucchiello     - joe AT throwingdice DOT com                |
+// |                                                                          |
+// | Based on phpLib Template Library                                         |
+// | (C) Copyright 1999-2000 NetUSE GmbH                                      |
+// |                 Kristian Koehntopp                                       |
+// | Bug fixes to version 7.2c compiled by                                    |
+// |          Richard Archer <rha@juggernaut.com.au>:                         |
+// | (credits given to first person to post a diff to phplib mailing list)    |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 define('TEMPLATE_VERSION','2.3.1');
-
-/*
- * Session Management for PHP3
- *
- * (C) Copyright 1999-2000 NetUSE GmbH
- *                    Kristian Koehntopp
- *
- * $Id$
- *
- */
-
-/*
- * Change log since version 7.2c
- *
- * Bug fixes to version 7.2c compiled by Richard Archer <rha@juggernaut.com.au>:
- * (credits given to first person to post a diff to phplib mailing list)
- *
- * Normalised all comments and whitespace (rha)
- * replaced "$handle" with "$varname" and "$h" with "$v" throughout (from phplib-devel)
- * added braces around all one-line if statements in: get_undefined, loadfile and halt (rha)
- * set_var was missing two sets of braces (rha)
- * added a couple of "return true" statements (rha)
- * set_unknowns had "keep" as default instead of "remove" (from phplib-devel)
- * set_file failed to check for empty strings if passed an array of filenames (phplib-devel)
- * remove @ from call to preg_replace in subst -- report errors if there are any (NickM)
- * set_block unnecessarily required a newline in the template file (Marc Tardif)
- * pparse now calls this->finish to replace undefined vars (Layne Weathers)
- * get_var now checks for unset varnames (NickM & rha)
- * get_var when passed an array used the array key instead of the value (rha)
- * get_vars now uses a call to get_var rather than this->varvals to prevent undefined var warning (rha)
- * in finish, the replacement string referenced an unset variable (rha)
- * loadfile would try to load a file if the varval had been set to "" (rha)
- * in get_undefined, only match non-whitespace in variable tags as in finish (Layne Weathers & rha)
- * more elegant fix to the problem of subst stripping '$n', '\n' and '\\' strings (rha)
- *
- *
- * Changes in functionality which go beyond bug fixes:
- *
- * changed debug handling so set, get and internals can be tracked separately (rha)
- * added debug statements throughout to track most function calls (rha)
- * debug output contained raw HTML -- is now escaped with htmlentities (rha)
- * Alter regex in set_block to remove more whitespace around BEGIN/END tags to improve HTML layout (rha)
- * Add "append" option to set_var, works just like append in parse (dale at linuxwebpro.com, rha)
- * Altered parse so that append is honored if passed an array (Brian)
- * Converted comments and documentation to phpdoc style (rha)
- * Added clear_var to set the value of variables to "" (rha)
- * Added unset_var to usset variables (rha)
- *
- * Changes in functionality which go WAY beyond bug fixes:
- *
- * added caching functions
- *
- */
 
 /**
  * The template class allows you to keep your HTML code in some external files
@@ -98,7 +53,7 @@ define('TEMPLATE_VERSION','2.3.1');
  *
  */
 
-/* This should be the only Geeklog-isms in the file. Didn't want to "infect" the class but it was necessary.
+/* This should be the only glFusion-isms in the file. Didn't want to "infect" the class but it was necessary.
  * These options are global to all templates.
  */
 $TEMPLATE_OPTIONS = Array(
@@ -236,7 +191,7 @@ class Template
   * "yes"      = the error is reported, then execution is halted
   * "report"   = the error is reported, then execution continues by returning "false"
   * "no"       = errors are silently ignored, and execution resumes reporting "false"
-  * "log"      = writes errors to Geeklog Error log and returns false.
+  * "log"      = writes errors to glFusion Error log and returns false.
   *
   * @var       string
   * @access    public
@@ -1539,7 +1494,7 @@ class Template
     }
     $basefile = basename($p['basename'],".{$p['extension']}");
 
-    // convert /path_to_geeklog/layout/theme/dir1/dir2/file to dir1/dir2/file
+    // convert /path_to_glfusion/private//layout/theme/dir1/dir2/file to dir1/dir2/file
     $extra_path = '';
     foreach ($TEMPLATE_OPTIONS['path_prefixes'] as $prefix) {
         if (strpos($p['dirname'], $prefix) === 0) {

@@ -2,7 +2,7 @@
 
 ###############################################################################
 # russian.php
-# This is the russian language page for the Geeklog Calendar Plug-in!
+# This is the russian language page for the glFusion Calendar Plug-in!
 #
 # Copyright (C) 2006 Alexander Yurchenko
 # archy@gala.net

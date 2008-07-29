@@ -80,13 +80,15 @@ $NEWFEATURE['filemgmt.upload'] = "filemgmt File Upload Rights";
 */
 function plugin_compatible_with_this_glfusion_version ()
 {
-    // Check for version 1.0+
-    $gl_version = floatval (glFusion_VERSION);
-    if ($gl_version >= 1.0.0) {
-        return true;
-    } else {
+    // requires 1.1.0 or newer
+    $glversion = explode(".", glFusion_VERSION);
+    if ( $glversion[0] < 1 ) {
         return false;
     }
+    if ( $glversion[1] < 1 ) {
+        return false;
+    }
+    return true;
 }
 
 // Only let Root users access this script

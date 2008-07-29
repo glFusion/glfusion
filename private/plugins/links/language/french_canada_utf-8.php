@@ -3,7 +3,7 @@
 ###############################################################################
 # french_canada.php
 #
-# This is the Canadian French language file for the Geeklog Links plugin
+# This is the Canadian French language file for the glFusion Links plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

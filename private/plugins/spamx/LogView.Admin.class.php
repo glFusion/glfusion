@@ -2,7 +2,7 @@
 
 /**
  * File: Logview.Admin.class.php
- * This is the LogViewer for the Geeklog Spam-X plugin
+ * This is the LogViewer for the glFusion Spam-X plugin
  *
  * Copyright (C) 2004-2006 by the following authors:
  * Author       Tom Willett     tomw AT pigstye DOT net

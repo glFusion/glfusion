@@ -1,38 +1,41 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Static Pages Geeklog Plugin 1.5                                           |
-// +---------------------------------------------------------------------------+
-// | index.php                                                                 |
-// |                                                                           |
-// | Administration page.                                                      |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// |          Phill Gillespie  - phill AT mediaaustralia DOT com DOT au        |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net     |
-// |          Dirk Haun        - dirk AT haun-online DOT de                    |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | Static Pages Plugin - glFusion CMS                                       |
+// +--------------------------------------------------------------------------+
+// | index.php                                                                |
+// |                                                                          |
+// | Administration page.                                                     |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Phill Gillespie  - phill AT mediaaustralia DOT com DOT au       |
+// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
@@ -104,9 +107,9 @@ function form ($A, $error = false)
         {
             $sp_template->set_file ('form', 'editor_advanced.thtml');
             if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
-                $sp_template->set_var('geeklogStyleBasePath',$_CONF['layout_url']);
+                $sp_template->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
             } else {
-                $sp_template->set_var('geeklogStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+                $sp_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
             }
             $sp_template->set_var ('lang_expandhelp', $LANG24[67]);
             $sp_template->set_var ('lang_reducehelp', $LANG24[68]);

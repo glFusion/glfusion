@@ -2,7 +2,7 @@
 
 ###############################################################################
 # russian.php
-# This is the russian language page for the Geeklog Polls Plug-in!
+# This is the russian language page for the glFusion Polls Plug-in!
 #
 # Copyright (C) 2006 Volodymyr V. Prokurashko
 # vvprok@ukr.net

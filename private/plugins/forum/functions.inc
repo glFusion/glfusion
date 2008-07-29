@@ -1,40 +1,42 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog Forums Plugin 2.0 for Geeklog - The Ultimate Weblog               |
-// | Official release date: Feb 7,2003                                         |
-// +---------------------------------------------------------------------------+
-// | functions.inc                                                             |
-// | This file implements the necessary Geeklog Plugin API functions and       |
-// | includes some common Forum functions                                      |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000,2001,2002,2003 by the following authors:               |
-// | Geeklog Author: Tony Bibbs   - tony@tonybibbs.com                         |
-// +---------------------------------------------------------------------------+
-// | FORUM Plugin Authors                                                      |
-// | Developed by Blaine and Matthew                                           |
-// | Blaine Lang,    contact: blaine@portalparts.com   www.portalparts.com     |
-// | Matthew DeWyer, contact: matt@mycws.com           www.cweb.ws             |
-// | Prototype & Concept :  Mr.GxBlock of www.gxblock.com                      |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Forum Plugin for glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | This file implements the necessary glFusion Plugin API functions and     |
+// | includes some common Forum functions                                     |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Forum Plugin for Geeklog CMS                                |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
+// |                              www.portalparts.com                         |
+// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
+// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
 {
@@ -410,7 +412,7 @@ function plugin_getheadercode_forum() {
 
 
 /**
-* Geeklog is asking us to provide any new items that show up in the type drop-down
+* glFusion is asking us to provide any new items that show up in the type drop-down
 * on search.php.  Let's let users search the Filelistings in the Filemgmt Plugin
 *
 */
@@ -819,6 +821,7 @@ function plugin_upgrade_forum() {
             DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
             break;
         case "2.7" :
+        case "2.7.1" :
             if (upgrade_30() == 0 ) {
                 DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '3.0', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
             }
@@ -836,7 +839,7 @@ function plugin_upgrade_forum() {
 
 
 /**
-* Removes the datastructures for this plugin from the Geeklog database
+* Removes the datastructures for this plugin from the glFusion database
 * This may get called by the install routine to undue anything created during the install.
 * Added check to see that plugin is first disabled.
 */
@@ -871,8 +874,8 @@ function plugin_uninstall_forum($installCheck='')
         exit;
     }
 
-    // Ok to proceed and delete plugin - Unregister the plugin with Geeklog
-    COM_errorLog('Attempting to unregister the Forum plugin from Geeklog',1);
+    // Ok to proceed and delete plugin - Unregister the plugin with glFusion
+    COM_errorLog('Attempting to unregister the Forum plugin from glFusion',1);
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'forum'",1);
     // Drop tables
     foreach($TABLES as $table) {

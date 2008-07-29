@@ -2,8 +2,8 @@
 
 ###############################################################################
 # chinese_simplified_utf-8.php
-# This is the Chinese Simplified UTF-8 language page for 
-# the Geeklog Polls Plug-in!
+# This is the Chinese Simplified UTF-8 language page for
+# the glFusion Polls Plug-in!
 #
 # Last updated on January 10, 2006
 #

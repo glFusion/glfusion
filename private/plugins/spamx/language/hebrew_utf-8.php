@@ -2,7 +2,7 @@
 
 /**
 * File: hebrew_utf-8.php
- * This is the Hebrew language file for the Geeklog Spam-X plugin
+ * This is the Hebrew language file for the glFusion Spam-X plugin
 * Copyright (C) 2008
  * http://lior.weissbrod.com
  * Version 1.5#1

@@ -2,11 +2,11 @@
 
 /**
  * File: japanese_utf-8.php
- * This is the Japanese language file for the Geeklog Spam-X plugin
+ * This is the Japanese language file for the glFusion Spam-X plugin
  * 
  * Copyright (C) 2004-2008 by the following authors:
  * Author        Tom Willett        tomw AT pigstye DOT net
- * Tranlated by Ivy (Geeklog Japanese)
+ * Tranlated by Ivy (glFusion Japanese)
  * Copyright (C) 2008 Takahiro Kambe
  * Additional translation to Japanese by taca AT back-street DOT net
  * 
@@ -14,7 +14,7 @@
  *
  * $Id$
  */
-# Last Update 2008/06/02 by Geeklog.jp group  - info AT geeklog DOT jp
+# Last Update 2008/06/02 by glFusion.jp group  - info AT glFusion DOT jp
 
 global $LANG32;
 
@@ -48,7 +48,7 @@ $LANG_SX00 = array (
     'adminc' => '管理者コマンド:',
     'mblack' => 'マイブラックリスト:',
     'rlinks' => '関係先リンク:',
-    'e3' => 'Geeklogのセンサーリスト追加:',
+    'e3' => 'glFusionのセンサーリスト追加:',
     'addcen' => 'センサーリスト追加',
     'addentry' => 'エントリ追加',
     'e1' => 'クリックしてエントリを削除',
@@ -108,7 +108,7 @@ $LANG_SX00 = array (
     'initial_import' => '初期 MT-ブラックリスト インポート',
     'import_success' => '<p> %d ブラクリストエントリーがインストールできました。',
     'import_failure' => '<p><strong>エラー:</strong> エントリーがみつかりません。',
-    'allow_url_fopen' => '<p>申し訳ありませんがあなたのウェブサーバのコンフィギュレーションはリモートファイルの読み込みを許可していません。 (<code>allow_url_fopen</code> がオフ). 次のURLからブラックリストをダウンロードしてGeeklogの "データ" ディレクトリにアップロードしてください。<tt>%s</tt>, 再実行の前に:',
+    'allow_url_fopen' => '<p>申し訳ありませんがあなたのウェブサーバのコンフィギュレーションはリモートファイルの読み込みを許可していません。 (<code>allow_url_fopen</code> がオフ). 次のURLからブラックリストをダウンロードしてglFusionの "データ" ディレクトリにアップロードしてください。<tt>%s</tt>, 再実行の前に:',
     'documentation' => 'Spam-X プラグインドキュメント',
     'emailmsg' => "新しいスパム投稿 \"%s\"\nUser UID: \"%s\"\n\nコンテンツ:\"%s\"",
     'emailsubject' => 'スパムポスト %s',

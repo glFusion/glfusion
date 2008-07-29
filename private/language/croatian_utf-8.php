@@ -2,7 +2,7 @@
 
 ###############################################################################
 # croatian_utf-8.php
-# This is the croatian language page for GeekLog!
+# This is the croatian language page for glFusion!
 # Special thanks to Mischa Polivanov for his work on this project
 #
 # Copyright (C) 2004 Roberto 'druid' Bilic
@@ -1426,7 +1426,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1482,7 +1482,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

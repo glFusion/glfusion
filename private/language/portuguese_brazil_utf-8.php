@@ -2,7 +2,7 @@
 
 ###############################################################################
 # portuguese_brazil.php
-# Esta é a página em Português do Brasil para o GeekLog!
+# Esta é a página em Português do Brasil para o glFusion!
 # Agradecimentos especiais para Mischa Polivanov pelo seu trabalho neste projeto
 #
 # Copyright (C) 2002 Dener C. Brito - LAST UPDATE: March 26,2002
@@ -1428,7 +1428,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1484,7 +1484,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

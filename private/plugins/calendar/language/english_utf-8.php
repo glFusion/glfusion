@@ -3,7 +3,7 @@
 ###############################################################################
 # english_utf-8.php
 #
-# This is the English language file for the Geeklog Calendar plugin
+# This is the English language file for the glFusion Calendar plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony AT tonybibbs DOT com

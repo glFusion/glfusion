@@ -1,35 +1,38 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | lib-webservices.php                                                       |
-// |                                                                           |
-// | WS-related functions needed in more than one place.                       |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2007-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Ramnath R Iyer        - rri AT silentyak DOT com                 |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | lib-webservices.php                                                      |
+// |                                                                          |
+// | WS-related functions needed in more than one place.                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Ramnath R Iyer        - rri AT silentyak DOT com                |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'lib-webservices.php') !== false) {
     die ('This file can not be used on its own!');
@@ -266,7 +269,7 @@ function WS_get()
     if ($WS_VERBOSE) {
         COM_errorLog("WS: GET request received");
     }
-    
+
     WS_dissectURI($args);
 
     if ($WS_INTROSPECTION) {
@@ -679,7 +682,7 @@ function WS_arrayToEntryXML($arr, $extn_elements, &$entry_elem, &$atom_doc)
         $entry_elem->appendChild($control);
     }
 
-    // Geeklog-specific elements
+    // glFusion-specific elements
 
     foreach ($extn_elements as $elem) {
         if (isset($arr[$elem])) {
@@ -799,8 +802,8 @@ function WS_authenticate()
 
                 if ($pwdigest == $mydigest) {
                     $password = $pwd;
-                }   
-            }   
+                }
+            }
         }
 
         if ($WS_VERBOSE) {
@@ -811,9 +814,7 @@ function WS_authenticate()
 
     } elseif (!empty($_SERVER['REMOTE_USER'])) {
         /* PHP installed as CGI may not have access to authorization headers of
-         * Apache. In that case, use .htaccess to store the auth header as
-         * explained at
-         * http://wiki.geeklog.net/wiki/index.php/Webservices_API#Authentication
+         * Apache. In that case, use .htaccess to store the auth header
          */
 
         list($auth_type, $auth_data) = explode(' ', $_SERVER['REMOTE_USER']);
@@ -907,7 +908,7 @@ function WS_authenticate()
             if ($WS_VERBOSE) {
                 COM_errorLog("WS: Wrong login credentials - counting as 2 failed attempts");
             }
-        } elseif ($WS_VERBOSE) { 
+        } elseif ($WS_VERBOSE) {
             COM_errorLog("WS: Empty login credentials - counting as 1 failed attempt");
         }
         WS_error(PLG_RET_AUTH_FAILED);
@@ -944,7 +945,7 @@ function WS_writeSync()
 * @param    string  $slug           Content of the 'Slug:' header
 * @param    int     $max_length     max. length of the created ID
 * @return   string                  new ID
-* 
+*
 * For more information on the 'Slug:' header, see RFC 5023, section 9.7
 *
 */

@@ -1,41 +1,44 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | lib-plugins.php                                                           |
-// |                                                                           |
-// | This file implements plugin support in Geeklog.                           |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// |          Blaine Lang      - blaine AT portalparts DOT com                 |
-// |          Dirk Haun        - dirk AT haun-online DOT de                    |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | lib-plugins.php                                                          |
+// |                                                                          |
+// | This file implements plugin support in glFusion.                         |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Blaine Lang      - blaine AT portalparts DOT com                |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /**
-* This is the plugin library for Geeklog.  This is the API that plugins can
-* implement to get tight integration with Geeklog.
+* This is the plugin library for glFusion.  This is the API that plugins can
+* implement to get tight integration with glFusion.
 * See each function for more details.
 *
 */
@@ -286,7 +289,7 @@ function PLG_uninstall ($type)
         COM_errorLog ('...success', 1);
 
         // uninstall the plugin
-        COM_errorLog ("Attempting to unregister the $type plugin from Geeklog", 1);
+        COM_errorLog ("Attempting to unregister the $type plugin from glFusion", 1);
         DB_query ("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = '$type'");
         COM_errorLog ('...success',1);
 
@@ -338,7 +341,7 @@ function PLG_enableStateChange ($type, $enable)
 /**
 * Checks to see if user is a plugin moderator
 *
-* Geeklog is asking if the user is a moderator for any installed plugins.
+* glFusion is asking if the user is a moderator for any installed plugins.
 *
 * @return   boolean     True if current user is moderator of plugin otherwise false
 *
@@ -552,10 +555,10 @@ function PLG_itemPreSave($type, $content)
 }
 
 /**
-* The way this function works is very specific to how Geeklog shows its
+* The way this function works is very specific to how glFusion shows its
 * statistics.  On stats.php, there is the top box which gives overall
-* statistics for Geeklog and then there are blocks below it that give
-* more specific statistics for various components of Geeklog.
+* statistics for glFusion and then there are blocks below it that give
+* more specific statistics for various components of glFusion.
 *
 * This plugin API function suffers from a variety of bugs and bad design
 * decisions for which we have to provide backward compatibility, so please
@@ -683,7 +686,7 @@ function PLG_getSearchTypes()
 }
 
 /**
-* Determines if a specific plugin supports Geeklog's
+* Determines if a specific plugin supports glFusion's
 * expanded search results feature
 *
 * @author Tony Bibbs <tony AT geeklog DOT net>
@@ -1228,7 +1231,7 @@ function PLG_groupChanged ($grp_id, $mode)
 }
 
 /**
-* Geeklog is about to display the edit form for the user's profile. Plugins
+* glFusion is about to display the edit form for the user's profile. Plugins
 * now get a chance to add their own variables and input fields to the form.
 *
 * @param   int   $uid        user id of the user profile to be edited
@@ -1253,7 +1256,7 @@ function PLG_profileVariablesEdit ($uid, &$template)
 }
 
 /**
-* Geeklog is about to display the edit form for the user's profile. Plugins
+* glFusion is about to display the edit form for the user's profile. Plugins
 * now get a chance to add their own blocks below the standard form.
 *
 * @param    int      $uid   user id of the user profile to be edited
@@ -1282,7 +1285,7 @@ function PLG_profileBlocksEdit ($uid)
 }
 
 /**
-* Geeklog is about to display the user's profile. Plugins now get a chance to
+* glFusion is about to display the user's profile. Plugins now get a chance to
 * add their own variables to the profile.
 *
 * @param   int   $uid        user id of the user profile to be edited
@@ -1307,7 +1310,7 @@ function PLG_profileVariablesDisplay ($uid, &$template)
 }
 
 /**
-* Geeklog is about to display the user's profile. Plugins now get a chance to
+* glFusion is about to display the user's profile. Plugins now get a chance to
 * add their own blocks below the standard profile form.
 *
 * @param    int      $uid        user id of the user profile to be edited
@@ -1773,7 +1776,7 @@ function PLG_getFeedExtensionTags($contentType, $feedType, $feedVersion, $topic,
 
 /**
 * The plugin is expected to check if the feed content needs to be updated.
-* This is called from COM_rdfUpToDateCheck() every time Geeklog's index.php
+* This is called from COM_rdfUpToDateCheck() every time glFusion's index.php
 * is displayed - it should try to be as efficient as possible ...
 *
 * @param    string  plugin          plugin name
@@ -1816,7 +1819,7 @@ function PLG_feedUpdateCheck($plugin, $feed, $topic, $update_data, $limit, $upda
 }
 
 /**
-* Ask plugins if they want to add something to Geeklog's What's New block.
+* Ask plugins if they want to add something to glFusion's What's New block.
 *
 * @return   array   array($headlines[], $bylines[], $content[$entries[]])
 *
@@ -1869,7 +1872,7 @@ function PLG_getWhatsNew()
 /**
 * Allows plugins and Core GL Components to filter out spam.
 *
-* The Spam-X Plugin is now part of the Geeklog Distribution
+* The Spam-X Plugin is now part of the glFusion Distribution
 * This plugin API will call the main function in the Spam-X plugin
 * but can also be used to call other plugins or custom functions
 * if available for filtering spam or content.
@@ -1990,11 +1993,11 @@ function PLG_getItemInfo ($type, $id, $what)
 }
 
 /**
-* Geeklog is about to perform an operation on a trackback or pingback comment
+* glFusion is about to perform an operation on a trackback or pingback comment
 * to one of the items under the plugin's control and asks for the plugin's
 * permission to continue.
 *
-* Geeklog handles receiving and deleting trackback comments and pingbacks
+* glFusion handles receiving and deleting trackback comments and pingbacks
 * for the plugin but since it doesn't know about the plugin's access control,
 * it has to ask the plugin to approve / reject such an operation.
 *
@@ -2044,7 +2047,7 @@ function PLG_runScheduledTask ()
 /**
 * "Generic" plugin API: Save item
 *
-* To be called (eventually) whenever Geeklog saves an item into the database.
+* To be called (eventually) whenever glFusion saves an item into the database.
 * Plugins can hook into this and modify the item (which is already in the
 * database but not visible on the site yet).
 *
@@ -2089,7 +2092,7 @@ function PLG_itemSaved($id, $type)
 /**
 * "Generic" plugin API: Display item
 *
-* To be called (eventually) whenever Geeklog displays an item.
+* To be called (eventually) whenever glFusion displays an item.
 * Plugins can hook into this and add content to the displayed item, in the form
 * of an array (true, string1, string2...).
 *
@@ -2144,7 +2147,7 @@ function PLG_itemDisplay($id, $type)
 
 
 /**
-* Gets Geeklog blocks from plugins
+* Gets glFusion blocks from plugins
 *
 * Returns data for blocks on a given side and, potentially, for
 * a given topic.

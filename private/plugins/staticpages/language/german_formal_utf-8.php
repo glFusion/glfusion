@@ -3,7 +3,7 @@
 ###############################################################################
 # german_formal_utf-8.php
 #
-# This is the formal German language file for the Geeklog Static Pages plugin
+# This is the formal German language file for the glFusion Static Pages plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony AT tonybibbs DOT com

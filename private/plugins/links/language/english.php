@@ -3,7 +3,7 @@
 ###############################################################################
 # english.php
 #
-# This is the english language file for the Geeklog Links Plugin
+# This is the english language file for the glFusion Links Plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony AT tonybibbs DOT com
@@ -28,7 +28,7 @@
 # $Id$
 
 /**
- * This is the english language page for the Geeklog links Plug-in!
+ * This is the english language page for the glFusion links Plug-in!
  *
  * @package Links
  * @subpackage Language

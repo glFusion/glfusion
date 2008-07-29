@@ -3,7 +3,7 @@
 ###############################################################################
 # german_formal.php
 #
-# This is the formal German language file for the Geeklog Calendar Plugin
+# This is the formal German language file for the glFusion Calendar Plugin
 #
 # Authors: Dirk Haun <dirk AT haun-online DOT de>
 #          Markus Wollschläger

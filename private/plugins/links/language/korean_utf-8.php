@@ -2,7 +2,7 @@
 
 ###############################################################################
 # korean_utf-8.php
-# This is the Japanese language page for the Geeklog links Plug-in!
+# This is the Japanese language page for the glFusion links Plug-in!
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

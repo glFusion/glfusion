@@ -2,7 +2,7 @@
 
 /**
  * Create the Spam-X rss feed
- * 
+ *
  * @param items $ array of blacklisted sites
  *
  * $Id$
@@ -10,16 +10,16 @@
 
 function Spamx_rss($items)
 {
-    global $_CONF; 
+    global $_CONF;
     // Basic Data
     $about = $_CONF['site_url'] . '/spamx/index.php';
     $title = 'Spam-X Blacklist';
-    $description = 'Personal Spamx Blacklist from site ' . $_CONF['site_name']; 
+    $description = 'Personal Spamx Blacklist from site ' . $_CONF['site_name'];
     // Dublic Core Data
     $dc = array('dc:publisher' => $_CONF['site_name'],
         'dc:creator' => $_CONF['site_name'],
         'dc:date' => time());
-    $rssfile = new RSSWriter($about, $title, $description, $dc); 
+    $rssfile = new RSSWriter($about, $title, $description, $dc);
     // Add items
     foreach($items as $item) {
         $about = $_CONF['site_url'] . '/spamx/index.php';
@@ -28,7 +28,7 @@ function Spamx_rss($items)
         $dc = array('dc:subject' => 'Personal Blacklist',
             'dc:author' => $_CONF['site_name']);
         $rssfile->addItem($about, $title, $dc);
-    } 
+    }
     // Now write the file
     $buff = $rssfile->serialize();
     $rdfpath = dirname($_CONF['rdf_file']);
@@ -36,7 +36,7 @@ function Spamx_rss($items)
     $fp = fopen($rdffile, "w");
     fputs($fp, $buff);
     fclose($fp);
-} 
+}
 
 // A convenience class to make it easy to write RSS classes
 // Edd Dumbill <mailto:edd+rsswriter@usefulinc.com>
@@ -69,19 +69,19 @@ class RSSWriter {
         $this->channelURI = str_replace("&", "&amp;", "http://" . $GLOBALS["SERVER_NAME"] . $GLOBALS["REQUEST_URI"]);
         foreach ($meta as $key => $value) {
             $this->chaninfo[$key] = $value;
-        } 
-    } 
+        }
+    }
 
     function useModule($prefix, $uri)
     {
         $this->modules[$prefix] = $uri;
-    } 
+    }
 
     function setImage($imgURI, $imgAlt, $imgWidth = 88, $imgHeight = 31)
     {
         $this->image = array("uri" => $imgURI, "title" => $imgAlt, "width" => $imgWidth,
             "height" => $imgHeight);
-    } 
+    }
 
     function addItem($uri, $title, $meta = array())
     {
@@ -90,11 +90,11 @@ class RSSWriter {
         foreach ($meta as $key => $value) {
             if ($key == "description" || $key == "dc:description") {
                 $value = $this->deTag($value);
-            } 
+            }
             $item[$key] = $value;
-        } 
+        }
         $this->items[] = $item;
-    } 
+    }
 
     function serialize()
     {
@@ -104,31 +104,31 @@ class RSSWriter {
         $buff .= $this->items();
         $buff .= $this->postamble();
         return $buff;
-    } 
+    }
 
     function deTag($in)
     {
         while (ereg('<[^>]+>', $in)) {
             $in = ereg_replace('<[^>]+>', '', $in);
-        } 
+        }
         return $in;
-    } 
+    }
 
     function preamble()
-    { 
+    {
         // header("Content-type: text/xml");
         $display = '<?xml version="1.0" encoding="iso-8859-1"?>
-<rdf:RDF 
+<rdf:RDF
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns="http://purl.org/rss/1.0/"
          xmlns:mn="http://usefulinc.com/rss/manifest/"
 ';
         foreach ($this->modules as $prefix => $uri) {
             $display .= "         xmlns:${prefix}=\"${uri}\"\n";
-        } 
+        }
         $display .= ">\n\n";
         return $display;
-    } 
+    }
 
     function channelinfo()
     {
@@ -138,21 +138,21 @@ class RSSWriter {
                 "dc:creator", "dc:rights") as $f) {
             if (isset($i[$f])) {
                 $display .= "    <${f}>" . htmlspecialchars($i[$f]) . "</${f}>\n";
-            } 
-        } 
+            }
+        }
         if (isset($this->image)) {
             $display .= "    <image rdf:resource=\"" . htmlspecialchars($this->image["uri"]) . "\" />\n";
-        } 
+        }
         $display .= "    <items>\n";
         $display .= "      <rdf:Seq>\n";
         foreach ($this->items as $i) {
             $display .= "        <rdf:li rdf:resource=\"" . htmlspecialchars($i["uri"]) . "\" />\n";
-        } 
+        }
         $display .= "      </rdf:Seq>\n";
         $display .= "    </items>\n";
         $display .= "  </channel>\n\n";
         return $display;
-    } 
+    }
 
     function image()
     {
@@ -165,9 +165,9 @@ class RSSWriter {
             if ($this->chaninfo["description"])
                 $display .= "     <dc:description>" . htmlspecialchars($this->chaninfo["description"]) . "</dc:description>\n";
             $display .= "  </image>\n\n";
-        } 
+        }
         return $display;
-    } 
+    }
 
     function postamble()
     {
@@ -182,7 +182,7 @@ class RSSWriter {
 </rdf:RDF>
 ';
         return $display;
-    } 
+    }
 
     function items()
     {
@@ -194,16 +194,16 @@ class RSSWriter {
                     if (is_array($value)) {
                         foreach ($value as $v1) {
                             $display .= "    <${key}>" . htmlspecialchars($v1) . "</${key}>\n";
-                        } 
+                        }
                     } else {
                         $display .= "    <${key}>" . htmlspecialchars($value) . "</${key}>\n";
-                    } 
-                } 
-            } 
+                    }
+                }
+            }
             $display .= "  </item>\n\n";
-        } 
+        }
         return $display;
-    } 
-} 
+    }
+}
 
 ?>

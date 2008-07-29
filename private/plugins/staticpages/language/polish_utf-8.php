@@ -2,7 +2,7 @@
 
 ###############################################################################
 # polish.php
-# This is the Polish language page for the Geeklog Static Page Plug-in!
+# This is the Polish language page for the glFusion Static Page Plug-in!
 # Translation by Robert Stadnik robert_stadnik@wp.pl
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

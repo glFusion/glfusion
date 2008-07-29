@@ -2,7 +2,7 @@
 
 /**
  * File: estonian_utf-8.php
- * This is the Estonian language file for the Geeklog Spam-X plugin
+ * This is the Estonian language file for the glFusion Spam-X plugin
  * 
  * Copyright (C) 2004-2008 by the following authors:
  * Author        Tom Willett        tomw AT pigstye DOT net
@@ -45,7 +45,7 @@ $LANG_SX00 = array (
     'adminc' => 'Administreerimiskäsud:',
     'mblack' => 'Minu blacklist:',
     'rlinks' => 'Seotud lingid:',
-    'e3' => 'Geeklogi tsensuuriloetelust sõnade lisamiseks vajuta nuppu:',
+    'e3' => 'glFusioni tsensuuriloetelust sõnade lisamiseks vajuta nuppu:',
     'addcen' => 'Lisa Tsensuuriloetelu',
     'addentry' => 'Lisa kanne',
     'e1' => 'Kande kustutamiseks klõpsa sellel',
@@ -105,7 +105,7 @@ $LANG_SX00 = array (
     'initial_import' => 'Algne MT-Blacklisti importimine',
     'import_success' => '<p>%d blacklisti kannet on edukalt imporditud.',
     'import_failure' => '<p><strong>Viga:</strong> Kandeid ei leitud.',
-    'allow_url_fopen' => '<p>Sorry, your webserver configuration does not allow reading of remote files (<code>allow_url_fopen</code> is off). Please download the blacklist from the following URL and upload it into Geeklog\'s "data" directory, <tt>%s</tt>, before trying again:', // tõlkida
+    'allow_url_fopen' => '<p>Sorry, your webserver configuration does not allow reading of remote files (<code>allow_url_fopen</code> is off). Please download the blacklist from the following URL and upload it into glFusion\'s "data" directory, <tt>%s</tt>, before trying again:', // tõlkida
     'documentation' => 'Spam-X Plugina Dokumentatsioon',
     'emailmsg' => "Lehel \"%s\" on postitatud uus spampostitus\nKasutaja UID: \"%s\"\n\nSisu:\"%s\"",
     'emailsubject' => 'Spampostitus - %s',

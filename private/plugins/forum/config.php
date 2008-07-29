@@ -1,41 +1,48 @@
 <?php
-//
-// +---------------------------------------------------------------------------+
-// | Forum Plugin for Geeklog - The Ultimate Weblog                            |
-// +---------------------------------------------------------------------------+
-// | config.php                                                                |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2002 by the following authors:                              |
-// |                                                                           |
-// | Author:                                                                   |
-// | Copyright (C) 2002,2003,2004,2005 by the following authors:               |
-// | Blaine Lang                 -    blaine@portalparts.com                   |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-
+// +--------------------------------------------------------------------------+
+// | Forum Plugin for glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | config.php                                                               |
+// |                                                                          |
+// | Forum configuration options.                                             |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Forum Plugin for Geeklog CMS                                |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
+// |                              www.portalparts.com                         |
+// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
+// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 $CONF_FORUM['debug'] = false;
-$CONF_FORUM['version'] = '3.0';
+$CONF_FORUM['version'] = '3.0.0';
 
 /********************* FORUM PLUGIN v2.7+ Setup for block layout to use ********************
-* Fourm Plugin for Geeklog v1.4.1 available at http://www.portalparts.com
-* Set the following for which Geeklog block columns you want to show along with the forum.
+* Fourm Plugin for glFusion v1.0.- available at http://www.glfusion.org
+* Set the following for which glFusion block columns you want to show along with the forum.
 * Options are: 'leftblocks', 'rightblocks', 'allblocks', 'noblocks'
 * For example, set to noblocks to not show any blocks (and have the forum span the entire page.)
 ***************************************************************************************/
@@ -132,6 +139,8 @@ $CONF_FORUM['allowablefiletypes']    = array(
         'application/x-zip-compressed'      => '.zip',
         'application/zip'                   => '.zip',
         'application/x-tar'                 => '.tar',
+        'application/x-gtar'                => '.gtar',
+        'application/x-gzip'                => '.gz',
         'text/plain'                        => '.php,.txt,.inc',
         'text/html'                         => '.html,.htm',
         'image/bmp'                         => '.bmp,.ico',
@@ -151,6 +160,7 @@ $CONF_FORUM['allowablefiletypes']    = array(
         'application/vnd.visio'             => '.vsd',
         'text/plain'                        => '.txt',
         'application/x-pangaeacadsolutions' => '.dwg',
+        'application/x-zip-compresseed'     => '.zip',
         'application/octet-stream'          => '.zip,.vsd,.fla,.psd,.xls,.doc,.ppt,.pdf,.swf,.mpp,.txt,.dwg'
         );
 

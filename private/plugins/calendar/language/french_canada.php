@@ -3,7 +3,7 @@
 ###############################################################################
 # french_canada.php
 #
-# This is the Canadian French language file for the Geeklog Calendar plugin
+# This is the Canadian French language file for the glFusion Calendar plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

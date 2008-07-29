@@ -1,37 +1,45 @@
 <?php
-
-###############################################################################
-# lang.php
-# This is the english language page for the Geeklog File Mgmt Page Plug-in!
-#
-# Copyright (C) 2002 Blaine Lang
-# blaine@portalparts.com
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-###############################################################################
-
-
-// Language variables used by the Plug-in API
+// +--------------------------------------------------------------------------+
+// | FileMgmt Plugin - glFusion CMS                                           |
+// +--------------------------------------------------------------------------+
+// | english.php                                                              |
+// |                                                                          |
+// | English language file                                                    |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the FileMgmt Plugin for Geeklog                                 |
+// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
+// | Author:                                                                  |
+// | Blaine Lang            blaine@portalparts.com                            |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 $LANG_FM00 = array (
     'access_denied'     => 'Access Denied',
     'access_denied_msg' => 'Only Root Users have Access to this Page.  Your user name and IP have been recorded.',
     'admin'             => 'Plugin Admin',
     'install_header'    => 'Install/Uninstall Plugin',
-    'installed'         => 'The Plugin and Block are now installed,<p><i>Enjoy,<br><a href="MAILTO:blaine@portalparts.com">Blaine</a></i>',
+    'installed'         => 'The Plugin and Block are now installed,<p><i>Enjoy,<br><a href="MAILTO:support@glfusion.org">glFusion Team</a></i>',
     'uninstalled'       => 'The Plugin is Not Installed',
     'install_success'   => 'Installation Successful<p><b>Next Steps</b>:
         <ol><li>Use the Filemgmt Admin to complete the plugin configuration</ol>

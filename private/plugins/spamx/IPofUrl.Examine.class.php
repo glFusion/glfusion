@@ -2,7 +2,7 @@
 
 /**
 * File: IPofUrl.Examine.class.php
-* This is the Personal BlackList Examine class for the Geeklog Spam-X plugin
+* This is the Personal BlackList Examine class for the glFusion Spam-X plugin
 *
 * Copyright (C) 2004-2006 by the following authors:
 * Author        Tom Willett        tomw AT pigstye DOT net

@@ -4,9 +4,9 @@
 # chinese_simplified_utf-8.php
 #
 # Last Modified: 2008-05-23
-# Version: 1.5
+# Version: 1.0
 #
-# This is the Chinese Simplified (UTF-8) language set for GeekLog 1.5
+# This is the Chinese Simplified (UTF-8) language set for glFusion 1.0
 #
 # Copyright (C) 2003 Samuel Maung Stone
 # sam AT stonemicro DOT com
@@ -1427,7 +1427,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1483,7 +1483,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

@@ -1,40 +1,39 @@
 <?php
-
-// +---------------------------------------------------------------------------+
-// | Universal Plugin 1.0 for Geeklog - The Ultimate Weblog                    |
-// +---------------------------------------------------------------------------+
-// | install.php                                                               |
-// |                                                                           |
-// | This file installs and removes the data structures for the                |
-// | plugin for Geeklog.                                                       |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2002 by the following authors:                              |
-// |                                                                           |
-// | Author:                                                                   |
-// | Constructed with the Universal Plugin                                     |
-// | Copyright (C) 2002 by the following authors:                              |
-// | Tom Willett                 -    tomw@pigstye.net                         |
-// | Blaine Lang                 -    geeklog@langfamily.ca                    |
-// | The Universal Plugin is based on prior work by:                           |
-// | Tony Bibbs                  -    tony@tonybibbs.com                       |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Forum Plugin for glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | install.php                                                              |
+// |                                                                          |
+// | Adds / removes data structures                                           |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Forum Plugin for Geeklog CMS                                |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
+// |                              www.portalparts.com                         |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 require_once('../../../lib-common.php');
 require_once($_CONF['path'] . 'plugins/forum/config.php');
@@ -70,12 +69,12 @@ $DEFVALUES['block2'] = "INSERT INTO {$_TABLES['blocks']} (is_enabled,name,type,t
 
 /**
 * Checks the requirements for this plugin and if it is compatible with this
-* version of Geeklog.
+* version of glFusion.
 *
 * @return   boolean     true = proceed with install, false = not compatible
 *
 */
-function plugin_compatible_with_this_geeklog_version ()
+function plugin_compatible_with_this_glfusion_version ()
 {
     return true;
 }
@@ -109,7 +108,7 @@ if (!SEC_inGroup('Root')) {
 }
 
 /**
-* Puts the datastructures for this plugin into the Geeklog database
+* Puts the datastructures for this plugin into the glFusion database
 *
 * Note: Corresponding uninstall routine is in functions.inc
 *
@@ -213,8 +212,8 @@ function plugin_install_now()
         exit;
     }
 
-    // Register the plugin with Geeklog
-    COM_errorLog("Registering $pi_name plugin with Geeklog", 1);
+    // Register the plugin with glFusion
+    COM_errorLog("Registering $pi_name plugin with glFusion", 1);
     DB_delete($_TABLES['plugins'],'pi_name',$pi_name);
     DB_query("INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_homepage, pi_enabled) "
         . "VALUES ('$pi_name', '$pi_version', '$gl_version', '$pi_url', 1)");
@@ -244,7 +243,7 @@ if ($_REQUEST['action'] == 'uninstall') {
 
 } else if (DB_count ($_TABLES['plugins'], 'pi_name', $pi_name) == 0) {
     // plugin not installed
-    if (plugin_compatible_with_this_geeklog_version ()) {
+    if (plugin_compatible_with_this_glfusion_version ()) {
         if (plugin_install_now ()) {
             $display = COM_refresh ($_CONF['site_admin_url']
                                     . '/plugins.php?msg=44');
@@ -253,7 +252,7 @@ if ($_REQUEST['action'] == 'uninstall') {
                                     . '/plugins.php?msg=72');
         }
     } else {
-        // plugin needs a newer version of Geeklog
+        // plugin needs a newer version of glFusion
         $display .= COM_siteHeader ('menu', $LANG32[8])
                  . COM_startBlock ($LANG32[8])
                  . '<p>' . $LANG32[9] . '</p>'

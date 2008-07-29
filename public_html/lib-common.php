@@ -1,58 +1,53 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | glFusion CMS                                                              |
-// +---------------------------------------------------------------------------+
-// | lib-common.php                                                            |
-// |                                                                           |
-// | glFusion common library.                                                  |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// |                                                                           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-// | Original code developed by the Geeklog team                               |
-// |                                                                           |
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                    |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net    |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com            |
-// |          Dirk Haun         - dirk AT haun-online DOT de                   |
-// |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net     |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | Common functions and startup code                                        |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
+// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
+// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
+// |          Dirk Haun         - dirk AT haun-online DOT de                  |
+// |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net    |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 // Prevent PHP from reporting uninitialized variables
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 /**
-* This is the common library for Geeklog.  Through our code, you will see
+* This is the common library for glFusion.  Through our code, you will see
 * functions with the COM_ prefix (e.g. COM_siteHeader()).  Any such functions
 * can be found in this file.
 *
 * --- You don't need to modify anything in this file! ---
 *
 * WARNING: put any custom hacks in lib-custom.php and not in here.  This file is
-* modified frequently by the Geeklog development team.  If you put your hacks in
+* modified frequently by the glFusion development team.  If you put your hacks in
 * lib-custom.php you will find upgrading much easier.
 *
 */
@@ -92,10 +87,6 @@ if( function_exists('set_error_handler') )
     }
 }
 
-/*
-* Configuration Include:
-* You do NOT need to modify anything here any more!
-*/
 require_once 'siteconfig.php' ;
 require_once $_CONF['path_system'] . 'classes/config.class.php';
 
@@ -237,7 +228,7 @@ require_once( $_CONF['path_system'] . 'lib-database.php' );
 *
 */
 if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("bad_behavior2","1")) > 0) {
-    require_once($_CONF['path_html'] . 'bad_behavior2/bad-behavior-geeklog.php');
+    require_once($_CONF['path_html'] . 'bad_behavior2/bad-behavior-glfusion.php');
 }
 
 /**
@@ -262,18 +253,9 @@ require_once( $_CONF['path_system'] . 'lib-syndication.php' );
 require_once( $_CONF['path_system'] . 'lib-glfusion.php' );
 
 /**
- *These variables were taken out of the configuration and placed here since they
- *are necessary to change with the themes, not whole sites. They should now be
- *overridden by setting them to a different value than here in the theme's
- *function.php or in lib-custom.php. Therefore they are NOT TO BE CHANGED HERE.
- */
-$_CONF['left_blocks_in_footer'] = 0;  // use left blocks in header
-$_CONF['right_blocks_in_footer'] = 1;  // use right blocks in footer
-
-/**
 * This is the custom library.
 *
-* It is the sandbox for every Geeklog Admin to play in.
+* It is the sandbox for every glFusion Admin to play in.
 * We will never modify this file.  This should hold all custom
 * hacks to make upgrading easier.
 *
@@ -296,13 +278,6 @@ require_once( $_CONF['path_system'] . 'lib-plugins.php' );
 */
 
 require_once( $_CONF['path_system'] . 'lib-sessions.php' );
-
-/**
-* Ulf Harnhammar's kses class
-*
-*/
-
-// require_once( $_CONF['path_system'] . 'classes/kses.class.php' );
 
 /**
 * Multibyte functions
@@ -822,10 +797,10 @@ function COM_renderMenu( &$header, $plugin_menu )
 * Programming Note:
 *
 * The two functions COM_siteHeader and COM_siteFooter provide the framework for
-* page display in Geeklog.  COM_siteHeader controls the display of the Header
+* page display in glFusion.  COM_siteHeader controls the display of the Header
 * and left blocks and COM_siteFooter controls the dsiplay of the right blocks
 * and the footer.  You use them like a sandwich.  Thus the following code will
-* display a Geeklog page with both right and left blocks displayed.
+* display a glFusion page with both right and left blocks displayed.
 *
 * -------------------------------------------------------------------------------------
 * <?php
@@ -1136,7 +1111,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     header( 'Content-Type: text/html; charset=' . COM_getCharset());
     echo $retval;
 
-    // Start caching / capturing output from Geeklog / plugins
+    // Start caching / capturing output from glFusion / plugins
     ob_start();
     return '';
 }
@@ -1382,9 +1357,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     if( empty( $lblocks )) {
         $theme->set_var( 'left_blocks', '' );
-        $theme->set_var( 'geeklog_blocks', '' );
+        $theme->set_var( 'glfusion_blocks', '' );
     } else {
-        $theme->set_var( 'geeklog_blocks', $lblocks );
+        $theme->set_var( 'glfusion_blocks', $lblocks );
     }
 
     // Do variable assignments
@@ -1412,9 +1387,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'lang_copyright', $LANG01[93] );
     $theme->set_var( 'trademark_msg', $LANG01[94] );
     $theme->set_var( 'powered_by', $LANG01[95] );
-    $theme->set_var( 'geeklog_url', 'http://www.geeklog.net/' );
-    $theme->set_var( 'geeklog_version', VERSION );
-    $theme->set_var( 'gllabs_url', 'http://www.gllabs.org/' );
+    $theme->set_var( 'glfusion_url', 'http://www.glfusion.org/' );
     $theme->set_var( 'glfusion_version', glFusion_VERSION );
 
 
@@ -1433,7 +1406,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $rblocks = COM_showBlocks( 'right', $topic );
 
         if( empty( $rblocks )) {
-            $theme->set_var( 'geeklog_rblocks', '');
+            $theme->set_var( 'glfusion_rblocks', '');
             $theme->set_var( 'right_blocks','');
             if ( empty($lblocks) ) {
                 $theme->set_var( 'centercolumn','gl_content-full' );
@@ -1441,7 +1414,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
                 $theme->set_var( 'centercolumn','gl_content-wide-left' );
             }
         } else {
-            $theme->set_var( 'geeklog_rblocks', $rblocks);
+            $theme->set_var( 'glfusion_rblocks', $rblocks);
             if ( empty($lblocks) ) {
                 $theme->set_var( 'centercolumn','gl_content-wide-right' );
             } else {
@@ -1449,7 +1422,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             }
         }
     } else {
-        $theme->set_var( 'geeklog_rblocks', '');
+        $theme->set_var( 'glfusion_rblocks', '');
         $theme->set_var( 'right_blocks', '' );
         if( empty( $lblocks )) {
             $theme->set_var( 'centercolumn','gl_content-full' );
@@ -1460,11 +1433,11 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     if ( !empty( $lblocks) ) {
         $theme->parse( 'left_blocks', 'leftblocks', true );
-        $theme->set_var( 'geeklog_blocks', '');
+        $theme->set_var( 'glfusion_blocks', '');
     }
     if ( !empty ($rblocks) ) {
         $theme->parse( 'right_blocks', 'rightblocks', true );
-        $theme->set_var( 'geeklog_rblocks', '');
+        $theme->set_var( 'glfusion_rblocks', '');
     }
 
     $exectime = $_PAGE_TIMER->stopTimer();
@@ -1888,7 +1861,7 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
     {
         if( !empty( $updated_type ) && ( $updated_type != 'glfusion' ))
         {
-            // when a plugin's feed is to be updated, skip Geeklog's own feeds
+            // when a plugin's feed is to be updated, skip glFusion's own feeds
             $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE (is_enabled = 1) AND (type <> 'glfusion')";
         }
         else
@@ -2031,7 +2004,7 @@ function COM_errorLog( $logentry, $actionid = '' )
 /**
 * Logs message to access.log
 *
-* This will print a message to the Geeklog access log
+* This will print a message to the glFusion access log
 *
 * @param        string      $string         Message to write to access log
 * @see COM_errorLog
@@ -3255,7 +3228,7 @@ function COM_formatEmailAddress( $name, $address )
 /**
 * Send an email.
 *
-* All emails sent by Geeklog are sent through this function now.
+* All emails sent by glFusion are sent through this function now.
 *
 * @param    string      $to         recipients name and email address
 * @param    string      $subject    subject of the email
@@ -3429,7 +3402,7 @@ function COM_olderStuff()
 }
 
 /**
-* Shows a single Geeklog block
+* Shows a single glFusion block
 *
 * This shows a single block and is typically called from
 * COM_showBlocks OR from plugin code
@@ -3491,7 +3464,7 @@ function COM_showBlock( $name, $help='', $title='' )
 
 
 /**
-* Shows Geeklog blocks
+* Shows glFusion blocks
 *
 * Returns HTML for blocks on a given side and, potentially, for
 * a given topic. Currentlly only used by static pages.
@@ -3616,7 +3589,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 }
 
 /**
-* Formats a Geeklog block
+* Formats a glFusion block
 *
 * This shows a single block and is typically called from
 * COM_showBlocks OR from plugin code
@@ -3796,7 +3769,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
     // Load the actual feed handlers:
     $factory = new FeedParserFactory($_CONF['path_system']
                                      . '/classes/syndication/');
-    $factory->userAgent = 'Geeklog/' . VERSION;
+    $factory->userAgent = 'glFusion/' . VERSION;
     if (!empty($last_modified) && !empty($etag)) {
         $factory->lastModified = $last_modified;
         $factory->eTag = $etag;
@@ -4069,7 +4042,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
 * Adds a hit to the system
 *
 * This function is called in the footer of every page and is used to
-* track the number of hits to the Geeklog system.  This information is
+* track the number of hits to the glFusion system.  This information is
 * shown on stats.php
 *
 */
@@ -5434,7 +5407,7 @@ function COM_getRate( $occurrences, $timespan )
 * Return SQL expression to check for permissions.
 *
 * Creates part of an SQL expression that can be used to request items with the
-* standard set of Geeklog permissions.
+* standard set of glFusion permissions.
 *
 * @param        string      $type     part of the SQL expr. e.g. 'WHERE', 'AND'
 * @param        int         $u_id     user id or 0 = current user
@@ -6024,7 +5997,7 @@ function COM_getCurrentURL()
 }
 
 /**
-* Check if we're on Geeklog's index page.
+* Check if we're on glFusion's index page.
 *
 * See if we're on the main index page (first page, no topics selected).
 *
@@ -6060,7 +6033,7 @@ function COM_onFrontpage()
 }
 
 /**
-* Check if we're on Geeklog's index page [deprecated]
+* Check if we're on glFusion's index page [deprecated]
 *
 * Note that this function returns FALSE when we're on the index page. Due to
 * the inverted return values, it has been deprecated and is only provided for

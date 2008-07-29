@@ -1,37 +1,41 @@
 <?php
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog Forums Plugin 2.6 for Geeklog - The Ultimate Weblog               |
-// | Release date: Oct 30,2006                                                 |
-// +---------------------------------------------------------------------------+
-// | Index.php                                                                 |
-// | Main Forum Admin program                                                  |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000,2001,2002,2003 by the following authors:               |
-// | Geeklog Author: Tony Bibbs       - tony@tonybibbs.com                     |
-// +---------------------------------------------------------------------------+
-// | Plugin Authors                                                            |
-// | Blaine Lang,                  blaine@portalparts.com, www.portalparts.com |
-// | Version 1.0 co-developer:     Matthew DeWyer, matt@mycws.com              |   
-// | Prototype & Concept :         Mr.GxBlock, www.gxblock.com                 |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Forum Plugin for glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | index.php                                                                |
+// |                                                                          |
+// | Main Forum administration screen                                         |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Forum Plugin for Geeklog CMS                                |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
+// |                              www.portalparts.com                         |
+// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
+// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 include_once('gf_functions.php');
 
@@ -88,7 +92,7 @@ if ($totalviews['TOTAL'] != 0) {
 
     $indextemplate = new Template($_CONF['path_layout'] . 'forum/layout/admin');
     $indextemplate->set_file (array ('indextemplate'=>'index.thtml'));
-    
+
     $indextemplate->set_var ('statsmsg', $LANG_GF91['statsmsg']);
     $indextemplate->set_var ('totalcatsmsg', $LANG_GF91['totalcats']);
     $indextemplate->set_var ('totalcats', $totalcats);
@@ -111,7 +115,7 @@ if ($totalviews['TOTAL'] != 0) {
     $indextemplate->set_var ('avgcviews', $avgcviews);
     $indextemplate->set_var ('avgfviews', $avgfviews);
     $indextemplate->set_var ('avgtviews', $avgtviews);
-    
+
     $indextemplate->parse ('output', 'indextemplate');
     echo $indextemplate->finish ($indextemplate->get_var('output'));
 

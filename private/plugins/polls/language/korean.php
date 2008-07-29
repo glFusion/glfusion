@@ -2,7 +2,7 @@
 
 ###############################################################################
 # korean.php
-# This is the Korean language page for the Geeklog Polls Plug-in!
+# This is the Korean language page for the glFusion Polls Plug-in!
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

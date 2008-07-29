@@ -1,44 +1,44 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.3                                                               |
-// +---------------------------------------------------------------------------+
-// | calendar.class.php                                                        |
-// |                                                                           |
-// | Geeklog calendar library.                                                 |
-// +---------------------------------------------------------------------------+
-// | Much of this code is from Jim Wright jdlwright@yahoo.com with minor       |
-// | customizations.                                                           |
-// |                                                                           |
-// | Copyright (C) 2000-2004 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony@tonybibbs.com                            |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | calendar.class.php                                                       |
+// |                                                                          |
+// | glFusion calendar library.                                               |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony@tonybibbs.com                           |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /**
 * This file contains the two classes used to help support the calendar pages.
 * Please note that our calendar code is in shambles and is hard to understand.
-* Not so much this file as /calendar/index.php and calendar/event.php.  
-* Those files along with this class need to be reworked to be easier 
+* Not so much this file as /calendar/index.php and calendar/event.php.
+* Those files along with this class need to be reworked to be easier
 * to maintain and support rich calendaring features
 *
 * @author   Tony Bibbs  <tony@tonybibbs.com>
@@ -53,7 +53,7 @@ class CalendarDay {
     var $daynumber = 0;
     var $year = 0;
 
-    var $weekendflag = false; 
+    var $weekendflag = false;
     var $holidayflag = false;
     var $selectedflag = false;
 
@@ -63,7 +63,7 @@ class CalendarDay {
     */
     function CalendarDay()
     {
-        $this->weekendflag = false; 
+        $this->weekendflag = false;
         $this->holidayflag = false;
         $this->selectedflag = false;
     }
@@ -76,9 +76,9 @@ class CalendarDay {
     */
     function isWeekend()
     {
-        return $this->weekendflag; 
+        return $this->weekendflag;
     }
-   
+
     /**
     * Returns if this day is a holiday
     *
@@ -139,7 +139,7 @@ class Calendar {
     * @access private
     */
     var $_matrix;
-     
+
     // PRIVATE METHODS
 
     /**
@@ -234,7 +234,7 @@ class Calendar {
         }
     }
 
-    /** 
+    /**
     * Returns the number of days in a given month/year
     *
     * If no year is given, the default year is used
@@ -340,14 +340,14 @@ class Calendar {
             return 0;
             break;
         }
-    } 
+    }
 
-    /** 
+    /**
     * Returns the name of the given month (can handle different languages)
     *
     * This aims to help with multi-lingual support
     *
-    * @param    int     $month      Month (1-12) to get name of 
+    * @param    int     $month      Month (1-12) to get name of
     * @return   string  returns text for current month name
     *
     */
@@ -404,7 +404,7 @@ class Calendar {
     *
     * Will put calendar in normal mode or in rolling mode.  Rolling
     * mode
-    * 
+    *
     * @param    boolean     $flag   True of False
     *
     */
@@ -416,7 +416,7 @@ class Calendar {
     /**
     * Sets the language for days of the week and months of year
     *
-    * This function defaults to English.  
+    * This function defaults to English.
     * Day array format is _lang_days['<daynameinenglish>'] = '<translation>'
     * Mondy array format is _lang_months['<monthnameinenglish'] = '<translation>'
     *
@@ -460,7 +460,7 @@ class Calendar {
             $this->_week_start = $week_start;
         }
     }
-    
+
     /**
     * Builds logical model of the month in memory
     *
@@ -478,7 +478,7 @@ class Calendar {
         $monthname = $this->getMonthName($month);
 
         // There are as many as 6 weeks in a calendar grid (I call these
-        // absolute weeks hence the variable name aw.  Loop through and 
+        // absolute weeks hence the variable name aw.  Loop through and
         // populate data
         for ($aw = 1; $aw <= 6; $aw++) {
             for ($wd = 1;  $wd <= 7; $wd++) {
@@ -487,7 +487,7 @@ class Calendar {
                 } else {
                     $cur_day = new CalendarDay();
                     $cur_day->year = $year;
-                    $cur_day->daynumber = $nextday; 
+                    $cur_day->daynumber = $nextday;
                     $week[$aw][$wd] = $cur_day;
 
                     // Bail if we just printed last day
@@ -501,13 +501,13 @@ class Calendar {
                         }
                         $aw = 7;
                     }
-                }      
+                }
             }
         }
 
         $this->_matrix = $week;
 
-    }   
+    }
 
     /**
     * Gets data for a given day

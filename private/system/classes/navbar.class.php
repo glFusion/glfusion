@@ -1,34 +1,40 @@
 <?php
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +-------------------------------------------------------------------------+
-// | Geeklog 1.3                                                             |
-// +-------------------------------------------------------------------------+
-// | navbar.class.php                                                        |
-// |                                                                         |
-// | class to create and display a CSS based Navbar for site navigation      |
-// +-------------------------------------------------------------------------+
-// | Copyright (C) 2004 by Consult4Hire Inc.                                 |
-// |                                                                         |
-// | Author:                                                                 |
-// | Blaine Lang                 -    blaine@portalparts.com                 |
-// +-------------------------------------------------------------------------+
-// |                                                                         |
-// | This program is free software; you can redistribute it and/or           |
-// | modify it under the terms of the GNU General Public License             |
-// | as published by the Free Software Foundation; either version 2          |
-// | of the License, or (at your option) any later version.                  |
-// |                                                                         |
-// | This program is distributed in the hope that it will be useful,         |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of          |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                    |
-// | See the GNU General Public License for more details.                    |
-// |                                                                         |
-// | You should have received a copy of the GNU General Public License       |
-// | along with this program; if not, write to the Free Software Foundation, |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.         |
-// |                                                                         |
-// +-------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | navbar.class.php                                                         |
+// |                                                                          |
+// | class to create and display a CSS based Navbar for site navigation       |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// |                                                                          |
+// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
+// |                                                                          |
+// | Author:                                                                  |
+// | Blaine Lang                 -    blaine@portalparts.com                  |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /**
 * This class will allow you to setup and generate a CSS Tab Menu and breadcrumb link trail
@@ -38,7 +44,7 @@
 *
 */
 
-/* Example Use 
+/* Example Use
     include ($_CONF['path_system'] . 'classes/navbar.class.php');
 
     $menuitems = array (
@@ -99,9 +105,9 @@ class navbar  {
     * @access private
     */
     var $_onclick;      // Array
-    
+
     var $_bctemplate = NULL;     // Template to use for Breadcrumbs
-    
+
     var $_numbreadcrumbs = 0;   // Number of Breadcrumb links added
 
     /**
@@ -184,7 +190,7 @@ class navbar  {
         $retval = $navtemplate->finish($navtemplate->get_var('output'));
         return $retval;
     }
-    
+
     function openBreadcrumbs() {
         global $_CONF;
         $this->_bctemplate = new Template($_CONF['path_layout'] . 'navbar');
@@ -196,7 +202,7 @@ class navbar  {
         $this->_bctemplate->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
         $this->_bctemplate->set_var( 'layout_url', $_CONF['layout_url'] );
     }
-    
+
     function add_breadcrumbs($url,$label,$title='') {
         if ($this->_numbreadcrumbs == '') {
             $this->_numbreadcrumbs = 0;
@@ -206,26 +212,26 @@ class navbar  {
         $this->_bctemplate->set_var('link_title',$title);
         if ($this->_numbreadcrumbs > 0) {
             $this->_bctemplate->set_var('link_separator','/&nbsp;');
-     
+
         }  else {
             $this->_bctemplate->set_var('link_separator','');
-        }            
+        }
         $this->_bctemplate->parse('breadcrumb_links','link',true);
         $this->_numbreadcrumbs = $this->_numbreadcrumbs + 1;
     }
-    
+
     function add_lastBreadcrumb($label) {
         if (trim($label) != '') {
             $label = "/&nbsp;$label";
             $this->_bctemplate->set_var('last_label',$label);
-        }           
-    }      
+        }
+    }
 
     function closeBreadcrumbs() {
         $this->_bctemplate->parse('output', 'breadcrumbs');
-        return $this->_bctemplate->finish ($this->_bctemplate->get_var('output'));         
-    }    
-    
+        return $this->_bctemplate->finish ($this->_bctemplate->get_var('output'));
+    }
+
 
 }
 

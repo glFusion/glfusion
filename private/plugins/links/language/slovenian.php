@@ -2,8 +2,8 @@
 
 ###############################################################################
 # slovenian.php - version 1.4.1
-# This is the slovenian language file for the Geeklog Links Plugin
-# language file for geeklog version 1.4.1 beta by mb
+# This is the slovenian language file for the glFusion Links Plugin
+# language file for glFusion version 1.4.1 beta by mb
 # gape@gape.org ; za pripombe, predloge ipd ... piši na email
 #
 # Copyright (C) 2001 Tony Bibbs

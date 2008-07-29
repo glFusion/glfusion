@@ -2,7 +2,7 @@
 
 ###############################################################################
 # portuguese_brazil.php
-# Esta é a página em português do Brasil para o plug-in Geeklog Static Page!
+# Esta é a página em português do Brasil para o plug-in glFusion Static Page!
 #
 # Tradução: Alcides Soares Filho (Maio de 2004)
 # asoaresfil@uol.com.br

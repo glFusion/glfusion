@@ -1,37 +1,41 @@
 <?php
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Bad Behavior plugin 2.0.10 for glFusion 1.0.x                             |
-// +---------------------------------------------------------------------------+
-// | english.php                                                               |
-// |                                                                           |
-// | English language file                                                     |
-// +---------------------------------------------------------------------------+
-// | Bad Behavior - detects and blocks unwanted Web accesses                   |
-// | Copyright (C) 2005-2007 Michael Hampton                                   |
-// +---------------------------------------------------------------------------+
-// | glFusion plugin wrapper                                                   |
-// | Copyright (C) 2005-2007 by Dirk Haun <dirk AT haun-online DOT de>         |
-// | Bad Behavior 2.0.10 wrapper upgrades                                      |
-// | Copyright (c) 2007 Mark R. Evans <mark AT gllabs DOT org>                 |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Bad Behavior Plugin - glFusion CMS                                       |
+// +--------------------------------------------------------------------------+
+// | english.php                                                              |
+// |                                                                          |
+// | English language file                                                    |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Bad Behavior - detects and blocks unwanted Web accesses                  |
+// | Copyright (C) 2005-2007 Michael Hampton                                  |
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 $LANG_BAD_BEHAVIOR = array (
     'plugin_display_name'   => 'Bad Behavior2',

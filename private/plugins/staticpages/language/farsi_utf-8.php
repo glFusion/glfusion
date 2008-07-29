@@ -2,7 +2,7 @@
 
 ###############################################################################
 # farsi.php
-# This is the farsi language page for the Geeklog Static Page Plug-in!
+# This is the farsi language page for the glFusion Static Page Plug-in!
 #
 # Copyright (C) 2004 Hesm.H
 # hesam@4shir.com

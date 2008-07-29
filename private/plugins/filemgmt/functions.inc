@@ -1,32 +1,43 @@
 <?php
+// +--------------------------------------------------------------------------+
+// | FileMgmt Plugin - glFusion CMS                                           |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | Plugin interface to glFusion                                             |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the FileMgmt Plugin for Geeklog                                 |
+// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
+// | Author:                                                                  |
+// | Blaine Lang            blaine@portalparts.com                            |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
-// +-------------------------------------------------------------------------+
-// | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |
-// +-------------------------------------------------------------------------+
-// | Copyright (C) 2004 by Consult4Hire Inc.                                 |
-// | Author:                                                                 |
-// | Blaine Lang                 -    blaine@portalparts.com                 |
-// +-------------------------------------------------------------------------+
-// | This program is free software; you can redistribute it and/or           |
-// | modify it under the terms of the GNU General Public License             |
-// | as published by the Free Software Foundation; either version 2          |
-// | of the License, or (at your option) any later version.                  |
-// |                                                                         |
-// | This program is distributed in the hope that it will be useful,         |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of          |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                    |
-// | See the GNU General Public License for more details.                    |
-// |                                                                         |
-// | You should have received a copy of the GNU General Public License       |
-// | along with this program; if not, write to the Free Software Foundation, |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.         |
-// |                                                                         |
-// +-------------------------------------------------------------------------+
-//
+if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
+{
+    die ('This file can not be used on its own.');
+}
 
 $langfile = $_CONF['path'] . 'plugins/filemgmt/language/' . $_CONF['language'] . '.php';
 if (file_exists ($langfile)) {
@@ -338,7 +349,7 @@ global $LANG_FILEMGMT, $_FM_TABLES, $_CONF;
 }
 
 /**
-* Geeklog is asking us to provide any new items that show up in the type drop-down
+* glFusion is asking us to provide any new items that show up in the type drop-down
 * on search.php.  Let's let users search the Filelistings in the Filemgmt Plugin
 *
 */
@@ -491,7 +502,7 @@ function plugin_getadminoption_filemgmt()
 
 
 /**
-* Removes the datastructures for this plugin from the Geeklog database
+* Removes the datastructures for this plugin from the glFusion database
 * This may get called by the install routine to undue anything created during the install.
 * Added check to see that plugin is first disabled.
 */
@@ -515,8 +526,8 @@ function plugin_uninstall_filemgmt($installCheck='')
         exit;
     }
 
-    // Ok to proceed and delete plugin - Unregister the plugin with Geeklog
-    COM_errorLog('Attempting to unregister the Forum plugin from Geeklog',1);
+    // Ok to proceed and delete plugin - Unregister the plugin with glFusion
+    COM_errorLog('Attempting to unregister the Forum plugin from glFusion',1);
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'filemgmt'",1);
     // Drop tables
     foreach($TABLES as $table) {

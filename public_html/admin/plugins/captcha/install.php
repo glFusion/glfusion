@@ -1,31 +1,35 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | CAPTCHA v3 Plugin                                                         |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | install.php                                                               |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2007 by the following authors:                              |
-// |                                                                           |
-// | Author: Mark R. Evans - mevans@ecsnet.com                                 |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | CAPTCHA Plugin - glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | install.php                                                              |
+// |                                                                          |
+// | Installs / uninstalls plugin                                             |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
+
 require_once('../../../lib-common.php');
 require_once($_CONF['path'] . '/plugins/captcha/config.php');
 require_once($_CONF['path'] . '/plugins/captcha/functions.inc');
@@ -79,7 +83,7 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'captcha') == 0) {
     $gl_version = VERSION;
     $php_version = phpversion();
 
-    $glver = sprintf($LANG_CP00['geeklog_check'],$gl_version);
+    $glver = sprintf($LANG_CP00['glfusion_check'],$gl_version);
     $phpver = sprintf($LANG_CP00['php_check'],$php_version);
     $T->set_var(array(
         'lang_overview'     => $LANG_CP00['overview'],

@@ -1,40 +1,43 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Polls Plugin 2.0                                                          |
-// +---------------------------------------------------------------------------+
-// | functions.inc                                                             |
-// |                                                                           |
-// | This file does two things: 1) it implements the necessary Geeklog Plugin  |
-// | API method and 2) implements all the common code needed by the Polls      |
-// | plugin' PHP files.                                                        |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net     |
-// |          Blaine Lang      - langmail AT sympatico DOT ca                  |
-// |          Dirk Haun        - dirk AT haun-online DOT de                    |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | Polls Plugin - glFusion CMS                                              |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | This file does two things: 1) it implements the necessary glFusion Plugin|
+// | API method and 2) implements all the common code needed by the Polls     |
+// | plugin' PHP files.                                                       |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
+// |          Blaine Lang      - langmail AT sympatico DOT ca                 |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos($_SERVER['PHP_SELF'], 'functions.inc') !== false) {
     die('This file can not be used on its own.');
@@ -51,10 +54,10 @@ if (file_exists($langfile)) {
 
 /*
 * Check and see if we need to load the plugin configuration
-*/ 
+*/
 if (!isset($_PO_CONF['pollsloginrequired'])) {
     require_once $_CONF['path_system'] . 'classes/config.class.php';
-    
+
     $po_config = config::get_instance();
     $_PO_CONF = $po_config->get_config('polls');
 }
@@ -62,7 +65,7 @@ if (!isset($_PO_CONF['pollsloginrequired'])) {
 $_PO_CONF['version'] = '2.0.1';
 
 // +---------------------------------------------------------------------------+
-// | Geeklog Plugin API Implementations                                        |
+// | glFusion Plugin API Implementations                                       |
 // +---------------------------------------------------------------------------+
 
 /**
@@ -88,11 +91,11 @@ function plugin_getmenuitems_polls ()
 }
 
 /**
-* Geeklog is checking to see if this plugin supports comments, tell it yes.
+* glFusion is checking to see if this plugin supports comments, tell it yes.
 *
 * NOTE: to support comments you must used the same date/time based ID for your
 * widget.  In other words, to make primary keys for your plugin you should call
-* makesid().  Comments are keyed off of that...it is a limitation on how Geeklog
+* makesid().  Comments are keyed off of that...it is a limitation on how glFusion
 * does comments.
 *
 */
@@ -368,7 +371,7 @@ function plugin_chkVersion_polls()
 }
 
 /**
-* Geeklog informs us that we're about to be enabled or disabled
+* glFusion informs us that we're about to be enabled or disabled
 *
 * @param    boolean     $enable     true = we're being enabled, false = disabled
 * @return   void
@@ -1068,8 +1071,6 @@ function plugin_getListField_polls($fieldname, $fieldvalue, $A, $icon_arr)
 * Note: A plugin should use its name as a prefix for the names of its
 * template variables, e.g. 'polls_xxx' and 'lang_polls_xxx'.
 * 'button_polls' is an exception, as such a variable existed for header.thtml
-* in Geeklog 1.3.11 and earlier, where the Polls were an integral part
-* of Geeklog. It is added here for backward-compatibility.
 *
 */
 function plugin_templatesetvars_polls ($templatename, &$template)

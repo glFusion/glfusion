@@ -2,7 +2,7 @@
 
 /**
  * File: italian.php
- * This is the Italian language page for the Geeklog Spam-X Plug-in!
+ * This is the Italian language page for the glFusion Spam-X Plug-in!
  * 
  * Copyright (C) 2004 by the following authors:
  * Author        Tom Willett        tomw AT pigstye DOT net
@@ -46,7 +46,7 @@ $LANG_SX00 = array(
     'adminc' => 'Comandi di Amministrazione:',
     'mblack' => 'La Mia Blacklist:',
     'rlinks' => 'Collegamenti Correlati:',
-    'e3' => 'Per Aggiungere le parole presenti nella Censor List di Geeklog Premi il Bottone:',
+    'e3' => 'Per Aggiungere le parole presenti nella Censor List di glFusion Premi il Bottone:',
     'addcen' => 'Aggiungi Censor List',
     'addentry' => 'Aggiungi Elemento',
     'e1' => 'Per Eliminare un elemento fai clic su di esso.',
@@ -106,7 +106,7 @@ $LANG_SX00 = array(
     'initial_import' => 'Importazione Iniziale MT-Blacklist',
     'import_success' => '<p>Importati con successo %d elementi della blacklist.',
     'import_failure' => '<p><strong>Errore:</strong> Nessun elemento trovato.',
-    'allow_url_fopen' => '<p>Spiacente, la configurazione del tuo webserver non permette la lettura di file remoti (<code>allow_url_fopen</code> &egrave; off). Please download the blacklist from the following URL and upload it into Geeklog\'s "data" directory, <tt>%s</tt>, before trying again:',
+    'allow_url_fopen' => '<p>Spiacente, la configurazione del tuo webserver non permette la lettura di file remoti (<code>allow_url_fopen</code> &egrave; off). Please download the blacklist from the following URL and upload it into glFusion\'s "data" directory, <tt>%s</tt>, before trying again:',
     'documentation' => 'Documentazione Plugin Spam-X',
     'emailmsg' => "Un nuovo commento spam &egrave; stato inviato su \"%s\"\nUID utente:\"%s\"\n\nContenuto:\"%s\"",
     'emailsubject' => 'Spam post at %s',

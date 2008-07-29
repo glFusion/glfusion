@@ -1,41 +1,44 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | lib-security.php                                                          |
-// |                                                                           |
-// | Geeklog security library.                                                 |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// |          Mark Limburg     - mlimburg AT users DOT sourceforge DOT net     |
-// |          Vincent Furia    - vmf AT abtech DOT org                         |
-// |          Michael Jervis   - mike AT fuckingbrit DOT com                   |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | lib-security.php                                                         |
+// |                                                                          |
+// | glFusion security library.                                               |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Mark Limburg     - mlimburg AT users DOT sourceforge DOT net    |
+// |          Vincent Furia    - vmf AT abtech DOT org                        |
+// |          Michael Jervis   - mike AT fuckingbrit DOT com                  |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /**
-* This is the security library for Geeklog.  This is used to implement Geeklog's
+* This is the security library for glFusion.  This is used to implement glFusion's
 * *nix-style security system.
 *
 * Programming notes:  For items you need security on you need the following for
@@ -202,7 +205,7 @@ function SEC_groupIsRemoteUserAndHaveAccess($groupid, $groups)
 /**
 * Determines if user belongs to specified group
 *
-* This is part of the Geeklog security implementation. This function
+* This is part of the glFusion security implementation. This function
 * looks up whether a user belongs to a specified group
 *
 * @param        string      $grp_to_verify      Group we want to see if user belongs to
@@ -267,7 +270,7 @@ function SEC_isModerator()
         }
     }
 
-    // If we get this far they are not a Geeklog moderator
+    // If we get this far they are not a glFusion moderator
     // So, let's return if they're a plugin moderator
 
     return PLG_isModerator();
@@ -299,7 +302,7 @@ function SEC_hasTopicAccess($tid)
 /**
 * Checks if current user has access to the given object
 *
-* This function takes the access info from a Geeklog object
+* This function takes the access info from a glFusion object
 * and let's us know if they have access to the object
 * returns 3 for read/edit, 2 for read only and 0 for no
 * access
@@ -474,7 +477,7 @@ function SEC_getPermissionsHTML($perm_owner,$perm_group,$perm_members,$perm_anon
 /**
 * Gets everything a user has permissions to within the system
 *
-* This is part of the Geeklog security implmentation.  This function
+* This is part of the glFusion security implmentation.  This function
 * will get all the permissions the current user has call itself recursively.
 *
 * @param        int     $grp_id     DO NOT USE (Used for reccursion) Current group function is working on
@@ -1086,14 +1089,14 @@ function SEC_createToken($ttl = 1200)
     if (isset($last_token)) {
         return $last_token;
     }
-    
+
     /* Figure out the full url to the current page */
     $pageURL = COM_getCurrentURL();
-    
+
     /* Generate the token */
     $token = md5($_USER['uid'].$pageURL.uniqid (rand (), 1));
     $pageURL = addslashes($pageURL);
-    
+
     /* Destroy exired tokens: */
     if($_DB_dbms == 'mssql') {
         $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATEADD(ss, ttl, created) < NOW())"
@@ -1103,17 +1106,17 @@ function SEC_createToken($ttl = 1200)
            . " AND (ttl > 0)";
     }
     DB_Query($sql);
-    
+
     /* Destroy tokens for this user/url combination */
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='$pageURL'";
     DB_Query($sql);
-    
+
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
            . "VALUES ('$token', NOW(), {$_USER['uid']}, '$pageURL', $ttl)";
     DB_Query($sql);
-           
+
     $last_token = $token;
 
     /* And return the token to the user */
@@ -1131,25 +1134,25 @@ function SEC_createToken($ttl = 1200)
 function SEC_checkToken()
 {
     global $_USER, $_TABLES, $_DB_dbms;
-    
+
     $token = ''; // Default to no token.
     $return = false; // Default to fail.
-    
+
     if(array_key_exists(CSRF_TOKEN, $_GET)) {
         $token = COM_applyFilter($_GET[CSRF_TOKEN]);
     } else if(array_key_exists(CSRF_TOKEN, $_POST)) {
         $token = COM_applyFilter($_POST[CSRF_TOKEN]);
     }
-    
+
     if(trim($token) != '') {
         if($_DB_dbms != 'mssql') {
             $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
                . "{$_TABLES['tokens']} WHERE token='$token'";
         } else {
-            $sql = "SELECT owner_id, urlfor, expired = 
-                      CASE 
+            $sql = "SELECT owner_id, urlfor, expired =
+                      CASE
                          WHEN (DATEADD(s,ttl,created) < getUTCDate()) AND (ttl>0) THEN 1
-                
+
                          ELSE 0
                       END
                     FROM gl_tokens WHERE token='$token'";
@@ -1174,7 +1177,7 @@ function SEC_checkToken()
             } else {
                 $return = true; // Everything is AOK in only one condition...
             }
-           
+
             // It's a one time token. So eat it.
             $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='$token'";
             DB_Query($sql);
@@ -1182,7 +1185,7 @@ function SEC_checkToken()
     } else {
         $return = false; // no token.
     }
-    
+
     return $return;
 }
 

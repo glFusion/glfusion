@@ -1,40 +1,43 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Calendar Plugin 1.0                                                       |
-// +---------------------------------------------------------------------------+
-// | functions.inc                                                             |
-// |                                                                           |
-// | This file does two things: 1) it implements the necessary Geeklog Plugin  |
-// | API method and 2) implements all the common code needed by the CAlendar   |
-// | plugin' PHP files.                                                        |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net     |
-// |          Blaine Lang      - langmail AT sympatico DOT ca                  |
-// |          Dirk Haun        - dirk AT haun-online DOT de                    |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | Calendar Plugin - glFusion CMS                                           |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | This file does two things: 1) it implements the necessary glFusion Plugin|
+// | API method and 2) implements all the common code needed by the Calendar  |
+// | plugin' PHP files.                                                       |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
+// |          Blaine Lang      - langmail AT sympatico DOT ca                 |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos($_SERVER['PHP_SELF'], 'functions.inc') !== false) {
     die ('This file can not be used on its own.');
@@ -62,7 +65,7 @@ if (!isset($_CA_CONF['calendarloginrequired'])) {
 $_CA_CONF['version'] = '1.0.2';
 
 // +---------------------------------------------------------------------------+
-// | Geeklog Plugin API Implementations                                        |
+// | glFusion Plugin API Implementations                                       |
 // +---------------------------------------------------------------------------+
 
 /**
@@ -844,7 +847,7 @@ function CALENDAR_deleteEvent($eid, $type = '')
 
         DB_delete($_TABLES['events'], 'eid', $eid);
         DB_delete($_TABLES['personal_events'], 'eid', $eid);
-        COM_rdfUpToDateCheck('geeklog', 'calendar', $eid);
+        COM_rdfUpToDateCheck('glfusion', 'calendar', $eid);
 
         return COM_refresh($_CONF['site_admin_url'] . '/plugins/calendar/index.php?msg=18');
     } elseif ($type == 'submission') {
@@ -1456,7 +1459,7 @@ function plugin_upgrade_calendar()
 }
 
 /**
-* Geeklog informs us that we're about to be enabled or disabled
+* glFusion informs us that we're about to be enabled or disabled
 *
 * @param    boolean     $enabled    true = we're being enabled, false = disabled
 * @return   void
@@ -1547,7 +1550,7 @@ function plugin_geticon_calendar ()
 }
 
 /**
-* Geeklog is asking us to provide any items that show up in the type
+* glFusion is asking us to provide any items that show up in the type
 * drop-down on search.php.  Let's users search for events.
 *
 * @return   array   (plugin name/entry title) pair for the dropdown
@@ -1724,8 +1727,6 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
 * Note: A plugin should use its name as a prefix for the names of its
 * template variables, e.g. 'calendar_xxx' and 'lang_calendar_xxx'.
 * 'button_calendar' is an exception, as such a variable existed for header.thtml
-* in Geeklog 1.4.0 and earlier, where the Calendar was an integral part
-* of Geeklog. It is added here for backward-compatibility.
 *
 */
 function plugin_templatesetvars_calendar ($templatename, &$template)

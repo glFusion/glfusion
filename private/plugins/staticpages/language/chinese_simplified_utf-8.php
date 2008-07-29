@@ -3,7 +3,7 @@
 ###############################################################################
 # chinese_simplified_utf-8.php
 # This is the Chinese Simplified Unicode (utf-8) language set
-# for the Geeklog Static Page Plug-in!
+# for the glFusion Static Page Plug-in!
 #
 # Last updated January 10, 2006
 #

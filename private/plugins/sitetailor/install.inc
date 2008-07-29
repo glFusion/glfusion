@@ -1,30 +1,33 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Site Tailor Plugin                                                        |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                              |
-// |                                                                           |
-// | Author: Mark R. Evans - mark@gllabs.org                                   |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Site Tailor Plugin - glFusion CMS                                        |
+// +--------------------------------------------------------------------------+
+// | install.inc                                                              |
+// |                                                                          |
+// | Install / Uninstall routines                                             |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
 if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
@@ -36,8 +39,8 @@ require_once($_CONF['path'] . '/plugins/sitetailor/config.php');
 
 $pi_name    = 'sitetailor';             // Plugin name  Must be 15 chars or less
 $pi_version = '1.0.0';     // Plugin Version
-$gl_version = '1.5.0';                  // GL Version plugin for
-$pi_url     = 'http://www.gllabs.org';  // Plugin Homepage
+$gl_version = '1.0.0';                  // GL Version plugin for
+$pi_url     = 'http://www.glfusion.org';  // Plugin Homepage
 
 // Default data
 
@@ -49,7 +52,7 @@ $NEWFEATURE = array();
 $NEWFEATURE['sitetailor.admin'] =   "Site Tailor Plugin Admin Rights";
 
 /*
- * If we are being called by Geeklog's install routine, there is no
+ * If we are being called by glFusion's install routine, there is no
  * COM_errorLog() function available.
  */
 
@@ -193,14 +196,14 @@ function glfusion_install_sitetailor($_DB_table_prefix)
 
     // OK, now give Root users access to this plugin now! NOTE: Root group should always be 1
 
-    // Register the plugin with Geeklog
-    COM_errorLog("Registering $pi_name plugin with Geeklog", 1);
+    // Register the plugin with glFusion
+    COM_errorLog("Registering $pi_name plugin with glFusion", 1);
     DB_delete($_TABLES['plugins'],'pi_name','sitetailor');
     DB_query("INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_homepage, pi_enabled) "
         . "VALUES ('$pi_name', '$pi_version', '$gl_version', '$pi_url', 1)");
 
     if (DB_error()) {
-        COM_errorLog("Failure registering plugin with Geeklog");
+        COM_errorLog("Failure registering plugin with glFusion");
         $uninstall_plugin();
         return false;
         exit;
@@ -211,7 +214,7 @@ function glfusion_install_sitetailor($_DB_table_prefix)
 }
 
 /**
-* Removes the data structures for this plugin from the Geeklog database.
+* Removes the data structures for this plugin from the glFusion database.
 * This routine will get called from the Plugin install program if user select De-Install or if Delete is used in the Plugin Editor.
 * The Plugin Installer will also call this routine upon and install error to remove anything it has created.
 * The Plugin installer will pass the optional parameter which will then double check that plugin has first been disabled.
@@ -244,8 +247,8 @@ function glfusion_uninstall_sitetailor($installCheck='') {
 
     // Ok to proceed and delete plugin
 
-    // Unregister the plugin with Geeklog
-    COM_errorLog('Attempting to unregister the ' . $pi_name . ' Plugin from Geeklog',1);
+    // Unregister the plugin with glFusion
+    COM_errorLog('Attempting to unregister the ' . $pi_name . ' Plugin from glFusion',1);
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = '" . $pi_name . "'",1);
 
     // Drop Menu Editor tables

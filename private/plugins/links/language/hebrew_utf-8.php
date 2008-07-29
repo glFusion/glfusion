@@ -3,7 +3,7 @@
 ###############################################################################
 # hebrew_utf-8.php
 #
-# This is the Hebrew language file for the Geeklog Links Plugin
+# This is the Hebrew language file for the glFusion Links Plugin
 #
 # Copyright (C) 2008
 # http://lior.weissbrod.com
@@ -27,7 +27,7 @@
 # $Id: english.php,v 1.31 2008/04/13 11:59:08 dhaun Exp $
 
 /**
- * This is the english language page for the Geeklog links Plug-in!
+ * This is the english language page for the glFusion links Plug-in!
  *
  * @package Links
  * @subpackage Language

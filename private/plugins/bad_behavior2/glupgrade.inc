@@ -1,31 +1,36 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Bad Behavior2 glFusion Upgrade                                            |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | This file has the functions necessary to upgrade Bad Behavior2            |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2005-2008 by the following authors:                         |
-// |                                                                           |
-// | Mark R. Evans              - mark@gllabs.org                              |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Bad Behavior Plugin - glFusion CMS                                       |
+// +--------------------------------------------------------------------------+
+// | glupgrade.inc                                                            |
+// |                                                                          |
+// | This file has the functions necessary to upgrade Bad Behavior2           |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Bad Behavior - detects and blocks unwanted Web accesses                  |
+// | Copyright (C) 2005-2007 Michael Hampton                                  |
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
 {
@@ -53,3 +58,4 @@ function plugin_upgrade_bad_behavior2 ()
 
     return true;
 }
+?>

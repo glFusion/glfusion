@@ -2,7 +2,7 @@
 
 ###############################################################################
 # czech.php
-# This is the cz language page for the Geeklog Static Page Plug-in!
+# This is the cz language page for the glFusion Static Page Plug-in!
 #
 # Copyright (C) 2002 hermes_trismegistos
 # hermes_trismegistos@hermetik.net

@@ -1,58 +1,34 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Theme Functions                                               |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2007 by the following authors:                              |
-// |                                                                           |
-// | Author:                                                                   |
-// | Mark R. Evans              - mevans@ecsnet.com                            |
-// +---------------------------------------------------------------------------+
-// | LICENSE                                                                   |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-// | DOCUMENTATION                                                             |
-// |                                                                           |
-// | This custom functions.php will allow you to build Geeklog content in any  |
-// | order.  By default, the functions.php is designed to build centercontent  |
-// | first, then left, then right.                                             |
-// |                                                                           |
-// | USAGE                                                                     |
-// |                                                                           |
-// | You MUST rename the nouveau_siteHeader() and nouveau_siteFooter()     |
-// | functions for your theme, by using your themename_siteHeader()/_siteFooter|
-// |                                                                           |
-// | This file also requires a new template file, htmlheader.thtml which is    |
-// | included in the sample theme.  This new template sends just the HTML      |
-// | header to the browser, it does not send the site content.                 |
-// |                                                                           |
-// | This functions sets a new template variable for the header.thtml called   |
-// | {centercolumn}, this holds the proper class name depending on what content|
-// | is going to be displayed.  For example, with left, center, right content  |
-// | {centercolumn} is set to content.                                         |
-// |                                                                           |
-// | What's Displayed               CSS Class                                  |
-// | -------------------            ---------------------                      |
-// | left, center, right            content                                    |
-// | left, center                   content-wide-left                          |
-// | center, right                  content-wide-right                         |
-// | center                         content-full                               |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | functions.php                                                            |
+// |                                                                          |
+// | Theme specific functions                                                 |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
 if (strpos ($_SERVER['PHP_SELF'], 'functions.php') !== false) {

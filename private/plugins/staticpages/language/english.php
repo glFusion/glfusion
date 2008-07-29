@@ -2,7 +2,7 @@
 
 ###############################################################################
 # english.php
-# This is the english language file for the Geeklog Static Page plugin
+# This is the english language file for the glFusion Static Page plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

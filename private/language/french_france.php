@@ -2,7 +2,7 @@
 
 ###############################################################################
 # french.php
-# This is the french language page for GeekLog!
+# This is the french language page for glFusion!
 #
 # Copyright (C) 2002 Florent Guiliani
 # flyer@perinfo.com
@@ -661,7 +661,7 @@ $LANG21 = array(
     27 => 'Cadre PHP',
     28 => 'Option du cadre PHP',
     29 => 'Cadre fonction',
-    30 => 'Si vous voulez que l\'un de vos cadres utilise du PHP, saisissez le nom de la fonction à utiliser.  Le nom de la fonction doit commencer par "phpblock_" (ex: phpblock_getweather).  Si ce n\'est pas le cas, votre fonction NE SERA PAS appellée.  Nous faisons ça pour des raisons de sécurité.  Ne mettez pas de parenthèses vides "()" après le nom de votre fonction.  Enfin, nous vous recommandons de mettre tout le code des cadre PHP dans /path/to/glfusion/system/lib-custom.php.  Cela permettera de garder votre code même après une mise à jour de geeklog.',
+    30 => 'Si vous voulez que l\'un de vos cadres utilise du PHP, saisissez le nom de la fonction à utiliser.  Le nom de la fonction doit commencer par "phpblock_" (ex: phpblock_getweather).  Si ce n\'est pas le cas, votre fonction NE SERA PAS appellée.  Nous faisons ça pour des raisons de sécurité.  Ne mettez pas de parenthèses vides "()" après le nom de votre fonction.  Enfin, nous vous recommandons de mettre tout le code des cadre PHP dans /path/to/glfusion/system/lib-custom.php.  Cela permettera de garder votre code même après une mise à jour de glFusion.',
     31 => 'Erreur dans le cadre PHP.  La fonction, %s, n\'existe pas.',
     32 => 'Erreur: champs manquant',
     33 => 'Vous devez mettre l\'URL dans le fichier .rdf pour le cadre portail.',
@@ -673,7 +673,7 @@ $LANG21 = array(
     39 => 'Côté',
     40 => 'Gauche',
     41 => 'Droit',
-    42 => 'Vous devez saisir l\'ordre et le niveau de sécurité pour les cadres par défaut de geeklog',
+    42 => 'Vous devez saisir l\'ordre et le niveau de sécurité pour les cadres par défaut de glFusion',
     43 => 'Accueil seulement',
     44 => '',
     45 => "Vous essayez d'accéder à un cadre auquel vous n'avez pas le droit.  Cette tentative est enregistrée. Veuillez <a href=\"{$_CONF['site_admin_url']}/block.php\">retourner à la page de controle des cadres</a>.",
@@ -859,7 +859,7 @@ $LANG28 = array(
     22 => 'Erreur',
     23 => 'Ajout par lot',
     24 => 'Importation par lot d\'utilisateurs',
-    25 => 'vous pouvez importer un lot d\'utilisateur dans geeklog.  Les champ du fichier d\'import doivent être séparés par une tabulation. Ils doivent apparaître dans l\'ordre suivant: Nom complet, nom de connexion, adresse email.  Chaque utilisateur importé sera averti par email et aura un mot de passe auto-généré.  Il ne doit y avoir qu\'un seul utilisateur par ligne.  Ne pas respecter ces consignes peut entraîner des dégat qui ne seront réparables que manuellement alors redoublez de vigilance!',
+    25 => 'vous pouvez importer un lot d\'utilisateur dans glFusion.  Les champ du fichier d\'import doivent être séparés par une tabulation. Ils doivent apparaître dans l\'ordre suivant: Nom complet, nom de connexion, adresse email.  Chaque utilisateur importé sera averti par email et aura un mot de passe auto-généré.  Il ne doit y avoir qu\'un seul utilisateur par ligne.  Ne pas respecter ces consignes peut entraîner des dégat qui ne seront réparables que manuellement alors redoublez de vigilance!',
     26 => '',
     27 => '',
     28 => 'Coche la case pour supprimer la photo',
@@ -984,7 +984,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Installer des plugin peut causer des domages à geeklog.  Il est important de n\'installer que des plugins provenant de <a href="http://www.gllabs.org" target="_blank">glFusion</a> car nous les testons et les approuvons pour plusieurs systèmes.  Installer des plugins requiert l\'exécution de plusieurs commandes systèmes qui peuvent poser des problèmes de sécurité particulièrement si vous utilisez des plugin provenant de tierse partie.  Vous êtes averti des domages que peut causer l\'installation d\'un plugin.  En d\'autres termes, vous installez des plugin à vos propres risques.  Les instructions d\'installation des plugins sont incluses dans chaque plugin.',
+    1 => 'Installer des plugin peut causer des domages à glFusion.  Il est important de n\'installer que des plugins provenant de <a href="http://www.gllabs.org" target="_blank">glFusion</a> car nous les testons et les approuvons pour plusieurs systèmes.  Installer des plugins requiert l\'exécution de plusieurs commandes systèmes qui peuvent poser des problèmes de sécurité particulièrement si vous utilisez des plugin provenant de tierse partie.  Vous êtes averti des domages que peut causer l\'installation d\'un plugin.  En d\'autres termes, vous installez des plugin à vos propres risques.  Les instructions d\'installation des plugins sont incluses dans chaque plugin.',
     2 => 'Instructions d\'installation d\'un plugin',
     3 => 'Formulaire d\'installation d\'un plugin',
     4 => 'Fichier de plugin',
@@ -992,7 +992,7 @@ $LANG32 = array(
     6 => 'Attention: plugin déjà installé!',
     7 => 'Le plugin que vous essayer d\'installer existe déjà.  Veuillez supprimer le plugin avant de le réinstaller.',
     8 => 'Test de compatibilité du plugin échoué',
-    9 => 'Ce plugin requiert une version plus récente de geeklog. Vous pouvez mettre à jour votre <a href="http://www.gllabs.org">glFusion</a> ou obtenir une autre version du plugin.',
+    9 => 'Ce plugin requiert une version plus récente de glFusion. Vous pouvez mettre à jour votre <a href="http://www.gllabs.org">glFusion</a> ou obtenir une autre version du plugin.',
     10 => '<br' . XHTML . '><b>Aucun plugin n\'est actuellement installé.</b><br' . XHTML . '><br' . XHTML . '>',
     11 => 'Cliquez sur le numéro du plugin pour le modifier ou le supprimer. Pour en savoir d\'avantage sur les plugins, cliquez sur le nom du plugin et vous serez dirigé vers le site web du plugin. Pour installer ou mettre à jour un plugin veuillez vous référer à la documentation du plugin.',
     12 => 'Aucun nom de plugin n\'a été passé à plugineditor()',
@@ -1423,7 +1423,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1479,7 +1479,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

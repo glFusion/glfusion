@@ -2,7 +2,7 @@
 
 ###############################################################################
 # russian_utf-8.php
-# This is the russian language file for the Geeklog Polls plugin
+# This is the russian language file for the glFusion Polls plugin
 #
 # Copyright (C) 2006 Volodymyr V. Prokurashko
 # vvprok@ukr.net

@@ -1,37 +1,47 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Forum glFusion Upgrade Routine                                            |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | This file has the functions necessary to upgrade MG to the latest release |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2005-2008 by the following authors:                         |
-// |                                                                           |
-// | Mark R. Evans              - mark@gllabs.org                              |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Forum Plugin for glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | This file has the functions necessary to upgrade the Forum plugin        |
+// | to the latest release                                                    |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Forum Plugin for Geeklog CMS                                |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
+// |                              www.portalparts.com                         |
+// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
+// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
 {
     die ('This file can not be used on its own.');
 }
-
 
 $_TABLES['gf_userprefs']    = $_DB_table_prefix . 'forum_userprefs';
 $_TABLES['gf_topic']        = $_DB_table_prefix . 'forum_topic';
@@ -47,7 +57,7 @@ $_TABLES['gf_attachments']  = $_DB_table_prefix . 'forum_attachments';
 $_TABLES['gf_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
 
 /*
- * If we are being called Geeklog's upgrade routine, there is no
+ * If we are being called glFusion's upgrade routine, there is no
  * COM_errorLog() function available.
  */
 
@@ -78,9 +88,14 @@ function plugin_upgrade_forum() {
             }
         case "2.6" :
         case "2.7" :
+        case "2.7.1" :
             if (upgrade_30() == 0 ) {
                 DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '3.0', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
             }
+            break;
+        case "3.0.0" :
+        case "3.0" :
+            // no upgrade items yet...
             break;
 
     }

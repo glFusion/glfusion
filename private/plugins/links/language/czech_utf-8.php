@@ -2,7 +2,7 @@
 
 ###############################################################################
 # czech.php
-# This is the czech (ISO 8859-2) language file for the Geeklog Links Plugin
+# This is the czech (ISO 8859-2) language file for the glFusion Links Plugin
 #
 # Copyright (C) 2007 Ondrej Rusek
 # rusek@gybon.cz

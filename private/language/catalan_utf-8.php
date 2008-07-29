@@ -1,7 +1,7 @@
 <?php
 
 ###############################################################################
-# This is the Spanish language page for GeekLog!
+# This is the Catalan language page for glFusion!
 #
 # Copyright (C) 2000 Jason Whittenburg
 # jwhitten@securitygeeks.com
@@ -1422,7 +1422,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1478,7 +1478,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

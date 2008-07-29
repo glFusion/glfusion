@@ -1,35 +1,38 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.4                                                               |
-// +---------------------------------------------------------------------------+
-// | plugin.class.php                                                          |
-// |                                                                           |
-// | Geeklog plugin class.                                                     |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2006 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs, tony AT tonybibbs DOT com                            |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | plugin.class.php                                                         |
+// |                                                                          |
+// | glFusion plugin class.                                                   |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs, tony AT tonybibbs DOT com                           |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /**
 * This is a poorly thought out class that is used pretty much as a structure
@@ -53,7 +56,7 @@ class Plugin {
     var $num_searchresults = 0;
     var $searchheading = array();
     var $searchresults = array();
-    var $num_itemssearched = 0; 
+    var $num_itemssearched = 0;
     var $num_searchheadings = 0;
     /**
     * @access private
@@ -67,7 +70,7 @@ class Plugin {
     var $submissionhelpfile = '';
     var $getsubmissionssql = '';
     var $submissionheading = array();
-    
+
 
     // PUBLIC METHODS
 
@@ -98,21 +101,21 @@ class Plugin {
         $this->num_searchresults = 0;
         $this->searchresults = array();
         $this->num_itemssearched = 0;
-        $this->num_searchheadings = 0; 
+        $this->num_searchheadings = 0;
         $this->submissionlabel = '';
         $this->submissionhelpfile = '';
         $this->getsubmissionssql = '';
         $this->submissionheading = array();
         $this->supports_paging = false;
     }
-   
+
     /**
     * Adds a header that will be used in outputing search results for this
     * plugin
     *
     * @param    string      $heading    Heading label
     *
-    */ 
+    */
     function addSearchHeading($heading)
     {
         $this->num_searchheadings = $this->num_searchheadings + 1;
@@ -128,7 +131,7 @@ class Plugin {
     function addSearchResult($result_string)
     {
         $this->searchresults[] = $result_string;
-    }     
+    }
 
     /**
     * Hrm, can't remember what this does exactly
@@ -141,7 +144,7 @@ class Plugin {
         $this->submissionheading[$this->num_submissions] = $heading;
         $this->num_submissions = $this->num_submissions + 1;
     }
-    
+
     /**
     * Sets whether or not the plugin supports expanded search
     * results
@@ -156,10 +159,10 @@ class Plugin {
         if (!is_bool($switch)) {
             $switch = false;
         }
-        
+
         $this->_expandedSearchSupport = $switch;
     }
-    
+
     /**
     * Returns if plugin supports expanded searches
     *

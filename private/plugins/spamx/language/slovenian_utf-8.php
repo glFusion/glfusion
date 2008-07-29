@@ -2,8 +2,8 @@
 
 /**
  * File: # slovenian.php - version 1.4.1
- * This is the slovenian language file for the Geeklog Spam-X plugin
- * language file for geeklog version 1.4.1 beta by mb
+ * This is the slovenian language file for the glFusion Spam-X plugin
+ * language file for glFusion version 1.4.1 beta by mb
  * gape@gape.org ; za pripombe, predloge ipd ... piši na email
 
  * 
@@ -47,7 +47,7 @@ $LANG_SX00 = array(
     'adminc' => 'Upravniški ukazi:',
     'mblack' => 'Moja črna lista:',
     'rlinks' => 'Sorodne povezave:',
-    'e3' => ' Za dodajanje besed iz Geeklogovega cenzurnega seznama pritisni gumb:',
+    'e3' => ' Za dodajanje besed iz glFusionovega cenzurnega seznama pritisni gumb:',
     'addcen' => 'Dodaj cenzurni seznam',
     'addentry' => 'Dodaj vpis',
     'e1' => 'Da izbrišeš vpis, ga klikni.',
@@ -107,7 +107,7 @@ $LANG_SX00 = array(
     'initial_import' => 'Initial MT-Blacklist Import',
     'import_success' => '<p>Successfully imported %d blacklist entries.',
     'import_failure' => '<p><strong>Error:</strong> No entries found.',
-    'allow_url_fopen' => '<p>Sorry, your webserver configuration does not allow reading of remote files (<code>allow_url_fopen</code> is off). Please download the blacklist from the following URL and upload it into Geeklog\'s "data" directory, <tt>%s</tt>, before trying again:',
+    'allow_url_fopen' => '<p>Sorry, your webserver configuration does not allow reading of remote files (<code>allow_url_fopen</code> is off). Please download the blacklist from the following URL and upload it into glFusion\'s "data" directory, <tt>%s</tt>, before trying again:',
     'documentation' => 'Spam-X Plugin Documentation',
     'emailmsg' => "A new spam post has been submitted at \"%s\"\nUser UID: \"%s\"\n\nContent:\"%s\"",
     'emailsubject' => 'Spam post at %s',

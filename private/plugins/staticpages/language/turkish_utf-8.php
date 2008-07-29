@@ -2,7 +2,7 @@
 
 ###############################################################################
 # turkish.php
-# This is the turkish language page for the Geeklog Static Page Plug-in!
+# This is the turkish language page for the glFusion Static Page Plug-in!
 #
 # Copyright (C) 2003 ScriptEvi.com
 # webmaster@scriptevi.com

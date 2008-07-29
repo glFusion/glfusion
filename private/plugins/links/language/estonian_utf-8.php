@@ -2,7 +2,7 @@
 
 ###############################################################################
 # estonian_utf-8.php
-# This is the estonian language page for the Geeklog links Plug-in
+# This is the estonian language page for the glFusion links Plug-in
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com
@@ -29,7 +29,7 @@
 # $Id$
 
 /** 
- * This is the estonian language page for the Geeklog links Plug-in! 
+ * This is the estonian language page for the glFusion links Plug-in! 
  * 
  * @package Links
  * @subpackage Language

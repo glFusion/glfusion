@@ -1,31 +1,33 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | CAPTCHA v3 Plugin                                                         |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | Geeklog integration functions.                                            |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2007 by the following authors:                              |
-// |                                                                           |
-// | Author: Mark R. Evans - mevans@ecsnet.com                                 |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | CAPTCHA Plugin - glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | glFusion integration functions.                                          |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
 if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
@@ -418,7 +420,7 @@ function plugin_getadminoption_captcha() {
 }
 
 /**
-* Removes the data structures for this plugin from the Geeklog database.
+* Removes the data structures for this plugin from the glFusion database.
 * This routine will get called from the Plugin install program if user select De-Install or if Delete is used in the Plugin Editor.
 * The Plugin Installer will also call this routine upon and install error to remove anything it has created.
 * The Plugin installer will pass the optional parameter which will then double check that plugin has first been disabled.
@@ -453,8 +455,8 @@ function plugin_uninstall_captcha($installCheck='') {
 
     // Ok to proceed and delete plugin
 
-    // Unregister the plugin with Geeklog
-    COM_errorLog('Attempting to unregister the CAPTCHA Plugin from Geeklog',1);
+    // Unregister the plugin with glFusion
+    COM_errorLog('Attempting to unregister the CAPTCHA Plugin from glFusion',1);
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'captcha'",1);
 
     COM_errorLog('...success',1);

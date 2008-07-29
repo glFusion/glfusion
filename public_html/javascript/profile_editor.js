@@ -1,21 +1,47 @@
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2003,2004,2005,2006 by the following authors:               |
-// | Version 1.0    Date: Jun 24, 2006                                         |
-// | Authors:   Blaine Lang - blaine@portalparts.com                           |
-// |                                                                           |
-// | Javascript functions for Account Profile Editor                           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | profile_editor.js                                                        |
+// |                                                                          |
+// | Javascript functions for Account Profile Editor                          |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors:   Blaine Lang - blaine@portalparts.com                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 // @param  string   selected    Name of div that has been selected
 // @param  int      selindex    index id of the selected tab as in 1 - 7 used to set the selected tab
 function showhideProfileEditorDiv(selected, selindex) {
-    
+
     // Reset the current selected navbar tab
     var cnavbar = document.getElementById('current');
     if (cnavbar) cnavbar.id = '';
 
-    // Cycle thru the navlist child elements - buiding an array of just the link items 
+    // Cycle thru the navlist child elements - buiding an array of just the link items
     var navbar = document.getElementById('navlist');
     var menuitems = new Array(7);
     var item = 0;
@@ -31,10 +57,10 @@ function showhideProfileEditorDiv(selected, selindex) {
     for (var j=0 ;j < menuitem.childNodes.length ; j++ ) {
         if (menuitem.childNodes[j].nodeName.toLowerCase() == 'a')  menuitem.childNodes[j].id = 'current';
     }
-    
+
     // Reset or show all the main divs - editor tab sections
     // Object profilepanels defined in profile.thtml after page is generated
-    for( var divid in profilepanels){  
+    for( var divid in profilepanels){
         if (selected != divid) {
             document.getElementById(divid).style.display = 'none';
         } else {
@@ -52,6 +78,6 @@ function showhideProfileEditorDiv(selected, selindex) {
     } else {
         document.getElementById('pe_preview').style.display = '';
         document.getElementById('save_button').style.display = 'none';
-    }     
-    
+    }
+
 }

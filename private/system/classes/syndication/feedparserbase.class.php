@@ -1,4 +1,20 @@
 <?php
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | feedParserBase.class.php                                                 |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Michael Jervis     - mike AT fuckingbrit DOT com                |
+// +--------------------------------------------------------------------------+
   /****************************************************************************/
   /* FeedParserBase.class.php                                                 */
   /*                                                                          */
@@ -240,7 +256,7 @@
       $xml .= $this->_injectExtendingTags();
       return $xml;
     }
-    
+
     /**
       * Inject extending tags into the feed header, if needed.
       */

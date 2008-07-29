@@ -1,31 +1,41 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Forum Plugin                                                              |
-// | glFusion auto install / uninstall routines                                |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                              |
-// |                                                                           |
-// | Author: Mark R. Evans - mark@gllabs.org                                   |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Forum Plugin for glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | install.inc                                                              |
+// |                                                                          |
+// | glFusion's auto install / uninstall routines                             |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Forum Plugin for Geeklog CMS                                |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
+// |                              www.portalparts.com                         |
+// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
+// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
 if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
@@ -37,10 +47,10 @@ function plugin_install_forum($_DB_table_prefix )
 {
     global $_TABLES, $_CONF;
 
-    $pi_name = 'forum';                          // Plugin name
-    $pi_version = '3.0';        // Plugin Version
-    $gl_version = '1.5';                         // GL Version plugin for
-    $pi_url = 'http://www.portalparts.com/';     // Plugin Homepage
+    $pi_name = 'forum';                     // Plugin name
+    $pi_version = '3.0.0';                  // Plugin Version
+    $gl_version = '1.0.0';                  // GL Version plugin for
+    $pi_url = 'http://www.glfusion.org/';   // Plugin Homepage
 
     // Adding the Forum Plugin tables to $_TABLES array
     $_TABLES['gf_userprefs']    = $_DB_table_prefix . 'forum_userprefs';
@@ -156,7 +166,7 @@ function plugin_install_forum($_DB_table_prefix )
         exit;
     }
 
-    // Register the plugin with Geeklog
+    // Register the plugin with glFusion
     DB_delete($_TABLES['plugins'],'pi_name',$pi_name);
     DB_query("INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_homepage, pi_enabled) "
         . "VALUES ('$pi_name', '$pi_version', '$gl_version', '$pi_url', 1)");
@@ -171,7 +181,7 @@ function plugin_install_forum($_DB_table_prefix )
 }
 
 /**
-* Removes the datastructures for this plugin from the Geeklog database
+* Removes the datastructures for this plugin from the glFusion database
 * This may get called by the install routine to undue anything created during the install.
 * Added check to see that plugin is first disabled.
 */
@@ -183,7 +193,7 @@ exit;
     $FEATURES = array ('forum.edit', 'forum.user');
     $TABLES = array ('gf_topic','gf_categories','gf_forums','gf_settings','gf_watch','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo'.'gf_attachments','gf_bookmarks');
 
-    // Ok to proceed and delete plugin - Unregister the plugin with Geeklog
+    // Ok to proceed and delete plugin - Unregister the plugin with glFusion
      DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'forum'",1);
     // Drop tables
     foreach($TABLES as $table) {

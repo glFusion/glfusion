@@ -2,7 +2,7 @@
 
 ###############################################################################
 # spanish_utf-8.php
-# This is the spanish language file for the Geeklog Links Plugin
+# This is the spanish language file for the glFusion Links Plugin
 #
 # Copyright (C) 2007 JoséR. Valverde
 # jrvalverde AT cnb DOT uam DOT es

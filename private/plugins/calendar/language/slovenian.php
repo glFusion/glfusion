@@ -1,9 +1,9 @@
 <?php
 
 ###############################################################################
-# slovenian.php - version 1.4.1
-# This is the slovenian language page for the Geeklog Calendar Plug-in!
-# language file for geeklog version 1.4.1 beta by mb
+# slovenian.php - version 1.0.0
+# This is the slovenian language page for the glFusion Calendar Plug-in!
+# language file for glFusion version 1.0.0 by mb
 # gape@gape.org ; za pripombe, predloge ipd ... piši na email
 #
 # Copyright (C) 2001 Tony Bibbs

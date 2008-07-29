@@ -2,7 +2,7 @@
 
 ###############################################################################
 # french_canada.php
-# This is a french language version for GeekLog!
+# This is a french language version for glFusion!
 #
 #
 # Copyright (C) 2003 Jean-Francois Allard
@@ -665,7 +665,7 @@ $LANG21 = array(
     27 => 'Cadre PHP',
     28 => 'Option du cadre PHP',
     29 => 'Cadre fonction',
-    30 => 'Si vous voulez que l\'un de vos cadres utilise du PHP, saisissez le nom de la fonction &agrave; utiliser.  Le nom de la fonction doit commencer par \'phpblock_\' (ex: phpblock_getweather).  Si ce n\'est pas le cas, votre fonction NE SERA PAS appell&eacute;e, ceci pour des raisons de s&eacute;curit&eacute;.  Ne mettez pas de parenth&egrave;ses vides \'()\' apr&egrave;s le nom de votre fonction.  Enfin, nous vous recommandons de mettre tout le code des cadre PHP dans /path/to/glfusion/system/lib-custom.php.  Cela permettera de garder votre code même apr&egrave;s une mise &agrave; jour de geeklog.',
+    30 => 'Si vous voulez que l\'un de vos cadres utilise du PHP, saisissez le nom de la fonction &agrave; utiliser.  Le nom de la fonction doit commencer par \'phpblock_\' (ex: phpblock_getweather).  Si ce n\'est pas le cas, votre fonction NE SERA PAS appell&eacute;e, ceci pour des raisons de s&eacute;curit&eacute;.  Ne mettez pas de parenth&egrave;ses vides \'()\' apr&egrave;s le nom de votre fonction.  Enfin, nous vous recommandons de mettre tout le code des cadre PHP dans /path/to/glfusion/system/lib-custom.php.  Cela permettera de garder votre code même apr&egrave;s une mise &agrave; jour de glFusion.',
     31 => 'Erreur dans le cadre PHP.  La fonction, %s, n\'existe pas.',
     32 => 'Erreur: champs manquant',
     33 => 'Vous devez mettre l\'URL dans le fichier .rdf pour le cadre portail.',
@@ -677,7 +677,7 @@ $LANG21 = array(
     39 => 'C&ocirc;t&eacute;',
     40 => 'Gauche',
     41 => 'Droit',
-    42 => 'Vous devez saisir l\'ordre et le niveau de s&eacute;curit&eacute; pour les cadres par d&eacute;faut de geeklog',
+    42 => 'Vous devez saisir l\'ordre et le niveau de s&eacute;curit&eacute; pour les cadres par d&eacute;faut de glFusion',
     43 => 'Accueil seulement',
     44 => '',
     45 => "Vous essayez d'acc&eacute;der &agrave; un cadre auquel vous n'avez pas droit.  Cette tentative est enregistr&eacute;e. Veuillez <a href=\'{$_CONF['site_admin_url']}/block.php\'>retourner &agrave; la page de controle des cadres</a>.",
@@ -1427,7 +1427,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1483,7 +1483,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 

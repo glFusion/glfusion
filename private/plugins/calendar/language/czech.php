@@ -2,7 +2,7 @@
 
 ###############################################################################
 # czech.php
-# This is the czech language (ISO 8859-2) page for the Geeklog Calendar Plug-in!
+# This is the czech language (ISO 8859-2) page for the glFusion Calendar Plug-in!
 #
 # Copyright (C) 2007 Ondrej Rusek
 # rusek@gybon.cz

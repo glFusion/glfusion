@@ -1,30 +1,33 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Site Tailor Plugin                                                        |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                              |
-// |                                                                           |
-// | Mark R. Evans              - mark@gllabs.org                              |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Site Tailor Plugin - glFusion CMS                                        |
+// +--------------------------------------------------------------------------+
+// | glupgrade.inc                                                            |
+// |                                                                          |
+// | Upgrade routines                                                         |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
 {
@@ -34,7 +37,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
 require_once $_CONF['path'] . '/plugins/sitetailor/config.php';
 
 /*
- * If we are being called Geeklog's upgrade routine, there is no
+ * If we are being called glFusion's upgrade routine, there is no
  * COM_errorLog() function available.
  */
 

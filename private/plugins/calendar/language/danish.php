@@ -2,7 +2,7 @@
 
 ###############################################################################
 # danish.php
-# This is the Danish language page for the Geeklog Calendar Plug-in!
+# This is the Danish language page for the glFusion Calendar Plug-in!
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

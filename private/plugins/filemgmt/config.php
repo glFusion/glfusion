@@ -1,40 +1,54 @@
 <?php
-// +-------------------------------------------------------------------------+
-// | File Management Plugin for Geeklog - by portalparts www.portalparts.com |
-// +-------------------------------------------------------------------------+
-// | Filemgmt plugin - version 1.5                                           |
-// | Date: Mar 18, 2006                                                      |
-// +-------------------------------------------------------------------------+
-// | Copyright (C) 2004 by Consult4Hire Inc.                                 |
-// | Author:                                                                 |
-// | Blaine Lang                 -    blaine@portalparts.com                 |
-// +-------------------------------------------------------------------------+
-// | This program is free software; you can redistribute it and/or           |
-// | modify it under the terms of the GNU General Public License             |
-// | as published by the Free Software Foundation; either version 2          |
-// | of the License, or (at your option) any later version.                  |
-// |                                                                         |
-// | This program is distributed in the hope that it will be useful,         |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of          |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                    |
-// | See the GNU General Public License for more details.                    |
-// |                                                                         |
-// | You should have received a copy of the GNU General Public License       |
-// | along with this program; if not, write to the Free Software Foundation, |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.         |
-// |                                                                         |
-// +-------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | FileMgmt Plugin - glFusion CMS                                           |
+// +--------------------------------------------------------------------------+
+// | config.php                                                               |
+// |                                                                          |
+// | FileMgmt configuration options                                           |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the FileMgmt Plugin for Geeklog                                 |
+// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
+// | Author:                                                                  |
+// | Blaine Lang            blaine@portalparts.com                            |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
-/* Include the Filemgmt Plugin configuration which defines Directories and URL's and options
-This file is set via the Filemgmt Plugin Admin menu - Configuration settings.
-The script reads and write to this file - thus needs to be a separate file.
+if (strpos ($_SERVER['PHP_SELF'], 'config.php') !== false)
+{
+    die ('This file can not be used on its own.');
+}
+
+/*
+ * Include the Filemgmt Plugin configuration which defines Directories and
+ * URL's and options. This file is set via the Filemgmt Plugin Admin menu -
+ * Configuration settings. The script reads and write to this file -
+ * thus needs to be a separate file.
 */
 
 @include ("filemgmt.php");
 
 $CONF_FM['version'] = '1.6';
-
 
 $_FM_TABLES['filemgmt_cat']             = $_DB_table_prefix . 'filemgmt_category';
 $_FM_TABLES['filemgmt_filedetail']      = $_DB_table_prefix . 'filemgmt_filedetail';
@@ -66,10 +80,6 @@ $_FMDOWNLOAD  = array(
     'sh'    => 'txt',
     'exe'   => 'reject'
 );
-
-// glmenu only use - for glmenu generated menus
-
-$CONF_FILEMGMT['glmenutype'] = 'block';      // Set to block or header
 
 $_FMDOWNLOAD['inconlib']    = array(
         'php' => "php.gif",

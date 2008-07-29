@@ -1,17 +1,17 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Site Tailor Plugin                                                       |
+// | Site Tailor Plugin - glFusion CMS                                        |
 // +--------------------------------------------------------------------------+
-// | $Id$|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | english.php                                                              |
 // |                                                                          |
-// | Mark R. Evans              - mark at gllabs.org                          |
+// | English language file                                                    |
 // +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
-// | If you translate this file, please consider uploading a copy at          |
-// |    http://www.gllabs.org so others can benefit from your                 |
-// |    translation.  Thank you!                                              |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
 // | modify it under the terms of the GNU General Public License              |
@@ -67,7 +67,7 @@ $LANG_ST00 = array (
     'success_upgrade'   => 'Site Tailor Successfully Upgraded',
     'overview'          => 'Site Tailor is a required Site Tailor CMS plugin that provides site customization options.',
     'preinstall_check'  => 'Site Tailor has the following requirements:',
-    'geeklog_check'     => 'glFusion v1.0.0 or greater, version reported is <b>%s</b>.',
+    'glfusion_check'    => 'glFusion v1.0.0 or greater, version reported is <b>%s</b>.',
     'php_check'         => 'PHP v4.3.0 or greater, version reported is <b>%s</b>.',
     'preinstall_confirm' => "For full details on installing Site Tailor, please refer to the <a href=\"{$_CONF['site_admin_url']}/plugins/sitetailor/install_doc.html\">Installation Manual</a>.",
 );
@@ -122,7 +122,7 @@ $LANG_ST01 = array (
     'gl_header_menu'    => 'Header Menu',
     'plugins'           => 'Plugin',
     'static_pages'      => 'Static Pages',
-    'geeklog_function'  => 'glFusion Function',
+    'glfusion_function' => 'glFusion Function',
     'save'              => 'Save',
     'cancel'            => 'Cancel',
     'action'            => 'Action',

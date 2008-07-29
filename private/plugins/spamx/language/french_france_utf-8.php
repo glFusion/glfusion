@@ -2,7 +2,7 @@
 
 /**
  * File: french_france.php
- * This is the French language page for the Geeklog Spam-X Plug-in!
+ * This is the French language page for the glFusion Spam-X Plug-in!
  * 
  * Copyright (C) 2004-2005 by the following authors:
  * Author        Tom Willett        tomw AT pigstye DOT net
@@ -44,7 +44,7 @@ $LANG_SX00 = array(
     'adminc' => 'Commandes Administration:',
     'mblack' => 'Ma Liste Noire:',
     'rlinks' => 'Liens relatifs:',
-    'e3' => 'Pour ajouter les mots de la liste de Censure Geeklogs Cliquez le bouton:',
+    'e3' => 'Pour ajouter les mots de la liste de Censure glFusions Cliquez le bouton:',
     'addcen' => 'Ajouter Liste de Censure',
     'addentry' => 'Ajouter l\'entrée',
     'e1' => 'Pour supprimer une entrée cliquez dessus.',
@@ -104,7 +104,7 @@ $LANG_SX00 = array(
     'initial_import' => 'Importer Liste Noire Principale Originale',
     'import_success' => '<p>Importation avec succès de %d entrées dans la liste noire.',
     'import_failure' => '<p><strong>Erreur:</strong> Aucune entrée trouvée.',
-    'allow_url_fopen' => '<p>Désolé, la configuration de votre serveur web ne permet pas la lecture de fichiers distants (<code>allow_url_fopen</code> est désactivé). Veuillez télécharger la liste noire de l\'adresse suivante et placez-la dans le répertoire "data" de Geeklog, <tt>%s</tt>, avant un nouvel essai:',
+    'allow_url_fopen' => '<p>Désolé, la configuration de votre serveur web ne permet pas la lecture de fichiers distants (<code>allow_url_fopen</code> est désactivé). Veuillez télécharger la liste noire de l\'adresse suivante et placez-la dans le répertoire "data" de glFusion, <tt>%s</tt>, avant un nouvel essai:',
     'documentation' => 'Documentation du Plugin Spam-X',
     'emailmsg' => "Un nouveau commentaire indésirable a été envoyé à \"%s\"\nUser UID:\"%s\"\n\nContent:\"%s\"",
     'emailsubject' => 'Spam post at %s',

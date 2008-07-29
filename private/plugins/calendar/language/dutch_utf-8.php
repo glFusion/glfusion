@@ -3,7 +3,7 @@
 ###############################################################################
 # dutch.php
 #
-# This is the Dutch language file for the Geeklog Calendar Plugin
+# This is the Dutch language file for the glFusion Calendar Plugin
 #
 # Copyright (C) 2007 John van Gaal
 # www.vespaclub.nl

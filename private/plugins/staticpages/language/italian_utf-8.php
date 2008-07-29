@@ -2,7 +2,7 @@
 
 ###############################################################################
 # italian.php
-# This is the Italian language page for the Geeklog Static Page Plug-in!
+# This is the Italian language page for the glFusion Static Page Plug-in!
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

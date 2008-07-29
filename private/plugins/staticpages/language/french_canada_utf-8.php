@@ -2,7 +2,7 @@
 
 ###############################################################################
 # french_canada.php
-# This is a french language page for the Geeklog Static Page Plug-in!
+# This is a french language page for the glFusion Static Page Plug-in!
 # Translation performed by Jean-Francois Allard - jfallard@jfallard.com
 # Copyright (c) July 2003
 #

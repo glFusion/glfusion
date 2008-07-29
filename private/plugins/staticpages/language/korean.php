@@ -2,7 +2,7 @@
 
 ###############################################################################
 # korean_utf-8.php
-# This is the english language page for the Geeklog Static Page Plug-in!
+# This is the english language page for the glFusion Static Page Plug-in!
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com

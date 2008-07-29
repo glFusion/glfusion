@@ -2,7 +2,7 @@
 
 ###############################################################################
 # russian.php
-# This is the russian language page for the Geeklog Links Plug-in!
+# This is the russian language page for the glFusion Links Plug-in!
 #
 # Copyright (C) 2006 Volodymyr V. Prokurashko
 # vvprok@ukr.net

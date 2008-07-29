@@ -2,7 +2,7 @@
 
 ###############################################################################
 # hebrew_utf-8.php
-# This is the Hebrew language page for the Geeklog Calendar Plug-in!
+# This is the Hebrew language page for the glFusion Calendar Plug-in!
 #
 # Copyright (C) 2008
 # http://lior.weissbrod.com

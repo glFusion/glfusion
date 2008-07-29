@@ -2,7 +2,7 @@
 
 /**
 * File: EditIP.Admin.class.php
-* This is the Edit IPBlacklist Module for the Geeklog Spam-X plugin
+* This is the Edit IPBlacklist Module for the glFusion Spam-X plugin
 *
 * Copyright (C) 2004-2008 by the following authors:
 * Author   Tom Willett     tomw AT pigstye DOT net

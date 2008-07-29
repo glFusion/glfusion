@@ -3,13 +3,13 @@
 ###############################################################################
 # japanese_utf-8.php
 #
-# This is the Japanese language file for the Geeklog Links Plugin
+# This is the Japanese language file for the glFusion Links Plugin
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony AT tonybibbs DOT com
 # Copyright (C) 2005 Trinity Bays
 # trinity93 AT gmail DOT com
-# Tranlated by Geeklog Japanese group
+# Tranlated by glFusion Japanese group
 # Copyright (C) 2008 Takahiro Kambe
 # Additional translation to Japanese by taca AT back-street DOT net
 #
@@ -29,10 +29,10 @@
 #
 ###############################################################################
 # $Id$
-# Last Update 2008/06/02 by Geeklog.jp group  - info AT geeklog DOT jp
+# Last Update 2008/06/02 by glFusion.jp group  - info AT glFusion DOT jp
 
 /**
- * This is the english language page for the Geeklog links Plug-in!
+ * This is the english language page for the glFusion links Plug-in!
  *
  * @package Links
  * @subpackage Language

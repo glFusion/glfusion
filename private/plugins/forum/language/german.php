@@ -1,39 +1,43 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog Forums Plugin 2.0 for Geeklog - The Ultimate Weblog               |
-// | Official release date: Feb 7,2003                                         |
-// +---------------------------------------------------------------------------+
-// | german.php                                                                |
-// | Translation by Dirk Haun <dirk AT haun-online DOT de>                     |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000,2001 by the following authors:                         |
-// | Geeklog Author: Tony Bibbs       - tony@tonybibbs.com                     |
-// +---------------------------------------------------------------------------+
-// | FORUM Plugin Authors                                                      |
-// | Prototype & Concept    :  Mr.GxBlock of www.gxblock.com                   |
-// | Co-Developed by Matthew and Blaine                                        |
-// | Matthew DeWyer, contact: matt@mycws.com          www.cweb.ws              |
-// | Blaine Lang,    contact: geeklog@langfamily.ca   www.langfamily.ca        |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Forum Plugin for glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | german.php                                                               |
+// |                                                                          |
+// | German language file                                                     |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Forum Plugin for Geeklog CMS                                |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
+// |                              www.portalparts.com                         |
+// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
+// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
+// |                                                                          |
+// | Translation by Dirk Haun <dirk AT haun-online DOT de>                    |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 $LANG_GF00 = array (
     'admin_only'        => 'Sorry Admins Only. If you are an Admin please login first.',
@@ -196,7 +200,7 @@ $LANG_GF01['DELALL_PM']      = 'Delete All';
 $LANG_GF01['DELOLDER_PM']    = 'Delete older';
 $LANG_GF01['members']        = 'Mitglieder';
 $LANG_GF01['save_sucess']    = 'Save Sucessful';
-$LANG_GF01['trademark']      = '<BR><CENTER><B>Geeklog Forum Project version 2.0</B> &copy; 2002</B></CENTER>';
+$LANG_GF01['trademark']      = '<BR><CENTER><B>glFusion Forum Project version 3.0</B> &copy; 2008</B></CENTER>';
 $LANG_GF01['back2top']       = 'Back to top';
 $LANG_GF01['POSTMODE']       = 'Post Mode:';
 $LANG_GF01['TEXTMODE']       = 'Text-Modus';

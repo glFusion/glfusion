@@ -1,35 +1,38 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.3                                                               |
-// +---------------------------------------------------------------------------+
-// | downloader.class.php                                                      |
-// |                                                                           |
-// | Geeklog file download class library.                                      |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2002-2005 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | downloader.class.php                                                     |
+// |                                                                          |
+// | glFusion file download class library.                                    |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /**
 * This class allows you to download a file from outside the web tree.  Many hooks
@@ -85,7 +88,7 @@ class downloader
     * @access private
     */
     var $_limitByIP;            // Boolean
-    
+
     /**
     * Constructor
     *
@@ -105,7 +108,7 @@ class downloader
         $this->_setAvailableExtensions ();
 
     }
-    
+
     // PRIVATE METHODS
 
     /**
@@ -124,7 +127,7 @@ class downloader
             $this->_logItem('Warning',$warningText);
         }
     }
-    
+
     /**
     * Adds an error that was encountered
     *
@@ -158,7 +161,7 @@ class downloader
             $this->_logItem('Debug',$debugText);
         }
     }
-    
+
     /**
     * Logs an item to the log file
     *
@@ -181,7 +184,7 @@ class downloader
         fclose($file);
         return true;
     }
-    
+
     /**
     * Defines superset of available Mime types.
     *
@@ -191,7 +194,7 @@ class downloader
     function _setAvailableExtensions($extensions = array())
     {
         if (sizeof($extensions) == 0) {
-            $this->_availableMimeTypes = 
+            $this->_availableMimeTypes =
                 array(
                     'tgz' => 'application/x-gzip-compressed',
                     'gz' =>  'application/x-gzip-compressed',
@@ -226,9 +229,9 @@ class downloader
             $this->_availableExtensions[] = $ext;
         }
     }
-    
+
     // Public Methods
-    
+
     /**
     * Extra security option that forces all attempts to upload a file to be done
     * so from a set of VERY specific IP's.  This is only good for those who are
@@ -249,7 +252,7 @@ class downloader
             return false;
         }
     }
-    
+
     /**
     * Sets log file
     *
@@ -268,7 +271,7 @@ class downloader
         $this->_logFile = $logFile;
         return true;
     }
-    
+
     /**
     * Enables/disables logging of errors and warnings
     *
@@ -297,7 +300,7 @@ class downloader
     {
         return $this->_doLogging;
     }
-    
+
     /**
     * Will force the debug messages in this class to be
     * printed
@@ -315,7 +318,7 @@ class downloader
             $this->_debug = false;
         }
     }
-    
+
     /**
     * This function will print any errors out.  This is useful in debugging
     *
@@ -340,7 +343,7 @@ class downloader
             return $retval;
         }
     }
-    
+
     /**
     * This function will print any warnings out.  This is useful in debugging
     *
@@ -356,7 +359,7 @@ class downloader
             }
         }
     }
-    
+
     /**
     * This function will print any debmug messages out.
     *
@@ -372,7 +375,7 @@ class downloader
             }
         }
     }
-    
+
     /**
     * Returns if any errors have been encountered thus far
     *
@@ -387,7 +390,7 @@ class downloader
             return false;
         }
     }
-    
+
     /**
     * Sets allowed mime types for this instance
     *
@@ -407,7 +410,7 @@ class downloader
         }
         $this->_allowedExtensions = $validExtensions;
     }
-    
+
     /**
     * Gets allowed mime types for this instance
     *
@@ -418,7 +421,7 @@ class downloader
     {
         return $this->_allowedExtensions;
     }
-    
+
     /**
     * Checks to see that mime type for current file is allowed for upload
     *
@@ -435,7 +438,7 @@ class downloader
             return true;
         }
     }
-    
+
     /**
     * Sets file upload path
     *
@@ -449,17 +452,17 @@ class downloader
             $this->_addError('Specified source directory, ' . $uploadDir . ' is not a valid directory');
             return false;
         }
-        
+
         if (!is_readable($uploadDir)) {
             $this->_addError('Specified source directory, ' . $uploadDir . ' exists but is not readable');
             return false;
         }
-        
+
         $this->_sourceDirectory = $uploadDir;
-        
+
         return true;
     }
-    
+
     /**
     * Returns directory to upload to
     *
@@ -470,7 +473,7 @@ class downloader
     {
         return $this->_sourceDirectory;
     }
-    
+
     /**
     * Attempts to dowload a file
     *
@@ -480,7 +483,7 @@ class downloader
     */
     function downloadFile($fileName)
     {
-        if (strstr( PHP_OS, "WIN")) {  // Added as test1 below was failing on Windows platforms 
+        if (strstr( PHP_OS, "WIN")) {  // Added as test1 below was failing on Windows platforms
             $strPathSeparator = '\\';
             $this->_sourceDirectory = str_replace('/','\\',$this->_sourceDirectory);
         } else {
@@ -493,7 +496,7 @@ class downloader
 
 
         // Ensure file exists and is accessible
-        if(!is_file($this->_sourceDirectory . $fileName) OR 
+        if(!is_file($this->_sourceDirectory . $fileName) OR
             ($this->_sourceDirectory <> (dirname($this->_sourceDirectory . $strPathSeparator .$fileName) .$strPathSeparator)) ) {
             $this->_addError('Specified file ' . $this->_sourceDirectory . $fileName . ' does not exist or is not accessible');
             return false;
@@ -509,7 +512,7 @@ class downloader
         // OK, file is valid, get file extension
         $pos = strrpos($fileName,'.') + 1;
         $fextension = substr($fileName, $pos);
-        
+
         // Send headers.
         if ($this->checkExtension($fextension)) {
             // Display file inside browser.

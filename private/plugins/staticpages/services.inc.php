@@ -1,39 +1,42 @@
 <?php
-
-// Reminder: always indent with 4 spaces (no tabs). 
-// +---------------------------------------------------------------------------+
-// | Static Pages Plugin 1.5                                                   |
-// +---------------------------------------------------------------------------+
-// | services.inc.php                                                          |
-// |                                                                           |
-// | This file implements the services provided by the 'Static Pages' plugin.  |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net     |
-// |          Blaine Lang      - langmail AT sympatico DOT ca                  |
-// |          Dirk Haun        - dirk AT haun-online DOT de                    |
-// |          Ramnath R Iyer   - rri AT silentyak DOT com                      |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | Static Pages Plugin - glFusion CMS                                       |
+// +--------------------------------------------------------------------------+
+// | services.inc.php                                                         |
+// |                                                                          |
+// | This file implements the services provided by the 'Static Pages' plugin. |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
+// |          Blaine Lang      - langmail AT sympatico DOT ca                 |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// |          Ramnath R Iyer   - rri AT silentyak DOT com                     |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 // this must be kept in synch with the actual size of 'sp_id' in the db ...
 define('STATICPAGE_MAX_ID_LENGTH', 40);
@@ -83,7 +86,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $gl_edit = $args['gl_edit'];
     }
     if ($gl_edit) {
-        // This is EDIT mode, so there should be an sp_old_id 
+        // This is EDIT mode, so there should be an sp_old_id
         if (empty($args['sp_old_id'])) {
             if (!empty($args['id'])) {
                 $args['sp_old_id'] = $args['id'];
@@ -129,7 +132,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         }
     }
 
-    // Apply filters to the parameters passed by the webservice 
+    // Apply filters to the parameters passed by the webservice
     if ($args['gl_svc']) {
         $par_str = array('mode', 'sp_id', 'sp_old_id', 'sp_tid', 'sp_format',
                          'postmode');
@@ -153,7 +156,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         }
     }
 
-    // START: Staticpages defaults 
+    // START: Staticpages defaults
 
     if(empty($args['sp_format'])) {
         $args['sp_format'] = 'allblocks';
@@ -176,7 +179,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
     }
 
     if ($args['gl_svc']) {
-        // Permissions 
+        // Permissions
         if (!isset($args['perm_owner'])) {
             $args['perm_owner'] = $_SP_CONF['default_permissions'][0];
         } else {
@@ -219,7 +222,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         }
     }
 
-    // END: Staticpages defaults 
+    // END: Staticpages defaults
 
     $sp_id = $args['sp_id'];
     $sp_uid = $args['sp_uid'];
@@ -256,7 +259,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
     $postmode = $args['postmode'];
 
     if ($gl_edit && !empty($args['gl_etag'])) {
-        // First load the original staticpage to check if it has been modified 
+        // First load the original staticpage to check if it has been modified
         $o = array();
         $s = array();
         $r = service_get_staticpages(array('sp_id' => $sp_old_id, 'gl_svc' => true), $o, $s);
@@ -400,7 +403,7 @@ function service_delete_staticpages($args, &$output, &$svc_msg)
     if (empty($args['sp_id']) && !empty($args['id']))
         $args['sp_id'] = $args['id'];
 
-    // Apply filters to the parameters passed by the webservice 
+    // Apply filters to the parameters passed by the webservice
 
     if ($args['gl_svc']) {
         $args['sp_id'] = COM_applyBasicFilter($args['sp_id']);
@@ -519,7 +522,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
 
         if (!($error)) {
             $output = DB_fetchArray ($result, false);
-            // WE ASSUME $output doesn't have any confidential fields 
+            // WE ASSUME $output doesn't have any confidential fields
 
             $_CONF['pagetitle'] = stripslashes ($output['sp_title']);
 
@@ -612,7 +615,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
 
         $count = 0;
         while (($output_item = DB_fetchArray ($result, false)) !== false) {
-            // WE ASSUME $output doesn't have any confidential fields 
+            // WE ASSUME $output doesn't have any confidential fields
 
             $count += 1;
             if ($count == $max_items) {
@@ -621,7 +624,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
             }
 
             if($args['gl_svc']) {
-                // This date format is PHP 5 only, but only the web-service uses the value 
+                // This date format is PHP 5 only, but only the web-service uses the value
                 $output_item['updated']      = date('c', strtotime($output_item['sp_date']));
                 $output_item['id']           = $output_item['sp_id'];
                 $output_item['title']        = $output_item['sp_title'];

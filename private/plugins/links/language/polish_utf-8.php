@@ -3,10 +3,10 @@
 ###############################################################################
 # polish.php
 #
-# This is the Polish language file for the Geeklog Links plugin
+# This is the Polish language file for the glFusion Links plugin
 #
 # Copyright (C) 2006 Robert Stadnik
-# geeklog_pl AT geeklog DOT now DOT pl
+# glFusion_pl AT glFusion DOT now DOT pl
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2

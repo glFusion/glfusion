@@ -2,7 +2,7 @@
 
 ###############################################################################
 # ukrainian.php
-# This is the ukrainian language page for the Geeklog Links Plug-in!
+# This is the ukrainian language page for the glFusion Links Plug-in!
 #
 # Copyright (C) 2006 Vitaliy Biliyenko
 # v.lokki@gmail.com

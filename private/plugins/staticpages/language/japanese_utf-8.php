@@ -2,11 +2,11 @@
 
 ###############################################################################
 # japanese_utf-8.php
-# This is the Japanese language file for the Geeklog Static Page plugin!
+# This is the Japanese language file for the glFusion Static Page plugin!
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com
-# Tranlated by Geeklog Japanese group SaY and Ivy
+# Tranlated by glFusion Japanese group SaY and Ivy
 # Copyright (C) 2008 Takahiro Kambe
 # Additional translation to Japanese by taca AT back-street DOT net
 #
@@ -25,7 +25,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 ###############################################################################
-# Last Update 2008/06/02 by Geeklog.jp group  - info AT geeklog DOT jp
+# Last Update 2008/06/02 by glFusion.jp group  - info AT glFusion DOT jp
 
 global $LANG32;
 

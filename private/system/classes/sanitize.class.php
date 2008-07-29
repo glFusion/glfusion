@@ -1,36 +1,40 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.4                                                               |
-// +---------------------------------------------------------------------------+
-// | sanitize.class.php                                                        |
-// |                                                                           |
-// | Geeklog data filtering or sanitizing class library.                       |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2002-2006 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                     |
-// |          Dirk Haun        - dirk AT haun-online DOT de                    |
-// |          Blaine Lang      - blaine AT portalparts DOT com                 |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | sanitize.class.php                                                       |
+// |                                                                          |
+// | glFusion data filtering or sanitizing class library.                     |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
+// |          Blaine Lang      - blaine AT portalparts DOT com                |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /* Class derived from original procedural code in Geeklog 1.3.x lib-common.php
 *  Jan 2005: Blaine Lang
@@ -90,7 +94,7 @@ class sanitize extends kses {
 
     }
 
-    /* Prepare data for SQL insert and apply filtering 
+    /* Prepare data for SQL insert and apply filtering
     *  Supports passing a single parm or array of parms
     */
     function prepareForDB($data) {
@@ -170,11 +174,11 @@ class sanitize extends kses {
       else
       {
         foreach ($vars as $key) {
-          if (array_key_exists($key, $_POST)) { 
+          if (array_key_exists($key, $_POST)) {
             $return_data[$key] = $_POST[$key];
           }
           elseif (array_key_exists($key, $_GET))
-          { 
+          {
             $return_data[$key] = $_GET[$key];
           }
         }

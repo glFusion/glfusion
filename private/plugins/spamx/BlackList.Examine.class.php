@@ -2,11 +2,11 @@
 
 /**
  * File: BlackList.Examine.class.php
- * This is the Personal BlackList Examine class for the Geeklog Spam-X plugin
- * 
+ * This is the Personal BlackList Examine class for the glFusion Spam-X plugin
+ *
  * Copyright (C) 2004-2006 by the following authors:
  * Author   Tom Willett     tomw AT pigstye DOT net
- * 
+ *
  * Licensed under GNU General Public License
  *
  * $Id$
@@ -32,8 +32,8 @@ if (!function_exists ('html_entity_decode')) {
 
 /**
  * Examines Comment according to Personal BLacklist
- * 
- * @author Tom Willett tomw AT pigstye DOT net 
+ *
+ * @author Tom Willett tomw AT pigstye DOT net
  */
 
 class BlackList extends BaseCommand {

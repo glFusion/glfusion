@@ -1,12 +1,16 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Site Tailor Plugin                                                       |
+// | Site Tailor Plugin - glFusion CMS                                        |
+// +--------------------------------------------------------------------------+
+// | mysql_install.php                                                        |
+// |                                                                          |
+// | Installation SQL                                                         |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
-// | Mark R. Evans              - mark at gllabs.org                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -24,7 +28,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-//
 
 $_SQL['st_config'] = "CREATE TABLE {$_TABLES['st_config']} (
   `id` int(11) NOT NULL auto_increment,

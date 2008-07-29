@@ -1,41 +1,43 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.5                                                               |
-// +---------------------------------------------------------------------------+
-// | lib-database.php                                                          |
-// |                                                                           |
-// | Geeklog database library.                                                 |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                         |
-// |                                                                           |
-// | Authors: Tony Bibbs, tony AT tonybibbs DOT com                            |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | lib-database.php                                                         |
+// |                                                                          |
+// | glFusion database library.                                               |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs, tony AT tonybibbs DOT com                           |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /**
-* This is the high-level database layer for Geeklog (for the low-level stuff,
+* This is the high-level database layer for glFusion (for the low-level stuff,
 * see the system/databases directory).
 *
-* NOTE: As of Geeklog 1.3.5 you should not have to edit this file any more.
 */
 
 if (strpos ($_SERVER['PHP_SELF'], 'lib-database.php') !== false) {
@@ -47,7 +49,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'lib-database.php') !== false) {
 // | database schema.  If you don't like the tables names, change them PRIOR   |
 // | to running the install after running the install program DO NOT TOUCH     |
 // | these. You have been warned!  Also, these variables are used in the core  |
-// | Geeklog code                                                              |
+// | glFusion code                                                             |
 // +---------------------------------------------------------------------------+
 
 $_TABLES['access']              = $_DB_table_prefix . 'access';
@@ -112,7 +114,7 @@ $_TABLES['spamx']               = $_DB_table_prefix . 'spamx';
 $_TABLES['staticpage']          = $_DB_table_prefix . 'staticpage';
 
 
-// These tables aren't used by Geeklog any more, but the table names are still
+// These tables aren't used by glFusion any more, but the table names are still
 // needed when upgrading from old versions
 $_TABLES['commentspeedlimit']   = $_DB_table_prefix . 'commentspeedlimit';
 $_TABLES['submitspeedlimit']    = $_DB_table_prefix . 'submitspeedlimit';
@@ -136,7 +138,7 @@ $_DB = new database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
 unset($_DB_user);
 unset($_DB_pass);
 
-if ( $_CONF['no_fail_sql'] == 1 ) {
+if ( isset($_CONF['no_fail_sql']) && $_CONF['no_fail_sql'] == 1 ) {
     $_DB->_no_fail = 1;
 }
 
@@ -483,7 +485,7 @@ function DB_error()
 /**
 * Creates database structures for fresh installation
 *
-* This may not be used by Geeklog currently
+* This may not be used by glFusion currently
 *
 * @return   boolean     returns true on success otherwise false
 *
@@ -498,7 +500,7 @@ function DB_createDatabaseStructures()
 /**
 * Executes the sql upgrade script(s)
 *
-* @param        string      $current_gl_version     version of geeklog to upgrade from
+* @param        string      $current_gl_version     version of glFusion to upgrade from
 * @return       boolean     returns true on success otherwise false
 *
 */

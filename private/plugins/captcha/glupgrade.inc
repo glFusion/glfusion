@@ -1,31 +1,33 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | CAPTCHA glFusion Upgrade                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | This file has the functions necessary to upgrade CAPTCHA                  |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2005-2008 by the following authors:                         |
-// |                                                                           |
-// | Mark R. Evans              - mark@gllabs.org                              |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | CAPTCHA Plugin - glFusion CMS                                            |
+// +--------------------------------------------------------------------------+
+// | glupgrade.inc                                                            |
+// |                                                                          |
+// | Upgrade routines                                                         |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
 {
@@ -38,12 +40,12 @@ if ( !isset($_DB_table_prefix) ) {
 
 $_CP_CONF['version']    = '3.1.0';
 $_CP_CONF['pi_name']    = 'captcha';
-$_CP_CONF['gl_version'] = '1.5.0';
+$_CP_CONF['gl_version'] = '1.0.0';
 $_TABLES['cp_config']   = $_DB_table_prefix . 'cp_config';
 $_TABLES['cp_sessions'] = $_DB_table_prefix . 'cp_sessions';
 
 /*
- * If we are being called Geeklog's upgrade routine, there is no
+ * If we are being called glFusion's upgrade routine, there is no
  * COM_errorLog() function available.
  */
 

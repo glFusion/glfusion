@@ -1,46 +1,39 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.3                                                               |
-// +---------------------------------------------------------------------------+
-// | addindex.php                                                              |
-// | Add index field to Geeklog tables.                                        |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2002 by the following authors:                              |
-// |                                                                           |
-// | Authors: Dirk Haun        - dirk@haun-online.de                           |
-// | with the help of Jeffrey Schoolcraft, Marc von Ahn, and Rob Griffiths     |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-// 
-// $Id$
-
-
-// Add missing indexes to Geeklog tables
-//
-// Date        Version  Author
-// ----        -------  ------
-//  2002-10-22  0.1      Dirk Haun <dirk@haun-online.de>
-//              Initial version
-//  2002-11-24  0.2      Dirk Haun <dirk@haun-online.de>
-//              Added key names for the indexes, added authentication check
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | addindex.php                                                             |
+// |                                                                          |
+// | Add index field to glFusion tables.                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Dirk Haun        - dirk@haun-online.de                          |
+// | with the help of Jeffrey Schoolcraft, Marc von Ahn, and Rob Griffiths    |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 require_once('../../lib-common.php');
 
@@ -56,10 +49,6 @@ if (!SEC_inGroup ('Root')) {
 }
 
 // $_DEBUG = 1;
-
-// list according to Jeff's post on geeklog-devel (2002-10-14)
-// plus stories.hits (Rob Griffiths) plus group_assignments.ug_uid
-// <http://www.geeklog.net/article.php?story=20021011151827972>
 
 $index['comments']          = "cid,type,sid,date,uid";
 $index['stories']           = "sid,tid,date,uid,frontpage,featured,hits";

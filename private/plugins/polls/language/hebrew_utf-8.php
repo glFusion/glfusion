@@ -3,7 +3,7 @@
 ###############################################################################
 # hebrew_utf-8.php
 #
-# This is the Hebrew language file for the Geeklog Polls plugin
+# This is the Hebrew language file for the glFusion Polls plugin
 #
 # Copyright (C) 2008
 # http://lior.weissbrod.com

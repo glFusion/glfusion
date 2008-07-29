@@ -1,12 +1,17 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Site Tailor Plugin                                                       |
+// | Site Tailor Plugin - glFusion CMS                                        |
+// +--------------------------------------------------------------------------+
+// | install.php                                                              |
+// |                                                                          |
+// | This file installs and removes the data structures for the               |
+// | Site Tailor plugin for glFusion.                                         |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
-// | Mark R. Evans              - mark at gllabs.org                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -24,7 +29,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-//
 
 require_once '../../../lib-common.php';
 require_once $_CONF['path'] . '/plugins/sitetailor/config.php';
@@ -60,7 +64,7 @@ if (!SEC_inGroup('Root')) {
 }
 
 /**
-* Puts the datastructures for this plugin into the Geeklog database
+* Puts the datastructures for this plugin into the glFusion database
 *
 * Note: Corresponding uninstall routine is in functions.inc
 *
@@ -147,7 +151,7 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'sitetailor') == 0) {
         $memoryCheck = '<div style="vertical-align:middle;padding:5px;"><img src="images/check.png" alt="OK" style="padding:5px;vertical-align:middle;">' . $LANG_ST00['ml_ok'] . '</div>';
     }
 
-    $glver  = sprintf($LANG_ST00['geeklog_check'],$gl_version);
+    $glver  = sprintf($LANG_ST00['glfusion_check'],$gl_version);
     $phpver = sprintf($LANG_ST00['php_check'],$php_version);
 
     $T->set_var(array(

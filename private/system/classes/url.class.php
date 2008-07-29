@@ -1,36 +1,38 @@
 <?php
-
-/* Reminder: always indent with 4 spaces (no tabs). */
-// +---------------------------------------------------------------------------+
-// | Geeklog 1.4                                                               |
-// +---------------------------------------------------------------------------+
-// | url.class.php                                                             |
-// |                                                                           |
-// | class to allow for spider friendly URL's                                  |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2002 by the following authors:                              |
-// |                                                                           |
-// | Authors: Tony Bibbs       - tony@tonybibbs.com                            |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id$
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | url.class.php                                                            |
+// |                                                                          |
+// | class to allow for spider friendly URL's                                 |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tony Bibbs       - tony@tonybibbs.com                           |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 /**
 * This class will allow you to use friendlier URL's, like:
@@ -53,7 +55,7 @@ class url {
     * @access private
     */
     var $_enabled = true;
-    
+
     /**
     * Constructor
     *
@@ -110,7 +112,7 @@ class url {
             $this->_enabled = false;
         }
     }
-    
+
     /**
     * Returns whether or not URL rewriting is enabled
     *
@@ -121,7 +123,7 @@ class url {
     {
         return $this->_enabled;
     }
-    
+
     /**
     * Returns the number of variables found in query string
     *
@@ -134,7 +136,7 @@ class url {
     {
         return count($this->_arguments);
     }
-    
+
     /**
     * Assigns logical names to query string variables
     *
@@ -172,16 +174,16 @@ class url {
     */
     function getArgument($name)
     {
-        // if in GET VARS array return it 
+        // if in GET VARS array return it
         if (!empty($_GET[$name])) {
             return $_GET[$name];
         }
-        
+
         // ok, pull from query string
         if (in_array($name,array_keys($this->_arguments))) {
             return $this->_arguments[$name];
         }
-        
+
         return '';
     }
 
@@ -200,7 +202,7 @@ class url {
         if (!$this->isEnabled()) {
             return $url;
         }
-        
+
         $pos = strpos($url,'?');
         $query_string = substr($url,$pos+1);
         $finalList = array();
@@ -223,7 +225,7 @@ class url {
             next($finalList);
         }
         return str_replace('?' . $query_string,$newArgs,$url);
-    }    
+    }
 }
 
 ?>

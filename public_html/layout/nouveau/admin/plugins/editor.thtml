@@ -33,7 +33,7 @@
                                         <td>{pi_codeversion}</td>
                                     </tr>
                                     <tr>
-                                        <td class="alignright"><b>{lang_geeklogversion}:</b></td>
+                                        <td class="alignright"><b>{lang_glfusionversion}:</b></td>
                                         <td>{pi_gl_version}</td>
                                     </tr>
                                     <tr>

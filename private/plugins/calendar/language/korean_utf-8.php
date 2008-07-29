@@ -2,7 +2,7 @@
 
 ###############################################################################
 # korean_utf-8.php
-# This is the Korean UTF-8 language page for the Geeklog Calendar Plug-in!
+# This is the Korean UTF-8 language page for the glFusion Calendar Plug-in!
 #
 # Copyright (C) 2001 Tony Bibbs
 # tony@tonybibbs.com
