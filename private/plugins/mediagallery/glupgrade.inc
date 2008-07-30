@@ -32,6 +32,17 @@ if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
     die ('This file can not be used on its own.');
 }
 
+/*
+ * If we are being called glFusion's upgrade routine, there is no
+ * COM_errorLog() function available.
+ */
+
+if (!function_exists('COM_errorLOG') ) {
+    function COM_errorLOG() {
+    }
+}
+
+global $_DB_table_prefix;
 
 $_MG_table_prefix = $_DB_table_prefix;
 
@@ -55,23 +66,10 @@ $_TABLES['mg_sort']             = $_MG_table_prefix . 'mg_sort';
 $_TABLES['mg_postcard']         = $_MG_table_prefix . 'mg_postcard';
 $_TABLES['mg_rating']           = $_MG_table_prefix . 'mg_rating';
 
-
-/*
- * If we are being called Geeklog's upgrade routine, there is no
- * COM_errorLog() function available.
- */
-
-if (!function_exists('COM_errorLOG') ) {
-    function COM_errorLOG() {
-    }
-}
-
-function plugin_upgrade_mediagallery()
+function plugin_plgupgrade_mediagallery()
 {
     global $_TABLES, $_CONF, $_MG_CONF, $_DB_dbms, $TEMPLATE_OPTIONS;
 
-
-//    include($_CONF['path'] . '/plugins/mediagallery/config.php');
     $result = DB_query("SELECT * FROM " . $_TABLES['mg_config'],1);
     while ($row = DB_fetchArray($result)) {
         $_MG_CONF[$row['config_name']] = $row['config_value'];
@@ -272,8 +270,8 @@ function plugin_upgrade_mediagallery()
             if ( isset($TEMPLATE_OPTIONS['path_cache']) ) {
                 MG_cleanup_plugin('mediagallery');
             }
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='http://www.gllabs.org' WHERE pi_name='mediagallery'",1);
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.1' WHERE pi_name='mediagallery' LIMIT 1");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='http://www.glfusion.org' WHERE pi_name='mediagallery'",1);
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.2' WHERE pi_name='mediagallery' LIMIT 1");
             break;
     }
     if ( DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='mediagallery'") == $_MG_CONF['version']) {

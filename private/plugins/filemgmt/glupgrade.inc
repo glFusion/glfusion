@@ -52,7 +52,7 @@ if (!function_exists('COM_errorLOG') ) {
 /**
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
-function plugin_upgrade_filemgmt() {
+function plugin_plgupgrade_filemgmt() {
     global $_TABLES,$_CONF, $_FM_TABLES,$CONF_FM,$_DB_table_prefix;;
 
     include($_CONF['path'] . '/plugins/filemgmt/config.php');
@@ -73,13 +73,21 @@ function plugin_upgrade_filemgmt() {
                     DB_query("UPDATE {$_TABLES['comments']} SET sid='$sid' WHERE cid='$cid'");
                 }
             }
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5' WHERE pi_name = 'filemgmt'");
         case '1.5' :
         case '1.5.1' :
         case '1.5.2' :
         case '1.5.3' :
             DB_query("ALTER TABLE {$_FM_TABLES['filemgmt_cat']} ADD `grp_writeaccess` MEDIUMINT( 8 ) NOT NULL DEFAULT '1'");
-        default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.6' WHERE pi_name = 'filemgmt'");
+        case '1.6' :
+        case '1.6.0' :
+            // need to migrate the configuration to our new online configuration.
+            require_once $_CONF['path_system'] . 'classes/config.class.php';
+            require_once $_CONF['path'] . 'plugins/filemgmt/install_defaults.php';
+            plugin_initconfig_filemgmt();
+        default :
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.7.0.fusion' WHERE pi_name = 'filemgmt'");
             return true;
     }
 }

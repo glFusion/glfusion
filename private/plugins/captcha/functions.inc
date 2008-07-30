@@ -47,9 +47,19 @@ if (file_exists ($langfile)) {
 */
 require_once($_CONF['path'] . 'plugins/captcha/config.php');
 
-$result = DB_query("SELECT * FROM {$_TABLES['cp_config']}",1);
-while ($row = DB_fetchArray($result)) {
-    $_CP_CONF[$row['config_name']] = stripslashes($row['config_value']);
+/*
+* Check and see if we need to load the plugin configuration
+*/
+if (!isset($_CP_CONF['gfxDriver'])) {
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+
+    $cp_config = config::get_instance();
+    $_CP_CFG = $cp_config->get_config('captcha');
+
+    if ( is_array($_CP_CONF)  && is_array($_CP_CFG) ) {
+        $_CP_CONF = array_merge($_CP_CONF, $_CP_CFG);
+    }
+    unset($_CP_CFG);
 }
 
 function CAPTCHA_sid() {
@@ -380,44 +390,6 @@ function plugin_chkVersion_captcha() {
     return $_CP_CONF['version'];
 }
 
-/**
-* This will put an option for the plugin in the command and control block on moderation.php
-*
-* Add the plugin name, icon and link to the command and control block in moderation.php
-*
-* @return   array   Array containing (plugin name, admin url, url of plugin icon)
-*
-*/
-
-function plugin_cclabel_captcha() {
-    global $_CONF, $LANG_CP00;
-
-    if (SEC_inGroup('Root') ) {
-        return array($LANG_CP00['plugin'],
-            $_CONF['site_admin_url'] . '/plugins/captcha/index.php',
-            $_CONF['site_url'] . '/captcha/captcha.png');
-    } else {
-        return '';
-    }
-}
-
-/**
-* Returns the administrative option for this plugin
-*
-* Adds the plugin to the Admin menu
-*
-* Universal Plugin:  Modify/Uncomment use it
-*
-* @return   array   Array containing (plugin name, plugin admin url, # of items in plugin or '')
-*
-*/
-function plugin_getadminoption_captcha() {
-    global $_CONF, $_TABLES, $LANG_CP00;
-
-    if (SEC_inGroup('Root')) {
-        return array($LANG_CP00['plugin'], $_CONF['site_admin_url'] . '/plugins/captcha/index.php','');
-    }
-}
 
 /**
 * Removes the data structures for this plugin from the glFusion database.
@@ -435,7 +407,7 @@ function plugin_getadminoption_captcha() {
 *
 */
 function plugin_uninstall_captcha($installCheck='') {
-    global $_DB_table_prefix, $_TABLES, $LANG_CP00;
+    global $_CONF, $_DB_table_prefix, $_TABLES, $LANG_CP00;
 
     $pi_name    = 'captcha';
 
@@ -449,103 +421,25 @@ function plugin_uninstall_captcha($installCheck='') {
         return false;
         exit;
     }
+    require_once($_CONF['path'] . 'plugins/captcha/install.inc');
 
-    DB_query("DROP TABLE " . $_DB_table_prefix . 'cp_config',1);
-    DB_query("DROP TABLE " . $_DB_table_prefix . 'cp_sessions',1);
+    $rc = plugin_remove_captcha();
+    return $rc;
 
-    // Ok to proceed and delete plugin
+}
 
-    // Unregister the plugin with glFusion
-    COM_errorLog('Attempting to unregister the CAPTCHA Plugin from glFusion',1);
-    DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'captcha'",1);
+/**
+* Called by the plugin Editor to run the SQL Update for a plugin update
+*/
+function plugin_upgrade_captcha() {
+    global $_CONF, $_TABLES;
 
-    COM_errorLog('...success',1);
+    require_once($_CONF['path'] . 'plugins/captcha/glupgrade.inc');
+
+    $rc = plugin_plgupgrade_captcha();
+
     return true;
+
 }
 
-function plugin_upgrade_captcha()
-{
-    global $_TABLES, $_CONF, $_CP_CONF;
-
-    $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='captcha'");
-
-    switch( $currentVersion ) {
-        case "2.0.0" :
-        case "2.0.1" :
-        case "2.0.2" :
-            $_SQL['cp_config'] =
-                "CREATE TABLE {$_TABLES['cp_config']} ( " .
-                "  `config_name` varchar(255) NOT NULL default '', " .
-                "  `config_value` varchar(255) NOT NULL default '', " .
-                "   PRIMARY KEY  (`config_name`) " .
-                " );";
-
-            foreach ($_SQL as $table => $sql) {
-                COM_errorLog("Creating $table table",1);
-                DB_query($sql,1);
-                if (DB_error()) {
-                    COM_errorLog("Error Creating $table table",1);
-                }
-                COM_errorLog("Success - Created $table table",1);
-            }
-
-            $SQL_DEFAULTS = "INSERT INTO `{$_TABLES['cp_config']}` (`config_name`, `config_value`) VALUES " .
-                            " ('anonymous_only', '1'), " .
-                            " ('debug', '0'), " .
-                            " ('enable_comment', '0'), " .
-                            " ('enable_contact', '0'), " .
-                            " ('enable_emailstory', '0'), " .
-                            " ('enable_forum', '0'), " .
-                            " ('enable_registration', '0'), " .
-                            " ('enable_story', '0'), " .
-                            " ('gfxDriver', '2'), " .
-                            " ('gfxFormat', 'jpg'), " .
-                            " ('gfxPath', '');";
-
-            DB_query($SQL_DEFAULTS,1);
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='2.1.0' WHERE pi_name='captcha' LIMIT 1");
-        case "2.1.0" :
-        case "2.1.1" :
-        case "2.1.2" :
-            $_SQL['cp_sessions'] =
-                            "CREATE TABLE {$_TABLES['cp_sessions']} ( " .
-                            "  `session_id` varchar(40) NOT NULL default '', " .
-                            "  `cptime`  INT(11) NOT NULL default 0, " .
-                            "  `validation` varchar(40) NOT NULL default '', " .
-                            "  `counter`    TINYINT(4) NOT NULL default 0, " .
-                            "  PRIMARY KEY (`session_id`) " .
-                            " );";
-
-            foreach ($_SQL as $table => $sql) {
-                COM_errorLog("Creating $table table",1);
-                DB_query($sql,1);
-                if (DB_error()) {
-                    COM_errorLog("Error Creating $table table",1);
-                }
-                COM_errorLog("Success - Created $table table",1);
-            }
-
-            $SQL_DEFAULTS = "INSERT INTO `{$_TABLES['cp_config']}` (`config_name`, `config_value`) VALUES " .
-                            " ('enable_mediagallery', '0'), " .
-                            " ('remoteusers', '0');";
-
-            DB_query($SQL_DEFAULTS,1);
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='3.0.0' WHERE pi_name='captcha' LIMIT 1");
-        case "3.0.0" :
-        case "3.0.1" :
-        case "3.0.2" :
-            $SQL_DEFAULTS = "INSERT INTO `{$_TABLES['cp_config']}` (`config_name`, `config_value`) VALUES " .
-                            " ('logging', '0'), " .
-                            " ('enable_rating', '0');";
-            DB_query($SQL_DEFAULTS,1);
-        default :
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='3.1.0' WHERE pi_name='captcha' LIMIT 1");
-            break;
-    }
-    if ( DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='captcha'") == $_CP_CONF['version']) {
-        return 1;
-    } else {
-        return 2;
-    }
-}
 ?>

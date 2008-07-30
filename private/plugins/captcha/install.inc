@@ -35,74 +35,93 @@ if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
     die ('This file can not be used on its own.');
 }
 
+global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
+
+$pi_name        = 'captcha';
+$pi_version     = '3.1.0';
+$gl_version     = '1.1.0';
+$pi_url         = 'http://www.glfusion.org';
+$base_path      = $_CONF['path'] . 'plugins/' . $pi_name . '/';
+
+/*
+ * If we are being called glFusion's install routine, there is no
+ * COM_errorLog() function available.
+ */
+
+if (!function_exists('COM_errorLOG') ) {
+    function COM_errorLOG() {
+    }
+}
+
+/**
+* Checks the requirements for this plugin and if it is compatible with this
+* version of glFusion.
+*
+* @return   boolean     true = proceed with install, false = not compatible
+*
+*/
+function captcha_compatible_with_this_glfusion_version ()
+{
+    // requires 1.1.0 or newer
+    $glversion = explode(".", glFusion_VERSION);
+    if ( $glversion[0] < 1 ) {
+        return false;
+    }
+    if ( $glversion[1] < 1 ) {
+        return false;
+    }
+    return true;
+}
+
+/**
+* Loads the configuration records for the GL Online Config Manager
+*
+* @return   boolean     true = proceed with install, false = an error occured
+*
+*/
+function captcha_load_configuration()
+{
+    global $_CONF, $base_path;
+
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+    require_once $base_path . 'install_defaults.php';
+
+    return plugin_initconfig_captcha();
+}
+
+
 function plugin_install_captcha($_DB_table_prefix)
 {
-    global $_TABLES, $_CONF, $LANG_CP00, $_DB_dbms;
-    global $_CP_CONF;
+    global $_TABLES, $_CONF;
+    global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
 
-    require_once($_CONF['path'] . '/plugins/captcha/config.php');
     require_once($_CONF['path'] . '/plugins/captcha/functions.inc');
 
-    $pi_version = $_CP_CONF['version'];
-    $pi_name    = $_CP_CONF['pi_name'];
-    $gl_version = $_CP_CONF['gl_version'];
-    $pi_url     = 'http://www.gllabs.org';  // Plugin Homepage
-
-    $_SQL['cp_config'] =
-        "CREATE TABLE {$_TABLES['cp_config']} ( " .
-        "  `config_name` varchar(255) NOT NULL default '', " .
-        "  `config_value` varchar(255) NOT NULL default '', " .
-        "   PRIMARY KEY  (`config_name`) " .
+    $_SQL['cp_sessions'] =
+        "CREATE TABLE {$_TABLES['cp_sessions']} ( " .
+        "  `session_id` varchar(40) NOT NULL default '', " .
+        "  `cptime`  INT(11) NOT NULL default 0, " .
+        "  `validation` varchar(40) NOT NULL default '', " .
+        "  `counter`    TINYINT(4) NOT NULL default 0, " .
+        "  PRIMARY KEY (`session_id`) " .
         " );";
 
-    if ( $_DB_dbms == 'mysql' ) {
-        $_SQL['cp_sessions'] =
-            "CREATE TABLE {$_TABLES['cp_sessions']} ( " .
-            "  `session_id` varchar(40) NOT NULL default '', " .
-            "  `cptime`  INT(11) NOT NULL default 0, " .
-            "  `validation` varchar(40) NOT NULL default '', " .
-            "  `counter`    TINYINT(4) NOT NULL default 0, " .
-            "  PRIMARY KEY (`session_id`) " .
-            " );";
-    } else {
-            "CREATE TABLE {$_TABLES['cp_sessions']} ( " .
-            "  `session_id` varchar(40) NOT NULL default '', " .
-            "  `cptime`  INT NOT NULL default 0, " .
-            "  `validation` varchar(40) NOT NULL default '', " .
-            "  `counter`    TINYINT NOT NULL default 0, " .
-            "  PRIMARY KEY (`session_id`) " .
-            " );";
-    }
     foreach ($_SQL as $table => $sql) {
         DB_query($sql,1);
         if (DB_error()) {
-            plugin_uninstall_captcha();
+            plugin_remove_captcha();
             return false;
             exit;
         }
     }
 
-    $SQL_DEFAULTS = "INSERT INTO `{$_TABLES['cp_config']}` (`config_name`, `config_value`) VALUES " .
-                    " ('anonymous_only', '1'), " .
-                    " ('remoteusers','0'), " .
-                    " ('debug', '0'), " .
-                    " ('enable_comment', '1'), " .
-                    " ('enable_contact', '1'), " .
-                    " ('enable_emailstory', '1'), " .
-                    " ('enable_forum', '1'), " .
-                    " ('enable_registration', '1'), " .
-                    " ('enable_mediagallery', '1'), " .
-                    " ('enable_rating', '1'), " .
-                    " ('enable_story', '1'), " .
-                    " ('enable_calendar', '1'), " .
-                    " ('enable_links', '1'), " .
-                    " ('gfxDriver', '2'), " .
-                    " ('gfxFormat', 'jpg'), " .
-                    " ('imageset','default'), " .
-                    " ('logging', '0'), " .
-                    " ('gfxPath', '');";
-
-    DB_query($SQL_DEFAULTS,1);
+    // Load the online configuration records
+    if (function_exists('captcha_load_configuration')) {
+        if (!captcha_load_configuration()) {
+            plugin_remove_captcha();
+            return false;
+        }
+    }
 
     // Register the plugin with glFusion
     DB_delete($_TABLES['plugins'],'pi_name','captcha');
@@ -116,6 +135,25 @@ function plugin_install_captcha($_DB_table_prefix)
     }
 
     // Create initial log entry
+    return true;
+}
+
+
+function plugin_remove_captcha() {
+    global $_DB_table_prefix, $_TABLES;
+
+    $pi_name    = 'captcha';
+
+    DB_query("DROP TABLE " . $_DB_table_prefix . 'cp_sessions',1);
+
+    // Ok to proceed and delete plugin
+
+    // Unregister the plugin with glFusion
+    COM_errorLog('Attempting to unregister the CAPTCHA Plugin from glFusion',1);
+    DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE group_name='captcha'");
+    DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'captcha'",1);
+
+    COM_errorLog('...success',1);
     return true;
 }
 ?>

@@ -46,9 +46,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'config.php') !== false)
  * thus needs to be a separate file.
 */
 
-@include ("filemgmt.php");
-
-$CONF_FM['version'] = '1.6';
+$CONF_FM['version'] = '1.7.0.fusion';
 
 $_FM_TABLES['filemgmt_cat']             = $_DB_table_prefix . 'filemgmt_category';
 $_FM_TABLES['filemgmt_filedetail']      = $_DB_table_prefix . 'filemgmt_filedetail';
@@ -60,13 +58,6 @@ $_FM_TABLES['filemgmt_history']         = $_DB_table_prefix . 'filemgmt_download
 
 // Permissions that will be used for new files into the repository
 $filemgmtFilePermissions = (int) 0755;
-
-// Number of days to show new files listing
-$filemgmtWhatsNewPeriodDays = 14;
-// String Length for Filename Titles in WhatsNewBlock
-$filemgmtWhatsNewTitleLength = 20;
-// Should the Whats New Block show new FileMgmt Comments
-$filemgmt_showWhatsNewComments = true;
 
 /* Configuration for the auto-rename or reject logic when users are submitted files for approval */
 /* Map any extensions to a new extension or 'reject' if they should not be allowed  */

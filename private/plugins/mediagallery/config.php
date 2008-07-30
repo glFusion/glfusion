@@ -221,7 +221,7 @@ $_MG_CONF['update_parent_lastupdated'] = false;
  * ------------------------------------------------------------------------ */
 
 $_MG_CONF['menulabel']           = $LANG_MG00['menulabel'];
-$_MG_CONF['version']             = '1.6.1';
+$_MG_CONF['version']             = '1.6.2';
 $_MG_CONF['pi_name']             = 'mediagallery';
 
 $_MG_table_prefix = $_DB_table_prefix;

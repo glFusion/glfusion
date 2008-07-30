@@ -1717,8 +1717,8 @@ function INST_pluginAutoUpgrade( $plugin, $forceInstall = 0 )
     if ( $active || $forceInstall == 1) {
         if ( file_exists($_CONF['path'] . '/plugins/' . $plugin . '/glupgrade.inc') ) {
             require_once($_CONF['path'] . '/plugins/' . $plugin . '/glupgrade.inc');
-            if ( function_exists( 'plugin_upgrade_' . $plugin ) ) {
-                $plgUpgradeFunction = 'plugin_upgrade_' . $plugin;
+            if ( function_exists( 'plugin_plgupgrade_' . $plugin ) ) {
+                $plgUpgradeFunction = 'plugin_plgupgrade_' . $plugin;
                 $rc = $plgUpgradeFunction();
             } else {
                 if ( $forceInstall == 1 ) {
@@ -2175,20 +2175,6 @@ switch ($mode) {
                 // Permissions are correct
                 @fclose($file);
                 @unlink($_CONF['path'] . 'data/layout_cache/test.txt');
-            }
-
-            // FileMgmt Plugin Directory
-            if (!$file = @fopen($gl_path . 'plugins/filemgmt/test.txt', 'w')) {
-                // Permissions are incorrect
-                $_PERMS['fm']      = sprintf("%3o", @fileperms($gl_path . 'plugins/filemgmt/') & 0777);
-                $display_permissions    .= '<p><label class="file-permission-list"><code>' . $gl_path
-                                        . 'plugins/filemgmt/</code></label><span class="error">' . $LANG_INSTALL[14]
-                                        . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['fm'] . ') </p>' . LB;
-                $failed++;
-            } else {
-                // Permissions are correct
-                fclose($file);
-                @unlink($gl_path . 'plugins/filemgmt/test.txt');
             }
 
             $display .= $LANG_INSTALL[9] . '<br' . XHTML . '><br' . XHTML . '>' . LB;

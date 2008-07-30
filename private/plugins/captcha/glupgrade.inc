@@ -34,16 +34,6 @@ if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
     die ('This file can not be used on its own.');
 }
 
-if ( !isset($_DB_table_prefix) ) {
-    $_DB_table_prefix = '';
-}
-
-$_CP_CONF['version']    = '3.1.0';
-$_CP_CONF['pi_name']    = 'captcha';
-$_CP_CONF['gl_version'] = '1.0.0';
-$_TABLES['cp_config']   = $_DB_table_prefix . 'cp_config';
-$_TABLES['cp_sessions'] = $_DB_table_prefix . 'cp_sessions';
-
 /*
  * If we are being called glFusion's upgrade routine, there is no
  * COM_errorLog() function available.
@@ -54,7 +44,7 @@ if (!function_exists('COM_errorLOG') ) {
     }
 }
 
-function plugin_upgrade_captcha()
+function plugin_plgupgrade_captcha()
 {
     global $_TABLES, $_CONF, $_CP_CONF;
 
@@ -64,36 +54,6 @@ function plugin_upgrade_captcha()
         case "2.0.0" :
         case "2.0.1" :
         case "2.0.2" :
-            $_SQL['cp_config'] =
-                "CREATE TABLE {$_TABLES['cp_config']} ( " .
-                "  `config_name` varchar(255) NOT NULL default '', " .
-                "  `config_value` varchar(255) NOT NULL default '', " .
-                "   PRIMARY KEY  (`config_name`) " .
-                " );";
-
-            foreach ($_SQL as $table => $sql) {
-                COM_errorLog("Creating $table table",1);
-                DB_query($sql,1);
-                if (DB_error()) {
-                    COM_errorLog("Error Creating $table table",1);
-                }
-                COM_errorLog("Success - Created $table table",1);
-            }
-
-            $SQL_DEFAULTS = "INSERT INTO `{$_TABLES['cp_config']}` (`config_name`, `config_value`) VALUES " .
-                            " ('anonymous_only', '1'), " .
-                            " ('debug', '0'), " .
-                            " ('enable_comment', '0'), " .
-                            " ('enable_contact', '0'), " .
-                            " ('enable_emailstory', '0'), " .
-                            " ('enable_forum', '0'), " .
-                            " ('enable_registration', '0'), " .
-                            " ('enable_story', '0'), " .
-                            " ('gfxDriver', '2'), " .
-                            " ('gfxFormat', 'jpg'), " .
-                            " ('gfxPath', '');";
-
-            DB_query($SQL_DEFAULTS,1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='2.1.0' WHERE pi_name='captcha' LIMIT 1");
         case "2.1.0" :
         case "2.1.1" :
@@ -115,20 +75,10 @@ function plugin_upgrade_captcha()
                 }
                 COM_errorLog("Success - Created $table table",1);
             }
-
-            $SQL_DEFAULTS = "INSERT INTO `{$_TABLES['cp_config']}` (`config_name`, `config_value`) VALUES " .
-                            " ('enable_mediagallery', '0'), " .
-                            " ('remoteusers', '0');";
-
-            DB_query($SQL_DEFAULTS,1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='3.0.0' WHERE pi_name='captcha' LIMIT 1");
         case "3.0.0" :
         case "3.0.1" :
         case "3.0.2" :
-            $SQL_DEFAULTS = "INSERT INTO `{$_TABLES['cp_config']}` (`config_name`, `config_value`) VALUES " .
-                            " ('logging', '0'), " .
-                            " ('enable_rating', '0');";
-            DB_query($SQL_DEFAULTS,1);
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='3.1.0' WHERE pi_name='captcha' LIMIT 1");
             break;

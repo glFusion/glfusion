@@ -59,43 +59,60 @@ $LANG_CP00 = array (
     'entry_error'       => 'The entered CAPTCHA string did not match the characters on the graphic, please try again. <b>This is case sensitive.</b>',
     'captcha_info'      => 'The CAPTCHA Plugin provides another layer of protection against SpamBots for your glFusion site.  See the <a href="%s">Online Documentation Wiki</a> for more info.',
     'enabled_header'    => 'Current CAPTCHA Settings',
-    'view_logfile'      => 'View CAPTCHA Logfile',
-    'log_viewer'        => 'glFusion Log Viewer',
     'on'                => 'On',
     'off'               => 'Off',
-    'anonymous_only'    => 'Anonymous Only',
-    'enable_comment'    => 'Enable Comment',
-    'enable_story'      => 'Enable Story',
-    'enable_registration' => 'Enable Registration',
-    'enable_contact'    => 'Enable Contact',
-    'enable_emailstory' => 'Enable Email Story',
-    'enable_forum'      => 'Enable Forum',
-    'enable_mediagallery' => 'Enable Media Gallery (Postcards)',
-    'enable_rating'     => 'Enable Rating Plugin Support',
-    'enable_links'      => 'Enable Links Plugin Support',
-    'enable_calendar'   => 'Enable Calendar Plugin Support',
     'captcha_alt'       => 'You must enter the graphic text - contact Site Admin if you are unable to read the graphic',
     'save'              => 'Save',
     'cancel'            => 'Cancel',
     'success'           => 'Configuration Options successfully saved.',
-    'gfx_driver'        => 'Graphics Driver',
-    'gfx_format'        => 'Graphics Format',
-    'convert_path'      => 'Full Path to ImageMagick\'s convert utility',
-    'gd_libs'           => 'GD Libs',
-    'imagemagick'       => 'ImageMagick',
-    'static_images'     => 'Use Static Images',
-    'image_set'			=> 'Static Image Set',
-    'debug'             => 'Debug',
-    'configuration'     => 'CAPTCHA Configuration',
-    'integration'       => 'CAPTCHA Integration',
     'reload'            => 'New Image',
     'reload_failed'     => 'Sorry, cannot autoreload CAPTCHA image\nSubmit the form and a new CAPTCHA will be loaded',
     'reload_too_many'   => 'You may only request up to 5 image refreshes',
     'session_expired'   => 'Your CAPTCHA Session has expired, please try again',
-    'remoteusers'       => 'Force CAPTCHA for all Remote Users',
-    'logging'           => 'Log invalid CAPTCHA attempts',
     'picture'           => 'Picture',
     'characters'        => 'Characters',
+);
+
+// Localization of the Admin Configuration UI
+$LANG_configsections['captcha'] = array(
+    'label'                 => 'CAPTCHA',
+    'title'                 => 'CAPTCHA Configuration'
+);
+$LANG_confignames['captcha'] = array(
+    'gfxDriver'             => 'Graphics Driver',
+    'gfxFormat'             => 'Graphics Format',
+    'imageset'			    => 'Static Image Set',
+    'debug'                 => 'Debug',
+    'gfxPath'               => 'Full Path to ImageMagick\'s convert utility',
+    'remoteusers'           => 'Force CAPTCHA for all Remote Users',
+    'logging'               => 'Log invalid CAPTCHA attempts',
+    'anonymous_only'        => 'Anonymous Only',
+    'enable_comment'        => 'Enable Comment',
+    'enable_story'          => 'Enable Story',
+    'enable_registration'   => 'Enable Registration',
+    'enable_contact'        => 'Enable Contact',
+    'enable_emailstory'     => 'Enable Email Story',
+    'enable_forum'          => 'Enable Forum',
+    'enable_mediagallery'   => 'Enable Media Gallery (Postcards)',
+    'enable_rating'         => 'Enable Rating Plugin Support',
+    'enable_links'          => 'Enable Links Plugin Support',
+    'enable_calendar'       => 'Enable Calendar Plugin Support',
+
+);
+$LANG_configsubgroups['captcha'] = array(
+    'sg_main'               => 'Configuration Settings'
+);
+$LANG_fs['captcha'] = array(
+    'cp_public'                 => 'General Settings',
+    'cp_integration'            => 'CAPTCHA Integration',
+);
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
+$LANG_configselects['captcha'] = array(
+    0 => array('True' => 1, 'False' => 0),
+    1 => array('True' => TRUE, 'False' => FALSE),
+    2 => array('GD Libs' => 0, 'ImageMagick' => 1, 'Static Images' => 2),
+    4 => array('Default' => 'default','Simple' => 'simple'),
+    5 => array('JPG' => 'jpg','PNG' => 'png')
 );
 
 $PLG_captcha_MESSAGE1 = 'CAPTCHA plugin upgrade: Update completed successfully.';

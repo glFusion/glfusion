@@ -857,4 +857,75 @@ $LANG_GF97 = array (
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade completed - no errors';
 $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade failed - check error.log';
 
+
+// Localization of the Admin Configuration UI
+$LANG_configsections['forum'] = array(
+    'label'                 => 'Forum',
+    'title'                 => 'Forum Configuration'
+);
+$LANG_confignames['forum'] = array(
+    'registration_required'     => 'Login Required to View?',
+    'registered_to_post'        => 'Login Required to Post?',
+    'allow_html'                => 'Allow HTML in posts?',
+    'post_htmlmode'             => 'HTML mode as default post mode?',
+    'use_glfilter'              => 'Use glFusion HTML Filter?',
+    'use_geshi'                 => 'Use the Geshi Code Formatting Feature?',
+    'use_censor'                => 'Use glFusion Content Filter?',
+    'show_moods'                => 'Enable moods to be selected per post?',
+    'allow_smilies'             => 'Enable smilies to be used?',
+    'allow_notification'        => 'Do you want to allow people to be notified?',
+    'allow_user_dateformat'     => 'Use the user defined preference for Date/Time format where required?',
+    'show_topicreview'          => 'Show Topic Review (Iframe) at bottom when replying to a topic?',
+    'use_autorefresh'           => 'Automatically refresh page after a submission?',
+    'autorefresh_delay'         => 'Pause delay in seconds if autorefresh mode used',
+    'show_subject_length'       => 'Maximum length (characters) for the topic subject',
+    'show_topics_perpage'       => 'Number of topics to display when viewing the forum index',
+    'show_posts_perpage'        => 'Number of posts to show per page',
+    'show_messages_perpage'     => 'Messages Admin screen - number of messages lines per page',
+    'show_searches_perpage'     => 'Number of records to show per page when viewing search results',
+    'views_tobe_popular'        => 'Number of views required for topic to have popular rating',
+    'convert_break'             => 'No longer used',
+    'min_comment_length'        => 'Minimum length in characters contents of post must be',
+    'min_username_length'       => 'Minimum length in characters requied for members name or anonymous name',
+    'min_subject_length'        => 'Minimum length in characters required for Topic Subject to post',
+    'post_speedlimit'           => 'Time in seconds required between posts - to prevent spamming',
+    'use_smilies_plugin'        => 'Smilies Plugin or external functions should be used for handling smilies',
+    'use_pm_plugin'             => 'Private Message Plugin is installed and should be enabled',
+    'use_spamx_filter'          => 'Enable the Spam-X Plugin to filter out possible spam on all posts before saving',
+    'show_centerblock'          => 'Enable Centerblock?',
+    'centerblock_homepage'      => 'Homepage Only?',
+    'centerblock_where'         => 'Placement on the page',
+    'cb_subject_size'           => 'Number of characters allowed in displayed subject',
+    'centerblock_numposts'      => 'Number of posts to show in Centerblock',
+    'sb_subject_size'           => 'Number of characters allowed in displayed subject',
+    'sb_latestpostonly'         => 'Only show the latest post per topic',
+    'sideblock_numposts'        => 'Number of posts to show in latestposts block',
+    'allowed_editwindow'        => 'Allowed time (min) to allow members to edit their posts',
+    'level1'                    => 'Rank 1 - Post threshold',
+    'level2'                    => 'Rank 2 - Post threshold',
+    'level3'                    => 'Rank 3 - Post threshold',
+    'level4'                    => 'Rank 4 - Post threshold',
+    'level5'                    => 'Rank 5 - Post threshold',
+    'level1name'                => 'Rank 1 - Name',
+    'level2name'                => 'Rank 2 - Name',
+    'level3name'                => 'Rank 3 - Name',
+    'level4name'                => 'Rank 4 - Name',
+    'level5name'                => 'Rank 5 - Name',
+);
+$LANG_configsubgroups['forum'] = array(
+    'sg_main'               => 'Configuration Settings'
+);
+$LANG_fs['forum'] = array(
+    'ff_public'                 => 'General Settings',
+    'ff_topic_post_settings'    => 'Topic Posting Settings',
+    'ff_centerblock'            => 'Centerblock Settings',
+    'ff_latest_post_block'      => 'Latest Posts Block Settings',
+    'ff_rank_settings'          => 'Rank Settings',
+);
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
+$LANG_configselects['forum'] = array(
+    0 => array('True' => 1, 'False' => 0),
+    1 => array('True' => TRUE, 'False' => FALSE),
+    2 => array('Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
+);
 ?>

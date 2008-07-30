@@ -53,6 +53,8 @@ else
     include_once ($_CONF['path'] . 'plugins/forum/language/english.php');
 }
 
+
+
 // Need to add this line because PLG_enableStateChange does an include of this file inside a plugin function and $_TABLES is not global.
 // This will be fixed in GL 1.4.1 Final
 $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
@@ -60,6 +62,46 @@ $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 $pi_version = floatval (DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'"));
 require_once ($_CONF['path_system'] . 'lib-portalparts.php');
 require_once ($_CONF['path'] . 'plugins/forum/config.php');
+
+/*
+* Check and see if we need to load the plugin configuration
+*/
+if (!isset($CONF_FORUM['registration_required'])) {
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+
+    $ff_config = config::get_instance();
+    $_FF_FORUM = $ff_config->get_config('forum');
+
+    if ( is_array($_FF_FORUM)  && is_array($CONF_FORUM) ) {
+        $CONF_FORUM = array_merge($_FF_FORUM, $CONF_FORUM);
+    }
+    // How many messages to show on the Most Popular page
+    $CONF_FORUM['popular_limit'] = '20';
+    // How many lines to show on one page in the search results
+    $CONF_FORUM['show_search_perpage'] = 15;
+    // How many users to show on one page in the memberlist results
+    $CONF_FORUM['show_members_perpage'] = 100;
+    // View Anonymous Posts - registed users can set this false
+    $CONF_FORUM['show_anonymous_posts'] = 1;
+    // Only send Notification once - even if more posts are created since your last visit
+    $CONF_FORUM['notify_once'] = 1;
+
+    if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
+        $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
+        if ( DB_numRows($result) > 0 ) {
+            $userprefs = DB_fetchArray($result);
+            $CONF_FORUM['show_topics_perpage']        = $userprefs['topicsperpage'];
+            $CONF_FORUM['show_posts_perpage']         = $userprefs['postsperpage'];
+            $CONF_FORUM['popular_limit']              = $userprefs['popularlimit'];
+            $CONF_FORUM['show_members_perpage']       = $userprefs['membersperpage'];
+            $CONF_FORUM['show_search_perpage']        = $userprefs['searchlines'];
+            $CONF_FORUM['show_topicreview']           = $userprefs['showiframe'];
+            $CONF_FORUM['show_anonymous_posts']       = $userprefs['viewanonposts'];
+            $CONF_FORUM['notify_once']                = $userprefs['notify_once'];
+        }
+    }
+    $CONF_FORUM['leftblocks'] = ppGetUserBlocks($CONF_FORUM['leftblocks']);
+}
 
 if( empty( $LANG_CHARSET )) {
     $CONF_FORUM['charset'] = $_CONF['default_charset'];
@@ -786,57 +828,15 @@ function plugin_chkVersion_forum() {
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function plugin_upgrade_forum() {
-    global $_TABLES,$CONF_FORUM;
+    global $_CONF, $_TABLES,$CONF_FORUM;
 
-    include ('upgrade.inc');        // Include the upgrade functions
+    require_once($_CONF['path'] . 'plugins/forum/glupgrade.inc');
 
-    $curversion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name = 'forum'");
+    $rc = plugin_plgupgrade_forum();
 
-    switch ($curversion) {
-
-        case "2.3" :
-            if (upgrade_232() == 0 )  {
-                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.5RC1' WHERE `pi_name` = 'forum' LIMIT 1");
-                if (upgrade_25() == 0 )  {
-                    DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.6', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
-                }
-            }
-            break;
-
-        case "2.3.2" :
-            if (upgrade_232() == 0 )  {
-                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.5RC1' WHERE `pi_name` = 'forum' LIMIT 1");
-                if (upgrade_25() == 0 )  {
-                    DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.6', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
-                }
-            }
-            break;
-
-        case "2.5RC1" :
-            if (upgrade_25() == 0 )  {
-                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.6', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
-            }
-            break;
-        case "2.6" :
-            DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
-            break;
-        case "2.7" :
-        case "2.7.1" :
-            if (upgrade_30() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '3.0', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
-            }
-            break;
-    }
-
-    /* Check if update completed and return a message number to be shown */
-    if (DB_getItem($_TABLES['plugins'],'pi_version',"pi_name = 'forum'") == $CONF_FORUM['version']) {
-        return 1;
-    } else {
-        return 5;
-    }
+    return true;
 
 }
-
 
 /**
 * Removes the datastructures for this plugin from the glFusion database
@@ -845,24 +845,7 @@ function plugin_upgrade_forum() {
 */
 function plugin_uninstall_forum($installCheck='')
 {
-    global $_TABLES, $LANG_GF00;
-
-    $pi_name='forum';
-    $FEATURES = array ('forum.edit', 'forum.user');
-    $TABLES = array(
-        'gf_topic',
-        'gf_categories',
-        'gf_forums',
-        'gf_settings',
-        'gf_watch',
-        'gf_moderators',
-        'gf_banned_ip',
-        'gf_log',
-        'gf_userprefs',
-        'gf_userinfo',
-        'gf_attachments',
-        'gf_bookmarks');
-
+    global $_CONF, $_TABLES, $LANG_GF00;
 
      // Check and see if plugin is still enabled - if so display warning and exit
     if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
@@ -873,41 +856,10 @@ function plugin_uninstall_forum($installCheck='')
         echo $display;
         exit;
     }
+    require_once($_CONF['path'] . 'plugins/forum/install.inc');
 
-    // Ok to proceed and delete plugin - Unregister the plugin with glFusion
-    COM_errorLog('Attempting to unregister the Forum plugin from glFusion',1);
-    DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'forum'",1);
-    // Drop tables
-    foreach($TABLES as $table) {
-        $t = $_TABLES["$table"];
-        COM_errorLog("Removing Table $t",1);
-        DB_query("DROP TABLE $t",1);
-    }
-
-    // Remove Admin Security for this plugin
-    $grp_id = DB_getItem($_TABLES['vars'], 'value', "name = '{$pi_name}_admin'");
-    COM_errorLog("Removing $pi_name Admin Group", 1);
-    DB_query("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id",1);
-    DB_query("DELETE FROM {$_TABLES['vars']} WHERE name = '{$pi_name}_admin'");
-    COM_errorLog("Removing root users from admin of $pi_name");
-    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id",1);
-
-    // Remove all the associated features - access rights. The feature ID's were stored in the vars table during install.
-    foreach ($FEATURES as $feature) {
-        COM_errorLog("Removing $feature feature and rights to it",1);
-        $feat_id = DB_getItem($_TABLES['features'], 'ft_id', "ft_name = '$feature'");
-        COM_errorLog("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $feat_id");
-        DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $feat_id",1);
-        DB_query("DELETE FROM {$_TABLES['features']} WHERE ft_id = $feat_id",1);
-    }
-
-    COM_errorLog("Removing Forum - Block Definition ", 1);
-    DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn = 'phpblock_forum_newposts'",1);
-    DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn = 'phpblock_forum_newposts2'",1);
-    DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn = 'phpblock_forum_menu'",1);
-
-    COM_errorLog('...success',1);
-    return true;
+    $rc = plugin_remove_forum();
+    return $rc;
 }
 
 //  ------- GENERAL FORUM FUNCTIONS --------
@@ -1250,9 +1202,9 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     }
     $retval = '';
 
-    // Retrieve Centerblock Settings
-    $query = DB_query ("SELECT cb_enable, cb_homepage, cb_where FROM {$_TABLES['gf_settings']}");
-    list ($cb_enable,$cb_homepage,$cb_where) = DB_fetchArray ($query);
+    $cb_enable = $CONF_FORUM['show_centerblock'];
+    $cb_homepage = $CONF_FORUM['centerblock_homepage'];
+    $cb_where = $CONF_FORUM['centerblock_where'];
 
     // If enabled only for homepage and this is not page 1 or a topic page,
     // then set disable flag

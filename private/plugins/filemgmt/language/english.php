@@ -125,6 +125,54 @@ $LANG_FILEMGMT = array(
     'more'          => '<em>more ...</em>'
 );
 
+
+// Localization of the Admin Configuration UI
+$LANG_configsections['filemgmt'] = array(
+    'label'                 => 'FileMgmt',
+    'title'                 => 'FileMgmt Configuration'
+);
+$LANG_confignames['filemgmt'] = array(
+    'whatsnew'              => 'Enable WhatsNew Listing?',
+    'perpage'               => 'Displayed Downloads per Page',
+    'popular_download'      => 'Hits to be Popular',
+    'newdownloads'          => 'Number of Downloads as New on Top Page',
+    'trimdesc'              => 'Trim File Descriptions in Listing',
+    'dlreport'              => 'Restrict access to Download report',
+    'selectpriv'            => 'Restrict access to group \'Logged-In Users\' only',
+    'uploadselect'          => 'Allow Logged-In uploads',
+    'uploadpublic'          => 'Allow Anonymous uploads',
+    'useshots'              => 'Display Category Images',
+    'shotwidth'             => 'Thumbnail Img Width',
+    'Emailoption'           => 'Email submitter if file approved',
+    'FileStore'             => 'Directory to store files',
+    'SnapStore'             => 'Directory to store file thumbnails',
+    'SnapCat'               => 'Directory to store category thumbnails',
+    'FileStoreURL'          => 'URL to files',
+    'FileSnapURL'           => 'URL to file thumbnails',
+    'SnapCatURL'            => 'URL to category thumbnails',
+    'whatsnewperioddays'    => 'What\'s New Days',
+    'whatsnewtitlelength'   => 'What\'s New Title Length',
+    'showwhatsnewcomments'  => 'Show Comment in What\'s New Block?',
+);
+$LANG_configsubgroups['filemgmt'] = array(
+    'sg_main'               => 'Main Settings'
+);
+$LANG_fs['filemgmt'] = array(
+    'fs_public'             => 'Public FileMgmt Settings',
+    'fs_admin'              => 'FileMgmt Admin Settings',
+    'fs_permissions'        => 'Default Permissions',
+    'fm_access'             => 'FileMgmt Access Control',
+    'fm_general'            => 'FileMgmt General Settings',
+);
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
+$LANG_configselects['filemgmt'] = array(
+    0 => array('True' => 1, 'False' => 0),
+    1 => array('True' => TRUE, 'False' => FALSE),
+    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
+);
+
+
+
 $PLG_filemgmt_MESSAGE1 = 'Filemgmt Plugin Install Aborted<br>File: plugins/filemgmt/filemgmt.php is not writeable';
 $PLG_filemgmt_MESSAGE3 = 'This plugin requires glFusion Version 1.0 or greater, upgrade aborted.';
 $PLG_filemgmt_MESSAGE4 = 'Plugin version 1.5 code not detected - upgrade aborted.';

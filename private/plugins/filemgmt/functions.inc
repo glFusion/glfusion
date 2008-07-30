@@ -48,6 +48,40 @@ if (file_exists ($langfile)) {
 
 include($_CONF['path'] . 'plugins/filemgmt/config.php');
 
+/*
+* Check and see if we need to load the plugin configuration
+*/
+if (!isset($_FM_CONF['perpage'])) {
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+
+    $fm_config = config::get_instance();
+    $_FM_CONF = $fm_config->get_config('filemgmt');
+    /*
+     * Backward compatibility for now...
+     */
+    $mydownloads_popular        = $_FM_CONF['popular'];
+    $mydownloads_newdownloads   = $_FM_CONF['newdownloads'];
+    $mydownloads_perpage        = $_FM_CONF['perpage'];
+    $mydownloads_trimdesc       = $_FM_CONF['trimdesc'];
+    $mydownloads_whatsnew       = $_FM_CONF['whatsnew'];
+    $mydownloads_dlreport       = $_FM_CONF['dlreport'];
+    $mydownloads_selectpriv     = $_FM_CONF['selectpriv'];
+    $mydownloads_publicpriv     = $_FM_CONF['publicpriv'];
+    $mydownloads_uploadselect   = $_FM_CONF['uploadselect'];
+    $mydownloads_uploadpublic   = $_FM_CONF['uploadpublic'];
+    $mydownloads_useshots       = $_FM_CONF['useshots'];
+    $mydownloads_shotwidth      = $_FM_CONF['shotwidth'];
+    $filemgmt_Emailoption       = $_FM_CONF['Emailoption'];
+    $filemgmt_FileStore         = $_FM_CONF['FileStore'];
+    $filemgmt_SnapStore         = $_FM_CONF['SnapStore'];
+    $filemgmt_SnapCat           = $_FM_CONF['SnapCat'];
+    $filemgmt_FileStoreURL      = $_FM_CONF['FileStoreURL'];
+    $filemgmt_FileSnapURL       = $_FM_CONF['FileSnapURL'];
+    $filemgmt_SnapCatURL        = $_FM_CONF['SnapCatURL'];
+    $filemgmtWhatsNewPeriodDays = $_FM_CONF['whatsnewperioddays'];
+    $filemgmtWhatsNewTitleLength= $_FM_CONF['whatsnewtitlelength'];
+    $filemgmt_showWhatsNewComments = $_FM_CONF['showwhatsnewcomments'];
+}
 
 /**
 * Returns the items for this plugin that should appear on the main menu
@@ -80,42 +114,14 @@ function plugin_chkVersion_filemgmt() {
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function plugin_upgrade_filemgmt() {
-    global $_TABLES,$_FM_TABLES,$CONF_FM;
+    global $_CONF, $_TABLES,$_FM_TABLES,$CONF_FM;
 
-    $cur_version = DB_getItem($_TABLES['plugins'],'pi_version', "pi_name='filemgmt'");
-    $gl_version = floatval (VERSION);
-    if ($gl_version >= 1.3) {
-        if ($cur_version == '1.3') {
-            DB_query("ALTER TABLE {$_FM_TABLES['filemgmt_cat']} ADD `grp_access` mediumint(8) DEFAULT '2' NOT NULL AFTER imgurl");
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '{$CONF_FM['version']}' WHERE pi_name = 'filemgmt'");
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version = '1.4' WHERE pi_name = 'filemgmt'");
+    require_once($_CONF['path'] . 'plugins/filemgmt/glupgrade.inc');
 
-            // Update all the comment records
-            $result = DB_query("SELECT cid,sid FROM {$_TABLES['comments']} WHERE type='filemgmt'");
-            while (list($cid,$sid) = DB_fetchArray($result)) {
-                if (strpos($sid,'fileid_') === FALSE) {
-                    $sid = "fileid_{$sid}";
-                    DB_query("UPDATE {$_TABLES['comments']} SET sid='$sid' WHERE cid='$cid'");
-                }
-            }
-            return true;
-        } elseif ($cur_version == '1.5') {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.1' WHERE pi_name = 'filemgmt'");
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version = '1.4' WHERE pi_name = 'filemgmt'");
-        } elseif ($cur_version == '1.5.1') {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.2' WHERE pi_name = 'filemgmt'");
-        } elseif ($cur_version == '1.5.2') {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.3' WHERE pi_name = 'filemgmt'");
-        } elseif ($cur_version == '1.5.3') {
-            DB_query("ALTER TABLE {$_FM_TABLES['filemgmt_cat']} ADD `grp_writeaccess` MEDIUMINT( 8 ) NOT NULL DEFAULT '1'");
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.6' WHERE pi_name = 'filemgmt'");
-            return true;
-        } else {
-            return 5;
-        }
-    } else {
-        return 3;
-    }
+    $rc = plugin_plgupgrade_filemgmt();
+
+    return true;
+
 }
 
 
@@ -508,11 +514,7 @@ function plugin_getadminoption_filemgmt()
 */
 function plugin_uninstall_filemgmt($installCheck='')
 {
-    global $LANG_FM00, $LANG_FILEMGMT, $_TABLES,$_FM_TABLES;
-
-    $pi_name='filemgmt';
-    $FEATURES = array ('filemgmt.edit', 'filemgmt.user','filemgmt.upload');
-    $TABLES = array ('filemgmt_cat','filemgmt_filedetail','filemgmt_filedesc','filemgmt_brokenlinks','filemgmt_votedata','filemgmt_history');
+    global $_CONF, $LANG_FM00, $LANG_FILEMGMT, $_TABLES,$_FM_TABLES;
 
      // Check and see if plugin is still enabled - if so display warning and exit
     if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
@@ -526,48 +528,10 @@ function plugin_uninstall_filemgmt($installCheck='')
         exit;
     }
 
-    // Ok to proceed and delete plugin - Unregister the plugin with glFusion
-    COM_errorLog('Attempting to unregister the Forum plugin from glFusion',1);
-    DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'filemgmt'",1);
-    // Drop tables
-    foreach($TABLES as $table) {
-        $t = $_FM_TABLES["$table"];
-        COM_errorLog("Removing Table $t",1);
-        DB_query("DROP TABLE $t",1);
-    }
+    require_once($_CONF['path'] . 'plugins/filemgmt/install.inc');
 
-    // Remove the Admin group definition for this plugin
-    $grp_id = DB_getItem($_TABLES['vars'], 'value', "name = '{$pi_name}_admingrp_id'");
-    COM_errorLog("Removing $pi_name Admin Group", 1);
-    DB_query("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id",1);
-    DB_query("DELETE FROM {$_TABLES['vars']} WHERE name = '{$pi_name}_admingrp_id'");
-    COM_errorLog("Removing root users from Admin Group of $pi_name");
-    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id",1);
-
-    // Remove User group definition for this plugin
-    $grp_id = DB_getItem($_TABLES['vars'], 'value', "name = '{$pi_name}_usersgrp_id'");
-    COM_errorLog("Removing $pi_name User Group", 1);
-    DB_query("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id",1);
-    DB_query("DELETE FROM {$_TABLES['vars']} WHERE name = '{$pi_name}_usersgrp_id'");
-    COM_errorLog("Removing root users from Users Group of $pi_name");
-    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id",1);
-
-    // Remove all the associated features - access rights. The feature ID's were stored in the vars table during install.
-    foreach ($FEATURES as $feature) {
-        COM_errorLog("Removing $feature feature and rights to it",1);
-        $feat_id = DB_getItem($_TABLES['features'], 'ft_id', "ft_name = '$feature'");
-        COM_errorLog("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $feat_id");
-        DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $feat_id",1);
-        DB_query("DELETE FROM {$_TABLES['features']} WHERE ft_id = $feat_id",1);
-    }
-
-    DB_query("DELETE FROM {$_TABLES['comments']} WHERE type='filemgmt'");
-    COM_errorLog("Removing all comments for plugin $pi_name");
-    DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn='phpblock_NewDownloads'");
-    COM_errorLog("Removing block definition for plugin $pi_name");
-
-    COM_errorLog('...success',1);
-    return true;
+    $rc = plugin_remove_filemgmt();
+    return $rc;
 }
 
 

@@ -1,0 +1,182 @@
+<?php
+// +--------------------------------------------------------------------------+
+// | FileMgmt Plugin - glFusion CMS                                           |
+// +--------------------------------------------------------------------------+
+// | install_defaults.php                                                     |
+// |                                                                          |
+// | Initial Installation Defaults used when loading the online configuration |
+// | records. These settings are only used during the initial installation    |
+// | and not referenced any more once the plugin is installed.                |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
+
+if (strpos($_SERVER['PHP_SELF'], 'install_defaults.php') !== false) {
+    die('This file can not be used on its own!');
+}
+
+/*
+ * FileMgmt default settings
+ *
+ * Initial Installation Defaults used when loading the online configuration
+ * records. These settings are only used during the initial installation
+ * and not referenced any more once the plugin is installed
+ *
+ */
+
+global $_FM_DEFAULT;
+$_FM_DEFAULT = array();
+
+$_FM_DEFAULT['popular_download'] = 20;
+$_FM_DEFAULT['newdownloads']     = 10;
+$_FM_DEFAULT['perpage']          = 5;
+$_FM_DEFAULT['trimdesc']         = true;
+$_FM_DEFAULT['whatsnew']         = true;
+$_FM_DEFAULT['dlreport']         = true;
+$_FM_DEFAULT['selectpriv']       = false;
+$_FM_DEFAULT['publicpriv']       = true;
+$_FM_DEFAULT['uploadselect']     = true;
+$_FM_DEFAULT['uploadpublic']     = true;
+$_FM_DEFAULT['useshots']         = true;
+$_FM_DEFAULT['shotwidth']        = 50;
+$_FM_DEFAULT['emailoption']      = true;
+$_FM_DEFAULT['FileStore']        = $_CONF['path_html'] . 'filemgmt_data/files/';
+$_FM_DEFAULT['SnapStore']        = $_CONF['path_html'] . 'filemgmt_data/snaps/';
+$_FM_DEFAULT['SnapCat']          = $_CONF['path_html'] . 'filemgmt_data/category_snaps/';
+$_FM_DEFAULT['FileStoreURL']     = $_CONF['site_url']  . '/filemgmt_data/files/';
+$_FM_DEFAULT['FileSnapURL']      = $_CONF['site_url']  . '/filemgmt_data/snaps/';
+$_FM_DEFAULT['SnapCatURL']       = $_CONF['site_url']  . '/filemgmt_data/category_snaps/';
+
+$_FM_DEFAULT['FilePermissions']     = (int) 0755;
+$_FM_DEFAULT['WhatsNewPeriodDays']  = 14;
+$_FM_DEFAULT['WhatsNewTitleLength'] = 20;
+$_FM_DEFAULT['showWhatsNewComments']= true;
+
+
+/**
+* the filemgmt plugin's config array
+*/
+global $_FM_CONF;
+$_FM_CONF = array();
+
+if ( isset($filemgmt_FileStore) && $filemgmt_FileStore != '' && (strpos($filemgmt_FileStore,'##FILESTORE##') !== false )) {
+    $_FM_CONF['popular_download'] = $mydownloads_popular;
+    $_FM_CONF['newdownloads']     = $mydownloads_newdownloads;
+    $_FM_CONF['perpage']          = $mydownloads_perpage;
+    $_FM_CONF['trimdesc']         = $mydownloads_trimdesc;
+    $_FM_CONF['whatsnew']         = $mydownloads_whatsnew;
+    $_FM_CONF['dlreport']         = $mydownloads_dlreport;
+    $_FM_CONF['selectpriv']       = $mydownloads_selectpriv;
+    $_FM_CONF['publicpriv']       = $mydownloads_publicpriv;
+    $_FM_CONF['uploadselect']     = $mydownloads_uploadselect;
+    $_FM_CONF['uploadpublic']     = $mydownloads_uploadpublic;
+    $_FM_CONF['useshots']         = $mydownloads_useshots;
+    $_FM_CONF['shotwidth']        = $mydownloads_shotwidth;
+    $_FM_CONF['emailoption']      = $filemgmt_Emailoption;
+    $_FM_CONF['FileStore']        = $filemgmt_FileStore;
+    $_FM_CONF['SnapStore']        = $filemgmt_SnapStore;
+    $_FM_CONF['SnapCat']          = $filemgmt_SnapCat;
+    $_FM_CONF['FileStoreURL']     = $filemgmt_FileStoreURL;
+    $_FM_CONF['FileSnapURL']      = $filemgmt_FileSnapURL;
+    $_FM_CONF['SnapCatURL']       = $filemgmt_SnapCatURL;
+}
+
+/**
+* Initialize FileMgmt plugin configuration
+*
+* Creates the database entries for the configuation if they don't already
+* exist. Initial values will be taken from $_FM_CONF if available (e.g. from
+* an old config.php), uses $_FM_DEFAULT otherwise.
+*
+* @return   boolean     true: success; false: an error occurred
+*
+*/
+function plugin_initconfig_filemgmt()
+{
+    global $_FM_CONF, $_FM_DEFAULT;
+
+    if (is_array($_FM_CONF) && (count($_FM_CONF) > 1)) {
+        $_FM_DEFAULT = array_merge($_FM_DEFAULT, $_FM_CONF);
+    }
+    $c = config::get_instance();
+    if (!$c->group_exists('filemgmt')) {
+
+        $c->add('sg_main', NULL, 'subgroup', 0, 0, NULL, 0, true, 'filemgmt');
+        $c->add('fs_public', NULL, 'fieldset', 0, 0, NULL, 0, true, 'filemgmt');
+
+        $c->add('perpage', $_FM_DEFAULT['perpage'], 'select',
+                0, 0, 2, 10, true, 'filemgmt');
+        $c->add('popular_download', $_FM_DEFAULT['popular_download'], 'text',
+                0, 0, 0, 20, true, 'filemgmt');
+        $c->add('newdownloads', $_FM_DEFAULT['newdownloads'], 'text',
+                0, 0, 0, 30, true, 'filemgmt');
+        $c->add('dlreport', $_FM_DEFAULT['dlreport'],'select',
+                0, 0, 0, 40, true, 'filemgmt');
+        $c->add('trimdesc', $_FM_DEFAULT['trimdesc'], 'select',
+                0, 0, 0, 50, true, 'filemgmt');
+        $c->add('whatsnew', $_FM_DEFAULT['whatsnew'],'select',
+                0, 0, 0, 60, true, 'filemgmt');
+        $c->add('whatsnewperioddays', $_FM_DEFAULT['WhatsNewPeriodDays'], 'text',
+                0, 0, 0, 70, true, 'filemgmt');
+        $c->add('whatsnewtitlelength', $_FM_DEFAULT['WhatsNewTitleLength'], 'text',
+                0, 0, 0, 80, true, 'filemgmt');
+        $c->add('showwhatsnewcomments', $_FM_DEFAULT['showWhatsNewComments'],'select',
+                0, 0, 0, 90, true, 'filemgmt');
+
+        $c->add('fm_access', NULL, 'fieldset', 0, 1, NULL, 0, true,
+                'filemgmt');
+
+        $c->add('selectpriv', $_FM_DEFAULT['selectpriv'],'select',
+                0, 1, 0, 80, true, 'filemgmt');
+        $c->add('uploadselect', $_FM_DEFAULT['uploadselect'],'select',
+                0, 1, 0, 90, true, 'filemgmt');
+        $c->add('uploadpublic', $_FM_DEFAULT['uploadpublic'],'select',
+                0, 1, 0, 100, true, 'filemgmt');
+
+        $c->add('fm_general', NULL, 'fieldset', 0, 2, NULL, 0, true,
+                'filemgmt');
+
+        $c->add('useshots', $_FM_DEFAULT['useshots'],'select',
+                0, 2, 0, 10, true, 'filemgmt');
+        $c->add('shotwidth', $_FM_DEFAULT['shotwidth'],'text',
+                0, 2, 0, 20, true, 'filemgmt');
+        $c->add('Emailoption', $_FM_DEFAULT['Emailoption'],'select',
+                0, 2, 0, 30, true, 'filemgmt');
+
+        $c->add('FileStore', $_FM_DEFAULT['FileStore'], 'text',
+                0, 2, 0, 40, true, 'filemgmt');
+        $c->add('SnapStore', $_FM_DEFAULT['SnapStore'], 'text',
+                0, 2, 0, 50, true, 'filemgmt');
+        $c->add('SnapCat', $_FM_DEFAULT['SnapCat'], 'text',
+                0, 2, 0, 60, true, 'filemgmt');
+        $c->add('FileStoreURL', $_FM_DEFAULT['FileStoreURL'], 'text',
+                0, 2, 0, 70, true, 'filemgmt');
+        $c->add('FileSnapURL', $_FM_DEFAULT['FileSnapURL'], 'text',
+                0, 2, 0, 80, true, 'filemgmt');
+        $c->add('SnapCatURL', $_FM_DEFAULT['SnapCatURL'], 'text',
+                0, 2, 0, 90, true, 'filemgmt');
+    }
+
+    return true;
+}
+?>

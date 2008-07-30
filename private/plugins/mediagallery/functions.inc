@@ -3,13 +3,13 @@
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
 // | $Id::                                                                    $|
-// | This file does two things: 1) it implements the necessary Geeklog Plugin  |
+// | This file does two things: 1) it implements the necessary glFusion Plugin |
 // | API method and 2) implements all the common code needed by the media      |
 // | gallery PHP files.                                                        |
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2005-2008 by the following authors:                         |
 // |                                                                           |
-// | Mark R. Evans              - mark@gllabs.org                              |
+// | Mark R. Evans              - mark AT glfusion DOT org                     |
 // +---------------------------------------------------------------------------+
 // |                                                                           |
 // | This program is free software; you can redistribute it and/or             |
@@ -2851,7 +2851,6 @@ function MG_clean_directories($path, $needle = '')
     }
 }
 
-
 function MG_cleanup_plugin($plugin)
 {
     global $TEMPLATE_OPTIONS;
@@ -2862,251 +2861,18 @@ function MG_cleanup_plugin($plugin)
     MG_clean_directories($TEMPLATE_OPTIONS['path_cache'], $plugin);
 }
 
-function plugin_upgrade_mediagallery()
-{
-    global $_TABLES, $_CONF, $_MG_CONF, $_DB_dbms, $TEMPLATE_OPTIONS;
+function plugin_upgrade_mediagallery() {
+    global $_CONF, $_TABLES,$_MG_CONF;
 
-    include ($_CONF['path'] . '/plugins/mediagallery/upgrade.inc');
+    require_once($_CONF['path'] . 'plugins/mediagallery/glupgrade.inc');
 
-    $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='mediagallery'");
+    $rc = plugin_plgupgrade_mediagallery();
 
-    switch( $currentVersion ) {
-        case "0.80" :
-            if ( MG_upgrade_090() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='0.90' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "0.90" :
-        case "0.91" :
-        case "0.92" :
-        case "0.92a" :
-        case "0.92b" :
-            if ( MG_upgrade_095() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='0.95' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "0.95" :
-        case "0.95b1" :
-        case "0.95b2" :
-        case "0.95beta1" :
-        case "0.95beta2" :
-        case "0.95rc1" :
-        case "0.95rc2" :
-        case "0.95rc3" :
-        case "0.95rc4" :
-            if ( MG_upgrade_096() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='0.97' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "0.96b1" :
-        case "0.96b2" :
-            if ( MG_upgrade_096b() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='0.97' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "0.96b3" :
-        case "0.97" :
-            if ( MG_upgrade_098() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='0.98' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "0.98"   :
-        case "0.98a"  :
-        case "0.98b"  :
-        case "0.98c"  :
-            if ( MG_upgrade_120() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.2.1' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.1.0" :
-        case "1.02cvs" :
-            DB_query("ALTER TABLE {$_TABLES['mg_albums']} ADD `full_display` TINYINT( 4 ) DEFAULT '0' NOT NULL AFTER `albums_first`",1);
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.2.1' WHERE pi_name='mediagallery' LIMIT 1");
-        case "1.2.0rc1" :
-            DB_query("ALTER TABLE {$_TABLES['mg_playback_options']} ADD UNIQUE (`media_id` ,`option_name`);",1);
-            DB_query("ALTER TABLE {$_TABLES['mg_albums']} ADD INDEX ( `last_update` )",1);
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.2.1' WHERE pi_name='mediagallery' LIMIT 1",1);
-        case "1.2.0rc2" :
-        case "1.2.0rc3" :
-        case "1.2.1" :
-        case "1.2.2" :
-        case "1.2.3" :
-        case "1.2.4" :
-        case "1.2.5" :
-        case "1.2.6" :
-            if ( MG_upgrade_131() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.1' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.1" :
-        case "1.3.2" :
-            if ( MG_upgrade_133() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.3' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.3" :
-            if ( MG_upgrade_134() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.4' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.4" :
-            if ( MG_upgrade_135() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.5' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.5" :
-            if ( MG_upgrade_136() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.6' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.6" :
-            if ( MG_upgrade_137() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.7' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.7" :
-            if ( MG_upgrade_138() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.8' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.8" :
-            if ( MG_upgrade_139() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.9' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.9" :
-            if ( MG_upgrade_1310() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.10' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.10" :
-        case "1.3.11" :
-            if ( MG_upgrade_1312() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.3.12' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.3.12" :
-        case "1.3.C" :
-        case "1.4.0RC1" :
-        case "1.4.0RC2" :
-        case "1.4.0RC3" :
-        case "1.4.1"  :
-        case "1.4.2"  :
-        case "1.4.3"  :
-        case "1.4.3a" :
-            if ( MG_upgrade_144() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.4.4' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.4.4" :
-            if ( MG_upgrade_145() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.4.5' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.4.5" :
-            if ( MG_upgrade_146() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.4.6' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.4.6" :
-        case "1.4.7" :
-            if ( MG_upgrade_148() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.4.8' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.4.8" :
-        case "1.4.8a" :
-        case "1.4.8b" :
-            if ( MG_upgrade_150() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.5.0' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.5.0" :
-            if ( MG_upgrade_160() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.0' WHERE pi_name='mediagallery' LIMIT 1");
-            }
-        case "1.6.0" :
-            // nothing to do yet...
-        default :
-            if ( $_DB_dbms != 'mssql' ) {
-                // we missed media_keywords field somewhere along the way...
-                $result = DB_query("SHOW COLUMNS FROM {$_TABLES['mg_mediaqueue']}");
-                $numColumns = DB_numRows($result);
-                $x=0;
-                while ( $x < $numColumns ) {
-                    $colname = DB_fetchArray($result);
-                    $col[$colname[0]] = $colname[0];
-                    $x++;
-                }
-                if ( $col['media_category'] != 'media_category' ) {
-                    DB_query("ALTER TABLE {$_TABLES['mg_mediaqueue']} ADD `media_category` int(11) NOT NULL default '0' AFTER `media_upload_time`");
-                }
-                if ( $col['media_keywords'] != 'media_keywords' ) {
-                    DB_query("ALTER TABLE {$_TABLES['mg_mediaqueue']} ADD `media_keywords` varchar(255) NOT NULL default '' AFTER `media_desc`");
-                }
-            }
-
-            // now we do a little housekeeping...
-
-            $album = array();
-            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']}";
-            $result = DB_query($sql);
-            $albumCount  = DB_numRows($result);
-            for ($i=0; $i < $albumCount; $i++ ) {
-                $album[] = DB_fetchArray($result);
-            }
-            for ($i=0; $i<$albumCount; $i++) {
-                // set media count...
-                $mediaCount  = DB_count($_TABLES['mg_media_albums'],'album_id',$album[$i]['album_id']);
-                $sql = "UPDATE {$_TABLES['mg_albums']} set media_count=" . $mediaCount  . " WHERE album_id=" . $album[$i]['album_id'];
-                DB_query($sql);
-            }
-
-            // rebuild the disk usage statistics
-
-            $res1 = DB_query("SELECT album_id FROM {$_TABLES['mg_albums']}");
-            while ( $row = DB_fetchArray($res1)) {
-                $quota = 0;
-                $sql = "SELECT m.media_filename, m.media_mime_ext FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-                        " ON ma.media_id=m.media_id WHERE ma.album_id=" . $row['album_id'];
-
-                $result = DB_query( $sql );
-                while (list($filename, $mimeExt) = DB_fetchArray($result)) {
-                    if ( $_MG_CONF['discard_original'] == 1 ) {
-                        $quota += @filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $filename[0] . '/' . $filename . '.' . $mimeExt);
-                        $quota += @filesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $filename[0] . '/' . $filename . '.jpg');
-                    } else {
-                        $quota += @filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $filename[0] . '/' . $filename . '.' . $mimeExt);
-                    }
-                }
-                DB_query("UPDATE {$_TABLES['mg_albums']} SET album_disk_usage=" . $quota . " WHERE album_id=" . $row['album_id']);
-            }
-
-            if ( isset($TEMPLATE_OPTIONS['path_cache']) ) {
-                MG_cleanup_plugin('mediagallery');
-            }
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='http://www.gllabs.org' WHERE pi_name='mediagallery'",1);
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='" . $_MG_CONF['version'] . "' WHERE pi_name='mediagallery' LIMIT 1");
-            break;
-    }
-    if ( DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='mediagallery'") == $_MG_CONF['version']) {
-        echo COM_refresh($_MG_CONF['admin_url'] . 'success.php');
-        exit;
-    } else {
-        return 3;
-    }
+    return true;
 }
 
 /**
-* Automatic uninstall function for plugins
-*
-* @return   array
-*
-* This code is automatically uninstalling the plugin.
-* It passes an array to the core code function that removes
-* tables, groups, features and php blocks from the tables.
-* Additionally, this code can perform special actions that cannot be
-* foreseen by the core code (interactions with other plugins for example)
-*
-*/
-function plugin_autouninstall_mediagallery ()
-{
-    $out = array (
-        /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('mg_albums','mg_media','mg_media_albums','mg_usage_tracking','mg_config', 'mg_mediaqueue', 'mg_media_album_queue','mg_playback_options','mg_userprefs','mg_exif_tags', 'mg_watermarks', 'mg_category', 'mg_sessions', 'mg_session_items', 'mg_session_items2','mg_session_log', 'mg_sort', 'mg_postcard','mg_rating'),
-        /* give the full name of the group, as in the db */
-        'groups' => array('mediagallery Admin','mediagallery Config'),
-        /* give the full name of the feature, as in the db */
-        'features' => array('mediagallery.admin','mediagallery.config'),
-        /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array('mgrandom','mgenroll'),
-        /* give all vars with their name */
-        'vars'=> array('mediagallery_gid','mediagallery_cid')
-    );
-    return $out;
-}
-
-/**
-* Removes the data structures for this plugin from the Geeklog database.
+* Removes the data structures for this plugin from the glFusion database.
 * This routine will get called from the Plugin install program if user select De-Install or if Delete is used in the Plugin Editor.
 * The Plugin Installer will also call this routine upon and install error to remove anything it has created.
 * The Plugin installer will pass the optional parameter which will then double check that plugin has first been disabled.
@@ -3121,13 +2887,7 @@ function plugin_autouninstall_mediagallery ()
 *
 */
 function plugin_uninstall_mediagallery($installCheck='') {
-    global $_DB_table_prefix, $_TABLES, $LANG_MG00;
-
-    $pi_name    = 'mediagallery';
-
-    $FEATURES   = array ( 'mediagallery.admin','mediagallery.config');
-
-    $TABLES     = array ( 'mg_albums','mg_media','mg_media_albums','mg_usage_tracking','mg_config', 'mg_media_queue', 'mg_media_album_queue','mg_playback_options','mg_userprefs','mg_exif_tags', 'mg_watermarks', 'mg_category', 'mg_batch_sessions', 'mg_batch_session_items', 'mg_batch_session_items2','mg_batch_session_log', 'mg_sort', 'mg_postcard','mg_rating');
+    global $_CONF, $_DB_table_prefix, $_TABLES, $LANG_MG00;
 
     // Check and see if plugin is still enabled - if so display warning and exit
     if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
@@ -3139,88 +2899,11 @@ function plugin_uninstall_mediagallery($installCheck='') {
         return false;
     }
 
-    // Ok to proceed and delete plugin
+    require_once($_CONF['path'] . 'plugins/mediagallery/install.inc');
 
-    // Unregister the plugin with Geeklog
-    COM_errorLog('Attempting to unregister the Media Gallery Plugin from Geeklog',1);
-    DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'mediagallery'",1);
+    $rc = plugin_remove_mediagallery();
 
-    // Drop mediagallery tables
-    foreach($TABLES as $table) {
-        COM_errorLog("Removing Table $table",1);
-        DB_query("DROP TABLE " . $_DB_table_prefix . $table,1);
-    }
-
-    // Remove Security for this plugin
-    $grp_id = DB_getItem($_TABLES['vars'], 'value', "name = '{$pi_name}_gid'");
-    $cgrp_id = DB_getItem($_TABLES['vars'],'value', "name = '{$pi_name}_cid'");
-
-    COM_errorLog("Removing $pi_name Admin Group", 1);
-    DB_query("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id",1);
-    DB_query("DELETE FROM {$_TABLES['vars']} WHERE name = '{$pi_name}_gid'");
-    DB_query("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $cgrp_id",1);
-    DB_query("DELETE FROM {$_TABLES['vars']} WHERE name = '{$pi_name}_cid'");
-
-    COM_errorLog("Removing root users from admin of $pi_name");
-    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id",1);
-    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $cgrp_id",1);
-
-    COM_errorLog("Removing comments for " . $pi_name);
-    DB_query("DELETE FROM {$_TABLES['comments']} WHERE type='mediagallery'",1);
-
-    // Remove all the associated features -- access rights
-    foreach ($FEATURES as $feature) {
-        COM_errorLog("Removing $feature feature and rights to it",1);
-        $feat_id = DB_getItem($_TABLES['features'], 'ft_id', "ft_name = '$feature'");
-        DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $feat_id",1);
-        DB_query("DELETE FROM {$_TABLES['features']} WHERE ft_id = $feat_id",1);
-    }
-
-    DB_query("DELETE FROM {$_TABLES['blocks']} WHERE name='mgrandom'",1);
-    DB_query("DELETE FROM {$_TABLES['blocks']} WHERE name='mgenroll'",1);
-
-    if ( function_exists('CACHE_cleanup_plugin') ) {
-        CACHE_cleanup_plugin('mediagallery');
-    }
-    COM_errorLog('...success',1);
-    return true;
-}
-// not available in Geeklog v1.3 so define if not here already
-if (!function_exists('COM_numberFormat') ) {
-    /** Converts a number for output into a formatted number with thousands-
-    *         separator, comma-separator and fixed decimals if necessary
-    *
-    *        @param        float        $number        Number that will be formatted
-    *        @return        string                        formatted number
-    */
-    function COM_numberFormat( $number )
-    {
-        global $_CONF;
-
-        if( $number - abs( $number ) > 0 ) // number has decimals
-        {
-            $dc = $_CONF['decimal_count'];
-        }
-        else
-        {
-            $dc = 0;
-        }
-        $ts = $_CONF['thousand_separator'];
-        $ds = $_CONF['decimal_separator'];
-
-        return number_format( $number, $dc, $ds, $ts );
-    }
-}
-
-if ( !function_exists('COM_truncate') ) {
-    function COM_truncate( $text, $maxlen, $filler = '' ) {
-        $newlen = $maxlen - strlen( $filler );
-        $len = strlen( $text );
-        if( $len > $maxlen ) {
-            $text = substr( $text, 0, $newlen ) . $filler;
-        }
-        return $text;
-    }
+    return $rc;
 }
 
 function plugin_user_create_mediagallery( $uid, $force = 0 ) {

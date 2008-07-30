@@ -37,32 +37,39 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-$CONF_FORUM['debug'] = false;
-$CONF_FORUM['version'] = '3.0.0';
+$CONF_FORUM['version'] = '3.1.0.fusion';
 
-/********************* FORUM PLUGIN v2.7+ Setup for block layout to use ********************
+$CONF_FORUM['debug'] = false;
+
+/********************* FORUM PLUGIN v2.7+ Setup for block layout to use ******
 * Fourm Plugin for glFusion v1.0.- available at http://www.glfusion.org
-* Set the following for which glFusion block columns you want to show along with the forum.
-* Options are: 'leftblocks', 'rightblocks', 'allblocks', 'noblocks'
-* For example, set to noblocks to not show any blocks (and have the forum span the entire page.)
-***************************************************************************************/
+* Set the following for which glFusion block columns you want to show along
+* with the forum. Options are: 'leftblocks', 'rightblocks', 'allblocks',
+* 'noblocks'
+*
+* For example, set to noblocks to not show any blocks (and have the forum
+* span the entire page.)
+*****************************************************************************/
 $CONF_FORUM['showblocks'] = 'leftblocks';
 
-/********************* FORUM PLUGIN v2.7+  Setup for user menu style to use ****************
+/********************* FORUM PLUGIN v2.7+  Setup for user menu style to use **
 * Show the usermenu as a block menu or as a top navbar
-* Note: Need to show leftblocks or rightblocks if usermenu option set to blockmenu
-* Options are 'blockmenu' or 'navbar' or 'none'
-***************************************************************************************/
-$CONF_FORUM['usermenu'] = 'navbar';
+* Note: Need to show leftblocks or rightblocks if usermenu option set to
+* blockmenu.  Options are 'blockmenu' or 'navbar' or 'none'
+******************************************************************************/
+$CONF_FORUM['usermenu'] = 'blockmenu';
 
-// Set to true if you are using MYSQL 4.0 or greater and this will improve performance.
+// Set to true if you are using MYSQL 4.0 or greater and this will improve
+// performance.
 $CONF_FORUM['mysql4+'] = false;
 
-// Set to true if you need to handle previous version 2.5 quotes and new line formatting - setting to false should be faster
-$CONF_FORUM['pre2.5_mode'] = true;
+// Set to true if you need to handle previous version 2.5 quotes and new line
+// formatting - setting to false should be faster
+$CONF_FORUM['pre2.5_mode'] = false;
 
-// When a user or moderator edits a story - if the default should be to not change post timestamps
-// and trigger any user notifications - then set default as true
+// When a user or moderator edits a story - if the default should be to not
+// change post timestamps and trigger any user notifications - then set default
+// as true
 $CONF_FORUM['silent_edit_default'] = true;
 
 // Able to set the width of the member avatar in pixels.
@@ -116,17 +123,17 @@ $CONF_FORUM['use_glmenu'] = false;          // Should glMenu be used for this me
 // Place images in the directory {theme}/forum/image_set/badges
 // Note Root needs a unique mapping since if you are in the Root group, then you are in all groups
 $CONF_FORUM['grouptags'] = array(
-    'Root'      => 'siteadmin_badge.png',
-    'Logged-in Users' => 'forum_user.png',
-    'Group A'   => 'badge1.png',
-    'Group B'   => 'badge2.png'
+    'Root'              => 'siteadmin_badge.png',
+    'Logged-in Users'   => 'forum_user.png',
+    'Group A'           => 'badge1.png',
+    'Group B'           => 'badge2.png'
 );
 
 /* Settings for the attachment feature */
-$CONF_FORUM['maxattachments'] = 5;      // Maximum number of attachments allowed in a single post
-$CONF_FORUM['uploadpath']   = $_CONF['path_html'] . 'forum/media';
-$CONF_FORUM['downloadURL']  = $_CONF['site_url'] . '/forum/media';
-$CONF_FORUM['fileperms'] = '0755';  // Needs to be a string for the upload class use.
+$CONF_FORUM['maxattachments']   = 5;      // Maximum number of attachments allowed in a single post
+$CONF_FORUM['uploadpath']       = $_CONF['path_html'] . 'forum/media';
+$CONF_FORUM['downloadURL']      = $_CONF['site_url'] . '/forum/media';
+$CONF_FORUM['fileperms']        = '0755';  // Needs to be a string for the upload class use.
 
 $CONF_FORUM['max_uploadimage_width']    = '2100';
 $CONF_FORUM['max_uploadimage_height']   = '1600';
@@ -196,90 +203,4 @@ $_TABLES['gf_log']          = $_DB_table_prefix . 'forum_log';
 $_TABLES['gf_userinfo']     = $_DB_table_prefix . 'forum_userinfo';
 $_TABLES['gf_attachments']  = $_DB_table_prefix . 'forum_attachments';
 $_TABLES['gf_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
-
-if ($pi_version >= 2.6) {
-    /* Retrieve the list of blocks to show on the left side and make the forum menu the first block */
-//    $CONF_FORUM['leftblocks'] = array ('forum_menu');
-    $CONF_FORUM['leftblocks'] = ppGetUserBlocks($CONF_FORUM['leftblocks']);
-
-    /* Don't change any settings below this line */
-    /* Retrieve the forum global settings and user preferences and save to config array */
-    $result = DB_query("SELECT * FROM {$_TABLES['gf_settings']}");
-    $A = DB_fetchArray($result);
-    $CONF_FORUM['registration_required']  = $A['registrationrequired'];
-    $CONF_FORUM['registered_to_post']     = $A['registerpost'];
-    $CONF_FORUM['allow_html']             = $A['allowhtml'];
-    $CONF_FORUM['post_htmlmode']          = $A['post_htmlmode'];
-    $CONF_FORUM['use_glfilter']           = $A['glfilter'];
-    $CONF_FORUM['use_geshi']              = $A['use_geshi_formatting'];
-    $CONF_FORUM['use_censor']             = $A['censor'];
-    $CONF_FORUM['show_moods']             = $A['showmood'];
-    $CONF_FORUM['allow_smilies']          = $A['allowsmilies'];
-    $CONF_FORUM['allow_notification']     = $A['allow_notify'];
-    $CONF_FORUM['allow_user_dateformat']  = $A['allow_userdatefmt'];
-    $CONF_FORUM['show_topicreview']       = $A['showiframe'];
-    $CONF_FORUM['use_autorefresh']        = $A['autorefresh'];
-    $CONF_FORUM['autorefresh_delay']      = $A['refresh_delay'];
-    $CONF_FORUM['show_subject_length']    = $A['viewtopicnumchars'];
-    $CONF_FORUM['show_topics_perpage']    = $A['topicsperpage'];
-    $CONF_FORUM['show_posts_perpage']     = $A['postsperpage'];
-    $CONF_FORUM['show_messages_perpage']  = $A['messagesperpage'];
-    $CONF_FORUM['show_searches_perpage']  = $A['searchesperpage'];
-    $CONF_FORUM['views_tobe_popular']     = $A['popular'];
-    $CONF_FORUM['convert_break']          = $A['html_newline'];
-    $CONF_FORUM['min_comment_length']     = $A['min_comment_len'];
-    $CONF_FORUM['min_username_length']    = $A['min_name_len'];
-    $CONF_FORUM['min_subject_length']     = $A['min_subject_len'];
-    $CONF_FORUM['post_speedlimit']        = $A['speedlimit'];
-    $CONF_FORUM['use_smilies_plugin']     = $A['use_smiliesplugin'];
-    $CONF_FORUM['use_pm_plugin']          = $A['use_pmplugin'];
-    $CONF_FORUM['use_spamx_filter']       = $A['use_spamxfilter'];
-    $CONF_FORUM['show_centerblock']       = $A['cb_enable'];
-    $CONF_FORUM['centerblock_homepage']   = $A['cb_homepage'];
-    $CONF_FORUM['centerblock_where']      = $A['cb_where'];
-    $CONF_FORUM['cb_subject_size']        = $A['cb_subjectsize'];
-    $CONF_FORUM['centerblock_numposts']   = $A['cb_numposts'];
-    $CONF_FORUM['sb_subject_size']        = $A['sb_subjectsize'];
-    $CONF_FORUM['sb_latestpostonly']      = $A['sb_latestposts'];
-    $CONF_FORUM['sideblock_numposts']     = $A['sb_numposts'];
-    $CONF_FORUM['allowed_editwindow']     = $A['edit_timewindow'];
-
-    $CONF_FORUM['level1']                 = $A['level1'];
-    $CONF_FORUM['level2']                 = $A['level2'];
-    $CONF_FORUM['level3']                 = $A['level3'];
-    $CONF_FORUM['level4']                 = $A['level4'];
-    $CONF_FORUM['level5']                 = $A['level5'];
-    $CONF_FORUM['level1name']             = $A['level1name'];
-    $CONF_FORUM['level2name']             = $A['level2name'];
-    $CONF_FORUM['level3name']             = $A['level3name'];
-    $CONF_FORUM['level4name']             = $A['level4name'];
-    $CONF_FORUM['level5name']             = $A['level5name'];
-
-    // User Preference Config Parms. Check if user has set their preference or use defaults
-    if(!empty($_USER['uid']) AND DB_getItem($_TABLES['gf_userprefs'],"uid","uid='{$_USER['uid']}'") == $_USER['uid']) {
-        $sql = DB_query("Select * from {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'");
-        $userprefs = DB_fetchArray($sql);
-        $CONF_FORUM['show_topics_perpage']        = $userprefs['topicsperpage'];
-        $CONF_FORUM['show_posts_perpage']         = $userprefs['postsperpage'];
-        $CONF_FORUM['popular_limit']              = $userprefs['popularlimit'];
-        $CONF_FORUM['show_members_perpage']       = $userprefs['membersperpage'];
-        $CONF_FORUM['show_search_perpage']        = $userprefs['searchlines'];
-        $CONF_FORUM['show_topicreview']           = $userprefs['showiframe'];
-        $CONF_FORUM['show_anonymous_posts']       = $userprefs['viewanonposts'];
-        $CONF_FORUM['notify_once']                = $userprefs['notify_once'];
-    } else {
-        // How many messages to show on the Most Popular page
-        $CONF_FORUM['popular_limit'] = '20';
-        // How many lines to show on one page in the search results
-        $CONF_FORUM['show_search_perpage'] = 15;
-        // How many users to show on one page in the memberlist results
-        $CONF_FORUM['show_members_perpage'] = 100;
-        // View Anonymous Posts - registed users can set this false
-        $CONF_FORUM['show_anonymous_posts'] = 1;
-        // Only send Notification once - even if more posts are created since your last visit
-        $CONF_FORUM['notify_once'] = 1;
-    }
-
-}
-
 ?>

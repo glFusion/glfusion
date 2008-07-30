@@ -38,20 +38,54 @@ if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
     die ('This file can not be used on its own.');
 }
 
+global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
+
+$pi_name        = 'bad_behavior2';
+$pi_version     = '2.0.13a';
+$gl_version     = '1.1.0';
+$pi_url         = 'http://www.glfusion.org';
+$base_path      = $_CONF['path'] . 'plugins/' . $pi_name . '/';
+
+/*
+ * If we are being called glFusion's install routine, there is no
+ * COM_errorLog() function available.
+ */
+
+if (!function_exists('COM_errorLOG') ) {
+    function COM_errorLOG() {
+    }
+}
+
+/**
+* Checks the requirements for this plugin and if it is compatible with this
+* version of glFusion.
+*
+* @return   boolean     true = proceed with install, false = not compatible
+*
+*/
+function bad_behavior2_compatible_with_this_glfusion_version ()
+{
+    // requires 1.1.0 or newer
+    $glversion = explode(".", glFusion_VERSION);
+    if ( $glversion[0] < 1 ) {
+        return false;
+    }
+    if ( $glversion[1] < 1 ) {
+        return false;
+    }
+    return true;
+}
+
+
 function plugin_install_bad_behavior2($_DB_table_prefix)
 {
-    global $_CONF, $_TABLES, $_USER, $_DB_dbms;
+    global $_TABLES, $_CONF;
+    global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
 
     require_once($_CONF['path'] . '/plugins/bad_behavior2/functions.inc');
 
-    $pi_display_name = 'Bad Behavior2';
-    $pi_name         = 'bad_behavior2';
-    $pi_version      = '2.0.13a';
-    $gl_version      = '1.5.0';
-    $pi_url          = 'http://www.gllabs.org/';
-
     // name of the Admin group
-    $pi_admin        = $pi_display_name . ' Admin';
+    $pi_admin        = 'Bad Behavior2 Admin';
 
     // the plugin's groups - assumes first group to be the Admin group
     $GROUPS = array();
@@ -63,7 +97,7 @@ function plugin_install_bad_behavior2($_DB_table_prefix)
     $DEFVALUES = array();
     $DEFVALUES[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('bad_behavior2.donate', 1)";
 
-    $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
+    $uninstall_plugin = 'plugin_remove_' . $pi_name;
 
     // create the plugin's groups
     $admin_group_id = 0;
@@ -136,4 +170,25 @@ function plugin_install_bad_behavior2($_DB_table_prefix)
 
     return true;
 }
+
+function plugin_remove_bad_behavior2 ()
+{
+    global $_CONF, $_DB_table_prefix, $_TABLES;
+
+    $group_id = DB_getItem ($_TABLES['groups'], 'grp_id',
+                            "grp_name = 'Bad Behavior2 Admin'");
+    if ($group_id > 1) {
+        DB_query ("DELETE FROM {$_TABLES['groups']} WHERE grp_name = 'Bad Behavior2 Admin'");
+        DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $group_id");
+    }
+
+    DB_query("DROP TABLE " . $_DB_table_prefix . "bad_behavior2",1);
+
+    DB_query ("DELETE FROM {$_TABLES['vars']} WHERE name = 'bad_behavior2.donate'");
+    DB_query ("DELETE FROM {$_TABLES['vars']} WHERE name = 'bb2_installed'");
+    DB_query ("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'bad_behavior2'");
+
+    return true;
+}
+
 ?>

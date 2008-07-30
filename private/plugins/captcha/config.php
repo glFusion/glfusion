@@ -38,8 +38,5 @@ if ( !isset($_DB_table_prefix) ) {
 }
 
 $_CP_CONF['version']    = '3.1.0';
-$_CP_CONF['pi_name']    = 'captcha';
-$_CP_CONF['gl_version'] = '1.0.0';
-$_TABLES['cp_config']   = $_DB_table_prefix . 'cp_config';
 $_TABLES['cp_sessions'] = $_DB_table_prefix . 'cp_sessions';
 ?>

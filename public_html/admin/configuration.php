@@ -286,6 +286,7 @@ if (array_key_exists('form_submit', $_POST) && $tokenstate) {
     $result = null;
     if (! array_key_exists('form_reset', $_POST)) {
         $result = $config->updateConfig($_POST, $conf_group);
+        CTL_clearCache();
         /*
          * An ugly hack to get the proper theme selected
          */

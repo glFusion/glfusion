@@ -43,14 +43,64 @@ if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
     die ('This file can not be used on its own.');
 }
 
+global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
+
+$pi_name        = 'forum';
+$pi_version     = '3.1.0.fusion';
+$gl_version     = '1.1.0';
+$pi_url         = 'http://www.glfusion.org';
+$base_path      = $_CONF['path'] . 'plugins/' . $pi_name . '/';
+
+/*
+ * If we are being called glFusion's install routine, there is no
+ * COM_errorLog() function available.
+ */
+
+if (!function_exists('COM_errorLOG') ) {
+    function COM_errorLOG() {
+    }
+}
+
+/**
+* Checks the requirements for this plugin and if it is compatible with this
+* version of glFusion.
+*
+* @return   boolean     true = proceed with install, false = not compatible
+*
+*/
+function forum_compatible_with_this_glfusion_version ()
+{
+    // requires 1.1.0 or newer
+    $glversion = explode(".", glFusion_VERSION);
+    if ( $glversion[0] < 1 ) {
+        return false;
+    }
+    if ( $glversion[1] < 1 ) {
+        return false;
+    }
+    return true;
+}
+
+/**
+* Loads the configuration records for the GL Online Config Manager
+*
+* @return   boolean     true = proceed with install, false = an error occured
+*
+*/
+function forum_load_configuration()
+{
+    global $_CONF, $base_path;
+
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+    require_once $base_path . 'install_defaults.php';
+
+    return plugin_initconfig_forum();
+}
+
 function plugin_install_forum($_DB_table_prefix )
 {
     global $_TABLES, $_CONF;
-
-    $pi_name = 'forum';                     // Plugin name
-    $pi_version = '3.0.0';                  // Plugin Version
-    $gl_version = '1.0.0';                  // GL Version plugin for
-    $pi_url = 'http://www.glfusion.org/';   // Plugin Homepage
+    global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
 
     // Adding the Forum Plugin tables to $_TABLES array
     $_TABLES['gf_userprefs']    = $_DB_table_prefix . 'forum_userprefs';
@@ -66,16 +116,10 @@ function plugin_install_forum($_DB_table_prefix )
     $_TABLES['gf_attachments']  = $_DB_table_prefix . 'forum_attachments';
     $_TABLES['gf_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
 
-    // Default data
-    // Insert table name and sql to insert default data for your plugin.
 
     $DEFVALUES = array();
 
     // Example default data
-
-    $DEFVALUES['gf_settings'] = "INSERT INTO {$_TABLES['gf_settings']}
-        (`slogan`, `registrationrequired`, `registerpost`, `allowhtml`, `glfilter`, `use_geshi_formatting`, `censor`, `showmood`, `allowsmilies`, `allowavatar`, `allow_notify`, `post_htmlmode`, `allow_userdatefmt`, `showiframe`, `autorefresh`, `refresh_delay`, `xtrausersettings`, `viewtopicnumchars`, `topicsperpage`, `postsperpage`, `messagesperpage`, `searchesperpage`, `popular`, `speedlimit`, `edit_timewindow`, `use_spamxfilter`, `use_smiliesplugin`, `use_pmplugin`, `imgset`, `cb_enable`, `cb_homepage`, `cb_where`, `cb_subjectsize`, `cb_numposts`, `sb_subjectsize`, `sb_numposts`, `sb_latestposts`, `min_comment_len`, `min_name_len`, `min_subject_len`, `html_newline`, `level1`, `level2`, `level3`, `level4`, `level5`, `level1name`, `level2name`, `level3name`, `level4name`, `level5name`)
-        VALUES ('',0,0,0,1,1,1,1,1,1,1,0,0,1,1,5,0,40,10,10,20,20,20,60,60,1,0,0,'',1,1,2,40,10,20,5,0,5,2,2,0,1,15,35,70,120,'Newbie','Junior','Chatty','Regular Member','Active Member');";
 
     $DEFVALUES['block1'] = "INSERT INTO {$_TABLES['blocks']} (is_enabled,name,type,title,tid,blockorder,onleft,phpblockfn,group_id,owner_id,perm_owner,perm_group,perm_members,perm_anon) "
          . " VALUES ('0','Forum News','phpblock','Forumposts','all',0,0,'phpblock_forum_newposts',2,2,3,3,2,2)";
@@ -92,7 +136,7 @@ function plugin_install_forum($_DB_table_prefix )
     $NEWFEATURE['forum.edit'] = 'Forum Admin';
     $NEWFEATURE['forum.user'] = 'Forum Viewer';
 
-    $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
+    $uninstall_plugin = 'plugin_remove_' . $pi_name;
 
     // Create the Plugins Tables
     require_once($_CONF['path'] . 'plugins/forum/sql/mysql_install_3.0.php');
@@ -166,6 +210,14 @@ function plugin_install_forum($_DB_table_prefix )
         exit;
     }
 
+    // Load the online configuration records
+    if (function_exists('forum_load_configuration')) {
+        if (!forum_load_configuration()) {
+            $uninstall_plugin();
+            return false;
+        }
+    }
+
     // Register the plugin with glFusion
     DB_delete($_TABLES['plugins'],'pi_name',$pi_name);
     DB_query("INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_homepage, pi_enabled) "
@@ -185,13 +237,13 @@ function plugin_install_forum($_DB_table_prefix )
 * This may get called by the install routine to undue anything created during the install.
 * Added check to see that plugin is first disabled.
 */
-function plugin_uninstall_forum($installCheck='')
+function plugin_remove_forum()
 {
     global $_TABLES, $LANG_GF00;
-exit;
-    $pi_name='forum';
-    $FEATURES = array ('forum.edit', 'forum.user');
-    $TABLES = array ('gf_topic','gf_categories','gf_forums','gf_settings','gf_watch','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo'.'gf_attachments','gf_bookmarks');
+
+    $pi_name    ='forum';
+    $FEATURES   = array ('forum.edit', 'forum.user');
+    $TABLES     = array ('gf_topic','gf_categories','gf_forums','gf_settings','gf_watch','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo','gf_attachments','gf_bookmarks');
 
     // Ok to proceed and delete plugin - Unregister the plugin with glFusion
      DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'forum'",1);
@@ -217,7 +269,7 @@ exit;
     DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn = 'phpblock_forum_newposts'",1);
     DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn = 'phpblock_forum_newposts2'",1);
     DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn = 'phpblock_forum_menu'",1);
-
+    DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE group_name='forum'");
     return true;
 }
 ?>

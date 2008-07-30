@@ -43,19 +43,6 @@ if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
     die ('This file can not be used on its own.');
 }
 
-$_TABLES['gf_userprefs']    = $_DB_table_prefix . 'forum_userprefs';
-$_TABLES['gf_topic']        = $_DB_table_prefix . 'forum_topic';
-$_TABLES['gf_categories']   = $_DB_table_prefix . 'forum_categories';
-$_TABLES['gf_forums']       = $_DB_table_prefix . 'forum_forums';
-$_TABLES['gf_settings']     = $_DB_table_prefix . 'forum_settings';
-$_TABLES['gf_watch']        = $_DB_table_prefix . 'forum_watch';
-$_TABLES['gf_moderators']   = $_DB_table_prefix . 'forum_moderators';
-$_TABLES['gf_banned_ip']    = $_DB_table_prefix . 'forum_banned_ip';
-$_TABLES['gf_log']          = $_DB_table_prefix . 'forum_log';
-$_TABLES['gf_userinfo']     = $_DB_table_prefix . 'forum_userinfo';
-$_TABLES['gf_attachments']  = $_DB_table_prefix . 'forum_attachments';
-$_TABLES['gf_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
-
 /*
  * If we are being called glFusion's upgrade routine, there is no
  * COM_errorLog() function available.
@@ -66,13 +53,11 @@ if (!function_exists('COM_errorLOG') ) {
     }
 }
 
-$CONF_FORUM['version'] = '3.0';
-
 /**
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
-function plugin_upgrade_forum() {
-    global $_TABLES,$CONF_FORUM;
+function plugin_plgupgrade_forum() {
+    global $_CONF, $_TABLES, $CONF_FORUM;
 
     $curversion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name = 'forum'");
 
@@ -81,32 +66,33 @@ function plugin_upgrade_forum() {
         case "2.3.2" :
             if (upgrade_232() == 0 )  {
                 DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.5RC1' WHERE `pi_name` = 'forum' LIMIT 1");
+            } else {
+                return false;
             }
         case "2.5RC1" :
             if (upgrade_25() == 0 )  {
                 DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.7', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
+            } else {
+                return false;
             }
         case "2.6" :
         case "2.7" :
         case "2.7.1" :
             if (upgrade_30() == 0 ) {
                 DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '3.0', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
+            } else {
+                return false;
             }
-            break;
         case "3.0.0" :
         case "3.0" :
-            // no upgrade items yet...
-            break;
-
+            // need to migrate the configuration to our new online configuration.
+            require_once $_CONF['path_system'] . 'classes/config.class.php';
+            require_once $_CONF['path'] . 'plugins/forum/install_defaults.php';
+            plugin_initconfig_forum();
+        default :
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.0.fusion' WHERE pi_name = 'forum'");
+            return true;
     }
-
-    /* Check if update completed and return a message number to be shown */
-    if (DB_getItem($_TABLES['plugins'],'pi_version',"pi_name = 'forum'") == $CONF_FORUM['version']) {
-        return 1;
-    } else {
-        return false;
-    }
-
 }
 
 function upgrade_232() {

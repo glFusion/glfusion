@@ -1,19 +1,21 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | FileMgmt Plugin for glFusion                                             |
+// | FileMgmt Plugin - glFusion CMS                                           |
 // +--------------------------------------------------------------------------+
+// | index.php                                                                |
+// |                                                                          |
 // | Administrative Functions                                                 |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | FileMgmt original work by:                                               |
-// |                                                                          |
+// | Based on the FileMgmt Plugin for Geeklog                                 |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
 // | Author:                                                                  |
 // | Blaine Lang            blaine@portalparts.com                            |
-// |                                                                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -31,7 +33,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-//
 
 require_once("../../../lib-common.php");
 include_once($_CONF['path_html']."filemgmt/include/header.php");
@@ -70,7 +71,6 @@ function filemgmt_navbar($selected='') {
     }
 
     $navbar = new navbar;
-    $navbar->add_menuitem($LANG_FM02['nav1'],$_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=filemgmtConfigAdmin');
     $navbar->add_menuitem($LANG_FM02['nav2'],$_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=categoryConfigAdmin');
     $navbar->add_menuitem($LANG_FM02['nav3'],$_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=newfileConfigAdmin');
     $navbar->add_menuitem(sprintf($LANG_FM02['nav4'],$totalnewdownloads),$_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=listNewDownloads');
@@ -1049,300 +1049,6 @@ function approve(){
     exit();
 }
 
-
-function filemgmtConfigAdmin() {
-    global $filemgmt_AllUserAccess, $filemgmt_AllowUserUploads,$LANG_FM02;
-    global $mydownloads_perpage, $mydownloads_popular, $mydownloads_newdownloads, $mydownloads_trimdesc, $mydownloads_dlreport;
-    global $mydownloads_selectpriv, $mydownloads_uploadselect, $mydownloads_publicpriv, $mydownloads_uploadpublic;
-    global $mydownloads_useshots, $mydownloads_shotwidth, $mydownloads_whatsnew, $filemgmt_Emailoption;
-    global $filemgmt_FileStoreURL,$filemgmt_FileSnapURL, $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat, $filemgmt_SnapCatURL;
-
-    $display = COM_siteHeader('menu');
-    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
-    $display .= filemgmt_navbar($LANG_FM02['nav1']);
-    $display .= '<form action="index.php" method="post" style="margin:0px;">';
-    $display .= '<table width="100%" border="0" class="plugin">';
-    $display .= '<tr><th colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_GENERALSET . '</th></tr>';
-    $display .= '<tr class="pluginRow1"><td style="white-space:nowrap;">' ._MD_DLSPERPAGE. '</td>';
-    $display .= "<td>
-        <select name=\"xmydownloads_perpage\">
-        <option value=\"$mydownloads_perpage\" selected=\"selected\">$mydownloads_perpage</option>
-        <option value=\"5\">5</option>
-        <option value=\"10\">10</option>
-        <option value=\"15\">15</option>
-        <option value=\"20\">20</option>
-        <option value=\"25\">25</option>
-        <option value=\"30\">30</option>
-        <option value=\"50\">50</option>
-        </select>
-        </td></tr><tr class=\"pluginRow2\"><td style=\"white-space:nowrap;\">
-        "._MD_HITSPOP."</td><td>
-        <select name=\"xmydownloads_popular\">
-        <option value=\"$mydownloads_popular\" selected=\"selected\">$mydownloads_popular</option>
-        <option value=\"5\">5</option>
-        <option value=\"10\">10</option>
-        <option value=\"20\">20</option>
-        <option value=\"50\">50</option>
-        <option value=\"100\">100</option>
-        <option value=\"500\">500</option>
-        <option value=\"1000\">1000</option>
-        </select>
-        </td></tr><tr class=\"pluginRow1\"><td style=\"white-space:nowrap;\">
-        "._MD_DLSNEW."</td><td>
-        <select name=\"xmydownloads_newdownloads\">
-        <option value=\"$mydownloads_newdownloads\" selected=\"selected\">$mydownloads_newdownloads</option>
-        <option value=\"10\">10</option>
-        <option value=\"15\">15</option>
-        <option value=\"20\">20</option>
-        <option value=\"25\">25</option>
-        <option value=\"30\">30</option>
-        <option value=\"50\">50</option>
-       </select><br" . XHTML . ">";
-    $display .= "</td></tr><tr class=\"pluginRow2\"><td  style=\"white-space:nowrap;\">" . _MD_DLREPORT . " </td><td>";
-    if ($mydownloads_dlreport==1) {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_dlreport\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_dlreport\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    } else {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_dlreport\" value=\"1\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_dlreport\" value=\"0\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    }
-    $display .= "</td></tr><tr class=\"pluginRow1\"><td style=\"white-space:nowrap;\">" . _MD_TRIMDESC . " </td><td>";
-    if ($mydownloads_trimdesc==1) {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_trimdesc\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_trimdesc\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    } else {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_trimdesc\" value=\"1\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_trimdesc\" value=\"0\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    }
-    $display .= "</td></tr><tr class=\"pluginRow2\"><td style=\"white-space:nowrap;\">" . _MD_WHATSNEWDESC . " </td><td>";
-    if ($mydownloads_whatsnew==1) {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_whatsnew\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_whatsnew\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    } else {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_whatsnew\" value=\"1\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_whatsnew\" value=\"0\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    }
-    $display .= "</td></tr><tr class=\"pluginRow1\"><td colspan=\"2\"><hr" . XHTML . ">";
-    $display .= "</td></tr><tr class=\"pluginRow1\"><td style=\"white-space:nowrap;\">" . _MD_SELECTPRIV . " </td><td>";
-    if ($mydownloads_selectpriv==1) {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_selectpriv\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_selectpriv\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    } else {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_selectpriv\" value=\"1\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_selectpriv\" value=\"0\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    }
-    $display .= "</td></tr><tr class=\"pluginRow2\"><td style=\"white-space:nowrap;\">" . _MD_UPLOADSELECT . " </td><td>";
-    if ($mydownloads_uploadselect==1) {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_uploadselect\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_uploadselect\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    } else {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_uploadselect\" value=\"1\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_uploadselect\" value=\"0\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    }
-      $display .= "</td></tr><tr class=\"pluginRow1\"><td style=\"white-space:nowrap;\">" . _MD_ACCESSPRIV . " </td><td>";
-    if ($mydownloads_publicpriv==1) {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_publicpriv\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_publicpriv\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    } else {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_publicpriv\" value=\"1\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_publicpriv\" value=\"0\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    }
-    $display .= "</td></tr><tr class=\"pluginRow2\"><td style=\"white-space:nowrap;\">" . _MD_UPLOADPUBLIC . " </td><td>";
-    if ($mydownloads_uploadpublic==1) {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_uploadpublic\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_uploadpublic\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    } else {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_uploadpublic\" value=\"1\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_uploadpublic\" value=\"0\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    }
-    $display .= "</td></tr><tr class=\"pluginRow1\"><td colspan=\"2\"><hr" . XHTML . ">";
-    $display .= "</td></tr><tr class=\"pluginRow1\"><td style=\"white-space:nowrap;\">" . _MD_USESHOTS . " </td><td>";
-    if ($mydownloads_useshots==1) {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_useshots\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_useshots\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    } else {
-        $display .= "<input type=\"radio\" name=\"xmydownloads_useshots\" value=\"1\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"xmydownloads_useshots\" value=\"0\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    }
-    $display .= "</td></tr>";
-    $display .= "<tr class=\"pluginRow2\"><td style=\"white-space:nowrap;\">" . _MD_IMGWIDTH . " </td><td>";
-    if($mydownloads_shotwidth!=""){
-       $display .= "<input type=\"text\" size=\"10\" name=\"xmydownloads_shotwidth\" value=\"$mydownloads_shotwidth\"" . XHTML . ">";
-    }else{
-       $display .= "<input type=\"text\" size=\"10\" name=\"xmydownloads_shotwidth\" value=\"140\"" . XHTML . ">";
-    }
-
-    $display .= "</td></tr><tr class=\"pluginRow1\"><td style=\"white-space:nowrap;\">"._MD_EMAILOPTION."</td><td>";
-    if ($filemgmt_Emailoption == true) {
-        $display .= "<input type=\"radio\" name=\"my_emailoption\" value=\"1\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"my_emailoption\" value=\"0\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    } else {
-        $display .= "<input type=\"radio\" name=\"my_emailoption\" value=\"1\"" . XHTML . ">&nbsp;" ._MD_YES."&nbsp;";
-        $display .= "<input type=\"radio\" name=\"my_emailoption\" value=\"0\" checked=\"checked\"" . XHTML . ">&nbsp;" ._MD_NO."&nbsp;";
-    }
-
-    $display .= "</td></tr><tr class=\"pluginRow2\"><td style=\"white-space:nowrap;\">Directory to store files: </td><td>";
-    $display .= "<input type='text' size='60' maxlength='150' name='my_filestore' value='$filemgmt_FileStore'" . XHTML . ">";
-    $display .= "</td></tr><tr class=\"pluginRow1\"><td style=\"white-space:nowrap;\">Directory to store file thumbnails: </td><td>";
-    $display .= "<input type='text' size='60' maxlength='150' name='my_snapstore' value='$filemgmt_SnapStore'" . XHTML . ">";
-    $display .= "</td></tr><tr class=\"pluginRow1\"><td style=\"white-space:nowrap;\">Directory to store category thumbnails: </td><td>";
-    $display .= "<input type='text' size='60' maxlength='150' name='my_snapcat' value='$filemgmt_SnapCat'" . XHTML . ">";
-    $display .= "</td></tr><tr class=\"pluginRow2\"><td style=\"white-space:nowrap;\">URL to files: </td><td>";
-    $display .= "<input type='text' size='60' maxlength='150' name='my_filestoreurl' value='$filemgmt_FileStoreURL'" . XHTML . ">";
-    $display .= "</td></tr><tr class=\"pluginRow1\"><td style=\"white-space:nowrap;\">URL to file thumbnails: </td><td>";
-    $display .= "<input type='text' size='60' maxlength='150' name='my_filesnapurl' value='$filemgmt_FileSnapURL'" . XHTML . ">";
-    $display .= "</td></tr><tr class=\"pluginRow2\"><td style=\"white-space:nowrap;\">URL to category thumbnails: </td><td>";
-    $display .= "<input type='text' size='60' maxlength='150' name='my_snapcaturl' value='$filemgmt_SnapCatURL'" . XHTML . ">";
-    $display .= "</td></tr>";
-    $display .= '<tr><td colspan="2" style="padding:10px;text-align:center">';
-    $display .= "<input type=\"hidden\" name=\"op\" value=\"filemgmtConfigChange\"" . XHTML . ">";
-    $display .= "<input type=\"submit\" value=\""._MD_SAVE."\"" . XHTML . ">";
-    $display .= "&nbsp;<input type=\"button\" value=\""._MD_CANCEL."\" onclick=\"javascript:history.go(-1)\"" . XHTML . ">";
-    $display .= "</td></tr></table>";
-    $display .= "</form>";
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter();
-    echo $display;
-}
-
-function filemgmtConfigChange($op='') {
-        global $_TABLES, $_CONF;
-        global $filemgmt_AllUserAccess, $filemgmt_AllowUserUploads;
-        global $mydownloads_perpage, $mydownloads_popular, $mydownloads_newdownloads, $mydownloads_trimdesc, $mydownloads_dlreport;
-        global $mydownloads_selectpriv, $mydownloads_uploadselect, $mydownloads_publicpriv, $mydownloads_uploadpublic;
-        global $mydownloads_useshots, $mydownloads_shotwidth, $mydownloads_whatsnew, $filemgmt_Emailoption;
-        global $filemgmt_FileStoreURL,$filemgmt_FileSnapURL, $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat, $filemgmt_SnapCatURL;
-
-        $configfile                 = $_CONF['path'] . 'plugins/filemgmt/filemgmt.php';
-
-        if ($op == 'init') {
-            $xmydownloads_popular       = $mydownloads_popular;
-            $xmydownloads_newdownloads  = $mydownloads_newdownloads;
-            $xmydownloads_perpage       = $mydownloads_perpage;
-            $xmydownloads_dlreport      = $mydownloads_dlreport;
-            $xmydownloads_trimdesc      = $mydownloads_trimdesc;
-            $xmydownloads_selectpriv    = $mydownloads_selectpriv;
-            $xmydownloads_publicpriv    = $mydownloads_publicpriv;
-            $xmydownloads_uploadselect  = $mydownloads_uploadselect;
-            $xmydownloads_uploadpublic  = $mydownloads_uploadpublic;
-            $xmydownloads_useshots      = $mydownloads_useshots;
-            $xmydownloads_shotwidth     = $mydownloads_shotwidth;
-            $xmydownloads_whatsnew      = $mydownloads_whatsnew;
-            $my_emailoption             = $filemgmt_Emailoption;
-            $my_filestoreurl            = $_CONF['site_url'] . '/filemgmt_data/files/';
-            $my_filesnapurl             = $_CONF['site_url'] . '/filemgmt_data/snaps/';
-            $my_snapcaturl              = $_CONF['site_url'] . '/filemgmt_data/category_snaps/';
-            $my_filestore               = $_CONF['path_html'] . 'filemgmt_data/files/';
-            $my_snapstore               = $_CONF['path_html'] . 'filemgmt_data/snaps/';
-            $my_snapcat                 = $_CONF['path_html'] . 'filemgmt_data/category_snaps/';
-
-        } else {
-            $xmydownloads_popular       = $_POST['xmydownloads_popular'];
-            $xmydownloads_newdownloads  = $_POST['xmydownloads_newdownloads'];
-            $xmydownloads_perpage       = $_POST['xmydownloads_perpage'];
-            $xmydownloads_dlreport      = $_POST['xmydownloads_dlreport'];
-            $xmydownloads_trimdesc      = $_POST['xmydownloads_trimdesc'];
-            $xmydownloads_selectpriv    = $_POST['xmydownloads_selectpriv'];
-            $xmydownloads_publicpriv    = $_POST['xmydownloads_publicpriv'];
-            $xmydownloads_uploadselect  = $_POST['xmydownloads_uploadselect'];
-            $xmydownloads_uploadpublic  = $_POST['xmydownloads_uploadpublic'];
-            $xmydownloads_useshots      = $_POST['xmydownloads_useshots'];
-            $xmydownloads_shotwidth     = $_POST['xmydownloads_shotwidth'];
-            $xmydownloads_whatsnew      = $_POST['xmydownloads_whatsnew'];
-            $my_emailoption             = $_POST['my_emailoption'];
-            $my_filestoreurl            = $_POST['my_filestoreurl'];
-            $my_filesnapurl             = $_POST['my_filesnapurl'];
-            $my_snapcaturl              = $_POST['my_snapcaturl'];
-            $my_filestore               = $_POST['my_filestore'];
-            $my_snapstore               = $_POST['my_snapstore'];
-            $my_snapcat                 = $_POST['my_snapcat'];
-        }
-
-        // Check to see if Access Priv or Upload priv have changed
-        // Will need to update the GL access table if they have
-
-        $feature1_id = DB_getItem($_TABLES['features'], 'ft_id', "ft_name = 'filemgmt.user'");
-        $feature2_id = DB_getItem($_TABLES['features'], 'ft_id', "ft_name = 'filemgmt.upload'");
-
-        if ($xmydownloads_selectpriv != $mydownloads_selectpriv ) {
-            // Note: assuming "Logged-in Users" group is 13 - always has been
-            $result = DB_query("SELECT COUNT(*) FROM {$_TABLES['access']} WHERE acc_ft_id = '$feature1_id' AND acc_grp_id = 13");
-            list($nrows) = DB_fetchArray($result);
-            if ($xmydownloads_selectpriv == 1 && $nrows == 0) {   // Enable and there is no record now
-                COM_errorLog('Granting Logged-In users access to filemgmt.user feature',1);
-                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ('$feature1_id', 13)");
-            } elseif ($xmydownloads_selectpriv == 0 && $nrows == 1) {  // Disable and there is a record
-                COM_errorLog('Removing Logged-In users access with filemgmt.user feature',1);
-                DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_grp_id = 13 AND acc_ft_id = '$feature1_id'");
-            }
-        }
-        if ($xmydownloads_publicpriv != $mydownloads_publicpriv ) {
-            $result = DB_query("SELECT COUNT(*) FROM {$_TABLES['access']} WHERE acc_ft_id = '$feature1_id' AND acc_grp_id = 2");
-            list($nrows) = DB_fetchArray($result);
-            if ($xmydownloads_publicpriv == 1 && $nrows == 0) {   // Enable and there is no record now
-                COM_errorLog('Granting anonymous access to filemgmt.user feature',1);
-                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ('$feature1_id', 2)");
-            } elseif ($xmydownloads_publicpriv == 0 && $nrows == 1) {  // Disable and there is a record
-                COM_errorLog('Removing anonymous access with filemgmt.user feature',1);
-                DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_grp_id = 2 AND acc_ft_id = '$feature1_id'");
-            }
-        }
-        if ($xmydownloads_uploadselect != $mydownloads_uploadselect ) {
-            // Note: assuming "Logged-in Users" group is 13 - always has been
-            $result = DB_query("SELECT COUNT(*) FROM {$_TABLES['access']} WHERE acc_ft_id = '$feature2_id' AND acc_grp_id = 13");
-            list($nrows) = DB_fetchArray($result);
-            if ($xmydownloads_uploadselect == 1 && $nrows == 0) {   // Enable and there is no record now
-                COM_errorLog('Granting Logged-In users upload privilage to filemgmt.user feature',1);
-                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ('$feature2_id', 13)");
-            } elseif ($xmydownloads_uploadselect == 0 && $nrows == 1) {  // Disable and there is a record
-                COM_errorLog('Removing Logged-In users upload privilage with filemgmt.user feature',1);
-                DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_grp_id = 13 AND acc_ft_id = '$feature2_id'");
-            }
-        }
-        if ($xmydownloads_uploadpublic != $mydownloads_uploadpublic ) {
-            $result = DB_query("SELECT COUNT(*) FROM {$_TABLES['access']} WHERE acc_ft_id = '$feature2_id' AND acc_grp_id = 2");
-            list($nrows) = DB_fetchArray($result);
-            if ($xmydownloads_uploadpublic == 1 && $nrows == 0) {   // Enable and there is no record now
-                COM_errorLog('Granting anonymous upload privilage to filemgmt.user feature',1);
-                DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ('$feature2_id', 2)");
-            } elseif ($xmydownloads_uploadpublic == 0 && $nrows == 1) {  // Disable and there is a record
-                COM_errorLog('Removing anonymous upload privilage with filemgmt.user feature',1);
-                DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_grp_id = 2 AND acc_ft_id = '$feature2_id'");
-            }
-        }
-
-        $file = fopen($configfile, "w");
-        $content = "";
-        $content .= "<?php\n";
-        $content .= "\n";
-        $content .= "\$mydownloads_popular      = $xmydownloads_popular;\n";
-        $content .= "\$mydownloads_newdownloads = $xmydownloads_newdownloads;\n";
-        $content .= "\$mydownloads_perpage      = $xmydownloads_perpage;\n";
-        $content .= "\$mydownloads_trimdesc     = $xmydownloads_trimdesc;\n";
-        $content .= "\$mydownloads_whatsnew     = $xmydownloads_whatsnew;\n";
-        $content .= "\$mydownloads_dlreport     = $xmydownloads_dlreport;\n";
-        $content .= "\$mydownloads_selectpriv   = $xmydownloads_selectpriv;\n";
-        $content .= "\$mydownloads_publicpriv   = $xmydownloads_publicpriv;\n";
-        $content .= "\$mydownloads_uploadselect = $xmydownloads_uploadselect;\n";
-        $content .= "\$mydownloads_uploadpublic = $xmydownloads_uploadpublic;\n";
-        $content .= "\$mydownloads_useshots     = $xmydownloads_useshots;\n";
-        $content .= "\$mydownloads_shotwidth    = $xmydownloads_shotwidth;\n";
-        $content .= "\$filemgmt_Emailoption     = $my_emailoption;\n";
-        $content .= "\$filemgmt_FileStore        = \"$my_filestore\";\n";
-        $content .= "\$filemgmt_SnapStore        = \"$my_snapstore\";\n";
-        $content .= "\$filemgmt_SnapCat          = \"$my_snapcat\";\n";
-        $content .= "\$filemgmt_FileStoreURL     = \"$my_filestoreurl\";\n";
-        $content .= "\$filemgmt_FileSnapURL      = \"$my_filesnapurl\";\n";
-        $content .= "\$filemgmt_SnapCatURL       = \"$my_snapcaturl\";\n";
-        $content .= "\n";
-        $content .= "?>\n";
-
-        fwrite($file, $content);
-        fclose($file);
-        CACHE_remove_instance('whatsnew');
-
-}
-
 function uploadNewFile($newfile,$directory) {
     global $myts,$eh,$filemgmtDuplicatesAllowed,$filemgmtFilePermissions;
 
@@ -1416,12 +1122,12 @@ function filemgmt_error($errormsg) {
 
 // Check and see if the current config has values for the filemgmt repository set.
 // If not - then initialize these variables and write the filemgmt.php - config file.
-if ($filemgmt_FileStoreURL == '' OR $filemgmt_FileStore == '') {
+//if ($filemgmt_FileStoreURL == '' OR $filemgmt_FileStore == '') {
     // Set default values and write over the config file
-    filemgmtConfigChange('init');
+//    filemgmtConfigChange('init');
     // Read in the new values
-    include ($_CONF['path'] .'plugins/filemgmt/filemgmt.php');
-}
+//    include ($_CONF['path'] .'plugins/filemgmt/filemgmt.php');
+//}
 
 //debugbreak();
 switch ($op) {
@@ -1476,14 +1182,6 @@ switch ($op) {
             break;
         case "delDownload":
             delDownload();
-            break;
-        case "filemgmtConfigAdmin":
-            filemgmtConfigAdmin();
-            break;
-        case "filemgmtConfigChange":
-            filemgmtConfigChange();
-            redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_CONFIGUPDATED);
-            exit();
             break;
         case "categoryConfigAdmin":
             categoryConfigAdmin();

@@ -87,22 +87,12 @@ function plugin_getadminoption_bad_behavior2 ()
 
 function plugin_uninstall_bad_behavior2 ()
 {
-    global $_DB_table_prefix, $_TABLES;
+    global $_CONF, $_TABLES, $_DB_table_prefix;
 
-    $group_id = DB_getItem ($_TABLES['groups'], 'grp_id',
-                            "grp_name = 'Bad Behavior2 Admin'");
-    if ($group_id > 1) {
-        DB_query ("DELETE FROM {$_TABLES['groups']} WHERE grp_name = 'Bad Behavior2 Admin'");
-        DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $group_id");
-    }
+    require_once($_CONF['path'] . 'plugins/bad_behavior2/install.inc');
 
-    DB_query("DROP TABLE " . $_DB_table_prefix . "bad_behavior2",1);
-
-    DB_query ("DELETE FROM {$_TABLES['vars']} WHERE name = 'bad_behavior2.donate'");
-    DB_query ("DELETE FROM {$_TABLES['vars']} WHERE name = 'bb2_installed'");
-    DB_query ("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'bad_behavior2'");
-
-    return true;
+    $rc = plugin_remove_bad_behavior2();
+    return $rc;
 }
 
 function plugin_chkversion_bad_behavior2 ()

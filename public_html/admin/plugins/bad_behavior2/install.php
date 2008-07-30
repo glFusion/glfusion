@@ -54,30 +54,14 @@ if (!SEC_inGroup('Root')) {
     exit;
 }
 
-/**
-* Checks the requirements for this plugin and if it is compatible with this
-* version of glFusion.
-*
-* @return   boolean     true = proceed with install, false = not compatible
-*
-*/
-function plugin_compatible_with_this_glfusion_version ()
-{
-    if (!function_exists ('COM_numberFormat')) {
-        return false;
-    }
-
-    return true;
-}
-
 $action = isset($_GET['action']) ? COM_applyFilter($_GET['action']) : '';
 
 $display = '';
 
 if ($action == 'install') {
     if (DB_count ($_TABLES['plugins'], 'pi_name', 'bad_behavior2') == 0) {
-        if (plugin_compatible_with_this_glfusion_version ()) {
-            if (plugin_install_bad_behavior2 ($_DB_table_prefix)) {
+        if (bad_behavior2_compatible_with_this_glfusion_version ()) {
+            if ( plugin_install_bad_behavior2($_DB_table_prefix) ) {
                 $display = COM_refresh ($_CONF['site_admin_url']
                                         . '/plugins.php?msg=44');
             } else {

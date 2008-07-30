@@ -40,19 +40,66 @@ if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
     die ('This file can not be used on its own.');
 }
 
+global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
+
+$pi_name        = 'filemgmt';
+$pi_version     = '1.7.0.fusion';  // $_FM_CONF['version'];
+$gl_version     = '1.1.0';
+$pi_url         = 'http://www.glfusion.org';
+$base_path      = $_CONF['path'] . 'plugins/' . $pi_name . '/';
+
+/*
+ * If we are being called glFusion's install routine, there is no
+ * COM_errorLog() function available.
+ */
+
+if (!function_exists('COM_errorLOG') ) {
+    function COM_errorLOG() {
+    }
+}
+
+/**
+* Checks the requirements for this plugin and if it is compatible with this
+* version of glFusion.
+*
+* @return   boolean     true = proceed with install, false = not compatible
+*
+*/
+function plugin_compatible_with_this_glfusion_version ()
+{
+    // requires 1.1.0 or newer
+    $glversion = explode(".", glFusion_VERSION);
+    if ( $glversion[0] < 1 ) {
+        return false;
+    }
+    if ( $glversion[1] < 1 ) {
+        return false;
+    }
+    return true;
+}
+
+/**
+* Loads the configuration records for the GL Online Config Manager
+*
+* @return   boolean     true = proceed with install, false = an error occured
+*
+*/
+function filemgmt_load_configuration()
+{
+    global $_CONF, $base_path;
+
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+    require_once $base_path . 'install_defaults.php';
+
+    return plugin_initconfig_filemgmt();
+}
+
 function plugin_install_filemgmt($_DB_table_prefix)
 {
     global $_TABLES, $_CONF, $_FM_TABLES;
+    global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
 
     require_once($_CONF['path'] . '/plugins/filemgmt/config.php');
-
-    $pi_name    = 'filemgmt';                   // Plugin name
-    $pi_version = $CONF_FM['version'];          // Plugin Version
-    $gl_version = '1.0.0';                      // GL Version plugin for
-    $pi_url     = 'http://www.glfusion.com'; // Plugin Homepage
-
-    // Default data
-    // Insert table name and sql to insert default data for your plugin.
 
     $DEFVALUES = array();
     $NEWFEATURE = array();
@@ -65,7 +112,7 @@ function plugin_install_filemgmt($_DB_table_prefix)
     $DEFVALUES['d2'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (`lid`, `description`) VALUES (1,'glFusion Overview Documentation in PDF format');";
     $DEFVALUES['d3'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} (`lid`, `cid`, `title`, `url`, `homepage`, `version`, `size`, `platform`, `logourl`, `submitter`, `status`, `date`, `hits`, `rating`, `votes`, `comments`) VALUES (1,1,'glFusion Overview Documentation','glfusion.pdf','http://www.gllabs.org','v1.0.0',208896 ,'','',2,1,$now,0,0.0000,0,1);";
 
-    $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
+    $uninstall_plugin = 'plugin_remove_' . $pi_name;
 
     // Create the Plugins Tables
     require_once($_CONF['path'] . 'plugins/filemgmt/sql/filemgmt_sql_install.php');
@@ -135,33 +182,13 @@ function plugin_install_filemgmt($_DB_table_prefix)
         exit;
     }
 
-    $fmconfigdist_path = $_CONF['path'] . '/plugins/filemgmt/filemgmt.php.dist';
-    $fmconfig_path = $_CONF['path'] . '/plugins/filemgmt/filemgmt.php';
-
-    // Read the distribution file
-    $fmconfig_file = fopen($fmconfigdist_path, 'r');
-    $fmconfig_data = fread($fmconfig_file, filesize($fmconfigdist_path));
-    fclose($fmconfig_file);
-
-    // Replace the values with the new ones
-    $fmconfig_data = str_replace("##FILESTORE##", $_CONF['path_html'] . "/filemgmt_data/files/", $fmconfig_data); // Filestore
-    $fmconfig_data = str_replace("##SNAPSTORE##", $_CONF['path_html'] . "/filemgmt_data/snaps/", $fmconfig_data); // Filestore
-    $fmconfig_data = str_replace("##SNAPCAP##", $_CONF['path_html'] . "/filemgmt_data/category_snaps/", $fmconfig_data); // Filestore
-    $fmconfig_data = str_replace("##STOREURL##", $_CONF['site_url'] . "/filemgmt_data/files/", $fmconfig_data); // Filestore
-    $fmconfig_data = str_replace("##SNAPURL##", $_CONF['site_url'] . "/filemgmt_data/snaps/", $fmconfig_data); // Filestore
-    $fmconfig_data = str_replace("##CATURL##", $_CONF['site_url'] . "/filemgmt_data/category_snaps/", $fmconfig_data); // Filestore
-
-    // Write our changes to filemgmt.php
-    $fmconfig_file = @fopen($fmconfig_path, 'w');
-    if ( $fmconfig_file == false ) {
-        $uninstall_plugin();
-        return false;
+    // Load the online configuration records
+    if (function_exists('filemgmt_load_configuration')) {
+        if (!filemgmt_load_configuration()) {
+            $uninstall_plugin();
+            return false;
+        }
     }
-    if (!@fwrite($fmconfig_file, $fmconfig_data)) {
-        $uninstall_plugin ();
-        return false;
-    }
-    fclose($fmconfig_file);
 
     // Register the plugin with glFusion
     DB_delete($_TABLES['plugins'],'pi_name',$pi_name);
@@ -181,13 +208,13 @@ function plugin_install_filemgmt($_DB_table_prefix)
 * This may get called by the install routine to undue anything created during the install.
 * Added check to see that plugin is first disabled.
 */
-function plugin_uninstall_filemgmt()
+function plugin_remove_filemgmt()
 {
     global $LANG_FM00, $LANG_FILEMGMT, $_TABLES,$_FM_TABLES;
 
-    $pi_name='filemgmt';
-    $FEATURES = array ('filemgmt.edit', 'filemgmt.user','filemgmt.upload');
-    $TABLES = array ('filemgmt_cat','filemgmt_filedetail','filemgmt_filedesc','filemgmt_brokenlinks','filemgmt_votedata','filemgmt_history');
+    $pi_name    ='filemgmt';
+    $FEATURES   = array ('filemgmt.edit', 'filemgmt.user','filemgmt.upload');
+    $TABLES     = array ('filemgmt_cat','filemgmt_filedetail','filemgmt_filedesc','filemgmt_brokenlinks','filemgmt_votedata','filemgmt_history');
 
     // Ok to proceed and delete plugin - Unregister the plugin with glFusion
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'filemgmt'",1);
@@ -218,6 +245,10 @@ function plugin_uninstall_filemgmt()
 
     DB_query("DELETE FROM {$_TABLES['comments']} WHERE type='filemgmt'");
     DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn='phpblock_NewDownloads'");
+
+    DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE group_name='filemgmt'");
+    COM_errorLog("Removing configuration option for plugin $pi_name");
+
     return true;
 }
 ?>
