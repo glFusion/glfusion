@@ -114,44 +114,13 @@ function plugin_chkVersion_sitetailor() {
 function plugin_upgrade_sitetailor() {
     global $_CONF;
 
-    include ($_CONF['path'] . '/plugins/sitetailor/glupgrade.inc');
+    require_once ($_CONF['path'] . '/plugins/sitetailor/glupgrade.inc');
 
-    $rc = glfusion_upgrade_sitetailor();
-    if ( $rc == true ) {
-        echo COM_refresh($_CONF['site_admin_url'] . 'success.php');
-        exit;
-    } else {
-        return 3;
-    }
+    $rc = plugin_plgupgrade_sitetailor();
+
+    return $rc;
 }
 
-/**
-* Automatic uninstall function for plugins
-*
-* @return   array
-*
-* This code is automatically uninstalling the plugin.
-* It passes an array to the core code function that removes
-* tables, groups, features and php blocks from the tables.
-* Additionally, this code can perform special actions that cannot be
-* foreseen by the core code (interactions with other plugins for example)
-*
-*/
-function plugin_autouninstall_sitetailor() {
-    $out = array (
-        /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('st_config','st_menu_config','st_menu_elements'),
-        /* give the full name of the group, as in the db */
-        'groups' => array('sitetailor Admin'),
-        /* give the full name of the feature, as in the db */
-        'features' => array('sitetailor.admin'),
-        /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array(),
-        /* give all vars with their name */
-        'vars'=> array('sitetailor_gid','sitetailor_cid')
-    );
-    return $out;
-}
 
 /**
 * Removes the data structures for this plugin from the glFusion database.
@@ -173,7 +142,8 @@ function plugin_uninstall_sitetailor($installCheck='') {
 
     require_once $_CONF['path'] . '/plugins/sitetailor/install.inc';
 
-    $rc = glfusion_uninstall_sitetailor($installCheck);
+    $rc = plugin_remove_sitetailor();
+
     return ( $rc );
 }
 

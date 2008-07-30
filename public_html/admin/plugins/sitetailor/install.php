@@ -33,6 +33,7 @@
 require_once '../../../lib-common.php';
 require_once $_CONF['path'] . '/plugins/sitetailor/config.php';
 require_once $_CONF['path'] . '/plugins/sitetailor/functions.inc';
+require_once $_CONF['path'] . '/plugins/sitetailor/install.inc';
 
 function SITETAILOR_return_bytes($val) {
     $val = trim($val);
@@ -63,28 +64,6 @@ if (!SEC_inGroup('Root')) {
     exit;
 }
 
-/**
-* Puts the datastructures for this plugin into the glFusion database
-*
-* Note: Corresponding uninstall routine is in functions.inc
-*
-* @return   boolean True if successful False otherwise
-*
-*/
-function plugin_install_sitetailor()
-{
-    global $_CONF, $_DB_table_prefix;
-    global $pi_name, $pi_version, $gl_version, $pi_url;
-    global $DEFVALUES, $NEWFEATURE;
-    global $_ST_CONF;
-
-    require_once $_CONF['path'] .'/plugins/sitetailor/install.inc';
-
-    $rc = glfusion_install_sitetailor($_DB_table_prefix);
-
-    return ($rc);
-}
-
 /*
 * Main Function
 */
@@ -100,7 +79,7 @@ $T->set_var('cgiurl', $_CONF['site_admin_url'] . '/plugins/sitetailor/install.ph
 $T->set_var('admin_url', $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php');
 
 if ($action == 'install') {
-    if (plugin_install_sitetailor()) {
+    if (plugin_install_sitetailor($_DB_table_prefix)) {
         $installMsg = sprintf($LANG_ST00['install_success'],$_CONF['site_admin_url'] . '/plugins/sitetailor/index.php');
         $T->set_var('installmsg1',$installMsg);
     } else {

@@ -35,47 +35,38 @@ if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
     die ('This file can not be used on its own.');
 }
 
-require_once($_CONF['path'] . '/plugins/sitetailor/config.php');
+global $pi_name, $pi_version, $gl_version, $pi_url, $base_path, $NEWFEATURE;
 
-$pi_name    = 'sitetailor';             // Plugin name  Must be 15 chars or less
-$pi_version = '1.0.0';     // Plugin Version
-$gl_version = '1.0.0';                  // GL Version plugin for
-$pi_url     = 'http://www.glfusion.org';  // Plugin Homepage
-
-// Default data
-
-$DEFVALUES = array();
-
-// Site Tailor Features
+$pi_name        = 'sitetailor';
+$pi_version     = '1.0.0';
+$gl_version     = '1.1.0';
+$pi_url         = 'http://www.glfusion.org';
+$base_path      = $_CONF['path'] . 'plugins/' . $pi_name . '/';
 
 $NEWFEATURE = array();
 $NEWFEATURE['sitetailor.admin'] =   "Site Tailor Plugin Admin Rights";
 
 /*
- * If we are being called by glFusion's install routine, there is no
+ * If we are being called glFusion's install routine, there is no
  * COM_errorLog() function available.
  */
 
-if (!function_exists('COM_errorLog') ) {
-    function COM_errorLog() {
+if (!function_exists('COM_errorLOG') ) {
+    function COM_errorLOG() {
     }
 }
 
-function glfusion_install_sitetailor($_DB_table_prefix)
+function plugin_install_sitetailor($_DB_table_prefix)
 {
-    global $pi_name, $pi_version, $gl_version, $pi_url;
-    global $DEFVALUES, $NEWFEATURE;
-    global $_TABLES, $_CONF, $LANG_ST00, $_DB_dbms;
+    global $_TABLES, $_CONF, $NEWFEATURE;
+    global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
 
     COM_errorLog("Installing the $pi_name Plugin",1);
 
-    if ( $_DB_dbms == 'mysql' ) {
-        require_once($_CONF['path'] . 'plugins/sitetailor/sql/mysql_install.php');
-    } else {
-        require_once($_CONF['path'] . 'plugins/sitetailor/sql/mssql_install.php');
-    }
+    require_once($_CONF['path'] . 'plugins/sitetailor/config.php');
+    require_once($_CONF['path'] . 'plugins/sitetailor/sql/mysql_install.php');
 
-    $uninstall_plugin = 'glfusion_uninstall_' . $pi_name;
+    $uninstall_plugin = 'plugin_remove_' . $pi_name;
 
     foreach ($_SQL as $table => $sql) {
         COM_errorLog("Creating $table table",1);
@@ -228,24 +219,11 @@ function glfusion_install_sitetailor($_DB_table_prefix)
 * @return   boolean True if successful false otherwise
 *
 */
-function glfusion_uninstall_sitetailor($installCheck='') {
-    global $pi_name, $pi_version, $gl_version, $pi_url;
-    global $DEFVALUES, $NEWFEATURE;
-    global $_DB_table_prefix, $_TABLES, $LANG_ST00;
+function plugin_remove_sitetailor() {
+    global $_CONF, $_DB_table_prefix, $_TABLES, $LANG_ST00, $NEWFEATURE;
+    global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
 
     $TABLES     = array ( 'st_config','st_menu_config','st_menu_elements');
-
-    // Check and see if plugin is still enabled - if so display warning and exit
-    if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
-        COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
-        $display .= COM_startBlock($LANG_ST00['warning']);
-        $display .= $LANG_ST00['enabled'];
-        $display .= COM_endBlock();
-        echo $display;
-        return false;
-    }
-
-    // Ok to proceed and delete plugin
 
     // Unregister the plugin with glFusion
     COM_errorLog('Attempting to unregister the ' . $pi_name . ' Plugin from glFusion',1);
@@ -258,7 +236,7 @@ function glfusion_uninstall_sitetailor($installCheck='') {
     }
 
     // Remove Security for this plugin
-    $grp_id = DB_getItem($_TABLES['vars'], 'value', "name = '{$pi_name}_gid'");
+    $grp_id  = DB_getItem($_TABLES['vars'], 'value', "name = '{$pi_name}_gid'");
     $cgrp_id = DB_getItem($_TABLES['vars'],'value', "name = '{$pi_name}_cid'");
 
     COM_errorLog("Removing $pi_name Admin Group", 1);
@@ -281,7 +259,6 @@ function glfusion_uninstall_sitetailor($installCheck='') {
         DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $feat_id",1);
         DB_query("DELETE FROM {$_TABLES['features']} WHERE ft_id = $feat_id",1);
     }
-
     COM_errorLog('...success',1);
     return true;
 }
