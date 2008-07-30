@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Moved CAPTCHA, Forum, and FileMgmt configuration to the core configuration
+  system.
+
 - Updated default header logo
 		public_html/admin/install/layout/logo.png
 		public_html/images/logo1234.png
