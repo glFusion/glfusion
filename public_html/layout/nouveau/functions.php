@@ -66,6 +66,15 @@ $_BLOCK_TEMPLATE['section_block'] = 'blockheader-list.thtml,blockfooter-list.tht
 // $_BLOCK_TEMPLATE['user_block'] = 'blockheader-list.thtml,blockfooter-list.thtml';
 
 
+function nouveau_headerVars( &$template ) {
+    global $_CONF;
+
+	//Enables use of gl_chronometer - a client-side header banner rotator
+	$template->set_var('gl_moochronometer',
+'<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moochronometer.js"></script>');
+
+}
+
 
 // A portal staticpage (that bases itself on a user created proper portal block called gl_mootickerRSS)
 //modified from LWC's forum post http://www.geeklog.net/forum/viewtopic.php?showtopic=67396 by Mark R. Evans and Joe Mucchiello

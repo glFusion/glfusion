@@ -843,8 +843,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
-           $theme_headercode, $theme_layout, $gllabsMooToolsLoaded,
-           $mbMenuConfig;
+           $theme_headercode, $theme_layout,$mbMenuConfig;
 
     $function = $_CONF['theme'] . '_siteHeader';
 
@@ -870,12 +869,9 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     ));
     $header->set_var('xhtml',XHTML);
 
-    // determine if MooTools is already loaded..
-    if ( $gllabsMooToolsLoaded != 1 ) {
-        $header->set_var('mootools',
-            '<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/mootools-release-1.11.packed.js"></script>');
-        $gllabsMooToolsLoaded = 1;
-    }
+    $header->set_var('mootools',
+            '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools-release-1.11.packed.js"></script>');
+
 	//Fade in animation for the gl_moomenu
     $animate = new Template( $_CONF['path_layout'] );
     $animate->set_file( array(
@@ -892,9 +888,16 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $tips->parse( 'tips_js', 'tips' );
     $header->set_var('gl_mootips',$tips->finish( $tips->get_var( 'tips_js' )));
 
-	//Enables use of gl_chronometer - a client-side header banner rotator
-	$header->set_var('gl_moochronometer',
-'<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moochronometer.js"></script>');
+    // give the theme a chance to load stuff....
+
+    $function = $_CONF['theme'] . '_headerVars';
+
+    if( function_exists( $function ))
+    {
+        $function( $header );
+    }
+
+    // initialize the Site Tailor items....
 
     $tmbg = '#151515';
     $tmh  = '#679ef1';

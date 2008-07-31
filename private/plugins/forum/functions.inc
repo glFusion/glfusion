@@ -436,14 +436,10 @@ function plugin_showstats_forum($showsitestats)
 
 
 function plugin_getheadercode_forum() {
-    global $_CONF, $CONF_FORUM, $gllabsMooToolsLoaded;
+    global $_CONF, $CONF_FORUM;
 
     $gf_header = '';
 
-    if ( $gllabsMooToolsLoaded != 1 ) {
-        $gf_header .= '<script type="text/javascript" src="' . $_CONF['site_url'] . '/forum/js/mootools-release-1.11.packed.js"></script>' . LB;
-        $gllabsMooToolsLoaded = 1;
-    }
     $gf_header .= '<script type="text/javascript">' . LB;
     $gf_header .= '	window.addEvent(\'domready\', function() {' . LB;
     $gf_header .= '		var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
