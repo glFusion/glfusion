@@ -426,7 +426,7 @@ function CUSTOM_mail($to, $subject, $message, $from = '', $html = false, $priori
     }
 
     $headers  = 'From: ' . $from . "\r\n"
-              . 'X-Mailer: glFusion ' . glFusion_VERSION . "\r\n";
+              . 'X-Mailer: glFusion ' . GVERSION . "\r\n";
 
     if ($priority > 0) {
         $headers .= 'X-Priority: ' . $priority . "\r\n";
