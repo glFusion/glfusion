@@ -752,9 +752,9 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                     }
                 }
 
-                if (empty ($A['username'])) {
-                    $A['username'] = DB_getItem ($_TABLES['users'], 'username',
-                                                 "uid = $uid");
+                if (empty($A['username']) || empty($A['fullname']) || empty($A['email'])) {
+                    $nresult = DB_query("SELECT username, fullname, email FROM {$_TABLES['users']} WHERE uid = $uid");
+                    list($A['username'], $A['fullname'], $A['email']) = DB_fetchArray($nresult);
                 }
                 $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false,
                                                true);
