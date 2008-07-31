@@ -152,8 +152,7 @@ function WS_dissectURI(&$args)
  */
 function WS_post()
 {
-    global $WS_PLUGIN, $WS_ATOM_NS, $WS_APP_NS, $WS_EXTN_NS, $WS_VERBOSE,
-           $_CONF;
+    global $_CONF, $WS_PLUGIN, $WS_VERBOSE;
 
     if ($WS_VERBOSE) {
         COM_errorLog("WS: POST request received");
@@ -202,10 +201,10 @@ function WS_post()
         if ($ret == PLG_RET_OK) {
             $atom_doc = new DOMDocument('1.0', 'utf-8');
 
-            $entry_elem = $atom_doc->createElementNS($WS_ATOM_NS, 'atom:entry');
+            $entry_elem = $atom_doc->createElementNS(WS_ATOM_NS, 'atom:entry');
             $atom_doc->appendChild($entry_elem);
-            $atom_doc->createAttributeNS($WS_APP_NS, 'app:entry');
-            $atom_doc->createAttributeNS($WS_EXTN_NS, 'gl:entry');
+            $atom_doc->createAttributeNS(WS_APP_NS, 'app:entry');
+            $atom_doc->createAttributeNS(WS_EXTN_NS, 'gl:entry');
 
             WS_arrayToEntryXML($out, $svc_msg['output_fields'], $entry_elem, $atom_doc);
             WS_write($atom_doc->saveXML());
@@ -222,8 +221,7 @@ function WS_post()
  */
 function WS_put()
 {
-    global $WS_PLUGIN, $WS_ATOM_NS, $WS_APP_NS, $WS_EXTN_NS, $WS_VERBOSE,
-           $_CONF;
+    global $_CONF, $WS_PLUGIN, $WS_VERBOSE;
 
     if ($WS_VERBOSE) {
         COM_errorLog("WS: PUT request received");
@@ -263,8 +261,7 @@ function WS_put()
  */
 function WS_get()
 {
-    global $WS_PLUGIN, $WS_INTROSPECTION, $WS_ATOM_NS, $WS_APP_NS, $WS_EXTN_NS,
-           $WS_VERBOSE, $_CONF, $_PLUGINS;
+    global $_CONF, $WS_PLUGIN, $WS_INTROSPECTION, $WS_VERBOSE, $_PLUGINS;
 
     if ($WS_VERBOSE) {
         COM_errorLog("WS: GET request received");
@@ -297,10 +294,10 @@ function WS_get()
         /* It might be simpler to do this part directly :-/ */
 
         $atom_doc = new DOMDocument('1.0', 'utf-8');
-        $root_elem = $atom_doc->createElementNS($WS_APP_NS, 'app:service');
+        $root_elem = $atom_doc->createElementNS(WS_APP_NS, 'app:service');
         $atom_doc->appendChild($root_elem);
-        $atom_doc->createAttributeNS($WS_ATOM_NS, 'atom:service');
-        $atom_doc->createAttributeNS($WS_EXTN_NS, 'gl:service');
+        $atom_doc->createAttributeNS(WS_ATOM_NS, 'atom:service');
+        $atom_doc->createAttributeNS(WS_EXTN_NS, 'gl:service');
 
         $workspace = $atom_doc->createElement('app:workspace');
         $root_elem->appendChild($workspace);
@@ -368,10 +365,10 @@ function WS_get()
             }
             $atom_doc = new DOMDocument('1.0', 'utf-8');
 
-            $entry_elem = $atom_doc->createElementNS($WS_ATOM_NS, 'atom:entry');
+            $entry_elem = $atom_doc->createElementNS(WS_ATOM_NS, 'atom:entry');
             $atom_doc->appendChild($entry_elem);
-            $atom_doc->createAttributeNS($WS_APP_NS, 'app:entry');
-            $atom_doc->createAttributeNS($WS_EXTN_NS, 'gl:entry');
+            $atom_doc->createAttributeNS(WS_APP_NS, 'app:entry');
+            $atom_doc->createAttributeNS(WS_EXTN_NS, 'gl:entry');
 
             WS_arrayToEntryXML($out, $svc_msg['output_fields'], $entry_elem, $atom_doc);
             WS_write($atom_doc->saveXML());
@@ -379,10 +376,10 @@ function WS_get()
             /* Output the feed here */
             $atom_doc = new DOMDocument('1.0', 'utf-8');
 
-            $feed_elem = $atom_doc->createElementNS($WS_ATOM_NS, 'atom:feed');
+            $feed_elem = $atom_doc->createElementNS(WS_ATOM_NS, 'atom:feed');
             $atom_doc->appendChild($feed_elem);
-            $atom_doc->createAttributeNS($WS_APP_NS, 'app:feed');
-            $atom_doc->createAttributeNS($WS_EXTN_NS, 'gl:feed');
+            $atom_doc->createAttributeNS(WS_APP_NS, 'app:feed');
+            $atom_doc->createAttributeNS(WS_EXTN_NS, 'gl:feed');
 
             $feed_id = $atom_doc->createElement('atom:id', $_CONF['site_name']);
             $feed_elem->appendChild($feed_id);
@@ -427,8 +424,7 @@ function WS_get()
  */
 function WS_delete()
 {
-    global $WS_PLUGIN, $WS_ATOM_NS, $WS_APP_NS, $WS_EXTN_NS, $WS_VERBOSE,
-           $_CONF;
+    global $_CONF, $WS_PLUGIN, $WS_VERBOSE;
 
     if ($WS_VERBOSE) {
         COM_errorLog("WS: DELETE request received");
@@ -469,11 +465,13 @@ function WS_getContent(&$args, $atom_doc, $node)
 
     switch ($type) {
     case 'text':
+    case 'text/plain':
         $args['content'] = (string) $node->nodeValue;
         $args['content_type'] = 'text';
         break;
 
     case 'html':
+    case 'text/html':
         $args['content'] = (string) $node->nodeValue;
         $args['content_type'] = 'html';
         break;
@@ -509,7 +507,7 @@ function WS_getContent(&$args, $atom_doc, $node)
  */
 function WS_xmlToArgs(&$args)
 {
-    global $_USER, $WS_EXTN_NS, $WS_ATOM_NS, $WS_APP_NS;
+    global $_USER;
 
     /* Previous data in args is NOT deleted */
 
@@ -525,7 +523,7 @@ function WS_xmlToArgs(&$args)
     }
 
     /* Get the action, if it exists */
-    $action_element = $entry_element->getElementsByTagNameNS($WS_EXTN_NS, 'action')->item(0);
+    $action_element = $entry_element->getElementsByTagNameNS(WS_EXTN_NS, 'action')->item(0);
     $action = '';
     if ($action_element != null) {
         $args['action'] = strtolower((string)($action_element->firstChild->data));
@@ -537,9 +535,10 @@ function WS_xmlToArgs(&$args)
         for ($index = 0; $index < $nodes->length; $index++) {
             $node = $nodes->item($index);
 
-            if (($node->namespaceURI != $WS_ATOM_NS) &&
-                ($node->namespaceURI != $WS_APP_NS ) &&
-                ($node->namespaceURI != $WS_EXTN_NS)) {
+            if (($node->namespaceURI != WS_ATOM_NS) &&
+                ($node->namespaceURI != WS_APP_NS) &&
+                ($node->namespaceURI != WS_APP_NS2) &&
+                ($node->namespaceURI != WS_EXTN_NS)) {
                 continue;
             }
 
@@ -549,7 +548,7 @@ function WS_xmlToArgs(&$args)
                 if ($author_name_element != null) {
                     $args['author_name'] = (string)($author_name_element->firstChild->nodeValue);
                 }
-                $author_uid_element = $node->getElementsByTagNameNS($WS_EXTN_NS, 'uid')->item(0);
+                $author_uid_element = $node->getElementsByTagNameNS(WS_EXTN_NS, 'uid')->item(0);
                 if ($author_uid_element != null) {
                     $args['uid'] = (string)($author_uid_element->firstChild->nodeValue);
                 }
@@ -560,8 +559,33 @@ function WS_xmlToArgs(&$args)
             case 'updated':
                 $args['updated'] = (string)$node->firstChild->nodeValue;
                 break;
+            case 'edited':
+                $args['edited'] = (string)$node->firstChild->nodeValue;
+                break;
+            case 'published':
+                $args['published'] = (string)$node->firstChild->nodeValue;
+                break;
             case 'content':
                 WS_getContent($args, $atom_doc, $node);
+                break;
+            case 'control':
+                if ($node->nodeType == XML_ELEMENT_NODE) {
+                    $child_nodes = $node->childNodes;
+                    if ($child_nodes == null) {
+                        continue;
+                    }
+                    $args[$node->localName] = array();
+                    for ($i = 0; $i < $child_nodes->length; $i++) {
+                        $child_node = $child_nodes->item($i);
+                        if ($child_node->nodeType == XML_ELEMENT_NODE) {
+                            if ($child_node->firstChild->nodeType == XML_TEXT_NODE) {
+                                $args[$node->localName][$child_node->localName]
+                                        = $child_node->firstChild->nodeValue;
+                                break;
+                            }
+                        }
+                    }
+                }
                 break;
             default:
                 if ($node->nodeType == XML_ELEMENT_NODE) {
@@ -580,23 +604,30 @@ function WS_xmlToArgs(&$args)
                             if ($child_node->firstChild->nodeType == XML_TEXT_NODE) {
                                 $args[$node->localName][$node->firstChild->localName] = $child_node->firstChild->nodeValue;
                             }
+                        } elseif ($child_node->nodeType == XML_CDATA_SECTION_NODE) {
+                            $args[$node->localName] = $child_node->nodeValue;
                         }
                     }
                 }
             }
         }
 
-        if (empty($args['updated'])) {
-            $args['updated'] = date('c');
-        }
-        $args['publish_month'] = date('m', strtotime($args['updated']));
-        $args['publish_year'] = date('Y', strtotime($args['updated']));
-        $args['publish_day'] = date('d', strtotime($args['updated']));
-        $args['publish_hour'] = date('H', strtotime($args['updated']));
-        $args['publish_minute'] = date('i', strtotime($args['updated']));
-        $args['publish_second'] = date('s', strtotime($args['updated']));
+        $timestamp = date('c');
+        if (!empty($args['published'])) {
+            $timestamp = $args['published'];
+        } elseif (!empty($args['updated'])) {
+            $timestamp = $args['updated'];
+        } elseif (!empty($args['edited'])) {
+            $timestamp = $args['edited'];
+       }
+        $args['publish_month'] = date('m', strtotime($timestamp));
+        $args['publish_year'] = date('Y', strtotime($timestamp));
+        $args['publish_day'] = date('d', strtotime($timestamp));
+        $args['publish_hour'] = date('H', strtotime($timestamp));
+        $args['publish_minute'] = date('i', strtotime($timestamp));
+        $args['publish_second'] = date('s', strtotime($timestamp));
 
-        if (isset($args['control'])) {
+        if (isset($args['control']) && is_array($args['control'])) {
             foreach ($args['control'] as $key => $value) {
                 if ($key == 'draft') {
                     $args['draft_flag'] = ($value == 'yes' ? 1 : 0);
@@ -619,12 +650,17 @@ function WS_xmlToArgs(&$args)
  */
 function WS_arrayToEntryXML($arr, $extn_elements, &$entry_elem, &$atom_doc)
 {
-    global $WS_PLUGIN, $WS_ATOM_NS, $WS_APP_NS, $WS_EXTN_NS, $_CONF;
+    global $_CONF, $WS_PLUGIN;
 
     /* Standard Atom elements */
 
     $id = $atom_doc->createElement('atom:id', $arr['id']);
     $entry_elem->appendChild($id);
+
+    if (!empty($arr['published'])) {
+        $published = $atom_doc->createElement('atom:published', $arr['published']);
+        $entry_elem->appendChild($published);
+    }
 
     $updated = $atom_doc->createElement('atom:updated', $arr['updated']);
     $entry_elem->appendChild($updated);
