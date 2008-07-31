@@ -552,7 +552,7 @@ $LANG11 = array(
     3 => 'Druckfähige Version',
     4 => 'Optionen',
     5 => 'Als PDF',
-    6 => 'Subscribe to '
+    6 => "Feed '%s' abonnieren"
 );
 
 ###############################################################################
@@ -1079,7 +1079,10 @@ $LANG33 = array(
     49 => 'Newsfeed-Logo',
     50 => "Relativ zur URL dieser Site ({$_CONF['site_url']})",
     51 => 'Der gewählte Dateiname wird bereits von einem anderen Newsfeed verwendet. Bitte wählen Sie einen anderen.',
-    52 => 'Fehler: Dateiname existiert schon'
+    52 => 'Fehler: Dateiname existiert schon',
+    53 => 'Alle auf der Startseite',
+    54 => 'Bitte wählen Sie die Art des Newsfeeds aus.',
+    55 => 'Artikel'
 );
 
 ###############################################################################
