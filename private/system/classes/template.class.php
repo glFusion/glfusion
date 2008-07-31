@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | template_new.class.php                                                   |
+// | template.class.php                                                       |
 // |                                                                          |
 // | glFusion template library.                                               |
 // +--------------------------------------------------------------------------+
@@ -10,12 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Joe Mucchiello     - joe AT throwingdice DOT com                |
+// | Joe Mucchiello     - joe AT throwingdice DOT com                         |
 // |                                                                          |
 // | Based on phpLib Template Library                                         |
 // | (C) Copyright 1999-2000 NetUSE GmbH                                      |
