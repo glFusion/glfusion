@@ -66,7 +66,7 @@ if (!function_exists('COM_errorLOG') ) {
 function bad_behavior2_compatible_with_this_glfusion_version ()
 {
     // requires 1.1.0 or newer
-    $glversion = explode(".", glFusion_VERSION);
+    $glversion = explode(".", GVERSION);
     if ( $glversion[0] < 1 ) {
         return false;
     }
