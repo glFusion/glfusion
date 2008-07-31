@@ -102,7 +102,7 @@ function find_feedFormats ()
 * @return   string   an array with id/name pairs for every feed
 *
 */
-function get_glFusionFeeds ()
+function get_articleFeeds()
 {
     global $_CONF, $_TABLES, $LANG33;
 
@@ -119,6 +119,7 @@ function get_glFusionFeeds ()
 
     if ($num > 0) {
         $options[] = array ('id' => '::all', 'name' => $LANG33[23]);
+        $options[] = array ('id' => '::frontpage', 'name' => $LANG33[53]);
     }
 
     for ($i = 0; $i < $num; $i++) {
@@ -286,7 +287,11 @@ function editfeed ($fid = 0, $type = '')
     $feed_template->set_var ('feed_content_length', $A['content_length']);
     $feed_template->set_var ('feed_filename', $A['filename']);
     $feed_template->set_var ('feed_type', $A['type']);
-    $feed_template->set_var ('feed_type_display', ucwords ($A['type']));
+    if ($A['type'] == 'article') {
+        $feed_template->set_var('feed_type_display', $LANG33[55]);
+    } else {
+        $feed_template->set_var('feed_type_display', ucwords($A['type']));
+    }
     $feed_template->set_var ('feed_charset', $A['charset']);
     $feed_template->set_var ('feed_language', $A['language']);
 
@@ -330,8 +335,8 @@ function editfeed ($fid = 0, $type = '')
     $feed_template->set_var ('feed_limits', $limits);
     $feed_template->set_var ('feed_limits_what', $selection);
 
-    if ($A['type'] == 'geeklog' || $A['type'] == 'glfusion') {
-        $options = get_glfusionFeeds ();
+    if ($A['type'] == 'article') {
+        $options = get_articleFeeds();
     } else {
         $result = DB_query("SELECT pi_enabled FROM {$_TABLES['plugins']} WHERE pi_name='{$A['type']}'");
         if($result)
@@ -388,11 +393,12 @@ function newfeed ()
         // none of the installed plugins are supporting feeds
         // - go directly to the feed editor
         $retval = COM_siteHeader ('menu', $LANG33[11])
-                . editfeed (0, 'glfusion')
+                . editfeed (0, 'article')
                 . COM_siteFooter ();
     } else {
         $selection = '<select name="type">' . LB;
-        $selection .= '<option value="glfusion">glFusion</option>' . LB;
+        $selection .= '<option value="article">' . $LANG33[55]
+                   . '</option>' . LB;
         foreach ($plugins as $p) {
             $selection .= '<option value="' . $p . '">' . ucwords ($p)
                        . '</option>' . LB;
@@ -410,7 +416,7 @@ function newfeed ()
 
         $feed_template->set_var ('type_selection', $selection);
 
-        $feed_template->set_var ('lang_explain', $LANG33[37]);
+        $feed_template->set_var ('lang_explain', $LANG33[54]);
         $feed_template->set_var ('lang_go', $LANG33[1]);
 
         $retval .= COM_siteHeader ('menu', $LANG33[11]);
