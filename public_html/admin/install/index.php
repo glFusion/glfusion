@@ -516,7 +516,8 @@ function INST_installEngine($install_type, $install_step)
                             ' . LB;
 
                     } else {
-                        if (INST_createDatabaseStructures($use_innodb)) {
+                        list($rc,$errors) = INST_createDatabaseStructures($use_innodb);
+                        if ( $rc ) {
                             $site_name      = isset($_POST['site_name']) ? $_POST['site_name'] : (isset($_GET['site_name']) ? $_GET['site_name'] : '') ;
                             $site_slogan    = isset($_POST['site_slogan']) ? $_POST['site_slogan'] : (isset($_GET['site_slogan']) ? $_GET['site_slogan'] : '') ;
                             $site_url       = isset($_POST['site_url']) ? $_POST['site_url'] : (isset($_GET['site_url']) ? $_GET['site_url'] : '') ;
@@ -570,7 +571,7 @@ function INST_installEngine($install_type, $install_step)
 
                             // Setup nouveau as the default
                             $config->set('theme', 'nouveau');
-                            DB_query("UPDATE {$_TABLES['users']} SET theme='nouveau' WHERE uid=2");
+                            DB_query("UPDATE {$_TABLES['users']} SET theme='nouveau' WHERE uid=2",1);
 
                             CTL_clearCache();
 
@@ -578,8 +579,8 @@ function INST_installEngine($install_type, $install_step)
                             header('Location: success.php?type=install&language=' . $language);
                         } else {
                             $display .= "<h2>" . $LANG_INSTALL[67] . "</h2><p>" . $LANG_INSTALL[68] . "</p>";
+                            $display .= '<br />' . $errors;
                         }
-
                     }
                     break;
 
@@ -613,7 +614,8 @@ function INST_installEngine($install_type, $install_step)
                         }
                     }
 
-                    if (INST_doDatabaseUpgrades($version, $use_innodb)) {
+                    list($rc,$errors) = INST_doDatabaseUpgrades($version, $use_innodb);
+                    if ( $rc ) {
                         INST_checkPlugins();
 
                         INST_pluginAutoUpgrade('sitetailor',1);
@@ -629,13 +631,14 @@ function INST_installEngine($install_type, $install_step)
                          * Insert some blocks
                          */
 
-                        DB_query("INSERT INTO {$_TABLES['blocks']} (`is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES (0,'blogroll_block','phpblock','Blog Roll','all',30,'',0,'','0000-00-00 00:00:00',NULL,NULL,0,0,'phpblock_blogroll','',2,4,3,3,2,2);",1);
+                        DB_query("REPLACE INTO {$_TABLES['blocks']} (`is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES (0,'blogroll_block','phpblock','Blog Roll','all',30,'',0,'','0000-00-00 00:00:00',NULL,NULL,0,0,'phpblock_blogroll','',2,4,3,3,2,2);",1);
 
                         // Great, installation is complete, redirect to success page
                         header('Location: success.php?type=upgrade&language=' . $language);
                     } else {
                         $display .= '<h2>' . $LANG_INSTALL[78] . '</h2>
                             <p>' . $LANG_INSTALL[79] . '</p>' . LB;
+                        $display .= $errors;
                     }
                     break;
             }
@@ -794,7 +797,7 @@ function INST_identifyglFusionVersion ()
 
     $version = '';
 
-    $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='glfusion'");
+    $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='glfusion'",1);
     if ( $result !== false ) {
         $row = DB_fetchArray($result);
         $version = $row['value'];
@@ -856,7 +859,9 @@ function INST_identifyglFusionVersion ()
  */
 function INST_createDatabaseStructures ($use_innodb = false)
 {
-    global $_CONF, $_TABLES, $_DB, $_DB_dbms, $_DB_host, $_DB_user, $_DB_pass;
+    global $_CONF, $_TABLES, $_DB, $_DB_dbms, $_DB_host, $_DB_user, $_DB_pass, $LANG_INSTALL;
+
+    $rc = true;
 
     $_DB->setDisplayError (true);
 
@@ -870,13 +875,13 @@ function INST_createDatabaseStructures ($use_innodb = false)
     $progress = '';
 
     if (INST_checkTableExists ('access')) {
-        return false;
+        return array(false,$LANG_INSTALL[68]);
     }
 
     switch($_DB_dbms){
         case 'mysql':
+            list($rc,$errors) = INST_updateDB($_SQL);
 
-            INST_updateDB($_SQL);
             if ($use_innodb) {
                 DB_query ("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('database_engine', 'InnoDB')");
             }
@@ -895,7 +900,7 @@ function INST_createDatabaseStructures ($use_innodb = false)
         DB_query ($data);
     }
 
-    return true;
+    return array($rc, $errors);
 }
 
 
@@ -917,12 +922,12 @@ function INST_personalizeAdminAccount($site_mail, $site_url)
 
         if (!empty($site_mail)) {
             if (strpos($site_mail, 'example.com') === false) {
-                DB_query("UPDATE {$_TABLES['users']} SET email = '" . addslashes($site_mail) . "' WHERE uid = 2");
+                DB_query("UPDATE {$_TABLES['users']} SET email = '" . addslashes($site_mail) . "' WHERE uid = 2",1);
             }
         }
         if (!empty($site_url)) {
             if (strpos($site_url, 'example.com') === false) {
-                DB_query("UPDATE {$_TABLES['users']} SET homepage = '" . addslashes($site_url) . "' WHERE uid = 2");
+                DB_query("UPDATE {$_TABLES['users']} SET homepage = '" . addslashes($site_url) . "' WHERE uid = 2",1);
             }
         }
     }
@@ -1013,7 +1018,7 @@ function INST_checkTableExists ($table)
     $exists = false;
 
     if ($_DB_dbms == 'mysql') {
-        $result = DB_query ("SHOW TABLES LIKE '{$_TABLES[$table]}'");
+        $result = DB_query ("SHOW TABLES LIKE '{$_TABLES[$table]}'",1);
         if (DB_numRows ($result) > 0) {
             $exists = true;
         }
@@ -1082,6 +1087,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
     global $_TABLES, $_CONF, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
            $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
 
+    $rc = true;
+    $errors = '';
+
     $_DB->setDisplayError (true);
 
     // Because the upgrade sql syntax can vary from dbms-to-dbms we are
@@ -1094,9 +1102,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.0.0':
         case '1.0.1':
             require_once $_CONF['path'] . 'sql/updates/' . $_DB_dbms . '_1.0.1_to_1.1.0.php';
-            INST_updateDB($_SQL);
-
-            $_SQL[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('database_version', '0')";
+            list($rc,$errors) = INST_updateDB($_SQL);
 
             $current_fusion_version = '1.1.0';
             $_SQL = '';
@@ -1111,7 +1117,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
     // to run admin/sectest.php again
     DB_delete ($_TABLES['vars'], 'name', 'security_check');
 
-    return true;
+    return array($rc,$errors);
+
 }
 
 
@@ -1143,15 +1150,24 @@ function INST_updateDB($_SQL)
 {
     global $progress, $_DB, $_DB_dbms;
 
+    $_DB->setDisplayError (true);
+    $errors = '';
+    $rc = true;
+
     $_SQL = INST_checkInnodbUpgrade($_SQL);
     foreach ($_SQL as $sql) {
         $progress .= "executing " . $sql . "<br />\n";
         if ($_DB_dbms == 'mssql') {
             $_DB->dbQuery($sql, 0, 1);
         } else {
-            DB_query($sql);
+            DB_query($sql,1);
+            if ( DB_error() ) {
+                $errors .= DB_error() . "<br />\n";
+                $rc = false;
+            }
         }
     }
+    return array($rc,$errors);
 }
 
 /**
