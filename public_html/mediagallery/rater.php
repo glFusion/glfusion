@@ -1,43 +1,46 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// | lib-rating.php - The function that draws the rating bar.                  |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2006,2007,2008 by the following authors:                    |
-// |                                                                           |
-// | Authors:                                                                  |
-// | Ryan Masuga, masugadesign.com  - ryan@masugadesign.com                    |
-// | Masuga Design                                                             |
-// |(http://masugadesign.com/the-lab/scripts/unobtrusive-ajax-star-rating-bar/)|
-// | Komodo Media (http://komodomedia.com)                                     |
-// | Climax Designs (http://slim.climaxdesigns.com/)                           |
-// | Ben Nolan (http://bennolan.com/behaviour/) for Behavio(u)r!               |
-// |                                                                           |
-// | Homepage for this script:                                                 |
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | rater.php                                                                |
+// |                                                                          |
+// | non AJAX based rating script                                             |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2006,2007,2008 by the following authors:                   |
+// |                                                                          |
+// | Authors:                                                                 |
+// | Ryan Masuga, masugadesign.com  - ryan@masugadesign.com                   |
+// | Masuga Design                                                            |
+// |http://masugadesign.com/the-lab/scripts/unobtrusive-ajax-star-rating-bar/ |
+// | Komodo Media (http://komodomedia.com)                                    |
+// | Climax Designs (http://slim.climaxdesigns.com/)                          |
+// | Ben Nolan (http://bennolan.com/behaviour/) for Behavio(u)r!              |
+// |                                                                          |
+// | Homepage for this script:                                                |
 // |http://www.masugadesign.com/the-lab/scripts/unobtrusive-ajax-star-rating-bar/
-// +---------------------------------------------------------------------------+
-// | This (Unobtusive) AJAX Rating Bar script is licensed under the            |
-// | Creative Commons Attribution 3.0 License                                  |
-// |  http://creativecommons.org/licenses/by/3.0/                              |
-// |                                                                           |
-// | What that means is: Use these files however you want, but don't           |
-// | redistribute without the proper credits, please. I'd appreciate hearing   |
-// | from you if you're using this script.                                     |
-// |                                                                           |
-// | Suggestions or improvements welcome - they only serve to make the script  |
-// | better.                                                                   |
-// +---------------------------------------------------------------------------+
-// | Adapted for Media Gallery by:                                             |
-// | Mark R. Evans                  - mark@gllabs.org                          |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | Licensed under a Creative Commons Attribution 3.0 License.                |
-// | http://creativecommons.org/licenses/by/3.0/                               |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | This (Unobtusive) AJAX Rating Bar script is licensed under the           |
+// | Creative Commons Attribution 3.0 License                                 |
+// |  http://creativecommons.org/licenses/by/3.0/                             |
+// |                                                                          |
+// | What that means is: Use these files however you want, but don't          |
+// | redistribute without the proper credits, please. I'd appreciate hearing  |
+// | from you if you're using this script.                                    |
+// |                                                                          |
+// | Suggestions or improvements welcome - they only serve to make the script |
+// | better.                                                                  |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | Licensed under a Creative Commons Attribution 3.0 License.               |
+// | http://creativecommons.org/licenses/by/3.0/                              |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 require_once('../lib-common.php');
 

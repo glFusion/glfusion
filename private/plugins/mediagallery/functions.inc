@@ -1,33 +1,35 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | This file does two things: 1) it implements the necessary glFusion Plugin |
-// | API method and 2) implements all the common code needed by the media      |
-// | gallery PHP files.                                                        |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2005-2008 by the following authors:                         |
-// |                                                                           |
-// | Mark R. Evans              - mark AT glfusion DOT org                     |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | functions.inc                                                            |
+// |                                                                          |
+// | This file does two things: 1) it implements the necessary glFusion Plugin|
+// | API method and 2) implements all the common code needed by the Media     |
+// | Gallery PHP files.                                                       |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
 {
@@ -229,7 +231,7 @@ function plugin_getmenuitems_mediagallery() {
 }
 
 function plugin_getheadercode_mediagallery() {
-    global $_CONF, $_MG_CONF, $gllabsMooToolsLoaded,$mgLightBox, $glversion,$swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $mgLightBox, $glversion,$swfjsinclude,$themeStyle;
 
     $mg_header = '';
 
@@ -250,11 +252,7 @@ function plugin_getheadercode_mediagallery() {
     $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/swfobject.js?ver=20"></script>' . LB;
     $mg_header .= '<script type="text/javascript">var mgBaseURL = \'' . $_MG_CONF['site_url'] . '\'</script>' . LB;
     $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/mediagallery.js?ver=2"></script>' . LB;
-    if ( $_MG_CONF['load_mootools'] != false && $gllabsMooToolsLoaded != 1 ) {
-        $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/mootools-release-1.11.packed.js?ver=111"></script>' . LB;
-//        $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/mootools-release-1.11.js"></script>' . LB;
-        $gllabsMooToolsLoaded = 1;
-    }
+
     if ( $_MG_CONF['disable_lightbox'] != true ) {
         $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/slimbox.js?ver=2"></script>' . LB;
     }

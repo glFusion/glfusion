@@ -1,12 +1,16 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                 |
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | config.php                                                               |
+// |                                                                          |
+// | Configuration options for Media Gallery                                  |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2008 by the following authors:                        |
+// | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
-// | Mark R. Evans              - mark@gllabs.org                             |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -24,7 +28,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-//
 
 /* -------------------------------------------------------------------------
  * Media Gallery Global Configuration Options
@@ -69,7 +72,7 @@ $_MG_CONF['template_path'] = $_CONF['path'] . 'plugins/mediagallery/templates';
 //$_MG_CONF['template_path'] = $_CONF['path_layout'] . 'mediagallery/';
 
 /*
- * Disable Media Gallery's search integration with Geeklog.
+ * Disable Media Gallery's search integration with glFusion.
  */
 
 $_MG_CONF['disable_search_integration'] = 0;
