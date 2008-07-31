@@ -52,11 +52,8 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 *
 */
 
-if (!defined('glFusion_VERSION')) {
-  define('glFusion_VERSION', '1.1.0');
-}
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.0');
+    define('GVERSION', '1.1.0svn');
 }
 
 /**
@@ -870,7 +867,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var('xhtml',XHTML);
 
     $header->set_var('mootools',
-            '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools-release-1.11.packed.js"></script>');
+            '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools-release-1.11.packed.js"></script>' . LB);
 
 	//Fade in animation for the gl_moomenu
     $animate = new Template( $_CONF['path_layout'] );
@@ -1012,7 +1009,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         $relLinks['service'] = '<link rel="service" '
                     . 'type="application/atomsvc+xml" ' . 'href="'
                     . $_CONF['site_url'] . '/webservices/atom/?introspection" '
-                    . 'title="' . $LANG01[130] . '"' . XHTML . '>';
+                    . 'title="' . $LANG01[130] . '"' . XHTML . '>' . LB;
     }
     // TBD: add a plugin API and a lib-custom.php function
     $header->set_var( 'rel_links', implode( LB, $relLinks ));
@@ -1105,7 +1102,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var( 'site_name', $_CONF['site_name'] );
     $header->set_var( 'site_slogan', $_CONF['site_slogan'] );
     $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,
-                           strlen( $_CONF['path_html'] ) - 1 );
+                           strlen( $_CONF['path_html'] ) - 1 ) . LB;
     $header->set_var( 'rdf_file', $rdf );
     $header->set_var( 'rss_url', $rdf );
 
@@ -1406,7 +1403,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'site_name', $_CONF['site_name'] );
     $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
     $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,
-                          strlen( $_CONF['path_html'] ) - 1 );
+                          strlen( $_CONF['path_html'] ) - 1 ) . LB;
     $theme->set_var( 'rdf_file', $rdf );
     $theme->set_var( 'rss_url', $rdf );
 
@@ -1899,7 +1896,7 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
         if( !empty( $updated_type ) && ( $updated_type != 'article' ))
         {
             // when a plugin's feed is to be updated, skip glFusion's own feeds
-            $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE (is_enabled = 1) AND (type <> 'glfusion')";
+            $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE (is_enabled = 1) AND (type <> 'article')";
         }
         else
         {
@@ -3809,7 +3806,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
     // Load the actual feed handlers:
     $factory = new FeedParserFactory($_CONF['path_system']
                                      . '/classes/syndication/');
-    $factory->userAgent = 'glFusion/' . VERSION;
+    $factory->userAgent = 'glFusion/' . GVERSION;
     if (!empty($last_modified) && !empty($etag)) {
         $factory->lastModified = $last_modified;
         $factory->eTag = $etag;
