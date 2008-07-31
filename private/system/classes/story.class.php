@@ -935,9 +935,12 @@ class Story
 
             $this->_oldsid = $this->_sid;
             $this->_date = mktime();
+            $this->_featured = 0;
             $this->_commentcode = $_CONF['comment_code'];
             $this->_trackbackcode = $_CONF['trackback_code'];
+            $this->_statuscode = 0;
             $this->_show_topic_icon = $_CONF['show_topic_icon'];
+            $this->_owner_id = $_USER['uid'];
             $this->_group_id = $T['group_id'];
             $this->_perm_owner = $T['perm_owner'];
             $this->_perm_group = $T['perm_group'];
@@ -1681,7 +1684,11 @@ class Story
 
         // SID's are a special case:
         $sid = COM_sanitizeID($array['sid']);
-        $oldsid = COM_sanitizeID($array['old_sid']);
+        if (isset($array['old_sid'])) {
+            $oldsid = COM_sanitizeID($array['old_sid'], false);
+        } else {
+            $oldsid = '';
+        }
 
         if (empty($sid)) {
             $sid = $oldsid;
@@ -1695,10 +1702,22 @@ class Story
         $this->_originalSid = $oldsid;
 
         /* Need to deal with the postdate and expiry date stuff */
-        $publish_ampm = COM_applyFilter($array['publish_ampm']);
-        $publish_hour = COM_applyFilter($array['publish_hour'], true);
-        $publish_minute = COM_applyFilter($array['publish_minute'], true);
-        $publish_second = COM_applyFilter($array['publish_second'], true);
+        $publish_ampm = '';
+        if (isset($array['publish_ampm'])) {
+            $publish_ampm = COM_applyFilter($array['publish_ampm']);
+        }
+        $publish_hour = 0;
+        if (isset($array['publish_hour'])) {
+            $publish_hour = COM_applyFilter($array['publish_hour'], true);
+        }
+        $publish_minute = 0;
+        if (isset($array['publish_minute'])) {
+            $publish_minute = COM_applyFilter($array['publish_minute'], true);
+        }
+        $publish_second = 0;
+        if (isset($array['publish_second'])) {
+            $publish_second = COM_applyFilter($array['publish_second'], true);
+        }
 
         if ($publish_ampm == 'pm') {
             if ($publish_hour < 12) {
@@ -1710,9 +1729,18 @@ class Story
             $publish_hour = '00';
         }
 
-        $publish_year = COM_applyFilter($array['publish_year'], true);
-        $publish_month = COM_applyFilter($array['publish_month'], true);
-        $publish_day = COM_applyFilter($array['publish_day'], true);
+        $publish_year = 0;
+        if (isset($array['publish_year'])) {
+            $publish_year = COM_applyFilter($array['publish_year'], true);
+        }
+        $publish_month = 0;
+        if (isset($array['publish_month'])) {
+            $publish_month = COM_applyFilter($array['publish_month'], true);
+        }
+        $publish_day = 0;
+        if (isset($array['publish_day'])) {
+            $publish_day = COM_applyFilter($array['publish_day'], true);
+        }
         $this->_date = strtotime(
                            "$publish_month/$publish_day/$publish_year $publish_hour:$publish_minute:$publish_second");
 
