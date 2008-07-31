@@ -2,20 +2,24 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Consolidated all MooTools libraries - now part of core. Moved
+  to public_html/javascript/ directory.
+- New theme API themename_headerVars(&$template). Allows a theme
+  to set header variables.
+- New install / upgrade system - allows migration from Geeklog
+- Added new GVERSION define
+- Fix for date formatting in RSS fields
+- Renamed the syndication feed type "glfusion" to "article"
+- New option "All Frontpage Stories" for article feeds: skip stories that have
+  the "Show only in topic" option set
+- Better support for plugin messages
+- Webservices tweaks to improve support for more clients.
+- Ensure name and email are properly populated on comment listings.
 - Moved CAPTCHA, Forum, and FileMgmt configuration to the core configuration
   system.
-
 - Updated default header logo
-		public_html/admin/install/layout/logo.png
-		public_html/images/logo1234.png
-
 - Implemented glFusion CSS layout driven header / footer functions.
-        public_html/lib-common.php
-        public_html/layout/nouveau/functions.php
-        public_html/layout/professional/functions.php
-
 - Bumped version number to 1.1.0svn
-        public_html/lib-common.php
 
 v1.0.1
 ------
