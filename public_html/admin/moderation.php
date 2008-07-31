@@ -96,7 +96,7 @@ function commandcontrol($token)
     $admin_templates->set_var('site_url', $_CONF['site_url']);
     $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
 
-    $retval .= COM_startBlock ('glFusion ' . glFusion_VERSION . ' -- ' . $LANG29[34], '',
+    $retval .= COM_startBlock ('glFusion ' . GVERSION . ' -- ' . $LANG29[34], '',
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
     $showTrackbackIcon = (($_CONF['trackback_enabled'] ||
@@ -165,7 +165,7 @@ function commandcontrol($token)
             'lang' => $LANG01[113], 'image' => '/images/icons/docs.'),
         array('condition' => (SEC_inGroup ('Root') &&
                               ($_CONF['link_versionchecker'] == 1)),
-            'url' => 'http://www.gllabs.org/versionchecker.php?version=' . glFusion_VERSION,
+            'url' => 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION,
             'lang' => $LANG01[107], 'image' => '/images/icons/versioncheck.'),
         array('condition' => (SEC_inGroup ('Root')),
             'url'=>$_CONF['site_admin_url'] . '/configuration.php',
