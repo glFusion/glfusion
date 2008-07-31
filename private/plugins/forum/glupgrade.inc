@@ -43,6 +43,8 @@ if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
     die ('This file can not be used on its own.');
 }
 
+require_once($_CONF['path'] . 'plugins/forum/config.php');
+
 /*
  * If we are being called glFusion's upgrade routine, there is no
  * COM_errorLog() function available.
