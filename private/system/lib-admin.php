@@ -916,7 +916,11 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
                 "{$_CONF['site_admin_url']}/syndication.php?mode=edit&amp;fid={$A['fid']}");
             break;
         case 'type':
-            $retval = ucwords($A['type']);
+            if ($A['type'] == 'article') {
+                $retval = $LANG33[55];
+            } else {
+                $retval = ucwords($A['type']);
+            }
             break;
         case 'format':
             $retval = str_replace ('-' , ' ', ucwords ($A['format']));

@@ -506,7 +506,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             }
             if ($_CONF['backend'] == 1) {
                 $tid = $story->displayElements('tid');
-                $result = DB_query("SELECT filename, title FROM {$_TABLES['syndication']} WHERE type = 'glfusion' AND topic = '$tid' AND is_enabled = 1");
+                $result = DB_query("SELECT filename, title FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '$tid' AND is_enabled = 1");
                 $feeds = DB_numRows($result);
                 for ($i = 0; $i < $feeds; $i++) {
                     list($filename, $title) = DB_fetchArray($result);
@@ -784,6 +784,10 @@ function STORY_getItemInfo ($sid, $what)
             case 'feed':
                 $feedfile = DB_getItem ($_TABLES['syndication'], 'filename',
                                         "topic = '::all'");
+                if (empty($feedfile)) {
+                    $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
+                                           "topic = '::frontpage'");
+                }
                 if (empty ($feedfile)) {
                     $feedfile = DB_getItem ($_TABLES['syndication'], 'filename',
                                             "topic = '{$A['tid']}'");
@@ -1126,8 +1130,12 @@ function service_submit_story($args, &$output, &$svc_msg)
     /* Apply filters to the parameters passed by the webservice */
 
     if ($args['gl_svc']) {
-        $args['mode'] = COM_applyBasicFilter($args['mode']);
-        $args['editopt'] = COM_applyBasicFilter($args['editopt']);
+        if (isset($args['mode'])) {
+            $args['mode'] = COM_applyBasicFilter($args['mode']);
+        }
+        if (isset($args['editopt'])) {
+            $args['editopt'] = COM_applyBasicFilter($args['editopt']);
+        }
     }
 
     /* - START: Set all the defaults - */
@@ -1222,6 +1230,9 @@ function service_submit_story($args, &$output, &$svc_msg)
     // exit ();
     // END TEST CODE
 
+    if (!isset($args['sid'])) {
+        $args['sid'] = '';
+    }
     $args['sid'] = COM_sanitizeID($args['sid']);
     if (!$gl_edit) {
         if (strlen($args['sid']) > STORY_MAX_ID_LENGTH) {
@@ -1441,7 +1452,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
 
         // update feed(s) and Older Stories block
-        COM_rdfUpToDateCheck ('glfusion', $story->DisplayElements('tid'), $sid);
+        COM_rdfUpToDateCheck ('article', $story->DisplayElements('tid'), $sid);
         COM_olderStuff ();
 
         if ($story->type == 'submission') {
@@ -1604,6 +1615,7 @@ function service_get_story($args, &$output, &$svc_msg)
             }
             $output['id']           = $output['sid'];
             $output['category']     = array($output['tid']);
+            $output['published']    = date('c', $output['date']);
             $output['updated']      = date('c', $output['date']);
             if (empty($output['bodytext'])) {
                 $output['content']  = $output['introtext'];
@@ -1689,6 +1701,7 @@ function service_get_story($args, &$output, &$svc_msg)
                 }
                 $output_item['id']           = $output_item['sid'];
                 $output_item['category']     = array($output_item['tid']);
+                $output_item['published']    = date('c', $output_item['date']);
                 $output_item['updated']      = date('c', $output_item['date']);
                 if (empty($output_item['bodytext'])) {
                     $output_item['content']  = $output_item['introtext'];
