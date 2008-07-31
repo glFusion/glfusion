@@ -66,7 +66,12 @@ if (!isset($_FM_CONF['perpage'])) {
     $mydownloads_whatsnew       = $_FM_CONF['whatsnew'];
     $mydownloads_dlreport       = $_FM_CONF['dlreport'];
     $mydownloads_selectpriv     = $_FM_CONF['selectpriv'];
-    $mydownloads_publicpriv     = $_FM_CONF['publicpriv'];
+    if ( $_FM_CONF['selectpriv'] == 1 ) {
+        $mydownloads_publicpriv     = 0;
+    } else {
+        $mydownloads_publicpriv     = 1;
+    }
+//    $mydownloads_publicpriv     = $_FM_CONF['publicpriv'];
     $mydownloads_uploadselect   = $_FM_CONF['uploadselect'];
     $mydownloads_uploadpublic   = $_FM_CONF['uploadpublic'];
     $mydownloads_useshots       = $_FM_CONF['useshots'];
@@ -447,7 +452,7 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
         $A = DB_fetchArray($result);
         $thetime = COM_getUserDateTimeFormat($A['day']);
         $url = $_CONF[site_url]. "/filemgmt/index.php?id=".$A['lid'];
-        $row = array("<a href={$url}>{$A['title']}</a>", wordwrap($A['description'],70,"<br>"), COM_getDisplayName($A['submitter']), $A['hits']);
+        $row = array("<a href=\"{$url}\">{$A['title']}</a>", wordwrap($A['description'],70,"<br>"), COM_getDisplayName($A['submitter']), $A['hits']);
         $plugin_results->addSearchResult($row);
     }
 
