@@ -140,12 +140,15 @@ $LANG_INSTALL = array(
     84 => '¦cie¿ka "',
     85 => '" jest b³êdna. Wróæ i srpóbuj ponownie.',
     86 => 'Jêzyk',
-    87 => 'http://www.gllabs.org',
+    87 => 'http://www.glfusion.org',
     88 => 'Change directory and containing files to',
     89 => 'Wersja Obecna:',
     90 => 'Opró¿niæ bazê danych?',
     91 => 'It appears that either your database is empty or the database credentials you entered are incorrect. Or maybe you wanted to perform a New Install (instead of an Upgrade)? Please go back and try again.',
-    92 => 'U¿yj kodowania UTF-8'
+    92 => 'U¿yj kodowania UTF-8',
+    93 => 'Migrate',
+    500 => 'does not exist, please copy siteconfig.php.dist to siteconfig.php and change the permissions to 777.',
+    501 => 'does not exist, please copy lib-custom.php.dist to lib-custom.php.',
 );
 
 // +---------------------------------------------------------------------------+

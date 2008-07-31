@@ -2,9 +2,9 @@
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | index.php                                                                |
+// | migrate.php                                                              |
 // |                                                                          |
-// | glFusion installation script.                                            |
+// | Migrates a Geeklog system to glFusion                                    |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
@@ -104,6 +104,7 @@ function mysql_v($_DB_host, $_DB_user, $_DB_pass)
     return array ($mysqlmajorv, $mysqlminorv, $mysqlrev);
 }
 
+
 /**
  * Check if we can skip upgrade steps (post-1.5.0)
  *
@@ -116,7 +117,7 @@ function mysql_v($_DB_host, $_DB_user, $_DB_pass)
  * @note    Will not return if upgrading from 1.5.0 or later.
  *
  */
-function INST_checkOKtoUpgrade($dbconfig_path, $siteconfig_path)
+function INST_checkPost150Upgrade($dbconfig_path, $siteconfig_path)
 {
     global $_CONF, $_TABLES, $_DB, $_DB_dbms, $_DB_host, $_DB_user, $_DB_pass;
 
@@ -134,14 +135,14 @@ function INST_checkOKtoUpgrade($dbconfig_path, $siteconfig_path)
     if ($connected) {
         require $_CONF['path_system'] . 'lib-database.php';
 
-        $version = INST_identifyglFusionVersion();
+        $version = INST_identifyGeeklogVersion();
 
         @mysql_close($db_handle);
 
-        if (!empty($version) && ($version != GVERSION) &&
-                (substr($version, 0, 4) == '1.0.')) {
+        if (!empty($version) && (substr($version, 0, 4) == '1.5.')) {
 
-            // this is a 1.0.x version, so upgrade directly
+            // this is a 1.5.x version, so upgrade directly
+            $version = '1.0.1';
             $req_string = 'index.php?mode=upgrade&step=3'
                         . '&dbconfig_path=' . $dbconfig_path
                         . '&version=' . $version;
@@ -150,7 +151,6 @@ function INST_checkOKtoUpgrade($dbconfig_path, $siteconfig_path)
             exit;
         }
     }
-
     return $version;
 }
 
@@ -166,6 +166,8 @@ function INST_installEngine($install_type, $install_step)
 {
     global $_CONF, $LANG_INSTALL, $LANG_CHARSET, $_DB, $_TABLES, $gl_path, $html_path, $dbconfig_path, $siteconfig_path, $display, $language, $label_dir;
 
+    $geeklogUpgradeFailed = 0;
+
     switch ($install_step) {
 
         /**
@@ -175,24 +177,53 @@ function INST_installEngine($install_type, $install_step)
             require_once $dbconfig_path; // Get the current DB info
 
             if ($install_type == 'upgrade') {
-                $v = INST_checkOKtoUpgrade($dbconfig_path, $siteconfig_path);
-
-                if ($v == GVERSION) {
-                    // looks like we're already up to date
-                    $display .= '<h2>' . $LANG_INSTALL[74] . '</h2>' . LB
-                             . '<p>' . $LANG_INSTALL[75] . '</p>';
-                    return;
-                }
+                $v = INST_checkPost150Upgrade($dbconfig_path, $siteconfig_path);
             }
 
-            $glSite_name = $LANG_INSTALL[29];
-            $glSite_slogan = $LANG_INSTALL[30];
-            $glSite_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
-            $glSite_admin_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/install.*/', '', $_SERVER['PHP_SELF']) ;
-            $host_name = explode(':', $_SERVER['HTTP_HOST']);
-            $host_name = $host_name[0];
-            $glSite_mail = ($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
-            $utf8 = true;
+            /*
+             * Try to migrate old values
+             */
+            if ( $install_type == 'upgrade' && ( $_DB_pass == 'password' || $_DB_pass == '' )) {
+                // assume the db config has not been updated
+                $configPath = preg_replace('/\/db-config.php.*/', '/config.php', $dbconfig_path);
+
+                if ( file_exists($configPath ) ) {
+                    include ($configPath);
+                    $glSite_name        = $_CONF['site_name'];
+                    $glSite_slogan      = $_CONF['site_slogan'];
+                    $glSite_url         = $_CONF['site_url'];
+                    $glSite_admin_url   = $_CONF['site_admin_url'];
+                    $glSite_mail        = $_CONF['site_mail'];
+                    if ( $_CONF['default_charset'] == 'utf-8') {
+                        $utf8 = true;
+                    } else {
+                        $utf8 = false;
+                    }
+                } else {
+                    $glSite_name = $LANG_INSTALL[29];
+                    $glSite_slogan = $LANG_INSTALL[30];
+                    $glSite_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
+                    $glSite_admin_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/migrate.*/', '', $_SERVER['PHP_SELF']) ;
+                    $host_name = explode(':', $_SERVER['HTTP_HOST']);
+                    $host_name = $host_name[0];
+                    $glSite_mail = ($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
+                    $utf8 = true;
+                }
+            } else {
+                $glSite_name = $LANG_INSTALL[29];
+                $glSite_slogan = $LANG_INSTALL[30];
+                $glSite_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
+                $glSite_admin_url = 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/migrate.*/', '', $_SERVER['PHP_SELF']) ;
+                $host_name = explode(':', $_SERVER['HTTP_HOST']);
+                $host_name = $host_name[0];
+                $glSite_mail = ($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
+                $utf8 = true;
+            }
+
+            /* end of migrate attempt
+             *
+             * NEED TO UPDATE the defaults below so they don't overwrite
+             */
 
             // Set all the form values either with their defaults or with received POST data.
             // The only instance where you'd get POST data would be if the user has to
@@ -207,12 +238,22 @@ function INST_installEngine($install_type, $install_step)
                     case 'mysql-innodb':
                         $mysql_innodb_selected = ' selected="selected"';
                         break;
+                    case 'mssql':
+                        $mssql_selected = ' selected="selected"';
+                        break;
                     default:
                         $mysql_selected = ' selected="selected"';
                         break;
                 }
             } else {
-                $mysql_selected = ' selected="selected"';
+                switch ($_DB_dbms) {
+                    case 'mssql':
+                        $mssql_selected = ' selected="selected"';
+                        break;
+                    default:
+                        $mysql_selected = ' selected="selected"';
+                        break;
+                }
             }
             $db_host = isset($_POST['db_host']) ? $_POST['db_host'] : $_DB_host;
             $db_name = isset($_POST['db_name']) ? $_POST['db_name'] : $_DB_name;
@@ -221,28 +262,29 @@ function INST_installEngine($install_type, $install_step)
             $db_prefix = isset($_POST['db_prefix']) ? $_POST['db_prefix'] : $_DB_table_prefix;
 
             $site_url = isset($_POST['site_url']) ? $_POST['site_url'] : $glSite_url; // 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/admin.*/', '', $_SERVER['PHP_SELF']) ;
-            $site_admin_url = isset($_POST['site_admin_url']) ? $_POST['site_admin_url'] : $glSite_admin_url; //'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/install.*/', '', $_SERVER['PHP_SELF']) ;
+            $site_admin_url = isset($_POST['site_admin_url']) ? $_POST['site_admin_url'] : $glSite_admin_url; //'http://' . $_SERVER['HTTP_HOST'] . preg_replace('/\/migrate.*/', '', $_SERVER['PHP_SELF']) ;
             $host_name = explode(':', $_SERVER['HTTP_HOST']);
             $host_name = $host_name[0];
             $site_mail = isset($_POST['site_mail']) ? $_POST['site_mail'] : $glSite_mail; //($_CONF['site_mail'] == 'admin@example.com' ? $_CONF['site_mail'] : 'admin@' . $host_name);
             $noreply_mail = isset($_POST['noreply_mail']) ? $_POST['noreply_mail'] : ($_CONF['noreply_mail'] == 'noreply@example.com' ? $_CONF['noreply_mail'] : 'noreply@' . $host_name);
 
-            if (isset($_POST['utf8']) && ($_POST['utf8'] == 'on')) {
-                $utf8 = true;
-            } else {
-                $utf8 = true;
-                if (strcasecmp($LANG_CHARSET, 'utf-8') == 0) {
+            if ( $install_type != 'upgrade' ) {
+                if (isset($_POST['utf8']) && ($_POST['utf8'] == 'on')) {
                     $utf8 = true;
+                } else {
+                    $utf8 = true;
+                    if (strcasecmp($LANG_CHARSET, 'utf-8') == 0) {
+                        $utf8 = true;
+                    }
                 }
             }
-
-            $buttontext = $LANG_INSTALL[50];
-            $innodbnote = '<small>' . $LANG_INSTALL[38] . '</small>';
+            $buttontext = $LANG_INSTALL[25];
+            $innodbnote = '';
 
             $display .= '
                 <h2>' . $LANG_INSTALL[31] . '</h2>
                 <div class="glform">
-                <form action="index.php" method="post">
+                <form action="migrate.php" method="post">
                 <input type="hidden" name="mode" value="' . $install_type . '" />
                 <input type="hidden" name="step" value="2" />
                 <input type="hidden" name="language" value="' . $language . '" />
@@ -268,13 +310,11 @@ function INST_installEngine($install_type, $install_step)
                 <p><label class="' . $label_dir . '">' . $LANG_INSTALL[49] . ' ' . INST_helpLink('noreply_mail') . '</label> <input type="text" name="noreply_mail" value="' . $noreply_mail . '" size="50" /></p>';
 
             $display .= '
-                <p><label class="' . $label_dir . '">' . $LANG_INSTALL[92] . ' ' . INST_helpLink('utf8') . '</label> <input type="checkbox" name="utf8"' . ($utf8 ? ' checked="checked"' : '') . ' /></p>';
-
-            $display .= '
                 <br />
                 <input type="submit" name="submit" class="submit" value="' . $buttontext . ' &gt;&gt;" />
                 </form></div>' . LB;
             break;
+
 
         /**
          * Page 2 - Enter information into db-config.php
@@ -282,18 +322,18 @@ function INST_installEngine($install_type, $install_step)
          */
         case 2:
             // Set all the variables from the received POST data.
-            $site_name      = $_POST['site_name'];
-            $site_slogan    = $_POST['site_slogan'];
-            $db_type        = $_POST['db_type'];
-            $db_host        = $_POST['db_host'];
-            $db_name        = $_POST['db_name'];
-            $db_user        = $_POST['db_user'];
-            $db_pass        = $_POST['db_pass'];
-            $db_prefix      = $_POST['db_prefix'];
-            $site_url       = $_POST['site_url'];
+            $site_name = $_POST['site_name'];
+            $site_slogan = $_POST['site_slogan'];
+            $db_type = $_POST['db_type'];
+            $db_host = $_POST['db_host'];
+            $db_name = $_POST['db_name'];
+            $db_user = $_POST['db_user'];
+            $db_pass = $_POST['db_pass'];
+            $db_prefix = $_POST['db_prefix'];
+            $site_url = $_POST['site_url'];
             $site_admin_url = $_POST['site_admin_url'];
-            $site_mail      = $_POST['site_mail'];
-            $noreply_mail   = $_POST['noreply_mail'];
+            $site_mail = $_POST['site_mail'];
+            $noreply_mail = $_POST['noreply_mail'];
             $utf8 = (isset($_POST['utf8']) && ($_POST['utf8'] == 'on')) ? true : false;
 
             // If using MySQL check to make sure the version is supported
@@ -395,7 +435,7 @@ function INST_installEngine($install_type, $install_step)
                         require $dbconfig_path;
                         require_once $siteconfig_path;
                         require_once $_CONF['path_system'] . 'lib-database.php';
-                        $req_string = 'index.php?mode=' . $install_type . '&step=3&dbconfig_path=' . $dbconfig_path
+                        $req_string = 'migrate.php?mode=' . $install_type . '&step=3&dbconfig_path=' . $dbconfig_path
                                     . '&language=' . $language
                                     . '&site_name=' . urlencode($site_name)
                                     . '&site_slogan=' . urlencode($site_slogan)
@@ -407,48 +447,52 @@ function INST_installEngine($install_type, $install_step)
                             $req_string .= '&utf8=true';
                         }
 
-                        $hidden_fields = '<input type="hidden" name="mode" value="' . $install_type . '" />
-                                    <input type="hidden" name="language" value="' . $language . '" />
-                                    <input type="hidden" name="dbconfig_path" value="' . urlencode($dbconfig_path) . '" />
-                                    <input type="hidden" name="site_name" value="' . urlencode($site_name) . '" />
-                                    <input type="hidden" name="site_slogan" value="' . urlencode($site_slogan) . '" />
-                                    <input type="hidden" name="site_url" value="' . urlencode($site_url) . '" />
-                                    <input type="hidden" name="site_admin_url" value="' . urlencode($site_admin_url) . '" />
-                                    <input type="hidden" name="site_mail" value="' . urlencode($site_mail) . '" />
-                                    <input type="hidden" name="noreply_mail" value="' . urlencode($noreply_mail) . '" />
-                                    <input type="hidden" name="utf8" value="' . ($utf8 ? 'true' : 'false') . '" />';
+                        switch ($install_type) {
+                        case 'upgrade':
+                            // Try and find out what the current version of GL is
+                            $curv = INST_identifyGeeklogVersion ();
+                            if ($curv == VERSION) {
+                                // If current version is the newest version
+                                // then there's no need to update.
+                                $display .= '<h2>' . $LANG_INSTALL[74] . '</h2>' . LB
+                                          . '<p>' . $LANG_INSTALL[75] . '</p>';
+                            } elseif ($curv == 'empty') {
+                                $display .= '<h2>' . $LANG_INSTALL[90] . '</h2>' . LB
+                                          . '<p>' . $LANG_INSTALL[91] . '</p>';
+                            } else {
 
-                        // If using MySQL check to see if InnoDB is supported
-                        if ($innodb && !INST_innodbSupported()) {
-                            // Warn that InnoDB tables are not supported
-                            $display .= '<h2>' . $LANG_INSTALL[59] . '</h2>
-                            <p>' . $LANG_INSTALL['60'] . '</p>
+                                $old_versions = array('1.2.5-1','1.3','1.3.1','1.3.2','1.3.2-1','1.3.3','1.3.4','1.3.5','1.3.6','1.3.7','1.3.8','1.3.9','1.3.10','1.3.11','1.4.0','1.4.1');
+                                if (empty($curv)) {
+                                    // If we were unable to determine the current GL
+                                    // version is then ask the user what it is
+                                    $display .= '<h2>' . $LANG_INSTALL[76] . '</h2>
+                                        <p>' . $LANG_INSTALL[77] . '</p>
+                                        <form action="migrate.php" method="post">
+                                        <input type="hidden" name="mode" value="upgrade" />
+                                        <input type="hidden" name="step" value="3" />
+                                        <input type="hidden" name="dbconfig_path" value="' . $dbconfig_path . '" />
+                                        <p><label class="' . $label_dir . '">' . $LANG_INSTALL[89] . '</label> <select name="version">';
+                                    $tmp_counter = 0;
+                                    $ver_selected = '';
+                                    foreach ($old_versions as $version) {
+                                        if ($tmp_counter == (count($old_versions) - 1)) {
+                                            $ver_selected = ' selected="selected"';
+                                        }
+                                        $display .= LB . '<option' . $ver_selected . '>' . $version . '</option>';
+                                        $tmp_counter++;
+                                    }
+                                    $display .= '</select></p>
+                                        <br />
+                                        <input type="submit" name="submit" class="submit" value="Upgrade &gt;&gt;" />
+                                        </form>' . LB;
 
-                            <br />
-                            <div style="margin-left: auto; margin-right: auto; width: 125px">
-                                <div style="position: relative; right: 10px">
-                                    <form action="index.php" method="post">
-                                    <input type="hidden" name="step" value="1" />
-                                    ' . $hidden_fields . '
-                                    <input type="submit" value="&lt;&lt; ' . $LANG_INSTALL[61] . '" />
-                                    </form>
-                                </div>
-
-                                <div style="position: relative; left: 65px; top: -27px">
-                                    <form action="index.php" method="post">
-                                    <input type="hidden" name="step" value="3" />
-                                    ' . $hidden_fields . '
-                                    <input type="hidden" name="innodb" value="false" />
-                                    <input type="submit" name="submit" value="' . $LANG_INSTALL[62] . ' &gt;&gt;" />
-                                    </form>
-                                </div>
-                            </div>' . LB;
-                        } else {
-                            // Continue on to step 3 where the installation will happen
-                            if ($innodb) {
-                                $req_string .= '&innodb=true';
+                                    $curv = $old_versions[count($old_versions) - 1];
+                                } else {
+                                    // Continue on to step 3 where the upgrade will happen
+                                    header('Location: ' . $req_string . '&version=' . $curv);
+                                }
                             }
-                            header('Location: ' . $req_string);
+                            break;
                         }
                     }
                 }
@@ -461,140 +505,17 @@ function INST_installEngine($install_type, $install_step)
         case 3:
             $gl_path = str_replace('db-config.php', '', $dbconfig_path);
             switch ($install_type) {
-                case 'install':
-                    if (isset($_POST['submit']) &&
-                            ($_POST['submit'] == '<< ' . $LANG_INSTALL[61])) {
-                        header('Location: index.php?mode=install');
-                    }
-
-                    // Check whether to use InnoDB tables
-                    $use_innodb = false;
-                    if ((isset($_POST['innodb']) && $_POST['innodb'] == 'true') || (isset($_GET['innodb']) && $_GET['innodb'] == 'true')) {
-                        $use_innodb = true;
-                    }
-
-                    $utf8 = false;
-                    if ((isset($_POST['utf8']) && $_POST['utf8'] == 'true') || (isset($_GET['utf8']) && $_GET['utf8'] == 'true')) {
-                        $utf8 = true;
-                    }
-
-                    // We need all this just to do one DB query
-                    require_once $dbconfig_path;
-                    require_once $siteconfig_path;
-                    require_once $_CONF['path_system'] . 'lib-database.php';
-
-                    // Check if GL is already installed
-                    if (INST_checkTableExists('vars')) {
-
-                        $display .= '<p>' . $LANG_INSTALL[63] . '</p>
-                            <ol>
-                                <li>' . $LANG_INSTALL[64] . '</li>
-                                <li>' . $LANG_INSTALL[65] . '</li>
-                            </ol>
-
-                            <div style="margin-left: auto; margin-right: auto; width: 125px">
-                                <div style="position: absolute">
-                                    <form action="index.php" method="post">
-                                    <input type="hidden" name="mode" value="install" />
-                                    <input type="hidden" name="step" value="3" />
-                                    <input type="hidden" name="language" value="' . $language . '" />
-                                    <input type="hidden" name="dbconfig_path" value="' . $dbconfig_path . '" />
-                                    <input type="hidden" name="innodb" value="' . (($use_innodb) ? 'true' : 'false') . '" />
-                                    <input type="submit" value="' . $LANG_INSTALL[66] . '" />
-                                    </form>
-                                </div>
-
-                                <div style="position: relative; left: 55px; top: 5px">
-                                    <form action="index.php" method="post">
-                                    <input type="hidden" name="mode" value="upgrade" />
-                                    <input type="hidden" name="language" value="' . $language . '" />
-                                    <input type="hidden" name="dbconfig_path" value="' . $dbconfig_path . '" />
-                                    <input type="submit" value="' . $LANG_INSTALL[25] . '" />
-                                    </form>
-                                </div>
-                            </div>
-                            ' . LB;
-
-                    } else {
-                        if (INST_createDatabaseStructures($use_innodb)) {
-                            $site_name      = isset($_POST['site_name']) ? $_POST['site_name'] : (isset($_GET['site_name']) ? $_GET['site_name'] : '') ;
-                            $site_slogan    = isset($_POST['site_slogan']) ? $_POST['site_slogan'] : (isset($_GET['site_slogan']) ? $_GET['site_slogan'] : '') ;
-                            $site_url       = isset($_POST['site_url']) ? $_POST['site_url'] : (isset($_GET['site_url']) ? $_GET['site_url'] : '') ;
-                            $site_admin_url = isset($_POST['site_admin_url']) ? $_POST['site_admin_url'] : (isset($_GET['site_admin_url']) ? $_GET['site_admin_url'] : '') ;
-                            $site_mail      = isset($_POST['site_mail']) ? $_POST['site_mail'] : (isset($_GET['site_mail']) ? $_GET['site_mail'] : '') ;
-                            $noreply_mail   = isset($_POST['noreply_mail']) ? $_POST['noreply_mail'] : (isset($_GET['noreply_mail']) ? $_GET['noreply_mail'] : '') ;
-
-                            INST_personalizeAdminAccount($site_mail, $site_url);
-
-                            // Insert the form data into the conf_values table
-
-                            require_once $_CONF['path_system'] . 'classes/config.class.php';
-                            require_once 'config-install.php';
-                            install_config();
-
-                            $config = config::get_instance();
-                            $config->set('site_name', urldecode($site_name));
-                            $config->set('site_slogan', urldecode($site_slogan));
-                            $config->set('site_url', urldecode($site_url));
-                            // FIXME: Check that directory exists
-                            $config->set('site_admin_url', urldecode($site_admin_url));
-                            $config->set('site_mail', urldecode($site_mail));
-                            $config->set('noreply_mail', urldecode($noreply_mail));
-                            $config->set('path_html', $html_path);
-                            $config->set('path_log', $gl_path . 'logs/');
-                            $config->set('path_language', $gl_path . 'language/');
-                            $config->set('backup_path', $gl_path . 'backups/');
-                            $config->set('path_data', $gl_path . 'data/');
-                            $config->set('path_images', $html_path . 'images/');
-                            $config->set('path_themes', $html_path . 'layout/');
-                            $config->set('rdf_file', $html_path . 'backend/glfusion.rss');
-                            $config->set('path_pear', $_CONF['path_system'] . 'pear/');
-                            $config->set_default('default_photo', urldecode($site_url) . '/default.jpg');
-
-                            $lng = INST_getDefaultLanguage($gl_path . 'language/', $language, $utf8);
-                            if (!empty($lng)) {
-                                $config->set('language', $lng);
-                            }
-
-                            $_CONF['path_html'] = $html_path;
-                            $_CONF['site_url'] =  $site_url;
-
-                            // Hook our plugin installs here...
-
-                            INST_pluginAutoInstall('sitetailor');
-                            INST_pluginAutoInstall('captcha');
-                            INST_pluginAutoInstall('bad_behavior2');
-                            INST_pluginAutoInstall('filemgmt');
-                            INST_pluginAutoInstall('forum');
-                            INST_pluginAutoInstall('mediagallery');
-
-                            // Setup nouveau as the default
-                            $config->set('theme', 'nouveau');
-                            DB_query("UPDATE {$_TABLES['users']} SET theme='nouveau' WHERE uid=2");
-
-                            CTL_clearCache();
-
-                            // Now we're done with the installation so redirect the user to success.php
-                            header('Location: success.php?type=install&language=' . $language);
-                        } else {
-                            $display .= "<h2>" . $LANG_INSTALL[67] . "</h2><p>" . $LANG_INSTALL[68] . "</p>";
-                        }
-
-                    }
-                    break;
-
                 case 'upgrade':
                     // Get and set which version to display
-                    if ( !isset($version) ) {
-                        $version = '';
-                        if (isset($_GET['version'])) {
-                            $version = $_GET['version'];
-                        } else {
-                            if (isset($_POST['version'])) {
-                                $version = $_POST['version'];
-                            }
+                    $version = '';
+                    if (isset($_GET['version'])) {
+                        $version = $_GET['version'];
+                    } else {
+                        if (isset($_POST['version'])) {
+                            $version = $_POST['version'];
                         }
                     }
+
                     // Let's do this
                     require_once $dbconfig_path;
                     require_once $siteconfig_path;
@@ -612,30 +533,18 @@ function INST_installEngine($install_type, $install_step)
                            $use_innodb = false;
                         }
                     }
-
-                    if (INST_doDatabaseUpgrades($version, $use_innodb)) {
+                    if (INST_doGeeklogDatabaseUpgrades($version, $use_innodb)) {
                         INST_checkPlugins();
+                        $version = '1.0.1';
+                        $req_string = 'index.php?mode=upgrade&step=3'
+                                    . '&dbconfig_path=' . $dbconfig_path
+                                    . '&version=' . $version;
 
-                        INST_pluginAutoUpgrade('sitetailor',1);
-                        INST_pluginAutoUpgrade('captcha');
-                        INST_pluginAutoUpgrade('bad_behavior2');
-                        INST_pluginAutoUpgrade('filemgmt');
-                        INST_pluginAutoUpgrade('forum');
-                        INST_pluginAutoUpgrade('mediagallery');
-
-                        CTL_clearCache();
-
-                        /*
-                         * Insert some blocks
-                         */
-
-                        DB_query("INSERT INTO {$_TABLES['blocks']} (`is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES (0,'blogroll_block','phpblock','Blog Roll','all',30,'',0,'','0000-00-00 00:00:00',NULL,NULL,0,0,'phpblock_blogroll','',2,4,3,3,2,2);",1);
-
-                        // Great, installation is complete, redirect to success page
-                        header('Location: success.php?type=upgrade&language=' . $language);
+                        header('Location: ' . $req_string);
                     } else {
                         $display .= '<h2>' . $LANG_INSTALL[78] . '</h2>
                             <p>' . $LANG_INSTALL[79] . '</p>' . LB;
+                        $geeklogUpgradeFailed = 1;
                     }
                     break;
             }
@@ -722,7 +631,7 @@ function INST_showReturnFormData($post_data)
     global $mode, $dbconfig_path, $language, $LANG_INSTALL;
 
     $display = '
-        <form action="index.php" method="post">
+        <form action="migrate.php" method="post">
         <input type="hidden" name="mode" value="' . $mode . '" />
         <input type="hidden" name="step" value="1" />
         <input type="hidden" name="dbconfig_path" value="' . $dbconfig_path . '" />
@@ -761,12 +670,12 @@ function INST_helpLink($var)
 
 
 /**
- * Get the current installed version of glFusion
+ * Get the current installed version of Geeklog
  *
- * @return glFusion version in x.x.x format
+ * @return Geeklog version in x.x.x format
  *
  */
-function INST_identifyglFusionVersion ()
+function INST_identifyGeeklogVersion ()
 {
     global $_TABLES, $_DB, $_DB_dbms, $dbconfig_path, $siteconfig_path;
 
@@ -786,23 +695,31 @@ function INST_identifyglFusionVersion ()
 
     case 'mysql':
         $test = array(
-            '1.0.1'  => array("DESCRIBE {$_TABLES['storysubmission']} bodytext",''),
+            '1.5.0'  => array("DESCRIBE {$_TABLES['storysubmission']} bodytext",''),
+            '1.4.1'  => array("SELECT ft_name FROM {$_TABLES['features']} WHERE ft_name = 'syndication.edit'", 'syndication.edit'),
+            '1.4.0'  => array("DESCRIBE {$_TABLES['users']} remoteusername",''),
+            '1.3.11' => array("DESCRIBE {$_TABLES['comments']} sid", 'sid,varchar(40)'),
+            '1.3.10' => array("DESCRIBE {$_TABLES['comments']} lft",''),
+            '1.3.9'  => array("DESCRIBE {$_TABLES['syndication']} fid",''),
+            '1.3.8'  => array("DESCRIBE {$_TABLES['userprefs']} showonline",'')
+            // It's hard to (reliably) test for 1.3.7 - let's just hope
+            // nobody uses such an old version any more ...
             );
 
         break;
+
+    case 'mssql':
+	    $test = array(
+            '1.5.0'  => array("DESCRIBE {$_TABLES['storysubmission']} bodytext",''),
+            '1.4.1'  => array("SELECT ft_name FROM {$_TABLES['features']} WHERE ft_name = 'syndication.edit'", 'syndication.edit')
+            // 1.4.1 was the first version with MS SQL support
+            );
+
+        break;
+
     }
 
     $version = '';
-
-    $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='glfusion'");
-    if ( $result !== false ) {
-        $row = DB_fetchArray($result);
-        $version = $row['value'];
-        return $version;
-    }
-
-    // we didn't find the easy stuff, so let's see if we can
-    // figure it out by snooping the databases
 
     $result = DB_query("DESCRIBE {$_TABLES['access']} acc_ft_id", 1);
     if ($result === false) {
@@ -1072,12 +989,12 @@ function INST_checkInnodbUpgrade($_SQL)
 /**
  * Perform database upgrades
  *
- * @param   string  $current_gl_version Current glFusion version
+ * @param   string  $current_gl_version Current Geeklog version
  * @param   boolean $use_innodb         Whether or not to use InnoDB support with MySQL
  * @return  boolean                     True if successful
  *
  */
-function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
+function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false)
 {
     global $_TABLES, $_CONF, $_SP_CONF, $_DB, $_DB_dbms, $_DB_table_prefix,
            $dbconfig_path, $siteconfig_path, $html_path,$LANG_INSTALL;
@@ -1085,20 +1002,396 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
     $_DB->setDisplayError (true);
 
     // Because the upgrade sql syntax can vary from dbms-to-dbms we are
-    // leaving that up to each glFusion database driver
+    // leaving that up to each Geeklog database driver
 
     $done = false;
     $progress = '';
     while ($done == false) {
-        switch ($current_fusion_version) {
-        case '1.0.0':
-        case '1.0.1':
-            require_once $_CONF['path'] . 'sql/updates/' . $_DB_dbms . '_1.0.1_to_1.1.0.php';
+        switch ($current_gl_version) {
+        case '1.2.5-1':
+            // Get DMBS-specific update sql
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.2.5-1_to_1.3.php');
             INST_updateDB($_SQL);
 
-            $_SQL[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('database_version', '0')";
+            // OK, now we need to add all users except anonymous to the All Users group and Logged in users group
+            // I can hard-code these group numbers because the group table was JUST created with these numbers
+            $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE uid <> 1");
+            $nrows = DB_numRows($result);
+            for ($i = 1; $i <= $nrows; $i++) {
+                $U = DB_fetchArray($result);
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} VALUES (2, {$U['uid']}, NULL)");
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} VALUES (13, {$U['uid']}, NULL)");
+            }
+            // Now take care of any orphans off the user table...and let me curse MySQL lack for supporting foreign
+            // keys at this time ;-)
+            $result = DB_query("SELECT MAX(uid) FROM {$_TABLES['users']}");
+            $ITEM = DB_fetchArray($result);
+            $max_uid = $ITEM[0];
+            if (!empty($max_uid) AND $max_uid <> 0) {
+                DB_query("DELETE FROM {$_TABLES['userindex']} WHERE uid > $max_uid");
+                DB_query("DELETE FROM {$_TABLES['userinfo']} WHERE uid > $max_uid");
+                DB_query("DELETE FROM {$_TABLES['userprefs']} WHERE uid > $max_uid");
+                DB_query("DELETE FROM {$_TABLES['usercomment']} WHERE uid > $max_uid");
+            }
+            $current_gl_version = '1.3';
+            $_SQL = '';
+            break;
+        case '1.3':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3_to_1.3.1.php');
+            INST_updateDB($_SQL);
+            $current_gl_version = '1.3.1';
+            $_SQL = '';
+            break;
+        case '1.3.1':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.1_to_1.3.2.php');
+            INST_updateDB($_SQL);
+            $current_gl_version = '1.3.2-1';
+            $_SQL = '';
+            break;
+        case '1.3.2':
+        case '1.3.2-1':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.2-1_to_1.3.3.php');
+            INST_updateDB($_SQL);
+            // Now we need to switch how user blocks are stored.  Right now we only store the blocks the
+            // user wants.  This will switch it to store the ones they don't want which allows us to add
+            // new blocks and ensure they are shown to the user.
+            $result = DB_query("SELECT {$_TABLES['users']}.uid,boxes FROM {$_TABLES['users']},{$_TABLES['userindex']} WHERE boxes IS NOT NULL AND boxes <> '' AND {$_TABLES['users']}.uid = {$_TABLES['userindex']}.uid");
+            $nrows = DB_numRows($result);
+            for ($i = 1; $i <= $nrows; $i++) {
+                $row = DB_fetchArray($result);
+                $ublocks = str_replace(' ',',',$row['boxes']);
+                $result2 = DB_query("SELECT bid,name FROM {$_TABLES['blocks']} WHERE bid NOT IN ($ublocks)");
+                $newblocks = '';
+                for ($x = 1; $x <= DB_numRows($result2); $x++) {
+                    $curblock = DB_fetchArray($result2);
+                    if ($curblock['name'] <> 'user_block' AND $curblock['name'] <> 'admin_block' AND $curblock['name'] <> 'section_block') {
+                        $newblocks .= $curblock['bid'];
+                        if ($x <> DB_numRows($result2)) {
+                            $newblocks .= ' ';
+                        }
+                    }
+                }
+                DB_query("UPDATE {$_TABLES['userindex']} SET boxes = '$newblocks' WHERE uid = {$row['uid']}");
+            }
+            $current_gl_version = '1.3.3';
+            $_SQL = '';
+            break;
+        case '1.3.3':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.3_to_1.3.4.php');
+            INST_updateDB($_SQL);
+            $current_gl_version = '1.3.4';
+            $_SQL = '';
+            break;
+        case '1.3.4':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.4_to_1.3.5.php');
+            INST_updateDB($_SQL);
+            $result = DB_query("SELECT ft_id FROM {$_TABLES['features']} WHERE ft_name = 'user.mail'");
+            $row = DB_fetchArray($result);
+            $mail_ft = $row['ft_id'];
+            $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name = 'Mail Admin'");
+            $row = DB_fetchArray($result);
+            $group_id = $row['grp_id'];
+            DB_query("INSERT INTO {$_TABLES['access']} (acc_grp_id, acc_ft_id) VALUES ($group_id, $mail_ft)");
 
-            $current_fusion_version = '1.1.0';
+            $current_gl_version = '1.3.5';
+            $_SQL = '';
+            break;
+        case '1.3.5':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.5_to_1.3.6.php');
+            INST_updateDB($_SQL);
+            if (!empty ($_DB_table_prefix)) {
+                DB_query ("RENAME TABLE staticpage TO {$_TABLES['staticpage']}");
+            }
+
+            $current_gl_version = '1.3.6';
+            $_SQL = '';
+            break;
+        case '1.3.6':
+            // fix wrong permissions value
+            DB_query ("UPDATE {$_TABLES['topics']} SET perm_anon = 2 WHERE perm_anon = 3");
+
+            // check for existence of 'date' field in gl_links table
+            DB_query ("SELECT date FROM {$_TABLES['links']}", 1);
+            $dterr = DB_error ();
+            if (strpos ($dterr, 'date') > 0) {
+                DB_query ("ALTER TABLE {$_TABLES['links']} ADD date datetime default NULL");
+            }
+
+            // Fix primary key so that more than one user can add an event
+            // to his/her personal calendar.
+            DB_query ("ALTER TABLE {$_TABLES['personal_events']} DROP PRIMARY KEY, ADD PRIMARY KEY (eid,uid)");
+
+            $current_gl_version = '1.3.7';
+            $_SQL = '';
+            break;
+        case '1.3.7':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.7_to_1.3.8.php');
+            INST_updateDB($_SQL);
+
+            // upgrade Static Pages plugin
+            $spversion = get_SP_ver ();
+            if ($spversion == 1) { // original version
+                DB_query ("ALTER TABLE {$_TABLES['staticpage']} "
+                    . "ADD COLUMN group_id mediumint(8) unsigned DEFAULT '1',"
+                    . "ADD COLUMN owner_id mediumint(8) unsigned DEFAULT '1',"
+                    . "ADD COLUMN perm_owner tinyint(1) unsigned DEFAULT '3',"
+                    . "ADD COLUMN perm_group tinyint(1) unsigned DEFAULT '2',"
+                    . "ADD COLUMN perm_members tinyint(1) unsigned DEFAULT '2',"
+                    . "ADD COLUMN perm_anon tinyint(1) unsigned DEFAULT '2',"
+                    . "ADD COLUMN sp_php tinyint(1) unsigned DEFAULT '0',"
+                    . "ADD COLUMN sp_nf tinyint(1) unsigned DEFAULT '0',"
+                    . "ADD COLUMN sp_centerblock tinyint(1) unsigned NOT NULL default '0',"
+                    . "ADD COLUMN sp_tid varchar(20) NOT NULL default 'none',"
+                    . "ADD COLUMN sp_where tinyint(1) unsigned NOT NULL default '1'");
+                DB_query ("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr) VALUES ('staticpages.PHP','Ability to use PHP in static pages')");
+                $php_id = DB_insertId ();
+                $group_id = DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name = 'Static Page Admin'");
+                DB_query ("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($php_id, $group_id)");
+            } elseif ($spversion == 2) { // extended version by Phill or Tom
+                DB_query ("ALTER TABLE {$_TABLES['staticpage']} "
+                    . "DROP COLUMN sp_pos,"
+                    . "DROP COLUMN sp_search_keywords,"
+                    . "ADD COLUMN sp_nf tinyint(1) unsigned DEFAULT '0',"
+                    . "ADD COLUMN sp_centerblock tinyint(1) unsigned NOT NULL default '0',"
+                    . "ADD COLUMN sp_tid varchar(20) NOT NULL default 'none',"
+                    . "ADD COLUMN sp_where tinyint(1) unsigned NOT NULL default '1'");
+            }
+
+            if ($spversion > 0) {
+                // update plugin version number
+                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '1.3', pi_gl_version = '1.3.8' WHERE pi_name = 'staticpages'");
+
+                // remove Static Pages 'lock' flag
+                DB_query ("DELETE FROM {$_TABLES['vars']} WHERE name = 'staticpages'");
+
+                // remove Static Pages Admin group id
+                DB_query ("DELETE FROM {$_TABLES['vars']} WHERE name = 'sp_group_id'");
+
+                if ($spversion == 1) {
+                    $result = DB_query ("SELECT DISTINCT sp_uid FROM {$_TABLES['staticpage']}");
+                    $authors = DB_numRows ($result);
+                    for ($i = 0; $i < $authors; $i++) {
+                        $A = DB_fetchArray ($result);
+                        DB_query ("UPDATE {$_TABLES['staticpage']} SET owner_id = '{$A['sp_uid']}' WHERE sp_uid = '{$A['sp_uid']}'");
+                    }
+                }
+
+                $result = DB_query ("SELECT sp_label FROM {$_TABLES['staticpage']} WHERE sp_title = 'Frontpage'");
+                if (DB_numRows ($result) > 0) {
+                    $A = DB_fetchArray ($result);
+                    if ($A['sp_label'] == 'nonews') {
+                        DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_centerblock = 1, sp_where = 0 WHERE sp_title = 'Frontpage'");
+                    } else if (!empty ($A['sp_label'])) {
+                        DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_centerblock = 1, sp_title = '{$A['sp_label']}' WHERE sp_title = 'Frontpage'");
+                    } else {
+                        DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_centerblock = 1 WHERE sp_title = 'Frontpage'");
+                    }
+                }
+            }
+
+            $current_gl_version = '1.3.8';
+            $_SQL = '';
+            break;
+        case '1.3.8':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.8_to_1.3.9.php');
+            INST_updateDB($_SQL);
+
+            $pos = strrpos ($_CONF['rdf_file'], '/');
+            $filename = substr ($_CONF['rdf_file'], $pos + 1);
+            $sitename = addslashes ($_CONF['site_name']);
+            $siteslogan = addslashes ($_CONF['site_slogan']);
+            DB_query ("INSERT INTO {$_TABLES['syndication']} (title, description, limits, content_length, filename, charset, language, is_enabled, updated, update_info) VALUES ('{$sitename}', '{$siteslogan}', '{$_CONF['rdf_limit']}', {$_CONF['rdf_storytext']}, '{$filename}', '{$_CONF['default_charset']}', '{$_CONF['rdf_language']}', {$_CONF['backend']}, '0000-00-00 00:00:00', NULL)");
+
+            // upgrade static pages plugin
+            $spversion = get_SP_ver ();
+            if ($spversion > 0) {
+                if ($spversion < 4) {
+                    if (!isset ($_SP_CONF['in_block'])) {
+                        $_SP_CONF['in_block'] = 1;
+                    } else if ($_SP_CONF['in_block'] > 1) {
+                        $_SP_CONF['in_block'] = 1;
+                    } else if ($_SP_CONF['in_block'] < 0) {
+                        $_SP_CONF['in_block'] = 0;
+                    }
+                    DB_query ("ALTER TABLE {$_TABLES['staticpage']} ADD COLUMN sp_inblock tinyint(1) unsigned DEFAULT '{$_SP_CONF['in_block']}'");
+                }
+                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '1.4', pi_gl_version = '1.3.9' WHERE pi_name = 'staticpages'");
+            }
+
+            // recreate 'date' field for old links
+            $result = DB_query ("SELECT lid FROM {$_TABLES['links']} WHERE date IS NULL");
+            $num = DB_numRows ($result);
+            if ($num > 0) {
+                for ($i = 0; $i < $num; $i++) {
+                    $A = DB_fetchArray ($result);
+
+                    $myyear = substr ($A['lid'], 0, 4);
+                    $mymonth = substr ($A['lid'], 4, 2);
+                    $myday = substr ($A['lid'], 6, 2);
+                    $myhour = substr ($A['lid'], 8, 2);
+                    $mymin = substr ($A['lid'], 10, 2);
+                    $mysec = substr ($A['lid'], 12, 2);
+
+                    $mtime = mktime ($myhour, $mymin, $mysec,
+                                     $mymonth, $myday, $myyear);
+                    $date = date ("Y-m-d H:i:s", $mtime);
+                    DB_query ("UPDATE {$_TABLES['links']} SET date = '$date' WHERE lid = '{$A['lid']}'");
+                }
+            }
+
+            // remove unused entries left over from deleted groups
+            $result = DB_query ("SELECT grp_id FROM {$_TABLES['groups']}");
+            $num = DB_numRows ($result);
+            $groups = array ();
+            for ($i = 0; $i < $num; $i++) {
+                $A = DB_fetchArray ($result);
+                $groups[] = $A['grp_id'];
+            }
+            $grouplist = '(' . implode (',', $groups) . ')';
+
+            DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE (ug_main_grp_id NOT IN $grouplist) OR (ug_grp_id NOT IN $grouplist)");
+
+            $current_gl_version = '1.3.9';
+            $_SQL = '';
+            break;
+        case '1.3.9':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.9_to_1.3.10.php');
+            INST_updateDB($_SQL);
+            commentsToPreorderTree();
+
+            $result = DB_query ("SELECT sid,introtext,bodytext FROM {$_TABLES['stories']}");
+            $numStories = DB_numRows ($result);
+            for ($i = 0; $i < $numStories; $i++) {
+                $A = DB_fetchArray ($result);
+                $related = addslashes (implode ("\n", UPDATE_extractLinks ($A['introtext'] . ' ' . $A['bodytext'])));
+                if (empty ($related)) {
+                    DB_query ("UPDATE {$_TABLES['stories']} SET related = NULL WHERE sid = '{$A['sid']}'");
+                } else {
+                    DB_query ("UPDATE {$_TABLES['stories']} SET related = '$related' WHERE sid = '{$A['sid']}'");
+                }
+            }
+
+            $spversion = get_SP_ver ();
+            if ($spversion > 0) {
+                // no database changes this time, but set new version number
+                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '1.4.1', pi_gl_version = '1.3.10' WHERE pi_name = 'staticpages'");
+            }
+
+            // install SpamX plugin
+            // (also handles updates from version 1.0)
+            install_spamx_plugin ();
+
+            $current_gl_version = '1.3.10';
+            $_SQL = '';
+            break;
+        case '1.3.10':
+            require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.10_to_1.3.11.php');
+            INST_updateDB($_SQL);
+            $current_gl_version = '1.3.11';
+            $_SQL = '';
+            break;
+
+        case '1.3.11':
+            require_once ($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.11_to_1.4.0.php');
+            INST_updateDB($_SQL);
+            upgrade_addFeature ();
+            upgrade_uniqueGroupNames ();
+
+            $current_gl_version = '1.4.0';
+            $_SQL = '';
+            break;
+
+        case '1.4.0':
+            require_once ($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.4.0_to_1.4.1.php');
+            INST_updateDB($_SQL);
+            upgrade_addSyndicationFeature ();
+            upgrade_ensureLastScheduledRunFlag ();
+            upgrade_plugins_141 ();
+
+            $current_gl_version = '1.4.1';
+            $_SQL = '';
+            break;
+
+        case '1.4.1':
+            require_once $_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.4.1_to_1.5.0.php';
+            INST_updateDB($_SQL);
+
+            upgrade_addWebservicesFeature();
+
+            create_ConfValues();
+            require_once $_CONF['path_system'] . 'classes/config.class.php';
+            $config = config::get_instance();
+
+            if (file_exists($_CONF['path'] . 'config.php')) {
+                // Read the values from config.php and use them to populate conf_values
+
+                $tmp_path = $_CONF['path']; // We'll need this to remember what the correct path is.
+                                            // Including config.php will overwrite all our $_CONF values.
+                require($tmp_path . 'config.php');
+                // Load some important values from config.php into conf_values
+                foreach ($_CONF as $key => $val) {
+                    $config->set($key, $val);
+                }
+
+                if (!INST_setDefaultCharset($siteconfig_path,
+                                            $_CONF['default_charset'])) {
+                    exit($LANG_INSTALL[26] . ' ' . $siteconfig_path
+                         . $LANG_INSTALL[58]);
+                }
+
+                require $siteconfig_path;
+                require $dbconfig_path;
+            }
+
+            // Update the GL configuration with the correct paths.
+            $config->set('path_html', $html_path);
+            $config->set('path_log', $_CONF['path'] . 'logs/');
+            $config->set('path_language', $_CONF['path'] . 'language/');
+            $config->set('backup_path', $_CONF['path'] . 'backups/');
+            $config->set('path_data', $_CONF['path'] . 'data/');
+            $config->set('path_images', $html_path . 'images/');
+            $config->set('path_themes', $html_path . 'layout/');
+            $config->set('rdf_file', $html_path . 'backend/glfusion.rss');
+            $config->set('path_pear', $_CONF['path_system'] . 'pear/');
+
+
+            if (INST_pluginExists('calendar')) {
+                $check = upgrade_CalendarPlugin();
+                if (!$check) {
+                    echo "Error updating the calendar";
+                    return false;
+                }
+            }
+            if (INST_pluginExists('polls')) {
+                $check = upgrade_PollsPlugin();
+                if (!$check) {
+                    echo "Error updating the polls";
+                    return false;
+                }
+            }
+            if (INST_pluginExists('staticpages')) {
+                $check = upgrade_StaticpagesPlugin();
+                if (!$check) {
+                    echo "Error updating the staticpages";
+                    return false;
+                }
+            }
+            if (INST_pluginExists('links')) {
+                $check = upgrade_LinksPlugin();
+                if (!$check) {
+                    echo "Error updating the links";
+                    return false;
+                }
+            }
+            if (INST_pluginExists('spamx')) {
+                $check = upgrade_SpamXPlugin();
+                if (!$check) {
+                    echo "Error updating the spamx";
+                    return false;
+                }
+            }
+
+            $current_gl_version = '1.5.0';
             $_SQL = '';
             break;
 
@@ -1319,7 +1612,7 @@ for ($i = 0; $i < 4; $i++) {
     }
 }
 
-$html_path          = str_replace('admin/install/index.php', '', str_replace('admin\install\index.php', '', str_replace('\\', '/', __FILE__)));
+$html_path          = str_replace('admin/install/migrate.php', '', str_replace('admin\install\migrate.php', '', str_replace('\\', '/', __FILE__)));
 $siteconfig_path    = '../../siteconfig.php';
 $dbconfig_path      = (isset($_POST['dbconfig_path'])) ? $_POST['dbconfig_path'] : ((isset($_GET['dbconfig_path'])) ? $_GET['dbconfig_path'] : '');
 $step               = isset($_GET['step']) ? $_GET['step'] : (isset($_POST['step']) ? $_POST['step'] : 1);
@@ -1383,7 +1676,7 @@ $display .= '<head>
 
 // Show the language drop down selection on the first page
 if ($mode == 'check_permissions') {
-    $display .='<form action="index.php" method="post">' . LB;
+    $display .='<form action="migrate.php" method="post">' . LB;
 
     $_PATH = array('dbconfig', 'public_html');
     if (isset($_GET['mode']) || isset($_POST['mode'])) {
@@ -1431,7 +1724,7 @@ switch ($mode) {
         } else {
 
             // Check the location of db-config.php
-            // We'll base our /path/to/glfusion/private/ on its location
+            // We'll base our /path/to/geeklog on its location
             $gl_path        .= '/';
             $form_fields    = '';
             $num_errors     = 0;
@@ -1454,12 +1747,12 @@ switch ($mode) {
 
             if ($num_errors == 0) {
                 // If the script was able to locate all the system files/directories move onto the next step
-                header('Location: index.php?mode=check_permissions&dbconfig_path=' . urlencode($dbconfig_path));
+                header('Location: migrate.php?mode=check_permissions&dbconfig_path=' . urlencode($dbconfig_path));
             } else {
                 // If the script was not able to locate all the system files/directories ask the user to enter their location
                 $display .= '<h2>' . $LANG_INSTALL[7] . '</h2>
                     <p style="margin-bottom:20px;">' . $LANG_INSTALL[8] . '</p>
-                    <form action="index.php" method="post">
+                    <form action="migrate.php" method="post">
                     <input type="hidden" name="mode" value="check_permissions" />
                     ' . $form_fields . '
                     <input style="margin-top:10px;float:right" type="submit" name="submit" class="submit" value="Next &gt;&gt;" />
@@ -1470,7 +1763,7 @@ switch ($mode) {
 
     /**
      * The second step is to check permissions on the files/directories
-     * that glFusion needs to be able to write to. The script uses the location of
+     * that Geeklog needs to be able to write to. The script uses the location of
      * db-config.php from the previous step to determine location of everything.
      */
     case 'check_permissions':
@@ -1478,7 +1771,7 @@ switch ($mode) {
         // Get the paths from the previous page
         $_PATH = array('db-config.php' => urldecode(isset($_GET['dbconfig_path'])
                                             ? $_GET['dbconfig_path'] : $_POST['dbconfig_path']),
-                        'public_html/' => str_replace('admin/install/index.php', '', str_replace('admin\install\index.php', '', __FILE__)));
+                        'public_html/' => str_replace('admin/install/migrate.php', '', str_replace('admin\install\migrate.php', '', __FILE__)));
 
         // Be fault tolerant with the path the user enters
         if (!strstr($_PATH['db-config.php'], 'db-config.php')) {
@@ -1489,14 +1782,14 @@ switch ($mode) {
             $_PATH['db-config.php'] .= 'db-config.php';
         }
 
-        // The path to db-config.php is what we'll use to generate our /path/to/glFusion/private so
+        // The path to db-config.php is what we'll use to generate our /path/to/geeklog so
         // we want to make sure it's valid and exists before we continue and create problems.
         if (!file_exists($_PATH['db-config.php'])) {
             $display .= '<h2>' . $LANG_INSTALL[83] . '</h2>'
                     . $LANG_INSTALL[84] . $_PATH['db-config.php'] . $LANG_INSTALL[85]
                     . '<br /><br />
                       <div style="margin-left: auto; margin-right: auto; width: 1px">
-                        <form action="index.php" method="post">
+                        <form action="migrate.php" method="post">
                         <input type="submit" value="&lt;&lt; ' . $LANG_INSTALL[61] . '" />
                         </form>
                       </div>';
@@ -1602,7 +1895,7 @@ switch ($mode) {
                 }
             }
 
-            // backend directory & glfusion.rss
+            // backend directory & geeklog.rss
             if (!$file = @fopen($_CONF['rdf_file'], 'w')) {
                 // Permissions are incorrect
                 $_PERMS['rdf']          = sprintf("%3o", @fileperms($_CONF['rdf_file']) & 0777);
@@ -1723,17 +2016,14 @@ switch ($mode) {
                 ' . $LANG_INSTALL[21] . '</p>
                 <br /><br />' . LB;
 
-                $req_string = 'index.php?mode=check_permissions'
+                $req_string = 'migrate.php?mode=check_permissions'
                             . '&amp;dbconfig_path=' . urlencode($_PATH['db-config.php'])
                             . '&amp;public_html_path=' . urlencode($_PATH['public_html/'])
                             . '&amp;language=' . $language;
+
             } else {
                 // Set up the request string
-                $req_string = 'index.php?mode=write_paths'
-                            . '&amp;dbconfig_path=' . urlencode($_PATH['db-config.php'])
-                            . '&amp;public_html_path=' . urlencode($_PATH['public_html/'])
-                            . '&amp;language=' . $language;
-                $migrate_string = 'migrate.php?mode=write_paths'
+                $req_string = 'migrate.php?mode=write_paths'
                             . '&amp;dbconfig_path=' . urlencode($_PATH['db-config.php'])
                             . '&amp;public_html_path=' . urlencode($_PATH['public_html/'])
                             . '&amp;language=' . $language;
@@ -1762,8 +2052,8 @@ switch ($mode) {
                         . '&amp;op=install">' . $LANG_INSTALL[24] . '</a></div>
                        <div class="' . $upgr_class . ' floatleft" style="margin-left:10px;"><a href="' . $req_string
                         . '&amp;op=upgrade">' . $LANG_INSTALL[25] . '</a></div>
-                       <div class="' . $upgr_class . ' floatleft" style="margin-left:10px;"><a href="' . $migrate_string
-                        . '&amp;op=upgrade">' . $LANG_INSTALL[93] . '</a></div>
+                       <div class="' . $upgr_class . ' floatleft" style="margin-left:10px;"><a href="' . $req_string
+                        . '&amp;op=upgradegeeklog">' . 'Migrate' . '</a></div>
                    </div>
     			</div>' . LB;
 		    }
@@ -1811,7 +2101,7 @@ switch ($mode) {
             fclose ($siteconfig_file);
 
             // Continue to the next step: Fresh install or Upgrade
-            header('Location: index.php?mode=' . $_GET['op'] . '&dbconfig_path=' . urlencode($_PATH['db-config.php']) . '&language=' . $language);
+            header('Location: migrate.php?mode=' . $_GET['op'] . '&dbconfig_path=' . urlencode($_PATH['db-config.php']) . '&language=' . $language);
 
         }
         break;

@@ -142,12 +142,15 @@ $LANG_INSTALL = array(
     84 => 'パス "',
     85 => '" は正しくありません。戻ってやり直してください。',
     86 => '言語',
-    87 => 'http://www.gllabs.org',
+    87 => 'http://www.glfusion.org',
     88 => '以下のファイルを含むディレクトリに変更してください：',
     89 => '現在のバージョン:',
     90 => 'データベースは空?',
     91 => 'データベースが空のままか，入力してデータベースの情報が不正確なようです。ひょっとすると，アップグレードではなく，新規インストールするつもりだったのではないでしょうか?　戻ってやり直してください。',
-    92 => 'UTF-8を使用する'
+    92 => 'UTF-8を使用する',
+    93 => 'Migrate',
+    500 => 'does not exist, please copy siteconfig.php.dist to siteconfig.php and change the permissions to 777.',
+    501 => 'does not exist, please copy lib-custom.php.dist to lib-custom.php.',
 );
 
 // +---------------------------------------------------------------------------+
