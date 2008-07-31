@@ -53,7 +53,10 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 */
 
 if (!defined('glFusion_VERSION')) {
-  define('glFusion_VERSION', '1.1.0.svn');
+  define('glFusion_VERSION', '1.1.0');
+}
+if (!defined ('GVERSION')) {
+    define('GVERSION', '1.1.0');
 }
 
 /**
@@ -1002,7 +1005,13 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
                         . $LANG01[117] . '"' . XHTML . '>';
         }
     }
-
+    if (!$_CONF['disable_webservices']) {
+        $relLinks['service'] = '<link rel="service" '
+                    . 'type="application/atomsvc+xml" ' . 'href="'
+                    . $_CONF['site_url'] . '/webservices/atom/?introspection" '
+                    . 'title="' . $LANG01[130] . '"' . XHTML . '>';
+    }
+    // TBD: add a plugin API and a lib-custom.php function
     $header->set_var( 'rel_links', implode( LB, $relLinks ));
 
     if( empty( $pagetitle ) && isset( $_CONF['pagetitle'] )) {
@@ -1016,8 +1025,13 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
                                                    "tid = '$topic'" ));
         }
     }
-    if( !empty( $pagetitle )) {
+    if( !empty( $pagetitle ))
+    {
         $header->set_var( 'page_site_splitter', ' - ');
+    }
+    else
+    {
+        $header->set_var( 'page_site_splitter', '');
     }
     $header->set_var( 'page_title', $pagetitle );
     $header->set_var( 'site_name', $_CONF['site_name']);
@@ -1073,11 +1087,16 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         }
     }
     $header->set_var( 'lang_id', $langId );
-    $header->set_var( 'lang_attribute', $langAttr );
+    if (!empty($_CONF['languages']) && !empty($_CONF['language_files'])) {
+        $header->set_var('lang_attribute', $langAttr);
+    } else {
+        $header->set_var('lang_attribute', '');
+    }
 
     $header->set_var( 'background_image', $_CONF['layout_url']
                                           . '/images/bg.' . $_IMAGE_TYPE );
     $header->set_var( 'site_url', $_CONF['site_url'] );
+    $header->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $header->set_var( 'layout_url', $_CONF['layout_url'] );
     $header->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
     $header->set_var( 'site_name', $_CONF['site_name'] );
@@ -1086,6 +1105,21 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
                            strlen( $_CONF['path_html'] ) - 1 );
     $header->set_var( 'rdf_file', $rdf );
     $header->set_var( 'rss_url', $rdf );
+
+    $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
+
+    if( !empty( $_USER['username'] ))
+    {
+        $msg .= ', ' . COM_getDisplayName( $_USER['uid'], $_USER['username'],
+                                           $_USER['fullname'] );
+    }
+
+    $curtime =  COM_getUserDateTimeFormat();
+
+    $header->set_var( 'welcome_msg', $msg );
+    $header->set_var( 'datetime', $curtime[0] );
+    $header->set_var( 'site_logo', $_CONF['layout_url']
+                                   . '/images/logo.' . $_IMAGE_TYPE );
     $header->set_var( 'css_url', $_CONF['layout_url'] . '/style.css' );
     $header->set_var( 'theme', $_CONF['theme'] );
 
@@ -1388,7 +1422,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'trademark_msg', $LANG01[94] );
     $theme->set_var( 'powered_by', $LANG01[95] );
     $theme->set_var( 'glfusion_url', 'http://www.glfusion.org/' );
-    $theme->set_var( 'glfusion_version', glFusion_VERSION );
+    $theme->set_var( 'glfusion_version', GVERSION );
 
 
     /* Check if an array has been passed that includes the name of a plugin
@@ -1859,7 +1893,7 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 
     if( $_CONF['backend'] > 0 )
     {
-        if( !empty( $updated_type ) && ( $updated_type != 'glfusion' ))
+        if( !empty( $updated_type ) && ( $updated_type != 'article' ))
         {
             // when a plugin's feed is to be updated, skip glFusion's own feeds
             $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE (is_enabled = 1) AND (type <> 'glfusion')";
@@ -1875,7 +1909,7 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
             $A = DB_fetchArray( $result );
 
             $is_current = true;
-            if( $A['type'] == 'glfusion' )
+            if( $A['type'] == 'article' )
             {
                 $is_current = SYND_feedUpdateCheck( $A['topic'],
                                 $A['update_info'], $A['limits'],
@@ -2759,9 +2793,9 @@ function COM_adminMenu( $help = '', $title = '' )
         if( $_CONF['link_versionchecker'] == 1 AND SEC_inGroup( 'Root' ))
         {
             $adminmenu->set_var( 'option_url',
-               'http://www.gllabs.org/versionchecker.php?version=' . glFusion_VERSION );
+               'http://www.glfusion.org/versionchecker.php?version=' . GVERSION );
             $adminmenu->set_var( 'option_label', $LANG01[107] );
-            $adminmenu->set_var( 'option_count', glFusion_VERSION );
+            $adminmenu->set_var( 'option_count', GVERSION );
 
             $menu_item = $adminmenu->parse( 'item', 'option' );
             $link_array[$LANG01[107]] = $menu_item;
@@ -2798,6 +2832,9 @@ function COM_adminMenu( $help = '', $title = '' )
 * used to be) more compatible than using a HTTP Location: header.
 *
 * @param        string      $url        URL to send user to
+* @return   string          HTML meta redirect
+* @note     This does not need to be XHTML compliant. It may also be used
+*           in situations where the XHTML constant is not defined yet ...
 *
 */
 function COM_refresh($url)
@@ -3317,7 +3354,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     {
         $headers['X-Priority'] = $priority;
     }
-    $headers['X-Mailer'] = 'glFusion ' . glFusion_VERSION;
+    $headers['X-Mailer'] = 'glFusion ' . GVERSION;
 
     if (!empty($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['SERVER_ADDR']) &&
             ($_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR'])) {
@@ -4546,6 +4583,9 @@ function COM_showMessage($msg, $plugin = '')
     global $_CONF, $MESSAGE, $_IMAGE_TYPE;
 
     $retval = '';
+    if (empty($plugin) AND !empty($_REQUEST['plugin'])) {
+        $plugin = COM_applyFilter($_REQUEST['plugin']);
+    };
 
     if ($msg > 0) {
         $timestamp = strftime($_CONF['daytime']);
@@ -5812,7 +5852,7 @@ function COM_highlightQuery( $text, $query )
         if( !empty( $searchword ))
         {
             $searchword = preg_quote( str_replace( "'", "\'", $searchword ));
-            $text = preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"highlight\">$searchword</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+            $text = preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"highlight\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
         }
     }
 
