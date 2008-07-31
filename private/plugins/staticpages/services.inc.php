@@ -569,6 +569,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
         if ($args['gl_svc']) {
             // This date format is PHP 5 only,
             // but only the web-service uses the value
+            $output['published']    = date('c', strtotime($output['sp_date']));
             $output['updated']      = date('c', strtotime($output['sp_date']));
             $output['id']           = $page;
             $output['title']        = $output['sp_title'];
@@ -625,6 +626,7 @@ function service_get_staticpages($args, &$output, &$svc_msg)
 
             if($args['gl_svc']) {
                 // This date format is PHP 5 only, but only the web-service uses the value
+                $output_item['published']    = date('c', strtotime($output_item['sp_date']));
                 $output_item['updated']      = date('c', strtotime($output_item['sp_date']));
                 $output_item['id']           = $output_item['sp_id'];
                 $output_item['title']        = $output_item['sp_title'];
