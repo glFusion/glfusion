@@ -580,8 +580,8 @@ class mbElement {
                                 }
 
                                 if( SEC_inGroup( 'Root' )) {
-                                    $url = 'http://www.gllabs.org/versionchecker.php?version=' . glFusion_VERSION;
-                                    $label = $LANG01[107] . ' (' . glFusion_VERSION . ')';
+                                    $url = 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION;
+                                    $label = $LANG01[107] . ' (' . GVERSION . ')';
                                     $link_array[$LANG01[107]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
 
