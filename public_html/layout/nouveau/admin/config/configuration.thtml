@@ -35,8 +35,8 @@
             <!-- END notes -->
 
             <table class="inputTable">
-            <col width="200">
-            <col>
+            <col width="300" />
+            <col />
             {fs_contents}
             </table>
             </fieldset>
