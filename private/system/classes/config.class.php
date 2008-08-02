@@ -637,13 +637,18 @@ class config {
                 if (!empty($GLOBALS['_CONF']['site_url'])) {
                     $baseUrl = $GLOBALS['_CONF']['site_url'];
                 } else {
-                    $baseUrl = 'http://www.gllabs.org';
+                    $baseUrl = 'http://www.glfusion.org';
                 }
                 if ($group == 'Core') {
                     $descUrl = $baseUrl . '/docs/config.html#desc_' . $o;
                     $t->set_var('doc_url', $descUrl);
                     $t->set_var('doc_link',
                             '(<a href="' . $descUrl . '" target="help">?</a>)');
+             /*   }  else if ($group == 'forum') {
+                    $descUrl = $baseUrl . '/docs/forum.html#desc_' . $o;
+                    $t->set_var('doc_url', $descUrl);
+                    $t->set_var('doc_link',
+                            '(<a href="' . $descUrl . '" target="help">?</a>)');  */
                 } else {
                     // TBD: link to description of plugin option
                 }
