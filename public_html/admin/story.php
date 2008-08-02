@@ -785,8 +785,20 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     $display .= storyeditor (COM_applyFilter ($_GET['id']), $mode);
     $display .= COM_siteFooter();
     echo $display;
-} else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save']) && SEC_checkToken()) {
-    submitstory ();
+} else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save']) /*&& SEC_checkToken() */) {
+    if ( !SEC_checkToken() ) {
+        $editor = '';
+        if (!empty ($_GET['editor'])) {
+            $editor = COM_applyFilter ($_GET['editor']);
+        }
+        $display  = COM_siteHeader('menu', $LANG24[5]);
+        $display .= COM_showMessage(501);
+        $display .= storyeditor (COM_applyFilter ($_POST['sid']), 'preview', '', '',$editor);
+        $display .= COM_siteFooter();
+        echo $display;
+    } else {
+        submitstory ();
+    }
 } else { // 'cancel' or no mode at all
     $type = '';
     if (isset($_POST['type'])){
