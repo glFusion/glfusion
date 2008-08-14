@@ -2,6 +2,13 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Added MooTools sameheight javascript to extend bg of 3 column dynamic div layouts (Eric)
+		public_html/layout/nouveau/js/gl_moosameheight.js
+		public_html/layout/nouveau/header.thtml
+		public_html/layout/nouveau/htmlheader.thtml
+		public_html/layout/nouveau/leftblocks.thtml
+		public_html/layout/nouveau/rightblocks.thtml
+
 - Consolidated all MooTools libraries - now part of core. Moved
   to public_html/javascript/ directory.
 - New theme API themename_headerVars(&$template). Allows a theme
