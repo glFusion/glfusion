@@ -74,7 +74,7 @@ $_FF_DEFAULT['post_speedlimit']        = 60;
 $_FF_DEFAULT['use_smilies_plugin']     = false;
 $_FF_DEFAULT['use_pm_plugin']          = false;
 $_FF_DEFAULT['use_spamx_filter']       = true;
-$_FF_DEFAULT['show_centerblock']       = false;
+$_FF_DEFAULT['show_centerblock']       = true;
 $_FF_DEFAULT['centerblock_homepage']   = true;
 $_FF_DEFAULT['centerblock_where']      = 2;
 $_FF_DEFAULT['cb_subject_size']        = 40;
@@ -93,6 +93,81 @@ $_FF_DEFAULT['level2name']             = 'Junior';
 $_FF_DEFAULT['level3name']             = 'Chatty';
 $_FF_DEFAULT['level4name']             = 'Regular Member';
 $_FF_DEFAULT['level5name']             = 'Active Member';
+// new stuff
+$_FF_DEFAULT['showblocks']              = 'leftblocks';  // noblocks, leftblocks, rightblocks
+$_FF_DEFAULT['usermenu']                = 'blockmenu'; // blockmenu, navbar, none
+$_FF_DEFAULT['mysql4+']                 = false;
+$_FF_DEFAULT['pre2.5_mode']             = false;
+$_FF_DEFAULT['silent_edit_default']     = true;
+$_FF_DEFAULT['avatar_width']            = '';
+$_FF_DEFAULT['allow_img_bbcode']        = true;
+$_FF_DEFAULT['show_moderators']         = false;
+$_FF_DEFAULT['imgset']                  = $_CONF['layout_url'] .'/forum/image_set';
+$_FF_DEFAULT['imgset_path']             = $_CONF['path_layout'] .'/forum/image_set';
+$_FF_DEFAULT['autoimagetype']           = true;
+$_FF_DEFAULT['image_type_override']     = 'gif';
+$_FF_DEFAULT['default_Datetime_format'] = '%m/%d/%y %H:%M %p';
+$_FF_DEFAULT['default_Topic_Datetime_format'] = '%B %d %Y %H:%M %p';
+$_FF_DEFAULT['contentinfo_numchars']    = 256;
+$_FF_DEFAULT['linkinfo_width']          = 40;
+$_FF_DEFAULT['quoteformat'] = "[QUOTE][u]Quote by: %s[/u][p]%s[/p][/QUOTE]";
+$_FF_DEFAULT['show_popular_perpage']    = '20';    // @TODO: Need to make this an online admin setting
+$_FF_DEFAULT['show_last_post_count']    = '20';    // @TODO: Number of posts to show in the member last post page
+$_FF_DEFAULT['use_glmenu']              = false;   // Should glMenu be used for this menublock;
+$_FF_DEFAULT['grouptags'] = array(
+    'Root'              => 'siteadmin_badge.png',
+    'Logged-in Users'   => 'forum_user.png',
+    'Group A'           => 'badge1.png',
+    'Group B'           => 'badge2.png'
+);
+$_FF_DEFAULT['maxattachments']          = 5;      // Maximum number of attachments allowed in a single post
+$_FF_DEFAULT['uploadpath']              = $_CONF['path_html'] . 'forum/media';
+$_FF_DEFAULT['downloadURL']             = $_CONF['site_url'] . '/forum/media';
+$_FF_DEFAULT['fileperms']               = '0755';  // Needs to be a string for the upload class use.
+$_FF_DEFAULT['max_uploadimage_width']   = '2100';
+$_FF_DEFAULT['max_uploadimage_height']  = '1600';
+$_FF_DEFAULT['max_uploadfile_size']     = '6553600';     // 6.400 MB
+$_FF_DEFAULT['inlineimage_width']       = '300';
+$_FF_DEFAULT['inlineimage_height']      = '300';
+
+$_FF_DEFAULT['allowablefiletypes']    = array(
+        'application/x-gzip-compressed'     => '.tgz',
+        'application/x-zip-compressed'      => '.zip',
+        'application/zip'                   => '.zip',
+        'application/x-tar'                 => '.tar',
+        'application/x-gtar'                => '.gtar',
+        'application/x-gzip'                => '.gz',
+        'text/plain'                        => '.php,.txt,.inc',
+        'text/html'                         => '.html,.htm',
+        'image/bmp'                         => '.bmp,.ico',
+        'image/gif'                         => '.gif',
+        'image/pjpeg'                       => '.jpg,.jpeg',
+        'image/jpeg'                        => '.jpg,.jpeg',
+        'image/png'                         => '.png',
+        'image/x-png'                       => '.png',
+        'audio/mpeg'                        => '.mp3',
+        'audio/wav'                         => '.wav',
+        'application/pdf'                   => '.pdf',
+        'application/x-shockwave-flash'     => '.swf',
+        'application/msword'                => '.doc',
+        'application/vnd.ms-excel'          => '.xls',
+        'application/vnd.ms-powerpoint'     => '.ppt',
+        'application/vnd.ms-project'        => '.mpp',
+        'application/vnd.visio'             => '.vsd',
+        'text/plain'                        => '.txt',
+        'application/x-pangaeacadsolutions' => '.dwg',
+        'application/x-zip-compresseed'     => '.zip',
+        'application/octet-stream'          => '.zip,.vsd,.fla,.psd,.xls,.doc,.ppt,.pdf,.swf,.mpp,.txt,.dwg'
+        );
+
+$_FF_DEFAULT['inlineimageypes']    = array(
+        'image/bmp'                         => '.bmp,',
+        'image/gif'                         => '.gif',
+        'image/pjpeg'                       => '.jpg,.jpeg',
+        'image/jpeg'                        => '.jpg,.jpeg',
+        'image/png'                         => '.png',
+        'image/x-png'                       => '.png'
+);
 
 /**
 * the Forum plugin's config array
@@ -204,88 +279,145 @@ function plugin_initconfig_forum()
                 0, 0, 0, 100, true, 'forum');
         $c->add('show_searches_perpage', $_FF_DEFAULT['show_searches_perpage'], 'text',
                 0, 0, 0, 110, true, 'forum');
+        $c->add('showblocks', $_FF_DEFAULT['showblocks'], 'select',
+                0, 0, 3, 120, true, 'forum');
+        $c->add('usermenu', $_FF_DEFAULT['usermenu'], 'select',
+                0, 0, 4, 130, true, 'forum');
+        $c->add('mysql4+', $_FF_DEFAULT['mysql4+'], 'select',
+                0, 0, 0, 140, true, 'forum');
+        $c->add('pre2.5_mode', $_FF_DEFAULT['pre2.5_mode'], 'select',
+                0, 0, 0, 150, true, 'forum');
+        $c->add('silent_edit_default', $_FF_DEFAULT['silent_edit_default'], 'select',
+                0, 0, 0, 160, true, 'forum');
+        $c->add('avatar_width', $_FF_DEFAULT['avatar_width'], 'text',
+                0, 0, 0, 170, true, 'forum');
+        $c->add('allow_img_bbcode', $_FF_DEFAULT['allow_img_bbcode'], 'select',
+                0, 0, 0, 180, true, 'forum');
+        $c->add('show_moderators', $_FF_DEFAULT['show_moderators'], 'select',
+                0, 0, 0, 190, true, 'forum');
+        $c->add('default_Datetime_format', $_FF_DEFAULT['default_Datetime_format'], 'text',
+                0, 0, 0, 200, true, 'forum');
+        $c->add('default_Topic_Datetime_format', $_FF_DEFAULT['default_Topic_Datetime_format'], 'text',
+                0, 0, 0, 210, true, 'forum');
+        $c->add('contentinfo_numchars', $_FF_DEFAULT['contentinfo_numchars'], 'text',
+                0, 0, 0, 220, true, 'forum');
+        $c->add('linkinfo_width', $_FF_DEFAULT['linkinfo_width'], 'text',
+                0, 0, 0, 230, true, 'forum');
+        $c->add('quoteformat', $_FF_DEFAULT['quoteformat'], 'text',
+                0, 0, 0, 240, true, 'forum');
+        $c->add('show_popular_perpage', $_FF_DEFAULT['show_popular_perpage'], 'text',
+                0, 0, 0, 250, true, 'forum');
+        $c->add('show_last_post_count', $_FF_DEFAULT['show_last_post_count'], 'text',
+                0, 0, 0, 260, true, 'forum');
+        $c->add('grouptags',$_FF_DEFAULT['grouptags'],'*text',
+                0,0,NULL,280,true,'forum');
 
-        $c->add('ff_topic_post_settings', NULL, 'fieldset', 0, 1, NULL, 0, true,'forum');
+        $c->add('ff_attachments_settings', NULL, 'fieldset', 0, 1, NULL, 0, true,'forum');
+
+        $c->add('maxattachments', $_FF_DEFAULT['maxattachments'], 'text',
+                0, 1, 0, 10, true, 'forum');
+        $c->add('uploadpath', $_FF_DEFAULT['uploadpath'], 'text',
+                0, 1, 0, 20, true, 'forum');
+        $c->add('downloadURL', $_FF_DEFAULT['downloadURL'], 'text',
+                0, 1, 0, 30, true, 'forum');
+        $c->add('fileperms', $_FF_DEFAULT['fileperms'], 'text',
+                0, 1, 0, 40, true, 'forum');
+        $c->add('max_uploadimage_width', $_FF_DEFAULT['max_uploadimage_width'], 'text',
+                0, 1, 0, 50, true, 'forum');
+        $c->add('max_uploadimage_height', $_FF_DEFAULT['max_uploadimage_height'], 'text',
+                0, 1, 0, 60, true, 'forum');
+        $c->add('max_uploadimage_size', $_FF_DEFAULT['max_uploadimage_size'], 'text',
+                0, 1, 0, 70, true, 'forum');
+        $c->add('inlineimage_width', $_FF_DEFAULT['inlineimage_width'], 'text',
+                0, 1, 0, 80, true, 'forum');
+        $c->add('inlineimage_height', $_FF_DEFAULT['inlineimage_height'], 'text',
+                0, 1, 0, 90, true, 'forum');
+        $c->add('allowablefiletypes',$_FF_DEFAULT['allowablefiletypes'], '*text',
+                0,1,NULL,100,true,'forum');
+        $c->add('inlineimageypes',$_FF_DEFAULT['inlineimageypes'], '*text',
+                0,1,NULL,110,true,'forum');
+
+        $c->add('ff_topic_post_settings', NULL, 'fieldset', 0, 2, NULL, 0, true,'forum');
 
         $c->add('show_subject_length', $_FF_DEFAULT['show_subject_length'], 'text',
-                0, 1, 0, 10, true, 'forum');
+                0, 2, 0, 10, true, 'forum');
         $c->add('min_username_length', $_FF_DEFAULT['min_username_length'], 'text',
-                0, 1, 0, 20, true, 'forum');
+                0, 2, 0, 20, true, 'forum');
         $c->add('min_subject_length', $_FF_DEFAULT['min_subject_length'], 'text',
-                0, 1, 0, 30, true, 'forum');
+                0, 2, 0, 30, true, 'forum');
         $c->add('min_comment_length', $_FF_DEFAULT['min_comment_length'], 'text',
-                0, 1, 0, 40, true, 'forum');
+                0, 2, 0, 40, true, 'forum');
         $c->add('views_tobe_popular', $_FF_DEFAULT['views_tobe_popular'], 'text',
-                0, 1, 0, 50, true, 'forum');
+                0, 2, 0, 50, true, 'forum');
         $c->add('post_speedlimit', $_FF_DEFAULT['post_speedlimit'], 'text',
-                0, 1, 0, 60, true, 'forum');
+                0, 2, 0, 60, true, 'forum');
         $c->add('allowed_editwindow', $_FF_DEFAULT['allowed_editwindow'], 'text',
-                0, 1, 0, 70, true, 'forum');
+                0, 2, 0, 70, true, 'forum');
         $c->add('allow_html', $_FF_DEFAULT['allow_html'], 'select',
-                0, 1, 0, 80, true, 'forum');
+                0, 2, 0, 80, true, 'forum');
         $c->add('post_htmlmode', $_FF_DEFAULT['post_htmlmode'], 'select',
-                0, 1, 0, 90, true, 'forum');
+                0, 2, 0, 90, true, 'forum');
         $c->add('use_censor', $_FF_DEFAULT['use_censor'], 'select',
-                0, 1, 0, 100, true, 'forum');
+                0, 2, 0, 100, true, 'forum');
         $c->add('use_glfilter', $_FF_DEFAULT['use_glfilter'], 'select',
-                0, 1, 0, 110, true, 'forum');
+                0, 2, 0, 110, true, 'forum');
         $c->add('use_geshi', $_FF_DEFAULT['use_geshi'], 'select',
-                0, 1, 0, 120, true, 'forum');
+                0, 2, 0, 120, true, 'forum');
         $c->add('use_spamx_filter', $_FF_DEFAULT['use_spamx_filter'], 'select',
-                0, 1, 0, 130, true, 'forum');
+                0, 2, 0, 130, true, 'forum');
         $c->add('show_moods', $_FF_DEFAULT['show_moods'], 'select',
-                0, 1, 0, 140, true, 'forum');
+                0, 2, 0, 140, true, 'forum');
         $c->add('allow_smilies', $_FF_DEFAULT['allow_smilies'], 'select',
-                0, 1, 0, 150, true, 'forum');
+                0, 2, 0, 150, true, 'forum');
         $c->add('use_smilies_plugin', $_FF_DEFAULT['use_smilies_plugin'], 'select',
-                0, 1, 0, 160, true, 'forum');
+                0, 2, 0, 160, true, 'forum');
 
-        $c->add('ff_centerblock', NULL, 'fieldset', 0, 2, NULL, 0, true,
+        $c->add('ff_centerblock', NULL, 'fieldset', 0, 3, NULL, 0, true,
                 'forum');
 
         $c->add('show_centerblock', $_FF_DEFAULT['show_centerblock'], 'select',
-                0, 2, 0, 10, true, 'forum');
+                0, 3, 0, 10, true, 'forum');
         $c->add('centerblock_homepage', $_FF_DEFAULT['centerblock_homepage'], 'select',
-                0, 2, 0, 20, true, 'forum');
+                0, 3, 0, 20, true, 'forum');
         $c->add('centerblock_numposts', $_FF_DEFAULT['centerblock_numposts'], 'text',
-                0, 2, 0, 30, true, 'forum');
+                0, 3, 0, 30, true, 'forum');
         $c->add('cb_subject_size', $_FF_DEFAULT['cb_subject_size'], 'text',
-                0, 2, 0, 40, true, 'forum');
+                0, 3, 0, 40, true, 'forum');
         $c->add('centerblock_where', $_FF_DEFAULT['centerblock_where'], 'select',
-                0, 2, 2, 50, true, 'forum');
+                0, 3, 2, 50, true, 'forum');
 
-        $c->add('ff_latest_post_block', NULL, 'fieldset', 0, 3, NULL, 0, true,
+        $c->add('ff_latest_post_block', NULL, 'fieldset', 0, 4, NULL, 0, true,
                 'forum');
 
         $c->add('sideblock_numposts', $_FF_DEFAULT['sideblock_numposts'], 'text',
-                0, 3, 0, 10, true, 'forum');
+                0, 4, 0, 10, true, 'forum');
         $c->add('sb_subject_size', $_FF_DEFAULT['sb_subject_size'], 'text',
-                0, 3, 0, 20, true, 'forum');
+                0, 4, 0, 20, true, 'forum');
         $c->add('sb_latestpostonly', $_FF_DEFAULT['sb_latestpostonly'], 'select',
-                0, 3, 0, 20, true, 'forum');
+                0, 4, 0, 20, true, 'forum');
 
-        $c->add('ff_rank_settings', NULL, 'fieldset', 0, 4, NULL, 0, true,
+        $c->add('ff_rank_settings', NULL, 'fieldset', 0, 5, NULL, 0, true,
                 'forum');
         $c->add('level1', $_FF_DEFAULT['level1'], 'text',
-                0, 4, 0, 10, true, 'forum');
+                0, 5, 0, 10, true, 'forum');
         $c->add('level1name', $_FF_DEFAULT['level1name'], 'text',
-                0, 4, 0, 20, true, 'forum');
+                0, 5, 0, 20, true, 'forum');
         $c->add('level2', $_FF_DEFAULT['level2'], 'text',
-                0, 4, 0, 30, true, 'forum');
+                0, 5, 0, 30, true, 'forum');
         $c->add('level2name', $_FF_DEFAULT['level2name'], 'text',
-                0, 4, 0, 40, true, 'forum');
+                0, 5, 0, 40, true, 'forum');
         $c->add('level3', $_FF_DEFAULT['level3'], 'text',
-                0, 4, 0, 50, true, 'forum');
+                0, 5, 0, 50, true, 'forum');
         $c->add('level3name', $_FF_DEFAULT['level3name'], 'text',
-                0, 4, 0, 60, true, 'forum');
+                0, 5, 0, 60, true, 'forum');
         $c->add('level4', $_FF_DEFAULT['level4'], 'text',
-                0, 4, 0, 70, true, 'forum');
+                0, 5, 0, 70, true, 'forum');
         $c->add('level4name', $_FF_DEFAULT['level4name'], 'text',
-                0, 4, 0, 80, true, 'forum');
+                0, 5, 0, 80, true, 'forum');
         $c->add('level5', $_FF_DEFAULT['level5'], 'text',
-                0, 4, 0, 90, true, 'forum');
+                0, 5, 0, 90, true, 'forum');
         $c->add('level5name', $_FF_DEFAULT['level5name'], 'text',
-                0, 4, 0, 100, true, 'forum');
+                0, 5, 0, 100, true, 'forum');
     }
 
     return true;

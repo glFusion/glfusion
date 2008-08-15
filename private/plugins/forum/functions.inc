@@ -53,10 +53,8 @@ else
     include_once ($_CONF['path'] . 'plugins/forum/language/english.php');
 }
 
-
-
 // Need to add this line because PLG_enableStateChange does an include of this file inside a plugin function and $_TABLES is not global.
-// This will be fixed in GL 1.4.1 Final
+
 $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 
 $pi_version = floatval (DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'"));
@@ -75,6 +73,7 @@ if (!isset($CONF_FORUM['registration_required'])) {
     if ( is_array($_FF_FORUM)  && is_array($CONF_FORUM) ) {
         $CONF_FORUM = array_merge($_FF_FORUM, $CONF_FORUM);
     }
+
     // How many messages to show on the Most Popular page
     $CONF_FORUM['popular_limit'] = '20';
     // How many lines to show on one page in the search results
@@ -100,8 +99,9 @@ if (!isset($CONF_FORUM['registration_required'])) {
             $CONF_FORUM['notify_once']                = $userprefs['notify_once'];
         }
     }
-    $CONF_FORUM['leftblocks'] = ppGetUserBlocks($CONF_FORUM['leftblocks']);
 }
+$CONF_FORUM['leftblocks'] = array ('forum_menu');
+$CONF_FORUM['leftblocks'] = ppGetUserBlocks($CONF_FORUM['leftblocks']);
 
 if( empty( $LANG_CHARSET )) {
     $CONF_FORUM['charset'] = $_CONF['default_charset'];
@@ -141,7 +141,9 @@ function plugin_autotags_forum($op,$content='',$autotag='') {
     if ($op == 'tagname' ) {
         return 'forum';
     } elseif ($op == 'parse') {
-        if ($autotag['parm2'] == '')  $autotag['parm2'] = 'here';
+        if ($autotag['parm2'] == '') {
+            $autotag['parm2'] = 'here';
+        }
         $filelink = '<a href="'.$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$autotag['parm1'].'">'.$autotag['parm2'].'</a>';
         $content = str_replace($autotag['tagstr'],$filelink,$content);
         return $content;
@@ -711,7 +713,6 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
     $result = DB_query ("SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = $feed");
     $F = DB_fetchArray ($result);
 
-//    $sql = "SELECT topic.id,topic.forum,topic.subject,topic.uid,topic.name,topic.comment,topic.date,topic.postmode,forum.forum_name,forum.grp_id ";
     $sql = "SELECT * ";
     $sql .= "FROM {$_TABLES['gf_topic']} topic LEFT JOIN {$_TABLES['gf_forums']} forum ON topic.forum=forum.forum_id ";
     $sql .= forum_buildFeedsSql ($F['topic'], $F['limits']);
@@ -799,8 +800,6 @@ function plugin_feedupdatecheck_forum ($feed, $topic, $update_data, $limit)
     }
     $current = implode (',', $ids);
 
-//    COM_errorLog ("Update check for forum: comparing new list ($current) with old list ($update_data)", 1);
-
     return ( $current != $update_data ) ? false : true;
 }
 
@@ -867,7 +866,7 @@ function forum_chkUsercanPost() {
     if($CONF_FORUM['registered_to_post'] && $_USER['uid'] < 2){
         $url = $_CONF['site_url']. '/users.php?mode=new';
         $display .= COM_startBlock($LANG_GF00['access_denied']);
-        $display .= '<br>' .$LANG_GF01['loginreqpost']. '<p>';
+        $display .= '<br' . XHTML . '>' .$LANG_GF01['loginreqpost']. '<br' . XHTML . '>';
         $display .= '<meta http-equiv="refresh" content="3; URL=' .$url. '">';
         $display .= COM_endBlock();
         $display .= COM_siteFooter();
@@ -892,13 +891,13 @@ function forum_chkUsercanAccess($secure=false) {
     global $_CONF, $LANG_GF01, $LANG_GF02, $CONF_FORUM, $_USER;
 
     if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
-            echo  '<TABLE WIDTH="100%" HEIGHT="100"><TR><TD><CENTER>';
+            echo  '<table width="100%" height="100"><tr><td><center>';
         printf($LANG_GF01['loginreqview'], '<A HREF="' .$_CONF['site_url']. '/users.php?mode=new">', '<A HREF="' .$_CONF['site_url']. '/users.php">');
-        echo '</CENTER></TD></TR></TABLE>';
+        echo '</center></td></tr></table>';
         echo COM_siteFooter();
         exit;
     } elseif($secure AND empty($_USER['uid'])) {
-        echo '<br>';
+        echo '<br' . XHTML . '>';
         BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg83'],false);
         echo COM_siteFooter();
         exit;
@@ -1506,14 +1505,13 @@ function phpblock_forum_menu() {
             $t = new Template($_CONF['path_layout'] . 'glmenu/cssmenu');
             $t->set_file('menu','blockmenu.thtml');
 
-            $links = "<li><a href=\"{$_CONF['site_url']}/forum/index.php\" TITLE=\"{$LANG_GF02['msg196']}\">{$LANG_GF01['INDEXPAGE']}</a></li>" . LB;
+            $links = "<li><a href=\"{$_CONF['site_url']}/forum/index.php\" title=\"{$LANG_GF02['msg196']}\">{$LANG_GF01['INDEXPAGE']}</a></li>" . LB;
             if ($_USER['uid'] > 1) {
-                $links .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php?op=markallread\" TITLE=\"{$LANG_GF02['msg197']}\">{$LANG_GF01['MARKALLREAD']}</a></li>" . LB;
-                $links .= "<li><a href=\"{$_CONF['site_url']}/forum/userprefs.php\" TITLE=\"{$LANG_GF02['msg198']}\">{$LANG_GF01['USERPREFS']}</a></li>" . LB;
-                $links .= "<li><a href=\"{$_CONF['site_url']}/forum/notify.php\" TITLE=\"{$LANG_GF02['msg199']}\">{$LANG_GF01['SUBSCRIPTIONS']}</a></li>" . LB;
+                $links .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php?op=markallread\" title=\"{$LANG_GF02['msg197']}\">{$LANG_GF01['MARKALLREAD']}</a></li>" . LB;
+                $links .= "<li><a href=\"{$_CONF['site_url']}/forum/userprefs.php\" title=\"{$LANG_GF02['msg198']}\">{$LANG_GF01['USERPREFS']}</a></li>" . LB;
+                $links .= "<li><a href=\"{$_CONF['site_url']}/forum/notify.php\" title=\"{$LANG_GF02['msg199']}\">{$LANG_GF01['SUBSCRIPTIONS']}</a></li>" . LB;
             }
-            $links .= "<li><a href=\"{$_CONF['site_url']}/forum/memberlist.php\" TITLE=\"{$LANG_GF02['msg200']}\">{$LANG_GF02['msg88']}</a></li>" . LB;
-            $links .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php?op=popular\" TITLE=\"{$LANG_GF02['msg201']}\">{$LANG_GF07['3']}</a></li>" . LB;
+            $links .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php?op=popular\" title=\"{$LANG_GF02['msg201']}\">{$LANG_GF07['3']}</a></li>" . LB;
 
             $t->set_var('menuitems', $links);
             $t->parse ('output', 'menu');
@@ -1522,24 +1520,18 @@ function phpblock_forum_menu() {
         }
 
     } else {
-        $retval = '<table width="100%" border="0" cellpadding="1" cellspacing="1"><tr><td>';
-        $retval .= "<a href=\"{$_CONF['site_url']}/forum/index.php\" TITLE=\"{$LANG_GF02['msg196']}\">{$LANG_GF01['INDEXPAGE']}</a>";
-        $retval .= '</td></tr><tr><td>';
+        $retval = '<ul>';
+        $retval .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php\" title=\"{$LANG_GF02['msg196']}\">{$LANG_GF01['INDEXPAGE']}</a></li>";
         if ($_USER['uid'] > 1) {
-            $retval .= "<a href=\"{$_CONF['site_url']}/forum/index.php?op=markallread\" TITLE=\"{$LANG_GF02['msg197']}\">{$LANG_GF01['MARKALLREAD']}</a>";
-            $retval .= '</td></tr><tr><td>';
-            $retval .= "<a href=\"{$_CONF['site_url']}/forum/userprefs.php\" TITLE=\"{$LANG_GF02['msg198']}\">{$LANG_GF01['USERPREFS']}</a>";
-            $retval .= '</td></tr><tr><td>';
-            $retval .= "<a href=\"{$_CONF['site_url']}/forum/notify.php\" TITLE=\"{$LANG_GF02['msg199']}\">{$LANG_GF01['SUBSCRIPTIONS']}</a>";
-            $retval .= '</td></tr><tr><td>';
+            $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/userprefs.php' . '" title="' . $LANG_GF01['USERPREFS'] . '">' . $LANG_GF01['USERPREFS'] . '</a></li>';
+            $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/notify.php' . '" title="' . $LANG_GF01['SUBSCRIPTIONS'] . '">' . $LANG_GF01['SUBSCRIPTIONS'] . '</a></li>';
+            $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/index.php?op=bookmarks' . '" title="' . $LANG_GF01['BOOKMARKS'] . '">' . $LANG_GF01['BOOKMARKS'] . '</a></li>';
         }
-        $retval .= "<a href=\"{$_CONF['site_url']}/forum/memberlist.php\" TITLE=\"{$LANG_GF02['msg200']}\">{$LANG_GF02['msg88']}</a>";
-        $retval .= '</td></tr><tr><td>';
-        $retval .= "<a href=\"{$_CONF['site_url']}/forum/index.php?op=popular\" TITLE=\"{$LANG_GF02['msg201']}\">{$LANG_GF07['3']}</a>";
-        $retval .= '</td></tr></table>';
+        $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/index.php?op=lastx" title="' . $LANG_GF01['LASTX'] . '">' . $LANG_GF01['LASTX'] . '</a></li>';
+        $retval .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php?op=popular\" title=\"{$LANG_GF02['msg201']}\">{$LANG_GF07['3']}</a></li>";
+        $retval .= '</ul>';
     }
     return $retval;
-
 }
 
 
