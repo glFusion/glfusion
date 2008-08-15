@@ -1,5 +1,5 @@
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
-
+<div id="configuration">
 <form method="post" action="configuration.php" name="group">
 <input type="hidden" value="{open_group}" name="conf_group"{xhtml}>
 <input type="hidden" value="" name="subgroup"{xhtml}>
@@ -7,10 +7,10 @@
 </form>
 <table>
     <tr>
-        <td class="block-featured-left" style="vertical-align:top;">
+        <td class="block-featured-left" style="vertical-align:top;padding-right:10px;">
             <div class="block-bg-left"> {config_menu} </div>
         </td>
-        <td>
+        <td style="vertical-align:top;">
             <div class="pluginInfo" style="display:{show_changeblock};margin-top:5px;margin-bottom:5px;padding-left:20px;border:1px solid #CCC; height: 120px;overflow: auto; min-height: 50px; max-height: 100px;">
                 {lang_changes_made}:
                 {change_block}
@@ -35,7 +35,7 @@
             <!-- END notes -->
 
             <table class="inputTable">
-            <col width="300" />
+            <col width="240" />
             <col />
             {fs_contents}
             </table>
@@ -55,3 +55,4 @@
         </td>
     </tr>
 </table>
+</div>

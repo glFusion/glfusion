@@ -2258,3 +2258,37 @@ width:173px;
 #inter_cal2 .ng-cal-header-table {
 width:95%;
 }
+/*
+#configuration {
+    border: 1px solid silver;
+}
+*/
+#configuration fieldset {
+	margin-bottom: 10px;
+	border: 1px #ccc solid;
+	padding: 5px;
+	text-align: left;
+}
+
+#configuration fieldset p {  margin: 10px 0px;  }
+
+#configuration legend    {
+	color: #0B55C4;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#configuration input,
+#configuration select { font-size: .9em;  border: 1px solid silver; }
+#configuration textarea      { font-size: 11px;  border: 1px solid silver; }
+#configuration button        { font-size: 10px;  }
+
+#configuration td.key {
+background-color:#F6F6F6;
+border-bottom:1px solid #E9E9E9;
+border-right:1px solid #E9E9E9;
+color:#222222;
+font-weight:bold;
+text-align:right;
+width:140px;
+}

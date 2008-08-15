@@ -3,7 +3,7 @@
 <!-- END delete-button -->
 
 <!-- BEGIN text-element -->
-<tr><td class="alignright">{display_name} {doc_link} {unset_link}</td>
+<tr><td class="key">{display_name} {doc_link} {unset_link}</td>
 <td>
 <input type="text" class="opt" name="{name}" style="width:300px" value="{value}"{xhtml}>
 {delete}
@@ -11,14 +11,14 @@
 <!-- END text-element -->
 
 <!-- BEGIN placeholder-element -->
-<tr><td class="alignright">{display_name}</td><td>
+<tr><td class="key">{display_name}</td><td>
 <input type="hidden" name="{name}" value="{value}"{xhtml}>
 {delete}
 </td></tr>
 <!-- END placeholder-element -->
 
 <!-- BEGIN select-element -->
-<tr><td class="alignright">{display_name} {doc_link} {unset_link}</td>
+<tr><td class="key">{display_name} {doc_link} {unset_link}</td>
 <td>
 <select name="{name}" class="opt">
   <!-- BEGIN select-options -->
@@ -28,13 +28,13 @@
 <!-- END select-element -->
 
 <!-- BEGIN unset-param -->
-<tr><td class="alignright">{display_name} {doc_link}</td>
+<tr><td class="key">{display_name} {doc_link}</td>
 <td><a href="#" onclick="restore('{name}');">{lang_restore}</a></td>
 </tr>
 <!-- END unset-param -->
 
 <!-- BEGIN list-element -->
-<tr><td class="alignright" style="vertical-align:top">{display_name} {doc_link} {unset_link}</td>
+<tr><td class="key" style="vertical-align:top">{display_name} {doc_link} {unset_link}</td>
 <td>
 <input type="button" value="+" onclick="hide_show_tbl(selectChildByID(this.parentNode, 'arr_table'), this);"{xhtml}>
 {delete}

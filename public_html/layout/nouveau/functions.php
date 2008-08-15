@@ -55,16 +55,16 @@ for ($i = 0; $i < $nrows; $i++) {
             $_BLOCK_TEMPLATE[$A['name']] = 'blockheader-right.thtml,blockfooter-right.thtml';
     }
 }
-
 $_BLOCK_TEMPLATE['_msg_block'] = 'blockheader-message.thtml,blockfooter-message.thtml';
-
 $_BLOCK_TEMPLATE['whats_related_block'] = 'blockheader-related.thtml,blockfooter-related.thtml';
 $_BLOCK_TEMPLATE['story_options_block'] = 'blockheader-related.thtml,blockfooter-related.thtml';
 // Define the blocks that are a list of links styled as an unordered list - using class="blocklist"
 $_BLOCK_TEMPLATE['admin_block'] = 'blockheader-list.thtml,blockfooter-list.thtml';
 $_BLOCK_TEMPLATE['section_block'] = 'blockheader-list.thtml,blockfooter-list.thtml';
 // $_BLOCK_TEMPLATE['user_block'] = 'blockheader-list.thtml,blockfooter-list.thtml';
-
+$_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml';
+// $_BLOCK_TEMPLATE['configmanager_block'] = 'blockheader-left.thtml,blockfooter-left.thtml';
+// $_BLOCK_TEMPLATE['configmanager_subblock'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 
 function nouveau_headerVars( &$template ) {
     global $_CONF;
@@ -72,7 +72,6 @@ function nouveau_headerVars( &$template ) {
 	//Enables use of gl_chronometer - a client-side header banner rotator
 	$template->set_var('gl_moochronometer',
 '<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moochronometer.js"></script>');
-
 }
 
 
