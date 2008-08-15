@@ -63,7 +63,7 @@ div#frame div.button#right {
 
 /* ie6 warning  javascript*/
 #iewarn {
-	background:#C6D3DA url(../images/noie6.png) 10px 20px no-repeat;
+	background:#ddd url(../images/ie6_warning.png) 10px 20px no-repeat;
 	position:relative;
 	z-index:1;
 	opacity:0;
@@ -73,21 +73,21 @@ div#frame div.button#right {
 }
 #iewarn div {
 	position:relative;
-	border-top:5px solid #95B8C9;
-	border-bottom:5px solid #95B8C9;
+	border-top:5px solid #666;
+	border-bottom:5px solid #666;
 	padding:10px 80px 10px 210px;
 }
 #iewarn h4 {
-	color:#e2494b;
+	color:#bf2f42;
 	font-weight:bold;
 	line-height:120%;
 }
 #iewarn a {
-	color:#296AC6;
+	color:#296ac6;
 	font-weight:bold;
 }
 #iewarn_close {
-	background:url(../images/ie6close.png) 50% 50% no-repeat;
+	background:url(../images/ie6_close.png) 50% 50% no-repeat;
 	display:block;
 	cursor:pointer;
 	position:absolute;

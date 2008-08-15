@@ -2,6 +2,13 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Made ie6Warning javascript more neutral so it can be used by other themes (Eric)
+		public_html/layout/nouveau/css/ie6.css
+		public_html/layout/nouveau/htmlheader.thtml
+		public_html/layout/nouveau/images/ie6_close.png
+		public_html/layout/nouveau/images/ie6_warning.png
+		public_html/layout/nouveau/js/gl_mooie6warning.js
+
 - Added MooTools sameheight javascript to extend bg of 3 column dynamic div layouts (Eric)
 		public_html/layout/nouveau/js/gl_moosameheight.js
 		public_html/layout/nouveau/header.thtml
