@@ -614,10 +614,7 @@ FCKEnterKey.prototype._ExecuteEnterBr = function( blockTag )
 
 				eLineBreak.parentNode.insertBefore( dummy, eLineBreak.nextSibling ) ;
 
-				if ( FCKBrowserInfo.IsSafari )
-					FCKDomTools.ScrollIntoView( dummy, false ) ;
-				else
-					dummy.scrollIntoView( false ) ;
+				FCKDomTools.ScrollIntoView( dummy, false ) ;
 
 				dummy.parentNode.removeChild( dummy ) ;
 			}

@@ -349,7 +349,8 @@ FCK._ExecPaste = function()
 // selected content if any.
 FCK.InsertHtml = function( html )
 {
-	var doc = FCK.EditorDocument ;
+	var doc = FCK.EditorDocument,
+		range;
 
 	html = FCKConfig.ProtectedSource.Protect( html ) ;
 	html = FCK.ProtectEvents( html ) ;
@@ -361,26 +362,31 @@ FCK.InsertHtml = function( html )
 
 	if ( FCKBrowserInfo.IsGecko )
 	{
-		// Using the following trick, &nbsp; present at the beginning and at
-		// the end of the HTML are preserved (#2248).
-		html = '<span id="__fakeFCKRemove1__" style="display:none;">fakeFCKRemove</span>' + html + '<span id="__fakeFCKRemove2__" style="display:none;">fakeFCKRemove</span>' ;
-	}
+		html = html.replace( /&nbsp;$/, '$&<span _fcktemp="1"/>' ) ;
 
-	// Insert the HTML code.
-	doc.execCommand( 'inserthtml', false, html ) ;
+		var docFrag = new FCKDocumentFragment( this.EditorDocument ) ;
+		docFrag.AppendHtml( html ) ;
 
-	if ( FCKBrowserInfo.IsGecko )
-	{
-		// Remove the fake nodes.
-		FCKDomTools.RemoveNode( doc.getElementById('__fakeFCKRemove1__') ) ;
-		FCKDomTools.RemoveNode( doc.getElementById('__fakeFCKRemove2__') ) ;
+		var lastNode = docFrag.RootNode.lastChild ;
+
+		range = new FCKDomRange( this.EditorWindow ) ;
+		range.MoveToSelection() ;
+		range.DeleteContents() ;
+		range.InsertNode( docFrag.RootNode ) ;
+
+		range.MoveToPosition( lastNode, 4 ) ;
 	}
+	else
+		doc.execCommand( 'inserthtml', false, html ) ;
 
 	this.Focus() ;
 
 	// Save the caret position before calling document processor.
-	var range = new FCKDomRange( this.EditorWindow ) ;
-	range.MoveToSelection() ;
+	if ( !range )
+	{
+		range = new FCKDomRange( this.EditorWindow ) ;
+		range.MoveToSelection() ;
+	}
 	var bookmark = range.CreateBookmark() ;
 
 	FCKDocumentProcessor.Process( doc ) ;

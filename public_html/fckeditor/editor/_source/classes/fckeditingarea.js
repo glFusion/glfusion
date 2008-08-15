@@ -150,18 +150,23 @@ FCKEditingArea.prototype.Start = function( html, secondCall )
 		if ( oIFrame.readyState && oIFrame.readyState != 'completed' )
 		{
 			var editArea = this ;
-			( oIFrame.onreadystatechange = function()
-			{
-				if ( oIFrame.readyState == 'complete' )
-				{
-					oIFrame.onreadystatechange = null ;
-					editArea.Window._FCKEditingArea = editArea ;
-					FCKEditingArea_CompleteStart.call( editArea.Window ) ;
-				}
-			// It happened that IE changed the state to "complete" after the
-			// "if" and before the "onreadystatechange" assignement, making we
-			// lost the event call, so we do a manual call just to be sure.
-			} )() ;
+
+			// Using a IE alternative for DOMContentLoaded, similar to the
+			// solution proposed at http://javascript.nwbox.com/IEContentLoaded/
+			setTimeout( function()
+					{
+						try
+						{
+							editArea.Window.document.documentElement.doScroll("left") ;
+						}
+						catch(e)
+						{
+							setTimeout( arguments.callee, 0 ) ;
+							return ;
+						}
+						editArea.Window._FCKEditingArea = editArea ;
+						FCKEditingArea_CompleteStart.call( editArea.Window ) ;
+					}, 0 ) ;
 		}
 		else
 		{

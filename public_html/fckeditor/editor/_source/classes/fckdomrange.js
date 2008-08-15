@@ -41,7 +41,6 @@ FCKDomRange.prototype =
 		{
 			// For text nodes, the node itself is the StartNode.
 			var eStart	= innerRange.startContainer ;
-			var eEnd	= innerRange.endContainer ;
 
 			var oElementPath = new FCKElementPath( eStart ) ;
 			this.StartNode			= eStart.nodeType == 3 ? eStart : eStart.childNodes[ innerRange.startOffset ] ;
@@ -49,28 +48,40 @@ FCKDomRange.prototype =
 			this.StartBlock			= oElementPath.Block ;
 			this.StartBlockLimit	= oElementPath.BlockLimit ;
 
-			if ( eStart != eEnd )
-				oElementPath = new FCKElementPath( eEnd ) ;
-
-			// The innerRange.endContainer[ innerRange.endOffset ] is not
-			// usually part of the range, but the marker for the range end. So,
-			// let's get the previous available node as the real end.
-			var eEndNode = eEnd ;
-			if ( innerRange.endOffset == 0 )
+			if ( innerRange.collapsed )
 			{
-				while ( eEndNode && !eEndNode.previousSibling )
-					eEndNode = eEndNode.parentNode ;
-
-				if ( eEndNode )
-					eEndNode = eEndNode.previousSibling ;
+				this.EndNode		= this.StartNode ;
+				this.EndContainer	= this.StartContainer ;
+				this.EndBlock		= this.StartBlock ;
+				this.EndBlockLimit	= this.StartBlockLimit ;
 			}
-			else if ( eEndNode.nodeType == 1 )
-				eEndNode = eEndNode.childNodes[ innerRange.endOffset - 1 ] ;
+			else
+			{
+				var eEnd	= innerRange.endContainer ;
 
-			this.EndNode			= eEndNode ;
-			this.EndContainer		= eEnd ;
-			this.EndBlock			= oElementPath.Block ;
-			this.EndBlockLimit		= oElementPath.BlockLimit ;
+				if ( eStart != eEnd )
+					oElementPath = new FCKElementPath( eEnd ) ;
+
+				// The innerRange.endContainer[ innerRange.endOffset ] is not
+				// usually part of the range, but the marker for the range end. So,
+				// let's get the previous available node as the real end.
+				var eEndNode = eEnd ;
+				if ( innerRange.endOffset == 0 )
+				{
+					while ( eEndNode && !eEndNode.previousSibling )
+						eEndNode = eEndNode.parentNode ;
+
+					if ( eEndNode )
+						eEndNode = eEndNode.previousSibling ;
+				}
+				else if ( eEndNode.nodeType == 1 )
+					eEndNode = eEndNode.childNodes[ innerRange.endOffset - 1 ] ;
+
+				this.EndNode			= eEndNode ;
+				this.EndContainer		= eEnd ;
+				this.EndBlock			= oElementPath.Block ;
+				this.EndBlockLimit		= oElementPath.BlockLimit ;
+			}
 		}
 
 		this._Cache = {} ;

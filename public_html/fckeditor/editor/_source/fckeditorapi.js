@@ -40,8 +40,8 @@ function InitializeAPI()
 		// objects that aren't really FCKeditor instances.
 		var sScript =
 			'window.FCKeditorAPI = {' +
-				'Version : "2.6.2",' +
-				'VersionBuild : "19417",' +
+				'Version : "2.6.3",' +
+				'VersionBuild : "19836",' +
 				'Instances : new Object(),' +
 
 				'GetInstance : function( name )' +
@@ -115,7 +115,7 @@ function InitializeAPI()
 			{
 				FCKAdobeAIR.FCKeditorAPI_Evaluate( oParentWindow, sScript ) ;
 			}
-			else if ( FCKBrowserInfo.IsSafari || FCKBrowserInfo.IsGecko19 )
+			else if ( FCKBrowserInfo.IsSafari )
 			{
 				// oParentWindow.eval in Safari and Gran Paradiso executes in the calling window
 				// environment, instead of the parent one. The following should make it work.
