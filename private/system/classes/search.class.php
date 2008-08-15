@@ -309,7 +309,8 @@ class Search {
                 $articleUrl = COM_buildUrl($_CONF['site_url']
                                     . '/article.php?story=' . $A['sid']);
                 if (!empty($this->_query)) {
-                    $articleUrl .= (strpos($articleUrl,'?') ? '&amp;' : '?') .'query=' . urlencode($this->_query);
+                    $articleUrl .= (strpos($articleUrl, '?') ? '&' : '?')
+                                . 'query=' . urlencode($this->_query);
                 }
 
                 $author = htmlspecialchars($this->_displayName($A['username'],
