@@ -210,6 +210,7 @@ class downloader
                     'gif' => 'image/gif',
                     'jpg' => 'image/jpeg',
                     'jpeg' => 'image/jpeg',
+                    'png' => 'image/png',
                     'png' => 'image/x-png',
                     'mp3' => 'audio/mpeg',
                     'wav' => 'audio/wav',
