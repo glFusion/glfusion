@@ -118,7 +118,7 @@ function get_articleFeeds()
     $num = DB_numRows ($result);
 
     if ($num > 0) {
-        $options[] = array ('id' => '::all', 'name' => $LANG33[23]);
+        $options[] = array ('id' => '::all',       'name' => $LANG33[23]);
         $options[] = array ('id' => '::frontpage', 'name' => $LANG33[53]);
     }
 
@@ -190,7 +190,7 @@ function listfeeds()
 * Display the feed editor.
 *
 * @param    int      $fid    feed id (0 for new feeds)
-* @param    string   $type   type of feed, e.g. 'glfusion'
+* @param    string   $type   type of feed, e.g. 'article'
 * @return   string           HTML for the feed editor
 *
 */
