@@ -289,7 +289,7 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id
         DB_save($_TABLES['topics'],'tid, topic, imageurl, sortnum, limitnews, is_default, archive_flag, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon',"'$tid', '$topic', '$imageurl','$sortnum','$limitnews',$is_default,'$is_archive',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon");
 
         // update feed(s) and Older Stories block
-        COM_rdfUpToDateCheck ('glfusion', $tid);
+        COM_rdfUpToDateCheck ('article', $tid);
         COM_olderStuff ();
         CACHE_remove_instance('stmenu');
         $retval = COM_refresh ($_CONF['site_admin_url'] . '/topic.php?msg=13');
@@ -442,7 +442,7 @@ function deleteTopic ($tid)
     DB_delete ($_TABLES['topics'], 'tid', $tid);
 
     // update feed(s) and Older Stories block
-    COM_rdfUpToDateCheck ('glfusion');
+    COM_rdfUpToDateCheck ('article');
     COM_olderStuff ();
     CACHE_remove_instance('stmenu');
     return COM_refresh ($_CONF['site_admin_url'] . '/topic.php?msg=14');
