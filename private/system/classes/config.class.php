@@ -111,13 +111,20 @@ class config {
     {
         global $_TABLES;
 
+        $false_str = serialize(false);
+
         $sql = "SELECT name, value, group_name FROM {$_TABLES['conf_values']} WHERE (type <> 'subgroup') AND (type <> 'fieldset')";
         $result = DB_query($sql);
         while ($row = DB_fetchArray($result)) {
             if ($row[1] !== 'unset') {
                 if (!array_key_exists($row[2], $this->config_array) ||
                     !array_key_exists($row[0], $this->config_array[$row[2]])) {
-                    $this->config_array[$row[2]][$row[0]] = unserialize($row[1]);
+                    $value = @unserialize($row[1]);
+                    if (($value === false) && ($row[1] != $false_str)) {
+                        COM_errorLog("Unable to unserialize {$row[1]} for {$row[2]}:{$row[0]}");
+                    } else {
+                        $this->config_array[$row[2]][$row[0]] = $value;
+                    }
                 }
             }
         }
@@ -623,7 +630,7 @@ class config {
         } else {
             if ($allow_reset) {
                 $t->set_var('unset_link',
-                        "(<a href='#' onClick='unset(\"{$name}\");' title='"
+                        "(<a href='#' onclick='unset(\"{$name}\");' title='"
                         . $LANG_CONFIG['disable'] . "'>X</a>)");
             }
             if (($a = strrchr($name, '[')) !== FALSE) {
@@ -642,15 +649,15 @@ class config {
                 if ($group == 'Core') {
                     $descUrl = $baseUrl . '/docs/config.html#desc_' . $o;
                     $t->set_var('doc_url', $descUrl);
+//                    $t->set_var('doc1_link',
+//                            '(<a href="' . $descUrl . '" target="help">?</a>)');
                     $t->set_var('doc_link',
-                            '(<a href="' . $descUrl . '" target="help">?</a>)');
-             /*   }  else if ($group == 'forum') {
-                    $descUrl = $baseUrl . '/docs/forum.html#desc_' . $o;
+                        '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""></a>');
+                } else {
+                    $descUrl = $baseUrl . '/docs/' . $group . '.html#desc_' . $o;
                     $t->set_var('doc_url', $descUrl);
                     $t->set_var('doc_link',
-                            '(<a href="' . $descUrl . '" target="help">?</a>)');  */
-                } else {
-                    // TBD: link to description of plugin option
+                        '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""></a>');
                 }
             }
         }
@@ -789,7 +796,9 @@ class config {
         global $_CONF, $LANG_ADMIN, $LANG_CONFIG,
                $LANG_configsections, $LANG_configsubgroups;
 
-        $retval = COM_startBlock($LANG_CONFIG['sections'], '',
+        $retval = '';
+
+        $retval .= COM_startBlock($LANG_CONFIG['sections'], '',
                         COM_getBlockTemplate('configmanager_block', 'header'));
         $link_array = array();
 
@@ -858,7 +867,6 @@ class config {
         }
         $retval .= COM_endBlock(COM_getBlockTemplate('configmanager_block',
                                                      'footer'));
-
         return $retval;
     }
 
