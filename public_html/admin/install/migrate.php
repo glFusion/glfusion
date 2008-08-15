@@ -533,7 +533,8 @@ function INST_installEngine($install_type, $install_step)
                            $use_innodb = false;
                         }
                     }
-                    if (INST_doGeeklogDatabaseUpgrades($version, $use_innodb)) {
+                    list($rc,$errors) = INST_doGeeklogDatabaseUpgrades($version, $use_innodb);
+                    if ( $rc === true ) {
                         INST_checkPlugins();
                         $version = '1.0.1';
                         $req_string = 'index.php?mode=upgrade&step=3'
@@ -544,6 +545,7 @@ function INST_installEngine($install_type, $install_step)
                     } else {
                         $display .= '<h2>' . $LANG_INSTALL[78] . '</h2>
                             <p>' . $LANG_INSTALL[79] . '</p>' . LB;
+                        $display .= $errors;
                         $geeklogUpgradeFailed = 1;
                     }
                     break;
@@ -763,88 +765,6 @@ function INST_identifyGeeklogVersion ()
     return $version;
 }
 
-
-/**
- * Sets up the database tables
- *
- * @param   boolean $use_innodb     Whether to use InnoDB table support if using MySQL
- * @return  boolean                 True if successful
- *
- */
-function INST_createDatabaseStructures ($use_innodb = false)
-{
-    global $_CONF, $_TABLES, $_DB, $_DB_dbms, $_DB_host, $_DB_user, $_DB_pass;
-
-    $_DB->setDisplayError (true);
-
-    // Because the create table syntax can vary from dbms-to-dbms we are
-    // leaving that up to each database driver (e.g. mysql.class.php,
-    // postgresql.class.php, etc)
-
-    // Get DBMS-specific create table array and data array
-    require_once $_CONF['path'] . 'sql/' . $_DB_dbms . '_tableanddata.php';
-
-    $progress = '';
-
-    if (INST_checkTableExists ('access')) {
-        return false;
-    }
-
-    switch($_DB_dbms){
-        case 'mysql':
-
-            INST_updateDB($_SQL);
-            if ($use_innodb) {
-                DB_query ("INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('database_engine', 'InnoDB')");
-            }
-            break;
-        case 'mssql':
-            foreach ($_SQL as $sql) {
-                $_DB->dbQuery($sql, 0, 1);
-            }
-            break;
-    }
-
-    // Now insert mandatory data and a small subset of initial data
-    foreach ($_DATA as $data) {
-        $progress .= "executing " . $data . "<br />\n";
-
-        DB_query ($data);
-    }
-
-    return true;
-}
-
-
-/**
- * On a fresh install, set the Admin's account email and homepage
- *
- * @param   string  $site_mail  email address, e.g. the site email
- * @param   string  $site_url   the site's URL
- * @return  void
- *
- */
-function INST_personalizeAdminAccount($site_mail, $site_url)
-{
-    global $_TABLES, $_DB_dbms;
-
-    if (($_DB_dbms == 'mysql') || ($_DB_dbms == 'mssql')) {
-
-        // let's try and personalize the Admin account a bit ...
-
-        if (!empty($site_mail)) {
-            if (strpos($site_mail, 'example.com') === false) {
-                DB_query("UPDATE {$_TABLES['users']} SET email = '" . addslashes($site_mail) . "' WHERE uid = 2");
-            }
-        }
-        if (!empty($site_url)) {
-            if (strpos($site_url, 'example.com') === false) {
-                DB_query("UPDATE {$_TABLES['users']} SET homepage = '" . addslashes($site_url) . "' WHERE uid = 2");
-            }
-        }
-    }
-}
-
 /**
 * Derive site's default language from available information
 *
@@ -1011,7 +931,7 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
         case '1.2.5-1':
             // Get DMBS-specific update sql
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.2.5-1_to_1.3.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
 
             // OK, now we need to add all users except anonymous to the All Users group and Logged in users group
             // I can hard-code these group numbers because the group table was JUST created with these numbers
@@ -1038,20 +958,20 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
             break;
         case '1.3':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3_to_1.3.1.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             $current_gl_version = '1.3.1';
             $_SQL = '';
             break;
         case '1.3.1':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.1_to_1.3.2.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             $current_gl_version = '1.3.2-1';
             $_SQL = '';
             break;
         case '1.3.2':
         case '1.3.2-1':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.2-1_to_1.3.3.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             // Now we need to switch how user blocks are stored.  Right now we only store the blocks the
             // user wants.  This will switch it to store the ones they don't want which allows us to add
             // new blocks and ensure they are shown to the user.
@@ -1078,13 +998,13 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
             break;
         case '1.3.3':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.3_to_1.3.4.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             $current_gl_version = '1.3.4';
             $_SQL = '';
             break;
         case '1.3.4':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.4_to_1.3.5.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             $result = DB_query("SELECT ft_id FROM {$_TABLES['features']} WHERE ft_name = 'user.mail'");
             $row = DB_fetchArray($result);
             $mail_ft = $row['ft_id'];
@@ -1098,7 +1018,7 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
             break;
         case '1.3.5':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.5_to_1.3.6.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             if (!empty ($_DB_table_prefix)) {
                 DB_query ("RENAME TABLE staticpage TO {$_TABLES['staticpage']}");
             }
@@ -1126,7 +1046,7 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
             break;
         case '1.3.7':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.7_to_1.3.8.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
 
             // upgrade Static Pages plugin
             $spversion = get_SP_ver ();
@@ -1194,7 +1114,7 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
             break;
         case '1.3.8':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.8_to_1.3.9.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
 
             $pos = strrpos ($_CONF['rdf_file'], '/');
             $filename = substr ($_CONF['rdf_file'], $pos + 1);
@@ -1256,7 +1176,7 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
             break;
         case '1.3.9':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.9_to_1.3.10.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             commentsToPreorderTree();
 
             $result = DB_query ("SELECT sid,introtext,bodytext FROM {$_TABLES['stories']}");
@@ -1286,14 +1206,14 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
             break;
         case '1.3.10':
             require_once($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.10_to_1.3.11.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             $current_gl_version = '1.3.11';
             $_SQL = '';
             break;
 
         case '1.3.11':
             require_once ($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.3.11_to_1.4.0.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             upgrade_addFeature ();
             upgrade_uniqueGroupNames ();
 
@@ -1303,7 +1223,7 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
 
         case '1.4.0':
             require_once ($_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.4.0_to_1.4.1.php');
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
             upgrade_addSyndicationFeature ();
             upgrade_ensureLastScheduledRunFlag ();
             upgrade_plugins_141 ();
@@ -1314,7 +1234,7 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
 
         case '1.4.1':
             require_once $_CONF['path'] . 'sql/glupdates/' . $_DB_dbms . '_1.4.1_to_1.5.0.php';
-            INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL);
 
             upgrade_addWebservicesFeature();
 
@@ -1436,15 +1356,24 @@ function INST_updateDB($_SQL)
 {
     global $progress, $_DB, $_DB_dbms;
 
+    $_DB->setDisplayError (true);
+    $errors = '';
+    $rc = true;
+
     $_SQL = INST_checkInnodbUpgrade($_SQL);
     foreach ($_SQL as $sql) {
         $progress .= "executing " . $sql . "<br />\n";
         if ($_DB_dbms == 'mssql') {
             $_DB->dbQuery($sql, 0, 1);
         } else {
-            DB_query($sql);
+            DB_query($sql,1);
+            if ( DB_error() ) {
+                $errors .= DB_error() . "<br />\n";
+                $rc = false;
+            }
         }
     }
+    return array($rc,$errors);
 }
 
 /**
@@ -1741,7 +1670,7 @@ switch ($mode) {
                 // See whether the file/directory is located in the default place or in public_html
                 $dbconfig_path = file_exists($gl_path . $dbconfig_file)
                                     ? $gl_path . $dbconfig_file
-                                    : $gl_path . 'public_html' . $dbconfig_file;
+                                    : $gl_path . 'public_html/' . $dbconfig_file;
             }
 
 
