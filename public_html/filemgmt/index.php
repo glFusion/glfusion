@@ -41,8 +41,8 @@ include_once($_CONF['path_html']."filemgmt/include/xoopstree.php");
 include_once($_CONF['path_html']."filemgmt/include/textsanitizer.php");
 
 // Setup how many categories you want to show in the category row display
-$numCategoriesPerRow  = 2;
-$numSubCategories2Show = 5;
+$numCategoriesPerRow   = $_FM_CONF['numcategoriesperrow'];
+$numSubCategories2Show = $_FM_CONF['numsubcategories2show'];
 
 if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
 
