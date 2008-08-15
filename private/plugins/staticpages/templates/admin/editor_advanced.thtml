@@ -4,8 +4,8 @@
 </noscript>
 <script type="text/javascript">
     // Setup editor path for FCKeditor JS Functions
-    geeklogEditorBasePath = "{site_url}/fckeditor/" ;
-    geeklogStyleBasePath  = "{geeklogStyleBasePath}/";
+    glfusionEditorBasePath = "{site_url}/fckeditor/" ;
+    glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
 </script>
 <script type="text/javascript" src="{site_url}/javascript/staticpages_fckeditor.js"></script>
 
@@ -59,8 +59,8 @@
                     <span id="sel_toolbar" style="padding-left:15px;display:{show_adveditor};">{lang_toolbar}:&nbsp;
                       <select id="fckeditor_toolbar_selector" name="fckeditor_toolbar_selector" onchange="changeToolbar(this.value);">
                            <option value="editor-toolbar1">{toolbar1}</option>
-                           <option value="editor-toolbar2" selected="selected">{toolbar2}</option>
-                           <option value="editor-toolbar3">{toolbar3}</option>
+                           <option value="editor-toolbar2">{toolbar2}</option>
+                           <option value="editor-toolbar3" selected="selected">{toolbar3}</option>
                            <option value="Default">{toolbar5}</option>
                       </select>
                     </span>
