@@ -292,7 +292,9 @@ function forumNavbarMenu($current='') {
 //        $navmenu->add_menuitem($LANG_GF02['msg197'],"{$_CONF['site_url']}/forum/index.php?op=markallread");
         $navmenu->add_menuitem($LANG_GF01['USERPREFS'],"{$_CONF['site_url']}/forum/userprefs.php");
         $navmenu->add_menuitem($LANG_GF01['SUBSCRIPTIONS'],"{$_CONF['site_url']}/forum/notify.php");
+        $navmenu->add_menuitem($LANG_GF01['BOOKMARKS'],"{$_CONF['site_url']}/forum/index.php?op=bookmarks");
     }
+    $navmenu->add_menuitem($LANG_GF01['LASTX'],"{$_CONF['site_url']}/forum/index.php?op=lastx");
 //    $navmenu->add_menuitem($LANG_GF02['msg200'],"{$_CONF['site_url']}/forum/memberlist.php");
     $navmenu->add_menuitem($LANG_GF02['msg201'],"{$_CONF['site_url']}/forum/index.php?op=popular");
     if ($current != '') {
@@ -1024,4 +1026,83 @@ function gf_makeFilemgmtCatSelect($uid) {
     $mytree->setGroupUploadAccessFilter($_GROUPS);
     return $mytree->makeMySelBox('title', 'title','','','filemgmtcat');
 }
+
+function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
+{
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
+    global $CONF_FORUM;
+
+    $retval = '';
+
+    switch ($fieldname) {
+        case 'date':
+            $retval = strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
+            break;
+        case 'lastupdated':
+            $retval = strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
+            break;
+        case 'subject':
+            $testText        = gf_formatTextBlock($A['comment'],'text','text');
+            $testText        = strip_tags($testText);
+            $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+            $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $A['id'] . '" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';
+            break;
+        case 'username':
+            $photoico = '';
+            if (!empty ($A['photo'])) {
+                $photoico = "&nbsp;<img src=\"{$_CONF['layout_url']}/images/smallcamera."
+                          . $_IMAGE_TYPE . '" alt="{$LANG04[77]}"' . XHTML . '>';
+            } else {
+                $photoico = '';
+            }
+            $retval = COM_createLink($fieldvalue, $_CONF['site_url']
+                    . '/users.php?mode=profile&amp;uid=' .  $A['uid']) . $photoico;
+            break;
+        case 'lastlogin':
+            if ($fieldvalue < 1) {
+                // if the user never logged in, show the registration date
+                $regdate = strftime ($_CONF['shortdate'], strtotime($A['regdate']));
+                $retval = "({$LANG28[36]}, {$LANG28[53]} $regdate)";
+            } else {
+                $retval = strftime ($_CONF['shortdate'], $fieldvalue);
+            }
+            break;
+        case 'lastlogin_short':
+            if ($fieldvalue < 1) {
+                // if the user never logged in, show the registration date
+                $regdate = strftime ($_CONF['shortdate'], strtotime($A['regdate']));
+                $retval = "({$LANG28[36]})";
+            } else {
+                $retval = strftime ($_CONF['shortdate'], $fieldvalue);
+            }
+            break;
+        case 'online_days':
+            if ($fieldvalue < 0){
+                // users that never logged in, would have a negative online days
+                $retval = "N/A";
+            } else {
+                $retval = $fieldvalue;
+            }
+            break;
+        case 'phantom_date':
+        case 'offline_months':
+            $retval = COM_numberFormat(round($fieldvalue / 2592000));
+            break;
+        case 'online_hours':
+            $retval = COM_numberFormat(round($fieldvalue / 3600, 3));
+            break;
+        case 'regdate':
+            $retval = strftime ($_CONF['shortdate'], strtotime($fieldvalue));
+            break;
+        case $_TABLES['users'] . '.uid':
+            $retval = $A['uid'];
+            break;
+        default:
+            $retval = $fieldvalue;
+            break;
+    }
+
+    return $retval;
+}
+
 ?>
