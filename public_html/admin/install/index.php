@@ -568,6 +568,7 @@ function INST_installEngine($install_type, $install_step)
                             INST_pluginAutoInstall('filemgmt');
                             INST_pluginAutoInstall('forum');
                             INST_pluginAutoInstall('mediagallery');
+                            INST_pluginAutoInstall('commentfeeds');
 
                             // Setup nouveau as the default
                             $config->set('theme', 'nouveau');
@@ -624,6 +625,7 @@ function INST_installEngine($install_type, $install_step)
                         INST_pluginAutoUpgrade('filemgmt');
                         INST_pluginAutoUpgrade('forum');
                         INST_pluginAutoUpgrade('mediagallery');
+                        INST_pluginAutoUpgrade('commentfeeds');
 
                         CTL_clearCache();
 
@@ -1464,7 +1466,7 @@ switch ($mode) {
                 // See whether the file/directory is located in the default place or in public_html
                 $dbconfig_path = file_exists($gl_path . $dbconfig_file)
                                     ? $gl_path . $dbconfig_file
-                                    : $gl_path . 'public_html' . $dbconfig_file;
+                                    : $gl_path . 'public_html/' . $dbconfig_file;
             }
 
 
