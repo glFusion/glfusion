@@ -118,16 +118,20 @@ div.level1 {
     margin-left:3px;
 }
 div.level2 {
-    margin-left:23px;
+    margin-left:3px;
 }
 div.level3 {
-    margin-left:43px;
+    margin-left:3px;
 }
 div.level4 {
-    margin-left:63px;
+    margin-left:3px;
 }
 div.level5 {
-    margin-left:83px;
+    margin-left:3px;
+}
+
+.inline a {
+    text-decoration:none;
 }
 
 h1 a, h2 a,h3 a,h4 a,h5 a,a.nolink {
@@ -154,23 +158,23 @@ h1 {
 }
 h2 {
     font-size:150%;
-    margin-left:20px;
+    margin-left:0px;
 }
 h3 {
     font-size:140%;
-    margin-left:40px;
+    margin-left:0px;
     border-bottom:none;
     font-weight:bold;
 }
 h4 {
     font-size:120%;
-    margin-left:60px;
+    margin-left:0px;
     border-bottom:none;
     font-weight:bold;
 }
 h5 {
     font-size:100%;
-    margin-left:80px;
+    margin-left:0px;
     border-bottom:none;
     font-weight:bold;
 }
