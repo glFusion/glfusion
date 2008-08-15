@@ -249,6 +249,7 @@ function USER_sendActivationEmail ($username, $useremail)
 * @param    string  $passwd     password (optional, see above)
 * @param    string  $fullname   user's full name (optional)
 * @param    string  $homepage   user's home page (optional)
+* @param    boolean $batchimport set to true when called from importuser() in admin/users.php (optional)
 * @return   int                 new user's ID
 *
 */
@@ -330,7 +331,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
 
     // call custom registration function and plugins
     if ($_CONF['custom_registration'] && (function_exists ('CUSTOM_userCreate'))) {
-        CUSTOM_userCreate ($uid);
+        CUSTOM_userCreate ($uid,$batchimport);
     }
     if ( function_exists('CUSTOM_userCreateHook') ) {
         CUSTOM_userCreateHook($uid);
