@@ -376,8 +376,7 @@ else if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] ))
 }
 
 // Handle Who's Online block
-if( COM_isAnonUser() )
-{
+if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
     // The following code handles anonymous users so they show up properly
     DB_query( "DELETE FROM {$_TABLES['sessions']} WHERE remote_ip = '{$_SERVER['REMOTE_ADDR']}' AND uid = 1" );
 
@@ -718,7 +717,7 @@ function COM_renderMenu( &$header, $plugin_menu )
                 break;
 
             case 'prefs':
-                $url = $_CONF['site_url'] . '/usersettings.php?mode=edit';
+                $url = $_CONF['site_url'] . '/usersettings.php';
                 $label = $LANG01[48];
                 break;
 
@@ -855,7 +854,9 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         return '';
     }
     $headerCalled = 1;
-
+    if ( is_array($what) ) {
+        $theme_what = array();
+    }
     $theme_what         = $what;
     $theme_pagetitle    = $pagetitle;
     $theme_headercode   = $headercode;
@@ -1980,6 +1981,10 @@ function COM_errorLog( $logentry, $actionid = '' )
 
         $timestamp = strftime( '%c' );
 
+        if (!isset($_CONF['path_layout']) &&
+                (($actionid == 2) || empty($actionid))) {
+            $actionid = 1;
+        }
         if (!isset($_CONF['path_log']) && ($actionid != 2)) {
             $actionid = 3;
         }
@@ -2349,7 +2354,7 @@ function COM_userMenu( $help='', $title='' )
             next( $plugin_options );
         }
 
-        $url = $_CONF['site_url'] . '/usersettings.php?mode=edit';
+        $url = $_CONF['site_url'] . '/usersettings.php';
         $usermenu->set_var( 'option_label', $LANG01[48] );
         $usermenu->set_var( 'option_count', '' );
         $usermenu->set_var( 'option_url', $url );
@@ -4104,6 +4109,9 @@ function COM_emailUserTopics()
 {
     global $_CONF, $_TABLES, $LANG04, $LANG08, $LANG24;
 
+    if ($_CONF['emailstories'] == 0) {
+        return;
+    }
     $subject = strip_tags( $_CONF['site_name'] . $LANG08[30] . strftime( '%Y-%m-%d', time() ));
 
     $authors = array();
@@ -4119,7 +4127,7 @@ function COM_emailUserTopics()
     $lastrun = DB_getItem( $_TABLES['vars'], 'value', "name = 'lastemailedstories'" );
 
     // For each user, pull the stories they want and email it to them
-    for( $x = 1; $x <= $nrows; $x++ )
+    for( $x = 0; $x < $nrows; $x++ )
     {
         $U = DB_fetchArray( $users );
 
@@ -4142,7 +4150,7 @@ function COM_emailUserTopics()
         }
 
         $TIDS = array();
-        for( $i = 1; $i <= $trows; $i++ )
+        for( $i = 0; $i < $trows; $i++ )
         {
             $T = DB_fetchArray( $tresult );
             $TIDS[] = $T['tid'];
@@ -5852,6 +5860,7 @@ function COM_highlightQuery( $text, $query )
         if( !empty( $searchword ))
         {
             $searchword = preg_quote( str_replace( "'", "\'", $searchword ));
+            $searchword = str_replace('/', '\\/', $searchword);
             $text = preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"highlight\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
         }
     }
