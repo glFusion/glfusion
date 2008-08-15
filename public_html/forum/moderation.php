@@ -99,6 +99,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 } else {
                     DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=0 WHERE forum_id=$forum");
                 }
+                CACHE_remove_instance('forumcb');
             } else {
                 // Need to check for any attachments and delete if required
                 $q1 = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE id=$msgid");
@@ -118,6 +119,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 if ($last_topic > 0) {
                     DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=$last_topic WHERE forum_id=$forum");
                 }
+                CACHE_remove_instance('forumcb');
             }
 
             if ($topicparent == 0) {
@@ -132,6 +134,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                     $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$lastrecid");
                     DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$lastrecid, lastupdated=$topicdatecreated WHERE id={$topicparent}");
                 }
+                CACHE_remove_instance('forumcb');
             }
 
             // Remove any lastviewed records in the log so that the new updated topic indicator will appear
@@ -144,6 +147,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$msgpid";
                 forum_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum);
             }
+            CACHE_remove_instance('forumcb');
             gf_siteFooter();
             exit();
         }
@@ -252,6 +256,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$moveid";
                 forum_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163']);
             }
+            CACHE_remove_instance('forumcb');
             gf_siteFooter();
             exit();
 
