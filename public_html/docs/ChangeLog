@@ -2,6 +2,28 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Fixed error in RSS topic icon (needed to be sprintf).
+- Made the namespace URLs constants for web services - no changes in
+  functionality
+- Tweaked online documentation style to no longer indent each header level.
+- Updated help documents to reference glfusion.org
+- Forum Plugin - Added bookmarks tab and last x tab.
+- Site Tailor - Fix problem that adds http:// to empty URL string. Now check
+  to ensure there is something there first.
+- Media Gallery Plugin - Fixed issue where saving the configuration would
+  cause an error due to openbase_dir restrictions.
+- Calendar Plugin - Fixed date comparison ("End date is before start date")
+- Changed syndication type to 'article' from 'glfusion'
+- Added commentfeeds plugin to defaults
+- New pop-up help window in configuration
+
+- Moved Forum configuration to online configuration.
+- Moved FileMgmt configuration to online configuration.
+- Moved CAPTCHA configuration to online configuration.
+- Added clear cache for Forum centerblock on moderation functions.
+
+- Fixed missing Configuration entry in Site Tailor menu (Admin Menu generation)
+
 - Made ie6Warning javascript more neutral so it can be used by other themes (Eric)
 		public_html/layout/nouveau/css/ie6.css
 		public_html/layout/nouveau/htmlheader.thtml
