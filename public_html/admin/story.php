@@ -194,8 +194,8 @@ function liststories()
         $_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE
     );
     $text_arr = array(
-        'has_extras'   => true,
-        'form_url' => $_CONF['site_admin_url'] . "/story.php"
+        'has_extras' => true,
+        'form_url'   => $_CONF['site_admin_url'] . '/story.php'
     );
 
     $sql = "SELECT {$_TABLES['stories']}.*, {$_TABLES['users']}.username, {$_TABLES['users']}.fullname, "
@@ -708,7 +708,7 @@ function submitstory($type='')
      * Do it HERE on $args */
 
     PLG_invokeService('story', 'submit', $args, $output, $svc_msg);
-//    CACHE_remove_instance('whatsnew');
+
     echo $output;
 }
 
@@ -785,7 +785,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     $display .= storyeditor (COM_applyFilter ($_GET['id']), $mode);
     $display .= COM_siteFooter();
     echo $display;
-} else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save']) /*&& SEC_checkToken() */) {
+} else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save'])) {
     if ( !SEC_checkToken() ) {
         $editor = '';
         if (!empty ($_GET['editor'])) {
@@ -797,7 +797,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
         $display .= COM_siteFooter();
         echo $display;
     } else {
-        submitstory ();
+        submitstory();
     }
 } else { // 'cancel' or no mode at all
     $type = '';
