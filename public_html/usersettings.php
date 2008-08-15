@@ -909,8 +909,11 @@ function saveuser($A)
                     function_exists ('CUSTOM_userCheck')) {
             $ret = CUSTOM_userCheck ($A['username'], $A['email']);
             // Need a numeric return for the default message hander - if not numeric use default message
-            if (!is_numeric($ret)) $ret = 97;
-            return COM_refresh ("{$_CONF['site_url']}/usersettings.php?mode=edit&amp;msg={$ret}");
+            // - if not numeric use default message
+            if (!is_numeric($ret)) {
+                $ret = 97;
+            }
+            return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
         }
     }
 
@@ -945,7 +948,7 @@ function saveuser($A)
                            "uid", $_USER['uid']);
             } else {
                 return COM_refresh ($_CONF['site_url']
-                        . '/usersettings.php?mode=edit&amp;msg=51');
+                        . '/usersettings.php?msg=51');
             }
         }
     }
@@ -966,10 +969,10 @@ function saveuser($A)
                       $_CONF['cookiesecure']);
         } elseif (SEC_encryptPassword($A['old_passwd']) != $_USER['passwd']) {
             return COM_refresh ($_CONF['site_url']
-                                . '/usersettings.php?mode=edit&amp;msg=68');
+                                . '/usersettings.php?msg=68');
         } elseif ($A['passwd'] != $A['passwd_conf']) {
             return COM_refresh ($_CONF['site_url']
-                                . '/usersettings.php?mode=edit&amp;msg=67');
+                                . '/usersettings.php?msg=67');
         }
     }
 
@@ -996,13 +999,13 @@ function saveuser($A)
 
     if (!COM_isEmail ($A['email'])) {
         return COM_refresh ($_CONF['site_url']
-                . '/usersettings.php?mode=edit&amp;msg=52');
+                . '/usersettings.php?msg=52');
     } else if ($A['email'] !== $A['email_conf']) {
         return COM_refresh ($_CONF['site_url']
-                . '/usersettings.php?mode=edit&amp;msg=78');
+                . '/usersettings.php?msg=78');
     } else if (emailAddressExists ($A['email'], $_USER['uid'])) {
         return COM_refresh ($_CONF['site_url']
-                . '/usersettings.php?mode=edit&amp;msg=56');
+                . '/usersettings.php?msg=56');
     } else {
         if ($_US_VERBOSE) {
             COM_errorLog('cooktime = ' . $A['cooktime'],1);
@@ -1526,7 +1529,7 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     case 'plugin':
         PLG_profileExtrasSave ($_POST['plugin']);
         $display = COM_refresh ($_CONF['site_url']
-                                . '/usersettings.php?mode=edit&amp;msg=5');
+                                . '/usersettings.php?msg=5');
         break;
 
     default: // also if $mode == 'edit', 'preferences', or 'comments'
