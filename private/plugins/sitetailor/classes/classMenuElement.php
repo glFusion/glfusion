@@ -248,7 +248,7 @@ class mbElement {
 
     function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$selected='' ) {
         global $_SP_CONF,$_USER, $_TABLES, $LANG01, $_CONF,$ST_menuElements, $meLevel;
-        global $_DB_dbms,$_GROUPS;
+        global $_DB_dbms,$_GROUPS, $config;
 
         $retval = '';
         $menu = '';
@@ -546,6 +546,11 @@ class mbElement {
                                     $url = $_CONF['site_admin_url'] . '/plugins.php';
                                     $label = $LANG01[77] . ' (' . COM_numberFormat( DB_count( $_TABLES['plugins'] )) . ')';
                                     $link_array[$LANG01[77]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                }
+                                if (SEC_inGroup('Root')) {
+                                    $url = $_CONF['site_admin_url'] . '/configuration.php';
+                                    $label = $LANG01[129] . ' (' . COM_numberFormat(count($config->_get_groups())) . ')';
+                                    $link_array[$LANG01[129]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
 
                                 // This will show the admin options for all installed plugins (if any)
