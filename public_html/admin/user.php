@@ -1068,9 +1068,9 @@ function importusers()
                                 addslashes ($emailAddr));
 
             if (($ucount == 0) && ($ecount == 0)) {
-                // user doesn't already exist
+                // user doesn't already exist - pass in optional true for $batchimport parm
                 $uid = USER_createAccount ($userName, $emailAddr, '',
-                                           $fullName);
+                                           $fullName,'','','',true);
 
                 $result = USER_createAndSendPassword ($userName, $emailAddr, $uid);
 
