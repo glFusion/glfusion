@@ -1,31 +1,33 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | checks the configuration and environment for errors.                      |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2005-2008 by the following authors:                         |
-// |                                                                           |
-// | Mark R. Evans              - mark@gllabs.org                              |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | envcheck.php                                                             |
+// |                                                                          |
+// | Post configuration checks to validate environemnt                        |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
 if (strpos ($_SERVER['PHP_SELF'], 'envcheck.php') !== false)
@@ -91,7 +93,7 @@ function MG_checkEnvironment( ) {
                     $binary = "/convert";
                 }
                 clearstatcache();
-                if (! file_exists( $_MG_CONF['graphicspackage_path'] . $binary ) ) {
+                if (! @file_exists( $_MG_CONF['graphicspackage_path'] . $binary ) ) {
                     $T->set_var(array(
                         'config_item'   =>  'ImageMagick Programs',
                         'status'        =>  '<font color="red">' .  $LANG_MG01['not_found'] . '</font>'
@@ -111,7 +113,7 @@ function MG_checkEnvironment( ) {
                     $binary = "/jpegtopnm";
                 }
                 clearstatcache();
-                if (! file_exists( $_MG_CONF['graphicspackage_path'] . $binary ) ) {
+                if (! @file_exists( $_MG_CONF['graphicspackage_path'] . $binary ) ) {
                     $T->set_var(array(
                         'config_item'   =>  'NetPBM Programs',
                         'status'        =>  '<font color="red">' . $LANG_MG01['not_found'] . '</font>'
@@ -155,7 +157,7 @@ function MG_checkEnvironment( ) {
                 $binary = "/jhead";
             }
             clearstatcache();
-            if (! file_exists( $_MG_CONF['jhead_path'] . $binary ) ) {
+            if (! @file_exists( $_MG_CONF['jhead_path'] . $binary ) ) {
                 $T->set_var(array(
                     'config_item'   =>  'jhead Program',
                     'status'        =>  '<font color="red">' .  $LANG_MG01['not_found'] . '</font>'
@@ -176,7 +178,7 @@ function MG_checkEnvironment( ) {
                 $binary = "/jpegtran";
             }
             clearstatcache();
-            if (! file_exists( $_MG_CONF['jpegtran_path'] . $binary ) ) {
+            if (! @file_exists( $_MG_CONF['jpegtran_path'] . $binary ) ) {
                 $T->set_var(array(
                     'config_item'   =>  'jpegtran Program',
                     'status'        =>  '<font color="red">' .  $LANG_MG01['not_found'] . '</font>'
@@ -196,7 +198,7 @@ function MG_checkEnvironment( ) {
                 $binary = "/ffmpeg";
             }
             clearstatcache();
-            if (! file_exists( $_MG_CONF['ffmpeg_path'] . $binary ) ) {
+            if (! @file_exists( $_MG_CONF['ffmpeg_path'] . $binary ) ) {
                 $T->set_var(array(
                     'config_item'   =>  'ffmpeg Program',
                     'status'        =>  '<font color="red">' .  $LANG_MG01['not_found'] . '</font>'
@@ -217,7 +219,7 @@ function MG_checkEnvironment( ) {
                 $binary = "/unzip";
             }
             clearstatcache();
-            if (! file_exists( $_MG_CONF['zip_path'] . $binary ) ) {
+            if (! @file_exists( $_MG_CONF['zip_path'] . $binary ) ) {
                 $T->set_var(array(
                     'config_item'   =>  'unzip Program',
                     'status'        =>  '<font color="red">' .  $LANG_MG01['not_found'] . '</font>'
