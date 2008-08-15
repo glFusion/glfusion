@@ -153,6 +153,8 @@ $LANG_confignames['filemgmt'] = array(
     'whatsnewperioddays'    => 'What\'s New Days',
     'whatsnewtitlelength'   => 'What\'s New Title Length',
     'showwhatsnewcomments'  => 'Show Comment in What\'s New Block?',
+    'numcategoriesperrow'   => 'Categories per row',
+    'numsubcategories2show' => 'Sub Categories per row',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Main Settings'

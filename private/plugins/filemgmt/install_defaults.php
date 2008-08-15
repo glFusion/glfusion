@@ -72,6 +72,9 @@ $_FM_DEFAULT['WhatsNewPeriodDays']  = 14;
 $_FM_DEFAULT['WhatsNewTitleLength'] = 20;
 $_FM_DEFAULT['showWhatsNewComments']= true;
 
+$_FM_DEFAULT['numCategoriesPerRow']     = 2;
+$_FM_DEFAULT['numSubCategories2Show']   = 5;
+
 
 /**
 * the filemgmt plugin's config array
@@ -142,6 +145,10 @@ function plugin_initconfig_filemgmt()
                 0, 0, 0, 80, true, 'filemgmt');
         $c->add('showwhatsnewcomments', $_FM_DEFAULT['showWhatsNewComments'],'select',
                 0, 0, 0, 90, true, 'filemgmt');
+        $c->add('numcategoriesperrow', $_FM_DEFAULT['numCategoriesPerRow'],'text',
+                0, 0, 0, 100, true, 'filemgmt');
+        $c->add('numsubcategories2show', $_FM_DEFAULT['numSubCategories2Show'],'text',
+                0, 0, 0, 110, true, 'filemgmt');
 
         $c->add('fm_access', NULL, 'fieldset', 0, 1, NULL, 0, true,
                 'filemgmt');
