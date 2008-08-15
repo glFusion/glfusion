@@ -329,6 +329,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         {
             $article->set_var( 'story_introtext', $introtext );
             $article->set_var( 'story_text_no_br', $introtext );
+        $article->set_var( 'story_introtext_only', $introtext );
 
             if( !empty( $bodytext ))
             {
@@ -511,7 +512,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 for ($i = 0; $i < $feeds; $i++) {
                     list($filename, $title) = DB_fetchArray($result);
                     $feedUrl = SYND_getFeedUrl($filename);
-                    $feedTitle = $LANG11[6] . $title;
+                    $feedTitle = sprintf($LANG11[6],$title);
                 }
                 if ( $feeds > 0 ) {
                     $feedicon = '<img src="'. $_CONF['layout_url'] . '/images/rss_small.'
