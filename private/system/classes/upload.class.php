@@ -261,24 +261,24 @@ class upload
         if (sizeof($mimeTypes) == 0) {
             $this->_availableMimeTypes =
             array(
-                'application/x-gzip-compressed'     => '.tar.gz,.tgz',
-                'application/x-zip-compressed'         => '.zip',
-                'application/x-tar'                    => '.tar',
+                'application/x-gzip-compressed'     => '.tar.gz,.tgz,.gz',
+                'application/x-zip-compressed'      => '.zip',
+                'application/x-tar'                 => '.tar',
                 'text/plain'                        => '.phps,.txt,.inc',
-                'text/html'                            => '.html,.htm',
+                'text/html'                         => '.html,.htm',
                 'image/bmp'                         => '.bmp,.ico',
                 'image/gif'                         => '.gif',
-                'image/pjpeg'                        => '.jpg,.jpeg',
+                'image/pjpeg'                       => '.jpg,.jpeg',
                 'image/jpeg'                        => '.jpg,.jpeg',
-                'image/png'                            => '.png',
-                'image/x-png'                        => '.png',
+                'image/png'                         => '.png',
+                'image/x-png'                       => '.png',
                 'audio/mpeg'                        => '.mp3',
-                'audio/wav'                            => '.wav',
-                'application/pdf'                    => '.pdf',
+                'audio/wav'                         => '.wav',
+                'application/pdf'                   => '.pdf',
                 'application/x-shockwave-flash'     => '.swf',
                 'application/msword'                => '.doc',
-                'application/vnd.ms-excel'            => '.xls',
-                'application/octet-stream'            => '.fla,.psd'
+                'application/vnd.ms-excel'          => '.xls',
+                'application/octet-stream'          => '.fla,.psd'
             );
         } else {
             $this->_availableMimeTypes = $mimeTypes;
