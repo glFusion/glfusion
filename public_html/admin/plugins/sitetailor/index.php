@@ -335,8 +335,10 @@ function ST_saveNewMenuElement ( ) {
             break;
         case 6 :
             $E['element_subtype'] = COM_applyFilter($_POST['menuurl']);
-            if(strpos($E['element_subtype'], "http") === false && strpos($E['element_subtype'],"%site") === false) {
-                $E['element_subtype'] = 'http://' . $E['element_subtype'];
+            if ( trim($E['element_subtype']) != '' ) {
+                if(strpos($E['element_subtype'], "http") !== 0 && strpos($E['element_subtype'],"%site") === false) {
+                    $E['element_subtype'] = 'http://' . $E['element_subtype'];
+                }
             }
             break;
         case 7 :
@@ -352,8 +354,10 @@ function ST_saveNewMenuElement ( ) {
 
     $E['element_active']    = COM_applyFilter($_POST['menuactive'],true);
     $E['element_url']       = trim(COM_applyFilter($_POST['menuurl']));
-    if ( strpos($E['element_url'],"http") === false && strpos($E['element_url'],"%site") === false) {
-        $E['element_url'] = 'http://' . $E['element_url'];
+    if ( trim($E['element_url']) != '' ) {
+        if ( strpos($E['element_url'],"http") !== 0 && strpos($E['element_url'],"%site") === false) {
+            $E['element_url'] = 'http://' . $E['element_url'];
+        }
     }
     $E['group_id']          = COM_applyFilter($_POST['group'],true);
 
@@ -545,7 +549,7 @@ function ST_saveEditMenuElement ( ) {
             break;
         case 6 :
             $subtype = COM_applyFilter($_POST['menuurl']);
-            if ( strpos($subtype,"http") === false && strpos($subtype,"%site") === false) {
+            if ( strpos($subtype,"http") !== 0 && strpos($subtype,"%site") === false) {
                 $subtype = 'http://' . $subtype;
             }
             break;
@@ -558,7 +562,7 @@ function ST_saveEditMenuElement ( ) {
     }
     $active     = COM_applyFilter($_POST['menuactive'],true);
     $url        = trim(addslashes(COM_applyFilter($_POST['menuurl'])));
-    if ( strpos($url,"http") === false && strpos($url,"%site") === false) {
+    if ( strpos($url,"http") !== 0 && strpos($url,"%site") === false) {
         $url = 'http://' . $url;
     }
     $group_id   = COM_applyFilter($_POST['group'],true);
