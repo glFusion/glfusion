@@ -1,9 +1,0 @@
-<!-- start subscribe_forum.thtml -->
-
-<a href="{subscribelink}">{LANG_subscribe}</a>
-<!--   Alternative layout to use Images -->
-<!--  
-<a href="{subscribelink}">{subscribelinkimg}</a>  
--->
-
-<!-- end subscribe_forum.thtml -->

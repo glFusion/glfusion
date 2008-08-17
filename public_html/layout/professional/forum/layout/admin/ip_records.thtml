@@ -1,6 +1,0 @@
-<!-- start ip_records.thtml -->
-<TR class="pluginRow{csscode}">
-    <TD style="padding:5px;">{ip}</TD>
-    <TD style="padding:5px;" nowrap>[&nbsp;<A HREF="{phpself}?op=unban&ip={ip}">{unban}</A>&nbsp;]</TD>
-</TR>
-<!-- end ip_records.thtml -->

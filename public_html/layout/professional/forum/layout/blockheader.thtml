@@ -1,9 +1,0 @@
-<!-- start blockheader.thtml -->
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-        <td height="22"  style="padding-left:5px;vertical-align:middle" class="pluginTitle">{block_title}</td>
-    </tr>
-    <tr>
-        <td width="100%" class="pluginTitle alignleft">
-            <table border="1" cellpadding="0" cellspacing="0" width="100%" class="plugin">
-<!-- end blockheader.thtml -->

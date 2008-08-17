@@ -1,6 +1,0 @@
-<div style="padding-left: {indent}px">
-  <ul style="margin: 0; padding: 0"><li>
-    <a href="{site_url}/comment.php?mode=display&amp;format=threaded&amp;order={order}&amp;pid={pid}">{title}</a>
-    - {lang_authoredby} {start_author_anchortag}{author}{end_author_anchortag} {lang_on} {date}
-  </li></ul>
-</div>
