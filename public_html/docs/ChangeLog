@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Updated topic image to better match default header. (Eric)
+- Removed the Professional theme. (Eric)
 - Fixed error in RSS topic icon (needed to be sprintf). (Mark)
 - Made the namespace URLs constants for web services - no changes in
   functionality. (Mark)
