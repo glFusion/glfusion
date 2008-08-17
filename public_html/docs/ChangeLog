@@ -2,60 +2,45 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
-- Fixed error in RSS topic icon (needed to be sprintf).
+- Fixed error in RSS topic icon (needed to be sprintf). (Mark)
 - Made the namespace URLs constants for web services - no changes in
-  functionality
-- Tweaked online documentation style to no longer indent each header level.
-- Updated help documents to reference glfusion.org
-- Forum Plugin - Added bookmarks tab and last x tab.
+  functionality. (Mark)
+- Tweaked online documentation style to no longer indent each header level. (Mark)
+- Updated help documents to reference glfusion.org (Mark)
+- Forum Plugin - Added bookmarks tab and last x tab. (Mark)
 - Site Tailor - Fix problem that adds http:// to empty URL string. Now check
-  to ensure there is something there first.
+  to ensure there is something there first. (Mark)
 - Media Gallery Plugin - Fixed issue where saving the configuration would
-  cause an error due to openbase_dir restrictions.
-- Calendar Plugin - Fixed date comparison ("End date is before start date")
-- Changed syndication type to 'article' from 'glfusion'
-- Added commentfeeds plugin to defaults
-- New pop-up help window in configuration
-
-- Moved Forum configuration to online configuration.
-- Moved FileMgmt configuration to online configuration.
-- Moved CAPTCHA configuration to online configuration.
-- Added clear cache for Forum centerblock on moderation functions.
-
-- Fixed missing Configuration entry in Site Tailor menu (Admin Menu generation)
-
+  cause an error due to openbase_dir restrictions. (Mark)
+- Calendar Plugin - Fixed date comparison ("End date is before start date") (Mark)
+- Changed syndication type to 'article' from 'glfusion' (Mark)
+- Added commentfeeds plugin to defaults (Mark)
+- New pop-up help window in configuration (Mark)
+- Moved Forum configuration to online configuration. (Mark)
+- Moved FileMgmt configuration to online configuration. (Mark)
+- Moved CAPTCHA configuration to online configuration. (Mark)
+- Added clear cache for Forum centerblock on moderation functions. (Mark)
+- Fixed missing Configuration entry in Site Tailor menu (Admin Menu generation) (Mark)
 - Made ie6Warning javascript more neutral so it can be used by other themes (Eric)
-		public_html/layout/nouveau/css/ie6.css
-		public_html/layout/nouveau/htmlheader.thtml
-		public_html/layout/nouveau/images/ie6_close.png
-		public_html/layout/nouveau/images/ie6_warning.png
-		public_html/layout/nouveau/js/gl_mooie6warning.js
-
 - Added MooTools sameheight javascript to extend bg of 3 column dynamic div layouts (Eric)
-		public_html/layout/nouveau/js/gl_moosameheight.js
-		public_html/layout/nouveau/header.thtml
-		public_html/layout/nouveau/htmlheader.thtml
-		public_html/layout/nouveau/leftblocks.thtml
-		public_html/layout/nouveau/rightblocks.thtml
-
-- Consolidated all MooTools libraries - now part of core. Moved
-  to public_html/javascript/ directory.
+- Consolidated all MooTools libraries - now part of core. Moved to public_html/javascript/
+  directory. (Mark)
 - New theme API themename_headerVars(&$template). Allows a theme
-  to set header variables.
-- New install / upgrade system - allows migration from Geeklog
-- Added new GVERSION define
-- Fix for date formatting in RSS fields
-- Renamed the syndication feed type "glfusion" to "article"
+  to set header variables. (Mark)
+- New install / upgrade system - allows migration from Geeklog (Mark)
+- Added new GVERSION define (Mark)
+- Fix for date formatting in RSS fields (Mark)
+- Renamed the syndication feed type "glfusion" to "article" (Mark)
 - New option "All Frontpage Stories" for article feeds: skip stories that have
-  the "Show only in topic" option set
-- Better support for plugin messages
-- Webservices tweaks to improve support for more clients.
-- Ensure name and email are properly populated on comment listings.
+  the "Show only in topic" option set (Mark)
+- Better support for plugin messages (Mark)
+- Webservices tweaks to improve support for more clients. (Mark)
+- Ensure name and email are properly populated on comment listings. (Mark)
 - Moved CAPTCHA, Forum, and FileMgmt configuration to the core configuration
-  system.
-- Updated default header logo
-- Implemented glFusion CSS layout driven header / footer functions.
-- Bumped version number to 1.1.0svn
+  system. (Mark)
+- Updated default header logo (Mark)
+- Implemented glFusion CSS layout driven header / footer functions. (Mark)
+- Bumped version number to 1.1.0svn (Mark)
 
 v1.0.1
 ------
