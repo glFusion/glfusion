@@ -57,7 +57,7 @@ function gf_check4files($id,$tempfile=false) {
         }
 
         if ( gf_uploadfile($filename,$uploadfile,$CONF_FORUM['allowablefiletypes']) ) {
-            if (array_key_exists($uploadfile['type'],$CONF_FORUM['inlineimageypes']) AND function_exists('MG_resizeImage')) {
+            if (array_key_exists($uploadfile['type'],$CONF_FORUM['inlineimageypes']) AND function_exists('IMG_resizeImage')) {
                 if ($_POST['chk_usefilemgmt'] == 1) {
                     $srcImage = "{$filemgmt_FileStore}{$filename}";
                     $destImage = "{$CONF_FORUM['uploadpath']}/tn/{$filename}";
@@ -66,7 +66,7 @@ function gf_check4files($id,$tempfile=false) {
                     $destImage = "{$CONF_FORUM['uploadpath']}/tn/{$uploadfilename}.{$ext}";
                 }
 
-                $ret = MG_resizeImage($srcImage,$destImage,$CONF_FORUM['inlineimage_height'],$CONF_FORUM['inlineimage_width']);
+                $ret = IMG_resizeImage($srcImage,$destImage,$CONF_FORUM['inlineimage_height'],$CONF_FORUM['inlineimage_width']);
             }
 
             // Store both the created filename and the real file source filename
@@ -119,11 +119,13 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes) {
         $upload->setPath($CONF_FORUM['uploadpath']);
     }
     $upload->setLogging(true);
-    $upload->setAutomaticResize(false);
+//    $upload->setAutomaticResize(false);
     $upload->setAllowedMimeTypes($allowablefiletypes);
     // Set max dimensions as well in case user is uploading a full size image
     $upload->setMaxDimensions ($CONF_FORUM['max_uploadimage_width'], $CONF_FORUM['max_uploadimage_height']);
     $upload->setMaxFileSize($CONF_FORUM['max_uploadfile_size']);
+$upload->setMaxFileSize(100000000);
+    $upload->setAutomaticResize(true);
 
     if (strlen($upload_file['name']) > 0) {
         $upload->setFileNames($filename);
@@ -135,7 +137,7 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes) {
         if (!$upload->_fileSizeOk()) {
             $upload->_addError('File, ' . $upload->_currentFile['name'] . ', is bigger than the ' . $upload->_maxFileSize . ' byte limit');
         }
-
+COM_errorLog($upload->_currentFile['type']);
         // If all systems check, do the upload
         if ($upload->checkMimeType() AND $upload->_imageSizeOK() AND !$upload->areErrors()) {
             if ($upload->_copyFile()) {
