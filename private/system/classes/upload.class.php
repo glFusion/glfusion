@@ -64,6 +64,10 @@ class upload
     /**
     * @access private
     */
+    var $_fieldName = '';
+    /**
+    * @access private
+    */
     var $_availableMimeTypes = array();   // Array
     /**
     * @access private
@@ -109,6 +113,10 @@ class upload
     * @access private
     */
     var $_autoResize = false;             // boolean
+    /**
+    * @access private
+    */
+    var $_allowAnyType = false;           // boolean
     /**
     * @access private
     */
@@ -354,6 +362,10 @@ class upload
             $this->_addDebugMsg('Max allowed height = ' . $this->_maxImageHeight . ', Image height = ' . $imageInfo['height']);
         }
 
+        if ( $this->_maxImageWidth == 0 && $this->maxImageHeight == 0 ) {
+            return $sizeOK;
+        }
+
         // If user set _autoResize then ignore these settings and try to resize on upload
         if (($doResizeCheck AND !($this->_autoResize)) OR (!($doResizeCheck))) {
             if ($imageInfo['width'] > $this->_maxImageWidth) {
@@ -387,7 +399,7 @@ class upload
     */
     function _getImageDimensions()
     {
-        $dimensions = GetImageSize($this->_currentFile['tmp_name']);
+        $dimensions = @getimagesize($this->_currentFile['tmp_name']);
         if ($this->_debug) {
             $this->_addDebugMsg('in _getImageDimensions I got a width of ' . $dimensions[0] . ', and a height of ' . $dimensions[1]);
         }
@@ -529,173 +541,10 @@ class upload
                                                   $imageInfo['height']);
             $newwidth = (int) ($imageInfo['width'] * $sizefactor);
             $newheight = (int) ($imageInfo['height'] * $sizefactor);
-            $this->_addDebugMsg ('Going to resize image to ' . $newwidth . 'x'
-                                 . $newheight . ' using ' . $this->_imageLib);
-
-            if ($this->_imageLib == 'imagemagick') {
-                $newsize = $newwidth . 'x' . $newheight;
-                $cmd = $this->_pathToMogrify . ' -resize '. $newsize . ' "' . $this->_fileUploadDirectory . '/' . $this->_getDestinationName() . '" 2>&1';
-                $this->_addDebugMsg('Attempting to resize with this command (imagemagick): ' . $cmd);
-
-                $filename = $this->_fileUploadDirectory . '/'
-                            . $this->_getDestinationName ();
-                if (!$this->_keepOriginalFile ($filename)) {
-                    exit;
-                }
-
-                exec($cmd, $mogrify_output, $retval);
-
-            } elseif ($this->_imageLib == 'netpbm') {
-
-                $cmd = $this->_pathToNetPBM;
-                $filename = $this->_fileUploadDirectory . '/' . $this->_getDestinationName();
-                $cmd_end = " '" . $filename . "' | " . $this->_pathToNetPBM . 'pnmscale -xsize=' . $newwidth . ' -ysize=' . $newheight . ' | ' . $this->_pathToNetPBM;
-                // convert to pnm, resize, convert back
-                if (eregi ('\.png', $filename)) {
-                    $tmpfile = $this->_fileUploadDirectory . '/tmp.png';
-                    $cmd .= 'pngtopnm ' . $cmd_end . 'pnmtopng > ' . $tmpfile;
-                } else if (eregi ('\.(jpg|jpeg)', $filename)) {
-                    $tmpfile = $this->_fileUploadDirectory . '/tmp.jpg';
-                    $cmd .= 'jpegtopnm ' . $cmd_end . 'pnmtojpeg > ' . $tmpfile;
-                }  else if (eregi ('\.gif', $filename)) {
-                    $tmpfile = $this->_fileUploadDirectory . '/tmp.gif';
-                    $cmd .= 'giftopnm ' . $cmd_end . 'ppmquant 256 | '
-                         . $this->_pathToNetPBM . 'ppmtogif > ' . $tmpfile;
-                } else {
-                    $this->_addError ("Image format of file $filename is not supported.");
-                    $this->printErrors ();
-                    exit;
-                }
-                $this->_addDebugMsg('Attempting to resize with this command (netpbm): ' . $cmd);
-                exec($cmd, $netpbm_output, $retval);
-
-                if (!$this->_keepOriginalFile ($filename)) {
-                    exit;
-                }
-
-                // Move tmp file to actual file
-                if (!copy($tmpfile,$filename)) {
-                    $this->_addError("Couldn't copy $tmpfile to $filename.  You'll need remove both files");
-                    $this->printErrors();
-                    exit;
-                } else {
-                    // resize with netpbm worked, now remove tmpfile
-                    if (!unlink($tmpfile)) {
-                        $this->_addError("Couldn't delete $tmpfile.  You'll need to remove it manually");
-                        $this->printErrors();
-                        exit;
-                    }
-                }
-
-            } elseif ($this->_imageLib == 'gdlib') {
-
-                $filename = $this->_fileUploadDirectory . '/'
-                          . $this->_getDestinationName();
-
-                if (!$this->_keepOriginalFile ($filename)) {
-                    exit;
-                }
-
-                if (($this->_currentFile['type'] == 'image/png') OR
-                    ($this->_currentFile['type'] == 'image/x-png')) {
-                    if (!function_exists ('imagecreatefrompng')) {
-                        $this->_addError ('Sorry, this version of the GD library does not support PNG images.');
-                        $this->printErrors ();
-                        exit;
-                    }
-                    if (!$image_source = imagecreatefrompng ($filename)) {
-                        $this->_addError ('Could not create image from PNG: '
-                                          . $filename);
-                        $this->printErrors ();
-                        exit;
-                    }
-                } elseif (($this->_currentFile['type'] == 'image/jpeg') OR
-                          ($this->_currentFile['type'] == 'image/pjpeg')) {
-                    if (!function_exists ('imagecreatefromjpeg')) {
-                        $this->_addError ('Sorry, this version of the GD library does not support JPEG images.');
-                        $this->printErrors ();
-                        exit;
-                    }
-                    if (!$image_source = imagecreatefromjpeg ($filename)) {
-                        $this->_addError ('Could not create image from JPEG: '
-                                          . $filename);
-                        $this->printErrors ();
-                        exit;
-                    }
-                } elseif ($this->_currentFile['type'] == 'image/gif') {
-                    if (!function_exists ('imagecreatefromgif')) {
-                        $this->_addError ('Sorry, this version of the GD library does not support GIF images.');
-                        $this->printErrors ();
-                        exit;
-                    }
-                    if (!$image_source = imagecreatefromgif ($filename)) {
-                        $this->_addError ('Could not create image from GIF: '
-                                          . $filename);
-                        $this->printErrors ();
-                        exit;
-                    }
-                } else {
-                    $this->_addError ('MIME type ' . $this->_currentFile['type']
-                                      . ' not supported.');
-                    $this->printErrors ();
-                    exit;
-                }
-
-                // do resize
-                $sizefactor = $this->_calcSizefactor ($imageInfo['width'],
-                                                      $imageInfo['height']);
-                $this->_addDebugMsg ('Resizing image, factor=' . $sizefactor);
-                $newwidth = (int) ($imageInfo['width'] * $sizefactor);
-                $newheight = (int) ($imageInfo['height'] * $sizefactor);
-                $newsize = $newwidth . 'x' . $newheight;
-
-                // ImageCreateTrueColor may throw a fatal error on some PHP
-                // versions when GD2 is not installed. Ugly workaround, but
-                // there seems to be no better way. Also see the discussion at
-                // http://php.net/ImageCreateTrueColor
-                $image_dest = @ImageCreateTrueColor($newwidth, $newheight);
-                if (!$image_dest) {
-                    $thumb = imagecreate ($newwidth, $newheight);
-                    imageJPEG ($thumb, $filename);
-                    imagedestroy ($thumb);
-                    $image_dest = @imagecreatefromjpeg ($filename);
-                    unlink ($filename);
-                }
-
-                imagecopyresized ($image_dest, $image_source, 0, 0, 0, 0,
-                                  $newwidth, $newheight, $imageInfo['width'],
-                                  $imageInfo['height']);
-                if (($this->_currentFile['type'] == 'image/png') OR
-                    ($this->_currentFile['type'] == 'image/x-png')) {
-                    if (!imagepng ($image_dest, $filename)) {
-                        $this->_addError ('Could not create PNG: ' . $filename);
-                        $this->printErrors ();
-                        exit;
-                    }
-                } elseif (($this->_currentFile['type'] == 'image/jpeg') OR
-                          ($this->_currentFile['type'] == 'image/pjpeg')) {
-                    if (!imagejpeg ($image_dest, $filename)) {
-                        $this->_addError ('Could not create JPEG: '. $filename);
-                        $this->printErrors ();
-                        exit;
-                    }
-                } elseif ($this->_currentFile['type'] == 'image/gif') {
-                    if (!imagegif ($image_dest, $filename)) {
-                        $this->_addError ('Could not create GIF: ' . $filename);
-                        $this->printErrors ();
-                        exit;
-                    }
-                }
-            }
-
-            if ($retval > 0) {
-                if ($this->_imageLib == 'imagemagick') {
-                    $this->_addError ('Image, ' . $this->_currentFile['name']
-                        . ' had trouble being resized: ' . $mogrify_output[0]);
-                } elseif ($this->_imageLib == 'netpbm') {
-                    $this->_addError ('Image, ' . $this->_currentFile['name']
-                        . ' had trouble being resized: ' . $netpbm_output[0]);
-                }
+            $newsize = $newwidth.'x'.$newheight;
+            list($retval,$msg) = IMG_resizeImage($this->_fileUploadDirectory . '/' . $this->_getDestinationName(), $this->_fileUploadDirectory . '/' . $this->_getDestinationName(), $newheight, $newwidth, $this->_currentFile['type'], 0 );
+            if ($retval !== true) {
+                $this->_addError('Image, ' . $this->_currentFile['name'] . ' ' . $msg);
                 $this->printErrors();
                 exit;
             } else {
@@ -705,7 +554,7 @@ class upload
         $returnChmod = true;
         $perms = $this->_getPermissions();
         if (!empty($perms)) {
-            $returnChmod = chmod ($this->_fileUploadDirectory . '/' . $this->_getDestinationName (), octdec ($perms));
+            $returnChmod = @chmod ($this->_fileUploadDirectory . '/' . $this->_getDestinationName (), octdec ($perms));
         }
 
         if ($returnMove AND $returnChmod) {
@@ -724,43 +573,25 @@ class upload
     }
 
     /**
-    * Sets the path to where the mogrify ImageMagic function is
+    * Sets $_FILES fieldname
     *
-    * @param     string    $path_to_mogrify    Absolute path to mogrify
-    * @return    boolean   True if set, false otherwise
+    * @param    string    $fieldname of $_FILES array
     *
     */
-    function setMogrifyPath($path_to_mogrify)
+    function setFieldName($fieldname)
     {
-        $this->_imageLib = 'imagemagick';
-        $this->_pathToMogrify = $path_to_mogrify;
-        return true;
+        $this->_fieldName = $fieldname;
     }
 
     /**
-    * Sets the path to where the netpbm utilities are
+    * Sets mode to allow any mime type
     *
-    * @param     string    $path_to_netpbm    Absolute path to netpbm dir
-    * @return    boolean   True if set, false otherwise
-    *
-    */
-    function setNetPBM($path_to_netpbm)
-    {
-        $this->_imageLib = 'netpbm';
-        $this->_pathToNetPBM = $path_to_netpbm;
-        return true;
-    }
-
-    /**
-    * Configure upload to use GD library
-    *
-    * @return    boolean   True if set, false otherwise
+    * @param    boolean    $switch  True to turn on, false to turn off
     *
     */
-    function setGDLib()
+    function setAllowAnyMimeType($switch)
     {
-        $this->_imageLib = 'gdlib';
-        return true;
+        $this->_allowAnyType = $switch;
     }
 
     /**
@@ -1044,6 +875,12 @@ class upload
     */
     function checkMimeType()
     {
+        if ( $this->_allowAnyType == true ) {
+            return true;
+        }
+        $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
+        $this->_currentFile['type'] = $metaData['mime_type'];
+
         $sc = strpos ($this->_currentFile['type'], ';');
         if ($sc > 0) {
             $this->_currentFile['type'] = substr ($this->_currentFile['type'], 0, $sc);
@@ -1153,21 +990,31 @@ class upload
     function numFiles()
     {
         if (empty($this->_filesToUpload)) {
-            $this->_filesToUpload = $_FILES;
+            if ( empty($this->_fieldName) ) {
+                $this->_filesToUpload = $_FILES;
+            } else {
+                $this->_filesToUpload = $_FILES[$this->_fieldName];
+            }
         }
 
         $fcount = 0;
 
-        for ($i = 1; $i <= count($_FILES); $i++) {
-            $curFile = current($this->_filesToUpload);
-
-            // Make sure file field on HTML form wasn't empty
-            if (!empty($curFile['name'])) {
-                $fcount++;
+        if ( is_array($this->_filesToUpload['name']) ) {
+            $fcount = 0;
+            for ($i = 0; $i <= count($this->_filesToUpload['name']); $i++) {
+                $curFile = current($this->_filesToUpload['name']);
+                // Make sure file field on HTML form wasn't empty
+                if (!empty($curFile)) {
+                    $fcount++;
+                }
+                next($this->_filesToUpload['name']);
             }
-            next($this->_filesToUpload);
+            reset($this->_filesToUpload['name']);
+        } else {
+            if ( !empty($this->_filesToUpload['name']) ) {
+                $fcount = 1;
+            }
         }
-        reset($_FILES);
 
         return $fcount;
     }
@@ -1190,8 +1037,14 @@ class upload
             }
         }
 
-        $this->_filesToUpload = $_FILES;
-        $numFiles = count($this->_filesToUpload);
+        if (empty($this->_filesToUpload)) {
+            if ( empty($this->_fieldName) ) {
+                $this->_filesToUpload = $_FILES;
+            } else {
+                $this->_filesToUpload = $_FILES[$this->_fieldName];
+            }
+        }
+        $numFiles = $this->numFiles();
 
         // For security sake, check to make sure a DOS isn't happening by making
         // sure there is a limit of the number of files being uploaded
@@ -1207,42 +1060,85 @@ class upload
         }
 
         // Verify allowed mime types exist
-        if (!$this->_allowedMimeTypes) {
+        if (!$this->_allowedMimeTypes && $this->_allowAnyType == false) {
             $this->_addError('No allowed mime types specified, use setAllowedMimeTypes() method');
         }
 
-        for ($i = 1; $i <= $numFiles; $i++) {
+        if ( is_array($this->_filesToUpload['name']) ) {
+            foreach ($this->_filesToUpload["error"] as $key => $error) {
+                if ($error == UPLOAD_ERR_OK) {
+                    $this->_currentFile['name'] = $this->_filesToUpload["name"][$key];
+                    $this->_currentFile['tmp_name'] = $this->_filesToUpload["tmp_name"][$key];
+                    $this->_currentFile['type'] = $this->_filesToUpload["type"][$key];
+                    $this->_currentFile['size'] = $this->_filesToUpload["size"][$key];
+                    $this->_currentFile['error'] = $this->_filesToUpload["error"][$key];
 
-            $this->_currentFile = current($_FILES);
+                    $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
+                    $this->_currentFile['type'] = $metaData['mime_type'];
+                    if (!empty($this->_currentFile['name'])) {
+                        // Verify file meets size limitations
+                        if (!$this->_fileSizeOk()) {
+                            $this->_addError('File, ' . $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit');
+                        }
 
-            // Make sure file field on HTML form wasn't empty before proceeding
-            if (!empty($this->_currentFile['name'])) {
-                // Verify file meets size limitations
-                if (!$this->_fileSizeOk()) {
-                    $this->_addError('File, ' . $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit');
-                }
+                        // If all systems check, do the upload
+                        if ($this->checkMimeType() AND $this->_imageSizeOK() AND !$this->areErrors()) {
+                            if ($this->_copyFile()) {
+                                $this->_uploadedFiles[] = $this->_fileUploadDirectory . '/' . $this->_getDestinationName();
+                            }
+                        }
 
-                // If all systems check, do the upload
-                if ($this->checkMimeType() AND $this->_imageSizeOK() AND !$this->areErrors()) {
-                    if ($this->_copyFile()) {
-                        $this->_uploadedFiles[] = $this->_fileUploadDirectory . '/' . $this->_getDestinationName();
+                        $this->_currentFile = array();
+
+                        if ($this->areErrors() AND !$this->_continueOnError) {
+                            return false;
+                        }
+                    } else {
+                        // No file name specified...send as warning.
+                        $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
                     }
+                } else {
+                    $offset++;
+                    $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
                 }
-
-                $this->_currentFile = array();
-
-                if ($this->areErrors() AND !$this->_continueOnError) {
-                    return false;
-                }
-
                 $this->_imageIndex++;
-            } else {
-                // No file name specified...send as warning.
-                $this->_addWarning('File #' . $i . ' on the HTML form was empty...ignoring it and continuing');
             }
-            next($_FILES);
-        }
+        } else {
+            if ( $this->_filesToUpload['name'] != '' ) {
+                $this->_currentFile['name'] = $this->_filesToUpload["name"];
+                $this->_currentFile['tmp_name'] = $this->_filesToUpload["tmp_name"];
+                $this->_currentFile['type'] = $this->_filesToUpload["type"];
+                $this->_currentFile['size'] = $this->_filesToUpload["size"];
+                $this->_currentFile['error'] = $this->_filesToUpload["error"];
 
+                $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
+                $this->_currentFile['type'] = $metaData['mime_type'];
+                if (!empty($this->_currentFile['name'])) {
+                    // Verify file meets size limitations
+                    if (!$this->_fileSizeOk()) {
+                        $this->_addError('File, ' . $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit');
+                    }
+
+                    // If all systems check, do the upload
+                    if ($this->checkMimeType() AND $this->_imageSizeOK() AND !$this->areErrors()) {
+                        if ($this->_copyFile()) {
+                            $this->_uploadedFiles[] = $this->_fileUploadDirectory . '/' . $this->_getDestinationName();
+                        }
+                    }
+
+//                    $this->_currentFile = array();
+
+                    if ($this->areErrors() AND !$this->_continueOnError) {
+                        return false;
+                    }
+                } else {
+                    // No file name specified...send as warning.
+                    $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
+                }
+            } else {
+                $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
+            }
+        }
         // This function returns false if any errors were encountered
         if ($this->areErrors()) {
             return false;
