@@ -1,1 +1,1 @@
-<th class="{class}"{th_subtags}>{header_text}</th>
+<th class="{class}"{th_subtags} {header_column_style}>{header_text}</th>
