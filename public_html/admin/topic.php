@@ -459,20 +459,11 @@ function handleIconUpload($tid)
 {
     global $_CONF, $_TABLES, $LANG27;
 
-    require_once ($_CONF['path_system'] . 'classes/upload.class.php');
+    require_once $_CONF['path_system'] . 'classes/upload.class.php';
 
     $upload = new upload();
     if (!empty ($_CONF['image_lib'])) {
-        if ($_CONF['image_lib'] == 'imagemagick') {
-            // Using imagemagick
-            $upload->setMogrifyPath ($_CONF['path_to_mogrify']);
-        } elseif ($_CONF['image_lib'] == 'netpbm') {
-            // using netPBM
-            $upload->setNetPBM ($_CONF['path_to_netpbm']);
-        } elseif ($_CONF['image_lib'] == 'gdlib') {
-            // using the GD library
-            $upload->setGDLib ();
-        }
+
         $upload->setAutomaticResize (true);
         if (isset ($_CONF['debug_image_upload']) &&
                 $_CONF['debug_image_upload']) {
@@ -497,6 +488,7 @@ function handleIconUpload($tid)
         echo $display;
         exit; // don't return
     }
+    $upload->setFieldName('newicon');
 
     $filename = '';
 
@@ -510,6 +502,7 @@ function handleIconUpload($tid)
 
     // do the upload
     if (!empty ($filename)) {
+
         $upload->setFileNames ($filename);
         $upload->setPerms ('0644');
         if (($_CONF['max_topicicon_width'] > 0) &&
@@ -588,6 +581,8 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
                            $_POST['perm_owner'], $_POST['perm_group'],
                            $_POST['perm_members'], $_POST['perm_anon'],
                            $is_default, $is_archive);
+    CACHE_remove_instance('story');
+
 } else if ($mode == 'edit') {
     $display .= COM_siteHeader('menu', $LANG27[1]);
     $tid = '';

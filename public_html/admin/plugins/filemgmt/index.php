@@ -163,7 +163,7 @@ function listNewDownloads(){
             $display .= '<tr><td align="right">'._MD_VERSIONC.'</td><td>';
             $display .= '<input type="text" name="version" size="10" maxlength="10" value="'.$version.'"' . XHTML . '></td></tr>';
             $display .= '<tr><td align="right">'._MD_FILESIZEC.'</td><td>';
-            $display .= '<input type="text" name="size" size="10" maxlength="8" value="'.$size.'"' . XHTML . '>&nbsp;'._MD_BYTES.'</td></tr>';
+            $display .= '<input type="text" name="size" size="10" maxlength="8" value="'.$size.'" disabled="disabled"' . XHTML . '>&nbsp;'._MD_BYTES.'</td></tr>';
             $display .= '<tr><td align="right" style="vertical-align:top;white-space:nowrap;">'._MD_DESCRIPTIONC.'</td><td>';
             $display .= '<textarea name=description cols="60" rows="5">'.$description.'</textarea>';
             $display .= '</td></tr>';
@@ -344,7 +344,7 @@ function modDownload() {
     $display .= '<tr><td width="25%">'._MD_REPLFILENAME.'</td><td colspan="2"><input type="file" name="newfile" size="50" maxlength="200"' . XHTML . '></td></tr>' .LB;
     $display .= '<tr><td>'._MD_HOMEPAGEC.'</td><td colspan="2"><input type="text" name="homepage" value="'.$homepage.'" size="50" maxlength="150"' . XHTML . '></td></tr>' .LB;
     $display .= '<tr><td>'._MD_VERSIONC.'</td><td colspan="2"><input type="text" name="version" value="'.$version.'" size="10" maxlength="10"' . XHTML . '></td></tr>' .LB;
-    $display .= '<tr><td>'._MD_FILESIZEC.'</td><td colspan="2"><input type="text" name="size" value="'.$size.'" size="10" maxlength="20"' . XHTML . '>'._MD_BYTES.'</td></tr>' .LB;
+    $display .= '<tr><td>'._MD_FILESIZEC.'</td><td colspan="2"><input type="text" name="size" value="'.$size.'" size="10" maxlength="20" disabled="disabled"' . XHTML . '>'._MD_BYTES.'</td></tr>' .LB;
     $display .= '<tr><td style="vertical-align:top;">'._MD_DESCRIPTIONC.'</td><td colspan="2"><textarea name="description" cols="55" rows="10">'.$description.'</textarea></td></tr>' .LB;
     $display .= '<tr><td>'._MD_CATEGORYC.'</td><td colspan="2">';
     $display .= $mytree->makeMySelBox("title", "title", $cid,0,"cid");
@@ -523,7 +523,7 @@ function listBrokenDownloads() {
         }
         $display .= "</table>";
     }
-//    $display .= CloseTable();
+
     $display .= COM_endBlock();
     $display .= COM_siteFooter();
     echo $display;
@@ -564,39 +564,74 @@ function modDownloadS() {
     global $_CONF,$_FM_TABLES,$myts,$eh,$filemgmt_SnapStore,$filemgmt_FileStore;
 
     $cid = $_POST["cid"];
+
     if (($_POST["url"]) || ($_POST["url"]!="")) {
         $url = rawurlencode($myts->makeTboxData4Save($_POST['url']));
     }
-
     $silentEdit = COM_applyFilter($_POST['silentedit'],true);
 
     $currentfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'url', "lid='{$_POST['lid']}'");
     $currentfileFQN = $filemgmt_FileStore . $myts->makeTboxData4Save(rawurldecode($currentfile));
     $newfile = rawurlencode($myts->makeTboxData4Save($_FILES['newfile']['name']));
     COM_errorLOG("Currentfilename is:'$currentfile' and new file is:'$newfile'");
-    if (($newfile != '' AND $currentfile != $newfile)  OR ($newfile != '' and $currentfile == '')) {
-        COM_errorLOG("Download file has changed");
-        if (uploadNewFile($_FILES["newfile"],$filemgmt_FileStore)) {
-            if (file_exists($currentfileFQN) && (!is_dir($currentfileFQN))) {
-               $err=@unlink ($currentfileFQN);
+    if ( $newfile != '' ) {
+        require_once $_CONF['path_system'] . 'classes/upload.class.php';
+        $upload = new upload();
+        $upload->setFieldName('newfile');
+        $upload->setPath($filemgmt_FileStore);
+        $upload->setAllowAnyMimeType(true);     // allow any file type
+        $upload->setMaxFileSize(100000000);
+        $upload->uploadFiles();
+        if ($upload->areErrors()) {
+            $errmsg = "Upload Error: " . $upload->printErrors(false);
+            COM_errorLog($errmsg);
+            $eh->show("1106");
+        } else {
+            $url = rawurlencode($myts->makeTboxData4Save($upload->_currentFile['name']));
+            $size = $myts->makeTboxData4Save($upload->_currentFile['size']);
+            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size." WHERE lid='{$_POST['lid']}'");
+            if ( $currentfile != $newfile ) {
+                @unlink($filemgmt_FileStore.$currentfile);
             }
-            $url = rawurlencode($myts->makeTboxData4Save($_FILES['newfile']['name']));
-            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$url' WHERE lid='{$_POST['lid']}'");
-       }
+        }
     }
-
     $currentsnapfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'logourl', "lid='{$_POST['lid']}'");
     $currentSnapFQN = $filemgmt_SnapStore . $myts->makeTboxData4Save(rawurldecode($currentsnapfile));
     $newsnapfile = rawurlencode($myts->makeTboxData4Save($_FILES['newfileshot']['name']));
-    if (($newsnapfile !="" AND $currentsnapfile != $newsnapfile)  OR ($newsnapfile != '' and $currentsnapfile == '')) {
-        //COM_errorLOG("Snap file has changed");
-        if (uploadNewFile($_FILES["newfileshot"],$filemgmt_SnapStore)) {
-            if (file_exists($currentSnapFQN) && (!is_dir($currentSnapFQN))) {
-               $err=@unlink ($currentSnapFQN);
-            }
-            $logourl = rawurlencode($myts->makeTboxData4Save($_FILES['newfileshot']['name']));
+
+    if ( $newsnapfile != '' ) {
+        require_once $_CONF['path_system'] . 'classes/upload.class.php';
+        $upload = new upload();
+        $upload->setFieldName('newfileshot');
+        $upload->setPath($filemgmt_SnapStore);
+        $upload->setAllowAnyMimeType(false);
+        $upload->setAllowedMimeTypes (array ('image/gif'   => '.gif',
+                                             'image/jpeg'  => '.jpg,.jpeg',
+                                             'image/pjpeg' => '.jpg,.jpeg',
+                                             'image/x-png' => '.png',
+                                             'image/png'   => '.png'
+                                     )      );
+        $upload->setAutomaticResize (true);
+        if (isset ($_CONF['debug_image_upload']) &&
+                $_CONF['debug_image_upload']) {
+            $upload->setLogFile ($_CONF['path'] . 'logs/error.log');
+            $upload->setDebug (true);
+        }
+        $upload->setMaxDimensions (640,480);
+        $upload->setAutomaticResize (true);
+        $upload->setMaxFileSize(100000000);
+        $upload->uploadFiles();
+        if ($upload->areErrors()) {
+            $errmsg = "Upload Error: " . $upload->printErrors(false);
+            COM_errorLog($errmsg);
+            $eh->show("1106");
+        } else {
+            $logourl = rawurlencode($myts->makeTboxData4Save($upload->_currentFile['name']));
             DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET logourl='$logourl' WHERE lid='{$_POST['lid']}'");
-       }
+            if ( $currentsnapfile != $newfile ) {
+                @unlink($filemgmt_SnapStore.$currentsnapfile);
+            }
+        }
     } elseif(isset($_POST['deletesnap'])) {
         if (file_exists($currentSnapFQN) && (!is_dir($currentSnapFQN))) {
             $err=@unlink ($currentSnapFQN);
@@ -605,16 +640,15 @@ function modDownloadS() {
         }
     }
 
-    $title = $myts->makeTboxData4Save($_POST['title']);
-    $homepage = $myts->makeTboxData4Save($_POST['homepage']);
-    $version = $myts->makeTboxData4Save($_POST['version']);
-    $size = $myts->makeTboxData4Save($_POST['size']);
-    $description = $myts->makeTareaData4Save($_POST['description']);
-    $commentoption = $_POST['commentoption'];
+    $title          = $myts->makeTboxData4Save($_POST['title']);
+    $homepage       = $myts->makeTboxData4Save($_POST['homepage']);
+    $version        = $myts->makeTboxData4Save($_POST['version']);
+    $description    = $myts->makeTareaData4Save($_POST['description']);
+    $commentoption  = $_POST['commentoption'];
     if ( $silentEdit ) {
-    	DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', size='$size', status=1, comments='$commentoption' WHERE lid='{$_POST['lid']}'");
+    	DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, comments='$commentoption' WHERE lid='{$_POST['lid']}'");
 	} else {
-   		DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', size='$size', status=1, date=".time().", comments='$commentoption' WHERE lid='{$_POST['lid']}'");
+   		DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, date=".time().", comments='$commentoption' WHERE lid='{$_POST['lid']}'");
 	}
     DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' WHERE lid='{$_POST['lid']}'");
     CACHE_remove_instance('whatsnew');
@@ -746,15 +780,57 @@ function modCatS() {
         $write_access = 2;  // All Users Group
     }
     if ($_FILES['imgurl']['name']!='') {
+
+        require_once ($_CONF['path_system'] . 'classes/upload.class.php');
+
+        $upload = new upload();
+
         $name = $_FILES['imgurl']['name'];        // this is the real name of your file
         $tmp  = $_FILES['imgurl']['tmp_name'];    // temporary name of file in temporary directory on server
         $imgurl = rawurlencode($myts->makeTboxData4Save($name));
         $target = $filemgmt_SnapCat.$name;
-        if (is_uploaded_file($_FILES['imgurl']['tmp_name'])) {                       // is this temporary file really uploaded?
-           if(!file_exists($target)) {       // Check to see the file already exists
-            $returnMove = move_uploaded_file($tmp, $target);    // move temporary file to your upload directory
-            }
-         }
+
+        $upload->setAutomaticResize (true);
+        if (isset ($_CONF['debug_image_upload']) &&
+                $_CONF['debug_image_upload']) {
+            $upload->setLogFile ($_CONF['path'] . 'logs/error.log');
+            $upload->setDebug (true);
+        }
+
+        $upload->setAllowedMimeTypes (array ('image/gif'   => '.gif',
+                                             'image/jpeg'  => '.jpg,.jpeg',
+                                             'image/pjpeg' => '.jpg,.jpeg',
+                                             'image/x-png' => '.png',
+                                             'image/png'   => '.png'
+                                     )      );
+        if (!$upload->setPath ($filemgmt_SnapCat)) {
+            $display = COM_siteHeader ('menu', $LANG24[30]);
+            $display .= COM_startBlock ($LANG24[30], '',
+                    COM_getBlockTemplate ('_msg_block', 'header'));
+            $display .= $upload->printErrors (false);
+            $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                            'footer'));
+            $display .= COM_siteFooter ();
+            echo $display;
+            exit; // don't return
+        }
+
+        $upload->setFileNames ($name);
+        $upload->setPerms ('0644');
+        $upload->setMaxDimensions (50,50);
+        $upload->uploadFiles ();
+
+        if ($upload->areErrors ()) {
+            $display = COM_siteHeader ('menu', $LANG24[30]);
+            $display .= COM_startBlock ($LANG24[30], '',
+                    COM_getBlockTemplate ('_msg_block', 'header'));
+            $display .= $upload->printErrors (false);
+            $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                            'footer'));
+            $display .= COM_siteFooter ();
+            echo $display;
+            exit; // don't return
+        }
     } else {
         $imgurl = '';
     }
@@ -858,12 +934,51 @@ function addCat() {
             $name = $_FILES["uploadfile"]['name'];        // this is the real name of your file
             $tmp  = $_FILES["uploadfile"]['tmp_name'];    // temporary name of file in temporary directory on server
             $imgurl = rawurlencode($myts->makeTboxData4Save($name));
-            if (is_uploaded_file ($tmp)) {                       // is this temporary file really uploaded?
-               if(!file_exists($filemgmt_SnapCat.$name)) {       // Check to see the file already exists
-                $target = $filemgmt_SnapCat.$name;
-                $returnMove = move_uploaded_file($tmp, $target);    // move temporary file to your upload directory
-                }
-             }
+
+            require_once ($_CONF['path_system'] . 'classes/upload.class.php');
+            $upload = new upload();
+
+            $upload->setAutomaticResize (true);
+            if (isset ($_CONF['debug_image_upload']) &&
+                    $_CONF['debug_image_upload']) {
+                $upload->setLogFile ($_CONF['path'] . 'logs/error.log');
+                $upload->setDebug (true);
+            }
+
+            $upload->setAllowedMimeTypes (array ('image/gif'   => '.gif',
+                                                 'image/jpeg'  => '.jpg,.jpeg',
+                                                 'image/pjpeg' => '.jpg,.jpeg',
+                                                 'image/x-png' => '.png',
+                                                 'image/png'   => '.png'
+                                         )      );
+            if (!$upload->setPath ($filemgmt_SnapCat)) {
+                $display = COM_siteHeader ('menu', $LANG24[30]);
+                $display .= COM_startBlock ($LANG24[30], '',
+                        COM_getBlockTemplate ('_msg_block', 'header'));
+                $display .= $upload->printErrors (false);
+                $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                                'footer'));
+                $display .= COM_siteFooter ();
+                echo $display;
+                exit; // don't return
+            }
+
+            $upload->setFileNames ($name);
+            $upload->setPerms ('0644');
+            $upload->setMaxDimensions (50,50);
+            $upload->uploadFiles ();
+
+            if ($upload->areErrors ()) {
+                $display = COM_siteHeader ('menu', $LANG24[30]);
+                $display .= COM_startBlock ($LANG24[30], '',
+                        COM_getBlockTemplate ('_msg_block', 'header'));
+                $display .= $upload->printErrors (false);
+                $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                                'footer'));
+                $display .= COM_siteFooter ();
+                echo $display;
+                exit; // don't return
+            }
         } else {
             $imgurl = '';
         }
@@ -880,17 +995,20 @@ function addDownload() {
     global $_CONF,$_USER,$_FM_TABLES,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$filemgmt_FileStore,$filemgmt_SnapStore;
     global $myts,$eh;
 
-    $filename = $myts->makeTboxData4Save($_FILES['newfile']['name']);
-    $url = $myts->makeTboxData4Save(rawurlencode($filename));
-    $snapfilename = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
-    $logourl = $myts->makeTboxData4Save(rawurlencode($snapfilename));
+//    $filename = $myts->makeTboxData4Save($_FILES['newfile']['name']);
+//    $url = $myts->makeTboxData4Save(rawurlencode($filename));
+//    $snapfilename = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
+//    $logourl = $myts->makeTboxData4Save(rawurlencode($snapfilename));
     $title = $myts->makeTboxData4Save($_POST['title']);
     $homepage = $myts->makeTboxData4Save($_POST['homepage']);
     $version = $myts->makeTboxData4Save($_POST['version']);
     $description = $myts->makeTareaData4Save($_POST['description']);
     $commentoption = $_POST['commentoption'];
+
     $submitter = $_USER['uid'];
-    $size = $myts->makeTboxData4Save(intval($_FILES['newfile']['size']));
+
+//    $size = $myts->makeTboxData4Save(intval($_FILES['newfile']['size']));
+
     $result = DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE url='$url'");
     list($numrows) = DB_fetchARRAY($result);
     $errormsg = "";
@@ -914,13 +1032,70 @@ function addDownload() {
         $cid = 0;
     }
 
+    $filename = ''; //$myts->makeTboxData4Save($_FILES['newfile']['name']);
+    $url = ''; //$myts->makeTboxData4Save(rawurlencode($filename));
+    $snapfilename = '';// = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
+    $logourl = '';//$myts->makeTboxData4Save(rawurlencode($snapfilename));
+
+    require_once $_CONF['path_system'] . 'classes/upload.class.php';
+    $upload = new upload();
+    $upload->setFieldName('newfile');
+    $upload->setPath($filemgmt_FileStore);
+    $upload->setAllowAnyMimeType(true);     // allow any file type
+    $upload->setMaxFileSize(100000000);
+    if ( $upload->numFiles() > 0 ) {
+        $upload->uploadFiles();
+        if ($upload->areErrors()) {
+            $errmsg = "Upload Error: " . $upload->printErrors(false);
+            COM_errorLog($errmsg);
+            $eh->show("1106");
+        } else {
+            $size = $myts->makeTboxData4Save(intval($upload->_currentFile['size']));
+            $filename = $myts->makeTboxData4Save($upload->_currentFile['name']);
+            $url = $myts->makeTboxData4Save(rawurlencode($filename));
+            $AddNewFile = true;
+        }
+    }
+
+    $upload = new upload();
+    $upload->setFieldName('newfileshot');
+    $upload->setPath($filemgmt_SnapStore);
+    $upload->setAllowAnyMimeType(false);
+    $upload->setAllowedMimeTypes (array ('image/gif'   => '.gif',
+                                         'image/jpeg'  => '.jpg,.jpeg',
+                                         'image/pjpeg' => '.jpg,.jpeg',
+                                         'image/x-png' => '.png',
+                                         'image/png'   => '.png'
+                                 )      );
+    $upload->setAutomaticResize (true);
+    if (isset ($_CONF['debug_image_upload']) &&
+            $_CONF['debug_image_upload']) {
+        $upload->setLogFile ($_CONF['path'] . 'logs/error.log');
+        $upload->setDebug (true);
+    }
+    $upload->setMaxDimensions (640,480);
+    $upload->setAutomaticResize (true);
+    $upload->setMaxFileSize(100000000);
+    $upload->uploadFiles();
+    if ( $upload->numFiles() > 0 ) {
+        if ($upload->areErrors()) {
+            $errmsg = "Upload Error: " . $upload->printErrors(false);
+            COM_errorLog($errmsg);
+            $eh->show("1106");
+        } else {
+            $snapfilename = $myts->makeTboxData4Save($upload->_currentFile['name']);
+            $logourl = $myts->makeTboxData4Save(rawurlencode($snapfilename));
+            $AddNewFile = true;
+        }
+    }
+/*
     if (uploadNewFile($_FILES["newfile"],$filemgmt_FileStore)) {
         $AddNewFile = true;
     }
     if (uploadNewFile($_FILES["newfileshot"],$filemgmt_SnapStore)) {
         $AddNewFile = true;
     }
-
+*/
     if ($AddNewFile){
         $fields = 'cid, title, url, homepage, version, size, logourl, submitter, status, date, hits, rating, votes, comments';
         $sql = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} ($fields) VALUES ";
@@ -1048,7 +1223,7 @@ function approve(){
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?op=listNewDownloads",2,_MD_NEWDLADDED);
     exit();
 }
-
+/*
 function uploadNewFile($newfile,$directory) {
     global $myts,$eh,$filemgmtDuplicatesAllowed,$filemgmtFilePermissions;
 
@@ -1090,7 +1265,7 @@ function uploadNewFile($newfile,$directory) {
     return false;
 }
 
-
+*/
 
 function filemgmt_comments($firstcomment) {
     global $_USER,$_CONF;
