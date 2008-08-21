@@ -40,7 +40,7 @@
 require_once("../lib-common.php"); // Path to your lib-common.php
 require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
 require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
-require_once ($_CONF['path_html'] . 'forum/include/bbcode/stringparser_bbcode.class.php');
+require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
 
 function gf_FormatForPrint( $str, $postmode='html' ) {
     global $CONF_FORUM;

@@ -365,11 +365,11 @@ if ($op == 'popular') {
     $retval = '';
 
     $header_arr = array(      # display 'text' and use table field 'field'
-                  array('text' => $LANG_GF01['FORUM'],     'field' => 'forum_name', 'sort' => true),
+                  array('text' => $LANG_GF01['FORUM'],     'field' => 'forum_name', 'sort' => false),
                   array('text' => $LANG_GF01['TOPIC'],     'field' => 'subject', 'sort' => false),
-                  array('text' => $LANG_GF01['REPLIES'],   'field' => 'replies', 'sort' => true),
-                  array('text' => $LANG_GF01['VIEWS'],     'field' => 'views', 'sort' => true),
-                  array('text' => $LANG_GF01['DATE'],      'field' => 'date', 'sort' => true)
+                  array('text' => $LANG_GF01['REPLIES'],   'field' => 'replies', 'sort' => false),
+                  array('text' => $LANG_GF01['VIEWS'],     'field' => 'views', 'sort' => false),
+                  array('text' => $LANG_GF01['DATE'],      'field' => 'date', 'sort' => false, 'nowrap' => true)
     );
     if ($CONF_FORUM['usermenu'] == 'navbar') {
         echo forumNavbarMenu($LANG_GF02['msg201']);
@@ -381,32 +381,12 @@ if ($op == 'popular') {
     $text_arr = array(
         'has_extras' => true,
         'form_url'   => $_CONF['site_url'] . '/forum/index.php?op=popular',
-        'help_url'   => ''
+        'help_url'   => '',
+        'nowrap'     => 'date'
     );
 
-   switch($order) {
-        case 1:
-            $orderby = 'subject';
-            break;
-        case 2:
-            $orderby = 'replies';
-            break;
-        case 4:
-            $orderby = 'date';
-            break;
-        default:
-            $orderby = 'views';
-            $order = 3;
-            break;
-    }
-    if ($order == $prevorder) {
-        $direction = ($direction == "DESC") ? "ASC" : "DESC";
-    } else {
-        $direction = ($direction == "ASC") ? "ASC" : "DESC";
-    }
-
-    $defsort_arr = array('field'     => $orderby,
-                         'direction' => $direction);
+    $defsort_arr = array('field'     => 'views',
+                         'direction' => 'DESC');
 
     $sql = "SELECT date,subject,comment,replies,views,id,forum,forum_name FROM {$_TABLES['gf_topic']} LEFT JOIN {$_TABLES['gf_forums']} ON forum=forum_id WHERE (pid = '0')";
 
@@ -424,7 +404,53 @@ if ($op == 'popular') {
     gf_siteFooter();
     exit();
 }
+
 if ($op == 'bookmarks' && $_USER['uid'] > 1) {
+
+    require_once $_CONF['path_system'] . 'lib-admin.php';
+
+    $retval = '';
+
+    $header_arr = array(      # display 'text' and use table field 'field'
+                  array('text' => $LANG_GF01['FORUM'],     'field' => 'forum_name', 'sort' => true),
+                  array('text' => $LANG_GF01['TOPIC'],     'field' => 'subject', 'sort' => true),
+                  array('text' => $LANG_GF01['REPLIES'],   'field' => 'replies', 'sort' => true),
+                  array('text' => $LANG_GF01['VIEWS'],     'field' => 'views', 'sort' => true),
+                  array('text' => $LANG_GF01['DATE'],      'field' => 'date', 'sort' => true, 'nowrap' => true)
+    );
+    if ($CONF_FORUM['usermenu'] == 'navbar') {
+        echo forumNavbarMenu($LANG_GF01['BOOKMARKS']);
+    }
+
+    $retval .= COM_startBlock($LANG_GF01['BOOKMARKS'], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
+    $text_arr = array(
+        'has_extras' => true,
+        'form_url'   => $_CONF['site_url'] . '/forum/index.php?op=bookmarks',
+        'help_url'   => ''
+    );
+
+    $defsort_arr = array('field'     => 'date',
+                         'direction' => 'DESC');
+
+    $sql = "SELECT * FROM {$_TABLES['gf_bookmarks']} AS bookmarks LEFT JOIN {$_TABLES['gf_topic']} AS topics ON bookmarks.topic_id=topics.id LEFT JOIN {$_TABLES['gf_forums']} AS forums ON topics.forum=forums.forum_id WHERE bookmarks.uid=" . $_USER['uid'];
+    $query_arr = array('table'          => 'gf_bookmarks',
+                       'sql'            => $sql,
+                       'query_fields'   => array('topics.date','topics.subject','topics.comment','topics.replies','topics.views','id','forum','forum_name'),
+                       'default_filter' => '');
+
+    $retval .= ADMIN_list('bookmarks', 'ADMIN_getListField_forum', $header_arr,
+                          $text_arr, $query_arr, $defsort_arr);
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    echo $retval;
+
+    gf_siteFooter();
+    exit();
+}
+
+if ($op == 'bookmarksxx' && $_USER['uid'] > 1) {
 
     require_once( $_CONF['path_system'] . 'lib-admin.php' );
 
@@ -492,7 +518,7 @@ if ($op == 'lastx') {
         array('text' => $LANG_GF01['TOPIC'],  'field' => 'subject'),
         array('text' => $LANG_GF01['REPLIES'],'field' => 'replies'),
         array('text' => $LANG_GF01['VIEWS'],  'field' => 'views'),
-        array('text' => $LANG_GF01['DATE'],   'field' => 'date'),
+        array('text' => $LANG_GF01['DATE'],   'field' => 'date', 'nowrap' => true),
     );
     $data_arr = array();
     $text_arr = array();

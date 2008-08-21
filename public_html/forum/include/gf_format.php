@@ -44,7 +44,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'gf_format.php') !== false)
 }
 
 if (!class_exists('StringParser') ) {
-    require_once ($_CONF['path_html'] . 'forum/include/bbcode/stringparser_bbcode.class.php');
+    require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
 }
 
 function gf_siteHeader($subject = '') {
@@ -164,6 +164,18 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
     $query = DB_query($sql);
     $i = 1;
 
+    if ( isset($attributes['align'] ) ) {
+        $align = ' align=' . $attributes['align'] . ' ';
+    } else {
+        $align = '';
+    }
+
+    if ( isset($attributes['lightbox'] ) ) {
+        $lb = ' rel="lightbox" ';
+    } else {
+        $lb = '';
+    }
+
     while (list($id,$fileinfo,$repository_id,$showinline,$topicid) = DB_fetchArray($query)) {
         if ($i == $content) {
             if ($showinline == 0) {
@@ -189,7 +201,7 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
                     $srcThumbnail = "{$_CONF['site_url']}/forum/images/icons/none.gif";
                 }
             }
-            $retval = '<a href="'.$srcImage.'" TARGET="_NEW"><img src="'. $srcThumbnail . '" title="'.$LANG_GF10['click2download'].'"></a>';
+            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$LANG_GF10['click2download'].'"></a>';
             break;
          }
         $i++;
@@ -289,13 +301,11 @@ function forumNavbarMenu($current='') {
     $navmenu = new navbar;
     $navmenu->add_menuitem($LANG_GF01['INDEXPAGE'],"{$_CONF['site_url']}/forum/index.php");
     if ($_USER['uid'] > 1) {
-//        $navmenu->add_menuitem($LANG_GF02['msg197'],"{$_CONF['site_url']}/forum/index.php?op=markallread");
         $navmenu->add_menuitem($LANG_GF01['USERPREFS'],"{$_CONF['site_url']}/forum/userprefs.php");
         $navmenu->add_menuitem($LANG_GF01['SUBSCRIPTIONS'],"{$_CONF['site_url']}/forum/notify.php");
         $navmenu->add_menuitem($LANG_GF01['BOOKMARKS'],"{$_CONF['site_url']}/forum/index.php?op=bookmarks");
     }
     $navmenu->add_menuitem($LANG_GF01['LASTX'],"{$_CONF['site_url']}/forum/index.php?op=lastx");
-//    $navmenu->add_menuitem($LANG_GF02['msg200'],"{$_CONF['site_url']}/forum/memberlist.php");
     $navmenu->add_menuitem($LANG_GF02['msg201'],"{$_CONF['site_url']}/forum/index.php?op=popular");
     if ($current != '') {
         $navmenu->set_selected($current);
@@ -452,15 +462,12 @@ function gf_checkHTML($str) {
     if ( $CONF_FORUM['use_glfilter'] != 1 ) {
         return $str;
     }
-    // if Geeklog is configured to allow root to use all html, no need to call
+    // if glFusion is configured to allow root to use all html, no need to call
     if( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
             SEC_inGroup( 'Root' ))
     {
         return $str;
-    }
-    if (!class_exists('ksesf4') ) {
-        require_once ($_CONF['path_html'] . 'forum/include/ksesf.class.php');
     }
     return COM_filterHTML($str);
 }
@@ -1046,56 +1053,6 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
             $testText        = strip_tags($testText);
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
             $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $A['id'] . '" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';
-            break;
-        case 'username':
-            $photoico = '';
-            if (!empty ($A['photo'])) {
-                $photoico = "&nbsp;<img src=\"{$_CONF['layout_url']}/images/smallcamera."
-                          . $_IMAGE_TYPE . '" alt="{$LANG04[77]}"' . XHTML . '>';
-            } else {
-                $photoico = '';
-            }
-            $retval = COM_createLink($fieldvalue, $_CONF['site_url']
-                    . '/users.php?mode=profile&amp;uid=' .  $A['uid']) . $photoico;
-            break;
-        case 'lastlogin':
-            if ($fieldvalue < 1) {
-                // if the user never logged in, show the registration date
-                $regdate = strftime ($_CONF['shortdate'], strtotime($A['regdate']));
-                $retval = "({$LANG28[36]}, {$LANG28[53]} $regdate)";
-            } else {
-                $retval = strftime ($_CONF['shortdate'], $fieldvalue);
-            }
-            break;
-        case 'lastlogin_short':
-            if ($fieldvalue < 1) {
-                // if the user never logged in, show the registration date
-                $regdate = strftime ($_CONF['shortdate'], strtotime($A['regdate']));
-                $retval = "({$LANG28[36]})";
-            } else {
-                $retval = strftime ($_CONF['shortdate'], $fieldvalue);
-            }
-            break;
-        case 'online_days':
-            if ($fieldvalue < 0){
-                // users that never logged in, would have a negative online days
-                $retval = "N/A";
-            } else {
-                $retval = $fieldvalue;
-            }
-            break;
-        case 'phantom_date':
-        case 'offline_months':
-            $retval = COM_numberFormat(round($fieldvalue / 2592000));
-            break;
-        case 'online_hours':
-            $retval = COM_numberFormat(round($fieldvalue / 3600, 3));
-            break;
-        case 'regdate':
-            $retval = strftime ($_CONF['shortdate'], strtotime($fieldvalue));
-            break;
-        case $_TABLES['users'] . '.uid':
-            $retval = $A['uid'];
             break;
         default:
             $retval = $fieldvalue;

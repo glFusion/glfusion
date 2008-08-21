@@ -699,7 +699,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             if ($CONF_FORUM['pre2.5_mode'] == true ) {
                 if ( $quotearray['postmode'] == 'html' || $quotearray['postmode'] == 'HTML' ) {
                     if (!class_exists('StringParser') ) {
-                        require_once ($_CONF['path_html'] . 'forum/include/bbcode/stringparser_bbcode.class.php');
+                        require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
                     }
                     $comment = gf_formatOldPost($quotearray['comment'],'html');
                     $comment = sprintf($CONF_FORUM['quoteformat'],$quotearray['name'],$comment);

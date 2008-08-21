@@ -67,7 +67,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     //COM_errorLog("Show Topic Display Time1: $intervalTime");
 
     if (!class_exists('StringParser') ) {
-        require_once ($_CONF['path_html'] . 'forum/include/bbcode/stringparser_bbcode.class.php');
+        require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
     }
 
     $topictemplate = new Template($_CONF['path_layout'] . 'forum/layout');
