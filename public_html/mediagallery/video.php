@@ -151,7 +151,7 @@ if ( $nRows > 0 ) {
                 $resolution_y = $row['resolution_y'];
             } else {
                 if ( $row['media_resolution_x'] == 0 ) {
-                    require_once($_MG_CONF['path_html'] . '/getid3/getid3/getid3.php');
+                    require_once($_CONF['path'] . '/lib/getid3/getid3.php');
                     // Needed for windows only
                     define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
                     $getID3 = new getID3;

@@ -119,7 +119,7 @@ function MG_displayASF( $aid, $I, $full ) {
         $resolution_y = $I['media_resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once($_MG_CONF['path_html'] . '/getid3/getid3/getid3.php');
+            require_once($_CONF['path'] . '/lib/getid3/getid3.php');
             // Needed for windows only
             define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
@@ -286,7 +286,7 @@ function MG_displayMOV( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once($_MG_CONF['path_html'] . '/getid3/getid3/getid3.php');
+            require_once($_CONF['path'] . '/lib/getid3/getid3.php');
             // Needed for windows only
             define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
@@ -426,7 +426,7 @@ function MG_displaySWF( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 ) {
-            require_once($_MG_CONF['path_html'] . '/getid3/getid3/getid3.php');
+            require_once($_CONF['path'] . '/lib/getid3/getid3.php');
             // Needed for windows only
             define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
@@ -593,7 +593,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
         $resolution_y = $I['resolution_y'];
     } else {
         if ( $I['media_resolution_x'] == 0 && $I['remote_media'] == 0 ) {
-            require_once($_MG_CONF['path_html'] . '/getid3/getid3/getid3.php');
+            require_once($_CONF['path'] . '/lib/getid3/getid3.php');
             // Needed for windows only
             define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
@@ -907,7 +907,7 @@ function MG_displayMP3( $aid, $I, $full ) {
             }
             $V->set_var('xhtml',XHTML);
 
-            require_once($_MG_CONF['path_html'] . '/getid3/getid3/getid3.php');
+            require_once($_CONF['path'] . '/lib/getid3/getid3.php');
             $getID3 = new getID3;
             // Analyze file and store returned data in $ThisFileInfo
             $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);

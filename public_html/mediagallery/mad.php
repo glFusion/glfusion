@@ -108,7 +108,7 @@ if (!function_exists('getmicrotime')) {
 
 $writescriptfilename = 'demo.write.php';
 
-require_once $_MG_CONF['path_html'] . 'getid3/getid3/getid3.php';
+require_once($_CONF['path'] . '/lib/getid3/getid3.php');
 // require_once('../getid3/getid3.php');
 
 // Needed for windows only
