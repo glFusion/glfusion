@@ -285,6 +285,8 @@ require_once( $_CONF['path_system'] . 'lib-sessions.php' );
 */
 require_once( $_CONF['path_system'] . 'lib-mbyte.php' );
 
+require_once( $_CONF['path_system'] . 'imglib/lib-image.php' );
+
 // Set theme
 // Need to modify this code to check if theme was cached in user cookie.  That
 // way if user logged in and set theme and then logged out we would still know
