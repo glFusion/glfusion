@@ -708,7 +708,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
         require_once( 'PHP/Compat.php' );
         PHP_Compat::loadFunction( 'str_ireplace' );
     }
-    require_once ($_CONF['path_html'] . 'forum/include/bbcode/stringparser_bbcode.class.php');
+    require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
 
     $result = DB_query ("SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = $feed");
     $F = DB_fetchArray ($result);
@@ -1279,15 +1279,15 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $A['subject'] .= '...';
             }
 
-            if ($CONF_FORUM['allow_user_dateformat']) {
-                $firstdate = COM_getUserDateTimeFormat ($A['date']);
-                $firstdate = $firstdate[0];
-                $lastdate = COM_getUserDateTimeFormat ($A['lastupdated']);
-                $lastdate = $lastdate[0];
-            } else {
+//            if ($CONF_FORUM['allow_user_dateformat']) {
+//                $firstdate = COM_getUserDateTimeFormat ($A['date']);
+//                $firstdate = $firstdate[0];
+//                $lastdate = COM_getUserDateTimeFormat ($A['lastupdated']);
+//                $lastdate = $lastdate[0];
+//            } else {
                 $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $A['date']);
                 $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $A['lastupdated']);
-            }
+//            }
             if ($A['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($A['uid']) . ', ';
                 //$topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($A['uid']));
