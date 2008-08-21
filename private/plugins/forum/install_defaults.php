@@ -93,9 +93,8 @@ $_FF_DEFAULT['level2name']             = 'Junior';
 $_FF_DEFAULT['level3name']             = 'Chatty';
 $_FF_DEFAULT['level4name']             = 'Regular Member';
 $_FF_DEFAULT['level5name']             = 'Active Member';
-// new stuff
-$_FF_DEFAULT['showblocks']              = 'leftblocks';  // noblocks, leftblocks, rightblocks
-$_FF_DEFAULT['usermenu']                = 'blockmenu'; // blockmenu, navbar, none
+$_FF_DEFAULT['showblocks']              = 'leftblocks';     // noblocks, leftblocks, rightblocks
+$_FF_DEFAULT['usermenu']                = 'navbar';         // blockmenu, navbar, none
 $_FF_DEFAULT['mysql4+']                 = false;
 $_FF_DEFAULT['pre2.5_mode']             = false;
 $_FF_DEFAULT['silent_edit_default']     = true;
@@ -157,7 +156,24 @@ $_FF_DEFAULT['allowablefiletypes']    = array(
         'text/plain'                        => '.txt',
         'application/x-pangaeacadsolutions' => '.dwg',
         'application/x-zip-compresseed'     => '.zip',
-        'application/octet-stream'          => '.zip,.vsd,.fla,.psd,.xls,.doc,.ppt,.pdf,.swf,.mpp,.txt,.dwg'
+        'application/vnd.ms-word.document.macroEnabled.12'                               =>         '.docm',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'        =>         '.docx',
+        'application/vnd.ms-word.template.macroEnabled.12'                               =>         '.dotm',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.template'        =>         '.dotx',
+        'application/vnd.ms-powerpoint.template.macroEnabled.12'                         =>         '.potm',
+        'application/vnd.openxmlformats-officedocument.presentationml.template'          =>         '.potx',
+        'application/vnd.ms-powerpoint.addin.macroEnabled.12'                            =>         '.ppam',
+        'application/vnd.ms-powerpoint.slideshow.macroEnabled.12'                        =>         '.ppsm',
+        'application/vnd.openxmlformats-officedocument.presentationml.slideshow'         =>         '.ppsx',
+        'application/vnd.ms-powerpoint.presentation.macroEnabled.12'                     =>         '.pptm',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation'      =>         '.pptx',
+        'application/vnd.ms-excel.addin.macroEnabled.12'                                 =>         '.xlam',
+        'application/vnd.ms-excel.sheet.binary.macroEnabled.12'                          =>         '.xlsb',
+        'application/vnd.ms-excel.sheet.macroEnabled.12'                                 =>         '.xlsm',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'              =>         '.xlsx',
+        'application/vnd.ms-excel.template.macroEnabled.12'                              =>         '.xltm',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.template'           =>         '.xltx',
+        'application/octet-stream'          => '.zip,.vsd,.fla,.psd,.xls,.doc,.ppt,.pdf,.swf,.mpp,.txt,.dwg,.docx,.ppsx,.pptx,.xlsx,.xltx'
         );
 
 $_FF_DEFAULT['inlineimageypes']    = array(
