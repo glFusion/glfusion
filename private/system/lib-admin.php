@@ -379,7 +379,6 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $header_text = ''; // title as displayed to the user
     // HEADER FIELDS array(text, field, sort, class)
     // this part defines the contents & format of the header fields
-
     for ($i=0; $i < count( $header_arr ); $i++) { #iterate through all headers
         $header_text = $header_arr[$i]['text'];
         if ($header_arr[$i]['sort'] != false) { # is this sortable?
@@ -406,12 +405,17 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
                 $th_subtags .= '&amp;query_limit=' . $query_limit;
             }
             $th_subtags .= "';\"";
+        } else {
+            $th_subtags = '';
         }
 
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
         } else {
             $admin_templates->set_var('class', "admin-list-headerfield");
+        }
+        if ( $header_arr[$i]['nowrap'] == true ) {
+            $admin_templates->set_var('header_column_style','style="white-space:nowrap;"');
         }
         $admin_templates->set_var('header_text', $header_text);
         $admin_templates->set_var('th_subtags', $th_subtags);
@@ -503,6 +507,11 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
                 $admin_templates->set_var('class', $header_arr[$j]['field_class']);
             } else {
                 $admin_templates->set_var('class', "admin-list-field");
+            }
+            if (!empty($header_arr[$j]['nowrap'])) {
+                $admin_templates->set_var('column_style',' style="white-space:nowrap;"');
+            } else {
+                $admin_templates->set_var('column_style','');
             }
             $admin_templates->set_var('itemtext', $fieldvalue); # write field
             $admin_templates->parse('item_field', 'field', true);
