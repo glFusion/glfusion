@@ -763,6 +763,7 @@ function handlePhotoUpload ($delete_photo = '')
 
     $upload = new upload();
     if (!empty ($_CONF['image_lib'])) {
+/* --------------------------------------
         if ($_CONF['image_lib'] == 'imagemagick') {
             // Using imagemagick
             $upload->setMogrifyPath ($_CONF['path_to_mogrify']);
@@ -773,6 +774,7 @@ function handlePhotoUpload ($delete_photo = '')
             // using the GD library
             $upload->setGDLib ();
         }
+------------------------------------------ */
         $upload->setAutomaticResize (true);
         if (isset ($_CONF['debug_image_upload']) &&
                 $_CONF['debug_image_upload']) {
