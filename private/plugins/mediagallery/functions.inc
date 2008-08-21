@@ -3330,96 +3330,15 @@ function MG_execWrapper($cmd) {
     }
 }
 
+require_once $_CONF['path'] . '/system/imglib/lib-image.php';
+
 /*
  * Get mime type of image
  */
 
 function MG_getMediaMetaData( $filename ) {
-    global $_MG_CONF;
 
-    // include getID3() library (can be in a different directory if full path is specified)
-    require_once($_MG_CONF['path_html'] . '/getid3/getid3/getid3.php');
-    // Needed for windows only
-    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
-
-    $getID3 = new getID3;
-
-    // Analyze file and store returned data in $ThisFileInfo
-    $ThisFileInfo = $getID3->analyze($filename);
-    getid3_lib::CopyTagsToComments($ThisFileInfo);
-
-    if ( $_MG_CONF['verbose'] ) {
-        COM_errorLog("MG_getMediaMetaData: getID3 analyzing file: " . $filename);
-        COM_errorLog("MG_getMediaMetaData: getID3 found mime_type: " . $ThisFileInfo['mime_type']);
-    }
-    /*
-     * Check to see if we failed on getting the mime type and do the additional checks here
-     */
-    if ( !isset($ThisFileInfo['mime_type']) || $ThisFileInfo['mime_type'] == '' || $ThisFileInfo['mime_type'] == 'application/octet-stream' ) {
-        $file_extension = strtolower(substr(strrchr($filename,"."),1));
-        switch ($file_extension) {
-            case 'flv':
-                $ThisFileInfo['mime_type'] = 'video/x-flv';
-                break;
-            case 'wma' :
-                $ThisFileInfo['mime_type'] = 'audio/x-ms-wma';
-                break;
-            case 'jpg' :
-                $ThisFileInfo['mime_type'] = 'image/jpeg';
-                break;
-            case 'png' :
-                $ThisFileInfo['mime_type'] = 'image/png';
-                break;
-            case 'bmp' :
-                $ThisFileInfo['mime_type'] = 'image/bmp';
-                break;
-            case 'gif' :
-                $ThisFileInfo['mime_type'] = 'image/gif';
-                break;
-            case "exe":
-                $ThisFileInfo['mime_type'] = 'application/octet-stream';
-                break;
-            case "zip":
-                $ThisFileInfo['mime_type'] = 'application/zip';
-                break;
-            case "mp3":
-                $ThisFileInfo['mime_type'] = 'audio/mpeg';
-                break;
-            case "mpg":
-                $ThisFileInfo['mime_type'] = 'video/mpeg';
-                break;
-            case "avi":
-                $ThisFileInfo['mime_type'] = 'video/x-msvideo';
-                break;
-            case 'tga' :
-                $ThisFileInfo['mime_type'] = 'image/tga';
-                break;
-            case 'psd' :
-                $ThisFileInfo['mime_type'] = 'image/psd';
-                break;
-            default:
-                $ThisFileInfo['mime_type'] = 'application/octet-stream';
-                break;
-        }
-        COM_errorLog("MG_getMediaMetaData: getID3() failed to return mime type, using file extension check.  Mime type detected is " . $ThisFileInfo['mime_type']);
-    }
-    return $ThisFileInfo;
-}
-
-/*
- * Include the proper graphics support package
- */
-
-switch ( $_MG_CONF['graphicspackage'] ) {
-    case 0 :    // ImageMagick...
-        require_once($_CONF['path'] . '/plugins/mediagallery/im_image.php');
-        break;
-    case 1 :    // NetPBM
-        require_once($_CONF['path'] . '/plugins/mediagallery/pbm_image.php');
-        break;
-    case 2 :    // GD Library
-        require_once($_CONF['path'] . '/plugins/mediagallery/gd_image.php');
-        break;
+    return IMG_getMediaMetaData( $filename );
 }
 
 /*
@@ -3427,66 +3346,8 @@ switch ( $_MG_CONF['graphicspackage'] ) {
  */
 
 function MG_resizeImage($srcImage, $destImage, $dImageHeight, $dImageWidth, $mimeType='', $deleteSrc=0 ) {
-    global $_MG_CONF;
 
-    $JpegQuality = 100;
-
-    if ( $dImageHeight == 0 ) {
-        $dImageHeight = 200;
-    }
-    if ( $dImageWidth == 0 ) {
-        $dImageWidth = 200;
-    }
-
-    $imgsize    = @getimagesize("$srcImage");
-    $imgwidth   = $imgsize[0];
-    $imgheight  = $imgsize[1];
-    if ($imgwidth == 0 || $imgheight == 0 ) {
-        $imgwidth   = $dImageWidth;
-        $imgheight  = $dImageHeight;
-    }
-
-    if ( $mimeType == '' ) {
-        $metaData = MG_getMediaMetaData($srcImage);
-        $mimeType = $metaData['mime_type'];
-    }
-
-    if ( $mimeType == 'image/x-targa' || $mimeType == 'image/tga' ) {
-        $fp = @fopen($srcImage,'rb');
-        if ( $fp == false ) {
-            return array(false,'Failed to open source TGA image.');
-        }
-        $data = fread($fp,filesize($srcImage));
-        fclose($fp);
-        $imgwidth = base_convert(bin2hex(strrev(substr($data,12,2))),16,10);
-        $imgheight = base_convert(bin2hex(strrev(substr($data,12,2))),16,10);
-        COM_errorLog("TGA resolution: height: " . $imgheight . " width: " . $imgwidth);
-    }
-
-    if ( $imgwidth > $imgheight ) {
-        $ratio = $imgwidth / $dImageWidth;
-        $newwidth = $dImageWidth;
-        $newheight = round($imgheight / $ratio);
-    } else {
-        $ratio = $imgheight / $dImageHeight;
-        $newheight = $dImageHeight;
-        $newwidth = round($imgwidth / $ratio);
-    }
-
-    // check to see if srcImage is smaller than desired target,
-    // if smaller, do not upsize, simply copy the src to the dest.
-
-    if ( ( $newheight > $imgheight) && ($newwidth > $imgwidth ) )  {
-        $rc = copy($srcImage, $destImage);
-        COM_errorLog("MG_resizeImage: Original (" . $srcImage . ") is smaller than target, original copied to target image (" . $destImage . ".");
-        return array(true,'Original is smaller than target, original copied to target image.');
-    }
-
-    list($rc,$msg) = _mg_resizeImage($srcImage, $destImage, $imgheight, $imgwidth, $newheight, $newwidth, $mimeType);
-    if ( $rc == false ) {
-        return array($rc,$msg);
-    }
-    return array(true,'Image successfully resized');
+    return IMG_resizeImage($srcImage, $destImage, $dImageHeight, $dImageWidth, $mimeType, $deleteSrc );
 }
 
 /*
@@ -3494,64 +3355,7 @@ function MG_resizeImage($srcImage, $destImage, $dImageHeight, $dImageWidth, $mim
  */
 
 function MG_rotateImage( $srcImage, $direction ) {
-    global $_MG_CONF;
-
-    $metaData = MG_getMediaMetaData($srcImage);
-    $mimeType = $metaData['mime_type'];
-
-    /*
-     * Check image format, jpegtan will only work for JPG images
-     */
-
-    if ( $_MG_CONF['jpegtran_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg') ) {
-        switch( $direction ) {
-            case 'right' :
-                $JT_rotate = "90";
-                break;
-            case 'left' :
-                $JT_rotate = "270";
-                break;
-            default :
-                COM_errorLog("MG_rotateImage: Invalid direction passed to rotate, must be left or right");
-                return array(false,'Invalid direction passed to rotate, must be left or right');
-        }
-        $tmpImage   = $srcImage . '.rt';
-
-        $rc = MG_execWrapper('"' . $_MG_CONF['jpegtran_path'] . "/jpegtran" . '"' . " -rotate " . $JT_rotate . " -trim \"$srcImage\" > \"$tmpImage\"");
-
-/* ------
-   -- This is commented out since it appears there is a true port of
-      jpegtran for Win32 that will use the > separator.
-        if (PHP_OS == "WINNT") {
-            $rc = MG_execWrapper('"' . $_MG_CONF['jpegtran_path'] . "/jpegtran.exe" . '"' . " -rotate " . $JT_rotate . " -trim \"$srcImage\"  \"$tmpImage\"");
-        } else {
-            $rc = MG_execWrapper('"' . $_MG_CONF['jpegtran_path'] . "/jpegtran" . '"' . " -rotate " . $JT_rotate . " -trim \"$srcImage\" > \"$tmpImage\"");
-        }
-
----------*/
-
-        if ( $rc != true ) {
-            @unlink($tmpImage);
-            return array(false,'MG Rotate: Error rotating image');
-        }
-        clearstatcache();
-        $rtFileSize = 0;
-        $rtFileSize = @filesize($tmpImage);
-        if ( $rtFileSize < 1 ) {
-            @unlink($tmpImage);
-            return array(false,'MG Rotate: Error rotating image');
-        }
-        if ( $_MG_CONF['jhead_enabled'] == 1 ) {
-            $rc = MG_execWrapper('"' . $_MG_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
-            COM_errorLog("MG_rotateImage: jhead returned " . $rc );
-        }
-        $rc = @copy($tmpImage, $srcImage);
-        @unlink($tmpImage);
-        return array(true,'');
-    } else {
-        list($rc,$msg) = _mg_RotateImage($srcImage, $direction, $mimeType);
-        return array($rc,$msg);
-    }
+    return MG_rotateImage( $srcImage, $direction );
 }
 
 /*
@@ -3559,68 +3363,11 @@ function MG_rotateImage( $srcImage, $direction ) {
  */
 
 function MG_convertImageFormat ( $srcImage, $destImage, $destFormat, $deleteOriginal=1 ) {
-    global $_CONF, $_MG_CONF;
 
-    $newSrc = $srcImage;
-
-    if ($_MG_CONF['verbose'] ) {
-        COM_errorLog("MG_convertImageFormat: Entering MG_convertImageFormat()");
-    }
-
-    $metaData = array();
-
-    $metaData = MG_getMediaMetaData($srcImage);
-    $mimeType = $metaData['mime_type'];
-
-    $imgsize = @getimagesize($srcImage);
-    if ( $imgsize == false &&
-         $mimeType != 'image/x-targa' &&
-         $mimeType != 'image/tga' &&
-         $mimeType != 'image/photoshop' &&
-         $mimeType != 'image/x-photoshop' &&
-         $mimeType != 'image/psd' &&
-         $mimeType != 'application/photoshop' &&
-         $mimeType != 'application/psd' &&
-         $mimeType != 'image/tiff' ) {
-        COM_errorLog("MG_convertImageFormat: Error - unable to retrieve srcImage resolution");
-        return array(false,'Unable to determine source image resolution');
-    }
-
-    $imgwidth = $imgsize[0];
-    $imgheight = $imgsize[1];
-
-    if ($imgsize == false || $imgwidth == 0 || $imgheight == 0 ) {
-        $imgwidth = 620;
-        $imgheight = 465;
-    }
-    if ( $mimeType == $destFormat ) {
-        if ( $srcImage != $destImage ) {
-            $rc = copy($srcImage, $destImage);
-        }
-        return array(true,'Original image copied to destination image.');
-    }
-
-    list($rc,$msg) = _mg_convertImageFormat($srcImage,$destImage,$destFormat, $mimeType);
-
-    return array($rc,$msg);
+    return IMG_convertImageFormat ( $srcImage, $destImage, $destFormat, $deleteOriginal );
 }
 
 function MG_watermarkImage( $origImage, $watermarkImage, $opacity, $location ) {
-    global $_CONF, $_MG_CONF;
-
-    if ( $_MG_CONF['verbose'] ) {
-        COM_errorLog("MG_watermarkImage: Entering MG_watermarkImage()");
-    }
-
-    $mType = MG_getMediaMetaData($origImage);
-    $mimeType = $mType['mime_type'];
-
-    if ( !in_array($mimeType,$_MG_CONF['watermark_types']) ) {
-        COM_errorLog("MG_watermarkImage: Media type is not in allowed watermark types (config.php)");
-        return false;
-    }
-
-    list($rc,$msg) = _mg_watermarkImage($origImage, $watermarkImage, $opacity, $location, $mimeType );
-    return array($rc,$msg);
+    return IMG_watermarkImage( $origImage, $watermarkImage, $opacity, $location );
 }
 ?>
