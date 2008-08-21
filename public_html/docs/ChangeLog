@@ -2,6 +2,19 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Moved stringparser_bbcode.* to lib/ from Forum plugin (Mark)
+- Moved getID3 to lib/ from Media Gallery (Mark)
+- New lib-image.php - image processing APIs from Media Gallery (Mark)
+- Updated upload.class.php to use new image APIs (Mark)
+- FileMgmt Updates (Mark)
+   - Replacement upload allows same file to be re-uploaded
+   - Filesize is automatically recalulated when new file is uploaded
+   - Thumbnail image is not auto-sized (640x480 max)
+- Forum Updates (Mark)
+   - Improved the upload handling of images
+- Media Gallery Updates (Mark)
+   - Moved image processing APIs to core
+
 - Updated topic image to better match default header. (Eric)
 - Removed the Professional theme. (Eric)
 - Fixed error in RSS topic icon (needed to be sprintf). (Mark)
