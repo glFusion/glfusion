@@ -46,7 +46,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'config.php') !== false)
  * thus needs to be a separate file.
 */
 
-$CONF_FM['version'] = '1.7.0.fusion';
+$CONF_FM['version'] = '1.8.0.fusion';
 
 $_FM_TABLES['filemgmt_cat']             = $_DB_table_prefix . 'filemgmt_category';
 $_FM_TABLES['filemgmt_filedetail']      = $_DB_table_prefix . 'filemgmt_filedetail';
