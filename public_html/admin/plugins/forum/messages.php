@@ -144,7 +144,8 @@ $result = DB_query($sql);
 $num_messages = DB_numRows($result);
 
 echo COM_siteHeader();
-$report = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+///$report = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+$report = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $report->set_file (array ('messages'=>'messages.thtml', 'records' => 'message_line.thtml'));
 $report->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/messages.php');
 $report->set_var ('site_url', $_CONF['site_url']);

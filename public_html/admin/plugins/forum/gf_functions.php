@@ -63,7 +63,8 @@ $navbarMenu = array(
 function adminfooter() {
     global $_CONF, $LANG_GF01;
 
-    $footertemplate = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//    $footertemplate = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+    $footertemplate = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
     $footertemplate->set_file (array ('footertemplate'=>'footer.thtml'));
 
     $footertemplate->set_var ('forumname', $LANG_GF01['forumname']);

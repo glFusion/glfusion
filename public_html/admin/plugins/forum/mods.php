@@ -167,7 +167,8 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
 
     if ( isset($_POST['promptadd']) AND $_POST['promptadd'] == $LANG_GF93['addmoderator']) {
 
-        $addmod= new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//        $addmod= new Template($_CONF['path_layout'] . 'forum/layout/admin');
+        $addmod = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
         $addmod->set_file (array ('moderator'=>'mod_add.thtml'));
         $addmod->set_var ('action_url', $_CONF['site_admin_url'] . '/plugins/forum/mods.php');
         $addmod->set_var ('imgset', $CONF_FORUM['imgset']);
@@ -204,7 +205,8 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
             }
         }
 
-        $moderators = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//        $moderators = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+        $moderators = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
         $moderators->set_file (array ('moderators'=>'moderators.thtml','mod_record'=>'mod_record.thtml'));
         $moderators->set_var ('action_url', $_CONF['site_admin_url'] . '/plugins/forum/mods.php');
         $moderators->set_var ('imgset', $CONF_FORUM['imgset']);

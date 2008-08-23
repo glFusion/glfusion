@@ -66,7 +66,8 @@ if ($type == "category") {
             echo COM_siteFooter();
             exit();
         } else {
-            $boards_addcategory = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//            $boards_addcategory = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+            $boards_addcategory = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
             $boards_addcategory->set_file (array ('boards_addcategory'=>'boards_edtcategory.thtml'));
             $boards_addcategory->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
             $boards_addcategory->set_var ('title', $LANG_GF93['addcat']);
@@ -97,7 +98,8 @@ if ($type == "category") {
             exit();
         } else {
             $catname = DB_getItem($_TABLES['gf_categories'], "cat_name","id=$id");
-            $boards_delcategory = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//            $boards_delcategory = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+            $boards_delcategory = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
             $boards_delcategory->set_file (array ('boards_delcategory'=>'boards_delete.thtml'));
             $boards_delcategory->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
             $boards_delcategory->set_var ('deletenote1', sprintf($LANG_GF93['deletecatnote1'], $catname));
@@ -126,7 +128,8 @@ if ($type == "category") {
     } elseif ($mode == $LANG_GF01['EDIT']) {
         $esql = DB_query("SELECT * FROM {$_TABLES['gf_categories']} WHERE (id='$id')");
         $E = DB_fetchArray($esql);
-        $boards_edtcategory = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//        $boards_edtcategory = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+        $boards_edtcategory = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
         $boards_edtcategory->set_file (array ('boards_edtcategory'=>'boards_edtcategory.thtml'));
         $boards_edtcategory->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
         $boards_edtcategory->set_var ('title', sprintf($LANG_GF93['editcatnote'], stripslashes($E['cat_name'])));
@@ -199,7 +202,8 @@ if ($type == "forum") {
                 }
             }
 
-            $boards_addforum = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//            $boards_addforum = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+            $boards_addforum = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
             $boards_addforum->set_file (array ('boards_addforum'=>'boards_edtforum.thtml'));
             $boards_addforum->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
             $boards_addforum->set_var ('title', "{$LANG_GF93['addforum']}&nbsp;{$LANG_GF93['undercat']}&nbsp;" .stripslashes($catname));
@@ -242,7 +246,8 @@ if ($type == "forum") {
             echo COM_siteFooter();
             exit();
         } else {
-            $boards_delforum = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//            $boards_delforum = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+            $boards_delforum = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
             $boards_delforum->set_file (array ('boards_delforum'=>'boards_delete.thtml'));
             $boards_delforum->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
             $boards_delforum->set_var ('deletenote1', sprintf($LANG_GF93['deleteforumnote1'], COM_applyFilter($_POST['forumname'])));
@@ -311,7 +316,8 @@ if ($type == "forum") {
             }
         }
 
-        $boards_edtforum = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//        $boards_edtforum = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+        $boards_edtforum = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
         $boards_edtforum->set_file (array ('boards_edtforum'=>'boards_edtforum.thtml'));
         $boards_edtforum->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
         $boards_edtforum->set_var ('title', sprintf($LANG_GF93['editforumnote'], $forum_name));
@@ -354,7 +360,8 @@ if ($type == "forum") {
 
 // MAIN CODE
 
-$boards = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//$boards = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+$boards = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $boards->set_file (array ('boards'=>'boards.thtml','categories' => 'board_categories.thtml','forums' => 'board_forums.thtml'));
 $boards->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
 $boards->set_var ('siteurl', $_CONF['site_url']);

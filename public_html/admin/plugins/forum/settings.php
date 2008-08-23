@@ -189,7 +189,8 @@ $CONF_FORUM['show_posts_perpage']     = $A['postsperpage'];
 // $CONF_FORUM['statusmsg_pause']        = $A['statusmsg_pause'];      // Added as of Version 2.4
 
 
-$settings = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//$settings = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+$settings = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $settings->set_file (array ('settings'=>'settings.thtml',
                                     'radioBtn_setting' => 'radiosetting_option.thtml',
                                     'text_setting' => 'textsetting_option.thtml',

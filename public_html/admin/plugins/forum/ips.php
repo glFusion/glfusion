@@ -59,7 +59,8 @@ if (($op == 'banip') && ($ip != '')) {
     }
 
     if ($_POST['sure'] != 'yes') {
-        $ips_unban = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//        $ips_unban = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+        $ips_unban = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
         $ips_unban->set_file (array ('ips_unban'=>'ips_unban.thtml'));
         $ips_unban->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/ips.php');
         $ips_unban->set_var ('deletenote1', sprintf($LANG_GF93['deleteforumnote1'], $forumname));
@@ -79,7 +80,8 @@ if (($op == 'banip') && ($ip != '')) {
     }
 
 } elseif (($op == 'banip') && ($ip == '')) {
-    $messagetemplate = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//    $messagetemplate = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+    $messagetemplate = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
     $messagetemplate->set_file (array ('messagetemplate'=>'message.thtml'));
     $messagetemplate->set_var ('message', $LANG_GF01['ERROR']);
     $messagetemplate->set_var ('transfer', $LANG_GF96['specip']);
@@ -110,7 +112,8 @@ if (!empty($forum)) {
 if ($op == '') {
     $bannedsql = DB_query("SELECT * FROM {$_TABLES['gf_banned_ip']} ORDER BY host_ip DESC");
     $bannum = DB_numRows($bannedsql);
-    $p = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+//    $p = new Template($_CONF['path_layout'] . 'forum/layout/admin');
+    $p = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
     $p->set_file (array ('page' => 'banip_mgmt.thtml', 'records' => 'ip_records.thtml'));
     if ($bannum == 0) {
         $p->set_var ('alertmessage', $LANG_GF96['noips']);
