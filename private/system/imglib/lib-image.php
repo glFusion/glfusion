@@ -50,7 +50,8 @@ switch ( $_CONF['image_lib'] ) {
         require_once($_CONF['path'] . '/system/imglib/gd_image.php');
         break;
     default:
-        return false;
+        require_once($_CONF['path'] . '/system/imglib/gd_image.php');
+        break;
 }
 
 /* - the next two calls need to move to a new library -- */
