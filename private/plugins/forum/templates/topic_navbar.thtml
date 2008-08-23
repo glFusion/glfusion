@@ -1,0 +1,27 @@
+<!-- start topic_navbar.thtml -->
+<script type="text/javascript">
+    var site_url = '{site_url}';
+</script>
+<script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;padding-right:10px;">
+    <tr>
+        <td>{navbreadcrumbsimg}</td>
+        <td class="alignleft" style="width:95%;white-space:nowrap;">&nbsp;<a href="{site_url}/forum/index.php">{forum_home}</a>&nbsp;&#62;&nbsp;<a href="{site_url}/forum/index.php?cat={cat_id}">{cat_name}</a>&nbsp;&#62;&nbsp;<a href="{site_url}/forum/index.php?forum={forum_id}">{forum_name}</a></td>
+        <td rowspan="2" class="alignright" style="width:100%;white-space:nowrap">{newtopic_link}</td>
+        <td rowspan="2" class="alignright" style="padding-left:5px;width:100%;white-space:nowrap;">{replytopic_link}</td>
+    </tr>
+    <tr>
+        <td colspan="2" style="padding-bottom:5px;">{navtopicimg}&nbsp;<b><a href="viewtopic.php?showtopic={topic_id}">{subject}</a></b></td>
+    </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
+    <tr>
+        <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;white-space:nowrap;">{pagenavigation}</td>
+        <td style="width:90%;white-space:nowrap;" class="alignright pluginBreadCrumbs">{subscribe_link}</td>
+        <td class="pluginBreadCrumbs" style="white-space:nowrap;">&nbsp;|&nbsp;</td>
+        <td class="pluginBreadCrumbs" style="padding-right:10px;white-space:nowrap;">{print_link}</td>
+        {prevtopic_link} {nexttopic_link}
+    </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="0" class="pluginSolidOutline alignleft">
+<!-- end topic_navbar.thtml -->

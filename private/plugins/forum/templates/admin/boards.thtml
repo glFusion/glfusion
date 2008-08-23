@@ -1,0 +1,8 @@
+<!-- start boards.thtml -->
+<table style="width:100%;border:none;" cellspacing="1" cellpadding="0">
+    <tr>
+        <td class="pluginHeader aligncenter" style="padding:5px;">[&nbsp;<a href="{phpself}?mode=add&amp;type=category">{addcat}</a>&nbsp;]</td>
+    </tr>
+</table>
+{forum_listing_records}
+<!-- end boards.thtml -->

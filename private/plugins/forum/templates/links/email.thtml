@@ -1,0 +1,3 @@
+<!-- start email.thtml -->
+<td style="padding-right:3px;"><a href="{emaillink}">{emaillinkimg}</a></td>                          
+<!-- end email.thtml -->
