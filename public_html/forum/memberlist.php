@@ -60,7 +60,8 @@ forum_chkUsercanAccess();
 
 if ($op == "last10posts") {
 
-    $report = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $report = new Template($_CONF['path_layout'] . 'forum/layout');
+    $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $report->set_file (array ('report' => 'reports/report_results.thtml',
                     'records' => 'reports/report_record.thtml',
                     'outline_header'=>'forum_outline_header.thtml',
@@ -131,7 +132,8 @@ if ($op == "last10posts") {
 
 } else {
 
-    $report = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $report = new Template($_CONF['path_layout'] . 'forum/layout');
+    $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $report->set_file (array ('report' => 'reports/memberlist.thtml',
                     'records' => 'reports/memberlist_line.thtml',
                     'link' => 'reports/memberlist_link.thtml',

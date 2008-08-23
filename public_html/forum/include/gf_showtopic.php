@@ -55,6 +55,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     global $CONF_FORUM,$_CONF,$_TABLES,$_USER,$LANG_GF01,$LANG_GF02;
     global $fromblock,$highlight;
     global $oldPost,$forumfiles;
+    global $canPost;
 
     $retval = '';
 
@@ -70,7 +71,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
     }
 
-    $topictemplate = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $topictemplate = new Template($_CONF['path_layout'] . 'forum/layout');
+    $topictemplate = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $topictemplate->set_file (array (
             'topictemplate' =>  'topic.thtml',
             'profile'       =>  'links/profile.thtml',
@@ -277,12 +279,14 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         if ($is_lockedtopic == 0) {
             $is_readonly = DB_getItem($_TABLES['gf_forums'],'is_readonly','forum_id=' . $showtopic['forum']);
             if ($is_readonly == 0 OR forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_edit')) {
-                $quotelink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum={$showtopic['forum']}&amp;id=$replytopicid&amp;quoteid={$showtopic['id']}";
-                $quotelinkimg = '<img src="'.gf_getImage('quote_button').'" border="0" align="middle" alt="'.$LANG_GF01['QUOTEICON'].'" title="'.$LANG_GF01['QUOTEICON'].'"' . XHTML . '>';
-                $topictemplate->set_var ('quotelink', $quotelink);
-                $topictemplate->set_var ('quotelinkimg', $quotelinkimg);
-                $topictemplate->set_var ('LANG_quote', $LANG_GF01['QUOTEICON']);
-                $topictemplate->parse ('quotetopic_link', 'quote');
+                if ( $canPost != 0 ) {
+                    $quotelink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum={$showtopic['forum']}&amp;id=$replytopicid&amp;quoteid={$showtopic['id']}";
+                    $quotelinkimg = '<img src="'.gf_getImage('quote_button').'" border="0" align="middle" alt="'.$LANG_GF01['QUOTEICON'].'" title="'.$LANG_GF01['QUOTEICON'].'"' . XHTML . '>';
+                    $topictemplate->set_var ('quotelink', $quotelink);
+                    $topictemplate->set_var ('quotelinkimg', $quotelinkimg);
+                    $topictemplate->set_var ('LANG_quote', $LANG_GF01['QUOTEICON']);
+                    $topictemplate->parse ('quotetopic_link', 'quote');
+                }
             }
         }
 

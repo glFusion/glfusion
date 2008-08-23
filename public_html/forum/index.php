@@ -37,20 +37,19 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once("../lib-common.php"); // Path to your lib-common.php
-require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
-require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
+require_once '../lib-common.php'; // Path to your lib-common.php
+require_once $_CONF['path_html'] . 'forum/include/gf_format.php';
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$forum = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
-$show  = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) : 0;
-$page  = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
-$order = isset($_REQUEST['order']) ? COM_applyFilter($_REQUEST['order'],true) : 0;
-$prevorder = isset($_REQUEST['prevorder']) ? COM_applyFilter($_REQUEST['prevorder']) : 0;
-$direction = isset($_REQUEST['direction']) ? COM_applyFilter($_REQUEST['direction']) : 'DESC';
-$sort = isset($_REQUEST['sort']) ? COM_applyFilter($_REQUEST['sort'],true) : 0;
-$cat_id = isset($_REQUEST['cat_id']) ? COM_applyFilter($_REQUEST['cat_id'],true) : 0;
-$op = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
+$forum      = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
+$show       = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) : 0;
+$page       = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
+$order      = isset($_REQUEST['order']) ? COM_applyFilter($_REQUEST['order'],true) : 0;
+$prevorder  = isset($_REQUEST['prevorder']) ? COM_applyFilter($_REQUEST['prevorder']) : 0;
+$direction  = isset($_REQUEST['direction']) ? COM_applyFilter($_REQUEST['direction']) : 'DESC';
+$sort       = isset($_REQUEST['sort']) ? COM_applyFilter($_REQUEST['sort'],true) : 0;
+$cat_id     = isset($_REQUEST['cat_id']) ? COM_applyFilter($_REQUEST['cat_id'],true) : 0;
+$op         = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 
 //Check is anonymous users can access
 if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
@@ -105,7 +104,7 @@ echo gf_siteHeader();
 forum_chkUsercanAccess();
 
 if ($op == 'newposts' AND $_USER['uid'] > 1) {
-    $report = new Template($_CONF['path_layout'] . 'forum/layout');
+    $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $report->set_file (array ('report' => 'reports/report_results.thtml',
                     'records' => 'reports/report_record.thtml',
                     'outline_header'=>'forum_outline_header.thtml',
@@ -175,7 +174,6 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
         $inforum = "";
     }
 
-//    $lastlogin = DB_getItem($_TABLES['userinfo'],'lastlogin',"uid='" . $_USER['uid'] ."'");
     $lastlogin = DB_getItem($_TABLES['userinfo'],'lastlogin',"uid = '" . $_USER['uid'] . "'");
     $sql = "SELECT lastupdated,subject,comment,replies,views,id,forum FROM {$_TABLES['gf_topic']} ";
     $sql .= "WHERE (pid = 0) $inforum ORDER BY $orderby $direction LIMIT 100";
@@ -236,7 +234,8 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
 }
 
 if ($op == 'search') {
-    $report = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $report = new Template($_CONF['path_layout'] . 'forum/layout');
+    $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $report->set_file (array ('report' => 'reports/report_results.thtml',
                     'records' => 'reports/report_record.thtml',
                     'outline_header'=>'forum_outline_header.thtml',
@@ -450,68 +449,8 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
     exit();
 }
 
-if ($op == 'bookmarksxx' && $_USER['uid'] > 1) {
-
-    require_once( $_CONF['path_system'] . 'lib-admin.php' );
-
-    $header_arr = array(
-        array('text' => $LANG_GF01['FORUM'], 'field' => 'forum'),
-        array('text' => $LANG_GF01['TOPIC'], 'field' => 'subject'),
-        array('text' => $LANG_GF01['DATE'],  'field' => 'date'),
-    );
-    $data_arr = array();
-    $text_arr = array();
-    if ($CONF_FORUM['usermenu'] == 'navbar') {
-        echo forumNavbarMenu($LANG_GF01['BOOKMARKS']);
-    }
-
-    $retval .= COM_startBlock($LANG_GF01['BOOKMARKS'], '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
-
-    $sql = "SELECT * FROM {$_TABLES['gf_bookmarks']} AS bookmarks LEFT JOIN {$_TABLES['gf_topic']} AS topics ON bookmarks.topic_id=topics.id LEFT JOIN {$_TABLES['gf_forums']} AS forums ON topics.forum=forums.forum_id WHERE bookmarks.uid=" . $_USER['uid'] . " ORDER BY topics.lastupdated DESC";
-    $result = DB_query($sql);
-    $nrows = DB_numRows($result);
-    $displayrecs = 0;
-    for ($i = 1; $i <= $nrows; $i++) {
-        $P = DB_fetchArray($result);
-        $forumgrpid = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='{$P['forum']}'");
-        $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$forumgrpid'");
-        if (SEC_inGroup($groupname)) {
-            if ($CONF_FORUM['use_censor']) {
-                $P['subject'] = COM_checkWords($P['subject']);
-            }
-            $displayrecs++;
-
-            $postdate = COM_getUserDateTimeFormat($P['date']);
-
-            $testText = gf_formatTextBlock($P['comment'],'text','text');
-            $testText = strip_tags($testText);
-            $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
-
-            if ( $P['pid'] == 0 ) {
-                $link = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $P['id'] . '" title="' . $P['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">';
-            } else {
-                $link = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $P['pid'] . '#' . $P['topic_id'] . '" title="' . $P['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">';
-            }
-
-            $data_arr[] = array('forum'   => $P['forum_name'],
-                                'subject' => $link . $P['subject'] . '</a>',
-                                'date'    => strftime( $CONF_FORUM['default_Topic_Datetime_format'], $P['date'] ));
-
-        }
-    }
-    $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
-
-    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-
-    echo $retval;
-
-    gf_siteFooter();
-    exit();
-}
-
 if ($op == 'lastx') {
-    require_once( $_CONF['path_system'] . 'lib-admin.php' );
+    require_once $_CONF['path_system'] . 'lib-admin.php';
 
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
@@ -611,7 +550,6 @@ if ($op == 'subscribe') {
 // MAIN CODE BEGINS to view forums or topics within a forum
 
 ForumHeader($forum,0);
-// ForumHeader($forum,$showtopic);
 
 // Check if the number of records was specified to show - part of page navigation.
 // Will be 0 if not set - as I'm now passing this tru gf_applyFilte() at top of script
@@ -640,11 +578,6 @@ $base_url = $_CONF['site_url'] . '/forum/index.php?forum='.$forum.'&amp;show='.$
 
 //Display Categories
 if ($forum == 0) {
-    //$mytimer = new timerobject();
-    //$mytimer->startTimer();
-    //$exectime = $mytimer->stopTimer();
-    //COM_errorLog("Forum Listing - time:$exectime");
-
     $dCat = isset($_REQUEST['cat']) ? COM_applyFilter($_REQUEST['cat'],true) : 0;
     $groups = array ();
     $usergroups = SEC_getUserGroups();
@@ -661,7 +594,8 @@ if ($forum == 0) {
         $catList = 'categorylisting.thtml';
     }
     $numCategories = DB_numRows($categoryQuery);
-    $forumlisting = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $forumlisting = new Template($_CONF['path_layout'] . 'forum/layout');
+    $forumlisting = new Template($_CONF['path'] . 'plugins/forum/templates/');
 
     $forumlisting->set_file (array ('forumlisting' => 'homepage.thtml',
             'forum_outline_header'=>'forum_outline_header.thtml',
@@ -679,8 +613,6 @@ if ($forum == 0) {
     $forumlisting->set_var('forum_home','Forum Index');
 
     for ($i =1; $i <= $numCategories; $i++) {
-        //$exectime = $mytimer->stopTimer();
-        //COM_errorLog("Start Category Listing - time:$exectime");
         $A = DB_FetchArray($categoryQuery,false);
 
         $forumlisting->set_var ('cat_name', $A['cat_name']);
@@ -693,18 +625,15 @@ if ($forum == 0) {
             $forumlisting->set_var ('LANG_markread', $LANG_GF02['msg84']);
             $forumlisting->parse ('markread_link','markread');
             if ($i == 1) {
-                $canPost = 1;
                 $newpostslink = 'href="'.$_CONF['site_url'] .'/forum/index.php?op=newposts">';
                 $forumlisting->set_var ('newpostslink', $newpostslink);
                 $forumlisting->set_var ('LANG_newposts', $LANG_GF02['msg112']);
                 $forumlisting->parse ('newposts_link','newposts');
                 $viewnewpostslink = true;
            } else {
-                $canPost = 0;
                 $forumlisting->set_var ('newposts_link', '');
            }
         } else {
-            $canPost = 0;
             $forumlisting->set_var ('newposts_link', '');
             $forumlisting->set_var ('markread_link', "");
         }
@@ -842,9 +771,6 @@ if ($forum == 0) {
                     $viewnewpostslink = true;
                     $forumlisting->parse ('newposts_link','newposts');
                 }
-//                else {
-//                    $forumlisting->set_var ('newposts_link', '');
-//                }
             } else {
                 $forumlisting->set_var ('newposts_link', '');
                 $forumlisting->set_var ('markread_link', "");
@@ -863,9 +789,6 @@ if ($forum == 0) {
     $forumlisting->parse ('outline_footer', 'forum_outline_footer');
     $forumlisting->parse ('output', 'forumlisting');
     echo $forumlisting->finish ($forumlisting->get_var('output'));
-
-    //$exectime = $mytimer->stopTimer();
-    //COM_errorLog("End of Listing - time:$exectime");
 }
 
  // Display Forums
@@ -873,7 +796,7 @@ if ($forum > 0) {
 
     $displaypostpages = '';
 
-    $topiclisting = new Template($_CONF['path_layout'] . 'forum/layout');
+    $topiclisting = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $topiclisting->set_file (array ('topiclisting' => 'topiclisting.thtml',
             'forum_outline_header'=>'forum_outline_header.thtml',
             'forum_outline_footer'=>'forum_outline_footer.thtml',
@@ -890,7 +813,7 @@ if ($forum > 0) {
     $topiclisting->set_var ('navbreadcrumbsimg','<img src="'.gf_getImage('nav_breadcrumbs').'" alt=""' . XHTML . '>');
     $topiclisting->set_var ('img_asc1', '<img src="'.gf_getImage('asc').'" border="0" alt=""' . XHTML . '>');
     $topiclisting->set_var ('img_asc2', '<img src="'.gf_getImage('asc').'" border="0" alt=""' . XHTML . '>');
-    $topiclisting->set_var ('img_asc3', '<img src="' .$CONF_FORUM['imgset']. '/asc.gif" border="0" alt=""' . XHTML . '>');
+    $topiclisting->set_var ('img_asc3', '<img src="'.gf_getImage('asc').'" border="0" alt=""' . XHTML . '>');
     $topiclisting->set_var ('img_asc4', '<img src="'.gf_getImage('asc').'" border="0" alt=""' . XHTML . '>');
     $topiclisting->set_var ('img_asc5', '<img src="'.gf_getImage('asc').'" border="0" alt=""' . XHTML . '>');
     $topiclisting->set_var ('img_desc1', '<img src="'.gf_getImage('desc').'" border="0" alt=""' . XHTML . '>');
@@ -898,14 +821,6 @@ if ($forum > 0) {
     $topiclisting->set_var ('img_desc3', '<img src="'.gf_getImage('desc').'" border="0" alt=""' . XHTML . '>');
     $topiclisting->set_var ('img_desc4', '<img src="'.gf_getImage('desc').'" border="0" alt=""' . XHTML . '>');
     $topiclisting->set_var ('img_desc5', '<img src="'.gf_getImage('desc').'" border="0" alt=""' . XHTML . '>');
-
-    if(function_exists('prj_getSessionProject')) {
-        $projectid = prj_getSessionProject();
-        if($projectid > 0) {
-            $link = "<a href=\"{$_CONF['site_url']}/projects/viewproject.php?pid=$projectid\">{$strings['RETURN2PROJECT']}</a>";
-            $topiclisting->set_var ('return2project',$link);
-        }
-    }
 
     switch($sort) {
         case 1:
@@ -966,22 +881,23 @@ if ($forum > 0) {
         $_USER['uid'] = 1;
     }
     if ($_USER['uid'] > 1 AND $CONF_FORUM['show_anonymous_posts'] == 0) {
-        $sql  = "SELECT topic.*,attachments.filename FROM {$_TABLES['gf_topic']} topic LEFT JOIN {$_TABLES['gf_attachments']} attachments ON topic.id=attachments.topic_id WHERE topic.forum = '$forum' AND topic.pid = 0 AND topic.uid > 1 ";
+        $sql  = "SELECT topic.* FROM {$_TABLES['gf_topic']} topic WHERE topic.forum = '$forum' AND topic.pid = 0 AND topic.uid > 1 ";
     } else {
-        $sql  = "SELECT topic.*,attachments.filename FROM {$_TABLES['gf_topic']} topic LEFT JOIN {$_TABLES['gf_attachments']} attachments ON topic.id=attachments.topic_id WHERE topic.forum = '$forum' AND topic.pid = 0 ";
+        $sql  = "SELECT topic.* FROM {$_TABLES['gf_topic']} topic WHERE topic.forum = '$forum' AND topic.pid = 0 ";
     }
     $sql .= "ORDER BY topic.sticky DESC, $sortOrder, topic.id DESC LIMIT $offset, $show";
     $topicResults = DB_query($sql);
     $totalresults = DB_numRows($topicResults);
 
     // Retrieve Forum details and Category name
-    $sql  = "SELECT forum.forum_name,category.cat_name,category.id,forum.is_readonly FROM {$_TABLES['gf_forums']} forum ";
+    $sql  = "SELECT forum.forum_name,category.cat_name,category.id,forum.is_readonly,forum.grp_id FROM {$_TABLES['gf_forums']} forum ";
     $sql .= "LEFT JOIN {$_TABLES['gf_categories']} category on category.id=forum.forum_cat ";
     $sql .= "WHERE forum.forum_id = $forum";
     $category = DB_fetchArray(DB_query($sql));
     if($totalresults < 1) {
         $LANG_MSG05 = $LANG_GF02['msg05'];
     }
+    $canPost = forum_canPost($category);
     $subscribe = '';
     if ($_USER['uid'] > 1) {
         // Check for user subscription status
@@ -1017,13 +933,13 @@ if ($forum > 0) {
     $topiclisting->set_var ('LANG_MSG05',$LANG_GF01['LASTPOST']);
     $topiclisting->set_var ('LANG_newforumposts', $LANG_GF02['msg113']);
 
-    if ($category['is_readonly'] == 0 OR forum_modPermission($forum,$_USER['uid'],'mod_edit')) {
+//    if ($category['is_readonly'] == 0 OR forum_modPermission($forum,$_USER['uid'],'mod_edit')) {
+    if ( $canPost ) {
         $newtopiclinkimg = '<img src="'.gf_getImage('post_newtopic').'" border="0" align="middle" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"' . XHTML . '>';
         $topiclisting->set_var ('LANG_newtopic', $LANG_GF01['NEWTOPIC']);
         $topiclisting->set_var('newtopiclinkimg',$newtopiclinkimg);
         $topiclisting->set_var ('newtopiclink',"{$_CONF['site_url']}/forum/createtopic.php?method=newtopic&amp;forum=$forum");
         $topiclisting->parse ('newpost_link','new');
-        $canPost = 1;
     } else {
         $topiclisting->set_var ('LANG_newtopic', '');
         $topiclisting->set_var ('newtopiclink','#');
@@ -1090,6 +1006,7 @@ if ($forum > 0) {
         } else {
             $lastdate = strftime('%b/%d/%y %I:%M&nbsp;%p',$record['lastupdated']);
             $lastreply = $record;
+            $record['filename'] = DB_getItem($_TABLES['gf_attachments'],'filename','topic_id='.$record['id']);
         }
 
         $firstdate1 = strftime('%m/%d/%Y', $record['date']);
@@ -1159,7 +1076,7 @@ if ($forum > 0) {
             $record['subject'] = COM_checkWords($record['subject']);
         }
         if (( isset($record['filename']) && $record['filename'] != '' ) || (isset($lastreply['filename']) && $lastreply['filename'] != '' ))  {
-            $subject = $subject . "&nbsp;<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">";
+            $subject = $subject . "&nbsp;<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">";
         }
         if($record['uid'] > 1) {
             $firstposterName = COM_getDisplayName($record['uid']);

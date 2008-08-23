@@ -133,7 +133,8 @@ if (!isset($_POST['$submit'])) {
         $showiframe_yes = '';
     }
 
-    $usersettings = new Template($_CONF['path_layout'] . 'forum/layout/userprefs');
+//    $usersettings = new Template($_CONF['path_layout'] . 'forum/layout/userprefs');
+    $usersettings = new Template($_CONF['path'] . 'plugins/forum/templates/userprefs');
     $usersettings->set_file (array ('usersettings'=>'user_settings.thtml'));
     $usersettings->set_var ('xhtml',XHTML);
     $usersettings->set_var ('phpself', $_CONF['site_url'] .'/forum/userprefs.php');

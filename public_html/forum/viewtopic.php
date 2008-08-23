@@ -81,12 +81,13 @@ if (empty($show) AND $CONF_FORUM['show_posts_perpage'] > 0) {
     $show = 20;
 }
 
-$sql  = "SELECT a.forum,a.pid,a.locked,a.subject,a.replies,b.forum_cat,b.forum_name,b.is_readonly,c.cat_name,c.id ";
+$sql  = "SELECT a.forum,a.pid,a.locked,a.subject,a.replies,b.forum_cat,b.forum_name,b.is_readonly,b.grp_id,c.cat_name,c.id ";
 $sql .= "FROM {$_TABLES['gf_topic']} a ";
 $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON b.forum_id=a.forum ";
 $sql .= "LEFT JOIN {$_TABLES['gf_categories']} c on c.id=b.forum_cat ";
 $sql .= "WHERE a.id=$showtopic";
 $viewtopic = DB_fetchArray(DB_query($sql),false);
+$canPost = forum_canPost($viewtopic);
 //$numpages = ceil(($viewtopic['replies'] + 1) / $show);
 // NOTE: 'replies' seems to be wrong, somewhere we need to find where it is
 //       created and incremented, it is not working properly
@@ -101,10 +102,12 @@ if ($CONF_FORUM['use_censor']) {
 
 if(isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
     // Send out the HTML headers and load the stylesheet for the iframe preview
-    echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' . LB;
-    echo '<html>' . LB;
+    echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . LB;
+    echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' . LB;
     echo '<head>' . LB;
-    echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$_CONF['site_url']}/layout/{$_CONF['theme']}/style.css\"></head>\n";
+    echo '<title></title>' . LB;
+    echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$_CONF['site_url']}/layout/{$_CONF['theme']}/style.css\" />" . LB;
+    echo '</head>' . LB;
     echo '<body class="sitebody">';
 } else {
     $pageTitle = strip_tags(COM_checkWords($subject));
@@ -114,8 +117,6 @@ if(isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
     // Now display the forum header
     ForumHeader($forum,$showtopic);
 }
-
-$canPost = 0;
 
 if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     if($page == 0) {
@@ -151,7 +152,8 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     }
 }
 
-$forum_outline_header = new Template($_CONF['path_layout'] . 'forum/layout');
+//$forum_outline_header = new Template($_CONF['path_layout'] . 'forum/layout');
+$forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
 $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
 $forum_outline_header->set_var('xhtml',XHTML);
 $forum_outline_header->set_var ('imgset', $CONF_FORUM['imgset']);
@@ -164,7 +166,8 @@ echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
 if ($mode != 'preview') {
 
-    $topicnavbar = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $topicnavbar = new Template($_CONF['path_layout'] . 'forum/layout');
+    $topicnavbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $topicnavbar->set_file (array ('topicnavbar'=>'topic_navbar.thtml',
             'subscribe' => 'links/subscribe.thtml',
             'print' => 'links/print.thtml',
@@ -187,23 +190,26 @@ if ($mode != 'preview') {
         $replytopic_id = $showtopic;
     }
 
-    if ($viewtopic['is_readonly'] == 0 OR forum_modPermission($viewtopic['forum'],$_USER['uid'],'mod_edit')) {
-        $newtopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=newtopic&amp;forum=$forum";
-        $newtopiclinkimg = '<img src="'.gf_getImage('post_newtopic').'" style="border:none;" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"' . XHTML . '>';
-        $canPost = 1;
-        if($viewtopic['locked'] != 1) {
-            $canPost = 1;
-            $replytopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum=$forum&amp;id=$replytopic_id";
-            $replytopiclinkimg = '<img src="'.gf_getImage('post_reply').'" style="border:none;" alt="'.$LANG_GF01['POSTREPLY'].'" title="'.$LANG_GF01['POSTREPLY'].'"' . XHTML . '>';
-            $topicnavbar->set_var ('replytopiclink', $replytopiclink);
-            $topicnavbar->set_var ('replytopiclinkimg', $replytopiclinkimg);
-            $topicnavbar->set_var ('LANG_reply', $LANG_GF01['POSTREPLY']);
-            $topicnavbar->parse ('replytopic_link', 'reply');
+//    if ($viewtopic['is_readonly'] == 0 OR forum_modPermission($viewtopic['forum'],$_USER['uid'],'mod_edit')) {
+        if ( $canPost != 0 ) {
+            $newtopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=newtopic&amp;forum=$forum";
+            $newtopiclinkimg = '<img src="'.gf_getImage('post_newtopic').'" style="border:none;" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"' . XHTML . '>';
+            if($viewtopic['locked'] != 1) {
+                $replytopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum=$forum&amp;id=$replytopic_id";
+                $replytopiclinkimg = '<img src="'.gf_getImage('post_reply').'" style="border:none;" alt="'.$LANG_GF01['POSTREPLY'].'" title="'.$LANG_GF01['POSTREPLY'].'"' . XHTML . '>';
+                $topicnavbar->set_var ('replytopiclink', $replytopiclink);
+                $topicnavbar->set_var ('replytopiclinkimg', $replytopiclinkimg);
+                $topicnavbar->set_var ('LANG_reply', $LANG_GF01['POSTREPLY']);
+                $topicnavbar->parse ('replytopic_link', 'reply');
+            }
+        } else {
+            $newtopiclink = '';
+            $newtopiclinkimg = '';
         }
-    } else {
-        $newtopiclink = '';
-        $newtopiclinkimg = '';
-    }
+//    } else {
+//        $newtopiclink = '';
+//        $newtopiclinkimg = '';
+//    }
 
 
     $prev_sql = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE (forum='$forum') AND (pid=0) AND (id < '$showtopic') ORDER BY id DESC LIMIT 1");
@@ -309,7 +315,8 @@ if ($mode != 'preview') {
     $topicnavbar->parse ('output', 'topicnavbar');
     echo $topicnavbar->finish($topicnavbar->get_var('output'));
 } else {
-    $preview_header = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $preview_header = new Template($_CONF['path_layout'] . 'forum/layout');
+    $preview_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $preview_header->set_file ('header', 'topicpreview_header.thtml');
     $preview_header->set_var ('xhtml',XHTML);
     $preview_header->set_var ('imgset', $CONF_FORUM['imgset']);
@@ -366,37 +373,39 @@ while($topicRec = DB_fetchArray($result)) {
 }
 
 if ($mode != 'preview') {
-    $topic_footer = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $topic_footer = new Template($_CONF['path_layout'] . 'forum/layout');
+    $topic_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $topic_footer->set_file (array ('topicfooter'=>'topicfooter.thtml',
             'new' => 'links/newtopic.thtml',
             'reply' => 'links/replytopic.thtml'
     ));
     $topic_footer->set_var('xhtml',XHTML);
 
-    if ($viewtopic['is_readonly'] == 0 OR forum_modPermission($viewtopic['forum'],$_USER['uid'],'mod_edit')) {
-        $newtopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=newtopic&amp;forum=$forum";
-        $newtopiclinkimg = '<img src="'.gf_getImage('post_newtopic').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"' . XHTML . '>';
-        $topic_footer->set_var('layout_url', $_CONF['layout_url']);
-        $topicDisplayTime = $mytimer->stopTimer();
-        $topic_footer->set_var ('page_generated_time', sprintf($LANG_GF02['msg179'],$topicDisplayTime));
-        $topic_footer->set_var ('newtopiclink', $newtopiclink);
-        $topic_footer->set_var ('newtopiclinkimg', $newtopiclinkimg);
-        $topic_footer->set_var ('LANG_newtopic', $LANG_GF01['NEWTOPIC']);
-        $topic_footer->parse ('newtopic_link', 'new');
-        $canPost = 1;
-        if($viewtopic['locked'] != 1) {
-            $canPost = 1;
-            $replytopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum=$forum&amp;id=$replytopic_id";
-            $replytopiclinkimg = '<img src="'.gf_getImage('post_reply').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['POSTREPLY'].'" title="'.$LANG_GF01['POSTREPLY'].'"' . XHTML . '>';
-            $topic_footer->set_var ('replytopiclink', $replytopiclink);
-            $topic_footer->set_var ('replytopiclinkimg', $replytopiclinkimg);
-            $topic_footer->set_var ('LANG_reply', $LANG_GF01['POSTREPLY']);
-            $topic_footer->parse ('replytopic_link', 'reply');
+//    if ($viewtopic['is_readonly'] == 0 OR forum_modPermission($viewtopic['forum'],$_USER['uid'],'mod_edit')) {
+        if ( $canPost != 0 ) {
+            $newtopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=newtopic&amp;forum=$forum";
+            $newtopiclinkimg = '<img src="'.gf_getImage('post_newtopic').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"' . XHTML . '>';
+            $topic_footer->set_var('layout_url', $_CONF['layout_url']);
+            $topicDisplayTime = $mytimer->stopTimer();
+            $topic_footer->set_var ('page_generated_time', sprintf($LANG_GF02['msg179'],$topicDisplayTime));
+            $topic_footer->set_var ('newtopiclink', $newtopiclink);
+            $topic_footer->set_var ('newtopiclinkimg', $newtopiclinkimg);
+            $topic_footer->set_var ('LANG_newtopic', $LANG_GF01['NEWTOPIC']);
+            $topic_footer->parse ('newtopic_link', 'new');
+            if($viewtopic['locked'] != 1) {
+                $replytopiclink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum=$forum&amp;id=$replytopic_id";
+                $replytopiclinkimg = '<img src="'.gf_getImage('post_reply').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF01['POSTREPLY'].'" title="'.$LANG_GF01['POSTREPLY'].'"' . XHTML . '>';
+                $topic_footer->set_var ('replytopiclink', $replytopiclink);
+                $topic_footer->set_var ('replytopiclinkimg', $replytopiclinkimg);
+                $topic_footer->set_var ('LANG_reply', $LANG_GF01['POSTREPLY']);
+                $topic_footer->parse ('replytopic_link', 'reply');
+            }
         }
-    }
+//    }
 } else {
     $base_url .= '&amp;onlytopic=1';
-    $topic_footer = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $topic_footer = new Template($_CONF['path_layout'] . 'forum/layout');
+    $topic_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $topic_footer->set_file (array ('topicfooter'=>'topicfooter_preview.thtml'));
     $topic_footer->set_var('xhtml',XHTML);
 }
@@ -407,7 +416,8 @@ $topic_footer->set_var ('imgset', $CONF_FORUM['imgset']);
 $topic_footer->parse ('output', 'topicfooter');
 echo $topic_footer->finish($topic_footer->get_var('output'));
 
-$forum_outline_footer= new Template($_CONF['path_layout'] . 'forum/layout');
+//$forum_outline_footer= new Template($_CONF['path_layout'] . 'forum/layout');
+$forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
 $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
 $forum_outline_footer->set_var ('xhtml',XHTML);
 $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);

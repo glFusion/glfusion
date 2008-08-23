@@ -165,7 +165,7 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
     $i = 1;
 
     if ( isset($attributes['align'] ) ) {
-        $align = ' align=' . $attributes['align'] . ' ';
+        $align = ' align="' . $attributes['align'] . '" ';
     } else {
         $align = '';
     }
@@ -201,7 +201,7 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
                     $srcThumbnail = "{$_CONF['site_url']}/forum/images/icons/none.gif";
                 }
             }
-            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$LANG_GF10['click2download'].'"></a>';
+            $retval = '<a href="'.$srcImage.'" '.$lb.' target="_new"><img src="'. $srcThumbnail . '" '.$align.' style="padding:5px;" title="'.$LANG_GF10['click2download'].'" alt="'.$LANG_GF10['click2download'].'"'.XHTML.'></a>';
             break;
          }
         $i++;
@@ -317,14 +317,16 @@ function forumNavbarMenu($current='') {
 function ForumHeader($forum,$showtopic) {
     global $_TABLES, $_USER, $_CONF, $CONF_FORUM, $LANG_GF01, $LANG_GF02;
 
-    $forum_outline_header = new Template($_CONF['path_layout'] . '/forum/layout');
+//    $forum_outline_header = new Template($_CONF['path_layout'] . '/forum/layout');
+    $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
     $forum_outline_header->set_var('xhtml',XHTML);
     $forum_outline_header->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_outline_header->parse ('output', 'forum_outline_header');
     echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
-    $navbar = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $navbar = new Template($_CONF['path_layout'] . 'forum/layout');
+    $navbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $navbar->set_file (array ('topicheader'=>'navbar.thtml'));
     $navbar->set_var ('xhtml',XHTML);
     $navbar->set_var ('site_url', $_CONF['site_url']);
@@ -353,7 +355,8 @@ function ForumHeader($forum,$showtopic) {
         $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
         if (!SEC_inGroup($groupname)) {
             BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg77'],false);
-            $forum_outline_footer= new Template($_CONF['path_layout'] . 'forum/layout');
+//            $forum_outline_footer= new Template($_CONF['path_layout'] . 'forum/layout');
+            $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
             $forum_outline_footer->set_var('xhtml',XHTML);
             $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
@@ -364,7 +367,8 @@ function ForumHeader($forum,$showtopic) {
         }
     }
 
-    $forum_outline_footer= new Template($_CONF['path_layout'] . 'forum/layout');
+//    $forum_outline_footer= new Template($_CONF['path_layout'] . 'forum/layout');
+    $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
     $forum_outline_footer->set_var ('xhtml',XHTML);
     $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
@@ -511,7 +515,7 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
                       'list', array ('inline','block', 'listitem'), array ());
     $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
                       'listitem', array ('list'), array ());
-    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['layout_url'] . '/forum/image_set/img_quote.gif" alt=""/>', 'end_tag' => '</div><p>'),
+    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>', 'end_tag' => '</div><p>'),
                       'inline', array('listitem','block','inline','link'), array());
     $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
@@ -656,25 +660,155 @@ function gf_replacesmilie($str) {
  * only icons of type set by the themes $_IMAGE_TYPE setting will be used
 */
 function gf_getImage($image,$directory='') {
-    global $CONF_FORUM,$_IMAGE_TYPE;
+    global $_CONF,$CONF_FORUM,$_IMAGE_TYPE;
+
+    $imageMap=array(
+        'accent'            =>    'accent.gif',
+        'add'               =>    'add.gif',
+        'aim'               =>    'aim.gif',
+        'alert_warning'     =>    'alert_warning.gif',
+        'allread'           =>    'allread.gif',
+        'asc'               =>    'asc.gif',
+        'asc_on'            =>    'asc_on.gif',
+        'board'             =>    'board.gif',
+        'bullet'            =>    'bullet.gif',
+        'busyforum'         =>    'busyforum.png',
+        'busytopic'         =>    'busytopic.png',
+        'busytopic_footer'  =>    'busytopic_footer.png',
+        'button-left'       =>    'button-left.png',
+        'button-middle'     =>    'button-middle.png',
+        'button-right'      =>    'button-right.png',
+        'button'            =>    'button.gif',
+        'button_over'       =>    'button_over.gif',
+        'captchasupport'    =>    'captchasupport.jpg',
+        'chatrooms'         =>    'chatrooms.gif',
+        'delete'            =>    'delete.gif',
+        'desc'              =>    'desc.gif',
+        'desc_on'           =>    'desc_on.gif',
+        'document_sm'       =>    'document_sm.gif',
+        'edit'              =>    'edit.png',
+        'edit_button'       =>    'edit_button.png',
+        'email'             =>    'email.png',
+        'email_button'      =>    'email_button.png',
+        'end-quote'         =>    'end-quote.gif',
+        'folder'            =>    'folder.gif',
+        'forum-wrap-b'      =>    'forum-wrap-b.gif',
+        'forum-wrap-bl'     =>    'forum-wrap-bl.gif',
+        'forum-wrap-br'     =>    'forum-wrap-br.gif',
+        'forum-wrap-l'      =>    'forum-wrap-l.gif',
+        'forum-wrap-r'      =>    'forum-wrap-r.gif',
+        'forum-wrap-t'      =>    'forum-wrap-t.gif',
+        'forum-wrap-tl'     =>    'forum-wrap-tl.gif',
+        'forum-wrap-tr'     =>    'forum-wrap-tr.gif',
+        'forum'             =>    'forum.png',
+        'forumindex'        =>    'forumindex.png',
+        'forumname'         =>    'forumname.gif',
+        'forumnotify_off'   =>    'forumnotify_off.gif',
+        'forumnotify_on'    =>    'forumnotify_on.gif',
+        'gl_mootip_bg200'   =>    'gl_mootip_bg200.png',
+        'green_dot'         =>    'green_dot.gif',
+        'home'              =>    'home.png',
+        'home_button'       =>    'home_button.png',
+        'icon_last_posts'   =>    'icon_last_posts.gif',
+        'icon_minipost'     =>    'icon_minipost.gif',
+        'icon_topic_latest' =>    'icon_topic_latest.gif',
+        'icon_www'          =>    'icon_www.gif',
+        'icq'               =>    'icq.gif',
+        'im'                =>    'im.gif',
+        'img_quote'         =>    'img_quote.gif',
+        'im_inbox'          =>    'im_inbox.gif',
+        'im_new'            =>    'im_new.gif',
+        'ip'                =>    'ip.gif',
+        'lastpost'          =>    'lastpost.gif',
+        'latestposts'       =>    'latestposts.png',
+        'lb-b'              =>    'lb-b.gif',
+        'lb-bl'             =>    'lb-bl.gif',
+        'lb-br'             =>    'lb-br.gif',
+        'lb-l'              =>    'lb-l.gif',
+        'lb-r'              =>    'lb-r.gif',
+        'lb-t'              =>    'lb-t.gif',
+        'lb-tl'             =>    'lb-tl.gif',
+        'lb-tr'             =>    'lb-tr.gif',
+        'locked'            =>    'locked.png',
+        'locked_new'        =>    'locked_new.gif',
+        'locked_new'        =>    'locked_new.png',
+        'members'           =>    'members.gif',
+        'modify'            =>    'modify.gif',
+        'msn'               =>    'msn.gif',
+        'msnm'              =>    'msnm.gif',
+        'nav_breadcrumbs'   =>    'nav_breadcrumbs.png',
+        'nav_down'          =>    'nav_down.gif',
+        'nav_topic'         =>    'nav_topic.gif',
+        'nav_topic'         =>    'nav_topic.png',
+        'nav_up'            =>    'nav_up.gif',
+        'new'               =>    'new.gif',
+        'newpost'           =>    'newpost.gif',
+        'newposts'          =>    'newposts.png',
+        'next'              =>    'next.gif',
+        'next2'             =>    'next2.gif',
+        'nexttopic'         =>    'nexttopic.gif',
+        'noposts'           =>    'noposts.png',
+        'notifications'     =>    'notifications.gif',
+        'notify_off'        =>    'notify_off.gif',
+        'notify_on'         =>    'notify_on.gif',
+        'padlock'           =>    'padlock.gif',
+        'pixel'             =>    'pixel.gif',
+        'pm'                =>    'pm.png',
+        'pm_button'         =>    'pm_button.png',
+        'popular'           =>    'popular.gif',
+        'post_newtopic'     =>    'post_newtopic.gif',
+        'post_reply'        =>    'post_reply.gif',
+        'prev'              =>    'prev.gif',
+        'prevtopic'         =>    'prevtopic.gif',
+        'print'             =>    'print.gif',
+        'printer'           =>    'printer.gif',
+        'private'           =>    'private.gif',
+        'profile'           =>    'profile.png',
+        'profile_button'    =>    'profile_button.png',
+        'quietforum'        =>    'quietforum.png',
+        'quiettopic_footer' =>    'quiettopic_footer.png',
+        'quote'             =>    'quote.png',
+        'quote_button'      =>    'quote_button.png',
+        'redarrow'          =>    'redarrow.gif',
+        'red_dot'           =>    'red_dot.gif',
+        'replypost'         =>    'replypost.gif',
+        'return'            =>    'return.gif',
+        'search'            =>    'search.gif',
+        'spacer'            =>    'spacer.gif',
+        'start-quote'       =>    'start-quote.gif',
+        'star_off_sm'       =>    'star_off_sm.gif',
+        'star_on_sm'        =>    'star_on_sm.gif',
+        'sticky'            =>    'sticky.png',
+        'sticky_new'        =>    'sticky_new.png',
+        'top'               =>    'top.gif',
+        'topic_markread'    =>    'topic_markread.png',
+        'topic_viewnew'     =>    'topic_viewnew.png',
+        'trash'             =>    'trash.gif',
+        'viewallnew'        =>    'viewallnew.gif',
+        'view_last_reply'   =>    'view_last_reply.gif',
+        'website'           =>    'website.png',
+        'website_button'    =>    'website_button.png',
+        'yim'               =>    'yim.gif',
+        'rank0'             =>    'rank0.gif',
+        'rank1'             =>    'rank1.gif',
+        'rank2'             =>    'rank2.gif',
+        'rank3'             =>    'rank3.gif',
+        'rank4'             =>    'rank4.gif',
+        'rank5'             =>    'rank5.gif',
+        'rank_admin'        =>    'rank_admin.gif',
+        'rank_mod'          =>    'rank_mod.gif',
+    );
 
     if ($directory != '')  {
-        $fullImagePath = "{$CONF_FORUM['imgset_path']}/{$directory}/{$image}.{$_IMAGE_TYPE}";
-    } else {
-        $fullImagePath = "{$CONF_FORUM['imgset_path']}/{$image}.{$_IMAGE_TYPE}";
-    }
-    if ($CONF_FORUM['autoimagetype']) {
-        $fullImageURL = "{$CONF_FORUM['imgset']}/";
-        if ($directory != '')  $fullImageURL .= "{$directory}/";
-
-        if (file_exists($fullImagePath)) {
-            $fullImageURL .= "{$image}.{$_IMAGE_TYPE}";
+        if ( $directory == 'moods' ) {
+            $fullImagePath = $_CONF['site_url'].'/forum/images/'.$directory .'/'.$image.'.gif';
         } else {
-            $fullImageURL .= "{$image}.{$CONF_FORUM['image_type_override']}";
+            $fullImagePath = $_CONF['site_url'].'/forum/images/'.$directory .'/'.$imageMap[$image];
         }
     } else {
-        $fullImageURL = "{$CONF_FORUM['imgset']}/{$image}.{$_IMAGE_TYPE}";
+        $fullImagePath = $_CONF['site_url'].'/forum/images/'.$imageMap[$image];
     }
+    $fullImageURL = $fullImagePath;
     return $fullImageURL;
 }
 
@@ -693,7 +827,8 @@ function BlockMessage($title,$message='',$sitefooter=true){
 function alertMessage($message,$title='',$prompt='') {
     global $_CONF, $CONF_FORUM,$LANG_GF02;
 
-    $alertmsg = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $alertmsg = new Template($_CONF['path_layout'] . 'forum/layout');
+    $alertmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $alertmsg->set_file (array (
         'outline_header'=>'forum_outline_header.thtml',
         'alertmsg'=>'alertmsg.thtml',
@@ -702,6 +837,7 @@ function alertMessage($message,$title='',$prompt='') {
     $alertmsg->set_var ('xhtml',XHTML);
     $alertmsg->set_var ('imgset', $CONF_FORUM['imgset']);
     $alertmsg->set_var ('layout_url', $_CONF['layout_url']);
+    $alertmsg->set_var ('site_url', $_CONF['site_url']);
     $alertmsg->set_var ('alert_title', $title);
     $alertmsg->set_var ('alert_message', $message);
     if ($prompt == '') {
@@ -721,7 +857,8 @@ function BaseFooter($showbottom=true) {
     global $_USER,$_CONF,$LANG_GF02,$forum,$CONF_FORUM;
 
     if (!$CONF_FORUM['registration_required'] OR $_USER['uid'] > 1) {
-        $footer = new Template($_CONF['path_layout'] . 'forum/layout');
+//        $footer = new Template($_CONF['path_layout'] . 'forum/layout');
+        $footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
         $footer->set_file (array ('footerblock'=>'footer/footer.thtml',
                   'header'=>'forum_outline_header.thtml',
                   'footer'=>'forum_outline_footer.thtml'
@@ -753,7 +890,8 @@ function BaseFooter($showbottom=true) {
 function f_forumsearch() {
     global $_CONF,$_TABLES,$LANG_GF01,$LANG_GF02,$forum;
 
-    $forum_search = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $forum_search = new Template($_CONF['path_layout'] . 'forum/layout');
+    $forum_search = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_search->set_file (array ('forum_search'=>'forum_search.thtml'));
     $forum_search->set_var ('forum', $forum);
     $forum_search->set_var ('xhtml',XHTML);
@@ -796,7 +934,8 @@ function f_forumjump($action='',$selected=0) {
             $selecthtml .= '</optgroup>';
         }
     }
-    $forum_jump = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $forum_jump = new Template($_CONF['path_layout'] . 'forum/layout');
+    $forum_jump = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_jump->set_file (array ('forum_jump'=>'forum_jump.thtml'));
     $forum_jump->set_var ('xhtml',XHTML);
     $forum_jump->set_var ('LANG_msg103', $LANG_GF02['msg103']);
@@ -817,7 +956,8 @@ function f_forumjump($action='',$selected=0) {
 function f_forumtime() {
     global $CONF_FORUM, $_CONF,$_TABLES,$LANG_GF01,$LANG_GF02,$forum;
 
-    $forum_time = new Template($_CONF['path_layout'] . 'forum/layout/footer');
+//    $forum_time = new Template($_CONF['path_layout'] . 'forum/layout/footer');
+    $forum_time = new Template($_CONF['path'] . 'plugins/forum/templates/footer');
     $forum_time->set_file (array ('forum_time'=>'forum_time.thtml'));
     $forum_time->set_var('xhtml',XHTML);
     $timezone = strftime('%Z');
@@ -831,7 +971,8 @@ function f_forumtime() {
 function f_legend() {
     global $CONF_FORUM,$forum,$_CONF,$LANG_GF01,$LANG_GF02;
 
-    $forum_legend = new Template($_CONF['path_layout'] . 'forum/layout/footer');
+//    $forum_legend = new Template($_CONF['path_layout'] . 'forum/layout/footer');
+    $forum_legend = new Template($_CONF['path'] . 'plugins/forum/templates/footer/');
     $forum_legend->set_file (array ('forum_legend'=>'forum_legend.thtml'));
     $forum_legend->set_var ('xhtml',XHTML);
     $forum_legend->set_var ('imgset', $CONF_FORUM['imgset']);
@@ -872,7 +1013,8 @@ function f_whosonline(){
     global $CONF_FORUM, $_CONF,$_TABLES,$LANG_GF02;
 
     $onlineusers = phpblock_whosonline();
-    $forum_users = new Template($_CONF['path_layout'] . 'forum/layout/footer');
+//    $forum_users = new Template($_CONF['path_layout'] . 'forum/layout/footer');
+    $forum_users = new Template($_CONF['path'] . 'plugins/forum/templates/footer/');
     $forum_users->set_file (array ('forum_users'=>'forum_users.thtml'));
     $forum_users->set_var ('xhtml',XHTML);
     $forum_users->set_var ('LANG_msg07', $LANG_GF02['msg07']);
@@ -914,7 +1056,8 @@ function f_forumrules() {
     } else {
         $anon_perm_image = '<img src="'.gf_getImage('red_dot').'" alt=""' . XHTML . '>';
     }
-    $forum_rules = new Template($_CONF['path_layout'] . 'forum/layout/footer');
+//    $forum_rules = new Template($_CONF['path_layout'] . 'forum/layout/footer');
+    $forum_rules = new Template($_CONF['path'] . 'plugins/forum/templates/footer/');
     $forum_rules->set_file (array ('forum_rules'=>'forum_rules.thtml'));
     $forum_rules->set_var ('xhtml',XHTML);
     $forum_rules->set_var ('imgset', $CONF_FORUM['imgset']);
@@ -1003,14 +1146,14 @@ function gf_showattachments($topic,$mode='') {
             list($testaccess_cnt) = DB_fetchArray(DB_query($sql));
         }
         if ($lid > 0 AND (!$filemgmtSupport OR $testaccess_cnt == 0 OR DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",$lid ) == 0)) {
-            $retval .= "<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">Insufficent Access";
+            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">Insufficent Access";
         } elseif (!empty($field_value)) {
-            $retval .= "<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">";
+            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">";
             $retval .= "<a href=\"{$_CONF['site_url']}/forum/getattachment.php?id=$id\" target=\"_new\">";
             $retval .= "{$filename[1]}</a>&nbsp;";
             if ($mode == 'edit') {
                 $retval .= "<a href=\"#\" onclick='ajaxDeleteFile($topic,$id);'>";
-                $retval .= "<img src=\"{$CONF_FORUM['imgset']}/delete.gif\" border=\"0\" alt=\"\"" . XHTML . "></a>";
+                $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/delete.gif\" border=\"0\" alt=\"\"" . XHTML . "></a>";
             }
         } else {
             $retval .= 'N/A&nbsp;';
