@@ -31,7 +31,7 @@
 
 require_once('../lib-common.php');
 require_once($_MG_CONF['path_html'] . 'classMedia.php');
-require_once($_MG_CONF['path_html'] . 'classes/class.phpmailer.php');
+require_once($_CONF['path'] . 'lib/phpmailer/class.phpmailer.php');
 
 if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1 )  {
     $display = MG_siteHeader();

@@ -1291,7 +1291,7 @@ function MG_notifyModerators( $aid ) {
         return true;
     }
 
-    require_once($_MG_CONF['path_html'] . 'classes/class.phpmailer.php');
+    require_once($_CONF['path'] . 'lib/phpmailer/class.phpmailer.php');
 
     $media_user_id = $_USER['uid'];
 

@@ -35,7 +35,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'rssfeed.php') !== false)
     die ('This file can not be used on its own.');
 }
 
-require_once($_MG_CONF['path_html'] . 'classes/feedcreator.class.php');
+require_once($_CONF['path'] . 'lib/feedcreator/feedcreator.class.php');
 
 function MG_buildAlbumRSS( $aid ) {
     global $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
