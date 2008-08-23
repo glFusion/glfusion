@@ -1,5 +1,0 @@
-<!-- start prevtopic.thtml -->
-<!-- <a {prevlink}{LANG_prevlink}</a> -->
-<!--   Alternative layout to use Images -->  
-<!-- <a href="{prevlink}">{prevlinkimg}</a> -->
-<!-- end prevtopic.thtml -->

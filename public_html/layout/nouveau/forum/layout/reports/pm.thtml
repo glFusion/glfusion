@@ -1,2 +1,0 @@
-<!-- pm.thtml -->
-                        <td style="background: center url({layout_url}/navbar/images/button.gif);" nowrap><img width="10" height="1"><a class="pluginButton" {pmlink}{LANG_pm}</a></td>

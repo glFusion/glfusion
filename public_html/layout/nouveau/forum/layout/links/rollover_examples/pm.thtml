@@ -1,3 +1,0 @@
-<!-- start pm.thtml -->
-<td class="pluginRollOut" onMouseOver="className='pluginRollOver';this.style.cursor='pointer';" onMouseOut="className='pluginRollOut';" style="text-align:center;width:40px;padding:2px;" onclick="window.location.href='{pmlink}'">{LANG_pm}</td>                          
-<!-- end pm.thtml -->

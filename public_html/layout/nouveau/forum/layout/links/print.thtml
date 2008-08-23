@@ -1,7 +1,0 @@
-<!-- start print.thtml -->
-<a href="{printlink}">{LANG_print}</a>
-<!--   Alternative layout to use Images -->
-<!--
-<a href="{printlink}">{printlinkimg}</a>  
--->
-<!-- end print.thtml -->
