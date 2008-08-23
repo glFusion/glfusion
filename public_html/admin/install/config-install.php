@@ -224,7 +224,7 @@ function install_config()
     $c->add('sg_images', NULL, 'subgroup', 5, 0, NULL, 0, TRUE);
 
     $c->add('fs_imagelib', NULL, 'fieldset', 5, 22, NULL, 0, TRUE);
-    $c->add('image_lib','','select',5,22,10,1450,TRUE);
+    $c->add('image_lib','gdlib','select',5,22,10,1450,TRUE);
     $c->add('path_to_mogrify','','text',5,22,NULL,1460,FALSE);
     $c->add('path_to_netpbm','','text',5,22,NULL,1470,FALSE);
 
