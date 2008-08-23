@@ -39,29 +39,11 @@
 
 $CONF_FORUM['version'] = '3.1.0.fusion';
 
-$CONF_FORUM['debug'] = false;
-
-
-$CONF_FORUM['imgset'] = $_CONF['layout_url'] .'/forum/image_set';
-$CONF_FORUM['imgset_path'] = $_CONF['path_layout'] .'/forum/image_set';
-
-/* The forum uses a number of icons and you may have a need to use a mixture of image types.
- * Enabling the $CONF_FORUM['autoimagetype'] feature will invoke a function that will first
- * check for an image of the type set in your themes function.php $_IMAGE_TYPE
- * If the icon of that image type is not found, then it will use an image of type
- * specified by the $CONF_FORUM['image_type_override'] setting.
-
- * Set $CONF_FORUM['autoimagetype'] to false to disable this feature and
- * only icons of type set by the themes $_IMAGE_TYPE setting will be used
-*/
-$CONF_FORUM['autoimagetype'] = true;
-$CONF_FORUM['image_type_override'] = 'gif';
+$CONF_FORUM['lastx_numposts'] = 30;
 
 /*************************************************************************
 *          Do not modify any settings below this area                    *
 *************************************************************************/
-$CONF_FORUM['lastx_numposts'] = 30;
-// Adding the Forum Plugin tables to $_TABLES array
 $_TABLES['gf_userprefs']    = $_DB_table_prefix . 'forum_userprefs';
 $_TABLES['gf_topic']        = $_DB_table_prefix . 'forum_topic';
 $_TABLES['gf_categories']   = $_DB_table_prefix . 'forum_categories';

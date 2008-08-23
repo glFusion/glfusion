@@ -949,7 +949,8 @@ function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
     if ($prompt=="") {
         $prompt = $LANG_GF02['msg140'];
     }
-    $statusmsg = new Template($_CONF['path_layout'] . 'forum/layout');
+//    $statusmsg = new Template($_CONF['path_layout'] . 'forum/layout');
+    $statusmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $statusmsg->set_file (array ('statusmsg'=>'statusmessage.thtml'));
     $statusmsg->set_var ('imgset', $CONF_FORUM['imgset']);
     $statusmsg->set_var ('heading', $LANG_GF02['StatusHeading']);
@@ -1054,7 +1055,8 @@ function phpblock_forum_newposts() {
                 }
         }
 
-        $block = new Template($_CONF['path_layout'] . 'forum/layout/blocks');
+//        $block = new Template($_CONF['path_layout'] . 'forum/layout/blocks');
+        $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file (array ('block'=>'latestpostsblock.thtml','topicrecord' => 'block_displayline.thtml'));
         $block->set_var ('phpself', $_CONF['site_url'] .'/index.php');
         $block->set_var ('layout_url', $_CONF['layout_url']);
@@ -1233,7 +1235,8 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         if ( $retval ) {
             return $retval;
         }
-        $block = new Template ($_CONF['path_layout'] . 'forum/layout/blocks');
+//        $block = new Template ($_CONF['path_layout'] . 'forum/layout/blocks');
+        $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file (array ('block'=>'centerblock.thtml','record' => 'centerblock_displayline.thtml'));
         $block->set_var ('phpself', $_CONF['site_url'] .'/index.php');
         $block->set_var ('startblock', COM_startBlock($LANG_GF02['msg170']));
@@ -1392,6 +1395,28 @@ function forum_modPermission($forum,$uid='',$permission='') {
 
 }
 
+function forum_canPost($forum) {
+    global $_CONF, $CONF_FORUM,$_USER;
+
+    if ( $CONF_FORUM['registered_to_post'] && (!isset($_USER) || $_USER['uid'] < 2 )) {
+        return false;
+    }
+    if (SEC_inGroup('Root') || SEC_hasRights('forum.edit')) {
+        return true;
+    }
+    if (forum_modPermission($forum,$_USER['uid'],'mod_edit')) {
+        return true;
+    }
+    if ( $forum['is_readonly'] ) {
+        return false;
+    }
+    if (!SEC_inGroup($forum['grp_id'])) {
+        return false;
+    }
+    return true;
+}
+
+
 function forum_delAttachment($deleteid) {
     global $_TABLES,$_FM_TABLES,$CONF_FORUM,$filemgmt_FileStore;
 
@@ -1442,7 +1467,8 @@ function forumPLG_showsmilies() {
     if ($CONF_FORUM['use_smilies_plugin'] AND function_exists(msg_showsmilies)) {
         return msg_showsmilies();
     } else {
-        $t = new Template($_CONF['path_layout'] . 'forum/layout');
+//        $t = new Template($_CONF['path_layout'] . 'forum/layout');
+        $t = new Template($_CONF['path'] . 'plugins/forum/templates/');
         $t->set_file ('smilies' , 'smilies.thtml');
         $t->set_var ('imgset', "{$_CONF['site_url']}/forum/images");
         $t->parse ('output', 'smilies');
@@ -1476,11 +1502,13 @@ function forumPLG_getMemberBadge($uid) {
         if (!SEC_inGroup('Root',$uid)) {
             foreach ($CONF_FORUM['grouptags'] as $groupid => $buttonimg) {
                 if (SEC_inGroup($groupid,$uid)) {
-                    return "<img src=\"{$CONF_FORUM['imgset']}/badges/{$buttonimg}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+//                    return "<img src=\"{$CONF_FORUM['imgset']}/badges/{$buttonimg}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+                    return "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$buttonimg}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
                 }
             }
         } else {
-            return "<img src=\"{$CONF_FORUM['imgset']}/badges/{$CONF_FORUM['grouptags']['Root']}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+//            return "<img src=\"{$CONF_FORUM['imgset']}/badges/{$CONF_FORUM['grouptags']['Root']}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+            return "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$CONF_FORUM['grouptags']['Root']}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
         }
     }
 }
