@@ -39,6 +39,12 @@
 // Prevent PHP from reporting uninitialized variables
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
+// this file can't be used on its own
+if( strpos( $_SERVER['PHP_SELF'], 'lib-common.php' ) !== false )
+{
+    die ('This file can not be used on its own.');
+}
+
 /**
 * This is the common library for glFusion.  Through our code, you will see
 * functions with the COM_ prefix (e.g. COM_siteHeader()).  Any such functions
@@ -121,12 +127,7 @@ if( isset( $_CONF['site_enabled'] ) && !$_CONF['site_enabled'] )
     exit;
 }
 
-// this file can't be used on its own - redirect to index.php
-if( strpos( $_SERVER['PHP_SELF'], 'lib-common.php' ) !== false )
-{
-    echo COM_refresh( $_CONF['site_url'] . '/index.php' );
-    exit;
-}
+
 
 // timezone hack - set the webserver's timezone
 if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
@@ -3103,7 +3104,7 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
 {
     global $_CONF;
 
-    require_once($_CONF['path'] . '/system/classes/htmLawed.php');
+    require_once($_CONF['path'] . 'lib/htmLawed/htmLawed.php');
 
     $allowedProtocols = array();
 
@@ -3129,6 +3130,7 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
 
     if ( $_CONF['use_safe_html'] == TRUE ) {
         $str = htmLawed($str,array('safe'=>1,'elements'=>'*+embed+object','balance'=>1,'valid_xhtml'=>0));
+
 /*        $str = htmLawed($str,
                 array(  'comments'=>0,
                         'cdata'=>0,
@@ -3309,72 +3311,38 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         return CUSTOM_mail( $to, $subject, $message, $from, $html, $priority, $cc );
     }
 
-    include_once( 'Mail.php' );
-    include_once( 'Mail/RFC822.php' );
+    require_once $_CONF['path'] . 'lib/phpmailer/class.phpmailer.php';
 
-    $method = $_CONF['mail_settings']['backend'];
-
-    if( !isset( $mailobj ))
-    {
-        if(( $method == 'sendmail' ) || ( $method == 'smtp' ))
-        {
-            $mailobj =& Mail::factory( $method, $_CONF['mail_settings'] );
-        }
-        else
-        {
-            $method = 'mail';
-            $mailobj =& Mail::factory( $method );
-        }
+    $mail = new PHPMailer();
+    $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
+    $mail->CharSet = COM_getCharset();
+    if ($_CONF['mail_settings']['backend'] == 'smtp' ) {
+        $mail->Host     = $_CONF['mail_settings']['host'] . ':' . $_CONF['mail_settings']['port'];
+        $mail->SMTPAuth = $_CONF['mail_settings']['auth'];
+        $mail->Username = $_CONF['mail_settings']['username'];
+        $mail->Password = $_CONF['mail_settings']['password'];
+        $mail->Mailer = "smtp";
+    } elseif ($_CONF['mail_settings']['backend'] == 'sendmail') {
+        $mail->Mailer = "sendmail";
+        $mail->Sendmail = $_CONF['mail_settings']['sendmail_path'];
+    } else {
+        $mail->Mailer = "mail";
     }
-
-    $charset = COM_getCharset();
-    $headers = array();
-
-    $headers['From'] = $from;
-    if( $method != 'mail' )
-    {
-        $headers['To'] = $to;
+    $mail->WordWrap = 76;
+    $mail->IsHTML($html);
+    $mail->Body    = $message;
+    $mail->Subject = $subject;
+    $mail->From = $from;
+    $mail->FromName = $_CONF['site_name'];
+    $mail->AddAddress($to);
+    if ( $cc != '' ) {
+        $mail->AddCC($cc);
     }
-    if( !empty( $cc ))
-    {
-        $headers['Cc'] = $cc;
+    if(!$mail->Send()) {
+        COM_errorLog("Email Error: " . $mail->ErrorInfo);
+        return false;
     }
-    $headers['Date'] = date( 'r' ); // RFC822 formatted date
-    if( $method == 'smtp' )
-    {
-        list( $usec, $sec ) = explode( ' ', microtime());
-        $m = substr( $usec, 2, 5 );
-        $headers['Message-Id'] = '<' .  date( 'YmdHis' ) . '.' . $m
-                               . '@' . $_CONF['mail_settings']['host'] . '>';
-    }
-    if( $html )
-    {
-        $headers['Content-Type'] = 'text/html; charset=' . $charset;
-        $headers['Content-Transfer-Encoding'] = '8bit';
-    }
-    else
-    {
-        $headers['Content-Type'] = 'text/plain; charset=' . $charset;
-    }
-    $headers['Subject'] = $subject;
-    if( $priority > 0 )
-    {
-        $headers['X-Priority'] = $priority;
-    }
-    $headers['X-Mailer'] = 'glFusion ' . GVERSION;
-
-    if (!empty($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['SERVER_ADDR']) &&
-            ($_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR'])) {
-        $headers['X-Originating-IP'] = $_SERVER['REMOTE_ADDR'];
-    }
-
-    $retval = $mailobj->send( $to, $headers, $message );
-    if( $retval !== true )
-    {
-        COM_errorLog( $retval->toString(), 1 );
-    }
-
-    return( $retval === true ? true : false );
+    return true;
 }
 
 
