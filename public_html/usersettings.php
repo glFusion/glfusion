@@ -763,18 +763,7 @@ function handlePhotoUpload ($delete_photo = '')
 
     $upload = new upload();
     if (!empty ($_CONF['image_lib'])) {
-/* --------------------------------------
-        if ($_CONF['image_lib'] == 'imagemagick') {
-            // Using imagemagick
-            $upload->setMogrifyPath ($_CONF['path_to_mogrify']);
-        } elseif ($_CONF['image_lib'] == 'netpbm') {
-            // using netPBM
-            $upload->setNetPBM ($_CONF['path_to_netpbm']);
-        } elseif ($_CONF['image_lib'] == 'gdlib') {
-            // using the GD library
-            $upload->setGDLib ();
-        }
------------------------------------------- */
+
         $upload->setAutomaticResize (true);
         if (isset ($_CONF['debug_image_upload']) &&
                 $_CONF['debug_image_upload']) {
@@ -835,6 +824,7 @@ function handlePhotoUpload ($delete_photo = '')
     // now do the upload
     if (!empty ($filename)) {
         $upload->setFileNames ($filename);
+        $upload->setFieldName('photo');
         $upload->setPerms ('0644');
         if (($_CONF['max_photo_width'] > 0) &&
             ($_CONF['max_photo_height'] > 0)) {
