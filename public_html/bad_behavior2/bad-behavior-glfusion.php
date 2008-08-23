@@ -28,6 +28,13 @@ Please report any problems to badbots AT ioerror DOT us
 ###############################################################################
 ###############################################################################
 
+if (strpos ($_SERVER['PHP_SELF'], 'bad-behavior-glfusion.php') !== false)
+{
+    die ('This file can not be used on its own.');
+}
+
+global $_DB_table_prefix;
+
 define('BB2_CWD', dirname(__FILE__));
 
 // Settings you can adjust for Bad Behavior.
