@@ -169,6 +169,43 @@
                                 </select>
                             </td>
                         </tr>
+                         <tr>
+                            <td>{lang_cmt_disable}:</td>
+                                        <td class="alignleft" style="vertical-align:top;" colspan="1">{lang_enabled}:<input type="checkbox" name="cmt_close_flag" value="1" {is_checked5} onclick="enablecmtclose(this);"{xhtml}>
+                                            <span dir="ltr">
+                                                <select id="cmt_close_month" name="cmt_close_month">
+                                                    {cmt_close_month_options}
+                                                 </select>
+                                                 /
+                                                 <select id="cmt_close_day" name="cmt_close_day">
+                                                    {cmt_close_day_options}
+                                                 </select>
+                                                 /
+                                                 <select id="cmt_close_year" name="cmt_close_year">
+                                                    {cmt_close_year_options}
+                                                 </select>&nbsp;&nbsp;
+
+                                <a href="#" id="toggler1">
+                                <img src="{site_url}/images/datepicker.jpg" alt="Date Picker" style="vertical-align:middle;border:none;"{xhtml}>
+                                </a>
+                                <span id="calendar2"></span>
+
+                                &nbsp;&nbsp;
+
+
+                                                 <select name="cmt_close_hour">
+                                                     {cmt_close_hour_options}
+                                                 </select>
+                                                 :
+                                                 <select name="cmt_close_minute">
+                                                     {cmt_close_minute_options}
+                                                 </select>
+                                                     {cmt_close_ampm_selection}
+                                                  <input type="hidden" name="cmt_close_second" value="{cmt_close_second}"{xhtml}>
+                                                      </span><br{xhtml}>
+                                        </td>
+
+                        </tr>
                     </table>
                 </fieldset>
             </div>
@@ -276,6 +313,28 @@
         	idPrefix:'cal1',
         	startDate:new Date(sYear-1,0,1),
         	selectedDate: new Date(sYear,sMonth-1,sDay),
+        	allowDaysOffSelection:true,
+        	allowWeekendSelection:true,
+        	allowDatesOffSelection:true,
+        	numMonths:1
+        });
+    });
+
+	window.addEvent("domready", function(){
+		var ctoday = new Date();
+
+		var cYear  = document.getElementById('cmt_close_year').value;
+		var cMonth = document.getElementById('cmt_close_month').value;
+		var cDay   = document.getElementById('cmt_close_day').value;
+
+        var calender2 = new Calendar("calendar2", "toggler1",
+           {inputField:{date:'cmt_close_day',
+        	month:'cmt_close_month',
+        	year:'cmt_close_year'},
+        	inputType:'select',
+        	idPrefix:'cal1',
+        	startDate:new Date(cYear-1,0,1),
+        	selectedDate:  new Date(cYear,cMonth-1,cDay),
         	allowDaysOffSelection:true,
         	allowWeekendSelection:true,
         	allowDatesOffSelection:true,

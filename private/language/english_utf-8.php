@@ -205,7 +205,11 @@ $LANG03 = array(
     24 => 'Anonymous User',
     25 => 'Are you sure you want to report this post to the site admin?',
     26 => '%s reported the following abusive comment post:',
-    27 => 'Abuse report'
+    27 => 'Abuse report',
+    28 => 'Preview Changes',
+    29 => 'Submit Changes',
+    30 => 'Edited on',
+    31 => 'by'
 );
 
 ###############################################################################
@@ -500,7 +504,15 @@ $LANG09 = array(
     58 => 'More results &gt;&gt;',
     59 => 'Results',
     60 => 'per page',
-    61 => 'Refine search'
+    61 => 'Refine search',
+    62 => '#',
+    63 => 'Description',
+    64 => 'Showing %d - %d of %d results',
+    65 => 'Not available...',
+    66 => 'Story',
+    67 => 'Comment',
+    68 => 'Show %d Results',
+    69 => 'Sort By'
 );
 
 ###############################################################################
@@ -770,7 +782,7 @@ $LANG24 = array(
     60 => '',
     61 => 'Auto Archive',
     62 => 'Auto Delete',
-    63 => '',
+    63 => 'Auto Close Comments',
     64 => '',
     65 => '',
     66 => '',
@@ -1772,6 +1784,8 @@ $LANG_confignames['Core'] = array(
     'atom_max_stories' => "Max. Stories in Webservices Feed",
     'disable_webservices' => 'Disable Webservices?',
     'restrict_webservices' => 'Restrict Webservices?',
+    'article_comment_close_days' => 'Days to close comments (default)',
+    'comment_close_rec_stories' => 'Number of most recent stories enabled for comments',
     'use_safe_html' => 'Use Safe HTML Mode?',
 );
 

@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Implemented feature to auto close / edit comments for articles (Mark)
 - Microsummaries support for topics fixed. (Mark)
 - Fixed hard coded table name in lib-security (Mark).
 - Handle HTML properly for config item in configuration (Mark).

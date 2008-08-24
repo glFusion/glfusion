@@ -56,6 +56,7 @@ $_TABLES['access']              = $_DB_table_prefix . 'access';
 $_TABLES['article_images']      = $_DB_table_prefix . 'article_images';
 $_TABLES['blocks']              = $_DB_table_prefix . 'blocks';
 $_TABLES['commentcodes']        = $_DB_table_prefix . 'commentcodes';
+$_TABLES['commentedits']        = $_DB_table_prefix . 'commentedits';
 $_TABLES['commentmodes']        = $_DB_table_prefix . 'commentmodes';
 $_TABLES['comments']            = $_DB_table_prefix . 'comments';
 $_TABLES['conf_values']         = $_DB_table_prefix . 'conf_values';

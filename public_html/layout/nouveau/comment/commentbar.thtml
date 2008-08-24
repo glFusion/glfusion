@@ -1,9 +1,9 @@
 <div class="block-divider"> </div>
 <a id="comments" name="comments"></a>
 <div class="commentbar-line1">
-    
+
 </div>
-<div class="commentbar-line2 block-box-comment">
+<div class="commentbar-line2">
 	<form style="float:right; margin-top:2px; margin-bottom:3px; margin-right:10px;" action="{site_url}/comment.php" method="post">
         <div>
             <input type="hidden" name="sid" value="{sid}"{xhtml}>
@@ -22,7 +22,7 @@
             <input type="hidden" name="type" value="{comment_type}"{xhtml}>
         </div>
     </form>
-	
+
 	<h2 style="padding:0px 10px; margin:5px;">{num_comments} {lang_comments}</h2>
 </div>
 <div class="commentbar-line3" style="clear:both; text-align:center; margin-bottom:10px;">

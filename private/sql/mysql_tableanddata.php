@@ -98,6 +98,15 @@ CREATE TABLE {$_TABLES['commentcodes']} (
 ";
 
 $_SQL[] = "
+CREATE TABLE {$_TABLES['commentedits']} (
+  cid int(10) NOT NULL,
+  uid mediumint(8) NOT NULL,
+  time datetime NOT NULL,
+  PRIMARY KEY (cid)
+) TYPE=MYISAM
+";
+
+$_SQL[] = "
 CREATE TABLE {$_TABLES['commentmodes']} (
   mode varchar(10) NOT NULL default '',
   name varchar(32) default NULL,
@@ -119,6 +128,7 @@ CREATE TABLE {$_TABLES['comments']} (
   lft mediumint(10) unsigned NOT NULL default '0',
   rht mediumint(10) unsigned NOT NULL default '0',
   indent mediumint(10) unsigned NOT NULL default '0',
+  name varchar(32) default NULL,
   uid mediumint(8) NOT NULL default '1',
   ipaddress varchar(15) NOT NULL default '',
   INDEX comments_sid(sid),
@@ -306,6 +316,7 @@ CREATE TABLE {$_TABLES['stories']} (
   hits mediumint(8) unsigned NOT NULL default '0',
   numemails mediumint(8) unsigned NOT NULL default '0',
   comments mediumint(8) unsigned NOT NULL default '0',
+  comment_expire datetime NOT NULL default '0000-00-00 00:00:00',
   trackbacks mediumint(8) unsigned NOT NULL default '0',
   related text,
   featured tinyint(3) unsigned NOT NULL default '0',

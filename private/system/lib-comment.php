@@ -20,6 +20,7 @@
 // |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
 // |          Dirk Haun         - dirk AT haun-online DOT de                  |
 // |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net    |
+// |          Jared Wenerd      - wenerd87 AT gmail DOT com                    |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -216,7 +217,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 */
 function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = false, $preview = false, $ccode = 0 )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $MESSAGE, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03, $MESSAGE, $_IMAGE_TYPE;
 
     $indent = 0;  // begin with 0 indent
     $retval = ''; // initialize return value
@@ -279,6 +280,22 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
     $row = 1;
     do {
+        //check for comment edit
+        $commentedit = DB_query("SELECT cid,uid,UNIX_TIMESTAMP(time) as time FROM {$_TABLES['commentedits']} WHERE cid = {$A['cid']}");
+        $B = DB_fetchArray($commentedit);
+        if ($B) { //comment edit present
+            //get correct editor name
+            if ($A['uid'] == $B['uid']) {
+                $editname = $A['username'];
+            } else {
+                $editname = DB_getItem($_TABLES['users'], 'username', "uid={$B['cid']}");
+            }
+            //add edit info to text
+            $A['comment'] .= LB . '<span class="comment-edit">' . $LANG03[30] . ' '
+                              . strftime($_CONF['date'],$B['time']) . ' ' . $LANG03[31] . ' '
+                              . $editname . '</span><!-- /COMMENTEDIT -->';
+        }
+
         // determines indentation for current comment
         if( $mode == 'threaded' || $mode == 'nested' ) {
             $indent = ($A['indent'] - $A['pindent']) * $_CONF['comment_indent'];
@@ -380,22 +397,51 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->set_var( 'sid', $A['sid'] );
         $template->set_var( 'type', $A['type'] );
 
+        //COMMENT edit rights
+        if ( $_USER['uid'] == $A['uid'] && $_CONF['comment_edit'] == 1
+                && (time() - $A['nice_date']) < $_CONF['comment_edittime'] &&
+                DB_getItem($_TABLES['comments'], 'COUNT(*)', "pid = {$A['cid']}") == 0) {
+            $edit_option = true;
+            if ( empty($token)) {
+                $token = SEC_createToken();
+            }
+        } else if ( SEC_hasRights( 'comment.moderate' )) {
+            $edit_option = true;
+        } else {
+            $edit_option = false;
+        }
+
+        //edit link
+        if ($edit_option) {
+            $editlink = $_CONF['site_url'] . '/comment.php?mode=edit&amp;cid='
+                . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
+                . '&amp;' . CSRF_TOKEN . '=' . $token;
+            $edit = COM_createLink( $LANG01[4], $editlink) . ' | ';
+        }
+
         // If deletion is allowed, displays delete link
         if( $delete_option ) {
+            $deloption = '';
+            if ( SEC_hasRights('comment.moderate')) {
+                if( !empty( $A['ipaddress'] ) ) {
+                    if( empty( $_CONF['ip_lookup'] )) {
+                        $deloption = $A['ipaddress'] . '  | ';
+                    } else {
+                        $iplookup = str_replace( '*', $A['ipaddress'], $_CONF['ip_lookup'] );
+                        $deloption = COM_createLink($A['ipaddress'], $iplookup) . ' | ';
+                    }
+                    //insert re-que link here
+                }
+            }
             $dellink = $_CONF['site_url'] . '/comment.php?mode=delete&amp;cid='
                 . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
                 . '&amp;' . CSRF_TOKEN . '=' . $token;
             $delattr = array('onclick' => "return confirm('{$MESSAGE[76]}');");
-            $deloption = COM_createLink( $LANG01[28], $dellink, $delattr) . ' | ';
-            if( !empty( $A['ipaddress'] )) {
-                if( empty( $_CONF['ip_lookup'] )) {
-                    $deloption .= $A['ipaddress'] . '  | ';
-                } else {
-                    $iplookup = str_replace( '*', $A['ipaddress'], $_CONF['ip_lookup'] );
-                    $deloption .= COM_createLink($A['ipaddress'], $iplookup) . ' | ';
-                }
-            }
-            $template->set_var( 'delete_option', $deloption );
+            $deloption .= COM_createLink( $LANG01[28], $dellink, $delattr) . ' | ';
+
+            $template->set_var( 'delete_option', $deloption . $edit);
+        } else if ( $edit_option) {
+            $template->set_var( 'delete_option', $edit );
         } else if( !empty( $_USER['username'] )) {
             $reportthis_link = $_CONF['site_url']
                 . '/comment.php?mode=report&amp;cid=' . $A['cid']
@@ -407,8 +453,12 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $template->set_var( 'delete_option', '' );
         }
 
-        // and finally: format the actual text of the comment
-        if( preg_match( '/<.*>/', $A['comment'] ) == 0 ) {
+        //and finally: format the actual text of the comment, but check only the text, not sig or edit
+        $text = str_replace('<!-- COMMENTSIG --><span class="comment-sig">', '', $A['comment']);
+        $text = str_replace('</span><!-- /COMMENTSIG -->', '', $text);
+        $text = str_replace('<span class="comment-edit">', '', $text);
+        $text = str_replace('</span><!-- /COMMENTEDIT -->', '', $text);
+        if( preg_match( '/<.*>/', $text ) == 0 ) {
             $A['comment'] = nl2br( $A['comment'] );
         }
 
@@ -650,6 +700,12 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
         $uid = $_USER['uid'];
     }
 
+    $commentuid = $uid;
+    if ( ($mode == 'edit' || $mode == $LANG03[28]) && isset($_REQUEST['cid']) ) {
+        $cid = COM_applyFilter ($_REQUEST['cid']);
+        $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = '$cid'");
+    }
+
     if (empty($_USER['username']) &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['commentsloginrequired'] == 1))) {
         $retval .= COM_startBlock ($LANG_LOGIN[1], '',
@@ -669,7 +725,10 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
     } else {
         COM_clearSpeedlimit ($_CONF['commentspeedlimit'], 'comment');
 
-        $last = COM_checkSpeedlimit ('comment');
+        if ($mode != 'edit' && $mode != $LANG03[28]) {
+            //not edit mode or preview changes
+            $last = COM_checkSpeedlimit ('comment');
+        }
 
         if ($last > 0) {
             $retval .= COM_startBlock ($LANG12[26], '',
@@ -730,7 +789,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $_POST['comment'] = $newcomment;
 
             // Preview mode:
-            if ($mode == $LANG03[14] && !empty($title) && !empty($comment) ) {
+            if (($mode == $LANG03[14] || $mode == $LANG03[28]) && !empty($title) && !empty($comment) ) {
                 $start = new Template( $_CONF['path_layout'] . 'comment' );
                 $start->set_file( array( 'comment' => 'startcomment.thtml' ));
                 $start->set_var( 'xhtml', XHTML );
@@ -752,9 +811,18 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                     }
                 }
 
-                if (empty($A['username']) || empty($A['fullname']) || empty($A['email'])) {
-                    $nresult = DB_query("SELECT username, fullname, email FROM {$_TABLES['users']} WHERE uid = $uid");
-                    list($A['username'], $A['fullname'], $A['email']) = DB_fetchArray($nresult);
+                //correct time and username for edit preview
+                if ($mode == $LANG03[28]) {
+                    $A['nice_date'] = DB_getItem ($_TABLES['comments'],
+                                        'UNIX_TIMESTAMP(date)', "cid = '$cid'");
+                    if ($_USER['uid'] != $commentuid) {
+                        $A['username'] = DB_getItem ($_TABLES['users'],
+                                              'username', "uid = $commentuid");
+                    }
+                }
+                if (empty ($A['username'])) {
+                    $A['username'] = DB_getItem ($_TABLES['users'], 'username',
+                                                 "uid = $uid");
                 }
                 $thecomments = CMT_getComment ($A, 'flat', $type, 'ASC', false,
                                                true);
@@ -792,14 +860,35 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template->set_var('pid', $pid);
             $comment_template->set_var('type', $type);
 
+            if ($mode == 'edit' || $mode == $LANG03[28]) { //edit modes
+            	$comment_template->set_var('start_block_postacomment', COM_startBlock("Edit a Comment"));
+            	$comment_template->set_var('cid', '<input type="hidden" name="cid" value="' . $_REQUEST['cid'] . '"' . XHTML . '>');
+            }
+            else {
+                $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
+            	$comment_template->set_var('cid', '');
+            }
+
             if (!empty($_USER['username'])) {
+            	$comment_template->set_var('CSRF_TOKEN', SEC_createToken());
                 $comment_template->set_var('uid', $_USER['uid']);
                 $comment_template->set_var('username', $_USER['username']);
                 $comment_template->set_var('action_url', $_CONF['site_url'] . '/users.php?mode=logout');
                 $comment_template->set_var('lang_logoutorcreateaccount', $LANG03[03]);
             } else {
+                //Anonymous user
                 $comment_template->set_var('uid', 1);
-                $comment_template->set_var('username', $LANG03[24]);
+                if ( isset($_POST['username']) ) {
+                    $name = $_POST['username']; //for preview
+                } elseif (isset($_COOKIE['anon-name'])) {
+                    $name = $_COOKIE['anon-name']; //stored as cookie, name used before
+                } else {
+                    $name = $LANG03[24]; //anonymous user
+                }
+                $usernameblock = '<input type="text" name="username" size="16" value="' .
+                                 $name . '" maxlength="32"' . XHTML . '>';
+                $comment_template->set_var('username', $usernameblock);
+
                 $comment_template->set_var('action_url', $_CONF['site_url'] . '/users.php?mode=new');
                 $comment_template->set_var('lang_logoutorcreateaccount', $LANG03[04]);
             }
@@ -825,11 +914,25 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template->set_var('lang_instr_line3', $LANG03[21]);
             $comment_template->set_var('lang_instr_line4', $LANG03[22]);
             $comment_template->set_var('lang_instr_line5', $LANG03[23]);
-            $comment_template->set_var('lang_preview', $LANG03[14]);
 
-            if (($_CONF['skip_preview'] == 1) || ($mode == $LANG03[14])) {
+            if ($mode == 'edit' || $mode == $LANG03[28]) {
+                //editing comment or preview changes
+                $comment_template->set_var('lang_preview', $LANG03[28]);
+            } else {
+            	//new comment
+                $comment_template->set_var('lang_preview', $LANG03[14]);
+            }
+
+            if ($mode == $LANG03[28] || ($mode == 'edit' && $_CONF['skip_preview'] == 1) ) {
+                //for editing
                 PLG_templateSetVars ('comment', $comment_template);
-                $comment_template->set_var('save_option', '<input type="submit" name="mode" value="' . $LANG03[11] . '"' . XHTML . '>');
+                $comment_template->set_var('save_option', '<input type="submit" name="mode" value="'
+                    . $LANG03[29] . '"' . XHTML . '>');
+            } elseif (($_CONF['skip_preview'] == 1) || ($mode == $LANG03[14])) {
+                //new comment
+                PLG_templateSetVars ('comment', $comment_template);
+                $comment_template->set_var('save_option', '<input type="submit" name="mode" value="'
+                    . $LANG03[11] . '"' . XHTML . '>');
             }
 
             $comment_template->set_var('end_block', COM_endBlock());
@@ -972,6 +1075,12 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                     "'$sid',$uid,'$comment',now(),'$title',$pid,$rht+1,$rht+2,0,'$type','{$_SERVER['REMOTE_ADDR']}'");
         }
         $cid = DB_insertId();
+        //set Anonymous user name if present
+        if (isset($_POST['username']) && strcmp($_POST['username'],$LANG03[24]) != 0) {
+            $name = COM_applyFilter ($_POST['username']);
+            DB_change($_TABLES['comments'],'name',$name,'cid',$cid);
+            setcookie('anon-name', $name);
+        }
         DB_unlockTable ($_TABLES['comments']);
 
         CACHE_remove_instance('whatsnew');
@@ -985,7 +1094,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             CMT_sendNotification ($title, $comment, $uid, $_SERVER['REMOTE_ADDR'],
                               $type, $cid);
         }
-        CACHE_remove_instance('whatsnew');
+//        CACHE_remove_instance('whatsnew');
     } else {
         COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with invalid $title and/or $comment.');
@@ -1276,5 +1385,131 @@ function CMT_sendReport ($cid, $type)
 
     return COM_refresh ($_CONF['site_url'] . '/index.php?msg=27');
 }
+
+/**
+ * Handles a comment edit submission
+ *
+ * @copyright Jared Wenerd 2008
+ * @author Jared Wenerd <wenerd87 AT gmail DOT com>
+ * @return string HTML (possibly a refresh)
+ */
+function CMT_handleEditSubmit()
+{
+    global $_CONF, $_TABLES, $_USER, $LANG03;
+
+    $display = '';
+
+    $type = COM_applyFilter ($_POST['type']);
+    $sid = COM_applyFilter ($_POST['sid']);
+    $cid = COM_applyFilter ($_POST['cid']);
+    $postmode = COM_applyFilter ($_POST['postmode']);
+
+    $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = '$cid'");
+    if ( empty($_USER['uid'])) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+
+    //check for bad input
+    if (empty ($sid) || empty ($_POST['title']) || empty ($_POST['comment']) || !is_numeric ($cid)
+            || $cid < 1 ) {
+        COM_errorLog("CMT_handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+                   . 'to edit a comment with one or more missing values.');
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    } elseif ( $uid != $commentuid && !SEC_hasRights( 'comment.moderate' ) ) {
+        //check permissions
+        COM_errorLog("CMT_handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+                   . 'to edit a comment without proper permission.');
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+
+    $comment = CMT_prepareText($_POST['comment'], $postmode);
+    $title = COM_checkWords (strip_tags (COM_stripslashes ($_POST['title'])));
+
+    if (!empty ($title) && !empty ($comment)) {
+        COM_updateSpeedlimit ('comment');
+        $title = addslashes ($title);
+        $comment = addslashes ($comment);
+
+        // save the comment into the comment table
+        DB_query("UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
+                . " WHERE cid=$cid AND sid='$sid'");
+
+        if (DB_error() ) { //saving to non-existent comment or comment in wrong article
+            COM_errorLog("CMT_handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+            . 'to edit to a non-existent comment or the cid/sid did not match');
+            return COM_refresh($_CONF['site_url'] . '/index.php');
+        }
+        DB_save($_TABLES['commentedits'],'cid,uid,time',"$cid,$uid,NOW()");
+    } else {
+        COM_errorLog("CMT_handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+                   . 'to submit a comment with invalid $title and/or $comment.');
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+    return COM_refresh (COM_buildUrl ($_CONF['site_url'] . "/article.php?story=$sid"));
+}
+
+/**
+ * Filters comment text and appends necessary tags (sig and/or edit)
+ *
+ * @copyright Jared Wenerd 2008
+ * @author Jared Wenerd <wenerd87 AT gmail DOT com>
+ * @param string  $comment   comment text
+ * @param string  $postmode ('html', 'plaintext',..)
+ * @param bool    $edit     if true append edit tag
+ * @param int     $cid      commentid if editing comment (for proper sig)
+ * @return string of comment text
+*/
+function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
+
+    global $_USER, $_TABLES, $LANG03, $_CONF;
+
+    if ($postmode == 'html') {
+        $comment = COM_checkWords (COM_checkHTML (COM_stripslashes ($comment)));
+    } else {
+    	//plaintext
+        $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)));
+        $newcomment = COM_makeClickableLinks ($comment);
+        if (strcmp ($comment, $newcomment) != 0) {
+            $comment = nl2br ($newcomment);
+        }
+    }
+
+    if ($edit) {
+        $comment .= LB . '<span class="comment-edit">' . $LANG03[30] . ' '
+                 . strftime( $_CONF['date'], time() ) . ' ' .$LANG03[31] .' '
+                 . $_USER['username'] . '</span><!-- /COMMENTEDIT -->';
+        $text = $comment;
+
+    }
+
+    if (empty ($_USER['uid'])) {
+        $uid = 1;
+    } elseif ($edit && is_numeric($cid) ){
+        //if comment moderator
+        $uid = DB_getItem ($_TABLES['comments'], 'uid', "cid = '$cid'");
+    } else {
+        $uid = $_USER['uid'];
+    }
+
+    $sig = '';
+    if ($uid > 1) {
+        $sig = DB_getItem ($_TABLES['users'], 'sig', "uid = '$uid'");
+        if (!empty ($sig)) {
+            $comment .= '<!-- COMMENTSIG --><span class="comment-sig">';
+            if ( $postmode == 'html') {
+                $comment .= '<p>---<br' . XHTML . '>' . nl2br ($sig);
+            } else {
+                $comment .=  LB . LB . '---' . LB . $sig;
+            }
+        $comment .= '</span><!-- /COMMENTSIG -->';
+        }
+    }
+
+    return $comment;
+}
+
+
 
 ?>

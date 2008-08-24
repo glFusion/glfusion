@@ -990,6 +990,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if( !COM_onFrontpage() ) {
         $relLinks['home'] = '<link rel="home" href="' . $_CONF['site_url']
                           . '/" title="' . $LANG01[90] . '"' . XHTML . '>';
+    } else {
+        CMT_updateCommentcodes();
     }
     $loggedInUser = !COM_isAnonUser();
     if( $loggedInUser || (( $_CONF['loginrequired'] == 0 ) &&
@@ -6724,6 +6726,38 @@ function COM_isAnonUser($uid = '')
     }
 }
 
+function CMT_updateCommentcodes() {
+    global $_CONF;
+    global $_TABLES;
+
+    $cleared = 0;
+
+    if ($_CONF['comment_close_rec_stories'] > 0) {
+        $results = DB_query("SELECT sid FROM {$_TABLES['stories']} ORDER BY date DESC LIMIT {$_CONF['comment_close_rec_stories']}");
+        while($A = DB_fetchArray($results))  {
+            $allowedcomments[] = $A['sid'];
+        }
+        //update comment codes.
+        $sql = '';
+        foreach ($allowedcomments as $sid) {
+            $sql .= "AND sid <> '$sid' ";
+        }
+        $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE commentcode = 0 " . $sql;
+        $result = DB_query($sql);
+        if ( DB_affectedRows($result) > 0 ) {
+            CACHE_remove_instance('story_');
+            $cleared = 1;
+        }
+    }
+    $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE UNIX_TIMESTAMP(comment_expire) < UNIX_TIMESTAMP() AND UNIX_TIMESTAMP(comment_expire) <> 0";
+    $result = DB_query($sql);
+    if ( $cleared == 0 ) {
+        if ( DB_affectedRows($result) > 0 ) {
+            CACHE_remove_instance('story_');
+        }
+    }
+}
+
 // Now include all plugin functions
 foreach( $_PLUGINS as $pi_name )
 {
@@ -6741,5 +6775,4 @@ if( $_CONF['cron_schedule_interval'] > 0 )
         PLG_runScheduledTask();
     }
 }
-
 ?>

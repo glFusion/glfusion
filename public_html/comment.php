@@ -20,6 +20,7 @@
 // |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
 // |          Dirk Haun         - dirk AT haun-online DOT de                  |
 // |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net    |
+// |          Jared Wenerd      - wenerd87 AT gmail DOT com                    |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -136,7 +137,7 @@ function handleSubmit()
 }
 
 /**
- * Handles a comment submission
+ * Handles a comment delete
  *
  * @copyright Vincent Furia 2005
  * @author Vincent Furia <vinny01 AT users DOT sourceforge DOT net>
@@ -275,7 +276,58 @@ function handleView($view = true)
     return COM_siteHeader() . $display . COM_siteFooter();
 }
 
+/**
+ * Handles a comment edit submission
+ *
+ * @copyright Jared Wenerd 2008
+ * @author Jared Wenerd <wenerd87 AT gmail DOT com>
+ * @return string HTML (possibly a refresh)
+ */
+function handleEdit() {
+    global $_TABLES; $LANG03;
+
+    $cid = COM_applyFilter ($_REQUEST['cid']);
+    $sid = COM_applyFilter ($_REQUEST['sid']);
+    $type = COM_applyFilter ($_REQUEST['type']);
+
+    if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
+        COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+               . 'to edit a comment with one or more missing/bad values.');
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+
+    $result = DB_query ("SELECT title,comment FROM {$_TABLES['comments']} "
+        . "WHERE cid = $cid AND sid = '$sid' AND type = '$type'");
+    if ( DB_numRows($result) == 1 ) {
+        $A = DB_fetchArray ($result);
+        $title = $A['title'];
+        $commenttext = COM_undoSpecialChars ($A['comment']);
+
+        //remove signature
+        $pos = strpos( $commenttext,'<!-- COMMENTSIG --><span class="comment-sig">');
+        if ( $pos > 0) {
+            $commenttext = substr($commenttext, 0, $pos);
+        }
+
+        //get format mode
+        if ( preg_match( '/<.*>/', $commenttext ) != 0 ){
+            $postmode = 'html';
+        } else {
+            $postmode = 'plaintext';
+        }
+    } else {
+        COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+               . 'to edit a comment that doesn\'t exist as described.');
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+
+    return COM_siteHeader('menu', $LANG03[1])
+           . CMT_commentForm ($title, $commenttext, $sid,
+                  COM_applyFilter ($_REQUEST['pid'], true), $type, 'edit', $postmode)
+           . COM_siteFooter();
+}
 // MAIN
+CMT_updateCommentcodes();
 $display = '';
 
 // If reply specified, force comment submission form
@@ -288,6 +340,8 @@ if (!empty ($_REQUEST['mode'])) {
     $mode = COM_applyFilter ($_REQUEST['mode']);
 }
 switch ($mode) {
+case $LANG03[28]: //Preview Changes (for edit)
+
 case $LANG03[14]: // Preview
 
     if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
@@ -306,6 +360,14 @@ case $LANG03[14]: // Preview
                     COM_applyFilter ($_POST['type']), $mode,
                     COM_applyFilter ($_POST['postmode']))
              . COM_siteFooter();
+    break;
+
+case $LANG03[29]: //Submit Changes
+    if (SEC_checkToken()) {
+        $display .= CMT_handleEditSubmit();
+    } else {
+        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+    }
     break;
 
 case $LANG03[11]: // Submit Comment
@@ -343,6 +405,30 @@ case 'sendreport':
         $display .= COM_refresh($_CONF['site_url'] . '/index.php');
     }
     break;
+
+case 'edit':
+    if (SEC_checkToken()) {
+        $display .= handleEdit();
+    } else {
+        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+    break;
+
+case 'que':
+    if ( SEC_checkToken() && SEC_hasRights('comment.moderate') ) {
+        //get comment
+        $cid = COM_applyFilter ($_GET['cid']);
+        $sid = COM_applyFilter ($_GET['sid']);
+        resubmitToModeration($cid);
+
+        $display .= COM_refresh(COM_buildUrl ($_CONF['site_url']
+                                    . "/article.php?story=$sid"));
+
+    } else {
+        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+    break;
+
 
 default:  // New Comment
     $sid = COM_applyFilter ($_REQUEST['sid']);

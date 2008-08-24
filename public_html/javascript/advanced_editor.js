@@ -49,6 +49,19 @@
         f.elements["expire_minute"].disabled=!disable;
         f.elements["expire_ampm"].disabled=!disable;
     }
+    
+    function enablecmtclose(obj) {
+    var f = obj.form;           // all elements have their parent form in "form"
+    var disable = obj.checked;  // Disable when checked
+
+    f.elements["cmt_close_month"].disabled=!disable;
+    f.elements["cmt_close_day"].disabled=!disable;
+    f.elements["cmt_close_year"].disabled=!disable;
+    f.elements["cmt_close_hour"].disabled=!disable;
+    f.elements["cmt_close_minute"].disabled=!disable;
+    f.elements["cmt_close_ampm"].disabled=!disable;
+    
+}
 
     function showhideEditorDiv(option,selindex) {
         var obj = document.getElementById('adveditor');

@@ -51,6 +51,7 @@
 */
 require_once 'lib-common.php';
 require_once $_CONF['path_system'] . 'lib-story.php';
+// require_once $_CONF['path_system'] . 'lib-comment.php';
 if ($_CONF['trackback_enabled']) {
     require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
@@ -62,6 +63,7 @@ if ($_CONF['trackback_enabled']) {
 // echo COM_debug($_POST);
 
 // MAIN
+//CMT_updateCommentcodes();
 $display = '';
 
 $order = '';

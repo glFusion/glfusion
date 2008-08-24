@@ -11,9 +11,11 @@
                         <tr>
                             <td class="alignright"><b>{lang_username}:</b></td>
                             <td>
+                                                            {cid}
                                 <input type="hidden" name="sid" value="{sid}"{xhtml}>
                                 <input type="hidden" name="pid" value="{pid}"{xhtml}>
                                 <input type="hidden" name="type" value="{type}"{xhtml}>
+                                                            <input type="hidden" name="_glsectoken" value="{CSRF_TOKEN}"{xhtml}>
                                 <input type="hidden" name="comment" value=""{xhtml}>
                                 <input type="hidden" name="uid" value="{uid}"{xhtml}>{username} [ <a href="{action_url}" rel="nofollow">{lang_logoutorcreateaccount}</a> ]
                             </td>
