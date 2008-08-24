@@ -332,7 +332,7 @@
         	month:'cmt_close_month',
         	year:'cmt_close_year'},
         	inputType:'select',
-        	idPrefix:'cal1',
+        	idPrefix:'cal2',
         	startDate:new Date(cYear-1,0,1),
         	selectedDate:  new Date(cYear,cMonth-1,cDay),
         	allowDaysOffSelection:true,
