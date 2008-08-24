@@ -91,21 +91,21 @@ $_SQL[] = "ALTER TABLE [dbo].[{$_TABLES['pollanswers']}] ADD
 ";
 
 $_SQL[] = "ALTER TABLE [dbo].[{$_TABLES['pollquestions']}] ADD
-    CONSTRAINT [PK_gl_pollquestions] PRIMARY KEY  CLUSTERED
+    CONSTRAINT [PK_{$_TABLES['pollquestions']}] PRIMARY KEY  CLUSTERED
     (
         [qid]
     )  ON [PRIMARY]
 ";
 
 $_SQL[] = "ALTER TABLE [dbo].[{$_TABLES['polltopics']}] ADD
-    CONSTRAINT [PK_gl_polltopics] PRIMARY KEY  CLUSTERED
+    CONSTRAINT [PK_{$_TABLES['polltopics']}] PRIMARY KEY  CLUSTERED
     (
         [pid]
     )  ON [PRIMARY]
 ";
 
 $_SQL[] = "ALTER TABLE [dbo].[{$_TABLES['pollvoters']}] ADD
-    CONSTRAINT [PK_gl_pollvoters] PRIMARY KEY  CLUSTERED
+    CONSTRAINT [PK_{$_TABLES['pollvoters']}] PRIMARY KEY  CLUSTERED
     (
         [id]
     )  ON [PRIMARY]
