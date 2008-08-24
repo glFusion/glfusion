@@ -527,7 +527,7 @@ function MG_getThemeCSS( $aid ) {
         return '';
     }
     if ( file_exists ($_MG_CONF['template_path'] . '/themes/' . $MG_albums[$aid]->skin . '/style.css') ) {
-        $css .= '<link rel="stylesheet" type="text/css" href="' . $_MG_CONF['site_url'] . '/mgcss.php?theme=' . $MG_albums[$aid]->skin . '">' . LB;
+        $css .= '<link rel="stylesheet" type="text/css" href="' . $_MG_CONF['site_url'] . '/mgcss.php?theme=' . $MG_albums[$aid]->skin . '"'.XHTML.'>' . LB;
     }
     return ($css);
 }
