@@ -73,7 +73,7 @@ require_once $_CONF['path_system'] . 'lib-comment.php';
  */
 function handleSubmit()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03;
+    global $_CONF, $_TABLES, $LANG03;
 
     $display = '';
 
@@ -145,12 +145,15 @@ function handleSubmit()
  */
 function handleDelete()
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $_USER;
 
     $display = '';
 
     $type = COM_applyFilter($_REQUEST['type']);
     $sid = COM_applyFilter($_REQUEST['sid']);
+    if (isset($_REQUEST['cid'])) {
+    	$cid = $_REQUEST['cid'];
+    }
 
     switch ($type) {
     case 'article':
@@ -284,7 +287,7 @@ function handleView($view = true)
  * @return string HTML (possibly a refresh)
  */
 function handleEdit() {
-    global $_TABLES; $LANG03;
+    global $_TABLES, $LANG03,$_USER,$_CONF;
 
     $cid = COM_applyFilter ($_REQUEST['cid']);
     $sid = COM_applyFilter ($_REQUEST['sid']);
@@ -337,8 +340,6 @@ function handleEdit() {
 function handleEditSubmit()
 {
     global $_CONF, $_TABLES, $_USER, $LANG03;
-
-    $display = '';
 
     $type = COM_applyFilter ($_POST['type']);
     $sid = COM_applyFilter ($_POST['sid']);
