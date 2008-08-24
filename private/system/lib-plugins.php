@@ -420,6 +420,23 @@ function PLG_commentDelete($type, $cid, $id)
 }
 
 /**
+ * Plugin edits comment
+ *
+ * @author Mark R. Evans <mark AT glfusion DOT org>
+ * @param   string  $type   Plugin to edit comment
+ * @param   int     $cid    Comment to be edited
+ * @param   string  $id     Item id to which $cid belongs
+ * @return  mixed   false for failure, HTML string (redirect?) for success
+ */
+function PLG_commentEditSave($type, $cid, $id)
+{
+    $args[1] = $cid;
+    $args[2] = $id;
+
+    return PLG_callFunctionForOnePlugin('plugin_editcomment_' . $type, $args);
+}
+
+/**
  * Plugin should save a comment
  *
  * @author Vincent Furia <vinny01 AT users DOT sourceforge DOT net>

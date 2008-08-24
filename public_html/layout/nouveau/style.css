@@ -851,7 +851,10 @@ border-top:1px solid #E7E7E7;
 font-weight:700;
 padding:3px 0 3px 10px;
 }
-
+.comment-edit {
+font-style: italic;
+padding-top:5px;
+}
 .edit-perm-up {
 padding-left:10px;
 padding-right:10px;

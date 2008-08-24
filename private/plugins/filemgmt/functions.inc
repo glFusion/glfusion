@@ -177,7 +177,12 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
             . "/filemgmt/index.php?id=$id")) );
     }
 }
+function plugin_editcomment_filemgmt($cid,$id) {
+    global $_CONF;
 
+    echo COM_refresh (COM_buildUrl ($_CONF['site_url'].'/filemgmt/index.php?id=$id'));
+    exit;
+}
 
 /**
  * Plugin API to delete a comment

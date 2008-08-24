@@ -141,6 +141,13 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
 
     return $retval;
 }
+function plugin_editcomment_polls($cid,$id) {
+    global $_CONF;
+
+    echo COM_refresh ($_CONF['site_url']
+                                . "/polls/index.php?pid=$id&amp;aid=-1");
+    exit;
+}
 
 /**
  * polls: delete a comment

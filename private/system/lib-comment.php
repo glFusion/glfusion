@@ -1386,69 +1386,6 @@ function CMT_sendReport ($cid, $type)
     return COM_refresh ($_CONF['site_url'] . '/index.php?msg=27');
 }
 
-/**
- * Handles a comment edit submission
- *
- * @copyright Jared Wenerd 2008
- * @author Jared Wenerd <wenerd87 AT gmail DOT com>
- * @return string HTML (possibly a refresh)
- */
-function CMT_handleEditSubmit()
-{
-    global $_CONF, $_TABLES, $_USER, $LANG03;
-
-    $display = '';
-
-    $type = COM_applyFilter ($_POST['type']);
-    $sid = COM_applyFilter ($_POST['sid']);
-    $cid = COM_applyFilter ($_POST['cid']);
-    $postmode = COM_applyFilter ($_POST['postmode']);
-
-    $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = '$cid'");
-    if ( empty($_USER['uid'])) {
-        $uid = 1;
-    } else {
-        $uid = $_USER['uid'];
-    }
-
-    //check for bad input
-    if (empty ($sid) || empty ($_POST['title']) || empty ($_POST['comment']) || !is_numeric ($cid)
-            || $cid < 1 ) {
-        COM_errorLog("CMT_handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-                   . 'to edit a comment with one or more missing values.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
-    } elseif ( $uid != $commentuid && !SEC_hasRights( 'comment.moderate' ) ) {
-        //check permissions
-        COM_errorLog("CMT_handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-                   . 'to edit a comment without proper permission.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
-    }
-
-    $comment = CMT_prepareText($_POST['comment'], $postmode);
-    $title = COM_checkWords (strip_tags (COM_stripslashes ($_POST['title'])));
-
-    if (!empty ($title) && !empty ($comment)) {
-        COM_updateSpeedlimit ('comment');
-        $title = addslashes ($title);
-        $comment = addslashes ($comment);
-
-        // save the comment into the comment table
-        DB_query("UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
-                . " WHERE cid=$cid AND sid='$sid'");
-
-        if (DB_error() ) { //saving to non-existent comment or comment in wrong article
-            COM_errorLog("CMT_handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-            . 'to edit to a non-existent comment or the cid/sid did not match');
-            return COM_refresh($_CONF['site_url'] . '/index.php');
-        }
-        DB_save($_TABLES['commentedits'],'cid,uid,time',"$cid,$uid,NOW()");
-    } else {
-        COM_errorLog("CMT_handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-                   . 'to submit a comment with invalid $title and/or $comment.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
-    }
-    return COM_refresh (COM_buildUrl ($_CONF['site_url'] . "/article.php?story=$sid"));
-}
 
 /**
  * Filters comment text and appends necessary tags (sig and/or edit)
@@ -1477,7 +1414,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
     }
 
     if ($edit) {
-        $comment .= LB . '<span class="comment-edit">' . $LANG03[30] . ' '
+        $comment .= LB . '<spam class="comment-edit">' . $LANG03[30] . ' '
                  . strftime( $_CONF['date'], time() ) . ' ' .$LANG03[31] .' '
                  . $_USER['username'] . '</span><!-- /COMMENTEDIT -->';
         $text = $comment;

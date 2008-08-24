@@ -97,6 +97,12 @@ function plugin_savecomment_mediagallery($title,$comment,$id,$pid,$postmode) {
         return (COM_refresh ($_MG_CONF['site_url'] . "/media.php?s=$id") );
     }
 }
+function plugin_editcomment_mediagallery($cid,$id) {
+    global $_CONF, $_MG_CONF, $_TABLES;
+
+    echo COM_refresh ($_MG_CONF['site_url'] . "/media.php?s=$id");
+    exit;
+}
 
 /** GL 1.4
  * Plugin function to delete a comment
