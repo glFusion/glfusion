@@ -4,7 +4,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td style="width:10px;height:18px;"><img src="{imgset}/forumindex.png" style="border:none;" alt=""{xhtml}></td>
+                            <td style="width:10px;height:18px;"><img src="{site_url}/forum/images/forumindex.png" style="border:none;" alt=""{xhtml}></td>
                             <td class="pluginHeader alignleft" style="white-space:nowrap;">&nbsp;{catname}:</td>
                             <td class="alignright" style="white-space:nowrap;">{catorder}:&nbsp;{order}&nbsp;&nbsp;</td>
                         </tr>

@@ -7,7 +7,7 @@
   <td style="padding-left:6px; padding-right:6px;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td style="width:8px;" class="aligncenter"><img src="{imgset}/icon_minipost.gif" alt=""{xhtml}></td>
+        <td style="width:8px;" class="aligncenter"><img src="{site_url}/forum/images/icon_minipost.gif" alt=""{xhtml}></td>
         <!-- <td nowrap>&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon} -->
         <td>
           by {userlink} ({onlinestatus})&nbsp;on&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon}

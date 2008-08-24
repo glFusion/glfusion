@@ -17,7 +17,7 @@
 <input type="hidden" name="op" value=""{xhtml}>
 <table width="100%" border="0" cellspacing="1" cellpadding="3" class="plugin" style="margin-bottom:10px;">
     <tr>
-        <td class="pluginCellTitle" style="width:2%;text-align:center;"><img src="{imgset}/trash.gif" title="{LANG_deleteall}" style="border:none;" onclick=' if(confirm("{LANG_DELALLCONFIRM}")) {document.notifications.op.value="delchecked"; document.notifications.submit();}' alt="" {xhtml}></td>
+        <td class="pluginCellTitle" style="width:2%;text-align:center;"><img src="{site_url}/forum/images/trash.gif" title="{LANG_deleteall}" style="border:none;" onclick=' if(confirm("{LANG_DELALLCONFIRM}")) {document.notifications.op.value="delchecked"; document.notifications.submit();}' alt="" {xhtml}></td>
         <td class="pluginCellTitle" style="white-space:nowrap;">{LANG_Heading2}</td>
         <td class="pluginCellTitle" style="white-space:nowrap;">{LANG_Heading3}</td>
         <td class="pluginCellTitle" style="white-space:nowrap;">{LANG_Heading4}</td>
