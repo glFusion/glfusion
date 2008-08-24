@@ -1058,11 +1058,18 @@ class Story
                                                     $lFilename_large;
                         }
 
-                        // And finally, replace the [imagex_mode] tags with the image and it's
-                        // hyperlink:
-                        $lLink_url = $lFilename_large_URL;
-                        $lLink_attr = array('title' => $LANG24[57]);
+                        // And finally, replace the [imageX_mode] tags with the
+                        // image and its hyperlink (only when the large image
+                        // actually exists)
+                        $lLink_url  = '';
+                        $lLink_attr = '';
+                        if (file_exists($lFilename_large_complete)) {
+                            $lLink_url = $lFilename_large_URL;
+                            $lLink_attr = array('title' => $LANG24[57]);
+                        }
+                    }
 
+                    if (!empty($lLink_url)) {
                         $intro = str_replace($norm,  COM_createLink($img_noalign,   $lLink_url, $lLink_attr), $intro);
                         $body  = str_replace($norm,  COM_createLink($img_noalign,   $lLink_url, $lLink_attr), $body);
                         $intro = str_replace($left,  COM_createLink($img_leftalgn,  $lLink_url, $lLink_attr), $intro);
@@ -1450,6 +1457,10 @@ class Story
             $return = COM_getUserDateTimeFormat($this->_date);
 
             $return = $return[0];
+            break;
+
+        case 'unixdate':
+            $return = $this->_date;
             break;
 
         case 'hits':
