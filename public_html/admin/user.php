@@ -1009,9 +1009,9 @@ function importusers()
     $upload->setPath ($_CONF['path_data']);
     $upload->setAllowedMimeTypes (array ('text/plain' => '.txt'));
     $upload->setFileNames ('user_import_file.txt');
+    $upload->setFieldName('file')
     if ($upload->uploadFiles()) {
         // Good, file got uploaded, now install everything
-        $thefile = current($_FILES);
         $filename = $_CONF['path_data'] . 'user_import_file.txt';
         if (!file_exists($filename)) { // empty upload form
             $retval = COM_refresh($_CONF['site_admin_url']
