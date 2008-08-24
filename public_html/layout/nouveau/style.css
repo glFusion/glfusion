@@ -2248,10 +2248,12 @@ background:#fff;
 padding-bottom:5px;
 padding-top:5px;
 }
-#calendar1 {
+#calendar1,
+#calendar2 {
 width:183px;
 }
-#calendar1 .ng-cal-header-table {
+#calendar1 .ng-cal-header-table,
+#calendar2 .ng-cal-header-table {
 width:173px;
 }
 #inter_cal .ng-cal-header-table,
