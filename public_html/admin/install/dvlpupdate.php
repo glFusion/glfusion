@@ -72,6 +72,14 @@ for ($i = 1; $i <= count($_SQL); $i++) {
     next($_SQL);
 }
 
+$c = config::get_instance();
+
+$c->add('comment_code',0,'select',4,21,17,1670,TRUE);
+$c->add('comment_edit',0,'select',4,21,0,1680,TRUE);
+$c->add('comment_edittime',1800,'text',4,21,NULL,1690,TRUE);
+$c->add('article_comment_close_days',30,'text',4,21,NULL,1700,TRUE);
+$c->add('comment_close_rec_stories',0,'text',4,21,NULL,1710,TRUE);
+
 $retval .= 'Development Code upgrades complete - see error.log for details<br>';
 
 $display = COM_siteHeader();
