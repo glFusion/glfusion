@@ -222,8 +222,8 @@ $LANG_fs['calendar'] = array(
 // Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['calendar'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    6 => array('12' => '12', '24' => '24'),
+    1 => array('True' => true, 'False' => false),
+    6 => array('12' => 12, '24' => 24),
     9 => array('Forward to Event' => 'item', 'Display Admin List' => 'list', 'Display Calendar' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
 );
