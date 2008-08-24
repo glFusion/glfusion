@@ -883,9 +883,16 @@ function saveuser($A)
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
 
-    $A['cooktime'] = COM_applyFilter ($A['cooktime'], true);
-    if ($A['cooktime'] < 0) {
+    // If not set or possibly removed from template - initialize variable
+    if (!isset($A['cookime'])) {
         $A['cooktime'] = 0;
+    } else {
+        $A['cooktime'] = COM_applyFilter ($A['cooktime'], true);
+    }
+    // If empty or invalid - set to user default
+    // So code after this does not fail the user password required test
+    if (empty($A['cooktime']) OR $A['cooktime'] < 0) {
+        $A['cooktime'] = $_USER['cookietimeout'];
     }
 
     // to change the password, email address, or cookie timeout,
@@ -896,7 +903,7 @@ function saveuser($A)
                 (SEC_encryptPassword($A['old_passwd']) != $_USER['passwd'])) {
 
             return COM_refresh ($_CONF['site_url']
-                                . '/usersettings.php?mode=edit&amp;msg=83');
+                                . '/usersettings.php?msg=83');
         } elseif ($_CONF['custom_registration'] &&
                     function_exists ('CUSTOM_userCheck')) {
             $ret = CUSTOM_userCheck ($A['username'], $A['email']);
