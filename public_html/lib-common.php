@@ -6743,14 +6743,14 @@ function CMT_updateCommentcodes() {
             $sql .= "AND sid <> '$sid' ";
         }
         $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE commentcode = 0 " . $sql;
-        $result = DB_query($sql);
+        $result = DB_query($sql,1);
         if ( DB_affectedRows($result) > 0 ) {
             CACHE_remove_instance('story_');
             $cleared = 1;
         }
     }
     $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE UNIX_TIMESTAMP(comment_expire) < UNIX_TIMESTAMP() AND UNIX_TIMESTAMP(comment_expire) <> 0";
-    $result = DB_query($sql);
+    $result = DB_query($sql,1);
     if ( $cleared == 0 ) {
         if ( DB_affectedRows($result) > 0 ) {
             CACHE_remove_instance('story_');
