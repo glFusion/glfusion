@@ -1309,7 +1309,7 @@ function CMT_reportAbusiveComment ($cid, $type)
 */
 function CMT_sendReport ($cid, $type)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG08, $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG08, $LANG09, $LANG_LOGIN;
 
     if (empty ($_USER['username'])) {
         $retval = COM_siteHeader ('menu', $LANG_LOGIN[1]);
