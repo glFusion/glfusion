@@ -620,8 +620,8 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
 
         $newallowed = $_CONF['maximagesperarticle'] - $icount;
         for ($z = $icount + 1; $z <= $_CONF['maximagesperarticle']; $z++) {
-            $fileinputs .= $z . ') <input type="file" dir="ltr" name="file'
-                        . $z . '"' . XHTML . '>';
+            $fileinputs .= $z . ') <input type="file" dir="ltr" name="file[]'
+                        . '"' . XHTML . '>';
             if ($z < $_CONF['maximagesperarticle']) {
                 $fileinputs .= '<br' . XHTML . '>';
             }
