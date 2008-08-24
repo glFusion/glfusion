@@ -1038,7 +1038,7 @@ class upload
         }
 
         if (empty($this->_filesToUpload)) {
-            if ( empty($this->_fieldName) ) {
+            if ( empty($this->_fieldName) || $this->_fieldName == '' ) {
                 $this->_filesToUpload = $_FILES;
             } else {
                 $this->_filesToUpload = $_FILES[$this->_fieldName];
