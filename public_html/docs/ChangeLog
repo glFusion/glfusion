@@ -2,6 +2,13 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Microsummaries support for topics fixed. (Mark)
+- Fixed hard coded table name in lib-security (Mark).
+- Handle HTML properly for config item in configuration (Mark).
+- Polls Plugin - Now if multiple questions make button read
+  'Start Poll' instead of vote (Mark)
+- Implemented PHPMailer into core (Mark)
+- Moved PHPMailer to lib/ from Media Gallery (Mark)
 - Moved stringparser_bbcode.* to lib/ from Forum plugin (Mark)
 - Moved getID3 to lib/ from Media Gallery (Mark)
 - New lib-image.php - image processing APIs from Media Gallery (Mark)
@@ -12,6 +19,8 @@ v1.1.0
    - Thumbnail image is not auto-sized (640x480 max)
 - Forum Updates (Mark)
    - Improved the upload handling of images
+   - Improved permission checking, validate user has proper permissions
+     before displaying new / reply links.
 - Media Gallery Updates (Mark)
    - Moved image processing APIs to core
 
