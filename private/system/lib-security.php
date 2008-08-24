@@ -1151,7 +1151,7 @@ function SEC_checkToken()
 
                          ELSE 0
                       END
-                    FROM gl_tokens WHERE token='$token'";
+                    FROM {$_TABLES['tokens']} WHERE token='$token'";
         }
         $tokens = DB_Query($sql);
         $numberOfTokens = DB_numRows($tokens);
