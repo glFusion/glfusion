@@ -834,7 +834,7 @@ function CALENDAR_deleteEvent($eid, $type = '')
     global $_CONF, $_TABLES, $_USER;
 
     if (empty($type)) { // delete regular event
-        $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['events']} WHERE eid = '$eid'");
+        $result = DB_query("SELECT * FROM {$_TABLES['events']} WHERE eid = '$eid'");
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'], $A['group_id'],
                     $A['perm_owner'], $A['perm_group'], $A['perm_members'],
@@ -847,7 +847,8 @@ function CALENDAR_deleteEvent($eid, $type = '')
 
         DB_delete($_TABLES['events'], 'eid', $eid);
         DB_delete($_TABLES['personal_events'], 'eid', $eid);
-        COM_rdfUpToDateCheck('glfusion', 'calendar', $eid);
+        COM_rdfUpToDateCheck('calendar', $A['event_type'], $A['eid']);
+        COM_rdfUpToDateCheck('article', 'calendar', $eid);
 
         return COM_refresh($_CONF['site_admin_url'] . '/plugins/calendar/index.php?msg=18');
     } elseif ($type == 'submission') {
@@ -1803,7 +1804,12 @@ function CALENDAR_eventTypeList ($currtype = '')
 
     $retval = '';
 
-    $event_types = $_CA_CONF['event_types'];
+    if (!isset($_CA_CONF['event_types']) ||
+            !is_array($_CA_CONF['event_types'])) {
+        $event_types = array();
+    } else {
+        $event_types = $_CA_CONF['event_types'];
+    }
     asort($event_types);
 
     foreach ($event_types as $type) {
