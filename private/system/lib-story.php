@@ -819,209 +819,7 @@ function STORY_getItemInfo ($sid, $what)
     return $retval;
 }
 
-/**
-* This replaces all article image HTML in intro and body with
-* GL special syntax
-*
-* @param    string      $sid    ID for story to parse
-* @param    string      $intro  Intro text
-* @param    string      $body   Body text
-* @return   string      processed text
-*
-*/
-function STORY_replace_images($sid, $intro, $body)
-{
-    global $_CONF, $_TABLES, $LANG24;
 
-    $stdImageLoc = true;
-    if (!strstr($_CONF['path_images'], $_CONF['path_html'])) {
-        $stdImageLoc = false;
-    }
-    $result = DB_query("SELECT ai_filename FROM {$_TABLES['article_images']} WHERE ai_sid = '$sid' ORDER BY ai_img_num");
-    $nrows = DB_numRows($result);
-    for ($i = 1; $i <= $nrows; $i++) {
-        $A = DB_fetchArray($result);
-
-        $imageX       = '[image' . $i . ']';
-        $imageX_left  = '[image' . $i . '_left]';
-        $imageX_right = '[image' . $i . '_right]';
-
-        $sizeattributes = COM_getImgSizeAttributes ($_CONF['path_images'] . 'articles/' . $A['ai_filename']);
-
-        $lLinkPrefix = '';
-        $lLinkSuffix = '';
-        if ($_CONF['keep_unscaled_image'] == 1) {
-            $lFilename_large = substr_replace ($A['ai_filename'], '_original.',
-                    strrpos ($A['ai_filename'], '.'), 1);
-            $lFilename_large_complete = $_CONF['path_images'] . 'articles/'
-                                      . $lFilename_large;
-            if ($stdImageLoc) {
-                $imgpath = substr ($_CONF['path_images'],
-                                   strlen ($_CONF['path_html']));
-                $lFilename_large_URL = $_CONF['site_url'] . '/' . $imgpath
-                                     . 'articles/' . $lFilename_large;
-            } else {
-                $lFilename_large_URL = $_CONF['site_url']
-                    . '/getimage.php?mode=show&amp;image=' . $lFilename_large;
-            }
-            if (file_exists ($lFilename_large_complete)) {
-                $lLinkPrefix = '<a href="' . $lFilename_large_URL
-                             . '" title="' . $LANG24[57] . '">';
-                $lLinkSuffix = '</a>';
-            }
-        }
-
-        if ($stdImageLoc) {
-            $imgpath = substr ($_CONF['path_images'],
-                               strlen ($_CONF['path_html']));
-            $imgSrc = $_CONF['site_url'] . '/' . $imgpath . 'articles/'
-                    . $A['ai_filename'];
-        } else {
-            $imgSrc = $_CONF['site_url']
-                . '/getimage.php?mode=articles&amp;image=' . $A['ai_filename'];
-        }
-        $norm = $lLinkPrefix . '<img ' . $sizeattributes . 'src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix;
-        $left = $lLinkPrefix . '<img ' . $sizeattributes . 'class="alignleft" src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix;
-        $right = $lLinkPrefix . '<img ' . $sizeattributes . 'class="alignright" src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix;
-
-        $fulltext = $intro . ' ' . $body;
-        $intro = str_replace ($norm,  $imageX,       $intro);
-        $body  = str_replace ($norm,  $imageX,       $body);
-        $intro = str_replace ($left,  $imageX_left,  $intro);
-        $body  = str_replace ($left,  $imageX_left,  $body);
-        $intro = str_replace ($right, $imageX_right, $intro);
-        $body  = str_replace ($right, $imageX_right, $body);
-
-        if (($_CONF['allow_user_scaling'] == 1) and
-            ($_CONF['keep_unscaled_image'] == 1)){
-
-            $unscaledX       = '[unscaled' . $i . ']';
-            $unscaledX_left  = '[unscaled' . $i . '_left]';
-            $unscaledX_right = '[unscaled' . $i . '_right]';
-
-            if (file_exists ($lFilename_large_complete)) {
-                    $sizeattributes = COM_getImgSizeAttributes($lFilename_large_complete);
-                    $norm = '<img ' . $sizeattributes . 'src="' . $lFilename_large_URL . '" alt=""' . XHTML . '>';
-                    $left = '<img ' . $sizeattributes . 'align="left" src="' . $lFilename_large_URL . '" alt=""' . XHTML . '>';
-                    $right = '<img ' . $sizeattributes . 'align="right" src="' . $lFilename_large_URL . '" alt=""' . XHTML . '>';
-                }
-            $intro = str_replace ($norm,  $unscaledX,       $intro);
-            $body  = str_replace ($norm,  $unscaledX,       $body);
-            $intro = str_replace ($left,  $unscaledX_left,  $intro);
-            $body  = str_replace ($left,  $unscaledX_left,  $body);
-            $intro = str_replace ($right, $unscaledX_right, $intro);
-            $body  = str_replace ($right, $unscaledX_right, $body);
-        }
-    }
-
-    return array($intro, $body);
-}
-
-/**
-* Replaces simple image syntax with actual HTML in the intro and body.
-* If errors occur it will return all errors in $error
-*
-* @param    string      $sid    ID for story to parse
-* @param    string      $intro  Intro text
-* @param    string      $body   Body text
-* @param    string      $usage  'html' for normal use, 'email' for email use
-* @return   string      Processed text
-*
-*/
-function STORY_insert_images($sid, $intro, $body, $usage='html')
-{
-    global $_CONF, $_TABLES, $LANG24;
-
-    $result = DB_query("SELECT ai_filename FROM {$_TABLES['article_images']} WHERE ai_sid = '$sid' ORDER BY ai_img_num");
-    $nrows = DB_numRows($result);
-    $errors = array();
-    $stdImageLoc = true;
-    if (!strstr($_CONF['path_images'], $_CONF['path_html'])) {
-        $stdImageLoc = false;
-    }
-    for ($i = 1; $i <= $nrows; $i++) {
-        $A = DB_fetchArray($result);
-
-        $lLinkPrefix = '';
-        $lLinkSuffix = '';
-        if ($_CONF['keep_unscaled_image'] == 1) {
-            $lFilename_large = substr_replace ($A['ai_filename'], '_original.',
-                    strrpos ($A['ai_filename'], '.'), 1);
-            $lFilename_large_complete = $_CONF['path_images'] . 'articles/'
-                                      . $lFilename_large;
-            if ($stdImageLoc) {
-                $imgpath = substr ($_CONF['path_images'],
-                                   strlen ($_CONF['path_html']));
-                $lFilename_large_URL = $_CONF['site_url'] . '/' . $imgpath
-                                     . 'articles/' . $lFilename_large;
-            } else {
-                $lFilename_large_URL = $_CONF['site_url']
-                    . '/getimage.php?mode=show&amp;image=' . $lFilename_large;
-            }
-            if (file_exists ($lFilename_large_complete)) {
-                $lLinkPrefix = '<a href="' . $lFilename_large_URL
-                             . '" title="' . $LANG24[57] . '">';
-                $lLinkSuffix = '</a>';
-            }
-        }
-
-        $sizeattributes = COM_getImgSizeAttributes ($_CONF['path_images'] . 'articles/' . $A['ai_filename']);
-
-        $norm  = '[image' . $i . ']';
-        $left  = '[image' . $i . '_left]';
-        $right = '[image' . $i . '_right]';
-
-        $unscalednorm  = '[unscaled' . $i . ']';
-        $unscaledleft  = '[unscaled' . $i . '_left]';
-        $unscaledright = '[unscaled' . $i . '_right]';
-
-        $fulltext = $intro . ' ' . $body;
-        $icount = substr_count($fulltext, $norm) + substr_count($fulltext, $left) + substr_count($fulltext, $right);
-        $icount = $icount + substr_count($fulltext, $unscalednorm) + substr_count($fulltext, $unscaledleft) + substr_count($fulltext, $unscaledright);
-        if ($icount == 0) {
-            // There is an image that wasn't used, create an error
-            $errors[] = $LANG24[48] . " #$i, {$A['ai_filename']}, " . $LANG24[53];
-        } else {
-            // Only parse if we haven't encountered any error to this point
-            if (count($errors) == 0) {
-                if ($usage=='email') {  // image will be attached, no path necessary
-                    $imgSrc = $A['ai_filename'];
-                } elseif ($stdImageLoc) {
-                    $imgpath = substr ($_CONF['path_images'],
-                                       strlen ($_CONF['path_html']));
-                    $imgSrc = $_CONF['site_url'] . '/' . $imgpath . 'articles/'
-                            . $A['ai_filename'];
-                } else {
-                    $imgSrc = $_CONF['site_url'] . '/getimage.php?mode=articles&amp;image=' . $A['ai_filename'];
-                }
-                $intro = str_replace($norm, $lLinkPrefix . '<img ' . $sizeattributes . 'src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix, $intro);
-                $body = str_replace($norm, $lLinkPrefix . '<img ' . $sizeattributes . 'src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix, $body);
-                $intro = str_replace($left, $lLinkPrefix . '<img ' . $sizeattributes . 'align="left" src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix, $intro);
-                $body = str_replace($left, $lLinkPrefix . '<img ' . $sizeattributes . 'align="left" src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix, $body);
-                $intro = str_replace($right, $lLinkPrefix . '<img ' . $sizeattributes . 'align="right" src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix, $intro);
-                $body = str_replace($right, $lLinkPrefix . '<img ' . $sizeattributes . 'align="right" src="' . $imgSrc . '" alt=""' . XHTML . '>' . $lLinkSuffix, $body);
-
-                if (($_CONF['allow_user_scaling'] == 1) and
-                    ($_CONF['keep_unscaled_image'] == 1)) {
-
-                    if (file_exists ($lFilename_large_complete)) {
-                        $imgSrc = $lFilename_large_URL;
-                        $sizeattributes = COM_getImgSizeAttributes ($lFilename_large_complete);
-                    }
-                    $intro = str_replace($unscalednorm, '<img ' . $sizeattributes . 'src="' . $imgSrc . '" alt=""' . XHTML . '>', $intro);
-                    $body = str_replace($unscalednorm, '<img ' . $sizeattributes . 'src="' . $imgSrc . '" alt=""' . XHTML . '>', $body);
-                    $intro = str_replace($unscaledleft, '<img ' . $sizeattributes . 'align="left" src="' . $imgSrc . '" alt=""' . XHTML . '>', $intro);
-                    $body = str_replace($unscaledleft, '<img ' . $sizeattributes . 'align="left" src="' . $imgSrc . '" alt=""' . XHTML . '>', $body);
-                    $intro = str_replace($unscaledright, '<img ' . $sizeattributes . 'align="right" src="' . $imgSrc . '" alt=""' . XHTML . '>', $intro);
-                    $body = str_replace($unscaledright, '<img ' . $sizeattributes . 'align="right" src="' . $imgSrc . '" alt=""' . XHTML . '>', $body);
-                }
-
-            }
-        }
-    }
-
-    return array($errors, $intro, $body);
-}
 
 /**
 * Delete a story.
@@ -1338,23 +1136,11 @@ function service_submit_story($args, &$output, &$svc_msg)
                 $upload->setDebug (true);
             }
             $upload->setMaxFileUploads ($_CONF['maximagesperarticle']);
-            if (!empty($_CONF['image_lib'])) {
-                if ($_CONF['image_lib'] == 'imagemagick') {
-                    // Using imagemagick
-                    $upload->setMogrifyPath ($_CONF['path_to_mogrify']);
-                } elseif ($_CONF['image_lib'] == 'netpbm') {
-                    // using netPBM
-                    $upload->setNetPBM ($_CONF['path_to_netpbm']);
-                } elseif ($_CONF['image_lib'] == 'gdlib') {
-                    // using the GD library
-                    $upload->setGDLib ();
-                }
-                $upload->setAutomaticResize(true);
-                if ($_CONF['keep_unscaled_image'] == 1) {
-                    $upload->keepOriginalImage (true);
-                } else {
-                    $upload->keepOriginalImage (false);
-                }
+            $upload->setAutomaticResize(true);
+            if ($_CONF['keep_unscaled_image'] == 1) {
+                $upload->keepOriginalImage (true);
+            } else {
+                $upload->keepOriginalImage (false);
             }
             $upload->setAllowedMimeTypes (array (
                     'image/gif'   => '.gif',
@@ -1363,6 +1149,7 @@ function service_submit_story($args, &$output, &$svc_msg)
                     'image/x-png' => '.png',
                     'image/png'   => '.png'
                     ));
+            $upload->setFieldName('file');
             if (!$upload->setPath($_CONF['path_images'] . 'articles')) {
                 $output = COM_siteHeader ('menu', $LANG24[30]);
                 $output .= COM_startBlock ($LANG24[30], '', COM_getBlockTemplate ('_msg_block', 'header'));
@@ -1383,6 +1170,17 @@ function service_submit_story($args, &$output, &$svc_msg)
             // Set file permissions on file after it gets uploaded (number is in octal)
             $upload->setPerms('0644');
             $filenames = array();
+            for ($z = 0; $z < 5; $z++ ) {
+                $curfile['name'] = $_FILES['file']['name'][$z];
+                if (!empty($curfile['name'])) {
+                    $pos = strrpos($curfile['name'],'.') + 1;
+                    $fextension = substr($curfile['name'], $pos);
+                    $filenames[] = $sid . '_' . $z . '.' . $fextension;
+                } else {
+                    $filenames[] = '';
+                }
+            }
+/*
             $end_index = $index_start + $upload->numFiles() - 1;
             for ($z = $index_start; $z <= $end_index; $z++) {
                 $curfile = current($_FILES);
@@ -1393,8 +1191,9 @@ function service_submit_story($args, &$output, &$svc_msg)
                 }
                 next($_FILES);
             }
+*/
             $upload->setFileNames($filenames);
-            reset($_FILES);
+//            reset($_FILES);
             $upload->uploadFiles();
 
             if ($upload->areErrors()) {
@@ -1407,12 +1206,18 @@ function service_submit_story($args, &$output, &$svc_msg)
                 echo $retval;
                 exit;
             }
-
+            for ($z = 0; $z < 5; $z++ ) {
+                if ( $filenames[$z] != '' ) {
+                    DB_query("INSERT INTO {$_TABLES['article_images']} (ai_sid, ai_img_num, ai_filename) VALUES ('$sid', $z, '" . $filenames[$z] . "')");
+                }
+            }
+/*
             reset($filenames);
             for ($z = $index_start; $z <= $end_index; $z++) {
                 DB_query("INSERT INTO {$_TABLES['article_images']} (ai_sid, ai_img_num, ai_filename) VALUES ('$sid', $z, '" . current($filenames) . "')");
                 next($filenames);
             }
+*/
         }
 
         if ($_CONF['maximagesperarticle'] > 0) {
