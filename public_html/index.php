@@ -43,10 +43,10 @@ require_once ($_CONF['path_system'] . 'lib-story.php');
 $newstories = false;
 $displayall = false;
 $microsummary = false;
-if (isset ($_GET['display']) && empty ($topic)) {
-    if ($_GET['display'] == 'new') {
+if (isset ($_GET['display'])) {
+    if (($_GET['display'] == 'new') && (empty ($topic))) {
         $newstories = true;
-    } else if ($_GET['display'] == 'all') {
+    } else if (($_GET['display'] == 'all') && (empty ($topic))) {
         $displayall = true;
     } else if ($_GET['display'] == 'microsummary') {
         $microsummary = true;
