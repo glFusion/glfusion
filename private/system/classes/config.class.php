@@ -287,13 +287,7 @@ class config {
     {
         global $_TABLES;
 
-        $format = 'INSERT INTO %1$s (name, value, type, ' .
-            'subgroup, group_name, selectionArray, sort_order,'.
-            ' fieldset, default_value) ' .
-            'VALUES ("%2$s","%3$s","%4$s",%5$s,"%6$s",%7$s,'.
-            '%8$s,%9$s, "%10$s")';
-        $Qargs = array($_TABLES['conf_values'],
-                       $param_name,
+        $Qargs = array($param_name,
                        $set ? serialize($default_value) : 'unset',
                        $type,
                        $subgroup,
@@ -304,7 +298,18 @@ class config {
                        $fieldset,
                        serialize($default_value));
         $Qargs = array_map('addslashes', $Qargs);
-        $sql = vsprintf($format, $Qargs);
+        $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
+            "subgroup, group_name, selectionArray, sort_order,".
+            " fieldset, default_value) VALUES ("
+            ."'{$Qargs[0]}',"
+            ."'{$Qargs[1]}',"
+            ."'{$Qargs[2]}',"
+            ."{$Qargs[3]},"
+            ."'{$Qargs[4]}',"
+            ."{$Qargs[5]},"
+            ."{$Qargs[6]},"
+            ."{$Qargs[7]},"
+            ."'{$Qargs[8]}')";
 
         $this->_DB_escapedQuery($sql);
 
@@ -623,7 +628,7 @@ class config {
         $t->set_var('name', $name);
         $t->set_var('display_name', $display_name);
         if (!is_array($val)) {
-            $t->set_var('value', $val);
+            $t->set_var('value', htmlspecialchars($val));
         }
         if ($deletable) {
             $t->set_var('delete', $t->parse('output', 'delete-button'));
