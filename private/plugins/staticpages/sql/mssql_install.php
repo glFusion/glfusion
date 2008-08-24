@@ -64,8 +64,8 @@ CREATE TABLE [dbo].[{$_TABLES['staticpage']}] (
 ";
 
 $_SQL[] = "ALTER TABLE [dbo].[{$_TABLES['staticpage']}] ADD
-    CONSTRAINT [DF_gl_staticpage] DEFAULT ('html') FOR [postmode],
-	CONSTRAINT [PK_gl_staticpage] PRIMARY KEY  CLUSTERED
+    CONSTRAINT [DF_{$_TABLES['staticpage']}] DEFAULT ('html') FOR [postmode],
+	CONSTRAINT [PK_{$_TABLES['staticpage']}] PRIMARY KEY  CLUSTERED
 	(
 		[sp_id]
 	)  ON [PRIMARY]
