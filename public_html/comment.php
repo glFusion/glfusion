@@ -81,7 +81,9 @@ function handleSubmit()
     switch ( $type ) {
         case 'article':
             $commentcode = DB_getItem ($_TABLES['stories'], 'commentcode',
-                                       "sid = '$sid'" . COM_getPermSQL('AND') . COM_getTopicSQL('AND'));
+                                       "sid = '$sid'" . COM_getPermSQL('AND')
+                                       . " AND (draft_flag = 0) AND (date <= NOW()) "
+                                       . COM_getTopicSQL('AND'));
             if (!isset($commentcode) || ($commentcode != 0)) {
                 return COM_refresh($_CONF['site_url'] . '/index.php');
             }
