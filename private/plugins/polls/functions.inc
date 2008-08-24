@@ -496,33 +496,40 @@ function POLLS_pollVote($pid, $showall=true)
                 $poll->set_var('poll_topic', $P['topic'] );
                 $poll->set_var('num_votes', COM_numberFormat($P['voters']));
                 $poll->set_var('poll_vote_url', $_CONF['site_url']
-                        . '/polls/index.php');
-                $poll->set_var('lang_vote', $LANG_POLLS['vote']);
+                                                . '/polls/index.php');
+                if (($nquestions == 1) || $showall) {
+                    $poll->set_var('lang_vote', $LANG_POLLS['vote']);
+                } else {
+                    $poll->set_var('lang_vote', $LANG_POLLS['start_poll']);
+                }
                 $poll->set_var('lang_votes', $LANG_POLLS['votes']);
-                $results = "";
 
-                if (($P['is_open'] == 0) || (
-                        ($P['hideresults'] == 1) && (isset($_USER['uid']) && $_USER['uid'] == $P['owner_id'])
-                    ) || (
-                        ($P['hideresults'] == 1) && (SEC_inGroup('Root'))
-                    )
-                ) {
+                $results = '';
+                if (($P['is_open'] == 0) || ($P['hideresults'] == 0) ||
+                    (($P['hideresults'] == 1) &&
+                        (
+                        SEC_inGroup('Root') ||
+                        (isset($_USER['uid'])
+                            && ($_USER['uid'] == $P['owner_id']))
+                        ))) {
                     $results = COM_createLink($LANG_POLLS['results'],
-                        "{$_CONF['site_url']}/polls/index.php?pid="
-                        . "$pid&amp;aid=-1");
+                        $_CONF['site_url'] . '/polls/index.php?pid=' . $pid
+                        . '&amp;aid=-1');
                 }
                 $poll->set_var('poll_results', $results);
-                $access = SEC_hasAccess($topic['owner_id'],$topic['group_id'],$topic['perm_owner'],
-                    $topic['perm_group'],$topic['perm_members'],$topic['perm_anon']);
+
+                $access = SEC_hasAccess($topic['owner_id'], $topic['group_id'],
+                                $topic['perm_owner'], $topic['perm_group'],
+                                $topic['perm_members'], $topic['perm_anon']);
                 if ($access == 3) {
                     $editlink = COM_createLink($LANG25[27], $_CONF['site_admin_url']
-                        . '/plugins/polls/index.php?mode=edit&amp;pid=' . $pid );
+                        . '/plugins/polls/index.php?mode=edit&amp;pid=' . $pid);
                     $poll->set_var('edit_link', $editlink);
                     $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
                     $icon_attr = array('title' => $LANG25[27]);
                     $editiconhtml = COM_createImage($editicon, $LANG25[27], $icon_attr);
                     $editlink = COM_createLink($editiconhtml, $_CONF['site_admin_url']
-                        . '/plugins/polls/index.php?mode=edit&amp;pid=' . $pid );
+                        . '/plugins/polls/index.php?mode=edit&amp;pid=' . $pid);
                     $poll->set_var('edit_icon', $editlink);
                 }
 
