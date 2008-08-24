@@ -151,7 +151,7 @@ $LANG_fs['staticpages'] = array(
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['staticpages'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
+    1 => array('True' => true, 'False' => false),
     2 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title'),
     3 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title', 'Label' => 'label'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
