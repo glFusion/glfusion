@@ -44,7 +44,7 @@ $LANG_SX00 = array (
     'rsscreated' => 'RSSフィードが作成されました',
     'add1' => '追加されました ',
     'add2' => ' エントリー: ',
-    'add3' => "のブラックリスト",
+    'add3' => 'のブラックリスト',
     'adminc' => '管理者コマンド:',
     'mblack' => 'マイブラックリスト:',
     'rlinks' => '関係先リンク:',
@@ -150,7 +150,7 @@ $LANG_configsections['spamx'] = array(
 $LANG_confignames['spamx'] = array(
     'action' => 'Spam-X の動作',
     'notification_email' => 'メールで通知する',
-    'admin_override' => "管理者の入力はフィルターしない",
+    'admin_override' => '管理者の入力はフィルターしない',
     'logging' => 'ログを有効にする',
     'timeout' => 'タイムアウト'
 );

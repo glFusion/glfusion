@@ -110,7 +110,7 @@ $LANG_SX00 = array (
     'emailmsg' => "Lehel \"%s\" on postitatud uus spampostitus\nKasutaja UID: \"%s\"\n\nSisu:\"%s\"",
     'emailsubject' => 'Spampostitus - %s',
     'ipblack' => 'Spam-X IP Blacklist',
-    'ipofurlblack' => 'Spam-X IP of URL Blacklist', // tõlkida
+    'ipofurlblack' => 'Spam-X IP of URL Blacklist',
     'headerblack' => 'Spam-X HTTP päiste blacklist',
     'headers' => 'Päringute päised:',
 
@@ -147,7 +147,7 @@ $LANG_configsections['spamx'] = array(
 $LANG_confignames['spamx'] = array(
     'action' => 'Spam-X tegevused',
     'notification_email' => 'Teavituskiri',
-    'admin_override' => "Ära filtreeri administraatori postitusi",
+    'admin_override' => 'Ära filtreeri administraatori postitusi',
     'logging' => 'Luba logimine',
     'timeout' => 'Ajapiir'
 );
