@@ -545,4 +545,32 @@ function DB_unlockTable($table)
     $_DB->dbUnlockTable($table);
 }
 
+/**
+ * Check if a table exists
+ *
+ * @param   string $table   Table name
+ * @return  boolean         True if table exists, false if it does not
+ *
+ */
+function DB_checkTableExists($table)
+{
+    global $_TABLES, $_DB_dbms;
+
+    $exists = false;
+
+    if ($_DB_dbms == 'mysql') {
+        $result = DB_query ("SHOW TABLES LIKE '{$_TABLES[$table]}'");
+        if (DB_numRows ($result) > 0) {
+            $exists = true;
+        }
+    } elseif ($_DB_dbms == 'mssql') {
+        $result = DB_Query("SELECT 1 FROM sysobjects WHERE name='{$_TABLES[$table]}' AND xtype='U'");
+        if (DB_numRows ($result) > 0) {
+            $exists = true;
+        }
+    }
+
+    return $exists;
+}
+
 ?>
