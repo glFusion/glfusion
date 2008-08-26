@@ -904,15 +904,18 @@ function saveuser($A)
 
             return COM_refresh ($_CONF['site_url']
                                 . '/usersettings.php?msg=83');
-        } elseif ($_CONF['custom_registration'] &&
+        }
+        if ($_CONF['custom_registration'] &&
                     function_exists ('CUSTOM_userCheck')) {
             $ret = CUSTOM_userCheck ($A['username'], $A['email']);
             // Need a numeric return for the default message hander - if not numeric use default message
             // - if not numeric use default message
-            if (!is_numeric($ret)) {
-                $ret = 97;
+            if ( $msg != '' ) {
+                if (!is_numeric($ret)) {
+                    $ret = 97;
+                }
+                return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
             }
-            return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
         }
     }
 
