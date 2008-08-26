@@ -280,7 +280,7 @@ function IMG_rotateImage( $srcImage, $direction ) {
         }
         $tmpImage   = $srcImage . '.rt';
 
-        $rc = UTL_execWrapper('"' . $_CONF['jpegtran_path'] . "/jpegtran" . '"' . " -rotate " . $JT_rotate . " -trim \"$srcImage\" > \"$tmpImage\"");
+        $rc = UTL_execWrapper('"' . $_CONF['path_to_jpegtran'] . "/jpegtran" . '"' . " -rotate " . $JT_rotate . " -trim \"$srcImage\" > \"$tmpImage\"");
 
         if ( $rc != true ) {
             @unlink($tmpImage);

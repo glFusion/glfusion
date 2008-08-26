@@ -54,7 +54,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/jpegtopnm" . '" ' . $srcImage . " | " . '"' . $_CONF['path_to_netpbm'] . "/" . $pamscale .'"' . " -xsize " . $dImageWidth . " -ysize " . $dImageHeight . " | " . '"' . $_CONF['path_to_netpbm'] . "/pnmtojpeg" . '" > ' . $destImage);
 
             if ( $_CONF['jhead_enabled'] == 1 ) {
-                UTL_execWrapper('"' . $_CONF['jhead_path'] . "/jhead" . '"' . " -v -te " . $srcImage . " " . $destImage);
+                UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -v -te " . $srcImage . " " . $destImage);
             }
             if ( $rc != true ) {
                 COM_errorLog("IMG_resizeImage: Unable to resize image - NetPBM failed.");
@@ -148,7 +148,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/pnmtojpeg" . '"' . " -quality=100 " . $srcImage . ".PNM > " . $tmpImage);
             @unlink($srcImage . ".PNM");
             if ( $_CONF['jhead_enabled'] == 1 ) {
-                $rc = UTL_execWrapper('"' . $_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
+                $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
             }
             $rc = copy($tmpImage, $srcImage);
             @unlink($tmpImage);
@@ -407,7 +407,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
     }
 
     if ( $_CONF['jhead_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg') ) {
-        $rc = UTL_execWrapper('"' . $_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $origImage . " " . $newSrc);
+        $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $origImage . " " . $newSrc);
     }
     @unlink($origImage);
     $rc = copy($newSrc, $origImage);

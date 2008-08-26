@@ -116,7 +116,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
     $rc = _img_gdRotate($srcImage,$tmpImage,$GD_rotate,$mimeType);
     if ( $rc == true ) {
         if ( $_CONF['jhead_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg' )) {
-            $rc = UTL_execWrapper('"' . $_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
+            $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
         }
         $rc = copy($tmpImage, $srcImage);
         @unlink($tmpImage);
@@ -381,7 +381,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
         imagejpeg($image,"$newSrcTmp",100);
 
         if ( $_CONF['jhead_enabled'] == 1 ) {
-            $rc = UTL_execWrapper('"' . $_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $origImage . " " . $newSrcTmp);
+            $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $origImage . " " . $newSrcTmp);
         }
         @unlink($origImage);
         $rc = copy($newSrcTmp, $origImage);

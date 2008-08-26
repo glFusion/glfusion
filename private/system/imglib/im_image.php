@@ -70,7 +70,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
 
     UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/convert" . '"' . " -quality 100 -rotate " . $IM_rotate . " $srcImage $tmpImage");
     if ( $_CONF['jhead_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg') ) {
-        $rc = UTL_execWrapper('"' . $_CONF['jhead_path'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
+        $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
     }
     $rc = copy($tmpImage, $srcImage);
     @unlink($tmpImage);
@@ -139,7 +139,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             return array(false,'Error - Unable to resize image - ImageMagick convert failed.');
         }
         if ( $_CONF['jhead_enabled'] == 1 ) {
-            UTL_execWrapper('"' . $_CONF['jhead_path'] . "/jhead" . '"' . " -v -te " . $srcImage . " " . $destImage);
+            UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -v -te " . $srcImage . " " . $destImage);
         }
     }
     return array(true,'');
