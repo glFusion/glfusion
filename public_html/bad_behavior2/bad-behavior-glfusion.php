@@ -43,7 +43,11 @@ $bb2_settings_defaults = array(
 	'log_table'     => $_DB_table_prefix . 'bad_behavior2',
 	'display_stats' => true,
 	'strict'        => false,
-	'verbose'       => false
+	'verbose'       => false,
+    'logging'       => true,
+    'httpbl_key'    => '',
+    'httpbl_threat' => '25',
+    'httpbl_maxage' => '30',
 );
 
 // Bad Behavior callback functions.
@@ -65,7 +69,7 @@ function bb2_db_escape($string) {
 
 // Return the number of rows in a particular query.
 function bb2_db_num_rows($result) {
-    if ( $result != FALSE ) {
+    if ( $result !== FALSE ) {
         return DB_numRows($result);
     }
     return 0;
@@ -77,7 +81,7 @@ function bb2_db_num_rows($result) {
 function bb2_db_query($query) {
 
     $result = DB_query($query);
-    if ( $result == false ) {
+    if ( $result === false ) {
 	    return FALSE;
     }
     return $result;
@@ -107,6 +111,10 @@ function bb2_read_settings() {
     return array('log_table'      => $bb2_settings_defaults['log_table'],
 			     'display_stats'  => $bb2_settings_defaults['display_stats'],
 			     'verbose'        => $bb2_settings_defaults['verbose'],
+			     'logging'        => $bb2_settings_defaults['logging'],
+			     'httpbl_key'     => $bb2_settings_defaults['httpbl_key'],
+			     'httpbl_threat'  => $bb2_settings_defaults['httpbl_threat'],
+			     'httpbl_maxage'  => $bb2_settings_defaults['httpbl_maxage'],
 			     'is_installed'   => $isInstalled );
 }
 
@@ -151,7 +159,7 @@ function bb2_insert_stats($force = false) {
     $settings = bb2_read_settings();
 
     if ($force || $settings['display_stats']) {
-        $blocked = bb2_db_query("SELECT COUNT(*) as blocked FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000'");
+        $blocked = bb2_db_query("SELECT COUNT(*) AS blocked FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000'");
         $row = bb2_db_rows($blocked);
         if ($blocked !== FALSE) {
             $retval =  sprintf('<p><a href="http://www.bad-behavior.ioerror.us/">%1$s</a> %2$s <strong>%3$s</strong> %4$s</p>', 'Bad Behavior', 'has blocked', $row['blocked'], 'access attempts in the last 7 days.');

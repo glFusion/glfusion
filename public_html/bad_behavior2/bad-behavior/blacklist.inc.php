@@ -10,15 +10,18 @@ function bb2_blacklist($package) {
 		"adwords",		// referrer spam
 		"autoemailspider",	// spam harvester
 		"blogsearchbot-martin",	// from honeypot
+		"CherryPicker",		// spam harvester
+		"core-project/",	// FrontPage extension exploits
+		"Diamond",		// delivers spyware/adware
 		"Digger",		// spam harvester
 		"ecollector",		// spam harvester
 		"EmailCollector",	// spam harvester
-		"Email Extractor",	// spam harvester
 		"Email Siphon",		// spam harvester
 		"EmailSiphon",		// spam harvester
 		"grub crawler",		// misc comment/email spam
 		"HttpProxy",		// misc comment/email spam
 		"Internet Explorer",	// XMLRPC exploits seen
+		"ISC Systems iRc",	// spam harvester
 		"Jakarta Commons",	// custommised spambots
 		"Java 1.",		// definitely a spammer
 		"Java/1.",		// definitely a spammer
@@ -26,7 +29,7 @@ function bb2_blacklist($package) {
 		"LWP",			// spambot scripts
 		"Microsoft URL",	// spam harvester
 		"Missigua",		// spam harvester
-		"MJ12bot",		// crawls MUCH too fast
+		"MJ12bot/v1.0.8",	// malicious botnet
 		"Movable Type",		// customised spambots
 		"Mozilla ",		// malicious software
 		"Mozilla/4.0(",		// from honeypot
@@ -38,11 +41,14 @@ function bb2_blacklist($package) {
 		"psycheclone",		// spam harvester
 		"PussyCat ",		// misc comment spam
 		"PycURL",		// misc comment spam
-		"Shockwave Flash",	// spam harvester
+//		"Shockwave Flash",	// spam harvester
+//		WP 2.5 now has Flash; FIXME
+		"Super Happy Fun ",	// spam harvester
 		"TrackBack/",		// trackback spam
 		"user",			// suspicious harvester
 		"User Agent: ",		// spam harvester
 		"User-Agent: ",		// spam harvester
+		"Winnie Poh",		// Automated Coppermine hacks
 		"Wordpress",		// malicious software
 		"\"",			// malicious software
 	);
@@ -56,6 +62,7 @@ function bb2_blacklist($package) {
 		"compatible ; MSIE",	// misc comment/email spam
 		"compatible-",		// misc comment/email spam
 		"DTS Agent",		// misc comment/email spam
+		"Email Extractor",	// spam harvester
 		"Gecko/25",		// revisit this in 500 years
 		"grub-client",		// search engine ignores robots.txt
 		"hanzoweb",		// very badly behaved crawler
@@ -72,6 +79,7 @@ function bb2_blacklist($package) {
 		"Windows NT 5.0;)",	// wikispam bot
 		"Windows NT 5.1;)",	// wikispam bot
 		"Windows XP 5",		// spam harvester
+		"WordPress/4.01",	// pingback spam
 		"\\\\)",		// spam harvester
 	);
 
@@ -86,7 +94,7 @@ function bb2_blacklist($package) {
 
 	// Do not edit below this line.
 
-	$ua = $package['headers_mixed']['User-Agent'];
+	@$ua = $package['headers_mixed']['User-Agent'];
 
 	foreach ($bb2_spambots_0 as $spambot) {
 		$pos = strpos($ua, $spambot);

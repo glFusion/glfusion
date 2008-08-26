@@ -15,7 +15,7 @@ function bb2_msie($package)
 
 	// MSIE does NOT send Connection: TE but Akamai does
 	// Bypass this test when Akamai detected
-	if (!array_key_exists('Akamai-Origin-Hop', $package['headers_mixed']) && preg_match('/\bTE\b/i', $package['headers_mixed']['Connection'])) {
+	if (!array_key_exists('Akamai-Origin-Hop', $package['headers_mixed']) && @preg_match('/\bTE\b/i', $package['headers_mixed']['Connection'])) {
 		return "2b90f772";
 	}
 

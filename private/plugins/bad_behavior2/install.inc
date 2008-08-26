@@ -41,7 +41,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
 global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
 
 $pi_name        = 'bad_behavior2';
-$pi_version     = '2.0.13a';
+$pi_version     = '2.0.23';
 $gl_version     = '1.1.0';
 $pi_url         = 'http://www.glfusion.org';
 $base_path      = $_CONF['path'] . 'plugins/' . $pi_name . '/';
