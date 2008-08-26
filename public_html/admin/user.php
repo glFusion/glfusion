@@ -1009,7 +1009,7 @@ function importusers()
     $upload->setPath ($_CONF['path_data']);
     $upload->setAllowedMimeTypes (array ('text/plain' => '.txt'));
     $upload->setFileNames ('user_import_file.txt');
-    $upload->setFieldName('file')
+    $upload->setFieldName('file');
     if ($upload->uploadFiles()) {
         // Good, file got uploaded, now install everything
         $filename = $_CONF['path_data'] . 'user_import_file.txt';
