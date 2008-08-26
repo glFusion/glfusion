@@ -445,42 +445,7 @@
           {lang_graphics_options}
         </th>
       </tr>
-      <tr class="pluginRow1">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_graphicspackage}</td>
-        <td class="mgAdminAlignLeft">
-          {graphicspackage}
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_gp_path}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" dir="ltr" maxlength="255" name="graphicspackage_path" value="{graphicspackage_path}"{xhtml}>
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_jhead_enable}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="enable_jhead" value="1" {jh_selected}{xhtml}>
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_jh_path}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" dir="ltr" maxlength="255" size="50" name="jhead_path" value="{jhead_path}"{xhtml}>
-        </td>
-      </tr>
-      <tr class="pluginRow1">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_jpegtran_enable}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="checkbox" name="enable_jpegtran" value="1" {jt_selected}{xhtml}>
-        </td>
-      </tr>
-      <tr class="pluginRow2">
-        <td  style="width:40%;" class="mgAdminAlignRight">{lang_jt_path}</td>
-        <td class="mgAdminAlignLeft">
-          <input type="text" dir="ltr" maxlength="255" size="50" name="jpegtran_path" value="{jpegtran_path}"{xhtml}>
-        </td>
-      </tr>
+
       <tr class="pluginRow1">
         <td  style="width:40%;" class="mgAdminAlignRight">{lang_ffmpeg_enable}</td>
         <td class="mgAdminAlignLeft">

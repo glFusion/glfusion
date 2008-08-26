@@ -18,11 +18,9 @@
 </tr>
 <tr>
   <td style="vertical-align:top;width:75%;">
-     {version_msg}
      {admin_body}
      <br{xhtml}>
      <br{xhtml}>
-     <div style="text-align:center;"><h2>{status_msg}&nbsp;</h2></div>
   </td>
   <td class="plugin" style="vertical-align:top;">
 	{mg_navigation}
