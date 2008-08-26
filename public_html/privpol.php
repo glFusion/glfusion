@@ -1,40 +1,41 @@
 <?php
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | privpol.php                                                              |
+// |                                                                          |
+// | glFusion Privacy Policy Page                                             |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Eric Warren            eric AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the Geeklog CMS                                                 |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Tom Willett        - twillett@users.sourceforge.net             |
+// |          John Hughes       - jlhughes@users.sf.net                       |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
-// +---------------------------------------------------------------------------+
-// | Stats Plugin 1.3 for Geeklog - The Ultimate Weblog                        |
-// +---------------------------------------------------------------------------+
-// | privpol.php                                                               |
-// | Suggested Site Privacy Policy for use with stats package                  |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2002, 2003 by the following authors:                        |
-// |                                                                           |
-// | Authors: Tom Willett        - twillett@users.sourceforge.net              |
-// |          John Hughes       - jlhughes@users.sf.net                        |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// $Id: privpol.php 2467 2008-06-10 00:04:06Z mevans0263 $
-
-require_once('../../../lib-common.php');
-
-/* 
-* Main Function
-*/
+require_once('lib-common.php');
 
 $display = COM_siteHeader();
 $display .= "<div><h1><b>Privacy Policy</b></h1><br />";
@@ -48,8 +49,6 @@ $display .= '<b>Security </b><br />This site has security measures in place to p
 $display .= '<b>Data Quality/Access </b><br />This site gives users control over their user experience and content that they may have provided.  Users can freely modify or delete any content they post.  Users have the ability to customize various aspects of the look and feel of the site.<br /><br />';
 $display .= '<b>Limitation of Liability</b><br />'. $_CONF['site_name'] . ' is not liable for any damages caused by any of the site content, whether directly provided by ' . $_CONF['site_name'] . ' or its employees or not.<br /><br />';
 $display .= '<b>Contacting the Web Site </b><br />If you have any questions about this privacy statement, the practices of this site, or your dealings with this Web site, you can contact the <a href="' . $_CONF['site_url'] . '/profiles.php?uid=2">webmaster</a>.<br /><br /></div>';
-
 $display .= COM_siteFooter(true);
-
 echo $display;
 ?>

@@ -1,57 +1,59 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Terms of Use v1.0 for Geeklog - The Ultimate Weblog                       |
-// +---------------------------------------------------------------------------+
-// | terms.php                                                                 |
-// | Suggested Site Terms of use.                                              |
-// +---------------------------------------------------------------------------+
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
-//
-// To read the license please visit http://www.gnu.org/copyleft/gpl.html
-// ----------------------------------------------------------------------
-//
-// Filename: modules/legal/tou.php
-// Original Author of file: Michael M. Wechsler, Esq. (michael@thelaw.com)
-// Purpose of file: Display a Terms of Use for Your Site.
-// ----------------------------------------------------------------------
-//
-// This was originaly part the legal module for POST-NUKE Content Management System
-// (http://www.postnuke.com) to display terms use and a privacy policy on your site.
-// Incorperated into GeekLog by Jeffrey "mrjeff" Randall jeffjpr@yahoo.com
-// -rewrote script, kept only the terms of use text and html formatting
-// -named script terms.php
-// -tested with GeekLog 1.3.9sr1
-// ----------------------------------------------------------------------
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | terms.php                                                                |
+// |                                                                          |
+// | glFusion Terms and Conditions.                                           |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2002-2008 by the following authors:                        |
+// |                                                                          |
+// | Eric Warren            eric AT glfusion DOT org                          |
+// |                                                                          |
+// | Based on the prior work by                                               |
+// | Copyright (C) 2000-2008 by the following authors:                        |
+// |                                                                          |
+// | Authors: Michael M. Wechsler, Esq. (michael@thelaw.com)                  |
+// |                                                                          |
+// | This was originaly part the legal module for POST-NUKE Content Management|
+// | System (http://www.postnuke.com) to display terms use and a privacy      |
+// | policy on your site.                                                     |
+// | Incorperated into GeekLog by Jeffrey "mrjeff" Randall jeffjpr@yahoo.com  |
+// |  -rewrote script, kept only the terms of use text and html formatting    |
+// |  -named script terms.php                                                 |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 
-require_once('../../../lib-common.php'); // This path should point to your lib-common.php
-echo COM_siteHeader();
+require_once('lib-common.php'); // This path should point to your lib-common.php
 
-$siteName .= $_CONF['site_name'];
-$siteURL .= $_CONF['site_url'];
-$layoutURL .= $_CONF['layout_url'];
-$adminEmail .= "<a href=\"$siteURL/profiles.php?uid=2\">here</a>";
-$sitePrivacy .="<a href=\"$layoutURL/extras/privpol.php\">Privacy Policy</a>";
-$siteTerms .= "<a href=\"$layoutURL/extras/terms.php\">Terms of Use</a>";
-$register .= "<a href=\"$siteURL/users.php?mode=new\">Register</a>";
+
+$siteName   = $_CONF['site_name'];
+$siteURL    = $_CONF['site_url'];
+$layoutURL  = $_CONF['layout_url'];
+$adminEmail = "<a href=\"$siteURL/profiles.php?uid=2\">here</a>";
+$sitePrivacy="<a href=\"$siteURL/privpol.php\">Privacy Policy</a>";
+$siteTerms  = "<a href=\"$siteURL/terms.php\">Terms of Use</a>";
+$register   = "<a href=\"$siteURL/users.php?mode=new\">Register</a>";
 
 $display .= "<div><h1>Terms of Use</h1>";
-$display .= "<br /><p><b>1. Acceptance of Terms of Use and Amendments</b><br />Each time you use or cause access to this web site, you agree to be bound by these $siteTerms, and as amended from time to time with or without notice to you. In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these $siteTerms. Please see our $sitePrivacy, which is incorporated into these $siteTerms by reference.</p><br /> 
+$display .= "<br /><p><b>1. Acceptance of Terms of Use and Amendments</b><br />Each time you use or cause access to this web site, you agree to be bound by these $siteTerms, and as amended from time to time with or without notice to you. In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these $siteTerms. Please see our $sitePrivacy, which is incorporated into these $siteTerms by reference.</p><br />
 <p><b>2. Our Service</b><br />Our web site and services provided to you on and through our web site on an &quot;AS IS&quot; basis. You agree that the owners of this web site exclusively reserve the right and may, at any time and without notice and any liability to you, modify or discontinue this web site and its services or delete the data you provide, whether temporarily or permanently. We shall have no responsibilty or liability for the timeliness, deletion, failure to store, inaccuracy, or improper delivery of any data or information.</p><br />
 <p><b>3. Your Responsibilities and Registration Obligations</b><br />In order to use some of the functions of this web site, you must $register on our site, and agree to provide truthful information when requested. When applying for membership, you explicitly agree to our $siteTerms and as may be modified by us from time to time and available here.</p><br />
 <p><b>4. Privacy Policy</b><br />Registration data and other personally identifiable information that we may collect is subject to the terms of our $sitePrivacy.</p><br />
@@ -68,7 +70,7 @@ $display .= "<br /><p><b>1. Acceptance of Terms of Use and Amendments</b><br />E
 <p><b>14. Applicable Law</b><br />You agree that this $siteTerms and any dispute arising out of your use of this web site or our products or services shall be governed by and construed in accordance with local laws where the headquarters of the owner of this web site is located, without regard to its conflict of law provisions. By registering or using this web site and service you consent and submit to the exclusive jurisdiction and venue of the county or city where the headquarters of the owner of this web site is located.</p><br />
 <p><b>15. Miscellaneous Information</b><br />(i) In the event that this $siteTerms conflicts with any law under which any provision may be held invalid by a court with jurisdiction over the parties, such provision will be interpreted to reflect the original intentions of the parties in accordance with applicable law, and the remainder of this $siteTerms will remain valid and intact; (ii) The failure of either party to assert any right under this $siteTerms shall not be considered a waiver of any that party's right and that right will remain in full force and effect; (iii) You agree that without regard to any statue or contrary law that any claim or cause arising out of this web site or its services must be filed within one (1) year after such claim or cause arose or the claim shall be forever barred; (iv) We may assign our rights and obligations under this $siteTerms and we shall be relieved of any further obligation.</p><br /></div>";
 
-
+echo COM_siteHeader();
 echo $display;
 echo COM_siteFooter();
 ?>
