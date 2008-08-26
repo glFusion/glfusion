@@ -604,8 +604,8 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
                     $preview_end = "</a>";
                     break;
         		case 'application/x-shockwave-flash' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flash.gif';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flash.gif');
+                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flash.png';
+                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flash.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
@@ -613,8 +613,8 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         		case 'video/x-mpeg' :
         		case 'video/x-mpeq2a' :
         			if ( $_MG_CONF['use_wmp_mpeg'] == 1 ) {
-                    	$thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.gif';
-                    	$size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.gif');
+                    	$thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
+                    	$size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.png');
                     	$preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     	$preview_end = "</a>";
             			break;
@@ -623,8 +623,8 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         		case 'video/quicktime' :
         		case 'video/x-qtc' :
 		        case 'audio/mpeg' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/quicktime.gif';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'quicktime.gif');
+                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/quicktime.png';
+                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'quicktime.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
@@ -640,22 +640,22 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 		        case 'application/x-troff-msvideo' :
 		        case 'application/x-ms-wmz' :
 		        case 'application/x-ms-wmd' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.gif';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.gif');
+                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
+                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
                 default :
-                    $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/video.gif';
-                    $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'video.gif');
+                    $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/video.png';
+                    $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'video.png');
                     break;
             }
             $rotate_right   = '';
             $rotate_left    = '';
             break;
         case 2 :
-            $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/audio.gif';
-            $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'audio.gif');
+            $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/audio.png';
+            $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'audio.png');
             $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',325,330)\">";
             $preview_end = "</a>";
             $rotate_right   = '';
@@ -664,16 +664,16 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         case 4 :
         	switch ( $row['mime_type'] ) {
 		        case 'application/zip' :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/zip.gif';
-                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'zip.gif');
+                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/zip.png';
+                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'zip.png');
                     break;
                 case 'application/pdf' :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/pdf.gif';
-                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'pdf.gif');
+                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/pdf.png';
+                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'pdf.png');
                     break;
                 default :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.gif';
-                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'generic.gif');
+                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.png';
+                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'generic.png');
                     break;
             }
             $rotate_right   = '';

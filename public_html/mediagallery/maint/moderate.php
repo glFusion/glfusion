@@ -113,27 +113,27 @@ function MG_userModerate( $album_id, $actionURL = '' ) {
             case 1 :
                 switch ( $row['media_mime_ext'] ) {
                     case 'swf' :
-                        $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flash.gif';
-                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'flash.gif';
+                        $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flash.png';
+                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'flash.png';
                         break;
                     case 'mov' :
                     case 'mp4' :
-                        $thumbnail = $_MG_CONF['mediaobjects_url'] . '/quicktime.gif';
-                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'quicktime.gif';
+                        $thumbnail = $_MG_CONF['mediaobjects_url'] . '/quicktime.png';
+                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'quicktime.png';
                         break;
                     case 'asf' :
-                        $thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.gif';
-                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'wmp.gif';
+                        $thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
+                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'wmp.png';
                         break;
                     default :
-                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/video.gif';
-                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'video.gif';
+                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/video.png';
+                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'video.png';
                         break;
                 }
                 break;
             case 2 :
-                $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/audio.gif';
-                $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'audio.gif';
+                $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/audio.png';
+                $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'audio.png';
                 break;
             case 4 :
                 switch ($row['media_mime_ext']) {
@@ -141,16 +141,16 @@ function MG_userModerate( $album_id, $actionURL = '' ) {
                     case 'arj' :
                     case 'rar' :
                     case 'gz'  :
-                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/zip.gif';
-                        $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'zip.gif';
+                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/zip.png';
+                        $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'zip.png';
                         break;
                     case 'pdf' :
-                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/pdf.gif';
-                        $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'pdf.gif';
+                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/pdf.png';
+                        $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'pdf.png';
                         break;
                     default :
-                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.gif';
-                        $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'generic.gif';
+                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.png';
+                        $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'generic.png';
                         break;
                 }
                 break;
