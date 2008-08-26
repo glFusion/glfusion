@@ -63,6 +63,8 @@ $_SQL[] = "REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('database_versi
 $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'";
 $_SQL[] = "UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'";
 $_SQL[] = "UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'glfusion'";
+$_SQL[] = "UPDATE {$_TABLES['configuration']} SET type='select',default_value='s:10:"US/Central";' WHERE name='timezone'";
+$_SQL[] = "UPDATE {$_TABLES['configuration']} SET value='s:10:"US/Central";' WHERE name='timezone' AND value=''";
 $_SQL[] = "REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion', '1.1.0svn')";
 
 /* Execute SQL now to perform the upgrade */
@@ -79,6 +81,11 @@ $c->add('comment_edit',0,'select',4,21,0,1680,TRUE);
 $c->add('comment_edittime',1800,'text',4,21,NULL,1690,TRUE);
 $c->add('article_comment_close_days',30,'text',4,21,NULL,1700,TRUE);
 $c->add('comment_close_rec_stories',0,'text',4,21,NULL,1710,TRUE);
+
+$c->add('jhead_enabled',0,'select',5,22,0,1480,TRUE);
+$c->add('path_to_jhead','','text',5,22,NULL,1490,TRUE);
+$c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);
+$c->add('path_to_jpegtrans','','text',5,22,NULL,1510,TRUE);
 
 $retval .= 'Development Code upgrades complete - see error.log for details<br>';
 

@@ -1106,6 +1106,19 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path'] . 'sql/updates/' . $_DB_dbms . '_1.0.1_to_1.1.0.php';
             list($rc,$errors) = INST_updateDB($_SQL);
 
+            $c = config::get_instance();
+
+            $c->add('comment_code',0,'select',4,21,17,1670,TRUE);
+            $c->add('comment_edit',0,'select',4,21,0,1680,TRUE);
+            $c->add('comment_edittime',1800,'text',4,21,NULL,1690,TRUE);
+            $c->add('article_comment_close_days',30,'text',4,21,NULL,1700,TRUE);
+            $c->add('comment_close_rec_stories',0,'text',4,21,NULL,1710,TRUE);
+
+            $c->add('jhead_enabled',0,'select',5,22,0,1480,TRUE);
+            $c->add('path_to_jhead','','text',5,22,NULL,1490,TRUE);
+            $c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);
+            $c->add('path_to_jpegtrans','','text',5,22,NULL,1510,TRUE);
+
             $current_fusion_version = '1.1.0';
             $_SQL = '';
             break;

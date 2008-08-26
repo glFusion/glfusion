@@ -232,6 +232,11 @@ function install_config()
     $c->add('path_to_mogrify','','text',5,22,NULL,1460,FALSE);
     $c->add('path_to_netpbm','','text',5,22,NULL,1470,FALSE);
 
+    $c->add('jhead_enabled',0,'select',5,22,0,1480,TRUE);
+    $c->add('path_to_jhead','','text',5,22,NULL,1490,TRUE);
+    $c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);
+    $c->add('path_to_jpegtrans','','text',5,22,NULL,1510,TRUE);
+
     $c->add('fs_upload', NULL, 'fieldset', 5, 23, NULL, 0, TRUE);
     $c->add('keep_unscaled_image',0,'select',5,23,0,1480,TRUE);
     $c->add('allow_user_scaling',1,'select',5,23,0,1490,TRUE);
@@ -278,7 +283,7 @@ function install_config()
     $c->add('thousand_separator',",",'text',6,29,NULL,440,TRUE);
     $c->add('decimal_separator',".",'text',6,29,NULL,450,TRUE);
     $c->add('decimal_count',"2",'text',6,29,NULL,460,TRUE);
-    $c->add('timezone','Etc/GMT-6','text',6,29,NULL,490,FALSE);
+    $c->add('timezone','US/Central','select',6,29,NULL,490,TRUE);
 
     // Subgroup: Miscellaneous
     $c->add('sg_misc', NULL, 'subgroup', 7, 0, NULL, 0, TRUE);
