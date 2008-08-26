@@ -10,8 +10,8 @@
             <div id="footer-copyright">
                 <div class="footerlinks">
                     <a href="#top">Top</a>&nbsp;&nbsp;|&nbsp;
-                    <a href="{layout_url}/extras/terms.php">Terms</a>&nbsp;&nbsp;|&nbsp;
-                    <a href="{layout_url}/extras/privpol.php">Privacy</a>&nbsp;&nbsp;
+                    <a href="{site_url}/terms.php">Terms</a>&nbsp;&nbsp;|&nbsp;
+                    <a href="{site_url}/privpol.php">Privacy</a>&nbsp;&nbsp;
                     <a href="{gllabs_url}"><img style="vertical-align:middle" src="{layout_url}/images/cms-glfusion.png" alt="{powered_by} glFusion" title="{powered_by} glFusion"{xhtml}></a><br{xhtml}>
                     {execution_textandtime}
                 </div> <!-- end of footerlinks-->
