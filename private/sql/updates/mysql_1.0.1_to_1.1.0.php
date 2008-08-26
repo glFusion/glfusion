@@ -13,5 +13,7 @@ $_SQL[] = "REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('database_versi
 $_SQL[] = "ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'";
 $_SQL[] = "UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'";
 $_SQL[] = "UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'glfusion'";
+$_SQL[] = "UPDATE {$_TABLES['configuration']} SET type='select',default_value='s:10:"US/Central";' WHERE name='timezone'";
+$_SQL[] = "UPDATE {$_TABLES['configuration']} SET value='s:10:"US/Central";' WHERE name='timezone' AND value=''";
 $_SQL[] = "REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion', '1.1.0')";
 ?>
