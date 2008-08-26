@@ -69,6 +69,7 @@ function configmanager_select_theme_helper()
     $themes = array();
 
     $themeFiles = COM_getThemes(true);
+
     usort($themeFiles,
           create_function('$a,$b', 'return strcasecmp($a,$b);'));
 
@@ -86,8 +87,17 @@ function configmanager_select_theme_helper()
 
         $themes[implode(' ', $bwords)] = $theme;
     }
-
     return $themes;
+}
+
+function configmanager_select_timezone_helper()
+{
+    $all = timezone_identifiers_list();
+
+    foreach($all AS $zone) {
+        $zones[$zone] = $zone;
+    }
+    return $zones;
 }
 
 
