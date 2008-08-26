@@ -2,9 +2,12 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Added jhead / jpegtrans
+- Added timezone select list in configuration (Mark)
+- Updated Bad Behavior2 to v2.0.23 (Mark)
+- Updated look of default poll vote results. (Eric)
 - Updated .sql on default install and preliminary .sql prep for mssql support. (Eric)
 - Moved and updated Terms of Use and Privacy Policy so they can be theme independent. (Eric)
-- Updated look of default poll vote results. (Eric)
 - Removed orphan images from tarball. (Eric)
 - Implemented feature to auto close / edit comments for articles (Mark)
 - Microsummaries support for topics fixed. (Mark)
