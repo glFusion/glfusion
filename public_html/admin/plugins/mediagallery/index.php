@@ -221,17 +221,20 @@ if ( $msg > 0 ) {
     $statusMsg = '';
 }
 
+require_once $_CONF['path'] . 'system/lib-admin.php';
+
 $T = new Template($_MG_CONF['template_path']);
 $T->set_file (array ('admin' => 'administration.thtml'));
 
 $T->set_var(array(
     'site_admin_url'    => $_CONF['site_admin_url'],
     'site_url'          => $_MG_CONF['site_url'],
-    'admin_body'        => MG_adminBox($mode),
+//    'admin_body'        => MG_adminBox($mode),
     'status_msg'        => $statusMsg,
     'mg_navigation'     => MG_navigation(),
     'lang_admin'        => $LANG_MG00['admin'],
     'version'           => $_MG_CONF['version'],
+    'admin_body'             => plugin_showstats_mediagallery(0),
     'xhtml'             => XHTML,
 ));
     if ( $_MG_CONF['disable_version_check'] == 0 ) {

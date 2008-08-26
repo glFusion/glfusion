@@ -313,7 +313,7 @@ function MG_editConfig( ) {
     if ( ini_get('safe_mode') != 1 && $_MG_CONF['skip_file_find'] == 0 ) {  // don't check in safe mode, the file_exists() will fail
 
         // see if we can find some paths to jhead and jpegtran...
-
+/* --------------------------------
         if (PHP_OS == "WINNT") {
             $binary = "/jhead.exe";
         } else {
@@ -371,7 +371,7 @@ function MG_editConfig( ) {
                 }
             }
         }
-
+--------------------------------- */
         if (PHP_OS == "WINNT") {
             $binary = "/unzip.exe";
         } else {
@@ -625,10 +625,10 @@ function MG_saveConfig( ) {
     $album_display_rows     = COM_applyFilter($_POST['albumdisplayrows'],true);
     $loginrequired          = COM_applyFilter($_POST['loginrequired'],true);
     $anonymous_uploads      = isset($_POST['anonymousuploads'])  ? COM_applyFilter($_POST['anonymousuploads'],true) : 0;
-    $graphicspackage        = COM_applyFilter($_POST['graphicspackage'],true);
-    $graphicspackage_path   = COM_applyFilter($_POST['graphicspackage_path']);
-    $jhead_path             = COM_applyFilter($_POST['jhead_path']);
-    $jpegtran_path          = COM_applyFilter($_POST['jpegtran_path']);
+//    $graphicspackage        = COM_applyFilter($_POST['graphicspackage'],true);
+//    $graphicspackage_path   = COM_applyFilter($_POST['graphicspackage_path']);
+//    $jhead_path             = COM_applyFilter($_POST['jhead_path']);
+//    $jpegtran_path          = COM_applyFilter($_POST['jpegtran_path']);
     $zip_path               = COM_applyFilter($_POST['zip_path']);
     $ffmpeg_path            = COM_applyFilter($_POST['ffmpeg_path']);
     $tmp_path               = COM_applyFilter($_POST['tmp_path']);
@@ -794,8 +794,8 @@ function MG_saveConfig( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'anonymous_uploads',     '$anonymous_uploads'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'album_display_columns', '$album_display_columns'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'album_display_rows',    '$album_display_rows'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'graphicspackage',       '$graphicspackage'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'graphicspackage_path',  '$graphicspackage_path'");
+//    DB_save($_TABLES['mg_config'],"config_name, config_value","'graphicspackage',       '$graphicspackage'");
+//    DB_save($_TABLES['mg_config'],"config_name, config_value","'graphicspackage_path',  '$graphicspackage_path'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'displayblocks',         '$displayblocks'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'usage_tracking',        '$usage_tracking'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'dfid',                  '$dfid'");
@@ -819,10 +819,10 @@ function MG_saveConfig( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'up_av_playback_enabled',    '$up_av_playback_enabled'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'up_thumbnail_size_enabled', '$up_thumbnail_size_enabled'");
 
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'jpegtran_enabled',      '$enable_jpegtran'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'jhead_enabled',         '$enable_jhead'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'jhead_path',            '$jhead_path'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'jpegtran_path',         '$jpegtran_path'");
+//    DB_save($_TABLES['mg_config'],"config_name, config_value","'jpegtran_enabled',      '$enable_jpegtran'");
+//    DB_save($_TABLES['mg_config'],"config_name, config_value","'jhead_enabled',         '$enable_jhead'");
+//    DB_save($_TABLES['mg_config'],"config_name, config_value","'jhead_path',            '$jhead_path'");
+//    DB_save($_TABLES['mg_config'],"config_name, config_value","'jpegtran_path',         '$jpegtran_path'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'zip_enabled',           '$enable_zip'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'zip_path',              '$zip_path'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'tmp_path',              '$tmp_path'");
