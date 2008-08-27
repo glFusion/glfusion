@@ -871,7 +871,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var('xhtml',XHTML);
 
     $header->set_var('mootools',
-            '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools-release-1.11.packed.js"></script>' . LB);
+            '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools/mootools-release-1.11.packed.js"></script>' . LB);
 
 	//Fade in animation for the gl_moomenu
     $animate = new Template( $_CONF['path_layout'] );
@@ -1343,9 +1343,9 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     ));
 
     if ( function_exists('st_getMenu') && $mbMenuConfig[0]['enabled'] == 1) {
-        $theme->set_var('gllabs_menu',st_getMenu(0,"gl_moomenu",'',"parent"));
+        $theme->set_var('st_hmenu',st_getMenu(0,"gl_moomenu",'',"parent"));
     } else {
-        $theme->set_var('gllabs_menu','');
+        $theme->set_var('st_hmenu','');
     }
 
     // Get plugin menu options
