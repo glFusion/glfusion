@@ -18,8 +18,8 @@
         </div> <!-- end of gl_header -->
 		<!-- start of gl_menu -->
         <div id="gl_moomenu">
-			{!if gllabs_menu}
-				{gllabs_menu}
+			{!if st_hmenu}
+				{st_hmenu}
 			{!else}
 				<ul class="gl_moomenu">
 					{menu_elements}
