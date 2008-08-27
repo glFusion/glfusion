@@ -19,7 +19,6 @@
 <script type="text/javascript" src="{site_url}/javascript/common.js"></script>
 <script type="text/javascript" src="{site_url}/javascript/fValidator.js"></script>
 <script type="text/javascript" src="{site_url}/javascript/mootools/gl_mooreflection.js"></script>
-<script type="text/javascript" src="{site_url}/javascript/mootools/gl_moosameheight.js"></script>
 {gl_animatedmoomenu} <!-- enables gl_moomenu animation, if you delete it, the menu will still work, it will just instantly appear instead of fading in -->
 {gl_mootips} <!-- enables gl_mootips throughout layout -->
 <!-- {gl_moochronometer} --><!-- enables gl_moochronometer header rotator - MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating -->
