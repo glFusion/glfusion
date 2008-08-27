@@ -2777,17 +2777,16 @@ function COM_adminMenu( $help = '', $title = '' )
             $link_array[$LANG01[103]] = $menu_item;
         }
 
-        // Add PDF Generator Link if the feature is enabled
-        if(( $_CONF['pdf_enabled'] == 1 ) AND SEC_inGroup( 'Root' ))
+        if( SEC_inGroup( 'Root' ))
         {
-            $url = $_CONF['site_url'] . '/pdfgenerator.php';
+            $url = $_CONF['site_admin_url'] . '/logview.php';
             $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG_PDF[9] );
-            $adminmenu->set_var( 'option_count', 'N/A' );
+            $adminmenu->set_var( 'option_label', $LANG01['logview'] );
+            $adminmenu->set_var( 'option_count','N/A');
 
             $menu_item = $adminmenu->parse( 'item',
                     ( $thisUrl == $url ) ? 'current' : 'option' );
-            $link_array[$LANG_PDF[9]] = $menu_item;
+            $link_array[$LANG01['logview']] = $menu_item;
         }
 
         if( $_CONF['link_documentation'] == 1 )
@@ -3332,7 +3331,12 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     }
     $mail->WordWrap = 76;
     $mail->IsHTML($html);
-    $mail->Body    = $message;
+    if ( $html ) {
+        $mail->Body = COM_filterHTML($message);
+    } else {
+        $mail->Body = strip_tags($message);
+    }
+//    $mail->Body    = $message;
     $mail->Subject = $subject;
     $mail->From = $from;
     $mail->FromName = $_CONF['site_name'];
