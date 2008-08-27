@@ -71,7 +71,7 @@ function nouveau_headerVars( &$template ) {
 
 	//Enables use of gl_chronometer - a client-side header banner rotator
 	$template->set_var('gl_moochronometer',
-'<script type="text/javascript" src="' . $_CONF['layout_url'] . '/js/gl_moochronometer.js"></script>');
+'<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools/gl_moochronometer.js"></script>');
 }
 
 
@@ -90,7 +90,7 @@ function gl_mootickerRSS() {
 	if ( $B['is_enabled'] == 0 ) {
 		$retval = <<<EOT
 <script type="text/javascript"
-src="{layout_url}/js/gl_mooticker.js"></script>
+src="{site_url}/javascript/mootools/gl_mooticker.js"></script>
 <script type="text/javascript">
          window.addEvent('domready', function() {
                  var x = new MooTicker('gl_mooticker', {
@@ -102,7 +102,7 @@ src="{layout_url}/js/gl_mooticker.js"></script>
 <div id="gl_mooticker">
    <span class="tickertitle">Latest News:</span>
 EOT;
-		$retval = str_replace('{layout_url}',$_CONF['layout_url'] , $retval);
+		$retval = str_replace('{site_url}',$_CONF['site_url'] , $retval);
 		$retval .= $B['content'] . '</div>';
 	}
 	return $retval;

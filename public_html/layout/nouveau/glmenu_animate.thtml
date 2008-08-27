@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{site_url}/javascript/gl_moomenu.js"></script>
+<script type="text/javascript" src="{site_url}/javascript/mootools/gl_moomenu.js"></script>
 <script type="text/javascript">
 	window.addEvent('domready', function() {
 		new moomenu($E('ul.gl_moomenu'), {
