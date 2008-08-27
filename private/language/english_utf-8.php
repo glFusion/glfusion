@@ -173,6 +173,8 @@ $LANG01 = array(
     129 => 'Configuration',
     130 => 'Webservices',
     500 => 'Please remove the admin/install/ directory!',
+    'ctl' => 'Clear Template Cache',
+    'logview' => 'Logview',
 );
 
 ###############################################################################
@@ -1095,6 +1097,15 @@ $LANG33 = array(
     55 => 'Articles'
 );
 
+$LANG_LOGVIEW = array(
+    'logview'   => 'Logview',
+    'info'      => 'glFusion Log file administration',
+    'logs'      => 'Logs',
+    'view'      => 'View Log File',
+    'clear'     => 'Clear Log File',
+    'log_file'  => 'Log File',
+);
+
 ###############################################################################
 # confirmation and error messages
 
@@ -1124,7 +1135,7 @@ $MESSAGE = array(
     23 => '',
     24 => '',
     25 => '',
-    26 => '',
+    26 => 'There was an error sending your message, please contact the Site Administrator',
     27 => 'Message successfully sent.',
     28 => 'The plugin has been successfully saved',
     29 => '',

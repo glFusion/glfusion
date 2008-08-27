@@ -576,7 +576,11 @@ class mbElement {
                                     $label = $LANG01[103] . ' (N/A)';
                                     $link_array[$LANG01[103]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
-
+                                if( SEC_inGroup( 'Root' )) {
+                                    $url = $_CONF['site_admin_url'] . '/logview.php';
+                                    $label = $LANG01['logview'] . ' (N/A)';
+                                    $link_array[$LANG01['logview']] = '<li><a href="' . $url .'">' . $label . '</a></li>' . LB;
+                                }
 
                                 if( $_CONF['link_documentation'] == 1 ) {
                                     $url = $_CONF['site_url'] . '/docs/index.html';

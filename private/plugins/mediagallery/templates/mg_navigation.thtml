@@ -97,10 +97,8 @@
    <tr>
      <td>
        <ul>
-         <li><a href="{admin_url}logview.php">{lang_logviewer}</a></li>
          <li><a href="{site_url}/phpinfo.php" rel="external">{lang_php_info}</a></li>
          <li><a href="{admin_url}filecheck.php">{lang_filecheck}</a></li>
-         <li><a href="{site_url}/docs/usage.html" rel="external">{lang_documentation}</a></li>
        </ul>
      </td>
    </tr>
