@@ -80,7 +80,7 @@ if ( isset($_POST['submit']) ) {
     $display = COM_siteHeader('menu');
     $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= "<form action=\"brokenfile.php\" method=\"post\">";
-    $display .= '<input type="hidden" name="lid" value="$lid"' . XHTML . '>';
+    $display .= '<input type="hidden" name="lid" value="'.$lid.'"' . XHTML . '>';
     $display .= '<table border="0" cellpadding="1" cellspacing="0" width="80%" class="plugin"><tr>';
     $display .= '<td class="pluginHeader">'._MD_REPORTBROKEN.'</td></tr>';
     $display .= '<tr><td style="padding:10px;">';
