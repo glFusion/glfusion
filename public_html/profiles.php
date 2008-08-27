@@ -50,7 +50,7 @@ require_once ('lib-common.php');
 * @param    string  $message        Text of message to send
 * @return   string                  Meta redirect or HTML for the contact form
 */
-function contactemail($uid,$author,$authoremail,$subject,$message)
+function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 {
     global $_CONF, $_TABLES, $_USER, $LANG04, $LANG08;
 
@@ -120,7 +120,12 @@ function contactemail($uid,$author,$authoremail,$subject,$message)
 
             $subject = strip_tags ($subject);
             $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-            $message = strip_tags ($message) . $sig;
+            if ( $html ) {
+                $message = $message . $sig;
+            } else {
+                $message = strip_tags ($message) . $sig;
+            }
+
             if (!empty ($A['fullname'])) {
                 $to = COM_formatEmailAddress ($A['fullname'], $A['email']);
             } else {
@@ -128,10 +133,14 @@ function contactemail($uid,$author,$authoremail,$subject,$message)
             }
             $from = COM_formatEmailAddress ($author, $authoremail);
 
-            COM_mail ($to, $subject, $message, $from);
+            $rc = COM_mail ($to, $subject, $message, $from,$html);
             COM_updateSpeedlimit ('mail');
 
-            $retval .= COM_refresh($_CONF['site_url'] . '/index.php?msg=27');
+            if ( $rc === false ) {
+                $retval = COM_refresh($_CONF['site_url'] . '/index.php?msg=26');
+            } else {
+                $retval = COM_refresh($_CONF['site_url'] . '/index.php?msg=27');
+            }
         } else {
             $subject = strip_tags ($subject);
             $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
@@ -165,7 +174,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message)
 */
 function contactform ($uid, $subject = '', $message = '')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG08, $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG08, $LANG_LOGIN;
 
     $retval = '';
 
@@ -194,13 +203,39 @@ function contactform ($uid, $subject = '', $message = '')
             $isAdmin = false;
         }
 
+        if ($_CONF['advanced_editor'] == 1) {
+            $postmode = 'html';
+        } elseif (empty ($postmode)) {
+            $postmode = $_CONF['postmode'];
+        }
+
         $displayname = COM_getDisplayName ($uid);
         if ((($P['emailfromadmin'] == 1) && $isAdmin) ||
             (($P['emailfromuser'] == 1) && !$isAdmin)) {
 
             $retval = COM_startBlock ($LANG08[10] . ' ' . $displayname);
             $mail_template = new Template ($_CONF['path_layout'] . 'profiles');
-            $mail_template->set_file ('form', 'contactuserform.thtml');
+
+            if (($_CONF['advanced_editor'] == 1)) {
+                $mail_template->set_file('form','contactuserform_advanced.thtml');
+            } else {
+                $mail_template->set_file('form','contactuserform.thtml');
+            }
+            if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
+                $mail_template->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
+            } else {
+                $mail_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+            }
+            if ($postmode == 'html') {
+                $mail_template->set_var ('show_texteditor', 'none');
+                $mail_template->set_var ('show_htmleditor', '');
+            } else {
+                $mail_template->set_var ('show_texteditor', '');
+                $mail_template->set_var ('show_htmleditor', 'none');
+            }
+            $mail_template->set_var('lang_postmode', $LANG03[2]);
+            $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
+
             $mail_template->set_var ( 'xhtml', XHTML );
             $mail_template->set_var ('site_url', $_CONF['site_url']);
             $mail_template->set_var ('lang_description', $LANG08[26]);
@@ -234,6 +269,8 @@ function contactform ($uid, $subject = '', $message = '')
             $mail_template->set_var ('subject', $subject);
             $mail_template->set_var ('lang_message', $LANG08[14]);
             $mail_template->set_var ('message', $message);
+            $mail_template->set_var ('message_text',$message);
+            $mail_template->set_var ('message_html',$message);
             $mail_template->set_var ('lang_nohtml', $LANG08[15]);
             $mail_template->set_var ('lang_submit', $LANG08[16]);
             $mail_template->set_var ('uid', $uid);
@@ -360,7 +397,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg)
 function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
                         $fromemail = '', $shortmsg = '', $msg = 0)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG08, $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG03,$LANG08, $LANG_LOGIN;
 
     $retval = '';
 
@@ -397,8 +434,34 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
         }
     }
 
+    if ($_CONF['advanced_editor'] == 1) {
+        $postmode = 'html';
+    } elseif (empty ($postmode)) {
+        $postmode = $_CONF['postmode'];
+    }
+
     $mail_template = new Template($_CONF['path_layout'] . 'profiles');
-    $mail_template->set_file('form', 'contactauthorform.thtml');
+
+    if (($_CONF['advanced_editor'] == 1)) {
+        $mail_template->set_file('form','contactauthorform_advanced.thtml');
+    } else {
+        $mail_template->set_file('form','contactauthorform.thtml');
+    }
+    if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
+        $mail_template->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
+    } else {
+        $mail_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+    }
+    if ($postmode == 'html') {
+        $mail_template->set_var ('show_texteditor', 'none');
+        $mail_template->set_var ('show_htmleditor', '');
+    } else {
+        $mail_template->set_var ('show_texteditor', '');
+        $mail_template->set_var ('show_htmleditor', 'none');
+    }
+    $mail_template->set_var('lang_postmode', $LANG03[2]);
+    $mail_template->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
+
     $mail_template->set_var( 'xhtml', XHTML );
     $mail_template->set_var('site_url', $_CONF['site_url']);
     $mail_template->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -414,6 +477,8 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     $mail_template->set_var('toemail', $toemail);
     $mail_template->set_var('lang_shortmessage', $LANG08[27]);
     $mail_template->set_var('shortmsg', $shortmsg);
+    $mail_template->set_var('message_text', $shortmsg);
+    $mail_template->set_var('message_html', $shortmsg);
     $mail_template->set_var('lang_warning', $LANG08[22]);
     $mail_template->set_var('lang_sendmessage', $LANG08[16]);
     $mail_template->set_var('story_id',$sid);
@@ -441,11 +506,27 @@ switch ($what) {
     case 'contact':
         $uid = COM_applyFilter ($_POST['uid'], true);
         if ($uid > 1) {
+            $html = 0;
+            if (($_CONF['advanced_editor'] == 1)) {
+                if ( $_POST['postmode'] == 'html' ) {
+                    $message = $_POST['message_html'];
+                    $html = 1;
+                } else if ( $_POST['postmode'] == 'text' ) {
+                    $message = $_POST['message_text'];
+                    $html = 0;
+                }
+            } else {
+                $message = $_POST['message'];
+            }
             $display .= contactemail ($uid, $_POST['author'],
                     $_POST['authoremail'], $_POST['subject'],
-                    $_POST['message']);
+                    $message,$html);
+            echo $display;
+            exit;
         } else {
             $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
+            echo $display;
+            exit;
         }
         break;
 
@@ -468,20 +549,32 @@ switch ($what) {
         if (empty ($sid)) {
             $display = COM_refresh ($_CONF['site_url'] . '/index.php');
         } else {
+            $html = 0;
+            if (($_CONF['advanced_editor'] == 1)) {
+                if ( $_POST['postmode'] == 'html' ) {
+                    $shortmessage = $_POST['message_html'];
+                    $html = 1;
+                } else if ( $_POST['postmode'] == 'text' ) {
+                    $shortmessage = $_POST['message_text'];
+                    $html = 0;
+                }
+            } else {
+                $shortmessage = $_POST['shortmsg'];
+            }
             if (empty ($_POST['toemail']) || empty ($_POST['fromemail'])
                     || !COM_isEmail ($_POST['toemail'])
                     || !COM_isEmail ($_POST['fromemail'])) {
                 $display .= COM_siteHeader ('menu', $LANG08[17])
                          . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
                                           COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
-                                          $_POST['shortmsg'], 52)
+                                          $shortmessage, 52)
                          . COM_siteFooter ();
             } else if (empty ($_POST['to']) || empty ($_POST['from']) ||
-                    empty ($_POST['shortmsg'])) {
+                    empty ($shortmessage)) {
                 $display .= COM_siteHeader ('menu', $LANG08[17])
                          . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
                                           COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
-                                          $_POST['shortmsg'])
+                                          $shortmessage)
                          . COM_siteFooter ();
             } else {
                 $msg = PLG_itemPreSave ('emailstory', $message);
@@ -490,11 +583,12 @@ switch ($what) {
                              . COM_errorLog ($msg, 2)
                              . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
                                               COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
-                                              $_POST['shortmsg'])
+                                              $shortmessage)
                              . COM_siteFooter ();
                 } else {
+
                     $display .= mailstory ($sid, $_POST['to'], $_POST['toemail'],
-                        $_POST['from'], $_POST['fromemail'], $_POST['shortmsg']);
+                        $_POST['from'], $_POST['fromemail'], $shortmessage,$html);
                 }
             }
         }

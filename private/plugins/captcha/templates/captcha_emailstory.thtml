@@ -22,14 +22,23 @@ function new_captcha()
 }
 //]]>
 </script>
-<label>{$LANG_CP00[picture]}:<br{xhtml}>
-<a href="javascript:new_captcha();" style="vertical-align:middle;">{lang_reload}</a>
-</label>
-
-<img src="{captcha_image}" id="captchaimage" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}>
-<div style="clear:both;"></div>
-<label for="captcha">{$LANG_CP00[characters]}:</label>
-
-<input type="text" id="captcha" name="captcha" size="25" maxlength="40" value="{captchastring}"{xhtml}>
-<input type="hidden" name="csid" value="{csid}"{xhtml}><br{xhtml}>
-<div style="margin-left: 95px;">{lang_captcha_help}</div>
+<tr>
+  <td class="alignright">
+    {$LANG_CP00[picture]}:<br{xhtml}>
+    <a href="javascript:new_captcha();" style="vertical-align:middle;">{lang_reload}</a>
+  </td>
+  <td>
+    <img src="{captcha_image}" id="captchaimage" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}>
+  </td>
+</tr>
+<tr>
+  <td class="alignright" style="vertical-align:top;">
+    {$LANG_CP00[characters]}:
+  </td>
+  <td>
+    <input type="text" id="captcha" name="captcha" size="25" maxlength="40" value="{captchastring}"{xhtml}>
+    <input type="hidden" name="csid" value="{csid}"{xhtml}>
+    <br{xhtml}>
+    <br{xhtml}>{lang_captcha_help}
+  </td>
+</tr>

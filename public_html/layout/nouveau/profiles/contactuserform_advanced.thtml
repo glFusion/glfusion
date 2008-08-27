@@ -1,0 +1,59 @@
+<script type="text/javascript">
+ // Setup editor path for FCKeditor JS Functions
+ glfusionEditorBasePath = "{site_url}/fckeditor/" ;
+ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
+window.addEvent('domready',function() {
+    var myValidator = new fValidator("contact");
+});
+</script>
+<script type="text/javaScript" src="{site_url}/javascript/submitcontactuser_fckeditor.js"></script>
+{start_block_contactuser}
+  <form action="{site_url}/profiles.php" method="post" id="contact" onsubmit='set_postcontent();'>
+    <table cellspacing="0" cellpadding="3" width="100%">
+      <tr>
+        <td class="alignright"><b>{lang_username}:</b></td>
+        <td><input class="fValidate['required']" type="text" id="author" name="author" size="45" value="{username}" maxlength="96"{xhtml}></td>
+      </tr>
+      <tr>
+        <td class="alignright"><b>{lang_useremail}:</b></td>
+        <td><input class="fValidate['required','email']" type="text" id="authoremail" name="authoremail" size="45" value="{useremail}" maxlength="96"{xhtml}></td>
+      </tr>
+      <tr>
+        <td class="alignright"><b>{lang_subject}:</b></td>
+        <td><input class="fValidate['required']" type="text" id="subject" name="subject" size="45" maxlength="96" value="{subject}"{xhtml}></td>
+      </tr>
+      <tr>
+        <td class="alignright" style="vertical-align:top;"><b>{lang_message}</b></td>
+        <td>
+          <div id="text_editor" style="display:{show_texteditor};">
+            <textarea id="message_text" name="message_text" cols="60" rows="10">{message_text}</textarea>
+          </div>
+          <div  id="html_editor" style="display:{show_htmleditor};">
+            <textarea id="message_html" name="message_html" rows="10" cols="60" style="width:90%;">{message_html}</textarea>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="alignright" style="vertical-align:top;"><b>{lang_postmode}:</b></td>
+        <td style="vertical-align:top;">
+          <select id="sel_editmode" name="postmode" onchange="change_editmode(this);">
+           {postmode_options}
+          </select>
+          <br{xhtml}>
+          <span class="warningsmall">{allowed_html}</span>
+        </td>
+      </tr>
+      {captcha}
+      <tr>
+        <td colspan="2"><hr{xhtml}></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="hidden" name="what" value="contact"{xhtml}>
+          <input type="hidden" name="uid" value="{uid}"{xhtml}>
+          <input type="submit" value="{lang_submit}"{xhtml}>
+        </td>
+      </tr>
+    </table>
+  </form>
+{end_block}
