@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Moved the Nouveau javascript widget files so they can be used by any theme (Eric)
+- Added /custom directories to all the private/plugin/templates/ .thtml files (Eric)
 - Implemented the advanced editor for Contact User and Email Story (Mark)
 - FileMgmt: Fixed a bug that caused the broken file reporting to not work (Mark)
 - Added logview feature to moderation screen (Mark)
