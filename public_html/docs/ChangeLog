@@ -2,7 +2,10 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
-- Added jhead / jpegtrans
+- Implemented the advanced editor for Contact User and Email Story (Mark)
+- FileMgmt: Fixed a bug that caused the broken file reporting to not work (Mark)
+- Added logview feature to moderation screen (Mark)
+- Added jhead / jpegtrans configuration options (Mark)
 - Added timezone select list in configuration (Mark)
 - Updated Bad Behavior2 to v2.0.23 (Mark)
 - Updated look of default poll vote results. (Eric)
@@ -31,7 +34,6 @@ v1.1.0
      before displaying new / reply links.
 - Media Gallery Updates (Mark)
    - Moved image processing APIs to core
-
 - Updated topic image to better match default header. (Eric)
 - Removed the Professional theme. (Eric)
 - Fixed error in RSS topic icon (needed to be sprintf). (Mark)
