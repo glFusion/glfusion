@@ -122,6 +122,7 @@ function IMG_getMediaMetaData( $filename ) {
     /*
      * Check to see if we failed on getting the mime type and do the additional checks here
      */
+/* --- DO NOT USE EXTENSION CHECKING - TOO DANGEROUS!
     if ( !isset($ThisFileInfo['mime_type']) || $ThisFileInfo['mime_type'] == '' || $ThisFileInfo['mime_type'] == 'application/octet-stream' ) {
         $file_extension = strtolower(substr(strrchr($filename,"."),1));
         switch ($file_extension) {
@@ -168,8 +169,10 @@ function IMG_getMediaMetaData( $filename ) {
                 $ThisFileInfo['mime_type'] = 'application/octet-stream';
                 break;
         }
+
         COM_errorLog("IMG_getMediaMetaData: getID3() failed to return mime type, using file extension check.  Mime type detected is " . $ThisFileInfo['mime_type']);
     }
+    ---------- */
     return $ThisFileInfo;
 }
 

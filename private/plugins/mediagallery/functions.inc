@@ -3361,7 +3361,7 @@ function MG_resizeImage($srcImage, $destImage, $dImageHeight, $dImageWidth, $mim
  */
 
 function MG_rotateImage( $srcImage, $direction ) {
-    return MG_rotateImage( $srcImage, $direction );
+    return IMG_rotateImage( $srcImage, $direction );
 }
 
 /*

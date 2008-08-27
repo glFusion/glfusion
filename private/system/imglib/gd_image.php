@@ -113,13 +113,15 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
 
     $tmpImage = $srcImage . '.rt';
 
-    $rc = _img_gdRotate($srcImage,$tmpImage,$GD_rotate,$mimeType);
+    list($rc,$msg) = _img_gdRotate($srcImage,$tmpImage,$GD_rotate,$mimeType);
     if ( $rc == true ) {
         if ( $_CONF['jhead_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg' )) {
             $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
         }
         $rc = copy($tmpImage, $srcImage);
         @unlink($tmpImage);
+    } else {
+        return array(false,$msg);
     }
     return array(true,'');
 }
@@ -203,6 +205,7 @@ function _img_gdRotate( $src, $dest, $angle, $mimeType ) {
             break;
     }
     imagedestroy($final_img);
+    return array(true,'');
 }
 
 function _img_convertImageFormat($srcImage,$destImage,$destFormat,$mimeType) {
