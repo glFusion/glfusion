@@ -271,7 +271,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         $values .= ",'$passwd'";
     }
     if (!empty ($fullname)) {
-        $fullname = addslashes ($fullname);
+        $fullname = addslashes (strip_tags($fullname));
         $fields .= ',fullname';
         $values .= ",'$fullname'";
     }
