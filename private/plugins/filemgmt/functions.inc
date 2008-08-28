@@ -712,6 +712,7 @@ function plugin_whatsnewsupported_filemgmt() {
 function plugin_getwhatsnew_filemgmt() {
     global $_TABLES, $_FM_TABLES, $_CONF, $LANG_FILEMGMT, $LANG01;
     global $filemgmtWhatsNewTitleLength,$filemgmtWhatsNewPeriodDays,$filemgmt_showWhatsNewComments;
+    global $mydownloads_publicpriv;
 
     $retval = '';
 
