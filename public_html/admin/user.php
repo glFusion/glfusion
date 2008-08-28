@@ -533,7 +533,7 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
                 DB_query("UPDATE {$_TABLES['users']} SET status = $userstatus WHERE uid = $uid");
             }
         } else {
-            $fullname = addslashes ($fullname);
+            $fullname = addslashes (strip_tags($fullname));
             $homepage = addslashes ($homepage);
             $curphoto = DB_getItem($_TABLES['users'],'photo',"uid = $uid");
             if (!empty ($curphoto) && ($delete_photo == 'on')) {
