@@ -1418,15 +1418,15 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     if( !empty( $_CONF['copyrightyear'] )) {
         $copyrightyear = $_CONF['copyrightyear'];
     }
-    $theme->set_var( 'copyright_notice', '&nbsp;' . $LANG01[93] . ' &copy; '
-            . $copyrightyear . ' ' . $_CONF['site_name'] . '<br' . XHTML . '>&nbsp;'
+    $theme->set_var( 'copyright_notice', $LANG01[93] . ' &copy; '
+            . $copyrightyear . ' ' . $_CONF['site_name'] . '&nbsp;&nbsp;&bull;&nbsp;&nbsp;'
             . $LANG01[94] );
     $theme->set_var( 'copyright_msg', $LANG01[93] . ' &copy; '
             . $copyrightyear . ' ' . $_CONF['site_name'] );
     $theme->set_var( 'current_year', $year );
     $theme->set_var( 'lang_copyright', $LANG01[93] );
     $theme->set_var( 'trademark_msg', $LANG01[94] );
-    $theme->set_var( 'powered_by', $LANG01[95] );
+    $theme->set_var( 'powered_by', $LANG01[95]);
     $theme->set_var( 'glfusion_url', 'http://www.glfusion.org/' );
     $theme->set_var( 'glfusion_version', GVERSION );
 

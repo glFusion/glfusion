@@ -266,7 +266,7 @@ float:left;
 margin-left:-100%;
 width:14.80em;
 height:1%;
-overflow:hidden;
+overflow:visible;
 }
 #gl_extra {
 background:#F7F7F7;
@@ -867,29 +867,22 @@ font-size:.8em;
 }
 
 #footer-copyright {
-color:#666;
-padding:5px 10px;
+color:#999;
+font-size:.8em;
+text-align:center; /* options are left - center - right */
+margin:1em 1em;
+padding:0 0 1em;
 }
 
-.footerlinks {
-float:right;
-text-align:right;
-}
-
-.footerlinks a:link,.footerlinks a:visited {
-color:#679EF1;
+#footer-copyright a:link,
+#footer-copyright a:visited {
+color:#999;
 text-decoration:none;
 }
 
-.footerlinks a:hover {
-color:#66CDF5;
-text-decoration:none;
-}
-
-.footer-rss {
-float:left;
-vertical-align:middle;
-margin:0 5px 0 0;
+#footer-copyright a:hover {
+color:#679ef1;
+text-decoration:underline;
 }
 
 .form-description {

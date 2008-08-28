@@ -26,6 +26,7 @@
 <link rel="stylesheet" type="text/css" href="{layout_url}/css/ie6.css" title="{theme}"{xthml}>
 <script defer type="text/javascript" src="{site_url}/javascript/mootools/gl_mooie6warning.js"></script>
 <script defer type="text/javascript" src="{site_url}/javascript/mootools/gl_moopngfix.js"></script>
+<script defer type="text/javascript" src="{site_url}/javascript/sitetailor_ie6vertmenu.js"></script>
 <![endif]-->
 <!--[if IE 7]>
 <link rel="stylesheet" type="text/css" href="{layout_url}/css/ie7.css" title="{theme}"{xthml}>
@@ -70,6 +71,8 @@ background:{spimage};  /*image for sub menu parent menu - the blue orb*/
 }
 .gl_moomenu {float:{menualign};}
 </style>
+<link rel="stylesheet" type="text/css" href="{layout_url}/sitetailor_vertmenu.css" title="{theme}"{xthml}>
+<link rel="stylesheet" type="text/css" href="{layout_url}/sitetailor_footmenu.css" title="{theme}"{xthml}>
 </head>
 <body dir="{direction}" style="background:#000000;">
 <div>

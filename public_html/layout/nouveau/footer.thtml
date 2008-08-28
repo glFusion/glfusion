@@ -7,17 +7,32 @@
             <div class="bottom-r-corner">
                 <div class="bottom-l-corner"></div>
             </div>
+			<!-- begin Site Tailor footer menu -->
+			<div class="st-fmenu">
+				<ul>
+					<li>
+						<a href="#">Home</a>
+					</li>
+					<li>
+						<a href="#">Contribute</a>
+					</li>
+					<li>
+						<a href="#">Search</a>
+					</li>
+					<li>
+						<a href="#">Directory</a>
+					</li>
+					<li>
+						<a href="#">Site Stats</a>
+					</li>
+					<li class="st-f-last">
+						<a href="#top">Top</a>
+					</li>
+				</ul>
+			</div>
+			<!-- end Site Tailor footer menu -->
             <div id="footer-copyright">
-                <div class="footerlinks">
-                    <a href="#top">Top</a>&nbsp;&nbsp;|&nbsp;
-                    <a href="{site_url}/terms.php">Terms</a>&nbsp;&nbsp;|&nbsp;
-                    <a href="{site_url}/privpol.php">Privacy</a>&nbsp;&nbsp;
-                    <a href="{glfusion_url}"><img style="vertical-align:middle" src="{layout_url}/images/cms-glfusion.png" alt="{powered_by} glFusion" title="{powered_by} glFusion"{xhtml}></a><br{xhtml}>
-                    {execution_textandtime}
-                </div> <!-- end of footerlinks-->
-                <a href="{rss_url}">
-                    <img class="reflect footer-rss" src="{layout_url}/images/rss.gif" alt="RSS" title="RSS"{xhtml}></a>
-                {copyright_notice}
+                {copyright_notice}&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="{rss_url}">RSS</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;{execution_textandtime}&nbsp;{powered_by} <a href="{glfusion_url}">glFusion</a>
             </div> <!-- end of footer-copyright -->
         </div> <!-- end of gl_footer-->
     </div> <!-- end of gl_container -->

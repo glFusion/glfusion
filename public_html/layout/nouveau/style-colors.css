@@ -171,7 +171,6 @@ form fieldset div.notes,
 form fieldset div.notes h4,
 form fieldset div.notes p,
 .fieldhelp,
-#footer-copyright,
 .ng-close-link,
 .ng-clear-link, 
 q,
@@ -294,6 +293,9 @@ form fieldset div.notes {
 }
 /***************************************************** BEGIN #999 ***************/
 h3,
+#footer-copyright,
+#footer-copyright a:link,
+#footer-copyright a:visited ,
 .ng-weekend,
 .ng-dayOff,
 .ng-dateOff,
@@ -313,8 +315,7 @@ a.tooltip:hover span,
 .table_list th {
 	background:#679ef1;
 }
-.footerlinks a:link,
-.footerlinks a:visited ,
+#footer-copyright a:hover,
 .tool-title,
 .gftool-title{
 	color:#679ef1;

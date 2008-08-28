@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Updated look of site footer to support a Site Tailor footer menu (Eric)
 - Moved the Nouveau javascript widget files so they can be used by any theme (Eric)
 - Added /custom directories to all the private/plugin/templates/ .thtml files (Eric)
 - Implemented the advanced editor for Contact User and Email Story (Mark)
