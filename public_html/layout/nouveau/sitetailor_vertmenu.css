@@ -55,7 +55,7 @@
 /* Fix IE. Hide from IE Mac \*/
 * html #gl_moomenu-vert-l ul li,
 * html #gl_moomenu-vert-r ul li {
-	float:{color-x};
+	float:left;
 	height:1%;
 }
 * html #gl_moomenu-vert-l ul li a,
