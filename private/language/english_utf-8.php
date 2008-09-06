@@ -962,7 +962,8 @@ $LANG29 = array(
     37 => '',
     38 => 'Submit',
     39 => 'There are no submissions to moderate at this time',
-    40 => 'User Submissions'
+    40 => 'User Submissions',
+    'info' => 'Approve or Decline submissions',
 );
 
 ###############################################################################
@@ -1726,6 +1727,7 @@ $LANG_confignames['Core'] = array(
     'pingback_excerpt' => "Create Pingback Excerpt?",
     'link_documentation' => "Link to Documentation?",
     'link_versionchecker' => "Link to Version Checker?",
+    'hide_adminmenu' => "Hide Admin Menu Outside Admin Pages?",
     'maximagesperarticle' => "Max Images per Article",
     'limitnews' => "Stories per Page",
     'minnews' => "Min. Stories per Page",

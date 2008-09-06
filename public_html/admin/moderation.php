@@ -41,6 +41,7 @@ require_once '../lib-common.php';
 require_once 'auth.inc.php';
 require_once $_CONF['path_system'] . 'lib-user.php';
 require_once $_CONF['path_system'] . 'lib-story.php';
+require_once $_CONF['path_system'] . 'lib-admin.php';
 
 // Uncomment the line below if you need to debug the HTTP variables being passed
 // to the script.  This will sometimes cause errors but it will allow you to see
@@ -49,8 +50,16 @@ require_once $_CONF['path_system'] . 'lib-story.php';
 
 function all_submissions($token)
 {
-    global $_CONF;
-    
+    global $_CONF, $LANG01, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
+
+    $menu_arr = array(
+            array('url' => $_CONF['site_admin_url'], 
+                  'text' => $LANG_ADMIN['admin_home']),
+    );    
+    $retval  = COM_startBlock($LANG01[10],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval .= ADMIN_createMenu($menu_arr, $LANG29['info'], 
+                                $_CONF['layout_url'] . '/images/icons/moderation.'. $_IMAGE_TYPE);
+
     if (SEC_hasRights('story.moderate')) {
         $retval .= itemlist('story', $token);
     }
@@ -67,6 +76,7 @@ function all_submissions($token)
     }
 
     $retval .= PLG_showModerationList($token);
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $retval;
 }
@@ -415,7 +425,7 @@ function moderation ($mid, $action, $type, $count)
         }
     }
 
-    $retval .= commandcontrol(SEC_createToken());
+    $retval .= all_submissions(SEC_createToken());
 
     return $retval;
 }
@@ -480,34 +490,10 @@ function moderateusers ($uid, $action, $count)
         }
     }
 
-    $retval .= commandcontrol(SEC_createToken());
+    $retval .= all_submissions(SEC_createToken());
 
     return $retval;
 }
-
-/**
-* Display a reminder to execute the security check script
-*
-*/
-function security_check_reminder ()
-{
-    global $_CONF, $_TABLES, $_IMAGE_TYPE, $MESSAGE;
-
-    $retval = '';
-
-    if (!SEC_inGroup ('Root')) {
-        return $retval;
-    }
-
-    $done = DB_getItem ($_TABLES['vars'], 'value', "name = 'security_check'");
-    if ($done != 1) {
-        $retval .= COM_showMessage(92);
-    }
-
-    return $retval;
-}
-
-// MAIN
 
 $display = '';
 $display .= COM_siteHeader ('menu', $LANG01[10]);
@@ -536,7 +522,6 @@ if (isset ($_POST['mode']) && ($_POST['mode'] == 'moderation') && SEC_checkToken
                                COM_applyFilter ($_POST['count'], true));
     }
 } else {
-    $display .= security_check_reminder();
     $display .= all_submissions(SEC_createToken());
 }
 

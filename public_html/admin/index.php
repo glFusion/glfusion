@@ -221,8 +221,33 @@ function commandcontrol()
     return $retval;
 }
 
+/**
+* Display a reminder to execute the security check script
+*
+*/
+function security_check_reminder()
+{
+    global $_CONF, $_TABLES, $_IMAGE_TYPE, $MESSAGE;
+
+    $retval = '';
+
+    if (!SEC_inGroup ('Root')) {
+        return $retval;
+    }
+
+    $done = DB_getItem ($_TABLES['vars'], 'value', "name = 'security_check'");
+    if ($done != 1) {
+        $retval .= COM_showMessage(92);
+    }
+
+    return $retval;
+}
+
+// MAIN
+
 
 $display .= COM_siteHeader('menu', $LANG29[34]);
+$display .= security_check_reminder();
 $display .= commandcontrol();
 $display .= COM_siteFooter();
 

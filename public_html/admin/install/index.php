@@ -1119,6 +1119,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);
             $c->add('path_to_jpegtrans','','text',5,22,NULL,1510,TRUE);
 
+            $c->add('hide_adminmenu',TRUE,'select',3,12,1,1170,TRUE);
+
             $current_fusion_version = '1.1.0';
             $_SQL = '';
             break;

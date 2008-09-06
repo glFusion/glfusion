@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- BB2 Update - eliminated redundant hits to vars table (Joe)
+- Added $_CONF['hide_adminmenu'] (Joe)
 - Added ability for plugins to control moderation queue by returning a string from plugin_itemlist_
   No other moderation functions will be called is a string is returned. (Joe)
 - Separated Command and Control from Submissions page in admin (Joe)

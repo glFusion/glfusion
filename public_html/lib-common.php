@@ -2290,7 +2290,7 @@ function COM_showTopics( $topic='' )
 
 function COM_userMenu( $help='', $title='' )
 {
-    global $_TABLES, $_USER, $_CONF, $LANG01, $LANG04, $_BLOCK_TEMPLATE;
+    global $_TABLES, $_USER, $_CONF, $LANG01, $LANG04, $LANG29, $_BLOCK_TEMPLATE;
 
     $retval = '';
 
@@ -2327,6 +2327,20 @@ function COM_userMenu( $help='', $title='' )
                            COM_getBlockTemplate( 'user_block', 'header' ));
         $retval .= '<ul>';
 
+        $plugin_options = PLG_getAdminOptions();
+        $num_plugins = count($plugin_options);
+    
+        if (SEC_isModerator() OR 
+                SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR') OR
+                ($num_plugins > 0))
+        {
+            $url = $_CONF['site_admin_url'] . '/index.php';
+            $usermenu->set_var('option_label', $LANG29[34]);
+            $usermenu->set_var('option_url', $url);
+            $usermenu->set_var('option_count', '');
+            $retval .= $usermenu->parse('item', ($thisUrl == $url) ? 'current' : 'option');
+        }
+        
         // This function will show the user options for all installed plugins
         // (if any)
 
@@ -2475,12 +2489,12 @@ function COM_adminMenu( $help = '', $title = '' )
     global $_TABLES, $_USER, $_CONF, $LANG01, $_BLOCK_TEMPLATE, $LANG_PDF,
            $_DB_dbms, $config, $LANG29;
 
-    $retval = '';
-
-    if( empty( $_USER['username'] ))
+    if (empty($_USER['username']))
     {
-        return $retval;
+        return '';
     }
+
+    $retval = '';
 
     $plugin_options = PLG_getAdminOptions();
     $num_plugins = count( $plugin_options );
@@ -2489,6 +2503,10 @@ function COM_adminMenu( $help = '', $title = '' )
     {
         // what's our current URL?
         $thisUrl = COM_getCurrentURL();
+        
+        if ($_CONF['hide_adminmenu'] && strpos($thisUrl, $_CONF['site_admin_url']) === false) {
+            return '';
+        }
 
         $adminmenu = new Template( $_CONF['path_layout'] );
         if( isset( $_BLOCK_TEMPLATE['adminoption'] ))

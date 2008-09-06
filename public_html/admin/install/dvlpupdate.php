@@ -87,6 +87,8 @@ $c->add('path_to_jhead','','text',5,22,NULL,1490,TRUE);
 $c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);
 $c->add('path_to_jpegtrans','','text',5,22,NULL,1510,TRUE);
 
+$c->add('hide_adminmenu',TRUE,'select',3,12,1,1170,TRUE);
+
 $retval .= 'Development Code upgrades complete - see error.log for details<br>';
 
 $display = COM_siteHeader();

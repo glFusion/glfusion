@@ -920,8 +920,14 @@ function PLG_getCCOptions()
 * @return   array   Returns options to put in admin menu
 *
 */
-function PLG_getAdminOptions()
+function PLG_getAdminOptions($force_reload = false)
 {
+    static $plgresults = null;
+    
+    if (!empty($plgresults) && !$force_reload) {
+        return $plgresults;
+    }
+
     $var_names = array('adminlabel', 'adminurl', 'numsubmissions');
     $required_names = array(true, true, false);
     $function_name = 'plugin_getadminoption_';
