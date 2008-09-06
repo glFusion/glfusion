@@ -1127,7 +1127,7 @@ function phpblock_forum_newposts() {
 
                $block->set_var ('site_url', $_CONF['site_url']);
                $block->set_var ('css_id', $onetwo);
-               $block->set_var ('img_dir', $CONF_FORUM['imgset']);
+               $block->set_var ('img_dir', $_CONF['site_url'] . '/forum/images');
                $block->set_var ('forum_id', $A['forum']);
                $block->set_var ('forum_name', DB_getItem($_TABLES['gf_forums'],'forum_name',"forum_id='{$A['forum']}'"));
                $block->set_var ('topic_id', $A['id']);
