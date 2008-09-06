@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Added ability for plugins to control moderation queue by returning a string from plugin_itemlist_
+  No other moderation functions will be called is a string is returned. (Joe)
+- Separated Command and Control from Submissions page in admin (Joe)
 - Removed non-english language files from install tarball (will be separate download) (Eric)
 - Updated look of site footer to support a Site Tailor footer menu (Eric)
 - Moved the Nouveau javascript widget files so they can be used by any theme (Eric)

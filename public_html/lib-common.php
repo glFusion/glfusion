@@ -2473,7 +2473,7 @@ function COM_userMenu( $help='', $title='' )
 function COM_adminMenu( $help = '', $title = '' )
 {
     global $_TABLES, $_USER, $_CONF, $LANG01, $_BLOCK_TEMPLATE, $LANG_PDF,
-           $_DB_dbms, $config;
+           $_DB_dbms, $config, $LANG29;
 
     $retval = '';
 
@@ -2810,23 +2810,31 @@ function COM_adminMenu( $help = '', $title = '' )
             $link_array[$LANG01[107]] = $menu_item;
         }
 
-        if( $_CONF['sort_admin'] )
+        // submissions entry        
+        if (SEC_isModerator()) {
+            $url = $_CONF['site_admin_url'] . '/moderation.php';
+            $adminmenu->set_var( 'option_url', $url );
+            $adminmenu->set_var( 'option_label', $LANG01[10] );
+            $adminmenu->set_var( 'option_count', COM_numberFormat( $modnum ));
+            $menu_item = $adminmenu->parse( 'item',
+                        ( $thisUrl == $url ) ? 'current' : 'option' );
+            $link_array[$LANG01[10]] = $menu_item;
+        }
+        
+        if ($_CONF['sort_admin'])
         {
-            uksort( $link_array, 'strcasecmp' );
+            uksort($link_array, 'strcasecmp');
         }
 
-        $url = $_CONF['site_admin_url'] . '/moderation.php';
-        $adminmenu->set_var( 'option_url', $url );
-        $adminmenu->set_var( 'option_label', $LANG01[10] );
-        $adminmenu->set_var( 'option_count', COM_numberFormat( $modnum ));
-        $menu_item = $adminmenu->parse( 'item',
-                    ( $thisUrl == $url ) ? 'current' : 'option' );
-        $link_array = array( $menu_item ) + $link_array;
+        // C&C entry
+        $url = $_CONF['site_admin_url'] . '/index.php';
+        $adminmenu->set_var('option_url', $url);
+        $adminmenu->set_var('option_label', $LANG29[34]);
+        $adminmenu->set_var('option_count', 'N/A');
+        $menu_item = $adminmenu->parse('item', ($thisUrl == $url) ? 'current' : 'option' );
+        $link_array = array($menu_item) + $link_array;
 
-        foreach( $link_array as $link )
-        {
-            $retval .= $link;
-        }
+        $retval .= implode('', $link_array);
 
         $retval .= COM_endBlock( COM_getBlockTemplate( 'admin_block', 'footer' ));
     }
