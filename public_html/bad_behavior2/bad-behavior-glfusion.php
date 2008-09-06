@@ -106,7 +106,11 @@ function bb2_email() {
 function bb2_read_settings() {
     global $_TABLES, $bb2_settings_defaults;
 
-    $isInstalled   = DB_getItem($_TABLES['vars'],'value','name="bb2_installed"');
+    static $isInstalled   = null;
+    
+    if ($isInstalled === null) {
+        $isInstalled = DB_getItem($_TABLES['vars'],'value','name="bb2_installed"');
+    }
 
     return array('log_table'      => $bb2_settings_defaults['log_table'],
 			     'display_stats'  => $bb2_settings_defaults['display_stats'],
