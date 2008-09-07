@@ -211,7 +211,16 @@ $LANG03 = array(
     28 => 'Preview Changes',
     29 => 'Submit Changes',
     30 => 'Edited on',
-    31 => 'by'
+    31 => 'by',
+    32 => 'Editting a Comment',
+    33 => 'Editting a Comment Submission',
+    34 => 'Preview Submission Changes',
+    35 => 'Save Changes to Queue',
+    36 => 'Notify me of new replies',
+    37 => 'New Comment Reply',
+    38 => 'Someone has replied to your comment.',
+    39 => 'You may view the comment thread at the following address: ',
+    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
 );
 
 ###############################################################################
@@ -510,11 +519,10 @@ $LANG09 = array(
     62 => '#',
     63 => 'Description',
     64 => 'Showing %d - %d of %d results',
-    65 => 'Not available...',
-    66 => 'Story',
-    67 => 'Comment',
-    68 => 'Show %d Results',
-    69 => 'Sort By'
+    65 => 'Story',
+    66 => 'Comment',
+    67 => 'Show %d Results',
+    68 => 'Sort By'
 );
 
 ###############################################################################
@@ -958,10 +966,14 @@ $LANG29 = array(
     18 => 'Email',
     34 => 'Command and Control',
     35 => 'Story Submissions',
-    36 => '',
-    37 => '',
+    36 => 'Comment',
+    37 => 'Time',
     38 => 'Submit',
     39 => 'There are no submissions to moderate at this time',
+    40 => 'User Submissions',
+    41 => 'Comment Submissions',
+    42 => 'User Name',
+    43 => 'Auto-pubish Comments?',
     40 => 'User Submissions',
     'info' => 'Approve or Decline submissions',
 );
@@ -1125,8 +1137,8 @@ $MESSAGE = array(
     12 => 'The block has been successfully deleted.',
     13 => 'Your topic has been successfully saved.',
     14 => 'The topic and all its stories and blocks have been successfully deleted.',
-    15 => '',
-    16 => '',
+    15 => 'Your comment has been submitted for review and will be published when approved by a moderator.',
+    16 => 'You have been unsubscribed. You will no longer be notified of new replies',
     17 => '',
     18 => '',
     19 => '',
@@ -1208,6 +1220,9 @@ $MESSAGE = array(
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
     97 => 'Not all required fields have been passed validation - default custom membership message',
+    98 => 'The plugin was successfully uploaded.',
+    99 => 'The plugin already exists.',
+    100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
 );
@@ -1529,7 +1544,8 @@ $LANG_ADMIN = array (
     'records_found' => 'Records found',
     'addchild'      => 'Add child',
     'list'          => 'list',
-    'list_all'      => 'List all'
+    'list_all'      => 'List all',
+    'na'            => 'N/A'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1806,6 +1822,18 @@ $LANG_confignames['Core'] = array(
     'jpegtrans_enabled' => 'Enable jpegtrans?',
     'path_to_jhead' => 'Path to jhead executable',
     'path_to_jpegtrans' => 'Path to jpegtrans executable',
+    'allow_reply_notifications' => 'Allow comment reply notifications?',
+    'search_style' => "Results List Style",
+    'search_limits' => "Page Limits",
+    'search_show_num' => "Show Result Number?",
+    'search_show_type' => "Show Result Type?",
+    'search_show_user' => "Show Author?",
+    'search_show_hits' => "Show Number of Hits?",
+    'search_show_sort' => "Allow User to Sort Results?",
+    'search_show_limit' => "Show Page Limits?",
+    'search_no_data' => "If No Data is Avaliable, Display",
+    'search_separator' => "Group Separator",
+    'search_def_keytype' => "Default Search Method",
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1889,7 +1917,8 @@ $LANG_configselects['Core'] = array(
     15 => array('By Number' => 'sortnum', 'Alphabetically' => 'alpha'),
     16 => array('No Login required' => 0, 'Advanced Search only' => 1, 'Simple + Advanced Search' => 2),
     17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
-    18 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
+    18 => array('Google' => 'google', 'Table' => 'table'),
+    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
 );
 
 ?>

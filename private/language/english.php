@@ -209,7 +209,16 @@ $LANG03 = array(
     28 => 'Preview Changes',
     29 => 'Submit Changes',
     30 => 'Edited on',
-    31 => 'by'
+    31 => 'by',
+    32 => 'Editting a Comment',
+    33 => 'Editting a Comment Submission',
+    34 => 'Preview Submission Changes',
+    35 => 'Save Changes to Queue',
+    36 => 'Notify me of new replies',
+    37 => 'New Comment Reply',
+    38 => 'Someone has replied to your comment.',
+    39 => 'You may view the comment thread at the following address: ',
+    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
 );
 
 ###############################################################################
@@ -508,11 +517,10 @@ $LANG09 = array(
     62 => '#',
     63 => 'Description',
     64 => 'Showing %d - %d of %d results',
-    65 => 'Not available...',
-    66 => 'Story',
-    67 => 'Comment',
-    68 => 'Show %d Results',
-    69 => 'Sort By'
+    65 => 'Story',
+    66 => 'Comment',
+    67 => 'Show %d Results',
+    68 => 'Sort By'
 );
 
 ###############################################################################
@@ -956,10 +964,14 @@ $LANG29 = array(
     18 => 'Email',
     34 => 'Command and Control',
     35 => 'Story Submissions',
-    36 => '',
-    37 => '',
+    36 => 'Comment',
+    37 => 'Time',
     38 => 'Submit',
     39 => 'There are no submissions to moderate at this time',
+    40 => 'User Submissions',
+    41 => 'Comment Submissions',
+    42 => 'User Name',
+    43 => 'Auto-pubish Comments?'
     40 => 'User Submissions',
     'info' => 'Approve or Decline submissions',
 );
@@ -1114,8 +1126,8 @@ $MESSAGE = array(
     12 => 'The block has been successfully deleted.',
     13 => 'Your topic has been successfully saved.',
     14 => 'The topic and all its stories and blocks have been successfully deleted.',
-    15 => '',
-    16 => '',
+    15 => 'Your comment has been submitted for review and will be published when approved by a moderator.',
+    16 => 'You have been unsubscribed. You will no longer be notified of new replies',
     17 => '',
     18 => '',
     19 => '',
@@ -1518,7 +1530,8 @@ $LANG_ADMIN = array (
     'records_found' => 'Records found',
     'addchild'      => 'Add child',
     'list'          => 'list',
-    'list_all'      => 'List all'
+    'list_all'      => 'List all',
+    'na'            => 'N/A'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1769,6 +1782,7 @@ $LANG_confignames['Core'] = array(
     'comment_code' => "Comment Default",
     'comment_edit' => "Allow Comment Edit?",
     'comment_edittime' => "Comment Edit Time (seconds)",
+    'commentsubmission' => "Queue Comment Submissions",
     'passwordspeedlimit' => "Password Speed Limit",
     'login_attempts' => "Max. Login Attempts",
     'login_speedlimit' => "Login Speed Limit",
