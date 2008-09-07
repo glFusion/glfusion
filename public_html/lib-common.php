@@ -2304,8 +2304,8 @@ function COM_userMenu( $help='', $title='', $position='' )
 
         $plugin_options = PLG_getAdminOptions();
         $num_plugins = count($plugin_options);
-    
-        if (SEC_isModerator() OR 
+
+        if (SEC_isModerator() OR
                 SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR') OR
                 ($num_plugins > 0))
         {
@@ -2315,7 +2315,7 @@ function COM_userMenu( $help='', $title='', $position='' )
             $usermenu->set_var('option_count', '');
             $retval .= $usermenu->parse('item', ($thisUrl == $url) ? 'current' : 'option');
         }
-        
+
         // This function will show the user options for all installed plugins
         // (if any)
 
@@ -2479,7 +2479,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
     {
         // what's our current URL?
         $thisUrl = COM_getCurrentURL();
-        
+
         if ($_CONF['hide_adminmenu'] && strpos($thisUrl, $_CONF['site_admin_url']) === false) {
             return '';
         }
@@ -3647,7 +3647,7 @@ function COM_formatBlock( $A, $noboxes = false )
             $A = DB_fetchArray($result);
         }
     }
-    
+
     if( array_key_exists( 'onleft', $A ) )
     {
         if( $A['onleft'] == 1 )
@@ -5842,7 +5842,7 @@ function COM_undoClickableLinks( $text )
 * @return   string          the text with highlighted search words
 *
 */
-function COM_highlightQuery( $text, $query )
+function COM_highlightQuery( $text, $query, $class = 'highlight')
 {
     $query = str_replace( '+', ' ', $query );
 
@@ -5862,8 +5862,7 @@ function COM_highlightQuery( $text, $query )
         if( !empty( $searchword ))
         {
             $searchword = preg_quote( str_replace( "'", "\'", $searchword ));
-            $searchword = str_replace('/', '\\/', $searchword);
-            $text = preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"highlight\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+            $text = preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
         }
     }
 
