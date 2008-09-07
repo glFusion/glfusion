@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
-if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
+if (stripos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
 {
     die ('This file can not be used on its own.');
 }
@@ -38,7 +38,7 @@ if (strpos ($_SERVER['PHP_SELF'], 'install.inc') !== false)
 global $pi_name, $pi_version, $gl_version, $pi_url, $base_path, $NEWFEATURE;
 
 $pi_name        = 'sitetailor';
-$pi_version     = '1.0.0';
+$pi_version     = '2.0.0';
 $gl_version     = '1.1.0';
 $pi_url         = 'http://www.glfusion.org';
 $base_path      = $_CONF['path'] . 'plugins/' . $pi_name . '/';
@@ -83,7 +83,7 @@ function plugin_install_sitetailor($_DB_table_prefix)
     // Insert default configuration
     COM_errorLog("Inserting default data into tables",1);
     for ($i = 1; $i <= count($_SQL_DEF); $i++) {
-        DB_query(current($_SQL_DEF));
+        DB_query(current($_SQL_DEF),1);
         if (DB_error()) {
             COM_errorLog("Error inserting Menu Editor Defaults",1);
             $uninstall_plugin();
@@ -108,7 +108,7 @@ function plugin_install_sitetailor($_DB_table_prefix)
     $group_id = DB_insertId();
     if ( $group_id == 0 ) {
         $lookup = $pi_name . ' Admin';
-        $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='" . $lookup . "'");
+        $result = DB_query("SELECT * FROM {$_TABLES['groups']} WHERE grp_name='" . $lookup . "'",1);
         $nRows = DB_numRows($result);
         if ( $nRows > 0 ) {
             $row = DB_fetchArray($result);
@@ -200,6 +200,8 @@ function plugin_install_sitetailor($_DB_table_prefix)
         exit;
     }
 
+    DB_query("INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, help, group_id, owner_id, perm_owner, perm_group, perm_members,perm_anon) VALUES (1, 'blockmenu', 'phpblock', 'Navigation', 'all', 0, '', '', 0, 1, 'phpblock_getMenu(block)','', 2, 4, 3, 2, 2, 2);",1);
+
     COM_errorLog("Succesfully installed the $pi_name Plugin!",1);
     return true;
 }
@@ -223,7 +225,7 @@ function plugin_remove_sitetailor() {
     global $_CONF, $_DB_table_prefix, $_TABLES, $LANG_ST00, $NEWFEATURE;
     global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
 
-    $TABLES     = array ( 'st_config','st_menu_config','st_menu_elements');
+    $TABLES     = array ( 'st_config','st_menus','st_menu_config','st_menus_config','st_menu_elements');
 
     // Unregister the plugin with glFusion
     COM_errorLog('Attempting to unregister the ' . $pi_name . ' Plugin from glFusion',1);
