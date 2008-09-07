@@ -1,8 +1,12 @@
 <script type="text/javascript">
 	var flashvars = {};
-	var params = {};
+    var params = {
+    wmode: "transparent"
+    };
 	var attributes = {};
+
 	flashvars.action="true";
+
 	flashvars.xmlUrl="{movie}&showDropShadow={dropshadow}&dely={delay}&transInType=Fade&transOutType=Fade&noLink={nolink}{showtitle}";
     swfobject.embedSWF("{site_url}/players/minislideshow.swf", "{id}", "{width}", "{height}", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
 </script>
