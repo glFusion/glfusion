@@ -231,20 +231,26 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
         // n = 'Compact display' for list of stories. p = 'Preview' mode.
 
-        if ((($index != 'n') && ($index != 'p')) || !empty($query)) {
-            $article->set_var( 'start_storylink_anchortag', '<a href="'
-                    . $articleUrl . '" class="non-ul">' );
-            $article->set_var( 'end_storylink_anchortag', '</a>' );
-            $article->set_var( 'story_title_link',
-                COM_createLink(
-                        $story->DisplayElements('title'),
-                        $articleUrl,
-                        array('class'=>'non-ul')
-                )
-            );
-        } else {
-            $article->set_var('story_title_link', $story->DisplayElements('title'));
+    if ((($index != 'n') && ($index != 'p')) || !empty($query)) {
+        $attributes = ' class="non-ul"';
+        $attr_array = array('class' => 'non-ul');
+        if (!empty($query)) {
+            $attributes .= ' rel="bookmark"';
+            $attr_array['rel'] = 'bookmark';
         }
+        $article->set_var('start_storylink_anchortag',
+                          '<a href="' . $articleUrl . '"' . $attributes);
+        $article->set_var('end_storylink_anchortag', '</a>');
+        $article->set_var('story_title_link',
+            COM_createLink(
+                    $story->DisplayElements('title'),
+                    $articleUrl,
+                    $attr_array
+            )
+        );
+    } else {
+        $article->set_var('story_title_link', $story->DisplayElements('title'));
+    }
 
         if(( $index == 'n' ) || ( $index == 'p' ))
         {

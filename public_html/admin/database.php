@@ -191,9 +191,9 @@ function dobackup()
         }
 
         if (function_exists('is_executable')) {
-            $canExec = is_executable($_DB_mysqldump_path);
+            $canExec = @is_executable($_DB_mysqldump_path);
         } else {
-            $canExec = file_exists($_DB_mysqldump_path);
+            $canExec = @file_exists($_DB_mysqldump_path);
         }
         if ($canExec) {
             exec($command);
@@ -211,7 +211,7 @@ function dobackup()
             $retval .= $LANG_DB_BACKUP['not_found'];
             $retval .= COM_endBlock(COM_getBlockTemplate('_msg_block',
                                                          'footer'));
-            COM_errorLog('Backup Error: Bad path or mysqldump does not exist', 1);
+            COM_errorLog('Backup Error: Bad path, mysqldump does not exist or open_basedir restriction in effect.', 1);
             COM_errorLog("Command used for mysqldump: $log_command", 1);
         }
     } else {

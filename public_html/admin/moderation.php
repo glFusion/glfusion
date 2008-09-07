@@ -254,7 +254,7 @@ function userlist ($token)
 * thus publish the story.
 *
 */
-function draftlist ()
+function draftlist ($token)
 {
     global $_CONF, $_TABLES, $LANG24, $LANG29, $LANG_ADMIN;
 
@@ -293,6 +293,7 @@ function draftlist ()
     $form_arr = array("bottom" => '', "top" => '');
     if ($nrows > 0) {
         $form_arr['bottom'] = '<input type="hidden" name="type" value="draft"' . XHTML . '>' . LB
+                . '<input type="hidden" name="' . CSRF_TOKEN . '" value="' . $token . '"'. XHTML . '>' . LB
                 . '<input type="hidden" name="mode" value="moderation"' . XHTML . '>' . LB
                 . '<input type="hidden" name="count" value="' . $nrows . '"' . XHTML . '>'
                 . '<p align="center"><input type="submit" value="'

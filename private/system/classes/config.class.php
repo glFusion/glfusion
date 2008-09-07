@@ -627,6 +627,7 @@ class config {
         $t->set_var('xhtml', XHTML);
 
         $t->set_var('lang_restore', $LANG_CONFIG['restore']);
+        $t->set_var('lang_enable', $LANG_CONFIG['enable']);
         $t->set_var('lang_add_element', $LANG_CONFIG['add_element']);
 
         $t->set_var('name', $name);

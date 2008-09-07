@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Several RFI security improvements throughout (Mark)
+- Updated Site Tailor to v2.0.0 - Ability to create multiple menus (Mark)
+- Search engine enhancements (Mark)
+- Comment handling enhancements (Mark)
+- Auto detect block tempaltes for left and right (Mark)
+- Approve draft from moderation queue fails due to CSRF hardening. (Mark)
 - BB2 Update - eliminated redundant hits to vars table (Joe)
 - Added $_CONF['hide_adminmenu'] (Joe)
 - Added ability for plugins to control moderation queue by returning a string from plugin_itemlist_

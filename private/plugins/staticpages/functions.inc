@@ -99,7 +99,7 @@ function plugin_getmenuitems_staticpages()
         }
     }
 
-    $result = DB_query ('SELECT sp_id, sp_label FROM ' . $_TABLES['staticpage'] . ' WHERE sp_onmenu = 1' . COM_getPermSql ('AND') . $order);
+    $result = DB_query('SELECT sp_id, sp_label FROM ' . $_TABLES['staticpage'] . ' WHERE sp_onmenu = 1' . COM_getPermSql('AND') . COM_getLangSql('sp_id', 'AND') . $order);
     $nrows = DB_numRows ($result);
     $menuitems = array ();
     for ($i = 0; $i < $nrows; $i++) {
