@@ -110,7 +110,7 @@ function plugin_upgrade_bad_behavior2 ()
 
     return true;
 }
-
+/*
 function plugin_searchtypes_bad_behavior2 ()
 {
     global $LANG_BAD_BEHAVIOR;
@@ -259,7 +259,7 @@ function plugin_dopluginsearch_bad_behavior2 ($query, $datestart, $dateend, $top
 
     return $plugin_results;
 }
-
+*/
 function plugin_getheadercode_bad_behavior2() {
 
     if ( function_exists('bb2_insert_head') ) {
