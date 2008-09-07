@@ -19,9 +19,9 @@
 <script type="text/javascript" src="{site_url}/javascript/common.js"></script>
 <script type="text/javascript" src="{site_url}/javascript/fValidator.js"></script>
 <script type="text/javascript" src="{site_url}/javascript/mootools/gl_mooreflection.js"></script>
-{gl_animatedmoomenu} <!-- enables gl_moomenu animation, if you delete it, the menu will still work, it will just instantly appear instead of fading in -->
-{gl_mootips} <!-- enables gl_mootips throughout layout -->
-<!-- {gl_moochronometer} --><!-- enables gl_moochronometer header rotator - MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating -->
+<script type="text/javascript" src="{site_url}/javascript/mootools/gl_moomenu.js"></script>
+{gl_animatedmoomenu}
+{gl_mootips}
 <!--[if lte IE 6]>
 <link rel="stylesheet" type="text/css" href="{layout_url}/css/ie6.css" title="{theme}"{xthml}>
 <script defer type="text/javascript" src="{site_url}/javascript/mootools/gl_mooie6warning.js"></script>
@@ -31,46 +31,7 @@
 <!--[if IE 7]>
 <link rel="stylesheet" type="text/css" href="{layout_url}/css/ie7.css" title="{theme}"{xthml}>
 <![endif]-->
-<style type="text/css">
-#gl_moomenu,
-#gl_moomenu ul,
-#gl_moomenu ul.gl_moomenu {
-background:{mbgcolor} {menu_bg};  /*Top Menu BG*/
-}
-#gl_moomenu a {
-color:{mtext};  /*Top Menu Text*/
-}
-.gl_moomenu li:hover {
-background:{mbghcolor} {menu_hover_bg};  /*Top Menu Hover*/
-}
-#gl_moomenu li {
-float:{malign};  /*Top Menu alignment*/
-}
-#gl_moomenu li:hover a,
-#gl_moomenu li.sfHover a,
-#gl_moomenu li:hover a:hover,
-#gl_moomenu li.sfHover a:hover {
-color:{mhtext};  /*Top Menu Text Hover / Sub Menu Text*/
-}
-#gl_moomenu li:hover li:hover a:hover,
-#gl_moomenu li.sfHover li.sfHover a:hover {
-color:{shtext};  /*Sub Menu Text Hover*/
-}
-#gl_moomenu ul ul {
-background:{sbgcolor};  /*Sub Menu BG*/
-border-left:1px solid {sbhcolor};  /*Sub Menu Highlight*/
-border-right:1px solid {sbscolor};  /*Sub Menu Shadow*/
-}
-#gl_moomenu li li {
-border-top:1px solid {sbhcolor};  /*Sub Menu Highlight*/
-border-bottom:1px solid {sbscolor};  /*Sub Menu Shadow*/
-}
-#gl_moomenu li li a.parent,
-#gl_moomenu li li a.parent:hover {
-background:{spimage};  /*image for sub menu parent menu - the blue orb*/
-}
-.gl_moomenu {float:{menualign};}
-</style>
+{menu_styles}
 <link rel="stylesheet" type="text/css" href="{layout_url}/sitetailor_vertmenu.css" title="{theme}"{xthml}>
 <link rel="stylesheet" type="text/css" href="{layout_url}/sitetailor_footmenu.css" title="{theme}"{xthml}>
 </head>

@@ -41,13 +41,16 @@ $_ST_CONF['whatsnew_cache_time'] = 3600;
  * ------------------------------------------------------------------------ */
 
 $_ST_CONF['sitetailor']   = $LANG_ST00['menulabel'];
-$_ST_CONF['version']      = '1.0.0';
+$_ST_CONF['version']      = '2.0.0';
 $_ST_CONF['pi_name']      = 'sitetailor';
-$_ST_CONF['gl_version']   = '1.0.0';
+$_ST_CONF['gl_version']   = '1.1.0';
 
 $_ST_table_prefix = $_DB_table_prefix;
 
 $_TABLES['st_config']       = $_ST_table_prefix . 'st_config';
-$_TABLES['st_menu_config']  = $_ST_table_prefix . 'st_menu_config';
+$_TABLES['st_menus']        = $_ST_table_prefix . 'st_menus';
+$_TABLES['st_menus_config'] = $_ST_table_prefix . 'st_menus_config';
 $_TABLES['st_menu_elements']= $_ST_table_prefix . 'st_menu_elements';
+
+$_TABLES['st_menu_config']  = $_ST_table_prefix . 'st_menu_config';
 ?>

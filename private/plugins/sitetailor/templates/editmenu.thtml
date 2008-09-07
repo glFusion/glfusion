@@ -1,0 +1,42 @@
+<!-- Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it -->
+<script type="text/javascript">
+    document.getElementById('sitetailor').style.display=''
+</script>
+<div class="plugin">
+<span>
+<a href="{site_admin_url}/plugins/sitetailor/index.php"><img style="vertical-align:middle;padding-right:10px;float:left;" src="{site_admin_url}/plugins/sitetailor/images/sitetailor.png" alt=""{xhtml}></a>
+</span>
+<h1 style="float:left">{birdseed}</h1>
+<div style="clear:both;"></div>
+<div class="pluginCellTitle" style="padding:5px;">
+  {$LANG_ST01[edit_menu]}
+</div>
+  <div class="glfform">
+    <form method="post" action="{form_action}" id="newmenu">
+    <input type="hidden" name="menu_id" id="menu_id" value="{menu_id}"{xhtml}>
+    <div>
+      <div class="required">
+        <label for="menuname">{$LANG_ST01[label]}:</label>
+        <input class="fValidate['required']" type="text" id="menuname" name="menuname" size="48" value="{menuname}"{xhtml}>
+      </div>
+      <div class="required">
+        <label for="menutype">{$LANG_ST01[menu_type]}:</label>
+        {menutype_select}
+      </div>
+      <div class="required">
+        <label for="menuactive">{$LANG_ST01[active]}:</label>
+        <input type="checkbox" id="menuactive" name="menuactive" value="1"{menuactive}{xhtml}>
+      </div>
+      <div class="required">
+        <label for="group">{$LANG_ST01[permission]}:</label>
+        {group_select}
+      </div>
+    <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
+      <input type="hidden" id="mode" name="mode" value="saveeditmenu"{xhtml}>
+      <input type="submit" id="execute" name="execute" value="{$LANG_ST01[save]}"{xhtml}>&nbsp;&nbsp;
+      <input type="submit" id="cancel" name="cancel" value="{$LANG_ST01[cancel]}"{xhtml}>
+    </div>
+  </div>
+  </form>
+  </div>
+</div>

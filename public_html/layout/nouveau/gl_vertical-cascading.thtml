@@ -1,0 +1,141 @@
+<style type="text/css">
+#gl_moomenu-vert-l{menu_id},
+#gl_moomenu-vert-r{menu_id} {
+	margin:0 auto;
+}
+#gl_moomenu-vert-l{menu_id} {
+    margin-left:-8px;
+    padding-left:0px;
+    }
+#gl_moomenu-vert-l{menu_id} {
+	text-align:left;
+}
+#gl_moomenu-vert-r{menu_id} {
+	text-align:right; /* change value to left to have the items left aligned but still in the right menu - you will also want to change the parent images below from 5% to 95% */
+}
+#gl_moomenu-vert-l{menu_id} ul,
+#gl_moomenu-vert-r{menu_id} ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+#gl_moomenu-vert-l{menu_id} ul {
+	width:160px; /* width of left menu items */
+	border-bottom:1px solid {submenu_highlight_color}; /* left menu border color */
+}
+#gl_moomenu-vert-r{menu_id} ul {
+	width:160px; /* width of right menu items */
+	border-bottom:1px solid {submenu_highlight_color}; /* right menu border color */
+}
+#gl_moomenu-vert-l{menu_id} ul li,
+#gl_moomenu-vert-r{menu_id} ul li {
+	position:relative;
+	z-index:40;
+	width:100%;
+}
+#gl_moomenu-vert-l{menu_id} li ul,
+#gl_moomenu-vert-r{menu_id} li ul {
+	position:absolute;
+	top:0;
+	display:block;
+}
+#gl_moomenu-vert-l{menu_id} li ul {
+	left:159px; /*set 1px less than left menu width above */
+}
+#gl_moomenu-vert-r{menu_id} li ul {
+	left:-159px; /*set 1px less than right menu width above */
+}
+#gl_moomenu-vert-l{menu_id} li:hover ul,
+#gl_moomenu-vert-r{menu_id} li:hover ul  {
+	display:block;
+}
+#gl_moomenu-vert-l{menu_id} li:hover>ul,
+#gl_moomenu-vert-r{menu_id} li:hover>ul {
+	visibility:visible;
+}
+#gl_moomenu-vert-l{menu_id} ul ul,
+#gl_moomenu-vert-r{menu_id} ul ul {
+	visibility:hidden;
+}
+/* Fix IE. Hide from IE Mac \*/
+* html #gl_moomenu-vert-l{menu_id} ul li,
+* html #gl_moomenu-vert-r{menu_id} ul li {
+	float:left;
+	height:1%;
+}
+* html #gl_moomenu-vert-l{menu_id} ul li a,
+* html #gl_moomenu-vert-r{menu_id} ul li a {
+	height:1%;
+}
+/* End */
+li,
+#gl_moomenu-vert-l{menu_id} ul,
+#gl_moomenu-vert-r{menu_id} ul {
+	margin:0;
+}
+#gl_moomenu-vert-l{menu_id} ul a,
+#gl_moomenu-vert-r{menu_id} ul a {
+	display:block;
+	text-decoration:none;
+}
+#gl_moomenu-vert-l{menu_id} ul a {
+	color:{main_menu_text_color}; /* left main menu text color */
+	background:{main_menu_bg_color}; /* left main menu bg color */
+	padding:3px; /* translates to height of left main menu boxes */
+	border:1px solid {submenu_highlight_color}; /* left main menu border color (set same as above) */
+	border-bottom:0; /* needs to be specified here to override above - declared in #gl_moomenu-vert-l ul */
+}
+#gl_moomenu-vert-r{menu_id} ul a {
+	color:{main_menu_text_color}; /* right main menu text color */
+	background:{main_menu_bg_color}; /* right main menu bg color */
+	padding:3px; /* translates to height of right main menu boxes */
+	border:1px solid {submenu_highlight_color}; /* right main menu border color (set same as above) */
+	border-bottom:0; /* needs to be specified here to override above - declared in #gl_moomenu-vert-r ul */
+}
+#gl_moomenu-vert-l{menu_id} ul a:hover {
+	color:{main_menu_hover_text_color}; /* left main menu text hover color */
+	background:{main_menu_hover_bg_color}; /* left main menu hover bg color */
+}
+#gl_moomenu-vert-r{menu_id} ul a:hover {
+	color:{main_menu_hover_text_color}; /* right main menu text hover color */
+	background:{main_menu_hover_bg_color}; /* right main menu hover bg color */
+}
+#gl_moomenu-vert-l{menu_id} li ul a,
+#gl_moomenu-vert-r{menu_id} li ul a {
+	text-decoration:none;
+}
+#gl_moomenu-vert-l{menu_id} li ul a {
+	color:{submenu_text_color}; /* left sub menu text color */
+	background:{submenu_background_color}; /* left sub menu bg color */
+	padding:3px; /* translates to height of left sub menu boxes */
+	border:1px solid {submenu_highlight_color}; /* left main menu border color (set same as above) */
+	border-bottom:0; /* needs to be specified here to override above - declared in #gl_moomenu-vert-l ul */
+}
+#gl_moomenu-vert-r{menu_id} li ul a {
+	color:{submenu_text_color}; /* right sub menu text color */
+	background:{submenu_background_color}; /* right sub menu bg color */
+	padding:3px; /* translates to height of right sub menu items */
+	border:1px solid {submenu_highlight_color}; /* right main menu border color (set same as above) */
+	border-bottom:0; /* needs to be specified here to override above - declared in #gl_moomenu-vert-r ul */
+}
+#gl_moomenu-vert-l{menu_id} li ul a:hover {
+	color:{submenu_hover_text_color}; /* left sub menu text hover color */
+	background:{submenu_hover_bg_color}; /* left sub menu hover bg color */
+}
+#gl_moomenu-vert-r{menu_id} li ul a:hover {
+	color:{submenu_hover_text_color}; /* right sub menu text hover color */
+	background:{submenu_hover_bg_color}; /* right sub menu hover bg color */
+}
+#gl_moomenu-vert-l{menu_id} ul ul a.parent-l{menu_id} {
+	background:{submenu_background_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 95% 50%; /* left sub menu background color - remove one of the ul to have the image display on the left main menu */
+}
+#gl_moomenu-vert-l{menu_id} ul ul a.parent-l{menu_id}:hover {
+	background:{submenu_hover_bg_color} url({site_url}/images/menu/{menu_hover_filename}) no-repeat scroll 95% 50%; /* left sub menu hover background color - remove one of the ul to have the image display on the left main menu */
+}
+#gl_moomenu-vert-r{menu_id} ul ul a.parent-r{menu_id} {
+	background:{submenu_background_color} url({site_url}/images/menu/{menu_bg_filename}) no-repeat scroll 5% 50%; /* right sub menu background color - remove one of the ul to have the image display on the right main menu */
+}
+#gl_moomenu-vert-r{menu_id} ul ul a.parent-r{menu_id}:hover {
+	background:{submenu_hover_bg_color} url({site_url}/images/menu/{menu_hover_filename}) no-repeat scroll 5% 50%; /* right sub menu hover background color - remove one of the ul to have the image display on the right main menu */
+}
+</style>

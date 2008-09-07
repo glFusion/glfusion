@@ -77,7 +77,7 @@ class mbElement {
     }
 
     function saveElement( ) {
-        global $_TABLES, $ST_menuElements;
+        global $_TABLES, $stMenu;
 
         $this->label            = addslashes($this->label);
         $this->url              = addslashes($this->url);
@@ -88,18 +88,19 @@ class mbElement {
     }
 
     function reorderMenu( ) {
-        global $_TABLES, $ST_menuElements;
+        global $_TABLES, $stMenu;
 
         $pid = $this->id;
+        $menu_id = $this->menu_id;
 
         $orderCount = 10;
 
-        $sql = "SELECT id,`element_order` FROM {$_TABLES['st_menu_elements']} WHERE pid=" . $pid . " ORDER BY `element_order` ASC";
+        $sql = "SELECT id,`element_order` FROM {$_TABLES['st_menu_elements']} WHERE menu_id=".$menu_id." AND pid=" . $pid . " ORDER BY `element_order` ASC";
         $result = DB_query($sql);
         while ($M = DB_fetchArray($result)) {
             $M['element_order'] = $orderCount;
             $orderCount += 10;
-            DB_query("UPDATE {$_TABLES['st_menu_elements']} SET `element_order`=" . $M['element_order'] . " WHERE id=" . $M['id'] );
+            DB_query("UPDATE {$_TABLES['st_menu_elements']} SET `element_order`=" . $M['element_order'] . " WHERE menu_id=".$menu_id." AND id=" . $M['id'] );
         }
     }
 
@@ -107,7 +108,7 @@ class mbElement {
     function createElementID( $menu_id ) {
         global $_TABLES;
 
-        $sql = "SELECT MAX(id) + 1 AS next_id FROM " . $_TABLES['st_menu_elements'] . " WHERE menu_id='" . $this->menu_id . "'";
+        $sql = "SELECT MAX(id) + 1 AS next_id FROM " . $_TABLES['st_menu_elements'];
         $result = DB_query( $sql );
         $row = DB_fetchArray( $result );
         $id = $row['next_id'];
@@ -123,7 +124,7 @@ class mbElement {
 
 
     function setAccessRights( $meadmin, $root, $groups ) {
-        global $_USER, $ST_menuElements;
+        global $_USER, $stMenu;
 
         if ($meadmin || $root) {
             $this->access = 3;
@@ -147,15 +148,15 @@ class mbElement {
     }
 
     function getChildcount() {
-        global $ST_menuElements;
+        global $stMenu;
 
         $numChildren = 0;
         $children = $this->getChildren();
         $x = count($children);
         for ($i=0; $i < $x; $i++ ) {
-            if ( $ST_menuElements[$this->menu_id][$children[$i]]->active > 0 ) {
-                if ( $ST_menuElements[$this->menu_id][$children[$i]]->hidden == 1 ) {
-                    if ( $ST_menuElements[$this->menu_id][$children[$i]]->access == 3 ) {
+            if ( $stMenu[$this->menu_id]['elements'][$children[$i]]->active > 0 ) {
+                if ( $stMenu[$this->menu_id]['elements'][$children[$i]]->hidden == 1 ) {
+                    if ( $stMenu[$this->menu_id]['elements'][$children[$i]]->access == 3 ) {
                         $numChildren++;
                     }
                 } else {
@@ -169,7 +170,7 @@ class mbElement {
 // This will build the actual edit tree line.  It will be a table, where each row
 
     function editTree( $depth, $count ) {
-        global $_CONF, $ST_menuElements, $level;
+        global $_CONF, $stMenu, $level;
         global $LANG_ST01, $LANG_ST_TYPES,$LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION;
 
         $plugin_menus = _stPLG_getMenuItems();
@@ -211,10 +212,10 @@ class mbElement {
                     break;
             }
 
-            $moveup     = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=move&amp;where=up&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $movedown   = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=move&amp;where=down&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $edit       = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=edit&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
-            $delete     = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php?mode=delete&amp;mid=' . $this->id . '" onclick="return confirm(\'' . $LANG_ST01['confirm_delete'] . '\');">';
+            $moveup     = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=move&amp;where=up&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
+            $movedown   = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=move&amp;where=down&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
+            $edit       = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=edit&amp;mid=' . $this->id . '&amp;menu=' . $this->menu_id . '">';
+            $delete     = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=delete&amp;mid=' . $this->id . '&amp;menuid='.$this->menu_id.'" onclick="return confirm(\'' . $LANG_ST01['confirm_delete'] . '\');">';
             $info       = '<a class="gl_mootip" title="' . $elementDetails . '" href="#"><img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/info.png" alt=""' . XHTML . '></a>';
 
             $retval .= "<div style=\"padding:5px;margin-left:" . $px . "px;\">" . ($this->type == 1 ? '<b>' : '') . strip_tags($this->label) . ($this->type == 1 ? '</b>' : '') . '</div>' . LB;
@@ -238,17 +239,45 @@ class mbElement {
             $children = $this->getChildren();
             foreach($children as $child) {
                 $level++;
-                $retval .= $ST_menuElements[$this->menu_id][$child]->editTree($depth,$count);
+                if ( isset($stMenu[$this->menu_id]['elements'][$child]) ) {
+                    $retval .= $stMenu[$this->menu_id]['elements'][$child]->editTree($depth,$count);
+                }
                 $level--;
             }
         }
         return $retval;
     }
 
+    function isLastChild() {
+        global $stMenu;
 
-    function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$selected='' ) {
-        global $_SP_CONF,$_USER, $_TABLES, $LANG01, $_CONF,$ST_menuElements, $meLevel;
-        global $_DB_dbms,$_GROUPS, $config;
+        $pid = $this->pid;
+        $children = $stMenu[$this->menu_id]['elements'][$pid]->getChildren();
+        $arrayIndex = count($children)-1;
+        if ( $this->id == $children[$arrayIndex] ) {
+            return true;
+        }
+        return false;
+    }
+
+
+    function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$lastclass,$selected='' ) {
+        global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG29, $_CONF,$meLevel,
+               $_DB_dbms,$_GROUPS, $config,$stMenu;
+
+        $oulclass       = $ulclass;
+        $oliclass       = $liclass;
+        $oparentaclass  = $parentaclass;
+        $olastclass     = $lastclass;
+
+        if ( $ulclass != '' )
+            $ulclass = $ulclass . $this->menu_id;
+        if ( $liclass != '' )
+            $liclass = $liclass . $this->menu_id;
+        if ( $parentaclass != '' )
+            $parentaclass = $parentaclass . $this->menu_id;
+        if ( $lastclass != '' )
+            $lastclass = $lastclass . $this->menu_id;
 
         $retval = '';
         $menu = '';
@@ -342,7 +371,7 @@ class mbElement {
                 switch ($this->subtype) {
                     case 1 : // user menu
                         if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                            $menu .= "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            $menu .= "<li>" . '<a class="' . $parentaclass . '" name="parent" href="#">' . strip_tags($this->label) . '</a>' . LB;
                         } else {
                             $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
                         }
@@ -393,7 +422,7 @@ class mbElement {
                              */
 
                             if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                                $menu .= "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                                $menu .= "<li>" . '<a class="' . $parentaclass . '" name="parent" href="#">' . strip_tags($this->label) . '</a>' . LB;
                             } else {
                                 $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
                             }
@@ -593,13 +622,18 @@ class mbElement {
                                     $label = $LANG01[107] . ' (' . GVERSION . ')';
                                     $link_array[$LANG01[107]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
+                                if (SEC_isModerator()) {
+                                    $url = $_CONF['site_admin_url'] . '/moderation.php';
+                                    $label = $LANG01[10] . ' (' . COM_numberFormat( $modnum ) . ')';
+                                    $link_array[$LANG01[10]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+                                }
 
                                 if( $_CONF['sort_admin'] ) {
                                     uksort( $link_array, 'strcasecmp' );
                                 }
-
-                                $url = $_CONF['site_admin_url'] . '/moderation.php';
-                                $label = $LANG01[10] . ' (' . COM_numberFormat( $modnum ) . ')';
+                                // C&C entry
+                                $url = $_CONF['site_admin_url'] . '/index.php';
+                                $label = $LANG29[34];
                                 $menu_item = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
 
                                 $link_array = array( $menu_item ) + $link_array;
@@ -615,7 +649,7 @@ class mbElement {
 
                     case 3 : // topics menu
                         if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                            $menu .= "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            $menu .= "<li>" . '<a class="' . $parentaclass . '" name="parent" href="#">' . strip_tags($this->label) . '</a>' . LB;
                         } else {
                             $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
                         }
@@ -793,7 +827,7 @@ class mbElement {
                 $functionName = $this->subtype;
                 if (function_exists($functionName)) {
                     /* Pass the type of menu to custom php function */
-                    $menu = "<li>" . '<a class="' . $parentaclass . '" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                    $menu = "<li>" . '<a class="' . $parentaclass . '" name="parent" href="#">' . strip_tags($this->label) . '</a>' . LB;
                     $menu .= $functionName();
                     $menu .= '</li>';
                 }
@@ -807,39 +841,47 @@ class mbElement {
         if ( $allowed == 0 ) {
             return $retval;
         }
+        /* here we actually define the menu item.... */
         if ( $this->type == 3 || $this->type == 7) {
             $retval .= $menu;
         } else {
             if ( $this->id != 0 && $this->access > 0 ) {
-                if ( $this->type == 1 && $parentaclass != '' ) {
-                    $retval .= "<li>" . '<a class="' . $parentaclass . '" href="' . ($this->url == '' ? '#' : $this->url) . '">' . strip_tags($this->label) . '</a>' . LB;
+                if ($this->isLastChild() && $lastclass != '') {
+                    $lastClass = ' class="'.$lastclass.'"';
                 } else {
-                    $retval .= "<li>" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a></li>' . LB;
+                    $lastClass = '';
                 }
-            }
 
-            if ( !empty($this->children)) {
-                $howmany = $this->getChildcount();
-                if ( $howmany > 0 ) {
-                    $children = $this->getChildren();
-                    if ( $this->id == 0 && $ulclass != '' ) {
-                        $retval .= '<ul class="' . $ulclass . '">' . LB;
-                    } else {
-                        $retval .= '<ul>' . LB;
-                    }
-                    foreach($children as $child) {
-                        $meLevel++;
-                        $retval .= $ST_menuElements[$this->menu_id][$child]->showTree($depth,$ulclass,$liclass,$parentaclass,$selected);
-                        $meLevel--;
-                    }
-                    if ( $this->id == 0 && $ulclass != '' ) {
-                        $retval .= '</ul>' . LB;
-                    } else {
-                        $retval .= '</ul>' . LB . '</li>' . LB;
-                    }
+                if ( $this->type == 1 && $parentaclass != '' ) {
+                    $retval .= "<li".$lastClass.">" . '<a class="' . $parentaclass . '" name="parent" href="' . ($this->url == '' ? '#' : $this->url) . '">' . strip_tags($this->label) . '</a>' . LB;
+                } else {
+                    $retval .= "<li".$lastClass.">" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a></li>' . LB;
                 }
             }
         }
+// DOES THIS NEED TO GO BACK A LEVEL???
+        if ( !empty($this->children)) {
+            $howmany = $this->getChildcount();
+            if ( $howmany > 0 ) {
+                $children = $this->getChildren();
+                if ( $this->id == 0 && $ulclass != '' ) {
+                    $retval .= '<ul class="' . $ulclass . '">' . LB;
+                } else {
+                    $retval .= '<ul>' . LB;
+                }
+                foreach($children as $child) {
+                    $meLevel++;
+                    $retval .= $stMenu[$this->menu_id]['elements'][$child]->showTree($depth,$oulclass,$oliclass,$oparentaclass,$olastclass,$selected);
+                    $meLevel--;
+                }
+                if ( $this->id == 0 ) {
+                    $retval .= '</ul>' . LB;
+                } else {
+                    $retval .= '</ul>' . LB . '</li>' . LB;
+                }
+            }
+        }
+        //}
         return $retval;
     }
 }

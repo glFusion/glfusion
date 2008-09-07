@@ -100,6 +100,11 @@ function toggleFields() {
 </script>
 
 <div class="plugin">
+<span>
+<a href="{site_admin_url}/plugins/sitetailor/index.php"><img style="vertical-align:middle;padding-right:10px;float:left;" src="{site_admin_url}/plugins/sitetailor/images/sitetailor.png" alt=""{xhtml}></a>
+</span>
+<h1 style="float:left">{birdseed}</h1>
+<div style="clear:both;"></div>
 <div class="pluginCellTitle" style="padding:5px;">
   {$LANG_ST01[edit_element]}
 </div>
@@ -156,7 +161,7 @@ function toggleFields() {
       </div>
 
       <div id="glfunc" class="optional required">
-        <label for="spname">{$LANG_ST01[geeklog_function]}:</label>
+        <label for="spname">{$LANG_ST01[glfusion_function]}:</label>
         {glfunction_select}
       </div>
 

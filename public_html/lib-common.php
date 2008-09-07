@@ -842,7 +842,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
-           $theme_headercode, $theme_layout,$mbMenuConfig;
+           $theme_headercode, $theme_layout,$stMenu;
 
     $function = $_CONF['theme'] . '_siteHeader';
 
@@ -873,14 +873,6 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var('mootools',
             '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools/mootools-release-1.11.packed.js"></script>' . LB);
 
-	//Fade in animation for the gl_moomenu
-    $animate = new Template( $_CONF['path_layout'] );
-    $animate->set_file( array(
-        'menu'        => 'glmenu_animate.thtml',
-    ));
-    $animate->parse( 'menu_js', 'menu' );
-    $header->set_var('gl_animatedmoomenu',$animate->finish( $animate->get_var( 'menu_js' )));
-
 	//Enables use of mootips
     $tips = new Template( $_CONF['path_layout'] );
     $tips->set_file( array(
@@ -898,45 +890,15 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         $function( $header );
     }
 
-    // initialize the Site Tailor items....
+    /* ************ BEGIN Site Tailor Menu Integration *************** */
 
-    $tmbg = '#151515';
-    $tmh  = '#679ef1';
-    $tmt  = '#e8e8e8';
-    $tmth = '#ffffff';
-    $smth = '#ffe600';
-    $smbg = '#151515';
-    $smh  = '#000000';
-    $sms  = '#333333';
+    // We can have many menus defined, so we need to cycle through each one
+    // and build the stylesheet for each.
 
-    // set menu colors
-    if ( function_exists('st_getMenu') ) { // && $mbMenuConfig[0]['enabled'] == 1) {
-        $result = DB_query("SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=0",1);
-        if ( DB_numRows($result) > 0 ) {
-            list($id,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$bgimage,$hoverimage,$parentimage,$alignment,$enabled) = DB_fetchArray($result);
-        }
-    }
+    st_getStyles( $header );
 
-    $header->set_var(array(
-        'mbgcolor'  => ($mbMenuConfig[0]['gorc'] == 1 ? '' : $tmbg),
-        'mbghcolor' => $tmh,
-        'mtext'     => $tmt,
-        'mhtext'    => $tmth,
-        'shtext'    => $smth,
-        'sbhcolor'  => $smh,
-        'sbscolor'  => $sms,
-        'sblcolor'  => $sms,
-        'sbrcolor'  => $sms,
-        'sbgcolor'  => $smbg,
-        'sbtcolor'  => $sms,
-        'sbbcolor'  => $sms,
-        'tmh'       => $tmh,
-        'menu_bg'       => ($mbMenuConfig[0]['gorc'] == 1 ? 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['bgimage'] . ') repeat' : ''),
-        'menu_hover_bg' => ($mbMenuConfig[0]['gorc'] == 1 ? 'url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['hoverimage'] . ') repeat' : ''),
-        'spimage'       => 'transparent url(' . $_CONF['site_url'] . '/images/menu/' . $mbMenuConfig[0]['parentimage'] . ') no-repeat scroll 95% 50%',
-        'menualign'     => ($alignment == 1 ? 'left' : 'right'),
 
-    ));
+    /* ************ END Site Tailor Menu Integration ***************** */
 
     // get topic if not on home page
     if( !isset( $_GET['topic'] )) {
@@ -1173,7 +1135,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
            $theme_pagetitle, $theme_headercode, $theme_layout,$mbMenuConfig,
-           $_ST_CONF;
+           $_ST_CONF,$stMenu;
 
     // If the theme implemented this for us then call their version instead.
 
@@ -1206,7 +1168,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'rightblocks'   => 'rightblocks.thtml',
     ));
     $theme->set_var('xhtml',XHTML);
-
+    $theme->set_var( 'num_search_results',$_CONF['num_search_results'] );
     // get topic if not on home page
     if( !isset( $_GET['topic'] )) {
         if( isset( $_GET['story'] )) {
@@ -1281,8 +1243,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $imgInfo = @getimagesize($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
         $dimension = $imgInfo[3];
 
-
-
         $L->set_var( 'xhtml', XHTML);
         $L->set_var( 'site_url', $_CONF['site_url'] );
         $L->set_var( 'layout_url', $_CONF['layout_url'] );
@@ -1318,8 +1278,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $theme->set_var('logo_block',$L->finish($L->get_var('output')));
     }
 
-
-
     $theme->set_var( 'site_logo', $_CONF['layout_url']
                                    . '/images/logo.' . $_IMAGE_TYPE );
 
@@ -1342,11 +1300,11 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'lang_newuser'      => $LANG12[3],
     ));
 
-    if ( function_exists('st_getMenu') && $mbMenuConfig[0]['enabled'] == 1) {
-        $theme->set_var('st_hmenu',st_getMenu(0,"gl_moomenu",'',"parent"));
-    } else {
-        $theme->set_var('st_hmenu','');
-    }
+    // build the site tailor menus
+
+    $theme->set_var('st_hmenu',st_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
+    $theme->set_var('st_footer_menu',st_getMenu('footer','st-fmenu','','','','st-f-last'));
+    $theme->set_var('st_header_menu',st_getMenu('header','','',''));
 
     // Get plugin menu options
     $plugin_menu = PLG_getMenuItems();
@@ -1408,6 +1366,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
     $theme->set_var( 'site_name', $_CONF['site_name'] );
     $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
+    $theme->set_var( 'num_search_results',$_CONF['num_search_results'] );
+
     $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,
                           strlen( $_CONF['path_html'] ) - 1 ) . LB;
     $theme->set_var( 'rdf_file', $rdf );
@@ -2828,7 +2788,7 @@ function COM_adminMenu( $help = '', $title = '' )
             $link_array[$LANG01[107]] = $menu_item;
         }
 
-        // submissions entry        
+        // submissions entry
         if (SEC_isModerator()) {
             $url = $_CONF['site_admin_url'] . '/moderation.php';
             $adminmenu->set_var( 'option_url', $url );
@@ -2838,7 +2798,7 @@ function COM_adminMenu( $help = '', $title = '' )
                         ( $thisUrl == $url ) ? 'current' : 'option' );
             $link_array[$LANG01[10]] = $menu_item;
         }
-        
+
         if ($_CONF['sort_admin'])
         {
             uksort($link_array, 'strcasecmp');

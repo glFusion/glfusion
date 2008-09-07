@@ -8,28 +8,7 @@
                 <div class="bottom-l-corner"></div>
             </div>
 			<!-- begin Site Tailor footer menu -->
-			<div class="st-fmenu">
-				<ul>
-					<li>
-						<a href="#">Home</a>
-					</li>
-					<li>
-						<a href="#">Contribute</a>
-					</li>
-					<li>
-						<a href="#">Search</a>
-					</li>
-					<li>
-						<a href="#">Directory</a>
-					</li>
-					<li>
-						<a href="#">Site Stats</a>
-					</li>
-					<li class="st-f-last">
-						<a href="#top">Top</a>
-					</li>
-				</ul>
-			</div>
+			{st_footer_menu}
 			<!-- end Site Tailor footer menu -->
             <div id="footer-copyright">
                 {copyright_notice}&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href="{rss_url}">RSS</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;{execution_textandtime}&nbsp;{powered_by} <a href="{glfusion_url}">glFusion</a>

@@ -9,6 +9,7 @@
 								<input id="header-textbox" type="text" name="query" maxlength="255" value="{$LANG09[10]}" title="{$LANG09[10]}" onfocus="if (this.value=='Search')this.value='';" onblur="if(this.value=='')this.value='{$LANG09[10]}';"{xhtml}>
 								<input type="hidden" name="type" value="all"{xhtml}>
 								<input type="hidden" name="mode" value="search"{xhtml}>
+								<input type="hidden" name="results" value="{num_search_results}"{xhtml}>
 							</div>
 						</form>
 					</div> <!-- end of header-flag-n-search  -->
@@ -17,13 +18,15 @@
             </div>
         </div> <!-- end of gl_header -->
 		<!-- start of gl_menu -->
-        <div id="gl_moomenu">
+
 			{!if st_hmenu}
+            <div id="gl_moomenu1">
 				{st_hmenu}
 			{!else}
-				<ul class="gl_moomenu">
-					{menu_elements}
-				</ul>
+        <div id="gl_moomenu">
+			<ul class="gl_moomenu">
+				{menu_elements}
+			</ul>
 			{!endif}
 		</div> <!-- end of gl_menu -->
 

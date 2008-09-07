@@ -85,10 +85,14 @@ $LANG_ST01 = array (
     'save'              => 'Save',
     'create_element'    => 'Create Menu Element',
     'add_new'           => 'Add New Menu Item',
+    'add_newmenu'       => 'Create New Menu',
+    'edit_menu'         => 'Edit Menu',
     'menu_list'         => 'Menu Listing',
     'configuration'     => 'Configuration',
     'edit_element'      => 'Edit Menu Item',
     'menu_element'      => 'Menu Element',
+    'menu_type'         => 'Menu Type',
+    'elements'          => 'Elements',
     'enabled'           => 'Enabled',
     'edit'              => 'Edit',
     'delete'            => 'Delete',
@@ -133,12 +137,13 @@ $LANG_ST01 = array (
     'same_window'       => 'Same Window',
     'new_window'        => 'New Window',
     'menu_color_options'    => 'Menu Color Options',
-    'top_menu_bg'       => 'Top Menu BG',
-    'top_menu_hover'    => 'Top Menu Hover',
-    'top_menu_text'     => 'Top Menu Text',
-    'top_menu_text_hover'   => 'Top Menu Text Hover / Sub Menu Text',
+    'top_menu_bg'           => 'Main Menu BG',
+    'top_menu_hover'        => 'Main Menu Hover',
+    'top_menu_text'         => 'Main Menu Text',
+    'top_menu_text_hover'   => 'Main Menu Text Hover / Sub Menu Text',
     'sub_menu_text_hover'   => 'Sub Menu Text Hover',
     'sub_menu_bg'           => 'Sub Menu BG',
+    'sub_menu_hover_bg'     => 'Sub Menu Hover BG',
     'sub_menu_highlight'    => 'Sub Menu Highlight',
     'sub_menu_shadow'       => 'Sub Menu Shadow',
     'menu_builder'      => 'Menu Builder',
@@ -164,7 +169,12 @@ $LANG_ST01 = array (
 	'confirm_reset'         => 'This will reset the menu colors and graphics to the installation values. Are you sure you want to continue?',
 );
 
-
+$LANG_ST_MENU_TYPES = array(
+    1                   => 'Horizontal - Cascading',
+    2                   => 'Horizontal - Simple',
+    3                   => 'Vertical - Cascading',
+    4                   => 'Vertical - Simple',
+);
 
 $LANG_ST_TYPES = array(
     1                   => 'Sub Menu',

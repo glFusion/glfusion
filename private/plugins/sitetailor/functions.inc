@@ -31,7 +31,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
+if (stripos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
 {
     die ('This file can not be used on its own.');
 }
@@ -50,6 +50,7 @@ if (file_exists ($langfile)) {
 require_once $_CONF['path'] . 'plugins/sitetailor/config.php';
 require_once($_CONF['path'] . 'plugins/sitetailor/classes/classMenuElement.php');
 
+global $stMenu;
 
 
 function plugin_getheadercode_sitetailor() {
@@ -111,7 +112,7 @@ function plugin_upgrade_sitetailor() {
 
     require_once ($_CONF['path'] . '/plugins/sitetailor/glupgrade.inc');
 
-    $rc = plugin_plgupgrade_sitetailor();
+    $rc = glfusion_plgupgrade_sitetailor();
 
     return $rc;
 }
@@ -142,8 +143,20 @@ function plugin_uninstall_sitetailor($installCheck='') {
     return ( $rc );
 }
 
-function st_initMenu() {
-    global $mbMenuConfig,$_GROUPS, $_ST_CONF, $ST_menuElements, $_TABLES, $_USER;
+function st_initMenu($skipCache=false) {
+    global $stMenu,$_GROUPS, $_ST_CONF, $_TABLES, $_USER;
+
+    $groups = implode($_GROUPS,'');
+    $hash = md5($groups);
+    $cacheInstance = 'stmenu_' . $hash . '__data';
+    $usedCache = 0;
+    if ( $skipCache == false ) {
+        $retval = CACHE_check_instance($cacheInstance, 0);
+        if ( $retval ) {
+            $stMenu = unserialize($retval);
+            return;
+        }
+    }
 
     $mbadmin = SEC_hasRights('sitetailor.admin');
     $root    = SEC_inGroup('Root');
@@ -154,83 +167,165 @@ function st_initMenu() {
         $uid = $_USER['uid'];
     }
 
-    $groups = $_GROUPS;
+    $result = DB_query("SELECT * FROM {$_TABLES['st_menus']}",1);
+    while ( $menu = DB_fetchArray($result) ) {
+        $menuID = $menu['id'];
+        $stMenu[$menu['id']]['menu_name']   = $menu['menu_name'];
+        $stMenu[$menu['id']]['menu_id']     = $menu['id'];
+        $stMenu[$menu['id']]['active']      = $menu['menu_active'];
+        $stMenu[$menu['id']]['menu_type']   = $menu['menu_type'];
+        $stMenu[$menu['id']]['group_id']    = $menu['group_id'];
 
-    // Red configuration
-    $result = DB_query("SELECT * FROM {$_TABLES['st_menu_config']}",1);
-    while ( $C = DB_fetchArray($result) ) {
-        $mbMenuConfig[] = $C;
-    }
-
-    $sql = "SELECT * FROM {$_TABLES['st_menu_elements']} ORDER BY element_order ASC";
-
-    $result         = DB_query( $sql, 1);
-    $ST_menuElements    = array();
-
-    $element            = new mbElement();
-    $element->id        = 0;
-    $element->menu_id   = 0; // 0 is header menu - more to come later
-    $element->label     = 'Top Level Menu';
-    $element->type      = -1;
-    $element->pid       = 0;
-    $element->order     = 0;
-    $element->url       = '';
-    $element->owner_id  = $mbadmin;
-    $element->group_id  = $root;
-    if ( $mbadmin ) {
-        $element->access = 3;
-    }
-    $ST_menuElements[$element->menu_id][$element->id] = $element;
-
-    while ($A = DB_fetchArray($result) ) {
-        $element  = new mbElement();
-        $element->constructor($A,$mbadmin,$root,$groups);
-
-        if ( $element->access > 0 ) {
-            if ( !isset($ST_menuElements[$element->menu_id][0]) ) {
-                $toplevel = new mbElement();
-                $toplevel->id = 0;
-                $toplevel->menu_name = $element->menu_id;
-                $toplevel->title = 'Top Level Menu';
-                $toplevel->owner_id = $mbadmin;
-                $toplevel->group_id = $root;
-                if ( $mbadmin ) {
-                    $element->access = 3;
+        if ($mbadmin || $root) {
+            $stMenu[$menu['id']]['menu_perm'] = 3;
+        } else {
+            if ( $menu['group_id'] == 998 ) {
+                if( COM_isAnonUser() ) {
+                    $stMenu[$menu['id']]['menu_perm'] = 3;
+                } else {
+                    $stMenu[$menu['id']]['menu_perm'] =  0;
                 }
-                $ST_menuElements[$toplevel->menu_id][0] = $toplevel;
+            } else {
+                if ( in_array( $menu['group_id'], $_GROUPS ) ) {
+                    $stMenu[$menu['id']]['menu_perm'] =  3;
+                }
             }
-            $ST_menuElements[$element->menu_id][$element->id] = $element;
+        }
+
+        // retrieve configuration options for this menu...
+        $cfgResult = DB_query("SELECT * FROM {$_TABLES['st_menus_config']} WHERE menu_id=".$menu['id']);
+        while ($cfgRow = DB_fetchArray($cfgResult)) {
+            $stMenu[$menu['id']]['config'][$cfgRow['conf_name']] = $cfgRow['conf_value'];
+        }
+
+        $sql = "SELECT * FROM {$_TABLES['st_menu_elements']} WHERE menu_id=".$menuID." ORDER BY element_order ASC";
+        $elementResult      = DB_query( $sql, 1);
+        $element            = new mbElement();
+        $element->id        = 0;
+        $element->menu_id   = $menuID;
+        $element->label     = 'Top Level Menu';
+        $element->type      = -1;
+        $element->pid       = 0;
+        $element->order     = 0;
+        $element->url       = '';
+        $element->owner_id  = $mbadmin;
+        $element->group_id  = $root;
+        if ( $mbadmin ) {
+            $element->access = 3;
+        }
+        $stMenu[$menuID]['elements'][0] = $element;
+
+        while ($A = DB_fetchArray($elementResult) ) {
+            $element  = new mbElement();
+            $element->constructor($A,$mbadmin,$root,$_GROUPS);
+            if ( $element->access > 0 ) {
+                $stMenu[$menuID]['elements'][$element->id] = $element;
+            }
         }
     }
 
-    foreach( $ST_menuElements as $name => $menu ) {
-        foreach( $ST_menuElements[$name] as $id => $element) {
-            if ($id != 0 && isset($ST_menuElements[$name][$element->pid]->id) ) {
-                $ST_menuElements[$name][$element->pid]->setChild($id);
+    if ( is_array($stMenu) ) {
+        foreach( $stMenu as $name => $menu ) {
+            foreach( $stMenu[$name]['elements'] as $id => $element) {
+                if ($id != 0 && isset($stMenu[$name]['elements'][$element->pid]->id) ) {
+                    $stMenu[$name]['elements'][$element->pid]->setChild($id);
+                }
             }
         }
     }
+    CACHE_remove_instance('stmenu');
+    $cacheMenu = serialize($stMenu);
+    CACHE_create_instance($cacheInstance, $cacheMenu, 0);
 }
 
 /*
  * This function will return the HTML (using <ul><li></ul>) structure
  */
 
-function st_getMenu($name=0,$ulclass='',$liclass='',$parentclass='', $selected='') {
-    global $ST_menuElements, $_GROUPS, $_CONF;
+
+function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$parentclass='',$lastclass='',$selected='') {
+    global $stMenu, $_GROUPS, $_CONF;
 
     $groups = implode($_GROUPS,'');
 
     $hash = md5($groups);
-    $cacheInstance = 'stmenu' . $name . '_' . $hash . '__' . $_CONF['theme'];
+    $cacheInstance = 'stmenu_' . $name . '_' . $hash . '__' . $_CONF['theme'];
 
     $retval = CACHE_check_instance($cacheInstance, 0);
     if ( $retval ) {
         return $retval;
     }
     $retval = '';
-    $retval = $ST_menuElements[$name][0]->showTree($name,$ulclass,$liclass,$parentclass,$selected);
+    $menuID = '';
+    if ( is_array($stMenu) ) {
+        foreach($stMenu AS $id) {
+            if ( $id['menu_name'] == $name ) {
+                $menuID = $id['menu_id'];
+                break;
+            }
+        }
+    }
+    if ( $menuID != '' && $stMenu[$menuID]['active'] == 1 && $stMenu[$menuID]['menu_perm'] == 3) {
+        if ( $wrapper != '' ) {
+            $retval = '<div class="'.$wrapper.$menuID.'">' . LB;
+        }
+        $retval .= $stMenu[$menuID]['elements'][0]->showTree(0,$ulclass,$liclass,$parentclass,$lastclass,$selected);
+        if ( $wrapper != '' ) {
+            $retval .= '</div>' . LB;
+        }
+    } else {
+        return '';
+    }
+
     CACHE_create_instance($cacheInstance, $retval, 0);
+    return $retval;
+}
+
+function phpblock_getMenu($arg1,$arg2) {
+    global $stMenu, $_GROUPS, $_CONF;
+
+    if ( is_array($stMenu) ) {
+        foreach($stMenu AS $id) {
+            if ( $id['menu_name'] == $arg2 ) {
+                $menuID = $id['menu_id'];
+                break;
+            }
+        }
+    }
+    if ( $stMenu[$menuID]['active'] != 1 || $stMenu[$menuID]['menu_perm'] == 0) {
+        return;
+    }
+
+    if ( $stMenu[$menuID]['menu_type'] == 4 ) {
+        $menu = st_getMenu($arg2,'st-vmenu','','','');
+        if ( $menu != '' ) {
+            $retval = $menu;
+        } else {
+            $retval = '';
+        }
+        return $retval;
+    }
+
+
+    // $arg1['onleft'] == 1 means left nav, 0 = right nav
+    // we'll use this to call the proper class names.
+
+    if ( $arg1['onleft'] == 1 ) {
+        $parent = 'parent-l';
+        $class  = 'gl_moomenu-vert-l';
+    } else {
+        $parent = 'parent-r';
+        $class  = 'gl_moomenu-vert-r';
+    }
+    $menu = st_getMenu($arg2,$class,'','',$parent);
+    if ( $menu != '' ) {
+        $retval = '<div id="'.$class.$menuID.'">';
+        $retval .= $menu;
+        $retval .= '</div>';
+    } else {
+        $retval = '';
+    }
+
     return $retval;
 }
 
@@ -238,6 +333,65 @@ function st_getImageFile($image) {
 	global $_CONF;
 
     return $_CONF['site_admin_url'] . '/plugins/sitetailor/images/' . $image;
+}
+
+function st_getStyles( &$template ) {
+    global $stMenu, $_CONF;
+
+    $menuStyles = '';
+
+    if ( is_array($stMenu) ) {
+        foreach ($stMenu AS $menu) {
+            if ( $menu['active'] == 1 ) {
+                /*
+                 * menu types 1 and 3 have animation
+                 */
+                if ($menu['menu_type'] == 1 || $menu['menu_type'] == 3 ) {
+                	//Fade in animation for the gl_moomenu
+                    $animate = new Template( $_CONF['path_layout'] );
+                    $animate->set_file( array(
+                        'menu'        => 'glmenu_animate.thtml',
+                    ));
+                    $animate->set_var('menu_id',$menu['menu_id']);
+                    $animate->parse( 'menu_js', 'menu' );
+                    $menuStyles .= $animate->finish( $animate->get_var( 'menu_js' ));
+                }
+                $ms = new Template( $_CONF['path_layout'] );
+                switch ($menu['menu_type']) {
+                    case 1 :    // horizontal with multi-level
+                        $stylefile = 'gl_horizontal-cascading.thtml';
+                        break;
+                    case 2 :    // horizontal with no cascading menus
+                        $stylefile = 'gl_horizontal-simple.thtml';
+                        break;
+                    case 3 :
+                        $stylefile = 'gl_vertical-cascading.thtml';
+                        break;
+                    case 4 :
+                        $stylefile = 'gl_vertical-simple.thtml';
+                        break;
+                    default :
+                        $stylefile = 'gl_horizontal-cascading.thtml';
+                        break;
+                }
+                $ms->set_file( array(
+                    'style'        => $stylefile,
+                ));
+                $ms->set_var('menu_id',$menu['menu_id']);
+                if ( is_array($menu['config']) ) {
+                    foreach ($menu['config'] AS $name => $value ) {
+                        if ( $name == 'use_images' && $value == 0 ) {
+                            continue;
+                        }
+                        $ms->set_var($name,$value);
+                    }
+                }
+                $ms->parse ('output', 'style');
+                $menuStyles .= $ms->finish ($ms->get_var('output'));
+            }
+        }
+        $template->set_var('menu_styles',$menuStyles);
+    }
 }
 
 function _stPLG_getMenuItems()
@@ -260,15 +414,6 @@ function _stPLG_getMenuItems()
     return $menu;
 }
 
-/*
- * Load configuration options (if available)
- */
-
-$result = DB_query("SELECT * FROM {$_TABLES['st_config']}",1);
-if ( $result ) {
-    while ($row = DB_fetchArray($result)) {
-        $_ST_CONF[$row['config_name']] = $row['config_value'];
-    }
-}
 st_initMenu();
+
 ?>
