@@ -35,6 +35,12 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+// this file can't be used on its own
+if (stripos ($_SERVER['PHP_SELF'], 'lib-uploadfiles.php') !== false)
+{
+    die ('This file can not be used on its own.');
+}
+
 function gf_check4files($id,$tempfile=false) {
     global $_FILES,$_CONF,$_TABLES,$_USER,$CONF_FORUM,$LANG_GF00;
     global $_FM_TABLES,$CONF_FORUM,$filemgmt_FileStore;

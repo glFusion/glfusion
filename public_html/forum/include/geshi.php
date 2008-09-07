@@ -40,6 +40,12 @@
 // version
 //
 
+// this file can't be used on its own
+if (stripos ($_SERVER['PHP_SELF'], 'geshi.php') !== false)
+{
+    die ('This file can not be used on its own.');
+}
+
 /** The version of this GeSHi file */
 define('GESHI_VERSION', '1.0.7.20');
 
@@ -1756,7 +1762,7 @@ class GeSHi {
                                         count($this->highlight_extra_lines) > 0)) {
                                         // strreplace to put close span and open span around multiline newlines
                                         $test_str .= str_replace(
-                                            "\n", "</span>\n<span$attributes>", 
+                                            "\n", "</span>\n<span$attributes>",
                                             str_replace("\n ", "\n&nbsp;", $rest_of_comment)
                                         );
                                     }
