@@ -75,7 +75,7 @@ $_SQL['st_menu_elements'] = "CREATE TABLE {$_TABLES['st_menu_elements']} (
 );";
 
 // default st configuration
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_config']} (`config_name`, `config_value`) VALUES ('use_graphic_logo','1'),(2,'display_site_slogan','1'),(3,'logo_name','logo1234.png');";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_config']} (`config_name`, `config_value`) VALUES ('use_graphic_logo','1'),('display_site_slogan','1'),('logo_name','logo1234.png');";
 
 // default menus
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus']} VALUES(1, 'navigation', 1, 1, 2);";
@@ -142,10 +142,10 @@ $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `el
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES (0,1,'Admins Only',3,'2',90,1,'','',1);";
 
 // default footer menu elements
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Home', 2, '0', 10, 1, '', '', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Contribute', 2, '1', 30, 1, '', '', 13);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Search', 2, '4', 20, 1, '', '', 2);";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Site Stats', 2, '5', 40, 1, '', '', 2);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Home',       2, '0',                             10, 1, '', '', 2);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Contribute', 2, '1',                             30, 1, '', '', 13);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Search',     2, '4',                             20, 1, '', '', 2);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Site Stats', 2, '5',                             40, 1, '', '', 2);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Contact Us', 6, '%site_url%/profiles.php?uid=2', 50, 1, '%site_url%/profiles.php?uid=2', '', 2);";
 
 // default block menu elements
