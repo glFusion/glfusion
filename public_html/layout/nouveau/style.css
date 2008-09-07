@@ -1907,6 +1907,10 @@ padding-right:60px;
 margin:10px;
 }
 
+.b {
+  font-weight:bold;
+}
+
 .ext-link {
 background-color:transparent;
 background:url(./images/external.png) right center no-repeat;
