@@ -413,7 +413,12 @@ function _stPLG_getMenuItems()
     }
     return $menu;
 }
-
+$result = DB_query("SELECT * FROM {$_TABLES['st_config']}",1);
+if ( $result ) {
+    while ($row = DB_fetchArray($result)) {
+        $_ST_CONF[$row['config_name']] = $row['config_value'];
+    }
+}
 st_initMenu();
 
 ?>
