@@ -585,12 +585,13 @@ class ListFactory {
                         $fieldvalue = $r + $offset;
                     else if (!empty($row[ $field['name'] ]))
                         $fieldvalue = $row[ $field['name'] ];
-
+if ( $fieldvalue != '' ) {
                     $fieldvalue = sprintf($field['format'], $fieldvalue, $field['title']);
 
                     // Write field
                     $list_templates->set_var('field_text', $fieldvalue);
                     $list_templates->parse('item_field', 'field', true);
+}
                 }
             }
 

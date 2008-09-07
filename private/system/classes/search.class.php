@@ -627,7 +627,7 @@ class Search {
                                 'title' =>        $col_title == -1 ? $_CONF['search_no_data'] : $old_row[$col_title],
                                 'description' =>  $col_desc == -1 ? $_CONF['search_no_data'] : $old_row[$col_desc],
                                 'date' =>         $col_date == -1 ? '&nbsp;' : $date,
-                                'uid' =>          $col_user == -1 ? '&nbsp;' : $old_row[$col_user],
+                                'uid' =>          $col_user == -1 ? '' : $old_row[$col_user],
                                 'hits' =>         $col_hits == -1 ? '0' : str_replace(',', '', $old_row[$col_hits]),
                                 'url' =>          $old_row[$col_url]
                             );
