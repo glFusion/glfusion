@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
-if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
+if (stripos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
 {
     die ('This file can not be used on its own.');
 }

@@ -34,7 +34,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
+if (stripos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
 {
     die ('This file can not be used on its own.');
 }
@@ -71,7 +71,6 @@ if (!isset($_FM_CONF['perpage'])) {
     } else {
         $mydownloads_publicpriv     = 1;
     }
-//    $mydownloads_publicpriv     = $_FM_CONF['publicpriv'];
     $mydownloads_uploadselect   = $_FM_CONF['uploadselect'];
     $mydownloads_uploadpublic   = $_FM_CONF['uploadpublic'];
     $mydownloads_useshots       = $_FM_CONF['useshots'];
@@ -395,6 +394,42 @@ function plugin_searchtypes_filemgmt()
 function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $type, $author)
 {
     global $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL;
+
+    $query = trim(addslashes($query));
+
+
+    $sql  = "SELECT a.lid AS id, a.cid, a.title,submitter AS uid,comments,hits,date,description, CONCAT('/filemgmt/index.php?id=',a.lid) AS url ";
+    $sql .= "FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
+    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
+    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_filedesc']} c ON c.lid=a.lid ";
+    $sql .= filemgmt_buildAccessSql('WHERE');
+    $sql .= " AND a.status > 0 ";
+
+    if (!empty($datestart) && !empty($dateend))
+    {
+        $delim = substr($datestart, 4, 1);
+        if (!empty($delim))
+        {
+            $DS = explode($delim, $datestart);
+            $DE = explode($delim, $dateend);
+            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
+            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
+            $sql .= "AND (date BETWEEN '$startdate' AND '$enddate') ";
+        }
+    }
+    if (!empty ($author))
+        $sql .= "AND (submitter = '$author') ";
+
+    $search = new SearchCriteria('filemgmt', 'FileMgmt');
+    $columns = array('c.description','a.title');
+    list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
+    $search->setSQL($sql);
+    $search->setFTSQL($ftsql);
+    $search->setRank(3);
+
+    return $search;
+
+
 
     $query = addslashes($query);
     if (empty($type)) {

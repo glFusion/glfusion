@@ -465,6 +465,76 @@ function plugin_searchtypes_forum()
     return $tmp;
 }
 
+/**
+* this searches for files matching the user query and returns an array of
+* for the header and table rows back to search.php where it will be formated and
+* printed
+*
+* @query            string          Keywords user is looking for
+* @datestart        date/time       Start date to get results for
+* @dateend          date/time       End date to get results for
+* @topic            string          The topic they were searching in
+* @type             string          Type of items they are searching
+* @author           string          Get all results by this author
+*
+*/
+
+function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
+{
+    global $LANG_GF00, $LANG_GF01, $_TABLES, $_CONF, $CONF_FORUM;
+
+    $query = trim(addslashes($query));
+
+    $sql   = "SELECT id,name,forum,date,subject as title,comment as description,views AS hits,uid, CONCAT('/forum/viewtopic.php?showtopic=',id) AS url ";
+    $sql  .= "FROM {$_TABLES['gf_topic']} t ";
+    $sql  .= "LEFT JOIN {$_TABLES['gf_forums']} f ON t.forum=f.forum_id ";
+    $sql  .= forum_buildSearchAccessSql('WHERE');
+
+    if (!empty($datestart) && !empty($dateend))
+    {
+        $delim = substr($datestart, 4, 1);
+        if (!empty($delim))
+        {
+            $DS = explode($delim, $datestart);
+            $DE = explode($delim, $dateend);
+            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
+            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
+            $sql .= "AND (UNIX_TIMESTAMP(date) BETWEEN '$startdate' AND '$enddate') ";
+        }
+    }
+    if (!empty ($author))
+        $sql .= "AND (uid = '$author') ";
+
+    $search = new SearchCriteria('forum', 'Forum');
+    $columns = array('comment','subject');
+    list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
+    $search->setSQL($sql);
+    $search->setFTSQL($ftsql);
+    $search->setRank(5);
+
+    return $search;
+}
+
+// Common function used to build group access SQL
+function forum_buildSearchAccessSql($clause='AND') {
+    global $_TABLES,$_USER;
+
+    if (isset($_USER['uid']) AND $_USER['uid'] > 1) {
+        $uid = $_USER['uid'];
+    } else {
+        $uid = 1;
+    }
+
+    $_GROUPS = SEC_getUserGroups($uid);
+    $groupsql = '';
+    if (count($_GROUPS) == 1) {
+        $groupsql .= " $clause grp_id = '" . current($_GROUPS) ."'";
+    } else {
+        $groupsql .= " $clause grp_id IN (" . implode(',',array_values($_GROUPS)) .")";
+    }
+    return $groupsql;
+}
+
 
 /**
 * this searches for files matching the user query and returns an array of
@@ -480,7 +550,7 @@ function plugin_searchtypes_forum()
 *
 */
 
-function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type, $author,$keyType,$page, $perpage)
+function plugin_dopluginsearch_forumOLD($query, $datestart, $dateend, $topic, $type, $author,$keyType,$page, $perpage)
 {
     global $LANG_GF00, $LANG_GF01, $_TABLES, $_CONF, $CONF_FORUM;
 

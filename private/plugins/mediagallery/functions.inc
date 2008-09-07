@@ -31,7 +31,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
+if (stripos ($_SERVER['PHP_SELF'], 'functions.inc') !== false)
 {
     die ('This file can not be used on its own.');
 }
@@ -2138,120 +2138,50 @@ function plugin_searchtypes_mediagallery()
 *
 */
 function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic, $type, $author) {
-    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_GET, $_POST;
+    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01;
 
     if ( $_MG_CONF['disable_search_integration'] == 1) {
         return '';
     }
 
-    if (empty($type)) {
-        $type = 'all';
-    }
+    $query = trim(addslashes($query));
 
-    $query = addslashes($query);
-
-    $keyType = '';
-    if (isset ($_POST['keyType'])) {
-        $keyType = COM_applyFilter ($_POST['keyType']);
-    } else if (isset ($_GET['keyType'])) {
-        $keyType = COM_applyFilter ($_GET['keyType']);
-    }
-
-    // Bail if we aren't supppose to do our search
-    if ($type <> 'all' AND $type <> 'mediagallery') {
-        $plugin_results = new Plugin();
-        $plugin_results->plugin_name = $LANG_MG00['plugin'];
-        $plugin_results->searchlabel = $LANG_MG00['externpages'] . $LANG_MG00['results'];
-        return $plugin_results;
-    }
-
-    // Build search SQL - Modified to exclude static PHP pages from search.
-
-    $sqltmp = " WHERE 1=1 ";
-
-    if ( $keyType == 'phrase' ) {
-        $sqltmp .= "AND ( m.media_title LIKE '%$query%' OR m.media_desc LIKE '%$query%' OR m.media_keywords LIKE '%$query%' ) ";
-    } else  if ( $keyType == 'any' ) {
-        $sqltmp .= 'AND ';
-        $tmp = '';
-        $mywords = explode( ' ', $query );
-        foreach( $mywords AS $mysearchitem ) {
-            $mysearchitem = addslashes( $mysearchitem );
-                $tmp .= "( m.media_title LIKE '%$query%' OR m.media_desc LIKE '%$query%' OR m.media_keywords LIKE '%$query%'  ) OR ";
-        }
-        $tmp = substr($tmp, 0, strlen($tmp) - 3);
-        $sqltmp .= "($tmp)";
-    } else if ( $keyType == 'all' ) {
-        $sqltmp .= 'AND ';
-        $tmp = '';
-        $mywords = explode( ' ', $query );
-        foreach( $mywords AS $mysearchitem ) {
-            $mysearchitem = addslashes( $mysearchitem );
-            $tmp .= "( m.media_title LIKE '%$query%' OR m.media_desc LIKE '%$query%' OR m.media_keywords LIKE '%$query%'  ) AND ";
-        }
-        $tmp = substr($tmp, 0, strlen($tmp) - 4);
-        $sqltmp .= "($tmp)";
-    } else {
-        $sqltmp = "WHERE (m.media_title LIKE '%$query%' OR m.media_desc LIKE '%$query%' OR m.media_keywords LIKE '%$query%' )";
-    }
-
-    if ( $author != 0 ) {
-        $sqltmp .= " AND media_user_id=" . $author;
-    }
-
-    // handle date ranges
-
-    if (!empty($datestart) && !empty($dateend)) {
-        $delim = substr($datestart, 4, 1);
-        $sd = explode($delim,$datestart);
-        $ed = explode($delim,$dateend);
-        $startdate = mktime(0,0,0,$sd[1],$sd[2],$sd[0]);
-        $enddate = mktime(0,0,0,$ed[1],$ed[2],$ed[0]) + 3600;
-        $sqltmp .= " AND m.media_time BETWEEN '$startdate' AND '$enddate'";
-    }
-
-    $sql = "SELECT DISTINCT ma.album_id,m.media_id,m.media_title,m.media_time,m.media_views FROM " .
+    $sql = "SELECT DISTINCT a.*,ma.album_id,a.perm_anon, m.media_id AS id,m.media_user_id AS uid,m.media_desc AS description ,m.media_title AS title,m.media_time AS date,m.media_views AS hits, CONCAT('/mediagallery/media.php?s=',m.media_id) AS url  FROM " .
             $_TABLES['mg_media'] . " as m " .
             " INNER JOIN " . $_TABLES['mg_media_albums'] . " as ma " .
-            " ON m.media_id=ma.media_id " . $sqltmp . " ORDER BY m.media_time DESC";
+            " ON m.media_id=ma.media_id " .
+            " INNER JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id " .
+            " WHERE 1=1 ";
+    $sql .= COM_getPermSQL('AND') . ' ';
 
-    $result = DB_query($sql);
-
-    // OK, now create new plugin object and insert table header labels
-    require_once($_CONF['path_system'] . 'classes/plugin.class.php');
-    $plugin_results = new Plugin();
-    $plugin_results->plugin_name = $LANG_MG00['plugin'];
-    $plugin_results->searchlabel = $LANG_MG00['externpages'] . $LANG_MG00['results'];
-    $plugin_results->addSearchHeading($LANG_MG00['titlemsg']);
-    $plugin_results->addSearchHeading($LANG_MG00['urlmsg']);
-    $plugin_results->addSearchHeading($LANG_MG00['hitsmsg']);
-
-    $previd = -1;
-
-    while ( $A = DB_fetchArray($result) ) {
-        if ( $previd == $A['media_id'] )
-            continue;
-        if ( !isset($MG_albums[$A['album_id']]->id) || $MG_albums[$A['album_id']]->access == 0 || ($MG_albums[$A['album_id']]->hidden == 1 && $MG_albums[0]->owner_id != 1) ) {
-            continue;
-        }
-        $previd = $A['media_id'];
-        $rcnt++;
-        $A['media_title'] = $A['media_title'];
-        if ( $A['media_title'] == '' ) {
-            $album_title = DB_getItem($_TABLES['mg_albums'],'album_title', 'album_id=' . $A['album_id']);
-            $A['media_title'] = $album_title . ' - <em>' . $LANG_MG01['no_caption'] . '</em>';
-        }
-        $url =  $_MG_CONF['site_url'] . '/media.php?s=' . $A['media_id'];
-
-        $media_date = COM_getUserDateTimeFormat($A['media_time']);
-        $row = array('<a href="' . $url . '">' . $A['media_title'] . "</a>",
-                     $media_date[0],$A['media_views']);
-        $plugin_results->addSearchResult($row);
+    if( !SEC_inGroup( 'Root')) {
+        $sql .= ' AND hidden=0 ';
     }
-    $plugin_results->num_searchresults = $rcnt;
-    $plugin_results->num_itemssearched = DB_count($_TABLES['mg_media']);
 
-    return $plugin_results;
+    if (!empty($datestart) && !empty($dateend))
+    {
+        $delim = substr($datestart, 4, 1);
+        if (!empty($delim))
+        {
+            $DS = explode($delim, $datestart);
+            $DE = explode($delim, $dateend);
+            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
+            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
+            $sql .= "AND (m.media_time BETWEEN '$startdate' AND '$enddate') ";
+        }
+    }
+    if (!empty ($author))
+        $sql .= "AND (m.media_user_id = '$author') ";
+
+    $search = new SearchCriteria('mediagallery', 'Media Gallery');
+    $columns = array('m.media_desc','m.media_title');
+    list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
+    $search->setSQL($sql);
+    $search->setFTSQL($ftsql);
+    $search->setRank(3);
+
+    return $search;
+
 }
 
 /**
