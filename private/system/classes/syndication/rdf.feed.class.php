@@ -42,7 +42,9 @@
   /*  3. This notice may not be removed or altered from any source            */
   /*     distribution.                                                        */
   /****************************************************************************/
-
+if (stripos ($_SERVER['PHP_SELF'], 'rdf.feed.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
   /**
     * Provides feed handlers for RDF 1.0
     *

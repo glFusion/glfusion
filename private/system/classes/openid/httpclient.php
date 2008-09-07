@@ -19,11 +19,11 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-Reciprocal linking.  The author humbly requests that if you should use 
-PHP-OpenID on your website to provide an OpenID enabled service that you 
-place a link to the author's website ( http://videntity.org ) somewhere 
-that your users can discover it.  You are however under no obligation to 
-do so.  
+Reciprocal linking.  The author humbly requests that if you should use
+PHP-OpenID on your website to provide an OpenID enabled service that you
+place a link to the author's website ( http://videntity.org ) somewhere
+that your users can discover it.  You are however under no obligation to
+do so.
 
 More info about PHP OpenID:
 openid@videntity.org
@@ -33,7 +33,9 @@ More info about OpenID:
 http://www.openid.net
 
 *****/
-
+if (stripos ($_SERVER['PHP_SELF'], 'httpclient.php') !== false) {
+    die ('This file can not be used on its own.');
+}
 
 class HTTPClient {
     // Object used by Consumer to send http messages
@@ -54,7 +56,7 @@ class HTTPClient {
 
         trigger_error( 'unimplemented', E_USER_WARNING );
     }
-    
+
     // static
     function getHTTPClient() {
 
@@ -62,10 +64,10 @@ class HTTPClient {
         if( function_exists( 'curl_init' ) ) {
             return new ParanoidHTTPClient();
         }
-    
+
         return new SimpleHTTPClient();
     }
-    
+
 };
 
 
@@ -88,11 +90,11 @@ class SimpleHTTPClient extends HTTPClient {
 
 
     function get( $url) {
-    
+
         do {
             $stop = time() + $this->ALLOWED_TIME;
             $off = $this->ALLOWED_TIME;
-        
+
             $parts = parse_url( $url );
             $scheme = isset( $parts['scheme'] ) ? $parts['scheme'] : null;
             $host = isset( $parts['host'] ) ? $parts['host'] : null;
@@ -101,40 +103,40 @@ class SimpleHTTPClient extends HTTPClient {
             $query = isset( $parts['query'] ) ? $parts['query'] : null;
 
             $uri = $path . ( $query ? '?' . $query : '' );
-            
+
             // FIXME: perform some error checking on this URL.
             // See request at http://lists.danga.com/pipermail/yadis/2005-September/001401.html
             // Also, paranoidHttpClient should have a _checkURL method, so may
             // want to use same mechanism here.
-        
+
             if( !in_array( $scheme, array( 'http', 'https' ) ) || !$host || !$port || !$uri ) {
                 return null;
             }
             if( $scheme == 'https' ) {
                 $host = 'ssl://' . $host;
             }
-    
+
             $user_agent = $this->user_agent;
-        	$headers = 
+        	$headers =
                 "GET $path HTTP/1.0\r\n" .
                 "User-Agent: $user_agent\r\n" .
                 "Host: $host:$port\r\n" .
                 "Port: $port\r\n" .
                 "Cache-Control: no-cache\r\n" .
                 "\r\n";
-            
+
         	$fp = @fsockopen($host, $port, $errno, $errstr);
         	if (!$fp) {
         		return false;
         	}
-    
+
         	fputs($fp, $headers);
-        	
+
         	$data = '';
         	while (!feof($fp)) {
         		$data.= fgets($fp, 1024);
             }
-                
+
         	fclose($fp);
 
             // Split response into header and body sections
@@ -148,18 +150,18 @@ class SimpleHTTPClient extends HTTPClient {
             }
 
             $off = $stop - time();
-            
+
         } while( $redir && $off > 0 );
-    	
+
     	return array( $url, $response_body );
     }
-    
+
     // Simple function to post http data.
-    // notes: 
+    // notes:
     //   - handles both http and https
     //   - does not follow redirects
     function post($url, $body) {
-    
+
     	$content_length = $this->strlen_bytes($body);
         $accept = '*/*';
 
@@ -167,7 +169,7 @@ class SimpleHTTPClient extends HTTPClient {
         $scheme = isset( $parts['scheme'] ) ? $parts['scheme'] : null;
         $host = isset( $parts['host'] ) ? $parts['host'] : null;
         $port = isset( $parts['port'] ) ? $parts['port'] : ( $scheme == 'https' ? 443 : 80 );
-    
+
         if( !in_array( $scheme, array( 'http', 'https' ) ) || !$host || !$port ) {
             return null;
         }
@@ -176,7 +178,7 @@ class SimpleHTTPClient extends HTTPClient {
         }
 
         $user_agent = $this->user_agent;
-    	$headers = 
+    	$headers =
             "POST $url HTTP/1.0\r\n" .
             "Accept: $accept\r\n" .
             "Content-Type: application/x-www-form-urlencoded\r\n" .
@@ -185,28 +187,28 @@ class SimpleHTTPClient extends HTTPClient {
             "Cache-Control: no-cache\r\n" .
             "Content-Length: $content_length\r\n" .
             "\r\n";
-        
+
     	$fp = fsockopen($host, $port, $errno, $errstr);
     	if (!$fp) {
     		return false;
     	}
-    
+
     	fputs($fp, $headers);
     	fputs($fp, $body);
-    	
+
     	$data = '';
     	while (!feof($fp)) {
     		$data.= @fgets($fp, 1024);
         }
-            
+
     	fclose($fp);
-        
+
         // Split response into header and body sections
         list($response_headers, $response_body) = explode("\r\n\r\n", $data, 2);
         $response_header_lines = explode("\r\n", $response_headers);
-    	
+
     	return array( $url, $response_body );
-    }    
+    }
 
     // static
     function strlen_bytes( $str ) {
@@ -216,13 +218,13 @@ class SimpleHTTPClient extends HTTPClient {
     }
 
 };
-    
+
 
 class ParanoidHTTPClient extends HTTPClient {
     // A paranoid HTTPClient that uses curl for fecthing.
     // See http://php.net/curl
     var $ALLOWED_TIME = 20;   // seconds
-    
+
     var $headers;
 
     function ParanoidHTTPClient() {
@@ -244,14 +246,14 @@ class ParanoidHTTPClient extends HTTPClient {
         //       ie. the Paranoid part.
         return true;
     }
-    
+
 
     function get( $url) {
-    
+
         $retval = null;
-        
+
         $c = curl_init( $url );
-        
+
         if( $c ) {
             // CURLOPT_NOSIGNAL was added in php 5.
             if( defined( 'CURLOPT_NOSIGNAL' ) ) {
@@ -263,13 +265,13 @@ class ParanoidHTTPClient extends HTTPClient {
 
             $stop = time() + $this->ALLOWED_TIME;
             $off = $this->ALLOWED_TIME;
-            
+
             while( $off > 0 ) {
-                
+
                 if( !$this->_checkURL($url) ) {
                     break;
                 }
-                
+
                 curl_setopt( $c, CURLOPT_URL, $url);
                 curl_setopt( $c, CURLOPT_TIMEOUT, $off );
 
@@ -292,7 +294,7 @@ class ParanoidHTTPClient extends HTTPClient {
 
                 $off = $stop - time();
             }
-            
+
             curl_close( $c );
 
         }
@@ -301,13 +303,13 @@ class ParanoidHTTPClient extends HTTPClient {
 
     function post( $url, $body) {
         $retval = null;
-    
+
         if( !$this->_checkURL($url) ) {
             return null;
         }
 
         $c = curl_init( $url );
-        
+
         if( $c ) {
             // CURLOPT_NOSIGNAL was added in php 5.
             if( defined( 'CURLOPT_NOSIGNAL' ) ) {
@@ -320,18 +322,18 @@ class ParanoidHTTPClient extends HTTPClient {
             curl_setopt( $c, CURLOPT_RETURNTRANSFER, true);
 
             $data = curl_exec( $c );
-            
+
             curl_close( $c );
-            
+
             if( $data ) {
                 $retval = array( $url, $data );
             }
         }
         return $retval;
     }
-            
-    
-    // static        
+
+
+    // static
     function startsWith( $str, $sub ) {
        return ( substr( $str, 0, strlen( $sub ) ) == $sub );
     }
@@ -356,6 +358,6 @@ function _oid_httpclient_test() {
 if( strstr( $_SERVER['REQUEST_URI'], 'httpclient.php' ) ) {
     _oid_httpclient_test();
 }
-            
-            
+
+
 ?>

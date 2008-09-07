@@ -19,11 +19,11 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-Reciprocal linking.  The author humbly requests that if you should use 
-PHP-OpenID on your website to provide an OpenID enabled service that you 
-place a link to the author's website ( http://videntity.org ) somewhere 
-that your users can discover it.  You are however under no obligation to 
-do so.  
+Reciprocal linking.  The author humbly requests that if you should use
+PHP-OpenID on your website to provide an OpenID enabled service that you
+place a link to the author's website ( http://videntity.org ) somewhere
+that your users can discover it.  You are however under no obligation to
+do so.
 
 More info about PHP OpenID:
 openid@videntity.org
@@ -33,7 +33,9 @@ More info about OpenID:
 http://www.openid.net
 
 *****/
-
+if (stripos ($_SERVER['PHP_SELF'], 'association.php') !== false) {
+    die ('This file can not be used on its own.');
+}
 
 require_once( 'oid_util.php' );
 
@@ -68,7 +70,7 @@ class ConsumerAssociation extends Association {
         parent::Association( $handle, $secret, $issued, $lifetime );
         $this->server_url = $server_url;
     }
-};        
+};
 
 
 class ConsumerAssociationManager {
@@ -78,15 +80,15 @@ class ConsumerAssociationManager {
     function get_association($server_url, $assoc_handle) {
         trigger_error( 'unimplemented', E_USER_WARNING );
     }
-    
+
     function associate($server_url) {
         trigger_error( 'unimplemented', E_USER_WARNING );
     }
-    
+
     function invalidate($server_url, $assoc_handle) {
         trigger_error( 'unimplemented', E_USER_WARNING );
     }
-}    
+}
 
 
 class DumbAssociationManager extends ConsumerAssociationManager {
@@ -94,11 +96,11 @@ class DumbAssociationManager extends ConsumerAssociationManager {
     function get_association($server_url, $assoc_handle) {
         return null;
     }
-    
+
     function associate($server_url) {
         return null;
     }
-    
+
     function invalidate($server_url, $assoc_handle) {
         return;
     }
@@ -159,7 +161,7 @@ class AbstractConsumerAssociationManager extends ConsumerAssociationManager {
         // each association in the expired list.
         trigger_error( 'unimplemented', E_USER_WARNING );
     }
-    
+
     function get_all($server_url) {
         // Subclasses should return a list of ConsumerAssociation
         // objects whose server_url attribute is equal to server_url.
@@ -188,9 +190,9 @@ class DiffieHelmanAssociator {
         $dh = new DiffieHellman();
         return array( $dh->DEFAULT_MOD, $dh->DEFAULT_GEN);
     }
-    
+
     function getResult( $results, $key ) {
-    
+
         if( !isset( $results[$key] ) ) {
             trigger_error( sprintf( 'protocol error : Association server response missing argument %s', $key ), E_USER_WARNING );
             return null;
@@ -237,11 +239,11 @@ class DiffieHelmanAssociator {
             $spub = oidUtil::a2long(oidUtil::from_b64( $this->getResult( $results, 'dh_server_public')));
             $dh_shared = $dh->decryptKeyExchange($spub);
             $enc_mac_key = $this->getResult( $results, 'enc_mac_key');
-            
+
             // print "enc_mac_key: " . $enc_mac_key;
             $secret = oidUtil::strxor(oidUtil::from_b64($enc_mac_key), oidUtil::sha1(oidUtil::long2a($dh_shared)));
         }
-                                    
+
         return ConsumerAssociation::from_expires_in( $expires_in, $server_url, $assoc_handle, $secret );
     }
 };

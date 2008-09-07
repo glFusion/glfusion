@@ -2,9 +2,9 @@
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | config.php                                                               |
+// | searchplugin.class.php                                                   |
 // |                                                                          |
-// | LDAP configuration file.                                                 |
+// | glFusion plugin class.                                                   |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
@@ -15,9 +15,7 @@
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
-// | Authors: Jessica Blank     - jessica.blank AT mtvnmix DOT com            |
-// |                              under contract to MTV Networks              |
-// |          Evan Rappaport    - evan.rappaport AT mtvi DOT com              |
+// | Authors: Sami Barakat, s.m.barakat AT gmail DOT com                      |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -36,49 +34,69 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (stripos ($_SERVER['PHP_SELF'], 'config.php') !== false) {
+if (stripos ($_SERVER['PHP_SELF'], 'searchplugin.class.php') !== false) {
     die ('This file can not be used on its own.');
 }
 
-global $_LDAP_CONF;
-
-$_LDAP_CONF['version']            = '1.0.0'; // Module Version
-
-
-// LDAP Settings
-
-// Basic LDAP variables
-$_LDAP_CONF['user_ou'] = "People";
-$_LDAP_CONF['group_ou'] = "Group";
-$_LDAP_CONF['branch'] = "dc=mydc,dc=com";
-$_LDAP_CONF['user_branch'] = "ou={$_LDAP_CONF['user_ou']}," . $_LDAP_CONF['branch'];
-$_LDAP_CONF['user_attributes'] = array("uid","cn","ou","objectClass","shadowLastChange","loginShell","uidnumber","gidNumber","homeDirectory","gecos","userPassword","givenName","sn","mail");
-
-// LDAP server configuration
-$_LDAP_CONF['servers'][0]['bind_dn'] = "cn=mycn,ou=LDAPusers,dc=mydc,dc=com";
-$_LDAP_CONF['servers'][0]['password'] = "mypassword";
-$_LDAP_CONF['servers'][0]['host'] = "localhost";
-
-// (put additional servers here; example given below)
-// $_LDAP_CONF['servers'][1]['bind_dn'] = 'cn=foo,ou=people,dc=corp,dc=com';
-// $_LDAP_CONF['servers'][1]['password'] = 'joshua';
-// $_LDAP_CONF['servers'][1]['host'] = 'ldap.example.com';
-
-// LDAP server selection
-
 /**
- * If you wanted to set up some complex logic to determine which
- * LDAP server is in use, this is where it would go.
- * We have provided the basic infrastructure for multiple LDAP servers;
- * the rest is left as an exercise for the user.
- */
-$_LDAP_CONF['server_num'] = 0;
+* This class allows data to be passed between the search engine and plugins.
+* So far it is just a structure but more will be added soon.
+*
+* @author   Sami Barakat <s.m.barakat AT gmail DOT com>
+*
+*/
+class SearchPlugin {
 
+    // PRIVATE PROPERTIES
+    var $_query = '';
+    var $_pluginLabel;
+    var $_pluginName;
+    var $_rank;
+    var $_url_rewite;
 
-// Default user settings
-$_LDAP_CONF['user_defaults']['ou'] = $_LDAP_CONF['user_ou'];
-$_LDAP_CONF['user_defaults']['objectClass'] = array("account","posixAccount","top","shadowAccount","person","organizationalPerson","inetOrgPerson");
-$_LDAP_CONF['user_defaults']['shadowLastChange'] = "0";
-$_LDAP_CONF['user_defaults']['loginShell'] = "/etc/ftponly";
+    function SearchPlugin($pluginLabel, $pluginName, $rank = 3, $url_rewite = false)
+    {
+        $this->_pluginName = $pluginName;
+        $this->_pluginLabel = $pluginLabel;
+        $this->_rank = $rank;
+        $this->_url_rewite = $url_rewite;
+    }
+
+    function setQuery($sqlQuery, $sqlFTQuery = '')
+    {
+        // this variable will be a global config var that sets the system to use full text searches if avaliable
+        $fulltext = false;
+
+        if ($fulltext && !empty($sqlFTQuery))
+            $this->_query = $sqlFTQuery;
+        else
+            $this->_query = $sqlQuery;
+    }
+
+    function getQuery()
+    {
+        return $this->_query;
+    }
+
+    function getName()
+    {
+        return $this->_pluginName;
+    }
+
+    function getLabel()
+    {
+        return $this->_pluginLabel;
+    }
+
+    function getRank()
+    {
+        return $this->_rank;
+    }
+
+    function UrlRewriteEnable()
+    {
+        return $this->_url_rewite;
+    }
+}
 
 ?>

@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'config.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 class config {
     var $dbconfig_file;
     var $config_array;

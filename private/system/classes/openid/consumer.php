@@ -19,11 +19,11 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-Reciprocal linking.  The author humbly requests that if you should use 
-PHP-OpenID on your website to provide an OpenID enabled service that you 
-place a link to the author's website ( http://videntity.org ) somewhere 
-that your users can discover it.  You are however under no obligation to 
-do so.  
+Reciprocal linking.  The author humbly requests that if you should use
+PHP-OpenID on your website to provide an OpenID enabled service that you
+place a link to the author's website ( http://videntity.org ) somewhere
+that your users can discover it.  You are however under no obligation to
+do so.
 
 More info about PHP OpenID:
 openid@videntity.org
@@ -33,7 +33,9 @@ More info about OpenID:
 http://www.openid.net
 
 *****/
-
+if (stripos ($_SERVER['PHP_SELF'], 'consumer.php') !== false) {
+    die ('This file can not be used on its own.');
+}
 
 require_once( 'httpclient.php' );
 require_once( 'oid_util.php' );
@@ -62,15 +64,15 @@ class OpenIDConsumerHelper {
         }
         return $res;
     }
-    
+
     // From openID spec:
-    // The delegate identity URL must be canonical. It will not be further 
-    // processed by the consumer, so be sure it has the "http://" and trailing 
+    // The delegate identity URL must be canonical. It will not be further
+    // processed by the consumer, so be sure it has the "http://" and trailing
     // slash, if there's no path component.
     function normalize_url($url) {
         assert( 'is_string( $url )' );
         $url = trim( $url );
-        
+
         // Note: we use parse_url() here rather than checking for http(s) because
         // possibly the url contains eg ftp:// and it would be silly to prepend
         // http:// to such a url.
@@ -85,12 +87,12 @@ class OpenIDConsumerHelper {
         }
 
         $path = isset( $parts['path'] ) ? $parts['path'] : null;
-        
+
         if( !$path ) {
             $url .= '/';
         }
-        
-    
+
+
         // Porting Todo: handle unicode urls.
         /*
         if isinstance(url, unicode) {
@@ -101,7 +103,7 @@ class OpenIDConsumerHelper {
             url = urlparse.urlunparse(encoded)
             assert type(url) is str
         */
-    
+
         return $url;
     }
 
@@ -144,7 +146,7 @@ class OpenIDConsumer {
         if( $assoc_handle ) {
             $redir_args['openid.assoc_handle'] = $assoc_handle;
         }
-        
+
         return oidUtil::append_args($server_url, $redir_args);
     }
 
@@ -169,7 +171,7 @@ class OpenIDConsumer {
             // raise ProtocolError( $error )
             trigger_error( $error, E_USER_ERROR );
         }
-        
+
         return $this->$func($req);
     }
 
@@ -182,14 +184,14 @@ class OpenIDConsumer {
         // url actually sent to the server to verify, and may be the
         // result of finding a delegate link.
         $url = OpenIDConsumerHelper::normalize_url($identity_url);
-        
+
         $ret = $this->http_client->get($url);
         if( !$ret ) {
             return null;
         }
 
         list( $consumer_id, $data ) = $ret;
-        
+
         $server = null;
         $delegate = null;
         $link_attrs = oidParse::parseLinkAttrs($data);
@@ -270,7 +272,7 @@ class OpenIDConsumer {
             error_log( "post_data: $post_data        " );
             error_log( serialize($vars) . "        " );
             $key = 'openid_identity';  // php replaces . with _
-            
+
             $identity = isset( $vars[$key] ) ? $vars[$key] : null;
             $vl = new ValidLogin($this, $identity);
             if( $vl->verifyIdentity($openid) ) {
@@ -302,7 +304,7 @@ class OpenIDConsumer {
         $server_url = $this->determine_server_url($req);
 
         $assoc = $this->assoc_mngr->get_association($server_url, $req->get('assoc_handle'));
-        
+
         if( !$assoc ) {
 
             // No matching association found. I guess we're in dumb mode...
@@ -322,11 +324,11 @@ class OpenIDConsumer {
         // Check the signature
         $sig = $req->get('sig');
         $signed_fields = explode( ',', trim( $req->get('signed') ) );
-        
+
         list( $_signed, $v_sig ) = oidUtil::sign_reply($req->args, $assoc->secret, $signed_fields);
-        
+
         if( $v_sig != $sig ) {
-            
+
             return new InvalidLogin();
         }
 
@@ -366,7 +368,7 @@ class OpenIDConsumer {
 
         // The default implementation fetches the identity page again,
         // and parses the server url out of it.
-        
+
         // Grab the server_url from the identity in args
         $ret = $this->find_identity_info($req->get('identity'));
         if( !$ret ) {
@@ -396,8 +398,8 @@ class OpenIDConsumer {
         // default implementation.
         trigger_error( 'unimplemented', E_USER_WARNING );
     }
-    
-};    
-        
-        
+
+};
+
+
 ?>

@@ -36,6 +36,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'template.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 define('TEMPLATE_VERSION','2.3.1');
 
 /**
@@ -1426,7 +1430,7 @@ class Template
     $f = fopen($filename,'w');
     if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
         fwrite($f,
-"<?php if (strpos(".'$'."_SERVER['PHP_SELF'], '".basename($filename)."') !== false) {
+"<?php if (stripos(".'$'."_SERVER['PHP_SELF'], '".basename($filename)."') !== false) {
     die ('This file can not be used on its own.');
 } ?>\n");
     }
@@ -1734,6 +1738,14 @@ function CACHE_remove_instance($iid)
 function CACHE_create_instance($iid, $data, $bypass_lang = false)
 {
     global $TEMPLATE_OPTIONS, $_CONF;
+
+    if ($TEMPLATE_OPTIONS['cache_by_language']) {
+        if (!is_dir($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'])) {
+            @mkdir($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language']);
+            @touch($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'] . '/index.html');
+        }
+    }
+
     $path_cache = $TEMPLATE_OPTIONS['path_cache'];
     if (!$bypass_lang && $TEMPLATE_OPTIONS['cache_by_language']) {
         $path_cache .= $_CONF['language'] . '/';

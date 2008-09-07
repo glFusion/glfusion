@@ -19,11 +19,11 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-Reciprocal linking.  The author humbly requests that if you should use 
-PHP-OpenID on your website to provide an OpenID enabled service that you 
-place a link to the author's website ( http://videntity.org ) somewhere 
-that your users can discover it.  You are however under no obligation to 
-do so.  
+Reciprocal linking.  The author humbly requests that if you should use
+PHP-OpenID on your website to provide an OpenID enabled service that you
+place a link to the author's website ( http://videntity.org ) somewhere
+that your users can discover it.  You are however under no obligation to
+do so.
 
 More info about PHP OpenID:
 openid@videntity.org
@@ -33,18 +33,20 @@ More info about OpenID:
 http://www.openid.net
 
 *****/
-
+if (stripos ($_SERVER['PHP_SELF'], 'oid_parse.php') !== false) {
+    die ('This file can not be used on its own.');
+}
 
 class oidParse {
 
     // static, public
     // parses html data and returns <link> tag attributes.
     //
-    // The return value is an array where each element 
+    // The return value is an array where each element
     // is a sub-array containing all attribute/value
     // pairs from a single <link> tag.
     function parseLinkAttrs($data) {
-    
+
         $tidy_ver = phpversion('tidy');
         if( (int)$tidy_ver == 2  ) {
             return oidParse::_parseLinkAttrsWithTidy2( $data );
@@ -55,16 +57,16 @@ class oidParse {
         }
         // Todo: We could also have a method that uses ereg. volunteers?
     }
-    
+
     // static, private
     // parses all link attrs from an html page using perl regex ( preg/pcre )
     function _parseLinkAttrsWithPreg( $text ) {
-    
+
         $tag_list = array();
-    
+
         // find all tags
         preg_match_all('/<[^>]+>/s',$text,$tags);
-        
+
         foreach ($tags[0] as $tag) {
                $gotten = preg_match('/^<\s*link\s*(.*)>/i',$tag,$alist);
                if ($gotten) {
@@ -81,45 +83,45 @@ class oidParse {
                     $tag_list[] = $attrs;
                }
         }
-        
+
         return $tag_list;
     }
 
     // static, private
     function _parseLinkAttrsWithTidy2Worker( $node, &$link_tags ) {
-        
+
         $link_tags = $link_tags ? $link_tags : array();
-        
+
         if(isset($node->id)) {
             if($node->id == TIDY_TAG_LINK ) {
-            
+
                 // $node->attribute is actually a mapped array with
                 // key/val pairs for each of the nodes attributes.
                 $link_tags[]  = $node->attribute;
-                
+
             }
         }
-        
+
         if( $node->hasChildren() ) {
-    
+
             foreach($node->child as $next) {
                 oidParse::_parseLinkAttrsWithTidy2Worker($next, $link_tags );
             }
-    
+
         }
-        
+
         return $link_tags;
     }
-    
+
     // static, private
     function _parseLinkAttrsWithTidy2( $html ) {
         $tree = tidy_parse_string( $html );
         $tags = null;
         return oidParse::_parseLinkAttrsWithTidy2Worker( $tree->html(), $tags );
     }
-    
-    
+
+
 };
-        
-        
+
+
 ?>

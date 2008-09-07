@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'downloader.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 /**
 * This class allows you to download a file from outside the web tree.  Many hooks
 * around security and file types have been added for customization within any app

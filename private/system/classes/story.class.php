@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'story.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 /**
  * This file provides a class to represent a story, or article. It provides a
  * finite state machine for articles. Switching them between the various states:
@@ -1355,9 +1359,9 @@ class Story
                 //return default expire time to form
                 $this->_comment_expire = $this->_date + ($_CONF['article_comment_close_days']*86400);
             }
-            
+
             break;
-            
+
         case 'cmt_close_second':
             $return = date('s', $this->_comment_expire);
 
@@ -1532,7 +1536,7 @@ class Story
             }
 
             break;
-            
+
         case 'commentcode':
             //check to see if comment_time has past
             if ($this->_comment_expire != 0 && (time() > $this->_comment_expire) && $this->_commentcode == 0 ) {
@@ -1853,7 +1857,7 @@ class Story
         }
 
         $this->_expire = $expiredate;
-        
+
         //comment expire time
         if (isset($array['cmt_close_flag'])) {
             $cmt_close_ampm = COM_applyFilter($array['cmt_close_ampm']);
@@ -1863,7 +1867,7 @@ class Story
             $cmt_close_year = COM_applyFilter($array['cmt_close_year'], true);
             $cmt_close_month = COM_applyFilter($array['cmt_close_month'], true);
             $cmt_close_day = COM_applyFilter($array['cmt_close_day'], true);
-            
+
             if ($cmt_close_ampm == 'pm') {
                 if ($cmt_close_hour < 12) {
                     $cmt_close_hour = $cmt_close_hour + 12;
@@ -1873,10 +1877,10 @@ class Story
             if ($cmt_close_ampm == 'am' AND $cmt_close_hour == 12) {
                 $cmt_close_hour = '00';
             }
-            
+
             $cmt_close_date
             = strtotime("$cmt_close_month/$cmt_close_day/$cmt_close_year $cmt_close_hour:$cmt_close_minute:$cmt_close_second");
-            
+
             $this->_comment_expire = $cmt_close_date;
         }
 

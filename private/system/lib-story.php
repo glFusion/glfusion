@@ -120,7 +120,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     $groups = implode($_GROUPS,'');
     $hash = md5($groups);
     $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar.$hash.'_'.$_CONF['theme'];
-    if ( !empty($query) || !$article->check_instance($instance_id,$article_filevar)) {
+    if ( $index == 'p' || !empty($query) || !$article->check_instance($instance_id,$article_filevar)) {
     // end of instance cache
 
         $article->set_var( 'xhtml', XHTML );
@@ -566,7 +566,9 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         {
             $article->parse( 'story_bodyhtml', 'bodytext', true );
         }
-        $article->create_instance($instance_id,$article_filevar);
+        if ($index != 'p') {
+            $article->create_instance($instance_id,$article_filevar);
+        }
     } // end of if cached
     PLG_templateSetVars($article_filevar,$article);
     $article->parse('finalstory',$article_filevar);

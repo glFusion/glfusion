@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'calendar.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 /**
 * This file contains the two classes used to help support the calendar pages.
 * Please note that our calendar code is in shambles and is hard to understand.

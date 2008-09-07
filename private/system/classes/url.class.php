@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'url.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 /**
 * This class will allow you to use friendlier URL's, like:
 * http://www.example.com/index.php/arg_value_1/arg_value_2/ instead of

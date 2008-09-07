@@ -36,6 +36,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'navbar.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 /**
 * This class will allow you to setup and generate a CSS Tab Menu and breadcrumb link trail
 * Version 1.1 June 4, 2006

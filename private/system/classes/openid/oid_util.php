@@ -19,11 +19,11 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-Reciprocal linking.  The author humbly requests that if you should use 
-PHP-OpenID on your website to provide an OpenID enabled service that you 
-place a link to the author's website ( http://videntity.org ) somewhere 
-that your users can discover it.  You are however under no obligation to 
-do so.  
+Reciprocal linking.  The author humbly requests that if you should use
+PHP-OpenID on your website to provide an OpenID enabled service that you
+place a link to the author's website ( http://videntity.org ) somewhere
+that your users can discover it.  You are however under no obligation to
+do so.
 
 More info about PHP OpenID:
 openid@videntity.org
@@ -34,6 +34,9 @@ http://www.openid.net
 
 *****/
 
+if (stripos ($_SERVER['PHP_SELF'], 'oid_util.php') !== false) {
+    die ('This file can not be used on its own.');
+}
 
 // for compatibility with versions of php without http_build_query
 // from http://php.net/manual/en/function.http-build-query.php#52789
@@ -58,13 +61,13 @@ class oidUtil {
     function sha1( $s ) {
         return oidUtilPhpSha1::sha1( $s );
     }
-    
+
     // Note: in php we don't really convert to a long because php doesn't
     // support values this large.
-    // 
+    //
     // instead we return a string converted from hex to base 10.
     function a2long($l) {
-    
+
         $len = strlen($l);
         // transform bytes/char values into hex number
         $foo = unpack("H".(2*$len), $l);
@@ -76,7 +79,7 @@ class oidUtil {
 
     // Note: in php we aren't really expecting a long as input.
     // Rather we expect a string containing a base 10 number.
-    // 
+    //
     // we return a packed (byte) string containing a base 16 number.
     function long2a($a) {
 
@@ -87,32 +90,32 @@ class oidUtil {
          $hex = "0" . $hex;   // pad leading hex nibble
         }
         if (ord($hex[0]) >= ord('8')) {
-         $hex = "00" . $hex;  // pad if it looks like negative number 
+         $hex = "00" . $hex;  // pad if it looks like negative number
         }
         // into bytestream
         return pack("H*", $hex);
-    
+
     }
-    
+
     function to_b64($s) {
         // Represent string s as base64, omitting newlines
         return base64_encode($s);
     }
-    
+
     function from_b64($s) {
         return base64_decode($s);
-    }    
-    
+    }
+
     function kvform($ma) {
-    
+
         // Represent mapped array ma as newline-terminated key:value pairs
         $str = '';
         foreach( $ma as $key => $val ) {
             $str .= sprintf( "%s:%s\n", $key, $val );
         }
         return $str;
-    }    
-    
+    }
+
     function parsekv( $d ) {
         $d = trim($d);
         $args = array();
@@ -127,35 +130,35 @@ class oidUtil {
         }
         return $args;
     }
-    
+
     function strxor( $aa, $bb ) {
-    
+
         $buf = '';
         $len = min( strlen($aa), strlen($bb) );
-        
+
         for ($i=0; $i<$len; $i++) {
           $buf .= chr( ord($aa[$i]) ^ ord($bb[$i]) );
         }
         return $buf;
     }
-    
+
     function sign_reply($reply, $key, $signed_fields ) {
         // Sign the given fields from the reply with the specified key.
         // Return signed and sig
-        
+
         $text = '';
-        
+
         foreach( $signed_fields as $i ) {
             $val = $reply['openid.' . $i];
             $text .= sprintf( "%s:%s\n", $i, $val );
         }
-        
+
         $sha1 = oidUtil::hmacsha1($key, $text);
         $b64_sha1 = oidUtil::to_b64( $sha1 );
-        
+
         return array( implode( ',', $signed_fields ), $b64_sha1 );
     }
-    
+
     function append_args( $url, $args ) {
         if( count($args) == 0 ) {
             return url;
@@ -163,27 +166,27 @@ class oidUtil {
         $sep = strchr( $url, '?') ? '&' : '?';
         return sprintf('%s%s%s',  $url, $sep, http_build_query($args));
     }
-    
+
     function random_string($length, $srand = null) {
-    
+
         if( $srand ) {
             srand( $srand );
         }
-    
+
         $a = '';
         for( $i = 0; $i < $length; $i++ ) {
             $a .= chr(rand(0,255));
         }
         return $a;
     }
-    
+
     // PHP lacks these very handy string functions, startsWith and endsWith.
     // included here for easier porting from python.
-    
+
     function startsWith( $str, $sub ) {
        return ( substr( $str, 0, strlen( $sub ) ) == $sub );
     }
-    
+
     // return tru if $str ends with $sub
     function endsWith( $str, $sub ) {
        $len1 = strlen( $str );
@@ -198,7 +201,7 @@ class oidUtil {
 // available ( or not available ) in php >= 4.x
 class oidUtilPhpSha1 {
 
-    // static 
+    // static
     function hmacsha1( $key, $text ) {
         if( function_exists( 'mhash' ) ) {
             // yay, we have mhash!
@@ -209,7 +212,7 @@ class oidUtilPhpSha1 {
             return oidUtilPhpSha1::_hmacsha1( $key, $text );
         }
     }
-    
+
     // static
     function sha1( $s ) {
         if( function_exists( 'mhash' ) ) {
@@ -244,8 +247,8 @@ class oidUtilPhpSha1 {
        $opad=str_repeat(chr(0x5c),$blocksize);
        $hmac = oidUtilPhpSha1::sha1( ($key^$opad) . oidUtilPhpSha1::sha1( ($key^$ipad) . $data ) );
        return $hmac;
-    }    
-    
+    }
+
     // private
     // php implementation of sha1, for older php versions. reportedly fast.
     // adapted from http://php.net/manual/en/function.sha1.php#48856
@@ -370,7 +373,7 @@ class oidUtilPhpBigInt {
 
     // static
     function random( $minval ) {
-    
+
         if( function_exists( 'gmp_random' ) ) {
             $limb_cnt = 31;
             do {
@@ -386,7 +389,7 @@ class oidUtilPhpBigInt {
 
     // static
     function base_convert( $numstring, $frombase, $tobase ) {
-    
+
         if ( function_exists('gmp_strval')) {
             return gmp_strval( gmp_init($numstring, $frombase), $tobase);
         }
@@ -396,18 +399,18 @@ class oidUtilPhpBigInt {
         else {
             return oidUtilPhpBigInt::_base_convert($numstring, $frombase, $tobase);
         }
-    
+
     }
-    
+
     // private
     //
     // From comment at http://php.net/manual/en/function.base-convert.php
     // by rithiur at mbnet dot fi
     //
-    // Here is a simple function that can convert numbers of any size. 
-    // However, note that as the division is performed manually to the 
-    // number, this function is not very efficient and may not be suitable 
-    // for converting strings with more than a few hundred numbers 
+    // Here is a simple function that can convert numbers of any size.
+    // However, note that as the division is performed manually to the
+    // number, this function is not very efficient and may not be suitable
+    // for converting strings with more than a few hundred numbers
     // (depending on the number bases).
     function _base_convert($numstring, $frombase, $tobase)
     {
@@ -417,7 +420,7 @@ class oidUtilPhpBigInt {
        $length = strlen($numstring);
        $result = '';
        $number = array();
-       
+
        for ($i = 0; $i < $length; $i++)
        {
            $number[$i] = strpos($hex, $numstring{$i});
@@ -446,21 +449,21 @@ class oidUtilPhpBigInt {
        while ($newlen != 0);
        return $result;
     }
-    
+
 };
 
 class DiffieHellman {
 
     var $DEFAULT_MOD = '155172898181473697471232257763715539915724801966915404479707795314057629378541917580651227423698188993727816152646631438561595825688188889951272158842675419950341258706556549803580104870537681476726513255747040765857479291291572334510643245094715007229621094194349783925984760375594985848253359305585439638443';
     var $DEFAULT_GEN = '2';
-    
+
     var $p;
     var $g;
     var $x;
-    
+
     // static
     function fromBase64( $p = null, $g = null, $srand = null ) {
-    
+
         if( $p ) {
             $p = oidUtil::a2long(oidUtil::from_b64($p));
         }
@@ -469,12 +472,12 @@ class DiffieHellman {
         }
         return new DiffieHellman($p, $g, $srand);
     }
-    
+
     function DiffieHellman( $p = null, $g = null, $srand = null ) {
-    
+
         $this->p = $p ? $p : $this->DEFAULT_MOD;
         $this->g = $g ? $g : $this->DEFAULT_GEN;
-        
+
         if( $srand ) {
             $this->x = $srand;
         }
@@ -482,18 +485,18 @@ class DiffieHellman {
             $this->x = oidUtilPhpBigInt::random( $this->p );
         }
     }
-    
+
     function createKeyExchange( ) {
-    
+
         return oidUtilPhpBigInt::powm( $this->g, $this->x, $this->p);
     }
 
     function decryptKeyExchange( $keyEx ) {
-    
+
         return oidUtilPhpBigInt::powm( $keyEx, $this->x, $this->p );
-    
+
     }
-    
+
 }
 
 

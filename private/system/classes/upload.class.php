@@ -35,6 +35,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'upload.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 /**
 * This class will allow you to securely upload one or more files from a form
 * submitted via POST method.  Please read documentation as there are a number of

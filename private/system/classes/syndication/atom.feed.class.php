@@ -43,6 +43,9 @@
   /*     distribution.                                                        */
   /****************************************************************************/
 
+if (stripos ($_SERVER['PHP_SELF'], 'atom.feed.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
   /**
     * Provides feed handlers for Atom 0.3 and Atom 1.0
     *

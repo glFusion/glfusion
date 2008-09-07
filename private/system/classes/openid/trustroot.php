@@ -19,11 +19,11 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-Reciprocal linking.  The author humbly requests that if you should use 
-PHP-OpenID on your website to provide an OpenID enabled service that you 
-place a link to the author's website ( http://videntity.org ) somewhere 
-that your users can discover it.  You are however under no obligation to 
-do so.  
+Reciprocal linking.  The author humbly requests that if you should use
+PHP-OpenID on your website to provide an OpenID enabled service that you
+place a link to the author's website ( http://videntity.org ) somewhere
+that your users can discover it.  You are however under no obligation to
+do so.
 
 More info about PHP OpenID:
 openid@videntity.org
@@ -34,6 +34,9 @@ http://www.openid.net
 
 *****/
 
+if (stripos ($_SERVER['PHP_SELF'], 'trustroot.php') !== false) {
+    die ('This file can not be used on its own.');
+}
 
 define( '_oid_top_level_domains_list', <<< END
 com|edu|gov|int|mil|net|org|biz|info|name|museum|coop|aero|ac|ad|ae|
@@ -55,15 +58,15 @@ define( '_oid_protocol_list', 'http|https');
 class TrustRoot {
     // Represents a valid openid trust root.  The parse classmethod
     // accepts a trust root string, producing a TrustRoot object.
-    
+
     var $_protocols;
     var $_top_level_domains;
-    
+
     function TrustRoot($unparsed, $proto, $wildcard, $host, $port, $path) {
-    
+
         $this->_top_level_domains = explode( '|', _oid_top_level_domains_list );
         $this->_protocols = explode( '|', _oid_protocol_list );
-    
+
         $this->unparsed = $unparsed;
         $this->proto = $proto;
         $this->wildcard = $wildcard;
@@ -77,7 +80,7 @@ class TrustRoot {
     function isSane() {
         // Checks the sanity of this trust root.
         // http://*.com/ for example is not sane.  Returns a bool.
-        
+
         if( $this->_is_sane ) {
             return $this->_is_sane;
         }
@@ -118,7 +121,7 @@ class TrustRoot {
         if( !$url_parts || !count( $url_parts ) ) {
             return false;
         }
-        
+
         $proto = isset( $url_parts['scheme'] ) ? $url_parts['scheme'] : null;
         $host = isset( $url_parts['host'] ) ? $url_parts['host'] : null;
         $port = isset( $url_parts['port'] ) ? $url_parts['port'] : null;
@@ -134,7 +137,7 @@ class TrustRoot {
 
         $arr1 = explode( '?', $path, 1);
         $arr2 = explode( '?', $this->path, 1);
-        
+
         if( !$this->startswith( $arr1[0], $arr2[0]) ) {
             return false;
         }
@@ -158,7 +161,7 @@ class TrustRoot {
         if( !$url_parts || !count( $url_parts ) ) {
             return false;
         }
-        
+
         $proto = isset( $url_parts['scheme'] ) ? $url_parts['scheme'] : null;
         $host = isset( $url_parts['host'] ) ? $url_parts['host'] : null;
         $port = isset( $url_parts['port'] ) ? $url_parts['port'] : null;
@@ -181,18 +184,18 @@ class TrustRoot {
             if( $host[1] != '.') {
                 return null;
             }
-            
+
             $host = substr( $host, 2 );
             $wilcard = true;
         }
         else {
             $wilcard = false;
         }
-        
+
         // at least needs to end in a top-level-domain
         $ends_in_tld = false;
         $_top_level_domains = explode( '|', _oid_top_level_domains_list );
-        
+
         foreach( $_top_level_domains as $tld ) {
             if( TrustRoot::endsWith($host, $tld) ) {
                 $ends_in_tld = true;
@@ -228,7 +231,7 @@ class TrustRoot {
     function checkURL($trust_root, $url) {
         // quick func for validating a url against a trust root.  See the
         // TrustRoot class if you need more control.
-        
+
         $tr = TrustRoot::parse($trust_root, true);
         return $tr && $tr->validateURL($url);
     }
@@ -242,13 +245,13 @@ class TrustRoot {
     function startsWith( $str, $sub ) {
        return ( substr( $str, 0, strlen( $sub ) ) == $sub );
     }
-    
+
     // return tru if $str ends with $sub
     function endsWith( $str, $sub ) {
        $len1 = strlen( $str );
        $len2 = strlen( $sub );
        return $len1 >= $len2 && ( substr( $str, $len1 - $len2 ) == $sub );
-    }        
+    }
 };
 
 
@@ -303,7 +306,7 @@ function _oid_trustroot_test() {
         $tr = TrustRoot::parse($s);
         $isSane = $tr->isSane();
         assert( '$isSane == $truth' );
-        
+
         if( $isSane != $truth ) {
             echo "$isSane, $truth<br" . XHTML . ">";
             exit;
@@ -336,7 +339,7 @@ function _oid_trustroot_test() {
             exit;
         }
     }
-        
+
 
     assertValid('http://*.foo.com', 'http://b.foo.com', true);
     assertValid('http://*.foo.com', 'http://hat.baz.foo.com', true);
@@ -374,5 +377,5 @@ function _oid_trustroot_test() {
 if( strstr( $_SERVER['REQUEST_URI'], 'trustroot.php' ) ) {
     _oid_trustroot_test();
 }
-    
+
 ?>

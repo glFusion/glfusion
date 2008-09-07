@@ -42,7 +42,9 @@
   /*  3. This notice may not be removed or altered from any source            */
   /*     distribution.                                                        */
   /****************************************************************************/
-
+if (stripos ($_SERVER['PHP_SELF'], 'rss.feed.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
   /**
     * Provides feed handlers for RSS 0.9x and RSS 2.0
     *

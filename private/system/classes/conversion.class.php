@@ -35,6 +35,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'conversion.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 class conversion
 {
 

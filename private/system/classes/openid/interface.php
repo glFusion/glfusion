@@ -19,11 +19,11 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-Reciprocal linking.  The author humbly requests that if you should use 
-PHP-OpenID on your website to provide an OpenID enabled service that you 
-place a link to the author's website ( http://videntity.org ) somewhere 
-that your users can discover it.  You are however under no obligation to 
-do so.  
+Reciprocal linking.  The author humbly requests that if you should use
+PHP-OpenID on your website to provide an OpenID enabled service that you
+place a link to the author's website ( http://videntity.org ) somewhere
+that your users can discover it.  You are however under no obligation to
+do so.
 
 More info about PHP OpenID:
 openid@videntity.org
@@ -34,6 +34,9 @@ http://www.openid.net
 
 *****/
 
+if (stripos ($_SERVER['PHP_SELF'], 'interface.php') !== false) {
+    die ('This file can not be used on its own.');
+}
 
 class ServerResponse {
 
@@ -43,10 +46,10 @@ class ServerResponse {
     var $redirect_url;
 
     function ServerResponse( $vars ) {
-    
+
         $attrs = array( 'code', 'content_type', 'body', 'redirect_url' );
         foreach( $attrs as $attr ) {
-        
+
             if( isset( $vars[$attr] ) ) {
                 $this->$attr = $vars[$attr];
             }
@@ -55,7 +58,7 @@ class ServerResponse {
 
 };
 
-    
+
 function redirect( $url ) {
     return new ServerResponse( array( 'code'=>302, 'redirect_url'=>$url) );
 }
@@ -82,8 +85,8 @@ class ConsumerResponse {
     function doAction( $handler ) {
         trigger_error( 'unimplemented', E_USER_WARNING );
     }
-};    
-        
+};
+
 
 class ActionHandler {
 
@@ -139,7 +142,7 @@ class ValidLogin extends ConsumerResponse {
         // verified is delegated to by the identity passed in, if such a
         // check is needed.  Returns True if the identity passed in was
         // authenticated by the server, False otherwise.
-error_log( "id: $identity       this_id: " . $this->identity . '      ' );        
+error_log( "id: $identity       this_id: " . $this->identity . '      ' );
         if( $identity == $this->identity ) {
             return true;
         }
@@ -151,21 +154,21 @@ error_log( "id: $identity       this_id: " . $this->identity . '      ' );
 
         return $ret[1] == $this->identity;
     }
-};    
+};
 
 class InvalidLogin extends ConsumerResponse {
     // This subclass is used when the login wasn't valid.
     function doAction($handler) {
         return $handler->doInvalidLogin();
     }
-};        
+};
 
 class UserCancelled extends ConsumerResponse {
     // This subclass is used when the user cancelled the login.
     function doAction($handler) {
         return $handler->doUserCancelled();
     }
-};    
+};
 
 class UserSetupNeeded extends ConsumerResponse {
     // This subclass is used when the UA needs to be sent to the given
@@ -177,7 +180,7 @@ class UserSetupNeeded extends ConsumerResponse {
     function doAction($handler) {
         return $handler->doUserSetupNeeded($this->user_setup_url);
     }
-};    
+};
 
 class ErrorFromServer extends ConsumerResponse {
     // This subclass is used
@@ -188,7 +191,7 @@ class ErrorFromServer extends ConsumerResponse {
     function doAction($handler) {
         return $handler->doErrorFromServer($this->message);
     }
-};    
+};
 
 class CheckAuthRequired extends ConsumerResponse {
     function CheckAuthRequired($server_url, $return_to, $post_data) {
@@ -201,7 +204,7 @@ class CheckAuthRequired extends ConsumerResponse {
         return $handler->doCheckAuthRequired(
             $this->server_url, $this->return_to, $this->post_data);
     }
-};    
+};
 
 
 class Request {
@@ -260,11 +263,11 @@ class Request {
 
         return val
   */
-  
+
     function get_by_full_key($key, $default=null) {
         return $this->get($key, $default);
     }
-    
+
     function toString() {
         $s = '';
         foreach( $this->args as $k => $v ) {
@@ -272,7 +275,7 @@ class Request {
         }
         return $s;
     }
-};    
+};
 
 class ConsumerRequest extends Request {
 
@@ -281,5 +284,5 @@ class ConsumerRequest extends Request {
         $this->openid = $openid;
     }
 };
-        
+
 ?>

@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (stripos ($_SERVER['PHP_SELF'], 'LiveJournal.auth.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
 // PEAR class to handle XML-RPC
 require_once ('XML/RPC.php');
 

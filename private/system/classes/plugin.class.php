@@ -16,6 +16,7 @@
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs, tony AT tonybibbs DOT com                           |
+// |          Sami Barakat, s.m.barakat AT gmail DOT com                      |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -33,6 +34,10 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
+
+if (stripos ($_SERVER['PHP_SELF'], 'plugin.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
 
 /**
 * This is a poorly thought out class that is used pretty much as a structure

@@ -43,6 +43,10 @@
   /*     distribution.                                                        */
   /****************************************************************************/
 
+if (stripos ($_SERVER['PHP_SELF'], 'parserfactory.class.php') !== false) {
+    die ('This file can not be used on its own.');
+}
+
   // Require pear HTTP_REQUEST
   require_once('HTTP/Request.php');
   /**

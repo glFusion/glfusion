@@ -19,11 +19,11 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-Reciprocal linking.  The author humbly requests that if you should use 
-PHP-OpenID on your website to provide an OpenID enabled service that you 
-place a link to the author's website ( http://videntity.org ) somewhere 
-that your users can discover it.  You are however under no obligation to 
-do so.  
+Reciprocal linking.  The author humbly requests that if you should use
+PHP-OpenID on your website to provide an OpenID enabled service that you
+place a link to the author's website ( http://videntity.org ) somewhere
+that your users can discover it.  You are however under no obligation to
+do so.
 
 More info about PHP OpenID:
 openid@videntity.org
@@ -34,6 +34,9 @@ http://www.openid.net
 
 *****/
 
+if (stripos ($_SERVER['PHP_SELF'], 'server.php') !== false) {
+    die ('This file can not be used on its own.');
+}
 
 require_once( 'oid_util.php' );
 require_once( 'interface.php' );
@@ -62,7 +65,7 @@ class OpenIDServer {
         // appropriate action.
 
         $method_name = 'do_' . $req->get('mode');
-        
+
         if( !method_exists( $this, $method_name ) ) {
             $error = sprintf('Unsupported openid.mode: %s', $req->get('mode') );
 
@@ -74,7 +77,7 @@ class OpenIDServer {
                 return OpenIDServer::_error_page( $error );
             }
         }
-        
+
         return $this->$method_name($req);
     }
 
@@ -94,9 +97,9 @@ class OpenIDServer {
             if( $session_type == 'DH-SHA1' ) {
                 $p = $req->get('dh_modulus');
                 $g = $req->get('dh_gen');
-                
+
                 $dh = DiffieHellman::fromBase64($p, $g, $this->srand);
-                
+
                 $cpub = oidUtil::a2long( oidUtil::from_b64($req->get( 'dh_consumer_public' )) );
 
                 $dh_shared = $dh->decryptKeyExchange($cpub);
@@ -108,12 +111,12 @@ class OpenIDServer {
                 $reply['session_type'] = $session_type;
                 $reply['dh_server_public'] = oidUtil::to_b64(oidUtil::long2a($spub));
                 $reply['enc_mac_key'] = oidUtil::to_b64($mac_key);
-                
+
                 // error_log( "assoc.secret: " . $assoc->secret );
                 // error_log( "dh_server_public: " . $reply['dh_server_public'] );
                 // error_log( "dh_server_public_raw: " . $spub );
                 // error_log( "enc_mac_key: " . $reply['enc_mac_key'] );
-                
+
             }
             else {
                 // raise ProtocolError('session_type must be DH-SHA1');
@@ -128,7 +131,7 @@ class OpenIDServer {
         $reply['assoc_type'] = $assoc_type;
         $reply['assoc_handle'] = $assoc->handle;
         $reply['expires_in'] = $assoc->get_expires_in();
-        
+
         return response_page(oidUtil::kvform($reply));
     }
 
@@ -144,7 +147,7 @@ class OpenIDServer {
                 }
             return redirect(append_args(req.return_to, reply))
      */
-     
+
         $rc = $this->checkid($req);
         if( is_int($rc) && $rc == _oid_authentication_error ) {
             $user_setup_url = $this->get_user_setup_url($req);
@@ -156,8 +159,8 @@ class OpenIDServer {
         }
         return $rc;
     }
-            
-     
+
+
 
     function do_checkid_setup($req) {
     /*
@@ -166,7 +169,7 @@ class OpenIDServer {
         except AuthenticationError:
             return $this->get_setup_response(req)
      */
-     
+
         $rc = $this->checkid($req);
         if( is_int( $rc ) && $rc == _oid_authentication_error ) {
             return $this->get_setup_response($req);
@@ -182,7 +185,7 @@ class OpenIDServer {
         // authentication errors are handled, this does all logic for
         // dealing with successful authentication, and raises an
         // exception for its caller to handle on a failed authentication.
-        
+
         $tr = TrustRoot::parse($req->get('trust_root') );
         if( !$tr ) {
             //raise ProtocolError('Malformed trust_root: %s' % req.trust_root)
@@ -240,14 +243,14 @@ class OpenIDServer {
 
         $reply['openid.signed'] = $signed;
         $reply['openid.sig'] = $sig;
-        
+
         return redirect(oidUtil::append_args($req->get('return_to'), $reply));
     }
 
     function do_check_authentication($req) {
-    
+
         $handle = $req->get('assoc_handle');
-    
+
         // Last step in dumb mode
         $assoc = $this->istore->lookup($req->get('assoc_handle'), 'HMAC-SHA1');
 
@@ -255,7 +258,7 @@ class OpenIDServer {
             // raise ProtocolError('no secret found for %r' % req.assoc_handle)
             $error = sprintf( 'no secret found for %r', $req->get('assoc_handle') );
             // trigger_error( $error, $E_USER_WARNING );
-            
+
             return OpenIDServer::_error_page( $error );
         }
 
@@ -279,13 +282,13 @@ class OpenIDServer {
                 }
             }
             else {
-            
+
                 $is_valid = 'false';
             }
         }
 
         else {
-        
+
             $this->istore->remove($req->get('assoc_handle'));
             $is_valid = 'false';
         }
@@ -293,10 +296,10 @@ class OpenIDServer {
         $reply['is_valid'] = $is_valid;
         return response_page(oidUtil::kvform($reply));
     }
-    
+
     // private
     function _error_page( $error ) {
-    
+
         $edict = array(
             'openid.mode' => 'error',
             'openid.error' => $error
@@ -304,14 +307,14 @@ class OpenIDServer {
 
         return error_page(oidUtil::kvform($edict));
     }
-    
+
 
     // Callbacks:
     function is_valid($req) {
         // If a valid authentication is supplied as part of the
         // request, and allows the given trust_root to authenticate the
         // identity url, this returns True.  Otherwise, it returns False.
-        
+
         trigger_error( 'unimplemented', E_USER_WARNING );
     }
 
