@@ -66,6 +66,7 @@ $_SQL[] = "UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'g
 $_SQL[] = "UPDATE {$_TABLES['configuration']} SET type='select',default_value='s:10:\"US/Central\";' WHERE name='timezone'";
 $_SQL[] = "UPDATE {$_TABLES['configuration']} SET value='s:10:\"US/Central\";' WHERE name='timezone' AND value=''";
 $_SQL[] = "REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion', '1.1.0svn')";
+$_SQL[] = "ALTER TABLE {$_TABLES['staticpage']} ADD sp_search tinyint(4) NOT NULL default '1' AFTER postmode";
 
 /* Execute SQL now to perform the upgrade */
 for ($i = 1; $i <= count($_SQL); $i++) {
@@ -86,7 +87,7 @@ $c->add('jhead_enabled',0,'select',5,22,0,1480,TRUE);
 $c->add('path_to_jhead','','text',5,22,NULL,1490,TRUE);
 $c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);
 $c->add('path_to_jpegtrans','','text',5,22,NULL,1510,TRUE);
-
+$c->add('jpg_orig_quality','85','text',5,23,NULL,1500,TRUE);
 
 // search stuff (temp for now)
 $c->add('fs_search', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
@@ -102,15 +103,15 @@ $c->add('search_show_hits',TRUE,'select',0,6,1,730,TRUE);
 $c->add('search_no_data','<i>Not available...</i>','text',0,6,NULL,740,TRUE);
 $c->add('search_separator',' &gt; ','text',0,6,NULL,750,TRUE);
 $c->add('search_def_keytype','phrase','select',0,6,19,760,TRUE);
-
 $c->restore_param('num_search_results', 'Core');
 
 // This option should only be set during the install/upgrade because of all
 // the setting up thats required. So hide it from the user.
 $c->add('search_use_fulltext',FALSE,'hidden',0,6);
 
-
 $c->add('hide_adminmenu',TRUE,'select',3,12,1,1170,TRUE);
+
+$c->del('use_glfilter', 'forum');
 
 $retval .= 'Development Code upgrades complete - see error.log for details<br>';
 
