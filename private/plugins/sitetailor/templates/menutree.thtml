@@ -2,27 +2,10 @@
 <script type="text/javascript">
     document.getElementById('sitetailor').style.display=''
 </script>
-<div class="plugin">
-<span>
-<a href="{site_admin_url}/plugins/sitetailor/index.php"><img style="vertical-align:middle;padding-right:10px;float:left;" src="{site_admin_url}/plugins/sitetailor/images/sitetailor.png" alt=""{xhtml}></a>
-</span>
-<h1 style="float:left">{birdseed}</h1>
-<div style="clear:both;"></div>
-<table style="border:none;width:100%">
-  <tr>
-    <td style="text-align:left;vertical-align:middle">
-      <form method="post" id="newmenuelement" action="{site_admin_url}/plugins/sitetailor/menu.php">
-        <input type="hidden" name="mode" value="new"{xhtml}>
-        <input type="hidden" id="menumid" name="menumid" value="{menuid}"{xhtml}>
-        <input type="hidden" id="menuid" name="menuid" value="{menuid}"{xhtml}>
-        <input type="button" id="newelement" name="newelement" value="{$LANG_ST01[add_new]}"onclick="submit()"{xhtml}>
-      </form>
-    </td>
-    <td style="text-align:right;vertical-align:middle">
-      {menu_select}
-    </td>
-  </tr>
-</table>
+
+<div style="float:right;padding-top:5px;">
+  {menu_select}
+</div><div style="clear:both;"></div>
 
 <form method="post" id="menusel" action="{site_admin_url}/plugins/sitetailor/menu.php">
 <div>
@@ -41,4 +24,3 @@
   <input type="hidden" name="mode" value="activate"{xhtml}>
 </div>
 </form>
-</div>

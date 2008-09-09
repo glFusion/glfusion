@@ -2,45 +2,31 @@
 <script type="text/javascript">
     document.getElementById('sitetailor').style.display=''
 </script>
-<div class="plugin">
-<span>
-<a href="{site_admin_url}/plugins/sitetailor/index.php"><img style="vertical-align:middle;padding-right:10px;float:left;" src="{site_admin_url}/plugins/sitetailor/images/sitetailor.png" alt=""{xhtml}></a>
-</span>
-<h1 style="float:left">{birdseed}</h1>
-<div style="clear:both;"></div>
 
-
-  <table style="border:none;width:100%">
-    <tr>
-      <td style="text-align:left;vertical-align:middle">
-        <form method="post" id="newmenu" action="{site_admin_url}/plugins/sitetailor/menu.php">
-          <input type="hidden" name="mode" value="newmenu"{xhtml}>
-          <input type="hidden" id="menumid" name="menumid" value="{menuid}"{xhtml}>
-          <input type="button" id="newmenubutton" name="newmenubutton" value="{$LANG_ST01[add_newmenu]}"onclick="submit()"{xhtml}>
-        </form>
-      </td>
-    </tr>
-  </table>
 
   <form method="post" id="menusel" action="{site_admin_url}/plugins/sitetailor/menu.php">
     <table style="width:100%;">
       <tr>
           <th style="width:60%;">Menu Name</th>
           <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[active]}</th>
-          <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[info]}</th>
-
-          <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[edit]}</th>
-          <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[menu_colors]}</th>
+          <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[elements]}</th>
+          <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[options]}</th>
           <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[delete]}</th>
       </tr>
       <!-- BEGIN menurow -->
         <tr class="pluginRow{rowclass}" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRow{rowclass}';">
-          <td style="width:60%;"><a href="{site_admin_url}/plugins/sitetailor/menu.php?mode=menu&amp;id={menu_id}">{menu_name}</a></td>
+          <td style="width:60%;">{info}</td>
           <td class="aligncenter" style="width:10%;text-align:center;">{menuactive}</td>
-          <td class="aligncenter" style="width:10%;text-align:center;">{info}</td>
-
-          <td class="aligncenter" style="width:10%;text-align:center;">{edit}</td>
-          <td class="aligncenter" style="width:10%;text-align:center;">{options}</td>
+          <td class="aligncenter" style="width:10%;text-align:center;">
+            <a href="{site_admin_url}/plugins/sitetailor/menu.php?mode=menu&amp;id={menu_id}">
+            <img src="{site_admin_url}/plugins/sitetailor/images/edit.png" alt="{$LANG_ST01[edit]}"{xhtml}>
+            </a>
+          </td>
+          <td class="aligncenter" style="width:10%;text-align:center;">
+            <a href="{site_admin_url}/plugins/sitetailor/menu.php?mode=menuconfig&amp;menuid={menu_id}">
+            <img src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[options]}"{xhtml}>
+            </a>
+          </td>
           <td class="aligncenter" style="width:10%;text-align:center;">{delete_menu}</td>
         </tr>
       <!-- END menurow -->
@@ -48,4 +34,3 @@
     <input type="hidden" id="menu" name="menu" value="{menuid}"{xhtml}>
     <input type="hidden" name="mode" value="menuactivate"{xhtml}>
   </form>
-</div>

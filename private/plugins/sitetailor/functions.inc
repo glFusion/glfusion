@@ -153,12 +153,15 @@ function plugin_getheaderjs_sitetailor() {
 */
 
 function plugin_cclabel_sitetailor() {
-    global $_CONF, $_ST_CONF, $LANG_ST00;
+    global $_CONF, $_ST_CONF, $LANG_ST00, $LANG_ST01;
 
     if (SEC_hasRights('sitetailor.admin') ) {
-        return array($LANG_ST00['menulabel'],
-            $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php',
-            st_getImageFile('sitetailor.png'));
+        return array(
+            array($LANG_ST01['menu_builder'],$_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
+                  st_getImageFile('sitetailor-menubuilder.png')),
+            array($LANG_ST01['logo'],$_CONF['site_admin_url'] . '/plugins/sitetailor/logo.php',
+                  st_getImageFile('sitetailor.png'))
+        );
     } else {
         return '';
     }
@@ -174,11 +177,26 @@ function plugin_cclabel_sitetailor() {
 * @return   array   Array containing (plugin name, plugin admin url, # of items in plugin or '')
 *
 */
+
 function plugin_getadminoption_sitetailor() {
-    global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF;
-    if (SEC_hasRights('sitetailor.admin')) {
-        return array($LANG_ST00['menulabel'], $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php', 'n/a');
+    global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01,$_ST_CONF;
+
+    if (SEC_hasRights('sitetailor.admin') ) {
+        return array(
+            array($LANG_ST01['menu_builder'],$_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
+                  st_getImageFile('sitetailor-menubuilder.png')),
+            array($LANG_ST01['logo'],$_CONF['site_admin_url'] . '/plugins/sitetailor/logo.php',
+                  st_getImageFile('sitetailor.png'))
+        );
+    } else {
+        return '';
     }
+
+
+
+//    if (SEC_hasRights('sitetailor.admin')) {
+//        return array($LANG_ST00['menulabel'], $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php', 'n/a');
+//    }
 }
 
 function plugin_chkVersion_sitetailor() {
@@ -346,12 +364,18 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
         }
     }
     if ( $menuID != '' && $stMenu[$menuID]['active'] == 1 && $stMenu[$menuID]['menu_perm'] == 3) {
+        if ( $stMenu[$menuID]['menu_type'] == 1 ) {
+            $retval .= '<div id="gl_moomenu'.$menuID.'">'. LB;
+        }
         if ( $wrapper != '' ) {
-            $retval = '<div class="'.$wrapper.$menuID.'">' . LB;
+            $retval .= '<div class="'.$wrapper.$menuID.'">' . LB;
         }
         $retval .= $stMenu[$menuID]['elements'][0]->showTree(0,$ulclass,$liclass,$parentclass,$lastclass,$selected);
         if ( $wrapper != '' ) {
             $retval .= '</div>' . LB;
+        }
+        if ( $stMenu[$menuID]['menu_type'] == 1 ) {
+            $retval .= '</div>'. LB;
         }
     } else {
         return '';
@@ -386,11 +410,12 @@ function phpblock_getMenu($arg1,$arg2) {
         return $retval;
     }
 
-
     // $arg1['onleft'] == 1 means left nav, 0 = right nav
     // we'll use this to call the proper class names.
 
-    if ( $arg1['onleft'] == 1 ) {
+
+    if ( $stMenu[$menuID]['config']['menu_alignment'] == 1 ) {
+//    if ( $arg1['onleft'] == 1 ) {
         $parent = 'parent-l';
         $class  = 'gl_moomenu-vert-l';
     } else {

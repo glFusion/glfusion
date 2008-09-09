@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | logo.php                                                                 |
 // |                                                                          |
-// | Logo Administrat.                                                        |
+// | Logo Administrator.                                                      |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
@@ -30,6 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once('../../../lib-common.php');
+require_once $_CONF['path'] . 'system/lib-admin.php';
 
 $display = '';
 
@@ -47,9 +48,18 @@ if (!SEC_hasRights('sitetailor.admin')) {
 }
 
 function ST_logoEdit() {
-    global $_CONF, $_TABLES, $_ST_CONF, $LANG_ST01;
+    global $_CONF, $_TABLES, $_ST_CONF, $LANG_ST01, $LANG_ADMIN;
 
     $retval = '';
+
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home']),
+    );
+    $retval  .= COM_startBlock($LANG_ST01['logo_options'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, 'Site Tailor allows you to easily customize your site logo and control the display of the site slogan.',
+                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor.png');
+
 
     if ( file_exists($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name'] ) ) {
         $current_logo = '<img src="' . $_CONF['site_url'] . '/images/' . $_ST_CONF['logo_name'] . '" alt="" border="0"' . XHTML . '>';
@@ -73,6 +83,7 @@ function ST_logoEdit() {
     $T->parse('output', 'admin');
 
     $retval .= $T->finish($T->get_var('output'));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     return $retval;
 }
 

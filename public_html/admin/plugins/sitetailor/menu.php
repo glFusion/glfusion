@@ -29,7 +29,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../../../lib-common.php');
+require_once '../../../lib-common.php';
+require_once $_CONF['path'] . 'system/lib-admin.php';
 
 $display = '';
 
@@ -51,9 +52,19 @@ if (!SEC_hasRights('sitetailor.admin')) {
  */
 
 function ST_displayMenuList( ) {
-    global $_CONF, $LANG_ST00, $LANG_ST01, $LANG_ST_MENU_TYPES, $_ST_CONF, $stMenu;
+    global $_CONF, $LANG_ST00, $LANG_ST01, $LANG_ADMIN,$LANG_ST_MENU_TYPES, $_ST_CONF, $stMenu;
 
     $retval = '';
+
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php?mode=newmenu',
+                  'text' => $LANG_ST01['add_newmenu']),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home']),
+    );
+    $retval  .= COM_startBlock($LANG_ST01['menu_builder'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to create and edit menus for your site.',
+                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
 
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
     $T->set_file (array ('admin' => 'menulist.thtml'));
@@ -65,18 +76,15 @@ function ST_displayMenuList( ) {
             $T->set_var('menu_id',$menu['menu_id']);
             $T->set_var('menu_name',$menu['menu_name']);
             $T->set_var('menuactive','<input type="checkbox" name="enabledmenu[' . $menu['menu_id'] . ']" onclick="submit()" value="1"' . ($menu['active'] == 1 ? ' checked="checked"' : '') . XHTML . '>');
-            if ( $menu['menu_id'] != 0 ) {
+            if ( $menu['menu_id'] != 1 ) {
                 $T->set_var('delete_menu','<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=deletemenu&amp;id=' . $menu['menu_id'] . '" onclick="return confirm(\'' . $LANG_ST01['confirm_delete'] . '\');"><img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/delete.png" alt="' . $LANG_ST01['delete'] . '"' . XHTML . '></a>');
             }
-            $T->set_var('options','<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php?mode=menuconfig&amp;menuid='.$id.'">Options</a>');
             $T->set_var('menu_tree',isset($stMenu[$id]['elements']) ? $stMenu[$id]['elements'][0]->editTree(0,2) : '');
             $elementDetails = $menu['menu_name'] . '::';
             $elementDetails .= '<b>' . $LANG_ST01['type'] . ':</b><br />' . $LANG_ST_MENU_TYPES[$menu['menu_type']] . '<br' . XHTML . '>';
-            $info       = '<a class="gl_mootip" title="' . $elementDetails . '" href="#"><img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/info.png" alt=""' . XHTML . '></a>';
+            $info       = '<a class="gl_mootip" title="' . $elementDetails . '" href="#">'.$menu['menu_name'].'</a>';
             $T->set_var('info',$info);
-            $edit       = '<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=editmenu&amp;menu_id=' . $menu['menu_id'] . '">';
-            $T->set_var('edit',$edit . '<img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/edit.png" alt="' . $LANG_ST01['edit'] . '"' . XHTML . '></a>');
-            $T->set_var('rowclass',$rowCounter % 2);
+            $T->set_var('rowclass',($rowCounter % 2)+1);
             $T->parse('mrow','menurow',true);
             $rowCounter++;
         }
@@ -84,7 +92,6 @@ function ST_displayMenuList( ) {
     $T->set_var(array(
         'site_admin_url'    => $_CONF['site_admin_url'],
         'site_url'          => $_CONF['site_url'],
-        'birdseed'          => 'Menu List',
         'status_msg'        => $statusMsg,
         'lang_admin'        => $LANG_ST00['admin'],
         'version'           => $_ST_CONF['version'],
@@ -96,6 +103,8 @@ function ST_displayMenuList( ) {
     $T->parse('output', 'admin');
     $retval .= $T->finish($T->get_var('output'));
 
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
     return $retval;
 }
 
@@ -104,9 +113,21 @@ function ST_displayMenuList( ) {
  */
 
 function ST_createMenu( ) {
-    global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01, $_ST_CONF, $LANG_ST_MENU_TYPES, $stMenu;
+    global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01, $_ST_CONF,
+           $LANG_ST_MENU_TYPES, $LANG_ADMIN, $stMenu;
 
     $retval = '';
+
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php',
+                  'text' => $LANG_ST01['menu_list']),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home']),
+    );
+    $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['add_newmenu'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to create and edit menus for your site.',
+                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
+
 
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
     $T->set_file (array ('admin' => 'createmenu.thtml'));
@@ -152,7 +173,7 @@ function ST_createMenu( ) {
     ));
     $T->parse('output', 'admin');
     $retval .= $T->finish($T->get_var('output'));
-
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -172,85 +193,68 @@ function ST_saveNewMenu( ) {
     $sqlDataValues = "'$menuname',$menutype,$menuactive,$menugroup";
     DB_save($_TABLES['st_menus'], $sqlFieldList, $sqlDataValues);
 
-    CACHE_remove_instance('stmenu');
-    st_initMenu(true);
-}
+    $menu_id = DB_insertId();
 
-function ST_editMenu( $menu_id ) {
-    global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01, $_ST_CONF, $LANG_ST_MENU_TYPES, $stMenu;
-
-    $retval = '';
-
-    $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
-    $T->set_file (array ('admin' => 'editmenu.thtml'));
-
-    // build menu type select
-
-    $menuTypeSelect = '<select id="menutype" name="menutype">' . LB;
-    while ( $types = current($LANG_ST_MENU_TYPES) ) {
-        $menuTypeSelect .= '<option value="' . key($LANG_ST_MENU_TYPES) . '"';
-        if (key($LANG_ST_MENU_TYPES) == $stMenu[$menu_id]['menu_type']) {
-            $menuTypeSelect .= ' selected="selected"';
-        }
-        $menuTypeSelect .= '>' . $types . '</option>' . LB;
-        next($LANG_ST_MENU_TYPES);
+    switch ( $menutype ) {
+        case 1:
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#151515'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#3667c0'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#CCCCCC'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#FFFFFF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#679EF1'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#151515'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#333333'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#151515'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#151515'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','menu_parent.png'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+            break;
+        case 2:
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#000000'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#000000'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#3677C0'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#679EF1'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#FFFFFF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#679EF1'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#151515'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#333333'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#151515'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#151515'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','menu_parent.png'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+            break;
+        case 3:
+        case 4:
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#DDDDDD'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#BBBBBB'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#0000FF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#0000FF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#F7FF00'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#DDDDDD'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#BBBBBB'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#999999'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#999999'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','vmenu_parent.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+            break;
     }
-    $menuTypeSelect .= '</select>' . LB;
 
-    // build group select
-
-    $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
-    $usergroups = SEC_getUserGroups($rootUser);
-    $usergroups[$LANG_ST01['non-logged-in']] = 998;
-    ksort($usergroups);
-    $group_select .= '<select id="group" name="group">' . LB;
-    for ($i = 0; $i < count($usergroups); $i++) {
-        $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
-        if ( $usergroups[key($usergroups)] == $stMenu[$menu_id]['group_id']) {
-            $group_select .= ' selected="selected"';
-        }
-        $group_select .= '>' . key($usergroups) . '</option>' . LB;
-        next($usergroups);
-    }
-    $group_select .= '</select>' . LB;
-
-    $T->set_var(array(
-        'site_admin_url'    => $_CONF['site_admin_url'],
-        'site_url'          => $_CONF['site_url'],
-        'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
-        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: '.$LANG_ST01['edit_menu'],
-        'status_msg'        => $statusMsg,
-        'lang_admin'        => $LANG_ST00['admin'],
-        'version'           => $_ST_CONF['version'],
-        'menu_list'         => $menulist,
-        'menuid'            => $menu_id,
-        'menuactive'        => $stMenu[$menu_id]['active'] == 1 ? ' checked="checked"' : ' ',
-        'menutype_select'   => $menuTypeSelect,
-        'group_select'      => $group_select,
-        'menuname'          => $stMenu[$menu_id]['menu_name'],
-        'menu_id'           => $menu_id,
-        'xhtml'             => XHTML,
-    ));
-    $T->parse('output', 'admin');
-    $retval .= $T->finish($T->get_var('output'));
-
-    return $retval;
-}
-
-function ST_saveEditMenu( ) {
-    global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF, $stMenu, $_GROUPS;
-
-    $menu_id    = COM_applyFilter($_POST['menu_id'],true);
-    $menuname   = addslashes(COM_applyFilter($_POST['menuname']));
-    $menutype   = COM_applyFilter($_POST['menutype'],true);
-    $menuactive = COM_applyFilter($_POST['menuactive'],true);
-    $menugroup  = COM_applyFilter($_POST['group'],true);
-
-    $sqlFieldList  = 'id,menu_name,menu_type,menu_active,group_id';
-    $sqlDataValues = "$menu_id,'$menuname',$menutype,$menuactive,$menugroup";
-    DB_save($_TABLES['st_menus'], $sqlFieldList, $sqlDataValues);
 
     CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('css');
+    $randID = rand();
+    DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
     st_initMenu(true);
 }
 
@@ -259,9 +263,22 @@ function ST_saveEditMenu( ) {
  */
 
 function ST_displayTree( $menu_id ) {
-    global $_CONF, $LANG_ST00, $LANG_ST01,$_ST_CONF, $stMenu;
+    global $_CONF, $LANG_ST00, $LANG_ST01,$LANG_ADMIN, $_ST_CONF, $stMenu;
 
     $retval = '';
+
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php?mode=new&amp;menuid='.$menu_id,
+                  'text' => $LANG_ST01['create_element']),
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php',
+                  'text' => $LANG_ST01['menu_list']),
+    );
+    $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to create and edit menus for your site.',
+                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
+
+
+
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
     $T->set_file (array ('admin' => 'menutree.thtml'));
 
@@ -292,7 +309,7 @@ function ST_displayTree( $menu_id ) {
 
     $T->parse('output', 'admin');
     $retval .= $T->finish($T->get_var('output'));
-
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -329,6 +346,16 @@ function ST_createElement ( $menu_id ) {
            $LANG_ST_GLTYPES, $LANG_ST_GLFUNCTION;
 
     $retval = '';
+
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php?mode=menu&amp;id='.$menu_id,
+                  'text' => 'Back to ' . $stMenu[$menu_id]['menu_name']),
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php',
+                  'text' => $LANG_ST01['menu_list']),
+    );
+    $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['create_element'] .' for ' . $stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to create menu elements easily to common areas of your glFusion site.',
+                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
 
     // build types select
 
@@ -452,7 +479,8 @@ function ST_createElement ( $menu_id ) {
     ));
 
     $T->parse('output', 'admin');
-    $retval = $T->finish($T->get_var('output'));
+    $retval .= $T->finish($T->get_var('output'));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -553,6 +581,17 @@ function ST_editElement( $menu_id, $mid ) {
            $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION;
 
     $retval = '';
+
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php?mode=menu&amp;id='.$menu_id,
+                  'text' => 'Back to ' . $stMenu[$menu_id]['menu_name']),
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php',
+                  'text' => $LANG_ST01['menu_list']),
+    );
+    $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['edit_element'] .' for ' . $stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, 'Once an element is created, you can always go back and edit the type, location, or label.',
+                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
+
 
     // build types select
 
@@ -698,6 +737,7 @@ function ST_editElement( $menu_id, $mid ) {
     $T->parse('output', 'admin');
 
     $retval .= $T->finish($T->get_var('output'));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -854,9 +894,8 @@ function ST_deleteChildElements( $id, $menu_id ){
 
 function ST_menuConfig( $mid ) {
     global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_ST00, $LANG_ST01,
-           $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION;
-
-
+           $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION,
+           $LANG_ST_MENU_TYPES;
 
     /* define the active attributes for each menu type */
 
@@ -906,11 +945,8 @@ function ST_menuConfig( $mid ) {
                              'submenu_hover_bg_color',
                              'submenu_highlight_color',
                              'submenu_shadow_color',
-                             'menu_bg_filename',
-                             'menu_hover_filename',
                              'menu_parent_filename',
                              'menu_alignment',
-                             'use_images',
                         );
 
     $VSattributes = array(   'main_menu_text_color',
@@ -919,10 +955,20 @@ function ST_menuConfig( $mid ) {
                         );
 
     $retval = '';
+    $menu_id = $mid;
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php',
+                  'text' => $LANG_ST01['menu_list']),
+    );
+    $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['menu_colors'] .' for ' . $stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to easily customize the look and feel of your menus.',
+                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
 
-        foreach ($menuAttributes AS $name => $display ) {
-            $menuConfig[$name] = '#000000';
-        }
+
+
+    foreach ($menuAttributes AS $name => $display ) {
+        $menuConfig[$name] = '#000000';
+    }
 
     if ( is_array($stMenu[$mid]['config']) ) {
         foreach ($stMenu[$mid]['config'] AS $name => $value ) {
@@ -977,16 +1023,50 @@ function ST_menuConfig( $mid ) {
 
     $menu_active_check = ($stMenu[$mid]['active'] == 1  ? ' checked="checked"' : '');
 
-    $menu_align_left_checked  = ($menu_alignment == 1 ? 'checked="checked"' : '');
-    $menu_align_right_checked = ($menu_alignment == 0 ? 'checked="checked"' : '');
+    $menu_align_left_checked  = ($menuConfig['menu_alignment'] == 1 ? 'checked="checked"' : '');
+    $menu_align_right_checked = ($menuConfig['menu_alignment'] == 0 ? 'checked="checked"' : '');
 
     $use_images_checked = ($menuConfig['use_images'] == 1 ? ' checked="checked"' : '');
     $use_colors_checked = ($menuConfig['use_images'] == 0 ? ' checked="checked"' : '');
+
+    // build menu type select
+
+    $menuTypeSelect = '<select id="menutype" name="menutype">' . LB;
+    while ( $types = current($LANG_ST_MENU_TYPES) ) {
+        $menuTypeSelect .= '<option value="' . key($LANG_ST_MENU_TYPES) . '"';
+        if (key($LANG_ST_MENU_TYPES) == $stMenu[$menu_id]['menu_type']) {
+            $menuTypeSelect .= ' selected="selected"';
+        }
+        $menuTypeSelect .= '>' . $types . '</option>' . LB;
+        next($LANG_ST_MENU_TYPES);
+    }
+    $menuTypeSelect .= '</select>' . LB;
+
+    // build group select
+
+    $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
+    $usergroups = SEC_getUserGroups($rootUser);
+    $usergroups[$LANG_ST01['non-logged-in']] = 998;
+    ksort($usergroups);
+    $group_select .= '<select id="group" name="group">' . LB;
+    for ($i = 0; $i < count($usergroups); $i++) {
+        $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
+        if ( $usergroups[key($usergroups)] == $stMenu[$menu_id]['group_id']) {
+            $group_select .= ' selected="selected"';
+        }
+        $group_select .= '>' . key($usergroups) . '</option>' . LB;
+        next($usergroups);
+    }
+    $group_select .= '</select>' . LB;
+
 
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
     $T->set_file( array( 'admin' => 'menuconfig.thtml'));
 
     $T->set_var(array(
+        'group_select'      => $group_select,
+        'menutype_select'   => $menuTypeSelect,
+        'menuactive'        => $stMenu[$menu_id]['active'] == 1 ? ' checked="checked"' : ' ',
         'site_admin_url'    => $_CONF['site_admin_url'],
         'site_url'          => $_CONF['site_url'],
         'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
@@ -1058,74 +1138,7 @@ function ST_menuConfig( $mid ) {
     $T->parse('output', 'admin');
 
     $retval .= $T->finish($T->get_var('output'));
-    return $retval;
-}
-
-
-function ST_menuConfig2( $mid ) {
-    global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_ST00, $LANG_ST01,
-           $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION;
-
-    $retval = '';
-
-    foreach ($stMenu[$mid]['config'] AS $name => $value ) {
-        $menuConfig[$name] = $value;
-    }
-
-    $sql = "SELECT * FROM {$_TABLES['st_menu_config']} WHERE menu_id=" . $mid;
-    $result = DB_query($sql);
-    list($cid,$menu_id,$tmbg,$tmh,$tmt,$tmth,$smth,$smbg,$smh,$sms,$gorc,$bgimage,$hoverimage,$parentimage,$alignment,$enabled) = DB_fetchArray($result);
-
-    $tmbgRGB    = '[' . ST_hexrgb($tmbg,'r') . ',' . ST_hexrgb($tmbg,'g') . ',' . ST_hexrgb($tmbg,'b') . ']';
-    $tmhRGB     = '[' . ST_hexrgb($tmh,'r')  . ',' . ST_hexrgb($tmh,'g')  . ',' . ST_hexrgb($tmh,'b')  . ']';
-    $tmtRGB     = '[' . ST_hexrgb($tmt,'r')  . ',' . ST_hexrgb($tmt,'g')  . ',' . ST_hexrgb($tmt,'b')  . ']';
-    $tmthRGB    = '[' . ST_hexrgb($tmth,'r') . ',' . ST_hexrgb($tmth,'g') . ',' . ST_hexrgb($tmth,'b') . ']';
-    $smthRGB    = '[' . ST_hexrgb($smth,'r') . ',' . ST_hexrgb($smth,'g') . ',' . ST_hexrgb($smth,'b') . ']';
-    $smbgRGB    = '[' . ST_hexrgb($smbg,'r') . ',' . ST_hexrgb($smbg,'g') . ',' . ST_hexrgb($smbg,'b') . ']';
-    $smhRGB     = '[' . ST_hexrgb($smh,'r')  . ',' . ST_hexrgb($smh,'g')  . ',' . ST_hexrgb($smh,'b')  . ']';
-    $smsRGB     = '[' . ST_hexrgb($sms,'r')  . ',' . ST_hexrgb($sms,'g')  . ',' . ST_hexrgb($sms,'b')  . ']';
-
-    $menuenabled_check = ($enabled == 1 ? ' checked="checked"' : '');
-    $alignment_left_checked  = ($alignment == 1 ? ' checked="checked"' : '');
-    $alignment_right_checked = ($alignment == 0 ? ' checked="checked"' : '');
-
-    $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
-    $T->set_file( array( 'admin' => 'config.thtml'));
-
-    $T->set_var(array(
-        'site_admin_url'    => $_CONF['site_admin_url'],
-        'site_url'          => $_CONF['site_url'],
-        'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
-        'menu_id'           => $mid,
-        'tmbgcolor'         => $tmbg,
-        'tmbgcolorrgb'      => $tmbgRGB,
-        'tmhcolor'          => $tmh,
-        'tmhcolorrgb'       => $tmhRGB,
-        'tmtcolor'          => $tmt,
-        'tmtcolorrgb'       => $tmtRGB,
-        'tmthcolor'         => $tmth,
-        'tmthcolorrgb'      => $tmthRGB,
-        'smthcolor'         => $smth,
-        'smthcolorrgb'      => $smthRGB,
-        'smbgcolor'         => $smbg,
-        'smbgcolorrgb'      => $smbgRGB,
-        'smhcolor'          => $smh,
-        'smhcolorrgb'       => $smhRGB,
-        'smscolor'          => $sms,
-        'smscolorrgb'       => $smsRGB,
-        'enabled'           => ($enabled == 1 ? ' checked="checked"' : ''),
-        'graphics_selected' => ($gorc == 1 ? ' checked="checked"' : ''),
-        'colors_selected'   => ($gorc == 0 ? ' checked="checked"' : ''),
-        'menu_bg_filename'  => $bgimage,
-        'menu_hover_filename' => $hoverimage,
-        'menu_parent_filename' => $parentimage,
-        'alignment_left_checked'    => $alignment_left_checked,
-        'alignment_right_checked'   => $alignment_right_checked,
-        'xhtml'             => XHTML,
-    ));
-    $T->parse('output', 'admin');
-
-    $retval .= $T->finish($T->get_var('output'));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -1147,11 +1160,18 @@ function ST_saveMenuConfig($menu_id=0) {
     $mc['submenu_hover_bg_color']     = COM_applyFilter($_POST['smhbg_sample']);
     $mc['submenu_highlight_color']    = COM_applyFilter($_POST['smh_sample']);
     $mc['submenu_shadow_color']       = COM_applyFilter($_POST['sms_sample']);
-    //$menu_bg_filename
-    //$menu_hover_filename
-    //$menu_parent_filename
     $mc['menu_alignment']             = isset($_POST['malign']) ? COM_applyFilter($_POST['malign'],true) : 0;
     $mc['use_images']                 = isset($_POST['gorc']) ? COM_applyFilter($_POST['gorc'],true) : 0;
+
+    $menutype   = COM_applyFilter($_POST['menutype'],true);
+    $menuactive = COM_applyFilter($_POST['menuactive'],true);
+    $menugroup  = COM_applyFilter($_POST['group'],true);
+
+    $menuname   = addslashes($stMenu[$menu_id]['menu_name']);
+
+    $sqlFieldList  = 'id,menu_name,menu_type,menu_active,group_id';
+    $sqlDataValues = "$menu_id,'$menuname',$menutype,$menuactive,$menugroup";
+    DB_save($_TABLES['st_menus'], $sqlFieldList, $sqlDataValues);
 
     foreach ($mc AS $name => $value) {
         DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'$name','$value'");
@@ -1259,7 +1279,8 @@ function ST_saveMenuConfig($menu_id=0) {
     }
     CACHE_remove_instance('stmenu');
     CACHE_remove_instance('css');
-
+    $randID = rand();
+    DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
     return;
 }
 
@@ -1323,7 +1344,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             $content = ST_displayTree( $menu_id );
             break;
         case 'new' :
-            $menu = COM_applyFilter($_POST['menuid'],true);
+            $menu = COM_applyFilter($_GET['menuid'],true);
             $content = ST_createElement ( $menu );
             break;
         case 'move' :

@@ -20,15 +20,14 @@
 		<!-- start of gl_menu -->
 
 			{!if st_hmenu}
-            <div id="gl_moomenu1">
-				{st_hmenu}
+              {st_hmenu}
 			{!else}
         <div id="gl_moomenu">
 			<ul class="gl_moomenu">
 				{menu_elements}
 			</ul>
+	    </div>
 			{!endif}
-		</div> <!-- end of gl_menu -->
 
         <div id="gl_wrapper">
             <div id="{centercolumn}">

@@ -563,21 +563,28 @@ function hsv(a){
 
 -->
 </script>
-<div class="plugin">
 
-<span>
-<a href="{site_admin_url}/plugins/sitetailor/index.php"><img style="vertical-align:middle;padding-right:10px;float:left;" src="{site_admin_url}/plugins/sitetailor/images/sitetailor.png" alt=""{xhtml}></a>
-</span>
-<h1 style="float:left">{birdseed}</h1>
-<div style="clear:both;"></div>
-
-
-  <div class="pluginCellTitle" style="padding:5px;">
-    {menu_name} - {$LANG_ST01[configuration]}
-  </div>
     <div class="glfform">
+
+
     <form method="post" action="{form_action}" id="mbconfig" enctype="multipart/form-data" >
     <input type="hidden" name="menu_id" id="menu_id" value="{menu_id}"{xhtml}>
+
+<h1 style="margin:9px;">Menu Properties for {menu_name}</h1>
+
+      <div>
+        <label for="menutype">{$LANG_ST01[menu_type]}:</label>
+        {menutype_select}
+      </div>
+      <div>
+        <label for="menuactive">{$LANG_ST01[active]}:</label>
+        <input type="checkbox" id="menuactive" name="menuactive" value="1"{menuactive}{xhtml}>
+      </div>
+      <div>
+        <label for="group">{$LANG_ST01[permission]}:</label>
+        {group_select}
+      </div>
+
 
 	  <h1 style="margin:9px;display:{menu_alignment_show};">{$LANG_ST01[menu_alignment]}</h1>
       <div style="display:{menu_alignment_show};">
@@ -669,21 +676,21 @@ function hsv(a){
         {$LANG_ST01[colors]}:&nbsp;<input type="radio" name="gorc" value="0" {colors_selected}{xhtml}>
       </div>
 
-      <div style="display:{use_images_show};">
+      <div style="display:{menu_bg_filename_show};">
         <label>{$LANG_ST01[menu_bg_image]}:</label>
         <input type="file" id="bgimg" name="bgimg" size="20" value=""{xhtml}>
         &nbsp;{$LANG_ST01[currently]}:
 		&nbsp;<img src="{site_url}/images/menu/{menu_bg_filename}" width="27" height="27" style="vertical-align:middle;border:none;" alt="" {xhtml}>
       </div>
 
-      <div style="height:27px;display:{use_images_show};">
+      <div style="height:27px;display:{menu_hover_filename_show};">
         <label>{$LANG_ST01[menu_hover_image]}:</label>
         <input type="file" id="hvimg" name="hvimg" size="20" value=""{xhtml}>
         &nbsp;{$LANG_ST01[currently]}:
 		&nbsp;<img src="{site_url}/images/menu/{menu_hover_filename}" width="27" height="27" style="vertical-align:middle;border:none;" alt="" {xhtml}>
       </div>
 
-      <div style="display:{use_images_show};">
+      <div style="display:{menu_parent_filename_show};">
         <label>{$LANG_ST01[parent_item_image]}:</label>
         <input type="file" id="piimg" name="piimg" size="20" value=""{xhtml}>
         &nbsp;{$LANG_ST01[currently]}:&nbsp;<img id="cpiimage" src="{site_url}/images/menu/{menu_parent_filename}" width="12" height="12" style="vertical-align:middle;border:none;" alt="" {xhtml}>
@@ -697,4 +704,3 @@ function hsv(a){
       </div>
     </form>
   </div>
-</div>

@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Implemented js.php / css.php to consolidate all CSS and JS (Mark)
+- Forum to always use HTML filter for html posts (Mark)
+- New option for static pages - include / exclude from search (Mark)
 - Several RFI security improvements throughout (Mark)
 - Updated Site Tailor to v2.0.0 - Ability to create multiple menus (Mark)
 - Search engine enhancements (Mark)
