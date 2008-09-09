@@ -375,8 +375,8 @@ function plugin_initconfig_forum()
                 0, 2, 0, 90, true, 'forum');
         $c->add('use_censor', $_FF_DEFAULT['use_censor'], 'select',
                 0, 2, 0, 100, true, 'forum');
-        $c->add('use_glfilter', $_FF_DEFAULT['use_glfilter'], 'select',
-                0, 2, 0, 110, true, 'forum');
+//        $c->add('use_glfilter', $_FF_DEFAULT['use_glfilter'], 'select',
+//                0, 2, 0, 110, true, 'forum');
         $c->add('use_geshi', $_FF_DEFAULT['use_geshi'], 'select',
                 0, 2, 0, 120, true, 'forum');
         $c->add('use_spamx_filter', $_FF_DEFAULT['use_spamx_filter'], 'select',

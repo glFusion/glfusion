@@ -74,6 +74,8 @@ if (!isset($CONF_FORUM['registration_required'])) {
         $CONF_FORUM = array_merge($_FF_FORUM, $CONF_FORUM);
     }
 
+    $CONF_FORUM['use_glfilter'] = 1; // always use the filter...
+
     // How many messages to show on the Most Popular page
     $CONF_FORUM['popular_limit'] = '20';
     // How many lines to show on one page in the search results
