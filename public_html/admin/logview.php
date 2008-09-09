@@ -103,9 +103,9 @@ if ( isset($_POST['clearlog']) ) {
     $_POST['viewlog'] = 1;
 }
 if ( isset($_POST['viewlog']) ) {
-    $retval .= '<hr'.XHTML.'><p><strong>'.$LANG_LOGVIEW['log_file'].': ' . $log . '</strong></p><pre>';
+    $retval .= '<div style="overflow:scroll;"><hr'.XHTML.'><p><strong>'.$LANG_LOGVIEW['log_file'].': ' . $log . '</strong></p><pre>';
     $retval .= htmlentities(implode('', file($_CONF['path_log'] . $log)));
-    $retval .= "</pre>";
+    $retval .= "</pre></div>";
 }
 
 $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
