@@ -884,16 +884,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     ));
     $header->set_var('xhtml',XHTML);
 
-    $header->set_var('mootools',
-            '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools/mootools-release-1.11.packed.js"></script>' . LB);
-
-	//Enables use of mootips
-    $tips = new Template( $_CONF['path_layout'] );
-    $tips->set_file( array(
-        'tips'        => 'gltips.thtml',
-    ));
-    $tips->parse( 'tips_js', 'tips' );
-    $header->set_var('gl_mootips',$tips->finish( $tips->get_var( 'tips_js' )));
+    $cacheID = DB_getItem($_TABLES['vars'],'value','name="cacheid"');
+    $header->set_var('cacheid',$cacheID);
 
     // give the theme a chance to load stuff....
 
@@ -903,16 +895,6 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     {
         $function( $header );
     }
-
-    /* ************ BEGIN Site Tailor Menu Integration *************** */
-
-    // We can have many menus defined, so we need to cycle through each one
-    // and build the stylesheet for each.
-
-    st_getStyles( $header );
-
-
-    /* ************ END Site Tailor Menu Integration ***************** */
 
     // get topic if not on home page
     if( !isset( $_GET['topic'] )) {
@@ -1248,6 +1230,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
      * New Logo Processing
      */
 
+/*
+ * Logo processing - we need to hook to Site Tailor, if not available
+ * just do the normal old logo management
+ */
+
+
     if ( $_ST_CONF['use_graphic_logo'] == 1 && file_exists($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']) ) {
         $L = new Template( $_CONF['path_layout'] );
         $L->set_file( array(
@@ -1292,20 +1280,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $theme->set_var('logo_block',$L->finish($L->get_var('output')));
     }
 
+// ************ end of logo processing, all of the above into ST
+
     $theme->set_var( 'site_logo', $_CONF['layout_url']
                                    . '/images/logo.' . $_IMAGE_TYPE );
 
     $theme->set_var( 'charset', COM_getCharset());
-
-    // Now add variables for buttons like e.g. those used by the Yahoo theme
-    $theme->set_var( 'button_home', $LANG_BUTTONS[1] );
-    $theme->set_var( 'button_contact', $LANG_BUTTONS[2] );
-    $theme->set_var( 'button_contribute', $LANG_BUTTONS[3] );
-    $theme->set_var( 'button_sitestats', $LANG_BUTTONS[7] );
-    $theme->set_var( 'button_personalize', $LANG_BUTTONS[8] );
-    $theme->set_var( 'button_search', $LANG_BUTTONS[9] );
-    $theme->set_var( 'button_advsearch', $LANG_BUTTONS[10] );
-    $theme->set_var( 'button_directory', $LANG_BUTTONS[11] );
 
     $theme->set_var( array (
         'lang_login'        => $LANG01[58],
@@ -1314,11 +1294,16 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'lang_newuser'      => $LANG12[3],
     ));
 
-    // build the site tailor menus
+// *** consider making this more or a plugin call
 
-    $theme->set_var('st_hmenu',st_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
-    $theme->set_var('st_footer_menu',st_getMenu('footer','st-fmenu','','','','st-f-last'));
-    $theme->set_var('st_header_menu',st_getMenu('header','','',''));
+    // build the site tailor menus
+    if ( function_exists('st_getMenu') ) {
+        $theme->set_var('st_hmenu',st_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
+        $theme->set_var('st_footer_menu',st_getMenu('footer','st-fmenu','','','','st-f-last'));
+        $theme->set_var('st_header_menu',st_getMenu('header','','',''));
+    }
+
+// *** end of menu integration
 
     // Get plugin menu options
     $plugin_menu = PLG_getMenuItems();

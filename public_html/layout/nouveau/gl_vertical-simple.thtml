@@ -1,4 +1,4 @@
-<style type="text/css">
+
 .st-vmenu{menu_id} ul{
 text-align:left; /* options are left - center - right */
 color:{main_menu_text_color};
@@ -14,4 +14,3 @@ text-decoration:none;
 color:{main_menu_hover_text_color};
 text-decoration:underline;
 }
-</style>

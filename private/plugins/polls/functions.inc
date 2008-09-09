@@ -1096,15 +1096,13 @@ function plugin_templatesetvars_polls ($templatename, &$template)
     }
 }
 
-function plugin_getheadercode_polls()
-{
+function plugin_getheadercss_polls() {
     global $_CONF;
 
-    $str = null;
-    $str = '<link rel="stylesheet" type="text/css" href="'
-        . $_CONF['site_url'] . '/polls/style.css"' . XHTML . '>';
+    $styles = array();
+    $styles[] = $_CONF['path_html'] . '/polls/style.css';
 
-    return $str;
+	return ($styles);
 }
 
 /**

@@ -1,4 +1,4 @@
-<style type="text/css">
+
 #gl_moomenu-vert-l{menu_id},
 #gl_moomenu-vert-r{menu_id} {
 	margin:0 auto;
@@ -139,4 +139,3 @@ li,
 #gl_moomenu-vert-r{menu_id} ul a.parent-r{menu_id}:hover {
 	background:{submenu_hover_bg_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 5% 50%; /* right sub menu hover background color - add an ul next to the ul to not have the image display on the right main menu */
 }
-</style>

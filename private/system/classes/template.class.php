@@ -1800,6 +1800,19 @@ function CACHE_check_instance($iid, $bypass_lang = false)
     return false;
 }
 
+function CACHE_instance_filename($iid,$bypass_lang = false)
+{
+    global $TEMPLATE_OPTIONS, $_CONF;
+    $path_cache = $TEMPLATE_OPTIONS['path_cache'];
+    if (!$bypass_lang && $TEMPLATE_OPTIONS['cache_by_language']) {
+        $path_cache .= $_CONF['language'] . '/';
+    }
+    $iid = str_replace(Array('..', '/', '\\', ':'), '', $iid);
+    $filename = $path_cache.'instance__'.$iid.'.php';
+
+    return $filename;
+}
+
 /******************************************************************************
  * Returns the time when the referenced instance was generated.
  *

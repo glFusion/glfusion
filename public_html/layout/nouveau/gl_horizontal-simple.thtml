@@ -1,4 +1,6 @@
-<style type="text/css">
+.st-fmenu{menu_id} {
+text-align:center;
+}
 .st-fmenu{menu_id} ul{
 margin:1em;
 padding:0;
@@ -26,4 +28,3 @@ text-decoration:none;
 color:{main_menu_hover_text_color};
 text-decoration:underline;
 }
-</style>

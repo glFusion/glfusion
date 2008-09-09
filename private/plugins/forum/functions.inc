@@ -436,10 +436,17 @@ function plugin_showstats_forum($showsitestats)
     return $retval;
 }
 
+function plugin_getheaderjs_forum() {
+    global $_CONF;
+
+    $js = array();
+    $js[] = $_CONF['path'] . 'plugins/forum/js/mootips.js';
+    return($js);
+}
 
 function plugin_getheadercode_forum() {
     global $_CONF, $CONF_FORUM;
-
+/*
     $gf_header = '';
 
     $gf_header .= '<script type="text/javascript">' . LB;
@@ -448,6 +455,8 @@ function plugin_getheadercode_forum() {
     $gf_header .= '	});' . LB;
     $gf_header .= '</script>' . LB;
     return $gf_header;
+*/
+return '';
 }
 
 

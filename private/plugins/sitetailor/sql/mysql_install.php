@@ -75,7 +75,7 @@ $_SQL['st_menu_elements'] = "CREATE TABLE {$_TABLES['st_menu_elements']} (
 );";
 
 // default st configuration
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_config']} (`config_name`, `config_value`) VALUES ('use_graphic_logo','1'),('display_site_slogan','1'),('logo_name','logo1234.png');";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_config']} (`config_name`, `config_value`) VALUES ('use_graphic_logo','0'),('display_site_slogan','1'),('logo_name','logo1234.png');";
 
 // default menus
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus']} VALUES(1, 'navigation', 1, 1, 2);";
@@ -91,8 +91,8 @@ $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'submenu_hover_text_color', '#679EF1');";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'submenu_background_color', '#151515');";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'submenu_hover_bg_color', '#333333');";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'submenu_highlight_color', '#151515');";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'submenu_shadow_color', '#151515');";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'submenu_highlight_color', '#333333');";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'submenu_shadow_color', '#000000');";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'use_images', '1');";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'menu_bg_filename', 'menu_bg.gif');";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(1, 'menu_hover_filename', 'menu_hover_bg.gif');";
@@ -128,7 +128,7 @@ $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'use_images', '1');";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_bg_filename', 'menu_bg.gif');";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_hover_filename', 'menu_hover_bg.gif');";
-$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_parent_filename', 'menu_parent.png');";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_parent_filename', 'vmenu_parent.gif');";
 
 // default navigation menu elements
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES (0,1,'Home',2,'0',10,1,'','',2);";

@@ -236,43 +236,68 @@ function plugin_getmenuitems_mediagallery() {
     return $menuitems;
 }
 
+function plugin_getheadercss_mediagallery() {
+    global $_CONF, $_MG_CONF, $mgLightBox, $glversion,$swfjsinclude,$themeStyle;
+
+    $styles = array();
+
+    if ( $_MG_CONF['template_path'] == $_CONF['path'] . 'plugins/mediagallery/templates' ) {
+	    $styleFile = $_MG_CONF['path_html'] . 'style.css';
+	} else {
+		$styleFile = $_CONF['layout_path'] . '/mediagallery/style.css';
+	}
+	$styles[] = $styleFile;
+
+    // check for random skin css
+    $cacheInstance = 'mgrs' . $_MG_CONF['random_skin'] . '__' . $_CONF['theme'];
+    $retval = CACHE_check_instance($cacheInstance, 0);
+    if ( $retval !== false) {
+        $styles[] = CACHE_instance_filename($cacheInstance,0);
+    } else {
+        require_once($_MG_CONF['path_html'] . 'classFrame.php');
+        $nFrame = new mgFrame();
+        $nFrame->constructor( $_MG_CONF['random_skin'] );
+        $fCSS= $nFrame->getCSS();
+        CACHE_create_instance($cacheInstance, $fCSS, 0);
+        $styles[] = CACHE_instance_filename($cacheInstance,0);
+    }
+
+	return ($styles);
+}
+
+function plugin_getheaderjs_mediagallery() {
+    global $_CONF, $_MG_CONF, $mgLightBox, $glversion,$swfjsinclude,$themeStyle;
+
+    $js = array();
+
+    $js[] = $_MG_CONF['path_html'] . 'js/swfobject.js';
+    $js[] = $_MG_CONF['path_html'] . 'js/mediagallery.js';
+    if ( $_MG_CONF['disable_lightbox'] != true ) {
+        $js[] = $_MG_CONF['path_html'] . 'js/slimbox.js';
+    }
+    $js[] = $_MG_CONF['path_html'] . 'js/rating.js';
+    $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
+
+	return ($js);
+}
+
+function plugin_getglobaljs_mediagallery() {
+    global $_MG_CONF, $_CONF;
+
+    $globalJS = array();
+    $globalJS['mgBaseURL'] = $_MG_CONF['site_url'];
+
+    return($globalJS);
+}
+
 function plugin_getheadercode_mediagallery() {
     global $_CONF, $_MG_CONF, $mgLightBox, $glversion,$swfjsinclude,$themeStyle;
 
     $mg_header = '';
 
-    //
-    // Check to see if the template path is using the plugins/ directory, if yes,
-    // we must point to the stylesheet in public_html/mediagallery/
-    //
-    if ( $_MG_CONF['template_path'] == $_CONF['path'] . 'plugins/mediagallery/templates' ) {
-	    $styleFile = $_MG_CONF['site_url'] . '/style.css';
-	} else {
-		$styleFile = $_CONF['layout_url'] . '/mediagallery/style.css';
-	}
-
-    $mg_header .= LB . "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $styleFile . "?ver=20080331\"" . XHTML . ">" . LB;
     if ( $themeStyle != '' ) {
         $mg_header .= $themeStyle;
     }
-    $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/swfobject.js?ver=20"></script>' . LB;
-    $mg_header .= '<script type="text/javascript">var mgBaseURL = \'' . $_MG_CONF['site_url'] . '\'</script>' . LB;
-    $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/mediagallery.js?ver=2"></script>' . LB;
-
-    if ( $_MG_CONF['disable_lightbox'] != true ) {
-        $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/slimbox.js?ver=2"></script>' . LB;
-    }
-    $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/rating.js?ver=4"></script>' . LB;
-    $mg_header .= '<script type="text/javascript" src="' . $_MG_CONF['site_url'] . '/js/slideshow.js?ver=2"></script>' . LB;
-
-    $swfjsinclude = 1;
-
-    require_once($_MG_CONF['path_html'] . 'classFrame.php');
-    $nFrame = new mgFrame();
-    $nFrame->constructor( $_MG_CONF['random_skin'] );
-    $fCSS= $nFrame->getCSS();
-    $mg_header .= $fCSS;
-
     return $mg_header;
 }
 

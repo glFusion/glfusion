@@ -103,14 +103,14 @@
 }
 .loading {
 	height: 30px;
-	background: url('images/working.gif') 50% 50% no-repeat;
+	background: url('mediagallery/images/working.gif') 50% 50% no-repeat;
 }
 .loadingsm {
 	height: 10px;
 	line-height:10px;
 	padding:0;
 	margin:0;
-	background: url('images/working.gif') 50% 50% no-repeat;
+	background: url('mediagallery/images/working.gif') 50% 50% no-repeat;
 }
 .unit-rating { /* the UL */
 	list-style:none;
@@ -118,7 +118,7 @@
 	padding:0px;
 	height: 30px;
 	position: relative;
-	background: url('images/starrating.png') top left repeat-x;
+	background: url('mediagallery/images/starrating.png') top left repeat-x;
 }
 .unit-rating li{
     text-indent: -90000px;
@@ -140,7 +140,7 @@
 	padding: 0px;
 }
 .unit-rating li a:hover{
-	background: url('images/starrating.png') left center;
+	background: url('mediagallery/images/starrating.png') left center;
 	z-index: 2;
 	left: 0px;
 }
@@ -165,7 +165,7 @@
 .unit-rating a.r10-unit{left: 270px;}
 .unit-rating a.r10-unit:hover{width: 300px;}
 .unit-rating li.current-rating {
-	background: url('images/starrating.png') left bottom;
+	background: url('mediagallery/images/starrating.png') left bottom;
 	position: absolute;
 	height: 30px;
 	display: block;
@@ -182,7 +182,7 @@
 	padding:0px;
 	height: 10px;
 	position: relative;
-	background: url('images/star_small.png') top left repeat-x;
+	background: url('mediagallery/images/star_small.png') top left repeat-x;
 }
 .small-unit-rating li{
     text-indent: -30000px;
@@ -204,7 +204,7 @@
 	padding: 0px;
 }
 .small-unit-rating li a:hover{
-	background: url('images/star_small.png') left center;
+	background: url('mediagallery/images/star_small.png') left center;
 	z-index: 2;
 	left: 0px;
 	line-height:10px
@@ -230,7 +230,7 @@
 .small-unit-rating a.r10-unit{left: 90px;}
 .small-unit-rating a.r10-unit:hover{width: 100px;}
 .small-unit-rating li.current-rating {
-	background: url('images/star_small.png') left bottom;
+	background: url('mediagallery/images/star_small.png') left bottom;
 	position: absolute;
 	height: 10px;
 	display: block;
@@ -312,7 +312,7 @@
 }
 
 .lbLoading {
-  background: #fff url(images/loading.gif) no-repeat center;
+  background: #fff url(mediagallery/images/loading.gif) no-repeat center;
 }
 
 #lbImage {
@@ -333,7 +333,7 @@
 }
 
 #lbPrevLink:hover {
-  background: transparent url(images/prevlabel.gif) no-repeat 0% 15%;
+  background: transparent url(mediagallery/images/prevlabel.gif) no-repeat 0% 15%;
 }
 
 #lbNextLink {
@@ -341,7 +341,7 @@
 }
 
 #lbNextLink:hover {
-  background: transparent url(images/nextlabel.gif) no-repeat 100% 15%;
+  background: transparent url(mediagallery/images/nextlabel.gif) no-repeat 100% 15%;
 }
 
 #lbBottom {
@@ -359,7 +359,7 @@
   float: right;
   width: 66px;
   height: 22px;
-  background: transparent url(images/closelabel.gif) no-repeat center;
+  background: transparent url(mediagallery/images/closelabel.gif) no-repeat center;
   margin: 5px 0;
 }
 

@@ -1,0 +1,14 @@
+window.addEvent('load', function() {
+	new moomenu($E('ul.gl_moomenu{menu_id}'), {
+		bgiframe: false,
+		delay: 50,
+		animate: {
+			props: ['opacity', 'width', 'height'],
+			opts: {
+				duration:300,
+				fps: 100,
+				transition: Fx.Transitions.Quad.easeOut
+			}
+		}
+	});
+});

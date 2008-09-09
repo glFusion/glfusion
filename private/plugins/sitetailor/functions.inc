@@ -52,16 +52,96 @@ require_once($_CONF['path'] . 'plugins/sitetailor/classes/classMenuElement.php')
 
 global $stMenu;
 
+function plugin_enablestatechange_sitetailor() {
+    global $_TABLES;
+    CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('css');
+    $randID = rand();
+    DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
+}
 
-function plugin_getheadercode_sitetailor() {
-    global $_CONF, $_ST_CONF;
+function plugin_getheadercss_sitetailor() {
+    global $_CONF, $_ST_CONF, $stMenu;
 
-    $st_header = '';
+    $st_header = array();
+    $st_header[] = $_CONF['path_html'] . 'admin/plugins/sitetailor/css/mooRainbow.css';
 
-    $st_header .= LB . "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $_CONF['site_admin_url'] . '/plugins/sitetailor/css/mooRainbow.css?ver=20080110"' . XHTML . ">" . LB;
+    if ( is_array($stMenu) ) {
+        foreach ($stMenu AS $menu) {
+            if ( $menu['active'] == 1 ) {
+                $cacheInstance = 'stmenu_css_' . $menu['menu_id'] . '__' . $_CONF['theme'];
+                $retval = CACHE_check_instance($cacheInstance, 0);
+                if ( $retval ) {
+                    $st_header[] = CACHE_instance_filename($cacheInstance,0);
+                } else {
+                    $ms = new Template( $_CONF['path_layout'] );
+                    switch ($menu['menu_type']) {
+                        case 1 :    // horizontal with multi-level
+                            $stylefile = 'gl_horizontal-cascading.thtml';
+                            break;
+                        case 2 :    // horizontal with no cascading menus
+                            $stylefile = 'gl_horizontal-simple.thtml';
+                            break;
+                        case 3 :
+                            $stylefile = 'gl_vertical-cascading.thtml';
+                            break;
+                        case 4 :
+                            $stylefile = 'gl_vertical-simple.thtml';
+                            break;
+                        default :
+                            $stylefile = 'gl_horizontal-cascading.thtml';
+                            break;
+                    }
+                    $ms->set_file( array(
+                        'style'        => $stylefile,
+                    ));
+                    $ms->set_var('menu_id',$menu['menu_id']);
+                    if ( is_array($menu['config']) ) {
+                        foreach ($menu['config'] AS $name => $value ) {
+                            if ( $name == 'use_images' && $value == 0 ) {
+                                continue;
+                            }
+                            $ms->set_var($name,$value);
+                        }
+                    }
+                    $ms->parse ('output', 'style');
+                    $fCSS = $ms->finish ($ms->get_var('output'));
+                    CACHE_create_instance($cacheInstance, $fCSS, 0);
+                    $st_header[] = CACHE_instance_filename($cacheInstance,0);
+                }
+            }
+        }
+    }
     return $st_header;
 }
 
+function plugin_getheaderjs_sitetailor() {
+    global $_CONF, $_ST_CONF, $stMenu;
+
+    $st_js = array();
+
+    if ( is_array($stMenu) ) {
+        foreach ($stMenu AS $menu) {
+            if ( $menu['active'] == 1 && $menu['menu_type'] == 1) {
+                $cacheInstance = 'stmenu_js_' . $menu['menu_id'] . '__' . $_CONF['theme'];
+                $retval = CACHE_check_instance($cacheInstance, 0);
+                if ( $retval ) {
+                    $st_js[] = CACHE_instance_filename($cacheInstance,0);
+                } else {
+                    $ms = new Template( $_CONF['path_layout'] );
+                    $ms = new Template( $_CONF['path'] .'plugins/sitetailor/templates/');
+                    $ms->set_file('js','animate.thtml');
+                    $ms->set_var('menu_id',$menu['menu_id']);
+                    $ms->parse ('output', 'js');
+                    $js = $ms->finish ($ms->get_var('output'));
+                    CACHE_create_instance($cacheInstance, $js, 0);
+                    $st_js[] = CACHE_instance_filename($cacheInstance,0);
+                }
+            }
+        }
+    }
+    return $st_js;
+}
 
 /**
 * This will put an option for the plugin in the command and control block on moderation.php
