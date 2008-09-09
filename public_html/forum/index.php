@@ -477,7 +477,7 @@ if ($op == 'lastx') {
     $sql .= "FROM {$_TABLES['gf_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
     $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 ";
-    $sql .= "ORDER BY lastupdated DESC LIMIT {$CONF_FORUM['lastx_numposts']}";
+    $sql .= "ORDER BY lastupdated DESC LIMIT {$CONF_FORUM['show_last_post_count']}";
     $result = DB_query ($sql);
 
     $nrows = DB_numRows($result);
