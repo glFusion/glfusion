@@ -148,6 +148,8 @@ function form ($A, $error = false)
             $A['commentcode'])
         );
 
+        $sp_template->set_var('sp_search_checked',$A['sp_search'] == 1 ? ' checked="checked"' : '');
+
         $sp_template->set_var('lang_accessrights', $LANG_ACCESS['accessrights']);
         $sp_template->set_var('lang_owner', $LANG_ACCESS['owner']);
         $ownername = COM_getDisplayName ($A['owner_id']);
@@ -515,7 +517,7 @@ function submitstaticpage ($sp_id, $sp_uid, $sp_title, $sp_content, $sp_hits,
                            $owner_id, $group_id, $perm_owner, $perm_group,
                            $perm_members, $perm_anon, $sp_php, $sp_nf,
                            $sp_old_id, $sp_centerblock, $sp_help, $sp_tid,
-                           $sp_where, $sp_inblock, $postmode)
+                           $sp_where, $sp_inblock, $postmode,$sp_search)
 {
     global $_CONF, $_TABLES, $LANG12, $LANG_STATIC, $_SP_CONF;
 
@@ -545,7 +547,8 @@ function submitstaticpage ($sp_id, $sp_uid, $sp_title, $sp_content, $sp_hits,
                 'sp_tid' => $sp_tid,
                 'sp_where' => $sp_where,
                 'sp_inblock' => $sp_inblock,
-                'postmode' => $postmode
+                'postmode' => $postmode,
+                'sp_search' => $sp_search
                  );
 
     PLG_invokeService('staticpages', 'submit', $args, $retval, $svc_msg);
@@ -630,7 +633,8 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete']) && SEC_ch
             COM_applyFilter ($_POST['sp_old_id']), $_POST['sp_centerblock'],
             $sp_help, COM_applyFilter ($_POST['sp_tid']),
             COM_applyFilter ($_POST['sp_where'], true), $_POST['sp_inblock'],
-            COM_applyFilter ($_POST['postmode']));
+            COM_applyFilter ($_POST['postmode']),
+            COM_applyFilter ($_POST['sp_search']));
     } else {
         $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
     }
