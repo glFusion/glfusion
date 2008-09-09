@@ -36,6 +36,10 @@
             <td><input type="text" dir="ltr" name="sp_id" size="40" maxlength="40" value="{sp_id}"{xhtml}></td>
           </tr>
           <tr>
+            <td align="right">{$LANG_STATIC[search]}:</td>
+            <td><input type="checkbox" name="sp_search" id="sp_search" value="1"{sp_search_checked}{xhtml}></td>
+          </tr>
+          <tr>
             <td align="right">{lang_url}:</td>
             <td>{example_url}</td>
           </tr>

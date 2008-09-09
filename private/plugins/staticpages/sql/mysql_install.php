@@ -63,6 +63,7 @@ CREATE TABLE {$_TABLES['staticpage']} (
   sp_nf tinyint(1) unsigned default '0',
   sp_inblock tinyint(1) unsigned default '1',
   postmode varchar(16) NOT NULL default 'html',
+  sp_search tinyint(1) unsigned default '1',
   PRIMARY KEY  (sp_id),
   KEY staticpage_sp_uid (sp_uid),
   KEY staticpage_sp_date (sp_date),

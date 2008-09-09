@@ -137,7 +137,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $par_str = array('mode', 'sp_id', 'sp_old_id', 'sp_tid', 'sp_format',
                          'postmode');
         $par_num = array('sp_uid', 'sp_hits', 'owner_id', 'group_id',
-                         'sp_where', 'sp_php', 'commentcode');
+                         'sp_where', 'sp_php', 'commentcode','sp_search');
 
         foreach ($par_str as $str) {
             if (isset($args[$str])) {
@@ -176,6 +176,10 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
 
     if (($args['commentcode'] < -1) || ($args['commentcode'] > 1)) {
         $args['commentcode'] = $_CONF['comment_code'];
+    }
+
+    if ( $args['sp_search'] != 1 ) {
+        $args['sp_search'] = 0;
     }
 
     if ($args['gl_svc']) {
@@ -257,6 +261,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
     $sp_where = $args['sp_where'];
     $sp_inblock = $args['sp_inblock'];
     $postmode = $args['postmode'];
+    $sp_search = $args['sp_search'];
 
     if ($gl_edit && !empty($args['gl_etag'])) {
         // First load the original staticpage to check if it has been modified
@@ -358,10 +363,10 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         }
 
         DB_save ($_TABLES['staticpage'], 'sp_id,sp_uid,sp_title,sp_content,sp_date,sp_hits,sp_format,sp_onmenu,sp_label,commentcode,owner_id,group_id,'
-                .'perm_owner,perm_group,perm_members,perm_anon,sp_php,sp_nf,sp_centerblock,sp_help,sp_tid,sp_where,sp_inblock,postmode',
+                .'perm_owner,perm_group,perm_members,perm_anon,sp_php,sp_nf,sp_centerblock,sp_help,sp_tid,sp_where,sp_inblock,postmode,sp_search',
                 "'$sp_id',$sp_uid,'$sp_title','$sp_content',NOW(),$sp_hits,'$sp_format',$sp_onmenu,'$sp_label','$commentcode',$owner_id,$group_id,"
                         ."$perm_owner,$perm_group,$perm_members,$perm_anon,'$sp_php','$sp_nf',$sp_centerblock,'$sp_help','$sp_tid',$sp_where,"
-                        ."'$sp_inblock','$postmode'");
+                        ."'$sp_inblock','$postmode',$sp_search");
 
         if ($delete_old_page && !empty ($sp_old_id)) {
             DB_delete ($_TABLES['staticpage'], 'sp_id', $sp_old_id);

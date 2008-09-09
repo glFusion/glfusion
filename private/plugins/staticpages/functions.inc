@@ -577,7 +577,7 @@ function plugin_dopluginsearch_staticpages($query, $datestart, $dateend, $topic,
 
     $sql = "SELECT sp.sp_id AS id, sp.sp_title AS title, sp.sp_content AS description, UNIX_TIMESTAMP(sp.sp_date) AS date, sp.sp_uid AS uid, sp.sp_hits AS hits, CONCAT('/staticpages/index.php?page=', sp.sp_id) AS url ";
     $sql .= "FROM {$_TABLES['staticpage']} AS sp,{$_TABLES['users']} AS u ";
-    $sql .= "WHERE (sp.sp_uid = u.uid) AND (sp_php <> 1) ";
+    $sql .= "WHERE (sp.sp_uid = u.uid) AND (sp_php <> 1) AND (sp_search = 1) ";
     $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 'sp') . ' ';
 
     if (!empty($datestart) && !empty($dateend))
