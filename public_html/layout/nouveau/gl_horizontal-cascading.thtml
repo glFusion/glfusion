@@ -122,6 +122,7 @@
 #gl_moomenu{menu_id} li {
   float:{alignment};  /*Top Menu alignment*/
 }
+
 #gl_moomenu{menu_id} li:hover a,
 #gl_moomenu{menu_id} li.sfHover a,
 #gl_moomenu{menu_id} li:hover a:hover,
@@ -141,8 +142,8 @@
   border-top:1px solid {submenu_highlight_color};  /*Sub Menu Highlight*/
   border-bottom:1px solid {submenu_shadow_color};  /*Sub Menu Shadow*/
 }
-#gl_moomenu{menu_id} li li a.parent,
-#gl_moomenu{menu_id} li li a.parent:hover {
+#gl_moomenu{menu_id} li li a.parent{menu_id},
+#gl_moomenu{menu_id} li li a.parent{menu_id}:hover {
   background:transparent url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 95% 50%;
 }
 .gl_moomenu{menu_id} {float:{alignment};}
