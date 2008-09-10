@@ -169,6 +169,8 @@ $LANG_ST01 = array (
 	'reset'                 => 'Reset Form',
 	'defaults'              => 'Reset To Default Values',
 	'confirm_reset'         => 'This will reset the menu colors and graphics to the installation values. Are you sure you want to continue?',
+	'menu_properties'       => 'Menu Properties for',
+
 );
 
 $LANG_ST_MENU_TYPES = array(

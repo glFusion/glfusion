@@ -104,6 +104,11 @@ function plugin_getheadercss_sitetailor() {
                             $ms->set_var($name,$value);
                         }
                     }
+                    if ( $menu['config']['menu_alignment'] == 1 ) {
+                        $ms->set_var('alignment','left');
+                    } else {
+                        $ms->set_var('alignment','right');
+                    }
                     $ms->parse ('output', 'style');
                     $fCSS = $ms->finish ($ms->get_var('output'));
                     CACHE_create_instance($cacheInstance, $fCSS, 0);
@@ -438,65 +443,6 @@ function st_getImageFile($image) {
 	global $_CONF;
 
     return $_CONF['site_admin_url'] . '/plugins/sitetailor/images/' . $image;
-}
-
-function st_getStyles( &$template ) {
-    global $stMenu, $_CONF;
-
-    $menuStyles = '';
-
-    if ( is_array($stMenu) ) {
-        foreach ($stMenu AS $menu) {
-            if ( $menu['active'] == 1 ) {
-                /*
-                 * menu types 1 and 3 have animation
-                 */
-                if ($menu['menu_type'] == 1 || $menu['menu_type'] == 3 ) {
-                	//Fade in animation for the gl_moomenu
-                    $animate = new Template( $_CONF['path_layout'] );
-                    $animate->set_file( array(
-                        'menu'        => 'glmenu_animate.thtml',
-                    ));
-                    $animate->set_var('menu_id',$menu['menu_id']);
-                    $animate->parse( 'menu_js', 'menu' );
-                    $menuStyles .= $animate->finish( $animate->get_var( 'menu_js' ));
-                }
-                $ms = new Template( $_CONF['path_layout'] );
-                switch ($menu['menu_type']) {
-                    case 1 :    // horizontal with multi-level
-                        $stylefile = 'gl_horizontal-cascading.thtml';
-                        break;
-                    case 2 :    // horizontal with no cascading menus
-                        $stylefile = 'gl_horizontal-simple.thtml';
-                        break;
-                    case 3 :
-                        $stylefile = 'gl_vertical-cascading.thtml';
-                        break;
-                    case 4 :
-                        $stylefile = 'gl_vertical-simple.thtml';
-                        break;
-                    default :
-                        $stylefile = 'gl_horizontal-cascading.thtml';
-                        break;
-                }
-                $ms->set_file( array(
-                    'style'        => $stylefile,
-                ));
-                $ms->set_var('menu_id',$menu['menu_id']);
-                if ( is_array($menu['config']) ) {
-                    foreach ($menu['config'] AS $name => $value ) {
-                        if ( $name == 'use_images' && $value == 0 ) {
-                            continue;
-                        }
-                        $ms->set_var($name,$value);
-                    }
-                }
-                $ms->parse ('output', 'style');
-                $menuStyles .= $ms->finish ($ms->get_var('output'));
-            }
-        }
-        $template->set_var('menu_styles',$menuStyles);
-    }
 }
 
 function _stPLG_getMenuItems()
