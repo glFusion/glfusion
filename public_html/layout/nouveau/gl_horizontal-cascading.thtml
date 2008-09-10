@@ -57,7 +57,7 @@
 .gl_moomenu{menu_id} {
   line-height:2.3em;
   float:left;
-/*  margin-bottom:1.5em; */
+  margin-bottom:1.5em;
   position:relative;
 }
 .gl_moomenu{menu_id} ul {
@@ -79,14 +79,14 @@
   width:14.6em;
   z-index:50;
 }
-.gl_moomenu{menu_id} li:hover ul,.gl_moomenu li.sfHover ul {
+.gl_moomenu{menu_id} li:hover ul,.gl_moomenu{menu_id} li.sfHover ul {
   left:-1px;
   top:2.2em;
 }
-.gl_moomenu{menu_id} li:hover li ul,.gl_moomenu li.sfHover li ul,.gl_moomenu li li:hover li ul,.gl_moomenu li li.sfHover li ul,.gl_moomenu li li li:hover li ul,.gl_moomenu li li li.sfHover li ul {
+.gl_moomenu{menu_id} li:hover li ul,.gl_moomenu{menu_id} li.sfHover li ul,.gl_moomenu{menu_id} li li:hover li ul,.gl_moomenu{menu_id} li li.sfHover li ul,.gl_moomenu{menu_id} li li li:hover li ul,.gl_moomenu{menu_id} li li li.sfHover li ul {
   top:-999em;
 }
-.gl_moomenu{menu_id} li li:hover ul,.gl_moomenu li li.sfHover ul,.gl_moomenu li li li:hover ul,.gl_moomenu li li li.sfHover ul,.gl_moomenu li li li li:hover ul,.gl_moomenu li li li li.sfHover ul {
+.gl_moomenu{menu_id} li li:hover ul,.gl_moomenu{menu_id} li li.sfHover ul,.gl_moomenu{menu_id} li li li:hover ul,.gl_moomenu{menu_id} li li li.sfHover ul,.gl_moomenu{menu_id} li li li li:hover ul,.gl_moomenu{menu_id} li li li li.sfHover ul {
   left:14.65em;
   top:-1px;
   z-index:50;
