@@ -352,7 +352,9 @@ class mgAlbum {
         } else {
             $pid = $MG_albums[$topParent]->parent;
         }
-
+        if (!isset($MG_albums[$pid]->id) ) {
+            return -1;
+        }
         $children = $MG_albums[$pid]->getChildren();
         $rcount = count($children);
 

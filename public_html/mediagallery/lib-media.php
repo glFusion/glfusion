@@ -1356,7 +1356,9 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . $mediaObject . '"');
 
-    if ( $MG_albums[$aid]->access == 0 ) {
+    $pid = $MG_albums[$aid]->pid;
+    $aOffset = $MG_albums[$aid]->getOffset();
+    if ( $aOffset == -1 || $MG_albums[$aid]->access == 0 ) {
         $retval = COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
                  . '<br />' . $LANG_MG00['access_denied_msg']
                  . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
@@ -1488,7 +1490,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         $disp = 'disp';
     }
 
-    $aOffset = $MG_albums[$aid]->getOffset();
+//    $aOffset = $MG_albums[$aid]->getOffset();
     $aPage = intval(($aOffset)  / ($_MG_CONF['album_display_columns'] * $_MG_CONF['album_display_rows'])) + 1;
     if ( $sortID > 0 ) {
         $birdseed = '<a href="' . $_CONF['site_url'] . '/index.php">' . $LANG_MG03['home'] . '</a> ' .
