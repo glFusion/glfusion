@@ -46,7 +46,7 @@ if (!function_exists('COM_errorLog') ) {
     }
 }
 
-function glfusion_plgupgrade_sitetailor()
+function plugin_plgupgrade_sitetailor()
 {
     global $_TABLES, $_CONF, $_ST_CONF, $_DB_dbms, $TEMPLATE_OPTIONS;
 
