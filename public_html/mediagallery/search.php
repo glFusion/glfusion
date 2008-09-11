@@ -29,9 +29,9 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
-require_once($_MG_CONF['path_html'] . 'classMedia.php');
-require_once($_MG_CONF['path_html'] . 'classFrame.php');
+require_once '../lib-common.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
 
 if (!function_exists('MG_usage')) {
     // The plugin is disabled
@@ -540,7 +540,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	                $resolution_y = $M['media_resolution_y'];
 	            } else {
 	                if ( $M['media_resolution_x'] == 0 && $M['remote_media'] != 1) {
-	                    require_once($_CONF['path'] . '/lib/getid3/getid3.php');
+	                    require_once $_CONF['path'] . '/lib/getid3/getid3.php';
 	                    // Needed for windows only
 	                    define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 	                    $getID3 = new getID3;
@@ -703,7 +703,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
     	 */
 
         if ( $MG_albums[$M['album_id']]->enable_rating > 0 ) {
-            require_once($_MG_CONF['path_html'] . 'lib-rating.php');
+            require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-rating.php';
 
             $ip     = $_SERVER['REMOTE_ADDR'];
             $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;

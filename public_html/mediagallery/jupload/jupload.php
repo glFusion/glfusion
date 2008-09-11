@@ -29,9 +29,9 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../../lib-common.php');
-require_once($_MG_CONF['path_html'] . 'lib-upload.php');
-require_once($_MG_CONF['path_html'] . 'maint/newmedia.php');
+require_once '../../lib-common.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
 
 if (!function_exists('MG_usage')) {
     // The plugin is disabled

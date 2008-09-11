@@ -42,7 +42,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
+require_once '../lib-common.php';
 
 //getting the values
 $vote_sent  = preg_replace("/[^0-9]/","",$_REQUEST['j']);

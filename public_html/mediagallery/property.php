@@ -29,8 +29,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
-require_once($_MG_CONF['path_html'] . 'lib-exif.php');
+require_once '../lib-common.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-exif.php';
 
 if (!function_exists('MG_usage')) {
     // The plugin is disabled

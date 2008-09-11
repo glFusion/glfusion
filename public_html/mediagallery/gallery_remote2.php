@@ -34,13 +34,13 @@
 
 // NOTES:  Need to validate login each time, we can timeout you know.
 
-require_once('../lib-common.php');
-require_once($_CONF['path_system']  . 'lib-user.php');
-require_once($_CONF['path_system']  . 'lib-security.php');
-require_once($_MG_CONF['path_html'] . 'classAlbum.php');
-require_once($_MG_CONF['path_html'] . 'classMedia.php');
-require_once($_MG_CONF['path_html'] . 'lib-upload.php');
-require_once($_MG_CONF['path_html'] . 'maint/sort.php');
+require_once '../lib-common.php';
+require_once $_CONF['path_system']  . 'lib-user.php';
+require_once $_CONF['path_system']  . 'lib-security.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
 
 /*
  * Definitions for handling the gallery remote protocol
@@ -586,7 +586,7 @@ function _mg_gr_add_album($parentaname, $albumname, $title, $descr) {
 
     _mg_gr_checkuser( );
 
-    require_once($_MG_CONF['path_html'] . 'maint/albumedit.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
 
     if ($parentaname == 'rootalbum' )
         $parentaname = 0;

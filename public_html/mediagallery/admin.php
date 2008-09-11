@@ -29,7 +29,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
+require_once '../lib-common.php';
 
 if (!function_exists('MG_usage')) {
     // The plugin is disabled
@@ -126,7 +126,7 @@ $display = '';
 
 if (($mode == 'edit') ) {
     if (!function_exists('MG_editAlbum')) {
-        require_once($_MG_CONF['path_html'] . 'maint/albumedit.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
     }
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
@@ -141,7 +141,7 @@ if (($mode == 'edit') ) {
 } else if ( $mode == 'jupload' ) {
     if ( isset($_GET['album_id']) ) {
         if ( !function_exists('MG_userUpload')) {
-            require_once($_MG_CONF['path_html'] . 'maint/newmedia.php');
+            require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         }
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display  = MG_siteHeader();
@@ -155,7 +155,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'xppub' ) {
     if ( isset($_GET['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/newmedia.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display  = MG_siteHeader();
         $display .= MG_navbar($LANG_MG01['xp_pub'],$album_id);
@@ -168,7 +168,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'gremote' ) {
     if ( isset($_GET['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/newmedia.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display  = MG_siteHeader();
         $display .= MG_navbar($LANG_MG01['gallery_remote'],$album_id);
@@ -180,7 +180,7 @@ if (($mode == 'edit') ) {
     $display .= MG_siteFooter();
     echo $display;
 } else if ( $mode == 'globalattr' ) {
-    require_once($_MG_CONF['path_html'] . 'maint/global.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/global.php';
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $admin_menu = COM_applyFilter($_GET['a'],true);
@@ -194,7 +194,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'globalperm' ) {
     if (!function_exists('MG_globalAlbumPermEditor') ) {
-        require_once($_MG_CONF['path_html'] . 'maint/global.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/global.php';
     }
 
     if ( isset($_GET['album_id']) ) {
@@ -210,10 +210,10 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'wmmanage' ) {
     if ( !function_exists('MG_getFile')) {
-        require_once($_MG_CONF['path_html'] . 'lib-upload.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
     }
     if ( !function_exists('MG_watermarkManage')) {
-        require_once($_MG_CONF['path_html'] . 'lib-watermark.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
     }
     $display = MG_siteHeader();
     $display .= MG_watermarkManage();
@@ -223,7 +223,7 @@ if (($mode == 'edit') ) {
 } else if ( $mode == 'batchcaption' ) {
     if ( isset($_GET['album_id']) ) {
         if ( !function_exists('MG_batchCaptionEdit') ) {
-            require_once($_MG_CONF['path_html'] . 'maint/caption.php');
+            require_once $_CONF['path'] . 'plugins/mediagallery/include/caption.php';
         }
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $start    = isset($_GET['start']) ? COM_applyFilter($_GET['start'],true) : 0;
@@ -238,7 +238,7 @@ if (($mode == 'edit') ) {
 } else if ( $mode == $LANG_MG01['save_exit'] ) {
     if ( isset($_GET['album_id']) ) {
         if ( !function_exists('MG_batchCaptionEdit') ) {
-            require_once($_MG_CONF['path_html'] . 'maint/caption.php');
+            require_once $_CONF['path'] . 'plugins/mediagallery/include/caption.php';
         }
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $start    = COM_applyFilter($_GET['start'],true);
@@ -253,7 +253,7 @@ if (($mode == 'edit') ) {
 } else if ( $mode == $LANG_MG01['save_next_batch'] ) {
     if ( isset($_GET['album_id']) ) {
         if ( !function_exists('MG_batchCaptionEdit')) {
-            require_once($_MG_CONF['path_html'] . 'maint/caption.php');
+            require_once $_CONF['path'] . 'plugins/mediagallery/include/caption.php';
         }
 
         $album_id = COM_applyFilter($_GET['album_id'],true);
@@ -268,7 +268,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'create' ) {
     if (!function_exists('MG_editAlbum')) {
-        require_once($_MG_CONF['path_html'] . 'maint/albumedit.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
     }
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
@@ -283,7 +283,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ($mode == $LANG_MG01['reset_rating'] && !empty($LANG_MG01['reset_rating'])) {
     if ( !function_exists('MG_imageAdmin')) {
-        require_once($_MG_CONF['path_html'] . 'maint/mediamanage.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
     }
     $album_id = COM_applyFilter($_POST['album_id']);
     $mid      = COM_applyFilter($_POST['mid']);
@@ -294,7 +294,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ($mode == $LANG_MG01['reset_views'] && !empty($LANG_MG01['reset_views'])) {
     if ( !function_exists('MG_imageAdmin')) {
-        require_once($_MG_CONF['path_html'] . 'maint/mediamanage.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
     }
     $album_id = COM_applyFilter($_POST['album_id']);
     $mid      = COM_applyFilter($_POST['mid']);
@@ -304,7 +304,7 @@ if (($mode == 'edit') ) {
     $display .= MG_siteFooter();
     echo $display;
 } else if ( $mode == 'list' ) {
-    require_once($_MG_CONF['path_html'] . 'maint/ftpmedia.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
     $album_id   = COM_applyFilter($_GET['album_id'],true);
     $dir        = urldecode($_GET['dir']);
     $purgefiles = COM_applyFilter($_GET['purgefiles'],true);
@@ -325,23 +325,23 @@ if (($mode == 'edit') ) {
 
         switch ($action) {
             case 'album' :
-                require_once($_MG_CONF['path_html'] . 'maint/albumedit.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
                 $display = MG_siteHeader();
                 $display .= MG_saveAlbum( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'remoteupload' :
-            	require_once($_MG_CONF['path_html'] . 'maint/remote.php');
+            	require_once $_CONF['path'] . 'plugins/mediagallery/include/remote.php';
             	$display = MG_siteHeader();
             	$display .= MG_saveRemoteUpload($album_id);
             	break;
             case 'upload' :
-                require_once($_MG_CONF['path_html'] . 'maint/newmedia.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
                 $display = MG_siteHeader();
                 $display .= MG_saveUserUpload($album_id);
                 break;
             case 'ftp' :
-                require_once($_MG_CONF['path_html'] . 'maint/ftpmedia.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
                 $dir        = $_REQUEST['directory'];
                 $purgefiles = $_REQUEST['purgefiles'];
                 $recurse    = $_REQUEST['recurse'];
@@ -354,58 +354,58 @@ if (($mode == 'edit') ) {
                 }
                 break;
             case 'ftpprocess' :
-                require_once($_MG_CONF['path_html'] . 'maint/ftpmedia.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
                 $display .= MG_ftpProcess($album_id);
                 break;
             case 'moderate' :
-                require_once($_MG_CONF['path_html'] . 'maint/moderate.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/moderate.php';
                 $display = MG_siteHeader();
                 $display .= MG_saveModeration( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id  );
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'media' :
-                require_once($_MG_CONF['path_html'] . 'maint/mediamanage.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
                 $display  = MG_siteHeader();
                 $display .= MG_saveMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'albumsort' :
-                require_once($_MG_CONF['path_html'] . 'maint/sort.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
                 $display  = MG_siteHeader();
                 $display .= MG_saveAlbumSort( $album_id, $_MG_CONF['site_url'] . '/index.php' );
                 break;
             case 'staticsort' :
-                require_once($_MG_CONF['path_html'] . 'maint/sort.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
                 $display = MG_siteHeader();
                 $display .= MG_saveStaticSortMedia($album_id,   $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
                 break;
             case 'savemedia' :
-                require_once($_MG_CONF['path_html'] . 'maint/mediamanage.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
                 $display = MG_siteHeader();
                 $media_id = $_POST['mid'];
                 $display .= MG_saveMediaEdit( $album_id, $media_id, $_MG_CONF['site_url'] . '/admin.php?mode=media&album_id=' . $album_id);
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'globalattr' :
-                require_once($_MG_CONF['path_html'] . 'maint/global.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/global.php';
                 $display = MG_siteHeader();
                 $display .= MG_saveGlobalAlbumAttr();
                 break;
             case 'globalperm' :
-                require_once($_MG_CONF['path_html'] . 'maint/global.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/global.php';
                 $display = MG_siteHeader();
                 $display .= MG_saveGlobalAlbumPerm();
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'watermark' :
-                require_once($_MG_CONF['path_html'] . 'lib-upload.php');
-                require_once($_MG_CONF['path_html'] . 'lib-watermark.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
                 $display = MG_siteHeader();
                 $display .= MG_watermarkSave();
                 break;
             case 'wm_upload' :
-                require_once($_MG_CONF['path_html'] . 'lib-upload.php');
-                require_once($_MG_CONF['path_html'] . 'lib-watermark.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
                 $display = MG_siteHeader();
                 $display .= MG_watermarkUploadSave();
                 break;
@@ -423,19 +423,19 @@ if (($mode == 'edit') ) {
 
         switch ($action) {
             case 'media' :
-                require_once($_MG_CONF['path_html'] . 'maint/batch.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
                 $display = MG_siteHeader();
                 $display .= MG_batchDeleteMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id );
                 CACHE_remove_instance('whatsnew');
                 break;
             case 'album' :
-                require_once($_MG_CONF['path_html'] . 'maint/batch.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
                 $display = MG_siteHeader();
                 $display .= MG_deleteAlbumConfirm( $album_id, $_MG_CONF['site_url'] . '/admin.php');
                 break;
             case 'confalbum' :
                 if ( isset($_POST['target'])) {
-                    require_once($_MG_CONF['path_html'] . 'maint/batch.php');
+                    require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
                     $target_id = COM_applyFilter($_POST['target'], true);
                     $display = MG_siteHeader();
                     $display .= MG_deleteAlbum($album_id, $target_id, $_MG_CONF['site_url'] . '/index.php');
@@ -445,8 +445,8 @@ if (($mode == 'edit') ) {
                 }
                 break;
             case 'watermark' :
-                require_once($_MG_CONF['path_html'] . 'lib-upload.php');
-                require_once($_MG_CONF['path_html'] . 'lib-watermark.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
                 $display = MG_siteHeader();
                 $display .= MG_watermarkDelete();
                 break;
@@ -464,12 +464,12 @@ if (($mode == 'edit') ) {
         $action = '';
     }
     if ( $action == 'watermark') {
-        require_once($_MG_CONF['path_html'] . 'lib-upload.php');
-        require_once($_MG_CONF['path_html'] . 'lib-watermark.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
         $display = MG_siteHeader();
         $display .= MG_watermarkUpload();
     } else if ( isset($_GET['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/newmedia.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display  = MG_siteHeader();
         $display .= MG_navbar($LANG_MG01['browser_upload'],$album_id);
@@ -482,7 +482,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'import' ) {
     if ( isset($_GET['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/ftpmedia.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display  = MG_siteHeader();
         $display .= MG_navbar($LANG_MG01['ftp_media'],$album_id);
@@ -495,7 +495,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'remote' ) {
 	if ( isset($_GET['album_id']) ) {
-		require_once($_MG_CONF['path_html'] . 'maint/remote.php');
+		require_once $_CONF['path'] . 'plugins/mediagallery/include/remote.php';
 		$album_id = COM_applyFilter($_GET['album_id'],true);
 		$display  = MG_siteHeader();
 		$display .= MG_navbar($LANG_MG01['remote_media'],$album_id);
@@ -508,7 +508,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'media' ) { // manage the media items...
     if ( isset($_GET['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/mediamanage.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $page     = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
         $display = MG_siteHeader();
@@ -521,7 +521,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'resize' ) {
     if ( isset($_GET['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/rebuild.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/rebuild.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display = MG_siteHeader();
         $display .= MG_albumResizeConfirm( $album_id, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
@@ -534,7 +534,7 @@ if (($mode == 'edit') ) {
 } else if ( $mode == $LANG_MG01['process'] && !empty($LANG_MG01['process']) ) {
     if ( isset($_POST['action'] )) {
         $action = $_POST['action'];
-        require_once($_MG_CONF['path_html'] . 'maint/rebuild.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/rebuild.php';
         if ( $action == 'doresize' ) {
             if ( isset($_POST['aid']) ) {
                 $album_id = COM_applyFilter($_POST['aid'],true);
@@ -555,7 +555,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'rebuild' ) {
     if ( isset($_GET['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/rebuild.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/rebuild.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display = MG_siteHeader();
         $display .= MG_albumRebuildConfirm( $album_id, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
@@ -567,7 +567,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'dorebuild' ) {
     if ( isset($_POST['aid']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/rebuild.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/rebuild.php';
         $album_id = COM_applyFilter($_POST['aid'],true);
         $display = MG_siteHeader();
         $display .= MG_albumRebuildThumbs( $aid, $_MG_CONF['site_url'] . '/admin.php?aid=' . $album_id  );
@@ -580,7 +580,7 @@ if (($mode == 'edit') ) {
 
 } else if ( $mode == 'mediaedit' ) { // edit a media item...
     if ( isset($_GET['album_id']) && isset($_GET['mid'])) {
-        require_once($_MG_CONF['path_html'] . 'maint/mediamanage.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $media_id = COM_applyFilter($_GET['mid'],true);
         if ( isset($_GET['s']) ) {
@@ -600,7 +600,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'mediaeditq' ) { // edit a media item...
     if ( isset($_GET['album_id']) && isset($_GET['mid'])) {
-        require_once($_MG_CONF['path_html'] . 'maint/mediamanage.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/mediamanage.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $media_id = COM_applyFilter($_GET['mid'],true);
         $display = MG_siteHeader();
@@ -616,7 +616,7 @@ if (($mode == 'edit') ) {
 
 } else if ( $mode == 'moderate' ) {  // handle the moderation queue
     if ( isset($_GET['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/moderate.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/moderate.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         if ( $album_id == -1) {
             $actionURL = $_MG_CONF['admin_url'] . 'index.php';
@@ -633,7 +633,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ($mode == $LANG_MG01['batch_process'] && !empty ($LANG_MG01['batch_process'])) {
     if ( isset($_POST['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/batch.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
         $album_id = COM_applyFilter($_POST['album_id'],true);
         $action = COM_applyFilter($_POST['batchOption']);
         $display .= MG_batchProcess( $album_id, $action, $_MG_CONF['site_url'] . '/admin.php?mode=media&album_id=' . $album_id);
@@ -647,7 +647,7 @@ if (($mode == 'edit') ) {
 
 } else if ($mode == $LANG_MG01['move'] && !empty ($LANG_MG01['move'])) {
     if ( isset($_POST['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/batch.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
         $album_id = COM_applyFilter($_POST['album_id'],true);
         $display = MG_siteHeader();
         $display .= MG_batchMoveMedia( $album_id, $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id  );
@@ -658,7 +658,7 @@ if (($mode == 'edit') ) {
     $display .= MG_siteFooter();
     echo $display;
 } else if ( $mode == 'albumsort' ) {
-    require_once($_MG_CONF['path_html'] . 'maint/sort.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
     if ( isset($_GET['album_id']) ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display = MG_siteHeader();
@@ -671,7 +671,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'staticsort' ) {
     if ( isset($_GET['album_id']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/sort.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display = MG_siteHeader();
         $display .= MG_staticSortMedia( $album_id, $_MG_CONF['site_url'] . '/admin.php' );
@@ -683,7 +683,7 @@ if (($mode == 'edit') ) {
     echo $display;
 } else if ( $mode == 'rotate' ) {
     if ( isset($_GET['album_id']) && isset($_GET['media_id']) && isset($_GET['action']) ) {
-        require_once($_MG_CONF['path_html'] . 'maint/rotate.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/rotate.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $media_id = COM_applyFilter($_GET['media_id']);
         $direction = COM_applyFilter($_GET['action']);

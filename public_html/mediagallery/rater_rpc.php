@@ -43,7 +43,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
+require_once '../lib-common.php';
 
 header("Cache-Control: no-cache");
 header("Pragma: nocache");

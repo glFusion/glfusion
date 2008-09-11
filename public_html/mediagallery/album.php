@@ -29,9 +29,9 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
-require_once($_MG_CONF['path_html'] . 'classMedia.php');
-require_once($_MG_CONF['path_html'] . 'classFrame.php');
+require_once '../lib-common.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
 
 if (!function_exists('MG_usage')) {
     // The plugin is disabled
