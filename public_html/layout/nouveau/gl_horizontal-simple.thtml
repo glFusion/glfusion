@@ -14,7 +14,7 @@ list-style-position:outside;
 .st-fmenu{menu_id} ul li {
 border-right:1px solid {submenu_highlight_color};
 display:inline;
-padding:0 .8em 0 1em;
+padding:0 1.1em 0 .8em;
 }
 .st-fmenu{menu_id} ul li.st-f-last{menu_id} {
 border-right:0;
