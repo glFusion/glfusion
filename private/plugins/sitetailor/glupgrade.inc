@@ -29,7 +29,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
+if (stripos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
 {
     die ('This file can not be used on its own.');
 }
@@ -55,11 +55,13 @@ function glfusion_plgupgrade_sitetailor()
     switch( $currentVersion ) {
         case "0.00" :
             if ( SITETAILOR_upgrade_100() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.00' WHERE pi_name='sitetailor' LIMIT 1");
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.0.0' WHERE pi_name='sitetailor' LIMIT 1");
             }
+        case "100"   :
         case "1.0.0" :
+        case "1.0.1" :
             if ( SITETAILOR_upgrade_200() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='2.00' WHERE pi_name='sitetailor' LIMIT 1");
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='2.0.0' WHERE pi_name='sitetailor' LIMIT 1");
             }
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='http://www.glfusion.org' WHERE pi_name='sitetailor'",1);
@@ -148,17 +150,17 @@ function SITETAILOR_upgrade_200() {
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'submenu_hover_bg_color', '#BBBBBB');";
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'submenu_highlight_color', '#999999');";
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'submenu_shadow_color', '#999999');";
-    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_alignment', '0');";
+    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_alignment', '1');";
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'use_images', '1');";
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_bg_filename', 'menu_bg.gif');";
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_hover_filename', 'menu_hover_bg.gif');";
-    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_parent_filename', 'menu_parent.png');";
+    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menus_config']} (`menu_id`, `conf_name`, `conf_value`) VALUES(3, 'menu_parent_filename', 'vmenu_parent.gif');";
 
     // default footer menu elements
-    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Home', 2, '0', 10, 1, '', '', 2);";
-    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Contribute', 2, '1', 30, 1, '', '', 13);";
-    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Search', 2, '4', 20, 1, '', '', 2);";
-    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Site Stats', 2, '5', 40, 1, '', '', 2);";
+    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Home',       2, '0',                             10, 1, '', '', 2);";
+    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Contribute', 2, '1',                             30, 1, '', '', 13);";
+    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Search',     2, '4',                             20, 1, '', '', 2);";
+    $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Site Stats', 2, '5',                             40, 1, '', '', 2);";
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Contact Us', 6, '%site_url%/profiles.php?uid=2', 50, 1, '%site_url%/profiles.php?uid=2', '', 2);";
 
     // default block menu elements
@@ -169,7 +171,6 @@ function SITETAILOR_upgrade_200() {
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 3, 'User Menu', 3, '1', 50, 1, '', '', 13);";
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 3, 'Admin Options', 3, '2', 60, 1, '', '', 1);";
     $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 3, 'Logout', 6, '%site_url%/users.php?mode=logout', 70, 1, '%site_url%/users.php?mode=logout', '', 13);";
-
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
