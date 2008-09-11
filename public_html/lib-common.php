@@ -2447,7 +2447,7 @@ function COM_userMenu( $help='', $title='', $position='' )
 
 function COM_adminMenu( $help = '', $title = '', $position = '' )
 {
-    global $_TABLES, $_USER, $_CONF, $LANG01, $_BLOCK_TEMPLATE, $LANG_PDF,
+    global $_TABLES, $_USER, $_CONF, $LANG01, $LANG_ADMIN, $_BLOCK_TEMPLATE, $LANG_PDF,
            $_DB_dbms, $config, $LANG29;
 
     $retval = '';
