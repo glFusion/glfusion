@@ -33,7 +33,7 @@ function upgrade_StaticpagesPlugin()
     $P_SQL[] = "UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.1', pi_gl_version = '1.1.0', pi_homepage='http://www.glfusion.org' WHERE pi_name = 'staticpages'";
 
     foreach ($P_SQL as $sql) {
-        $rst = DB_query($sql);
+        $rst = DB_query($sql,1);
         if (DB_error()) {
             echo "There was an error upgrading the Static Pages plugin, SQL: $sql<br>";
             return false;
