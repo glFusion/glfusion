@@ -1106,6 +1106,14 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path'] . 'sql/updates/' . $_DB_dbms . '_1.0.1_to_1.1.0.php';
             list($rc,$errors) = INST_updateDB($_SQL);
 
+            if (INST_pluginExists('staticpages')) {
+                $check = upgrade_StaticpagesPlugin();
+                if (!$check) {
+                    echo "Error updating the staticpages";
+                    return false;
+                }
+            }
+
             $c = config::get_instance();
 
             $c->add('comment_code',0,'select',4,21,17,1670,TRUE);
@@ -1143,15 +1151,6 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $current_fusion_version = '1.1.0';
             $_SQL = '';
-
-            if (INST_pluginExists('staticpages')) {
-                $check = upgrade_StaticpagesPlugin();
-                if (!$check) {
-                    echo "Error updating the staticpages";
-                    return false;
-                }
-            }
-
             break;
 
         default:
