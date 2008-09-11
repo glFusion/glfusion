@@ -1059,12 +1059,12 @@ function ST_menuConfig( $mid ) {
     }
     $group_select .= '</select>' . LB;
 
-
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
     $T->set_file( array( 'admin' => 'menuconfig.thtml'));
 
     $T->set_var(array(
         'group_select'      => $group_select,
+        'menutype'          => $stMenu[$menu_id]['menu_type'],
         'menutype_select'   => $menuTypeSelect,
         'menuactive'        => $stMenu[$menu_id]['active'] == 1 ? ' checked="checked"' : ' ',
         'site_admin_url'    => $_CONF['site_admin_url'],
@@ -1103,6 +1103,10 @@ function ST_menuConfig( $mid ) {
         'alignment_right_checked'   => $menu_align_right_checked,
         'xhtml'                     => XHTML,
     ));
+
+    if ( $stMenu[$menu_id]['menu_type'] == 1 ) {
+        $T->set_var('show_warning','1');
+    }
 
     /* check menu type and call the proper foreach call to
        set the display for the items.
@@ -1465,8 +1469,8 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
                 DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#679EF1'");
                 DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#151515'");
                 DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#333333'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#151515'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#151515'");
+                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#333333'");
+                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#000000'");
                 DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
                 DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
                 DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
