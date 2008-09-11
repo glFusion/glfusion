@@ -110,19 +110,19 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'sitetailor') == 0) {
 
     $glversion = explode(".", GVERSION);
     if ( $glversion[0] < 1 || $glversion[1] < 1 ) {
-        $versionCheck = '<div style="background-color:#ffff00;color:#000000;vertical-align:middle;padding:5px;"><img src="images/redX.png" alt="error" style="padding:5px;vertical-align:middle;">&nbsp;' . $LANG_ST00['gl_version_error'] . '</div>';
+        $versionCheck = '<div style="background-color:#ffff00;color:#000000;vertical-align:middle;padding:5px;"><img src="images/delete.png" alt="error" style="padding:5px;vertical-align:middle;">&nbsp;' . $LANG_ST00['gl_version_error'] . '</div>';
         $errCheck++;
     } else {
         $versionCheck = '<div style="vertical-align:middle;padding:5px;"><img src="images/check.png" alt="OK" style="padding:5px;vertical-align:middle;">' . $LANG_ST00['gl_version_ok'] . '</div>';
     }
     if ( $tc_installed == 0 ) {
         $errCheck++;
-        $cacheCheck = '<div style="background-color:#ffff00;color:#000000;vertical-align:middle;padding:5px;"><img src="images/redX.png" alt="error" style="padding:5px;vertical-align:middle;">&nbsp;' . $LANG_ST00['tc_error'] . '</div>';
+        $cacheCheck = '<div style="background-color:#ffff00;color:#000000;vertical-align:middle;padding:5px;"><img src="images/delete.png" alt="error" style="padding:5px;vertical-align:middle;">&nbsp;' . $LANG_ST00['tc_error'] . '</div>';
     } else {
         $cacheCheck = '<div style="vertical-align:middle;padding:5px;"><img src="images/check.png" alt="OK" style="padding:5px;vertical-align:middle;">' . $LANG_ST00['tc_ok'] . '</div>';
     }
     if ( $memory_limit < 50331648 ) {
-        $memoryCheck = '<div style="background-color:#ffff00;color:#000000;vertical-align:middle;padding:5px;"><img src="images/redX.png" alt="error" style="padding:5px;vertical-align:middle;">&nbsp;' . $LANG_ST00['ml_error'] . '</div>';
+        $memoryCheck = '<div style="background-color:#ffff00;color:#000000;vertical-align:middle;padding:5px;"><img src="images/delete.png" alt="error" style="padding:5px;vertical-align:middle;">&nbsp;' . $LANG_ST00['ml_error'] . '</div>';
     } else {
         $memoryCheck = '<div style="vertical-align:middle;padding:5px;"><img src="images/check.png" alt="OK" style="padding:5px;vertical-align:middle;">' . $LANG_ST00['ml_ok'] . '</div>';
     }
