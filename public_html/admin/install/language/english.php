@@ -54,9 +54,9 @@ $LANG_CHARSET = 'iso-8859-1';
 // install.php
 
 $LANG_INSTALL = array(
-    0 => 'glFusion - Technology Fused with Style',
+    0 => 'glFusion - synergy - stability - style',
     1 => 'Installation Support',
-    2 => 'Technology Fused with Style',
+    2 => 'synergy - stability - style',
     3 => 'glFusion Installation',
     4 => 'PHP 4.1.0 required',
     5 => 'Sorry, but glFusion requires at least PHP 4.1.0 to run (you have version ',
@@ -83,7 +83,7 @@ $LANG_INSTALL = array(
     27 => '. Did you make sure the file is write-able by the web server?',
     28 => 'siteconfig.php. Did you make sure the file is write-able by the web server?',
     29 => 'glFusion Site',
-    30 => 'Technology Fused with Style',
+    30 => 'synergy - stability - style',
     31 => 'Required Configuration Information',
     32 => 'Site Name',
     33 => 'Site Slogan',
@@ -140,7 +140,7 @@ $LANG_INSTALL = array(
     84 => 'The path "',
     85 => '" does not appear to be correct. Please go back and try again.',
     86 => 'Language',
-    87 => 'http://www.glfusion.org',
+    87 => 'http://www.glfusion.org/wiki/doku.php?id=glfusion:install',
     88 => 'Change directory and containing files to',
     89 => 'Current Version:',
     90 => 'Empty database?',

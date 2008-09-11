@@ -1431,7 +1431,7 @@ $display .= '<head>
             <div class="top-r-corner">
                 <div class="top-l-corner">
 					<div class="floatright install-slogan" style="color:#FFF;">
-						' . $LANG_INSTALL[2] . '
+						<a style="color:#fff;text-decoration:none;" href="' . $LANG_INSTALL[87] . '">' . $LANG_INSTALL[1] . '</a>
 					</div>
                     <div class="floatleft">
                       <img src="layout/logo.png" height="100" width="330" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo" />
@@ -1440,9 +1440,8 @@ $display .= '<head>
             </div>
         </div> <!-- end of gl_header -->
 
-        <div id="gl_moomenu">
-			<a style="float:right;padding-right:10px;padding-top:5px;vertical-align:middle;" href="' . $LANG_INSTALL[87] . '">' . $LANG_INSTALL[1] . '</a>
-		</div>
+        <div id="gl_moomenu"></div>
+
         <div id="gl_wrapper">' . LB;
 
 // Show the language drop down selection on the first page
