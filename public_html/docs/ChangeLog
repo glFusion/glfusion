@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Fixed broken image references in Site Tailor Install (Eric)
+- Changed hard-coded "N/A" from Admins Only menu with a language file generated neutral "-" (Eric)
 - Implemented js.php / css.php to consolidate all CSS and JS (Mark)
 - Forum to always use HTML filter for html posts (Mark)
 - New option for static pages - include / exclude from search (Mark)
@@ -14,7 +16,7 @@ v1.1.0
 - BB2 Update - eliminated redundant hits to vars table (Joe)
 - Added $_CONF['hide_adminmenu'] (Joe)
 - Added ability for plugins to control moderation queue by returning a string from plugin_itemlist_
-  No other moderation functions will be called is a string is returned. (Joe)
+  No other moderation functions will be called if a string is returned. (Joe)
 - Separated Command and Control from Submissions page in admin (Joe)
 - Removed non-english language files from install tarball (will be separate download) (Eric)
 - Updated look of site footer to support a Site Tailor footer menu (Eric)
