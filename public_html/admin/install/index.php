@@ -801,9 +801,11 @@ function INST_identifyglFusionVersion ()
 
     $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='glfusion'",1);
     if ( $result !== false ) {
-        $row = DB_fetchArray($result);
-        $version = $row['value'];
-        return $version;
+        if ( DB_numRows($result) > 0 ) {
+            $row = DB_fetchArray($result);
+            $version = $row['value'];
+            return $version;
+        }
     }
 
     // we didn't find the easy stuff, so let's see if we can
@@ -1103,7 +1105,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         switch ($current_fusion_version) {
         case '1.0.0':
         case '1.0.1':
-            require_once $_CONF['path'] . 'sql/updates/' . $_DB_dbms . '_1.0.1_to_1.1.0.php';
+            require_once $_CONF['path'] . 'sql/updates/mysql_1.0.1_to_1.1.0.php';
             list($rc,$errors) = INST_updateDB($_SQL);
 
             if (INST_pluginExists('staticpages')) {
@@ -1113,6 +1115,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                     return false;
                 }
             }
+            require_once $_CONF['path_system'] . 'classes/config.class.php';
 
             $c = config::get_instance();
 
