@@ -964,7 +964,7 @@ $LANG29 = array(
     16 => 'User name',
     17 => 'Full name',
     18 => 'Email',
-    34 => 'Command and Control',
+    34 => 'Command & Control',
     35 => 'Story Submissions',
     36 => 'Comment',
     37 => 'Time',
@@ -1545,7 +1545,7 @@ $LANG_ADMIN = array (
     'addchild'      => 'Add child',
     'list'          => 'list',
     'list_all'      => 'List all',
-    'na'            => 'N/A'
+    'na'            => '-'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
