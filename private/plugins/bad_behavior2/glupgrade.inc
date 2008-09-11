@@ -32,7 +32,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
+if (stripos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
 {
     die ('This file can not be used on its own.');
 }
@@ -48,13 +48,13 @@ if (!function_exists('COM_errorLOG') ) {
     }
 }
 
-function plugin_upgrade_bad_behavior2 ()
+function plugin_plgupgrade_bad_behavior2 ()
 {
     global $_TABLES;
 
     // Bad Behavior handles its database changes automatically,
     // so only update the version number
-    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.23', pi_gl_version = '1.5.0', pi_homepage = 'http://www.gllabs.org/' WHERE pi_name = 'bad_behavior2'");
+    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.23', pi_gl_version = '1.1.0', pi_homepage = 'http://www.glfusion.org/' WHERE pi_name = 'bad_behavior2'");
 
     return true;
 }
