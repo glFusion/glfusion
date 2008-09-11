@@ -103,7 +103,7 @@ if ( isset($_POST['clearlog']) ) {
     $_POST['viewlog'] = 1;
 }
 if ( isset($_POST['viewlog']) ) {
-    $retval .= '<div style="overflow:scroll;"><hr'.XHTML.'><p><strong>'.$LANG_LOGVIEW['log_file'].': ' . $log . '</strong></p><pre>';
+    $retval .= '<p><strong>'.$LANG_LOGVIEW['log_file'].': ' . $log . '</strong></p><hr'.XHTML.'><div style="overflow:scroll;"><pre>';
     $retval .= htmlentities(implode('', file($_CONF['path_log'] . $log)));
     $retval .= "</pre></div>";
 }
