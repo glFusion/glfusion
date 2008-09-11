@@ -107,7 +107,7 @@ $LANG_STATIC = array(
     'edit' => 'Edit',
     'copy' => 'Copy',
     'limit_results' => 'Limit Results',
-    'search' => 'Search',
+    'search' => 'Make Searchable',
     'submit' => 'Submit'
 );
 
