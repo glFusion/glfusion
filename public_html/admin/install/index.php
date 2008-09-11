@@ -1431,7 +1431,7 @@ $display .= '<head>
             <div class="top-r-corner">
                 <div class="top-l-corner">
 					<div class="floatright install-slogan" style="color:#FFF;">
-						<a style="color:#fff;text-decoration:none;" href="' . $LANG_INSTALL[87] . '">' . $LANG_INSTALL[1] . '</a>
+						<a style="color:#fff;text-decoration:none;" href="' . $LANG_INSTALL[87] . '" target="_blank">' . $LANG_INSTALL[1] . '</a>
 					</div>
                     <div class="floatleft">
                       <img src="layout/logo.png" height="100" width="330" alt="' . $LANG_INSTALL[0] . '" title="' . $LANG_INSTALL[0] . '" id="header-site-logo" />
