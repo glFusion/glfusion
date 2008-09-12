@@ -156,6 +156,7 @@ function js_out(){
 
     // finally send output
     print $js;
+    unset($js);
 }
 
 /**
