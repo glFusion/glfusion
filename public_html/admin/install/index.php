@@ -1108,6 +1108,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path'] . 'sql/updates/mysql_1.0.1_to_1.1.0.php';
             list($rc,$errors) = INST_updateDB($_SQL);
 
+            /*
+             * Do the plugin upgrades here
+             */
+
             if (INST_pluginExists('staticpages')) {
                 $check = upgrade_StaticpagesPlugin();
                 if (!$check) {
