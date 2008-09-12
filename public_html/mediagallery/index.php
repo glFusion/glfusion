@@ -29,7 +29,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once '../lib-common.php');
+require_once '../lib-common.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/mgindex.php';
 
