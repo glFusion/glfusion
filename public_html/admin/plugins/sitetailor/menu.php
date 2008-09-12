@@ -52,7 +52,7 @@ if (!SEC_hasRights('sitetailor.admin')) {
  */
 
 function ST_displayMenuList( ) {
-    global $_CONF, $LANG_ST00, $LANG_ST01, $LANG_ADMIN,$LANG_ST_MENU_TYPES, $_ST_CONF, $stMenu;
+    global $_CONF, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, $LANG_ADMIN,$LANG_ST_MENU_TYPES, $_ST_CONF, $stMenu;
 
     $retval = '';
 
@@ -63,7 +63,7 @@ function ST_displayMenuList( ) {
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_ST01['menu_builder'],'', COM_getBlockTemplate('_admin_block', 'header'));
-    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to create and edit menus for your site.',
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[1],
                                 $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
 
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
@@ -113,7 +113,7 @@ function ST_displayMenuList( ) {
  */
 
 function ST_createMenu( ) {
-    global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01, $_ST_CONF,
+    global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, $_ST_CONF,
            $LANG_ST_MENU_TYPES, $LANG_ADMIN, $stMenu;
 
     $retval = '';
@@ -125,7 +125,7 @@ function ST_createMenu( ) {
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['add_newmenu'],'', COM_getBlockTemplate('_admin_block', 'header'));
-    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to create and edit menus for your site.',
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[2],
                                 $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
 
 
@@ -263,7 +263,7 @@ function ST_saveNewMenu( ) {
  */
 
 function ST_displayTree( $menu_id ) {
-    global $_CONF, $LANG_ST00, $LANG_ST01,$LANG_ADMIN, $_ST_CONF, $stMenu;
+    global $_CONF, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, $LANG_ADMIN, $_ST_CONF, $stMenu;
 
     $retval = '';
 
@@ -274,7 +274,7 @@ function ST_displayTree( $menu_id ) {
                   'text' => $LANG_ST01['menu_list']),
     );
     $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
-    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to create and edit menus for your site.',
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[3],
                                 $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
 
 
@@ -342,7 +342,7 @@ function ST_moveElement( $menu_id, $mid, $direction ) {
  */
 
 function ST_createElement ( $menu_id ) {
-    global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_ST00, $LANG_ST01, $LANG_ST_TYPES,
+    global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, $LANG_ST_TYPES,
            $LANG_ST_GLTYPES, $LANG_ST_GLFUNCTION;
 
     $retval = '';
@@ -354,7 +354,7 @@ function ST_createElement ( $menu_id ) {
                   'text' => $LANG_ST01['menu_list']),
     );
     $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['create_element'] .' for ' . $stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
-    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to create menu elements easily to common areas of your glFusion site.',
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[4],
                                 $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
 
     // build types select
@@ -577,7 +577,7 @@ function ST_saveNewMenuElement ( ) {
  */
 
 function ST_editElement( $menu_id, $mid ) {
-    global $_CONF, $_TABLES, $_ST_CONF, $stMenu,$stMenu,$LANG_ST00, $LANG_ST01,
+    global $_CONF, $_TABLES, $_ST_CONF, $stMenu,$stMenu,$LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, 
            $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION;
 
     $retval = '';
@@ -589,7 +589,7 @@ function ST_editElement( $menu_id, $mid ) {
                   'text' => $LANG_ST01['menu_list']),
     );
     $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['edit_element'] .' for ' . $stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
-    $retval  .= ADMIN_createMenu($menu_arr, 'Once an element is created, you can always go back and edit the type, location, or label.',
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[5],
                                 $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
 
 
@@ -893,7 +893,7 @@ function ST_deleteChildElements( $id, $menu_id ){
  */
 
 function ST_menuConfig( $mid ) {
-    global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_ST00, $LANG_ST01,
+    global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN,
            $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION,
            $LANG_ST_MENU_TYPES;
 
@@ -961,7 +961,7 @@ function ST_menuConfig( $mid ) {
                   'text' => $LANG_ST01['menu_list']),
     );
     $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['menu_colors'] .' for ' . $stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
-    $retval  .= ADMIN_createMenu($menu_arr, 'Menu Builder allows you to easily customize the look and feel of your menus.',
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[6],
                                 $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
 
 
