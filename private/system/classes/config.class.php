@@ -481,45 +481,47 @@ class config {
         $outerloopcntr = 1;
         if (count($groups) > 0) {
             $t->set_block('menugroup', 'subgroup-selector', 'subgroups');
-            foreach ($groups as $group) {
-                $t->set_var("select_id", ($group === $grp ? 'id="current"' : ''));
-                $t->set_var("group_select_value", $group);
-                $t->set_var("group_display", ucwords($group));
-                $subgroups = $this->_get_sgroups($group);
-                $innerloopcntr = 1;
-                foreach ($subgroups as $sgname => $sgroup) {
-                    if ($grp == $group AND $sg == $sgroup) {
-                        $t->set_var('group_active_name', ucwords($group));
-                        if (isset($LANG_configsubgroups[$group][$sgname])) {
-                            $t->set_var('subgroup_active_name',
-                                    $LANG_configsubgroups[$group][$sgname]);
-                        } else if (isset($LANG_configsubgroups[$group][$sgroup])) {
-                            $t->set_var('subgroup_active_name',
-                                    $LANG_configsubgroups[$group][$sgroup]);
+            if ( is_array($groups) ) {
+                foreach ($groups as $group) {
+                    $t->set_var("select_id", ($group === $grp ? 'id="current"' : ''));
+                    $t->set_var("group_select_value", $group);
+                    $t->set_var("group_display", ucwords($group));
+                    $subgroups = $this->_get_sgroups($group);
+                    $innerloopcntr = 1;
+                    foreach ($subgroups as $sgname => $sgroup) {
+                        if ($grp == $group AND $sg == $sgroup) {
+                            $t->set_var('group_active_name', ucwords($group));
+                            if (isset($LANG_configsubgroups[$group][$sgname])) {
+                                $t->set_var('subgroup_active_name',
+                                        $LANG_configsubgroups[$group][$sgname]);
+                            } else if (isset($LANG_configsubgroups[$group][$sgroup])) {
+                                $t->set_var('subgroup_active_name',
+                                        $LANG_configsubgroups[$group][$sgroup]);
+                            } else {
+                                $t->set_var('subgroup_active_name', $sgname);
+                            }
+                            $t->set_var('select_id', 'id="current"');
                         } else {
-                            $t->set_var('subgroup_active_name', $sgname);
+                            $t->set_var('select_id', '');
                         }
-                        $t->set_var('select_id', 'id="current"');
-                    } else {
-                        $t->set_var('select_id', '');
+                        $t->set_var('subgroup_name', $sgroup);
+                        if (isset($LANG_configsubgroups[$group][$sgname])) {
+                            $t->set_var('subgroup_display_name',
+                                        $LANG_configsubgroups[$group][$sgname]);
+                        } else {
+                            $t->set_var('subgroup_display_name', $sgname);
+                        }
+                        if ($innerloopcntr == 1) {
+                            $t->parse('subgroups', "subgroup-selector");
+                        } else {
+                            $t->parse('subgroups', "subgroup-selector", true);
+                        }
+                        $innerloopcntr++;
                     }
-                    $t->set_var('subgroup_name', $sgroup);
-                    if (isset($LANG_configsubgroups[$group][$sgname])) {
-                        $t->set_var('subgroup_display_name',
-                                    $LANG_configsubgroups[$group][$sgname]);
-                    } else {
-                        $t->set_var('subgroup_display_name', $sgname);
-                    }
-                    if ($innerloopcntr == 1) {
-                        $t->parse('subgroups', "subgroup-selector");
-                    } else {
-                        $t->parse('subgroups', "subgroup-selector", true);
-                    }
-                    $innerloopcntr++;
+                    $t->set_var('cntr',$outerloopcntr);
+                    $t->parse("menu_elements", "menugroup", true);
+                    $outerloopcntr++;
                 }
-                $t->set_var('cntr',$outerloopcntr);
-                $t->parse("menu_elements", "menugroup", true);
-                $outerloopcntr++;
             }
         } else {
             $t->set_var('hide_groupselection','none');
@@ -530,18 +532,20 @@ class config {
         $t->set_block('fieldset', 'notes', 'fs_notes');
 
         $ext_info = $this->_get_extended($sg, $grp);
-        foreach ($ext_info as $fset => $params) {
-            $fs_contents = '';
-            foreach ($params as $name => $e) {
-                $fs_contents .=
-                    $this->_UI_get_conf_element($grp, $name,
-                                               $e['display_name'],
-                                               $e['type'],
-                                               $e['value'],
-                                               $e['selectionArray'], false,
-                                               $e['reset']);
+        if ( is_array($ext_info) ) {
+            foreach ($ext_info as $fset => $params) {
+                $fs_contents = '';
+                foreach ($params as $name => $e) {
+                    $fs_contents .=
+                        $this->_UI_get_conf_element($grp, $name,
+                                                   $e['display_name'],
+                                                   $e['type'],
+                                                   $e['value'],
+                                                   $e['selectionArray'], false,
+                                                   $e['reset']);
+                }
+                $this->_UI_get_fs($grp, $fs_contents, $fset, $t);
             }
-            $this->_UI_get_fs($grp, $fs_contents, $fset, $t);
         }
 
         $display  = COM_siteHeader('none', $LANG_CONFIG['title']);
@@ -561,10 +565,11 @@ class config {
     {
         if ($changes != null AND $changes !== array()) {
             $display = '<ul style="margin-top:5px;">';
-            foreach ($changes as $param_name => $success)
-                $display .= '<li>' . $param_name . '</li>';
-            $display .= '</ul>';
-
+            if ( is_array($changes) ) {
+                foreach ($changes as $param_name => $success)
+                    $display .= '<li>' . $param_name . '</li>';
+                $display .= '</ul>';
+            }
             return $display;
         }
     }
@@ -617,8 +622,10 @@ class config {
         $blocks = array('delete-button', 'text-element', 'placeholder-element',
                         'select-element', 'list-element', 'unset-param',
                         'keyed-add-button', 'unkeyed-add-button');
-        foreach ($blocks as $block) {
-            $t->set_block('element', $block);
+        if ( is_array($blocks) ) {
+            foreach ($blocks as $block) {
+                $t->set_block('element', $block);
+            }
         }
 
         $t->set_var('site_url', $_CONF['site_url']);
@@ -695,25 +702,29 @@ class config {
             }
 
             $t->set_block('select-element', 'select-options', 'myoptions');
-            foreach ($selectionArray as $sName => $sVal) {
-                if (is_bool($sVal)) {
-                    $t->set_var('opt_value', $sVal ? 'b:1' : 'b:0');
-                } else {
-                    $t->set_var('opt_value', $sVal);
+            if ( is_array($selectionArray) ) {
+                foreach ($selectionArray as $sName => $sVal) {
+                    if (is_bool($sVal)) {
+                        $t->set_var('opt_value', $sVal ? 'b:1' : 'b:0');
+                    } else {
+                        $t->set_var('opt_value', $sVal);
+                    }
+                    $t->set_var('opt_name', $sName);
+                    $t->set_var('selected', ($val == $sVal ? 'selected="selected"' : ''));
+                    $t->parse('myoptions', 'select-options', true);
                 }
-                $t->set_var('opt_name', $sName);
-                $t->set_var('selected', ($val == $sVal ? 'selected="selected"' : ''));
-                $t->parse('myoptions', 'select-options', true);
             }
             return $t->parse('output', 'select-element');
         } elseif (strpos($type, "@") === 0) {
             $result = "";
-            foreach ($val as $valkey => $valval) {
-                $result .= config::_UI_get_conf_element($group,
-                                $name . '[' . $valkey . ']',
-                                $display_name . '[' . $valkey . ']',
-                                substr($type, 1), $valval, $selectionArray,
-                                false);
+            if ( is_array($val) ) {
+                foreach ($val as $valkey => $valval) {
+                    $result .= config::_UI_get_conf_element($group,
+                                    $name . '[' . $valkey . ']',
+                                    $display_name . '[' . $valkey . ']',
+                                    substr($type, 1), $valval, $selectionArray,
+                                    false);
+                }
             }
             return $result;
         } elseif (strpos($type, "*") === 0 || strpos($type, "%") === 0) {
@@ -724,11 +735,13 @@ class config {
                                            'unkeyed-add-button'));
             $t->set_var('my_add_element_button', $button);
             $result = "";
-            foreach ($val as $valkey => $valval) {
-                $result .= config::_UI_get_conf_element($group,
-                                $name . '[' . $valkey . ']', $valkey,
-                                substr($type, 1), $valval, $selectionArray,
-                                true);
+            if ( is_array($val) ) {
+                foreach ($val as $valkey => $valval) {
+                    $result .= config::_UI_get_conf_element($group,
+                                    $name . '[' . $valkey . ']', $valkey,
+                                    substr($type, 1), $valval, $selectionArray,
+                                    true);
+                }
             }
             $t->set_var('my_elements', $result);
             return $t->parse('output', 'list-element');
@@ -764,13 +777,15 @@ class config {
         }
 
         $success_array = array();
-        foreach ($this->config_array[$group] as $param_name => $param_value) {
-            if (array_key_exists($param_name, $change_array)) {
-                $change_array[$param_name] =
-                    $this->_validate_input($change_array[$param_name]);
-                if ($change_array[$param_name] != $param_value) {
-                    $this->set($param_name, $change_array[$param_name], $group);
-                    $success_array[$param_name] = true;
+        if ( is_array($this->config_array[$group]) ) {
+            foreach ($this->config_array[$group] as $param_name => $param_value) {
+                if (array_key_exists($param_name, $change_array)) {
+                    $change_array[$param_name] =
+                        $this->_validate_input($change_array[$param_name]);
+                    if ($change_array[$param_name] != $param_value) {
+                        $this->set($param_name, $change_array[$param_name], $group);
+                        $success_array[$param_name] = true;
+                    }
                 }
             }
         }
@@ -782,9 +797,11 @@ class config {
     {
         if (is_array($input_val)) {
             $r = array();
-            foreach ($input_val as $key => $val) {
-                if ($key !== 'placeholder') {
-                    $r[$key] = $this->_validate_input($val);
+            if ( is_array($input_val) ) {
+                foreach ($input_val as $key => $val) {
+                    if ($key !== 'placeholder') {
+                        $r[$key] = $this->_validate_input($val);
+                    }
                 }
             }
         } else {
@@ -813,7 +830,7 @@ class config {
         $link_array = array();
 
         $groups = $this->_get_groups();
-        if (count($groups) > 0) {
+        if (is_array($groups) && count($groups) > 0) {
             foreach ($groups as $group) {
                 if (empty($LANG_configsections[$group]['label'])) {
                     $group_display = ucwords($group);
@@ -836,8 +853,10 @@ class config {
         }
 
         uksort($link_array, 'strcasecmp');
-        foreach ($link_array as $link) {
-            $retval .= $link;
+        if ( is_array($link_array) ) {
+            foreach ($link_array as $link) {
+                $retval .= $link;
+            }
         }
 
         $retval .= '<div><a href="' . $_CONF['site_admin_url'] . '">'
@@ -856,7 +875,7 @@ class config {
                     COM_getBlockTemplate('configmanager_subblock', 'header'));
 
         $sgroups = $this->_get_sgroups($conf_group);
-        if (count($sgroups) > 0) {
+        if (is_array($sgroups) && count($sgroups) > 0) {
             $i = 0;
             foreach ($sgroups as $sgname => $sgroup) {
                 if (isset($LANG_configsubgroups[$conf_group][$sgname])) {
