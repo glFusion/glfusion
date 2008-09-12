@@ -121,6 +121,7 @@ function css_out(){
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
     // finally send output
     print $css;
+    unset($css);
 }
 
 /**
