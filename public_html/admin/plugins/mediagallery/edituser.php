@@ -27,8 +27,8 @@
 // +---------------------------------------------------------------------------+
 //
 
-require_once('../../../lib-common.php');
-require_once($_MG_CONF['path_admin'] . 'navigation.php');
+require_once '../../../lib-common.php';
+require_once $_MG_CONF['path_admin'] . 'navigation.php';
 
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {

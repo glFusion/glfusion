@@ -27,9 +27,9 @@
 // +---------------------------------------------------------------------------+
 //
 
-require_once('../../../lib-common.php');
-require_once($_MG_CONF['path_html'] . 'lib-batch.php');
-require_once($_MG_CONF['path_admin'] . 'navigation.php');
+require_once '../../../lib-common.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
+require_once $_MG_CONF['path_admin'] . 'navigation.php';
 
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {

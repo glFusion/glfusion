@@ -27,10 +27,10 @@
 // +---------------------------------------------------------------------------+
 //
 
-require_once('../../../lib-common.php');
-require_once($_CONF['path'] . '/plugins/mediagallery/config.php');
-require_once($_CONF['path'] . '/plugins/mediagallery/functions.inc');
-require_once($_CONF['path'] . 'plugins/mediagallery/install.inc');
+require_once '../../../lib-common.php';
+require_once $_CONF['path'] . '/plugins/mediagallery/config.php';
+require_once $_CONF['path'] . '/plugins/mediagallery/functions.inc';
+require_once $_CONF['path'] . 'plugins/mediagallery/install.inc';
 
 function MG_return_bytes($val) {
     $val = trim($val);

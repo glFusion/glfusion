@@ -27,8 +27,8 @@
 // +---------------------------------------------------------------------------+
 //
 
-require_once('../../../lib-common.php');
-require_once($_MG_CONF['path_admin'] . 'navigation.php');
+require_once '../../../lib-common.php';
+require_once $_MG_CONF['path_admin'] . 'navigation.php';
 
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
@@ -129,7 +129,7 @@ function MG_purgeMemberAlbums() {
         MG_deleteChildAlbums( $_POST['album'][$i] );
     }
     MG_initAlbums();
-    require_once($_MG_CONF['path_html'] . 'maint/rssfeed.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/rssfeed.php';
     MG_buildFullRSS( );
 
     echo COM_refresh($_MG_CONF['admin_url'] . 'index.php?msg=8');
@@ -164,7 +164,7 @@ $T->set_var(array(
 ));
 
 if ($mode == $LANG_MG01['delete'] && !empty ($LANG_MG01['delete'])) {
-    require_once($_MG_CONF['path_html'] . 'maint/batch.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/batch.php';
     MG_purgeMemberAlbums();
     exit;
 } elseif ($mode == $LANG_MG01['cancel']) {

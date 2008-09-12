@@ -33,8 +33,8 @@
 // you will need to edit the path to lib-common.php if you put this file anywhere other than
 // the Ban Plugin admin directory in a standard install
 //
-require_once('../../../lib-common.php');
-require_once($_MG_CONF['path_admin'] . 'navigation.php');
+require_once '../../../lib-common.php';
+require_once $_MG_CONF['path_admin'] . 'navigation.php';
 
 // Path to this file
 $path = $_MG_CONF['admin_url'];

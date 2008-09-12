@@ -27,8 +27,8 @@
 // +---------------------------------------------------------------------------+
 //
 
-require_once('../../../lib-common.php');
-require_once($_MG_CONF['path_admin'] . 'navigation.php');
+require_once '../../../lib-common.php';
+require_once $_MG_CONF['path_admin'] . 'navigation.php';
 
 $display = '';
 
@@ -89,7 +89,7 @@ function MG_MassdeleteAlbum( $album_id ) {
         }
     }
     MG_initAlbums();
-    require_once($_MG_CONF['path_html'] . 'maint/rssfeed.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/rssfeed.php';
     MG_buildFullRSS( );
     echo COM_refresh($_MG_CONF['admin_url'] . '/index.php?msg=15');
 

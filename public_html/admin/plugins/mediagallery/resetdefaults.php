@@ -27,8 +27,8 @@
 // +---------------------------------------------------------------------------+
 //
 
-require_once('../../../lib-common.php');
-require_once($_MG_CONF['path_admin'] . 'navigation.php');
+require_once '../../../lib-common.php';
+require_once $_MG_CONF['path_admin'] . 'navigation.php';
 
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
@@ -56,7 +56,7 @@ switch ($step) {
         $ftp_path = $_CONF['path'] . 'plugins/mediagallery/uploads/';
         $tmp_path = $_CONF['path'] . 'plugins/mediagallery/tmp/';
 
-        require_once($_CONF['path'] . 'plugins/mediagallery/sql/sql_defaults.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/sql/sql_defaults.php';
         // Insert default configuration
         COM_errorLog("Media Gallery: Restoring system defaults",1);
         for ($i = 1; $i <= count($_SQL_DEF); $i++) {

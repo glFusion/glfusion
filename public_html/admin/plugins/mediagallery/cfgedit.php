@@ -27,10 +27,10 @@
 // +---------------------------------------------------------------------------+
 //
 
-require_once('../../../lib-common.php');
-require_once($_MG_CONF['path_admin'] . 'envcheck.php');
-require_once($_MG_CONF['path_admin'] . 'navigation.php');
-require_once($_MG_CONF['path_html'] . 'classFrame.php');
+require_once '../../../lib-common.php';
+require_once $_MG_CONF['path_admin'] . 'envcheck.php';
+require_once $_MG_CONF['path_admin'] . 'navigation.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
 
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {

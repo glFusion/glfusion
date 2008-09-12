@@ -27,7 +27,7 @@
 // +---------------------------------------------------------------------------+
 //
 
-require_once('../../../lib-common.php');
+require_once '../../../lib-common.php';
 
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {

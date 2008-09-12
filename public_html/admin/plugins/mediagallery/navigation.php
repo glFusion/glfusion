@@ -28,7 +28,7 @@
 //
 
 // this file can't be used on its own
-if (strpos ($_SERVER['PHP_SELF'], 'navigation.php') !== false)
+if (stripos ($_SERVER['PHP_SELF'], 'navigation.php') !== false)
 {
     die ('This file can not be used on its own.');
 }

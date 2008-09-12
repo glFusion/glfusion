@@ -35,10 +35,10 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-require_once('../../../lib-common.php');
-require_once($_CONF['path_system']  . 'lib-user.php');
-require_once($_MG_CONF['path_html'] . 'classAlbum.php');
-require_once($_MG_CONF['path_html'] . 'lib-upload.php');
+require_once '../../../lib-common.php';
+require_once $_CONF['path_system']  . 'lib-user.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 
 function MG_xpPubHeader( ) {
     // Send no-cache headers
@@ -353,7 +353,7 @@ if ( $step == "addit" ) {
     $album_desc = $_POST['album_desc'];
     $parent_aid = $_POST['parentaid'];
 
-    require_once($_MG_CONF['path_html'] . 'maint/albumedit.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
     MG_quickCreate($parent_aid,$album_name,$album_desc);
 
     ?>
