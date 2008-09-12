@@ -217,11 +217,13 @@ function SITETAILOR_upgrade_200() {
         DB_query(current($_SQL_DEF),1);
         if (DB_error()) {
             COM_errorLog("SQL Error during Site Tailor plugin update",1);
-            return 1;
+//            return 1;
         }
         next($_SQL_DEF);
     }
-    CACHE_remove_instance('stmenu');
+    if ( function_exists('CACHE_remove_instance') ) {
+        CACHE_remove_instance('stmenu');
+    }
     return 0;
 }
 ?>
