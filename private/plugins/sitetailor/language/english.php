@@ -101,7 +101,8 @@ $LANG_ST01 = array (
     'order'             => 'Order',
     'id'                => 'ID',
     'parent'            => 'Parent',
-    'label'             => 'Label',
+    'label'             => 'Menu Name',
+    'elementlabel'      => 'Element Name',
     'display_after'     => 'Display After',
     'type'              => 'Type',
     'url'               => 'URL',
@@ -213,6 +214,15 @@ $LANG_ST_GLTYPES = array(
     4                   => 'Static Pages Menu',
     5                   => 'Plugin Menu',
     6                   => 'Header Menu',
+);
+
+$LANG_ST_ADMIN = array(
+    1                   => 'Menu Builder allows you to create and edit menus for your site. To add a new menu, click the Create New Menu link above. To edit a menu\'s items, click the icon under the Elements column. To change the menu colors, click the icon under the Options column.',
+    2                   => 'To create a new menu, specify a Menu Name and Menu type below. You can also set the active status, and what group of users will be able to see the menu, with the Active and Visible To fields.',
+    3                   => 'Click on the icon under the Edit column to edit a menu item\'s properties. Arrange the items by moving them up or down with the arrows under the Order column.',
+    4                   => 'To create a new menu element, specify its details and permissions below.',
+    5                   => 'Once an element is created, you can always go back and edit its details and permissions below.',
+    6                   => 'Menu Builder allows you to easily customize the look and feel of your menus. Adjust the values below to create a unique menu style.',
 );
 
 $PLG_sitetailor_MESSAGE1 = 'Site Tailor Logo Options Successfully Saved.';
