@@ -50,9 +50,9 @@ if (file_exists ($langfile)) {
 /*
 * Include MediaGallery config file
 */
-require_once($_CONF['path'] . 'plugins/mediagallery/config.php');
-require_once($_MG_CONF['path_html'] . 'common.php');
-require_once($_MG_CONF['path_html'] . 'classAlbum.php');
+require_once $_CONF['path'] . 'plugins/mediagallery/config.php';
+require_once $_MG_CONF['path_html'] . 'common.php';
+require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
 
 MG_initAlbums();
 
@@ -194,8 +194,8 @@ function plugin_displaycomment_mediagallery($id,$commentid,$title,$order,$format
     }
 
     $retval = '';
-    require_once($_MG_CONF['path_html'] . 'classAlbum.php');
-    require_once($_MG_CONF['path_html'] . 'lib-media.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
+    require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-media.php';
     list($ptitle,$retval,$themeCSS,$album_id) =  MG_displayMediaImage( $id, 0, 0, 0 );
 
     $retval = $themeCSS . $retval;
@@ -254,7 +254,7 @@ function plugin_getheadercss_mediagallery() {
     if ( $retval !== false) {
         $styles[] = CACHE_instance_filename($cacheInstance,0);
     } else {
-        require_once($_MG_CONF['path_html'] . 'classFrame.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
         $nFrame = new mgFrame();
         $nFrame->constructor( $_MG_CONF['random_skin'] );
         $fCSS= $nFrame->getCSS();
@@ -2265,7 +2265,7 @@ function phpblock_mg_randommedia(){
     }
 
     if ( $gotit ) {
-        require_once($_MG_CONF['path_html'] . 'classFrame.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
         $nFrame = new mgFrame();
         $nFrame->constructor( $_MG_CONF['random_skin'] );
         $imageFrameTemplate = $nFrame->getTemplate();
@@ -2420,7 +2420,7 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
                 $T = new Template( MG_getTemplatePath(0) );
                 $T->set_file ('page', 'cb_featured_album.thtml');
                 $T->set_var('xhtml',XHTML);
-                require_once($_MG_CONF['path_html'] . 'classAlbum.php');
+                require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
 
                 if ($MG_albums[$album_id]->last_update > 0 ) {
                     $album_last_update = MG_getUserDateTimeFormat($MG_albums[$album_id]->last_update);
@@ -2619,7 +2619,7 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
             $T = new Template( MG_getTemplatePath(0) );
             $T->set_file ('page', 'cb_featured_album.thtml');
 
-            require_once($_MG_CONF['path_html'] . 'classAlbum.php');
+            require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
 
             if ($MG_albums[$album_id]->last_update > 0 ) {
                 $album_last_update = MG_getUserDateTimeFormat($MG_albums[$album_id]->last_update);
@@ -2823,7 +2823,7 @@ function MG_cleanup_plugin($plugin)
 function plugin_upgrade_mediagallery() {
     global $_CONF, $_TABLES,$_MG_CONF;
 
-    require_once($_CONF['path'] . 'plugins/mediagallery/glupgrade.inc');
+    require_once $_CONF['path'] . 'plugins/mediagallery/glupgrade.inc';
 
     $rc = plugin_plgupgrade_mediagallery();
 
@@ -2858,7 +2858,7 @@ function plugin_uninstall_mediagallery($installCheck='') {
         return false;
     }
 
-    require_once($_CONF['path'] . 'plugins/mediagallery/install.inc');
+    require_once $_CONF['path'] . 'plugins/mediagallery/install.inc';
 
     $rc = plugin_remove_mediagallery();
 
@@ -3218,7 +3218,7 @@ function plugin_profileblocksdisplay_mediagallery( $uid ) {
 function MG_galleryOnly() {
 	global $_MG_CONF, $_CONF, $_USER, $LANG_LOGIN;
 
-	require_once($_MG_CONF['path_html'] . 'mgindex.php');
+	require_once $_CONF['path'] . 'plugins/mediagallery/include/mgindex.php';
 
 	if (!function_exists('MG_usage')) {
 	    // The plugin is disabled
