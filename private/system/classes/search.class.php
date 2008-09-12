@@ -730,7 +730,7 @@ class Search {
             if ($row['description'] != $_CONF['search_no_data'])
                 $row['description'] = stripslashes($this->_shortenText($this->_query, $row['description'], $this->_wordlength));
 
-            $row['date'] = strftime($_CONF['daytime'], $row['date']);
+            $row['date'] = @strftime($_CONF['daytime'], $row['date']);
             $row['hits'] = COM_NumberFormat($row['hits']).' '; // simple solution to a silly problem!
         }
 
