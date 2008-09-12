@@ -207,7 +207,8 @@ margin:20px;
 }
 
 #gl_header {
-background:url(layout/nouveau/images/header-bg-day.jpg) 0 0 repeat-x;
+    background-color:#459ff7;
+/*background:url(layout/nouveau/images/header-bg-day.jpg) 0 0 repeat-x;*/
 height:100px;
 }
 
@@ -2265,6 +2266,7 @@ width:95%;
 	border: 1px #ccc solid;
 	padding: 5px;
 	text-align: left;
+	width:90%;
 }
 
 #configuration fieldset p {  margin: 10px 0px;  }
@@ -2287,5 +2289,5 @@ border-right:1px solid #E9E9E9;
 color:#222222;
 font-weight:bold;
 text-align:right;
-width:140px;
+width:50%;
 }

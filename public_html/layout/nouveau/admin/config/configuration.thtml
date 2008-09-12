@@ -10,7 +10,7 @@
         <td class="block-featured-left" style="vertical-align:top;padding-right:10px;">
             <div class="block-bg-left"> {config_menu} </div>
         </td>
-        <td style="vertical-align:top;">
+        <td style="vertical-align:top;width:85%;">
             <div class="pluginInfo" style="display:{show_changeblock};margin-top:5px;margin-bottom:5px;padding-left:20px;border:1px solid #CCC; height: 120px;overflow: auto; min-height: 50px; max-height: 100px;">
                 {lang_changes_made}:
                 {change_block}
@@ -33,18 +33,12 @@
              <span class="warningsmall">{fs_warning}</span>
             </div>
             <!-- END notes -->
-
-            <table class="inputTable">
-            <col width="240" />
-            <col />
+            <table class="inputTable" style="width:100%;">
             {fs_contents}
             </table>
             </fieldset>
             <!-- END fieldset -->
-
             </div>
-
-
             <input type="hidden" name="form_submit" value="true"{xhtml}>
             <div id="bottom_buttons" class="aligncenter">
                 <input type="submit" value="{lang_save_changes}"{xhtml}>
