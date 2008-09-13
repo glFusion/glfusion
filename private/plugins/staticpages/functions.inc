@@ -39,7 +39,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos($_SERVER['PHP_SELF'], 'functions.inc') !== false) {
+if (stripos($_SERVER['PHP_SELF'], 'functions.inc') !== false) {
     die('This file can not be used on its own.');
 }
 
@@ -62,7 +62,7 @@ if (!isset($_SP_CONF['allow_php'])) {
     $_SP_CONF = $sp_config->get_config('staticpages');
 }
 
-$_SP_CONF['version'] = '1.5.0';
+$_SP_CONF['version'] = '1.5.1';
 
 // +---------------------------------------------------------------------------+
 // | Plugin API - Services                                                     |
