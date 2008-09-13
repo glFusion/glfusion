@@ -78,7 +78,12 @@
         // Get the editor instance that we want to interact with.
         var oEditor = FCKeditorAPI.GetInstance(instanceName) ;
         // return the editor contents in XHTML.
-        return oEditor.GetXHTML( true );
+        var content = '';
+        try {
+            content = oEditor.GetXHTML( true );
+        } catch (e) {}
+
+        return content;
     }
 
     function swapEditorContent(curmode,instanceName) {

@@ -82,18 +82,16 @@
     }
 
     function changeHTMLTextAreaSize(element, option) {
-        var size = 0;
-        var size = document.getElementById(element + '___Frame').height;
+        var currentSize = parseInt(document.getElementById(element + '___Frame').style.height);
         if (option == 'larger') {
-            document.getElementById(element + '___Frame').height = +(size) + 50;
-
+            var newsize = currentSize + 50;
         } else if (option == 'smaller') {
-            document.getElementById(element + '___Frame').height = +(size) - 50;
+            var newsize = currentSize - 50;
         }
+        document.getElementById(element + '___Frame').style.height = newsize + 'px';
     }
 
     function changeTextAreaSize(element, option) {
-        var size = 0;
         var size = document.getElementById(element).rows;
         if (option == 'larger') {
             document.getElementById(element).rows = +(size) + 3;
@@ -107,23 +105,29 @@
         // Get the editor instance that we want to interact with.
         var oEditor = FCKeditorAPI.GetInstance(instanceName) ;
         // return the editor contents in XHTML.
-        return oEditor.GetXHTML( true );
+        var content = '';
+        try {
+            content = oEditor.GetXHTML( true );
+        } catch (e) {}
+
+        return content;
     }
 
     function swapEditorContent(curmode,instanceName) {
         var content = '';
         var oEditor = FCKeditorAPI.GetInstance(instanceName) ;
-        //alert(curmode + ':' + instanceName);
+
         if (curmode == 'adveditor') { // Switching from Text to HTML mode
             // Get the content from the textarea 'text' content and copy it to the editor
             if (instanceName == 'introhtml' )  {
                 content = document.getElementById('introtext').value;
-                //alert('Intro :' + instanceName + '\n' + content);
             } else {
                 content = document.getElementById('bodytext').value;
-                //alert('HTML :' + instanceName + '\n' + content);
             }
-            oEditor.SetHTML(content);
+            try {
+                oEditor.SetHTML(content);
+                } catch (e) {}
+
         } else {
                content = getEditorContent(instanceName);
               if (instanceName == 'introhtml' )  {
