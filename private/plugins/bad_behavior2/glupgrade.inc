@@ -39,7 +39,7 @@ if (stripos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
 
 
 /*
- * If we are being called Geeklog's upgrade routine, there is no
+ * If we are being called glFusion's upgrade routine, there is no
  * COM_errorLog() function available.
  */
 
