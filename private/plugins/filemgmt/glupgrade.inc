@@ -87,7 +87,7 @@ function plugin_plgupgrade_filemgmt() {
             require_once $_CONF['path'] . 'plugins/filemgmt/install_defaults.php';
             plugin_initconfig_filemgmt();
         default :
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.7.0.fusion' WHERE pi_name = 'filemgmt'");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.7.0.fusion',pi_gl_version = '1.1.0' WHERE pi_name = 'filemgmt'");
             return true;
     }
 }
