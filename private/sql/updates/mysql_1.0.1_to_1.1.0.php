@@ -36,7 +36,7 @@ function upgrade_StaticpagesPlugin()
         $rst = DB_query($sql,1);
         if (DB_error()) {
             echo "There was an error upgrading the Static Pages plugin, SQL: $sql<br>";
-            return false;
+//            return false;
         }
     }
 
