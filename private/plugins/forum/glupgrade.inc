@@ -38,7 +38,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
+if (stripos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
 {
     die ('This file can not be used on its own.');
 }
@@ -81,7 +81,7 @@ function plugin_plgupgrade_forum() {
         case "2.7" :
         case "2.7.1" :
             if (upgrade_30() == 0 ) {
-                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '3.0', `pi_gl_version` = '1.4.1' WHERE `pi_name` = 'forum' LIMIT 1");
+                DB_query("UPDATE {$_TABLES['plugins']} SET `pi_version` = '3.0', `pi_gl_version` = '1.0.0' WHERE `pi_name` = 'forum' LIMIT 1");
             } else {
                 return false;
             }
@@ -92,7 +92,7 @@ function plugin_plgupgrade_forum() {
             require_once $_CONF['path'] . 'plugins/forum/install_defaults.php';
             plugin_initconfig_forum();
         default :
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.0.fusion' WHERE pi_name = 'forum'");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.0.fusion',pi_gl_version='1.1.0' WHERE pi_name = 'forum'");
             return true;
     }
 }
@@ -270,7 +270,7 @@ function upgrade_30() {
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
-        COM_errorLOG("Forum Plugin 3.05 update: Executing SQL => " . current($_SQL));
+        COM_errorLOG("Forum Plugin 3.0 update: Executing SQL => " . current($_SQL));
         DB_query(current($_SQL),'1');
         if (DB_error()) {
             COM_errorLog("SQL Error during Forum plugin update",1);
