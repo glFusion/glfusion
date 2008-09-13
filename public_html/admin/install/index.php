@@ -621,11 +621,11 @@ function INST_installEngine($install_type, $install_step)
 
                         INST_pluginAutoUpgrade('sitetailor',1);
                         INST_pluginAutoUpgrade('captcha');
-                        INST_pluginAutoUpgrade('bad_behavior2');
+                        INST_pluginAutoUpgrade('bad_behavior2',1);
                         INST_pluginAutoUpgrade('filemgmt');
                         INST_pluginAutoUpgrade('forum');
                         INST_pluginAutoUpgrade('mediagallery');
-                        INST_pluginAutoUpgrade('commentfeeds');
+                        INST_pluginAutoUpgrade('commentfeeds',1);
 
                         CTL_clearCache();
 
