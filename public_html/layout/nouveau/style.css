@@ -207,8 +207,7 @@ margin:20px;
 }
 
 #gl_header {
-    background-color:#459ff7;
-/*background:url(layout/nouveau/images/header-bg-day.jpg) 0 0 repeat-x;*/
+background:url(layout/nouveau/images/header-bg.png) 0 0 repeat-x;
 height:100px;
 }
 
