@@ -116,6 +116,10 @@ if ( isset($_REQUEST['p'])) {
 list($ptitle,$retval,$themeCSS,$album_id) = MG_displayMediaImage( $mediaObject, $full, $sortOrder,1,$sortID,$page );
 $themeStyle = MG_getThemeCSS($album_id);
 
+if ($themeCSS != '') {
+    $themeCSS = '<style type="text/css">'.$themeCSS.'</style>';
+}
+
 echo MG_siteHeader($ptitle,$themeCSS);
 
 if ( $msg != '' ) {

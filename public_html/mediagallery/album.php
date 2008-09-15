@@ -596,18 +596,17 @@ if ( $total_media > 0 ) {
 
 $T->parse('output','page');
 $themeStyle = MG_getThemeCSS($album_id);
+
 $fCSS= $nFrame->getCSS();
 if ($nFrame->name != $aFrame->name ) {
     $fCSS .= $aFrame->getCSS();
 }
+if ( $fCSS != '' ) {
+    $fCSS = '<style type="text/css">'.$fCSS.'</style>';
+}
 ob_start();
 echo MG_siteHeader(strip_tags($MG_albums[$album_id]->title),$fCSS);
-/*  -- no longer needed, pass via header meta
-echo $nFrame->getCSS();
-if ($nFrame->name != $aFrame->name ) {
-    echo $aFrame->getCSS();
-}
-*/
+
 echo $T->finish($T->get_var('output'));
 echo MG_siteFooter();
 $data = ob_get_contents();
