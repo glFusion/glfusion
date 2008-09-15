@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<rss version="2.0" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+<title>glFusion Site</title>
+<link>http://fusion.ecsnet.org</link>
+<description>Fusing Technology with Style</description>
+<managingEditor>admin@fusion.ecsnet.org</managingEditor>
+<webMaster>admin@fusion.ecsnet.org</webMaster>
+<copyright>Copyright 2008 glFusion Site</copyright>
+<generator>glFusion</generator>
+<pubDate>Mon, 15 Sep 2008 11:49:07 -0500</pubDate>
+<language>en-gb</language>
+<atom:link href="http://fusion.ecsnet.org/backend/glfusion.rss" rel="self" type="application/rss+xml" /><item>
+<title>This &amp;amp; That</title>
+<link>http://fusion.ecsnet.org/article.php?story=2008091416335577</link>
+<guid isPermaLink="true">http://fusion.ecsnet.org/article.php?story=2008091416335577</guid>
+<pubDate>Sun, 14 Sep 2008 16:33:55 -0500</pubDate>
+<comments>http://fusion.ecsnet.org/article.php?story=2008091416335577#comments</comments>
+<dc:subject>General News</dc:subject>
+<description>&lt;p&gt;This and that&lt;/p&gt;
+&lt;p&gt;and a more stuff&lt;/p&gt;</description>
+<trackback:ping>http://fusion.ecsnet.org/trackback.php?id=2008091416335577</trackback:ping>
+</item>
+<item>
+<title>This's is a test</title>
+<link>http://fusion.ecsnet.org/article.php?story=2008091415300331</link>
+<guid isPermaLink="true">http://fusion.ecsnet.org/article.php?story=2008091415300331</guid>
+<pubDate>Sun, 14 Sep 2008 15:30:03 -0500</pubDate>
+<comments>http://fusion.ecsnet.org/article.php?story=2008091415300331#comments</comments>
+<dc:subject>General News</dc:subject>
+<description>&lt;p&gt;This one is already done&lt;/p&gt;
+&lt;p&gt;This is a test...&lt;/p&gt;</description>
+<trackback:ping>http://fusion.ecsnet.org/trackback.php?id=2008091415300331</trackback:ping>
+</item>
+<item>
+<title>Are you secure?</title>
+<link>http://fusion.ecsnet.org/article.php?story=security-reminder</link>
+<guid isPermaLink="true">http://fusion.ecsnet.org/article.php?story=security-reminder</guid>
+<pubDate>Mon, 08 Sep 2008 20:34:50 -0500</pubDate>
+<comments>http://fusion.ecsnet.org/article.php?story=security-reminder#comments</comments>
+<dc:subject>glFusion</dc:subject>
+<description>&lt;p&gt;This is a reminder to secure your site once you have glFusion up and running. What you should do:&lt;/p&gt;&lt;ol&gt;&lt;li&gt;Change the default password for the Admin account.&lt;/li&gt;&lt;li&gt;Remove the install directory (you won't need it any more).&lt;/li&gt;&lt;/ol&gt;</description>
+<trackback:ping>http://fusion.ecsnet.org/trackback.php?id=security-reminder</trackback:ping>
+</item>
+<item>
+<title>What Can You Do with glFusion?</title>
+<link>http://fusion.ecsnet.org/article.php?story=glfusion</link>
+<guid isPermaLink="true">http://fusion.ecsnet.org/article.php?story=glfusion</guid>
+<pubDate>Mon, 08 Sep 2008 20:34:50 -0500</pubDate>
+<comments>http://fusion.ecsnet.org/article.php?story=glfusion#comments</comments>
+<dc:subject>glFusion</dc:subject>
+<description>&lt;p&gt;&lt;strong&gt;&lt;em&gt;glFusion&lt;/em&gt;&lt;/strong&gt; gives you the ability to quickly and easily setup a web site complete with extras like forums, CAPTCHA support, calendaring, and full file and media gallery management solutions.&amp;nbsp; Unique features include:&lt;/p&gt;&lt;ul&gt;    &lt;li&gt;Integrated Menu Builder - Allowing you to change the site menu using an online editor.&lt;/li&gt;    &lt;li&gt;Direct integration of the FCKeditor WYSIWYG editor with your theme's styles.&amp;nbsp; See exactly how your story will look as you type it.&lt;/li&gt;    &lt;li&gt;Pre-installed plugins, bringing additional functionality and enhanced security:    &lt;ul&gt;        &lt;li&gt;Bad Behavior2 - A great tool that blocks bot attacks, spam bots, and other nasties from the Internet&lt;/li&gt;        &lt;li&gt;CAPTCHA - Ensures that humans are the only ones entering content on your site&lt;/li&gt;        &lt;li&gt;Forum - A community collaboration and discussion tool.&lt;/li&gt;        &lt;li&gt;FileMgmt - A complete File Manager for your site&lt;/li&gt;        &lt;li&gt;Media Gallery - A complete multi-media manager.&lt;/li&gt;    &lt;/ul&gt;    &lt;/li&gt;    &lt;li&gt;glFusion gives you a true XHTML compliant site with a pure CSS driven layout.&amp;nbsp; The design is SEO optomized (search engine friendly) and is also more accessible by screen readers and other assistance tools used by the visually impaired.&lt;/li&gt;    &lt;li&gt;Better documentation - the glFusion community has published a full users guide to glFusion - Check out the online wiki at http://www.glfusion.org&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Welcome to your new site, we hope you enjoy using it as much as we did assembling the software to drive it!&lt;/p&gt;&lt;p&gt;The glFusion Team&lt;/p&gt;</description>
+<trackback:ping>http://fusion.ecsnet.org/trackback.php?id=glfusion</trackback:ping>
+</item>
+<item>
+<title>glFusion v1.1.0 - The Revolution Continues...</title>
+<link>http://fusion.ecsnet.org/article.php?story=20080824115808580</link>
+<guid isPermaLink="true">http://fusion.ecsnet.org/article.php?story=20080824115808580</guid>
+<pubDate>Mon, 08 Sep 2008 20:34:50 -0500</pubDate>
+<comments>http://fusion.ecsnet.org/article.php?story=20080824115808580#comments</comments>
+<dc:subject>General News</dc:subject>
+<description>&lt;div style=&quot;margin-bottom: 10px&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;blockquote&gt;&lt;p&gt;&lt;a href=&quot;http://www.glfusion.org&quot; target=&quot;_blank&quot;&gt;glFusion&lt;/a&gt;, the next generation content management system built on the foundation of synergy, stability, and style.&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&amp;nbsp;&lt;/p&gt;&lt;div class=&quot;yui-g&quot; style=&quot;border-bottom: rgb(247,247,247) 2px solid&quot;&gt;&lt;div class=&quot;yui-u first&quot;&gt;&lt;h2&gt;Better Style&lt;/h2&gt;&lt;ul&gt;    &lt;li&gt;The Nouveau Theme - A versitile and flexible default layout.&lt;/li&gt;    &lt;li&gt;Improved WYSIWYG editor integration - See the styles available from the theme in the editor.&lt;/li&gt;    &lt;li&gt;Pure CSS driven layout - Seach Engine friendly and provides a more accessible web site, aiding visually impaired users.&lt;/li&gt;    &lt;li&gt;XHTML Compliant&lt;/li&gt;    &lt;li&gt;Additional authoring styles - Improves the look and feel of your stories.&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div class=&quot;yui-u&quot;&gt;&lt;h2&gt;Better Usability&lt;/h2&gt;&lt;ul&gt;    &lt;li&gt;Caching Template Library - Speed and Scalability&lt;/li&gt;    &lt;li&gt;Integrated Menu Builder&lt;/li&gt;    &lt;li&gt;Integrated Logo management&lt;/li&gt;    &lt;li&gt;Integrated Security Features    &lt;ul&gt;        &lt;li&gt;CAPTCHA Plugin&lt;/li&gt;        &lt;li&gt;Bad Behavior2 Plugin&lt;/li&gt;    &lt;/ul&gt;    &lt;/li&gt;    &lt;li&gt;Integrated Collaboration Tools    &lt;ul&gt;        &lt;li&gt;Forum Plugin&lt;/li&gt;        &lt;li&gt;File Management Plugin&lt;/li&gt;        &lt;li&gt;Media Management Plugin&lt;/li&gt;    &lt;/ul&gt;    &lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&quot;http://www.glfusion.org&quot; target=&quot;_blank&quot;&gt;glFusion&lt;/a&gt;, the next generation content management system built on the foundation of synergy, stability, and style.&lt;em&gt;glFusion&lt;/em&gt; provides a complete content management solution in a single package that lets you get your site up and running quickly, without having to search for 3rd party plugins or components.&lt;/p&gt;&lt;p&gt;&lt;span class=&quot;alert&quot;&gt;&lt;b&gt;Don't forget to change your password after logging in!&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;</description>
+<trackback:ping>http://fusion.ecsnet.org/trackback.php?id=20080824115808580</trackback:ping>
+</item>
+</channel>
+</rss>

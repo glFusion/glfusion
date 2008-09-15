@@ -8,12 +8,12 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2003-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors:   Blaine Lang - blaine@portalparts.com                          |
 // +--------------------------------------------------------------------------+
@@ -49,7 +49,7 @@
         f.elements["expire_minute"].disabled=!disable;
         f.elements["expire_ampm"].disabled=!disable;
     }
-    
+
     function enablecmtclose(obj) {
     var f = obj.form;           // all elements have their parent form in "form"
     var disable = obj.checked;  // Disable when checked
@@ -60,7 +60,7 @@
     f.elements["cmt_close_hour"].disabled=!disable;
     f.elements["cmt_close_minute"].disabled=!disable;
     f.elements["cmt_close_ampm"].disabled=!disable;
-    
+
 }
 
     function showhideEditorDiv(option,selindex) {

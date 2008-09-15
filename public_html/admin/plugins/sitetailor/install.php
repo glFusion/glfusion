@@ -9,9 +9,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Eric Warren            eric AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |

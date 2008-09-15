@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -36,6 +36,10 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
+
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
+}
 
 /**
 * This is the security library for glFusion.  This is used to implement glFusion's
@@ -66,9 +70,7 @@
 // Turn this on to get various debug messages from the code in this library
 $_SEC_VERBOSE = false;
 
-if (strpos ($_SERVER['PHP_SELF'], 'lib-security.php') !== false) {
-    die ('This file can not be used on its own!');
-}
+
 
 /* Constants for account stats */
 define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled

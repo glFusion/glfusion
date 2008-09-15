@@ -85,15 +85,15 @@ function MG_checkEnvironment( ) {
 
     if ( ini_get('safe_mode') != 1 ) {
 
-        switch ( $_MG_CONF['graphicspackage'] ) {
-            case 0 :    // ImageMagick
+        switch ( $_CONF['image_lib'] ) {
+            case 'imagemagick' :    // ImageMagick
                 if (PHP_OS == "WINNT") {
                     $binary = "/convert.exe";
                 } else {
                     $binary = "/convert";
                 }
                 clearstatcache();
-                if (! @file_exists( $_MG_CONF['graphicspackage_path'] . $binary ) ) {
+                if (! @file_exists( $_CONF['path_to_mogrify'] . $binary ) ) {
                     $T->set_var(array(
                         'config_item'   =>  'ImageMagick Programs',
                         'status'        =>  '<font color="red">' .  $LANG_MG01['not_found'] . '</font>'
@@ -106,14 +106,14 @@ function MG_checkEnvironment( ) {
                 }
                 $T->parse('CRow','CheckRow',true);
                 break;
-            case 1 :    // NetPBM
+            case 'netpbm' :    // NetPBM
                 if (PHP_OS == "WINNT") {
                     $binary = "/jpegtopnm.exe";
                 } else {
                     $binary = "/jpegtopnm";
                 }
                 clearstatcache();
-                if (! @file_exists( $_MG_CONF['graphicspackage_path'] . $binary ) ) {
+                if (! @file_exists( $_CONF['path_to_netpbm'] . $binary ) ) {
                     $T->set_var(array(
                         'config_item'   =>  'NetPBM Programs',
                         'status'        =>  '<font color="red">' . $LANG_MG01['not_found'] . '</font>'
@@ -126,7 +126,7 @@ function MG_checkEnvironment( ) {
                 }
                 $T->parse('CRow','CheckRow',true);
                 break;
-            case 2 :        // GD Libs
+            case 'gdlib' :        // GD Libs
                 if ($gdv = gdVersion()) {
                     if ($gdv >=2) {
                         $T->set_var(array(
@@ -150,14 +150,14 @@ function MG_checkEnvironment( ) {
                 break;
         }
 
-        if ( $_MG_CONF['jhead_enabled'] ) {
+        if ( $_CONF['jhead_enabled'] ) {
             if (PHP_OS == "WINNT") {
                 $binary = "/jhead.exe";
             } else {
                 $binary = "/jhead";
             }
             clearstatcache();
-            if (! @file_exists( $_MG_CONF['jhead_path'] . $binary ) ) {
+            if (! @file_exists( $_CONF['path_to_jhead'] . $binary ) ) {
                 $T->set_var(array(
                     'config_item'   =>  'jhead Program',
                     'status'        =>  '<font color="red">' .  $LANG_MG01['not_found'] . '</font>'
@@ -171,14 +171,14 @@ function MG_checkEnvironment( ) {
             $T->parse('CRow','CheckRow',true);
         }
 
-        if ( $_MG_CONF['jpegtran_enabled'] ) {
+        if ( $_CONF['jpegtrans_enabled'] ) {
             if (PHP_OS == "WINNT") {
                 $binary = "/jpegtran.exe";
             } else {
                 $binary = "/jpegtran";
             }
             clearstatcache();
-            if (! @file_exists( $_MG_CONF['jpegtran_path'] . $binary ) ) {
+            if (! @file_exists( $_CONF['path_to_jpegtrans'] . $binary ) ) {
                 $T->set_var(array(
                     'config_item'   =>  'jpegtran Program',
                     'status'        =>  '<font color="red">' .  $LANG_MG01['not_found'] . '</font>'

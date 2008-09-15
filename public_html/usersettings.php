@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -37,8 +34,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('lib-common.php');
-require_once ($_CONF['path_system'] . 'lib-user.php');
+require_once 'lib-common.php';
+require_once $_CONF['path_system'] . 'lib-user.php';
 
 // Set this to true to have this script generate various debug messages in
 // error.log
@@ -884,7 +881,7 @@ function saveuser($A)
     }
 
     // If not set or possibly removed from template - initialize variable
-    if (!isset($A['cookime'])) {
+    if (!isset($A['cooktime'])) {
         $A['cooktime'] = 0;
     } else {
         $A['cooktime'] = COM_applyFilter ($A['cooktime'], true);

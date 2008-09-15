@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -39,7 +39,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos ($_SERVER['PHP_SELF'], 'lib-comment.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
@@ -97,8 +97,6 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     $cmt_title = stripslashes($title);
     $commentbar->set_var('story_title', $cmt_title);
-    $cmt_title = htmlspecialchars($cmt_title);
-    $commentbar->set_var('comment_title', $cmt_title);
 
     if( $type == 'article' ) {
         $articleUrl = COM_buildUrl( $_CONF['site_url']
@@ -122,8 +120,9 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
         list($plgurl, $plgid) = PLG_getCommentUrlId($type);
         $commentbar->set_var( 'story_link', "$plgurl?$plgid=$sid" );
+        $cmt_title = htmlspecialchars($cmt_title);
     }
-
+    $commentbar->set_var('comment_title', $cmt_title);
     if( !empty( $_USER['uid'] ) && ( $_USER['uid'] > 1 )) {
         $username = $_USER['username'];
         $fullname = $_USER['fullname'];

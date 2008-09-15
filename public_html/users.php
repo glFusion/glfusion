@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -483,8 +480,8 @@ function createuser ($username, $email, $email_conf)
 
     $retval = '';
 
-    $username = trim ($username);
-    $email = trim ($email);
+    $username   = COM_truncate(trim ($username),16);
+    $email      = COM_truncate(trim ($email),96);
     $email_conf = trim ($email_conf);
 
     if (!isset ($_CONF['disallow_domains'])) {

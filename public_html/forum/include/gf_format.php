@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -38,7 +38,7 @@
 // +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
-if (stripos ($_SERVER['PHP_SELF'], 'gf_format.php') !== false)
+if (!defined ('GVERSION')) {
 {
     die ('This file can not be used on its own.');
 }

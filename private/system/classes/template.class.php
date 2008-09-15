@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2007-2008 by the following authors:                        |
 // |                                                                          |
 // | Joe Mucchiello     - joe AT throwingdice DOT com                         |
 // |                                                                          |
@@ -36,7 +36,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (stripos ($_SERVER['PHP_SELF'], 'template.class.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 

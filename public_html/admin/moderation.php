@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -53,11 +50,11 @@ function all_submissions($token)
     global $_CONF, $LANG01, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
 
     $menu_arr = array(
-            array('url' => $_CONF['site_admin_url'], 
+            array('url' => $_CONF['site_admin_url'],
                   'text' => $LANG_ADMIN['admin_home']),
-    );    
+    );
     $retval  = COM_startBlock($LANG01[10],'', COM_getBlockTemplate('_admin_block', 'header'));
-    $retval .= ADMIN_createMenu($menu_arr, $LANG29['info'], 
+    $retval .= ADMIN_createMenu($menu_arr, $LANG29['info'],
                                 $_CONF['layout_url'] . '/images/icons/moderation.'. $_IMAGE_TYPE);
 
     if (SEC_hasRights('story.moderate')) {

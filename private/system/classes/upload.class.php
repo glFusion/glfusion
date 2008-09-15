@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -35,7 +35,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (stripos ($_SERVER['PHP_SELF'], 'upload.class.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 

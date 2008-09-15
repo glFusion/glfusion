@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2006-2008 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -30,10 +30,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../../../lib-common.php');
-require_once($_CONF['path'] . '/plugins/captcha/config.php');
-require_once($_CONF['path'] . '/plugins/captcha/functions.inc');
-require_once($_CONF['path'] . '/plugins/captcha/install.inc');
+require_once '../../../lib-common.php');
+require_once $_CONF['path'] . '/plugins/captcha/config.php';
+require_once $_CONF['path'] . '/plugins/captcha/functions.inc';
+require_once $_CONF['path'] . '/plugins/captcha/install.inc';
 
 // Only let Root users access this page
 if (!SEC_inGroup('Root')) {

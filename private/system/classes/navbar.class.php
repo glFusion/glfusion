@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // |                                                                          |
@@ -36,7 +33,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (stripos ($_SERVER['PHP_SELF'], 'navbar.class.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 

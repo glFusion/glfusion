@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -36,8 +33,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('lib-common.php');
-require_once($_CONF['path_system'] . 'classes/search.class.php');
+require_once 'lib-common.php';
+require_once $_CONF['path_system'] . 'classes/search.class.php';
 
 $searchObj = new Search();
 

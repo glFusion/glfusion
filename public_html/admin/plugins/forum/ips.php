@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,8 +37,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-include_once('gf_functions.php');
-require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
+include_once 'gf_functions.php';
+require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 $ip = COM_applyFilter($_REQUEST['ip']);
 $forum = COM_applyFilter($_REQUEST['forum'],true);

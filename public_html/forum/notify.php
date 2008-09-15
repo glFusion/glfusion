@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,9 +37,9 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once("../lib-common.php"); // Path to your lib-common.php
-require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
-require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
+require_once '../lib-common.php'; // Path to your lib-common.php
+require_once $_CONF['path_html'] . 'forum/include/gf_format.php';
+require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
 $id    = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;

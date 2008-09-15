@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -37,7 +34,7 @@
 // +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
-if (strpos($_SERVER['PHP_SELF'], 'auth.inc.php') !== false) {
+if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
 

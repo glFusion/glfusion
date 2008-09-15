@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -35,10 +35,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../../../lib-common.php');
-require_once($_CONF['path'] . 'plugins/forum/config.php');
-require_once($_CONF['path'] . 'plugins/forum/functions.inc');
-require_once($_CONF['path'] . 'plugins/forum/install.inc');
+require_once '../../../lib-common.php';
+require_once $_CONF['path'] . 'plugins/forum/config.php';
+require_once $_CONF['path'] . 'plugins/forum/functions.inc';
+require_once $_CONF['path'] . 'plugins/forum/install.inc';
 
 // Only let Root users access this page
 if (!SEC_inGroup('Root')) {

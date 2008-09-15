@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -29,7 +29,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../../lib-common.php');
+require_once '../../lib-common.php';
 
 // Only let admin users access this page
 if (!SEC_inGroup('Root')) {

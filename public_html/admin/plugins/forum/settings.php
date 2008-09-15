@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -35,7 +35,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-include_once('gf_functions.php');
+include_once 'gf_functions.php';
 
 function gf_RadioButtonSetting(&$template,$title,$help,$parm,$value,$id=1) {
     $template->set_var ('LANG_title', $title);

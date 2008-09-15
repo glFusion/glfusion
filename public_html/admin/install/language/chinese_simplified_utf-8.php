@@ -8,9 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Samuel Maung Stone – sam AT stonemicro DOT com                           |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -21,7 +21,6 @@
 // |          Dirk Haun          - dirk AT haun-online DOT de                 |
 // |          Randy Kolenko      - randy AT nextide DOT ca				      |
 // |          Matt West          - matt AT mattdanger DOT net			      |
-// |		  Samuel Maung Stone – sam AT stonemicro DOT com                  |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |

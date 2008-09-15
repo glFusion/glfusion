@@ -30,6 +30,10 @@
 // +-------------------------------------------------------------------------+
 //
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
+}
+
 /* PortalPart Navbar Function */
 
 function ppNavbar ($menuitems, $selected='', $parms='') {
@@ -66,7 +70,7 @@ function ppCleanField(&$field) {
     }
 }
 
-// Function to clean any posted data 
+// Function to clean any posted data
 function ppCleanData($postarray) {
     array_walk($postarray,'ppCleanField');
     return $postarray;
@@ -123,9 +127,9 @@ function ppGetData($vars,$setglobal=false,$type='')  {
 
   } else {
     foreach ($vars as $key) {
-      if (array_key_exists($key, $_POST)) { 
+      if (array_key_exists($key, $_POST)) {
         $return_data[$key] = $_POST[$key];
-      } elseif (array_key_exists($key, $_GET)) { 
+      } elseif (array_key_exists($key, $_GET)) {
         $return_data[$key] = $_GET[$key];
       }
     }
@@ -223,7 +227,7 @@ function ppRmdir($dirname)
     if (!file_exists($dirname)) {
         return false;
     }
- 
+
     // Simple delete for a file
     if (is_file($dirname)) {
         return unlink($dirname);
@@ -251,14 +255,14 @@ function ppRmdir($dirname)
 function ppRandomFilename() {
 
     $length=10;
-    srand((double)microtime()*1000000); 
-    $possible_charactors = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
-    $string = ""; 
-    while(strlen($string)<$length) { 
-        $string .= substr($possible_charactors, rand()%(strlen($possible_charactors)),1); 
+    srand((double)microtime()*1000000);
+    $possible_charactors = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $string = "";
+    while(strlen($string)<$length) {
+        $string .= substr($possible_charactors, rand()%(strlen($possible_charactors)),1);
     }
     $string .= date('mdHms');   // Now add the numerical MonthDayHourSecond just to ensure no possible duplicate
-    return($string); 
+    return($string);
 
 }
 

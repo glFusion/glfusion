@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,8 +37,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-include_once('gf_functions.php');
-require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
+include_once 'gf_functions.php';
+require_once $_CONF['path_html'] . 'forum/include/gf_format.php';
 
 $forum = COM_applyFilter($_REQUEST['forum'],true);
 $op = COM_applyFilter($_REQUEST['op']);

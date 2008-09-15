@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,7 +37,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-include_once('gf_functions.php');
+include_once 'gf_functions.php';
 
 echo COM_siteHeader();
 echo COM_startBlock($LANG_GF91['gfstats']);

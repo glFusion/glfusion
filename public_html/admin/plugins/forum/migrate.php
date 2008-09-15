@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -36,8 +36,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-include_once('gf_functions.php');
-require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
+include_once 'gf_functions.php';
+require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 if (isset($_POST['migrate']) && $_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] AND $_POST['selforum'] != "select" AND !empty( $_POST['cb_chkentry']) ) {
     $num_stories = 0;

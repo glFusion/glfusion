@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -20,7 +20,7 @@
 // |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
 // |          Dirk Haun         - dirk AT haun-online DOT de                  |
 // |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net    |
-// |          Jared Wenerd      - wenerd87 AT gmail DOT com                    |
+// |          Jared Wenerd      - wenerd87 AT gmail DOT com                   |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |

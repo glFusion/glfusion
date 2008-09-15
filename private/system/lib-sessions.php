@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -35,6 +35,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
+}
+
 /**
 * This is the session management library for glFusion.  Some of this code was
 * borrowed from phpBB 1.4.x which is also GPL'd
@@ -43,10 +47,6 @@
 
 // Turn this on if you want to see various debug messages from this library
 $_SESS_VERBOSE = false;
-
-if (strpos ($_SERVER['PHP_SELF'], 'lib-sessions.php') !== false) {
-    die ('This file can not be used on its own!');
-}
 
 if (empty ($_CONF['cookiedomain'])) {
     preg_match ("/\/\/([^\/:]*)/", $_CONF['site_url'], $server);

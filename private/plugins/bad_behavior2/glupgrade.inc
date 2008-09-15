@@ -9,9 +9,9 @@
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2007 Michael Hampton                                  |
+// | Copyright (C) 2005-2008 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -32,11 +32,9 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (stripos ($_SERVER['PHP_SELF'], 'glupgrade.inc') !== false)
-{
-    die ('This file can not be used on its own.');
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
 }
-
 
 /*
  * If we are being called glFusion's upgrade routine, there is no

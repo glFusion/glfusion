@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -36,16 +36,16 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
+}
+
 /**
 * This is the plugin library for glFusion.  This is the API that plugins can
 * implement to get tight integration with glFusion.
 * See each function for more details.
 *
 */
-
-if (strpos ($_SERVER['PHP_SELF'], 'lib-plugins.php') !== false) {
-    die ('This file can not be used on its own!');
-}
 
 require_once $_CONF['path_system'] . 'classes/plugin.class.php';
 
@@ -770,7 +770,7 @@ function PLG_doSearch($query, $datestart, $dateend, $topic, $type, $author, $key
 
         return $search_results;
     }
-    
+
     foreach ($_PLUGINS as $pi_name)
     {
         $function = 'plugin_dopluginsearch_' . $pi_name;
@@ -941,7 +941,7 @@ function PLG_getCCOptions()
 function PLG_getAdminOptions($force_reload = false)
 {
     static $plgresults = null;
-    
+
     if (!empty($plgresults) && !$force_reload) {
         return $plgresults;
     }

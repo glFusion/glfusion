@@ -13,7 +13,7 @@
 * $Id$
 */
 
-if (strpos($_SERVER['PHP_SELF'], 'EditIPofURL.Admin.class.php') !== false) {
+if (!defined ('GVERSION')) {
     die('This file can not be used on its own!');
 }
 

@@ -9,9 +9,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -48,7 +45,7 @@ require_once '../../../lib-common.php';
 $pi_display_name = 'Spam-X';
 $pi_name         = 'spamx';
 $pi_version      = '1.1.1';
-$gl_version      = '1.0.0';
+$gl_version      = '1.1.0';
 $pi_url          = 'http://www.glfusion.org';
 
 $base_path = $_CONF['path'] . 'plugins/' . $pi_name . '/';

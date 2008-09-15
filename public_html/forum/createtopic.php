@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,12 +37,12 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php'); // Path to your lib-common.php
-require_once ($_CONF['path_html'] . 'forum/include/include_html.php');
-require_once ($_CONF['path_html'] . 'forum/include/gf_showtopic.php');
-require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
-require_once ($_CONF['path_html'] . 'forum/include/lib-uploadfiles.php');
-require_once($_CONF['path'] . 'plugins/forum/debug.php');  // Common Debug Code
+require_once '../lib-common.php'; // Path to your lib-common.php
+require_once $_CONF['path_html'] . 'forum/include/include_html.php';
+require_once $_CONF['path_html'] . 'forum/include/gf_showtopic.php';
+require_once $_CONF['path_html'] . 'forum/include/gf_format.php';
+require_once $_CONF['path_html'] . 'forum/include/lib-uploadfiles.php';
+require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 $retval = '';
 $forumfiles = array();

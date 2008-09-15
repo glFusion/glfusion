@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -35,12 +35,12 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-// set to true to enable debug output in error.log
-$_SYND_DEBUG = false;
-
-if (strpos ($_SERVER['PHP_SELF'], 'lib-syndication.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
+
+// set to true to enable debug output in error.log
+$_SYND_DEBUG = false;
 
 if ($_CONF['trackback_enabled']) {
     require_once ($_CONF['path_system'] . 'lib-trackback.php');

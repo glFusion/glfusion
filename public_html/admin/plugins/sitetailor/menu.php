@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -577,7 +577,7 @@ function ST_saveNewMenuElement ( ) {
  */
 
 function ST_editElement( $menu_id, $mid ) {
-    global $_CONF, $_TABLES, $_ST_CONF, $stMenu,$stMenu,$LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, 
+    global $_CONF, $_TABLES, $_ST_CONF, $stMenu,$stMenu,$LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN,
            $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION;
 
     $retval = '';

@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -35,7 +32,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../../lib-common.php');
+require_once '../../lib-common.php';
 
 if (!SEC_inGroup ('Root')) {
     COM_errorLog ("Access denied to {$PHP_SELF} for user {$_USER['username']}, IP=" . $_SERVER['REMOTE_ADDR']);

@@ -1,7 +1,7 @@
 <?php
 /*
 Bad Behavior - detects and blocks unwanted Web accesses
-Copyright (C) 2005-2006 Michael Hampton
+Copyright (C) 2005-2008 Michael Hampton
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -28,9 +28,8 @@ Please report any problems to badbots AT ioerror DOT us
 ###############################################################################
 ###############################################################################
 
-if (strpos ($_SERVER['PHP_SELF'], 'bad-behavior-glfusion.php') !== false)
-{
-    die ('This file can not be used on its own.');
+if (!defined ('GVERSION')) {
+    die('This file can not be used on its own.');
 }
 
 global $_DB_table_prefix;
@@ -107,7 +106,7 @@ function bb2_read_settings() {
     global $_TABLES, $bb2_settings_defaults;
 
     static $isInstalled   = null;
-    
+
     if ($isInstalled === null) {
         $isInstalled = DB_getItem($_TABLES['vars'],'value','name="bb2_installed"');
     }

@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -35,7 +32,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('../lib-common.php');
+require_once '../lib-common.php';
 
 $id = COM_applyFilter($_GET['id'], true);
 $sql = "SELECT filename,repository_id FROM {$_TABLES['gf_attachments']} WHERE id=$id;";
