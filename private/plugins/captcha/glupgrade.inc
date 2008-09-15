@@ -79,8 +79,12 @@ function plugin_plgupgrade_captcha()
         case "3.0.0" :
         case "3.0.1" :
         case "3.0.2" :
+            // need to migrate the configuration to our new online configuration.
+            require_once $_CONF['path_system'] . 'classes/config.class.php';
+            require_once $_CONF['path'] . 'plugins/captcha/install_defaults.php';
+            plugin_initconfig_captcha();
         default :
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='3.1.0' WHERE pi_name='captcha' LIMIT 1");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='3.1.0',pi_gl_version='1.1.0' WHERE pi_name='captcha' LIMIT 1");
             break;
     }
     if ( DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='captcha'") == $_CP_CONF['version']) {
