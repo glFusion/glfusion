@@ -37,6 +37,6 @@ if ( !isset($_DB_table_prefix) ) {
     $_DB_table_prefix = '';
 }
 
-$_CP_CONF['version']    = '3.1.0';
+$_CP_CONF['version']    = '3.2.0';
 $_TABLES['cp_sessions'] = $_DB_table_prefix . 'cp_sessions';
 ?>
