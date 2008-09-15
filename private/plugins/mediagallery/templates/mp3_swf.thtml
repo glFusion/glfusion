@@ -22,7 +22,9 @@
 <body>
 <script type="text/javascript">
 	var flashvars = {};
-	var params = {};
+    var params = {
+    wmode: "transparent"
+    };
 	var attributes = {};
 	flashvars.mp3Url="{movie}";
 	flashvars.title="{mp3_title}";

@@ -1,6 +1,8 @@
 <script type="text/javascript">
 	var flashvars = {};
-	var params = {};
+    var params = {
+    wmode: "transparent"
+    };
 	var attributes = {};
 	{streamingServerURLmg}
 	flashvars.flvUrl="{videoFile}";

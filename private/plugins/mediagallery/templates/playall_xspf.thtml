@@ -13,7 +13,9 @@
     <h2>{album_desc}</h2>
     <script type="text/javascript">
     	var flashvars = {};
-    	var params = {};
+    var params = {
+    wmode: "transparent"
+    };
     	var attributes = {};
     	flashvars.action="play";
     	flashvars.playlist="{site_url}/xspf.php%3Faid%3D{aid}";

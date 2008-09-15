@@ -11,7 +11,9 @@
 
 <script type="text/javascript">
 	var flashvars = {};
-	var params = {};
+    var params = {
+    wmode: "transparent"
+    };
 	var attributes = {};
 	params.allowfullscreen="true";
 	flashvars.action="{autoplay}";

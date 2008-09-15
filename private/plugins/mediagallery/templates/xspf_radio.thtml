@@ -1,6 +1,8 @@
 <script type="text/javascript">
 	var flashvars = {};
-	var params = {};
+    var params = {
+    wmode: "transparent"
+    };
 	var attributes = {};
 	flashvars.action="{autoplay}";
 	flashvars.playlist="{site_url}/xspf.php?aid={aid}";

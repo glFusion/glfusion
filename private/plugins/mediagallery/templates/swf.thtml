@@ -10,7 +10,9 @@
 <div style="text-align:center;">
 <script type="text/javascript">
 	var flashvars = {};
-	var params = {};
+    var params = {
+    wmode: "transparent"
+    };
 	var attributes = {};
     params.play="{play}";
     params.quality="{quality}";
