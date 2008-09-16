@@ -39,11 +39,11 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
-include_once($_CONF['path_html']."filemgmt/include/header.php");
-include_once($_CONF['path_html']."filemgmt/include/functions.php");
-include_once($_CONF['path_html']."filemgmt/include/xoopstree.php");
-include_once($_CONF['path_html']."filemgmt/include/textsanitizer.php");
+require_once '../lib-common.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 
 $_GROUPS = SEC_getUserGroups( $uid );       // List of groups user is a member of
 $numCategoriesPerRow  = 6;
@@ -188,7 +188,7 @@ if($maxrows > 0) {
         $result2 = DB_query("SELECT username,fullname,photo  FROM {$_TABLES['users']} WHERE uid = $submitter");
         list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
         $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-        include($_CONF['path_html'] ."/filemgmt/include/dlformat.php");
+        include($_CONF['path'] .plugins/filemgmt/include/dlformat.php';
         $p->set_var('cssid',$cssid);
         $p->parse ('filelisting_records', 'records',true);
         $cssid = ($cssid == 2) ? 1 : 2;

@@ -22,10 +22,6 @@
  * This is the "File Uploader" for PHP.
  */
 
-if (stripos ($_SERVER['PHP_SELF'], 'upload.php') !== false) {
-    die ('This file can not be used on its own.');
-}
-
 require('./config.php') ;
 require('./util.php') ;
 require('./io.php') ;
@@ -36,7 +32,6 @@ function SendError( $number, $text )
 {
 	SendUploadResults( $number, '', '', $text ) ;
 }
-
 
 // Check if this uploader has been enabled.
 if ( !$Config['Enabled'] )

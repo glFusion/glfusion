@@ -51,7 +51,6 @@ if (!SEC_hasRights('forum.edit')) {
 
 $navbarMenu = array(
     $LANG_GF06['1']   => $_CONF['site_admin_url'] .'/plugins/forum/index.php',
-/*    $LANG_GF06['2']   => $_CONF['site_admin_url'] .'/plugins/forum/settings.php', */
     $LANG_GF06['3']   => $_CONF['site_admin_url'] .'/plugins/forum/boards.php',
     $LANG_GF06['4']   => $_CONF['site_admin_url'] .'/plugins/forum/mods.php',
     $LANG_GF06['5']   => $_CONF['site_admin_url'] .'/plugins/forum/migrate.php',
@@ -63,7 +62,6 @@ $navbarMenu = array(
 function adminfooter() {
     global $_CONF, $LANG_GF01;
 
-//    $footertemplate = new Template($_CONF['path_layout'] . 'forum/layout/admin');
     $footertemplate = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
     $footertemplate->set_file (array ('footertemplate'=>'footer.thtml'));
 

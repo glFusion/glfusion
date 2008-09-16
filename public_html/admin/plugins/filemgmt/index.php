@@ -35,12 +35,12 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
-include_once $_CONF['path_html']."filemgmt/include/header.php";
-include_once $_CONF['path_html']."filemgmt/include/functions.php";
-include_once $_CONF['path_html']."filemgmt/include/xoopstree.php";
-include_once $_CONF['path_html']."filemgmt/include/textsanitizer.php";
-include_once $_CONF['path_html']."filemgmt/include/errorhandler.php";
-include_once $_CONF['path']."system/classes/navbar.class.php";
+include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
+include_once $_CONF['path'].'system/classes/navbar.class.php';
 
 $op = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 $display = '';

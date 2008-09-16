@@ -37,7 +37,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-include_once 'gf_functions.php';
+require_once 'gf_functions.php';
 
 echo COM_siteHeader();
 echo COM_startBlock($LANG_GF91['gfstats']);
@@ -90,7 +90,6 @@ if ($totalviews['TOTAL'] != 0) {
 }
 
 
-//    $indextemplate = new Template($_CONF['path_layout'] . 'forum/layout/admin');
     $indextemplate = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
     $indextemplate->set_file (array ('indextemplate'=>'index.thtml'));
 

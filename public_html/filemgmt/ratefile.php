@@ -39,11 +39,11 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
-include_once($_CONF[path_html]."filemgmt/include/header.php");
-include_once($_CONF['path_html']."filemgmt/include/functions.php");
-include_once($_CONF[path_html]."filemgmt/include/errorhandler.php");
-include_once($_CONF[path_html]."filemgmt/include/textsanitizer.php");
+require_once '../lib-common.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 
 //$myts =& MyTextSanitizer::getInstance(); // MyTextSanitizer object
 $myts = new MyTextSanitizer;

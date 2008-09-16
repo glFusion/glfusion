@@ -6,7 +6,7 @@
 // |                                                                          |
 // | General formatting routines                                              |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
+// | $Id:: gf_format.php 3155 2008-09-16 02:13:18Z mevans0263                $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
@@ -431,9 +431,9 @@ function gf_preparefordb($message,$postmode) {
 function geshi_formatted($str,$type='PHP') {
     global $_CONF;
 
-    include_once('geshi.php');
+    include_once($_CONF['path'].'lib/geshi/geshi.php');
 
-    $geshi = new Geshi($str,$type,"{$_CONF['path_html']}/forum/include/geshi");
+    $geshi = new Geshi($str,$type,"{$_CONF['path']}lib/geshi");
     $geshi->set_header_type(GESHI_HEADER_DIV);
     //$geshi->enable_strict_mode(true);
     //$geshi->enable_classes();
@@ -1122,7 +1122,6 @@ function gf_showattachments($topic,$mode='') {
         $filemgmtSupport = false;
     }
 
-//    $retval .= '<div id="fileattachlist">';
     while (list($id,$lid,$field_value) =  DB_fetchArray($query)) {
         $retval .= '<div class="tblforumfile">';
         $filename = explode(':',$field_value);
@@ -1148,7 +1147,6 @@ function gf_showattachments($topic,$mode='') {
         }
         $retval .= '</div>';
     }
-//    $retval .= '</div>';
     return $retval;
 }
 
@@ -1157,8 +1155,8 @@ function gf_showattachments($topic,$mode='') {
 function gf_makeFilemgmtCatSelect($uid) {
     global $_CONF,$_FM_TABLES,$_DB_name;
 
-    include_once($_CONF['path_html']."filemgmt/include/xoopstree.php");
-    include_once($_CONF['path_html']."filemgmt/include/textsanitizer.php");
+    include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
+    include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
     $_GROUPS = SEC_getUserGroups( $uid );
     $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupUploadAccessFilter($_GROUPS);

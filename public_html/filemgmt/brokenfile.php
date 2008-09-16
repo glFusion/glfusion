@@ -39,9 +39,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
-include_once($_CONF['path_html']."filemgmt/include/header.php");
-include_once($_CONF['path_html'] ."filemgmt/include/functions.php");
+require_once '../lib-common.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
+include_once $_CONF['path'] .'plugins/filemgmt/include/functions.php';
+
 $lid = COM_applyFilter($_REQUEST['lid'],true);
 if ($lid == 0) {
     echo COM_refresh($_CONF['site_url'] .'/filemgmt/index.php');

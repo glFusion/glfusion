@@ -382,6 +382,10 @@ function form ($A, $error = false)
         $retval .= $sp_template->parse('output','form');
     }
 
+    $rc = setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+               time() + 1200, $_CONF['cookie_path'],
+               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+
     return $retval;
 }
 
@@ -592,6 +596,10 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete']) && SEC_ch
         $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
     }
 } else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save']) && SEC_checkToken()) {
+    // purge any tokens we created for the advanced editor
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
+    DB_Query($sql,1);
+
     if (!empty ($sp_id)) {
         if (!isset ($_POST['sp_onmenu'])) {
             $_POST['sp_onmenu'] = '';

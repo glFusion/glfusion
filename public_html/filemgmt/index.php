@@ -34,11 +34,11 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once("../lib-common.php");
-include_once($_CONF['path_html']."filemgmt/include/header.php");
-include_once($_CONF['path_html']."filemgmt/include/functions.php");
-include_once($_CONF['path_html']."filemgmt/include/xoopstree.php");
-include_once($_CONF['path_html']."filemgmt/include/textsanitizer.php");
+require_once '../lib-common.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 
 // Setup how many categories you want to show in the category row display
 $numCategoriesPerRow   = $_FM_CONF['numcategoriesperrow'];
@@ -105,7 +105,7 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
         $result2 = DB_query("SELECT username,fullname,photo FROM {$_TABLES['users']} WHERE uid = $submitter");
         list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
         $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-        include($_CONF['path_html'] ."/filemgmt/include/dlformat.php");
+        include($_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
 
         $p->set_var('cssid',1);
         $p->parse ('filelisting_records', 'records');
@@ -255,7 +255,7 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
                     $result2 = DB_query("SELECT username,fullname,photo  FROM {$_TABLES['users']} WHERE uid = $submitter");
                     list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
                     $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-                    include($_CONF['path_html'] ."/filemgmt/include/dlformat.php");
+                    include($_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
                     $p->set_var('cssid',$cssid);
                     $p->parse ('filelisting_records', 'records',true);
                     $cssid = ($cssid == 2) ? 1 : 2;

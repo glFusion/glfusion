@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the FileMgmt Plugin for Geeklog                                 |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
@@ -35,7 +32,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('../lib-common.php');
+require_once '../lib-common.php';
 
 if (isset ($_GET['lid'])) {
     echo COM_refresh ($_CONF['site_url'] . '/filemgmt/index.php?id=' . $_GET['lid']);

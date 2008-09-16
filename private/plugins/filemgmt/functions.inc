@@ -224,9 +224,9 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
     $id = str_replace('fileid_','',$id);
     /* Plugin specific code to display relevant content above the comment thread */
     /* Example: Display the file details */
-    include($_CONF['path_html'] ."filemgmt/include/functions.php");
-    include_once($_CONF[path_html]. "filemgmt/include/xoopstree.php");
-    include_once($_CONF[path_html]. "filemgmt/include/textsanitizer.php");
+    include $_CONF['path'] .'plugins/filemgmt/include/functions.php';
+    include_once $_CONF['path']. 'plguins/filemgmt/include/xoopstree.php';
+    include_once $_CONF['path']. 'plugins/filemgmt/include/textsanitizer.php';
 
     $comments = true;   // Checked in filemgmt code in dlformat.php
 
@@ -270,7 +270,7 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
     $result2 = DB_query("SELECT username,fullname,photo FROM {$_TABLES['users']} WHERE uid = $submitter");
     list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
     $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-    include($_CONF[path_html] ."/filemgmt/include/dlformat.php");
+    include $_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
     $p->set_var('cssid',1);
     $p->parse ('filelisting_records', 'records');
     $p->parse ('output', 'page');

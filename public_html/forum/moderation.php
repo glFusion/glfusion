@@ -38,8 +38,8 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path_html'] . 'forum/include/gf_format.php';
-require_once $_CONF['path_html'] . 'forum/include/gf_showtopic.php';
+require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 // Display Common headers

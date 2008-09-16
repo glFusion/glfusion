@@ -39,9 +39,9 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once("../lib-common.php");
-include_once($_CONF['path_html']."filemgmt/include/header.php");
-include_once($_CONF['path_html'] ."filemgmt/include/functions.php");
+require_once '../lib-common.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 
 // Comment out the following security check if you want general filemgmt users access to this report
 if (!SEC_hasRights("filemgmt.edit")) {

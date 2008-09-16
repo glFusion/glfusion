@@ -38,7 +38,7 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php'; // Path to your lib-common.php
-require_once $_CONF['path_html'] . 'forum/include/gf_format.php';
+require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
 $forum      = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;

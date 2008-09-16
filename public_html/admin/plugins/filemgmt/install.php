@@ -34,10 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../../../lib-common.php');
-require_once($_CONF['path'] . 'plugins/filemgmt/config.php');
-require_once($_CONF['path'] . 'plugins/filemgmt/functions.inc');
-require_once($_CONF['path'] . 'plugins/filemgmt/install.inc');
+require_once '../../../lib-common.php';
+require_once $_CONF['path'] . 'plugins/filemgmt/config.php';
+require_once $_CONF['path'] . 'plugins/filemgmt/functions.inc';
+require_once $_CONF['path'] . 'plugins/filemgmt/install.inc';
 
 // Only let Root users access this script
 if (!SEC_inGroup('Root')) {

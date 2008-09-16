@@ -224,7 +224,7 @@ function plugin_profileextrassave_forum()
 {
     global $_CONF,$_USER, $_TABLES;
 
-    require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
+    require_once ($_CONF['path'] . 'plugins/forum/include/gf_format.php');
     $uid = $_USER['uid'];
     if ($uid > 1) {
         $location   = gf_preparefordb($_POST['forum_location'],'html');
@@ -782,7 +782,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
     $allow_smilies = $CONF_FORUM['allow_smilies'];
     $CONF_FORUM['allow_smilies']=0;
 
-    require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
+    require_once ($_CONF['path'] . 'plugins/forum/include/gf_format.php');
     if( !function_exists( 'str_ireplace' ))
     {
         require_once( 'PHP/Compat.php' );
@@ -1268,7 +1268,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM;
     global $LANG_GF02, $mode, $order,$pi_version, $_GROUPS;
 
-    require_once ($_CONF['path_html'] . 'forum/include/gf_format.php');
+    require_once ($_CONF['path'] . 'plugins/forum/include/gf_format.php');
 
     if ($pi_version < 2.6) {
         return;

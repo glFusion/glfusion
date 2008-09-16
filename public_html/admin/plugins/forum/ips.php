@@ -37,7 +37,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-include_once 'gf_functions.php';
+require_once 'gf_functions.php';
 require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 $ip = COM_applyFilter($_REQUEST['ip']);

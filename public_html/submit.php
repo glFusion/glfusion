@@ -226,7 +226,9 @@ function submitstory($topic = '')
     $storyform->parse('theform', 'storyform');
     $retval .= $storyform->finish($storyform->get_var('theform'));
     $retval .= COM_endBlock();
-
+    $rc = setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+               time() + 1200, $_CONF['cookie_path'],
+               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
     return $retval;
 }
 
@@ -407,6 +409,12 @@ if (isset ($_REQUEST['mode'])) {
 }
 
 if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
+    // purge any tokens we created for the advanced editor
+    if ( !isset($_USER['uid'] ) ) {
+        $_USER['uid'] = 1;
+    }
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
+    DB_Query($sql,1);
     if (empty ($_USER['username']) &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
         $display = COM_refresh ($_CONF['site_url'] . '/index.php');

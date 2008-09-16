@@ -702,6 +702,12 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $display .= $story_templates->finish($story_templates->get_var('output'));
     $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
+    $rc = setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+               time() + 1200, $_CONF['cookie_path'],
+               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+
+
+
     return $display;
 }
 
@@ -833,6 +839,10 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     $display .= COM_siteFooter();
     echo $display;
 } else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save'])) {
+    // purge any tokens we created for the advanced editor
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
+    DB_Query($sql,1);
+
     if ( !SEC_checkToken() ) {
         $editor = '';
         if (!empty ($_GET['editor'])) {
@@ -847,6 +857,10 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
         submitstory();
     }
 } else { // 'cancel' or no mode at all
+    // purge any tokens we created for the advanced editor
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
+    DB_Query($sql,1);
+
     $type = '';
     if (isset($_POST['type'])){
         $type = COM_applyFilter ($_POST['type']);

@@ -1184,4 +1184,82 @@ function SEC_checkToken()
     return $return;
 }
 
+/**
+  * Generate a security token.
+  *
+  * This generates and stores a security token. These general security tokens
+  * can be used in cookies to validate an action is allows.
+  *
+  * @param $ttl integer Time to live for token in seconds. Default is 20 minutes.
+  *
+  * @return string  Generated token, it'll be an MD5 hash (32chars)
+  */
+function SEC_createTokenGeneral($action='general',$ttl = 1200)
+{
+    global $_USER, $_TABLES, $_DB_dbms;
+
+    if ( !isset($_USER['uid'] ) || $_USER['uid'] == '' ) {
+        $_USER['uid'] = 1;
+    }
+
+    /* Generate the token */
+    $token = md5($_USER['uid'].$_USER['uid'].uniqid (rand (), 1));
+
+    /* Destroy exired tokens: */
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < NOW())"
+       . " AND (ttl > 0)";
+
+    DB_Query($sql);
+
+    /* Destroy tokens for this user/url combination */
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='$action'";
+    DB_Query($sql);
+
+    $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
+           . "VALUES ('$token', NOW(), {$_USER['uid']}, '$action', $ttl)";
+    DB_Query($sql);
+
+    /* And return the token to the user */
+    return $token;
+}
+
+
+
+function SEC_checkTokenGeneral($token,$action='general')
+{
+    global $_USER, $_TABLES, $_DB_dbms;
+
+    $return = false; // Default to fail.
+
+    if(trim($token) != '') {
+        $token = COM_applyFilter($token);
+        $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
+           . "{$_TABLES['tokens']} WHERE token='$token'";
+
+        $tokens = DB_Query($sql);
+        $numberOfTokens = DB_numRows($tokens);
+        if($numberOfTokens != 1) {
+            $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
+        } else {
+            $tokendata = DB_fetchArray($tokens);
+            /* Check that:
+             *  token's user is the current user.
+             *  token is not expired.
+             */
+            if( $_USER['uid'] != $tokendata['owner_id'] ) {
+                $return = false;
+            } else if($tokendata['expired']) {
+                $return = false;
+            } else if($tokendata['urlfor'] != $action) {
+                $return = false;
+            } else {
+                $return = true; // Everything is OK
+            }
+        }
+    } else {
+        $return = false; // no token.
+    }
+    return $return;
+}
+
 ?>
