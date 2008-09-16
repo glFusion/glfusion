@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
-if (stripos ($_SERVER['PHP_SELF'], 'caption.php') !== false)
+if (!defined ('GVERSION')) {
 {
     die ('This file can not be used on its own.');
 }

@@ -26,7 +26,10 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------+
 //
-
+if (!defined ('GVERSION')) {
+{
+    die ('This file can not be used on its own.');
+}
 $_SQL['mg_start'] = "begin tran";
 
 $_SQL['mg_albums'] = "CREATE TABLE [dbo].[{$_TABLES['mg_albums']}](
