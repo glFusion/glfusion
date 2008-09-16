@@ -111,7 +111,7 @@ class ErrorHandler {
         if (!in_array($e_code, $errorno)) {
             $e_code = '9999';
         }
-        include_once($_CONF['path_html']."filemgmt/include/header.php");
+        include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
         $display  = COM_siteHeader('menu');
         $display .= '<table width="100%" class="plugin" border="0" cellspacing="0" cellpadding="1">';
         $display .= '<tr><td class="pluginAlert" style="text-align:right;padding:5px;">File Management Plugin</td>';
