@@ -291,6 +291,9 @@ class config {
     {
         global $_TABLES;
 
+
+
+
         $Qargs = array($param_name,
                        $set ? serialize($default_value) : 'unset',
                        $type,
@@ -302,6 +305,10 @@ class config {
                        $fieldset,
                        serialize($default_value));
         $Qargs = array_map('addslashes', $Qargs);
+
+        $sql = "DELETE FROM {$_TABLES['conf_values']} WHERE name = '{$Qargs[0]}' AND group_name = '{$Qargs[4]}'";
+        $this->_DB_escapedQuery($sql);
+
         $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
             "subgroup, group_name, selectionArray, sort_order,".
             " fieldset, default_value) VALUES ("
