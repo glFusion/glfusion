@@ -66,13 +66,6 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 // $_BLOCK_TEMPLATE['configmanager_block'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 // $_BLOCK_TEMPLATE['configmanager_subblock'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 
-function nouveau_headerVarsXX( &$template ) {
-    global $_CONF;
-
-	//Enables use of gl_chronometer - a client-side header banner rotator
-	$template->set_var('gl_moochronometer',
-'<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools/gl_moochronometer.js"></script>');
-}
 
 function nouveau_themeJS() {
     global $_CONF;
