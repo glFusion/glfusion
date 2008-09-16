@@ -31,6 +31,10 @@
 // +--------------------------------------------------------------------------+
 //
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 define('HTMLHEAD_PRIO_VERYHIGH', 1);
 define('HTMLHEAD_PRIO_HIGH', 2);
 define('HTMLHEAD_PRIO_NORMAL', 3);
@@ -52,21 +56,21 @@ $HTMLHEAD = Array(
 function HTMLHEAD_style($code, $priority = HTMLHEAD_PRIO_NORMAL, $mime = 'text/css', $cache = false)
 {
     global $HTMLHEAD, $_CONF;
-    
+
     $HTMLHEAD[$priority]['style'][] = '<style type='' . $mime . '\'>\n' . $code . '\n</style>\n';
 }
 
 function HTMLHEAD_script($code, $priority = HTMLHEAD_PRIO_NORMAL, $mime = 'text/javascript', $cache = false)
 {
     global $HTMLHEAD, $_CONF;
-    
+
     $HTMLHEAD[$priority]['script'][] = '<script type=\'' . $mime . '\'>\n<!--\n' . $code . '\n// --></script>\n';
 }
 
 function HTMLHEAD_link($rel, $href, $type = '', $priority = HTMLHEAD_PRIO_NORMAL, $attrs = array())
 {
     global $HTMLHEAD;
-    
+
     $link = '<link rel='' . $rel .'' href='' . htmlspecialchars($href) . ''';
     if (!empty($type)) {
         $link .= ' type='' . $type . ''';
@@ -82,7 +86,7 @@ function HTMLHEAD_link($rel, $href, $type = '', $priority = HTMLHEAD_PRIO_NORMAL
 function HTMLHEAD_link_style($href, $priority = HTMLHEAD_PRIO_NORMAL, $mime = 'text/css', $attrs = array(), $cache = true)
 {
     global $HTMLHEAD;
-    
+
     $link = '<link rel='stylesheet' type='' . $mime . '' href='' . htmlspecialchars($href) . ''';
     if (is_array($attrs)) {
         foreach ($attrs as $k => $v) {
@@ -90,27 +94,27 @@ function HTMLHEAD_link_style($href, $priority = HTMLHEAD_PRIO_NORMAL, $mime = 't
         }
     }
     $link .= XHTML . '>\n';
-    
+
     $HTMLHEAD[$priority]['style'][] = $link;
 }
 
 function HTMLHEAD_link_script($href, $priority = HTMLHEAD_PRIO_NORMAL, $mime = 'text/javascript', $cache = true)
 {
     global $HTMLHEAD, $_CONF;
-    
+
     $link = '<link rel='stylesheet' type='' . $mime . '' href='' . htmlspecialchars($href) . ''';
     if (!empty($title)) {
         $link .= ' title='' . htmlspecialchars($title) . ''';
     }
     $link .= XHTML . '>\n';
-    
+
     $HTMLHEAD[$priority]['script'][] = $link;
 }
 
 function HTMLHEAD_raw($code, $priority = HTMLHEAD_PRIO_NORMAL)
 {
     global $HTMLHEAD, $_CONF;
-    
+
     $HTMLHEAD[$priority]['raw'][] = $code . '\n';
 }
 

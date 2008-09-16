@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 //
 
-if (strpos($_SERVER['PHP_SELF'], 'lib-install.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
@@ -56,14 +56,14 @@ function INSTALLER_install_group($step, &$vars)
     if (isset($step['addroot'])) {
         DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($grp_id, 1)");
     }
-    
+
     return "DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id";
 }
 
 function INSTALLER_install_addgroup($step, &$vars)
 {
     global $_TABLES;
-    
+
     COM_errorLog("Adding a group to another group...");
     if (array_key_exists('parent_var',$step)) {
         $parent_grp = $vars[$step['parent_var']];
@@ -85,7 +85,7 @@ function INSTALLER_install_addgroup($step, &$vars)
         COM_errorLog("Parent or child group missing!");
         return 1;
     }
-    
+
     DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($parent_grp, $child_grp)", 1);
     if (DB_error()) {
         COM_errorLog("Failed to assign group!");
@@ -142,14 +142,14 @@ function INSTALLER_install_mapping($step, &$vars)
 function INSTALLER_install_table($step, &$vars)
 {
     global $_DB_dbms, $_TABLES;
-    
+
     COM_errorLog("Creating table {$step['table']}...");
     static $use_innodb = false;
     static $check_innodb = null;
     if ($check_innodb === null) {
         $check_innodb = ($_DB_dbms == 'mysql');
     }
-        
+
     if ($check_innodb &&
         (DB_getItem ($_TABLES['vars'], 'value', "name = 'database_engine'")
             == 'InnoDB')) {
@@ -175,7 +175,7 @@ function INSTALLER_install_sql($step, &$vars)
     if (isset($step['log'])) {
         COM_errorLog($step['log']);
     }
-    
+
     DB_query($step['sql'], 1);
     if (DB_error()) {
         COM_errorLog("SQL failed!");
@@ -229,7 +229,7 @@ function INSTALLER_install_createvar($step, &$vars)
     } elseif (isset($step['feature'])) {
         $table = $_TABLES['features'];
         $col = 'ft_id';
-        $where = "ft_name = '{$step['feature']}'";        
+        $where = "ft_name = '{$step['feature']}'";
         $major = '__feature';
     } else {
         COM_errorLog("Don't know what var to create");
@@ -293,10 +293,10 @@ function INSTALLER_fail($rev)
     }
 }
 
-function INSTALLER_install($A) 
+function INSTALLER_install($A)
 {
     global $_TABLES;
-    
+
     if (!isset($A['installer']) OR $A['installer']['version'] != INSTALLER_VERSION) {
         COM_errorLog('Invalid or Unknown installer version');
         return 2;
@@ -345,28 +345,28 @@ function INSTALLER_install($A)
 
     DB_query("INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_homepage, pi_enabled) "
            . "VALUES ('{$plugin['name']}', '{$plugin['ver']}', '{$plugin['gl_ver']}', '{$plugin['url']}', 1)", 1);
-    
+
     return 0;
 }
 
 function INSTALLER_uninstall($A)
 {
     global $_TABLES;
-    
+
     $reverse = array_reverse($A);
     $plugin = Array();
     foreach ($reverse as $step) {
         if ($step['type'] == 'feature') {
             $ft_name = addslashes($step['feature']);
             $ft_id = DB_getItem($_TABLES['features'], 'ft_id', "ft_name = '$ft_name'");
-            
+
             COM_errorLog("Removing feature {$step['feature']}....");
             DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $ft_id", 1);
             DB_query("DELETE FROM {$_TABLES['features']} WHERE ft_id = $ft_id", 1);
         } else if ($step['type'] == 'group') {
             $grp_name = addslashes($step['group']);
             $grp_id = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '$grp_name'");
-    
+
             COM_errorLog("Removing group {$step['group']}....");
             DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_grp_id = $grp_id", 1);
             DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id OR ug_grp_id = $grp_id", 1);
@@ -391,14 +391,14 @@ function INSTALLER_uninstall($A)
             }
         }
     }
-    
+
     if (array_key_exists('plugin', $A)) {
         $plugin = $A['plugin'];
         COM_errorLog("Removing plugin {$plugin['name']} from plugins table", 1);
         DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = '{$plugin['name']}'", 1);
     }
 
-    COM_errorLog("Uninstall complete");    
+    COM_errorLog("Uninstall complete");
     return true;
 }
 

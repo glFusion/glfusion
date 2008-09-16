@@ -32,7 +32,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die('This file can not be used on its own!');
+    die ('This file can not be used on its own.');
 }
 
 /*

@@ -34,7 +34,7 @@ http://www.openid.net
 
 *****/
 
-if (stripos ($_SERVER['PHP_SELF'], 'trustroot.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 

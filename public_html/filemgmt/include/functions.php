@@ -39,6 +39,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 function newdownloadgraphic($time, $status) {
     global $_CONF;
 

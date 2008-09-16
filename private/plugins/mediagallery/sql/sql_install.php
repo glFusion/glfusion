@@ -27,7 +27,6 @@
 // +---------------------------------------------------------------------------+
 //
 if (!defined ('GVERSION')) {
-{
     die ('This file can not be used on its own.');
 }
 $_SQL['mg_albums'] = "CREATE TABLE {$_TABLES['mg_albums']} (

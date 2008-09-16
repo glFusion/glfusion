@@ -33,7 +33,7 @@ More info about OpenID:
 http://www.openid.net
 
 *****/
-if (stripos ($_SERVER['PHP_SELF'], 'association.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 

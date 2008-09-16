@@ -157,7 +157,6 @@ class Search {
         global $_USER, $_CONF;
 
         if ( !isset($_USER) || $_USER['uid'] < 2 ) {
-//        if (empty($_USER['username'])) {
             //check if an anonymous user is attempting to illegally access privilege search capabilities
             if (($this->_type != 'all') OR !empty($this->_dateStart) OR !empty($this->_dateEnd) OR ($this->_author > 0) OR !empty($topic)) {
                 if (($_CONF['loginrequired'] == 1) OR ($_CONF['searchloginrequired'] >= 1)) {

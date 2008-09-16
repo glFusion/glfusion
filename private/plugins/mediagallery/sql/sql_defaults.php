@@ -27,7 +27,6 @@
 // +---------------------------------------------------------------------------+
 //
 if (!defined ('GVERSION')) {
-{
     die ('This file can not be used on its own.');
 }
 // Must set $ftp_path and $tmp_path in main routine before including this file.

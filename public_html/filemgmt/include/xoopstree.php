@@ -39,6 +39,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 class XoopsTree{
 
     var $table;     //table with parent-child structure

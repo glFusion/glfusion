@@ -31,7 +31,7 @@
 // +--------------------------------------------------------------------------+
 //
 
-if (strpos($_SERVER['PHP_SELF'], 'lib-scrub.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
@@ -57,7 +57,7 @@ if (strpos($_SERVER['PHP_SELF'], 'lib-scrub.php') !== false) {
  *   * Performs simple validations automatically -- As seen in the above
  *      example, not only is mode assign in one line of code, it is also
  *      only in one of three known states: 'quickadd', 'personal' or ''.
- *              
+ *
  */
 
 
@@ -79,7 +79,7 @@ function SCRUB_integer($key, &$A, $default = 0)
         $data = $A;
     } elseif (array_key_exists($key, $A)) {
         $data = $A[$key];
-    } 
+    }
     if ($data === null) {
         return $default;
     } elseif (is_array($data)) { // handle sub-arrays
@@ -114,7 +114,7 @@ function SCRUB_boundInteger($key, &$A, $default, $low, $high)
         $data = $A;
     } elseif (array_key_exists($key, $A)) {
         $data = $A[$key];
-    } 
+    }
     if ($data === null) {
         if (!is_array($default)) {
             return $default[0];
@@ -155,13 +155,13 @@ function SCRUB_float($key, &$A, $default = 0.0)
         $data = $A;
     } elseif (array_key_exists($key, $A)) {
         $data = $A[$key];
-    } 
+    }
     if ($data === null) {
         return $default;
     } elseif (is_array($data)) { // handle sub-arrays
         return SCRUB_array($data, $default, 'SCRUB_float');
     }
-    
+
     return floatval($data);
 }
 
@@ -184,7 +184,7 @@ function SCRUB_strictText($key, &$A, $default = '')
         $data = $A;
     } elseif (array_key_exists($key, $A)) {
         $data = $A[$key];
-    } 
+    }
     if ($data === null) {
         return $default;
     } elseif (is_array($data)) { // handle sub-arrays
@@ -203,13 +203,13 @@ function SCRUB_modeText($key, &$A, $default = '', $modes_available = Array(), $f
         $data = $A;
     } elseif (array_key_exists($key, $A)) {
         $data = $A[$key];
-    } 
+    }
     if ($data === null) {
         return $default;
     } elseif (is_array($data)) { // handle sub-arrays
         return SCRUB_array($data, $default, 'SCRUB_modeText', $modes_available, $force_lower);
     }
-    
+
     $data = COM_applyFilter($data);
     if ($force_lower) {
         $data = strlower($data);
@@ -229,7 +229,7 @@ function SCRUB_plainText($key, &$A, $default = '')
         $data = $A;
     } elseif (array_key_exists($key, $A)) {
         $data = $A[$key];
-    } 
+    }
     if ($data === null) {
         return $default;
     } elseif (is_array($data)) { // handle sub-arrays
@@ -248,13 +248,13 @@ function SCRUB_htmlText($key, &$A, $default = '')
         $data = $A;
     } elseif (array_key_exists($key, $A)) {
         $data = $A[$key];
-    } 
+    }
     if ($data === null) {
         return $default;
     } elseif (is_array($data)) { // handle sub-arrays
         return SCRUB_array($data, $default, 'SCRUB_htmlText');
     }
-    
+
     return COM_checkWords(COM_checkHTML($data)); // checkHtml calls stripslashes
 }
 
@@ -267,7 +267,7 @@ function SCRUB_freeText($key, &$A, $default = '')
         $data = $A;
     } elseif (array_key_exists($key, $A)) {
         $data = $A[$key];
-    } 
+    }
     if ($data === null) {
         return $default;
     } elseif (is_array($data)) { // handle sub-arrays
@@ -286,7 +286,7 @@ function SCRUB_boolean($key, &$A, $default = false)
         $data = $A;
     } elseif (array_key_exists($key, $A)) {
         $data = $A[$key];
-    } 
+    }
     if ($data === null) {
         return $default;
     } elseif (is_array($data)) { // handle sub-arrays
@@ -305,14 +305,14 @@ function SCRUB_boolean($key, &$A, $default = false)
 /** SCRUB_buttonCheck -- Find which button was pressed on form.
  *
  *  Instead of doing this:
- *      <input type="submit" value="{lang_save}" name="mode"> 
+ *      <input type="submit" value="{lang_save}" name="mode">
  *      <input type="submit" value="{lang_cancel}" name="mode">
  *
- *  and checking 
+ *  and checking
  *      if ($_POST['mode'] == $LANG_ADMIN['save']) ...
  *
  *  Do this:
- *      <input type="submit" value="{lang_save}" name="save"> 
+ *      <input type="submit" value="{lang_save}" name="save">
  *      <input type="submit" value="{lang_cancel}" name="cancel">
  *
  *  and check this way:
@@ -357,7 +357,7 @@ function SCRUB_buttonCheck($buttonList, $A, $default = '', $return_name = true)
  *          $data = $A;
  *      } elseif (array_key_exists($key, $A)) {
  *          $data = $A[$key];
- *      } 
+ *      }
  *      if ($data === null) {
  *          return $default;
  *      } elseif (is_array($data)) { // handle sub-arrays
@@ -389,7 +389,7 @@ function SCRUB_array(&$A, $default, $scrubber)
         $ret = Array();
         foreach($A as $k => $v) {
             if (is_numeric($k)) {
-                $key = intval($k); 
+                $key = intval($k);
             } else {
                 $key = COM_applyFilter($k);
             }
@@ -439,7 +439,7 @@ function SCRUB_array(&$A, $default, $scrubber)
 
 
 
-/** 
+/**
  *  QUOTE_text -- prepare text for inclusion in a sql statement.
  *
  *  @param  string  text    The text to quote
@@ -450,7 +450,7 @@ function QUOTE_text($text)
     return '\''.addslashes($text).'\'';
 }
 
-/** 
+/**
  *  QUOTE_bigtext -- prepare blob text for inclusion in a sql statement.
  *
  *  @param  string  text    The text to quote
@@ -461,7 +461,7 @@ function QUOTE_bigtext($text)
     return '\''.addslashes($text).'\'';
 }
 
-/** 
+/**
  *  QUOTE_int -- prepare number for inclusion in a sql statement.
  *
  *  @param  string  n       The number
@@ -472,7 +472,7 @@ function QUOTE_int($n)
     return intval($n);
 }
 
-/** 
+/**
  *  QUOTE_int -- prepare number for inclusion in a sql statement.
  *
  *  @param  string  b       The boolean

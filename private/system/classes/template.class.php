@@ -1430,7 +1430,7 @@ class Template
     $f = fopen($filename,'w');
     if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
         fwrite($f,
-"<?php if (stripos(".'$'."_SERVER['PHP_SELF'], '".basename($filename)."') !== false) {
+"<?php if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 } ?>\n");
     }

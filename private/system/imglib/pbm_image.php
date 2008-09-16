@@ -29,8 +29,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (strpos ($_SERVER['PHP_SELF'], 'pbm_image.php') !== false)
-{
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 

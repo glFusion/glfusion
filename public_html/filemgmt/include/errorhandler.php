@@ -39,6 +39,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 class ErrorHandler {
     function show($e_code, $pages=1) {
         global $_CONF;

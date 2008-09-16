@@ -40,7 +40,7 @@
 // +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
-    die('This file can not be used on its own.');
+    die ('This file can not be used on its own.');
 }
 
 $plugin_path = $_CONF['path'] . 'plugins/links/';
