@@ -40,8 +40,8 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-include_once $_CONF['path'].'filemgmt/include/header.php';
-include_once $_CONF['path'].'filemgmt/include/functions.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
+include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 
 if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
 
