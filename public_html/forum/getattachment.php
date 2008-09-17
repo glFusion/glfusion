@@ -55,14 +55,19 @@ $filename = $filedata[0];
 $realname = $filedata[1];
 $filepath = "{$CONF_FORUM['uploadpath']}/$filename";
 
-if ($fd = fopen ($filepath, "rb")) {
-    header("Content-type: application/octet-stream");
-    header("Content-Disposition: inline; filename=\"{$realname}\"");
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-    header('Pragma: public');
-    fpassthru($fd);
-    fclose ($fd);
+if ( file_exists($filepath) ) {
+    if ($fd = fopen ($filepath, "rb")) {
+        header("Content-type: application/octet-stream");
+        header("Content-Disposition: inline; filename=\"{$realname}\"");
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+        fpassthru($fd);
+        fclose ($fd);
+    } else {
+        echo "Error: Cannot Display Selected File, $realname";
+        COM_errorLog("Error: Cannot Display Selected File, $realname");
+    }
 } else {
     echo "Error: Cannot Display Selected File, $realname";
     COM_errorLog("Error: Cannot Display Selected File, $realname");
