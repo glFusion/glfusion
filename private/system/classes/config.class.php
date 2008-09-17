@@ -291,9 +291,6 @@ class config {
     {
         global $_TABLES;
 
-
-
-
         $Qargs = array($param_name,
                        $set ? serialize($default_value) : 'unset',
                        $type,
