@@ -382,10 +382,6 @@ function form ($A, $error = false)
         $retval .= $sp_template->parse('output','form');
     }
 
-    $rc = setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-               time() + 1200, $_CONF['cookie_path'],
-               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-
     return $retval;
 }
 
@@ -580,6 +576,9 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete']) && SEC_ch
         PLG_invokeService('staticpages', 'delete', $args, $display, $svc_msg);
     }
 } else if ($mode == 'edit') {
+    @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+               time() + 1200, $_CONF['cookie_path'],
+               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
     $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
     $editor = '';
     if (isset ($_GET['editor'])) {
