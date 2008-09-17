@@ -188,7 +188,7 @@ if($maxrows > 0) {
         $result2 = DB_query("SELECT username,fullname,photo  FROM {$_TABLES['users']} WHERE uid = $submitter");
         list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
         $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-        include($_CONF['path'] .plugins/filemgmt/include/dlformat.php';
+        include $_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
         $p->set_var('cssid',$cssid);
         $p->parse ('filelisting_records', 'records',true);
         $cssid = ($cssid == 2) ? 1 : 2;
