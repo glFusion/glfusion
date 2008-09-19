@@ -118,9 +118,11 @@ function js_out(){
 
     if(js_cacheok($cacheFile,$files)){
         http_conditionalRequest(filemtime($cacheFile));
-        if($conf['allowdebug']) header("X-CacheUsed: $cache");
-        readfile($cacheFile);
-        return;
+        // readfile($cacheFile);
+        $js = file_get_contents($cacheFile);
+        echo $js;
+        flush();
+        exit;
     } else {
         http_conditionalRequest(time());
     }
@@ -157,19 +159,21 @@ function js_out(){
     // finally send output
     print $js;
     unset($js);
+    ob_flush();
+    flush();
+    exit;
 }
 
 /**
  * Load the given file, handle include calls and print it
  */
 function js_load($file){
-    if(!@file_exists($file)) return;
-    static $loaded = array();
+    if (!@file_exists($file))
+        return;
 
     $js = readfile($file);
 
     return;
-
 }
 
 /**
@@ -177,7 +181,6 @@ function js_load($file){
  *
  */
 function js_cacheok($cache,$files){
-    if($_REQUEST['purge']) return false; //support purge request
 
     $ctime = @filemtime($cache);
     if(!$ctime) return false; //There is no cache
