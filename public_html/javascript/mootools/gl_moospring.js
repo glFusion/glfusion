@@ -41,4 +41,4 @@ var GL_moospring = {
 	}
 };
 //lock and load!
-window.addEvent('domready',GL_moospring.start);
+window.addEvent('load',GL_moospring.start);
