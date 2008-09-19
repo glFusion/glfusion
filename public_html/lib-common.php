@@ -3338,7 +3338,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         if ( isset($to[1]) && $to[1] != '' ) {
             $mail->AddAddress($to[0],$to[1]);
         } else {
-            $mail-AddAddress($to[0]);
+            $mail->AddAddress($to[0]);
         }
     } else {
         // assume old style....
