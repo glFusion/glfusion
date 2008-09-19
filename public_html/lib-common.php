@@ -3332,7 +3332,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     if ( is_array($from) && isset($from[1]) && $from[1] != '' ) {
         $mail->FromName = $from[1];
     } else {
-        $mail->FromName = '';
+        $mail->FromName = $_CONF['site_name'];
     }
     if ( is_array($to) && isset($to[0]) && $to[0] != '' ) {
         if ( isset($to[1]) && $to[1] != '' ) {
