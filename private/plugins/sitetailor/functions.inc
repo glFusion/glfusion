@@ -176,7 +176,6 @@ function plugin_cclabel_sitetailor() {
 *
 * Adds the plugin to the Admin menu
 *
-* Universal Plugin:  Modify/Uncomment use it
 *
 * @return   array   Array containing (plugin name, plugin admin url, # of items in plugin or '')
 *
@@ -195,12 +194,6 @@ function plugin_getadminoption_sitetailor() {
     } else {
         return '';
     }
-
-
-
-//    if (SEC_hasRights('sitetailor.admin')) {
-//        return array($LANG_ST00['menulabel'], $_CONF['site_admin_url'] . '/plugins/sitetailor/index.php', 'n/a');
-//    }
 }
 
 function plugin_chkVersion_sitetailor() {
@@ -214,7 +207,7 @@ function plugin_upgrade_sitetailor() {
 
     require_once ($_CONF['path'] . '/plugins/sitetailor/glupgrade.inc');
 
-    $rc = glfusion_plgupgrade_sitetailor();
+    $rc = plugin_plgupgrade_sitetailor();
 
     return $rc;
 }
