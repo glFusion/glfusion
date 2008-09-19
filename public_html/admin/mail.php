@@ -170,7 +170,7 @@ function send_messages ($vars)
 
     $result = DB_query ($sql);
     $nrows = DB_numRows ($result);
-
+    $from = array();
     $from = COM_formatEmailAddress ($vars['fra'], $vars['fraepost']);
     $subject = COM_stripslashes ($vars['subject']);
     $message = COM_stripslashes ($vars['message']);
@@ -178,6 +178,7 @@ function send_messages ($vars)
     // Loop through and send the messages!
     $successes = array ();
     $failures = array ();
+    $to = array();
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray ($result);
         if (empty ($A['fullname'])) {

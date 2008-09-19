@@ -1080,7 +1080,9 @@ function CALENDAR_sendNotification ($table, $A)
     $mailbody .= "\n$LANG08[34]\n";
     $mailbody .= "\n------------------------------\n";
 
-    COM_mail ($_CONF['site_mail'], $mailsubject, $mailbody);
+    $to = array();
+    $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
+    COM_mail ($to, $mailsubject, $mailbody);
 }
 
 

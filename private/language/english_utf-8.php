@@ -1824,17 +1824,26 @@ $LANG_confignames['Core'] = array(
     'path_to_jhead' => 'Path to jhead executable',
     'path_to_jpegtrans' => 'Path to jpegtrans executable',
     'allow_reply_notifications' => 'Allow comment reply notifications?',
-    'search_style' => "Results List Style",
-    'search_limits' => "Page Limits",
-    'search_show_num' => "Show Result Number?",
-    'search_show_type' => "Show Result Type?",
-    'search_show_user' => "Show Author?",
-    'search_show_hits' => "Show Number of Hits?",
-    'search_show_sort' => "Allow User to Sort Results?",
-    'search_show_limit' => "Show Page Limits?",
-    'search_no_data' => "If No Data is Avaliable, Display",
-    'search_separator' => "Group Separator",
-    'search_def_keytype' => "Default Search Method",
+    'search_style' => 'Results List Style',
+    'search_limits' => 'Page Limits',
+    'search_show_num' => 'Show Result Number?',
+    'search_show_type' => 'Show Result Type?',
+    'search_show_user' => 'Show Author?',
+    'search_show_hits' => 'Show Number of Hits?',
+    'search_show_sort' => 'Allow User to Sort Results?',
+    'search_show_limit' => 'Show Page Limits?',
+    'search_no_data' => 'If No Data is Avaliable, Display',
+    'search_separator' => 'Group Separator',
+    'search_def_keytype' => 'Default Search Method',
+    'mail_backend' => 'Mail Backend',
+    'mail_sendmail_path' => 'Path to Sendmail',
+    'mail_sendmail_args' => 'Sendmail Parameters',
+    'mail_smtp_host' => 'SMTP Hostname',
+    'mail_smtp_port' => 'SMTP Port',
+    'mail_smtp_auth' => 'Require SMTP Auth?',
+    'mail_smtp_username' => 'SMTP Auth Username',
+    'mail_smtp_password' => 'SMTP Auth Password',
+    'mail_smtp_secure'   => 'SMTP Security Protocol',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1920,6 +1929,9 @@ $LANG_configselects['Core'] = array(
     17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
     18 => array('Google' => 'google', 'Table' => 'table'),
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
+    20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
+    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
+
 );
 
 ?>

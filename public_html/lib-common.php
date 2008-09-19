@@ -3255,8 +3255,9 @@ function COM_formatEmailAddress( $name, $address )
         $formatted_name = str_replace( '"', '\\"', $formatted_name );
         $formatted_name = '"' . $formatted_name . '"';
     }
+    return array($address,$formatted_name);
 
-    return $formatted_name . ' <' . $address . '>';
+//    return $formatted_name . ' <' . $address . '>';
 }
 
 /**
@@ -3281,16 +3282,6 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
 {
     global $_CONF;
 
-    static $mailobj;
-
-    if( empty( $from ))
-    {
-        $from = COM_formatEmailAddress( $_CONF['site_name'], $_CONF['site_mail']);
-    }
-
-    $to = substr( $to, 0, strcspn( $to, "\r\n" ));
-    $cc = substr( $cc, 0, strcspn( $cc, "\r\n" ));
-    $from = substr( $from, 0, strcspn( $from, "\r\n" ));
     $subject = substr( $subject, 0, strcspn( $subject, "\r\n" ));
     $subject = COM_emailEscape( $subject );
 
@@ -3304,15 +3295,22 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     $mail = new PHPMailer();
     $mail->SetLanguage('en',$_CONF['path'].'lib/phpmailer/language/');
     $mail->CharSet = COM_getCharset();
-    if ($_CONF['mail_settings']['backend'] == 'smtp' ) {
-        $mail->Host     = $_CONF['mail_settings']['host'] . ':' . $_CONF['mail_settings']['port'];
-        $mail->SMTPAuth = $_CONF['mail_settings']['auth'];
-        $mail->Username = $_CONF['mail_settings']['username'];
-        $mail->Password = $_CONF['mail_settings']['password'];
+    if ($_CONF['mail_backend'] == 'smtp' ) {
+        $mail->IsSMTP();
+        $mail->Host     = $_CONF['mail_smtp_host'] . ':' . $_CONF['mail_smtp_port'];
+        if ( $_CONF['mail_smtp_secure'] != 'none' ) {
+            $mail->SMTPSecure = $_CONF['mail_smtp_secure'];
+        }
+        if ( $_CONF['mail_smtp_auth'] ) {
+            $mail->SMTPAuth   = true;
+            $mail->Username = $_CONF['mail_smtp_username'];
+            $mail->Password = $_CONF['mail_smtp_password'];
+        }
         $mail->Mailer = "smtp";
-    } elseif ($_CONF['mail_settings']['backend'] == 'sendmail') {
+
+    } elseif ($_CONF['mail_backend'] == 'sendmail') {
         $mail->Mailer = "sendmail";
-        $mail->Sendmail = $_CONF['mail_settings']['sendmail_path'];
+        $mail->Sendmail = $_CONF['mail_sendmail_path'];
     } else {
         $mail->Mailer = "mail";
     }
@@ -3323,21 +3321,49 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     } else {
         $mail->Body = strip_tags($message);
     }
-//    $mail->Body    = $message;
     $mail->Subject = $subject;
-    $mail->From = $from;
-    $mail->FromName = $_CONF['site_name'];
-    $mail->AddAddress($to);
-    if ( $cc != '' ) {
-        $mail->AddCC($cc);
+
+    if (is_array($from) && isset($from[0]) && $from[0] != '' ) {
+        $mail->From = $from[0];
+    } else {
+        $mail->From = $_CONF['site_mail'];
     }
+
+    if ( is_array($from) && isset($from[1]) && $from[1] != '' ) {
+        $mail->FromName = $from[1];
+    } else {
+        $mail->FromName = '';
+    }
+    if ( is_array($to) && isset($to[0]) && $to[0] != '' ) {
+        if ( isset($to[1]) && $to[1] != '' ) {
+            $mail->AddAddress($to[0],$to[1]);
+        } else {
+            $mail-AddAddress($to[0]);
+        }
+    } else {
+        // assume old style....
+        $mail->AddAddress($to);
+    }
+
+    if ( isset($cc[0]) && $cc[0] != '' ) {
+        if ( isset($cc[1]) && $cc[1] != '' ) {
+            $mail->AddCC($cc[0],$cc[1]);
+        } else {
+            $mail-AddCC($cc[0]);
+        }
+    } else {
+        // assume old style....
+        if ( isset($cc) && $cc != '' ) {
+            $mail->AddCC($cc);
+        }
+    }
+
     if(!$mail->Send()) {
         COM_errorLog("Email Error: " . $mail->ErrorInfo);
         return false;
     }
     return true;
 }
-
 
 /**
 * Creates older stuff block
@@ -4205,7 +4231,7 @@ function COM_emailUserTopics()
         $mailtext .= "\n$LANG08[34]\n";
         $mailtext .= "\n------------------------------\n";
 
-        $mailto = $U['username'] . ' <' . $U['email'] . '>';
+//        $mailto = $U['username'] . ' <' . $U['email'] . '>';
 
         if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
             $mailfrom = $_CONF['noreply_mail'];
@@ -4214,7 +4240,12 @@ function COM_emailUserTopics()
         } else {
             $mailfrom = $_CONF['site_mail'];
         }
-        COM_mail( $mailto, $subject, $mailtext , $mailfrom);
+        $to = array();
+        $from = array();
+        $from = COM_formatEmailAddress('',$mailfrom);
+        $to   = COM_formatEmailAddress( $U['username'],$U['email'] );
+        COM_mail ($to, $subject, $mailtext, $from);
+//        COM_mail( $mailto, $subject, $mailtext , $mailfrom);
     }
 
     DB_query( "UPDATE {$_TABLES['vars']} SET value = NOW() WHERE name = 'lastemailedstories'" );

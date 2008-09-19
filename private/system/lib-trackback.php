@@ -940,7 +940,9 @@ function TRB_sendNotificationEmail ($cid, $what = 'trackback')
         $mailsubject = $_CONF['site_name'] . ' ' . $LANG_TRB['trackback'];
     }
 
-    COM_mail ($_CONF['site_mail'], $mailsubject, $mailbody);
+    $to = array();
+    $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
+    COM_mail ($to, $mailsubject, $mailbody);
 }
 
 ?>

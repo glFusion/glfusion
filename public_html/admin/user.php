@@ -959,7 +959,12 @@ function batchreminders()
                 $mailfrom = $_CONF['site_mail'];
             }
 
-            if (COM_mail ($useremail, $subject, $mailtext, $mailfrom)) {
+            $to = array();
+            $to = COM_formatEmailAddress($username,$useremail);
+            $from = array();
+            $from = COM_formatEmailAddress('',$mailfrom);
+
+            if (COM_mail ($to, $subject, $mailtext, $from)) {
                 DB_query("UPDATE {$_TABLES['users']} SET num_reminders=num_reminders+1 WHERE uid=$userid");
                 $c++;
             } else {

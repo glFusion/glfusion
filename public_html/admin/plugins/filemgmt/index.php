@@ -1212,60 +1212,15 @@ function approve(){
             $mailtext .= "{$_CONF["site_name"]}\n";
             $mailtext .= "{$_CONF['site_url']}\n";
             //COM_errorLOG("email: ".$emailaddress.", text: ".$mailtext);
-            if (function_exists(COM_mail) ) {
-                COM_mail($emailaddress,_MD_APPROVED,$mailtext);
-            } else {
-                mail($emailaddress ,"{$_CONF["site_name"]}: " . _MD_UPLOADAPPROVED ,$mailtext, "From: {$_CONF["site_name"]} <{$_CONF["site_mail"]}>\nReturn-Path: <{$_CONF["site_mail"]}>\nX-Mailer: GeekLog $VERSION" );
-            }
+            $to = array();
+            $to = COM_formatEmailAddress($submitter_name,$emailaddress);
+            COM_mail($to,_MD_APPROVED,$mailtext);
          }
     }
     CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?op=listNewDownloads",2,_MD_NEWDLADDED);
     exit();
 }
-/*
-function uploadNewFile($newfile,$directory) {
-    global $myts,$eh,$filemgmtDuplicatesAllowed,$filemgmtFilePermissions;
-
-    if ($newfile["name"]!="") {
-        $name = $newfile['name'];        // this is the real name of your file
-        $tmp  = $newfile['tmp_name'];    // temporary name of file in temporary directory on server
-        $name = $myts->makeTboxData4Save($name);
-        $logourl = rawurlencode($name);
-        COM_errorLOG("AddNewFileShot - Upload filename  is " .$directory.$myts->makeTboxData4Save($name));
-        if (is_uploaded_file ($tmp)) {             // is this temporary file really uploaded?
-            $newfile = $directory.$name;
-            if(!file_exists($newfile)) {   // Check to see the snapfile already exists
-                $returnMove = move_uploaded_file($tmp, $newfile);    // move temp file to upload directory
-                if (!$returnMove) {
-                    COM_errorLOG("Filemgmt File add by admin error: New file could not be created: ".$tmp." to ".$name);
-                    $eh->show("1106");
-                    return false;
-                } else {
-                    $chown =@chmod ($newfile,$filemgmtFilePermissions);
-                    COM_errorLOG("File uploaded and moved ok");
-                    return true;
-                }
-            } else {
-                // Allow duplicate file names, user may want to have two filelisting to same file or has already copied the files manually
-                COM_errorLOG("Filemgmt - Warning: Added new filelisting for a file that already exists ". $directory.$name);
-                if (!$filemgmtDuplicatesAllowed) {
-                    $eh->show("1108");
-                    return false;
-                } else {
-                   return true;
-                }
-            }
-        } else {
-            COM_errorLOG("Filemgmt upload error: Temporary file does not exist: '".$tmp ."'");
-            $eh->show("1107");
-            return false;
-        }
-    }
-    return false;
-}
-
-*/
 
 function filemgmt_comments($firstcomment) {
     global $_USER,$_CONF;
@@ -1294,17 +1249,6 @@ function filemgmt_error($errormsg) {
     exit();
 }
 
-
-// Check and see if the current config has values for the filemgmt repository set.
-// If not - then initialize these variables and write the filemgmt.php - config file.
-//if ($filemgmt_FileStoreURL == '' OR $filemgmt_FileStore == '') {
-    // Set default values and write over the config file
-//    filemgmtConfigChange('init');
-    // Read in the new values
-//    include ($_CONF['path'] .'plugins/filemgmt/filemgmt.php');
-//}
-
-//debugbreak();
 switch ($op) {
         default:
             mydownloads();

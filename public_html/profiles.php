@@ -122,6 +122,8 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
             } else {
                 $message = strip_tags ($message) . $sig;
             }
+            $to = array();
+            $from = array();
 
             if (!empty ($A['fullname'])) {
                 $to = COM_formatEmailAddress ($A['fullname'], $A['email']);
@@ -370,6 +372,9 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg)
                   . COM_buildUrl ($_CONF['site_url'] . '/article.php?story='
                                   . $sid);
     }
+
+    $mailto = array();
+    $mailfrom = array();
 
     $mailto = COM_formatEmailAddress ($to, $toemail);
     $mailfrom = COM_formatEmailAddress ($from, $fromemail);

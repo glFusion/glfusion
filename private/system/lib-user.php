@@ -187,8 +187,11 @@ function USER_createAndSendPassword ($username, $useremail, $uid)
     } else {
         $mailfrom = $_CONF['site_mail'];
     }
-
-    return COM_mail ($useremail, $subject, $mailtext, $mailfrom);
+    $to = array();
+    $from = array();
+    $from = COM_formatEmailAddress('',$mailfrom);
+    $to   = COM_formatEmailAddress( '',$useremail );
+    return COM_mail ($to, $subject, $mailtext, $from);
 }
 
 /**
@@ -231,7 +234,11 @@ function USER_sendActivationEmail ($username, $useremail)
         $mailfrom = $_CONF['site_mail'];
     }
 
-    return COM_mail ($useremail, $subject, $mailtext, $mailfrom);
+    $to = array();
+    $from = array();
+    $from = COM_formatEmailAddress('',$mailfrom);
+    $to   = COM_formatEmailAddress( '',$useremail );
+    return COM_mail ($to, $subject, $mailtext, $from);
 }
 
 /**
@@ -378,7 +385,10 @@ function USER_sendNotification ($username, $email, $uid, $mode='inactive')
     $mailbody .= "\n------------------------------\n";
 
     $mailsubject = $_CONF['site_name'] . ' ' . $LANG29[40];
-    COM_mail ($_CONF['site_mail'], $mailsubject, $mailbody);
+
+    $to = array();
+    $to   = COM_formatEmailAddress( '',$_CONF['site_mail'] );
+    COM_mail ($to, $mailsubject, $mailbody);
 }
 
 /**

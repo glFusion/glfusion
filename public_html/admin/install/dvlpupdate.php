@@ -113,6 +113,18 @@ $c->add('hide_adminmenu',TRUE,'select',3,12,1,1170,TRUE);
 
 $c->del('use_glfilter', 'forum');
 
+$c->add('mail_backend','mail','select',0,1,20,60,TRUE);
+$c->add('mail_sendmail_path','','text',0,1,NULL,70,TRUE);
+$c->add('mail_sendmail_args','','text',0,1,NULL,80,TRUE);
+$c->add('mail_smtp_host','','text',0,1,NULL,90,TRUE);
+$c->add('mail_smtp_port','25','text',0,1,NULL,100,TRUE);
+$c->add('mail_smtp_auth',FALSE,'select',0,1,0,110,TRUE);
+$c->add('mail_smtp_username','','text',0,1,NULL,120,TRUE);
+$c->add('mail_smtp_password','','text',0,1,NULL,130,TRUE);
+$c->add('mail_smtp_secure','none','select',0,1,21,140,TRUE);
+
+$c->del('mail_settings','Core');
+
 $retval .= 'Development Code upgrades complete - see error.log for details<br>';
 
 $display = COM_siteHeader();

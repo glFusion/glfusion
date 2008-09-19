@@ -411,7 +411,11 @@ function requestpassword ($username, $msg = 0)
         } else {
             $mailfrom = $_CONF['site_mail'];
         }
-        COM_mail ($A['email'], $subject, $mailtext, $mailfrom);
+        $to = array();
+        $to = COM_formatEmailAddress('',$A['email']);
+        $from = array();
+        $from = COM_formatEmailAddress('',$mailfrom);
+        COM_mail ($to, $subject, $mailtext, $from);
 
         if ($msg) {
             $retval .= COM_refresh ($_CONF['site_url'] . "/index.php?msg=$msg");

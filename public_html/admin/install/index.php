@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -105,9 +105,9 @@ function mysql_v($_DB_host, $_DB_user, $_DB_pass)
 }
 
 /**
- * Check if we can skip upgrade steps (post-1.5.0)
+ * Check if we can skip upgrade steps (post-1.0.0)
  *
- * If we're doing an upgrade from 1.5.0 or later and we have the necessary
+ * If we're doing an upgrade from 1.0.0 or later and we have the necessary
  * DB credentials, skip the forms and upgrade directly.
  *
  * @param   string  $dbconfig_path      path to db-config.php
@@ -1123,6 +1123,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $c = config::get_instance();
 
+            $_CONF = $c->get_config('Core');
+
             $c->add('comment_code',0,'select',4,21,17,1670,TRUE);
             $c->add('comment_edit',0,'select',4,21,0,1680,TRUE);
             $c->add('comment_edittime',1800,'text',4,21,NULL,1690,TRUE);
@@ -1136,7 +1138,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $c->add('hide_adminmenu',TRUE,'select',3,12,1,1170,TRUE);
 
-            // search stuff (temp for now)
+            // search stuff
             $c->add('fs_search', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
             $c->add('search_style','google','select',0,6,18,650,TRUE);
             $c->add('search_limits','10,15,25,30','text',0,6,NULL,660,TRUE);
@@ -1155,6 +1157,26 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             // This option should only be set during the install/upgrade because of all
             // the setting up thats required. So hide it from the user.
             $c->add('search_use_fulltext',FALSE,'hidden',0,6);
+
+            /*
+             * Add new mail settings...
+             * need to pull the existing values from the DB
+             * to initialize these properly.
+             */
+
+            $c->add('mail_backend','mail','select',0,1,20,60,TRUE);
+            $c->add('mail_sendmail_path','','text',0,1,NULL,70,TRUE);
+            $c->add('mail_sendmail_args','','text',0,1,NULL,80,TRUE);
+            $c->add('mail_smtp_host','','text',0,1,NULL,90,TRUE);
+            $c->add('mail_smtp_port','','text',0,1,NULL,100,TRUE);
+            $c->add('mail_smtp_auth',FALSE,'select',0,1,0,110,TRUE);
+            $c->add('mail_smtp_username','','text',0,1,NULL,120,TRUE);
+            $c->add('mail_smtp_password','','text',0,1,NULL,130,TRUE);
+            $c->add('mail_smtp_secure','none','select',0,1,21,140,TRUE);
+
+            // now delete the old setting - we don't want it anymore...
+
+            $c->del('mail_settings','Core');
 
             $current_fusion_version = '1.1.0';
             $_SQL = '';

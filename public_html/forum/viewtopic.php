@@ -55,7 +55,7 @@ $showtopic = isset($_REQUEST['showtopic']) ? COM_applyFilter($_REQUEST['showtopi
 $show      = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) : 0;
 $page      = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
 $mode      = isset($_REQUEST['mode']) ? COM_applyFilter($_REQUEST['mode']) : '';
-$highlight = isset($_REQUEST['highlight']) ? COM_applyFilter($_REQUEST['highlight']) : '';
+$highlight = isset($_REQUEST['query']) ? COM_applyFilter($_REQUEST['query']) : '';
 //$forum = DB_getItem($_TABLES['gf_topic'],"forum","id='$showtopic'");
 $result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['gf_topic']} WHERE id = '$showtopic'"); // <- new
 list($forum, $topic_pid, $subject) = DB_fetchArray($result); // <- new

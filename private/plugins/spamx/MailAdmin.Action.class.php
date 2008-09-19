@@ -77,7 +77,9 @@ class MailAdmin extends BaseCommand {
         } else {
             $email_address = $_SPX_CONF['notification_email'];
         }
-        COM_mail($email_address, $subject, $msg);
+        $to = array();
+        $to = COM_formatEmailAddress( '',$email_address );
+        COM_mail($to, $subject, $msg);
         $result = 8;
         SPAMX_log('Mail Sent to Admin');
 

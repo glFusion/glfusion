@@ -2,7 +2,9 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
-- Fixed searching for non-installed plugins when open_basedir restrictions are in effect (GL bug #0000741)
+- Implemented new mailer - added support for secure SMTP (Mark)
+- Fixed searching for non-installed plugins when open_basedir restrictions are in
+  effect (GL bug #0000741)
 - Story cache does not cache date format (Joe)
 - Fixed broken image references in Site Tailor Install (Eric)
 - Changed hard-coded "N/A" from Admins Only menu with a language file generated neutral "-" (Eric)

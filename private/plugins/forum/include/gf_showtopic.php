@@ -240,8 +240,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     }
 
     if($highlight != '') {
-        $showtopic['subject'] = str_replace("$highlight","<font class=highlight>$highlight</font>", $showtopic['subject']);
-        $showtopic['comment'] = str_replace("$highlight","<font class=highlight>$highlight</font>", $showtopic['comment']);
+        $showtopic['subject'] = str_replace("$highlight","<span class=\"b\">$highlight</span>", $showtopic['subject']);
+        $showtopic['comment'] = str_replace("$highlight","<span class=\"b\">$highlight</span>", $showtopic['comment']);
     }
 
     if ($showtopic['pid'] == 0) {

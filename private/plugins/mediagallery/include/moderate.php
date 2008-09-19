@@ -356,7 +356,6 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
                     $result2 = DB_query("SELECT username, fullname, email FROM {$_TABLES['users']} WHERE uid='" . $owner_uid . "'");
                     list($username,$fullname,$email) = DB_fetchArray($result2);
                     if ( $email != '' ) {
-                        $to = $email;
                         $subject = $LANG_MG01['upload_approved'];
                         $body  = $LANG_MG01['upload_approved'];
                         $body .= '<br' . XHTML . '><br' . XHTML . '>';
@@ -364,7 +363,10 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
                         $body .= '<br' . XHTML . '><br' . XHTML . '>';
                         $body .= $_CONF['site_name'] . '<br' . XHTML . '>';
                         $body .= $_CONF['site_url'] . '<br' . XHTML . '>';
-                        $from = COM_formatEmailAddress ($_CONF['site_name'], $_CONF['site_mail']);
+                        $to   = array();
+                        $from = array();
+                        $to   = COM_formatEmailAddress($username,$email);
+                        $from = COM_formatEmailAddress($_CONF['site_name'], $_CONF['site_mail']);
                         if (!COM_mail($to,$subject,$body,$from,true)){
                             COM_errorLog("Media Gallery Error - Unable to send queue notification email");
                         }

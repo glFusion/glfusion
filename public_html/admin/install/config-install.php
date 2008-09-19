@@ -57,7 +57,17 @@ function install_config()
     $c->add('fs_mail', NULL, 'fieldset', 0, 1, NULL, 0, TRUE);
     $c->add('site_mail','','text',0,1,NULL,40,TRUE);
     $c->add('noreply_mail','','text',0,1,NULL,50,TRUE);
-    $c->add('mail_settings',array ('backend' => 'mail', 'sendmail_path' => '/usr/bin/sendmail', 'sendmail_args' => '', 'host' => 'smtp.example.com','port' => '25', 'auth' => false, 'username' => 'smtp-username','password' => 'smtp-password'),'@text',0,1,NULL,160,TRUE);
+//    $c->add('mail_settings',array ('backend' => 'mail', 'sendmail_path' => '/usr/bin/sendmail', 'sendmail_args' => '', 'host' => 'smtp.example.com','port' => '25', 'auth' => false, 'username' => 'smtp-username','password' => 'smtp-password'),'@text',0,1,NULL,160,TRUE);
+
+    $c->add('mail_backend','mail','select',0,1,20,60,TRUE);
+    $c->add('mail_sendmail_path','','text',0,1,NULL,70,TRUE);
+    $c->add('mail_sendmail_args','','text',0,1,NULL,80,TRUE);
+    $c->add('mail_smtp_host','','text',0,1,NULL,90,TRUE);
+    $c->add('mail_smtp_port','25','text',0,1,NULL,100,TRUE);
+    $c->add('mail_smtp_auth',FALSE,'select',0,1,0,110,TRUE);
+    $c->add('mail_smtp_username','','text',0,1,NULL,120,TRUE);
+    $c->add('mail_smtp_password','','text',0,1,NULL,130,TRUE);
+    $c->add('mail_smtp_secure','none','select',0,1,21,140,TRUE);
 
     $c->add('fs_syndication', NULL, 'fieldset', 0, 2, NULL, 0, TRUE);
     $c->add('backend',1,'select',0,2,0,1380,TRUE);

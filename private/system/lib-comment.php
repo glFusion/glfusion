@@ -1154,7 +1154,9 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid)
 
     $mailsubject = $_CONF['site_name'] . ' ' . $LANG03[9];
 
-    COM_mail ($_CONF['site_mail'], $mailsubject, $mailbody);
+    $to = array();
+    $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
+    COM_mail ($to, $mailsubject, $mailbody);
 }
 
 /**
@@ -1376,7 +1378,10 @@ function CMT_sendReport ($cid, $type)
 
     $mailsubject = $_CONF['site_name'] . ' ' . $LANG03[27];
 
-    COM_mail ($_CONF['site_mail'], $mailsubject, $mailbody);
+    $to = array();
+    $to = COM_formatEmailAddress( '',$_CONF['site_mail'] );
+    COM_mail ($to, $mailsubject, $mailbody);
+
     COM_updateSpeedlimit ('mail');
 
     return COM_refresh ($_CONF['site_url'] . '/index.php?msg=27');

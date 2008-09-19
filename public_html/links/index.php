@@ -411,7 +411,9 @@ if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
              .  $LANG_LINKS[120] . LB . '<' . $editurl . '>' . LB . LB
              .  $LANG_LINKS[121] . $_USER['username'] . ', IP: '
              . $_SERVER['REMOTE_ADDR'];
-        COM_mail($_CONF['site_mail'], $LANG_LINKS[118], $msg);
+        $to = array();
+        $to = COM_formatEmailAddress('',$_CONF['site_mail']);
+        COM_mail($to, $LANG_LINKS[118], $msg);
         $message = array($LANG_LINKS[123], $LANG_LINKS[122]);
     }
 }
