@@ -380,6 +380,21 @@ class mbElement {
                             $menu .= '<ul>' . LB;
                         }
                         if( !empty( $_USER['uid'] ) && ( $_USER['uid'] > 1 )) {
+
+
+        $plugin_options = PLG_getAdminOptions();
+        $num_plugins = count($plugin_options);
+        if (SEC_isModerator() OR
+                SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR') OR
+                ($num_plugins > 0))
+        {
+            $url = $_CONF['site_admin_url'] . '/index.php';
+            $label =  $LANG29[34];
+            $menu .= '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
+        }
+
+
+
                             // what's our current URL?
                             $thisUrl = COM_getCurrentURL();
 
