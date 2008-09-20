@@ -225,7 +225,7 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
     /* Plugin specific code to display relevant content above the comment thread */
     /* Example: Display the file details */
     include $_CONF['path'] .'plugins/filemgmt/include/functions.php';
-    include_once $_CONF['path']. 'plguins/filemgmt/include/xoopstree.php';
+    include_once $_CONF['path']. 'plugins/filemgmt/include/xoopstree.php';
     include_once $_CONF['path']. 'plugins/filemgmt/include/textsanitizer.php';
 
     $comments = true;   // Checked in filemgmt code in dlformat.php
