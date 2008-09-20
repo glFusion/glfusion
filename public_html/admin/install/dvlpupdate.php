@@ -125,6 +125,9 @@ $c->add('mail_smtp_secure','none','select',0,1,21,140,TRUE);
 
 $c->del('mail_settings','Core');
 
+// probably need to clear the template cache so do it here
+CTL_clearCache();
+
 $retval .= 'Development Code upgrades complete - see error.log for details<br>';
 
 $display = COM_siteHeader();
