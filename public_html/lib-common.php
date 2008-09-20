@@ -3191,11 +3191,12 @@ function COM_makesid()
 */
 function COM_isEmail( $email )
 {
-    require_once( 'Mail/RFC822.php' );
+    global $_CONF;
 
-    $rfc822 = new Mail_RFC822;
+    require_once $_CONF['path'] . 'lib/email-address-validation/EmailAddressValidator.php';
 
-    return( $rfc822->isValidInetAddress( $email ) ? true : false );
+    $validator = new EmailAddressValidator;
+    return ( $validator->check_email_address( $email ) ? true : false );
 }
 
 
