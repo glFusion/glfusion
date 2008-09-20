@@ -2317,7 +2317,6 @@ function phpblock_mg_randommedia(){
         $F->set_var(array(
             'media_link_start'  => '<a href="' . $url_media . '">',
             'media_link_end'    => '</a>',
-//            'url_media_item'    =>  $url_media_item,
             'url_display_item'  =>  $url_media,
             'media_thumbnail'   =>  $media_thumbnail,
             'media_size'        =>  'width="' . $width . '" height="' . $height . '"',
