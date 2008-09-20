@@ -400,13 +400,14 @@ class Search {
         // Make sure the query is SQL safe
         $query = trim(addslashes($this->_query));
 
-        $sql = "SELECT c.cid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+        $sql = "SELECT c.cid AS id1, s.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
 
         // MSSQL has a problem when concatenating numeric values
         if ($_DB_dbms == 'mssql')
             $sql .= "'/comment.php?mode=view&amp;cid=' + CAST(c.cid AS varchar(10)) AS url ";
         else
-            $sql .= "CONCAT('/comment.php?mode=view&amp;cid=',c.cid) AS url ";
+//            $sql .= "CONCAT('/comment.php?mode=view&amp;cid=',c.cid) AS url ";
+            $sql .= "CONCAT('/article.php?story=',s.sid) AS url ";
 
         $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
         $sql .= "LEFT JOIN {$_TABLES['stories']} AS s ON ((s.sid = c.sid) ";
