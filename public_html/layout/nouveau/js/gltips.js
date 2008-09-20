@@ -1,4 +1,4 @@
-	window.addEvent('domready', function() {
+	window.addEvent('load', function() {
 		var Tips1 = new Tips($$('.gl_mootip')); //enables use of tooltips
 		var Tips2 = new Tips($$('.gl_mootipfade'), { //enables use of fade in/out tooltips
 			initialize:function(){
