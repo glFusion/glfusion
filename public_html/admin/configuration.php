@@ -203,21 +203,7 @@ function configmanager_path_pear_validate($value)
     }
     return $value;
 }
-/**
-* Validate function: Validate input
-*
-* @return   string      validated ata
-*
-*/
 
-function configmanager_mysqldump_path_validate($value)
-{
-    $value = trim($value);
-    if ( $value[strlen($value)-1] != '/' ) {
-        return $value . '/';
-    }
-    return $value;
-}
 /**
 * Validate function: Validate input
 *
