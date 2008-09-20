@@ -445,21 +445,6 @@ function plugin_getheaderjs_forum() {
     return($js);
 }
 
-function plugin_getheadercode_forum() {
-    global $_CONF, $CONF_FORUM;
-/*
-    $gf_header = '';
-
-    $gf_header .= '<script type="text/javascript">' . LB;
-    $gf_header .= '	window.addEvent(\'domready\', function() {' . LB;
-    $gf_header .= '		var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
-    $gf_header .= '	});' . LB;
-    $gf_header .= '</script>' . LB;
-    return $gf_header;
-*/
-return '';
-}
-
 
 /**
 * glFusion is asking us to provide any new items that show up in the type drop-down
@@ -520,7 +505,7 @@ function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type
     list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
     $search->setSQL($sql);
     $search->setFTSQL($ftsql);
-    $search->setRank(5);
+    $search->setRank(4);
 
     return $search;
 }
@@ -544,152 +529,6 @@ function forum_buildSearchAccessSql($clause='AND') {
     }
     return $groupsql;
 }
-
-
-/**
-* this searches for files matching the user query and returns an array of
-* for the header and table rows back to search.php where it will be formated and
-* printed
-*
-* @query            string          Keywords user is looking for
-* @datestart        date/time       Start date to get results for
-* @dateend          date/time       End date to get results for
-* @topic            string          The topic they were searching in
-* @type             string          Type of items they are searching
-* @author           string          Get all results by this author
-*
-*/
-
-function plugin_dopluginsearch_forumOLD($query, $datestart, $dateend, $topic, $type, $author,$keyType,$page, $perpage)
-{
-    global $LANG_GF00, $LANG_GF01, $_TABLES, $_CONF, $CONF_FORUM;
-
-    if (empty($type)) {
-        $type = 'all';
-    }
-    // Bail if we aren't supppose to do our search
-    if ($type <> 'all' AND $type <> 'forum') {
-        $plugin_results = new Plugin();
-        $plugin_results->plugin_name = $LANG_GF00['plugin_name'];
-        $plugin_results->searchlabel = $LANG_GF00['searchlabel'];
-        return $plugin_results;
-    }
-
-    $query = addslashes($query);
-
-    // Build search SQL
-
-    $sqltmp = " WHERE 1=1 ";
-
-    if ( $keyType == 'phrase' ) {
-        $sqltmp .= "AND (comment LIKE '%$query%' OR subject LIKE '%$query%')";
-    } else  if ( $keyType == 'any' ) {
-        $sqltmp .= 'AND ';
-        $tmp = '';
-        $mywords = explode( ' ', $query );
-        foreach( $mywords AS $mysearchitem ) {
-            $mysearchitem = addslashes( $mysearchitem );
-            $tmp .= "( comment LIKE '%$mysearchitem%' OR subject LIKE '%$mysearchitem%' ) OR ";
-        }
-        $tmp = substr($tmp, 0, strlen($tmp) - 3);  // pulls off the last OR
-        $sqltmp .= "($tmp)";
-    } else if ( $keyType == 'all' ) {
-        $sqltmp .= 'AND ';
-        $tmp = '';
-        $mywords = explode( ' ', $query );
-        foreach( $mywords AS $mysearchitem ) {
-            $mysearchitem = addslashes( $mysearchitem );
-            $tmp .= "( comment LIKE '%$mysearchitem%' ) AND ";
-        }
-        $tmp = substr($tmp, 0, strlen($tmp) - 4);
-        $sqltmp .= "($tmp)";
-
-        $sqltmp .= 'OR ';
-        $tmp = '';
-        $mywords = explode( ' ', $query );
-        foreach( $mywords AS $mysearchitem ) {
-            $mysearchitem = addslashes( $mysearchitem );
-            $tmp .= "( subject LIKE '%$mysearchitem%' ) AND ";
-        }
-        $tmp = substr($tmp, 0, strlen($tmp) - 4);
-        $sqltmp .= "($tmp)";
-
-    } else {
-        $sqltmp = "WHERE (comment LIKE '%$query%' OR subject LIKE '%$query%')";
-    }
-
-    if ( $author != 0 ) {
-        $sqltmp .= " AND uid='" . $author . "'";
-    }
-
-    // handle date ranges
-
-    if (!empty($datestart) && !empty($dateend)) {
-        $delim = substr($datestart, 4, 1);
-        $sd = explode($delim,$datestart);
-        $ed = explode($delim,$dateend);
-        $startdate = mktime(0,0,0,$sd[1],$sd[2],$sd[0]);
-        $enddate = mktime(0,0,0,$ed[1],$ed[2],$ed[0]) + 3600;
-        $sqltmp .= " AND date BETWEEN '$startdate' AND '$enddate'";
-    }
-
-    $sql = "SELECT id,name,forum,date,subject,comment,views,uid FROM {$_TABLES['gf_topic']} "
-           . $sqltmp . " ORDER BY date DESC";
-
-    // limit what we are searching for...
-    if ( $perpage < 1 ) {
-        $perpage = 10;
-    }
-    $limitStart = ($page-1) * $perpage;
-    $limitEnd   = $limitStart + $perpage;
-    $sql .= " LIMIT " . $limitStart . "," . $limitEnd;
-
-    // Perform search
-    $result = DB_query($sql);
-
-    // OK, now return coma delmited string of table header labels
-    // Need to use language variables
-    require_once($_CONF['path_system'] . 'classes/plugin.class.php');
-    $plugin_results = new Plugin();
-    $plugin_results->plugin_name = 'forum';
-    if (!empty($author)) {
-       $username = DB_getItem($_TABLES['users'],"username","uid = {$author}");
-       $plugin_results->searchlabel = sprintf($LANG_GF00['searchresults'],$LANG_GF01['FOR'] . '&nbsp;' . $username);
-    } else {
-       $plugin_results->searchlabel = sprintf($LANG_GF00['searchresults'],"");
-    }
-    $plugin_results->addSearchHeading($LANG_GF01['FORUM']);
-    $plugin_results->addSearchHeading($LANG_GF01['SUBJECT']);
-    $plugin_results->addSearchHeading($LANG_GF01['DATE']);
-    $plugin_results->addSearchHeading($LANG_GF01['VIEWS'] );
-    $totalsearched = DB_numRows($result);
-    $searchcount=0;
-    // NOTE if any of your data items need to be links then add them here!
-    // make sure data elements are in an array and in the same order as your
-    // headings above!
-    for ($i = 1; $i <= $totalsearched; $i++) {
-        $A = DB_fetchArray($result);
-        $grp_id = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='{$A['forum']}'");
-        $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
-        if (SEC_inGroup($groupname) OR $grp_id == 2) {
-            if ($CONF_FORUM['use_censor']) {
-                $A['subject'] = COM_checkWords($A['subject']);
-            }
-            $searchcount++;
-            $forumname = DB_getItem($_TABLES['gf_forums'],"forum_name","forum_id='{$A['forum']}'");
-            $subject = wordwrap($A['subject'],40,"<br" . XHTML . ">");
-            $date = strftime('%b %d %Y @ %I:%M %p', $A['date']);
-            $url = $_CONF['site_url']. "/forum/viewtopic.php?showtopic={$A['id']}";
-            $row = array($forumname, "<a href=\"$url\">" . COM_truncate($subject,$CONF_FORUM['show_subject_length'],'...') . "</a>",$date,$A['views']);
-            $plugin_results->addSearchResult($row);
-        }
-    }
-    $plugin_results->num_searchresults = $searchcount;
-    $plugin_results->num_itemssearched = DB_count($_TABLES['gf_topic']);
-
-    return $plugin_results;
-}
-
 
 /* RSS FEED Related API functions */
 
@@ -1029,7 +868,6 @@ function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
     if ($prompt=="") {
         $prompt = $LANG_GF02['msg140'];
     }
-//    $statusmsg = new Template($_CONF['path_layout'] . 'forum/layout');
     $statusmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $statusmsg->set_file (array ('statusmsg'=>'statusmessage.thtml'));
     $statusmsg->set_var ('imgset', $CONF_FORUM['imgset']);
@@ -1135,7 +973,6 @@ function phpblock_forum_newposts() {
                 }
         }
 
-//        $block = new Template($_CONF['path_layout'] . 'forum/layout/blocks');
         $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file (array ('block'=>'latestpostsblock.thtml','topicrecord' => 'block_displayline.thtml'));
         $block->set_var ('phpself', $_CONF['site_url'] .'/index.php');
@@ -1315,7 +1152,6 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         if ( $retval ) {
             return $retval;
         }
-//        $block = new Template ($_CONF['path_layout'] . 'forum/layout/blocks');
         $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file (array ('block'=>'centerblock.thtml','record' => 'centerblock_displayline.thtml'));
         $block->set_var ('phpself', $_CONF['site_url'] .'/index.php');
@@ -1362,15 +1198,9 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $A['subject'] .= '...';
             }
 
-//            if ($CONF_FORUM['allow_user_dateformat']) {
-//                $firstdate = COM_getUserDateTimeFormat ($A['date']);
-//                $firstdate = $firstdate[0];
-//                $lastdate = COM_getUserDateTimeFormat ($A['lastupdated']);
-//                $lastdate = $lastdate[0];
-//            } else {
-                $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $A['date']);
-                $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $A['lastupdated']);
-//            }
+            $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $A['date']);
+            $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $A['lastupdated']);
+
             if ($A['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($A['uid']) . ', ';
                 //$topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($A['uid']));
@@ -1547,7 +1377,6 @@ function forumPLG_showsmilies() {
     if ($CONF_FORUM['use_smilies_plugin'] AND function_exists(msg_showsmilies)) {
         return msg_showsmilies();
     } else {
-//        $t = new Template($_CONF['path_layout'] . 'forum/layout');
         $t = new Template($_CONF['path'] . 'plugins/forum/templates/');
         $t->set_file ('smilies' , 'smilies.thtml');
         $t->set_var ('imgset', "{$_CONF['site_url']}/forum/images");
@@ -1582,12 +1411,10 @@ function forumPLG_getMemberBadge($uid) {
         if (!SEC_inGroup('Root',$uid)) {
             foreach ($CONF_FORUM['grouptags'] as $groupid => $buttonimg) {
                 if (SEC_inGroup($groupid,$uid)) {
-//                    return "<img src=\"{$CONF_FORUM['imgset']}/badges/{$buttonimg}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
                     return "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$buttonimg}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
                 }
             }
         } else {
-//            return "<img src=\"{$CONF_FORUM['imgset']}/badges/{$CONF_FORUM['grouptags']['Root']}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
             return "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$CONF_FORUM['grouptags']['Root']}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
         }
     }
