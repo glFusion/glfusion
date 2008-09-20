@@ -886,6 +886,7 @@ class getid3_riff
 							$ThisFileInfo['mpeg']    = $dummy['mpeg'];
 							$ThisFileInfo['warning'] = $dummy['warning'];
 						}
+						unset($mpeg_scanner);
 					}
 				}
 				break;
@@ -1079,6 +1080,7 @@ class getid3_riff
 		$maxoffset = min($maxoffset, $ThisFileInfo['avdataend']);
 
 		$RIFFchunk = false;
+		$ParsedAudioStream = false;
 
 		fseek($fd, $startoffset, SEEK_SET);
 
@@ -1108,7 +1110,6 @@ class getid3_riff
 							$RIFFchunk[$listname]['offset'] = ftell($fd) - 4;
 							$RIFFchunk[$listname]['size']   = $chunksize;
 
-							static $ParsedAudioStream = false;
 							if ($ParsedAudioStream) {
 
 								// skip over
@@ -1124,7 +1125,6 @@ class getid3_riff
 								if ($AudioChunkStreamType == 'wb') {
 									$FirstFourBytes = substr($AudioChunkHeader, 8, 4);
 									if (preg_match('/^\xFF[\xE2-\xE7\xF2-\xF7\xFA-\xFF][\x00-\xEB]/s', $FirstFourBytes)) {
-
 										// MP3
 										if (getid3_mp3::MPEGaudioHeaderBytesValid($FirstFourBytes)) {
 											$dummy = $ThisFileInfo;
@@ -1140,6 +1140,7 @@ class getid3_riff
 												$ThisFileInfo['bitrate']               = $ThisFileInfo['audio']['bitrate'];
 												$ThisFileInfo['audio']['bitrate_mode'] = strtolower($ThisFileInfo['mpeg']['audio']['bitrate_mode']);
 											}
+											unset($dummy);
 										}
 
 									} elseif (preg_match('/^\x0B\x77/s', $FirstFourBytes)) {
@@ -1158,6 +1159,7 @@ class getid3_riff
 												$ThisFileInfo['ac3']     = $dummy['ac3'];
 												$ThisFileInfo['warning'] = $dummy['warning'];
 											}
+											unset($ac3_tag);
 
 										}
 
@@ -1203,12 +1205,12 @@ class getid3_riff
 
 								// Probably is MP3 data
 								if (getid3_mp3::MPEGaudioHeaderBytesValid(substr($RIFFdataChunkContentsTest, 0, 4))) {
-									
-									// copy info array 
+
+									// copy info array
 									$dummy = $ThisFileInfo;
-									
+
 									getid3_mp3::getOnlyMPEGaudioInfo($fd, $dummy, $RIFFchunk[$chunkname][$thisindex]['offset'], false);
-									
+
                                     // use dummy array unless error
 									if (empty($dummy['error'])) {
 									    $ThisFileInfo = $dummy;
@@ -1232,6 +1234,7 @@ class getid3_riff
 										$ThisFileInfo['ac3']     = $dummy['ac3'];
 										$ThisFileInfo['warning'] = $dummy['warning'];
 									}
+									unset($ac3_tag);
 
 								}
 
@@ -1266,6 +1269,7 @@ class getid3_riff
 										} else {
 											$ThisFileInfo['error'][] = 'Errors parsing DolbyDigital WAV: '.explode(';', $dummy['error']);
 										}
+										unset($ac3_tag);
 
 									} else {
 
@@ -1294,6 +1298,8 @@ class getid3_riff
 						case 'bext':
 						case 'cart':
 						case 'fmt ':
+						case 'strh':
+						case 'strf':
 						case 'MEXT':
 						case 'DISP':
 							// always read data in
@@ -1352,6 +1358,7 @@ class getid3_riff
 			$ThisFileInfo['error']    = $dummy['error'];
 			$ThisFileInfo['tags']     = $dummy['tags'];
 			$ThisFileInfo['comments'] = $dummy['comments'];
+			unset($riff);
 			fclose($fp_temp);
 			unlink($tempfile);
 			return true;

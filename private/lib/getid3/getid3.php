@@ -9,15 +9,13 @@
 //                                                            ///
 /////////////////////////////////////////////////////////////////
 
-// Defines
-define('GETID3_VERSION', '1.7.8b1');
-define('GETID3_FREAD_BUFFER_SIZE', 16384); // read buffer size in bytes
-
-// this file can't be used on its own
-if (strpos ($_SERVER['PHP_SELF'], 'getid3.php') !== false)
-{
-    die ('This file can not be used on its own.');
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
 }
+
+// Defines
+define('GETID3_VERSION', '1.7.8b2');
+define('GETID3_FREAD_BUFFER_SIZE', 16384); // read buffer size in bytes
 
 class getID3
 {
@@ -120,7 +118,7 @@ class getID3
 			if (!is_dir($helperappsdir)) {
 				$this->startup_error .= '"'.$helperappsdir.'" cannot be defined as GETID3_HELPERAPPSDIR because it does not exist';
 			} elseif (strpos(realpath($helperappsdir), ' ') !== false) {
-				$DirPieces = explode(GETID3_OS_DIRSLASH, realpath($helperappsdir));
+				$DirPieces = explode(DIRECTORY_SEPARATOR, realpath($helperappsdir));
 				foreach ($DirPieces as $key => $value) {
 					if ((strpos($value, '.') !== false) && (strpos($value, ' ') === false)) {
 						if (strpos($value, '.') > 8) {
@@ -131,7 +129,7 @@ class getID3
 					}
 					$DirPieces[$key] = strtoupper($value);
 				}
-				$this->startup_error .= 'GETID3_HELPERAPPSDIR must not have any spaces in it - use 8dot3 naming convention if neccesary (on this server that would be something like "'.implode(GETID3_OS_DIRSLASH, $DirPieces).'" - NOTE: this may or may not be the actual 8.3 equivalent of "'.$helperappsdir.'", please double-check). You can run "dir /x" from the commandline to see the correct 8.3-style names.';
+				$this->startup_error .= 'GETID3_HELPERAPPSDIR must not have any spaces in it - use 8dot3 naming convention if neccesary (on this server that would be something like "'.implode(DIRECTORY_SEPARATOR, $DirPieces).'" - NOTE: this may or may not be the actual 8.3 equivalent of "'.$helperappsdir.'", please double-check). You can run "dir /x" from the commandline to see the correct 8.3-style names.';
 			}
 			define('GETID3_HELPERAPPSDIR', realpath($helperappsdir).DIRECTORY_SEPARATOR);
 		}
@@ -241,6 +239,7 @@ class getID3
 			$GETID3_ERRORARRAY = &$this->info['warning'];
 			if (getid3_lib::IncludeDependency(GETID3_INCLUDEPATH.'module.tag.id3v2.php', __FILE__, false)) {
 				$tag = new getid3_id3v2($fp, $this->info);
+				unset($tag);
 			}
 
 		} else {
@@ -267,6 +266,7 @@ class getID3
 				return $this->error('module.tag.id3v1.php is missing - you may disable option_tag_id3v1.');
 			}
 			$tag = new getid3_id3v1($fp, $this->info);
+			unset($tag);
 		}
 
 		// handle APE tag
@@ -275,6 +275,7 @@ class getID3
 				return $this->error('module.tag.apetag.php is missing - you may disable option_tag_apetag.');
 			}
 			$tag = new getid3_apetag($fp, $this->info);
+			unset($tag);
 		}
 
 		// handle lyrics3 tag
@@ -283,6 +284,7 @@ class getID3
 				return $this->error('module.tag.lyrics3.php is missing - you may disable option_tag_lyrics3.');
 			}
 			$tag = new getid3_lyrics3($fp, $this->info);
+			unset($tag);
 		}
 
 		// read 32 kb file data
@@ -345,6 +347,7 @@ class getID3
 		} else {
 			$class = new $class_name($fp, $this->info);
 		}
+		unset($class);
 
 		// close file
 		fclose($fp);
@@ -408,7 +411,7 @@ class getID3
 	function CleanUp() {
 
 		// remove possible empty keys
-		$AVpossibleEmptyKeys = array('dataformat', 'bits_per_sample', 'encoder_options', 'streams');
+		$AVpossibleEmptyKeys = array('dataformat', 'bits_per_sample', 'encoder_options', 'streams', 'bitrate');
 		foreach ($AVpossibleEmptyKeys as $dummy => $key) {
 			if (empty($this->info['audio'][$key]) && isset($this->info['audio'][$key])) {
 				unset($this->info['audio'][$key]);
@@ -1060,8 +1063,6 @@ class getID3
 
 
 	function getHashdata($algorithm) {
-		global $_MG_CONF;
-
 		switch ($algorithm) {
 			case 'md5':
 			case 'sha1':
@@ -1103,12 +1104,12 @@ class getID3
 				$old_abort = ignore_user_abort(true);
 
 				// Create empty file
-				$empty = tempnam($_MG_CONF['tmp_path'], 'getID3');
+				$empty = tempnam('*', 'getID3');
 				touch($empty);
 
 
 				// Use vorbiscomment to make temp file without comments
-				$temp = tempnam($_MG_CONF['tmp_path'], 'getID3');
+				$temp = tempnam('*', 'getID3');
 				$file = $this->info['filenamepath'];
 
 				if (GETID3_OS_ISWINDOWS) {
@@ -1207,6 +1208,23 @@ class getID3
 		//	// should not set overall bitrate and playtime from audio bitrate only
 		//	unset($this->info['bitrate']);
 		//}
+
+		// video bitrate undetermined, but calculable
+		if (isset($this->info['video']['dataformat']) && $this->info['video']['dataformat'] && (!isset($this->info['video']['bitrate']) || ($this->info['video']['bitrate'] == 0))) {
+			// if video bitrate not set
+			if (isset($this->info['audio']['bitrate']) && ($this->info['audio']['bitrate'] > 0) && ($this->info['audio']['bitrate'] == $this->info['bitrate'])) {
+				// AND if audio bitrate is set to same as overall bitrate
+				if (isset($this->info['playtime_seconds']) && ($this->info['playtime_seconds'] > 0)) {
+					// AND if playtime is set
+					if (isset($this->info['avdataend']) && isset($this->info['avdataoffset'])) {
+						// AND if AV data offset start/end is known
+						// THEN we can calculate the video bitrate
+						$this->info['bitrate'] = round((($this->info['avdataend'] - $this->info['avdataoffset']) * 8) / $this->info['playtime_seconds']);
+						$this->info['video']['bitrate'] = $this->info['bitrate'] - $this->info['audio']['bitrate'];
+					}
+				}
+			}
+		}
 
 		if (!isset($this->info['playtime_seconds']) && !empty($this->info['bitrate'])) {
 			$this->info['playtime_seconds'] = (($this->info['avdataend'] - $this->info['avdataoffset']) * 8) / $this->info['bitrate'];

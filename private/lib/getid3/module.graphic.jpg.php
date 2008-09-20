@@ -38,7 +38,7 @@ class getid3_jpg
 				if (function_exists('exif_read_data')) {
 
 					ob_start();
-					$ThisFileInfo['jpg']['exif'] = @exif_read_data($ThisFileInfo['filenamepath'], '', true, false);
+					$ThisFileInfo['jpg']['exif'] = exif_read_data($ThisFileInfo['filenamepath'], '', true, false);
 					$errors = ob_get_contents();
 					if ($errors) {
 						$ThisFileInfo['error'][] = strip_tags($errors);

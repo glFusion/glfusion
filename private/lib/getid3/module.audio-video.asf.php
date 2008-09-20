@@ -27,7 +27,6 @@ class getid3_asf
 {
 
 	function getid3_asf(&$fd, &$ThisFileInfo) {
-		global $_MG_CONF;
 
 		// Shortcuts
 		$thisfile_audio = &$ThisFileInfo['audio'];
@@ -133,7 +132,6 @@ class getid3_asf
 					$offset += 8;
 					$thisfile_asf_filepropertiesobject['preroll']            = getid3_lib::LittleEndian2Int(substr($ASFHeaderData, $offset, 8));
 					$offset += 8;
-					$ThisFileInfo['playtime_seconds'] = ($thisfile_asf_filepropertiesobject['play_duration'] / 10000000) - ($thisfile_asf_filepropertiesobject['preroll'] / 1000);
 					$thisfile_asf_filepropertiesobject['flags_raw']          = getid3_lib::LittleEndian2Int(substr($ASFHeaderData, $offset, 4));
 					$offset += 4;
 					$thisfile_asf_filepropertiesobject['flags']['broadcast'] = (bool) ($thisfile_asf_filepropertiesobject['flags_raw'] & 0x0001);
@@ -145,8 +143,25 @@ class getid3_asf
 					$offset += 4;
 					$thisfile_asf_filepropertiesobject['max_bitrate']        = getid3_lib::LittleEndian2Int(substr($ASFHeaderData, $offset, 4));
 					$offset += 4;
-					//$ThisFileInfo['bitrate']                                 = $thisfile_asf_filepropertiesobject['max_bitrate'];
-					$ThisFileInfo['bitrate']                                 = ($thisfile_asf_filepropertiesobject['filesize'] * 8) / $ThisFileInfo['playtime_seconds'];
+
+					if ($thisfile_asf_filepropertiesobject['flags']['broadcast']) {
+
+						// broadcast flag is set, some values invalid
+						unset($thisfile_asf_filepropertiesobject['filesize']);
+						unset($thisfile_asf_filepropertiesobject['data_packets']);
+						unset($thisfile_asf_filepropertiesobject['play_duration']);
+						unset($thisfile_asf_filepropertiesobject['send_duration']);
+						unset($thisfile_asf_filepropertiesobject['min_packet_size']);
+						unset($thisfile_asf_filepropertiesobject['max_packet_size']);
+
+					} else {
+
+						// broadcast flag NOT set, perform calculations
+						$ThisFileInfo['playtime_seconds'] = ($thisfile_asf_filepropertiesobject['play_duration'] / 10000000) - ($thisfile_asf_filepropertiesobject['preroll'] / 1000);
+
+						//$ThisFileInfo['bitrate'] = $thisfile_asf_filepropertiesobject['max_bitrate'];
+						$ThisFileInfo['bitrate'] = ((isset($thisfile_asf_filepropertiesobject['filesize']) ? $thisfile_asf_filepropertiesobject['filesize'] : $ThisFileInfo['filesize']) * 8) / $ThisFileInfo['playtime_seconds'];
+					}
 					break;
 
 				case GETID3_ASF_Stream_Properties_Object:
@@ -779,7 +794,7 @@ class getid3_asf
 							case 'id3':
 								// id3v2 module might not be loaded
 								if (class_exists('getid3_id3v2')) {
-								    $tempfile         = tempnam($_MG_CONF['tmp_path'], 'getID3');
+								    $tempfile         = tempnam('*', 'getID3');
 								    $tempfilehandle   = fopen($tempfile, "wb");
 									$tempThisfileInfo = array('encoding'=>$ThisFileInfo['encoding']);
 									fwrite($tempfilehandle, $thisfile_asf_extendedcontentdescriptionobject_contentdescriptor_current['value']);
@@ -787,10 +802,12 @@ class getid3_asf
 
 									$tempfilehandle = fopen($tempfile, "rb");
 									$id3 = new getid3_id3v2($tempfilehandle, $tempThisfileInfo);
+									unset($id3);
 									fclose($tempfilehandle);
 									unlink($tempfile);
 
 									$ThisFileInfo['id3v2'] = $tempThisfileInfo['id3v2'];
+									unset($tempThisfileInfo);
 								}
 								break;
 
@@ -1000,6 +1017,7 @@ class getid3_asf
 						$thisfile_audio['streams'][$streamnumber]['wformattag']  = $thisfile_asf_audiomedia_currentstream['raw']['wFormatTag'];
 						$thisfile_audio['streams'][$streamnumber]['lossless']    = $thisfile_audio['lossless'];
 						$thisfile_audio['streams'][$streamnumber]['bitrate']     = $thisfile_audio['bitrate'];
+						$thisfile_audio['streams'][$streamnumber]['dataformat']  = 'wma';
 						unset($thisfile_audio['streams'][$streamnumber]['raw']);
 
 						$thisfile_asf_audiomedia_currentstream['codec_data_size'] = getid3_lib::LittleEndian2Int(substr($streamdata['type_specific_data'], $audiomediaoffset, 2));
@@ -1286,7 +1304,7 @@ class getid3_asf
                     case 'WMVA':
                     case 'WVC1':
                     case 'WMVP':
-                    case 'WVP2': 
+                    case 'WVP2':
 						$thisfile_video['dataformat'] = 'wmv';
 						$ThisFileInfo['mime_type']    = 'video/x-ms-wmv';
 						break;
@@ -1379,6 +1397,11 @@ class getid3_asf
 			}
 		}
 		$ThisFileInfo['bitrate'] = @$thisfile_audio['bitrate'] + @$thisfile_video['bitrate'];
+
+		if ((!isset($ThisFileInfo['playtime_seconds']) || ($ThisFileInfo['playtime_seconds'] <= 0)) && ($ThisFileInfo['bitrate'] > 0)) {
+			$ThisFileInfo['playtime_seconds'] = ($ThisFileInfo['filesize'] - $ThisFileInfo['avdataoffset']) / ($ThisFileInfo['bitrate'] / 8);
+		}
+
 		return true;
 	}
 

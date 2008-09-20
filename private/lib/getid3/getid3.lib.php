@@ -10,10 +10,8 @@
 //                                                            ///
 /////////////////////////////////////////////////////////////////
 
-// this file can't be used on its own
-if (strpos ($_SERVER['PHP_SELF'], 'getid3.lib.php') !== false)
-{
-    die ('This file can not be used on its own.');
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own!');
 }
 
 class getid3_lib
@@ -414,13 +412,15 @@ class getid3_lib
 
 
 	function PlaytimeString($playtimeseconds) {
+		$sign = (($playtimeseconds < 0) ? '-' : '');
+		$playtimeseconds = abs($playtimeseconds);
 		$contentseconds = round((($playtimeseconds / 60) - floor($playtimeseconds / 60)) * 60);
 		$contentminutes = floor($playtimeseconds / 60);
 		if ($contentseconds >= 60) {
 			$contentseconds -= 60;
 			$contentminutes++;
 		}
-		return intval($contentminutes).':'.str_pad($contentseconds, 2, 0, STR_PAD_LEFT);
+		return $sign.intval($contentminutes).':'.str_pad($contentseconds, 2, 0, STR_PAD_LEFT);
 	}
 
 
@@ -588,7 +588,7 @@ class getid3_lib
 	// Allan Hansen <ahØartemis*dk>
 	// getid3_lib::md5_data() - returns md5sum for a file from startuing position to absolute end position
 	function hash_data($file, $offset, $end, $algorithm) {
-		global $_MG_CONF;
+
 		switch ($algorithm) {
 			case 'md5':
 				$hash_function = 'md5_file';
@@ -644,7 +644,7 @@ class getid3_lib
 		}
 
 		// try to create a temporary file in the system temp directory - invalid dirname should force to system temp dir
-		if (($data_filename = tempnam($_MG_CONF['tmp_path'], 'getID3')) === false) {
+		if (($data_filename = tempnam('*', 'getID3')) === false) {
 			// can't find anywhere to create a temp file, just die
 			return false;
 		}
@@ -1154,9 +1154,8 @@ class getid3_lib
 
 
 	function GetDataImageSize($imgData) {
-		global $_MG_CONF;
 		$GetDataImageSize = false;
-		if ($tempfilename = tempnam($_MG_CONF['tmp_path'], 'getID3')) {
+		if ($tempfilename = tempnam('*', 'getID3')) {
 			if ($tmp = @fopen($tempfilename, 'wb')) {
 				fwrite($tmp, $imgData);
 				fclose($tmp);

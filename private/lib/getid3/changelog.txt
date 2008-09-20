@@ -17,14 +17,47 @@
 Version History
 ===============
 
+1.7.8b2: [2007-10-15] James Heinrich, Allan Hansen
+    * Video bitrate now calculated even if not explicitly stated in
+      file metadata, but if overall and audio bitrates are known
+    * Bugfix: 'comments_html' missing last letter in id3v2 tags.
+    * Bugfix: module objects (e.g. getid3_riff) that are instantiated
+      in other modules are explicitly disposed once no longer needed.
+    * Bugfix: some AVI files were not returning audio information
+      because "strh" chunk was not being read in
+    * Bugfix: asf [audio][<streamnumber>][dataformat] should be set
+      to "wma" but wasn't
+    * Bugfix: [mpeg][audio][bitrate_mode] should always be one of
+      ("cbr", "vbr", "abr") but wasn't for some values in
+      LAMEvbrMethodLookup()
+    * Bugfix: MP3 audio in AVI files could show "cbr" instead of
+      correct audio bitrate_mode, and audio bitrate could be slightly
+      incorrect if multiple files were scanned in a loop (scanning
+      single files produced correct values).
+    * Bugfix: remove [audio/video][bitrate] key if falsely set to zero
+    * Bugfix: PlaytimeString returned non-matching value for negative
+      playtimes (which shouldn't happen either, but now they're at
+      least shown correctly, if they happen due to other bugs)
+    * Bugfix: Several ASF header values are invalid if the broadcast
+      flag is set, getID3() now calculates these values in other
+      ways if the broadcast flag is set  (thanks fletchÿpobox*com)
+    * Bugfix: lyrics3-flags-lyrics field was always false, and there
+      never was a lyrics3-flags-timestamp field present even though
+      the lyrics3-raw-IND field consisted of "10" (lyrics present,
+      timestamp not present).  (thanks i*f*schulzÿweb*de)
+    * Bugfix: TAR.GZ files produce PHP errors when
+      option_gzip_parse_contents == true in module.archive.gzip.php
+      (thanks alan*harderÿsun*com)
+
+
 1.7.8b1: [2007-01-08] Allan Hansen
     ª Major update to readme.txt
     ª PHP 4.2.0 required
     ª Tagwriter requires metaflac 1.1.1+ in order to write FLAC tags.
     ª Removed broken and non-fixable tagwriting module for real format.
-    ! Developers please help fix the above module: 
+    ! Developers please help fix the above module:
       http://www.getid3.org/phpBB2/viewtopic.php?t=677
-    ª Avoided security issues with demo.browse.php, demo.write.php and 
+    ª Avoided security issues with demo.browse.php, demo.write.php and
       demo.mysql.php. These demos are now disabled by default and has
       to be enabled in the source.
     * Bugfix: id3v2 genre broken since 1.7.7.
@@ -36,13 +69,13 @@ Version History
     * Bugfix: PHP_NOTICE issues in MultiByteCharString2HTML()
     * Bugfix: PHP_NOTICE issue  in BigEndian2Float()
     * Bugfix: fread() zero bytes issue in real module.
-    * Bugfix: ASF module returned mime type video/x-ms-wma instead of 
+    * Bugfix: ASF module returned mime type video/x-ms-wma instead of
       video/x-ms-wmv for certain FourCCs.
     * Bugfix: PHP_NOTICE issues with broken ID3v2 tag/garbage.
     * Bugfix: PNG module broken in regards to gIFg and gIFx chunks.
-    ª Removed detection of short filenames 8dot3 under windows, as 
+    ª Removed detection of short filenames 8dot3 under windows, as
       it only worked for English versions of windows and has other
-      problems.    
+      problems.
     * Bugfix: Some CBR MP3 files detected as VBR with plenty of warnings.
     * Bugfix: PHP_NOTICE issues in MP3 module.
     * Bugfix: Quicktime returned incorrect frame rate.
@@ -58,11 +91,11 @@ Version History
     ª PAR2 file detection (no parsing)
     * Bugfix: Wave files being detected as MP3.
     * Bugfix: ASF padding offset bug.
-    * Bugfix: Shorten module not working for wav files with fmt 
+    * Bugfix: Shorten module not working for wav files with fmt
       chunks <> 16 bytes.
     § RIFF: Zero sized chunk invokes warning instead of error.
     § FLAC: Removed some ['raw'] keys.
-    § MPC: Mime type returned: audio/x-musepack 
+    § MPC: Mime type returned: audio/x-musepack
 
 1.7.7: [2006-06-25] Allan Hansen
     * Bugfix: AAC static bitrate cache wrong result when parsing

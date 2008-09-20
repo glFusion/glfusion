@@ -289,7 +289,7 @@ class getid3_id3v2
 					$thisfile_id3v2['padding']['start']  = $framedataoffset;
 					$thisfile_id3v2['padding']['length'] = strlen($frame_header) + strlen($framedata);
 					$thisfile_id3v2['padding']['valid']  = true;
-					
+
 					$len = strlen($framedata);
 					for ($i = 0; $i < $len; $i++) {
 						if ($framedata{$i} != "\x00") {
@@ -643,8 +643,8 @@ class getid3_id3v2
 
 				// remove possible terminating \x00 (put by encoding id or software bug)
                 $string = getid3_lib::iconv_fallback($parsedFrame['encoding'], $ThisFileInfo['id3v2']['encoding'], $parsedFrame['data']);
-                if ($string[strlen($string)-1] = "\x00") {
-                    $string = substr($string, 0, strlen($string)-1);
+                if ($string[strlen($string) - 1] == "\x00") {
+                    $string = substr($string, 0, strlen($string) - 1);
                 }
 				$ThisFileInfo['id3v2']['comments'][$parsedFrame['framenameshort']][] = $string;
 				unset($string);
