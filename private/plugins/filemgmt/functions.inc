@@ -428,79 +428,7 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
 
     return $search;
 
-
-
-    $query = addslashes($query);
-    if (empty($type)) {
-        $type = 'all';
-    }
-
-    // Bail if we aren't supppose to do our search
-    if ($type <> 'all' AND $type <> 'filemgmt') {
-        $plugin_results = new Plugin();
-        $plugin_results->plugin_name = $LANG_FILEMGMT['plugin_name'];
-        $plugin_results->searchlabel = $LANG_FILEMGMT['searchlabel'];
-        return $plugin_results;
-    }
-
-    // Build search SQL
-    $sql  = "SELECT a.lid, a.lid, a.cid, a.title, url, submitter, comments, hits, UNIX_TIMESTAMP(date) as day, description ";
-    $sql .= "FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
-    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
-    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_filedesc']} c ON c.lid=a.lid ";
-    $sql .= filemgmt_buildAccessSql('WHERE');
-    $sql .= " AND a.status > 0 ";
-    $sql .= "AND ((comments like '%$query%' OR comments like '$query%' OR comments like '%$query') ";
-    $sql .= "OR (a.title like '%$query%' OR a.title like '$query%' OR a.title like '%$query') ";
-    $sql .= "OR (c.description like '%$query%' OR c.description like '$query%' OR c.description like '%$query')) ";
-
-    if (!empty($datestart) && !empty($dateend)) {
-        $delim = substr($datestart, 4, 1);
-        $DS = explode($delim,$datestart);
-        $DE = explode($delim,$dateend);
-        $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-        $enddate = mktime(0,0,0,$DE[1],$DE[2],$DE[0]) + 3600;
-        $sql .= "AND (UNIX_TIMESTAMP(date) BETWEEN '$startdate' AND '$enddate') ";
-    }
-
-    if (!empty($author)) {
-        $sql .= "AND (submitter = '$author') ";
-    }
-    $sql    .= "ORDER BY date desc";
-
-    // Perform search
-    $result = DB_query($sql);
-
-    // OK, now return coma delmited string of table header labels
-    // Need to use language variables
-    require_once($_CONF['path_system'] . 'classes/plugin.class.php');
-    $plugin_results = new Plugin();
-    $plugin_results->plugin_name = 'filemgmt';
-    $plugin_results->searchlabel = $LANG_FILEMGMT['searchlabel_results'];
-    $plugin_results->addSearchHeading('Title');
-    $plugin_results->addSearchHeading('Description');
-    $plugin_results->addSearchHeading('Author');
-    $plugin_results->addSearchHeading('Downloads');
-    $plugin_results->num_searchresults = DB_numRows($result);
-
-    // NOTE if any of your data items need to be links then add them here!
-    // make sure data elements are in an array and in the same order as your
-    // headings above!
-
-    for ($i = 1; $i <= $plugin_results->num_searchresults; $i++) {
-        $A = DB_fetchArray($result);
-        $thetime = COM_getUserDateTimeFormat($A['day']);
-        $url = $_CONF[site_url]. "/filemgmt/index.php?id=".$A['lid'];
-        $row = array("<a href=\"{$url}\">{$A['title']}</a>", wordwrap($A['description'],70,"<br>"), COM_getDisplayName($A['submitter']), $A['hits']);
-        $plugin_results->addSearchResult($row);
-    }
-
-    $plugin_results->num_itemssearched = DB_count($_FM_TABLES['filemgmt_filedetail']);
-
-    return $plugin_results;
 }
-
-
 
 
 /**
