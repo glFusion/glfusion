@@ -1,0 +1,82 @@
+<script type="text/javascript">
+<!--
+glfusionEditorBasePath = "{site_url}/fckeditor/" ;
+glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
+
+-->
+</script>
+<script type="text/javaScript" src="{site_url}/javascript/submitmailuser_fckeditor.js"></script>
+
+<form action="{site_admin_url}/mail.php" method="post" id="mailusers" onsubmit='set_postcontent();'>
+
+    {startblock_email}
+    <table cellspacing="0" cellpadding="2" width="100%" style="margin:5px 0px 10px 0px;">
+        <tr>
+            <td><img src="{layout_url}/images/icons/mail.png" alt=""{xhtml}></td>
+            <td>{lang_note}</td>
+        </tr>
+    </table>
+    <table width="100%" cellpadding="2" cellspacing="0">
+        <tr>
+            <td class="alignright">{lang_to}:</td>
+            <td>
+                <select name="to_group">
+                    <option value="">{lang_selectgroup}</option>
+                    {group_options}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="alignright">{lang_from}:</td>
+            <td><input type="text" name="fra" value="{site_name}" size="40"{xhtml}></td>
+        </tr>
+        <tr>
+            <td class="alignright">{lang_replyto}:</td>
+            <td><input type="text" name="fraepost" value="{site_mail}" size="40"{xhtml}></td>
+        </tr>
+        <tr>
+            <td class="alignright">{lang_subject}:</td>
+            <td><input type="text" name="subject" size="40"{xhtml}></td>
+        </tr>
+        <tr>
+          <td class="alignright" style="vertical-align:top;">{lang_body}:</td>
+          <td>
+          <div id="text_editor" style="display:{show_texteditor};">
+            <textarea id="message_text" name="message_text" cols="60" rows="10">{message_text}</textarea>
+          </div>
+          <div  id="html_editor" style="display:{show_htmleditor};">
+            <textarea id="message_html" name="message_html" rows="10" cols="60" style="width:90%;">{message_html}</textarea>
+          </div>
+          </td>
+
+        </tr>
+        <tr>
+            <td colspan="2" class="alignleft"><b>{lang_options}</b></td>
+        </tr>
+        <tr>
+        <td class="alignright" style="vertical-align:top;"><b>{lang_postmode}:</b></td>
+        <td style="vertical-align:top;">
+          <select id="sel_editmode" name="postmode" onchange="change_editmode(this);">
+           {postmode_options}
+          </select>
+        </td>
+
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="checkbox" name="priority"{xhtml}> {lang_urgent}</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="checkbox" name="overstyr"{xhtml}> {lang_ignoreusersettings}</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="aligncenter">
+                <input type="submit" value="{lang_send}"{xhtml}>
+                <input type="hidden" name="mail" value="mail"{xhtml}>
+                <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
+            </td>
+        </tr>
+    </table>
+    {end_block}
+</form>

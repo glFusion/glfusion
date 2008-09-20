@@ -59,12 +59,39 @@ if (!SEC_inGroup ('Mail Admin') && !SEC_hasrights ('user.mail')) {
 */
 function display_mailform ()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG31;
+    global $_CONF, $_TABLES, $_USER, $LANG31, $LANG03;
 
     $retval = '';
 
+    if ($_CONF['advanced_editor'] == 1) {
+        $postmode = 'html';
+    } elseif (empty ($postmode)) {
+        $postmode = $_CONF['postmode'];
+    }
+
     $mail_templates = new Template ($_CONF['path_layout'] . 'admin/mail');
-    $mail_templates->set_file (array ('form' => 'mailform.thtml'));
+    if (($_CONF['advanced_editor'] == 1)) {
+        $mail_templates->set_file('form','mailform_advanced.thtml');
+    } else {
+        $mail_templates->set_file('form','mailform.thtml');
+    }
+    if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
+        $mail_templates->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
+    } else {
+        $mail_templates->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+    }
+    if ($postmode == 'html') {
+        $mail_templates->set_var ('show_texteditor', 'none');
+        $mail_templates->set_var ('show_htmleditor', '');
+    } else {
+        $mail_templates->set_var ('show_texteditor', '');
+        $mail_templates->set_var ('show_htmleditor', 'none');
+    }
+    $mail_templates->set_var('lang_postmode', $LANG03[2]);
+    $mail_templates->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
+
+
+
     $mail_templates->set_var ('site_url', $_CONF['site_url']);
     $mail_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
     $mail_templates->set_var ('layout_url', $_CONF['layout_url']);
@@ -125,12 +152,25 @@ function send_messages ($vars)
 {
     global $_CONF, $_TABLES, $LANG31;
 
-    require_once($_CONF['path_system'] . 'lib-user.php');
+    require_once $_CONF['path_system'] . 'lib-user.php';
 
     $retval = '';
 
+    $html = 0;
+    if (($_CONF['advanced_editor'] == 1)) {
+        if ( $vars['postmode'] == 'html' ) {
+            $message = COM_stripslashes($vars['message_html']);
+            $html = true;
+        } else if ( $vars['postmode'] == 'text' ) {
+            $message = COM_stripslashes($vars['message_text']);
+            $html = false;
+        }
+    } else {
+        $message = COM_stripslashes($vars['message']);
+    }
+
     if (empty ($vars['fra']) OR empty ($vars['fraepost']) OR
-            empty ($vars['subject']) OR empty ($vars['message']) OR
+            empty ($vars['subject']) OR empty ($message) OR
             empty ($vars['to_group'])) {
         $retval .= COM_startBlock ($LANG31[1], '',
                         COM_getBlockTemplate ('_msg_block', 'header'));
@@ -148,11 +188,11 @@ function send_messages ($vars)
     }
 
     // If you want to send html mail
-    if (isset ($vars['html'])) {
-        $html = true;
-    } else {
-        $html = false;
-    }
+//    if (isset ($vars['html'])) {
+//        $html = true;
+//    } else {
+//        $html = false;
+//    }
 
     $groupList = implode (',', USER_getChildGroups($vars['to_group']));
 
@@ -173,7 +213,7 @@ function send_messages ($vars)
     $from = array();
     $from = COM_formatEmailAddress ($vars['fra'], $vars['fraepost']);
     $subject = COM_stripslashes ($vars['subject']);
-    $message = COM_stripslashes ($vars['message']);
+//    $message = COM_stripslashes ($vars['message']);
 
     // Loop through and send the messages!
     $successes = array ();
@@ -188,9 +228,9 @@ function send_messages ($vars)
         }
 
         if (!COM_mail ($to, $subject, $message, $from, $html, $priority)) {
-            $failures[] = htmlspecialchars ($to);
+            $failures[] = htmlspecialchars ($to[0]);
         } else {
-            $successes[] = htmlspecialchars ($to);
+            $successes[] = htmlspecialchars ($to[0]);
         }
     }
 
