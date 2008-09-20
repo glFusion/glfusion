@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	window.addEvent('domready', function() {
+	window.addEvent('load', function() {
 		new moomenu($E('ul.gl_moomenu{menu_id}'), {
 			bgiframe: false,
 			delay: 50,

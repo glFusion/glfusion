@@ -31,7 +31,7 @@
 // +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
-if (strpos ($_SERVER['PHP_SELF'], 'functions.php') !== false) {
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
@@ -95,7 +95,7 @@ function gl_mootickerRSS() {
 <script type="text/javascript"
 src="{site_url}/javascript/mootools/gl_mooticker.js"></script>
 <script type="text/javascript">
-         window.addEvent('domready', function() {
+         window.addEvent('load', function() {
                  var x = new MooTicker('gl_mooticker', {
                          controls: true,
                          delay: 2500,
