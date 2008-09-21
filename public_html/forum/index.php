@@ -413,6 +413,7 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
     $header_arr = array(      # display 'text' and use table field 'field'
                   array('text' => $LANG_GF01['FORUM'],     'field' => 'forum_name', 'sort' => true),
                   array('text' => $LANG_GF01['TOPIC'],     'field' => 'subject', 'sort' => true),
+                  array('text' => $LANG_GF01['AUTHOR'],    'field' => 'name', 'sort' => true),
                   array('text' => $LANG_GF01['REPLIES'],   'field' => 'replies', 'sort' => true),
                   array('text' => $LANG_GF01['VIEWS'],     'field' => 'views', 'sort' => true),
                   array('text' => $LANG_GF01['DATE'],      'field' => 'date', 'sort' => true, 'nowrap' => true)
@@ -436,7 +437,7 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
     $sql = "SELECT * FROM {$_TABLES['gf_bookmarks']} AS bookmarks LEFT JOIN {$_TABLES['gf_topic']} AS topics ON bookmarks.topic_id=topics.id LEFT JOIN {$_TABLES['gf_forums']} AS forums ON topics.forum=forums.forum_id WHERE bookmarks.uid=" . $_USER['uid'];
     $query_arr = array('table'          => 'gf_bookmarks',
                        'sql'            => $sql,
-                       'query_fields'   => array('topics.date','topics.subject','topics.comment','topics.replies','topics.views','id','forum','forum_name'),
+                       'query_fields'   => array('topics.date','topics.subject','topics.comment','topics.name','topics.replies','topics.views','id','forum','forum_name'),
                        'default_filter' => '');
 
     $retval .= ADMIN_list('bookmarks', 'ADMIN_getListField_forum', $header_arr,
@@ -455,8 +456,6 @@ if ($op == 'lastx') {
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
         array('text' => $LANG_GF01['TOPIC'],  'field' => 'subject'),
-        array('text' => $LANG_GF01['REPLIES'],'field' => 'replies'),
-        array('text' => $LANG_GF01['VIEWS'],  'field' => 'views'),
         array('text' => $LANG_GF01['DATE'],   'field' => 'date', 'nowrap' => true),
     );
     $data_arr = array();
@@ -489,9 +488,22 @@ if ($op == 'lastx') {
         if (SEC_inGroup($groupname)) {
             if ($CONF_FORUM['use_censor']) {
                 $P['subject'] = COM_checkWords($P['subject']);
+                $P['comment'] = COM_checkWords($P['comment']);
             }
             $topic_id = $P['id'];
             $displayrecs++;
+
+            $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $P['date']);
+            $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $P['lastupdated']);
+
+            if ($p['uid'] > 1) {
+                $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
+            } else {
+                $topicinfo = "{$LANG_GF01['STARTEDBY']},{$P['name']},";
+            }
+
+            $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}:{$P['views']}, {$LANG_GF01['REPLIES']}:{$P['replies']}<br" . XHTML . ">";
+
 
             if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
                 $lastid = $P['id'];
@@ -510,15 +522,16 @@ if ($op == 'lastx') {
                 }
                 $testText = gf_formatTextBlock($B['comment'],'text','text');
                 $testText = strip_tags($testText);
-                $lastpostinfogll = preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...'));
+                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
             }
             $link = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . $P['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">';
 
+            $topiclink = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
+
             $data_arr[] = array('forum'   => $P['forum_name'],
-                                'subject' => $link . $P['subject'] . '</a>',
-                                'replies' => $P['replies'],
-                                'views'   => $P['views'],
-                                'date'    => strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] ));
+                                'subject' => $topiclink, /*$link . $P['subject'] . '</a>',*/
+                                'date'    => $link . strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] ) . '</a>'
+                                );
 
             if ($displayrecs >= $CONF_FORUM['show_popular_perpage']) {
                 break;
