@@ -1122,7 +1122,7 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                             $message .= sprintf($LANG_GF02['msg23b'],$A['subject'],$A['name'],$forum_name, $_CONF['site_name'],$_CONF['site_url'],$pid);
                         } else {
                             $message .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
-                            $message .= sprintf($LANG_GF02['msg23c'],$_CONF['site_url'],$pid);
+                            $message .= sprintf($LANG_GF02['msg23c'],$_CONF['site_url'],$pid,$topicid);
                         }
                         $message .= $LANG_GF02['msg26'];
                         $message .= sprintf($LANG_GF02['msg27'],"{$_CONF['site_url']}/forum/notify.php");
