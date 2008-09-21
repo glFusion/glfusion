@@ -169,7 +169,7 @@ $LANG_ST01 = array (
 	'blocks'                => 'Block Styles',
 	'reset'                 => 'Reset Form',
 	'defaults'              => 'Reset To Default Values',
-	'confirm_reset'         => 'This will reset the menu colors and graphics to the installation values. Are you sure you want to continue?',
+	'confirm_reset'         => 'This will reset the menu colors and graphics to the installation values and automatically clear the Template Cache. Are you sure you want to continue? When done, make sure to clear your local browser cache as well.',
 	'menu_properties'       => 'Menu Properties for',
 
 );
