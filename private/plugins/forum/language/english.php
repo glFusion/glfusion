@@ -326,7 +326,7 @@ $LANG_GF02['msg21']    = 'Sorry, you are unauthorized to do this. Please <a href
 $LANG_GF02['msg22']    = '- Forum Post Notification';
 $LANG_GF02['msg23a']   = "A reply has been made to the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum. ";
 $LANG_GF02['msg23b']   = "A new topic '%s' has been posted by %s in the %s forum on the %s website. You may view it at:\n%s/forum/viewtopic.php?showtopic=%s\n";
-$LANG_GF02['msg23c']   = "You may view it at:\n%s/forum/viewtopic.php?showtopic=%s&lastpost=true\n";
+$LANG_GF02['msg23c']   = "You may view it at:\n%s/forum/viewtopic.php?showtopic=%s&lastpost=true#%d\n";
 $LANG_GF02['msg24']    = 'You may see the thread and reply at: %s/forum/viewtopic.php?forum=%s&showtopic=%s';
 $LANG_GF02['msg25']    = "\nHave a great day! \n";
 $LANG_GF02['msg26']    = "\nYou are receiving this email because you have chosen to be notified when a reply has been made to this topic. ";
