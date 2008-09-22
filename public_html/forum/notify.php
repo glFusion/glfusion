@@ -205,6 +205,8 @@ while (list($notify_recid,$forum_id,$topic_id,$date_added) = DB_fetchARRAY($noti
         $subject = '';
         $is_forum = $LANG_GF02['msg138'];
         $topic_link = '<a href="' .$_CONF['site_url']. '/forum/index.php?forum=' .$forum_id. '" title="' .$subject. '">' .$subject. '</a>';
+        $A['name'] = '';
+        $A['uid'] = '';
     } else {
         if ($topic_id < 0) {
             $neg_subscription = true;
