@@ -1110,7 +1110,7 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                 }
 
                 if  ($userNotifyOnceOption == 0 OR ($userNotifyOnceOption == 1 AND ($nologRecord OR $logtime != 0)) ) {
-                    $topicrec = DB_query("SELECT subject,name,forum FROM {$_TABLES['gf_topic']} WHERE id='$pid'");
+                    $topicrec = DB_query("SELECT subject,name,forum,last_reply_rec FROM {$_TABLES['gf_topic']} WHERE id='$pid'");
                     $A = DB_fetchArray($topicrec);
                     $userrec = DB_query("SELECT username,email,status FROM {$_TABLES['users']} WHERE uid='{$N['uid']}'");
                     $B = DB_fetchArray($userrec);
@@ -1121,8 +1121,13 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                             $forum_name = DB_getItem($_TABLES['gf_forums'],forum_name, "forum_id='$forumid'");
                             $message .= sprintf($LANG_GF02['msg23b'],$A['subject'],$A['name'],$forum_name, $_CONF['site_name'],$_CONF['site_url'],$pid);
                         } else {
+                            if ( $A['last_reply_rec'] != '' && $A['last_reply_rec'] != 0 ) {
+                                $last_reply_rec = $A['last_reply_rec'];
+                            } else {
+                                $last_reply_rec = $topicid;
+                            }
                             $message .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
-                            $message .= sprintf($LANG_GF02['msg23c'],$_CONF['site_url'],$pid,$topicid);
+                            $message .= sprintf($LANG_GF02['msg23c'],$_CONF['site_url'],$pid,$last_reply_rec);
                         }
                         $message .= $LANG_GF02['msg26'];
                         $message .= sprintf($LANG_GF02['msg27'],"{$_CONF['site_url']}/forum/notify.php");
