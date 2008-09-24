@@ -48,6 +48,7 @@ class mbElement {
     var $group_id;          // group membership
     var $access;            // derived access level
     var $children;          // this elements child elements
+    var $hidden;            // I have no idea -- Joe
 
     function mbElement () {
         $this->children         = array();
