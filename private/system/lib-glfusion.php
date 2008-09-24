@@ -45,8 +45,11 @@ function glf_template_set_root($root) {
         $root = array($root);
     }
 
-    foreach( $root as $r ) {
-        $retval[] = $r . 'custom/';
+    foreach ($root as $r) {
+        if (substr($r, -1) == '/') {
+            $r = substr($r, 0, -1);
+        }
+        $retval[] = $r . '/custom';
         $retval[] = $r;
     }
     return $retval;
