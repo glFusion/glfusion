@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Bugfix of template root hook for directories below layout/nouveau/ (Joe)
 - Implemented new mailer - added support for secure SMTP (Mark)
 - Fixed searching for non-installed plugins when open_basedir restrictions are in
   effect (GL bug #0000741)
