@@ -499,7 +499,7 @@ if ($op == 'lastx') {
             if ($p['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
             } else {
-                $topicinfo = "{$LANG_GF01['STARTEDBY']},{$P['name']},";
+                $topicinfo = "{$LANG_GF01['STARTEDBY']} {$P['name']},";
             }
 
             $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}:{$P['views']}, {$LANG_GF01['REPLIES']}:{$P['replies']}<br" . XHTML . ">";
