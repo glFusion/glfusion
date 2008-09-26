@@ -542,7 +542,11 @@ class Search {
             $this->_wordlength = 10;
         }
         */
-        $obj->setDefaultSort('date');
+        if ( isset($_CONF['default_search_order']) ) {
+            $obj->setDefaultSort($_CONF['default_search_order']);
+        } else {
+            $obj->setDefaultSort('date');
+        }
 
         // Start search timer
         $searchtimer = new timerobject();
