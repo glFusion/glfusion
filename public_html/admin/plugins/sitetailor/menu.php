@@ -830,6 +830,8 @@ function ST_changeActiveStatusElement ($bid_arr)
         }
     }
     CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('css');
+    CACHE_remove_instance('js');
 
     return;
 }
