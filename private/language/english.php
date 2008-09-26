@@ -173,6 +173,8 @@ $LANG01 = array(
     129 => 'Configuration',
     130 => 'Webservices',
     500 => 'Please remove the admin/install/ directory!',
+    'ctl' => 'Clear Template Cache',
+    'logview' => 'Logview',
 );
 
 ###############################################################################
@@ -971,7 +973,7 @@ $LANG29 = array(
     40 => 'User Submissions',
     41 => 'Comment Submissions',
     42 => 'User Name',
-    43 => 'Auto-pubish Comments?'
+    43 => 'Auto-pubish Comments?',
     40 => 'User Submissions',
     'info' => 'Approve or Decline submissions',
 );
@@ -1108,6 +1110,15 @@ $LANG33 = array(
     55 => 'Articles'
 );
 
+$LANG_LOGVIEW = array(
+    'logview'   => 'Logview',
+    'info'      => 'glFusion Log file administration',
+    'logs'      => 'Logs',
+    'view'      => 'View Log File',
+    'clear'     => 'Clear Log File',
+    'log_file'  => 'Log File',
+);
+
 ###############################################################################
 # confirmation and error messages
 
@@ -1137,7 +1148,7 @@ $MESSAGE = array(
     23 => '',
     24 => '',
     25 => '',
-    26 => '',
+    26 => 'There was an error sending your message, please contact the Site Administrator',
     27 => 'Message successfully sent.',
     28 => 'The plugin has been successfully saved',
     29 => '',
@@ -1209,6 +1220,9 @@ $MESSAGE = array(
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
     97 => 'Not all required fields have been passed validation - default custom membership message',
+    98 => 'The plugin was successfully uploaded.',
+    99 => 'The plugin already exists.',
+    100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
 );
@@ -1813,6 +1827,27 @@ $LANG_confignames['Core'] = array(
     'jpegtrans_enabled' => 'Enable jpegtrans?',
     'path_to_jhead' => 'Path to jhead executable',
     'path_to_jpegtrans' => 'Path to jpegtrans executable',
+    'allow_reply_notifications' => 'Allow comment reply notifications?',
+    'search_style' => 'Results List Style',
+    'search_limits' => 'Page Limits',
+    'search_show_num' => 'Show Result Number?',
+    'search_show_type' => 'Show Result Type?',
+    'search_show_user' => 'Show Author?',
+    'search_show_hits' => 'Show Number of Hits?',
+    'search_show_sort' => 'Allow User to Sort Results?',
+    'search_show_limit' => 'Show Page Limits?',
+    'search_no_data' => 'If No Data is Avaliable, Display',
+    'search_separator' => 'Group Separator',
+    'search_def_keytype' => 'Default Search Method',
+    'mail_backend' => 'Mail Backend',
+    'mail_sendmail_path' => 'Path to Sendmail',
+    'mail_sendmail_args' => 'Sendmail Parameters',
+    'mail_smtp_host' => 'SMTP Hostname',
+    'mail_smtp_port' => 'SMTP Port',
+    'mail_smtp_auth' => 'Require SMTP Auth?',
+    'mail_smtp_username' => 'SMTP Auth Username',
+    'mail_smtp_password' => 'SMTP Auth Password',
+    'mail_smtp_secure'   => 'SMTP Security Protocol',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1896,7 +1931,12 @@ $LANG_configselects['Core'] = array(
     15 => array('By Number' => 'sortnum', 'Alphabetically' => 'alpha'),
     16 => array('No Login required' => 0, 'Advanced Search only' => 1, 'Simple + Advanced Search' => 2),
     17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
-    18 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
+    18 => array('Google' => 'google', 'Table' => 'table'),
+    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
+    20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
+    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
+
 );
 
 ?>
