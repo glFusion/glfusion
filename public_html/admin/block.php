@@ -187,8 +187,8 @@ function editdefaultblock ($A, $access)
 */
 function editblock ($bid = '')
 {
-    global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG01, $LANG21, $LANG_ACCESS,
-           $LANG_ADMIN, $MESSAGE;
+    global $_CONF, $_GROUPS, $_TABLES, $_USER, $LANG01, $LANG21, $LANG24,$LANG_ACCESS,
+           $LANG_ADMIN, $LANG_postmodes,$MESSAGE;
 
     $retval = '';
 
@@ -242,7 +242,31 @@ function editblock ($bid = '')
     }
 
     $block_templates = new Template($_CONF['path_layout'] . 'admin/block');
-    $block_templates->set_file('editor','blockeditor.thtml');
+
+   if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) ) {
+        $block_templates->set_file ('editor', 'blockeditor_advanced.thtml');
+        if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
+            $block_templates->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
+        } else {
+            $block_templates->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
+        }
+        $block_templates->set_var ('lang_toolbar', $LANG24[70]);
+        $block_templates->set_var ('toolbar1', $LANG24[71]);
+        $block_templates->set_var ('toolbar2', $LANG24[72]);
+        $block_templates->set_var ('toolbar3', $LANG24[73]);
+        $block_templates->set_var ('toolbar4', $LANG24[74]);
+        $block_templates->set_var ('toolbar5', $LANG24[75]);
+        $block_templates->set_var('lang_nojavascript',$LANG24[77]);
+        $block_templates->set_var('lang_postmode', $LANG24[4]);
+        $block_templates->set_var('show_htmleditor','none');
+        $block_templates->set_var('show_texteditor','');
+        $post_options .= '<option value="text" selected="selected">'.'Text Mode'.'</option>';
+        $post_options .= '<option value="html">'.$LANG_postmodes['html'].'</option>';
+        $block_templates->set_var('post_options',$post_options );
+        $block_templates->set_var ('change_editormode', 'onchange="change_editmode(this);"');
+    } else {
+        $block_templates->set_file('editor','blockeditor.thtml');
+    }
     $block_templates->set_var('site_url', $_CONF['site_url']);
     $block_templates->set_var('xhtml', XHTML);
     $block_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -350,6 +374,10 @@ function editblock ($bid = '')
     $block_templates->set_var ('lang_autotags', $LANG21[66]);
     $block_templates->set_var ('lang_use_autotags', $LANG21[67]);
     $block_templates->set_var ('block_content',
+                               htmlspecialchars (stripslashes ($A['content'])));
+    $block_templates->set_var ('block_text',
+                               htmlspecialchars (stripslashes ($A['content'])));
+    $block_templates->set_var ('block_html',
                                htmlspecialchars (stripslashes ($A['content'])));
     if ($A['allow_autotags'] == 1) {
         $block_templates->set_var ('allow_autotags', 'checked="checked"');
@@ -798,10 +826,23 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     if (isset ($_POST['help'])) {
         $help = COM_sanitizeUrl ($_POST['help'], array ('http', 'https'));
     }
+
     $content = '';
-    if (isset ($_POST['content'])) {
-        $content = $_POST['content'];
+//    if (isset ($_POST['content'])) {
+//        $content = $_POST['content'];
+//    }
+    if (($_CONF['advanced_editor'] == 1)) {
+        if ( $_POST['postmode'] == 'html' ) {
+            $content = COM_stripslashes($_POST['block_html']);
+            $html = true;
+        } else if ( $_POST['postmode'] == 'text' ) {
+            $content = COM_stripslashes($_POST['block_text']);
+            $html = false;
+        }
+    } else {
+        $content = COM_stripslashes($_POST['content']);
     }
+
     $rdfurl = '';
     if (isset ($_POST['rdfurl'])) {
         $rdfurl = $_POST['rdfurl']; // to be sanitized later
@@ -826,6 +867,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     if (isset ($_POST['allow_autotags'])) {
         $allow_autotags = $_POST['allow_autotags'];
     }
+
     $display .= saveblock ($bid, $_POST['name'], $_POST['title'],
                     $help, $_POST['type'], $_POST['blockorder'], $content,
                     COM_applyFilter ($_POST['tid']), $rdfurl, $rdfupdated,
