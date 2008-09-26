@@ -85,7 +85,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
         }
     }
     if (!SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,syndication.edit','OR')) {
-        $display .= COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
+        $display .= COM_refresh($_CONF['site_admin_url'] . '/index.php');
     } else {
         $display .= COM_refresh($_CONF['site_url'] . '/index.php');
     }
