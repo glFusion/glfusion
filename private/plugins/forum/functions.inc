@@ -454,7 +454,11 @@ function plugin_getheaderjs_forum() {
 
 function plugin_searchtypes_forum()
 {
-    global $LANG_GF00;
+    global $_USER, $CONF_FORUM, $LANG_GF00;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
+        return '';
+    }
 
     $tmp['forum'] = $LANG_GF00['searchlabel'];
     return $tmp;
@@ -476,7 +480,11 @@ function plugin_searchtypes_forum()
 
 function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
 {
-    global $LANG_GF00, $LANG_GF01, $_TABLES, $_CONF, $CONF_FORUM;
+    global $LANG_GF00, $LANG_GF01, $_USER, $_TABLES, $_CONF, $CONF_FORUM;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
+        return;
+    }
 
     $query = trim(addslashes($query));
 
@@ -943,6 +951,9 @@ function phpblock_forum_newposts() {
     global $_CONF, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version;
 
     if ($pi_version < 2.6) {
+        return;
+    }
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
         return;
     }
     $mode = COM_applyFilter($_GET['mode']);
