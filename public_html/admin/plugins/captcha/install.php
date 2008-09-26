@@ -30,7 +30,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once '../../../lib-common.php');
+require_once '../../../lib-common.php';
 require_once $_CONF['path'] . '/plugins/captcha/config.php';
 require_once $_CONF['path'] . '/plugins/captcha/functions.inc';
 require_once $_CONF['path'] . '/plugins/captcha/install.inc';
