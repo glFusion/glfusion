@@ -1,9 +1,10 @@
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | submitmailuser_fckeditor.js                                              |
+// | blocks_fckeditor.js                                                      |
 // |                                                                          |
 // | Javascript functions for FCKEditor Integration into glFusion             |
+// | Blocks Editor integration.                                               |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
@@ -36,7 +37,7 @@
     var undefined;
 
     window.onload = function() {
-        var oFCKeditor1 = new FCKeditor( 'message_html' ) ;
+        var oFCKeditor1 = new FCKeditor( 'block_html' ) ;
         oFCKeditor1.BasePath = glfusionEditorBasePath;
         oFCKeditor1.Config['CustomConfigurationsPath'] = glfusionEditorBaseUrl + '/fckeditor/myconfig.js';
         if ( undefined != window.glfusionStyleBasePath ) {
@@ -44,7 +45,7 @@
             oFCKeditor1.Config['StylesXmlPath'] = glfusionStyleBasePath + 'fckstyles.xml';
         }
         oFCKeditor1.ToolbarSet = 'editor-toolbar3' ;
-        oFCKeditor1.Height = 300 ;
+        oFCKeditor1.Height = 400 ;
         oFCKeditor1.ReplaceTextarea() ;
     }
     function change_editmode(obj) {
@@ -61,26 +62,26 @@
 
     function getEditorContent() {
         // Get the editor instance that we want to interact with.
-        var oEditor = FCKeditorAPI.GetInstance('message_html') ;
+        var oEditor = FCKeditorAPI.GetInstance('block_html') ;
         // return the editor contents in XHTML.
         return oEditor.GetXHTML( true );
     }
 
     function swapEditorContent(curmode) {
         var content = '';
-        var oEditor = FCKeditorAPI.GetInstance('message_html') ;
+        var oEditor = FCKeditorAPI.GetInstance('block_html') ;
         if (curmode == 'html') { // Switching from Text to HTML mode
             // Get the content from the textarea 'text' content and copy it to the editor
-            content = document.getElementById('message_text').value;
+            content = document.getElementById('block_text').value;
             oEditor.SetHTML(content);
         } else {
               content = getEditorContent();
-              document.getElementById('message_text').value = content;
+              document.getElementById('block_text').value = content;
           }
     }
 
     function set_postcontent() {
         if (document.getElementById('sel_editmode').value == 'html') {
-            document.getElementById('message_text').value = getEditorContent();
+            document.getElementById('block_text').value = getEditorContent();
         }
     }

@@ -37,7 +37,7 @@
         oFCKeditor1.BasePath = glfusionEditorBasePath;
         oFCKeditor1.Config['CustomConfigurationsPath'] = glfusionEditorBaseUrl + '/fckeditor/myconfig.js';
         if ( undefined != window.glfusionStyleBasePath ) {
-            oFCKeditor1.Config['EditorAreaCSS'] = glfusionStyleBasePath + 'style.css';
+            oFCKeditor1.Config['EditorAreaCSS'] = glfusionStyleCSS;
         }
         oFCKeditor1.ToolbarSet = 'editor-toolbar1' ;
         oFCKeditor1.Height = 200 ;

@@ -42,7 +42,7 @@
         oFCKeditor1.Config['CustomConfigurationsPath'] = glfusionEditorBaseUrl + '/fckeditor/myconfig.js';
         oFCKeditor1.ToolbarSet = 'editor-toolbar4' ;
         if ( undefined != window.glfusionStyleBasePath ) {
-            oFCKeditor1.Config['EditorAreaCSS'] = glfusionStyleBasePath + 'style.css';
+            oFCKeditor1.Config['EditorAreaCSS'] = glfusionStyleCSS;
             oFCKeditor1.Config['StylesXmlPath'] = glfusionStyleBasePath + 'fckstyles.xml';
         }
         oFCKeditor1.Height = 300 ;
@@ -53,7 +53,7 @@
         oFCKeditor2.Config['CustomConfigurationsPath'] = glfusionEditorBaseUrl + '/fckeditor/myconfig.js';
         oFCKeditor2.ToolbarSet = 'editor-toolbar4' ;
         if ( undefined != window.glfusionStyleBasePath ) {
-            oFCKeditor2.Config['EditorAreaCSS'] = glfusionStyleBasePath + 'style.css';
+            oFCKeditor2.Config['EditorAreaCSS'] = glfusionStyleCSS;
             oFCKeditor2.Config['StylesXmlPath'] = glfusionStyleBasePath + 'fckstyles.xml';
         }
         oFCKeditor2.Height = 300 ;
