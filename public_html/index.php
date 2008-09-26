@@ -231,12 +231,16 @@ while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray (
         if (!empty ($archivetid) ) {
             COM_errorLOG("Archive Story: $sid, Topic: $archivetid, Title: $title, Expired: $expire");
             DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='{$sid}'");
+            CACHE_remove_instance('story_'.$sid);
+            CACHE_remove_instance('whatsnew');
         }
     } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
         COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
         STORY_deleteImages ($sid);
         DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='{$sid}' AND type = 'article'");
         DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='{$sid}'");
+        CACHE_remove_instance('story_'.$sid);
+        CACHE_remove_instance('whatsnew');
     }
 }
 
