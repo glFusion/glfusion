@@ -3043,47 +3043,6 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 /**
 * This function filters the HTML and attempts to clean up invalid markup.
 *
-* Checks to see that the HTML tags are on the approved list and
-* removes them if not.
-*
-* Currently, we are using the KSES compatibility mode.
-*
-* Long term, we should move to the safe=1 option and forget
-* about manually setting the options.
-*
-* Using safe=1:
-* Safe HTML refers to HTML that is restricted to reduce the vulnerability for
-* scripting attacks (such as XSS) based on HTML code which otherwise may be legal
-* and compliant with the HTML standard specs. When elements such as script and
-* object, and attributes such as onmouseover and style are allowed in the input
-* text, an input writer can introduce HTML code for such attacks. Note that what
-* is considered safe depends on the nature of the web application and the trust-level
-* accorded to its users.
-*
-* htmLawed allows an admin to use $config["safe"] to auto-adjust multiple $config
-* parameters (such as elements which declares the allowed element-set), which
-* otherwise would have to be manually set. The relevant parameters are indicated by
-* " in section 2.2). Thus, one can pass the $config argument with a simpler value.
-*
-* With the value of 1, htmLawed considers CDATA sections and comments as plain
-* text, and disallows the applet, embed, iframe, object and script elements,
-* and the on* attributes like onclick. Further URLs with schemes (see section 3.4.3)
-*  are neutralized so that, e.g., style="moz-binding:url(http://danger)"
-* becomes style="moz-binding:url(denied:http://danger)" while style="moz-binding:url(ok)"
-* remains intact.
-*
-* Admins, however, may still want to completely deny the style attribute, e.g., with code like
-*
-*     $processed = htmLawed($text, array('safe'=>1, 'deny_attribute'=>'on*, style'));
-*
-* There are $config parameters like css_expression that are not affected by
-* the value set for safe but whose default values still contribute towards a more safe output.
-*
-* If a value for a parameter auto-set through safe is still manually
-* provided, then that value can over-ride the auto-set value. E.g., with
-* $config["safe"] = 1 and $config["elements"] = "*+script", script, but not applet, is allowed.
-*
-*
 * @param    string  $str            HTML to check
 * @return   string                  Filtered HTML
 *
@@ -3092,44 +3051,27 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
 {
     global $_CONF;
 
-    require_once($_CONF['path'] . 'lib/htmLawed/htmLawed.php');
-
-    $allowedProtocols = array();
-
-    if( isset( $_CONF['allowed_protocols'] ) && is_array( $_CONF['allowed_protocols'] ) && ( sizeof( $_CONF['allowed_protocols'] ) > 0 ))
-    {
-        $allowedProtocols = $_CONF['allowed_protocols'];
-    }
-    else
-    {
-        $allowedProtocols =  array( 'http:', 'https:', 'ftp:' );
+    if( isset( $_CONF['skip_html_filter_for_root'] ) &&
+             ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
+            SEC_inGroup( 'Root' )) {
+        return $str;
     }
 
-    if( empty( $permissions) || !SEC_hasRights( $permissions ) ||
-            empty( $_CONF['admin_html'] ))
-    {
-        $html = $_CONF['user_html'];
-    }
-    else
-    {
-        $html = array_merge( $_CONF['user_html'],
-                             $_CONF['admin_html'] );
-    }
+    require_once $_CONF['path'] . 'lib/htmLawed/htmLawed.php';
 
-    if ( $_CONF['use_safe_html'] == TRUE ) {
-        $str = htmLawed($str,array('safe'=>1,'elements'=>'*+embed+object','balance'=>1,'valid_xhtml'=>0));
-
-/*        $str = htmLawed($str,
-                array(  'comments'=>0,
-                        'cdata'=>0,
-                        'balance'=>1,
-                        'valid_xhtml'=>0,
-                        'deny_attribute'=>'on*',
-                        'elements'=>'*-applet-iframe-object-script',
-                        'scheme'=>'href: ftp, http, https, mailto,; *:file, http, https'));
-*/
+    if ( $_CONF['allow_embed_object'] == 1 ) {
+        $str = htmLawed($str,array( 'safe'=>1,
+                                    'elements'=>'*+embed+object',
+                                    'balance'=>1,
+                                    'valid_xhtml'=>0
+                                    )
+                        );
     } else {
-        $str = kses($str,$html,$allowedProtocols);
+        $str = htmLawed($str,array( 'safe'=>1,
+                                    'balance'=>1,
+                                    'valid_xhtml'=>1
+                                    )
+                        );
     }
     return $str;
 }
@@ -3936,37 +3878,8 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
         }
 
         $allow_page_break = false;
-        if( empty( $permissions ) || !SEC_hasRights( $permissions ) ||
-                empty( $_CONF['admin_html'] ))
-        {
-            $html = $_CONF['user_html'];
-        }
-        else
-        {
-            $html = array_merge_recursive( $_CONF['user_html'],
-                                           $_CONF['admin_html'] );
-            if( $_CONF['allow_page_breaks'] == 1 )
-            {
-                $perms = explode( ',', $permissions );
-                foreach( $perms as $p )
-                {
-                    if( substr( $p, 0, 6 ) == 'story.' )
-                    {
-                        $allow_page_break = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        foreach( $html as $tag => $attr )
-        {
-            $retval .= '&lt;' . $tag . '&gt;, ';
-        }
     }
-    if ( $_CONF['use_safe_html'] == 1 ) {
-        $retval = '<span class="warningsmall">' . $LANG01[31] . ' ';
-    }
+    $retval = '<span class="warningsmall">' . $LANG01[31] . ' ';
 
     $retval .= '[code], [raw]';
 
@@ -4310,13 +4223,10 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
          */
 
         // Find the newest stories
-//        $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) AND (date <= NOW()) AND (draft_flag = 0)" . $archsql . COM_getPermSQL( 'AND' ) . $topicsql . COM_getLangSQL( 'sid', 'AND' );
         $sql = "SELECT * FROM {$_TABLES['stories']} WHERE (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) AND (date <= NOW()) AND (draft_flag = 0)" . $archsql . COM_getPermSQL( 'AND' ) . $topicsql . COM_getLangSQL( 'sid', 'AND' ) . ' ORDER BY date DESC';
 
         $result = DB_query( $sql );
         $nrows  = DB_numRows( $result );
-//        $A = DB_fetchArray( $result );
-//        $nrows = $A['count'];
 
         if( empty( $title ))
         {
