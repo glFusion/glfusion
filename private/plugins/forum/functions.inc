@@ -329,7 +329,12 @@ function plugin_profilevariablesdisplay_forum ($uid, &$template)
 }
 
 function plugin_statssummary_forum() {
-    global $_CONF, $_TABLES, $LANG_GF00;
+    global $_USER, $CONF_FORUM, $_CONF, $_TABLES, $LANG_GF00;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
+        return '';
+    }
+
 
     // This shows in the summary box
     $total_items = DB_count($_TABLES['gf_topic']);      // Total number of Forum Posts
@@ -348,7 +353,11 @@ function plugin_statssummary_forum() {
 */
 function plugin_showstats_forum($showsitestats)
 {
-    global $_CONF, $CONF_FORUM,$_TABLES, $LANG_GF00,$LANG_GF01;
+    global $_USER, $_CONF, $CONF_FORUM,$_TABLES, $LANG_GF00,$LANG_GF01;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
+        return '';
+    }
 
     $stat_templates = new Template($_CONF['path_layout'] . 'stats');
     $stat_templates->set_file(array('itemstats'=>'itemstatistics.thtml',
