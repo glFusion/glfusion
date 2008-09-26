@@ -57,8 +57,6 @@ function install_config()
     $c->add('fs_mail', NULL, 'fieldset', 0, 1, NULL, 0, TRUE);
     $c->add('site_mail','','text',0,1,NULL,40,TRUE);
     $c->add('noreply_mail','','text',0,1,NULL,50,TRUE);
-//    $c->add('mail_settings',array ('backend' => 'mail', 'sendmail_path' => '/usr/bin/sendmail', 'sendmail_args' => '', 'host' => 'smtp.example.com','port' => '25', 'auth' => false, 'username' => 'smtp-username','password' => 'smtp-password'),'@text',0,1,NULL,160,TRUE);
-
     $c->add('mail_backend','mail','select',0,1,20,60,TRUE);
     $c->add('mail_sendmail_path','','text',0,1,NULL,70,TRUE);
     $c->add('mail_sendmail_args','','text',0,1,NULL,80,TRUE);
@@ -97,7 +95,7 @@ function install_config()
     $c->add('fs_search', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
     $c->add('search_style','google','select',0,6,18,650,TRUE);
     $c->add('search_limits','10,15,25,30','text',0,6,NULL,660,TRUE);
-    $c->add('num_search_results',30,'text',0,6,NULL,670,TRUE);
+    $c->add('num_search_results',25,'text',0,6,NULL,670,TRUE);
     $c->add('search_show_limit',TRUE,'select',0,6,1,680,TRUE);
     $c->add('search_show_sort',TRUE,'select',0,6,1,690,TRUE);
     $c->add('search_show_num',TRUE,'select',0,6,1,700,TRUE);
@@ -107,6 +105,7 @@ function install_config()
     $c->add('search_no_data','<i>Not available...</i>','text',0,6,NULL,740,TRUE);
     $c->add('search_separator',' &gt; ','text',0,6,NULL,750,TRUE);
     $c->add('search_def_keytype','phrase','select',0,6,19,760,TRUE);
+    $c->add('default_search_order','date','select',0,6,22,770,TRUE);
 
     // Subgroup: Stories and Trackback
     $c->add('sg_stories', NULL, 'subgroup', 1, 0, NULL, 0, TRUE);
@@ -154,6 +153,7 @@ function install_config()
     $c->add('fs_theme_advanced', NULL, 'fieldset', 2, 11, NULL, 0, TRUE);
     $c->add('show_right_blocks',FALSE,'select',2,11,1,1350,TRUE);
     $c->add('showfirstasfeatured',0,'select',2,11,0,1360,TRUE);
+    $c->add('compress_css',TRUE,'select',2,11,0,1370,TRUE);
 
     // Subgroup: Blocks
     $c->add('sg_blocks', NULL, 'subgroup', 3, 0, NULL, 0, TRUE);
@@ -337,11 +337,8 @@ function install_config()
     $c->add('emailstoriesperdefault',0,'select',7,33,0,950,TRUE);
 
     $c->add('fs_htmlfilter', NULL, 'fieldset', 7, 34, NULL, 0, TRUE);
-    $c->add('use_safe_html',1,'select',7,34,0,1705,TRUE);
-    $c->add('user_html',array ('p' => array(), 'b' => array(), 'strong' => array(),'i' => array(), 'a' => array('href' => 1, 'title' => 1, 'rel' => 1),'em'     => array(),'br'     => array(),'tt'     => array(),'hr'     => array(),        'li'     => array(), 'ol'     => array(), 'ul'     => array(), 'code' => array(), 'pre'    => array()),'**placeholder',7,34,NULL,1710,TRUE);
-    $c->add('admin_html',array ('p' => array('class' => 1, 'id' => 1, 'align' => 1), 'div' => array('class' => 1, 'id' => 1), 'span' => array('class' => 1, 'id' => 1), 'table' => array('class' => 1, 'id' => 1, 'width' => 1, 'border' => 1, 'cellspacing' => 1, 'cellpadding' => 1), 'tr' => array('class' => 1, 'id' => 1, 'align' => 1, 'valign' => 1), 'th' => array('class' => 1, 'id' => 1, 'align' => 1, 'valign' => 1, 'colspan' => 1, 'rowspan' => 1), 'td' => array('class' => 1, 'id' => 1, 'align' => 1, 'valign' => 1, 'colspan' => 1, 'rowspan' => 1)),'**placeholder',7,34,NULL,1720,TRUE);
+    $c->add('allow_embed_object',TRUE,'select',7,34,1,1720,TRUE);
     $c->add('skip_html_filter_for_root',0,'select',7,34,0,1730,TRUE);
-    $c->add('allowed_protocols',array('http','ftp','https'),'%text',7,34,NULL,1740,TRUE);
 
     $c->add('fs_censoring', NULL, 'fieldset', 7, 35, NULL, 0, TRUE);
     $c->add('censormode',1,'select',7,35,0,1760,TRUE);

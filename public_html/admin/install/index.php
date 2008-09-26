@@ -1138,11 +1138,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $c->add('hide_adminmenu',TRUE,'select',3,12,1,1170,TRUE);
 
-            // search stuff
             $c->add('fs_search', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
             $c->add('search_style','google','select',0,6,18,650,TRUE);
             $c->add('search_limits','10,15,25,30','text',0,6,NULL,660,TRUE);
-            $c->add('num_search_results',30,'text',0,6,NULL,670,TRUE);
+            $c->add('num_search_results',25,'text',0,6,NULL,670,TRUE);
             $c->add('search_show_limit',TRUE,'select',0,6,1,680,TRUE);
             $c->add('search_show_sort',TRUE,'select',0,6,1,690,TRUE);
             $c->add('search_show_num',TRUE,'select',0,6,1,700,TRUE);
@@ -1152,7 +1151,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('search_no_data','<i>Not available...</i>','text',0,6,NULL,740,TRUE);
             $c->add('search_separator',' &gt; ','text',0,6,NULL,750,TRUE);
             $c->add('search_def_keytype','phrase','select',0,6,19,760,TRUE);
-            $c->restore_param('num_search_results', 'Core');
+            $c->add('default_search_order','date','select',0,6,22,770,TRUE);
 
             // This option should only be set during the install/upgrade because of all
             // the setting up thats required. So hide it from the user.
@@ -1174,9 +1173,16 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('mail_smtp_password','','text',0,1,NULL,130,TRUE);
             $c->add('mail_smtp_secure','none','select',0,1,21,140,TRUE);
 
+            $c->add('compress_css',TRUE,'select',2,11,0,1370,TRUE);
+            $c->add('allow_embed_object',TRUE,'select',7,34,1,1720,TRUE);
+
             // now delete the old setting - we don't want it anymore...
 
             $c->del('mail_settings','Core');
+            $c->del('use_safe_html','Core');
+            $c->del('user_html','Core');
+            $c->del('admin_html','Core');
+            $c->del('allowed_protocols','Core');
 
             $current_fusion_version = '1.1.0';
             $_SQL = '';
