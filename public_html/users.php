@@ -933,7 +933,7 @@ case 'getpassword':
 case 'newpwd':
     $uid = COM_applyFilter ($_GET['uid'], true);
     $reqid = COM_applyFilter ($_GET['rid']);
-    if (!empty ($uid) && is_numeric ($uid) && ($uid > 0) &&
+    if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
             !empty ($reqid) && (strlen ($reqid) == 16)) {
         $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
                            array ($uid, $reqid));
@@ -962,7 +962,7 @@ case 'setnewpwd':
     } else {
         $uid = COM_applyFilter ($_POST['uid'], true);
         $reqid = COM_applyFilter ($_POST['rid']);
-        if (!empty ($uid) && is_numeric ($uid) && ($uid > 0) &&
+        if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
                 !empty ($reqid) && (strlen ($reqid) == 16)) {
             $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
                                array ($uid, $reqid));
