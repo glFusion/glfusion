@@ -2,6 +2,17 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Clear CTL when stories are auto deleted or archived (Mark)
+- Do not display profile page for anonymous users (Mark)
+- Modified block editor to allow use of advanced editor (Mark)
+- Added HTML filtering allow embed tag to configuration (Mark)
+- Added css_compress configuration option to configuration (Mark)
+- Added default sort order to configuration (Mark)
+- Fixed missing </li> on parent menu without children nodes (Mark)
+- Fixed issue where What's New and old cached stories were not updated when the
+  story was set to auto archive or delete. (Mark)
+- Fixed Forum notification email to actually point to the last reply where
+  appropriate (Mark)
 - Bugfix of template root hook for directories below layout/nouveau/ (Joe)
 - Implemented new mailer - added support for secure SMTP (Mark)
 - Fixed searching for non-installed plugins when open_basedir restrictions are in
