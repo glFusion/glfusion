@@ -95,7 +95,12 @@ if (!isset($_FM_CONF['perpage'])) {
 */
 function plugin_getmenuitems_filemgmt()
 {
-    global $_CONF, $LANG_FILEMGMT;
+    global $_USER, $mydownloads_publicpriv, $_CONF, $LANG_FILEMGMT;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+        return '';
+    }
+
     $menuitems = array();
     $menuitems["{$LANG_FILEMGMT['downloads']}"] = $_CONF['site_url'] . "/filemgmt/index.php";
     return $menuitems;
@@ -219,7 +224,12 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @return  mixed   results of calling the CMT_userComments function
  */
 function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$page,$view) {
-    global $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $LANG01;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $LANG01;
+
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+        return '';
+    }
 
     $id = str_replace('fileid_','',$id);
     /* Plugin specific code to display relevant content above the comment thread */
@@ -297,7 +307,11 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
 
 function plugin_statssummary_filemgmt ()
 {
-    global $_FM_TABLES, $LANG_FILEMGMT;
+    global $_USER, $mydownloads_publicpriv, $_FM_TABLES, $LANG_FILEMGMT;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+        return '';
+    }
 
     $sql = "SELECT COUNT(*), SUM(hits) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
@@ -318,7 +332,11 @@ function plugin_statssummary_filemgmt ()
 */
 function plugin_showstats_filemgmt($showsitestats)
 {
-global $LANG_FILEMGMT, $_FM_TABLES, $_CONF;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_FM_TABLES, $_CONF;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+        return '';
+    }
 
     $stat_templates = new Template($_CONF['path_layout'] . 'stats');
     $stat_templates->set_file(array('itemstats'=>'itemstatistics.thtml',
@@ -370,7 +388,11 @@ global $LANG_FILEMGMT, $_FM_TABLES, $_CONF;
 
 function plugin_searchtypes_filemgmt()
 {
-    global $LANG_FILEMGMT;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+        return '';
+    }
 
     $tmp['filemgmt'] = $LANG_FILEMGMT['searchlabel'];
 
@@ -392,7 +414,11 @@ function plugin_searchtypes_filemgmt()
 */
 function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $type, $author)
 {
-    global $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+        return '';
+    }
 
     $query = trim(addslashes($query));
 
@@ -635,7 +661,6 @@ function plugin_feedupdatecheck_filemgmt ($feed, $topic, $update_data, $limit)
 
     $is_current = true;
 
-//    $sql = "SELECT lid FROM {$_FM_TABLES['filemgmt_filedetail']}" . filemgmt_buildSql ($topic, $limits);
     $sql  = "SELECT *,cat.title as cat_title,filedetail.title as file_title FROM {$_FM_TABLES['filemgmt_filedetail']} filedetail LEFT JOIN {$_FM_TABLES['filemgmt_cat']} cat ON filedetail.cid=cat.cid ";
     $sql .= filemgmt_buildSql( $topic,$limits );
 
@@ -656,7 +681,12 @@ function plugin_feedupdatecheck_filemgmt ($feed, $topic, $update_data, $limit)
   * Return the Headline and Byline for the new section in the Whatsnew Block
 */
 function plugin_whatsnewsupported_filemgmt() {
-    global $_CONF, $LANG_FM00,$mydownloads_whatsnew,$filemgmtWhatsNewPeriodDays;
+    global $_USER, $mydownloads_publicpriv, $_CONF, $LANG_FM00,$mydownloads_whatsnew,$filemgmtWhatsNewPeriodDays;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+        return '';
+    }
+
     if ($mydownloads_whatsnew == 1) {
         return array(
             $LANG_FM00['WhatsNewLabel'],
@@ -743,11 +773,18 @@ function plugin_getwhatsnew_filemgmt() {
 */
 function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
 {
-    global $_CONF, $_FM_TABLES;
+    global $_USER, $mydownloads_publicpriv, $_CONF, $_FM_TABLES;
+
+    if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+        return '';
+    }
 
     if ($op == 'tagname' ) {
         return 'file';
     } else if ($op == 'parse') {
+        if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+            return $content;
+        }
         $file_id = COM_applyFilter ($autotag['parm1']);
         $url = COM_buildUrl ($_CONF['site_url'] . '/filemgmt/index.php?id='
                              . $file_id);
@@ -763,75 +800,4 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
         return $content;
     }
 }
-
-
-
-/* GLMENU USE ONLY API FUNCTIONS */
-
-/* Function can be used in a Menuitem of type "PHP Function"
-*  It will generate the menuitems and submenus for your filemgmt plugin
-*  Works with the function plugin_glMenuCreateMenus_filemgmt()
-*/
-function glmenu_filemgmt() {
-    global $_CONF,$_FM_TABLES,$CONF_FILEMGMT;
-    $menu_location = $CONF_FILEMGMT['glmenutype'];
-
-    $retval = '';
-    $sql = "SELECT cid,pid,title FROM {$_FM_TABLES['filemgmt_cat']} WHERE pid = 0 ";
-    $sql .= filemgmt_buildAccessSql('AND') . ' ORDER BY cid';
-    $q1 = DB_query($sql);
-    while (list($cid,$pid,$title) = DB_fetchArray($q1)) {
-        $retval .= 'aI("image='.$_CONF['layout_url'] .'/glmenu/images/folder.gif;text='.$title.';showmenu=filemgmt-'.$cid.';url='.$_CONF['site_url'].'/filemgmt/viewcat.php?cid='.$cid.';");';
-    }
-    return $retval;
-}
-
-
-
-/* GL-Menu API function to generate requires Milonic Javascript functions */
-function plugin_glMenuCreateMenus_filemgmt() {
-    global $_CONF,$_FM_TABLES,$CONF_GLMENU,$CONF_FILEMGMT,$_FMDOWNLOAD;
-
-    /* Generate the JS Menu Functions that are needed for the Content Editor submenus */
-    $menu_location = $CONF_FILEMGMT['glmenutype'];
-    $retval .= '';
-    $groupsql = filemgmt_buildAccessSql('WHERE');
-    $sql = "SELECT cid,pid,title FROM {$_FM_TABLES['filemgmt_cat']} $groupsql ORDER BY cid";
-    $q1 = DB_query($sql);
-    while (list($cid,$pid,$title) = DB_fetchArray($q1)) {
-       $menudata = '';
-       $retval .= ' with(milonic=new menuname("filemgmt-'.$cid.'")) {';
-                if ($menu_location == 'block') {
-                    $retval .=  'style='.$CONF_GLMENU['blockmenustyle'] .';';
-                } else {
-                    $retval .=  'style='.$CONF_GLMENU['headersubmenustyle'] .';';
-                }
-                /* Find and sub categories - that will be submenus */
-                $q2 = DB_query("SELECT cid,pid,title FROM {$_FM_TABLES['filemgmt_cat']}  $groupsql AND pid='{$cid}' ");
-                while (list ($subcid,$subpid,$subtitle) = DB_fetchArray($q2)) {
-                   $menudata .= 'aI("image='.$_CONF['layout_url'] .'/glmenu/images/folder.gif;text='.$subtitle.';showmenu=filemgmt-'.$subcid.';url='.$_CONF['site_url'].'/filemgmt/viewcat.php?cid='.$subcid.';");';
-                }
-                /* Show any links for files that are in this category */
-                $q3 = DB_query("SELECT lid,title,url FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE cid='{$cid}'");
-                while (list ($fileid,$filename,$url) = DB_fetchArray($q3)) {
-                    $pos = strrpos($url,'.') + 1;
-                    $ext = strtolower(substr($url, $pos));
-                    if (array_key_exists($ext, $_FMDOWNLOAD['inconlib'] )) {
-                        $icon = "{$_CONF['layout_url']}/glmenu/images/{$_FMDOWNLOAD['inconlib'][$ext]}";
-                    } else {
-                        $icon = "{$_CONF['layout_url']}/glmenu/images/{$_FMDOWNLOAD['inconlib']['none']}";
-                    }
-                   $menudata .= 'aI("image='.$icon.';text='.$filename.';url='.$_CONF['site_url'].'/filemgmt/singlefile.php?lid='.$fileid.';");';
-                }
-                if ($menudata != '') {
-                    $retval .=  $menudata;
-                }
-
-      $retval .=  '}';
-    }
-    return $retval;
-
-}
-
-
 ?>
