@@ -93,7 +93,7 @@ function userprofile ($user, $msg = 0)
         return $retval;
     }
 
-    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status FROM {$_TABLES['userinfo']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['users']}.uid = $user");
+    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = $user");
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
         return COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -122,6 +122,7 @@ function userprofile ($user, $msg = 0)
                                       'strow'   => 'storyrow.thtml'));
     $user_templates->set_var ('xhtml', XHTML);
     $user_templates->set_var ('site_url', $_CONF['site_url']);
+    $user_templates->set_var ('layout_url', $_CONF['layout_url']);
     $user_templates->set_var ('start_block_userprofile',
             COM_startBlock ($LANG04[1] . ' ' . $display_name));
     $user_templates->set_var ('end_block', COM_endBlock ());
@@ -183,6 +184,14 @@ function userprofile ($user, $msg = 0)
     } else {
         $user_templates->set_var('user_lastlogin', $lasttime[0]);
     }
+
+    if ( $A['showonline'] ) {
+        $online_result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE uid=" . $user);
+        if ( DB_numRows($online_result) > 0 ) {
+            $user_templates->set_var ('online', 'online');
+        }
+    }
+
     $user_templates->set_var ('lang_email', $LANG04[5]);
     $user_templates->set_var ('user_id', $user);
     $user_templates->set_var ('lang_sendemail', $LANG04[81]);
