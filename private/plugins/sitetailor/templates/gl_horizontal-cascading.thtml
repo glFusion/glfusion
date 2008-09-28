@@ -1,0 +1,158 @@
+#gl_moomenu{menu_id} a {
+  text-decoration:none;
+  white-space:nowrap;
+  display:block;
+  float:left;
+  line-height:2.2em;
+  font-weight:700;
+  color:#ccc;
+  height:2.2em;
+  font-size:1em;
+  padding:0 1.2em;
+}
+#gl_moomenu{menu_id} {
+  height:2.2em;
+  position:relative;
+  z-index:50;
+  margin:0;
+}
+#gl_moomenu{menu_id} ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+#gl_moomenu{menu_id} li {
+  display:block;
+  float:left;
+  margin:0;
+  padding:0;
+}
+#gl_moomenu{menu_id} ul ul {
+  border-left:1px solid #333;
+  border-right:1px solid #000;
+}
+#gl_moomenu{menu_id} li li {
+  background:none;
+  border-top:1px solid #333;
+  border-bottom:1px solid #000;
+  margin:0;
+}
+#gl_moomenu{menu_id} li li a:hover {
+  background:none;
+}
+#gl_moomenu{menu_id} li li a {
+  font-family:Helvetica, Arial, sans-serif;
+  font-size:100%;
+  font-weight:400;
+  display:block;
+  text-decoration:none;
+  float:none;
+  height:2.3em;
+  line-height:2.3em;
+  text-indent:1.3em;
+  width:98%;
+  margin:0;
+  padding:0;
+}
+.gl_moomenu{menu_id} {
+  line-height:2.3em;
+  float:left;
+  position:relative;
+}
+.gl_moomenu{menu_id} ul {
+  background:#fff;
+  padding:0;
+}
+.gl_moomenu{menu_id} li {
+  float:left;
+  list-style:none;
+  position:relative;
+}
+.gl_moomenu{menu_id} li:hover {
+  z-index:51;
+}
+.gl_moomenu{menu_id} li ul {
+  float:none;
+  left:-999em;
+  position:absolute;
+  width:14.6em;
+  z-index:50;
+}
+.gl_moomenu{menu_id} li:hover ul,.gl_moomenu{menu_id} li.sfHover ul {
+  left:-1px;
+  top:2.2em;
+}
+.gl_moomenu{menu_id} li:hover li ul,.gl_moomenu{menu_id} li.sfHover li ul,.gl_moomenu{menu_id} li li:hover li ul,.gl_moomenu{menu_id} li li.sfHover li ul,.gl_moomenu{menu_id} li li li:hover li ul,.gl_moomenu{menu_id} li li li.sfHover li ul {
+  top:-999em;
+}
+.gl_moomenu{menu_id} li li:hover ul,.gl_moomenu{menu_id} li li.sfHover ul,.gl_moomenu{menu_id} li li li:hover ul,.gl_moomenu{menu_id} li li li.sfHover ul,.gl_moomenu{menu_id} li li li li:hover ul,.gl_moomenu{menu_id} li li li li.sfHover ul {
+  left:14.65em;
+  top:-1px;
+  z-index:50;
+}
+.gl_moomenu{menu_id} li li {
+  position:relative;
+  float:none;
+  width:100%;
+}
+{!if use_images}
+#gl_moomenu{menu_id},
+#gl_moomenu{menu_id} ul,
+#gl_moomenu{menu_id} ul.gl_moomenu{menu_id} {
+  background:{main_menu_bg_color} url({site_url}/images/menu/{menu_bg_filename}) repeat;
+}
+.gl_moomenu{menu_id} li:hover {
+  background:{main_menu_hover_bg_color} url({site_url}/images/menu/{menu_hover_filename}) repeat;
+}
+{!else}
+#gl_moomenu{menu_id},
+#gl_moomenu{menu_id} ul,
+#gl_moomenu{menu_id} ul.gl_moomenu{menu_id} {
+  background:{main_menu_bg_color};
+}
+.gl_moomenu{menu_id} li:hover {
+  background:{main_menu_hover_bg_color};
+}
+{!endif}
+#gl_moomenu{menu_id} a {
+  color:{main_menu_text_color};  /*Top Menu Text*/
+}
+
+#gl_moomenu{menu_id} li {
+  float:{alignment};  /*Top Menu alignment*/
+}
+
+#gl_moomenu{menu_id} li:hover a,
+#gl_moomenu{menu_id} li.sfHover a,
+#gl_moomenu{menu_id} li:hover a:hover,
+#gl_moomenu{menu_id} li.sfHover a:hover {
+  color:{main_menu_hover_text_color};  /*Top Menu Text Hover / Sub Menu Text*/
+}
+#gl_moomenu{menu_id} li:hover li:hover a:hover,
+#gl_moomenu{menu_id} li.sfHover li.sfHover a:hover {
+  color:{submenu_hover_text_color};  /*Sub Menu Text Hover*/
+}
+#gl_moomenu{menu_id} ul ul {
+  background:{submenu_background_color};  /*Sub Menu BG*/
+  border-left:1px solid {submenu_highlight_color};  /*Sub Menu Highlight*/
+  border-right:1px solid {submenu_shadow_color};  /*Sub Menu Shadow*/
+}
+#gl_moomenu{menu_id} li li {
+  border-top:1px solid {submenu_highlight_color};  /*Sub Menu Highlight*/
+  border-bottom:1px solid {submenu_shadow_color};  /*Sub Menu Shadow*/
+}
+#gl_moomenu{menu_id} li li a.parent{menu_id},
+#gl_moomenu{menu_id} li li a.parent{menu_id}:hover {
+  background:transparent url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 95% 50%;
+}
+.gl_moomenu{menu_id} {float:{alignment};}
+
+<!--[if IE 7]>
+#gl_moomenu{menu_id} {
+  height:auto;
+  width:100%;
+}
+.gl_moomenu{menu_id} li ul {
+  width:177px;
+}
+<![endif]-->

@@ -73,7 +73,7 @@ function plugin_getheadercss_sitetailor() {
                 if ( $retval ) {
                     $st_header[] = CACHE_instance_filename($cacheInstance,0);
                 } else {
-                    $ms = new Template( $_CONF['path_layout'] );
+                    $ms = new Template( $_CONF['path'].'plugins/sitetailor/templates/' );
                     switch ($menu['menu_type']) {
                         case 1 :    // horizontal with multi-level
                             $stylefile = 'gl_horizontal-cascading.thtml';
@@ -132,7 +132,6 @@ function plugin_getheaderjs_sitetailor() {
                 if ( $retval ) {
                     $st_js[] = CACHE_instance_filename($cacheInstance,0);
                 } else {
-                    $ms = new Template( $_CONF['path_layout'] );
                     $ms = new Template( $_CONF['path'] .'plugins/sitetailor/templates/');
                     $ms->set_file('js','animate.thtml');
                     $ms->set_var('menu_id',$menu['menu_id']);

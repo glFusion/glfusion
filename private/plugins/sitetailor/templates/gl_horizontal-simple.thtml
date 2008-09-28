@@ -1,0 +1,30 @@
+.st-fmenu{menu_id} {
+text-align:center;
+}
+.st-fmenu{menu_id} ul{
+margin:1em;
+padding:0;
+clear:both;
+text-align:center; /* options are left - center - right */
+color:{main_menu_text_color};
+list-style-type:disc;
+list-style-image:none;
+list-style-position:outside;
+}
+.st-fmenu{menu_id} ul li {
+border-right:1px solid {submenu_highlight_color};
+display:inline;
+padding:0 1.1em 0 .8em;
+}
+.st-fmenu{menu_id} ul li.st-f-last{menu_id} {
+border-right:0;
+}
+.st-fmenu{menu_id} a:link,
+.st-fmenu{menu_id} a:visited {
+color:{main_menu_text_color};
+text-decoration:none;
+}
+.st-fmenu{menu_id} a:hover {
+color:{main_menu_hover_text_color};
+text-decoration:underline;
+}
