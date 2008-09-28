@@ -47,7 +47,9 @@ if (!defined ('GVERSION')) {
 $FilemgmtUser  = false;
 $FilemgmtAdmin = false;
 
-if (SEC_hasRights("filemgmt.user") OR $mydownloads_publicpriv == 1) {
+if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    $FilemgmtUser = false;
+} else {
     $FilemgmtUser = true;
 }
 if (SEC_hasRights("filemgmt.edit")) {
