@@ -1,6 +1,6 @@
 {start_block_userprofile}
 		<div class="profile-col1">
-			<img class="gl_mootip profile-image" src="{site_url}/images/userphotos/{username}.jpg" alt="" title="{username} - {user_fullname} :: {lang_membersince}<br{xhtml}>{user_regdate}<br{xhtml}><br{xhtml}>{$LANG28[35]}<br{xhtml}>{user_lastlogin}"{xhtml}>
+			{user_photo}
 			<div class="profile-meta">
 				<ul>
 					{edit_link}
@@ -14,22 +14,30 @@
 							<img src="{layout_url}/images/home.png" alt="{lang_homepage}: {user_homepage}" title="{lang_homepage}: {user_homepage}"{xhtml}>
 						</a>
 					</li>
+					{!if user_location}
 					<li>
 						<img src="{layout_url}/images/location.png" alt="{lang_location}: {user_location}" title="{lang_location}: {user_location}"{xhtml}>
 					</li>
+					{!endif}
+					{!if online}
 					<li>
 						<img src="{layout_url}/images/online.png" alt="{lang_online}" title="{lang_online}"{xhtml}>
 					</li>
+					{!endif}
 				</ul>
 			</div> <!-- end profile-meta -->
+			{!if user_bio}
 			<div class="profile-bio">
 				<b>{lang_bio} {username}</b><br{xhtml}>
 				<p>{user_bio}</p>
 			</div>
+			{!endif}
+			{!if user_pgp}
 			<div class="profile-pgpkey">
 				<b>{lang_pgpkey}</b><br{xhtml}>
 				<p>{user_pgp}</p>
 			</div>
+			{!endif}
 		</div> <!-- end profile-col1 -->
 		<div class="profile-col2">
 			<div class="profile-header">
