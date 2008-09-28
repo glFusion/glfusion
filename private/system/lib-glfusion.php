@@ -51,6 +51,8 @@ function glf_template_set_root($root) {
         }
         $retval[] = $r . '/custom';
         $retval[] = $r;
+        $retval[] = $_CONF['path_themes'] . 'nouveau/' .
+            substr($r, strlen($_CONF['path_layout']));
     }
     return $retval;
 }
