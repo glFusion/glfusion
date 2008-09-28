@@ -68,24 +68,25 @@
             <table class="inputTable">
                 <tr>
                     <td style="width:100px;"><label for="homepage">{lang_homepage}:</label></td>
-                    <td><input type="text" id="homepage" name="homepage" size="55" maxlength="128" value="{homepage_value}"{xhtml}></td>
+                    <td><input type="text" id="homepage" name="homepage" size="48" maxlength="128" value="{homepage_value}"{xhtml}></td>
                 </tr>
+				{customfields}
                 <tr>
                     <td style="width:100px;"><label for="location">{lang_location}:</label></td>
-                    <td><input type="text" id="location" name="location" size="55" maxlength="96" value="{location_value}"{xhtml}></td>
+                    <td><input type="text" id="location" name="location" size="48" maxlength="96" value="{location_value}"{xhtml}></td>
                 </tr>
                 {userphoto_option}
                 <tr>
                     <td style="width:100px;"><label for="sig">{lang_signature}:</label></td>
-                    <td><textarea id="sig" name="sig" style="width:100%" cols="20" rows="4">{signature_value}</textarea></td>
+                    <td><textarea id="sig" name="sig" style="width:100%" cols="18" rows="4">{signature_value}</textarea></td>
                 </tr>
                 <tr>
                     <td style="width:100px;"><label for="about">{lang_about}:</label></td>
-                    <td><textarea id="about" name="about" style="width:100%" cols="20" rows="4">{about_value}</textarea></td>
+                    <td><textarea id="about" name="about" style="width:100%" cols="18" rows="4">{about_value}</textarea></td>
                 </tr>
                 <tr>
                     <td style="width:100px;"><label for="pgpkey">{lang_pgpkey}:</label></td>
-                    <td><textarea id="pgpkey" name="pgpkey" style="width:100%" cols="20" rows="4">{pgpkey_value}</textarea></td>
+                    <td><textarea id="pgpkey" name="pgpkey" style="width:100%" cols="18" rows="4">{pgpkey_value}</textarea></td>
                 </tr>
             </table>
         </fieldset>
