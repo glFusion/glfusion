@@ -43,14 +43,16 @@ require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 
-if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
-
+if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    COM_errorLOG("Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}, Remote address is: {$_SERVER['REMOTE_ADDR']}");
+    redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOACCESS);
+    exit();
+} else {
     if (isset($_USER['uid'])) {
         $uid = $_USER['uid'];
     } else {
         $uid = 1;    // Set to annonymous GL User ID
     }
-
     $lid = COM_applyFilter($_GET['lid'],true);
     $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
     $groupsql = filemgmt_buildAccessSql();
@@ -77,10 +79,5 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
         exit();
     }
 
-} else {
-    COM_errorLOG("Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}, Remote address is: {$_SERVER['REMOTE_ADDR']}");
-    redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOACCESS);
-    exit();
 }
-
 ?>

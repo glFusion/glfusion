@@ -44,8 +44,11 @@ include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 $numCategoriesPerRow   = $_FM_CONF['numcategoriesperrow'];
 $numSubCategories2Show = $_FM_CONF['numsubcategories2show'];
 
-if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
-
+if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+    COM_errorLOG("Index.php => Filemgmt Plugin Access denied. Attempted direct (not via menu) to FileMgmt Plugin, Remote address is: {$_SERVER['REMOTE_ADDR']}");
+    redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOACCESS);
+    exit();
+} else {
     $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
     $p->set_file (array (
         'page'             =>     'filelisting.thtml',
@@ -274,10 +277,5 @@ if (SEC_hasRights('filemgmt.user') OR $mydownloads_publicpriv == 1) {
     $display .= COM_siteFooter();
     echo $display;
 
-} else {
-    COM_errorLOG("Index.php => Filemgmt Plugin Access denied. Attempted direct (not via menu) to FileMgmt Plugin, Remote address is: {$_SERVER['REMOTE_ADDR']}");
-    redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOACCESS);
-    exit();
 }
-
 ?>
