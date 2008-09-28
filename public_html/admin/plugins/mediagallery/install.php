@@ -102,7 +102,7 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'mediagallery') == 0) {
     $T->set_var('btnmsg', $LANG_MG00['install']);
     $T->set_var('action','install');
 
-    $gl_version     = glFusion_VERSION;
+    $gl_version     = GVERSION;
     $php_version    = phpversion();
     if (is_array($TEMPLATE_OPTIONS)) {
         $tc_installed = 1;
@@ -111,7 +111,7 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'mediagallery') == 0) {
     }
     $memory_limit = MG_return_bytes(ini_get('memory_limit'));
 
-    $glversion = explode(".", glFusion_VERSION);
+    $glversion = explode(".", GVERSION);
     if ( $glversion[1] < 1 ) {
         $versionCheck = '<div style="background-color:#ffff00;color:#000000;vertical-align:middle;padding:5px;"><img src="redX.png" alt="error" style="padding:5px;vertical-align:middle;">&nbsp;' . $LANG_MG00['gl_version_error'] . '</div>';
         $errCheck++;
