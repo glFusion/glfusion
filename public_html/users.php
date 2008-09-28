@@ -93,7 +93,7 @@ function userprofile ($user, $msg = 0)
         return $retval;
     }
 
-    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,homepage,about,location,pgpkey,photo,email,status FROM {$_TABLES['userinfo']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['users']}.uid = $user");
+    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status FROM {$_TABLES['userinfo']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['users']}.uid = $user");
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
         return COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -161,18 +161,28 @@ function userprofile ($user, $msg = 0)
         $edit_link_url = COM_createLink($edit_icon,
             "{$_CONF['site_admin_url']}/user.php?mode=edit&amp;uid={$A['uid']}");
         $user_templates->set_var ('edit_icon', $edit_icon);
-        $user_templates->set_var ('edit_link', $edit_link_url);
-        $user_templates->set_var ('user_edit', $edit_link_url);
+        $user_templates->set_var ('edit_link', '<li>' . $edit_link_url . '</li>');
+        $user_templates->set_var ('user_edit', '<li>' . $edit_link_url . '</li>');
     }
 
     if (isset ($A['photo']) && empty ($A['photo'])) {
         $A['photo'] = '(none)'; // user does not have a photo
     }
+
+    $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = {$A['uid']}");
+    $lasttime = COM_getUserDateTimeFormat ($lastlogin);
+
     $photo = USER_getPhoto ($user, $A['photo'], $A['email'], -1);
     $user_templates->set_var ('user_photo', $photo);
 
     $user_templates->set_var ('lang_membersince', $LANG04[67]);
     $user_templates->set_var ('user_regdate', $A['regdate']);
+    $user_templates->set_var('lang_lastlogin', $LANG28[35]);
+    if (empty ($lastlogin)) {
+        $user_templates->set_var('user_lastlogin', $LANG28[36]);
+    } else {
+        $user_templates->set_var('user_lastlogin', $lasttime[0]);
+    }
     $user_templates->set_var ('lang_email', $LANG04[5]);
     $user_templates->set_var ('user_id', $user);
     $user_templates->set_var ('lang_sendemail', $LANG04[81]);
@@ -180,6 +190,7 @@ function userprofile ($user, $msg = 0)
     $user_templates->set_var ('user_homepage', COM_killJS ($A['homepage']));
     $user_templates->set_var ('lang_location', $LANG04[106]);
     $user_templates->set_var ('user_location', strip_tags ($A['location']));
+    $user_templates->set_var ('lang_online', $LANG04[160]);
     $user_templates->set_var ('lang_bio', $LANG04[7]);
     $user_templates->set_var ('user_bio', nl2br (stripslashes ($A['about'])));
     $user_templates->set_var ('lang_pgpkey', $LANG04[8]);
@@ -194,9 +205,9 @@ function userprofile ($user, $msg = 0)
     $user_templates->set_var ('lang_date', $LANG09[17]);
 
     // for alternative layouts: use these as headlines instead of block titles
-    $user_templates->set_var ('headline_last10stories', $LANG04[82]);
-    $user_templates->set_var ('headline_last10comments', $LANG04[10]);
-    $user_templates->set_var ('headline_postingstats', $LANG04[83]);
+    $user_templates->set_var ('headline_last10stories', $LANG04[82] . ' ' . $display_name);
+    $user_templates->set_var ('headline_last10comments', $LANG04[10] . ' ' . $display_name);
+    $user_templates->set_var ('headline_postingstats', $LANG04[83] . ' ' . $display_name);
 
     $result = DB_query ("SELECT tid FROM {$_TABLES['topics']}"
             . COM_getPermSQL ());
@@ -230,7 +241,7 @@ function userprofile ($user, $msg = 0)
                 COM_createLink(
                     stripslashes ($C['title']),
                     $articleUrl,
-                    array ('class'=>'b'))
+                    array ('class'=>''))
             );
             $storytime = COM_getUserDateTimeFormat ($C['unixdate']);
             $user_templates->set_var ('story_date', $storytime[0]);
@@ -284,7 +295,7 @@ function userprofile ($user, $msg = 0)
                 COM_createLink(
                     stripslashes ($C['title']),
                     $comment_url,
-                    array ('class'=>'b'))
+                    array ('class'=>''))
             );
             $commenttime = COM_getUserDateTimeFormat ($C['unixdate']);
             $user_templates->set_var ('comment_date', $commenttime[0]);
