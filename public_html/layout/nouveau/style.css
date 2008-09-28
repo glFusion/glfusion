@@ -978,6 +978,86 @@ text-align:center;
 white-space:nowrap;
 }
 
+.profile-col1 {
+width:14.80em;
+float:left;
+padding-left:1em;
+margin-bottom:1em;
+}
+
+.profile-image {
+background:#f2f2f2 50% 50%;
+border:1px solid #ccc;
+padding:5px;
+margin:0;
+height:185px;
+width:170px;
+}
+
+.profile-meta ul {
+list-style-type:none;
+margin:0 auto;
+padding:5px 10px;
+width:170px;
+}
+
+.profile-meta ul li {
+float:left;
+padding:5px;
+}
+.profile-bio {
+background:#f2f2f2;
+border:1px solid #ccc;
+padding:5px;
+margin:0;
+width:170px;
+clear:left;
+}
+
+.profile-bio p {
+padding-top:5px;
+}
+
+.profile-pgpkey {
+background:#f2f2f2;
+border:1px solid #ccc;
+padding:5px;
+margin-top:1.8em;
+width:170px;
+clear:left;
+}
+
+.profile-pgpkep p {
+padding-top:5px;
+}
+.profile-col2 {
+margin-left:17.8em;
+}
+.profile-col2 ul {
+margin:0 .5em 1em;
+}
+
+.profile-header {
+background:#ccc;
+padding:.5em 1em;
+margin:1em 0;
+font-weight:bold;
+}
+
+.profile-header span {
+float:right;
+font-weight:normal;
+}
+
+.profile-header span a {
+text-decoration:none;
+}
+
+.profile-data {
+padding:0 .5em;
+width:100%; /*width:auto in css/ie6.css file */
+}
+
 .searchauth {
 background:transparent;
 color:#000;

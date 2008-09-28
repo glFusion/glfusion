@@ -191,6 +191,7 @@ input.inputButton,
 .commentbar-line2,
 .pluginSubTable,
 .pluginSolidOutline,
+.profile-header,
 .ng-selected-day {
 	background-color:#ccc;
 }
@@ -205,6 +206,9 @@ div#frame,
 .ng-cal-header-table,
 .ng-close-link,
 .ng-clear-link,
+.profile-image,
+.profile-bio,
+.profile-pgpkey,
 .table_list {
 	border:1px solid #ccc;
 }
@@ -248,6 +252,9 @@ div#frame,
 .plugin,
 .pluginCellFill,
 .pluginCellSubTitle,
+.profile-image,
+.profile-bio,
+.profile-pgpkey,
 .story-featured pre .story-body pre {
 	background-color:#f2f2f2;
 }

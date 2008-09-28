@@ -1,75 +1,70 @@
 {start_block_userprofile}
-    <table cellspacing="0" cellpadding="3">
-        <tr>
-            <td class="alignright" style="vertical-align:top;"><b>{lang_username}:</b></td>
-            <td style="vertical-align:top;">{username} ({user_fullname}) {edit_link}<br{xhtml}> {user_photo}</td>
-        </tr>
-        <tr>
-            <td class="alignright" style="vertical-align:top;"><b>{lang_membersince}:</b></td>
-            <td style="vertical-align:top;">{user_regdate}</td>
-        </tr>
-        <tr>
-            <td class="alignright" style="vertical-align:top;"><b>{lang_email}:</b></td>
-            <td style="vertical-align:top;"><a href="{site_url}/profiles.php?uid={user_id}">{lang_sendemail}</a></td>
-        </tr>
-        <tr>
-            <td class="alignright" style="vertical-align:top;"><b>{lang_homepage}:</b></td>
-            <td style="vertical-align:top;"><a href="{user_homepage}">{user_homepage}</a></td>
-        </tr>
-        <tr>
-            <td class="alignright" style="vertical-align:top;"><b>{lang_location}:</b></td>
-            <td style="vertical-align:top;">{user_location}</td>
-        </tr>
-        <tr>
-            <td class="alignright" style="vertical-align:top;"><b>{lang_bio}:</b></td>
-            <td style="vertical-align:top;">{user_bio}</td>
-        </tr>
-        <tr>
-            <td class="alignright" style="vertical-align:top;"><b>{lang_pgpkey}:</b></td>
-            <td style="vertical-align:top;">{user_pgp}</td>
-        </tr>
-    </table>
-{end_block}
-{start_block_last10stories}
-    <table cellpadding="3" cellspacing="0" width="100%">
-        <tr>
-            <td>
-                <table cellspacing="0" cellpadding="3">
-                    {story_row}
-                </table>
-            </td>
-        </tr>
-    </table>
-{end_block}
-{start_block_last10comments}
-    <table cellpadding="3" cellspacing="0" width="100%">
-        <tr>
-            <td>
-                <table cellspacing="0" cellpadding="3">
-                    {comment_row}
-                </table>
-            </td>
-        </tr>
-    </table>
-{end_block}
-{start_block_postingstats}
-    <table cellpadding="3" cellspacing="0" width="100%">
-        <tr>
-            <td>
-                <table cellspacing="0" cellpadding="3" width="100%">
-                    <tr>
-                        <td>{lang_number_stories}</td>
-                        <td>{number_stories}</td>
-                    </tr>
-                    <tr>
-                        <td>{lang_number_comments}</td>
-                        <td>{number_comments}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><a href="{site_url}/search.php?query=&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=all&amp;author={user_id}&amp;mode=search">{lang_all_postings_by}</a></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+		<div class="profile-col1">
+			<img class="gl_mootip profile-image" src="{site_url}/images/userphotos/{username}.jpg" alt="" title="{username} - {user_fullname} :: {lang_membersince}<br{xhtml}>{user_regdate}<br{xhtml}><br{xhtml}>{$LANG28[35]}<br{xhtml}>{user_lastlogin}"{xhtml}>
+			<div class="profile-meta">
+				<ul>
+					{edit_link}
+					<li>
+						<a href="{site_url}/profiles.php?uid={user_id}">
+							<img src="{layout_url}/images/mail.png" alt="{lang_sendemail}" title="{lang_sendemail}"{xhtml}>
+						</a>
+					</li>
+					<li>
+						<a href="{user_homepage}" target="_blank">
+							<img src="{layout_url}/images/home.png" alt="{lang_homepage}: {user_homepage}" title="{lang_homepage}: {user_homepage}"{xhtml}>
+						</a>
+					</li>
+					<li>
+						<img src="{layout_url}/images/location.png" alt="{lang_location}: {user_location}" title="{lang_location}: {user_location}"{xhtml}>
+					</li>
+					<li>
+						<img src="{layout_url}/images/online.png" alt="{lang_online}" title="{lang_online}"{xhtml}>
+					</li>
+				</ul>
+			</div> <!-- end profile-meta -->
+			<div class="profile-bio">
+				<b>{lang_bio} {username}</b><br{xhtml}>
+				<p>{user_bio}</p>
+			</div>
+			<div class="profile-pgpkey">
+				<b>{lang_pgpkey}</b><br{xhtml}>
+				<p>{user_pgp}</p>
+			</div>
+		</div> <!-- end profile-col1 -->
+		<div class="profile-col2">
+			<div class="profile-header">
+				<span>
+					<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=stories&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
+						{lang_number_stories} {number_stories}
+					</a>
+				</span>
+				{headline_last10stories}
+			</div>
+			<table class="profile-data" cellspacing="0" cellpadding="3">
+				{story_row}
+			</table>
+			<div class="profile-header">
+				<span>
+					<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=comments&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
+						{lang_number_comments} {number_comments}
+					</a>
+				</span>
+				{headline_last10comments}
+			</div>
+			<table class="profile-data" cellspacing="0" cellpadding="3">
+				{comment_row}
+			</table>
+			<div class="profile-header">
+				<span>
+					<a href="{site_url}/search.php?query=&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=all&amp;author={user_id}&amp;mode=search" title="{lang_all_postings_by}">
+						{lang_all_postings_by}
+					</a>
+				</span>
+				{headline_postingstats}
+			</div>
+			<ul>
+				<li>{lang_number_stories} {number_stories}</li>
+				<li>{lang_number_comments} {number_comments}</li>
+			</ul>
+		</div>
 {end_block}

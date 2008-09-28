@@ -1,4 +1,4 @@
-                                            <tr>
-                                                <td>{row_number} {story_title}</td>
-                                                <td>{story_date}</td>
-                                            </tr>
+<tr>
+	<td>{row_number} {story_title}</td>
+	<td align="right">{story_date}</td>
+</tr>

@@ -98,3 +98,7 @@ div#frame div.button#right {
 	right:12px;
 }
 /* end ie6 warning */
+
+.profile-data {
+width:auto;
+}
