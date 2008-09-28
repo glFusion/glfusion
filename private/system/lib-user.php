@@ -439,7 +439,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0)
         }
 
         $img = '';
-        if (empty ($photo) || ($photo == 'none')) {
+        if (empty ($photo) || ($photo == '(none)')) {
             // no photo - try gravatar.com, if allowed
             if ($_CONF['use_gravatar']) {
                 $img = 'http://www.gravatar.com/avatar.php?gravatar_id='
@@ -468,9 +468,16 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0)
             }
         }
 
+        if (empty($img) || $img == '' ) {
+            $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
+        }
+
+/*
         if (empty ($img) && !empty ($_CONF['default_photo'])) {
             $img = $_CONF['default_photo'];
+            $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
         }
+*/
         if (!empty ($img)) {
             $userphoto = '<img src="' . $img . '"';
             if ($width > 0) {
