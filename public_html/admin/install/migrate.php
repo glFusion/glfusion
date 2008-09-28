@@ -535,7 +535,7 @@ function INST_installEngine($install_type, $install_step)
                     }
                     list($rc,$errors) = INST_doGeeklogDatabaseUpgrades($version, $use_innodb);
                     if ( $rc === true ) {
-                        INST_checkPlugins();
+//                        INST_checkPlugins();
                         $version = '1.0.1';
                         $req_string = 'index.php?mode=upgrade&step=3'
                                     . '&dbconfig_path=' . $dbconfig_path
