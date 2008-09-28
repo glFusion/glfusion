@@ -43,6 +43,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+$_CONF['right_blocks_in_footer'] = 1;
+
 function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
