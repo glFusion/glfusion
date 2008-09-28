@@ -338,6 +338,10 @@ if (file_exists($_CONF['path_layout'] . 'functions.php')) {
     require_once $_CONF['path_layout'] . 'functions.php';
 }
 
+if (!isset($themeAPI) ) {
+    $themeAPI = 1;
+}
+
 // ensure XHTML constant is defined to avoid problems elsewhere
 
 if (!defined('XHTML')) {
@@ -856,7 +860,13 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
-           $theme_headercode, $theme_layout,$stMenu;
+           $theme_headercode, $theme_layout,$stMenu,$themeAPI;
+
+    if ( $themeAPI == 1 ) {
+        require_once $_CONF['path'] . 'system/lib-compatibility.php';
+        return COM_siteHeaderv1($what, $pagetitle, $headercode);
+        exit;
+    }
 
     $function = $_CONF['theme'] . '_siteHeader';
 
@@ -1131,7 +1141,14 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
            $theme_pagetitle, $theme_headercode, $theme_layout,$mbMenuConfig,
-           $_ST_CONF,$stMenu;
+           $_ST_CONF,$stMenu, $themeAPI;
+
+
+    if ( $themeAPI == 1 ) {
+        require_once $_CONF['path'] . 'system/lib-compatibility.php';
+        return COM_siteFooterv1( $rightblock, $custom);
+        exit;
+    }
 
     // If the theme implemented this for us then call their version instead.
 

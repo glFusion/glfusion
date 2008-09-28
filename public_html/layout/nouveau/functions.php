@@ -35,6 +35,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+$themeAPI = 2;
+
 $_IMAGE_TYPE = 'png';
 
 if (!defined ('XHTML')) {
