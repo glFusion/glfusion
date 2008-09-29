@@ -63,7 +63,7 @@ $LANG_MG00 = array (
     'mg_error'          => 'Error retrieving requested information. Please notify site administrator of the error number. Error Number : ',
     'mg_error_log'      => 'Media Gallery internal error # ',
     'mg_error_generic'  => 'Media Gallery Error: Invalid input received',
-    'whatsnew_prompt'   => 'Last %s Days',
+    'whatsnew_prompt'   => 'last %s days',
     'no_date'           => 'No Date',
     'stats_rate_title'  => 'Top Ten Rated Media Items',
     'rating'            => 'Rating',
@@ -80,7 +80,7 @@ $LANG_MG00 = array (
     'filecheck'         => 'FileCheck Utility',
     'filecheck_disclaimer' => 'FileCheck will scan the Media Gallery directories and provide a list of files that exist in the directories that are not included in the Media Gallery distribution.  These files may be old, obsolete files that are no longer needed.  <b>Use Caution</b> and ensure these files are not needed by your web server.  <br' . XHTML . '><b>YOU SHOULD HAVE A CURRENT BACKUP BEFORE RUNNING THIS UTILITY!</b>',
     'mg_enroll_header'  => 'Album Enrollment',
-    'whatsnew_title'    => 'MEDIA GALLERY',
+    'whatsnew_title'    => 'Media Gallery',
     /* --- New in v1.6.0 --- */
     'template_cache'    => 'Template Cache Library Installed',
     'env_check'         => 'Environment Check',

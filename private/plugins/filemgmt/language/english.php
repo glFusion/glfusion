@@ -51,7 +51,7 @@ $LANG_FM00 = array (
     'editor'            => 'Plugin Editor',
     'warning'           => 'De-Install Warning',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
-    'WhatsNewLabel'    => 'NEW FILES',
+    'WhatsNewLabel'    => 'Files',
     'WhatsNewPeriod'   => ' last %s days'
 );
 
