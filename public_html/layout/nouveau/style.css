@@ -354,7 +354,7 @@ div.glfform form fieldset div.notes {
 }
 
 div.glfform form fieldset div.notes h4 {
-  background-image: url(/images/icon_info.gif);
+  background-image: url(images/icon_info.gif);
   background-repeat: no-repeat;
   background-position: top left;
   padding: 3px 0 3px 27px;
@@ -431,7 +431,7 @@ div.glfform form div img {
 
 div.glfform p.error {
   background-color: #ff0000;
-  background-image: url(/images/icon_error.gif);
+  background-image: url(images/icon_error.gif);
   background-repeat: no-repeat;
   background-position: 3px 3px;
   color: #ffffff;
@@ -442,7 +442,7 @@ div.glfform p.error {
 
 div.glfform form div.error {
   background-color: #ffffe1;
-  background-image: url(/images/required_bg.gif);
+  background-image: url(images/required_bg.gif);
   background-repeat: no-repeat;
   background-position: top left;
   color: #666666;
@@ -450,7 +450,7 @@ div.glfform form div.error {
 }
 
 div.glfform form div.error p.error {
-  background-image: url(/images/icon_error.gif);
+  background-image: url(images/icon_error.gif);
   background-position: top left;
   background-color: transparent;
   border-style: none;
@@ -1617,7 +1617,7 @@ color:#CCCCCC;
 }
 
 #gl_moomenu {
-background: url(/images/menu/menu_bg.gif) repeat;
+background: url(images/menu/menu_bg.gif) repeat;
 height:2.2em;
 position:relative;
 z-index:50;
@@ -1625,7 +1625,7 @@ margin:0;
 }
 
 #gl_moomenu ul {
-background: url(/images/menu/menu_bg.gif) repeat;
+background: url(images/menu/menu_bg.gif) repeat;
 list-style:none;
 margin:0;
 padding:0;
@@ -1987,7 +1987,7 @@ margin:10px;
 
 .ext-link {
 background-color:transparent;
-background:url(/images/external.png) right center no-repeat;
+background:url(images/external.png) right center no-repeat;
 background-attachment:scroll;
 padding-right:13px;
 }
@@ -2193,27 +2193,6 @@ margin:0;
 padding:0;
 }
 
-.gftool-tip {
-color:#fff;
-width:200px;
-overflow:hidden;
-z-index:13000;
-}
-
-.gftool-title {
-font-weight:700;
-font-size:11px;
-color:#679EF1;
-background:url(layout/nouveau/images/gl_mootip_bg200.png) top left;
-margin:0;
-padding:8px 8px 4px;
-}
-
-.gftool-text {
-font-size:11px;
-background:url(layout/nouveau/images/gl_mootip_bg200.png) bottom right;
-padding:4px 8px 8px;
-}
 /*
 Default style for the nogray calendar
 the default class prefix is ng-
