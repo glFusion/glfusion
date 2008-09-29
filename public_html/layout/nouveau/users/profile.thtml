@@ -1,6 +1,7 @@
 {start_block_userprofile}
 		<div class="profile-col1">
-			{user_photo}
+			<img class="gl_mootip profile-image" src="{user_photo}" alt="" title="{username} - {user_fullname} :: {lang_membersince}<br{xhtml}>{user_regdate}<br{xhtml}><br{xhtml}>{$LANG28[35]}<br{xhtml}>{user_lastlogin}"{xhtml}>
+
 			<div class="profile-meta">
 				<ul>
 					{edit_link}
