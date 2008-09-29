@@ -40,12 +40,12 @@ if (!defined ('GVERSION')) {
 
 $langfile = $_CONF['path'] . 'plugins/filemgmt/language/' . $_CONF['language'] . '.php';
 if (file_exists ($langfile)) {
-    include_once ($langfile);
+    include_once $langfile;
 } else {
-    include_once ($_CONF['path'] . 'plugins/filemgmt/language/english.php');
+    include_once $_CONF['path'] . 'plugins/filemgmt/language/english.php';
 }
 
-include($_CONF['path'] . 'plugins/filemgmt/config.php');
+include $_CONF['path'] . 'plugins/filemgmt/config.php';
 
 /*
 * Check and see if we need to load the plugin configuration
@@ -55,10 +55,11 @@ if (!isset($_FM_CONF['perpage'])) {
 
     $fm_config = config::get_instance();
     $_FM_CONF = $fm_config->get_config('filemgmt');
+
     /*
      * Backward compatibility for now...
      */
-    $mydownloads_popular        = $_FM_CONF['popular'];
+    $mydownloads_popular        = $_FM_CONF['popular_download'];
     $mydownloads_newdownloads   = $_FM_CONF['newdownloads'];
     $mydownloads_perpage        = $_FM_CONF['perpage'];
     $mydownloads_trimdesc       = $_FM_CONF['trimdesc'];
