@@ -50,87 +50,6 @@ require_once 'lib-common.php';
 require_once $_CONF['path_system'] . 'lib-user.php';
 $VERBOSE = false;
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-
-// echo COM_debug($_POST);
-
-function profile_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0)
-{
-    global $_CONF, $_TABLES, $_USER;
-
-    $userphoto = '';
-
-    if ($_CONF['allow_user_photo'] == 1) {
-
-        if (($width == 0) && !empty ($_CONF['force_photo_width'])) {
-            $width = $_CONF['force_photo_width'];
-        }
-
-        // collect user's information with as few SQL requests as possible
-        if ($uid == 0) {
-            $uid = $_USER['uid'];
-            if (empty ($email)) {
-                $email = $_USER['email'];
-            }
-            if (!empty ($_USER['photo']) &&
-                    (empty ($photo) || ($photo == '(none)'))) {
-                $photo = $_USER['photo'];
-            }
-        }
-        if ((empty ($photo) || ($photo == '(none)')) ||
-                (empty ($email) && $_CONF['use_gravatar'])) {
-            $result = DB_query ("SELECT email,photo FROM {$_TABLES['users']} WHERE uid = '$uid'");
-            list($newemail, $newphoto) = DB_fetchArray ($result);
-            if (empty ($photo) || ($photo == '(none)')) {
-                $photo = $newphoto;
-            }
-            if (empty ($email)) {
-                $email = $newemail;
-            }
-        }
-
-        $img = '';
-        if (empty ($photo) || ($photo == '(none)')) {
-            // no photo - try gravatar.com, if allowed
-            if ($_CONF['use_gravatar']) {
-                $img = 'http://www.gravatar.com/avatar.php?gravatar_id='
-                     . md5 ($email);
-                if ($width > 0) {
-                    $img .= '&amp;size=' . $width;
-                }
-                if (!empty ($_CONF['gravatar_rating'])) {
-                    $img .= '&amp;rating=' . $_CONF['gravatar_rating'];
-                }
-                if (!empty ($_CONF['default_photo'])) {
-                    $img .= '&amp;default='
-                         . urlencode ($_CONF['default_photo']);
-                }
-            }
-        } else {
-            // check if images are inside or outside the document root
-            if (strstr ($_CONF['path_images'], $_CONF['path_html'])) {
-                $imgpath = substr ($_CONF['path_images'],
-                                   strlen ($_CONF['path_html']));
-                $img = $_CONF['site_url'] . '/' . $imgpath . 'userphotos/'
-                     . $photo;
-            } else {
-                $img = $_CONF['site_url']
-                     . '/getimage.php?mode=userphotos&amp;image=' . $photo;
-            }
-        }
-
-        if (empty($img) || $img == '' ) {
-            $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
-        }
-
-    }
-
-    return $img;
-}
-
-
 /**
 * Shows a profile for a user
 *
@@ -248,7 +167,7 @@ function userprofile ($user, $msg = 0)
     $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = {$A['uid']}");
     $lasttime = COM_getUserDateTimeFormat ($lastlogin);
 
-    $photo = profile_getPhoto ($user, $A['photo'], $A['email'], -1);
+    $photo = USER_getPhoto ($user, $A['photo'], $A['email'], -1,0);
     $user_templates->set_var ('user_photo', $photo);
 
     $user_templates->set_var ('lang_membersince', $LANG04[67]);

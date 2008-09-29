@@ -398,12 +398,13 @@ function USER_sendNotification ($username, $email, $uid, $mode='inactive')
 * @param    string  $photo  name of the user's uploaded image
 * @param    string  $email  user's email address (for gravatar.com)
 * @param    int     $width  preferred image width
+* @param    int     $fullURL if true, send full <img> tag, otherwise just the path to image
 * @return   string          <img> tag or empty string if no image available
 *
 * @note     All parameters are optional and can be passed as 0 / empty string.
 *
 */
-function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0)
+function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL = 1)
 {
     global $_CONF, $_TABLES, $_USER;
 
@@ -469,15 +470,13 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0)
         }
 
         if (empty($img) || $img == '' ) {
+//            $img = $_CONF['default_photo'];
             $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
+        }
+        if ( $fullURL != 1 ) {
+            return $img;
         }
 
-/*
-        if (empty ($img) && !empty ($_CONF['default_photo'])) {
-            $img = $_CONF['default_photo'];
-            $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
-        }
-*/
         if (!empty ($img)) {
             $userphoto = '<img src="' . $img . '"';
             if ($width > 0) {

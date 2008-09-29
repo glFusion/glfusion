@@ -983,7 +983,7 @@ function saveuser($A)
         return COM_refresh ($_CONF['site_url']
                 . '/usersettings.php?msg=56');
     } else {
-        
+
         if (!empty($A['passwd'])) {
             if (($A['passwd'] == $A['passwd_conf']) &&
                     (SEC_encryptPassword($A['old_passwd']) == $_USER['passwd'])) {
@@ -1006,7 +1006,7 @@ function saveuser($A)
                                     . '/usersettings.php?msg=67');
             }
         }
-        
+
         if ($_US_VERBOSE) {
             COM_errorLog('cooktime = ' . $A['cooktime'],1);
         }
@@ -1133,6 +1133,7 @@ function userprofile ($user, $msg = 0)
                                       'strow'   => 'storyrow.thtml'));
     $user_templates->set_var ( 'xhtml', XHTML );
     $user_templates->set_var ('site_url', $_CONF['site_url']);
+    $user_templates->set_var ('layout_url', $_CONF['layout_url']);
     $user_templates->set_var ('start_block_userprofile',
             COM_startBlock ($LANG04[1] . ' ' . $display_name));
     $user_templates->set_var ('end_block', COM_endBlock ());
@@ -1157,7 +1158,7 @@ function userprofile ($user, $msg = 0)
         $user_templates->set_var ('edit_link', $edit_link_url);
     }
 
-    $photo = USER_getPhoto ($user, $A['photo'], $A['email'], -1);
+    $photo = USER_getPhoto ($user, $A['photo'], $A['email'], -1,0);
     $user_templates->set_var ('user_photo', $photo);
 
     $user_templates->set_var ('lang_membersince', $LANG04[67]);
