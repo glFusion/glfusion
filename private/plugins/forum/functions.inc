@@ -446,6 +446,15 @@ function plugin_showstats_forum($showsitestats)
     return $retval;
 }
 
+function plugin_getheadercss_forum() {
+    global $_CONF;
+
+    $styles = array();
+    $styles[] = $_CONF['path'] . 'plugins/forum/css/style.css';
+    return($styles);
+}
+
+
 function plugin_getheaderjs_forum() {
     global $_CONF;
 
