@@ -40,6 +40,7 @@
 $CONF_FORUM['version'] = '3.1.0.fusion';
 
 $CONF_FORUM['lastx_numposts'] = 30;
+$CONF_FORUM['avatar_width'] = 115;
 
 /*************************************************************************
 *          Do not modify any settings below this area                    *
