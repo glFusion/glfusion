@@ -43,13 +43,10 @@ if (!defined ('GVERSION')) {
 }
 
 $langfile = $_CONF['path'] . 'plugins/forum/language/' . $_CONF['language'] . '.php';
-if (file_exists ($langfile))
-{
-    include_once ($langfile);
-}
-else
-{
-    include_once ($_CONF['path'] . 'plugins/forum/language/english.php');
+if (file_exists ($langfile)) {
+    include_once $langfile;
+} else {
+    include_once $_CONF['path'] . 'plugins/forum/language/english.php';
 }
 
 // Need to add this line because PLG_enableStateChange does an include of this file inside a plugin function and $_TABLES is not global.
@@ -224,7 +221,7 @@ function plugin_profileextrassave_forum()
 {
     global $_CONF,$_USER, $_TABLES;
 
-    require_once ($_CONF['path'] . 'plugins/forum/include/gf_format.php');
+    require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
     $uid = $_USER['uid'];
     if ($uid > 1) {
         $location   = gf_preparefordb($_POST['forum_location'],'html');
@@ -266,8 +263,8 @@ function plugin_profilevariablesedit_forum($uid, &$template)
 
 function plugin_profilevariablesdisplay_forum ($uid, &$template)
 {
-
     global $CONF_FORUM,$_TABLES, $_CONF, $LANG_GF02,$LANG_GF04;
+
     $postlimit="10";        // How many posts you want displayed
 
     $query = DB_query ("SELECT id,date,forum,subject FROM {$_TABLES['gf_topic']} WHERE uid = {$uid} ORDER BY date DESC LIMIT 100");
@@ -334,7 +331,6 @@ function plugin_statssummary_forum() {
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
         return '';
     }
-
 
     // This shows in the summary box
     $total_items = DB_count($_TABLES['gf_topic']);      // Total number of Forum Posts
@@ -770,7 +766,7 @@ function plugin_chkVersion_forum() {
 function plugin_upgrade_forum() {
     global $_CONF, $_TABLES,$CONF_FORUM;
 
-    require_once($_CONF['path'] . 'plugins/forum/glupgrade.inc');
+    require_once $_CONF['path'] . 'plugins/forum/glupgrade.inc';
 
     $rc = plugin_plgupgrade_forum();
 
@@ -796,7 +792,7 @@ function plugin_uninstall_forum($installCheck='')
         echo $display;
         exit;
     }
-    require_once($_CONF['path'] . 'plugins/forum/install.inc');
+    require_once $_CONF['path'] . 'plugins/forum/install.inc';
 
     $rc = plugin_remove_forum();
     return $rc;
@@ -1131,10 +1127,10 @@ function phpblock_forum_newposts() {
 */
 function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 {
-    global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM;
-    global $LANG_GF02, $mode, $order,$pi_version, $_GROUPS;
+    global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM,
+           $LANG_GF02, $mode, $order,$pi_version, $_GROUPS;
 
-    require_once ($_CONF['path'] . 'plugins/forum/include/gf_format.php');
+    require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
     if ($pi_version < 2.6) {
         return;
@@ -1449,52 +1445,20 @@ function forumPLG_getMemberBadge($uid) {
     }
 }
 
-/* GL-Menu 2.5 version of the Forum Menu */
 function phpblock_forum_menu() {
-    global $_TABLES,$_CONF,$_USER,$CONF_FORUM,$LANG_GF01,$LANG_GF02,$LANG_GF07,$CONF_GLMENU,$_BLOCK_TEMPLATE;
+    global $_TABLES,$_CONF,$_USER,$CONF_FORUM,$LANG_GF01,$LANG_GF02,$LANG_GF07,
+           $_BLOCK_TEMPLATE;
 
-    if (isset($CONF_GLMENU) AND $CONF_GLMENU['installed_version'] >= 2.5) {
-        if ($CONF_GLMENU['milonicmode']) {
-            $retval = COM_startBlock( $LANG_GF00['forumblock'], '', 'glmenu/milonicmenu/blockheader-blockmenu.thtml');
-            $retval .= 'aI("text='.$LANG_GF01['INDEXPAGE'].';url='.$_CONF['site_url'].'/forum/index.php;");' . LB;
-            if ($_USER['uid'] > 1) {
-                $retval .= 'aI("text='.$LANG_GF01['USERPREFS'].';url='.$_CONF['site_url'].'/forum/userprefs.php;");' . LB;
-                $retval .= 'aI("text='.$LANG_GF01['SUBSCRIPTIONS'].';url='.$_CONF['site_url'].'/forum/notify.php;");' . LB;
-            }
-            $retval .= 'aI("text='.$LANG_GF02['msg88'].';url='.$_CONF['site_url'].'/forum/memberlist.php;");' . LB;
-            $retval .= 'aI("text='.$LANG_GF07['3'].';url='.$_CONF['site_url'].'/forum/index.php?op=popular;");' . LB;
-            $retval .= COM_endBlock('glmenu/milonicmenu/blockfooter-blockmenu.thtml');
-        } else {
-            $retval = COM_startBlock( $LANG01[47], '', 'glmenu/blockheader.thtml');
-            $t = new Template($_CONF['path_layout'] . 'glmenu/cssmenu');
-            $t->set_file('menu','blockmenu.thtml');
-
-            $links = "<li><a href=\"{$_CONF['site_url']}/forum/index.php\" title=\"{$LANG_GF02['msg196']}\">{$LANG_GF01['INDEXPAGE']}</a></li>" . LB;
-            if ($_USER['uid'] > 1) {
-                $links .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php?op=markallread\" title=\"{$LANG_GF02['msg197']}\">{$LANG_GF01['MARKALLREAD']}</a></li>" . LB;
-                $links .= "<li><a href=\"{$_CONF['site_url']}/forum/userprefs.php\" title=\"{$LANG_GF02['msg198']}\">{$LANG_GF01['USERPREFS']}</a></li>" . LB;
-                $links .= "<li><a href=\"{$_CONF['site_url']}/forum/notify.php\" title=\"{$LANG_GF02['msg199']}\">{$LANG_GF01['SUBSCRIPTIONS']}</a></li>" . LB;
-            }
-            $links .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php?op=popular\" title=\"{$LANG_GF02['msg201']}\">{$LANG_GF07['3']}</a></li>" . LB;
-
-            $t->set_var('menuitems', $links);
-            $t->parse ('output', 'menu');
-            $retval .= $t->finish ($t->get_var('output'));
-            $retval .= COM_endBlock('glmenu/blockfooter.thtml');
-        }
-
-    } else {
-        $retval = '<ul>';
-        $retval .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php\" title=\"{$LANG_GF02['msg196']}\">{$LANG_GF01['INDEXPAGE']}</a></li>";
-        if ($_USER['uid'] > 1) {
-            $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/userprefs.php' . '" title="' . $LANG_GF01['USERPREFS'] . '">' . $LANG_GF01['USERPREFS'] . '</a></li>';
-            $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/notify.php' . '" title="' . $LANG_GF01['SUBSCRIPTIONS'] . '">' . $LANG_GF01['SUBSCRIPTIONS'] . '</a></li>';
-            $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/index.php?op=bookmarks' . '" title="' . $LANG_GF01['BOOKMARKS'] . '">' . $LANG_GF01['BOOKMARKS'] . '</a></li>';
-        }
-        $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/index.php?op=lastx" title="' . $LANG_GF01['LASTX'] . '">' . $LANG_GF01['LASTX'] . '</a></li>';
-        $retval .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php?op=popular\" title=\"{$LANG_GF02['msg201']}\">{$LANG_GF07['3']}</a></li>";
-        $retval .= '</ul>';
+    $retval = '<ul>';
+    $retval .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php\" title=\"{$LANG_GF02['msg196']}\">{$LANG_GF01['INDEXPAGE']}</a></li>";
+    if ($_USER['uid'] > 1) {
+        $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/userprefs.php' . '" title="' . $LANG_GF01['USERPREFS'] . '">' . $LANG_GF01['USERPREFS'] . '</a></li>';
+        $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/notify.php' . '" title="' . $LANG_GF01['SUBSCRIPTIONS'] . '">' . $LANG_GF01['SUBSCRIPTIONS'] . '</a></li>';
+        $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/index.php?op=bookmarks' . '" title="' . $LANG_GF01['BOOKMARKS'] . '">' . $LANG_GF01['BOOKMARKS'] . '</a></li>';
     }
+    $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/index.php?op=lastx" title="' . $LANG_GF01['LASTX'] . '">' . $LANG_GF01['LASTX'] . '</a></li>';
+    $retval .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php?op=popular\" title=\"{$LANG_GF02['msg201']}\">{$LANG_GF07['3']}</a></li>";
+    $retval .= '</ul>';
     return $retval;
 }
 

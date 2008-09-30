@@ -1,8 +1,6 @@
 <?php
 
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} ADD cb_enable tinyint(1) DEFAULT '0' NOT NULL AFTER postsperpage";
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} ADD cb_homepage tinyint(1) DEFAULT '0' NOT NULL AFTER cb_enable";
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} ADD cb_where tinyint(1) DEFAULT '0' NOT NULL AFTER cb_homepage";
+
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_topic']} DROP cat";
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_topic']} DROP topicimg";
 

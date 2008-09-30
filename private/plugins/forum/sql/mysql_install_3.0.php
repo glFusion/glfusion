@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -139,66 +139,6 @@ $_SQL[] = "CREATE TABLE {$_TABLES['gf_moderators']} (
   mod_move tinyint(1) NOT NULL default '0',
   mod_stick tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (mod_id)
-) TYPE=MyISAM;";
-# --------------------------------------------------------
-
-#
-# Table structure for table `forum_settings`
-#
-
-
-$_SQL[] = "CREATE TABLE {$_TABLES['gf_settings']} (
-  slogan varchar(255) NOT NULL default '',
-  registrationrequired tinyint(1) unsigned NOT NULL default '0',
-  registerpost tinyint(1) unsigned NOT NULL default '0',
-  allowhtml tinyint(1) unsigned NOT NULL default '1',
-  glfilter tinyint(1) unsigned NOT NULL default '0',
-  use_geshi_formatting tinyint(1) NOT NULL default '1',
-  censor tinyint(1) unsigned NOT NULL default '1',
-  showmood tinyint(1) unsigned NOT NULL default '1',
-  allowsmilies tinyint(1) unsigned NOT NULL default '1',
-  allowavatar tinyint(1) unsigned NOT NULL default '1',
-  allow_notify tinyint(1) unsigned NOT NULL default '1',
-  post_htmlmode tinyint(1) NOT NULL default '1',
-  allow_userdatefmt tinyint(1) NOT NULL default '0',
-  showiframe tinyint(1) unsigned NOT NULL default '1',
-  autorefresh tinyint(1) NOT NULL default '1',
-  refresh_delay tinyint(1) NOT NULL default '0',
-  xtrausersettings tinyint(1) unsigned NOT NULL default '0',
-  viewtopicnumchars int(4) NOT NULL default '20',
-  topicsperpage int(4) NOT NULL default '10',
-  postsperpage int(4) NOT NULL default '10',
-  messagesperpage int(4) NOT NULL default '0',
-  searchesperpage int(4) NOT NULL default '0',
-  popular int(4) NOT NULL default '0',
-  speedlimit int(1) NOT NULL default '60',
-  edit_timewindow int(11) NOT NULL default '3600',
-  use_spamxfilter tinyint(1) NOT NULL default '0',
-  use_smiliesplugin tinyint(1) NOT NULL default '0',
-  use_pmplugin tinyint(1) NOT NULL default '0',
-  imgset varchar(30) NOT NULL default '',
-  cb_enable tinyint(1) NOT NULL default '0',
-  cb_homepage tinyint(1) NOT NULL default '0',
-  cb_where tinyint(1) NOT NULL default '0',
-  cb_subjectsize tinyint(1) NOT NULL default '0',
-  cb_numposts tinyint(1) NOT NULL default '0',
-  sb_subjectsize tinyint(1) NOT NULL default '0',
-  sb_numposts tinyint(1) NOT NULL default '0',
-  sb_latestposts tinyint(1) NOT NULL default '0',
-  min_comment_len tinyint(1) NOT NULL default '0',
-  min_name_len tinyint(1) NOT NULL default '0',
-  min_subject_len tinyint(1) NOT NULL default '0',
-  html_newline tinyint(1) NOT NULL default '0',
-  level1 int(5) NOT NULL default '1',
-  level2 int(5) NOT NULL default '15',
-  level3 int(5) NOT NULL default '35',
-  level4 int(5) NOT NULL default '70',
-  level5 int(5) NOT NULL default '120',
-  level1name varchar(40) NOT NULL default 'Newbie',
-  level2name varchar(40) NOT NULL default 'Junior',
-  level3name varchar(40) NOT NULL default 'Chatty',
-  level4name varchar(40) NOT NULL default 'Regular Member',
-  level5name varchar(40) NOT NULL default 'Active Member'
 ) TYPE=MyISAM;";
 # --------------------------------------------------------
 

@@ -1,6 +1,6 @@
 <?php
 
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} DROP img_width";
+
 $_SQL[] = "UPDATE {$_TABLES['plugins']} SET `pi_version` = '2.3' WHERE `pi_name` = 'forum' LIMIT 1";
 
 $_SQL[] = "ALTER TABLE  {$_TABLES['gf_topic']} ADD INDEX `idxtopicuid` ( `uid` )";

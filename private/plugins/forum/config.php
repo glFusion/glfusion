@@ -37,10 +37,11 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-$CONF_FORUM['version'] = '3.1.0.fusion';
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
 
-$CONF_FORUM['lastx_numposts'] = 30;
-$CONF_FORUM['avatar_width'] = 115;
+$CONF_FORUM['version'] = '3.1.0.fusion';
 
 /*************************************************************************
 *          Do not modify any settings below this area                    *
@@ -49,7 +50,6 @@ $_TABLES['gf_userprefs']    = $_DB_table_prefix . 'forum_userprefs';
 $_TABLES['gf_topic']        = $_DB_table_prefix . 'forum_topic';
 $_TABLES['gf_categories']   = $_DB_table_prefix . 'forum_categories';
 $_TABLES['gf_forums']       = $_DB_table_prefix . 'forum_forums';
-$_TABLES['gf_settings']     = $_DB_table_prefix . 'forum_settings';
 $_TABLES['gf_watch']        = $_DB_table_prefix . 'forum_watch';
 $_TABLES['gf_moderators']   = $_DB_table_prefix . 'forum_moderators';
 $_TABLES['gf_banned_ip']    = $_DB_table_prefix . 'forum_banned_ip';

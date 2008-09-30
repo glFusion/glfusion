@@ -10,14 +10,10 @@ $_SQL[] = "ALTER TABLE {$_TABLES['gf_topic']} CHANGE `uid` `uid` MEDIUMINT( 8 ) 
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_watch']} ADD forum_id mediumint(8) NOT NULL AFTER id";
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_watch']} ADD topic_id mediumint(8) NOT NULL AFTER id";
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_watch']} ADD date_added date NOT NULL AFTER uid";
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} ADD showiframe tinyint(1) DEFAULT '1' NOT NULL AFTER allow_notify";
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} ADD allowavatar tinyint(1) DEFAULT '1' NOT NULL AFTER allowsmilies";
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} ADD msgauto tinyint(1) DEFAULT '1' NOT NULL AFTER allow_notify";
+
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_topic']} DROP fid";
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_topic']} DROP cat";
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} DROP img_height";
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} DROP mouseover";
-$_SQL[] = "ALTER TABLE {$_TABLES['gf_settings']} DROP mouseout";
+
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_watch']} DROP notify_status";
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD INDEX forum_cat (forum_cat)";
 $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD INDEX forum_id (forum_id)";

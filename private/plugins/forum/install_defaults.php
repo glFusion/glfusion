@@ -45,6 +45,7 @@ if (!defined ('GVERSION')) {
  */
 
 global $_FF_DEFAULT;
+
 $_FF_DEFAULT = array();
 $_FF_DEFAULT['registration_required']  = false;
 $_FF_DEFAULT['registered_to_post']     = true;
@@ -98,7 +99,7 @@ $_FF_DEFAULT['usermenu']                = 'navbar';         // blockmenu, navbar
 $_FF_DEFAULT['mysql4+']                 = false;
 $_FF_DEFAULT['pre2.5_mode']             = false;
 $_FF_DEFAULT['silent_edit_default']     = true;
-$_FF_DEFAULT['avatar_width']            = '';
+$_FF_DEFAULT['avatar_width']            = 115;
 $_FF_DEFAULT['allow_img_bbcode']        = true;
 $_FF_DEFAULT['show_moderators']         = false;
 $_FF_DEFAULT['imgset']                  = $_CONF['layout_url'] .'/forum/image_set';
@@ -110,9 +111,9 @@ $_FF_DEFAULT['default_Topic_Datetime_format'] = '%B %d %Y %H:%M %p';
 $_FF_DEFAULT['contentinfo_numchars']    = 256;
 $_FF_DEFAULT['linkinfo_width']          = 40;
 $_FF_DEFAULT['quoteformat'] = "[QUOTE][u]Quote by: %s[/u][p]%s[/p][/QUOTE]";
-$_FF_DEFAULT['show_popular_perpage']    = '20';    // @TODO: Need to make this an online admin setting
-$_FF_DEFAULT['show_last_post_count']    = '20';    // @TODO: Number of posts to show in the member last post page
-$_FF_DEFAULT['use_glmenu']              = false;   // Should glMenu be used for this menublock;
+$_FF_DEFAULT['show_popular_perpage']    = '20';
+$_FF_DEFAULT['show_last_post_count']    = '20';
+$_FF_DEFAULT['use_glmenu']              = false;
 $_FF_DEFAULT['grouptags'] = array(
     'Root'              => 'siteadmin_badge.png',
     'Logged-in Users'   => 'forum_user.png',
@@ -191,60 +192,108 @@ $_FF_DEFAULT['inlineimageypes']    = array(
 global $_FF_CONF;
 $_FF_CONF = array();
 
+$_TABLES['gf_settings']     = $_DB_table_prefix . 'forum_settings';
+
 if ( isset($_TABLES['gf_settings']) ) {
     $result = DB_query("SELECT * FROM {$_TABLES['gf_settings']}",1);
     $numRows = DB_numRows($result);
     if ( $numRows > 0 ) {
         $A = DB_fetchArray($result);
 
-        $_FF_CONF['registration_required']  = $A['registrationrequired'];
-        $_FF_CONF['registered_to_post']     = $A['registerpost'];
-        $_FF_CONF['allow_html']             = $A['allowhtml'];
-        $_FF_CONF['post_htmlmode']          = $A['post_htmlmode'];
-        $_FF_CONF['use_glfilter']           = $A['glfilter'];
-        $_FF_CONF['use_geshi']              = $A['use_geshi_formatting'];
-        $_FF_CONF['use_censor']             = $A['censor'];
-        $_FF_CONF['show_moods']             = $A['showmood'];
-        $_FF_CONF['allow_smilies']          = $A['allowsmilies'];
-        $_FF_CONF['allow_notification']     = $A['allow_notify'];
-        $_FF_CONF['allow_user_dateformat']  = $A['allow_userdatefmt'];
-        $_FF_CONF['show_topicreview']       = $A['showiframe'];
-        $_FF_CONF['use_autorefresh']        = $A['autorefresh'];
-        $_FF_CONF['autorefresh_delay']      = $A['refresh_delay'];
-        $_FF_CONF['show_subject_length']    = $A['viewtopicnumchars'];
-        $_FF_CONF['show_topics_perpage']    = $A['topicsperpage'];
-        $_FF_CONF['show_posts_perpage']     = $A['postsperpage'];
-        $_FF_CONF['show_messages_perpage']  = $A['messagesperpage'];
-        $_FF_CONF['show_searches_perpage']  = $A['searchesperpage'];
-        $_FF_CONF['views_tobe_popular']     = $A['popular'];
-        $_FF_CONF['convert_break']          = $A['html_newline'];
-        $_FF_CONF['min_comment_length']     = $A['min_comment_len'];
-        $_FF_CONF['min_username_length']    = $A['min_name_len'];
-        $_FF_CONF['min_subject_length']     = $A['min_subject_len'];
-        $_FF_CONF['post_speedlimit']        = $A['speedlimit'];
-        $_FF_CONF['use_smilies_plugin']     = $A['use_smiliesplugin'];
-        $_FF_CONF['use_pm_plugin']          = $A['use_pmplugin'];
-        $_FF_CONF['use_spamx_filter']       = $A['use_spamxfilter'];
-        $_FF_CONF['show_centerblock']       = $A['cb_enable'];
-        $_FF_CONF['centerblock_homepage']   = $A['cb_homepage'];
-        $_FF_CONF['centerblock_where']      = $A['cb_where'];
-        $_FF_CONF['cb_subject_size']        = $A['cb_subjectsize'];
-        $_FF_CONF['centerblock_numposts']   = $A['cb_numposts'];
-        $_FF_CONF['sb_subject_size']        = $A['sb_subjectsize'];
-        $_FF_CONF['sb_latestpostonly']      = $A['sb_latestposts'];
-        $_FF_CONF['sideblock_numposts']     = $A['sb_numposts'];
-        $_FF_CONF['allowed_editwindow']     = $A['edit_timewindow'];
-
-        $_FF_CONF['level1']                 = $A['level1'];
-        $_FF_CONF['level2']                 = $A['level2'];
-        $_FF_CONF['level3']                 = $A['level3'];
-        $_FF_CONF['level4']                 = $A['level4'];
-        $_FF_CONF['level5']                 = $A['level5'];
-        $_FF_CONF['level1name']             = $A['level1name'];
-        $_FF_CONF['level2name']             = $A['level2name'];
-        $_FF_CONF['level3name']             = $A['level3name'];
-        $_FF_CONF['level4name']             = $A['level4name'];
-        $_FF_CONF['level5name']             = $A['level5name'];
+        if ( isset($A['registrationrequired']) )
+            $_FF_CONF['registration_required']  = $A['registrationrequired'];
+        if ( isset($A['registerpost']))
+            $_FF_CONF['registered_to_post']     = $A['registerpost'];
+        if ( isset($A['allowhtml']) )
+            $_FF_CONF['allow_html']             = $A['allowhtml'];
+        if ( isset($A['post_htmlmode']) )
+            $_FF_CONF['post_htmlmode']          = $A['post_htmlmode'];
+        if ( isset($A['glfilter']) )
+            $_FF_CONF['use_glfilter']           = $A['glfilter'];
+        if ( isset($A['use_geshi_formatting']) )
+            $_FF_CONF['use_geshi']              = $A['use_geshi_formatting'];
+        if ( isset($A['censor']) )
+            $_FF_CONF['use_censor']             = $A['censor'];
+        if ( isset($A['showmood']) )
+            $_FF_CONF['show_moods']             = $A['showmood'];
+        if ( isset($A['allowsmilies']) )
+            $_FF_CONF['allow_smilies']          = $A['allowsmilies'];
+        if ( isset($A['allow_notify']) )
+            $_FF_CONF['allow_notification']     = $A['allow_notify'];
+        if ( isset($A['allow_userdatefmt'] ) )
+            $_FF_CONF['allow_user_dateformat']  = $A['allow_userdatefmt'];
+        if ( isset($A['showiframe']) )
+            $_FF_CONF['show_topicreview']       = $A['showiframe'];
+        if ( isset($A['autorefresh']) )
+            $_FF_CONF['use_autorefresh']        = $A['autorefresh'];
+        if ( isset($A['refresh_delay'] ) )
+            $_FF_CONF['autorefresh_delay']      = $A['refresh_delay'];
+        if ( isset($A['viewtopicnumchars']) )
+            $_FF_CONF['show_subject_length']    = $A['viewtopicnumchars'];
+        if ( isset($A['topicsperpage']) )
+            $_FF_CONF['show_topics_perpage']    = $A['topicsperpage'];
+        if ( isset($A['postsperpage']) )
+            $_FF_CONF['show_posts_perpage']     = $A['postsperpage'];
+        if ( isset($A['messagesperpage']) )
+            $_FF_CONF['show_messages_perpage']  = $A['messagesperpage'];
+        if ( isset($A['searchesperpage']) )
+            $_FF_CONF['show_searches_perpage']  = $A['searchesperpage'];
+        if ( isset($A['popular']) )
+            $_FF_CONF['views_tobe_popular']     = $A['popular'];
+        if ( isset($A['html_newline']) )
+            $_FF_CONF['convert_break']          = $A['html_newline'];
+        if ( isset($A['min_comment_len']) )
+            $_FF_CONF['min_comment_length']     = $A['min_comment_len'];
+        if ( isset($A['min_name_len']) )
+            $_FF_CONF['min_username_length']    = $A['min_name_len'];
+        if ( isset($A['min_subject_len']) )
+            $_FF_CONF['min_subject_length']     = $A['min_subject_len'];
+        if ( isset($A['speedlimit']) )
+            $_FF_CONF['post_speedlimit']        = $A['speedlimit'];
+        if ( isset($A['use_smilieplugin']) )
+            $_FF_CONF['use_smilies_plugin']     = $A['use_smiliesplugin'];
+        if ( isset($A['use_pmplugin']) )
+            $_FF_CONF['use_pm_plugin']          = $A['use_pmplugin'];
+        if ( isset($A['use_spamxfilter']) )
+            $_FF_CONF['use_spamx_filter']       = $A['use_spamxfilter'];
+        if ( isset($A['cb_enable']) )
+            $_FF_CONF['show_centerblock']       = $A['cb_enable'];
+        if ( isset($A['cb_homepage']) )
+            $_FF_CONF['centerblock_homepage']   = $A['cb_homepage'];
+        if ( isset($A['cb_where']) )
+            $_FF_CONF['centerblock_where']      = $A['cb_where'];
+        if ( isset($A['cb_subjectsize']) )
+            $_FF_CONF['cb_subject_size']        = $A['cb_subjectsize'];
+        if ( isset($A['cb_numposts']) )
+            $_FF_CONF['centerblock_numposts']   = $A['cb_numposts'];
+        if ( isset($A['sb_subjectsize']) )
+            $_FF_CONF['sb_subject_size']        = $A['sb_subjectsize'];
+        if ( isset($A['sb_latestposts']) )
+            $_FF_CONF['sb_latestpostonly']      = $A['sb_latestposts'];
+        if ( isset($A['sb_numposts']) )
+            $_FF_CONF['sideblock_numposts']     = $A['sb_numposts'];
+        if ( isset($A['edit_timewindow']) )
+            $_FF_CONF['allowed_editwindow']     = $A['edit_timewindow'];
+        if ( isset($A['level1']) )
+            $_FF_CONF['level1']                 = $A['level1'];
+        if ( isset($A['level2']) )
+            $_FF_CONF['level2']                 = $A['level2'];
+        if ( isset($A['level3']) )
+            $_FF_CONF['level3']                 = $A['level3'];
+        if ( isset($A['level4']) )
+            $_FF_CONF['level4']                 = $A['level4'];
+        if ( isset($A['level5']) )
+            $_FF_CONF['level5']                 = $A['level5'];
+        if ( isset($A['level1name']) )
+            $_FF_CONF['level1name']             = $A['level1name'];
+        if ( isset($A['level2name']) )
+            $_FF_CONF['level2name']             = $A['level2name'];
+        if ( isset($A['level3name']) )
+            $_FF_CONF['level3name']             = $A['level3name'];
+        if ( isset($A['level4name']) )
+            $_FF_CONF['level4name']             = $A['level4name'];
+        if ( isset($A['level5name']) )
+            $_FF_CONF['level5name']             = $A['level5name'];
     }
 }
 
@@ -375,8 +424,6 @@ function plugin_initconfig_forum()
                 0, 2, 0, 90, true, 'forum');
         $c->add('use_censor', $_FF_DEFAULT['use_censor'], 'select',
                 0, 2, 0, 100, true, 'forum');
-//        $c->add('use_glfilter', $_FF_DEFAULT['use_glfilter'], 'select',
-//                0, 2, 0, 110, true, 'forum');
         $c->add('use_geshi', $_FF_DEFAULT['use_geshi'], 'select',
                 0, 2, 0, 120, true, 'forum');
         $c->add('use_spamx_filter', $_FF_DEFAULT['use_spamx_filter'], 'select',
