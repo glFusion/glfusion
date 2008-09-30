@@ -2,10 +2,17 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Fixed issue with search truncating description text (Mark)
+- Improved error handling when CTL cannot write to cache directory (Mark)
 - Created (and converted all security profile hashes to) CACHE_security_hash() (Joe)
 - CTL: Save some cycles in {!if var} processing, some debug traces, code cleanup (Joe)
-- Forum did not honor the logged in required to view setting for the new post
-  block and searching. (Mark)
+- Upgraded Bad Behavior to v2.0.24 (Mark)
+- attempting to change your password when your email address is 'invalid' causes
+  password change but failed to make changes message. (M.Jervis Geeklog Team) (Mark)
+- FileMgmt did not honor the logged in required to view for menu,
+  search, and stats. (Mark)
+- Forum did not honor the logged in required to view for the new post
+  block, searching, and stats. (Mark)
 - Clear CTL when stories are auto deleted or archived (Mark)
 - Do not display profile page for anonymous users (Mark)
 - Modified block editor to allow use of advanced editor (Mark)
