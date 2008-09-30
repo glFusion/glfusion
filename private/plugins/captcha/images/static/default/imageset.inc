@@ -26,8 +26,7 @@
 // +---------------------------------------------------------------------------+
 //
 // this file can't be used on its own
-if (strpos ($_SERVER['PHP_SELF'], 'imageset.inc') !== false)
-{
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 

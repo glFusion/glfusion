@@ -33,20 +33,19 @@
 // +--------------------------------------------------------------------------+
 
 // this file can't be used on its own
-if (strpos ($_SERVER['PHP_SELF'], 'captcha.class.php') !== false)
-{
+if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require($_CONF['path'] . 'plugins/captcha/class/filter.class.php');
-require($_CONF['path'] . 'plugins/captcha/class/error.class.php');
+require $_CONF['path'] . 'plugins/captcha/class/filter.class.php';
+require $_CONF['path'] . 'plugins/captcha/class/error.class.php';
 
 $imgSet = $_CONF['path'] . 'plugins/captcha/images/static/' . $_CP_CONF['imageset'] . '/imageset.inc';
 
 if (file_exists ($imgSet)) {
-    include_once ($imgSet);
+    include_once $imgSet;
 } else {
-    include_once ($_CONF['path'] . 'plugins/captcha/images/static/default/imageset.inc');
+    include_once $_CONF['path'] . 'plugins/captcha/images/static/default/imageset.inc';
 }
 
 class captcha {
