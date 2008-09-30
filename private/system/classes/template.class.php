@@ -223,7 +223,7 @@ class Template
   */
   function Template($root = Array(), $unknowns = "") {
     global $TEMPLATE_OPTIONS;
-    
+
     $this->set_root($root);
     $this->set_unknowns($unknowns);
     if (array_key_exists('default_vars',$TEMPLATE_OPTIONS) and is_array($TEMPLATE_OPTIONS['default_vars'])) {
@@ -979,7 +979,7 @@ class Template
                     echo "root: " . $r . "<br>";
                 }
             }
-            
+
     // if path reaches root, just use it.
     if (substr($filename, 0, 1) == '/' ||   // handle unix root /
         substr($filename, 1, 1) == ':' ||   // handle windows d:\path
@@ -1158,7 +1158,7 @@ class Template
     }
     return '';
   }
-  
+
  /***
   * Used in {!if var}. Avoid duplicating a large string when all we care about is if the string is non-zero length
   */
@@ -1185,13 +1185,13 @@ class Template
         $ret = $this->varvals[$val];
         foreach ($mods as $mod) {
             switch ($mod[0]) {
-            case 'u': $ret = urlencode($ret); 
+            case 'u': $ret = urlencode($ret);
                       break;
             case 's': $ret = htmlspecialchars($ret);
                       break;
             case 't': $ret = substr($ret, 0, intval(substr($mod,1))); // truncate
                       break;
-            }       
+            }
         }
         return $ret;
     }
@@ -1459,15 +1459,19 @@ class Template
     if ($this->debug & 4) {
         printf("<b>cache_write:</b> opening $filename<br>\n");
     }
-    $f = fopen($filename,'w');
-    if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
-        fwrite($f,
-"<?php if (!defined('GVERSION')) {
-    die('This file can not be used on its own.');
+    $f = @fopen($filename,'w');
+    if ($f !== false ) {
+        if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
+            fwrite($f,
+"<?php if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
 } ?>\n");
+        }
+        fwrite($f, $tmplt);
+        fclose($f);
+    } else {
+        die("Cache directory is not writable.");
     }
-    fwrite($f, $tmplt);
-    fclose($f);
   }
 
  /******************************************************************************
@@ -1557,11 +1561,11 @@ class Template
     } else {
         $cache_fstat = 0;
     }
-    
+
     if ($this->debug & 8) {
         printf("<check_cache> Look for %s<br>", $filename);
     }
-    
+
     if ($template_fstat > $cache_fstat OR $source_fstat > $cache_fstat) {
         // remove old files, especially old block files.
         $phpfilespec = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '*.php';
@@ -1847,7 +1851,7 @@ function CACHE_get_instance_update($iid, $bypass_lang = false)
 }
 
 /******************************************************************************
- * Generates a full path to the instance file. Should really only be used 
+ * Generates a full path to the instance file. Should really only be used
  * internally but there are probably reasons to use it externally.
  *
  * usage: $time = CACHE_instance_filename($iid, $bypass_lang = false)
@@ -1890,7 +1894,7 @@ function CACHE_instance_filename($iid,$bypass_lang = false)
 function CACHE_security_hash()
 {
     global $_GROUPS;
-    
+
     static $hash = NULL;
 
     if (empty($hash)) {
