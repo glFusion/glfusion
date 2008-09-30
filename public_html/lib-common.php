@@ -1249,16 +1249,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'welcome_msg', $msg );
     $theme->set_var( 'datetime', $curtime[0] );
 
-    /*
-     * New Logo Processing
-     */
-
-/*
- * Logo processing - we need to hook to Site Tailor, if not available
- * just do the normal old logo management
- */
-
-
     if ( $_ST_CONF['use_graphic_logo'] == 1 && file_exists($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']) ) {
         $L = new Template( $_CONF['path_layout'] );
         $L->set_file( array(
@@ -1303,8 +1293,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $theme->set_var('logo_block',$L->finish($L->get_var('output')));
     }
 
-// ************ end of logo processing, all of the above into ST
-
     $theme->set_var( 'site_logo', $_CONF['layout_url']
                                    . '/images/logo.' . $_IMAGE_TYPE );
 
@@ -1317,16 +1305,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'lang_newuser'      => $LANG12[3],
     ));
 
-// *** consider making this more or a plugin call
-
     // build the site tailor menus
     if ( function_exists('st_getMenu') ) {
         $theme->set_var('st_hmenu',st_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
         $theme->set_var('st_footer_menu',st_getMenu('footer','st-fmenu','','','','st-f-last'));
         $theme->set_var('st_header_menu',st_getMenu('header','','',''));
     }
-
-// *** end of menu integration
 
     // Get plugin menu options
     $plugin_menu = PLG_getMenuItems();
@@ -4168,8 +4152,6 @@ function COM_emailUserTopics()
         $mailtext .= "\n$LANG08[34]\n";
         $mailtext .= "\n------------------------------\n";
 
-//        $mailto = $U['username'] . ' <' . $U['email'] . '>';
-
         if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
             $mailfrom = $_CONF['noreply_mail'];
             global $LANG_LOGIN;
@@ -4182,7 +4164,6 @@ function COM_emailUserTopics()
         $from = COM_formatEmailAddress('',$mailfrom);
         $to   = COM_formatEmailAddress( $U['username'],$U['email'] );
         COM_mail ($to, $subject, $mailtext, $from);
-//        COM_mail( $mailto, $subject, $mailtext , $mailfrom);
     }
 
     DB_query( "UPDATE {$_TABLES['vars']} SET value = NOW() WHERE name = 'lastemailedstories'" );
@@ -4238,11 +4219,6 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             $archsql = " AND (tid <> '" . addslashes( $archivetid ) . "')";
         }
 
-        /*
-         * glFusion modification - retrieve new stories
-         * as a list instead of just a count.
-         */
-
         // Find the newest stories
         $sql = "SELECT * FROM {$_TABLES['stories']} WHERE (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) AND (date <= NOW()) AND (draft_flag = 0)" . $archsql . COM_getPermSQL( 'AND' ) . $topicsql . COM_getLangSQL( 'sid', 'AND' ) . ' ORDER BY date DESC';
 
@@ -4274,9 +4250,6 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                         $_CONF['site_url'] . '/article.php?story=' . $A['sid']) . '</li>';
                 }
                 $retval .= '</ul>';
-
-//                $retval .= COM_createLink($newmsg, $_CONF['site_url']
-//                    . '/index.php?display=new') . '<br' . XHTML . '>';
             }
         }
         else
@@ -6166,13 +6139,6 @@ function COM_displayMessageAndAbort( $msg, $plugin = '', $http_status = 200, $ht
              . COM_showMessage( $msg, $plugin )
              . COM_siteFooter( true );
 
-/* -----------------------------------------------------
-    if( $http_status != 200 )
-    {
-        header( "HTTP/1.1 $http_status $http_text" );
-        header( "Status: $http_status $http_text" );
-    }
--------------------------------------------------------- */
     echo $display;
     exit;
 }

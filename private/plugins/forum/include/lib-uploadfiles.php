@@ -41,10 +41,8 @@ if (!defined ('GVERSION')) {
 }
 
 function gf_check4files($id,$tempfile=false) {
-    global $_FILES,$_CONF,$_TABLES,$_USER,$CONF_FORUM,$LANG_GF00;
-    global $_FM_TABLES,$CONF_FORUM,$filemgmt_FileStore;
-
-    //require_once("{$_CONF['path']}/plugins/mediagallery/pbm_image.php");
+    global $_FILES,$_CONF,$_TABLES,$_USER,$CONF_FORUM,$LANG_GF00,
+           $_FM_TABLES,$CONF_FORUM,$filemgmt_FileStore;
 
     $filelinks = '';
     $uploadfile = $_FILES['file_forum'];
@@ -116,7 +114,8 @@ function gf_check4files($id,$tempfile=false) {
 function gf_uploadfile($filename,&$upload_file,$allowablefiletypes) {
     global $_FILES,$_CONF,$_TABLES,$CONF_FORUM,$LANG_GF00,$filemgmt_FileStore;
 
-    include_once($_CONF['path_system'] . 'classes/upload.class.php');
+    include_once $_CONF['path_system'] . 'classes/upload.class.php';
+
     $upload = new upload();
     if ($_POST['chk_usefilemgmt'] == 1) {
         $upload->setPath($filemgmt_FileStore);
@@ -124,12 +123,14 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes) {
         $upload->setPath($CONF_FORUM['uploadpath']);
     }
     $upload->setLogging(true);
-//    $upload->setAutomaticResize(false);
     $upload->setAllowedMimeTypes($allowablefiletypes);
     // Set max dimensions as well in case user is uploading a full size image
     $upload->setMaxDimensions ($CONF_FORUM['max_uploadimage_width'], $CONF_FORUM['max_uploadimage_height']);
-    $upload->setMaxFileSize($CONF_FORUM['max_uploadfile_size']);
-$upload->setMaxFileSize(100000000);
+    if ( $CONF_FORUM['max_uploadimage_size'] == 0 ) {
+        $upload->setMaxFileSize(100000000);
+    } else {
+        $upload->setMaxFileSize($CONF_FORUM['max_uploadimage_size']);
+    }
     $upload->setAutomaticResize(true);
 
     if (strlen($upload_file['name']) > 0) {
@@ -142,7 +143,6 @@ $upload->setMaxFileSize(100000000);
         if (!$upload->_fileSizeOk()) {
             $upload->_addError('File, ' . $upload->_currentFile['name'] . ', is bigger than the ' . $upload->_maxFileSize . ' byte limit');
         }
-COM_errorLog($upload->_currentFile['type']);
         // If all systems check, do the upload
         if ($upload->checkMimeType() AND $upload->_imageSizeOK() AND !$upload->areErrors()) {
             if ($upload->_copyFile()) {
@@ -163,8 +163,6 @@ COM_errorLog($upload->_currentFile['type']);
     } else {
         return false;
     }
-
     return false;
-
 }
 ?>

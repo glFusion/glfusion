@@ -766,7 +766,11 @@ class Search {
             return COM_highlightQuery($text, $keyword, 'b');
 
         $rt = '';
-        $pos = stripos($text, $keyword);
+        if ( $keyword == '' ) {
+            $pos == false;
+        } else {
+            $pos = stripos($text, $keyword);
+        }
         if ($pos !== false)
         {
             $pos_space = strpos($text, ' ', $pos);

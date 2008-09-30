@@ -277,7 +277,7 @@ function install_config()
     $c->add('max_photo_height',128,'text',5,26,NULL,1580,TRUE);
     $c->add('max_photo_size',65536,'text',5,26,NULL,1590,TRUE);
     $c->add('force_photo_width',75,'text',5,26,NULL,1620,FALSE);
-    $c->add('default_photo','http://example.com/default.jpg','text',5,26,NULL,1630,FALSE);
+    $c->add('default_photo','http://example.com/images/userphotos/default.jpg','text',5,26,NULL,1630,FALSE);
 
     $c->add('fs_gravatar', NULL, 'fieldset', 5, 27, NULL, 0, TRUE);
     $c->add('use_gravatar',FALSE,'select',5,27,1,1600,TRUE);

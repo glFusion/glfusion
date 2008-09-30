@@ -53,7 +53,7 @@ if (!SEC_inGroup ('Bad Behavior2 Admin')) {
     exit;
 }
 
-require_once( $_CONF['path_html'] . '/bad_behavior2/bad-behavior-glfusion.php' );
+require_once $_CONF['path_html'] . '/bad_behavior2/bad-behavior-glfusion.php';
 
 /**
 * List logged requests

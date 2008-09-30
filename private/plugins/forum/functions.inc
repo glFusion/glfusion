@@ -54,7 +54,7 @@ if (file_exists ($langfile)) {
 $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 
 $pi_version = floatval (DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'"));
-require_once ($_CONF['path_system'] . 'lib-portalparts.php');
+// require_once ($_CONF['path_system'] . 'lib-portalparts.php');
 require_once ($_CONF['path'] . 'plugins/forum/config.php');
 
 /*

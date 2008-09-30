@@ -43,7 +43,7 @@ if (!defined ('GVERSION')) {
 }
 
 if (!class_exists('StringParser') ) {
-    require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
+    require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 }
 
 function gf_siteHeader($subject = '') {
@@ -57,7 +57,7 @@ function gf_siteHeader($subject = '') {
         echo COM_siteHeader('none', $subject);
     } elseif ($CONF_FORUM['showblocks'] == 'leftblocks' OR $CONF_FORUM['showblocks'] == 'allblocks' ) {
         if ($CONF_FORUM['usermenu'] == 'blockmenu') {
-            echo COM_siteHeader( array('custom_showBlocks',$CONF_FORUM['leftblocks']), $subject );
+            echo COM_siteHeader( array('forum_showBlocks',$CONF_FORUM['leftblocks']), $subject );
         } else {
             echo COM_siteHeader('menu', $subject);
         }
@@ -73,7 +73,7 @@ function gf_siteFooter() {
         echo COM_siteFooter(false);
     } elseif ($CONF_FORUM['showblocks'] == 'rightblocks') {
         if ($CONF_FORUM['usermenu'] == 'blockmenu') {
-            echo COM_siteFooter(true, array('custom_showBlocks',$CONF_FORUM['leftblocks']) );
+            echo COM_siteFooter(true, array('forum_showBlocks',$CONF_FORUM['leftblocks']) );
         } else {
             echo COM_siteFooter(true);
         }
@@ -1186,6 +1186,33 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
         default:
             $retval = $fieldvalue;
             break;
+    }
+
+    return $retval;
+}
+
+function forum_showBlocks($showblocks)
+{
+    global $_CONF, $_USER, $_TABLES;
+
+    $retval = '';
+    if( !isset( $_USER['noboxes'] )) {
+        if( !empty( $_USER['uid'] )) {
+            $noboxes = DB_getItem( $_TABLES['userindex'], 'noboxes', "uid = {$_USER['uid']}" );
+        } else {
+            $noboxes = 0;
+        }
+    } else {
+        $noboxes = $_USER['noboxes'];
+    }
+
+    foreach($showblocks as $block) {
+        $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='$block'";
+        $result = DB_query($sql);
+        if (DB_numRows($result) == 1) {
+            $A = DB_fetchArray($result);
+            $retval .= COM_formatBlock($A,$noboxes);
+        }
     }
 
     return $retval;

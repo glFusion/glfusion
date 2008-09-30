@@ -470,8 +470,8 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
         }
 
         if (empty($img) || $img == '' ) {
-//            $img = $_CONF['default_photo'];
-            $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
+            $img = $_CONF['default_photo'];
+//            $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
         }
         if ( $fullURL != 1 ) {
             return $img;
