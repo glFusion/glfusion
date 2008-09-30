@@ -296,7 +296,7 @@ function SCRUB_boolean($key, &$A, $default = false)
     if (intval($data) != 0) return true; // Make any non-zero numeric value true
     $data = strtolower(COM_applyFilter($data));
     if (strlen($data) == 0) return $default;
-    if ($data == 0) return false;
+    if ($data === 0) return false;
     if (in_array($data, array('yes','on','true'))) return true;
     if (in_array($data, array('no','off','false'))) return false;
     return $default;
