@@ -31,8 +31,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (stripos($_SERVER['PHP_SELF'], 'install_defaults.php') !== false) {
-    die('This file can not be used on its own!');
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
 }
 
 /*
