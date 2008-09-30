@@ -1741,6 +1741,20 @@ switch ($mode) {
                 unlink($data_path . 'test.txt');
             }
 
+            // layout_cache directory
+            if (!$file = @fopen($data_path . 'layout_cache/test.txt', 'w')) {
+                // Permissions are incorrect
+                $_PERMS['data']         = sprintf("%3o", @fileperms($data_path . 'layout_cache/') & 0777);
+                $display_permissions    .= '<p><label class="file-permission-list"><code>' . $data_path . 'layout_cache/'
+                                        . '</code></label><span class="error">' . $LANG_INSTALL[14]
+                                        . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['data'] . ') </p>' . LB;
+                $failed++;
+            } else {
+                // Permissions are correct
+                fclose($file);
+                unlink($data_path . 'layout_cache/test.txt');
+            }
+
             // articles directory
             if (!$file = @fopen($_CONF['path_images'] . 'articles/test.gif', 'w')) {
                 // Permissions are incorrect
