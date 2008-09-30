@@ -38,29 +38,17 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-/*
- * Include the Filemgmt Plugin configuration which defines Directories and
- * URL's and options. This file is set via the Filemgmt Plugin Admin menu -
- * Configuration settings. The script reads and write to this file -
- * thus needs to be a separate file.
-*/
-
 $CONF_FM['version'] = '1.7.0.fusion';
-
-$_FM_TABLES['filemgmt_cat']             = $_DB_table_prefix . 'filemgmt_category';
-$_FM_TABLES['filemgmt_filedetail']      = $_DB_table_prefix . 'filemgmt_filedetail';
-$_FM_TABLES['filemgmt_filedesc']        = $_DB_table_prefix . 'filemgmt_filedesc';
-$_FM_TABLES['filemgmt_brokenlinks']     = $_DB_table_prefix . 'filemgmt_broken';
-$_FM_TABLES['filemgmt_modreq']          = $_DB_table_prefix . 'filemgmt_mod';
-$_FM_TABLES['filemgmt_votedata']        = $_DB_table_prefix . 'filemgmt_votedata';
-$_FM_TABLES['filemgmt_history']         = $_DB_table_prefix . 'filemgmt_downloadhistory';
 
 // Permissions that will be used for new files into the repository
 $filemgmtFilePermissions = (int) 0755;
 
-/* Configuration for the auto-rename or reject logic when users are submitted files for approval */
-/* Map any extensions to a new extension or 'reject' if they should not be allowed  */
-/* Any file type not listed will be uploaded using original file extension  */
+/*
+ * Configuration for the auto-rename or reject logic when users are submitted
+ * files for approval. Map any extensions to a new extension or 'reject' if
+ * they should not be allowed. Any file type not listed will be uploaded using
+ * original file extension.
+ */
 
 $_FMDOWNLOAD  = array(
     'php'   => 'phps',
@@ -72,28 +60,39 @@ $_FMDOWNLOAD  = array(
 );
 
 $_FMDOWNLOAD['inconlib']    = array(
-        'php' => "php.gif",
-        'phps' => "php.gif",
-        'bmp' => "bmp.gif",
-        'gif' => "gif.gif",
-        'jpg' => "jpg.gif",
-        'html' => "htm.gif",
-        'htm' => "htm.gif",
-        'mov' => "mov.gif",
-        'mp3' => "mp3.gif",
-        'pdf' => "pdf.gif",
-        'ppt' => "ppt.gif",
-        'tar' => "zip.gif",
-        'gz'  => "zip.gif",
-        'zip' => "zip.gif",
-        'txt' => "txt.gif",
-        'doc' => "doc.gif",
-        'xls' => "xls.gif",
-        'mpp' => "mpp.gif",
-        'exe' => "exe.gif",
-        'swf' => "swf.gif",
-        'vsd' => "visio.gif",
-        'none' => "file.gif"
-        );
+    'php'  => "php.gif",
+    'phps' => "php.gif",
+    'bmp'  => "bmp.gif",
+    'gif'  => "gif.gif",
+    'jpg'  => "jpg.gif",
+    'html' => "htm.gif",
+    'htm'  => "htm.gif",
+    'mov'  => "mov.gif",
+    'mp3'  => "mp3.gif",
+    'pdf'  => "pdf.gif",
+    'ppt'  => "ppt.gif",
+    'tar'  => "zip.gif",
+    'gz'   => "zip.gif",
+    'zip'  => "zip.gif",
+    'txt'  => "txt.gif",
+    'doc'  => "doc.gif",
+    'xls'  => "xls.gif",
+    'mpp'  => "mpp.gif",
+    'exe'  => "exe.gif",
+    'swf'  => "swf.gif",
+    'vsd'  => "visio.gif",
+    'none' => "file.gif"
+    );
+
+/*************************************************************************
+ *          Do not modify any settings below this area                   *
+ *************************************************************************/
+$_FM_TABLES['filemgmt_cat']         = $_DB_table_prefix . 'filemgmt_category';
+$_FM_TABLES['filemgmt_filedetail']  = $_DB_table_prefix . 'filemgmt_filedetail';
+$_FM_TABLES['filemgmt_filedesc']    = $_DB_table_prefix . 'filemgmt_filedesc';
+$_FM_TABLES['filemgmt_brokenlinks'] = $_DB_table_prefix . 'filemgmt_broken';
+$_FM_TABLES['filemgmt_modreq']      = $_DB_table_prefix . 'filemgmt_mod';
+$_FM_TABLES['filemgmt_votedata']    = $_DB_table_prefix . 'filemgmt_votedata';
+$_FM_TABLES['filemgmt_history']     = $_DB_table_prefix . 'filemgmt_downloadhistory';
 
 ?>

@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the FileMgmt Plugin for Geeklog                                 |
 // | Copyright (C) 2004 by Consult4Hire Inc.                                  |
@@ -33,6 +30,10 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
+
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
 
 #
 # Table structure for filemgmt categories - Top Level and subcategories
@@ -117,7 +118,6 @@ $_SQL[] = "CREATE TABLE {$_FM_TABLES['filemgmt_votedata']} (
   KEY ratinghostname (ratinghostname),
   KEY lid (lid)
 ) TYPE=MyISAM";
-
 
 #
 # Table structure for filemgmt download history
