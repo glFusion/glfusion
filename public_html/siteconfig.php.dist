@@ -13,6 +13,7 @@ if (!defined ('GVERSION')) {
 }
 
 global $_CONF;
+$_CONF = array();
 
 // To disable your site quickly, simply set this flag to false
 $_CONF['site_enabled'] = true;
