@@ -36,11 +36,11 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+if (!defined('GVERSION')) {
+    die('This file can not be used on its own.');
 }
 
-define('TEMPLATE_VERSION','2.3.1');
+define('TEMPLATE_VERSION','2.3.3');
 
 /**
  * The template class allows you to keep your HTML code in some external files
@@ -223,7 +223,7 @@ class Template
   */
   function Template($root = Array(), $unknowns = "") {
     global $TEMPLATE_OPTIONS;
-
+    
     $this->set_root($root);
     $this->set_unknowns($unknowns);
     if (array_key_exists('default_vars',$TEMPLATE_OPTIONS) and is_array($TEMPLATE_OPTIONS['default_vars'])) {
@@ -263,6 +263,9 @@ class Template
         }
     }
 
+    if ($this->debug & 4) {
+      echo '<p><b>set_root:</b> root = Array(' . (count($root) > 0 ? '"' . implode('","', $root) . '"' : '') .")</p>\n";
+    }
     $this->root = Array();
     $missing = Array();
     foreach ($root as $r) {
@@ -274,6 +277,9 @@ class Template
             continue;
         }
         $this->root[] = $r;
+    }
+    if ($this->debug & 4) {
+      echo '<p><b>set_root:</b> root = Array(' . (count($root) > 0 ? '"' . implode('","', $root) . '"' : '') .")</p>\n";
     }
     if (count($this->root) > 0) {
         return true;
@@ -968,6 +974,12 @@ class Template
     if ($this->debug & 4) {
       echo "<p><b>filename:</b> filename = $filename</p>\n";
     }
+            if ($this->debug & 8) {
+                foreach($this->root as $r) {
+                    echo "root: " . $r . "<br>";
+                }
+            }
+            
     // if path reaches root, just use it.
     if (substr($filename, 0, 1) == '/' ||   // handle unix root /
         substr($filename, 1, 1) == ':' ||   // handle windows d:\path
@@ -981,6 +993,9 @@ class Template
         // check each path in order
         foreach ($this->root as $r) {
             $f = $r.'/'.$filename;
+            if ($this->debug & 8) {
+              echo "<p><b>filename:</b> filename = $f</p>\n";
+            }
             if (file_exists($f)) {
                 return $f;
             }
@@ -1143,6 +1158,17 @@ class Template
     }
     return '';
   }
+  
+ /***
+  * Used in {!if var}. Avoid duplicating a large string when all we care about is if the string is non-zero length
+  */
+  function var_notempty($val)
+  {
+    if (array_key_exists($val, $this->varvals)) {
+        return !empty($this->varvals[$val]);
+    }
+    return false;
+  }
 
   function mod_echo($val, $modifier = '')
   {
@@ -1155,13 +1181,19 @@ class Template
     }
 
     if (array_key_exists($val, $this->varvals)) {
-        if (empty($modifier)) {
-            return $this->varvals[$val];
-        } else if ($modifier == ':u') {
-            return urlencode($this->varvals[$val]);
-        } else if ($modifier == ':s') {
-            return htmlspecialchars($this->varvals[$val]);
+        $mods = explode(':', substr($modifier,1));
+        $ret = $this->varvals[$val];
+        foreach ($mods as $mod) {
+            switch ($mod[0]) {
+            case 'u': $ret = urlencode($ret); 
+                      break;
+            case 's': $ret = htmlspecialchars($ret);
+                      break;
+            case 't': $ret = substr($ret, 0, intval(substr($mod,1))); // truncate
+                      break;
+            }       
         }
+        return $ret;
     }
     if ($this->unknowns == 'comment') {
         return '<!-- Template variable '.htmlspecialchars($val).' undefined -->';
@@ -1258,7 +1290,7 @@ class Template
         $tmplt = preg_replace(
                     Array(
                           '/\{([-\w\d_\[\]]+)\}/',                              // matches {identifier}
-                          '/\{([-\w\d_\[\]]+)(:[us])\}/',                       // matches {identifier} with optional :s or :u suffix
+                          '/\{([-\w\d_\[\]]+)((:u|:s|:t\d+)+)\}/',              // matches {identifier} with optional :s, :u or :t### suffix
                          ),
                     Array(
                           '$this->get_var(\'\1\')',
@@ -1269,7 +1301,7 @@ class Template
         $tmplt = preg_replace(
                     Array(
                           '/\{([-\w\d_\[\]]+)\}/',                              // matches {identifier}
-                          '/\{([-\w\d_\[\]]+)(:[us])\}/',                       // matches {identifier} with optional :s or :u suffix
+                          '/\{([-\w\d_\[\]]+)((:u|:s|:t\d+)+)\}/',              // matches {identifier} with optional :s, :u or :t### suffix
                          ),
                     Array(
                           '<?php echo $this->val_echo(\'\1\'); ?>',
@@ -1347,7 +1379,7 @@ class Template
                       '/\{!unset ([-\w\d_\[\]]+)(|!| !)\}/',                // unsets a variable
                      ),
                 Array(
-                      '<?php \1 ($this->get_var(\'\2\')): ?>',              // if exists and is non-zero
+                      '<?php \1 ($this->var_notempty(\'\2\')): ?>',         // if exists and is non-zero
                       '<?php else: ?>',
                       '<?php end\1; ?>',
                       '<?php while ($this->loop(\'\1\')): ?>',              // !loop
@@ -1430,8 +1462,8 @@ class Template
     $f = fopen($filename,'w');
     if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
         fwrite($f,
-"<?php if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+"<?php if (!defined('GVERSION')) {
+    die('This file can not be used on its own.');
 } ?>\n");
     }
     fwrite($f, $tmplt);
@@ -1487,6 +1519,9 @@ class Template
   function check_cache($varname, $filename) {
     global $TEMPLATE_OPTIONS, $_CONF;
 
+    if ($this->debug & 8) {
+        printf("<check_cache> Var %s for file %s<br>", $varname, $filename);
+    }
     $p = pathinfo($filename);
     if ($p['extension'] == 'php') {
         return $filename;
@@ -1522,7 +1557,11 @@ class Template
     } else {
         $cache_fstat = 0;
     }
-
+    
+    if ($this->debug & 8) {
+        printf("<check_cache> Look for %s<br>", $filename);
+    }
+    
     if ($template_fstat > $cache_fstat OR $source_fstat > $cache_fstat) {
         // remove old files, especially old block files.
         $phpfilespec = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '*.php';
@@ -1746,12 +1785,7 @@ function CACHE_create_instance($iid, $data, $bypass_lang = false)
         }
     }
 
-    $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-    if (!$bypass_lang && $TEMPLATE_OPTIONS['cache_by_language']) {
-        $path_cache .= $_CONF['language'] . '/';
-    }
-    $iid = str_replace(Array('..', '/', '\\', ':'), '', $iid);
-    $filename = $path_cache.'instance__'.$iid.'.php';
+    $filename = CACHE_instance_filename($iid, $bypass_lang);
     file_put_contents($filename, $data);
 }
 
@@ -1787,30 +1821,11 @@ function CACHE_create_instance($iid, $data, $bypass_lang = false)
  */
 function CACHE_check_instance($iid, $bypass_lang = false)
 {
-    global $TEMPLATE_OPTIONS, $_CONF;
-    $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-    if (!$bypass_lang && $TEMPLATE_OPTIONS['cache_by_language']) {
-        $path_cache .= $_CONF['language'] . '/';
-    }
-    $iid = str_replace(Array('..', '/', '\\', ':'), '', $iid);
-    $filename = $path_cache.'instance__'.$iid.'.php';
+    $filename = CACHE_instance_filename($iid, $bypass_lang);
     if (file_exists($filename)) {
         return file_get_contents($filename);
     }
     return false;
-}
-
-function CACHE_instance_filename($iid,$bypass_lang = false)
-{
-    global $TEMPLATE_OPTIONS, $_CONF;
-    $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-    if (!$bypass_lang && $TEMPLATE_OPTIONS['cache_by_language']) {
-        $path_cache .= $_CONF['language'] . '/';
-    }
-    $iid = str_replace(Array('..', '/', '\\', ':'), '', $iid);
-    $filename = $path_cache.'instance__'.$iid.'.php';
-
-    return $filename;
 }
 
 /******************************************************************************
@@ -1827,14 +1842,63 @@ function CACHE_instance_filename($iid,$bypass_lang = false)
  */
 function CACHE_get_instance_update($iid, $bypass_lang = false)
 {
+    $filename = CACHE_instance_filename($iid, $bypass_lang);
+    return @filemtime($filename);
+}
+
+/******************************************************************************
+ * Generates a full path to the instance file. Should really only be used 
+ * internally but there are probably reasons to use it externally.
+ *
+ * usage: $time = CACHE_instance_filename($iid, $bypass_lang = false)
+ *
+ * @param  $iid            A globally unique instance identifier.
+ * @param  $bypass_lang    If true, the cached data is not instanced by language
+ * @access public
+ * @return unix_timestamp of when the instance was generated or false
+ * @see    CACHE_create_instance, CACHE_check_instance, CACHE_remove_instance
+ *
+ */
+function CACHE_instance_filename($iid,$bypass_lang = false)
+{
     global $TEMPLATE_OPTIONS, $_CONF;
     $path_cache = $TEMPLATE_OPTIONS['path_cache'];
     if (!$bypass_lang && $TEMPLATE_OPTIONS['cache_by_language']) {
         $path_cache .= $_CONF['language'] . '/';
     }
-    $iid = str_replace(Array('..', '/', '\\', ':'), '', $iid);
+    $iid = COM_sanitizeFilename($iid, true);
     $filename = $path_cache.'instance__'.$iid.'.php';
-    return @filemtime($filename);
+
+    return $filename;
+}
+
+/******************************************************************************
+ * Generates a hash based on the current user's secutiry profile.
+ *
+ * Currently that is just a list of groups the user is a member of but if
+ * additional data is found to be necessary for creating a unique security
+ * profile, this centralized function would be the place for it.
+ *
+ * usage: $hash = CACHE_security_hash()
+ *        $instance = "somedata__$someid__$hash";
+ *        CACHE_create_instance($instance, $thedata);
+ *
+ * @access public
+ * @return a string uniquely identifying the user's security profile
+ *
+ */
+function CACHE_security_hash()
+{
+    global $_GROUPS;
+    
+    static $hash = NULL;
+
+    if (empty($hash)) {
+        $groups = implode(',',$_GROUPS);
+        $hash = strtolower(md5($groups));
+    }
+    return $hash;
+
 }
 
 
