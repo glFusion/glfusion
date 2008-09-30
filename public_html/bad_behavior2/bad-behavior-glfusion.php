@@ -157,16 +157,21 @@ function bb2_insert_head() {
 // Display stats? This is optional.
 function bb2_insert_stats($force = false) {
 
-    $retval = '';
+    static $retval = null;
 
     $settings = bb2_read_settings();
 
-    if ($force || $settings['display_stats']) {
-        $blocked = bb2_db_query("SELECT COUNT(*) AS blocked FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000'");
-        $row = bb2_db_rows($blocked);
-        if ($blocked !== FALSE) {
-            $retval =  sprintf('<p><a href="http://www.bad-behavior.ioerror.us/">%1$s</a> %2$s <strong>%3$s</strong> %4$s</p>', 'Bad Behavior', 'has blocked', $row['blocked'], 'access attempts in the last 7 days.');
-        }
+    if (!$force && !$settings['display_stats']) {
+        return ''; // not cached
+    }
+    if ($retval !== null) {
+        return $retval;
+    } 
+
+    $blocked = bb2_db_query("SELECT COUNT(*) AS blocked FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000'");
+    $row = bb2_db_rows($blocked);
+    if ($blocked !== FALSE) {
+        $retval =  sprintf('<p><a href="http://www.bad-behavior.ioerror.us/">%1$s</a> %2$s <strong>%3$s</strong> %4$s</p>', 'Bad Behavior', 'has blocked', $row['blocked'], 'access attempts in the last 7 days.');
     }
     return $retval;
 }

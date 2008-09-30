@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- BB2: Stop generating stats every time templateSetVars is called (Joe)
 - Fixed issue with search truncating description text (Mark)
 - Improved error handling when CTL cannot write to cache directory (Mark)
 - Created (and converted all security profile hashes to) CACHE_security_hash() (Joe)
