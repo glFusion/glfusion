@@ -100,6 +100,7 @@ if (!defined('CSRF_TOKEN')) {
 function SEC_getUserGroups($uid='')
 {
     global $_TABLES, $_USER, $_SEC_VERBOSE;
+    static $runonce = Array();
 
     if ($_SEC_VERBOSE) {
         COM_errorLog("****************in getusergroups(uid=$uid,usergroups=$usergroups,cur_grp_id=$cur_grp_id)***************",1);
@@ -114,11 +115,16 @@ function SEC_getUserGroups($uid='')
             $uid = $_USER['uid'];
         }
     }
+    
+    if (array_key_exists($uid, $runonce)) {
+        return $runonce[$uid];
+    }
 
     $result = DB_query("SELECT ug_main_grp_id,grp_name FROM {$_TABLES["group_assignments"]},{$_TABLES["groups"]}"
             . " WHERE grp_id = ug_main_grp_id AND ug_uid = $uid",1);
 
     if ($result == -1) {
+        $once[$uid] = $groups;
         return $groups;
     }
 
@@ -159,6 +165,7 @@ function SEC_getUserGroups($uid='')
         COM_errorLog("****************leaving getusergroups(uid=$uid)***************",1);
     }
 
+    $runonce[$uid] = $groups;
     return $groups;
 }
 
