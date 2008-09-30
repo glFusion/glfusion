@@ -52,7 +52,7 @@ function plugin_plgupgrade_bad_behavior2 ()
 
     // Bad Behavior handles its database changes automatically,
     // so only update the version number
-    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.23', pi_gl_version = '1.1.0', pi_homepage = 'http://www.glfusion.org/' WHERE pi_name = 'bad_behavior2'");
+    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.24', pi_gl_version = '1.1.0', pi_homepage = 'http://www.glfusion.org/' WHERE pi_name = 'bad_behavior2'");
 
     return true;
 }
