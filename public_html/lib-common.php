@@ -40,9 +40,8 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 // this file can't be used on its own
-if( strpos( $_SERVER['PHP_SELF'], 'lib-common.php' ) !== false )
-{
-    die ('This file can not be used on its own.');
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
+    die('This file can not be used on its own!');
 }
 
 /**
@@ -59,7 +58,7 @@ if( strpos( $_SERVER['PHP_SELF'], 'lib-common.php' ) !== false )
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.0svn');
+    define('GVERSION', '1.1.0.svn');
 }
 
 /**
@@ -182,6 +181,13 @@ if( !function_exists( 'file_put_contents' ))
     require_once( 'PHP/Compat.php' );
 
     PHP_Compat::loadFunction( 'file_put_contents' );
+}
+
+if( !function_exists( 'stripos' ))
+{
+    require_once( 'PHP/Compat.php' );
+
+    PHP_Compat::loadFunction( 'stripos' );
 }
 
 
