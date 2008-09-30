@@ -24,7 +24,7 @@ function bb2_post($settings, $package)
 	// Catch a few completely broken spambots
 	foreach ($request_entity as $key => $value) {
 		$pos = strpos($key, "	document.write");
-		if ($pos !== FAlSE) {
+		if ($pos !== FALSE) {
 			return "dfd9b1ad";
 		}
 	}
