@@ -53,7 +53,7 @@ function PNB_getPingbackUrl($url)
 
     $req = new HTTP_Request($url);
     $req->setMethod(HTTP_REQUEST_METHOD_HEAD);
-    $req->addHeader('User-Agent', 'glFusion/' . VERSION);
+    $req->addHeader('User-Agent', 'glFusion/' . GVERSION);
 
     $response = $req->sendRequest();
     if (PEAR::isError($response)) {
@@ -67,7 +67,7 @@ function PNB_getPingbackUrl($url)
         // search for <link rel="pingback">
         $req = new HTTP_Request($url);
         $req->setMethod(HTTP_REQUEST_METHOD_GET);
-        $req->addHeader('User-Agent', 'glFusion/' . VERSION);
+        $req->addHeader('User-Agent', 'glFusion/' . GVERSION);
 
         $response = $req->sendRequest();
         if (PEAR::isError($response)) {

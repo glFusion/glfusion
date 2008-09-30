@@ -126,7 +126,7 @@ function PNB_handlePingback ($id, $type, $url, $oururl)
     $title = '';
     $excerpt = '';
     $req = new HTTP_Request ($url);
-    $req->addHeader ('User-Agent', 'glFusion/' . VERSION);
+    $req->addHeader ('User-Agent', 'glFusion/' . GVERSION);
     $response = $req->sendRequest ();
     if (PEAR::isError ($response)) {
         if ($_CONF['check_trackback_link'] & 3) {

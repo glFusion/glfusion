@@ -1125,7 +1125,7 @@ function links_validateUrl($url)
 
     $req = new HTTP_Request($url);
     $req->setMethod(HTTP_REQUEST_METHOD_HEAD);
-    $req->addHeader('User-Agent', 'glFusion/' . VERSION);
+    $req->addHeader('User-Agent', 'glFusion/' . GVERSION);
 
     $response = $req->sendRequest();
     if (PEAR::isError($response)) {

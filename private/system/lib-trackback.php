@@ -506,7 +506,7 @@ function TRB_linksToUs ($sid, $type, $urlToGet)
     }
 
     $req = new HTTP_Request ($urlToGet);
-    $req->addHeader ('User-Agent', 'glFusion/' . VERSION);
+    $req->addHeader ('User-Agent', 'glFusion/' . GVERSION);
     $response = $req->sendRequest ();
     if (PEAR::isError ($response)) {
         COM_errorLog ("Trackback verification: " . $response->getMessage()
@@ -784,7 +784,7 @@ function TRB_sendTrackbackPing ($targeturl, $url, $title, $excerpt, $blog = '')
     fputs ($sock, 'Content-type: application/x-www-form-urlencoded; charset='
                   . $charset . "\r\n");
     fputs ($sock, 'Content-length: ' . MBYTE_strlen ($toSend) . "\r\n");
-    fputs ($sock, 'User-Agent: glFusion/' . VERSION . "\r\n");
+    fputs ($sock, 'User-Agent: glFusion/' . GVERSION . "\r\n");
     fputs ($sock, "Connection: close\r\n\r\n");
     fputs ($sock, $toSend);
 
@@ -837,7 +837,7 @@ function TRB_detectTrackbackUrl ($url)
 
     $req = new HTTP_Request ($url);
     $req->setMethod (HTTP_REQUEST_METHOD_GET);
-    $req->addHeader ('User-Agent', 'glFusion/' . VERSION);
+    $req->addHeader ('User-Agent', 'glFusion/' . GVERSION);
 
     $response = $req->sendRequest ();
     if (PEAR::isError ($response)) {
