@@ -119,9 +119,9 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
     {
         $article_filevar = 'article';
     }
-    $groups = implode($_GROUPS,'');
-    $hash = md5($groups);
-    $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar.$hash.'_'.$_CONF['theme'];
+
+    $hash = CACHE_security_hash();
+    $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar.'_'.$hash.'_'.$_CONF['theme'];
     if ( $index == 'p' || !empty($query) || !$article->check_instance($instance_id,$article_filevar)) {
     // end of instance cache
 

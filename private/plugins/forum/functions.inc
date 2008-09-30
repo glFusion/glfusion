@@ -1167,10 +1167,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     }
 
     if ($cb_enable AND ($cb_where == $where)) {
-        $groups = implode($_GROUPS,'');
-
-        $hash = md5($groups);
-        $cacheInstance = 'forumcb' . $hash . '__' . $_CONF['theme'];
+        $cacheInstance = 'forumcb__' . CACHE_security_hash() . '__' . $_CONF['theme'];
 
         $retval = '';
         $retval = CACHE_check_instance($cacheInstance, 0);

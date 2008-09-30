@@ -4203,15 +4203,13 @@ function COM_emailUserTopics()
 function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_WHATSNEW, $page, $newstories;
-    global $_GROUPS, $_ST_CONF;
+    global $_ST_CONF;
 
     if ( !isset($_ST_CONF['whatsnew_cache_time']) ) {
         $_ST_CONF['whatsnew_cache_time'] = 3600;
     }
 
-    $groups = implode($_GROUPS,'');
-    $hash = md5($groups);
-    $cacheInstance = 'whatsnew' . $hash . '__' . $_CONF['theme'];
+    $cacheInstance = 'whatsnew__' . CACHE_security_hash() . '__' . $_CONF['theme'];
     $retval = CACHE_check_instance($cacheInstance, 0);
     if ( $retval ) {
         $lu = CACHE_get_instance_update($cacheInstance, 0);

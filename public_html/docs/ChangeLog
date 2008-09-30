@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Created (and converted all security profile hashes to) CACHE_security_hash() (Joe)
+- CTL: Save some cycles in {!if var} processing, some debug traces, code cleanup (Joe)
 - Forum did not honor the logged in required to view setting for the new post
   block and searching. (Mark)
 - Clear CTL when stories are auto deleted or archived (Mark)

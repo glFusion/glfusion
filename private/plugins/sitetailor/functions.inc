@@ -240,9 +240,7 @@ function plugin_uninstall_sitetailor($installCheck='') {
 function st_initMenu($skipCache=false) {
     global $stMenu,$_GROUPS, $_ST_CONF, $_TABLES, $_USER;
 
-    $groups = implode($_GROUPS,'');
-    $hash = md5($groups);
-    $cacheInstance = 'stmenu_' . $hash . '__data';
+    $cacheInstance = 'stmenu_' . CACHE_security_hash() . '__data';
     $usedCache = 0;
     if ( $skipCache == false ) {
         $retval = CACHE_check_instance($cacheInstance, 0);
@@ -338,12 +336,9 @@ function st_initMenu($skipCache=false) {
 
 
 function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$parentclass='',$lastclass='',$selected='') {
-    global $stMenu, $_GROUPS, $_CONF;
+    global $stMenu, $_CONF;
 
-    $groups = implode($_GROUPS,'');
-
-    $hash = md5($groups);
-    $cacheInstance = 'stmenu_' . $name . '_' . $hash . '__' . $_CONF['theme'];
+    $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '__' . $_CONF['theme'];
 
     $retval = CACHE_check_instance($cacheInstance, 0);
     if ( $retval ) {
