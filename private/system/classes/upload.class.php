@@ -1129,9 +1129,6 @@ class upload
                             $this->_uploadedFiles[] = $this->_fileUploadDirectory . '/' . $this->_getDestinationName();
                         }
                     }
-
-//                    $this->_currentFile = array();
-
                     if ($this->areErrors() AND !$this->_continueOnError) {
                         return false;
                     }
