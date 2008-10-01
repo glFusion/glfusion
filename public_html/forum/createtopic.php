@@ -255,12 +255,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     list ($lastid) = DB_fetchArray(DB_query("SELECT max(id) FROM {$_TABLES['gf_topic']} "));
 
                     /* Check for any uploaded files - during add of new topic */
-                    $rc = gf_check4files($lastid);
-                    if ( $rc == -1 ) {
-                        $uploadErrorMessage = 'up error message' . $GLOBALS['gf_errmsg'];
-                    } else {
-                        $uploadErrorMessage = '';
-                    }
+                    $uploadErrorMessage = gf_check4files($lastid);
 
                     // Check and see if there are no [file] bbcode tags in content and reset the show_inline value
                     // This is needed in case user had used the file bbcode tag and then removed it

@@ -44,6 +44,7 @@ function gf_check4files($id,$tempfile=false) {
     global $_FILES,$_CONF,$_TABLES,$_USER,$CONF_FORUM,$LANG_GF00,
            $_FM_TABLES,$CONF_FORUM,$filemgmt_FileStore;
 
+    $retval = '';
 
     for ( $z = 1; $z <= $CONF_FORUM['maxattachments']; $z++ ) {
         $filelinks = '';
@@ -100,7 +101,7 @@ function gf_check4files($id,$tempfile=false) {
 
             } else {
                 COM_errorlog("upload error:" . $GLOBALS['gf_errmsg']);
-                $errmsg = $GLOBALS['gf_errmsg'];
+                $retval .= $GLOBALS['gf_errmsg'];
                 $filelinks = -1;
             }
         }
@@ -110,7 +111,8 @@ function gf_check4files($id,$tempfile=false) {
         DB_query("UPDATE {$_TABLES['gf_attachments']} SET topic_id=$id, tempfile=0 WHERE topic_id={$_POST['uniqueid']}");
     }
 
-    return $filelinks;
+    return $retval;
+//    return $filelinks;
 
 }
 
@@ -151,8 +153,6 @@ function gf_uploadfile($filename,&$upload_file,$allowablefiletypes,$use_filemgmt
             if ($upload->_copyFile()) {
                 $upload->_uploadedFiles[] = $upload->_fileUploadDirectory . '/' . $upload->_getDestinationName();
             }
-        } else {
-            $upload->_addError('File, ' . $upload->_currentFile['name'] . ', failed one of the checks (probably mime type)');
         }
 
         $upload->_currentFile = array();
