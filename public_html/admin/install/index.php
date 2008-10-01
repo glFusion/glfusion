@@ -1744,7 +1744,7 @@ switch ($mode) {
             // layout_cache directory
             if (!$file = @fopen($data_path . 'layout_cache/test.txt', 'w')) {
                 // Permissions are incorrect
-                $_PERMS['data']         = sprintf("%3o", @fileperms($data_path . 'layout_cache/') & 0777);
+                $_PERMS['layout_cache']  = sprintf("%3o", @fileperms($data_path . 'layout_cache/') & 0777);
                 $display_permissions    .= '<p><label class="file-permission-list"><code>' . $data_path . 'layout_cache/'
                                         . '</code></label><span class="error">' . $LANG_INSTALL[14]
                                         . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['data'] . ') </p>' . LB;
@@ -1807,19 +1807,6 @@ switch ($mode) {
             } else {
                 // Permissions are correct
                 fclose($err_file);
-            }
-
-            // Template Caching Directory
-            if (!$file = @fopen($gl_path . 'data/layout_cache/test.txt', 'w')) {
-                // Permissions are incorrect
-                $_PERMS['ctl']    = sprintf("%3o", @fileperms($gl_path . 'data/layout_cache/') & 0777);
-                $display_permissions    .= '<p><label class="file-permission-list"><code>' . $gl_path
-                                        . 'data/layout_cache/</code></label><span class="error">' . $LANG_INSTALL[14]
-                                        . ' 777</span> (' . $LANG_INSTALL[13] . ' ' . $_PERMS['ctl'] . ') </p>' . LB;
-            } else {
-                // Permissions are correct
-                @fclose($file);
-                @unlink($_CONF['path'] . 'data/layout_cache/test.txt');
             }
 
             $display .= $LANG_INSTALL[9] . '<br /><br />' . LB;
