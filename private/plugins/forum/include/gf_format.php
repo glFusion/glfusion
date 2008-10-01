@@ -1160,7 +1160,7 @@ function gf_makeFilemgmtCatSelect($uid) {
     $_GROUPS = SEC_getUserGroups( $uid );
     $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupUploadAccessFilter($_GROUPS);
-    return $mytree->makeMySelBox('title', 'title','','','filemgmtcat');
+    return $mytree->makeMySelBoxNoHeading('title', 'title','','','filemgmtcat');
 }
 
 function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)

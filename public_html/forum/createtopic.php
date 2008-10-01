@@ -969,7 +969,12 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         }
         $edit_prompt .= 'value="1"' . XHTML . '>';
         $submissionform_main->set_var('attachments','<div id="fileattachlist">' . gf_showattachments($id,'edit') . '</div>');
+        $numAttachments = DB_Count($_TABLES['gf_attachments'],'topic_id',$id);
+        $allowedAttachments = $CONF_FORUM['maxattachments'] - $numAttachments;
+        $submissionform_main->set_var('fcounter',$allowedAttachments);
     } else {
+        $allowedAttachments = $CONF_FORUM['maxattachments'];
+        $submissionform_main->set_var('fcounter',$allowedAttachments);
         $edit_prompt = '&nbsp;';
         $submissionform_main->set_var('attachments','');
         if ($uniqueid > 0) {
