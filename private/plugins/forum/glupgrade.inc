@@ -91,6 +91,7 @@ function plugin_plgupgrade_forum() {
             require_once $_CONF['path'] . 'plugins/forum/install_defaults.php';
             plugin_initconfig_forum();
         default :
+            DB_query("ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.0.fusion',pi_gl_version='1.1.0' WHERE pi_name = 'forum'");
             return true;
     }

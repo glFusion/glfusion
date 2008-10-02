@@ -79,7 +79,6 @@ CREATE TABLE {$_TABLES['blocks']} (
   perm_group tinyint(1) unsigned NOT NULL default '3',
   perm_members tinyint(1) unsigned NOT NULL default '2',
   perm_anon tinyint(1) unsigned NOT NULL default '2',
-  INDEX blocks_bid(bid),
   INDEX blocks_is_enabled(is_enabled),
   INDEX blocks_tid(tid),
   INDEX blocks_type(type),
@@ -205,7 +204,6 @@ CREATE TABLE {$_TABLES['group_assignments']} (
   ug_grp_id mediumint(8) unsigned default NULL,
   INDEX group_assignments_ug_main_grp_id(ug_main_grp_id),
   INDEX group_assignments_ug_uid(ug_uid),
-  KEY ug_main_grp_id (ug_main_grp_id)
 ) TYPE=MyISAM
 ";
 
@@ -269,7 +267,6 @@ CREATE TABLE {$_TABLES['sessions']} (
   uid mediumint(8) NOT NULL default '1',
   md5_sess_id varchar(128) default NULL,
   PRIMARY KEY  (sess_id),
-  KEY sess_id (sess_id),
   KEY start_time (start_time),
   KEY remote_ip (remote_ip)
 ) TYPE=MyISAM
@@ -335,7 +332,6 @@ CREATE TABLE {$_TABLES['stories']} (
   perm_group tinyint(1) unsigned NOT NULL default '3',
   perm_members tinyint(1) unsigned NOT NULL default '2',
   perm_anon tinyint(1) unsigned NOT NULL default '2',
-  INDEX stories_sid(sid),
   INDEX stories_tid(tid),
   INDEX stories_uid(uid),
   INDEX stories_featured(featured),
@@ -465,7 +461,6 @@ CREATE TABLE {$_TABLES['userindex']} (
   boxes varchar(255) NOT NULL default '',
   noboxes tinyint(4) NOT NULL default '0',
   maxstories tinyint(4) default NULL,
-  INDEX userindex_uid(uid),
   INDEX userindex_noboxes(noboxes),
   INDEX userindex_maxstories(maxstories),
   PRIMARY KEY  (uid)
@@ -568,7 +563,6 @@ CREATE TABLE {$_TABLES['events']} (
   location varchar(128) default NULL,
   timestart time default NULL,
   timeend time default NULL,
-  INDEX events_eid(eid),
   INDEX events_event_type(event_type),
   INDEX events_datestart(datestart),
   INDEX events_dateend(dateend),
@@ -724,7 +718,6 @@ CREATE TABLE {$_TABLES['polltopics']} (
   perm_group tinyint(1) unsigned NOT NULL default '2',
   perm_members tinyint(1) unsigned NOT NULL default '2',
   perm_anon tinyint(1) unsigned NOT NULL default '2',
-  INDEX pollquestions_pid(pid),
   INDEX pollquestions_date(date),
   INDEX pollquestions_display(display),
   INDEX pollquestions_commentcode(commentcode),

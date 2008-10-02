@@ -2373,7 +2373,7 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
     $pi_name = 'mediagallery';     // Plugin name
     $retval = '';
 
-	if ( $_MG_CONF['gallery_only'] == 1 ) {
+	if ( $_MG_CONF['gallery_only'] == 1 && $topic == '') {
 		MG_galleryOnly();
 	}
 

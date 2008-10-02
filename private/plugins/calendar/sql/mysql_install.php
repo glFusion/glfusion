@@ -64,7 +64,6 @@ CREATE TABLE {$_TABLES['events']} (
   location varchar(128) default NULL,
   timestart time default NULL,
   timeend time default NULL,
-  INDEX events_eid(eid),
   INDEX events_event_type(event_type),
   INDEX events_datestart(datestart),
   INDEX events_dateend(dateend),

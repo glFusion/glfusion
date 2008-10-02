@@ -70,7 +70,6 @@ $_SQL[] = "CREATE TABLE {$_TABLES['gf_forums']} (
   last_post_rec mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (forum_id),
   KEY forum_cat (forum_cat),
-  KEY forum_id (forum_id)
 ) TYPE=MyISAM;";
 # --------------------------------------------------------
 
