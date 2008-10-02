@@ -68,6 +68,15 @@ $_SQL[] = "UPDATE {$_TABLES['configuration']} SET value='s:10:\"US/Central\";' W
 $_SQL[] = "REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion', '1.1.0svn')";
 $_SQL[] = "ALTER TABLE {$_TABLES['staticpage']} ADD sp_search tinyint(4) NOT NULL default '1' AFTER postmode";
 
+$_SQL[] = "ALTER TABLE {$_TABLES['blocks']} DROP INDEX blocks_bid";
+$_SQL[] = "ALTER TABLE {$_TABLES['events']} DROP INDEX events_eid";
+$_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id";
+$_SQL[] = "ALTER TABLE {$_TABLES['group_assignments']} DROP INDEX ug_main_grp_id";
+$_SQL[] = "ALTER TABLE {$_TABLES['polltopics']} DROP INDEX pollquestions_pid";
+$_SQL[] = "ALTER TABLE {$_TABLES['sessions']} DROP INDEX sess_id";
+$_SQL[] = "ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_sid";
+$_SQL[] = "ALTER TABLE {$_TABLES['userindex']} DROP INDEX userindex_uid";
+
 /* Execute SQL now to perform the upgrade */
 for ($i = 1; $i <= count($_SQL); $i++) {
     COM_errorLOG("glFusion 1.1.0svn Development update: Executing SQL => " . current($_SQL));
