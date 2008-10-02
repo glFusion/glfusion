@@ -1105,6 +1105,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         switch ($current_fusion_version) {
         case '1.0.0':
         case '1.0.1':
+        case '1.0.2':
             require_once $_CONF['path'] . 'sql/updates/mysql_1.0.1_to_1.1.0.php';
             list($rc,$errors) = INST_updateDB($_SQL);
 
