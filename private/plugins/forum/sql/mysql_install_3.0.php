@@ -46,7 +46,7 @@ $_SQL[] = "CREATE TABLE {$_TABLES['gf_categories']} (
   cat_dscp text NOT NULL,
   id int(2) NOT NULL auto_increment,
   PRIMARY KEY  (id)
-) TYPE=MyISAM;";
+) TYPE=MyISAM";
 # --------------------------------------------------------
 
 #
@@ -69,7 +69,7 @@ $_SQL[] = "CREATE TABLE {$_TABLES['gf_forums']} (
   post_count mediumint(8) NOT NULL default '0',
   last_post_rec mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (forum_id),
-  KEY forum_cat (forum_cat),
+  KEY forum_cat (forum_cat)
 ) TYPE=MyISAM;";
 # --------------------------------------------------------
 
