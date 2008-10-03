@@ -203,7 +203,7 @@ CREATE TABLE {$_TABLES['group_assignments']} (
   ug_uid mediumint(8) unsigned default NULL,
   ug_grp_id mediumint(8) unsigned default NULL,
   INDEX group_assignments_ug_main_grp_id(ug_main_grp_id),
-  INDEX group_assignments_ug_uid(ug_uid),
+  INDEX group_assignments_ug_uid(ug_uid)
 ) TYPE=MyISAM
 ";
 
