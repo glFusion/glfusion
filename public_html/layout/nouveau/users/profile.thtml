@@ -33,12 +33,6 @@
 				<p>{user_bio}</p>
 			</div>
 			{!endif}
-			{!if user_pgp}
-			<div class="profile-pgpkey">
-				<b>{lang_pgpkey}</b><br{xhtml}>
-				<p>{user_pgp}</p>
-			</div>
-			{!endif}
 		</div> <!-- end profile-col1 -->
 		<div class="profile-col2">
 			<div class="profile-header">
@@ -77,3 +71,4 @@
 			</ul>
 		</div>
 {end_block}
+<div style="clear:both;"></div>
