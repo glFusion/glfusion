@@ -49,12 +49,7 @@ css_out();
 function css_out(){
     global $_CONF, $_PLUGINS, $_TABLES;
 
-    $tpl = trim(preg_replace('/[^\w-]+/','',$_REQUEST['t']));
-
-    if ( !$tpl ) {
-        $tpl = 'nouveau';
-    }
-    $tpldir = $_CONF['layout_dir'] . '/' . $tpl . '/';
+    $tpl = $_CONF['theme'];
 
     $cacheID = 'css_' . $tpl;
     $cacheFile = CACHE_instance_filename($cacheID,0);
