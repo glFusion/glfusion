@@ -579,7 +579,7 @@ switch ($what) {
                                           $shortmessage)
                          . COM_siteFooter ();
             } else {
-                $msg = PLG_itemPreSave ('emailstory', $message);
+                $msg = PLG_itemPreSave ('emailstory', $shortmessage);
                 if (!empty ($msg)) {
                     $display .= COM_siteHeader ('menu', '')
                              . COM_errorLog ($msg, 2)
