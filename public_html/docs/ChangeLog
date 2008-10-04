@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Profile display - removed PGP display added hard break at end to
+  prevent plugin items from overlapping main profile page (Mark)
+- Forum plugin - added new configuration option to set display order on
+  the topic reply previous posts iframe (Mark)
+- Removed theme name from css.php, now use proper configuration vars (Mark)
 - BB2: Stop generating stats every time templateSetVars is called (Joe)
 - Fixed issue with search truncating description text (Mark)
 - Improved error handling when CTL cannot write to cache directory (Mark)
