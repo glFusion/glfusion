@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Send story did not send proper variable to PLG_itemPreSave() - Fix by Dirk
+  Haun Geeklog team (Mark)
+- Fixed 'cookiedomain' being reported as changed in the Configuration - Fix by
+  Dirk Haun Geeklog team (Mark)
+- Link plugin - Prevent overwriting existing links when changing the link ID
+  Fix by Dirk Haun Geeklog team (Mark)
 - Profile display - removed PGP display added hard break at end to
   prevent plugin items from overlapping main profile page (Mark)
 - Forum plugin - added new configuration option to set display order on
