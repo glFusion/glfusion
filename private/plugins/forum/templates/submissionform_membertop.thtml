@@ -5,7 +5,7 @@
             <td class="pluginCellSubTitle">&nbsp;{LANG_NAME}
                 <div style="background:transparent; width:110px; height:1px;"></div>
             </td>
-            <td class="pluginCellText pluginCellFill" width="90%"><input type="hidden" name="name" size="35" value="{xusername}"{xhtml}>{username}</td>
+            <td class="pluginCellText pluginCellFill" width="90%"><input type="hidden" name="name" size="35" value="{username}"{xhtml}>{username}</td>
         </tr>
         <tr>
 <!-- end submissionform_membertop.thtml -->
