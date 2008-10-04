@@ -940,6 +940,7 @@ $LANG_confignames['forum'] = array(
     'inlineimage_height'        => 'Inline Image Height',
     'allowablefiletypes'        => 'Allowable File Types',
     'inlineimageypes'           => 'Allows Image Types',
+    'showtopic_review_order'    => 'Order to display old topics when replying',
 );
 $LANG_configsubgroups['forum'] = array(
     'sg_main'               => 'Configuration Settings'
@@ -959,5 +960,6 @@ $LANG_configselects['forum'] = array(
     2 => array('Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
     3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks'),
     4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
+    5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
 );
 ?>

@@ -54,8 +54,8 @@ if (file_exists ($langfile)) {
 $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 
 $pi_version = floatval (DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'"));
-// require_once ($_CONF['path_system'] . 'lib-portalparts.php');
 require_once ($_CONF['path'] . 'plugins/forum/config.php');
+//$CONF_FORUM['showtopic_review_order'] = 'DESC';
 
 /*
 * Check and see if we need to load the plugin configuration
@@ -66,7 +66,7 @@ if (!isset($CONF_FORUM['registration_required'])) {
     $ff_config = config::get_instance();
     $_FF_FORUM = $ff_config->get_config('forum');
 
-    if ( is_array($_FF_FORUM)  && is_array($CONF_FORUM) ) {
+    if ( is_array($_FF_FORUM) && is_array($CONF_FORUM) ) {
         $CONF_FORUM = array_merge($_FF_FORUM, $CONF_FORUM);
     }
 
@@ -100,6 +100,10 @@ if (!isset($CONF_FORUM['registration_required'])) {
 }
 $CONF_FORUM['leftblocks'] = array ('forum_menu');
 $CONF_FORUM['leftblocks'] = ppGetUserBlocks($CONF_FORUM['leftblocks']);
+
+if ( !isset($CONF_FORUM['showtopic_review_order']) ) {
+    $CONF_FORUM['showtopic_review_order'] = 'DESC';
+}
 
 if( empty( $LANG_CHARSET )) {
     $CONF_FORUM['charset'] = $_CONF['default_charset'];

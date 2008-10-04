@@ -145,6 +145,8 @@ $c->del('user_html','Core');
 $c->del('admin_html','Core');
 $c->del('allowed_protocols','Core');
 
+$c->add('showtopic_review_order', $_FF_DEFAULT['showtopic_review_order'], 'select',0, 0, 5, 45, true, 'forum');
+
 // probably need to clear the template cache so do it here
 CTL_clearCache();
 

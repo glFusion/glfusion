@@ -59,6 +59,7 @@ $_FF_DEFAULT['allow_smilies']          = true;
 $_FF_DEFAULT['allow_notification']     = true;
 $_FF_DEFAULT['allow_user_dateformat']  = true;
 $_FF_DEFAULT['show_topicreview']       = true;
+$_FF_DEFAULT['showtopic_review_order'] = 'DESC';
 $_FF_DEFAULT['use_autorefresh']        = true;
 $_FF_DEFAULT['autorefresh_delay']      = 5;
 $_FF_DEFAULT['show_subject_length']    = 40;
@@ -328,6 +329,8 @@ function plugin_initconfig_forum()
                 0, 0, 0, 30, true, 'forum');
         $c->add('show_topicreview', $_FF_DEFAULT['show_topicreview'], 'select',
                 0, 0, 0, 40, true, 'forum');
+        $c->add('showtopic_review_order', $_FF_DEFAULT['showtopic_review_order'], 'select',
+                0, 0, 5, 45, true, 'forum');
         $c->add('allow_user_dateformat', $_FF_DEFAULT['allow_user_dateformat'], 'select',
                 0, 0, 0, 50, true, 'forum');
         $c->add('use_pm_plugin', $_FF_DEFAULT['use_pm_plugin'], 'select',
