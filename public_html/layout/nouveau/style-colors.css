@@ -52,6 +52,7 @@ div.glfform p.error,
 #gl_moorotator .gl_moorotatortext,
 .gl_moorotatortext a,
 .gl_moorotatortext a:hover,
+.gl_moosimplebox,
 #gl_slide-toolbar li,
 .tool-tip,
 .pluginAltBG td,
@@ -75,6 +76,7 @@ div.glfform p.error,
 
 div.glfform form fieldset,
 div.glfform p.error,
+.gl_moosimplebox,
 .morph-start,
 .codeblock {
 	border:1px solid #000;
@@ -208,7 +210,6 @@ div#frame,
 .ng-clear-link,
 .profile-image,
 .profile-bio,
-.profile-pgpkey,
 .table_list {
 	border:1px solid #ccc;
 }
@@ -254,7 +255,6 @@ div#frame,
 .pluginCellSubTitle,
 .profile-image,
 .profile-bio,
-.profile-pgpkey,
 .story-featured pre .story-body pre {
 	background-color:#f2f2f2;
 }
