@@ -967,10 +967,10 @@ These variables define the names of all of glFusion&#039;s cookies. They can eas
 
 	</tr>
 	<tr class="row1">
-		<td class="col0 leftalign"><a name="desc_notification">Notifications</a>  </td><td class="col1 leftalign">Send an email notification to $_CONF[&#039;site_email&#039;] when a new story, comment, trackback or pingback has been submitted or a new user has registered with the site. The array() can hold any combination of the strings &#039;story&#039;, &#039;comment&#039;, &#039;trackback&#039;, &#039;pingback&#039;, and &#039;user&#039; (separated by commas), depending on which notification(s) you want. In this web-based configuration tool, click the '+' button to add each item as an individual element. Do not include single or double quotes.  <br/>
+		<td class="col0 leftalign"><a name="desc_notification">Notifications</a>  </td><td class="col1 leftalign">Send an email notification to $_CONF[&#039;site_email&#039;] when a new story, comment, trackback or pingback has been submitted or a new user has registered with the site. The array() can hold any combination of the strings &#039;story&#039;, &#039;comment&#039;, &#039;trackback&#039;, &#039;pingback&#039;, and &#039;user&#039; (separated by commas), depending on which notification(s) you want.  <br/>
 
  <br/>
- Example: array(&#039;story&#039;,&#039;user&#039;); would send notifications when a new story has been submitted or a new user has registered. No notifications would be sent, for example, for new comments.  </td>
+In this web-based configuration tool, click the '+' button to add each item as an individual element. Do not include single or double quotes.  </td>
 	</tr>
 	<tr class="row2">
 		<td class="col0 leftalign"><a name="desc_cron_schedule_interval">Cron Schedule Interval</a>  </td><td class="col1 leftalign">glFusion can emulate a cronjob, i.e. trigger a certain action at a given time. The code to be executed can be provided by a plugin or through the CUSTOM_runScheduledTask function in your lib-custom.php. The value given is in seconds and specifies the interval in which the code should be executed. <br/>
