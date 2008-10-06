@@ -44,7 +44,16 @@ if (is_numeric ($uid) && ($uid > 1)) {
     if ($A['status'] == USER_ACCOUNT_DISABLED && !SEC_hasRights ('user.edit')) {
         die("Invalid Request");
     }
-    $display = '<pre>'.$A['pgpkey'].'</pre>';
+    $display = '
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>' . $LANG04[8] . '</title>
+</head>
+<body>
+	<pre>'.$A['pgpkey'].'</pre>
+</body>
+</html>';
     if( empty( $LANG_CHARSET )) {
         $charset = $_CONF['default_charset'];
         if( empty( $charset )) {
