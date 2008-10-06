@@ -80,7 +80,7 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'captcha') == 0) {
     $T->set_var('btnmsg', $LANG_CP00['install']);
     $T->set_var('action','install');
 
-    $gl_version = VERSION;
+    $gl_version = GVERSION;
     $php_version = phpversion();
 
     $glver = sprintf($LANG_CP00['glfusion_check'],$gl_version);
@@ -94,7 +94,7 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'captcha') == 0) {
         'install_doc'       => $LANG_CP00['preinstall_confirm'],
     ));
 } else {
-    echo COM_refresh($_CONF['site_url'] . '/index.php?msg=3&amp;plugin=captcha');
+    echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=44');
     exit;
 }
 $T->parse('output','install');
