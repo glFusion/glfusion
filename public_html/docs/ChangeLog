@@ -2,14 +2,17 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Added additional gl_moosimplebox mootools javascript widget, with accompanying
+  css and images, to allow creation of styled popup content boxes (Eric)
 - Send story did not send proper variable to PLG_itemPreSave() - Fix by Dirk
   Haun Geeklog team (Mark)
 - Fixed 'cookiedomain' being reported as changed in the Configuration - Fix by
   Dirk Haun Geeklog team (Mark)
 - Link plugin - Prevent overwriting existing links when changing the link ID
   Fix by Dirk Haun Geeklog team (Mark)
-- Profile display - removed PGP display added hard break at end to
-  prevent plugin items from overlapping main profile page (Mark)
+- Redesigned Profile page display - removed PGP display to a popup box, and
+  added hard break at end to prevent plugin items from overlapping main
+  profile page (Eric & Mark)
 - Forum plugin - added new configuration option to set display order on
   the topic reply previous posts iframe (Mark)
 - Removed theme name from css.php, now use proper configuration vars (Mark)
@@ -19,7 +22,7 @@ v1.1.0
 - Created (and converted all security profile hashes to) CACHE_security_hash() (Joe)
 - CTL: Save some cycles in {!if var} processing, some debug traces, code cleanup (Joe)
 - Upgraded Bad Behavior to v2.0.24 (Mark)
-- attempting to change your password when your email address is 'invalid' causes
+- Attempting to change your password when your email address is 'invalid' causes
   password change but failed to make changes message. (M.Jervis Geeklog Team) (Mark)
 - FileMgmt did not honor the logged in required to view for menu,
   search, and stats. (Mark)
