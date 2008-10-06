@@ -354,7 +354,7 @@ div.glfform form fieldset div.notes {
 }
 
 div.glfform form fieldset div.notes h4 {
-  background-image: url(images/icon_info.gif);
+  background-image: url(layout/nouveau/images/info.png);
   background-repeat: no-repeat;
   background-position: top left;
   padding: 3px 0 3px 27px;
@@ -431,7 +431,7 @@ div.glfform form div img {
 
 div.glfform p.error {
   background-color: #ff0000;
-  background-image: url(images/icon_error.gif);
+  background-image: url(layout/nouveau/images/alert-small.png);
   background-repeat: no-repeat;
   background-position: 3px 3px;
   color: #ffffff;
@@ -442,7 +442,7 @@ div.glfform p.error {
 
 div.glfform form div.error {
   background-color: #ffffe1;
-  background-image: url(images/required_bg.gif);
+  background-image: url(layout/nouveau/images/required_bg.gif);
   background-repeat: no-repeat;
   background-position: top left;
   color: #666666;
@@ -450,7 +450,7 @@ div.glfform form div.error {
 }
 
 div.glfform form div.error p.error {
-  background-image: url(images/icon_error.gif);
+  background-image: url(layout/nouveau/images/alert-small.png);
   background-position: top left;
   background-color: transparent;
   border-style: none;
@@ -618,7 +618,7 @@ padding:5px;
 }
 
 form fieldset div.notes h4 {
-background:url(layout/nouveau/images/icon_info.png) no-repeat top left;
+background:url(layout/nouveau/images/info.png) no-repeat top left;
 border-bottom:1px solid #666;
 color:#666;
 font-size:1.3em;
@@ -1973,13 +1973,6 @@ margin:10px;
   font-weight:bold;
 }
 
-.ext-link {
-background-color:transparent;
-background:url(images/external.png) right center no-repeat;
-background-attachment:scroll;
-padding-right:13px;
-}
-
 .strike {
 text-decoration:line-through;
 }
@@ -2336,7 +2329,9 @@ font-weight:bold;
 text-align:right;
 width:50%;
 }
-
+#gl_moosimplebox_trigger1 {
+cursor:pointer;
+}
 .gl_moosimplebox {
 color:#fff;
 font-family:Arial, Helvetica, sans-serif;
