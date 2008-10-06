@@ -4504,9 +4504,6 @@ function COM_showMessage($msg, $plugin = '')
     global $_CONF, $MESSAGE, $_IMAGE_TYPE;
 
     $retval = '';
-    if (empty($plugin) AND !empty($_REQUEST['plugin'])) {
-        $plugin = COM_applyFilter($_REQUEST['plugin']);
-    };
 
     if ($msg > 0) {
         $timestamp = strftime($_CONF['daytime']);
@@ -6639,6 +6636,49 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     }
 
     exit;
+}
+
+function COM_checkVersion($have, $need) {
+
+    list($major,$minor,$rev,$extra) = explode('.',$have);
+    list($requireMajor,$requireMinor,$requireRev,$requireExtra) = explode('.',$need);
+    if ( !isset($major) )
+        $major = 0;
+    if ( !isset($minor) )
+        $minor = 0;
+    if ( !isset($rev) )
+        $rev = 0;
+    if ( !isset($extra) )
+        $extra = '';
+    if ( !isset($requireMajor) )
+        $requireMajor = 0;
+    if ( !isset($requireMinor) )
+        $requireMinor = 0;
+    if ( !isset($requireRev) )
+        $requireRev = 0;
+    if ( !isset($requireExtra) )
+        $RequireExtra = '';
+    $passed = 0;
+    if ( $requireMajor <= $major ) {
+        if ( $requireMajor < $major ) {
+            $passed = 1;
+        } else if ( $requireMinor <= $minor ) {
+            if ( $requireMinor < $minor ) {
+                $passed = 1;
+            } else if ( $requireRev <= $rev ) {
+                if ( $requireRev < $rev ) {
+                    $passed = 1;
+                } else if ($requireExtra != '' ) {
+                    if ( $requireExtra == 'fusion' ) {
+                        $passed = 1;
+                    }
+                } else {
+                    $passed = 1;
+                }
+            }
+        }
+    }
+    return $passed;
 }
 
 /**

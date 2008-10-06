@@ -585,10 +585,11 @@ function forum_buildFeedsSql ($forumID, $limits)
 {
     global $pi_version;
 
-    $where = '';
-    if ($pi_version < 2.6) {
+    if ( !COM_checkVersion($pi_version, '2.6') ) {
         return '';
     }
+
+    $where = '';
 
     $groups = array ();
     $usergroups = SEC_getUserGroups(1);
@@ -640,8 +641,8 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
     $lids = array();
     $ids = array();
 
-    if ($pi_version < 2.6) {
-        return $content;
+    if ( !COM_checkVersion($pi_version, '2.6') ) {
+        return '';
     }
 
     $allow_smilies = $CONF_FORUM['allow_smilies'];
@@ -968,9 +969,10 @@ function forum_deleteForum($id) {
 function phpblock_forum_newposts() {
     global $_CONF, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version;
 
-    if ($pi_version < 2.6) {
-        return;
+    if ( !COM_checkVersion($pi_version, '2.6') ) {
+        return '';
     }
+
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
         return;
     }
@@ -1134,15 +1136,16 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM,
            $LANG_GF02, $mode, $order,$pi_version, $_GROUPS;
 
-    require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-
-    if ($pi_version < 2.6) {
-        return;
+    if ( !COM_checkVersion($pi_version, '2.6') ) {
+        return '';
     }
 
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
         return;
     }
+
+    require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+
     $retval = '';
 
     $cb_enable = $CONF_FORUM['show_centerblock'];

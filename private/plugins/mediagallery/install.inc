@@ -61,23 +61,15 @@ if (!function_exists('COM_errorLOG') ) {
 */
 function mediagallery_compatible_with_this_glfusion_version ()
 {
-    // requires 1.1.0 or newer
-    $glversion = explode(".", GVERSION);
-    if ( $glversion[0] < 1 ) {
-        return false;
-    }
-    if ( $glversion[1] < 1 ) {
-        return false;
-    }
-    return true;
+    return COM_checkVersion(GVERSION, '1.1.0');
 }
 
 function plugin_install_mediagallery($_DB_table_prefix)
 {
-    global $_TABLES, $_CONF, $LANG_MG00, $_DB_dbms;
-    global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
+    global $_TABLES, $_CONF, $LANG_MG00, $_DB_dbms,
+           $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
 
-    require_once($_CONF['path'] . '/plugins/mediagallery/config.php');
+    require_once $_CONF['path'] . '/plugins/mediagallery/config.php';
 
     $DEFVALUES = array();
 
@@ -88,9 +80,9 @@ function plugin_install_mediagallery($_DB_table_prefix)
     // Create the Plugins Tables
 
     if ( $_DB_dbms == 'mysql' ) {
-        require_once($_CONF['path'] . 'plugins/mediagallery/sql/sql_install.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/sql/sql_install.php';
     } else {
-        require_once($_CONF['path'] . 'plugins/mediagallery/sql/mssql_install.php');
+        require_once $_CONF['path'] . 'plugins/mediagallery/sql/mssql_install.php';
     }
     foreach ($_SQL as $table => $sql) {
         DB_query($sql,1);
@@ -104,7 +96,7 @@ function plugin_install_mediagallery($_DB_table_prefix)
     $ftp_path = $_CONF['path'] . 'plugins/mediagallery/uploads/';
     $tmp_path = $_CONF['path'] . 'plugins/mediagallery/tmp/';
 
-    require_once($_CONF['path'] . 'plugins/mediagallery/sql/sql_defaults.php');
+    require_once $_CONF['path'] . 'plugins/mediagallery/sql/sql_defaults.php';
     // Insert default configuration
     for ($i = 1; $i <= count($_SQL_DEF); $i++) {
         DB_query(current($_SQL_DEF));
