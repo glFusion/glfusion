@@ -111,8 +111,7 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'mediagallery') == 0) {
     }
     $memory_limit = MG_return_bytes(ini_get('memory_limit'));
 
-    $glversion = explode(".", GVERSION);
-    if ( $glversion[1] < 1 ) {
+    if (!COM_checkVersion(GVERSION, '1.1.0')) {
         $versionCheck = '<div style="background-color:#ffff00;color:#000000;vertical-align:middle;padding:5px;"><img src="redX.png" alt="error" style="padding:5px;vertical-align:middle;">&nbsp;' . $LANG_MG00['gl_version_error'] . '</div>';
         $errCheck++;
     } else {
@@ -156,7 +155,7 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'mediagallery') == 0) {
         $T->set_var('errormessage',$LANG_MG00['fix_install']);
     }
 } else {
-   echo COM_refresh($_CONF['site_admin_url'] . '/plugins/mediagallery/index.php?mode=install');
+   echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=44');
    exit;
 }
 $T->parse('output','install');
