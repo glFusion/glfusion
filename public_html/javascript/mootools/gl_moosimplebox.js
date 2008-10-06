@@ -1,3 +1,34 @@
+/* gl_moosimplebox - adapted from mooMessageBox http://www.artviper.net/mooMessageBox.php
+A mootools powered fading in/out popup box. Styling for the moosimplebox can be found in layout/nouveau/style.css.
+Usage example in a .thtml file below:
+<img id="gl_moosimplebox_trigger1" src="{layout_url}/images/pgpkey.png" alt="{lang_pgpkey}" title="{lang_pgpkey}"{xhtml}>
+<div id="my_gl_moosimpleboxDiv">{user_pgp}</div>
+<script type="text/javascript" src="{site_url}/javascript/mootools/gl_moosimplebox.js"></script>
+<script language="javascript" type="text/javascript">
+window.addEvent('load',function(){
+	var p = new mooSimpleBox({
+		width:430,
+		height:195,
+		btnTitle:'Test',
+		closeBtn:'myBtn',
+		btnTitle: ' ',
+		boxClass:'gl_moosimplebox',
+		id:'gl_moosimplebox',
+		fadeSpeed:500,
+		opacity:'1',
+		addContentID:'my_gl_moosimpleboxDiv',
+		boxTitle:'{lang_pgpkey}',
+		isDrag:'false'
+	});
+	$('gl_moosimplebox_trigger1').addEvent('click',function(e){
+		e = new Event(e).stop();
+		p.fadeIn();
+	})
+})
+</script>
+*/
+
+
 var mooSimpleBox = new Class({
 	options: {
 		width: 		300,
