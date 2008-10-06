@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Added blank index.html pages for directory security in various places in the
+  public_html/ path (Eric)
+- Added new icons to match those defined in style.css (Eric)
 - Added additional gl_moosimplebox mootools javascript widget, with accompanying
   css and images, to allow creation of styled popup content boxes (Eric)
 - Send story did not send proper variable to PLG_itemPreSave() - Fix by Dirk
