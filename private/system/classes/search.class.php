@@ -546,7 +546,7 @@ class Search {
         } else {
             $obj->setDefaultSort('date');
         }
-        $obj->setRowFunction('searchFormatCallBack', $this);
+        $obj->setRowFunction(Array($this, 'searchFormatCallBack'));
 
         // Start search timer
         $searchtimer = new timerobject();
