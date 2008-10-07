@@ -463,6 +463,26 @@ function plugin_getheaderjs_forum() {
     return($js);
 }
 
+function plugin_getheadercode_forum() {
+    global $_CONF, $CONF_FORUM, $themeAPI;
+
+    $gf_header = '';
+
+    if ( $themeAPI > 1 ) {
+        return '';
+    }
+
+    $gf_header .= '<style>'. file_get_contents($_CONF['path'] . 'plugins/forum/css/style.css') . '</style>';
+
+    $gf_header .= '<script type="text/javascript">' . LB;
+    $gf_header .= '	window.addEvent(\'load\', function() {' . LB;
+    $gf_header .= '		var gfTips = new Tips($$(\'.gf_mootip\'), { maxTitleChars: 50, className: \'gftool\' });' . LB;
+    $gf_header .= '	});' . LB;
+    $gf_header .= '</script>' . LB;
+
+    return $gf_header;
+}
+
 
 /**
 * glFusion is asking us to provide any new items that show up in the type drop-down
