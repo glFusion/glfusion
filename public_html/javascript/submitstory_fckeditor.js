@@ -38,6 +38,12 @@
 
     window.onload = function() {
         var oFCKeditor1 = new FCKeditor( 'introhtml' ) ;
+        if (undefined == window.glfusionEditorBaseUrl) {
+            glfusionEditorBaseUrl = geeklogEditorBaseUrl;
+        }
+        if (undefined == window.glfusionEditorBasePath) {
+            glfusionEditorBasePath = geeklogEditorBasePath;
+        }
         oFCKeditor1.BasePath = glfusionEditorBasePath;
         oFCKeditor1.Config['CustomConfigurationsPath'] = glfusionEditorBaseUrl + '/fckeditor/myconfig.js';
         oFCKeditor1.ToolbarSet = 'editor-toolbar4' ;
@@ -49,6 +55,12 @@
         oFCKeditor1.ReplaceTextarea() ;
 
         var oFCKeditor2 = new FCKeditor( 'bodyhtml' ) ;
+        if (undefined == window.glfusionEditorBaseUrl) {
+            glfusionEditorBaseUrl = geeklogEditorBaseUrl;
+        }
+        if (undefined == window.glfusionEditorBasePath) {
+            glfusionEditorBasePath = geeklogEditorBasePath;
+        }
         oFCKeditor2.BasePath = glfusionEditorBasePath ;
         oFCKeditor2.Config['CustomConfigurationsPath'] = glfusionEditorBaseUrl + '/fckeditor/myconfig.js';
         oFCKeditor2.ToolbarSet = 'editor-toolbar4' ;

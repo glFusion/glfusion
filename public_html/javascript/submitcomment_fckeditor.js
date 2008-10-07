@@ -34,6 +34,12 @@
 
     window.onload = function() {
         var oFCKeditor1 = new FCKeditor( 'comment_html' ) ;
+        if (undefined == window.glfusionEditorBaseUrl) {
+            glfusionEditorBaseUrl = geeklogEditorBaseUrl;
+        }
+        if (undefined == window.glfusionEditorBasePath) {
+            glfusionEditorBasePath = geeklogEditorBasePath;
+        }
         oFCKeditor1.BasePath = glfusionEditorBasePath;
         oFCKeditor1.Config['CustomConfigurationsPath'] = glfusionEditorBaseUrl + '/fckeditor/myconfig.js';
         if ( undefined != window.glfusionStyleBasePath ) {
