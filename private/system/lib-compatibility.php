@@ -76,6 +76,9 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
         ));
     $header->set_var( 'xhtml', XHTML );
 
+    $cacheID = DB_getItem($_TABLES['vars'],'value','name="cacheid"');
+    $header->set_var('cacheid',$cacheID);
+
     // get topic if not on home page
     if( !isset( $_GET['topic'] ))
     {
@@ -344,6 +347,12 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
             next( $plugin_menu );
         }
     }
+
+    $headercode = '<script type="text/javascript" src="'.$_CONF['site_url'].'/javascript/mootools/mootools-release-1.11.packed.js"></script>' . $headercode;
+
+    // Call any plugin that may want to include extra Meta tags
+    // or Javascript functions
+    $header->set_var( 'plg_headercode', $headercode . PLG_getHeaderCode() );
 
     // Call to plugins to set template variables in the header
     PLG_templateSetVars( 'header', $header );
