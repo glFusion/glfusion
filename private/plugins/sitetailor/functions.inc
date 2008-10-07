@@ -47,7 +47,7 @@ if (file_exists ($langfile)) {
 }
 
 require_once $_CONF['path'] . 'plugins/sitetailor/config.php';
-require_once($_CONF['path'] . 'plugins/sitetailor/classes/classMenuElement.php');
+require_once $_CONF['path'] . 'plugins/sitetailor/classes/classMenuElement.php';
 
 global $stMenu;
 
@@ -144,6 +144,71 @@ function plugin_getheaderjs_sitetailor() {
         }
     }
     return $st_js;
+}
+
+function plugin_getheadercode_sitetailor() {
+    global $_CONF, $_ST_CONF, $stMenu, $themeAPI;
+
+    if ( $themeAPI > 1 ) {
+        return '';
+    }
+
+    $st_header = '';
+
+    $st_header = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $_CONF['site_url'] . '/admin/plugins/sitetailor/css/mooRainbow.css"' . XHTML . ">" . LB;
+
+    if ( is_array($stMenu) ) {
+        foreach ($stMenu AS $menu) {
+            if ( $menu['active'] == 1 ) {
+                $cacheInstance = 'stmenu_css_' . $menu['menu_id'] . '__' . $_CONF['theme'];
+                $retval = CACHE_check_instance($cacheInstance, 0);
+                if ( $retval ) {
+                    $st_header .= '<style>'.$retval.'</style>';
+                } else {
+                    $ms = new Template( $_CONF['path'].'plugins/sitetailor/templates/' );
+                    switch ($menu['menu_type']) {
+                        case 1 :    // horizontal with multi-level
+                            $stylefile = 'gl_horizontal-cascading.thtml';
+                            break;
+                        case 2 :    // horizontal with no cascading menus
+                            $stylefile = 'gl_horizontal-simple.thtml';
+                            break;
+                        case 3 :
+                            $stylefile = 'gl_vertical-cascading.thtml';
+                            break;
+                        case 4 :
+                            $stylefile = 'gl_vertical-simple.thtml';
+                            break;
+                        default :
+                            $stylefile = 'gl_horizontal-cascading.thtml';
+                            break;
+                    }
+                    $ms->set_file( array(
+                        'style'        => $stylefile,
+                    ));
+                    $ms->set_var('menu_id',$menu['menu_id']);
+                    if ( is_array($menu['config']) ) {
+                        foreach ($menu['config'] AS $name => $value ) {
+                            if ( $name == 'use_images' && $value == 0 ) {
+                                continue;
+                            }
+                            $ms->set_var($name,$value);
+                        }
+                    }
+                    if ( $menu['config']['menu_alignment'] == 1 ) {
+                        $ms->set_var('alignment','left');
+                    } else {
+                        $ms->set_var('alignment','right');
+                    }
+                    $ms->parse ('output', 'style');
+                    $fCSS = $ms->finish ($ms->get_var('output'));
+                    CACHE_create_instance($cacheInstance, $fCSS, 0);
+                    $st_header .= '<style>'.$fCSS.'</style>';
+                }
+            }
+        }
+    }
+    return $st_header;
 }
 
 /**
