@@ -391,7 +391,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     CACHE_remove_instance('forumcb');
 
                     COM_updateSpeedlimit ('forum');
-                    $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$id&amp;lastpost=true#$lastid";
+                    $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$id&lastpost=true#$lastid";
                     forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19'],true,$forum);
                 }
 
@@ -1058,7 +1058,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     }
     if(($method != 'newtopic' && $_POST['editpost'] != 'yes') && ($method == 'postreply' || $preview == 'Preview')) {
         if ($CONF_FORUM['show_topicreview']) {
-            echo "<iframe src=\"{$_CONF['site_url']}/forum/viewtopic.php?mode=preview&amp;showtopic=$id&amp;onlytopic=1&amp;lastpost=true\" height=\"300\" width=\"100%\"></iframe>";
+            echo "<iframe src=\"{$_CONF['site_url']}/forum/viewtopic.php?mode=preview&amp;showtopic=$id&amp;onlytopic=1&lastpost=true\" height=\"300\" width=\"100%\"></iframe>";
         }
     }
     //End Topic Review
