@@ -44,7 +44,7 @@ js_out();
  * Output all needed JavaScript
  */
 function js_out(){
-    global $_CONF, $_PLUGINS;
+    global $_CONF, $_PLUGINS, $themeAPI;
 
     $cacheID = 'js';
     $cacheFile = CACHE_instance_filename($cacheID,0);
@@ -63,6 +63,9 @@ function js_out(){
 
     );
 
+    if ( $themeAPI < 2 ) {
+        $files[] = $_CONF['path_html'] . 'javascript/sitetailor_ie6vertmenu.js';
+    }
     /*
      * Check to see if the theme has any JavaScript to include...
      */
@@ -120,7 +123,7 @@ function js_out(){
         http_conditionalRequest(filemtime($cacheFile));
         // readfile($cacheFile);
         $js = file_get_contents($cacheFile);
-        echo $js;
+        echo $js . LB;
         flush();
         exit;
     } else {
