@@ -73,6 +73,8 @@ function nouveau_themeJS() {
     global $_CONF;
 
     $js = array();
+// uncomment the line below to enable gl_moochronometer header rotator
+// MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating
 //    $js[] = $_CONF['path_html'] .'javascript/mootools/gl_moochronometer.js';
     $js[] = $_CONF['path_layout'] .'js/gltips.js';
 
