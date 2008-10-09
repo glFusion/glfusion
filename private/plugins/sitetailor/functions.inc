@@ -208,6 +208,7 @@ function plugin_getheadercode_sitetailor() {
             }
         }
     }
+    $st_header .= "<script defer type=\"text/javascript\" src=\"" . $_CONF['site_url'] . '/javascript/sitetailor_ie6vertmenu.js"' . XHTML . '>' . LB;
     return $st_header;
 }
 
