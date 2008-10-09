@@ -1590,6 +1590,15 @@ margin:15px 0;
 padding:10px 10px 10px 45px;
 }
 
+/* start gl_moomenu css */
+#gl_moomenu {
+background: url(images/menu/menu_bg.gif) repeat;
+height:2.2em;
+position:relative;
+z-index:50;
+margin:0;
+}
+
 #gl_moomenu a {
 text-decoration:none;
 white-space:nowrap;
@@ -1602,14 +1611,6 @@ height:2.2em;
 font-size:1em;
 padding:0 1.2em;
 color:#CCCCCC;
-}
-
-#gl_moomenu {
-background: url(images/menu/menu_bg.gif) repeat;
-height:2.2em;
-position:relative;
-z-index:50;
-margin:0;
 }
 
 #gl_moomenu ul {
@@ -1722,6 +1723,7 @@ float:none;
 width:100%;
 }
 
+/* start gl_moomorph css */
 .morph-start {
 border:1px solid #000;
 font-weight:700;
@@ -1729,6 +1731,7 @@ width:95%;
 margin:10px;
 }
 
+/* start gl_moorotator css */
 #gl_moorotator {
 position:relative;
 z-index:1;
@@ -1776,6 +1779,23 @@ background-position:0 -34px;
 background-position:0 -51px;
 }
 
+#gl_moorotator .controls img,#gl_mooticker .controls img {
+background-image:url(layout/nouveau/images/gl_mooticker_controls.png);
+cursor:pointer;
+height:15px;
+margin-right:5px;
+width:15px;
+}
+
+#gl_moorotator .control-prev,div#frame div.button#left:hover,div#frame div.button#left.hover,div#frame div.button#right:hover,div#frame div.button#right.hover,#gl_mooticker .control-prev {
+background-position:0 0;
+}
+
+#gl_moorotator .control-next,#gl_mooticker .control-next {
+background-position:0 -17px;
+}
+
+/* start gl_mooslide css */
 .gl_slide {
 margin:0 auto;
 }
@@ -1787,7 +1807,7 @@ border:0;
 display:none;
 }
 
-ul#gl_slide-toolbar {
+ul#gl_slide-toolbar { /* The toolbar for the content box */
 text-align:center;
 list-style:none;
 clear:both;
@@ -1804,9 +1824,14 @@ cursor:pointer;
 list-style:none;
 margin-left:3px;
 font-weight:700;
-background:url(layout/nouveau/images/header-bg.png) repeat bottom;
+background:#4d77cc;
 color:#FFF;
 padding:0 15px;
+}
+
+#gl_slide-toolbar li.current {
+background:#D7D7D7 none repeat scroll 0 0;
+color:#333333;
 }
 
 div#frame {
@@ -1861,6 +1886,7 @@ background:#D7D7D7;
 color:#333;
 }
 
+/* start gl_moospring css */
 #gl_moospring {
 background:url(layout/nouveau/images/joinus.jpg) no-repeat scroll 100%;
 height:100px;
@@ -1907,8 +1933,13 @@ border-right:5px solid #FFF;
 background:url(layout/nouveau/images/joinus.jpg) no-repeat;
 }
 
+/* start gl_mootickerRSS css */
 #gl_mooticker {
 padding:10px 0;
+}
+
+#gl_mooticker a {
+text-decoration:none;
 }
 
 #gl_mooticker ul {
@@ -1931,6 +1962,7 @@ display:block;
 position:absolute;
 }
 
+/* start gl_mootip css */
 .tool-tip {
 color:#fff;
 width:139px;
@@ -1951,6 +1983,7 @@ font-size:11px;
 background:url(layout/nouveau/images/gl_mootip_bg.png) bottom right;
 padding:4px 8px 8px;
 }
+/* end gl_moo based css */
 
 q {
 background-color:transparent;
@@ -2134,26 +2167,6 @@ color:#FFF;
 font-style:normal;
 font-weight:400;
 text-decoration:none;
-}
-
-#gl_moomenu a:hover,#gl_mooticker a {
-text-decoration:none;
-}
-
-#gl_moorotator .controls img,#gl_mooticker .controls img {
-background-image:url(layout/nouveau/images/gl_mooticker_controls.png);
-cursor:pointer;
-height:15px;
-margin-right:5px;
-width:15px;
-}
-
-#gl_moorotator .control-prev,div#frame div.button#left:hover,div#frame div.button#left.hover,div#frame div.button#right:hover,div#frame div.button#right.hover,#gl_mooticker .control-prev {
-background-position:0 0;
-}
-
-#gl_moorotator .control-next,#gl_mooticker .control-next {
-background-position:0 -17px;
 }
 
 .blocklist ul {
