@@ -853,6 +853,32 @@ function STORY_deleteStory($sid)
 }
 
 /**
+* Checks and Updates the featured status of all articles.
+*
+* Checks to see if any articles that were published for the future have been
+* published and, if so, will see if they are featured.  If they are featured,
+* this will set old featured article (if there is one) to normal
+*
+*/
+
+function STORY_featuredCheck()
+{
+    global $_TABLES;
+
+    $curdate = date( "Y-m-d H:i:s", time() );
+
+    if( DB_getItem( $_TABLES['stories'], 'count(*)', "featured = 1 AND draft_flag = 0 AND date <= '$curdate'" ) > 1 )
+    {
+        // OK, we have two featured stories, fix that
+
+        $sid = DB_getItem( $_TABLES['stories'], 'sid', "featured = 1 AND draft_flag = 0 ORDER BY date LIMIT 1" );
+        DB_query( "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE sid = '$sid'" );
+    }
+}
+
+
+
+/**
  * Return true since this component supports webservices
  *
  * @return  bool	True, if webservices are supported
