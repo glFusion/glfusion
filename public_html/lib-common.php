@@ -2246,7 +2246,7 @@ function COM_showTopics( $topic='' )
 /**
 * Shows the user their menu options
 *
-* This shows the average joe use their menu options. This is the user block on right side
+* This shows the average joe use their menu options. This is the user block on left side
 *
 * @param        string      $help       Help file to show
 * @param        string      $title      Title of Menu
