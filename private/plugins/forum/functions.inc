@@ -1257,7 +1257,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $topicinfo = "{$LANG_GF01['STARTEDBY']},{$A['name']},";
             }
 
-            $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}:{$A['views']}, {$LANG_GF01['REPLIES']}:{$A['replies']}<br" . XHTML . ">";
+            $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}: {$A['views']}, {$LANG_GF01['REPLIES']}: {$A['replies']}<br" . XHTML . ">";
 
             if (empty ($A['last_reply_rec']) || $A['last_reply_rec'] < 1) {
                 $lastid = $A['id'];
