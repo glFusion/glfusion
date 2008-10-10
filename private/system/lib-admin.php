@@ -414,7 +414,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         } else {
             $admin_templates->set_var('class', "admin-list-headerfield");
         }
-        if ( $header_arr[$i]['nowrap'] == true ) {
+        if (isset($header_arr[$i]['nowrap'])) {
             $admin_templates->set_var('header_column_style','style="white-space:nowrap;"');
         }
         $admin_templates->set_var('header_text', $header_text);
