@@ -873,8 +873,8 @@ function forum_chkUsercanAccess($secure=false) {
 
 function forum_xchsmilies($message,$reverse=false) {
 
-    $search = array(":D", ":)", ":(", "8O", ":?", "B)", ":lol:", ":x", ":P" ,":oops:", ":o",":cry:",
-        ":evil:", ":twisted:", ":roll:", ";)", ":!:", ":question:", ":idea:", ":arrow:", ":|",
+    $search = array(":D", ":)", ":(", "8O", ":?", "B)", ":cool:", ":lol:", ":x", ":P" ,":oops:", ":o",":cry:",
+        ":evil:", ":twisted:", ":roll:", ";)", ":wink:", ":!:", ":question:", ":idea:", ":arrow:", ":|",
         ":mrgreen:",":mrt:",":love:",":cat:");
     $replace = array(
     "<img style=\"vertical-align:middle;\" src='images/smilies/biggrin.gif' alt='Big Grin'" . XHTML . ">",
@@ -882,6 +882,7 @@ function forum_xchsmilies($message,$reverse=false) {
     "<img style=\"vertical-align:middle;\" src='images/smilies/frown.gif' alt='Frown'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/eek.gif' alt='Eek!'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/confused.gif' alt='Confused'" . XHTML . ">",
+    "<img style=\"vertical-align:middle;\" src='images/smilies/cool.gif' alt='Cool'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/cool.gif' alt='Cool'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/lol.gif' alt='Laughing Out Loud'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/mad.gif' alt='Angry'" . XHTML . ">",
@@ -892,6 +893,7 @@ function forum_xchsmilies($message,$reverse=false) {
     "<img style=\"vertical-align:middle;\" src='images/smilies/evil.gif' alt='Evil'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/twisted.gif' alt='Twisted Evil'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/rolleyes.gif' alt='Rolling Eyes'" . XHTML . ">",
+    "<img style=\"vertical-align:middle;\" src='images/smilies/wink.gif' alt='Wink'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/wink.gif' alt='Wink'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/exclaim.gif' alt='Exclaimation'" . XHTML . ">",
     "<img style=\"vertical-align:middle;\" src='images/smilies/question.gif' alt='Question'" . XHTML . ">",
