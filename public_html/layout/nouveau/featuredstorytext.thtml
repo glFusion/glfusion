@@ -1,16 +1,17 @@
 <div class="story-featured">
     <span class="story-icons">
 <!-- displays the Submit to Digg.com icon. For more info visit http://digg.com/tools/integrate -->
-<span style="padding-right:3px;">
+		{!if digg_enabled}
+		<span style="padding-right:3px;">
 <script type="text/javascript">
 digg_url = '{article_url}'; //permalink to article
 digg_skin = 'icon'; //icon, compact, normal(if left blank)
 digg_window = 'new'; //open's Digg.com window in a new window, if left blank will use same window
 </script>
 <script src="http://digg.com/tools/diggthis.js" type="text/javascript"></script>
-</span>
+		</span>
+		{!endif}
 <!-- end Digg.com icon code -->
-
         {email_icon}
         {print_icon}
         {pdf_icon}
