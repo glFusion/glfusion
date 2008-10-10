@@ -309,8 +309,8 @@ function INSTALLER_install($A)
     $vars = Array('__groups' => Array(), '__features' => Array(), '__blocks' => Array());
     $reverse = Array();
     foreach ($A as $meta => $step) {
-        if ($meta == 'installer') {
-        } elseif ($meta == 'plugin') {
+        if ($meta === 'installer') { // must use === when since 0 == 'anystring' is true
+        } elseif ($meta === 'plugin') {
             if (!isset($meta['name'])) {
                 COM_errorLog("Missing plugin name!");
                 INSTALLER_fail($reverse);
