@@ -147,6 +147,9 @@ $c->del('allowed_protocols','Core');
 
 $c->add('showtopic_review_order', $_FF_DEFAULT['showtopic_review_order'], 'select',0, 0, 5, 45, true, 'forum');
 
+// New 2008-10-10
+$c->add('digg_enabled',1,'select',7,31,0,2000,TRUE);
+
 // probably need to clear the template cache so do it here
 CTL_clearCache();
 

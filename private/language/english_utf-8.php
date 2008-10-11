@@ -1810,6 +1810,7 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => "Skip HTML Filter for Root?",
     'allowed_protocols' => "Allowed Protocols",
     'disable_autolinks' => "Disable Autolinks?",
+    'digg_enabled' => "Show Digg.com Links?",
     'censormode' => "Censor Mode?",
     'censorreplace' => "Censor Replace Text",
     'censorlist' => "Censor List",

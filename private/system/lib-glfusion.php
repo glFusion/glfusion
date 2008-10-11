@@ -35,6 +35,7 @@ if (!defined ('GVERSION')) {
 }
 
 $TEMPLATE_OPTIONS['hook']['set_root'] = 'glf_template_set_root';
+$TEMPLATE_OPTIONS['default_vars']['digg_enabled'] = $_CONF['digg_enabled'];
 
 function glf_template_set_root($root) {
     global $_CONF;
