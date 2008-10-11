@@ -35,7 +35,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-$themeAPI = 2;
+//set glFusion style COM_siteHeader/Footer functions.
+//Comment out to use old Geeklog functions.
+$themeAPI = 2; 
 
 $_IMAGE_TYPE = 'png';
 
@@ -80,39 +82,4 @@ function nouveau_themeJS() {
 
     return($js);
 }
-
-
-// A portal staticpage (that bases itself on a user created proper portal block called gl_mootickerRSS)
-//modified from LWC's forum post http://www.geeklog.net/forum/viewtopic.php?showtopic=67396 by Mark R. Evans and Joe Mucchiello
-function gl_mootickerRSS() {
-	global $_CONF, $_TABLES;
-	$retval = '';
-	$result = DB_query("SELECT *, rdfupdated as date FROM
-{$_TABLES['blocks']} WHERE name='gl_mootickerRSS'");
-	$numRows = DB_numRows($result);
-	if ( $numRows < 1 || $result == NULL ) {
-		return $retval;
-	}
-	$B = DB_fetchArray($result);
-	if ( $B['is_enabled'] == 0 ) {
-		$retval = <<<EOT
-<script type="text/javascript"
-src="{site_url}/javascript/mootools/gl_mooticker.js"></script>
-<script type="text/javascript">
-         window.addEvent('load', function() {
-                 var x = new MooTicker('gl_mooticker', {
-                         controls: true,
-                         delay: 2500,
-                         duration: 600 });
-         });
-</script>
-<div id="gl_mooticker">
-   <span class="tickertitle">Latest News:</span>
-EOT;
-		$retval = str_replace('{site_url}',$_CONF['site_url'] , $retval);
-		$retval .= $B['content'] . '</div>';
-	}
-	return $retval;
-}
-
 ?>
