@@ -87,15 +87,19 @@ EOS;
 
     return $display;
 }
-// add you own static pages here.
-//$slides = Array('staticpage id 1', 'staticpage id 2');
-//$display = COM_siteHeader();
-// test the parameters, or not
-//$display .= WIDGET_mooslide($slides);
-//$display .= WIDGET_mooslide($slides, 550, 160, 'div id of mooSlide');
-//$display .= COM_siteFooter();
-//echo $display;
 
+/*  Sample staticpage:
+
+USES_lib_widget();
+// add you own static pages here.
+$slides = Array('staticpage id 1', 'staticpage id 2');
+$display = COM_siteHeader();
+// test the parameters, or not
+$display .= WIDGET_mooslide($slides);
+$display .= WIDGET_mooslide($slides, 550, 160, 'div id of mooSlide');
+$display .= COM_siteFooter();
+echo $display;
+*/
 
 // A portal staticpage (that bases itself on a user created proper portal block called gl_mootickerRSS)
 //modified from LWC's forum post http://www.geeklog.net/forum/viewtopic.php?showtopic=67396 by Mark R. Evans and Joe Mucchiello
