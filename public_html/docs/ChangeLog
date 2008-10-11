@@ -2,6 +2,13 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Added digg link support and $_CONF['digg_enabled'] (Eric and Joe)
+- Created USES_ family of functions for included libraries not loaded 
+  by lib-common.php (Joe)
+- Moved COM_featuredCheck() to STORY_featuredCheck() (Joe)
+- Added local cache to (and reformatted code in) COM_getDisplayName() (Joe)
+- Added COM_showLoginRequiredMsg() - Will propogate calls to it throughout
+  glFusion in v1.2.0 (Joe)
 - Added blank index.html pages for directory security in various places in the
   public_html/ path (Eric)
 - Added new icons to match those defined in style.css (Eric)
