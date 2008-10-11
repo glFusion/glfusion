@@ -92,6 +92,25 @@ if( function_exists('set_error_handler') )
     }
 }
 
+/**
+* Strip slashes from a string only when magic_quotes_gpc = on.
+* This has to be way up here in the file before COM_stripslashes is used.
+*
+* @param   string  $text  The text
+* @return  string  The text, possibly without slashes.
+*/
+if (get_magic_quotes_gpc() == 1) {
+    function COM_stripslashes($text)
+    {
+        return stripslashes($text);
+    }
+} else {
+    function COM_stripslashes($text)
+    {
+        return $text;
+    }
+}
+
 require_once 'siteconfig.php' ;
 require_once $_CONF['path_system'] . 'classes/config.class.php';
 
@@ -5544,22 +5563,6 @@ function COM_getTopicSQL( $type = 'WHERE', $u_id = 0, $table = '' )
     }
 
     return $topicsql;
-}
-
-/**
-* Strip slashes from a string only when magic_quotes_gpc = on.
-*
-* @param   string  $text  The text
-* @return  string  The text, possibly without slashes.
-*/
-if (get_magic_quotes_gpc() == 1) {
-    function COM_stripslashes($text) {
-        return stripslashes($text);
-    }
-} else {
-    function COM_stripslashes($text) {
-        return $text;
-    }
 }
 
 /**
