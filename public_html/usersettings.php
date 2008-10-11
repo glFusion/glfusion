@@ -1151,10 +1151,10 @@ function userprofile ($user, $msg = 0)
         $edit_icon = '<img src="' . $_CONF['layout_url'] . '/images/edit.'
              . $_IMAGE_TYPE . '" alt="' . $LANG_ADMIN['edit']
              . '" title="' . $LANG_ADMIN['edit'] . '"' . XHTML . '>';
-        $edit_link_url = COM_createLink(
+        $edit_link_url = '<li>' . COM_createLink(
             $edit_icon,
             "{$_CONF['site_admin_url']}/user.php?mode=edit&amp;uid={$A['uid']}"
-        );
+        ) . '</li>';
         $user_templates->set_var ('edit_link', $edit_link_url);
     }
 
