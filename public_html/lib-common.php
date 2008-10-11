@@ -5552,14 +5552,14 @@ function COM_getTopicSQL( $type = 'WHERE', $u_id = 0, $table = '' )
 * @param   string  $text  The text
 * @return  string  The text, possibly without slashes.
 */
-function COM_stripslashes( $text )
-{
-    if( get_magic_quotes_gpc() == 1 )
-    {
-        return( stripslashes( $text ));
+if (get_magic_quotes_gpc() == 1) {
+    function COM_stripslashes($text) {
+        return stripslashes($text);
     }
-
-    return( $text );
+} else {
+    function COM_stripslashes($text) {
+        return $text;
+    }
 }
 
 /**
