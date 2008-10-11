@@ -137,9 +137,6 @@ if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
 // | Library Includes: You shouldn't have to touch anything below here         |
 // +---------------------------------------------------------------------------+
 
-//Include widget functionality
-require_once ($_CONF['path_system'] . 'lib-widgets.php');
-
 /**
 * If needed, add our PEAR path to the list of include paths
 *
