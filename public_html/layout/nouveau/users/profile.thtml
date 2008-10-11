@@ -20,11 +20,13 @@ function popitup(url)
 							<img src="{layout_url}/images/mail.png" alt="{lang_sendemail}" title="{lang_sendemail}"{xhtml}>
 						</a>
 					</li>
+					{!if user_homepage}
 					<li>
 						<a href="{user_homepage}" target="_blank">
 							<img src="{layout_url}/images/home.png" alt="{lang_homepage}: {user_homepage}" title="{lang_homepage}: {user_homepage}"{xhtml}>
 						</a>
 					</li>
+					{!endif}
 					{!if user_location}
 					<li>
 						<img src="{layout_url}/images/location.png" alt="{lang_location}: {user_location}" title="{lang_location}: {user_location}"{xhtml}>
