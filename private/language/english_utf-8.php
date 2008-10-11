@@ -1941,4 +1941,11 @@ $LANG_configselects['Core'] = array(
 
 );
 
+###############################################################################
+# lib-widgets.php
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News'
+);
+
 ?>
