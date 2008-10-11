@@ -1902,6 +1902,7 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 }
 
 /**
+* DEPRICATED: Use STORY_featuredCheck() instead
 * Checks and Updates the featured status of all articles.
 *
 * Checks to see if any articles that were published for the future have been
@@ -1912,17 +1913,8 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 
 function COM_featuredCheck()
 {
-    global $_TABLES;
-
-    $curdate = date( "Y-m-d H:i:s", time() );
-
-    if( DB_getItem( $_TABLES['stories'], 'count(*)', "featured = 1 AND draft_flag = 0 AND date <= '$curdate'" ) > 1 )
-    {
-        // OK, we have two featured stories, fix that
-
-        $sid = DB_getItem( $_TABLES['stories'], 'sid', "featured = 1 AND draft_flag = 0 ORDER BY date LIMIT 1" );
-        DB_query( "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE sid = '$sid'" );
-    }
+    USES_lib_story();
+    STORY_featuredCheck();
 }
 
 /**
@@ -3960,48 +3952,43 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
 {
     global $_CONF, $_TABLES, $_USER;
 
-    if ($uid == '')
-    {
-        if( COM_isAnonUser() )
-        {
+    static $cache = Array();
+
+    if ($uid == '') {
+        if (COM_isAnonUser()) {
             $uid = 1;
-        }
-        else
-        {
+        } else {
             $uid = $_USER['uid'];
         }
     }
-
-    if( empty( $username ))
-    {
-        $query = DB_query( "SELECT username, fullname, remoteusername, remoteservice FROM {$_TABLES['users']} WHERE uid='$uid'" );
-        list( $username, $fullname, $remoteusername, $remoteservice ) = DB_fetchArray( $query );
+    
+    if (array_key_exists($uid, $cache)) {
+        return $cache[$uid];
     }
 
-    if( !empty( $fullname ) && ($_CONF['show_fullname'] == 1 ))
-    {
-        return $fullname;
+    if (empty($username)) {
+        $query = DB_query("SELECT username, fullname, remoteusername, remoteservice FROM {$_TABLES['users']} WHERE uid='$uid'");
+        list($username, $fullname, $remoteusername, $remoteservice) = DB_fetchArray($query);
     }
-    else if(( $_CONF['user_login_method']['3rdparty'] || $_CONF['user_login_method']['openid'] ) && !empty( $remoteusername ))
-    {
-        if( !empty( $username ))
-        {
+    $ret = $username;
+    if (!empty($fullname) && ($_CONF['show_fullname'] == 1)) {
+        $ret = $fullname;
+    } else if (($_CONF['user_login_method']['3rdparty'] || $_CONF['user_login_method']['openid']) && !empty($remoteusername)) {
+        if (!empty($username)) {
             $remoteusername = $username;
         }
 
-        if( $_CONF['show_servicename'] )
-    {
-        return "$remoteusername@$remoteservice";
-    }
-        else
-        {
-            return $remoteusername;
+        if ($_CONF['show_servicename']) {
+            $ret = "$remoteusername@$remoteservice";
+        } else {
+            $ret = $remoteusername;
         }
     }
 
-    return $username;
+    $cache[$uid] = $ret;
+    return $ret;
 }
-
+ 
 
 /**
 * Adds a hit to the system
@@ -4530,6 +4517,34 @@ function COM_showMessage($msg, $plugin = '')
 
     return $retval;
 }
+
+
+/**
+* Creates a standard "login required" message block
+*
+* @return     string  HTML block with message
+*/
+function COM_showLoginRequiredMsg()
+{
+    global $LANG_LOGIN, $_CONF;
+    
+    $display = COM_startBlock($LANG_LOGIN[1], '', COM_getBlockTemplate('_msg_block', 'header'));
+    $T = new Template($_CONF['path_layout'] . 'submit');
+    $T->set_file('login', 'submitloginrequired.thtml');
+    $T->set_var('xhtml', XHTML);
+    $T->set_var('site_url', $_CONF['site_url']);
+    $T->set_var('site_admin_url', $_CONF['site_admin_url']);
+    $T->set_var('layout_url', $_CONF['layout_url']);
+    $T->set_var('login_message', $LANG_LOGIN[2]);
+    $T->set_var('lang_login', $LANG_LOGIN[3]);
+    $T->set_var('lang_newuser', $LANG_LOGIN[4]);
+    $T->parse('output', 'login');
+    $display .= $T->finish($T->get_var('output'));
+    $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+    
+    return $display;
+}
+
 
 
 /**
@@ -6741,6 +6756,72 @@ function CMT_updateCommentcodes() {
     }
 }
 
+
+/**
+ * Loads the specified library or class normally not loaded by lib-common.php
+ *
+ * This allows use to move these files, the functions in the files, etc without
+ * breaking existing code.
+ */
+function USES_lib_admin() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-admin.php';
+}
+function USES_lib_comments() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-comment.php';
+}
+function USES_lib_image() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'imglib/lib-image.php';
+}
+function USES_lib_install() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-install.php';
+}
+function USES_lib_pingback() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-pingback.php';
+}
+function USES_lib_scrub() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-scrub.php';
+}
+function USES_lib_story() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-story.php';
+}
+function USES_lib_trackbacks() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-trackbacks.php';
+}
+function USES_lib_user() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-user.php';
+}
+function USES_lib_widgets() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-widgets.php';
+}
+function USES_class_navbar() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'classes/navbar.class.php';
+}
+function USES_class_search() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'classes/search.class.php';
+}
+function USES_class_story() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'classes/story.class.php';
+}
+function USES_class_upload() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'classes/upload.class.php';
+}
+
+
+
 // Now include all plugin functions
 foreach( $_PLUGINS as $pi_name )
 {
@@ -6758,4 +6839,5 @@ if( $_CONF['cron_schedule_interval'] > 0 )
         PLG_runScheduledTask();
     }
 }
+
 ?>
