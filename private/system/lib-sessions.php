@@ -133,7 +133,9 @@ function SESS_sessionCheck()
                     $cookie_password = '';
                     $userpass = '';
                     if ($userid > 1) {
-                        $cookie_password = $_COOKIE[$_CONF['cookie_password']];
+                        if (array_key_exists($_CONF['cookie_password'], $_CONF)) {
+                            $cookie_password = $_COOKIE[$_CONF['cookie_password']];
+                        }
                         $userpass = DB_getItem ($_TABLES['users'], 'passwd',
                                                 "uid = $userid");
                     }
