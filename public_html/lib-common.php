@@ -2681,7 +2681,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $url = $_CONF['site_admin_url'] . '/mail.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01[105] );
-            $adminmenu->set_var( 'option_count', $LANG_ADMIN[na] );
+            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
 
             $menu_item = $adminmenu->parse( 'item',
                     ( $thisUrl == $url ) ? 'current' : 'option' );
@@ -2714,7 +2714,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             }
             else
             {
-                $adminmenu->set_var( 'option_count', $LANG_ADMIN[na] );
+                $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
             }
 
             $menu_item = $adminmenu->parse( 'item',
@@ -2746,7 +2746,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
 
             if( empty( $plg->numsubmissions ))
             {
-                $adminmenu->set_var( 'option_count', $LANG_ADMIN[na] );
+                $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
             }
             else
             {
@@ -2767,7 +2767,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $url = $_CONF['site_admin_url'] . '/database.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01[103] );
-            $adminmenu->set_var( 'option_count', $LANG_ADMIN[na] );
+            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
 
             $menu_item = $adminmenu->parse( 'item',
                     ( $thisUrl == $url ) ? 'current' : 'option' );
@@ -2779,7 +2779,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $url = $_CONF['site_admin_url'] . '/logview.php';
             $adminmenu->set_var( 'option_url', $url );
             $adminmenu->set_var( 'option_label', $LANG01['logview'] );
-            $adminmenu->set_var( 'option_count',$LANG_ADMIN[na]);
+            $adminmenu->set_var( 'option_count',$LANG_ADMIN['na']);
 
             $menu_item = $adminmenu->parse( 'item',
                     ( $thisUrl == $url ) ? 'current' : 'option' );
@@ -2791,7 +2791,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $adminmenu->set_var( 'option_url',
                                  $_CONF['site_url'] . '/docs/index.html' );
             $adminmenu->set_var( 'option_label', $LANG01[113] );
-            $adminmenu->set_var( 'option_count', $LANG_ADMIN[na] );
+            $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
             $menu_item = $adminmenu->parse( 'item', 'option' );
             $link_array[$LANG01[113]] = $menu_item;
         }
@@ -2827,7 +2827,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         $url = $_CONF['site_admin_url'] . '/index.php';
         $adminmenu->set_var('option_url', $url);
         $adminmenu->set_var('option_label', $LANG29[34]);
-        $adminmenu->set_var('option_count', $LANG_ADMIN[na]);
+        $adminmenu->set_var('option_count', $LANG_ADMIN['na']);
         $menu_item = $adminmenu->parse('item', ($thisUrl == $url) ? 'current' : 'option' );
         $link_array = array($menu_item) + $link_array;
 
@@ -6658,8 +6658,8 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
 
 function COM_checkVersion($have, $need) {
 
-    list($major,$minor,$rev,$extra) = explode('.',$have);
-    list($requireMajor,$requireMinor,$requireRev,$requireExtra) = explode('.',$need);
+    list($major,$minor,$rev,$extra) = explode('.',$have.'....');
+    list($requireMajor,$requireMinor,$requireRev,$requireExtra) = explode('.',$need.'....');
     if ( !isset($major) )
         $major = 0;
     if ( !isset($minor) )
