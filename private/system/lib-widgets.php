@@ -2,17 +2,17 @@
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// |lib-widgets.php                                                            |
+// |lib-widgets.php                                                           |
 // |                                                                          |
-// | A place for widget functions, mootools based or otherwise |
+// | A place for widget functions, mootools based or otherwise                |
 // +--------------------------------------------------------------------------+
-// | $Id:: lib-widgets.php 3334 2008-10-10 02:31:21Z ewarren                   $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Joe Mucchiello         jmucchiello AT yahoo DOT com                      |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Eric Warren         eakwarren AT gmail DOT com                      |
+// | Eric Warren            eakwarren AT gmail DOT com                        |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -40,11 +40,11 @@ function WIDGET_mooslide($pages, $width = 550, $height = 160, $id = 'gl_slide')
 //standalone page example is at the bottom of the function.
 {
     global $_TABLES, $_CONF;
-    
+
     if (count($pages) == 0) {
         return '';
     }
-    
+
     $display = <<<EOJ
 <script type="text/javascript" src="{$_CONF['site_url']}/javascript/mootools/gl_mooslide.js"></script>
 <script type="text/javascript">
@@ -64,14 +64,14 @@ function WIDGET_mooslide($pages, $width = 550, $height = 160, $id = 'gl_slide')
 		});
 	});
 </script>
- 
+
 <div id="$id" class="gl_slide">
 EOJ;
 
     $sql = "SELECT sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
          . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $pages))
          . ')';
-    
+
     $res = DB_query($sql);
     for ($i = 0; $A = DB_fetchArray($res); ++$i) {
         $content = SP_render_content($A['sp_content'], $A['sp_php']);
