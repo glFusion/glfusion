@@ -257,9 +257,9 @@ function plugin_getadminoption_sitetailor() {
     if (SEC_hasRights('sitetailor.admin') ) {
         return array(
             array($LANG_ST01['menu_builder'],$_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
-                  st_getImageFile('sitetailor-menubuilder.png')),
-            array($LANG_ST01['logo'],$_CONF['site_admin_url'] . '/plugins/sitetailor/logo.php',
-                  st_getImageFile('sitetailor.png'))
+                  DB_count($_TABLES['st_menus'])
+                  ),
+            array($LANG_ST01['logo'],$_CONF['site_admin_url'] . '/plugins/sitetailor/logo.php',0)
         );
     } else {
         return '';
