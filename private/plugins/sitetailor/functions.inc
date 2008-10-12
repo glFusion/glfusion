@@ -205,6 +205,11 @@ function plugin_getheadercode_sitetailor() {
                     } else {
                         $ms->set_var('alignment','right');
                     }
+                    if ( $themeAPI > 1 ) {
+                        $ms->set_var('themeapi','');
+                    } else {
+                        $ms->set_var('themeapi','1');
+                    }
                     $ms->parse ('output', 'style');
                     $fCSS = $ms->finish ($ms->get_var('output'));
                     CACHE_create_instance($cacheInstance, $fCSS, 0);
