@@ -165,7 +165,6 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
 $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
 $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
 $forum_outline_header->set_var('xhtml',XHTML);
-$forum_outline_header->set_var ('imgset', $CONF_FORUM['imgset']);
 $forum_outline_header->parse ('output', 'forum_outline_header');
 echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
@@ -280,7 +279,6 @@ if ($mode != 'preview') {
     $topicnavbar->set_var ('LANG_print', $LANG_GF01['PRINTABLE']);
     $topicnavbar->parse ('print_link', 'print');
 
-    $topicnavbar->set_var ('imgset', $CONF_FORUM['imgset']);
     $topicnavbar->set_var ('navbreadcrumbsimg','<img src="'.gf_getImage('nav_breadcrumbs').'" style="border:none;vertical-align:middle;" alt=""' . XHTML . '>');
     $topicnavbar->set_var ('navtopicimg','<img src="'.gf_getImage('nav_topic').'" style="border:none;vertical-align:middle;" alt=""' . XHTML . '>');
     $topicnavbar->set_var('forum_home',$LANG_GF01['INDEXPAGE']);
@@ -307,7 +305,6 @@ if ($mode != 'preview') {
     $preview_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $preview_header->set_file ('header', 'topicpreview_header.thtml');
     $preview_header->set_var ('xhtml',XHTML);
-    $preview_header->set_var ('imgset', $CONF_FORUM['imgset']);
     $preview_header->parse ('output', 'header');
     echo $preview_header->finish($preview_header->get_var('output'));
 }
@@ -390,14 +387,12 @@ if ($mode != 'preview') {
 
 $topic_footer->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page, $numpages));
 $topic_footer->set_var ('forum_id', $forum);
-$topic_footer->set_var ('imgset', $CONF_FORUM['imgset']);
 $topic_footer->parse ('output', 'topicfooter');
 echo $topic_footer->finish($topic_footer->get_var('output'));
 
 $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
 $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
 $forum_outline_footer->set_var ('xhtml',XHTML);
-$forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
 $forum_outline_footer->parse ('output', 'forum_outline_footer');
 echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
 

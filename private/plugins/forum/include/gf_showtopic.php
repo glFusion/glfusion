@@ -399,7 +399,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     $topictemplate->set_var ('numposts', isset($numposts) ? $numposts : '');
     $topictemplate->set_var ('location', isset($location) ? $location  : '');
     $topictemplate->set_var ('site_url', $_CONF['site_url']);
-    $topictemplate->set_var ('imgset', $CONF_FORUM['imgset']);
     $topictemplate->set_var ('topic_subject', $showtopic['subject']);
     $topictemplate->set_var ('LANG_ON2', $LANG_GF01['ON2']);
     $topictemplate->set_var ('mod_functions', isset($mod_functions) ? $mod_functions : '');

@@ -171,7 +171,6 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
         $addmod = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
         $addmod->set_file (array ('moderator'=>'mod_add.thtml'));
         $addmod->set_var ('action_url', $_CONF['site_admin_url'] . '/plugins/forum/mods.php');
-        $addmod->set_var ('imgset', $CONF_FORUM['imgset']);
         $addmod->set_var ('LANG_filtertitle', 'Type' );
         $addmod->set_var ('LANG_ADDMessage', $LANG_GF93['addmessage']);
         $addmod->set_var ('sel_forums', COM_optionList($_TABLES['gf_forums'], 'forum_id,forum_name'));
@@ -205,11 +204,9 @@ if(DB_count($_TABLES['gf_forums']) == 0) {
             }
         }
 
-//        $moderators = new Template($_CONF['path_layout'] . 'forum/layout/admin');
         $moderators = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
         $moderators->set_file (array ('moderators'=>'moderators.thtml','mod_record'=>'mod_record.thtml'));
         $moderators->set_var ('action_url', $_CONF['site_admin_url'] . '/plugins/forum/mods.php');
-        $moderators->set_var ('imgset', $CONF_FORUM['imgset']);
         $moderators->set_var ('userfilter', '');
         if (isset($_POST['filtermode']) && $_POST['filtermode'] == 'group') {
             $moderators->set_var ('groupfilter', 'checked="checked"');

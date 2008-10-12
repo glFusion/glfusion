@@ -366,7 +366,6 @@ $boards->set_file (array ('boards'=>'boards.thtml','categories' => 'board_catego
 $boards->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
 $boards->set_var ('siteurl', $_CONF['site_url']);
 $boards->set_var ('adminurl', $_CONF['site_admin_url']);
-$boards->set_var ('imgset', $CONF_FORUM['imgset']);
 $boards->set_var ('addcat', $LANG_GF93['addcat']);
 $boards->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
 $boards->set_var ('cat', $LANG_GF01['category']);

@@ -919,7 +919,6 @@ function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
     }
     $statusmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $statusmsg->set_file (array ('statusmsg'=>'statusmessage.thtml'));
-    $statusmsg->set_var ('imgset', $CONF_FORUM['imgset']);
     $statusmsg->set_var ('heading', $LANG_GF02['StatusHeading']);
     $statusmsg->set_var ('message', $message);
     if ($CONF_FORUM['use_autorefresh'] == "0") {
@@ -1289,7 +1288,6 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             $block->set_var ('lastpostid', $lastid);
             $block->set_var ('topicinfo', $topicinfo);
             $block->set_var ('cssid', $cssid);
-            $block->set_var ('img_dir', $CONF_FORUM['imgset']);
             $block->set_var ('forum_id', $A['forum']);
             $block->set_var ('forum_name', $A['forum_name']);
             $block->set_var ('topic_id', $A['id']);

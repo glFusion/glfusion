@@ -319,7 +319,6 @@ function ForumHeader($forum,$showtopic) {
     $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
     $forum_outline_header->set_var('xhtml',XHTML);
-    $forum_outline_header->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_outline_header->parse ('output', 'forum_outline_header');
     echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
@@ -355,7 +354,6 @@ function ForumHeader($forum,$showtopic) {
             $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
             $forum_outline_footer->set_var('xhtml',XHTML);
-            $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
             echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
             gf_siteFooter();
@@ -366,7 +364,6 @@ function ForumHeader($forum,$showtopic) {
     $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
     $forum_outline_footer->set_var ('xhtml',XHTML);
-    $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_outline_footer->parse ('output', 'forum_outline_footer');
     echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
 }
@@ -829,7 +826,6 @@ function alertMessage($message,$title='',$prompt='') {
         'outline_footer'=>'forum_outline_footer.thtml'));
 
     $alertmsg->set_var ('xhtml',XHTML);
-    $alertmsg->set_var ('imgset', $CONF_FORUM['imgset']);
     $alertmsg->set_var ('layout_url', $_CONF['layout_url']);
     $alertmsg->set_var ('site_url', $_CONF['site_url']);
     $alertmsg->set_var ('alert_title', $title);
@@ -857,7 +853,6 @@ function BaseFooter($showbottom=true) {
                   'footer'=>'forum_outline_footer.thtml'
         ));
         $footer->set_var ('xhtml',XHTML);
-        $footer->set_var ('imgset', $CONF_FORUM['imgset']);
         $footer->parse('outline_header','header',true);
         $footer->parse('outline_footer','footer',true);
         if ($forum == '') {
@@ -932,7 +927,7 @@ function f_forumjump($action='',$selected=0) {
     $forum_jump->set_var ('LANG_msg103', $LANG_GF02['msg103']);
     $forum_jump->set_var ('LANG_msg106', $LANG_GF02['msg106']);
     $forum_jump->set_var ('jumpheading', $LANG_GF02['msg103']);
-    $forum_jump->set_var ('imgset', $CONF_FORUM['imgset']);
+
     if ($action == '') {
         $forum_jump->set_var ('action', $_CONF['site_url'] . '/forum/index.php');
     } else {
@@ -952,7 +947,6 @@ function f_forumtime() {
     $forum_time->set_var('xhtml',XHTML);
     $timezone = strftime('%Z');
     $time = strftime('%I:%M %p');
-    $forum_time->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_time->set_var ('message', sprintf($LANG_GF02['msg121'],$timezone,$time));
     $forum_time->parse ('output', 'forum_time');
     return $forum_time->finish($forum_time->get_var('output'));
@@ -964,7 +958,7 @@ function f_legend() {
     $forum_legend = new Template($_CONF['path'] . 'plugins/forum/templates/footer/');
     $forum_legend->set_file (array ('forum_legend'=>'forum_legend.thtml'));
     $forum_legend->set_var ('xhtml',XHTML);
-    $forum_legend->set_var ('imgset', $CONF_FORUM['imgset']);
+
 
     if ($forum == '') {
         $forum_legend->set_var ('normal_msg', $LANG_GF02['msg194']);
@@ -1006,7 +1000,6 @@ function f_whosonline(){
     $forum_users->set_file (array ('forum_users'=>'forum_users.thtml'));
     $forum_users->set_var ('xhtml',XHTML);
     $forum_users->set_var ('LANG_msg07', $LANG_GF02['msg07']);
-    $forum_users->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_users->set_var ('onlineusers', $onlineusers);
     $forum_users->parse ('output', 'forum_users');
     return $forum_users->finish($forum_users->get_var('output'));
@@ -1048,7 +1041,6 @@ function f_forumrules() {
     $forum_rules = new Template($_CONF['path'] . 'plugins/forum/templates/footer/');
     $forum_rules->set_file (array ('forum_rules'=>'forum_rules.thtml'));
     $forum_rules->set_var ('xhtml',XHTML);
-    $forum_rules->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_rules->set_var ('LANG_title', $LANG_GF02['msg101']);
 
     $forum_rules->set_var ('anonymous_msg', $LANG_GF01['ANON_PERM_MSG']);

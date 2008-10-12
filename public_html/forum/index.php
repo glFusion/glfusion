@@ -137,7 +137,6 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
         $direction = ($direction == "ASC") ? "ASC" : "DESC";
     }
 
-    $report->set_var ('imgset', $CONF_FORUM['imgset']);
     $report->set_var ('layout_url', $_CONF['layout_url']);
     $report->set_var ('phpself',$_CONF['site_url'] . '/forum/index.php?op=newposts');
     $report->set_var ('LANG_TITLE', $LANG_GF02['msg111']);
@@ -269,7 +268,6 @@ if ($op == 'search') {
 
     $html_query = strip_tags(COM_stripslashes($_REQUEST['query']));
     $query = addslashes(COM_stripslashes($_REQUEST['query']));
-    $report->set_var ('imgset', $CONF_FORUM['imgset']);
     $report->set_var ('layout_url', $_CONF['layout_url']);
     $report->set_var ('phpself',$_CONF['site_url'] . '/forum/index.php?op=search');
     $report->set_var ('LANG_TITLE',$LANG_GF02['msg119']. ' ' . htmlentities($html_query));
@@ -619,7 +617,6 @@ if ($forum == 0) {
             'category_record'=>$catList ));
 
     $forumlisting->set_var ('xhtml',XHTML);
-    $forumlisting->set_var ('imgset', $CONF_FORUM['imgset']);
     $forumlisting->set_var ('forumindeximg','<img src="'.gf_getImage('forumindex').'" alt=""' . XHTML . '>');
     $forumlisting->set_var ('phpself', $_CONF['site_url'] .'/forum/index.php');
     $forumlisting->set_var('layout_url', $_CONF['layout_url']);
@@ -818,7 +815,6 @@ if ($forum > 0) {
             'topic_record'=>'topiclist_record.thtml' ));
 
     $topiclisting->set_var ('xhtml',XHTML);
-    $topiclisting->set_var ('imgset', $CONF_FORUM['imgset']);
     $topiclisting->set_var('layout_url', $_CONF['layout_url']);
     $topiclisting->set_var('site_url',$_CONF['site_url']);
     $topiclisting->set_var ('LANG_HOME', $LANG_GF01['HOMEPAGE']);
@@ -875,10 +871,10 @@ if ($forum > 0) {
         case 5:
             if($order == 0) {
                 $sortOrder = "lastupdated ASC";
-                $topiclisting->set_var ('img_asc5', '<img src="' .$CONF_FORUM['imgset']. '/asc_on.gif" border="0" alt=""' . XHTML . '>');
+                $topiclisting->set_var ('img_asc5', '<img src="' .$_CONF['site_url'] .'/forum/images/asc_on.gif" border="0" alt=""' . XHTML . '>');
             } else {
                 $sortOrder = "lastupdated DESC";
-                $topiclisting->set_var ('img_desc5', '<img src="' .$CONF_FORUM['imgset']. '/desc_on.gif" border="0" alt=""' . XHTML . '>');
+                $topiclisting->set_var ('img_desc5', '<img src="' .$_CONF['site_url']. '/forum/images/desc_on.gif" border="0" alt=""' . XHTML . '>');
             }
             break;
         default:
@@ -936,7 +932,6 @@ if ($forum > 0) {
     $topiclisting->set_var ('cat_id',$category['id']);
     $topiclisting->set_var ('forum_name', $category['forum_name']);
     $topiclisting->set_var ('forum_id', $forum);
-    $topiclisting->set_var ('imgset', $CONF_FORUM['imgset']);
     $topiclisting->set_var ('LANG_TOPIC', $LANG_GF01['TOPICSUBJECT']);
     $topiclisting->set_var ('LANG_STARTEDBY', $LANG_GF01['STARTEDBY']);
     $topiclisting->set_var ('LANG_REPLIES', $LANG_GF01['REPLIES']);
@@ -946,7 +941,6 @@ if ($forum > 0) {
     $topiclisting->set_var ('LANG_MSG05',$LANG_GF01['LASTPOST']);
     $topiclisting->set_var ('LANG_newforumposts', $LANG_GF02['msg113']);
 
-//    if ($category['is_readonly'] == 0 OR forum_modPermission($forum,$_USER['uid'],'mod_edit')) {
     if ( $canPost ) {
         $newtopiclinkimg = '<img src="'.gf_getImage('post_newtopic').'" border="0" align="middle" alt="'.$LANG_GF01['NEWTOPIC'].'" title="'.$LANG_GF01['NEWTOPIC'].'"' . XHTML . '>';
         $topiclisting->set_var ('LANG_newtopic', $LANG_GF01['NEWTOPIC']);
@@ -998,11 +992,7 @@ if ($forum > 0) {
             $lastreplysql = DB_query("SELECT topic.*,att.filename FROM {$_TABLES['gf_topic']} topic LEFT JOIN {$_TABLES['gf_attachments']} att ON topic.id=att.topic_id WHERE topic.id={$record['last_reply_rec']}");
             $lastreply = DB_fetchArray($lastreplysql);
             $lastreply['subject'] = COM_truncate($record['subject'],$CONF_FORUM['show_subject_length'],'...');
-/* ---
-            if ( isset($lastreply['filename']) && $lastreply['filename'] != '' ) {
-                $lastreply['subject'] = $lastreply['subject'] . "&nbsp;<img src=\"{$CONF_FORUM['imgset']}/document_sm.gif\" border=\"0\" alt=\"\">";
-            }
---- */
+
             if ($CONF_FORUM['use_censor']) {
                 $lastreply['subject'] = COM_checkWords($lastreply['subject']);
             }

@@ -149,7 +149,6 @@ $report = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $report->set_file (array ('messages'=>'messages.thtml', 'records' => 'message_line.thtml'));
 $report->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/messages.php');
 $report->set_var ('site_url', $_CONF['site_url']);
-$report->set_var ('imgset', $CONF_FORUM['imgset']);
 $report->set_var ('LANG_deleteall', $LANG_GF01['DELETEALL']);
 $report->set_var ('LANG_DELCONFIRM', $LANG_GF01['DELCONFIRM']);
 $report->set_var ('LANG_DELALLCONFIRM', $LANG_GF01['DELALLCONFIRM']);

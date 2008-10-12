@@ -496,13 +496,11 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
 
     $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
-    $forum_outline_header->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_outline_header->parse ('output', 'forum_outline_header');
     echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
     $preview_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $preview_header->set_file (array ('preview_header'=>'topicpreview_header.thtml'));
-    $preview_header->set_var ('imgset', $CONF_FORUM['imgset']);
     $preview_header->set_var ('startblock', COM_startBlock('<b>' .$LANG_GF01['TopicPreview']. '</b>','',$_CONF['path'].'/plugins/forum/templates/blockheader.thtml') );
     $preview_header->parse ('output', 'preview_header');
     echo $preview_header->finish($preview_header->get_var('output'));
@@ -511,13 +509,11 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
 
     $preview_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $preview_footer->set_file (array ('preview_footer'=>'topicpreview_footer.thtml'));
-    $preview_footer->set_var ('imgset', $CONF_FORUM['imgset']);
     $preview_footer->parse ('output', 'preview_footer');
     echo $preview_footer->finish($preview_footer->get_var('output'));
 
     $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-    $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_outline_footer->parse ('output', 'forum_outline_footer');
     echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
     echo '<br' . XHTML . '>';
@@ -547,7 +543,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             BlockMessage('ERROR',$LANG_GF02['msg87'],false);
             $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-            $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
             echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
             gf_siteFooter();
@@ -561,7 +556,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             BlockMessage('ERROR',$LANG_GF02['msg87'],false);
             $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-            $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
             echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
             gf_siteFooter();
@@ -575,7 +569,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             BlockMessage('ERROR',$LANG_GF02['msg87'],false);
             $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-            $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
             echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
             gf_siteFooter();
@@ -585,7 +578,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
-    $forum_outline_header->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_outline_header->parse ('output', 'forum_outline_header');
     echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
@@ -597,7 +589,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     $topicnavbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $topicnavbar->set_file (array ('topicnavbar'=>'post_topic_navbar.thtml'));
-    $topicnavbar->set_var ('imgset', $CONF_FORUM['imgset']);
     $topicnavbar->set_var ('navbreadcrumbsimg','<img src="'.gf_getImage('nav_breadcrumbs').'" alt=""' . XHTML . '>');
     $topicnavbar->set_var ('navtopicimg','<img src="'.gf_getImage('nav_topic').'" alt=""' . XHTML . '>');
     $topicnavbar->set_var ('site_url', $_CONF['site_url']);
@@ -1048,7 +1039,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-    $forum_outline_footer->set_var ('imgset', $CONF_FORUM['imgset']);
     $forum_outline_footer->parse ('output', 'forum_outline_footer');
     echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
 
