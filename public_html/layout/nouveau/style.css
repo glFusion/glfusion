@@ -1455,97 +1455,124 @@ min-height:3.0em;
 
 ul.arrow li {
 background:transparent url(layout/nouveau/images/arrow.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 ul.bug li {
 background:transparent url(layout/nouveau/images/bug.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 ul.cart li {
 background:transparent url(layout/nouveau/images/cart.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 ul.check li {
 background:transparent url(layout/nouveau/images/check.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 ul.script li {
 background:transparent url(layout/nouveau/images/script.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 ul.bullet-blue li {
 background:transparent url(layout/nouveau/images/bullet-blue.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 ul.bullet-grey li {
 background:transparent url(layout/nouveau/images/bullet-grey.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 ul.bullet-plus li {
 background:transparent url(layout/nouveau/images/bullet-plus.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 ul.bullet-rss li {
 background:transparent url(layout/nouveau/images/bullet-rss.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 ul.bullet-star li {
 background:transparent url(layout/nouveau/images/bullet-star.png) no-repeat scroll 2px;
+padding-left:28px;
 }
 
 li.num-1 {
 background:transparent url(layout/nouveau/images/number-1.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
 }
 
 li.num-2 {
 background:transparent url(layout/nouveau/images/number-2.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
 }
 
 li.num-3 {
 background:transparent url(layout/nouveau/images/number-3.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
 }
 
 li.num-4 {
 background:transparent url(layout/nouveau/images/number-4.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
 }
 
 li.num-5 {
 background:transparent url(layout/nouveau/images/number-5.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
 }
 
 li.num-6 {
 background:transparent url(layout/nouveau/images/number-6.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
 }
 
 li.num-7 {
 background:transparent url(layout/nouveau/images/number-7.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
 }
 
 li.num-8 {
 background:transparent url(layout/nouveau/images/number-8.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
 }
 
 li.num-9 {
 background:transparent url(layout/nouveau/images/number-9.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
 }
 
-ul.arrow li,ul.bug li,ul.cart li,ul.check li,ul.script li,ul.bullet-blue li,ul.bullet-grey li,ul.bullet-plus li,ul.bullet-rss li,ul.bullet-star li,ul.number li {
+ul.arrow,ul.bug,ul.cart,ul.check,ul.script,ul.bullet-blue,ul.bullet-grey,ul.bullet-plus,ul.bullet-rss,ul.bullet-star,ul.number {
 list-style-image:none;
 list-style-position:outside;
 list-style-type:none;
 margin-bottom:10px;
-margin-left:2em;
-padding-bottom:3px;
-padding-left:28px;
+margin-left:0;
+padding-left:0;
 }
 
-.story-featured pre .story-body pre {
+.story-featured pre, .story-body pre {
 background:#F7F7F7 url(layout/nouveau/images/code.png) no-repeat scroll 5px 50%;
 border:3px solid #CCC;
 font-size:90%;
 line-height:135%;
-overflow:scroll;
-padding:10px 10px 10px 5em;
+overflow:auto;
+padding:1em 1em 1em 5em;
 }
 
 span.alert {
@@ -1869,11 +1896,11 @@ margin:0 auto;
 .tab-pane {
 float:left;
 overflow:hidden;
-margin:0 20px;
+margin:0;
 }
 
 .tab-pane img {
-padding:0 10px;
+padding:0;
 }
 
 #gl_slide-toolbar li.active {
