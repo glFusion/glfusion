@@ -1181,7 +1181,7 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
             $testText        = gf_formatTextBlock($A['comment'],'text','text');
             $testText        = strip_tags($testText);
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
-            $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $A['id'] . '" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';
+            $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $A['pid'] . '&topic='.$A['id'].'#'.$A['id'].'" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';
             break;
         default:
             $retval = $fieldvalue;

@@ -56,6 +56,7 @@ $show      = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) 
 $page      = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
 $mode      = isset($_REQUEST['mode']) ? COM_applyFilter($_REQUEST['mode']) : '';
 $highlight = isset($_REQUEST['query']) ? COM_applyFilter($_REQUEST['query']) : '';
+$topic     = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic']) : '';
 //$forum = DB_getItem($_TABLES['gf_topic'],"forum","id='$showtopic'");
 $result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['gf_topic']} WHERE id = '$showtopic'"); // <- new
 list($forum, $topic_pid, $subject) = DB_fetchArray($result); // <- new
@@ -134,6 +135,16 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     }
     $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
 } else {
+    if ( $topic != '' ) {
+        $sql = "SELECT id FROM {$_TABLES['gf_topic']} WHERE pid='".$showtopic."'";
+        $idResult = DB_query($sql);
+        $ids = array();
+        while ( $I = DB_fetchArray($idResult)) {
+            $ids[] = $I['id'];
+        }
+        $key = array_search($topic,$ids);
+        $page = intval($key / $show) + 1;
+    }
     if ($page == 0) {
         $page = 1;
     }
@@ -325,15 +336,9 @@ if(isset($_USER['uid']) && $_USER['uid'] > 1 ) {
 //$intervalTime = $mytimer->stopTimer();
 //COM_errorLog("Topic Display Time2b: $intervalTime");
 
-if ($CONF_FORUM['mysql4+']) {
-    $sql  = "(SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$showtopic') ";
-    $sql .= "UNION ALL (SELECT * FROM {$_TABLES['gf_topic']} WHERE pid='$showtopic') ";
-    $sql .= "ORDER BY id $order LIMIT $offset, $show";
-    $result  = DB_query($sql);
-} else {
-    $sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$showtopic' OR pid='$showtopic' ORDER BY id $order LIMIT $offset, $show";
-    $result  = DB_query($sql);
-}
+$sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$showtopic' OR pid='$showtopic' ORDER BY id $order LIMIT $offset, $show";
+$result  = DB_query($sql);
+
 // Display each post in this topic
 $onetwo = 1;
 while($topicRec = DB_fetchArray($result)) {
