@@ -125,7 +125,7 @@ function form ($A, $error = false)
                 $sp_template->set_var('show_adveditor','none');
                 $sp_template->set_var('show_htmleditor','');
             }
-            $post_options .= '<option value="html" selected="selected">'.$LANG_postmodes['html'].'</option>';
+            $post_options = '<option value="html" selected="selected">'.$LANG_postmodes['html'].'</option>';
             if ($A['postmode'] == 'adveditor') {
                 $post_options .= '<option value="adveditor" selected="selected">'.$LANG24[86].'</option>';
             } else {
@@ -638,7 +638,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete']) && SEC_ch
             $sp_help, COM_applyFilter ($_POST['sp_tid']),
             COM_applyFilter ($_POST['sp_where'], true), $_POST['sp_inblock'],
             COM_applyFilter ($_POST['postmode']),
-            COM_applyFilter ($_POST['sp_search']));
+            isset($_POST['sp_search']) ? 1 : 0);
     } else {
         $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
     }

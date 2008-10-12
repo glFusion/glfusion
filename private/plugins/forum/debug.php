@@ -39,7 +39,7 @@ if (!defined ('GVERSION')) {
 }
 
 // Debug Code to show variables
-if ($CONF_FORUM['debug']) {
+if (isset($CONF_FORUM['debug'])) {
     if (!empty($_POST)) {
         echo COM_startBlock("_POST");
         var_dump($_POST);

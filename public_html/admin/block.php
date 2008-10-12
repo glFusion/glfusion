@@ -260,8 +260,8 @@ function editblock ($bid = '')
         $block_templates->set_var('lang_postmode', $LANG24[4]);
         $block_templates->set_var('show_htmleditor','none');
         $block_templates->set_var('show_texteditor','');
-        $post_options .= '<option value="text" selected="selected">'.'Text Mode'.'</option>';
-        $post_options .= '<option value="html">'.$LANG_postmodes['html'].'</option>';
+        $post_options = '<option value="text" selected="selected">'.'Text Mode'.'</option>'
+                      . '<option value="html">'.$LANG_postmodes['html'].'</option>';
         $block_templates->set_var('post_options',$post_options );
         $block_templates->set_var ('change_editormode', 'onchange="change_editmode(this);"');
     } else {
