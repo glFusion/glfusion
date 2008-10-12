@@ -75,7 +75,7 @@ EOJ;
     $res = DB_query($sql);
     for ($i = 0; $A = DB_fetchArray($res); ++$i) {
         $content = SP_render_content(stripslashes($A['sp_content']), $A['sp_php']);
-		$title = SP_render_content(stripslashes($A['sp_title']), $A{'sp_php'});
+		$title = htmlspecialchars(stripslashes($A['sp_title']));
         $display .= <<<EOS
 <div class="tab-pane" id="tab-$i-pane">
 	<h1 class="tab-title">$title</h1>
