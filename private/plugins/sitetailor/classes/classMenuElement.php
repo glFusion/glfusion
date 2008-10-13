@@ -187,7 +187,7 @@ class mbElement {
 
             $retval .= '<td>';
 
-            $elementDetails .= $this->label . '::';
+            $elementDetails = $this->label . '::';
             $elementDetails .= '<b>' . $LANG_ST01['type'] . ':</b> ' . $LANG_ST_TYPES[$this->type] . '<br' . XHTML . '>';
             switch ($this->type) {
                 case 1 :
