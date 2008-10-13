@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+
+  
+  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+
+
+  
+  <link rel="stylesheet" type="text/css" href="layout/style.css" />
+
+
+  
+  <meta name="robots" content="noindex,nofollow" />
+
+  
+  <title>Calendar Plugin - glFusion CMS</title>
+</head>
+
+
+<body style="direction: ltr;">
+
+
+<div id="gl_container_fluid">
+<div id="gl_header"><span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">
+glFusion Documentation Project
+</span><a style="float: right; padding-right: 10px; padding-top: 5px; vertical-align: middle;" href="http://www.glfusion.org/wiki/doku.php">glFusion Wiki</a>
+</div>
+
+
+<div id="gl_wrapper">
+<div class="body-container">
+<h1><a name="calendar_plugin" id="calendar_plugin">Calendar
+Plugin</a></h1>
+
+
+<div class="level1">
+<p>The Calendar plugin is a great tool which allows users and
+administrators to create events which will appear in the calendars of
+users who have appropriate access. Events can include everything from
+the go-live of your latest application, to business meetings. </p>
+
+
+<p>
+When an event is added, it will be added to the site calendar where
+users can view all the events. Additionally, upcoming events will be
+displayed in a block on the page. There is also a 'Site Calendar' block
+which highlights dates with upcoming events. </p>
+
+
+<h1><a name="calendar_plugin_configuration_options" id="calendar_plugin_configuration_options">Calendar Plugin
+Configuration Options</a></h1>
+
+
+<table class="inline">
+
+
+  <tbody>
+
+
+    <tr class="row0">
+
+
+      <th class="col0 leftalign">Option </th>
+
+
+      <th class="col1 leftalign">Description </th>
+
+
+    </tr>
+
+
+    <tr class="row1">
+
+
+      <td class="col0 leftalign"><a name="desc_calendarloginrequired"></a>Calendar Login Required </td>
+
+
+      <td class="col1 leftalign">When
+set to True, only registered users can access the calendar. Please note
+that Login Required setting in glFusion's main configuration takes
+precedence over this setting. So when Login Required is True, anonymous
+users can not access the calendar even when this setting is False. </td>
+
+
+    </tr>
+
+
+    <tr class="row2">
+
+
+      <td class="col0 leftalign"><a name="desc_hidecalendarmenu"></a>Hide Calendar Menu Entry </td>
+
+
+      <td class="col1 leftalign">Whether to hide the
+&ldquo;Calendar&rdquo; entry from glFusion's menu bar (when set
+to 1) or to show it (when set to 0). </td>
+
+
+    </tr>
+
+
+    <tr class="row3">
+
+
+      <td class="col0 leftalign"><a name="desc_personalcalendars"></a>Enable Personal Calendars
+      </td>
+
+
+      <td class="col1 leftalign">Allow account holders to
+have a personal calendar </td>
+
+
+    </tr>
+
+
+    <tr class="row4">
+
+
+      <td class="col0 leftalign"><a name="desc_eventsubmission"></a>Enable Submission Queue </td>
+
+
+      <td class="col1 leftalign">Whether
+events submitted by users will have to be approved by an admin first
+(when set = 1) or show up immediately (when set = 0). </td>
+
+
+    </tr>
+
+
+    <tr class="row5">
+
+
+      <td class="col0 leftalign"><a name="desc_showupcomingevents"></a>Show upcoming Events </td>
+
+
+      <td class="col1 leftalign">Whether to show upcoming
+events (0 = no, 1 = yes) in a separate block. </td>
+
+
+    </tr>
+
+
+    <tr class="row6">
+
+
+      <td class="col0 leftalign"><a name="desc_upcomingeventsrange"></a>Upcoming Events Range </td>
+
+
+      <td class="col1 leftalign">Number of days that the
+&ldquo;Upcoming Events&rdquo; block will look ahead. </td>
+
+
+    </tr>
+
+
+    <tr class="row7">
+
+
+      <td class="col0 leftalign"><a name="desc_hour_mode"></a>Hour Mode </td>
+
+
+      <td class="col1 leftalign">Which
+format to use when submitting or editing an event. Can be 12 (for the
+12 hours am/pm format) or 24 (for the 24 hours format). Uses the same
+value as $_CONF['hour_mode'] by default. </td>
+
+
+    </tr>
+
+
+    <tr class="row8">
+
+
+      <td class="col0 leftalign"><a name="desc_event_types"></a>Event Types </td>
+
+
+      <td class="col1 leftalign">The set of event types
+that are used both on the public calendar and the user's personal
+calendar. </td>
+
+
+    </tr>
+
+
+    <tr class="row9">
+
+
+      <td class="col0 leftalign"><a name="desc_notification"></a>Notification Email </td>
+
+
+      <td class="col1 leftalign">Whether
+to send an email notification when a new event was submitted for the
+site's calendar (when set to = 1) or not (when set to = 0). No
+notification is ever sent for events in personal calendars. </td>
+
+
+    </tr>
+
+
+    <tr class="row10">
+
+
+      <td class="col0 leftalign"><a name="desc_delete_event"></a>Delete Events with Owner </td>
+
+
+      <td class="col1 leftalign">Defines
+what to do when a user is deleted that is the owner of an event. When
+set to 0, all events owned by the deleted user will be assigned to a
+user of the &ldquo;Root&rdquo; group (e.g. the site admin).
+When set to 1, the
+events are deleted. This only applies to site events - a user's
+personal events are always deleted. </td>
+
+
+    </tr>
+
+
+    <tr class="row11">
+
+
+      <td class="col0 leftalign"><a name="desc_aftersave"></a>After Saving Event </td>
+
+
+      <td class="col1 leftalign">Which page to go to after
+an event has been saved: <br />
+
+
+* 'item': display the event details <br />
+
+
+* 'list': show admin's list of events (default) <br />
+
+
+* 'plugin': display the calendar <br />
+
+
+* 'home': display the site's homepage <br />
+
+
+* 'admin': go to the &ldquo;Admin Home&rdquo; page, i.e.
+Command &amp; Control </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<p></p>
+
+
+</div>
+
+
+<h2><a name="other_options" id="other_options">Other
+Options</a></h2>
+
+
+<div class="level2">
+<p>Please note that some of the options from glFusion&rsquo;s
+main configuration are also relevant for the calendar plugin.
+</p>
+
+
+<p>
+Times and dates are formatted according to the current language and the
+locale settings from glFusion&rsquo;s main configuration.
+</p>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+</html>
