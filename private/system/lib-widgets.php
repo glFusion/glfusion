@@ -68,14 +68,19 @@ function WIDGET_mooslide($pages, $width = 550, $height = 160, $id = 'gl_slide')
 <div id="$id" class="gl_slide">
 EOJ;
 
-    $sql = "SELECT sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
+    $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
          . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $pages))
          . ')';
 
     $res = DB_query($sql);
+    $list = array();
     for ($i = 0; $A = DB_fetchArray($res); ++$i) {
         $content = SP_render_content(stripslashes($A['sp_content']), $A['sp_php']);
 		$title = htmlspecialchars(stripslashes($A['sp_title']));
+		$list[$A['sp_id']] = Array('content' => $content, 'title' => $title);
+	}
+	foreach ($pages as $page) {
+	    extract($list[$page]);
         $display .= <<<EOS
 <div class="tab-pane" id="tab-$i-pane">
 	<h1 class="tab-title">$title</h1>
