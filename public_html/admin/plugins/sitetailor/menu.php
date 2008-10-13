@@ -31,7 +31,7 @@
 
 require_once '../../../lib-common.php';
 require_once $_CONF['path'] . 'system/lib-admin.php';
-
+//error_reporting( E_ALL );
 $display = '';
 
 // Only let admin users access this page
@@ -92,12 +92,8 @@ function ST_displayMenuList( ) {
     $T->set_var(array(
         'site_admin_url'    => $_CONF['site_admin_url'],
         'site_url'          => $_CONF['site_url'],
-        'status_msg'        => $statusMsg,
         'lang_admin'        => $LANG_ST00['admin'],
         'version'           => $_ST_CONF['version'],
-        'menu_list'         => $menulist,
-        'menuid'            => $menu_id,
-        'menuactive'        => $stMenu[$menu_id]['active'] == 1 ? ' checked="checked"' : ' ',
         'xhtml'             => XHTML,
     ));
     $T->parse('output', 'admin');
@@ -148,7 +144,7 @@ function ST_createMenu( ) {
     $usergroups = SEC_getUserGroups($rootUser);
     $usergroups[$LANG_ST01['non-logged-in']] = 998;
     ksort($usergroups);
-    $group_select .= '<select id="group" name="group">' . LB;
+    $group_select = '<select id="group" name="group">' . LB;
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
         $group_select .= '>' . key($usergroups) . '</option>' . LB;
@@ -161,12 +157,8 @@ function ST_createMenu( ) {
         'site_url'          => $_CONF['site_url'],
         'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: '.$LANG_ST01['add_newmenu'],
-        'status_msg'        => $statusMsg,
         'lang_admin'        => $LANG_ST00['admin'],
         'version'           => $_ST_CONF['version'],
-        'menu_list'         => $menulist,
-        'menuid'            => $menu_id,
-        'menuactive'        => $stMenu[$menu_id]['active'] == 1 ? ' checked="checked"' : ' ',
         'menutype_select'   => $menuTypeSelect,
         'group_select'      => $group_select,
         'xhtml'             => XHTML,
@@ -296,7 +288,6 @@ function ST_displayTree( $menu_id ) {
         'site_admin_url'    => $_CONF['site_admin_url'],
         'site_url'          => $_CONF['site_url'],
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: '.$stMenu[$menu_id]['menu_name'].' :: '.$LANG_ST01['elements'],
-        'status_msg'        => $statusMsg,
         'lang_admin'        => $LANG_ST00['admin'],
         'version'           => $_ST_CONF['version'],
         'menu_tree'         => $stMenu[$menu_id]['elements'][0]->editTree(0,2),
@@ -671,7 +662,7 @@ function ST_editElement( $menu_id, $mid ) {
     $usergroups = SEC_getUserGroups($rootUser);
     $usergroups[$LANG_ST01['non-logged-in']] = 998;
     ksort($usergroups);
-    $group_select .= '<select id="group" name="group">' . LB;
+    $group_select = '<select id="group" name="group">' . LB;
 
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
@@ -1050,7 +1041,7 @@ function ST_menuConfig( $mid ) {
     $usergroups = SEC_getUserGroups($rootUser);
     $usergroups[$LANG_ST01['non-logged-in']] = 998;
     ksort($usergroups);
-    $group_select .= '<select id="group" name="group">' . LB;
+    $group_select = '<select id="group" name="group">' . LB;
     for ($i = 0; $i < count($usergroups); $i++) {
         $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
         if ( $usergroups[key($usergroups)] == $stMenu[$menu_id]['group_id']) {
