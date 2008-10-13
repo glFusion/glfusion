@@ -781,7 +781,7 @@ function modCatS() {
     }
     if ($_FILES['imgurl']['name']!='') {
 
-        require_once ($_CONF['path_system'] . 'classes/upload.class.php');
+        require_once $_CONF['path_system'] . 'classes/upload.class.php';
 
         $upload = new upload();
 
@@ -815,6 +815,7 @@ function modCatS() {
             exit; // don't return
         }
 
+        $upload->setFieldname( 'imgurl' );
         $upload->setFileNames ($name);
         $upload->setPerms ('0644');
         $upload->setMaxDimensions (50,50);
@@ -962,7 +963,7 @@ function addCat() {
                 echo $display;
                 exit; // don't return
             }
-
+            $upload->setFieldName('uploadfile');
             $upload->setFileNames ($name);
             $upload->setPerms ('0644');
             $upload->setMaxDimensions (50,50);
