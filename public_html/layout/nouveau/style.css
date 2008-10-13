@@ -1,3 +1,8 @@
+/* MAIN  STYLESHEET*************************************************
+This file contains the main layout and styles.
+NOTE: paths specified below are relative to the site root (http://www.mysite.com/)
+ */
+ 
 body {
 background:#FFF;
 font:76% arial,verdana,tahoma,helvetica,sans-serif;
@@ -5,6 +10,7 @@ text-align:left;
 margin:0;
 padding:0;
 }
+
 #doc,#doc2,#doc3,#doc4,.yui-t1,.yui-t2,.yui-t3,.yui-t4,.yui-t5,.yui-t6,.yui-t7 {
 text-align:left;
 width:56.25em;

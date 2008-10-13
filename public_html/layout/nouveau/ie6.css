@@ -1,5 +1,6 @@
 /* IE 6 ONLY LAYOUT  STYLESHEET*************************************************
 This file only contains CSS fixes for the IE 6 browser. For regular style info use style.css
+NOTE: paths specified below are relative to this file
  */
 
 #gl_navigation { /*the leftblocks*/
