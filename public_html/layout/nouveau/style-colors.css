@@ -53,7 +53,8 @@ div.glfform p.error,
 .gl_moorotatortext a,
 .gl_moorotatortext a:hover,
 .gl_moosimplebox,
-#gl_slide-toolbar li,
+#gl_slide-tabs li,
+#gl_slide-tabs li.active,
 .tool-tip,
 .pluginAltBG td,
 .pluginAltText,
@@ -112,8 +113,6 @@ th,
 .block-content-right,
 .commentbar-line1,
 .commentbar-line3,
-#gl_slide-toolbar li.active,
-#gl_slide-toolbar li.current,
 #header-textbox,
 #header-textbox:focus,
 .highlight,
@@ -172,6 +171,7 @@ div.glfform form div.error,
 form fieldset div.notes,
 form fieldset div.notes h4,
 form fieldset div.notes p,
+#gl_slide-tabs li.current,
 .fieldhelp,
 .ng-close-link,
 .ng-clear-link, 
@@ -183,7 +183,7 @@ q,
 	color:#666;
 }
 /***************************************************** BEGIN #CCC ******************/
-#gl_slide-toolbar li.current,
+#gl_slide-tabs li.current,
 div.glfform form div input.inputSubmit,
 form div input.inputButton,
 input.inputSubmit,
@@ -191,6 +191,7 @@ input.inputButton,
 .block-box-left h2,
 .block-box-right h2,
 .commentbar-line2,
+#gl_slide-tabs li.current,
 .pluginSubTable,
 .pluginSolidOutline,
 .profile-header,
@@ -220,6 +221,7 @@ div#frame,
 	border-bottom:1px solid #ccc;
 }
 /***************************************************** BEGIN #4D77CC ***************/
+#gl_slide-tabs li,
 .ng-cal-header-table,
 .ng-month-name-th,
 .pluginAlert,
@@ -319,6 +321,7 @@ a.tooltip:hover span,
 	border:1px solid #b7c1dc;
 }
 /***************************************************** BEGIN #679EF1 ***************/
+#gl_slide-tabs li.active,
 .table_list th {
 	background:#679ef1;
 }
