@@ -78,8 +78,9 @@ EOJ;
         $content = SP_render_content(stripslashes($A['sp_content']), $A['sp_php']);
         $title = htmlspecialchars(stripslashes($A['sp_title']));
         $order = array_search($A['sp_id'],$page_ids); // find proper order
-        $pages[$order] = Array('content' => $content, 'title' => $title, 'index' => $order);
+        $pages[$order] = Array('content' => $content, 'title' => $title, 'index' => $order+1);
     }
+    ksort($pages);
     foreach ($pages as $page) {
         extract($page);
         $display .= <<<EOS
