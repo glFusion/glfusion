@@ -332,16 +332,17 @@ a.tooltip:hover span,
 }
 
 a:link,
-#navcontainer a:link,
-a.pluginButton:hover {
+#navcontainer a:link {
 	color:#0000ff;
 }
 a:visited,
-#navcontainer a:visited,{
+#navcontainer a:visited,
+a.pluginButton:visited {
 	color:#800080;
 }
 a:hover,
-#navcontainer a:hover, {
+#navcontainer a:hover,
+a.pluginButton:hover {
 	color:#008000;
 }
 .footerlinks a:hover {

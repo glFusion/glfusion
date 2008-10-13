@@ -562,15 +562,15 @@ color:#00F;
 }
 
 a:visited {
-color:purple;
+color:#800080;
 }
 
 a:hover {
-color:green;
+color:#008000;
 }
 
 a:active {
-color:red;
+color:#f00;
 }
 
 fieldset {
