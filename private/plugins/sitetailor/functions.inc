@@ -414,7 +414,9 @@ function st_initMenu($skipCache=false) {
 function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$parentclass='',$lastclass='',$selected='') {
     global $stMenu, $_CONF;
 
-    $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '__' . $_CONF['theme'];
+    $optionHash = md5($wrapper.$ulclass.$liclass.$parentclass.$lastclass.$selected);
+
+    $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
 
     $retval = CACHE_check_instance($cacheInstance, 0);
     if ( $retval ) {
