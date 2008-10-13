@@ -48,7 +48,7 @@ function WIDGET_mooslide($pages, $width = 550, $height = 160, $id = 'gl_slide')
     $display = <<<EOJ
 <script type="text/javascript" src="{$_CONF['site_url']}/javascript/mootools/gl_mooslide.js"></script>
 <script type="text/javascript">
-	window.addEvent('load', function() {
+	window.addEvent('domready', function() { //leave as domready so list won't display until ready
 		var myFilm = new gl_Slide(\$('$id'), {
 			fx: {
 				wait: true,
