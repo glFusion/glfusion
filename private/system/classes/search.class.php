@@ -767,7 +767,7 @@ class Search {
 
         $rt = '';
         if ( $keyword == '' ) {
-            $pos == false;
+            $pos = false;
         } else {
             $pos = stripos($text, $keyword);
         }
