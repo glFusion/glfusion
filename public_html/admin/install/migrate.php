@@ -535,7 +535,6 @@ function INST_installEngine($install_type, $install_step)
                     }
                     list($rc,$errors) = INST_doGeeklogDatabaseUpgrades($version, $use_innodb);
                     if ( $rc === true ) {
-//                        INST_checkPlugins();
                         $version = '1.0.1';
                         $req_string = 'index.php?mode=upgrade&step=3'
                                     . '&dbconfig_path=' . $dbconfig_path
@@ -1376,31 +1375,6 @@ function INST_updateDB($_SQL)
     return array($rc,$errors);
 }
 
-/**
-* Check which plugins are actually installed and disable them if needed
-*
-* @return   int     number of plugins that were disabled
-*
-*/
-function INST_checkPlugins()
-{
-    global $_CONF, $_TABLES;
-
-    $disabled = 0;
-    $plugin_path = $_CONF['path'] . 'plugins/';
-
-    $result = DB_query("SELECT pi_name FROM {$_TABLES['plugins']} WHERE pi_enabled = 1");
-    $num_plugins = DB_numRows($result);
-    for ($i = 0; $i < $num_plugins; $i++) {
-        $A = DB_fetchArray($result);
-        if (!file_exists($plugin_path . $A['pi_name'] . '/functions.inc')) {
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_enabled = 0 WHERE pi_name = '{$A['pi_name']}'");
-            $disabled++;
-        }
-    }
-
-    return $disabled;
-}
 
 /**
 * Change default character set to UTF-8

@@ -600,6 +600,7 @@ function INST_installEngine($install_type, $install_step)
                     // Let's do this
                     require_once $dbconfig_path;
                     require_once $siteconfig_path;
+
                     require_once $_CONF['path_system'] . 'lib-database.php';
 
                     // If this is a MySQL database check to see if it was
@@ -1121,10 +1122,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 }
             }
             require_once $_CONF['path_system'] . 'classes/config.class.php';
-
             $c = config::get_instance();
-
-            $_CONF = $c->get_config('Core');
 
             $c->add('comment_code',0,'select',4,21,17,1670,TRUE);
             $c->add('comment_edit',0,'select',4,21,0,1680,TRUE);
@@ -1176,6 +1174,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $c->add('compress_css',TRUE,'select',2,11,0,1370,TRUE);
             $c->add('allow_embed_object',TRUE,'select',7,34,1,1720,TRUE);
+
+            $c->add('digg_enabled',0,'select',7,31,0,2000,TRUE);
 
             // now delete the old setting - we don't want it anymore...
 
@@ -1354,15 +1354,15 @@ function INST_pluginAutoUpgrade( $plugin, $forceInstall = 0 )
 
     $active = DB_getItem($_TABLES['plugins'],'pi_enabled','pi_name="' . $plugin . '"');
     if ( $active || $forceInstall == 1) {
-        if ( file_exists($_CONF['path'] . '/plugins/' . $plugin . '/glupgrade.inc') ) {
+        if ( $active && file_exists($_CONF['path'] . '/plugins/' . $plugin . '/glupgrade.inc') ) {
             require_once($_CONF['path'] . '/plugins/' . $plugin . '/glupgrade.inc');
             if ( function_exists( 'plugin_plgupgrade_' . $plugin ) ) {
                 $plgUpgradeFunction = 'plugin_plgupgrade_' . $plugin;
                 $rc = $plgUpgradeFunction();
-            } else {
-                if ( $forceInstall == 1 ) {
-                    INST_pluginAutoInstall( $plugin );
-                }
+            }
+        } else {
+            if ( !$active && $forceInstall == 1 ) {
+                INST_pluginAutoInstall($plugin);
             }
         }
     }
