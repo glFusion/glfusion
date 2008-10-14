@@ -50,7 +50,6 @@ class SearchCriteria {
     {
         $this->_pluginName = $pluginName;
         $this->_pluginLabel = $pluginLabel;
-        $this->_rank = $rank;
         $this->_url_rewrite = false;
         $this->_rank = 3;
     }

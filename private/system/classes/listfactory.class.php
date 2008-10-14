@@ -478,7 +478,7 @@ class ListFactory {
             // No results to show so quickly print a message and exit
             $retval = '';
             if (!empty($title))
-                $retval .= COM_startBlock($title, $help_url, COM_getBlockTemplate('_admin_block', 'header'));
+                $retval .= COM_startBlock($title, '', COM_getBlockTemplate('_admin_block', 'header'));
             $retval .= $list_templates->finish($list_templates->get_var('output'));
             if (!empty($title))
                 $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
@@ -610,7 +610,7 @@ if ( $fieldvalue != '' ) {
         $retval = '';
 
         if (!empty($title))
-            $retval .= COM_startBlock($title, $help_url, COM_getBlockTemplate('_admin_block', 'header'));
+            $retval .= COM_startBlock($title, '', COM_getBlockTemplate('_admin_block', 'header'));
 
         $retval .= $list_templates->finish($list_templates->get_var('output'));
 

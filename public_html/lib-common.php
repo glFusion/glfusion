@@ -1328,7 +1328,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     if ( function_exists('st_getMenu') ) {
         $theme->set_var('st_hmenu',st_getMenu('navigation',"gl_moomenu","gl_moomenu",'',"parent"));
         $theme->set_var('st_footer_menu',st_getMenu('footer','st-fmenu','','','','st-f-last'));
-        $theme->set_var('st_header_menu',st_getMenu('header','','',''));
+        $theme->set_var('st_header_menu',st_getMenu('header','st-fmenu','','','','st-f-last'));
     }
 
     // Get plugin menu options
@@ -2399,7 +2399,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         if ($_CONF['user_login_method']['3rdparty'] && !$_CONF['usersubmission']) {
             $modules = SEC_collectRemoteAuthenticationModules();
             if (count($modules) == 0) {
-                $user_templates->set_var('services', '');
+                $login->set_var('services', '');
             } else {
                 if (!$_CONF['user_login_method']['standard'] &&
                         (count($modules) == 1)) {
@@ -2465,7 +2465,7 @@ function COM_userMenu( $help='', $title='', $position='' )
 
 function COM_adminMenu( $help = '', $title = '', $position = '' )
 {
-    global $_TABLES, $_USER, $_CONF, $LANG01, $LANG_ADMIN, $_BLOCK_TEMPLATE, $LANG_PDF,
+    global $_TABLES, $_USER, $_CONF, $LANG01, $LANG_ADMIN, $_BLOCK_TEMPLATE,
            $_DB_dbms, $config, $LANG29;
 
     $retval = '';
@@ -3310,7 +3310,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         if ( isset($cc[1]) && $cc[1] != '' ) {
             $mail->AddCC($cc[0],$cc[1]);
         } else {
-            $mail-AddCC($cc[0]);
+            $mail->AddCC($cc[0]);
         }
     } else {
         // assume old style....
@@ -3980,7 +3980,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
             $uid = $_USER['uid'];
         }
     }
-    
+
     if (array_key_exists($uid, $cache)) {
         return $cache[$uid];
     }
@@ -4007,7 +4007,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
     $cache[$uid] = $ret;
     return $ret;
 }
- 
+
 
 /**
 * Adds a hit to the system
@@ -4546,7 +4546,7 @@ function COM_showMessage($msg, $plugin = '')
 function COM_showLoginRequiredMsg()
 {
     global $LANG_LOGIN, $_CONF;
-    
+
     $display = COM_startBlock($LANG_LOGIN[1], '', COM_getBlockTemplate('_msg_block', 'header'));
     $T = new Template($_CONF['path_layout'] . 'submit');
     $T->set_file('login', 'submitloginrequired.thtml');
@@ -4560,7 +4560,7 @@ function COM_showLoginRequiredMsg()
     $T->parse('output', 'login');
     $display .= $T->finish($T->get_var('output'));
     $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-    
+
     return $display;
 }
 
