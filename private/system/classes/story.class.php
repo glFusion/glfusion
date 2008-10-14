@@ -409,7 +409,7 @@ class Story
      */
     function loadFromDatabase($sid, $mode = 'edit')
     {
-        global $_TABLES, $_CONF, $_USER;
+        global $_TABLES, $_CONF, $_USER, $_GROUPS;
 
         $sid = addslashes(COM_applyFilter($sid));
 
