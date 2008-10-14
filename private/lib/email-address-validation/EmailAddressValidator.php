@@ -24,7 +24,7 @@
          * @param   strEmailAddress     Email address to be checked
          * @return  True if email is valid, false if not
          */
-        public function check_email_address($strEmailAddress) {
+        function check_email_address($strEmailAddress) {
 
             // If magic quotes is "on", email addresses with quote marks will
             // fail validation because of added escape characters. Uncommenting
@@ -81,7 +81,7 @@
          * @param   strLocalPortion     Text to be checked
          * @return  True if local portion is valid, false if not
          */
-        protected function check_local_portion($strLocalPortion) {
+        function check_local_portion($strLocalPortion) {
             // Local portion can only be from 1 to 64 characters, inclusive.
             // Please note that servers are encouraged to accept longer local
             // parts than 64 characters.
@@ -112,7 +112,7 @@
          * @param   strDomainPortion     Text to be checked
          * @return  True if domain portion is valid, false if not
          */
-        protected function check_domain_portion($strDomainPortion) {
+        function check_domain_portion($strDomainPortion) {
             // Total domain can only be from 1 to 255 characters, inclusive
             if (!$this->check_text_length($strDomainPortion, 1, 255)) {
                 return false;
@@ -151,7 +151,7 @@
          * @param   intMaximum  Maximum acceptable length
          * @return  True if string is within bounds (inclusive), false if not
          */
-        protected function check_text_length($strText, $intMinimum, $intMaximum) {
+        function check_text_length($strText, $intMinimum, $intMaximum) {
             // Minimum and maximum are both inclusive
             $intTextLength = strlen($strText);
             if (($intTextLength < $intMinimum) || ($intTextLength > $intMaximum)) {
