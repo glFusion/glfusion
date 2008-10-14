@@ -36,10 +36,10 @@
 <!-- BEGIN list-element -->
 <tr><td class="key" style="vertical-align:top">{display_name} {doc_link} {unset_link}</td>
 <td>
-<input type="button" value="+" onclick="hide_show_tbl(selectChildByID(this.parentNode, 'arr_table'), this);"{xhtml}>
+<input type="button" value="+" onclick="hide_show_tbl(selectChildByID(this.parentNode, 'arr_table{arr_name}'), this);"{xhtml}>
 {delete}
 <input type="hidden" value="true" name="{name}[placeholder]"{xhtml}>
-<table style="display:none" id="arr_table">
+<table style="display:none" id="arr_table{arr_name}">
 <col width="100%"{xhtml}>
 <col width="100%"{xhtml}>
 {my_elements}
