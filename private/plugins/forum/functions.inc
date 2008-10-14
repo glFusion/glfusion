@@ -755,7 +755,7 @@ function plugin_feedupdatecheck_forum ($feed, $topic, $update_data, $limit)
 {
     global $_TABLES;
 
-    $sql = "SELECT id,forum.grp_id FROM {$_TABLES['gf_topic']} topic LEFT JOIN {$_TABLES['gf_forums']} forum ON topic.forum=forum.forum_id " . forum_buildFeedsSql ($topic, $limits);
+    $sql = "SELECT id,forum.grp_id FROM {$_TABLES['gf_topic']} topic LEFT JOIN {$_TABLES['gf_forums']} forum ON topic.forum=forum.forum_id " . forum_buildFeedsSql ($topic, $limit);
     $result = DB_query ($sql);
     $num = DB_numRows ($result);
 
@@ -809,7 +809,7 @@ function plugin_uninstall_forum($installCheck='')
     global $_CONF, $_TABLES, $LANG_GF00;
 
      // Check and see if plugin is still enabled - if so display warning and exit
-    if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
+    if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "forum"')) {
         COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
         $display .= COM_startBlock($LANG_GF00['warning']);
         $display .= $LANG_GF00['enabled'];
@@ -997,6 +997,7 @@ function phpblock_forum_newposts() {
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
         return;
     }
+    $post_limit = $CONF_FORUM['sideblock_numposts'];
     $mode = COM_applyFilter($_GET['mode']);
     $order = COM_applyFilter($_GET['order']);
     if (DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name="forum"')) {
