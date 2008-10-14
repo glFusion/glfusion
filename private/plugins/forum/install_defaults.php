@@ -121,7 +121,7 @@ $_FF_DEFAULT['grouptags'] = array(
     'Group A'           => 'badge1.png',
     'Group B'           => 'badge2.png'
 );
-$_FF_DEFAULT['maxattachments']          = 5;      // Maximum number of attachments allowed in a single post
+$_FF_DEFAULT['maxattachments']          = 2;      // Maximum number of attachments allowed in a single post
 $_FF_DEFAULT['uploadpath']              = $_CONF['path_html'] . 'forum/media';
 $_FF_DEFAULT['downloadURL']             = $_CONF['site_url'] . '/forum/media';
 $_FF_DEFAULT['fileperms']               = '0755';  // Needs to be a string for the upload class use.
