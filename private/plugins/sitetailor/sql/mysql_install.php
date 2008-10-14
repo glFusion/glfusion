@@ -147,6 +147,7 @@ $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `el
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Search',     2, '4',                             20, 1, '', '', 2);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Site Stats', 2, '5',                             40, 1, '', '', 2);";
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Contact Us', 6, '%site_url%/profiles.php?uid=2', 50, 1, '%site_url%/profiles.php?uid=2', '', 2);";
+$_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 2, 'Top', 6, '#top', 60, 1, '#top', '', 2);";
 
 // default block menu elements
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES(0, 3, 'Home', 2, '0', 10, 1, '', '', 2);";
