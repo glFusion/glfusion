@@ -40,7 +40,7 @@ if (!defined('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
-define('TEMPLATE_VERSION','2.3.3');
+define('TEMPLATE_VERSION','2.3.4');
 
 /**
  * The template class allows you to keep your HTML code in some external files
@@ -635,18 +635,21 @@ class Template
 
     if (count($this->varkeys) < count($this->varvals)) {
         foreach ($this->varvals as $k => $v) {
-            $this->varkeys[$k] = "/".$this->varname($k)."/";
+//            $this->varkeys[$k] = "/".$this->varname($k)."/";
+            $this->varkeys[$k] = "{".$k."}";
         }
     }
 
     // quote the replacement strings to prevent bogus stripping of special chars
     reset($this->varvals);
     while(list($k, $v) = each($this->varvals)) {
-      $varvals_quoted[$k] = preg_replace(array('/\\\\/', '/\$/'), array('\\\\\\\\', '\\\\$'), $v);
+//      $varvals_quoted[$k] = preg_replace(array('/\\\\/', '/\$/'), array('\\\\\\\\', '\\\\$'), $v);
+      $varvals_quoted[$k] = str_replace(array('\\\\', '$'), array('\\\\\\\\', '\\\\$'), $v);
     }
 
     $str = $this->get_var($varname);
-    $str = preg_replace($this->varkeys, $varvals_quoted, $str);
+//    $str = preg_replace($this->varkeys, $varvals_quoted, $str);
+    $str = str_replace($this->varkeys, $varvals_quoted, $str);
     return $str;
   }
 
@@ -1453,7 +1456,7 @@ class Template
     $tmplt = $this->replace_vars($tmplt);
 
     // clean up concatenation.
-    $tmplt = preg_replace('/\?'.'><'.'\?php /', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
+    $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
                           "\n", $tmplt);
 
     if ($this->debug & 4) {
@@ -1463,7 +1466,7 @@ class Template
     if ($f !== false ) {
         if ($TEMPLATE_OPTIONS['incl_phpself_header']) {
             fwrite($f,
-"<?php if (!defined ('GVERSION')) {
+"<?php if (!defined('GVERSION')) {
     die ('This file can not be used on its own.');
 } ?>\n");
         }
@@ -1706,7 +1709,7 @@ class Template
  * @return void
  *
  */
-function cache_clean_directories($path, $needle = '')
+function cache_clean_directories($path, $needle = '', $since = 0)
 {
     if ($dir = @opendir($path)) {
         while (false !== ($entry = readdir($dir))) {
@@ -1715,7 +1718,9 @@ function cache_clean_directories($path, $needle = '')
                 cache_clean_directories($path . '/' . $entry, $needle);
                 @rmdir($path . '/' . $entry);
             } elseif (empty($needle) || strpos($entry, $needle) !== false) {
-                @unlink($path . '/' . $entry);
+                if (!$since || @filectime($path . '/' . $entry) <= $since) {
+                    @unlink($path . '/' . $entry);
+                }
             }
         }
         @closedir($dir);
