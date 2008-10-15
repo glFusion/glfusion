@@ -140,7 +140,7 @@ $LANG01 = array(
     90 => 'ホーム',
     91 => 'ページ作成時間',
     92 => '秒',
-    93 => 'Copyright',
+    93 => '',
     94 => '本ページのすべての商標と著作権はそれぞれの所有者に帰属します。',
     95 => 'Powered By',
     96 => 'グループ',
@@ -178,7 +178,9 @@ $LANG01 = array(
     128 => 'OpenIDログイン:',
     129 => 'コンフィギュレーション',
     130 => 'Webサービス',
-    500 => 'Please remove the admin/install/ directory!'
+    500 => 'Please remove the admin/install/ directory!',
+    'ctl' => 'Clear Template Cache',
+    'logview' => 'Logview'
 );
 
 ###############################################################################
@@ -211,7 +213,20 @@ $LANG03 = array(
     24 => 'ゲストユーザ',
     25 => '投稿をサイト管理者に通知してよいですか？',
     26 => '%s さんが以下の投稿を迷惑だと指摘しています。',
-    27 => '迷惑通知'
+    27 => '迷惑通知',
+    28 => 'Preview Changes',
+    29 => 'Submit Changes',
+    30 => 'Edited on',
+    31 => 'by',
+    32 => 'Editing a Comment',
+    33 => 'Editing a Comment Submission',
+    34 => 'Preview Submission Changes',
+    35 => 'Save Changes to Queue',
+    36 => 'Notify me of new replies',
+    37 => 'New Comment Reply',
+    38 => 'Someone has replied to your comment.',
+    39 => 'You may view the comment thread at the following address: ',
+    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
 );
 
 ###############################################################################
@@ -371,7 +386,8 @@ $LANG04 = array(
     156 => 'アカウント削除',
     157 => 'アカウント削除オプション',
     158 => 'タイムゾーン',
-    159 => 'このメールは自動送信されたものです。返信しないでください。'
+    159 => 'このメールは自動送信されたものです。返信しないでください。',
+    160 => 'Online'
 );
 
 ###############################################################################
@@ -506,7 +522,14 @@ $LANG09 = array(
     58 => '次の検索結果へ &gt;&gt;',
     59 => '１ページあたりの件数',
     60 => '件',
-    61 => '検索条件の修正'
+    61 => '検索条件の修正',
+    62 => '#',
+    63 => 'Description',
+    64 => 'Showing %d - %d of %d results',
+    65 => 'Story',
+    66 => 'Comment',
+    67 => 'Show %d Results',
+    68 => 'Sort By'
 );
 
 ###############################################################################
@@ -776,7 +799,7 @@ $LANG24 = array(
     60 => '',
     61 => '自動圧縮',
     62 => '自動削除',
-    63 => '',
+    63 => 'Auto Close Comments',
     64 => '',
     65 => '',
     66 => '',
@@ -949,11 +972,15 @@ $LANG29 = array(
     18 => 'メールアドレス',
     34 => '投稿管理',
     35 => '記事の投稿申請',
-    36 => '',
-    37 => '',
+    36 => 'Comment',
+    37 => 'Time',
     38 => '実行',
     39 => '現在のところ申請はありません',
-    40 => 'ユーザの登録申請'
+    40 => 'ユーザの登録申請',
+    41 => 'Comment Submissions',
+    42 => 'User Name',
+    43 => 'Auto-pubish Comments?',
+    'info' => 'Approve or Decline submissions'
 );
 
 ###############################################################################
@@ -1067,7 +1094,7 @@ $LANG33 = array(
     34 => '件',
     35 => '時間以内',
     36 => 'フィードのタイプを選択してください。',
-    37 => 'シンジケーションを有効にするためには，関係するプラグインを少なくとも一つインストールしておいてください。以下では，glFusionのフィードを作成するのか，プラグインで取得するフィードを作成するのか選択してください。',
+    37 => '',
     38 => 'エラー: 入力していない項目があります。',
     39 => 'フィードのタイトル，詳細，ファイル名を入力してください。',
     40 => 'エントリ数または，取得する時間を入力してください。',
@@ -1082,7 +1109,10 @@ $LANG33 = array(
     49 => 'ロゴ',
     50 => "本サイトからの相対URL ({$_CONF['site_url']})",
     51 => '選択したフィード名は他のフィードで使用されています。別の名前にしてください。',
-    52 => 'エラー: このファイル名は既に使用されています'
+    52 => 'エラー: このファイル名は既に使用されています',
+    53 => 'All Frontpage Stories',
+    54 => 'Please select the type of feed to create.',
+    55 => 'Articles'
 );
 
 ###############################################################################
@@ -1103,8 +1133,8 @@ $MESSAGE = array(
     12 => 'ブロックの削除が完了しました。',
     13 => '話題の変更を反映しました。',
     14 => '話題とそれに含まれるすべての記事とブロックを削除しました',
-    15 => '',
-    16 => '',
+    15 => 'Your comment has been submitted for review and will be published when approved by a moderator.',
+    16 => 'You have been unsubscribed. You will no longer be notified of new replies',
     17 => '',
     18 => '',
     19 => '',
@@ -1114,7 +1144,7 @@ $MESSAGE = array(
     23 => '',
     24 => '',
     25 => '',
-    26 => '',
+    26 => 'There was an error sending your message, please contact the Site Administrator',
     27 => 'メッセージを送信しました。',
     28 => 'プラグインを保存しました',
     29 => '',
@@ -1186,7 +1216,11 @@ $MESSAGE = array(
     95 => 'エラーが発生しました。',
     96 => '申し訳ありません。あなたにはコンフィギュレーション管理ページへのアクセスが許可されていません。許可されていない機能へアクセスしようとする行為のすべてが記録される点に注意してください。',
     97 => 'Not all required fields have been passed validation - default custom membership message',
-    500 => 'The Template Cache has been successfully cleared'
+    98 => 'The plugin was successfully uploaded.',
+    99 => 'The plugin already exists.',
+    100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
+    500 => 'The Template Cache has been successfully cleared',
+    501 => 'Security Token is Invalid - Possible session timeout.'
 );
 
 ###############################################################################
@@ -1431,7 +1465,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1487,7 +1521,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1516,7 +1550,8 @@ $LANG_ADMIN = array(
     'records_found' => '件数',
     'addchild' => '子を追加',
     'list' => 'リスト',
-    'list_all' => 'すべてのリスト'
+    'list_all' => 'すべてのリスト',
+    'na' => '-'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1589,7 +1624,8 @@ $LANG_CONFIG = array(
     'reset_form' => 'フォームを初期化する',
     'changes_made' => '変更が完了しました',
     'title' => 'コンフィギュレーション管理',
-    'disable' => 'Click to disable this option'
+    'disable' => 'Click to disable this option',
+    'enable' => 'Enable'
 );
 
 $LANG_configsections['Core'] = array(
@@ -1714,6 +1750,7 @@ $LANG_confignames['Core'] = array(
     'pingback_excerpt' => 'ピングバックを要約する',
     'link_documentation' => 'ドキュメントをリンクする',
     'link_versionchecker' => 'バージョンチェッカーをリンクする',
+    'hide_adminmenu' => 'Hide Admin Menu Outside Admin Pages?',
     'maximagesperarticle' => '記事に配置する画像の最大数',
     'limitnews' => '1ページあたりの記事の表示数',
     'minnews' => '記事の最小数',
@@ -1764,6 +1801,9 @@ $LANG_confignames['Core'] = array(
     'comment_limit' => 'コメント制限',
     'comment_mode' => 'コメント形状',
     'comment_code' => 'コメント許可',
+    'comment_edit' => 'Allow Comment Edit?',
+    'comment_edittime' => 'Comment Edit Time (seconds)',
+    'commentsubmission' => 'Queue Comment Submissions',
     'passwordspeedlimit' => 'パスワード入力間隔制限',
     'login_attempts' => 'ログイン試行回数制限',
     'login_speedlimit' => 'ログイン試行間隔制限',
@@ -1783,7 +1823,34 @@ $LANG_confignames['Core'] = array(
     'atom_max_stories' => 'フィードの最大記事数',
     'disable_webservices' => '無効にする',
     'restrict_webservices' => '制限する',
-    'use_safe_html' => 'Use Safe HTML Mode?'
+    'article_comment_close_days' => 'Days to close comments (default)',
+    'comment_close_rec_stories' => 'Number of most recent stories enabled for comments',
+    'use_safe_html' => 'Use Safe HTML Mode?',
+    'jhead_enabled' => 'Enable JHEAD?',
+    'jpegtrans_enabled' => 'Enable jpegtrans?',
+    'path_to_jhead' => 'Path to jhead executable',
+    'path_to_jpegtrans' => 'Path to jpegtrans executable',
+    'allow_reply_notifications' => 'Allow comment reply notifications?',
+    'search_style' => 'Results List Style',
+    'search_limits' => 'Page Limits',
+    'search_show_num' => 'Show Result Number?',
+    'search_show_type' => 'Show Result Type?',
+    'search_show_user' => 'Show Author?',
+    'search_show_hits' => 'Show Number of Hits?',
+    'search_show_sort' => 'Allow User to Sort Results?',
+    'search_show_limit' => 'Show Page Limits?',
+    'search_no_data' => 'If No Data is Avaliable, Display',
+    'search_separator' => 'Group Separator',
+    'search_def_keytype' => 'Default Search Method',
+    'mail_backend' => 'Mail Backend',
+    'mail_sendmail_path' => 'Path to Sendmail',
+    'mail_sendmail_args' => 'Sendmail Parameters',
+    'mail_smtp_host' => 'SMTP Hostname',
+    'mail_smtp_port' => 'SMTP Port',
+    'mail_smtp_auth' => 'Require SMTP Auth?',
+    'mail_smtp_username' => 'SMTP Auth Username',
+    'mail_smtp_password' => 'SMTP Auth Password',
+    'mail_smtp_secure' => 'SMTP Security Protocol'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1859,7 +1926,19 @@ $LANG_configselects['Core'] = array(
     14 => array('日曜日' => 'Sun', '月曜日' => 'Mon'),
     15 => array('番号順' => 'sortnum', 'アルファベット順' => 'alpha'),
     16 => array('ログイン不要' => 0, 'アドバンストサーチのみ' => 1, 'シンプル + アドバンストサーチ' => 2),
-    17 => array('コメントを許可する' => 0, 'コメントを許可しない' => -1)
+    17 => array('コメントを許可する' => 0, 'コメントを許可しない' => -1),
+    18 => array('Google' => 'google', 'Table' => 'table'),
+    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
+    20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
+    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
 );
+###############################################################################
+# lib-widget.php
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News'
+);
+
 
 ?>

@@ -134,7 +134,7 @@ $LANG01 = array(
     90 => 'Etusivu',
     91 => 'Sivu luotu ',
     92 => 'sekunnissa',
-    93 => 'Copyright',
+    93 => '',
     94 => 'All trademarks and copyrights on this page are owned by their respective owners.',
     95 => 'Moottorina toimii',
     96 => 'Ryhmiä',
@@ -172,7 +172,9 @@ $LANG01 = array(
     128 => 'Login with OpenID:',
     129 => 'Configuration',
     130 => 'Webservices',
-    500 => 'Please remove the admin/install/ directory!'
+    500 => 'Please remove the admin/install/ directory!',
+    'ctl' => 'Clear Template Cache',
+    'logview' => 'Logview'
 );
 
 ###############################################################################
@@ -205,7 +207,20 @@ $LANG03 = array(
     24 => 'Tuntematon käyttäjä',
     25 => 'Are you sure you want to report this post to the site admin?',
     26 => '%s reported the following abusive comment post:',
-    27 => 'Abuse report'
+    27 => 'Abuse report',
+    28 => 'Preview Changes',
+    29 => 'Submit Changes',
+    30 => 'Edited on',
+    31 => 'by',
+    32 => 'Editing a Comment',
+    33 => 'Editing a Comment Submission',
+    34 => 'Preview Submission Changes',
+    35 => 'Save Changes to Queue',
+    36 => 'Notify me of new replies',
+    37 => 'New Comment Reply',
+    38 => 'Someone has replied to your comment.',
+    39 => 'You may view the comment thread at the following address: ',
+    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
 );
 
 ###############################################################################
@@ -365,7 +380,8 @@ $LANG04 = array(
     156 => 'Delete Account',
     157 => 'Delete Option',
     158 => 'Time Zone',
-    159 => 'This email was generated automatically. Please do not reply to this email.'
+    159 => 'This email was generated automatically. Please do not reply to this email.',
+    160 => 'Online'
 );
 
 ###############################################################################
@@ -500,7 +516,14 @@ $LANG09 = array(
     58 => 'More results &gt;&gt;',
     59 => 'Results',
     60 => 'per page',
-    61 => 'Refine search'
+    61 => 'Refine search',
+    62 => '#',
+    63 => 'Description',
+    64 => 'Showing %d - %d of %d results',
+    65 => 'Story',
+    66 => 'Comment',
+    67 => 'Show %d Results',
+    68 => 'Sort By'
 );
 
 ###############################################################################
@@ -770,7 +793,7 @@ $LANG24 = array(
     60 => '',
     61 => 'Auto Archive',
     62 => 'Auto Delete',
-    63 => '',
+    63 => 'Auto Close Comments',
     64 => '',
     65 => '',
     66 => '',
@@ -943,11 +966,15 @@ $LANG29 = array(
     18 => 'Sähköposti',
     34 => 'Komennot ja hallinta',
     35 => 'Lähetettyjä artikkeleja',
-    36 => '',
-    37 => '',
+    36 => 'Comment',
+    37 => 'Time',
     38 => 'Lähetä',
     39 => 'Ei hallinnoitavia lähetyksiä tällä hetkellä',
-    40 => 'Käyttäjien lähetyksiä'
+    40 => 'Käyttäjien lähetyksiä',
+    41 => 'Comment Submissions',
+    42 => 'User Name',
+    43 => 'Auto-pubish Comments?',
+    'info' => 'Approve or Decline submissions'
 );
 
 ###############################################################################
@@ -1061,7 +1088,7 @@ $LANG33 = array(
     34 => 'Kirjauksia',
     35 => 'Tuntia',
     36 => 'Valitse syötteen tyyppi',
-    37 => 'Vähintään yksi syötettä tai sisällön jakamista tukeva laajennus on asennettu. Alta voit valita haluatko luoda syötteen glFusionista vai jostain laajennuksesta.',
+    37 => '',
     38 => 'Virhe: puuttuvia kenttiä',
     39 => 'Täytä syötteen otsikko, kuvaus ja tiedoston nimi.',
     40 => 'Syötä kirjauksien määrä tai tuntien lukumäärä.',
@@ -1076,7 +1103,10 @@ $LANG33 = array(
     49 => 'Feed Logo',
     50 => "Relative to site url ({$_CONF['site_url']})",
     51 => 'The filename you have chosen is already used by another feed. Please choose a different one.',
-    52 => 'Error: existing Filename'
+    52 => 'Error: existing Filename',
+    53 => 'All Frontpage Stories',
+    54 => 'Please select the type of feed to create.',
+    55 => 'Articles'
 );
 
 ###############################################################################
@@ -1097,8 +1127,8 @@ $MESSAGE = array(
     12 => 'Lohko on poistettu.',
     13 => 'Aiheesi on tallennettu.',
     14 => 'Aihe ja kaikki sen artikkelit ja lohkot ovat poistettu.',
-    15 => '',
-    16 => '',
+    15 => 'Your comment has been submitted for review and will be published when approved by a moderator.',
+    16 => 'You have been unsubscribed. You will no longer be notified of new replies',
     17 => '',
     18 => '',
     19 => '',
@@ -1108,7 +1138,7 @@ $MESSAGE = array(
     23 => '',
     24 => '',
     25 => '',
-    26 => '',
+    26 => 'There was an error sending your message, please contact the Site Administrator',
     27 => 'Viesti lähetetty onnistuneesti.',
     28 => 'Laajennus on tallennettu',
     29 => '',
@@ -1180,7 +1210,11 @@ $MESSAGE = array(
     95 => 'There was an error.',
     96 => 'Sorry, you do not have access to the configuration administration page.  Please note that all attempts to access unauthorized features are logged.',
     97 => 'Not all required fields have been passed validation - default custom membership message',
-    500 => 'The Template Cache has been successfully cleared'
+    98 => 'The plugin was successfully uploaded.',
+    99 => 'The plugin already exists.',
+    100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
+    500 => 'The Template Cache has been successfully cleared',
+    501 => 'Security Token is Invalid - Possible session timeout.'
 );
 
 ###############################################################################
@@ -1425,7 +1459,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1481,7 +1515,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1510,7 +1544,8 @@ $LANG_ADMIN = array(
     'records_found' => 'Records found',
     'addchild' => 'Add child',
     'list' => 'list',
-    'list_all' => 'List all'
+    'list_all' => 'List all',
+    'na' => '-'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1583,7 +1618,8 @@ $LANG_CONFIG = array(
     'reset_form' => 'Reset Form',
     'changes_made' => 'Changes were successfully made to',
     'title' => 'Configuration Manager',
-    'disable' => 'Click to disable this option'
+    'disable' => 'Click to disable this option',
+    'enable' => 'Enable'
 );
 
 $LANG_configsections['Core'] = array(
@@ -1708,6 +1744,7 @@ $LANG_confignames['Core'] = array(
     'pingback_excerpt' => 'Create Pingback Excerpt?',
     'link_documentation' => 'Link to Documentation?',
     'link_versionchecker' => 'Link to Version Checker?',
+    'hide_adminmenu' => 'Hide Admin Menu Outside Admin Pages?',
     'maximagesperarticle' => 'Max Images per Article',
     'limitnews' => 'Stories per Page',
     'minnews' => 'Min. Stories per Page',
@@ -1758,6 +1795,9 @@ $LANG_confignames['Core'] = array(
     'comment_limit' => 'Comment Limit',
     'comment_mode' => 'Comment Mode',
     'comment_code' => 'Comment Default',
+    'comment_edit' => 'Allow Comment Edit?',
+    'comment_edittime' => 'Comment Edit Time (seconds)',
+    'commentsubmission' => 'Queue Comment Submissions',
     'passwordspeedlimit' => 'Password Speed Limit',
     'login_attempts' => 'Max. Login Attempts',
     'login_speedlimit' => 'Login Speed Limit',
@@ -1777,7 +1817,34 @@ $LANG_confignames['Core'] = array(
     'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
     'restrict_webservices' => 'Restrict Webservices?',
-    'use_safe_html' => 'Use Safe HTML Mode?'
+    'article_comment_close_days' => 'Days to close comments (default)',
+    'comment_close_rec_stories' => 'Number of most recent stories enabled for comments',
+    'use_safe_html' => 'Use Safe HTML Mode?',
+    'jhead_enabled' => 'Enable JHEAD?',
+    'jpegtrans_enabled' => 'Enable jpegtrans?',
+    'path_to_jhead' => 'Path to jhead executable',
+    'path_to_jpegtrans' => 'Path to jpegtrans executable',
+    'allow_reply_notifications' => 'Allow comment reply notifications?',
+    'search_style' => 'Results List Style',
+    'search_limits' => 'Page Limits',
+    'search_show_num' => 'Show Result Number?',
+    'search_show_type' => 'Show Result Type?',
+    'search_show_user' => 'Show Author?',
+    'search_show_hits' => 'Show Number of Hits?',
+    'search_show_sort' => 'Allow User to Sort Results?',
+    'search_show_limit' => 'Show Page Limits?',
+    'search_no_data' => 'If No Data is Avaliable, Display',
+    'search_separator' => 'Group Separator',
+    'search_def_keytype' => 'Default Search Method',
+    'mail_backend' => 'Mail Backend',
+    'mail_sendmail_path' => 'Path to Sendmail',
+    'mail_sendmail_args' => 'Sendmail Parameters',
+    'mail_smtp_host' => 'SMTP Hostname',
+    'mail_smtp_port' => 'SMTP Port',
+    'mail_smtp_auth' => 'Require SMTP Auth?',
+    'mail_smtp_username' => 'SMTP Auth Username',
+    'mail_smtp_password' => 'SMTP Auth Password',
+    'mail_smtp_secure' => 'SMTP Security Protocol'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1853,7 +1920,19 @@ $LANG_configselects['Core'] = array(
     14 => array('Sunday' => 'Sun', 'Monday' => 'Mon'),
     15 => array('By Number' => 'sortnum', 'Alphabetically' => 'alpha'),
     16 => array('No Login required' => 0, 'Advanced Search only' => 1, 'Simple + Advanced Search' => 2),
-    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1)
+    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
+    18 => array('Google' => 'google', 'Table' => 'table'),
+    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
+    20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
+    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
 );
+###############################################################################
+# lib-widget.php
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News'
+);
+
 
 ?>

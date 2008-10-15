@@ -136,7 +136,7 @@ $LANG01 = array(
     90 => 'Home',
     91 => 'Seite erzeugt in',
     92 => 'Sekunden',
-    93 => 'Copyright',
+    93 => '',
     94 => 'All trademarks and copyrights on this page are owned by their respective owners.',
     95 => 'Powered by',
     96 => 'Gruppen',
@@ -174,7 +174,9 @@ $LANG01 = array(
     128 => 'Einloggen mit OpenID:',
     129 => 'Konfiguration',
     130 => 'Webservices',
-    500 => 'Please remove the admin/install/ directory!'
+    500 => 'Please remove the admin/install/ directory!',
+    'ctl' => 'Clear Template Cache',
+    'logview' => 'Logview'
 );
 
 ###############################################################################
@@ -207,7 +209,20 @@ $LANG03 = array(
     24 => 'Gast',
     25 => 'Bist Du sicher, dass Du diesen Beitrag als möglichen Missbrauch melden willst?',
     26 => '%s meldete den folgenden Beitrag als möglichen Missbrauch:',
-    27 => 'Hinweis auf Missbrauch'
+    27 => 'Hinweis auf Missbrauch',
+    28 => 'Preview Changes',
+    29 => 'Submit Changes',
+    30 => 'Edited on',
+    31 => 'by',
+    32 => 'Editing a Comment',
+    33 => 'Editing a Comment Submission',
+    34 => 'Preview Submission Changes',
+    35 => 'Save Changes to Queue',
+    36 => 'Notify me of new replies',
+    37 => 'New Comment Reply',
+    38 => 'Someone has replied to your comment.',
+    39 => 'You may view the comment thread at the following address: ',
+    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
 );
 
 ###############################################################################
@@ -367,7 +382,8 @@ $LANG04 = array(
     156 => 'Account löschen',
     157 => 'Löschen',
     158 => 'Zeitzone',
-    159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.'
+    159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.',
+    160 => 'Online'
 );
 
 ###############################################################################
@@ -502,7 +518,14 @@ $LANG09 = array(
     58 => 'Weitere Ergebnisse &gt;&gt;',
     59 => 'Ergebnisse',
     60 => 'pro Seite',
-    61 => 'Suche korrigieren'
+    61 => 'Suche korrigieren',
+    62 => '#',
+    63 => 'Description',
+    64 => 'Showing %d - %d of %d results',
+    65 => 'Story',
+    66 => 'Comment',
+    67 => 'Show %d Results',
+    68 => 'Sort By'
 );
 
 ###############################################################################
@@ -551,7 +574,7 @@ $LANG11 = array(
     3 => 'Druckfähige Version',
     4 => 'Optionen',
     5 => 'Als PDF',
-    6 => "Feed '%s' abonnieren"
+    6 => 'Feed \'%s\' abonnieren'
 );
 
 ###############################################################################
@@ -772,7 +795,7 @@ $LANG24 = array(
     60 => '',
     61 => 'automatisch archivieren',
     62 => 'automatisch löschen',
-    63 => '',
+    63 => 'Auto Close Comments',
     64 => '',
     65 => '',
     66 => '',
@@ -945,11 +968,15 @@ $LANG29 = array(
     18 => 'E-Mail',
     34 => 'Kommandozentrale',
     35 => 'Beiträge: Artikel',
-    36 => '',
-    37 => '',
+    36 => 'Comment',
+    37 => 'Time',
     38 => 'Abschicken',
     39 => 'Derzeit gibt es keine Beiträge zu moderieren.',
-    40 => 'Neue User'
+    40 => 'Neue User',
+    41 => 'Comment Submissions',
+    42 => 'User Name',
+    43 => 'Auto-pubish Comments?',
+    'info' => 'Approve or Decline submissions'
 );
 
 ###############################################################################
@@ -1063,7 +1090,7 @@ $LANG33 = array(
     34 => 'Einträge',
     35 => 'Stunden',
     36 => 'Art des Newsfeeds festlegen',
-    37 => 'Du hast (mindestens) ein Plugin installiert, das Newsfeeds unterstützt. Bitte wähle zunächst aus, ob Du einen Newsfeed für glFusion oder für ein Plugin anlegen wollst.',
+    37 => '',
     38 => 'Fehler: Nicht alle Felder ausgefüllt',
     39 => 'Bitte die Felder Newsfeeds-Titel, Beschreibung und Dateiname ausfüllen.',
     40 => 'Bitte ein Limit (Anzahl Einträge oder Anzahl Stunden) eingeben.',
@@ -1102,8 +1129,8 @@ $MESSAGE = array(
     12 => 'Der Block wurde gelöscht.',
     13 => 'Deine Kategorie wurde gespeichert.',
     14 => 'Die Kategorie und alle zugehörigen Artikel wurden gelöscht.',
-    15 => '',
-    16 => '',
+    15 => 'Your comment has been submitted for review and will be published when approved by a moderator.',
+    16 => 'You have been unsubscribed. You will no longer be notified of new replies',
     17 => '',
     18 => '',
     19 => '',
@@ -1113,7 +1140,7 @@ $MESSAGE = array(
     23 => '',
     24 => '',
     25 => '',
-    26 => '',
+    26 => 'There was an error sending your message, please contact the Site Administrator',
     27 => 'Nachricht wurde verschickt.',
     28 => 'Das Plugin wurde gespeichert.',
     29 => '',
@@ -1185,7 +1212,11 @@ $MESSAGE = array(
     95 => 'Es gab einen Fehler.',
     96 => 'Sorry, kein Zugang zur Admin-Seite. Unzulässige Zugangsversuche werden gelogged.',
     97 => 'Not all required fields have been passed validation - default custom membership message',
-    500 => 'The Template Cache has been successfully cleared'
+    98 => 'The plugin was successfully uploaded.',
+    99 => 'The plugin already exists.',
+    100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
+    500 => 'The Template Cache has been successfully cleared',
+    501 => 'Security Token is Invalid - Possible session timeout.'
 );
 
 ###############################################################################
@@ -1515,7 +1546,8 @@ $LANG_ADMIN = array(
     'records_found' => 'Einträge',
     'addchild' => 'Add child',
     'list' => 'auflisten',
-    'list_all' => 'alle auflisten'
+    'list_all' => 'alle auflisten',
+    'na' => '-'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1588,7 +1620,8 @@ $LANG_CONFIG = array(
     'reset_form' => 'Angaben zurücksetzen',
     'changes_made' => 'Änderungen wurden erfolgreich übernommen',
     'title' => 'Konfigurations-Manager',
-    'disable' => 'Click to disable this option'
+    'disable' => 'Click to disable this option',
+    'enable' => 'Enable'
 );
 
 $LANG_configsections['Core'] = array(
@@ -1713,6 +1746,7 @@ $LANG_confignames['Core'] = array(
     'pingback_excerpt' => 'Pingback-Auszug erzeugen?',
     'link_documentation' => 'Link zur Dokumentation?',
     'link_versionchecker' => 'Link zum Versions-Checker?',
+    'hide_adminmenu' => 'Hide Admin Menu Outside Admin Pages?',
     'maximagesperarticle' => 'Max. Bilder pro Artikel',
     'limitnews' => 'Artikel pro Seite',
     'minnews' => 'Min. Artikel pro Seite',
@@ -1763,6 +1797,9 @@ $LANG_confignames['Core'] = array(
     'comment_limit' => 'Max. Anzahl Kommentare',
     'comment_mode' => 'Kommentar-Anzeigemodus',
     'comment_code' => 'Kommentar Grundeinstellung',
+    'comment_edit' => 'Allow Comment Edit?',
+    'comment_edittime' => 'Comment Edit Time (seconds)',
+    'commentsubmission' => 'Queue Comment Submissions',
     'passwordspeedlimit' => 'Passwort Speed-Limit',
     'login_attempts' => 'Max. Login-Versuche',
     'login_speedlimit' => 'Login Speed-Limit',
@@ -1782,7 +1819,34 @@ $LANG_confignames['Core'] = array(
     'atom_max_stories' => 'Max. Artikel im Webservices-Feed',
     'disable_webservices' => 'Webservices ausschalten?',
     'restrict_webservices' => 'Webservices beschränken?',
-    'use_safe_html' => 'Use Safe HTML Mode?'
+    'article_comment_close_days' => 'Days to close comments (default)',
+    'comment_close_rec_stories' => 'Number of most recent stories enabled for comments',
+    'use_safe_html' => 'Use Safe HTML Mode?',
+    'jhead_enabled' => 'Enable JHEAD?',
+    'jpegtrans_enabled' => 'Enable jpegtrans?',
+    'path_to_jhead' => 'Path to jhead executable',
+    'path_to_jpegtrans' => 'Path to jpegtrans executable',
+    'allow_reply_notifications' => 'Allow comment reply notifications?',
+    'search_style' => 'Results List Style',
+    'search_limits' => 'Page Limits',
+    'search_show_num' => 'Show Result Number?',
+    'search_show_type' => 'Show Result Type?',
+    'search_show_user' => 'Show Author?',
+    'search_show_hits' => 'Show Number of Hits?',
+    'search_show_sort' => 'Allow User to Sort Results?',
+    'search_show_limit' => 'Show Page Limits?',
+    'search_no_data' => 'If No Data is Avaliable, Display',
+    'search_separator' => 'Group Separator',
+    'search_def_keytype' => 'Default Search Method',
+    'mail_backend' => 'Mail Backend',
+    'mail_sendmail_path' => 'Path to Sendmail',
+    'mail_sendmail_args' => 'Sendmail Parameters',
+    'mail_smtp_host' => 'SMTP Hostname',
+    'mail_smtp_port' => 'SMTP Port',
+    'mail_smtp_auth' => 'Require SMTP Auth?',
+    'mail_smtp_username' => 'SMTP Auth Username',
+    'mail_smtp_password' => 'SMTP Auth Password',
+    'mail_smtp_secure' => 'SMTP Security Protocol'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1858,7 +1922,19 @@ $LANG_configselects['Core'] = array(
     14 => array('Sonntag' => 'Sun', 'Montag' => 'Mon'),
     15 => array('Nummerisch' => 'sortnum', 'Alphabetisch' => 'alpha'),
     16 => array('Kein Login benötigt' => 0, 'Nur erweiterte Suche' => 1, 'Einfache und erweiterte Suche' => 2),
-    17 => array('Kommentare eingeschaltet' => 0, 'Kommentare ausgeschaltet' => -1)
+    17 => array('Kommentare eingeschaltet' => 0, 'Kommentare ausgeschaltet' => -1),
+    18 => array('Google' => 'google', 'Table' => 'table'),
+    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
+    20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
+    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
 );
+###############################################################################
+# lib-widget.php
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News'
+);
+
 
 ?>

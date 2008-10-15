@@ -136,7 +136,7 @@ $LANG01 = array(
     90 => 'Na osnovno stran',
     91 => 'Spletna stran generirana v',
     92 => 'sekundah',
-    93 => 'Copyright',
+    93 => '',
     94 => 'Vsa naša koda pripada vam.',
     95 => 'Gnano z',
     96 => 'Uporabniške skupine',
@@ -174,7 +174,9 @@ $LANG01 = array(
     128 => 'Prijavi se z OpenID:',
     129 => 'Nastavitve',
     130 => 'Spletne storitve',
-    500 => 'Please remove the admin/install/ directory!'
+    500 => 'Please remove the admin/install/ directory!',
+    'ctl' => 'Clear Template Cache',
+    'logview' => 'Logview'
 );
 
 ###############################################################################
@@ -207,7 +209,20 @@ $LANG03 = array(
     24 => 'Anonimni uporabnik',
     25 => 'Hočeš ta prispevek res prijaviti skrbniku strani?',
     26 => '%s je prijavil sledeči prispevek, ki zlorablja:',
-    27 => 'Prijava zlorabe'
+    27 => 'Prijava zlorabe',
+    28 => 'Preview Changes',
+    29 => 'Submit Changes',
+    30 => 'Edited on',
+    31 => 'by',
+    32 => 'Editing a Comment',
+    33 => 'Editing a Comment Submission',
+    34 => 'Preview Submission Changes',
+    35 => 'Save Changes to Queue',
+    36 => 'Notify me of new replies',
+    37 => 'New Comment Reply',
+    38 => 'Someone has replied to your comment.',
+    39 => 'You may view the comment thread at the following address: ',
+    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
 );
 
 ###############################################################################
@@ -367,7 +382,8 @@ $LANG04 = array(
     156 => 'Izbriši račun',
     157 => 'Briši opcijo',
     158 => 'Časovni pas',
-    159 => 'Ta pošta je poslana samodejno. Prosim ne odgovarjaj najo.'
+    159 => 'Ta pošta je poslana samodejno. Prosim ne odgovarjaj najo.',
+    160 => 'Online'
 );
 
 ###############################################################################
@@ -502,7 +518,14 @@ $LANG09 = array(
     58 => 'Več  rezultatov &gt;&gt;',
     59 => 'Rezultati',
     60 => 'na stran',
-    61 => 'Podrobnejše iskanje'
+    61 => 'Podrobnejše iskanje',
+    62 => '#',
+    63 => 'Description',
+    64 => 'Showing %d - %d of %d results',
+    65 => 'Story',
+    66 => 'Comment',
+    67 => 'Show %d Results',
+    68 => 'Sort By'
 );
 
 ###############################################################################
@@ -772,7 +795,7 @@ $LANG24 = array(
     60 => '',
     61 => 'Samodejno arhiviranje',
     62 => 'Samodejno brisanje',
-    63 => '',
+    63 => 'Auto Close Comments',
     64 => '',
     65 => '',
     66 => '',
@@ -945,11 +968,15 @@ $LANG29 = array(
     18 => 'E-naslov',
     34 => 'Skrbnikove strani',
     35 => 'Čakajoči članki',
-    36 => '',
-    37 => '',
+    36 => 'Comment',
+    37 => 'Time',
     38 => 'Oddaj',
     39 => 'Trenutno ni nobene čakajoče vsebine',
-    40 => 'Uporabniška čakajoča vsebina'
+    40 => 'Uporabniška čakajoča vsebina',
+    41 => 'Comment Submissions',
+    42 => 'User Name',
+    43 => 'Auto-pubish Comments?',
+    'info' => 'Approve or Decline submissions'
 );
 
 ###############################################################################
@@ -1063,7 +1090,7 @@ $LANG33 = array(
     34 => 'Vpisi',
     35 => 'Ure',
     36 => 'Izberi tip združene vsebine',
-    37 => 'Nameščen imaš vsaj en vtičnik, ki podpira združevanje vsebine. Spodaj je treba izbrati, ali hočeš ustvariti združeno vsebino za glFusion ali za katerega od vtičnikov.',
+    37 => '',
     38 => 'Napaka: Manjkajoča polja',
     39 => 'Izpolni polja Naslov združene vsebine, Opis, Ime datoteke.',
     40 => 'Vpiši število vpisov ali število ur.',
@@ -1078,7 +1105,10 @@ $LANG33 = array(
     49 => 'Logotip združene vsebine',
     50 => "Glede na url strani ({$_CONF['site_url']})",
     51 => 'Izbrano ime datoteke že uporablja druga združena vsebina. Prosim izberi drugega.',
-    52 => 'Napaka: Ime datoteke že obstaja.'
+    52 => 'Napaka: Ime datoteke že obstaja.',
+    53 => 'All Frontpage Stories',
+    54 => 'Please select the type of feed to create.',
+    55 => 'Articles'
 );
 
 ###############################################################################
@@ -1099,8 +1129,8 @@ $MESSAGE = array(
     12 => 'Blok je bil uspešno izbrisan.',
     13 => 'Rubrika je bila uspešno shranjeno.',
     14 => 'Rubrika skupaj z vsemi članki in bloki je bila uspešno izbrisana.',
-    15 => '',
-    16 => '',
+    15 => 'Your comment has been submitted for review and will be published when approved by a moderator.',
+    16 => 'You have been unsubscribed. You will no longer be notified of new replies',
     17 => '',
     18 => '',
     19 => '',
@@ -1110,7 +1140,7 @@ $MESSAGE = array(
     23 => '',
     24 => '',
     25 => '',
-    26 => '',
+    26 => 'There was an error sending your message, please contact the Site Administrator',
     27 => 'Sporočilo je bilo uspešno poslano.',
     28 => 'Vtičnik je bil uspešno shranjen',
     29 => '',
@@ -1182,7 +1212,11 @@ $MESSAGE = array(
     95 => 'Prišlo je do napake.',
     96 => 'Žal, nimaš dostopa do strani z nastavitvami!   Vedi da so vsi poskusi za dostop do zaščitenih lastnosti strani zabeleženi.',
     97 => 'Not all required fields have been passed validation - default custom membership message',
-    500 => 'The Template Cache has been successfully cleared'
+    98 => 'The plugin was successfully uploaded.',
+    99 => 'The plugin already exists.',
+    100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
+    500 => 'The Template Cache has been successfully cleared',
+    501 => 'Security Token is Invalid - Possible session timeout.'
 );
 
 ###############################################################################
@@ -1427,7 +1461,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1483,7 +1517,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1512,7 +1546,8 @@ $LANG_ADMIN = array(
     'records_found' => 'Najdeni zapisi',
     'addchild' => 'Dodaj novo (child)',
     'list' => 'izpiši',
-    'list_all' => 'Izpiši vse'
+    'list_all' => 'Izpiši vse',
+    'na' => '-'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1585,7 +1620,8 @@ $LANG_CONFIG = array(
     'reset_form' => 'Ponastavi obrazec',
     'changes_made' => 'Spremembe so bile uspešno izvedene nad',
     'title' => 'Upravljavec nastavitev',
-    'disable' => 'Click to disable this option'
+    'disable' => 'Click to disable this option',
+    'enable' => 'Enable'
 );
 
 $LANG_configsections['Core'] = array(
@@ -1710,6 +1746,7 @@ $LANG_confignames['Core'] = array(
     'pingback_excerpt' => 'Create Pingback Excerpt?',
     'link_documentation' => 'Povezava do dokumentacije?',
     'link_versionchecker' => 'Povezava do preverjalnika verzije?',
+    'hide_adminmenu' => 'Hide Admin Menu Outside Admin Pages?',
     'maximagesperarticle' => 'Največje število slik na članek',
     'limitnews' => 'Člankov na strani',
     'minnews' => 'Min. št. člankov na strani',
@@ -1760,6 +1797,9 @@ $LANG_confignames['Core'] = array(
     'comment_limit' => 'Število komentarjev',
     'comment_mode' => 'Način prikaza komentarjev',
     'comment_code' => 'Prednastavljen komentar',
+    'comment_edit' => 'Allow Comment Edit?',
+    'comment_edittime' => 'Comment Edit Time (seconds)',
+    'commentsubmission' => 'Queue Comment Submissions',
     'passwordspeedlimit' => 'Zahtevani čas med vpisi gesla',
     'login_attempts' => 'Največje število poizkusov prijave',
     'login_speedlimit' => 'Zahtevani čas med prijavami',
@@ -1779,7 +1819,34 @@ $LANG_confignames['Core'] = array(
     'atom_max_stories' => 'Največje število člankov v Webservices Feed',
     'disable_webservices' => 'Onemogoči Webservices?',
     'restrict_webservices' => 'Omeji Webservices?',
-    'use_safe_html' => 'Use Safe HTML Mode?'
+    'article_comment_close_days' => 'Days to close comments (default)',
+    'comment_close_rec_stories' => 'Number of most recent stories enabled for comments',
+    'use_safe_html' => 'Use Safe HTML Mode?',
+    'jhead_enabled' => 'Enable JHEAD?',
+    'jpegtrans_enabled' => 'Enable jpegtrans?',
+    'path_to_jhead' => 'Path to jhead executable',
+    'path_to_jpegtrans' => 'Path to jpegtrans executable',
+    'allow_reply_notifications' => 'Allow comment reply notifications?',
+    'search_style' => 'Results List Style',
+    'search_limits' => 'Page Limits',
+    'search_show_num' => 'Show Result Number?',
+    'search_show_type' => 'Show Result Type?',
+    'search_show_user' => 'Show Author?',
+    'search_show_hits' => 'Show Number of Hits?',
+    'search_show_sort' => 'Allow User to Sort Results?',
+    'search_show_limit' => 'Show Page Limits?',
+    'search_no_data' => 'If No Data is Avaliable, Display',
+    'search_separator' => 'Group Separator',
+    'search_def_keytype' => 'Default Search Method',
+    'mail_backend' => 'Mail Backend',
+    'mail_sendmail_path' => 'Path to Sendmail',
+    'mail_sendmail_args' => 'Sendmail Parameters',
+    'mail_smtp_host' => 'SMTP Hostname',
+    'mail_smtp_port' => 'SMTP Port',
+    'mail_smtp_auth' => 'Require SMTP Auth?',
+    'mail_smtp_username' => 'SMTP Auth Username',
+    'mail_smtp_password' => 'SMTP Auth Password',
+    'mail_smtp_secure' => 'SMTP Security Protocol'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1855,7 +1922,19 @@ $LANG_configselects['Core'] = array(
     14 => array('Nedelja' => 'Sun', 'Ponedeljek' => 'Mon'),
     15 => array('Po zaporednih številkah' => 'sortnum', 'Po abecedi' => 'alpha'),
     16 => array('Prijava ni potrebna' => 0, 'Samo napredno iskanje' => 1, 'Preprosto in napredno iskanje' => 2),
-    17 => array('Komentarji omogočeni' => 0, 'Komentarji onemogočeni' => -1)
+    17 => array('Komentarji omogočeni' => 0, 'Komentarji onemogočeni' => -1),
+    18 => array('Google' => 'google', 'Table' => 'table'),
+    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
+    20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
+    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
 );
+###############################################################################
+# lib-widget.php
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News'
+);
+
 
 ?>

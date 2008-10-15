@@ -136,7 +136,7 @@ $LANG01 = array(
     90 => '首頁',
     91 => '載入這頁用了',
     92 => '秒',
-    93 => '版權',
+    93 => '',
     94 => '此網站所有的商標和版權屬於他們各自的所有者.',
     95 => '動力於',
     96 => '小組',
@@ -174,7 +174,9 @@ $LANG01 = array(
     128 => '用OpenID 登入:',
     129 => '設定',
     130 => '網路服務',
-    500 => 'Please remove the admin/install/ directory!'
+    500 => 'Please remove the admin/install/ directory!',
+    'ctl' => 'Clear Template Cache',
+    'logview' => 'Logview'
 );
 
 ###############################################################################
@@ -207,7 +209,20 @@ $LANG03 = array(
     24 => '匿名用戶',
     25 => '你肯定想要報告此濫登文給網站管理員否?',
     26 => '%s 報告以下濫登的評論:',
-    27 => '濫用報告'
+    27 => '濫用報告',
+    28 => 'Preview Changes',
+    29 => 'Submit Changes',
+    30 => 'Edited on',
+    31 => 'by',
+    32 => 'Editing a Comment',
+    33 => 'Editing a Comment Submission',
+    34 => 'Preview Submission Changes',
+    35 => 'Save Changes to Queue',
+    36 => 'Notify me of new replies',
+    37 => 'New Comment Reply',
+    38 => 'Someone has replied to your comment.',
+    39 => 'You may view the comment thread at the following address: ',
+    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
 );
 
 ###############################################################################
@@ -367,7 +382,8 @@ $LANG04 = array(
     156 => '刪除用戶',
     157 => '刪除選項',
     158 => '時區',
-    159 => '這電郵是自動產生的。請不要回信。'
+    159 => '這電郵是自動產生的。請不要回信。',
+    160 => 'Online'
 );
 
 ###############################################################################
@@ -502,7 +518,14 @@ $LANG09 = array(
     58 => '更多的結果 &gt;&gt;',
     59 => '結果',
     60 => '每頁',
-    61 => '改進搜尋'
+    61 => '改進搜尋',
+    62 => '#',
+    63 => 'Description',
+    64 => 'Showing %d - %d of %d results',
+    65 => 'Story',
+    66 => 'Comment',
+    67 => 'Show %d Results',
+    68 => 'Sort By'
 );
 
 ###############################################################################
@@ -772,7 +795,7 @@ $LANG24 = array(
     60 => '',
     61 => '過期後自動封存',
     62 => '過期後自動刪除',
-    63 => '',
+    63 => 'Auto Close Comments',
     64 => '',
     65 => '',
     66 => '',
@@ -945,11 +968,15 @@ $LANG29 = array(
     18 => '電子郵件',
     34 => '命令和控制',
     35 => '已遞交的文章',
-    36 => '',
-    37 => '',
+    36 => 'Comment',
+    37 => 'Time',
     38 => '遞交',
     39 => '此時沒有遞交的東西',
-    40 => '申請的用戶'
+    40 => '申請的用戶',
+    41 => 'Comment Submissions',
+    42 => 'User Name',
+    43 => 'Auto-pubish Comments?',
+    'info' => 'Approve or Decline submissions'
 );
 
 ###############################################################################
@@ -1063,7 +1090,7 @@ $LANG33 = array(
     34 => '條目',
     35 => '小時',
     36 => '選擇文流種類',
-    37 => '你有最少一個安裝了的插件能配合內容辛迪加.一下你需要選擇你是否要建立一個主系統文流或插件文流.',
+    37 => '',
     38 => '錯誤: 缺少資訊',
     39 => '請填入文流標題, 說明, 和檔案名.',
     40 => '請輸入條目數目或小時數目.',
@@ -1078,7 +1105,10 @@ $LANG33 = array(
     49 => '新聞 Feed 的標誌',
     50 => "跟網址有關 ({$_CONF['site_url']})",
     51 => '你所選的檔案名已經在另一個文流中用著了。請選另一個。',
-    52 => '錯誤: 檔案名已存在'
+    52 => '錯誤: 檔案名已存在',
+    53 => 'All Frontpage Stories',
+    54 => 'Please select the type of feed to create.',
+    55 => 'Articles'
 );
 
 ###############################################################################
@@ -1099,8 +1129,8 @@ $MESSAGE = array(
     12 => '你的組件已被刪除了。',
     13 => '你的主題已被保存了。',
     14 => '你的主題和所有相關的文章已被刪除了。',
-    15 => '',
-    16 => '',
+    15 => 'Your comment has been submitted for review and will be published when approved by a moderator.',
+    16 => 'You have been unsubscribed. You will no longer be notified of new replies',
     17 => '',
     18 => '',
     19 => '',
@@ -1110,7 +1140,7 @@ $MESSAGE = array(
     23 => '',
     24 => '',
     25 => '',
-    26 => '',
+    26 => 'There was an error sending your message, please contact the Site Administrator',
     27 => '資訊已發送。',
     28 => '插件已被保存了。',
     29 => '',
@@ -1182,7 +1212,11 @@ $MESSAGE = array(
     95 => '有錯誤。',
     96 => '對不起, 你沒權進入設定管理區。 請注意所有登入企圖都被記錄。',
     97 => 'Not all required fields have been passed validation - default custom membership message',
-    500 => 'The Template Cache has been successfully cleared'
+    98 => 'The plugin was successfully uploaded.',
+    99 => 'The plugin already exists.',
+    100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
+    500 => 'The Template Cache has been successfully cleared',
+    501 => 'Security Token is Invalid - Possible session timeout.'
 );
 
 ###############################################################################
@@ -1427,7 +1461,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1483,7 +1517,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1512,7 +1546,8 @@ $LANG_ADMIN = array(
     'records_found' => '已找到的資料',
     'addchild' => '加入子單',
     'list' => '列',
-    'list_all' => '列所有'
+    'list_all' => '列所有',
+    'na' => '-'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1585,7 +1620,8 @@ $LANG_CONFIG = array(
     'reset_form' => '恢復表格原狀',
     'changes_made' => '更改已成功地安置於',
     'title' => '設定管理',
-    'disable' => 'Click to disable this option'
+    'disable' => 'Click to disable this option',
+    'enable' => 'Enable'
 );
 
 $LANG_configsections['Core'] = array(
@@ -1710,6 +1746,7 @@ $LANG_confignames['Core'] = array(
     'pingback_excerpt' => '建設Ping回摘錄?',
     'link_documentation' => '聯結用戶指南?',
     'link_versionchecker' => '聯結版本檢查?',
+    'hide_adminmenu' => 'Hide Admin Menu Outside Admin Pages?',
     'maximagesperarticle' => '每文章的最多圖像限度',
     'limitnews' => '每頁最多文章顯示',
     'minnews' => '每頁最少文章顯示',
@@ -1760,6 +1797,9 @@ $LANG_confignames['Core'] = array(
     'comment_limit' => '評論限定',
     'comment_mode' => '評論方式',
     'comment_code' => '評論默認',
+    'comment_edit' => 'Allow Comment Edit?',
+    'comment_edittime' => 'Comment Edit Time (seconds)',
+    'commentsubmission' => 'Queue Comment Submissions',
     'passwordspeedlimit' => '密碼速度限定',
     'login_attempts' => '最多登入企圖次數',
     'login_speedlimit' => '登入速度限定',
@@ -1779,7 +1819,34 @@ $LANG_confignames['Core'] = array(
     'atom_max_stories' => 'Webservices Feed裏的文章數定',
     'disable_webservices' => '關閉 Webservices?',
     'restrict_webservices' => '限制 Webservices?',
-    'use_safe_html' => 'Use Safe HTML Mode?'
+    'article_comment_close_days' => 'Days to close comments (default)',
+    'comment_close_rec_stories' => 'Number of most recent stories enabled for comments',
+    'use_safe_html' => 'Use Safe HTML Mode?',
+    'jhead_enabled' => 'Enable JHEAD?',
+    'jpegtrans_enabled' => 'Enable jpegtrans?',
+    'path_to_jhead' => 'Path to jhead executable',
+    'path_to_jpegtrans' => 'Path to jpegtrans executable',
+    'allow_reply_notifications' => 'Allow comment reply notifications?',
+    'search_style' => 'Results List Style',
+    'search_limits' => 'Page Limits',
+    'search_show_num' => 'Show Result Number?',
+    'search_show_type' => 'Show Result Type?',
+    'search_show_user' => 'Show Author?',
+    'search_show_hits' => 'Show Number of Hits?',
+    'search_show_sort' => 'Allow User to Sort Results?',
+    'search_show_limit' => 'Show Page Limits?',
+    'search_no_data' => 'If No Data is Avaliable, Display',
+    'search_separator' => 'Group Separator',
+    'search_def_keytype' => 'Default Search Method',
+    'mail_backend' => 'Mail Backend',
+    'mail_sendmail_path' => 'Path to Sendmail',
+    'mail_sendmail_args' => 'Sendmail Parameters',
+    'mail_smtp_host' => 'SMTP Hostname',
+    'mail_smtp_port' => 'SMTP Port',
+    'mail_smtp_auth' => 'Require SMTP Auth?',
+    'mail_smtp_username' => 'SMTP Auth Username',
+    'mail_smtp_password' => 'SMTP Auth Password',
+    'mail_smtp_secure' => 'SMTP Security Protocol'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1855,7 +1922,19 @@ $LANG_configselects['Core'] = array(
     14 => array('Sunday' => 'Sun', 'Monday' => 'Mon'),
     15 => array('By Number' => 'sortnum', 'Alphabetically' => 'alpha'),
     16 => array('No Login required' => 0, 'Advanced Search only' => 1, 'Simple + Advanced Search' => 2),
-    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1)
+    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
+    18 => array('Google' => 'google', 'Table' => 'table'),
+    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
+    20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
+    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
 );
+###############################################################################
+# lib-widget.php
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News'
+);
+
 
 ?>
