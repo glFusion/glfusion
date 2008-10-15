@@ -1945,7 +1945,8 @@ $LANG_configselects['Core'] = array(
 # lib-widgets.php
 
 $LANG_WIDGETS = array(
-    'latest_news' => 'Latest News'
+    'latest_news' => 'Latest News',
+	'translate' => 'Click on a flag to automatically translate this site into that country\'s language'
 );
 
 ?>
