@@ -98,7 +98,7 @@ EOS;
 
 /*  Sample staticpage:
 
-USES_lib_widget();
+USES_lib_widgets();
 // add you own static pages here.
 $slides = Array('staticpage id 1', 'staticpage id 2');
 $display = COM_siteHeader();
@@ -141,4 +141,21 @@ EOT;
     }
     return $retval;
 }
+
+function WIDGET_autotranslations() {
+
+global $_CONF, $LANG_WIDGETS;
+
+	$retval = '';
+	$retval = '<h2>' . $LANG_WIDGETS['translate'] . '</h2>';
+	$retval .= '<ul class="autotranslations"><li><a href="http://translate.google.com/translate?';
+	$retval .= 'hl=' . 'ru'; // 2 character language code of google header bar (usually the same as tl below)
+	$retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
+	$retval .= '&amp;tl=' . 'ru'; // 2 character language code to translate site into (usually should be the same as hl above)
+	$retval .= '&amp;u=' . $_CONF['site_url']; // address of your site
+	$retval .= '"><img src="' . $_CONF['site_url'] . '/images/translations/ru.png"  alt=""' . XHTML . '></a></li></ul><div style="clear:left;"></div>';
+
+	return $retval;
+}
+
 ?>
