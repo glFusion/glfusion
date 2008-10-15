@@ -142,20 +142,65 @@ EOT;
     return $retval;
 }
 
-function WIDGET_autotranslations() {
+function WIDGET_autotranslations($header=0) {
+    global $_CONF, $LANG_WIDGETS;
 
-global $_CONF, $LANG_WIDGETS;
+    $isoLang = array(
+                 'ar' => 'Argentia',
+                 'bg' => 'Bulgarian',
+                 'ca' => 'Catalan',
+                 'cs' => 'Czech',
+                 'da' => 'Danish',
+                 'de' => 'German',
+                 'el' => 'Hellenic',
+                 'en' => 'English',
+                 'fi' => 'Finnish',
+                 'fr' => 'French',
+                 'hi' => 'Unknown',
+                 'hr' => 'Croatian',
+                 'id' => 'Indonesian',
+                 'it' => 'Italian',
+                 'iw' => 'unknown',
+                 'ja' => 'Japanese',
+                 'ko' => 'Korean',
+                 'lt' => 'unknown',
+                 'lv' => 'unknown',
+                 'nl' => 'Dutch',
+                 'no' => 'Norwegian',
+                 'pl' => 'Polish',
+                 'pt' => 'Portugese',
+                 'rc' => 'unknown',
+                 'ru' => 'Russian',
+                 'sk' => 'Slovak',
+                 'sl' => 'Slovenian',
+                 'sr' => 'unknown',
+                 'sv' => 'Swedish',
+                 'tl' => 'unknown',
+                 'uk' => 'Ukrainian',
+                 'vi' => 'unknown',
+                 'zh-CN' => 'Chinese simplified',
+                 'zh-TW' => 'Chinese traditional',
+            );
 
 	$retval = '';
-	$retval = '<h2>' . $LANG_WIDGETS['translate'] . '</h2>';
-	$retval .= '<ul class="autotranslations"><li><a href="http://translate.google.com/translate?';
-	$retval .= 'hl=' . 'ru'; // 2 character language code of google header bar (usually the same as tl below)
-	$retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
-	$retval .= '&amp;tl=' . 'ru'; // 2 character language code to translate site into (usually should be the same as hl above)
-	$retval .= '&amp;u=' . $_CONF['site_url']; // address of your site
-	$retval .= '"><img src="' . $_CONF['site_url'] . '/images/translations/ru.png"  alt=""' . XHTML . '></a></li></ul><div style="clear:left;"></div>';
+	if ($header) {
+	    $retval = '<h2>' . $LANG_WIDGETS['translate'] . '</h2>';
+	}
+	$retval .= '<ul class="autotranslations">';
 
+    foreach ($isoLang AS $key => $language ) {
+        if ($key != $_CONF['iso_lang']) {
+        	$retval .= '<li><a href="http://translate.google.com/translate?';
+        	$retval .= 'hl=' . $key; // 2 character language code of google header bar (usually the same as tl below)
+        	$retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
+        	$retval .= '&amp;tl=' . $key; // 2 character language code to translate site into (usually should be the same as hl above)
+        	$retval .= '&amp;u=' . $_CONF['site_url']; // address of your site
+        	$retval .= '">';
+        	$retval .= '<img src="' . $_CONF['site_url'] . '/images/translations/';
+            $retval .= $key.'.png" alt="'.$language.'"' . XHTML . '></a></li>';
+        }
+    }
+    $retval .= '</ul><div style="clear:left;"></div>';
 	return $retval;
 }
-
 ?>
