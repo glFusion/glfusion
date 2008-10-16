@@ -14,11 +14,10 @@
  *
  * $Id: japanese_utf-8.php 2970 2008-08-24 01:32:36Z mevans0263 $
  */
-# Last Update 2008/06/02 by glFusion.jp group  - info AT glFusion DOT jp
 
 global $LANG32;
 
-$LANG_SX00 = array (
+$LANG_SX00 = array(
     'inst1' => '<p>もしこれをおこなったら他も ',
     'inst2' => '見えます。そしてあなたのブラックリストをインポートするとさらに効果を発揮します。',
     'inst3' => 'データベースが構築されました。</p><p>もし、ウェブサイトを作ってもリスティングされないためには',
@@ -95,15 +94,15 @@ $LANG_SX00 = array (
     'foundspam3' => ' IPから ',
     'deletespam' => 'スパム削除',
     'numtocheck' => 'コメント数チェック',
-    'note1'     => '<p>Note: マスデリートで攻撃から守ります。',
-    'note2'     => ' コメントスパムと Spam-X はキャッチしません。 </p><ul><li>最初のリンクとその他 ',
-    'note3'     => 'このスパムコメントをあなたのパーソナルブラックリストへ追加</li><li>',
-    'note4'     => 'ここに戻り、最近のコメントを Spam-X チェック</li></ul><p>',
-    'note5'     => '最新コメントを最後のコメントに追加チェック -- コメントチェック ',
-    'note6'     => 'チェックをより多く要求します。</p>',
-    'masshead'  => '<hr' . XHTML . '><h1 align="center">マスデリート - スパムコメント</h1>',
+    'note1' => '<p>Note: マスデリートで攻撃から守ります。',
+    'note2' => ' コメントスパムと Spam-X はキャッチしません。 </p><ul><li>最初のリンクとその他 ',
+    'note3' => 'このスパムコメントをあなたのパーソナルブラックリストへ追加</li><li>',
+    'note4' => 'ここに戻り、最近のコメントを Spam-X チェック</li></ul><p>',
+    'note5' => '最新コメントを最後のコメントに追加チェック -- コメントチェック ',
+    'note6' => 'チェックをより多く要求します。</p>',
+    'masshead' => '<hr' . XHTML . '><h1 align="center">マスデリート - スパムコメント</h1>',
     'masstb' => '<hr' . XHTML . '><h1 align="center">マスデリート - トラックバックスパム</h1>',
-    'comdel'    => 'コメントが削除されました。',
+    'comdel' => 'コメントが削除されました。',
     'initial_Pimport' => '<p>パーソナルブラックリスト インポート"',
     'initial_import' => '初期 MT-ブラックリスト インポート',
     'import_success' => '<p> %d ブラクリストエントリーがインストールできました。',
@@ -116,7 +115,6 @@ $LANG_SX00 = array (
     'ipofurlblack' => 'Spam-X IP of URL ブラックリスト',
     'headerblack' => 'Spam-X HTTP Header ブラックリスト',
     'headers' => 'リクエストヘッダ:',
-
     'stats_headline' => 'Spam-Xステータス',
     'stats_page_title' => 'ブラックリスト',
     'stats_entries' => 'エントリ',
@@ -126,20 +124,17 @@ $LANG_SX00 = array (
     'stats_ipofurl' => 'URLのIPによってブロックされました',
     'stats_header' => 'HTTPヘッダ',
     'stats_deleted' => 'スパム投稿削除数',
-
     'plugin_name' => 'Spam-X',
     'slvwhitelist' => 'SLVホワイトリスト'
 );
 
-
-/* Define Messages that are shown when Spam-X module action is taken */
+// Define Messages that are shown when Spam-X module action is taken
 $PLG_spamx_MESSAGE128 = 'スパム削除。投稿は削除されました。';
-$PLG_spamx_MESSAGE8   = 'スパム削除。メールが管理者に送られました。';
+$PLG_spamx_MESSAGE8 = 'スパム削除。メールが管理者に送られました。';
 
 // Messages for the plugin upgrade
 $PLG_spamx_MESSAGE3001 = 'プラグインのアップグレードはサポートされていません。';
 $PLG_spamx_MESSAGE3002 = $LANG32[9];
-
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['spamx'] = array(
@@ -163,9 +158,10 @@ $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-Xの設定'
 );
 
+// Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['spamx'] = array(
     0 => array('はい' => 1, 'いいえ' => 0),
-    1 => array('はい' => TRUE, 'いいえ' => FALSE)
+    1 => array('はい' => true, 'いいえ' => false)
 );
 
 ?>

@@ -25,15 +25,14 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 ###############################################################################
-# Last Update 2008/06/02 by glFusion.jp group  - info AT glFusion DOT jp
 
 global $LANG32;
 
 ###############################################################################
 # Array Format:
-# $LANGXX[YY]:	$LANG - variable name
-#		  	XX - file id number
-#			YY - phrase id number
+# $LANGXX[YY]:  $LANG - variable name
+#               XX    - file id number
+#               YY    - phrase id number
 ###############################################################################
 
 $LANG_STATIC = array(
@@ -108,18 +107,15 @@ $LANG_STATIC = array(
     'select_php_free' => 'PHPを実行する',
     'php_not_activated' => "静的ページでPHPは使用しない設定になっています。詳細については <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">関連ドキュメント</a> をご覧下さい。",
     'printable_format' => '印刷用フォーマット',
-    'edit' => '編集',
     'copy' => 'コピー',
     'limit_results' => '絞込検索',
     'search' => '検索',
     'submit' => '登録'
 );
 
-
 // Messages for the plugin upgrade
 $PLG_staticpages_MESSAGE3001 = 'プラグインのアップグレードはサポートされていません。';
 $PLG_staticpages_MESSAGE3002 = $LANG32[9];
-
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['staticpages'] = array(

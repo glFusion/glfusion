@@ -28,14 +28,13 @@
 global $LANG32;
 
 ###############################################################################
-# Array Format: 
-# $LANGXX[YY]:	$LANG - variable name
-#		  	XX - file id number
-#			YY - phrase id number
+# Array Format:
+# $LANGXX[YY]:  $LANG - variable name
+#               XX    - file id number
+#               YY    - phrase id number
 ###############################################################################
 
-
-$LANG_STATIC= array(
+$LANG_STATIC = array(
     'newpage' => 'Uus leht',
     'adminhome' => 'Admin avaleht',
     'staticpages' => 'Staatilised lehed',
@@ -105,9 +104,8 @@ $LANG_STATIC= array(
     'select_php_none' => 'ära käivita PHP',
     'select_php_return' => 'käivita PHP (return)',
     'select_php_free' => 'käivita PHP',
-    'php_not_activated' => 'Staatilistel lehtedel pole PHP kasutamine sisse lülitatud. Täpsemat infot palun vaata <a href="' . $_CONF['site_url'] . '/docs/staticpages.html#php">dokumentatsioonist.</a>',
+    'php_not_activated' => "Staatilistel lehtedel pole PHP kasutamine sisse lülitatud. Täpsemat infot palun vaata <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">dokumentatsioonist.</a>",
     'printable_format' => 'Prinditaval kujul',
-    'edit' => 'Toimeta',
     'copy' => 'Koopia',
     'limit_results' => 'Piira tulemused',
     'search' => 'Otsi',
@@ -157,6 +155,5 @@ $LANG_configselects['staticpages'] = array(
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
 );
-
 
 ?>
