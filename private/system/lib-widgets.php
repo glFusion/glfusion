@@ -146,47 +146,48 @@ function WIDGET_autotranslations($header=0) {
     global $_CONF, $LANG_WIDGETS;
 
     $isoLang = array(
-                 'ar' => 'Argentia',
+                 'ar' => 'Arabic',
                  'bg' => 'Bulgarian',
                  'ca' => 'Catalan',
                  'cs' => 'Czech',
                  'da' => 'Danish',
                  'de' => 'German',
-                 'el' => 'Hellenic',
+                 'el' => 'Greek',
                  'en' => 'English',
+				 'es' => 'Spanish',
                  'fi' => 'Finnish',
                  'fr' => 'French',
-                 'hi' => 'Unknown',
+                 'hi' => 'Hindi',
                  'hr' => 'Croatian',
                  'id' => 'Indonesian',
                  'it' => 'Italian',
-                 'iw' => 'unknown',
+                 'iw' => 'Hebrew',
                  'ja' => 'Japanese',
                  'ko' => 'Korean',
-                 'lt' => 'unknown',
-                 'lv' => 'unknown',
+                 'lt' => 'Lithuanian',
+                 'lv' => 'Latvian',
                  'nl' => 'Dutch',
                  'no' => 'Norwegian',
                  'pl' => 'Polish',
                  'pt' => 'Portugese',
-                 'rc' => 'unknown',
+                 'rc' => 'Romanian',
                  'ru' => 'Russian',
                  'sk' => 'Slovak',
                  'sl' => 'Slovenian',
-                 'sr' => 'unknown',
+                 'sr' => 'Serbian',
                  'sv' => 'Swedish',
-                 'tl' => 'unknown',
+                 'tl' => 'Filipino',
                  'uk' => 'Ukrainian',
-                 'vi' => 'unknown',
-                 'zh-CN' => 'Chinese simplified',
-                 'zh-TW' => 'Chinese traditional',
+                 'vi' => 'Vietnamese',
+                 'zh-CN' => 'Chinese Simplified',
+                 'zh-TW' => 'Chinese Traditional',
             );
-
+    asort($isoLang); //comment out this line to sort results by 2 digit language code instead of language names above
 	$retval = '';
 	if ($header) {
 	    $retval = '<h2>' . $LANG_WIDGETS['translate'] . '</h2>';
 	}
-	$retval .= '<ul class="autotranslations">';
+	$retval .= '<div class="autotranslations"><ul>';
 
     foreach ($isoLang AS $key => $language ) {
         if ($key != $_CONF['iso_lang']) {
@@ -197,10 +198,10 @@ function WIDGET_autotranslations($header=0) {
         	$retval .= '&amp;u=' . $_CONF['site_url']; // address of your site
         	$retval .= '">';
         	$retval .= '<img src="' . $_CONF['site_url'] . '/images/translations/';
-            $retval .= $key.'.png" alt="'.$language.'"' . XHTML . '></a></li>';
+            $retval .= $key.'.png" alt="'.$language.'" title="'.$language.'"' . XHTML . '></a></li>';
         }
     }
-    $retval .= '</ul><div style="clear:left;"></div>';
+    $retval .= '</ul></div><div style="clear:left;"></div>';
 	return $retval;
 }
 ?>
