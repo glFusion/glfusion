@@ -76,7 +76,8 @@ function ST_displayMenuList( ) {
             $T->set_var('menu_id',$menu['menu_id']);
             $T->set_var('menu_name',$menu['menu_name']);
             $T->set_var('menuactive','<input type="checkbox" name="enabledmenu[' . $menu['menu_id'] . ']" onclick="submit()" value="1"' . ($menu['active'] == 1 ? ' checked="checked"' : '') . XHTML . '>');
-            if ( $menu['menu_id'] != 1 ) {
+//            if ( $menu['menu_id'] != 1 ) {
+            if ( $menu['menu_name'] != 'header' && $menu['menu_name'] != 'footer' && $menu['menu_name'] != 'navigation' ) {
                 $T->set_var('delete_menu','<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=deletemenu&amp;id=' . $menu['menu_id'] . '" onclick="return confirm(\'' . $LANG_ST01['confirm_delete'] . '\');"><img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/delete.png" alt="' . $LANG_ST01['delete'] . '"' . XHTML . '></a>');
             }
             $T->set_var('menu_tree',isset($stMenu[$id]['elements']) ? $stMenu[$id]['elements'][0]->editTree(0,2) : '');
