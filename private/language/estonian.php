@@ -1806,6 +1806,7 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'Jäta HTML filter root jaoks vahele?',
     'allowed_protocols' => 'Lubatud protokollid',
     'disable_autolinks' => 'Keela autolingid?',
+    'digg_enabled' => 'Show Digg.com Links?',
     'censormode' => 'Tsensuurireþiim?',
     'censorreplace' => 'Tsensuuri asendustekst',
     'censorlist' => 'Tsenseerimisloetelu',
@@ -1844,7 +1845,11 @@ $LANG_confignames['Core'] = array(
     'mail_smtp_auth' => 'Require SMTP Auth?',
     'mail_smtp_username' => 'SMTP Auth Username',
     'mail_smtp_password' => 'SMTP Auth Password',
-    'mail_smtp_secure' => 'SMTP Security Protocol'
+    'mail_smtp_secure' => 'SMTP Security Protocol',
+    'default_search_order' => 'Default Sort Order',
+    'compress_css' => 'Compress CSS',
+    'jpg_orig_quality' => 'JPEG Quality Factor',
+    'allow_embed_object' => 'Allow EMBED Object'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1931,7 +1936,8 @@ $LANG_configselects['Core'] = array(
 # lib-widget.php
 
 $LANG_WIDGETS = array(
-    'latest_news' => 'Latest News'
+    'latest_news' => 'Latest News',
+    'translate' => 'Click on a flag to automatically translate this site into that country\'s language'
 );
 
 

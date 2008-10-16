@@ -1850,6 +1850,10 @@ $LANG_confignames['Core'] = array(
     'mail_smtp_username' => 'SMTP Auth Username',
     'mail_smtp_password' => 'SMTP Auth Password',
     'mail_smtp_secure'   => 'SMTP Security Protocol',
+    'default_search_order' => 'Default Sort Order',
+    'compress_css'  => 'Compress CSS',
+    'jpg_orig_quality' => 'JPEG Quality Factor',
+    'allow_embed_object' => 'Allow EMBED Object',
 );
 
 $LANG_configsubgroups['Core'] = array(
