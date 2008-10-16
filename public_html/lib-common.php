@@ -6990,4 +6990,17 @@ if( $_CONF['cron_schedule_interval'] > 0 )
     }
 }
 
+
+/**
+ * This block will display a list of flags that link to the Google automatic
+ * translation service.
+ *
+ * Loads the autotranslations widget block from private/system/lib-widgets.php
+ */
+function phpblock_autotranslations() {
+   global $_CONF, $LANG_WIDGETS;
+   require_once $_CONF['path'] . 'system/lib-widgets.php';
+   return(WIDGET_autotranslations());
+}
+
 ?>
