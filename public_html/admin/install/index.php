@@ -1175,7 +1175,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('compress_css',TRUE,'select',2,11,0,1370,TRUE);
             $c->add('allow_embed_object',TRUE,'select',7,34,1,1720,TRUE);
 
-            $c->add('digg_enabled',0,'select',7,31,0,2000,TRUE);
+            $c->add('digg_enabled',1,'select',1,7,0,1235,TRUE);
 
             // now delete the old setting - we don't want it anymore...
 
