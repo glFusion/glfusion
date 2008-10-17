@@ -72,7 +72,7 @@ $_SQL['st_menu_elements'] = "CREATE TABLE {$_TABLES['st_menu_elements']} (
     `group_id` mediumint(9) NOT NULL,
     PRIMARY KEY( `id` ),
     INDEX ( `pid` )
-);";
+) TYPE=MyISAM;";
 
 // default st configuration
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_config']} (`config_name`, `config_value`) VALUES ('use_graphic_logo','0'),('display_site_slogan','1'),('logo_name','logo1234.png');";

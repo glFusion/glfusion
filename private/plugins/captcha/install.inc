@@ -103,7 +103,7 @@ function plugin_install_captcha($_DB_table_prefix)
         "  `validation` varchar(40) NOT NULL default '', " .
         "  `counter`    TINYINT(4) NOT NULL default 0, " .
         "  PRIMARY KEY (`session_id`) " .
-        " );";
+        " ) TYPE=MyISAM";
 
     foreach ($_SQL as $table => $sql) {
         DB_query($sql,1);

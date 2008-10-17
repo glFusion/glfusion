@@ -103,13 +103,15 @@ $_SQL['mg_albums'] = "CREATE TABLE {$_TABLES['mg_albums']} (
   PRIMARY KEY  (`album_id`),
   KEY `album_parent` (`album_parent`),
   KEY `last_update` (`last_update`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_config']="CREATE TABLE {$_TABLES['mg_config']} (
   `config_name` varchar(255) NOT NULL default '',
   `config_value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`config_name`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_media']="CREATE TABLE {$_TABLES['mg_media']} (
   `media_id` varchar(40) NOT NULL default '0',
@@ -147,7 +149,8 @@ $_SQL['mg_media']="CREATE TABLE {$_TABLES['mg_media']} (
   `maint` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`media_id`),
   KEY `media_upload_time` (`media_upload_time`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_mediaqueue']="CREATE TABLE {$_TABLES['mg_mediaqueue']} (
   `media_id` varchar(40) NOT NULL default '0',
@@ -185,7 +188,8 @@ $_SQL['mg_mediaqueue']="CREATE TABLE {$_TABLES['mg_mediaqueue']} (
   `maint` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`media_id`),
   KEY `media_upload_time` (`media_upload_time`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_media_albums']="CREATE TABLE {$_TABLES['mg_media_albums']} (
   `album_id` int(11) NOT NULL default '0',
@@ -193,7 +197,8 @@ $_SQL['mg_media_albums']="CREATE TABLE {$_TABLES['mg_media_albums']} (
   `media_order` int(11) NOT NULL default '0',
   KEY `media_id` (`media_id`),
   KEY `album_id` (`album_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_media_album_queue']="CREATE TABLE {$_TABLES['mg_media_album_queue']} (
   `album_id` int(11) NOT NULL default '0',
@@ -201,7 +206,8 @@ $_SQL['mg_media_album_queue']="CREATE TABLE {$_TABLES['mg_media_album_queue']} (
   `media_order` int(11) NOT NULL default '0',
   KEY `media_id` (`media_id`),
   KEY `album_id` (`album_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_playback_options']="CREATE TABLE {$_TABLES['mg_playback_options']} (
   `media_id` varchar(40) NOT NULL default '',
@@ -209,7 +215,8 @@ $_SQL['mg_playback_options']="CREATE TABLE {$_TABLES['mg_playback_options']} (
   `option_value` varchar(255) NOT NULL default '',
   UNIQUE KEY `media_id_2` (`media_id`,`option_name`),
   KEY `media_id` (`media_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_usage_tracking']="CREATE TABLE {$_TABLES['mg_usage_tracking']} (
   `time` int(11) NOT NULL default '0',
@@ -221,7 +228,8 @@ $_SQL['mg_usage_tracking']="CREATE TABLE {$_TABLES['mg_usage_tracking']} (
   `media_title` varchar(127) NOT NULL default '',
   `media_id` varchar(40) NOT NULL default '0',
   KEY `time` (`time`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_userprefs']="CREATE TABLE {$_TABLES['mg_userprefs']} (
   `uid` mediumint(8) NOT NULL default '0',
@@ -234,7 +242,8 @@ $_SQL['mg_userprefs']="CREATE TABLE {$_TABLES['mg_userprefs']} (
   `quota` bigint(20) unsigned NOT NULL default '0',
   `member_gallery` mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (`uid`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_watermark']="CREATE TABLE {$_TABLES['mg_watermarks']} (
   `wm_id` int(11) NOT NULL default 0,
@@ -242,7 +251,8 @@ $_SQL['mg_watermark']="CREATE TABLE {$_TABLES['mg_watermarks']} (
   `filename` varchar(255) NOT NULL default '',
   `description` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`wm_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_watermark_data']="INSERT INTO {$_TABLES['mg_watermarks']} VALUES (0, 0, 'blank.png', '---');";
 
@@ -257,7 +267,8 @@ $_SQL['mg_session_items'] = "CREATE TABLE {$_TABLES['mg_session_items']} (
   `status` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `session_id` (`session_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_session_items2'] = "CREATE TABLE {$_TABLES['mg_session_items2']} (
   `id` bigint(20) NOT NULL,
@@ -271,13 +282,15 @@ $_SQL['mg_session_items2'] = "CREATE TABLE {$_TABLES['mg_session_items2']} (
   `data8` varchar(255) NOT NULL,
   `data9` varchar(255) NOT NULL,
   KEY `id` (`id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_session_log'] = "CREATE TABLE {$_TABLES['mg_session_log']} (
   `session_id` varchar(40) NOT NULL default '',
   `session_log` varchar(255) NOT NULL default '',
   KEY `session_id` (`session_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_sessions'] = "CREATE TABLE {$_TABLES['mg_sessions']} (
   `session_id` varchar(40) NOT NULL default '',
@@ -295,7 +308,8 @@ $_SQL['mg_sessions'] = "CREATE TABLE {$_TABLES['mg_sessions']} (
   `session_var3` varchar(255) default NULL,
   `session_var4` varchar(255) default NULL,
   PRIMARY KEY  (`session_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_category'] = "CREATE TABLE {$_TABLES['mg_category']} (
   `cat_id` mediumint(9) NOT NULL default '0',
@@ -303,7 +317,8 @@ $_SQL['mg_category'] = "CREATE TABLE {$_TABLES['mg_category']} (
   `cat_description` varchar(255) NOT NULL default '',
   `cat_order` mediumint(11) NOT NULL default '0',
   PRIMARY KEY  (`cat_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_sort'] = "CREATE TABLE {$_TABLES['mg_sort']} (
   `sort_id` varchar(40) NOT NULL default '',
@@ -313,7 +328,8 @@ $_SQL['mg_sort'] = "CREATE TABLE {$_TABLES['mg_sort']} (
   `sort_datetime` int(11) NOT NULL default '0',
   `referer` varchar(255) NOT NULL default '',
   `keywords` varchar(255) NOT NULL default ''
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_postcard'] = "CREATE TABLE {$_TABLES['mg_postcard']} (
   `pc_id` varchar(40) NOT NULL default '',
@@ -327,7 +343,8 @@ $_SQL['mg_postcard'] = "CREATE TABLE {$_TABLES['mg_postcard']} (
   `pc_time` int(11) NOT NULL default '0',
   `uid` mediumint(9) NOT NULL default '0',
    PRIMARY KEY  (`pc_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_rating'] = "CREATE TABLE {$_TABLES['mg_rating']} (
   `id` int(11) unsigned NOT NULL default '0',
@@ -338,13 +355,15 @@ $_SQL['mg_rating'] = "CREATE TABLE {$_TABLES['mg_rating']} (
   `owner_id` mediumint(8) NOT NULL default '2',
   PRIMARY KEY  (`id`),
   KEY `owner_id` (`owner_id`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['mg_exif_tags']="CREATE TABLE {$_TABLES['mg_exif_tags']} (
   `name` varchar(255) NOT NULL default '',
   `selected` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`name`)
-);";
+) TYPE=MyISAM
+";
 
 $_SQL['exif_tag_data']="INSERT INTO {$_TABLES['mg_exif_tags']} (`name`, `selected`) VALUES ('ApertureValue', 1),
 ('ShutterSpeedValue', 1),
