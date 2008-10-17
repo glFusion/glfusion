@@ -1,4 +1,6 @@
-/* form.css */
+/* form.css
+ *NOTE: paths specified below are relative to the site root (http://www.mysite.com/)
+ */
 
 meform.* {
   margin: 0;

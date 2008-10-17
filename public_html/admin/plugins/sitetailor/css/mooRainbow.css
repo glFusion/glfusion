@@ -1,6 +1,8 @@
 /***
  *  - mooRainbow: defaultCSS
  * author: w00fz <w00fzIT@gmail.com>
+ *
+ *NOTE: paths specified below are relative to the site root (http://www.mysite.com/)
  */
 
 #mooRainbow { 
@@ -28,12 +30,12 @@ width: 11px; /* if you want a bigger or smaller slider... */
 height: 148px;
 }
 .moor-cursor {
-background: url(../images/moor_cursor.gif); 
+background: url(admin/plugins/sitetailor/images/moor_cursor.gif); 
 width: 8px;
 height: 8px;
 }
 .moor-arrows {
-background: url(../images/moor_arrows.gif) top center no-repeat;
+background: url(admin/plugins/sitetailor/images/moor_arrows.gif) top center no-repeat;
 top: 9px; 
 left: 152px;
 width: 19px;
