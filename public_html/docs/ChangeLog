@@ -2,7 +2,10 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
-- Added digg link support and $_CONF['digg_enabled'] (Eric and Joe)
+- Added Auto Translations widget block for automatic site translation (Eric & Mark)
+- Added private/system/lib-widgets.php as a place for widget javascripts and other
+  functionality (Eric, Joe, & Mark)
+- Added digg link support and $_CONF['digg_enabled'] (Eric & Joe)
 - Created USES_ family of functions for included libraries not loaded 
   by lib-common.php (Joe)
 - Moved COM_featuredCheck() to STORY_featuredCheck() (Joe)
