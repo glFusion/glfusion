@@ -390,6 +390,8 @@ class Story
         }
         if (array_key_exists('cmt_expire_unix', $story)) {
             $this->_comment_expire = $story['cmt_expire_unix'];
+        } else {
+            $this->_comment_expire = 0;
         }
 
         // Store the original SID
