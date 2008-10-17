@@ -31,7 +31,7 @@
 
 require_once '../../../lib-common.php';
 require_once $_CONF['path'] . 'system/lib-admin.php';
-//error_reporting( E_ALL );
+
 $display = '';
 
 // Only let admin users access this page
@@ -76,7 +76,6 @@ function ST_displayMenuList( ) {
             $T->set_var('menu_id',$menu['menu_id']);
             $T->set_var('menu_name',$menu['menu_name']);
             $T->set_var('menuactive','<input type="checkbox" name="enabledmenu[' . $menu['menu_id'] . ']" onclick="submit()" value="1"' . ($menu['active'] == 1 ? ' checked="checked"' : '') . XHTML . '>');
-//            if ( $menu['menu_id'] != 1 ) {
             if ( $menu['menu_name'] != 'header' && $menu['menu_name'] != 'footer' && $menu['menu_name'] != 'navigation' ) {
                 $T->set_var('delete_menu','<a href="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=deletemenu&amp;id=' . $menu['menu_id'] . '" onclick="return confirm(\'' . $LANG_ST01['confirm_delete'] . '\');"><img src="' . $_CONF['site_admin_url'] . '/plugins/sitetailor/images/delete.png" alt="' . $LANG_ST01['delete'] . '"' . XHTML . '></a>');
             }
@@ -242,7 +241,6 @@ function ST_saveNewMenu( ) {
             DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
             break;
     }
-
 
     CACHE_remove_instance('stmenu');
     CACHE_remove_instance('css');
@@ -889,7 +887,7 @@ function ST_deleteChildElements( $id, $menu_id ){
 function ST_menuConfig( $mid ) {
     global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN,
            $LANG_ST_TYPES, $LANG_ST_GLTYPES,$LANG_ST_GLFUNCTION,
-           $LANG_ST_MENU_TYPES;
+           $LANG_ST_MENU_TYPES,$LANG_VC,$LANG_HS,$LANG_HC,$LANG_VS;
 
     /* define the active attributes for each menu type */
 
@@ -935,10 +933,7 @@ function ST_menuConfig( $mid ) {
                              'main_menu_hover_text_color',
                              'submenu_text_color',
                              'submenu_hover_text_color',
-                             'submenu_background_color',
-                             'submenu_hover_bg_color',
                              'submenu_highlight_color',
-                             'submenu_shadow_color',
                              'menu_parent_filename',
                              'menu_alignment',
                         );
@@ -1110,21 +1105,25 @@ function ST_menuConfig( $mid ) {
         case 1: // horizontal cascading...
             foreach ($HCattributes AS $name) {
                 $menuAttributes[$name] = 'show';
+                $T->set_var('lang_'.$name,$LANG_HC[$name]);
             }
             break;
         case 2: // horizontal simple
             foreach ($HSattributes AS $name) {
                 $menuAttributes[$name] = 'show';
+                $T->set_var('lang_'.$name,$LANG_HS[$name]);
             }
             break;
         case 3: // vertical cascading
             foreach ($VCattributes AS $name) {
                 $menuAttributes[$name] = 'show';
+                $T->set_var('lang_'.$name,$LANG_VC[$name]);
             }
             break;
         case 4: // vertical simple
             foreach ($VSattributes AS $name) {
                 $menuAttributes[$name] = 'show';
+                $T->set_var('lang_'.$name,$LANG_VS[$name]);
             }
             break;
     }

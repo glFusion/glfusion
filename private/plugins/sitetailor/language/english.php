@@ -171,7 +171,36 @@ $LANG_ST01 = array (
 	'defaults'              => 'Reset To Default Values',
 	'confirm_reset'         => 'This will reset the menu colors and graphics to the installation values and automatically clear the Template Cache. Are you sure you want to continue? When done, make sure to clear your local browser cache as well.',
 	'menu_properties'       => 'Menu Properties for',
+);
 
+$LANG_HC = array (
+    'main_menu_bg_color'         => 'Main Menu BG',
+    'main_menu_hover_bg_color'   => 'Main Menu Hover',
+    'main_menu_text_color'       => 'Main Menu Text',
+    'main_menu_hover_text_color' => 'Main Menu Text Hover / Sub Menu Text',
+    'submenu_hover_text_color'   => 'Sub Menu Text Hover',
+    'submenu_background_color'   => 'Sub Menu BG',
+    'submenu_hover_bg_color'     => 'Sub Menu Hover BG',
+    'submenu_highlight_color'    => 'Sub Menu Highlight',
+    'submenu_shadow_color'       => 'Sub Menu Shadow',
+);
+$LANG_HS = array (
+    'main_menu_text_color'          => 'Text',
+    'main_menu_hover_text_color'    => 'Hover',
+    'submenu_highlight_color'       => 'Seperator',
+);
+$LANG_VC = array(
+    'main_menu_bg_color'           => 'Menu BG',
+    'main_menu_hover_bg_color'     => 'Menu BG Hover',
+    'main_menu_text_color'         => 'Menu Text',
+    'main_menu_hover_text_color'   => 'Text Hover',
+    'submenu_text_color'           => 'Sub Menu Text Hover',
+    'submenu_hover_text_color'     => 'Sub Menu Text Color',
+    'submenu_highlight_color'      => 'Border',
+);
+$LANG_VS = array (
+    'main_menu_text_color'          => 'Menu Text',
+    'main_menu_hover_text_color'    => 'Menu Text Hover',
 );
 
 $LANG_ST_MENU_TYPES = array(

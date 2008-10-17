@@ -577,7 +577,6 @@ function hsv(a){
         {group_select}
       </div>
 
-
 	  <h1 style="margin:9px;display:{menu_alignment_show};">{$LANG_ST01[menu_alignment]}</h1>
       <div style="display:{menu_alignment_show};">
         <label>{$LANG_ST01[alignment_question]}:</label>
@@ -588,7 +587,7 @@ function hsv(a){
       <h1 style="margin:9px;">{$LANG_ST01[menu_color_options]}</h1>
 
       <div style="display:{main_menu_bg_color_show};">
-        <label>{$LANG_ST01[top_menu_bg]}:</label>
+        <label>{lang_main_menu_bg_color}:</label>
         <input id="tmbgcolor" name="tmbgcolor" type="hidden" size="7" value="{tmbgcolor}" {xhtml}>&nbsp;
         <input type="text" name="tmbg_sample" id="tmbg_sample" size="7" maxlength="7" value="{tmbgcolor}" style="vertical-align:middle;background-color:{tmbgcolor};"{xhtml}>
         <img id="tmbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
@@ -598,7 +597,7 @@ function hsv(a){
       </div>
 
       <div style="display:{main_menu_hover_bg_color_show};">
-        <label>{$LANG_ST01[top_menu_hover]}:</label>
+        <label>{lang_main_menu_hover_bg_color}:</label>
         <input id="tmhcolor" name="tmhcolor" type="hidden" size="7" value="{tmhcolor}"{xhtml}>&nbsp;
         <input type="text" name="tmh_sample" id="tmh_sample" size="7" maxlength="7" value="{tmhcolor}" style="vertical-align:middle;background-color:{tmhcolor};"{xhtml}>
         <img id="tmhrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
@@ -608,56 +607,56 @@ function hsv(a){
       </div>
 
       <div style="display:{main_menu_text_color_show};">
-        <label>{$LANG_ST01[top_menu_text]}:</label>
+        <label>{lang_main_menu_text_color}:</label>
         <input id="tmtcolor" name="tmtcolor" type="hidden" size="7" value="{tmtcolor}" {xhtml}>&nbsp;
         <input type="text" name="tmt_sample" id="tmt_sample" size="7" maxlength="7" value="{tmtcolor}" style="vertical-align:middle;background-color:{tmtcolor};"{xhtml}>
         <img id="tmtrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{main_menu_hover_text_color_show};">
-        <label>{$LANG_ST01[top_menu_text_hover]}:</label>
+        <label>{lang_main_menu_hover_text_color}:</label>
         <input id="tmthcolor" name="tmthcolor" type="hidden" size="7" value="{tmthcolor}" {xhtml}>&nbsp;
         <input type="text" name="tmth_sample" id="tmth_sample" size="7" maxlength="7" value="{tmthcolor}" style="vertical-align:middle;background-color:{tmthcolor};"{xhtml}>
         <img id="tmthrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_text_color_show};">
-        <label>{$LANG_ST01[sub_menu_text]}:</label>
+        <label>{lang_submenu_text_color}:</label>
         <input id="smtcolor" name="smtcolor" type="hidden" size="7" value="{smtcolor}" {xhtml}>&nbsp;
         <input type="text" name="smt_sample" id="smt_sample" size="7" maxlength="7" value="{smtcolor}" style="vertical-align:middle;background-color:{smtcolor};"{xhtml}>
         <img id="smtrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_hover_text_color_show};">
-        <label>{$LANG_ST01[sub_menu_text_hover]}:</label>
+        <label>{lang_submenu_hover_text_color}:</label>
         <input id="smthcolor" name="smthcolor" type="hidden" size="7" value="{smthcolor}" {xhtml}>&nbsp;
         <input type="text" name="smth_sample" id="smth_sample" size="7" maxlength="7" value="{smthcolor}" style="vertical-align:middle;background-color:{smthcolor};"{xhtml}>
         <img id="smthrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_background_color_show};">
-        <label>{$LANG_ST01[sub_menu_bg]}:</label>
+        <label>{lang_submenu_background_color}:</label>
         <input id="smbgcolor" name="smbgcolor" type="hidden" size="7" value="{smbgcolor}" {xhtml}>&nbsp;
         <input type="text" name="smbg_sample" id="smbg_sample" size="7" maxlength="7" value="{smbgcolor}" style="vertical-align:middle;background-color:{smbgcolor};"{xhtml}>
         <img id="smbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_hover_bg_color_show};">
-        <label>{$LANG_ST01[sub_menu_hover_bg]}:</label>
+        <label>{lang_submenu_hover_bg_color}:</label>
         <input id="smhbgcolor" name="smhbgcolor" type="hidden" size="7" value="{smhbgcolor}" {xhtml}>&nbsp;
         <input type="text" name="smhbg_sample" id="smhbg_sample" size="7" maxlength="7" value="{smhbgcolor}" style="vertical-align:middle;background-color:{smhbgcolor};"{xhtml}>
         <img id="smhbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
      </div>
 
       <div style="display:{submenu_highlight_color_show};">
-        <label>{$LANG_ST01[sub_menu_highlight]}:</label>
+        <label>{lang_submenu_highlight_color}:</label>
         <input id="smhcolor" name="smhcolor" type="hidden" size="7" value="{smhcolor}" {xhtml}>&nbsp;
         <input type="text" name="smh_sample" id="smh_sample" size="7" maxlength="7" value="{smhcolor}" style="vertical-align:middle;background-color:{smhcolor};"{xhtml}>
         <img id="smhrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_shadow_color_show};">
-        <label>{$LANG_ST01[sub_menu_shadow]}:</label>
+        <label>{lang_submenu_shadow_color}:</label>
         <input id="smscolor" name="smscolor" type="hidden" size="7" value="{smscolor}" {xhtml}>&nbsp;
         <input type="text" name="sms_sample" id="sms_sample" size="7" maxlength="7" value="{smscolor}" style="vertical-align:middle;background-color:{smscolor};"{xhtml}>
         <img id="smsrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>

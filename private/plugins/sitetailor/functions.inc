@@ -478,13 +478,7 @@ function phpblock_getMenu($arg1,$arg2) {
         }
         return $retval;
     }
-
-    // $arg1['onleft'] == 1 means left nav, 0 = right nav
-    // we'll use this to call the proper class names.
-
-
     if ( $stMenu[$menuID]['config']['menu_alignment'] == 1 ) {
-//    if ( $arg1['onleft'] == 1 ) {
         $parent = 'parent-l';
         $class  = 'gl_moomenu-vert-l';
     } else {
