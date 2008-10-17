@@ -1,9 +1,9 @@
-<!-- Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it -->
 <script type="text/javascript">
-    document.getElementById('sitetailor').style.display=''
+    document.getElementById('sitetailor').style.display='';
+window.addEvent('load',function() {
+    var myValidator = new fValidator("newmenu");
+});
 </script>
-
-
   <div class="glfform">
     <form method="post" action="{form_action}" id="newmenu">
     <div>
