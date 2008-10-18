@@ -2113,34 +2113,6 @@ font-weight:bold;
 text-align:right;
 width:50%;
 }
-#gl_moosimplebox_trigger1 {
-cursor:pointer;
-}
-.gl_moosimplebox {
-color:#fff;
-font-family:Arial, Helvetica, sans-serif;
-font-size:11px;
-padding:10px;
-border:1px solid #000;
-background:transparent url(layout/nouveau/images/moosimplebox/bg.png) repeat;
-}
-.gl_moosimplebox button{
-border:none;
-background:transparent url(layout/nouveau/images/moosimplebox/close.png) no-repeat;
-position:absolute;
-top:-6px;
-right:-6px;
-width:24px;
-height:24px;
-font-size:10px;
-font-family:arial;
-cursor:pointer;
-}
-.gl_moosimplebox div div,
-div#my_gl_moosimplebox_content {
-background-image:none;
-height:auto;
-}
 
 /* WIDGET styles ************************************/
 
@@ -2214,6 +2186,36 @@ background-position:0 0;
 
 #gl_moorotator .control-next,#gl_mooticker .control-next {
 background-position:0 -17px;
+}
+
+/* start gl_moosimplebox css */
+#gl_moosimplebox_trigger1 {
+cursor:pointer;
+}
+.gl_moosimplebox {
+color:#fff;
+font-family:Arial, Helvetica, sans-serif;
+font-size:11px;
+padding:10px;
+border:1px solid #000;
+background:transparent url(layout/nouveau/images/moosimplebox/bg.png) repeat;
+}
+.gl_moosimplebox button{
+border:none;
+background:transparent url(layout/nouveau/images/moosimplebox/close.png) no-repeat;
+position:absolute;
+top:-6px;
+right:-6px;
+width:24px;
+height:24px;
+font-size:10px;
+font-family:arial;
+cursor:pointer;
+}
+.gl_moosimplebox div div,
+div#my_gl_moosimplebox_content {
+background-image:none;
+height:auto;
 }
 
 /* start gl_mooslide css */
