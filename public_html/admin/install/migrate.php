@@ -1278,35 +1278,35 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
                 $check = upgrade_CalendarPlugin();
                 if (!$check) {
                     echo "Error updating the calendar";
-                    return false;
+                    return array(false,"Error updating the calendar plugin");
                 }
             }
             if (INST_pluginExists('polls')) {
                 $check = upgrade_PollsPlugin();
                 if (!$check) {
                     echo "Error updating the polls";
-                    return false;
+                    return array(false,"Error updating the polls plugin");
                 }
             }
             if (INST_pluginExists('staticpages')) {
                 $check = upgrade_StaticpagesPlugin();
                 if (!$check) {
                     echo "Error updating the staticpages";
-                    return false;
+                    return array(false,"Error updating the staticpages plugin");
                 }
             }
             if (INST_pluginExists('links')) {
                 $check = upgrade_LinksPlugin();
                 if (!$check) {
                     echo "Error updating the links";
-                    return false;
+                    return array(false,"Error updating the links plugin");
                 }
             }
             if (INST_pluginExists('spamx')) {
                 $check = upgrade_SpamXPlugin();
                 if (!$check) {
                     echo "Error updating the spamx";
-                    return false;
+                    return array(false,"Error updating the spamx plugin");
                 }
             }
 
@@ -1323,7 +1323,7 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
     // to run admin/sectest.php again
     DB_delete ($_TABLES['vars'], 'name', 'security_check');
 
-    return true;
+    return array(true,'');
 }
 
 
