@@ -35,7 +35,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-function install_config()
+function install_config($site_url)
 {
     global $_CONF, $_TABLES;
 
@@ -278,7 +278,8 @@ function install_config()
     $c->add('max_photo_height',185,'text',5,26,NULL,1580,TRUE);
     $c->add('max_photo_size',65536,'text',5,26,NULL,1590,TRUE);
     $c->add('force_photo_width',75,'text',5,26,NULL,1620,FALSE);
-    $c->add('default_photo','http://example.com/images/userphotos/default.jpg','text',5,26,NULL,1630,FALSE);
+    $def_photo = urldecode($site_url) . '/images/userphotos/default.jpg';
+    $c->add('default_photo',$def_photo,'text',5,26,NULL,1630,TRUE);
 
     $c->add('fs_gravatar', NULL, 'fieldset', 5, 27, NULL, 0, TRUE);
     $c->add('use_gravatar',FALSE,'select',5,27,1,1600,TRUE);

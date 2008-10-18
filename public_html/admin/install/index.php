@@ -531,7 +531,7 @@ function INST_installEngine($install_type, $install_step)
 
                             require_once $_CONF['path_system'] . 'classes/config.class.php';
                             require_once 'config-install.php';
-                            install_config();
+                            install_config($site_url);
 
                             $config = config::get_instance();
                             $config->set('site_name', urldecode($site_name));
@@ -550,7 +550,7 @@ function INST_installEngine($install_type, $install_step)
                             $config->set('path_themes', $html_path . 'layout/');
                             $config->set('rdf_file', $html_path . 'backend/glfusion.rss');
                             $config->set('path_pear', $_CONF['path_system'] . 'pear/');
-                            $config->set_default('default_photo', urldecode($site_url) . '/images/userphotos/default.jpg');
+//                            $config->set_default('default_photo', urldecode($site_url) . '/images/userphotos/default.jpg');
 
                             $lng = INST_getDefaultLanguage($gl_path . 'language/', $language, $utf8);
                             if (!empty($lng)) {
