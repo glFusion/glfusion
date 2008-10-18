@@ -3053,11 +3053,11 @@ function COM_checkWords( $Message )
                     $RegExSuffix   = '(\w*)';
                     break;
             }
-
-            $censor_entries = count( $_CONF['censorlist'] );
-            for( $i = 0; $i < $censor_entries; $i++ )
-            {
-                $EditedMessage = MBYTE_eregi_replace( $RegExPrefix . $_CONF['censorlist'][$i] . $RegExSuffix, "\\1$Replacement\\2", $EditedMessage );
+            foreach ($_CONF['censorlist'] as $c) {
+                if (!empty($c)) {
+                    $EditedMessage = MBYTE_eregi_replace($RegExPrefix . $c
+                        . $RegExSuffix, "\\1$Replacement\\2", $EditedMessage);
+                }
             }
         }
     }

@@ -534,7 +534,12 @@ function deletefeed ($fid)
     global $_CONF, $_TABLES;
 
     if ($fid > 0) {
-        DB_delete ($_TABLES['syndication'], 'fid', $fid);
+        $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
+                               "fid = $fid");
+        if (!empty($feedfile)) {
+            @unlink(SYND_getFeedPath($feedfile));
+        }
+        DB_delete($_TABLES['syndication'], 'fid', $fid);
         CACHE_remove_instance('story');
         return COM_refresh ($_CONF['site_admin_url']
                             . '/syndication.php?msg=59');
@@ -576,10 +581,12 @@ else if (($mode == $LANG33[1]) && !empty ($LANG33[1]))
 elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken())
 {
     $display .= savefeed($_POST);
-}
-elseif (($mode == $LANG_ADMIN['delete']) && !empty($LANG_ADMIN['delete']) && SEC_checkToken())
-{
-    $display .= deletefeed(COM_applyFilter($_REQUEST['fid']));
+} elseif (($mode == $LANG_ADMIN['delete']) && !empty($LANG_ADMIN['delete']) && SEC_checkToken()) {
+    $fid = 0;
+    if (isset($_POST['fid'])) {
+        $fid = COM_applyFilter($_POST['fid'], true);
+    }
+    $display .= deletefeed($fid);
 }
 else
 {

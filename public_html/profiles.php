@@ -54,10 +54,10 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     $retval = '';
 
     // check for correct $_CONF permission
-    if (empty ($_USER['username']) &&
-        (($_CONF['loginrequired'] == 1) || ($_CONF['emailuserloginrequired'] == 1))
-        && ($uid != 2)) {
-        return COM_refresh ($_CONF['site_url'] . '/index.php');
+    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
+                             ($_CONF['emailuserloginrequired'] == 1))
+                         && ($uid != 2)) {
+        return COM_refresh($_CONF['site_url'] . '/index.php?msg=85');
     }
 
     // check for correct 'to' user preferences
@@ -70,7 +70,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     }
     if ((($P['emailfromadmin'] != 1) && $isAdmin) ||
         (($P['emailfromuser'] != 1) && !$isAdmin)) {
-        return COM_refresh ($_CONF['site_url'] . '/index.php');
+        return COM_refresh ($_CONF['site_url'] . '/index.php?msg=85');
     }
 
     // check mail speedlimit
@@ -86,8 +86,9 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 
             // Append the user's signature to the message
             $sig = '';
-            if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
-                $sig = DB_getItem ($_TABLES['users'], 'sig', "uid={$_USER['uid']}");
+            if (!COM_isAnonUser()) {
+                $sig = DB_getItem($_TABLES['users'], 'sig',
+                                  "uid={$_USER['uid']}");
                 if (!empty ($sig)) {
                     $sig = strip_tags (COM_stripslashes ($sig));
                     $sig = "\n\n-- \n" . $sig;
@@ -136,9 +137,13 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
             COM_updateSpeedlimit ('mail');
 
             if ( $rc === false ) {
-                $retval = COM_refresh($_CONF['site_url'] . '/index.php?msg=26');
+                $retval .= COM_refresh($_CONF['site_url']
+                                       . '/users.php?mode=profile&amp;uid=' . $uid
+                                       . '&amp;msg=26');
             } else {
-                $retval = COM_refresh($_CONF['site_url'] . '/index.php?msg=27');
+                $retval .= COM_refresh($_CONF['site_url']
+                                       . '/users.php?mode=profile&amp;uid=' . $uid
+                                       . '&amp;msg=27');
             }
         } else {
             $subject = strip_tags ($subject);
@@ -177,8 +182,8 @@ function contactform ($uid, $subject = '', $message = '')
 
     $retval = '';
 
-    if (empty ($_USER['username']) &&
-        (($_CONF['loginrequired'] == 1) || ($_CONF['emailuserloginrequired'] == 1))) {
+    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
+                             ($_CONF['emailuserloginrequired'] == 1))) {
         $retval = COM_startBlock ($LANG_LOGIN[1], '',
                           COM_getBlockTemplate ('_msg_block', 'header'));
         $login = new Template($_CONF['path_layout'] . 'submit');
@@ -239,7 +244,7 @@ function contactform ($uid, $subject = '', $message = '')
             $mail_template->set_var ('site_url', $_CONF['site_url']);
             $mail_template->set_var ('lang_description', $LANG08[26]);
             $mail_template->set_var ('lang_username', $LANG08[11]);
-            if (empty ($_USER['username'])) {
+            if (COM_isAnonUser()) {
                 $sender = '';
                 if (isset ($_POST['author'])) {
                     $sender = strip_tags ($_POST['author']);
@@ -314,12 +319,15 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg)
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG08;
 
-    $retval = COM_refresh (COM_buildUrl ($_CONF['site_url']
-                                         . '/article.php?story=' . $sid));
-
+    $storyurl = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $sid);
+    if ($_CONF['url_rewrite']) {
+        $retval = COM_refresh($storyurl . '?msg=85');
+    } else {
+        $retval = COM_refresh($storyurl . '&amp;msg=85');
+    }
     // check for correct $_CONF permission
-    if (empty ($_USER['username']) &&
-        (($_CONF['loginrequired'] == 1) || ($_CONF['emailstoryloginrequired'] == 1))) {
+    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
+                             ($_CONF['emailstoryloginrequired'] == 1))) {
         return $retval;
     }
 
@@ -386,6 +394,11 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg)
     // Increment numemails counter for story
     DB_query ("UPDATE {$_TABLES['stories']} SET numemails = numemails + 1 WHERE sid = '$sid'");
 
+    if ($_CONF['url_rewrite']) {
+        $retval = COM_refresh($storyurl . '?msg=27');
+    } else {
+        $retval = COM_refresh($storyurl . '&amp;msg=27');
+    }
     return $retval;
 }
 
@@ -403,8 +416,8 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
 
     $retval = '';
 
-    if (empty ($_USER['username']) &&
-        (($_CONF['loginrequired'] == 1) || ($_CONF['emailstoryloginrequired'] == 1))) {
+    if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
+                             ($_CONF['emailstoryloginrequired'] == 1))) {
         $retval = COM_startBlock ($LANG_LOGIN[1], '',
                           COM_getBlockTemplate ('_msg_block', 'header'));
         $login = new Template($_CONF['path_layout'] . 'submit');
@@ -428,7 +441,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     }
 
     if (empty ($from) && empty ($fromemail)) {
-        if (!empty ($_USER['username'])) {
+        if (!COM_isAnonUser()) {
             $from = COM_getDisplayName ($_USER['uid'], $_USER['username'],
                                         $_USER['fullname']);
             $fromemail = DB_getItem ($_TABLES['users'], 'email',

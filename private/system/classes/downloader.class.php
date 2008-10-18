@@ -175,7 +175,7 @@ class downloader
     function _logItem($logtype, $text)
     {
         $timestamp = strftime("%c");
-        if (!$file = fopen($this->_logFile,a)) {
+        if (!$file = fopen($this->_logFile,'a')) {
             // couldn't open log file for writing so let's disable logging and add an error
             $this->setLogging(false);
             $this->_addError('Error writing to log file: ' . $this->_logFile . '.  Logging has been disabled');
