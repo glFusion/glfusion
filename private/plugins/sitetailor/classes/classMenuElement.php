@@ -371,7 +371,7 @@ class mbElement {
                 switch ($this->subtype) {
                     case 1 : // user menu
                         if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                            $menu .= "<li>" . '<a class="' . $parentaclass . '" name="parent" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            $menu .= "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
                         } else {
                             $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
                         }
@@ -432,7 +432,7 @@ class mbElement {
                              */
 
                             if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                                $menu .= "<li>" . '<a class="' . $parentaclass . '" name="parent" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                                $menu .= "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
                             } else {
                                 $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
                             }
@@ -659,7 +659,7 @@ class mbElement {
 
                     case 3 : // topics menu
                         if ( $this->id != 0 && $this->access > 0 && $parentaclass != '' ) {
-                            $menu .= "<li>" . '<a class="' . $parentaclass . '" name="parent" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                            $menu .= "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
                         } else {
                             $menu .= "<li>" . '<a href="#">' . strip_tags($this->label) . '</a></li>' . LB;
                         }
@@ -837,7 +837,7 @@ class mbElement {
                 $functionName = $this->subtype;
                 if (function_exists($functionName)) {
                     /* Pass the type of menu to custom php function */
-                    $menu = "<li>" . '<a class="' . $parentaclass . '" name="parent" href="#">' . strip_tags($this->label) . '</a>' . LB;
+                    $menu = "<li>" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="#">' . strip_tags($this->label) . '</a>' . LB;
                     $menu .= $functionName();
                     $menu .= '</li>';
                 }
@@ -863,7 +863,7 @@ class mbElement {
                 }
 
                 if ( $this->type == 1 && $parentaclass != '' ) {
-                    $retval .= "<li".$lastClass.">" . '<a class="' . $parentaclass . '" name="parent" href="' . ($this->url == '' ? '#' : $this->url) . '">' . strip_tags($this->label) . '</a>' . LB;
+                    $retval .= "<li".$lastClass.">" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="' . ($this->url == '' ? '#' : $this->url) . '">' . strip_tags($this->label) . '</a>' . LB;
                 } else {
                     $retval .= "<li".$lastClass.">" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a></li>' . LB;
                 }
