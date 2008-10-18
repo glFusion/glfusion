@@ -60,7 +60,7 @@ $_SQL[] = "ALTER TABLE {$_TABLES['sessions']} DROP INDEX sess_id";
 $_SQL[] = "ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_sid";
 $_SQL[] = "ALTER TABLE {$_TABLES['userindex']} DROP INDEX userindex_uid";
 
-$_SQL[] = "ALTER TABLE {$_TABLES['polltopics']} DROP INDEX pollquestions_pid";
+// $_SQL[] = "ALTER TABLE {$_TABLES['polltopics']} DROP INDEX pollquestions_pid";
 
 // Staticpages plugin updates
 function upgrade_StaticpagesPlugin()
