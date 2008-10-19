@@ -14,7 +14,13 @@ function popitup(url)
 
 			<div class="profile-meta">
 				<ul>
-					{edit_link}
+					{!if user_edit}
+					<li>
+						<a href="{user_edit}">
+							<img src="{layout_url}/images/edit.png" alt="{$LANG_ADMIN[edit]}" title="{$LANG_ADMIN[edit]}"{xhtml}>
+						</a>
+					</li>
+					{!endif}
 					<li>
 						<a href="{site_url}/profiles.php?uid={user_id}">
 							<img src="{layout_url}/images/mail.png" alt="{lang_sendemail}" title="{lang_sendemail}"{xhtml}>

@@ -147,17 +147,24 @@ function userprofile ($user, $msg = 0)
     $user_templates->set_var ('username', $username);
     $user_templates->set_var ('user_fullname', $fullname);
 
-    if (SEC_hasRights ('user.edit')) {
+    if (SEC_hasRights('user.edit') || $_USER['uid'] == $A['uid']) {
         global $_IMAGE_TYPE, $LANG_ADMIN;
 
         $edit_icon = '<img src="' . $_CONF['layout_url'] . '/images/edit.'
                    . $_IMAGE_TYPE . '" alt="' . $LANG_ADMIN['edit']
                    . '" title="' . $LANG_ADMIN['edit'] . '"' . XHTML . '>';
-        $edit_link_url = COM_createLink($edit_icon,
-            "{$_CONF['site_admin_url']}/user.php?mode=edit&amp;uid={$A['uid']}");
-        $user_templates->set_var ('edit_icon', $edit_icon);
-        $user_templates->set_var ('edit_link', '<li>' . $edit_link_url . '</li>');
-        $user_templates->set_var ('user_edit', '<li>' . $edit_link_url . '</li>');
+        if ($_USER['uid'] == $A['uid']) {
+            $edit_url = "{$_CONF['site_url']}/usersettings.php";
+        } else {
+            $edit_url = "{$_CONF['site_admin_url']}/user.php?mode=edit&amp;uid={$A['uid']}";
+        }
+        
+        $edit_link_url = COM_createLink($edit_icon, $edit_url);
+        $user_templates->set_var('edit_icon', $edit_icon);
+        $user_templates->set_var('edit_link', $edit_link_url);
+        $user_templates->set_var('user_edit', $edit_url);
+    } else {
+        $user_templates->set_var('user_edit', '');
     }
 
     if (isset ($A['photo']) && empty ($A['photo'])) {
