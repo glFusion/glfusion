@@ -10,7 +10,7 @@ function popitup(url)
 </script>
 {start_block_userprofile}
 		<div class="profile-col1">
-			<img class="gl_mootip profile-image" src="{user_photo}" alt="" title="{username} - {user_fullname} :: {lang_membersince}<br{xhtml}>{user_regdate}<br{xhtml}><br{xhtml}>{$LANG28[35]}<br{xhtml}>{user_lastlogin}"{xhtml}>
+			<img class="gl_mootip profile-image" src="{user_photo}" alt="" title="{username} - {user_fullname} :: {lang_membersince}<br{xhtml}>{user_regdate}{!if user_lastlogin}<br{xhtml}><br{xhtml}>{$LANG28[35]}<br{xhtml}>{user_lastlogin}{!endif}"{xhtml}>
 
 			<div class="profile-meta">
 				<ul>
