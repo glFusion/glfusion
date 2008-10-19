@@ -624,6 +624,8 @@ function upgrade_LinksPlugin()
     $blockadmin_id = DB_getItem($_TABLES['groups'], 'grp_id',
                                 "grp_name='Block Admin'");
 
+    DB_query("ALTER TABLE {$_TABLES['linksubmission']} ADD date datetime NULL AFTER hits",1);
+
     $P_SQL[] = "ALTER TABLE {$_TABLES['linksubmission']} ADD owner_id mediumint(8) unsigned NOT NULL default '1' AFTER date";
     $P_SQL[] = "ALTER TABLE {$_TABLES['linksubmission']} CHANGE category cid varchar(32) NOT NULL";
     $P_SQL[] = "ALTER TABLE {$_TABLES['links']} CHANGE category cid varchar(32) NOT NULL";
