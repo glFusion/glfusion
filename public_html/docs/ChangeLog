@@ -2,11 +2,29 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- FileMgmt: decode the sort options to prevent SQL error (Mark)
+- Resolve missing date field in polls table on upgrade (Mark)
+- Migration from Geeklog failed due to incorrect return code (Mark)
+- Properly initialize default photo configuration option (Mark)
+- Several small XHTML fixes (Mark)
+- Fixed comments auto close (it would close immediately) (Mark)
+- Site Tailor: Properly initiate fValidator class on create menu (Mark)
+- Removed unused gllabsform.css (Mark)
+- Added filecheck.php to assist with source file cleanup (Mark)
+- Site Tailor: Clear CTL after menu reset (Mark)
+- Force MyISAM table types (Mark)
+- Site Tailor: Updated menu builder prompts to better reflect item being
+  edited (Mark)
+- Updated / added online help documentation (Mark)
+- Added ISO country code translation (Mark)
+- Site Tailor: Make header, navigation, footer menu permanent (Mark)
+- FileMgmt: Fixed invalid &nbsp (missing semi-colon) (Mark)
+- Added #top to default footer menu (Mark)
 - Added Auto Translations widget block for automatic site translation (Eric & Mark)
 - Added private/system/lib-widgets.php as a place for widget javascripts and other
   functionality (Eric, Joe, & Mark)
 - Added digg link support and $_CONF['digg_enabled'] (Eric & Joe)
-- Created USES_ family of functions for included libraries not loaded 
+- Created USES_ family of functions for included libraries not loaded
   by lib-common.php (Joe)
 - Moved COM_featuredCheck() to STORY_featuredCheck() (Joe)
 - Added local cache to (and reformatted code in) COM_getDisplayName() (Joe)
