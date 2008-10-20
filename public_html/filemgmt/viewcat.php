@@ -198,7 +198,7 @@ if($maxrows > 0) {
         $cssid = ($cssid == 2) ? 1 : 2;
 
         // Print Google-like paging navigation
-        $base_url = $_CONF['site_url'] . '/filemgmt/viewcat.php?cid='.$cid.'&amp;orderby='.$orderby;
+        $base_url = $_CONF['site_url'] . '/filemgmt/viewcat.php?cid='.$cid.'&amp;orderby='.convertorderbyout($orderby);
         $p->set_var('page_navigation', COM_printPageNavigation($base_url,$page, $numpages));
     }
 
