@@ -1048,7 +1048,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     }
     if(($method != 'newtopic' && $_POST['editpost'] != 'yes') && ($method == 'postreply' || $preview == 'Preview')) {
         if ($CONF_FORUM['show_topicreview']) {
-            echo "<iframe src=\"{$_CONF['site_url']}/forum/viewtopic.php?mode=preview&amp;showtopic=$id&amp;onlytopic=1&lastpost=true\" height=\"300\" width=\"100%\"></iframe>";
+            echo "<iframe src=\"{$_CONF['site_url']}/forum/viewtopic.php?mode=preview&amp;showtopic=$id&amp;onlytopic=1&amp;lastpost=true\" height=\"300\" width=\"100%\"></iframe>";
         }
     }
     //End Topic Review
