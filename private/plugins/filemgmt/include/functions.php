@@ -152,7 +152,6 @@ function themecenterposts($title, $content) {
 
 function redirect_header($url, $time=3, $message=''){
     $display = COM_siteHeader('menu');
-//    $display .= "<html><head>\n";
     $display .= "<meta http-equiv='Content-Type' content='text/html;' />\n";
     $display .= "<meta http-equiv='Refresh' content='$time; url=$url' />\n";
     $display .= "<div id='content'>\n";
@@ -172,36 +171,77 @@ function redirect_header($url, $time=3, $message=''){
 
 //Reusable Link Sorting Functions
 function convertorderbyin($orderby) {
-        if ($orderby == "titleA")                       $orderby = "title ASC";
-        if ($orderby == "dateA")                        $orderby = "date ASC";
-        if ($orderby == "hitsA")                        $orderby = "hits ASC";
-        if ($orderby == "ratingA")                      $orderby = "rating ASC";
-        if ($orderby == "titleD")                       $orderby = "title DESC";
-        if ($orderby == "dateD")                        $orderby = "date DESC";
-        if ($orderby == "hitsD")                        $orderby = "hits DESC";
-        if ($orderby == "ratingD")                      $orderby = "rating DESC";
+        if ($orderby == "titleA") {
+            $orderby = "a.title ASC";
+        } else if ($orderby == "dateA") {
+            $orderby = "date ASC";
+        } else if ($orderby == "hitsA") {
+            $orderby = "hits ASC";
+        } else if ($orderby == "ratingA") {
+            $orderby = "rating ASC";
+        } else if ($orderby == "titleD") {
+            $orderby = "a.title DESC";
+        } else if ($orderby == "dateD") {
+            $orderby = "date DESC";
+        } else if ($orderby == "hitsD") {
+            $orderby = "hits DESC";
+        } else if ($orderby == "ratingD") {
+            $orderby = "rating DESC";
+        } else {
+            $orderby = "a.title ASC";
+        }
         return $orderby;
 }
 function convertorderbytrans($orderby) {
-        if ($orderby == "hits ASC")     $orderbyTrans = _MD_POPULARITYLTOM;
-        if ($orderby == "hits DESC")    $orderbyTrans = _MD_POPULARITYMTOL;
-        if ($orderby == "title ASC")    $orderbyTrans = _MD_TITLEATOZ;
-       if ($orderby == "title DESC")    $orderbyTrans = _MD_TITLEZTOA;
-        if ($orderby == "date ASC")     $orderbyTrans = _MD_DATEOLD;
-        if ($orderby == "date DESC")    $orderbyTrans = _MD_DATENEW;
-        if ($orderby == "rating ASC")   $orderbyTrans = _MD_RATINGLTOH;
-        if ($orderby == "rating DESC")  $orderbyTrans = _MD_RATINGHTOL;
+        if ($orderby == "hits ASC") {
+            $orderbyTrans = _MD_POPULARITYLTOM;
+        } else if ($orderby == "hits DESC") {
+            $orderbyTrans = _MD_POPULARITYMTOL;
+        } else if ($orderby == "title ASC") {
+            $orderbyTrans = _MD_TITLEATOZ;
+        } else if ($orderby == "a.title ASC") {
+            $orderbyTrans = _MD_TITLEATOZ;
+        } else if ($orderby == "title DESC") {
+            $orderbyTrans = _MD_TITLEZTOA;
+        } else if ($orderby == "a.title DESC") {
+            $orderbyTrans = _MD_TITLEZTOA;
+        } else if ($orderby == "date ASC") {
+            $orderbyTrans = _MD_DATEOLD;
+        } else if ($orderby == "date DESC") {
+            $orderbyTrans = _MD_DATENEW;
+        } else if ($orderby == "rating ASC") {
+            $orderbyTrans = _MD_RATINGLTOH;
+        } else if ($orderby == "rating DESC") {
+            $orderbyTrans = _MD_RATINGHTOL;
+        } else {
+            $orderbyTrans = _MD_TITLEATOZ;
+        }
         return $orderbyTrans;
 }
 function convertorderbyout($orderby) {
-        if ($orderby == "title ASC")    $orderby = "titleA";
-        if ($orderby == "date ASC")     $orderby = "dateA";
-        if ($orderby == "hits ASC")     $orderby = "hitsA";
-        if ($orderby == "rating ASC")   $orderby = "ratingA";
-        if ($orderby == "title DESC")   $orderby = "titleD";
-        if ($orderby == "date DESC")    $orderby = "dateD";
-        if ($orderby == "hits DESC")    $orderby = "hitsD";
-        if ($orderby == "rating DESC")  $orderby = "ratingD";
+        if ($orderby == "title ASC") {
+            $orderby = "titleA";
+        } else if ($orderby == "a.title ASC") {
+            $orderby = "titleA";
+        } else if ($orderby == "date ASC") {
+            $orderby = "dateA";
+        } else if ($orderby == "hits ASC") {
+            $orderby = "hitsA";
+        } else if ($orderby == "rating ASC") {
+            $orderby = "ratingA";
+        } else if ($orderby == "title DESC") {
+            $orderby = "titleD";
+        } else if ($orderby == "a.title DESC") {
+            $orderby = "titleD";
+        } else if ($orderby == "date DESC") {
+            $orderby = "dateD";
+        } else if ($orderby == "hits DESC") {
+            $orderby = "hitsD";
+        } else if ($orderby == "rating DESC") {
+            $orderby = "ratingD";
+        } else {
+            $orderby = "dateA";
+        }
         return $orderby;
 }
 

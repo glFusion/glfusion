@@ -54,7 +54,7 @@ $mytree->setGroupAccessFilter($_GROUPS);
 
 $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
 $cid  = isset($_GET['cid']) ? COM_applyFilter($_GET['cid'],true) : 0;
-$orderby  = isset($_GET['orderby']) ? COM_applyFilter($_GET['orderby'],false) : '';
+$orderby  = isset($_GET['orderby']) ? @html_entity_decode(COM_applyFilter($_GET['orderby'],false)) : '';
 
 $groupsql = filemgmt_buildAccessSql();
 $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE cid='$cid' $groupsql";
