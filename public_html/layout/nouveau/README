@@ -1,9 +1,11 @@
 Theme: Nouveau v1.1 for glFusion v1.1.0
-Theme by: Eric Warren - gl Labs (http://www.glfusion.org)
-Last updated: 20 September 2008
+Theme by: Eric Warren - glFusion (http://www.glfusion.org)
+Last updated: 19 October 2008
 ========================================
 Nouveau is a fixed & fluid width, blue and grey neutral theme that is included in a default
-glFusion install. For complete documentation please visit: http://www.glfusion.org/wiki/doku.php?id=glfusion:nouveau.
+glFusion install.
+
+For complete documentation please visit: http://www.glfusion.org/wiki/doku.php?id=glfusion:nouveau.
 
 Briefly, Nouveau features:
 
@@ -16,20 +18,16 @@ Briefly, Nouveau features:
 - Validates to HTML 4.01 Transitional, HTML 4.01 Strict or
   XHTML Transitional 1.0 via a switch in the theme's functions.php)
 
-- Support for Menu Builder's cascading menus.
+- Support for glFusion's Menu Builder cascading menus.
 
-- MooTools Javascript Library v1.11 integration. (learn more at http://mootools.net) We have also
-  included some MooTools based javascript widgets. For more info on using them, visit:
-  http://www.glfusion.org/wiki/doku.php?id=glfusion:nouveau
-
-- Additional typography elements with enhanced block class styling, quote and code styling, list
+- Additional typography elements with enhanced block class styling, quote & code styling, list
   styling, and more.
 
 - Extra block styling options for both left and right blocks.
 
 - YUI grids.css support.
 
-We have tested it in Firefox 2, IE 6/7, Opera 9, Safari beta 3 on Windows, and Google Chrome. In other browsers, your mileage may vary.
+We have tested it in Firefox 2/3, IE 6/7, Opera 9, Safari beta 3 on Windows, and Google Chrome. In other browsers, your mileage may vary.
 
 
 TOC
@@ -82,10 +80,10 @@ THINGS FOR YOU TO DO
      #CCCCCC is the color of the block header backgrounds.
 
 
-4. Visit http://www.glfusion.org/wiki/doku.php?id=glfusion:nouveau and learn
-   about how to use the additional MooTools javascript widgets included with Nouveau.
-   From content sliders and news tickers, to custom tool tips, header rotators and more,
-   Nouveau gives you the flexibility and power to make your site unique!
+4. Visit http://www.glfusion.org/wiki/doku.php?id=glfusion:widgets and learn
+   about how to use the additional MooTools javascript widgets included with glFusion.
+   From content sliders & news tickers, to custom tool tips, header rotators and more,
+   glFusion gives you the flexibility and power to make your site unique!
 
 BUGS
 ====
@@ -95,4 +93,4 @@ CHANGELOG
 =========
 29 April 2008 - v1.0 released.
 24 July 2008 - v1.0.1 released.
-FIXME - v1.1.0 released.
+31 October 2008 - v1.1.0 released.
