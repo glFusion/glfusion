@@ -107,6 +107,7 @@ $arr=array();
 $arr=$mytree->getFirstChild($cid, 'title');
 
 $count = 1;
+$eor   = 0;
 foreach($arr as $ele) {
     $totalfiles = 0;
     //debugbreak();
@@ -120,14 +121,16 @@ foreach($arr as $ele) {
         $p->set_var('new_table_row','<tr>');
         $count = 1;
         $subcategories = '';
+        $eor = 1;
     } else {
         $p->set_var('end_of_row','');
         $p->parse ('category_records', 'category',true);
         $p->set_var('new_table_row','');
+        $eor = 0;
         $count++;
     }
 }
-if ($count != $numCategoriesPerRow  && $count != 0) {
+if ( $eor == 0 ) {
     $p->set_var('final_end_row','</tr>');
 }
 
@@ -139,7 +142,8 @@ while( list($category) = DB_fetchArray($query)) {
 }
 $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
 $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-$sql .= "WHERE a.cid in ($categories) AND status > 0 $groupsql";
+//$sql .= "WHERE a.cid in ($categories) AND status > 0 $groupsql";
+$sql .= "WHERE a.cid=".$cid." AND status > 0 $groupsql";
 list($maxrows) = DB_fetchArray(DB_query($sql));
 $numpages = ceil($maxrows / $show);
 
