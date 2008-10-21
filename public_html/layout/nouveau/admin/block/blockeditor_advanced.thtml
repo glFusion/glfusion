@@ -101,7 +101,7 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
              <tr>
              <td colspan="2">
           <div id="text_editor" style="display:{show_texteditor};">
-          <textarea name="block_text" cols="45" rows="12" style="width:95%;">{block_text}</textarea><br{xhtml}>
+          <textarea name="block_text" id="block_text" cols="45" rows="12" style="width:95%;">{block_text}</textarea><br{xhtml}>
           </div>
           <div  id="html_editor" style="display:{show_htmleditor};">
             <textarea id="block_html" name="block_html" rows="10" cols="60" style="width:90%;">{block_html}</textarea>

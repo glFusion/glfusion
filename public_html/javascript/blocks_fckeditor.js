@@ -49,14 +49,14 @@
         oFCKeditor1.ReplaceTextarea() ;
     }
     function change_editmode(obj) {
-        if (obj.value == 'html') {
+        if (obj.value == 'adveditor') {
             document.getElementById('text_editor').style.display='none';
             document.getElementById('html_editor').style.display='';
-            swapEditorContent('html');
+            swapEditorContent('adveditor');
         } else {
             document.getElementById('text_editor').style.display='';
             document.getElementById('html_editor').style.display='none';
-            swapEditorContent('text');
+            swapEditorContent('html');
         }
     }
 
@@ -70,7 +70,7 @@
     function swapEditorContent(curmode) {
         var content = '';
         var oEditor = FCKeditorAPI.GetInstance('block_html') ;
-        if (curmode == 'html') { // Switching from Text to HTML mode
+        if (curmode == 'adveditor') { // Switching from Text to HTML mode
             // Get the content from the textarea 'text' content and copy it to the editor
             content = document.getElementById('block_text').value;
             oEditor.SetHTML(content);
@@ -81,7 +81,7 @@
     }
 
     function set_postcontent() {
-        if (document.getElementById('sel_editmode').value == 'html') {
+        if (document.getElementById('sel_editmode').value == 'adveditor') {
             document.getElementById('block_text').value = getEditorContent();
         }
     }
