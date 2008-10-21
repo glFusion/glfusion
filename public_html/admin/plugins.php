@@ -179,8 +179,7 @@ function changePluginStatus ($pi_name_arr)
             DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '{$P['pi_name']}'");
         }
     }
-    CACHE_remove_instance('stmenu');
-    CACHE_remove_instance('whatsnew');
+    CTL_clearCache();
 }
 
 
