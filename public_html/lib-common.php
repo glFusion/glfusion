@@ -338,6 +338,16 @@ else if( $_CONF['allow_user_themes'] == 1 )
         }
     }
 
+    if ( $_USER['theme'] == 'chameleon' ) {
+        if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("chameleon","1")) < 1) {
+            if ( $_CONF['theme'] != 'chameleon' ) {
+                $_USER['theme'] = $_CONF['theme'];
+            } else {
+                $_USER['theme'] = 'nouveau';
+            }
+        }
+    }
+
     if( !empty( $_USER['theme'] ))
     {
         if( is_dir( $_CONF['path_themes'] . $_USER['theme'] ))
@@ -350,6 +360,13 @@ else if( $_CONF['allow_user_themes'] == 1 )
         {
             $_USER['theme'] = $_CONF['theme'];
         }
+    }
+} else if ($_CONF['theme'] == 'chameleon' ) {
+    if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("chameleon","1")) < 1) {
+        $_USER['theme'] = 'nouveau';
+        $_CONF['theme'] = 'nouveau';
+        $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
+        $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
     }
 }
 
