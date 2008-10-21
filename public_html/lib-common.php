@@ -1067,7 +1067,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var('xhtml',XHTML);
 
     $cacheID = DB_getItem($_TABLES['vars'],'value','name="cacheid"');
-    $header->set_var('cacheid',$cacheID);
+    $header->set_var('cacheid',$_CONF['theme'].$cacheID);
 
     // give the theme a chance to load stuff....
 
