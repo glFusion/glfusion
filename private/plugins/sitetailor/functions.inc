@@ -411,7 +411,7 @@ function st_initMenu($skipCache=false) {
  */
 
 
-function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$parentclass='',$lastclass='',$selected='') {
+function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$parentclass='',$lastclass='',$selected='',$noid=0) {
     global $stMenu, $_CONF;
 
     $optionHash = md5($wrapper.$ulclass.$liclass.$parentclass.$lastclass.$selected);
@@ -419,7 +419,7 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
     $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
 
     $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval ) {
+    if ( $retval && $noid == 0) {
         return $retval;
     }
     $retval = '';
@@ -432,12 +432,13 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
             }
         }
     }
+
     if ( $menuID != '' && $stMenu[$menuID]['active'] == 1 && $stMenu[$menuID]['menu_perm'] == 3) {
         if ( $stMenu[$menuID]['menu_type'] == 1 ) {
-            $retval .= '<div id="gl_moomenu'.$menuID.'">'. LB;
+            $retval .= '<div id="gl_moomenu'.($noid == 0 ? $menuID : '').'">'. LB;
         }
         if ( $wrapper != '' ) {
-            $retval .= '<div class="'.$wrapper.$menuID.'">' . LB;
+            $retval .= '<div class="'.$wrapper.($noid == 0 ? $menuID : '').'">' . LB;
         }
         $retval .= $stMenu[$menuID]['elements'][0]->showTree(0,$ulclass,$liclass,$parentclass,$lastclass,$selected);
         if ( $wrapper != '' ) {
@@ -449,8 +450,8 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
     } else {
         return '';
     }
-
-    CACHE_create_instance($cacheInstance, $retval, 0);
+    if ( $noid == 0 )
+        CACHE_create_instance($cacheInstance, $retval, 0);
     return $retval;
 }
 
