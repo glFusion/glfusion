@@ -49,6 +49,7 @@ global $_FF_DEFAULT;
 $_FF_DEFAULT = array();
 $_FF_DEFAULT['registration_required']  = false;
 $_FF_DEFAULT['registered_to_post']     = true;
+$_FF_DEFAULT['allow_memberlist']       = false;
 $_FF_DEFAULT['allow_html']             = false;
 $_FF_DEFAULT['post_htmlmode']          = false;
 $_FF_DEFAULT['use_glfilter']           = true;
@@ -325,6 +326,8 @@ function plugin_initconfig_forum()
                 0, 0, 0, 10, true, 'forum');
         $c->add('registered_to_post', $_FF_DEFAULT['registered_to_post'], 'select',
                 0, 0, 0, 20, true, 'forum');
+        $c->add('allow_memberlist', $_FF_DEFAULT['allow_memberlist'], 'select',
+                0, 0, 0, 25, true, 'forum');
         $c->add('allow_notification', $_FF_DEFAULT['allow_notification'], 'select',
                 0, 0, 0, 30, true, 'forum');
         $c->add('show_topicreview', $_FF_DEFAULT['show_topicreview'], 'select',

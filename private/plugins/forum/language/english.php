@@ -941,6 +941,7 @@ $LANG_confignames['forum'] = array(
     'allowablefiletypes'        => 'Allowable File Types',
     'inlineimageypes'           => 'Allows Image Types',
     'showtopic_review_order'    => 'Order to display old topics when replying',
+    'allow_memberlist'          => 'Allow Site Member List',
 );
 $LANG_configsubgroups['forum'] = array(
     'sg_main'               => 'Configuration Settings'

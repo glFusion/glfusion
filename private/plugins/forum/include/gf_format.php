@@ -294,7 +294,7 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
 }
 
 function forumNavbarMenu($current='') {
-    global $_CONF,$_USER,$LANG_GF01,$LANG_GF02;
+    global $CONF_FORUM, $_CONF,$_USER,$LANG_GF01,$LANG_GF02;
 
     include ($_CONF['path_system'] . 'classes/navbar.class.php');
     $navmenu = new navbar;
@@ -303,6 +303,9 @@ function forumNavbarMenu($current='') {
         $navmenu->add_menuitem($LANG_GF01['USERPREFS'],"{$_CONF['site_url']}/forum/userprefs.php");
         $navmenu->add_menuitem($LANG_GF01['SUBSCRIPTIONS'],"{$_CONF['site_url']}/forum/notify.php");
         $navmenu->add_menuitem($LANG_GF01['BOOKMARKS'],"{$_CONF['site_url']}/forum/index.php?op=bookmarks");
+    }
+    if ( $CONF_FORUM['allow_memberlist'] && $_USER['uid'] > 1 ) {
+        $navmenu->add_menuitem($LANG_GF02['msg88'],"{$_CONF['site_url']}/forum/memberlist.php");
     }
     $navmenu->add_menuitem($LANG_GF01['LASTX'],"{$_CONF['site_url']}/forum/index.php?op=lastx");
     $navmenu->add_menuitem($LANG_GF02['msg201'],"{$_CONF['site_url']}/forum/index.php?op=popular");

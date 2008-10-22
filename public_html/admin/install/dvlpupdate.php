@@ -150,6 +150,8 @@ $c->add('showtopic_review_order', 'DESC', 'select',0, 0, 5, 45, true, 'forum');
 // New 2008-10-10
 $c->add('digg_enabled',1,'select',7,31,0,2000,TRUE);
 
+$c->add('allow_memberlist',FALSE, 'select',0, 0, 0, 25, true, 'forum');
+
 // probably need to clear the template cache so do it here
 CTL_clearCache();
 
