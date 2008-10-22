@@ -8,7 +8,8 @@ window.addEvent('load',function() {
     $('menutype').addEvent('change',toggleFields);
     $('pid').addEvent('change',function(){
          var option_id = this.getValue();
-         var url = 'getorder.php?optionid='+option_id+'&amp;edit=1';
+         var menu_id = {menu};
+         var url = 'getorder.php?optionid='+option_id+'&menuid='+menu_id+'&edit=1';
          new Ajax(url, {
               method: 'get',
               update: $('displayafter')
