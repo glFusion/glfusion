@@ -118,7 +118,7 @@ function install_config($site_url)
     $c->add('hideviewscount',0,'select',1,7,0,1210,TRUE);
     $c->add('hideemailicon',0,'select',1,7,0,1220,TRUE);
     $c->add('hideprintericon',0,'select',1,7,0,1230,TRUE);
-    $c->add('digg_enabled',1,'select',1,7,0,1235,TRUE);
+    $c->add('digg_enabled',0,'select',1,7,0,1235,TRUE);
     $c->add('allow_page_breaks',1,'select',1,7,0,1240,TRUE);
     $c->add('page_break_comments','last','select',1,7,7,1250,TRUE);
     $c->add('article_image_align','right','select',1,7,8,1260,TRUE);
