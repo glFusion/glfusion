@@ -37,7 +37,18 @@ if (!defined ('GVERSION')) {
 }
 
 function WIDGET_mooslide($page_ids, $width = 550, $height = 160, $id = 'gl_slide')
-//standalone page example is at the bottom of the function.
+/*  Sample standalone staticpage:
+
+USES_lib_widgets();
+// add you own static pages here.
+$slides = Array('staticpage_id_1', 'staticpage_id_2');
+$display = COM_siteHeader();
+// test the parameters, or not
+$display .= WIDGET_mooslide($slides);
+$display .= WIDGET_mooslide($slides, 560, 160, 'div id of mooSlide');
+$display .= COM_siteFooter();
+echo $display;
+*/
 {
     global $_TABLES, $_CONF;
 
@@ -95,19 +106,6 @@ EOS;
 
     return $display;
 }
-
-/*  Sample staticpage:
-
-USES_lib_widgets();
-// add you own static pages here.
-$slides = Array('staticpage id 1', 'staticpage id 2');
-$display = COM_siteHeader();
-// test the parameters, or not
-$display .= WIDGET_mooslide($slides);
-$display .= WIDGET_mooslide($slides, 550, 160, 'div id of mooSlide');
-$display .= COM_siteFooter();
-echo $display;
-*/
 
 // A portal staticpage (that bases itself on a user created proper portal block called gl_mootickerRSS)
 //modified from LWC's forum post http://www.geeklog.net/forum/viewtopic.php?showtopic=67396 by Mark R. Evans and Joe Mucchiello
@@ -204,4 +202,13 @@ function WIDGET_autotranslations($header=0) {
     $retval .= '</ul></div><div style="clear:left;"></div>';
 	return $retval;
 }
+
+// inserts the call to the javascript file, referencing the full path to gl_moospring.js
+function WIDGET_moospring() {
+    global $_CONF;
+	
+    $retval = '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools/gl_moospring.js"></script>';
+    return $retval;
+}
+
 ?>
