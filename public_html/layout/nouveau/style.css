@@ -2091,18 +2091,28 @@ width:95%;
 	width:90%;
 }
 
-#configuration fieldset p {  margin: 10px 0px;  }
+#configuration fieldset p {
+	margin: 10px 0px;
+}
 
-#configuration legend    {
+#configuration legend {
 	color: #0B55C4;
 	font-size: 1.2em;
 	font-weight: bold;
 }
 
 #configuration input,
-#configuration select { font-size: .9em;  border: 1px solid silver; }
-#configuration textarea      { font-size: 11px;  border: 1px solid silver; }
-#configuration button        { font-size: 10px;  }
+#configuration select {
+	font-size:.9em;
+	border:1px solid silver;
+}
+#configuration textarea {
+	font-size:11px;
+	border:1px solid silver;
+}
+#configuration button {
+	font-size: 10px;
+}
 
 #configuration td.key {
 background-color:#F6F6F6;
@@ -2122,6 +2132,72 @@ border:1px solid #000;
 font-weight:700;
 width:95%;
 margin:10px;
+}
+
+/* start gl_moorotator_block css */
+#gl_moorotator_block {
+position:relative;
+z-index:1;
+height:198px; /* the total height of the image rotator window*/
+width:160px;
+overflow:hidden;
+margin:0 0 0 -5px;
+}
+
+#gl_moorotator_block .gl_moorotatorimage_block {
+float:left;
+top:10px;
+left:0;
+position:relative;
+height:198px;
+z-index:1;
+overflow:hidden;
+}
+
+#gl_moorotator_block .gl_moorotatortext_block {
+position:relative;
+top:125px;
+z-index:2;
+margin-left:10px;
+display:block;
+color:#FFF;
+}
+
+.gl_moorotatortext_block a,
+.gl_moorotatortext_block a:hover {
+color:#FFF;
+text-decoration:none;
+}
+
+#gl_moorotator_block .controls {
+position:absolute;
+top:20px;
+right:10px;
+z-index:5;
+}
+
+#gl_moorotator_block .control-pause {
+background-position:0 -34px;
+}
+
+#gl_moorotator_block .control-play {
+background-position:0 -51px;
+}
+
+#gl_moorotator_block .controls img{
+background-image:url(layout/nouveau/images/gl_mooticker_controls.png);
+cursor:pointer;
+height:15px;
+margin-right:5px;
+width:15px;
+}
+
+#gl_moorotator_block .control-prev {
+background-position:0 0;
+}
+
+#gl_moorotator_block .control-next {
+background-position:0 -17px;
 }
 
 /* start gl_moorotator css */
@@ -2152,7 +2228,8 @@ display:block;
 color:#FFF;
 }
 
-.gl_moorotatortext a,.gl_moorotatortext a:hover {
+.gl_moorotatortext a,
+.gl_moorotatortext a:hover {
 color:#FFF;
 text-decoration:none;
 }
@@ -2172,7 +2249,8 @@ background-position:0 -34px;
 background-position:0 -51px;
 }
 
-#gl_moorotator .controls img,#gl_mooticker .controls img {
+#gl_moorotator .controls img,
+#gl_mooticker .controls img {
 background-image:url(layout/nouveau/images/gl_mooticker_controls.png);
 cursor:pointer;
 height:15px;
@@ -2180,11 +2258,17 @@ margin-right:5px;
 width:15px;
 }
 
-#gl_moorotator .control-prev,div#frame div.button#left:hover,div#frame div.button#left.hover,div#frame div.button#right:hover,div#frame div.button#right.hover,#gl_mooticker .control-prev {
+#gl_moorotator .control-prev,
+div#frame div.button#left:hover,
+div#frame div.button#left.hover,
+div#frame div.button#right:hover,
+div#frame div.button#right.hover,
+#gl_mooticker .control-prev {
 background-position:0 0;
 }
 
-#gl_moorotator .control-next,#gl_mooticker .control-next {
+#gl_moorotator .control-next,
+#gl_mooticker .control-next {
 background-position:0 -17px;
 }
 
