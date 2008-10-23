@@ -81,7 +81,7 @@ EOJ;
 
     $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
          . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $page_ids))
-         . ')';
+         . ')' . COM_getPermSQL('AND');
 
     $res = DB_query($sql);
     $pages = array();
@@ -90,6 +90,9 @@ EOJ;
         $title = htmlspecialchars(stripslashes($A['sp_title']));
         $order = array_search($A['sp_id'],$page_ids); // find proper order
         $pages[$order] = Array('content' => $content, 'title' => $title, 'index' => $order+1);
+    }
+    if (count($pages) == 0) {
+        return '';
     }
     ksort($pages);
     foreach ($pages as $page) {
