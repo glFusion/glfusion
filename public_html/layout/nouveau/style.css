@@ -2139,14 +2139,14 @@ margin:10px;
 position:relative;
 z-index:1;
 height:198px; /* the total height of the image rotator window*/
-width:160px;
+width:150px;
 overflow:hidden;
 margin:0 0 0 -5px;
 }
 
 #gl_moorotator_block .gl_moorotatorimage_block {
 float:left;
-top:10px;
+top:0;
 left:0;
 position:relative;
 height:198px;
@@ -2156,9 +2156,9 @@ overflow:hidden;
 
 #gl_moorotator_block .gl_moorotatortext_block {
 position:relative;
-top:125px;
+top:178px;
 z-index:2;
-margin-left:10px;
+margin-left:15px;
 display:block;
 color:#FFF;
 }
@@ -2171,8 +2171,8 @@ text-decoration:none;
 
 #gl_moorotator_block .controls {
 position:absolute;
-top:20px;
-right:10px;
+bottom:5px;
+right:52px;
 z-index:5;
 }
 
