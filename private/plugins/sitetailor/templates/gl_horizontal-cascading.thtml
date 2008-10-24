@@ -11,7 +11,7 @@
   padding:0 1.2em;
 }
 #gl_moomenu{menu_id} {
-  height:2.2em;
+  height:auto;
   position:relative;
   z-index:50;
   margin:0;
@@ -58,6 +58,7 @@
   line-height:2.3em;
   float:left;
   position:relative;
+  width:100%;
 }
 .gl_moomenu{menu_id} ul {
   background:#fff;
@@ -149,7 +150,6 @@
 
 <!--[if IE 7]>
 #gl_moomenu{menu_id} {
-  height:auto;
   width:100%;
 }
 .gl_moomenu{menu_id} li ul {
