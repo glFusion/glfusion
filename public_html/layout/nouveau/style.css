@@ -201,14 +201,14 @@ zoom:1;
 
 #gl_container_fixed {
 background:#FFF;
-min-width:960px;
-width:960px;
+min-width:955px;
+width:955px;
 margin:20px auto auto;
 }
 
 #gl_container_fluid {
 background:#FFF;
-min-width:960px;
+min-width:955px;
 margin:20px;
 }
 
