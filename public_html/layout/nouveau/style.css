@@ -201,14 +201,14 @@ zoom:1;
 
 #gl_container_fixed {
 background:#FFF;
-min-width:920px;
-width:980px;
+min-width:960px;
+width:960px;
 margin:20px auto auto;
 }
 
 #gl_container_fluid {
 background:#FFF;
-min-width:720px;
+min-width:960px;
 margin:20px;
 }
 
@@ -2138,7 +2138,7 @@ margin:10px;
 #gl_moorotator_block {
 position:relative;
 z-index:1;
-height:198px; /* the total height of the image rotator window*/
+height:160px; /* the total height of the image rotator window*/
 width:150px;
 overflow:hidden;
 margin:0 0 0 -5px;
@@ -2149,14 +2149,14 @@ float:left;
 top:0;
 left:0;
 position:relative;
-height:198px;
+height:160px;
 z-index:1;
 overflow:hidden;
 }
 
 #gl_moorotator_block .gl_moorotatortext_block {
 position:relative;
-top:178px;
+bottom:10px;
 z-index:2;
 margin-left:15px;
 display:block;
@@ -2172,7 +2172,7 @@ text-decoration:none;
 #gl_moorotator_block .controls {
 position:absolute;
 bottom:5px;
-right:52px;
+left:47px;
 z-index:5;
 }
 
@@ -2237,7 +2237,7 @@ text-decoration:none;
 
 #gl_moorotator .controls {
 position:absolute;
-top:20px;
+top:15px;
 right:10px;
 z-index:5;
 }
@@ -2352,7 +2352,7 @@ clear:both;
 position:relative;
 overflow:hidden;
 border:5px solid #CCC;
-margin:10px auto;
+margin:0 auto 10px;
 }
 
 div#frame div.button {
