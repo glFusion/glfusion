@@ -483,7 +483,7 @@ function MG_buildImportAlbums( $configdir ) {
 }
 
 function MG_importSelectAlbums($configdir ) {
-	global $mgAlbums, $CONFIG, $_DB_name, $_TABLES, $_CONF, $LANG_MG02, $_USER, $_POST;
+	global $mgAlbums, $_MG_CONF, $CONFIG, $_DB_name, $_TABLES, $_CONF, $LANG_MG02, $_USER, $_POST;
 
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file (array('page' => 'import_select_items.thtml'));
