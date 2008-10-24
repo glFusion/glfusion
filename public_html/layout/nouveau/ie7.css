@@ -3,13 +3,6 @@ This file only contains CSS fixes for the IE 7 browser. For regular style info u
 NOTE: paths specified below are relative to this file
  */
 
-#gl_moomenu {
-  height:auto;
-  width:100%;
-}
 #gl_mooticker ul {
   margin:0 0 5px 120px;
-}
-.gl_moomenu li ul {
-  width:177px;
 }
