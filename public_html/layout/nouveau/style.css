@@ -1509,6 +1509,30 @@ background:transparent url(layout/nouveau/images/bullet-star.png) no-repeat scro
 padding-left:28px;
 }
 
+ul.disc li {
+background:transparent url(layout/nouveau/images/disc.png) no-repeat scroll 2px;
+padding-left:28px;
+}
+
+ul.headphones li {
+background:transparent url(layout/nouveau/images/headphones.png) no-repeat scroll 2px;
+padding-left:28px;
+}
+
+ul.mic li {
+background:transparent url(layout/nouveau/images/mic.png) no-repeat scroll 2px;
+padding-left:28px;
+}
+
+ul.speaker li {
+background:transparent url(layout/nouveau/images/speaker.png) no-repeat scroll 2px;
+padding-left:28px;
+}
+
+ul.video li {
+background:transparent url(layout/nouveau/images/video.png) no-repeat scroll 2px;
+padding-left:28px;
+}
 li.num-1 {
 background:transparent url(layout/nouveau/images/number-1.png) no-repeat scroll 0;
 padding-left:28px;
@@ -1563,7 +1587,7 @@ padding-left:28px;
 padding-bottom:3px;
 }
 
-ul.arrow,ul.bug,ul.cart,ul.check,ul.script,ul.bullet-blue,ul.bullet-grey,ul.bullet-plus,ul.bullet-rss,ul.bullet-star,ul.number {
+ul.arrow,ul.bug,ul.cart,ul.check,ul.script,ul.bullet-blue,ul.bullet-grey,ul.bullet-plus,ul.bullet-rss,ul.bullet-star,ul.disc,ul.headphones,ul.mic,ul.speaker,ul.video,ul.number {
 list-style-image:none;
 list-style-position:outside;
 list-style-type:none;
@@ -2205,7 +2229,7 @@ background-position:0 -17px;
 position:relative;
 z-index:1;
 height:220px;
-width:580px;
+width:570px;
 overflow:hidden;
 margin:auto;
 }
@@ -2238,7 +2262,7 @@ text-decoration:none;
 #gl_moorotator .controls {
 position:absolute;
 top:15px;
-right:10px;
+right:15px;
 z-index:5;
 }
 
@@ -2352,7 +2376,7 @@ clear:both;
 position:relative;
 overflow:hidden;
 border:5px solid #CCC;
-margin:0 auto 10px;
+margin:0 auto 2em;
 }
 
 div#frame div.button {
