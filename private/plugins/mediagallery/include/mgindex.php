@@ -531,7 +531,7 @@ function MG_index() {
 	    $T->parse('gallery_body','body');
 	}
 	$T->parse('output','page');
-	echo $nFrame->getCSS();
+	echo '<style type="text/css">'.$nFrame->getCSS().'</style>';
 
 	echo $T->finish($T->get_var('output'));
 	echo MG_siteFooter();
