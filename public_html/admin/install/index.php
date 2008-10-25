@@ -575,6 +575,7 @@ function INST_installEngine($install_type, $install_step)
                             DB_query("UPDATE {$_TABLES['users']} SET theme='nouveau' WHERE uid=2",1);
 
                             CTL_clearCache();
+                            $config->_purgeCache();
 
                             // Now we're done with the installation so redirect the user to success.php
                             header('Location: success.php?type=install&language=' . $language);

@@ -202,6 +202,7 @@ class config {
             $this->config_array[$group][$name] = $value;
             $this->_post_configuration();
         }
+        $this->_writeIntoCache();
     }
 
     /**
@@ -224,6 +225,7 @@ class config {
                "SET default_value = '{$escaped_val}' WHERE " .
                "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
         $this->_DB_escapedQuery($sql);
+        $this->_writeIntoCache();
     }
 
     function restore_param($name, $group)
@@ -245,6 +247,7 @@ class config {
         }
         $sql .= " WHERE name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
         $this->_DB_escapedQuery($sql);
+        $this->_writeIntoCache();
     }
 
     function unset_param($name, $group)
@@ -262,6 +265,7 @@ class config {
         }
         $sql .= " WHERE name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
         $this->_DB_escapedQuery($sql);
+        $this->_writeIntoCache();
     }
 
     /**
@@ -703,8 +707,6 @@ class config {
                 if ($group == 'Core') {
                     $descUrl = $baseUrl . '/docs/config.html#desc_' . $o;
                     $t->set_var('doc_url', $descUrl);
-//                    $t->set_var('doc1_link',
-//                            '(<a href="' . $descUrl . '" target="help">?</a>)');
                     $t->set_var('doc_link',
                         '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>');
                 } else {
