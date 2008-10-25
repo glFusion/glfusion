@@ -245,7 +245,10 @@ function plugin_remove_filemgmt()
     DB_query("DELETE FROM {$_TABLES['comments']} WHERE type='filemgmt'");
     DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn='phpblock_NewDownloads'");
 
-    DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE group_name='filemgmt'");
+    $c = config::get_instance();
+    if ($c->group_exists('filemgmt')) {
+        $c->delGroup('filemgmt');
+    }
     COM_errorLog("Removing configuration option for plugin $pi_name");
 
     return true;

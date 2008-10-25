@@ -260,7 +260,12 @@ function plugin_remove_forum()
     DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn = 'phpblock_forum_newposts'",1);
     DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn = 'phpblock_forum_newposts2'",1);
     DB_query("DELETE FROM {$_TABLES['blocks']} WHERE phpblockfn = 'phpblock_forum_menu'",1);
-    DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE group_name='forum'");
+
+    $c = config::get_instance();
+    if ($c->group_exists('forum')) {
+        $c->delGroup('forum');
+    }
+//    DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE group_name='forum'");
     return true;
 }
 ?>

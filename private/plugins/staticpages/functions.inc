@@ -401,6 +401,7 @@ function SP_printPage ($page, $A)
     $print->set_var ('site_url', $_CONF['site_url']);
     $print->set_var ('site_name', $_CONF['site_name']);
     $print->set_var ('site_slogan', $_CONF['site_slogan']);
+    $print->set_var('xhtml', XHTML);
 
     $print->set_var ('page_title', $_CONF['site_name'] . ' - '
                                    . stripslashes ($A['sp_title']));

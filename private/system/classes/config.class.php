@@ -38,6 +38,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+define('CONFIG_CACHE_FILE_NAME', '$$$config$$$.cache');
+
 class config {
     var $dbconfig_file;
     var $config_array;
@@ -115,6 +117,12 @@ class config {
     {
         global $_TABLES;
 
+        // Reads from a cache file if there is one
+        if ($this->_readFromCache()) {
+            $this->_post_configuration();
+            return $this->config_array;
+        }
+
         $false_str = serialize(false);
 
         $sql = "SELECT name, value, group_name FROM {$_TABLES['conf_values']} WHERE (type <> 'subgroup') AND (type <> 'fieldset')";
@@ -132,6 +140,7 @@ class config {
                 }
             }
         }
+        $this->_writeIntoCache();
         $this->_post_configuration();
 
         return $this->config_array;
@@ -322,6 +331,7 @@ class config {
         $this->_DB_escapedQuery($sql);
 
         $this->config_array[$group][$param_name] = $default_value;
+        $this->_writeIntoCache();
     }
 
     /**
@@ -334,6 +344,29 @@ class config {
                   array('name', 'group_name'),
                   array(addslashes($param_name), addslashes($group)));
         unset($this->config_array[$group][$param_name]);
+        $this->_writeIntoCache();
+    }
+
+    /**
+     * Permanently deletes a group of parameters
+     * @param string  $group   This is the name of the group to delete
+     */
+    function delGroup($group)
+    {
+        global $_CONF, $_TABLES;
+
+        if ( $group == 'Core' ) {
+            return;
+        }
+        $result = DB_query("SELECT * FROM {$GLOBALS['_TABLES']['conf_values']} WHERE group_name='".addslashes($group)."'");
+        while ( $C = DB_fetchArray($result) ) {
+            $param_name = $C['name'];
+            DB_delete($GLOBALS['_TABLES']['conf_values'],
+                      array('name', 'group_name'),
+                      array(addslashes($param_name), addslashes($group)));
+            unset($this->config_array[$group][$param_name]);
+        }
+        $this->_purgeCache();
     }
 
     /**
@@ -927,6 +960,61 @@ class config {
             DB_query($sql);
         }
     }
-}
 
+    /**
+    * Read from the cache file
+    *
+    * @return boolean true = found cache, false = otherwise
+    */
+    function _readFromCache()
+    {
+        global $_CONF;
+
+        $cache_file = $_CONF['path'] . 'data/' . CONFIG_CACHE_FILE_NAME;
+        clearstatcache();
+        if (file_exists($cache_file)) {
+            $s = file_get_contents($cache_file);
+            if ($s !== false) {
+                $this->config_array = unserialize($s);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+    * Write into the cache file
+    */
+    function _writeIntoCache()
+    {
+        global $_CONF;
+
+        $cache_file = $_CONF['path'] . 'data/' . CONFIG_CACHE_FILE_NAME;
+        $s = serialize($this->config_array);
+        $fh = fopen($cache_file, 'wb');
+        if ($fh !== false) {
+            if (flock($fh, LOCK_EX)) {
+                ftruncate($fh, 0);
+                rewind($fh);
+				fwrite($fh, $s);
+                flock($fh, LOCK_UN);
+            }
+            fclose($fh);
+        } else {
+            COM_errorLog('config::_writeIntoCache: cannot write into cache file: ' . $cache_file);
+        }
+    }
+
+    /**
+    * Purge the cache file
+    */
+    function _purgeCache()
+    {
+        global $_CONF;
+
+        $cache_file = $_CONF['path'] . 'data/' . CONFIG_CACHE_FILE_NAME;
+        @unlink($cache_file);
+    }
+}
 ?>

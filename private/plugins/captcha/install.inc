@@ -149,7 +149,10 @@ function plugin_remove_captcha() {
 
     // Unregister the plugin with glFusion
     COM_errorLog('Attempting to unregister the CAPTCHA Plugin from glFusion',1);
-    DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE group_name='captcha'");
+    $c = config::get_instance();
+    if ($c->group_exists('captcha')) {
+        $c->delGroup('captcha');
+    }
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = 'captcha'",1);
 
     COM_errorLog('...success',1);
