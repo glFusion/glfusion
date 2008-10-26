@@ -199,7 +199,7 @@ function plugin_install_sitetailor($_DB_table_prefix)
         exit;
     }
 
-    DB_query("INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, help, group_id, owner_id, perm_owner, perm_group, perm_members,perm_anon) VALUES (1, 'blockmenu', 'phpblock', 'Navigation', 'all', 0, '', '', 0, 1, 'phpblock_getMenu(block)','', 2, 4, 3, 2, 2, 2);",1);
+    DB_query("INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, help, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1, 'blockmenu', 'phpblock', 'Navigation', 'all', 2, '', '', 0, 1, 'phpblock_getMenu(block)','', 4, 2, 3, 2, 2, 2);",1);
 
     COM_errorLog("Succesfully installed the $pi_name Plugin!",1);
     return true;
