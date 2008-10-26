@@ -1183,6 +1183,16 @@ echo WIDGET_moospring();
 	</ul>
 </div>
 </center>', 1, '0000-00-00 00:00:00', 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 2, 0, 0, 'html', 0) ";
+$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_mooslide', 2, 'gl_mooslide', '// this staticpage needs to have PHP set to execute PHP (return) below
+// use lib-widgets.php
+USES_lib_widgets();
+
+// add your staticpage IDs, order here is order they appear on the mooslide tabs
+$slides = Array(\'mooslide_whatsnew\', \'mooslide_cachetech\', \'mooslide_integratedplugins\', \'mooslide_mootools\', \'mooslide_widgets\');
+
+//call the WIDGET_mooslide function from lib-widgets.php
+// last 3 options below are width, height, and css id
+return WIDGET_mooslide($slides, 560, 160, \'gl_slide\');', 1, '0000-00-00 00:00:00', 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (1,'Refreshing') ";
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (0,'Normal') ";
