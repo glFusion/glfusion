@@ -991,10 +991,170 @@ $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('html','HTM
 $_DATA[] = "INSERT INTO {$_TABLES['sortcodes']} (code, name) VALUES ('ASC','Oldest First') ";
 $_DATA[] = "INSERT INTO {$_TABLES['sortcodes']} (code, name) VALUES ('DESC','Newest First') ";
 
-$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('typography', 2, 'typography', '<div style=\"margin-bottom: 10px;\">&nbsp;</div>\r\n<blockquote>\r\n<p>This page shows all of the typography styles and settings that can be applied in glFusion, using one of the default themes.<br />\r\n<br />\r\nIn addition to extended typography and styles, glFusion also features <a href=\"http://developer.yahoo.com/yui/grids/\" target=\"_blank\" class=\"gl_mootipfixed\" title=\"Yahoo User Interface :: Grids css layout framework\">YUI Grids css support</a> for easy implementation of multi-column layouts.</p>\r\n</blockquote>\r\n<div style=\"border-bottom: 2px solid rgb(247, 247, 247);\" class=\"yui-g\">\r\n<div class=\"yui-u first\"><span class=\"alert\">Create it with the following html:<br />\r\n<strong>&lt;span class=&quot;alert&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"info\">Create it with the following html:<br />\r\n<strong>&lt;span class=&quot;info&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"down\">Create it with the following html:<br />\r\n<strong>&lt;span class=&quot;down&quot;&gt;....&lt;/span&gt;</strong></span></div>\r\n<div class=\"yui-u\"><span class=\"note\">Create it with the following html:<br />\r\n<strong>&lt;span class=&quot;note&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"idea\">Create it with the following html:<br />\r\n<strong>&lt;span class=&quot;idea&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"help\">Create it with the following html:<br />\r\n<strong>&lt;span class=&quot;help&quot;&gt;...&gt;&lt;/span&gt;</strong></span></div>\r\n</div>\r\n<div style=\"border-bottom: 2px solid rgb(247, 247, 247); padding: 1em;\" class=\"yui-u\">\r\n<div style=\"margin-bottom: 10px;\" class=\"story-featured\">\r\n<h1>Create featured story H1 text with the following html: <strong>&lt;div class=&quot;story-featured&quot;&gt;&lt;h1&gt;....&lt;/h1&gt;&lt;/div&gt;</strong></h1>\r\n<br />\r\nTHIS&nbsp;PARAGRAPH&nbsp;IS&nbsp;LEFT&nbsp;JUSTIFIED: Aenean neque est, laoreet quis, condimentum ut, pellentesque et, nulla. Etiam malesuada ipsum egestas lorem. Vestibulum gravida laoreet justo. Maecenas eget tellus mollis lacus cursus suscipit. Phasellus ante ante, dapibus ut, pellentesque eu, tincidunt vel, velit.</div>\r\n<h1>Create H1 text with the following html: <strong>&lt;h1&gt;....&lt;/h1&gt;</strong></h1>\r\n<p style=\"text-align: center;\">THIS&nbsp;PARAGRAPH&nbsp;IS&nbsp;CENTER&nbsp;JUSTIFIED: Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus aliquet nulla sed nisl. Nullam egestas sagittis leo. Quisque dolor ligula, hendrerit laoreet, gravida sit amet, rutrum et, tortor. Donec lorem dui, varius sed, nonummy ut, viverra ac, metus. Duis in mauris ut erat porta placerat.</p>\r\n<h2>Create H2 text with the following html: <strong>&lt;h2&gt;....&lt;/h2&gt;</strong></h2>\r\n<p style=\"text-align: right;\">THIS PARAGRAPH IS RIGHT JUSTIFIED: Aenean elementum, lectus non tempor volutpat, dolor augue molestie nisl, cursus ullamcorper urna odio nec velit. Phasellus lobortis justo. Donec risus. Sed et nunc vitae dolor mattis vestibulum. Morbi iaculis augue vel tortor.</p>\r\n<h3>Create H3 text with the following html: <strong>&lt;h3&gt;....&lt;/h3&gt;</strong></h3>\r\n<p style=\"text-align: justify;\">THIS PARAGRAPH IS BLOCK JUSTIFIED: Praesent semper elit quis elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque eu neque. Morbi aliquet sapien vel nisl aliquam pellentesque.</p>\r\n</div>\r\n<div class=\"story-body\" style=\"margin: auto; width: 520px; padding-top: 20px;\">\r\n<pre>\r\nThis is a sample <strong>&lt;div class=&quot;story-body&quot;&gt;&lt;pre&gt;...&lt;/pre&gt;&lt;/div&gt;</strong> tag:\r\n=============================================\r\n.story-body pre {\r\nbackground:#F7F7F7 url(layout/nouveau/images/code.png) no-repeat scroll 5px 50%;\r\nborder:3px solid #CCC;\r\nfont-size:90%;\r\nline-height:135%;\r\noverflow:auto;\r\npadding:1em 1em 1em 5em;\r\n}\r\n=============================================\r\n</pre>\r\n</div>\r\n<div style=\"border-bottom: 2px solid rgb(247, 247, 247); padding: 1em;\" class=\"yui-u\">This is an example of a block quote. Wrap your text in: <strong>&lt;blockquote&gt;&lt;p&gt;....&lt;/p&gt;&lt;/blockquote&gt;</strong> <blockquote>\r\n<p>Etiam congue risus in mi. Suspendisse scelerisque. Integer vel ante at odio tempor pretium. Proin porta augue quis augue. Aliquam erat volutpat. Proin condimentum. Vivamus gravida convallis massa. Proin turpis.</p>\r\n</blockquote></div>\r\n<div style=\"padding: 0.5em;\" class=\"yui-g\">\r\n<div class=\"yui-u first\">\r\n<h1>List Styles - Images</h1>\r\n<ul class=\"arrow\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>arrow</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>\r\n</ul>\r\n<ul class=\"bug\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>bug</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>\r\n</ul>\r\n<ul class=\"cart\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>cart</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;.<br />\r\n    </strong></li>\r\n</ul>\r\n<ul class=\"check\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>check</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>\r\n</ul>\r\n<ul class=\"script\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>script</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>\r\n</ul>\r\n</div>\r\n<div class=\"yui-u\">\r\n<h1>List Styles - Bullets</h1>\r\n<ul class=\"bullet-blue\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>bullet-blue</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>\r\n</ul>\r\n<ul class=\"bullet-grey\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>bullet-grey</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>\r\n</ul>\r\n<ul class=\"bullet-plus\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>bullet-plus</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>\r\n</ul>\r\n<ul class=\"bullet-rss\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>bullet-rss</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>\r\n</ul>\r\n<ul class=\"bullet-star\">\r\n    <li>Use this style with the following html code:<br />\r\n    <strong>&lt;ul class=&quot;</strong><em>bullet-star</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>\r\n</ul>\r\n</div>\r\n</div>\r\n<div style=\"border-bottom: 1px solid rgb(204, 204, 204); padding: 1em 1em 1em 5em;\" class=\"yui-u\">\r\n<h1>List Styles - Numbers &lt;ul class=&quot;number&quot;&gt;...&lt;/ul&gt;</h1>\r\n<ul class=\"number\">\r\n    <li class=\"num-1\">Create this list number with the following html: <strong>&lt;li class=&quot;num-1&quot;&gt;...&lt;/li&gt;.</strong></li>\r\n    <li class=\"num-2\">Create this list number with the following html: <strong>&lt;li class=&quot;num-2&quot;&gt;...&lt;/li&gt;.</strong></li>\r\n    <li class=\"num-3\">Create this list number with the following html: <strong>&lt;li class=&quot;num-3&quot;&gt;...&lt;/li&gt;.</strong></li>\r\n    <li class=\"num-4\">Create this list number with the following html: <strong>&lt;li class=&quot;num-4&quot;&gt;...&lt;/li&gt;.</strong></li>\r\n    <li class=\"num-5\">Create this list number with the following html: <strong>&lt;li class=&quot;num-5&quot;&gt;...&lt;/li&gt;.</strong></li>\r\n    <li class=\"num-6\">Create this list number with the following html: <strong>&lt;li class=&quot;num-6&quot;&gt;...&lt;/li&gt;.</strong></li>\r\n    <li class=\"num-7\">Create this list number with the following html: <strong>&lt;li class=&quot;num-7&quot;&gt;...&lt;/li&gt;.</strong></li>\r\n    <li class=\"num-8\">Create this list number with the following html: <strong>&lt;li class=&quot;num-8&quot;&gt;...&lt;/li&gt;.</strong></li>\r\n    <li class=\"num-9\">Create this list number with the following html: <strong>&lt;li class=&quot;num-9&quot;&gt;...&lt;/li&gt;.</strong></li>\r\n</ul>\r\n</div>', 1, '0000-00-00 00:00:00', 'allblocks', 0, '', 0, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 0, 0, 0, 'adveditor', 0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_mootickerRSS', 2, 'gl_mootickerRSS', 'USES_lib_widgets();
-echo WIDGET_mootickerRSS();', 1, '0000-00-00 00:00:00', 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 1, 0, 0, 'html', 0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_moospring', 2, 'gl_moospring', 'USES_lib_widgets();
+$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('typography', 2, 'typography', '<div style=\"margin-bottom: 10px;\">&nbsp;</div>
+<blockquote>
+<p>This page shows all of the typography styles and settings that can be applied in glFusion, using one of the default themes.<br />
+<br />
+In addition to extended typography and styles, glFusion also features <a href=\"http://developer.yahoo.com/yui/grids/\" target=\"_blank\" class=\"gl_mootipfixed\" title=\"Yahoo User Interface :: Grids css layout framework\">YUI Grids css support</a> for easy implementation of multi-column layouts.</p>
+</blockquote>
+<div style=\"border-bottom: 2px solid rgb(247, 247, 247);\" class=\"yui-g\">
+<div class=\"yui-u first\"><span class=\"alert\">Create it with the following html:<br />
+<strong>&lt;span class=&quot;alert&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"info\">Create it with the following html:<br />
+<strong>&lt;span class=&quot;info&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"down\">Create it with the following html:<br />
+<strong>&lt;span class=&quot;down&quot;&gt;....&lt;/span&gt;</strong></span></div>
+<div class=\"yui-u\"><span class=\"note\">Create it with the following html:<br />
+<strong>&lt;span class=&quot;note&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"idea\">Create it with the following html:<br />
+<strong>&lt;span class=&quot;idea&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"help\">Create it with the following html:<br />
+<strong>&lt;span class=&quot;help&quot;&gt;...&gt;&lt;/span&gt;</strong></span></div>
+</div>
+<div style=\"border-bottom: 2px solid rgb(247, 247, 247); padding: 1em;\" class=\"yui-u\">
+<div style=\"margin-bottom: 10px;\" class=\"story-featured\">
+<h1>Create featured story H1 text with the following html: <strong>&lt;div class=&quot;story-featured&quot;&gt;&lt;h1&gt;....&lt;/h1&gt;&lt;/div&gt;</strong></h1>
+<br />
+THIS&nbsp;PARAGRAPH&nbsp;IS&nbsp;LEFT&nbsp;JUSTIFIED: Aenean neque est, laoreet quis, condimentum ut, pellentesque et, nulla. Etiam malesuada ipsum egestas lorem. Vestibulum gravida laoreet justo. Maecenas eget tellus mollis lacus cursus suscipit. Phasellus ante ante, dapibus ut, pellentesque eu, tincidunt vel, velit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus aliquet nulla sed nisl. Nullam egestas sagittis leo. Quisque dolor ligula, hendrerit laoreet, gravida sit amet, rutrum et, tortor. Donec lorem dui, varius sed, nonummy ut, viverra ac, metus. Duis in mauris ut erat porta placerat.</div>
+<h1>Create H1 text with the following html: <strong>&lt;h1&gt;....&lt;/h1&gt;</strong></h1>
+<p style=\"text-align: center;\">THIS&nbsp;PARAGRAPH&nbsp;IS&nbsp;CENTER&nbsp;JUSTIFIED: Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus aliquet nulla sed nisl. Nullam egestas sagittis leo. Quisque dolor ligula, hendrerit laoreet, gravida sit amet, rutrum et, tortor. Donec lorem dui, varius sed, nonummy ut, viverra ac, metus. Duis in mauris ut erat porta placerat. Aenean neque est, laoreet quis, condimentum ut, pellentesque et, nulla. Etiam malesuada ipsum egestas lorem. Vestibulum gravida laoreet justo. Maecenas eget tellus mollis lacus cursus suscipit. Phasellus ante ante, dapibus ut, pellentesque eu, tincidunt vel, velit.</p>
+<h2>Create H2 text with the following html: <strong>&lt;h2&gt;....&lt;/h2&gt;</strong></h2>
+<p style=\"text-align: right;\">THIS PARAGRAPH IS RIGHT JUSTIFIED: Aenean neque est, laoreet quis, condimentum ut, pellentesque et, nulla. Etiam malesuada ipsum egestas lorem. Vestibulum gravida laoreet justo. Maecenas eget tellus mollis lacus cursus suscipit. Phasellus ante ante, dapibus ut, pellentesque eu, tincidunt vel, velit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus aliquet nulla sed nisl. Nullam egestas sagittis leo. Quisque dolor ligula, hendrerit laoreet, gravida sit amet, rutrum et, tortor. Donec lorem dui, varius sed, nonummy ut, viverra ac, metus. Duis in mauris ut erat porta placerat.</p>
+<h3>Create H3 text with the following html: <strong>&lt;h3&gt;....&lt;/h3&gt;</strong></h3>
+<p style=\"text-align: justify;\">THIS PARAGRAPH IS BLOCK JUSTIFIED: Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus aliquet nulla sed nisl. Nullam egestas sagittis leo. Quisque dolor ligula, hendrerit laoreet, gravida sit amet, rutrum et, tortor. Donec lorem dui, varius sed, nonummy ut, viverra ac, metus. Duis in mauris ut erat porta placerat. Aenean neque est, laoreet quis, condimentum ut, pellentesque et, nulla. Etiam malesuada ipsum egestas lorem. Vestibulum gravida laoreet justo. Maecenas eget tellus mollis lacus cursus suscipit. Phasellus ante ante, dapibus ut, pellentesque eu, tincidunt vel, velit.</p>
+</div>
+<div class=\"story-body\" style=\"margin: auto; width: 520px; padding-top: 20px;\">
+<pre>
+This is a sample <strong>&lt;div class=&quot;story-body&quot;&gt;&lt;pre&gt;...&lt;/pre&gt;&lt;/div&gt;</strong> tag:
+=============================================
+.story-body pre {
+background:#F7F7F7 url(layout/nouveau/images/code.png) no-repeat scroll 5px 50%;
+border:3px solid #CCC;
+font-size:90%;
+line-height:135%;
+overflow:auto;
+padding:1em 1em 1em 5em;
+}
+=============================================
+</pre>
+</div>
+<div style=\"border-bottom: 2px solid rgb(247, 247, 247); padding: 1em;\" class=\"yui-u\">This is an example of a block quote. Wrap your text in: <strong>&lt;blockquote&gt;&lt;p&gt;....&lt;/p&gt;&lt;/blockquote&gt;</strong> <blockquote>
+<p>Etiam congue risus in mi. Suspendisse scelerisque. Integer vel ante at odio tempor pretium. Proin porta augue quis augue. Aliquam erat volutpat. Proin condimentum. Vivamus gravida convallis massa. Proin turpis.</p>
+</blockquote></div>
+<div style=\"padding: 0.5em;\" class=\"yui-gb\">
+
+<div class=\"yui-u first\">
+<h1>List Styles - Bullets</h1>
+<ul class=\"bullet-blue\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>bullet-blue</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"bullet-grey\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>bullet-grey</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"bullet-plus\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>bullet-plus</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"bullet-rss\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>bullet-rss</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"bullet-star\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>bullet-star</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+</div>
+
+<div class=\"yui-u\">
+<h1>List Styles - Images</h1>
+<ul class=\"arrow\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>arrow</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"bug\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>bug</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"cart\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>cart</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;.<br />
+    </strong></li>
+</ul>
+<ul class=\"check\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>check</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"script\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>script</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+</div>
+
+<div class=\"yui-u\">
+<h1>List Styles - Media</h1>
+<ul class=\"disc\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>disc</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"headphones\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>headphones</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"mic\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>mic</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"speaker\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>speaker</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+<ul class=\"video\">
+    <li>Use this style with the following html code:<br />
+    <strong>&lt;ul class=&quot;</strong><em>video</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
+</ul>
+</div>
+</div>
+
+<div style=\"border-bottom: 1px solid rgb(204, 204, 204); padding: 1em;\" class=\"yui-g\">
+<div class=\"yui-u first\">
+<h1>List Styles - Blue Numbers &lt;ul class=&quot;number&quot;&gt;...&lt;/ul&gt;</h1>
+<ul class=\"number\">
+    <li class=\"num-1\">Create this list number with the following html: <strong>&lt;li class=&quot;num-1&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-2\">Create this list number with the following html: <strong>&lt;li class=&quot;num-2&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-3\">Create this list number with the following html: <strong>&lt;li class=&quot;num-3&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-4\">Create this list number with the following html: <strong>&lt;li class=&quot;num-4&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-5\">Create this list number with the following html: <strong>&lt;li class=&quot;num-5&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-6\">Create this list number with the following html: <strong>&lt;li class=&quot;num-6&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-7\">Create this list number with the following html: <strong>&lt;li class=&quot;num-7&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-8\">Create this list number with the following html: <strong>&lt;li class=&quot;num-8&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-9\">Create this list number with the following html: <strong>&lt;li class=&quot;num-9&quot;&gt;...&lt;/li&gt;.</strong></li>
+</ul>
+</div>
+
+<div class=\"yui-u\">
+<h1>List Styles - Grey Numbers &lt;ul class=&quot;number&quot;&gt;...&lt;/ul&gt;</h1>
+<ul class=\"number\">
+    <li class=\"num-1g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-1g&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-2g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-2g&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-3g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-3g&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-4g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-4g&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-5g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-5g&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-6g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-6g&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-7g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-7g&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-8g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-8g&quot;&gt;...&lt;/li&gt;.</strong></li>
+    <li class=\"num-9g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-9g&quot;&gt;...&lt;/li&gt;.</strong></li>
+</ul>
+</div>
+</div>', 1, '0000-00-00 00:00:00', 'noblocks', 0, '', 0, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 0, 0, 0, 'html', 0) ";
+$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_mootickerRSS', 2, 'gl_mootickerRSS', '// this staticpage needs to have PHP set to execute PHP (return) below
+// use lib-widgets.php
+USES_lib_widgets();
+
+//call the WIDGET_mootickerRSS function from lib-widgets.php
+return WIDGET_mootickerRSS();', 1, '0000-00-00 00:00:00', 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 1, 0, 0, 'html', 0) ";
+$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_moospring', 2, 'gl_moospring', '// this staticpage needs to have PHP set to execute PHP below
+// use lib-widgets.php
+USES_lib_widgets();
+
+//call the WIDGET_moospring function from lib-widgets.php
 echo WIDGET_moospring();
 ?>
 <center>
@@ -1022,7 +1182,7 @@ echo WIDGET_moospring();
 		</li>
 	</ul>
 </div>
-</center>', 1, '0000-00-00 00:00:00', 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 2, 0, 0, 'html', 0) ";
+</center>', 1, '0000-00-00 00:00:00', 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 2, 0, 0, 'html', 0) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (1,'Refreshing') ";
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (0,'Normal') ";
