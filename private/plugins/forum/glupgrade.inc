@@ -198,7 +198,7 @@ function upgrade_30() {
       KEY `topic_id` (`topic_id`),
       KEY `pid` (`pid`),
       KEY `uid` (`uid`)
-    ) ENGINE=MyISAM ;";
+    ) TYPE=MyISAM ;";
 
 
     $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_attachments']} (
@@ -210,7 +210,7 @@ function upgrade_30() {
       `show_inline` tinyint(4) NOT NULL default '0',
       PRIMARY KEY  (`id`),
       KEY `topic_id` (`topic_id`)
-    ) ENGINE=MyISAM;";
+    ) Type=MyISAM;";
 
     // Set default access to use attachments to be the Root group
     $_SQL[] = "ALTER TABLE {$_TABLES['gf_forums']} ADD use_attachment_grpid mediumint(8) DEFAULT '1' NOT NULL AFTER grp_id";

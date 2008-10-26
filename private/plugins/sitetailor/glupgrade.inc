@@ -106,7 +106,7 @@ function SITETAILOR_upgrade_200() {
       `group_id` mediumint(9) NOT NULL,
       PRIMARY KEY  (`id`),
       KEY `menu_name` (`menu_name`)
-    ) ENGINE=MyISAM;";
+    ) TYPE=MyISAM;";
 
     $_SQL['st_menus_config'] = "CREATE TABLE {$_TABLES['st_menus_config']} (
       `id` int(11) NOT NULL auto_increment,
@@ -116,7 +116,7 @@ function SITETAILOR_upgrade_200() {
       PRIMARY KEY  (`id`),
       UNIQUE KEY `Config` (`menu_id`,`conf_name`),
       KEY `menu_id` (`menu_id`)
-    ) ENGINE=MyISAM;";
+    ) TYPE=MyISAM;";
 
     $_SQL_DEF = array();
 

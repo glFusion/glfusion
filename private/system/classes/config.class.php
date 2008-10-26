@@ -201,8 +201,10 @@ class config {
         if ( $name != 'theme' )  {
             $this->config_array[$group][$name] = $value;
             $this->_post_configuration();
+            $this->_writeIntoCache();
+        } else {
+            $this->_purgeCache();
         }
-        $this->_writeIntoCache();
     }
 
     /**

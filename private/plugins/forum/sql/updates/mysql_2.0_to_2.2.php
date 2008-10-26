@@ -14,6 +14,6 @@ $_SQL[] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
   `interests` varchar(255) NOT NULL default '',
   `occupation` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`uid`)
-) ENGINE=MyISAM COMMENT='Forum Extra User Profile Information';";
+) TYPE=MyISAM COMMENT='Forum Extra User Profile Information';";
 
 ?>
