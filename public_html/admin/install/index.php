@@ -630,7 +630,9 @@ function INST_installEngine($install_type, $install_step)
                         INST_pluginAutoUpgrade('commentfeeds',1);
 
                         CTL_clearCache();
-
+                        require_once $_CONF['path_system'] . 'classes/config.class.php';
+                        $config = config::get_instance();
+                        $config->_purgeCache();
                         /*
                          * Insert some blocks
                          */
