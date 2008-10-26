@@ -574,6 +574,15 @@ function INST_installEngine($install_type, $install_step)
                             $config->set('theme', 'nouveau');
                             DB_query("UPDATE {$_TABLES['users']} SET theme='nouveau' WHERE uid=2",1);
 
+                            // now load default content...
+                            $_DATA = array();
+                            require_once $_CONF['path'] . 'sql/default_content.sql';
+                            $x = count($_DATA);
+                            for ( $i=0;$i< $x;$i++) {
+                                $_DATA[$i] = str_replace("xxxSITEURLxxx",$site_url,$_DATA[$i]);
+                                DB_query($_DATA[$i],1);
+                            }
+
                             CTL_clearCache();
                             $config->_purgeCache();
 
