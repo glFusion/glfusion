@@ -35,6 +35,6 @@ $_SQL[] = "CREATE TABLE {$_TABLES['gf_userprefs']} (
 	  membersperpage int(3) NOT NULL default '20',
 	  showiframe int(1) NOT NULL default '1',
 	  PRIMARY KEY  (uid)
-	) TYPE=MyISAM";
+	) ENGINE=MyISAM";
 
 ?>

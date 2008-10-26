@@ -42,7 +42,7 @@ CREATE TABLE {$_TABLES['access']} (
   acc_ft_id mediumint(8) NOT NULL default '0',
   acc_grp_id mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (acc_ft_id,acc_grp_id)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -51,7 +51,7 @@ CREATE TABLE {$_TABLES['article_images']} (
   ai_img_num tinyint(2) unsigned NOT NULL,
   ai_filename varchar(128) NOT NULL,
   PRIMARY KEY (ai_sid,ai_img_num)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -85,7 +85,7 @@ CREATE TABLE {$_TABLES['blocks']} (
   INDEX blocks_name(name),
   INDEX blocks_onleft(onleft),
   PRIMARY KEY  (bid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -93,7 +93,7 @@ CREATE TABLE {$_TABLES['commentcodes']} (
   code tinyint(4) NOT NULL default '0',
   name varchar(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -102,7 +102,7 @@ CREATE TABLE {$_TABLES['commentedits']} (
   uid mediumint(8) NOT NULL,
   time datetime NOT NULL,
   PRIMARY KEY (cid)
-) TYPE=MYISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -110,7 +110,7 @@ CREATE TABLE {$_TABLES['commentmodes']} (
   mode varchar(10) NOT NULL default '',
   name varchar(32) default NULL,
   PRIMARY KEY  (mode)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -136,7 +136,7 @@ CREATE TABLE {$_TABLES['comments']} (
   INDEX comments_rht(rht),
   INDEX comments_date(date),
   PRIMARY KEY  (cid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -150,7 +150,7 @@ CREATE TABLE {$_TABLES['conf_values']} (
   selectionArray int(11) default NULL,
   sort_order int(11) default NULL,
   fieldset int(11) default NULL
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -158,7 +158,7 @@ CREATE TABLE {$_TABLES['cookiecodes']} (
   cc_value int(8) unsigned NOT NULL default '0',
   cc_descr varchar(20) NOT NULL default '',
   PRIMARY KEY  (cc_value)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -167,7 +167,7 @@ CREATE TABLE {$_TABLES['dateformats']} (
   format varchar(32) default NULL,
   description varchar(64) default NULL,
   PRIMARY KEY  (dfid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -175,7 +175,7 @@ CREATE TABLE {$_TABLES['featurecodes']} (
   code tinyint(4) NOT NULL default '0',
   name varchar(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -186,7 +186,7 @@ CREATE TABLE {$_TABLES['features']} (
   ft_gl_core tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (ft_id),
   KEY ft_name (ft_name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -194,7 +194,7 @@ CREATE TABLE {$_TABLES['frontpagecodes']} (
   code tinyint(4) NOT NULL default '0',
   name varchar(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -204,7 +204,7 @@ CREATE TABLE {$_TABLES['group_assignments']} (
   ug_grp_id mediumint(8) unsigned default NULL,
   INDEX group_assignments_ug_main_grp_id(ug_main_grp_id),
   INDEX group_assignments_ug_uid(ug_uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -215,7 +215,7 @@ CREATE TABLE {$_TABLES['groups']} (
   grp_gl_core tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (grp_id),
   UNIQUE grp_name (grp_name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -223,7 +223,7 @@ CREATE TABLE {$_TABLES['maillist']} (
   code int(1) NOT NULL default '0',
   name char(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -236,7 +236,7 @@ CREATE TABLE {$_TABLES['pingservice']} (
   is_enabled tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (pid),
   INDEX pingservice_is_enabled(is_enabled)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -248,7 +248,7 @@ CREATE TABLE {$_TABLES['plugins']} (
   pi_homepage varchar(128) NOT NULL default '',
   INDEX plugins_enabled(pi_enabled),
   PRIMARY KEY  (pi_name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -256,7 +256,7 @@ CREATE TABLE {$_TABLES['postmodes']} (
   code char(10) NOT NULL default '',
   name char(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -269,7 +269,7 @@ CREATE TABLE {$_TABLES['sessions']} (
   PRIMARY KEY  (sess_id),
   KEY start_time (start_time),
   KEY remote_ip (remote_ip)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -277,7 +277,7 @@ CREATE TABLE {$_TABLES['sortcodes']} (
   code char(4) NOT NULL default '0',
   name char(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -297,7 +297,7 @@ CREATE TABLE {$_TABLES['statuscodes']} (
   code int(1) NOT NULL default '0',
   name char(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -342,7 +342,7 @@ CREATE TABLE {$_TABLES['stories']} (
   INDEX stories_frontpage(frontpage),
   INDEX stories_in_transit(in_transit),
   PRIMARY KEY  (sid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -356,7 +356,7 @@ CREATE TABLE {$_TABLES['storysubmission']} (
   date datetime default NULL,
   postmode varchar(10) NOT NULL default 'html',
   PRIMARY KEY  (sid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -382,7 +382,7 @@ CREATE TABLE {$_TABLES['syndication']} (
   INDEX syndication_topic(topic),
   INDEX syndication_is_enabled(is_enabled),
   INDEX syndication_updated(updated)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -393,7 +393,7 @@ CREATE TABLE {$_TABLES['tokens']} (
   urlfor varchar(255) NOT NULL,
   ttl mediumint(8) unsigned NOT NULL default '1',
   PRIMARY KEY (token)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -412,7 +412,7 @@ CREATE TABLE {$_TABLES['topics']} (
   perm_members tinyint(1) unsigned NOT NULL default '2',
   perm_anon tinyint(1) unsigned NOT NULL default '2',
   PRIMARY KEY  (tid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -431,7 +431,7 @@ CREATE TABLE {$_TABLES['trackback']} (
   INDEX trackback_url(url),
   INDEX trackback_type(type),
   INDEX trackback_date(date)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -439,7 +439,7 @@ CREATE TABLE {$_TABLES['trackbackcodes']} (
   code tinyint(4) NOT NULL default '0',
   name varchar(32) default NULL,
   PRIMARY KEY  (code)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -449,7 +449,7 @@ CREATE TABLE {$_TABLES['usercomment']} (
   commentorder varchar(4) NOT NULL default 'ASC',
   commentlimit mediumint(8) unsigned NOT NULL default '100',
   PRIMARY KEY  (uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -464,7 +464,7 @@ CREATE TABLE {$_TABLES['userindex']} (
   INDEX userindex_noboxes(noboxes),
   INDEX userindex_maxstories(maxstories),
   PRIMARY KEY  (uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -479,7 +479,7 @@ CREATE TABLE {$_TABLES['userinfo']} (
   lastgranted int(10) unsigned NOT NULL default '0',
   lastlogin VARCHAR(10) NOT NULL default '0',
   PRIMARY KEY  (uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -494,7 +494,7 @@ CREATE TABLE {$_TABLES['userprefs']} (
   emailfromuser tinyint(1) NOT NULL default '1',
   showonline tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -523,7 +523,7 @@ CREATE TABLE {$_TABLES['users']} (
   INDEX users_email(email),
   INDEX users_passwd(passwd),
   INDEX users_pwrequestid(pwrequestid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -531,7 +531,7 @@ CREATE TABLE {$_TABLES['vars']} (
   name varchar(20) NOT NULL default '',
   value varchar(128) default NULL,
   PRIMARY KEY  (name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 // Tables used by the bundled plugins
@@ -567,7 +567,7 @@ CREATE TABLE {$_TABLES['events']} (
   INDEX events_datestart(datestart),
   INDEX events_dateend(dateend),
   PRIMARY KEY  (eid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -589,7 +589,7 @@ CREATE TABLE {$_TABLES['eventsubmission']} (
   timestart time default NULL,
   timeend time default NULL,
   PRIMARY KEY  (eid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -619,7 +619,7 @@ CREATE TABLE {$_TABLES['personal_events']} (
   timestart time default NULL,
   timeend time default NULL,
   PRIMARY KEY  (eid,uid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 // Links plugin
@@ -640,7 +640,7 @@ CREATE TABLE {$_TABLES['linkcategories']} (
   perm_anon tinyint(1) unsigned NOT NULL default '2',
   PRIMARY KEY (cid),
   KEY links_pid (pid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -661,7 +661,7 @@ CREATE TABLE {$_TABLES['links']} (
   INDEX links_category(cid),
   INDEX links_date(date),
   PRIMARY KEY (lid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -675,7 +675,7 @@ CREATE TABLE {$_TABLES['linksubmission']} (
   date datetime default NULL,
   owner_id mediumint(8) unsigned NOT NULL default '1',
   PRIMARY KEY (lid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 // Polls plugin
@@ -688,7 +688,7 @@ CREATE TABLE {$_TABLES['pollanswers']} (
   votes mediumint(8) unsigned default NULL,
   remark varchar(255) NULL,
   PRIMARY KEY (pid, qid, aid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -697,7 +697,7 @@ CREATE TABLE {$_TABLES['pollquestions']} (
   pid varchar(20) NOT NULL,
   question varchar(255) NOT NULL,
   PRIMARY KEY (qid, pid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -723,7 +723,7 @@ CREATE TABLE {$_TABLES['polltopics']} (
   INDEX pollquestions_commentcode(commentcode),
   INDEX pollquestions_statuscode(statuscode),
   PRIMARY KEY  (pid)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
@@ -733,7 +733,7 @@ CREATE TABLE {$_TABLES['pollvoters']} (
   ipaddress varchar(15) NOT NULL default '',
   date int(10) unsigned default NULL,
   PRIMARY KEY (id)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 // Spam-X plugin
@@ -742,7 +742,7 @@ CREATE TABLE {$_TABLES['spamx']} (
   name varchar(20) NOT NULL default '',
   value varchar(255) NOT NULL default '',
   INDEX spamx_name(name)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 // Static Pages plugin
@@ -780,7 +780,7 @@ CREATE TABLE {$_TABLES['staticpage']} (
   KEY staticpage_sp_centerblock (sp_centerblock),
   KEY staticpage_sp_tid (sp_tid),
   KEY staticpage_sp_where (sp_where)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 ";
 
 

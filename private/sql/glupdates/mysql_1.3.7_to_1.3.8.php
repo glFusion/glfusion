@@ -15,7 +15,7 @@ $_SQL[] = "CREATE TABLE {$_TABLES['speedlimit']} (
   date int(10) unsigned default NULL,
   type varchar(30) NOT NULL default 'submit',
   PRIMARY KEY (id)
-) TYPE = MyISAM";
+) ENGINE=MyISAM";
 
 $_SQL[] = "DROP TABLE {$_TABLES['commentspeedlimit']}";
 $_SQL[] = "DROP TABLE {$_TABLES['submitspeedlimit']}";

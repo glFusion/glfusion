@@ -36,7 +36,7 @@ $_SQL['st_config'] = "CREATE TABLE {$_TABLES['st_config']} (
   `config_value` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `config_name` (`config_name`)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 
 $_SQL['st_menus'] = "CREATE TABLE {$_TABLES['st_menus']} (
   `id` int(11) NOT NULL auto_increment,
@@ -46,7 +46,7 @@ $_SQL['st_menus'] = "CREATE TABLE {$_TABLES['st_menus']} (
   `group_id` mediumint(9) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `menu_name` (`menu_name`)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 
 $_SQL['st_menus_config'] = "CREATE TABLE {$_TABLES['st_menus_config']} (
   `id` int(11) NOT NULL auto_increment,
@@ -56,7 +56,7 @@ $_SQL['st_menus_config'] = "CREATE TABLE {$_TABLES['st_menus_config']} (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `Config` (`menu_id`,`conf_name`),
   KEY `menu_id` (`menu_id`)
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 
 $_SQL['st_menu_elements'] = "CREATE TABLE {$_TABLES['st_menu_elements']} (
     `id` int(11) NOT NULL auto_increment,
@@ -72,7 +72,7 @@ $_SQL['st_menu_elements'] = "CREATE TABLE {$_TABLES['st_menu_elements']} (
     `group_id` mediumint(9) NOT NULL,
     PRIMARY KEY( `id` ),
     INDEX ( `pid` )
-) TYPE=MyISAM;";
+) ENGINE=MyISAM;";
 
 // default st configuration
 $_SQL_DEF[] = "INSERT INTO {$_TABLES['st_config']} (`config_name`, `config_value`) VALUES ('use_graphic_logo','0'),('display_site_slogan','1'),('logo_name','logo1234.png');";
