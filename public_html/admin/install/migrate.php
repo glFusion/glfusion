@@ -1309,7 +1309,7 @@ function INST_doGeeklogDatabaseUpgrades($current_gl_version, $use_innodb = false
                     return array(false,"Error updating the spamx plugin");
                 }
             }
-
+            $config->_purgeCache();
             $current_gl_version = '1.5.0';
             $_SQL = '';
             break;
