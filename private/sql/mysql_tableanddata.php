@@ -289,7 +289,7 @@ CREATE TABLE {$_TABLES['speedlimit']} (
   PRIMARY KEY (id),
   KEY type_ipaddress (type,ipaddress),
   KEY date (date)
-) TYPE = MyISAM
+) ENGINE=MyISAM
 ";
 
 $_SQL[] = "
