@@ -1533,6 +1533,7 @@ ul.video li {
 background:transparent url(layout/nouveau/images/video.png) no-repeat scroll 2px;
 padding-left:28px;
 }
+
 li.num-1 {
 background:transparent url(layout/nouveau/images/number-1.png) no-repeat scroll 0;
 padding-left:28px;
@@ -1583,6 +1584,60 @@ padding-bottom:3px;
 
 li.num-9 {
 background:transparent url(layout/nouveau/images/number-9.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
+}
+
+li.num-1g {
+background:transparent url(layout/nouveau/images/number-1g.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
+}
+
+li.num-2g {
+background:transparent url(layout/nouveau/images/number-2g.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
+}
+
+li.num-3g {
+background:transparent url(layout/nouveau/images/number-3g.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
+}
+
+li.num-4g {
+background:transparent url(layout/nouveau/images/number-4g.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
+}
+
+li.num-5g {
+background:transparent url(layout/nouveau/images/number-5g.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
+}
+
+li.num-6g {
+background:transparent url(layout/nouveau/images/number-6g.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
+}
+
+li.num-7g {
+background:transparent url(layout/nouveau/images/number-7g.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
+}
+
+li.num-8g {
+background:transparent url(layout/nouveau/images/number-8g.png) no-repeat scroll 0;
+padding-left:28px;
+padding-bottom:3px;
+}
+
+li.num-9g {
+background:transparent url(layout/nouveau/images/number-9g.png) no-repeat scroll 0;
 padding-left:28px;
 padding-bottom:3px;
 }
