@@ -638,6 +638,17 @@ function INST_installEngine($install_type, $install_step)
                         INST_pluginAutoUpgrade('mediagallery');
                         INST_pluginAutoUpgrade('commentfeeds',1);
 
+                        // now load default content...
+/* ---
+                        $_DATA = array();
+                        require_once $_CONF['path'] . 'sql/default_content.sql';
+                        $x = count($_DATA);
+                        $site_url = $_CONF['site_url'];
+                        for ( $i=0;$i< $x;$i++) {
+                            $_DATA[$i] = str_replace("xxxSITEURLxxx",$site_url,$_DATA[$i]);
+                            DB_query($_DATA[$i],1);
+                        }
+--- */
                         CTL_clearCache();
                         require_once $_CONF['path_system'] . 'classes/config.class.php';
                         $config = config::get_instance();
