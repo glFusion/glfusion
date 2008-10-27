@@ -108,8 +108,8 @@ function plugin_install_filemgmt($_DB_table_prefix)
 
     $now = time();
     $DEFVALUES['d1'] = "INSERT INTO {$_FM_TABLES['filemgmt_cat']} (`cid`, `pid`, `title`, `imgurl`, `grp_access`, `grp_writeaccess`) VALUES (1,0,'General','',2,2);";
-    $DEFVALUES['d2'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (`lid`, `description`) VALUES (1,'glFusion Overview Documentation in PDF format');";
-    $DEFVALUES['d3'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} (`lid`, `cid`, `title`, `url`, `homepage`, `version`, `size`, `platform`, `logourl`, `submitter`, `status`, `date`, `hits`, `rating`, `votes`, `comments`) VALUES (1,1,'glFusion Overview Documentation','glfusion.pdf','http://www.glfusion.org','v1.0.0',208896 ,'','',2,1,$now,0,0.0000,0,1);";
+	$DEFVALUES['d2'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (`lid`, `description`) VALUES (1,'Yahoo User Interface Grids CSS framework cheat sheet in .pdf format.');";
+    $DEFVALUES['d3'] = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} (`lid`, `cid`, `title`, `url`, `homepage`, `version`, `size`, `platform`, `logourl`, `submitter`, `status`, `date`, `hits`, `rating`, `votes`, `comments`) VALUES (1,1,'YUI Grids CSS Cheat Sheet','css.pdf','http://developer.yahoo.com/yui/grids/','v2.6',131072 ,'','',2,1,$now,0,0.0000,0,1);";
 
     $uninstall_plugin = 'plugin_remove_' . $pi_name;
 
