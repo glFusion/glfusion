@@ -1143,13 +1143,13 @@ padding:1em 1em 1em 5em;
     <li class=\"num-9g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-9g&quot;&gt;...&lt;/li&gt;.</strong></li>
 </ul>
 </div>
-</div>', 1, '0000-00-00 00:00:00', 'noblocks', 0, '', 0, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 0, 0, 0, 'html', 0) ";
+</div>', 1, NOW(), 'noblocks', 0, '', 0, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 0, 0, 0, 'html', 0) ";
 $_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_mootickerRSS', 2, 'gl_mootickerRSS', '// this staticpage needs to have PHP set to execute PHP (return) below
 // use lib-widgets.php
 USES_lib_widgets();
 
 //call the WIDGET_mootickerRSS function from lib-widgets.php
-return WIDGET_mootickerRSS();', 1, '0000-00-00 00:00:00', 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 1, 0, 0, 'html', 0) ";
+return WIDGET_mootickerRSS();', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 1, 0, 0, 'html', 0) ";
 $_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_moospring', 2, 'gl_moospring', '// this staticpage needs to have PHP set to execute PHP below
 // use lib-widgets.php
 USES_lib_widgets();
@@ -1182,7 +1182,7 @@ echo WIDGET_moospring();
 		</li>
 	</ul>
 </div>
-</center>', 1, '0000-00-00 00:00:00', 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 2, 0, 0, 'html', 0) ";
+</center>', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 2, 0, 0, 'html', 0) ";
 $_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_mooslide', 2, 'gl_mooslide', '// this staticpage needs to have PHP set to execute PHP (return) below
 // use lib-widgets.php
 USES_lib_widgets();
@@ -1192,7 +1192,7 @@ USES_lib_widgets();
 
 //call the WIDGET_mooslide function from lib-widgets.php
 // last 3 options below are width, height, and css id
-return WIDGET_mooslide(\$slides, 560, 160, \'gl_slide\');', 1, '0000-00-00 00:00:00', 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
+return WIDGET_mooslide(\$slides, 560, 160, \'gl_slide\');', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (1,'Refreshing') ";
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (0,'Normal') ";
