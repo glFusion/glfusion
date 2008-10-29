@@ -226,7 +226,7 @@ function submitstory($topic = '')
     $storyform->parse('theform', 'storyform');
     $retval .= $storyform->finish($storyform->get_var('theform'));
     $retval .= COM_endBlock();
-    $rc = setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+    $rc = @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                time() + 1200, $_CONF['cookie_path'],
                $_CONF['cookiedomain'], $_CONF['cookiesecure']);
     return $retval;
@@ -425,9 +425,10 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
             $msg = PLG_itemPreSave ($type, $_POST);
             if (!empty ($msg)) {
                 $_POST['mode'] =  $LANG12[32];
+                $subForm = submitstory($topic);
                 $display .= COM_siteHeader ('menu', $pagetitle)
                          . COM_errorLog ($msg, 2)
-                         . submitstory ($topic)
+                         . $subForm
                          . COM_siteFooter();
                 echo $display;
                 exit;
@@ -465,8 +466,9 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
             $pagetitle = '';
             break;
     }
+    $subForm = submissionsform($type,$mode,$topic);
     $display .= COM_siteHeader ('menu', $pagetitle);
-    $display .= submissionform($type, $mode, $topic);
+    $display .= $subForm;
     $display .= COM_siteFooter();
 }
 
