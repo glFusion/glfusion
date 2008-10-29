@@ -587,7 +587,7 @@ $LANG12 = array(
     6 => 'Submit a Story',
     7 => 'Login is Required',
     8 => 'Submit',
-    9 => 'When submitting information for use on this site we ask that you follow the following suggestions...<ul><li>Fill in all the fields, they\'re required</li><li>Provide complete and accurate information</li><li>Double check those URLs</li></ul>',
+    9 => 'When submitting information for use on this site we ask that you follow these suggestions...<ul class="bullet-grey"><li>Fill in all the fields, they\'re required</li><li>Provide complete and accurate information</li><li>Double check those URLs</li></ul>',
     10 => 'Title',
     11 => '',
     12 => 'Start Date',
