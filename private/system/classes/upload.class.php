@@ -883,8 +883,9 @@ class upload
             return true;
         }
         $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
-        $this->_currentFile['type'] = $metaData['mime_type'];
-
+        if ( $metaData['mime_type'] != '' ) {
+            $this->_currentFile['type'] = $this->_filesToUpload['type'];
+        }
         $sc = strpos ($this->_currentFile['type'], ';');
         if ($sc > 0) {
             $this->_currentFile['type'] = substr ($this->_currentFile['type'], 0, $sc);
@@ -1078,7 +1079,10 @@ class upload
                     $this->_currentFile['error'] = $this->_filesToUpload["error"][$key];
 
                     $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
-                    $this->_currentFile['type'] = $metaData['mime_type'];
+                    if ( $metaData['mime_type'] != '' ) {
+                        $this->_currentFile['type'] = $metaData['mime_type'];
+                    }
+
                     if (!empty($this->_currentFile['name'])) {
                         // Verify file meets size limitations
                         if (!$this->_fileSizeOk()) {
@@ -1116,7 +1120,9 @@ class upload
                 $this->_currentFile['error'] = $this->_filesToUpload["error"];
 
                 $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
-                $this->_currentFile['type'] = $metaData['mime_type'];
+                if ( $metaData['mime_type'] != '' ) {
+                    $this->_currentFile['type'] = $metaData['mime_type'];
+                }
                 if (!empty($this->_currentFile['name'])) {
                     // Verify file meets size limitations
                     if (!$this->_fileSizeOk()) {

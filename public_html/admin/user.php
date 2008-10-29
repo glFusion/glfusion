@@ -1014,7 +1014,7 @@ function importusers()
     $upload->setPath ($_CONF['path_data']);
     $upload->setAllowedMimeTypes (array ('text/plain' => '.txt'));
     $upload->setFileNames ('user_import_file.txt');
-    $upload->setFieldName('file');
+    $upload->setFieldName('importfile');
     if ($upload->uploadFiles()) {
         // Good, file got uploaded, now install everything
         $filename = $_CONF['path_data'] . 'user_import_file.txt';
@@ -1030,7 +1030,7 @@ function importusers()
                 COM_getBlockTemplate ('_msg_block', 'header'));
         $retval .= $upload->printErrors(false);
         $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-
+        $retval .= COM_siteFooter();
         return $retval;
     }
 
