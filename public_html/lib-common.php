@@ -58,7 +58,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.0.svn');
+    define('GVERSION', '1.1.0.rc1');
 }
 
 /**
