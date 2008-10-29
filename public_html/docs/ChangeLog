@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.0
 ------------
+- Added additional Media and Number list styles to default typography (Eric)
+- Added default configured widgets to new install (Eric)
 - FileMgmt: decode the sort options to prevent SQL error (Mark)
 - Resolve missing date field in polls table on upgrade (Mark)
 - Migration from Geeklog failed due to incorrect return code (Mark)
