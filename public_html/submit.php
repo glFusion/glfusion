@@ -466,7 +466,7 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
             $pagetitle = '';
             break;
     }
-    $subForm = submissionsform($type,$mode,$topic);
+    $subForm = submissionform($type,$mode,$topic);
     $display .= COM_siteHeader ('menu', $pagetitle);
     $display .= $subForm;
     $display .= COM_siteFooter();
