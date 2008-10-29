@@ -60,7 +60,7 @@ function plugin_enablestatechange_sitetailor() {
 }
 
 function plugin_getheadercss_sitetailor() {
-    global $_CONF, $_ST_CONF, $stMenu, $themeAPI;
+    global $_CONF, $_ST_CONF, $stMenu, $themeAPI, $themeStyle;
 
     $st_header = array();
     $st_header[] = $_CONF['path_html'] . 'admin/plugins/sitetailor/css/mooRainbow.css';
@@ -111,6 +111,9 @@ function plugin_getheadercss_sitetailor() {
                     if ( $themeAPI > 1 ) {
                         $ms->set_var('themeapi','');
                     } else {
+                        $ms->set_var('themeapi','1');
+                    }
+                    if ( $themeStyle == 'table' ) {
                         $ms->set_var('themeapi','1');
                     }
                     $ms->parse ('output', 'style');
