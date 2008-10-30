@@ -114,7 +114,7 @@ function listbackups()
         $token = SEC_createToken();
         $menu_arr = array(
             array('url' => $_CONF['site_admin_url']
-                           . '/database.php?mode=backup&'.CSRF_TOKEN.'='.$token,
+                           . '/database.php?mode=backup&amp;'.CSRF_TOKEN.'='.$token,
                   'text' => $LANG_ADMIN['create_new']),
             array('url' => $_CONF['site_admin_url'],
                   'text' => $LANG_ADMIN['admin_home'])
