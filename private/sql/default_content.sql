@@ -104,8 +104,8 @@ echo WIDGET_moorotator();
 	<!-- repeat as needed -->
 </div>', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 1, 2, 0, 0, 'html', 0) ";
 $_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_moosimplebox', 2, 'gl_moosimplebox', '<center>
-<h2>Click on the note or text below</h2>
-<img id=\"gl_moosimplebox_trigger1\" src=\"xxxSITEURLxxx/layout/nouveau/images/note.png\" alt=\"mooSimpleBox\" title=\"mooSimpleBox\" /><br />
+<h2>Click on the logo or text below</h2>
+<img id=\"gl_moosimplebox_trigger1\" src=\"xxxSITEURLxxx/layout/nouveau/images/cms-glfusion.gif\" alt=\"mooSimpleBox\" title=\"mooSimpleBox\" /><br />
 You can also <span id=\"gl_moosimplebox_trigger2\" style=\"cursor:pointer;\">click me</span>.
 </center>
 
