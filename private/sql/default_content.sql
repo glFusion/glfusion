@@ -47,7 +47,7 @@ echo WIDGET_moorotator();
 	<div class=\"gl_moorotator\">
 		<div class=\"gl_moorotatorimage\">
 			<a href=\"http://www.glfusion.org/wiki/doku.php?id=glfusion:mission\" target=\"_blank\">
-				<img src=\"xxxSITEURLxxx/images/library/Image/moorotator1.jpg\" />
+				<img src=\"xxxSITEURLxxx/images/library/Image/moorotator1.jpg\" alt=\"glFusion Mission\" title=\"glFusion Mission\" />
 			</a>
 		</div>
 		<div class=\"gl_moorotatortext\">
@@ -61,7 +61,7 @@ echo WIDGET_moorotator();
 	<div class=\"gl_moorotator\">
 		<div class=\"gl_moorotatorimage\">
 			<a href=\"http://www.glfusion.org/wiki/doku.php?id=glfusion:nouveau#custom_header_images\" target=\"_blank\">
-				<img src=\"xxxSITEURLxxx/images/library/Image/moorotator2.jpg\" />
+				<img src=\"xxxSITEURLxxx/images/library/Image/moorotator2.jpg\" alt=\"Custom Headers\" title=\"Custom Headers\" />
 			</a>
 		</div>
 		<div class=\"gl_moorotatortext\">
@@ -75,7 +75,7 @@ echo WIDGET_moorotator();
 	<div class=\"gl_moorotator\">
 		<div class=\"gl_moorotatorimage\">
 			<a href=\"http://www.glfusion.org/wiki/doku.php?id=glfusion:language\" target=\"_blank\">
-				<img src=\"xxxSITEURLxxx/images/library/Image/moorotator3.jpg\" />
+				<img src=\"xxxSITEURLxxx/images/library/Image/moorotator3.jpg\" alt=\"Language Localization\" title=\"Language Localization\" />
 			</a>
 		</div>
 		<div class=\"gl_moorotatortext\">
@@ -90,7 +90,7 @@ echo WIDGET_moorotator();
 	<div class=\"gl_moorotator\">
 		<div class=\"gl_moorotatorimage\">
 			<a href=\"http://tracker.glfusion.org\" target=\"_blank\">
-				<img src=\"xxxSITEURLxxx/images/library/Image/moorotator4.jpg\" />
+				<img src=\"xxxSITEURLxxx/images/library/Image/moorotator4.jpg\" alt=\"Bug Tracker\" title=\"Bug Tracker\" />
 			</a>
 		</div>
 		<div class=\"gl_moorotatortext\">
