@@ -50,9 +50,11 @@ pre {
 	overflow:scroll;
 }
 div#frame div.button#left {
+	left:10px;
 	background: url(images/prev_ie6.png) no-repeat;
 }
 div#frame div.button#right {
+	right:10px;
 	background: url(images/next_ie6.png) no-repeat;
 }
 #gl_mooticker ul {
