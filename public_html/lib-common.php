@@ -309,6 +309,7 @@ require_once( $_CONF['path_system'] . 'lib-sessions.php' );
 */
 require_once( $_CONF['path_system'] . 'lib-mbyte.php' );
 
+require_once( $_CONF['path_system'] . 'lib-htmlhead.php' );
 require_once( $_CONF['path_system'] . 'imglib/lib-image.php' );
 
 // Set theme
@@ -1296,6 +1297,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     // Call any plugin that may want to include extra Meta tags
     // or Javascript functions
+    $headercode .= HTMLHEAD_render();
     $header->set_var( 'plg_headercode', $headercode . PLG_getHeaderCode() );
 
     // Call to plugins to set template variables in the header
@@ -7014,10 +7016,10 @@ if( $_CONF['cron_schedule_interval'] > 0 )
  *
  * Loads the autotranslations widget block from private/system/lib-widgets.php
  */
-function phpblock_autotranslations() {
-   global $_CONF, $LANG_WIDGETS;
-   require_once $_CONF['path'] . 'system/lib-widgets.php';
-   return(WIDGET_autotranslations());
+function phpblock_autotranslations()
+{
+   USES_lib_widgets();
+   return WIDGET_autotranslations();
 }
 
 ?>

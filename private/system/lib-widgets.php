@@ -56,9 +56,8 @@ echo $display;
         return '';
     }
 
-    $display = <<<EOJ
-<script type="text/javascript" src="{$_CONF['site_url']}/javascript/mootools/gl_mooslide.js"></script>
-<script type="text/javascript">
+    HTMLHEAD_link_script($_CONF['site_url'] . '/javascript/mootools/gl_mooslide.js');
+    HTMLHEAD_script(<<<EOJ
     window.addEvent('load', function() {
         var myFilm = new gl_Slide(\$('$id'), {
             fx: {
@@ -74,10 +73,10 @@ echo $display;
                 }
         });
     });
-</script>
+EOJ
+);
 
-<div id="$id" class="gl_slide">
-EOJ;
+    $display = "<div id=\"$id\" class=\"gl_slide\">";
 
     $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
          . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $page_ids))

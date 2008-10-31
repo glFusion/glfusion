@@ -43,9 +43,9 @@ define('HTMLHEAD_PRIO_VERYLOW', 5);
 
 // DO NOT MODIFY THIS ARRAY DIRECTLY!!!!
 $HTMLHEAD = Array(
-    'title' => '',
+    'title' => null,
     'meta' => Array('http-equiv' => Array(), 'name' => Array()),
-    'favicon' => '',
+    'favicon' => null,
     HTMLHEAD_PRIO_VERYHIGH => Array('style' => Array(), 'script' => Array(), 'raw' => Array() ),
     HTMLHEAD_PRIO_HIGH => Array('style' => Array(), 'script' => Array(), 'raw' => Array() ),
     HTMLHEAD_PRIO_NORMAL => Array('style' => Array(), 'script' => Array(), 'raw' => Array() ),
@@ -57,29 +57,31 @@ function HTMLHEAD_style($code, $priority = HTMLHEAD_PRIO_NORMAL, $mime = 'text/c
 {
     global $HTMLHEAD, $_CONF;
 
-    $HTMLHEAD[$priority]['style'][] = '<style type='' . $mime . '\'>\n' . $code . '\n</style>\n';
+    $HTMLHEAD[$priority]['style'][] = '<style type="' . $mime . "\">\n" . $code . "\n</style>\n";
 }
 
 function HTMLHEAD_script($code, $priority = HTMLHEAD_PRIO_NORMAL, $mime = 'text/javascript', $cache = false)
 {
     global $HTMLHEAD, $_CONF;
 
-    $HTMLHEAD[$priority]['script'][] = '<script type=\'' . $mime . '\'>\n<!--\n' . $code . '\n// --></script>\n';
+    $HTMLHEAD[$priority]['script'][] = '<script type="' . $mime . "\">\n<!--\n" . $code . "\n// --></script>\n";
 }
 
 function HTMLHEAD_link($rel, $href, $type = '', $priority = HTMLHEAD_PRIO_NORMAL, $attrs = array())
 {
     global $HTMLHEAD;
 
-    $link = '<link rel='' . $rel .'' href='' . htmlspecialchars($href) . ''';
+    $link = '<link rel="' . $rel .'" href="' . htmlspecialchars($href) . '"';
     if (!empty($type)) {
-        $link .= ' type='' . $type . ''';
+        $link .= ' type="' . $type . '"';
     }
     if (is_array($attrs)) {
         foreach ($attrs as $k => $v) {
-            $link .= ' ' . $k . '='' . $v . ''';
+            $link .= ' ' . $k . '="' . $v . '"';
         }
     }
+    $link .= XHTML . ">\n";
+
     $HTMLHEAD[$priority][] = $link;
 }
 
@@ -87,13 +89,13 @@ function HTMLHEAD_link_style($href, $priority = HTMLHEAD_PRIO_NORMAL, $mime = 't
 {
     global $HTMLHEAD;
 
-    $link = '<link rel='stylesheet' type='' . $mime . '' href='' . htmlspecialchars($href) . ''';
+    $link = '<link rel="stylesheet" type="' . $mime . '" href="' . htmlspecialchars($href) . '"';
     if (is_array($attrs)) {
         foreach ($attrs as $k => $v) {
-            $link .= ' ' . $k . '='' . $v . ''';
+            $link .= ' ' . $k . '="' . $v . '"';
         }
     }
-    $link .= XHTML . '>\n';
+    $link .= XHTML . ">\n";
 
     $HTMLHEAD[$priority]['style'][] = $link;
 }
@@ -102,11 +104,11 @@ function HTMLHEAD_link_script($href, $priority = HTMLHEAD_PRIO_NORMAL, $mime = '
 {
     global $HTMLHEAD, $_CONF;
 
-    $link = '<link rel='stylesheet' type='' . $mime . '' href='' . htmlspecialchars($href) . ''';
+    $link = '<script type="' . $mime . '" src="' . htmlspecialchars($href) . '"';
     if (!empty($title)) {
-        $link .= ' title='' . htmlspecialchars($title) . ''';
+        $link .= ' title="' . htmlspecialchars($title) . '"';
     }
-    $link .= XHTML . '>\n';
+    $link .= "></script>\n";
 
     $HTMLHEAD[$priority]['script'][] = $link;
 }
@@ -115,31 +117,31 @@ function HTMLHEAD_raw($code, $priority = HTMLHEAD_PRIO_NORMAL)
 {
     global $HTMLHEAD, $_CONF;
 
-    $HTMLHEAD[$priority]['raw'][] = $code . '\n';
+    $HTMLHEAD[$priority]['raw'][] = $code . "\n";
 }
 
 function HTMLHEAD_title($title)
 {
     global $HTMLHEAD;
-    $HTMLHEAD['title'] = '<title>' . $title . '</title>\n';
+    $HTMLHEAD['title'] = '<title>' . $title . "</title>\n";
 }
 
 function HTMLHEAD_favicon($href)
 {
     global $HTMLHEAD;
-    $HTMLHEAD['favicon'] = '<link rel='SHORTCUT ICON' href='' . htmlspecialchars($href) . ''' . XHTML .'>\n';
+    $HTMLHEAD['favicon'] = '<link rel="SHORTCUT ICON" href="' . htmlspecialchars($href) . '"' . XHTML .">\n";
 }
 
 function HTMLHEAD_meta_name($name, $content)
 {
     global $HTMLHEAD;
-    $HTMLHEAD['meta']['name'] = '<meta name='' .  $name . '' content='' . $content . ''' . XHTML .'>\n';
+    $HTMLHEAD['meta']['name'] = '<meta name="' .  $name . '" content="' . $content . '"' . XHTML .">\n";
 }
 
 function HTMLHEAD_meta_http_equiv($header, $content)
 {
     global $HTMLHEAD;
-    $HTMLHEAD['meta']['http-equiv'] = '<meta http-equiv='' . $header .'' content='' . $content . ''' . XHTML .'>\n';
+    $HTMLHEAD['meta']['http-equiv'] = '<meta http-equiv="' . $header .'" content="' . $content . '"' . XHTML .">\n";
 }
 
 
@@ -148,7 +150,7 @@ function HTMLHEAD_render()
 {
     global $HTMLHEAD;
 
-    return '\n' . array_concat_recursive($HTMLHEAD);
+    return "\n<!-- Start HTMLHEAD library-->\n" . array_concat_recursive($HTMLHEAD) . "<!-- End HTMLHEAD library -->\n";
 }
 
 function array_concat_recursive($a)
@@ -158,7 +160,7 @@ function array_concat_recursive($a)
         foreach ($a as $aa) {
             if (is_array($aa)) {
                 $cat .= array_concat_recursive($aa);
-            } else {
+            } elseif (!is_null($aa)) {
                 $cat .= $aa;
             }
         }
