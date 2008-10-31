@@ -1106,7 +1106,6 @@ class upload
                         $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
                     }
                 } else {
-                    $offset++;
                     $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
                 }
                 $this->_imageIndex++;
