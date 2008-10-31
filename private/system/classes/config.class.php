@@ -250,6 +250,7 @@ class config {
         $sql .= " WHERE name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
         $this->_DB_escapedQuery($sql);
         $this->_writeIntoCache();
+        $this->_purgeCache();
     }
 
     function unset_param($name, $group)
