@@ -107,7 +107,7 @@ class SearchCriteria {
 
     function UrlRewriteEnable()
     {
-        return $this->_url_rewite;
+        return $this->_url_rewrite;
     }
 
     function buildSearchSQL($keyType, $query, $columns, $sql = '')

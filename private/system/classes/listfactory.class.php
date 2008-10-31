@@ -307,11 +307,13 @@ class ListFactory {
         $order = range(0, count($totals)-1);
         array_multisort($totals, $order);
 
+        $fin = Array();
         for ($p = 0; $p < $this->_page; $p++)
         {
             $extra = 0;
             for ($q = 0; $q < count($totals); $q++)
             {
+                $fin[$q] = Array('offset' => 0, 'limit' => 0);
                 $fin[$q]['offset'] = $fin[$q]['offset'] + $fin[$q]['limit'];
                 $extra_pp = $extra + $totals[$q]['pp'];
                 if ($extra_pp - $totals[$q]['total'] >= 0)
@@ -409,8 +411,13 @@ class ListFactory {
 
                 foreach ($this->_fields as $field)
                 {
-                    if (!is_numeric($field['name']))
-                        $col[ $field['name'] ] = $A[ $field['name'] ];
+                    if (!is_numeric($field['name'])) {
+                        if ($field['name'] == '_html') {
+                            $col[$field['name']] = $field['format'];
+                        } else {
+                            $col[ $field['name'] ] = $A[ $field['name'] ];
+                        }
+                    }
                 }
 
                 // Need to call the format function before and after
