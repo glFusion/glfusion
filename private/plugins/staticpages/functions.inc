@@ -274,6 +274,18 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 
     $retval = '';
 
+    if ($A['sp_format'] == 'allblocks' OR $A['sp_format'] == 'leftblocks') {
+        $retval .= COM_siteHeader ('menu');
+    } else {
+        if ($A['sp_format'] <> 'blankpage') {
+            $retval .= COM_siteHeader ('none');
+        }
+    }
+    if (($A['sp_inblock'] == 1) && ($A['sp_format'] != 'blankpage')) {
+        $retval .= COM_startBlock (stripslashes ($A['sp_title']), $A['sp_help'],
+                        COM_getBlockTemplate ('_staticpages_block', 'header'));
+    }
+
     $spage = new Template( $_CONF['path'] . 'plugins/staticpages/templates/' );
     $spage->set_var('xhtml', XHTML);
     $spage->set_var('site_url', $_CONF['site_url']);
@@ -341,19 +353,6 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             $hits = COM_numberFormat ($A['sp_hits']) . ' ' . $LANG_STATIC['hits'];
             $spage->set_var('hits', $hits);
         }
-    }
-
-    // Content is rendered. Now we can start constructing the page
-    if ($A['sp_format'] == 'allblocks' OR $A['sp_format'] == 'leftblocks') {
-        $retval .= COM_siteHeader ('menu');
-    } else {
-        if ($A['sp_format'] <> 'blankpage') {
-            $retval .= COM_siteHeader ('none');
-        }
-    }
-    if (($A['sp_inblock'] == 1) && ($A['sp_format'] != 'blankpage')) {
-        $retval .= COM_startBlock (stripslashes ($A['sp_title']), $A['sp_help'],
-                        COM_getBlockTemplate ('_staticpages_block', 'header'));
     }
 
     $retval .= $spage->finish($spage->parse('output', 'page'));

@@ -39,7 +39,6 @@
 // Prevent PHP from reporting uninitialized variables
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
-
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
     die('This file can not be used on its own!');
@@ -310,7 +309,6 @@ require_once( $_CONF['path_system'] . 'lib-sessions.php' );
 */
 require_once( $_CONF['path_system'] . 'lib-mbyte.php' );
 
-require_once( $_CONF['path_system'] . 'lib-htmlhead.php' );
 require_once( $_CONF['path_system'] . 'imglib/lib-image.php' );
 
 // Set theme
@@ -1046,13 +1044,12 @@ function COM_renderMenu( &$header, $plugin_menu )
 * @see function COM_siteFooter
 *
 */
-$_global_header = new Template( $_CONF['path_layout'] );
 
 function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
-           $theme_headercode, $theme_layout,$stMenu,$themeAPI, $_global_header;
+           $theme_headercode, $theme_layout,$stMenu,$themeAPI;
 
     if ( $themeAPI == 1 ) {
         require_once $_CONF['path'] . 'system/lib-compatibility.php';
@@ -1080,7 +1077,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $theme_pagetitle    = $pagetitle;
     $theme_headercode   = $headercode;
 
-    $header = $_global_header;
+    $header = new Template( $_CONF['path_layout'] );
     $header->set_file( array(
         'header'        => 'htmlheader.thtml',
     ));
@@ -1296,7 +1293,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     } else {
         $header->set_var( 'direction', $LANG_DIRECTION );
     }
-    
+
     // Call any plugin that may want to include extra Meta tags
     // or Javascript functions
     $header->set_var( 'plg_headercode', $headercode . PLG_getHeaderCode() );
@@ -1304,8 +1301,12 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     // Call to plugins to set template variables in the header
     PLG_templateSetVars( 'header', $header );
 
+    $header->parse( 'index_header', 'header' );
+    $retval = $header->finish( $header->get_var( 'index_header' ));
+
     // send out the charset header
     header( 'Content-Type: text/html; charset=' . COM_getCharset());
+    echo $retval;
 
     // Start caching / capturing output from glFusion / plugins
     ob_start();
@@ -1329,7 +1330,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
            $theme_pagetitle, $theme_headercode, $theme_layout,$mbMenuConfig,
-           $_ST_CONF,$stMenu, $themeAPI, $_global_header;
+           $_ST_CONF,$stMenu, $themeAPI;
 
 
     if ( $themeAPI == 1 ) {
@@ -1357,11 +1358,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $content = ob_get_contents();
     ob_end_clean();
-
-    $_global_header->set_var( 'plg_headercode', HTMLHEAD_render(), true );
-
-    $_global_header->parse( 'index_header', 'header' );
-    echo $_global_header->finish( $_global_header->get_var( 'index_header' ));
 
     $theme = new Template( $_CONF['path_layout'] );
     $theme->set_file( array(
@@ -6954,10 +6950,6 @@ function USES_lib_pingback() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-pingback.php';
 }
-function USES_lib_scrub() {
-    global $_CONF;
-    require_once $_CONF['path_system'] . 'lib-scrub.php';
-}
 function USES_lib_story() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-story.php';
@@ -7018,10 +7010,10 @@ if( $_CONF['cron_schedule_interval'] > 0 )
  *
  * Loads the autotranslations widget block from private/system/lib-widgets.php
  */
-function phpblock_autotranslations()
-{
-   USES_lib_widgets();
-   return WIDGET_autotranslations();
+function phpblock_autotranslations() {
+   global $_CONF, $LANG_WIDGETS;
+   require_once $_CONF['path'] . 'system/lib-widgets.php';
+   return(WIDGET_autotranslations());
 }
 
 ?>

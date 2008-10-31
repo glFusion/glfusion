@@ -349,7 +349,6 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
     }
 
     $headercode = '<script type="text/javascript" src="'.$_CONF['site_url'].'/javascript/mootools/mootools-release-1.11.packed.js"></script>' . $headercode;
-    $headercode .= HTMLHEAD_render();
 
     // Call any plugin that may want to include extra Meta tags
     // or Javascript functions
