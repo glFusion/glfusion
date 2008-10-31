@@ -47,7 +47,6 @@ function js_out(){
     global $_CONF, $_PLUGINS, $themeAPI;
 
     $cacheID = 'js';
-    $cacheFile = CACHE_instance_filename($cacheID,0);
 
     /*
      * Static list of standard JavaScript used by glFusion...
@@ -119,10 +118,10 @@ function js_out(){
     header('Cache-Control: public, max-age=3600');
     header('Pragma: public');
 
-    if(js_cacheok($cacheFile,$files)){
-        http_conditionalRequest(filemtime($cacheFile));
-        // readfile($cacheFile);
-        $js = file_get_contents($cacheFile);
+    $cache_time = CACHE_get_instance_update($cacheID);
+    if (js_cacheok($cache_time,$files)){
+        http_conditionalRequest($cache_time);
+        $js = CACHE_check_instance($cacheID);
         echo $js . LB;
         flush();
         exit;
@@ -184,9 +183,8 @@ function js_load($file){
  * Checks if a JavaScript Cache file still is valid
  *
  */
-function js_cacheok($cache,$files){
-
-    $ctime = @filemtime($cache);
+function js_cacheok($ctime,$files)
+{
     if(!$ctime) return false; //There is no cache
 
     // now walk the files

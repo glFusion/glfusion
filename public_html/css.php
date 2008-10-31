@@ -52,7 +52,6 @@ function css_out(){
     $tpl = $_CONF['theme'];
 
     $cacheID = 'css_' . $tpl;
-    $cacheFile = CACHE_instance_filename($cacheID,0);
 
     // Array of needed files
 
@@ -86,13 +85,17 @@ function css_out(){
     // check cache age & handle conditional request
     header('Cache-Control: public, max-age=3600');
     header('Pragma: public');
-    if(css_cacheok($cacheFile,$files)){
-        http_conditionalRequest(filemtime($cacheFile));
-        readfile($cacheFile);
-        return;
-    } else {
-        http_conditionalRequest(time());
+    
+    if (!isset($_REQUEST['purge'])) { //support purge request
+        $cache_time = CACHE_get_instance_update($cacheID, false);
+        if (css_cacheok($cache_time,$files)) {
+            http_conditionalRequest($cache_time, false);
+            echo CACHE_check_instance($cacheFile);
+            return;
+        }
     }
+
+    http_conditionalRequest(time());
 
     // start output buffering and build the stylesheet
     ob_start();
@@ -111,7 +114,7 @@ function css_out(){
         $css = css_compress($css);
     }
     // save cache file
-    CACHE_create_instance($cacheID, $css, 0);
+    CACHE_create_instance($cacheID, $css, false);
     $randID = rand();
     DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
     // finally send output
@@ -123,10 +126,7 @@ function css_out(){
  * Checks if a CSS Cache file still is valid
  *
  */
-function css_cacheok($cache,$files){
-    if (isset($_REQUEST['purge'])) return false; //support purge request
-
-    $ctime = @filemtime($cache);
+function css_cacheok($ctime,$files){
     if(!$ctime) { return false; } //There is no cache
 
     // now walk the files
