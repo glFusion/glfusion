@@ -90,7 +90,7 @@ function css_out(){
         $cache_time = CACHE_get_instance_update($cacheID, false);
         if (css_cacheok($cache_time,$files)) {
             http_conditionalRequest($cache_time, false);
-            echo CACHE_check_instance($cacheFile);
+            echo CACHE_check_instance($cacheID);
             return;
         }
     }
