@@ -2162,7 +2162,7 @@ function plugin_searchtypes_mediagallery()
 * @author           string          Get all results by this author
 *
 */
-function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic, $type, $author) {
+function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage) {
     global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01;
 
     if ( $_MG_CONF['disable_search_integration'] == 1) {

@@ -413,7 +413,7 @@ function plugin_searchtypes_filemgmt()
 * @author           string          Get all results by this author
 *
 */
-function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $type, $author)
+function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
 {
     global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL;
 
