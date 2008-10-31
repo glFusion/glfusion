@@ -454,7 +454,6 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
     $search->setRank(3);
 
     return $search;
-
 }
 
 
