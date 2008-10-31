@@ -1934,7 +1934,10 @@ $LANG_configselects['Core'] = array(
 
 $LANG_WIDGETS = array(
     'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language'
+    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
+    'prev' => 'Previous',
+    'next' => 'Next',
+    'playpause' => 'Play/Pause'
 );
 
 
