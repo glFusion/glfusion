@@ -330,7 +330,7 @@ $LANG_GF02['msg23c']   = "You may view it at:\n%s/forum/viewtopic.php?showtopic=
 $LANG_GF02['msg24']    = 'You may see the thread and reply at: %s/forum/viewtopic.php?forum=%s&showtopic=%s';
 $LANG_GF02['msg25']    = "\nHave a great day! \n";
 $LANG_GF02['msg26']    = "\nYou are receiving this email because you have chosen to be notified when a reply has been made to this topic. ";
-$LANG_GF02['msg27']    = "To stop receiving notifications on this topic go to <%s> to remove it.\n";
+$LANG_GF02['msg27']    = "To stop receiving notifications on this topic go to %s to remove it.\n";
 $LANG_GF02['msg28']    = 'Error, No subject for this post';
 $LANG_GF02['msg29']    = 'Your signature will be placed here.';
 $LANG_GF02['msg30']    = 'Back to top';
