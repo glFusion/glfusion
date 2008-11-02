@@ -883,7 +883,8 @@ class upload
             return true;
         }
         $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
-        if ( $metaData['mime_type'] != '' ) {
+
+        if ( $metaData['mime_type'] == '' ) {
             $this->_currentFile['type'] = $this->_filesToUpload['type'];
         }
         $sc = strpos ($this->_currentFile['type'], ';');
