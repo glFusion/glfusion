@@ -42,7 +42,7 @@ require_once 'gf_functions.php';
 echo COM_siteHeader();
 echo COM_startBlock($LANG_GF91['gfstats']);
 
-echo ppNavbar($navbarMenu,$LANG_GF06['1']);
+echo glfNavbar($navbarMenu,$LANG_GF06['1']);
 
 // CATEGORIES
 $numcats=DB_query("SELECT id FROM {$_TABLES['gf_categories']}");

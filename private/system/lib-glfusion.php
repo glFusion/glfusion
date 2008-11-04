@@ -251,7 +251,7 @@ function CTL_clearCache($plugin='')
 // | Blaine Lang                 -    blaine@portalparts.com                 |
 // +-------------------------------------------------------------------------+
 
-function ppGetUserBlocks(&$blocks) {
+function glfGetUserBlocks(&$blocks) {
     global $_TABLES, $_CONF, $_USER, $LANG21, $topic, $page, $newstories;
 
     $retval = '';
@@ -286,7 +286,7 @@ function ppGetUserBlocks(&$blocks) {
     return $blocks;
 }
 
-function ppRandomFilename() {
+function glfRandomFilename() {
     $length=10;
     srand((double)microtime()*1000000);
     $possible_charactors = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -298,13 +298,13 @@ function ppRandomFilename() {
     return($string);
 
 }
-function ppPrepareForDB($var) {
+function glfPrepareForDB($var) {
     // Need to call addslashes again as COM_checkHTML stips it out
     $var = COM_checkHTML($var);
     $var = addslashes($var);
     return $var;
 }
-function ppNavbar ($menuitems, $selected='', $parms='') {
+function glfNavbar ($menuitems, $selected='', $parms='') {
     global $_CONF;
 
     $navbar = new Template($_CONF['path_layout'] . 'navbar');

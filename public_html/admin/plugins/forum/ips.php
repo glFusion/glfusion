@@ -46,7 +46,7 @@ $op = COM_applyFilter($_REQUEST['op']);
 
 echo COM_siteHeader();
 echo COM_startBlock($LANG_GF96['gfipman']);
-echo ppNavbar($navbarMenu,$LANG_GF06['7']);
+echo glfNavbar($navbarMenu,$LANG_GF06['7']);
 
 if (($op == 'banip') && ($ip != '')) {
     if($_POST['sure'] == 'yes') {

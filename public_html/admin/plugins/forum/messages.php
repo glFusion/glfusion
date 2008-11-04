@@ -165,7 +165,7 @@ $report->set_var ('LANG_Delete', $LANG_GF01['DELETE']);
 
 $report->set_var ('select_forum',selectHTML_forum($forum));
 $report->set_var ('select_member',selectHTML_members($member));
-$report->set_var('navbar', ppNavbar($navbarMenu,$LANG_GF06['6']));
+$report->set_var('navbar', glfNavbar($navbarMenu,$LANG_GF06['6']));
 if ($parentonly == 1) {
     $report->set_var('chk_parentonly', 'CHECKED=CHECKED');
 }

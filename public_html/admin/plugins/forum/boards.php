@@ -49,7 +49,7 @@ $catorder = isset($_POST['catorder']) ? COM_applyFilter($_POST['catorder'],true)
 
 echo COM_siteHeader();
 echo COM_startBlock($LANG_GF93['gfboard']);
-echo ppNavbar($navbarMenu,$LANG_GF06['3']);
+echo glfNavbar($navbarMenu,$LANG_GF06['3']);
 
 
 // CATEGORY Maintenance Section

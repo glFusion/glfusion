@@ -59,7 +59,7 @@ function gf_check4files($id,$tempfile=false) {
                 $pos = strrpos($uploadfile['name'],'.') + 1;
                 $ext = strtolower(substr($uploadfile['name'], $pos));
             } else {
-                $uploadfilename =  ppRandomFilename();
+                $uploadfilename =  glfRandomFilename();
                 $pos = strrpos($uploadfile['name'],'.') + 1;
                 $ext = strtolower(substr($uploadfile['name'], $pos));
                 $filename = "{$uploadfilename}.{$ext}";
@@ -92,7 +92,7 @@ function gf_check4files($id,$tempfile=false) {
                     $newid = DB_insertID();
                     DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,repository_id,filename,tempfile)
                         VALUES ('$id',$newid,'$filename',$temp)");
-                    $description = ppPrepareForDB($_POST[$filemgmt_desc]);
+                    $description = glfPrepareForDB($_POST[$filemgmt_desc]);
                     DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')");
                 } else {
                     DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,filename,tempfile)

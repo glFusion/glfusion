@@ -42,7 +42,7 @@ require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 echo COM_siteHeader();
 echo COM_startBlock($LANG_GF94['mod_title']);
-echo ppNavbar($navbarMenu,$LANG_GF06['4']);
+echo glfNavbar($navbarMenu,$LANG_GF06['4']);
 
 if(DB_count($_TABLES['gf_forums']) == 0) {
     echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">';

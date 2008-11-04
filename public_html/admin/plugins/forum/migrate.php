@@ -254,8 +254,8 @@ if (empty($page) || $page < 1) {
 }
 
 echo COM_startBlock($LANG_GF02['msg193']);
-echo ppNavbar($navbarMenu,$LANG_GF06['5']);
-//$p= new Template($_CONF['path_layout'] . 'forum/layout/admin');
+echo glfNavbar($navbarMenu,$LANG_GF06['5']);
+
 $p = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $p->set_file (array ('page'=>'migratestories.thtml','records' => 'migrate_records.thtml'));
 

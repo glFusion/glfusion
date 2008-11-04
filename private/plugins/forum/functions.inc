@@ -99,7 +99,7 @@ if (!isset($CONF_FORUM['registration_required'])) {
     }
 }
 $CONF_FORUM['leftblocks'] = array ('forum_menu');
-$CONF_FORUM['leftblocks'] = ppGetUserBlocks($CONF_FORUM['leftblocks']);
+$CONF_FORUM['leftblocks'] = glfGetUserBlocks($CONF_FORUM['leftblocks']);
 
 if ( !isset($CONF_FORUM['showtopic_review_order']) ) {
     $CONF_FORUM['showtopic_review_order'] = 'DESC';

@@ -66,7 +66,7 @@ function gf_RankSetting(&$template,$title,$help,$value1,$value2,$id) {
 
 echo COM_siteHeader();
 echo COM_startBlock($LANG_GF92['gfsettings']);
-echo ppNavbar($navbarMenu,$LANG_GF06['2']);
+echo glfNavbar($navbarMenu,$LANG_GF06['2']);
 
 if(isset($_POST['savesettings']) && $_POST['savesettings'] == 'yes'){
 
