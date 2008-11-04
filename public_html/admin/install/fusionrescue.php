@@ -247,7 +247,7 @@ function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
 
     $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
     @mysql_select_db($dbname) or die('error selecting database');
-    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE name='allow_embed_object'";
+    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
     $result = @mysql_query($sql,$db) or die('Cannot execute query');
     if ( @mysql_num_rows($result) < 1 ) die('Invalid glFusion Database');
     $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE group_name='Core' AND ((type <> 'subgroup') AND (type <> 'fieldset')) ORDER BY subgroup,sort_order ASC";
