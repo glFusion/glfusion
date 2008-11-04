@@ -349,7 +349,7 @@ function plugin_getwhatsnew_mediagallery() {
     while ($row = DB_fetchArray($result)) {
         $aid = $row['album_id'];
 
-        if ( $MG_albums[$aid]->access > 0 && $MG_albums[$aid]->hidden != 1 ) {
+        if ( $MG_albums[$aid]->access > 0 && $MG_albums[$aid]->hidden != 1 && $MG_albums[$aid]->getOffset() != -1) {
             $title = $MG_albums[$aid]->title;
             if ( strlen($title) > $_MG_CONF['title_length'] ) {
                 $dTitle = substr($title,0,$_MG_CONF['title_length'] - 3) . '...';

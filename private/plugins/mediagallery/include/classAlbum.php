@@ -349,7 +349,11 @@ class mgAlbum {
         if ( $topParent == 0 ) {
             $pid = 0;
         } else {
-            $pid = $MG_albums[$topParent]->parent;
+            if ( isset($MG_albums[$topParent]->parent) ) {
+                $pid = $MG_albums[$topParent]->parent;
+            } else {
+                return -1;
+            }
         }
         if (!isset($MG_albums[$pid]->id) ) {
             return -1;
