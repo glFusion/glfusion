@@ -158,7 +158,7 @@ function userprofile ($user, $msg = 0)
         } else {
             $edit_url = "{$_CONF['site_admin_url']}/user.php?mode=edit&amp;uid={$A['uid']}";
         }
-        
+
         $edit_link_url = COM_createLink($edit_icon, $edit_url);
         $user_templates->set_var('edit_icon', $edit_icon);
         $user_templates->set_var('edit_link', $edit_link_url);
@@ -186,7 +186,7 @@ function userprofile ($user, $msg = 0)
         } else {
             $user_templates->set_var('user_lastlogin', $lasttime[0]);
         }
-    
+
         $online_result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE uid=" . $user);
         if ( DB_numRows($online_result) > 0 ) {
             $user_templates->set_var ('online', 'online');
@@ -384,8 +384,8 @@ function emailpassword ($username, $msg = 0)
             $retval = COM_refresh ("{$_CONF['site_url']}/index.php?msg=1");
         }
     } else {
-        $retval = COM_siteHeader ('menu', $LANG04[17])
-                . defaultform ($LANG04[17])
+        $retval = COM_siteHeader ('menu','')
+                . defaultform ('')
                 . COM_siteFooter ();
     }
 
@@ -445,8 +445,8 @@ function requestpassword ($username, $msg = 0)
         }
         COM_updateSpeedlimit ('password');
     } else {
-        $retval .= COM_siteHeader ('menu', $LANG04[17])
-                . defaultform ($LANG04[17]) . COM_siteFooter ();
+        $retval .= COM_siteHeader ('menu', '')
+                . defaultform ('') . COM_siteFooter ();
     }
 
     return $retval;
@@ -804,7 +804,7 @@ function getpasswordform()
 */
 function defaultform ($msg)
 {
-    global $LANG04;
+    global $LANG04, $_CONF;
 
     $retval = '';
 
@@ -817,7 +817,9 @@ function defaultform ($msg)
 
     $retval .= loginform (true);
 
-    $retval .= newuserform ();
+    if ( $_CONF['disable_new_user_registration'] == FALSE ) {
+        $retval .= newuserform ();
+    }
 
     $retval .= getpasswordform ();
 
