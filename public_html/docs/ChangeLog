@@ -1,6 +1,13 @@
 glFusion ChangeLog
 
 v1.1.0
+------
+- Fixed conflict with lib-portalparts.php (Mark)
+- MediaGallery: Fixed issue where children albums with more open permissions
+  were showing in the What's New block causing an error when selected (Mark)
+- Fixed error with forgot password screen displaying new user registration
+  regardless of Disable New User Registration setting (Mark)
+- Fixed crash when no stories exist and auto close comments enable (Mark)
 - Fixed PHP5 only call in configuration (Mark)
 - Fixed XHTML compliance issue with Last X posts in Forum (Mark)
 - Fixed mime detection problem in upload.class.php (Mark)
