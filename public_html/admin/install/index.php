@@ -54,6 +54,11 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.1.0');
 }
 
+if (!function_exists('COM_errorLog') ) {
+    function COM_errorLog() {
+    }
+}
+
 /**
  * Returns the PHP version
  *
