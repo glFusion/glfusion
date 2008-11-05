@@ -46,7 +46,9 @@ js_out();
 function js_out(){
     global $_CONF, $_PLUGINS, $themeAPI;
 
-    $cacheID = 'js';
+    $tpl = $_CONF['theme'];
+
+    $cacheID = 'js_' . $tpl;
     $cacheFile = CACHE_instance_filename($cacheID,0);
 
     /*
