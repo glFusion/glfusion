@@ -53,15 +53,6 @@ $_SQL[] = "UPDATE {$_TABLES['conf_values']} SET type='select',default_value='s:1
 $_SQL[] = "UPDATE {$_TABLES['conf_values']} SET value='s:10:\"US/Central\";' WHERE name='timezone' AND value=''";
 $_SQL[] = "REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion', '1.1.0')";
 
-$_SQL[] = "ALTER TABLE {$_TABLES['blocks']} DROP INDEX blocks_bid";
-$_SQL[] = "ALTER TABLE {$_TABLES['events']} DROP INDEX events_eid";
-$_SQL[] = "ALTER TABLE {$_TABLES['group_assignments']} DROP INDEX ug_main_grp_id";
-$_SQL[] = "ALTER TABLE {$_TABLES['sessions']} DROP INDEX sess_id";
-$_SQL[] = "ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_sid";
-$_SQL[] = "ALTER TABLE {$_TABLES['userindex']} DROP INDEX userindex_uid";
-
-// $_SQL[] = "ALTER TABLE {$_TABLES['polltopics']} DROP INDEX pollquestions_pid";
-
 // Staticpages plugin updates
 function upgrade_StaticpagesPlugin()
 {
