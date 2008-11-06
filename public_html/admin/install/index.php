@@ -1149,6 +1149,20 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                     return false;
                 }
             }
+            // index cleanup...
+            $_SQLi = array();
+            $_SQLi[] = "ALTER TABLE {$_TABLES['blocks']} DROP INDEX blocks_bid";
+            $_SQLi[] = "ALTER TABLE {$_TABLES['events']} DROP INDEX events_eid";
+            $_SQLi[] = "ALTER TABLE {$_TABLES['group_assignments']} DROP INDEX ug_main_grp_id";
+            $_SQLi[] = "ALTER TABLE {$_TABLES['sessions']} DROP INDEX sess_id";
+            $_SQLi[] = "ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_sid";
+            $_SQLi[] = "ALTER TABLE {$_TABLES['userindex']} DROP INDEX userindex_uid";
+            $_SQLi[] = "ALTER TABLE {$_TABLES['polltopics']} DROP INDEX pollquestions_pid";
+
+            foreach ($_SQLi as $sqli) {
+                DB_query($sqli,1);
+            }
+
             require_once $_CONF['path_system'] . 'classes/config.class.php';
             $c = config::get_instance();
 
