@@ -118,7 +118,7 @@ function mysql_v($_DB_host, $_DB_user, $_DB_pass)
  * @param   string  $dbconfig_path      path to db-config.php
  * @param   string  $siteconfig_path    path to siteconfig.php
  * @return  string                      database version, if possible
- * @note    Will not return if upgrading from 1.5.0 or later.
+ * @note    Will not return if upgrading from 1.0.0 or later.
  *
  */
 function INST_checkOKtoUpgrade($dbconfig_path, $siteconfig_path)
@@ -820,6 +820,8 @@ function INST_identifyglFusionVersion ()
 
     case 'mysql':
         $test = array(
+            '1.1.0'  => array("SELECT name FROM {$_TABLES['conf_values']} WHERE name='allow_embed_object'",'allow_embed_object'),
+            '1.0.2'  => array("SELECT name FROM {$_TABLES['conf_values']} WHERE name='use_safe_html'",'use_safe_html'),
             '1.0.1'  => array("DESCRIBE {$_TABLES['storysubmission']} bodytext",''),
             );
 
