@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.0
 ------
+- Modified index maintenance (cleanup) to no longer produce fatal errors
+  if the index does not exist (Mark)
+- Cache JS by themem (Mark)
 - Fixed conflict with lib-portalparts.php (Mark)
 - MediaGallery: Fixed issue where children albums with more open permissions
   were showing in the What's New block causing an error when selected (Mark)
