@@ -1145,8 +1145,8 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid)
         $mailbody .= $comment . "\n\n";
     }
 
-    $mailbody .= $LANG08[33] . ' <' . $_CONF['site_url']
-              . '/comment.php?mode=view&cid=' . $cid . ">\n\n";
+    $mailbody .= $LANG08[33] . ' ' . $_CONF['site_url']
+              . '/comment.php?mode=view&cid=' . $cid . "\n\n";
 
     $mailbody .= "\n------------------------------\n";
     $mailbody .= "\n$LANG08[34]\n";
