@@ -886,6 +886,8 @@ class upload
 
         if ( $metaData['mime_type'] == '' ) {
             $this->_currentFile['type'] = $this->_filesToUpload['type'];
+        } else {
+            $this->_currentFile['type'] = $metaData['mime_type'];
         }
         $sc = strpos ($this->_currentFile['type'], ';');
         if ($sc > 0) {
