@@ -492,7 +492,7 @@ $LANG_GF02['msg197']   = 'Mark topics in all categories as read';
 $LANG_GF02['msg198']   = 'Update your forum settings';
 $LANG_GF02['msg199']   = 'View or remove forum notifications';
 $LANG_GF02['msg200']   = 'View site members report';
-$LANG_GF02['msg201']   = 'View popular topics report';
+$LANG_GF02['msg201']   = 'Popular Topics';
 
 
 $LANG_GF02['StatusHeading']   = 'Nur zur Information';
