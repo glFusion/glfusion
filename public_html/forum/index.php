@@ -454,7 +454,7 @@ if ($op == 'lastx') {
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
         array('text' => $LANG_GF01['TOPIC'],  'field' => 'subject'),
-        array('text' => $LANG_GF01['DATE'],   'field' => 'date', 'nowrap' => true),
+        array('text' => $LANG_GF92['sb_latestposts'],   'field' => 'date', 'nowrap' => true),
     );
     $data_arr = array();
     $text_arr = array();
@@ -509,10 +509,11 @@ if ($op == 'lastx') {
                 $testText = strip_tags($testText);
                 $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
             } else {
-                $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
+                $qlreply = DB_query("SELECT id,uid,name,comment,date FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
                 $lastid = $B['id'];
                 $lastcomment = $B['comment'];
+                $P['date'] = $B['date'];
                 if ($B['uid'] > 1) {
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($B['uid']));
                 } else {
