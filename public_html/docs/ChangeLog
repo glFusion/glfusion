@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.0
 ------
+- Fixed issue where 'Read the full article' prompt did not display
+  the URL in Thunderbird (Mark)
 - Forum: Fixed issue in Latest Post tab, did not use the latest reply
   date for the date column (Mark)
 - Forum: Changed 'Date' column title to 'Latest Post' in Latest Post Tab (Mark)
