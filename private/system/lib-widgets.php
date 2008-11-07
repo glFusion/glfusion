@@ -157,7 +157,7 @@ function WIDGET_autotranslations($header=0) {
                  'de' => 'German',
                  'el' => 'Greek',
                  'en' => 'English',
-				 'es' => 'Spanish',
+                 'es' => 'Spanish',
                  'fi' => 'Finnish',
                  'fr' => 'French',
                  'hi' => 'Hindi',
@@ -193,15 +193,17 @@ function WIDGET_autotranslations($header=0) {
 	$retval .= '<div class="autotranslations"><ul>';
 
     foreach ($isoLang AS $key => $language ) {
+		$randID = rand();
         if ($key != $_CONF['iso_lang']) {
         	$retval .= '<li><a href="http://translate.google.com/translate?';
         	$retval .= 'hl=' . $key; // 2 character language code of google header bar (usually the same as tl below)
         	$retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
         	$retval .= '&amp;tl=' . $key; // 2 character language code to translate site into (usually should be the same as hl above)
         	$retval .= '&amp;u=' . $_CONF['site_url']; // address of your site
+        	$retval .= '&amp;uniq=' . $randID; //appends a random string so Google won't cache the translated page
         	$retval .= '">';
         	$retval .= '<img src="' . $_CONF['site_url'] . '/images/translations/';
-            $retval .= $key.'.png" alt="'.$language.'" title="'.$language.'"' . XHTML . '></a></li>';
+        	$retval .= $key.'.png" alt="'.$language.'" title="'.$language.'"' . XHTML . '></a></li>';
         }
     }
     $retval .= '</ul></div><div style="clear:left;"></div>';
