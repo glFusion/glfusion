@@ -643,17 +643,6 @@ function INST_installEngine($install_type, $install_step)
                         INST_pluginAutoUpgrade('mediagallery');
                         INST_pluginAutoUpgrade('commentfeeds',1);
 
-                        // now load default content...
-/* ---
-                        $_DATA = array();
-                        require_once $_CONF['path'] . 'sql/default_content.sql';
-                        $x = count($_DATA);
-                        $site_url = $_CONF['site_url'];
-                        for ( $i=0;$i< $x;$i++) {
-                            $_DATA[$i] = str_replace("xxxSITEURLxxx",$site_url,$_DATA[$i]);
-                            DB_query($_DATA[$i],1);
-                        }
---- */
                         CTL_clearCache();
                         require_once $_CONF['path_system'] . 'classes/config.class.php';
                         $config = config::get_instance();
@@ -663,6 +652,15 @@ function INST_installEngine($install_type, $install_step)
                          */
 
                         DB_query("REPLACE INTO {$_TABLES['blocks']} (`is_enabled`, `name`, `type`, `title`, `tid`, `blockorder`, `content`, `allow_autotags`, `rdfurl`, `rdfupdated`, `rdf_last_modified`, `rdf_etag`, `rdflimit`, `onleft`, `phpblockfn`, `help`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES (0,'blogroll_block','phpblock','Blog Roll','all',30,'',0,'','0000-00-00 00:00:00',NULL,NULL,0,0,'phpblock_blogroll','',2,4,3,3,2,2);",1);
+
+                        /*
+                         * Housekeeping
+                         */
+
+                        $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
+                        foreach ($stdPlugins AS $pi_name) {
+                            DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='1.1.0' WHERE pi_name='".$pi_name."'",1);
+                        }
 
                         // Great, installation is complete, redirect to success page
                         header('Location: success.php?type=upgrade&language=' . $language);
