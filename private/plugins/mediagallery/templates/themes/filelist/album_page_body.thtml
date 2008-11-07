@@ -1,0 +1,15 @@
+<table style="width:100%;border:none;margin:0px auto;">
+<tr class="pluginRow2">
+  <td style="width:52px;text-align:center;">&nbsp;</td>
+  <td style="text-align:left;"><b>Name</b></td>
+  <td style="text-align:left;"><b>Description</b></td>
+  <td style="text-align:left;"><b>Size</b></td>
+  <td style="text-align:left;"><b>User</b></td>
+  <td style="text-align:left;"><b>Updated</b></td>
+</tr>
+<!-- BEGIN ImageRow -->
+<!-- BEGIN ImageColumn -->
+{CELL_DISPLAY_IMAGE}
+<!-- END ImageColumn -->
+<!-- END ImageRow -->
+</table>
