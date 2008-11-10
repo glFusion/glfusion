@@ -1064,7 +1064,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                 if($pos === false) {
                     $media_caption = $original_filename;
                 } else {
-                    $media_caption = strtolower(substr($original_filename,0,$pos));
+                    $media_caption = substr($original_filename,0,$pos);
                 }
             }
         }
