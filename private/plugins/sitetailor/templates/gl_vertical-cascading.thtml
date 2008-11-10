@@ -33,12 +33,16 @@
 	position:relative;
 	z-index:40;
 	width:100%;
+	margin:0;
+    padding:0;
 }
 #gl_moomenu-vert-l{menu_id} li ul,
 #gl_moomenu-vert-r{menu_id} li ul {
 	position:absolute;
 	top:0;
 	display:block;
+	margin:0;
+    padding:0;
 }
 #gl_moomenu-vert-l{menu_id} li ul {
 	left:155px; /*set 1px less than left menu width above */
@@ -141,9 +145,9 @@ li,
 }
 {!if themeapi}
 html>body #gl_moomenu-vert-l{menu_id} ul li {
-*height:20px
+*height:20px;
 }
 html>body #gl_moomenu-vert-r{menu_id} ul li {
-*height:20px
+*height:20px;
 }
 {!endif}
