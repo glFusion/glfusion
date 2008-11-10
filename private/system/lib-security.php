@@ -115,7 +115,7 @@ function SEC_getUserGroups($uid='')
             $uid = $_USER['uid'];
         }
     }
-    
+
     if (array_key_exists($uid, $runonce)) {
         return $runonce[$uid];
     }
@@ -730,7 +730,7 @@ function SEC_authenticate($username, $password, &$uid)
             return $U['status']; // just return their status
         }
     } else {
-        $tmp = $LANG01[32] . ": '" . $username . "'";
+        $tmp = $LANG01[32] . ": '" . $username . "' - IP: " . $_SERVER['REMOTE_ADDR'];
         COM_errorLog($tmp, 1);
         return -1;
     }
