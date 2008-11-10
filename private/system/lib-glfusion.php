@@ -50,6 +50,11 @@ function glf_template_set_root($root) {
         if (substr($r, -1) == '/') {
             $r = substr($r, 0, -1);
         }
+        if ( strpos($r,"plugins") != 0 ) {
+            $p = str_replace($_CONF['path'],$_CONF['path_themes'] . $_CONF['theme'] . '/', $r);
+            $x = str_replace("/templates", "",$p);
+            $retval[] = $x;
+        }
         $retval[] = $r . '/custom';
         $retval[] = $r;
         $retval[] = $_CONF['path_themes'] . 'nouveau/' .
