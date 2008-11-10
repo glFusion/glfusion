@@ -375,10 +375,10 @@ function USER_sendNotification ($username, $email, $uid, $mode='inactive')
 
     if ($mode == 'inactive') {
         // user needs admin approval
-        $mailbody .= "$LANG01[10] <{$_CONF['site_admin_url']}/moderation.php>\n\n";
+        $mailbody .= "$LANG01[10] {$_CONF['site_admin_url']}/moderation.php\n\n";
     } else {
         // user has been created, or has activated themselves:
-        $mailbody .= "$LANG29[4] <{$_CONF['site_url']}/users.php?mode=profile&uid={$uid}>\n\n";
+        $mailbody .= "$LANG29[4] {$_CONF['site_url']}/users.php?mode=profile&uid={$uid}\n\n";
     }
     $mailbody .= "\n------------------------------\n";
     $mailbody .= "\n$LANG08[34]\n";
