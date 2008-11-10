@@ -199,8 +199,7 @@ function WIDGET_autotranslations($header=0) {
         	$retval .= 'hl=' . $key; // 2 character language code of google header bar (usually the same as tl below)
         	$retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
         	$retval .= '&amp;tl=' . $key; // 2 character language code to translate site into (usually should be the same as hl above)
-        	$retval .= '&amp;u=' . $_CONF['site_url']; // address of your site
-        	$retval .= '?' . $randID; //appends a random string so Google won't cache the translated page
+        	$retval .= '&amp;u=' . urlencode($_CONF['site_url'] . '?r=' . $randID); // address of your site appends a random string so Google won't cache the translated page
         	$retval .= '">';
         	$retval .= '<img src="' . $_CONF['site_url'] . '/images/translations/';
         	$retval .= $key.'.png" alt="'.$language.'" title="'.$language.'"' . XHTML . '></a></li>';
@@ -213,7 +212,7 @@ function WIDGET_autotranslations($header=0) {
 // inserts the call to the javascript file, referencing the full path to gl_moospring.js
 function WIDGET_moospring() {
     global $_CONF;
-	
+
     $retval = '<script type="text/javascript" src="' . $_CONF['site_url'] . '/javascript/mootools/gl_moospring.js"></script>';
     return $retval;
 }
@@ -221,7 +220,7 @@ function WIDGET_moospring() {
 //Powers the gl_moorotator. It is here so that the blankimage reference can be built with the full site url
 function WIDGET_moorotator() {
 	global $_CONF, $LANG_WIDGETS;
-	
+
 	$retval = '';
 	$retval = <<<EOR
 <script type="text/javascript">
