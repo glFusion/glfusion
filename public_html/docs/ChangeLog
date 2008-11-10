@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.0
 ------
+- Add IP to the log entry for failed logins (Mark)
+- Modified translation widget to keep Google from caching results (Mark)
 - Fixed issue where 'Read the full article' prompt did not display
   the URL in Thunderbird (Mark)
 - Forum: Fixed issue in Latest Post tab, did not use the latest reply
@@ -9,7 +11,7 @@ v1.1.0
 - Forum: Changed 'Date' column title to 'Latest Post' in Latest Post Tab (Mark)
 - Modified index maintenance (cleanup) to no longer produce fatal errors
   if the index does not exist (Mark)
-- Cache JS by themem (Mark)
+- Cache JS by theme (Mark)
 - Fixed conflict with lib-portalparts.php (Mark)
 - MediaGallery: Fixed issue where children albums with more open permissions
   were showing in the What's New block causing an error when selected (Mark)
