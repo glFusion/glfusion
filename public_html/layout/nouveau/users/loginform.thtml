@@ -5,11 +5,11 @@
                 <form action="{site_url}/users.php" method="post">
                     <table cellspacing="0" cellpadding="3">
                         <tr>
-                            <td colspan="2">{lang_message}  {lang_newreglink}</td>
+                            <td colspan="2">{lang_message}</td>
                         </tr>
                         <tr>
                             <td class="alignright"><b><label for="loginname">{lang_username}</label>:</b></td>
-                            <td><input type="text" size="16" name="loginname"{xhtml}></td>
+                            <td><input type="text" size="16" name="loginname"{xhtml}>&nbsp;{lang_newreglink}</td>
                         </tr>
                         {services}
                         <tr>
