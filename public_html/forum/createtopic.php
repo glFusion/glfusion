@@ -340,8 +340,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
                     DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic='$id' and time > 0");
 
-                    // Check for any users subscribed notifications
-                    gf_chknotifications($forum,$id,$uid);
+
                     $postmode = gf_chkpostmode($postmode,$postmode_switch);
                     $subject = gf_preparefordb($_POST['subject'],'text');
                     $comment = gf_preparefordb($_POST['comment'],$postmode);
@@ -391,6 +390,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     CACHE_remove_instance('forumcb');
 
                     COM_updateSpeedlimit ('forum');
+                    // Check for any users subscribed notifications
+                    gf_chknotifications($forum,$id,$uid);
                     $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$id&lastpost=true#$lastid";
                     forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19'],true,$forum);
                 }
