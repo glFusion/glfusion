@@ -1,5 +1,26 @@
 glFusion ChangeLog
 
+v1.1.1
+------
+- Media Gallery: Fixed issue with header parsing in the gps.php module (Mark)
+        private/plugins/mediagallery/include/makers/gps.php
+
+- Forum: Fixed issue where notification email is off my one reply id (Mark)
+        public_html/forum/createtopic.php
+
+- Media Gallery: Fixed an issue when importing from Gallery v1.x, the import
+  would fail on empty Gallery albums. (Mark)
+        public_html/admin/plugins/mediagallery/importers/Galleryv1/index.php
+
+- Media Gallery: Fixed error in watermarking code that caused application to
+  fail. (Mark)
+        private/system/imglib/lib-image.php
+
+- Enhanced error check when reading EXIF data from JPG images, ensure that
+  corrupted images do not cause the application to fail. (Mark)
+        private/lib/getid3/module.graphic.jpg.php
+
+
 v1.1.0
 ------
 - Add IP to the log entry for failed logins (Mark)
