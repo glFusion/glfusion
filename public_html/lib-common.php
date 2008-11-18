@@ -1597,7 +1597,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         if( function_exists( $function )) {
             $rblocks = $function( $custom['1'], 'right' );
         }
-    } elseif( $rightblock == 1 ) {
+    } elseif( $rightblock == 1 || $_CONF['show_right_blocks'] == 1 ) {
         $rblocks = '';
 
         $rblocks = COM_showBlocks( 'right', $topic );
@@ -5810,7 +5810,7 @@ function COM_applyBasicFilter( $parameter, $isnumeric = false )
 * @return   string                      sanitized URL
 *
 */
-function COM_sanitizeUrl( $url, $allowed_protocols = '', $default_protocol = '' )
+function COM_sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp'), $default_protocol = 'http' )
 {
     global $_CONF;
 
