@@ -2,7 +2,7 @@
 This file contains the main layout and styles.
 NOTE: paths specified below are relative to the site root (http://www.mysite.com/)
  */
- 
+
 body {
 background:#FFF;
 font:76% arial,verdana,tahoma,helvetica,sans-serif;
@@ -448,7 +448,6 @@ div.glfform p.error {
 
 div.glfform form div.error {
   background-color: #ffffe1;
-  background-image: url(layout/nouveau/images/required_bg.gif);
   background-repeat: no-repeat;
   background-position: top left;
   color: #666666;
