@@ -431,42 +431,6 @@ div.glfform form div fieldset label.labelCheckbox, form div fieldset label.label
   width: 170px;
 }
 
-div.glfform form div img {
-
-}
-
-div.glfform p.error {
-  background-color: #ff0000;
-  background-image: url(layout/nouveau/images/alert-small.png);
-  background-repeat: no-repeat;
-  background-position: 3px 3px;
-  color: #ffffff;
-  padding: 3px 3px 5px 27px;
-  border: 1px solid #000000;
-  margin: auto 100px;
-}
-
-div.glfform form div.error {
-  background-color: #ffffe1;
-  background-image: url(layout/nouveau/images/required_bg.gif);
-  background-repeat: no-repeat;
-  background-position: top left;
-  color: #666666;
-  border: 1px solid #ff0000;
-}
-
-div.glfform form div.error p.error {
-  background-image: url(layout/nouveau/images/alert-small.png);
-  background-position: top left;
-  background-color: transparent;
-  border-style: none;
-  font-size: 88%;
-  font-weight: bold;
-  margin: 0 0 0 118px;
-  width: 200px;
-  color: #ff0000;
-}
-
 div.glfform form div select, form div textarea {
   width: 200px;
   padding: 1px 3px;
