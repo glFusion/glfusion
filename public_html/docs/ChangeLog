@@ -2,6 +2,19 @@ glFusion ChangeLog
 
 v1.1.1
 ------
+- Removed reference to required_bg.gif in style.css (Mark)
+        public_html/layout/nouveau/style.css
+
+- glFusion did not honor the show_right_blocks setting (Mark)
+        public_html/lib-common.php
+
+- Removed reference to missing graphic on gllform. class. (Mark)
+        public_html/layout/nouveau/style.css
+
+- Fixed broken API COM_sanitizeUrl().  We removed the allowed_protocol
+  configuration option but neglected to update this function. (Mark)
+        public_html/lib-common.php
+
 - Media Gallery: Fixed issue with header parsing in the gps.php module (Mark)
         private/plugins/mediagallery/include/makers/gps.php
 
