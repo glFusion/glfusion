@@ -63,7 +63,7 @@ function all_submissions($token)
 
     if (SEC_hasRights('story.edit')) {
         if ($_CONF['listdraftstories'] == 1) {
-            $retval .= draftlist ();
+            $retval .= draftlist ($token);
         }
     }
     if ($_CONF['usersubmission'] == 1) {
