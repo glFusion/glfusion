@@ -132,7 +132,9 @@ class Search {
         $login->set_var ('site_admin_url', $_CONF['site_admin_url']);
         $login->set_var ('layout_url', $_CONF['layout_url']);
         $login->set_var ('lang_login', $LANG_LOGIN[3]);
-        $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
+        if ($_CONF['disable_new_user_registration'] != 1) {
+            $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
+        }
         $login->parse ('output', 'login');
         $retval .= $login->finish ($login->get_var('output'));
         $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
