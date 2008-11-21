@@ -6450,13 +6450,13 @@ function COM_getLanguageFromBrowser()
         foreach ($accept as $l) {
             $l = explode(';', trim($l));
             $l = $l[0];
-            if (array_key_exists($l, $_CONF['language_files'])) {
+            if (@array_key_exists($l, $_CONF['language_files'])) {
                 $retval = $_CONF['language_files'][$l];
                 break;
             } else {
                 $l = explode('-', $l);
                 $l = $l[0];
-                if (array_key_exists($l, $_CONF['language_files'])) {
+                if (@array_key_exists($l, $_CONF['language_files'])) {
                     $retval = $_CONF['language_files'][$l];
                     break;
                 }
