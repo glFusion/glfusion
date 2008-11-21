@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.1
 ------
+- moderation fails with a 2 - Missing argument 1 for draftlist() error (Mark)
+        public_html/admin/moderation.php
+
 - Media Gallery: img auto tag with alignment will not always work with
   IE. (Mark)
         private/plugins/mediagallery/functions.inc
