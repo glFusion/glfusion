@@ -2,6 +2,21 @@ glFusion ChangeLog
 
 v1.1.1
 ------
+- Media Gallery: img auto tag with alignment will not always work with
+  IE. (Mark)
+        private/plugins/mediagallery/functions.inc
+
+- If login is required for search and disable_new_registrations is true,
+  non-logged-in users who performed a search were presented with a link
+  to the 'New User' page.  Removed the New User link if registration is
+  disabled. (Mark)
+        private/system/classes/search.class.php
+        public_html/layout/nouveau/submit/submitloginrequired.thtml
+
+- Fixed a problem that only appears if the configuration setting
+  for Languages is set, but Language Files is not (Mark)
+        public_html/lib-common.php
+
 - Removed reference to required_bg.gif in style.css (Mark)
         public_html/layout/nouveau/style.css
 
