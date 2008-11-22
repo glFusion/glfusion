@@ -9,13 +9,14 @@
                         </tr>
                         <tr>
                             <td class="alignright"><b><label for="loginname">{lang_username}</label>:</b></td>
-                            <td><input type="text" size="16" name="loginname"{xhtml}>&nbsp;{lang_newreglink}</td>
+                            <td><input type="text" size="16" name="loginname"{xhtml}></td>
                         </tr>
                         {services}
                         <tr>
                             <td class="alignright"><b><label for="passwd">{lang_password}</label>:</b></td>
                             <td><input type="password" name="passwd" size="16"{xhtml}>
-                                &nbsp;<a href="{site_url}/users.php?mode=getpassword" rel="nofollow">{lang_forgetpassword}</a>
+                                &nbsp;<a href="{site_url}/users.php?mode=getpassword" rel="nofollow">{lang_forgetpassword}</a><br{xhtml}
+                                <div style="position:relative; top:-43px; left:111px">{lang_newreglink}</div>
                             </td>
                         </tr>
                         <tr>
