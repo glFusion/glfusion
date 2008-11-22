@@ -893,6 +893,18 @@ margin-left:65px;
 z-index:1000;
 }
 
+#header-site-text {
+padding:25px 0 15px 20px;
+}
+
+#header-site-text a {
+font-style:italic;
+font-weight:bold;
+font-size:xx-large;
+color:#FFF;
+text-decoration:none;
+}
+
 #header-textbox {
 background:url(layout/nouveau/images/bg_search.jpg) no-repeat right -22px #FFF;
 color:#000;
