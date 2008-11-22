@@ -2,6 +2,14 @@ glFusion ChangeLog
 
 v1.1.1
 ------
+- Fixed an issue where the bbcode parser could exhaust system resources. (Mark)
+        private/lib/bbcode/stringparser.class.php
+
+- Bad Behavior2 - Upgraded to v2.0.25 (Mark)
+        public_html/bad_behavior2/bad-behavior/blackhole.inc.php
+        public_html/bad_behavior2/bad-behavior/version.inc.php
+        public_html/bad_behavior2/README.txt
+
 - moderation fails with a 2 - Missing argument 1 for draftlist() error (Mark)
         public_html/admin/moderation.php
 
