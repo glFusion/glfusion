@@ -42,7 +42,7 @@ function bb2_httpbl($settings, $package) {
 	$result = gethostbynamel($settings['httpbl_key'].".${find}.dnsbl.httpbl.org.");
 	if (!empty($result)) {
 		$ip = explode('.', $result[0]);
-		if ($ip[0] == 127 && ($ip[3] & 7) && $ip[2] >= $settings['httpbl_threat'] && $ip[1] >= $settings['httpbl_maxage']) {
+		if ($ip[0] == 127 && ($ip[3] & 7) && $ip[2] >= $settings['httpbl_threat'] && $ip[1] <= $settings['httpbl_maxage']) {
 			return '2b021b1f';
 		}
 	}
