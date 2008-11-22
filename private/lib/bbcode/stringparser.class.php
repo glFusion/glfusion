@@ -5,7 +5,7 @@
  * These classes provide the means to parse any kind of string into a tree-like
  * memory structure. It would e.g. be possible to create an HTML parser based
  * upon this class.
- * 
+ *
  * Version: 0.3.3
  *
  * @author Christian Seiler <spam@christian-seiler.de>
@@ -84,42 +84,42 @@ class StringParser {
 	 * @see STRINGPARSER_MODE_SEARCH, STRINGPARSER_MODE_LOOP
 	 */
 	var $_parserMode = STRINGPARSER_MODE_SEARCH;
-	
+
 	/**
 	 * Raw text
 	 * @access protected
 	 * @var string
 	 */
 	var $_text = '';
-	
+
 	/**
 	 * Parse stack
 	 * @access protected
 	 * @var array
 	 */
 	var $_stack = array ();
-	
+
 	/**
 	 * Current position in raw text
 	 * @access protected
 	 * @var integer
 	 */
 	var $_cpos = -1;
-	
+
 	/**
 	 * Root node
 	 * @access protected
 	 * @var mixed
 	 */
 	var $_root = null;
-	
+
 	/**
 	 * Length of the text
 	 * @access protected
 	 * @var integer
 	 */
 	var $_length = -1;
-	
+
 	/**
 	 * Flag if this object is already parsing a text
 	 *
@@ -130,7 +130,7 @@ class StringParser {
 	 * @var boolean
 	 */
 	var $_parsing = false;
-	
+
 	/**
 	 * Strict mode
 	 *
@@ -140,14 +140,14 @@ class StringParser {
 	 * @var boolean
 	 */
 	var $strict = false;
-	
+
 	/**
 	 * Characters or strings to look for
 	 * @access protected
 	 * @var array
 	 */
 	var $_charactersSearch = array ();
-	
+
 	/**
 	 * Characters currently allowed
 	 *
@@ -165,35 +165,40 @@ class StringParser {
 	 * @var array
 	 */
 	var $_charactersAllowed = array ();
-	
+
 	/**
 	 * Current parser status
 	 * @access protected
 	 * @var int
 	 */
 	var $_status = 0;
-	
+
 	/**
 	 * Prefilters
 	 * @access protected
 	 * @var array
 	 */
 	var $_prefilters = array ();
-	
+
 	/**
 	 * Postfilters
 	 * @access protected
 	 * @var array
 	 */
 	var $_postfilters = array ();
-	
+
 	/**
 	 * Recently reparsed?
 	 * @access protected
 	 * @var bool
 	 */
 	var $_recentlyReparsed = false;
-	 
+
+	/**
+	 * keep track of the number of times we loop to prevent run away processes
+	 *
+	 */
+    var $_looper = 0;
 	/**
 	 * Constructor
 	 *
@@ -201,7 +206,7 @@ class StringParser {
 	 */
 	function StringParser () {
 	}
-	
+
 	/**
 	 * Add a filter
 	 *
@@ -216,7 +221,7 @@ class StringParser {
 		if (!is_callable ($callback)) {
 			return false;
 		}
-		
+
 		switch ($type) {
 			case STRINGPARSER_FILTER_PRE:
 				$this->_prefilters[] = $callback;
@@ -227,10 +232,10 @@ class StringParser {
 			default:
 				return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Remove all filters
 	 *
@@ -256,7 +261,7 @@ class StringParser {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * This function parses the text
 	 *
@@ -284,11 +289,11 @@ class StringParser {
 		unset ($this->_root);
 		$this->_root =& new StringParser_Node_Root ();
 		$this->_stack[0] =& $this->_root;
-		
+
 		$this->_parserInit ();
-		
+
 		$finished = false;
-		
+
 		while (!$finished) {
 			switch ($this->_parserMode) {
 				case STRINGPARSER_MODE_SEARCH:
@@ -309,7 +314,7 @@ class StringParser {
 					$this->_parsing = false;
 					return false;
 			}
-			
+
 			$res = $this->_closeRemainingBlocks ();
 			if (!$res) {
 				if ($this->strict) {
@@ -326,21 +331,21 @@ class StringParser {
 			}
 			$finished = true;
 		}
-		
+
 		$res = $this->_modifyTree ();
-		
+
 		if (!$res) {
 			$this->_parsing = false;
 			return false;
 		}
-		
+
 		$res = $this->_outputTree ();
-		
+
 		if (!$res) {
 			$this->_parsing = false;
 			return false;
 		}
-		
+
 		if (is_null ($this->_output)) {
 			$root =& $this->_root;
 			unset ($this->_root);
@@ -352,7 +357,7 @@ class StringParser {
 			$this->_parsing = false;
 			return $root;
 		}
-		
+
 		$res = StringParser_Node::destroyNode ($this->_root);
 		if (!$res) {
 			$this->_parsing = false;
@@ -364,11 +369,11 @@ class StringParser {
 			unset ($this->_stack[count($this->_stack)-1]);
 		}
 		$this->_stack = array ();
-		
+
 		$this->_parsing = false;
 		return $this->_output;
 	}
-	
+
 	/**
 	 * Apply prefilters
 	 *
@@ -386,7 +391,7 @@ class StringParser {
 		}
 		return $text;
 	}
-	
+
 	/**
 	 * Apply postfilters
 	 *
@@ -404,7 +409,7 @@ class StringParser {
 		}
 		return $text;
 	}
-	
+
 	/**
 	 * Abstract method: Manipulate the tree
 	 * @access protected
@@ -413,7 +418,7 @@ class StringParser {
 	function _modifyTree () {
 		return true;
 	}
-	
+
 	/**
 	 * Abstract method: Output tree
 	 * @access protected
@@ -423,7 +428,7 @@ class StringParser {
 		// this could e.g. call _applyPostfilters
 		return true;
 	}
-	
+
 	/**
 	 * Restart parsing after current block
 	 *
@@ -439,7 +444,7 @@ class StringParser {
 			return false;
 		}
 		$topelem =& $this->_stack[$stack_count-1];
-		
+
 		$node_parent =& $topelem->_parent;
 		// remove the child from the tree
 		$res = $node_parent->removeChild ($topelem, false);
@@ -450,7 +455,7 @@ class StringParser {
 		if (!$res) {
 			return false;
 		}
-		
+
 		// now try to get the position of the object
 		if ($topelem->occurredAt < 0) {
 			return false;
@@ -463,13 +468,13 @@ class StringParser {
 		if (!$res) {
 			return false;
 		}
-		
+
 		$this->_cpos = $topelem->occurredAt + 1;
 		$this->_recentlyReparsed = true;
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Abstract method: Close remaining blocks
 	 * @access protected
@@ -491,7 +496,7 @@ class StringParser {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Abstract method: Initialize the parser
 	 * @access protected
@@ -499,7 +504,7 @@ class StringParser {
 	function _parserInit () {
 		$this->_setStatus (0);
 	}
-	
+
 	/**
 	 * Abstract method: Set a specific status
 	 * @access protected
@@ -513,7 +518,7 @@ class StringParser {
 		$this->_status = $status;
 		return true;
 	}
-	
+
 	/**
 	 * Abstract method: Handle status
 	 * @access protected
@@ -526,7 +531,7 @@ class StringParser {
 		$this->_cpos += strlen ($needle);
 		return true;
 	}
-	
+
 	/**
 	 * Search mode loop
 	 * @access protected
@@ -535,9 +540,12 @@ class StringParser {
 	function _searchLoop () {
 		$i = 0;
 		while (1) {
+		    // check to see how often we've looped and break out if too many times.
+            $this->_looper++;
+            if ( $this->_looper > 25) return;
 			// make sure this is false!
 			$this->_recentlyReparsed = false;
-			
+
 			list ($needle, $offset) = $this->_strpos ($this->_charactersSearch, $this->_cpos);
 			// parser ends here
 			if ($needle === false) {
@@ -581,7 +589,7 @@ class StringParser {
 			}
 			$this->_cpos += strlen ($needle);
 		}
-		
+
 		// get subtext
 		if ($this->_cpos < strlen ($this->_text)) {
 			$subtext = substr ($this->_text, $this->_cpos);
@@ -590,10 +598,10 @@ class StringParser {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Loop mode loop
 	 *
@@ -603,12 +611,12 @@ class StringParser {
 	function _loop () {
 		// HACK: This method ist not yet implemented correctly, the code below
 		// DOES NOT WORK! Do not use!
-		
+
 		return false;
 		/*
 		while ($this->_cpos < $this->_length) {
 			$needle = $this->_strDetect ($this->_charactersSearch, $this->_cpos);
-			
+
 			if ($needle === false) {
 				// not found => see if character is allowed
 				if (!in_array ($this->_text{$this->_cpos}, $this->_charactersAllowed)) {
@@ -624,7 +632,7 @@ class StringParser {
 					return false;
 				}
 			}
-			
+
 			// get subtext
 			$subtext = substr ($this->_text, $offset, $offset - $this->_cpos);
 			$res = $this->_appendText ($subtext);
@@ -655,7 +663,7 @@ class StringParser {
 		return $this->_loop ();
 		*/
 	}
-	
+
 	/**
 	 * Abstract method Append text depending on current status
 	 * @access protected
@@ -669,7 +677,7 @@ class StringParser {
 		// default: call _appendToLastTextChild
 		return $this->_appendToLastTextChild ($text);
 	}
-	
+
 	/**
 	 * Append text to last text child of current top parser stack node
 	 * @access protected
@@ -683,7 +691,7 @@ class StringParser {
 		}
 		return $this->_stack[$scount-1]->appendToLastTextChild ($text);
 	}
-	
+
 	/**
 	 * Searches {@link StringParser::_text _text} for every needle that is
 	 * specified by using the {@link PHP_MANUAL#strpos strpos} function. It
@@ -703,7 +711,7 @@ class StringParser {
 	function _strpos ($needles, $offset) {
 		$cur_needle = false;
 		$cur_offset = -1;
-		
+
 		if ($offset < strlen ($this->_text)) {
 			foreach ($needles as $needle) {
 				$n_offset = strpos ($this->_text, $needle, $offset);
@@ -713,10 +721,10 @@ class StringParser {
 				}
 			}
 		}
-		
+
 		return array ($cur_needle, $cur_offset, 'needle' => $cur_needle, 'offset' => $cur_offset);
 	}
-	
+
 	/**
 	 * Detects a string at the current position
 	 *
@@ -734,8 +742,8 @@ class StringParser {
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Adds a node to the current parse stack
 	 *
@@ -753,7 +761,7 @@ class StringParser {
 		$this->_stack[$stack_count] =& $node;
 		return true;
 	}
-	
+
 	/**
 	 * Removes a node from the current parse stack
 	 *
@@ -766,7 +774,7 @@ class StringParser {
 		unset ($this->_stack[$stack_count-1]);
 		return true;
 	}
-	
+
 	/**
 	 * Execute a method on the top element
 	 *
@@ -786,7 +794,7 @@ class StringParser {
 		}
 		return call_user_func_array ($method, $args);
 	}
-	
+
 	/**
 	 * Get a variable of the top element
 	 *
@@ -838,7 +846,7 @@ $GLOBALS['__STRINGPARSER_NODE_ID'] = 0;
 class StringParser_Node {
 	/**
 	 * The type of this node.
-	 * 
+	 *
 	 * There are three standard node types: root node, text node and unknown
 	 * node. All node types are integer constants. Any node type of a
 	 * subclass must be at least 32 to allow future developements.
@@ -849,7 +857,7 @@ class StringParser_Node {
 	 * @see STRINGPARSER_NODE_UNKNOWN
 	 */
 	var $_type = STRINGPARSER_NODE_UNKNOWN;
-	
+
 	/**
 	 * The node ID
 	 *
@@ -864,7 +872,7 @@ class StringParser_Node {
 	 * @see StringParser_Node::_children
 	 */
 	var $_id = -1;
-	
+
 	/**
 	 * The parent of this node.
 	 *
@@ -875,7 +883,7 @@ class StringParser_Node {
 	 * @see StringParser_Node::_children
 	 */
 	var $_parent = null;
-	
+
 	/**
 	 * The children of this node.
 	 *
@@ -887,7 +895,7 @@ class StringParser_Node {
 	 * @see StringParser_Node::_parent
 	 */
 	var $_children = array ();
-	
+
 	/**
 	 * Occured at
 	 *
@@ -898,7 +906,7 @@ class StringParser_Node {
 	 * @var int
 	 */
 	var $occurredAt = -1;
-	
+
 	/**
 	 * Constructor
 	 *
@@ -914,7 +922,7 @@ class StringParser_Node {
 		$this->_id = $GLOBALS['__STRINGPARSER_NODE_ID']++;
 		$this->occurredAt = $occurredAt;
 	}
-	
+
 	/**
 	 * Type of the node
 	 *
@@ -926,7 +934,7 @@ class StringParser_Node {
 	function type () {
 		return $this->_type;
 	}
-	
+
 	/**
 	 * Prepend a node
 	 *
@@ -938,12 +946,12 @@ class StringParser_Node {
 		if (!is_object ($node)) {
 			return false;
 		}
-		
+
 		// root nodes may not be children of other nodes!
 		if ($node->_type == STRINGPARSER_NODE_ROOT) {
 			return false;
 		}
-		
+
 		// if node already has a parent
 		if ($node->_parent !== false) {
 			// remove node from there
@@ -953,7 +961,7 @@ class StringParser_Node {
 			}
 			unset ($parent);
 		}
-		
+
 		$index = count ($this->_children) - 1;
 		// move all nodes to a new index
 		while ($index >= 0) {
@@ -969,7 +977,7 @@ class StringParser_Node {
 		$this->_children[0] =& $node;
 		return true;
 	}
-	
+
 	/**
 	 * Append text to last text child
 	 * @access public
@@ -986,7 +994,7 @@ class StringParser_Node {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Append a node to the children
 	 *
@@ -1002,12 +1010,12 @@ class StringParser_Node {
 		if (!is_object ($node)) {
 			return false;
 		}
-		
+
 		// root nodes may not be children of other nodes!
 		if ($node->_type == STRINGPARSER_NODE_ROOT) {
 			return false;
 		}
-		
+
 		// if node already has a parent
 		if ($node->_parent !== null) {
 			// remove node from there
@@ -1017,14 +1025,14 @@ class StringParser_Node {
 			}
 			unset ($parent);
 		}
-		
+
 		// append it to current node
 		$new_index = count ($this->_children);
 		$this->_children[$new_index] =& $node;
 		$node->_parent =& $this;
 		return true;
 	}
-	
+
 	/**
 	 * Insert a node before another node
 	 *
@@ -1038,19 +1046,19 @@ class StringParser_Node {
 		if (!is_object ($node)) {
 			return false;
 		}
-		
+
 		// root nodes may not be children of other nodes!
 		if ($node->_type == STRINGPARSER_NODE_ROOT) {
 			return false;
 		}
-		
+
 		// is the reference node a child?
 		$child = $this->_findChild ($reference);
-		
+
 		if ($child === false) {
 			return false;
 		}
-		
+
 		// if node already has a parent
 		if ($node->_parent !== null) {
 			// remove node from there
@@ -1060,7 +1068,7 @@ class StringParser_Node {
 			}
 			unset ($parent);
 		}
-		
+
 		$index = count ($this->_children) - 1;
 		// move all nodes to a new index
 		while ($index >= $child) {
@@ -1076,7 +1084,7 @@ class StringParser_Node {
 		$this->_children[$child] =& $node;
 		return true;
 	}
-	
+
 	/**
 	 * Insert a node after another node
 	 *
@@ -1090,19 +1098,19 @@ class StringParser_Node {
 		if (!is_object ($node)) {
 			return false;
 		}
-		
+
 		// root nodes may not be children of other nodes!
 		if ($node->_type == STRINGPARSER_NODE_ROOT) {
 			return false;
 		}
-		
+
 		// is the reference node a child?
 		$child = $this->_findChild ($reference);
-		
+
 		if ($child === false) {
 			return false;
 		}
-		
+
 		// if node already has a parent
 		if ($node->_parent !== false) {
 			// remove node from there
@@ -1112,7 +1120,7 @@ class StringParser_Node {
 			}
 			unset ($parent);
 		}
-		
+
 		$index = count ($this->_children) - 1;
 		// move all nodes to a new index
 		while ($index >= $child + 1) {
@@ -1128,7 +1136,7 @@ class StringParser_Node {
 		$this->_children[$child + 1] =& $node;
 		return true;
 	}
-	
+
 	/**
 	 * Remove a child node
 	 *
@@ -1158,38 +1166,38 @@ class StringParser_Node {
 			$save = $child;
 			unset($child);
 			$child = $save;
-			
+
 			// else: get object
 			if (!isset($this->_children[$child])) {
 				return false;
 			}
 			$object =& $this->_children[$child];
 		}
-		
+
 		// store count for later use
 		$ccount = count ($this->_children);
-		
+
 		// index out of bounds
 		if (!is_int ($child) || $child < 0 || $child >= $ccount) {
 			return false;
 		}
-		
+
 		// inkonsistency
 		if ($this->_children[$child]->_parent === null ||
 		    $this->_children[$child]->_parent->_id != $this->_id) {
 			return false;
 		}
-		
+
 		// $object->_parent = null would equal to $this = null
 		// as $object->_parent is a reference to $this!
 		// because of this, we have to unset the variable to remove
 		// the reference and then redeclare the variable
 		unset ($object->_parent); $object->_parent = null;
-		
+
 		// we have to unset it because else it will be overridden in
 		// in the loop
 		unset ($this->_children[$child]);
-		
+
 		// move all remaining objects one index higher
 		while ($child < $ccount - 1) {
 			// save object
@@ -1203,14 +1211,14 @@ class StringParser_Node {
 			unset ($obj);
 			$child++;
 		}
-		
+
 		if ($destroy) {
 			return StringParser_Node::destroyNode ($object);
 			unset ($object);
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Get the first child of this node
 	 *
@@ -1224,7 +1232,7 @@ class StringParser_Node {
 		}
 		return $this->_children[0];
 	}
-	
+
 	/**
 	 * Get the last child of this node
 	 *
@@ -1239,7 +1247,7 @@ class StringParser_Node {
 		}
 		return $this->_children[$c-1];
 	}
-	
+
 	/**
 	 * Destroy a node
 	 *
@@ -1259,7 +1267,7 @@ class StringParser_Node {
 			// method will call destroyNode again
 			return $parent->removeChild ($node, true);
 		}
-		
+
 		// node has children
 		while (count ($node->_children)) {
 			$child = 0;
@@ -1269,19 +1277,19 @@ class StringParser_Node {
 			}
 			unset($child);
 		}
-		
+
 		// now call the nodes destructor
 		if (!$node->_destroy ()) {
 			return false;
 		}
-		
+
 		// now just unset it and prey that there are no more references
 		// to this node
 		unset ($node);
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Destroy this node
 	 *
@@ -1292,8 +1300,8 @@ class StringParser_Node {
 	function _destroy () {
 		return true;
 	}
-	
-	/** 
+
+	/**
 	 * Find a child node
 	 *
 	 * This function searches for a node in the own children and returns
@@ -1308,18 +1316,18 @@ class StringParser_Node {
 		if (!is_object ($child)) {
 			return false;
 		}
-		
+
 		$ccount = count ($this->_children);
 		for ($i = 0; $i < $ccount; $i++) {
 			if ($this->_children[$i]->_id == $child->_id) {
 				return $i;
 			}
 		}
-		
+
 		return false;
 	}
-	
-	/** 
+
+	/**
 	 * Checks equality of this node and another node
 	 *
 	 * @access public
@@ -1329,7 +1337,7 @@ class StringParser_Node {
 	function equals (&$node) {
 		return ($this->_id == $node->_id);
 	}
-	
+
 	/**
 	 * Determines whether a criterium matches this node
 	 *
@@ -1341,7 +1349,7 @@ class StringParser_Node {
 	function matchesCriterium ($criterium, $value) {
 		return false;
 	}
-	
+
 	/**
 	 * Search for nodes with a certain criterium
 	 *
@@ -1371,7 +1379,7 @@ class StringParser_Node {
 		}
 		return $nodes;
 	}
-	
+
 	/**
 	 * Search for nodes with a certain criterium and return the count
 	 *
@@ -1393,7 +1401,7 @@ class StringParser_Node {
 		}
 		return $node_ctr;
 	}
-	
+
 	/**
 	 * Dump nodes
 	 *
@@ -1412,7 +1420,7 @@ class StringParser_Node {
 		}
 		return $str;
 	}
-	
+
 	/**
 	 * Dump this node to a string
 	 *
@@ -1435,7 +1443,7 @@ class StringParser_Node {
 class StringParser_Node_Root extends StringParser_Node {
 	/**
 	 * The type of this node.
-	 * 
+	 *
 	 * This node is a root node.
 	 *
 	 * @access protected
@@ -1453,7 +1461,7 @@ class StringParser_Node_Root extends StringParser_Node {
 class StringParser_Node_Text extends StringParser_Node {
 	/**
 	 * The type of this node.
-	 * 
+	 *
 	 * This node is a text node.
 	 *
 	 * @access protected
@@ -1461,22 +1469,22 @@ class StringParser_Node_Text extends StringParser_Node {
 	 * @see STRINGPARSER_NODE_TEXT
 	 */
 	var $_type = STRINGPARSER_NODE_TEXT;
-	
+
 	/**
 	 * Node flags
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
 	var $_flags = array ();
-	
+
 	/**
 	 * The content of this node
 	 * @access public
 	 * @var string
 	 */
 	var $content = '';
-	
+
 	/**
 	 * Constructor
 	 *
@@ -1490,7 +1498,7 @@ class StringParser_Node_Text extends StringParser_Node {
 		parent::StringParser_Node ($occurredAt);
 		$this->content = $content;
 	}
-	
+
 	/**
 	 * Append text to content
 	 *
@@ -1501,7 +1509,7 @@ class StringParser_Node_Text extends StringParser_Node {
 	function appendText ($text) {
 		$this->content .= $text;
 	}
-	
+
 	/**
 	 * Set a flag
 	 *
@@ -1513,7 +1521,7 @@ class StringParser_Node_Text extends StringParser_Node {
 		$this->_flags[$name] = $value;
 		return true;
 	}
-	
+
 	/**
 	 * Get Flag
 	 *
@@ -1532,7 +1540,7 @@ class StringParser_Node_Text extends StringParser_Node {
 		}
 		return $return;
 	}
-	
+
 	/**
 	 * Dump this node to a string
 	 */
