@@ -925,7 +925,10 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                                 $videowidth  = 200;
                             } else if ( $width == 0 && $height > 0 ) {
                                 $videowidth = round($height / $ratio);
-                                $videoheidht = $height;
+                                $videoheight = $height;
+                            } else if ( $width > 0 && $height > 0 ) {
+                                $videowidth = $width;
+                                $videoheight = $height;
                             }
                         } else {
                             if ( $width > 0 && $height == 0 ) {
@@ -936,7 +939,10 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                                 $videowidth  = round(200 / $ratio);
                             } else if ( $width == 0 && $height > 0 ) {
                                 $videowidth = round($height * $ratio);
-                                $videoheidht = $height;
+                                $videoheight = $height;
+                            } else  if ( $width > 0 && $height > 0 ) {
+                                $videowidth = $width;
+                                $videoheight = $height;
                             }
                         }
                     }
