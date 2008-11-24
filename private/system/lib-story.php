@@ -1208,7 +1208,14 @@ function service_submit_story($args, &$output, &$svc_msg)
                 if (!empty($curfile['name'])) {
                     $pos = strrpos($curfile['name'],'.') + 1;
                     $fextension = substr($curfile['name'], $pos);
-                    $filenames[] = $sid . '_' . $z . '.' . $fextension;
+                    $sql = "SELECT MAX(ai_img_num) + 1 AS ai_img_num FROM " . $_TABLES['article_images'] . " WHERE ai_sid = '" . $sid ."'";
+        	        $result = DB_query( $sql,1 );
+        	        $row = DB_fetchArray( $result );
+        	        $ai_img_num = $row['ai_img_num'];
+        	        if ( $ai_img_num < 1 ) {
+        	            $ai_img_num = 1;
+        	        }
+                    $filenames[] = $sid . '_' . $ai_img_num . '.' . $fextension;
                 } else {
                     $filenames[] = '';
                 }
@@ -1228,7 +1235,14 @@ function service_submit_story($args, &$output, &$svc_msg)
             }
             for ($z = 0; $z < $_CONF['maximagesperarticle']; $z++ ) {
                 if ( $filenames[$z] != '' ) {
-                    DB_query("INSERT INTO {$_TABLES['article_images']} (ai_sid, ai_img_num, ai_filename) VALUES ('$sid', $z, '" . $filenames[$z] . "')");
+                    $sql = "SELECT MAX(ai_img_num) + 1 AS ai_img_num FROM " . $_TABLES['article_images'] . " WHERE ai_sid = '" . $sid ."'";
+        	        $result = DB_query( $sql,1 );
+        	        $row = DB_fetchArray( $result );
+        	        $ai_img_num = $row['ai_img_num'];
+        	        if ( $ai_img_num < 1 ) {
+        	            $ai_img_num = 1;
+        	        }
+                    DB_query("INSERT INTO {$_TABLES['article_images']} (ai_sid, ai_img_num, ai_filename) VALUES ('$sid', $ai_img_num, '" . $filenames[$z] . "')");
                 }
             }
         }
