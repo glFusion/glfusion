@@ -1091,7 +1091,7 @@ margin-bottom:30px;
 .story h1 {
 background:transparent;
 color:#02576B;
-font-family:Tahoma;
+font-family:Tahoma,Arial,Verdana;
 font-size:130%;
 font-weight:normal;
 margin:0 5px 0 0;
@@ -1120,7 +1120,7 @@ margin-top:10px;
 .story-featured h1 {
 background:transparent;
 color:#02576B;
-font-family:Tahoma;
+font-family:Tahoma,Arial,Verdana;
 font-size:160%;
 font-weight:bold;
 margin:0 5px 0 0;
