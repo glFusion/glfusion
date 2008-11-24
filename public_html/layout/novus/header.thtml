@@ -1,0 +1,45 @@
+<!-- Start of header.thtml -->
+	<!-- start of gl_menu -->
+	<div id="menu-bg">
+		<div class="wrapper">
+			{!if st_hmenu}
+				{st_hmenu}
+			{!else}
+				<div id="gl_moomenu">
+					<ul class="gl_moomenu">
+						{menu_elements}
+					</ul>
+				</div>
+			{!endif}
+		</div>
+	</div>
+	<!-- end of gl_menu -->
+
+	<div id="gl_header">
+		<div class="wrapper">
+			{logo_block}
+		</div>
+	</div> <!-- end of gl_header -->
+
+<div id="content">
+	<div id="gl_container_fixed"><!-- options: fixed | fluid-->
+		<div id="gl_wrapper">
+			<div id="{centercolumn}">
+				<div class="welcomeanddate-text">
+					<form method="get" action="{site_url}/search.php">
+						<span class="gl_user-menu-right">
+								<input id="header-textbox" type="text" name="query" maxlength="255" value="{$LANG09[10]}" title="{$LANG09[10]}" onfocus="if (this.value=='Search')this.value='';" onblur="if(this.value=='')this.value='{$LANG09[10]}';"{xhtml}>
+								<input type="hidden" name="type" value="all"{xhtml}>
+								<input type="hidden" name="mode" value="search"{xhtml}>
+								<input type="hidden" name="results" value="{num_search_results}"{xhtml}>
+						</span>
+					</form>
+					<span class="gl_user-menu-left">
+						<a href="{site_url}">{welcome_msg}</a><br{xhtml}>
+						{datetime}
+					</span>
+				</div> <!-- end of welcomeanddate-text -->
+<!-- START OF CONTENT AREA -->
+				<a name="content-start" id="content-start"></a><!--for screenreaders -->
+				{content}
+<!-- End of header.thtml -->
