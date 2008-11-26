@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-define('CONFIG_CACHE_FILE_NAME', '$$$config$$$.cache');
+define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
 
 class config {
     var $dbconfig_file;
@@ -975,7 +975,7 @@ class config {
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
         clearstatcache();
         if (file_exists($cache_file)) {
             $s = file_get_contents($cache_file);
@@ -995,7 +995,7 @@ class config {
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
         $s = serialize($this->config_array);
         $fh = fopen($cache_file, 'wb');
         if ($fh !== false) {
@@ -1018,7 +1018,7 @@ class config {
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
         @unlink($cache_file);
     }
 }
