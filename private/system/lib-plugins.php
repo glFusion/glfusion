@@ -281,21 +281,20 @@ function PLG_uninstall ($type)
         }
 
         // remove config table data for this plugin
+
         COM_errorLog ("Attempting to remove config table records for group_name: $type", 1);
-        DB_query ("DELETE FROM {$_TABLES['conf_values']} WHERE group_name = '$type'");
-        COM_errorLog ('...success', 1);
-
-        // uninstall the plugin
-        COM_errorLog ("Attempting to unregister the $type plugin from glFusion", 1);
-        DB_query ("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = '$type'");
-        COM_errorLog ('...success',1);
-
         require_once $_CONF['path_system'] . 'classes/config.class.php';
 
         $c = config::get_instance();
         if ($c->group_exists($type)) {
             $c->delGroup($type);
         }
+        COM_errorLog ('...success', 1);
+
+        // uninstall the plugin
+        COM_errorLog ("Attempting to unregister the $type plugin from glFusion", 1);
+        DB_query ("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = '$type'");
+        COM_errorLog ('...success',1);
 
         COM_errorLog ("Finished uninstalling the $type plugin.", 1);
 
