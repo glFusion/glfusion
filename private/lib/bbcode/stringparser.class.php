@@ -542,7 +542,7 @@ class StringParser {
 		while (1) {
 		    // check to see how often we've looped and break out if too many times.
             $this->_looper++;
-            if ( $this->_looper > 25) return;
+            if ( $this->_looper > 100) return;
 			// make sure this is false!
 			$this->_recentlyReparsed = false;
 
