@@ -187,7 +187,7 @@ function PLG_chkVersion($type)
 */
 function PLG_uninstall ($type)
 {
-    global $_PLUGINS, $_TABLES;
+    global $_CONF, $_PLUGINS, $_TABLES;
 
     if (empty ($type)) {
         return false;
@@ -289,6 +289,13 @@ function PLG_uninstall ($type)
         COM_errorLog ("Attempting to unregister the $type plugin from glFusion", 1);
         DB_query ("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = '$type'");
         COM_errorLog ('...success',1);
+
+        require_once $_CONF['path_system'] . 'classes/config.class.php';
+
+        $c = config::get_instance();
+        if ($c->group_exists($type)) {
+            $c->delGroup($type);
+        }
 
         COM_errorLog ("Finished uninstalling the $type plugin.", 1);
 
