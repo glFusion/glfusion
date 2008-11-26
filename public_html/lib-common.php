@@ -5970,7 +5970,7 @@ function COM_highlightQuery( $text, $query, $class = 'highlight')
         if( !empty( $searchword ))
         {
             $searchword = preg_quote( str_replace( "'", "\'", $searchword ));
-            $text = preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+            $text = @preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
         }
     }
 
