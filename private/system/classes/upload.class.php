@@ -886,6 +886,8 @@ class upload
 
         if ( $metaData['mime_type'] != '' ) {
             $this->_currentFile['type'] = $metaData['mime_type'];
+        } else {
+            $this->_currentFile['type'] = 'application/octet-stream';
         }
         $sc = strpos ($this->_currentFile['type'], ';');
         if ($sc > 0) {
@@ -1082,6 +1084,8 @@ class upload
                     $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
                     if ( $metaData['mime_type'] != '' ) {
                         $this->_currentFile['type'] = $metaData['mime_type'];
+                    } else {
+                        $this->_currentFile['type'] = 'application/octet-stream';
                     }
 
                     if (!empty($this->_currentFile['name'])) {
@@ -1122,6 +1126,8 @@ class upload
                 $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
                 if ( $metaData['mime_type'] != '' ) {
                     $this->_currentFile['type'] = $metaData['mime_type'];
+                } else {
+                    $this->_currentFile['type'] = 'application/octet-stream';
                 }
                 if (!empty($this->_currentFile['name'])) {
                     // Verify file meets size limitations
