@@ -310,7 +310,7 @@ function form ($A, $error = false)
         $sp_template->set_var('lang_title', $LANG_STATIC['title']);
         $title = '';
         if (isset ($A['sp_title'])) {
-            $title = htmlspecialchars (stripslashes ($A['sp_title']));
+            $title = htmlspecialchars ($A['sp_title']);
         }
         $sp_template->set_var('sp_title', $title);
         $sp_template->set_var('lang_addtomenu', $LANG_STATIC['addtomenu']);
@@ -357,7 +357,7 @@ function form ($A, $error = false)
         $sp_template->set_var('lang_content', $LANG_STATIC['content']);
         $content = '';
         if (isset ($A['sp_content'])) {
-            $content = htmlspecialchars (stripslashes ($A['sp_content']));
+            $content = htmlspecialchars ($A['sp_content']);
         }
         $sp_template->set_var('sp_content', $content);
         if ($_SP_CONF['filter_html'] == 1) {
@@ -626,8 +626,8 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete']) && SEC_ch
         if (!isset ($_POST['postmode'])) {
             $_POST['postmode'] = '';
         }
-        $display .= submitstaticpage ($sp_id, $sp_uid, $_POST['sp_title'],
-            $_POST['sp_content'], COM_applyFilter ($_POST['sp_hits'], true),
+        $display .= submitstaticpage ($sp_id, $sp_uid, COM_stripslashes($_POST['sp_title']),
+            COM_stripslashes($_POST['sp_content']), COM_applyFilter ($_POST['sp_hits'], true),
             COM_applyFilter ($_POST['sp_format']), $_POST['sp_onmenu'],
             $_POST['sp_label'], COM_applyFilter ($_POST['commentcode'], true),
             COM_applyFilter ($_POST['owner_id'], true),
