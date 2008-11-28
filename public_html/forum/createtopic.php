@@ -986,7 +986,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $submissionform_main->set_var ('LANG_attachments',$LANG_GF10['attachments']);
     $submissionform_main->set_var ('LANG_maxattachments',sprintf($LANG_GF10['maxattachments'],$CONF_FORUM['maxattachments']));
     // Check and see if the filemgmt plugin is installed and enabled
-    if (function_exists('filemgmt_buildAccessSql')) {
+    if (function_exists('filemgmt_buildAccessSql') && $CONF_FORUM['enable_fm_integration'] == 1) {
         // Generate the select dropdown HTML for the filemgmt categories
         $submissionform_main->set_var('filemgmt_category_options',gf_makeFilemgmtCatSelect($uid));
         $submissionform_main->set_var('LANG_usefilemgmt',$LANG_GF10['usefilemgmt']);
