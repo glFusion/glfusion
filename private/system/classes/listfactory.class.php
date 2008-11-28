@@ -128,7 +128,7 @@ if (!defined ('GVERSION')) {
 */
 
 /**
- * Geeklog List Factory Class
+ * glFusion List Factory Class
  *
  * @author Sami Barakat <s.m.barakat AT gmail DOT com>
  *
@@ -148,6 +148,7 @@ class ListFactory {
     var $_preset_rows = array();
     var $_page_url = '';
     var $_style = 'table';
+    var $_limits = array();
 
     /**
      * Constructor
@@ -211,6 +212,22 @@ class ListFactory {
             $sort = false;
         $this->_fields[] = array('title' => $title, 'name' => $name, 'display' => $display, 'sort' => $sort, 'format' => $format);
     }
+    function addTotalRank( $rank )
+    {
+        $this->_total_rank+= $rank;
+    }
+    function getTotalRank( )
+    {
+        return $this->_total_rank;
+    }
+    function getPerPage()
+    {
+        return $this->_per_page;
+    }
+    function addToTotalFound($total)
+    {
+        $this->_total_found += $total;
+    }
 
     /**
      * Sets the SQL query that will generate rows
@@ -224,9 +241,24 @@ class ListFactory {
      */
     function setQuery($title, $name, $sql, $rank)
     {
-        $this->_query_arr[] = array('title' => $title, 'name' => $name, 'sql' => $sql, 'rank' => $rank);
-        $this->_total_rank += $rank;
+        $total_results = $this->_numRows($sql);
+        if ( $total_results > 0 ) {
+            $this->_query_arr[] = array('title' => $title, 'name' => $name, 'sql' => $sql, 'rank' => $rank, 'found' => $total_results, 'type'=>'sql');
+            $this->_total_rank += $rank;
+        }
     }
+    /**
+     * Set rank and totals for non-SQL based search
+     */
+
+    function setQueryText($title,$name,$query,$numResults,$rank)
+    {
+        if ( $numResults > 0 ) {
+            $this->_query_arr[] = array('title' => $title, 'name' => $name, 'sql' => $query, 'rank' => $rank, 'found' => $numResults,'type'=>'text');
+            $this->_total_rank += $rank;
+        }
+    }
+
 
     /**
      * Sets the callback function that gets called when formatting a row
@@ -294,55 +326,6 @@ class ListFactory {
     }
 
     /**
-     * Calculates the offset and limits for each query based on
-     * the number of rows to be displayed per query per page.
-     *
-     * @access private
-     * @param array $totals The total number of results per query
-     * @return array The offsets and limits for a given page
-     *
-     */
-    function _getLimits($totals)
-    {
-        $order = range(0, count($totals)-1);
-        array_multisort($totals, $order);
-
-        $fin = Array();
-        for ($p = 0; $p < $this->_page; $p++)
-        {
-            $extra = 0;
-            for ($q = 0; $q < count($totals); $q++)
-            {
-                $fin[$q] = Array('offset' => 0, 'limit' => 0);
-                $fin[$q]['offset'] = $fin[$q]['offset'] + $fin[$q]['limit'];
-                $extra_pp = $extra + $totals[$q]['pp'];
-                if ($extra_pp - $totals[$q]['total'] >= 0)
-                {
-                    $fin[$q]['limit'] = $totals[$q]['total'];
-                    $extra = $extra_pp - $totals[$q]['total'];
-                    $totals[$q]['total'] = 0;
-                }
-                else if ($totals[$q]['total'] - $extra_pp >= 0)
-                {
-                    $fin[$q]['limit'] = $extra_pp;
-                    $totals[$q]['total'] = $totals[$q]['total'] - $extra_pp;
-                    $extra = 0;
-                }
-                else
-                {
-                    $fin[$q]['limit'] = $totals[$q]['pp'];
-                    $totals[$q]['total'] = $totals[$q]['total'] - $totals[$q]['pp'];
-                }
-            }
-            array_multisort($totals, $order, $fin);
-        }
-
-        array_multisort($order, $fin);
-
-        return $fin;
-    }
-
-    /**
      * Executes pre set queries
      *
      * @access public
@@ -354,90 +337,229 @@ class ListFactory {
         // Get the details for sorting the list
         $this->_sort_arr['field'] = isset($_REQUEST['order']) ? COM_applyFilter($_REQUEST['order']) : $this->_def_sort_arr['field'];
         $this->_sort_arr['direction'] = isset($_REQUEST['direction']) ? COM_applyFilter($_REQUEST['direction']) : $this->_def_sort_arr['direction'];
-        if (is_numeric($this->_sort_arr['field']))
-        {
+        if (is_numeric($this->_sort_arr['field'])) {
             $ord = $this->_def_sort_arr['field'];
             $this->_sort_arr['field'] = SQL_TITLE;
-        }
-        else
+        } else {
             $ord = $this->_sort_arr['field'];
+        }
+
         $order_sql = ' ORDER BY ' . $ord . ' ' . strtoupper($this->_sort_arr['direction']);
 
-        $this->_page = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'], true) : 1;
-        if (isset($_REQUEST['results']))
+        if (isset($_REQUEST['results'])) {
             $this->_per_page = COM_applyFilter($_REQUEST['results'], true);
+        }
 
         // Calculate the limits for each query
-        $this->_total_found = count($this->_preset_rows);
-        $num_query_results = $this->_per_page - $this->_total_found;
-        $pp_total = $this->_total_found;
-        $limits = array();
-        for ($i = 0; $i < count($this->_query_arr); $i++)
-        {
-            $limits[$i]['total'] = $this->_numRows($this->_query_arr[$i]['sql']);
-            $limits[$i]['pp'] = round(($this->_query_arr[$i]['rank'] / $this->_total_rank) * $num_query_results);
-            $this->_total_found += $limits[$i]['total'];
-            $pp_total += $limits[$i]['pp'];
+
+        $num_query_results = $this->_per_page - count($this->_preset_rows);
+        $pp_total = count($this->_preset_rows);
+
+        $this->_page = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'], true) : 1;
+        if ( isset($_REQUEST['np']) && $_REQUEST['np'] == 1 ) {
+            $this->_page++;
         }
-        if ($pp_total < $this->_per_page)
-            $limits[0]['pp'] += $this->_per_page - $pp_total;
-        else if ($this->_per_page < $pp_total)
-            $limits[0]['pp'] -= $pp_total - $this->_per_page;
-        $limits = $this->_getLimits($limits);
+        $prevPage = 0;
+        if ( isset($_REQUEST['pp']) && $_REQUEST['pp'] == 1) {
+            $this->_page--;
+            $prevPage = 1;
+        }
+        if ( $this->_page < 1 ) {
+            $this->_page = 1;
+        }
+
+        if ( isset($_REQUEST['i']) ) {
+            $encode = urldecode($_REQUEST['i']);
+            $decode = base64_decode($encode);
+            $vars = explode(',',$decode);
+            for ($i=0;$i<count($vars);$i++) {
+                list($name,$value) = explode('=',$vars[$i]);
+                $_post_offset[$name] = $value;
+            }
+        }
+
+        if ( isset($_REQUEST['j']) ) {
+            $encode = urldecode($_REQUEST['j']);
+            $decode = base64_decode($encode);
+            $vars = explode(',',$decode);
+            for ($i=0;$i<count($vars);$i++) {
+                list($name,$value) = explode('=',$vars[$i]);
+                $_post_pp[$name] = $value;
+            }
+        }
+        /*
+         * preprocess so we can find those that are empty on the subsequest pages
+         * so we can adjust the total ranking number.
+         *
+         * can we handle those that are too short (more pp than items found)?
+         */
+
+        $limits = array();
+        $bucket = 0;
+        $bucket_limit = $num_query_results;
+
+        for ($i = 0; $i < count($this->_query_arr); $i++) {
+            $limits[$i]['name'] = $this->_query_arr[$i]['name'];
+            $limits[$i]['total'] = $this->_query_arr[$i]['found'];
+            $limits[$i]['pp'] = round(($this->_query_arr[$i]['rank'] / $this->_total_rank) * $num_query_results);
+            $this->_total_found += $this->_query_arr[$i]['found'];
+            /*
+             * Check to see if the total found is less that the per page limit
+             */
+            if ( $limits[$i]['total'] < $limits[$i]['pp'] ) {
+                $real_pp = $limits[$i]['total'];
+                $limits[$i]['pp'] = $real_pp;
+            } else {
+                $real_pp = $limits[$i]['pp'];
+                $limits[$i]['limit'] = $real_pp;
+            }
+            /*
+             * Calculate the offset based on how many we can fit on a page
+             */
+            $name = $limits[$i]['name'];
+            if ( isset($_post_offset[$name]) && isset($_REQUEST['np']) && $_REQUEST['np'] == 1 ) {
+                $limits[$i]['offset'] = COM_applyFilter($_post_offset[$name],true) + COM_applyFilter($_post_pp[$name],true);
+            } else {
+                $limits[$i]['offset'] = ($this->_page - 1) * $limits[$i]['pp'];
+                if ( $limits[$i]['offset'] < 0 ) {
+                    $limits[$i]['offset'] = 0;
+                }
+            }
+
+            /*
+             * Check to see if offset+limit is greater
+             */
+
+            if ( ($limits[$i]['offset'] + $limits[$i]['pp']) > $limits[$i]['total']) {
+                $limits[$i]['pp'] = ($limits[$i]['total'] - $limits[$i]['offset']);
+                $real_pp = $limits[$i]['pp'];
+            }
+
+            /*
+             * Check to see if the offset is greater than the total
+             */
+            if ( $limits[$i]['offset'] >= $limits[$i]['total'] ) {
+                // set limit to 0 so we will skip later
+                $limits[$i]['limit'] = 0;
+            } else {
+                $limits[$i]['limit']  = $real_pp;
+                $bucket += $real_pp;
+            }
+        }
+        /*
+         * Check to see if the bucket limit is too big (all searches returned less)
+         */
+        if ( ( $this->_page  * $bucket_limit ) > $this->_total_found ) {
+            $shortby = ( $this->_page  * $bucket_limit ) - $this->_total_found;
+            $bucket_limit = $bucket_limit - $shortby;
+        }
+        /*
+         * now loop through the bunch to fill the gaps, we'll loop several times
+         */
+        $done = 1;
+        while ( $bucket < $bucket_limit ) {
+            $done = 1;
+            for ($i = 0; $i < count($this->_query_arr); $i++) {
+                if ( ($limits[$i]['offset'] + $limits[$i]['limit']) < $limits[$i]['total'] ) {
+                    $limits[$i]['pp']++;
+                    $limits[$i]['limit']++;
+                    $bucket++;
+                    $done = 0;
+                    if ( $bucket >= $bucket_limit ) {
+                        break;
+                    }
+                }
+            }
+            if ( $done ) {
+                break;
+            }
+            if ( $bucket >= $bucket_limit) {
+                break;
+            }
+        }
+
+        for ($i = 0; $i < count($this->_query_arr); $i++) {
+            if ($limits[$i]['limit'] != 0 ) {
+                $pp_total+=$limits[$i]['pp'];
+            }
+        }
 
         // Execute each query in turn
         $rows_arr = $this->_preset_rows;
-        for ($i = 0; $i < count($this->_query_arr); $i++)
-        {
-            if ($limits[$i]['limit'] == 0 || $limits[$i]['limit'] < 0)
+        for ($i = 0; $i < count($this->_query_arr); $i++) {
+            if ($limits[$i]['limit'] == 0 || $limits[$i]['limit'] < 0) {
                 continue;
-            $limit_sql = " LIMIT {$limits[$i]['offset']},{$limits[$i]['limit']}";
-
-            if (is_array($this->_query_arr[$i]['sql']))
-            {
-                $this->_query_arr[$i]['sql']['mysql'] .= $order_sql . $limit_sql;
-                $this->_query_arr[$i]['sql']['mssql'] .= $order_sql . $limit_sql;
             }
-            else
-                $this->_query_arr[$i]['sql'] .= $order_sql . $limit_sql;
+            if ($this->_query_arr[$i]['type'] == 'sql' ) {
+                $limit_sql = " LIMIT {$limits[$i]['offset']},{$limits[$i]['limit']}";
+                if (is_array($this->_query_arr[$i]['sql'])) {
+                    $this->_query_arr[$i]['sql']['mysql'] .= $order_sql . $limit_sql;
+                    $this->_query_arr[$i]['sql']['mssql'] .= $order_sql . $limit_sql;
+                } else {
+                    $this->_query_arr[$i]['sql'] .= $order_sql . $limit_sql;
+                }
 
-            $result = DB_query($this->_query_arr[$i]['sql']);
+                $result = DB_query($this->_query_arr[$i]['sql']);
 
-            while ($A = DB_fetchArray($result))
-            {
-                $col = array();
-                $col[SQL_TITLE] = $this->_query_arr[$i]['title'];
-                $col[SQL_NAME] = $this->_query_arr[$i]['name'];
+                while ($A = DB_fetchArray($result)) {
+                    $col = array();
+                    $col[SQL_TITLE] = $this->_query_arr[$i]['title'];
+                    $col[SQL_NAME] = $this->_query_arr[$i]['name'];
 
-                foreach ($this->_fields as $field)
-                {
-                    if (!is_numeric($field['name'])) {
-                        if ($field['name'] == '_html') {
-                            $col[$field['name']] = $field['format'];
-                        } else {
-                            $col[ $field['name'] ] = $A[ $field['name'] ];
+                    foreach ($this->_fields as $field) {
+                        if (!is_numeric($field['name'])) {
+                            if ($field['name'] == '_html') {
+                                $col[$field['name']] = $field['format'];
+                            } else {
+                                $col[ $field['name'] ] = $A[ $field['name'] ];
+                            }
                         }
                     }
+                    // Need to call the format function before and after
+                    // sorting the results.
+                    if (is_callable($this->_function)) {
+                        $col = call_user_func($this->_function, true, $col);
+                    }
+                    $rows_arr[] = $col;
                 }
+            } else if ( $this->_query_arr[$i]['type'] == 'text' ) {
+                $sqlFunction = 'plugin_executepluginsearch_'.$this->_query_arr[$i]['name'];
+                $sqlResults  = $sqlFunction($this->_query_arr[$i]['sql'],$limits[$i]['offset'],$limits[$i]['limit']);
+                if ( is_array($sqlResults) ) {
+                    foreach ($sqlResults as $A) {
+                        $col = array();
+                        $col[SQL_TITLE] = $this->_query_arr[$i]['title'];
+                        $col[SQL_NAME] = $this->_query_arr[$i]['name'];
 
-                // Need to call the format function before and after
-                // sorting the results.
-                if (is_callable($this->_function))
-                {
-                    $col = call_user_func($this->_function, true, $col);
+                        foreach ($this->_fields as $field) {
+                            if (!is_numeric($field['name'])) {
+                                if ($field['name'] == '_html') {
+                                    $col[$field['name']] = $field['format'];
+                                } else {
+                                    $col[ $field['name'] ] = $A[ $field['name'] ];
+                                }
+                            }
+                        }
+
+                        // Need to call the format function before and after
+                        // sorting the results.
+                        if (is_callable($this->_function)) {
+                            $col = call_user_func($this->_function, true, $col);
+                        }
+                        $rows_arr[] = $col;
+                    }
                 }
-
-                $rows_arr[] = $col;
             }
         }
-
         // Sort the final array
         $direction = $this->_sort_arr['direction'] == 'asc' ? SORT_ASC : SORT_DESC;
         $column = array();
-        foreach ($rows_arr as $sortarray)
+        foreach ($rows_arr as $sortarray) {
             $column[] = strip_tags($sortarray[ $this->_sort_arr['field'] ]);
+        }
         array_multisort($column, $direction, $rows_arr);
 
+        $this->_limits = $limits;
         return $rows_arr;
     }
 
@@ -456,7 +578,7 @@ class ListFactory {
      */
     function getFormattedOutput($rows_arr, $title, $list_top = '', $list_bottom = '', $show_sort = true, $show_limit = true)
     {
-        global $_CONF, $_IMAGE_TYPE, $LANG_ADMIN, $LANG09;
+        global $_CONF, $_IMAGE_TYPE, $LANG_ADMIN, $LANG09,$LANG05;
 
         // get all template fields.
         $list_templates = new Template($_CONF['path_layout'] . 'lists/' . $this->_style);
@@ -472,6 +594,24 @@ class ListFactory {
         $list_templates->set_var('xhtml', XHTML);
         $list_templates->set_var('site_url', $_CONF['site_url']);
         $list_templates->set_var('layout_url', $_CONF['layout_url']);
+
+        $search_helper = '';
+
+        $string_offsets = '';
+        $string_pp = '';
+        for ($i=0;$i<count($this->_limits);$i++) {
+            if ( $i != 0 ) {
+                $string_offsets.=',';
+                $string_pp.=',';
+            }
+            $name  = $this->_limits[$i]['name'];
+            $value = $this->_limits[$i]['offset'];
+            $pp    = $this->_limits[$i]['limit'];
+            $string_offsets .= $name . '='.$value;
+            $string_pp .= $name . '=' . $pp;
+        }
+        $offset_encode = urlencode(base64_encode($string_offsets));
+        $pp_encode = urlencode(base64_encode($string_pp));
 
         if (count($rows_arr) == 0)
         {
@@ -531,6 +671,7 @@ class ListFactory {
         }
 
         // Draw the sorting select box/table headings
+
         foreach ($this->_fields as $field)
         {
             if ($field['display'] == true && $field['title'] != '')
@@ -538,6 +679,7 @@ class ListFactory {
                 $text = $sort_text . $field['title'];
                 $subtags = '';
                 $selected = '';
+/* ----------------------------------------------------------------
                 if ($show_sort && $field['sort'] != false)
                 {
                     $direction = $this->_def_sort_arr['direction'];
@@ -551,7 +693,7 @@ class ListFactory {
 
                     $subtags = $subtag."order={$field['name']}&amp;direction=$direction';\"";
                 }
-
+------------------------------------------------------------------ */
                 // Write field
                 $list_templates->set_var('sort_text', $text);
                 $list_templates->set_var('sort_subtags', $subtags);
@@ -582,13 +724,13 @@ class ListFactory {
                         $fieldvalue = $r + $offset;
                     else if (!empty($row[ $field['name'] ]))
                         $fieldvalue = $row[ $field['name'] ];
-if ( $fieldvalue != '' ) {
-                    $fieldvalue = sprintf($field['format'], $fieldvalue, $field['title']);
+                    if ( $fieldvalue != '' ) {
+                        $fieldvalue = sprintf($field['format'], $fieldvalue, $field['title']);
 
-                    // Write field
-                    $list_templates->set_var('field_text', $fieldvalue);
-                    $list_templates->parse('item_field', 'field', true);
-}
+                        // Write field
+                        $list_templates->set_var('field_text', $fieldvalue);
+                        $list_templates->parse('item_field', 'field', true);
+                    }
                 }
             }
 
@@ -600,12 +742,23 @@ if ( $fieldvalue != '' ) {
         }
 
         // Print page numbers
-        $page_url = $this->_page_url . 'order=' . $this->_sort_arr['field'] . '&amp;direction=' . $this->_sort_arr['direction'] . '&amp;results=' . $this->_per_page;
+        $page_url = $this->_page_url . 'order=' . $this->_sort_arr['field'] . '&amp;direction=' . $this->_sort_arr['direction'] . '&amp;results=' . $this->_per_page . '&amp;page='.$this->_page.'&amp;i='.$offset_encode.'&amp;j='.$pp_encode;
         $num_pages = ceil($this->_total_found / $this->_per_page);
-        if ($num_pages > 1)
-            $list_templates->set_var('google_paging', COM_printPageNavigation($page_url, $this->_page, $num_pages, 'page=', false, '', ''));
-        else
-            $list_templates->set_var('google_paging', '');
+        $gp = '';
+        if ( $num_pages > 1 ) {
+            if ( $this->_page == 1 ) {
+                $gp .= '[&nbsp;' . '<a href="'.$page_url.'&amp;np=1">'.$LANG05[5].'</a>&nbsp;]';
+            } else {
+                if ( $this->_page < $num_pages ) {
+                    $gp .= '[&nbsp;' . '<a href="'.$page_url.'&amp;pp=1">'.$LANG05[6].'</a>&nbsp;]&nbsp;&nbsp;&nbsp;';
+                    $gp .= '[&nbsp;' . '<a href="'.$page_url.'&amp;np=1">'.$LANG05[5].'</a>&nbsp;]';
+                } else {
+                    $gp .= '[&nbsp;' . '<a href="'.$page_url.'&amp;pp=1">'.$LANG05[6].'</a>&nbsp;]';
+                }
+            }
+        }
+        $list_templates->set_var('google_paging',$gp);
+        $list_templates->set_var('page_url',$page_url);
 
         $list_top = @sprintf($list_top, $offset+1, $r+$offset-1, $this->_total_found);
         $list_templates->set_var('list_top', $list_top);

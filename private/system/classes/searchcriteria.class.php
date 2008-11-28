@@ -45,18 +45,33 @@ class SearchCriteria {
     var $_pluginName;
     var $_rank;
     var $_url_rewrite;
+    var $_type;
+    var $_num_results = 0;
 
-    function SearchCriteria($pluginName, $pluginLabel)
+    function SearchCriteria($pluginName, $pluginLabel,$type='sql')
     {
         $this->_pluginName = $pluginName;
         $this->_pluginLabel = $pluginLabel;
         $this->_url_rewrite = false;
         $this->_rank = 3;
+        $this->_type = $type;
     }
 
     function setSQL($sql)
     {
         $this->_sql = $sql;
+    }
+    function setNumResults($numResults)
+    {
+        $this->_num_results = $numResults;
+    }
+    function getType()
+    {
+        return $this->_type;
+    }
+    function getNumResults()
+    {
+        return $this->_num_results;
     }
 
     function setFTSQL($ftsql)

@@ -305,7 +305,7 @@ class Search {
                     if ($A['uid'] == $this->_author) {
                         $options .= ' selected="selected"';
                     }
-                    $options .= '>' . htmlspecialchars(COM_getDisplayName('', $A['username'], $A['fullname'])) . '</option>';
+                    $options .= '>' . htmlspecialchars(COM_getDisplayName($A['uid'], $A['username'], $A['fullname'])) . '</option>';
                 }
                 $searchform->set_var('author_option_list', $options);
                 $searchform->parse('author_form_element', 'authors', true);
@@ -408,7 +408,6 @@ class Search {
         if ($_DB_dbms == 'mssql')
             $sql .= "'/comment.php?mode=view&amp;cid=' + CAST(c.cid AS varchar(10)) AS url ";
         else
-//            $sql .= "CONCAT('/comment.php?mode=view&amp;cid=',c.cid) AS url ";
             $sql .= "CONCAT('/article.php?story=',s.sid) AS url ";
 
         $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
@@ -523,26 +522,7 @@ class Search {
             $obj->setField('',          '_html',       true,       false, '</span>');
             $this->_wordlength = 50;
         }
-        /*
-        // This atrocity should never see the light of day!
-        // TODO: when I lean HTML
-        else if ($style == 'simple')
-        {
-            $obj->setStyle('inline');
-            $obj->setField('',          '_html',       true,       false, '<span>');
-            $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<b>%d.</b>');
-            $obj->setField('',          SQL_TITLE,     $show_type, true,  '%s');
-            $obj->setField('',          'title',       true,       true,  '<b>%s</b> - ');
-            $obj->setField('',          'description', true,       false, '%s');
-            $obj->setField('',          '_html',       true,       false, '</span>');
-            //$obj->setField('',          '_html',       true,       false, '</table>');
-            //$obj->setField($LANG09[18], 'uid',         $show_user, true,  $LANG01[104].' %s ');
-            $obj->setField($LANG09[17], 'date',        true,       true,  '<span align=right>'.$LANG01[36].' %s</span>');
-            $obj->setField($LANG09[50], 'hits',        $show_hits, true,  '');
-            //$obj->setField('',          '_html',       true,       false, '</span>');
-            $this->_wordlength = 10;
-        }
-        */
+
         if ( isset($_CONF['default_search_order']) ) {
             $obj->setDefaultSort($_CONF['default_search_order']);
         } else {
@@ -572,27 +552,28 @@ class Search {
 
         foreach ($result_plugins as $result)
         {
-            if (is_a($result, 'SearchCriteria'))
-            {
+            if (is_a($result, 'SearchCriteria')) {
                 $debug_info .= $result->getName() . " using APIv2, ";
 
-                if ($_CONF['search_use_fulltext'] == true && $result->getFTSQL() != '')
-                {
-                    $debug_info .= "search using FULLTEXT\n";
-                    $sql = $result->getFTSQL();
+                $type = $result->getType();
+                if ( $type == 'sql' ) {
+                    if ($_CONF['search_use_fulltext'] == true && $result->getFTSQL() != '') {
+                        $debug_info .= "search using FULLTEXT\n";
+                        $sql = $result->getFTSQL();
+                    } else {
+                        $debug_info .= "search using LIKE\n";
+                        $sql = $result->getSQL();
+                    }
+
+                    $sql = $this->_convertsql($sql);
+
+                    $debug_info .= "\tSQL = " . print_r($sql,1) . "\n";
+
+                    $obj->setQuery($result->getLabel(), $result->getName(), $sql, $result->getRank());
+                    $this->_url_rewrite[ $result->getName() ] = $result->UrlRewriteEnable() ? true : false;
+                } else if ($type == 'text') {
+                    $obj->setQueryText($result->getLabel(), $result->getName(), $this->_query, $result->getNumResults(), $result->getRank());
                 }
-                else
-                {
-                    $debug_info .= "search using LIKE\n";
-                    $sql = $result->getSQL();
-                }
-
-                $sql = $this->_convertsql($sql);
-
-                $debug_info .= "\tSQL = " . print_r($sql,1) . "\n";
-
-                $obj->setQuery($result->getLabel(), $result->getName(), $sql, $result->getRank());
-                $this->_url_rewrite[ $result->getName() ] = $result->UrlRewriteEnable() ? true : false;
                 $new_api++;
             }
             else if (is_a($result, 'Plugin') && $result->num_searchresults != 0)
@@ -611,39 +592,57 @@ class Search {
 
                 $label = str_replace($LANG09[59], '', $result->searchlabel);
 
-                $num_results += $result->num_itemssearched;
-
-                // Extract the results
-                foreach ($result->searchresults as $old_row)
-                {
-                    if ($col_date != -1)
-                    {
-                        // Convert the date back to a timestamp
-                        $date = $old_row[$col_date];
-                        $date = substr($date, 0, strpos($date, '@'));
-                        if ($date == '')
-                            $date = $old_row[$col_date];
-                        else
-                            $date = strtotime($date);
+                if ( $result->num_itemssearched > 0 ) {
+                    $_page = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'], true) : 1;
+                    if (isset($_REQUEST['results'])) {
+                        $_per_page = COM_applyFilter($_REQUEST['results'], true);
+                    } else {
+                        $_per_page = $obj->getPerPage();
                     }
+                    $obj->addTotalRank(3);
+                    $pp = round((3 / $obj->getTotalRank()) * $_per_page);
+                    $offset = ($_page - 1) * $pp;
+                    $limit  = $pp;
 
-                    $api_results = array(
-                                SQL_NAME =>       $result->plugin_name,
-                                SQL_TITLE =>      $label,
-                                'title' =>        $col_title == -1 ? $_CONF['search_no_data'] : $old_row[$col_title],
-                                'description' =>  $col_desc == -1 ? $_CONF['search_no_data'] : $old_row[$col_desc],
-                                'date' =>         $col_date == -1 ? '&nbsp;' : $date,
-                                'uid' =>          $col_user == -1 ? '' : $old_row[$col_user],
-                                'hits' =>         $col_hits == -1 ? '0' : str_replace(',', '', $old_row[$col_hits]),
-                                'url' =>          $old_row[$col_url]
-                            );
+                    $obj->addToTotalFound($result->num_itemssearched);
 
-                    $obj->addResult($api_results);
+                    $counter = 0;
+
+                    // Extract the results
+                    foreach ($result->searchresults as $old_row)
+                    {
+                        if ( $counter >= $offset && $counter <= ($offset+$limit) ) {
+                            if ($col_date != -1)
+                            {
+                                // Convert the date back to a timestamp
+                                $date = $old_row[$col_date];
+                                $date = substr($date, 0, strpos($date, '@'));
+                                if ($date == '')
+                                    $date = $old_row[$col_date];
+                                else
+                                    $date = strtotime($date);
+                            }
+
+                            $api_results = array(
+                                        SQL_NAME =>       $result->plugin_name,
+                                        SQL_TITLE =>      $label,
+                                        'title' =>        $col_title == -1 ? $_CONF['search_no_data'] : $old_row[$col_title],
+                                        'description' =>  $col_desc == -1 ? $_CONF['search_no_data'] : $old_row[$col_desc],
+                                        'date' =>         $col_date == -1 ? '&nbsp;' : $date,
+                                        'uid' =>          $col_user == -1 ? '' : $old_row[$col_user],
+                                        'hits' =>         $col_hits == -1 ? '0' : str_replace(',', '', $old_row[$col_hits]),
+                                        'url' =>          $old_row[$col_url]
+                                    );
+
+                            $obj->addResult($api_results);
+                        }
+                        $counter++;
+                    }
                 }
+//                $num_results += $counter;
                 $old_api++;
             }
         }
-
         // Find out how many plugins are on the old/new system
         $debug_info .= "\nAPIv1: $old_api\nAPIv2: $new_api";
 
@@ -682,8 +681,7 @@ class Search {
             $retval = $obj->getFormattedOutput($results, $LANG09[11], $retval, '', $_CONF['search_show_sort'], $_CONF['search_show_limit']);
         }
 
-        //echo '<pre>'.$debug_info.'</pre>';
-
+//        echo '<pre>'.$debug_info.'</pre>';
         return $retval;
     }
 
@@ -729,12 +727,20 @@ class Search {
                 $row['url'] = COM_buildUrl($row['url']);
             $row['url'] .= (strpos($row['url'],'?') ? '&amp;' : '?') . 'query=' . urlencode($this->_query);
 
+            if ( $row['title'] == '' ) {
+                $row['title'] = $row[SQL_TITLE];
+            }
+
             $row['title'] = $this->_shortenText($this->_query, $row['title'], 6);
-            $row['title'] = stripslashes(str_replace('$', '&#36;', $row['title']));
+            $row['title'] = str_replace('$', '&#36;', $row['title']);
             $row['title'] = COM_createLink($row['title'], $row['url']);
 
+            if ( $row['description'] == '' ) {
+                $row['description'] = $_CONF['search_no_data'];
+            }
+
             if ($row['description'] != $_CONF['search_no_data'])
-                $row['description'] = stripslashes($this->_shortenText($this->_query, $row['description'], $this->_wordlength));
+                $row['description'] = $this->_shortenText($this->_query, $row['description'], $this->_wordlength);
 
             $row['date'] = @strftime($_CONF['daytime'], $row['date']);
             $row['hits'] = COM_NumberFormat($row['hits']).' '; // simple solution to a silly problem!
