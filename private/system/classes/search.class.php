@@ -511,7 +511,7 @@ class Search {
         else if ($style == 'google')
         {
             $obj->setStyle('inline');
-            $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<b>%d.</b>');
+            $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<strong>%d.</strong>');
             $obj->setField($LANG09[16], 'title',       true,       true,  '%s<br'.XHTML.'>');
             $obj->setField('',          'description', true,       false, '%s<br'.XHTML.'>');
             $obj->setField('',          '_html',       true,       false, '<span style="color:green;">');
