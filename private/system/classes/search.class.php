@@ -725,7 +725,7 @@ class Search {
             $row['url'] = ($row['url'][0] == '/' ? $_CONF['site_url'] : '') . $row['url'];
             if ($this->_url_rewrite[$row[SQL_NAME]])
                 $row['url'] = COM_buildUrl($row['url']);
-            $row['url'] .= (strpos($row['url'],'?') ? '&amp;' : '?') . 'query=' . urlencode($this->_query);
+//            $row['url'] .= (strpos($row['url'],'?') ? '&amp;' : '?') . 'query=' . urlencode($this->_query);
 
             if ( $row['title'] == '' ) {
                 $row['title'] = $row[SQL_TITLE];
