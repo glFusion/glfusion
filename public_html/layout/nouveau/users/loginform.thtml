@@ -5,7 +5,7 @@
                 <form action="{site_url}/users.php" method="post">
                     <table cellspacing="0" cellpadding="3">
                         <tr>
-                            <td colspan="2">{lang_message}  {lang_newreglink}</td>
+                            <td colspan="2">{lang_message}</td>
                         </tr>
                         <tr>
                             <td class="alignright"><b><label for="loginname">{lang_username}</label>:</b></td>
@@ -15,7 +15,8 @@
                         <tr>
                             <td class="alignright"><b><label for="passwd">{lang_password}</label>:</b></td>
                             <td><input type="password" name="passwd" size="16"{xhtml}>
-                                &nbsp;<a href="{site_url}/users.php?mode=getpassword" rel="nofollow">{lang_forgetpassword}</a>
+                                &nbsp;<a href="{site_url}/users.php?mode=getpassword" rel="nofollow">{lang_forgetpassword}</a><br{xhtml}
+                                <div style="position:relative; top:-43px; left:111px">&nbsp;{lang_newreglink}</div>
                             </td>
                         </tr>
                         <tr>
