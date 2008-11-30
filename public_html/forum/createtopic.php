@@ -172,7 +172,7 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
                 // Check for any users subscribed notifications
                 gf_chknotifications($forum,$editid,$uid);
             }
-            $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topicparent&amp;page=$page#$editid";
+            $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topicparent&topic=$editid#$editid";
             forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19']);
         } else {
             alertMessage($LANG_GF02['msg18']);
