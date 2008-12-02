@@ -669,7 +669,7 @@ class getid3_lib
 			}
 			fclose($fp);
 		}
-		unlink($data_filename);
+		@unlink($data_filename);
 		return $result;
 	}
 
@@ -1161,7 +1161,7 @@ class getid3_lib
 				fclose($tmp);
 				$GetDataImageSize = @GetImageSize($tempfilename);
 			}
-			unlink($tempfilename);
+			@unlink($tempfilename);
 		}
 		return $GetDataImageSize;
 	}
