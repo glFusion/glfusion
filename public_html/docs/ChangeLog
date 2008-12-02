@@ -2,6 +2,41 @@ glFusion ChangeLog
 
 v1.1.1
 ------
+- Bumped version number to v1.1.1 (Mark)
+        public_html/lib-common.php
+
+- Fixed issue with openbase_dir restrictions when processing mime types (Mark)
+        private/lib/getid3/getid3.lib.php
+
+- Added new multi-byte function: MBYTE_is_utf8() returns true if a valid
+  utf-8 string (Mark)
+        private/system/lib-mbyte.php
+
+- Calendar Plugin: Fixed an issue where the day of the week name would not
+  properly display on UTF-8 sites (Mark)
+        private/plugins/calendar/functions.inc
+
+- Configuration now checks to see if plugin help file exists before placing
+  the help icon next to the configuration option (Mark)
+        private/system/classes/config.class.php
+
+- FileMgmt: Fixed a bug where non-approved uploads would show in RSS feed (Mark)
+        private/plugins/filemgmt/functions.inc
+
+- Forum Plugin: Fixed bug where it would not return you to the post you just
+  edited, instead it would take you to the first post. (Mark)
+        public_html/forum/createtopic.php
+
+- Cleaned up language file (Eric)
+        private/language/english.php
+        private/language/english_utf-8.php
+
+- Cleaned up login form (Eric)
+        public_html\layout\nouveau\users\loginform.thtml
+
+- Update MooTicker RSS feeds (Eric)
+        private/system/lib-widgets.php
+
 - Added a feature to turn on / off the FileMgmt integration with the Forum
   plugin for storing uploaded files. (Mark)
         private/plugins/forum/config.php
@@ -29,6 +64,8 @@ v1.1.1
         private/system/classes/listfactory.class.php
         public_html/layout/nouveau/lists/inline/list.thtml
         public_html/layout/nouveau/lists/table/list.thtml
+
+        private/plugins/forum/functions.inc
 
         **Also requires and update to DokuWiki** functions.inc
 
