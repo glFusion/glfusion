@@ -4,6 +4,7 @@ v1.1.1
 ------
 - Bumped version number to v1.1.1 (Mark)
         public_html/lib-common.php
+        public_html/admin/install/index.php
 
 - Fixed issue with openbase_dir restrictions when processing mime types (Mark)
         private/lib/getid3/getid3.lib.php
