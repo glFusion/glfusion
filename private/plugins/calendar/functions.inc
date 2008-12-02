@@ -212,6 +212,15 @@ function phpblock_calendar( $help='', $title='' )
                     $dayName2 = strftime( '%A', $theTime2 );
                     $abbrDate2 = strftime( $dateonly, $theTime2 );
 
+                    if ( COM_getCharset() == 'utf-8' ) {
+                        if ( !MBYTE_is_utf8($dayName1) ) {
+                            $dayName1 = utf8_encode($dayName1);
+                        }
+                        if ( !MBYTE_is_utf8($dayName2) ) {
+                            $dayName2 = utf8_encode($dayName2);
+                        }
+                    }
+
                     $todaysEvent = false;
                     if( date( 'Ymd', $theTime1 ) == date( 'Ymd', time())) {
                         $todaysEvent = true;
