@@ -40,7 +40,7 @@ if (!defined('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
-define('TEMPLATE_VERSION','2.3.4');
+define('TEMPLATE_VERSION','2.4.0');
 
 /**
  * The template class allows you to keep your HTML code in some external files
@@ -92,6 +92,8 @@ class Template
   * 2 = debug calls to get variable
   * 4 = debug internals (outputs all function calls with parameters).
   * 8 = debug caching (incomplete)
+  * 16 = Calls to hooks
+  * 32 = debug instance calls
   *
   * Note: setting $this->debug = true will enable debugging of variable
   * assignments only which is the same behaviour as versions up to release 7.2d.
@@ -254,17 +256,21 @@ class Template
         $root = Array($root);
     }
     if ($this->debug & 4) {
-      echo '<p><b>set_root:</b> root = Array(' . (count($root) > 0 ? '"' . implode('","', $root) . '"' : '') .")</p>\n";
+      $this->logv('set_root', 'root', $root);
     }
     if (isset($TEMPLATE_OPTIONS['hook']['set_root'])) {
         $function = $TEMPLATE_OPTIONS['hook']['set_root'];
         if (is_callable($function)) {
+            if ($this->debug & 16) {
+                is_callable($function, true, $printed_funcname);
+                $this->log('set_root', 'calling hook: ' . $printed_funcname);
+            }
             $root = call_user_func($function, $root);
         }
     }
 
-    if ($this->debug & 4) {
-      echo '<p><b>set_root:</b> root = Array(' . (count($root) > 0 ? '"' . implode('","', $root) . '"' : '') .")</p>\n";
+    if ($this->debug & 8) {
+      $this->logv('set_root', 'root', $root);
     }
     $this->root = Array();
     $missing = Array();
@@ -278,8 +284,8 @@ class Template
         }
         $this->root[] = $r;
     }
-    if ($this->debug & 4) {
-      echo '<p><b>set_root:</b> root = Array(' . (count($root) > 0 ? '"' . implode('","', $root) . '"' : '') .")</p>\n";
+    if ($this->debug & 8) {
+      $this->logv('set_root', 'root', $root);
     }
     if (count($this->root) > 0) {
         return true;
@@ -326,7 +332,7 @@ class Template
     }
 
     if ($this->debug & 4) {
-      echo "<p><b>unknowns:</b> unknowns = $unknowns</p>\n";
+      $this->log('set_unknowns', 'unknowns = ' . $unknowns);
     }
     $this->unknowns = $unknowns;
   }
@@ -356,7 +362,7 @@ class Template
   function set_file($varname, $filename = "") {
     if (!is_array($varname)) {
       if ($this->debug & 4) {
-        echo "<p><b>set_file:</b> (with scalar) varname = $varname, filename = $filename</p>\n";
+        $this->log('set_file (scalar)', 'varname = ' . $varname . ', filename = ' . $filename);
       }
       if ($filename == "") {
         $this->halt("set_file: For varname $varname filename is empty.");
@@ -365,11 +371,11 @@ class Template
       $filename = $this->check_cache($varname, $this->filename($filename));
       $this->file[$varname] = $filename;
     } else {
+      if ($this->debug & 4) {
+        $this->logv('set_file (array)', 'varname', $varname);
+      }
       reset($varname);
       while(list($v, $f) = each($varname)) {
-        if ($this->debug & 4) {
-          echo "<p><b>set_file:</b> (with array) varname = $v, filename = $f</p>\n";
-        }
         if ($f == "") {
           $this->halt("set_file: For varname $v filename is empty.");
           return false;
@@ -403,6 +409,9 @@ class Template
   * @return    boolean
   */
   function set_block($parent, $varname, $name = "") {
+      if ($this->debug & 4) {
+        $this->log('set_block', "parent = $parent, varname = $varname, name = $name");
+      }
       $this->block_replace[$varname] = !empty($name)?$name:$parent;
 
       $filename = $this->file[$parent];
@@ -443,7 +452,7 @@ class Template
     if (!is_array($varname)) {
       if (!empty($varname)) {
         if ($this->debug & 1) {
-          printf("<b>set_var:</b> (with scalar) <b>%s</b> = '%s'<br>\n", $varname, htmlentities($value));
+          $this->log('set_var (scalar)', $varname . ' = \'' . htmlentities($value) . '\'');
         }
 //        $this->varkeys[$varname] = "/".$this->varname($varname)."/";
         if ($append && isset($this->varvals[$varname])) {
@@ -460,7 +469,7 @@ class Template
       while(list($k, $v) = each($varname)) {
         if (!empty($k)) {
           if ($this->debug & 1) {
-            printf("<b>set_var:</b> (with array) <b>%s</b> = '%s'<br>\n", $k, htmlentities($v));
+            $this->log('set_var (scalar)', $k . ' = \'' . htmlentities($v) . '\'');
           }
 //          $this->varkeys[$k] = "/".$this->varname($k)."/";
           if ($append && isset($this->varvals[$k])) {
@@ -500,7 +509,7 @@ class Template
     if (!is_array($varname)) {
       if (!empty($varname)) {
         if ($this->debug & 1) {
-          printf("<b>clear_var:</b> (with scalar) <b>%s</b><br>\n", $varname);
+          $this->log('clear_var (scalar)', $varname);
         }
         $this->set_var($varname, "");
       }
@@ -509,7 +518,7 @@ class Template
       while(list($k, $v) = each($varname)) {
         if (!empty($v)) {
           if ($this->debug & 1) {
-            printf("<b>clear_var:</b> (with array) <b>%s</b><br>\n", $v);
+            $this->log('clear_var (array)', $v);
           }
           $this->set_var($v, "");
         }
@@ -541,18 +550,18 @@ class Template
     if (!is_array($varname)) {
       if (!empty($varname)) {
         if ($this->debug & 1) {
-          printf("<b>unset_var:</b> (with scalar) <b>%s</b><br>\n", $varname);
+          $this->log('unset (scalar)', $varname);
         }
         unset($this->varkeys[$varname]);
         unset($this->varvals[$varname]);
       }
     } else {
+      if ($this->debug & 1) {
+        $this->log('unset_var (array)', 'parameter', $varname);
+      }
       reset($varname);
       while(list($k, $v) = each($varname)) {
         if (!empty($v)) {
-          if ($this->debug & 1) {
-            printf("<b>unset_var:</b> (with array) <b>%s</b><br>\n", $v);
-          }
           unset($this->varkeys[$v]);
           unset($this->varvals[$v]);
         }
@@ -586,14 +595,14 @@ class Template
     } else {
       // $varname does not reference a file so return
       if ($this->debug & 4) {
-        echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
+        $this->log('subst', "varname $varname does not reference a file");
       }
       return true;
     }
     if (!is_readable($filename)) {
       // file missing
       if ($this->debug & 4) {
-        echo "<p><b>subst:</b> file $filename Does Not Exist or is not readable</p>\n";
+        $this->log('subst', "file $filename Does Not Exist or is not readable");
       }
       return true;
     }
@@ -630,7 +639,7 @@ class Template
   function slow_subst($varname) {
     $varvals_quoted = array();
     if ($this->debug & 4) {
-      echo "<p><b>subst:</b> varname = $varname</p>\n";
+      $this->log('slow_subst', "varname = $varname");
     }
 
     if (count($this->varkeys) < count($this->varvals)) {
@@ -649,7 +658,8 @@ class Template
 
     $str = $this->get_var($varname);
 //    $str = preg_replace($this->varkeys, $varvals_quoted, $str);
-    $str = str_replace($this->varkeys, $varvals_quoted, $str);
+//    $str = str_replace($this->varkeys, $varvals_quoted, $str);
+    $str = str_replace($this->varkeys, $this->varvals, $str);
     return $str;
   }
 
@@ -669,7 +679,7 @@ class Template
   */
   function psubst($varname) {
     if ($this->debug & 4) {
-      echo "<p><b>psubst:</b> varname = $varname</p>\n";
+      $this->log('psubst', "varname = $varname");
     }
     print $this->subst($varname);
 
@@ -720,7 +730,7 @@ class Template
   function parse($target, $varname, $append = false) {
     if (!is_array($varname)) {
       if ($this->debug & 4) {
-        echo "<p><b>parse:</b> (with scalar) target = $target, varname = $varname, append = $append</p>\n";
+        $this->log('parse (scalar)', "target = $target, varname = $varname, append = $append");
       }
       $str = $this->subst($varname);
       if ($append) {
@@ -732,7 +742,7 @@ class Template
       reset($varname);
       while(list($i, $v) = each($varname)) {
         if ($this->debug & 4) {
-          echo "<p><b>parse:</b> (with array) target = $target, i = $i, varname = $v, append = $append</p>\n";
+          $this->log('parse (array)', "target = $target, varname = $v, append = $append");
         }
         $str = $this->subst($v);
         if ($append) {
@@ -744,7 +754,7 @@ class Template
     }
 
     if ($this->debug & 4) {
-      echo "<p><b>parse:</b> completed</p>\n";
+      $this->log('parse', 'completed');
     }
     return $str;
   }
@@ -769,7 +779,7 @@ class Template
   */
   function pparse($target, $varname, $append = false) {
     if ($this->debug & 4) {
-      echo "<p><b>pparse:</b> passing parameters to parse...</p>\n";
+      $this->log('pparse', 'passing parameters to parse');
     }
     print $this->finish($this->parse($target, $varname, $append));
     return false;
@@ -793,7 +803,7 @@ class Template
   */
   function get_vars() {
     if ($this->debug & 4) {
-      echo "<p><b>get_vars:</b> constructing array of vars...</p>\n";
+      $this->log('get_vars', 'constructing array of vars');
     }
     reset($this->varvals);
     while(list($k, $v) = each($this->varvals)) {
@@ -829,7 +839,7 @@ class Template
         $str = "";
       }
       if ($this->debug & 2) {
-        printf ("<b>get_var</b> (with scalar) <b>%s</b> = '%s'<br>\n", $varname, htmlentities($str));
+        $this->log('get_var (scalar)', $varname . ' = ' . htmlentities($str));
       }
       return $str;
     } else {
@@ -841,7 +851,7 @@ class Template
           $str = "";
         }
         if ($this->debug & 2) {
-          printf ("<b>get_var:</b> (with array) <b>%s</b> = '%s'<br>\n", $v, htmlentities($str));
+          $this->log('get_var (scalar)', $v . ' = ' . htmlentities($str));
         }
         $result[$v] = $str;
       }
@@ -868,7 +878,7 @@ class Template
   */
   function get_undefined($varname) {
     if ($this->debug & 4) {
-      echo "<p><b>get_undefined (DEPRECATED):</b> varname = $varname</p>\n";
+      $this->log('get_undefined (DEPRECATED)', "varname = $varname");
     }
     if (!$this->loadfile($varname)) {
       $this->halt("get_undefined: unable to load $varname.");
@@ -885,7 +895,7 @@ class Template
     while(list($k, $v) = each($m)) {
       if (!isset($this->varvals[$v])) {
         if ($this->debug & 4) {
-         echo "<p><b>get_undefined:</b> undefined: $v</p>\n";
+         $this->log('get_undefined', 'undefined: ' . $v);
         }
         $result[$v] = $v;
       }
@@ -915,6 +925,10 @@ class Template
     if (isset($TEMPLATE_OPTIONS['hook']['finish'])) {
         $function = $TEMPLATE_OPTIONS['hook']['finish'];
         if (is_callable($function)) {
+            if ($this->debug & 16) {
+                is_callable($function, true, $printed_funcname);
+                $this->log('finish', 'calling hook: ' . $printed_funcname);
+            }
             $str = call_user_func($function, $str);
         }
     }
@@ -975,13 +989,11 @@ class Template
   */
   function filename($filename) {
     if ($this->debug & 4) {
-      echo "<p><b>filename:</b> filename = $filename</p>\n";
+      $this->log('filename', "filename = $filename");
     }
-            if ($this->debug & 8) {
-                foreach($this->root as $r) {
-                    echo "root: " . $r . "<br>";
-                }
-            }
+    if ($this->debug & 8) {
+        $this->logv('filename', 'root', $this->root);
+    }
 
     // if path reaches root, just use it.
     if (substr($filename, 0, 1) == '/' ||   // handle unix root /
@@ -997,7 +1009,7 @@ class Template
         foreach ($this->root as $r) {
             $f = $r.'/'.$filename;
             if ($this->debug & 8) {
-              echo "<p><b>filename:</b> filename = $f</p>\n";
+              $this->log('filename', "filename = $f");
             }
             if (file_exists($f)) {
                 return $f;
@@ -1011,7 +1023,7 @@ class Template
 
  /******************************************************************************
   * This function will construct a regexp for a given variable name with any
-  * special chars quoted.
+  * special chars quoted. DEPRECATED: regexp no longer used for individual vars
   *
   * Returns: a string containing an escaped variable name.
   *
@@ -1048,13 +1060,13 @@ class Template
   */
   function loadfile($varname) {
     if ($this->debug & 4) {
-      echo "<p><b>loadfile:</b> varname = $varname</p>\n";
+      $this->log('loadfile', "varname = $varname");
     }
 
     if (!isset($this->file[$varname])) {
       // $varname does not reference a file so return
       if ($this->debug & 4) {
-        echo "<p><b>loadfile:</b> varname $varname does not reference a file</p>\n";
+        $this->log('loadfile', "varname $varname does not reference a file");
       }
       return true;
     }
@@ -1063,7 +1075,7 @@ class Template
       // will only be unset if varname was created with set_file and has never been loaded
       // $varname has already been loaded so return
       if ($this->debug & 4) {
-        echo "<p><b>loadfile:</b> varname $varname is already loaded</p>\n";
+        $this->log('loadfile', "varname $varname is already loaded");
       }
       return true;
     }
@@ -1192,7 +1204,10 @@ class Template
                       break;
             case 's': $ret = htmlspecialchars($ret);
                       break;
-            case 't': $ret = substr($ret, 0, intval(substr($mod,1))); // truncate
+            case 't': $maxlen = intval(substr($mod,1));
+                      if ($maxlen > 0) {
+                          $ret = COM_truncate($ret, $maxlen);
+                      }
                       break;
             }
         }
@@ -1361,9 +1376,9 @@ class Template
   {
     if (strpos($tmplt, '!}') !== false || strpos($tmplt, '$}') !== false) {
         $tmplt = preg_replace_callback(
-                      Array('/\{!(if|elseif|while|echo|global|) (([^\\\']|\\\\|\\\')+?) !\}/',
-                            '/\{!(set) ([-\w\d_\[\]]+) (([^\\\']|\\\\|\\\')+?) !\}/',       // sets a variable
-                            '/\{\($LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\] (([^\\\']|\\\\|\\\')+?) \$\}/',       // Substitutable language independence
+                      Array('/\{\!\!(if|elseif|while|echo|global|) (([^\\\']|\\\\|\\\')+?) \!\!\}/',
+                            '/\{\!\!(set) ([-\w\d_\[\]]+) (([^\\\']|\\\\|\\\')+?) \!\!\}/',       // sets a variable
+                            '/\{(\$LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\] (([^\\\']|\\\\|\\\')+?) \$\}/',       // Substitutable language independence
                            ),
                       Array($this, 'parse_extended_callback'),
                       $tmplt);
@@ -1399,6 +1414,7 @@ class Template
         // Callbacks for replace_extended
         function parse_extended_callback($matches)
         {
+            var_dump($matches);
             global $TEMPLATE_OPTIONS;
             if ($matches[1] == 'set') {
                 $cond = $matches[3];
@@ -1422,7 +1438,7 @@ class Template
 
             $cond = $this->replace_vars($cond,true);
             $cond = $this->replace_lang($cond,true);
-
+var_dump($cond);
             return '<?php ' . $prefix . $cond . $postfix . ' ?>';
         }
 
@@ -1606,6 +1622,9 @@ class Template
   */
   function uncached_var($vars)
   {
+    if ($this->debug & 4) {
+        $this->log('uncached_var (scalar)', "varname = $varname, filename = $filename");
+    }
     if (empty($vars)) {
         return;
     } elseif (!is_array($vars)) {
@@ -1696,6 +1715,22 @@ class Template
     return false;
   }
 
+  function log($method, $notice) {
+    if ($this->debug) {
+        echo '<p><b>' . $method . ':</b> ' . $notice . "";
+    }
+  }
+  function logv($method, $var, $p) {
+    if ($this->debug) {
+        if (!empty($var)) {
+            $var .= ' = ';
+        }
+        ob_start();
+        var_dump($p);
+        $this->log($method, $var . ob_get_clean());
+    }
+  }
+  
 } // end class
 
 /******************************************************************************

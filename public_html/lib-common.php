@@ -58,7 +58,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.0');
+    define('GVERSION', '1.2.0.svn');
 }
 
 /**
@@ -1597,7 +1597,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         if( function_exists( $function )) {
             $rblocks = $function( $custom['1'], 'right' );
         }
-    } elseif( $rightblock == 1 ) {
+    } elseif( $rightblock == 1 || $_CONF['show_right_blocks'] == 1 ) {
         $rblocks = '';
 
         $rblocks = COM_showBlocks( 'right', $topic );
@@ -5810,7 +5810,7 @@ function COM_applyBasicFilter( $parameter, $isnumeric = false )
 * @return   string                      sanitized URL
 *
 */
-function COM_sanitizeUrl( $url, $allowed_protocols = '', $default_protocol = '' )
+function COM_sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp'), $default_protocol = 'http' )
 {
     global $_CONF;
 
@@ -5970,7 +5970,7 @@ function COM_highlightQuery( $text, $query, $class = 'highlight')
         if( !empty( $searchword ))
         {
             $searchword = preg_quote( str_replace( "'", "\'", $searchword ));
-            $text = preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+            $text = @preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
         }
     }
 
@@ -6450,13 +6450,13 @@ function COM_getLanguageFromBrowser()
         foreach ($accept as $l) {
             $l = explode(';', trim($l));
             $l = $l[0];
-            if (array_key_exists($l, $_CONF['language_files'])) {
+            if (@array_key_exists($l, $_CONF['language_files'])) {
                 $retval = $_CONF['language_files'][$l];
                 break;
             } else {
                 $l = explode('-', $l);
                 $l = $l[0];
-                if (array_key_exists($l, $_CONF['language_files'])) {
+                if (@array_key_exists($l, $_CONF['language_files'])) {
                     $retval = $_CONF['language_files'][$l];
                     break;
                 }

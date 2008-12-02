@@ -44,32 +44,29 @@ if (!defined ('GVERSION')) {
 /**
  * Include the base kses class if not already loaded
  */
-require_once($_CONF['path_system'] . 'classes/kses.class.php');
+require_once $_CONF['path_system'] . 'lib/htmLawed/htmLawed.php';
+require_once $_CONF['path_system'] . 'lib/bbcode/stringparser.class.php';
 
-class sanitize extends kses {
+class sanitize {
 
-    var $string = '';
-    var $_parmissions = '';
-    var $_isnumeric = false;
-    var $_logging = false;
-    var $_setglobal = false;
-    var $_censordata = false;
+    var $string         = '';
+    var $_parmissions   = '';
+    var $_isnumeric     = false;
+    var $_logging       = false;
+    var $_setglobal     = false;
+    var $_censordata    = false;
 
     /* Filter or sanitize single parm */
     function filterparm ($parm) {
 
         $p = $this->Parse( $parm );
 
-        if( $this->_isnumeric )
-        {
+        if( $this->_isnumeric ) {
             // Note: PHP's is_numeric() accepts values like 4e4 as numeric
-            if( !is_numeric( $p ) || ( preg_match( '/^([0-9]+)$/', $p ) == 0 ))
-            {
+            if( !is_numeric( $p ) || ( preg_match( '/^([0-9]+)$/', $p ) == 0 )) {
                $p = 0;
             }
-        }
-        else
-        {
+        } else {
             $p = preg_replace( '/\/\*.*/', '', $p );
             $pa = explode( "'", $p );
             $pa = explode( '"', $pa[0] );
@@ -79,10 +76,8 @@ class sanitize extends kses {
             $p = $pa[0];
         }
 
-        if( $this->logging )
-        {
-            if( strcmp( $p, $parm ) != 0 )
-            {
+        if( $this->logging ) {
+            if( strcmp( $p, $parm ) != 0 ) {
                 COM_errorLog( "Filter applied: >> $parm << filtered to $p [IP {$_SERVER['REMOTE_ADDR']}]", 1);
             }
         }
@@ -101,9 +96,7 @@ class sanitize extends kses {
                 $return_data[]  = addslashes($this->filterHTML($var));
             }
             return $return_data;
-        }
-        else
-        {
+        } else {
             $data = $this->filterHTML($data);
             $data = addslashes($data);
             return $data;
@@ -116,28 +109,21 @@ class sanitize extends kses {
         // strip_tags() gets confused by HTML comments ...
         $message = preg_replace( '/<!--.+?-->/', '', $message );
 
-        if( isset( $_CONF['allowed_protocols'] ) && is_array( $_CONF['allowed_protocols'] ) && ( sizeof( $_CONF['allowed_protocols'] ) > 0 ))
-        {
+        if( isset( $_CONF['allowed_protocols'] ) && is_array( $_CONF['allowed_protocols'] ) && ( sizeof( $_CONF['allowed_protocols'] ) > 0 )) {
             $this->Protocols( $_CONF['allowed_protocols'] );
-        }
-        else
-        {
+        } else {
             $this->Protocols( array( 'http:', 'https:', 'ftp:' ));
         }
 
         if( empty( $this->permissions) || !SEC_hasRights( $this->permissions ) ||
-                empty( $_CONF['admin_html'] ))
-        {
+                empty( $_CONF['admin_html'] )) {
             $html = $_CONF['user_html'];
-        }
-        else
-        {
+        } else {
             $html = array_merge_recursive( $_CONF['user_html'],
                                            $_CONF['admin_html'] );
         }
 
-        foreach( $html as $tag => $attr )
-        {
+        foreach( $html as $tag => $attr ) {
             $this->AddHTML( $tag, $attr );
         }
 
@@ -155,49 +141,47 @@ class sanitize extends kses {
     *  Optionally Parms can be made global
     */
     function sanitizeParms($vars,$type='')  {
-      $return_data = array();
+        $return_data = array();
 
-      #setup common reference to SuperGlobals depending which array is needed
-      if ($type == "GET" OR $type == "POST") {
-        if ($type =="GET") { $SG_Array =& $_GET; }
-        if ($type =="POST") { $SG_Array =& $_POST; }
+        #setup common reference to SuperGlobals depending which array is needed
+        if ($type == "GET" OR $type == "POST") {
+            if ($type =="GET") {
+                $SG_Array =& $_GET;
+            }
+            if ($type =="POST") {
+                $SG_Array =& $_POST;
+            }
 
-        # loop through SuperGlobal data array and grab out data for allowed fields if found
-        foreach($vars as $key)  {
-          if (array_key_exists($key,$SG_Array)) { $return_data[$key]=$SG_Array[$key]; }
+            # loop through SuperGlobal data array and grab out data for allowed fields if found
+            foreach($vars as $key)  {
+                if (array_key_exists($key,$SG_Array)) {
+                    $return_data[$key]=$SG_Array[$key];
+                }
+            }
+        } else {
+            foreach ($vars as $key) {
+                if (array_key_exists($key, $_POST)) {
+                    $return_data[$key] = $_POST[$key];
+                } elseif (array_key_exists($key, $_GET)) {
+                    $return_data[$key] = $_GET[$key];
+                }
+            }
         }
-
-      }
-      else
-      {
-        foreach ($vars as $key) {
-          if (array_key_exists($key, $_POST)) {
-            $return_data[$key] = $_POST[$key];
-          }
-          elseif (array_key_exists($key, $_GET))
-          {
-            $return_data[$key] = $_GET[$key];
-          }
-        }
-      }
 
         # loop through $vars array and apply the filter
         foreach($vars as $value)  {
-          $return_data[$value]  = $this->filterparm($return_data[$value]);
+            $return_data[$value]  = $this->filterparm($return_data[$value]);
         }
 
-      // Optionally set $GLOBALS or return the array
-      if ($this->_setglobal) {
-          # loop through final data and define all the variables using the $GLOBALS array
-          foreach ($return_data as $key=>$value)  {
-            $GLOBALS[$key]=$value;
-          }
-      }
-      else
-      {
-         return $return_data;
-      }
-
+        // Optionally set $GLOBALS or return the array
+        if ($this->_setglobal) {
+            # loop through final data and define all the variables using the $GLOBALS array
+            foreach ($return_data as $key=>$value)  {
+                $GLOBALS[$key]=$value;
+            }
+        } else {
+            return $return_data;
+        }
     }
 
 

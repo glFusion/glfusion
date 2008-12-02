@@ -170,6 +170,12 @@ class config {
         return array_key_exists($group, $this->config_array);
     }
 
+    function get($param_name,$group='Core') {
+        if (isset($this->config_array[$group][$param_name]) )
+            return $this->config_array[$group][$param_name];
+        return '';
+    }
+
     /**
      * This function sets a configuration variable to a value in the database
      * and in the current array. If the variable does not already exist,
@@ -713,10 +719,15 @@ class config {
                     $t->set_var('doc_link',
                         '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>');
                 } else {
-                    $descUrl = $baseUrl . '/docs/' . $group . '.html#desc_' . $o;
-                    $t->set_var('doc_url', $descUrl);
-                    $t->set_var('doc_link',
-                        '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>');
+                    if ( @file_exists($baseUrl . '/docs/' . $group . '.html') ) {
+                        $descUrl = $baseUrl . '/docs/' . $group . '.html#desc_' . $o;
+                        $t->set_var('doc_url', $descUrl);
+                        $t->set_var('doc_link',
+                            '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>');
+                    } else {
+                        $t->set_var('doc_url','');
+                        $t->set_var('doc_link','');
+                    }
                 }
             }
         }
@@ -975,7 +986,7 @@ class config {
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
         clearstatcache();
         if (file_exists($cache_file)) {
             $s = file_get_contents($cache_file);
@@ -995,7 +1006,7 @@ class config {
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
         $s = serialize($this->config_array);
         $fh = fopen($cache_file, 'wb');
         if ($fh !== false) {
@@ -1018,7 +1029,7 @@ class config {
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
         @unlink($cache_file);
     }
 }

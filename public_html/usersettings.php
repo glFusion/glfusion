@@ -536,7 +536,11 @@ function editpreferences()
         $preferences->set_var ('theme_selection', '');
     }
 
-    require_once ('Date/TimeZone.php');
+    if ( $_CONF['have_pear'] == false ) {
+        require_once $_CONF['path'] . 'system/pear/Date/TimeZone.php';
+    } else {
+        require_once 'Date/TimeZone.php';
+    }
     // Timezone
     if (empty($_USER['tzid']) && isset($_CONF['timezone'])) {
         $timezone = $_CONF['timezone'];

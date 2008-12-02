@@ -925,7 +925,10 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                                 $videowidth  = 200;
                             } else if ( $width == 0 && $height > 0 ) {
                                 $videowidth = round($height / $ratio);
-                                $videoheidht = $height;
+                                $videoheight = $height;
+                            } else if ( $width > 0 && $height > 0 ) {
+                                $videowidth = $width;
+                                $videoheight = $height;
                             }
                         } else {
                             if ( $width > 0 && $height == 0 ) {
@@ -936,7 +939,10 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                                 $videowidth  = round(200 / $ratio);
                             } else if ( $width == 0 && $height > 0 ) {
                                 $videowidth = round($height * $ratio);
-                                $videoheidht = $height;
+                                $videoheight = $height;
+                            } else  if ( $width > 0 && $height > 0 ) {
+                                $videowidth = $width;
+                                $videoheight = $height;
                             }
                         }
                     }
@@ -1864,7 +1870,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                         $album_image = '<img src="' . $media_thumbnail . '" ' . $alttag . 'style="border:none;"' . XHTML . '>';
                     }
                 } else {
-                    return $content;
+                    return $content; // no image found
                 }
                 $mediaSize = @getimagesize($media_thumbnail_file);
                 if ( $mediaSize == false ) {
@@ -1906,15 +1912,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                         $newwidth = round($mediaSize[0] / $ratio);
                     }
                 }
-                if ( $autotag['tag'] == 'img' ) {
-                    if ( $align != '' && $align != 'center' ) {
-                        $album_image = '<span style="float:' . $align . ';padding:5px;"><img src="' . $media_thumbnail . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;"' . XHTML . '></span>';
-                    } else {
-                        $album_image = '<img src="' . $media_thumbnail . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;"' . XHTML . '>';
-                    }
-                } else {
-                    $album_image = '<img src="' . $media_thumbnail . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;"' . XHTML . '>';
-                }
+                $album_image = '<img src="' . $media_thumbnail . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;"' . XHTML . '>';
 
                 $tagtext = $album_image;
                 $link = '';
@@ -1954,6 +1952,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                     }
                 }
 
+
                 if ( $link == '' ) {
 
                     if ( $autotag['tag'] != 'image' && $MG_albums[$aid]->hidden != 1 && $enable_link != 0) {
@@ -1970,8 +1969,10 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                         $link = $tagtext;
                     }
                 }
-
-                if ($autotag['tag'] == 'img' ) {
+                if ( $autotag['tag'] == 'img' ) {
+                    if ( $align != '' && $align != 'center' ) {
+                        $link = '<span style="float:' . $align . ';padding:5px;">'.$link.'</span>';
+                    }
                     if ( $destination != 'block' ) {
                         $content = str_replace ($autotag['tagstr'], $link, $content);
                     } else {

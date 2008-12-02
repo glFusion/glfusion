@@ -1,14 +1,7 @@
-                            {list_top}
-                            <div class="admin-list-search" style="{show_sorts}">
-                                <select name="page_limit">
-                                    {page_limit}
-                                </select>
-                                <select name="page_sort">
-                                    {page_sort}
-                                </select>
-                            </div>
-                            {item_row}
-                            <p class="aligncenter" style="{show_message}"><b>{message}</b></p>
-                            <br{xhtml}>
-                            {google_paging}
-                            {list_bottom}
+{list_top}
+<br />
+{item_row}
+<p class="aligncenter" style="{show_message}"><strong>{message}</strong></p>
+<br{xhtml}>
+<p class="aligncenter">{google_paging}</p>
+{list_bottom}

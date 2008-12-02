@@ -16,7 +16,7 @@
                             <td class="alignright"><b><label for="passwd">{lang_password}</label>:</b></td>
                             <td><input type="password" name="passwd" size="16"{xhtml}>
                                 &nbsp;<a href="{site_url}/users.php?mode=getpassword" rel="nofollow">{lang_forgetpassword}</a><br{xhtml}
-                                <div style="position:relative; top:-43px; left:111px">{lang_newreglink}</div>
+                                <div style="position:relative; top:-43px; left:111px">&nbsp;{lang_newreglink}</div>
                             </td>
                         </tr>
                         <tr>

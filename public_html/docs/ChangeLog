@@ -1,5 +1,167 @@
 glFusion ChangeLog
 
+v1.2.0
+------
+- Updated version numbers to v1.2.0.svn (Mark)
+
+v1.1.1
+------
+- Bumped version number to v1.1.1 (Mark)
+        public_html/lib-common.php
+        public_html/admin/install/index.php
+
+- Fixed issue with openbase_dir restrictions when processing mime types (Mark)
+        private/lib/getid3/getid3.lib.php
+
+- Added new multi-byte function: MBYTE_is_utf8() returns true if a valid
+  utf-8 string (Mark)
+        private/system/lib-mbyte.php
+
+- Calendar Plugin: Fixed an issue where the day of the week name would not
+  properly display on UTF-8 sites (Mark)
+        private/plugins/calendar/functions.inc
+
+- Configuration now checks to see if plugin help file exists before placing
+  the help icon next to the configuration option (Mark)
+        private/system/classes/config.class.php
+
+- FileMgmt: Fixed a bug where non-approved uploads would show in RSS feed (Mark)
+        private/plugins/filemgmt/functions.inc
+
+- Forum Plugin: Fixed bug where it would not return you to the post you just
+  edited, instead it would take you to the first post. (Mark)
+        public_html/forum/createtopic.php
+
+- Cleaned up language file (Eric)
+        private/language/english.php
+        private/language/english_utf-8.php
+
+- Cleaned up login form (Eric)
+        public_html\layout\nouveau\users\loginform.thtml
+
+- Update MooTicker RSS feeds (Eric)
+        private/system/lib-widgets.php
+
+- Added a feature to turn on / off the FileMgmt integration with the Forum
+  plugin for storing uploaded files. (Mark)
+        private/plugins/forum/config.php
+        public_html/forum/createtopic.php
+
+- Added feature to plugin_autouninstall to purge configuration data if it
+  exists (Mark)
+        private/system/lib-plugins.php
+
+- Several folks reported issues including the Date/TimeZone.php file from the
+  included pear modules in the usersettings.php. Now use full path if have_pear
+  is set to false (Mark)
+        public_html/usersettings.php
+
+- Ensure a mime type is set when uploading files (Mark)
+        private/system/classes/upload.class.php
+
+- Fixed a bug when highlighting a query and the text contains regex type items.
+        public_html/lib-common.php
+
+- Reworked the search algorithms
+  Fixed missing titles and not available messages too...
+        private/system/classes/search.class.php
+        private/system/classes/searchcriteria.class.php
+        private/system/classes/listfactory.class.php
+        public_html/layout/nouveau/lists/inline/list.thtml
+        public_html/layout/nouveau/lists/table/list.thtml
+
+        private/plugins/forum/functions.inc
+
+        **Also requires and update to DokuWiki** functions.inc
+
+- FileMgmt: Auto tags did not work properly if URL rewrite enabled (Mark)
+        public_html/filemgmt/index.php
+
+- FileMgmt: Filesize was set to 0 bytes when approving user submitted
+  files (Mark)
+        public_html/admin/plugins/filemgmt/index.php
+
+- Fixed bug where username did not show in the search Author: field,
+  instead the current username repeated over and over (Mark)
+        private/system/classes/search.class.php
+
+- Fixed bug where no more than 5 images could be uploaded to a story (Mark)
+        private/system/lib-story.php
+
+- Moved the configuration cache file into the data/layout_cache/ directory.
+  (Mark)
+        private/system/classes/config.class.php
+
+- Searching - Fixed improper use of stripslashes() on the results (Mark)
+        private/system/classes/search.class.php
+
+- StaticPages: Fixed improper use of a bunch of stripslashes() calls. (Mark)
+        private/plugins/staticpages/functions.inc
+        private/plugins/staticpages/services.inc.php
+        public_html/admin/plugins/staticpages/index.php
+
+- Media Gallery: If both width and height were passed to a video auto tag,
+  neither the width or height were properly set. Also, fixed a variable name
+  that was mistyped (Mark)
+        private/plugins/mediagallery/functions.inc
+
+- Fixed an issue where the bbcode parser could exhaust system resources. (Mark)
+        private/lib/bbcode/stringparser.class.php
+
+- Bad Behavior2 - Upgraded to v2.0.25 (Mark)
+        public_html/bad_behavior2/bad-behavior/blackhole.inc.php
+        public_html/bad_behavior2/bad-behavior/version.inc.php
+        public_html/bad_behavior2/README.txt
+
+- moderation fails with a 2 - Missing argument 1 for draftlist() error (Mark)
+        public_html/admin/moderation.php
+
+- Media Gallery: img auto tag with alignment will not always work with
+  IE. (Mark)
+        private/plugins/mediagallery/functions.inc
+
+- If login is required for search and disable_new_registrations is true,
+  non-logged-in users who performed a search were presented with a link
+  to the 'New User' page.  Removed the New User link if registration is
+  disabled. (Mark)
+        private/system/classes/search.class.php
+        public_html/layout/nouveau/submit/submitloginrequired.thtml
+
+- Fixed a problem that only appears if the configuration setting
+  for Languages is set, but Language Files is not (Mark)
+        public_html/lib-common.php
+
+- Removed reference to required_bg.gif in style.css (Mark)
+        public_html/layout/nouveau/style.css
+
+- glFusion did not honor the show_right_blocks setting (Mark)
+        public_html/lib-common.php
+
+- Removed reference to missing graphic on gllform. class. (Mark)
+        public_html/layout/nouveau/style.css
+
+- Fixed broken API COM_sanitizeUrl().  We removed the allowed_protocol
+  configuration option but neglected to update this function. (Mark)
+        public_html/lib-common.php
+
+- Media Gallery: Fixed issue with header parsing in the gps.php module (Mark)
+        private/plugins/mediagallery/include/makers/gps.php
+
+- Forum: Fixed issue where notification email is off my one reply id (Mark)
+        public_html/forum/createtopic.php
+
+- Media Gallery: Fixed an issue when importing from Gallery v1.x, the import
+  would fail on empty Gallery albums. (Mark)
+        public_html/admin/plugins/mediagallery/importers/Galleryv1/index.php
+
+- Media Gallery: Fixed error in watermarking code that caused application to
+  fail. (Mark)
+        private/system/imglib/lib-image.php
+
+- Enhanced error check when reading EXIF data from JPG images, ensure that
+  corrupted images do not cause the application to fail. (Mark)
+        private/lib/getid3/module.graphic.jpg.php
+
 v1.1.0
 ------
 - Add IP to the log entry for failed logins (Mark)

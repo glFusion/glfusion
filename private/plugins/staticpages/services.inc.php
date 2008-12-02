@@ -530,7 +530,8 @@ function service_get_staticpages($args, &$output, &$svc_msg)
             $output = DB_fetchArray ($result, false);
             // WE ASSUME $output doesn't have any confidential fields
 
-            $_CONF['pagetitle'] = stripslashes ($output['sp_title']);
+//            $_CONF['pagetitle'] = stripslashes ($output['sp_title']);
+            $_CONF['pagetitle'] = $output['sp_title'];
 
         } else { // an error occured (page not found, access denied, ...)
             if (empty ($page)) {

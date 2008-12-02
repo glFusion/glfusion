@@ -584,7 +584,7 @@ function filemgmt_buildSql ($topic, $limits)
     }
     $grouplist = implode(',',$groups);
 
-    $where = ' cat.grp_access IN (' . $grouplist . ') ';
+    $where = ' filedetail.status=1 AND cat.grp_access IN (' . $grouplist . ') ';
     if ($topic > 0) {
         $where = 'cid=' . $topic;
     }

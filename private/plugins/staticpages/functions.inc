@@ -282,7 +282,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
         }
     }
     if (($A['sp_inblock'] == 1) && ($A['sp_format'] != 'blankpage')) {
-        $retval .= COM_startBlock (stripslashes ($A['sp_title']), $A['sp_help'],
+        $retval .= COM_startBlock ($A['sp_title'], $A['sp_help'],
                         COM_getBlockTemplate ('_staticpages_block', 'header'));
     }
 
@@ -335,7 +335,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
     }
 
 
-    $content = SP_render_content (stripslashes ($A['sp_content']), $A['sp_php']);
+    $content = SP_render_content ($A['sp_content'], $A['sp_php']);
     $spage->set_var('content', $content );
 
     $spage->set_var('info_separator', 'hidden');
@@ -404,13 +404,13 @@ function SP_printPage ($page, $A)
     $print->set_var('xhtml', XHTML);
 
     $print->set_var ('page_title', $_CONF['site_name'] . ' - '
-                                   . stripslashes ($A['sp_title']));
+                                   . $A['sp_title']);
     $sp_url = COM_buildUrl ($_CONF['site_url']
                                . '/staticpages/index.php?page=' . $page);
     $print->set_var ('sp_url', $sp_url);
-    $print->set_var ('sp_title', stripslashes ($A['sp_title']));
+    $print->set_var ('sp_title', $A['sp_title']);
     $print->set_var ('sp_content',
-            SP_render_content (stripslashes ($A['sp_content']), $A['sp_php']));
+            SP_render_content ($A['sp_content'], $A['sp_php']));
     $print->set_var ('sp_hits', COM_numberFormat ($A['sp_hits']));
     if ($A['commentcode'] >= 0) {
         $commentsUrl = $sp_url . '#comments';
@@ -461,7 +461,7 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
         if ($mode == 'print') {
             $retval = SP_printPage($page, $retval);
         } else if ($mode =='autotag') {
-            $retval = SP_render_content(stripslashes($retval['sp_content']), $retval['sp_php']);
+            $retval = SP_render_content($retval['sp_content'], $retval['sp_php']);
         } else {
             $retval = SP_displayPage($page, $retval, $comment_order, $comment_mode);
         }
@@ -504,7 +504,7 @@ function plugin_showstats_staticpages($showsitestats)
         );
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray ($result);
-            $A['sp_title'] = stripslashes ($A['sp_title']);
+            $A['sp_title'] = $A['sp_title'];
             $A['sid'] = COM_createLink($A['sp_title'], COM_buildUrl ($_CONF['site_url']
                       . "/staticpages/index.php?page={$A['sp_id']}"));
             $A['sp_hits'] = COM_NumberFormat ($A['sp_hits']);
@@ -828,7 +828,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
                 $spage->set_var('hits', $hits);
             }
 
-            $content = SP_render_content (stripslashes ($S['sp_content']), $S['sp_php']);
+            $content = SP_render_content ($S['sp_content'], $S['sp_php']);
             $spage->set_var('content', $content );
             $retval .= $spage->finish($spage->parse('output', 'page'));
             if (($S['sp_inblock'] == 1) && !empty ($S['sp_title'])
@@ -914,8 +914,8 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
             $url = COM_buildUrl($_CONF['site_url']
                                 . '/staticpages/index.php?page=' . $sp_id);
             if (empty($autotag['parm2'])) {
-                $linktext = stripslashes(DB_getItem ($_TABLES['staticpage'],
-                                         'sp_title', "sp_id = '$sp_id'"));
+                $linktext = DB_getItem ($_TABLES['staticpage'],
+                                         'sp_title', "sp_id = '$sp_id'");
             } else {
                 $linktext = $autotag['parm2'];
             }
@@ -1045,7 +1045,7 @@ function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
                 "{$_CONF['site_admin_url']}/plugins/staticpages/index.php?mode=clone&amp;sp_id={$A['sp_id']}");
             break;
         case "sp_title":
-            $sp_title = stripslashes ($A['sp_title']);
+            $sp_title = $A['sp_title'];
             $url = COM_buildUrl ($_CONF['site_url'] .
                                  '/staticpages/index.php?page=' . $A['sp_id']);
             $retval = COM_createLink($sp_title, $url, array('title'=>$LANG_STATIC['title_display']));

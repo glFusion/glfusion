@@ -51,7 +51,7 @@ if (!defined ("LB")) {
     define("LB", "\n");
 }
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.0');
+    define('GVERSION', '1.2.0.svn');
 }
 
 if (!function_exists('COM_errorLog') ) {

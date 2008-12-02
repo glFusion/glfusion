@@ -41,6 +41,13 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+/*
+ * Enable or disable the filemanager integration for storing
+ * uploaded files.
+ */
+
+$CONF_FORUM['enable_fm_integration'] = 0;
+
 $CONF_FORUM['version'] = '3.1.0.fusion';
 
 /*************************************************************************

@@ -172,7 +172,7 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
                 // Check for any users subscribed notifications
                 gf_chknotifications($forum,$editid,$uid);
             }
-            $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topicparent&amp;page=$page#$editid";
+            $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topicparent&topic=$editid#$editid";
             forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19']);
         } else {
             alertMessage($LANG_GF02['msg18']);
@@ -340,8 +340,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
                     DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic='$id' and time > 0");
 
-                    // Check for any users subscribed notifications
-                    gf_chknotifications($forum,$id,$uid);
+
                     $postmode = gf_chkpostmode($postmode,$postmode_switch);
                     $subject = gf_preparefordb($_POST['subject'],'text');
                     $comment = gf_preparefordb($_POST['comment'],$postmode);
@@ -391,6 +390,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     CACHE_remove_instance('forumcb');
 
                     COM_updateSpeedlimit ('forum');
+                    // Check for any users subscribed notifications
+                    gf_chknotifications($forum,$id,$uid);
                     $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$id&lastpost=true#$lastid";
                     forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19'],true,$forum);
                 }
@@ -985,7 +986,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $submissionform_main->set_var ('LANG_attachments',$LANG_GF10['attachments']);
     $submissionform_main->set_var ('LANG_maxattachments',sprintf($LANG_GF10['maxattachments'],$CONF_FORUM['maxattachments']));
     // Check and see if the filemgmt plugin is installed and enabled
-    if (function_exists('filemgmt_buildAccessSql')) {
+    if (function_exists('filemgmt_buildAccessSql') && $CONF_FORUM['enable_fm_integration'] == 1) {
         // Generate the select dropdown HTML for the filemgmt categories
         $submissionform_main->set_var('filemgmt_category_options',gf_makeFilemgmtCatSelect($uid));
         $submissionform_main->set_var('LANG_usefilemgmt',$LANG_GF10['usefilemgmt']);

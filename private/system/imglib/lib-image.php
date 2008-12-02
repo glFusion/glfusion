@@ -360,7 +360,7 @@ function IMG_convertImageFormat ( $srcImage, $destImage, $destFormat, $deleteOri
 }
 
 function IMG_watermarkImage( $origImage, $watermarkImage, $opacity, $location ) {
-    global $_CONF;
+    global $_MG_CONF, $_CONF;
 
     if ( $_CONF['debug_image_upload'] ) {
         COM_errorLog("IMG_watermarkImage: Entering IMG_watermarkImage()");
@@ -369,7 +369,7 @@ function IMG_watermarkImage( $origImage, $watermarkImage, $opacity, $location ) 
     $mType = IMG_getMediaMetaData($origImage);
     $mimeType = $mType['mime_type'];
 
-    if ( !in_array($mimeType,$_CONF['watermark_types']) ) {
+    if ( !in_array($mimeType,$_MG_CONF['watermark_types']) ) {
         COM_errorLog("IMG_watermarkImage: Media type is not in allowed watermark types (config.php)");
         return false;
     }

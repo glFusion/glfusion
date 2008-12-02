@@ -1201,7 +1201,7 @@ function approve(){
         }
     }
     if ($AddNewFile) {
-        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', size='$size', logourl='$logourl', status=1, date=".time() .", comments='$commentoption' where lid='$lid'");
+        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', logourl='$logourl', status=1, date=".time() .", comments='$commentoption' where lid='$lid'");
         DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' where lid='$lid'");
         CACHE_remove_instance('whatsnew');
         // Send a email to submitter notifying them that file was approved

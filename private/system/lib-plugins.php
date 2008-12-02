@@ -187,7 +187,7 @@ function PLG_chkVersion($type)
 */
 function PLG_uninstall ($type)
 {
-    global $_PLUGINS, $_TABLES;
+    global $_CONF, $_PLUGINS, $_TABLES;
 
     if (empty ($type)) {
         return false;
@@ -281,8 +281,14 @@ function PLG_uninstall ($type)
         }
 
         // remove config table data for this plugin
+
         COM_errorLog ("Attempting to remove config table records for group_name: $type", 1);
-        DB_query ("DELETE FROM {$_TABLES['conf_values']} WHERE group_name = '$type'");
+        require_once $_CONF['path_system'] . 'classes/config.class.php';
+
+        $c = config::get_instance();
+        if ($c->group_exists($type)) {
+            $c->delGroup($type);
+        }
         COM_errorLog ('...success', 1);
 
         // uninstall the plugin

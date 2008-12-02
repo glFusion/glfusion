@@ -63,8 +63,11 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupAccessFilter($_GROUPS);
 
+    COM_setArgNames( array('id') );
+    $lid = COM_applyFilter(COM_getArgument( 'id' ),true);
+
     $display = COM_siteHeader('menu');
-    $lid = isset($_GET['id']) ? COM_applyFilter($_GET['id'],true) : 0;
+//    $lid = isset($_GET['id']) ? COM_applyFilter($_GET['id'],true) : 0;
     if ($lid == 0) {  // Check if the script is being called from the commentbar
         $lid = str_replace('fileid_','',isset($_POST['id']) ? $_POST['id'] : 0);
     }

@@ -587,41 +587,43 @@ function MG_importFiles( $album_id, $import_album_id, $galleryDir, $session_id )
     if ($ret) {
         return;
     }
-    foreach ($photos as $j => $importAlbumItem) {
-    	if (!isset($importAlbumItem->isAlbumName)) {
-			$fullFileName = $galleryDir . '/' . $mgAlbums[$import_album_id]->galleryName . '/' . $importAlbumItem->image->name . '.' . $importAlbumItem->image->type;
-			$fileName = $importAlbumItem->image->name . '.' . $importAlbumItem->image->type;
-			$aid = $album_id;
-			$data = $fullFileName;
-			$data2 = $fileName;
-			$data3 = $importAlbumItem->caption;
-			$mid   = intval($importAlbumItem->clicks);
+    if ( is_array($photos) ) {
+        foreach ($photos as $j => $importAlbumItem) {
+        	if (!isset($importAlbumItem->isAlbumName)) {
+    			$fullFileName = $galleryDir . '/' . $mgAlbums[$import_album_id]->galleryName . '/' . $importAlbumItem->image->name . '.' . $importAlbumItem->image->type;
+    			$fileName = $importAlbumItem->image->name . '.' . $importAlbumItem->image->type;
+    			$aid = $album_id;
+    			$data = $fullFileName;
+    			$data2 = $fileName;
+    			$data3 = $importAlbumItem->caption;
+    			$mid   = intval($importAlbumItem->clicks);
 
-      	  	DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status)
-        	          VALUES('$session_id','$mid',$aid,'" . addslashes($data) . "','" . addslashes($data2) . "','" . addslashes($data3) . "',0)");
+          	  	DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status)
+            	          VALUES('$session_id','$mid',$aid,'" . addslashes($data) . "','" . addslashes($data2) . "','" . addslashes($data3) . "',0)");
 
-		    $id = DB_insertId();
-		    if ( $id == 0 ) {
-		        $result = DB_query("SELECT * FROM {$_TABLES['mg_batch_session']} ORDER BY id DESC LIMIT 1");
-		        $nRows = DB_numRows($result);
-		        if ( $nRows > 0 ) {
-		            $row = DB_fetchArray($result);
-		            $id = $row['id'];
-		        }
-		    }
-        }
-		if (isset($importAlbumItem->comments) && count($importAlbumItem->comments) > 0) {
-        	foreach ($importAlbumItem->comments as $importCommentId => $importComment) {
-	        	$name = str_replace('(',',',$importComment->name);
-	        	$name = str_replace(')','',$name);
-	        	list($uname,$uid) = explode(',',$name,2);
-	        	$commentText = addslashes($importComment->commentText);
-	        	$datePosted  = $importComment->datePosted;
-	        	$ip			 = $importComment->IPNumber;
-	        	DB_query("INSERT INTO {$_TABLES['mg_session_items2']} (id,data1,data2,data3,data4,data5,data6,data7,data8,data9)
-	        			  VALUES($id,'$uname','$uid','$commentText','$datePosted','$ip','','','','')");
+    		    $id = DB_insertId();
+    		    if ( $id == 0 ) {
+    		        $result = DB_query("SELECT * FROM {$_TABLES['mg_batch_session']} ORDER BY id DESC LIMIT 1");
+    		        $nRows = DB_numRows($result);
+    		        if ( $nRows > 0 ) {
+    		            $row = DB_fetchArray($result);
+    		            $id = $row['id'];
+    		        }
+    		    }
+            }
+    		if (isset($importAlbumItem->comments) && count($importAlbumItem->comments) > 0) {
+            	foreach ($importAlbumItem->comments as $importCommentId => $importComment) {
+    	        	$name = str_replace('(',',',$importComment->name);
+    	        	$name = str_replace(')','',$name);
+    	        	list($uname,$uid) = explode(',',$name,2);
+    	        	$commentText = addslashes($importComment->commentText);
+    	        	$datePosted  = $importComment->datePosted;
+    	        	$ip			 = $importComment->IPNumber;
+    	        	DB_query("INSERT INTO {$_TABLES['mg_session_items2']} (id,data1,data2,data3,data4,data5,data6,data7,data8,data9)
+    	        			  VALUES($id,'$uname','$uid','$commentText','$datePosted','$ip','','','','')");
+            	}
         	}
-    	}
+        }
     }
 }
 
