@@ -116,6 +116,9 @@ v1.1.1
   IE. (Mark)
         private/plugins/mediagallery/functions.inc
 
+- Added missing security token to trackback editor (Mark)
+        public_html/layout/nouveau/admin/trackback/trackbackeditor.thtml
+
 - If login is required for search and disable_new_registrations is true,
   non-logged-in users who performed a search were presented with a link
   to the 'New User' page.  Removed the New User link if registration is
