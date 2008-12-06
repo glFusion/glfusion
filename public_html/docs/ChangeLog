@@ -6,6 +6,16 @@ v1.1.1
         public_html/lib-common.php
         public_html/admin/install/index.php
 
+- Fixed bug where contacting a user would try to redirect to profile page
+  when profileloginrequired = true (Mark)
+        public_html/profiles.php
+
+- Added rdf_file to the fusionrescue.php fields (Mark)
+        public_html/admin/install/fusionrescue.php
+
+- Fixed IE6 bug with the block menus (Eric)
+        public_html/javascript/sitetailor_ie6vertmenu.js
+
 - Fixed issue with openbase_dir restrictions when processing mime types (Mark)
         private/lib/getid3/getid3.lib.php
 
