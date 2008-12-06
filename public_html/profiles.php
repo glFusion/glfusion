@@ -136,14 +136,18 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
             $rc = COM_mail ($to, $subject, $message, $from,$html);
             COM_updateSpeedlimit ('mail');
 
-            if ( $rc === false ) {
-                $retval .= COM_refresh($_CONF['site_url']
-                                       . '/users.php?mode=profile&amp;uid=' . $uid
-                                       . '&amp;msg=26');
+            if ( COM_isAnonUser() && $_CONF['profileloginrequired'] == true) {
+                $redirectURL = $_CONF['site_url'] . '/index.php?msg=';
             } else {
-                $retval .= COM_refresh($_CONF['site_url']
-                                       . '/users.php?mode=profile&amp;uid=' . $uid
-                                       . '&amp;msg=27');
+                $redirectURL = $_CONF['site_url']
+                                . '/users.php?mode=profile&amp;uid=' . $uid
+                                . '&amp;msg=';
+            }
+
+            if ( $rc === false ) {
+                $retval .= COM_refresh($redirectURL . '26');
+            } else {
+                $retval .= COM_refresh($redirectURL . '27');
             }
         } else {
             $subject = strip_tags ($subject);
