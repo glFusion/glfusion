@@ -563,7 +563,7 @@ function MG_saveGlobalAlbumAttr() {
     $A['display_image_size'] = isset($_POST['display_image_size']) ? COM_applyFilter($_POST['display_image_size'],true) : 0;
     $A['enable_album_views'] = isset($_POST['enable_album_views']) ? COM_applyFilter($_POST['enable_album_views'],true) : 0;
     $A['enable_rss']         = isset($_POST['enable_rss']) ? COM_applyFilter($_POST['enable_rss'],true) : 0;
-    $A['enable_postcard']    = isset($_POST['enable_postcards']) ? COM_applyFilter($_POST['enable_postcard'],true) : 0;
+    $A['enable_postcard']    = isset($_POST['enable_postcard']) ? COM_applyFilter($_POST['enable_postcard'],true) : 0;
     $A['allow_download']     = isset($_POST['allow_download']) ? COM_applyFilter($_POST['allow_download'],true) : 0;
     $A['display_album_desc'] = isset($_POST['display_album_desc']) ? COM_applyFilter($_POST['display_album_desc'],true) : 0;
     $A['filename_title']     = isset($_POST['filename_title']) ? COM_applyFilter($_POST['filename_title'],true) : 0;
@@ -673,7 +673,6 @@ function MG_saveGlobalAlbumAttr() {
 
     $updateSQL .= ($enable_rss_active ? ($updateSQL != '' ? ',' : '') . "enable_rss={$A['enable_rss']}" : '');
     $updateSQL .= ($enable_postcard_active ? ($updateSQL != '' ? ',' : '') . "enable_postcard={$A['enable_postcard']}" : '');
-
     $updateSQL .= ($image_skin_active ? ($updateSQL != '' ? ',' : '') . "image_skin=\"{$A['image_skin']}\"" : '');
     $updateSQL .= ($album_skin_active ? ($updateSQL != '' ? ',' : '') . "album_skin=\"{$A['album_skin']}\"" : '');
     $updateSQL .= ($display_skin_active ? ($updateSQL != '' ? ',' : '') . "display_skin=\"{$A['display_skin']}\"" : '');
