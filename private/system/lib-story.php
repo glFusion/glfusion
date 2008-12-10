@@ -43,6 +43,7 @@ if (!defined ('GVERSION')) {
 }
 
 require_once $_CONF['path_system'] . '/classes/story.class.php';
+require_once $_CONF['path_system'] . '/lib-webservices.php';
 
 if ($_CONF['allow_user_photo']) {
     // only needed for the USER_getPhoto function
