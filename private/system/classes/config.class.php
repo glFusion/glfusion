@@ -713,7 +713,7 @@ class config {
                     $t->set_var('doc_link',
                         '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>');
                 } else {
-                    if ( @file_exists($baseUrl . '/docs/' . $group . '.html') ) {
+                    if ( @file_exists($_CONF['path_html'] . '/docs/' . $group . '.html') ) {
                         $descUrl = $baseUrl . '/docs/' . $group . '.html#desc_' . $o;
                         $t->set_var('doc_url', $descUrl);
                         $t->set_var('doc_link',
