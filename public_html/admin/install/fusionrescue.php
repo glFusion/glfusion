@@ -270,6 +270,9 @@ function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
 <input type="hidden" name="dbpass" value="' . $dbpass . '" />
 <input type="hidden" name="dbname" value="' . $dbname . '" />
 <input type="hidden" name="dbprefix" value="' . $dbprefix . '" />
+
+<center><b>To Repair the Sessions Table - Select the repair button</b></center>
+
 <table style="width:100%;border:none;padding:5px;" cellspacing="5" cellpadding="5">
 <tr><th style="text-align:right;width:20%;">Option</th><th style="text-align:middle; width:60%;">Value</th><th style="text-align:middle;width:20%;">Reset Default</th></tr>
 ';
@@ -295,9 +298,21 @@ foreach ($config as $option => $value) {
 
 echo '
 </table>
-<center><input type="submit" name="mode" value="save" /></center>
+<center><input type="submit" name="mode" value="save" />&nbsp;&nbsp;<input type="submit" name="mode" value="repair" /></center>
 </form>
 ';
+}
+
+function repairSessions( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
+    global $rescueFields;
+
+    $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
+    @mysql_select_db($dbname) or die('error selecting database');
+
+    $result = @mysql_query("REPAIR TABLE " . $dbprefix . "_sessions");
+
+    echo '<br />Sessions table has been repaired.';
+    exit;
 }
 
 function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
@@ -399,6 +414,15 @@ switch ( $mode ) {
         $dbprefix = $_POST['dbprefix'];
         saveNewPaths($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix);
         break;
+    case 'repair' :
+        $dbserver = $_POST['dbserver'];
+        $dbuser   = $_POST['dbuser'];
+        $dbpasswd = $_POST['dbpass'];
+        $dbname   = $_POST['dbname'];
+        $dbprefix = $_POST['dbprefix'];
+        repairSessions($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix);
+        break;
+
     default :
         getDBLogin();
         break;
