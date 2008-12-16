@@ -1,5 +1,32 @@
 glFusion ChangeLog
 
+v1.1.2
+------
+- Enhanced fusionrescue.php to allow session table repair (Mark)
+        public_html/admin/install/fusionrescue.php
+
+- Fixed issue where links to the help documents do not appear for plugins
+  in the online configuration. (bug #0000292) (Mark)
+        private/system/classes/config.class.php
+
+- Fixed issue when saving a story from the submission queue could crash under
+  certain circumstances. (bug #0000295)
+        private/system/lib-story.php
+
+- Fixed bug where the URL query string could be duplicated when determining
+  the current URL (bug #000293) (Mark)
+        public_html/lib-common.php
+
+- MediaGallery: Fixed bug where the global edit of 'enable_postcards' failed.
+  (bug #0000294) (Mark)
+        private/plugins/mediagallery/include/global.php
+
+- Improved error handling in the image processing routines (bug #0000296) (Mark)
+        private/plugins/mediagallery/include/makes/canon.php
+        private/plugins/mediagallery/include/makes/gps.php
+        private/plugins/mediagallery/include/makes/olympus.php
+        private/plugins/mediagallery/include/makes/sanyo.php
+
 v1.1.1
 ------
 - Bumped version number to v1.1.1 (Mark)
