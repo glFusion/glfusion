@@ -6108,7 +6108,7 @@ function COM_getCurrentURL()
     {
         $thisUrl = $_SERVER['SCRIPT_URI'];
     }
-    if( !empty( $thisUrl ) && !empty( $_SERVER['QUERY_STRING'] ))
+    if( !empty( $thisUrl ) && !empty( $_SERVER['QUERY_STRING'] ) && (strpos($thisUrl,'?') === false)  )
     {
         $thisUrl .= '?' . $_SERVER['QUERY_STRING'];
     }
