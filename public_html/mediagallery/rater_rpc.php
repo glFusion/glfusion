@@ -68,6 +68,10 @@ if ($size == 'sm') {
 
 if ($vote_sent > $units) die("Sorry, vote appears to be invalid."); // kill the script because normal users will never see this.
 
+if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1 )  {
+    die("Sorry, user must login first");
+}
+
 $sql = "SELECT media_votes,media_rating,media_user_id FROM {$_TABLES['mg_media']} WHERE media_id='" . $id_sent . "'";
 $result         = DB_query($sql);
 $row            = DB_fetchArray($result);
