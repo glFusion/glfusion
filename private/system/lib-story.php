@@ -769,9 +769,10 @@ function STORY_getItemInfo ($sid, $what)
     }
 
     if (count ($fields) > 0) {
-        $result = DB_query ("SELECT " . implode (',', $fields)
-                    . " FROM {$_TABLES['stories']} WHERE sid = '$sid'"
-                    . COM_getPermSql ('AND') . COM_getTopicSql ('AND'));
+         $result = DB_query ("SELECT " . implode (',', $fields)
+                     . " FROM {$_TABLES['stories']} WHERE sid = '$sid'"
+                     . ' AND (draft_flag = 0) AND (date <= NOW())'
+                     . COM_getPermSql ('AND') . COM_getTopicSql ('AND'));
         $A = DB_fetchArray ($result);
     } else {
         $A = array ();
