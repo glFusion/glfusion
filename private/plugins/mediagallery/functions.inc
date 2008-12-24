@@ -2170,7 +2170,7 @@ function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic
         return '';
     }
 
-    $query = trim(addslashes($query));
+    $query = trim(addslashes(htmlspecialchars($query)));
 
     $sql = "SELECT DISTINCT a.*,ma.album_id,a.perm_anon, m.media_id AS id,m.media_user_id AS uid,m.media_desc AS description ,m.media_title AS title,m.media_time AS date,m.media_views AS hits, CONCAT('/mediagallery/media.php?s=',m.media_id) AS url  FROM " .
             $_TABLES['mg_media'] . " as m " .
