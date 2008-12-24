@@ -2,6 +2,43 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Media Gallery: Add support for newlines in postcard email. (Mark)
+        public_html/mediagallery/postcard.php
+
+- Searches with & (or other special chars) would fail on stories and comments
+  (Mark)
+        private/system/classes/search.class.php
+
+- Media Gallery: Fixed a missing global variable which caused batch image
+  rotate to fail (Mark)
+        private/plugins/mediagallery/include/batch.php
+
+- Fixed wrong use of COM_isAnonUser in COM_getPermSQL (port from Geeklog)
+        public_html/lib-common.php
+
+- Fixed STORY_getItemInfo - need to check the draft flag and for a publish date
+  in the future (port from Geeklog)
+        private/system/lib-story.php
+
+- Admin lists allowed non-sortable columns to be sortable (port from Geeklog)
+        private/system/lib-admin.php
+
+- Static Pages: Do not include pages with sp_search set to 0 in stats (Mark)
+        private/plugins/staticpages/functions.inc
+
+- Media Gallery: Added check to rating code to validate if login is required
+  and if user is logged in (Mark)
+        public_html/mediagallery/rater.php
+        public_html/mediagallery/rater_rpc.php
+
+- Media Gallery: Enhanced gallery_remote2.php to support F-SPOT Gallery
+  export (Mark)
+        public_html/mediagallery/gallery_remote2.php
+
+- URL Rewriting can fail on certain web servers. Now check to ensure the
+  arguments are properly calculated. (Mark)
+        private/system/classes/url.class.php
+
 - Enhanced fusionrescue.php to allow session table repair (Mark)
         public_html/admin/install/fusionrescue.php
 
