@@ -6,8 +6,11 @@ v1.1.2
         public_html/mediagallery/postcard.php
 
 - Searches with & (or other special chars) would fail on stories and comments
-  (Mark)
+  and several plugins (Mark)
         private/system/classes/search.class.php
+        private/plugins/calendar/functions.inc
+        private/plugins/links/functions.inc
+        private/plugins/mediagallery/functions.inc
 
 - Media Gallery: Fixed a missing global variable which caused batch image
   rotate to fail (Mark)
