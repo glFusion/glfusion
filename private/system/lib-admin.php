@@ -381,6 +381,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     // this part defines the contents & format of the header fields
     for ($i=0; $i < count( $header_arr ); $i++) { #iterate through all headers
         $header_text = $header_arr[$i]['text'];
+        $th_subtags = '';
         if ($header_arr[$i]['sort'] != false) { # is this sortable?
             if ($order==$header_arr[$i]['field']) { # is this currently sorted?
                 $header_text .= $img_arrow;
