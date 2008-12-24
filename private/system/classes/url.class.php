@@ -92,6 +92,9 @@ class url {
                 $this->_arguments = explode ('/', $_SERVER['PATH_INFO']);
             }
             array_shift ($this->_arguments);
+            if ( $this->_arguments[0] == substr($_SERVER['SCRIPT_NAME'],1) ) {
+                array_shift($this->_arguments);
+            }
         } else if (isset ($_ENV['ORIG_PATH_INFO'])) {
             $this->_arguments = explode('/', substr($_ENV['ORIG_PATH_INFO'],1));
         } else {
