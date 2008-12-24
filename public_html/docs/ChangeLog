@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Polls: Fixed XHTML compliance issue (Mark)
+        private/plugins/polls/functions.inc
+
 - Media Gallery: Add support for newlines in postcard email. (Mark)
         public_html/mediagallery/postcard.php
 
@@ -62,10 +65,10 @@ v1.1.2
         private/plugins/mediagallery/include/global.php
 
 - Improved error handling in the image processing routines (bug #0000296) (Mark)
-        private/plugins/mediagallery/include/makes/canon.php
-        private/plugins/mediagallery/include/makes/gps.php
-        private/plugins/mediagallery/include/makes/olympus.php
-        private/plugins/mediagallery/include/makes/sanyo.php
+        private/plugins/mediagallery/include/makers/canon.php
+        private/plugins/mediagallery/include/makers/gps.php
+        private/plugins/mediagallery/include/makers/olympus.php
+        private/plugins/mediagallery/include/makers/sanyo.php
 
 v1.1.1
 ------
