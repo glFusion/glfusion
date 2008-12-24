@@ -351,7 +351,7 @@ class Search {
         global $_TABLES, $_DB_dbms, $LANG09;
 
         // Make sure the query is SQL safe
-        $query = trim(addslashes($this->_query));
+        $query = trim(addslashes(htmlspecialchars($this->_query)));
 
         $sql = "SELECT s.sid AS id, s.title AS title, s.introtext AS description, UNIX_TIMESTAMP(s.date) AS date, s.uid AS uid, s.hits AS hits, CONCAT('/article.php?story=',s.sid) AS url ";
         $sql .= "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u ";
@@ -400,7 +400,7 @@ class Search {
         global $_TABLES, $_DB_dbms, $LANG09;
 
         // Make sure the query is SQL safe
-        $query = trim(addslashes($this->_query));
+        $query = trim(addslashes(htmlspecialchars($this->_query)));
 
         $sql = "SELECT c.cid AS id1, s.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
 
