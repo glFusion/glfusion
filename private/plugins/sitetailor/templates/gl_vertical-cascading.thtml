@@ -111,37 +111,37 @@ li,
 }
 #gl_moomenu-vert-l{menu_id} li ul a {
 	color:{submenu_text_color}; /* left sub menu text color */
-	background:{submenu_background_color}; /* left sub menu bg color */
+	background:{main_menu_bg_color}; /* left sub menu bg color */
 	padding:3px 6px; /* translates to height of left sub menu boxes */
 	border:1px solid {submenu_highlight_color}; /* left main menu border color (set same as above) */
 	border-bottom:0; /* needs to be specified here to override above - declared in #gl_moomenu-vert-l{menu_id} ul */
 }
 #gl_moomenu-vert-r{menu_id} li ul a {
 	color:{submenu_text_color}; /* right sub menu text color */
-	background:{submenu_background_color}; /* right sub menu bg color */
+	background:{main_menu_bg_color}; /* right sub menu bg color */
 	padding:3px 6px; /* translates to height of right sub menu items */
 	border:1px solid {submenu_highlight_color}; /* right main menu border color (set same as above) */
 	border-bottom:0; /* needs to be specified here to override above - declared in #gl_moomenu-vert-r{menu_id} ul */
 }
 #gl_moomenu-vert-l{menu_id} li ul a:hover {
 	color:{submenu_hover_text_color}; /* left sub menu text hover color */
-	background:{submenu_hover_bg_color}; /* left sub menu hover bg color */
+	background:{main_menu_hover_bg_color}; /* left sub menu hover bg color */
 }
 #gl_moomenu-vert-r{menu_id} li ul a:hover {
 	color:{submenu_hover_text_color}; /* right sub menu text hover color */
-	background:{submenu_hover_bg_color}; /* right sub menu hover bg color */
+	background:{main_menu_hover_bg_color}; /* right sub menu hover bg color */
 }
 #gl_moomenu-vert-l{menu_id} ul a.parent-l{menu_id} {
-	background:{submenu_background_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 95% 50%; /* left sub menu background color - add an ul next to the ul to not have the image display on the left main menu */
+	background:{main_menu_bg_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 95% 50%; /* left sub menu background color - add an ul next to the ul to not have the image display on the left main menu */
 }
 #gl_moomenu-vert-l{menu_id} ul a.parent-l{menu_id}:hover {
-	background:{submenu_hover_bg_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 95% 50%; /* left sub menu hover background color - add an ul next to the ul to not have the image display on the left main menu */
+	background:{main_menu_hover_bg_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 95% 50%; /* left sub menu hover background color - add an ul next to the ul to not have the image display on the left main menu */
 }
 #gl_moomenu-vert-r{menu_id} ul a.parent-r{menu_id} {
-	background:{submenu_background_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 5% 50%; /* right sub menu background color - add an ul next to the ul to not have the image display on the right main menu */
+	background:{main_menu_bg_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 5% 50%; /* right sub menu background color - add an ul next to the ul to not have the image display on the right main menu */
 }
 #gl_moomenu-vert-r{menu_id} ul a.parent-r{menu_id}:hover {
-	background:{submenu_hover_bg_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 5% 50%; /* right sub menu hover background color - add an ul next to the ul to not have the image display on the right main menu */
+	background:{main_menu_hover_bg_color} url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 5% 50%; /* right sub menu hover background color - add an ul next to the ul to not have the image display on the right main menu */
 }
 {!if themeapi}
 html>body #gl_moomenu-vert-l{menu_id} ul li {
