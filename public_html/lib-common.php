@@ -139,7 +139,6 @@ if (isset($_CONF['site_enabled']) && !$_CONF['site_enabled']) {
             echo $_CONF['site_disabled_msg'];
         }
     }
-
     exit;
 }
 
@@ -152,9 +151,9 @@ if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
 }
 
 
-// +---------------------------------------------------------------------------+
-// | Library Includes: You shouldn't have to touch anything below here         |
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
+// | Library Includes                                                         |
+// +--------------------------------------------------------------------------+
 
 /**
 * If needed, add our PEAR path to the list of include paths
@@ -163,22 +162,17 @@ if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
 if( !$_CONF['have_pear'] )
 {
     $curPHPIncludePath = ini_get( 'include_path' );
-    if( defined( 'PATH_SEPARATOR' ))
-    {
+    if( defined( 'PATH_SEPARATOR' )) {
         $separator = PATH_SEPARATOR;
-    }
-    else
-    {
+    } else {
         // prior to PHP 4.3.0, we have to guess the correct separator ...
         $separator = ';';
-        if( strpos( $curPHPIncludePath, $separator ) === false )
-        {
+        if( strpos( $curPHPIncludePath, $separator ) === false ) {
             $separator = ':';
         }
     }
     if( ini_set( 'include_path', $_CONF['path_pear'] . $separator
-                                 . $curPHPIncludePath ) === false )
-    {
+                                 . $curPHPIncludePath ) === false ) {
         COM_errorLog( 'ini_set failed - there may be problems using the PEAR classes.', 1);
     }
 }
@@ -248,7 +242,8 @@ require_once( $_CONF['path_system'] . 'classes/template.class.php' );
 require_once( $_CONF['path_system'] . 'lib-database.php' );
 
 /**
-* This is the Bad Behavior2 Security Plugin
+* Check to see if the Bad Behavior2 Security Plugin is enabled, if yes
+* then include the necessary files.
 *
 */
 if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("bad_behavior2","1")) > 0) {
@@ -289,8 +284,6 @@ require_once( $_CONF['path_system'] . 'lib-custom.php' );
 
 /**
 * Include plugin class.
-* This is a poorly implemented class that was not very well thought out.
-* Still very necessary
 *
 */
 
@@ -316,6 +309,11 @@ if( !empty( $_USER['tzid'] ) && !ini_get( 'safe_mode' ) &&
 *
 */
 require_once( $_CONF['path_system'] . 'lib-mbyte.php' );
+
+/**
+* Image processing library
+*
+*/
 
 require_once( $_CONF['path_system'] . 'imglib/lib-image.php' );
 
@@ -606,7 +604,12 @@ DB_query( "DELETE FROM {$_TABLES['sessions']} WHERE start_time < " . ( time() - 
 *
 */
 
-require_once( $_CONF['path_language'] . $_CONF['language'] . '.php' );
+require_once $_CONF['path_language'] . $_CONF['language'] . '.php';
+
+if (empty($LANG_DIRECTION)) {
+    // default to left-to-right
+    $LANG_DIRECTION = 'ltr';
+}
 
 COM_switchLocaleSettings();
 
@@ -4667,24 +4670,53 @@ function COM_formatTimeString( $time_string, $time, $type = '', $amount = 0 )
 
 
 /**
-* Displays a message on the webpage
+* Displays a message text in a "System Message" block
 *
-* Pulls $msg off the URL string and gets the corresponding message and returns
-* it for display on the calling page
+* @param    string  $message    Message text; may contain HTML
+* @param    string  $title      (optional) alternative block title
+* @return   string              HTML block with message
 *
-* @param      int     $msg        ID of message to show
-* @param      string  $plugin     Optional Name of plugin to lookup plugin defined message
-* @return     string  HTML block with message
 */
-
-function COM_showMessage($msg, $plugin = '')
+function COM_showMessageText($message, $title = '')
 {
     global $_CONF, $MESSAGE, $_IMAGE_TYPE;
 
     $retval = '';
 
-    if ($msg > 0) {
+    if (!empty($message)) {
+        if (empty($title)) {
+            $title = $MESSAGE[40];
+        }
         $timestamp = strftime($_CONF['daytime']);
+        $retval .= COM_startBlock($title . ' - ' . $timestamp, '',
+                                  COM_getBlockTemplate('_msg_block', 'header'))
+                . '<p class="sysmessage"><img src="' . $_CONF['layout_url']
+                . '/images/sysmessage.' . $_IMAGE_TYPE . '" alt="" ' . XHTML
+                . '>' . $message . '</p>'
+                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+    }
+
+    return $retval;
+}
+
+
+/**
+* Displays a message on the webpage
+*
+* Pulls $msg off the URL string and gets the corresponding message and returns
+* it for display on the calling page
+*
+* @param    int     $msg        ID of message to show
+* @param    string  $plugin     Optional Name of plugin to lookup plugin defined message
+* @return   string              HTML block with message
+*/
+function COM_showMessage($msg, $plugin = '')
+{
+    global $MESSAGE;
+
+    $retval = '';
+
+    if ($msg > 0) {
         if (!empty($plugin)) {
             $var = 'PLG_' . $plugin . '_MESSAGE' . $msg;
             global $$var;
@@ -4698,44 +4730,41 @@ function COM_showMessage($msg, $plugin = '')
             $message = $MESSAGE[$msg];
         }
 
-        $retval .= COM_startBlock($MESSAGE[40] . ' - ' . $timestamp, '',
-                                  COM_getBlockTemplate('_msg_block', 'header'))
-                . '<p class="sysmessage"><img src="' . $_CONF['layout_url']
-                . '/images/sysmessage.' . $_IMAGE_TYPE . '" alt="" ' . XHTML
-                . '>' . $message . '</p>'
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
+        if (!empty($message)) {
+            $retval .= COM_showMessageText($message);
+        }
     }
 
     return $retval;
 }
 
-
 /**
-* Creates a standard "login required" message block
+* Displays a message, as defined by URL parameters
 *
-* @return     string  HTML block with message
+* Helper function to display a message, if URL parameters 'msg' and 'plugin'
+* (optional) are defined. Only for GET requests, but that's what Geeklog uses
+* everywhere anyway.
+*
+* @return   string  HTML block with message
+*
 */
-function COM_showLoginRequiredMsg()
+function COM_showMessageFromParameter()
 {
-    global $LANG_LOGIN, $_CONF;
+    $retval = '';
 
-    $display = COM_startBlock($LANG_LOGIN[1], '', COM_getBlockTemplate('_msg_block', 'header'));
-    $T = new Template($_CONF['path_layout'] . 'submit');
-    $T->set_file('login', 'submitloginrequired.thtml');
-    $T->set_var('xhtml', XHTML);
-    $T->set_var('site_url', $_CONF['site_url']);
-    $T->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $T->set_var('layout_url', $_CONF['layout_url']);
-    $T->set_var('login_message', $LANG_LOGIN[2]);
-    $T->set_var('lang_login', $LANG_LOGIN[3]);
-    $T->set_var('lang_newuser', $LANG_LOGIN[4]);
-    $T->parse('output', 'login');
-    $display .= $T->finish($T->get_var('output'));
-    $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+    if (isset($_GET['msg'])) {
+        $msg = COM_applyFilter($_GET['msg'], true);
+        if ($msg > 0) {
+            $plugin = '';
+            if (isset($_GET['plugin'])) {
+                $plugin = COM_applyFilter($_GET['plugin']);
+            }
+            $retval .= COM_showMessage($msg, $plugin);
+        }
+    }
 
-    return $display;
+    return $retval;
 }
-
 
 
 /**
@@ -5114,34 +5143,23 @@ function COM_getDayFormOptions( $selected = '' )
 * @return string  HTML years as option values
 */
 
-function COM_getYearFormOptions( $selected = '', $startoffset=0, $endoffset=5 )
+function COM_getYearFormOptions($selected = '', $startoffset = -1, $endoffset = 5)
 {
     $year_options = '';
-    if ($startoffset != 0)
-    {
-        $start_year = date ( 'Y' ) + $startoffset;
-    }
-    else
-    {
-        $start_year = date( 'Y', time() );
-    }
-    $cur_year = date( 'Y', time() );
+    $start_year  = date('Y') + $startoffset;
+    $cur_year    = date('Y', time());
     $finish_year = $cur_year + $endoffset;
 
-    if( !empty( $selected ))
-    {
-        if( $selected < $cur_year )
-        {
+    if (!empty($selected)) {
+        if ($selected < $cur_year) {
             $start_year = $selected;
         }
     }
 
-    for( $i = $start_year - 1; $i <= $finish_year; $i++ )
-    {
+    for ($i = $start_year; $i <= $finish_year; $i++) {
         $year_options .= '<option value="' . $i . '"';
 
-        if( $i == $selected )
-        {
+        if ($i == $selected) {
             $year_options .= ' selected="selected"';
         }
 
@@ -6748,32 +6766,58 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     global $_CONF, $_USER;
 
     // Handle @ operator
-    if( error_reporting() == 0 )
-    {
+    if (error_reporting() == 0) {
         return;
     }
 
-    /* If in PHP4, then respect error_reporting */
-    if( (PHP_VERSION < 5) && (($errno & error_reporting()) == 0) ) return;
+    // If in PHP4, then respect error_reporting
+    if ((PHP_VERSION < 5) && (($errno & error_reporting()) == 0)) {
+        return;
+    }
 
     /*
      * If we have a root user, then output detailed error message:
      */
-    if( ( is_array($_USER) && function_exists('SEC_inGroup') ) || (isset($_CONF['rootdebug']) && $_CONF['rootdebug']) )
-    {
-        if($_CONF['rootdebug'] || SEC_inGroup('Root'))
-        {
-            echo("
-                An error has occurred:<br>
-                $errno - $errstr @ $errfile line $errline<br>
-            <pre>");
+    if ((is_array($_USER) && function_exists('SEC_inGroup'))
+            || (isset($_CONF['rootdebug']) && $_CONF['rootdebug'])) {
+        if ($_CONF['rootdebug'] || SEC_inGroup('Root')) {
+
+            header('HTTP/1.1 500 Internal Server Error');
+            header('Status: 500 Internal Server Error');
+
+            $title = 'An Error Occurred';
+            if (!empty($_CONF['site_name'])) {
+                $title = $_CONF['site_name'] . ' - ' . $title;
+            }
+            echo("<html><head><title>$title</title></head>\n<body>\n");
+
+            echo('<h1>An error has occurred:</h1>');
+            if ($_CONF['rootdebug']) {
+                echo('<h2 style="color: red">This is being displayed as "Root Debugging" is enabled
+                        in your Geeklog configuration.</h2><p>If this is a production
+                        website you <strong><em>must disable</em></strong> this
+                        option once you have resolved any issues you are
+                        investigating.</p>');
+            } else {
+                echo('<p>(This text is only displayed to users in the group \'Root\')</p>');
+            }
+            echo("<p>$errno - $errstr @ $errfile line $errline</p>");
+
+            if (!function_exists('SEC_inGroup') || !SEC_inGroup('Root')) {
+                if ('force' != ''.$_CONF['rootdebug']) {
+                    $errcontext = COM_rootDebugClean($errcontext);
+                } else {
+                    echo('<h2 style="color: red">Root Debug is set to "force", this
+                    means that passwords and session cookies are exposed in this
+                    message!!!</h2>');
+                }
+            }
+            echo('<pre>');
             ob_start();
             var_dump($errcontext);
             $errcontext = htmlspecialchars(ob_get_contents());
             ob_end_clean();
-            echo("$errcontext</pre>
-            (This text is only displayed to users in the group 'Root')
-            ");
+            echo("$errcontext</pre></body></html>");
             exit;
         }
     }
@@ -6781,15 +6825,12 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     /* If there is a custom error handler, fail over to that, but only
      * if the error wasn't in lib-custom.php
      */
-    if( is_array($_CONF) && !(strstr($errfile, 'lib-custom.php')))
-    {
-        if( array_key_exists('path_system', $_CONF) )
-        {
-            if (file_exists($_CONF['path_system'].'lib-custom.php')) {
-                require_once($_CONF['path_system'].'lib-custom.php');
+    if (is_array($_CONF) && !(strstr($errfile, 'lib-custom.php'))) {
+        if (array_key_exists('path_system', $_CONF)) {
+            if (file_exists($_CONF['path_system'] . 'lib-custom.php')) {
+                require_once $_CONF['path_system'] . 'lib-custom.php';
             }
-            if( function_exists('CUSTOM_handleError') )
-            {
+            if (function_exists('CUSTOM_handleError')) {
                 CUSTOM_handleError($errno, $errstr, $errfile, $errline, $errcontext);
                 exit;
             }
@@ -6799,14 +6840,17 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     // if we do not throw the error back to an admin, still log it in the error.log
     COM_errorLog("$errno - $errstr @ $errfile line $errline", 1);
 
-    /* Does the theme implement an error message html file? */
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Status: 500 Internal Server Error');
+
+    // Does the theme implement an error message html file?
     if (!empty($_CONF['path_layout']) &&
             file_exists($_CONF['path_layout'] . 'errormessage.html')) {
         // NOTE: NOT A TEMPLATE! JUST HTML!
         include $_CONF['path_layout'] . 'errormessage.html';
     } else {
-        /* Otherwise, display simple error message */
-        $title = "An Error Occurred";
+        // Otherwise, display simple error message
+        $title = 'An Error Occurred';
         if (!empty($_CONF['site_name'])) {
             $title = $_CONF['site_name'] . ' - ' . $title;
         }
@@ -6827,6 +6871,45 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
 
     exit;
 }
+
+/**
+  * Recurse through the error context array removing/blanking password/cookie
+  * values in case the "for development" only switch is left on in a production
+  * environment.
+  *
+  * [Not fit for public consumption comments about what users who enable root
+  * debug in production should have done to them, and why making this change
+  * defeats the point of the entire root debug feature go here.]
+  *
+  * @param $array   Array of state info (Recursive array).
+  * @return Cleaned array
+  */
+function COM_rootDebugClean($array, $blank=false)
+{
+    $blankField = false;
+    while(list($key, $value) = each($array)) {
+        $lkey = strtolower($key);
+        if((strpos($lkey, 'pass') !== false) || (strpos($lkey, 'cookie')!== false)) {
+            $blankField = true;
+        } else {
+            $blankField = $blank;
+        }
+        if(is_array($value)) {
+            $array[$key] = COM_rootDebugClean($value, $blankField);
+        } elseif($blankField) {
+            $array[$key] = '[VALUE REMOVED]';
+        }
+    }
+    return $array;
+}
+
+/**
+  * Checks to see if the needed version is installed.
+  *
+  * @param  string $have    Version installed
+  * @param  string $need    Version we must have to continue
+  * @return boolean         true if $have is greater or equal to $need
+  */
 
 function COM_checkVersion($have, $need) {
 
@@ -6896,6 +6979,82 @@ function COM_isAnonUser($uid = '')
         return ($uid == 1);
     } else {
         return true;
+    }
+}
+
+/**
+* Convert wiki-formatted text to (X)HTML
+*
+* @param    string  $wikitext   wiki-formatted text
+* @return   string              XHTML formatted text
+*
+*/
+function COM_renderWikiText($wikitext)
+{
+    global $_CONF;
+
+    if (!$_CONF['wikitext_editor']) {
+        return $wikitext;
+    }
+
+    require_once 'Text/Wiki.php';
+
+    $wiki = &new Text_Wiki();
+    $wiki->disableRule('wikilink');
+    $wiki->disableRule('freelink');
+    $wiki->disableRule('interwiki');
+
+    return $wiki->transform($wikitext, 'Xhtml');
+}
+
+/**
+* Set the {lang_id} and {lang_attribute} variables for a template
+*
+* @param    ref     $template   template to use
+* @return   void
+* @note     {lang_attribute} is only set in multi-language environments.
+*
+*/
+function COM_setLangIdAndAttribute(&$template)
+{
+    global $_CONF;
+
+    $langAttr = '';
+    $langId   = '';
+
+    if (!empty($_CONF['languages']) && !empty($_CONF['language_files'])) {
+        $langId = COM_getLanguageId();
+    } else {
+        // try to derive the language id from the locale
+        $l = explode('.', $_CONF['locale']); // get rid of character set
+        $langId = $l[0];
+        $l = explode('@', $langId); // get rid of '@euro', etc.
+        $langId = $l[0];
+    }
+
+    if (!empty($langId)) {
+        $l = explode('-', str_replace('_', '-', $langId));
+        if ((count($l) == 1) && (strlen($langId) == 2)) {
+            $langAttr = 'lang="' . $langId . '"';
+        } else if (count($l) == 2) {
+            if (($l[0] == 'i') || ($l[0] == 'x')) {
+                $langId = implode('-', $l);
+                $langAttr = 'lang="' . $langId . '"';
+            } else if (strlen($l[0]) == 2) {
+                $langId = implode('-', $l);
+                $langAttr = 'lang="' . $langId . '"';
+            } else {
+                $langId = $l[0];
+                // this isn't a valid lang attribute, so don't set $langAttr
+            }
+        }
+    }
+    $template->set_var('lang_id', $langId);
+
+    if (!empty($_CONF['languages']) && !empty($_CONF['language_files'])) {
+        $template->set_var('lang_attribute', $langAttr);
+    } else {
+        $template->set_var('lang_attribute', '');
     }
 }
 
