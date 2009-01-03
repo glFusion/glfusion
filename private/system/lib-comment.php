@@ -476,9 +476,10 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         if( $ccode == 0 ) {
             $reply_link = $_CONF['site_url'] . '/comment.php?sid=' . $A['sid']
                         . '&amp;pid=' . $A['cid'] . '&amp;title='
-                        . urlencode( $A['title'] ) . '&amp;type=' . $A['type'];
-            $reply_option = COM_createLink($LANG01[43], $reply_link ) . ' | ';
-            $template->set_var( 'reply_option', $reply_option );
+                        . urlencode($A['title']) . '&amp;type=' . $A['type'];
+            $reply_option = COM_createLink($LANG01[43], $reply_link,
+                                           array('rel' => 'nofollow')) . ' | ';
+            $template->set_var('reply_option', $reply_option);
         } else {
             $template->set_var( 'reply_option', '' );
         }
