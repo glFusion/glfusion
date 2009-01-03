@@ -42,6 +42,11 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+if ( !function_exists('plugin_getmenuitems_forum') ) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
 if (!class_exists('StringParser') ) {
     require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 }
