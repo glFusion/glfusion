@@ -76,7 +76,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     // check mail speedlimit
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'mail');
     if (COM_checkSpeedlimit ('mail') > 0) {
-        return COM_refresh ($_CONF['site_url'] . '/index.php');
+        return COM_refresh ($_CONF['site_url'] . '/index.php?msg=85');
     }
 
     if (!empty($author) && !empty($subject) && !empty($message)) {
