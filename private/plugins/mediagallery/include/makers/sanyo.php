@@ -1,12 +1,11 @@
-<?php
-//================================================================================================
+<?php //================================================================================================
 //================================================================================================
 //================================================================================================
 /*
 	Exifer
 	Extracts EXIF information from digital photos.
 
-	Copyright © 2003 Jake Olefsky
+	Copyright ï¿½ 2003 Jake Olefsky
 	http://www.offsky.com/software/exif/index.php
 	jake@olefsky.com
 
@@ -26,7 +25,9 @@
 //================================================================================================
 //================================================================================================
 
-
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
 
 //=================
 // Looks up the name of the tag for the MakerNote (Depends on Manufacturer)
@@ -70,16 +71,16 @@ function formatSanyoData($type,$tag,$intel,$data) {
 		$data=hexdec($data);
 
 		if($tag=="0200") { //SpecialMode
-			if($data == 0) $data = "Normal";
-			else $data = "Unknown: ".$data;
+			if($data == 0) $data = gettext_glf("Normal");
+			else $data = gettext_glf("Unknown").": ".$data;
 		}
 		if($tag=="0201") { //Quality
-			if($data == 2) $data = "High";
-			else $data = "Unknown: ".$data;
+			if($data == 2) $data = gettext_glf("High");
+			else $data = gettext_glf("Unknown").": ".$data;
 		}
 		if($tag=="0202") { //Macro
-			if($data == 0) $data = "Normal";
-			else $data = "Unknown: ".$data;
+			if($data == 0) $data = gettext_glf("Normal");
+			else $data = gettext_glf("Unknown").": ".$data;
 		}
 	} else if($type=="UNDEFINED") {
 
