@@ -375,7 +375,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     if (!empty ($order_for_query)) { # concat order string
         $order_sql = "ORDER BY $order_for_query $direction";
     }
-    $th_subtags = ''; // other tags in the th, such as onlick and mouseover
+    $th_subtags = ''; // other tags in the th, such as onclick and mouseover
     $header_text = ''; // title as displayed to the user
     // HEADER FIELDS array(text, field, sort, class)
     // this part defines the contents & format of the header fields
