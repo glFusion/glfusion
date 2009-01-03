@@ -1,14 +1,164 @@
 glFusion ChangeLog
 
-v1.2.0
+vSVN
 ------
-- Updated version numbers to v1.2.0.svn (Mark)
+[upd] - Updated version numbers to v1.2.0.svn - May change to 2.0 (Mark)
+[new] - Implemented new santize.class.php (Mark)
+[new] - Implemented new output.class.php (Mark)
+[new] - Implemented new htmlfilter.class.php (Mark)
+[bug] - Fixed bug in URL processing on Abyss web server (Mark)
+
+v1.1.2
+------
+- Updated version numbers (Mark)
+        private/system/sql/mysql_tableanddata.php
+
+- SiteTailor - Fixed issue where color was not properly used (Eric)
+        private/plugins/sitetailor/templates/gl_vertical-cascading.thtml
+
+- Forum: Implement check to see if plugin is disabled and return
+  404 error (Mark)
+        public_html/forum/createtopic.php
+        public_html/forum/index.php
+        public_html/forum/memberlist.php
+        public_html/forum/print.php
+        public_html/forum/userprefs.php
+        public_html/forum/viewtopic.php
+        private/plugins/forum/include/gf_format.php
+
+- Media Gallery: Updated the EXIF library to latest release (Mark)
+        private/plugins/mediagallery/include/exif.php
+        private/plugins/mediagallery/include/makers/canon.php
+        private/plugins/mediagallery/include/makers/fujifilm.php
+        private/plugins/mediagallery/include/makers/gps.php
+        private/plugins/mediagallery/include/makers/nikon.php
+        private/plugins/mediagallery/include/makers/olympus.php
+        private/plugins/mediagallery/include/makers/panasonic.php (new file)
+        private/plugins/mediagallery/include/makers/sanyo.php
+
+- Check username length (Mark)
+        public_html/users.php
+
+- Pass error message when speedlimit error (Mark)
+        public_html/profiles.php
+
+- XHTML Fix (Mark)
+        private/system/lib-plugins.php
+
+- Fixed spelling error (no code changes) (Mark)
+        private/system/lib-admin.php
+
+- Added nofollow attribute to comment reply (Mark)
+        private/system/lib-comment.php
+
+- Moved wiki processing to its own functions (Mark - port from Geeklog)
+        private/system/classes/story.class.php
+        public_html/lib-common.php
+
+- Forum: Implemented "Back to top" image in lower right corner of
+  posts (Eric)
+        public_html/forum/images/icon_minipost.gif
+        public_html/forum/images/top.png
+        private/plugins/forum/css/style.css
+        private/plugins/forum/templates/topic.thtml
+
+- Admin index did not display informational messages (Mark)
+        public_html/admin/index.php
+
+- Implement COM_showMessageText() (Mark - port from Geeklog)
+  Implement COM_showMessageFromParameter()
+  Fixed bug in COM_getYearFormOptions()
+        public_html/lib-common.php
+        private/system/lib-story.php
+        public_html/users.php
+        public_html/usersettings.php
+
+- Add lang direction to article template (Mark)
+        public_html/article.php
+
+- Polls: Fixed XHTML compliance issue (Mark)
+        private/plugins/polls/functions.inc
+
+- Media Gallery: Add support for newlines in postcard email. (Mark)
+        public_html/mediagallery/postcard.php
+
+- Searches with & (or other special chars) would fail on stories and comments
+  and several plugins (Mark)
+        private/system/classes/search.class.php
+        private/plugins/calendar/functions.inc
+        private/plugins/links/functions.inc
+        private/plugins/mediagallery/functions.inc
+
+- Media Gallery: Fixed a missing global variable which caused batch image
+  rotate to fail (Mark)
+        private/plugins/mediagallery/include/batch.php
+
+- Fixed wrong use of COM_isAnonUser in COM_getPermSQL (port from Geeklog)
+        public_html/lib-common.php
+
+- Fixed STORY_getItemInfo - need to check the draft flag and for a publish date
+  in the future (port from Geeklog)
+        private/system/lib-story.php
+
+- Admin lists allowed non-sortable columns to be sortable (port from Geeklog)
+        private/system/lib-admin.php
+
+- Static Pages: Do not include pages with sp_search set to 0 in stats (Mark)
+        private/plugins/staticpages/functions.inc
+
+- Media Gallery: Added check to rating code to validate if login is required
+  and if user is logged in (Mark)
+        public_html/mediagallery/rater.php
+        public_html/mediagallery/rater_rpc.php
+
+- Media Gallery: Enhanced gallery_remote2.php to support F-SPOT Gallery
+  export (Mark)
+        public_html/mediagallery/gallery_remote2.php
+
+- URL Rewriting can fail on certain web servers. Now check to ensure the
+  arguments are properly calculated. (Mark)
+        private/system/classes/url.class.php
+
+- Enhanced fusionrescue.php to allow session table repair (Mark)
+        public_html/admin/install/fusionrescue.php
+
+- Fixed issue where links to the help documents do not appear for plugins
+  in the online configuration. (bug #0000292) (Mark)
+        private/system/classes/config.class.php
+
+- Fixed issue when saving a story from the submission queue could crash under
+  certain circumstances. (bug #0000295)
+        private/system/lib-story.php
+
+- Fixed bug where the URL query string could be duplicated when determining
+  the current URL (bug #000293) (Mark)
+        public_html/lib-common.php
+
+- MediaGallery: Fixed bug where the global edit of 'enable_postcards' failed.
+  (bug #0000294) (Mark)
+        private/plugins/mediagallery/include/global.php
+
+- Improved error handling in the image processing routines (bug #0000296) (Mark)
+        private/plugins/mediagallery/include/makers/canon.php
+        private/plugins/mediagallery/include/makers/gps.php
+        private/plugins/mediagallery/include/makers/olympus.php
+        private/plugins/mediagallery/include/makers/sanyo.php
 
 v1.1.1
 ------
 - Bumped version number to v1.1.1 (Mark)
         public_html/lib-common.php
         public_html/admin/install/index.php
+
+- Fixed bug where contacting a user would try to redirect to profile page
+  when profileloginrequired = true (Mark)
+        public_html/profiles.php
+
+- Added rdf_file to the fusionrescue.php fields (Mark)
+        public_html/admin/install/fusionrescue.php
+
+- Fixed IE6 bug with the block menus (Eric)
+        public_html/javascript/sitetailor_ie6vertmenu.js
 
 - Fixed issue with openbase_dir restrictions when processing mime types (Mark)
         private/lib/getid3/getid3.lib.php
@@ -120,6 +270,9 @@ v1.1.1
   IE. (Mark)
         private/plugins/mediagallery/functions.inc
 
+- Added missing security token to trackback editor (Mark)
+        public_html/layout/nouveau/admin/trackback/trackbackeditor.thtml
+
 - If login is required for search and disable_new_registrations is true,
   non-logged-in users who performed a search were presented with a link
   to the 'New User' page.  Removed the New User link if registration is
@@ -161,6 +314,7 @@ v1.1.1
 - Enhanced error check when reading EXIF data from JPG images, ensure that
   corrupted images do not cause the application to fail. (Mark)
         private/lib/getid3/module.graphic.jpg.php
+
 
 v1.1.0
 ------
