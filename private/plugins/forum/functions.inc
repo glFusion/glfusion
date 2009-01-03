@@ -988,7 +988,7 @@ function forum_deleteForum($id) {
 
 
 function phpblock_forum_newposts() {
-    global $_CONF, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version;
+    global $_CONF, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version, $inputHandler;
 
     if ( !COM_checkVersion($pi_version, '2.6') ) {
         return '';
@@ -998,8 +998,9 @@ function phpblock_forum_newposts() {
         return;
     }
     $post_limit = $CONF_FORUM['sideblock_numposts'];
-    $mode = COM_applyFilter($_GET['mode']);
-    $order = COM_applyFilter($_GET['order']);
+    $mode = $inputHandler->getVar('strict','mode','get','');
+    $order = $inputHandler->getVar('strict','order','get','');
+
     if (DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name="forum"')) {
         // Check if user has clicked on a sort option in the block
         if ($mode == 'forumblock') {
@@ -1476,7 +1477,7 @@ function phpblock_forum_menu() {
 
     $retval = '<ul>';
     $retval .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php\" title=\"{$LANG_GF02['msg196']}\">{$LANG_GF01['INDEXPAGE']}</a></li>";
-    if ($_USER['uid'] > 1) {
+    if (isset($_USER['uid']) && $_USER['uid'] > 1) {
         $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/userprefs.php' . '" title="' . $LANG_GF01['USERPREFS'] . '">' . $LANG_GF01['USERPREFS'] . '</a></li>';
         $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/notify.php' . '" title="' . $LANG_GF01['SUBSCRIPTIONS'] . '">' . $LANG_GF01['SUBSCRIPTIONS'] . '</a></li>';
         $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/index.php?op=bookmarks' . '" title="' . $LANG_GF01['BOOKMARKS'] . '">' . $LANG_GF01['BOOKMARKS'] . '</a></li>';

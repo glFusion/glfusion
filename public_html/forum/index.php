@@ -41,24 +41,21 @@ require_once '../lib-common.php'; // Path to your lib-common.php
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$forum      = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
-$show       = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) : 0;
-$page       = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
-$order      = isset($_REQUEST['order']) ? COM_applyFilter($_REQUEST['order'],true) : 0;
-$prevorder  = isset($_REQUEST['prevorder']) ? COM_applyFilter($_REQUEST['prevorder']) : 0;
-$direction  = isset($_REQUEST['direction']) ? COM_applyFilter($_REQUEST['direction']) : 'DESC';
-$sort       = isset($_REQUEST['sort']) ? COM_applyFilter($_REQUEST['sort'],true) : 0;
-$cat_id     = isset($_REQUEST['cat_id']) ? COM_applyFilter($_REQUEST['cat_id'],true) : 0;
-$op         = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
+
+$forum = $inputHandler->getVar('integer','forum','request',0);
+$show  = $inputHandler->getVar('integer','show','request',0);
+$page  = $inputHandler->getVar('integer','page','request',0);
+$order = $inputHandler->getVar('integer','order','request',0);
+$prevorder  = $inputHandler->getVar('integer','prevorder','request',0);
+$direction  = $inputHandler->getVar('strict','direction','request','DESC');
+$sort       = $inputHandler->getVar('integer','sort','request',0);
+$cat_id     = $inputHandler->getVar('integer','cat_id','request',0);
+$op         = $inputHandler->getVar('strict','op','request','');
+
 
 //Check is anonymous users can access
 if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
-    echo COM_siteHeader();
-    echo COM_startBlock();
-    alertMessage($LANG_GF02['msg01'],$LANG_GF02['msg171']);
-    echo COM_endBlock();
-    echo COM_siteFooter();
-    exit;
+    $pageHandle->displayLoginRequired();
 }
 $canPost = 0;
 $todaysdate=date("l, F d, Y");
@@ -92,13 +89,15 @@ if (isset($_USER['uid']) && $_USER['uid'] > 1 && $op == 'markallread') {
             }
         }
     }
-    echo COM_refresh($_CONF['site_url'] .'/forum/index.php');
+    $pageHandle->redirect($_CONF['site_url'] .'/forum/index.php');
     exit();
 }
 
 // Display Common headers
-ob_start();
-echo gf_siteHeader();
+
+
+
+gf_siteHeader();
 
 //Check if anonymous users allowed to access forum
 forum_chkUsercanAccess();
@@ -227,7 +226,7 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
     }
 
     $report->parse ('output', 'report');
-    echo $report->finish ($report->get_var('output'));
+    $pageHandle->addContent($report->finish ($report->get_var('output')));
     gf_siteFooter();
     exit();
 }
@@ -350,7 +349,7 @@ if ($op == 'search') {
         $report->set_var ('bottomlink',$link);
     }
     $report->parse ('output', 'report');
-    echo $report->finish($report->get_var('output'));
+    $pageHandle->addContent($report->finish($report->get_var('output')));
     gf_siteFooter();
     exit();
 }
@@ -369,7 +368,7 @@ if ($op == 'popular') {
                   array('text' => $LANG_GF01['DATE'],      'field' => 'date', 'sort' => false, 'nowrap' => true)
     );
     if ($CONF_FORUM['usermenu'] == 'navbar') {
-        echo forumNavbarMenu($LANG_GF02['msg201']);
+        $pageHandle->addContent(forumNavbarMenu($LANG_GF02['msg201']));
     }
 
     $retval .= COM_startBlock($LANG_GF02['msg201'], '',
@@ -396,7 +395,7 @@ if ($op == 'popular') {
                           $text_arr, $query_arr, $defsort_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
-    echo $retval;
+    $pageHandle->addContent($retval);
 
     gf_siteFooter();
     exit();
@@ -417,7 +416,7 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
                   array('text' => $LANG_GF01['DATE'],      'field' => 'date', 'sort' => true, 'nowrap' => true)
     );
     if ($CONF_FORUM['usermenu'] == 'navbar') {
-        echo forumNavbarMenu($LANG_GF01['BOOKMARKS']);
+        $pageHandle->addContent(forumNavbarMenu($LANG_GF01['BOOKMARKS']));
     }
 
     $retval .= COM_startBlock($LANG_GF01['BOOKMARKS'], '',
@@ -442,7 +441,7 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
                           $text_arr, $query_arr, $defsort_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
-    echo $retval;
+    $pageHandle->addContent($retval);
 
     gf_siteFooter();
     exit();
@@ -459,7 +458,7 @@ if ($op == 'lastx') {
     $data_arr = array();
     $text_arr = array();
     if ($CONF_FORUM['usermenu'] == 'navbar') {
-        echo forumNavbarMenu($LANG_GF01['LASTX']);
+        $pageHandle->addContent(forumNavbarMenu($LANG_GF01['LASTX']));
     }
     $retval .= COM_startBlock($LANG_GF01['LASTX'], '',
                               COM_getBlockTemplate('_admin_block', 'header'));
@@ -540,7 +539,7 @@ if ($op == 'lastx') {
 
     $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-    echo $retval;
+    $pageHandle->addContent($retval);
 
     gf_siteFooter();
     exit();
@@ -551,9 +550,9 @@ if ($op == 'subscribe') {
         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','0','{$_USER['uid']}', now() )");
         // Delete all individual topic notification records
         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='{$_USER['uid']}' AND forum_id='$forum' and topic_id > '0' " );
-        forum_statusMessage($LANG_GF02['msg134'],$_CONF['site_url'] .'/forum/index.php?forum=' .$forum,$LANG_GF02['msg135']);
+        $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg134'],$_CONF['site_url'] .'/forum/index.php?forum=' .$forum,$LANG_GF02['msg135']));
     } else {
-        BlockMessage($LANG_GF01['ERROR'],$LANG_GF02['msg136'],false);
+        $pageHandle->addContent(BlockMessage($LANG_GF01['ERROR'],$LANG_GF02['msg136'],false));
     }
     gf_siteFooter();
     exit();
@@ -561,7 +560,7 @@ if ($op == 'subscribe') {
 
 // MAIN CODE BEGINS to view forums or topics within a forum
 
-ForumHeader($forum,0);
+$pageHandle->addContent(ForumHeader($forum,0));
 
 // Check if the number of records was specified to show - part of page navigation.
 // Will be 0 if not set - as I'm now passing this tru gf_applyFilte() at top of script
@@ -793,13 +792,13 @@ if ($forum == 0) {
     }
 
     if ($numCategories == 0 ) {         // Do we have any categories defined yet
-        echo '<h1 style="padding:10px; color:#F00; background-color:#000">No Categories or Forums Defined</h1>';
+        $pageHandle->addContent('<h1 style="padding:10px; color:#F00; background-color:#000">No Categories or Forums Defined</h1>');
     }
 
     $forumlisting->parse ('outline_header', 'forum_outline_header');
     $forumlisting->parse ('outline_footer', 'forum_outline_footer');
     $forumlisting->parse ('output', 'forumlisting');
-    echo $forumlisting->finish ($forumlisting->get_var('output'));
+    $pageHandle->addContent($forumlisting->finish ($forumlisting->get_var('output')));
 }
 
  // Display Forums
@@ -1115,13 +1114,10 @@ if ($forum > 0) {
     $topiclisting->parse ('outline_header', 'forum_outline_header');
     $topiclisting->parse ('outline_footer', 'forum_outline_footer');
     $topiclisting->parse ('output', 'topiclisting');
-    echo $topiclisting->finish ($topiclisting->get_var('output'));
+    $pageHandle->addContent($topiclisting->finish ($topiclisting->get_var('output')));
 
 }
 
-BaseFooter();
+$pageHandle->addContent(BaseFooter());
 gf_siteFooter();
-$display = ob_get_contents();
-ob_end_clean();
-echo $display;
 ?>

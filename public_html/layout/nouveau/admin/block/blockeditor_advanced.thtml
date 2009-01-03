@@ -1,6 +1,6 @@
 <!-- Hide the Advanced Editor as Javascript is required. If JS is not enabled then the message below in the <nonscript> tags will be displayed -->
 <noscript>
-<div class="pluginAlert" style="border:1px dashed #ccc;text-align:center;margin-top:10px;padding:15px;">{lang_nojavascript} </div>
+<div class="pluginAlert" style="border:1px dashed #ccc;text-align:center;margin-top:10px;padding:15px;">{$LANG24[77]} </div>
 </noscript>
 <script type="text/javascript">
 glfusionEditorBasePath = "{site_url}/fckeditor/" ;
@@ -11,51 +11,51 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
 <form action="{site_admin_url}/block.php" method="post">
 <table cellspacing="0" cellpadding="3" width="100%">
 <tr>
-    <td width="180" class="alignright">{lang_blocktitle}:</td>
+    <td width="180" class="alignright">{$LANG_ADMIN[title]}:</td>
     <td><input type="text" size="48" name="title" value="{block_title}"{xhtml}></td>
 </tr>
 <tr>
-    <td class="alignright">{lang_enabled}:</td>
+    <td class="alignright">{$LANG_ADMIN[enabled]}:</td>
     <td><input type="checkbox" name="is_enabled" {is_enabled}{xhtml}></td>
 </tr>
 <tr>
-    <td class="alignright" style="vertical-align:top">{lang_blockhelpurl}:</td>
-    <td><input type="text" dir="ltr" name="help" value="{block_help}" size="48" maxlength="{max_url_length}"{xhtml}><div class="pluginMediumText">{lang_includehttp}&nbsp;{lang_explanation}</div></td>
+    <td class="alignright" style="vertical-align:top">{$LANG_ADMIN[help_url]}:</td>
+    <td><input type="text" dir="ltr" name="help" value="{block_help}" size="48" maxlength="{max_url_length}"{xhtml}><div class="pluginMediumText">{$LANG21[51]}&nbsp;{$LANG21[52]}</div></td>
 </tr>
 <tr>
-    <td class="alignright" style="vertical-align:top">{lang_blockname}:</td>
-    <td><input type="text" size="48" name="name" value="{block_name}"{xhtml}><br{xhtml}>{lang_nospaces}</td>
+    <td class="alignright" style="vertical-align:top">{$LANG21[48]}:</td>
+    <td><input type="text" size="48" name="name" value="{block_name}"{xhtml}><br{xhtml}>{$LANG21[49]}</td>
 </tr>
 <tr>
-    <td class="alignright">{lang_topic}:</td>
+    <td class="alignright">{$LANG_ADMIN[topic]}:</td>
     <td>
         <select name="tid">
-            <option value="all" {all_selected}>{lang_all}</option>
-            <option value="homeonly" {homeonly_selected}>{lang_homeonly}</option>
+            <option value="all" {all_selected}>{$LANG21[7]}</option>
+            <option value="homeonly" {homeonly_selected}>{$LANG21[43]}</option>
             {topic_options}
         </select>
     </td>
 </tr>
 <tr>
-    <td class="alignright">{lang_side}:</td>
+    <td class="alignright">{$LANG21[39]}:</td>
     <td>
         <select name="onleft">
-            <option value="1" {left_selected}>{lang_left}</option>
-            <option value="0" {right_selected}>{lang_right}</option>
+            <option value="1" {left_selected}>{$LANG21[40]}</option>
+            <option value="0" {right_selected}>{$LANG21[41]}</option>
         </select>
    </td>
 </tr>
 <tr>
-    <td class="alignright">{lang_blockorder}:</td>
+    <td class="alignright">{$LANG21[9]}:</td>
     <td><input type="text" size="4" name="blockorder" value="{block_order}"{xhtml}> 0 - 9999</td>
 </tr>
 <tr>
-    <td class="alignright">{lang_blocktype}:</td>
+    <td class="alignright">{$LANG_ADMIN[type]}:</td>
     <td>
         <select name="type">
-            <option value="normal" {normal_selected}>{lang_normalblock}</option>
-            <option value="phpblock" {php_selected}>{lang_phpblock}</option>
-            <option value="portal" {portal_selected}>{lang_portalblock}</option>
+            <option value="normal" {normal_selected}>{$LANG21[12]}</option>
+            <option value="phpblock" {php_selected}>{$LANG21[27]}</option>
+            <option value="portal" {portal_selected}>{$LANG21[11]}</option>
         </select>
     </td>
 </tr>
@@ -63,38 +63,38 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
     <td colspan="2"><hr{xhtml}></td>
 </tr>
 <tr>
-    <td colspan="2"><b>{lang_phpblockoptions}</b></td>
+    <td colspan="2"><b>{$LANG21[28]}</b></td>
 </tr>
 <tr>
-    <td class="alignright">{lang_blockfunction}:</td>
+    <td class="alignright">{$LANG21[29]}:</td>
     <td><input type="text" size="50" maxlength="64" name="phpblockfn" value="{block_phpblockfn}"{xhtml}></td>
 </tr>
 <tr>
-    <td colspan="2">{lang_phpblockwarning}</td>
+    <td colspan="2">{$LANG21[30]}</td>
 </tr>
 <tr><td colspan="2"><hr{xhtml}></td></tr>
 <tr>
-    <td colspan="2"><b>{lang_portalblockoptions}</b></td>
+    <td colspan="2"><b>{$LANG21[13]}</b></td>
 </tr>
 <tr>
-    <td class="alignright">{lang_rdfurl}:</td>
+    <td class="alignright">{$LANG21[14]}:</td>
     <td><input type="text" dir="ltr" size="50" maxlength="{max_url_length}" name="rdfurl" value="{block_rdfurl}"{xhtml}></td>
 </tr>
 <tr>
-    <td class="alignright">{lang_rdflimit}:</td>
+    <td class="alignright">{$LANG21[62]}:</td>
     <td><input type="text" size="3" maxlength="3" name="rdflimit" value="{block_rdflimit}"{xhtml}></td>
 </tr>
 <tr>
-    <td class="alignright">{lang_lastrdfupdate}:</td>
+    <td class="alignright">{$LANG21[15]}:</td>
     <td><input type="text" size="19" name="rdfupdated" value="{block_rdfupdated}"{xhtml}></td>
 </tr>
 <tr><td colspan="2"><hr{xhtml}></td></tr>
 <tr>
-    <td colspan="2"><b>{lang_normalblockoptions}</b></td>
+    <td colspan="2"><b>{$LANG21[16]}</b></td>
 </tr>
         <tr>
             <td colspan="2" style="vertical-align:top;padding-top:10px;padding-left:15px;">
-              {lang_postmode}:&nbsp;
+              {$LANG24[4]}:&nbsp;
               <select id="sel_editmode" name="postmode" {change_editormode}>{post_options}</select>
             </td>
         </tr>
@@ -110,43 +110,43 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
           </tr>
 
 <tr>
-    <td class="alignright">{lang_autotags}:</td>
-    <td><input type="checkbox" name="allow_autotags" {allow_autotags}{xhtml}> ({lang_use_autotags})</td>
+    <td class="alignright">{$LANG21[66]}:</td>
+    <td><input type="checkbox" name="allow_autotags" {allow_autotags}{xhtml}> ({$LANG21[67]})</td>
 </tr>
 <tr>
     <td colspan="2"><hr{xhtml}></td>
 </tr>
 <tr>
-    <td colspan="2"><b>{lang_accessrights}</b></td>
+    <td colspan="2"><b>{$LANG_ACCESS[accessrights]}</b></td>
 </tr>
 <tr>
-    <td class="alignright">{lang_owner}:</td>
+    <td class="alignright">{$LANG_ACCESS[owner]}:</td>
     <td>{owner_name} <input type="hidden" name="owner_id" value="{owner_id}"{xhtml}>
     </td>
 </tr>
 <tr>
-    <td class="alignright">{lang_group}:</td>
+    <td class="alignright">{$LANG_ACCESS[group]}:</td>
     <td>
         {group_dropdown}
     </td>
 </tr>
 <tr>
-    <td colspan="2"><b>{lang_permissions}:</b></td>
+    <td colspan="2"><b>{$LANG_ACCESS[permissions]}:</b></td>
 </tr>
 <tr>
-    <td colspan="2">{lang_perm_key}</td>
+    <td colspan="2">{$LANG_ACCESS[permissionskey]}</td>
 </tr>
 <tr>
     <td colspan="2">{permissions_editor}</td>
 </tr>
 <tr>
-    <td colspan="2">{lang_permissions_msg}</td>
+    <td colspan="2">{$LANG_ACCESS[permmsg]}</td>
 </tr>
 <tr><td>&nbsp;</td></tr>
 <tr>
     <td colspan="2">
-    <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-    <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+    <input type="submit" value="{$LANG_ADMIN[save]}" name="mode"{xhtml}>
+    <input type="submit" value="{$LANG_ADMIN[cancel]}" name="mode"{xhtml}>
     {delete_option}
     <input type="hidden" name="bid" value="{block_bid}"{xhtml}>
     <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>

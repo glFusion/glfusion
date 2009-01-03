@@ -41,6 +41,11 @@
 require_once '../lib-common.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
+if ( !function_exists('plugin_getmenuitems_forum') ) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
 if ( !$CONF_FORUM['allow_memberlist'] || COM_isAnonUser() ) {
     echo COM_refresh($_CONF['site_url'] .'/forum/index.php');
     exit;

@@ -37,33 +37,16 @@
 require_once('lib-common.php');
 require_once( $_CONF['path_system'] . 'lib-admin.php' );
 
-$display = '';
+$pageHandle->setShowExtraBlocks(false);
 
 if (empty ($_USER['username']) &&
     (($_CONF['loginrequired'] == 1) || ($_CONF['statsloginrequired'] == 1))) {
-    $display = COM_siteHeader ('menu', $LANG_LOGIN[1]);
-    $display .= COM_startBlock ($LANG_LOGIN[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $login = new Template($_CONF['path_layout'] . 'submit');
-    $login->set_file (array ('login'=>'submitloginrequired.thtml'));
-    $login->set_var ( 'xhtml', XHTML );
-    $login->set_var ('site_url', $_CONF['site_url']);
-    $login->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $login->set_var ('layout_url', $_CONF['layout_url']);
-    $login->set_var ('login_message', $LANG_LOGIN[2]);
-    $login->set_var ('lang_login', $LANG_LOGIN[3]);
-    $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-    $login->parse ('output', 'login');
-    $display .= $login->finish ($login->get_var('output'));
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter();
-    echo $display;
-    exit;
+    $pageHandle->displayLoginRequired();
 }
 
 // MAIN
 
-$display .= COM_siteHeader ('menu', $LANG10[1]);
+$pageHandle->setPageTitle($LANG10[1]);
 
 // Overall Site Statistics
 
@@ -119,10 +102,7 @@ if (count ($plg_stats) > 0) {
     }
 }
 
-$display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
-
-// old stats plugin API call, for backward compatibilty
-$display .= PLG_getPluginStats (1);
+$pageHandle->addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 
 // Detailed story statistics
 
@@ -142,17 +122,17 @@ if ($nrows > 0) {
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
         $A['title'] = stripslashes(str_replace('$','&#36;',$A['title']));
-        $A['sid'] = COM_createLink($A['title'],  COM_buildUrl ($_CONF['site_url']
+        $A['sid'] = COM_createLink($A['title'],  $pageHandle->buildUrl ($_CONF['site_url']
                   . "/article.php?story={$A['sid']}"));
         $A['hits'] = COM_NumberFormat ($A['hits']);
         $data_arr[$i] = $A;
 
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    $pageHandle->addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 } else {
-    $display .= COM_startBlock($LANG10[7]);
-    $display .= $LANG10[10];
-    $display .= COM_endBlock();
+    $pageHandle->addContent(COM_startBlock($LANG10[7]));
+    $pageHandle->addContent($LANG10[10]);
+    $pageHandle->addContent(COM_endBlock());
 }
 
 // Top Ten Commented Stories
@@ -171,17 +151,17 @@ if ($nrows > 0) {
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
         $A['title'] = stripslashes(str_replace('$','&#36;',$A['title']));
-        $A['sid'] = COM_createLink($A['title'], COM_buildUrl ($_CONF['site_url']
+        $A['sid'] = COM_createLink($A['title'], $pageHandle->buildUrl ($_CONF['site_url']
                   . "/article.php?story={$A['sid']}"));
         $A['comments'] = COM_NumberFormat ($A['comments']);
         $data_arr[$i] = $A;
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    $pageHandle->addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 
 } else {
-    $display .= COM_startBlock($LANG10[11]);
-    $display .= $LANG10[13];
-    $display .= COM_endBlock();
+    $pageHandle->addContent(COM_startBlock($LANG10[11]));
+    $pageHandle->addContent($LANG10[13]);
+    $pageHandle->addContent(COM_endBlock());
 }
 
 // Top Ten Trackback Comments
@@ -201,17 +181,17 @@ if ($_CONF['trackback_enabled'] || $_CONF['pingback_enabled']) {
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray ($result);
             $A['title'] = stripslashes(str_replace('$','&#36;',$A['title']));
-            $A['sid'] = COM_createLink($A['title'], COM_buildUrl ($_CONF['site_url']
+            $A['sid'] = COM_createLink($A['title'], $pageHandle->buildUrl ($_CONF['site_url']
                       . "/article.php?story={$A['sid']}"));
             $A['count'] = COM_NumberFormat ($A['count']);
             $data_arr[$i] = $A;
         }
-        $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+        $pageHandle->addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 
     } else {
-        $display .= COM_startBlock ($LANG10[25]);
-        $display .= $LANG10[26];
-        $display .= COM_endBlock ();
+        $pageHandle->addContent(COM_startBlock ($LANG10[25]));
+        $pageHandle->addContent($LANG10[26]);
+        $pageHandle->addContent(COM_endBlock ());
     }
 }
 
@@ -232,23 +212,20 @@ if ($nrows > 0) {
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
         $A['title'] = stripslashes(str_replace('$','&#36;',$A['title']));
-        $A['sid'] = COM_createLink($A['title'], COM_buildUrl ($_CONF['site_url']
+        $A['sid'] = COM_createLink($A['title'], $pageHandle->buildUrl ($_CONF['site_url']
                   . "/article.php?story={$A['sid']}"));
         $A['numemails'] = COM_NumberFormat ($A['numemails']);
         $data_arr[$i] = $A;
 
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    $pageHandle->addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 } else {
-    $display .= COM_startBlock($LANG10[22]);
-    $display .= $LANG10[24];
-    $display .= COM_endBlock();
+    $pageHandle->addContent(COM_startBlock($LANG10[22]));
+    $pageHandle->addContent($LANG10[24]);
+    $pageHandle->addContent(COM_endBlock());
 }
 
 // Now show stats for any plugins that want to be included
-$display .= PLG_getPluginStats(2);
-$display .= COM_siteFooter();
-
-echo $display;
-
+$pageHandle->addContent(PLG_getPluginStats(2));
+$pageHandle->displayPage();
 ?>

@@ -42,46 +42,61 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+if ( !function_exists('plugin_getmenuitems_forum') ) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
 if (!class_exists('StringParser') ) {
     require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 }
 
 function gf_siteHeader($subject = '') {
-    global $CONF_FORUM;
+    global $CONF_FORUM, $pageHandle;
 
     // Display Common headers
-    if (!isset($CONF_FORUM['showblocks'])) $CONF_FORUM['showblocks'] = 'leftblocks';
-    if (!isset($CONF_FORUM['usermenu'])) $CONF_FORUM['usermenu'] = 'blockmenu';
+    if (!isset($CONF_FORUM['showblocks']))
+        $CONF_FORUM['showblocks'] = 'leftblocks';
+    if (!isset($CONF_FORUM['usermenu']))
+        $CONF_FORUM['usermenu'] = 'blockmenu';
 
     if ($CONF_FORUM['showblocks'] == 'noblocks' OR $CONF_FORUM['showblocks'] == 'rightblocks') {
-        echo COM_siteHeader('none', $subject);
+        $pageHandle->setShowNavigationBlocks(false);
+
     } elseif ($CONF_FORUM['showblocks'] == 'leftblocks' OR $CONF_FORUM['showblocks'] == 'allblocks' ) {
         if ($CONF_FORUM['usermenu'] == 'blockmenu') {
-            echo COM_siteHeader( array('forum_showBlocks',$CONF_FORUM['leftblocks']), $subject );
+            $pageHandle->setNavigationBlocksFunction(array('forum_showBlocks',$CONF_FORUM['leftblocks']));
         } else {
-            echo COM_siteHeader('menu', $subject);
+            $pageHandle->setShowNavigationBlocks(true);
         }
     } else {
-        echo COM_siteHeader('menu', $subject);
+        $pageHandle->setShowNavigationBlocks(true);
+    }
+    if ( $subject != '' ) {
+        $pageHandle->setPageTitle($subject);
     }
 }
 
 function gf_siteFooter() {
-    global $CONF_FORUM;
+    global $CONF_FORUM,$pageHandle;
+
+    $pageHandle->setShowExtraBlocks(true);
 
     if ($CONF_FORUM['showblocks'] == 'noblocks' OR $CONF_FORUM['showblocks'] == 'leftblocks') {
-        echo COM_siteFooter(false);
+        $pageHandle->setShowExtraBlocks(false);
+
     } elseif ($CONF_FORUM['showblocks'] == 'rightblocks') {
         if ($CONF_FORUM['usermenu'] == 'blockmenu') {
-            echo COM_siteFooter(true, array('forum_showBlocks',$CONF_FORUM['leftblocks']) );
+            $pageHandle->setExtraBlocksFunction(array('forum_showBlocks',$CONF_FORUM['leftblocks']));
         } else {
-            echo COM_siteFooter(true);
+            $pageHandle->setShowExtraBlocks(true);
         }
     } elseif ($CONF_FORUM['showblocks'] == 'allblocks') {
-        echo COM_siteFooter(true);
+        $pageHandle->setShowExtraBlocks(true);
     } else {
-        echo COM_siteFooter();
+        $pageHandle->setShowExtraBlocks(false);
     }
+    $pageHandle->displayPage();
 }
 
 function convertlinebreaks ($text) {
@@ -317,13 +332,15 @@ function forumNavbarMenu($current='') {
 }
 
 function ForumHeader($forum,$showtopic) {
-    global $_TABLES, $_USER, $_CONF, $CONF_FORUM, $LANG_GF01, $LANG_GF02;
+    global $_TABLES, $_USER, $_CONF, $CONF_FORUM, $LANG_GF01, $LANG_GF02, $pageHandle;
+
+    $retval = '';
 
     $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
     $forum_outline_header->set_var('xhtml',XHTML);
     $forum_outline_header->parse ('output', 'forum_outline_header');
-    echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
+    $retval = $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
     $navbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $navbar->set_file (array ('topicheader'=>'navbar.thtml'));
@@ -342,7 +359,7 @@ function ForumHeader($forum,$showtopic) {
         $navbar->set_var('navmenu','');
     }
     $navbar->parse ('output', 'topicheader');
-    echo $navbar->finish($navbar->get_var('output'));
+    $retval .= $navbar->finish($navbar->get_var('output'));
 
     if (($forum != '') || ($showtopic != '')) {
         if ($showtopic != '') {
@@ -358,7 +375,8 @@ function ForumHeader($forum,$showtopic) {
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
             $forum_outline_footer->set_var('xhtml',XHTML);
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
-            echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
+            $retval .= $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
+            $pageHandle->addContent($retval);
             gf_siteFooter();
             exit;
         }
@@ -368,7 +386,8 @@ function ForumHeader($forum,$showtopic) {
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
     $forum_outline_footer->set_var ('xhtml',XHTML);
     $forum_outline_footer->parse ('output', 'forum_outline_footer');
-    echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
+    $retval .=  $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
+    return $retval;
 }
 
 function gf_checkHTMLforSQL($str,$postmode='html') {
@@ -794,6 +813,7 @@ function gf_getImage($image,$directory='') {
         'rank_mod'          =>    'rank_mod.gif',
     );
 
+    $fullImagePath = '';
     if ($directory != '')  {
         if ( $directory == 'moods' ) {
             $fullImagePath = $_CONF['site_url'].'/forum/images/'.$directory .'/'.$image.'.gif';
@@ -801,26 +821,30 @@ function gf_getImage($image,$directory='') {
             $fullImagePath = $_CONF['site_url'].'/forum/images/'.$directory .'/'.$imageMap[$image];
         }
     } else {
-        $fullImagePath = $_CONF['site_url'].'/forum/images/'.$imageMap[$image];
+        if ( isset($imageMap[$image]) ) {
+            $fullImagePath = $_CONF['site_url'].'/forum/images/'.$imageMap[$image];
+        }
     }
     $fullImageURL = $fullImagePath;
     return $fullImageURL;
 }
 
 
-function BlockMessage($title,$message='',$sitefooter=true){
+function BlockMessage($title,$message='',$sitefooter=true)
+{
+    $retval = '';
 
-    echo COM_startBlock($title);
-    echo $message;
-    echo COM_endBlock();
-    if ($sitefooter) {
-        echo COM_siteFooter();
-    }
-    return;
+    $retval .= COM_startBlock($title);
+    $retval .= $message;
+    $retval .= COM_endBlock();
+
+    return $retval;
 }
 
 function alertMessage($message,$title='',$prompt='') {
     global $_CONF, $CONF_FORUM,$LANG_GF02;
+
+    $retval = '';
 
     $alertmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $alertmsg->set_file (array (
@@ -841,8 +865,8 @@ function alertMessage($message,$title='',$prompt='') {
     $alertmsg->parse ('alert_header', 'outline_header');
     $alertmsg->parse ('alert_footer', 'outline_footer');
     $alertmsg->parse ('output', 'alertmsg');
-    echo $alertmsg->finish ($alertmsg->get_var('output'));
-    return;
+    $retval = $alertmsg->finish ($alertmsg->get_var('output'));
+    return $retval;
 }
 
 
@@ -874,7 +898,7 @@ function BaseFooter($showbottom=true) {
         $footer->set_var ('search_forum', f_forumsearch() );
         $footer->set_var ('select_forum', f_forumjump() );
         $footer->parse ('output', 'footerblock');
-        echo $footer->finish($footer->get_var('output'));
+        return $footer->finish($footer->get_var('output'));
     }
 }
 

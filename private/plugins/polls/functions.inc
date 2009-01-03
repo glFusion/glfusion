@@ -497,7 +497,7 @@ function POLLS_pollVote($pid, $showall=true)
                 $poll->set_var('layout_url', $_CONF['layout_url']);
                 $poll->set_var('site_admin_url', $_CONF['site_admin_url']);
                 $poll->set_var('poll_id', $pid );
-                $poll->set_var('poll_topic', $P['topic'] );
+                $poll->set_var('poll_topic', htmlspecialchars($P['topic']) );
                 $poll->set_var('num_votes', COM_numberFormat($P['voters']));
                 $poll->set_var('poll_vote_url', $_CONF['site_url']
                                                 . '/polls/index.php');
@@ -578,7 +578,7 @@ function POLLS_pollVote($pid, $showall=true)
                     $poll->clear_var('poll_answers');
                 }
                 if ($nquestions > 1) {
-                    $poll->set_var('poll_topic', $LANG25['34'] . " " . $P['topic']);
+                    $poll->set_var('poll_topic', $LANG25['34'] . " " . htmlspecialchars($P['topic']));
                     $poll->set_var('lang_question', $LANG25[31]);
                 }
                 $poll->set_var('lang_polltopics', $LANG_POLLS['polltopics']);
@@ -802,7 +802,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
             $poll->set_var('site_url', $_CONF['site_url']);
             $poll->set_var('site_admin_url', $_CONF['site_admin_url']);
             $poll->set_var('layout_url', $_CONF['layout_url']);
-            $poll->set_var('poll_topic', $P['topic']);
+            $poll->set_var('poll_topic', htmlspecialchars($P['topic']));
             $poll->set_var('poll_id', $pid);
             $poll->set_var('num_votes', COM_numberFormat($P['voters']));
             $poll->set_var('lang_votes', $LANG_POLLS['votes']);

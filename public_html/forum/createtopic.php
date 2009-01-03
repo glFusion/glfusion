@@ -38,6 +38,12 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php'; // Path to your lib-common.php
+
+if ( !function_exists('plugin_getmenuitems_forum') ) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
 require_once $_CONF['path'] . 'plugins/forum/include/include_html.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
@@ -190,14 +196,19 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
     $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
     if($method == 'newtopic') {
-        if($_POST['aname'] != '') {
+        if(isset($_POST['aname']) && $_POST['aname'] != '') {
             $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['aname']))),'text');
         } else {
             $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
         }
 
         if ( function_exists('plugin_itemPreSave_captcha') ) {
-            $msg = plugin_itemPreSave_captcha('forum',$_POST['captcha']);
+            if ( isset($_POST['captcha']) ) {
+                $captcha = $_POST['captcha'];
+            } else {
+                $captcha = '';
+            }
+            $msg = plugin_itemPreSave_captcha('forum',$captcha);
             if ( $msg != '' ) {
                 $preview = 'Preview';
                 $subject = COM_stripslashes($_POST['subject']);
@@ -207,6 +218,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         . COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
                 echo $retval;
             }
+
         }
         if ( $msg == '' ) {
             if(strlen(trim($name)) > $CONF_FORUM['min_username_length'] AND

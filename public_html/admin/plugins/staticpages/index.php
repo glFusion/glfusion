@@ -38,15 +38,7 @@ require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
 if (!SEC_hasRights ('staticpages.edit')) {
-    $display = COM_siteHeader ('menu', $LANG_STATIC['access_denied']);
-    $display .= COM_startBlock ($LANG_STATIC['access_denied'], '',
-                        COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $LANG_STATIC['access_denied_msg'];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the static pages administration screen.");
-    echo $display;
-    exit;
+    $pageHandle->displayAccessError($LANG_STATIC['access_denied'],$LANG_STATIC['access_denied_msg'],'static pages administration');
 }
 
 
@@ -61,7 +53,7 @@ function form ($A, $error = false)
 {
     global $_CONF, $_TABLES, $_USER, $_GROUPS, $_SP_CONF, $mode, $sp_id,
            $LANG21, $LANG_STATIC, $LANG_ACCESS, $LANG_ADMIN, $LANG24,
-           $LANG_postmodes, $MESSAGE;
+           $LANG_postmodes, $MESSAGE, $pageHandle,$inputHandler;
 
     $template_path = staticpages_templatePath ('admin');
     if (!empty($sp_id) && $mode=='edit') {
@@ -78,9 +70,7 @@ function form ($A, $error = false)
         }
         SEC_setDefaultPermissions ($A, $_SP_CONF['default_permissions']);
         $access = 3;
-        if (isset ($_CONF['advanced_editor']) &&
-          ($_CONF['advanced_editor'] == 1) &&
-          file_exists ($template_path . '/editor_advanced.thtml'))
+        if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1))
         {
              $A['advanced_editor_mode'] = 1;
         }

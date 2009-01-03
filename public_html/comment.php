@@ -73,12 +73,19 @@ require_once $_CONF['path_system'] . 'lib-comment.php';
  */
 function handleSubmit()
 {
-    global $_CONF, $_TABLES, $LANG03;
+    global $_CONF, $_TABLES, $LANG03, $inputHandler, $pageHandle;
 
     $display = '';
 
-    $type = COM_applyFilter ($_POST['type']);
-    $sid = COM_applyFilter ($_POST['sid']);
+    $type           = $inputHandler->getVar('strict','type','post','');
+    $sid            = $inputHandler->getVar('strict','sid','post','');
+    $postmode       = $inputHandler->getVar('strict','postmode','post','');
+    $comment_html   = $inputHandler->getVar('html','comment_html','post','');
+    $comment_text   = $inputHandler->getVar('text','comment_text','post','');
+    $comment        = $inputHandler->getVar('text','comment','post','');
+    $title          = $inputHandler->getVar('text','title','post','');
+    $pid            = $inputHandler->getVar('strict','pid','post','');
+
     switch ( $type ) {
         case 'article':
             $commentcode = DB_getItem ($_TABLES['stories'], 'commentcode',
@@ -86,49 +93,66 @@ function handleSubmit()
                                        . " AND (draft_flag = 0) AND (date <= NOW()) "
                                        . COM_getTopicSQL('AND'));
             if (!isset($commentcode) || ($commentcode != 0)) {
-                return COM_refresh($_CONF['site_url'] . '/index.php');
+                $pageHandle->redirect($_CONF['site_url'] . '/index.php');
             }
-            if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
-                if ( $_POST['postmode'] == 'html' ) {
-                    $comment = $_POST['comment_html'];
-                } else if ( $_POST['postmode'] == 'text' ) {
-                    $comment = $_POST['comment_text'];
+
+    if (($_CONF['advanced_editor'] == 1)) {
+        if ( $postmode == 'html' ) {
+            $comment = $inputHandler->getVar('text','comment_html','post','');
+        } else if ( $postmode == 'text' || $postmode == 'plaintext') {
+            $comment = $inputHandler->getVar('text','comment_text','post','');
+        }
+        if ( $comment_html == '' && $comment_text == '' ) {
+            $comment = $inputHandler->getVar($postmode,'comment','post','');
+        }
+    } else {
+        if ( $postmode == 'html' ) {
+            $comment = $inputHandler->getVar('html','comment','post','');
+        } else if ( $postmode == 'text' ) {
+            $comment = $inputHandler->getVar('text','comment','post','');
+        }
+    }
+
+/*---
+            if (($_CONF['advanced_editor'] == 1)) {
+                if ( $postmode == 'html' ) {
+                    $comment = $comment_html;
+                } else if ( $postmode == 'text' ) {
+                    $comment = $comment_text;
                 }
-            } else {
-                $comment = $_POST['comment'];
             }
-            $ret = CMT_saveComment ( strip_tags ($_POST['title']),
-                $comment, $sid, COM_applyFilter ($_POST['pid'], true),
-                'article', COM_applyFilter ($_POST['postmode']));
+--- */
+            $ret = CMT_saveComment ( $title,
+                $comment, $sid, $pid,
+                'article', $postmode);
 
             if ( $ret > 0 ) { // failure //FIXME: some failures should not return to comment form
-                $display .= COM_siteHeader ('menu', $LANG03[1])
-                         . CMT_commentForm ($_POST['title'], $comment,
-                           $sid, COM_applyFilter($_POST['pid']), $type,
-                           $LANG03[14], COM_applyFilter($_POST['postmode']))
-                         . COM_siteFooter();
+                $pageHandle->setPageTitle($LANG03[1]);
+                $pageHandle->addContent(CMT_commentForm ($title, $comment,
+                           $sid, $pid, $type,
+                           $LANG03[14],$postmode));
+                $pageHandle->displayPage();
+
             } else { // success
                 $comments = DB_count ($_TABLES['comments'], 'sid', $sid);
                 DB_change ($_TABLES['stories'], 'comments', $comments, 'sid', $sid);
                 COM_olderStuff (); // update comment count in Older Stories block
-                $display = COM_refresh (COM_buildUrl ($_CONF['site_url']
+                $pageHandle->redirect($pageHandle->buildUrl ($_CONF['site_url']
                     . "/article.php?story=$sid"));
             }
             break;
         default: // assume plugin
-            if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
-                if ( $_POST['postmode'] == 'html' ) {
-                    $comment = $_POST['comment_html'];
-                } else if ( $_POST['postmode'] == 'text' ) {
-                    $comment = $_POST['comment_text'];
+            if (($_CONF['advanced_editor'] == 1)) {
+                if ( $postmode == 'html' ) {
+                    $comment = $comment_html;
+                } else if ( $postmode == 'text' ) {
+                    $comment = $comment_text;
                 }
-            } else {
-                $comment = $_POST['comment'];
             }
-            if ( !($display = PLG_commentSave($type, strip_tags ($_POST['title']),
-                                $comment, $sid, COM_applyFilter ($_POST['pid'], true),
-                                COM_applyFilter ($_POST['postmode']))) ) {
-                $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+            if ( !($display = PLG_commentSave($type, $title,
+                                $comment, $sid, $pid,
+                                $postmode)) ) {
+                $pageHandle->redirect($_CONF['site_url'] . '/index.php');
             }
             break;
     }
@@ -145,15 +169,13 @@ function handleSubmit()
  */
 function handleDelete()
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER, $pageHandle, $inputHandler;
 
     $display = '';
 
-    $type = COM_applyFilter($_REQUEST['type']);
-    $sid = COM_applyFilter($_REQUEST['sid']);
-    if (isset($_REQUEST['cid'])) {
-    	$cid = $_REQUEST['cid'];
-    }
+    $type = $inputHandler->getVar('strict','type','request','');
+    $sid  = $inputHandler->getVar('strict','sid','request','');
+    $cid  = $inputHandler->getVar('strict','cid','request',0);
 
     switch ($type) {
     case 'article':
@@ -164,25 +186,25 @@ function handleDelete()
         if ($has_editPermissions && SEC_hasAccess($A['owner_id'],
                 $A['group_id'], $A['perm_owner'], $A['perm_group'],
                 $A['perm_members'], $A['perm_anon']) == 3) {
-            CMT_deleteComment(COM_applyFilter($_REQUEST['cid'], true), $sid,
+            CMT_deleteComment($cid, $sid,
                               'article');
             $comments = DB_count($_TABLES['comments'], 'sid', $sid);
             DB_change($_TABLES['stories'], 'comments', $comments,
                       'sid', $sid);
             CACHE_remove_instance('whatsnew');
-            $display .= COM_refresh(COM_buildUrl ($_CONF['site_url']
+            $pageHandle->redirect($pageHandle->buildUrl ($_CONF['site_url']
                                     . "/article.php?story=$sid") . '#comments');
         } else {
             COM_errorLog("User {$_USER['username']} (IP: {$_SERVER['REMOTE_ADDR']}) tried to illegally delete comment $cid from $type $sid");
-            $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
         }
         break;
 
     default: // assume plugin
         if (!($display = PLG_commentDelete($type,
-                            COM_applyFilter($_REQUEST['cid'], true), $sid))) {
+                            $cid, $sid))) {
             CACHE_remove_instance('whatsnew');
-            $display = COM_refresh($_CONF['site_url'] . '/index.php');
+            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
         }
         break;
     }
@@ -200,18 +222,18 @@ function handleDelete()
  */
 function handleView($view = true)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS;
+    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $inputHandler,$pageHandle;
 
     $display = '';
 
     if ($view) {
-        $cid = COM_applyFilter ($_REQUEST['cid'], true);
+        $cid = $inputHandler->getVar('strict','cid','request',0);
     } else {
-        $cid = COM_applyFilter ($_REQUEST['pid'], true);
+        $cid = $inputHandler->getVar('strict','pid','request',0);
     }
 
     if ($cid <= 0) {
-        return COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
 
     $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = $cid";
@@ -220,10 +242,7 @@ function handleView($view = true)
     $title = $A['title'];
     $type  = $A['type'];
 
-    $format = $_CONF['comment_mode'];
-    if( isset( $_REQUEST['format'] )) {
-        $format = COM_applyFilter( $_REQUEST['format'] );
-    }
+    $format = $inputHandler->getVar('strict','format','request',$_CONF['comment_mode']);
     if ( $format != 'threaded' && $format != 'nested' && $format != 'flat' ) {
         if ( $_USER['uid'] > 1 ) {
             $format = DB_getItem( $_TABLES['usercomment'], 'commentmode',
@@ -248,14 +267,10 @@ function handleView($view = true)
                     ( SEC_hasAccess( $B['owner_id'], $B['group_id'],
                         $B['perm_owner'], $B['perm_group'], $B['perm_members'],
                         $B['perm_anon'] ) == 3 ) );
-                $order = '';
-                if (isset ( $_REQUEST['order'])) {
-                    $order = COM_applyFilter ($_REQUEST['order']);
-                }
-                $page = 0;
-                if (isset ($_REQUEST['page'])) {
-                    $page = COM_applyFilter ($_REQUEST['page'], true);
-                }
+
+                $order = $inputHandler->getVar('strict','order','request','');
+                $page  = $inputHandler->getVar('strict','page','request',0);
+
                 $display .= CMT_userComments ($sid, $title, $type, $order,
                                 $format, $cid, $page, $view, $delete_option,
                                 $B['commentcode']);
@@ -268,15 +283,18 @@ function handleView($view = true)
             break;
 
         default: // assume plugin
+            $order = $inputHandler->getVar('strict','order','request','');
+            $page  = $inputHandler->getVar('strict','page','request',0);
+
             if ( !($display = PLG_displayComment($type, $sid, $cid, $title,
-                                  COM_applyFilter ($_REQUEST['order']), $format,
-                                  COM_applyFilter ($_REQUEST['page'], true), $view)) ) {
-                return COM_refresh($_CONF['site_url'] . '/index.php');
+                                  $order, $format,
+                                  $page, $view)) ) {
+                $pageHandle->redirect($_CONF['site_url'] . '/index.php');
             }
             break;
     }
-
-    return COM_siteHeader() . $display . COM_siteFooter();
+    $pageHandle->addContent($display);
+    $pageHandle->displayPage();
 }
 
 /**
@@ -287,16 +305,17 @@ function handleView($view = true)
  * @return string HTML (possibly a refresh)
  */
 function handleEdit() {
-    global $_TABLES, $LANG03,$_USER,$_CONF;
+    global $_TABLES, $LANG03,$_USER,$_CONF, $inputHandler, $pageHandle;
 
-    $cid = COM_applyFilter ($_REQUEST['cid']);
-    $sid = COM_applyFilter ($_REQUEST['sid']);
-    $type = COM_applyFilter ($_REQUEST['type']);
+    $cid = $inputHandler->getVar('strict','cid','request','');
+    $sid = $inputHandler->getVar('strict','sid','request','');
+    $type = $inputHandler->getVar('strict','type','request','');
+    $pid  = $inputHandler->getVar('strict','pid','request',0);
 
     if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
         COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                . 'to edit a comment with one or more missing/bad values.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
 
     $result = DB_query ("SELECT title,comment FROM {$_TABLES['comments']} "
@@ -321,13 +340,13 @@ function handleEdit() {
     } else {
         COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                . 'to edit a comment that doesn\'t exist as described.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
 
-    return COM_siteHeader('menu', $LANG03[1])
-           . CMT_commentForm ($title, $commenttext, $sid,
-                  COM_applyFilter ($_REQUEST['pid'], true), $type, 'edit', $postmode)
-           . COM_siteFooter();
+    $pageHandle->setPageTitle($LANG03[1]);
+    $pageHandle->addContent(CMT_commentForm ($title, $commenttext, $sid,
+                  $pid, $type, 'edit', $postmode));
+    $pageHandle->displayPage();
 }
 
 /**
@@ -339,12 +358,33 @@ function handleEdit() {
  */
 function handleEditSubmit()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $inputHandler,$pageHandle;
 
-    $type = COM_applyFilter ($_POST['type']);
-    $sid = COM_applyFilter ($_POST['sid']);
-    $cid = COM_applyFilter ($_POST['cid']);
-    $postmode = COM_applyFilter ($_POST['postmode']);
+    $type = $inputHandler->getVar('strict','type','post');
+    $sid  = $inputHandler->getVar('strict','sid','post');
+    $cid  = $inputHandler->getVar('strict','cid','post');
+    $postmode = $inputHandler->getVar('strict','postmode','post','plaintext');
+    $title = $inputHandler->getVar('plain','title','post','');
+
+
+//    $comment = $inputHandler->getVar('html','comment','post','');
+
+    if (($_CONF['advanced_editor'] == 1)) {
+        if ( $postmode == 'html' ) {
+            $comment = $inputHandler->getVar('text','comment_html','post','');
+        } else if ( $postmode == 'text' || $postmode == 'plaintext') {
+            $comment = $inputHandler->getVar('text','comment_text','post','');
+        }
+        if ( $comment_html == '' && $comment_text == '' ) {
+            $comment = $inputHandler->getVar($postmode,'comment','post','');
+        }
+    } else {
+        if ( $postmode == 'html' ) {
+            $comment = $inputHandler->getVar('html','comment','post','');
+        } else if ( $postmode == 'text' ) {
+            $comment = $inputHandler->getVar('text','comment','post','');
+        }
+    }
 
     $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = '$cid'");
     if ( empty($_USER['uid'])) {
@@ -354,25 +394,25 @@ function handleEditSubmit()
     }
 
     //check for bad input
-    if (empty ($sid) || empty ($_POST['title']) || empty ($_POST['comment']) || !is_numeric ($cid)
+    if (empty ($sid) || empty ($title) || empty ($comment) || !is_numeric ($cid)
             || $cid < 1 ) {
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment with one or more missing values.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     } elseif ( $uid != $commentuid && !SEC_hasRights( 'comment.moderate' ) ) {
         //check permissions
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment without proper permission.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
 
-    $comment = CMT_prepareText($_POST['comment'], $postmode);
-    $title = COM_checkWords (strip_tags (COM_stripslashes ($_POST['title'])));
+    $comment = CMT_prepareText($comment, $postmode);
+    $title = COM_checkWords (strip_tags ($title));
 
     if (!empty ($title) && !empty ($comment)) {
         COM_updateSpeedlimit ('comment');
-        $title = addslashes ($title);
-        $comment = addslashes ($comment);
+        $title   = $inputHandler->prepareForDB($title);
+        $comment = $inputHandler->prepareForDB($comment);
 
         // save the comment into the comment table
         DB_query("UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
@@ -381,16 +421,16 @@ function handleEditSubmit()
         if (DB_error() ) { //saving to non-existent comment or comment in wrong article
             COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
             . 'to edit to a non-existent comment or the cid/sid did not match');
-            return COM_refresh($_CONF['site_url'] . '/index.php');
+            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
         }
         DB_save($_TABLES['commentedits'],'cid,uid,time',"$cid,$uid,NOW()");
     } else {
         COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with invalid $title and/or $comment.');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
     PLG_commentEditSave($type,$cid,$sid);
-    return COM_refresh (COM_buildUrl ($_CONF['site_url'] . "/article.php?story=$sid"));
+    $pageHandle->redirect($pageHandle->buildUrl ($_CONF['site_url'] . "/article.php?story=$sid"));
 }
 
 
@@ -399,42 +439,58 @@ CMT_updateCommentcodes();
 $display = '';
 
 // If reply specified, force comment submission form
-if (isset ($_REQUEST['reply'])) {
-    $_REQUEST['mode'] = '';
+$reply = $inputHandler->getVar('strict','reply','request','');
+if ( !empty($reply) ) {
+    $mode = '';
+} else {
+    $mode = $inputHandler->getVar('strict','mode','request','');
 }
+$postmode     = $inputHandler->getVar('strict','postmode','post','');
+$comment_html = $inputHandler->getVar('html','comment_html','post','');
+$comment_text = $inputHandler->getVar('text','comment_text','post','');
+//$comment      = $inputHandler->getVar('text','comment','post','');
 
-$mode = '';
-if (!empty ($_REQUEST['mode'])) {
-    $mode = COM_applyFilter ($_REQUEST['mode']);
-}
 switch ($mode) {
 case $LANG03[28]: //Preview Changes (for edit)
 
 case $LANG03[14]: // Preview
 
-    if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
-        if ( $_POST['postmode'] == 'html' ) {
-            $comment = $_POST['comment_html'];
-        } else if ( $_POST['postmode'] == 'text' ) {
-            $comment = $_POST['comment_text'];
+    $title          = $inputHandler->getVar('text','title','post','');
+    $sid            = $inputHandler->getVar('strict','sid','post','');
+    $pid            = $inputHandler->getVar('strict','pid','post',0);
+    $type           = $inputHandler->getVar('strict','type','post','');
+
+    if (($_CONF['advanced_editor'] == 1)) {
+        if ( $postmode == 'html' ) {
+            $comment = $comment_html;
+        } else if ( $postmode == 'text' ) {
+            $comment = $comment_text;
+        }
+        if ( $comment_html == '' && $comment_text == '' ) {
+            $comment = $inputHandler->getVar($postmode,'comment','post','');
         }
     } else {
-        $comment = $_POST['comment'];
+        if ( $postmode == 'html' ) {
+            $comment = $inputHandler->getVar('html','comment','post','');
+        } else if ( $postmode == 'text' ) {
+            $comment = $inputHandler->getVar('text','comment','post','');
+        }
     }
-    $display .= COM_siteHeader('menu', $LANG03[14])
-             . CMT_commentForm (strip_tags ($_POST['title']), $comment, /*$_POST['comment'], */
-                    COM_applyFilter ($_POST['sid']),
-                    COM_applyFilter ($_POST['pid'], true),
-                    COM_applyFilter ($_POST['type']), $mode,
-                    COM_applyFilter ($_POST['postmode']))
-             . COM_siteFooter();
+
+    $pageHandle->setPageTitle($LANG03[14]);
+    $pageHandle->addContent(CMT_commentForm ($title, $comment,
+                    $sid,
+                    $pid,
+                    $type, $mode,
+                    $postmode));
+    $pageHandle->displayPage();
     break;
 
 case $LANG03[29]: //Submit Changes
     if (SEC_checkToken()) {
         $display .= handleEditSubmit();
     } else {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
     break;
 
@@ -446,7 +502,7 @@ case 'delete':
     if (SEC_checkToken()) {
         $display .= handleDelete();  // moved to function for readibility
     } else {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
     break;
 
@@ -459,10 +515,11 @@ case 'display':
     break;
 
 case 'report':
-    $display .= COM_siteHeader ('menu', $LANG03[27])
-              . CMT_reportAbusiveComment (COM_applyFilter ($_GET['cid'], true),
-                                          COM_applyFilter ($_GET['type']))
-              . COM_siteFooter ();
+    $cid = $inputHandler->getVar('int','cid','get',0);
+    $type = $inputHandler->getVar('strict','type','get','');
+    $pageHandle->setPageTitle($LANG03[27]);
+    $pageHandle->addContent(CMT_reportAbusiveComment ($cid,$type));
+    $pageHandle->displayPage();
     break;
 
 case 'sendreport':
@@ -470,7 +527,7 @@ case 'sendreport':
         $display .= CMT_sendReport(COM_applyFilter($_POST['cid'], true),
                                    COM_applyFilter($_POST['type']));
     } else {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
     break;
 
@@ -478,37 +535,32 @@ case 'edit':
     if (SEC_checkToken()) {
         $display .= handleEdit();
     } else {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
     break;
 
 case 'que':
     if ( SEC_checkToken() && SEC_hasRights('comment.moderate') ) {
         //get comment
-        $cid = COM_applyFilter ($_GET['cid']);
-        $sid = COM_applyFilter ($_GET['sid']);
+        $cid = $inputHandler->getVar('int','cid','get',0);
+        $sid = $inputHandler->getVar('strict','sid','get','');
         resubmitToModeration($cid);
 
-        $display .= COM_refresh(COM_buildUrl ($_CONF['site_url']
+        $pageHandle->redirect($pageHandle->buildUrl ($_CONF['site_url']
                                     . "/article.php?story=$sid"));
 
     } else {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
     break;
 
 
 default:  // New Comment
-    $sid = COM_applyFilter ($_REQUEST['sid']);
-    $type = COM_applyFilter ($_REQUEST['type']);
-    $title = '';
-    if (isset ($_REQUEST['title'])) {
-        $title = strip_tags ($_REQUEST['title']);
-    }
-    $postmode = $_CONF['postmode'];
-    if (isset ($_REQUEST['postmode'])) {
-        $postmode = COM_applyFilter ($_REQUEST['postmode']);
-    }
+    $sid = $inputHandler->getVar('strict','sid','request','');
+    $type = $inputHandler->getVar('strict','type','request','');
+    $title = $inputHandler->getVar('text','title','request','');
+    $postmode = $inputHandler->getVar('strict','postmode','request',$_CONF['postmode']);
+    $pid = $inputHandler->getVar('int','pid','request',0);
 
     if (!empty ($sid) && !empty ($type)) {
         if (empty ($title)) {
@@ -524,17 +576,17 @@ default:  // New Comment
             $title = str_replace ( '&lt;', '<', $title );
             $title = str_replace ( '&gt;', '>', $title );
         }
-        $display .= COM_siteHeader('menu', $LANG03[1])
-                 . CMT_commentForm ($title, '', $sid,
-                        COM_applyFilter ($_REQUEST['pid'], true), $type, $mode,
-                        $postmode)
-                 . COM_siteFooter();
+        $pageHandle->setPageTitle($LANG03[1]);
+        $pageHandle->addContent(CMT_commentForm ($title, '', $sid,
+                        $pid, $type, $mode,
+                        $postmode));
+        $pageHandle->displayPage();
     } else {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
     break;
 }
 
-echo $display;
-
+$pageHandle->addContent($display);
+$pageHandle->displayPage();
 ?>

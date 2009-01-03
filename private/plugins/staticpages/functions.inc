@@ -80,7 +80,7 @@ include_once $plugin_path . 'services.inc.php';
 */
 function plugin_getmenuitems_staticpages()
 {
-    global $_CONF, $_TABLES, $_SP_CONF;
+    global $_CONF, $_TABLES, $_SP_CONF, $pageHandle;
 
     $order = '';
     if (!empty ($_SP_CONF['sort_menu_by'])) {
@@ -101,7 +101,7 @@ function plugin_getmenuitems_staticpages()
     $menuitems = array ();
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray ($result);
-        $menuitems[$A['sp_label']] = COM_buildURL ($_CONF['site_url'] . '/staticpages/index.php?page=' . $A['sp_id']);
+        $menuitems[$A['sp_label']] = $pageHandle->buildURL ($_CONF['site_url'] . '/staticpages/index.php?page=' . $A['sp_id']);
     }
 
     return $menuitems;
@@ -270,7 +270,9 @@ function SP_countVisiblePages ()
 function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nested')
 {
     global $_CONF, $_TABLES, $_USER,
-           $LANG01, $LANG11, $LANG_STATIC, $_IMAGE_TYPE, $_SP_CONF;
+           $LANG01, $LANG11, $LANG_STATIC, $_IMAGE_TYPE, $_SP_CONF,
+           $pageHandle;
+
 
     $retval = '';
 
@@ -299,7 +301,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             $icon_url = $_CONF['layout_url'] . '/images/print.' . $_IMAGE_TYPE;
             $attr = array('title' => $LANG_STATIC['printable_format']);
             $printicon = COM_createImage($icon_url, $LANG01[65], $attr);
-            $print_url = COM_buildURL ($_CONF['site_url']
+            $print_url = $pageHandle->buildURL ($_CONF['site_url']
                 . '/staticpages/index.php?page=' . $page . '&amp;disp_mode=print');
             $icon = COM_createLink($printicon, $print_url);
             $spage->set_var('print_icon', $icon);
@@ -393,7 +395,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 */
 function SP_printPage ($page, $A)
 {
-    global $_CONF, $LANG01, $_TABLES;
+    global $_CONF, $LANG01, $_TABLES, $pageHandle;
 
     $template_path = staticpages_templatePath ();
     $print = new Template ($template_path);
@@ -405,7 +407,7 @@ function SP_printPage ($page, $A)
 
     $print->set_var ('page_title', $_CONF['site_name'] . ' - '
                                    . $A['sp_title']);
-    $sp_url = COM_buildUrl ($_CONF['site_url']
+    $sp_url = $pageHandle->buildUrl ($_CONF['site_url']
                                . '/staticpages/index.php?page=' . $page);
     $print->set_var ('sp_url', $sp_url);
     $print->set_var ('sp_title', $A['sp_title']);
@@ -483,14 +485,14 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
 */
 function plugin_showstats_staticpages($showsitestats)
 {
-    global $_CONF, $_TABLES, $LANG_STATIC;
+    global $_CONF, $_TABLES, $LANG_STATIC, $pageHandle;
     $retval = '';
 
     $perms = SP_getPerms ();
     if (!empty ($perms)) {
         $perms = ' AND ' . $perms;
     }
-    $result = DB_query ("SELECT sp_id,sp_title,sp_hits FROM {$_TABLES['staticpage']} WHERE sp_hits > 0" . $perms . ' ORDER BY sp_hits DESC LIMIT 10');
+    $result = DB_query ("SELECT sp_id,sp_title,sp_hits FROM {$_TABLES['staticpage']} WHERE sp_hits > 0 AND sp_search=1 " . $perms . ' ORDER BY sp_hits DESC LIMIT 10');
     $nrows  = DB_numRows ($result);
     if ($nrows > 0) {
         require_once( $_CONF['path_system'] . 'lib-admin.php' );
@@ -505,7 +507,7 @@ function plugin_showstats_staticpages($showsitestats)
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray ($result);
             $A['sp_title'] = $A['sp_title'];
-            $A['sid'] = COM_createLink($A['sp_title'], COM_buildUrl ($_CONF['site_url']
+            $A['sid'] = COM_createLink($A['sp_title'], $pageHandle->buildUrl ($_CONF['site_url']
                       . "/staticpages/index.php?page={$A['sp_id']}"));
             $A['sp_hits'] = COM_NumberFormat ($A['sp_hits']);
             $data_arr[$i] = $A;
@@ -703,6 +705,7 @@ function SP_getPerms ($table = '', $access = '2', $u_id = '')
 function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
 {
     global $_CONF, $_TABLES, $_SP_CONF, $LANG_STATIC, $_IMAGE_TYPE, $LANG01;
+    global $pageHandle;
 
     $retval = '';
 
@@ -789,7 +792,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
                 $icon_url = $_CONF['layout_url'] . '/images/print.' . $_IMAGE_TYPE;
                 $attr = array('title' => $LANG_STATIC['printable_format']);
                 $printicon = COM_createImage($icon_url, $LANG01[65], $attr);
-                $print_url = COM_buildURL ($_CONF['site_url']
+                $print_url = $pageHandle->buildURL ($_CONF['site_url']
                     . '/staticpages/index.php?page=' . $S['sp_id'] . '&amp;mode=print');
                 $icon = COM_createLink($printicon, $print_url);
                 $spage->set_var('print_icon', $icon);
@@ -902,7 +905,7 @@ function plugin_chkVersion_staticpages()
 */
 function plugin_autotags_staticpages($op, $content = '', $autotag = '')
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $pageHandle;
 
     static $recursive = array();
 
@@ -911,7 +914,7 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
     } else if ($op == 'parse') {
         if ($autotag['tag'] == 'staticpage' ) {
             $sp_id = COM_applyFilter($autotag['parm1']);
-            $url = COM_buildUrl($_CONF['site_url']
+            $url = $pageHandle->buildUrl($_CONF['site_url']
                                 . '/staticpages/index.php?page=' . $sp_id);
             if (empty($autotag['parm2'])) {
                 $linktext = DB_getItem ($_TABLES['staticpage'],
@@ -1033,7 +1036,7 @@ function staticpages_templatePath ($path = '')
 
 function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $LANG_ADMIN, $LANG_STATIC, $_TABLES;
+    global $_CONF, $LANG_ADMIN, $LANG_STATIC, $_TABLES, $pageHandle;
 
     switch($fieldname) {
         case "edit":
@@ -1046,7 +1049,7 @@ function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case "sp_title":
             $sp_title = $A['sp_title'];
-            $url = COM_buildUrl ($_CONF['site_url'] .
+            $url = $pageHandle->buildUrl ($_CONF['site_url'] .
                                  '/staticpages/index.php?page=' . $A['sp_id']);
             $retval = COM_createLink($sp_title, $url, array('title'=>$LANG_STATIC['title_display']));
             break;

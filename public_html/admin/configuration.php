@@ -34,7 +34,8 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
-$conf_group = array_key_exists('conf_group', $_POST) ? $_POST['conf_group'] : 'Core';
+// $conf_group = array_key_exists('conf_group', $_POST) ? $_POST['conf_group'] : 'Core';
+$conf_group = $inputHandler->getVar('strict','conf_group','post','Core');
 
 $config =& config::get_instance();
 

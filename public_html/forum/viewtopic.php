@@ -39,6 +39,12 @@
 
 require_once '../lib-common.php';
 require_once $_CONF['path_system'] . 'classes/timer.class.php';
+
+if ( !function_exists('plugin_getmenuitems_forum') ) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
 $mytimer = new timerobject();
 $mytimer->setPercision(2);
 $mytimer->startTimer();
@@ -51,25 +57,19 @@ $mytimer = new timerobject();
 $mytimer->startTimer();
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$showtopic = isset($_REQUEST['showtopic']) ? COM_applyFilter($_REQUEST['showtopic'],true) : 0;
-$show      = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) : 0;
-$page      = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
-$mode      = isset($_REQUEST['mode']) ? COM_applyFilter($_REQUEST['mode']) : '';
-$highlight = isset($_REQUEST['query']) ? COM_applyFilter($_REQUEST['query']) : '';
-$topic     = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic']) : '';
-//$forum = DB_getItem($_TABLES['gf_topic'],"forum","id='$showtopic'");
+
+$showtopic = $inputHandler->getVar('integer','showtopic','request',0);
+$show      = $inputHandler->getVar('integer','show','request',0);
+$page      = $inputHandler->getVar('integer','page','request',0);
+$mode      = $inputHandler->getVar('strict','mode','request','');
+$highlight = $inputHandler->getVar('strict','highlight','request','');
+$topic     = $inputHandler->getVar('strict','topic','request','');
+
 $result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['gf_topic']} WHERE id = '$showtopic'"); // <- new
 list($forum, $topic_pid, $subject) = DB_fetchArray($result); // <- new
-//$topic_pid = DB_getItem($_TABLES['gf_topic'], "pid","id='$showtopic'");
-
 
 if ($topic_pid == '') {
-    echo COM_siteHeader();
-    echo COM_startBlock();
-    alertMessage($LANG_GF02['msg172'],$LANG_GF02['msg171']);
-    echo COM_endBlock();
-    echo COM_siteFooter();
-    exit;
+    $pageHandle->displayError($LANG_GF02['msg171']);
 }
 if ($topic_pid != 0) {
     $showtopic = $topic_pid;
@@ -115,7 +115,7 @@ if(isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
     //Check is anonymous users can access
     forum_chkUsercanAccess();
     // Now display the forum header
-    ForumHeader($forum,$showtopic);
+    $pageHandle->addContent(ForumHeader($forum,$showtopic));
 }
 
 if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
@@ -166,7 +166,7 @@ $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/'
 $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
 $forum_outline_header->set_var('xhtml',XHTML);
 $forum_outline_header->parse ('output', 'forum_outline_header');
-echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
+$pageHandle->addContent($forum_outline_header->finish($forum_outline_header->get_var('output')));
 
 // Stop timer and print elapsed time
 //$intervalTime = $mytimer->stopTimer();
@@ -300,13 +300,13 @@ if ($mode != 'preview') {
     $topicnavbar->set_var ('LANG_HOME', $LANG_GF01['HOMEPAGE']);
     $topicnavbar->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page,$numpages));
     $topicnavbar->parse ('output', 'topicnavbar');
-    echo $topicnavbar->finish($topicnavbar->get_var('output'));
+    $pageHandle->addContent($topicnavbar->finish($topicnavbar->get_var('output')));
 } else {
     $preview_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $preview_header->set_file ('header', 'topicpreview_header.thtml');
     $preview_header->set_var ('xhtml',XHTML);
     $preview_header->parse ('output', 'header');
-    echo $preview_header->finish($preview_header->get_var('output'));
+    $pageHandle->addContent($preview_header->finish($preview_header->get_var('output')));
 }
 
 //$intervalTime = $mytimer->stopTimer();
@@ -342,11 +342,11 @@ while($topicRec = DB_fetchArray($result)) {
     //$intervalTime = $mytimer->stopTimer();
     //COM_errorLog("Topic Display Time: $intervalTime");
     if ($CONF_FORUM['show_anonymous_posts'] == 0 AND $topicRec['uid'] == 1) {
-       echo '<div class="pluginAlert" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
+       $pageHandle->addContent('<div class="pluginAlert" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>');
         break;
        //Do nothing - but this way I don't always have to do this check
     } else {
-        echo showtopic($topicRec,$mode,$onetwo,$page);
+        $pageHandle->addContent(showtopic($topicRec,$mode,$onetwo,$page));
         $onetwo = ($onetwo == 1) ? 2 : 1;
     }
 }
@@ -388,19 +388,18 @@ if ($mode != 'preview') {
 $topic_footer->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page, $numpages));
 $topic_footer->set_var ('forum_id', $forum);
 $topic_footer->parse ('output', 'topicfooter');
-echo $topic_footer->finish($topic_footer->get_var('output'));
+$pageHandle->addContent($topic_footer->finish($topic_footer->get_var('output')));
 
 $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
 $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
 $forum_outline_footer->set_var ('xhtml',XHTML);
 $forum_outline_footer->parse ('output', 'forum_outline_footer');
-echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
+$pageHandle->addContent($forum_outline_footer->finish ($forum_outline_footer->get_var('output')));
 
 $intervalTime = $mytimer->stopTimer();
-// COM_errorLog("End Topic Display Time: $intervalTime");
 
 if(!isset($_REQUEST['onlytopic']) || $_REQUEST['onlytopic'] != 1) {
-    echo BaseFooter();
+    $pageHandle->addContent(BaseFooter());
     gf_siteFooter();
 } else {
     echo '</body>' . LB;

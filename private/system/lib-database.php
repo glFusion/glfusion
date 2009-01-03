@@ -209,7 +209,7 @@ function DB_query ($sql, $ignore_errors = 0)
             die ($result);
         }
     }
-
+COM_errorLog("SQL Debug: " . $sql);
     return $_DB->dbQuery ($sql, $ignore_errors);
 }
 
@@ -274,8 +274,10 @@ function DB_getItem($table,$what,$selection='')
 {
     if (!empty($selection)) {
         $result = DB_query("SELECT $what FROM $table WHERE $selection");
+COM_errorLog("SQL Debug getitem: " . "SELECT $what FROM $table WHERE $selection");
     } else {
         $result = DB_query("SELECT $what FROM $table");
+COM_errorLog("SQL Debug getitem: " . "SELECT $what FROM $table");
     }
     $ITEM = DB_fetchArray($result, true);
     return $ITEM[0];

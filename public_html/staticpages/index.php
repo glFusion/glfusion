@@ -36,17 +36,23 @@
 require_once '../lib-common.php';
 
 if (!in_array('staticpages', $_PLUGINS)) {
-    echo COM_refresh($_CONF['site_url'] . '/index.php');
+    $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     exit;
 }
 
 
 // MAIN
 
-COM_setArgNames(array('page', 'disp_mode'));
-$page = COM_applyFilter(COM_getArgument('page'));
-$display_mode = COM_applyFilter(COM_getArgument('disp_mode'));
+$inputHandler->setArgNames(array('page', 'disp_mode'));
 
+$page           = $inputHandler->getVar('strict','page','get','');
+$display_mode   = $inputHandler->getVar('strict','disp_mode','get','');
+$comment_order  = $inputHandler->getVar('strict','order','post','');
+$comment_mode   = $inputHandler->getVar('strict','mode','post','');
+
+$page           = $inputHandler->getVar('strict','id','post',$page);
+
+/*
 // from comments display refresh:
 if (isset($_POST['order'])) {
     $comment_order = COM_applyFilter($_POST['order']);
@@ -59,6 +65,11 @@ if (isset($_POST['order'])) {
 } else {
     $comment_order = '';
     $comment_mode  = '';
+}
+*/
+if ((strcasecmp($comment_order, 'ASC') != 0) &&
+        (strcasecmp($comment_order, 'DESC') != 0)) {
+    $comment_order = '';
 }
 
 if ($display_mode != 'print') {

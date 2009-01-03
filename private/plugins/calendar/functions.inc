@@ -1595,7 +1595,7 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
     global $_TABLES, $LANG_CAL_1;
 
     // Make sure the query is SQL safe
-    $query = trim(addslashes($query));
+    $query = trim(addslashes(htmlspecialchars($query)));
 
     $sql_e = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, hits, CONCAT('/calendar/event.php?eid=',eid) AS url ";
     $sql_e .= "FROM {$_TABLES['events']} WHERE 1=1 ";

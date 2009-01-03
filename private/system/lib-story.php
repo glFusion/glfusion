@@ -43,6 +43,7 @@ if (!defined ('GVERSION')) {
 }
 
 require_once $_CONF['path_system'] . '/classes/story.class.php';
+require_once $_CONF['path_system'] . '/lib-webservices.php';
 
 if ($_CONF['allow_user_photo']) {
     // only needed for the USER_getPhoto function
@@ -74,7 +75,7 @@ if (!defined ('STORY_ARCHIVE_ON_EXPIRE')) {
 function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $query='')
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG05, $LANG11, $LANG_TRB,
-           $_IMAGE_TYPE, $mode, $_GROUPS;
+           $mode, $_GROUPS,$pageHandle;
 
     static $storycounter = 0;
 
@@ -175,8 +176,9 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             if (!empty($photo)) {
                 $article->set_var('contributedby_photo', $photo);
                 $article->set_var('author_photo', $photo);
-                $camera_icon = '<img src="' . $_CONF['layout_url']
-                             . '/images/smallcamera.' . $_IMAGE_TYPE . '" alt=""'
+
+                $camera_icon = '<img src="' . $pageHandle->getImage('smallcamera.png')
+                             . '" alt=""'
                              . XHTML . '>';
                 $article->set_var('camera_icon',
                                   COM_createLink($camera_icon, $profileUrl));
@@ -227,7 +229,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'story_topic_url', $topicurl );
 
         $recent_post_anchortag = '';
-        $articleUrl = COM_buildUrl($_CONF['site_url'] . '/article.php?story='
+        $articleUrl = $pageHandle->buildURL($_CONF['site_url'] . '/article.php?story='
                                     . $story->getSid());
         $article->set_var('story_title', $story->DisplayElements('title'));
         $article->set_var('lang_permalink', $LANG01[127]);
@@ -322,8 +324,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var( 'send_trackback_link',
                     COM_createLink($LANG_TRB['send_trackback'], $url)
                 );
-                $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
-                    . $_IMAGE_TYPE . '" alt="' . $LANG_TRB['send_trackback']
+                $pingico = '<img src="' . $pageHandle->getImage('sendping.png')
+                    . '" alt="' . $LANG_TRB['send_trackback']
                     . '" title="' . $LANG_TRB['send_trackback'] . '"' . XHTML . '>';
                 $article->set_var( 'send_trackback_icon',
                     COM_createLink($pingico, $url)
@@ -364,7 +366,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
             if(( $story->DisplayElements('commentcode') >= 0 ) and ( $show_comments ))
             {
-                $commentsUrl = COM_buildUrl( $_CONF['site_url']
+                $commentsUrl = $pageHandle->buildURL( $_CONF['site_url']
                         . '/article.php?story=' . $story->getSid() ) . '#comments';
                 $article->set_var( 'comments_url', $commentsUrl );
                 $article->set_var( 'comments_text',
@@ -416,7 +418,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                     ( $story->DisplayElements('trackbackcode') >= 0 ) && ( $show_comments ))
             {
                 $num_trackbacks = COM_numberFormat( $story->DisplayElements('trackbacks') );
-                $trackbacksUrl = COM_buildUrl( $_CONF['site_url']
+                $trackbacksUrl = $pageHandle->buildUrl( $_CONF['site_url']
                         . '/article.php?story=' . $story->getSid() ) . '#trackback';
                 $article->set_var( 'trackbacks_url', $trackbacksUrl );
                 $article->set_var( 'trackbacks_text', $num_trackbacks . ' '
@@ -434,8 +436,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 {
                     $pingurl = $_CONF['site_admin_url']
                         . '/trackback.php?mode=sendall&amp;id=' . $story->getSid();
-                    $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
-                        . $_IMAGE_TYPE . '" alt="' . $LANG_TRB['send_trackback']
+                    $pingico = '<img src="' . $pageHandle->getImage('sendping.png')
+                        . '" alt="' . $LANG_TRB['send_trackback']
                         . '" title="' . $LANG_TRB['send_trackback'] . '"' . XHTML . '>';
                     $article->set_var( 'send_trackback_icon',
                         COM_createLink($pingico, $pingurl)
@@ -470,8 +472,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             {
                 $emailUrl = $_CONF['site_url'] . '/profiles.php?sid=' . $story->getSid()
                           . '&amp;what=emailstory';
-                $emailicon = '<img src="' . $_CONF['layout_url'] . '/images/mail.'
-                    . $_IMAGE_TYPE . '" alt="' . $LANG01[64] . '" title="'
+                $emailicon = '<img src="' . $pageHandle->getImage('mail.png')
+                    . '" alt="' . $LANG01[64] . '" title="'
                     . $LANG11[2] . '"' . XHTML . '>';
                 $article->set_var( 'email_icon',
                     COM_createLink($emailicon, $emailUrl)
@@ -480,7 +482,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var( 'lang_email_story', $LANG11[2] );
                 $article->set_var( 'lang_email_story_alt', $LANG01[64] );
             }
-            $printUrl = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
+            $printUrl = $pageHandle->buildUrl( $_CONF['site_url'] . '/article.php?story='
                                       . $story->getSid() . '&amp;mode=print' );
             if( $_CONF['hideprintericon'] == 1 )
             {
@@ -488,8 +490,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             }
             else
             {
-                $printicon = '<img src="' . $_CONF['layout_url']
-                    . '/images/print.' . $_IMAGE_TYPE . '" alt="' . $LANG01[65]
+                $printicon = '<img src="' . $pageHandle->getImage('print.png')
+                    . '" alt="' . $LANG01[65]
                     . '" title="' . $LANG11[3] . '"' . XHTML . '>';
                 $article->set_var( 'print_icon',
                     COM_createLink($printicon, $printUrl, array('rel' => 'nofollow'))
@@ -502,8 +504,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             {
                 $pdfUrl = $_CONF['site_url'] . '/pdfgenerator.php?pageType=2&amp;'
                         . 'pageData=' . urlencode( $printUrl );
-                $pdficon = '<img src="'. $_CONF['layout_url'] . '/images/pdf.'
-                             . $_IMAGE_TYPE . '" alt="'. $LANG01[111]
+                $pdficon = '<img src="'. $pageHandle->getImage('pdf.png')
+                             . '" alt="'. $LANG01[111]
                              .'" title="'. $LANG11[5] .'"' . XHTML . '>';
                 $article->set_var( 'pdf_icon',
                     COM_createLink($pdficon, $pdfUrl)
@@ -526,8 +528,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                     $feedTitle = sprintf($LANG11[6],$title);
                 }
                 if ( $feeds > 0 ) {
-                    $feedicon = '<img src="'. $_CONF['layout_url'] . '/images/rss_small.'
-                             . $_IMAGE_TYPE . '" alt="'. $feedTitle
+                    $feedicon = '<img src="'. $pageHandle->getImage('rss_small.png')
+                             . '" alt="'. $feedTitle
                              .'" title="'. $feedTitle .'"' . XHTML . '>';
                     $article->set_var( 'feed_icon',COM_createLink($feedicon, $feedUrl,array("type" =>"application/rss+xml")));
                 } else {
@@ -553,7 +555,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->set_var( 'edit_url', $_CONF['site_admin_url']
                     . '/story.php?mode=edit&amp;sid=' . $story->getSid() );
             $article->set_var( 'lang_edit_text',  $LANG01[4] );
-            $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
+            $editicon = $pageHandle->getImage('edit.png');
             $editiconhtml = '<img src="' . $editicon . '" alt="' . $LANG01[4] . '" title="' . $LANG01[4] . '"' . XHTML . '>';
             $article->set_var( 'edit_icon',
                 COM_createLink(
@@ -768,9 +770,10 @@ function STORY_getItemInfo ($sid, $what)
     }
 
     if (count ($fields) > 0) {
-        $result = DB_query ("SELECT " . implode (',', $fields)
-                    . " FROM {$_TABLES['stories']} WHERE sid = '$sid'"
-                    . COM_getPermSql ('AND') . COM_getTopicSql ('AND'));
+         $result = DB_query ("SELECT " . implode (',', $fields)
+                     . " FROM {$_TABLES['stories']} WHERE sid = '$sid'"
+                     . ' AND (draft_flag = 0) AND (date <= NOW())'
+                     . COM_getPermSql ('AND') . COM_getTopicSql ('AND'));
         $A = DB_fetchArray ($result);
     } else {
         $A = array ();
@@ -810,7 +813,7 @@ function STORY_getItemInfo ($sid, $what)
                 $retval[] = stripslashes ($A['title']);
                 break;
             case 'url':
-                $retval[] = COM_buildUrl ($_CONF['site_url']
+                $retval[] = $pageHandle->buildUrl ($_CONF['site_url']
                                           . '/article.php?story=' . $sid);
                 break;
             default:
@@ -901,15 +904,13 @@ function plugin_wsEnabled_story()
  */
 function service_submit_story($args, &$output, &$svc_msg)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG24, $MESSAGE, $_GROUPS;
+    global $_CONF, $_TABLES, $_USER, $LANG24, $MESSAGE, $_GROUPS,
+           $pageHandle;
 
     if (!SEC_hasRights('story.edit')) {
-        $output .= COM_siteHeader('menu', $MESSAGE[30]);
-        $output .= COM_startBlock($MESSAGE[30], '',
-                                  COM_getBlockTemplate('_msg_block', 'header'));
-        $output .= $MESSAGE[31];
-        $output .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
-        $output .= COM_siteFooter();
+        $output .= COM_siteHeader('menu', $MESSAGE[30])
+                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
+                . COM_siteFooter();
 
         return PLG_RET_AUTH_FAILED;
     }
@@ -991,7 +992,9 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
     }
 
-    $args['owner_id'] = $_USER['uid'];
+    if(empty($args['owner_id'])) {
+        $args['owner_id'] = $_USER['uid'];
+    }
 
     if (empty($args['group_id'])) {
         $args['group_id'] = SEC_getFeatureGroup('story.edit', $_USER['uid']);
@@ -1110,21 +1113,15 @@ function service_submit_story($args, &$output, &$svc_msg)
         $output .= COM_siteFooter ();
         return PLG_RET_ERROR;
     case STORY_EXISTING_NO_EDIT_PERMISSION:
-        $output .= COM_siteHeader ('menu', $MESSAGE[30]);
-        $output .= COM_startBlock ($MESSAGE[30], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-        $output .= $MESSAGE[31];
-        $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-        $output .= COM_siteFooter ();
+        $output .= COM_siteHeader('menu', $MESSAGE[30])
+                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
+                . COM_siteFooter ();
         COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
         return PLG_RET_PERMISSION_DENIED;
     case STORY_NO_ACCESS_PARAMS:
-        $output .= COM_siteHeader ('menu', $MESSAGE[30]);
-        $output .= COM_startBlock ($MESSAGE[30], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-        $output .= $MESSAGE[31];
-        $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-        $output .= COM_siteFooter ();
+        $output .= COM_siteHeader('menu', $MESSAGE[30])
+                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
+                . COM_siteFooter ();
         COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
         return PLG_RET_PERMISSION_DENIED;
     case STORY_EMPTY_REQUIRED_FIELDS:
@@ -1292,7 +1289,7 @@ function service_submit_story($args, &$output, &$svc_msg)
             $output = COM_refresh ($_CONF['site_admin_url'] . '/moderation.php?msg=9');
         } else {
             $output = PLG_afterSaveSwitch($_CONF['aftersave_story'],
-                    COM_buildURL("{$_CONF['site_url']}/article.php?story=$sid"),
+                    $pageHandle->buildURL("{$_CONF['site_url']}/article.php?story=$sid"),
                         'story', 9);
         }
 

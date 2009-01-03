@@ -34,13 +34,7 @@ require_once '../lib-common.php';
 $display = '';
 
 if (!SEC_inGroup ('Root')) {
-    $display .= COM_siteHeader ('menu');
-    $display .= COM_startBlock ($LANG20[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= '<p>' . $LANG20[6] . '</p>';
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
-    echo $display;
+    $pageHandle->displayAccessError($LANG20[1],$LANG20[6],'the clear cache function.');
     exit;
 }
 
@@ -50,5 +44,5 @@ if (!SEC_inGroup ('Root')) {
 
 CTL_clearCache();
 
-echo COM_refresh($_CONF['site_admin_url'] . '/index.php?msg=500');
+$pageHandle->redirect($_CONF['site_admin_url'] . '/index.php?msg=500');
 ?>
