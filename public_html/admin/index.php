@@ -245,8 +245,20 @@ function security_check_reminder()
 
 // MAIN
 
+$display = COM_siteHeader('menu', $LANG29[34]);
 
-$display .= COM_siteHeader('menu', $LANG29[34]);
+$msg = 0;
+if (isset($_GET['msg'])) {
+    $msg = COM_applyFilter($_GET['msg'], true);
+}
+if ($msg > 0) {
+    $plugin = '';
+    if (isset($_GET['plugin'])) {
+        $plugin = COM_applyFilter($_GET['plugin']);
+    }
+    $display .= COM_showMessage($msg, $plugin);
+}
+
 $display .= security_check_reminder();
 $display .= commandcontrol();
 $display .= COM_siteFooter();
