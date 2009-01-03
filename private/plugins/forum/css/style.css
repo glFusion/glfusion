@@ -19,3 +19,11 @@ font-size:11px;
 background:url(forum/images/gl_mootip_bg200.png) bottom right;
 padding:4px 8px 8px;
 }
+
+.top-link {
+float:right;
+}
+.top-link img {
+padding-right:5px;
+vertical-align:middle;
+}

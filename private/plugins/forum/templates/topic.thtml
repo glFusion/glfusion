@@ -106,7 +106,13 @@
       </tr>
     </table>
   </td>
-  <td style="height:30px;">&nbsp;</td>
+  <td style="height:30px;">
+    <div class="top-link">
+      <a href="#top">
+        <img src="{site_url}/forum/images/top.png" alt="{$LANG_GF01[back2top]}" title="{$LANG_GF01[back2top]}" {xhtml}>
+      </a>
+    </div>
+  </td>
 </tr>
 <tr>
   <td colspan="2" class="pluginSolidOutline"><div style="background:transparent;width:1px;height:10px;display:{show_topicrule}"></div></td>
