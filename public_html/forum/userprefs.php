@@ -40,6 +40,11 @@
 require_once '../lib-common.php'; // Path to your lib-common.php
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
+if ( !function_exists('plugin_getmenuitems_forum') ) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
 // Display Common headers
 gf_siteHeader();
 

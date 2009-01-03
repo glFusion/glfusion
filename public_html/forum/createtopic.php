@@ -38,6 +38,12 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php'; // Path to your lib-common.php
+
+if ( !function_exists('plugin_getmenuitems_forum') ) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
 require_once $_CONF['path'] . 'plugins/forum/include/include_html.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';

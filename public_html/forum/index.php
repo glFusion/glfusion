@@ -40,6 +40,11 @@
 require_once '../lib-common.php'; // Path to your lib-common.php
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
+if ( !function_exists('plugin_getmenuitems_forum') ) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
 $forum      = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
 $show       = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) : 0;

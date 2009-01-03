@@ -39,6 +39,12 @@
 
 require_once '../lib-common.php';
 require_once $_CONF['path_system'] . 'classes/timer.class.php';
+
+if ( !function_exists('plugin_getmenuitems_forum') ) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
 $mytimer = new timerobject();
 $mytimer->setPercision(2);
 $mytimer->startTimer();
