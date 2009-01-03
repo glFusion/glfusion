@@ -61,8 +61,11 @@ define('GR_STAT_UPLOAD_PHOTO_FAIL', 403);
 define('GR_STAT_NO_WRITE_PERMISSION', 404);
 define('GR_STAT_NO_CREATE_ALBUM_PERMISSION', 501);
 define('GR_STAT_CREATE_ALBUM_FAILED', 502);
+define('GR_STAT_MOVE_ALBUM_FAILED',503);
+define('GR_STAT_ROTATE_IMAGE_FAILED',504);
 
-define('GR_SERVER_VERSION', '2.14');
+define('GR_SERVER_VERSION', '2.15');
+
 
 function _mg_gr_checkuser( ) {
     global $_USER, $_CONF;
@@ -103,7 +106,8 @@ function _mg_gr_finish($code, $body = NULL, $message = NULL) {
   			GR_STAT_UPLOAD_PHOTO_FAIL => 'The file was received, but could not be processed or added to the album.',
   			GR_STAT_NO_WRITE_PERMISSION => 'No write permission to destination album.',
   			GR_STAT_NO_CREATE_ALBUM_PERMISSION => 'A new album could not be created because the user does not have permission to do so.',
-  			GR_STAT_CREATE_ALBUM_FAILED => 'A new album could not be created, for a different reason (name conflict).',
+  			GR_STAT_CREATE_ALBUM_FAILED => 'A new album could not be created, for a different reason (name conflict, missing data, permissions...).',
+  			GR_STAT_MOVE_ALBUM_FAILED => 'The album could not be moved.',
     	);
   	}
   	if (!isset($message)) {
@@ -195,71 +199,13 @@ function _mg_gr_login( $loginname, $passwd ) {
 }
 
 
-function _mg_gr_loginOLD( $loginname, $passwd ) {
-	global $_CONF, $_USER, $_SERVER, $_COOKIE, $VERBOSE;
-
-	$retval = 'server_version='. GR_SERVER_VERSION."\n";
-
-    if (isset($loginname) && isset($passwd)) {
-        $mypasswd = COM_getPassword($loginname);
-        if ( md5($passwd) == $mypasswd ) {
-            $userdata = SESS_getUserData($loginname);
-            $_USER=$userdata;
-            $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
-            SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-            PLG_loginUser ($_USER['uid']);
-
-            // Now that we handled session cookies, handle longterm cookie
-            if (!isset($_COOKIE[$_CONF['cookie_name']]) || !isset($_COOKIE['password'])) {
-
-                // Either their cookie expired or they are new
-                $cooktime = COM_getUserCookieTimeout();
-                if ($cooktime > 0) {
-                    // They want their cookie to persist for some amount of time so set it now
-                    setcookie ($_CONF['cookie_name'], $_USER['uid'],
-                               time() + $cooktime, $_CONF['cookie_path'],
-                               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-                    setcookie ($_CONF['cookie_password'], md5 ($passwd),
-                               time() + $cooktime, $_CONF['cookie_path'],
-                               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-                }
-            } else {
-                $userid = $_COOKIE[$_CONF['cookie_name']];
-
-                if (empty ($userid) || ($userid == 'deleted')) {
-                    unset ($userid);
-                } else {
-                    $userid = COM_applyFilter ($userid, true);
-                    if ($userid > 1) {
-                        // Create new session
-                        $userdata = SESS_getUserDataFromId($userid);
-                        $_USER = $userdata;
-                    }
-                }
-            }
-
-            // Now that we have users data see if their theme cookie is set.
-            // If not set it
-            setcookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
-                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                       $_CONF['cookiesecure']);
-
-			_mg_gr_finish(GR_STAT_SUCCESS, $retval);
-        } else {
-			_mg_gr_finish(GR_STAT_PASSWD_WRONG, $retval);
-		}
-    } else {
-    	_mg_gr_finish(GR_STAT_LOGIN_MISSING, $retval);
-    }
-}
-
 function _mg_gr_fetch_albums($refnum, $check_writeable) {
 	global $MG_albums, $_MG_USERPREFS, $_MG_CONF, $_USER;
 
+COM_errorLog("*** entering _mg_gr_fetch_albums ****");
     _mg_gr_checkuser( );
 
   	$retval = '';
-
   	$nalbums = 0;
   	$children = $MG_albums[0]->getChildren();
 	$nrows = count($children);
@@ -269,16 +215,21 @@ function _mg_gr_fetch_albums($refnum, $check_writeable) {
     	}
 		$aid = $MG_albums[$children[$i]]->id;
 		$aid = $nalbums+1;
+		$MG_albums[$children[$i]]->gid = $aid;
 		$retval .= 'album.name.'.$aid.'=' . $MG_albums[$children[$i]]->id ."\n";
-      	$retval .= 'album.title.'.$aid.'='.$MG_albums[$children[$i]]->title."\n";
-      	$retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
+		if ( $MG_albums[$children[$i]]->title != '' )
+      	    $retval .= 'album.title.'.$aid.'='.$MG_albums[$children[$i]]->title."\n";
+        if ( $MG_albums[$children[$i]]->description != '' )
+      	    $retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
       	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$children[$i]]->parent."\n";
-      	$retval .= 'album.resize_size.'.$aid.'='.'false'."\n";
+      	$retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
       	$maxsize = $MG_albums[$children[$i]]->max_image_width;
       	if ( $MG_albums[$children[$i]]->max_image_height > $MG_albums[$children[$i]]->max_image_width ) {
           	$maxsize = $MG_albums[$children[$i]]->max_image_height;
       	}
-      	$retval .= 'album.max_size.'.$aid.'='.$maxsize."\n";
+      	if ( isset($maxsize) && $maxsize != 0 && $maxsize != '' ) {
+      	    $retval .= 'album.max_size.'.$aid.'='.$maxsize."\n";
+      	}
 
         if (($_MG_CONF['member_albums'] && $MG_albums[$children[$i]]->isMemberAlbum() && $MG_albums[$children[$i]]->owner_id == $_USER['uid'] && $_MG_USERPREFS['active']) ||
            ( $MG_albums[$children[$i]]->member_uploads && $MG_albums[$children[$i]]->access >= 2 ) ||
@@ -306,32 +257,44 @@ function _mg_gr_fetch_albums($refnum, $check_writeable) {
             $create_sub = 'false';
         }
       	$retval .= 'album.perms.create_sub.'.$aid.'='.$create_sub."\n";
-      	$retval .= 'album.info.extrafields.'.$aid."=Summary\n";
+//      	$retval .= 'album.info.extrafields.'.$aid."=Summary\n";
       	$nalbums++;
-      	list($nalbums, $clist) = _mg_recurse_children( $MG_albums[$children[$i]]->id, $nalbums, $check_writable);
-      	$retval .= $clist;
+
+      	$subs = $MG_albums[$children[$i]]->getChildren();
+      	if ( count($subs) > 0 ) {
+            list($nalbums, $clist) = _mg_recurse_children( $MG_albums[$children[$i]]->id, $nalbums, $check_writable);
+            $retval .= $clist;
+        }
 	}
+
 	$retval .= 'album_count='.$nalbums."\n";
-  	$retval .= 'can_create_root='. ($MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/ ? 'true' : 'false') ."\n";
-  	_mg_gr_finish(GR_STAT_SUCCESS, $retval);
+  	$retval .= 'can_create_root='. ($MG_albums[0]->owner_id ? 'yes' : 'no') ."\n";
+
+  	_mg_gr_finish(GR_STAT_SUCCESS, $retval,'Fetch albums successful.');
 }
 
-function _mg_recurse_children( $aid, $counter, $check_writable ) {
+function _mg_recurse_children( $album_id, $counter, $check_writable ) {
     global $MG_albums, $_MG_USERPREFS;
 
     $retval = '';
 
-  	$children = $MG_albums[$aid]->getChildren();
+  	$children = $MG_albums[$album_id]->getChildren();
     $nrows = count($children);
+
     for ($i=0;$i<$nrows;$i++) {
     	if ( $MG_albums[$children[$i]]->access == 0 ) {
         	continue;
     	}
 		$aid = $counter+1;
+		$MG_albums[$children[$i]]->gid = $aid;
 		$retval .= 'album.name.'.$aid.'=' . $MG_albums[$children[$i]]->id ."\n";
-      	$retval .= 'album.title.'.$aid.'='.$MG_albums[$children[$i]]->title."\n";
-      	$retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
-      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$children[$i]]->parent."\n";
+		if ( $MG_albums[$children[$i]]->title != '' ) {
+      	    $retval .= 'album.title.'.$aid.'='.$MG_albums[$children[$i]]->title."\n";
+      	}
+      	if ( $MG_albums[$children[$i]]->summary != '' ) {
+      	    $retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
+      	}
+      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->gid."\n";
       	$retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
       	$retval .= 'album.max_size.'.$aid.'='.'0'."\n";
       	$retval .= 'album.thumb_size.'.$aid.'='.'200'."\n";
@@ -346,7 +309,7 @@ function _mg_recurse_children( $aid, $counter, $check_writable ) {
       	$retval .= 'album.perms.del_item.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
       	$retval .= 'album.perms.del_alb.'.$aid.'='.($MG_albums[$children[$i]]->access == 3 ? 'true' : 'false')."\n";
       	$retval .= 'album.perms.create_sub.'.$aid.'='.(($MG_albums[$children[$i]]->access == 3  && $_MG_USERPREFS['active'] == 1) || $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/  ? 'true' : 'false')."\n";
-      	$retval .= 'album.info.extrafields.'.$aid."=Summary\n";
+//      	$retval .= 'album.info.extrafields.'.$aid."=Summary\n";
       	$counter++;
       	list($counter, $clist) = _mg_recurse_children( $MG_albums[$children[$i]]->id, $counter, $check_writable);
       	$retval .= $clist;
@@ -588,11 +551,18 @@ function _mg_gr_add_album($parentaname, $albumname, $title, $descr) {
 
     require_once $_CONF['path'] . 'plugins/mediagallery/include/albumedit.php';
 
+    if ( !isset($parentaname) || $parentaname == '') {
+        $parentaname = 0;
+    }
+
     if ($parentaname == 'rootalbum' )
         $parentaname = 0;
 
     $retval = '';
     $aid = MG_quickCreate($parentaname,$title,$descr);
+    if ( $aid == -1 ) {
+        _mg_gr_finish(GR_STAT_CREATE_ALBUM_FAILED,'','Album could not be created.');
+    }
 
     $dc = time();
     $grname = addslashes($albumname);
@@ -606,6 +576,10 @@ function _mg_gr_move_album($albname, $destaname) {
 
       _mg_gr_checkuser( );
 
+    if ( !isset($destaname) || $destaname == '') {
+        $destaname = 0;
+    }
+
     if ( $destaname == 'rootalbum' ) {
         $destaname = 0;
     }
@@ -613,7 +587,7 @@ function _mg_gr_move_album($albname, $destaname) {
     $retval = '';
 
     if ( ($MG_albums[$albname]->access != 3 || $MG_albums[$destaname]->access != 3) && !$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/ ) {
-        _mg_gr_finish(GR_STAT_NO_WRITE_PERMISSION, $retval);
+        _mg_gr_finish(GR_STAT_NO_WRITE_PERMISSION, $retval,'No write permissions');
     }
     $sql = "UPDATE {$_TABLES['mg_albums']} SET album_parent=" . $destaname . " WHERE album_id=" . $albname;
     DB_query($sql);
