@@ -2,6 +2,69 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Updated version numbers (Mark)
+        private/system/sql/mysql_tableanddata.php
+
+- Forum: Implement check to see if plugin is disabled and return
+  404 error (Mark)
+        public_html/forum/createtopic.php
+        public_html/forum/index.php
+        public_html/forum/memberlist.php
+        public_html/forum/print.php
+        public_html/forum/userprefs.php
+        public_html/forum/viewtopic.php
+        private/plugins/forum/include/gf_format.php
+
+- Media Gallery: Updated the EXIF library to latest release (Mark)
+        private/plugins/mediagallery/include/exif.php
+        private/plugins/mediagallery/include/makers/canon.php
+        private/plugins/mediagallery/include/makers/fujifilm.php
+        private/plugins/mediagallery/include/makers/gps.php
+        private/plugins/mediagallery/include/makers/nikon.php
+        private/plugins/mediagallery/include/makers/olympus.php
+        private/plugins/mediagallery/include/makers/panasonic.php (new file)
+        private/plugins/mediagallery/include/makers/sanyo.php
+
+- Check username length (Mark)
+        public_html/users.php
+
+- Pass error message when speedlimit error (Mark)
+        public_html/profiles.php
+
+- XHTML Fix (Mark)
+        private/system/lib-plugins.php
+
+- Fixed spelling error (no code changes) (Mark)
+        private/system/lib-admin.php
+
+- Added nofollow attribute to comment reply (Mark)
+        private/system/lib-comment.php
+
+- Moved wiki processing to its own functions (Mark - port from Geeklog)
+        private/system/classes/story.class.php
+        public_html/lib-common.php
+
+- Forum: Implemented "Back to top" image in lower right corner of
+  posts (Eric)
+        public_html/forum/images/icon_minipost.gif
+        public_html/forum/images/top.png
+        private/plugins/forum/css/style.css
+        private/plugins/forum/templates/topic.thtml
+
+- Admin index did not display informational messages (Mark)
+        public_html/admin/index.php
+
+- Implement COM_showMessageText() (Mark - port from Geeklog)
+  Implement COM_showMessageFromParameter()
+  Fixed bug in COM_getYearFormOptions()
+        public_html/lib-common.php
+        private/system/lib-story.php
+        public_html/users.php
+        public_html/usersettings.php
+
+- Add lang direction to article template (Mark)
+        public_html/article.php
+
 - Polls: Fixed XHTML compliance issue (Mark)
         private/plugins/polls/functions.inc
 
