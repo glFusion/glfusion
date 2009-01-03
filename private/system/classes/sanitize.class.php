@@ -8,13 +8,12 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
-// | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// |          Blaine Lang      - blaine AT portalparts DOT com                |
+// | Based on sanitize.class.php included in the Geeklog CMS                  |
+// | Also based on the lib-scrub.php developed by Joe Mucchiello (c) 2008     |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -37,34 +36,409 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-/* Class derived from original procedural code in Geeklog 1.3.x lib-common.php
-*  Jan 2005: Blaine Lang
-*/
-
-/**
- * Include the base kses class if not already loaded
+/*
+ * This class is designed to filter input or data.  Generally,
+ * it will be used to filter $_POST, $_GET, $_REQUEST, $_COOKIE,
+ * and $_ENV data.
+ *
+ * Filtering is limited to removing bad things (like scripts,
+ * when the data type if HTML, or ensuring proper typed data
+ * is returned (int, float, etc.).
+ *
+ * Input filtering does not perform functions such as
+ * censoring (replacing bad words), template fixes (replacing
+ * {} characters).  The class supports these functions, but they
+ * are not automatically called on input.  The programmer must
+ * make subsequent calls to perform these levels of filtering.
+ *
+ * All $_POST, $_GET, $_REQUEST, $_COOKIE, and $_ENV data
+ * is automatically run through stripslashes() if necessary.
+ * There should never be a reason for a programmer to call
+ * stripslashes() outside of this function.
+ *
+ * Supported data types:
+ *
+ * Integer - will return an int
+ * Float   - return float value
+ * Strict  - returns a fully filtered input, generally used
+ *           for single word items like mode, etc.  Will not
+ *           contain quotes or any other DB dangerous code
+ * Plain   - returns a text block that has been htmlencoded
+ *           safe for display
+ * HTML    - returns filtered HTML (supports code / raw blocks)
+ * Raw     - returns as-is input, no filtering!
+ * Boolean - returns 0 or 1
+ * URL     - Returns a valid URL
+ *
+ *
  */
-require_once $_CONF['path_system'] . 'lib/htmLawed/htmLawed.php';
-require_once $_CONF['path_system'] . 'lib/bbcode/stringparser.class.php';
 
 class sanitize {
 
-    var $string         = '';
-    var $_parmissions   = '';
-    var $_isnumeric     = false;
-    var $_logging       = false;
-    var $_setglobal     = false;
-    var $_censordata    = false;
+    private $_post   = array();
+    private $_get    = array();
+    private $_cookie = array();
+    private $_env    = array();
+    private $_request = array();
+    private $_rewriteEnabled = false;
+    private $_arguments = array();
 
-    /* Filter or sanitize single parm */
-    function filterparm ($parm) {
+    /**
+     * Constructor, initializes the internal variable arrays
+     * calls stripslashes on all input if necessary.
+     */
 
-        $p = $this->Parse( $parm );
+    public function __construct()
+    {
+        global $_CONF;
 
-        if( $this->_isnumeric ) {
+        if((function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()) || (ini_get('magic_quotes_sybase') && (strtolower(ini_get('magic_quotes_sybase'))!="off")) ){
+            $this->_stripslashes_deep($_GET);
+            $this->_stripslashes_deep($_POST);
+            $this->_stripslashes_deep($_COOKIE);
+            $this->_stripslashes_deep($_ENV);
+            $this->_stripslashes_deep($_REQUEST);
+        }
+        $this->_post   = &$_POST;
+        $this->_get    = &$_GET;
+        $this->_cookie = &$_COOKIE;
+        $this->_env    = &$_ENV;
+        $this->_request = &$_REQUEST;
+        $this->_rewriteEnabled = $_CONF['url_rewrite'];
+        if ( $this->_rewriteEnabled == 1 ) {
+            $this->_getArguments();
+        }
+    }
+
+	/**
+	 * Returns a reference to a global sanitizer object, only creating it
+	 * if it doesn't already exist.
+	 *
+	 * This method must be invoked as:
+	 * 		<pre>$inputHandle =& sanitizer::getInstance();</pre>
+	 *
+	 * @static
+	 * @return	object	The sanitizer object.
+	 * @since	1.2.0
+	 */
+    function &getInstance()
+    {
+        static $instance;
+
+        if (!$instance) {
+            $instance = new sanitize();
+        }
+
+        return $instance;
+    }
+
+	/**
+	 * Retrieves a $_POST, $_GET, $_REQUEST, $_ENV, or $_COOKIE variable.
+	 *
+	 * @param  string   $type    Type of data to retrieve
+	 *                             - int, float, strict, plain, html, free, ...
+	 * @param  string   $key     Array key
+	 * @param  array    $mode    Type of data; post, get, request, env, cookie
+	 *                           must specify in order of precedence
+	 * @param  string   $default Default return value if not found
+	 *
+	 * @note This will return the first item found when passing an array of
+	 *       modes. If you pass array('get','post') and the $_GET variable is
+	 *       set, the $_GET variable will be returned.
+     *
+	 * @access public
+	 * @return varible
+	 */
+    function getVar ( $type, $key, $mode=array('post'), $default='' )
+    {
+        if ( !is_array($mode) ) {
+            $mode = array($mode);
+        }
+        foreach($mode AS $method) {
+            switch (strtoupper($method) ) {
+                case 'POST' :
+                    $vData = $this->_post;
+                    break;
+                case 'GET' :
+                    $vData = $this->_get;
+                    break;
+                case 'REQUEST' :
+                    $vData = $this->_request;
+                    break;
+                case 'ENV' :
+                    $vData = $this->_env;
+                    break;
+                case 'COOKIE' :
+                    $vData = $this->_cookie;
+                    break;
+                case 'default' :
+                    $vData = $this->_post;
+                    break;
+            }
+            if (array_key_exists($key, $vData)) {
+                return $this->filterVar($type,$vData[$key],'',$default);
+            }
+        }
+        return $default;
+    }
+
+
+	/**
+	 * Filters and returns a variable
+	 *
+	 * @param  string   $type    Type of data to retrieve
+	 *                             - int, float, strict, plain, html, free, ...
+	 * @param  string   $key     Array key or data to filter
+	 * @param  array    $A       Array of data to filter
+	 * @param  array    $mode    Type of data; post, get, request, env, cookie
+	 * @param  string   $default Default return value if not found
+     *
+	 * @access public
+	 * @return varible
+	 *
+	 * @note Pass only $key to filter a single variable
+	 */
+    function filterVar( $type, $key, $A, $default='' )
+    {
+        $data = null;
+        if ($A === null || $A === '') {
+            $data = $key;
+        } elseif ($key === null || $key === '' ) {
+            $data = $A;
+        } elseif (array_key_exists($key, $A)) {
+            $data = $A[$key];
+        }
+        if (($data === null || $data === '' ) && $default != '') {
+            return $default;
+        } elseif (is_array($data)) {
+            return($this->_sanitizeArray($type,$data,$default));
+        }
+        switch ( strtoupper($type) ) {
+            case 'INT' :
+            case 'INTEGER' :
+				preg_match('/-?[0-9]+/', (string) $data, $matches);
+				return @ (int) $matches[0];
+                break;
+            case 'FLOAT' :
+            case 'DOUBLE' :
+				preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $data, $matches);
+				return @ (float) $matches[0];
+                break;
+            case 'STRICT' :
+                return $this->_applyFilter($data);
+                break;
+            case 'PLAIN' :
+            case 'TEXT'  :
+            case 'PLAINTEXT' :
+                $data = strip_tags($data);
+                return @htmlspecialchars ($data,ENT_QUOTES, COM_getCharset());
+                break;
+            case 'HTML' :
+                $htmlFilter =& htmlFilter::getInstance();
+                return $htmlFilter->filterHTML($data);
+                break;
+            case 'RAW' :
+                return $data;
+                break;
+            case 'BOOL' :
+            case 'BOOLEAN' :
+                if (!isset($default) || $default === '' ) {
+                    $default = 0;
+                }
+                if (intval($data) != 0)
+                    return true; // Make any non-zero numeric value true
+                $data = MBYTE_strtolower($this->_applyFilter($data));
+                if (strlen($data) == 0)
+                    return $default;
+                if ($data === 0)
+                    return false;
+                if (in_array($data, array('yes','on','true')))
+                    return true;
+                if (in_array($data, array('no','off','false')))
+                    return false;
+                return $default;
+                break;
+            case 'URL' :
+                return $this->_sanitizeUrl($data,$default);
+                break;
+            case 'SQL' :
+                return mysql_real_escape_string ($data);
+                break;
+            case 'FILENAME' :
+                return $this->_sanitizeFilename($data,false);
+                break;
+            default :
+                return (@htmlspecialchars ($data,ENT_QUOTES, COM_getCharset()));
+                break;
+        }
+    }
+
+
+    /** buttonCheck -- Find which button was pressed on form.
+     *
+     *  Instead of doing this:
+     *      <input type="submit" value="{lang_save}" name="mode">
+     *      <input type="submit" value="{lang_cancel}" name="mode">
+     *
+     *  and checking
+     *      if ($_POST['mode'] == $LANG_ADMIN['save']) ...
+     *
+     *  Do this:
+     *      <input type="submit" value="{lang_save}" name="save">
+     *      <input type="submit" value="{lang_cancel}" name="cancel">
+     *
+     *  and check this way:
+     *      $mode = $inputHandler->buttonCheck(array('save','cancel'), $_POST, '');
+     *      if ($mode == 'save') ...
+     *
+     *  @param  string  $buttonlist     List of buttons.
+     *  @param  array   $A              Array such as $_GET, $_POST, $_COOKIE or $_REQUEST
+     *  @param  mixed   $default        If no entry is in the array, return this default value.
+     *  @param  boolean $return_name    If true, the returned name is the name in the buttonlist
+     *                                  If false, the return value is the key of the name in
+     *                                  the buttonlist
+     *  @return mixed                   The given button or the associated key of the button
+     */
+    function buttonCheck($buttonList, $A, $default = '', $return_name = true)
+    {
+        if (!is_array($buttonList) && !is_array($A)) {
+            return false;
+        }
+        foreach ($buttonList as $optionalreturn => $button) {
+            if (array_key_exists($button, $A)) {
+                return ($return_name ? $button : $optionalreturn);
+            }
+        }
+        return $default;
+    }
+
+    // URL Rewrite
+
+    /**
+    * Grabs any variables from the query string
+    *
+    * @access   private
+    */
+    function _getArguments()
+    {
+        if (isset ($_SERVER['PATH_INFO'])) {
+            if ($_SERVER['PATH_INFO'] == '')
+            {
+                if (isset ($_ENV['ORIG_PATH_INFO']))
+                {
+                    $this->_arguments = explode('/', $_ENV['ORIG_PATH_INFO']);
+                } else {
+                    $this->_arguments = array();
+                }
+            } else {
+                $this->_arguments = explode ('/', $_SERVER['PATH_INFO']);
+            }
+            array_shift ($this->_arguments);
+        } else if (isset ($_ENV['ORIG_PATH_INFO'])) {
+            $this->_arguments = explode('/', substr($_ENV['ORIG_PATH_INFO'],1));
+        } else {
+            $this->_arguments = array ();
+        }
+    }
+
+    /**
+    * Returns the number of variables found in query string
+    *
+    * This is particularly useful just before calling setArgNames() method
+    *
+    * @return   int     Number of arguments found in URL
+    *
+    */
+    function numArguments()
+    {
+        return count($this->_arguments);
+    }
+
+
+    /**
+    * Assigns logical names to query string variables
+    *
+    * @param        array       $names      String array of names to assign to variables pulled from query string
+    * @return       boolean     true on success otherwise false
+    *
+    */
+    function setArgNames($names)
+    {
+        if (count($names) < count($this->_arguments)) {
+            print "URL Class: number of names passed to setArgNames must be equal or greater than number of arguments found in URL";
+            exit;
+        }
+        if (is_array($names)) {
+            $newArray = array();
+            for ($i = 1; $i <= count($this->_arguments); $i++) {
+                $newArray[current($names)] = current($this->_arguments);
+                next($names);
+		        next($this->_arguments);
+            }
+            $this->_arguments = $newArray;
+            reset($this->_arguments);
+        } else {
+            return false;
+        }
+        // move these into the $_get array
+        if ( is_array($this->_arguments) ) {
+            foreach ($this->_arguments AS $name => $value ) {
+                if ( !isset($_get[$name]) ) {
+                    if((function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()) || (ini_get('magic_quotes_sybase') && (strtolower(ini_get('magic_quotes_sybase'))!="off")) ){
+                        $this->_get[$name] = stripslashes($value);
+                    } else {
+                        $this->_get[$name] = $value;
+                    }
+//                    COM_errorLog('Setting _get['.$name.'] = ' . $value);
+                } else {
+//                    COM_errorLog('_get[' . $name . '] already exists');
+                }
+            }
+        }
+        return true;
+    }
+
+
+    /**
+    * Sanitize a filename.
+    *
+    * @param    string  $filename   the filename to clean up
+    * @param    boolean $allow_dots whether to allow dots in the filename or not
+    * @return   string              sanitized filename
+    * @note     This function is pretty strict in what it allows. Meant to be used
+    *           for files to be included where part of the filename is dynamic.
+    *
+    */
+    function _sanitizeFilename($filename, $allow_dots = false)
+    {
+        if ($allow_dots) {
+            $filename = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', $filename);
+            $filename = str_replace('..', '', $filename);
+        } else {
+            $filename = preg_replace('/[^a-zA-Z0-9\-_]/', '', $filename);
+        }
+
+        return $filename;
+    }
+
+
+    /**
+    * Filter variable
+    *
+    * @param    string    $parameter   the parameter to test
+    * @param    boolean   $isnumeric   true if $parameter is supposed to be numeric
+    * @return   string    the filtered parameter (may now be empty or 0)
+    *
+    */
+    function _applyFilter($parameter, $isnumeric = false)
+    {
+        $p = strip_tags( $parameter );
+        $p = $this->_killJS( $p );
+
+        if( $isnumeric ) {
             // Note: PHP's is_numeric() accepts values like 4e4 as numeric
-            if( !is_numeric( $p ) || ( preg_match( '/^([0-9]+)$/', $p ) == 0 )) {
-               $p = 0;
+            if( !is_numeric( $p ) || ( preg_match( '/^-?\d+$/', $p ) == 0 )) {
+                $p = 0;
             }
         } else {
             $p = preg_replace( '/\/\*.*/', '', $p );
@@ -72,176 +446,92 @@ class sanitize {
             $pa = explode( '"', $pa[0] );
             $pa = explode( '`', $pa[0] );
             $pa = explode( ';', $pa[0] );
+            $pa = explode( ',', $pa[0] );
             $pa = explode( '\\', $pa[0] );
             $p = $pa[0];
         }
 
-        if( $this->logging ) {
-            if( strcmp( $p, $parm ) != 0 ) {
-                COM_errorLog( "Filter applied: >> $parm << filtered to $p [IP {$_SERVER['REMOTE_ADDR']}]", 1);
-            }
-        }
-
         return $p;
-
-    }
-
-    /* Prepare data for SQL insert and apply filtering
-    *  Supports passing a single parm or array of parms
-    */
-    function prepareForDB($data) {
-        if (is_array($data)) {
-            # loop through array and apply the filters
-            foreach($data as $var)  {
-                $return_data[]  = addslashes($this->filterHTML($var));
-            }
-            return $return_data;
-        } else {
-            $data = $this->filterHTML($data);
-            $data = addslashes($data);
-            return $data;
-        }
-    }
-
-    function filterHTML ($message) {
-        global $_CONF;
-
-        // strip_tags() gets confused by HTML comments ...
-        $message = preg_replace( '/<!--.+?-->/', '', $message );
-
-        if( isset( $_CONF['allowed_protocols'] ) && is_array( $_CONF['allowed_protocols'] ) && ( sizeof( $_CONF['allowed_protocols'] ) > 0 )) {
-            $this->Protocols( $_CONF['allowed_protocols'] );
-        } else {
-            $this->Protocols( array( 'http:', 'https:', 'ftp:' ));
-        }
-
-        if( empty( $this->permissions) || !SEC_hasRights( $this->permissions ) ||
-                empty( $_CONF['admin_html'] )) {
-            $html = $_CONF['user_html'];
-        } else {
-            $html = array_merge_recursive( $_CONF['user_html'],
-                                           $_CONF['admin_html'] );
-        }
-
-        foreach( $html as $tag => $attr ) {
-            $this->AddHTML( $tag, $attr );
-        }
-
-        $message = $this->Parse( $message );
-        $message = $this->formatCode($message);
-        $message = $this->censor($message);
-        return $message;
-
     }
 
 
-    /* Apply filtering to a single parm or array of parms
-    *  Parms may be in either $_POST or $_GET input parms array
-    *  If type (GET or POST) is not set then POST is checked first
-    *  Optionally Parms can be made global
-    */
-    function sanitizeParms($vars,$type='')  {
-        $return_data = array();
-
-        #setup common reference to SuperGlobals depending which array is needed
-        if ($type == "GET" OR $type == "POST") {
-            if ($type =="GET") {
-                $SG_Array =& $_GET;
-            }
-            if ($type =="POST") {
-                $SG_Array =& $_POST;
-            }
-
-            # loop through SuperGlobal data array and grab out data for allowed fields if found
-            foreach($vars as $key)  {
-                if (array_key_exists($key,$SG_Array)) {
-                    $return_data[$key]=$SG_Array[$key];
-                }
-            }
-        } else {
-            foreach ($vars as $key) {
-                if (array_key_exists($key, $_POST)) {
-                    $return_data[$key] = $_POST[$key];
-                } elseif (array_key_exists($key, $_GET)) {
-                    $return_data[$key] = $_GET[$key];
-                }
-            }
-        }
-
-        # loop through $vars array and apply the filter
-        foreach($vars as $value)  {
-            $return_data[$value]  = $this->filterparm($return_data[$value]);
-        }
-
-        // Optionally set $GLOBALS or return the array
-        if ($this->_setglobal) {
-            # loop through final data and define all the variables using the $GLOBALS array
-            foreach ($return_data as $key=>$value)  {
-                $GLOBALS[$key]=$value;
-            }
-        } else {
-            return $return_data;
-        }
-    }
-
-
-    function formatCode($message)  {
-
-        // Get rid of any newline characters
-        $message = preg_replace( "/\n/", '', $message );
-
-        // Replace any $ with &#36; (HTML equiv)
-        $message = str_replace( '$', '&#36;', $message );
-
-        // handle [code] ... [/code]
-        do
-        {
-            $start_pos = MBYTE_substr( MBYTE_strtolower( $message ), '[code]' );
-            if( $start_pos !== false )
-            {
-                $end_pos = MBYTE_substr( MBYTE_strtolower( $message ), '[/code]' );
-                if( $end_pos !== false )
-                {
-                    $encoded = $this->_handleCode( MBYTE_substr( $message, $start_pos + 6,
-                            $end_pos - ( $start_pos + 6 )));
-                    $encoded = '<pre><code>' . $encoded . '</code></pre>';
-                    $message = MBYTE_substr( $message, 0, $start_pos ) . $encoded
-                         . MBYTE_substr( $message, $end_pos + 7 );
-                }
-                else // missing [/code]
-                {
-                    // Treat the rest of the text as code (so as not to lose any
-                    // special characters). However, the calling entity should
-                    // better be checking for missing [/code] before calling this
-                    // function ...
-                    $encoded = $this->_handleCode( MBYTE_substr( $message, $start_pos + 6 ));
-                    $encoded = '<pre><code>' . $encoded . '</code></pre>';
-                    $message = MBYTE_substr( $message, 0, $start_pos ) . $encoded;
-                }
-            }
-        }
-        while( $start_pos !== false );
-
-        return $message;
-
-    }
 
     /**
-    * Handles the part within a [code] ... [/code] section, i.e. escapes all
-    * special characters.
+    *  Takes some amount of text and replaces all javascript events on*= with in
     *
-    * @param   string  $str  the code section to encode
-    * @return  string  $str with the special characters encoded
+    *  This script takes some amount of text and matches all javascript events, on*= (onBlur= onMouseClick=)
+    *  and replaces them with in*=
+    *  Essentially this will cause onBlur to become inBlur, onFocus to be inFocus
+    *  These are not valid javascript events and the browser will ignore them.
+    * @param    string  $Message    Text to filter
+    * @return   string  $Message with javascript filtered
+    * @see  _censor
+    * @see  _checkHTML
     *
     */
-    function _handleCode( $str )
+    function _killJS( $text )
     {
-        $search  = array( '&',     '\\',    '<',    '>',    '[',     ']'     );
-        $replace = array( '&amp;', '&#92;', '&lt;', '&gt;', '&#91;', '&#93;' );
+        return( preg_replace( '/(\s)+[oO][nN](\w*) ?=/', '\1in\2=', $text ));
+    }
 
-        $str = str_replace( $search, $replace, $str );
 
-        return( $str );
+    /**
+    * Sanitize a URL
+    *
+    * @param    string  $url                URL to sanitized
+    * @param    array   $allowed_protocols  array of allowed protocols
+    * @param    string  $default_protocol   replacement protocol (default: http)
+    * @return   string                      sanitized URL
+    *
+    */
+    function _sanitizeUrl( $url, $allowed_protocols = array('http','https','ftp'), $default_protocol = 'http' )
+    {
+        if( !is_array( $allowed_protocols )) {
+            $allowed_protocols = array( $allowed_protocols );
+        }
+
+        if( empty( $default_protocol )) {
+            $default_protocol = 'http:';
+        } else if( substr( $default_protocol, -1 ) != ':' ) {
+            $default_protocol .= ':';
+        }
+
+        $url = strip_tags( $url );
+        if( !empty( $url )) {
+            $pos = MBYTE_strpos( $url, ':' );
+            if( $pos === false ) {
+                $url = $default_protocol . '//' . $url;
+            } else {
+                $protocol = MBYTE_substr( $url, 0, $pos + 1 );
+                $found_it = false;
+                foreach( $allowed_protocols as $allowed ) {
+                    if( substr( $allowed, -1 ) != ':' ) {
+                        $allowed .= ':';
+                    }
+                    if( $protocol == $allowed ) {
+                        $found_it = true;
+                        break;
+                    }
+                }
+                if( !$found_it ) {
+                    $url = $default_protocol . MBYTE_substr( $url, $pos + 1 );
+                }
+            }
+        }
+
+        return $url;
+    }
+
+
+    /**
+    * Prepare data for DB use
+    *
+    * @param    string  $str                Data to be sanitized
+    * @return   string                      Escaped string
+    *
+    */
+    function prepareForDB($str) {
+        return mysql_real_escape_string ($str);
     }
 
 
@@ -250,60 +540,91 @@ class sanitize {
     *
     * This will replace 'bad words' with something more appropriate
     *
-    * @param        string      $message        String to check
-    * @return   string  Edited $Message
+    * @param        string      $Message        String to check
+    * @see function checkHTML
+    * @return       string      Edited $Message
     *
     */
-
-    function censor ($message)
+    function censor( $Message )
     {
         global $_CONF;
 
-        $editedMessage = $message;
+        $EditedMessage = $Message;
 
-        if( $this->_censordata )
+        if( $_CONF['censormode'] != 0 )
         {
             if( is_array( $_CONF['censorlist'] ))
             {
-                $replacement = $_CONF['censorreplace'];
+                $Replacement = $_CONF['censorreplace'];
 
                 switch( $_CONF['censormode'])
                 {
                     case 1: # Exact match
-                        $regExPrefix = '(\s*)';
-                        $regExSuffix = '(\W*)';
+                        $RegExPrefix = '(\s*)';
+                        $RegExSuffix = '(\W*)';
                         break;
 
                     case 2: # Word beginning
-                        $regExPrefix = '(\s*)';
-                        $regExSuffix = '(\w*)';
+                        $RegExPrefix = '(\s*)';
+                        $RegExSuffix = '(\w*)';
                         break;
 
                     case 3: # Word fragment
-                        $regExPrefix   = '(\w*)';
-                        $regExSuffix   = '(\w*)';
+                        $RegExPrefix   = '(\w*)';
+                        $RegExSuffix   = '(\w*)';
                         break;
                 }
-
-                for( $i = 0; $i < count( $_CONF['censorlist']); $i++ )
-                {
-                    $editedMessage = MBYTE_eregi_replace( $regExPrefix . $_CONF['censorlist'][$i] . $regExSuffix, "\\1$replacement\\2", $editedMessage );
+                foreach ($_CONF['censorlist'] as $c) {
+                    if (!empty($c)) {
+                        $EditedMessage = MBYTE_eregi_replace($RegExPrefix . $c
+                            . $RegExSuffix, "\\1$Replacement\\2", $EditedMessage);
+                    }
                 }
             }
         }
 
-        return $editedMessage;
+        return $EditedMessage;
     }
 
 
-    function setPermissions($permissions) {
-        $this->permissions = $permissions;
+    function fixTemplate($text) {
+        $text = str_replace('{','&#123;',$text);
+        $text = str_replace('}','&#125;',$text);
+
+        return $text;
     }
 
-    function setLogging($state=false) {
-        $this->logging = $state;
+
+    function _stripslashes_deep(&$value)
+    {
+        $value = is_array($value) ?
+                    array_map(array('sanitizer','_stripslashes_deep'), $value) :
+                    stripslashes($value);
+
+        return $value;
     }
 
+
+    function _sanitizeArray($type,&$A, $default)
+    {
+        if (is_array($A)) { // handle sub-arrays
+            $ret = array();
+            foreach($A as $k => $v) {
+                if (is_numeric($k)) {
+                    $key = intval($k);
+                } else {
+                    $key = $this->_applyFilter($k);     // not sure we really want to do this here
+                }
+                $value = $this->filterVar($type,$v,null,$default);
+                if (empty($key) && $key !== 0) {
+                    $ret[] = $value;
+                } else {
+                    $ret[$key] = $value;
+                }
+            }
+            return $ret;
+        }
+        return array();
+    }
 }
-
 ?>
