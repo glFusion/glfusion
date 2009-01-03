@@ -57,10 +57,11 @@ $VERBOSE = false;
 *
 * @param    int     $user   User ID of profile to get
 * @param    int     $msg    Message to display (if != 0)
+* @param    string  $plugin optional plugin name for message
 * @return   string          HTML for user profile page
 *
 */
-function userprofile ($user, $msg = 0)
+function userprofile($user, $msg = 0, $plugin = '')
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09, $LANG28, $LANG_LOGIN;
 
@@ -103,7 +104,7 @@ function userprofile ($user, $msg = 0)
 
     $retval .= COM_siteHeader ('menu', $LANG04[1] . ' ' . $display_name);
     if ($msg > 0) {
-        $retval .= COM_showMessage ($msg);
+        $retval .= COM_showMessage($msg, $plugin);
     }
 
     // format date/time to user preference
@@ -514,7 +515,8 @@ function createuser ($username, $email, $email_conf)
     }
 
     if (COM_isEmail ($email) && !empty ($username) && ($email === $email_conf)
-            && !USER_emailMatches ($email, $_CONF['disallow_domains'])) {
+            && !USER_emailMatches ($email, $_CONF['disallow_domains'])
+            && (strlen ($username) <= 16)) {
 
         $ucount = DB_count ($_TABLES['users'], 'username',
                             addslashes ($username));
@@ -587,7 +589,7 @@ function createuser ($username, $email, $email_conf)
         $retval .= COM_siteFooter();
     } else { // invalid username or email address
 
-        if (empty ($username)) {
+        if ((empty ($username)) || (strlen($username) > 16)) {
             $msg = $LANG01[32]; // invalid username
         } else {
             $msg = $LANG04[18]; // invalid email address
@@ -899,7 +901,11 @@ case 'profile':
         if (isset ($_GET['msg'])) {
             $msg = COM_applyFilter ($_GET['msg'], true);
         }
-        $display .= userprofile ($uid, $msg);
+        $plugin = '';
+        if (($msg > 0) && isset($_GET['plugin'])) {
+            $plugin = COM_applyFilter($_GET['plugin']);
+        }
+        $display .= userprofile($uid, $msg, $plugin);
     } else {
         $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
