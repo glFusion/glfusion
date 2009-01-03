@@ -38,7 +38,7 @@ require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
 
 function MG_batchProcess( $album_id, $action, $actionURL = '' ) {
-    global $MG_albums, $_TABLES, $_MG_CONF, $LANG_MG01, $_POST, $_SERVER;
+    global $_CONF, $MG_albums, $_TABLES, $_MG_CONF, $LANG_MG01, $_POST, $_SERVER;
 
     $numItems = count($_POST['sel']);
 

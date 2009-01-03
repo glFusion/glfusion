@@ -1,5 +1,4 @@
-<?php
-//================================================================================================
+<?php //================================================================================================
 //================================================================================================
 //================================================================================================
 /*
@@ -26,7 +25,9 @@
 //================================================================================================
 //================================================================================================
 
-
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
 
 //=================
 // Looks up the name of the tag
@@ -96,7 +97,9 @@ function GPSRational($data, $intel) {
 function formatGPSData($type,$tag,$intel,$data) {
 
 	if($type=="ASCII") {
-
+						if($tag=="0001" || $tag=="0003"){ // Latitude Reference, Longitude Reference
+								$data = ($data{1} == $data{2} && $data{1} == $data{3}) ? $data{0} : $data;
+						}
 
 	} else if($type=="URATIONAL" || $type=="SRATIONAL") {
 		$data = bin2hex($data);
@@ -110,11 +113,16 @@ function formatGPSData($type,$tag,$intel,$data) {
 
 		if($type=="SRATIONAL" && $top>2147483647) $top = $top - 4294967296;		//this makes the number signed instead of unsigned
 
-		if($tag=="0002" || $tag=="0004") { //Latitude
+								if($tag=="0002" || $tag=="0004") { //Latitude, Longitude
 
-			$seconds = GPSRational(substr($data,0,16),$intel);
+			if($intel==1){
+				$seconds = GPSRational(substr($data,0,16),$intel);
+				$hour = GPSRational(substr($data,32,16),$intel);
+			} else {
+				$hour= GPSRational(substr($data,0,16),$intel);
+				$seconds = GPSRational(substr($data,32,16),$intel);
+			}
 			$minutes = GPSRational(substr($data,16,16),$intel);
-			$hour = GPSRational(substr($data,32,16),$intel);
 
 			$data = $hour+$minutes/60+$seconds/3600;
 		} else if($tag=="0007") { //Time
@@ -127,6 +135,10 @@ function formatGPSData($type,$tag,$intel,$data) {
 			if($bottom!=0) $data=$top/$bottom;
 			else if($top==0) $data = 0;
 			else $data=$top."/".$bottom;
+
+												if($tag=="0006"){
+														$data .= 'm';
+												}
 		}
 	} else if($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
 		$data = bin2hex($data);
@@ -142,9 +154,17 @@ function formatGPSData($type,$tag,$intel,$data) {
 		$data = bin2hex($data);
 		if($intel==1) $num = intel2Moto($data);
 
-		if($tag=="0000") { //Latitude
-			$data =  hexdec(substr($data,0,2)).".". hexdec(substr($data,2,2)).".". hexdec(substr($data,4,2)).".". hexdec(substr($data,6,2));
-		}
+
+		if($tag=="0000") { // VersionID
+										$data =  hexdec(substr($data,0,2)) .
+												".". hexdec(substr($data,2,2)) .
+												".". hexdec(substr($data,4,2)) .
+												".". hexdec(substr($data,6,2));
+
+								} else if($tag=="0005"){ // Altitude Reference
+										if($data == "00000000"){ $data = 'Above Sea Level'; }
+										else if($data == "01000000"){ $data = 'Below Sea Level'; }
+								}
 
 	} else {
 		$data = bin2hex($data);
@@ -176,7 +196,7 @@ function parseGPS($block,&$result,$offset,$seek, $globalOffset) {
 	$num=hexdec($num);
 	$result['GPS']['NumTags'] = $num;
 
-	$block = fread( $seek, (int) ($num*12) );
+	$block = fread( $seek, $num*12 );
 	$place = 0;
 
 	//loop thru all tags  Each field is 12 bytes
@@ -206,7 +226,7 @@ function parseGPS($block,&$result,$offset,$seek, $globalOffset) {
 			if($intel==1) $value = intel2Moto($value);
 
 			$v = fseek($seek,$globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
-			if($v==0) {
+			if($v==0 && $bytesofdata > 0) {
 				$data = fread($seek, $bytesofdata);
 			} else if($v==-1) {
 				$result['Errors'] = $result['Errors']++;
