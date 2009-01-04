@@ -5,6 +5,18 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Incorrect function used when extracting links (Mark)
+        private/system/lib-story.php
+
+- Forum: Fixed issue with usernames containing special characters (Mark)
+        public_html/forum/createtopic.php
+
+- Handle UTF-8 encoded configuration settings better (Mark)
+        private/system/classes/config.class.php
+
+- SiteTailor - Fixed issue where color was not properly used (Eric)
+        private/plugins/sitetailor/templates/gl_vertical-cascading.thtml
+
 - Forum: Implement check to see if plugin is disabled and return
   404 error (Mark)
         public_html/forum/createtopic.php
