@@ -7054,6 +7054,31 @@ function CMT_updateCommentcodes() {
     }
 }
 
+/**
+* Creates a standard "login required" message block
+*
+* @return     string  HTML block with message
+*/
+function COM_showLoginRequiredMsg()
+{
+    global $LANG_LOGIN, $_CONF;
+
+    $display = COM_startBlock($LANG_LOGIN[1], '', COM_getBlockTemplate('_msg_block', 'header'));
+    $T = new Template($_CONF['path_layout'] . 'submit');
+    $T->set_file('login', 'submitloginrequired.thtml');
+    $T->set_var('xhtml', XHTML);
+    $T->set_var('site_url', $_CONF['site_url']);
+    $T->set_var('site_admin_url', $_CONF['site_admin_url']);
+    $T->set_var('layout_url', $_CONF['layout_url']);
+    $T->set_var('login_message', $LANG_LOGIN[2]);
+    $T->set_var('lang_login', $LANG_LOGIN[3]);
+    $T->set_var('lang_newuser', $LANG_LOGIN[4]);
+    $T->parse('output', 'login');
+    $display .= $T->finish($T->get_var('output'));
+    $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+
+    return $display;
+}
 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
