@@ -201,7 +201,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
         } else {
             $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
         }
-
+        $name = urldecode($name);
         if ( function_exists('plugin_itemPreSave_captcha') ) {
             $msg = plugin_itemPreSave_captcha('forum',$_POST['captcha']);
             if ( $msg != '' ) {
@@ -322,6 +322,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
             } else {
                 $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
             }
+            $name = urldecode($name);
             if($name != '' && strlen(trim($_POST['comment'])) > $CONF_FORUM['min_comment_length']) {
 
                 COM_clearSpeedlimit ($CONF_FORUM['post_speedlimit'], 'forum');
@@ -685,6 +686,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         if($quoteid > 0) {
             $quotesql = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$quoteid'");
             $quotearray = DB_fetchArray($quotesql);
+            $quotearray['name'] = urldecode($quotearray['name']);
             $quotearray['comment'] = $quotearray['comment'];
             if ($CONF_FORUM['pre2.5_mode'] == true ) {
                 if ( $quotearray['postmode'] == 'html' || $quotearray['postmode'] == 'HTML' ) {
