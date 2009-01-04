@@ -600,20 +600,6 @@ $_RIGHTS = explode( ',', SEC_getUserPermissions() );
 
 $topic = $inputHandler->getVar('strict','topic',array('get','post'));
 
-//if( isset( $_GET['topic'] ))
-//{
-//    $topic = COM_applyFilter( $_GET['topic'] );
-//}
-//else if( isset( $_POST['topic'] ))
-//{
-//    $topic = COM_applyFilter( $_POST['topic'] );
-//}
-//else
-//{
-//    $topic = '';
-//}
-
-
 // +---------------------------------------------------------------------------+
 // | HTML WIDGETS                                                              |
 // +---------------------------------------------------------------------------+
@@ -4703,7 +4689,7 @@ function COM_showMessage($msg, $plugin = '')
 * Displays a message, as defined by URL parameters
 *
 * Helper function to display a message, if URL parameters 'msg' and 'plugin'
-* (optional) are defined. Only for GET requests, but that's what Geeklog uses
+* (optional) are defined. Only for GET requests, but that's what glFusion uses
 * everywhere anyway.
 *
 * @return   string  HTML block with message
@@ -6756,10 +6742,10 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             echo('<h1>An error has occurred:</h1>');
             if ($_CONF['rootdebug']) {
                 echo('<h2 style="color: red">This is being displayed as "Root Debugging" is enabled
-                        in your Geeklog configuration.</h2><p>If this is a production
-                        website you <strong><em>must disable</em></strong> this
+                        in your glFusion configuration.</h2><p>If this is a production
+                        website you <strong><em>should disable</em></strong> this
                         option once you have resolved any issues you are
-                        investigating.</p>');
+                        troubleshooting.</p>');
             } else {
                 echo('<p>(This text is only displayed to users in the group \'Root\')</p>');
             }
@@ -7052,32 +7038,6 @@ function CMT_updateCommentcodes() {
             CACHE_remove_instance('story_');
         }
     }
-}
-
-/**
-* Creates a standard "login required" message block
-*
-* @return     string  HTML block with message
-*/
-function COM_showLoginRequiredMsg()
-{
-    global $LANG_LOGIN, $_CONF;
-
-    $display = COM_startBlock($LANG_LOGIN[1], '', COM_getBlockTemplate('_msg_block', 'header'));
-    $T = new Template($_CONF['path_layout'] . 'submit');
-    $T->set_file('login', 'submitloginrequired.thtml');
-    $T->set_var('xhtml', XHTML);
-    $T->set_var('site_url', $_CONF['site_url']);
-    $T->set_var('site_admin_url', $_CONF['site_admin_url']);
-    $T->set_var('layout_url', $_CONF['layout_url']);
-    $T->set_var('login_message', $LANG_LOGIN[2]);
-    $T->set_var('lang_login', $LANG_LOGIN[3]);
-    $T->set_var('lang_newuser', $LANG_LOGIN[4]);
-    $T->parse('output', 'login');
-    $display .= $T->finish($T->get_var('output'));
-    $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-
-    return $display;
 }
 
 /**
