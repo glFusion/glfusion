@@ -4742,7 +4742,7 @@ function COM_showMessage($msg, $plugin = '')
 * Displays a message, as defined by URL parameters
 *
 * Helper function to display a message, if URL parameters 'msg' and 'plugin'
-* (optional) are defined. Only for GET requests, but that's what Geeklog uses
+* (optional) are defined. Only for GET requests, but that's what glFusion uses
 * everywhere anyway.
 *
 * @return   string  HTML block with message
@@ -6794,10 +6794,10 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             echo('<h1>An error has occurred:</h1>');
             if ($_CONF['rootdebug']) {
                 echo('<h2 style="color: red">This is being displayed as "Root Debugging" is enabled
-                        in your Geeklog configuration.</h2><p>If this is a production
-                        website you <strong><em>must disable</em></strong> this
+                        in your glFusion configuration.</h2><p>If this is a production
+                        website you <strong><em>should disable</em></strong> this
                         option once you have resolved any issues you are
-                        investigating.</p>');
+                        troubleshooting.</p>');
             } else {
                 echo('<p>(This text is only displayed to users in the group \'Root\')</p>');
             }
