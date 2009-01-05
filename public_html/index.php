@@ -282,8 +282,7 @@ $msql="SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
          . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
          . $sql . "ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
 */
-//COM_errorLog($msql);
-COM_errorLog("STD QUERY: " . $msql);
+
 $result = DB_query ($msql);
 
 $nrows = DB_numRows ($result);
