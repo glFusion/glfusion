@@ -595,10 +595,10 @@ class sanitize {
     }
 
 
-    function _stripslashes_deep(&$value)
+    static function _stripslashes_deep(&$value)
     {
         $value = is_array($value) ?
-                    array_map(array('sanitizer','_stripslashes_deep'), $value) :
+                    array_map(array('sanitize','_stripslashes_deep'), $value) :
                     stripslashes($value);
 
         return $value;
