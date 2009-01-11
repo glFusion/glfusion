@@ -46,7 +46,7 @@ if (!SEC_inGroup('Root')) {
 
 COM_errorLog("glFusion: Running code update for glFusion v1.2.0.svn");
 
-$retval .= 'Performing database and configuration upgrades if necessary...<br />';
+$retval = 'Performing database and configuration upgrades if necessary...<br />';
 
 /*
  * Define SQL update in the $_SQL[] array
@@ -56,7 +56,7 @@ $_SQL = array();
 
 /* Execute SQL now to perform the upgrade */
 for ($i = 1; $i <= count($_SQL); $i++) {
-    COM_errorLOG("glFusion 1.1.0svn Development update: Executing SQL => " . current($_SQL));
+    COM_errorLOG("glFusion 1.2.0svn Development update: Executing SQL => " . current($_SQL));
     DB_query(current($_SQL),1);
     next($_SQL);
 }
@@ -66,6 +66,7 @@ for ($i = 1; $i <= count($_SQL); $i++) {
  */
 
 $c = config::get_instance();
+$c->add('allow_memberlist', false, 'select', 0, 0, 0, 25, true, 'forum');
 
 /*
  * Always clear the cache after running development update.
