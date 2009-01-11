@@ -10,6 +10,8 @@ vSVN
 
 v1.1.2
 ------
+- Bug#313 - unconditional include of lib-user.php made conditional (Joe)
+
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
