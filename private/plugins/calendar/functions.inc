@@ -60,6 +60,7 @@ if (!isset($_CA_CONF['calendarloginrequired'])) {
 }
 
 $_CA_CONF['version'] = '1.0.2';
+$_CA_CONF['only_admin_submit'] = 0;
 
 // +---------------------------------------------------------------------------+
 // | glFusion Plugin API Implementations                                       |
@@ -435,24 +436,22 @@ function plugin_savesubmission_calendar($A)
 
     // check for missing textfields
     if (empty ($A['title']) || empty ($A['start_month']) || empty ($A['start_day']) || empty ($A['start_year'])) {
-        $retval = COM_siteHeader ('menu', $LANG_CAL_1[27])
-            . COM_startBlock ($LANG12[22], '',
+        $retval = COM_startBlock ($LANG12[22], '',
                            COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[23]
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . plugin_submit_calendar ($A['calendar_type'])
-            . COM_siteFooter ();
+            . plugin_submit_calendar ($A['calendar_type'],$A);
 
         return $retval;
     }
     $msg = PLG_itemPreSave('calendar',$A);
     if ( !empty($msg)) {
-        $retval .= COM_startBlock($LANG12[22],'',
+        $retval = COM_startBlock($LANG12[22],'',
                    COM_getBlockTemplate('_msg_block','header'))
                    . $msg
                    . COM_endBlock(COM_getBlockTemplate('_msg_block','footer'))
-                   . plugin_submit_calendar($A['calendar_type'])
-                   . COM_siteFooter();
+                   . plugin_submit_calendar($A['calendar_type'],$A);
+//                   . COM_siteFooter();
         return $retval;
     }
 
@@ -669,7 +668,7 @@ function plugin_getheadercode_calendar()
 * Shows event submission form or diverts to event editor if admin calls in
 *
 */
-function plugin_submit_calendar($mode = 'master')
+function plugin_submit_calendar($mode = 'master',$A = array())
 {
     global $_CONF, $_USER, $_CA_CONF, $LANG_CAL_1;
 
@@ -720,6 +719,54 @@ function plugin_submit_calendar($mode = 'master')
     }
     // otherwise non-admin or admin-personal. do personal form or public submission.
 
+    if (isset ($_REQUEST['year'])) {
+        $year = COM_applyFilter ($_REQUEST['year'], true);
+    } else {
+        $year = date ('Y', time ());
+    }
+    if (isset ($_REQUEST['month'])) {
+        $month = COM_applyFilter ($_REQUEST['month'], true);
+    } else {
+        $month = date ('m', time ());
+    }
+    if (isset ($_REQUEST['day'])) {
+        $day = COM_applyFilter ($_REQUEST['day'], true);
+    } else {
+        $day = date ('d', time ());
+    }
+    if (isset ($_REQUEST['hour'])) {
+        $hour = COM_applyFilter ($_REQUEST['hour'], true);
+    } else {
+        $hour = date ('H', time ());
+    }
+
+    // Pull all the POST data so we can pre-fill the form.
+
+    $title      = isset($_POST['title']) ? COM_stripslashes($_POST['title']) : '';
+    $event_type = isset($_POST['event_type']) ? COM_stripslashes($_POST['event_type']) : '';
+    $url        = isset($_POST['url']) ? COM_stripslashes($_POST['url']) : '';
+    $allday     = isset($_POST['allday']) ? COM_applyFilter ($_POST['allday']) : '';
+    $start_month = isset($_POST['start_month']) ? COM_applyFilter ($_POST['start_month'], true) : $month;
+    $start_day   = isset($_POST['start_day']) ? COM_applyFilter ($_POST['start_day'], true) : $day;
+    $start_year  = isset($_POST['start_year']) ? COM_applyFilter ($_POST['start_year'], true) : $year;
+    $start_hour  = isset($_POST['start_hour']) ? COM_applyFilter ($_POST['start_hour'], true) : $hour;
+    $start_minute = isset($_POST['start_minute']) ? COM_applyFilter ($_POST['start_minute'], true) : 0;
+    $start_ampm   = isset($_POST['start_ampm']) ? $_POST['start_ampm'] : '';
+    $end_month  = isset($_POST['end_month']) ? COM_applyFilter ($_POST['end_month'], true) : $month;
+    $end_day    = isset($_POST['end_day']) ? COM_applyFilter ($_POST['end_day'], true) : $day;
+    $end_year   = isset($_POST['end_year']) ? COM_applyFilter ($_POST['end_year'], true) : $year;
+    $end_hour   = isset($_POST['end_hour']) ? COM_applyFilter ($_POST['end_hour'], true) : $hour;
+    $end_minute = isset($_POST['end_minute']) ? COM_applyFilter ($_POST['end_minute'], true) : 0;
+    $end_ampm   = isset($_POST['end_ampm']) ?  $_POST['end_ampm'] : '';
+    $location   = isset($_POST['location']) ? COM_stripslashes($_POST['location']) : '';
+    $address1   = isset($_POST['address1']) ? COM_stripslashes($_POST['address1']) : '';
+    $address2   = isset($_POST['address2']) ? COM_stripslashes($_POST['address2']) : '';
+    $city       = isset($_POST['city']) ? COM_stripslashes($_POST['city']) : '';
+    $state      = isset($_POST['state']) ? COM_stripslashes($_POST['state']) : '';
+    $zipcode    = isset($_POST['zipcode']) ? COM_stripslashes($_POST['zipcode']) : '';
+    $description= isset($_POST['description']) ? COM_stripslashes($_POST['description']) : '';
+    $postmode   = isset($_POST['postmode']) ? COM_stripslashes($_POST['postmode']) : '';
+
     $retval = '';
 
     $retval .= COM_startBlock ($LANG_CAL_1[26], 'submitevent.html');
@@ -727,7 +774,7 @@ function plugin_submit_calendar($mode = 'master')
     $eventform->set_file ('eventform', 'submitevent.thtml');
     if ($mode != 'personal') {
         $eventform->set_var ('explanation', $LANG_CAL_1[27]);
-        $eventform->set_var ('submit_url', '/submit.php');
+        $eventform->set_var ('submit_url', '/calendar/index.php');
     } else {
         $eventform->set_var ('explanation', '');
         $eventform->set_var ('submit_url', '/calendar/index.php?view=savepersonal');
@@ -744,59 +791,113 @@ function plugin_submit_calendar($mode = 'master')
 
     $eventform->set_var('lang_eventtype', $LANG_CAL_1[37]);
     $eventform->set_var('lang_editeventtypes', $LANG_CAL_1[38]);
-    $eventform->set_var('type_options', CALENDAR_eventTypeList ());
+    $eventform->set_var('type_options', CALENDAR_eventTypeList ($event_type));
 
     $eventform->set_var('lang_link', $LANG_CAL_1[43]);
     $eventform->set_var('max_url_length', 255);
     $eventform->set_var('lang_startdate', $LANG_CAL_1[21]);
     $eventform->set_var('lang_starttime', $LANG_CAL_1[30]);
-    if (empty ($month)) {
-        $month = date ('m', time ());
-    }
-    if (empty ($day)) {
-        $day = date ('d', time ());
-    }
-    if (empty ($year)) {
-        $year = date ('Y', time ());
-    }
-    $eventform->set_var ('month_options', COM_getMonthFormOptions ($month));
-    $eventform->set_var ('day_options', COM_getDayFormOptions ($day));
-    $eventform->set_var ('year_options', COM_getYearFormOptions ($year));
 
-    if (empty ($hour) || ($hour < 0)) {
-        $cur_hour = date ('H', time ());
-    } else {
-        $cur_hour = $hour;
+    if (empty ($start_month) || $start_month == 0) {
+        $start_month = date ('m', time ());
     }
-    $cur_hour_24 = $cur_hour % 24;
-    if ($cur_hour >= 12) {
-        $ampm = 'pm';
+    if (empty ($start_day) || $start_day == 0) {
+        $start_day = date ('d', time ());
+    }
+    if (empty ($start_year)) {
+        $start_year = date ('Y', time ());
+    }
+    $eventform->set_var ('start_month_options', COM_getMonthFormOptions ($start_month));
+    $eventform->set_var ('start_day_options', COM_getDayFormOptions ($start_day));
+    $eventform->set_var ('start_year_options', COM_getYearFormOptions ($start_year));
+
+
+    if (empty ($end_month)) {
+        $end_month = date ('m', time ());
+    }
+    if (empty ($end_day)) {
+        $end_day = date ('d', time ());
+    }
+    if (empty ($end_year)) {
+        $end_year = date ('Y', time ());
+    }
+    $eventform->set_var ('end_month_options', COM_getMonthFormOptions ($end_month));
+    $eventform->set_var ('end_day_options', COM_getDayFormOptions ($end_day));
+    $eventform->set_var ('end_year_options', COM_getYearFormOptions ($end_year));
+
+    if (empty ($start_hour) || ($start_hour < 0)) {
+        $start_hour = date ('H', time ());
+    }
+    $start_hour_24 = $start_hour % 24;
+    if ($start_hour >= 12) {
+        $start_ampm = 'pm';
     } else {
-        $ampm = 'am';
+        $start_ampm = 'am';
     }
 
     $eventform->set_var ('startampm_selection',
-                         COM_getAmPmFormSelection ('start_ampm', $ampm));
-    $eventform->set_var ('endampm_selection',
-                         COM_getAmPmFormSelection ('end_ampm', $ampm));
+                         COM_getAmPmFormSelection ('start_ampm', $start_ampm));
 
-    if ($cur_hour > 12) {
-        $cur_hour = $cur_hour - 12;
-    } else if ($cur_hour == 0) {
-        $cur_hour = 12;
+    if ($start_hour > 12) {
+        $start_hour = $start_hour - 12;
+    } else if ($start_hour == 0) {
+        $start_hour = 12;
     }
 
     if (isset ($_CA_CONF['hour_mode']) && ($_CA_CONF['hour_mode'] == 24)) {
-        $eventform->set_var ('hour_options',
-                             COM_getHourFormOptions ($cur_hour_24, 24));
+        $eventform->set_var ('start_hour_options',
+                             COM_getHourFormOptions ($start_hour_24, 24));
     } else {
-        $eventform->set_var ('hour_options',
-                             COM_getHourFormOptions ($cur_hour));
+        $eventform->set_var ('start_hour_options',
+                             COM_getHourFormOptions ($start_hour));
     }
-    $cur_min = intval (date ('i') / 15) * 15;
-    $eventform->set_var ('minute_options',
+    if ( empty($start_minute) ) {
+        $cur_min = intval (date ('i') / 15) * 15;
+    } else {
+        $cur_min = $start_minute;
+    }
+    $eventform->set_var ('start_minute_options',
                          COM_getMinuteFormOptions ($cur_min, 15));
 
+    // end hours
+    if (empty ($end_hour) || ($end_hour < 0)) {
+        $end_hour = date ('H', time ());
+    }
+    $end_hour_24 = $end_hour % 24;
+    if ($end_hour >= 12) {
+        $end_ampm = 'pm';
+    } else {
+        $end_ampm = 'am';
+    }
+    $eventform->set_var ('endampm_selection',
+                         COM_getAmPmFormSelection ('end_ampm', $end_ampm));
+
+    if ($end_hour > 12) {
+        $end_hour = $end_hour - 12;
+    } else if ($end_hour == 0) {
+        $end_hour = 12;
+    }
+
+    if (isset ($_CA_CONF['hour_mode']) && ($_CA_CONF['hour_mode'] == 24)) {
+        $eventform->set_var ('end_hour_options',
+                             COM_getHourFormOptions ($end_hour_24, 24));
+    } else {
+        $eventform->set_var ('end_hour_options',
+                             COM_getHourFormOptions ($end_hour));
+    }
+
+    if (empty($end_minute) ) {
+        $end_min = intval (date ('i') / 15) * 15;
+    } else {
+        $end_min = $end_minute;
+    }
+
+    $eventform->set_var ('end_minute_options',
+                         COM_getMinuteFormOptions ($end_min, 15));
+
+    if ( $allday == 'on' ) {
+        $eventform->set_var('all_day_checked','checked="checked"');
+    }
     $eventform->set_var('lang_enddate', $LANG_CAL_1[18]);
     $eventform->set_var('lang_endtime', $LANG_CAL_1[29]);
     $eventform->set_var('lang_alldayevent',$LANG_CAL_1[31]);
@@ -821,6 +922,20 @@ function plugin_submit_calendar($mode = 'master')
         $eventform->set_var('hidden_fields', '');
     }
     $eventform->set_var('xhtml', XHTML);
+
+    // set the fields
+    $eventform->set_var('title',$title);
+    $eventform->set_var('event_type',$event_type);
+    $eventform->set_var('url',$url);
+    $eventform->set_var('allday',$allday);
+    $eventform->set_var('location',$location);
+    $eventform->set_var('address1',$address1);
+    $eventform->set_var('address2',$address2);
+    $eventform->set_var('city',$city);
+    $eventform->set_var('state',$state);
+    $eventform->set_var('zipcode',$zipcode);
+    $eventform->set_var('description',$description);
+    $eventform->set_var('postmode',$postmode);
     $eventform->parse('theform', 'eventform');
     $retval .= $eventform->finish($eventform->get_var('theform'));
     $retval .= COM_endBlock();

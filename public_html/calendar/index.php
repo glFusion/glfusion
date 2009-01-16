@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -37,7 +40,7 @@
 require_once '../lib-common.php';
 
 if (!in_array('calendar', $_PLUGINS)) {
-    echo COM_refresh($_CONF['site_url'] . '/index.php');
+    COM_404();
     exit;
 }
 
@@ -384,6 +387,52 @@ if (isset ($_REQUEST['mode'])) {
     $mode = COM_applyFilter ($_REQUEST['mode']);
 }
 
+if ( isset($_GET['op']) ) {
+    if ( $_GET['op'] == 'add' ) {
+        $_POST['addevent'] = 1;
+    }
+}
+
+if ( isset($_POST['addevent']) || isset($_POST['addpersonalevent']) ) {
+    if (COM_isAnonUser() &&
+        (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
+        echo COM_refresh ($_CONF['site_url'] . '/calendar/index.php');
+        exit;
+    }
+
+    $slerror = '';
+    COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
+    $last = COM_checkSpeedlimit ('submit');
+    if ($last > 0) {
+        $slerror .= COM_startBlock ($LANG12[26], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'))
+            . $LANG12[30]
+            . $last
+            . $LANG12[31]
+            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    }
+
+    echo COM_siteHeader();
+    if ( $slerror != '' ) {
+        echo $slerror;
+    } else {
+        if ( $mode != 'personal' && $_CA_CONF['only_admin_submit'] == 1 && !SEC_hasRights('calendar.edit') ) {
+            echo 'Invalid request';
+        } else {
+            echo plugin_submit_calendar($mode);
+        }
+    }
+    echo COM_siteFooter();
+    exit;
+}
+
+if ( isset($_POST['savecal']) ) {
+    echo COM_siteHeader();
+    echo plugin_savesubmission_calendar($_POST);
+    echo COM_siteFooter();
+    exit;
+}
+
 if ($mode != 'personal' && $mode != 'quickadd') {
     $mode = '';
 }
@@ -587,9 +636,6 @@ case 'day':
     } else {
         $cal_templates->set_var('allday_events', '&nbsp;');
     }
-
-    //$cal_templates->set_var('first_colspan', $maxcols);
-    //$cal_templates->set_var('title_colspan', $maxcols + 1);
     for ($i = 0; $i <= 23; $i++) {
         $numevents = $hourcols[$i];
         if ($numevents > 0) {
@@ -619,8 +665,32 @@ case 'day':
         } else {
             $cal_templates->set_var('event_entry','&nbsp;');
         }
-        $cal_templates->set_var ($i . '_hour',
-                strftime ($_CONF['timeonly'], mktime ($i, 0)));
+        if ( $mode != 'personal' ) {
+            if ( $_CA_CONF['only_admin_submit'] == 1 ) {
+                if ( SEC_hasRights('calendar.edit') ) {
+                    $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'">';
+                } else {
+                    $link = '';
+                }
+            } else {
+                $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'">';
+            }
+        } else {
+            $link = '<a href="' . $_CONF['site_url'] . '/calendar/index.php?op=add&amp;mode='.$mode.'&amp;month='.$month.'&amp;day='.$day.'&amp;year='.$year.'&amp;hour='.$i.'">';
+        }
+        $link .= strftime ($_CONF['timeonly'], mktime ($i, 0));
+        if ( $mode != 'personal' ) {
+            if ( $_CA_CONF['only_admin_submit'] == 1 ) {
+                if ( SEC_hasRights('calendar.edit') ) {
+                    $link .= '</a>';
+                }
+            } else {
+                $link .= '</a>';
+            }
+        } else {
+            $link .= '</a>';
+        }
+        $cal_templates->set_var ($i . '_hour',$link);
         $cal_templates->parse ($i . '_cols', 'column', true);
     }
 
@@ -739,10 +809,32 @@ case 'week':
             $add_str =  $LANG_CAL_2[42];
         }
 
+        if ($mode != 'personal') {
+            if ( $_CA_CONF['only_admin_submit'] == 1 ) {
+                if ( SEC_hasRights('calendar.edit') ) {
+                    $cal_templates->set_var ('langlink_addevent' . $i,
+                        COM_createLink($add_str, $_CONF['site_url'] . '/calendar/index.php?op=add&amp;type=calendar&amp;'
+                        . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum")
+                    );
+                }
+            } else {
+                $cal_templates->set_var ('langlink_addevent' . $i,
+                    COM_createLink($add_str, $_CONF['site_url'] . '/calendar/index.php?op=add&amp;type=calendar&amp;'
+                    . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum")
+                );
+            }
+        } else {
+            $cal_templates->set_var ('langlink_addevent' . $i,
+                COM_createLink($add_str, $_CONF['site_url'] . '/calendar/index.php?op=add&amp;type=calendar&amp;'
+                . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum")
+            );
+        }
+/*
         $cal_templates->set_var ('langlink_addevent' . $i,
-            COM_createLink($add_str, $_CONF['site_url'] . '/submit.php?type=calendar&amp;'
+            COM_createLink($add_str, $_CONF['site_url'] . '/calendar/index.php?op=add&amp;type=calendar&amp;'
             . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum")
         );
+*/
         if ($mode == 'personal') {
             $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['personal_events']} WHERE (uid = {$_USER['uid']}) AND ((allday=1 AND datestart = \"$yearnum-$monthnum-$daynum\") OR (datestart >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND datestart <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (dateend >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND dateend <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (\"$yearnum-$monthnum-$daynum\" BETWEEN datestart AND dateend)) ORDER BY datestart,timestart";
         } else {
@@ -1070,14 +1162,26 @@ $cal_templates->set_var('cal_curyr_num', $currentyear);
 $cal_templates->set_var('lang_cal_displaymo', $LANG_MONTH[$month + 0]);
 $cal_templates->set_var('cal_displaymo_num', $month);
 $cal_templates->set_var('cal_displayyr_num', $year);
+
 if ($mode == 'personal') {
     $cal_templates->set_var('lang_addevent', $LANG_CAL_2[8]);
     $cal_templates->set_var('addevent_formurl', '/calendar/index.php');
+    $cal_templates->set_var('addevent_name','addpersonalevent');
 } else {
-    $cal_templates->set_var('lang_addevent', $LANG_CAL_2[42]);
-    $cal_templates->set_var('addevent_formurl', '/submit.php?type=calendar');
+    if ( $_CA_CONF['only_admin_submit'] == 1 ) {
+        if ( SEC_hasRights('calendar.edit') ) {
+            $cal_templates->set_var('lang_addevent', $LANG_CAL_2[42]);
+            $cal_templates->set_var('addevent_formurl', '/calendar/index.php');
+            $cal_templates->set_var('addevent_name','addevent');
+        }
+    } else {
+        $cal_templates->set_var('lang_addevent', $LANG_CAL_2[42]);
+        $cal_templates->set_var('addevent_formurl', '/calendar/index.php');
+        $cal_templates->set_var('addevent_name','addevent');
+    }
 }
 $cal_templates->parse('add_event_option','addevent',true);
+
 $cal_templates->parse('output','calendar');
 $display .= $cal_templates->finish($cal_templates->get_var('output'));
 
