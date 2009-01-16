@@ -44,6 +44,11 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+if (!in_array('filemgmt', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 $FilemgmtUser  = false;
 $FilemgmtAdmin = false;
 
