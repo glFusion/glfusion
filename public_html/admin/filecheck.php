@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -32,23 +32,13 @@
 require_once '../lib-common.php';
 
 if (!SEC_inGroup ('Root')) {
-    $display .= COM_siteHeader ('menu');
-    $display .= COM_startBlock ($LANG20[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= '<p>' . $LANG20[6] . '</p>';
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
-    echo $display;
-    exit;
+    $pageHandle->displayAccessError($$LANG20[1],$LANG20[6],'filecheck utility.');
 }
 
 $fullIgnore = array('cgi-bin','.','..','.svn','layout_cache','tn','orig','disp');
 
-
 $glfusionDir = array();
 $glfusionDir['private']=1;
-//$glfusionDir['private/backups']=1;
-//$glfusionDir['private/data']=1;
 $glfusionDir['private/language']=1;
 $glfusionDir['private/lib/bbcode']=1;
 $glfusionDir['private/lib/email_address_validation']=1;
@@ -59,23 +49,17 @@ $glfusionDir['private/lib/getid3']=1;
 $glfusionDir['private/lib/htmLawed']=1;
 $glfusionDir['private/lib/phpmailer']=1;
 $glfusionDir['private/lib/phpmailer/language']=1;
-//$glfusionDir['private/logs']=1;
 $glfusionDir['private/plugins']=1;
 $glfusionDir['private/plugins/bad_behavior2']=1;
 $glfusionDir['private/plugins/bad_behavior2/language']=1;
 $glfusionDir['private/plugins/bad_behavior2/templates']=1;
-//$glfusionDir['private/plugins/bad_behavior2/templates/custom']=1;
 $glfusionDir['private/plugins/calendar']=1;
 $glfusionDir['private/plugins/calendar/language']=1;
 $glfusionDir['private/plugins/calendar/sql']=1;
 $glfusionDir['private/plugins/calendar/templates']=1;
 $glfusionDir['private/plugins/calendar/templates/admin']=1;
-//$glfusionDir['private/plugins/calendar/templates/admin/custom']=1;
-//$glfusionDir['private/plugins/calendar/templates/custom']=1;
 $glfusionDir['private/plugins/calendar/templates/dayview']=1;
-//$glfusionDir['private/plugins/calendar/templates/dayview/custom']=1;
 $glfusionDir['private/plugins/calendar/templates/weekview']=1;
-//$glfusionDir['private/plugins/calendar/templates/weekview/custom']=1;
 $glfusionDir['private/plugins/captcha']=1;
 $glfusionDir['private/plugins/captcha/class']=1;
 $glfusionDir['private/plugins/captcha/images/backgrounds']=1;
@@ -84,14 +68,12 @@ $glfusionDir['private/plugins/captcha/images/static/default']=1;
 $glfusionDir['private/plugins/captcha/images/static/simple']=1;
 $glfusionDir['private/plugins/captcha/language']=1;
 $glfusionDir['private/plugins/captcha/templates']=1;
-//$glfusionDir['private/plugins/captcha/templates/custom']=1;
 $glfusionDir['private/plugins/commentfeeds']=1;
 $glfusionDir['private/plugins/filemgmt']=1;
 $glfusionDir['private/plugins/filemgmt/include']=1;
 $glfusionDir['private/plugins/filemgmt/language']=1;
 $glfusionDir['private/plugins/filemgmt/sql']=1;
 $glfusionDir['private/plugins/filemgmt/templates']=1;
-//$glfusionDir['private/plugins/filemgmt/templates/custom']=1;
 $glfusionDir['private/plugins/forum']=1;
 $glfusionDir['private/plugins/forum/css']=1;
 $glfusionDir['private/plugins/forum/include']=1;
@@ -101,27 +83,17 @@ $glfusionDir['private/plugins/forum/sql']=1;
 $glfusionDir['private/plugins/forum/sql/updates']=1;
 $glfusionDir['private/plugins/forum/templates']=1;
 $glfusionDir['private/plugins/forum/templates/admin']=1;
-//$glfusionDir['private/plugins/forum/templates/admin/custom']=1;
 $glfusionDir['private/plugins/forum/templates/blocks']=1;
-//$glfusionDir['private/plugins/forum/templates/blocks/custom']=1;
-//$glfusionDir['private/plugins/forum/templates/custom']=1;
 $glfusionDir['private/plugins/forum/templates/footer']=1;
-//$glfusionDir['private/plugins/forum/templates/footer/custom']=1;
 $glfusionDir['private/plugins/forum/templates/links']=1;
-//$glfusionDir['private/plugins/forum/templates/links/custom']=1;
 $glfusionDir['private/plugins/forum/templates/links/rollover_examples']=1;
-//$glfusionDir['private/plugins/forum/templates/links/rollover_examples/custom']=1;
 $glfusionDir['private/plugins/forum/templates/reports']=1;
-//$glfusionDir['private/plugins/forum/templates/reports/custom']=1;
 $glfusionDir['private/plugins/forum/templates/userprefs']=1;
-//$glfusionDir['private/plugins/forum/templates/userprefs/custom']=1;
 $glfusionDir['private/plugins/links']=1;
 $glfusionDir['private/plugins/links/language']=1;
 $glfusionDir['private/plugins/links/sql']=1;
 $glfusionDir['private/plugins/links/templates']=1;
 $glfusionDir['private/plugins/links/templates/admin']=1;
-//$glfusionDir['private/plugins/links/templates/admin/custom']=1;
-//$glfusionDir['private/plugins/links/templates/custom']=1;
 $glfusionDir['private/plugins/mediagallery']=1;
 $glfusionDir['private/plugins/mediagallery/docs']=1;
 $glfusionDir['private/plugins/mediagallery/include']=1;
@@ -129,44 +101,31 @@ $glfusionDir['private/plugins/mediagallery/include/makers']=1;
 $glfusionDir['private/plugins/mediagallery/language']=1;
 $glfusionDir['private/plugins/mediagallery/sql']=1;
 $glfusionDir['private/plugins/mediagallery/templates']=1;
-//$glfusionDir['private/plugins/mediagallery/templates/custom']=1;
 $glfusionDir['private/plugins/mediagallery/templates/themes']=1;
 $glfusionDir['private/plugins/mediagallery/templates/themes/clean']=1;
-//$glfusionDir['private/plugins/mediagallery/templates/themes/clean/custom']=1;
 $glfusionDir['private/plugins/mediagallery/templates/themes/lightbox']=1;
-//$glfusionDir['private/plugins/mediagallery/templates/themes/lightbox/custom']=1;
 $glfusionDir['private/plugins/mediagallery/templates/themes/podcast']=1;
-//$glfusionDir['private/plugins/mediagallery/templates/themes/podcast/custom']=1;
 $glfusionDir['private/plugins/mediagallery/templates/themes/simpleviewer']=1;
-//$glfusionDir['private/plugins/mediagallery/templates/themes/simpleviewer/custom']=1;
-//$glfusionDir['private/plugins/mediagallery/tmp']=1;
-//$glfusionDir['private/plugins/mediagallery/uploads']=1;
 $glfusionDir['private/plugins/polls']=1;
 $glfusionDir['private/plugins/polls/language']=1;
 $glfusionDir['private/plugins/polls/sql']=1;
 $glfusionDir['private/plugins/polls/templates']=1;
 $glfusionDir['private/plugins/polls/templates/admin']=1;
-//$glfusionDir['private/plugins/polls/templates/admin/custom']=1;
-//$glfusionDir['private/plugins/polls/templates/custom']=1;
 $glfusionDir['private/plugins/sitetailor']=1;
 $glfusionDir['private/plugins/sitetailor/classes']=1;
 $glfusionDir['private/plugins/sitetailor/language']=1;
 $glfusionDir['private/plugins/sitetailor/sql']=1;
 $glfusionDir['private/plugins/sitetailor/templates']=1;
-//$glfusionDir['private/plugins/sitetailor/templates/custom']=1;
 $glfusionDir['private/plugins/spamx']=1;
 $glfusionDir['private/plugins/spamx']=1;
 $glfusionDir['private/plugins/spamx/language']=1;
 $glfusionDir['private/plugins/spamx/sql']=1;
 $glfusionDir['private/plugins/spamx/templates']=1;
-//$glfusionDir['private/plugins/spamx/templates/custom']=1;
 $glfusionDir['private/plugins/staticpages']=1;
 $glfusionDir['private/plugins/staticpages/language']=1;
 $glfusionDir['private/plugins/staticpages/sql']=1;
 $glfusionDir['private/plugins/staticpages/templates']=1;
 $glfusionDir['private/plugins/staticpages/templates/admin']=1;
-//$glfusionDir['private/plugins/staticpages/templates/admin/custom']=1;
-//$glfusionDir['private/plugins/staticpages/templates/custom']=1;
 $glfusionDir['private/sql']=1;
 $glfusionDir['private/sql/glupdates']=1;
 $glfusionDir['private/sql/updates']=1;
@@ -329,7 +288,6 @@ $glfusionDir['public_html/fckeditor/editor/skins/silver']=1;
 $glfusionDir['public_html/fckeditor/editor/skins/silver/images']=1;
 $glfusionDir['public_html/filemgmt']=1;
 $glfusionDir['public_html/filemgmt/images']=1;
-//$glfusionDir['public_html/filemgmt_data']=1;
 $glfusionDir['public_html/filemgmt_data/category_snaps']=1;
 $glfusionDir['public_html/filemgmt_data/category_snaps/tmp']=1;
 $glfusionDir['public_html/filemgmt_data/files']=1;
@@ -344,55 +302,32 @@ $glfusionDir['public_html/forum/images/moods']=1;
 $glfusionDir['public_html/forum/images/ranks']=1;
 $glfusionDir['public_html/forum/images/smilies']=1;
 $glfusionDir['public_html/forum/javascript']=1;
-//$glfusionDir['public_html/forum/media']=1;
 $glfusionDir['public_html/forum/media/tn']=1;
 $glfusionDir['public_html/help']=1;
-//$glfusionDir['public_html/images']=1;
 $glfusionDir['public_html/images/articles']=1;
 $glfusionDir['public_html/images/library']=1;
-//$glfusionDir['public_html/images/library/File']=1;
-//$glfusionDir['public_html/images/library/Flash']=1;
-//$glfusionDir['public_html/images/library/Image']=1;
-//$glfusionDir['public_html/images/library/Media']=1;
 $glfusionDir['public_html/images/menu']=1;
 $glfusionDir['public_html/images/topics']=1;
-//$glfusionDir['public_html/images/userphotos']=1;
 $glfusionDir['public_html/javascript']=1;
 $glfusionDir['public_html/javascript/mootools']=1;
 $glfusionDir['public_html/layout']=1;
 $glfusionDir['public_html/layout/nouveau']=1;
 $glfusionDir['public_html/layout/nouveau/admin']=1;
 $glfusionDir['public_html/layout/nouveau/admin/block']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/block/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/common']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/common/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/config']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/config/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/group']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/group/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/lists']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/lists/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/mail']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/mail/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/moderation']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/moderation/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/plugins']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/plugins/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/story']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/story/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/syndication']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/syndication/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/topic']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/topic/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/trackback']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/trackback/custom']=1;
 $glfusionDir['public_html/layout/nouveau/admin/user']=1;
-//$glfusionDir['public_html/layout/nouveau/admin/user/custom']=1;
 $glfusionDir['public_html/layout/nouveau/article']=1;
-//$glfusionDir['public_html/layout/nouveau/article/custom']=1;
 $glfusionDir['public_html/layout/nouveau/comment']=1;
-//$glfusionDir['public_html/layout/nouveau/comment/custom']=1;
-//$glfusionDir['public_html/layout/nouveau/custom']=1;
 $glfusionDir['public_html/layout/nouveau/images']=1;
 $glfusionDir['public_html/layout/nouveau/images/admin']=1;
 $glfusionDir['public_html/layout/nouveau/images/icons']=1;
@@ -402,22 +337,14 @@ $glfusionDir['public_html/layout/nouveau/lists']=1;
 $glfusionDir['public_html/layout/nouveau/lists/inline']=1;
 $glfusionDir['public_html/layout/nouveau/lists/table']=1;
 $glfusionDir['public_html/layout/nouveau/navbar']=1;
-//$glfusionDir['public_html/layout/nouveau/navbar/custom']=1;
 $glfusionDir['public_html/layout/nouveau/navbar/images']=1;
 $glfusionDir['public_html/layout/nouveau/preferences']=1;
-//$glfusionDir['public_html/layout/nouveau/preferences/custom']=1;
 $glfusionDir['public_html/layout/nouveau/profiles']=1;
-//$glfusionDir['public_html/layout/nouveau/profiles/custom']=1;
 $glfusionDir['public_html/layout/nouveau/search']=1;
-//$glfusionDir['public_html/layout/nouveau/search/custom']=1;
 $glfusionDir['public_html/layout/nouveau/stats']=1;
-//$glfusionDir['public_html/layout/nouveau/stats/custom']=1;
 $glfusionDir['public_html/layout/nouveau/submit']=1;
-//$glfusionDir['public_html/layout/nouveau/submit/custom']=1;
 $glfusionDir['public_html/layout/nouveau/trackback']=1;
-//$glfusionDir['public_html/layout/nouveau/trackback/custom']=1;
 $glfusionDir['public_html/layout/nouveau/users']=1;
-//$glfusionDir['public_html/layout/nouveau/users/custom']=1;
 $glfusionDir['public_html/links']=1;
 $glfusionDir['public_html/links/images']=1;
 $glfusionDir['public_html/mediagallery']=1;
@@ -504,8 +431,6 @@ $glfusionDir['public_html/mediagallery/mediaobjects/tn/d']=1;
 $glfusionDir['public_html/mediagallery/mediaobjects/tn/e']=1;
 $glfusionDir['public_html/mediagallery/mediaobjects/tn/f']=1;
 $glfusionDir['public_html/mediagallery/players']=1;
-//$glfusionDir['public_html/mediagallery/rss']=1;
-//$glfusionDir['public_html/mediagallery/watermarks']=1;
 $glfusionDir['public_html/polls']=1;
 $glfusionDir['public_html/polls/images']=1;
 $glfusionDir['public_html/staticpages']=1;
@@ -4237,16 +4162,12 @@ $glfusionFiles['public_html/webservices/index.html']=1;
  * Main Processing
  */
 
-$mode = '';
-
-if (isset ($_POST['submit'])) {
-    $mode = COM_applyFilter($_POST['submit']);
-}
+$mode = $inputHandler->getVar('strict','submit','post','');
 
 $rc = '';
 
 if ($mode == 'Cancel') {
-    echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+    $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
     exit;
 } elseif ($mode == 'Delete') {
     $rc = fileCheckDelete( );
@@ -4272,9 +4193,6 @@ $form_arr = array();
 
 $form_arr = array('bottom' => '<input type="submit" name="submit" value="Delete"' . XHTML . '>&nbsp;&nbsp;<input type="submit" name="submit" value="Cancel"' . XHTML . '>');
 
-//$retval .= COM_startBlock("Files that are no longer used in glFusion", '',
-//                          COM_getBlockTemplate('_admin_block', 'header'));
-
 getDirectory($_CONF['path'],'private');
 getDirectory($_CONF['path_html'],'public_html');
 
@@ -4283,14 +4201,13 @@ sort($data_arr);
 $retval .= ADMIN_simpleList("ADMIN_getListField_filecheck", $header_arr, $text_arr, $data_arr,NULL,$form_arr);
 //$retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
-echo COM_siteHeader();
+$pageHandle->setPageTitle('');
+$pageHandle->setShowExtraBlocks(false);
 if ( $rc != '' ) {
-    echo COM_showMessage('Selected files have been removed.');
-//    echo 'The following files have been removed:<br />';
-//    echo $rc;
+    $pageHandle->addMessageText('Selected files have been removed.');
 }
-echo $retval;
-echo COM_siteFooter();
+$pageHandle->addContent($retval);
+$pageHandle->displayPage();
 exit;
 
 

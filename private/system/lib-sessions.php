@@ -78,7 +78,7 @@ $_USER = SESS_sessionCheck();
 */
 function SESS_sessionCheck()
 {
-    global $_CONF, $_TABLES, $_USER, $_SESS_VERBOSE;
+    global $_CONF, $_TABLES, $_USER, $_SESS_VERBOSE, $inputHandler;
 
     if ($_SESS_VERBOSE) {
         COM_errorLog("***Inside SESS_sessionCheck***",1);
@@ -94,8 +94,8 @@ function SESS_sessionCheck()
     // Check for a cookie on the users's machine.  If the cookie exists, build
     // an array of the users info and setup the theme.
 
-    if (isset ($_COOKIE[$_CONF['cookie_session']])) {
-        $sessid = COM_applyFilter ($_COOKIE[$_CONF['cookie_session']]);
+    $sessid = $inputHandler->getVar('strict',$_CONF['cookie_session'],'cookie','');
+    if ( $sessid != '' ) {
         if ($_SESS_VERBOSE) {
             COM_errorLog("got $sessid as the session id from lib-sessions.php",1);
         }
@@ -124,36 +124,34 @@ function SESS_sessionCheck()
             }
         } else {
             // Session probably expired, now check permanent cookie
-            if (isset ($_COOKIE[$_CONF['cookie_name']])) {
-                $userid = $_COOKIE[$_CONF['cookie_name']];
-                if (empty ($userid) || ($userid == 'deleted')) {
-                    unset ($userid);
-                } else {
-                    $userid = COM_applyFilter ($userid, true);
-                    $cookie_password = '';
-                    $userpass = '';
-                    if ($userid > 1) {
-                        if (array_key_exists('cookie_password', $_CONF)) {
-                            $cookie_password = $_COOKIE[$_CONF['cookie_password']];
-                        }
-                        $userpass = DB_getItem ($_TABLES['users'], 'passwd',
-                                                "uid = $userid");
+            $userid = $inputHandler->getVar('strict',$_CONF['cookie_name'],'cookie',0);
+            if (empty ($userid) || ($userid == 'deleted') || $userid == '') {
+                unset ($userid);
+            } else {
+                $userid = $inputHandler->filterVar('integer',$userid,'',0);
+                $cookie_password = '';
+                $userpass = '';
+                if ($userid > 1) {
+                    if (array_key_exists('cookie_password', $_CONF)) {
+                        $cookie_password = $_COOKIE[$_CONF['cookie_password']];
                     }
-                    if (empty ($cookie_password) || ($cookie_password <> $userpass)) {
-                        // User may have modified their UID in cookie, ignore them
-                    } else if ($userid > 1) {
-                        // Check user status
-                        $status = SEC_checkUserStatus ($userid);
-                        if (($status == USER_ACCOUNT_ACTIVE) ||
-                                ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
-                            $user_logged_in = 1;
+                    $userpass = DB_getItem ($_TABLES['users'], 'passwd',
+                                            "uid = $userid");
+                }
+                if (empty ($cookie_password) || ($cookie_password <> $userpass)) {
+                    // User may have modified their UID in cookie, ignore them
+                } else if ($userid > 1) {
+                    // Check user status
+                    $status = SEC_checkUserStatus ($userid);
+                    if (($status == USER_ACCOUNT_ACTIVE) ||
+                            ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
+                        $user_logged_in = 1;
 
-                            $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
-                            SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-                            $userdata = SESS_getUserDataFromId($userid);
-                            $_USER = $userdata;
-                            $_USER['auto_login'] = true;
-                        }
+                        $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
+                        SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+                        $userdata = SESS_getUserDataFromId($userid);
+                        $_USER = $userdata;
+                        $_USER['auto_login'] = true;
                     }
                 }
             }
@@ -165,41 +163,33 @@ function SESS_sessionCheck()
 
         // Check if the persistent cookie exists
 
-        if (isset ($_COOKIE[$_CONF['cookie_name']])) {
-            // Session cookie doesn't exist but a permanent cookie does.
-            // Start a new session cookie;
-            if ($_SESS_VERBOSE) {
-                COM_errorLog('perm cookie found from lib-sessions.php',1);
+        $userid = $inputHandler->getVar('strict',$_CONF['cookie_name'],'cookie','');
+        if (empty ($userid) || ($userid == 'deleted') || $userid == '') {
+            unset ($userid);
+        } else {
+            $userid = $inputHandler->filterVar('integer',$userid,'',0);
+            $cookie_password = '';
+            $userpass = '';
+            if ($userid > 1) {
+                $userpass = DB_getItem ($_TABLES['users'], 'passwd',
+                                        "uid = $userid");
+                $cookie_password = $inputHandler->getVar('strict',$_CONF['cookie_password'],'cookie','');
             }
+            if (empty ($cookie_password) || $cookie_password == '' || ($cookie_password <> $userpass)) {
+                // User could have modified UID in cookie, don't do shit
+            } else if ($userid > 1) {
+                // Check user status
+                $status = SEC_checkUserStatus($userid);
+                if (($status == USER_ACCOUNT_ACTIVE) ||
+                        ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
+                    $user_logged_in = 1;
 
-            $userid = $_COOKIE[$_CONF['cookie_name']];
-            if (empty ($userid) || ($userid == 'deleted')) {
-                unset ($userid);
-            } else {
-                $userid = COM_applyFilter ($userid, true);
-                $cookie_password = '';
-                $userpass = '';
-                if ($userid > 1) {
-                    $userpass = DB_getItem ($_TABLES['users'], 'passwd',
-                                            "uid = $userid");
-                    $cookie_password = $_COOKIE[$_CONF['cookie_password']];
-                }
-                if (empty ($cookie_password) || ($cookie_password <> $userpass)) {
-                    // User could have modified UID in cookie, don't do shit
-                } else if ($userid > 1) {
-                    // Check user status
-                    $status = SEC_checkUserStatus($userid);
-                    if (($status == USER_ACCOUNT_ACTIVE) ||
-                            ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
-                        $user_logged_in = 1;
-
-                        // Create new session and write cookie
-                        $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
-                        SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-                        $userdata = SESS_getUserDataFromId($userid);
-                        $_USER = $userdata;
-                        $_USER['auto_login'] = true;
-                    }
+                    // Create new session and write cookie
+                    $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
+                    SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+                    $userdata = SESS_getUserDataFromId($userid);
+                    $_USER = $userdata;
+                    $_USER['auto_login'] = true;
                 }
             }
         }

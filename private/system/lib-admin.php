@@ -117,6 +117,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
         $admin_templates->set_var('class', "admin-list-field");
         $admin_templates->set_var('show_deleteimage', '');
+
         $admin_templates->parse('header_row', 'header', true);
         $admin_templates->clear_var('on_click');
     } else {

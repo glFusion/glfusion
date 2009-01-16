@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -49,12 +49,13 @@
 * glFusion common function library
 */
 require_once '../lib-common.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
-
 /**
 * Security check to ensure user even belongs on this page
 */
 require_once 'auth.inc.php';
+
+USES_lib_story();
+
 
 // Set this to true if you want to have this code output debug messages to
 // the error log
@@ -64,22 +65,8 @@ $display = '';
 $pageHandle->setShowExtraBlocks(false);
 
 if (!SEC_hasRights('story.edit')) {
-    $pageHandle->setPageTitle($MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[31];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $pageHandle->addContent($display);
-    COM_errorLog("User {$_USER['username']} tried to illegally access the story administration screen.");
-    $pageHandle->displayPage();
+    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[31],'the story administration screen.');
 }
-
-
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// debug($_POST);
-
 
 /**
 * Returns a list of all users and their user ids, wrapped in <option> tags.
@@ -109,21 +96,14 @@ function userlist ($uid = 0)
 
 function liststories()
 {
-    global $_CONF, $_TABLES, $_IMAGE_TYPE,
-           $LANG09, $LANG_ADMIN, $LANG_ACCESS, $LANG24,
-           $pageHandle;
+    global $_CONF, $_TABLES, $LANG09, $LANG_ADMIN, $LANG_ACCESS,
+           $LANG24, $pageHandle, $inputHandler;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
-    if (!empty ($_GET['tid'])) {
-        $current_topic = COM_applyFilter($_GET['tid']);
-    } elseif (!empty ($_POST['tid'])) {
-        $current_topic = COM_applyFilter($_POST['tid']);
-    } else {
-        $current_topic = $LANG09[9];
-    }
+    $current_topic = $inputHandler->getVar('strict','tid',array('get','post'),$LANG09[9]);
 
     if ($current_topic == $LANG09[9]) {
         $excludetopics = '';
@@ -513,13 +493,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_optionarchive', $LANG24[61]);
     $story_templates->set_var('lang_optiondelete', $LANG24[62]);
     $story_templates->set_var('lang_title', $LANG_ADMIN['title']);
-//    if ($A['postmode'] == 'plaintext') {
-//        $A['title'] = str_replace ('$', '&#36;', $A['title']);
-//    }
-//
-//    $A['title'] = str_replace('{','&#123;',$A['title']);
-//    $A['title'] = str_replace('}','&#125;',$A['title']);
-//    $A['title'] = str_replace('"','&quot;',$A['title']);
+
     $story_templates->set_var('story_title', $story->EditElements('title'));//stripslashes ($A['title']));
     $story_templates->set_var('lang_topic', $LANG_ADMIN['topic']);
     if(empty($currenttopic) && ($story->EditElements('tid') == ''))
@@ -701,10 +675,6 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $display .= $story_templates->finish($story_templates->get_var('output'));
     $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
-
-
-
-
     return $display;
 }
 
@@ -739,10 +709,13 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
 */
 function submitstory($type='')
 {
+    global $inputHandler, $pageHandle;
+
     $output = '';
 
-    $args = &$_POST;
-
+    $args = $inputHandler->getRawVars('post');
+//    $args = &$_POST;
+/*
     // Handle Magic GPC Garbage:
     while (list($key, $value) = each($args)) {
         if (!is_array($value)) {
@@ -753,36 +726,33 @@ function submitstory($type='')
             }
         }
     }
-
+*/
     /* ANY FURTHER PROCESSING on POST variables - COM_stripslashes etc.
      * Do it HERE on $args */
 
     PLG_invokeService('story', 'submit', $args, $output, $svc_msg);
 
-    echo $output;
+    $pageHandle->displayPage();
+//    echo $output;
 }
 
 // MAIN
-$mode = '';
-if (isset($_REQUEST['mode'])){
-    $mode = COM_applyFilter ($_REQUEST['mode']);
+
+$mode       = $inputHandler->getVar('strict','mode','request','');
+$editopt    = $inputHandler->getVar('strict','editopt','request','');
+$sid        = $inputHandler->getVar('strict','sid',array('post','get'),'');
+$type       = $inputHandler->getVar('strict','type','post','');
+$editor     = $inputHandler->getVar('strict','editor','get','');
+$topic      = $inputHandler->getVar('strict','topic','get','');
+$msg        = $inputHandler->getVar('integer','msg','get',0);
+$id         = $inputHandler->getVar('strict','id','get','');
+if ($editopt == 'default') {
+    $_CONF['advanced_editor'] = false;
 }
 
-if (isset($_REQUEST['editopt'])){
-    $editopt = COM_applyFilter ($_REQUEST['editopt']);
-    if ($editopt == 'default') {
-        $_CONF['advanced_editor'] = false;
-    }
-}
-
-$display = '';
 if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
-    $sid = COM_applyFilter ($_POST['sid']);
-    $type = '';
-    if (isset ($_POST['type'])) {
-        $type = COM_applyFilter ($_POST['type']);
-    }
-    if (!isset ($sid) || empty ($sid)) {
+
+    if (!isset ($sid) || empty ($sid) || $sid == '') {
         COM_errorLog ('Attempted to delete story sid=' . $sid);
         $pageHandle->redirect($_CONF['site_admin_url'] . '/story.php');
     } else if ($type == 'submission') {
@@ -798,7 +768,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
             $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
         }
     } else if (SEC_checkToken()) {
-        echo STORY_deleteStory ($sid);
+        $pageHandler->addContent(STORY_deleteStory ($sid));
     } else {
         COM_accessLog ("User {$_USER['username']} tried to delete story and failed CSRF checks $sid.");
         $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
@@ -809,11 +779,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
                $_CONF['cookiedomain'], $_CONF['cookiesecure']);
     $pageHandle->setPageTitle($LANG24[5]);
 
-    $editor = '';
-    if (!empty ($_GET['editor'])) {
-        $editor = COM_applyFilter ($_GET['editor']);
-    }
-    $pageHanle->addContent(storyeditor (COM_applyFilter ($_POST['sid']), 'preview', '', '',
+    $pageHanle->addContent(storyeditor ($sid, 'preview', '', '',
                              $editor));
     $pageHandle->displayPage();
 
@@ -823,18 +789,6 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
                $_CONF['cookiedomain'], $_CONF['cookiesecure']);
 
     $pageHandle->setPageTitle($LANG24[5]);
-    $sid = '';
-    if (isset ($_GET['sid'])) {
-        $sid = COM_applyFilter ($_GET['sid']);
-    }
-    $topic = '';
-    if (isset ($_GET['topic'])) {
-        $topic = COM_applyFilter ($_GET['topic']);
-    }
-    $editor = '';
-    if (isset ($_GET['editor'])) {
-        $editor = COM_applyFilter ($_GET['editor']);
-    }
     $pageHandle->addContent(storyeditor ($sid, $mode, '', $topic, $editor));
     $pageHandle->displayPage();
 } else if ($mode == 'editsubmission') {
@@ -842,7 +796,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
                 time() + 1200, $_CONF['cookie_path'],
                $_CONF['cookiedomain'], $_CONF['cookiesecure']);
     $pageHandle->setPageTitle($LANG24[5]);
-    $pageHandle->addContent(storyeditor (COM_applyFilter ($_GET['id']), $mode));
+    $pageHandle->addContent(storyeditor ($id, $mode));
     $pageHandle->displayPage();
 } else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save'])) {
     // purge any tokens we created for the advanced editor
@@ -850,16 +804,12 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     DB_Query($sql,1);
 
     if ( !SEC_checkToken() ) {
-        $editor = '';
-        if (!empty ($_GET['editor'])) {
-            $editor = COM_applyFilter ($_GET['editor']);
-        }
         @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                     time() + 1200, $_CONF['cookie_path'],
                    $_CONF['cookiedomain'], $_CONF['cookiesecure']);
         $pageHandle->setPageTitle($LANG24[5]);
         $pageHandle->addMessage(501);
-        $pageHandle->addContent(storyeditor (COM_applyFilter ($_POST['sid']), 'preview', '', '',$editor));
+        $pageHandle->addContent(storyeditor ($sid, 'preview', '', '',$editor));
         $pageHandle->displayPage();
     } else {
         submitstory();
@@ -867,20 +817,14 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
 } else { // 'cancel' or no mode at all
     // purge any tokens we created for the advanced editor
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
-    DB_Query($sql,1);
+    DB_query($sql,1);
 
-    $type = '';
-    if (isset($_POST['type'])){
-        $type = COM_applyFilter ($_POST['type']);
-    }
     if (($mode == $LANG24[10]) && !empty ($LANG24[10]) &&
             ($type == 'submission')) {
         $pageHandle->redirect($_CONF['site_admin_url'] . '/moderation.php');
     } else {
         $pageHandle->setPageTitle($LANG24[22]);
-        $msg = "";
-        if (isset($_GET['msg'])) {
-            $msg = COM_applyFilter($_GET['msg'], true);
+        if ($msg > 0 ) {
             $pageHandle->addMessage($msg);
         }
         $pageHandle->addContent(liststories());

@@ -36,13 +36,7 @@ require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
 if (!SEC_inGroup ('Root')) {
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[46];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the security check.");
-    echo $display;
+    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[46],'the plugin administration screen.');
     exit;
 }
 
@@ -272,9 +266,10 @@ function checkDefaultPassword ()
 }
 
 // MAIN
-$display = COM_siteHeader ('menu', 'glFusion Security Check');
-$display .= '<div dir="ltr">' . LB;
-$display .= COM_startBlock ('Results of the Security Check');
+$pageHandle->setPageTitle('glfusion Security Check');
+$pageHandle->addContent('<div dir="ltr">' . LB);
+
+$display = COM_startBlock ('Results of the Security Check');
 
 $url = urlToCheck ();
 if (!empty ($url)) {
@@ -365,8 +360,8 @@ $display .= '<p>To stay informed about new glFusion releases and possible '
 
 $display .= COM_endBlock ();
 $display .= '</div>' . LB;
-$display .= COM_siteFooter ();
 
-echo $display;
-
+$pageHandle->addContent($display);
+$pageHandle->setShowExtraBlocks(false);
+$pageHandle->displayPage();
 ?>

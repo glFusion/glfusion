@@ -505,17 +505,16 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
 */
 function USER_deletePhoto ($photo, $abortonerror = true)
 {
-    global $_CONF, $LANG04;
+    global $_CONF, $LANG04, $pageHandle;
 
     if (!empty ($photo)) {
         $filetodelete = $_CONF['path_images'] . 'userphotos/' . $photo;
         if (file_exists ($filetodelete)) {
             if (!@unlink ($filetodelete)) {
                 if ($abortonerror) {
-                    $display = COM_siteHeader ('menu', $LANG04[21])
-                             . COM_errorLog ("Unable to remove file $photo")
-                             . COM_siteFooter ();
-                    echo $display;
+                    $pageHandle->setPageTitle($LANG04[21]);
+                    $pageHandle->addContent(COM_errorLog ("Unable to remove file $photo"));
+                    $pageHandle->displayPage();
                     exit;
                 } else {
                     // just log the problem, but don't abort

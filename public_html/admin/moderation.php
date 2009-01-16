@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -36,14 +39,10 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'lib-user.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
-require_once $_CONF['path_system'] . 'lib-admin.php';
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
+USES_lib_user();
+USES_lib_story();
+USES_lib_admin();
 
 function all_submissions($token)
 {
@@ -100,9 +99,7 @@ function itemlist($type, $token)
         if (function_exists ($function)) {
             // Great, we found the plugin, now call its itemlist method
             $plugin = new Plugin();
-//            $plugin = $function();
-//            if (isset ($plugin)) {
-            $plugin = $function($token);   // http://project.geeklog.net/tracking/view.php?id=619
+            $plugin = $function($token);
             if (is_string($plugin)) {
                 return '<div class="block-box">'.$plugin.'</div>';
             } elseif (is_object($plugin)) {
@@ -331,7 +328,6 @@ function moderation ($mid, $action, $type, $count)
         break;
     default:
         if (strlen($type) <= 0) {
-            // something is terribly wrong, bail
             $retval .= COM_errorLog("Unable to find type of $type in moderation() in moderation.php");
             return $retval;
         }
@@ -470,7 +466,7 @@ function moderateusers ($uid, $action, $count)
                 if ($nrows == 1) {
                     $A = DB_fetchArray($result);
                     $sql = "UPDATE {$_TABLES['users']} SET status=3 WHERE uid={$A['uid']}";
-                    DB_Query($sql);
+                    DB_query($sql);
                     USER_createAndSendPassword ($A['username'], $A['email'], $A['uid']);
                 }
                 break;
@@ -494,37 +490,31 @@ function moderateusers ($uid, $action, $count)
 }
 
 $display = '';
-$display .= COM_siteHeader ('menu', $LANG01[10]);
-$msg = 0;
-if (isset($_GET['msg'])) {
-    $msg = COM_applyFilter($_GET['msg'], true);
-}
+$pageHandle->setPageTitle($LANG01[10]);
+$msg = $inputHandler->getVar('integer','msg','get',0);
+$plugin = $inputHandler->getVar('strict','plugin','get','');
+$mode   = $inputHandler->getVar('strict','mode','post','');
+
 if ($msg > 0) {
-    $plugin = '';
-    if (isset($_GET['plugin'])) {
-        $plugin = COM_applyFilter($_GET['plugin']);
-    }
-    $display .= COM_showMessage($msg, $plugin);
+    $pageHandle->addMessage($msg,$plugin);
 }
 
-if (isset ($_POST['mode']) && ($_POST['mode'] == 'moderation') && SEC_checkToken()) {
+if ($mode == 'moderation' && SEC_checkToken()) {
     $action = array();
-    if (isset($_POST['action'])) {
-        $action = $_POST['action'];
-    }
-    if ($_POST['type'] == 'user') {
-        $display .= moderateusers($_POST['id'], $action,
-                                  COM_applyFilter($_POST['count'], true));
+
+    $action = $inputHandler->getVar('strict','action','post','');
+    $type   = $inputHandler->getVar('strict','type','post','');
+    $id     = $inputHandler->getVar('strict','id','post','');
+    $count  = $inputHandler->getVar('strict','count','post','');
+
+    if ($type == 'user') {
+        $pageHandle->addContent(moderateusers($id, $action,$count));
     } else {
-        $display .= moderation($_POST['id'], $action, $_POST['type'],
-                               COM_applyFilter ($_POST['count'], true));
+        $pageHandle->addContent(moderation($id, $action, $type,$count));
     }
 } else {
-    $display .= all_submissions(SEC_createToken());
+    $pageHandle->addContent(all_submissions(SEC_createToken()));
 }
 
-$display .= COM_siteFooter();
-
-echo $display;
-
+$pageHandle->displayPage();
 ?>

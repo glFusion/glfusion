@@ -334,6 +334,19 @@ class outputHandler {
         $this->_buffer .= $content;
     }
 
+	/**
+	 * Retrieves the page contents
+	 *
+	 * Retrievs the page contents (after the header)
+	 *
+     *
+	 * @access public
+	 * @return nothing
+	 */
+    public function getContent( ) {
+        return $this->_buffer;
+    }
+
 
 	/**
 	 * Adds a message block to the top of the page

@@ -746,7 +746,7 @@ function SEC_authenticate($username, $password, &$uid)
 */
 function SEC_checkUserStatus($userid)
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $pageHandle;
 
     // Check user status
     $status = DB_getItem($_TABLES['users'], 'status', "uid=$userid");
@@ -768,13 +768,13 @@ function SEC_checkUserStatus($userid)
         // If we aren't on users.php with a default action then go to it
         if ($redirect) {
             COM_accessLog("SECURITY: Attempted Cookie Session login from user awaiting approval $userid.");
-            echo COM_refresh($_CONF['site_url'] . '/users.php?msg=70');
+            $pageHandle->redirect($_CONF['site_url'] . '/users.php?msg=70');
             exit;
         }
     } elseif ($status == USER_ACCOUNT_DISABLED) {
         if ($redirect) {
             COM_accessLog("SECURITY: Attempted Cookie Session login from banned user $userid.");
-            echo COM_refresh($_CONF['site_url'] . '/users.php?msg=69');
+            $pageHandle->redirect($_CONF['site_url'] . '/users.php?msg=69');
             exit;
         }
     }
@@ -800,7 +800,7 @@ function SEC_checkUserStatus($userid)
   */
 function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES,$inputHandler;
 
     /* First try a local cached login */
     $remoteusername = addslashes($loginname);
@@ -818,7 +818,8 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
         }
     }
 
-    $service = COM_sanitizeFilename($service);
+    $service = $inputHandler->filterVar('filename',$service,'');
+//    $service = COM_sanitizeFilename($service);
     $servicefile = $_CONF['path_system'] . 'classes/authentication/' . $service
                  . '.auth.class.php';
     if (file_exists($servicefile)) {
@@ -1135,16 +1136,20 @@ function SEC_createToken($ttl = 1200)
   */
 function SEC_checkToken()
 {
-    global $_USER, $_TABLES, $_DB_dbms;
+    global $_USER, $_TABLES, $_DB_dbms,$inputHandler;
 
     $token = ''; // Default to no token.
     $return = false; // Default to fail.
 
-    if(array_key_exists(CSRF_TOKEN, $_GET)) {
+//    if(array_key_exists(CSRF_TOKEN, $_GET)) {
+    $token = $inputHandler->getVar('strict',CSRF_TOKEN,array('get','post'),'');
+/*
         $token = COM_applyFilter($_GET[CSRF_TOKEN]);
     } else if(array_key_exists(CSRF_TOKEN, $_POST)) {
         $token = COM_applyFilter($_POST[CSRF_TOKEN]);
     }
+*/
+    $token = $inputHandler->prepareForDB($token);
 
     if(trim($token) != '') {
         if($_DB_dbms != 'mssql') {
@@ -1171,10 +1176,13 @@ function SEC_checkToken()
              *  the http referer is the url for which the token was created.
              */
             if( $_USER['uid'] != $tokendata['owner_id'] ) {
+                COM_errorLog("SEC: Token Failure - userid did not match token owner id");
                 $return = false;
             } else if($tokendata['urlfor'] != $_SERVER['HTTP_REFERER']) {
+                COM_errorLog("SEC: Token Failure - URL did not match HTTP_REFERER");
                 $return = false;
             } else if($tokendata['expired']) {
+                COM_errorLog("SEC: Token Failure - token expired");
                 $return = false;
             } else {
                 $return = true; // Everything is AOK in only one condition...
@@ -1185,6 +1193,7 @@ function SEC_checkToken()
             DB_Query($sql);
         }
     } else {
+        COM_errorLog("SEC: Token Failure - no token found");
         $return = false; // no token.
     }
 
@@ -1234,18 +1243,22 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
 
 function SEC_checkTokenGeneral($token,$action='general')
 {
-    global $_USER, $_TABLES, $_DB_dbms;
+    global $_USER, $_TABLES, $_DB_dbms,$inputHandler;
 
     $return = false; // Default to fail.
 
     if(trim($token) != '') {
-        $token = COM_applyFilter($token);
+//        $token = COM_applyFilter($token);
+        $token = $inputHandler->filterVar('strict',$token,'');
+        $token = $inputHandler->prepareForDB($token);
+
         $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
            . "{$_TABLES['tokens']} WHERE token='$token'";
 
         $tokens = DB_Query($sql);
         $numberOfTokens = DB_numRows($tokens);
         if($numberOfTokens != 1) {
+            COM_errorLog("SEC: Token Failure - no token or multiple tokens found");
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
             $tokendata = DB_fetchArray($tokens);
@@ -1254,16 +1267,20 @@ function SEC_checkTokenGeneral($token,$action='general')
              *  token is not expired.
              */
             if( $_USER['uid'] != $tokendata['owner_id'] ) {
+                COM_errorLog("SEC: Token Failure - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['expired']) {
+                COM_errorLog("SEC: Token Failure - token expired");
                 $return = false;
             } else if($tokendata['urlfor'] != $action) {
+                COM_errorLog("SEC: Token Failure - URL does not match HTTP_REFERER URL");
                 $return = false;
             } else {
                 $return = true; // Everything is OK
             }
         }
     } else {
+        COM_errorLog("SEC: Token Failure - no token found");
         $return = false; // no token.
     }
     return $return;

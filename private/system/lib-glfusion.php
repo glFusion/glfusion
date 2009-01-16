@@ -175,8 +175,9 @@ function phpblock_storypicker() {
 
     $topicsql = '';
     $sid = '';
-    if (isset($_GET['story'])) {
-        $sid = COM_applyFilter($_GET['story']);
+    $sid = $inputHandler->getVar('strict','story','get','');
+
+    if ($sid != '') {
         $stopic = DB_getItem($_TABLES['stories'], 'tid', 'sid = \''.addslashes($sid).'\'');
         if (!empty($stopic)) {
             $topic = $stopic;
@@ -185,8 +186,8 @@ function phpblock_storypicker() {
         }
     }
 
-    if (empty($topic) && isset($_REQUEST['topic'])) {
-        $topic = COM_applyFilter($_REQUEST['topic']);
+    if (empty($topic)) {
+        $topic = $inputHandler->getVar('strict','topic','request','');
     }
     if (!empty($topic)) {
         $topicsql = " AND tid = '$topic'";

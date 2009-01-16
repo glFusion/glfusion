@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -285,7 +285,7 @@ function sendNotification ($table, $story)
 */
 function savestory ($A)
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER, $pageHandle;
 
     $retval = '';
 
@@ -306,7 +306,7 @@ function savestory ($A)
     if( $result == STORY_NO_ACCESS_TOPIC )
     {
         // user doesn't have access to this topic - bail
-        $retval = COM_refresh ($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     } elseif( ( $result == STORY_SAVED ) || ( $result == STORY_SAVED_SUBMISSION ) ) {
         if (isset ($_CONF['notification']) &&
                 in_array ('story', $_CONF['notification']))
@@ -316,10 +316,10 @@ function savestory ($A)
 
         if( $result == STORY_SAVED )
         {
-            $retval = COM_refresh( COM_buildUrl( $_CONF['site_url']
+            $retval = $pageHandle->redirect( $pageHandle->buildUrl( $_CONF['site_url']
                                . '/article.php?story=' . $story->getSid() ) );
         } else {
-            $retval = COM_refresh( $_CONF['site_url'] . '/index.php?msg=2' );
+            $retval = $pageHandle->redirect( $_CONF['site_url'] . '/index.php?msg=2' );
         }
     }
 
@@ -335,23 +335,20 @@ function savestory ($A)
 */
 function savesubmission($type, $A)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG12;
+    global $_CONF, $_TABLES, $_USER, $LANG12, $pageHandle;
 
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
 
     $last = COM_checkSpeedlimit ('submit');
 
     if ($last > 0) {
-        $retval = COM_siteHeader ();
-        $retval .= COM_startBlock ($LANG12[26], '',
+        $retval = COM_startBlock ($LANG12[26], '',
                            COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[30]
             . $last
             . $LANG12[31]
-            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . COM_siteFooter ();
-
-        return $retval;
+            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $pageHandle->displayError($retval);
     }
 
     if (!empty ($type) && ($type != 'story')) {
@@ -368,22 +365,23 @@ function savesubmission($type, $A)
         } elseif (empty ($retval)) {
             // plugin should include its own redirect - but in case handle
             // it here and redirect to the main page
-            return COM_refresh ($_CONF['site_url'] . '/index.php');
+            $pageHandle->redirect ($_CONF['site_url'] . '/index.php');
         } else {
-            return $retval;
+            $pageHandle->redirect($retval);
+//            return $retval;
         }
     }
 
     if (!empty ($A['title']) && !empty ($A['introtext'])) {
         $retval = savestory ($A);
     } else {
-        $retval = COM_siteHeader ();
-        $retval .= COM_startBlock ($LANG12[22], '',
+        $retval = COM_startBlock ($LANG12[22], '',
                            COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[23] // return missing fields error
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . submissionform($type)
-            . COM_siteFooter ();
+            . submissionform($type);
+        $pageHandle->addContent($retval);
+        $pageHandle->displayPage();
     }
 
     return $retval;

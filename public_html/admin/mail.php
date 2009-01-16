@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -35,18 +38,9 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
-$display = '';
-
 // Make sure user has access to this page
 if (!SEC_inGroup ('Mail Admin') && !SEC_hasrights ('user.mail')) {
-    $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $retval .= COM_startBlock ($MESSAGE[30], '',
-                               COM_getBlockTemplate ('_msg_block', 'header'));
-    $retval .= $MESSAGE[39];
-    $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $retval .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the mail administration screen.");
-    echo $retval;
+    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[39],'mail administration.');
     exit;
 }
 
@@ -150,28 +144,34 @@ function display_mailform ()
 */
 function send_messages ($vars)
 {
-    global $_CONF, $_TABLES, $LANG31;
+    global $_CONF, $_TABLES, $inputHandler,$LANG31;
 
-    require_once $_CONF['path_system'] . 'lib-user.php';
+    USES_lib_user();
 
     $retval = '';
 
     $html = 0;
+
     if (($_CONF['advanced_editor'] == 1)) {
         if ( $vars['postmode'] == 'html' ) {
-            $message = COM_stripslashes($vars['message_html']);
+            $message = $inputHandler->getVar('html','message_html','post','');
             $html = true;
         } else if ( $vars['postmode'] == 'text' ) {
-            $message = COM_stripslashes($vars['message_text']);
+            $message = $inputHandler->getVar('text','message_text','post','');
             $html = false;
         }
     } else {
-        $message = COM_stripslashes($vars['message']);
+        $message = $inputHandler->getVar('text','message','post','');
     }
 
-    if (empty ($vars['fra']) OR empty ($vars['fraepost']) OR
-            empty ($vars['subject']) OR empty ($message) OR
-            empty ($vars['to_group'])) {
+    $fra      = $inputHandler->getVar('strict','fra','post','');
+    $fraepost = $inputHandler->getVar('strict','fraepost','post','');
+    $subject  = $inputHandler->getVar('text','subject','post','');
+    $to_group = $inputHandler->getVar('strict','to_group','post','');
+
+    if (empty ($fra) OR empty ($fraepost) OR
+            empty ($subject) OR empty ($message) OR
+            empty ($to_group)) {
         $retval .= COM_startBlock ($LANG31[1], '',
                         COM_getBlockTemplate ('_msg_block', 'header'));
         $retval .= $LANG31[26];
@@ -180,21 +180,9 @@ function send_messages ($vars)
         return $retval;
     }
 
-    // Urgent message!
-    if (isset ($vars['priority'])) {
-        $priority = 1;
-    } else {
-        $priority = 0;
-    }
+    $priority = $inputHandler->getVar('bool','priority','post',0);
 
-    // If you want to send html mail
-//    if (isset ($vars['html'])) {
-//        $html = true;
-//    } else {
-//        $html = false;
-//    }
-
-    $groupList = implode (',', USER_getChildGroups($vars['to_group']));
+    $groupList = implode (',', USER_getChildGroups($to_group));
 
     // and now mail it
     if (isset ($vars['overstyr'])) {
@@ -211,9 +199,7 @@ function send_messages ($vars)
     $result = DB_query ($sql);
     $nrows = DB_numRows ($result);
     $from = array();
-    $from = COM_formatEmailAddress ($vars['fra'], $vars['fraepost']);
-    $subject = COM_stripslashes ($vars['subject']);
-//    $message = COM_stripslashes ($vars['message']);
+    $from = COM_formatEmailAddress ($fra, $fraepost);
 
     // Loop through and send the messages!
     $successes = array ();
@@ -266,16 +252,16 @@ function send_messages ($vars)
 
 // MAIN
 
-$display .= COM_siteHeader ('menu', $LANG31[1]);
+$pageHandle->setPageTitle($LANG31[1]);
+$pageHandle->setShowExtraBlocks(false);
 
-if (isset($_POST['mail']) && ($_POST['mail'] == 'mail') && SEC_checkToken()) {
-    $display .= send_messages ($_POST);
+$mail = $inputHandler->getVar('strict','mail','post','');
+
+if ($mail == 'mail' && SEC_checkToken()) {
+    $pageHandle->addContent(send_messages ($_POST));
 } else {
-    $display .= display_mailform ();
+    $pageHandle->addContent(display_mailform ());
 }
 
-$display .= COM_siteFooter ();
-
-echo $display;
-
+$pageHandle->displayPage();
 ?>

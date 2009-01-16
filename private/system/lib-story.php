@@ -47,7 +47,7 @@ require_once $_CONF['path_system'] . '/lib-webservices.php';
 
 if ($_CONF['allow_user_photo']) {
     // only needed for the USER_getPhoto function
-    require_once $_CONF['path_system'] . 'lib-user.php';
+    USES_lib_user();
 }
 
 // this must be kept in sync with the actual size of 'sid' in the db ...
@@ -620,7 +620,7 @@ function STORY_extractLinks( $fulltext, $maxlength = 26 )
         }
 
         $rel[] = '<a href="' . $matches[1][$i] . '">'
-               . str_replace ("/(\015\012)|(\015)|(\012)/", '', $matches[2][$i])
+               . preg_replace ("/(\015\012)|(\015)|(\012)/", '', $matches[2][$i])
                . '</a>';
     }
 
@@ -744,7 +744,7 @@ function STORY_deleteImages ($sid)
 */
 function STORY_getItemInfo ($sid, $what)
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $pageHandle;
 
     $properties = explode (',', $what);
     $fields = array ();
@@ -905,14 +905,11 @@ function plugin_wsEnabled_story()
 function service_submit_story($args, &$output, &$svc_msg)
 {
     global $_CONF, $_TABLES, $_USER, $LANG24, $MESSAGE, $_GROUPS,
-           $pageHandle;
+           $pageHandle, $inputHandler;
 
     if (!SEC_hasRights('story.edit')) {
-        $output .= COM_siteHeader('menu', $MESSAGE[30])
-                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
-                . COM_siteFooter();
-
-        return PLG_RET_AUTH_FAILED;
+        $pageHandle->displayAccessError( $MESSAGE[30],$MESSAGE[31],'story submission' );
+//        return PLG_RET_AUTH_FAILED;
     }
 
     $gl_edit = false;
@@ -964,10 +961,10 @@ function service_submit_story($args, &$output, &$svc_msg)
 
     if ($args['gl_svc']) {
         if (isset($args['mode'])) {
-            $args['mode'] = COM_applyBasicFilter($args['mode']);
+            $args['mode'] = $inputHandler->filterVar('strict',$args['mode'],'');
         }
         if (isset($args['editopt'])) {
-            $args['editopt'] = COM_applyBasicFilter($args['editopt']);
+            $args['editopt'] = $inputHandler->filterVar('strict',$args['editopt'],'');
         }
     }
 
@@ -1019,22 +1016,22 @@ function service_submit_story($args, &$output, &$svc_msg)
         if (!isset($args['perm_owner'])) {
             $args['perm_owner'] = $_CONF['default_permissions_story'][0];
         } else {
-            $args['perm_owner'] = COM_applyBasicFilter($args['perm_owner'], true);
+            $args['perm_owner'] = $inputHandler->filterVar('integer',$args['perm_owner'],'');
         }
         if (!isset($args['perm_group'])) {
             $args['perm_group'] = $_CONF['default_permissions_story'][1];
         } else {
-            $args['perm_group'] = COM_applyBasicFilter($args['perm_group'], true);
+            $args['perm_group'] = $inputHandler->filterVar('integer',$args['perm_group'],'');
         }
         if (!isset($args['perm_members'])) {
             $args['perm_members'] = $_CONF['default_permissions_story'][2];
         } else {
-            $args['perm_members'] = COM_applyBasicFilter($args['perm_members'], true);
+            $args['perm_members'] = $inputHandler->filterVar('integer',$args['perm_members'], '');
         }
         if (!isset($args['perm_anon'])) {
             $args['perm_anon'] = $_CONF['default_permissions_story'][3];
         } else {
-            $args['perm_anon'] = COM_applyBasicFilter($args['perm_anon'], true);
+            $args['perm_anon'] = $inputHandler->filterVar('integer',$args['perm_anon'], 0);
         }
 
         if (!isset($args['draft_flag'])) {
@@ -1050,20 +1047,6 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
     }
     /* - END: Set all the defaults - */
-
-    // TEST CODE
-    /* foreach ($args as $k => $v) {
-        if (!is_array($v)) {
-            echo "$k => $v\r\n";
-        } else {
-            echo "$k => $v\r\n";
-            foreach ($v as $k1 => $v1) {
-                echo "        $k1 => $v1\r\n";
-            }
-        }
-    }*/
-    // exit ();
-    // END TEST CODE
 
     if (!isset($args['sid'])) {
         $args['sid'] = '';
@@ -1101,36 +1084,39 @@ function service_submit_story($args, &$output, &$svc_msg)
 
     switch ($result) {
     case STORY_DUPLICATE_SID:
-        $output .= COM_siteHeader ('menu', $LANG24[5]);
-        $output .= COM_errorLog ($LANG24[24], 2);
+        $pageHandle->setPageTitle($LANG24[5]);
+        $pageHandle->addContent(COM_errorLog ($LANG24[24], 2));
         if (!$args['gl_svc']) {
             if ( $args['type'] == 'submission' ) {
-                $output .= storyeditor($sid,'editsubmission');
+                $pageHandle->addContent(storyeditor($sid,'editsubmission'));
             } else {
-                $output .= storyeditor ($sid);
+                $pageHandle->addContent(storyeditor ($sid));
             }
         }
-        $output .= COM_siteFooter ();
+//        $pageHandle->displayPage();
         return PLG_RET_ERROR;
     case STORY_EXISTING_NO_EDIT_PERMISSION:
-        $output .= COM_siteHeader('menu', $MESSAGE[30])
-                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
-                . COM_siteFooter ();
+        $pageHandle->setPageTitle($MESSAGE[30]);
+        $pageHandle->addMessageText($MESSAGE[30]);
+
+//        $output .= COM_siteHeader('menu', $MESSAGE[30])
+//                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
+//                . COM_siteFooter ();
         COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
         return PLG_RET_PERMISSION_DENIED;
     case STORY_NO_ACCESS_PARAMS:
-        $output .= COM_siteHeader('menu', $MESSAGE[30])
-                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
-                . COM_siteFooter ();
+        $pageHandle->setPageTitle($MESSAGE[30]);
+        $pageHandle->addMessageText($MESSAGE[30]);
+//        $output .= COM_siteHeader('menu', $MESSAGE[30])
+//                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
+//                . COM_siteFooter ();
         COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
         return PLG_RET_PERMISSION_DENIED;
     case STORY_EMPTY_REQUIRED_FIELDS:
-        $output .= COM_siteHeader('menu');
-        $output .= COM_errorLog($LANG24[31],2);
+        $pageHandle->addContent(COM_errorLog($LANG24[31],2));
         if (!$args['gl_svc']) {
-            $output .= storyeditor($sid);
+            $pageHandle->addContent(storyeditor($sid));
         }
-        $output .= COM_siteFooter();
         return PLG_RET_ERROR;
     default:
         break;
@@ -1158,7 +1144,8 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
 
         if (count($_FILES) > 0 AND $_CONF['maximagesperarticle'] > 0) {
-            require_once($_CONF['path_system'] . 'classes/upload.class.php');
+            USES_class_upload();
+//            require_once($_CONF['path_system'] . 'classes/upload.class.php');
             $upload = new upload();
 
             if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {
@@ -1181,12 +1168,14 @@ function service_submit_story($args, &$output, &$svc_msg)
                     ));
             $upload->setFieldName('file');
             if (!$upload->setPath($_CONF['path_images'] . 'articles')) {
-                $output = COM_siteHeader ('menu', $LANG24[30]);
-                $output .= COM_startBlock ($LANG24[30], '', COM_getBlockTemplate ('_msg_block', 'header'));
-                $output .= $upload->printErrors (false);
-                $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-                $output .= COM_siteFooter ();
-                echo $output;
+                $pageHandle->displayError($upload->printErrors(false));
+
+//                $output = COM_siteHeader ('menu', $LANG24[30]);
+//                $output .= COM_startBlock ($LANG24[30], '', COM_getBlockTemplate ('_msg_block', 'header'));
+//                $output .= $upload->printErrors (false);
+//                $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+//                $output .= COM_siteFooter ();
+//                echo $output;
                 exit;
             }
 
@@ -1221,13 +1210,14 @@ function service_submit_story($args, &$output, &$svc_msg)
             $upload->uploadFiles();
 
             if ($upload->areErrors()) {
-                $retval = COM_siteHeader('menu', $LANG24[30]);
-                $retval .= COM_startBlock ($LANG24[30], '',
-                            COM_getBlockTemplate ('_msg_block', 'header'));
-                $retval .= $upload->printErrors(false);
-                $retval .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-                $retval .= COM_siteFooter();
-                echo $retval;
+                $pageHandle->displayError($upload->printErrors(false));
+//                $retval = COM_siteHeader('menu', $LANG24[30]);
+//                $retval .= COM_startBlock ($LANG24[30], '',
+//                            COM_getBlockTemplate ('_msg_block', 'header'));
+//                $retval .= $upload->printErrors(false);
+//                $retval .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+//                $retval .= COM_siteFooter();
+//                echo $retval;
                 exit;
             }
             for ($z = 0; $z < $_CONF['maximagesperarticle']; $z++ ) {
@@ -1247,8 +1237,9 @@ function service_submit_story($args, &$output, &$svc_msg)
         if ($_CONF['maximagesperarticle'] > 0) {
             $errors = $story->insertImages();
             if (count($errors) > 0) {
-                $output = COM_siteHeader ('menu', $LANG24[54]);
-                $output .= COM_startBlock ($LANG24[54], '',
+                $pageHandle->setPageTitle($LANG24[54]);
+
+                $output = COM_startBlock ($LANG24[54], '',
                                 COM_getBlockTemplate ('_msg_block', 'header'));
                 $output .= $LANG24[55] . '<p>';
                 for ($i = 1; $i <= count($errors); $i++) {
@@ -1256,9 +1247,9 @@ function service_submit_story($args, &$output, &$svc_msg)
                     next($errors);
                 }
                 $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-                $output .= storyeditor($sid);
-                $output .= COM_siteFooter();
-                echo $output;
+                $pageHandle->addContent($output);
+                $pageHandle->addContent(storyeditor($sid));
+                $pageHandle->displayPage();
                 exit;
             }
         }
@@ -1275,9 +1266,8 @@ function service_submit_story($args, &$output, &$svc_msg)
 
         // in case of an error go back to the story editor
         if ($plugin_error !== false) {
-            $output .= COM_siteHeader ('menu', $LANG24[5]);
-            $output .= storyeditor ($sid, 'retry', $plugin_error);
-            $output .= COM_siteFooter ();
+            $pageHandle->setPageTitle($LANG24[5]);
+            $pageHandle->addContent(storyeditor ($sid, 'retry', $plugin_error));
             return PLG_RET_ERROR;
         }
 
@@ -1286,7 +1276,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         COM_olderStuff ();
 
         if ($story->type == 'submission') {
-            $output = COM_refresh ($_CONF['site_admin_url'] . '/moderation.php?msg=9');
+            $pageHandle->redirect ($_CONF['site_admin_url'] . '/moderation.php?msg=9');
         } else {
             $output = PLG_afterSaveSwitch($_CONF['aftersave_story'],
                     $pageHandle->buildURL("{$_CONF['site_url']}/article.php?story=$sid"),
@@ -1309,14 +1299,14 @@ function service_submit_story($args, &$output, &$svc_msg)
  */
 function service_delete_story($args, &$output, &$svc_msg)
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER,$inputHandler,$pageHandle;
 
     if (empty($args['sid']) && !empty($args['id'])) {
         $args['sid'] = $args['id'];
     }
 
     if ($args['gl_svc']) {
-        $args['sid'] = COM_applyBasicFilter($args['sid']);
+        $args['sid'] = $inputHandler->filterVar('strict',$args['sid'],'');
     }
 
     $sid = $args['sid'];
@@ -1328,7 +1318,7 @@ function service_delete_story($args, &$output, &$svc_msg)
     $access = min ($access, SEC_hasTopicAccess ($A['tid']));
     if ($access < 3) {
         COM_accessLog ("User {$_USER['username']} tried to illegally delete story $sid.");
-        $output = COM_refresh ($_CONF['site_admin_url'] . '/story.php');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/story.php');
         if ($_USER['uid'] > 1) {
             return PLG_RET_PERMISSION_DENIED;
         } else {
@@ -1347,7 +1337,7 @@ function service_delete_story($args, &$output, &$svc_msg)
     COM_rdfUpToDateCheck ();
     COM_olderStuff ();
 
-    $output = COM_refresh ($_CONF['site_admin_url'] . '/story.php?msg=10');
+    $pageHandle->redirect ($_CONF['site_admin_url'] . '/story.php?msg=10');
 
     return PLG_RET_OK;
 }
@@ -1361,7 +1351,7 @@ function service_delete_story($args, &$output, &$svc_msg)
  */
 function service_get_story($args, &$output, &$svc_msg)
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER, $inputHandler,$pageHandle;
 
     $output = array();
     $retval = '';
@@ -1397,10 +1387,10 @@ function service_get_story($args, &$output, &$svc_msg)
 
     if ($args['gl_svc']) {
         if (isset($args['mode'])) {
-            $args['mode'] = COM_applyBasicFilter($args['mode']);
+            $args['mode'] = $inputHandler->filterVar('strict',$args['mode'],'');
         }
         if (isset($args['sid'])) {
-            $args['sid'] = COM_applyBasicFilter($args['sid']);
+            $args['sid'] = $inputHandler->filterVar('strict',$args['sid'],'');
         }
 
         if (empty($args['sid'])) {
@@ -1470,7 +1460,7 @@ function service_get_story($args, &$output, &$svc_msg)
         $sql = array();
 
         if (isset($args['offset'])) {
-            $offset = COM_applyBasicFilter($args['offset'], true);
+            $offset = $inputHandler->filterVar('integer',$args['offset'], '',0);
         } else {
             $offset = 0;
         }

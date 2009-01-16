@@ -73,8 +73,8 @@ if (!defined ('GVERSION')) {
  *
  */
 
-class sanitize {
-
+class sanitize
+{
     private $_post   = array();
     private $_get    = array();
     private $_cookie = array();
@@ -130,6 +130,29 @@ class sanitize {
         }
 
         return $instance;
+    }
+
+    function getRawVars($type)
+    {
+        switch ($type) {
+            case 'post' :
+                return $this->_post;
+                break;
+            case 'get' :
+                return $this->_get;
+                break;
+            case 'request' :
+                return $this->_request;
+                break;
+            case 'env' :
+                return $this->_env;
+                break;
+            case 'cookie' :
+                return $this->_cookie;
+                break;
+            default :
+                return '';
+        }
     }
 
 	/**
@@ -216,13 +239,11 @@ class sanitize {
         switch ( strtoupper($type) ) {
             case 'INT' :
             case 'INTEGER' :
-				preg_match('/-?[0-9]+/', (string) $data, $matches);
-				return @ (int) $matches[0];
+				return @intval($data);
                 break;
             case 'FLOAT' :
             case 'DOUBLE' :
-				preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $data, $matches);
-				return @ (float) $matches[0];
+				return @doubleval($data);
                 break;
             case 'STRICT' :
                 return $this->_applyFilter($data);
@@ -389,9 +410,6 @@ class sanitize {
                     } else {
                         $this->_get[$name] = $value;
                     }
-//                    COM_errorLog('Setting _get['.$name.'] = ' . $value);
-                } else {
-//                    COM_errorLog('_get[' . $name . '] already exists');
                 }
             }
         }

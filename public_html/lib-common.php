@@ -6786,7 +6786,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     }
 
     // if we do not throw the error back to an admin, still log it in the error.log
-    COM_errorLog("$errno - $errstr @ $errfile line $errline", 1);
+//    COM_errorLog("$errno - $errstr @ $errfile line $errline", 1);
 
     header('HTTP/1.1 500 Internal Server Error');
     header('Status: 500 Internal Server Error');
@@ -7070,9 +7070,9 @@ function USES_lib_story() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-story.php';
 }
-function USES_lib_trackbacks() {
+function USES_lib_trackback() {
     global $_CONF;
-    require_once $_CONF['path_system'] . 'lib-trackbacks.php';
+    require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
 function USES_lib_user() {
     global $_CONF;

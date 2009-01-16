@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -35,25 +35,16 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path_system'] . 'lib-admin.php';
+USES_lib_admin();
 
 if (!SEC_inGroup('Root')) {
-    $display = COM_siteHeader ('menu');
-    $display .= COM_startBlock ($LANG27[12], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $LANG27[12];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the log viewer utility.");
-    echo $display;
+    $pageHandle->displayAccessError($LANG27[12],$LANG27[12],'log viewer utility.');
     exit;
 }
 
-$log = isset($_REQUEST['log']) ? COM_applyFilter($_REQUEST['log']) : '';
+$log = $inputHandler->getVar('strict','log','request','');
 
 $retval = '';
-
-$display = COM_siteHeader();
 
 $menu_arr = array (
     array('url' => $_CONF['site_admin_url'],
@@ -94,7 +85,9 @@ $retval .= '&nbsp;&nbsp;&nbsp;&nbsp;';
 $retval .= '<input type="submit" name="clearlog" value="'.$LANG_LOGVIEW['clear'].'"'.XHTML.'>';
 $retval .= '</form>';
 
-if ( isset($_POST['clearlog']) ) {
+$clearlog = $inputHandler->buttonCheck(array('clearlog'), $_POST, '');
+
+if ( $clearlog ) {
     @unlink($_CONF['path_log'] . $log);
     $timestamp = strftime( "%c" );
     $fd = fopen( $_CONF['path_log'] . $log, 'a' );
@@ -111,7 +104,7 @@ if ( isset($_POST['viewlog']) ) {
 $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
 
 $display .= $retval;
-$display .= COM_siteFooter();
-echo $display;
-exit;
+
+$pageHandle->addContent($display);
+$pageHandle->displayPage();
 ?>

@@ -41,7 +41,6 @@ if (!defined ('GVERSION')) {
 // MAIN
 COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
 if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
-
     $pageHandle->setPageTitle($LANG04[112]);
     $pageHandle->displayError('Access denied');
 }

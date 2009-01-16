@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -39,15 +39,7 @@ require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
 if (!SEC_hasRights ('syndication.edit')) {
-    $display .= COM_siteHeader ('menu', $MESSAGE[30])
-        . COM_startBlock ($MESSAGE[30], '',
-                          COM_getBlockTemplate ('_msg_block', 'header'))
-        . $MESSAGE[34]
-        . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-        . COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the content syndication administration screen.");
-    echo $display;
-    exit;
+    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[34],'the content syndication administration screen.');
 }
 
 /**
@@ -132,9 +124,9 @@ function get_articleFeeds()
 
 function listfeeds()
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $pageHandle;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
     $token = SEC_createToken();
@@ -163,7 +155,7 @@ function listfeeds()
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG33[13],
-        $_CONF['layout_url'] . '/images/icons/syndication.' . $_IMAGE_TYPE
+        $pageHandle->getImage('icons/syndication.png')
     );
 
     $text_arr = array(
@@ -196,7 +188,8 @@ function listfeeds()
 */
 function editfeed ($fid = 0, $type = '')
 {
-    global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $MESSAGE;
+    global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $MESSAGE,
+           $pageHandle;
 
     if ($fid > 0) {
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(updated) AS date FROM {$_TABLES['syndication']} WHERE fid = '$fid'");
@@ -223,7 +216,7 @@ function editfeed ($fid = 0, $type = '')
             $A['update_info'] = '';
             $A['date'] = time ();
         } else {
-            return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php');
+            $pageHandle->redirect($_CONF['site_admin_url'] . '/syndication.php');
         }
     }
 
@@ -232,9 +225,6 @@ function editfeed ($fid = 0, $type = '')
     $feed_template = new Template ($_CONF['path_layout'] . 'admin/syndication');
     $feed_template->set_file ('editor', 'feededitor.thtml');
 
-    $feed_template->set_var ( 'xhtml', XHTML );
-    $feed_template->set_var ('site_url', $_CONF['site_url']);
-    $feed_template->set_var ('site_admin_url', $_CONF['site_admin_url']);
     $feed_template->set_var ('layout_url', $_CONF['layout_url']);
 
     $feed_template->set_var ('start_feed_editor', COM_startBlock ($LANG33[24],
@@ -344,7 +334,7 @@ function editfeed ($fid = 0, $type = '')
             $P = DB_fetchArray($result);
             if($P['pi_enabled'] == 0)
             {
-                echo COM_refresh($_CONF['site_admin_url'].'/syndication.php?msg=80');
+                $pageHandle->redirect($_CONF['site_admin_url'].'/syndication.php?msg=80');
                 exit;
             }
         }
@@ -440,11 +430,7 @@ function newfeed ()
 */
 function savefeed ($A)
 {
-    global $_CONF, $_TABLES, $LANG33;
-
-    foreach ($A as $name => $value) {
-        $A[$name] = COM_stripslashes ($value);
-    }
+    global $_CONF, $_TABLES, $LANG33, $pageHandle;
 
     if ($A['is_enabled'] == 'on') {
         $A['is_enabled'] = 1;
@@ -453,38 +439,41 @@ function savefeed ($A)
     }
     if (empty ($A['title']) || empty ($A['description']) ||
             empty ($A['filename'])) {
-        $retval = COM_siteHeader ('menu', $LANG33[38])
-                . COM_startBlock ($LANG33[38], '',
+        $pageHandle->setPageTitle($LANG33[38]);
+
+        $retval = COM_startBlock ($LANG33[38], '',
                         COM_getBlockTemplate ('_msg_block', 'header'))
                 . $LANG33[39]
                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-                . editfeed ($A['fid'], $A['type'])
-                . COM_siteFooter ();
-        return $retval;
+                . editfeed ($A['fid'], $A['type']);
+        $pageHandle->addContent($retval);
+        $pageHandle->displayPage();
     }
 
     $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['syndication']} WHERE filename = '{$A['filename']}' AND (fid <> '{$A['fid']}')");
     $C = DB_fetchArray($result);
     if ($C['count'] > 0) {
-        $retval = COM_siteHeader ('menu', $LANG33[52])
-                . COM_startBlock ($LANG33[52], '',
+        $pageHandle->setPageTitle($LANG33[52]);
+
+        $retval = COM_startBlock ($LANG33[52], '',
                         COM_getBlockTemplate ('_msg_block', 'header'))
                 . $LANG33[51]
                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-                . editfeed ($A['fid'], $A['type'])
-                . COM_siteFooter ();
-        return $retval;
+                . editfeed ($A['fid'], $A['type']);
+        $pageHandle->addContent($retval);
+        $pageHandle->displayPage();
     }
 
     if ($A['limits'] <= 0) {
-        $retval = COM_siteHeader ('menu', $LANG33[38])
-                . COM_startBlock ($LANG33[38], '',
+        $pageHandle->setPageTitle($LANG33[38]);
+
+        $retval = COM_startBlock ($LANG33[38], '',
                         COM_getBlockTemplate ('_msg_block', 'header'))
                 . $LANG33[40]
                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-                . editfeed ($A['fid'], $A['type'])
-                . COM_siteFooter ();
-        return $retval;
+                . editfeed ($A['fid'], $A['type']);
+        $pageHandle->addContent($retval);
+        $pageHandle->displayPage();
     }
     if ($A['limits_in'] == 1) {
         $A['limits'] .= 'h';
@@ -519,7 +508,7 @@ function savefeed ($A)
     }
     SYND_updateFeed ($A['fid']);
     CACHE_remove_instance('story');
-    return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php?msg=58');
+    $pageHandle->redirect ($_CONF['site_admin_url'] . '/syndication.php?msg=58');
 }
 
 /**
@@ -531,7 +520,7 @@ function savefeed ($A)
 */
 function deletefeed ($fid)
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $pageHandle;
 
     if ($fid > 0) {
         $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
@@ -541,11 +530,11 @@ function deletefeed ($fid)
         }
         DB_delete($_TABLES['syndication'], 'fid', $fid);
         CACHE_remove_instance('story');
-        return COM_refresh ($_CONF['site_admin_url']
+        $pageHandle->redirect($_CONF['site_admin_url']
                             . '/syndication.php?msg=59');
     }
 
-    return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php');
+    $pageHandle->redirect($_CONF['site_admin_url'] . '/syndication.php');
 }
 
 
@@ -559,44 +548,43 @@ if ($_CONF['backend'] && isset($_POST['feedenabler']) && SEC_checkToken()) {
     }
     changeFeedStatus($enabledfeeds);
 }
-$mode = '';
-if (isset($_REQUEST['mode'])) {
-    $mode = $_REQUEST['mode'];
-}
+$mode = $inputHandler->getVar('strict','mode','request','');
+$fid  = $inputHandler->getVar('strict','fid','request','');
+$type = $inputHandler->getVar('strict','type',array('request','post'),'');
+$msg  = $inputHandler->getVar('integer','msg','get',0);
+
 if ($mode == 'edit') {
-    if (empty ($_REQUEST['fid'])) {
+    if ($fid == '' ) {
         $display .= newfeed ();
     } else {
-        $display .= COM_siteHeader ('menu', $LANG33[24])
-                 . editfeed (COM_applyFilter($_REQUEST['fid']))
-                 . COM_siteFooter ();
+        $pageHandle->setPageTitle($LANG33[24]);
+        $pageHandle->addContent(editfeed($fid));
     }
 }
 else if (($mode == $LANG33[1]) && !empty ($LANG33[1]))
 {
-    $display .= COM_siteHeader ('menu', $LANG33[24])
-             . editfeed (0, COM_applyFilter($_REQUEST['type']))
-             . COM_siteFooter ();
+    $pageHandle->setPageTitle($LANG33[24]);
+    $pageHandle->addContent(0,$type);
 }
 elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken())
 {
-    $display .= savefeed($_POST);
+    $postVars = $inputHandler->getRawVars('post');
+    $pageHandle->addContent(savefeed($postVars));
 } elseif (($mode == $LANG_ADMIN['delete']) && !empty($LANG_ADMIN['delete']) && SEC_checkToken()) {
-    $fid = 0;
-    if (isset($_POST['fid'])) {
-        $fid = COM_applyFilter($_POST['fid'], true);
+    if ( $fid != '' ) {
+        $pageHandle->deletefeed($fid);
     }
-    $display .= deletefeed($fid);
 }
 else
 {
-    $display .= COM_siteHeader ('menu', $LANG33[10]);
-    if (isset ($_REQUEST['msg'])) {
-        $display .= COM_showMessage (COM_applyFilter($_REQUEST['msg']));
+    $pageHandle->setPageTitle($LANG33[10]);
+    if ( $msg > 0 ) {
+        $pageHandle->addMessage($msg);
     }
-    $display .= listfeeds();
-    $display .= COM_siteFooter ();
+    $pageHandle->addContent(listfeeds());
 }
 
-echo $display;
+$pageHandle->setShowExtraBlocks(false);
+
+$pageHandle->displayPage();
 ?>

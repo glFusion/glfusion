@@ -1506,7 +1506,7 @@ function PLG_collectTags()
 */
 function PLG_replaceTags($content, $plugin = '')
 {
-    global $_CONF, $_TABLES, $LANG32;
+    global $_CONF, $_TABLES, $LANG32,$inputHandler,$pageHandle;
 
     if (isset ($_CONF['disable_autolinks']) && ($_CONF['disable_autolinks'] == 1)) {
         // autolinks are disabled - return $content unchanged
@@ -1585,11 +1585,11 @@ function PLG_replaceTags($content, $plugin = '')
                 $url = '';
                 $linktext = $autotag['parm2'];
                 if ($autotag['tag'] == 'story') {
-                    $autotag['parm1'] = COM_applyFilter ($autotag['parm1']);
-                    $url = COM_buildUrl ($_CONF['site_url']
+                    $autotag['parm1'] = $inputHandler->filterVar('strict',$autotag['parm1'],'');
+                    $url = $pageHandle->buildUrl ($_CONF['site_url']
                          . '/article.php?story=' . $autotag['parm1']);
                     if (empty ($linktext)) {
-                        $linktext = stripslashes (DB_getItem ($_TABLES['stories'], 'title', "sid = '{$autotag['parm1']}'"));
+                        $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '{$autotag['parm1']}'");
                     }
                 }
 
@@ -2352,7 +2352,7 @@ function PLG_wsEnabled($type)
 */
 function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
 {
-    global $_CONF;
+    global $_CONF, $pageHandle;
 
     if (isset($message) && (!empty($message) || is_numeric($message))) {
         $msg = "msg=$message";
@@ -2414,7 +2414,7 @@ function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
         break;
     }
 
-    return COM_refresh($url);
+    $pageHandle->redirect($url);
 }
 
 ?>

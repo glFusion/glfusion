@@ -1414,7 +1414,6 @@ class Template
         // Callbacks for replace_extended
         function parse_extended_callback($matches)
         {
-            var_dump($matches);
             global $TEMPLATE_OPTIONS;
             if ($matches[1] == 'set') {
                 $cond = $matches[3];
@@ -1438,7 +1437,7 @@ class Template
 
             $cond = $this->replace_vars($cond,true);
             $cond = $this->replace_lang($cond,true);
-var_dump($cond);
+
             return '<?php ' . $prefix . $cond . $postfix . ' ?>';
         }
 
@@ -1730,7 +1729,7 @@ var_dump($cond);
         $this->log($method, $var . ob_get_clean());
     }
   }
-  
+
 } // end class
 
 /******************************************************************************

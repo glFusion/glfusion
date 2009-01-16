@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2007-2008 by the following authors:                        |
@@ -34,10 +37,9 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
-// $conf_group = array_key_exists('conf_group', $_POST) ? $_POST['conf_group'] : 'Core';
 $conf_group = $inputHandler->getVar('strict','conf_group','post','Core');
 
-$config =& config::get_instance();
+$config = config::get_instance();
 
 /**
 * Helper function: Provide language dropdown
@@ -846,7 +848,8 @@ if (array_key_exists('form_submit', $_POST) && $tokenstate) {
         {
             if( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] ))
             {
-                $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
+                $theme = $inputHandler->getVar('filename',$_CONF['cookie_theme'],'cookie','');
+//                $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
                 if( is_dir( $_CONF['path_themes'] . $theme ))
                 {
                     $_USER['theme'] = $theme;
