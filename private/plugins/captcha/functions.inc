@@ -274,9 +274,13 @@ function CAPTCHA_getHTML($csid, $type='general' ) {
             $T->set_file('page', 'captcha_contact.thtml');
             break;
         case 'emailstory' :
+            $T->set_file('page', 'captcha.thtml');
+            break;
         case 'links' :
+            $T->set_file('page', 'captcha_links.thtml');
+            break;
         case 'calendar' :
-            $T->set_file('page', 'captcha_emailstory.thtml');
+            $T->set_file('page', 'captcha_calendar.thtml');
             break;
         case 'forum' :
             $T->set_file('page', 'captcha_forum.thtml');
