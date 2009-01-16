@@ -34,6 +34,11 @@
 
 require_once '../lib-common.php';
 
+if (!in_array('filemgmt', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 if (isset ($_GET['lid'])) {
     echo COM_refresh ($_CONF['site_url'] . '/filemgmt/index.php?id=' . $_GET['lid']);
 } else {
