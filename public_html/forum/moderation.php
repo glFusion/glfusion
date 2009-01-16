@@ -42,6 +42,11 @@ require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 // Display Common headers
 gf_siteHeader();
 

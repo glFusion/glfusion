@@ -41,6 +41,11 @@ require_once '../lib-common.php'; // Path to your lib-common.php
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
 $id    = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
 $forum = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;

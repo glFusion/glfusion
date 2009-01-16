@@ -41,8 +41,8 @@
 require_once '../lib-common.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
-if ( !function_exists('plugin_getmenuitems_forum') ) {
-    header("HTTP/1.0 404 Not Found");
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
     exit;
 }
 
@@ -193,6 +193,7 @@ if ($op == "last10posts") {
     }
 
     $membercount   = DB_numRows($memberlistsql);
+    $membercount--;
     $numpages = ceil($membercount / $show);
     $offset = ($page - 1) * $show;
     $base_url = "{$_CONF['site_url']}/forum/memberlist.php?show={$show}&amp;order={$order}&amp;prevorder={$prevorder}";
