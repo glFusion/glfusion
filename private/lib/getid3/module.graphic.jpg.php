@@ -32,7 +32,7 @@ class getid3_jpg
 
 			$ThisFileInfo['video']['resolution_x'] = $width;
 			$ThisFileInfo['video']['resolution_y'] = $height;
-
+/* --- Disable EXIF processing - not really needed
 			if (version_compare(phpversion(), '4.2.0', '>=')) {
 
 				if (function_exists('exif_read_data')) {
@@ -57,7 +57,7 @@ class getid3_jpg
 				$ThisFileInfo['warning'][] = 'EXIF parsing only available in PHP v4.2.0 and higher compiled with --enable-exif (or php_exif.dll enabled for Windows). You are using PHP v'.phpversion();
 
 			}
-
+-------- */
 			return true;
 
 		}
