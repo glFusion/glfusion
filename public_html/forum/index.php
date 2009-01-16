@@ -414,6 +414,7 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
     $retval = '';
 
     $header_arr = array(      # display 'text' and use table field 'field'
+                  array('text' => '#',                     'field' => 'bookmark', 'sort' => false),
                   array('text' => $LANG_GF01['FORUM'],     'field' => 'forum_name', 'sort' => true),
                   array('text' => $LANG_GF01['TOPIC'],     'field' => 'subject', 'sort' => true),
                   array('text' => $LANG_GF01['AUTHOR'],    'field' => 'name', 'sort' => true),
@@ -424,6 +425,11 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
     if ($CONF_FORUM['usermenu'] == 'navbar') {
         echo forumNavbarMenu($LANG_GF01['BOOKMARKS']);
     }
+
+    $retval .= '<script type="text/javascript">' . LB;
+    $retval .= 'var site_url = \''.$_CONF['site_url'].'\';' . LB;
+    $retval .= '</script>' . LB;
+    $retval .= '<script type="text/javascript" src="'.$_CONF['site_url'].'/forum/javascript/ajax_bookmark.js"></script>' . LB;
 
     $retval .= COM_startBlock($LANG_GF01['BOOKMARKS'], '',
                               COM_getBlockTemplate('_admin_block', 'header'));
