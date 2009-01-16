@@ -60,7 +60,7 @@ $archivetid = DB_getItem ($_TABLES['topics'], 'tid', "archive_flag=1");
 // see: http://wiki.mozilla.org/Microsummaries
 if( $microsummary )
 {
-    $sql = " (date <= NOW()) AND (draft_flag = 0)";
+    $sql = " (UNIX_TIMESTAMP(s.date) <= NOW()) AND (draft_flag <> 1)";
 
     if (empty ($topic)) {
         $sql .= COM_getLangSQL ('tid', 'AND', 's');
@@ -70,7 +70,7 @@ if( $microsummary )
     if (!empty($topic)) {
         $sql .= " AND s.tid = '$topic' ";
     } elseif (!$newstories) {
-        $sql .= " AND frontpage = 1 ";
+        $sql .= " AND frontpage <> 0 ";
     }
 
     if ($topic != $archivetid) {
@@ -79,17 +79,14 @@ if( $microsummary )
 
     $sql .= COM_getPermSQL ('AND', 0, 2, 's');
     $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
-    $msql = array();
-    $msql['mysql']="SELECT STRAIGHT_JOIN s.title "
-         . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-         . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-         . $sql . "ORDER BY featured DESC, date DESC LIMIT 0, 1";
 
-    $msql['mssql']="SELECT STRAIGHT_JOIN s.title "
-         . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-         . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-         . $sql . "ORDER BY featured DESC, date DESC LIMIT 0, 1";
-    $result = DB_query ($msql);
+    $msql = "SELECT s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
+            . "UNIX_TIMESTAMP(s.expire) as expireunix, u.uid, u.username, "
+            . "u.fullname, u.photo, t.topic, t.imageurl "
+            . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u "
+            . "ON s.uid=u.uid LEFT JOIN  {$_TABLES['topics']} AS t ON "
+            . "s.tid=t.tid WHERE "
+            . $sql . " ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
 
     if ( $A = DB_fetchArray( $result ) ) {
         $pagetitle = $_CONF['microsummary_short'].$A['title'];
