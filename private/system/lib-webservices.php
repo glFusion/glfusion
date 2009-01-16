@@ -958,6 +958,8 @@ function WS_write($text)
 {
     global $WS_TEXT;
 
+    $text = str_replace('&nbsp;','&#160;',$text);
+
     $WS_TEXT .= $text;
 
 }
