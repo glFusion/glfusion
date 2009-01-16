@@ -1361,9 +1361,9 @@ class Template
   {
     if (strpos($tmplt, '!}') !== false || strpos($tmplt, '$}') !== false) {
         $tmplt = preg_replace_callback(
-                      Array('/\{!(if|elseif|while|echo|global|) (([^\\\']|\\\\|\\\')+?) !\}/',
-                            '/\{!(set) ([-\w\d_\[\]]+) (([^\\\']|\\\\|\\\')+?) !\}/',       // sets a variable
-                            '/\{\($LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\] (([^\\\']|\\\\|\\\')+?) \$\}/',       // Substitutable language independence
+                      Array('/\{\!\!(if|elseif|while|echo|global|) (([^\\\']|\\\\|\\\')+?) \!\!\}/',
+                            '/\{\!\!(set) ([-\w\d_\[\]]+) (([^\\\']|\\\\|\\\')+?) \!\!\}/',       // sets a variable
+                            '/\{(\$LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\] (([^\\\']|\\\\|\\\')+?) \$\}/',       // Substitutable language independence
                            ),
                       Array($this, 'parse_extended_callback'),
                       $tmplt);
