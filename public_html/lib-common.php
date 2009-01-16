@@ -3537,9 +3537,8 @@ function COM_olderStuff()
             {
                 if( $day != 'noday' )
                 {
-                    $daylist = COM_makeList( $oldnews, 'list-older-stories' );
-                    $daylist = preg_replace( "/(\015\012)|(\015)|(\012)/",
-                                             '', $daylist );
+                   $daylist = COM_makeList($oldnews, 'list-older-stories');
+                    $daylist = str_replace(array("\015", "\012"), '', $daylist);
                     $string .= $daylist . '<br' . XHTML . '>';
                 }
 
@@ -3559,7 +3558,7 @@ function COM_olderStuff()
         if( !empty( $oldnews ))
         {
             $daylist = COM_makeList( $oldnews, 'list-older-stories' );
-            $daylist = preg_replace( "/(\015\012)|(\015)|(\012)/", '', $daylist );
+            $daylist = str_replace(array("\015", "\012"), '', $daylist);
             $string .= $daylist;
             $string = addslashes( $string );
 
@@ -4013,7 +4012,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 
         // build a list
         $content = COM_makeList($articles, 'list-feed');
-        $content = preg_replace("/(\015\012)|(\015)|(\012)/", '', $content);
+        $content = str_replace(array("\015", "\012"), '', $content);
 
         if (strlen($content) > 65000) {
             $content = $LANG21[68];
@@ -7090,6 +7089,43 @@ function CMT_updateCommentcodes() {
             CACHE_remove_instance('story_');
         }
     }
+}
+
+/**
+ * Display 404 - Not found message
+ *
+ */
+function COM_404()
+{
+    /*
+     * Allow for custom 404 handler
+     */
+
+    if ( function_exists('CUSTOM_404') ) {
+        return CUSTOM_404();
+    }
+
+    if (isset ($_SERVER['SCRIPT_URI'])) {
+        $url = strip_tags ($_SERVER['SCRIPT_URI']);
+    } else {
+        $pos = strpos ($_SERVER['REQUEST_URI'], '?');
+        if ($pos === false) {
+            $request = $_SERVER['REQUEST_URI'];
+        } else {
+            $request = substr ($_SERVER['REQUEST_URI'], 0, $pos);
+        }
+        $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
+    }
+    header("HTTP/1.0 404 Not Found");
+    echo '
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL ' . $url . ' was not found on this server.</p>
+</body></html>';
+exit;
 }
 
 
