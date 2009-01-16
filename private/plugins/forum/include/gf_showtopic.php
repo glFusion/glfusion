@@ -48,7 +48,7 @@ if( !function_exists( 'str_ireplace' ))
     PHP_Compat::loadFunction( 'str_ireplace' );
 }
 
-include ($_CONF['path'] . 'system/lib-user.php');
+USES_lib_user();
 
 function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     global $CONF_FORUM,$_CONF,$_TABLES,$_USER,$LANG_GF01,$LANG_GF02;
