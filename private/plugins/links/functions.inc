@@ -794,13 +794,11 @@ function plugin_savesubmission_links($A)
                 !empty ($A['url'])) {
         $retval = plugin_save_submit_links ($A);
     } else {
-        $retval .= COM_siteHeader()
-            . COM_startBlock ($LANG12[22], '',
+        $retval = COM_startBlock ($LANG12[22], '',
                            COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[23]
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . submissionform('links')
-            . COM_siteFooter ();
+            . plugin_submit_links($A);
     }
 
     return $retval;
@@ -812,7 +810,7 @@ function plugin_savesubmission_links($A)
 * @return   string  HTML for the link submission form
 *
 */
-function plugin_submit_links()
+function plugin_submit_links($A = array())
 {
     global $_CONF, $LANG_LINKS_SUBMIT, $LANG12;
 
@@ -835,6 +833,19 @@ function plugin_submit_links()
     $linkform->set_var('lang_submit', $LANG12[8]);
     $linkform->set_var('max_url_length', 255);
     $linkform->set_var('xhtml', XHTML);
+
+    if ( isset($A['title']) ) {
+        $linkform->set_var('title',$A['title']);
+    }
+    if ( isset($A['description'] ) ) {
+        $linkform->set_var('description',$A['description']);
+    }
+    if ( isset($A['url']) ) {
+        $linkform->set_var('url',$A['url']);
+    } else {
+        $linkform->set_var('url','http://');
+    }
+
     PLG_templateSetVars ('links', $linkform);
     $linkform->parse('theform', 'linkform');
     $retval .= $linkform->finish($linkform->get_var('theform'));
@@ -855,17 +866,16 @@ function plugin_save_submit_links($A)
     global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG12;
 
     $retval = '';
-
     /* check CAPTCHA */
     $msg = PLG_itemPreSave ('links', $A);
     if (!empty ($msg)) {
-        $retval = COM_siteHeader();
-        $retval .= COM_startBlock($LANG12[22], '',
+    //    $retval = COM_siteHeader();
+        $retval = COM_startBlock($LANG12[22], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
                 . $msg
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
-                . plugin_submit_links()
-                . COM_siteFooter();
+                . plugin_submit_links($A);
+//                . COM_siteFooter();
 
         return $retval;
     }
@@ -897,7 +907,7 @@ function plugin_save_submit_links($A)
                        COM_getBlockTemplate('_msg_block', 'header'))
                 . $LANG12[23]
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
-                . submissionform('links')
+                . plugin_submit_links($A)
                 . COM_siteFooter();
 
         return $retval;
@@ -926,7 +936,7 @@ function plugin_save_submit_links($A)
         }
 
         $retval = COM_refresh($_CONF['site_url']
-                              . '/index.php?msg=1&amp;plugin=links');
+                              . '/links/index.php?msg=1&amp;plugin=links');
 
     } else { // add link directly
 
@@ -948,7 +958,7 @@ function plugin_save_submit_links($A)
         COM_rdfUpToDateCheck('links', $A['cid'], $A['lid']);
         CACHE_remove_instance('whatsnew');
         $retval = COM_refresh($_CONF['site_url']
-                              . '/index.php?msg=4&amp;plugin=links');
+                              . '/links/index.php?msg=4&amp;plugin=links');
     }
 
     return $retval;

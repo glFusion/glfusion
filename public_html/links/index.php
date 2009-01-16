@@ -58,7 +58,7 @@
 require_once '../lib-common.php';
 
 if (!in_array('links', $_PLUGINS)) {
-    echo COM_refresh($_CONF['site_url'] . '/index.php');
+    COM_404();
     exit;
 }
 
@@ -396,6 +396,64 @@ if (isset ($_REQUEST['mode'])) {
 }
 
 $message = array();
+
+if ( $mode == 'submit' ) {
+    if (COM_isAnonUser() &&
+        (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
+        echo COM_refresh ($_CONF['site_url'] . '/links/index.php');
+        exit;
+    }
+
+    if (SEC_hasRights ("links.edit") ||
+        SEC_hasRights ("links.admin"))  {
+        echo COM_refresh ($_CONF['site_admin_url']
+                . "/plugins/links/index.php?mode=edit");
+        exit;
+    }
+
+    $slerror = '';
+    COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
+    $last = COM_checkSpeedlimit ('submit');
+    if ($last > 0) {
+        $slerror .= COM_startBlock ($LANG12[26], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'))
+            . $LANG12[30]
+            . $last
+            . $LANG12[31]
+            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    }
+
+    echo COM_siteHeader();
+    if ( $slerror != '' ) {
+        echo $slerror;
+    } else {
+        echo plugin_submit_links();
+    }
+    echo COM_siteFooter();
+    exit;
+}
+
+if ( $mode == $LANG12[8] && !empty($LANG12[8]) ) {
+    $A = array();
+    if ( isset($_POST['url']) ) {
+        $A['url'] = COM_stripslashes($_POST['url']);
+    }
+    if ( isset($_POST['title']) ) {
+        $A['title'] = COM_stripslashes($_POST['title']);
+    }
+    if ( isset($_POST['description']) ) {
+        $A['description'] = COM_stripslashes($_POST['description']);
+    }
+    if ( isset($_POST['categorydd']) ) {
+        $A['categorydd'] = $_POST['categorydd'];
+    }
+    echo COM_siteHeader();
+    echo plugin_savesubmission_links($A);
+    echo COM_siteFooter();
+    exit;
+}
+
+
 if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
     if (isset ($_GET['lid'])) {
         $lid = COM_applyFilter($_GET['lid']);
