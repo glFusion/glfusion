@@ -45,6 +45,11 @@
 
 require_once '../lib-common.php';
 
+if (!in_array('mediagallery', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 header("Cache-Control: no-cache");
 header("Pragma: nocache");
 

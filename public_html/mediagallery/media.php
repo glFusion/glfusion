@@ -35,17 +35,10 @@ require_once '../lib-common.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-media.php';
 
-if (!function_exists('MG_usage')) {
-    // The plugin is disabled
-    $display = COM_siteHeader();
-    $display .= COM_startBlock('Plugin disabled');
-    $display .= '<br />The Media Gallery plugin is currently disabled.';
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter(true);
-    echo $display;
+if (!in_array('mediagallery', $_PLUGINS)) {
+    COM_404();
     exit;
 }
-
 
 if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1 )  {
     $display = MG_siteHeader();

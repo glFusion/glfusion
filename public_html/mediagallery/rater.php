@@ -44,6 +44,11 @@
 
 require_once '../lib-common.php';
 
+if (!in_array('mediagallery', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 //getting the values
 $vote_sent  = preg_replace("/[^0-9]/","",$_REQUEST['j']);
 $id_sent    = preg_replace("/[^0-9a-zA-Z]/","",$_REQUEST['q']);

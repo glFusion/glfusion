@@ -35,6 +35,12 @@
 // NOTES:  Need to validate login each time, we can timeout you know.
 
 require_once '../lib-common.php';
+
+if (!in_array('mediagallery', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 require_once $_CONF['path_system']  . 'lib-user.php';
 require_once $_CONF['path_system']  . 'lib-security.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
