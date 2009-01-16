@@ -1022,7 +1022,7 @@ function importusers()
 
     $upload = new upload ();
     $upload->setPath ($_CONF['path_data']);
-    $upload->setAllowedMimeTypes (array ('text/plain' => '.txt'));
+    $upload->setAllowedMimeTypes (array ('text/plain' => '.txt','application/octet-stream' => '.txt'));
     $upload->setFileNames ('user_import_file.txt');
     $upload->setFieldName('importfile');
     if ($upload->uploadFiles()) {
