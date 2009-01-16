@@ -36,10 +36,9 @@
 require_once '../lib-common.php';
 
 if (!in_array('staticpages', $_PLUGINS)) {
-    echo COM_refresh($_CONF['site_url'] . '/index.php');
+    COM_404();
     exit;
 }
-
 
 // MAIN
 
