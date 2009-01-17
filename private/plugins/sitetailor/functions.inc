@@ -290,6 +290,54 @@ function plugin_upgrade_sitetailor() {
     return $rc;
 }
 
+function plugin_autotags_sitetailor($op,$content='',$autotag='') {
+    global $_CONF;
+
+    if ($op == 'tagname' ) {
+        return array('hmenu','vmenu');
+    } else if ($op == 'parse') {
+        /*
+         * Process the auto tag to remove any embedded &nbsp;
+         */
+        $tag = str_replace('&nbsp;',' ',$autotag['tagstr']);
+        $parms = explode (' ', $tag);
+        // Extra test to see if autotag was entered with a space
+        // after the module name
+        if (substr ($parms[0], -1) == ':') {
+            $startpos = strlen ($parms[0]) + strlen ($parms[1]) + 2;
+            $label = str_replace (']', '', substr ($tag, $startpos));
+            $tagid = $parms[1];
+        } else {
+            $label = str_replace (']', '',
+                     substr ($tag, strlen ($parms[0]) + 1));
+            $parms = explode (':', $parms[0]);
+            if (count ($parms) > 2) {
+                // whoops, there was a ':' in the tag id ...
+                array_shift ($parms);
+                $tagid = implode (':', $parms);
+            } else {
+                $tagid = $parms[1];
+            }
+        }
+        $autotag['parm1'] = str_replace(']','',$tagid);
+        $autotag['parm2'] = $label;
+        /*
+         * end of tag replacement
+         */
+        switch( $autotag['tag'] ) {
+            case 'hmenu' :
+                $menu = st_getMenu($autotag['parm1'],"gl_moomenu","gl_moomenu",'',"parent");
+                $content = str_replace($autotag['tagstr'],$menu,$content);
+                break;
+            case 'vmenu' :
+                $menu = phpblock_getMenu('',$autotag['parm1']);
+                $content = str_replace($autotag['tagstr'],$menu,$content);
+                break;
+        }
+        return $content;  // not doing anything right now....
+    }
+}
+
 
 /**
 * Removes the data structures for this plugin from the glFusion database.
