@@ -5,6 +5,13 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Comments always show username, regarless of show_fullname configuration
+  setting - Port from Geeklog (Mark)
+        private/system/lib-comment.php
+
+- Do not filter non-HTML email messages (Mark)
+        public_html/lib-common.php
+
 - Fixed bug where [imageX] did not allow more than 1 image per story (Mark)
         private/system/lib-story.php
 

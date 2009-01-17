@@ -17,7 +17,7 @@
 // |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
 // |          Dirk Haun         - dirk AT haun-online DOT de                  |
 // |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net    |
-// |          Jared Wenerd      - wenerd87 AT gmail DOT com                    |
+// |          Jared Wenerd      - wenerd87 AT gmail DOT com                   |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -339,7 +339,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $template->set_var( 'end_author_anchortag', '</a>' );
             $template->set_var( 'author_link',
                 COM_createLink(
-                    $A['username'],
+                    $fullname,
                     $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $A['uid']
                 )
             );
@@ -686,7 +686,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 */
 function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS;
 
     $retval = '';
 
@@ -855,7 +855,11 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template->set_var('site_admin_url', $_CONF['site_admin_url']);
             $comment_template->set_var('layout_url', $_CONF['layout_url']);
             $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
-            $comment_template->set_var('lang_username', $LANG03[5]);
+            if ($_CONF['show_fullname'] == 1) {
+                $comment_template->set_var('lang_username', $LANG_ACCESS['name']);
+            } else {
+                $comment_template->set_var('lang_username', $LANG03[5]);
+            }
             $comment_template->set_var('sid', $sid);
             $comment_template->set_var('pid', $pid);
             $comment_template->set_var('type', $type);
@@ -872,9 +876,10 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             if (!empty($_USER['username'])) {
             	$comment_template->set_var('CSRF_TOKEN', SEC_createToken());
                 $comment_template->set_var('uid', $_USER['uid']);
-                $comment_template->set_var('username', $_USER['username']);
-                $comment_template->set_var('action_url', $_CONF['site_url'] . '/users.php?mode=logout');
-                $comment_template->set_var('lang_logoutorcreateaccount', $LANG03[03]);
+                $name = COM_getDisplayName($_USER['uid'], $_USER['username'],$_USER['fullname']);
+                $comment_template->set_var('username', $name);
+                $comment_template->set_var('action_url',$_CONF['site_url'] . '/users.php?mode=logout');
+                $comment_template->set_var('lang_logoutorcreateaccount',$LANG03[03]);
             } else {
                 //Anonymous user
                 $comment_template->set_var('uid', 1);
@@ -890,7 +895,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $comment_template->set_var('username', $usernameblock);
 
                 $comment_template->set_var('action_url', $_CONF['site_url'] . '/users.php?mode=new');
-                $comment_template->set_var('lang_logoutorcreateaccount', $LANG03[04]);
+                $comment_template->set_var('lang_logoutorcreateaccount',$LANG03[04]);
             }
 
             if ($postmode == 'html') {

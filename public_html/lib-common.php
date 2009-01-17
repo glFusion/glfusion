@@ -3454,9 +3454,12 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     $mail->IsHTML($html);
     if ( $html ) {
         $mail->Body = COM_filterHTML($message);
-    } else {
+    }
+/* - no need to filter non-HTML messages
+     else {
         $mail->Body = strip_tags($message);
     }
+-- */
     $mail->Subject = $subject;
 
     if (is_array($from) && isset($from[0]) && $from[0] != '' ) {
