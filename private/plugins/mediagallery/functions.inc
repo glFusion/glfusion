@@ -2234,7 +2234,7 @@ function plugin_getuseroption_mediagallery() {
 
     $title = $LANG_MG01['user_prefs'];
 
-    if ( $_MG_CONF['link_to_member_album'] == 1 && !COM_isAnonUser() ) {
+    if ( $_MG_CONF['member_albums'] == 1 && $_MG_CONF['link_to_member_album'] == 1 && !COM_isAnonUser() ) {
         $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $_USER['uid'] . " AND album_parent=" . $_MG_CONF['member_album_root'] . " LIMIT 1";
         $result = DB_query($sql);
         $numRows = DB_numRows($result);
