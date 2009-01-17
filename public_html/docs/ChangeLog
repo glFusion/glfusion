@@ -5,20 +5,321 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
-- Incorrect function used when extracting links (Mark)
-        private/system/lib-story.php
+- Removed extra : (colon) from template (already in language file) (Mark)
+        public_html/layout/nouveau/profiles/contactuserform_advanced.thtml
 
-- Forum: Fixed issue with usernames containing special characters (Mark)
-        public_html/forum/createtopic.php
+- Media Gallery - removed references to non-existent usage.html in
+  Media Gallery (Mark)
+       private/plugins/mediagallery/templates/administration.thtml
 
-- Handle UTF-8 encoded configuration settings better (Mark)
-        private/system/classes/config.class.php
+- Fixed error in emailglfusionstories that would include banned and non-active
+  users - Patch by cchiapusio (Mark)
+        public_html/lib-common.php
 
-- SiteTailor - Fixed issue where color was not properly used (Eric)
-        private/plugins/sitetailor/templates/gl_vertical-cascading.thtml
+- SiteTailor - Implemented the hmenu and vmenu auto tags (Mark)
+        private/plugins/sitetailor/functions.inc
 
-- Forum: Implement check to see if plugin is disabled and return
-  404 error (Mark)
+- Upgraded FCKeditor to latest version
+        private/system/lib-comment.php
+        public_html/profiles.php
+        public_html/submit.php
+
+        public_html/javascript/advanced_editor.js
+        public_html/javascript/storyeditor_fckeditor.js
+
+        public_html/fckeditor/_documentation.html
+        public_html/fckeditor/_upgrade.html
+        public_html/fckeditor/_whatsnew.html
+        public_html/fckeditor/_whatsnew_history.html
+        public_html/fckeditor/editor/_source/classes/fckcontextmenu.js
+        public_html/fckeditor/editor/_source/classes/fckdataprocessor.js
+        public_html/fckeditor/editor/_source/classes/fckdocumentfragment_gecko.js
+        public_html/fckeditor/editor/_source/classes/fckdocumentfragment_ie.js
+        public_html/fckeditor/editor/_source/classes/fckdomrange.js
+        public_html/fckeditor/editor/_source/classes/fckdomrange_gecko.js
+        public_html/fckeditor/editor/_source/classes/fckdomrange_ie.js
+        public_html/fckeditor/editor/_source/classes/fckdomrangeiterator.js
+        public_html/fckeditor/editor/_source/classes/fckeditingarea.js
+        public_html/fckeditor/editor/_source/classes/fckelementpath.js
+        public_html/fckeditor/editor/_source/classes/fckenterkey.js
+        public_html/fckeditor/editor/_source/classes/fckevents.js
+        public_html/fckeditor/editor/_source/classes/fckhtmliterator.js
+        public_html/fckeditor/editor/_source/classes/fckicon.js
+        public_html/fckeditor/editor/_source/classes/fckiecleanup.js
+        public_html/fckeditor/editor/_source/classes/fckimagepreloader.js
+        public_html/fckeditor/editor/_source/classes/fckkeystrokehandler.js
+        public_html/fckeditor/editor/_source/classes/fckmenublock.js
+        public_html/fckeditor/editor/_source/classes/fckmenublockpanel.js
+        public_html/fckeditor/editor/_source/classes/fckmenuitem.js
+        public_html/fckeditor/editor/_source/classes/fckpanel.js
+        public_html/fckeditor/editor/_source/classes/fckplugin.js
+        public_html/fckeditor/editor/_source/classes/fckspecialcombo.js
+        public_html/fckeditor/editor/_source/classes/fckstyle.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbar.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarbreak_gecko.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarbreak_ie.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarbutton.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarbuttonui.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarfontformatcombo.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarfontscombo.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarfontsizecombo.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarpanelbutton.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarspecialcombo.js
+        public_html/fckeditor/editor/_source/classes/fcktoolbarstylecombo.js
+        public_html/fckeditor/editor/_source/classes/fckw3crange.js
+        public_html/fckeditor/editor/_source/classes/fckxml.js
+        public_html/fckeditor/editor/_source/classes/fckxml_gecko.js
+        public_html/fckeditor/editor/_source/classes/fckxml_ie.js
+        public_html/fckeditor/editor/_source/commandclasses/fck_othercommands.js
+        public_html/fckeditor/editor/_source/commandclasses/fckblockquotecommand.js
+        public_html/fckeditor/editor/_source/commandclasses/fckcorestylecommand.js
+        public_html/fckeditor/editor/_source/commandclasses/fckfitwindow.js
+        public_html/fckeditor/editor/_source/commandclasses/fckindentcommands.js
+        public_html/fckeditor/editor/_source/commandclasses/fckjustifycommands.js
+        public_html/fckeditor/editor/_source/commandclasses/fcklistcommands.js
+        public_html/fckeditor/editor/_source/commandclasses/fcknamedcommand.js
+        public_html/fckeditor/editor/_source/commandclasses/fckpasteplaintextcommand.js
+        public_html/fckeditor/editor/_source/commandclasses/fckpastewordcommand.js
+        public_html/fckeditor/editor/_source/commandclasses/fckremoveformatcommand.js
+        public_html/fckeditor/editor/_source/commandclasses/fckshowblocks.js
+        public_html/fckeditor/editor/_source/commandclasses/fckspellcheckcommand_gecko.js
+        public_html/fckeditor/editor/_source/commandclasses/fckspellcheckcommand_ie.js
+        public_html/fckeditor/editor/_source/commandclasses/fckstylecommand.js
+        public_html/fckeditor/editor/_source/commandclasses/fcktablecommand.js
+        public_html/fckeditor/editor/_source/commandclasses/fcktextcolorcommand.js
+        public_html/fckeditor/editor/_source/fckconstants.js
+        public_html/fckeditor/editor/_source/fckeditorapi.js
+        public_html/fckeditor/editor/_source/fckjscoreextensions.js
+        public_html/fckeditor/editor/_source/fckscriptloader.js
+        public_html/fckeditor/editor/_source/internals/fck.js
+        public_html/fckeditor/editor/_source/internals/fck_contextmenu.js
+        public_html/fckeditor/editor/_source/internals/fck_gecko.js
+        public_html/fckeditor/editor/_source/internals/fck_ie.js
+        public_html/fckeditor/editor/_source/internals/fckbrowserinfo.js
+        public_html/fckeditor/editor/_source/internals/fckcodeformatter.js
+        public_html/fckeditor/editor/_source/internals/fckcommands.js
+        public_html/fckeditor/editor/_source/internals/fckconfig.js
+        public_html/fckeditor/editor/_source/internals/fckdebug.js
+        public_html/fckeditor/editor/_source/internals/fckdebug_empty.js
+        public_html/fckeditor/editor/_source/internals/fckdialog.js
+        public_html/fckeditor/editor/_source/internals/fckdocumentprocessor.js
+        public_html/fckeditor/editor/_source/internals/fckdomtools.js
+        public_html/fckeditor/editor/_source/internals/fcklanguagemanager.js
+        public_html/fckeditor/editor/_source/internals/fcklisthandler.js
+        public_html/fckeditor/editor/_source/internals/fcklistslib.js
+        public_html/fckeditor/editor/_source/internals/fckplugins.js
+        public_html/fckeditor/editor/_source/internals/fckregexlib.js
+        public_html/fckeditor/editor/_source/internals/fckselection.js
+        public_html/fckeditor/editor/_source/internals/fckselection_gecko.js
+        public_html/fckeditor/editor/_source/internals/fckselection_ie.js
+        public_html/fckeditor/editor/_source/internals/fckstyles.js
+        public_html/fckeditor/editor/_source/internals/fcktablehandler.js
+        public_html/fckeditor/editor/_source/internals/fcktablehandler_gecko.js
+        public_html/fckeditor/editor/_source/internals/fcktablehandler_ie.js
+        public_html/fckeditor/editor/_source/internals/fcktoolbaritems.js
+        public_html/fckeditor/editor/_source/internals/fcktoolbarset.js
+        public_html/fckeditor/editor/_source/internals/fcktools.js
+        public_html/fckeditor/editor/_source/internals/fcktools_gecko.js
+        public_html/fckeditor/editor/_source/internals/fcktools_ie.js
+        public_html/fckeditor/editor/_source/internals/fckundo.js
+        public_html/fckeditor/editor/_source/internals/fckurlparams.js
+        public_html/fckeditor/editor/_source/internals/fckxhtml.js
+        public_html/fckeditor/editor/_source/internals/fckxhtml_gecko.js
+        public_html/fckeditor/editor/_source/internals/fckxhtml_ie.js
+        public_html/fckeditor/editor/_source/internals/fckxhtmlentities.js
+        public_html/fckeditor/editor/css/fck_editorarea.css
+        public_html/fckeditor/editor/css/fck_internal.css
+        public_html/fckeditor/editor/css/fck_showtableborders_gecko.css
+        public_html/fckeditor/editor/dialog/common/fck_dialog_common.css
+        public_html/fckeditor/editor/dialog/common/fck_dialog_common.js
+        public_html/fckeditor/editor/dialog/fck_about.html
+        public_html/fckeditor/editor/dialog/fck_anchor.html
+        public_html/fckeditor/editor/dialog/fck_button.html
+        public_html/fckeditor/editor/dialog/fck_checkbox.html
+        public_html/fckeditor/editor/dialog/fck_colorselector.html
+        public_html/fckeditor/editor/dialog/fck_div.html
+        public_html/fckeditor/editor/dialog/fck_docprops.html
+        public_html/fckeditor/editor/dialog/fck_docprops/fck_document_preview.html
+        public_html/fckeditor/editor/dialog/fck_flash.html
+        public_html/fckeditor/editor/dialog/fck_flash/fck_flash.js
+        public_html/fckeditor/editor/dialog/fck_flash/fck_flash_preview.html
+        public_html/fckeditor/editor/dialog/fck_form.html
+        public_html/fckeditor/editor/dialog/fck_hiddenfield.html
+        public_html/fckeditor/editor/dialog/fck_image.html
+        public_html/fckeditor/editor/dialog/fck_image/fck_image.js
+        public_html/fckeditor/editor/dialog/fck_image/fck_image_preview.html
+        public_html/fckeditor/editor/dialog/fck_link.html
+        public_html/fckeditor/editor/dialog/fck_link/fck_link.js
+        public_html/fckeditor/editor/dialog/fck_listprop.html
+        public_html/fckeditor/editor/dialog/fck_paste.html
+        public_html/fckeditor/editor/dialog/fck_radiobutton.html
+        public_html/fckeditor/editor/dialog/fck_replace.html
+        public_html/fckeditor/editor/dialog/fck_select.html
+        public_html/fckeditor/editor/dialog/fck_select/fck_select.js
+        public_html/fckeditor/editor/dialog/fck_smiley.html
+        public_html/fckeditor/editor/dialog/fck_source.html
+        public_html/fckeditor/editor/dialog/fck_specialchar.html
+        public_html/fckeditor/editor/dialog/fck_spellerpages.html
+        public_html/fckeditor/editor/dialog/fck_table.html
+        public_html/fckeditor/editor/dialog/fck_tablecell.html
+        public_html/fckeditor/editor/dialog/fck_template.html
+        public_html/fckeditor/editor/dialog/fck_textarea.html
+        public_html/fckeditor/editor/dialog/fck_textfield.html
+        public_html/fckeditor/editor/dtd/fck_xhtml10strict.js
+        public_html/fckeditor/editor/dtd/fck_xhtml10transitional.js
+        public_html/fckeditor/editor/fckdebug.html
+        public_html/fckeditor/editor/fckdialog.html
+        public_html/fckeditor/editor/fckeditor.html
+        public_html/fckeditor/editor/fckeditor.original.html
+        public_html/fckeditor/editor/filemanager/browser/default/browser.css
+        public_html/fckeditor/editor/filemanager/browser/default/browser.html
+        public_html/fckeditor/editor/filemanager/browser/default/frmactualfolder.html
+        public_html/fckeditor/editor/filemanager/browser/default/frmcreatefolder.html
+        public_html/fckeditor/editor/filemanager/browser/default/frmfolders.html
+        public_html/fckeditor/editor/filemanager/browser/default/frmresourceslist.html
+        public_html/fckeditor/editor/filemanager/browser/default/frmresourcetype.html
+        public_html/fckeditor/editor/filemanager/browser/default/frmupload.html
+        public_html/fckeditor/editor/filemanager/browser/default/js/common.js
+        public_html/fckeditor/editor/filemanager/browser/default/js/fckxml.js
+        public_html/fckeditor/editor/filemanager/connectors/php/basexml.php
+        public_html/fckeditor/editor/filemanager/connectors/php/commands.php
+        public_html/fckeditor/editor/filemanager/connectors/php/config.php
+        public_html/fckeditor/editor/filemanager/connectors/php/connector.php
+        public_html/fckeditor/editor/filemanager/connectors/php/io.php
+        public_html/fckeditor/editor/filemanager/connectors/php/upload.php
+        public_html/fckeditor/editor/filemanager/connectors/php/util.php
+        public_html/fckeditor/editor/js/fckadobeair.js
+        public_html/fckeditor/editor/js/fckeditorcode_gecko.js
+        public_html/fckeditor/editor/js/fckeditorcode_ie.js
+        public_html/fckeditor/editor/lang/_translationstatus.txt
+        public_html/fckeditor/editor/lang/af.js
+        public_html/fckeditor/editor/lang/ar.js
+        public_html/fckeditor/editor/lang/bg.js
+        public_html/fckeditor/editor/lang/bn.js
+        public_html/fckeditor/editor/lang/bs.js
+        public_html/fckeditor/editor/lang/ca.js
+        public_html/fckeditor/editor/lang/cs.js
+        public_html/fckeditor/editor/lang/da.js
+        public_html/fckeditor/editor/lang/de.js
+        public_html/fckeditor/editor/lang/el.js
+        public_html/fckeditor/editor/lang/en-au.js
+        public_html/fckeditor/editor/lang/en-ca.js
+        public_html/fckeditor/editor/lang/en-uk.js
+        public_html/fckeditor/editor/lang/en.js
+        public_html/fckeditor/editor/lang/eo.js
+        public_html/fckeditor/editor/lang/es.js
+        public_html/fckeditor/editor/lang/et.js
+        public_html/fckeditor/editor/lang/eu.js
+        public_html/fckeditor/editor/lang/fa.js
+        public_html/fckeditor/editor/lang/fi.js
+        public_html/fckeditor/editor/lang/fo.js
+        public_html/fckeditor/editor/lang/fr-ca.js
+        public_html/fckeditor/editor/lang/fr.js
+        public_html/fckeditor/editor/lang/gl.js
+        public_html/fckeditor/editor/lang/gu.js
+        public_html/fckeditor/editor/lang/he.js
+        public_html/fckeditor/editor/lang/hi.js
+        public_html/fckeditor/editor/lang/hr.js
+        public_html/fckeditor/editor/lang/hu.js
+        public_html/fckeditor/editor/lang/it.js
+        public_html/fckeditor/editor/lang/ja.js
+        public_html/fckeditor/editor/lang/km.js
+        public_html/fckeditor/editor/lang/ko.js
+        public_html/fckeditor/editor/lang/lt.js
+        public_html/fckeditor/editor/lang/lv.js
+        public_html/fckeditor/editor/lang/mn.js
+        public_html/fckeditor/editor/lang/ms.js
+        public_html/fckeditor/editor/lang/nb.js
+        public_html/fckeditor/editor/lang/nl.js
+        public_html/fckeditor/editor/lang/no.js
+        public_html/fckeditor/editor/lang/pl.js
+        public_html/fckeditor/editor/lang/pt-br.js
+        public_html/fckeditor/editor/lang/pt.js
+        public_html/fckeditor/editor/lang/ro.js
+        public_html/fckeditor/editor/lang/ru.js
+        public_html/fckeditor/editor/lang/sk.js
+        public_html/fckeditor/editor/lang/sl.js
+        public_html/fckeditor/editor/lang/sr-latn.js
+        public_html/fckeditor/editor/lang/sr.js
+        public_html/fckeditor/editor/lang/sv.js
+        public_html/fckeditor/editor/lang/th.js
+        public_html/fckeditor/editor/lang/tr.js
+        public_html/fckeditor/editor/lang/uk.js
+        public_html/fckeditor/editor/lang/vi.js
+        public_html/fckeditor/editor/lang/zh-cn.js
+        public_html/fckeditor/editor/lang/zh.js
+        public_html/fckeditor/editor/plugins/autogrow/fckplugin.js
+        public_html/fckeditor/editor/plugins/bbcode/_sample/sample.config.js
+        public_html/fckeditor/editor/plugins/bbcode/_sample/sample.html
+        public_html/fckeditor/editor/plugins/bbcode/fckplugin.js
+        public_html/fckeditor/editor/plugins/dragresizetable/fckplugin.js
+        public_html/fckeditor/editor/plugins/placeholder/fck_placeholder.html
+        public_html/fckeditor/editor/plugins/placeholder/fckplugin.js
+        public_html/fckeditor/editor/plugins/placeholder/lang/de.js
+        public_html/fckeditor/editor/plugins/placeholder/lang/en.js
+        public_html/fckeditor/editor/plugins/placeholder/lang/es.js
+        public_html/fckeditor/editor/plugins/placeholder/lang/fr.js
+        public_html/fckeditor/editor/plugins/placeholder/lang/it.js
+        public_html/fckeditor/editor/plugins/placeholder/lang/pl.js
+        public_html/fckeditor/editor/plugins/simplecommands/fckplugin.js
+        public_html/fckeditor/editor/plugins/tablecommands/fckplugin.js
+        public_html/fckeditor/editor/skins/_fckviewstrips.html
+        public_html/fckeditor/editor/skins/default/fck_dialog.css
+        public_html/fckeditor/editor/skins/default/fck_dialog_ie6.js
+        public_html/fckeditor/editor/skins/default/fck_editor.css
+        public_html/fckeditor/editor/skins/default/fck_strip.gif
+        public_html/fckeditor/editor/skins/office2003/fck_dialog.css
+        public_html/fckeditor/editor/skins/office2003/fck_dialog_ie6.js
+        public_html/fckeditor/editor/skins/office2003/fck_editor.css
+        public_html/fckeditor/editor/skins/silver/fck_dialog.css
+        public_html/fckeditor/editor/skins/silver/fck_dialog_ie6.js
+        public_html/fckeditor/editor/skins/silver/fck_editor.css
+        public_html/fckeditor/editor/skins/silver/fck_strip.gif
+        public_html/fckeditor/editor/wsc
+        public_html/fckeditor/editor/wsc/ciframe.html
+        public_html/fckeditor/editor/wsc/tmpFrameset.html
+        public_html/fckeditor/editor/wsc/w.html
+        public_html/fckeditor/fckconfig.js
+        public_html/fckeditor/fckeditor.js
+        public_html/fckeditor/fckeditor.php
+        public_html/fckeditor/fckeditor_php4.php
+        public_html/fckeditor/fckeditor_php5.php
+        public_html/fckeditor/fckpackager.xml
+        public_html/fckeditor/fckstyles.xml
+        public_html/fckeditor/fcktemplates.xml
+        public_html/fckeditor/license.txt
+        public_html/fckeditor/editor/lang/is.js
+
+- Forum: Implemented ability to manage bookmarks from the bookmark screen (Mark)
+        public_html/forum/index.php
+        private/plugins/forum/include/gf_format.php
+
+- CAPTCHA: Improved integration with Calendar / Links (Mark)
+        private/plugins/captcha/functions.inc
+        private/plugins/captcha/templates/captcha_calendar.thtml (new)
+        private/plugins/captcha/templates/captcha_links.thtml (new)
+        private/plugins/links/templates/submitlink.thtml
+
+- Calendar: Add option to remove ability for non-admins to submit events (Mark)
+        public_html/calendar/index.php
+        private/plugins/calendar/templates/addeventoption.thtml
+        private/plugins/calendar/functions.inc
+            $_CA_CONF['only_admin_submit'] config setting
+        public_html/calendar/event.php
+        private/plugins/calendar/templates/events.thtml
+        private/plugins/calendar/templates/weekview/weekview.thtml
+        private/plugins/calendar/templates/dayview/dayview.thtml
+
+- Forum: Fixed bug in Site Member Report that displayed the wrong number
+  of total users (Mark)
+        public_html/forum/memberlist.php
+
+- Plugins: Implement check to see if plugin is disabled and return 404 error.
+  The 404 Not Found message can be overwridden by implementing a custom
+  CUSTOM_404() function in lib-custom.php  (Mark)
+        public_html/lib-common.php
+        private/system/lib-custom.php.dist
+
         public_html/forum/createtopic.php
         public_html/forum/index.php
         public_html/forum/memberlist.php
@@ -26,6 +327,114 @@ v1.1.2
         public_html/forum/userprefs.php
         public_html/forum/viewtopic.php
         private/plugins/forum/include/gf_format.php
+
+        private/plugins/filemgmt/include/header.php
+        public_html/filemgmt/singlefile.php
+
+        public_html/links/index.php
+        public_html/staticpages/index.php
+
+        public_html/calendar/index.php
+        public_html/calendar/event.php
+
+        public_html/polls/index.php
+
+        public_html/mediagallery/index.php
+        public_html/mediagallery/admin.php
+        public_html/mediagallery/album.php
+        public_html/mediagallery/batch.php
+        public_html/mediagallery/download.php
+        public_html/mediagallery/enroll.php
+        public_html/mediagallery/fslideshow.php
+        public_html/mediagallery/gallery_remote2.php
+        public_html/mediagallery/getcard.php
+        public_html/mediagallery/lightbox.php
+        public_html/mediagallery/mad.php
+        public_html/mediagallery/media.php
+        public_html/mediagallery/media_popup.php
+        public_html/mediagallery/mgcss.php
+        public_html/mediagallery/mgjs.php
+        public_html/mediagallery/phpinfo.php
+        public_html/mediagallery/playall.php
+        public_html/mediagallery/popup.php
+        public_html/mediagallery/postcard.php
+        public_html/mediagallery/property.php
+        public_html/mediagallery/rater.php
+        public_html/mediagallery/rater_rpc.php
+        public_html/mediagallery/search.php
+        public_html/mediagallery/simpleviewer.php
+        public_html/mediagallery/slideshow.php
+        public_html/mediagallery/userprefs.php
+        public_html/mediagallery/video.php
+        public_html/mediagallery/xml.php
+        public_html/mediagallery/xspf.php
+        public_html/mediagallery/jupload/jupload.php
+
+- Media Gallery: Implemented 'Your Member Album' link in user options (Mark)
+        private/plugins/mediagallery/functions.inc
+        private/plugins/mediagallery/config.php
+
+- Calendar: Rewrote the event submission to no longer use the
+  generic submit.php. Now if errors are encounted, the data entry
+  is preserved (Mark)
+        private/plugins/calendar/functions.inc
+        private/plugins/calendar/templates/addeventoption.thtml
+        private/plugins/calendar/templates/events.thtml
+        private/plugins/calendar/templates/submitevent.thtml
+        private/plugins/calendar/templates/admin/eventeditor.thtml
+        private/plugins/calendar/templates/dayview/dayview.thtml
+        public_html/calendar/index.php
+
+- Links: Rewrote the links submission to no longer use the
+  generic submit.php. Now if errors are encountered, data entry
+  is preserved (Mark)
+        private/plugins/links/functions.inc
+        private/plugins/links/templates/links.thtml
+        private/plugins/links/templates/submitlink.thtml
+        public_html/links/index.php
+
+- Forum: Fixed absolute include of lib-users (Mark)
+        private/plugins/forum/include/gf_showtopic.php
+
+- Replace preg_replace with more efficient str_replace (Mark)
+        public_html/lib-common.php
+
+- Incorrect function used when extracting links (Mark)
+        private/system/lib-story.php
+
+- Remove EXIF processing from getID3() library for JPG files, not needed
+  and fails miserably when corrupt meta data exists. (Mark)
+        private/lib/getid3/module.graphic.jpg.php
+
+- Properly encode spaces in XML (Mark)
+        private/system/lib-webservices.php
+
+- Allow standard mime types when uploading batch users (Mark)
+        public_html/admin/user.php
+
+- Implemented fix JS for IE8 and vertical cascading menus (Mark)
+        public_html/layout/nouveau/htmlheader.thtml
+
+- Forum: Added missing allow memberlist configuration to config.php (Mark)
+        private/plugins/forum/config.php
+
+- Forum: Fixed issue with usernames containing special characters (Mark)
+        public_html/forum/createtopic.php
+
+- Media Gallery: Turn off version checking in config.php (Mark)
+        private/plugins/mediagallery/config.php
+
+- Fixed logic processing in template class (Mark)
+        private/system/classes/template.class.php
+
+- Improved main page SQL to be much more efficient (Mark)
+        public_html/index.php
+
+- Handle UTF-8 encoded configuration settings better (Mark)
+        private/system/classes/config.class.php
+
+- SiteTailor - Fixed issue where color was not properly used (Eric)
+        private/plugins/sitetailor/templates/gl_vertical-cascading.thtml
 
 - Media Gallery: Updated the EXIF library to latest release (Mark)
         private/plugins/mediagallery/include/exif.php
