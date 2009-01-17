@@ -49,17 +49,43 @@ if (!defined ('GVERSION')) {
 $_CST_VERBOSE = false;
 
 /**
+ * Sample HTTP 404 - Page not found handler
+ *
+ * If a plugin has been loaded, but is either disabled or not installed,
+ * glFusion will call COM_404().  You can override the behavior by implementing
+ * your own CUSTOM_404() function.
+ *
+ * Sample 404 handler to redirect to the site index page
+ *
+ */
+
+/* --- REMOVE THE COMMENTS TO ENABLE...
+
+function CUSTOM_404()
+{
+    global $_CONF;
+
+    echo COM_refresh($_CONF['site_url'] );
+}
+
+------ */
+
+/**
  * Sample User Create Hook
  *
  * This example will automatically add a user to a group when their account
  * is initially created.
  *
  */
-/* ------ Commented out by default -------- */
-//function CUSTOM_userCreateHook($uid)
-//{
-//    SEC_addUserToGroup($uid, 'Place Group Name Here');
-//}
+
+/* --- REMOVE THE COMMENTS TO ENABLE...
+
+function CUSTOM_userCreateHook($uid)
+{
+    SEC_addUserToGroup($uid, 'Place Group Name Here');
+}
+
+------ */
 
 /**
 * Sample PHP Block function
@@ -125,6 +151,9 @@ function CUSTOM_loginErrorHandler($msg='') {
 * Initially, this function is only called in the COM_siteHeader function to set
 * header.thtml variables
 */
+
+/* ------ REMOVE COMMENTS TO ENABLE ...
+
 function CUSTOM_templateSetVars ($templatename, &$template)
 {
     if ($templatename == 'header') {
@@ -132,7 +161,7 @@ function CUSTOM_templateSetVars ($templatename, &$template)
         $template->set_var ('hello_world', 'Hello, world!');
     }
 }
-
+------ */
 
 /*  Sample Custom Member Functions to create and update Custom Membership registration and profile
 
@@ -413,7 +442,9 @@ function CUSTOM_showBlocks($showblocks)
 * instead of sending them through COM_mail in lib-common.php.
 *
 */
-/*
+
+/* -------- REMOVE COMMENTS TO ENABLE...
+
 function CUSTOM_mail($to, $subject, $message, $from = '', $html = false, $priority = 0)
 {
     global $_CONF;
@@ -439,14 +470,16 @@ function CUSTOM_mail($to, $subject, $message, $from = '', $html = false, $priori
 
     return mail ($to, $subject, $message, $headers);
 }
-*/
+------ */
 
 /**
 * This is an example of a function that returns menu entries to be used for
 * the 'custom' entry in $_CONF['menu_elements'] (see configuration).
 *
 */
-/*
+
+/* -------- REMOVE COMMENTS TO ENABLE...
+
 function CUSTOM_menuEntries ()
 {
     global $_CONF, $_USER;
@@ -467,7 +500,7 @@ function CUSTOM_menuEntries ()
 
     return $myentries;
 }
-*/
+------ */
 
 /**
   * This is an example of an error handler override. This will be used in
@@ -476,7 +509,9 @@ function CUSTOM_menuEntries ()
   * Though you could try and notify the sysadmin, and log the error, as this
   * example will show. The function is commented out for saftey.
   */
-/*
+
+/* -------- REMOVE COMMENTS TO ENABLE...
+
 function CUSTOM_handleError($errno, $errstr, $errfile, $errline, $errcontext)
 {
     global $_CONF;
@@ -516,5 +551,6 @@ function CUSTOM_handleError($errno, $errstr, $errfile, $errline, $errcontext)
         ");
     exit;
 }
-*/
+------ */
+
 ?>
