@@ -5,6 +5,9 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Change mailer text to glFusion CMS (Mark)
+        private/lib/phpmailer/class.phpmailer.php
+
 - Removed extra : (colon) from template (already in language file) (Mark)
         public_html/layout/nouveau/profiles/contactuserform_advanced.thtml
 
@@ -26,6 +29,14 @@ v1.1.2
 
         public_html/javascript/advanced_editor.js
         public_html/javascript/storyeditor_fckeditor.js
+        public_html/javascript/staticpages_fckeditor.js
+        public_html/javascript/submitcomment_fckeditor.js
+        public_html/javascript/submitcontactuser_fckeditor.js
+        public_html/javascript/submitmailuser_fckeditor.js
+        public_html/javascript/submitstory_fckeditor.js
+
+        public_html/fckeditor/fckconfig.js
+        public_html/fckeditor/myconfig.js
 
         public_html/fckeditor/_documentation.html
         public_html/fckeditor/_upgrade.html

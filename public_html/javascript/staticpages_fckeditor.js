@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -36,7 +36,7 @@
 
     var undefined;
 
-    window.onload = function() {
+    window.addEvent('load', function() {
         var oFCKeditor1 = new FCKeditor( 'sp_content' ) ;
         oFCKeditor1.BasePath = glfusionEditorBasePath;
         oFCKeditor1.Config['CustomConfigurationsPath'] = glfusionEditorBaseUrl + '/fckeditor/myconfig.js';
@@ -48,7 +48,7 @@
         oFCKeditor1.Height = 200 ;
         oFCKeditor1.AutoGrowMax = 1200
         oFCKeditor1.ReplaceTextarea() ;
-    }
+   });
 
    function changeToolbar(toolbar) {
         var oEditor1 = FCKeditorAPI.GetInstance('sp_content');
