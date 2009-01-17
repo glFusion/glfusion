@@ -3,7 +3,7 @@
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
 // | $Id::                                                                    $|
-// | Geeklog Story Image Import                                                |
+// | glFUsion Story Image Import                                                |
 // +---------------------------------------------------------------------------+
 // | Copyright (C) 2005-2008 by the following authors:                         |
 // |                                                                           |
@@ -31,6 +31,7 @@ require_once '../../../../../lib-common.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 require_once $_CONF['path'] . 'system/lib-story.php';
+require_once $_CONF['path'] . 'system/classes/story.class.php';
 
 
 class mgAlbumg {
@@ -505,6 +506,8 @@ function MG_buildImportAlbums( ) {
     $numRows    = DB_numRows( $result );
     for ($i=0; $i < $numRows; $i++ ) {
         $I      = DB_fetchArray($result);
+        $story = new Story();
+        $story->loadFromArray($I);
         $tmpsid = $I['sid'];
         $icount = DB_count ($_TABLES['article_images'], 'ai_sid', $tmpsid);
         if ( $icount == 0 ) {
@@ -516,10 +519,12 @@ function MG_buildImportAlbums( ) {
 
         $mgalbum->title = $I['title'];
         $mgalbum->parent = 0;
-        list($intro,$body) = STORY_replace_images($I['sid'],$I['introtext'],$I['bodytext']);
+        $intro = $story->replaceImages($I['introtext']);
+        $body  = $story->replaceImages($I['bodytext']);
+//        list($intro,$body) = STORY_replace_images($I['sid'],$I['introtext'],$I['bodytext']);
         list($errors,$intro_notags,$body_notags) = _MG_remove_images($I['sid'], $intro, $body,'html');
 
-        $mgalbum->description   = $intro_notags;
+        $mgalbum->description   = ''; //$intro_notags;
         $mgalbum->views         = 0;
         $mgalbum->media_count	= $icount;
         $mgalbum->owner_id      = $I['owner_id'];
@@ -599,7 +604,7 @@ function MG_importAlbums( $aid, $parent, $session_id=0 ) {
             } else {
                 $mgAlbums[$children[$i]]->mgid = $parent;
             }
-            COM_errorLog("Media Gallery: Geeklog Story Import processed " . $mgAlbums[$children[$i]]->title . " MGID: " . $mgAlbums[$children[$i]]->mgid . " Parent: " . $mgAlbums[$children[$i]]->mgparent);
+            COM_errorLog("Media Gallery: glFusion Story Import processed " . $mgAlbums[$children[$i]]->title . " MGID: " . $mgAlbums[$children[$i]]->mgid . " Parent: " . $mgAlbums[$children[$i]]->mgparent);
 
             MG_importFiles($mgAlbums[$children[$i]]->mgid, $mgAlbums[$children[$i]]->id,$session_id);
 
@@ -660,7 +665,7 @@ if (isset($_POST['mode']) ) {
             $delete         = COM_applyFilter($_POST['delete']);
             $destination    = COM_applyFilter($_POST['destination']);
 
-            $session_description = 'Geeklog Story Image Import';
+            $session_description = 'glFusion Story Image Import';
             $session_id = MG_beginSession('gl_storyimport',$_MG_CONF['site_url'] . '/index.php',$session_description,$autotag, $alignment, $delete,$destination );
             MG_buildImportAlbums();
             MG_importAlbums( 0, $destination, $session_id );

@@ -5,6 +5,14 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Fixed bug where [imageX] did not allow more than 1 image per story (Mark)
+        private/system/lib-story.php
+
+- Updated MG import for stories to use new story class (Mark)
+        private/plugins/mediagallery/include/lib-batch.php
+        private/plugins/mediagallery/templates/gl_story_import.thtml
+        public_html/admin/plugins/mediagallery/importers/gl_story/index.php
+
 - New option to email user when admin creates account (Mark)
         private/system/lib/lib-user.php
         public_html/admin/user.php
