@@ -1198,11 +1198,7 @@ function service_submit_story($args, &$output, &$svc_msg)
             // Set file permissions on file after it gets uploaded (number is in octal)
             $upload->setPerms('0644');
             $filenames = array();
-            for ($z = 0; $z < $_CONF['maximagesperarticle']; $z++ ) {
-                $curfile['name'] = $_FILES['file']['name'][$z];
-                if (!empty($curfile['name'])) {
-                    $pos = strrpos($curfile['name'],'.') + 1;
-                    $fextension = substr($curfile['name'], $pos);
+
                     $sql = "SELECT MAX(ai_img_num) + 1 AS ai_img_num FROM " . $_TABLES['article_images'] . " WHERE ai_sid = '" . $sid ."'";
         	        $result = DB_query( $sql,1 );
         	        $row = DB_fetchArray( $result );
@@ -1210,7 +1206,15 @@ function service_submit_story($args, &$output, &$svc_msg)
         	        if ( $ai_img_num < 1 ) {
         	            $ai_img_num = 1;
         	        }
+
+            for ($z = 0; $z < $_CONF['maximagesperarticle']; $z++ ) {
+                $curfile['name'] = $_FILES['file']['name'][$z];
+                if (!empty($curfile['name'])) {
+                    $pos = strrpos($curfile['name'],'.') + 1;
+                    $fextension = substr($curfile['name'], $pos);
+
                     $filenames[] = $sid . '_' . $ai_img_num . '.' . $fextension;
+                    $ai_img_num++;
                 } else {
                     $filenames[] = '';
                 }
