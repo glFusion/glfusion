@@ -4220,9 +4220,9 @@ function COM_emailUserTopics()
     $authors = array();
 
     // Get users who want stories emailed to them
-    $usersql = "SELECT username,email,etids,{$_TABLES['users']}.uid AS uuid "
+    $usersql = "SELECT username,email,etids,{$_TABLES['users']}.uid AS uuid, status "
         . "FROM {$_TABLES['users']}, {$_TABLES['userindex']} "
-        . "WHERE {$_TABLES['users']}.uid > 1 AND {$_TABLES['userindex']}.uid = {$_TABLES['users']}.uid AND (etids <> '-' OR etids IS NULL) ORDER BY {$_TABLES['users']}.uid";
+        . "WHERE {$_TABLES['users']}.uid > 1 AND {$_TABLES['userindex']}.uid = {$_TABLES['users']}.uid AND status=".USER_ACCOUNT_ACTIVE." AND (etids <> '-' OR etids IS NULL) ORDER BY {$_TABLES['users']}.uid";
 
     $users = DB_query( $usersql );
     $nrows = DB_numRows( $users );
@@ -4233,7 +4233,6 @@ function COM_emailUserTopics()
     for( $x = 0; $x < $nrows; $x++ )
     {
         $U = DB_fetchArray( $users );
-
         $storysql = array();
         $storysql['mysql'] = "SELECT sid,uid,date AS day,title,introtext,bodytext";
 
@@ -4344,6 +4343,7 @@ function COM_emailUserTopics()
         $from = COM_formatEmailAddress('',$mailfrom);
         $to   = COM_formatEmailAddress( $U['username'],$U['email'] );
         COM_mail ($to, $subject, $mailtext, $from);
+
     }
 
     DB_query( "UPDATE {$_TABLES['vars']} SET value = NOW() WHERE name = 'lastemailedstories'" );

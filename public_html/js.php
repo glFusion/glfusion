@@ -136,9 +136,9 @@ function js_out(){
     ob_start();
 
     // add some global variables
-    print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';";
-    print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';";
-    print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php';";
+    print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
+    print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
+    print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php';" . LB;
 
     // send any global plugin JS vars
 

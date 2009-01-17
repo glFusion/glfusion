@@ -226,6 +226,9 @@ function contactform ($uid, $subject = '', $message = '')
 
             if (($_CONF['advanced_editor'] == 1)) {
                 $mail_template->set_file('form','contactuserform_advanced.thtml');
+                $ae_uid = addslashes(COM_applyFilter($_USER['uid'],true));
+                $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
+                DB_Query($sql,1);
             } else {
                 $mail_template->set_file('form','contactuserform.thtml');
             }
@@ -463,6 +466,9 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
 
     if (($_CONF['advanced_editor'] == 1)) {
         $mail_template->set_file('form','contactauthorform_advanced.thtml');
+        $ae_uid = addslashes(COM_applyFilter($_USER['uid'],true));
+        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
+        DB_Query($sql,1);
     } else {
         $mail_template->set_file('form','contactauthorform.thtml');
     }

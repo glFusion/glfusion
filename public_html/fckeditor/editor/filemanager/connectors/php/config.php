@@ -1,7 +1,7 @@
 <?php
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -25,6 +25,12 @@
 require ('../../../../../lib-common.php');
 global $Config ;
 
+// SECURITY: You must explicitly enable this "connector". (Set it to "true").
+// WARNING: don't just set "$Config['Enabled'] = true ;", you must be sure that only
+//		authenticated users can access this file or use some kind of session checking.
+
+$Config['Enabled'] = false;
+
 $cookiename = $_CONF['cookie_name'].'fckeditor';
 if ( isset($_COOKIE[$cookiename]) ) {
     $token = $_COOKIE[$cookiename];
@@ -38,19 +44,7 @@ if (SEC_checkTokenGeneral($token,'advancededitor')) {
     $Config['Enabled'] = false;
 }
 
-// SECURITY: You must explicitly enable this "connector". (Set it to "true").
-// WARNING: don't just set "$Config['Enabled'] = true ;", you must be sure that only
-//		authenticated users can access this file or use some kind of session checking.
-//$Config['Enabled'] = true ;
-
-
-// Path to user files relative to the document root.
-$Config['UserFilesPath'] = $_CONF['site_url'] . $_CONF_FCK['imagelibrary'] .'/' ;
-
-// Fill the following value it you prefer to specify the absolute path for the
-// user files directory. Useful if you are using a virtual directory, symbolic
-// link or alias. Examples: 'C:\\MySite\\userfiles\\' or '/root/mysite/userfiles/'.
-// Attention: The above 'UserFilesPath' must point to the same directory.
+$Config['UserFilesPath'] = $_CONF['site_url'] . $_CONF_FCK['imagelibrary'] .'/';
 $Config['UserFilesAbsolutePath'] = $_CONF['path_html'] . $_CONF_FCK['imagelibrary'] . '/';
 
 // Due to security issues with Apache modules, it is recommended to leave the
@@ -139,27 +133,43 @@ $Config['DeniedExtensions']['File']		= array() ;
 $Config['FileTypesPath']['File']		= $Config['UserFilesPath'] . 'File/' ;
 $Config['FileTypesAbsolutePath']['File']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'File/' ;
 $Config['QuickUploadPath']['File']		= $Config['UserFilesPath'] . 'File/' ;
-$Config['QuickUploadAbsolutePath']['File']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'File/' ; //$Config['UserFilesAbsolutePath'] ;
+$Config['QuickUploadAbsolutePath']['File']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'File/' ;
 
 $Config['AllowedExtensions']['Image']	= array('bmp','gif','jpeg','jpg','png') ;
 $Config['DeniedExtensions']['Image']	= array() ;
+
 $Config['FileTypesPath']['Image']		= $Config['UserFilesPath'] . 'Image/' ;
 $Config['FileTypesAbsolutePath']['Image']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Image/' ;
 $Config['QuickUploadPath']['Image']		= $Config['UserFilesPath'] . 'Image/';
-$Config['QuickUploadAbsolutePath']['Image']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Image/' ; // $Config['UserFilesAbsolutePath'] ;
+$Config['QuickUploadAbsolutePath']['Image']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Image/' ;
 
 $Config['AllowedExtensions']['Flash']	= array('swf','flv') ;
 $Config['DeniedExtensions']['Flash']	= array() ;
 $Config['FileTypesPath']['Flash']		= $Config['UserFilesPath'] . 'Flash/' ;
 $Config['FileTypesAbsolutePath']['Flash']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Flash/' ;
 $Config['QuickUploadPath']['Flash']		= $Config['UserFilesPath'] . 'Flash/' ;
-$Config['QuickUploadAbsolutePath']['Flash']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Flash/' ; //$Config['UserFilesAbsolutePath'] ;
+$Config['QuickUploadAbsolutePath']['Flash']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Flash/' ;
 
 $Config['AllowedExtensions']['Media']	= array('aiff', 'asf', 'avi', 'bmp', 'fla', 'flv', 'gif', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'png', 'qt', 'ram', 'rm', 'rmi', 'rmvb', 'swf', 'tif', 'tiff', 'wav', 'wma', 'wmv') ;
 $Config['DeniedExtensions']['Media']	= array() ;
 $Config['FileTypesPath']['Media']		= $Config['UserFilesPath'] . 'Media/' ;
 $Config['FileTypesAbsolutePath']['Media']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Media/' ;
 $Config['QuickUploadPath']['Media']		= $Config['UserFilesPath'] . 'Media/';
-$Config['QuickUploadAbsolutePath']['Media']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Media/' ; // $Config['UserFilesAbsolutePath'] ;
+$Config['QuickUploadAbsolutePath']['Media']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Media/' ;
 
+// per user directories
+
+if ( $Config['Enabled'] == true && isset($_USER['username']) && $_USER['username'] != '') {
+    $uid    = $_USER['username'];
+    $uid = ereg_replace('[^A-Za-z0-9.]','-',$_USER['username']);
+    $uid = str_replace(' ','_',$uid);
+
+    $inRoot = SEC_inGroup('Story Admin');
+    if ( $_CONF_FCK['editor_images_by_user'] == true && !$inRoot) {
+        $Config['FileTypesPath']['Image']		= $Config['UserFilesPath'] . 'Image/'.$uid.'/' ;
+        $Config['FileTypesAbsolutePath']['Image']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Image/'.$uid.'/' ;
+        $Config['QuickUploadPath']['Image']		= $Config['UserFilesPath'] . 'Image/'.$uid.'/';
+        $Config['QuickUploadAbsolutePath']['Image']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'Image/'.$uid.'/' ;
+    }
+}
 ?>

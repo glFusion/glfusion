@@ -839,6 +839,9 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template = new Template($_CONF['path_layout'] . 'comment');
             if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
                 $comment_template->set_file('form','commentform_advanced.thtml');
+                $ae_uid = addslashes(COM_applyFilter($_USER['uid'],true));
+                $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
+                DB_Query($sql,1);
             } else {
                 $comment_template->set_file('form','commentform.thtml');
             }
