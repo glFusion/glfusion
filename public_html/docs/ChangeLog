@@ -5,6 +5,15 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- New option to email user when admin creates account (Mark)
+        private/system/lib/lib-user.php
+        public_html/admin/user.php
+        public_html/layout/nouveau/admin/users/edituser.thtml
+
+- Enhanced password generation, do not include commonly mistaken characters
+  like 0 and O, 1 and l - Patch by Jeff Hare (Mark)
+        private/system/lib/lib-user.php
+
 - Change mailer text to glFusion CMS (Mark)
         private/lib/phpmailer/class.phpmailer.php
 

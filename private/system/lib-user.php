@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -139,17 +142,17 @@ function USER_deleteAccount ($uid)
 *
 * @param    string  $username   user's login name
 * @param    string  $useremail  user's email address
+* @param    int     $uid        user id of user
 * @return   bool                true = success, false = an error occured
 *
 */
-function USER_createAndSendPassword ($username, $useremail, $uid)
+function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 {
     global $_CONF, $_TABLES, $LANG04;
 
-    srand ((double) microtime () * 1000000);
-    $passwd = rand ();
-    $passwd = md5 ($passwd);
-    $passwd = substr ($passwd, 1, 8);
+    if ( $passwd == '' ) {
+        $passwd = USER_createPassword(8);
+    }
     $passwd2 = SEC_encryptPassword($passwd);
     DB_change ($_TABLES['users'], 'passwd', "$passwd2", 'uid', $uid);
 
@@ -189,8 +192,10 @@ function USER_createAndSendPassword ($username, $useremail, $uid)
     }
     $to = array();
     $from = array();
-    $from = COM_formatEmailAddress('',$mailfrom);
-    $to   = COM_formatEmailAddress( '',$useremail );
+    $from = COM_formatEmailAddress($_CONF['site_name'],$mailfrom);
+    $to   = COM_formatEmailAddress( $username,$useremail );
+    $subject    = COM_undoSpecialChars(strip_tags(stripslashes($subject)));
+
     return COM_mail ($to, $subject, $mailtext, $from);
 }
 
@@ -701,6 +706,36 @@ function USER_getChildGroups($groupid)
     }
 
     return $groups;
+}
+
+/**
+* Generate a password
+*
+* @param    int     $length         Length of the password
+* @return   string                  Generated password
+*
+*/
+
+function USER_createPassword ($length)
+{
+    // Enforce reasonable limits
+    if (($length < 5) || ($length > 10)) {
+        $length = 7;
+    }
+
+    // Exclude 0,O,o,1,i,I,L,l because they're frequently mistyped
+    // -----------------------------------------------------------
+    $legal_characters = "-23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ";
+
+    srand((double) microtime () * 1000000);
+
+    $password = "";
+    $num_legal_chars = strlen($legal_characters);
+    while (strlen($password) < $length) {
+        $password .= $legal_characters[rand(0,$num_legal_chars-1)];
+    }
+
+    return($password);
 }
 
 ?>

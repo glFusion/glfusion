@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -142,6 +142,7 @@ function edituser($uid = '', $msg = '')
            $MESSAGE;
 
     $retval = '';
+    $newuser = 0;
 
     if (!empty ($msg)) {
         $retval .= COM_startBlock ($LANG28[22], '',
@@ -186,6 +187,7 @@ function edituser($uid = '', $msg = '')
         $lastlogin = '';
         $lasttime = '';
         $A['status'] = USER_ACCOUNT_ACTIVE;
+        $newuser = 1;
     }
 
     $retval .= COM_startBlock ($LANG28[1], '',
@@ -230,6 +232,10 @@ function edituser($uid = '', $msg = '')
         $user_templates->set_var('username', $A['username']);
     } else {
         $user_templates->set_var('username', '');
+    }
+
+    if ( $newuser == 1 ) {
+        $user_templates->set_var('newuser',1);
     }
 
     if ($_CONF['allow_user_photo'] && ($A['uid'] > 0)) {
@@ -522,25 +528,31 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
         }
 
         if (empty ($uid) || !empty ($passwd)) {
-            $passwd = SEC_encryptPassword($passwd);
+            $passwd2 = SEC_encryptPassword($passwd);
         } else {
-            $passwd = DB_getItem ($_TABLES['users'], 'passwd', "uid = $uid");
+            $passwd2 = DB_getItem ($_TABLES['users'], 'passwd', "uid = $uid");
         }
 
         if (empty ($uid)) {
             if (empty ($passwd)) {
                 // no password? create one ...
+                $passwd = USER_createPassword (8);
+/*
                 srand ((double) microtime () * 1000000);
                 $passwd = rand ();
                 $passwd = md5 ($passwd);
                 $passwd = substr ($passwd, 1, 8);
-                $passwd = SEC_encryptPassword($passwd);
+*/
+                $passwd2 = SEC_encryptPassword($passwd);
             }
 
-            $uid = USER_createAccount ($username, $email, $passwd, $fullname,
+            $uid = USER_createAccount ($username, $email, $passwd2, $fullname,
                                        $homepage);
             if ($uid > 1) {
                 DB_query("UPDATE {$_TABLES['users']} SET status = $userstatus WHERE uid = $uid");
+            }
+            if ( isset($_POST['emailuser']) ) {
+                USER_createAndSendPassword ($username, $email, $uid, $passwd);
             }
         } else {
             $fullname = addslashes (strip_tags($fullname));
