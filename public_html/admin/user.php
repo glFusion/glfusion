@@ -1030,7 +1030,7 @@ function importusers()
     $_CONF['usersubmission'] = 0;
 
     // First, upload the file
-    require_once $_CONF['path_system'] . 'classes/upload.class.php';
+    USES_class_upload();
 
     $upload = new upload ();
     $upload->setPath ($_CONF['path_data']);

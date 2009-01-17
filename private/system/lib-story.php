@@ -47,7 +47,7 @@ require_once $_CONF['path_system'] . '/lib-webservices.php';
 
 if ($_CONF['allow_user_photo']) {
     // only needed for the USER_getPhoto function
-    require_once $_CONF['path_system'] . 'lib-user.php';
+    USES_lib_user();
 }
 
 // this must be kept in sync with the actual size of 'sid' in the db ...

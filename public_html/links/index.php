@@ -476,7 +476,7 @@ if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
     }
 }
 
-if (empty ($_USER['username']) &&
+if (COM_isAnonUser() &&
     (($_CONF['loginrequired'] == 1) || ($_LI_CONF['linksloginrequired'] == 1))) {
     $display .= COM_siteHeader ('menu', $LANG_LINKS[114]);
     $display .= COM_startBlock ($LANG_LOGIN[1], '',
