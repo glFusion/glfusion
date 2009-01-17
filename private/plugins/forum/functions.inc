@@ -213,6 +213,7 @@ function plugin_user_delete_forum ($uid)
     global $_TABLES;
 
     $username = DB_getItem($_TABLES['users'], "username", "uid=$uid");
+    $username = addslashes($username);
     DB_query("DELETE FROM {$_TABLES['gf_moderators']} WHERE mod_username='$username'");
     DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid ='$uid'");
     DB_query("DELETE FROM {$_TABLES['gf_userinfo']} WHERE uid ='$uid'");
