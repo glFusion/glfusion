@@ -40,30 +40,35 @@
 require_once '../lib-common.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
+
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
 
 // Display Common headers
 gf_siteHeader();
 
 // Check for access privilege and pass true to check that user is signed in.
 forum_chkUsercanAccess(true);
-$forum = COM_applyFilter($_REQUEST['forum'],true);
-$showtopic = COM_applyFilter($_REQUEST['showtopic'],true);
-ForumHeader($forum,$showtopic);
+$forum = $inputHandler->getVAr('integer','forum','request',0); //COM_applyFilter($_REQUEST['forum'],true);
+$showtopic = $inputHandler->getVar('integer','showtopic','request',0); //COM_applyFilter($_REQUEST['showtopic'],true);
+$pageHandle->addContent(ForumHeader($forum,$showtopic));
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$fortopicid = COM_applyFilter($_REQUEST['fortopicid'],true);
-$moveid = COM_applyFilter($_REQUEST['moveid'],true);
-$top = COM_applyFilter($_REQUEST['top']);
-$movetoforum = COM_applyFilter($_REQUEST['movetoforum'],true);
-$msgid = COM_applyFilter($_REQUEST['msgid'],true);
-$msgpid = COM_applyFilter($_REQUEST['msgpid'],true);
-$fortopicid = COM_applyFilter($_REQUEST['fortopicid'],true);
-$modfunction = COM_applyFilter($_REQUEST['modfunction']);
-$submit = $_POST['submit'];
+$fortopicid = $inputHandler->getVar('integer','fortopicid','request',0); //COM_applyFilter($_REQUEST['fortopicid'],true);
+$moveid = $inputHandler->getVar('integer','moveid','request',0); //COM_applyFilter($_REQUEST['moveid'],true);
+$top = $inputHandler->getVar('strict','top','request',''); //COM_applyFilter($_REQUEST['top']);
+$movetoforum = $inputHandler->getVar('integer','movetoforum','request',0); //COM_applyFilter($_REQUEST['movetoforum'],true);
+$msgid = $inputHandler->getVar('integer','msgid','request',0); //COM_applyFilter($_REQUEST['msgid'],true);
+$msgpid = $inputHandler->getVar('integer','msgpid','request',0); //COM_applyFilter($_REQUEST['msgpid'],true);
+$fortopicid = $inputHandler->getVar('integer','fortopicid','request',0); //COM_applyFilter($_REQUEST['fortopicid'],true);
+$modfunction = $inputHandler->getVar('strict','modfunction','request',''); //COM_applyFilter($_REQUEST['modfunction']);
+$submit = $inputHandler->getVar('strict','submit','post',''); //$_POST['submit'];
 
 if ($forum == 0) {
-    alertMessage($LANG_GF02['msg71']);
+    $pageHandle->addContent(alertMessage($LANG_GF02['msg71']));
+    $pageHandle->displayPage();
     exit();
 }
 
@@ -72,7 +77,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
     //Moderator check OK, everything dealing with moderator permissions go here.
     if($_POST['modconfirmdelete'] == 1 && $msgid != '') {
         if ($submit == $LANG_GF01['CANCEL']) {
-               echo COM_refresh("viewtopic.php?showtopic=$msgpid");
+            $pageHandle->redirect("viewtopic.php?showtopic=$msgpid");
             exit();
         } else {
 
@@ -142,10 +147,10 @@ if (forum_modPermission($forum,$_USER['uid'])) {
 
             if ($top == 'yes') {
                 $link = "{$_CONF['site_url']}/forum/index.php?forum=$forum";
-                forum_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum);
+                $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum));
             } else {
                 $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$msgpid";
-                forum_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum);
+                $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum));
             }
             CACHE_remove_instance('forumcb');
             gf_siteFooter();
@@ -155,13 +160,13 @@ if (forum_modPermission($forum,$_USER['uid'])) {
 
     if($_POST['confirmbanip'] == '1') {
         if ($submit == $LANG_GF01['CANCEL']) {
-            echo COM_refresh("viewtopic.php?showtopic=$fortopicid");
+            $pageHandle->redirect("viewtopic.php?showtopic=$fortopicid");
             exit();
         } else {
-            $hostip = COM_applyFilter($_POST['hostip']);
+            $hostip = $inputHandler->getVar('strict','hostip','post',''); // COM_applyFilter($_POST['hostip']);
             DB_query("INSERT INTO {$_TABLES['gf_banned_ip']} (host_ip) VALUES ('$hostip')");
             $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$fortopicid";
-            forum_statusMessage($LANG_GF02['msg56'],$link,$LANG_GF02['msg56']);
+            $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg56'],$link,$LANG_GF02['msg56']));
             gf_siteFooter();
             exit();
         }
@@ -169,7 +174,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
 
     if($_POST['confirm_move'] == '1' AND forum_modPermission($forum,$_USER['uid'],'mod_move') AND $moveid != 0) {
         if ($submit == $LANG_GF01['CANCEL']) {
-            echo COM_refresh("viewtopic.php?showtopic=$moveid");
+            $pageHandle->redirect("viewtopic.php?showtopic=$moveid");
             exit();
         } else {
             $date = time();
@@ -230,7 +235,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
 //                    DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=topic_count+1, post_count=post_count+$numreplies WHERE forum_id=$newforumid");
                 }
                 $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$moveid";
-                forum_statusMessage(sprintf($LANG_GF02['msg183'],$movetoforum),$link,$LANG_GF02['msg183']);
+                $pageHandle->addContent(forum_statusMessage(sprintf($LANG_GF02['msg183'],$movetoforum),$link,$LANG_GF02['msg183']));
 
             } else {  // Move complete topic
                 $moveResult = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=$moveid");
@@ -254,7 +259,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 // Remove any lastviewed records in the log so that the new updated topic indicator will appear
                 DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic='$moveid'");
                 $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$moveid";
-                forum_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163']);
+                $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163']));
             }
             CACHE_remove_instance('forumcb');
             gf_siteFooter();
@@ -282,15 +287,15 @@ if (forum_modPermission($forum,$_USER['uid'])) {
         $promptform .= '<center><input type="submit" name="submit" value="' .$LANG_GF01['CONFIRM']. '"' . XHTML . '>&nbsp;&nbsp;';
         $promptform .= '<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '></center>';
         $promptform .= '</form></div>';
-        alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
+        $pageHandle->addContent(alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform));
 
     } elseif($modfunction == 'editpost' AND forum_modPermission($forum,$_USER['uid'],'mod_edit') AND $fortopicid != 0) {
-        $page = COM_applyFilter($_REQUEST['page'],true);
-        echo COM_refresh("createtopic.php?method=edit&amp;id=$fortopicid&amp;page=$page");
-        echo $LANG_GF02['msg110'];
+        $page = $inputHandler->getVar('integer','page','request',0); //COM_applyFilter($_REQUEST['page'],true);
+        $pageHandle->redirect("createtopic.php?method=edit&amp;id=$fortopicid&amp;page=$page");
+//        $pageHandle->echo $LANG_GF02['msg110'];
 
     } elseif($modfunction == 'lockedpost' AND forum_modPermission($forum,$_USER['uid'],'mod_edit') AND $fortopicid != 0) {
-        echo COM_refresh("createtopic.php?method=postreply&amp;id=$fortopicid");
+        $pageHandle->redirect("createtopic.php?method=postreply&amp;id=$fortopicid");
         echo $LANG_GF02['msg173'];
 
     } elseif($modfunction == 'movetopic' AND forum_modPermission($forum,$_USER['uid'],'mod_move') AND $fortopicid != 0) {
@@ -310,7 +315,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
         $query = DB_query($sql);
 
         if (DB_numRows($query) == 0) {
-            alertMessage($LANG_GF02['msg181'],$LANG_GF01['WARNING']);
+            $pageHandle->addContent(alertMessage($LANG_GF02['msg181'],$LANG_GF01['WARNING']));
         } else {
             $topictitle = DB_getItem($_TABLES['gf_topic'],"subject","id='$fortopicid'");
             $promptform  =  '<div style="padding:10 0 5 0px;">';
@@ -335,7 +340,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 $promptform .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '></div>';
                 $promptform .= '</form></div>';
                 $alertmessage = sprintf($LANG_GF03['movetopicmsg'],$topictitle);
-                alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
+                $pageHandle->addContent(alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform));
             } else {
                 $poster   = DB_getItem($_TABLES['gf_topic'],"name","id='$fortopicid'");
                 $postdate = COM_getUserDateTimeFormat(DB_getItem($_TABLES['gf_topic'],"date","id='$fortopicid'"));
@@ -347,7 +352,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 $promptform .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '></div>';
                 $promptform .= '</form></div>';
                 $alertmessage = sprintf($LANG_GF03['splittopicmsg'],$topictitle,$poster,$postdate[0]);
-                alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
+                $pageHandle->addContent(alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform));
             }
         }
 
@@ -357,7 +362,8 @@ if (forum_modPermission($forum,$_USER['uid'])) {
         $iptobansql = DB_query("SELECT ip FROM {$_TABLES['gf_topic']} WHERE id='$fortopicid'");
         $forumpostipnum = DB_fetchArray($iptobansql);
         if ($forumpostipnum['ip'] == '') {
-            alertMessage($LANG_GF02['msg174']);
+            $pageHandle->addContent(alertMessage($LANG_GF02['msg174']));
+            $pageHandle->displayPage();
             exit;
         }
         $alertmessage =  '<p>' .$LANG_GF02['msg68'] . '</p><p>';
@@ -371,14 +377,14 @@ if (forum_modPermission($forum,$_USER['uid'])) {
         $promptform .= '<center><input type="submit" name="submit" value="' .$LANG_GF01['CONFIRM']. '"' . XHTML . '>';
         $promptform .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '>';
         $promptform .= '</center></form></div>';
-        alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
+        $pageHandle->addContent(alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform));
 
     } else {
-        alertMessage($LANG_GF02['msg71'],$LANG_GF01['WARNING']);
+        $pageHandle->addContent(alertMessage($LANG_GF02['msg71'],$LANG_GF01['WARNING']));
     }
 
 } else {
-    alertMessage($LANG_GF02['msg72'],$LANG_GF01['ACCESSERROR']);
+    $pageHandle->addContent(alertMessage($LANG_GF02['msg72'],$LANG_GF01['ACCESSERROR']));
 }
 
 gf_siteFooter();

@@ -1,7 +1,7 @@
 <!-- $Id$ -->
-<h1>Geeklog Story Image Import to Media Gallery Wizard</h1>
+<h1>glFusion Story Image Import to Media Gallery Wizard</h1>
 <form name="galselect" action="{form_action}" method="post">
-This will import images used in your Geeklog stories into Media Gallery
+This will import images used in your glFusion stories into Media Gallery
 and replace the image with a Media Gallery auto tag.<br><br>
 <b>This will change all of your stories with embedded images, be sure you have a good backup!</b>
 <br>
@@ -35,7 +35,7 @@ and replace the image with a Media Gallery auto tag.<br><br>
 </fieldset>
 <fieldset style="border: none; border-top: 1px solid #000000">
 	<br>
-	<legend>Geeklog Stories with embedded images</legend>
+	<legend>glFusion Stories with embedded images</legend>
     {picklist}
 </fieldset>
 

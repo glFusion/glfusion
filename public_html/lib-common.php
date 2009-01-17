@@ -3401,9 +3401,12 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     $mail->IsHTML($html);
     if ( $html ) {
         $mail->Body = COM_filterHTML($message);
-    } else {
+    }
+/* - no need to filter non-HTML messages
+     else {
         $mail->Body = strip_tags($message);
     }
+-- */
     $mail->Subject = $subject;
 
     if (is_array($from) && isset($from[0]) && $from[0] != '' ) {
@@ -4168,9 +4171,9 @@ function COM_emailUserTopics()
     $authors = array();
 
     // Get users who want stories emailed to them
-    $usersql = "SELECT username,email,etids,{$_TABLES['users']}.uid AS uuid "
+    $usersql = "SELECT username,email,etids,{$_TABLES['users']}.uid AS uuid, status "
         . "FROM {$_TABLES['users']}, {$_TABLES['userindex']} "
-        . "WHERE {$_TABLES['users']}.uid > 1 AND {$_TABLES['userindex']}.uid = {$_TABLES['users']}.uid AND (etids <> '-' OR etids IS NULL) ORDER BY {$_TABLES['users']}.uid";
+        . "WHERE {$_TABLES['users']}.uid > 1 AND {$_TABLES['userindex']}.uid = {$_TABLES['users']}.uid AND status=".USER_ACCOUNT_ACTIVE." AND (etids <> '-' OR etids IS NULL) ORDER BY {$_TABLES['users']}.uid";
 
     $users = DB_query( $usersql );
     $nrows = DB_numRows( $users );
@@ -7041,6 +7044,44 @@ function CMT_updateCommentcodes() {
 }
 
 /**
+ * Display 404 - Not found message
+ *
+ */
+function COM_404()
+{
+    /*
+     * Allow for custom 404 handler
+     */
+
+    if ( function_exists('CUSTOM_404') ) {
+        return CUSTOM_404();
+    }
+
+    if (isset ($_SERVER['SCRIPT_URI'])) {
+        $url = strip_tags ($_SERVER['SCRIPT_URI']);
+    } else {
+        $pos = strpos ($_SERVER['REQUEST_URI'], '?');
+        if ($pos === false) {
+            $request = $_SERVER['REQUEST_URI'];
+        } else {
+            $request = substr ($_SERVER['REQUEST_URI'], 0, $pos);
+        }
+        $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
+    }
+    header("HTTP/1.0 404 Not Found");
+    echo '
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL ' . $url . ' was not found on this server.</p>
+</body></html>';
+exit;
+}
+
+
+/**
  * Loads the specified library or class normally not loaded by lib-common.php
  *
  * This allows use to move these files, the functions in the files, etc without
@@ -7070,9 +7111,9 @@ function USES_lib_story() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-story.php';
 }
-function USES_lib_trackback() {
+function USES_lib_trackbacks() {
     global $_CONF;
-    require_once $_CONF['path_system'] . 'lib-trackback.php';
+    require_once $_CONF['path_system'] . 'lib-trackbacks.php';
 }
 function USES_lib_user() {
     global $_CONF;

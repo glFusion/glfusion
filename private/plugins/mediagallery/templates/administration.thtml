@@ -11,7 +11,7 @@
 	  <td align="left"><h1>{lang_admin} - {version}</h1></td>
 	</tr>
 	<tr>
-	  <td><span style="font-weight:bold;">{title}</span> &nbsp; <a href="{help_url}" rel="external">{lang_help}</a></td>
+	  <td><span style="font-weight:bold;">{title}</span></td>
 	</tr>
 	</table>
   </td>

@@ -32,7 +32,7 @@
 
     var undefined;
 
-    window.onload = function() {
+    window.addEvent('load', function() {
         var oFCKeditor1 = new FCKeditor( 'comment_html' ) ;
         if (undefined == window.glfusionEditorBaseUrl) {
             glfusionEditorBaseUrl = geeklogEditorBaseUrl;
@@ -48,7 +48,8 @@
         oFCKeditor1.ToolbarSet = 'editor-toolbar1' ;
         oFCKeditor1.Height = 200 ;
         oFCKeditor1.ReplaceTextarea() ;
-    }
+    });
+
     function change_editmode(obj) {
         if (obj.value == 'html') {
             document.getElementById('text_editor').style.display='none';

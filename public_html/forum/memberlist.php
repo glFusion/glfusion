@@ -41,26 +41,26 @@
 require_once '../lib-common.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
-if ( !function_exists('plugin_getmenuitems_forum') ) {
-    header("HTTP/1.0 404 Not Found");
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
     exit;
 }
 
 if ( !$CONF_FORUM['allow_memberlist'] || COM_isAnonUser() ) {
-    echo COM_refresh($_CONF['site_url'] .'/forum/index.php');
+    $pageHandle->redirect($_CONF['site_url'] .'/forum/index.php');
     exit;
 }
 
 // Use filter to remove all possible hostile SQL injections - only expecting numeric data
-$show       = COM_applyFilter($_GET['show'],true);
-$page       = COM_applyFilter($_GET['page'],true);
-$prevorder  = COM_applyFilter($_GET['prevorder'],true);
-$order      = COM_applyFilter($_GET['order'],true);
-$sort       = COM_applyFilter($_GET['sort'],true);
-$direction  = COM_applyFilter($_GET['direction']);
-$showuser   = COM_applyFilter($_GET['showuser'],true);
-$op         = COM_applyFilter($_GET['op']);
-$chkactivity = COM_applyFilter($_REQUEST['chkactivity'],true);
+$show       = $inputHandler->getVar('integer','show','get',0); //COM_applyFilter($_GET['show'],true);
+$page       = $inputHandler->getVar('integer','page','get',0); // COM_applyFilter($_GET['page'],true);
+$prevorder  = $inputHandler->getVar('integer','prevorder','get',0); // COM_applyFilter($_GET['prevorder'],true);
+$order      = $inputHandler->getVar('integer','order','get',0); //COM_applyFilter($_GET['order'],true);
+$sort       = $inputHandler->getVar('integer','sort','get',0); // COM_applyFilter($_GET['sort'],true);
+$direction  = $inputHandler->getVar('integer','direction','get',0); //COM_applyFilter($_GET['direction']);
+$showuser   = $inputHandler->getVar('integer','showuser','get',0); //COM_applyFilter($_GET['showuser'],true);
+$op         = $inputHandler->getVar('strict','op','get',''); // COM_applyFilter($_GET['op']);
+$chkactivity = $inputHandler->getVar('integer','chkactivity','request',0); //COM_applyFilter($_REQUEST['chkactivity'],true);
 
 // Display Common headers
 gf_siteHeader();
@@ -193,6 +193,7 @@ if ($op == "last10posts") {
     }
 
     $membercount   = DB_numRows($memberlistsql);
+    $membercount--;
     $numpages = ceil($membercount / $show);
     $offset = ($page - 1) * $show;
     $base_url = "{$_CONF['site_url']}/forum/memberlist.php?show={$show}&amp;order={$order}&amp;prevorder={$prevorder}";
@@ -308,7 +309,7 @@ if ($op == "last10posts") {
 
     $report->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page, $numpages));
     $report->parse ('output', 'report');
-    echo $report->finish($report->get_var('output'));
+    $pageHandle->addContent($report->finish($report->get_var('output')));
 }
 
 gf_siteFooter();

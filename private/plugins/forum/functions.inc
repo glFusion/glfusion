@@ -267,7 +267,7 @@ function plugin_profilevariablesedit_forum($uid, &$template)
 
 function plugin_profilevariablesdisplay_forum ($uid, &$template)
 {
-    global $CONF_FORUM,$_TABLES, $_CONF, $LANG_GF02,$LANG_GF04;
+    global $CONF_FORUM,$_TABLES, $_CONF, $LANG_GF02,$LANG_GF04, $inputHandler;
 
     $postlimit="10";        // How many posts you want displayed
 
@@ -279,7 +279,7 @@ function plugin_profilevariablesdisplay_forum ($uid, &$template)
         $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
         if (SEC_inGroup($groupname) OR $grp_id == 2) {
             if ($CONF_FORUM['use_censor']) {
-                $subject = COM_checkWords($subject);
+                $subject = $inputHandler->censor($subject);
             }
             $numposts++;
             $postdate = COM_getUserDateTimeFormat ($date);
@@ -353,7 +353,8 @@ function plugin_statssummary_forum() {
 */
 function plugin_showstats_forum($showsitestats)
 {
-    global $_USER, $_CONF, $CONF_FORUM,$_TABLES, $LANG_GF00,$LANG_GF01;
+    global $_USER, $_CONF, $CONF_FORUM,$_TABLES, $LANG_GF00,$LANG_GF01,
+           $inputHandler;
 
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
         return '';
@@ -390,7 +391,7 @@ function plugin_showstats_forum($showsitestats)
                 $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
                 if (SEC_inGroup($groupname) OR $grp_id == 2) {
                     if ($CONF_FORUM['use_censor']) {
-                        $subject = COM_checkWords($subject);
+                        $subject = $inputHandler->censor($subject);
                     }
                     $url = $_CONF['site_url']. "/forum/viewtopic.php?showtopic=$id";
                     $S['topicsubject'] = '<a href="' . $url . '">' . COM_truncate($subject,$CONF_FORUM['show_subject_length'],'...') . '</a>';
@@ -426,7 +427,7 @@ function plugin_showstats_forum($showsitestats)
                 $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
                 if (SEC_inGroup($groupname) OR $grp_id == 2) {
                     if ($CONF_FORUM['use_censor']) {
-                        $subject = COM_checkWords($subject);
+                        $subject = $inputHandler->censor($subject);
                     }
                     $url = $_CONF['site_url']. "/forum/viewtopic.php?showtopic=$id";
                     $S['topicsubject'] = '<a href="' . $url . '">' . COM_truncate($subject,$CONF_FORUM['show_subject_length'],'...') . '</a>';
@@ -655,7 +656,8 @@ function forum_buildFeedsSql ($forumID, $limits)
 
 function plugin_getfeedcontent_forum ($feed, &$link, &$update)
 {
-    global $_CONF, $_TABLES, $CONF_FORUM, $LANG_GF01, $pi_version;
+    global $_CONF, $_TABLES, $CONF_FORUM, $LANG_GF01, $pi_version,
+           $inputHandler;
 
     $content = array();
     $lids = array();
@@ -723,7 +725,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
         $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$A['id']}";
 
         if ($CONF_FORUM['use_censor']) {
-            $A['subject'] = COM_checkWords($A['subject']);
+            $A['subject'] = $inputHandler->censor($A['subject']);
         }
         $content[] = array ('title'     => $A['forum_name'] . ' :: ' . $A['subject'],
                             'summary'   => $desc,
@@ -806,15 +808,15 @@ function plugin_upgrade_forum() {
 */
 function plugin_uninstall_forum($installCheck='')
 {
-    global $_CONF, $_TABLES, $LANG_GF00;
+    global $_CONF, $_TABLES, $LANG_GF00,$pageHandle;
 
      // Check and see if plugin is still enabled - if so display warning and exit
     if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "forum"')) {
         COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
-        $display .= COM_startBlock($LANG_GF00['warning']);
-        $display .= $LANG_GF00['enabled'];
-        $display .= COM_endBlock();
-        echo $display;
+        $pageHandle->addContent(COM_startBlock($LANG_GF00['warning']));
+        $pageHandle->addContent($LANG_GF00['enabled']);
+        $pageHandle->addContent(COM_endBlock());
+        $pageHandle->displayPage();
         exit;
     }
     require_once $_CONF['path'] . 'plugins/forum/install.inc';
@@ -826,17 +828,17 @@ function plugin_uninstall_forum($installCheck='')
 //  ------- GENERAL FORUM FUNCTIONS --------
 
 function forum_chkUsercanPost() {
-    global $_CONF,$CONF_FORUM,$LANG_GF00, $LANG_GF01, $LANG_GF02, $_TABLES, $_USER;
+    global $_CONF,$CONF_FORUM,$LANG_GF00, $LANG_GF01, $LANG_GF02, $_TABLES, $_USER,
+           $inputHandler, $pageHandle;
 
     //Check is anonymous users can post
     if($CONF_FORUM['registered_to_post'] && $_USER['uid'] < 2){
         $url = $_CONF['site_url']. '/users.php?mode=new';
-        $display .= COM_startBlock($LANG_GF00['access_denied']);
-        $display .= '<br' . XHTML . '>' .$LANG_GF01['loginreqpost']. '<br' . XHTML . '>';
-        $display .= '<meta http-equiv="refresh" content="3; URL=' .$url. '">';
-        $display .= COM_endBlock();
-        $display .= COM_siteFooter();
-        echo $display;
+        $pageHandle->addRaw('<meta http-equiv="refresh" content="3; URL=' .$url. '">');
+        $pageHandle->addContent(COM_startBlock($LANG_GF00['access_denied']));
+        $pageHandle->addContent('<br' . XHTML . '>' .$LANG_GF01['loginreqpost']. '<br' . XHTML . '>');
+        $pageHandle->addContent(COM_endBlock());
+        $pageHandle->displayPage();
         exit;
     }
     // Check if IP of user has been banned
@@ -844,28 +846,28 @@ function forum_chkUsercanPost() {
     $sqlresult = DB_query ("SELECT * FROM {$_TABLES['gf_banned_ip']} WHERE host_ip like '$ip'");
     $numRows = DB_numRows($sqlresult);
     if ( $numRows > 0 ) {
-        echo COM_startBlock($LANG_GF00['access_denied']);
-        echo ($LANG_GF02['msg14']);
-        printf ($LANG_GF02['msg15'],$_CONF['site_mail']);
-        echo COM_endBlock();
-        echo COM_siteFooter(true);
+        $pageHandle->addContent(COM_startBlock($LANG_GF00['access_denied']));
+        $pageHandle->addContent($LANG_GF02['msg14']);
+        $pageHandle->addContent(printf ($LANG_GF02['msg15'],$_CONF['site_mail']));
+        $pageHandle->addContent(COM_endBlock());
+        $pageHandle->displayPage();
         exit();
     }
 }
 
 function forum_chkUsercanAccess($secure=false) {
-    global $_CONF, $LANG_GF01, $LANG_GF02, $CONF_FORUM, $_USER;
+    global $_CONF, $LANG_GF01, $LANG_GF02, $CONF_FORUM, $_USER, $pageHandle;
 
     if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
-            echo  '<table width="100%" height="100"><tr><td><center>';
-        printf($LANG_GF01['loginreqview'], '<A HREF="' .$_CONF['site_url']. '/users.php?mode=new">', '<A HREF="' .$_CONF['site_url']. '/users.php">');
-        echo '</center></td></tr></table>';
-        echo COM_siteFooter();
+        $pageHandle->addContent('<table width="100%" height="100"><tr><td><center>');
+        $pageHandle->addContent(printf($LANG_GF01['loginreqview'], '<A HREF="' .$_CONF['site_url']. '/users.php?mode=new">', '<A HREF="' .$_CONF['site_url']. '/users.php">'));
+        $pageHandle->addContent('</center></td></tr></table>');
+        $pageHandle->displayPage();
         exit;
     } elseif($secure AND empty($_USER['uid'])) {
-        echo '<br' . XHTML . '>';
-        BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg83'],false);
-        echo COM_siteFooter();
+        $pageHandle->addContent('<br' . XHTML . '>');
+        $pageHandle->addContent(BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg83'],false));
+        $pageHandle->displayPage();
         exit;
     }
 }
@@ -937,9 +939,8 @@ function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
         $statusmsg->set_var ('prompt',$prompt);
     }
     $statusmsg->parse ('output', 'statusmsg');
-    echo $statusmsg->finish ($statusmsg->get_var('output'));
+    return $statusmsg->finish ($statusmsg->get_var('output'));
 
-    return;
 }
 
 
@@ -1072,7 +1073,7 @@ function phpblock_forum_newposts() {
             if ($no_newposts==0 AND (SEC_inGroup($groupname) OR $grp_id == 2)) {
                 $displaycount++;
                 if ($CONF_FORUM['use_censor']) {
-                    $A['subject'] = COM_checkWords($A['subject']);
+                    $A['subject'] = $inputHandler->censor($A['subject']);
                 }
                 $fullsubject = $A['subject'];
                 if (strlen ($A['subject']) > $CONF_FORUM['sb_subject_size']) {
@@ -1157,7 +1158,8 @@ function phpblock_forum_newposts() {
 function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 {
     global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM,
-           $LANG_GF02, $mode, $order,$pi_version, $_GROUPS;
+           $LANG_GF02, $mode, $order,$pi_version, $_GROUPS,
+           $inputHandler;
 
     if ( !COM_checkVersion($pi_version, '2.6') ) {
         return '';
@@ -1240,8 +1242,8 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         while ($A = DB_fetchArray ($result)) {
             $A['subject'] = @htmlspecialchars($A['subject'],ENT_COMPAT,$CONF_FORUM['charset']);
             if ($CONF_FORUM['use_censor']) {
-                $A['subject'] = COM_checkWords($A['subject']);
-                $A['comment'] = COM_checkWords($A['comment']);
+                $A['subject'] = $inputHandler->censor($A['subject']);
+                $A['comment'] = $inputHandler->censor($A['comment']);
             }
 
             $fullsubject = "{$A['subject']}\n{$LANG_GF01['POSTEDBY']}:{$A['name']}{$LANG_GF01['VIEWS']}:{$A['views']}, {$LANG_GF01['REPLIES']}:{$A['replies']}";

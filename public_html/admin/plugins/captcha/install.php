@@ -38,13 +38,7 @@ require_once $_CONF['path'] . '/plugins/captcha/install.inc';
 // Only let Root users access this page
 if (!SEC_inGroup('Root')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the CAPTCHA install/uninstall page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
-    $display = COM_siteHeader();
-    $display .= COM_startBlock($LANG_CP00['access_denied']);
-    $display .= $LANG_CP00['access_denied_msg'];
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter(true);
-    echo $display;
+    $pageHandle->displayAccessError('',$LANG_CP00['access_denied_msg'],'CAPTCHA install/uninstall page.');
     exit;
 }
 
@@ -52,9 +46,8 @@ if (!SEC_inGroup('Root')) {
 * Main Function
 */
 
-$action = isset($_POST['action']) ? COM_applyFilter($_POST['action']) : '';
+$action = $inputHandler->getVar('strict','action','post','');
 
-$display = COM_siteHeader();
 $T = new Template($_CONF['path'] . 'plugins/captcha/templates');
 $T->set_file('install', 'install.thtml');
 $T->set_var('install_header', $LANG_CP00['install_header']);
@@ -67,7 +60,7 @@ if ($action == 'install') {
         $installMsg = sprintf($LANG_CP00['install_success'],$_CONF['site_admin_url'] . '/plugins/captcha/index.php');
         $T->set_var('installmsg1',$installMsg);
     } else {
-       	echo COM_refresh ($_CONF['site_admin_url'] . '/plugins.php?msg=72');
+       	$pageHandle->redirect ($_CONF['site_admin_url'] . '/plugins.php?msg=72');
     }
 } else if ($action == "uninstall") {
    plugin_uninstall_captcha('installed');
@@ -94,13 +87,11 @@ if (DB_count($_TABLES['plugins'], 'pi_name', 'captcha') == 0) {
         'install_doc'       => $LANG_CP00['preinstall_confirm'],
     ));
 } else {
-    echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=44');
+    $pageHandle->direct($_CONF['site_admin_url'] . '/plugins.php?msg=44');
     exit;
 }
 $T->parse('output','install');
-$display .= $T->finish($T->get_var('output'));
-$display .= COM_siteFooter(true);
-
-echo $display;
+$pageHandle->addContent($T->finish($T->get_var('output')));
+$pageHandle->displayPage();
 
 ?>

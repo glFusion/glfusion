@@ -40,8 +40,8 @@
 require_once '../lib-common.php';
 require_once $_CONF['path_system'] . 'classes/timer.class.php';
 
-if ( !function_exists('plugin_getmenuitems_forum') ) {
-    header("HTTP/1.0 404 Not Found");
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
     exit;
 }
 
@@ -51,7 +51,6 @@ $mytimer->startTimer();
 
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 $mytimer = new timerobject();
 $mytimer->startTimer();
@@ -110,7 +109,8 @@ if(isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
     echo '</head>' . LB;
     echo '<body class="sitebody">';
 } else {
-    $pageTitle = strip_tags(COM_checkWords($subject));
+    $pageTitle = $inputHandler->filterVar('text',$subject,''); //strip_tags(COM_checkWords($subject));
+    $pageTitle = $inputHandler->censor($pageTitle);
     gf_siteHeader($pageTitle);
     //Check is anonymous users can access
     forum_chkUsercanAccess();
@@ -167,10 +167,6 @@ $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_h
 $forum_outline_header->set_var('xhtml',XHTML);
 $forum_outline_header->parse ('output', 'forum_outline_header');
 $pageHandle->addContent($forum_outline_header->finish($forum_outline_header->get_var('output')));
-
-// Stop timer and print elapsed time
-//$intervalTime = $mytimer->stopTimer();
-//COM_errorLog("Start Topic Display Time: $intervalTime");
 
 if ($mode != 'preview') {
 
@@ -402,6 +398,7 @@ if(!isset($_REQUEST['onlytopic']) || $_REQUEST['onlytopic'] != 1) {
     $pageHandle->addContent(BaseFooter());
     gf_siteFooter();
 } else {
+    echo $pageHandle->getContent();
     echo '</body>' . LB;
     echo '</html>' . LB;
 }

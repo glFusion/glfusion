@@ -39,12 +39,16 @@
 
 require_once '../lib-common.php'; // Path to your lib-common.php
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
+
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$id    = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
-$forum = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
-$topic = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic'],true) : 0;
+$id    = $inputHandler->getVar('integer','id','request',0); // isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
+$forum = $inputHandler->getVar('integer','forum','request',0); //isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
+$topic = $inputHandler->getVar('integer','topic','request',0); //isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic'],true) : 0;
 
 // Display Common headers
 gf_siteHeader();
@@ -72,24 +76,22 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($id != 0))
             }  else {
                 DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','$pid','{$_USER['uid']}',now() )");
             }
-            forum_statusMessage($LANG_GF02['msg142'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$id",$LANG_GF02['msg142']);
+            $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg142'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$id",$LANG_GF02['msg142']));
         } else {
-            forum_statusMessage($LANG_GF02['msg40'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$id",$LANG_GF02['msg40']);
+            $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg40'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$id",$LANG_GF02['msg40']));
         }
     } else {
         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','$pid','{$_USER['uid']}',now() )");
         $nid = -$id;
         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='{$_USER['uid']}' AND forum_id='$forum' and topic_id = '$nid'");
-        forum_statusMessage($LANG_GF02['msg142'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$id",$LANG_GF02['msg142']);
+        $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg142'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$id",$LANG_GF02['msg142']));
     }
-    echo COM_siteFooter();
-    exit();
-
+    $pageHandle->displayPage();
 } elseif ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete') AND ($id != 0))  {
     DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id='$id')");
     $notifytype = COM_applyFilter($_GET['filter']);
-    forum_statusMessage($LANG_GF02['msg42'], "{$_CONF['site_url']}/forum/notify.php?filter=$notifytype", $LANG_GF02['msg42']);
-    echo COM_siteFooter();
+    $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg42'], "{$_CONF['site_url']}/forum/notify.php?filter=$notifytype", $LANG_GF02['msg42']));
+    $pageHandle->displayPage();
     exit();
 
 } elseif ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete2') AND ($id != ''))  {
@@ -102,17 +104,17 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($id != 0))
     } else {
         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id='$id')");
     }
-    forum_statusMessage($LANG_GF02['msg146'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$topic",$LANG_GF02['msg146']);
-    echo COM_siteFooter();
+    $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg146'], $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$topic",$LANG_GF02['msg146']));
+    $pageHandle->displayPage();
     exit();
 }
 
 // NOTIFY MAIN
 
-$notifytype = COM_applyFilter($_REQUEST['filter']);
-$op = COM_applyFilter($_REQUEST['op']);
-$show = COM_applyFilter($_GET['show'],true);
-$page = COM_applyFilter($_GET['page'],true);
+$notifytype = $inputHandler->getVar('strict','filter','request',''); //COM_applyFilter($_REQUEST['filter']);
+$op         = $inputHandler->getVar('strict','op','request',''); //COM_applyFilter($_REQUEST['op']);
+$show       = $inputHandler->getVar('integer','show','get',0); //COM_applyFilter($_GET['show'],true);
+$page       = $inputHandler->getVar('integer','page','get',0); //COM_applyFilter($_GET['page'],true);
 
 // Page Navigation Logic
 if ($show == 0) {
@@ -256,7 +258,7 @@ if ($nrows == 0) {
     }
 }
 $report->parse ('output', 'report');
-echo $report->finish ($report->get_var('output'));
+$pageHandle->addContent($report->finish ($report->get_var('output')));
 // Display Common headers
 gf_siteFooter();
 

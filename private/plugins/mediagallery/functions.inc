@@ -233,6 +233,7 @@ function plugin_getmenuitems_mediagallery() {
 
     $menuitems = array();
     $menuitems["$menulabel"] = $menurul;
+
     return $menuitems;
 }
 
@@ -2221,7 +2222,7 @@ function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic
 *
 */
 function plugin_getuseroption_mediagallery() {
-    global $_CONF, $_MG_CONF, $_USER, $LANG_MG01;
+    global $_CONF, $_MG_CONF, $_USER, $LANG_MG01, $LANG_MG03, $_TABLES;
 
     if ( $_MG_CONF['up_display_rows_enabled'] == 0 &&
          $_MG_CONF['up_display_columns_enabled'] == 0 &&
@@ -2231,8 +2232,21 @@ function plugin_getuseroption_mediagallery() {
              return '';
     }
 
+    $title = $LANG_MG01['user_prefs'];
+
+    if ( $_MG_CONF['member_albums'] == 1 && $_MG_CONF['link_to_member_album'] == 1 && !COM_isAnonUser() ) {
+        $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $_USER['uid'] . " AND album_parent=" . $_MG_CONF['member_album_root'] . " LIMIT 1";
+        $result = DB_query($sql);
+        $numRows = DB_numRows($result);
+        if ( $numRows > 0 ) {
+            $A = DB_fetchArray($result);
+            $album_id = $A['album_id'];
+            $title .= '</a> <a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id . '">' . $LANG_MG03['your_member_album'];
+        }
+    }
+
     if ( isset($_USER['uid']) && $_USER['uid'] > 1) {
-        return array($LANG_MG01['user_prefs'], $_MG_CONF['site_url'] . '/userprefs.php', 0);
+        return array($title, $_MG_CONF['site_url'] . '/userprefs.php', 0);
     }
 }
 

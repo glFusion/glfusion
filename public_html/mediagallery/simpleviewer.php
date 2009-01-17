@@ -31,6 +31,11 @@
 
 require_once '../lib-common.php';
 
+if (!in_array('mediagallery', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 function MG_getAlbumList ()
 {
 	global $MG_albums;

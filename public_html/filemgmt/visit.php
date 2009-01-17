@@ -53,7 +53,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     } else {
         $uid = 1;    // Set to annonymous GL User ID
     }
-    $lid = COM_applyFilter($_GET['lid'],true);
+    $lid = $inputHandler->getVar('integer','lid','get',0);
     $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
     $groupsql = filemgmt_buildAccessSql();
 
@@ -64,7 +64,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
     if ($testaccess_cnt == 0 OR DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",$lid ) == 0) {
         COM_errorLOG("filemgmt visit.php ERROR: Invalid attempt to download a file. User:{$_USER['username']}, IP:{$_SERVER['REMOTE_ADDR']}, File ID:{$lid}");
-        echo COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/filemgmt/index.php');
         exit;
     } else {
         DB_query("INSERT INTO {$_FM_TABLES['filemgmt_history']} (uid, lid, remote_ip, date) VALUES ($uid, $lid, '{$_SERVER['REMOTE_ADDR']}', NOW())") or $eh->show("0013");
@@ -74,10 +74,9 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         $fullurl = $filemgmt_FileStoreURL .$url;
         $fullurl = stripslashes($fullurl);
         COM_accessLOG("Visit.php => Download File:{$url}, User ID is:{$uid}, Remote address is: {$_SERVER['REMOTE_ADDR']}");
-        Header("Location: $fullurl");
+        header("Location: $fullurl");
         echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=".$fullurl."\"></meta></head><body></body></html>";
         exit();
     }
-
 }
 ?>

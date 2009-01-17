@@ -63,10 +63,9 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupAccessFilter($_GROUPS);
 
-    COM_setArgNames( array('id') );
-    $lid = COM_applyFilter(COM_getArgument( 'id' ),true);
+    $inputHandler->setArgNames(array('id'));
+    $lid = $inputHandler->getVar('integer','id','get',0);
 
-    $display = COM_siteHeader('menu');
 //    $lid = isset($_GET['id']) ? COM_applyFilter($_GET['id'],true) : 0;
     if ($lid == 0) {  // Check if the script is being called from the commentbar
         $lid = str_replace('fileid_','',isset($_POST['id']) ? $_POST['id'] : 0);
@@ -141,7 +140,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         $p->set_var ('imgset',$_CONF['layout_url'] . '/nexflow/images');
         $p->set_var ('tablewidth', $mydownloads_shotwidth+10);
 
-        $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+        $page = $inputHandler->getVar('integer','page','get',0);
         if (!isset($page) OR $page == 0) {
             $page = 1;
         }
@@ -277,8 +276,9 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         $display .= $p->finish ($p->get_var('output'));
     }
 
-    $display .= COM_siteFooter();
-    echo $display;
+    $pageHandle->setShowExtraBlocks(false);
+    $pageHandle->addContent($display);
+    $pageHandle->displayPage();
 
 }
 ?>

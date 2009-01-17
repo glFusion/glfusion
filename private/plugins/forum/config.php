@@ -47,9 +47,9 @@ if (!defined ('GVERSION')) {
  */
 
 $CONF_FORUM['enable_fm_integration'] = 0;
+$CONF_FORUM['allow_memberlist']      = 0;
 
 $CONF_FORUM['version'] = '3.1.0.fusion';
-
 /*************************************************************************
 *          Do not modify any settings below this area                    *
 *************************************************************************/

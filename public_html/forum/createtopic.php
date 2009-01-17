@@ -39,8 +39,8 @@
 
 require_once '../lib-common.php'; // Path to your lib-common.php
 
-if ( !function_exists('plugin_getmenuitems_forum') ) {
-    header("HTTP/1.0 404 Not Found");
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
     exit;
 }
 
@@ -48,7 +48,6 @@ require_once $_CONF['path'] . 'plugins/forum/include/include_html.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/include/lib-uploadfiles.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 $retval = '';
 $forumfiles = array();
@@ -56,26 +55,35 @@ $forumfiles = array();
 gf_siteHeader();
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$id         = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
-$showtopic  = isset($_REQUEST['showtopic']) ? COM_applyFilter($_REQUEST['showtopic'],true) : 0;
-$editpid    = isset($_POST['editpid']) ? COM_applyFilter($_POST['editpid'],true) : 0;
-$forum      = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
-$method     = isset($_REQUEST['method']) ? COM_applyFilter($_REQUEST['method']) : 0;
-$page       = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
-$notify     = isset($_POST['notify']) ? COM_applyFilter($_POST['notify']) : '';
-$preview    = isset($_REQUEST['preview']) ? COM_applyFilter($_REQUEST['preview']) : '';
-if (isset($_REQUEST['postmode'])) {
-    $postmode = COM_applyFilter($_REQUEST['postmode']);
-} else {
+//$id         = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
+//$showtopic  = isset($_REQUEST['showtopic']) ? COM_applyFilter($_REQUEST['showtopic'],true) : 0;
+//$editpid    = isset($_POST['editpid']) ? COM_applyFilter($_POST['editpid'],true) : 0;
+//$forum      = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
+//$method     = isset($_REQUEST['method']) ? COM_applyFilter($_REQUEST['method']) : 0;
+//$page       = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
+//$notify     = isset($_POST['notify']) ? COM_applyFilter($_POST['notify']) : '';
+//$preview    = isset($_REQUEST['preview']) ? COM_applyFilter($_REQUEST['preview']) : '';
+
+$id         = $inputHandler->getVar('integer','id','request',0);
+$showtopic  = $inputHandler->getVar('integer','showtopic','request',0);
+$editpid    = $inputHandler->getVar('integer','editpid','post',0);
+$forum      = $inputHandler->getVar('integer','forum','request',0);
+$method     = $inputHandler->getVar('strict','method','request',0);
+$page       = $inputHandler->getVar('integer','page','request',0);
+$notify     = $inputHandler->getVar('strict','notify','post','');
+$preview    = $inputHandler->getVar('strict','preview','request','');
+$postmode   = $inputHandler->getVar('strict','postmode','request','');
+$postmode_switch = $inputHandler->getVar('integer','postmode_switch','request',0);
+
+if ($postmode == '' ) {
     if ($CONF_FORUM['allow_html'] == 0 OR $CONF_FORUM['post_htmlmode'] == 0) {
         $postmode = 'text';
     } else {
         $postmode = 'html';
     }
 }
-$postmode_switch = isset($_REQUEST['postmode_switch']) ? COM_applyFilter($_REQUEST['postmode_switch'],true) : 0;
 
-ForumHeader($forum,$showtopic);
+$pageHandle->addContent(ForumHeader($forum,$showtopic));
 
 //Check is anonymous users can post
 forum_chkUsercanPost();
@@ -88,8 +96,10 @@ if(empty($_USER['uid']) || $_USER['uid'] == 1 ) {
 
 // ADD EDITED TOPIC
 if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_POST['editpost'] == 'yes')) {
-    $editid = COM_applyFilter($_POST['editid'],true);
-    $forum = COM_applyFilter($_POST['forum'],true);
+
+    $editpid    = $inputHandler->getVar('integer','editpid','post',0);
+    $forum      = $inputHandler->getVar('integer','forum','post',0);
+
     $date = time();
 
     $editAllowed = false;
@@ -109,10 +119,10 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
     }
 
     if (($editpid < 1) && (trim($_POST['subject']) == '')) {
-        BlockMessage('',$LANG_GF02['msg18'],false);
+        $pageHandle->addContent(BlockMessage('',$LANG_GF02['msg18'],false));
     } elseif (!$editAllowed) {
         $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$id}";
-        alertMessage('',$LANG_GF02['msg189'], sprintf($LANG_GF02['msg187'],$link));
+        $pageHandle->addContent(alertMessage('',$LANG_GF02['msg189'], sprintf($LANG_GF02['msg187'],$link)));
     } else {
         if(strlen(trim($_POST['name'])) > $CONF_FORUM['min_username_length'] && strlen(trim($_POST['comment'])) > $CONF_FORUM['min_comment_length']) {
             if ($CONF_FORUM['use_spamx_filter'] == 1) {
@@ -122,7 +132,8 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
                 // Now check the result and redirect to index.php if spam action was taken
                 if ($result > 0) {
                     // then tell them to get lost ...
-                    echo COM_showMessage( $result, 'spamx' );
+                    $pageHandle->addMessage($result,'spamx');
+//                    echo COM_showMessage( $result, 'spamx' );
                     gf_siteFooter();
                     exit;
                 }
@@ -179,9 +190,9 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
                 gf_chknotifications($forum,$editid,$uid);
             }
             $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$topicparent&topic=$editid#$editid";
-            forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19']);
+            $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19']));
         } else {
-            alertMessage($LANG_GF02['msg18']);
+            $pageHandle->addContent(alertMessage($LANG_GF02['msg18']));
         }
     }
 
@@ -201,7 +212,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
         } else {
             $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
         }
-
+        $name = urldecode($name);
         if ( function_exists('plugin_itemPreSave_captcha') ) {
             if ( isset($_POST['captcha']) ) {
                 $captcha = $_POST['captcha'];
@@ -211,12 +222,12 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
             $msg = plugin_itemPreSave_captcha('forum',$captcha);
             if ( $msg != '' ) {
                 $preview = 'Preview';
-                $subject = COM_stripslashes($_POST['subject']);
+                $subject = $inputHandle->getVar('text','subject','post','');
                 $retval .= COM_startBlock ($LANG03[17], '',
                              COM_getBlockTemplate ('_msg_block', 'header'))
                         . $msg
                         . COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-                echo $retval;
+                $pageHandle->addContent($retval);
             }
 
         }
@@ -229,7 +240,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                 $last = COM_checkSpeedlimit ('forum');
                 if ($last > 0) {
                     $message = sprintf($LANG_GF01['SPEEDLIMIT'],$last,$CONF_FORUM['post_speedlimit']);
-                    alertMessage($message,$LANG_GF02['msg180']);
+                    $pageHandle->addContent(alertMessage($message,$LANG_GF02['msg180']));
 
                 } else {
                     if ( $CONF_FORUM['use_spamx_filter'] == 1 ) {
@@ -239,7 +250,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         // Now check the result and redirect to index.php if spam action was taken
                         if ($result > 0) {
                             // then tell them to get lost ...
-                            echo COM_showMessage( $result, 'spamx' );
+                            $pageHandle->addMessage( $result, 'spamx' );
                             gf_siteFooter();
                             exit;
                         }
@@ -249,7 +260,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
                     $subject = COM_truncate($subject,100);
                     $comment = gf_preparefordb($_POST['comment'],$postmode);
-                    $mood = COM_applyFilter($_POST['mood']);
+                    $mood = $inputHandler->getVar('strict','mood','post','');
                     $locked = 0;
                     $sticky = 0;
                     if ($_POST['modedit'] == 1) {
@@ -300,11 +311,11 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     if ($uid != '1') {
                         DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('$_USER[uid]','$forum','$lastid','$date')");
                     }
-                    forum_statusMessage($LANG_GF02['msg19'] . '<br' . XHTML . '><br' . XHTML . '>' . $uploadErrorMessage, $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$lastid",$LANG_GF02['msg19']);
+                    $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg19'] . '<br' . XHTML . '><br' . XHTML . '>' . $uploadErrorMessage, $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$lastid",$LANG_GF02['msg19']));
                 }
 
             } else {
-                alertMessage($LANG_GF02['msg18']);
+                $pageHandle->addContent(alertMessage($LANG_GF02['msg18']));
             }
         }
 // END OF A NEW TOPIC...
@@ -313,12 +324,12 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
             $msg = plugin_itemPreSave_captcha('forum',$_POST['captcha']);
             if ( $msg != '' ) {
                 $preview = 'Preview';
-                $subject = COM_stripslashes($_POST['subject']);
+                $subject = $inputHandler->getVar('text','subject','post','');
                 $retval .= COM_startBlock ($LANG03[17], '',
                              COM_getBlockTemplate ('_msg_block', 'header'))
                         . $msg
                         . COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-                echo $retval;
+                $pageHandle->addContent( $retval );
             }
         }
         if ( $msg == '' ) {
@@ -328,13 +339,14 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
             } else {
                 $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
             }
+            $name = urldecode($name);
             if($name != '' && strlen(trim($_POST['comment'])) > $CONF_FORUM['min_comment_length']) {
 
                 COM_clearSpeedlimit ($CONF_FORUM['post_speedlimit'], 'forum');
                 $last = COM_checkSpeedlimit ('forum');
                 if ($last > 0) {
                     $message = sprintf($LANG_GF01['SPEEDLIMIT'],$last,$CONF_FORUM['post_speedlimit']);
-                    alertMessage($message,$LANG_GF02['msg180']);
+                    $pageHandle->addContent(alertMessage($message,$LANG_GF02['msg180']));
 
                 } else {
                     if ( $CONF_FORUM['use_spamx_filter'] == 1 ) {
@@ -344,7 +356,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         // Now check the result and redirect to index.php if spam action was taken
                         if ($result > 0) {
                             // then tell them to get lost ...
-                            echo COM_showMessage( $result, 'spamx' );
+                            $pageHandle->addMessage( $result, 'spamx' );
                             gf_siteFooter();
                             exit;
                         }
@@ -356,7 +368,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     $postmode = gf_chkpostmode($postmode,$postmode_switch);
                     $subject = gf_preparefordb($_POST['subject'],'text');
                     $comment = gf_preparefordb($_POST['comment'],$postmode);
-                    $mood = COM_applyFilter($_POST['mood']);
+                    $mood = $inputHandler->getVar('strict','mood','post','');
 
                     $fields = "name,date,subject,comment,postmode,ip,mood,uid,pid,forum";
                     $sql  = "INSERT INTO {$_TABLES['gf_topic']} ($fields) ";
@@ -405,11 +417,11 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     // Check for any users subscribed notifications
                     gf_chknotifications($forum,$id,$uid);
                     $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$id&lastpost=true#$lastid";
-                    forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19'],true,$forum);
+                    $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg19'],$link,$LANG_GF02['msg19'],true,$forum));
                 }
 
             } else {
-                alertMessage($LANG_GF02['msg18']);
+                $pageHandle->addContent(alertMessage($LANG_GF02['msg18']));
             }
         }
     }
@@ -420,7 +432,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 }
 
 // EDIT MESSAGE
-$comment = isset($_POST['comment']) ? COM_stripslashes( $_POST['comment'] ) : '';
+//$comment = isset($_POST['comment']) ? COM_stripslashes( $_POST['comment'] ) : '';
+$comment = $inputHandler->getVar('raw','comment','post','');
 
 if ($id > 0) {
     $sql  = "SELECT a.forum,a.pid,a.comment,a.date,a.locked,a.subject,a.mood,a.sticky,a.uid,a.name,a.postmode,b.forum_cat,b.forum_name,b.is_readonly,c.cat_name,";
@@ -442,7 +455,7 @@ if ($method == 'edit') {
     $editAllowed = false;
     if (forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
         $editAllowed = true;
-        echo '<input type="hidden" name="modedit" value="1"' . XHTML . '>';
+        $pageHandle->addContent('<input type="hidden" name="modedit" value="1"' . XHTML . '>');
     } else {
         // User is trying to edit their topic post - this is allowed
         if ($edittopic['date'] > 0 ) {
@@ -469,7 +482,7 @@ if ($method == 'edit') {
             $notify_val= 'checked="checked"';
         }
     } else {
-        alertMessage($LANG_GF02['msg72'],$LANG_GF02['msg191']);
+        $pageHandle->addContent(alertMessage($LANG_GF02['msg72'],$LANG_GF02['msg191']));
     }
 }
 
@@ -510,26 +523,26 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
     $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
     $forum_outline_header->parse ('output', 'forum_outline_header');
-    echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
+    $pageHandle->addContent( $forum_outline_header->finish($forum_outline_header->get_var('output')));
 
     $preview_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $preview_header->set_file (array ('preview_header'=>'topicpreview_header.thtml'));
     $preview_header->set_var ('startblock', COM_startBlock('<b>' .$LANG_GF01['TopicPreview']. '</b>','',$_CONF['path'].'/plugins/forum/templates/blockheader.thtml') );
     $preview_header->parse ('output', 'preview_header');
-    echo $preview_header->finish($preview_header->get_var('output'));
+    $pageHandle->addContent($preview_header->finish($preview_header->get_var('output')));
 
-    echo showtopic($previewitem,'preview');
+    $pageHandle->addContent(showtopic($previewitem,'preview'));
 
     $preview_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $preview_footer->set_file (array ('preview_footer'=>'topicpreview_footer.thtml'));
     $preview_footer->parse ('output', 'preview_footer');
-    echo $preview_footer->finish($preview_footer->get_var('output'));
+    $pageHandle->addContent($preview_footer->finish($preview_footer->get_var('output')));
 
     $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
     $forum_outline_footer->parse ('output', 'forum_outline_footer');
-    echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
-    echo '<br' . XHTML . '>';
+    $pageHandle->addContent($forum_outline_footer->finish ($forum_outline_footer->get_var('output')));
+    $pageHandle->addContent('<br' . XHTML . '>');
 
     // If Moderator and editing the parent topic - see if form has skicky or locked checkbox on
     if ($editmoderator AND $editpid == 0) {
@@ -547,17 +560,17 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
 // NEW TOPIC OR REPLY
 if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($preview == "Preview")) {
     if ( $preview == 'Preview' ) {
-        $edittopic['subject'] = COM_stripslashes($_POST['subject']);
+        $edittopic['subject'] = $inputHandler->getVar('text','subject','post','');
     }
     // validate the forum is actually the forum the topic belongs in...
     if ( $method == 'postreply' || $method=='edit') {
         if ( ($forum != 0) && $forum != $edittopic['forum'] ) {
-            echo '<br' . XHTML . '>';
-            BlockMessage('ERROR',$LANG_GF02['msg87'],false);
+            $pageHandle->addContent('<br' . XHTML . '>');
+            $pageHandle->addContent(BlockMessage('ERROR',$LANG_GF02['msg87'],false));
             $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
-            echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
+            $pageHandle->addContent($forum_outline_footer->finish ($forum_outline_footer->get_var('output')));
             gf_siteFooter();
             exit;
         }
@@ -565,12 +578,12 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     if ( $method == 'newtopic' && ($newtopic['is_readonly'] == 1 ) ) {
         /* Check if this user has moderation rights now to allow a post to a locked topic */
         if (!forum_modPermission($forum,$_USER['uid'],'mod_edit')) {
-            echo '<br' . XHTML . '>';
-            BlockMessage('ERROR',$LANG_GF02['msg87'],false);
+            $pageHandle->addContent('<br' . XHTML . '>');
+            $pageHandle->addContent(BlockMessage('ERROR',$LANG_GF02['msg87'],false));
             $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
-            echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
+            $pageHandle->addContent($forum_outline_footer->finish ($forum_outline_footer->get_var('output')));
             gf_siteFooter();
             exit;
         }
@@ -578,12 +591,12 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     if ($method == 'postreply' AND ( $edittopic['locked'] == 1 || $edittopic['is_readonly'] == 1 )) {
         /* Check if this user has moderation rights now to allow a post to a locked topic */
         if (!forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
-            echo '<br' . XHTML . '>';
-            BlockMessage('ERROR',$LANG_GF02['msg87'],false);
+            $pageHandle->addContent('<br' . XHTML . '>');
+            $pageHandle->addContent(BlockMessage('ERROR',$LANG_GF02['msg87'],false));
             $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
-            echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
+            $pageHandle->addContent($forum_outline_footer->finish ($forum_outline_footer->get_var('output')));
             gf_siteFooter();
             exit;
         }
@@ -592,7 +605,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
     $forum_outline_header->parse ('output', 'forum_outline_header');
-    echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
+    $pageHandle->addContent($forum_outline_header->finish($forum_outline_header->get_var('output')));
 
     if ($method == 'postreply' OR ($method == 'edit' AND $subject == '')) {
         $subject = $edittopic['subject'];
@@ -691,6 +704,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         if($quoteid > 0) {
             $quotesql = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$quoteid'");
             $quotearray = DB_fetchArray($quotesql);
+            $quotearray['name'] = urldecode($quotearray['name']);
             $quotearray['comment'] = $quotearray['comment'];
             if ($CONF_FORUM['pre2.5_mode'] == true ) {
                 if ( $quotearray['postmode'] == 'html' || $quotearray['postmode'] == 'HTML' ) {
@@ -737,7 +751,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     }
     $topicnavbar->parse ('output', 'topicnavbar');
-    echo $topicnavbar->finish($topicnavbar->get_var('output'));
+    $pageHandle->addContent($topicnavbar->finish($topicnavbar->get_var('output')));
 
     if ($uid < 2) {
         $submissionformtop = new Template($_CONF['path'] . 'plugins/forum/templates/');
@@ -747,7 +761,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         $submissionformtop->set_var ('LANG_NAME', $LANG_GF02['msg33']);
         $submissionformtop->set_var ('name', gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes(isset($_POST['aname']) ? $_POST['aname'] : '')))));
         $submissionformtop->parse ('output', 'submissionformtop');
-        echo $submissionformtop->finish($submissionformtop->get_var('output'));
+        $pageHandle->addContent($submissionformtop->finish($submissionformtop->get_var('output')));
 
     } else {
         $submissionformtop = new Template($_CONF['path'] . 'plugins/forum/templates/');
@@ -771,7 +785,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         $submissionformtop->set_var ('username', $username);
         $submissionformtop->set_var ('xusername', urlencode($username));
         $submissionformtop->parse ('output', 'submissionformtop');
-        echo $submissionformtop->finish($submissionformtop->get_var('output'));
+        $pageHandle->addContent( $submissionformtop->finish($submissionformtop->get_var('output')) );
     }
 
     if ($CONF_FORUM['show_moods']) {
@@ -802,7 +816,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         $submissionform_moods->set_var ('LANG_MOOD', $LANG_GF02['msg36']);
         $submissionform_moods->set_var ('moodoptions', $moodoptions);
         $submissionform_moods->parse ('output', 'submissionform_moods');
-        echo $submissionform_moods->finish($submissionform_moods->get_var('output'));
+        $pageHandle->addContent($submissionform_moods->finish($submissionform_moods->get_var('output')));
     }
 
     $sub_dot = '...';
@@ -865,7 +879,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     }
 
     $submissionform_code->parse ('output', 'submissionform_code');
-    echo $submissionform_code->finish($submissionform_code->get_var('output'));
+    $pageHandle->addContent( $submissionform_code->finish($submissionform_code->get_var('output')));
 
     if(!$CONF_FORUM['allow_smilies']) {
         $smilies = '';
@@ -1047,13 +1061,13 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     $submissionform_main->set_var ('postmode', $postmode);
     $submissionform_main->parse ('output', 'submissionform_main');
-    echo $submissionform_main->finish($submissionform_main->get_var('output'));
-    echo '</form>';
+    $pageHandle->addContent($submissionform_main->finish($submissionform_main->get_var('output')));
+    $pageHandle->addContent('</form>' );
 
     $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
     $forum_outline_footer->parse ('output', 'forum_outline_footer');
-    echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
+    $pageHandle->addContent($forum_outline_footer->finish ($forum_outline_footer->get_var('output')));
 
     //Topic Review
     if ( !isset($_POST['editpost']) ) {
@@ -1061,7 +1075,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     }
     if(($method != 'newtopic' && $_POST['editpost'] != 'yes') && ($method == 'postreply' || $preview == 'Preview')) {
         if ($CONF_FORUM['show_topicreview']) {
-            echo "<iframe src=\"{$_CONF['site_url']}/forum/viewtopic.php?mode=preview&amp;showtopic=$id&amp;onlytopic=1&amp;lastpost=true\" height=\"300\" width=\"100%\"></iframe>";
+            $pageHandle->addContent("<iframe src=\"{$_CONF['site_url']}/forum/viewtopic.php?mode=preview&amp;showtopic=$id&amp;onlytopic=1&amp;lastpost=true\" height=\"300\" width=\"100%\"></iframe>");
         }
     }
     //End Topic Review

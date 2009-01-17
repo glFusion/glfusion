@@ -40,6 +40,11 @@
 require_once '../lib-common.php'; // Path to your lib-common.php
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
+
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
 
 $forum = $inputHandler->getVar('integer','forum','request',0);
@@ -190,7 +195,7 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
                 $userlogtime = DB_getItem($_TABLES['gf_log'],"time", "uid=$_USER[uid] AND topic={$P['id']}");
                 if ($userlogtime == NULL OR $P['lastupdated'] > $userlogtime) {
                     if ($CONF_FORUM['use_censor']) {
-                        $P['subject'] = COM_checkWords($P['subject']);
+                        $P['subject'] = $inputHandler->censor($P['subject']);
                     }
                     $postdate = COM_getUserDateTimeFormat($P['lastupdated']);
                     $link = "<a href=\"{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$P['id']}\">";
@@ -265,8 +270,12 @@ if ($op == 'search') {
         $direction = ($direction == "ASC") ? "ASC" : "DESC";
     }
 
-    $html_query = strip_tags(COM_stripslashes($_REQUEST['query']));
-    $query = addslashes(COM_stripslashes($_REQUEST['query']));
+//    $html_query = strip_tags(COM_stripslashes($_REQUEST['query']));
+//    $query = addslashes(COM_stripslashes($_REQUEST['query']));
+
+    $html_query = $inputHandler->getVar('text','query','request','');
+    $query      = $inputHandler->getVar('sql','query','request','');
+
     $report->set_var ('layout_url', $_CONF['layout_url']);
     $report->set_var ('phpself',$_CONF['site_url'] . '/forum/index.php?op=search');
     $report->set_var ('LANG_TITLE',$LANG_GF02['msg119']. ' ' . htmlentities($html_query));
@@ -320,7 +329,8 @@ if ($op == 'search') {
             $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$forumgrpid'");
             if (SEC_inGroup($groupname)) {
                 if ($CONF_FORUM['use_censor']) {
-                    $P['subject'] = COM_checkWords($P['subject']);
+//                    $P['subject'] = COM_checkWords($P['subject']);
+                    $P['subject'] = $inputHandler->censor($P['subject']);
                 }
                 $postdate = COM_getUserDateTimeFormat($P['date']);
                 $link = "<a href=\"{$_CONF['site_url']}/forum/viewtopic.php?forum={$P['forum']}&amp;showtopic={$P['id']}&amp;highlight=" . htmlentities($html_query) . "\">";
@@ -356,7 +366,7 @@ if ($op == 'search') {
 
 if ($op == 'popular') {
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
@@ -403,11 +413,12 @@ if ($op == 'popular') {
 
 if ($op == 'bookmarks' && $_USER['uid'] > 1) {
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
     $header_arr = array(      # display 'text' and use table field 'field'
+                  array('text' => '#',                     'field' => 'bookmark', 'sort' => false),
                   array('text' => $LANG_GF01['FORUM'],     'field' => 'forum_name', 'sort' => true),
                   array('text' => $LANG_GF01['TOPIC'],     'field' => 'subject', 'sort' => true),
                   array('text' => $LANG_GF01['AUTHOR'],    'field' => 'name', 'sort' => true),
@@ -418,6 +429,11 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
     if ($CONF_FORUM['usermenu'] == 'navbar') {
         $pageHandle->addContent(forumNavbarMenu($LANG_GF01['BOOKMARKS']));
     }
+
+    $retval .= '<script type="text/javascript">' . LB;
+    $retval .= 'var site_url = \''.$_CONF['site_url'].'\';' . LB;
+    $retval .= '</script>' . LB;
+    $retval .= '<script type="text/javascript" src="'.$_CONF['site_url'].'/forum/javascript/ajax_bookmark.js"></script>' . LB;
 
     $retval .= COM_startBlock($LANG_GF01['BOOKMARKS'], '',
                               COM_getBlockTemplate('_admin_block', 'header'));
@@ -448,7 +464,7 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
 }
 
 if ($op == 'lastx') {
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
@@ -484,8 +500,8 @@ if ($op == 'lastx') {
         $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$forumgrpid'");
         if (SEC_inGroup($groupname)) {
             if ($CONF_FORUM['use_censor']) {
-                $P['subject'] = COM_checkWords($P['subject']);
-                $P['comment'] = COM_checkWords($P['comment']);
+                $P['subject'] = $inputHandler->censor($P['subject']);
+                $P['comment'] = $inputHandler->censor($P['comment']);
             }
             $topic_id = $P['id'];
             $displayrecs++;
@@ -589,7 +605,8 @@ $base_url = $_CONF['site_url'] . '/forum/index.php?forum='.$forum.'&amp;show='.$
 
 //Display Categories
 if ($forum == 0) {
-    $dCat = isset($_REQUEST['cat']) ? COM_applyFilter($_REQUEST['cat'],true) : 0;
+//    $dCat = isset($_REQUEST['cat']) ? COM_applyFilter($_REQUEST['cat'],true) : 0;
+    $dCat = $inputHandler->getVar('integer','cat','request',0);
     $groups = array ();
     $usergroups = SEC_getUserGroups();
     foreach ($usergroups as $group) {
@@ -705,7 +722,8 @@ if ($forum == 0) {
                     $B['subject'] .= "..";
                 }
                 if ($CONF_FORUM['use_censor']) {
-                    $B['subject'] = COM_checkWords($B['subject']);
+//                    $B['subject'] = COM_checkWords($B['subject']);
+                    $B['subject'] = $inputHandler->censor($B['subject']);
                 }
 
                 if (isset($_USER['uid']) && $_USER['uid'] > 1) {
@@ -994,7 +1012,8 @@ if ($forum > 0) {
             $lastreply['subject'] = COM_truncate($record['subject'],$CONF_FORUM['show_subject_length'],'...');
 
             if ($CONF_FORUM['use_censor']) {
-                $lastreply['subject'] = COM_checkWords($lastreply['subject']);
+//                $lastreply['subject'] = COM_checkWords($lastreply['subject']);
+                $lastreply['subject'] = $inputHandler->censor($lastreply['subject']);
             }
             $lastdate1 = strftime('%m/%d/%Y', $lastreply['date']);
             if ($lastdate1 == date('m/d/Y')) {
@@ -1075,8 +1094,10 @@ if ($forum > 0) {
 
         $subject = COM_truncate($record['subject'],$CONF_FORUM['show_subject_length'],'...');
         if ($CONF_FORUM['use_censor']) {
-            $subject = COM_checkWords($subject);
-            $record['subject'] = COM_checkWords($record['subject']);
+//            $subject = COM_checkWords($subject);
+            $subject = $inputHandler->censor($subject);
+//            $record['subject'] = COM_checkWords($record['subject']);
+            $record['subject'] = $inputHandler->censor($record['subject']);
         }
         if (( isset($record['filename']) && $record['filename'] != '' ) || (isset($lastreply['filename']) && $lastreply['filename'] != '' ))  {
             $subject = $subject . "&nbsp;<img src=\"{$_CONF['site_url']}/forum/images/document_sm.gif\" border=\"0\" alt=\"\"" . XHTML . ">";

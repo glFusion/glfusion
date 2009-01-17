@@ -806,6 +806,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
                 require_once $_CONF['path'] . 'system/lib-story.php';
+                require_once $_CONF['path'] . 'system/classes/story.class.php';
 
                 $album_id = $row['aid'];
                 $srcFile  = $row['data'];
@@ -852,7 +853,11 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $sResult = DB_query("SELECT * FROM {$_TABLES['stories']} WHERE sid='" . $sid . "'");
                 $howmany = DB_numRows($sResult);
                 $S = DB_fetchArray($sResult);
-                list($intro,$body) = STORY_replace_images($S['sid'],$S['introtext'],$S['bodytext']);
+                $story = new Story();
+                $story->loadFromArray($S);
+                $intro = $story->replaceImages($S['introtext']);
+                $body  = $story->replaceImages($S['bodytext']);
+//                list($intro,$body) = STORY_replace_images($S['sid'],$S['introtext'],$S['bodytext']);
 
                 $atag   = $session['session_var0'];
                 $align  = $session['session_var1'];

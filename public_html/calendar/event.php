@@ -37,7 +37,7 @@
 require_once '../lib-common.php';
 
 if (!in_array('calendar', $_PLUGINS)) {
-    echo COM_refresh($_CONF['site_url'] . '/index.php');
+    COM_404();
     exit;
 }
 
@@ -511,7 +511,21 @@ default:
             ));
 
     $cal_templates->set_var ( 'xhtml', XHTML );
-    $cal_templates->set_var ('lang_addevent', $LANG_CAL_1[6]);
+    if ($mode != 'personal') {
+        if ( $_CA_CONF['only_admin_submit'] == 1 ) {
+            if ( SEC_hasRights('calendar.edit') ) {
+                $cal_templates->set_var ('lang_addevent', $LANG_CAL_1[6]);
+            }
+        } else {
+            $cal_templates->set_var ('lang_addevent', $LANG_CAL_1[6]);
+        }
+    } else {
+        $cal_templates->set_var ('lang_addevent', $LANG_CAL_1[6]);
+    }
+
+//    if ( $mode != 'personal' && $_CA_CONF['only_admin_submit'] == 1 && !SEC_hasRights('calendar.edit') ) {
+//        $cal_templates->set_var ('lang_addevent', $LANG_CAL_1[6]);
+//    }
     $cal_templates->set_var ('lang_backtocalendar', $LANG_CAL_1[15]);
     if ($mode == 'personal') {
         $cal_templates->set_var ('calendar_mode', '?mode=personal');

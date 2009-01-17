@@ -41,13 +41,7 @@ require_once $_CONF['path'] . 'plugins/filemgmt/install.inc';
 
 // Only let Root users access this script
 if (!SEC_inGroup('Root')) {
-    COM_errorLog("Someone has tried to illegally access the FileMgmt Pro install/uninstall page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
-    $display = COM_siteHeader();
-    $display .= COM_startBlock($LANG_FM00['access_denied']);
-    $display .= $LANG_FM00['access_denied_msg'];
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter(true);
-    echo $display;
+    $pageHandle->displayAccessError('',$LANG_FM00['access_denied_msg'],'FileMgmt install/uninstall page');
     exit;
 }
 
@@ -60,10 +54,10 @@ $display = '';
 if ($_REQUEST['action'] == 'uninstall') {
     $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
     if ($uninstall_plugin ()) {
-        $display = COM_refresh ($_CONF['site_admin_url']
+        $pageHandle->redirect ($_CONF['site_admin_url']
                                 . '/plugins.php?msg=45');
     } else {
-        $display = COM_refresh ($_CONF['site_admin_url']
+        $pageHandle->redirect($_CONF['site_admin_url']
                                 . '/plugins.php?msg=73');
     }
 
@@ -71,28 +65,27 @@ if ($_REQUEST['action'] == 'uninstall') {
     // plugin not installed
     if (plugin_compatible_with_this_glfusion_version ()) {
         if ( plugin_install_filemgmt($_DB_table_prefix) ) {
-            $display = COM_refresh ($_CONF['site_admin_url']
+            $pageHandle->redirect ($_CONF['site_admin_url']
                                     . '/plugins.php?msg=44');
         } else {
-            $display = COM_refresh ($_CONF['site_admin_url']
+            $pageHandle->redirect ($_CONF['site_admin_url']
                                     . '/plugins.php?msg=72');
         }
     } else {
         // plugin needs a newer version of glFusion
-        $display .= COM_siteHeader ('menu', $LANG32[8])
-                 . COM_startBlock ($LANG32[8])
+        $pageHandle->setPageTitle($LANG32[8]);
+        $display = COM_startBlock ($LANG32[8])
                  . '<p>' . $LANG32[9] . '</p>'
-                 . COM_endBlock ()
-                 . COM_siteFooter ();
+                 . COM_endBlock ();
+        $pageHandle->addContent($display);
     }
 } else {
     // plugin already installed
-    $display .= COM_siteHeader ('menu', $LANG01[77])
-             . COM_startBlock ($LANG32[6])
+    $pageHandle->setPageTitle($LANG01[77]);
+    $pageHandle->addContent(COM_startBlock ($LANG32[6])
              . '<p>' . $LANG32[7] . '</p>'
-             . COM_endBlock ()
-             . COM_siteFooter();
+             . COM_endBlock ());
 }
 
-echo $display;
+$pageHandle->displayPage();
 ?>

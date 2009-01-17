@@ -58,10 +58,10 @@ if($_POST['submit']) {
     //Make sure only 1 anonymous from an IP in a single day.
     $anonwaitdays = 1;
     $ip = $_SERVER['REMOTE_ADDR'];
-    $lid = COM_applyFilter($_POST['lid'],true);
-    $rating = COM_applyFilter($_POST['rating'],true);
+    $lid = $inputHandler->getVar('integer','lid','post',0);
+    $rating = $inputHandler->getVar('integer','rating','post',0);
     // Check if Rating is Null
-    if ($rating=="--") {
+    if ($rating==0) {
         redirect_header("ratefile.php?lid=".$lid."",4,_MD_NORATING);
         exit();
     }
@@ -107,9 +107,10 @@ if($_POST['submit']) {
 
 } else {
 
-    $lid = COM_applyFilter($_GET['lid'],true);
-    $display = COM_siteHeader('menu');
-    $display .= COM_startBlock("<b>"._MD_RATEFILETITLE."</b>");
+
+    $lid = $inputHandler->getVar('integer','lid','get',0);
+
+    $display = COM_startBlock("<b>"._MD_RATEFILETITLE."</b>");
     $result=DB_query("SELECT title FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
     list($title) = DB_fetchARRAY($result);
     $title = $myts->makeTboxData4Show($title);
@@ -132,8 +133,8 @@ if($_POST['submit']) {
     $display .= "&nbsp;<input type=\"button\" value=\""._MD_CANCEL."\" onclick=\"javascript:history.go(-1)\"" . XHTML . ">\n";
     $display .= "</form></td></tr></table>";
     $display .= COM_endBlock();
-    $display .= COM_siteFooter();
-    echo $display;
+    $pageHandle->addContent($display);
+    $pageHandle->displayPage();
 
 }
 

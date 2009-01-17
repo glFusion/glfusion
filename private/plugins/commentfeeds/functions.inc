@@ -107,7 +107,7 @@ function plugin_getfeednames_commentfeeds()
 */
 function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
 {
-    global $_CONF, $_TABLES, $_CF_CONF;
+    global $_CONF, $_TABLES, $_CF_CONF,$pageHandle;
 
     $result = DB_query( "SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = '$feed'" );
     $S = DB_fetchArray( $result );
@@ -141,7 +141,7 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
         $title = stripslashes( $row['title'] );
         $body = stripslashes( $row['comment'] );
         $body = SYND_truncateSummary( $body, $S['content_length'] );
-        $articleLink = COM_buildUrl( $_CONF['site_url']
+        $articleLink = $pageHandle->buildUrl( $_CONF['site_url']
                   ."/article.php?story={$row['sid']}");
 
         $link = $articleLink."#comments";

@@ -36,7 +36,7 @@
 
     var undefined;
 
-    window.onload = function() {
+    window.addEvent('load', function() {
         var oFCKeditor1 = new FCKeditor( 'introhtml' ) ;
         if (undefined == window.glfusionEditorBaseUrl) {
             glfusionEditorBaseUrl = geeklogEditorBaseUrl;
@@ -70,7 +70,7 @@
         }
         oFCKeditor2.Height = 300 ;
         oFCKeditor2.ReplaceTextarea() ;
-    }
+    });
 
     function change_editmode(obj) {
         if (obj.value == 'html') {

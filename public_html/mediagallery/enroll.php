@@ -31,14 +31,8 @@
 
 require_once '../lib-common.php';
 
-if (!function_exists('MG_usage')) {
-    // The plugin is disabled
-    $display = COM_siteHeader();
-    $display .= COM_startBlock('Plugin disabled');
-    $display .= '<br />The Media Gallery plugin is currently disabled.';
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter(true);
-    echo $display;
+if (!in_array('mediagallery', $_PLUGINS)) {
+    COM_404();
     exit;
 }
 

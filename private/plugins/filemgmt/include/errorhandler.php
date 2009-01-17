@@ -45,7 +45,7 @@ if (!defined ('GVERSION')) {
 
 class ErrorHandler {
     function show($e_code, $pages=1) {
-        global $_CONF;
+        global $_CONF, $pageHandle;
         $errmsg = array(
             "0001" =>"Could not connect to the forums database.",
             "0002" => "The forum you selected does not exist. Please go back and try again.",
@@ -112,16 +112,16 @@ class ErrorHandler {
             $e_code = '9999';
         }
         include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
-        $display  = COM_siteHeader('menu');
-        $display .= '<table width="100%" class="plugin" border="0" cellspacing="0" cellpadding="1">';
+
+        $display  = '<table width="100%" class="plugin" border="0" cellspacing="0" cellpadding="1">';
         $display .= '<tr><td class="pluginAlert" style="text-align:right;padding:5px;">File Management Plugin</td>';
         $display .= "<td class=\"pluginAlert\" width=\"50%\" style=\"padding:5px 0px 5px 10px;\">Error Code: $e_code</td></tr>";
         $display .= "<tr><td colspan=\"2\" class=\"pluginInfo\"><b>ERROR:</b> $errmsg[$e_code]</td></tr>";
         $display .= '<tr><td colspan="2" class="pluginInfo" style="text-align:center;padding:10px;">';
         $display .= "[ <a href='javascript:history.go(-".$pages.")'>Go Back</a> ]</td></tr></table>";
-        $display .= COM_siteFooter();
-        echo $display;
-        die("");
+
+        $pageHandle->addContent($display);
+        $pageHandle->displayPage();
     }
 }
 

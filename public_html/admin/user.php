@@ -133,6 +133,7 @@ function edituser($uid = '', $msg = '')
            $MESSAGE, $pageHandle;
 
     $retval = '';
+    $newuser = 0;
 
     if (!empty ($msg)) {
         $retval .= COM_startBlock ($LANG28[22], '',
@@ -177,6 +178,7 @@ function edituser($uid = '', $msg = '')
         $lastlogin = '';
         $lasttime = '';
         $A['status'] = USER_ACCOUNT_ACTIVE;
+        $newuser = 1;
     }
 
     $retval .= COM_startBlock ($LANG28[1], '',
@@ -221,6 +223,10 @@ function edituser($uid = '', $msg = '')
         $user_templates->set_var('username', $A['username']);
     } else {
         $user_templates->set_var('username', '');
+    }
+
+    if ( $newuser == 1 ) {
+        $user_templates->set_var('newuser',1);
     }
 
     if ($_CONF['allow_user_photo'] && ($A['uid'] > 0)) {
@@ -355,7 +361,7 @@ function edituser($uid = '', $msg = '')
 
 function listusers()
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG28, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
 
     require_once $_CONF['path_system'] . 'lib-admin.php';
 
@@ -374,10 +380,14 @@ function listusers()
                     array('text' => $LANG28[37], 'field' => $_TABLES['users'] . '.uid', 'sort' => true),
                     array('text' => $LANG28[3], 'field' => 'username', 'sort' => true),
                     array('text' => $LANG28[4], 'field' => 'fullname', 'sort' => true),
-                    array('text' => $login_text, 'field' => $login_field, 'sort' => true)
+                    array('text' => $login_text, 'field' => $login_field, 'sort' => true),
+                    array('text' => $LANG28[7], 'field' => 'email', 'sort' => true)
     );
 
-    $header_arr[] = array('text' => $LANG28[7], 'field' => 'email', 'sort' => true);
+    if ($_CONF['user_login_method']['openid'] ||
+        $_CONF['user_login_method']['3rdparty']) {
+        $header_arr[] = array('text' => $LANG04[121], 'field' => 'remoteservice', 'sort' => true);
+    }
 
     $defsort_arr = array('field'     => $_TABLES['users'] . '.uid',
                          'direction' => 'ASC');
@@ -408,9 +418,15 @@ function listusers()
         'help_url'   => ''
     );
 
+    $join_userinfo   = '';
+    $select_userinfo = '';
     if ($_CONF['lastlogin']) {
-        $join_userinfo="LEFT JOIN {$_TABLES['userinfo']} ON {$_TABLES['users']}.uid={$_TABLES['userinfo']}.uid ";
-        $select_userinfo=",lastlogin";
+        $join_userinfo .= "LEFT JOIN {$_TABLES['userinfo']} ON {$_TABLES['users']}.uid={$_TABLES['userinfo']}.uid ";
+        $select_userinfo .= ",lastlogin";
+    }
+    if ($_CONF['user_login_method']['openid'] ||
+        $_CONF['user_login_method']['3rdparty']) {
+        $select_userinfo .= ',remoteservice';
     }
     $sql = "SELECT {$_TABLES['users']}.uid,username,fullname,email,photo,status,regdate$select_userinfo "
          . "FROM {$_TABLES['users']} $join_userinfo WHERE 1=1";
@@ -503,25 +519,31 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
         }
 
         if (empty ($uid) || !empty ($passwd)) {
-            $passwd = SEC_encryptPassword($passwd);
+            $passwd2 = SEC_encryptPassword($passwd);
         } else {
-            $passwd = DB_getItem ($_TABLES['users'], 'passwd', "uid = $uid");
+            $passwd2 = DB_getItem ($_TABLES['users'], 'passwd', "uid = $uid");
         }
 
         if (empty ($uid)) {
             if (empty ($passwd)) {
                 // no password? create one ...
+                $passwd = USER_createPassword (8);
+/*
                 srand ((double) microtime () * 1000000);
                 $passwd = rand ();
                 $passwd = md5 ($passwd);
                 $passwd = substr ($passwd, 1, 8);
-                $passwd = SEC_encryptPassword($passwd);
+*/
+                $passwd2 = SEC_encryptPassword($passwd);
             }
 
-            $uid = USER_createAccount ($username, $email, $passwd, $fullname,
+            $uid = USER_createAccount ($username, $email, $passwd2, $fullname,
                                        $homepage);
             if ($uid > 1) {
                 DB_query("UPDATE {$_TABLES['users']} SET status = $userstatus WHERE uid = $uid");
+            }
+            if ( isset($_POST['emailuser']) ) {
+                USER_createAndSendPassword ($username, $email, $uid, $passwd);
             }
         } else {
             $fullname = addslashes (strip_tags($fullname));
@@ -994,7 +1016,7 @@ function importusers()
 
     $upload = new upload ();
     $upload->setPath ($_CONF['path_data']);
-    $upload->setAllowedMimeTypes (array ('text/plain' => '.txt'));
+    $upload->setAllowedMimeTypes (array ('text/plain' => '.txt','application/octet-stream' => '.txt'));
     $upload->setFileNames ('user_import_file.txt');
     $upload->setFieldName('importfile');
     if ($upload->uploadFiles()) {

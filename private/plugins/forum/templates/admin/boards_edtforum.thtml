@@ -16,7 +16,8 @@
           <tr>
             <td class="pluginCellSubTitle">{LANG_DESCRIPTION}</td>
             <td class="pluginCellText pluginCellFill">
-              <input type="text" name="dscp" value="{forum_dscp}" size="80"{xhtml}>
+{#              <input type="text" name="dscp" value="{forum_dscp}" size="80"{xhtml}>  #}
+              <textarea name="dscp" rows="4" cols="80">{forum_dscp}</textarea>
             </td>
           </tr>
           <tr>

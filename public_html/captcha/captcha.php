@@ -38,9 +38,9 @@ require_once('../lib-common.php');
 require($_CONF['path'] . 'plugins/captcha/class/captcha.class.php');
 
 // see if an existing session_id is passed
-if (isset($_GET['csid']) ) {
-    $csid = COM_applyFilter($_GET['csid']);
-} else {
+$csid = $inputHandler->getVar('strict','csid','get','');
+
+if ($csid == '' ) {
     die("Invalid session id");
 }
 

@@ -414,7 +414,7 @@ function gf_checkHTMLforSQL($str,$postmode='html') {
 * @return       string      filtered HTML code
 */
 function gf_cleanHTML($message) {
-    global $_CONF;
+    global $_CONF, $inputHandler;
 
     if( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
@@ -423,27 +423,27 @@ function gf_cleanHTML($message) {
         return $message;
     }
 
-    return COM_filterHTML( $message);
+    return $inputHandler->filterVar('html', $message,'');
 }
 
 
 function gf_preparefordb($message,$postmode) {
-    global $CONF_FORUM, $_CONF;
+    global $CONF_FORUM, $_CONF, $inputHandler;
 
     // if magic quotes is on, remove the slashes from the $_POST
-    if(get_magic_quotes_gpc() ) {
-       $message = stripslashes($message);
-    }
+//    if(get_magic_quotes_gpc() ) {
+//       $message = stripslashes($message);
+//    }
 
     if ( $CONF_FORUM['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML') ) {
         $message = gf_checkHTMLforSQL($message,$postmode);
     }
 
     if ($CONF_FORUM['use_censor']) {
-        $message = COM_checkWords($message);
+        $message = $inputHandler->censor($message);
     }
 
-    $message = addslashes($message);
+    $message = $inputHandler->prepareForDB($message);
     return $message;
 }
 
@@ -474,7 +474,7 @@ function geshi_formatted($str,$type='PHP') {
 
 
 function gf_checkHTML($str) {
-    global $CONF_FORUM, $_CONF;
+    global $CONF_FORUM, $_CONF, $inputHandler;
 
     // just return if admin doesn't want to filter html
     if ( $CONF_FORUM['use_glfilter'] != 1 ) {
@@ -487,12 +487,12 @@ function gf_checkHTML($str) {
     {
         return $str;
     }
-    return COM_filterHTML($str);
+    return $inputHandler->filterVar('html',$str,''); // COM_filterHTML($str);
 }
 
 
 function gf_formatTextBlock($str,$postmode='html',$mode='') {
-    global $_CONF, $CONF_FORUM;
+    global $_CONF, $CONF_FORUM, $inputHandler;
 
     $bbcode = new StringParser_BBCode ();
     $bbcode->setGlobalCaseSensitive (false);
@@ -550,7 +550,7 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
     $bbcode->setRootParagraphHandling (true);
 
     if ($CONF_FORUM['use_censor']) { // and $mode == 'preview') {
-        $str = COM_checkWords($str);
+        $str = $inputHandler->censor($str);
     }
     $str = $bbcode->parse ($str);
 
@@ -583,7 +583,7 @@ function bbcode_oldpost($text) {
 }
 
 function gf_formatOldPost($str,$postmode='html',$mode='') {
-    global $CONF_FORUM;
+    global $CONF_FORUM, $inputHandler;
 
     $oldPost = 0;
 
@@ -623,7 +623,7 @@ function gf_formatOldPost($str,$postmode='html',$mode='') {
                       'code', array ('listitem', 'block', 'inline', 'link'), array ());
 
     if ( $CONF_FORUM['use_censor'] ) {
-        $str = COM_checkWords($str);
+        $str = $inputHandler->censor($str);
     }
     $str = $bbcode->parse ($str);
 
@@ -1201,6 +1201,10 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
             $testText        = strip_tags($testText);
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
             $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . ($A['pid'] == 0 ? $A['id'] : $A['pid']) . '&amp;topic='.$A['id'].'#'.$A['id'].'" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';
+            break;
+        case 'bookmark' :
+            $bm_icon_on = '<img src="'.gf_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""' . XHTML . '>';
+            $retval = '<span id="forumbookmark'.$A['topic_id'].'"><a href="#" onclick="ajax_toggleForumBookmark('.$A['topic_id'].');return false;">'.$bm_icon_on.'</a></span>';
             break;
         default:
             $retval = $fieldvalue;

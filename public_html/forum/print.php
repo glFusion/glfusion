@@ -39,13 +39,12 @@
 
 require_once '../lib-common.php'; // Path to your lib-common.php
 
-if ( !function_exists('plugin_getmenuitems_forum') ) {
-    header("HTTP/1.0 404 Not Found");
+if (!in_array('forum', $_PLUGINS)) {
+    COM_404();
     exit;
 }
 
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 
 function gf_FormatForPrint( $str, $postmode='html' ) {
@@ -75,24 +74,19 @@ function gf_FormatForPrint( $str, $postmode='html' ) {
 }
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$id = COM_applyFilter($_REQUEST['id'],true);
+$id = $inputHandler->getVar('integer','id','request',0);
 
 //Check is anonymous users can access
 if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
-    echo COM_siteHeader();
-    echo COM_startBlock();
-    alertMessage($LANG_GF02['msg01'],$LANG_GF02['msg171']);
-    echo COM_endBlock();
-    echo COM_siteFooter();
+    $pageHandle->displayAccessError($LANG_GF02['msg01'],$LANG_GF02['msg171'],' anonymous user tried to access Forum plugin');
     exit;
 }
 
 
 //Check is anonymous users can access
 if ($id == 0 OR DB_count($_TABLES['gf_topic'],"id","$id") == 0) {
-        echo COM_siteHeader();
-        forum_statusMessage($LANG_GF02['msg166'], $_CONF['site_url'] . "/forum/index.php?forum=$forum",$LANG_GF02['msg166']);
-        echo COM_siteFooter();
+        $pageHandle->addContent(forum_statusMessage($LANG_GF02['msg166'], $_CONF['site_url'] . "/forum/index.php?forum=$forum",$LANG_GF02['msg166']));
+        $pageHandle->displayPage();
         exit;
 }
 
@@ -100,9 +94,8 @@ $forum = DB_getItem($_TABLES['gf_topic'],"forum","id='{$id}'");
 $query = DB_query("SELECT grp_name from {$_TABLES['groups']} groups, {$_TABLES['gf_forums']} forum WHERE forum.forum_id='{$forum}' AND forum.grp_id=groups.grp_id");
 list ($groupname) = DB_fetchArray($query);
 if (!SEC_inGroup($groupname) AND $grp_id != 2) {
-        echo COM_siteHeader();
-        alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
-        echo COM_siteFooter();
+        $pageHandle->addContent(alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']));
+        $pageHandle->displayPage();
         exit;
 }
 

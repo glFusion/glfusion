@@ -151,10 +151,12 @@ function themecenterposts($title, $content) {
 }
 
 function redirect_header($url, $time=3, $message=''){
-    $display = COM_siteHeader('menu');
-    $display .= "<meta http-equiv='Content-Type' content='text/html;' />\n";
-    $display .= "<meta http-equiv='Refresh' content='$time; url=$url' />\n";
-    $display .= "<div id='content'>\n";
+    global $pageHandle;
+
+
+    $pageHandle->addDirectHeader("<meta http-equiv='Refresh' content='$time; url=$url' />'");
+
+    $display  = "<div id='content'>\n";
     $display .= COM_startBlock();
     $display .= "<center>";
     if ( $message!="" ) {
@@ -165,8 +167,9 @@ function redirect_header($url, $time=3, $message=''){
     $display .= "</b>\n";
     $display .= "</center></div>\n";
     $display .= COM_endBlock();
-    $display .= COM_siteFooter(false);
-    echo $display;
+
+    $pageHandle->addContent($display);
+    $pageHandle->displayPage();
 }
 
 //Reusable Link Sorting Functions

@@ -180,7 +180,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 */
 function contactform ($uid, $subject = '', $message = '')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG08, $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG08, $LANG_LOGIN,$inputHandler;
 
     $retval = '';
 
@@ -224,6 +224,9 @@ function contactform ($uid, $subject = '', $message = '')
 
             if (($_CONF['advanced_editor'] == 1)) {
                 $mail_template->set_file('form','contactuserform_advanced.thtml');
+                $ae_uid = addslashes($inputHandler->getVar('integer',$_USER['uid'],''));
+                $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
+                DB_Query($sql,1);
             } else {
                 $mail_template->set_file('form','contactuserform.thtml');
             }

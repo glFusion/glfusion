@@ -33,14 +33,8 @@ require_once '../../lib-common.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
 
-if (!function_exists('MG_usage')) {
-    // The plugin is disabled
-    $display = COM_siteHeader();
-    $display .= COM_startBlock('Plugin disabled');
-    $display .= '<br />The Media Gallery plugin is currently disabled.';
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter(true);
-    echo $display;
+if (!in_array('mediagallery', $_PLUGINS)) {
+    COM_404();
     exit;
 }
 

@@ -22,7 +22,8 @@
           <tr>
             <td class="pluginCellSubTitle">{LANG_DESCRIPTION}</td>
             <td class="pluginCellText pluginCellFill">
-              <input type="text" name="dscp" value="{catdscp}" size="70"{xhtml}>
+{#              <input type="text" name="dscp" value="{catdscp}" size="70"{xhtml}>  #}
+              <textarea rows="4" cols="70" name="dscp">{catdscp}</textarea>
             </td>
           </tr>
         </table>

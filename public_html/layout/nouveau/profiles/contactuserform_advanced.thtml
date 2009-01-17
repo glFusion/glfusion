@@ -11,15 +11,15 @@ window.addEvent('domready',function() {
   <form action="{site_url}/profiles.php" method="post" id="contact" onsubmit='set_postcontent();'>
     <table cellspacing="0" cellpadding="3" width="100%">
       <tr>
-        <td class="alignright"><b>{lang_username}:</b></td>
+        <td class="alignright"><b>{lang_username}</b></td>
         <td><input class="fValidate['required']" type="text" id="author" name="author" size="45" value="{username}" maxlength="96"{xhtml}></td>
       </tr>
       <tr>
-        <td class="alignright"><b>{lang_useremail}:</b></td>
+        <td class="alignright"><b>{lang_useremail}</b></td>
         <td><input class="fValidate['required','email']" type="text" id="authoremail" name="authoremail" size="45" value="{useremail}" maxlength="96"{xhtml}></td>
       </tr>
       <tr>
-        <td class="alignright"><b>{lang_subject}:</b></td>
+        <td class="alignright"><b>{lang_subject}</b></td>
         <td><input class="fValidate['required']" type="text" id="subject" name="subject" size="45" maxlength="96" value="{subject}"{xhtml}></td>
       </tr>
       <tr>

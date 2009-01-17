@@ -52,19 +52,19 @@ $myts = new MyTextSanitizer;
 $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],'cid','pid');
 $mytree->setGroupAccessFilter($_GROUPS);
 
-$page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
-$cid  = isset($_GET['cid']) ? COM_applyFilter($_GET['cid'],true) : 0;
-$orderby  = isset($_GET['orderby']) ? @html_entity_decode(COM_applyFilter($_GET['orderby'],false)) : '';
+$page = $inputHandler->getVar('integer','page','get',0);
+$cid  = $inputHandler->getVar('integer','cid','get',0);
+$orderby = @html_entity_decode($inputHandler->getVar('strict','orderby','get',''));
 
 $groupsql = filemgmt_buildAccessSql();
 $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE cid='$cid' $groupsql";
 list($category_rows) = DB_fetchArray( DB_query($sql));
 if ($cid == 0 OR $category_rows == 0) {
-    echo COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
+    $pageHandle->redirect($_CONF['site_url'] . '/filemgmt/index.php');
     exit;
 }
 
-$display = COM_siteHeader('menu');
+$display = '';
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
@@ -73,8 +73,6 @@ $p->set_file (array (
     'sortmenu'         =>     'sortmenu.thtml'));
 
 $p->set_var ('layout_url', $_CONF['layout_url']);
-$p->set_var ('site_url',$_CONF['site_url']);
-$p->set_var ('site_admin_url',$_CONF['site_admin_url']);
 $p->set_var ('imgset',$_CONF['layout_url'] . '/nexflow/images');
 $p->set_var ('tablewidth', $mydownloads_shotwidth+10);
 $p->set_var('block_header', COM_startBlock(_MD_CATEGORYTITLE));
@@ -210,7 +208,8 @@ if($maxrows > 0) {
     $display .= $p->finish ($p->get_var('output'));
 }
 
-$display .= COM_siteFooter();
-echo $display;
+$pageHandle->setShowExtraBlocks(false);
+$pageHandle->addContent($display);
+$pageHandle->displayPage();
 
 ?>

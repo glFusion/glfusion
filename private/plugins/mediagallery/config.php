@@ -33,6 +33,8 @@
  * Media Gallery Global Configuration Options
  * ----------------------------------------------------------------------- */
 
+$_MG_CONF['link_to_member_album'] = 1;
+
 /*
  * Media Gallery Path Configuration. If you want to move the directory where
  * the Media Gallery programs are stored and accessed, change the
@@ -84,7 +86,7 @@ $_MG_CONF['disable_search_integration'] = 0;
  * To disable this check, set this variable to 1.
  */
 
-$_MG_CONF['disable_version_check']   = 0;
+$_MG_CONF['disable_version_check']   = 1;
 
 /*
  * Set the maximum number of media items to display in the Media Manage Screen

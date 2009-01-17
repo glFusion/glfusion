@@ -117,7 +117,7 @@ function submissionform($type='story', $mode = '', $topic = '')
 */
 function submitstory($topic = '')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG12, $LANG24;
+    global $_CONF, $_TABLES, $_USER, $LANG12, $LANG24,$inputHandler;
 
     $retval = '';
 
@@ -141,6 +141,9 @@ function submitstory($topic = '')
     if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) &&
         file_exists ($_CONF['path_layout'] . 'submit/submitstory_advanced.thtml')) {
         $storyform->set_file('storyform','submitstory_advanced.thtml');
+        $ae_uid = addslashes($inputHandler->getVar('integer',$_USER['uid'],''));
+        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
+        DB_Query($sql,1);
         if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
             $storyform->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
         } else {

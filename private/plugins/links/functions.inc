@@ -122,7 +122,8 @@ function plugin_whatsnewsupported_links()
 */
 function plugin_getwhatsnew_links()
 {
-    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG_LINKS;
+    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG_LINKS,
+           $pageHandle;
 
     $retval = '';
 
@@ -135,10 +136,10 @@ function plugin_getwhatsnew_links()
         $newlinks = array();
         for ($x = 0; $x < $nrows; $x++) {
             $A = DB_fetchArray($result);
-            $A['title'] = stripslashes($A['title']);
+            $A['title'] = $A['title'];
 
             // redirect link via portal.php so we can count the clicks
-            $lcount = COM_buildUrl($_CONF['site_url']
+            $lcount = $pageHandle->buildUrl($_CONF['site_url']
                     . '/links/portal.php?what=link&amp;item=' . $A['lid']);
 
             $title = COM_truncate($A['title'], $_CONF['title_trim_length'],
@@ -170,13 +171,13 @@ function plugin_getwhatsnew_links()
 */
 function plugin_autotags_links($op, $content = '', $autotag = '')
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $pageHandle,$inputHandler;
 
     if ($op == 'tagname' ) {
         return 'link';
     } else if ($op == 'parse') {
-        $lid = COM_applyFilter($autotag['parm1']);
-        $url = COM_buildUrl($_CONF['site_url']
+        $lid = $inputHandler->filterVar('strict',$autotag['parm1'],'');
+        $url = $pageHandle->buildUrl($_CONF['site_url']
                             . '/links/portal.php?what=link&amp;item=' . $lid);
         if (empty($autotag['parm2'])) {
             $result = DB_query("SELECT url, title FROM {$_TABLES['links']} WHERE lid = '$lid'");
@@ -243,9 +244,9 @@ function LINKS_countLinksAndClicks ()
 */
 function plugin_showstats_links ($showsitestats)
 {
-    global $_CONF, $_TABLES, $LANG_LINKS_STATS;
+    global $_CONF, $_TABLES, $LANG_LINKS_STATS,$pageHandle;
 
-    require_once ($_CONF['path_system'] . 'lib-admin.php');
+    USES_lib_admin();
 
     $retval = '';
 
@@ -269,8 +270,8 @@ function plugin_showstats_links ($showsitestats)
         );
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray ($result);
-            $title = stripslashes (str_replace ('$', '&#36;', $A['title']));
-            $url = COM_buildUrl ($_CONF['site_url']
+            $title = str_replace ('$', '&#36;', $A['title']);
+            $url = $pageHandle->buildUrl ($_CONF['site_url']
                         . '/links/portal.php?what=link&amp;item=' . $A['lid']);
             $sid = COM_createLink($title, $url, array('title' => $A['url']));
             $hits = COM_numberFormat ($A['hits']);
@@ -486,7 +487,7 @@ function plugin_getfeednames_links()
 */
 function plugin_getfeedcontent_links ($feed, &$link, &$update)
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $pageHandle;
 
     $result = DB_query( "SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = '$feed'" );
     $S = DB_fetchArray( $result );
@@ -502,10 +503,10 @@ function plugin_getfeedcontent_links ($feed, &$link, &$update)
         $row = DB_fetchArray( $result );
         $lids[] = $row['lid'];
 
-        $linktitle = stripslashes( $row['title'] );
-        $linkdesc = stripslashes( $row['description'] );
+        $linktitle = $row['title'];
+        $linkdesc =  $row['description'];
 
-        $linklink = COM_buildUrl( $_CONF['site_url']
+        $linklink = $pageHandle->buildUrl( $_CONF['site_url']
                   . '/links/portal.php?what=link&amp;item=' . $row['lid'] );
 
         $content[] = array( 'title'   => $linktitle,
@@ -534,9 +535,11 @@ function plugin_getfeedcontent_links ($feed, &$link, &$update)
 */
 function links_buildSql($cid, $limits)
 {
+    global $inputHandler;
+
     $where = '';
     if ($cid != 'all') {
-        $where = "cid='" . addslashes($cid) . "'";
+        $where = "cid='" . $inputHandler->prepareForDB($cid) . "'";
     }
 
     $limitsql = '';
@@ -786,7 +789,7 @@ function plugin_moderationdelete_links($id)
 */
 function plugin_savesubmission_links($A)
 {
-    global $LANG12;
+    global $LANG12,$pageHandle;
 
     $retval = '';
 
@@ -794,13 +797,15 @@ function plugin_savesubmission_links($A)
                 !empty ($A['url'])) {
         $retval = plugin_save_submit_links ($A);
     } else {
-        $retval .= COM_siteHeader()
-            . COM_startBlock ($LANG12[22], '',
+            $retval = COM_startBlock ($LANG12[22], '',
                            COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[23]
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . submissionform('links')
-            . COM_siteFooter ();
+            . plugin_submit_links($A);
+            $pageHandle->addContent($retval);
+            $pageHandle->displayPage();
+//            . submissionform('links')
+//            . COM_siteFooter ();
     }
 
     return $retval;
@@ -812,9 +817,10 @@ function plugin_savesubmission_links($A)
 * @return   string  HTML for the link submission form
 *
 */
-function plugin_submit_links()
+function plugin_submit_links($A = array())
 {
-    global $_CONF, $LANG_LINKS_SUBMIT, $LANG12;
+    global $_CONF, $LANG_LINKS_SUBMIT, $LANG12,
+           $pageHandle, $inputHandler;
 
     $retval = COM_startBlock ($LANG_LINKS_SUBMIT[1], 'submitlink.html');
 
@@ -835,6 +841,19 @@ function plugin_submit_links()
     $linkform->set_var('lang_submit', $LANG12[8]);
     $linkform->set_var('max_url_length', 255);
     $linkform->set_var('xhtml', XHTML);
+
+    if ( isset($A['title']) ) {
+        $linkform->set_var('title',$A['title']);
+    }
+    if ( isset($A['description'] ) ) {
+        $linkform->set_var('description',$A['description']);
+    }
+    if ( isset($A['url']) ) {
+        $linkform->set_var('url',$A['url']);
+    } else {
+        $linkform->set_var('url','http://');
+    }
+
     PLG_templateSetVars ('links', $linkform);
     $linkform->parse('theform', 'linkform');
     $retval .= $linkform->finish($linkform->get_var('theform'));
@@ -852,22 +871,21 @@ function plugin_submit_links()
 */
 function plugin_save_submit_links($A)
 {
-    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG12;
+    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG12,
+           $inputHandler, $pageHandle;
 
     $retval = '';
 
     /* check CAPTCHA */
     $msg = PLG_itemPreSave ('links', $A);
     if (!empty ($msg)) {
-        $retval = COM_siteHeader();
-        $retval .= COM_startBlock($LANG12[22], '',
+        $retval = COM_startBlock($LANG12[22], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
                 . $msg
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
-                . plugin_submit_links()
-                . COM_siteFooter();
-
-        return $retval;
+                . plugin_submit_links($A);
+        $pageHandle->addContent($retval);
+        $pageHandle->displayPage();
     }
 
     // pseudo-formatted link description for the spam check
@@ -880,11 +898,11 @@ function plugin_save_submit_links($A)
         COM_displayMessageAndAbort($result, 'spamx', 403, 'Forbidden');
     }
 
-    $A['cid'] = strip_tags(COM_stripslashes($A['categorydd']));
+    $A['cid'] = strip_tags($A['categorydd']);
 
     $validcat = false;
     if (!empty($A['cid'])) {
-        $cid = addslashes($A['cid']);
+        $cid = $inputHandler->prepareForDB($A['cid']);
         $cat = DB_getItem($_TABLES['linkcategories'], 'category',
                           "cid = '$cid'");
         if (!empty($cat)) {
@@ -892,22 +910,26 @@ function plugin_save_submit_links($A)
         }
     }
     if (!$validcat) {
-        $retval = COM_siteHeader();
-        $retval .= COM_startBlock($LANG12[22], '',
+        $retval = COM_startBlock($LANG12[22], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
                 . $LANG12[23]
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
-                . submissionform('links')
-                . COM_siteFooter();
-
-        return $retval;
+                . submissionform('links');
+        $pageHandle->addContent($retval);
+        $pageHandle->displayPage();
     }
 
-    $A['cid'] = addslashes($A['cid']);
-    $A['description'] = addslashes(htmlspecialchars(COM_checkWords($A['description'])));
-    $A['title'] = addslashes(strip_tags(COM_checkWords($A['title'])));
-    $A['url'] = addslashes(COM_sanitizeUrl($A['url']));
-    $A['lid'] = addslashes(COM_makeSid());
+    $A['cid'] = $inputHandler->prepareForDB($A['cid']);
+    $A['description'] = $inputHandler->prepareForDB(
+                            $inputHandler->censor(
+                            $inputHandler->filterVar('html','description',$A)));
+    $A['title'] = $inputHandler->prepareForDB(
+                    $inputHandler->censor(
+                    $inputHandler->filterVar('text','title',$A)));
+
+    $A['url'] = $inputHandler->prepareForDB(
+                    $inputHandler->filterVar('url','url',$A));
+    $A['lid'] = $inputHandler->prepareForDB(COM_makeSid());
 
     COM_updateSpeedlimit('submit');
     if (COM_isAnonUser()) {
@@ -925,7 +947,7 @@ function plugin_save_submit_links($A)
             LINKS_sendNotification($_TABLES['linksubmission'], $A);
         }
 
-        $retval = COM_refresh($_CONF['site_url']
+        $pageHandle->redirect($_CONF['site_url']
                               . '/index.php?msg=1&amp;plugin=links');
 
     } else { // add link directly
@@ -947,11 +969,9 @@ function plugin_save_submit_links($A)
         }
         COM_rdfUpToDateCheck('links', $A['cid'], $A['lid']);
         CACHE_remove_instance('whatsnew');
-        $retval = COM_refresh($_CONF['site_url']
+        $pageHandle->redirect($_CONF['site_url']
                               . '/index.php?msg=4&amp;plugin=links');
     }
-
-    return $retval;
 }
 
 /**
@@ -1312,7 +1332,7 @@ function links_breadcrumbs($root, $cid)
  */
 function phpblock_topic_links()
 {
-    global $_CONF, $_TABLES, $LANG_LINKS, $topic;
+    global $_CONF, $_TABLES, $LANG_LINKS, $topic, $pageHandle;
 
     $retval = '';
 
@@ -1324,7 +1344,7 @@ function phpblock_topic_links()
             for ($i = 0; $i < $nrows; $i++) {
                 $A = DB_fetchArray($result);
                 $content = stripslashes($A['title']);
-                $url = COM_buildUrl($_CONF['site_url']
+                $url = $pageHandle->buildUrl($_CONF['site_url']
                      . '/links/portal.php?what=link&amp;item=' . $A['lid']);
                 $retval .= COM_createLink($content, $url,
                                           array('title' => $A['url']))

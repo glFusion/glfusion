@@ -161,30 +161,29 @@ function plugin_commentsupport_filemgmt()
  * @return  mixed   HTML string (redirect?) for success or comment form if failure.
  */
 function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
-    global $_CONF,$_FM_TABLES, $LANG03, $_TABLES;
+    global $_CONF,$_FM_TABLES, $LANG03, $_TABLES,$inputHandler,$pageHandle;
 
     $title = strip_tags ($title);
-    $pid = COM_applyFilter ($pid, true);
-    $postmode = COM_applyFilter ($postmode);
+    $pid = $inputHandler->filterVar('integer',$pid,'');
+    $postmode = $inputHandler->filterVar('strict',$postmode,'');
 
     $ret = CMT_saveComment ( $title, $comment, $id, $pid, 'filemgmt',$postmode);
 
     if ( $ret > 0 ) { // failure
-        return COM_siteHeader()
-            . CMT_commentform ($title, $comment, $id, $pid,
-                    'filemgmt', $LANG03[14], $postmode)
-            . COM_siteFooter();
+        $pageHandle->addContent(CMT_commentform ($title, $comment, $id, $pid,
+                    'filemgmt', $LANG03[14], $postmode));
+        $pageHandle->displayPage();
     } else { // success
         $comments = DB_count ($_TABLES['comments'], 'sid', $id);
         DB_change($_FM_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',$id);
-        return (COM_refresh (COM_buildUrl ($_CONF['site_url']
-            . "/filemgmt/index.php?id=$id")) );
+        $pageHandle->redirect($pageHandle->buildUrl ($_CONF['site_url']
+            . "/filemgmt/index.php?id=$id")) ;
     }
 }
 function plugin_editcomment_filemgmt($cid,$id) {
-    global $_CONF;
+    global $_CONF,$pageHandle;
 
-    echo COM_refresh (COM_buildUrl ($_CONF['site_url'].'/filemgmt/index.php?id=$id'));
+    $pageHandle->redirect ($pageHandle->buildUrl ($_CONF['site_url'].'/filemgmt/index.php?id=$id'));
     exit;
 }
 
@@ -196,12 +195,12 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @param   string  $id     Item id to which $cid belongs
  * @return  mixed   false for failure, HTML string (redirect?) for success
  */function plugin_deletecomment_filemgmt($cid,$id) {
-    global $_CONF,$_FM_TABLES, $_TABLES;
+    global $_CONF,$_FM_TABLES, $_TABLES,$pageHandle;
 
     if (SEC_hasRights("filemgmt.edit")) {
         if (CMT_deleteComment($cid, $id, 'filemgmt') == 0) {
             // Now redirect the program flow to the view of the file and its comments
-            return (COM_refresh($_CONF['site_url'] . "/filemgmt/index.php?id=$id"));
+            $pageHandle->COM_refresh($_CONF['site_url'] . "/filemgmt/index.php?id=$id");
         } else {
             return false;
         }
@@ -512,16 +511,15 @@ function plugin_getadminoption_filemgmt()
 */
 function plugin_uninstall_filemgmt($installCheck='')
 {
-    global $_CONF, $LANG_FM00, $LANG_FILEMGMT, $_TABLES,$_FM_TABLES;
+    global $_CONF, $LANG_FM00, $LANG_FILEMGMT, $_TABLES,$_FM_TABLES,$pageHandle;
 
      // Check and see if plugin is still enabled - if so display warning and exit
     if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
         COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
-        $display = COM_siteHeader();
-        $display .= COM_startBlock($LANG_FM00['warning']);
-        $display .= $LANG_FM00['enabled'];
-        $display .= COM_endBlock();
-        $display .= COM_siteFooter();
+        $pageHandle->addContent( COM_startBlock($LANG_FM00['warning']));
+        $pageHandle->addContent($LANG_FM00['enabled']);
+        $pageHandle->addContent(COM_endBlock());
+        $pageHandle->displayPage();
         echo $display;
         exit;
     }

@@ -66,14 +66,14 @@ function CAPTCHA_sid() {
 }
 
 function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type, $postmode) {
-    global $_CP_CONF, $_USER, $_POST;
+    global $_CP_CONF, $_USER,$inputHandler;
 
     if ( $_CP_CONF['enable_comment'] != 1 ) {
         return 0;
     }
 
     if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        $str = $_POST['captcha'];
+        $str = $inputHandler->getVar('strict','captcha','post','');
         list( $rc, $msg )  = CAPTCHA_checkInput( 'comment',$str );
         if ( $rc == 1 )
             return 0;
@@ -84,7 +84,7 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
 }
 
 function plugin_itemPreSave_captcha( $type='registration', $content='' ) {
-    global $_CP_CONF, $_USER, $_POST;
+    global $_CP_CONF, $_USER, $inputHandler;
 
     $msg = '';
 
@@ -146,7 +146,7 @@ function plugin_itemPreSave_captcha( $type='registration', $content='' ) {
         $_USER['uid'] = 1;
     }
     if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        $str = COM_applyFilter($_POST['captcha']);
+        $str = $inputHandler->getVar('strict','captcha','post','');
         list( $rc, $msg )  = CAPTCHA_checkInput( $type, $str );
         return $msg;
     }
@@ -154,7 +154,7 @@ function plugin_itemPreSave_captcha( $type='registration', $content='' ) {
 }
 
 function plugin_templatesetvars_captcha($name, &$template) {
-    global $_CP_CONF, $_USER, $_TABLES;
+    global $_CP_CONF, $_USER, $_TABLES, $inputHandler;
 
     switch( $name ) {
         case 'comment' :
@@ -234,9 +234,8 @@ function plugin_templatesetvars_captcha($name, &$template) {
         // OK, we need to insert the CAPTCHA, so now we need to setup the session_id:
 
         // check to see if a failed entry happened...
-        if ( isset($_POST['csid']) ) {
-            $csid = COM_applyFilter($_POST['csid']);
-        } else {
+        $csid = $inputHandler->getVar('strict','csid','post','');
+        if ( $csid == '' ) {
             $csid    = CAPTCHA_sid();
         }
         $time    = time();
@@ -274,9 +273,13 @@ function CAPTCHA_getHTML($csid, $type='general' ) {
             $T->set_file('page', 'captcha_contact.thtml');
             break;
         case 'emailstory' :
+            $T->set_file('page', 'captcha.thtml');
+            break;
         case 'links' :
+            $T->set_file('page', 'captcha_links.thtml');
+            break;
         case 'calendar' :
-            $T->set_file('page', 'captcha_emailstory.thtml');
+            $T->set_file('page', 'captcha_calendar.thtml');
             break;
         case 'forum' :
             $T->set_file('page', 'captcha_forum.thtml');
@@ -310,7 +313,7 @@ function CAPTCHA_getHTML($csid, $type='general' ) {
 }
 
 function CAPTCHA_checkInput( $type, $str ) {
-    global $_CONF, $_CP_CONF, $_TABLES, $LANG_CP00, $_SERVER;
+    global $_CONF, $_CP_CONF, $_TABLES, $LANG_CP00, $inputHandler;
 
     $msg = '';
     $rc = 0;
@@ -328,7 +331,7 @@ function CAPTCHA_checkInput( $type, $str ) {
         $msg = $LANG_CP00['bypass_error_blank'];
         $rc = 0;
     } else {
-        $csid = COM_applyFilter($_POST['csid']);
+        $csid = $inputHandler->getVar('strict','csid','post','');
         // check the time
         $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . $csid . "'");
         $now = time();
