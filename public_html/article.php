@@ -243,7 +243,7 @@ if ($A['count'] > 0) {
                  ($_CONF['emailstoryloginrequired'] == 0)))) {
             $emailUrl = $_CONF['site_url'] . '/profiles.php?sid=' . $story->getSid()
                       . '&amp;what=emailstory';
-            $story_options[] = COM_createLink($LANG11[2], $emailUrl);
+            $story_options[] = COM_createLink($LANG11[2], $emailUrl,array('rel' => 'nofollow'));
             $story_template->set_var ('email_story_url', $emailUrl);
             $story_template->set_var ('lang_email_story', $LANG11[2]);
             $story_template->set_var ('lang_email_story_alt', $LANG01[64]);
