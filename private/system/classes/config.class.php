@@ -115,12 +115,24 @@ class config {
      */
     function &initConfig()
     {
-        global $_TABLES;
+        global $_TABLES, $_CONF;
 
         // Reads from a cache file if there is one
-        if ($this->_readFromCache()) {
-            $this->_post_configuration();
-            return $this->config_array;
+        $this->no_cache = false;
+        if ( !$_CONF['no_cache_config'] ) {
+            if ($this->_readFromCache()) {
+                if (($_CONF['rootdebug'] != $this->config_array['Core']['rootdebug']) ||
+                  ($_CONF['site_enabled'] != $this->config_array['Core']['site_enabled'])) {
+                    $this->config_array = array();
+                    $this->config_array['Core'] =& $_CONF;
+                    $this->no_cache = true;
+                } else {
+                    $this->_post_configuration();
+                    return $this->config_array;
+                }
+            }
+        } else {
+            $this->no_cache = true;
         }
 
         $false_str = serialize(false);
@@ -141,7 +153,9 @@ class config {
                 }
             }
         }
-        $this->_writeIntoCache();
+        if ( !$this->no_cache ) {
+            $this->_writeIntoCache();
+        }
         $this->_post_configuration();
 
         return $this->config_array;
@@ -1002,6 +1016,12 @@ class config {
     {
         global $_CONF;
 
+        $saveenabled = ($_CONF['site_enabled'] ? (bool) 1 : (bool) 0);
+        $savedebug   = $_CONF['rootdebug'];
+
+        $this->config_array['Core']['rootdebug']   = 0;
+        $this->config_array['Core']['site_enabled'] = 1;
+
         $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
         $s = serialize($this->config_array);
         $fh = fopen($cache_file, 'wb');
@@ -1016,6 +1036,8 @@ class config {
         } else {
             COM_errorLog('config::_writeIntoCache: cannot write into cache file: ' . $cache_file);
         }
+        $this->config_array['Core']['rootdebug']   = $savedebug;
+        $this->config_array['Core']['site_enabled'] = $saveenabled;
     }
 
     /**
