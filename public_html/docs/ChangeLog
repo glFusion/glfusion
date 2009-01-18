@@ -5,6 +5,17 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Enhanced system maintenance option handling. No longer use $_CONF vars which
+  could cause issues with caching of the configuration settings. (Mark)
+    - rootdebug
+    - site_enabled
+    - no_fail_sql
+    - no_config_cache (new)
+    - maintenance_mode (new)
+        public_html/siteconfig.php.dist
+        public_html/lib-common.php
+        private/system/classes/config.class.php
+
 - Comments always show username, regarless of show_fullname configuration
   setting - Port from Geeklog (Mark)
         private/system/lib-comment.php

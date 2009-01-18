@@ -173,6 +173,9 @@ $LANG01 = array(
     129 => 'Configuration',
     130 => 'Webservices',
     500 => 'Please remove the admin/install/ directory!',
+    501 => 'Root Debug is Enabled',
+    502 => 'No fail SQL is Enabled',
+    503 => 'Maintenance Mode - Non-admin logins disabled',
     'ctl' => 'Clear Template Cache',
     'logview' => 'Logview',
 );

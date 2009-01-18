@@ -64,15 +64,29 @@ function glf_template_set_root($root) {
 }
 
 function glfusion_SecurityCheck() {
-    global $_CONF,$LANG01;
+    global $_CONF,$_SYSTEM,$LANG01;
 
     if (!SEC_inGroup ('Root')) {
         return;
     }
 
     $retval = '';
+    $msg = '';
     if ( file_exists($_CONF['path_html'] . 'admin/install/') ) {
-        $retval = '<p style="width:100%;text-align:center;"><span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">' . $LANG01[500] . '</span></p>';
+        $msg .= $LANG01[500].'<br />';
+    }
+
+    if ( $_SYSTEM['rootdebug'] ) {
+        $msg .= $LANG01[501].'<br />';
+    }
+    if ( $_SYSTEM['no_fail_sql'] ) {
+        $msg .= $LANG01[502].'<br />';
+    }
+    if ( $_SYSTEM['maintenance_mode'] ) {
+        $msg .= $LANG01[503].'<br />';
+    }
+    if ( $msg != '' ) {
+        $retval = '<p style="width:100%;text-align:center;"><span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">' . $msg . '</span></p>';
     }
     return $retval;
 }

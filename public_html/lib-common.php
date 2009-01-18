@@ -123,7 +123,7 @@ $_CONF = $config->get_config('Core');
 
 // Before we do anything else, check to ensure site is enabled
 
-if (isset($_CONF['site_enabled']) && !$_CONF['site_enabled']) {
+if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
 
     if (empty($_CONF['site_disabled_msg'])) {
         header("HTTP/1.1 503 Service Unavailable");
@@ -6763,7 +6763,7 @@ function COM_getCharset()
   */
 function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='')
 {
-    global $_CONF, $_USER;
+    global $_CONF, $_USER, $_SYSTEM;
 
     // Handle @ operator
     if (error_reporting() == 0) {
@@ -6779,8 +6779,8 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
      * If we have a root user, then output detailed error message:
      */
     if ((is_array($_USER) && function_exists('SEC_inGroup'))
-            || (isset($_CONF['rootdebug']) && $_CONF['rootdebug'])) {
-        if ($_CONF['rootdebug'] || SEC_inGroup('Root')) {
+            || (isset($_SYSTEM['rootdebug']) && $_SYSTEM['rootdebug'])) {
+        if ($_SYSTEM['rootdebug'] || SEC_inGroup('Root')) {
 
             header('HTTP/1.1 500 Internal Server Error');
             header('Status: 500 Internal Server Error');
@@ -6792,9 +6792,9 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             echo("<html><head><title>$title</title></head>\n<body>\n");
 
             echo('<h1>An error has occurred:</h1>');
-            if ($_CONF['rootdebug']) {
+            if ($_SYSTEM['rootdebug']) {
                 echo('<h2 style="color: red">This is being displayed as "Root Debugging" is enabled
-                        in your glFusion configuration.</h2><p>If this is a production
+                        in your glFusion siteconfig.php.</h2><p>If this is a production
                         website you <strong><em>should disable</em></strong> this
                         option once you have resolved any issues you are
                         troubleshooting.</p>');
@@ -6804,7 +6804,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             echo("<p>$errno - $errstr @ $errfile line $errline</p>");
 
             if (!function_exists('SEC_inGroup') || !SEC_inGroup('Root')) {
-                if ('force' != ''.$_CONF['rootdebug']) {
+                if ('force' != ''.$_SYSTEM['rootdebug']) {
                     $errcontext = COM_rootDebugClean($errcontext);
                 } else {
                     echo('<h2 style="color: red">Root Debug is set to "force", this
@@ -7195,6 +7195,24 @@ function USES_class_upload() {
 foreach( $_PLUGINS as $pi_name )
 {
     require_once( $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' );
+}
+
+if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 && !SEC_inGroup('Root') ) {
+    if (empty($_CONF['site_disabled_msg'])) {
+        header("HTTP/1.1 503 Service Unavailable");
+        header("Status: 503 Service Unavailable");
+        echo $_CONF['site_name'] . ' is temporarily down.  Please check back soon.';
+    } else {
+        // if the msg starts with http: assume it's a URL we should redirect to
+        if (preg_match("/^(https?):/", $_CONF['site_disabled_msg']) === 1) {
+            echo COM_refresh($_CONF['site_disabled_msg']);
+        } else {
+            header("HTTP/1.1 503 Service Unavailable");
+            header("Status: 503 Service Unavailable");
+            echo $_CONF['site_disabled_msg'];
+        }
+    }
+    exit;
 }
 
 // Check and see if any plugins (or custom functions)

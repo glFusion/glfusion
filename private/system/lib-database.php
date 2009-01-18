@@ -139,7 +139,7 @@ $_DB = new database($_DB_host, $_DB_name, $_DB_user, $_DB_pass, 'COM_errorLog',
 unset($_DB_user);
 unset($_DB_pass);
 
-if ( isset($_CONF['no_fail_sql']) && $_CONF['no_fail_sql'] == 1 ) {
+if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
     $_DB->_no_fail = 1;
 }
 
