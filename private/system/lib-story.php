@@ -693,7 +693,7 @@ function STORY_deleteImage ($image)
     $filename = $_CONF['path_images'] . 'articles/' . $image;
     if (!@unlink ($filename)) {
         // log the problem but don't abort the script
-        echo COM_errorLog ('Unable to remove the following image from the article: ' . $filename);
+        COM_errorLog ('Unable to remove the following image from the article: ' . $filename);
     }
 
     // remove unscaled image, if it exists
@@ -704,7 +704,7 @@ function STORY_deleteImage ($image)
     if (file_exists ($lFilename_large_complete)) {
         if (!@unlink ($lFilename_large_complete)) {
             // again, log the problem but don't abort the script
-            echo COM_errorLog ('Unable to remove the following image from the article: ' . $lFilename_large_complete);
+            COM_errorLog ('Unable to remove the following image from the article: ' . $lFilename_large_complete);
         }
     }
 }
@@ -1141,7 +1141,7 @@ function service_submit_story($args, &$output, &$svc_msg)
             $delete = count($args['delete']);
             for ($i = 1; $i <= $delete; $i++) {
                 $ai_filename = DB_getItem ($_TABLES['article_images'],'ai_filename', "ai_sid = '{$sid}' AND ai_img_num = " . key($args['delete']));
-            STORY_deleteImage ($ai_filename);
+                STORY_deleteImage ($ai_filename);
 
                 DB_query ("DELETE FROM {$_TABLES['article_images']} WHERE ai_sid = '$sid' AND ai_img_num = " . key($args['delete']));
                 next($args['delete']);
