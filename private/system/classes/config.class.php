@@ -143,9 +143,7 @@ class config {
                 }
             }
         }
-        if ( !$_SYSTEM_['no_cache_config'] ) {
-            $this->_writeIntoCache();
-        }
+        $this->_writeIntoCache();
         $this->_post_configuration();
 
         return $this->config_array;

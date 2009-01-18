@@ -1,12 +1,11 @@
 <?php
-
-/*
- * glFusion site configuration
- *
- * You should not need to edit this file. See the installation instructions
- * for details.
- *
- */
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | siteconfig.php.dist                                                      |
+// |                                                                          |
+// | Site configuration settings                                              |
+// +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -16,66 +15,78 @@ global $_CONF, $_SYSTEM;
 $_CONF = array();
 $_SYSTEM = array();
 
-/****************************************************************************
- * System Maintenance and debugging options
- *
- * These options allow you to enable several debug options...
-*****************************************************************************/
 
-/*
- * Site Enabled - if set to true, the site will accept users.
- *                if set to false, users will be shown a site down message
- */
+// +--------------------------------------------------------------------------+
+// | If true, only site admins can submit calendar events. This will remove   |
+// | the Add to Master option for all other users.                            |
+// +--------------------------------------------------------------------------+
+$_CA_CONF['only_admin_submit']      = false;
+
+// +--------------------------------------------------------------------------+
+// | Enables 'per user' libraries for images for the Advanced Editor          |
+// +--------------------------------------------------------------------------+
+$_CONF_FCK['editor_images_by_user'] = false;
+
+
+// ** System Maintenance and debugging options **
+
+// +--------------------------------------------------------------------------+
+// | Site Enabled - if set to true, the site will accept users                |
+// |                if set to false, users will be shown a site down msg.     |
+// +--------------------------------------------------------------------------+
 
 $_SYSTEM['site_enabled'] = true;
 
 
-/*
- * Maintenance Mode - Allows a site admin to disable the site
- *                    for non-admin (and anonymous) users.
- *
- * This mode is useful if you have some maintenance work to do like
- * installing a new plugin or reorganizing content, etc.
- *
- * You _MUST_ login to your site as an admin user _BEFORE_ enabling
- * this option since it will disable all non-admin users.
- */
+// +--------------------------------------------------------------------------+
+// | Maintenance Mode - Allows a site admin to disable the site               |
+// |                    for non-admin (and anonymous) users.                  |
+// |                                                                          |
+// | This mode is useful if you have some maintenance work to do like         |
+// | installing a new plugin or reorganizing content, etc.                    |
+// |                                                                          |
+// | You _MUST_ login to your site as an admin user _BEFORE_ enabling         |
+// | this option since it will disable all non-admin users.                   |
+// +--------------------------------------------------------------------------+
 
 $_SYSTEM['maintenance_mode'] = false;
 
-/*
- * Root debug - Display detailed error messages.
- *
- * NOTE: This option should not be enabled on production sites since it
- *       will display configuration options and other details that could
- *       expose confidential data such as database logins, etc.
- *
- */
+
+// +--------------------------------------------------------------------------+
+// | Root debug - Display detailed error messages.                            |
+// |                                                                          |
+// | NOTE: This option should not be enabled on production sites since it     |
+// |       will display configuration options and other details that could    |
+// |       expose confidential data such as database logins, etc.             |
+// +--------------------------------------------------------------------------+
+
 $_SYSTEM['rootdebug']        = false;
 
-/*
- * No Fail SQL - Do not fail (crash) if SQL errors are encountered
- *
- * Use this option if your site becomes unavailable because of the
- * dreaded 'An SQL error has occurred' message.  This will disable
- * the error temporarily to allow you to debug or resolve the issue.
- */
+
+// +--------------------------------------------------------------------------+
+// | No Fail SQL - Do not fail (crash) if SQL errors are encountered          |
+// |                                                                          |
+// | Use this option if your site becomes unavailable because of the          |
+// | dreaded 'An SQL error has occurred' message.  This will disable          |
+// | the error temporarily to allow you to debug or resolve the issue.        |
+// +--------------------------------------------------------------------------+
 
 $_SYSTEM['no_fail_sql']      = false;
 
-/*
- * No Cache Config - disable configuration caching
- *
- * If you experience issues with the caching the configuration options.
- * you can disable the caching feature by setting this to true.
- */
+// +--------------------------------------------------------------------------+
+// | No Cache Config - disable configuration caching                          |
+// |                                                                          |
+// | If you experience issues with the caching the configuration options.     |
+// | you can disable the caching feature by setting this to true.             |
+// +--------------------------------------------------------------------------+
 
 $_SYSTEM['no_cache_config']  = false;
 
-/*
- * You should not need to change any settings below this line,
- * these settings are created during the site installation.
- */
+
+// +--------------------------------------------------------------------------+
+// | You should not need to change any settings below this line,              |
+// | these settings are created during the site installation.                 |
+// +--------------------------------------------------------------------------+
 
 $_CONF['path'] = '/path/to/glfusion/';
 $_CONF['path_system'] = $_CONF['path'] . 'system/';
@@ -83,8 +94,6 @@ $_CONF['path_system'] = $_CONF['path'] . 'system/';
 $_CONF['default_charset'] = 'iso-8859-1';
 
 $_CONF_FCK['imagelibrary'] = '/images/library';
-
-// Useful Stuff
 
 if (!defined('LB')) {
   define('LB',"\n");

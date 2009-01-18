@@ -15,6 +15,9 @@ v1.1.2
         public_html/siteconfig.php.dist
         public_html/lib-common.php
         private/system/classes/config.class.php
+        private/system/lib-glfusion.php
+        private/language/english.php
+        private/language/english_utf-8.php
 
 - Comments always show username, regarless of show_fullname configuration
   setting - Port from Geeklog (Mark)
