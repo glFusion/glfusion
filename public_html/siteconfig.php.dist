@@ -23,6 +23,17 @@ $_CONF['site_enabled'] = true;
 // on and get detailed error messages:
 // $_CONF['rootdebug'] = true;
 
+// If you have issues with caching the configuration options,
+// you can disable the caching feature by setting this to
+// true
+$_CONF['no_cache_config'] = false;
+
+// If you are receiving unknown SQL errors set this to 1 to allow
+// the site to continue to load and enable debugging of the
+// problem.
+$_CONF['no_fail_sql'] = 0;
+
+// the following settings are done automatically during install.
 
 $_CONF['path'] = '/path/to/glfusion/';
 $_CONF['path_system'] = $_CONF['path'] . 'system/';
@@ -30,12 +41,6 @@ $_CONF['path_system'] = $_CONF['path'] . 'system/';
 $_CONF['default_charset'] = 'iso-8859-1';
 
 $_CONF_FCK['imagelibrary'] = '/images/library';
-
-// If you are receiving unknown SQL errors set this to 1 to allow
-// the site to continue to load and enable debugging of the
-// problem.
-
-$_CONF['no_fail_sql'] = 0;
 
 // Useful Stuff
 
