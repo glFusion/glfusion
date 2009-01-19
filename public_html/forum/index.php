@@ -362,7 +362,7 @@ if ($op == 'search') {
 
 if ($op == 'popular') {
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
@@ -390,7 +390,18 @@ if ($op == 'popular') {
     $defsort_arr = array('field'     => 'views',
                          'direction' => 'DESC');
 
-    $sql = "SELECT date,subject,comment,replies,views,id,forum,forum_name FROM {$_TABLES['gf_topic']} LEFT JOIN {$_TABLES['gf_forums']} ON forum=forum_id WHERE (pid = '0')";
+    $groups = array ();
+    $usergroups = SEC_getUserGroups();
+    foreach ($usergroups as $group) {
+        $groups[] = $group;
+    }
+    $grouplist = implode(',',$groups);
+
+    $sql  = "SELECT a.id, a.forum, a.name, a.date, a.lastupdated, a.last_reply_rec, a.subject, ";
+    $sql .= "a.comment, a.uid, a.name, a.pid, a.replies, a.views, b.forum_name  ";
+    $sql .= "FROM {$_TABLES['gf_topic']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
+    $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 ";
 
     $query_arr = array('table'          => 'topic',
                        'sql'            => $sql,
@@ -409,7 +420,7 @@ if ($op == 'popular') {
 
 if ($op == 'bookmarks' && $_USER['uid'] > 1) {
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
@@ -460,7 +471,7 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
 }
 
 if ($op == 'lastx') {
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
