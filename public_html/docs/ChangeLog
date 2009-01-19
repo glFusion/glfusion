@@ -5,6 +5,11 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Forum - Fixed a security vulnerability in the popular topic listing. The
+  list did not properly filter posts by permission allowing posts that a user
+  did not have read access to be listed. Reported by Eric Kingsley (Mark)
+        public_html/forum/index.php
+
 - Enhanced system maintenance option handling. No longer use $_CONF vars which
   could cause issues with caching of the configuration settings. (Mark)
     - rootdebug
