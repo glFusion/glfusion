@@ -869,13 +869,11 @@ function plugin_save_submit_links($A)
     /* check CAPTCHA */
     $msg = PLG_itemPreSave ('links', $A);
     if (!empty ($msg)) {
-    //    $retval = COM_siteHeader();
         $retval = COM_startBlock($LANG12[22], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
                 . $msg
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
                 . plugin_submit_links($A);
-//                . COM_siteFooter();
 
         return $retval;
     }
@@ -901,14 +899,24 @@ function plugin_save_submit_links($A)
             $validcat = true;
         }
     }
-    if (!$validcat) {
-        $retval = COM_siteHeader();
+    // check link
+    if (!preg_match("/^(http(s?):\\/\\/|ftp:\\/\\/{1})((\w+\.)+)\w{2,}(\/?)$/i", $A['url'])) {
         $retval .= COM_startBlock($LANG12[22], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
                 . $LANG12[23]
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
-                . plugin_submit_links($A)
-                . COM_siteFooter();
+                . plugin_submit_links($A);
+
+        return $retval;
+    }
+
+
+    if (!$validcat) {
+        $retval = COM_startBlock($LANG12[22], '',
+                       COM_getBlockTemplate('_msg_block', 'header'))
+                . $LANG12[23]
+                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
+                . plugin_submit_links($A);
 
         return $retval;
     }
@@ -1129,7 +1137,7 @@ function links_validateUrl($url)
 {
     global $LANG_LINKS_STATUS;
 
-    require_once 'HTTP/Request.php';
+    USES_pear_http_request();
 
     $retval = '';
 
