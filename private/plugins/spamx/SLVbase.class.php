@@ -53,7 +53,8 @@ class SLVbase {
     {
         global $_SPX_CONF;
 
-        require_once ('XML/RPC.php');
+//        require_once ('XML/RPC.php');
+        USES_pear_xml_rpc();
 
         $retval = false;
 

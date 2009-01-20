@@ -36,7 +36,8 @@ if (!defined ('GVERSION')) {
 }
 
 // PEAR class to handle XML-RPC
-require_once ('XML/RPC.php');
+//require_once ('XML/RPC.php');
+USES_pear_xml_rpc();
 
 class LiveJournal
 {

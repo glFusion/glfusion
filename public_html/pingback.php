@@ -39,7 +39,8 @@ require_once $_CONF['path_system'] . 'lib-pingback.php';
 require_once $_CONF['path_system'] . 'lib-trackback.php';
 
 // PEAR class to handle XML-RPC
-require_once 'XML/RPC/Server.php';
+//require_once 'XML/RPC/Server.php';
+USES_pear_xml_rpc_server();
 
 // Note: Error messages are hard-coded in English since there is no way of
 // knowing which language the sender of the pingback may prefer.
