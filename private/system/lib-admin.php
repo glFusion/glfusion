@@ -877,6 +877,32 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
                 }
             }
             break;
+        case "copy":
+        case "copy_adv":
+            $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
+                                     $A['perm_owner'], $A['perm_group'],
+                                     $A['perm_members'], $A['perm_anon']);
+            if ($access == 3) {
+                if (SEC_hasTopicAccess ($A['tid']) == 3) {
+                    $access = $LANG_ACCESS['copy'];
+                } else {
+                    $access = $LANG_ACCESS['readonly'];
+                }
+            } else {
+                $access = $LANG_ACCESS['readonly'];
+            }
+            if ($fieldname == 'access') {
+                $retval = $access;
+            } else if ($access == $LANG_ACCESS['copy']) {
+                if ($fieldname == 'copy_adv') {
+                    $retval = COM_createLink($icon_arr['copy'],
+                        "{$_CONF['site_admin_url']}/story.php?mode=clone&amp;editor=adv&amp;sid={$A['sid']}");
+                } else if ($fieldname == 'copy') {
+                    $retval = COM_createLink($icon_arr['copy'],
+                        "{$_CONF['site_admin_url']}/story.php?mode=clone&amp;editor=std&amp;sid={$A['sid']}");
+                }
+            }
+            break;
         case "featured":
             if ($A['featured'] == 1) {
                 $retval = $LANG24[35];

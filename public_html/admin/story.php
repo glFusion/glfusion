@@ -164,6 +164,7 @@ function liststories()
     $header_arr = array(
         array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false));
 
+    $header_arr[] = array('text' => $LANG_ADMIN['copy'], 'field' => 'copy', 'sort' => false);
     $header_arr[] = array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true);
     $header_arr[] = array('text' => $LANG_ACCESS['access'], 'field' => 'access', 'sort' => false);
     $header_arr[] = array('text' => $LANG24[34], 'field' => 'draft_flag', 'sort' => true);
@@ -371,7 +372,16 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
             $navbar->add_menuitem($LANG24[85],'showhideEditorDiv("all",5);return false;',true);
         }
 
-        $navbar->set_selected($LANG24[80]);
+//        $navbar->set_selected($LANG24[80]);
+        if ($mode == 'preview') {
+            $story_templates->set_var ('show_preview', '');
+            $story_templates->set_var ('show_htmleditor', 'none');
+            $story_templates->set_var ('show_texteditor', 'none');
+            $story_templates->set_var ('show_submitoptions', 'none');
+            $navbar->set_selected($LANG24[79]);
+        } else {
+            $navbar->set_selected($LANG24[80]);
+        }
         $story_templates->set_var ('navbar', $navbar->generate() );
     }
 
@@ -836,6 +846,19 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     }
     $display .= storyeditor ($sid, $mode, '', $topic, $editor);
     $display .= COM_siteFooter();
+    echo $display;
+} else if ($mode == 'clone') {
+    $sid = '';
+    if (isset ($_GET['sid'])) {
+        $sid = COM_applyFilter ($_GET['sid']);
+    }
+    if (!empty($sid)) {
+        $display .= COM_siteHeader('menu', $LANG24[5]);
+        $display .= storyeditor ($sid, $mode);
+        $display .= COM_siteFooter();
+    } else {
+        $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+    }
     echo $display;
 } else if ($mode == 'editsubmission') {
     @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
