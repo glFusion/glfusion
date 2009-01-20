@@ -297,33 +297,11 @@ function plugin_autotags_sitetailor($op,$content='',$autotag='') {
         return array('hmenu','vmenu');
     } else if ($op == 'parse') {
         /*
-         * Process the auto tag to remove any embedded &nbsp;
+         * Check to see if the menu name has spaces, if so, concatenate into a single parm
          */
-        $tag = str_replace('&nbsp;',' ',$autotag['tagstr']);
-        $parms = explode (' ', $tag);
-        // Extra test to see if autotag was entered with a space
-        // after the module name
-        if (substr ($parms[0], -1) == ':') {
-            $startpos = strlen ($parms[0]) + strlen ($parms[1]) + 2;
-            $label = str_replace (']', '', substr ($tag, $startpos));
-            $tagid = $parms[1];
-        } else {
-            $label = str_replace (']', '',
-                     substr ($tag, strlen ($parms[0]) + 1));
-            $parms = explode (':', $parms[0]);
-            if (count ($parms) > 2) {
-                // whoops, there was a ':' in the tag id ...
-                array_shift ($parms);
-                $tagid = implode (':', $parms);
-            } else {
-                $tagid = $parms[1];
-            }
+        if ( isset($autotag['parm2']) ) {
+            $autotag['parm1'] .= ' ' . $autotag['parm2'];
         }
-        $autotag['parm1'] = str_replace(']','',$tagid);
-        $autotag['parm2'] = $label;
-        /*
-         * end of tag replacement
-         */
         switch( $autotag['tag'] ) {
             case 'hmenu' :
                 $menu = st_getMenu($autotag['parm1'],"gl_moomenu","gl_moomenu",'',"parent");
