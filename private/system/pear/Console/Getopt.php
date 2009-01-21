@@ -127,10 +127,6 @@ class Console_Getopt {
                 $error = Console_Getopt::_parseLongOption(substr($arg, 2), $long_options, $opts, $args);
                 if (PEAR::isError($error))
                     return $error;
-            } elseif ($arg == '-') {
-                // - is stdin
-                $non_opts = array_merge($non_opts, array_slice($args, $i));
-                break;
             } else {
                 $error = Console_Getopt::_parseShortOption(substr($arg, 1), $short_options, $opts, $args);
                 if (PEAR::isError($error))
@@ -228,11 +224,7 @@ class Console_Getopt {
 
             /* Check that the options uniquely matches one of the allowed
                options. */
-            if ($i + 1 < count($long_options)) {
-                $next_option_rest = substr($long_options[$i + 1], $opt_len);
-            } else {
-                $next_option_rest = '';
-            }
+            $next_option_rest = substr($long_options[$i + 1], $opt_len);
             if ($opt_rest != '' && $opt{0} != '=' &&
                 $i + 1 < count($long_options) &&
                 $opt == substr($long_options[$i+1], 0, $opt_len) &&
@@ -247,9 +239,6 @@ class Console_Getopt {
                        Take the next argument if one wasn't specified. */;
                     if (!strlen($opt_arg) && !(list(, $opt_arg) = each($args))) {
                         return PEAR::raiseError("Console_Getopt: option --$opt requires an argument");
-                    }
-                    if (Console_Getopt::_isShortOpt($opt_arg) || Console_Getopt::_isLongOpt($opt_arg)) {
-                        return PEAR::raiseError("Console_Getopt: option requires an argument --$opt");
                     }
                 }
             } else if ($opt_arg) {

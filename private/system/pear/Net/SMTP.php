@@ -296,8 +296,8 @@ class Net_SMTP
         /* Compare the server's response code with the valid code/codes. */
         if (is_int($valid) && ($this->_code === $valid)) {
             return true;
-        } elseif (is_array($valid)) {
-            return in_array($this->_code, $valid, true);
+        } elseif (is_array($valid) && in_array($this->_code, $valid, true)) {
+            return true;
         }
 
         return PEAR::raiseError('Invalid response code received from server',
@@ -460,32 +460,26 @@ class Net_SMTP
      */
     function auth($uid, $pwd , $method = '')
     {
-        if (empty($this->_esmtp['AUTH'])) {
-            if (version_compare(PHP_VERSION, '5.1.0', '>=')) {
-                if (!isset($this->_esmtp['STARTTLS'])) {
-                    return PEAR::raiseError('SMTP server does not support authentication');
-                }
-                if (PEAR::isError($result = $this->_put('STARTTLS'))) {
-                    return $result;
-                }
-                if (PEAR::isError($result = $this->_parseResponse(220))) {
-                    return $result;
-                }
-                if (PEAR::isError($result = $this->_socket->enableCrypto(true, STREAM_CRYPTO_METHOD_TLS_CLIENT))) {
-                    return $result;
-                } elseif ($result !== true) {
-                    return PEAR::raiseError('STARTTLS failed');
-                }
-
-                /* Send EHLO again to recieve the AUTH string from the
-                 * SMTP server. */
-                $this->_negotiate();
-                if (empty($this->_esmtp['AUTH'])) {
-                    return PEAR::raiseError('SMTP server does not support authentication');
-                }
-            } else {
-                return PEAR::raiseError('SMTP server does not support authentication');
+        if (version_compare(PHP_VERSION, '5.1.0', '>=') && isset($this->_esmtp['STARTTLS'])) {
+            if (PEAR::isError($result = $this->_put('STARTTLS'))) {
+                return $result;
             }
+            if (PEAR::isError($result = $this->_parseResponse(220))) {
+                return $result;
+            }
+            if (PEAR::isError($result = $this->_socket->enableCrypto(true, STREAM_CRYPTO_METHOD_TLS_CLIENT))) {
+                return $result;
+            } elseif ($result !== true) {
+                return PEAR::raiseError('STARTTLS failed');
+            }
+
+            /* Send EHLO again to recieve the AUTH string from the
+             * SMTP server. */
+            $this->_negotiate();
+        }
+
+        if (empty($this->_esmtp['AUTH'])) {
+            return PEAR::raiseError('SMTP server does not support authentication');
         }
 
         /* If no method has been specified, get the name of the best
@@ -725,6 +719,18 @@ class Net_SMTP
         }
 
         return true;
+    }
+
+    /**
+     * Return the list of SMTP service extensions advertised by the server.
+     *
+     * @return array The list of SMTP service extensions.
+     * @access public
+     * @since 1.3
+     */
+    function getServiceExtensions()
+    {
+        return $this->_esmtp;
     }
 
     /**
