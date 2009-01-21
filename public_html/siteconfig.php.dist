@@ -27,6 +27,15 @@ $_CA_CONF['only_admin_submit']      = false;
 // +--------------------------------------------------------------------------+
 $_CONF_FCK['editor_images_by_user'] = false;
 
+// +--------------------------------------------------------------------------+
+// | If true, only display topics a user has write permissions to in the      |
+// | user submitted story editor.                                             |
+// |                                                                          |
+// | If true, anonymous (non-logged-in users) will not be able to submit      |
+// | stories since an anonymous user never has write access to a topic.       |
+// +--------------------------------------------------------------------------+
+$_CONF['story_submit_by_perm_only'] = false;
+
 
 // ** System Maintenance and debugging options **
 

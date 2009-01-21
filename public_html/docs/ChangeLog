@@ -5,6 +5,9 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Refreshed PEAR libraries with latest versions (Mark)
+        private/system/pear/
+
 - Links: validate the link is of valid structure prior to saving (Mark)
         private/plugins/links/functions.inc
 
@@ -525,6 +528,9 @@ v1.1.2
 
 - Added nofollow attribute to comment reply (Mark)
         private/system/lib-comment.php
+
+- Added nofollow attribute to email links (Mark)
+        public_html/article.php
 
 - Moved wiki processing to its own functions (Mark - port from Geeklog)
         private/system/classes/story.class.php

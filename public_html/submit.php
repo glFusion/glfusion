@@ -139,6 +139,18 @@ function submitstory($topic = '')
         $story->loadSubmission();
     }
 
+    if ( $_CONF['story_submit_by_perm_only'] ) {
+        $topicList = COM_topicList('tid,topic',$story->EditElements('tid'),1,false,3);
+    } else {
+        $topicList = COM_topicList('tid,topic',$story->EditElements('tid'));
+    }
+
+    // no topics
+    if ( $topicList == '' ) {
+        $retval = COM_showMessageText($LANG24[66]);
+        return $retval;
+    }
+
     $retval .= COM_startBlock($LANG12[6],'submitstory.html');
 
     $storyform = new Template($_CONF['path_layout'] . 'submit');
@@ -206,7 +218,14 @@ function submitstory($topic = '')
     $storyform->set_var('story_title', $story->EditElements('title'));
     $storyform->set_var('lang_topic', $LANG12[28]);
 
-    $storyform->set_var('story_topic_options', COM_topicList('tid,topic',$story->EditElements('tid')));
+    $storyform->set_var('story_topic_options', $topicList);
+/*
+    if ( $_CONF['story_submit_by_perm_only'] ) {
+        $storyform->set_var('story_topic_options', COM_topicList('tid,topic',$story->EditElements('tid'),1,false,3));
+    } else {
+        $storyform->set_var('story_topic_options', COM_topicList('tid,topic',$story->EditElements('tid')));
+    }
+*/
     $storyform->set_var('lang_story', $LANG12[29]);
     $storyform->set_var('lang_introtext', $LANG12[54]);
     $storyform->set_var('lang_bodytext', $LANG12[55]);
