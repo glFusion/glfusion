@@ -5,6 +5,17 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Links: validate the link is of valid structure prior to saving (Mark)
+        private/plugins/links/functions.inc
+
+- Resolved a search issue if query was empty but topic was not (mark)
+        private/system/classes/search.class.php
+
+- Implemented a 'clone story' feature (Mark)
+        public_html/admin/story.php
+        private/system/lib-admin.php
+        private/system/classes/story.class.php
+
 - Forum - Fixed a security vulnerability in the popular topic listing. The
   list did not properly filter posts by permission allowing posts that a user
   did not have read access to be listed. Reported by Eric Kingsley (Mark)
