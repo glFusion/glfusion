@@ -574,7 +574,7 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
             }
 
             $curphoto = addslashes ($curphoto);
-            DB_query("UPDATE {$_TABLES['users']} SET username = '$username', fullname = '$fullname', passwd = '$passwd', email = '$email', homepage = '$homepage', photo = '$curphoto', status='$userstatus' WHERE uid = $uid");
+            DB_query("UPDATE {$_TABLES['users']} SET username = '$username', fullname = '$fullname', passwd = '$passwd2', email = '$email', homepage = '$homepage', photo = '$curphoto', status='$userstatus' WHERE uid = $uid");
             if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userSave'))) {
                 CUSTOM_userSave($uid);
             }
