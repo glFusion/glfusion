@@ -36,8 +36,7 @@ if (!defined ('GVERSION')) {
 }
 
 // PEAR class to handle XML-RPC
-//require_once 'XML/RPC.php';
-USES_pear_xml_rpc();
+require_once 'XML/RPC.php';
 
 /**
 * Get the Pingback URL for a given URL
@@ -48,8 +47,7 @@ USES_pear_xml_rpc();
 */
 function PNB_getPingbackUrl($url)
 {
-//    require_once 'HTTP/Request.php';
-    USES_pear_http_request();
+    require_once 'HTTP/Request.php';
 
     $retval = '';
 

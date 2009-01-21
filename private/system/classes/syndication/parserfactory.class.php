@@ -45,8 +45,7 @@ if (!defined ('GVERSION')) {
 }
 
   // Require pear HTTP_REQUEST
-//  require_once('HTTP/Request.php');
-  USES_pear_http_request();
+  require_once('HTTP/Request.php');
   /**
    * FeedParserFactory provides generic access to syndication feed formats.
    *

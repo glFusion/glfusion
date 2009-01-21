@@ -488,8 +488,7 @@ function TRB_linksToUs ($sid, $type, $urlToGet)
         return true;
     }
 
-//    require_once ('HTTP/Request.php');
-    USES_pear_http_request();
+    require_once ('HTTP/Request.php');
 
     $retval = false;
 
@@ -832,8 +831,7 @@ function TRB_sendTrackbackPing ($targeturl, $url, $title, $excerpt, $blog = '')
 */
 function TRB_detectTrackbackUrl ($url)
 {
-//    require_once ('HTTP/Request.php');
-    USES_pear_http_request();
+    require_once ('HTTP/Request.php');
 
     $retval = false;
 

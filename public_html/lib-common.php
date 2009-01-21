@@ -7189,49 +7189,6 @@ function USES_class_upload() {
     require_once $_CONF['path_system'] . 'classes/upload.class.php';
 }
 
-// PEAR inclues...
-
-function USES_pear_xml_rpc() {
-    global $_CONF;
-
-    if ( $_CONF['have_pear'] ) {
-        require_once 'XML/RPC.php';
-    } else {
-        require_once $_CONF['path_pear'] . 'XML/RPC.php';
-    }
-}
-
-function USES_pear_http_request() {
-    global $_CONF;
-
-    if ( $_CONF['have_pear'] ) {
-        require_once 'HTTP/Request.php';
-    } else {
-        require_once $_CONF['path_pear'] . 'HTTP/Request.php';
-    }
-}
-
-function USES_pear_xml_rpc_server() {
-    global $_CONF;
-
-    if ( $_CONF['have_pear'] ) {
-        require_once 'XML/RPC/Server.php';
-    } else {
-        require_once $_CONF['path_pear'] . 'XML/RPC/Server.php';
-    }
-}
-
-function USES_pear_net_dns() {
-    global $_CONF;
-
-    if ( $_CONF['have_pear'] ) {
-        require_once 'Net/DNS.php';
-    } else {
-        require_once $_CONF['path_pear'] . 'Net/DNS.php';
-    }
-}
-
-
 // Now include all plugin functions
 foreach( $_PLUGINS as $pi_name )
 {

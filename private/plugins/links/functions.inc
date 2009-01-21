@@ -1137,7 +1137,7 @@ function links_validateUrl($url)
 {
     global $LANG_LINKS_STATUS;
 
-    USES_pear_http_request();
+    require_once 'HTTP/Request.php';
 
     $retval = '';
 

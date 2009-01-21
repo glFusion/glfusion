@@ -59,8 +59,7 @@ $failed_tests = 0;
 */
 function doHeadRequest ($url, &$errmsg)
 {
-//    require_once ('HTTP/Request.php');
-    USES_pear_request();
+    require_once ('HTTP/Request.php');
 
     $req = new HTTP_Request ($url);
     $req->setMethod (HTTP_REQUEST_METHOD_HEAD);
