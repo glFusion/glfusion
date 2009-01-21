@@ -537,12 +537,6 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
             if (empty ($passwd)) {
                 // no password? create one ...
                 $passwd = USER_createPassword (8);
-/*
-                srand ((double) microtime () * 1000000);
-                $passwd = rand ();
-                $passwd = md5 ($passwd);
-                $passwd = substr ($passwd, 1, 8);
-*/
                 $passwd2 = SEC_encryptPassword($passwd);
             }
 
@@ -584,7 +578,7 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
             }
 
             $curphoto = addslashes ($curphoto);
-            DB_query("UPDATE {$_TABLES['users']} SET username = '$username', fullname = '$fullname', passwd = '$passwd', email = '$email', homepage = '$homepage', photo = '$curphoto', status='$userstatus' WHERE uid = $uid");
+            DB_query("UPDATE {$_TABLES['users']} SET username = '$username', fullname = '$fullname', passwd = '$passwd2', email = '$email', homepage = '$homepage', photo = '$curphoto', status='$userstatus' WHERE uid = $uid");
             if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userSave'))) {
                 CUSTOM_userSave($uid);
             }
