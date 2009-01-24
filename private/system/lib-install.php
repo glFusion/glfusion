@@ -54,7 +54,7 @@ function INSTALLER_install_group($step, &$vars)
     $vars[$step['variable']] = $grp_id;
     $vars['__groups'][$step['variable']] = $grp_name;
     if (isset($step['addroot'])) {
-        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($grp_id, 1)");
+        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($grp_id, 1)", 1);
     }
 
     return "DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id";
@@ -144,17 +144,13 @@ function INSTALLER_install_table($step, &$vars)
     global $_DB_dbms, $_TABLES;
 
     COM_errorLog("Creating table {$step['table']}...");
-    static $use_innodb = false;
-    static $check_innodb = null;
-    if ($check_innodb === null) {
-        $check_innodb = ($_DB_dbms == 'mysql');
-    }
-
-    if ($check_innodb &&
-        (DB_getItem ($_TABLES['vars'], 'value', "name = 'database_engine'")
-            == 'InnoDB')) {
-        $use_innodb = true;
-        $check_innodb = false;
+    static $use_innodb = null;
+    if ($use_innodb === null) {
+        if (($_DB_dbms == 'mysql') &&
+            (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+            $use_innodb = true;
+        }
+        $use_innodb = false;
     }
     if ($use_innodb) {
         $sql = str_replace('MyISAM', 'InnoDB', $step['sql']);
@@ -189,10 +185,10 @@ function INSTALLER_install_block($step, &$vars)
     global $_TABLES, $_CONF, $_USER;
 
     COM_errorLog("Creating block {$step['name']}...");
-    $is_enabled = isset($step['is_enabled']) ? $step['is_enabled'] : 1;
-    $rdflimit = isset($step['rdflimit']) ? $step['rdflimit'] : 0;
-    $onleft = isset($step['onleft']) ? $step['onleft'] : 0;
-    $allow_autotags = isset($step['allow_autotags']) ? $step['allow_autotags'] : 0;
+    $is_enabled = isset($step['is_enabled']) ? intval($step['is_enabled']) : 1;
+    $rdflimit = isset($step['rdflimit']) ? intval($step['rdflimit']) : 0;
+    $onleft = isset($step['onleft']) ? intval($step['onleft']) : 0;
+    $allow_autotags = isset($step['allow_autotags']) ? intval($step['allow_autotags']) : 0;
     $name = isset($step['name']) ? addslashes($step['name']) : '';
     $title = isset($step['title']) ? addslashes($step['title']) : '';
     $type = isset($step['block_type']) ? addslashes($step['block_type']) : 'unknown';
