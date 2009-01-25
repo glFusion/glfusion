@@ -46,9 +46,6 @@ if (!SEC_hasrights ('plugin.edit')) {
     exit;
 }
 
-// USES_lib_admin();
-
-
 /**
 * Process old style plugins
 *
@@ -585,12 +582,10 @@ function post_uploadProcess() {
                 }
             } else {
                 // must be some other file relative to the plugin/pluginname/ directory
-COM_errorLog("Filetorename: " . $fileToRename);
+
                 $absoluteFileName = $fileToRename;
                 $lastSlash = strrpos($fileToRename,'/');
-                if ( $lastSlash === false ) {
-//                    continue;
-                }
+
                 $pathTo = substr($fileToRename,0,$lastSlash);
                 if ( $pathTo != '' ) {
                     $pathTo .= '/';
@@ -603,7 +598,6 @@ COM_errorLog("Filetorename: " . $fileToRename);
                     continue;
                 }
                 $fileName = substr($fileNameDist,0,$lastSlash);
-COM_errorLog("Going to copy: ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName . ' TO ' . $_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                 if ( !file_exists($_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName) ) {
                     COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                     @copy ($_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName,$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
@@ -643,6 +637,7 @@ COM_errorLog("Going to copy: ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$
         echo COM_refresh($_CONF['site_admin_url'] . '/plugin_upload.php?mode=upgrade&amp;pi=' .$pluginData['id']);
         exit;
     }
+
     CTL_clearCache();
     // show status (success or fail)
     return $retval;
@@ -724,8 +719,8 @@ function io_mkdir_p($target){
     if (@file_exists($target) && !is_dir($target)) return 0;
     //recursion
     if (io_mkdir_p(substr($target,0,strrpos($target,'/')))){
-        $ret = @mkdir($target,0777);
-        @chmod($target, 0777);
+        $ret = @mkdir($target,0755);
+        @chmod($target, 0755);
         return $ret;
     }
     return 0;
@@ -941,7 +936,7 @@ function _pi_dir_copy($srcdir, $dstdir )
                 if (is_file($srcfile)) {
                     if (copy($srcfile, $dstfile)) {
                         touch($dstfile, filemtime($srcfile)); $num++;
-                        @chmod($dstfile, 0777);
+                        @chmod($dstfile, 0644);
                         $sizetotal = ($sizetotal + filesize($dstfile));
                     } else {
                         COM_errorLog("PLG-INSTALL: File '$srcfile' could not be copied!");
