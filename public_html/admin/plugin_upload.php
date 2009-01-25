@@ -60,8 +60,6 @@ function processOldPlugin( $tmpDir )
     global $_CONF, $_PLUGINS, $_TABLES, $pluginData, $_DB_dbms, $_DB_table_prefix,$LANG32 ;
 
     $retval = '';
-
-
     $pi_name = '';
     $dirCount = 0;
 
@@ -88,12 +86,23 @@ function processOldPlugin( $tmpDir )
         return _pi_errorBox($retval);
     }
 
+    $result = DB_query("SELECT * FROM {$_TABLES['plugins']} WHERE pi_name='".addslashes($pi_name)."' LIMIT 1");
+    if ( DB_numRows($result) > 0 ) {
+        $P = DB_fetchArray($result);
+
+        if ( $P['pi_enabled'] != 1 ) {
+            return _pi_errorBox($LANG32[72]);
+        }
+
+        $upgrade = true;
+    }
+/*
     if ( ($key = array_search($pi_name,$_PLUGINS)) !== false ) {
         $pluginVersion = DB_getItem ($_TABLES['plugins'], 'pi_version',
                                     "pi_name= '$pi_name' LIMIT 1");
         $upgrade = true;
     }
-
+*/
     $T = new Template($_CONF['path_layout'] . 'admin/plugins');
     $T->set_file('form','plugin_upload_old_confirm.thtml');
 
@@ -126,7 +135,6 @@ function processOldPluginInstall(  )
     $pluginData['name']             = $pluginData['id'];
     $upgrade                        = COM_applyFilter($_POST['upgrade'],true);
     $tmp                            = COM_applyFilter($_POST['temp_dir']);
-
 
     // test copy to proper directories
     list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
@@ -340,6 +348,27 @@ function processPluginUpload()
         // if it does, check that this is an upgrade
             // if not, error
         // else validate we really want to upgrade
+    $result = DB_query("SELECT * FROM {$_TABLES['plugins']} WHERE pi_name='".addslashes($pluginData['id'])."'");
+    if ( DB_numRows($result) > 0 ) {
+        $P = DB_fetchArray($result);
+        if ($P['pi_version'] == $pluginData['version'] ) {
+            $retval .= sprintf($LANG32[52],$pluginData['id']);
+            return _pi_errorBox($retval);
+        }
+        // if we are here, it must be an upgrade or disabled plugin....
+        $rc = COM_checkVersion($pluginData['version'],$P['pi_version']);
+        if ( $rc < 1 ) {
+            $retval .= sprintf($LANG32[53],$pluginData['id'],$pluginData['version'],$pluginVersion);
+            return _pi_errorBox($retval);
+        }
+        if ( $P['pi_enabled'] != 1 ) {
+            return _pi_errorBox($LANG32[72]);
+        }
+
+        $upgrade = true;
+    }
+/*
+
     if ( ($key = array_search($pluginData['id'],$_PLUGINS)) !== false ) {
         $pluginVersion = DB_getItem ($_TABLES['plugins'], 'pi_version',
                                     "pi_name= '{$pluginData['id']}' LIMIT 1");
@@ -355,6 +384,7 @@ function processPluginUpload()
         }
         $upgrade = true;
     }
+*/
 
     $permError = 0;
     $permErrorList = '';
@@ -390,10 +420,6 @@ function processPluginUpload()
         _pi_deleteDir($tmp);
         return _pi_errorBox($retval);
     }
-
-    /*
-     * Everything looks good, get confirmation to continue...
-     */
 
     $T = new Template($_CONF['path_layout'] . 'admin/plugins');
     $T->set_file('form','plugin_upload_confirm.thtml');
@@ -431,6 +457,8 @@ function post_uploadProcess() {
 
     $retval = '';
     $upgrade = false;
+    $masterErrorCount   = 0;
+    $masterErrorMsg     = '';
 
     $pluginData = array();
     $pluginData['id']               = COM_applyFilter($_POST['pi_name']);
@@ -533,6 +561,7 @@ function post_uploadProcess() {
 
     if ( is_array($pluginData['renamedist']) ) {
         foreach ($pluginData['renamedist'] AS $fileToRename) {
+            $rc = true;
             if (strncmp($fileToRename,'admin',5) == 0 ) {
                 // we have a admin file to rename....
                 $absoluteFileName = substr($fileToRename,6);
@@ -555,7 +584,12 @@ function post_uploadProcess() {
 
                 if ( !file_exists($_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$pathTo.$fileName) ) {
                     COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
-                    @copy ($_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$absoluteFileNameDist,$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
+                    $rc = @copy ($_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$absoluteFileNameDist,$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
+                    if ( $rc === false ) {
+                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$absoluteFileNameDist." to ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
+                        $masterErrorCount++;
+                        $msterErrorMsg .= "Unable to copy ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$absoluteFileNameDist." to ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$pathTo.$fileName."<br />";
+                    }
                 }
             } elseif (strncmp($fileToRename,'public_html',10) == 0 ) {
                 // we have a public_html file to rename...
@@ -580,11 +614,15 @@ function post_uploadProcess() {
 
                 if ( !file_exists($_CONF['path_html'].'public_html/'.$pluginData['id'].'/'.$pathTo.$fileName) ) {
                     COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName);
-                    @copy ($_CONF['path_html'].$pluginData['id'].'/'.$absoluteFileNameDist,$_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName);
+                    $rc = @copy ($_CONF['path_html'].$pluginData['id'].'/'.$absoluteFileNameDist,$_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName);
+                    if ( $rc === false ) {
+                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_html'].$pluginData['id'].'/'.$absoluteFileNameDist." to ".$_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName);
+                        $masterErrorCount++;
+                        $msterErrorMsg .= "Unable to copy ".$_CONF['path_html'].$pluginData['id'].'/'.$absoluteFileNameDist." to ".$_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName."<br />";
+                    }
                 }
             } else {
                 // must be some other file relative to the plugin/pluginname/ directory
-
                 $absoluteFileName = $fileToRename;
                 $lastSlash = strrpos($fileToRename,'/');
 
@@ -602,11 +640,21 @@ function post_uploadProcess() {
                 $fileName = substr($fileNameDist,0,$lastSlash);
                 if ( !file_exists($_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName) ) {
                     COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
-                    @copy ($_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName,$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
+                    $rc = @copy ($_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName,$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
+                    if ( $rc === false ) {
+                        COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName." to ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
+                        $masterErrorCount++;
+                        $msterErrorMsg .= "Unable to copy ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName." to ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName."<br />";
+                    }
                 }
             }
+
         }
     }
+
+    // handle masterErrorCount here, if not 0, display error and ask use to manually install via the plugin admin screen.
+    // all files have been copied, so all they really should need to do is fix the error above and then run.
+
 
     if ( $upgrade == 0 ) { // fresh install
 
@@ -783,7 +831,7 @@ function _pi_parseXML($tmpDirectory)
     $pluginData = array();
 
     if (!($xml_parser = xml_parser_create()))
-        die("Couldn't create parser.");
+        return false;
 
     xml_set_element_handler($xml_parser,"_pi_startElementHandler","_pi_endElementHandler");
     xml_set_character_data_handler( $xml_parser, "_pi_characterDataHandler");
@@ -1021,20 +1069,6 @@ function _pi_test_copy($srcdir, $dstdir)
     return array($fail,$failedFiles);
 }
 
-function _pi_Header()
-{
-    global $_CONF, $LANG_ADMIN;
-
-    $retval = '';
-
-    $retval .= COM_startBlock('Automated Plugin Installer', '',
-                              COM_getBlockTemplate('_admin_block', 'header'));
-
-    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
-
-
-    return $retval;
-}
 
 function _pi_errorBox( $errMsg )
 {
@@ -1058,22 +1092,36 @@ function _pi_errorBox( $errMsg )
 }
 
 function is__writable($path) {
+    if ($path{strlen($path)-1}=='/')
+        return is__writable($path.uniqid(mt_rand()).'.tmp');
 
-if ($path{strlen($path)-1}=='/')
-    return is__writable($path.uniqid(mt_rand()).'.tmp');
+    if (file_exists($path)) {
+        if (!($f = @fopen($path, 'r+')))
+            return false;
+        fclose($f);
+        return true;
+    }
 
-if (file_exists($path)) {
-    if (!($f = @fopen($path, 'r+')))
+    if (!($f = @fopen($path, 'w')))
         return false;
     fclose($f);
+    unlink($path);
     return true;
 }
 
-if (!($f = @fopen($path, 'w')))
-    return false;
-fclose($f);
-unlink($path);
-return true;
+function _pi_Header()
+{
+    global $_CONF, $LANG_ADMIN,$LANG32;
+
+    $retval = '';
+
+    $retval .= COM_startBlock($LANG32[73], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
+    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
+
+
+    return $retval;
 }
 
 /*

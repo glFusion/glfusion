@@ -1090,6 +1090,8 @@ $LANG32 = array(
     69 => 'IMPORTANT',
     70 => 'The automated installer is not able to verify that this plugin will work with your current version of glFusion. If you choose to have the files automatically copied, you will need to run the manual install from the Plugin Administration screen.',
     71 => 'Continue',
+    72 => 'A version of this plugin is installed but disabled. glFusion cannot upgrade a disabled plugin. Please re-enable the plugin and perform the upload again.',
+    73 => 'Automated Plugin Installer',
 );
 
 ###############################################################################
