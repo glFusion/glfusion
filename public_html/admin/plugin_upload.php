@@ -64,6 +64,7 @@ function processOldPlugin( $tmpDir )
     $dirCount = 0;
 
     if (!$dh = @opendir($tmpDir)) {
+        _pi_deleteDir($tmpDir);
         return ( _pi_errorBox( $LANG32[39] ));
 
     }
@@ -82,7 +83,7 @@ function processOldPlugin( $tmpDir )
 
     if ( $pi_name == '' || $dirCount > 1) {
         $retval .= $LANG32[40];
-
+        _pi_deleteDir($tmpDir);
         return _pi_errorBox($retval);
     }
 
@@ -91,18 +92,13 @@ function processOldPlugin( $tmpDir )
         $P = DB_fetchArray($result);
 
         if ( $P['pi_enabled'] != 1 ) {
+            _pi_deleteDir($tmpDir);
             return _pi_errorBox($LANG32[72]);
         }
 
         $upgrade = true;
     }
-/*
-    if ( ($key = array_search($pi_name,$_PLUGINS)) !== false ) {
-        $pluginVersion = DB_getItem ($_TABLES['plugins'], 'pi_version',
-                                    "pi_name= '$pi_name' LIMIT 1");
-        $upgrade = true;
-    }
-*/
+
     $T = new Template($_CONF['path_layout'] . 'admin/plugins');
     $T->set_file('form','plugin_upload_old_confirm.thtml');
 
@@ -304,8 +300,10 @@ function processPluginUpload()
     }
 
     if ( !COM_decompress($Finalfilename,$tmp) ) {
+        _pi_deleteDir($tmp);
         return _pi_errorBox($LANG32[48]);
     }
+    @unlink($Finalfilename);
 
     // read XML data file, places in $pluginData;
 
@@ -324,11 +322,13 @@ function processPluginUpload()
     // proper glfusion version
     if (!COM_checkVersion(GVERSION, $pluginData['glfusionversion'])) {
         $retval .= sprintf($LANG32[49],$pluginData['glfusionversion']);
+        _pi_deleteDir($tmp);
         return _pi_errorBox($retval);
     }
 
     if ( !COM_checkVersion(phpversion (),$pluginData['phpversion'])) {
         $retval .= sprintf($LANG32[50],$pluginData['phpversion']);
+        _pi_deleteDir($tmp);
         return _pi_errorBox($retval);
     }
 
@@ -342,6 +342,7 @@ function processPluginUpload()
         }
     }
     if ( $errors != '' ) {
+        _pi_deleteDir($tmp);
         return _pi_errorBox($errors);
     }
     // check if plugin already exists
@@ -353,38 +354,23 @@ function processPluginUpload()
         $P = DB_fetchArray($result);
         if ($P['pi_version'] == $pluginData['version'] ) {
             $retval .= sprintf($LANG32[52],$pluginData['id']);
+            _pi_deleteDir($tmp);
             return _pi_errorBox($retval);
         }
         // if we are here, it must be an upgrade or disabled plugin....
         $rc = COM_checkVersion($pluginData['version'],$P['pi_version']);
         if ( $rc < 1 ) {
             $retval .= sprintf($LANG32[53],$pluginData['id'],$pluginData['version'],$pluginVersion);
+            _pi_deleteDir($tmp);
             return _pi_errorBox($retval);
         }
         if ( $P['pi_enabled'] != 1 ) {
+            _pi_deleteDir($tmp);
             return _pi_errorBox($LANG32[72]);
         }
 
         $upgrade = true;
     }
-/*
-
-    if ( ($key = array_search($pluginData['id'],$_PLUGINS)) !== false ) {
-        $pluginVersion = DB_getItem ($_TABLES['plugins'], 'pi_version',
-                                    "pi_name= '{$pluginData['id']}' LIMIT 1");
-        if ($pluginVersion == $pluginData['version'] ) {
-            $retval .= sprintf($LANG32[52],$pluginData['id']);
-            return _pi_errorBox($retval);
-            }
-        // if we are here, it must be an upgrade?
-        $rc = COM_checkVersion($pluginData['version'],$pluginVersion);
-        if ( $rc < 1 ) {
-            $retval .= sprintf($LANG32[53],$pluginData['id'],$pluginData['version'],$pluginVersion);
-            return _pi_errorBox($retval);
-        }
-        $upgrade = true;
-    }
-*/
 
     $permError = 0;
     $permErrorList = '';
@@ -471,6 +457,7 @@ function post_uploadProcess() {
 
     $pluginData = array();
     $rc = _pi_parseXML($tmp);
+//FIXME: add error check here incase we cannot parse the XML file.
 
     clearstatcache();
 
