@@ -451,7 +451,6 @@ function plugin_savesubmission_calendar($A)
                    . $msg
                    . COM_endBlock(COM_getBlockTemplate('_msg_block','footer'))
                    . plugin_submit_calendar($A['calendar_type'],$A);
-//                   . COM_siteFooter();
         return $retval;
     }
 
