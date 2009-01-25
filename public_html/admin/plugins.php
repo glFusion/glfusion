@@ -484,6 +484,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
         $display .= do_uninstall ($pi_name);
         $token = SEC_createToken();
         $display .= listplugins ($token);
+        $display .= showuploadform($token);
         $display .= show_newplugins($token);
         $display .= COM_siteFooter ();
     } else { // ask user for confirmation
