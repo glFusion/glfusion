@@ -440,7 +440,7 @@ if ($method == 'edit') {
         echo '<input type="hidden" name="modedit" value="1"' . XHTML . '>';
     } else {
         // User is trying to edit their topic post - this is allowed
-        if ($edittopic['date'] > 0 ) {
+        if ($edittopic['date'] > 0 AND $edittopic['uid'] == $_USER['uid'] ) {
             if ($CONF_FORUM['allowed_editwindow'] > 0) {   // Check if edit timeframe is still valid
                 $t2 = $CONF_FORUM['allowed_editwindow'];
                 $time = time();
@@ -465,6 +465,8 @@ if ($method == 'edit') {
         }
     } else {
         alertMessage($LANG_GF02['msg72'],$LANG_GF02['msg191']);
+        gf_siteFooter();
+        exit;
     }
 }
 
