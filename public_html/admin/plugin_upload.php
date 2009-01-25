@@ -452,6 +452,7 @@ function post_uploadProcess() {
     $permErrorList = '';
 
     // copy to proper directories
+
     $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
     list($success,$failed,$size,$faillist) = explode(',',$rc);
     if ( $failed > 0 ) {
@@ -464,27 +465,31 @@ function post_uploadProcess() {
             }
         }
     }
-    $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'/admin/plugins/'.$pluginData['id']);
-    list($success,$failed,$size,$faillist) = explode(',',$rc);
-    if ( $failed > 0 ) {
-        $permError++;
-        $t = array();
-        $t = explode('|',$faillist);
-        if ( is_array($t) ) {
-            foreach ($t AS $failedFile) {
-                $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'/plugins/'.$pluginData['id']);
+    if ( file_exists($tmp.'/'.$pluginData['id'].'/admin/') ) {
+        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'/admin/plugins/'.$pluginData['id']);
+        list($success,$failed,$size,$faillist) = explode(',',$rc);
+        if ( $failed > 0 ) {
+            $permError++;
+            $t = array();
+            $t = explode('|',$faillist);
+            if ( is_array($t) ) {
+                foreach ($t AS $failedFile) {
+                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'/plugins/'.$pluginData['id']);
+                }
             }
         }
     }
-    $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].'/'.$pluginData['id']);
-    list($success,$failed,$size,$faillist) = explode(',',$rc);
-    if ( $failed > 0 ) {
-        $permError++;
-        $t = array();
-        $t = explode('|',$faillist);
-        if ( is_array($t) ) {
-            foreach ($t AS $failedFile) {
-                $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'/plugins/'.$pluginData['id']);
+    if ( file_exists($tmp.'/'.$pluginData['id'].'/public_html/') ) {
+        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].'/'.$pluginData['id']);
+        list($success,$failed,$size,$faillist) = explode(',',$rc);
+        if ( $failed > 0 ) {
+            $permError++;
+            $t = array();
+            $t = explode('|',$faillist);
+            if ( is_array($t) ) {
+                foreach ($t AS $failedFile) {
+                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'/plugins/'.$pluginData['id']);
+                }
             }
         }
     }
@@ -955,7 +960,7 @@ function _pi_dir_copy($srcdir, $dstdir )
         }
         closedir($curdir);
     } else {
-        COM_errorLog("PLG-INSTALL: Unable to open temporary directory");
+        COM_errorLog("PLG-INSTALL: Unable to open temporary directory: " . $srcdir);
         $ret ='0,1,0,Unable to open temp. directory';
         return $ret;
     }
