@@ -262,6 +262,7 @@ function processPluginUpload()
             $upload->setDebug (true);
         }
         $upload->setMaxFileUploads (1);
+        $upload->setMaxFileSize(4194304);
         $upload->setAllowedMimeTypes (array (
                 'application/x-gzip'=> '.gz,.gzip,tgz',
                 'application/zip'   => '.zip',
@@ -623,6 +624,7 @@ function post_uploadProcess() {
             $ret = INSTALLER_install($INSTALL_plugin[$pi_version]);
 
             if ( $ret == 0 ) {
+                CTL_clearCache();
                 echo COM_refresh ($_CONF['site_admin_url']. '/plugins.php?msg=44');
                 exit;
             } else {
