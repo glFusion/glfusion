@@ -82,9 +82,8 @@ function processOldPlugin( $tmpDir )
     closedir($dh);
 
     if ( $pi_name == '' || $dirCount > 1) {
-        $retval .= $LANG32[40];
         _pi_deleteDir($tmpDir);
-        return _pi_errorBox($retval);
+        return _pi_errorBox($LANG32[40]);
     }
 
     $result = DB_query("SELECT * FROM {$_TABLES['plugins']} WHERE pi_name='".addslashes($pi_name)."' LIMIT 1");
@@ -126,11 +125,16 @@ function processOldPluginInstall(  )
 {
     global $_CONF, $_PLUGINS, $_TABLES, $pluginData, $LANG32,$_DB_dbms, $_DB_table_prefix ;
 
+    $retval = '';
+
     $pluginData = array();
     $pluginData['id']               = COM_applyFilter($_POST['pi_name']);
     $pluginData['name']             = $pluginData['id'];
     $upgrade                        = COM_applyFilter($_POST['upgrade'],true);
     $tmp                            = COM_applyFilter($_POST['temp_dir']);
+
+    $permError = 0;
+    $permErrorList = '';
 
     // test copy to proper directories
     list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
@@ -156,13 +160,10 @@ function processOldPluginInstall(  )
     }
 
     if ( $permError != 0 ) {
-        $retval .= '<h2>'.$LANG32[42].'</h2>';
-        $retval .= $LANG32[43].
-        $retval .= $permErrorList . '<br />';
-        $retval .= $LANG32[44];
+        $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
 
         _pi_deleteDir($tmp);
-        return _pi_errorBox($retval);
+        return (_pi_errorBox($errorMessage));
     }
 
     clearstatcache();
@@ -226,13 +227,9 @@ function processOldPluginInstall(  )
         }
     }
     if ( $permError != 0 ) {
-        $retval .= '<h2>'.$LANG32[42].'</h2>';
-        $retval .= $LANG32[43].
-        $retval .= $permErrorList . '<br />';
-        $retval .= $LANG32[44];
-
+        $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
         _pi_deleteDir($tmp);
-        return _pi_errorBox($retval);
+        return _pi_errorBox($errorMessage);
     }
     _pi_deleteDir($tmp);
 
@@ -321,15 +318,14 @@ function processPluginUpload()
 
     // proper glfusion version
     if (!COM_checkVersion(GVERSION, $pluginData['glfusionversion'])) {
-        $retval .= sprintf($LANG32[49],$pluginData['glfusionversion']);
         _pi_deleteDir($tmp);
-        return _pi_errorBox($retval);
+        return _pi_errorBox(sprintf($LANG32[49],$pluginData['glfusionversion']));
     }
 
     if ( !COM_checkVersion(phpversion (),$pluginData['phpversion'])) {
         $retval .= sprintf($LANG32[50],$pluginData['phpversion']);
         _pi_deleteDir($tmp);
-        return _pi_errorBox($retval);
+        return _pi_errorBox(sprintf($LANG32[50],$pluginData['phpversion']));
     }
 
     // check prerequisites
@@ -353,16 +349,14 @@ function processPluginUpload()
     if ( DB_numRows($result) > 0 ) {
         $P = DB_fetchArray($result);
         if ($P['pi_version'] == $pluginData['version'] ) {
-            $retval .= sprintf($LANG32[52],$pluginData['id']);
             _pi_deleteDir($tmp);
-            return _pi_errorBox($retval);
+            return _pi_errorBox(sprintf($LANG32[52],$pluginData['id']));
         }
         // if we are here, it must be an upgrade or disabled plugin....
         $rc = COM_checkVersion($pluginData['version'],$P['pi_version']);
         if ( $rc < 1 ) {
-            $retval .= sprintf($LANG32[53],$pluginData['id'],$pluginData['version'],$pluginVersion);
             _pi_deleteDir($tmp);
-            return _pi_errorBox($retval);
+            return _pi_errorBox(sprintf($LANG32[53],$pluginData['id'],$pluginData['version'],$pluginVersion));
         }
         if ( $P['pi_enabled'] != 1 ) {
             _pi_deleteDir($tmp);
@@ -399,12 +393,9 @@ function processPluginUpload()
     }
 
     if ( $permError != 0 ) {
-        $retval .= '<h2>'.$LANG32[42].'</h2>';
-        $retval .= $LANG32[43].
-        $retval .= $permErrorList . '<br />';
-        $retval .= $LANG32[44];
+        $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
         _pi_deleteDir($tmp);
-        return _pi_errorBox($retval);
+        return _pi_errorBox($errorMessage);
     }
 
     $T = new Template($_CONF['path_layout'] . 'admin/plugins');
@@ -529,13 +520,9 @@ function post_uploadProcess() {
     }
 
     if ( $permError != 0 ) {
-        $retval .= '<h2>'.$LANG32[42].'</h2>';
-        $retval .= $LANG32[43].
-        $retval .= $permErrorList . '<br />';
-        $retval .= $LANG32[44];
-
+        $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
         _pi_deleteDir($tmp);
-        return _pi_errorBox($retval);
+        return _pi_errorBox($errorMessage);
     }
 
     if ( isset($pluginData['dataproxydriver']) && $pluginData['dataproxydriver'] != '' ) {
@@ -664,8 +651,7 @@ function post_uploadProcess() {
                 echo COM_refresh ($_CONF['site_admin_url']. '/plugins.php?msg=44');
                 exit;
             } else {
-                $retval .= $LANG32[54];
-                return _pi_errorBox($retval);
+                return _pi_errorBox($LANG32[54]);
             }
         } else {
             return _pi_errorBox($LANG32[55]);
@@ -1063,8 +1049,8 @@ function _pi_errorBox( $errMsg )
 
     $retval = '';
 
-    $retval .= '<div id="msgbox" style="font-weight:bold;width:95%;margin:10px;border:1px solid black;">';
-    $retval .= '<div style="padding:5px;color:#FFFFFF;background:url('.$_CONF['layout_url'].'/images/header-bg.png) #1A3955;">';
+    $retval .= '<div id="msgbox" style="width:95%;margin:10px;border:1px solid black;">';
+    $retval .= '<div style="padding:5px;font-weight:bold;color:#FFFFFF;background:url('.$_CONF['layout_url'].'/images/header-bg.png) #1A3955;">';
     $retval .= $LANG32[56];
     $retval .= '</div>';
     $retval .= '<div style="padding:5px 15px 15px 15px;border-top:3px solid black;background:#E7E7E7;">';
