@@ -2658,7 +2658,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         // what's our current URL?
         $thisUrl = COM_getCurrentURL();
 
-        if ($_CONF['hide_adminmenu'] && strpos($thisUrl, $_CONF['site_admin_url']) === false) {
+        if ($_CONF['hide_adminmenu'] && @strpos($thisUrl, $_CONF['site_admin_url']) === false) {
             return '';
         }
 
