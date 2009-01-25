@@ -1,0 +1,8 @@
+<br />
+{$LANG32[57]}
+<br />
+<form name="pluginupload" action="{form_action_url}" method="post" enctype="multipart/form-data">
+   <input type="file" dir="ltr" name="pluginfile" id="pluginfile" size="60"{xhtml}>&nbsp;
+   <input type="hidden" name="action" value="processupload" />
+   <input type="submit" name="submit" value="{$LANG32[58]}" />&nbsp;&nbsp;
+</form>

@@ -61,6 +61,29 @@ if (!SEC_hasrights ('plugin.edit')) {
     exit;
 }
 
+function showuploadform( )
+{
+    global $_CONF,$LANG_ADMIN;
+
+    $retval = '';
+
+    $retval .= COM_startBlock ($LANG32[13],'', COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $T = new Template($_CONF['path_layout'] . 'admin/plugins');
+    $T->set_file('form','plugin_upload_form.thtml');
+
+    $T->set_var(array(
+        'form_action_url'   =>  $_CONF['site_admin_url'] .'/plugin_upload.php',
+        'lang_instructions' => 'Select a plugin from your local system to uploads',
+    ));
+
+    $retval .= $T->parse('output', 'form');
+
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    return $retval;
+}
+
 /**
 * Shows the plugin editor form
 *
@@ -507,7 +530,9 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
         }
     }
     $token = SEC_createToken();
+
     $display .= listplugins ($token);
+    $display .= showuploadform($token);
     $display .= show_newplugins($token);
     $display .= COM_siteFooter();
 }

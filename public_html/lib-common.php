@@ -7129,6 +7129,54 @@ function COM_404()
 exit;
 }
 
+/**
+* Decompress an archive
+*
+* @param    string  $file   soure file
+* @param    string  $target destination directory
+* @return   bool            true on success, false on fail
+*
+*/
+function COM_decompress($file, $target)
+{
+    global $_CONF;
+
+    // decompression library doesn't like target folders ending in "/"
+    if (substr($target, -1) == "/") $target = substr($target, 0, -1);
+    $ext = substr($file, strrpos($file,'.')+1);
+
+    // .tar, .tar.bz, .tar.gz, .tgz
+    if (in_array($ext, array('tar','bz','bz2','gz','tgz'))) {
+
+        require_once 'Archive/Tar.php';
+
+        if (strpos($ext, 'bz') !== false) $compress_type = COMPRESS_BZIP;
+        else if (strpos($ext,'gz') !== false) $compress_type = COMPRESS_GZIP;
+        else $compress_type = COMPRESS_NONE;
+
+        $tar = new Archive_Tar($file);
+        $ok = $tar->extract($target);
+        if ($ok == '' ){
+            $ok = 1;
+        }
+
+        return ($ok<1?false:true);
+
+    } else if ($ext == 'zip') {
+
+      require_once $_CONF['path'] . '/lib/ZipLib.class.php';
+
+      $zip = new ZipLib();
+      $ok = $zip->Extract($file, $target);
+
+      return ($ok==-1?false:true);
+
+    }
+
+    // unsupported file type
+    return false;
+}
+
 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
