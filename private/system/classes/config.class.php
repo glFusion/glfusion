@@ -1006,7 +1006,7 @@ class config {
 
         $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
         $s = serialize($this->config_array);
-        $fh = fopen($cache_file, 'wb');
+        $fh = @fopen($cache_file, 'wb');
         if ($fh !== false) {
             if (flock($fh, LOCK_EX)) {
                 ftruncate($fh, 0);
