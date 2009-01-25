@@ -560,16 +560,17 @@ function post_uploadProcess() {
             } elseif (strncmp($fileToRename,'public_html',10) == 0 ) {
                 // we have a public_html file to rename...
                 $absoluteFileName = substr($fileToRename,11);
-                $lastSlash = strrpos($fileToRename,'/');
-                if ( $lastSlash === false ) {
-                    continue;
-                }
-                $pathTo = substr($fileToRename,0,$lastSlash);
-                if ( $pathTo != '' ) {
-                    $pathTo .= '/';
+                $lastSlash = strrpos($absoluteFileName,'/');
+                if ( $lastSlash !== false ) {
+                    $pathTo = substr($absoluteFileName,0,$lastSlash);
+                    if ( $pathTo != '' ) {
+                        $pathTo .= '/';
+                    }
+                } else {
+                    $pathTo = '';
                 }
                 $lastSlash++;
-                $fileNameDist = substr($fileToRename,$lastSlash);
+                $fileNameDist = substr($absoluteFileName,$lastSlash);
 
                 $lastSlash = strrpos($fileNameDist,'.');
                 if ( $lastSlash === false ) {
@@ -578,8 +579,8 @@ function post_uploadProcess() {
                 $fileName = substr($fileNameDist,0,$lastSlash);
 
                 if ( !file_exists($_CONF['path_html'].'public_html/'.$pluginData['id'].'/'.$pathTo.$fileName) ) {
-                    COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].'public_html/'.$pluginData['id'].'/'.$pathTo.$fileName);
-                    @copy ($_CONF['path_html'].'public_html/'.$pluginData['id'].'/'.$absoluteFileNameDist,$_CONF['path_html'].'public_html/'.$pluginData['id'].'/'.$pathTo.$fileName);
+                    COM_errorLog("PLG-INSTALL: Renaming " . $fileNameDist ." to " . $_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName);
+                    @copy ($_CONF['path_html'].$pluginData['id'].'/'.$absoluteFileNameDist,$_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName);
                 }
             } else {
                 // must be some other file relative to the plugin/pluginname/ directory
