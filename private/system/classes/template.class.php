@@ -1579,7 +1579,7 @@ class Template
             }
         }
 
-        $str = file_get_contents($filename);
+        $str = @file_get_contents($filename);
 
         // check for begin/end block stuff
         $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
@@ -1832,7 +1832,8 @@ function CACHE_check_instance($iid, $bypass_lang = false)
 {
     $filename = CACHE_instance_filename($iid, $bypass_lang);
     if (file_exists($filename)) {
-        return file_get_contents($filename);
+        $str = @file_get_contents($filename);
+        return $str === FALSE ? false : $str;
     }
     return false;
 }
