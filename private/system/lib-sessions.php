@@ -256,10 +256,18 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
     $expirytime = (string) (time() - $lifespan);
     if (!isset($_COOKIE[$_CONF['cookie_session']])) {
         // ok, delete any old sessons for this user
-        DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = $userid");
+        DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = $userid",1);
+        if ( DB_error() ) {
+            DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
+            COM_errorLog("***** REPAIR SESSIONS TABLE *****");
+        }
     } else {
         $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < $expirytime)";
-        $delresult = DB_query($deleteSQL);
+        $delresult = DB_query($deleteSQL,1);
+        if ( DB_error() ) {
+            DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
+            COM_errorLog("***** REPAIR SESSIONS TABLE *****");
+        }
 
         if ($_SESS_VERBOSE) {
             COM_errorLog("Attempted to delete rows from session table with following SQL\n$deleteSQL\n",1);
@@ -365,7 +373,11 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip, $md5_based=
         COM_errorLog("SQL in SESS_getUserIdFromSession is:\n $sql\n");
     }
 
-    $result = DB_query($sql);
+    $result = DB_query($sql,1);
+    if ( DB_error() ) {
+        DB_query("REPAIR TABLE {$_TABLES['sessions']}");
+        COM_errorLog("**** REPAIRING SESSION TABLE ******");
+    }
     $row = DB_fetchArray($result);
 
     if ($_SESS_VERBOSE) {
