@@ -7177,6 +7177,23 @@ function COM_decompress($file, $target)
     return false;
 }
 
+function COM_isWritable($path) {
+    if ($path{strlen($path)-1}=='/')
+        return COM_isWritable($path.uniqid(mt_rand()).'.tmp');
+
+    if (@file_exists($path)) {
+        if (!($f = @fopen($path, 'r+')))
+            return false;
+        @fclose($f);
+        return true;
+    }
+
+    if (!($f = @fopen($path, 'w')))
+        return false;
+    @fclose($f);
+    @unlink($path);
+    return true;
+}
 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
