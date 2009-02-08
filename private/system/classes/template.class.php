@@ -226,7 +226,7 @@ class Template
 
     $this->set_root($root);
     $this->set_unknowns($unknowns);
-    if (array_key_exists('default_vars',$TEMPLATE_OPTIONS) and is_array($TEMPLATE_OPTIONS['default_vars'])) {
+    if (is_array($TEMPLATE_OPTIONS) AND array_key_exists('default_vars',$TEMPLATE_OPTIONS) and is_array($TEMPLATE_OPTIONS['default_vars'])) {
         foreach ($TEMPLATE_OPTIONS['default_vars'] as $k => $v) {
             $this->set_var($k, $v);
         }
@@ -1537,10 +1537,12 @@ class Template
 
     // convert /path_to_glfusion/private//layout/theme/dir1/dir2/file to dir1/dir2/file
     $extra_path = '';
-    foreach ($TEMPLATE_OPTIONS['path_prefixes'] as $prefix) {
-        if (strpos($p['dirname'], $prefix) === 0) {
-            $extra_path = substr($p['dirname'].'/', strlen($prefix));
-            break;
+    if ( is_array($TEMPLATE_OPTIONS['path_prefixes']) ) {
+        foreach ($TEMPLATE_OPTIONS['path_prefixes'] as $prefix) {
+            if (strpos($p['dirname'], $prefix) === 0) {
+                $extra_path = substr($p['dirname'].'/', strlen($prefix));
+                break;
+            }
         }
     }
 
