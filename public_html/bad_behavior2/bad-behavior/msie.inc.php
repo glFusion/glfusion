@@ -15,7 +15,8 @@ function bb2_msie($package)
 
 	// MSIE does NOT send Connection: TE but Akamai does
 	// Bypass this test when Akamai detected
-	if (!array_key_exists('Akamai-Origin-Hop', $package['headers_mixed']) && @preg_match('/\bTE\b/i', $package['headers_mixed']['Connection'])) {
+	// The latest version of IE for Windows CE also uses Connection: TE
+	if (!array_key_exists('Akamai-Origin-Hop', $package['headers_mixed']) && strpos($package['headers_mixed']['User-Agent'], "IEMobile") === FALSE && @preg_match('/\bTE\b/i', $package['headers_mixed']['Connection'])) {
 		return "2b90f772";
 	}
 
