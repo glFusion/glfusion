@@ -62,7 +62,7 @@ if (!isset($_LI_CONF['linksloginrequired'])) {
     $_LI_CONF = $li_config->get_config('links');
 }
 
-$_LI_CONF['version'] = '2.0.0';
+require_once $_CONF['path'].'plugins/links/links.php';
 
 // +---------------------------------------------------------------------------+
 // | glFusion Plugin API Implementation                                        |
@@ -208,7 +208,7 @@ function plugin_chkVersion_links ()
 {
     global $_LI_CONF;
 
-    return $_LI_CONF['version'];
+    return $_LI_CONF['pi_version'];
 }
 
 /**
@@ -620,15 +620,14 @@ function plugin_feedupdatecheck_links ($feed, $topic, $update_data, $limit, $upd
 */
 function plugin_upgrade_links()
 {
-    // the plugin needs these function so complain when they don't exist
-    if (!function_exists('PLG_uninstall') ||
-            !function_exists('COM_createLink')) {
-        return 3002;
+    if ( @file_exists($_CONF['path'].'plugins/links/upgrade.php') ) {
+        require_once $_CONF['path'].'plugins/links/upgrade.php';
+        return links_upgrade();
+    } else {
+        // upgrades are done by the install script - return a generic error
+        COM_errorLog("Links plugin upgrade function not implemented");
+        return 3001;
     }
-
-    // upgrades are done by the install script - return a generic error
-    COM_errorLog("Plugin upgrade function not implemented");
-    return 3001;
 }
 
 /**
@@ -1193,7 +1192,7 @@ function plugin_templatesetvars_links ($templatename, &$template)
 * foreseen by the core code (interactions with other plugins for example)
 *
 */
-function plugin_autouninstall_links ()
+function plugin_autouninstall_linksXX ()
 {
     $out = array (
         /* give the name of the tables, without $_TABLES[] */

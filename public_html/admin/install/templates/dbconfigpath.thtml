@@ -1,0 +1,23 @@
+<form action="index.php" method="post">
+  <input type="hidden" name="mode" value="gotdbconfig" />
+  <input type="hidden" name="previousstep" value="" />
+
+  <div style="float:left;">
+    <h1>{step_heading}</h1>
+  </div>
+  <div style="float:right;">
+    <input style="vertical-align:middle;float:right" type="submit" name="submit" class="submit" value="{lang_next} &gt;&gt;" />
+    <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_prev}" />&nbsp;&nbsp;
+  </div>
+  <div style="clear:both;"></div>
+  <hr />
+  <p style="margin-bottom:20px;">
+    {lang_sys_path_help}
+  </p>
+  <p>
+    <label>db-config.php</label>
+    <input type="text" name="dbconfig_path" value="{dbconfig_path}" size="65" /><br />
+    {lang_sys_path_exp}
+  </p>
+</form>
+<br />

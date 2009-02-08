@@ -49,7 +49,6 @@ global $_FF_DEFAULT;
 $_FF_DEFAULT = array();
 $_FF_DEFAULT['registration_required']  = false;
 $_FF_DEFAULT['registered_to_post']     = true;
-$_FF_DEFAULT['allow_memberlist']       = false;
 $_FF_DEFAULT['allow_html']             = false;
 $_FF_DEFAULT['post_htmlmode']          = false;
 $_FF_DEFAULT['use_glfilter']           = true;
@@ -187,6 +186,9 @@ $_FF_DEFAULT['inlineimageypes']    = array(
         'image/png'                         => '.png',
         'image/x-png'                       => '.png'
 );
+// new in v3.1.1
+$_FF_DEFAULT['enable_fm_integration'] = false;
+$_FF_DEFAULT['allow_memberlist']      = false;
 
 /**
 * the Forum plugin's config array
@@ -397,7 +399,8 @@ function plugin_initconfig_forum()
                 0, 1, 0, 50, true, 'forum');
         $c->add('max_uploadimage_height', $_FF_DEFAULT['max_uploadimage_height'], 'text',
                 0, 1, 0, 60, true, 'forum');
-        $c->add('max_uploadimage_size', $_FF_DEFAULT['max_uploadimage_size'], 'text',
+//FIXME, validate this setting!
+        $c->add('max_uploadfile_size', $_FF_DEFAULT['max_uploadfile_size'], 'text',
                 0, 1, 0, 70, true, 'forum');
         $c->add('inlineimage_width', $_FF_DEFAULT['inlineimage_width'], 'text',
                 0, 1, 0, 80, true, 'forum');
@@ -407,6 +410,8 @@ function plugin_initconfig_forum()
                 0,1,NULL,100,true,'forum');
         $c->add('inlineimageypes',$_FF_DEFAULT['inlineimageypes'], '*text',
                 0,1,NULL,110,true,'forum');
+        $c->add('enable_fm_integration', $_FF_DEFAULT['enable_fm_integration'], 'select',
+                0,1,NULL,120, true, 'forum');
 
         $c->add('ff_topic_post_settings', NULL, 'fieldset', 0, 2, NULL, 0, true,'forum');
 

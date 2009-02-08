@@ -47,7 +47,8 @@ if (!defined ('GVERSION')) {
  *
  */
 
-require_once ($_CONF['path'] . 'plugins/commentfeeds/config.php');
+require_once $_CONF['path'].'plugins/commentfeeds/config.php';
+require_once $_CONF['path'].'plugins/commentfeeds/commentfeeds.php';
 
 // +---------------------------------------------------------------------------+
 // | glFusion Plugin API Implementation                                        |
@@ -65,7 +66,7 @@ function plugin_chkVersion_commentfeeds ()
 {
     global $_CF_CONF;
 
-    return $_CF_CONF['version'];
+    return $_CF_CONF['pi_version'];
 }
 
 
@@ -222,23 +223,14 @@ function plugin_feedupdatecheck_commentfeeds ($feed, $topic, $update_data, $limi
     return ($current != $update_data) ? false : true;
 }
 
-
 /**
-* Removes the datastructures for this plugin from the glFusion database
-*
-* This may get called by the install routine to undo anything done to this
-* point.
-*
-* @return   boolean     true: uninstalled successfully
-*
+* Called by the plugin Editor to run the SQL Update for a plugin update
 */
-function plugin_uninstall_commentfeeds ()
-{
+function plugin_upgrade_commentfeeds() {
     global $_CONF, $_TABLES;
 
-    require_once($_CONF['path'] . 'plugins/commentfeeds/install.inc');
+    require_once $_CONF['path'].'plugins/commentfeeds/upgrade.php';
 
-    $rc = plugin_remove_commentfeeds();
-    return $rc;
+    return commentfeeds_upgrade();
 }
 ?>

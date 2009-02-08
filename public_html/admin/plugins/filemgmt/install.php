@@ -4,11 +4,11 @@
 // +--------------------------------------------------------------------------+
 // | install.php                                                              |
 // |                                                                          |
-// | Install / Uninstall routines                                             |
+// | This file installs and removes the data structures                       |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -35,64 +35,50 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
-require_once $_CONF['path'] . 'plugins/filemgmt/config.php';
-require_once $_CONF['path'] . 'plugins/filemgmt/functions.inc';
-require_once $_CONF['path'] . 'plugins/filemgmt/install.inc';
+require_once $_CONF['path'].'/plugins/filemgmt/autoinstall.php';
 
-// Only let Root users access this script
+USES_lib_install();
+
 if (!SEC_inGroup('Root')) {
-    COM_errorLog("Someone has tried to illegally access the FileMgmt Pro install/uninstall page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
-    $display = COM_siteHeader();
-    $display .= COM_startBlock($LANG_FM00['access_denied']);
-    $display .= $LANG_FM00['access_denied_msg'];
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter(true);
+    // Someone is trying to illegally access this page
+    COM_errorLog("Someone has tried to illegally access the FileMgmt install/uninstall page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+    $display = COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
+             . COM_startBlock ($LANG_ACCESS['accessdenied'])
+             . $LANG_ACCESS['plugin_access_denied_msg']
+             . COM_endBlock ()
+             . COM_siteFooter ();
     echo $display;
     exit;
 }
 
-/*
+/**
 * Main Function
 */
 
-$display = '';
-
-if ($_REQUEST['action'] == 'uninstall') {
-    $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
-    if ($uninstall_plugin ()) {
-        $display = COM_refresh ($_CONF['site_admin_url']
-                                . '/plugins.php?msg=45');
-    } else {
-        $display = COM_refresh ($_CONF['site_admin_url']
-                                . '/plugins.php?msg=73');
-    }
-
-} else if (DB_count ($_TABLES['plugins'], 'pi_name', $pi_name) == 0) {
-    // plugin not installed
-    if (plugin_compatible_with_this_glfusion_version ()) {
-        if ( plugin_install_filemgmt($_DB_table_prefix) ) {
-            $display = COM_refresh ($_CONF['site_admin_url']
-                                    . '/plugins.php?msg=44');
+if (SEC_checkToken()) {
+    $action = COM_applyFilter($_GET['action']);
+    if ($action == 'install') {
+        if (plugin_install_filemgmt()) {
+    		// Redirects to the plugin editor
+    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=44');
+    		exit;
         } else {
-            $display = COM_refresh ($_CONF['site_admin_url']
-                                    . '/plugins.php?msg=72');
+    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=72');
+    		exit;
         }
-    } else {
-        // plugin needs a newer version of glFusion
-        $display .= COM_siteHeader ('menu', $LANG32[8])
-                 . COM_startBlock ($LANG32[8])
-                 . '<p>' . $LANG32[9] . '</p>'
-                 . COM_endBlock ()
-                 . COM_siteFooter ();
+    } else if ($action == 'uninstall') {
+    	if (plugin_uninstall_filemgmt('installed')) {
+    		/**
+    		* Redirects to the plugin editor
+    		*/
+    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=45');
+    		exit;
+    	} else {
+    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=73');
+    		exit;
+    	}
     }
-} else {
-    // plugin already installed
-    $display .= COM_siteHeader ('menu', $LANG01[77])
-             . COM_startBlock ($LANG32[6])
-             . '<p>' . $LANG32[7] . '</p>'
-             . COM_endBlock ()
-             . COM_siteFooter();
 }
 
-echo $display;
+echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php');
 ?>

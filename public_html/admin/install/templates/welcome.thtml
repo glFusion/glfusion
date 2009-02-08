@@ -1,0 +1,29 @@
+<form id="welcome" name="welcome" method="post" action="index.php">
+  <div style="float:left;">
+    <h1>{step_heading}</h1>
+  </div>
+  <div style="clear:both;"></div>
+  <hr />
+  <div style="float:left;vertical-align:top;width:75%;padding:10px;">
+    {lang_welcome}
+    <br />
+  </div>
+
+  <div style="float:right;vertical-align:top;width:20%;">
+    <h1>{lang_select_lanaguage}</h1>
+    {language_select}
+  </div>
+
+  <div style="clear:both;"></div>
+
+  <div>
+    <strong>{lang_select_task}:&nbsp;</strong>
+    <select name="type">
+      <option value="install">{lang_new_install}</option>
+      <option value="upgrade">{lang_site_upgrade}</option>
+      <option value="migrate">{lang_geeklog_migrate}</option>
+    </select>
+    &nbsp;&nbsp;<input type="submit" name="submit" value="{lang_proceed}" />
+  </div>
+
+</form>

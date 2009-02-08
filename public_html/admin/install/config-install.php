@@ -51,7 +51,7 @@ function install_config($site_url)
     $c->add('site_slogan','','text',0,0,NULL,70,TRUE);
     $c->add('microsummary_short','GL: ','text',0,0,NULL,80,TRUE);
     $c->add('site_disabled_msg','glFusion Site is down. Please come back soon.','text',0,0,NULL,510,TRUE);
-    $c->add('copyrightyear','2008','text',0,0,NULL,1440,FALSE);
+    $c->add('copyrightyear','2009','text',0,0,NULL,1440,FALSE);
     $c->add('url_rewrite',FALSE,'select',0,0,1,1800,TRUE);
 
     $c->add('fs_mail', NULL, 'fieldset', 0, 1, NULL, 0, TRUE);
@@ -345,7 +345,7 @@ function install_config($site_url)
 
     $c->add('fs_censoring', NULL, 'fieldset', 7, 35, NULL, 0, TRUE);
     $c->add('censormode',1,'select',7,35,0,1760,TRUE);
-    $c->add('censorreplace','*censormode*','text',7,35,NULL,1770,TRUE);
+    $c->add('censorreplace','*censored*','text',7,35,NULL,1770,TRUE);
     $c->add('censorlist', array('fuck','cunt','fucker','fucking','pussy','cock','c0ck',' cum ','twat','clit','bitch','fuk','fuking','motherfucker'),'%text',7,35,NULL,1780,TRUE);
 
     $c->add('fs_iplookup', NULL, 'fieldset', 7, 36, NULL, 0, TRUE);
@@ -364,25 +364,5 @@ function install_config($site_url)
     $c->add('disable_webservices',   0, 'select', 7, 40, 0, 1840, TRUE);
     $c->add('restrict_webservices',  0, 'select', 7, 40, 0, 1850, TRUE);
     $c->add('atom_max_stories',     10, 'text',   7, 40, 0, 1860, TRUE);
-
-
-    // Add the configuration records for the default installed plugins
-    $plugin_path = $_CONF['path'] . 'plugins/';
-
-    require_once $plugin_path . 'calendar/install_defaults.php';
-    plugin_initconfig_calendar();
-
-    require_once $plugin_path . 'links/install_defaults.php';
-    plugin_initconfig_links();
-
-    require_once $plugin_path . 'polls/install_defaults.php';
-    plugin_initconfig_polls();
-
-    require_once $plugin_path . 'spamx/install_defaults.php';
-    plugin_initconfig_spamx();
-
-    require_once $plugin_path . 'staticpages/install_defaults.php';
-    plugin_initconfig_staticpages();
 }
-
 ?>

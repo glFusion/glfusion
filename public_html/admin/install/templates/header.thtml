@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset={charset}" />
+<link rel="stylesheet" type="text/css" href="layout/style.css" />
+<meta name="robots" content="noindex,nofollow" />
+<title>{page_title}</title>
+</head>
+<body dir="ltr">
+  <div id="gl_container_fluid">
+    <div id="gl_header">
+      <div class="top-r-corner">
+        <div class="top-l-corner">
+		  <div class="floatright install-slogan" style="color:#FFF;">
+          </div>
+          <div class="floatleft">
+            <img src="layout/logo.png" height="100" width="330" alt="" title="" id="header-site-logo" />
+          </div>
+        </div>
+      </div>
+    </div>
+<!--    <div id="gl_moomenu"> </div>  -->
+      <div id="gl_wrapper">
+       <div class="installation-body-container">

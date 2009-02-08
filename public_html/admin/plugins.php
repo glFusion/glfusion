@@ -391,14 +391,29 @@ function do_uninstall ($pi_name)
         require_once ($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc');
     }
 
+    if ( !function_exists('plugin_autouninstall_'.$pi_name) && file_exists($_CONF['path'].'plugins/'.$pi_name.'/autoinstall.php') ) {
+        require_once $_CONF['path'].'plugins/'.$pi_name.'/autoinstall.php';
+    }
+
+    $msg = '';
     if (PLG_uninstall ($pi_name)) {
+        $msg = 45;
         $retval .= COM_showMessage (45);
     } else {
+        $msg = 95;
         $retval .= COM_showMessage (95);
     }
     CACHE_remove_instance('stmenu');
     CACHE_remove_instance('whatsnew');
-    return $retval;
+
+    if ( $msg != '' ) {
+        $refreshURL = $_CONF['site_admin_url'].'/plugins.php?msg='.$msg;
+    } else {
+        $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
+    }
+
+    echo COM_refresh($refreshURL);
+    exit;
 }
 
 /**

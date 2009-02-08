@@ -59,7 +59,7 @@ if (!isset($_PO_CONF['pollsloginrequired'])) {
     $_PO_CONF = $po_config->get_config('polls');
 }
 
-$_PO_CONF['version'] = '2.0.1';
+require_once $_CONF['path'].'plugins/polls/polls.php';
 
 // +---------------------------------------------------------------------------+
 // | glFusion Plugin API Implementations                                       |
@@ -371,7 +371,7 @@ function plugin_chkVersion_polls()
 {
     global $_PO_CONF;
 
-    return $_PO_CONF['version'];
+    return $_PO_CONF['pi_version'];
 }
 
 /**
@@ -389,35 +389,6 @@ function plugin_enablestatechange_polls ($enable)
 
     // toggle Poll block
     DB_query ("UPDATE {$_TABLES['blocks']} SET is_enabled = $is_enabled WHERE (type = 'phpblock') AND (phpblockfn = 'phpblock_polls')");
-}
-
-/**
-* Automatic uninstall function for plugins
-*
-* @return   array
-*
-* This code is automatically uninstalling the plugin.
-* It passes an array to the core code function that removes
-* tables, groups, features and php blocks from the tables.
-* Additionally, this code can perform special actions that cannot be
-* foreseen by the core code (interactions with other plugins for example)
-*
-*/
-function plugin_autouninstall_polls ()
-{
-    $out = array (
-        /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('pollanswers','polltopics','pollvoters','pollquestions'),
-        /* give the full name of the group, as in the db */
-        'groups' => array('Polls Admin'),
-        /* give the full name of the feature, as in the db */
-        'features' => array('polls.edit'),
-        /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array('phpblock_polls'),
-        /* give all vars with their name */
-        'vars'=> array()
-    );
-    return $out;
 }
 
 /**
@@ -1110,15 +1081,14 @@ function plugin_getheadercss_polls() {
 */
 function plugin_upgrade_polls()
 {
-    // the plugin needs these function so complain when they don't exist
-    if (!function_exists('PLG_uninstall') ||
-            !function_exists('COM_createLink')) {
-        return 3002;
+    if ( @file_exists($_CONF['path'].'plugins/polls/upgrade.php') ) {
+        require_once $_CONF['path'].'plugins/polls/upgrade.php';
+        return polls_upgrade();
+    } else {
+        // upgrades are done by the install script - return a generic error
+        COM_errorLog("Polls plugin upgrade function not implemented");
+        return 3001;
     }
-
-    // upgrades are done by the install script - return a generic error
-    COM_errorLog("Plugin upgrade function not implemented");
-    return 3001;
 }
 
 ?>

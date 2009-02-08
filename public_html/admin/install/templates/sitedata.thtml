@@ -1,0 +1,60 @@
+<form name="sitedata" id="sitedata" action="index.php" method="post">
+  <input type="hidden" name="mode" value="gotsitedata" />
+   <input type="hidden" name="previousstep" value="getdatabase" />
+
+  <div style="float:left;">
+    <h1>{lang_site_information}</h1>
+  </div>
+
+  <div style="float:right;">
+    <input style="vertical-align:middle;float:right" type="submit" name="submit" class="submit" value="{lang_install} &gt;&gt;" />
+    <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_prev}" />
+  </div>
+  <div style="clear:both;"></div>
+  <hr />
+
+<div class="glform">
+  <br />
+  <div style="width:60%;float:left;">
+  <p>
+    <label class="label-left">{lang_site_name}</label>
+    <input class="fValidate['required']" type="text" name="site_name" value="{site_name}" size="40" />
+  </p>
+  <p>
+    <label class="label-left">{lang_site_slogan}</label>
+    <input class="fValidate['required']" type="text" name="site_slogan" value="{site_slogan}" size="40" />
+  </p>
+
+  <p>
+    <label class="label-left">{lang_site_email}</label>
+    <input class="fValidate['required','email']" type="text" name="site_mail" value="{site_mail}" size="50" />
+  </p>
+  <p>
+    <label class="label-left">{lang_site_noreply_email}</label>
+    <input class="fValidate['required','email']" type="text" name="noreply_mail" value="{noreply_mail}" size="50" />
+  </p>
+
+  <p>
+    <label class="label-left">{lang_site_url}</label>
+    <input class="fValidate['required']" type="text" name="site_url" value="{site_url}" size="40" />
+  </p>
+
+  <p>
+    <label class="label-left">{lang_site_admin_url}</label>
+    <input class="fValidate['required']" type="text" name="site_admin_url" value="{site_admin_url}" size="40" />
+  </p>
+
+  <p>
+    <label class="label-left">{lang_utf8}</label>
+    <input type="checkbox" name="utf8" checked="checked" />
+  </p>
+  <br />
+
+</div>
+<div style="width:38%;float:right;">
+{lang_sitedata_help}
+</div>
+</div>
+  </form>
+<br />
+<br />

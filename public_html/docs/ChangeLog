@@ -5,6 +5,32 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Rewrote install / upgrade routines (Mark)
+
+- Implemented plugin upload / auto install (Mark)
+
+- Upgrade Bad Behavior2 to v2.0.26 (Mark)
+
+- Upgrade FCKEditor to latest production release (Mark)
+
+- Detect crashed sessions table and attempt to auto repair (Mark)
+        private/system/lib-sessions.php
+
+- Validate arrays prior to using them - prevent permission crashes (Mark)
+        private/system/lib-plugins.php
+        private/system/lib-glfusion.php
+        private/system/classes/template.class.php
+        private/system/classes/config.class.php
+
+- Fixed missing global declaration in image watermarking (Mark)
+        private/system/imglib/im_image.php
+
+- Do not use config cache if not writable (Mark)
+        private/system/classes/config.class.php
+
+- Added new COM_isWritable()  (Mark)
+        public_html/lib-common.php
+
 - Refreshed PEAR libraries with latest versions (Mark)
         private/system/pear/
 

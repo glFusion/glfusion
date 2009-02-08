@@ -102,7 +102,7 @@ CREATE TABLE {$_TABLES['commentedits']} (
   uid mediumint(8) NOT NULL,
   time datetime NOT NULL,
   PRIMARY KEY (cid)
-) TYPE=MYISAM
+) TYPE=MyISAM
 ";
 
 $_SQL[] = "
@@ -534,293 +534,35 @@ CREATE TABLE {$_TABLES['vars']} (
 ) TYPE=MyISAM
 ";
 
-// Tables used by the bundled plugins
-
-// Calendar plugin
-$_SQL[] = "
-CREATE TABLE {$_TABLES['events']} (
-  eid varchar(20) NOT NULL default '',
-  title varchar(128) default NULL,
-  description text,
-  postmode varchar(10) NOT NULL default 'plaintext',
-  datestart date default NULL,
-  dateend date default NULL,
-  url varchar(255) default NULL,
-  hits mediumint(8) unsigned NOT NULL default '0',
-  owner_id mediumint(8) unsigned NOT NULL default '1',
-  group_id mediumint(8) unsigned NOT NULL default '1',
-  perm_owner tinyint(1) unsigned NOT NULL default '3',
-  perm_group tinyint(1) unsigned NOT NULL default '3',
-  perm_members tinyint(1) unsigned NOT NULL default '2',
-  perm_anon tinyint(1) unsigned NOT NULL default '2',
-  address1 varchar(40) default NULL,
-  address2 varchar(40) default NULL,
-  city varchar(60) default NULL,
-  state varchar(40) default NULL,
-  zipcode varchar(5) default NULL,
-  allday tinyint(1) NOT NULL default '0',
-  event_type varchar(40) NOT NULL default '',
-  location varchar(128) default NULL,
-  timestart time default NULL,
-  timeend time default NULL,
-  INDEX events_event_type(event_type),
-  INDEX events_datestart(datestart),
-  INDEX events_dateend(dateend),
-  PRIMARY KEY  (eid)
-) TYPE=MyISAM
-";
-
-$_SQL[] = "
-CREATE TABLE {$_TABLES['eventsubmission']} (
-  eid varchar(20) NOT NULL default '',
-  title varchar(128) default NULL,
-  description text,
-  location varchar(128) default NULL,
-  datestart date default NULL,
-  dateend date default NULL,
-  url varchar(255) default NULL,
-  allday tinyint(1) NOT NULL default '0',
-  zipcode varchar(5) default NULL,
-  state varchar(40) default NULL,
-  city varchar(60) default NULL,
-  address2 varchar(40) default NULL,
-  address1 varchar(40) default NULL,
-  event_type varchar(40) NOT NULL default '',
-  timestart time default NULL,
-  timeend time default NULL,
-  PRIMARY KEY  (eid)
-) TYPE=MyISAM
-";
-
-$_SQL[] = "
-CREATE TABLE {$_TABLES['personal_events']} (
-  eid varchar(20) NOT NULL default '',
-  title varchar(128) default NULL,
-  event_type varchar(40) NOT NULL default '',
-  datestart date default NULL,
-  dateend date default NULL,
-  address1 varchar(40) default NULL,
-  address2 varchar(40) default NULL,
-  city varchar(60) default NULL,
-  state varchar(40) default NULL,
-  zipcode varchar(5) default NULL,
-  allday tinyint(1) NOT NULL default '0',
-  url varchar(255) default NULL,
-  description text,
-  postmode varchar(10) NOT NULL default 'plaintext',
-  owner_id mediumint(8) unsigned NOT NULL default '1',
-  group_id mediumint(8) unsigned NOT NULL default '1',
-  perm_owner tinyint(1) unsigned NOT NULL default '3',
-  perm_group tinyint(1) unsigned NOT NULL default '3',
-  perm_members tinyint(1) unsigned NOT NULL default '2',
-  perm_anon tinyint(1) unsigned NOT NULL default '2',
-  uid mediumint(8) NOT NULL default '0',
-  location varchar(128) default NULL,
-  timestart time default NULL,
-  timeend time default NULL,
-  PRIMARY KEY  (eid,uid)
-) TYPE=MyISAM
-";
-
-// Links plugin
-$_SQL[] = "
-CREATE TABLE {$_TABLES['linkcategories']} (
-  cid varchar(32) NOT NULL,
-  pid varchar(32) NOT NULL,
-  category varchar(32) NOT NULL,
-  description text DEFAULT NULL,
-  tid varchar(20) DEFAULT NULL,
-  created datetime DEFAULT NULL,
-  modified datetime DEFAULT NULL,
-  owner_id mediumint(8) unsigned NOT NULL default '1',
-  group_id mediumint(8) unsigned NOT NULL default '1',
-  perm_owner tinyint(1) unsigned NOT NULL default '3',
-  perm_group tinyint(1) unsigned NOT NULL default '2',
-  perm_members tinyint(1) unsigned NOT NULL default '2',
-  perm_anon tinyint(1) unsigned NOT NULL default '2',
-  PRIMARY KEY (cid),
-  KEY links_pid (pid)
-) TYPE=MyISAM
-";
-
-$_SQL[] = "
-CREATE TABLE {$_TABLES['links']} (
-  lid varchar(40) NOT NULL default '',
-  cid varchar(32) default NULL,
-  url varchar(255) default NULL,
-  description text,
-  title varchar(96) default NULL,
-  hits int(11) NOT NULL default '0',
-  date datetime default NULL,
-  owner_id mediumint(8) unsigned NOT NULL default '1',
-  group_id mediumint(8) unsigned NOT NULL default '1',
-  perm_owner tinyint(1) unsigned NOT NULL default '3',
-  perm_group tinyint(1) unsigned NOT NULL default '2',
-  perm_members tinyint(1) unsigned NOT NULL default '2',
-  perm_anon tinyint(1) unsigned NOT NULL default '2',
-  INDEX links_category(cid),
-  INDEX links_date(date),
-  PRIMARY KEY (lid)
-) TYPE=MyISAM
-";
-
-$_SQL[] = "
-CREATE TABLE {$_TABLES['linksubmission']} (
-  lid varchar(40) NOT NULL default '',
-  cid varchar(32) default NULL,
-  url varchar(255) default NULL,
-  description text,
-  title varchar(96) default NULL,
-  hits int(11) default NULL,
-  date datetime default NULL,
-  owner_id mediumint(8) unsigned NOT NULL default '1',
-  PRIMARY KEY (lid)
-) TYPE=MyISAM
-";
-
-// Polls plugin
-$_SQL[] = "
-CREATE TABLE {$_TABLES['pollanswers']} (
-  pid varchar(20) NOT NULL default '',
-  qid mediumint(9) NOT NULL default '0',
-  aid tinyint(3) unsigned NOT NULL default '0',
-  answer varchar(255) default NULL,
-  votes mediumint(8) unsigned default NULL,
-  remark varchar(255) NULL,
-  PRIMARY KEY (pid, qid, aid)
-) TYPE=MyISAM
-";
-
-$_SQL[] = "
-CREATE TABLE {$_TABLES['pollquestions']} (
-  qid mediumint(9) NOT NULL DEFAULT '0',
-  pid varchar(20) NOT NULL,
-  question varchar(255) NOT NULL,
-  PRIMARY KEY (qid, pid)
-) TYPE=MyISAM
-";
-
-$_SQL[] = "
-CREATE TABLE {$_TABLES['polltopics']} (
-  pid varchar(20) NOT NULL,
-  topic varchar(255) default NULL,
-  voters mediumint(8) unsigned default NULL,
-  questions int(11) NOT NULL default '0',
-  date datetime default NULL,
-  display tinyint(4) NOT NULL default '0',
-  is_open tinyint(1) NOT NULL default '1',
-  hideresults tinyint(1) NOT NULL default '0',
-  commentcode tinyint(4) NOT NULL default '0',
-  statuscode tinyint(4) NOT NULL default '0',
-  owner_id mediumint(8) unsigned NOT NULL default '1',
-  group_id mediumint(8) unsigned NOT NULL default '1',
-  perm_owner tinyint(1) unsigned NOT NULL default '3',
-  perm_group tinyint(1) unsigned NOT NULL default '2',
-  perm_members tinyint(1) unsigned NOT NULL default '2',
-  perm_anon tinyint(1) unsigned NOT NULL default '2',
-  INDEX pollquestions_date(date),
-  INDEX pollquestions_display(display),
-  INDEX pollquestions_commentcode(commentcode),
-  INDEX pollquestions_statuscode(statuscode),
-  PRIMARY KEY  (pid)
-) TYPE=MyISAM
-";
-
-$_SQL[] = "
-CREATE TABLE {$_TABLES['pollvoters']} (
-  id int(10) unsigned NOT NULL auto_increment,
-  pid varchar(20) NOT NULL default '',
-  ipaddress varchar(15) NOT NULL default '',
-  date int(10) unsigned default NULL,
-  PRIMARY KEY (id)
-) TYPE=MyISAM
-";
-
-// Spam-X plugin
-$_SQL[] = "
-CREATE TABLE {$_TABLES['spamx']} (
-  name varchar(20) NOT NULL default '',
-  value varchar(255) NOT NULL default '',
-  INDEX spamx_name(name)
-) TYPE=MyISAM
-";
-
-// Static Pages plugin
-$_SQL[] = "
-CREATE TABLE {$_TABLES['staticpage']} (
-  sp_id varchar(40) NOT NULL default '',
-  sp_uid mediumint(8) NOT NULL default '1',
-  sp_title varchar(128) NOT NULL default '',
-  sp_content text NOT NULL,
-  sp_hits mediumint(8) unsigned NOT NULL default '0',
-  sp_date datetime NOT NULL default '0000-00-00 00:00:00',
-  sp_format varchar(20) NOT NULL default '',
-  sp_onmenu tinyint(1) unsigned NOT NULL default '0',
-  sp_label varchar(64) default NULL,
-  commentcode tinyint(4) NOT NULL default '0',
-  owner_id mediumint(8) unsigned NOT NULL default '1',
-  group_id mediumint(8) unsigned NOT NULL default '1',
-  perm_owner tinyint(1) unsigned NOT NULL default '3',
-  perm_group tinyint(1) unsigned NOT NULL default '2',
-  perm_members tinyint(1) unsigned NOT NULL default '2',
-  perm_anon tinyint(1) unsigned NOT NULL default '2',
-  sp_centerblock tinyint(1) unsigned NOT NULL default '0',
-  sp_help varchar(255) default '',
-  sp_tid varchar(20) NOT NULL default 'none',
-  sp_where tinyint(1) unsigned NOT NULL default '1',
-  sp_php tinyint(1) unsigned NOT NULL default '0',
-  sp_nf tinyint(1) unsigned default '0',
-  sp_inblock tinyint(1) unsigned default '1',
-  postmode varchar(16) NOT NULL default 'html',
-  sp_search tinyint(1) unsigned default '1',
-  PRIMARY KEY  (sp_id),
-  KEY staticpage_sp_uid (sp_uid),
-  KEY staticpage_sp_date (sp_date),
-  KEY staticpage_sp_onmenu (sp_onmenu),
-  KEY staticpage_sp_centerblock (sp_centerblock),
-  KEY staticpage_sp_tid (sp_tid),
-  KEY staticpage_sp_where (sp_where)
-) TYPE=MyISAM
-";
-
-
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (1,3) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (2,3) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (3,5) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (4,5) ";
+$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (4,3) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (5,9) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (5,11) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (6,9) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (6,11) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES(7,12) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (8,7) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (9,7) ";
+$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (7,12) ";
+$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (8,5) ";
+$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (9,8) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (10,4) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (11,6) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (12,8) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (13,10) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (14,11) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (15,11) ";
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (16,4) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (17,14) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (18,14) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (22,14) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (23,15) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (24,3) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (25,17) ";
-$_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (26,18) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (1,1,'user_block','gldefault','My Account','all',4,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (2,1,'admin_block','gldefault','Admins Only','all',3,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (3,1,'section_block','gldefault','Topics','all',2,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (4,1,'polls_block','phpblock','Poll','all',3,'','','0000-00-00 00:00:00',0,'phpblock_polls',4,2,3,3,2,2) ";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (5,1,'events_block','phpblock','Events','all',5,'','','0000-00-00 00:00:00',1,'phpblock_calendar',4,2,3,3,2,2) ";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (6,1,'whats_new_block','gldefault','What\'s New','all',3,'','','0000-00-00 00:00:00',0,'',4,2,3,3,2,2) ";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (8,1,'whosonline_block','phpblock','Who\'s Online','all',0,'','','0000-00-00 00:00:00',0,'phpblock_whosonline',4,2,3,3,2,2) ";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (9,1,'older_stories','gldefault','Older Stories','all',7,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (10,1,'blogroll_block','phpblock','Blog Roll','all',2,'','','0000-00-00 00:00:00',0,'phpblock_blogroll',4,2,3,3,2,2) ";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (11,0,'gl_mootickerRSS','portal','gl_mootickerRSS','all',10,'<ul class=\"list-feed\">  <li><a href=\"http://www.glfusion.org/article.php?story=glfusion112freeze\">glFusion v1.1.2 Feature Freeze</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=glfusion102\">glFusion v1.0.2 Released (Security Update)</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=glfusion110-update2\">glFusion Development Update 2</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=20080909145217132\">Vote for glFusion at WebMonkey!</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=glfusionv112devupdate\">glFusion v1.1.2 Development Update</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=fckeditor-upload-exploit\">FCKEditor Upload Exploit</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=chameleon200\">Chameleon v2.0.0 for glFusion</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=20080707224104910\">glFusion v1.0.1 Released</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=20080629203901111\">glPopMail is ready for testing and feedback</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=phpversion\">What PHP Version do you use?</a></li></ul>','http://www.glfusion.org/backend/glfusion.rss','0000-00-00 00:00:00',0,'',4,2,3,3,2,2) ";
-$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (12,1,'auto_translations','phpblock','Auto Translations','all',0,'','','0000-00-00 00:00:00',0,'phpblock_autotranslations',4,2,3,3,2,2) ";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (4,1,'whats_new_block','gldefault','What\'s New','all',3,'','','0000-00-00 00:00:00',0,'',4,2,3,3,2,2) ";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (5,1,'whosonline_block','phpblock','Who\'s Online','all',0,'','','0000-00-00 00:00:00',0,'phpblock_whosonline',4,2,3,3,2,2) ";
+$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (6,1,'older_stories','gldefault','Older Stories','all',7,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
+
+//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (4,1,'polls_block','phpblock','Poll','all',3,'','','0000-00-00 00:00:00',0,'phpblock_polls',4,2,3,3,2,2) ";
+//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (5,1,'events_block','phpblock','Events','all',5,'','','0000-00-00 00:00:00',1,'phpblock_calendar',4,2,3,3,2,2) ";
+//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (10,1,'blogroll_block','phpblock','Blog Roll','all',2,'','','0000-00-00 00:00:00',0,'phpblock_blogroll',4,2,3,3,2,2) ";
+//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (11,0,'gl_mootickerRSS','portal','gl_mootickerRSS','all',10,'<ul class=\"list-feed\">  <li><a href=\"http://www.glfusion.org/article.php?story=glfusion112freeze\">glFusion v1.1.2 Feature Freeze</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=glfusion102\">glFusion v1.0.2 Released (Security Update)</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=glfusion110-update2\">glFusion Development Update 2</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=20080909145217132\">Vote for glFusion at WebMonkey!</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=glfusionv112devupdate\">glFusion v1.1.2 Development Update</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=fckeditor-upload-exploit\">FCKEditor Upload Exploit</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=chameleon200\">Chameleon v2.0.0 for glFusion</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=20080707224104910\">glFusion v1.0.1 Released</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=20080629203901111\">glPopMail is ready for testing and feedback</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=phpversion\">What PHP Version do you use?</a></li></ul>','http://www.glfusion.org/backend/glfusion.rss','0000-00-00 00:00:00',0,'',4,2,3,3,2,2) ";
+//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (12,1,'auto_translations','phpblock','Auto Translations','all',0,'','','0000-00-00 00:00:00',0,'phpblock_autotranslations',4,2,3,3,2,2) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['commentcodes']} (code, name) VALUES (0,'Comments Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['commentcodes']} (code, name) VALUES (-1,'Comments Disabled') ";
@@ -859,37 +601,26 @@ $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VA
 $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (17,'%d/%m/%y %H:%M','21/03/99 22:00') ";
 $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (18,'%a %d %b %I:%M%p','Sun 21 Mar 10:00PM') ";
 
-$_DATA[] = "INSERT INTO {$_TABLES['eventsubmission']} (eid, title, description, location, datestart, dateend, url, allday, zipcode, state, city, address2, address1, event_type, timestart, timeend) VALUES ('2006051410130162','glFusion installed','Today, you successfully installed this glFusion site.','Your webserver',CURDATE(),CURDATE(),'http://www.glfusion.org/',1,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL) ";
+//$_DATA[] = "INSERT INTO {$_TABLES['eventsubmission']} (eid, title, description, location, datestart, dateend, url, allday, zipcode, state, city, address2, address1, event_type, timestart, timeend) VALUES ('2006051410130162','glFusion installed','Today, you successfully installed this glFusion site.','Your webserver',CURDATE(),CURDATE(),'http://www.glfusion.org/',1,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['featurecodes']} (code, name) VALUES (0,'Not Featured') ";
 $_DATA[] = "INSERT INTO {$_TABLES['featurecodes']} (code, name) VALUES (1,'Featured') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (1,'story.edit','Access to story editor',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (2,'story.moderate','Ability to moderate pending stories',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (3,'links.moderate','Ability to moderate pending links',0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (4,'links.edit','Access to links editor',0) ";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (3,'story.submit','May skip the story submission queue',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (4,'story.ping', 'Ability to send pings, pingbacks, or trackbacks for stories', 1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (5,'user.edit','Access to user editor',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (6,'user.delete','Ability to delete a user',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (7,'user.mail','Ability to send email to members',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (8,'calendar.moderate','Ability to moderate pending events',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (9,'calendar.edit','Access to event editor',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (8,'syndication.edit', 'Access to Content Syndication', 1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (9,'webservices.atompub', 'May use Atompub Webservices (if restricted)', 1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (10,'block.edit','Access to block editor',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (11,'topic.edit','Access to topic editor',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (12,'polls.edit','Access to polls editor',0) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (13,'plugin.edit','Access to plugin editor',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (14,'group.edit','Ability to edit groups',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (15,'group.delete','Ability to delete groups',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (16,'block.delete','Ability to delete a block',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (17,'staticpages.edit','Ability to edit a static page',0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (18,'staticpages.delete','Ability to delete static pages',0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (19,'story.submit','May skip the story submission queue',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (20,'links.submit','May skip the links submission queue',0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (21,'calendar.submit','May skip the event submission queue',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (22,'staticpages.PHP','Ability use PHP in static pages',0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (23,'spamx.admin', 'Full access to Spam-X plugin', 0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (24,'story.ping', 'Ability to send pings, pingbacks, or trackbacks for stories', 1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (25,'syndication.edit', 'Access to Content Syndication', 1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (26,'webservices.atompub', 'May use Atompub Webservices (if restricted)', 1) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (0,'Show Only in Topic') ";
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (1,'Show on Front Page') ";
@@ -898,10 +629,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid,
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (3,NULL,1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (4,NULL,1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (5,NULL,1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (6,NULL,1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (7,NULL,1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (8,NULL,1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (9,NULL,1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (10,NULL,1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (11,NULL,1) ";
@@ -911,10 +639,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid,
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,12) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,10) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,9) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,8) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,7) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,6) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,5) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,4) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,3) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (12,NULL,1) ";
@@ -922,48 +647,41 @@ $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid,
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,NULL,11) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (10,2,NULL) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (9,2,NULL) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (8,2,NULL) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (7,2,NULL) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (6,2,NULL) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (5,2,NULL) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (4,2,NULL) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (3,2,NULL) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (2,2,NULL) ";
 $_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (1,2,NULL) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (14,NULL,1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (15,NULL,1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (17,NULL,1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (18,NULL,1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (5,NULL,1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid, ug_grp_id) VALUES (8,NULL,1) ";
 
+// Traditionally, grp_id 1 = Root, 2 = All Users, 13 = Logged-In Users
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (1,'Root','Has full access to the site',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (2,'All Users','Group that a typical user is added to',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (3,'Story Admin','Has full access to story features',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (4,'Block Admin','Has full access to block features',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (5,'Links Admin','Has full access to links features',0) ";
+$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (5,'Syndication Admin', 'Can create and modify web feeds for the site',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (6,'Topic Admin','Has full access to topic features',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (7,'Calendar Admin','Has full access to calendar features',0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (8,'Polls Admin','Has full access to polls features',0) ";
+$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (7,'Remote Users', 'Users in this group can have authenticated against a remote server.',1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (8,'Webservices Users', 'Can use the Webservices API (if restricted)',0) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (9,'User Admin','Has full access to user features',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (10,'Plugin Admin','Has full access to plugin features',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (11,'Group Admin','Is a User Admin with access to groups, too',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (12,'Mail Admin','Can use Mail Utility',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (13,'Logged-in Users','All registered members',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (14,'Static Page Admin','Can administer static pages',0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (15,'spamx Admin', 'Users in this group can administer the Spam-X plugin',0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (16,'Remote Users', 'Users in this group can have authenticated against a remote server.',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (17,'Syndication Admin', 'Can create and modify web feeds for the site',1) ";
-$_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (18,'Webservices Users', 'Can use the Webservices API (if restricted)',0) ";
+/*
 
 $_DATA[] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('site', 'root', 'Root', 'Website root', NULL, NOW(), NOW(), 2, 5, 3, 3, 2, 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('blog-roll', 'site', 'Blog Roll', 'glFusion Related Sites', NULL, NOW(), NOW(), 2, 5, 3, 3, 2, 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion.org', 'blog-roll', 'http://www.glfusion.org/', 'Visit glFusion - A site dedicated to enhancing glFusion.', 'glFusion - Enhancing glFusion', 1, NOW(), 2, 5, 3, 3, 2, 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion_manual', 'blog-roll', 'http://www.glfusion.org/filemgmt/index.php?id=220', 'The glFusion manual is a snapshot compilation of the living documentation in the online wiki. It is in .pdf format.', 'glFusion Manual', 1, NOW(), 2, 5, 3, 3, 2, 2);";
+*/
 
 $_DATA[] = "INSERT INTO {$_TABLES['maillist']} (code, name) VALUES (0,'Don\'t Email') ";
 $_DATA[] = "INSERT INTO {$_TABLES['maillist']} (code, name) VALUES (1,'Email Headlines Each Night') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['pingservice']} (pid, name, site_url, ping_url, method, is_enabled) VALUES (1, 'Ping-O-Matic', 'http://pingomatic.com/', 'http://rpc.pingomatic.com/', 'weblogUpdates.ping', 1)";
-
+/*
 $_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('staticpages', '1.5.1','1.1.2',1,'http://www.glfusion.org/') ";
 $_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('spamx', '1.1.1','1.1.2',1,'http://www.glfusion.org') ";
 $_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('links', '2.0.0', '1.1.2', 1, 'http://www.glfusion.org/')";
@@ -984,13 +702,13 @@ $_DATA[] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`)
 $_DATA[] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`) VALUES ('glfusionfeaturepoll', 1, 'What is your favorite plugin?');";
 
 $_DATA[] = "INSERT INTO `{$_TABLES['polltopics']}` (`pid`, `topic`, `voters`, `questions`, `date`, `display`, `is_open`, `hideresults`, `commentcode`, `statuscode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES ('glfusionfeaturepoll', 'Tell us your opinion about glFusion', 0, 2, '2007-01-16 12:24:22', 1, 1, 1, 0, 0, 2, 8, 3, 2, 2, 2);";
-
+*/
 $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('plaintext','Plain Old Text') ";
 $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('html','HTML Formatted') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['sortcodes']} (code, name) VALUES ('ASC','Oldest First') ";
 $_DATA[] = "INSERT INTO {$_TABLES['sortcodes']} (code, name) VALUES ('DESC','Newest First') ";
-
+/*
 $_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('typography', 2, 'typography', '<div style=\"margin-bottom: 10px;\">&nbsp;</div>
 <blockquote>
 <p>This page shows all of the typography styles and settings that can be applied in glFusion, using one of the default themes.<br />
@@ -1193,20 +911,19 @@ USES_lib_widgets();
 //call the WIDGET_mooslide function from lib-widgets.php
 // last 3 options below are width, height, and css id
 return WIDGET_mooslide(\$slides, 560, 160, \'gl_slide\');', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
-
+*/
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (1,'Refreshing') ";
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (0,'Normal') ";
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (10,'Archive') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['stories']} (`sid`, `uid`, `draft_flag`, `tid`, `date`, `title`, `introtext`, `bodytext`, `hits`, `numemails`, `comments`, `trackbacks`, `related`, `featured`, `show_topic_icon`, `commentcode`, `trackbackcode`, `statuscode`, `expire`, `postmode`, `advanced_editor_mode`, `frontpage`, `in_transit`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES ('20080824115808580',2,0,'General',NOW(),'glFusion v1.1.2 - The Evolution Continues...','<div style=\"margin-bottom: 10px\">&nbsp;</div>\r<blockquote>\r<p><a href=\"http://www.glfusion.org\" target=\"_blank\">glFusion</a>, the next generation content management system built on the foundation of synergy, stability, and style.</p>\r</blockquote>\r<p>&nbsp;</p>\r<div class=\"yui-g\" style=\"border-bottom: rgb(247,247,247) 2px solid\">\r<div class=\"yui-u first\">\r<h2>Better Style</h2>\r<ul>\r    <li>The Nouveau Theme - A versitile and flexible default layout.</li>\r    <li>Improved WYSIWYG editor integration - See the styles available from the theme in the editor.</li>\r    <li>Pure CSS driven layout - Seach Engine friendly and provides a more accessible web site, aiding visually impaired users.</li>\r    <li>XHTML Compliant</li>\r    <li>Additional authoring styles - Improves the look and feel of your stories.</li>\r</ul>\r</div>\r<div class=\"yui-u\">\r<h2>Better Usability</h2>\r<ul>\r    <li>Caching Template Library - Speed and Scalability</li>\r    <li>Integrated Menu Builder</li>\r    <li>Integrated Logo management</li>\r    <li>Integrated Security Features\r    <ul>\r        <li>CAPTCHA Plugin</li>\r        <li>Bad Behavior2 Plugin</li>\r    </ul>\r    </li>\r    <li>Integrated Collaboration Tools\r    <ul>\r        <li>Forum Plugin</li>\r        <li>File Management Plugin</li>\r        <li>Media Management Plugin</li>\r    </ul>\r    </li>\r</ul>\r</div>\r</div>\r<p><a href=\"http://www.glfusion.org\" target=\"_blank\"><strong><em>glFusion</em></strong></a>, the next generation content management system built on the foundation of synergy, stability, and style. It provides a complete content management solution in a single package that lets you get your site up and running quickly, without having to search for 3rd party plugins or components.</p>\r<p><span class=\"alert\"><b>Don\'t forget to change your password after logging in!</b></span></p>','',5,0,0,0,'',1,0,0,0,0,'0000-00-00 00:00:00','html',1,1,0,2,3,3,2,2,2);";
-$_DATA[] = "INSERT INTO {$_TABLES['stories']} (sid, uid, draft_flag, tid, date, title, introtext, bodytext, hits, numemails, comments, trackbacks, related, featured, show_topic_icon, commentcode, trackbackcode, statuscode, expire, postmode, advanced_editor_mode, frontpage, in_transit, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion', 2, 0, 'glFusion', NOW(), 'What Can You Do with glFusion?', '<p><strong><em>glFusion</em></strong> gives you the ability to quickly and easily setup a web site complete with extras like forums, CAPTCHA support, calendaring, and full file and media gallery management solutions.&nbsp; Unique features include:</p>\r<ul>\r    <li>Integrated Menu Builder - Allowing you to change the site menu using an online editor.</li>\r    <li>Direct integration of the FCKeditor WYSIWYG editor with your theme\'s styles.&nbsp; See exactly how your story will look as you type it.</li>\r    <li>Pre-installed plugins, bringing additional functionality and enhanced security:\r    <ul>\r        <li>Bad Behavior2 - A great tool that blocks bot attacks, spam bots, and other nasties from the Internet.</li>\r        <li>CAPTCHA - Ensures that humans are the only ones entering content on your site.</li>\r        <li>Forum - A community collaboration and discussion tool.</li>\r        <li>FileMgmt - A complete File Manager for your site.</li>\r        <li>Media Gallery - A complete multi-media manager.</li>\r    </ul>\r    </li>\r    <li>glFusion gives you a true XHTML compliant site with a pure CSS driven layout.&nbsp; The design is SEO optomized (search engine friendly) and is also more accessible by screen readers and other assistance tools used by the visually impaired.</li>\r    <li>Better documentation - the glFusion community has published a full users guide to glFusion - Check out the online wiki at http://www.glfusion.org.</li>\r</ul>\r<p>Welcome to your new site, we hope you enjoy using it as much as we did assembling the software to drive it!</p>\r<p>The glFusion Team</p>', '', 0, 0, 0, 0, '', 0, 1, 0, 0, 0, '0000-00-00 00:00:00', 'html', 0, 1, 0, 3, 3, 3, 2, 2, 2)";
-
-$_DATA[] = "INSERT INTO {$_TABLES['storysubmission']} (sid, uid, tid, title, introtext, date, postmode) VALUES ('security-reminder',2,'glFusion','Are you secure?','<p>This is a reminder to secure your site once you have glFusion up and running. What you should do:</p>\r\r<ol>\r<li>Change the default password for the Admin account.</li>\r<li>Remove the install directory (you won\'t need it any more).</li>\r</ol>',NOW(),'html') ";
+//$_DATA[] = "INSERT INTO {$_TABLES['stories']} (sid, uid, draft_flag, tid, date, title, introtext, bodytext, hits, numemails, comments, trackbacks, related, featured, show_topic_icon, commentcode, trackbackcode, statuscode, expire, postmode, advanced_editor_mode, frontpage, in_transit, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion', 2, 0, 'glFusion', NOW(), 'What Can You Do with glFusion?', '<p><strong><em>glFusion</em></strong> gives you the ability to quickly and easily setup a web site complete with extras like forums, CAPTCHA support, calendaring, and full file and media gallery management solutions.&nbsp; Unique features include:</p>\r<ul>\r    <li>Integrated Menu Builder - Allowing you to change the site menu using an online editor.</li>\r    <li>Direct integration of the FCKeditor WYSIWYG editor with your theme\'s styles.&nbsp; See exactly how your story will look as you type it.</li>\r    <li>Pre-installed plugins, bringing additional functionality and enhanced security:\r    <ul>\r        <li>Bad Behavior2 - A great tool that blocks bot attacks, spam bots, and other nasties from the Internet.</li>\r        <li>CAPTCHA - Ensures that humans are the only ones entering content on your site.</li>\r        <li>Forum - A community collaboration and discussion tool.</li>\r        <li>FileMgmt - A complete File Manager for your site.</li>\r        <li>Media Gallery - A complete multi-media manager.</li>\r    </ul>\r    </li>\r    <li>glFusion gives you a true XHTML compliant site with a pure CSS driven layout.&nbsp; The design is SEO optomized (search engine friendly) and is also more accessible by screen readers and other assistance tools used by the visually impaired.</li>\r    <li>Better documentation - the glFusion community has published a full users guide to glFusion - Check out the online wiki at http://www.glfusion.org.</li>\r</ul>\r<p>Welcome to your new site, we hope you enjoy using it as much as we did assembling the software to drive it!</p>\r<p>The glFusion Team</p>', '', 0, 0, 0, 0, '', 0, 1, 0, 0, 0, '0000-00-00 00:00:00', 'html', 0, 1, 0, 3, 3, 3, 2, 2, 2)";
+//$_DATA[] = "INSERT INTO {$_TABLES['storysubmission']} (sid, uid, tid, title, introtext, date, postmode) VALUES ('security-reminder',2,'glFusion','Are you secure?','<p>This is a reminder to secure your site once you have glFusion up and running. What you should do:</p>\r\r<ol>\r<li>Change the default password for the Admin account.</li>\r<li>Remove the install directory (you won\'t need it any more).</li>\r</ol>',NOW(),'html') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['syndication']} (type, topic, header_tid, format, limits, content_length, title, description, filename, charset, language, is_enabled, updated, update_info) VALUES ('article', '::all', 'all', 'RSS-2.0', 10, 1, 'glFusion Site', 'Fusing Technology with Style', 'glfusion.rss', 'iso-8859-1', 'en-gb', 1, '0000-00-00 00:00:00', NULL)";
 
 $_DATA[] = "INSERT INTO {$_TABLES['topics']} (tid, topic, imageurl, sortnum, limitnews, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('General','General News','/images/topics/topic_news.png',1,10,6,2,3,2,2,2)";
-$_DATA[] = "INSERT INTO {$_TABLES['topics']} (tid, topic, imageurl, sortnum, limitnews, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glFusion','glFusion','/images/topics/topic_gl.png',2,10,6,2,3,2,2,2)";
+//$_DATA[] = "INSERT INTO {$_TABLES['topics']} (tid, topic, imageurl, sortnum, limitnews, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glFusion','glFusion','/images/topics/topic_gl.png',2,10,6,2,3,2,2,2)";
 
 $_DATA[] = "INSERT INTO {$_TABLES['usercomment']} (uid, commentmode, commentorder, commentlimit) VALUES (1,'nested','ASC',100) ";
 $_DATA[] = "INSERT INTO {$_TABLES['usercomment']} (uid, commentmode, commentorder, commentlimit) VALUES (2,'threaded','ASC',100) ";
@@ -1221,7 +938,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['userprefs']} (uid, noicons, willing, dfid, tz
 $_DATA[] = "INSERT INTO {$_TABLES['userprefs']} (uid, noicons, willing, dfid, tzid, emailstories) VALUES (2,0,1,0,'',1) ";
 
 #
-# Dumping data for table 'users'
+# Default data for table 'users'
 #
 
 $_DATA[] = "INSERT INTO {$_TABLES['users']} (uid, username, fullname, passwd, email, homepage, sig, regdate, cookietimeout, theme, status) VALUES (1,'Anonymous','Anonymous','',NULL,NULL,'',NOW(),0,NULL,3) ";

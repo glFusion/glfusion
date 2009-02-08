@@ -54,8 +54,9 @@ if (file_exists ($langfile)) {
 $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 
 $pi_version = floatval (DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'"));
-require_once ($_CONF['path'] . 'plugins/forum/config.php');
-//$CONF_FORUM['showtopic_review_order'] = 'DESC';
+
+require_once $_CONF['path'].'plugins/forum/forum.php';
+require_once $_CONF['path'].'plugins/forum/config.php';
 
 /*
 * Check and see if we need to load the plugin configuration
@@ -780,9 +781,9 @@ function plugin_feedupdatecheck_forum ($feed, $topic, $update_data, $limit)
 * If newer then you may want to run the update
 */
 function plugin_chkVersion_forum() {
-    global $CONF_FORUM;
-    return $CONF_FORUM['version'] ;
+    global $_FF_CONF;
 
+    return $_FF_CONF['pi_version'] ;
 }
 
 
@@ -792,37 +793,11 @@ function plugin_chkVersion_forum() {
 function plugin_upgrade_forum() {
     global $_CONF, $_TABLES,$CONF_FORUM;
 
-    require_once $_CONF['path'] . 'plugins/forum/glupgrade.inc';
+    require_once $_CONF['path'] . 'plugins/forum/upgrade.php';
 
-    $rc = plugin_plgupgrade_forum();
-
-    return true;
-
+    return forum_upgrade();
 }
 
-/**
-* Removes the datastructures for this plugin from the glFusion database
-* This may get called by the install routine to undue anything created during the install.
-* Added check to see that plugin is first disabled.
-*/
-function plugin_uninstall_forum($installCheck='')
-{
-    global $_CONF, $_TABLES, $LANG_GF00;
-
-     // Check and see if plugin is still enabled - if so display warning and exit
-    if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "forum"')) {
-        COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
-        $display .= COM_startBlock($LANG_GF00['warning']);
-        $display .= $LANG_GF00['enabled'];
-        $display .= COM_endBlock();
-        echo $display;
-        exit;
-    }
-    require_once $_CONF['path'] . 'plugins/forum/install.inc';
-
-    $rc = plugin_remove_forum();
-    return $rc;
-}
 
 //  ------- GENERAL FORUM FUNCTIONS --------
 

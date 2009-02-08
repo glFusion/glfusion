@@ -46,8 +46,9 @@ if (file_exists ($langfile)) {
     include_once $_CONF['path'] . 'plugins/sitetailor/language/english.php';
 }
 
-require_once $_CONF['path'] . 'plugins/sitetailor/config.php';
-require_once $_CONF['path'] . 'plugins/sitetailor/classes/classMenuElement.php';
+require_once $_CONF['path'].'plugins/sitetailor/sitetailor.php';
+require_once $_CONF['path'].'plugins/sitetailor/config.php';
+require_once $_CONF['path'].'plugins/sitetailor/classes/classMenuElement.php';
 
 global $stMenu;
 
@@ -277,17 +278,15 @@ function plugin_getadminoption_sitetailor() {
 function plugin_chkVersion_sitetailor() {
     global $_ST_CONF;
 
-    return $_ST_CONF['version'];
+    return $_ST_CONF['pi_version'];
 }
 
 function plugin_upgrade_sitetailor() {
     global $_CONF;
 
-    require_once ($_CONF['path'] . '/plugins/sitetailor/glupgrade.inc');
+    require_once $_CONF['path'].'/plugins/sitetailor/upgrade.inc';
 
-    $rc = plugin_plgupgrade_sitetailor();
-
-    return $rc;
+    return sitetailor_upgrade();
 }
 
 function plugin_autotags_sitetailor($op,$content='',$autotag='') {
@@ -316,31 +315,6 @@ function plugin_autotags_sitetailor($op,$content='',$autotag='') {
     }
 }
 
-
-/**
-* Removes the data structures for this plugin from the glFusion database.
-* This routine will get called from the Plugin install program if user select De-Install or if Delete is used in the Plugin Editor.
-* The Plugin Installer will also call this routine upon and install error to remove anything it has created.
-* The Plugin installer will pass the optional parameter which will then double check that plugin has first been disabled.
-*
-* For this plugin, this routine will also remove the Block definition.
-*
-* Returns True if all Plugin related data is removed without error
-*
-* @param    string   $installCheck     Defult is blank but if set, check if plugin is disabled first
-*
-* @return   boolean True if successful false otherwise
-*
-*/
-function plugin_uninstall_sitetailor($installCheck='') {
-    global $_CONF;
-
-    require_once $_CONF['path'] . '/plugins/sitetailor/install.inc';
-
-    $rc = plugin_remove_sitetailor();
-
-    return ( $rc );
-}
 
 function st_initMenu($skipCache=false) {
     global $stMenu,$_GROUPS, $_ST_CONF, $_TABLES, $_USER;

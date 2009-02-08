@@ -37,6 +37,11 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!@file_exists('siteconfig.php') ) {
+    header("Location:admin/install/index.php");
+    exit;
+}
+
 require_once 'lib-common.php';
 USES_lib_story();
 

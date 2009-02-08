@@ -45,8 +45,6 @@ if (file_exists ($langfile)) {
     include_once $_CONF['path'] . 'plugins/filemgmt/language/english.php';
 }
 
-include $_CONF['path'] . 'plugins/filemgmt/config.php';
-
 /*
 * Check and see if we need to load the plugin configuration
 */
@@ -87,6 +85,10 @@ if (!isset($_FM_CONF['perpage'])) {
     $filemgmt_showWhatsNewComments = $_FM_CONF['showwhatsnewcomments'];
 }
 
+require_once $_CONF['path'].'plugins/filemgmt/filemgmt.php';
+require_once $_CONF['path'].'plugins/filemgmt/config.php';
+
+
 /**
 * Returns the items for this plugin that should appear on the main menu
 *
@@ -115,7 +117,7 @@ function plugin_getmenuitems_filemgmt()
 */
 function plugin_chkVersion_filemgmt() {
     global $CONF_FM;
-    return $CONF_FM['version'];
+    return $CONF_FM['pi_version'];
 }
 
 
@@ -125,12 +127,9 @@ function plugin_chkVersion_filemgmt() {
 function plugin_upgrade_filemgmt() {
     global $_CONF, $_TABLES,$_FM_TABLES,$CONF_FM;
 
-    require_once($_CONF['path'] . 'plugins/filemgmt/glupgrade.inc');
+    require_once $_CONF['path'] . 'plugins/filemgmt/upgrade.php';
 
-    $rc = plugin_plgupgrade_filemgmt();
-
-    return true;
-
+    return filemgmt_upgrade();
 }
 
 
@@ -501,35 +500,6 @@ function plugin_getadminoption_filemgmt()
         list($submittedfiles) = DB_fetchARRAY($result);
         return array($LANG_FILEMGMT['admin_menu'], $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php', $submittedfiles);
     }
-}
-
-
-
-/**
-* Removes the datastructures for this plugin from the glFusion database
-* This may get called by the install routine to undue anything created during the install.
-* Added check to see that plugin is first disabled.
-*/
-function plugin_uninstall_filemgmt($installCheck='')
-{
-    global $_CONF, $LANG_FM00, $LANG_FILEMGMT, $_TABLES,$_FM_TABLES;
-
-     // Check and see if plugin is still enabled - if so display warning and exit
-    if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
-        COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
-        $display = COM_siteHeader();
-        $display .= COM_startBlock($LANG_FM00['warning']);
-        $display .= $LANG_FM00['enabled'];
-        $display .= COM_endBlock();
-        $display .= COM_siteFooter();
-        echo $display;
-        exit;
-    }
-
-    require_once($_CONF['path'] . 'plugins/filemgmt/install.inc');
-
-    $rc = plugin_remove_filemgmt();
-    return $rc;
 }
 
 

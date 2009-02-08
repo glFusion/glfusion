@@ -1,10 +1,31 @@
 /* STYLE STYLESHEET *****************************************
 
 *****************************************************************/
+.pluginRow2,.pluginRow2 td {
+background:#F1F5FA;
+color:#000;
+line-height:120%;
+}
+
+.pluginRow1 .pluginRollOver,.pluginRow2 .pluginRollOver,.pluginRollOver {
+background:#E7E7E7;
+color:#000;
+line-height:120%;
+}
+.yes, .Writeable
+{
+font-weight: bold;
+color: #46882b;
+}
+.no, .Unwriteable
+{
+font-weight: bold;
+color: #cc0000;
+}
 
 .glform label, .glform label-left, .glform label-right .glform input {
 display:block;
-width:200px;
+width:100px;
 float:left;
 margin-bottom:10px;
 }

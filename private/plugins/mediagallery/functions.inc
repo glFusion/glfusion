@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -42,17 +42,18 @@ if (!defined ('GVERSION'))
 $langfile = $_CONF['path'] . 'plugins/mediagallery/language/' . $_CONF['language'] . '.php';
 
 if (file_exists ($langfile)) {
-    include_once ($langfile);
+    include_once $langfile;
 } else {
-    include_once ($_CONF['path'] . 'plugins/mediagallery/language/english.php');
+    include_once $_CONF['path'] . 'plugins/mediagallery/language/english.php';
 }
 
 /*
 * Include MediaGallery config file
 */
-require_once $_CONF['path'] . 'plugins/mediagallery/config.php';
-require_once $_MG_CONF['path_html'] . 'common.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classAlbum.php';
+require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
+require_once $_CONF['path'].'plugins/mediagallery/config.php';
+require_once $_MG_CONF['path_html'].'common.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/classAlbum.php';
 
 MG_initAlbums();
 
@@ -68,7 +69,7 @@ function plugin_commentsupport_mediagallery()
 }
 
 
-/** GL 1.4
+/**
  * Plugin function that is called after comment form is submitted.
  * Needs to at least save the comment and check return value.
  * Add any additional logic your plugin may need to perform on comments.
@@ -104,7 +105,7 @@ function plugin_editcomment_mediagallery($cid,$id) {
     exit;
 }
 
-/** GL 1.4
+/**
  * Plugin function to delete a comment
  * $cid    Comment to be deleted
  * $id     Item id to which $cid belongs
@@ -162,7 +163,7 @@ function plugin_getcommenturlid_mediagallery( ) {
     return $retval;
 }
 
-/** GL 1.4
+/**
  * Plugin function to display a specific comment thread
  * $id      Unique idenifier for item comment belongs to
  * $cid     Comment id to display (possibly including sub-comments)
@@ -314,7 +315,7 @@ function plugin_whatsnewsupported_mediagallery() {
         return '';
     }
 
-    if ( $mg_installed_version != $_MG_CONF['version'] ) {
+    if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
         return '';
     }
 
@@ -334,7 +335,7 @@ function plugin_getwhatsnew_mediagallery() {
         return;
     }
 
-    if ( $mg_installed_version != $_MG_CONF['version'] ) {
+    if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
         return;
     }
 
@@ -581,7 +582,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
     global $MG_albums, $_MG_CONF, $_CONF, $_MG_USERPREFS, $_TABLES, $LANG_MG00, $LANG_MG03, $side_count, $ss_count, $swfjsinclude;
     global $mgAutoTagArray, $mg_installed_version,$glversion;
 
-    if ( $mg_installed_version != $_MG_CONF['version'] ) {
+    if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
         return $content;
     }
     if ($op == 'tagname' ) {
@@ -2256,7 +2257,7 @@ function phpblock_mg_randommedia(){
     $retval = '';
     $gotit = 0;
 
-    if ( $mg_installed_version != $_MG_CONF['version'] ) {
+    if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
         return $retval;
     }
 
@@ -2392,7 +2393,7 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
 		MG_galleryOnly();
 	}
 
-    if ( $mg_installed_version != $_MG_CONF['version'] ) {
+    if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
         return $retval;
     }
 
@@ -2801,7 +2802,7 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
 function plugin_chkVersion_mediagallery() {
     global $_MG_CONF;
 
-    return $_MG_CONF['version'];
+    return $_MG_CONF['pi_version'];
 }
 
 function MG_clean_directories($path, $needle = '')
@@ -2837,46 +2838,9 @@ function MG_cleanup_plugin($plugin)
 function plugin_upgrade_mediagallery() {
     global $_CONF, $_TABLES,$_MG_CONF;
 
-    require_once $_CONF['path'] . 'plugins/mediagallery/glupgrade.inc';
+    require_once $_CONF['path'].'plugins/mediagallery/upgrade.php';
 
-    $rc = plugin_plgupgrade_mediagallery();
-
-    return true;
-}
-
-/**
-* Removes the data structures for this plugin from the glFusion database.
-* This routine will get called from the Plugin install program if user select De-Install or if Delete is used in the Plugin Editor.
-* The Plugin Installer will also call this routine upon and install error to remove anything it has created.
-* The Plugin installer will pass the optional parameter which will then double check that plugin has first been disabled.
-*
-* For this plugin, this routine will also remove the Block definition.
-*
-* Returns True if all Plugin related data is removed without error
-*
-* @param    string   $installCheck     Defult is blank but if set, check if plugin is disabled first
-*
-* @return   boolean True if successful false otherwise
-*
-*/
-function plugin_uninstall_mediagallery($installCheck='') {
-    global $_CONF, $_DB_table_prefix, $_TABLES, $LANG_MG00;
-
-    // Check and see if plugin is still enabled - if so display warning and exit
-    if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
-        COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
-        $display .= COM_startBlock($LANG_MG00['warning']);
-        $display .= $LANG_MG00['enabled'];
-        $display .= COM_endBlock();
-        echo $display;
-        return false;
-    }
-
-    require_once $_CONF['path'] . 'plugins/mediagallery/install.inc';
-
-    $rc = plugin_remove_mediagallery();
-
-    return $rc;
+    return mediagallery_upgrade();
 }
 
 function plugin_user_create_mediagallery( $uid, $force = 0 ) {

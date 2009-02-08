@@ -59,8 +59,7 @@ if (!isset($_CA_CONF['calendarloginrequired'])) {
     $_CA_CONF = $ca_config->get_config('calendar');
 }
 
-$_CA_CONF['version'] = '1.0.2';
-$_CA_CONF['only_admin_submit'] = 0;
+require_once $_CONF['path'].'plugins/calendar/calendar.php';
 
 // +---------------------------------------------------------------------------+
 // | glFusion Plugin API Implementations                                       |
@@ -1559,7 +1558,7 @@ function plugin_chkVersion_calendar()
 {
     global $_CA_CONF;
 
-    return $_CA_CONF['version'];
+    return $_CA_CONF['pi_version'];
 }
 
 /**
@@ -1570,15 +1569,16 @@ function plugin_chkVersion_calendar()
 */
 function plugin_upgrade_calendar()
 {
-    // the plugin needs these function so complain when they don't exist
-    if (!function_exists('PLG_uninstall') ||
-            !function_exists('COM_createLink')) {
-        return 3002;
-    }
+    global $_CONF, $_CA_CONF, $_TABLES;
 
-    // upgrades are done by the install script - return a generic error
-    COM_errorLog("Plugin upgrade function not implemented");
-    return 3001;
+    if ( @file_exists($_CONF['path'].'plugins/calendar/upgrade.php') ) {
+        require_once $_CONF['path'].'plugins/calendar/upgrade.php';
+        return calendar_upgrade();
+    } else {
+        // upgrades are done by the install script - return a generic error
+        COM_errorLog("Calendar plugin upgrade function not implemented");
+        return 3001;
+    }
 }
 
 /**
@@ -1612,7 +1612,8 @@ function plugin_enablestatechange_calendar ($enable)
 * foreseen by the core code (interactions with other plugins for example)
 *
 */
-function plugin_autouninstall_calendar ()
+
+function plugin_autouninstall_calendarXX ()
 {
     $out = array (
         /* give the name of the tables, without $_TABLES[] */

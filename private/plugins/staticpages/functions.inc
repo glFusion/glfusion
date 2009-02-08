@@ -59,7 +59,7 @@ if (!isset($_SP_CONF['allow_php'])) {
     $_SP_CONF = $sp_config->get_config('staticpages');
 }
 
-$_SP_CONF['version'] = '1.5.1';
+require_once $_CONF['path'].'plugins/staticpages/staticpages.php';
 
 // +---------------------------------------------------------------------------+
 // | Plugin API - Services                                                     |
@@ -893,7 +893,7 @@ function plugin_chkVersion_staticpages()
 {
     global $_SP_CONF;
 
-    return $_SP_CONF['version'];
+    return $_SP_CONF['pi_version'];
 }
 
 /**
@@ -958,49 +958,18 @@ function plugin_geticon_staticpages ()
 */
 function plugin_upgrade_staticpages()
 {
-    // the plugin needs these function so complain when they don't exist
-    if (!function_exists('PLG_uninstall') ||
-            !function_exists('COM_createLink')) {
-        return 3002;
+    global $_CONF;
+
+    if ( @file_exists($_CONF['path'].'plugins/staticpages/upgrade.php') ) {
+        require_once $_CONF['path'].'plugins/staticpages/upgrade.php';
+        return staticpages_upgrade();
+    } else {
+        // upgrades are done by the install script - return a generic error
+        COM_errorLog("StaticPages plugin upgrade function not implemented");
+        return 3001;
     }
-
-    // upgrades are done by the install script - return a generic error
-    COM_errorLog("Plugin upgrade function not implemented");
-    return 3001;
 }
 
-
-/**
-* Automatic uninstall function for plugins
-*
-* @return   array
-*
-* This code is automatically uninstalling the plugin.
-* It passes an array to the core code function that removes
-* tables, groups, features and php blocks from the tables.
-* Additionally, this code can perform special actions that cannot be
-* foreseen by the core code (interactions with other plugins for example)
-*
-*/
-function plugin_autouninstall_staticpages ()
-{
-    $out = array (
-        /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('staticpage'),
-        /* give the full name of the group, as in the db */
-        'groups' => array('Static Page Admin'),
-        /* give the full name of the feature, as in the db */
-        'features' => array('staticpages.edit', 'staticpages.delete', 'staticpages.PHP'),
-        /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array('phpblock_calendar'),
-        /* give all vars with their name */
-        'vars'=> array(),
-        /* give the full name of the plugins config data to be removed from the config table */
-        'config_data' => array('staticpages')
-    );
-
-    return $out;
-}
 
 /**
 * Get path for the template files.

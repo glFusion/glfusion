@@ -58,7 +58,7 @@ if (!isset($_SPX_CONF['timeout'])) {
     $_SPX_CONF = $spx_config->get_config('spamx');
 }
 
-$_SPX_CONF['version'] = '1.1.1';
+require_once $_CONF['path'].'plugins/spamx/spamx.php';
 
 // +---------------------------------------------------------------------------+
 // | glFusion Plugin API Implementations                                       |
@@ -169,7 +169,7 @@ function plugin_chkVersion_spamx ()
 {
     global $_SPX_CONF;
 
-    return $_SPX_CONF['version'];
+    return $_SPX_CONF['pi_version'];
 }
 
 /**
@@ -331,35 +331,4 @@ function plugin_geticon_spamx ()
 
     return $_CONF['site_admin_url'] . '/plugins/spamx/images/spamx.png';
 }
-
-/**
-* Automatic uninstall function for plugins
-*
-* @return   array
-*
-* This code is automatically uninstalling the plugin.
-* It passes an array to the core code function that removes
-* tables, groups, features and php blocks from the tables.
-* Additionally, this code can perform special actions that cannot be
-* foreseen by the core code (interactions with other plugins for example)
-*
-*/
-function plugin_autouninstall_spamx ()
-{
-    $out = array (
-        /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('spamx'),
-        /* give the full name of the group, as in the db */
-        'groups' => array('spamx Admin'),
-        /* give the full name of the feature, as in the db */
-        'features' => array('spamx.admin', 'spamx.view'),
-        /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array(),
-        /* give all vars with their name */
-        'vars' => array('spamx_gid', 'spamx.counter')
-    );
-
-    return $out;
-}
-
 ?>

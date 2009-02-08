@@ -34,7 +34,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-$_SQL[] = "
+$_SQL['staticpage'] = "
 CREATE TABLE {$_TABLES['staticpage']} (
   sp_id varchar(40) NOT NULL default '',
   sp_uid mediumint(8) NOT NULL default '1',

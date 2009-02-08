@@ -41,10 +41,6 @@ if (file_exists ($langfile)) {
 } else {
     include_once ($_CONF['path'] . 'plugins/captcha/language/english.php');
 }
-/*
-* Include captcha config file
-*/
-require_once($_CONF['path'] . 'plugins/captcha/config.php');
 
 /*
 * Check and see if we need to load the plugin configuration
@@ -60,6 +56,8 @@ if (!isset($_CP_CONF['gfxDriver'])) {
     }
     unset($_CP_CFG);
 }
+
+require_once $_CONF['path'].'plugins/captcha/captcha.php';
 
 function CAPTCHA_sid() {
     return dechex(time()).dechex(mt_rand(1,65535));
@@ -390,45 +388,7 @@ function CAPTCHA_errorLog( $logentry, $override = 0) {
 function plugin_chkVersion_captcha() {
     global $_CP_CONF;
 
-    return $_CP_CONF['version'];
-}
-
-
-/**
-* Removes the data structures for this plugin from the glFusion database.
-* This routine will get called from the Plugin install program if user select De-Install or if Delete is used in the Plugin Editor.
-* The Plugin Installer will also call this routine upon and install error to remove anything it has created.
-* The Plugin installer will pass the optional parameter which will then double check that plugin has first been disabled.
-*
-* For this plugin, this routine will also remove the Block definition.
-*
-* Returns True if all Plugin related data is removed without error
-*
-* @param    string   $installCheck     Defult is blank but if set, check if plugin is disabled first
-*
-* @return   boolean True if successful false otherwise
-*
-*/
-function plugin_uninstall_captcha($installCheck='') {
-    global $_CONF, $_DB_table_prefix, $_TABLES, $LANG_CP00;
-
-    $pi_name    = 'captcha';
-
-    // Check and see if plugin is still enabled - if so display warning and exit
-    if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
-        COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
-        $display .= COM_startBlock($LANG_CP00['warning']);
-        $display .= $LANG_CP00['enabled'];
-        $display .= COM_endBlock();
-        echo $display;
-        return false;
-        exit;
-    }
-    require_once($_CONF['path'] . 'plugins/captcha/install.inc');
-
-    $rc = plugin_remove_captcha();
-    return $rc;
-
+    return $_CP_CONF['pi_version'];
 }
 
 /**
@@ -437,12 +397,8 @@ function plugin_uninstall_captcha($installCheck='') {
 function plugin_upgrade_captcha() {
     global $_CONF, $_TABLES;
 
-    require_once($_CONF['path'] . 'plugins/captcha/glupgrade.inc');
+    require_once $_CONF['path'].'plugins/captcha/upgrade.php';
 
-    $rc = plugin_plgupgrade_captcha();
-
-    return true;
-
+    return captcha_upgrade();
 }
-
 ?>
