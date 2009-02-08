@@ -244,7 +244,7 @@ function CTL_clearCacheDirectories($path, $needle = '')
                 CTL_clearCacheDirectories($path . $entry, $needle);
                 @rmdir($path . $entry);
             } elseif (empty($needle) || strpos($entry, $needle) !== false) {
-                unlink($path . $entry);
+                @unlink($path . $entry);
             }
         }
         @closedir($dir);
