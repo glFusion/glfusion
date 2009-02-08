@@ -119,9 +119,13 @@ class config {
 
         // Reads from a cache file if there is one
         if ( !$_SYSTEM['no_cache_config'] ) {
-            if ($this->_readFromCache()) {
-                $this->_post_configuration();
-                return $this->config_array;
+            if ( function_exists('COM_isWritable') ) {
+                if ( COM_isWritable($_CONF['path'].'data/layout_cache/'.CONFIG_CACHE_FILE_NAME)) {
+                    if ($this->_readFromCache()) {
+                        $this->_post_configuration();
+                        return $this->config_array;
+                    }
+                }
             }
         }
 
@@ -136,10 +140,17 @@ class config {
                     $row[1] = preg_replace('!s:(\d+):"(.*?)";!se', '"s:".strlen("$2").":\"$2\";"', $row[1]);
                     $value = @unserialize($row[1]);
                     if (($value === false) && ($row[1] != $false_str)) {
-                        COM_errorLog("Unable to unserialize {$row[1]} for {$row[2]}:{$row[0]}");
+                        if (function_exists('COM_errorLog')) {
+                            COM_errorLog("Unable to unserialize {$row[1]} for {$row[2]}:{$row[0]}");
+                        }
                     } else {
                         $this->config_array[$row[2]][$row[0]] = $value;
                     }
+/*                    if (($value === false) && ($row[1] != $false_str)) {
+                        COM_errorLog("Unable to unserialize {$row[1]} for {$row[2]}:{$row[0]}");
+                    } else {
+                        $this->config_array[$row[2]][$row[0]] = $value;
+                    } */
                 }
             }
         }
@@ -436,13 +447,21 @@ class config {
         global $_USER;
 
         if (empty($_USER['theme'])) {
-            $theme = $this->config_array['Core']['theme'];
+            if (! empty($this->config_array['Core']['theme'])) {
+                $theme = $this->config_array['Core']['theme'];
+            }
         } else {
             $theme = $_USER['theme'];
         }
+        if (! empty($theme)) {
+            if (! empty($this->config_array['Core']['path_themes'])) {
+                $this->config_array['Core']['path_layout'] = $this->config_array['Core']['path_themes'] . $theme . '/';
+            }
+            if (! empty($this->config_array['Core']['site_url'])) {
+                $this->config_array['Core']['layout_url'] = $this->config_array['Core']['site_url'] . '/layout/' . $theme;
+            }
+        }
 
-        $this->config_array['Core']['path_layout'] = $this->config_array['Core']['path_themes'] . $theme . '/';
-        $this->config_array['Core']['layout_url'] = $this->config_array['Core']['site_url'] . '/layout/' . $theme;
     }
 
     function _get_groups()
@@ -1016,7 +1035,9 @@ class config {
             }
             fclose($fh);
         } else {
-            COM_errorLog('config::_writeIntoCache: cannot write into cache file: ' . $cache_file);
+            if ( function_exists('COM_errorLog')) {
+                COM_errorLog('config::_writeIntoCache: cannot write into cache file: ' . $cache_file);
+            }
         }
     }
 
