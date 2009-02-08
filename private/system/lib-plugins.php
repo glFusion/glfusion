@@ -2080,10 +2080,12 @@ function PLG_runScheduledTask ()
     if (function_exists ('CUSTOM_runScheduledTask')) {
         CUSTOM_runScheduledTask();
     }
-    foreach ($_PLUGINS as $pi_name) {
-        $function = 'plugin_runScheduledTask_' . $pi_name;
-        if (function_exists ($function)) {
-            $function ();
+    if ( is_array($_PLUGINS) ) {
+        foreach ($_PLUGINS as $pi_name) {
+            $function = 'plugin_runScheduledTask_' . $pi_name;
+            if (function_exists ($function)) {
+                $function ();
+            }
         }
     }
 }
