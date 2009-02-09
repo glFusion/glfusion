@@ -180,16 +180,18 @@ function plugin_chkVersion_spamx ()
 */
 function plugin_upgrade_spamx()
 {
-    // the plugin needs these function so complain when they don't exist
-    if (!function_exists('PLG_uninstall') ||
-            !function_exists('COM_createLink')) {
-        return 3002;
-    }
+    global $_CONF, $_SPX_CONF, $_TABLES;
 
-    // upgrades are done by the install script - return a generic error
-    COM_errorLog("Plugin upgrade function not implemented");
-    return 3001;
+    if ( @file_exists($_CONF['path'].'plugins/spamx/upgrade.php') ) {
+        require_once $_CONF['path'].'plugins/spamx/upgrade.php';
+        return spamx_upgrade();
+    } else {
+        // upgrades are done by the install script - return a generic error
+        COM_errorLog("Spamx plugin upgrade function not implemented");
+        return 3001;
+    }
 }
+
 
 /**
  * Actual Plugin Functions here.
