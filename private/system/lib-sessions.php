@@ -267,6 +267,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
         if ( DB_error() ) {
             DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
             COM_errorLog("***** REPAIR SESSIONS TABLE *****");
+            $delresult = DB_query($deleteSQL,1);
         }
 
         if ($_SESS_VERBOSE) {
@@ -377,6 +378,7 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip, $md5_based=
     if ( DB_error() ) {
         DB_query("REPAIR TABLE {$_TABLES['sessions']}");
         COM_errorLog("**** REPAIRING SESSION TABLE ******");
+        $result = DB_query($sql,1);
     }
     $row = DB_fetchArray($result);
 
