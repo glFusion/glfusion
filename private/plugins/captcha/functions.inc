@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -34,19 +34,19 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-$langfile = $_CONF['path'] . 'plugins/captcha/language/' . $_CONF['language'] . '.php';
+$langfile = $_CONF['path'].'plugins/captcha/language/' . $_CONF['language'] . '.php';
 
 if (file_exists ($langfile)) {
-    include_once ($langfile);
+    include_once $langfile;
 } else {
-    include_once ($_CONF['path'] . 'plugins/captcha/language/english.php');
+    include_once $_CONF['path'].'plugins/captcha/language/english.php';
 }
-
+require_once $_CONF['path'].'plugins/captcha/captcha.php';
 /*
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_CP_CONF['gfxDriver'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
+    require_once $_CONF['path_system'].'classes/config.class.php';
 
     $cp_config = config::get_instance();
     $_CP_CFG = $cp_config->get_config('captcha');
@@ -57,21 +57,19 @@ if (!isset($_CP_CONF['gfxDriver'])) {
     unset($_CP_CFG);
 }
 
-require_once $_CONF['path'].'plugins/captcha/captcha.php';
-
 function CAPTCHA_sid() {
     return dechex(time()).dechex(mt_rand(1,65535));
 }
 
 function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type, $postmode) {
-    global $_CP_CONF, $_USER, $_POST;
+    global $_CP_CONF, $_USER;
 
     if ( $_CP_CONF['enable_comment'] != 1 ) {
         return 0;
     }
 
     if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        $str = $_POST['captcha'];
+        $str = COM_applyFilter($_POST['captcha']);
         list( $rc, $msg )  = CAPTCHA_checkInput( 'comment',$str );
         if ( $rc == 1 )
             return 0;
@@ -136,6 +134,8 @@ function plugin_itemPreSave_captcha( $type='registration', $content='' ) {
             if ( $_CP_CONF['enable_calendar'] != 1 ) {
                 return '';
             }
+            break;
+        case 'general' :
             break;
         default :
             return '';
@@ -215,6 +215,8 @@ function plugin_templatesetvars_captcha($name, &$template) {
                 return;
             }
             break;
+        case 'general' :
+            break;
         default :
             $template->set_var('captcha', '');
             return;
@@ -288,6 +290,9 @@ function CAPTCHA_getHTML($csid, $type='general' ) {
             break;
         case 'rating' :
             $T->set_file('page', 'captcha_rating.thtml');
+            break;
+        case 'general' :
+            $T->set_file('page', 'captcha.thtml');
             break;
         default :
             return '';
