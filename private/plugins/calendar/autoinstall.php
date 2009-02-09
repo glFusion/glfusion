@@ -81,9 +81,10 @@ $INSTALL_plugin['calendar'] = array(
   array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'submit_feature_id',
         'log' => 'Adding feature to the admin group'),
 
-  array('type' => 'block', 'name' => 'block_events','title' => 'Upcoming Events',
+  array('type' => 'block',  'name' => 'block_calevents', 'title' => 'Upcoming Events',
           'phpblockfn' => 'phpblock_calendar', 'block_type' => 'phpblock',
           'group_id' => 'admin_group_id'),
+
 );
 
 
@@ -152,7 +153,7 @@ function plugin_postinstall_calendar()
         SEC_setDefaultPermissions ($A, $_CONF['default_permissions_block']);
 
         // set the block's title in the current language, while we're at it
-        $title = addslashes ($LANG_CAL_1[7]);
+        $title = 'Upcoming Events';
 
         // ... and make it the last block on the left side
         $result = DB_query ("SELECT MAX(blockorder) FROM {$_TABLES['blocks']} WHERE onleft = 1");

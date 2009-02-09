@@ -1600,36 +1600,6 @@ function plugin_enablestatechange_calendar ($enable)
     DB_query ("UPDATE {$_TABLES['blocks']} SET is_enabled = $is_enabled WHERE (type = 'phpblock') AND (phpblockfn = 'phpblock_calendar')");
 }
 
-/**
-* Automatic uninstall function for plugins
-*
-* @return   array
-*
-* This code is automatically uninstalling the plugin.
-* It passes an array to the core code function that removes
-* tables, groups, features and php blocks from the tables.
-* Additionally, this code can perform special actions that cannot be
-* foreseen by the core code (interactions with other plugins for example)
-*
-*/
-
-function plugin_autouninstall_calendarXX ()
-{
-    $out = array (
-        /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('events','eventsubmission','personal_events'),
-        /* give the full name of the group, as in the db */
-        'groups' => array('Calendar Admin'),
-        /* give the full name of the feature, as in the db */
-        'features' => array('calendar.edit', 'calendar.moderate', 'calendar.submit'),
-        /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array('phpblock_calendar'),
-        /* give all vars with their name */
-        'vars'=> array()
-    );
-    return $out;
-}
-
 
 /**
 * Get path for the template files.
