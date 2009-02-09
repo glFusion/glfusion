@@ -142,6 +142,7 @@ $LANG_INSTALL = array(
     'upgrade_error'             => 'Upgrade Error',
     'upgrade_error_text'        => 'An error occured while upgrading your glFusion installation.',
     'plugin_upgrade_error'      => 'There was a problem upgrading the %s plugin, please check the error.log for more details.<br />',
+    'plugin_upgrade_error_desc' => 'The following plugins were not upgraded. Please refer to the error.log for more details.<br />',
 );
 
 // +---------------------------------------------------------------------------+

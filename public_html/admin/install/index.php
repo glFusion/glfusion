@@ -127,7 +127,7 @@ function _displayError($error,$step,$errorText='')
             $T->set_var('text',$LANG_INSTALL['core_upgrade_error'].'<br /><br />'.$errorText);
             break;
         case PLUGIN_UPGRADE_ERROR :
-            $T->set_var('text',$LANG_INSTALL['plugin_upgrade_error'].'<br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['plugin_upgrade_error_desc'].'<br /><br />'.$errorText);
             break;
         default :
             $T->set_var('text',$errorText);
@@ -459,7 +459,7 @@ function _checkSitePermissions($dbconfig_path='')
     $rc = @mkdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
     if (!$rc) {
         $T->set_var('location',$_PATH['dbconfig_path'].'data/layout_cache/');
-        $T->set_var('status', $ok ? '<span class="yes">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['unable_mkdir'].'</span>');
+        $T->set_var('status', '<span class="Unwriteable">'.$LANG_INSTALL['unable_mkdir'].'</span>');
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
