@@ -517,6 +517,7 @@ function post_uploadProcess() {
                 }
             }
         }
+        _pi_deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/admin/');
     }
     if ( file_exists($tmp.'/'.$pluginData['id'].'/public_html/') ) {
         $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].'/'.$pluginData['id']);
@@ -531,6 +532,7 @@ function post_uploadProcess() {
                 }
             }
         }
+        _pi_deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/public_html/');
     }
     if ( file_exists($tmp.'/'.$pluginData['id'].'/themefiles/') ) {
         // determine where to copy them, first check to see if layout was defined in xml
@@ -552,6 +554,7 @@ function post_uploadProcess() {
                 }
             }
         }
+        _pi_deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/themefiles/');
     }
 
     if ( $permError != 0 ) {
