@@ -645,7 +645,7 @@ function saveblock ($bid, $name, $title, $help, $type, $blockorder, $content, $t
         if (($type == 'gldefault') && ($name == 'older_stories')) {
             COM_olderStuff ();
         }
-
+        CTL_clearCache();
         return COM_refresh ($_CONF['site_admin_url'] . '/block.php?msg=11');
     } else {
         $retval .= COM_siteHeader ('menu', $LANG21[32])
