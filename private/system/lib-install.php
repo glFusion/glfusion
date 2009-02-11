@@ -122,7 +122,8 @@ function INSTALLER_install_mapping($step, &$vars)
         COM_errorLog("AutoInstall: Mapping a feature to a group...");
     }
     if (array_key_exists('findgroup', $step)) {
-        $grp_id = DB_getItem($_TABLES['groups'],'grp_id',"grp_name = '" . addslashes($step['findgroup']) . "'");
+        $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = '" . addslashes($step['findgroup']) . "'"));
+
         if ($grp_id == 0) {
             COM_errorLog("AutoInstall: Could not find existing '{$step['findgroup']}' group!");
             return 1;
