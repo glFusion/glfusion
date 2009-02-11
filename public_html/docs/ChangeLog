@@ -5,6 +5,12 @@ v1.1.2
 - Updated version numbers (Mark)
         private/system/sql/mysql_tableanddata.php
 
+- Forum - Ability to move a forum between categories (Mark)
+
+- FileMgmt - Ability to use remote URL instead of local file (Mark)
+
+- Media Gallery - Improved error trapping for permission issues on upload (Mark)
+
 - Rewrote install / upgrade routines (Mark)
 
 - Implemented plugin upload / auto install (Mark)
