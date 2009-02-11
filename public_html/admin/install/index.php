@@ -51,10 +51,13 @@ define('DB_DATA_MISSING',           7);
 define('DB_NO_CONNECT',             8);
 define('DB_NO_DATABASE',            9);
 define('DB_NO_INNODB',             10);
-define('SITE_DATA_MISSING',        11);
-define('LIBCUSTOM_NOT_WRITABLE',   12);
-define('CORE_UPGRADE_ERROR',       13);
-define('PLUGIN_UPGRADE_ERROR',     14);
+define('DB_EXISTS',                11);
+define('SITE_DATA_MISSING',        12);
+define('LIBCUSTOM_NOT_WRITABLE',   13);
+define('CORE_UPGRADE_ERROR',       14);
+define('PLUGIN_UPGRADE_ERROR',     15);
+define('INVALID_GEEKLOG_VERSION',  16);
+define('NO_MIGRATE_GLFUSION',      17);
 
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
@@ -128,6 +131,15 @@ function _displayError($error,$step,$errorText='')
             break;
         case PLUGIN_UPGRADE_ERROR :
             $T->set_var('text',$LANG_INSTALL['plugin_upgrade_error_desc'].'<br /><br />'.$errorText);
+            break;
+        case INVALID_GEEKLOG_VERSION :
+            $T->set_var('text',$LANG_INSTALL['invalid_geeklog_version']);
+            break;
+        case DB_EXISTS :
+            $T->set_var('text',$LANG_INSTALL['database_exists']);
+            break;
+        case NO_MIGRATE_GLFUSION :
+            $T->set_var('text',$LANG_INSTALL['no_migrate_glfusion']);
             break;
         default :
             $T->set_var('text',$errorText);
@@ -409,8 +421,12 @@ function _checkSitePermissions($dbconfig_path='')
                         $_PATH['dbconfig_path'].'db-config.php',
                         $_PATH['dbconfig_path'].'data/',
                         $_PATH['dbconfig_path'].'logs/error.log',
+                        $_PATH['dbconfig_path'].'logs/access.log',
+                        $_PATH['dbconfig_path'].'logs/captcha.log',
+                        $_PATH['dbconfig_path'].'logs/spamx.log',
                         $_PATH['dbconfig_path'].'data/layout_cache/',
                         $_PATH['dbconfig_path'].'data/temp/',
+                        $_PATH['dbconfig_path'].'system/lib-custom.php',
 
                         $_PATH['public_html'],
                         $_PATH['public_html'].'siteconfig.php',
@@ -418,19 +434,29 @@ function _checkSitePermissions($dbconfig_path='')
                         $_PATH['public_html'].'images/articles/',
                         $_PATH['public_html'].'images/topics/',
                         $_PATH['public_html'].'images/userphotos/',
+                        $_PATH['public_html'].'images/library/File/',
+                        $_PATH['public_html'].'images/library/Flash/',
+                        $_PATH['public_html'].'images/library/Image/',
+                        $_PATH['public_html'].'images/library/Media/',
 
                         $_PATH['public_html'].'mediagallery/mediaobjects/',
                         $_PATH['public_html'].'mediagallery/mediaobjects/covers/',
                         $_PATH['public_html'].'mediagallery/mediaobjects/orig/',
                         $_PATH['public_html'].'mediagallery/mediaobjects/disp/',
                         $_PATH['public_html'].'mediagallery/mediaobjects/tn/',
+                        $_PATH['public_html'].'mediagallery/mediaobjects/orig/0/',
+                        $_PATH['public_html'].'mediagallery/mediaobjects/disp/0/',
+                        $_PATH['public_html'].'mediagallery/mediaobjects/tn/0/',
                         $_PATH['public_html'].'mediagallery/rss/',
                         $_PATH['public_html'].'mediagallery/watermarks/',
 
                         $_PATH['public_html'].'filemgmt_data/',
                         $_PATH['public_html'].'filemgmt_data/category_snaps/',
+                        $_PATH['public_html'].'filemgmt_data/category_snaps/tmp/',
                         $_PATH['public_html'].'filemgmt_data/files/',
+                        $_PATH['public_html'].'filemgmt_data/files/tmp/',
                         $_PATH['public_html'].'filemgmt_data/snaps/',
+                        $_PATH['public_html'].'filemgmt_data/snaps/tmp/',
 
                         $_PATH['public_html'].'forum/media/',
                         $_PATH['public_html'].'forum/media/tn/',
@@ -686,6 +712,10 @@ function _gotDBData()
         if (strcasecmp ($A[1], 'yes') != 0) {
             return _displayError(DB_NO_INNODB,'getdatabase');
         }
+    }
+    $result = @mysql_query("SHOW TABLES LIKE '".$db_prefix."vars'");
+    if (@mysql_numrows ($result) > 0) {
+        return _displayError(DB_EXISTS,'');
     }
 
     return _getSiteData();
@@ -1149,12 +1179,12 @@ function _doPluginUpgrade()
         $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Polls');
         $upgradeError = 1;
     }
-    $rc = INST_pluginAutoUpgrade('spamx');
+    $rc = INST_pluginAutoUpgrade('spamx',1);
     if ( $rc == false ) {
         $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Spamx');
         $upgradeError = 1;
     }
-    $rc = INST_pluginAutoUpgrade('staticpages');
+    $rc = INST_pluginAutoUpgrade('staticpages',1);
     if ( $rc == false ) {
         $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Static Pages');
         $upgradeError = 1;
@@ -1164,7 +1194,7 @@ function _doPluginUpgrade()
         $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Site Tailor');
         $upgradeError = 1;
     }
-    $rc = INST_pluginAutoUpgrade('captcha');
+    $rc = INST_pluginAutoUpgrade('captcha',1);
     if ( $rc == false ) {
         $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'CAPTCHA');
         $upgradeError = 1;
@@ -1213,6 +1243,69 @@ function _doPluginUpgrade()
 
     header('Location: success.php?type=upgrade&language=' . $language);
 }
+
+function _migrateGeeklog()
+{
+    global $_CONF, $_DB, $_TABLES, $_DB_table_prefix;
+
+    // Do we have a valid Geeklog v1.5+ site:
+
+    if ( !@file_exists('../../siteconfig.php') ) {
+        return _displayError(INVALID_GEEKLOG_VERSION,'');
+    }
+    include '../../siteconfig.php';
+
+    if ( !@file_exists($_CONF['path'].'db-config.php') ) {
+        return _displayError(INVALID_GEEKLOG_VERSION,'');
+    }
+    include $_CONF['path'].'db-config.php';
+
+    $db_handle = @mysql_connect($_DB_host, $_DB_user, $_DB_pass);
+    if (!$db_handle) {
+        return _displayError(DB_NO_CONNECT,'getdatabase');
+    }
+    if ($db_handle) {
+        $connected = @mysql_select_db($_DB_name, $db_handle);
+    }
+    if ( !$connected) {
+        return _displayError(DB_NO_DATABASE,'getdatabase');
+    }
+
+    include $_CONF['path'].'system/lib-database.php';
+
+    // Peform a few basic check to ensure we are not trying to migrate a glFusion site.
+
+    $result = DB_query("SELECT name FROM {$_TABLES['conf_values']} WHERE name='allow_embed_object'",1);
+    if ( DB_numRows($result) > 0 ) {
+        return _displayError(NO_MIGRATE_GLFUSION,'');
+    }
+
+    $result = DB_query("SELECT name FROM {$_TABLES['conf_values']} WHERE name='use_safe_html'",1);
+    if ( DB_numRows($result) > 0 ) {
+        return _displayError(NO_MIGRATE_GLFUSION,'');
+    }
+
+    $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='glfusion'",1);
+    if ( DB_numRows($result) > 0 ) {
+        return _displayError(NO_MIGRATE_GLFUSION,'');
+    }
+
+    // setup the environment to match glFusion 1.0.0
+
+    DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'",1);
+    DB_query("UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'",1);
+
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.2' WHERE pi_name = 'calendar'",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.0' WHERE pi_name = 'links'",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1' WHERE pi_name = 'polls'",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1' WHERE pi_name = 'spamx'",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
+
+    DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.0.0' WHERE name='glfusion'",1);
+
+    return _checkSitePermissions();
+}
+
 
 /*
  * Start of the main program
@@ -1279,12 +1372,19 @@ if ( isset($_POST['type']) ) {
             $method = 'upgrade';
             $mode   = 'startupgrade';
             break;
+        case 'migrate' :
+            $method = 'upgrade';
+            $mode   = 'migrate';
+            break;
     }
 }
 
 $_SESSION['method'] = $method;
 
 switch($mode) {
+    case 'migrate' :
+        $pageBody = _migrateGeeklog();
+        break;
     case 'finddbconfig' :
         $pageBody = _getDBconfigPath();
         break;
