@@ -39,8 +39,11 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+global $_DB_dbms;
+
 require_once $_CONF['path'].'plugins/spamx/functions.inc';
 require_once $_CONF['path'].'plugins/spamx/spamx.php';
+require_once $_CONF['path'].'plugins/spamx/sql/'.$_DB_dbms.'_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |
@@ -53,6 +56,7 @@ $INSTALL_plugin['spamx'] = array(
         'ver' => $_SPX_CONF['pi_version'], 'gl_ver' => $_SPX_CONF['gl_version'],
         'url' => $_SPX_CONF['pi_url'], 'display' => $_SPX_CONF['pi_display_name']),
 
+  array('type' => 'table', 'table' => $_TABLES['spamx'], 'sql' => $_SQL['spamx']),
 
   array('type' => 'group', 'group' => 'spamx Admin', 'desc' => 'Users in this group can administer the Spamx plugin',
         'variable' => 'admin_group_id', 'addroot' => true),

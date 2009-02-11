@@ -31,7 +31,11 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-$_SQL[] = "
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+$_SQL['spamx'] = "
 CREATE TABLE {$_TABLES['spamx']} (
   name varchar(20) NOT NULL default '',
   value varchar(255) NOT NULL default '',
