@@ -1265,6 +1265,7 @@ $MESSAGE = array(
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
+    503 => 'Plugin installation is disabled in demo mode.',
 );
 
 ###############################################################################

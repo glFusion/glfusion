@@ -173,7 +173,6 @@ $LANG01 = array(
     129 => 'Configuration',
     130 => 'Webservices',
     500 => 'Please remove the admin/install/ directory!',
-    500 => 'Please remove the admin/install/ directory!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
     503 => 'Maintenance Mode - Non-admin logins disabled',
@@ -1265,6 +1264,8 @@ $MESSAGE = array(
     100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
+    502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
+    503 => 'Plugin installation is disabled in demo mode.',
 );
 
 ###############################################################################
