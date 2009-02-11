@@ -189,6 +189,12 @@ function processOldPluginInstall(  )
 
     clearstatcache();
 
+    if ( defined('DEMO_MODE') ) {
+        _pi_deleteDir($tmp);
+        echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=503');
+        exit;
+    }
+
     $permError = 0;
     $permErrorList = '';
 
@@ -491,6 +497,12 @@ function post_uploadProcess() {
     $permErrorList = '';
 
     // copy to proper directories
+
+    if ( defined('DEMO_MODE') ) {
+        _pi_deleteDir($tmp);
+        echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=503');
+        exit;
+    }
 
     $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
     list($success,$failed,$size,$faillist) = explode(',',$rc);

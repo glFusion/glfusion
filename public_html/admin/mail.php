@@ -227,10 +227,14 @@ function send_messages ($vars)
             $to = COM_formatEmailAddress ($A['fullname'], $A['email']);
         }
 
-        if (!COM_mail ($to, $subject, $message, $from, $html, $priority)) {
-            $failures[] = htmlspecialchars ($to[0]);
-        } else {
+        if ( defined('DEMO_MODE') ) {
             $successes[] = htmlspecialchars ($to[0]);
+        } else {
+            if (!COM_mail ($to, $subject, $message, $from, $html, $priority)) {
+                $failures[] = htmlspecialchars ($to[0]);
+            } else {
+                $successes[] = htmlspecialchars ($to[0]);
+            }
         }
     }
 
