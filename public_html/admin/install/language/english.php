@@ -143,6 +143,8 @@ $LANG_INSTALL = array(
     'upgrade_error_text'        => 'An error occured while upgrading your glFusion installation.',
     'plugin_upgrade_error'      => 'There was a problem upgrading the %s plugin, please check the error.log for more details.<br />',
     'plugin_upgrade_error_desc' => 'The following plugins were not upgraded. Please refer to the error.log for more details.<br />',
+    'invalid_geeklog_version'   => 'The installer is unable to locate the siteconfig.php file. Are you sure you are migrating from Geeklog v1.5.0 or higher?  If you have an older Geeklog installation, please upgrade it to at least Geeklog v1.5.0 and then try the migration again.',
+    'no_migrate_glfusion'       => 'You cannot migrate an existing glFusion site, you must choose Upgrade instead.',
 );
 
 // +---------------------------------------------------------------------------+

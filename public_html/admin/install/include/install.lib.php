@@ -35,6 +35,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 if (!defined('LB')) {
     define('LB', "\n");
 }
@@ -830,6 +834,8 @@ function INST_pluginAutoUpgrade( $plugin, $forceInstall = 0 )
                 $rc = INST_pluginAutoInstall($plugin);
             }
         }
+    } else {
+        $rc = true; // not active, so just skip without error
     }
     return $rc;
 }
