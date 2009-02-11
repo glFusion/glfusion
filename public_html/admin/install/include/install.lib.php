@@ -76,14 +76,14 @@ if (!function_exists('INST_stripslashes') ) {
 
 function INST_header($currentAction='',$nextAction='',$prevAction='')
 {
-    global $LANG_INSTALL, $LANG_CHARSET;
+    global $_GLFUSION, $LANG_INSTALL, $LANG_CHARSET;
 
     $header = new TemplateLite('templates/');
     $header->set_file('header','header.thtml');
     $header->set_var(array(
         'page_title'        =>  $LANG_INSTALL['install_heading'],
         'charset'           =>  $LANG_CHARSET,
-        'language'          =>  $_SESSION['language'],
+        'language'          =>  $_GLFUSION['language'],
     ));
     $header->parse('output','header');
     return $header->finish($header->get_var('output'));
@@ -462,7 +462,9 @@ function INST_getSiteAdminUrl()
  */
 function INST_checkInnodbUpgrade($_SQL,$use_innodb)
 {
-    $use_innodb = $_SESSION['innodb'];
+    global $_GLFUSION;
+
+    $use_innodb = $_GLFUSION['innodb'];
 
     if ($use_innodb) {
         $statements = count($_SQL);

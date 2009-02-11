@@ -53,36 +53,67 @@ define('DB_NO_DATABASE',            9);
 define('DB_NO_INNODB',             10);
 define('DB_EXISTS',                11);
 define('SITE_DATA_MISSING',        12);
-define('LIBCUSTOM_NOT_WRITABLE',   13);
-define('CORE_UPGRADE_ERROR',       14);
-define('PLUGIN_UPGRADE_ERROR',     15);
-define('INVALID_GEEKLOG_VERSION',  16);
-define('NO_MIGRATE_GLFUSION',      17);
+define('SITE_DATA_ERROR',          13);
+define('LIBCUSTOM_NOT_WRITABLE',   14);
+define('CORE_UPGRADE_ERROR',       15);
+define('PLUGIN_UPGRADE_ERROR',     16);
+define('INVALID_GEEKLOG_VERSION',  17);
+define('NO_MIGRATE_GLFUSION',      18);
 
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
 
+$_GLFUSION = array();
+
+$glFusionVars = array('language','method','expire','remoteip','dbconfig_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8');
+
+if ( is_array($_POST) ) {
+    foreach ($_POST AS $name => $value) {
+        if ( in_array($name,$glFusionVars)) {
+            $_GLFUSION[$name] = INST_stripslashes($value);
+        }
+    }
+}
+
+function _buildHiddenFields()
+{
+    global $_GLFUSION;
+
+    $hiddenFields = '';
+
+    if ( is_array($_GLFUSION) ) {
+        foreach ($_GLFUSION AS $name => $value) {
+            $hiddenFields .= '<input type="hidden" name="'.$name.'" value="'.$value.'" />'.LB;
+        }
+    }
+    return $hiddenFields;
+}
+
+
 function _checkSession()
 {
-    if ( !isset($_SESSION['expire']) ) {
+    global $_GLFUSION;
+
+    if ( !isset($_GLFUSION['expire']) ) {
         return _displayError(SESSION_EXPIRED,'');
     }
 
-    if ($_SESSION['expire'] < time()  ) {
+    if ($_GLFUSION['expire'] < time()  ) {
         return _displayError(SESSION_EXPIRED,'');
     }
 
-    if ( $_SESSION['remoteip'] != $_SERVER['REMOTE_ADDR'] ) {
+    if ( $_GLFUSION['remoteip'] != $_SERVER['REMOTE_ADDR'] ) {
         return _displayError(SESSION_EXPIRED,'');
     }
 
-    $_SESSION['expire'] = time() + 1800;
+    $_GLFUSION['expire'] = time() + 1800;
+
     return intval(0);
 }
 
 function _displayError($error,$step,$errorText='')
 {
-    global $LANG_INSTALL;
+    global $_GLFUSION, $LANG_INSTALL;
 
     $T = new TemplateLite('templates/');
     $T->set_file('page', 'error.thtml');
@@ -123,6 +154,9 @@ function _displayError($error,$step,$errorText='')
         case SITE_DATA_MISSING :
             $T->set_var('text',$LANG_INSTALL['sitedata_missing'].'<br /><br />'.$errorText);
             break;
+        case SITE_DATA_ERROR :
+            $T->set_var('text',$LANG_INSTALL['sitedata_missing'].'<br /><br />'.$errorText);
+            break;
         case LIBCUSTOM_NOT_WRITABLE :
             $T->set_var('text',$LANG_INSTALL['libcustom_not_writable']);
             break;
@@ -146,6 +180,7 @@ function _displayError($error,$step,$errorText='')
             break;
     }
     $T->set_var('step',$step);
+    $T->set_var('hiddenfields',_buildHiddenFields());
 
     $T->parse('output','page');
     return $T->finish($T->get_var('output'));
@@ -154,14 +189,14 @@ function _displayError($error,$step,$errorText='')
 
 function _displayWelcome( )
 {
-    global $LANG_INSTALL;
+    global $_GLFUSION, $LANG_INSTALL;
 
     // set the session expire time.
-    $_SESSION['expire'] = time() + 1800;
-    $_SESSION['remoteip'] = $_SERVER['REMOTE_ADDR'];
+    $_GLFUSION['expire'] = time() + 1800;
+    $_GLFUSION['remoteip'] = $_SERVER['REMOTE_ADDR'];
 
-    if ( isset($_SESSION['language']) ) {
-        $language = $_SESSION['language'];
+    if ( isset($_GLFUSION['language']) ) {
+        $language = $_GLFUSION['language'];
     } else {
         $language = 'english';
     }
@@ -172,7 +207,7 @@ function _displayWelcome( )
     $T->set_file('page', 'welcome.thtml');
 
     // create language select
-    $lang_select = '<select name="language">' . LB;
+    $lang_select = '<select name="lang">' . LB;
     foreach (glob('language/*.php') as $filename) {
         $filename = preg_replace('/.php/', '', preg_replace('/language\//', '', $filename));
         $lang_select .= '<option value="' . $filename . '"' . (($filename == $language) ? ' selected="selected"' : '') . '>' . INST_prettifyLanguageName($filename) . '</option>' . LB;
@@ -196,6 +231,7 @@ function _displayWelcome( )
         'lang_site_upgrade'     => $LANG_INSTALL['site_upgrade'],
         'lang_geeklog_migrate'  => $LANG_INSTALL['geeklog_migrate'],
         'lang_proceed'          => $LANG_INSTALL['proceed'],
+        'hiddenfields'          => _buildHiddenFields(),
     ));
 
     $T->parse('output','page');
@@ -207,13 +243,13 @@ function _displayWelcome( )
 
 function _getDBconfigPath()
 {
-    global $LANG_INSTALL;
+    global $_GLFUSION, $LANG_INSTALL;
 
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
 
-    if ( isset($_SESSION['method']) && $_SESSION['method'] == 'install' ) {
+    if ( isset($_GLFUSION['method']) && $_GLFUSION['method'] == 'install' ) {
         // if it isn't there, ask again...
         if ( @file_exists('../../siteconfig.php') ) {
             return _displayError(SITECONFIG_EXISTS,'');
@@ -237,8 +273,8 @@ function _getDBconfigPath()
     $dbconfig_path = $fusion_path;
 
     // check the session to see if we have already defined the path...
-    if ( isset($_SESSION['dbconfig_path']) ) {
-        $dbconfig_path = $_SESSION['dbconfig_path'];
+    if ( isset($_GLFUSION['dbconfig_path']) ) {
+        $dbconfig_path = $_GLFUSION['dbconfig_path'];
     }
     $dbconfig_file  = 'db-config.php';
 
@@ -256,7 +292,7 @@ function _getDBconfigPath()
         }
         if ($dbconfig_path != '' ) {
             // found it, set the session
-            $_SESSION['dbconfig_path'] = $dbconfig_path;
+            $_GLFUSION['dbconfig_path'] = $dbconfig_path;
         }
     }
     $T->set_var(array(
@@ -266,6 +302,8 @@ function _getDBconfigPath()
         'lang_prev'         => $LANG_INSTALL['previous'],
         'lang_sys_path_help'=> $LANG_INSTALL['system_path_prompt'],
         'lang_sys_path_exp' => $LANG_INSTALL['system_path_example'],
+        'gnu'                   => nl2br(file_get_contents('gnu-2.txt')),
+        'hiddenfields'      => _buildHiddenFields(),
     ));
     $T->parse('output','page');
     return $T->finish($T->get_var('output'));
@@ -277,13 +315,15 @@ function _getDBconfigPath()
 
 function _gotDBconfigPath($dbc_path = '')
 {
+    global $_GLFUSION;
+
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
 
     // was it passed from the previous step, or via $_POST?
     if ( $dbc_path == '' ) {
-        $dbconfig_path = INST_stripslashes($_POST['dbconfig_path']);
+        $dbconfig_path = INST_stripslashes($_POST['private_path']);
     } else {
         $dbconfig_path = $dbc_path;
     }
@@ -299,7 +339,7 @@ function _gotDBconfigPath($dbc_path = '')
     }
 
     // store entered path into the session var
-    $_SESSION['dbconfig_path'] = $dbconfig_path;
+    $_GLFUSION['dbconfig_path'] = $dbconfig_path;
 
     // now, lets see if it exists, if not, try to rename the .dist file...
 
@@ -331,7 +371,7 @@ function _gotDBconfigPath($dbc_path = '')
 
 function _checkSitePermissions($dbconfig_path='')
 {
-    global $LANG_INSTALL;
+    global $_GLFUSION, $LANG_INSTALL;
 
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
@@ -341,10 +381,10 @@ function _checkSitePermissions($dbconfig_path='')
 
     // was it passed from the previous step
     if ( $dbconfig_path == '') {
-        if ( !isset($_SESSION['dbconfig_path']) ) {
+        if ( !isset($_GLFUSION['dbconfig_path']) ) {
             return _getDBconfigPath();
         }
-        $dbconfig_path = $_SESSION['dbconfig_path'];
+        $dbconfig_path = $_GLFUSION['dbconfig_path'];
     }
 
     $permError = 0;
@@ -392,7 +432,7 @@ function _checkSitePermissions($dbconfig_path='')
     $T->set_var('status',$ob == '' ? '<span class="yes">'.$LANG_INSTALL['none'].'</span>' : '<span class="no">'.$ob.'</span>');
     $T->parse('env','envs',true);
 
-    if ( $_SESSION['method'] == 'upgrade' && @file_exists('../../siteconfig.php')) {
+    if ( $_GLFUSION['method'] == 'upgrade' && @file_exists('../../siteconfig.php')) {
         include '../../siteconfig.php';
         $_PATH['public_html']   = INST_getHtmlPath();
         $_PATH['dbconfig_path'] = $_CONF['path'];
@@ -400,7 +440,7 @@ function _checkSitePermissions($dbconfig_path='')
     } else {
         $_PATH['public_html']   = INST_getHtmlPath();
         if ( $dbconfig_path == '' ) {
-            $_PATH['dbconfig_path'] = INST_stripslashes($_POST['dbconfig_path']);
+            $_PATH['dbconfig_path'] = INST_stripslashes($_POST['private_path']);
         } else {
             $_PATH['dbconfig_path']     = $dbconfig_path;
         }
@@ -528,11 +568,11 @@ function _checkSitePermissions($dbconfig_path='')
 
         $button = $LANG_INSTALL['next'];
 
-        if ( $_SESSION['method'] == 'upgrade' ) {
+        if ( $_GLFUSION['method'] == 'upgrade' ) {
             $action = 'doupgrade';
             $previousaction = '';
         } else {
-            $action = 'getdatabase';
+            $action = 'getdata';
             $previousaction = 'finddbconfig';
         }
     }
@@ -547,51 +587,61 @@ function _checkSitePermissions($dbconfig_path='')
         'lang_recommended'  => $LANG_INSTALL['recommended'],
         'lang_warning'      => $LANG_INSTALL['perm_warning'],
         'lang_filesystem'   => $LANG_INSTALL['filesystem_check'],
+        'hiddenfields'      => _buildHiddenFields(),
     ));
     $T->parse('output','page');
     return $T->finish($T->get_var('output'));
 }
 
-function _getDBData()
+function _getSiteData()
 {
-    global $LANG_INSTALL;
+    global $_GLFUSION, $LANG_INSTALL;
 
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
 
-    if ( !isset($_SESSION['dbconfig_path']) ) {
+    if ( !isset($_GLFUSION['dbconfig_path']) ) {
         return _getDBconfigPath();
     }
-    $dbconfig_path = $_SESSION['dbconfig_path'];
+
+
+    $T = new TemplateLite('templates/');
+    $T->set_file('page','sitedata.thtml');
+
+    $site_name      = (isset($_GLFUSION['site_name']) ? $_GLFUSION['site_name'] : '');
+    $site_slogan    = (isset($_GLFUSION['site_slogan']) ? $_GLFUSION['site_slogan'] : '');
+    $site_url       = (isset($_GLFUSION['site_url']) ? $_GLFUSION['site_url'] : INST_getSiteUrl());
+    $site_admin_url = (isset($_GLFUSION['site_admin_url']) ? $_GLFUSION['site_admin_url'] : INST_getSiteAdminUrl());
+    $site_mail      = (isset($_GLFUSION['site_mail']) ? $_GLFUSION['site_mail'] : '');
+    $noreply_mail   = (isset($_GLFUSION['noreply_mail']) ? $_GLFUSION['noreply_mail'] : '');
+    $utf8           = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
+    $dbconfig_path  = $_GLFUSION['dbconfig_path'];
 
     require $dbconfig_path.'db-config.php';
 
-    $T = new TemplateLite('templates/');
-    $T->set_file('page','database.thtml');
-
-    if ( isset($_SESSION['db_type']) ) {
-        $_DB_dbms = $_SESSION['db_type'];
+    if ( isset($_GLFUSION['db_type']) ) {
+        $_DB_dbms = $_GLFUSION['db_type'];
     }
-    if ( isset($_SESSION['db_host']) ) {
-        $_DB_host = $_SESSION['db_host'];
+    if ( isset($_GLFUSION['db_host']) ) {
+        $_DB_host = $_GLFUSION['db_host'];
     }
-    if ( isset($_SESSION['db_name']) ) {
-        $_DB_name = $_SESSION['db_name'];
+    if ( isset($_GLFUSION['db_name']) ) {
+        $_DB_name = $_GLFUSION['db_name'];
     }
-    if ( isset( $_SESSION['db_user']) ) {
-        $_DB_user = $_SESSION['db_user'];
+    if ( isset( $_GLFUSION['db_user']) ) {
+        $_DB_user = $_GLFUSION['db_user'];
     }
-    if ( isset( $_SESSION['db_pass']) ) {
-        $_DB_pass = $_SESSION['db_pass'];
+    if ( isset( $_GLFUSION['db_pass']) ) {
+        $_DB_pass = $_GLFUSION['db_pass'];
     } else {
         $_DB_pass = '';
     }
-    if ( isset( $_SESSION['db_prefix']) ) {
-        $_DB_table_prefix = $_SESSION['db_prefix'];
+    if ( isset( $_GLFUSION['db_prefix']) ) {
+        $_DB_table_prefix = $_GLFUSION['db_prefix'];
     }
 
-    if ( isset($_SESSION['innodb']) && $_SESSION['innodb'] ) {
+    if ( isset($_GLFUSION['innodb']) && $_GLFUSION['innodb'] ) {
         $T->set_var('innodb_selected',' selected="selected"');
         $T->set_var('noinnodb_selected','');
     } else {
@@ -606,9 +656,6 @@ function _getDBData()
         'db_user'                       => $_DB_user,
         'db_pass'                       => $_DB_pass,
         'db_prefix'                     => $_DB_table_prefix,
-        'lang_next'                     => $LANG_INSTALL['next'],
-        'lang_prev'                     => $LANG_INSTALL['previous'],
-        'step_heading'                  => $LANG_INSTALL['database_info'],
         'lang_database_type'            => $LANG_INSTALL['db_type'],
         'lang_database_hostname'        => $LANG_INSTALL['db_hostname'],
         'lang_database_name'            => $LANG_INSTALL['db_name'],
@@ -616,59 +663,82 @@ function _getDBData()
         'lang_database_password'        => $LANG_INSTALL['db_pass'],
         'lang_database_table_prefix'    => $LANG_INSTALL['db_table_prefix'],
         'lang_connection_settings'      => $LANG_INSTALL['connection_settings'],
-        'lang_connection_settings_help' => $LANG_INSTALL['connection_setting_help'],
+        'site_name'                     => $site_name,
+        'site_slogan'                   => $site_slogan,
+        'site_url'                      => $site_url,
+        'site_admin_url'                => $site_admin_url,
+        'site_mail'                     => $site_mail,
+        'noreply_mail'                  => $noreply_mail,
+        'lang_next'                     => $LANG_INSTALL['next'],
+        'lang_prev'                     => $LANG_INSTALL['previous'],
+        'lang_install'                  => $LANG_INSTALL['install'],
+        'lang_site_information'         => $LANG_INSTALL['site_info'],
+        'lang_site_name'                => $LANG_INSTALL['site_name'],
+        'lang_site_slogan'              => $LANG_INSTALL['site_slogan'],
+        'lang_site_url'                 => $LANG_INSTALL['site_url'],
+        'lang_site_admin_url'           => $LANG_INSTALL['site_admin_url'],
+        'lang_site_email'               => $LANG_INSTALL['site_email'],
+        'lang_site_noreply_email'       => $LANG_INSTALL['site_noreply_email'],
+        'lang_utf8'                     => $LANG_INSTALL['use_utf8'],
+        'lang_sitedata_help'            => $LANG_INSTALL['sitedata_help'],
+        'hiddenfields'                  => _buildHiddenFields(),
     ));
 
     $T->parse('output','page');
     return $T->finish($T->get_var('output'));
 }
 
-function _gotDBData()
+function _gotSiteData()
 {
-    global $LANG_INSTALL;
+    global $_GLFUSION, $LANG_INSTALL;
 
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
 
+    $dbconfig_path = $_GLFUSION['dbconfig_path'];
+
+    include $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php';
+    $validator = new EmailAddressValidator;
+
     $numErrors = 0;
     $errText   = '';
 
-    if ( isset($_POST['db_type']) && $_POST['db_type'] != '') {
-        $db_type = INST_stripslashes($_POST['db_type']);
+    if ( isset($_POST['dbtype']) && $_POST['dbtype'] != '') {
+        $db_type = INST_stripslashes($_POST['dbtype']);
     } else {
         $db_type = '';
         $numErrors++;
         $errText .= $LANG_INSTALL['db_type_error'].'<br />';
     }
-    if ( isset($_POST['db_host']) && $_POST['db_host'] != '') {
-        $db_host = INST_stripslashes($_POST['db_host']);
+    if ( isset($_POST['dbhost']) && $_POST['dbhost'] != '') {
+        $db_host = INST_stripslashes($_POST['dbhost']);
     } else {
         $db_host = '';
         $numErrors++;
         $errText .= $LANG_INSTALL['db_hostname_error'].'<br />';
     }
-    if ( isset($_POST['db_name']) && $_POST['db_name'] != '') {
-        $db_name = INST_stripslashes($_POST['db_name']);
+    if ( isset($_POST['dbname']) && $_POST['dbname'] != '') {
+        $db_name = INST_stripslashes($_POST['dbname']);
     } else {
         $db_name = '';
         $numErrors++;
         $errText .= $LANG_INSTALL['db_name_error'].'<br />';
     }
-    if ( isset($_POST['db_user']) && $_POST['db_user'] != '') {
-        $db_user = INST_stripslashes($_POST['db_user']);
+    if ( isset($_POST['dbuser']) && $_POST['dbuser'] != '') {
+        $db_user = INST_stripslashes($_POST['dbuser']);
     } else {
         $db_user = '';
         $numErrors++;
         $errText .= $LANG_INSTALL['db_user_error'].'<br />';
     }
-    if ( isset($_POST['db_pass']) && $_POST['db_pass'] != '') {
-        $db_pass = INST_stripslashes($_POST['db_pass']);
+    if ( isset($_POST['dbpass']) && $_POST['dbpass'] != '') {
+        $db_pass = INST_stripslashes($_POST['dbpass']);
     } else {
         $db_pass = '';
     }
-    if ( isset($_POST['db_prefix']) ) {
-        $db_prefix = INST_stripslashes($_POST['db_prefix']);
+    if ( isset($_POST['dbprefix']) ) {
+        $db_prefix = INST_stripslashes($_POST['dbprefix']);
     } else {
         $db_prefix = '';
     }
@@ -684,33 +754,91 @@ function _gotDBData()
 
     // populate the session vars...
 
-   $_SESSION['db_type']     = $db_type;
-   $_SESSION['innodb']      = $innodb;
-   $_SESSION['db_host']     = $db_host;
-   $_SESSION['db_name']     = $db_name;
-   $_SESSION['db_user']     = $db_user;
-   $_SESSION['db_pass']     = $db_pass;
-   $_SESSION['db_prefix']   = $db_prefix;
+    $_GLFUSION['db_type']     = $db_type;
+    $_GLFUSION['innodb']      = $innodb;
+    $_GLFUSION['db_host']     = $db_host;
+    $_GLFUSION['db_name']     = $db_name;
+    $_GLFUSION['db_user']     = $db_user;
+    $_GLFUSION['db_pass']     = $db_pass;
+    $_GLFUSION['db_prefix']   = $db_prefix;
+
+    if ( isset($_POST['sitename']) && $_POST['sitename'] != '' ) {
+        $site_name = INST_stripslashes($_POST['sitename']);
+    } else {
+        $site_name = '';
+        $numErrors++;
+        $errText .= $LANG_INSTALL['site_name_error'].'<br />';
+    }
+    if ( isset($_POST['siteslogan']) && $_POST['siteslogan'] != '' ) {
+        $site_slogan = INST_stripslashes($_POST['siteslogan']);
+    } else {
+        $site_slogan = '';
+    }
+    if ( isset($_POST['siteurl']) && $_POST['siteurl'] != '' ) {
+        $site_url = INST_stripslashes($_POST['siteurl']);
+    } else {
+        $site_url = '';
+        $numErrors++;
+        $errText .= $LANG_INSTALL['site_url_error'].'<br />';
+    }
+
+    if ( isset($_POST['siteadminurl']) && $_POST['siteadminurl'] != '' ) {
+        $site_admin_url = INST_stripslashes($_POST['siteadminurl']);
+    } else {
+        $site_admin_url = '';
+        $numErrors++;
+        $errText .= $LANG_INSTALL['site_admin_url_error'].'<br />';
+    }
+    if ( isset($_POST['sitemail']) && $_POST['sitemail'] != '' ) {
+        $site_mail = INST_stripslashes($_POST['sitemail']);
+        if ( !$validator->check_email_address( $site_mail ) ) {
+            $numErrors++;
+            $errText .= 'Site Email is not a valid email address'.'<br />';
+        }
+    } else {
+        $site_mail = '';
+        $numErrors++;
+        $errText .= $LANG_INSTALL['site_email_error'].'<br />';
+    }
+    if ( isset($_POST['noreplymail']) && $_POST['noreplymail'] != '' ) {
+        $noreply_mail = INST_stripslashes($_POST['noreplymail']);
+        if ( !$validator->check_email_address( $noreply_mail ) ) {
+            $numErrors++;
+            $errText .= 'No Reply Email is not a valid email address'.'<br />';
+        }
+    } else {
+        $noreply_mail = '';
+        $numErrors++;
+        $errText .= $LANG_INSTALL['site_noreply_email_error'].'<br />';
+    }
+
+    $_GLFUSION['site_name']       = $site_name;
+    $_GLFUSION['site_slogan']     = $site_slogan;
+    $_GLFUSION['site_url']        = $site_url;
+    $_GLFUSION['site_admin_url']  = $site_admin_url;
+    $_GLFUSION['site_mail']       = $site_mail;
+    $_GLFUSION['noreply_mail']    = $noreply_mail;
+    $_GLFUSION['utf8']            = 1;
 
     if ( $numErrors > 0 ) {
-        return _displayError(DB_DATA_MISSING,'getdatabase',$errText);
+        return _displayError(SITE_DATA_ERROR,'getdata',$errText);
     }
 
     $db_handle = @mysql_connect($db_host, $db_user, $db_pass);
     if (!$db_handle) {
-        return _displayError(DB_NO_CONNECT,'getdatabase');
+        return _displayError(DB_NO_CONNECT,'getdata');
     }
     if ($db_handle) {
         $connected = @mysql_select_db($db_name, $db_handle);
     }
     if ( !$connected) {
-        return _displayError(DB_NO_DATABASE,'getdatabase');
+        return _displayError(DB_NO_DATABASE,'getdata');
     }
     if ( $innodb ) {
         $res = @mysql_query("SHOW VARIABLES LIKE 'have_innodb'");
         $A = @mysql_fetch_array($res);
         if (strcasecmp ($A[1], 'yes') != 0) {
-            return _displayError(DB_NO_INNODB,'getdatabase');
+            return _displayError(DB_NO_INNODB,'getdata');
         }
     }
     $result = @mysql_query("SHOW TABLES LIKE '".$db_prefix."vars'");
@@ -718,118 +846,10 @@ function _gotDBData()
         return _displayError(DB_EXISTS,'');
     }
 
-    return _getSiteData();
-}
-
-
-function _getSiteData()
-{
-    global $LANG_INSTALL;
-
-    if ( ($rc = _checkSession() ) !== 0 ) {
-        return $rc;
-    }
-
-    $T = new TemplateLite('templates/');
-    $T->set_file('page','sitedata.thtml');
-
-    $site_name      = (isset($_SESSION['site_name']) ? $_SESSION['site_name'] : '');
-    $site_slogan    = (isset($_SESSION['site_slogan']) ? $_SESSION['site_slogan'] : '');
-    $site_url       = (isset($_SESSION['site_url']) ? $_SESSION['site_url'] : INST_getSiteUrl());
-    $site_admin_url = (isset($_SESSION['site_admin_url']) ? $_SESSION['site_admin_url'] : INST_getSiteAdminUrl());
-    $site_mail      = (isset($_SESSION['site_mail']) ? $_SESSION['site_mail'] : '');
-    $noreply_mail   = (isset($_SESSION['noreply_mail']) ? $_SESSION['noreply_mail'] : '');
-    $utf8           = (isset($_SESSION['utf8']) ? $_SESSION['utf8'] : 1);
-
-    $T->set_var(array(
-        'site_name'     => $site_name,
-        'site_slogan'   => $site_slogan,
-        'site_url'      => $site_url,
-        'site_admin_url'=> $site_admin_url,
-        'site_mail'     => $site_mail,
-        'noreply_mail'  => $noreply_mail,
-        'lang_next'                 => $LANG_INSTALL['next'],
-        'lang_prev'                 => $LANG_INSTALL['previous'],
-        'lang_install'              => $LANG_INSTALL['install'],
-        'lang_site_information'     => $LANG_INSTALL['site_info'],
-        'lang_site_name'            => $LANG_INSTALL['site_name'],
-        'lang_site_slogan'          => $LANG_INSTALL['site_slogan'],
-        'lang_site_url'             => $LANG_INSTALL['site_url'],
-        'lang_site_admin_url'       => $LANG_INSTALL['site_admin_url'],
-        'lang_site_email'           => $LANG_INSTALL['site_email'],
-        'lang_site_noreply_email'   => $LANG_INSTALL['site_noreply_email'],
-        'lang_utf8'                 => $LANG_INSTALL['use_utf8'],
-        'lang_sitedata_help'        => $LANG_INSTALL['sitedata_help'],
-    ));
-
-    $T->parse('output','page');
-    return $T->finish($T->get_var('output'));
-}
-
-function _gotSiteData()
-{
-    global $LANG_INSTALL;
-
-    if ( ($rc = _checkSession() ) !== 0 ) {
-        return $rc;
-    }
-
-    $numErrors = 0;
-    $errText   = '';
-
-    if ( isset($_POST['site_name']) && $_POST['site_name'] != '' ) {
-        $site_name = INST_stripslashes($_POST['site_name']);
-    } else {
-        $site_name = '';
-        $numErrors++;
-        $errText .= $LANG_INSTALL['site_name_error'].'<br />';
-    }
-    if ( isset($_POST['site_slogan']) && $_POST['site_slogan'] != '' ) {
-        $site_slogan = INST_stripslashes($_POST['site_slogan']);
-    } else {
-        $site_slogan = '';
-    }
-    if ( isset($_POST['site_url']) && $_POST['site_url'] != '' ) {
-        $site_url = INST_stripslashes($_POST['site_url']);
-    } else {
-        $site_url = '';
-        $numErrors++;
-        $errText .= $LANG_INSTALL['site_url_error'].'<br />';
-    }
-
-    if ( isset($_POST['site_admin_url']) && $_POST['site_admin_url'] != '' ) {
-        $site_admin_url = INST_stripslashes($_POST['site_admin_url']);
-    } else {
-        $site_admin_url = '';
-        $numErrors++;
-        $errText .= $LANG_INSTALL['site_admin_url_error'].'<br />';
-    }
-    if ( isset($_POST['site_mail']) && $_POST['site_mail'] != '' ) {
-        $site_mail = INST_stripslashes($_POST['site_mail']);
-    } else {
-        $site_mail = '';
-        $numErrors++;
-        $errText .= $LANG_INSTALL['site_email_error'].'<br />';
-    }
-    if ( isset($_POST['noreply_mail']) && $_POST['noreply_mail'] != '' ) {
-        $noreply_mail = INST_stripslashes($_POST['noreply_mail']);
-    } else {
-        $noreply_mail = '';
-        $numErrors++;
-        $errText .= $LANG_INSTALL['site_noreply_email_error'].'<br />';
-    }
-
-    $_SESSION['site_name']       = $site_name;
-    $_SESSION['site_slogan']     = $site_slogan;
-    $_SESSION['site_url']        = $site_url;
-    $_SESSION['site_admin_url']  = $site_admin_url;
-    $_SESSION['site_mail']       = $site_mail;
-    $_SESSION['noreply_mail']    = $noreply_mail;
-    $_SESSION['utf8']            = 1;
-
     if ( $numErrors > 0 ) {
         return _displayError(SITE_DATA_MISSING,'getdata',$errText);
     }
+
     return _doInstall();
 }
 
@@ -838,27 +858,28 @@ function _gotSiteData()
  */
 function _doInstall()
 {
-    global $_SYSTEM, $_CONF, $_TABLES, $_DB, $_DB_dbms, $_DB_host, $_DB_user,
-           $_DB_pass, $site_url,$_DB_table_prefix, $LANG_INSTALL;
+    global $_GLFUSION, $_SYSTEM, $_CONF, $_TABLES, $_DB, $_DB_dbms,
+           $_DB_host, $_DB_user,$_DB_pass, $site_url,$_DB_table_prefix,
+           $LANG_INSTALL;
 
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
 
-    if ( isset($_SESSION['innodb']) ) {
-        $use_innodb = $_SESSION['innodb'];
+    if ( isset($_GLFUSION['innodb']) ) {
+        $use_innodb = $_GLFUSION['innodb'];
     } else {
         $use_innodb = false;
     }
 
-    $utf8 = (isset($_SESSION['utf8']) ? $_SESSION['utf8'] : 1);
-    if ( isset($_SESSION['language']) ) {
-        $language = $_SESSION['language'];
+    $utf8 = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
+    if ( isset($_GLFUSION['language']) ) {
+        $language = $_GLFUSION['language'];
     } else {
         $language = 'english';
     }
 
-    $_PATH['dbconfig_path'] = $_SESSION['dbconfig_path'];
+    $_PATH['dbconfig_path'] = $_GLFUSION['dbconfig_path'];
     $_PATH['public_html']   = INST_getHtmlPath();
     if (!preg_match('/^.*\/$/', $_PATH['public_html'])) {
         $_PATH['public_html'] .= '/';
@@ -903,26 +924,26 @@ function _doInstall()
     fclose ($siteconfig_file);
     require $siteconfig_path;
 
-    $config_file = $_SESSION['dbconfig_path'].'db-config.php';
+    $config_file = $_GLFUSION['dbconfig_path'].'db-config.php';
 
     require $config_file;
 
-    $db = array('host' => (isset($_SESSION['db_host']) ? $_SESSION['db_host'] : $_DB_host),
-                'name' => (isset($_SESSION['db_name']) ? $_SESSION['db_name'] : $_DB_name),
-                'user' => (isset($_SESSION['db_user']) ? $_SESSION['db_user'] : $_DB_user),
-                'pass' => (isset($_SESSION['db_pass']) ? $_SESSION['db_pass'] : $_DB_pass),
-                'table_prefix' => (isset($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $_DB_table_prefix),
+    $db = array('host' => (isset($_GLFUSION['db_host']) ? $_GLFUSION['db_host'] : $_DB_host),
+                'name' => (isset($_GLFUSION['db_name']) ? $_GLFUSION['db_name'] : $_DB_name),
+                'user' => (isset($_GLFUSION['db_user']) ? $_GLFUSION['db_user'] : $_DB_user),
+                'pass' => (isset($_GLFUSION['db_pass']) ? $_GLFUSION['db_pass'] : $_DB_pass),
+                'table_prefix' => (isset($_GLFUSION['db_prefix']) ? $_GLFUSION['db_prefix'] : $_DB_table_prefix),
                 'type' => 'mysql');
 
     $dbconfig_file = fopen($config_file, 'r');
     $dbconfig_data = fread($dbconfig_file, filesize($config_file));
     fclose($dbconfig_file);
 
-    $dbconfig_data = str_replace("\$_DB_host = '" . $_DB_host . "';", "\$_DB_host = '" . $_SESSION['db_host'] . "';", $dbconfig_data); // Host
-    $dbconfig_data = str_replace("\$_DB_name = '" . $_DB_name . "';", "\$_DB_name = '" . $_SESSION['db_name'] . "';", $dbconfig_data); // Database
-    $dbconfig_data = str_replace("\$_DB_user = '" . $_DB_user . "';", "\$_DB_user = '" . $_SESSION['db_user'] . "';", $dbconfig_data); // Username
-    $dbconfig_data = str_replace("\$_DB_pass = '" . $_DB_pass . "';", "\$_DB_pass = '" . $_SESSION['db_pass'] . "';", $dbconfig_data); // Password
-    $dbconfig_data = str_replace("\$_DB_table_prefix = '" . $_DB_table_prefix . "';", "\$_DB_table_prefix = '" . $_SESSION['db_prefix'] . "';", $dbconfig_data); // Table prefix
+    $dbconfig_data = str_replace("\$_DB_host = '" . $_DB_host . "';", "\$_DB_host = '" . $_GLFUSION['db_host'] . "';", $dbconfig_data); // Host
+    $dbconfig_data = str_replace("\$_DB_name = '" . $_DB_name . "';", "\$_DB_name = '" . $_GLFUSION['db_name'] . "';", $dbconfig_data); // Database
+    $dbconfig_data = str_replace("\$_DB_user = '" . $_DB_user . "';", "\$_DB_user = '" . $_GLFUSION['db_user'] . "';", $dbconfig_data); // Username
+    $dbconfig_data = str_replace("\$_DB_pass = '" . $_DB_pass . "';", "\$_DB_pass = '" . $_GLFUSION['db_pass'] . "';", $dbconfig_data); // Password
+    $dbconfig_data = str_replace("\$_DB_table_prefix = '" . $_DB_table_prefix . "';", "\$_DB_table_prefix = '" . $_GLFUSION['db_prefix'] . "';", $dbconfig_data); // Table prefix
     $dbconfig_data = str_replace("\$_DB_dbms = '" . $_DB_dbms . "';", "\$_DB_dbms = '" . 'mysql' . "';", $dbconfig_data); // Database type
 
     // Write changes to db-config.php
@@ -939,12 +960,12 @@ function _doInstall()
     if ( $rc != true ) {
         return _displayError(DB_NO_CONNECT,'getdata',$errors);
     }
-    $site_name      = isset($_SESSION['site_name']) ? $_SESSION['site_name'] : '';
-    $site_slogan    = isset($_SESSION['site_slogan']) ? $_SESSION['site_slogan'] : '';
-    $site_url       = isset($_SESSION['site_url']) ? $_SESSION['site_url'] : INST_getSiteUrl();
-    $site_admin_url = isset($_SESSION['site_admin_url']) ? $_SESSION['site_admin_url'] : INST_getSiteAdminUrl();
-    $site_mail      = isset($_SESSION['site_mail']) ? $_SESSION['site_mail'] : '' ;
-    $noreply_mail   = isset($_SESSION['noreply_mail']) ? $_SESSION['noreply_mail'] : '' ;
+    $site_name      = isset($_GLFUSION['site_name']) ? $_GLFUSION['site_name'] : '';
+    $site_slogan    = isset($_GLFUSION['site_slogan']) ? $_GLFUSION['site_slogan'] : '';
+    $site_url       = isset($_GLFUSION['site_url']) ? $_GLFUSION['site_url'] : INST_getSiteUrl();
+    $site_admin_url = isset($_GLFUSION['site_admin_url']) ? $_GLFUSION['site_admin_url'] : INST_getSiteAdminUrl();
+    $site_mail      = isset($_GLFUSION['site_mail']) ? $_GLFUSION['site_mail'] : '' ;
+    $noreply_mail   = isset($_GLFUSION['noreply_mail']) ? $_GLFUSION['noreply_mail'] : '' ;
 
     INST_personalizeAdminAccount($site_mail, $site_url);
 
@@ -952,7 +973,7 @@ function _doInstall()
     require_once 'config-install.php';
     install_config($site_url);
 
-    $gl_path    = $_SESSION['dbconfig_path'];
+    $gl_path    = $_GLFUSION['dbconfig_path'];
     $html_path  = $_PATH['public_html'];
 
     $config = config::get_instance();
@@ -1033,6 +1054,7 @@ function _doInstall()
         'lang_polls_desc'           =>  $LANG_INSTALL['polls_desc'],
         'lang_links_desc'           =>  $LANG_INSTALL['links_desc'],
         'lang_next'                 =>  $LANG_INSTALL['next'],
+        'hiddenfields'              => _buildHiddenFields(),
     ));
 
     $T->parse('output','page');
@@ -1042,10 +1064,10 @@ function _doInstall()
 
 function _doPluginInstall()
 {
-    global $_CONF, $_TABLES, $_DB_table_prefix;
+    global $_GLFUSION, $_CONF, $_TABLES, $_DB_table_prefix;
 
     $site_url = $_CONF['site_url'];
-    $language = $_SESSION['language'];
+    $language = $_GLFUSION['language'];
 
     $pluginsToInstall = $_POST['plugin'];
     if ( is_array($pluginsToInstall) ) {
@@ -1155,9 +1177,9 @@ function _doUpgrade()
 
 function _doPluginUpgrade()
 {
-    global $_CONF, $_TABLES, $LANG_INSTALL;
+    global $_GLFUSION, $_CONF, $_TABLES, $LANG_INSTALL;
 
-    $language = $_SESSION['language'];
+    $language = $_GLFUSION['language'];
 
     $upgradeError = '';
     $error        = '';
@@ -1262,13 +1284,13 @@ function _migrateGeeklog()
 
     $db_handle = @mysql_connect($_DB_host, $_DB_user, $_DB_pass);
     if (!$db_handle) {
-        return _displayError(DB_NO_CONNECT,'getdatabase');
+        return _displayError(DB_NO_CONNECT,'getdata');
     }
     if ($db_handle) {
         $connected = @mysql_select_db($_DB_name, $db_handle);
     }
     if ( !$connected) {
-        return _displayError(DB_NO_DATABASE,'getdatabase');
+        return _displayError(DB_NO_DATABASE,'getdata');
     }
 
     include $_CONF['path'].'system/lib-database.php';
@@ -1313,9 +1335,6 @@ function _migrateGeeklog()
 
 $_SYSTEM['no_cache_config']  = true;
 
-session_name(md5('glfusioninstallation'));
-session_start();
-
 /*
  * The driver, based on inputs received, we'll decide what to do and where to go
  */
@@ -1330,13 +1349,13 @@ for ($i = 0; $i < 4; $i++) {
     }
 }
 
-if ( isset($_SESSION['language']) ) {
-    $lng = $_SESSION['language'];
+if ( isset($_GLFUSION['language']) ) {
+    $lng = $_GLFUSION['language'];
 } else {
     $lng = 'english';
 }
-if ( isset($_POST['language']) ) {
-    $lng = $_POST['language'];
+if ( isset($_POST['lang']) ) {
+    $lng = $_POST['lang'];
 }
 
 // sanitize value and check for file
@@ -1347,7 +1366,7 @@ if (!empty($lng) && is_file('language/' . $lng . '.php')) {
     $language = 'english';
 }
 
-$_SESSION['language'] = $language;
+$_GLFUSION['language'] = $language;
 require_once 'language/'.$language.'.php';
 
 $mode = isset($_POST['mode']) ? $_POST['mode'] : '';
@@ -1356,10 +1375,10 @@ if ( isset($_POST['prev']) ) {
     $mode = $_POST['previousstep'];
 }
 
-if ( !isset($_SESSION['method'])) {
+if ( !isset($_GLFUSION['method'])) {
     $method = 'install';
 } else {
-    $method = $_SESSION['method'];
+    $method = $_GLFUSION['method'];
 }
 
 if ( isset($_POST['type']) ) {
@@ -1379,7 +1398,7 @@ if ( isset($_POST['type']) ) {
     }
 }
 
-$_SESSION['method'] = $method;
+$_GLFUSION['method'] = $method;
 
 switch($mode) {
     case 'migrate' :
@@ -1393,12 +1412,6 @@ switch($mode) {
         break;
     case 'checkperms' :
         $pageBody = _checkSitePermissions();
-        break;
-    case 'getdatabase' :
-        $pageBody = _getDBData();
-        break;
-    case 'gotdbdata' :
-        $pageBody = _gotDBData();
         break;
     case 'getdata' :
         $pageBody = _getSiteData();
@@ -1419,7 +1432,7 @@ switch($mode) {
         } else {
             require '../../siteconfig.php';
             require $_CONF['path'].'db-config.php';
-            $_SESSION['dbconfig_path'] = $_CONF['path'];
+            $_GLUSION['dbconfig_path'] = $_CONF['path'];
             $pageBody = _checkSitePermissions();
         }
         break;
@@ -1429,7 +1442,7 @@ switch($mode) {
         } else {
             require '../../siteconfig.php';
             require $_CONF['path'].'db-config.php';
-            $_SESSION['dbconfig_path'] = $_CONF['path'];
+            $_GLFUSION['dbconfig_path'] = $_CONF['path'];
             require $_CONF['path_system'] . 'lib-database.php';
             $pageBody = _doUpgrade();
         }
@@ -1443,15 +1456,15 @@ switch($mode) {
         $pageBody = _doPluginUpgrade();
         break;
     case 'done' :
-        $method = $_SESSION['method'];
+        $method = $_GLFUSION['method'];
         header('Location: success.php?type='.$method.'&language=' . $language);
         exit;
     default:
         if ( !isset($_POST['prev']) ) {
             session_unset();
         }
-        $_SESSION['language'] = $language;
-        $_SESSION['method'] = $method;
+        $_GLFUSION['language'] = $language;
+        $_GLFUSION['method'] = $method;
         $pageBody = _displayWelcome( );
         break;
 }

@@ -3,7 +3,7 @@
   <input type="hidden" name="language" value="{language}" />
   <input type="hidden" name="dbconfig_path" value="{dbconfig_path}" />
   <input type="hidden" name="previousstep" value="{previousaction}" />
-
+  {hiddenfields}
   <div style="float:left;">
     <h1>{step_heading}</h1>
   </div>
