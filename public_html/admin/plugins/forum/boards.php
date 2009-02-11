@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -279,11 +279,12 @@ if ($type == "forum") {
         $is_readonly = COM_applyFilter($_POST['is_readonly'],true);
         $is_hidden = COM_applyFilter($_POST['is_hidden'],true);
         $no_newposts = COM_applyFilter($_POST['no_newposts'],true);
+        $category    = COM_applyFilter($_POST['category'],true);
         if ($privgroup == 0) $privgroup = 2;
         $attachmentgroup = COM_applyFilter($_POST['attachmentgroup'],true);
         if ( $attachmentgroup == 0) $privgroup = 1;
         $sql = "UPDATE {$_TABLES['gf_forums']} SET forum_name='$name',forum_dscp='$dscp', grp_id=$privgroup, ";
-        $sql .= "is_hidden='$is_hidden', is_readonly='$is_readonly', no_newposts='$no_newposts',use_attachment_grpid=$attachmentgroup ";
+        $sql .= "is_hidden='$is_hidden', is_readonly='$is_readonly', no_newposts='$no_newposts',use_attachment_grpid=$attachmentgroup,forum_cat=$category ";
         $sql .= "WHERE forum_id='$id'";
         DB_query($sql);
         forum_statusMessage($LANG_GF93['forumedited'],$_CONF['site_admin_url'] .'/plugins/forum/boards.php',$LANG_GF93['forumedited']);
@@ -315,12 +316,18 @@ if ($type == "forum") {
                 $attachgrouplist .= '<option value="' .$grp. '">' . $name. '</option>';
             }
         }
+        $catSelect = '<select name="category">';
+        $catResult = DB_query("SELECT * FROM {$_TABLES['gf_categories']} ORDER BY cat_order ASC");
+        while ( ($C = DB_fetchArray($catResult)) != NULL ) {
+            $catSelect .= '<option value="'.$C['id'].'" '.($C['id'] == $forum_category ? ' selected="selected"' : '').'>'.$C['cat_name'].'</option>';
+        }
+        $catSelect .= '</select>';
 
-//        $boards_edtforum = new Template($_CONF['path_layout'] . 'forum/layout/admin');
         $boards_edtforum = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
         $boards_edtforum->set_file (array ('boards_edtforum'=>'boards_edtforum.thtml'));
         $boards_edtforum->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
         $boards_edtforum->set_var ('title', sprintf($LANG_GF93['editforumnote'], $forum_name));
+        $boards_edtforum->set_var ('cat_select',$catSelect);
         $boards_edtforum->set_var ('id', $id);
         $boards_edtforum->set_var ('mode', 'save');
         $boards_edtforum->set_var ('confirm', '0');

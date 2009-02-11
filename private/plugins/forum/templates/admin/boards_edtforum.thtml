@@ -8,6 +8,12 @@
       <td class="pluginCellSubTitle" style="padding:0px;">
         <table style="width:100%;border:none;" cellspacing="1" cellpadding="0">
           <tr>
+            <td style="width:180px;" class="pluginCellSubTitle">{$LANG_GF01[category]}</td>
+            <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
+              {cat_select}
+            </td>
+          </tr>
+          <tr>
             <td style="width:180px;" class="pluginCellSubTitle">{LANG_NAME}</td>
             <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
               <input type="text" name="name" size="80" value="{forum_name}"{xhtml}>
@@ -63,7 +69,6 @@
               <input type="hidden" name="type" value="forum"{xhtml}>
               <input type="hidden" name="confirm" value="{confirm}"{xhtml}>
               <input type="hidden" name="id" value="{id}"{xhtml}>
-              <input type="hidden" name="category" value="{category_id}"{xhtml}>
               <input type="hidden" name="mode" value="{mode}"{xhtml}>
               <input type="submit" name="submit" value="{LANG_SAVE}"{xhtml}>&nbsp;
               <input type="button" value="{LANG_CANCEL}" onclick="javascript:history.go(-1)"{xhtml}>
