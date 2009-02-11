@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: lib-upload.php 2963 2008-08-23 17:38:32Z mevans0263               $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -34,8 +34,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-exif.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-watermark.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/lib-exif.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/lib-watermark.php';
 
 function MG_videoThumbnail($aid, $srcImage, $media_filename ) {
     global $_MG_CONF;
@@ -500,13 +500,14 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     $tmpPath = $_MG_CONF['tmp_path'] . '/' . $_USER['username'] . COM_makesid() . '.tmp';
 
     if ($upload) {
-        $rc = move_uploaded_file($filename, $tmpPath);
+        $rc = @move_uploaded_file($filename, $tmpPath);
     } else {
-        $rc = copy($filename, $tmpPath);
+        $rc = @copy($filename, $tmpPath);
         $importSource = $filename;
     }
     if ( $rc != 1 ) {
         COM_errorLog("Media Upload - Error moving uploaded file in generic processing....");
+        COM_errorLog("Media Upload - Unable to copy file to: " . $tmpPath);
         $errors++;
         $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
         @unlink($tmpPath);
@@ -826,10 +827,11 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             if ( $_MG_CONF['verbose'] ) {
                 COM_errorLog("MG Upload: About to move/copy file");
             }
-            $rc = copy($filename, $media_orig);
+            $rc = @copy($filename, $media_orig);
 
             if ( $rc != 1 ) {
                 COM_errorLog("Media Upload - Error moving uploaded file....");
+                COM_errorLog("Media Upload - Unable to copy file to: " . $media_orig);
                 $errors++;
                 $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
             } else {
@@ -908,11 +910,12 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             // process video format
             $media_orig = $_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/' . $media_filename . '.' . $mimeExt;
 
-            $rc = copy($filename, $media_orig);
+            $rc = @copy($filename, $media_orig);
 
             if ( $rc != 1 )
             {
                 COM_errorLog("MG Upload: Error moving uploaded file in video processing....");
+                COM_errorLog("Media Upload - Unable to copy file to: " . $media_orig);
                 $errors++;
                 $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
             } else {
@@ -933,7 +936,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             // process audio format
             $media_orig = $_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/' . $media_filename . '.' . $mimeExt;
 
-            $rc = copy($filename, $media_orig);
+            $rc = @copy($filename, $media_orig);
 
     		COM_errorLog("MG Upload: Extracting audio meta data");
 
@@ -955,6 +958,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             if ( $rc != 1 )
             {
                 COM_errorLog("Media Upload - Error moving uploaded file in audio processing....");
+                COM_errorLog("Media Upload - Unable to copy file to: " . $media_orig);
                 $errors++;
                 $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
             } else {
@@ -976,11 +980,12 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             $media_orig = $_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/' . $media_filename . "." . $mimeExt;
             $mimeType = $mimeInfo['mime_type'];
 
-            $rc = copy($filename, $media_orig);
+            $rc = @copy($filename, $media_orig);
 
             if ( $rc != 1 )
             {
                 COM_errorLog("Media Upload - Error moving uploaded file in generic processing....");
+                COM_errorLog("Media Upload - Unable to copy file to: " . $media_orig);
                 $errors++;
                 $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
             } else {
