@@ -109,7 +109,12 @@ if (($hits > 0 && !$mydownloads_dlreport) || ( $hits > 0 && SEC_hasRights('filem
 $p->set_var('download_times',sprintf(_MD_DLTIMES,$hits));
 $p->set_var('download_count',$hits);
 $p->set_var('LANG_FILESIZE',_MD_FILESIZE);
-$p->set_var('file_size',PrettySize($size));
+$pos = MBYTE_strpos( $url, ':' );
+if( $pos === false ) {
+    $p->set_var('file_size',PrettySize($size));
+} else {
+    $p->set_var('file_size','Remote');
+}
 $p->set_var('homepage_url',$homepage);
 $p->set_var('LANG_HOMEPAGE',_MD_HOMEPAGE);
 $p->set_var('homepage',$homepage);

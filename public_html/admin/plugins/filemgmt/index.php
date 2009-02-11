@@ -270,9 +270,15 @@ function newfileConfigAdmin(){
     $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_ADDNEWFILE . '</td></tr>';
     $display .= '<tr><td align="right">'._MD_FILETITLE.'</td><td>';
     $display .= '<input type="text" name="title" size="50" maxlength="100"' . XHTML . '>';
+
     $display .= '</td></tr><tr><td align="right" style="white-space:nowrap;">File:</td><td>';
     $display .= '<input type="file" name="newfile" size="50" maxlength="100"' . XHTML . '>';
     $display .= '</td></tr>';
+
+    $display .= '<tr><td align="right" style="white-space:nowrap;">URL:</td><td>';
+    $display .= '<input type="text" name="fileurl" size="50" maxlength="250"' . XHTML . '>';
+    $display .= '</td></tr>';
+
     $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_CATEGORYC.'</td><td>';
     $display .= $mytree->makeMySelBox('title', 'title');
     $display .= '</td></tr><tr><td></td><td></td></tr>';
@@ -569,6 +575,7 @@ function modDownloadS() {
         $url = rawurlencode($myts->makeTboxData4Save($_POST['url']));
     }
     $silentEdit = COM_applyFilter($_POST['silentedit'],true);
+    $fileurl    = COM_applyFilter($_POST['url']);
 
     $currentfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'url', "lid='{$_POST['lid']}'");
     $currentfileFQN = $filemgmt_FileStore . $myts->makeTboxData4Save(rawurldecode($currentfile));
@@ -594,6 +601,8 @@ function modDownloadS() {
                 @unlink($filemgmt_FileStore.$currentfile);
             }
         }
+    } else if ( !empty ($fileurl) )  {
+        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$fileurl',size='n/a' WHERE lid='{$_POST['lid']}'");
     }
     $currentsnapfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'logourl', "lid='{$_POST['lid']}'");
     $currentSnapFQN = $filemgmt_SnapStore . $myts->makeTboxData4Save(rawurldecode($currentsnapfile));
@@ -1005,6 +1014,7 @@ function addDownload() {
     $version = $myts->makeTboxData4Save($_POST['version']);
     $description = $myts->makeTareaData4Save($_POST['description']);
     $commentoption = $_POST['commentoption'];
+    $fileurl = COM_applyFilter($_POST['fileurl']);
 
     $submitter = $_USER['uid'];
 
@@ -1023,7 +1033,7 @@ function addDownload() {
            $eh->show("1105");
      }
      // Check if a file was uploaded
-    if ($_FILES['newfile']['size'] == 0) {
+    if ($_FILES['newfile']['size'] == 0  && empty($fileurl)) {
         $eh->show("1017");
     }
 
@@ -1056,6 +1066,12 @@ function addDownload() {
             $url = $myts->makeTboxData4Save(rawurlencode($filename));
             $AddNewFile = true;
         }
+    }
+
+    if ( $upload->numFiles() == 0 && !$upload->areErrors() && !empty($fileurl) ) {
+        $url = $fileurl;
+        $size = 'n/a';
+        $AddNewFile = true;
     }
 
     $upload = new upload();

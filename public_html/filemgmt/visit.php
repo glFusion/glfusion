@@ -71,7 +71,33 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET hits=hits+1 WHERE lid=$lid AND status>0");
         $result = DB_query("SELECT url FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid=$lid AND status>0");
         list($url) = DB_fetchArray($result);
-        $fullurl = $filemgmt_FileStoreURL .$url;
+
+        $allowed_protocols = array('http','https','ftp');
+        $found_it = false;
+
+        $pos = MBYTE_strpos( $url, ':' );
+        if( $pos === false ) {
+            $fullurl = $filemgmt_FileStoreURL .$url;
+        } else {
+            $protocol = MBYTE_substr( $url, 0, $pos + 1 );
+            $found_it = false;
+            foreach( $allowed_protocols as $allowed ) {
+                if( substr( $allowed, -1 ) != ':' ) {
+                    $allowed .= ':';
+                }
+                if( $protocol == $allowed ) {
+                    $found_it = true;
+                    break;
+                }
+            }
+            if( !$found_it ) {
+                $fullurl = $filemgmt_FileStoreURL .$url;
+            } else {
+                $fullurl = $url;
+            }
+        }
+
+//        $fullurl = $filemgmt_FileStoreURL .$url;
         $fullurl = stripslashes($fullurl);
         COM_accessLOG("Visit.php => Download File:{$url}, User ID is:{$uid}, Remote address is: {$_SERVER['REMOTE_ADDR']}");
         Header("Location: $fullurl");
