@@ -446,8 +446,10 @@ function requestpassword ($username, $msg = 0)
         }
         COM_updateSpeedlimit ('password');
     } else {
-        $retval .= COM_siteHeader ('menu', '')
-                . defaultform ('') . COM_siteFooter ();
+        COM_updateSpeedlimit ('password');
+        echo COM_refresh ($_CONF['site_url']
+                                . '/users.php?mode=getpassword');
+        exit;
     }
 
     return $retval;
@@ -947,7 +949,7 @@ case 'getpassword':
         $_CONF['passwordspeedlimit'] = 300; // 5 minutes
     }
     COM_clearSpeedlimit ($_CONF['passwordspeedlimit'], 'password');
-    $last = COM_checkSpeedlimit ('password');
+    $last = COM_checkSpeedlimit ('password',4);
     if ($last > 0) {
         $display .= COM_startBlock ($LANG12[26], '',
                             COM_getBlockTemplate ('_msg_block', 'header'))
@@ -1039,8 +1041,10 @@ case 'emailpasswd':
         if (!empty ($username)) {
             $display .= requestpassword ($username, 55);
         } else {
-            $display = COM_refresh ($_CONF['site_url']
+
+            echo COM_refresh ($_CONF['site_url']
                                     . '/users.php?mode=getpassword');
+            exit;
         }
     }
     break;
