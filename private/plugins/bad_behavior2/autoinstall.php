@@ -48,7 +48,7 @@ $INSTALL_plugin['bad_behavior2'] = array(
         'ver' => $_BB2_CONF['pi_version'], 'gl_ver' => $_BB2_CONF['gl_version'],
         'url' => $_BB2_CONF['pi_url'], 'display' => $_BB2_CONF['pi_display_name']),
 
-  array('type' => 'group', 'group' => 'bad_behavior2 Admin', 'desc' => 'Users in this group can administer the Bad Behavior2 plugin',
+  array('type' => 'group', 'group' => 'Bad Behavior2 Admin', 'desc' => 'Users in this group can administer the Bad Behavior2 plugin',
         'variable' => 'admin_group_id', 'addroot' => true),
 );
 
@@ -98,7 +98,7 @@ function plugin_autouninstall_bad_behavior2 ()
         /* give the name of the tables, without $_TABLES[] */
         'tables' => array(),
         /* give the full name of the group, as in the db */
-        'groups' => array('bad_behavior2 Admin'),
+        'groups' => array('Bad Behavior2 Admin'),
         /* give the full name of the feature, as in the db */
         'features' => array(),
         /* give the full name of the block, including 'phpblock_', etc */
