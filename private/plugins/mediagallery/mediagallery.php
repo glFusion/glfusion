@@ -35,7 +35,15 @@ if (!defined ('GVERSION')) {
 
 global $_DB_table_prefix, $_TABLES;
 
-// set Plugin Table Prefix the Same as glFusion's
+$_MG_CONF = array();
+
+// Plugin info
+
+$_MG_CONF['pi_name']            = 'mediagallery';
+$_MG_CONF['pi_display_name']    = 'Media Gallery';
+$_MG_CONF['pi_version']         = '1.6.3';
+$_MG_CONF['gl_version']         = '1.1.2';
+$_MG_CONF['pi_url']             = 'http://www.glfusion.org/';
 
 $_MG_table_prefix = $_DB_table_prefix;
 
@@ -60,14 +68,4 @@ $_TABLES['mg_session_log']      = $_MG_table_prefix . 'mg_batch_session_log';
 $_TABLES['mg_sort']             = $_MG_table_prefix . 'mg_sort';
 $_TABLES['mg_postcard']         = $_MG_table_prefix . 'mg_postcard';
 $_TABLES['mg_rating']           = $_MG_table_prefix . 'mg_rating';
-
-$_MG_CONF = array();
-
-// Plugin info
-
-$_MG_CONF['pi_name']            = 'mediagallery';
-$_MG_CONF['pi_display_name']    = 'Media Gallery';
-$_MG_CONF['pi_version']         = '1.6.2';
-$_MG_CONF['gl_version']         = '1.1.2';
-$_MG_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>
