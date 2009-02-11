@@ -60,6 +60,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 if (!defined ('GVERSION')) {
     define('GVERSION', '1.1.2');
 }
+//define('DEMO_MODE',true);
 
 /**
 * Turn this on to get various debug messages from the code in this library
