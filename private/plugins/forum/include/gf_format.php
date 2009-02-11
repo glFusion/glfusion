@@ -301,7 +301,8 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
 function forumNavbarMenu($current='') {
     global $CONF_FORUM, $_CONF,$_USER,$LANG_GF01,$LANG_GF02;
 
-    include ($_CONF['path_system'] . 'classes/navbar.class.php');
+    USES_class_navbar();
+
     $navmenu = new navbar;
     $navmenu->add_menuitem($LANG_GF01['INDEXPAGE'],"{$_CONF['site_url']}/forum/index.php");
     if ($_USER['uid'] > 1) {
