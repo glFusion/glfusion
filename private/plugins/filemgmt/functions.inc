@@ -674,7 +674,6 @@ function plugin_whatsnewsupported_filemgmt() {
 function plugin_getwhatsnew_filemgmt() {
     global $_TABLES, $_FM_TABLES, $_CONF, $LANG_FILEMGMT, $LANG01;
     global $filemgmtWhatsNewTitleLength,$filemgmtWhatsNewPeriodDays,$filemgmt_showWhatsNewComments;
-    global $mydownloads_publicpriv;
 
     $retval = '';
 
@@ -691,16 +690,21 @@ function plugin_getwhatsnew_filemgmt() {
             $retval .= $LANG_FILEMGMT['no_new_files'] . '<br' . XHTML . '>' . LB;
         } else {
             for( $i = 0; $i < $nrows1; $i++ ) {
-                list($lid, $title) = DB_fetchArray( $result );
-                $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid\">";
-                $str .= stripslashes(substr($title,0,$filemgmtWhatsNewTitleLength));
+                list($lid, $ftitle) = DB_fetchArray( $result );
+                $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$lid}\">";
+				if( strlen( $ftitle ) > $filemgmtWhatsNewTitleLength ) {
+					$titleTrimLength = $filemgmtWhatsNewTitleLength - 3;
+                    $str .= COM_truncate( $ftitle,$titleTrimLength, '...' );
+				} else {
+					$str .= $ftitle;
+				}
                 $str .= '</a>';
                 $items[] = $str;
             }
         }
         if ($filemgmt_showWhatsNewComments) {
             // Search for new comments
-            $sql  = "SELECT a.lid,c.title FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
+            $sql  = "SELECT a.lid,a.title,c.title FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
             $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
             $sql .= "LEFT JOIN {$_TABLES['comments']} c ON c.sid = concat('fileid_' ,a.lid )";
             $sql .= filemgmt_buildAccessSql('WHERE');
@@ -713,11 +717,17 @@ function plugin_getwhatsnew_filemgmt() {
                 $retval .= $LANG_FILEMGMT['no_comments'] . '<br' . XHTML . '>' . LB;
             } else {
                 for( $i = 0; $i < $nrows2; $i++ ) {
-                    list($lid, $title) = DB_fetchArray( $result );
-                    $titleLength = $filemgmtWhatsNewTitleLength + 13;        // Compensate for the added HTML
-                    $title = "<b>C:</b>&nbsp;".$title;
-                    $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid\">";
-                    $str .= stripslashes(substr($title,0,$titleLength));
+                    list($lid, $ftitle, $ctitle) = DB_fetchArray( $result );
+                    $titlePrefix = "<b>C:</b>&nbsp;";
+                    $ctitle = $titlePrefix . $ctitle;
+                    $titleLength = $filemgmtWhatsNewTitleLength + strlen( $titlePrefix ) - 3;        // Compensate for the added HTML
+                    $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$lid}\">";
+					if( strlen( $ctitle ) > $titleLength ) {
+						$titleTrimLength = $titleLength - 3;
+	                    $str .= COM_truncate( $ctitle,$titleTrimLength, '...' );
+					} else {
+						$str .= $ctitle;
+					}
                     $str .= '</a>';
                     $items[] = $str;
                 }
@@ -734,7 +744,6 @@ function plugin_getwhatsnew_filemgmt() {
         return $retval;
     }
 }
-
 
 
 /**
