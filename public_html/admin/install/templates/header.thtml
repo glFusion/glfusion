@@ -22,3 +22,5 @@
 <!--    <div id="gl_moomenu"> </div>  -->
       <div id="gl_wrapper">
        <div class="installation-body-container">
+
+<div>{progress_bar}</div>

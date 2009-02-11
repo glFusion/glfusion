@@ -78,12 +78,15 @@ function INST_header($currentAction='',$nextAction='',$prevAction='')
 {
     global $_GLFUSION, $LANG_INSTALL, $LANG_CHARSET;
 
+    $currentStep = isset($_GLFUSION['currentstep']) ? $_GLFUSION['currentstep'] : '';
+
     $header = new TemplateLite('templates/');
     $header->set_file('header','header.thtml');
     $header->set_var(array(
         'page_title'        =>  $LANG_INSTALL['install_heading'],
         'charset'           =>  $LANG_CHARSET,
         'language'          =>  $_GLFUSION['language'],
+        'progress_bar'      =>  _buildProgressBar($currentStep),
     ));
     $header->parse('output','header');
     return $header->finish($header->get_var('output'));

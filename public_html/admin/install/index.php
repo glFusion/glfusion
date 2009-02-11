@@ -89,6 +89,72 @@ function _buildHiddenFields()
     return $hiddenFields;
 }
 
+function _buildProgressBar($currentStep)
+{
+    global $_GLFUSION;
+
+    $installSteps = array('welcome'=>'Welcome',
+                          'finddbconfig'=>'Path Info',
+                          'checkperms' => 'Environment Check',
+                          'getdata' => 'Site Information',
+                          'install' => 'Site Installation',
+                          'doinstall' => 'Plugin Installation');
+
+    $upgradeSteps = array('welcome' => 'Welcome',
+                          'checkperms' => 'Environment Check',
+                          'upgrade'    => 'Perform Upgrade',
+                          );
+    $retval = '';
+    $first  = 0;
+    $found  = 0;
+
+    switch ($_GLFUSION['method']) {
+        case 'install' :
+            foreach ($installSteps AS $step => $desc) {
+                if ( $step == $currentStep ) {
+                    $found++;
+                    if ( $first != 0 ) {
+                        $retval .= ' -> ';
+                    } else {
+                        $first++;
+                    }
+                    $retval .= '<strong>'.$desc.'</strong>';
+                } else {
+                    if ( $first != 0 ) {
+                        $retval .= ' -> ';
+                    } else {
+                        $first++;
+                    }
+                    $retval .= $desc;
+                }
+            }
+            break;
+        case 'upgrade' :
+            foreach ($upgradeSteps AS $step => $desc) {
+                if ( $step == $currentStep ) {
+                    $found++;
+                    if ( $first != 0 ) {
+                        $retval .= ' -> ';
+                    } else {
+                        $first++;
+                    }
+                    $retval .= '<strong>'.$desc.'</strong>';
+                } else {
+                    if ( $first != 0 ) {
+                        $retval .= ' -> ';
+                    } else {
+                        $first++;
+                    }
+                    $retval .= $desc;
+                }
+            }
+            break;
+    }
+    if ( $found == 0 ) {
+        $retval = '';
+    }
+    return $retval;
+}
 
 function _checkSession()
 {
@@ -249,6 +315,8 @@ function _getDBconfigPath()
         return $rc;
     }
 
+    $_GLFUSION['currentstep'] = 'finddbconfig';
+
     if ( isset($_GLFUSION['method']) && $_GLFUSION['method'] == 'install' ) {
         // if it isn't there, ask again...
         if ( @file_exists('../../siteconfig.php') ) {
@@ -376,6 +444,8 @@ function _checkSitePermissions($dbconfig_path='')
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
+
+    $_GLFUSION['currentstep'] = 'checkperms';
 
     $previousaction = 'finddbconfig';
 
@@ -604,6 +674,8 @@ function _getSiteData()
     if ( !isset($_GLFUSION['dbconfig_path']) ) {
         return _getDBconfigPath();
     }
+
+    $_GLFUSION['currentstep'] = 'getdata';
 
 
     $T = new TemplateLite('templates/');
@@ -865,6 +937,8 @@ function _doInstall()
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
+
+    $_GLFUSION['currentstep'] = 'doinstall';
 
     if ( isset($_GLFUSION['innodb']) ) {
         $use_innodb = $_GLFUSION['innodb'];
@@ -1460,9 +1534,9 @@ switch($mode) {
         header('Location: success.php?type='.$method.'&language=' . $language);
         exit;
     default:
-        if ( !isset($_POST['prev']) ) {
-            session_unset();
-        }
+//        if ( !isset($_POST['prev']) ) {
+//            session_unset();
+//        }
         $_GLFUSION['language'] = $language;
         $_GLFUSION['method'] = $method;
         $pageBody = _displayWelcome( );
