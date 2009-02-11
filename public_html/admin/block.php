@@ -794,7 +794,7 @@ function deleteBlock ($bid)
     }
 
     DB_delete ($_TABLES['blocks'], 'bid', $bid);
-
+    CTL_clearCache();
     return COM_refresh ($_CONF['site_admin_url'] . '/block.php?msg=12');
 }
 
