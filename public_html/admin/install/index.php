@@ -91,18 +91,18 @@ function _buildHiddenFields()
 
 function _buildProgressBar($currentStep)
 {
-    global $_GLFUSION;
+    global $_GLFUSION, $LANG_INSTALL;
 
     $installSteps = array('welcome'=>'Welcome',
-                          'finddbconfig'=>'Path Info',
-                          'checkperms' => 'Environment Check',
-                          'getdata' => 'Site Information',
-                          'install' => 'Site Installation',
-                          'doinstall' => 'Plugin Installation');
+                          'finddbconfig'    => $LANG_INSTALL['path_info'],
+                          'checkperms'      => $LANG_INSTALL['env_check'],
+                          'getdata'         => $LANG_INSTALL['site_info'],
+                          'install'         => $LANG_INSTALL['installation'],
+                          'doinstall'       => $LANG_INSTALL['plugin_install']);
 
-    $upgradeSteps = array('welcome' => 'Welcome',
-                          'checkperms' => 'Environment Check',
-                          'upgrade'    => 'Perform Upgrade',
+    $upgradeSteps = array('welcome'     => $LANG_INSTALL['welcome'],
+                          'checkperms'  => $LANG_INSTALL['env_check'],
+                          'upgrade'     => $LANG_INSTALL['perform_upgrade'],
                           );
     $retval = '';
     $first  = 0;
@@ -462,7 +462,7 @@ function _checkSitePermissions($dbconfig_path='')
     $T = new TemplateLite('templates/');
     $T->set_file('page','permission.thtml');
 
-    $T->set_var('step_heading','Hosting Environment Check');
+    $T->set_var('step_heading',$LANG_INSTALL['hosting_env']);
 
     /*
      * First we will validate the general environment..
@@ -472,7 +472,7 @@ function _checkSitePermissions($dbconfig_path='')
 
     // PHP Version
 
-    $T->set_var('item','PHP Version');
+    $T->set_var('item',$LANG_INSTALL['php_version']);
 
     if ( INST_phpOutOfDate() ) {
         $T->set_var('status','<span class="no">'.phpversion().'</span>');
@@ -480,7 +480,7 @@ function _checkSitePermissions($dbconfig_path='')
         $T->set_var('status','<span class="yes">'.phpversion().'</span>');
     }
     $T->set_var('recommended','4.3.0+');
-    $T->set_var('notes','glFusion requires at least PHP v4.3.0 or higher.');
+    $T->set_var('notes',$LANG_INSTALL['php_req_version']);
     $T->parse('env','envs',true);
 
     $rg = ini_get('register_globals');
@@ -491,14 +491,14 @@ function _checkSitePermissions($dbconfig_path='')
     $T->set_var('item','register_globals');
     $T->set_var('status',$rg == 1 ? '<span class="no">'.$LANG_INSTALL['on'].'</span>' : '<span class="yes">'.$LANG_INSTALL['off'].'</span>');
     $T->set_var('recommended',$LANG_INSTALL['off']);
-    $T->set_var('notes','If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.');
+    $T->set_var('notes',$LANG_INSTALL['register_globals']);
     $T->parse('env','envs',true);
 
     $sm = ini_get('safe_mode');
-    $T->set_var('item',$LANG_INSTALL['safe_mode']);
+    $T->set_var('item','safe_mode');
     $T->set_var('status',$sm == 1 ? '<span class="no">'.$LANG_INSTALL['on'].'</span>' : '<span class="yes">'.$LANG_INSTALL['off'].'</span>');
     $T->set_var('recommended',$LANG_INSTALL['off']);
-    $T->set_var('notes','If PHP\'s <strong>safe_mode</strong> is enabled, some functions of glFusion may not work correctly. Specifically the Media Gallery plugin.');
+    $T->set_var('notes',$LANG_INSTALL['safe_mode']);
     $T->parse('env','envs',true);
 
     $ob = ini_get('open_basedir');
@@ -508,40 +508,40 @@ function _checkSitePermissions($dbconfig_path='')
         $open_basedir_restriction = 1;
         $open_basedir_directories = $ob;
     }
-    $T->set_var('item',$LANG_INSTALL['open_basedir']);
-    $T->set_var('status',$ob == '' ? '<span class="yes">'.$LANG_INSTALL['none'].'</span>' : '<span class="no">'.'Enabled'.'</span>');
-    $T->set_var('notes','If open_basedir restrictions are enabled on your site, it may cause permission problems during the install. The file system check below should point out any issues.');
+    $T->set_var('item','open_basedir');
+    $T->set_var('status',$ob == '' ? '<span class="yes">'.$LANG_INSTALL['none'].'</span>' : '<span class="no">'.$LANG_INSTALL['enabled'].'</span>');
+    $T->set_var('notes',$LANG_INSTALL['open_basedir']);
     $T->parse('env','envs',true);
 
     $memory_limit = INST_return_bytes(ini_get('memory_limit'));
     $memory_limit_print = ($memory_limit / 1024) / 1024;
-    $T->set_var('item','Memory Limit');
+    $T->set_var('item','memory_limit');
     $T->set_var('status',$memory_limit < 50331648 ? '<span class="no">'.$memory_limit_print.'M</span>' : '<span class="yes">'.$memory_limit_print.'M</span>');
     $T->set_var('recommended','48M');
-    $T->set_var('notes','It is recommended that you have at least 48M of memory enabled on your site.');
+    $T->set_var('notes',$LANG_INSTALL['memory_limit']);
     $T->parse('env','envs',true);
 
     $fu = ini_get('file_uploads');
-    $T->set_var('item','File Uploads');
+    $T->set_var('item','file_uploads');
     $T->set_var('status',$fu == 1 ? '<span class="yes">'.$LANG_INSTALL['on'].'</span>' : '<span class="no">'.$LANG_INSTALL['off'].'</span>');
     $T->set_var('recommended','On');
-    $T->set_var('notes','Many features of glFusion require the ability to upload files, this should be enabled.');
+    $T->set_var('notes',$LANG_INSTALL['file_uploads']);
     $T->parse('env','envs',true);
 
     $upload_limit = INST_return_bytes(ini_get('upload_max_filesize'));
     $upload_limit_print = ($upload_limit / 1024) / 1024;
-    $T->set_var('item','Upload Max Filesize');
+    $T->set_var('item','upload_max_filesize');
     $T->set_var('status',$upload_limit < 8388608 ? '<span class="no">'.$upload_limit_print.'M</span>' : '<span class="yes">'.$upload_limit_print.'M</span>');
     $T->set_var('recommended','8M');
-    $T->set_var('notes','glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.');
+    $T->set_var('notes',$LANG_INSTALL['upload_max_filesize']);
     $T->parse('env','envs',true);
 
     $post_limit = INST_return_bytes(ini_get('post_max_size'));
     $post_limit_print = ($post_limit / 1024) / 1024;
-    $T->set_var('item','Post Max Size');
+    $T->set_var('item','post_max_size');
     $T->set_var('status',$post_limit < 8388608 ? '<span class="no">'.$post_limit_print.'M</span>' : '<span class="yes">'.$post_limit_print.'M</span>');
     $T->set_var('recommended','8M');
-    $T->set_var('notes','glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the maximum post size.');
+    $T->set_var('notes',$LANG_INSTALL['post_max_size']);
     $T->parse('env','envs',true);
 
     if ( $_GLFUSION['method'] == 'upgrade' && @file_exists('../../siteconfig.php')) {
@@ -697,8 +697,10 @@ function _checkSitePermissions($dbconfig_path='')
         'lang_setting'      => $LANG_INSTALL['setting'],
         'lang_current'      => $LANG_INSTALL['current'],
         'lang_recommended'  => $LANG_INSTALL['recommended'],
-        'lang_warning'      => $LANG_INSTALL['perm_warning'],
+        'lang_notes'        => $LANG_INSTALL['notes'],
         'lang_filesystem'   => $LANG_INSTALL['filesystem_check'],
+        'lang_php_settings' => $LANG_INSTALL['php_settings'],
+        'lang_php_warning'  => $LANG_INSTALL['php_warning'],
         'hiddenfields'      => _buildHiddenFields(),
     ));
     $T->parse('output','page');
