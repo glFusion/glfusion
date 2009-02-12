@@ -108,7 +108,8 @@ $LANG_STATIC = array(
     'copy' => 'Copy',
     'limit_results' => 'Limit Results',
     'search' => 'Make Searchable',
-    'submit' => 'Submit'
+    'submit' => 'Submit',
+    'delete_confirm' => 'Are you sure you want to delete this page?',
 );
 
 

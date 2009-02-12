@@ -1013,6 +1013,12 @@ function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
             $retval = COM_createLink($icon_arr['copy'],
                 "{$_CONF['site_admin_url']}/plugins/staticpages/index.php?mode=clone&amp;sp_id={$A['sp_id']}");
             break;
+        case "delete" :
+            $icon_url = "{$_CONF['site_url']}/staticpages/images/delete.png";
+            $icon = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
+            $retval = '<a href="'.$_CONF['site_admin_url'].'/plugins/staticpages/index.php?mode='.$LANG_ADMIN['delete'].'&amp;sp_id='.$A['sp_id'].'&amp;'.CSRF_TOKEN.'='.SEC_createToken().'" onclick="return confirm(\''.$LANG_STATIC['delete_confirm'].'\');">';
+            $retval .= $icon.'</a>';
+            break;
         case "sp_title":
             $sp_title = $A['sp_title'];
             $url = COM_buildUrl ($_CONF['site_url'] .

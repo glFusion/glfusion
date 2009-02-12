@@ -398,7 +398,8 @@ function liststaticpages()
         array('text' => $LANG_ADMIN['title'], 'field' => 'sp_title', 'sort' => true),
         array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => false),
         array('text' => $LANG_STATIC['head_centerblock'], 'field' => 'sp_centerblock', 'sort' => true),
-        array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true)
+        array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true),
+        array('text' => $LANG_ADMIN['delete'],'field' => 'delete','sort' => false),
     );
     $defsort_arr = array('field' => 'sp_title', 'direction' => 'asc');
 
