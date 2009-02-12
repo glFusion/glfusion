@@ -75,6 +75,12 @@ if ( is_array($_POST) ) {
     }
 }
 
+/**
+ * Builds hidden inputs for all session data
+ *
+ * @return  string          HTML
+ *
+ */
 function _buildHiddenFields()
 {
     global $_GLFUSION;
@@ -89,19 +95,28 @@ function _buildHiddenFields()
     return $hiddenFields;
 }
 
+
+/**
+ * Builds the progress bar
+ *
+ * This function will ultimately be replaced with a much
+ * prettier version....
+ *
+ * @return  string          HTML
+ *
+ */
 function _buildProgressBar($currentStep)
 {
     global $_GLFUSION, $LANG_INSTALL;
 
-    $installSteps = array('welcome'=>'Welcome',
-                          'finddbconfig'    => $LANG_INSTALL['path_info'],
-                          'checkperms'      => $LANG_INSTALL['env_check'],
-                          'getdata'         => $LANG_INSTALL['site_info'],
-                          'install'         => $LANG_INSTALL['installation'],
-                          'doinstall'       => $LANG_INSTALL['plugin_install']);
+    $installSteps = array('languagetask'        => 'Language & Task',
+                          'pathsetting'         => 'Path Settings',
+                          'checkenvironment'    => 'Environment Check',
+                          'getsiteinformation'  => 'Site Information',
+                          'contentplugins'      => 'Content & Plugins');
 
     $upgradeSteps = array('welcome'     => $LANG_INSTALL['welcome'],
-                          'checkperms'  => $LANG_INSTALL['env_check'],
+                          'checkenvironment'  => $LANG_INSTALL['env_check'],
                           'upgrade'     => $LANG_INSTALL['perform_upgrade'],
                           );
     $retval = '';
@@ -156,6 +171,13 @@ function _buildProgressBar($currentStep)
     return $retval;
 }
 
+
+/**
+ * Checks to see if the session has timed out.
+ *
+ * @return  bool          0 - session is OK
+ *
+ */
 function _checkSession()
 {
     global $_GLFUSION;
@@ -173,6 +195,13 @@ function _checkSession()
     return intval(0);
 }
 
+
+/**
+ * Displays error text
+ *
+ * @return  string          HTML
+ *
+ */
 function _displayError($error,$step,$errorText='')
 {
     global $_GLFUSION, $LANG_INSTALL;
@@ -249,12 +278,23 @@ function _displayError($error,$step,$errorText='')
 }
 
 
-function _displayWelcome( )
+/**
+ * Display initial welcome screen.
+ *
+ * Determine what language to use and what task to perform, i.e.;
+ * New Installation, Upgrade, or Migrate a site.
+ *
+ * @return  string          HTML
+ *
+ */
+function INST_getLanguageTask( )
 {
     global $_GLFUSION, $LANG_INSTALL;
 
     // set the session expire time.
     $_GLFUSION['expire'] = time() + 1800;
+
+    $_GLFUSION['currentstep'] = 'languagetask';
 
     if ( isset($_GLFUSION['language']) ) {
         $language = $_GLFUSION['language'];
@@ -265,7 +305,7 @@ function _displayWelcome( )
     $retval = '';
 
     $T = new TemplateLite('templates/');
-    $T->set_file('page', 'welcome.thtml');
+    $T->set_file('page', 'languagetask.thtml');
 
     // create language select
     $lang_select = '<select name="lang">' . LB;
@@ -276,7 +316,7 @@ function _displayWelcome( )
     $lang_select .= '</select>';
 
     $prevAction = '';
-    $nextAction = 'finddbconfig';
+    $nextAction = 'pathsetting';
 
     $T->set_var(array(
         'language_select'       => $lang_select,
@@ -302,7 +342,17 @@ function _displayWelcome( )
     return $retval;
 }
 
-function _getDBconfigPath()
+
+/**
+ * Retrieve path to private/ directory
+ *
+ * Prompt the user to enter (or verify) the path to the system
+ * private directory.
+ *
+ * @return  string          HTML form for path entry
+ *
+ */
+function INST_getPathSetting()
 {
     global $_GLFUSION, $LANG_INSTALL;
 
@@ -310,7 +360,7 @@ function _getDBconfigPath()
         return $rc;
     }
 
-    $_GLFUSION['currentstep'] = 'finddbconfig';
+    $_GLFUSION['currentstep'] = 'pathsetting';
 
     if ( isset($_GLFUSION['method']) && $_GLFUSION['method'] == 'install' ) {
         // if it isn't there, ask again...
@@ -342,7 +392,7 @@ function _getDBconfigPath()
     $dbconfig_file  = 'db-config.php';
 
     $T = new TemplateLite('templates/');
-    $T->set_file('page', 'dbconfigpath.thtml');
+    $T->set_file('page', 'pathsetting.thtml');
 
 
     if (@file_exists($dbconfig_path . $dbconfig_file) || @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file) || @file_exists($dbconfig_path.'private/'.$dbconfig_file)
@@ -365,7 +415,6 @@ function _getDBconfigPath()
         'lang_prev'         => $LANG_INSTALL['previous'],
         'lang_sys_path_help'=> $LANG_INSTALL['system_path_prompt'],
         'lang_sys_path_exp' => $LANG_INSTALL['system_path_example'],
-        'gnu'                   => nl2br(file_get_contents('gnu-2.txt')),
         'hiddenfields'      => _buildHiddenFields(),
     ));
     $T->parse('output','page');
@@ -376,7 +425,20 @@ function _getDBconfigPath()
  * Validate the dbconfig_path
  */
 
-function _gotDBconfigPath($dbc_path = '')
+/**
+ * Validate private/ directory path.
+ *
+ * Check to see if db-config.php or db-config.php.dist exist
+ * in the specified directory.
+ *
+ * @note   This will return _displayError() if files not found
+ *         or will call INST_checkEnvironment() to validate
+ *         directory and file permissions.
+ *
+ * @return  string          HTML
+ *
+ */
+function INST_gotPathSetting($dbc_path = '')
 {
     global $_GLFUSION;
 
@@ -412,27 +474,36 @@ function _gotDBconfigPath($dbc_path = '')
             // found it, try to rename..
             $rc = @copy($dbconfig_path.'db-config.php.dist',$dbconfig_path.'db-config.php');
             if ( $rc !== true ) {
-                return _displayError(DBCONFIG_NOT_WRITABLE,'finddbconfig');
+                return _displayError(DBCONFIG_NOT_WRITABLE,'pathsetting');
             }
         } else {
-            return _displayError(DBCONFIG_NOT_FOUND,'finddbconfig');
+            return _displayError(DBCONFIG_NOT_FOUND,'pathsetting');
         }
     }
 
     // if it isn't there, ask again...
     if ( !@file_exists($dbconfig_path.'db-config.php') ) {
-        return _displayError(DBCONFIG_NOT_FOUND,'finddbconfig');
+        return _displayError(DBCONFIG_NOT_FOUND,'pathsetting');
     }
     // found it, but it is read-only...
     if ( !INST_isWritable($dbconfig_path.'db-config.php') ) {
-        return _displayError(DBCONFIG_NOT_WRITABLE,'finddbconfig');
+        return _displayError(DBCONFIG_NOT_WRITABLE,'pathsetting');
     }
 
     // we have a good path to /private, off to the next step...
-    return _checkSitePermissions($dbconfig_path);
+    return INST_checkEnvironment($dbconfig_path);
 }
 
-function _checkSitePermissions($dbconfig_path='')
+/**
+ * Check PHP settings and path permissions
+ *
+ * Validates the PHP settings will support glFusion and also
+ * checks for proper permissions on the file system.
+ *
+ * @return  string          HTML screen with environment status
+ *
+ */
+function INST_checkEnvironment($dbconfig_path='')
 {
     global $_GLFUSION, $LANG_INSTALL;
 
@@ -440,14 +511,14 @@ function _checkSitePermissions($dbconfig_path='')
         return $rc;
     }
 
-    $_GLFUSION['currentstep'] = 'checkperms';
+    $_GLFUSION['currentstep'] = 'checkenvironment';
 
-    $previousaction = 'finddbconfig';
+    $previousaction = 'pathsetting';
 
     // was it passed from the previous step
     if ( $dbconfig_path == '') {
         if ( !isset($_GLFUSION['dbconfig_path']) ) {
-            return _getDBconfigPath();
+            return INST_getPathSetting();
         }
         $dbconfig_path = $_GLFUSION['dbconfig_path'];
     }
@@ -455,7 +526,7 @@ function _checkSitePermissions($dbconfig_path='')
     $permError = 0;
 
     $T = new TemplateLite('templates/');
-    $T->set_file('page','permission.thtml');
+    $T->set_file('page','checkenvironment.thtml');
 
     $T->set_var('step_heading',$LANG_INSTALL['hosting_env']);
 
@@ -660,7 +731,7 @@ function _checkSitePermissions($dbconfig_path='')
 
     if ( $permError ) {
         $button = 'Recheck';
-        $action = 'checkperms';
+        $action = 'checkenvironment';
         $T->set_var('error_message',$LANG_INSTALL['correct_perms']);
     } else {
         $T->set_var('location',$LANG_INSTALL['directory_permissions']);
@@ -679,8 +750,8 @@ function _checkSitePermissions($dbconfig_path='')
             $action = 'doupgrade';
             $previousaction = '';
         } else {
-            $action = 'getdata';
-            $previousaction = 'finddbconfig';
+            $action = 'getsiteinformation';
+            $previousaction = 'pathsetting';
         }
     }
     $T->set_var(array(
@@ -702,7 +773,16 @@ function _checkSitePermissions($dbconfig_path='')
     return $T->finish($T->get_var('output'));
 }
 
-function _getSiteData()
+/**
+ * Retrieves database settings and site information
+ *
+ * Prompt the user for the database setting and site
+ * information such as site name, url, etc.
+ *
+ * @return  string          HTML form
+ *
+ */
+function INST_getSiteInformation()
 {
     global $_GLFUSION, $LANG_INSTALL;
 
@@ -711,14 +791,14 @@ function _getSiteData()
     }
 
     if ( !isset($_GLFUSION['dbconfig_path']) ) {
-        return _getDBconfigPath();
+        return INST_getPathSetting();
     }
 
-    $_GLFUSION['currentstep'] = 'getdata';
+    $_GLFUSION['currentstep'] = 'getsiteinformation';
 
 
     $T = new TemplateLite('templates/');
-    $T->set_file('page','sitedata.thtml');
+    $T->set_file('page','siteinformation.thtml');
 
     $site_name      = (isset($_GLFUSION['site_name']) ? $_GLFUSION['site_name'] : '');
     $site_slogan    = (isset($_GLFUSION['site_slogan']) ? $_GLFUSION['site_slogan'] : '');
@@ -799,7 +879,20 @@ function _getSiteData()
     return $T->finish($T->get_var('output'));
 }
 
-function _gotSiteData()
+
+/**
+ * Validates database and site settings.
+ *
+ * Checks to ensure connectivity to the database and that
+ * the email fields are properly formed email addresses.
+ *
+ * @return  string          HTML screen with environment status
+ *
+ * @note This will return _displayError() if there are data issues.
+ *       otherwise it calls INST_installAndContentPlugins()
+ *
+ */
+function INST_gotSiteInformation()
 {
     global $_GLFUSION, $LANG_INSTALL;
 
@@ -929,27 +1022,27 @@ function _gotSiteData()
     $_GLFUSION['site_admin_url']  = $site_admin_url;
     $_GLFUSION['site_mail']       = $site_mail;
     $_GLFUSION['noreply_mail']    = $noreply_mail;
-    $_GLFUSION['utf8']            = 1;
+    $_GLFUSION['utf8']            = isset($_POST['use_utf8']) ? 1 : 0;
 
     if ( $numErrors > 0 ) {
-        return _displayError(SITE_DATA_ERROR,'getdata',$errText);
+        return _displayError(SITE_DATA_ERROR,'getsiteinformation',$errText);
     }
 
     $db_handle = @mysql_connect($db_host, $db_user, $db_pass);
     if (!$db_handle) {
-        return _displayError(DB_NO_CONNECT,'getdata');
+        return _displayError(DB_NO_CONNECT,'getsiteinformation');
     }
     if ($db_handle) {
         $connected = @mysql_select_db($db_name, $db_handle);
     }
     if ( !$connected) {
-        return _displayError(DB_NO_DATABASE,'getdata');
+        return _displayError(DB_NO_DATABASE,'getsiteinformation');
     }
     if ( $innodb ) {
         $res = @mysql_query("SHOW VARIABLES LIKE 'have_innodb'");
         $A = @mysql_fetch_array($res);
         if (strcasecmp ($A[1], 'yes') != 0) {
-            return _displayError(DB_NO_INNODB,'getdata');
+            return _displayError(DB_NO_INNODB,'getsiteinformation');
         }
     }
     $result = @mysql_query("SHOW TABLES LIKE '".$db_prefix."vars'");
@@ -958,16 +1051,23 @@ function _gotSiteData()
     }
 
     if ( $numErrors > 0 ) {
-        return _displayError(SITE_DATA_MISSING,'getdata',$errText);
+        return _displayError(SITE_DATA_MISSING,'getsiteinformation',$errText);
     }
 
-    return _doInstall();
+    return INST_installAndContentPlugins();
 }
 
-/*
- * Perform the installation.
+
+/**
+ * Performs base site install and prompts for plugin / content install
+ *
+ * Initializes the database and configuration settings.
+ * Prompts user for optional content and plugins to install.
+ *
+ * @return  string          HTML form
+ *
  */
-function _doInstall()
+function INST_installAndContentPlugins()
 {
     global $_GLFUSION, $_SYSTEM, $_CONF, $_TABLES, $_DB, $_DB_dbms,
            $_DB_host, $_DB_user,$_DB_pass, $site_url,$_DB_table_prefix,
@@ -977,7 +1077,7 @@ function _doInstall()
         return $rc;
     }
 
-    $_GLFUSION['currentstep'] = 'doinstall';
+    $_GLFUSION['currentstep'] = 'contentplugins';
 
     if ( isset($_GLFUSION['innodb']) ) {
         $use_innodb = $_GLFUSION['innodb'];
@@ -986,6 +1086,12 @@ function _doInstall()
     }
 
     $utf8 = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
+    if ( $utf8 ) {
+        $charset = 'utf-8';
+    } else {
+        $charset = 'iso-8859-1';
+    }
+
     if ( isset($_GLFUSION['language']) ) {
         $language = $_GLFUSION['language'];
     } else {
@@ -1004,7 +1110,7 @@ function _doInstall()
         if ( @file_exists($_PATH['dbconfig_path'].'system/lib-custom.php.dist') ) {
             $rc = @copy($_PATH['dbconfig_path'].'system/lib-custom.php.dist',$_PATH['dbconfig_path'].'system/lib-custom.php');
             if ( $rc === false ) {
-                return _displayError(LIBCUSTOM_NOT_WRITABLE,'getdata');
+                return _displayError(LIBCUSTOM_NOT_WRITABLE,'getsiteinformation');
             }
         }
     }
@@ -1014,7 +1120,7 @@ function _doInstall()
         if ( @file_exists($_PATH['public_html'].'siteconfig.php.dist') ) {
             $rc = @copy($_PATH['public_html'].'siteconfig.php.dist',$_PATH['public_html'].'siteconfig.php');
             if ( $rc === false ) {
-                return _displayError(SITECONFIG_NOT_WRITABLE,'getdata');
+                return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
             }
         }
     }
@@ -1030,9 +1136,16 @@ function _doInstall()
                         "\$_CONF['path'] = '" . str_replace('db-config.php', '', $_PATH['dbconfig_path']) . "';",
                         $siteconfig_data);
 
+    $siteconfig_data = preg_replace
+            (
+             '/\$_CONF\[\'default_charset\'\] = \'[^\']*\';/',
+             "\$_CONF['default_charset'] = '" . $charset . "';",
+             $siteconfig_data
+            );
+
     $siteconfig_file = fopen($siteconfig_path, 'w');
     if (!fwrite($siteconfig_file, $siteconfig_data)) {
-        return _displayError(SITECONFIG_NOT_WRITABLE,'getdata');
+        return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
     }
     fclose ($siteconfig_file);
     require $siteconfig_path;
@@ -1062,7 +1175,7 @@ function _doInstall()
     // Write changes to db-config.php
     $dbconfig_file = fopen($config_file, 'w');
     if (!fwrite($dbconfig_file, $dbconfig_data)) {
-        return _displayError(DBCONFIG_NOT_WRITABLE,'getdata');
+        return _displayError(DBCONFIG_NOT_WRITABLE,'getsiteinformation');
     }
     fclose($dbconfig_file);
     require $config_file;
@@ -1071,7 +1184,7 @@ function _doInstall()
 
     list($rc,$errors) = INST_createDatabaseStructures($use_innodb);
     if ( $rc != true ) {
-        return _displayError(DB_NO_CONNECT,'getdata',$errors);
+        return _displayError(DB_NO_CONNECT,'getsiteinformation',$errors);
     }
     $site_name      = isset($_GLFUSION['site_name']) ? $_GLFUSION['site_name'] : '';
     $site_slogan    = isset($_GLFUSION['site_slogan']) ? $_GLFUSION['site_slogan'] : '';
@@ -1148,7 +1261,7 @@ function _doInstall()
     INST_clearCache();
 
     $T = new TemplateLite('templates/');
-    $T->set_file('page','plugins.thtml');
+    $T->set_file('page','contentplugins.thtml');
 
     $T->set_var(array(
         'lang_almost_done'          =>  $LANG_INSTALL['almost_done'],
@@ -1175,7 +1288,13 @@ function _doInstall()
 }
 
 
-function _doPluginInstall()
+/**
+ * Installs optional plugins and content
+ *
+ * @note redirects to success page.
+ *
+ */
+function INST_doPluginInstall()
 {
     global $_GLFUSION, $_CONF, $_TABLES, $_DB_table_prefix;
 
@@ -1233,19 +1352,13 @@ function _doPluginInstall()
     exit;
 }
 
-/*
-function _validatePath()
-{
-    $dbconfig_path = $_SESSION['dbconfig_path'];
-
-    if (@file_exists($dbconfig_path.'db-config.php') && INST_isWritable($dbconfig_path.'db-config.php') ) {
-        return true;
-    }
-    return false;
-}
-*/
-
-function _doUpgrade()
+/**
+ * Upgrades an existing glFusion installation
+ *
+ * @return  string          HTML if error or NULL if success
+ *
+ */
+function INST_doSiteUpgrade()
 {
     global $_CONF,  $_TABLES, $_DB_dbms, $LANG_INSTALL;
 
@@ -1288,7 +1401,13 @@ function _doUpgrade()
     return;
 }
 
-function _doPluginUpgrade()
+/**
+ * Calls all bundled plugin upgrade routines
+ *
+ * @return  string          HTML or redirects to success page
+ *
+ */
+function INST_doPluginUpgrade()
 {
     global $_GLFUSION, $_CONF, $_TABLES, $LANG_INSTALL;
 
@@ -1379,7 +1498,13 @@ function _doPluginUpgrade()
     header('Location: success.php?type=upgrade&language=' . $language);
 }
 
-function _migrateGeeklog()
+/**
+ * Migrates a Geeklog 1.5+ site to glFusion
+ *
+ * @return  string          HTML
+ *
+ */
+function INST_migrateGeeklog()
 {
     global $_CONF, $_DB, $_TABLES, $_DB_table_prefix;
 
@@ -1397,13 +1522,13 @@ function _migrateGeeklog()
 
     $db_handle = @mysql_connect($_DB_host, $_DB_user, $_DB_pass);
     if (!$db_handle) {
-        return _displayError(DB_NO_CONNECT,'getdata');
+        return _displayError(DB_NO_CONNECT,'getsiteinformation');
     }
     if ($db_handle) {
         $connected = @mysql_select_db($_DB_name, $db_handle);
     }
     if ( !$connected) {
-        return _displayError(DB_NO_DATABASE,'getdata');
+        return _displayError(DB_NO_DATABASE,'getsiteinformation');
     }
 
     include $_CONF['path'].'system/lib-database.php';
@@ -1438,7 +1563,7 @@ function _migrateGeeklog()
 
     DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.0.0' WHERE name='glfusion'",1);
 
-    return _checkSitePermissions();
+    return INST_checkEnvironment();
 }
 
 
@@ -1498,7 +1623,7 @@ if ( isset($_POST['type']) ) {
     switch($_POST['type']) {
         case 'install' :
             $method = 'install';
-            $mode   = 'finddbconfig';
+            $mode   = 'pathsetting';
             break;
         case 'upgrade' :
             $method = 'upgrade';
@@ -1515,29 +1640,29 @@ $_GLFUSION['method'] = $method;
 
 switch($mode) {
     case 'migrate' :
-        $pageBody = _migrateGeeklog();
+        $pageBody = INST_migrateGeeklog();
         break;
-    case 'finddbconfig' :
-        $pageBody = _getDBconfigPath();
+    case 'pathsetting' :
+        $pageBody = INST_getPathSetting();
         break;
-    case 'gotdbconfig':
-        $pageBody =   _gotDBconfigPath();
+    case 'gotpathsetting':
+        $pageBody =   INST_gotPathSetting();
         break;
-    case 'checkperms' :
-        $pageBody = _checkSitePermissions();
+    case 'checkenvironment' :
+        $pageBody = INST_checkEnvironment();
         break;
-    case 'getdata' :
-        $pageBody = _getSiteData();
+    case 'getsiteinformation' :
+        $pageBody = INST_getSiteInformation();
         break;
-    case 'gotsitedata' :
-        $pageBody = _gotSiteData();
+    case 'gotsiteinformation' :
+        $pageBody = INST_gotSiteInformation();
         break;
-    case 'doinstall' :
-        $pageBody = _doInstall();
+    case 'contentplugins' :
+        $pageBody = INST_installAndContentPlugins();
         break;
     case 'installplugins' :
         require '../../lib-common.php';
-        $pageBody = _doPluginInstall();
+        $pageBody = INST_doPluginInstall();
         break;
     case 'startupgrade' :
         if ( !@file_exists('../../siteconfig.php') ) {
@@ -1546,7 +1671,7 @@ switch($mode) {
             require '../../siteconfig.php';
             require $_CONF['path'].'db-config.php';
             $_GLUSION['dbconfig_path'] = $_CONF['path'];
-            $pageBody = _checkSitePermissions();
+            $pageBody = INST_checkEnvironment();
         }
         break;
     case 'doupgrade' :
@@ -1557,7 +1682,7 @@ switch($mode) {
             require $_CONF['path'].'db-config.php';
             $_GLFUSION['dbconfig_path'] = $_CONF['path'];
             require $_CONF['path_system'] . 'lib-database.php';
-            $pageBody = _doUpgrade();
+            $pageBody = INST_doSiteUpgrade();
         }
         if ( $pageBody != '' ) {
             break;
@@ -1566,19 +1691,16 @@ switch($mode) {
         // at this point we have a fully updated database and core environment
     case 'dopluginupgrade' :
         require '../../lib-common.php';
-        $pageBody = _doPluginUpgrade();
+        $pageBody = INST_doPluginUpgrade();
         break;
     case 'done' :
         $method = $_GLFUSION['method'];
         header('Location: success.php?type='.$method.'&language=' . $language);
         exit;
     default:
-//        if ( !isset($_POST['prev']) ) {
-//            session_unset();
-//        }
         $_GLFUSION['language'] = $language;
         $_GLFUSION['method'] = $method;
-        $pageBody = _displayWelcome( );
+        $pageBody = INST_getLanguageTask( );
         break;
 }
 

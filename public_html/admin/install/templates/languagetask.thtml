@@ -1,5 +1,5 @@
 <form id="welcome" name="welcome" method="post" action="index.php">
-{hiddenfields}
+  {hiddenfields}
   <div style="float:left;">
     <h1>{step_heading}</h1>
   </div>
@@ -16,8 +16,6 @@
   </div>
 
   <div style="clear:both;"></div>
-
-
 
   <div>
     <strong>{lang_select_task}:&nbsp;</strong>

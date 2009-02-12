@@ -227,6 +227,7 @@ function install_config($site_url)
 
     $c->add('fs_submission', NULL, 'fieldset', 4, 20, NULL, 0, TRUE);
     $c->add('storysubmission',1,'select',4,20,0,770,TRUE);
+    $c->add('story_submit_by_perm_only',0,'select',4,20,0,780,TRUE);
     $c->add('listdraftstories',0,'select',4,20,0,790,TRUE);
     $c->add('postmode','html','select',4,20,5,810,TRUE);
     $c->add('speedlimit',45,'text',4,20,NULL,820,TRUE);

@@ -1,5 +1,5 @@
 <form action="index.php" method="post">
-  <input type="hidden" name="mode" value="gotdbconfig" />
+  <input type="hidden" name="mode" value="gotpathsetting" />
   <input type="hidden" name="previousstep" value="" />
   {hiddenfields}
 
@@ -13,11 +13,6 @@
   <div style="clear:both;"></div>
   <hr />
 
-  <h1>GNU GENERAL PUBLIC LICENSE</h1>
-  <div style="padding:15px;overflow:auto;width:90%;height:100px;">
-  {gnu}
-  </div>
-  <hr / >
   <p style="margin-bottom:20px;">
     {lang_sys_path_help}
   </p>

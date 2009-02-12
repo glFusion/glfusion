@@ -78,7 +78,7 @@ function INST_header($currentAction='',$nextAction='',$prevAction='')
 {
     global $_GLFUSION, $LANG_INSTALL, $LANG_CHARSET;
 
-    $currentStep = isset($_GLFUSION['currentstep']) ? $_GLFUSION['currentstep'] : '';
+    $currentStep = isset($_GLFUSION['currentstep']) ? $_GLFUSION['currentstep'] : 'languagetask';
 
     $header = new TemplateLite('templates/');
     $header->set_file('header','header.thtml');
@@ -88,6 +88,9 @@ function INST_header($currentAction='',$nextAction='',$prevAction='')
         'language'          =>  $_GLFUSION['language'],
         'progress_bar'      =>  _buildProgressBar($currentStep),
     ));
+
+//    $pb = _buildProgressBar($currentStep,&$header);
+
     $header->parse('output','header');
     return $header->finish($header->get_var('output'));
 }
@@ -690,9 +693,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL = '';
         case '1.1.0' :
         case '1.1.1' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('story_submit_by_perm_only',0,'select',4,20,0,780,TRUE);
+            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.2' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.2';
             $done = true;
-            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.2' WHERE name='glfusion'",1);
             break;
         default:
             $done = true;
