@@ -65,7 +65,7 @@ require_once 'include/template-lite.class.php';
 
 $_GLFUSION = array();
 
-$glFusionVars = array('language','method','expire','remoteip','dbconfig_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8');
+$glFusionVars = array('language','method','expire','dbconfig_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8');
 
 if ( is_array($_POST) ) {
     foreach ($_POST AS $name => $value) {
@@ -168,10 +168,6 @@ function _checkSession()
         return _displayError(SESSION_EXPIRED,'');
     }
 
-    if ( $_GLFUSION['remoteip'] != $_SERVER['REMOTE_ADDR'] ) {
-        return _displayError(SESSION_EXPIRED,'');
-    }
-
     $_GLFUSION['expire'] = time() + 1800;
 
     return intval(0);
@@ -259,7 +255,6 @@ function _displayWelcome( )
 
     // set the session expire time.
     $_GLFUSION['expire'] = time() + 1800;
-    $_GLFUSION['remoteip'] = $_SERVER['REMOTE_ADDR'];
 
     if ( isset($_GLFUSION['language']) ) {
         $language = $_GLFUSION['language'];

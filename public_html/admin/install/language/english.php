@@ -57,7 +57,7 @@ $LANG_INSTALL = array(
     'perform_upgrade'			=> 'Perform Upgrade',
     'error'                     => 'Error',
     'return'                    => 'Return',
-    'session_error'             => 'Cookies do not appear to be enabled on your browser client. You will not be able to install the application with this feature disabled. Alternatively, there could also be a problem with the server\'s session.save_path. If this is the case, please consult your hosting provider if you don\'t know how to check or fix this yourself.',
+    'session_error'             => 'Your session has expired.  Please restart the installation process.',
     'siteconfig_exists'         => 'An existing siteconfig.php file was found. Please delete this file before performing a new installation.',
     'siteconfig_not_writable'   => 'The siteconfig.php file is not writable, or the directory where siteconfig.php is stored is not writable. Please correct this issue before proceeding.',
     'siteconfig_not_found'      => 'Unable to locate the siteconfig.php file, are you sure this is an upgrade?',
@@ -161,7 +161,7 @@ $LANG_INSTALL = array(
     'invalid_geeklog_version'   => 'The installer is unable to locate the siteconfig.php file. Are you sure you are migrating from Geeklog v1.5.0 or higher?  If you have an older Geeklog installation, please upgrade it to at least Geeklog v1.5.0 and then try the migration again.',
     'no_migrate_glfusion'       => 'You cannot migrate an existing glFusion site, you must choose Upgrade instead.',
     'php_version'				=> 'PHP Version',
-    
+
 );
 
 // +---------------------------------------------------------------------------+
