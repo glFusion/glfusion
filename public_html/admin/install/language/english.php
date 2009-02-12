@@ -93,7 +93,7 @@ $LANG_INSTALL = array(
     'setting'                   => 'Setting',
     'current'                   => 'Current',
     'recommended'               => 'Recommended',
-    'perm_warning'              => 'If any of these items are not supported (marked as No), your system does not meet the minimum requirements for installation. Please take appropriate actions to correct the errors. Failure to do so could lead to your glFusion installation not functioning properly.',
+    'perm_warning'              => 'If any of the items to the left are marked in <font-color="red">red</font>, you may encounter problems with your glFusion site.<br /><strong>PHP Version</strong> - glFusion requires at least PHP v4.3.0 or higher.<br /><strong>Register Globals</strong> - If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.<br /><strong>Safe Mode</strong - If PHP\'s <strong>safe_mode</strong> is enabled, some functions of glFusion may not work correctly. Specifically the Media Gallery plugin.<br /><strong>Open Base Dir Resitrction</strong> - If open_basedir restrictions are enabled on your site, it may cause permission problems during the install. The file system check below should point out any issues.<br /><strong>Memory Limit</strong> - It is recommended that you have at least 48M of memory enabled on your site.<br /><strong>File Uploads</strong> - Many features of glFusion require the ability to upload files, this should be enabled.<br /><strong>Upload Max Size</strong> -...<br /><strong>Post Max Size</strong> - ... ',
     'filesystem_check'          => 'File System Check',
     'database_info'             => 'Database Information',
     'db_type'                   => 'Database Type',

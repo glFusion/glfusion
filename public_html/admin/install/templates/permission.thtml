@@ -18,28 +18,30 @@
   <hr />
   {error_message}
 
-  <h2>{lang_host_env}</h2>
+  <h2>PHP Settings</h2>
+  <p style="padding-left:5px;">
+If any of the items to the left are marked in <span style="color:#ff0000;"><strong>red</strong></span>, you may encounter problems with your glFusion site.
+  </p>
 
   <table style="width:100%;">
   <tr>
-   <td style="width:50%;">
-     <table style="width:100%;">
+   <td style="width:100%;vertical-align:top;">
+     <table style="width:100%;" cellpadding="5">
        <tr>
          <th>{lang_setting}</th>
          <th>{lang_current}</th>
          <th>{lang_recommended}</th>
+         <th>Notes</th>
        </tr>
        <!-- BEGIN envs -->
        <tr>
-         <td style="width:50%;">{item}</td>
+         <td>{item}</td>
          <td style="text-align:left;">{status}</td>
          <td>{recommended}</td>
+         <td>{notes}</td>
        </tr>
        <!-- END envs -->
      </table>
-   </td>
-   <td style="vertical-align:top;">
-     {lang_warning}
    </td>
   </tr>
   </table>
