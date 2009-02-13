@@ -558,12 +558,6 @@ $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (5,1,'whosonline_block','phpblock','Who\'s Online','all',0,'','','0000-00-00 00:00:00',0,'phpblock_whosonline',4,2,3,3,2,2) ";
 $_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (6,1,'older_stories','gldefault','Older Stories','all',7,'','','0000-00-00 00:00:00',1,'',4,2,3,3,2,2) ";
 
-//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (4,1,'polls_block','phpblock','Poll','all',3,'','','0000-00-00 00:00:00',0,'phpblock_polls',4,2,3,3,2,2) ";
-//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (5,1,'events_block','phpblock','Events','all',5,'','','0000-00-00 00:00:00',1,'phpblock_calendar',4,2,3,3,2,2) ";
-//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (10,1,'blogroll_block','phpblock','Blog Roll','all',2,'','','0000-00-00 00:00:00',0,'phpblock_blogroll',4,2,3,3,2,2) ";
-//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (11,0,'gl_mootickerRSS','portal','gl_mootickerRSS','all',10,'<ul class=\"list-feed\">  <li><a href=\"http://www.glfusion.org/article.php?story=glfusion112freeze\">glFusion v1.1.2 Feature Freeze</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=glfusion102\">glFusion v1.0.2 Released (Security Update)</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=glfusion110-update2\">glFusion Development Update 2</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=20080909145217132\">Vote for glFusion at WebMonkey!</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=glfusionv112devupdate\">glFusion v1.1.2 Development Update</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=fckeditor-upload-exploit\">FCKEditor Upload Exploit</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=chameleon200\">Chameleon v2.0.0 for glFusion</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=20080707224104910\">glFusion v1.0.1 Released</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=20080629203901111\">glPopMail is ready for testing and feedback</a></li>  <li><a href=\"http://www.glfusion.org/article.php?story=phpversion\">What PHP Version do you use?</a></li></ul>','http://www.glfusion.org/backend/glfusion.rss','0000-00-00 00:00:00',0,'',4,2,3,3,2,2) ";
-//$_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (12,1,'auto_translations','phpblock','Auto Translations','all',0,'','','0000-00-00 00:00:00',0,'phpblock_autotranslations',4,2,3,3,2,2) ";
-
 $_DATA[] = "INSERT INTO {$_TABLES['commentcodes']} (code, name) VALUES (0,'Comments Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['commentcodes']} (code, name) VALUES (-1,'Comments Disabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['commentcodes']} (code, name) VALUES (1,'Comments Closed') ";
@@ -600,8 +594,6 @@ $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VA
 $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (16,'%y-%m-%d %I:%M','99-03-21 10:00') ";
 $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (17,'%d/%m/%y %H:%M','21/03/99 22:00') ";
 $_DATA[] = "INSERT INTO {$_TABLES['dateformats']} (dfid, format, description) VALUES (18,'%a %d %b %I:%M%p','Sun 21 Mar 10:00PM') ";
-
-//$_DATA[] = "INSERT INTO {$_TABLES['eventsubmission']} (eid, title, description, location, datestart, dateend, url, allday, zipcode, state, city, address2, address1, event_type, timestart, timeend) VALUES ('2006051410130162','glFusion installed','Today, you successfully installed this glFusion site.','Your webserver',CURDATE(),CURDATE(),'http://www.glfusion.org/',1,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['featurecodes']} (code, name) VALUES (0,'Not Featured') ";
 $_DATA[] = "INSERT INTO {$_TABLES['featurecodes']} (code, name) VALUES (1,'Featured') ";
@@ -669,261 +661,27 @@ $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_g
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (11,'Group Admin','Is a User Admin with access to groups, too',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (12,'Mail Admin','Can use Mail Utility',1) ";
 $_DATA[] = "INSERT INTO {$_TABLES['groups']} (grp_id, grp_name, grp_descr, grp_gl_core) VALUES (13,'Logged-in Users','All registered members',1) ";
-/*
-
-$_DATA[] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('site', 'root', 'Root', 'Website root', NULL, NOW(), NOW(), 2, 5, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['linkcategories']} (cid, pid, category, description, tid, created, modified, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('blog-roll', 'site', 'Blog Roll', 'glFusion Related Sites', NULL, NOW(), NOW(), 2, 5, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion.org', 'blog-roll', 'http://www.glfusion.org/', 'Visit glFusion - A site dedicated to enhancing glFusion.', 'glFusion - Enhancing glFusion', 1, NOW(), 2, 5, 3, 3, 2, 2);";
-$_DATA[] = "INSERT INTO {$_TABLES['links']} (lid, cid, url, description, title, hits, date, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion_manual', 'blog-roll', 'http://www.glfusion.org/filemgmt/index.php?id=220', 'The glFusion manual is a snapshot compilation of the living documentation in the online wiki. It is in .pdf format.', 'glFusion Manual', 1, NOW(), 2, 5, 3, 3, 2, 2);";
-*/
 
 $_DATA[] = "INSERT INTO {$_TABLES['maillist']} (code, name) VALUES (0,'Don\'t Email') ";
 $_DATA[] = "INSERT INTO {$_TABLES['maillist']} (code, name) VALUES (1,'Email Headlines Each Night') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['pingservice']} (pid, name, site_url, ping_url, method, is_enabled) VALUES (1, 'Ping-O-Matic', 'http://pingomatic.com/', 'http://rpc.pingomatic.com/', 'weblogUpdates.ping', 1)";
-/*
-$_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('staticpages', '1.5.1','1.1.2',1,'http://www.glfusion.org/') ";
-$_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('spamx', '1.1.1','1.1.2',1,'http://www.glfusion.org') ";
-$_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('links', '2.0.0', '1.1.2', 1, 'http://www.glfusion.org/')";
-$_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('polls', '2.0.1', '1.1.2', '1', 'http://www.glfusion.org/')";
-$_DATA[] = "INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage) VALUES ('calendar', '1.0.2', '1.1.2', '1', 'http://www.glfusion.org/')";
 
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 1, 'CTL Support', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 2, 'Integrated Plugins', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 3, 'Nouveau Theme', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 4, 'Enhanced Security', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 0, 5, 'Other', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 1, 1, 'Media Gallery', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 1, 2, 'Site Tailor', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 1, 3, 'Forum', 0, '');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollanswers']}` (`pid`, `qid`, `aid`, `answer`, `votes`, `remark`) VALUES ('glfusionfeaturepoll', 1, 4, 'File Management', 0, '');";
-
-$_DATA[] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`) VALUES ('glfusionfeaturepoll', 0, 'What is the best new feature of glFusion?');";
-$_DATA[] = "INSERT INTO `{$_TABLES['pollquestions']}` (`pid`, `qid`, `question`) VALUES ('glfusionfeaturepoll', 1, 'What is your favorite plugin?');";
-
-$_DATA[] = "INSERT INTO `{$_TABLES['polltopics']}` (`pid`, `topic`, `voters`, `questions`, `date`, `display`, `is_open`, `hideresults`, `commentcode`, `statuscode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES ('glfusionfeaturepoll', 'Tell us your opinion about glFusion', 0, 2, '2007-01-16 12:24:22', 1, 1, 1, 0, 0, 2, 8, 3, 2, 2, 2);";
-*/
 $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('plaintext','Plain Old Text') ";
 $_DATA[] = "INSERT INTO {$_TABLES['postmodes']} (code, name) VALUES ('html','HTML Formatted') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['sortcodes']} (code, name) VALUES ('ASC','Oldest First') ";
 $_DATA[] = "INSERT INTO {$_TABLES['sortcodes']} (code, name) VALUES ('DESC','Newest First') ";
-/*
-$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('typography', 2, 'typography', '<div style=\"margin-bottom: 10px;\">&nbsp;</div>
-<blockquote>
-<p>This page shows all of the typography styles and settings that can be applied in glFusion, using one of the default themes.<br />
-<br />
-In addition to extended typography and styles, glFusion also features <a href=\"http://developer.yahoo.com/yui/grids/\" target=\"_blank\" class=\"gl_mootipfixed\" title=\"Yahoo User Interface :: Grids css layout framework\">YUI Grids css support</a> for easy implementation of multi-column layouts.</p>
-</blockquote>
-<div style=\"border-bottom: 2px solid rgb(247, 247, 247);\" class=\"yui-g\">
-<div class=\"yui-u first\"><span class=\"alert\">Create it with the following html:<br />
-<strong>&lt;span class=&quot;alert&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"info\">Create it with the following html:<br />
-<strong>&lt;span class=&quot;info&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"down\">Create it with the following html:<br />
-<strong>&lt;span class=&quot;down&quot;&gt;....&lt;/span&gt;</strong></span></div>
-<div class=\"yui-u\"><span class=\"note\">Create it with the following html:<br />
-<strong>&lt;span class=&quot;note&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"idea\">Create it with the following html:<br />
-<strong>&lt;span class=&quot;idea&quot;&gt;....&lt;/span&gt;</strong></span> <span class=\"help\">Create it with the following html:<br />
-<strong>&lt;span class=&quot;help&quot;&gt;...&gt;&lt;/span&gt;</strong></span></div>
-</div>
-<div style=\"border-bottom: 2px solid rgb(247, 247, 247); padding: 1em;\" class=\"yui-u\">
-<div style=\"margin-bottom: 10px;\" class=\"story-featured\">
-<h1>Create featured story H1 text with the following html: <strong>&lt;div class=&quot;story-featured&quot;&gt;&lt;h1&gt;....&lt;/h1&gt;&lt;/div&gt;</strong></h1>
-<br />
-THIS&nbsp;PARAGRAPH&nbsp;IS&nbsp;LEFT&nbsp;JUSTIFIED: Aenean neque est, laoreet quis, condimentum ut, pellentesque et, nulla. Etiam malesuada ipsum egestas lorem. Vestibulum gravida laoreet justo. Maecenas eget tellus mollis lacus cursus suscipit. Phasellus ante ante, dapibus ut, pellentesque eu, tincidunt vel, velit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus aliquet nulla sed nisl. Nullam egestas sagittis leo. Quisque dolor ligula, hendrerit laoreet, gravida sit amet, rutrum et, tortor. Donec lorem dui, varius sed, nonummy ut, viverra ac, metus. Duis in mauris ut erat porta placerat.</div>
-<h1>Create H1 text with the following html: <strong>&lt;h1&gt;....&lt;/h1&gt;</strong></h1>
-<p style=\"text-align: center;\">THIS&nbsp;PARAGRAPH&nbsp;IS&nbsp;CENTER&nbsp;JUSTIFIED: Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus aliquet nulla sed nisl. Nullam egestas sagittis leo. Quisque dolor ligula, hendrerit laoreet, gravida sit amet, rutrum et, tortor. Donec lorem dui, varius sed, nonummy ut, viverra ac, metus. Duis in mauris ut erat porta placerat. Aenean neque est, laoreet quis, condimentum ut, pellentesque et, nulla. Etiam malesuada ipsum egestas lorem. Vestibulum gravida laoreet justo. Maecenas eget tellus mollis lacus cursus suscipit. Phasellus ante ante, dapibus ut, pellentesque eu, tincidunt vel, velit.</p>
-<h2>Create H2 text with the following html: <strong>&lt;h2&gt;....&lt;/h2&gt;</strong></h2>
-<p style=\"text-align: right;\">THIS PARAGRAPH IS RIGHT JUSTIFIED: Aenean neque est, laoreet quis, condimentum ut, pellentesque et, nulla. Etiam malesuada ipsum egestas lorem. Vestibulum gravida laoreet justo. Maecenas eget tellus mollis lacus cursus suscipit. Phasellus ante ante, dapibus ut, pellentesque eu, tincidunt vel, velit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus aliquet nulla sed nisl. Nullam egestas sagittis leo. Quisque dolor ligula, hendrerit laoreet, gravida sit amet, rutrum et, tortor. Donec lorem dui, varius sed, nonummy ut, viverra ac, metus. Duis in mauris ut erat porta placerat.</p>
-<h3>Create H3 text with the following html: <strong>&lt;h3&gt;....&lt;/h3&gt;</strong></h3>
-<p style=\"text-align: justify;\">THIS PARAGRAPH IS BLOCK JUSTIFIED: Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus aliquet nulla sed nisl. Nullam egestas sagittis leo. Quisque dolor ligula, hendrerit laoreet, gravida sit amet, rutrum et, tortor. Donec lorem dui, varius sed, nonummy ut, viverra ac, metus. Duis in mauris ut erat porta placerat. Aenean neque est, laoreet quis, condimentum ut, pellentesque et, nulla. Etiam malesuada ipsum egestas lorem. Vestibulum gravida laoreet justo. Maecenas eget tellus mollis lacus cursus suscipit. Phasellus ante ante, dapibus ut, pellentesque eu, tincidunt vel, velit.</p>
-</div>
-<div class=\"story-body\" style=\"margin: auto; width: 520px; padding-top: 20px;\">
-<pre>
-This is a sample <strong>&lt;div class=&quot;story-body&quot;&gt;&lt;pre&gt;...&lt;/pre&gt;&lt;/div&gt;</strong> tag:
-=============================================
-.story-body pre {
-background:#F7F7F7 url(layout/nouveau/images/code.png) no-repeat scroll 5px 50%;
-border:3px solid #CCC;
-font-size:90%;
-line-height:135%;
-overflow:auto;
-padding:1em 1em 1em 5em;
-}
-=============================================
-</pre>
-</div>
-<div style=\"border-bottom: 2px solid rgb(247, 247, 247); padding: 1em;\" class=\"yui-u\">This is an example of a block quote. Wrap your text in: <strong>&lt;blockquote&gt;&lt;p&gt;....&lt;/p&gt;&lt;/blockquote&gt;</strong> <blockquote>
-<p>Etiam congue risus in mi. Suspendisse scelerisque. Integer vel ante at odio tempor pretium. Proin porta augue quis augue. Aliquam erat volutpat. Proin condimentum. Vivamus gravida convallis massa. Proin turpis.</p>
-</blockquote></div>
-<div style=\"padding: 0.5em;\" class=\"yui-gb\">
 
-<div class=\"yui-u first\">
-<h1>List Styles - Bullets</h1>
-<ul class=\"bullet-blue\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>bullet-blue</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"bullet-grey\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>bullet-grey</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"bullet-plus\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>bullet-plus</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"bullet-rss\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>bullet-rss</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"bullet-star\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>bullet-star</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-</div>
-
-<div class=\"yui-u\">
-<h1>List Styles - Images</h1>
-<ul class=\"arrow\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>arrow</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"bug\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>bug</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"cart\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>cart</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;.<br />
-    </strong></li>
-</ul>
-<ul class=\"check\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>check</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"script\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>script</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-</div>
-
-<div class=\"yui-u\">
-<h1>List Styles - Media</h1>
-<ul class=\"disc\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>disc</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"headphones\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>headphones</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"mic\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>mic</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"speaker\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>speaker</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-<ul class=\"video\">
-    <li>Use this style with the following html code:<br />
-    <strong>&lt;ul class=&quot;</strong><em>video</em><strong>&quot;&gt;&lt;li&gt;....&lt;/li&gt;&lt;/ul&gt;</strong>.</li>
-</ul>
-</div>
-</div>
-
-<div style=\"border-bottom: 1px solid rgb(204, 204, 204); padding: 1em;\" class=\"yui-g\">
-<div class=\"yui-u first\">
-<h1>List Styles - Blue Numbers &lt;ul class=&quot;number&quot;&gt;...&lt;/ul&gt;</h1>
-<ul class=\"number\">
-    <li class=\"num-1\">Create this list number with the following html: <strong>&lt;li class=&quot;num-1&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-2\">Create this list number with the following html: <strong>&lt;li class=&quot;num-2&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-3\">Create this list number with the following html: <strong>&lt;li class=&quot;num-3&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-4\">Create this list number with the following html: <strong>&lt;li class=&quot;num-4&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-5\">Create this list number with the following html: <strong>&lt;li class=&quot;num-5&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-6\">Create this list number with the following html: <strong>&lt;li class=&quot;num-6&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-7\">Create this list number with the following html: <strong>&lt;li class=&quot;num-7&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-8\">Create this list number with the following html: <strong>&lt;li class=&quot;num-8&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-9\">Create this list number with the following html: <strong>&lt;li class=&quot;num-9&quot;&gt;...&lt;/li&gt;.</strong></li>
-</ul>
-</div>
-
-<div class=\"yui-u\">
-<h1>List Styles - Grey Numbers &lt;ul class=&quot;number&quot;&gt;...&lt;/ul&gt;</h1>
-<ul class=\"number\">
-    <li class=\"num-1g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-1g&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-2g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-2g&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-3g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-3g&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-4g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-4g&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-5g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-5g&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-6g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-6g&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-7g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-7g&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-8g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-8g&quot;&gt;...&lt;/li&gt;.</strong></li>
-    <li class=\"num-9g\">Create this list number with the following html: <strong>&lt;li class=&quot;num-9g&quot;&gt;...&lt;/li&gt;.</strong></li>
-</ul>
-</div>
-</div>', 1, NOW(), 'noblocks', 0, '', 0, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 0, 0, 0, 'html', 0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_mootickerRSS', 2, 'gl_mootickerRSS', '// this staticpage needs to have PHP set to execute PHP (return) below
-// use lib-widgets.php
-USES_lib_widgets();
-
-//call the WIDGET_mootickerRSS function from lib-widgets.php
-return WIDGET_mootickerRSS();', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 1, 0, 0, 'html', 0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_moospring', 2, 'gl_moospring', '// this staticpage needs to have PHP set to execute PHP below
-// use lib-widgets.php
-USES_lib_widgets();
-
-//call the WIDGET_moospring function from lib-widgets.php
-echo WIDGET_moospring();
-?>
-<center>
-<div id=\"gl_moospring\">
-	<ul class=\"gl_moosprings\">
-		<li>
-			<a class=\"gl_moospring gl_moospring1\" href=\"http://www.glfusion.org/filemgmt/index.php\">
-				<span>Grab It</span>
-			</a>
-		</li>
-		<li>
-			<a class=\"gl_moospring gl_moospring2\" href=\"http://glfusion.org/wiki/doku.php\">
-				<span>Read It</span>
-			</a>
-		</li>
-		<li>
-			<a class=\"gl_moospring gl_moospring3\" href=\"http://www.glfusion.org/forum/\">
-				<span>Say It</span>
-			</a>
-		</li>
-		<li>
-			<a class=\"gl_moospring gl_moospring4\" href=\"http://www.glfusion.org/wiki/doku.php?id=glfusion:mission\">
-				<span>Join Us</span>
-			</a>
-		</li>
-	</ul>
-</div>
-</center>', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 2, 0, 0, 'html', 0) ";
-$_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_mooslide', 2, 'gl_mooslide', '// this staticpage needs to have PHP set to execute PHP (return) below
-// use lib-widgets.php
-USES_lib_widgets();
-
-// add your staticpage IDs, order here is order they appear on the mooslide tabs
-\$slides = Array(\'mooslide_whatsnew\', \'mooslide_cachetech\', \'mooslide_integratedplugins\', \'mooslide_mootools\', \'mooslide_widgets\');
-
-//call the WIDGET_mooslide function from lib-widgets.php
-// last 3 options below are width, height, and css id
-return WIDGET_mooslide(\$slides, 560, 160, \'gl_slide\');', 1, NOW(), 'leftblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
-*/
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (1,'Refreshing') ";
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (0,'Normal') ";
 $_DATA[] = "INSERT INTO {$_TABLES['statuscodes']} (code, name) VALUES (10,'Archive') ";
 
-$_DATA[] = "INSERT INTO {$_TABLES['stories']} (`sid`, `uid`, `draft_flag`, `tid`, `date`, `title`, `introtext`, `bodytext`, `hits`, `numemails`, `comments`, `trackbacks`, `related`, `featured`, `show_topic_icon`, `commentcode`, `trackbackcode`, `statuscode`, `expire`, `postmode`, `advanced_editor_mode`, `frontpage`, `in_transit`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES ('20080824115808580',2,0,'General',NOW(),'glFusion v1.1.2 - The Evolution Continues...','<div style=\"margin-bottom: 10px\">&nbsp;</div>\r<blockquote>\r<p><a href=\"http://www.glfusion.org\" target=\"_blank\">glFusion</a>, the next generation content management system built on the foundation of synergy, stability, and style.</p>\r</blockquote>\r<p>&nbsp;</p>\r<div class=\"yui-g\" style=\"border-bottom: rgb(247,247,247) 2px solid\">\r<div class=\"yui-u first\">\r<h2>Better Style</h2>\r<ul>\r    <li>The Nouveau Theme - A versitile and flexible default layout.</li>\r    <li>Improved WYSIWYG editor integration - See the styles available from the theme in the editor.</li>\r    <li>Pure CSS driven layout - Seach Engine friendly and provides a more accessible web site, aiding visually impaired users.</li>\r    <li>XHTML Compliant</li>\r    <li>Additional authoring styles - Improves the look and feel of your stories.</li>\r</ul>\r</div>\r<div class=\"yui-u\">\r<h2>Better Usability</h2>\r<ul>\r    <li>Caching Template Library - Speed and Scalability</li>\r    <li>Integrated Menu Builder</li>\r    <li>Integrated Logo management</li>\r    <li>Integrated Security Features\r    <ul>\r        <li>CAPTCHA Plugin</li>\r        <li>Bad Behavior2 Plugin</li>\r    </ul>\r    </li>\r    <li>Integrated Collaboration Tools\r    <ul>\r        <li>Forum Plugin</li>\r        <li>File Management Plugin</li>\r        <li>Media Management Plugin</li>\r    </ul>\r    </li>\r</ul>\r</div>\r</div>\r<p><a href=\"http://www.glfusion.org\" target=\"_blank\"><strong><em>glFusion</em></strong></a>, the next generation content management system built on the foundation of synergy, stability, and style. It provides a complete content management solution in a single package that lets you get your site up and running quickly, without having to search for 3rd party plugins or components.</p>\r<p><span class=\"alert\"><b>Don\'t forget to change your password after logging in!</b></span></p>','',5,0,0,0,'',1,0,0,0,0,'0000-00-00 00:00:00','html',1,1,0,2,3,3,2,2,2);";
-//$_DATA[] = "INSERT INTO {$_TABLES['stories']} (sid, uid, draft_flag, tid, date, title, introtext, bodytext, hits, numemails, comments, trackbacks, related, featured, show_topic_icon, commentcode, trackbackcode, statuscode, expire, postmode, advanced_editor_mode, frontpage, in_transit, owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glfusion', 2, 0, 'glFusion', NOW(), 'What Can You Do with glFusion?', '<p><strong><em>glFusion</em></strong> gives you the ability to quickly and easily setup a web site complete with extras like forums, CAPTCHA support, calendaring, and full file and media gallery management solutions.&nbsp; Unique features include:</p>\r<ul>\r    <li>Integrated Menu Builder - Allowing you to change the site menu using an online editor.</li>\r    <li>Direct integration of the FCKeditor WYSIWYG editor with your theme\'s styles.&nbsp; See exactly how your story will look as you type it.</li>\r    <li>Pre-installed plugins, bringing additional functionality and enhanced security:\r    <ul>\r        <li>Bad Behavior2 - A great tool that blocks bot attacks, spam bots, and other nasties from the Internet.</li>\r        <li>CAPTCHA - Ensures that humans are the only ones entering content on your site.</li>\r        <li>Forum - A community collaboration and discussion tool.</li>\r        <li>FileMgmt - A complete File Manager for your site.</li>\r        <li>Media Gallery - A complete multi-media manager.</li>\r    </ul>\r    </li>\r    <li>glFusion gives you a true XHTML compliant site with a pure CSS driven layout.&nbsp; The design is SEO optomized (search engine friendly) and is also more accessible by screen readers and other assistance tools used by the visually impaired.</li>\r    <li>Better documentation - the glFusion community has published a full users guide to glFusion - Check out the online wiki at http://www.glfusion.org.</li>\r</ul>\r<p>Welcome to your new site, we hope you enjoy using it as much as we did assembling the software to drive it!</p>\r<p>The glFusion Team</p>', '', 0, 0, 0, 0, '', 0, 1, 0, 0, 0, '0000-00-00 00:00:00', 'html', 0, 1, 0, 3, 3, 3, 2, 2, 2)";
-//$_DATA[] = "INSERT INTO {$_TABLES['storysubmission']} (sid, uid, tid, title, introtext, date, postmode) VALUES ('security-reminder',2,'glFusion','Are you secure?','<p>This is a reminder to secure your site once you have glFusion up and running. What you should do:</p>\r\r<ol>\r<li>Change the default password for the Admin account.</li>\r<li>Remove the install directory (you won\'t need it any more).</li>\r</ol>',NOW(),'html') ";
+$_DATA[] = "INSERT INTO {$_TABLES['stories']} (`sid`, `uid`, `draft_flag`, `tid`, `date`, `title`, `introtext`, `bodytext`, `hits`, `numemails`, `comments`, `comment_expire`, `trackbacks`, `related`, `featured`, `show_topic_icon`, `commentcode`, `trackbackcode`, `statuscode`, `expire`, `postmode`, `advanced_editor_mode`, `frontpage`, `in_transit`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`) VALUES('glfusion', 2, 0, 'General', NOW(), 'What Can You Do with glFusion?', '<p><strong><em>glFusion</em></strong> gives you the ability to quickly and easily setup a web site complete with extras like forums, CAPTCHA support, calendaring, and full file and media gallery management solutions.&nbsp; Check out the <a href=\"http://www.glfusion.org/wiki/doku.php?id=glfusion:quickstart\">Quick Start Guide</a> for more information. Features of your glFusion site include:</p>\r<ul>\r    <li>Integrated Menu Builder - Allowing you to change the site menu using an online editor.</li>\r    <li>Direct integration of the FCKeditor WYSIWYG editor with your theme''s styles.&nbsp; See exactly how your story will look as you type it.</li>\r    <li>Pre-installed plugins, bringing additional functionality and enhanced security:\r    <ul>\r        <li>Bad Behavior2 - A great tool that blocks bot attacks, spam bots, and other nasties from the Internet.</li>\r        <li>CAPTCHA - Ensures that humans are the only ones entering content on your site.</li>\r        <li>Forum - A community collaboration and discussion tool.</li>\r        <li>FileMgmt - A complete File Manager for your site.</li>\r        <li>Media Gallery - A complete multi-media manager.</li>\r    </ul>\r    </li>\r    <li>glFusion gives you a true XHTML compliant site with a pure CSS driven layout.&nbsp; The design is SEO optomized (search engine friendly) and is also more accessible by screen readers and other assistance tools used by the visually impaired.</li>\r    <li>Better documentation - the glFusion community has published a full users guide to glFusion - Check out the online <a href=\"http://www.glfusion.org/wiki/doku.php?id=glfusion:start\">wiki</a> at <a href=\"http://www.glfusion.org\">http://www.glfusion.org</a>.</li>\r</ul>\r<p>Welcome to your new site, we hope you enjoy using it as much as we did assembling the software to drive it!</p>\r<p>The glFusion Team</p>', '', 0, 0, 0, '0000-00-00 00:00:00', 0, '<a href=\"http://www.glfusion.org/wiki/doku.php?id=glfusion:quickstart\">Quick Start Guide</a>\n<a href=\"http://www.glfusion.org/wiki/doku.php?id=glfusion:start\">wiki</a>\n<a href=\"http://www.glfusion.org\">http://www.glfusion.org</a>', 0, 1, 0, 0, 0, '0000-00-00 00:00:00', 'html', 1, 1, 0, 3, 3, 3, 2, 2, 2)";
 
 $_DATA[] = "INSERT INTO {$_TABLES['syndication']} (type, topic, header_tid, format, limits, content_length, title, description, filename, charset, language, is_enabled, updated, update_info) VALUES ('article', '::all', 'all', 'RSS-2.0', 10, 1, 'glFusion Site', 'Fusing Technology with Style', 'glfusion.rss', 'iso-8859-1', 'en-gb', 1, '0000-00-00 00:00:00', NULL)";
 
 $_DATA[] = "INSERT INTO {$_TABLES['topics']} (tid, topic, imageurl, sortnum, limitnews, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('General','General News','/images/topics/topic_news.png',1,10,6,2,3,2,2,2)";
-//$_DATA[] = "INSERT INTO {$_TABLES['topics']} (tid, topic, imageurl, sortnum, limitnews, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES ('glFusion','glFusion','/images/topics/topic_gl.png',2,10,6,2,3,2,2,2)";
 
 $_DATA[] = "INSERT INTO {$_TABLES['usercomment']} (uid, commentmode, commentorder, commentlimit) VALUES (1,'nested','ASC',100) ";
 $_DATA[] = "INSERT INTO {$_TABLES['usercomment']} (uid, commentmode, commentorder, commentlimit) VALUES (2,'threaded','ASC',100) ";
