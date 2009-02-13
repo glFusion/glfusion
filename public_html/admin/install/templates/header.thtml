@@ -7,20 +7,45 @@
 <title>{page_title}</title>
 </head>
 <body dir="ltr">
-  <div id="gl_container_fluid">
+  <div id="gl_container_fixed">
     <div id="gl_header">
       <div class="top-r-corner">
         <div class="top-l-corner">
-		  <div class="floatright install-slogan" style="color:#FFF;">
-          </div>
+          <div class="floatright install-slogan">{wizard_version}</div>
           <div class="floatleft">
-            <img src="layout/logo.png" height="100" width="330" alt="" title="" id="header-site-logo" />
+            <a href="http://www.glfusion.org" target="_blank">
+              <img src="layout/logo.png" alt="" title="" id="header-site-logo" />
+            </a>
           </div>
         </div>
       </div>
     </div>
-<!--    <div id="gl_moomenu"> </div>  -->
-      <div id="gl_wrapper">
-       <div class="installation-body-container">
+    <div id="gl_moomenu"></div>
+    <div id="gl_wrapper">
 
-<div>{progress_bar}</div>
+        <div class="steplist floatleft">
+          <span class="steplist-top"></span>
+            <div class="steplist-content">
+              <ul>
+                <li>
+                  <span class="b larger">INSTALL STEPS</span>
+                </li>
+                <li class="complete">
+                  Language & Task
+                </li>
+                <li class="current">
+                  Path Settings
+                </li>
+                <li>
+                  Environment Check
+                </li>
+                <li>
+                  Site Information
+                </li>
+                <li>
+                  Content & Plugins
+                </li>
+              </ul>
+            </div>
+          <div class="steplist-bottom"></div>
+        </div>

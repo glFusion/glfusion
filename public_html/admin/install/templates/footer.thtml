@@ -1,11 +1,9 @@
-        <br /><br />
-      </div>
     </div>
     <div id="gl_footer">
       <div class="bottom-r-corner">
         <div class="bottom-l-corner"></div>
       </div>
-      <div style="padding-top:5px;text-align:center;color:#FFF;">{copyright}</div>
+      <div>{copyright}</div>
     </div>
   </div>
 </body>

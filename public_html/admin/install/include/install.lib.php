@@ -86,6 +86,7 @@ function INST_header($currentAction='',$nextAction='',$prevAction='')
         'page_title'        =>  $LANG_INSTALL['install_heading'],
         'charset'           =>  $LANG_CHARSET,
         'language'          =>  $_GLFUSION['language'],
+        'wizard_version'    =>  $LANG_INSTALL['wizard_version'],
         'progress_bar'      =>  _buildProgressBar($currentStep),
     ));
 

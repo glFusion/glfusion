@@ -2,13 +2,13 @@
 
 *****************************************************************/
 .pluginRow2,.pluginRow2 td {
-background:#F1F5FA;
+background:#f1f5fa;
 color:#000;
 line-height:120%;
 }
 
 .pluginRow1 .pluginRollOver,.pluginRow2 .pluginRollOver,.pluginRollOver {
-background:#E7E7E7;
+background:#e7e7e7;
 color:#000;
 line-height:120%;
 }
@@ -43,24 +43,25 @@ clear:left;
 clear:left;
 }
 
-#gl_container_fluid {
-  background:#FFFFFF; /*needs to be set here*/
-  min-width:540px;
-  margin:20px 20px !important;
-  margin:20px 20px 30px 20px;
+#gl_container_fixed {
+background:#fff;
+min-width:955px;
+width:955px;
+margin:20px auto auto;
 }
+
 #gl_header {
   background:url(header-bg.png) 0 0 repeat-x;
-  height:100px;
+  height:50px;
 }
 #gl_wrapper {
-  background:#FFF;
+  background:#fff;
   float:left;
   padding:10px 20px 20px;
-  width:93%;
+  width:915px;
 }
 #gl_content-full {
-  background:#FFFFFF;
+  background:#fff;
   margin:0 10px 0 10px;
   height:1%; /*fix for peek-a-boo bug in IE*/
 }
@@ -68,24 +69,96 @@ clear:left;
   background:#000;
   clear:left;
   height:40px;
+  color:#fff;
+  text-align:center;
+}
+#gl_footer div {
+  padding-top:5px;
+}
+#gl_footer div a:link {
+  color:#ccc;
+  text-decoration:none;
+}
+#gl_footer div a:hover {
+  color:#7ea8c2;
+  text-decoration:none;
 }
 .top-r-corner {
   background:transparent url(top-r-corner.png) 100% 0 no-repeat;
-  height:100px;
+  height:50px;
 }
 .top-l-corner {
   background:transparent url(top-l-corner.png) 0 0 no-repeat;
-  height:100px;
+  height:50px;
 }
 .bottom-r-corner {
-  background:#FFF url(bottom-r-corner.png) 100% 0 no-repeat !important;
-  background:#FFF url(bottom-r-corner.png) 100% 10px no-repeat;
+  background:#fff url(bottom-r-corner.png) 100% 100% no-repeat !important;
+  background:#fff url(bottom-r-corner.png) 100% 10px no-repeat;
   height:5px;
 }
 .bottom-l-corner {
   background:transparent url(bottom-l-corner.png) 0 0 no-repeat !important;
   background:transparent url(bottom-l-corner.png) 0 10px no-repeat;
   height:5px;
+}
+.steplist{
+	margin:0 0 20px;
+	width:180px;
+    color:#666;
+}
+.steplist .steplist-top {
+	background:url(steplist-top.png) no-repeat  top;
+    height:145px;
+	display:block;
+	padding:0;
+}
+.steplist  .steplist-content {
+	background:url(steplist-repeat.png) repeat-y;
+	padding:10px 22px;
+	margin-top:-18px;
+}
+.steplist-content ul {
+  margin:0;
+  padding:0;
+  list-style-type:none;
+}
+.steplist-content li {
+  margin:0;
+  padding:10px 0;
+  border-bottom:1px solid #ccc;
+}
+.steplist .steplist-bottom {
+	background: url(steplist-bottom.png) no-repeat bottom;
+	padding:0;
+    height:23px;
+}
+.step {
+  padding:0 0 0 20px;
+  width:715px;
+}
+.stepheading {
+  color:#666;
+  font-size:200%;
+  font-weight:bold;
+  height:45px;
+  border-bottom:1px solid #ccc;
+}
+.stepfields {
+ float:left;
+ padding:10px 0;
+ width:324px;
+}
+.stepfields span {
+  float:left;
+  clear:left;
+  padding:5px 0;
+}
+.stephelp {
+  float:left;
+  padding:0 0 10px 20px;
+  margin-top:10px;
+  width:370px;
+  border-left:1px solid #ccc;
 }
 /* GLOBAL SEMANTICS ***********************************************/
 a {
@@ -95,11 +168,11 @@ a:link.non-ul,
 a:visited.non-ul,
 a:hover.non-ul,
 a:active.non-ul {
-  color:#000000;
+  color:#000;
   text-decoration:none;
 }
 a:link {
-  color:#0000FF;
+  color:#00f;
 }
 a:visited {
   color:#fff;
@@ -108,11 +181,8 @@ a:visited {
 a:hover {
   color:#008000;
 }
-a:active {
-  color:#FF0000;
-}
 body {
-  background:#000000;
+  background:#000;
   font:76% arial,verdana,tahoma,helvetica,sans-serif;
   margin:0;
   padding:0;
@@ -151,8 +221,8 @@ form div.notes li {
 }
 form fieldset div.notes {
   background-color:#ffffe1;
-  border:1px solid #666666;
-  color:#666666;
+  border:1px solid #666;
+  color:#666;
   float:right;
   font-size:.75em;
   height:auto;
@@ -163,15 +233,14 @@ form fieldset div.notes {
   width:150px;
 }
 form fieldset div.notes h4 {
-  background:url(../../professional/images/icon_info.png) no-repeat top left;
-  border-bottom:1px solid #666666;
-  color:#666666;
+  border-bottom:1px solid #666;
+  color:#666;
   font-size:1.3em;
   margin:0 0 5px 0;
   padding:3px 0px 2px 27px;
 }
 form fieldset div.notes p {
-  color:#666666;
+  color:#666;
   margin:0em 0em 1.2em 0em;
 }
 form fieldset div.notes p.last {
@@ -200,7 +269,7 @@ input {
 input,
 submit,
 td {
-  color:#000000;
+  color:#000;
 }
 p {
   margin-top:5px;
@@ -209,19 +278,19 @@ p, fieldset, table, pre {
 margin-bottom:0em;
 }
 select {
-  color:#000000;
+  color:#000;
   font-size:.9em;
 }
 table {
   border:0px;
 }
 textarea {
-  color:#000000;
+  color:#000;
   font-family:arial,verdana,tahoma,helvetica,sans-serif;
 }
 th {
-  background-color:#DAE0ED;
-  color:#000000;
+  background-color:#dae0ed;
+  color:#000;
   font-size:larger;
   font-weight:bold;
   padding-left:3px;
@@ -271,44 +340,41 @@ margin-left:0em;
   float:right;
 }
 .install-slogan {
-  padding:40px 30px 0 10px;
+  padding:20px 20px 0 10px;
+  color:#fff;
 }
 .support a:link,
 .support a:hover {
-  color:#FFF;
+  color:#fff;
   padding-top:30px;
 }
 /* General formatting class***********************/
 .b {
   font-weight:bold;
 }
-.ext-link {
-  background: url(../../professional/images/external.png) right center no-repeat;
-  background-attachment: scroll;
+.larger {
+  font-size:larger;
+}
+.current {
   background-color: transparent;
-  padding-right: 13px;
+  background: url(arrow.png) right center no-repeat;
+  font-weight:bold;
+}
+.complete {
+  background-color: transparent;
+  background: url(check.png) right center no-repeat;
 }
 /* Header ***************************************/
 #header-site-logo {
-  margin:0 0 -5px /* <-- adjust this to move the SLOGAN up or down */ 5px;
+  margin:8px 0 0 15px;
   z-index:90;
 }
-/*GL_MOOMENU CSS**************************/
 #gl_moomenu {
-  background:#000 url(gl_moomenu1-bg.gif) repeat;  /*main menu background*/
-  height:27px;
+  background:#000 url(gl_moomenu1-bg.gif) repeat;
+  height:10px;
   margin:0;
   position:relative;
   z-index:50;
-}
-#gl_moomenu a:link{
-  color:#FFF;
-  text-decoration:none;
-  padding-top:5px;
-}
-#gl_moomenu a:hover {
-  color:#CCC;
-  text-decoration:none;
 }
 /* Installation ******************************************************************/
 .heading {
@@ -318,7 +384,7 @@ margin-left:0em;
 .installation-container {
 }
 .install-path-container-outer {
-  background: #FFFFFF;
+  background: #fff;
   border: 1px solid;
   margin-left: auto;
   margin-right: auto;
@@ -328,13 +394,7 @@ margin-left:0em;
   margin-left: auto;
   margin-right: auto;
   border: 0px solid;
-  color: #FFFFFF;
-}
-.installation-body-container {
-  background:#FFFFFF;
-  color:#000000;
-  text-align:left;
-  width:100%;
+  color: #fff;
 }
 .install-type-container-outer {
   height: 130px;
@@ -366,7 +426,7 @@ margin-left:0em;
 }
 .install a:link,
 .upgrade a:link{
-  color:#FFF;
+  color:#fff;
 }
 .upgrade-rtl {
   position: relative;
@@ -374,7 +434,7 @@ margin-left:0em;
   top: -77px;
   width: 220px;
   height: 55px;
-  background-color: #CCC;
+  background-color: #ccc;
   text-align: center;
   font-size: 20pt;
   font-family: "Verdana";
@@ -385,7 +445,7 @@ margin-left:0em;
 }
 .install a:hover,
 .upgrade a:hover{
-  color:#CCC;
+  color:#ccc;
 }
 .file-permission-list {
   padding: 0px;
@@ -408,10 +468,10 @@ margin-left:0em;
 
 /* Misc ******************************************************************/
 .error {
-  color: #FF0000;
+  color: #f00;
 }
 .codeblock  {
-  background-color:#CCC;
+  background-color:#ccc;
   color:#000;
   width: 400px;
   height: 15px;

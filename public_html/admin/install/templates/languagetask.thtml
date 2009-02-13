@@ -1,30 +1,34 @@
+<div class="step floatleft">
+  <div class="stepheading">
+    <span class="floatright">
+      <a href="screen specific link to help in wiki" target="_blank">
+        <img src="layout/help.png" alt="Online Install Help" title="Online Install Help" />
+      </a>
+    </span>
+    {step_heading}
+  </div>
 <form id="welcome" name="welcome" method="post" action="index.php">
   {hiddenfields}
-  <div style="float:left;">
-    <h1>{step_heading}</h1>
-  </div>
-  <div style="clear:both;"></div>
-  <hr />
-  <div style="float:left;vertical-align:top;width:75%;padding:10px;">
-    {lang_welcome}
-    <br />
-  </div>
 
-  <div style="float:right;vertical-align:top;width:20%;">
-    <h1>{lang_select_lanaguage}</h1>
+  <div class="stepfields">
+    <span>
+    <strong>{lang_select_language}:&nbsp;</strong>
     {language_select}
-  </div>
-
-  <div style="clear:both;"></div>
-
-  <div>
+    </span>
+    <span>
     <strong>{lang_select_task}:&nbsp;</strong>
     <select name="type">
       <option value="install">{lang_new_install}</option>
       <option value="upgrade">{lang_site_upgrade}</option>
       <option value="migrate">{lang_geeklog_migrate}</option>
     </select>
+    </span>
+    <span>
     &nbsp;&nbsp;<input type="submit" name="submit" value="{lang_proceed}" />
+    </span>
   </div>
-
+  <div class="stephelp">
+    {lang_welcome}
+  </div>
 </form>
+</div>
