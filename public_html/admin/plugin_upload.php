@@ -102,12 +102,12 @@ function processOldPlugin( $tmpDir )
     $T->set_file('form','plugin_upload_old_confirm.thtml');
 
     $T->set_var(array(
-        'form_action_url'   =>  $_CONF['site_admin_url'] .'/plugin_upload.php',
-        'action'            =>  'processoldupload',
-        'pi_name'           => $pi_name,
+        'form_action_url'    => $_CONF['site_admin_url'] .'/plugin_upload.php',
+        'action'             => 'processoldupload',
+        'pi_name'            => $pi_name,
         'plugin_old_version' => $pluginVersion,
-        'upgrade'           => $upgrade,
-        'temp_dir'          => $tmpDir,
+        'upgrade'            => $upgrade,
+        'temp_dir'           => $tmpDir,
     ));
 
     $retval .= $T->parse('output', 'form');
@@ -383,9 +383,9 @@ function processPluginUpload()
         return _pi_errorBox($errors);
     }
     // check if plugin already exists
-        // if it does, check that this is an upgrade
-            // if not, error
-        // else validate we really want to upgrade
+    // if it does, check that this is an upgrade
+    // if not, error
+    // else validate we really want to upgrade
     $result = DB_query("SELECT * FROM {$_TABLES['plugins']} WHERE pi_name='".addslashes($pluginData['id'])."'");
     if ( DB_numRows($result) > 0 ) {
         $P = DB_fetchArray($result);
@@ -443,8 +443,8 @@ function processPluginUpload()
     $T->set_file('form','plugin_upload_confirm.thtml');
 
     $T->set_var(array(
-        'form_action_url'   =>  $_CONF['site_admin_url'] .'/plugin_upload.php',
-        'action'            =>  'processupload',
+        'form_action_url'   => $_CONF['site_admin_url'] .'/plugin_upload.php',
+        'action'            => 'processupload',
         'pi_name'           => $pluginData['id'],
         'pi_version'        => $pluginData['version'],
         'pi_url'            => $pluginData['url'],
@@ -489,7 +489,10 @@ function post_uploadProcess() {
 
     $pluginData = array();
     $rc = _pi_parseXML($tmp);
-//FIXME: add error check here incase we cannot parse the XML file.
+    if ( $rc == -1 ) {
+        // no xml file found
+        return _pi_errorBox($LANG32[74]);
+    }
 
     clearstatcache();
 
@@ -614,7 +617,7 @@ function post_uploadProcess() {
                     if ( $rc === false ) {
                         COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$absoluteFileNameDist." to ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                         $masterErrorCount++;
-                        $msterErrorMsg .= "Unable to copy ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$absoluteFileNameDist." to ".$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$pathTo.$fileName."<br />";
+                        $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$absoluteFileNameDist,$_CONF['path_html'].'admin/plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                     }
                 }
             } elseif (strncmp($fileToRename,'public_html',10) == 0 ) {
@@ -644,7 +647,7 @@ function post_uploadProcess() {
                     if ( $rc === false ) {
                         COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path_html'].$pluginData['id'].'/'.$absoluteFileNameDist." to ".$_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName);
                         $masterErrorCount++;
-                        $msterErrorMsg .= "Unable to copy ".$_CONF['path_html'].$pluginData['id'].'/'.$absoluteFileNameDist." to ".$_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName."<br />";
+                        $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path_html'].$pluginData['id'].'/'.$absoluteFileNameDist,$_CONF['path_html'].$pluginData['id'].'/'.$pathTo.$fileName);
                     }
                 }
             } else {
@@ -670,7 +673,7 @@ function post_uploadProcess() {
                     if ( $rc === false ) {
                         COM_errorLog("PLG-INSTALL: Unable to copy ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName." to ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                         $masterErrorCount++;
-                        $msterErrorMsg .= "Unable to copy ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName." to ".$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName."<br />";
+                        $masterErrorMsg .= sprintf($LANG32[75],$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$absoluteFileName,$_CONF['path'].'plugins/'.$pluginData['id'].'/'.$pathTo.$fileName);
                     }
                 }
             }
@@ -681,10 +684,14 @@ function post_uploadProcess() {
     // handle masterErrorCount here, if not 0, display error and ask use to manually install via the plugin admin screen.
     // all files have been copied, so all they really should need to do is fix the error above and then run.
 
+    if ( $masterErrorCount != 0 ) {
+        $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$masterErrorMsg.'<br />'.$LANG32[44];
+        return _pi_errorBox($errorMessage);
+    }
 
     if ( $upgrade == 0 ) { // fresh install
 
-        require_once $_CONF['path'] . '/system/lib-install.php';
+        USES_lib_install();
 
         $pi_name         = $pluginData['id'];
         $pi_display_name = $pluginData['name'];
@@ -1067,7 +1074,7 @@ function _pi_test_copy($srcdir, $dstdir)
                 $srcfile = $srcdir . '/' . $file;
                 $dstfile = $dstdir . '/' . $file;
                 if(is_file($srcfile)) {
-                    if ( !is__writable($dstfile) ) {
+                    if ( !COM_isWritable($dstfile) ) {
                         $failedFiles[] = $dstfile;
                         COM_errorLog("PLG-INSTALL: Error: File '$dstfile' cannot be written");
                         $fail++;
@@ -1101,6 +1108,13 @@ function _pi_errorBox( $errMsg )
 
     $retval = '';
 
+    $retval .= '<h1>'.$LANG32[56].'</h2>';
+    $retval .= $errMsg;
+    $retval .= '<form action="'.$_CONF['site_admin_url'] . '/plugins.php" method="get">';
+    $retval .= '&nbsp;&nbsp;&nbsp;<input type="submit" name="cont" value="Continue" />';
+    $retval .= '</form>';
+    return $retval;
+
     $retval .= '<div id="msgbox" style="width:95%;margin:10px;border:1px solid black;">';
     $retval .= '<div style="padding:5px;font-weight:bold;color:#FFFFFF;background:url('.$_CONF['layout_url'].'/images/header-bg.png) #1A3955;">';
     $retval .= $LANG32[56];
@@ -1116,23 +1130,6 @@ function _pi_errorBox( $errMsg )
     return $retval;
 }
 
-function is__writable($path) {
-    if ($path{strlen($path)-1}=='/')
-        return is__writable($path.uniqid(mt_rand()).'.tmp');
-
-    if (file_exists($path)) {
-        if (!($f = @fopen($path, 'r+')))
-            return false;
-        fclose($f);
-        return true;
-    }
-
-    if (!($f = @fopen($path, 'w')))
-        return false;
-    fclose($f);
-    unlink($path);
-    return true;
-}
 
 function _pi_Header()
 {

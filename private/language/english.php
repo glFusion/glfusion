@@ -1091,6 +1091,8 @@ $LANG32 = array(
     71 => 'Continue',
     72 => 'A version of this plugin is installed but disabled. glFusion cannot upgrade a disabled plugin. Please re-enable the plugin and perform the upload again.',
     73 => 'Automated Plugin Installer',
+    74 => 'Unable to locate the plugin\'s XML description file.',
+    75 => 'Unable to copy %s to %s<br />',
 );
 
 ###############################################################################
@@ -1894,6 +1896,7 @@ $LANG_confignames['Core'] = array(
     'compress_css'  => 'Compress CSS',
     'jpg_orig_quality' => 'JPEG Quality Factor',
     'allow_embed_object' => 'Allow EMBED Object',
+    'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
 );
 
 $LANG_configsubgroups['Core'] = array(
