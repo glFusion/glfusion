@@ -112,6 +112,10 @@ function plugin_load_configuration_captcha()
 */
 function plugin_autouninstall_captcha ()
 {
+    if ( defined('DEMO_MODE') ) {
+        return '';
+    }
+
     $out = array (
         /* give the name of the tables, without $_TABLES[] */
         'tables' => array('cp_sessions'),

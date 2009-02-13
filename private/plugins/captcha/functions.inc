@@ -57,6 +57,15 @@ if (!isset($_CP_CONF['gfxDriver'])) {
     unset($_CP_CFG);
 }
 
+function plugin_enablestatechange_captcha($enable) {
+
+    if ( defined('DEMO_MODE') && $enable == false ) {
+        return -2;
+    }
+    return true;
+}
+
+
 function CAPTCHA_sid() {
     return dechex(time()).dechex(mt_rand(1,65535));
 }
