@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | siteconfig.php.dist                                                      |
+// | siteconfig.php                                                           |
 // |                                                                          |
 // | Site configuration settings                                              |
 // +--------------------------------------------------------------------------+
@@ -15,26 +15,10 @@ global $_CONF, $_SYSTEM;
 $_CONF = array();
 $_SYSTEM = array();
 
-
-// +--------------------------------------------------------------------------+
-// | If true, only site admins can submit calendar events. This will remove   |
-// | the Add to Master option for all other users.                            |
-// +--------------------------------------------------------------------------+
-$_CA_CONF['only_admin_submit']      = false;
-
 // +--------------------------------------------------------------------------+
 // | Enables 'per user' libraries for images for the Advanced Editor          |
 // +--------------------------------------------------------------------------+
 $_CONF_FCK['editor_images_by_user'] = false;
-
-// +--------------------------------------------------------------------------+
-// | If true, only display topics a user has write permissions to in the      |
-// | user submitted story editor.                                             |
-// |                                                                          |
-// | If true, anonymous (non-logged-in users) will not be able to submit      |
-// | stories since an anonymous user never has write access to a topic.       |
-// +--------------------------------------------------------------------------+
-$_CONF['story_submit_by_perm_only'] = false;
 
 
 // ** System Maintenance and debugging options **
@@ -106,8 +90,5 @@ $_CONF_FCK['imagelibrary'] = '/images/library';
 
 if (!defined('LB')) {
   define('LB',"\n");
-}
-if (!defined('VERSION')) {
-  define('VERSION', '1.5.0');
 }
 ?>
