@@ -579,8 +579,10 @@ function plugin_getadminoption_mediagallery() {
 
 
 function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
-    global $MG_albums, $_MG_CONF, $_CONF, $_MG_USERPREFS, $_TABLES, $LANG_MG00, $LANG_MG03, $side_count, $ss_count, $swfjsinclude;
+    global $MG_albums, $_MG_CONF, $_CONF, $_MG_USERPREFS, $_TABLES, $LANG_MG00, $LANG_MG03, $side_count, $swfjsinclude;
     global $mgAutoTagArray, $mg_installed_version,$glversion;
+
+    static $ss_count = 0;
 
     if ( $mg_installed_version != $_MG_CONF['pi_version'] ) {
         return $content;
@@ -775,7 +777,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                 return $content;
             }
         }
-
+        $ss_count = mt_rand(0,32768);
         switch( $autotag['tag'] ) {
             case 'download' :
                 $side_count--;
