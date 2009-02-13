@@ -365,19 +365,30 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
     }
 
-    $mailtext .= '------------------------------------------------------------'
-              . LB . LB
-              . COM_undoSpecialChars (stripslashes ($A['title'])) . LB
-              . strftime ($_CONF['date'], $A['day']) . LB;
+    if ( $html ) {
+        $mailtext .= '------------------------------------------------------------<br /><br />'
+                  . COM_undoSpecialChars (stripslashes ($A['title'])) . '<br />'
+                  . strftime ($_CONF['date'], $A['day']) . '<br />';
+    } else {
+        $mailtext .= '------------------------------------------------------------'
+                  . LB . LB
+                  . COM_undoSpecialChars (stripslashes ($A['title'])) . LB
+                  . strftime ($_CONF['date'], $A['day']) . LB;
+    }
 
     if ($_CONF['contributedbyline'] == 1) {
         $author = COM_getDisplayName ($A['uid']);
         $mailtext .= $LANG01[1] . ' ' . $author . LB;
     }
-    $mailtext .= LB
-        . COM_undoSpecialChars(stripslashes(strip_tags($A['introtext']))).LB.LB
-        . COM_undoSpecialChars(stripslashes(strip_tags($A['bodytext']))).LB.LB
-        . '------------------------------------------------------------'.LB;
+    if ( $html ) {
+        $mailtext .= $A['introtext'] . '<br />'.$A['bodytext'].'<br /><br />'
+        . '------------------------------------------------------------<br />';
+    } else {
+        $mailtext .= LB
+            . COM_undoSpecialChars(stripslashes(strip_tags($A['introtext']))).LB.LB
+            . COM_undoSpecialChars(stripslashes(strip_tags($A['bodytext']))).LB.LB
+            . '------------------------------------------------------------'.LB;
+    }
     if ($A['commentcode'] == 0) { // comments allowed
         $mailtext .= $LANG08[24] . LB
                   . COM_buildUrl ($_CONF['site_url'] . '/article.php?story='
