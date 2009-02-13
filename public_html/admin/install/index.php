@@ -1670,7 +1670,7 @@ switch($mode) {
         } else {
             require '../../siteconfig.php';
             require $_CONF['path'].'db-config.php';
-            $_GLUSION['dbconfig_path'] = $_CONF['path'];
+            $_GLFUSION['dbconfig_path'] = $_CONF['path'];
             $pageBody = INST_checkEnvironment();
         }
         break;
