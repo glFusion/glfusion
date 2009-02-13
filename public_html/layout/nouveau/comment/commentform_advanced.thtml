@@ -28,7 +28,7 @@
                             <td class="alignright" style="vertical-align:top;"><b>{lang_comment}:</b></td>
                             <td>
                                 <div id="text_editor" style="display:{show_texteditor};">
-                                    <textarea id="comment_text" name="comment" cols="60" rows="10">{comment}</textarea>
+                                    <textarea id="comment_text" name="comment" cols="60" rows="10" style="width:90%;">{comment}</textarea>
                                 </div>
                                 <div  id="html_editor" style="display:{show_htmleditor};">
                                     <textarea id="comment_html" name="comment_html" rows="10" cols="60" style="width:90%;">{comment}</textarea>
