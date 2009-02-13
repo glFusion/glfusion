@@ -4,9 +4,15 @@
 
 <div class="step floatleft">
   <div class="stepheading">
-    <span class="floatright" style="font-size:12px;">
-      <input style="vertical-align:middle;float:right" type="submit" name="submit" class="submit" value="{lang_next} &gt;&gt;" />
-    </span>
+
+     <span class="floatright" style="font-size:12px;">
+        <div class="buttons">
+            <button type="submit" name="submit" class="positive">
+                {lang_next}
+                <img src="layout/right_arrow.png" alt=""/>
+            </button>
+        </div>
+      </span>
     {lang_content_plugins}
   </div>
 

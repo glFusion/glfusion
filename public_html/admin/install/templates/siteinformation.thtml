@@ -4,10 +4,20 @@
   {hiddenfields}
 <div class="step floatleft">
   <div class="stepheading">
-    <span class="floatright" style="font-size:12px;">
-      <input style="vertical-align:middle;float:right" type="submit" name="submit" class="submit" value="{lang_install} &gt;&gt;" />
-      <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_prev}" />
-    </span>
+
+     <span class="floatright" style="font-size:12px;">
+        <div class="buttons">
+            <button type="submit" name="prev" class="positive">
+                <img src="layout/left_arrow.png" alt=""/>
+                {lang_prev}
+            </button>
+
+            <button type="submit" name="submit" class="positive">
+                {lang_install}
+                <img src="layout/right_arrow.png" alt=""/>
+            </button>
+        </div>
+      </span>
     {lang_site_information}
   </div>
 

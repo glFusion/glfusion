@@ -167,6 +167,8 @@ $LANG_INSTALL = array(
     'install_steps'             => 'INSTALL STEPS',
     'upgrade_steps'             => 'UPGRADE STEPS',
     'online_install_help'       => 'Online Install Help',
+    'online_help_text'          => 'Online Install Help<br /> at glFusion.org',
+    'path_prompt'               => 'Path to private/ directory',
 );
 
 // +---------------------------------------------------------------------------+

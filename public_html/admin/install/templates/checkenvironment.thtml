@@ -7,10 +7,19 @@
 
 <div class="step floatleft">
   <div class="stepheading">
-    <span class="floatright" style="font-size:12px;">
-      <input style="vertical-align:middle;float:right" type="submit" name="submit" class="submit" value="{button} &gt;&gt;" />
-      <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_previous}" />
-    </span>
+     <span class="floatright" style="font-size:12px;">
+        <div class="buttons">
+            <button type="submit" name="prev" class="positive">
+                <img src="layout/left_arrow.png" alt=""/>
+                {lang_previous}
+            </button>
+
+            <button type="submit" name="submit" class="positive">
+                {button}
+                <img src="layout/right_arrow.png" alt=""/>
+            </button>
+        </div>
+      </span>
     {step_heading}
   </div>
 

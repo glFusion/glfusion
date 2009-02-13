@@ -99,9 +99,6 @@ function _buildHiddenFields()
 /**
  * Builds the progress bar
  *
- * This function will ultimately be replaced with a much
- * prettier version....
- *
  * @return  string          HTML
  *
  */
@@ -124,16 +121,16 @@ function _buildProgressBar($currentStep)
     $found  = 0;
 
     $retval  = '<div class="steplist floatleft">' . LB;
-    $retval .= '   <span class="steplist-top"></span>' . LB;
-    $retval .= '        <div class="steplist-content">' . LB;
-    $retval .= '          <ul>' . LB;
-    $retval .= '            <li>' . LB;
+    $retval .= '<span class="steplist-top"></span>' . LB;
+    $retval .= '<div class="steplist-content">' . LB;
+    $retval .= '<ul>' . LB;
+    $retval .= '<li>' . LB;
     if ( $_GLFUSION['method'] == 'install' )  {
-        $retval .= '              <span class="b larger">'.$LANG_INSTALL['install_steps'].'</span>' . LB;
+        $retval .= '<span class="b larger">'.$LANG_INSTALL['install_steps'].'</span>' . LB;
     } else {
-        $retval .= '              <span class="b larger">'.$LANG_INSTALL['upgrade_steps'].'</span>' . LB;
+        $retval .= '<span class="b larger">'.$LANG_INSTALL['upgrade_steps'].'</span>' . LB;
     }
-    $retval .= '            </li>' . LB;
+    $retval .= '</li>' . LB;
 
     switch ($_GLFUSION['method']) {
         case 'install' :
@@ -165,8 +162,10 @@ function _buildProgressBar($currentStep)
             }
             break;
     }
-    $retval .= '<li style="text-align:center;"><a href="http://www.glfusion.org" target="_blank"><img src="layout/help.png" style="text-align:center;" alt="Online Install Help" title="Online Install Help" /></a></li>';
-    $retval .= '          </ul></div><div class="steplist-bottom"></div></div>' . LB;
+    $retval .= '</ul>' . LB;
+    $retval .= '<span style="float:left;padding-top:5px;padding-right:2px;"><a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:install:'.$currentStep.'" target="_blank"><img src="layout/help.png" style="text-align:center;" alt="'.$LANG_INSTALL['online_install_help'].'" title="'.$LANG_INSTALL['online_install_help'].'" /></a></span><div style="padding-top:5px;">'.$LANG_INSTALL['online_help_text'].'</div>' . LB;
+    $retval .= '</div><div class="steplist-bottom"></div></div>' . LB;
+
     return $retval;
 }
 
@@ -308,7 +307,7 @@ function INST_getLanguageTask( )
     $T->set_file('page', 'languagetask.thtml');
 
     // create language select
-    $lang_select = '<select name="lang">' . LB;
+    $lang_select = '<select name="lang" style="width:200px;">' . LB;
     foreach (glob('language/*.php') as $filename) {
         $filename = preg_replace('/.php/', '', preg_replace('/language\//', '', $filename));
         $lang_select .= '<option value="' . $filename . '"' . (($filename == $language) ? ' selected="selected"' : '') . '>' . INST_prettifyLanguageName($filename) . '</option>' . LB;
@@ -415,7 +414,7 @@ function INST_getPathSetting()
         'lang_prev'         => $LANG_INSTALL['previous'],
         'lang_sys_path_help'=> $LANG_INSTALL['system_path_prompt'],
         'lang_sys_path_exp' => $LANG_INSTALL['system_path_example'],
-        'lang_path_prompt'  => 'Path to private/ directory',
+        'lang_path_prompt'  => $LANG_INSTALL['path_prompt'],
         'hiddenfields'      => _buildHiddenFields(),
     ));
     $T->parse('output','page');
