@@ -1227,7 +1227,7 @@ if (isset ($_POST['passwd']) && isset ($_POST['passwd_conf']) &&
             $_POST['username'], $_POST['fullname'],
             $_POST['passwd'], $_POST['passwd_conf'], $_POST['email'],
             $_POST['regdate'], $_POST['homepage'],
-            $_POST['groups'],
+            $_POST['gl_groups'],
             $delphoto, $_POST['userstatus'], $_POST['oldstatus']);
     if (!empty($display)) {
         $tmp = COM_siteHeader('menu', $LANG28[22]);
