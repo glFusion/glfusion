@@ -322,7 +322,7 @@ function contactform ($uid, $subject = '', $message = '')
 *                this code
 *
 */
-function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg)
+function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG08;
 
@@ -395,7 +395,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg)
     $mailfrom = COM_formatEmailAddress ($from, $fromemail);
     $subject = COM_undoSpecialChars(strip_tags(stripslashes('Re: '.$A['title'])));
 
-    COM_mail ($mailto, $subject, $mailtext, $mailfrom);
+    COM_mail ($mailto, $subject, $mailtext, $mailfrom,$html);
     COM_updateSpeedlimit ('mail');
 
     // Increment numemails counter for story
@@ -536,7 +536,7 @@ switch ($what) {
                 if ( $_POST['postmode'] == 'html' ) {
                     $message = $_POST['message_html'];
                     $html = 1;
-                } else if ( $_POST['postmode'] == 'text' ) {
+                } else if ( $_POST['postmode'] == 'plaintext' ) {
                     $message = $_POST['message_text'];
                     $html = 0;
                 }
@@ -579,7 +579,7 @@ switch ($what) {
                 if ( $_POST['postmode'] == 'html' ) {
                     $shortmessage = $_POST['message_html'];
                     $html = 1;
-                } else if ( $_POST['postmode'] == 'text' ) {
+                } else if ( $_POST['postmode'] == 'plaintext' ) {
                     $shortmessage = $_POST['message_text'];
                     $html = 0;
                 }
