@@ -1,15 +1,19 @@
 <form action="index.php" method="post">
   <input type="hidden" name="previousstep" value="{step}" />
   {hiddenfields}
-  <div style="float:left;">
-    <h1 class="no">{title}</h1>
+
+<div class="step floatleft">
+  <div class="stepheading">
+    <span class="floatright" style="font-size:12px;">
+      <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_prev}" />
+    </span>
+    {title}
   </div>
-  <div style="float:right;">
-    <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_prev}" />
+
+  <div class="stepfields" style="width:100%;">
+    <span>
+    {text}
+    </span>
   </div>
-  <div style="clear:both;"></div>
-  <hr />
-  {text}
-  <br />
-  <br />
+</div>
 </form>

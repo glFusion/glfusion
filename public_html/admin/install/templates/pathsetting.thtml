@@ -1,26 +1,35 @@
-<form action="index.php" method="post">
+<form id="welcome" name="welcome" method="post" action="index.php">
   <input type="hidden" name="mode" value="gotpathsetting" />
   <input type="hidden" name="previousstep" value="" />
   {hiddenfields}
 
-  <div style="float:left;">
-    <h1>{step_heading}</h1>
+<div class="step floatleft">
+  <div class="stepheading">
+    <span class="floatright" style="font-size:12px;">
+      <input style="vertical-align:middle;float:right" type="submit" name="submit" class="submit" value="{lang_next} &gt;&gt;" />
+      <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_prev}" />&nbsp;&nbsp;
+    </span>
+    {step_heading}
   </div>
-  <div style="float:right;">
-    <input style="vertical-align:middle;float:right" type="submit" name="submit" class="submit" value="{lang_next} &gt;&gt;" />
-    <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_prev}" />&nbsp;&nbsp;
-  </div>
-  <div style="clear:both;"></div>
-  <hr />
 
-  <p style="margin-bottom:20px;">
-    {lang_sys_path_help}
-  </p>
+  <div class="stepfields">
+    <span>
 
-  <p>
-    <label>db-config.php</label>
-    <input type="text" name="private_path" value="{dbconfig_path}" size="65" /><br />
+    <label>{lang_path_prompt}</label><br />
+    <input type="text" name="private_path" value="{dbconfig_path}" size="50" /><br />
+    <br />
     {lang_sys_path_exp}
-  </p>
+
+    </span>
+  </div>
+
+
+
+  <div class="stephelp">
+    {lang_sys_path_help}
+  </div>
+
+</div>
 </form>
-<br />
+
+

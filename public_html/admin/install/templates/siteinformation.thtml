@@ -2,21 +2,21 @@
   <input type="hidden" name="mode" value="gotsiteinformation" />
   <input type="hidden" name="previousstep" value="checkenvironment" />
   {hiddenfields}
-  <div style="float:left;">
-    <h1>{lang_site_information}</h1>
+<div class="step floatleft">
+  <div class="stepheading">
+    <span class="floatright" style="font-size:12px;">
+      <input style="vertical-align:middle;float:right" type="submit" name="submit" class="submit" value="{lang_install} &gt;&gt;" />
+      <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_prev}" />
+    </span>
+    {lang_site_information}
   </div>
-  <div style="float:right;">
-    <input style="vertical-align:middle;float:right" type="submit" name="submit" class="submit" value="{lang_install} &gt;&gt;" />
-    <input style="vertical-align:middle;float:right" type="submit" name="prev" class="submit" value="&lt;&lt; {lang_prev}" />
-  </div>
-  <div style="clear:both;"></div>
-  <hr />
-  <div class="glform">
-    <div style="width:60%;float:left;">
+
+  <div class="stepfields">
+    <span>
       <p>
         <label class="label-left">
           {lang_database_type}
-        </label>
+        </label><br />
         <select name="dbtype">
          <option value="mysql" {noinnodb_selected}>MySQL</option>
          <option value="mysql-innodb" {innodb_selected}>MySQL with InnoDB Table support</option>
@@ -25,65 +25,68 @@
       <p>
         <label class="label-left">
           {lang_database_hostname}
-        </label>
-        <input type="text" name="dbhost" value="{db_host}" size="20" />
+        </label><br />
+        <input type="text" name="dbhost" value="{db_host}" size="50" />
       </p>
       <p>
         <label class="label-left">
           {lang_database_name}
-        </label>
-        <input type="text" name="dbname" value="{db_name}" size="20" />
+        </label><br />
+        <input type="text" name="dbname" value="{db_name}" size="50" />
       </p>
       <p>
         <label class="label-left">
           {lang_database_user}
-        </label>
-        <input type="text" name="dbuser" value="{db_user}" size="20" />
+        </label><br />
+        <input type="text" name="dbuser" value="{db_user}" size="50" />
       </p>
       <p>
         <label class="label-left">
           {lang_database_password}
-        </label>
-        <input type="password" name="dbpass" value="{db_pass}" size="20" />
+        </label><br />
+        <input type="password" name="dbpass" value="{db_pass}" size="50" />
       </p>
       <p>
         <label class="label-left">
           {lang_database_table_prefix}
-        </label>
-        <input type="text" name="dbprefix" value="{db_prefix}" size="20" />
+        </label><br />
+        <input type="text" name="dbprefix" value="{db_prefix}" size="50" />
       </p>
       <p>
-        <label class="label-left">{lang_site_name}</label>
-        <input type="text" name="sitename" value="{site_name}" size="40" />
+        <label class="label-left">{lang_site_name}</label><br />
+        <input type="text" name="sitename" value="{site_name}" size="50" />
       </p>
       <p>
-        <label class="label-left">{lang_site_slogan}</label>
-        <input type="text" name="siteslogan" value="{site_slogan}" size="40" />
+        <label class="label-left">{lang_site_slogan}</label><br />
+        <input type="text" name="siteslogan" value="{site_slogan}" size="50" />
       </p>
       <p>
-        <label class="label-left">{lang_site_email}</label>
+        <label class="label-left">{lang_site_email}</label><br />
         <input type="text" name="sitemail" value="{site_mail}" size="50" />
       </p>
       <p>
-        <label class="label-left">{lang_site_noreply_email}</label>
+        <label class="label-left">{lang_site_noreply_email}</label><br />
         <input type="text" name="noreplymail" value="{noreply_mail}" size="50" />
       </p>
       <p>
-        <label class="label-left">{lang_site_url}</label>
-        <input type="text" name="siteurl" value="{site_url}" size="40" />
+        <label class="label-left">{lang_site_url}</label><br />
+        <input type="text" name="siteurl" value="{site_url}" size="50" />
       </p>
       <p>
-        <label class="label-left">{lang_site_admin_url}</label>
-        <input type="text" name="siteadminurl" value="{site_admin_url}" size="40" />
+        <label class="label-left">{lang_site_admin_url}</label><br />
+        <input type="text" name="siteadminurl" value="{site_admin_url}" size="50" />
       </p>
       <p>
         <label class="label-left">{lang_utf8}</label>
         <input type="checkbox" name="use_utf8" checked="checked" />
       </p>
-      <br />
-    </div>
-    <div style="width:38%;float:right;">
-      {lang_sitedata_help}
-    </div>
+
+    </span>
   </div>
+
+  <div class="stephelp">
+    {lang_sitedata_help}
+  </div>
+
+</div>
 </form>

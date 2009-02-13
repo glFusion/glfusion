@@ -22,30 +22,4 @@
     </div>
     <div id="gl_moomenu"></div>
     <div id="gl_wrapper">
-
-        <div class="steplist floatleft">
-          <span class="steplist-top"></span>
-            <div class="steplist-content">
-              <ul>
-                <li>
-                  <span class="b larger">INSTALL STEPS</span>
-                </li>
-                <li class="complete">
-                  Language & Task
-                </li>
-                <li class="current">
-                  Path Settings
-                </li>
-                <li>
-                  Environment Check
-                </li>
-                <li>
-                  Site Information
-                </li>
-                <li>
-                  Content & Plugins
-                </li>
-              </ul>
-            </div>
-          <div class="steplist-bottom"></div>
-        </div>
+        {progress_bar}

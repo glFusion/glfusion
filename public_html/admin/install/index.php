@@ -109,38 +109,44 @@ function _buildProgressBar($currentStep)
 {
     global $_GLFUSION, $LANG_INSTALL;
 
-    $installSteps = array('languagetask'        => 'Language & Task',
-                          'pathsetting'         => 'Path Settings',
-                          'checkenvironment'    => 'Environment Check',
-                          'getsiteinformation'  => 'Site Information',
-                          'contentplugins'      => 'Content & Plugins');
+    $installSteps = array('languagetask'        => $LANG_INSTALL['language_task'],
+                          'pathsetting'         => $LANG_INSTALL['path_settings'],
+                          'checkenvironment'    => $LANG_INSTALL['env_check'],
+                          'getsiteinformation'  => $LANG_INSTALL['site_info'],
+                          'contentplugins'      => $LANG_INSTALL['content_plugins']);
 
-    $upgradeSteps = array('welcome'     => $LANG_INSTALL['welcome'],
-                          'checkenvironment'  => $LANG_INSTALL['env_check'],
-                          'upgrade'     => $LANG_INSTALL['perform_upgrade'],
+    $upgradeSteps = array('languagetask'        => $LANG_INSTALL['language_task'],
+                          'checkenvironment'    => $LANG_INSTALL['env_check'],
+                          'upgrade'             => $LANG_INSTALL['perform_upgrade'],
                           );
     $retval = '';
     $first  = 0;
     $found  = 0;
+
+    $retval  = '<div class="steplist floatleft">' . LB;
+    $retval .= '   <span class="steplist-top"></span>' . LB;
+    $retval .= '        <div class="steplist-content">' . LB;
+    $retval .= '          <ul>' . LB;
+    $retval .= '            <li>' . LB;
+    if ( $_GLFUSION['method'] == 'install' )  {
+        $retval .= '              <span class="b larger">'.$LANG_INSTALL['install_steps'].'</span>' . LB;
+    } else {
+        $retval .= '              <span class="b larger">'.$LANG_INSTALL['upgrade_steps'].'</span>' . LB;
+    }
+    $retval .= '            </li>' . LB;
 
     switch ($_GLFUSION['method']) {
         case 'install' :
             foreach ($installSteps AS $step => $desc) {
                 if ( $step == $currentStep ) {
                     $found++;
-                    if ( $first != 0 ) {
-                        $retval .= ' -> ';
-                    } else {
-                        $first++;
-                    }
-                    $retval .= '<strong>'.$desc.'</strong>';
+                    $retval .= '<li class="current">'.$desc.'</li>';
                 } else {
-                    if ( $first != 0 ) {
-                        $retval .= ' -> ';
+                    if ( $found ) {
+                        $retval .= '<li>'.$desc.'</li>';
                     } else {
-                        $first++;
+                        $retval .= '<li class="complete">'.$desc.'</li>';
                     }
-                    $retval .= $desc;
                 }
             }
             break;
@@ -148,26 +154,19 @@ function _buildProgressBar($currentStep)
             foreach ($upgradeSteps AS $step => $desc) {
                 if ( $step == $currentStep ) {
                     $found++;
-                    if ( $first != 0 ) {
-                        $retval .= ' -> ';
-                    } else {
-                        $first++;
-                    }
-                    $retval .= '<strong>'.$desc.'</strong>';
+                    $retval .= '<li class="current">'.$desc.'</li>';
                 } else {
-                    if ( $first != 0 ) {
-                        $retval .= ' -> ';
+                    if ( $found ) {
+                        $retval .= '<li>'.$desc.'</li>';
                     } else {
-                        $first++;
+                        $retval .= '<li class="complete">'.$desc.'</li>';
                     }
-                    $retval .= $desc;
                 }
             }
             break;
     }
-    if ( $found == 0 ) {
-        $retval = '';
-    }
+    $retval .= '<li style="text-align:center;"><a href="http://www.glfusion.org" target="_blank"><img src="layout/help.png" style="text-align:center;" alt="Online Install Help" title="Online Install Help" /></a></li>';
+    $retval .= '          </ul></div><div class="steplist-bottom"></div></div>' . LB;
     return $retval;
 }
 
@@ -272,6 +271,7 @@ function _displayError($error,$step,$errorText='')
     }
     $T->set_var('step',$step);
     $T->set_var('hiddenfields',_buildHiddenFields());
+    $T->set_var('lang_online_install_help',$LANG_INSTALL['online_install_help']);
 
     $T->parse('output','page');
     return $T->finish($T->get_var('output'));
@@ -415,6 +415,7 @@ function INST_getPathSetting()
         'lang_prev'         => $LANG_INSTALL['previous'],
         'lang_sys_path_help'=> $LANG_INSTALL['system_path_prompt'],
         'lang_sys_path_exp' => $LANG_INSTALL['system_path_example'],
+        'lang_path_prompt'  => 'Path to private/ directory',
         'hiddenfields'      => _buildHiddenFields(),
     ));
     $T->parse('output','page');
@@ -445,6 +446,8 @@ function INST_gotPathSetting($dbc_path = '')
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
+
+    $_GLFUSION['currentstep'] = 'pathsetting';
 
     // was it passed from the previous step, or via $_POST?
     if ( $dbc_path == '' ) {
@@ -900,6 +903,8 @@ function INST_gotSiteInformation()
         return $rc;
     }
 
+    $_GLFUSION['currentstep'] = 'getsiteinformation';
+
     $dbconfig_path = $_GLFUSION['dbconfig_path'];
 
     include $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php';
@@ -1264,7 +1269,7 @@ function INST_installAndContentPlugins()
     $T->set_file('page','contentplugins.thtml');
 
     $T->set_var(array(
-        'lang_almost_done'          =>  $LANG_INSTALL['almost_done'],
+        'lang_content_plugins'      =>  $LANG_INSTALL['content_plugins'],
         'lang_step_description'     =>  $LANG_INSTALL['step_description'],
         'lang_load_sample_content'  =>  $LANG_INSTALL['load_sample_content'],
         'lang_calendar'             =>  $LANG_INSTALL['calendar'],
