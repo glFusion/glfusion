@@ -198,8 +198,10 @@ function changePluginStatus ($pi_name_arr)
             PLG_enableStateChange ($P['pi_name'], true);
             DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '{$P['pi_name']}'");
         } else if (!isset($pi_name_arr[$P['pi_name']]) && $P['pi_enabled'] == 1) {  // disable it
-            PLG_enableStateChange ($P['pi_name'], false);
-            DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '{$P['pi_name']}'");
+            $rc = PLG_enableStateChange ($P['pi_name'], false);
+            if ( $rc !== -2 ) {
+                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '{$P['pi_name']}'");
+            }
         }
     }
     CTL_clearCache();
