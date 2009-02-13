@@ -572,10 +572,10 @@ function modDownloadS() {
     $cid = $_POST["cid"];
 
     if (($_POST["url"]) || ($_POST["url"]!="")) {
+        $fileurl    = COM_applyFilter($_POST['url']);
         $url = rawurlencode($myts->makeTboxData4Save($_POST['url']));
     }
     $silentEdit = COM_applyFilter($_POST['silentedit'],true);
-    $fileurl    = COM_applyFilter($_POST['url']);
 
     $currentfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'url', "lid='{$_POST['lid']}'");
     $currentfileFQN = $filemgmt_FileStore . $myts->makeTboxData4Save(rawurldecode($currentfile));
@@ -602,7 +602,7 @@ function modDownloadS() {
             }
         }
     } else if ( !empty ($fileurl) )  {
-        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$fileurl',size='n/a' WHERE lid='{$_POST['lid']}'");
+        $url = $fileurl;
     }
     $currentsnapfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'logourl', "lid='{$_POST['lid']}'");
     $currentSnapFQN = $filemgmt_SnapStore . $myts->makeTboxData4Save(rawurldecode($currentsnapfile));
