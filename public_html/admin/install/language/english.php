@@ -44,15 +44,14 @@
 $LANG_CHARSET = 'iso-8859-1';
 
 // +---------------------------------------------------------------------------+
-// install.php
+// index.php
 
 $LANG_INSTALL = array(
-    'almost_done'               => 'We\'re Almost Done',
     'calendar'                  => 'Calendar Plugin',
     'calendar_desc'             => 'An online calendar / event system. Includes a site wide calendar and personal calendars for your site users.',
     'connection_setting_help'   => '<p>Select the type of database from the drop down list. This will generally be MySQL.</p><p>Enter the hostname of the database server glFusion will be installed on. This may not necessarily be the same as your Web server so check with your hosting provider if you are not sure.</p><p>Enter the MySQL username, password and database name you wish to use with glFusion. These must already exist for the database you are going to use.</p><p>Some hosting providers allow only a specific database name per account. If this is the case with your setup, use the table prefix option to differentiate more than one glFusion site. </p>',
     'connection_settings'       => 'Connection Settings',
-    'wizard_version'             => 'v' . GVERSION . ' Installation Wizard',
+    'content_plugins'           => 'Content & Plugins',
     'copyright'                 => '<a href="http://www.glfusion.org" target="_blank">glFusion</a> is free software released under the <a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 License.</a>',
     'core_upgrade_error'        => 'There was an error performing the core upgrade.',
     'correct_perms'             => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
@@ -86,9 +85,10 @@ $LANG_INSTALL = array(
     'hosting_env'               => 'Hosting Environment Check',
     'install'                   => 'Install',
     'install_heading'           => 'glFusion Installation',
-    'installation'				=> 'Installation',
+    'install_steps'             => 'INSTALL STEPS',
     'invalid_geeklog_version'   => 'The installer is unable to locate the siteconfig.php file. Are you sure you are migrating from Geeklog v1.5.0 or higher?  If you have an older Geeklog installation, please upgrade it to at least Geeklog v1.5.0 and then try the migration again.',
     'language'                  => 'Language',
+    'language_task'             => 'Language & Task',
     'libcustom_not_writable'    => 'lib-custom.php is not writable.',
     'links'                     => 'Links Plugin',
     'links_desc'                => 'An links management system. Allows you to collect and present links to other interesting sites organized by categories.',
@@ -109,8 +109,12 @@ $LANG_INSTALL = array(
     'off'                       => 'Off',
     'ok'                        => 'OK',
     'on'                        => 'On',
+    'online_help_text'          => 'Online Install Help<br /> at glFusion.org',
+    'online_install_help'       => 'Online Install Help',
     'open_basedir'				=> 'If open_basedir restrictions are enabled on your site, it may cause permission problems during the install. The file system check below should point out any issues.',
     'path_info'					=> 'Path Information',
+    'path_prompt'               => 'Path to private/ directory',
+    'path_settings'             => 'Path Settings',
     'perform_upgrade'			=> 'Perform Upgrade',
     'php_req_version'			=> 'glFusion requires PHP version 4.3.0 or newer',
     'php_settings'				=> 'PHP Settings',
@@ -118,12 +122,11 @@ $LANG_INSTALL = array(
     'php_warning'				=> 'If any of the items to the left are marked in <strong>red</strong>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
     'plugin_install'			=> 'Plugin Installation',
     'plugin_upgrade_error'      => 'There was a problem upgrading the %s plugin, please check the error.log for more details.<br />',
-    'plugin_upgrade_error'      => 'There were errors updating the standard plugins.',
     'plugin_upgrade_error_desc' => 'The following plugins were not upgraded. Please refer to the error.log for more details.<br />',
     'polls'                     => 'Polls Plugin',
     'polls_desc'                => 'Online Poll system. Allows you to create polls for your site users to vote on various topics.',
     'post_max_size'				=> 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the maximum post size.',
-    'previous'                  => 'Previous',
+    'previous'                  => 'Back',
     'proceed'                   => 'Proceed',
     'recommended'               => 'Recommended',
     'register_globals'			=> 'If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.',
@@ -150,25 +153,17 @@ $LANG_INSTALL = array(
     'siteconfig_not_writable'   => 'The siteconfig.php file is not writable, or the directory where siteconfig.php is stored is not writable. Please correct this issue before proceeding.',
     'sitedata_help'             => 'Select the type of database from the drop down list. This is generally <strong>MySQL</strong><br /><br />Enter the hostname of the database server. This may not be the same as your web server so check with your hosting provider if you are not sure.<br /><br />Enter the database username, password, and database name for the database.  The database <strong>must</strong> already exist.<br /><br />Enter a table prefix to be used for the database tables.<br /><br />Enter the site name, slogan, and contact emails. The <strong>no reply email</strong> will be used to send new user and password reset emails.<br /><br />Select whether or not to use UTF-8 character set. This should generally be checked.',
     'sitedata_missing'          => 'The following problems were detected with the site data you entered:',
-    'step_description'          => 'Congradulations! The base glFusion system has been installed.  We are not completely done, one more step remains.  Select from the list of plugins below to install:',
     'system_path'               => 'System / Private Path',
     'system_path_example'       => 'Examples:<br />/home/www/glfuison/private<br />c:/www/glfusion/private',
     'system_path_prompt'        => 'Enter the path to the private/ directory.  This is the location where you placed the <strong>private/</strong> directory on the server.  This directory also contains the db-config.php or db-config.php.dist file.<br /><br />Please enter the full, absolute path to this directory.',
     'unable_mkdir'              => 'Unable to create directory',
     'upgrade_error'             => 'Upgrade Error',
     'upgrade_error_text'        => 'An error occured while upgrading your glFusion installation.',
+    'upgrade_steps'             => 'UPGRADE STEPS',
     'upload_max_filesize'		=> 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
     'use_utf8'                  => 'Use UTF-8',
-    'welcome'					=> 'Welcome',
     'welcome_help'              => 'Welcome to the glFusion CMS Installer.  The installer allows you to install glFusion, upgrade an existing glFusion site, or migrate from an existing Geeklog v1.5 site.<br /><br />The installer will perform several checks to ensure your hosting environment is properly configured.<br /><br />For new site installations, the installer will allow you to customize your site\'s name and slogan.  You will also have the opporutnity to select which plugins you would like to install and whether you want to have the sample data loaded.<br /><br />When upgrading an existing glFusion site, the installer will perform all the necessary database upgrades and upgrade all the bundled plugins.<br /><br />Please select the language to use and the task to perform, then press <strong>Proceed</strong>.',
-    'language_task'             => 'Language & Task',
-    'path_settings'             => 'Path Settings',
-    'content_plugins'           => 'Content & Plugins',
-    'install_steps'             => 'INSTALL STEPS',
-    'upgrade_steps'             => 'UPGRADE STEPS',
-    'online_install_help'       => 'Online Install Help',
-    'online_help_text'          => 'Online Install Help<br /> at glFusion.org',
-    'path_prompt'               => 'Path to private/ directory',
+    'wizard_version'             => 'v' . GVERSION . ' Installation Wizard',
 );
 
 // +---------------------------------------------------------------------------+
@@ -198,25 +193,4 @@ $LANG_SUCCESS = array(
     20 => 'installed',
     21 => 'upgraded'
 );
-
-// +---------------------------------------------------------------------------+
-// help.php
-
-$LANG_HELP = array(
-    0 => 'glFusion Installation Support',
-    1 => 'The name of your website.',
-    2 => 'A simple description of your website.',
-    3 => 'glFusion can be installed using a MySQL database.<br><br><strong>Note:</strong> InnoDB Tables may improve performance on (very) large sites, but they also make database backups more complicated.',
-    4 => 'The network name (or IP address) of your database server. This is typically "localhost". If you are not sure contact your hosting provider.',
-    5 => 'The name of your database. If you are not sure what this is contact your hosting provider.',
-    6 => 'Your database user account. If you are not sure what this is contact your hosting provider.',
-    7 => 'Your database account password. If you are not sure what this is contact your hosting provider.',
-    8 => 'Some users want to install multiple copies of glFusion on the same database. In order for each copy of glFusion to function correctly it must have its own unique table prefix (i.e. gl1_, gl2_, etc).',
-    9 => 'Make sure this is the correct URL to your site, i.e. to where glFusion\'s <code>index.php</code> file resides (no trailing slash).',
-    10 => 'Some hosting services have a preconfigured admin directory. In that case, you need to rename glFusion\'s admin directory to something like "myadmin" and change the following URL as well. Leave as is until you experience any problems accessing glFusion\'s admin menu.',
-    11 => 'This is the return address for all email sent by glFusion and contact info displayed in syndication feeds.',
-    12 => 'This is the sender\'s address of emails sent by the system when users register, etc. This should be either the same as Site Email or a bouncing address to prevent spammers from getting your email address by registering on the site. If this is NOT the same as above, there will be a message in sent messages that replying to those emails is recommended.',
-    13 => 'Indicate whether to use UTF-8 as the default character set for your site. Recommended especially for multi-lingual setups.'
-);
-
 ?>

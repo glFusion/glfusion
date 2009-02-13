@@ -1269,7 +1269,6 @@ function INST_installAndContentPlugins()
 
     $T->set_var(array(
         'lang_content_plugins'      =>  $LANG_INSTALL['content_plugins'],
-        'lang_step_description'     =>  $LANG_INSTALL['step_description'],
         'lang_load_sample_content'  =>  $LANG_INSTALL['load_sample_content'],
         'lang_calendar'             =>  $LANG_INSTALL['calendar'],
         'lang_filemgmt'             =>  $LANG_INSTALL['filemgmt'],
