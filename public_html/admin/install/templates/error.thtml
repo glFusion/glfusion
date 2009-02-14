@@ -1,26 +1,19 @@
 <form action="index.php" method="post">
   <input type="hidden" name="previousstep" value="{step}" />
   {hiddenfields}
-
-<div class="step floatleft">
-  <div class="stepheading">
-
-     <span class="floatright" style="font-size:12px;">
-        <div class="buttons">
-            <button type="submit" name="prev" class="positive">
-                <img src="layout/left_arrow.png" alt=""/>
-                {lang_prev}
-            </button>
-        </div>
+  <div class="step floatleft">
+    <div class="stepheading">
+      <span class="floatright buttons">
+        <button type="submit" name="prev">
+          <img src="layout/arrow-back.png" alt=""/>
+          {lang_prev}
+        </button>
       </span>
-
-    {title}
+      {title}
+    </div>
+    <div class="stepfields-error">
+      <img src="layout/error.png" alt=""/>
+      <p>{text}</p>
+    </div>
   </div>
-
-  <div class="stepfields" style="width:100%;">
-    <span>
-    {text}
-    </span>
-  </div>
-</div>
 </form>

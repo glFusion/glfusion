@@ -163,7 +163,7 @@ function _buildProgressBar($currentStep)
             break;
     }
     $retval .= '</ul>' . LB;
-    $retval .= '<span style="float:left;padding-top:5px;padding-right:2px;"><a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:install:'.$currentStep.'" target="_blank"><img src="layout/help.png" style="text-align:center;" alt="'.$LANG_INSTALL['online_install_help'].'" title="'.$LANG_INSTALL['online_install_help'].'" /></a></span><div style="padding-top:5px;">'.$LANG_INSTALL['online_help_text'].'</div>' . LB;
+    $retval .= '<div class="steplist-help"><span><a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:install:'.$currentStep.'" target="_blank"><img src="layout/help.png"  alt="'.$LANG_INSTALL['online_install_help'].'" title="'.$LANG_INSTALL['online_install_help'].'" /></a></span>'.$LANG_INSTALL['online_help_text'].'</div>' . LB;
     $retval .= '</div><div class="steplist-bottom"></div></div>' . LB;
 
     return $retval;
@@ -208,7 +208,7 @@ function _displayError($error,$step,$errorText='')
     $T->set_file('page', 'error.thtml');
 
     $T->set_var('title',$LANG_INSTALL['error']);
-    $T->set_var('lang_prev',$LANG_INSTALL['return']);
+    $T->set_var('lang_prev',$LANG_INSTALL['previous']);
     switch ($error) {
         case SESSION_EXPIRED :
             $T->set_var('text',$LANG_INSTALL['session_error']);
@@ -413,7 +413,6 @@ function INST_getPathSetting()
         'lang_next'         => $LANG_INSTALL['next'],
         'lang_prev'         => $LANG_INSTALL['previous'],
         'lang_sys_path_help'=> $LANG_INSTALL['system_path_prompt'],
-        'lang_sys_path_exp' => $LANG_INSTALL['system_path_example'],
         'lang_path_prompt'  => $LANG_INSTALL['path_prompt'],
         'hiddenfields'      => _buildHiddenFields(),
     ));

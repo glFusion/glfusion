@@ -2,41 +2,27 @@
   <input type="hidden" name="mode" value="gotpathsetting" />
   <input type="hidden" name="previousstep" value="" />
   {hiddenfields}
-
-
-
-
-
-
-
   <div class="step floatleft">
     <div class="stepheading">
-      <span class="floatright" style="font-size:12px;">
-        <div class="buttons">
-            <button type="submit" name="prev" class="positive">
-                <img src="layout/left_arrow.png" alt=""/>
-                {lang_prev}
-            </button>
-
-            <button type="submit" name="submit" class="positive">
-                {lang_next}
-                <img src="layout/right_arrow.png" alt=""/>
-            </button>
-        </div>
+      <span class="floatright buttons">
+        <button type="submit" name="prev">
+          <img src="layout/arrow-back.png" alt=""/>
+          {lang_prev}
+        </button>
+        <button type="submit" name="submit">
+          {lang_next}
+          <img src="layout/arrow-next.png" alt=""/>
+        </button>
       </span>
       {step_heading}
     </div>
-
     <div class="stepfields">
       <span>
-        <label>{lang_path_prompt}</label><br />
-        <input type="text" name="private_path" value="{dbconfig_path}" size="50" />
-        <br />
-        <br />
+        <label>{lang_path_prompt}:</label><br />
+        <input type="text" name="private_path" value="{dbconfig_path}" size="46" />
         {lang_sys_path_exp}
       </span>
     </div>
-
     <div class="stephelp">
       {lang_sys_path_help}
     </div>

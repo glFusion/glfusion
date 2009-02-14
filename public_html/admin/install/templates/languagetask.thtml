@@ -2,29 +2,26 @@
   {hiddenfields}
   <div class="step floatleft">
     <div class="stepheading">
-      <span class="floatright" style="font-size:12px;">
-        <div class="buttons">
-            <button type="submit" name="submit" class="positive">
-                {lang_proceed}
-            </button>
-        </div>
-
+      <span class="floatright buttons">
+        <button type="submit" name="submit">
+          {lang_next}
+          <img src="layout/arrow-next.png" alt=""/>
+        </button>
       </span>
       {step_heading}
     </div>
     <div class="stepfields">
       <span>
-        <label style="font-weight:bold;font-size:14px;">{lang_select_task}:</label><br />
-        <select name="type" style="width:200px;">
+        <label>{lang_select_language}:</label><br />
+        {language_select}
+      </span>
+      <span>
+        <label>{lang_select_task}:</label><br />
+        <select name="type">
           <option value="install">{lang_new_install}</option>
           <option value="upgrade">{lang_site_upgrade}</option>
           <option value="migrate">{lang_geeklog_migrate}</option>
         </select>
-      </span>
-      <br /><br /><br />
-      <span>
-        <label style="font-weight:bold;font-size:14px;">{lang_select_language}:</label><br />
-        {language_select}
       </span>
     </div>
     <div class="stephelp">
