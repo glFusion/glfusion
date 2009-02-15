@@ -2,101 +2,82 @@
   <input type="hidden" name="mode" value="gotsiteinformation" />
   <input type="hidden" name="previousstep" value="checkenvironment" />
   {hiddenfields}
-<div class="step floatleft">
-  <div class="stepheading">
-
-     <span class="floatright" style="font-size:12px;">
-        <div class="buttons">
-            <button type="submit" name="prev" class="positive">
-                <img src="layout/left_arrow.png" alt=""/>
-                {lang_prev}
-            </button>
-
-            <button type="submit" name="submit" class="positive">
-                {lang_install}
-                <img src="layout/right_arrow.png" alt=""/>
-            </button>
-        </div>
+  <div class="step floatleft">
+    <div class="stepheading">
+      <span class="floatright buttons">
+        <button type="submit" name="prev">
+          <img src="layout/arrow-back.png" alt=""/>
+          {lang_prev}
+        </button>
+        <button type="submit" name="submit">
+          {lang_install}
+          <img src="layout/arrow-next.png" alt=""/>
+        </button>
       </span>
-    {lang_site_information}
-  </div>
-
-  <div class="stepfields">
-    <span>
-      <p>
-        <label class="label-left">
-          {lang_database_type}
-        </label><br />
+      {lang_site_information}
+    </div>
+    <div class="stepfields">
+      <span>
+        <label>{lang_database_type}:</label><br />
         <select name="dbtype">
-         <option value="mysql" {noinnodb_selected}>MySQL</option>
-         <option value="mysql-innodb" {innodb_selected}>MySQL with InnoDB Table support</option>
+          <option value="mysql" {noinnodb_selected}>MySQL</option>
+          <option value="mysql-innodb" {innodb_selected}>MySQL with InnoDB Table support</option>
         </select>
-      </p>
-      <p>
-        <label class="label-left">
-          {lang_database_hostname}
-        </label><br />
-        <input type="text" name="dbhost" value="{db_host}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">
-          {lang_database_name}
-        </label><br />
-        <input type="text" name="dbname" value="{db_name}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">
-          {lang_database_user}
-        </label><br />
-        <input type="text" name="dbuser" value="{db_user}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">
-          {lang_database_password}
-        </label><br />
-        <input type="password" name="dbpass" value="{db_pass}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">
-          {lang_database_table_prefix}
-        </label><br />
-        <input type="text" name="dbprefix" value="{db_prefix}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">{lang_site_name}</label><br />
-        <input type="text" name="sitename" value="{site_name}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">{lang_site_slogan}</label><br />
-        <input type="text" name="siteslogan" value="{site_slogan}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">{lang_site_email}</label><br />
-        <input type="text" name="sitemail" value="{site_mail}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">{lang_site_noreply_email}</label><br />
-        <input type="text" name="noreplymail" value="{noreply_mail}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">{lang_site_url}</label><br />
-        <input type="text" name="siteurl" value="{site_url}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">{lang_site_admin_url}</label><br />
-        <input type="text" name="siteadminurl" value="{site_admin_url}" size="50" />
-      </p>
-      <p>
-        <label class="label-left">{lang_utf8}</label>
+        <label>&nbsp;&nbsp;{lang_utf8}:</label>
         <input type="checkbox" name="use_utf8" checked="checked" />
-      </p>
-
-    </span>
+      </span>
+      <span>
+        <label>{lang_database_hostname}:</label><br />
+        <input type="text" name="dbhost" value="{db_host}" size="46" />
+      </span>
+      <span>
+        <label>{lang_database_name}:</label><br />
+        <input type="text" name="dbname" value="{db_name}" size="46" />
+      </span>
+      <span>
+        <label>{lang_database_user}:</label><br />
+        <input type="text" name="dbuser" value="{db_user}" size="46" />
+      </span>
+      <span>
+        <label>{lang_database_password}:</label><br />
+        <input type="password" name="dbpass" value="{db_pass}" size="46" />
+      </span>
+      <span>
+        <label>{lang_database_table_prefix}:</label><br />
+        <input type="text" name="dbprefix" value="{db_prefix}" size="46" />
+      </span>
+      <span>
+        <label>{lang_site_name}:</label><br />
+        <input type="text" name="sitename" value="{site_name}" size="46" />
+      </span>
+      <span>
+        <label>{lang_site_slogan}:</label><br />
+        <input type="text" name="siteslogan" value="{site_slogan}" size="46" />
+      </span>
+      <span>
+        <label>{lang_site_email}:</label><br />
+        <input type="text" name="sitemail" value="{site_mail}" size="46" />
+      </span>
+      <span>
+        <label>{lang_site_noreply_email}:</label><br />
+        <input type="text" name="noreplymail" value="{noreply_mail}" size="46" />
+      </span>
+      <span>
+        <label>{lang_site_url}:</label><br />
+        <input type="text" name="siteurl" value="{site_url}" size="46" />
+      </span>
+      <span>
+        <label>{lang_site_admin_url}:</label><br />
+        <input type="text" name="siteadminurl" value="{site_admin_url}" size="46" />
+      </span>
+      <span>
+        <a href="#top" id="back-to-top">
+          <img title="{back_to_top}" alt="{back_to_top}" src="layout/top.png"/>&nbsp;{back_to_top}
+        </a>
+      </span>
+    </div>
+    <div class="stephelp">
+      {lang_sitedata_help}
+    </div>
   </div>
-
-  <div class="stephelp">
-    {lang_sitedata_help}
-  </div>
-
-</div>
 </form>

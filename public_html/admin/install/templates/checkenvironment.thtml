@@ -4,58 +4,50 @@
   <input type="hidden" name="dbconfig_path" value="{dbconfig_path}" />
   <input type="hidden" name="previousstep" value="{previousaction}" />
   {hiddenfields}
-
-<div class="step floatleft">
-  <div class="stepheading">
-     <span class="floatright" style="font-size:12px;">
-        <div class="buttons">
-            <button type="submit" name="prev" class="positive">
-                <img src="layout/left_arrow.png" alt=""/>
-                {lang_previous}
-            </button>
-
-            <button type="submit" name="submit" class="positive">
-                {button}
-                <img src="layout/right_arrow.png" alt=""/>
-            </button>
-        </div>
+  <div class="step floatleft">
+    <div class="stepheading">
+      <span class="floatright buttons">
+        <button type="submit" name="prev">
+          <img src="layout/arrow-back.png" alt=""/>
+          {lang_previous}
+        </button>
+        <button type="submit" name="submit">
+          {button}
+          <img src="layout/arrow-next.png" alt=""/>
+        </button>
       </span>
-    {step_heading}
-  </div>
-
-  <div class="stepfields" style="width:100%;">
-    <span>
-      <h2>{lang_php_settings}</h2>
-      <p style="padding-left:5px;">
+      {step_heading}
+    </div>
+    <div class="stepfields-envchk">
+      <h2 class="top">{lang_php_settings}</h2>
+      <p>
         {lang_php_warning}
       </p>
-
-      <table style="width:100%;">
-      <tr>
-       <td style="width:100%;vertical-align:top;">
-         <table style="width:100%;" cellpadding="2">
-           <tr>
-             <th>{lang_setting}</th>
-             <th>{lang_current}</th>
-             <th>{lang_recommended}</th>
-             <th>{lang_notes}</th>
-           </tr>
-           <!-- BEGIN envs -->
-           <tr>
-             <td>{item}</td>
-             <td style="text-align:left;">{status}</td>
-             <td>{recommended}</td>
-             <td>{notes}</td>
-           </tr>
-           <!-- END envs -->
-         </table>
-       </td>
-      </tr>
+      <table>
+        <tr>
+          <td>
+            <table cellpadding="2">
+              <tr>
+                <th>{lang_setting}</th>
+                <th>{lang_current}</th>
+                <th>{lang_recommended}</th>
+                <th>{lang_notes}</th>
+              </tr>
+              <!-- BEGIN envs -->
+              <tr>
+                <td>{item}</td>
+                <td class="aligncenter">{status}</td>
+                <td class="aligncenter">{recommended}</td>
+                <td>{notes}</td>
+              </tr>
+              <!-- END envs -->
+            </table>
+          </td>
+        </tr>
       </table>
-
       <h2>{lang_filesystem}</h2>
       <hr />
-      <table style="width:100%;">
+      <table>
         <!-- BEGIN perms -->
         <tr class="pluginRow{rowclass}">
           <td style="width:80%;">{location}</td>
@@ -63,8 +55,6 @@
         </tr>
         <!-- END perms -->
       </table>
-
-    </span>
+    </div>
   </div>
-</div>
 </form>

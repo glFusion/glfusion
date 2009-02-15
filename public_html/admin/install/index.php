@@ -842,6 +842,7 @@ function INST_getSiteInformation()
     }
 
     $T->set_var(array(
+        'back_to_top'                   => $LANG_INSTALL['back_to_top'],
         'db_type'                       => $_DB_dbms,
         'db_host'                       => $_DB_host,
         'db_name'                       => $_DB_name,
