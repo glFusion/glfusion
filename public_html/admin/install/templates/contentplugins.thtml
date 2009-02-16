@@ -1,106 +1,54 @@
 <form action="index.php" method="post">
   <input type="hidden" name="mode" value="installplugins" />
   {hiddenfields}
-
-<div class="step floatleft">
-  <div class="stepheading">
-
-     <span class="floatright" style="font-size:12px;">
-        <div class="buttons">
-            <button type="submit" name="submit" class="positive">
-                {lang_next}
-                <img src="layout/right_arrow.png" alt=""/>
-            </button>
-        </div>
+  <div class="step floatleft">
+    <div class="stepheading">
+      <span class="floatright buttons">
+        <button type="submit" name="submit">
+          {lang_next}
+          <img src="layout/arrow-next.png" alt=""/>
+        </button>
       </span>
-    {lang_content_plugins}
+      {lang_content_plugins}
+    </div>
+    <div class="stepfields">
+      <span id="spacer0">
+        <input type="checkbox" name="installdefaultdata" class="floatright"/>
+        <label>{lang_load_sample_content}</label>
+      </span>
+      <span id="spacer1">
+        <input type="checkbox" name="plugin[calendar]" class="floatright"/>
+        <label>{lang_calendar}</label>
+      </span>
+      <span id="spacer2">
+        <input type="checkbox" name="plugin[filemgmt]" class="floatright"/>
+        <label>{lang_filemgmt}</label>
+      </span>
+      <span id="spacer3">
+        <input type="checkbox" name="plugin[forum]" class="floatright"/>
+        <label>{lang_forum}</label>
+      </span>
+      <span id="spacer4">
+        <input type="checkbox" name="plugin[links]" class="floatright"/>
+        <label>{lang_links}</label>
+      </span>
+      <span id="spacer5">
+        <input type="checkbox" name="plugin[mediagallery]" class="floatright"/>
+        <label>{lang_mediagallery}</label>
+      </span>
+      <span id="spacer6">
+        <input type="checkbox" name="plugin[polls]" class="floatright"/>
+        <label>{lang_polls}</label>
+      </span>
+    </div>
+    <div class="stephelp">
+      {lang_samplecontent_desc}<br /><br />
+      {lang_calendar_desc}<br /><br />
+      {lang_filemgmt_desc}<br /><br />
+      {lang_forum_desc}<br /><br />
+      {lang_links_desc}<br /><br />
+      {lang_mediagallery_desc}<br /><br />
+      {lang_polls_desc}
+    </div>
   </div>
-
-  <div class="stepfields" style="width:100%;">
-    <span>
-      <table>
-        <tr>
-          <td>
-            <input type="checkbox" name="installdefaultdata" />
-          </td>
-          <td colspan="2">
-            {lang_load_sample_content}
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <input type="checkbox" name="plugin[calendar]" />
-          </td>
-          <td style="width:30%;">
-            {lang_calendar}
-          </td>
-          <td>
-            {lang_calendar_desc}
-          </td>
-         </tr>
-
-         <tr>
-           <td>
-             <input type="checkbox" name="plugin[filemgmt]" />
-           </td>
-           <td style="width:30%;">
-             {lang_filemgmt}
-           </td>
-           <td>
-             {lang_filemgmt_desc}
-           </td>
-         </tr>
-
-         <tr>
-           <td>
-             <input type="checkbox" name="plugin[polls]" />
-           </td>
-           <td style="width:30%;">
-             {lang_polls}
-           </td>
-           <td>
-             {lang_polls_desc}
-           </td>
-         </tr>
-
-         <tr>
-           <td>
-             <input type="checkbox" name="plugin[mediagallery]" />
-           </td>
-           <td style="width:30%;">
-             {lang_mediagallery}
-           </td>
-           <td>
-             {lang_mediagallery_desc}
-           </td>
-         </tr>
-
-         <tr>
-           <td>
-             <input type="checkbox" name="plugin[forum]" />
-           </td>
-           <td style="width:30%;">
-             {lang_forum}
-           </td>
-           <td>
-             {lang_forum_desc}
-           </td>
-         </tr>
-
-         <tr>
-           <td>
-             <input type="checkbox" name="plugin[links]" />
-           </td>
-           <td style="width:30%;">
-             {lang_links}
-           </td>
-           <td>
-             {lang_links_desc}
-           </td>
-         </tr>
-       </table>
-    </span>
-  </div>
-</div>
 </form>

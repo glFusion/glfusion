@@ -759,6 +759,7 @@ function INST_checkEnvironment($dbconfig_path='')
         'previousaction'    => $previousaction,
         'nextaction'        => $action,
         'button'            => $button,
+        'back_to_top'       => $LANG_INSTALL['back_to_top'],
         'lang_previous'     => $LANG_INSTALL['previous'],
         'lang_host_env'     => $LANG_INSTALL['hosting_env'],
         'lang_setting'      => $LANG_INSTALL['setting'],
@@ -1270,6 +1271,7 @@ function INST_installAndContentPlugins()
     $T->set_var(array(
         'lang_content_plugins'      =>  $LANG_INSTALL['content_plugins'],
         'lang_load_sample_content'  =>  $LANG_INSTALL['load_sample_content'],
+        'lang_samplecontent_desc'   =>  $LANG_INSTALL['samplecontent_desc'],
         'lang_calendar'             =>  $LANG_INSTALL['calendar'],
         'lang_filemgmt'             =>  $LANG_INSTALL['filemgmt'],
         'lang_mediagallery'         =>  $LANG_INSTALL['mediagallery'],

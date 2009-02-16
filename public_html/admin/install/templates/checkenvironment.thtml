@@ -55,6 +55,11 @@
         </tr>
         <!-- END perms -->
       </table>
+      <div id="back-to-top">
+        <a href="#top">
+          {back_to_top}&nbsp;<img title="{back_to_top}" alt="{back_to_top}" src="layout/top.png"/>
+        </a>
+      </div>
     </div>
   </div>
 </form>

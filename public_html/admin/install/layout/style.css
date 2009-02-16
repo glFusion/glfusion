@@ -196,6 +196,7 @@ margin:20px auto auto;
   padding:10px 0;
   width:324px;
   color:#666;
+  margin-top:15px;
 }
 .stepfields-envchk {
   float:left;
@@ -233,6 +234,7 @@ margin:20px auto auto;
   padding:5px 0;
   font-weight:bold;
   font-size:14px;
+  width:304px;
 }
 .stepfields span select{
   width:200px;
@@ -252,9 +254,34 @@ margin:20px auto auto;
   border-left:1px solid #ccc;
   color:#666;
 }
-#back-to-top {
+#back-to-top a {
+  float:right;
   text-decoration:none;
   color:#666;
+  font-weight:bold;
+  font-size:14px;
+  padding:10px 0 0;
+}
+#spacer0 {
+  height:33px;
+}
+#spacer1 {
+  height:35px;
+}
+#spacer2 {
+  height:35px;
+}
+#spacer3 {
+  height:35px;
+}
+#spacer4 {
+  height:40px;
+}
+#spacer5 {
+  height:45px;
+}
+#spacer6 {
+  height:15px;
 }
 /* GLOBAL SEMANTICS ***********************************************/
 a {
