@@ -3,8 +3,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset={charset}" />
 <link rel="stylesheet" type="text/css" href="layout/style.css?ver=20090215" />
+<script type="text/javascript" src="layout/mootools-release-1.11.packed.js"></script>
 <meta name="robots" content="noindex,nofollow" />
 <title>{page_title}</title>
+<!--[if lte IE 6]>
+<link rel="stylesheet" type="text/css" href="layout/ie6.css" />
+<script defer type="text/javascript" src="layout/gl_moopngfix.js"></script>
+<![endif]-->
+<!--[if IE 7]>
+<link rel="stylesheet" type="text/css" href="layout/ie7.css" />
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="layout/ie7.css" />
+<![endif]-->
 </head>
 <body dir="ltr"><a name="top"/>
   <div id="gl_container_fixed">
