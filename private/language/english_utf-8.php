@@ -177,7 +177,7 @@ $LANG01 = array(
     502 => 'No fail SQL is Enabled',
     503 => 'Maintenance Mode - Non-admin logins disabled',
     'ctl' => 'Clear Template Cache',
-    'logview' => 'Logview',
+    'logview' => 'Logview'
 );
 
 ###############################################################################
@@ -227,7 +227,7 @@ $LANG03 = array(
 );
 
 ###############################################################################
-# usersettings.php
+# users.php
 
 $LANG04 = array(
     1 => 'User Profile for',
@@ -384,21 +384,21 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-	160 => 'Online'
+    160 => 'Online'
 );
 
 ###############################################################################
-# Customize if need to modify the Tabbed navbar MyAccount panels used. Array index key matches preference div id
+# Customize if need to modify the Tabbed navbar MyAccount panels used.
+# Array index key matches preference div id
 
 $LANG_MYACCOUNT = array(
-    'pe_preview'   => 'Preview',
-    'pe_namepass'  => 'Username &amp; Password',
-    'pe_userinfo'  => 'About You',
-    'pe_layout'    => 'Layout &amp; Language',
-    'pe_content'   => 'Content',
-    'pe_privacy'   => 'Privacy'
+    'pe_preview' => 'Preview',
+    'pe_namepass' => 'Username &amp; Password',
+    'pe_userinfo' => 'About You',
+    'pe_layout' => 'Layout &amp; Language',
+    'pe_content' => 'Content',
+    'pe_privacy' => 'Privacy'
 );
-
 
 ###############################################################################
 # index.php
@@ -575,7 +575,7 @@ $LANG11 = array(
     3 => 'Printable Story Format',
     4 => 'Story Options',
     5 => 'PDF Story Format',
-    6 => "Subscribe to '%s'"
+    6 => 'Subscribe to \'%s\''
 );
 
 ###############################################################################
@@ -824,7 +824,6 @@ $LANG24 = array(
     88 => 'Wiki-style format'
 );
 
-
 ###############################################################################
 # admin/topic.php
 
@@ -918,7 +917,7 @@ $LANG28 = array(
     52 => '<br' . XHTML . '>Note: "Online Days" is the number of days between the first registration and the last login.',
     53 => 'registered',
     54 => 'Batch Admin',
-    55 => "This only works if you have enabled the 'Record Last Login' option in the Configuration admin panel.",
+    55 => 'This only works if you have enabled the \'Record Last Login\' option in the Configuration admin panel.',
     56 => 'Please choose the type of user you want to delete and press "Update List". Then, uncheck those from the list you do not want to delete and press "Delete". Please note that you will only delete those that are currently visible in case the list spans over several pages.',
     57 => 'Phantom users',
     58 => 'Short-Time Users',
@@ -978,8 +977,7 @@ $LANG29 = array(
     41 => 'Comment Submissions',
     42 => 'User Name',
     43 => 'Auto-pubish Comments?',
-    40 => 'User Submissions',
-    'info' => 'Approve or Decline submissions',
+    'info' => 'Approve or Decline submissions'
 );
 
 ###############################################################################
@@ -1092,7 +1090,7 @@ $LANG32 = array(
     72 => 'A version of this plugin is installed but disabled. glFusion cannot upgrade a disabled plugin. Please re-enable the plugin and perform the upload again.',
     73 => 'Automated Plugin Installer',
     74 => 'Unable to locate the plugin\'s XML description file.',
-    75 => 'Unable to copy %s to %s<br />',
+    75 => 'Unable to copy %s to %s<br />'
 );
 
 ###############################################################################
@@ -1151,13 +1149,16 @@ $LANG33 = array(
     55 => 'Articles'
 );
 
+###############################################################################
+# admin/logview.php
+
 $LANG_LOGVIEW = array(
-    'logview'   => 'Logview',
-    'info'      => 'glFusion Log file administration',
-    'logs'      => 'Logs',
-    'view'      => 'View Log File',
-    'clear'     => 'Clear Log File',
-    'log_file'  => 'Log File',
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
 );
 
 ###############################################################################
@@ -1255,7 +1256,7 @@ $MESSAGE = array(
     89 => 'Unable to find an OpenID server for the given identity URL.',
     90 => 'OpenID identification cancelled.',
     91 => 'You specified an invalid identity URL.',
-    92 => 'Please <a href="' . $_CONF['site_admin_url'] . '/sectest.php">check the security of your site</a> before using it!',
+    92 => "Please <a href=\"{$_CONF['site_admin_url']}/sectest.php\">check the security of your site</a> before using it!",
     93 => 'Database back up was successful.',
     94 => 'Backup Failed: Filesize less than 1kb',
     95 => 'There was an error.',
@@ -1267,7 +1268,7 @@ $MESSAGE = array(
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
-    503 => 'Plugin installation is disabled in demo mode.',
+    503 => 'Plugin installation is disabled in demo mode.'
 );
 
 ###############################################################################
@@ -1346,10 +1347,7 @@ $LANG_DB_BACKUP = array(
     'do_backup' => 'Do Backup',
     'backup_successful' => 'Database back up was successful.',
     'db_explanation' => 'To create a new backup of your site\'s database, click on "Create New" above. Click on a file name to download that backup.',
-    'not_found' => 'Incorrect path, security restriction in effect or mysqldump utility not executable.<br'
-                    . XHTML . '> Check <strong>mysqldump_path</strong> definition in the Configuration.<br'
-                    . XHTML . '> Check <a href="http://www.php.net/manual/en/features.safe-mode.php#ini.open-basedir">open_basedir</a> settings in PHP.<br'
-                    . XHTML . "> Path currently defined as: <var>{$_DB_mysqldump_path}</var>",
+    'not_found' => "Incorrect path, security restriction in effect or mysqldump utility not executable.<br" . XHTML . "> Check <strong>mysqldump_path</strong> definition in the Configuration.<br" . XHTML . "> Check <a href=\"http://www.php.net/manual/en/features.safe-mode.php#ini.open-basedir\">open_basedir</a> settings in PHP.<br" . XHTML . "> Path currently defined as: <var>{$_DB_mysqldump_path}</var>",
     'zero_size' => 'Backup Failed: Filesize was 0 bytes',
     'path_not_found' => "{$_CONF['backup_path']} does not exist or is not a directory",
     'no_access' => "ERROR: Directory {$_CONF['backup_path']} is not accessible.",
@@ -1386,6 +1384,7 @@ $LANG_404 = array(
 );
 
 ###############################################################################
+# login form
 
 $LANG_LOGIN = array(
     1 => 'Login required',
@@ -1393,6 +1392,9 @@ $LANG_LOGIN = array(
     3 => 'Login',
     4 => 'New User'
 );
+
+###############################################################################
+# pdfgenerator.php
 
 $LANG_PDF = array(
     1 => 'The PDF feature has been disabled',
@@ -1412,127 +1414,130 @@ $LANG_PDF = array(
 );
 
 ###############################################################################
-# trackback
+# trackback.php
 
-$LANG_TRB = array (
-    'trackback'          => 'Trackback',
-    'from'               => 'from',
-    'tracked_on'         => 'Tracked on',
-    'read_more'          => '[read more]',
-    'intro_text'         => "Here's what others have to say about '%s':",
-    'no_comments'        => 'No trackback comments for this entry.',
+$LANG_TRB = array(
+    'trackback' => 'Trackback',
+    'from' => 'from',
+    'tracked_on' => 'Tracked on',
+    'read_more' => '[read more]',
+    'intro_text' => 'Here\'s what others have to say about \'%s\':',
+    'no_comments' => 'No trackback comments for this entry.',
     'this_trackback_url' => 'Trackback URL for this entry:',
-    'num_comments'       => '%d trackback comments',
-    'send_trackback'     => 'Send Pings',
-    'preview'            => 'Preview',
-    'editor_title'       => 'Send trackback comment',
-    'trackback_url'      => 'Trackback URL',
-    'entry_url'          => 'Entry URL',
-    'entry_title'        => 'Entry Title',
-    'blog_name'          => 'Site Name',
-    'excerpt'            => 'Excerpt',
-    'truncate_warning'   => 'Note: The receiving site may truncate your excerpt',
-    'button_send'        => 'Send',
-    'button_preview'     => 'Preview',
-    'send_error'         => 'Error',
+    'num_comments' => '%d trackback comments',
+    'send_trackback' => 'Send Pings',
+    'preview' => 'Preview',
+    'editor_title' => 'Send trackback comment',
+    'trackback_url' => 'Trackback URL',
+    'entry_url' => 'Entry URL',
+    'entry_title' => 'Entry Title',
+    'blog_name' => 'Site Name',
+    'excerpt' => 'Excerpt',
+    'truncate_warning' => 'Note: The receiving site may truncate your excerpt',
+    'button_send' => 'Send',
+    'button_preview' => 'Preview',
+    'send_error' => 'Error',
     'send_error_details' => 'Error when sending trackback comment:',
-    'url_missing'        => 'No Entry URL',
-    'url_required'       => 'Please enter at least a URL for the entry.',
-    'target_missing'     => 'No Trackback URL',
-    'target_required'    => 'Please enter a trackback URL',
-    'error_socket'       => 'Could not open socket.',
-    'error_response'     => 'Response not understood.',
-    'error_unspecified'  => 'Unspecified error.',
-    'select_url'         => 'Select Trackback URL',
-    'not_found'          => 'Trackback URL not found',
-    'autodetect_failed'  => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
-    'trackback_explain'  => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
+    'url_missing' => 'No Entry URL',
+    'url_required' => 'Please enter at least a URL for the entry.',
+    'target_missing' => 'No Trackback URL',
+    'target_required' => 'Please enter a trackback URL',
+    'error_socket' => 'Could not open socket.',
+    'error_response' => 'Response not understood.',
+    'error_unspecified' => 'Unspecified error.',
+    'select_url' => 'Select Trackback URL',
+    'not_found' => 'Trackback URL not found',
+    'autodetect_failed' => 'glFusion could not detect the Trackback URL for the post you want to send your comment to. Please enter it manually below.',
+    'trackback_explain' => 'From the links below, please select the URL you want to send your Trackback comment to. glFusion will then try to determine the correct Trackback URL for that post. Or you can <a href="%s">enter it manually</a> if you know it already.',
     'no_links_trackback' => 'No links found. You can not send a Trackback comment for this entry.',
-    'pingback'           => 'Pingback',
-    'pingback_results'   => 'Pingback results',
-    'send_pings'         => 'Send Pings',
-    'send_pings_for'     => 'Send Pings for "%s"',
-    'no_links_pingback'  => 'No links found. No Pingbacks were sent for this entry.',
-    'pingback_success'   => 'Pingback sent.',
-    'no_pingback_url'    => 'No pingback URL found.',
-    'resend'             => 'Resend',
-    'ping_all_explain'   => 'You can now notify the sites you linked to (<a href="http://en.wikipedia.org/wiki/Pingback">Pingback</a>), advertise that your site has been updated by pinging weblog directory services, or send a <a href="http://en.wikipedia.org/wiki/Trackback">Trackback</a> comment in case you wrote about a post on someone else\'s site.',
-    'pingback_button'    => 'Send Pingback',
-    'pingback_short'     => 'Send Pingbacks to all sites linked from this entry.',
-    'pingback_disabled'  => '(Pingback disabled)',
-    'ping_button'        => 'Send Ping',
-    'ping_short'         => 'Ping weblog directory services.',
-    'ping_disabled'      => '(Ping disabled)',
-    'trackback_button'   => 'Send Trackback',
-    'trackback_short'    => 'Send a Trackback comment.',
+    'pingback' => 'Pingback',
+    'pingback_results' => 'Pingback results',
+    'send_pings' => 'Send Pings',
+    'send_pings_for' => 'Send Pings for "%s"',
+    'no_links_pingback' => 'No links found. No Pingbacks were sent for this entry.',
+    'pingback_success' => 'Pingback sent.',
+    'no_pingback_url' => 'No pingback URL found.',
+    'resend' => 'Resend',
+    'ping_all_explain' => 'You can now notify the sites you linked to (<a href="http://en.wikipedia.org/wiki/Pingback">Pingback</a>), advertise that your site has been updated by pinging weblog directory services, or send a <a href="http://en.wikipedia.org/wiki/Trackback">Trackback</a> comment in case you wrote about a post on someone else\'s site.',
+    'pingback_button' => 'Send Pingback',
+    'pingback_short' => 'Send Pingbacks to all sites linked from this entry.',
+    'pingback_disabled' => '(Pingback disabled)',
+    'ping_button' => 'Send Ping',
+    'ping_short' => 'Ping weblog directory services.',
+    'ping_disabled' => '(Ping disabled)',
+    'trackback_button' => 'Send Trackback',
+    'trackback_short' => 'Send a Trackback comment.',
     'trackback_disabled' => '(Trackback disabled)',
-    'may_take_a_while'   => 'Please note that sending Pingbacks and Pings may take a while.',
-    'ping_results'       => 'Ping results',
-    'unknown_method'     => 'Unknown ping method',
-    'ping_success'       => 'Ping sent.',
-    'error_site_name'    => 'Please enter the site\'s name.',
-    'error_site_url'     => 'Please enter the site\'s URL.',
-    'error_ping_url'     => 'Please enter a valid Ping URL.',
-    'no_services'        => 'No weblog directory services configured.',
-    'services_headline'  => 'Weblog Directory Services',
-    'service_explain'    => 'To modify or delete a weblog directory service, click on the edit icon of that service below. To add a new weblog directory service, click on "Create New" above.',
-    'service'            => 'Service',
-    'ping_method'        => 'Ping method',
-    'service_website'    => 'Website',
-    'service_ping_url'   => 'URL to ping',
-    'ping_standard'      => 'Standard Ping',
-    'ping_extended'      => 'Extended Ping',
-    'ping_unknown'       => '(unknown method)',
-    'edit_service'       => 'Edit Weblog Directory Service',
-    'trackbacks'         => 'Trackbacks',
-    'editor_intro'       => 'Prepare your trackback comment for <a href="%s">%s</a>.',
-    'editor_intro_none'  => 'Prepare your trackback comment.',
-    'trackback_note'     => 'To send a trackback comment for a story, go to the list of stories and click on "' . $LANG24[21] . '" for the story. To send a trackback that is not related to a story, <a href="%s">click here</a>.',
-    'pingback_explain'   => 'Enter a URL to send the Pingback to. The pingback will point to your site\'s homepage.',
-    'pingback_url'       => 'Pingback URL',
-    'site_url'           => 'This site\'s URL',
-    'pingback_note'      => 'To send a pingback for a story, go to the list of stories and click on "' . $LANG24[21] . '" for the story. To send a pingback that is not related to a story, <a href="%s">click here</a>.',
-    'pbtarget_missing'   => 'No Pingback URL',
-    'pbtarget_required'  => 'Please enter a pingback URL',
-    'pb_error_details'   => 'Error when sending the pingback:',
-    'delete_trackback'   => 'To delete this Trackback click: '
+    'may_take_a_while' => 'Please note that sending Pingbacks and Pings may take a while.',
+    'ping_results' => 'Ping results',
+    'unknown_method' => 'Unknown ping method',
+    'ping_success' => 'Ping sent.',
+    'error_site_name' => 'Please enter the site\'s name.',
+    'error_site_url' => 'Please enter the site\'s URL.',
+    'error_ping_url' => 'Please enter a valid Ping URL.',
+    'no_services' => 'No weblog directory services configured.',
+    'services_headline' => 'Weblog Directory Services',
+    'service_explain' => 'To modify or delete a weblog directory service, click on the edit icon of that service below. To add a new weblog directory service, click on "Create New" above.',
+    'service' => 'Service',
+    'ping_method' => 'Ping method',
+    'service_website' => 'Website',
+    'service_ping_url' => 'URL to ping',
+    'ping_standard' => 'Standard Ping',
+    'ping_extended' => 'Extended Ping',
+    'ping_unknown' => '(unknown method)',
+    'edit_service' => 'Edit Weblog Directory Service',
+    'trackbacks' => 'Trackbacks',
+    'editor_intro' => 'Prepare your trackback comment for <a href="%s">%s</a>.',
+    'editor_intro_none' => 'Prepare your trackback comment.',
+    'trackback_note' => 'To send a trackback comment for a story, go to the list of stories and click on "Send Ping" for the story. To send a trackback that is not related to a story, <a href="%s">click here</a>.',
+    'pingback_explain' => 'Enter a URL to send the Pingback to. The pingback will point to your site\'s homepage.',
+    'pingback_url' => 'Pingback URL',
+    'site_url' => 'This site\'s URL',
+    'pingback_note' => 'To send a pingback for a story, go to the list of stories and click on "Send Ping" for the story. To send a pingback that is not related to a story, <a href="%s">click here</a>.',
+    'pbtarget_missing' => 'No Pingback URL',
+    'pbtarget_required' => 'Please enter a pingback URL',
+    'pb_error_details' => 'Error when sending the pingback:',
+    'delete_trackback' => 'To delete this Trackback click: '
 );
 
 ###############################################################################
 # directory.php
 
-$LANG_DIR = array (
-    'title'            => 'Article Directory',
-    'title_year'       => 'Article Directory for %d',
+$LANG_DIR = array(
+    'title' => 'Article Directory',
+    'title_year' => 'Article Directory for %d',
     'title_month_year' => 'Article Directory for %s %d',
-    'nav_top'          => 'Back to Article Directory',
-    'no_articles'      => 'No articles.'
+    'nav_top' => 'Back to Article Directory',
+    'no_articles' => 'No articles.'
 );
 
-################################################################################
+###############################################################################
 # "What's New" Time Strings
+# 
+# For the first two strings, you can use the following placeholders.
+# Order them so it makes sense in your language:
+# %i    item, "Stories"
+# %n    amount, "2", "20" etc.
+# %t    time, "2" (weeks)
+# %s    scale, "hrs", "weeks"
 
-$LANG_WHATSNEW = array (
-    # This here determines the order of the sentence "No new stories in 2 hrs"
-    # order it so it makes sense in your language:
-    # %i    item, "Stories"
-    # %n    amount, "2", "20" etc
-    # %t    time, "2" (weeks)
-    # %s    scale, "hrs", "weeks"
-    'new_string'  => '%n new %i in the last %t %s',
-    'new_last'    => 'last %t %s',
-    # other strings
-    'minutes'     => 'minutes',
-    'hours'       => 'hours',
-    'days'        => 'days',
-    'weeks'       => 'weeks',
-    'months'      => 'months',
-    'minute'      => 'minute',
-    'hour'        => 'hour',
-    'day'         => 'day',
-    'week'        => 'week',
-    'month'       => 'month'
+$LANG_WHATSNEW = array(
+    'new_string' => '%n new %i in the last %t %s',
+    'new_last' => 'last %t %s',
+    'minutes' => 'minutes',
+    'hours' => 'hours',
+    'days' => 'days',
+    'weeks' => 'weeks',
+    'months' => 'months',
+    'minute' => 'minute',
+    'hour' => 'hour',
+    'day' => 'day',
+    'week' => 'week',
+    'month' => 'month'
 );
+
+###############################################################################
+# Month names
 
 $LANG_MONTH = array(
     1 => 'January',
@@ -1549,6 +1554,9 @@ $LANG_MONTH = array(
     12 => 'December'
 );
 
+###############################################################################
+# Weekdays
+
 $LANG_WEEK = array(
     1 => 'Sunday',
     2 => 'Monday',
@@ -1559,39 +1567,52 @@ $LANG_WEEK = array(
     7 => 'Saturday'
 );
 
-################################################################################
+###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
-$LANG_ADMIN = array (
-    'search'        => 'Search',
+$LANG_ADMIN = array(
+    'search' => 'Search',
     'limit_results' => 'Limit Results',
-    'submit'        => 'Submit',
-    'edit'          => 'Edit',
-    'edit_adv'      => 'Adv. Edit',
-    'admin_home'    => 'Admin Home',
-    'create_new'    => 'Create New',
-    'create_new_adv'=> 'Create New (Adv.)',
-    'enabled'       => 'Enabled',
-    'title'         => 'Title',
-    'type'          => 'Type',
-    'topic'         => 'Topic',
-    'help_url'      => 'Help File URL',
-    'save'          => 'Save',
-    'cancel'        => 'Cancel',
-    'delete'        => 'Delete',
-    'delete_sel'    => 'Delete selected',
-    'copy'          => 'Copy',
-    'no_results'    => '- No entries found -',
-    'data_error'    => 'There was an error processing the subscription data. Please check the data source.',
-    'preview'       => 'Preview',
+    'submit' => 'Submit',
+    'edit' => 'Edit',
+    'edit_adv' => 'Adv. Edit',
+    'admin_home' => 'Admin Home',
+    'create_new' => 'Create New',
+    'create_new_adv' => 'Create New (Adv.)',
+    'enabled' => 'Enabled',
+    'title' => 'Title',
+    'type' => 'Type',
+    'topic' => 'Topic',
+    'help_url' => 'Help File URL',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'delete' => 'Delete',
+    'delete_sel' => 'Delete selected',
+    'copy' => 'Copy',
+    'no_results' => '- No entries found -',
+    'data_error' => 'There was an error processing the subscription data. Please check the data source.',
+    'preview' => 'Preview',
     'records_found' => 'Records found',
-    'addchild'      => 'Add child',
-    'list'          => 'list',
-    'list_all'      => 'List all',
-    'na'            => '-'
+    'addchild' => 'Add child',
+    'list' => 'list',
+    'list_all' => 'List all',
+    'na' => '-'
+);
+
+###############################################################################
+# Widgets - Strings
+# 
+# These are some standard strings used by the widget static pages
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News',
+    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
+    'prev' => 'Previous',
+    'next' => 'Next',
+    'playpause' => 'Play/Pause'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1599,31 +1620,31 @@ $LANG_ADMIN = array (
 # database.
 
 $LANG_commentcodes = array(
-    0   => 'Comments Enabled',
-    -1  => 'Comments Disabled',
-    1   => 'Comments Closed'
+    0 => 'Comments Enabled',
+    -1 => 'Comments Disabled',
+    1 => 'Comments Closed'
 );
 
 $LANG_commentmodes = array(
-    'flat'      => 'Flat',
-    'nested'    => 'Nested',
-    'threaded'  => 'Threaded',
+    'flat' => 'Flat',
+    'nested' => 'Nested',
+    'threaded' => 'Threaded',
     'nocomment' => 'No Comments'
 );
 
 $LANG_cookiecodes = array(
-    0       => '(don\'t)',
-    3600    => '1 Hour',
-    7200    => '2 Hours',
-    10800   => '3 Hours',
-    28800   => '8 Hours',
-    86400   => '1 Day',
-    604800  => '1 Week',
+    0 => '(don\'t)',
+    3600 => '1 Hour',
+    7200 => '2 Hours',
+    10800 => '3 Hours',
+    28800 => '8 Hours',
+    86400 => '1 Day',
+    604800 => '1 Week',
     2678400 => '1 Month'
 );
 
 $LANG_dateformats = array(
-    0   => 'System Default'
+    0 => 'System Default'
 );
 
 $LANG_featurecodes = array(
@@ -1638,34 +1659,34 @@ $LANG_frontpagecodes = array(
 
 $LANG_postmodes = array(
     'plaintext' => 'Plain Old Text',
-    'html'      => 'HTML Formatted'
+    'html' => 'HTML Formatted'
 );
 
 $LANG_sortcodes = array(
-    'ASC'  => 'Oldest First',
+    'ASC' => 'Oldest First',
     'DESC' => 'Newest First'
 );
 
 $LANG_trackbackcodes = array(
-    0   => 'Trackback Enabled',
-    -1  => 'Trackback Disabled'
+    0 => 'Trackback Enabled',
+    -1 => 'Trackback Disabled'
 );
 
-################################################################################
+###############################################################################
 # Localization of the Admin Configuration UI
 
 $LANG_CONFIG = array(
-    'home'          => 'Home',
-    'admin_home'    => 'Site Administration',
-    'sections'      => 'Configuration Sections',
-    'restore'       => 'Restore',
-    'add_element'   => 'Add Element',
-    'save_changes'  => 'Save Changes',
-    'reset_form'    => 'Reset Form',
-    'changes_made'  => 'Changes were successfully made to',
-    'title'         => 'Configuration Manager',
-    'disable'       => 'Click to disable this option',
-    'enable'        => 'Enable'
+    'home' => 'Home',
+    'admin_home' => 'Site Administration',
+    'sections' => 'Configuration Sections',
+    'restore' => 'Restore',
+    'add_element' => 'Add Element',
+    'save_changes' => 'Save Changes',
+    'reset_form' => 'Reset Form',
+    'changes_made' => 'Changes were successfully made to',
+    'title' => 'Configuration Manager',
+    'disable' => 'Click to disable this option',
+    'enable' => 'Enable'
 );
 
 $LANG_configsections['Core'] = array(
@@ -1674,194 +1695,194 @@ $LANG_configsections['Core'] = array(
 );
 
 $LANG_confignames['Core'] = array(
-    'path_html' => "HTML Path",
-    'site_url' => "Site URL",
-    'site_admin_url' => "Admin URL",
-    'site_mail' => "Site E-Mail",
-    'noreply_mail' => "No-Reply E-Mail",
-    'site_name' => "Site Name",
-    'site_slogan' => "Slogan",
-    'microsummary_short' => "Microsummary",
-    'path_log' => "Log",
-    'path_language' => "Language",
-    'backup_path' => "Backup",
-    'path_data' => "Data",
-    'path_images' => "Images",
-    'path_pear' => "Path Pear",
-    'have_pear' => "Have Pear?",
-    'mail_settings' => "Mail Settings",
-    'allow_mysqldump' => "Allow MySQL Dump",
+    'path_html' => 'HTML Path',
+    'site_url' => 'Site URL',
+    'site_admin_url' => 'Admin URL',
+    'site_mail' => 'Site E-Mail',
+    'noreply_mail' => 'No-Reply E-Mail',
+    'site_name' => 'Site Name',
+    'site_slogan' => 'Slogan',
+    'microsummary_short' => 'Microsummary',
+    'path_log' => 'Log',
+    'path_language' => 'Language',
+    'backup_path' => 'Backup',
+    'path_data' => 'Data',
+    'path_images' => 'Images',
+    'path_pear' => 'Path Pear',
+    'have_pear' => 'Have Pear?',
+    'mail_settings' => 'Mail Settings',
+    'allow_mysqldump' => 'Allow MySQL Dump',
     'mysqldump_path' => 'Path of Executable',
-    'mysqldump_options' => "MySQL Dump Options",
-    'theme' => "Theme",
-    'menu_elements' => "Menu Elements",
-    'path_themes' => "Themes Path",
-    'disable_new_user_registration' => "Disable New Registrations",
-    'allow_user_themes' => "Allow User Themes",
-    'allow_user_language' => "Allow User Language",
-    'allow_user_photo' => "Allow User Photo",
-    'allow_username_change' => "Allow Username Changes",
-    'allow_account_delete' => "Allow Account Deletion",
-    'hide_author_exclusion' => "Allow Hide Author",
-    'show_fullname' => "Show Fullname",
-    'show_servicename' => "Show Service Name",
-    'custom_registration' => "Enable Custom Registration",
-    'user_login_method' => "User Login Method",
-    'spamx' => "Spam-X Actions",
-    'sort_admin' => "Sort Links",
-    'language' => "Language",
-    'locale' => "Locale",
-    'date' => "Date Format",
-    'daytime' => "Daytime Format",
-    'shortdate' => "Short Date Format",
-    'dateonly' => "Date Only Format",
-    'timeonly' => "Time Only Format",
-    'week_start' => "Week Start",
-    'hour_mode' => "Hour Mode",
-    'thousand_separator' => "Thousands Separator",
-    'decimal_separator' => "Decimal Separator",
-    'decimal_count' => "Decimal Count",
-    'language_files' => "Language Files",
-    'languages' => "Languages",
-    'timezone' => "Timezone",
-    'site_disabled_msg' => "Site Disabled Message or URL",
-    'rootdebug' => "Root Debugging",
-    'cookie_session' => "Session Cookie Name",
-    'cookie_name' => "Permanent Cookie Name",
-    'cookie_password' => "Password Cookie Name",
-    'cookie_theme' => "Theme Cookie Name",
-    'cookie_language' => "Language Cookie Name",
-    'cookie_tzid' => "Timezone Cookie Name",
-    'cookie_ip' => "Cookies embed IP?",
-    'default_perm_cookie_timeout' => "Permanent Timeout",
-    'session_cookie_timeout' => "Session Timeout",
-    'cookie_path' => "Cookie Path",
-    'cookiedomain' => "Cookie Domain",
-    'cookiesecure' => "Cookie Secure",
-    'lastlogin' => "Record Last Login?",
-    'pdf_enabled' => "PDF Enabled?",
-    'num_search_results' => "Number of Search Results",
-    'loginrequired' => "Login Required?",
-    'submitloginrequired' => "Submit Login Required?",
-    'commentsloginrequired' => "Comment Login Required?",
-    'statsloginrequired' => "Stats Login Required?",
-    'searchloginrequired' => "Search Login Required?",
-    'profileloginrequired' => "Profile Login Required?",
-    'emailuserloginrequired' => "E-Mail User Login Required?",
-    'emailstoryloginrequired' => "E-Mail Story Login Required?",
-    'directoryloginrequired' => "Directory Login Required?",
-    'storysubmission' => "Story Submission Queue?",
-    'usersubmission' => "User Submission Queue?",
-    'listdraftstories' => "List Draft Stories?",
-    'notification' => "Notifications",
-    'postmode' => "Default Post Mode",
-    'speedlimit' => "Post Speed Limit",
-    'skip_preview' => "Skip Preview in Posts",
-    'advanced_editor' => "Advanced Editor?",
-    'wikitext_editor' => "Wikitext Editor?",
-    'cron_schedule_interval' => "Cron Schedule Interval",
-    'sortmethod' => "Sort Topics",
-    'showstorycount' => "Show Story Count?",
-    'showsubmissioncount' => "Show Submission Count?",
-    'hide_home_link' => "Hide Home Link?",
-    'whosonline_threshold' => "Session Threshold",
-    'whosonline_anonymous' => "Hide Names from Guests?",
-    'emailstories' => "Daily Digest Enabled?",
-    'emailstorieslength' => "Length of Stories",
-    'emailstoriesperdefault' => "Enable for New Users?",
-    'allow_domains' => "Automatic Allow Domains",
-    'disallow_domains' => "Automatic Disallow Domains",
-    'newstoriesinterval' => "New Stories Interval",
-    'newcommentsinterval' => "New Comments Interval",
-    'newtrackbackinterval' => "New Trackbacks Interval",
-    'hidenewstories' => "Hide New Stories",
-    'hidenewcomments' => "Hide New Comments",
-    'hidenewtrackbacks' => "Hide New Trackbacks",
-    'hidenewplugins' => "Hide New Plugin Entries",
-    'title_trim_length' => "Title Trim Length",
-    'trackback_enabled' => "Trackback Enabled?",
-    'pingback_enabled' => "Pingback Enabled?",
-    'ping_enabled' => "Ping Enabled?",
-    'trackback_code' => "Trackback Default",
-    'multiple_trackbacks' => "Multiple Trackbacks",
-    'trackbackspeedlimit' => "Trackback Speed Limit",
-    'check_trackback_link' => "Check Trackbacks",
-    'pingback_self' => "Pingback Self?",
-    'pingback_excerpt' => "Create Pingback Excerpt?",
-    'link_documentation' => "Link to Documentation?",
-    'link_versionchecker' => "Link to Version Checker?",
-    'hide_adminmenu' => "Hide Admin Menu Outside Admin Pages?",
-    'maximagesperarticle' => "Max Images per Article",
-    'limitnews' => "Stories per Page",
-    'minnews' => "Min. Stories per Page",
+    'mysqldump_options' => 'MySQL Dump Options',
+    'theme' => 'Theme',
+    'menu_elements' => 'Menu Elements',
+    'path_themes' => 'Themes Path',
+    'disable_new_user_registration' => 'Disable New Registrations',
+    'allow_user_themes' => 'Allow User Themes',
+    'allow_user_language' => 'Allow User Language',
+    'allow_user_photo' => 'Allow User Photo',
+    'allow_username_change' => 'Allow Username Changes',
+    'allow_account_delete' => 'Allow Account Deletion',
+    'hide_author_exclusion' => 'Allow Hide Author',
+    'show_fullname' => 'Show Fullname',
+    'show_servicename' => 'Show Service Name',
+    'custom_registration' => 'Enable Custom Registration',
+    'user_login_method' => 'User Login Method',
+    'spamx' => 'Spam-X Actions',
+    'sort_admin' => 'Sort Links',
+    'language' => 'Language',
+    'locale' => 'Locale',
+    'date' => 'Date Format',
+    'daytime' => 'Daytime Format',
+    'shortdate' => 'Short Date Format',
+    'dateonly' => 'Date Only Format',
+    'timeonly' => 'Time Only Format',
+    'week_start' => 'Week Start',
+    'hour_mode' => 'Hour Mode',
+    'thousand_separator' => 'Thousands Separator',
+    'decimal_separator' => 'Decimal Separator',
+    'decimal_count' => 'Decimal Count',
+    'language_files' => 'Language Files',
+    'languages' => 'Languages',
+    'timezone' => 'Timezone',
+    'site_disabled_msg' => 'Site Disabled Message or URL',
+    'rootdebug' => 'Root Debugging',
+    'cookie_session' => 'Session Cookie Name',
+    'cookie_name' => 'Permanent Cookie Name',
+    'cookie_password' => 'Password Cookie Name',
+    'cookie_theme' => 'Theme Cookie Name',
+    'cookie_language' => 'Language Cookie Name',
+    'cookie_tzid' => 'Timezone Cookie Name',
+    'cookie_ip' => 'Cookies embed IP?',
+    'default_perm_cookie_timeout' => 'Permanent Timeout',
+    'session_cookie_timeout' => 'Session Timeout',
+    'cookie_path' => 'Cookie Path',
+    'cookiedomain' => 'Cookie Domain',
+    'cookiesecure' => 'Cookie Secure',
+    'lastlogin' => 'Record Last Login?',
+    'pdf_enabled' => 'PDF Enabled?',
+    'num_search_results' => 'Number of Search Results',
+    'loginrequired' => 'Login Required?',
+    'submitloginrequired' => 'Submit Login Required?',
+    'commentsloginrequired' => 'Comment Login Required?',
+    'statsloginrequired' => 'Stats Login Required?',
+    'searchloginrequired' => 'Search Login Required?',
+    'profileloginrequired' => 'Profile Login Required?',
+    'emailuserloginrequired' => 'E-Mail User Login Required?',
+    'emailstoryloginrequired' => 'E-Mail Story Login Required?',
+    'directoryloginrequired' => 'Directory Login Required?',
+    'storysubmission' => 'Story Submission Queue?',
+    'usersubmission' => 'User Submission Queue?',
+    'listdraftstories' => 'List Draft Stories?',
+    'notification' => 'Notifications',
+    'postmode' => 'Default Post Mode',
+    'speedlimit' => 'Post Speed Limit',
+    'skip_preview' => 'Skip Preview in Posts',
+    'advanced_editor' => 'Advanced Editor?',
+    'wikitext_editor' => 'Wikitext Editor?',
+    'cron_schedule_interval' => 'Cron Schedule Interval',
+    'sortmethod' => 'Sort Topics',
+    'showstorycount' => 'Show Story Count?',
+    'showsubmissioncount' => 'Show Submission Count?',
+    'hide_home_link' => 'Hide Home Link?',
+    'whosonline_threshold' => 'Session Threshold',
+    'whosonline_anonymous' => 'Hide Names from Guests?',
+    'emailstories' => 'Daily Digest Enabled?',
+    'emailstorieslength' => 'Length of Stories',
+    'emailstoriesperdefault' => 'Enable for New Users?',
+    'allow_domains' => 'Automatic Allow Domains',
+    'disallow_domains' => 'Automatic Disallow Domains',
+    'newstoriesinterval' => 'New Stories Interval',
+    'newcommentsinterval' => 'New Comments Interval',
+    'newtrackbackinterval' => 'New Trackbacks Interval',
+    'hidenewstories' => 'Hide New Stories',
+    'hidenewcomments' => 'Hide New Comments',
+    'hidenewtrackbacks' => 'Hide New Trackbacks',
+    'hidenewplugins' => 'Hide New Plugin Entries',
+    'title_trim_length' => 'Title Trim Length',
+    'trackback_enabled' => 'Trackback Enabled?',
+    'pingback_enabled' => 'Pingback Enabled?',
+    'ping_enabled' => 'Ping Enabled?',
+    'trackback_code' => 'Trackback Default',
+    'multiple_trackbacks' => 'Multiple Trackbacks',
+    'trackbackspeedlimit' => 'Trackback Speed Limit',
+    'check_trackback_link' => 'Check Trackbacks',
+    'pingback_self' => 'Pingback Self?',
+    'pingback_excerpt' => 'Create Pingback Excerpt?',
+    'link_documentation' => 'Link to Documentation?',
+    'link_versionchecker' => 'Link to Version Checker?',
+    'hide_adminmenu' => 'Hide Admin Menu Outside Admin Pages?',
+    'maximagesperarticle' => 'Max Images per Article',
+    'limitnews' => 'Stories per Page',
+    'minnews' => 'Min. Stories per Page',
     'contributedbyline' => 'Show "Contributed By"?"',
-    'hideviewscount' => "Hide Views Count?",
-    'hideemailicon' => "Hide E-Mail Icon?",
-    'hideprintericon' => "Hide Print Icon?",
-    'allow_page_breaks' => "Allow Page Breaks?",
-    'page_break_comments' => "Comments on Multi-Page Articles",
+    'hideviewscount' => 'Hide Views Count?',
+    'hideemailicon' => 'Hide E-Mail Icon?',
+    'hideprintericon' => 'Hide Print Icon?',
+    'allow_page_breaks' => 'Allow Page Breaks?',
+    'page_break_comments' => 'Comments on Multi-Page Articles',
     'article_image_align' => 'Topic Icon Alignment',
-    'show_topic_icon' => "Show Topic Icon?",
-    'draft_flag' => "Draft Flag Default",
-    'frontpage' => "Frontpage Default",
+    'show_topic_icon' => 'Show Topic Icon?',
+    'draft_flag' => 'Draft Flag Default',
+    'frontpage' => 'Frontpage Default',
     'hide_no_news_msg' => 'Hide "No News" Message?',
-    'hide_main_page_navigation' => "Hide Main Page Navigation?",
-    'onlyrootfeatures' => "Only Root can Feature?",
-    'aftersave_story' => "After Saving Story",
-    'aftersave_user' => "After Saving User",
-    'show_right_blocks' => "Always Show Right Blocks?",
-    'showfirstasfeatured' => "Show First Story as Featured?",
-    'backend' => "Enable Feeds?",
-    'rdf_file' => "Syndication Output Folder",
-    'rdf_limit' => "Feed Limit",
-    'rdf_storytext' => "Length of Stories in Feed",
-    'rdf_language' => "Feed Language",
+    'hide_main_page_navigation' => 'Hide Main Page Navigation?',
+    'onlyrootfeatures' => 'Only Root can Feature?',
+    'aftersave_story' => 'After Saving Story',
+    'aftersave_user' => 'After Saving User',
+    'show_right_blocks' => 'Always Show Right Blocks?',
+    'showfirstasfeatured' => 'Show First Story as Featured?',
+    'backend' => 'Enable Feeds?',
+    'rdf_file' => 'Syndication Output Folder',
+    'rdf_limit' => 'Feed Limit',
+    'rdf_storytext' => 'Length of Stories in Feed',
+    'rdf_language' => 'Feed Language',
     'syndication_max_headlines' => 'Max. Number of Headlines (portal blocks)',
-    'copyrightyear' => "Copyright Year",
-    'image_lib' => "Image Library",
-    'path_to_mogrify' => "Path to ImageMagick",
-    'path_to_netpbm' => "Path to Netpbm",
-    'debug_image_upload' => "Debug Image Uploading?",
-    'keep_unscaled_image' => "Keep Unscaled Image?",
-    'allow_user_scaling' => "Allow User Scaling?",
-    'max_image_width' => "Max Image Width?",
-    'max_image_height' => "Max Image Height?",
-    'max_image_size' => "Max Image Size?",
-    'max_topicicon_width' => "Max Topic Icon Width?",
-    'max_topicicon_height' => "Max Topic Icon Height?",
-    'max_topicicon_size' => "Max Topic Icon Size?",
-    'max_photo_width' => "Max Photo Width?",
-    'max_photo_height' => "Max Photo Height?",
-    'max_photo_size' => "Max Photo Size?",
-    'use_gravatar' => "Use Gravatar?",
-    'gravatar_rating' => "Gravatar Rating Allowed",
-    'force_photo_width' => "Force Photo Width",
-    'default_photo' => "Default Photo",
-    'commentspeedlimit' => "Comment Speed Limit",
-    'comment_limit' => "Comment Limit",
-    'comment_mode' => "Comment Mode",
-    'comment_code' => "Comment Default",
-    'comment_edit' => "Allow Comment Edit?",
-    'comment_edittime' => "Comment Edit Time (seconds)",
-    'commentsubmission' => "Queue Comment Submissions",
-    'passwordspeedlimit' => "Password Speed Limit",
-    'login_attempts' => "Max. Login Attempts",
-    'login_speedlimit' => "Login Speed Limit",
-    'user_html' => "User HTML",
-    'admin_html' => "Admin HTML",
-    'skip_html_filter_for_root' => "Skip HTML Filter for Root?",
-    'allowed_protocols' => "Allowed Protocols",
-    'disable_autolinks' => "Disable Autolinks?",
-    'digg_enabled' => "Show Digg.com Links?",
-    'censormode' => "Censor Mode?",
-    'censorreplace' => "Censor Replace Text",
-    'censorlist' => "Censor List",
-    'ip_lookup' => "IP Lookup",
-    'url_rewrite' => "Enable URL Rewrite",
-    'default_permissions_block' => "Block Default Permissions",
-    'default_permissions_story' => "Story Default Permissions",
-    'default_permissions_topic' => "Topic Default Permissions",
-    'atom_max_stories' => "Max. Stories in Webservices Feed",
+    'copyrightyear' => 'Copyright Year',
+    'image_lib' => 'Image Library',
+    'path_to_mogrify' => 'Path to ImageMagick',
+    'path_to_netpbm' => 'Path to Netpbm',
+    'debug_image_upload' => 'Debug Image Uploading?',
+    'keep_unscaled_image' => 'Keep Unscaled Image?',
+    'allow_user_scaling' => 'Allow User Scaling?',
+    'max_image_width' => 'Max Image Width?',
+    'max_image_height' => 'Max Image Height?',
+    'max_image_size' => 'Max Image Size?',
+    'max_topicicon_width' => 'Max Topic Icon Width?',
+    'max_topicicon_height' => 'Max Topic Icon Height?',
+    'max_topicicon_size' => 'Max Topic Icon Size?',
+    'max_photo_width' => 'Max Photo Width?',
+    'max_photo_height' => 'Max Photo Height?',
+    'max_photo_size' => 'Max Photo Size?',
+    'use_gravatar' => 'Use Gravatar?',
+    'gravatar_rating' => 'Gravatar Rating Allowed',
+    'force_photo_width' => 'Force Photo Width',
+    'default_photo' => 'Default Photo',
+    'commentspeedlimit' => 'Comment Speed Limit',
+    'comment_limit' => 'Comment Limit',
+    'comment_mode' => 'Comment Mode',
+    'comment_code' => 'Comment Default',
+    'comment_edit' => 'Allow Comment Edit?',
+    'comment_edittime' => 'Comment Edit Time (seconds)',
+    'commentsubmission' => 'Queue Comment Submissions',
+    'passwordspeedlimit' => 'Password Speed Limit',
+    'login_attempts' => 'Max. Login Attempts',
+    'login_speedlimit' => 'Login Speed Limit',
+    'user_html' => 'User HTML',
+    'admin_html' => 'Admin HTML',
+    'skip_html_filter_for_root' => 'Skip HTML Filter for Root?',
+    'allowed_protocols' => 'Allowed Protocols',
+    'disable_autolinks' => 'Disable Autolinks?',
+    'digg_enabled' => 'Show Digg.com Links?',
+    'censormode' => 'Censor Mode?',
+    'censorreplace' => 'Censor Replace Text',
+    'censorlist' => 'Censor List',
+    'ip_lookup' => 'IP Lookup',
+    'url_rewrite' => 'Enable URL Rewrite',
+    'default_permissions_block' => 'Block Default Permissions',
+    'default_permissions_story' => 'Story Default Permissions',
+    'default_permissions_topic' => 'Topic Default Permissions',
+    'atom_max_stories' => 'Max. Stories in Webservices Feed',
     'disable_webservices' => 'Disable Webservices?',
     'restrict_webservices' => 'Restrict Webservices?',
     'article_comment_close_days' => 'Days to close comments (default)',
@@ -1891,12 +1912,12 @@ $LANG_confignames['Core'] = array(
     'mail_smtp_auth' => 'Require SMTP Auth?',
     'mail_smtp_username' => 'SMTP Auth Username',
     'mail_smtp_password' => 'SMTP Auth Password',
-    'mail_smtp_secure'   => 'SMTP Security Protocol',
+    'mail_smtp_secure' => 'SMTP Security Protocol',
     'default_search_order' => 'Default Sort Order',
-    'compress_css'  => 'Compress CSS',
+    'compress_css' => 'Compress CSS',
     'jpg_orig_quality' => 'JPEG Quality Factor',
     'allow_embed_object' => 'Allow EMBED Object',
-    'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
+    'story_submit_by_perm_only' => 'Only allow submission to topics with write permission'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1955,26 +1976,19 @@ $LANG_fs['Core'] = array(
 );
 
 $LANG_configselects['Core'] = array(
-    0 => array('True'=>1,'False'=>0),
-    1 => array('True'=>TRUE,'False'=>FALSE),
-    2 => array('Reject'=>0,'Only Keep Latest'=>1, 'Allow Multiple Posts'=>2),
-    3 => array_flip($LANG_trackbackcodes),
-    4 => array("Don't Check Anything" => 0,
-               "Check against Site URL" => 1,
-               "Check full URL" => 2,
-               "Check against Site URL and full URL" => 3,
-               "Check IP against Site IP" => 4,
-               "Check IP and Site URL" => 5,
-               "Check IP and Full URL" => 6,
-               "Check IP, Full URL, and Site URL" => 7),
-    5 => array_flip($LANG_postmodes),
-    6 => array('12'=>'12','24'=>'24'),
+    0 => array('True' => 1, 'False' => 0),
+    1 => array('True' => true, 'False' => false),
+    2 => array('Reject' => 0, 'Only Keep Latest' => 1, 'Allow Multiple Posts' => 2),
+    3 => array('Trackback Enabled' => 0, 'Trackback Disabled' => -1),
+    4 => array('Don\'t Check Anything' => 0, 'Check against Site URL' => 1, 'Check full URL' => 2, 'Check against Site URL and full URL' => 3, 'Check IP against Site IP' => 4, 'Check IP and Site URL' => 5, 'Check IP and Full URL' => 6, 'Check IP, Full URL, and Site URL' => 7),
+    5 => array('Plain Old Text' => 'plaintext', 'HTML Formatted' => 'html'),
+    6 => array('12' => 12, '24' => 24),
     7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
-    8 => array('Right'=>'right', 'Left'=>'left'),
+    8 => array('Right' => 'right', 'Left' => 'left'),
     9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm'=>'netpbm', 'ImageMagick'=>'imagemagick', 'gdLib' =>'gdlib'),
-    11 => array_flip($LANG_commentmodes),
-    12 => array('No access'=>0, 'Read-Only'=>2,'Read-Write'=>3),
+    10 => array('Netpbm' => 'netpbm', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
+    11 => array('Flat' => 'flat', 'Nested' => 'nested', 'Threaded' => 'threaded', 'No Comments' => 'nocomment'),
+    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
     14 => array('Sunday' => 'Sun', 'Monday' => 'Mon'),
     15 => array('By Number' => 'sortnum', 'Alphabetically' => 'alpha'),
@@ -1984,19 +1998,7 @@ $LANG_configselects['Core'] = array(
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
-
-);
-
-###############################################################################
-# lib-widgets.php
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-	'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-	'prev' => 'Previous',
-	'next' => 'Next',
-	'playpause' => 'Play/Pause'
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
 );
 
 ?>

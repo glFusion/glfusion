@@ -111,8 +111,12 @@ $LANG_STATIC = array(
     'copy' => 'Kopieren',
     'limit_results' => 'Ergebnisse einschränken',
     'search' => 'Suchen',
-    'submit' => 'Absenden'
+    'submit' => 'Absenden',
+    'delete_confirm' => 'Are you sure you want to delete this page?'
 );
+
+$PLG_staticpages_MESSAGE19 = '';
+$PLG_staticpages_MESSAGE20 = '';
 
 // Messages for the plugin upgrade
 $PLG_staticpages_MESSAGE3001 = 'Plugin upgrade not supported.';
