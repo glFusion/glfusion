@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Redesigned the layout of the install screens (Eric)
+
+- Removed height property from .profile-image to maintain original aspect ratio of picture (issue 333) (Eric)
+
 - Updated version numbers (Mark)
 
 - Updated htmLawed to v1.1.6 (Mark)
