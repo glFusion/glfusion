@@ -17,7 +17,8 @@
 <link rel="stylesheet" type="text/css" href="layout/ie7.css" />
 <![endif]-->
 </head>
-<body dir="ltr"><a name="top"/>
+<body dir="ltr">
+ <a name="top"></a>
   <div id="gl_container_fixed">
     <div id="gl_header">
       <div class="top-r-corner">
