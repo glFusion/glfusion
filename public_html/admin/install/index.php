@@ -65,7 +65,7 @@ require_once 'include/template-lite.class.php';
 
 $_GLFUSION = array();
 
-$glFusionVars = array('language','method','expire','dbconfig_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8');
+$glFusionVars = array('language','method','migrate','expire','dbconfig_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8');
 
 if ( is_array($_POST) ) {
     foreach ($_POST AS $name => $value) {
@@ -1365,7 +1365,19 @@ function INST_doPluginInstall()
  */
 function INST_doSiteUpgrade()
 {
-    global $_CONF,  $_TABLES, $_DB_dbms, $LANG_INSTALL;
+    global $_GLFUSION, $_CONF,  $_TABLES, $_DB_dbms, $LANG_INSTALL;
+
+    if ( $_GLFUSION['migrate'] == 1 ) {
+        // setup the environment to match glFusion 1.0.0
+        DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'",1);
+        DB_query("UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'",1);
+        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.2' WHERE pi_name = 'calendar'",1);
+        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.0' WHERE pi_name = 'links'",1);
+        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1' WHERE pi_name = 'polls'",1);
+        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1' WHERE pi_name = 'spamx'",1);
+        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
+        DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.0.0' WHERE name='glfusion'",1);
+    }
 
     $version = INST_identifyglFusionVersion();
 
@@ -1527,13 +1539,13 @@ function INST_migrateGeeklog()
 
     $db_handle = @mysql_connect($_DB_host, $_DB_user, $_DB_pass);
     if (!$db_handle) {
-        return _displayError(DB_NO_CONNECT,'getsiteinformation');
+        return _displayError(DB_NO_CONNECT,'');
     }
     if ($db_handle) {
         $connected = @mysql_select_db($_DB_name, $db_handle);
     }
     if ( !$connected) {
-        return _displayError(DB_NO_DATABASE,'getsiteinformation');
+        return _displayError(DB_NO_DATABASE,'');
     }
 
     include $_CONF['path'].'system/lib-database.php';
@@ -1554,7 +1566,7 @@ function INST_migrateGeeklog()
     if ( DB_numRows($result) > 0 ) {
         return _displayError(NO_MIGRATE_GLFUSION,'');
     }
-
+/* ----------------------------------------------------------
     // setup the environment to match glFusion 1.0.0
 
     DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'",1);
@@ -1567,7 +1579,7 @@ function INST_migrateGeeklog()
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
 
     DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.0.0' WHERE name='glfusion'",1);
-
+--------------------------------------------------------------- */
     return INST_checkEnvironment();
 }
 
@@ -1623,6 +1635,7 @@ if ( !isset($_GLFUSION['method'])) {
 } else {
     $method = $_GLFUSION['method'];
 }
+$_GLFUSION['migrate'] = 0;
 
 if ( isset($_POST['type']) ) {
     switch($_POST['type']) {
@@ -1637,6 +1650,7 @@ if ( isset($_POST['type']) ) {
         case 'migrate' :
             $method = 'upgrade';
             $mode   = 'migrate';
+            $_GLFUSION['migrate'] = 1;
             break;
     }
 }
