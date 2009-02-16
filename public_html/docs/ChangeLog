@@ -4,6 +4,8 @@ v1.1.2
 ------
 - Updated version numbers (Mark)
 
+- Updated htmLawed to v1.1.6 (Mark)
+
 - Fixed issue where user groups did not save from user edit screen (Mark)
 
 - Prevent mailer from crashing if unable to connec to SMTP server (Mark)
