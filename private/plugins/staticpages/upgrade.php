@@ -51,6 +51,7 @@ COM_errorLog("Found SP version: " . $currentVersion);
         case '1.5.0' :
             $rc = update_150_to_151();
         default :
+            DB_query("ALTER TABLE {$_TABLES['staticpage']} ADD sp_search tinyint(4) NOT NULL default '1' AFTER postmode",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_SP_CONF['pi_version']."',pi_gl_version='".$_SP_CONF['gl_version']."' WHERE pi_name='staticpages' LIMIT 1");
             break;
     }
