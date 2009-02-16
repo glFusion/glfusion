@@ -63,6 +63,20 @@ define('NO_MIGRATE_GLFUSION',      18);
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
 
+if( function_exists('set_error_handler') )
+{
+    if( PHP_VERSION >= 5 ) {
+        /* Tell the error handler to use the default error reporting options.
+         * you may like to change this to use it in more/less cases, if so,
+         * just use the syntax used in the call to error_reporting() above.
+         */
+        $defaultErrorHandler = set_error_handler('INST_handleError', error_reporting());
+    } else {
+        $defaultErrorHandler = set_error_handler('INST_handleError');
+    }
+}
+
+
 $_GLFUSION = array();
 
 $glFusionVars = array('language','method','migrate','expire','dbconfig_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8');
@@ -73,6 +87,24 @@ if ( is_array($_POST) ) {
             $_GLFUSION[$name] = INST_stripslashes($value);
         }
     }
+}
+
+
+/**
+ * Error Handler - attempt to trap certain errors
+ *
+ * will set the global $_GLFUSION['errstr'] with the error text
+ *
+ * @return  nothing
+ *
+ */
+function INST_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='')
+{
+    global $_GLFUSION;
+
+    $_GLFUSION['errstr'] = $errstr;
+
+    return;
 }
 
 /**
@@ -701,14 +733,15 @@ function INST_checkEnvironment($dbconfig_path='')
         }
     }
     // special test to see if we can create a directory under layout_cache...
-    $rc = @mkdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
+    $rc = mkdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
     if (!$rc) {
-        $T->set_var('location',$_PATH['dbconfig_path'].'data/layout_cache/');
+        $T->set_var('location',$_PATH['dbconfig_path'].'data/layout_cache/<br /><strong>'.$_GLFUSION['errstr'].'</strong>');
         $T->set_var('status', '<span class="Unwriteable">'.$LANG_INSTALL['unable_mkdir'].'</span>');
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
         $permError = 1;
+        @rmdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
     } else {
         $ok = INST_isWritable($_PATH['dbconfig_path'].'data/layout_cache/test/');
         if ( !$ok ) {
@@ -1635,7 +1668,6 @@ if ( !isset($_GLFUSION['method'])) {
 } else {
     $method = $_GLFUSION['method'];
 }
-$_GLFUSION['migrate'] = 0;
 
 if ( isset($_POST['type']) ) {
     switch($_POST['type']) {
