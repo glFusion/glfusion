@@ -242,6 +242,10 @@ margin:20px auto auto;
 }
 .stepfields input {
   margin:5px 0;
+  width:299px;
+}
+.stepfields input.sameline {
+  width:17px;
 }
 .stepfields select {
   color:#666;
@@ -261,6 +265,9 @@ margin:20px auto auto;
   font-weight:bold;
   font-size:14px;
   padding:10px 0 0;
+}
+#path-input {
+  
 }
 #spacer0 {
   height:33px;

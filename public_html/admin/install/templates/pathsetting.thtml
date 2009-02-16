@@ -5,13 +5,13 @@
   <div class="step floatleft">
     <div class="stepheading">
       <span class="floatright buttons">
-        <button type="submit" name="submit" style="float:right;">
-          {lang_next}
-          <img src="layout/arrow-next.png" alt=""/>
-        </button>
         <button type="submit" name="prev">
           <img src="layout/arrow-back.png" alt=""/>
           {lang_prev}
+        </button>
+        <button type="submit" name="submit">
+          {lang_next}
+          <img src="layout/arrow-next.png" alt=""/>
         </button>
       </span>
       {step_heading}
@@ -19,7 +19,7 @@
     <div class="stepfields">
       <span>
         <label>{lang_path_prompt}:</label><br />
-        <input type="text" name="private_path" value="{dbconfig_path}" size="46" />
+        <input type="text" name="private_path" value="{dbconfig_path}" size="46"/>
         {lang_sys_path_exp}
       </span>
     </div>

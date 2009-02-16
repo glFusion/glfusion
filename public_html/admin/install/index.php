@@ -241,10 +241,10 @@ function _displayError($error,$step,$errorText='')
             $T->set_var('text',$LANG_INSTALL['no_innodb_support']);
             break;
         case SITE_DATA_MISSING :
-            $T->set_var('text',$LANG_INSTALL['sitedata_missing'].'<br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['sitedata_missing'].'<br /><br /><br />'.$errorText);
             break;
         case SITE_DATA_ERROR :
-            $T->set_var('text',$LANG_INSTALL['sitedata_missing'].'<br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['sitedata_missing'].'<br /><br /><br />'.$errorText);
             break;
         case LIBCUSTOM_NOT_WRITABLE :
             $T->set_var('text',$LANG_INSTALL['libcustom_not_writable']);
@@ -1002,7 +1002,7 @@ function INST_gotSiteInformation()
         $site_mail = INST_stripslashes($_POST['sitemail']);
         if ( !$validator->check_email_address( $site_mail ) ) {
             $numErrors++;
-            $errText .= 'Site Email is not a valid email address'.'<br />';
+            $errText .= $LANG_INSTALL['site_email_notvalid'].'<br />';
         }
     } else {
         $site_mail = '';
@@ -1013,7 +1013,7 @@ function INST_gotSiteInformation()
         $noreply_mail = INST_stripslashes($_POST['noreplymail']);
         if ( !$validator->check_email_address( $noreply_mail ) ) {
             $numErrors++;
-            $errText .= 'No Reply Email is not a valid email address'.'<br />';
+            $errText .= $LANG_INSTALL['site_noreply_notvalid'].'<br />';
         }
     } else {
         $noreply_mail = '';
