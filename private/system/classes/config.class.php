@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -51,10 +51,10 @@ class config {
      * instance for a given group name.
      *
      *    @param string group_name   This is simply the group name that this
-     *                             config object will control - for the main gl
-     *                             settings this is 'Core'
+     *                               config object will control - for the main
+     *                               settings this is 'Core'
      *
-     *    @return config                The newly created or referenced config object
+     *    @return config             The newly created or referenced config object
      */
     function &get_instance()
     {
@@ -137,7 +137,7 @@ class config {
             if ($row[1] !== 'unset') {
                 if (!array_key_exists($row[2], $this->config_array) ||
                     !array_key_exists($row[0], $this->config_array[$row[2]])) {
-                    $row[1] = preg_replace('!s:(\d+):"(.*?)";!se', '"s:".strlen("$2").":\"$2\";"', $row[1]);
+                    $row[1] = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $row[1] );
                     $value = @unserialize($row[1]);
                     if (($value === false) && ($row[1] != $false_str)) {
                         if (function_exists('COM_errorLog')) {
@@ -146,11 +146,6 @@ class config {
                     } else {
                         $this->config_array[$row[2]][$row[0]] = $value;
                     }
-/*                    if (($value === false) && ($row[1] != $false_str)) {
-                        COM_errorLog("Unable to unserialize {$row[1]} for {$row[2]}:{$row[0]}");
-                    } else {
-                        $this->config_array[$row[2]][$row[0]] = $value;
-                    } */
                 }
             }
         }
@@ -1007,7 +1002,7 @@ class config {
         if (file_exists($cache_file)) {
             $s = file_get_contents($cache_file);
             if ($s !== false) {
-                $s = preg_replace('!s:(\d+):"(.*?)";!se', '"s:".strlen("$2").":\"$2\";"', $s);
+                $s = preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $s );
                 $this->config_array = @unserialize($s);
                 return true;
             }
