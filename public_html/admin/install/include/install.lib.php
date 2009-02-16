@@ -913,8 +913,7 @@ function INST_identifyglFusionVersion ()
     case 'mysql':
         $test = array(
             '1.1.0'  => array("SELECT name FROM {$_TABLES['conf_values']} WHERE name='allow_embed_object'",'allow_embed_object'),
-            '1.0.2'  => array("SELECT name FROM {$_TABLES['conf_values']} WHERE name='use_safe_html'",'use_safe_html'),
-            '1.0.1'  => array("DESCRIBE {$_TABLES['storysubmission']} bodytext",''),
+            '1.0.0'  => array("SELECT name FROM {$_TABLES['conf_values']} WHERE name='use_safe_html'",'use_safe_html'),
             );
 
         break;
