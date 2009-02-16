@@ -79,7 +79,7 @@ $form_arr = array();
 
     $text_arr = array(
         'has_extras' => true,
-        'title'      => "FileCheck: This list shows files that glFusion does not recognize as files included in the glFusion v1.1.2 distribution.  This DOES NOT mean you should simple delete the files below, instead use this tool to assist you in removing files that have been removed or moved in the glFusion distribution.",
+        'title'      => "FileCheck: This list shows files that glFusion does not recognize as files included in the glFusion v".GVERSION." distribution.  This DOES NOT mean you should simple delete the files below, instead use this tool to assist you in removing files that have been removed or moved in the glFusion distribution.",
         'form_url'   => $_CONF['site_admin_url'] . '/filecheck.php'
     );
 
