@@ -47,6 +47,7 @@ $LANG_CHARSET = 'iso-8859-1';
 // index.php
 
 $LANG_INSTALL = array(
+    'back_to_top'               => 'Back to top',
     'calendar'                  => 'Load Calendar Plugin?',
     'calendar_desc'             => 'An online calendar / event system. Includes a site wide calendar and personal calendars for site users.',
     'connection_settings'       => 'Connection Settings',
@@ -92,7 +93,6 @@ $LANG_INSTALL = array(
     'links'                     => 'Load Links Plugin?',
     'links_desc'                => 'A links management system. Provides links to other interesting sites, organized by category.',
     'load_sample_content'       => 'Load Sample Site Content?',
-    'samplecontent_desc'        => 'If checked, install sample content such as blocks, stories, and static pages. <strong>This is recommended for new users of glFusion.</strong>',
     'mediagallery'              => 'Load Media Gallery Plugin?',
     'mediagallery_desc'         => 'A multi-media management system. Can be used as a simple photo gallery or a robust media management system supporting audio, video, and images.',
     'memory_limit'				=> 'It is recommended that you have at least 48M of memory enabled on your site.',
@@ -131,6 +131,7 @@ $LANG_INSTALL = array(
     'recommended'               => 'Recommended',
     'register_globals'			=> 'If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.',
     'safe_mode'					=> 'If PHP\'s <strong>safe_mode</strong> is enabled, some functions of glFusion may not work correctly. Specifically the Media Gallery plugin.',
+    'samplecontent_desc'        => 'If checked, install sample content such as blocks, stories, and static pages. <strong>This is recommended for new users of glFusion.</strong>',
     'select_task'               => 'Select Task',
     'session_error'             => 'Your session has expired.  Please restart the installation process.',
     'setting'                   => 'Setting',
@@ -157,6 +158,7 @@ $LANG_INSTALL = array(
     'system_path'               => 'Path Settings',
     'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />This directory contains the <strong>db-config.php.dist</strong> or <strong>db-config.php</strong> file.<br /><br />Examples: /home/www/glfuison/private or c:/www/glfusion/private',
     'unable_mkdir'              => 'Unable to create directory',
+    'unable_to_find_ver'        => 'Unable to determine glFusion version.',
     'upgrade_error'             => 'Upgrade Error',
     'upgrade_error_text'        => 'An error occured while upgrading your glFusion installation.',
     'upgrade_steps'             => 'UPGRADE STEPS',
@@ -164,7 +166,6 @@ $LANG_INSTALL = array(
     'use_utf8'                  => 'Use UTF-8',
     'welcome_help'              => 'Welcome to the glFusion CMS Installation Wizard. You can install a new glFusion site, upgrade an existing glFusion site, or migrate from an existing Geeklog v1.5 site.<br /><br />Please select the language for the wizard, and the task to perform, then press <strong>Next</strong>.',
     'wizard_version'            => 'v' . GVERSION . ' Installation Wizard',
-    'back_to_top'               => 'Back to top',
 );
 
 // +---------------------------------------------------------------------------+

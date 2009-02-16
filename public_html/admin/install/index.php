@@ -1722,7 +1722,13 @@ switch($mode) {
             require '../../siteconfig.php';
             require $_CONF['path'].'db-config.php';
             $_GLFUSION['dbconfig_path'] = $_CONF['path'];
-            $pageBody = INST_checkEnvironment();
+            require_once $_CONF['path_system'].'lib-database.php';
+            $version = INST_identifyglFusionVersion();
+            if ($version == '' || $version == 'empty' ) {
+                $pageBody = _displayError(CORE_UPGRADE_ERROR,'',$LANG_INSTALL['unable_to_find_ver']);
+            } else {
+                $pageBody = INST_checkEnvironment();
+            }
         }
         break;
     case 'doupgrade' :
