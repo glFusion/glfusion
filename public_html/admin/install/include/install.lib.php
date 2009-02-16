@@ -689,7 +689,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('user_html','Core');
             $c->del('admin_html','Core');
             $c->del('allowed_protocols','Core');
-            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.0' WHERE name='glfusion'",1);
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.0',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.0' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.0';
             $_SQL = '';
         case '1.1.0' :
@@ -697,7 +698,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('story_submit_by_perm_only',0,'select',4,20,0,780,TRUE);
-            DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.1.2' WHERE name='glfusion'",1);
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.2',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.2' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.2';
             $done = true;
             break;

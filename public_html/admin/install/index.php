@@ -1402,14 +1402,14 @@ function INST_doSiteUpgrade()
 
     if ( $_GLFUSION['migrate'] == 1 ) {
         // setup the environment to match glFusion 1.0.0
-        DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'",1);
+        DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE `type` type varchar(30) NOT NULL default 'article'",1);
         DB_query("UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'",1);
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.2' WHERE pi_name = 'calendar'",1);
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.0' WHERE pi_name = 'links'",1);
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1' WHERE pi_name = 'polls'",1);
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1' WHERE pi_name = 'spamx'",1);
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
-        DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.0.0' WHERE name='glfusion'",1);
+        DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.0.0', name='glfusion'",1);
     }
 
     $version = INST_identifyglFusionVersion();
