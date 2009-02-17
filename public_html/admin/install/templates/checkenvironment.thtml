@@ -1,17 +1,16 @@
-<form action="index.php" method="post">
-  <input type="hidden" name="mode" value="{nextaction}" />
+<form name="checkenv" action="index.php" method="post">
+  <input type="hidden" name="task" value="" />
   <input type="hidden" name="language" value="{language}" />
   <input type="hidden" name="dbconfig_path" value="{dbconfig_path}" />
-  <input type="hidden" name="previousstep" value="{previousaction}" />
   {hiddenfields}
   <div class="step floatleft">
     <div class="stepheading">
       <span class="floatright buttons">
-        <button type="submit" name="prev">
+        <button type="submit" name="prev"  onclick="submitForm( checkenv, '{previousaction}' );">
           <img src="layout/arrow-back.gif" alt=""/>
           {lang_previous}
         </button>
-        <button type="submit" name="submit">
+        <button type="submit" name="submit" onclick="submitForm( checkenv, '{nextaction}' );">
           {button}
           <img src="layout/arrow-next.gif" alt=""/>
         </button>

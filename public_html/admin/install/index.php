@@ -1657,10 +1657,10 @@ if (!empty($lng) && is_file('language/' . $lng . '.php')) {
 $_GLFUSION['language'] = $language;
 require_once 'language/'.$language.'.php';
 
-$mode = isset($_POST['mode']) ? $_POST['mode'] : '';
-
-if ( isset($_POST['prev']) ) {
-    $mode = $_POST['previousstep'];
+if ( isset($_POST['task']) ) {
+    $mode = $_POST['task'];
+} else {
+    $mode = '';
 }
 
 if ( !isset($_GLFUSION['method'])) {

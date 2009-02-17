@@ -1,15 +1,14 @@
 <form id="welcome" name="welcome" method="post" action="index.php">
-  <input type="hidden" name="mode" value="gotpathsetting" />
-  <input type="hidden" name="previousstep" value="" />
+  <input type="hidden" name="task" value="" />
   {hiddenfields}
   <div class="step floatleft">
     <div class="stepheading">
       <span class="floatright buttons">
-        <button type="submit" name="prev">
+        <button type="submit" name="prev" onclick="submitForm( welcome, '' );">
           <img src="layout/arrow-back.gif" alt=""/>
           {lang_prev}
         </button>
-        <button type="submit" name="submit">
+        <button type="submit" name="submit" onclick="submitForm( welcome, 'gotpathsetting' );">
           {lang_next}
           <img src="layout/arrow-next.gif" alt=""/>
         </button>
@@ -19,7 +18,7 @@
     <div class="stepfields">
       <span>
         <label>{lang_path_prompt}:</label><br />
-        <input type="text" name="private_path" value="{dbconfig_path}" size="46"/>
+        <input type="text" name="private_path" value="{dbconfig_path}" size="46" onkeypress="return check(event)"/>
         {lang_sys_path_exp}
       </span>
     </div>

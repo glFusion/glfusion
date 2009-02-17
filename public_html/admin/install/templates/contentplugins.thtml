@@ -1,10 +1,10 @@
-<form action="index.php" method="post">
-  <input type="hidden" name="mode" value="installplugins" />
+<form name="contentplugins" action="index.php" method="post">
+  <input type="hidden" name="task" value="" />
   {hiddenfields}
   <div class="step floatleft">
     <div class="stepheading">
       <span class="floatright buttons">
-        <button type="submit" name="submit">
+        <button type="submit" name="submit" onclick="submitForm( contentplugins, 'installplugins' );">
           {lang_next}
           <img src="layout/arrow-next.gif" alt=""/>
         </button>

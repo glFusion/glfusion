@@ -1,10 +1,10 @@
-<form action="index.php" method="post">
-  <input type="hidden" name="previousstep" value="{step}" />
+<form name="error" action="index.php" method="post">
+  <input type="hidden" name="task" value="" />
   {hiddenfields}
   <div class="step floatleft">
     <div class="stepheading">
       <span class="floatright buttons">
-        <button type="submit" name="prev">
+        <button type="submit" name="prev" onclick="submitForm( error, '{step}' );">
           <img src="layout/arrow-back.gif" alt=""/>
           {lang_prev}
         </button>
