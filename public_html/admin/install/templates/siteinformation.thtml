@@ -6,12 +6,12 @@
     <div class="stepheading">
       <span class="floatright buttons">
         <button type="submit" name="prev">
-          <img src="layout/arrow-back.png" alt=""/>
+          <img src="layout/arrow-back.gif" alt=""/>
           {lang_prev}
         </button>
         <button type="submit" name="submit">
           {lang_install}
-          <img src="layout/arrow-next.png" alt=""/>
+          <img src="layout/arrow-next.gif" alt=""/>
         </button>
       </span>
       {lang_site_information}

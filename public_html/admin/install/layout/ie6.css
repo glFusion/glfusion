@@ -3,8 +3,19 @@ This file only contains CSS fixes for the IE 6 browser. For regular style info u
 NOTE: paths specified below are relative to this file
  */
 .bottom-r-corner {
-	background:#FFF url(bottom-r-corner.png) 100% 10px no-repeat;
+  background:#fff url(bottom-r-corner.png) 100% 20px no-repeat;
+  height:5px;
 }
 .bottom-l-corner {
-	background:transparent url(bottom-l-corner.png) 0 10px no-repeat;
+  background:transparent url(bottom-l-corner.png) 0 15px no-repeat;
+  height:5px;
+}
+#gl_moomenu {
+  font-size:50%;
+}
+.buttons {
+  padding-top:5px;
+}
+.steplist .steplist-content {
+  padding:10px 18px;
 }

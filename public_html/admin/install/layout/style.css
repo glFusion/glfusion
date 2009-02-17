@@ -150,7 +150,7 @@ margin:20px auto auto;
 	display:block;
 	padding:0;
 }
-.steplist  .steplist-content {
+.steplist .steplist-content {
 	background:url(steplist-repeat.png) repeat-y;
 	padding:10px 22px;
 	margin-top:-18px;
