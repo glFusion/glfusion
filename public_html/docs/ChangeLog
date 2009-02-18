@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Fixed AM/PM going onto second line randomly in forum lastx view (Eric)
 - Fixed bug where searching for _just_ a date range would fail (Mark)
 - Replaced ini_set() calls for include path to set_include_path() (Mark)
 - Redesigned the layout of the install screens (Eric)
