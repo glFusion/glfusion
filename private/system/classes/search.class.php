@@ -472,7 +472,9 @@ class Search {
         if (empty($this->_query)) {
             if ( (empty($this->_author) || $this->_author==0 )  &&
                  (empty($this->_type)   || $this->_type=='all') &&
-                 (empty($this->_topic)  || $this->_topic=='all')) {
+                 (empty($this->_topic)  || $this->_topic=='all') &&
+                 (empty($this->_dateStart) || empty($this->_dateEnd))
+             ) {
                 $retval = '<p>' . $LANG09[41] . '</p>' . LB;
                 $retval .= $this->showForm();
 
