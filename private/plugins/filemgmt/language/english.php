@@ -52,7 +52,12 @@ $LANG_FM00 = array (
     'warning'           => 'De-Install Warning',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
     'WhatsNewLabel'    => 'Files',
-    'WhatsNewPeriod'   => ' last %s days'
+    'WhatsNewPeriod'   => ' last %s days',
+    'new_upload'        => 'New File submitted at ',
+    'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
+    'details'           => 'File Details',
+    'filename'          => 'Filename',
+    'uploaded_by'       => 'Uploaded By',
 );
 
 // Admin Navbar

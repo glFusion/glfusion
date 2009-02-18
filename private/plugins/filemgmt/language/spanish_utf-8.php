@@ -49,7 +49,12 @@ $LANG_FM00 = array (
     'warning'           => 'Advertencia de desinstalaci&oacute;n',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">El componente est&aacute; instalado y habilitado.<br>Deshabilite primero si quiere desinstalar.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Editor de Componente</a></div',
     'WhatsNewLabel'    => 'Nuevos ficheros',
-    'WhatsNewPeriod'   => ' en %s d&iacute;as'
+    'WhatsNewPeriod'   => ' en %s d&iacute;as',
+    'new_upload'        => 'New File submitted at ',
+    'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
+    'details'           => 'File Details',
+    'filename'          => 'Filename',
+    'uploaded_by'       => 'Uploaded By',
 );
 
 // Admin Navbar

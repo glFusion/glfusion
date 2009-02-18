@@ -52,7 +52,12 @@ $LANG_FM00 = array (
     'warning'           => 'Af-Installre Advarsel',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin er installeret og aktiveret.<br>Deaktiver første, hvis du vil af-Installere det.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
     'WhatsNewLabel'    => 'Filer',
-    'WhatsNewPeriod'   => ' sidst %s days'
+    'WhatsNewPeriod'   => ' sidst %s days',
+    'new_upload'        => 'New File submitted at ',
+    'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
+    'details'           => 'File Details',
+    'filename'          => 'Filename',
+    'uploaded_by'       => 'Uploaded By',
 );
 
 // Admin Navbar
