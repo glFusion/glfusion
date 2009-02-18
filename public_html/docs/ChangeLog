@@ -2,9 +2,14 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Fixed bug where searching for _just_ a date range would fail (Mark)
+
+- Replaced ini_set() calls for include path to set_include_path() (Mark)
+
 - Redesigned the layout of the install screens (Eric)
 
-- Removed height property from .profile-image to maintain original aspect ratio of picture (issue 333) (Eric)
+- Removed height property from .profile-image to maintain original aspect ratio
+  of picture (issue 333) (Eric)
 
 - Updated version numbers (Mark)
 
@@ -172,9 +177,9 @@ Forum Plugin
  - Fixed security issue where a user could edit another user's post if they
    knew the correct URL (Mark)
 
- - Fixed a security vulnerability in the popular topic listing. The list did not
-   properly filter posts by permission allowing posts that a user did not have
-   read access to be listed. Reported by Eric Kingsley (Mark)
+ - Fixed a security vulnerability in the popular topic listing. The list did
+   not properly filter posts by permission allowing posts that a user did not
+   have read access to be listed. Reported by Eric Kingsley (Mark)
 
  - Implemented ability to manage bookmarks from the bookmark screen (Mark)
 
@@ -191,8 +196,8 @@ Links Plugin
 ------------
  - Validate the link is of valid structure prior to saving (Mark)
 
- - Rewrote the links submission to no longer use the generic submit.php. Now if
-   errors are encountered, data entry is preserved (Mark)
+ - Rewrote the links user submission to no longer use the generic submit.php.
+   Now if errors are encountered, data entry is preserved (Mark)
 
 Media Gallery Plugin
 --------------------
