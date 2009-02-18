@@ -8,7 +8,7 @@
       <td class="pluginCellSubTitle" style="padding:0px;">
         <table style="width:100%;border:none;" cellspacing="1" cellpadding="0">
           <tr>
-            <td style="width:180px;" class="pluginCellSubTitle">{$LANG_GF01[category]}</td>
+            <td style="width:180px;" class="pluginCellSubTitle">{lang_category}</td>
             <td class="pluginCellText pluginCellFill" style="white-space:nowrap;">
               {cat_select}
             </td>

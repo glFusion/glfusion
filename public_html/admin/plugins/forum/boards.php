@@ -66,7 +66,6 @@ if ($type == "category") {
             echo COM_siteFooter();
             exit();
         } else {
-//            $boards_addcategory = new Template($_CONF['path_layout'] . 'forum/layout/admin');
             $boards_addcategory = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
             $boards_addcategory->set_file (array ('boards_addcategory'=>'boards_edtcategory.thtml'));
             $boards_addcategory->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
@@ -202,13 +201,14 @@ if ($type == "forum") {
                 }
             }
 
-//            $boards_addforum = new Template($_CONF['path_layout'] . 'forum/layout/admin');
             $boards_addforum = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
             $boards_addforum->set_file (array ('boards_addforum'=>'boards_edtforum.thtml'));
             $boards_addforum->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
             $boards_addforum->set_var ('title', "{$LANG_GF93['addforum']}&nbsp;{$LANG_GF93['undercat']}&nbsp;" .stripslashes($catname));
             $boards_addforum->set_var ('mode', 'add');
             $boards_addforum->set_var ('category_id', COM_applyFilter($_GET['category'],true));
+            $boards_addforum->set_var ('cat_select','<input type="hidden" name="category" value="'.COM_applyFilter($_GET['category'],true).'"'.XHTML.'>');
+            $boards_addforum->set_var ('lang_category','');
             $boards_addforum->set_var ('id', $id);
             $boards_addforum->set_var ('confirm', '1');
             $boards_addforum->set_var ('LANG_DESCRIPTION', $LANG_GF01['DESCRIPTION']);
@@ -328,6 +328,7 @@ if ($type == "forum") {
         $boards_edtforum->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
         $boards_edtforum->set_var ('title', sprintf($LANG_GF93['editforumnote'], $forum_name));
         $boards_edtforum->set_var ('cat_select',$catSelect);
+        $boards_edtforum->set_var ('lang_category',$LANG_GF01['category']);
         $boards_edtforum->set_var ('id', $id);
         $boards_edtforum->set_var ('mode', 'save');
         $boards_edtforum->set_var ('confirm', '0');
