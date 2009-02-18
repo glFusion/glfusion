@@ -113,7 +113,11 @@ $pos = MBYTE_strpos( $url, ':' );
 if( $pos === false ) {
     $p->set_var('file_size',PrettySize($size));
 } else {
-    $p->set_var('file_size','Remote');
+    if ( $size != 0 ) {
+        $p->set_var('file_size',PrettySize($size));
+    } else {
+        $p->set_var('file_size','Remote');
+    }
 }
 $p->set_var('homepage_url',$homepage);
 $p->set_var('LANG_HOMEPAGE',_MD_HOMEPAGE);

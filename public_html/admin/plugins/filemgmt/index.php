@@ -350,7 +350,8 @@ function modDownload() {
     $display .= '<tr><td width="25%">'._MD_REPLFILENAME.'</td><td colspan="2"><input type="file" name="newfile" size="50" maxlength="200"' . XHTML . '></td></tr>' .LB;
     $display .= '<tr><td>'._MD_HOMEPAGEC.'</td><td colspan="2"><input type="text" name="homepage" value="'.$homepage.'" size="50" maxlength="150"' . XHTML . '></td></tr>' .LB;
     $display .= '<tr><td>'._MD_VERSIONC.'</td><td colspan="2"><input type="text" name="version" value="'.$version.'" size="10" maxlength="10"' . XHTML . '></td></tr>' .LB;
-    $display .= '<tr><td>'._MD_FILESIZEC.'</td><td colspan="2"><input type="text" name="size" value="'.$size.'" size="10" maxlength="20" disabled="disabled"' . XHTML . '>'._MD_BYTES.'</td></tr>' .LB;
+//    $display .= '<tr><td>'._MD_FILESIZEC.'</td><td colspan="2"><input type="text" name="size" value="'.$size.'" size="10" maxlength="20" disabled="disabled"' . XHTML . '>'._MD_BYTES.'</td></tr>' .LB;
+    $display .= '<tr><td>'._MD_FILESIZEC.'</td><td colspan="2"><input type="text" name="size" value="'.$size.'" size="10" maxlength="20"' . XHTML . '>'._MD_BYTES.'</td></tr>' .LB;
     $display .= '<tr><td style="vertical-align:top;">'._MD_DESCRIPTIONC.'</td><td colspan="2"><textarea name="description" cols="55" rows="10">'.$description.'</textarea></td></tr>' .LB;
     $display .= '<tr><td>'._MD_CATEGORYC.'</td><td colspan="2">';
     $display .= $mytree->makeMySelBox("title", "title", $cid,0,"cid");
@@ -602,7 +603,10 @@ function modDownloadS() {
             }
         }
     } else if ( !empty ($fileurl) )  {
+        $size = COM_applyFilter($_POST['size'],true);
+        $size = $myts->makeTboxData4Save($size);
         $url = $fileurl;
+        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size." WHERE lid='{$_POST['lid']}'");
     }
     $currentsnapfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'logourl', "lid='{$_POST['lid']}'");
     $currentSnapFQN = $filemgmt_SnapStore . $myts->makeTboxData4Save(rawurldecode($currentsnapfile));
