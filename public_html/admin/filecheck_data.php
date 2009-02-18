@@ -332,7 +332,7 @@ $glfusionDir['public_html/forum/images/ranks']=1;
 $glfusionDir['public_html/forum/images/smilies']=1;
 $glfusionDir['public_html/forum/javascript']=1;
 $glfusionDir['public_html/help']=1;
-$glfusionDir['public_html/images']=1;
+//$glfusionDir['public_html/images']=1;
 $glfusionDir['public_html/images/library']=1;
 $glfusionDir['public_html/images/menu']=1;
 $glfusionDir['public_html/images/topics']=1;
@@ -2357,6 +2357,14 @@ $glfusionFiles['public_html/admin/install/language/index.html']=1;
 $glfusionFiles['public_html/admin/install/language/japanese.php']=1;
 $glfusionFiles['public_html/admin/install/language/japanese_utf_8.php']=1;
 $glfusionFiles['public_html/admin/install/language/polish.php']=1;
+
+$glfusionFiles['public_html/admin/install/layout/arrow_back.gif']=1;
+$glfusionFiles['public_html/admin/install/layout/arrow_next.gif']=1;
+$glfusionFiles['public_html/admin/install/layout/gl_moopngfix.js']=1;
+$glfusionFiles['public_html/admin/install/layout/ie6.css']=1;
+$glfusionFiles['public_html/admin/install/layout/ie7.css']=1;
+$glfusionFiles['public_html/admin/install/layout/mootools_release_1.11.packed.js']=1;
+
 $glfusionFiles['public_html/admin/install/layout/arrow_back.png']=1;
 $glfusionFiles['public_html/admin/install/layout/arrow_next.png']=1;
 $glfusionFiles['public_html/admin/install/layout/top.png']=1;
