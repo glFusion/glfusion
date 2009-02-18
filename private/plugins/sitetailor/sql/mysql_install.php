@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2008 by the following authors:                            |
+// | Copyright (C)  2008-2009 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -137,7 +137,7 @@ $_SQL['default_menu_elements'] = "INSERT INTO {$_TABLES['st_menu_elements']} (`i
 (3, 0, 1, 'Search', 2, '4', 30, 1, '', '', 2),
 (4, 0, 1, 'Directory', 2, '2', 40, 1, '', '', 2),
 (5, 0, 1, 'Topics', 3, '3', 50, 1, '', '', 2),
-(6, 0, 1, 'Plugins', 3, '5', 60, 1, '', '', 2),
+(6, 0, 1, 'Extras', 3, '5', 60, 1, '', '', 2),
 
 (14, 0, 1, 'Site Stats', 2, '5', 90, 1, '', '', 2),
 (15, 0, 1, 'My Account', 3, '1', 100, 1, '', '', 13),
@@ -156,14 +156,4 @@ $_SQL['default_menu_elements'] = "INSERT INTO {$_TABLES['st_menu_elements']} (`i
 (28, 0, 3, 'Admin Options', 3, '2', 60, 1, '', '', 1),
 (29, 0, 3, 'Logout', 6, '%site_url%/users.php?mode=logout', 70, 1, '%site_url%/users.php?mode=logout', '', 13);
 ";
-
-/*
-(7, 0, 1, 'Widgets', 1, '', 70, 1, '', '', 2),
-(8, 7, 1, 'moorotator', 5, 'gl_moorotator', 10, 1, '', '', 2),
-(9, 7, 1, 'moosimplebox', 5, 'gl_moosimplebox', 20, 1, '', '', 2),
-(10, 7, 1, 'mooslide', 5, 'gl_mooslide', 30, 1, '', '', 2),
-(11, 7, 1, 'moospring', 5, 'gl_moospring', 40, 1, '', '', 2),
-(12, 7, 1, 'mootickerRSS', 5, 'gl_mootickerRSS', 50, 1, '', '', 2),
-(13, 0, 1, 'Typography', 5, 'typography', 80, 1, '', '', 2),
-*/
 ?>
