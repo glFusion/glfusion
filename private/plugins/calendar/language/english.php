@@ -208,7 +208,8 @@ $LANG_confignames['calendar'] = array(
     'notification' => 'Notification Email?',
     'delete_event' => 'Delete Events with Owner?',
     'aftersave' => 'After Saving Event',
-    'default_permissions' => 'Event Default Permissions'
+    'default_permissions' => 'Event Default Permissions',
+    'only_admin_submit' => 'Only allow Admins to Submit',
 );
 
 $LANG_configsubgroups['calendar'] = array(
