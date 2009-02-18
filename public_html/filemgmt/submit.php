@@ -47,8 +47,8 @@ include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 
 
-function FM_notifyAdmins( $filename,$file_user_id ) {
-    global $LANG_DIRECTION, $LANG_CHARSET, $_USER, $_FM_CONF, $_CONF, $_TABLES;
+function FM_notifyAdmins( $filename,$file_user_id,$description ) {
+    global $LANG_DIRECTION, $LANG_CHARSET, $LANG_FM00, $_USER, $_FM_CONF, $_CONF, $_TABLES;
 
     require_once $_CONF['path'].'lib/phpmailer/class.phpmailer.php';
 
@@ -67,7 +67,7 @@ function FM_notifyAdmins( $filename,$file_user_id ) {
         $charset = $LANG_CHARSET;
     }
 
-    COM_clearSpeedlimit(600,'fmnotify');
+    COM_clearSpeedlimit(300,'fmnotify');
     $last = COM_checkSpeedlimit ('fmnotify');
     if ( $last == 0 ) {
         $mail = new PHPMailer();
@@ -106,6 +106,7 @@ function FM_notifyAdmins( $filename,$file_user_id ) {
             'lang_uploaded_by'  =>  $LANG_FM00['uploaded_by'],
             'username'          =>  $uname,
             'filename'          =>  $filename,
+            'description'       =>  $description,
             'url_moderate'      =>  '<a href="' . $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?op=listNewDownloads">Click here to view</a>',
             'site_name'         =>  $_CONF['site_name'] . ' - ' . $_CONF['site_slogan'],
             'site_url'          =>  $_CONF['site_url'],
@@ -145,9 +146,7 @@ function FM_notifyAdmins( $filename,$file_user_id ) {
         for ($i=0;$i < $nRows; $i++ ) {
             $row = DB_fetchArray($result);
             if ( $row['email'] != '' ) {
-			    if ($_MG_CONF['verbose'] ) {
-					COM_errorLog("FileMgmt Upload: Sending notification email to: " . $row['email'] . " - " . $row['username']);
-				}
+    			COM_errorLog("FileMgmt Upload: Sending notification email to: " . $row['email'] . " - " . $row['username']);
                 $toCount++;
                 $mail->AddAddress($row['email'], $row['username']);
             }
@@ -295,7 +294,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                     $returnMove = move_uploaded_file($tmp, "{$filemgmt_FileStore}{$name}");             // move file to your upload directory
                 } else {
                     $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
-                    FM_notifyAdmins($name,$submitter);
+                    FM_notifyAdmins($name,$submitter,$description);
                 }
 //                $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
                 if (!$returnMove) {

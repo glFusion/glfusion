@@ -11,6 +11,7 @@
 <span style="font-weight:bold;">{lang_details}</span>
 <br><br>
 {lang_filename} - {filename}<br>
+<p>{description}</p>
 {lang_uploaded_by} - {username}<br>
 <br>
 {url_moderate}
