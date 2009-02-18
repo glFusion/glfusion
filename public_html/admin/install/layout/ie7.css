@@ -5,3 +5,6 @@ NOTE: paths specified below are relative to this file
 .stepheading {
   padding-top:5px;
 }
+.stepfields input {
+  margin:4px 0;
+}

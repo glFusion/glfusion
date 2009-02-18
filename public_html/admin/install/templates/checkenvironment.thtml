@@ -46,11 +46,11 @@
       </table>
       <h2>{lang_filesystem}</h2>
       <hr />
-      <table>
+      <table style="width:714px;">
         <!-- BEGIN perms -->
         <tr class="pluginRow{rowclass}">
-          <td style="width:80%;">{location}</td>
-          <td style="text-align:right;">{status}</td>
+          <td id="pathtext">{location}</td>
+          <td id="pathtext-status">{status}</td>
         </tr>
         <!-- END perms -->
       </table>

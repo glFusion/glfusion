@@ -261,7 +261,7 @@ function _displayError($error,$step,$errorText='')
             $T->set_var('text',$LANG_INSTALL['dbconfig_not_found']);
             break;
         case DB_DATA_MISSING :
-            $T->set_var('text',$LANG_INSTALL['missing_db_fields'].'<br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['missing_db_fields'].'<br /><br /><br />'.$errorText);
             break;
         case DB_NO_CONNECT :
             $T->set_var('text',$LANG_INSTALL['no_db_connect']);
@@ -282,10 +282,10 @@ function _displayError($error,$step,$errorText='')
             $T->set_var('text',$LANG_INSTALL['libcustom_not_writable']);
             break;
         case CORE_UPGRADE_ERROR :
-            $T->set_var('text',$LANG_INSTALL['core_upgrade_error'].'<br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['core_upgrade_error'].'<br /><br /><br />'.$errorText);
             break;
         case PLUGIN_UPGRADE_ERROR :
-            $T->set_var('text',$LANG_INSTALL['plugin_upgrade_error_desc'].'<br /><br />'.$errorText);
+            $T->set_var('text',$LANG_INSTALL['plugin_upgrade_error_desc'].'<br /><br /><br />'.$errorText);
             break;
         case INVALID_GEEKLOG_VERSION :
             $T->set_var('text',$LANG_INSTALL['invalid_geeklog_version']);

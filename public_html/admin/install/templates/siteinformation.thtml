@@ -23,7 +23,7 @@
           <option value="mysql-innodb" {innodb_selected}>MySQL with InnoDB Table support</option>
         </select>
         <label style="font-weight:normal;">&nbsp;{lang_utf8}:</label>
-        <input type="checkbox" name="use_utf8" checked="checked" class="sameline"/>
+        <input type="checkbox" name="use_utf8" checked="checked" class="box"/>
       </span>
       <span>
         <label>{lang_database_hostname}:</label><br />
