@@ -1233,7 +1233,7 @@ function INST_installAndContentPlugins()
 
     INST_personalizeAdminAccount($site_mail, $site_url);
 
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
+    require_once $_CONF['path_system'].'classes/config.class.php';
     require_once 'config-install.php';
     install_config($site_url);
 
@@ -1241,12 +1241,12 @@ function INST_installAndContentPlugins()
     $html_path  = $_PATH['public_html'];
 
     $config = config::get_instance();
-    $config->set('site_name', urldecode($site_name));
-    $config->set('site_slogan', urldecode($site_slogan));
-    $config->set('site_url', urldecode($site_url));
-    $config->set('site_admin_url', urldecode($site_admin_url));
-    $config->set('site_mail', urldecode($site_mail));
-    $config->set('noreply_mail', urldecode($noreply_mail));
+    $config->set('site_name', $site_name);
+    $config->set('site_slogan', $site_slogan);
+    $config->set('site_url', $site_url);
+    $config->set('site_admin_url', $site_admin_url);
+    $config->set('site_mail', $site_mail);
+    $config->set('noreply_mail', $noreply_mail);
     $config->set('path_html', $html_path);
     $config->set('path_log', $gl_path . 'logs/');
     $config->set('path_language', $gl_path . 'language/');
@@ -1256,7 +1256,7 @@ function INST_installAndContentPlugins()
     $config->set('path_themes', $html_path . 'layout/');
     $config->set('rdf_file', $html_path . 'backend/glfusion.rss');
     $config->set('path_pear', $_CONF['path_system'] . 'pear/');
-    $config->set_default('default_photo', urldecode($site_url) . '/default.jpg');
+    $config->set_default('default_photo', $site_url.'/default.jpg');
 
     $lng = INST_getDefaultLanguage($gl_path . 'language/', $language, $utf8);
     if (!empty($lng)) {
