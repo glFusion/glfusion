@@ -119,6 +119,10 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
         $altbody .= "\n\r\n\r";
         $altbody .= $LANG_FM00['details'];
         $altbody .= "\n\r";
+        $altbody .= $LANG_FM00['filename'] . ' ' . $filename . "\n\r";
+        $altbody .= "\n\r";
+        $altbody .= $description . "\n\r";
+        $altbody .= "\n\r";
         $altbody .= $LANG_FM00['uploaded_by'] . ' ' . $uname . "\n\r";
         $altbody .= "\n\r\n\r";
         $altbody .= $_CONF['site_name'] . "\n\r";
