@@ -1319,15 +1319,15 @@ function MG_notifyModerators( $aid ) {
     if ( $last == 0 ) {
         $mail = new PHPMailer();
         $mail->CharSet = $charset;
-        if ($_CONF['mail_settings']['backend'] == 'smtp' ) {
-            $mail->Host     = $_CONF['mail_settings']['host'] . ':' . $_CONF['mail_settings']['port'];
-            $mail->SMTPAuth = $_CONF['mail_settings']['auth'];
-            $mail->Username = $_CONF['mail_settings']['username'];
-            $mail->Password = $_CONF['mail_settings']['password'];
+        if ($_CONF['mail_backend'] == 'smtp' ) {
+            $mail->Host     = $_CONF['mail_smtp_host'] . ':' . $_CONF['mail_smtp_port'];
+            $mail->SMTPAuth = $_CONF['mail_smtp_auth'];
+            $mail->Username = $_CONF['mail_smtp_username'];
+            $mail->Password = $_CONF['mail_smtp_password'];
             $mail->Mailer = "smtp";
-        } elseif ($_CONF['mail_settings']['backend'] == 'sendmail') {
+        } elseif ($_CONF['mail_backend'] == 'sendmail') {
             $mail->Mailer = "sendmail";
-            $mail->Sendmail = $_CONF['mail_settings']['sendmail_path'];
+            $mail->Sendmail = $_CONF['mail_sendmail_path'];
         } else {
             $mail->Mailer = "mail";
         }
