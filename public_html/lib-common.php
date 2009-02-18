@@ -162,7 +162,7 @@ if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
 */
 if( !$_CONF['have_pear'] )
 {
-    $curPHPIncludePath = ini_get( 'include_path' );
+    $curPHPIncludePath = get_include_path();
     if( defined( 'PATH_SEPARATOR' )) {
         $separator = PATH_SEPARATOR;
     } else {
@@ -172,23 +172,12 @@ if( !$_CONF['have_pear'] )
             $separator = ':';
         }
     }
-    if( ini_set( 'include_path', $_CONF['path_pear'] . $separator
+    if( set_include_path( $_CONF['path_pear'] . $separator
                                  . $curPHPIncludePath ) === false ) {
-        COM_errorLog( 'ini_set failed - there may be problems using the PEAR classes.', 1);
+        COM_errorLog( 'set_include_path failed - there may be problems using the PEAR classes.', 1);
     }
 }
 
-
-/**
-* This is necessary to ensure compatibility with PHP 4.1.x
-*
-*/
-if( !function_exists( 'is_a' ))
-{
-    require_once( 'PHP/Compat.php' );
-
-    PHP_Compat::loadFunction( 'is_a' );
-}
 
 if( !function_exists( 'file_put_contents' ))
 {
@@ -7165,7 +7154,7 @@ function COM_decompress($file, $target)
 
     } else if ($ext == 'zip') {
 
-      require_once $_CONF['path'] . '/lib/ZipLib.class.php';
+      require_once $_CONF['path'].'/lib/ZipLib.class.php';
 
       $zip = new ZipLib();
       $ok = $zip->Extract($file, $target);
@@ -7265,7 +7254,7 @@ if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 &&
     if (empty($_CONF['site_disabled_msg'])) {
         header("HTTP/1.1 503 Service Unavailable");
         header("Status: 503 Service Unavailable");
-        echo $_CONF['site_name'] . ' is temporarily down.  Please check back soon.';
+        echo $_CONF['site_name'] . ' is temporarily undergoing maintenance.  Please check back soon.';
     } else {
         // if the msg starts with http: assume it's a URL we should redirect to
         if (preg_match("/^(https?):/", $_CONF['site_disabled_msg']) === 1) {
