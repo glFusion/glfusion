@@ -351,7 +351,23 @@ function PLG_enableStateChange ($type, $enable)
 */
 function PLG_isModerator()
 {
-    return PLG_callFunctionForAllPlugins('ismoderator');
+    global $_PLUGINS;
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_ismoderator_' . $pi_name;
+        if (function_exists($function)) {
+            if ( $function() == true ) {
+                return true;
+            }
+        }
+    }
+    $function = 'custom_ismoderator';
+    if (function_exists($function)) {
+        if ( $function() == true ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
