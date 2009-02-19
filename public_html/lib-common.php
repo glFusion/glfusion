@@ -1461,7 +1461,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         }
         $L->parse('output','logo');
         $theme->set_var('logo_block',$L->finish($L->get_var('output')));
-    } else {
+    } else if ( $_ST_CONF['use_graphic_logo'] == 0 ) {
         $L = new Template( $_CONF['path_layout'] );
         $L->set_file( array(
             'logo'          => 'logo-text.thtml',
@@ -1475,6 +1475,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         }
         $L->parse('output','logo');
         $theme->set_var('logo_block',$L->finish($L->get_var('output')));
+    } else {
+        $theme->set_var('logo_block','');
     }
 
     $theme->set_var( 'site_logo', $_CONF['layout_url']

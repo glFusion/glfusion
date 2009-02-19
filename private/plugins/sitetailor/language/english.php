@@ -77,6 +77,7 @@ $LANG_ST01 = array (
     'logo_options'      => 'Site Tailor Logo Options',
     'use_graphic_logo'  => 'Use Graphic Logo',
     'use_text_logo'     => 'Use Text Logo',
+    'use_no_logo'       => 'Do Not Display a Logo',
     'display_site_slogan'   => 'Display Site Slogan',
     'upload_logo'       => 'Upload New Logo',
     'current_logo'      => 'Current Logo',

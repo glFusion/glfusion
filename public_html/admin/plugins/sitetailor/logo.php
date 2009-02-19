@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -77,6 +77,7 @@ function ST_logoEdit() {
         'xhtml'                 => XHTML,
         'graphic_logo_selected' => $_ST_CONF['use_graphic_logo'] == 1 ? ' checked="checked"' : '',
         'text_logo_selected'    => $_ST_CONF['use_graphic_logo'] == 0 ? ' checked="checked"' : '',
+        'no_logo_selected'      => $_ST_CONF['use_graphic_logo'] == -1 ? ' checked="checked"' : '',
         'slogan_selected'       => $_ST_CONF['display_site_slogan'] == 1 ? ' checked="checked"' : '',
         'current_logo_graphic'  => $current_logo,
     ));
