@@ -46,7 +46,7 @@ function staticpages_upgrade()
     global $_TABLES, $_CONF, $_SP_CONF;
 
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='staticpages'");
-COM_errorLog("Found SP version: " . $currentVersion);
+
     switch( $currentVersion ) {
         case '1.5.0' :
             $rc = update_150_to_151();
