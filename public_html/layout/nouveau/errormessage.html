@@ -9,26 +9,23 @@ html, body {height:100%; margin:0; padding:0;}
 * html #tbl {position:absolute; top: 50%;}
 #tbl[id] {display:table; height:100%; width:100%;}
 * html #cell {position:relative; top:-50%; z-index:1; width:100%; text-align:center; color:#fff; font-size:3em;}
-#cell[id] {display:table-cell; vertical-align:middle; text-align:center; color:#fff; font-size:3em;}
-#cell span {font-size:.5em;}
+#cell[id] {display:table-cell; vertical-align:middle; text-align:center; color:blue; font-size:3em;}
+#cell span {font-size:.5em; color:#000;}
 </style>
 <!--[if lte IE 6]>
-<style type="text/css">html {overflow-y:hidden;}body {overflow-y:auto;}#bg {position:absolute; z-index:-1;}#content {position:static;}#cell{padding-top:.5em;}</style>
-<script type="text/javascript" src="../../javascript/mootools/mootools-release-1.11.packed.js"></script>
-<script defer type="text/javascript" src="../../javascript/mootools/gl_moopngfix.js"></script>
+<style type="text/css">html {overflow-y:hidden;}body {overflow-y:auto;}#bg {position:absolute; z-index:-1;}#content {position:static;}</style>
 <![endif]-->
 <!--[if IE 7]>
 <style type="text/css">#cell {position:relative; top:40%; text-align:center; margin-top:-1em;}</style>
 <![endif]-->
 </head>
-  <body>
-    <div id="bg"><img src="images/header-bg.png" width="100%" height="100%" alt="" /></div>
-      <div id="tbl">
-        <div id="cell">
-          <img src="images/alert-big.png" width="128px" height="128px" alt="" style="margin-top:-.5em;"/><br />
-          Oops! There's an error!<br />
-          <span>If the problem persists, please review the error logs.</span>
-        </div>
-      </div>
-  </body>
+<body>
+  <div id="bg"></div>
+  <div id="tbl">
+    <div id="cell">
+      Oops! There's an error!<br />
+      <span>If the problem persists, please review the error logs.</span>
+    </div>
+  </div>
+</body>
 </html>
