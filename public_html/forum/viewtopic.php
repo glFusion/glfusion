@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -174,10 +174,6 @@ $forum_outline_header->set_var('xhtml',XHTML);
 $forum_outline_header->parse ('output', 'forum_outline_header');
 echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
-// Stop timer and print elapsed time
-//$intervalTime = $mytimer->stopTimer();
-//COM_errorLog("Start Topic Display Time: $intervalTime");
-
 if ($mode != 'preview') {
 
     $topicnavbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
@@ -315,29 +311,22 @@ if ($mode != 'preview') {
     echo $preview_header->finish($preview_header->get_var('output'));
 }
 
-//$intervalTime = $mytimer->stopTimer();
-//COM_errorLog("Topic Display Time2: $intervalTime");
-
 // Update the topic view counter and user access log
 DB_query("UPDATE {$_TABLES['gf_topic']} SET views=views+1 WHERE id='$showtopic'");
 if(isset($_USER['uid']) && $_USER['uid'] > 1 ) {
     $query = DB_query("SELECT pid,forum FROM {$_TABLES['gf_topic']} WHERE id={$showtopic}");
     list ($showtopicpid,$forumid) = DB_fetchArray($query);
     if ($showtopicpid == 0 ) {
-        $showtopicpid = 0; // $showtopics;
+        $showtopicpid = $showtopic;
     }
     $lrows = DB_count($_TABLES['gf_log'],array('uid','topic'),array($_USER['uid'],$showtopic));
     $logtime = time();
     if ($lrows < 1) {
-        DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('$_USER[uid]','$forum','$showtopic','$logtime')");
+        DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('$_USER[uid]','$forum','$showtopicpid','$logtime')");
     } else {
-        DB_query("UPDATE {$_TABLES['gf_log']} SET time=$logtime WHERE uid=$_USER[uid] AND topic=$showtopic");
+        DB_query("UPDATE {$_TABLES['gf_log']} SET time=$logtime WHERE uid=$_USER[uid] AND topic=$showtopicpid");
     }
 }
-
-// Retrieve all the records for this topic
-//$intervalTime = $mytimer->stopTimer();
-//COM_errorLog("Topic Display Time2b: $intervalTime");
 
 $sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$showtopic' OR pid='$showtopic' ORDER BY id $order LIMIT $offset, $show";
 $result  = DB_query($sql);
@@ -345,8 +334,6 @@ $result  = DB_query($sql);
 // Display each post in this topic
 $onetwo = 1;
 while($topicRec = DB_fetchArray($result)) {
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Topic Display Time: $intervalTime");
     if ($CONF_FORUM['show_anonymous_posts'] == 0 AND $topicRec['uid'] == 1) {
        echo '<div class="pluginAlert" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
         break;
@@ -403,7 +390,6 @@ $forum_outline_footer->parse ('output', 'forum_outline_footer');
 echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
 
 $intervalTime = $mytimer->stopTimer();
-// COM_errorLog("End Topic Display Time: $intervalTime");
 
 if(!isset($_REQUEST['onlytopic']) || $_REQUEST['onlytopic'] != 1) {
     echo BaseFooter();

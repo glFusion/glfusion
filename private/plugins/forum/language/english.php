@@ -496,6 +496,7 @@ $LANG_GF02['msg201']   = 'Popular Topics';
 $LANG_GF02['msg202']   = 'No new posts';
 $LANG_GF02['msg203']   = 'Click to add bookmark';
 $LANG_GF02['msg204']   = 'Click to remove bookmark';
+$LANG_GF02['new_posts'] = 'New Posts';
 
 $LANG_GF02['StatusHeading']   = 'Information Only';
 $LANG_GF02['PostReply']   = 'Post New Reply';

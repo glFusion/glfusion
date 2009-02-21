@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -109,68 +109,27 @@ echo gf_siteHeader();
 forum_chkUsercanAccess();
 
 if ($op == 'newposts' AND $_USER['uid'] > 1) {
-    $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $report->set_file (array ('report' => 'reports/report_results.thtml',
-                    'records' => 'reports/report_record.thtml',
-                    'outline_header'=>'forum_outline_header.thtml',
-                    'outline_footer' => 'forum_outline_footer.thtml',
-                    'markread' => 'links/markread.thtml',
-                    'return' => 'links/return.thtml'));
 
-    $report->set_var('xhtml',XHTML);
-    switch($order) {
-        case 1:
-            $orderby = 'subject';
-            break;
-        case 2:
-            $orderby = 'views';
-            break;
-        case 3:
-            $orderby = 'replies';
-            break;
-        case 4:
-            $orderby = 'date';
-            break;
-        default:
-            $orderby = 'date';
-            $order = 1;
-            break;
-    }
-    if ($order == $prevorder) {
-        $direction = ($direction == "DESC") ? "ASC" : "DESC";
-    } else {
-        $direction = ($direction == "ASC") ? "ASC" : "DESC";
-    }
+    USES_lib_admin();
 
-    $report->set_var ('layout_url', $_CONF['layout_url']);
-    $report->set_var ('phpself',$_CONF['site_url'] . '/forum/index.php?op=newposts');
-    $report->set_var ('LANG_TITLE', $LANG_GF02['msg111']);
-    $report->set_var ('startblock', COM_startBlock($LANG_GF02['msg111']));
-    $report->set_var ('endblock', COM_endBlock());
-    $report->set_var ('markreadlink', 'href="'.$_CONF['site_url'] .'/forum/index.php?op=markallread">');
-    $report->set_var ('LANG_markread', $LANG_GF02['msg164']);
-    $report->set_var ('returnlink', "href=\"{$_CONF['site_url']}/forum/index.php\">");
-    $report->set_var ('LANG_return', $LANG_GF02['msg175']);
-    $report->set_var ('spacerwidth', '40%');
-    $report->set_var ('prevorder', $order);
-    $report->set_var ('direction', $direction);
-    $report->set_var ('op', '&amp;op=newposts');
-    $report->set_var ('page', '1');
+    $header_arr = array(
+        array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
+        array('text' => $LANG_GF01['TOPIC'],  'field' => 'subject'),
+        array('text' => $LANG_GF92['sb_latestposts'],   'field' => 'date', 'nowrap' => true),
+    );
+    $data_arr = array();
+    $text_arr = array();
     if ($CONF_FORUM['usermenu'] == 'navbar') {
-        $report->set_var('navmenu', forumNavbarMenu());
-    } else {
-        $report->set_var('navmenu','');
+        echo forumNavbarMenu($LANG_GF02['new_posts']);
     }
-
-    $report->set_var ('LANG_Heading1', $LANG_GF01['SUBJECT']);
-    $report->set_var ('LANG_Heading2', $LANG_GF01['REPLIES']);
-    $report->set_var ('LANG_Heading3', $LANG_GF01['VIEWS']);
-    $report->set_var ('LANG_Heading4', $LANG_GF01['DATE']);
-
-    $report->parse ('link1','return');
-    $report->parse ('link2','markread');
-    $report->parse ('header_outline','outline_header');
-    $report->parse ('footer_outline','outline_footer');
+    $retval .= COM_startBlock($LANG_GF02['msg111'], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+    $groups = array ();
+    $usergroups = SEC_getUserGroups();
+    foreach ($usergroups as $group) {
+        $groups[] = $group;
+    }
+    $grouplist = implode(',',$groups);
 
     if ($forum > 0) {
         $inforum = "AND forum = '$forum'";
@@ -178,67 +137,83 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
         $inforum = "";
     }
 
-    $lastlogin = DB_getItem($_TABLES['userinfo'],'lastlogin',"uid = '" . $_USER['uid'] . "'");
-    $sql = "SELECT lastupdated,subject,comment,replies,views,id,forum FROM {$_TABLES['gf_topic']} ";
-    $sql .= "WHERE (pid = 0) $inforum ORDER BY $orderby $direction LIMIT 100";
-//    $sql .= "WHERE lastupdated > " . $lastlogin . " $inforum ORDER BY $orderby $direction LIMIT 100";
+    $orderby    = 'date';
+    $order      = 1;
+    $direction  = "DESC";
+
+    $sql = "SELECT * FROM {$_TABLES['gf_topic']} a LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id WHERE (pid=0) $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0 ORDER BY $orderby $direction";
 
     $result = DB_query($sql);
+
     $nrows = DB_numRows($result);
-    $reportrecords=0;
-    $csscode = 1;
-    if ($nrows > 0 ) {
-        for ($i = 1; $i <= $nrows; $i++) {
-            $P = DB_fetchArray($result);
-            $forumgrpid = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='{$P['forum']}'");
-            $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$forumgrpid'");
-            if (SEC_inGroup($groupname)) {
-                $userlogtime = DB_getItem($_TABLES['gf_log'],"time", "uid=$_USER[uid] AND topic={$P['id']}");
-                if ($userlogtime == NULL OR $P['lastupdated'] > $userlogtime) {
-                    if ($CONF_FORUM['use_censor']) {
-                        $P['subject'] = COM_checkWords($P['subject']);
-                    }
-                    $postdate = COM_getUserDateTimeFormat($P['lastupdated']);
-                    $link = "<a href=\"{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$P['id']}\">";
-                    $report->set_var('post_start_ahref', $link);
-                    $report->set_var('post_subject', $P['subject']);
-                    $report->set_var('csscode', $csscode);
-                    $report->set_var('post_end_ahref', '</a>');
-                    $report->set_var('post_date',$postdate[0]);
-                    $report->set_var('post_replies', $P['replies']);
-                    $report->set_var('post_views', $P['views']);
-                    $report->parse ('report_records', 'records',true);
-                    if($csscode == 2) {
-                        $csscode = 1;
-                    } else {
-                        $csscode++;
-                    }
-                    $reportrecords++;
+
+    $displayrecs = 0;
+    for ($i = 1; $i <= $nrows; $i++) {
+        $P = DB_fetchArray($result);
+        $userlogtime = DB_getItem($_TABLES['gf_log'],"time", "uid=$_USER[uid] AND topic={$P['id']}");
+        if ($userlogtime == NULL OR $P['lastupdated'] > $userlogtime) {
+            if ($CONF_FORUM['use_censor']) {
+                $P['subject'] = COM_checkWords($P['subject']);
+                $P['comment'] = COM_checkWords($P['comment']);
+            }
+            $topic_id = $P['id'];
+            $displayrecs++;
+
+            $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $P['date']);
+            $lastdate  = strftime($CONF_FORUM['default_Datetime_format'], $P['lastupdated']);
+
+            if ($p['uid'] > 1) {
+                $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
+            } else {
+                $topicinfo = "{$LANG_GF01['STARTEDBY']} {$P['name']},";
+            }
+
+            $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}:{$P['views']}, {$LANG_GF01['REPLIES']}:{$P['replies']}<br" . XHTML . ">";
+
+            if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
+                $lastid = $P['id'];
+                $testText = gf_formatTextBlock($P['comment'],'text','text');
+                $testText = strip_tags($testText);
+                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+            } else {
+                $qlreply = DB_query("SELECT id,uid,name,comment,date FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
+                $B = DB_fetchArray($qlreply);
+                $lastid = $B['id'];
+                $lastcomment = $B['comment'];
+                $P['date'] = $B['date'];
+                if ($B['uid'] > 1) {
+                    $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($B['uid']));
+                } else {
+                    $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
                 }
+                $testText = gf_formatTextBlock($B['comment'],'text','text');
+                $testText = strip_tags($testText);
+                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+            }
+            $link = '<a class="gf_mootip" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . htmlspecialchars($P['subject']) . '::' . $lastpostinfogll . '" rel="nofollow">';
+
+            $topiclink = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
+
+            $data_arr[] = array('forum'   => $P['forum_name'],
+                                'subject' => $topiclink,
+                                'date'    => $link . strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] ) . '</a>'
+                                );
+
+            if ($displayrecs >= 100) {
+                break;
             }
         }
     }
 
-    if ($reportrecords == 0) {
-        $report->set_var ('report_records','<tr><td colspan="4" class="pluginAlert">'.$LANG_GF02['msg202'].'</td></tr><tr><td><a href="' . $_CONF['site_url'] . '/forum/index.php">' . $LANG_GF02['msg175'] . '</a>');
-    }
+    $retval .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    echo $retval;
 
-    if ($forum > 0) {
-        $link = "<p><a href=\"{$_CONF['site_url']}/forum/index.php?forum=$forum\">{$LANG_GF02['msg144']}</a><p />";
-        $report->set_var ('bottomlink',$link);
-    } else {
-        $link = "<p><a href=\"{$_CONF['site_url']}/forum/index.php\">{$LANG_GF02['msg175']}</a><p />";
-        $report->set_var ('bottomlink',$link);
-    }
-
-    $report->parse ('output', 'report');
-    echo $report->finish ($report->get_var('output'));
     gf_siteFooter();
     exit();
 }
 
 if ($op == 'search') {
-//    $report = new Template($_CONF['path_layout'] . 'forum/layout');
     $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $report->set_file (array ('report' => 'reports/report_results.thtml',
                     'records' => 'reports/report_record.thtml',
@@ -307,12 +282,10 @@ if ($op == 'search') {
 
     if ($CONF_FORUM['mysql4+']) {
         $sql = " (SELECT * FROM {$_TABLES['gf_topic']} WHERE (subject LIKE '%$query%') $inforum ) ";
-//        $sql = " (SELECT * FROM {$_TABLES['gf_topic']} WHERE (subject LIKE '%$query%') ) ";
         $sql .= "UNION ALL (SELECT * FROM {$_TABLES['gf_topic']} WHERE (comment LIKE '%$query%') ";
         $sql .= "$inforum) ORDER BY $orderby $direction LIMIT 100";
         $result = DB_query($sql);
     } else {
-//        $sql  = "SELECT * FROM {$_TABLES['gf_topic']} WHERE (subject LIKE '%$query%') OR ";
         $sql  = "SELECT * FROM {$_TABLES['gf_topic']} WHERE (subject LIKE '%$query%') $inforum OR ";
         $sql .= "(comment LIKE '%$query%') $inforum GROUP BY $orderby ORDER BY $orderby $direction LIMIT 100";
         $result = DB_query($sql);
@@ -611,6 +584,7 @@ $offset = ($page - 1) * $show;
 $base_url = $_CONF['site_url'] . '/forum/index.php?forum='.$forum.'&amp;show='.$show;
 
 //Display Categories
+//Display Categories
 if ($forum == 0) {
     $dCat = isset($_REQUEST['cat']) ? COM_applyFilter($_REQUEST['cat'],true) : 0;
     $groups = array ();
@@ -628,7 +602,7 @@ if ($forum == 0) {
         $catList = 'categorylisting.thtml';
     }
     $numCategories = DB_numRows($categoryQuery);
-//    $forumlisting = new Template($_CONF['path_layout'] . 'forum/layout');
+
     $forumlisting = new Template($_CONF['path'] . 'plugins/forum/templates/');
 
     $forumlisting->set_file (array ('forumlisting' => 'homepage.thtml',
@@ -730,10 +704,10 @@ if ($forum == 0) {
                 if ($CONF_FORUM['use_censor']) {
                     $B['subject'] = COM_checkWords($B['subject']);
                 }
-
                 if (isset($_USER['uid']) && $_USER['uid'] > 1) {
                     // Determine if there are new topics since last visit for this user.
                     $lsql = DB_query("SELECT * FROM {$_TABLES['gf_log']} WHERE uid='{$_USER['uid']}' AND forum='{$B['forum_id']}' AND time > 0");
+//                    $lsql = DB_query("SELECT * FROM {$_TABLES['gf_log']} WHERE uid='{$_USER['uid']}' AND forum='{$B['forum_id']}' AND time > 0 ORDER BY time DESC");
                     if ($topicCount > DB_numRows($lsql)) {
                         $folderimg = '<img src="'.gf_getImage('busyforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg111'].'" title="'.$LANG_GF02['msg111'].'"' . XHTML . '>';
                     } else {
