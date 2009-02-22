@@ -201,7 +201,7 @@ $LANG_confignames['calendar'] = array(
     'hidecalendarmenu' => 'Hide Calendar Menu Entry?',
     'personalcalendars' => 'Enable Personal Calendars?',
     'eventsubmission' => 'Enable Submission Queue?',
-    'showupcomingevents' => 'Show upcoming Events?',
+    'showupcomingevents' => 'Show Upcoming Events?',
     'upcomingeventsrange' => 'Upcoming Events Range',
     'event_types' => 'Event Types',
     'hour_mode' => 'Hour Mode',
@@ -209,7 +209,7 @@ $LANG_confignames['calendar'] = array(
     'delete_event' => 'Delete Events with Owner?',
     'aftersave' => 'After Saving Event',
     'default_permissions' => 'Event Default Permissions',
-    'only_admin_submit' => 'Only allow Admins to Submit',
+    'only_admin_submit' => 'Only Allow Admins to Submit',
 );
 
 $LANG_configsubgroups['calendar'] = array(
