@@ -2855,7 +2855,11 @@ function plugin_user_create_mediagallery( $uid, $force = 0 ) {
     if ( $force == 1 || ($_MG_CONF['member_albums'] == 1 && $_MG_CONF['member_auto_create'] == 1) ) {
         $username               = DB_getItem($_TABLES['users'],'username','uid=' . $uid);
         $fullname               = DB_getItem($_TABLES['users'],'fullname','uid=' . $uid);
-        $grp_id                 = DB_getItem($_TABLES['vars'], 'value','name="mediagallery_gid"');
+        $grp_id                 = DB_getItem($_TABLES['groups'],'grp_id','grp_name="mediagallery Admin"');
+
+        if ( $grp_id == NULL || $grp_id == '' || $grp_id < 2 ) {
+            $grp_id = 2;
+        }
 
         $album = new mgAlbum();
 
@@ -2866,7 +2870,7 @@ function plugin_user_create_mediagallery( $uid, $force = 0 ) {
         $album->title           = htmlspecialchars(strip_tags(COM_checkWords($title)));
         $album->parent          = $_MG_CONF['member_album_root'];
         $album->group_id        = $grp_id;
-        $album->mod_group_id    = $grp_id; // $_MG_CONF['member_mod_group_id'];
+        $album->mod_group_id    = $grp_id;
         $album->owner_id        = $uid;
         $album->moderate        = $_MG_CONF['member_moderate'];
         $album->email_mod       = $_MG_CONF['member_email_mod'];
