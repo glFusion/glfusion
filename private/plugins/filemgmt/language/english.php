@@ -137,7 +137,7 @@ $LANG_configsections['filemgmt'] = array(
     'title'                 => 'FileMgmt Configuration'
 );
 $LANG_confignames['filemgmt'] = array(
-    'whatsnew'              => 'Enable WhatsNew Listing?',
+    'whatsnew'              => 'Enable WhatsNew Listing',
     'perpage'               => 'Displayed Downloads per Page',
     'popular_download'      => 'Hits to be Popular',
     'newdownloads'          => 'Number of Downloads as New on Top Page',
@@ -157,7 +157,7 @@ $LANG_confignames['filemgmt'] = array(
     'SnapCatURL'            => 'URL to Category Thumbnails',
     'whatsnewperioddays'    => 'What\'s New Days',
     'whatsnewtitlelength'   => 'What\'s New Title Length',
-    'showwhatsnewcomments'  => 'Show Comments in What\'s New Block?',
+    'showwhatsnewcomments'  => 'Show Comments in What\'s New Block',
     'numcategoriesperrow'   => 'Categories per Row',
     'numsubcategories2show' => 'Sub Categories per Row',
 );
