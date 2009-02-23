@@ -1,6 +1,26 @@
 /* STYLE STYLESHEET *****************************************
 
 *****************************************************************/
+h1.title-smenu, h1.moofx-toggler {
+	margin: 0;
+	padding-left: 10px;
+	margin-bottom: 0px;
+	font-size: 14px;
+	color: #666;
+	cursor: pointer;
+}
+
+h1.moofx-toggler {
+    background-image: url(arrow_open.png);
+    background-repeat: no-repeat;
+    background-position: bottom left
+}
+h1.moofx-toggler-down {
+    background-image: url(arrow_down.png);
+    background-repeat: no-repeat;
+    background-position: bottom left
+}
+
 /* BUTTONS */
 
 .buttons a, .buttons button{

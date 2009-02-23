@@ -79,7 +79,7 @@ if( function_exists('set_error_handler') )
 
 $_GLFUSION = array();
 
-$glFusionVars = array('language','method','migrate','expire','dbconfig_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8');
+$glFusionVars = array('language','method','migrate','expire','dbconfig_path','log_path','lang_path','backup_path','data_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8');
 
 if ( is_array($_POST) ) {
     foreach ($_POST AS $name => $value) {
@@ -441,11 +441,20 @@ function INST_getPathSetting()
     }
     $T->set_var(array(
         'dbconfig_path'     => $dbconfig_path,
+        'log_path'          => isset($_GLFUSION['log_path']) ? $_GLFUSION['log_path'] : '',
+        'lang_path'         => isset($_GLFUSION['lang_path']) ? $_GLFUSION['lang_path'] : '',
+        'backup_path'       => isset($_GLFUSION['backup_path']) ? $_GLFUSION['backup_path'] : '',
+        'data_path'         => isset($_GLFUSION['data_path']) ? $_GLFUSION['data_path'] : '',
         'step_heading'      => $LANG_INSTALL['system_path'],
         'lang_next'         => $LANG_INSTALL['next'],
         'lang_prev'         => $LANG_INSTALL['previous'],
         'lang_sys_path_help'=> $LANG_INSTALL['system_path_prompt'],
         'lang_path_prompt'  => $LANG_INSTALL['path_prompt'],
+        'lang_advanced_settings' => $LANG_INSTALL['advanced_settings'],
+        'lang_log_path'     => $LANG_INSTALL['log_path'],
+        'lang_lang_path'    => $LANG_INSTALL['lang_path'],
+        'lang_backup_path'  => $LANG_INSTALL['backup_path'],
+        'lang_data_path'    => $LANG_INSTALL['data_path'],
         'hiddenfields'      => _buildHiddenFields(),
     ));
     $T->parse('output','page');
@@ -498,6 +507,44 @@ function INST_gotPathSetting($dbc_path = '')
 
     // store entered path into the session var
     $_GLFUSION['dbconfig_path'] = $dbconfig_path;
+
+    if ( isset($_POST['logpath']) && $_POST['logpath'] != '') {
+        $log_path = INST_stripslashes($_POST['logpath']);
+        if (!preg_match('/^.*\/$/', $log_path)) {
+            $log_path .= '/';
+        }
+    } else {
+        $log_path = $dbconfig_path .'logs/';
+    }
+    if ( isset($_POST['langpath']) && $_POST['langpath'] != '') {
+        $lang_path = INST_stripslashes($_POST['langpath']);
+        if (!preg_match('/^.*\/$/', $lang_path)) {
+            $lang_path .= '/';
+        }
+    } else {
+        $lang_path = $dbconfig_path .'language/';
+    }
+    if ( isset($_POST['backuppath']) && $_POST['backuppath'] != '') {
+        $backup_path = INST_stripslashes($_POST['backuppath']);
+        if (!preg_match('/^.*\/$/', $backup_path)) {
+            $backup_path .= '/';
+        }
+    } else {
+        $backup_path = $dbconfig_path .'backups/';
+    }
+    if ( isset($_POST['datapath']) && $_POST['datapath'] != '') {
+        $data_path = INST_stripslashes($_POST['datapath']);
+        if (!preg_match('/^.*\/$/', $data_path)) {
+            $data_path .= '/';
+        }
+    } else {
+        $data_path = $dbconfig_path .'data/';
+    }
+
+    $_GLFUSION['log_path']      = $log_path;
+    $_GLFUSION['lang_path']     = $lang_path;
+    $_GLFUSION['backup_path']   = $backup_path;
+    $_GLFUSION['data_path']     = $data_path;
 
     // now, lets see if it exists, if not, try to rename the .dist file...
 
@@ -648,6 +695,17 @@ function INST_checkEnvironment($dbconfig_path='')
         $_PATH['public_html']   = INST_getHtmlPath();
         $_PATH['dbconfig_path'] = $_CONF['path'];
         $_PATH['admin_path']    = INST_getAdminPath();
+        require_once $_CONF['path_system'].'lib-database.php';
+        require_once $_CONF['path_system'].'classes/config.class.php';
+        $config = config::get_instance();
+        $config->set_configfile($_CONF['path'] . 'db-config.php');
+        $config->load_baseconfig();
+        $config->initConfig();
+        $_CONF = $config->get_config('Core');
+        $_PATH['log_path']      = $_CONF['path_logs'];
+        $_PATH['lang_path']     = $_CONF['path_language'];
+        $_PATH['backup_path']   = $_CONF['backup_path'];
+        $_PATH['data_path']     = $_CONF['path_data'];
     } else {
         $_PATH['public_html']   = INST_getHtmlPath();
         if ( $dbconfig_path == '' ) {
@@ -656,6 +714,11 @@ function INST_checkEnvironment($dbconfig_path='')
             $_PATH['dbconfig_path']     = $dbconfig_path;
         }
         $_PATH['admin_path']        = INST_getAdminPath();
+
+        $_PATH['log_path']      = $_GLFUSION['log_path'];
+        $_PATH['lang_path']     = $_GLFUSION['lang_path'];
+        $_PATH['backup_path']   = $_GLFUSION['backup_path'];
+        $_PATH['data_path']     = $_GLFUSION['data_path'];
     }
 
     if (!preg_match('/^.*\/$/', $_PATH['public_html'])) {
@@ -670,13 +733,13 @@ function INST_checkEnvironment($dbconfig_path='')
 
     $file_list = array( $_PATH['dbconfig_path'],
                         $_PATH['dbconfig_path'].'db-config.php',
-                        $_PATH['dbconfig_path'].'data/',
-                        $_PATH['dbconfig_path'].'logs/error.log',
-                        $_PATH['dbconfig_path'].'logs/access.log',
-                        $_PATH['dbconfig_path'].'logs/captcha.log',
-                        $_PATH['dbconfig_path'].'logs/spamx.log',
-                        $_PATH['dbconfig_path'].'data/layout_cache/',
-                        $_PATH['dbconfig_path'].'data/temp/',
+                        $_PATH['data_path'],
+                        $_PATH['log_path'].'error.log',
+                        $_PATH['log_path'].'access.log',
+                        $_PATH['log_path'].'captcha.log',
+                        $_PATH['log_path'].'spamx.log',
+                        $_PATH['data_path'].'layout_cache/',
+                        $_PATH['data_path'].'temp/',
                         $_PATH['dbconfig_path'].'system/lib-custom.php',
 
                         $_PATH['public_html'],

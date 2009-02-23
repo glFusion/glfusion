@@ -156,7 +156,7 @@ $LANG_INSTALL = array(
     'sitedata_help'             => 'Select the type of database to use from the drop down list. This is generally <strong>MySQL</strong>. Also select whether to use the <strong>UTF-8</strong> character set (this should generally be checked for multi-lingual sites.)<br /><br /><br />Enter the hostname of the database server. This may not be the same as your web server, so check with your hosting provider if you are not sure.<br /><br />Enter the name of your database. <strong>The database must already exist.</strong> If you do not know the name of your database, contact your hosting provider.<br /><br />Enter the username to connect to the database. If you do not know the database username, contact your hosting provider.<br /><br /><br />Enter the password to connect to the database. If you do not know the database password, contact your hosting provider.<br /><br />Enter a table prefix to be used for the database tables. This is helpful to separate multiple sites or systems when using a single database.<br /><br />Enter the name of your site. It will be displayed in the site header. For example, glFusion or Mark\'s Marbles. Don\'t worry, it can always be changed later.<br /><br />Enter the slogan of your site. It will be displayed in the site header below the site name. For example, synergy - stability - style. Don\'t worry, it can always be changed later.<br /><br />Enter your site\'s main email address. This is the email address for the default Admin account. Don\'t worry, it can always be changed later.<br /><br />Enter your site\'s no reply email address. It will be used to automatically send new user, password reset, and other notification emails. Don\'t worry, it can always be changed later.<br /><br />Please confirm that this is the web address or URL used to access the homepage of your site.<br /><br /><br />Please confirm that this is the web address or URL used to access the admin section of your site.',
     'sitedata_missing'          => 'The following problems were detected with the site data you entered:',
     'system_path'               => 'Path Settings',
-    'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />This directory contains the <strong>db-config.php.dist</strong> or <strong>db-config.php</strong> file.<br /><br />Examples: /home/www/glfuison/private or c:/www/glfusion/private',
+
     'unable_mkdir'              => 'Unable to create directory',
     'unable_to_find_ver'        => 'Unable to determine glFusion version.',
     'upgrade_error'             => 'Upgrade Error',
@@ -166,6 +166,14 @@ $LANG_INSTALL = array(
     'use_utf8'                  => 'Use UTF-8',
     'welcome_help'              => 'Welcome to the glFusion CMS Installation Wizard. You can install a new glFusion site, upgrade an existing glFusion site, or migrate from an existing Geeklog v1.5 site.<br /><br />Please select the language for the wizard, and the task to perform, then press <strong>Next</strong>.',
     'wizard_version'            => 'v' . GVERSION . ' Installation Wizard',
+/* --- Updated --- */
+    'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />This directory contains the <strong>db-config.php.dist</strong> or <strong>db-config.php</strong> file.<br /><br />Examples: /home/www/glfuison/private or c:/www/glfusion/private.<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
+/* --- New --- */
+    'advanced_settings'         => 'Advanced Settings',
+    'log_path'                  => 'Logs Path',
+    'lang_path'                 => 'Language Path',
+    'backup_path'               => 'Backups Path',
+    'data_path'                 => 'Data Path',
 );
 
 // +---------------------------------------------------------------------------+
