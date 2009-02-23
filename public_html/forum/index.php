@@ -194,7 +194,7 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
 
             $topiclink = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
-            $data_arr[] = array('forum'   => $P['forum_name'],
+            $data_arr[] = array('forum'   => '<a href="'.$_CONF['site_url'].'/forum/index.php?forum='.$P['forum_id'].'">'.$P['forum_name'].'</a>',
                                 'subject' => $topiclink,
                                 'date'    => $link . strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] ) . '</a>'
                                 );
@@ -476,60 +476,55 @@ if ($op == 'lastx') {
     $displayrecs = 0;
     for ($i = 1; $i <= $nrows; $i++) {
         $P = DB_fetchArray($result);
-        $forumgrpid = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='{$P['forum']}'");
-        $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$forumgrpid'");
-        if (SEC_inGroup($groupname)) {
-            if ($CONF_FORUM['use_censor']) {
-                $P['subject'] = COM_checkWords($P['subject']);
-                $P['comment'] = COM_checkWords($P['comment']);
-            }
-            $topic_id = $P['id'];
-            $displayrecs++;
+        if ($CONF_FORUM['use_censor']) {
+            $P['subject'] = COM_checkWords($P['subject']);
+            $P['comment'] = COM_checkWords($P['comment']);
+        }
+        $topic_id = $P['id'];
+        $displayrecs++;
 
-            $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $P['date']);
-            $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $P['lastupdated']);
+        $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $P['date']);
+        $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $P['lastupdated']);
 
-            if ($p['uid'] > 1) {
-                $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
+        if ($p['uid'] > 1) {
+            $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
+        } else {
+            $topicinfo = "{$LANG_GF01['STARTEDBY']} {$P['name']},";
+        }
+
+        $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}:{$P['views']}, {$LANG_GF01['REPLIES']}:{$P['replies']}<br" . XHTML . ">";
+
+        if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
+            $lastid = $P['id'];
+            $testText = gf_formatTextBlock($P['comment'],'text','text');
+            $testText = strip_tags($testText);
+            $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+        } else {
+            $qlreply = DB_query("SELECT id,uid,name,comment,date FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
+            $B = DB_fetchArray($qlreply);
+            $lastid = $B['id'];
+            $lastcomment = $B['comment'];
+            $P['date'] = $B['date'];
+            if ($B['uid'] > 1) {
+                $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($B['uid']));
             } else {
-                $topicinfo = "{$LANG_GF01['STARTEDBY']} {$P['name']},";
+                $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
             }
+            $testText = gf_formatTextBlock($B['comment'],'text','text');
+            $testText = strip_tags($testText);
+            $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+        }
+        $link = '<a class="gf_mootip" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . htmlspecialchars($P['subject']) . '::' . $lastpostinfogll . '" rel="nofollow">';
 
-            $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}:{$P['views']}, {$LANG_GF01['REPLIES']}:{$P['replies']}<br" . XHTML . ">";
+        $topiclink = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
+        $data_arr[] = array('forum'   => $P['forum_name'],
+                            'subject' => $topiclink, /*$link . $P['subject'] . '</a>',*/
+                            'date'    => $link . strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] ) . '</a>'
+                            );
 
-            if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
-                $lastid = $P['id'];
-                $testText = gf_formatTextBlock($P['comment'],'text','text');
-                $testText = strip_tags($testText);
-                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
-            } else {
-                $qlreply = DB_query("SELECT id,uid,name,comment,date FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
-                $B = DB_fetchArray($qlreply);
-                $lastid = $B['id'];
-                $lastcomment = $B['comment'];
-                $P['date'] = $B['date'];
-                if ($B['uid'] > 1) {
-                    $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($B['uid']));
-                } else {
-                    $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
-                }
-                $testText = gf_formatTextBlock($B['comment'],'text','text');
-                $testText = strip_tags($testText);
-                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
-            }
-            $link = '<a class="gf_mootip" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . htmlspecialchars($P['subject']) . '::' . $lastpostinfogll . '" rel="nofollow">';
-
-            $topiclink = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
-
-            $data_arr[] = array('forum'   => $P['forum_name'],
-                                'subject' => $topiclink, /*$link . $P['subject'] . '</a>',*/
-                                'date'    => $link . strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] ) . '</a>'
-                                );
-
-            if ($displayrecs >= $CONF_FORUM['show_popular_perpage']) {
-                break;
-            }
+        if ($displayrecs >= $CONF_FORUM['show_popular_perpage']) {
+            break;
         }
     }
 
@@ -583,7 +578,6 @@ $numpages = ceil($topicCount / $show);
 $offset = ($page - 1) * $show;
 $base_url = $_CONF['site_url'] . '/forum/index.php?forum='.$forum.'&amp;show='.$show;
 
-//Display Categories
 //Display Categories
 if ($forum == 0) {
     $dCat = isset($_REQUEST['cat']) ? COM_applyFilter($_REQUEST['cat'],true) : 0;
@@ -707,7 +701,6 @@ if ($forum == 0) {
                 if (isset($_USER['uid']) && $_USER['uid'] > 1) {
                     // Determine if there are new topics since last visit for this user.
                     $lsql = DB_query("SELECT * FROM {$_TABLES['gf_log']} WHERE uid='{$_USER['uid']}' AND forum='{$B['forum_id']}' AND time > 0");
-//                    $lsql = DB_query("SELECT * FROM {$_TABLES['gf_log']} WHERE uid='{$_USER['uid']}' AND forum='{$B['forum_id']}' AND time > 0 ORDER BY time DESC");
                     if ($topicCount > DB_numRows($lsql)) {
                         $folderimg = '<img src="'.gf_getImage('busyforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg111'].'" title="'.$LANG_GF02['msg111'].'"' . XHTML . '>';
                     } else {
