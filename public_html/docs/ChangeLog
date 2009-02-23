@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Added Bulgarian install language (Mark)
 - Added styled error message (Eric)
 - Fixed AM/PM going onto second line randomly in forum lastx view (Eric)
 - Fixed bug where searching for _just_ a date range would fail (Mark)
@@ -112,6 +113,8 @@ FileMgmt Plugin
 
 Forum Plugin
 ------------
+- Several fixes dealing with busy / quiet forum icons (Mark)
+- Reworked New Posts and added to navigation menu (Mark)
 - Ability to move a forum between categories (Mark)
 - Fixed security issue where a user could edit another user's post if they
   knew the correct URL (Mark)
