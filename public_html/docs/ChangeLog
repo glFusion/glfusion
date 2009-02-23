@@ -136,6 +136,7 @@ Links Plugin
 
 Media Gallery Plugin
 --------------------
+- Fixed issue where enrolling in Member Albums would cause SQL error (Mark)
 - Fixed bug with generating unique slideshow ids (Mark)
 - Improved error trapping for permission issues on upload (Mark)
 - Updated MG import for stories to use new story class (Mark)
