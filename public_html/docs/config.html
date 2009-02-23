@@ -1459,7 +1459,7 @@ the sticky top story on the site. </td>
 		<td class="col0 leftalign"><a name="desc_trackback_enabled">Trackback Enabled</a>  </td>
 
 
-      <td class="col1 leftalign">Enable (true) or disable (true) trackback comments. This applies to both sending and receiving trackback comments.  </td>
+      <td class="col1 leftalign">Enable (True) or disable (False) trackback comments. This applies to both sending and receiving trackback comments.  </td>
 
 
 
@@ -1475,7 +1475,7 @@ the sticky top story on the site. </td>
 		<td class="col0 leftalign"><a name="desc_trackback_code">Trackback Default</a>  </td>
 
 
-      <td class="col1 leftalign">Default value for new stories: Trackback enabled (0) or disabled (-1)  </td>
+      <td class="col1 leftalign">Default value for new stories: Trackback enabled (True) or disabled (False)  </td>
 
 
 
@@ -1505,14 +1505,7 @@ the sticky top story on the site. </td>
 		<td class="col0 leftalign"><a name="desc_check_trackback_link">Check Trackbacks</a>  </td>
 
 
-      <td class="col1 leftalign">This option can be used to check the validity of a trackback. You can check if the <acronym title="Uniform Resource Locator">URL</acronym>
-in the trackback actually contains a link back to your site (otherwise,
-it's probably spam). You can also check if the trackback was sent from
-the proper IP address, i.e. the IP of the site in the trackback <acronym title="Uniform Resource Locator">URL</acronym>
-(again, if they don't match, it's probably spam). Note that you can add
-up the values below to do more than one check (but using option 1 and 2
-doesn't make sense and will be treated as if you requested option 2).
-Options are: <br />
+      <td class="col1 leftalign">This option can be used to check the validity of a trackback. You can check if the URL in the trackback actually contains a link back to your site (otherwise, it's probably spam). You can also check if the trackback was sent from the proper IP address, (i.e. the IP of the site in the trackback URL. Again, if they don't match, it's probably spam). Note that you can add up the values below to do more than one check (but using option 1 and 2 doesn't make sense and will be treated as if you requested option 2). Options are: <br />
 
 
 
@@ -1566,32 +1559,14 @@ Options are: <br />
 		<td class="col0"><a name="desc_multiple_trackbacks">Multiple Trackbacks</a></td>
 
 
-      <td class="col1 leftalign">How to handle multiple trackbacks and
-pingbacks from the same source: 0 = keep only the first, reject any
-further trackbacks / pingbacks; <br />
-
+      <td class="col1 leftalign">How to handle multiple trackbacks and pingbacks from the same source. Options are:<br />
 
 
  <br />
-
-
-
- Options: <br />
-
-
-
- <br />
-
-
-
 
  * Allow multiple posts <br />
 
-
-
  * Only keep latest (overwrite previous entries from this site) <br />
-
-
 
  * Reject  </td>
 
@@ -1634,7 +1609,7 @@ further trackbacks / pingbacks; <br />
 		<td class="col0 leftalign"><a name="desc_pingback_enabled">Pingback Enabled</a>  </td>
 
 
-      <td class="col1 leftalign">Enable (true) or disable (true) pingback support. This applies to both sending and receiving pingbacks.  </td>
+      <td class="col1 leftalign">Enable (True) or disable (False) pingback support. This applies to both sending and receiving pingbacks.  </td>
 
 
 
@@ -1672,14 +1647,12 @@ text near the link, and use that as the excerpt for the Pingback. </td>
       <td class="col1 leftalign">Pingbacks are sent out automatically
 to all the URLs linked from a story - which includes stories on your
 own site that you may have linked in the article. This option lets you
-specify how these &#8220;self pingbacks&#8221; are to be handled: 0 =
-skip them, i.e. don't send pingbacks to stories on your own site; 1 =
-allow them, but obey the speed limit; 2 = allow them and ignore the
+specify how these &#8220;self pingbacks&#8221; are to be handled: Skip them, (i.e. don't send pingbacks to stories on your own site). Allow them, but obey the speed limit. Allow them and ignore the
 speed limit. <br />
 
 
 If your article contains more than one link to other stories on your
-site, then option 1 is probably of limited use, as it would only
+site, then option 2 is probably of limited use, as it would only
 pingback the first linked story and run into the speed limit for the
 others. </td>
 
@@ -1696,7 +1669,7 @@ others. </td>
 		<td class="col0 leftalign"><a name="desc_ping_enabled">Ping Enabled</a>  </td>
 
 
-      <td class="col1 leftalign">Enable (true) or disable (true) the ability to ping weblog directory services like Technorati.  </td>
+      <td class="col1 leftalign">Enable (True) or disable (False) the ability to ping weblog directory services like Technorati.  </td>
 
 
 
@@ -4091,7 +4064,9 @@ format). </td>
 
 
 
-		<td class="col0 leftalign"><a name="desc_decimal_count&lt;/a&gt;Decimal Count&lt;/a&gt;  &lt;/td&gt;&lt;td class=" col1="" leftalign="">How many decimal places to display.  </a></td>
+		<td class="col0 leftalign"><a name="desc_decimal_count">Decimal Count</a>  </td>
+        
+        <td class="col1 leftalign">How many decimal places to display.</td>
 
 
 
