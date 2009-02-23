@@ -262,18 +262,18 @@ $LANG_configsections['links'] = array(
 );
 
 $LANG_confignames['links'] = array(
-    'linksloginrequired' => 'Links Login Required?',
-    'linksubmission' => 'Enable Submission Queue?',
+    'linksloginrequired' => 'Links Login Required',
+    'linksubmission' => 'Enable Link Submission Queue',
     'newlinksinterval' => 'New Links Interval',
-    'hidenewlinks' => 'Hide New Links?',
-    'hidelinksmenu' => 'Hide Links Menu Entry?',
+    'hidenewlinks' => 'Hide New Links',
+    'hidelinksmenu' => 'Hide Links Menu Entry',
     'linkcols' => 'Categories per Column',
     'linksperpage' => 'Links per Page',
-    'show_top10' => 'Show Top 10 Links?',
-    'notification' => 'Notification Email?',
-    'delete_links' => 'Delete Links with Owner?',
+    'show_top10' => 'Show Top 10 Links',
+    'notification' => 'Notification Email',
+    'delete_links' => 'Delete Links with Owner',
     'aftersave' => 'After Saving Link',
-    'show_category_descriptions' => 'Show Category Description?',
+    'show_category_descriptions' => 'Show Category Description',
     'root' => 'ID of Root Category',
     'default_permissions' => 'Link Default Permissions'
 );
