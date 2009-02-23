@@ -37,7 +37,7 @@ if (!defined ('GVERSION')) {
 $_DATA['calendar'][] = "INSERT INTO {$_TABLES['eventsubmission']} (eid, title, description, location, datestart, dateend, url, allday, zipcode, state, city, address2, address1, event_type, timestart, timeend) VALUES ('2006051410130162','glFusion installed','Today, you successfully installed this glFusion site.','Your webserver',CURDATE(),CURDATE(),'http://www.glfusion.org/',1,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL) ";
 
 // FileMgmt Default Data
-$_DATA['filemgmt'][] = "INSERT INTO {$_TABLES['filemgmt_cat']} (`cid`, `pid`, `title`, `imgurl`, `grp_access`, `grp_writeaccess`) VALUES (1,0,'General','',2,2);";
+$_DATA['filemgmt'][] = "INSERT INTO {$_TABLES['filemgmt_cat']} (`cid`, `pid`, `title`, `imgurl`, `grp_access`, `grp_writeaccess`) VALUES (1,0,'General','',2,1);";
 $_DATA['filemgmt'][] = "INSERT INTO {$_TABLES['filemgmt_filedesc']} (`lid`, `description`) VALUES (1,'Yahoo User Interface Grids CSS framework cheat sheet in .pdf format.');";
 $_DATA['filemgmt'][] = "INSERT INTO {$_TABLES['filemgmt_filedetail']} (`lid`, `cid`, `title`, `url`, `homepage`, `version`, `size`, `platform`, `logourl`, `submitter`, `status`, `date`, `hits`, `rating`, `votes`, `comments`) VALUES (1,1,'YUI Grids CSS Cheat Sheet','css.pdf','http://developer.yahoo.com/yui/grids/','v2.6',131072 ,'','',2,1,UNIX_TIMESTAMP(),0,0.0000,0,1);";
 
