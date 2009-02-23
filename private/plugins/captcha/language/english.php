@@ -97,7 +97,7 @@ $LANG_confignames['captcha'] = array(
     'enable_rating'         => 'Enable Rating Plugin Support',
     'enable_links'          => 'Enable Links Plugin Support',
     'enable_calendar'       => 'Enable Calendar Plugin Support',
-
+    'expire'                => 'How Many Seconds a CAPTCHA Session is Valid',
 );
 $LANG_configsubgroups['captcha'] = array(
     'sg_main'               => 'Configuration Settings'
