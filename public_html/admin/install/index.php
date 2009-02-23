@@ -1294,6 +1294,11 @@ function INST_installAndContentPlugins()
     $site_mail      = isset($_GLFUSION['site_mail']) ? $_GLFUSION['site_mail'] : '' ;
     $noreply_mail   = isset($_GLFUSION['noreply_mail']) ? $_GLFUSION['noreply_mail'] : '' ;
 
+    $log_path     = isset($_GLFUSION['log_path'])    ? $_GLFUSION['log_path']    : $gl_path . 'logs/';
+    $lang_path    = isset($_GLFUSION['lang_path'])   ? $_GLFUSION['lang_path']   : $gl_path . 'language/';
+    $backup_path  = isset($_GLFUSION['backup_path']) ? $_GLFUSION['backup_path'] : $gl_path . 'backups/';
+    $data_path    = isset($_GLFUSION['data_path'])   ? $_GLFUSION['data_path']   : $gl_path . 'data/';
+
     INST_personalizeAdminAccount($site_mail, $site_url);
 
     require_once $_CONF['path_system'].'classes/config.class.php';
@@ -1311,10 +1316,10 @@ function INST_installAndContentPlugins()
     $config->set('site_mail', $site_mail);
     $config->set('noreply_mail', $noreply_mail);
     $config->set('path_html', $html_path);
-    $config->set('path_log', $gl_path . 'logs/');
-    $config->set('path_language', $gl_path . 'language/');
-    $config->set('backup_path', $gl_path . 'backups/');
-    $config->set('path_data', $gl_path . 'data/');
+    $config->set('path_log', $log_path);
+    $config->set('path_language', $lang_path);
+    $config->set('backup_path', $backup_path);
+    $config->set('path_data', $data_path);
     $config->set('path_images', $html_path . 'images/');
     $config->set('path_themes', $html_path . 'layout/');
     $config->set('rdf_file', $html_path . 'backend/glfusion.rss');
