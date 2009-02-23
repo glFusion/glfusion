@@ -38,6 +38,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $_SQL['events'] = "
 CREATE TABLE {$_TABLES['events']} (
   eid varchar(20) NOT NULL default '',
