@@ -125,18 +125,18 @@ $LANG_configsections['staticpages'] = array(
 );
 
 $LANG_confignames['staticpages'] = array(
-    'allow_php' => 'Allow PHP?',
-    'sort_by' => 'Sort Centerblocks by',
-    'sort_menu_by' => 'Sort Menu Entries by',
-    'delete_pages' => 'Delete Pages with Owner?',
-    'in_block' => 'Wrap Pages in Block?',
-    'show_hits' => 'Show Hits?',
-    'show_date' => 'Show Date?',
-    'filter_html' => 'Filter HTML?',
-    'censor' => 'Censor Content?',
+    'allow_php' => 'Allow PHP',
+    'sort_by' => 'Sort Centerblocks By',
+    'sort_menu_by' => 'Sort Menu Entries By',
+    'delete_pages' => 'Delete Pages with Owner',
+    'in_block' => 'Wrap Pages in Block',
+    'show_hits' => 'Show Hits',
+    'show_date' => 'Show Date',
+    'filter_html' => 'Filter HTML',
+    'censor' => 'Censor Content',
     'default_permissions' => 'Page Default Permissions',
     'aftersave' => 'After Saving Page',
-    'atom_max_items' => 'Max. Pages in Webservices Feed'
+    'atom_max_items' => 'Max. Pages in Web Services Feed'
 );
 
 $LANG_configsubgroups['staticpages'] = array(
