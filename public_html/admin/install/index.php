@@ -1352,6 +1352,11 @@ function INST_installAndContentPlugins()
 
     $config->_purgeCache();
 
+    @touch($log_path.'error.log');
+    @touch($log_path.'access.log');
+    @touch($log_path.'captcha.log');
+    @touch($log_path.'spamx.log');
+
     global $_CONF, $_SYSTEM, $_DB, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
 
     require $_CONF['path_html'].'lib-common.php';
