@@ -21,36 +21,30 @@
         <input type="text" name="private_path" value="{dbconfig_path}" size="46" onkeypress="return check(event)"/>
         {lang_sys_path_exp}
       </span>
-
-
-<h1 class="title-smenu moofx-toggler" title="Advanced">{lang_advanced_settings}</h1>
-<div class="moofx-slider" style="float:left;">
-
-      <span>
-        <label>{lang_log_path}:</label><br />
-        <input type="text" name="logpath" value="{log_path}" size="40" onkeypress="return check(event)"/>
-        {lang_log_path_exp}
-      </span>
-
-      <span>
-        <label>{lang_lang_path}:</label><br />
-        <input type="text" name="langpath" value="{lang_path}" size="46" onkeypress="return check(event)"/>
-        {lang_lang_path_exp}
-      </span>
-
-      <span>
-        <label>{lang_backup_path}:</label><br />
-        <input type="text" name="backuppath" value="{backup_path}" size="46" onkeypress="return check(event)"/>
-        {lang_backup_path_exp}
-      </span>
-
-      <span>
-        <label>{lang_data_path}:</label><br />
-        <input type="text" name="datapath" value="{data_path}" size="46" onkeypress="return check(event)"/>
-        {lang_data_path_exp}
-      </span>
-</div>
-
+      <h1 class="title-smenu moofx-toggler" title="Advanced">{lang_advanced_settings}</h1>
+      <div class="moofx-slider">
+        <div style="height:2px;"></div>
+        <span>
+          <label>{lang_log_path}:</label><br />
+          <input type="text" name="logpath" value="{log_path}" size="46" onkeypress="return check(event)"/>
+          {lang_log_path_exp}
+        </span>
+        <span>
+          <label>{lang_lang_path}:</label><br />
+          <input type="text" name="langpath" value="{lang_path}" size="46" onkeypress="return check(event)"/>
+          {lang_lang_path_exp}
+        </span>
+        <span>
+          <label>{lang_backup_path}:</label><br />
+          <input type="text" name="backuppath" value="{backup_path}" size="46" onkeypress="return check(event)"/>
+          {lang_backup_path_exp}
+        </span>
+        <span>
+          <label>{lang_data_path}:</label><br />
+          <input type="text" name="datapath" value="{data_path}" size="46" onkeypress="return check(event)"/>
+          {lang_data_path_exp}
+        </span>
+      </div>
     </div>
     <div class="stephelp">
       {lang_sys_path_help}
