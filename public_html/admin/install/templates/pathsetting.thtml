@@ -21,7 +21,7 @@
         <input type="text" name="private_path" value="{dbconfig_path}" size="46" onkeypress="return check(event)"/>
         {lang_sys_path_exp}
       </span>
-      <h1 class="title-smenu moofx-toggler" title="Advanced">{lang_advanced_settings}</h1>
+      <h1 class="title moofx-toggler" title="Advanced">{lang_advanced_settings}</h1>
       <div class="moofx-slider">
         <div style="height:2px;"></div>
         <span>

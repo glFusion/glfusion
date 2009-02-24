@@ -13,31 +13,31 @@
     </div>
     <div class="stepfields">
       <span id="spacer0">
-        <input type="checkbox" name="installdefaultdata" class="floatright box"/>
+        <input type="checkbox" name="installdefaultdata" checked="checked" class="floatright box"/>
         <label>{lang_load_sample_content}</label>
       </span>
       <span id="spacer1">
-        <input type="checkbox" name="plugin[calendar]" class="floatright box"/>
+        <input type="checkbox" name="plugin[calendar]" checked="checked" class="floatright box"/>
         <label>{lang_calendar}</label>
       </span>
       <span id="spacer2">
-        <input type="checkbox" name="plugin[filemgmt]" class="floatright box"/>
+        <input type="checkbox" name="plugin[filemgmt]" checked="checked" class="floatright box"/>
         <label>{lang_filemgmt}</label>
       </span>
       <span id="spacer3">
-        <input type="checkbox" name="plugin[forum]" class="floatright box"/>
+        <input type="checkbox" name="plugin[forum]" checked="checked" class="floatright box"/>
         <label>{lang_forum}</label>
       </span>
       <span id="spacer4">
-        <input type="checkbox" name="plugin[links]" class="floatright box"/>
+        <input type="checkbox" name="plugin[links]" checked="checked" class="floatright box"/>
         <label>{lang_links}</label>
       </span>
       <span id="spacer5">
-        <input type="checkbox" name="plugin[mediagallery]" class="floatright box"/>
+        <input type="checkbox" name="plugin[mediagallery]" checked="checked" class="floatright box"/>
         <label>{lang_mediagallery}</label>
       </span>
       <span id="spacer6">
-        <input type="checkbox" name="plugin[polls]" class="floatright box"/>
+        <input type="checkbox" name="plugin[polls]" checked="checked" class="floatright box"/>
         <label>{lang_polls}</label>
       </span>
     </div>

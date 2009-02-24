@@ -48,9 +48,9 @@
       <hr />
       <table style="width:714px;">
         <!-- BEGIN perms -->
-        <tr class="pluginRow{rowclass}">
-          <td id="pathtext">{location}</td>
-          <td id="pathtext-status">{status}</td>
+        <tr class="Row{rowclass}">
+          <td class="pathtext">{location}</td>
+          <td class="pathtext-status">{status}</td>
         </tr>
         <!-- END perms -->
       </table>

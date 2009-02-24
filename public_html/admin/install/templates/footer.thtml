@@ -1,7 +1,7 @@
     </div>
-    <div id="gl_footer">
-      <div class="bottom-r-corner">
-        <div class="bottom-l-corner"></div>
+    <div id="footer">
+      <div class="bottomrcorner">
+        <div class="bottomlcorner"></div>
       </div>
       <div>{copyright}</div>
     </div>

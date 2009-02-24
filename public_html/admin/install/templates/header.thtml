@@ -4,10 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html;charset={charset}" />
 <link rel="stylesheet" type="text/css" href="layout/style.css?ver=20090215" />
 <script type="text/javascript" src="layout/mootools-release-1.11.packed.js"></script>
-	<script type="text/javascript">
-		Window.onDomReady(function(){ new Accordion($$('h1.moofx-toggler'), $$('div.moofx-slider'), {onActive: function(toggler, i) { toggler.addClass('moofx-toggler-down'); },onBackground: function(toggler, i) { toggler.removeClass('moofx-toggler-down'); },duration: 300,opacity: false, alwaysHide:true, show: 1}); });
-	</script>
-
+<script type="text/javascript">
+	Window.onDomReady(function(){ new Accordion($$('h1.moofx-toggler'), $$('div.moofx-slider'), {onActive: function(toggler, i) { toggler.addClass('moofx-toggler-down'); },onBackground: function(toggler, i) { toggler.removeClass('moofx-toggler-down'); },duration: 300,opacity: false, alwaysHide:true, show: 1}); });
+</script>
 <meta name="robots" content="noindex,nofollow" />
 <title>{page_title}</title>
 <!--[if lte IE 6]>
@@ -43,10 +42,10 @@ function check(e) {
 </head>
 <body dir="ltr">
  <a name="top"></a>
-  <div id="gl_container_fixed">
-    <div id="gl_header">
-      <div class="top-r-corner">
-        <div class="top-l-corner">
+  <div id="container_fixed">
+    <div id="header">
+      <div class="toprcorner">
+        <div class="toplcorner">
           <div class="floatright install-slogan">{wizard_version}</div>
           <div class="floatleft">
             <a href="http://www.glfusion.org" target="_blank">
@@ -56,6 +55,6 @@ function check(e) {
         </div>
       </div>
     </div>
-    <div id="gl_moomenu"></div>
-    <div id="gl_wrapper">
+    <div id="moomenu"></div>
+    <div id="wrapper">
         {progress_bar}
