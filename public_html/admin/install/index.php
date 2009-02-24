@@ -422,6 +422,8 @@ function INST_getPathSetting()
     }
     $dbconfig_file  = 'db-config.php';
 
+    $htmlpath = INST_getHtmlPath();
+
     $T = new TemplateLite('templates/');
     $T->set_file('page', 'pathsetting.thtml');
 
@@ -448,7 +450,7 @@ function INST_getPathSetting()
         'step_heading'      => $LANG_INSTALL['system_path'],
         'lang_next'         => $LANG_INSTALL['next'],
         'lang_prev'         => $LANG_INSTALL['previous'],
-        'lang_sys_path_help'=> $LANG_INSTALL['system_path_prompt'],
+        'lang_sys_path_help'=> sprintf($LANG_INSTALL['system_path_prompt'],$htmlpath),
         'lang_path_prompt'  => $LANG_INSTALL['path_prompt'],
         'lang_advanced_settings' => $LANG_INSTALL['advanced_settings'],
         'lang_log_path'     => $LANG_INSTALL['log_path'],
