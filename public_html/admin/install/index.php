@@ -585,7 +585,8 @@ function INST_gotPathSetting($dbc_path = '')
  */
 function INST_checkEnvironment($dbconfig_path='')
 {
-    global $_GLFUSION, $LANG_INSTALL;
+    global $_GLFUSION, $LANG_INSTALL, $_DB, $_DB_host, $_DB_name, $_DB_user,
+           $_DB_pass,$_DB_table_prefix,$_DB_dbms, $_TABLES, $_SYSTEM;
 
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
@@ -691,10 +692,9 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->parse('env','envs',true);
 
     if ( $_GLFUSION['method'] == 'upgrade' && @file_exists('../../siteconfig.php')) {
-        include '../../siteconfig.php';
-        $_PATH['public_html']   = INST_getHtmlPath();
-        $_PATH['dbconfig_path'] = $_CONF['path'];
-        $_PATH['admin_path']    = INST_getAdminPath();
+        require '../../siteconfig.php';
+        $_GLFUSION['dbconfig_path'] = $_CONF['path'];
+        require $_CONF['path'].'db-config.php';
         require_once $_CONF['path_system'].'lib-database.php';
         require_once $_CONF['path_system'].'classes/config.class.php';
         $config = config::get_instance();
@@ -702,7 +702,10 @@ function INST_checkEnvironment($dbconfig_path='')
         $config->load_baseconfig();
         $config->initConfig();
         $_CONF = $config->get_config('Core');
-        $_PATH['log_path']      = $_CONF['path_logs'];
+        $_PATH['public_html']   = $_CONF['path_html'];
+        $_PATH['dbconfig_path'] = $_CONF['path'];
+        $_PATH['admin_path']    = INST_getAdminPath();
+        $_PATH['log_path']      = $_CONF['path_log'];
         $_PATH['lang_path']     = $_CONF['path_language'];
         $_PATH['backup_path']   = $_CONF['backup_path'];
         $_PATH['data_path']     = $_CONF['path_data'];
