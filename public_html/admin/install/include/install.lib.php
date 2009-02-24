@@ -200,6 +200,12 @@ function INST_mysqlOutOfDate($db)
  */
 function INST_prettifyLanguageName($filename)
 {
+    $utfscore = strstr($filename,'_utf-8');
+    if ( $utfscore === false ) {
+        $utf = false;
+    } else {
+        $utf = true;
+    }
     $langfile = str_replace('_utf-8', '', $filename);
     $uscore = strpos($langfile, '_');
     if ($uscore === false) {
@@ -219,6 +225,10 @@ function INST_prettifyLanguageName($filename)
             }
         }
         $lngname .= ' (' . trim($lngadd) . ')';
+    }
+
+    if ( $utf ) {
+        $lngname .= ' (utf-8)';
     }
 
     return $lngname;
