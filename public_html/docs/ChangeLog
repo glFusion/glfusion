@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Cleaned up Configuration screen setting labels, made more uniform (Eric)
+- Added missing addchild.png image for Links plugin Category admin screen (Eric)
 - Added Bulgarian install language (Mark)
 - Added styled error message (Eric)
 - Fixed AM/PM going onto second line randomly in forum lastx view (Eric)
