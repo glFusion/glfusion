@@ -26,31 +26,43 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
+###############################################################################
+# Array Format:
+# $LANGXX[YY]:  $LANG - variable name
+#               XX    - file id number
+#               YY    - phrase id number
+###############################################################################
+
 $LANG_POLLS = array(
-    'polls'             => 'Meningsmåling',
-    'results'           => 'Resultater',
-    'pollresults'       => 'Meningsmåling Resultater',
-    'votes'             => 'stemmer',
-    'vote'              => 'Stem',
-    'pastpolls'         => 'Sidste Meningsmåling',
-    'savedvotetitle'    => 'Meningsmåling Gemt',
-    'savedvotemsg'      => 'Din stemme blev gemt for meningsmåling',
-    'pollstitle'        => 'Meningsmålinger i System',
-    'polltopics'        => 'Andre meningsmålinger',
-    'stats_top10'       => 'Top Ti Meningsmålinger',
-    'stats_topics'      => 'Meningsmålings Emne',
-    'stats_votes'       => 'Stemmer',
-    'stats_none'        => 'Det fremgår, at der ikke er nogen meningsmålinger på dette websted eller ingen nogensinde har stemt.',
-    'stats_summary'     => 'Afstemninger (Svar) i systemet',
-    'open_poll'         => 'Åben for Meningsmåling',
-    'answer_all'        => 'De bedes besvare alle tilbageværende spørgsmål',
-    'not_saved'         => 'Resultat ikke gemt',
-    'upgrade1'          => 'Du har installeret en ny version af Polls plugin',
-    'upgrade2'          => 'upgradere',
-    'editinstructions'  => 'Udfyld Poll ID, mindst et spørgsmål og to svar til det.',
-    'start_poll'        => 'Start Afstemning'
+    'polls' => 'Meningsmåling',
+    'results' => 'Resultater',
+    'pollresults' => 'Meningsmåling Resultater',
+    'votes' => 'stemmer',
+    'vote' => 'Stem',
+    'pastpolls' => 'Sidste Meningsmåling',
+    'savedvotetitle' => 'Meningsmåling Gemt',
+    'savedvotemsg' => 'Din stemme blev gemt for meningsmåling',
+    'pollstitle' => 'Meningsmålinger i System',
+    'polltopics' => 'Andre meningsmålinger',
+    'stats_top10' => 'Top Ti Meningsmålinger',
+    'stats_topics' => 'Meningsmålings Emne',
+    'stats_votes' => 'Stemmer',
+    'stats_none' => 'Det fremgår, at der ikke er nogen meningsmålinger på dette websted eller ingen nogensinde har stemt.',
+    'stats_summary' => 'Afstemninger (Svar) i systemet',
+    'open_poll' => 'Åben for Meningsmåling',
+    'answer_all' => 'De bedes besvare alle tilbageværende spørgsmål',
+    'not_saved' => 'Resultat ikke gemt',
+    'upgrade1' => 'Du har installeret en ny version af Polls plugin',
+    'upgrade2' => 'upgradere',
+    'editinstructions' => 'Udfyld Poll ID, mindst et spørgsmål og to svar til det.',
+    'start_poll' => 'Start Afstemning'
 );
 
 ###############################################################################
@@ -60,15 +72,15 @@ $LANG25 = array(
     1 => 'Mode',
     2 => 'Angiv et emne, mindst et spørgsmål og mindst et svar til det spørgsmål.',
     3 => 'Meningsmåling Lavet',
-    4 => "Meningsmåling %s er gemt",
+    4 => 'Meningsmåling %s er gemt',
     5 => 'Rediger meningsmåling',
     6 => 'Meningsmåling ID',
     7 => '(Anvend ikke mellemrum)',
     8 => 'Vises på Meningsmålingblok',
     9 => 'Emne',
     10 => 'Svar / Afstemninger / Bemærkning',
-    11 => "Fejl med af hente meningsmålings svar data om denne meningsmåling %s",
-    12 => "Fejl med af hente meningsmålings spørgsmål data om denne meningsmåling %s",
+    11 => 'Fejl med af hente meningsmålings svar data om denne meningsmåling %s',
+    12 => 'Fejl med af hente meningsmålings spørgsmål data om denne meningsmåling %s',
     13 => 'Lav meningsmåling',
     14 => 'gem',
     15 => 'fortryd',
@@ -106,12 +118,11 @@ $PLG_polls_MESSAGE20 = 'Din afstemning er blevet slettet.';
 $PLG_polls_MESSAGE3001 = 'Plugin opgraderingen ikke understøttes.';
 $PLG_polls_MESSAGE3002 = $LANG32[9];
 
-
 // Localization of the Admin Configuration UI
 $LANG_configsections['polls'] = array(
     'label' => 'Meningsmåling',
     'title' => 'Meningsmåling KonfiguratioSorter resultatern'
-);  
+);
 
 $LANG_confignames['polls'] = array(
     'pollsloginrequired' => 'Meningsmåling Login Påkrævet?',
@@ -138,7 +149,7 @@ $LANG_fs['polls'] = array(
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['polls'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
+    1 => array('True' => true, 'False' => false),
     2 => array('Som Forelagt' => 'submitorder', 'Ved Afstemninger' => 'voteorder'),
     9 => array('Frem Til Afstemning' => 'item', 'Vis Admin List' => 'list', 'Vis Public List' => 'plugin', 'Vis Hjem' => 'home', 'Vis Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)

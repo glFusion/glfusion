@@ -15,6 +15,11 @@
  * $Id: japanese_utf-8.php 2970 2008-08-24 01:32:36Z mevans0263 $
  */
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 $LANG_SX00 = array(

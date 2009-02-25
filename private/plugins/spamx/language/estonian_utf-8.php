@@ -13,6 +13,11 @@
  * $Id: estonian_utf-8.php,v 1.1 2008/06/07 14:27:34 dhaun Exp $
  */
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 $LANG_SX00 = array(

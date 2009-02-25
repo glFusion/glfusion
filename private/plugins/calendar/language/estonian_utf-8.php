@@ -27,6 +27,11 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 ###############################################################################
@@ -209,7 +214,8 @@ $LANG_confignames['calendar'] = array(
     'notification' => 'Teavituskiri?',
     'delete_event' => 'Kustuta sündmused, omanikuks?',
     'aftersave' => 'Pärast sündmuste salvestamist',
-    'default_permissions' => 'Sündmuste vaikimisi õigused'
+    'default_permissions' => 'Sündmuste vaikimisi õigused',
+    'only_admin_submit' => 'Only Allow Admins to Submit'
 );
 
 $LANG_configsubgroups['calendar'] = array(

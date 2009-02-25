@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $LANG_BAD_BEHAVIOR = array (
     'plugin_display_name' => 'Bad Behavior2',
 

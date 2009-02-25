@@ -31,6 +31,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $LANG_FM00 = array (
     'access_denied'     => 'Acceso Denegado',
     'access_denied_msg' => 'Solo usuarios administradores tiene acceso hacia est&aacute; p&aacute;gina. Su nombre de usuario y direcci&oacute;n IP han sido registrados en bit&aacute;cora.',

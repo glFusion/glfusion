@@ -27,6 +27,10 @@
 ###############################################################################
 # $Id$
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 /**
  * This is the english language page for the glFusion links Plug-in!
  *

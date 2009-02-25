@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $LANG_FM00 = array (
     'access_denied'     => 'Adgang nægtet',
     'access_denied_msg' => 'Kun Root brugern har adgang til denne side.  Dit brugernavn og IP er blevet gemt.',

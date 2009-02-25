@@ -26,6 +26,10 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 global $LANG32;
 
 $LANG_POLLS = array(
@@ -111,7 +115,7 @@ $PLG_polls_MESSAGE3002 = $LANG32[9];
 $LANG_configsections['polls'] = array(
     'label' => 'Polls',
     'title' => 'Polls Configuration'
-);  
+);
 
 $LANG_confignames['polls'] = array(
     'pollsloginrequired' => 'Polls Login Required',

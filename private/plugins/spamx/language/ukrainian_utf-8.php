@@ -12,6 +12,11 @@
  * $Id: ukrainian_utf-8.php 2846 2008-07-29 00:52:10Z mevans0263 $
  */
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 $LANG_SX00 = array(
