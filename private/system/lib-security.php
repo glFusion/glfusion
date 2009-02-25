@@ -1171,10 +1171,13 @@ function SEC_checkToken()
              *  the http referer is the url for which the token was created.
              */
             if( $_USER['uid'] != $tokendata['owner_id'] ) {
+                COM_errorLog("CheckToken: Token failed - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['urlfor'] != $_SERVER['HTTP_REFERER']) {
+                COM_errorLog("CheckToken: Token failed - token URL does not match referer URL.");
                 $return = false;
             } else if($tokendata['expired']) {
+                COM_errorLog("CheckToken: Token failed - token has expired.");
                 $return = false;
             } else {
                 $return = true; // Everything is AOK in only one condition...
@@ -1254,10 +1257,13 @@ function SEC_checkTokenGeneral($token,$action='general')
              *  token is not expired.
              */
             if( $_USER['uid'] != $tokendata['owner_id'] ) {
+                COM_errorLog("CheckToken: Token failed - userid does not match token owner id");
                 $return = false;
             } else if($tokendata['expired']) {
+                COM_errorLog("CheckToken: Token failed - token has expired.");
                 $return = false;
             } else if($tokendata['urlfor'] != $action) {
+                COM_errorLog("CheckToken: Token failed - token URL does not match referer URL.");
                 $return = false;
             } else {
                 $return = true; // Everything is OK
