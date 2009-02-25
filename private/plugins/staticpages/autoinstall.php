@@ -74,6 +74,8 @@ $INSTALL_plugin['staticpages'] = array(
         'log' => 'Adding feature to the admin group'),
   array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'delete_feature_id',
         'log' => 'Adding feature to the admin group'),
+  array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'php_feature_id',
+        'log' => 'Adding feature to the admin group'),
 );
 
 
