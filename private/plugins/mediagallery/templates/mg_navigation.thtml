@@ -98,7 +98,6 @@
      <td>
        <ul>
          <li><a href="{site_url}/phpinfo.php" rel="external">{lang_php_info}</a></li>
-         <li><a href="{admin_url}filecheck.php">{lang_filecheck}</a></li>
        </ul>
      </td>
    </tr>
