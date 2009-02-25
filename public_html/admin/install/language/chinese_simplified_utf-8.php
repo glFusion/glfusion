@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
@@ -62,7 +62,7 @@ $LANG_INSTALL = array(
     'content_plugins'           => '内容与插件',
     'copyright'                 => '<a href="http://www.glfusion.org" target="_blank">glFusion</a>是一个自由软件，基于<a href="http://www.gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU/GPL v2.0 许可证发行。</a>',
     'core_upgrade_error'        => '升级核心系统时发生错误。',
-    'correct_perms'             => '请按照提示修改您的安装环境，如果您完成修改了，请点击<b>Recheck</b>按钮重新检查安装环境',
+    'correct_perms'             => '请按照提示修改您的安装环境，如果您完成修改了，请点击<b>重新检查</b>按钮重新检查安装环境',
     'current'                   => '当前',
     'database_exists'           => '数据库中已经存在glFusion的数据表。请在全新安装前情况所有旧数据表。',
     'database_info'             => '数据库信息',
@@ -115,7 +115,7 @@ $LANG_INSTALL = array(
     'not_writable'              => '不可写',
     'notes'						=> '注意',
     'off'                       => '关闭',
-    'ok'                        => '确认',
+    'ok'                        => '通过',
     'on'                        => '开启',
     'online_help_text'          => '在线安装助手<br />位于glFusion.org',
     'online_install_help'       => '在线安装帮助',
@@ -134,7 +134,7 @@ $LANG_INSTALL = array(
     'polls'                     => '加载投票插件？',
     'polls_desc'                => '一个在线投票系统，为您的用户提功一个多样的投票功能。',
     'post_max_size'				=> 'glFusion让您可以上传插件、图片、和文件。您应该允许至少8M的上传权限。',
-    'previous'                  => '返回',
+    'previous'                  => '上一步',
     'proceed'                   => '继续',
     'recommended'               => '推荐',
     'register_globals'			=> '如果PHP的<strong>register_globals</strong>开启，可能引起安全隐患。',
@@ -161,7 +161,7 @@ $LANG_INSTALL = array(
     'siteconfig_exists'         => '一个siteconfig.php文件已经存在。如果运行全新安装，请先删除该文件。',
     'siteconfig_not_found'      => '找不到siteconfig.php文件，您真的是在做升级操作吗？',
     'siteconfig_not_writable'   => '文件siteconfig.php不可写，或者该文件所在路径不可写。请在继续操作之前纠正这个问题。',
-    'sitedata_help'             => '从下拉菜单选择数据库类型。通常是<strong>MySQL</strong>。同时也选择是否使用<strong>UTF-8</strong>字符集(对于多语言站点一般需要选择该选项)。<br /><br /><br />输入数据库服务器的主机名。可能会和您的web服务器不同，当您不确定时请咨询服务器提供商。<br /><br />输入数据库名称。<strong>数据库必须已经存在。</strong>如果您不知道数据库的名字，请联系您的服务器提供商。<br /><br />输入数据库用户名。如果您不知道数据库用户名，请联系服务器提供商。<br /><br /><br />输入数据库密码，如果您不知道该密码请联系服务器提供商。<br /><br />输入一个数据表前缀，表前缀可以用来在一个数据库中区分多个网站的数据表。<br /><br />输入您网站的名字，它将会显示为网站标题。例如glFusion或Mark\'s Marbles。不必担心，您可以在以后再更改它。<br /><br />请输入网站副标题。它将会显示在网站标题下方。例如synergy - stability - style。不必担心，您可以在以后再更改它。<br /><br />输入您网站的主电子邮件地址。该地址将被作为默认管理员的电邮.不必担心，您可以在以后再更改它。<br /><br />输入您网站的不监控电邮地址。该地址将被用来发送自动生成的电子邮件、重置密码信、或其他提醒邮件。不必担心，您可以在以后再更改它。<br /><br />请确认填写正确的网站首页访问路径或URL。<br /><br />请确认填写正确的网站管理后台的路径或URL。',
+    'sitedata_help'             => '<br />从下拉菜单选择数据库类型。通常是<strong>MySQL</strong>。同时也选择是否使用<strong>UTF-8</strong>字符集(对于多语言站点一般需要选择该选项)。<br /><br /><br />输入数据库服务器的主机名。可能会和您的web服务器不同，当您不确定时请咨询服务器提供商。<br /><br /><br />输入数据库名称。<strong>数据库必须已经存在。</strong>如果您不知道数据库的名字，请联系您的服务器提供商。<br /><br /><br />输入数据库用户名。如果您不知道数据库用户名，请联系服务器提供商。<br /><br /><br />输入数据库密码，如果您不知道该密码请联系服务器提供商。<br /><br /><br />输入一个数据表前缀，表前缀可以用来在一个数据库中区分多个网站的数据表。<br /><br /><br />输入您网站的名字，它将会显示为网站标题。例如glFusion或Mark\'s Marbles。不必担心，您可以在以后再更改它。<br /><br /><br />请输入网站副标题。它将会显示在网站标题下方。例如synergy - stability - style。不必担心，您可以在以后再更改它。<br /><br />输入您网站的主电子邮件地址。该地址将被作为默认管理员的电邮.不必担心，您可以在以后再更改它。<br /><br />输入您网站的不监控电邮地址。该地址将被用来发送自动生成的电子邮件、重置密码信、或其他提醒邮件。不必担心，您可以在以后再更改它。<br /><br />请确认填写正确的网站首页访问路径或URL。<br /><br />请确认填写正确的网站管理后台的路径或URL。',
     'sitedata_missing'          => '您输入的网站数据存在以下问题：',
     'system_path'               => '路径设置',
     'system_path_prompt'        => '请输入glFusion的<strong>private/</strong>目录的完整绝对路径。<br /><br />该路径包括<strong>db-config.php.dist</strong>或<strong>db-config.php</strong>文件。<br /><br />例如: /home/www/glfuison/private 或  c:/www/glfusion/private',
@@ -185,21 +185,21 @@ $LANG_SUCCESS = array(
     2 => ' 完成!',
     3 => '恭喜, 你已成功的 ',
     4 => ' glFusion 请用一分钟时间阅读以下的信息.',
-    5 => '要登入你的新志乐网站, 请用这个账户:',
+    5 => '要登入你的新glFusion网站, 请用这个账户:',
     6 => '用户名:',
-    7 => '管理员',
+    7 => 'Admin',
     8 => '密码:',
-    9 => '密码',
+    9 => 'password',
     10 => '安全警告',
     11 => '不要忘记',
     12 => '项目',
-    13 => '删除或改名 install 目录,',
+    13 => '删除或改名 public_html/admin/installinstall 目录,',
     14 => '更改',
     15 => '账户密码.',
     16 => '设定许可于',
     17 => '和',
     18 => '回到',
-    19 => '<strong>注意:</strong> 因为安全模式已改变, 我们已建立了新的账户让你管理你的新网站.  这新的账户名是 <b>NewAdmin</b> 和密码是 <b>password</b>',
+    19 => '<strong>注意:</strong> 因为安全模式已改变, 我们已建立了新的账户让你管理你的新网站.  这个新的账户名是 <b>NewAdmin</b> 和密码是 <b>password</b>',
     20 => '安装',
     21 => '升级'
 );
