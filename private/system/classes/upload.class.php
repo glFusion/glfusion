@@ -546,9 +546,13 @@ class upload
             $newwidth = (int) ($imageInfo['width'] * $sizefactor);
             $newheight = (int) ($imageInfo['height'] * $sizefactor);
             $newsize = $newwidth.'x'.$newheight;
+            if (!$this->_keepOriginalFile ($this->_fileUploadDirectory . '/' . $this->_getDestinationName())) {
+                exit;
+            }
             list($retval,$msg) = IMG_resizeImage($this->_fileUploadDirectory . '/' . $this->_getDestinationName(), $this->_fileUploadDirectory . '/' . $this->_getDestinationName(), $newheight, $newwidth, $this->_currentFile['type'], 0 );
             if ($retval !== true) {
                 $this->_addError('Image, ' . $this->_currentFile['name'] . ' ' . $msg);
+
                 $this->printErrors();
                 exit;
             } else {
