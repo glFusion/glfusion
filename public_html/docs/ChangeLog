@@ -168,6 +168,11 @@ Site Tailor Plugin
 
 StaticPages Plugin
 ------------------
+- Improved handling of disabled plugins when there is a menu item that
+  points to it. (Mark)
+- Fixed bug where sub-menus did not display the correct items in the
+  display after field (Mark)
+- Do not add http:// to blank URLs (Mark)
 - Made editor window larger when using advanced editor (Mark)
 - Ability to delete pages from admin list (Mark)
 - Do not include pages with sp_search set to 0 in stats (Mark)
