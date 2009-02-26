@@ -511,7 +511,7 @@ function ST_saveNewMenuElement ( ) {
              * check URL if it needs http:// appended...
              */
             if ( trim($E['element_subtype']) != '' ) {
-                if(strpos($E['element_subtype'], "http") !== 0 && strpos($E['element_subtype'],"%site") === false) {
+                if(strpos($E['element_subtype'], "http") !== 0 && strpos($E['element_subtype'],"%site") === false && rtrim($E['element_subtype']) != '') {
                     $E['element_subtype'] = 'http://' . $E['element_subtype'];
                 }
             }
@@ -527,7 +527,7 @@ function ST_saveNewMenuElement ( ) {
     // check if URL needs the http:// added
 
     if ( trim($E['element_url']) != '' ) {
-        if ( strpos($E['element_url'],"http") !== 0 && strpos($E['element_url'],"%site") === false && $E['element_url'][0] != '#') {
+        if ( strpos($E['element_url'],"http") !== 0 && strpos($E['element_url'],"%site") === false && $E['element_url'][0] != '#' && rtrim($E['element_url']) != '' ) {
             $E['element_url'] = 'http://' . $E['element_url'];
         }
     }
@@ -621,11 +621,22 @@ function ST_editElement( $menu_id, $mid ) {
     $plugin_select = '<select id="pluginname" name="pluginname">' . LB;
     $plugin_menus = _stPLG_getMenuItems(); // PLG_getMenuItems();
 
+    $found = 0;
     $num_plugins = count($plugin_menus);
     for( $i = 1; $i <= $num_plugins; $i++ )
     {
-        $plugin_select .= '<option value="' . key($plugin_menus) . '"' . ($stMenu[$menu_id]['elements'][$mid]->subtype==key($plugin_menus) ? ' selected="selected"' : '') . '>' . key($plugin_menus) . '</option>' . LB;
+        $plugin_select .= '<option value="' . key($plugin_menus) . '"';
+
+        if ( $stMenu[$menu_id]['elements'][$mid]->subtype==key($plugin_menus) ) {
+            $plugin_select .= ' selected="selected"';
+            $found++;
+        }
+        $plugin_select .= '>' . key($plugin_menus) . '</option>' . LB;
+
         next( $plugin_menus );
+    }
+    if ( $found == 0 ) {
+        $plugin_select .= '<option value="'.$stMenu[$menu_id]['elements'][$mid]->subtype.'" selected="selected">'.$LANG_ST01['disabled_plugin'].'</option>'.LB;
     }
     $plugin_select .= '</select>' . LB;
 
@@ -686,7 +697,7 @@ function ST_editElement( $menu_id, $mid ) {
 
     $order_select = '<select id="menuorder" name="menuorder">' . LB;
     $order_select .= '<option value="0">' . $LANG_ST01['first_position'] . '</option>' . LB;
-    $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['st_menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=0 ORDER BY element_order ASC");
+    $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['st_menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=".$stMenu[$menu_id]['elements'][$mid]->pid." ORDER BY element_order ASC");
     $order = 10;
 
     while ($row = DB_fetchArray($result)) {
@@ -763,7 +774,7 @@ function ST_saveEditMenuElement ( ) {
             break;
         case 6 :
             $subtype = COM_applyFilter($_POST['menuurl']);
-            if ( strpos($subtype,"http") !== 0 && strpos($subtype,"%site") === false && $subtype[0] != '#') {
+            if ( strpos($subtype,"http") !== 0 && strpos($subtype,"%site") === false && $subtype[0] != '#' && rtrim($subtype) != '' ) {
                 $subtype = 'http://' . $subtype;
             }
             break;
@@ -776,7 +787,7 @@ function ST_saveEditMenuElement ( ) {
     }
     $active     = COM_applyFilter($_POST['menuactive'],true);
     $url        = trim(addslashes(COM_applyFilter($_POST['menuurl'])));
-    if ( strpos($url,"http") !== 0 && strpos($url,"%site") === false && $url[0] != '#') {
+    if ( strpos($url,"http") !== 0 && strpos($url,"%site") === false && $url[0] != '#' && rtrim($url) != '') {
         $url = 'http://' . $url;
     }
     $group_id   = COM_applyFilter($_POST['group'],true);
