@@ -799,14 +799,9 @@ function ST_saveEditMenuElement ( ) {
     $sql        = "UPDATE {$_TABLES['st_menu_elements']} SET pid=$pid, element_order=$neworder, element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url', element_target='$target', group_id=$group_id WHERE id=$id";
 
     DB_query($sql);
-
-    CACHE_remove_instance('stmenu');
-
-    st_initMenu();
-
+    st_initMenu(true);
     $stMenu[$menu_id]['elements'][$pid]->reorderMenu();
-
-    st_initMenu();
+    st_initMenu(true);
 }
 
 
@@ -1373,13 +1368,15 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'saveedit' :
             ST_saveEditMenuElement();
-            $content = ST_displayTree( $menu_id );
-            $currentSelect = $LANG_ST01['menu_builder'];
+            CACHE_remove_instance('stmenu');
+            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;id=' . $menu_id);
+            exit;
             break;
         case 'save' :
             // save the new or edited element
             $menu_id = COM_applyFilter($_POST['menuid'],true);
             ST_saveNewMenuElement();
+            CACHE_remove_instance('stmenu');
             echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;id=' . $menu_id);
             exit;
             break;
