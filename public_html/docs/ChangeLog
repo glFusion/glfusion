@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Removed unused gltips.thtml template file (Eric)
 - Log error message when token check fails (Mark)
 - Cleaned up Configuration screen setting labels, made more uniform (Eric)
 - Added missing addchild.png image for Links plugin Category admin screen (Eric)
