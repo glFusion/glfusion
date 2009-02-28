@@ -673,7 +673,7 @@ function INST_checkEnvironment($dbconfig_path='')
     $fu = ini_get('file_uploads');
     $T->set_var('item','file_uploads');
     $T->set_var('status',$fu == 1 ? '<span class="yes">'.$LANG_INSTALL['on'].'</span>' : '<span class="no">'.$LANG_INSTALL['off'].'</span>');
-    $T->set_var('recommended','On');
+    $T->set_var('recommended',$LANG_INSTALL['on']);
     $T->set_var('notes',$LANG_INSTALL['file_uploads']);
     $T->parse('env','envs',true);
 

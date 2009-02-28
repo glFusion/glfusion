@@ -24,7 +24,6 @@
   
   
   <title>glFusion - Content Management with Style</title></head>
-
 <body dir="ltr">
 
 
@@ -486,7 +485,11 @@ parameters to the sendmail binary. </td>
       <td>If your SMTP server requires a secure connection, select the protocol.</td>
 
 
-    </tr>
+    </tr><tr><td><a name="desc_use_from_site_mail"></a>Force email from address to be site email</td><td>Force
+the From address to be your site email address. This is useful for
+hosting providers that do not allow email from addresses that are not
+from your domain. &nbsp;This will force the Reply-To address to be the
+email address of the user.</td></tr>
 
 
 
@@ -1505,7 +1508,15 @@ the sticky top story on the site. </td>
 		<td class="col0 leftalign"><a name="desc_check_trackback_link">Check Trackbacks</a>  </td>
 
 
-      <td class="col1 leftalign">This option can be used to check the validity of a trackback. You can check if the URL in the trackback actually contains a link back to your site (otherwise, it's probably spam). You can also check if the trackback was sent from the proper IP address, (i.e. the IP of the site in the trackback URL. Again, if they don't match, it's probably spam). Note that you can add up the values below to do more than one check (but using option 1 and 2 doesn't make sense and will be treated as if you requested option 2). Options are: <br />
+      <td class="col1 leftalign">This
+option can be used to check the validity of a trackback. You can check
+if the URL in the trackback actually contains a link back to your site
+(otherwise, it's probably spam). You can also check if the trackback
+was sent from the proper IP address, (i.e. the IP of the site in the
+trackback URL. Again, if they don't match, it's probably spam). Note
+that you can add up the values below to do more than one check (but
+using option 1 and 2 doesn't make sense and will be treated as if you
+requested option 2). Options are: <br />
 
 
 
@@ -1644,10 +1655,13 @@ text near the link, and use that as the excerpt for the Pingback. </td>
 		<td class="col0 leftalign"><a name="desc_pingback_self">Pingback Self</a>  </td>
 
 
-      <td class="col1 leftalign">Pingbacks are sent out automatically
+      <td class="col1 leftalign">Pingbacks
+are sent out automatically
 to all the URLs linked from a story - which includes stories on your
 own site that you may have linked in the article. This option lets you
-specify how these &#8220;self pingbacks&#8221; are to be handled: Skip them, (i.e. don't send pingbacks to stories on your own site). Allow them, but obey the speed limit. Allow them and ignore the
+specify how these &#8220;self pingbacks&#8221; are to be handled: Skip them, (i.e.
+don't send pingbacks to stories on your own site). Allow them, but obey
+the speed limit. Allow them and ignore the
 speed limit. <br />
 
 

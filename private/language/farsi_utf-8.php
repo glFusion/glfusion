@@ -1909,7 +1909,8 @@ $LANG_confignames['Core'] = array(
     'compress_css' => 'Compress CSS',
     'jpg_orig_quality' => 'JPEG Quality Factor',
     'allow_embed_object' => 'Allow EMBED Object',
-    'story_submit_by_perm_only' => 'Only allow submission to topics with write permission'
+    'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
+    'use_from_site_mail' => 'Force email from address to be site email'
 );
 
 $LANG_configsubgroups['Core'] = array(

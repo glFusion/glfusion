@@ -3453,7 +3453,12 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     $mail->Subject = $subject;
 
     if (is_array($from) && isset($from[0]) && $from[0] != '' ) {
-        $mail->From = $from[0];
+        if ( $_CONF['use_from_site_mail'] == 1 ) {
+            $mail->From = $_CONF['site_mail'];
+            $mail->AddReplyTo($from[0]);
+        } else {
+            $mail->From = $from[0];
+        }
     } else {
         $mail->From = $_CONF['site_mail'];
     }

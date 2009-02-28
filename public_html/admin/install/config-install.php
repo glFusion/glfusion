@@ -66,6 +66,7 @@ function install_config($site_url)
     $c->add('mail_smtp_username','','text',0,1,NULL,120,TRUE);
     $c->add('mail_smtp_password','','text',0,1,NULL,130,TRUE);
     $c->add('mail_smtp_secure','none','select',0,1,21,140,TRUE);
+    $c->add('use_from_site_mail',FALSE,'select',0,1,0,150,TRUE);
 
     $c->add('fs_syndication', NULL, 'fieldset', 0, 2, NULL, 0, TRUE);
     $c->add('backend',1,'select',0,2,0,1380,TRUE);
