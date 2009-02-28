@@ -35,6 +35,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $_SQL['pollanswers'] = "
 CREATE TABLE {$_TABLES['pollanswers']} (
   pid varchar(20) NOT NULL default '',

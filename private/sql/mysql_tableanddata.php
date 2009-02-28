@@ -37,6 +37,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $_SQL[] = "
 CREATE TABLE {$_TABLES['access']} (
   acc_ft_id mediumint(8) NOT NULL default '0',

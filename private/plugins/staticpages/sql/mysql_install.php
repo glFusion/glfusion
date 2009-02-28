@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $_SQL['staticpage'] = "
 CREATE TABLE {$_TABLES['staticpage']} (
   sp_id varchar(40) NOT NULL default '',
