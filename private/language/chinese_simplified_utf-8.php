@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 ###############################################################################
 # chinese_simplified_utf-8.php
@@ -8,7 +8,8 @@
 #
 # This is the Chinese Simplified (UTF-8) language set for glFusion 1.0
 #
-# Copyright (C) 2003 Samuel Maung Stone
+# Copyright (C) 2009 Albert Zhu
+#      i AT cpro DOT me
 # sam AT stonemicro DOT com
 #
 # This program is free software; you can redistribute it and/or
@@ -50,15 +51,15 @@ $LANG_CHARSET = 'UTF-8';
 
 $LANG01 = array(
     1 => '作者︰',
-    2 => '读整文',
+    2 => '阅读更多',
     3 => '个评论',
     4 => '编辑',
     5 => '投票',
     6 => '结果',
     7 => '',
     8 => '投票',
-    9 => '管理者功能︰',
-    10 => '提交物',
+    9 => '管理者中心︰',
+    10 => '提交',
     11 => '文章',
     12 => '组件',
     13 => '主题',
@@ -66,19 +67,19 @@ $LANG01 = array(
     15 => '',
     16 => '',
     17 => '用户',
-    18 => 'SQL 质问',
-    19 => '退出',
-    20 => '用户讯息︰',
+    18 => 'SQL查询',
+    19 => '登出',
+    20 => '用户信息︰',
     21 => '用户名',
-    22 => '用户识别号',
+    22 => '用户ID',
     23 => '安全等级',
     24 => '匿名',
     25 => '回复',
-    26 => '以下评论只属张贴者个人观点。',
-    27 => '最近发表的',
+    26 => '以下评论只属发贴者个人观点，本站不对其内容负责。',
+    27 => '最近发表',
     28 => '删除',
     29 => '没有评论。',
-    30 => '旧的文章',
+    30 => '旧文章',
     31 => '允许的 HTML 标记:',
     32 => '错误，无效的用户名',
     33 => '错误，不能写系统日志;',
@@ -475,16 +476,16 @@ $LANG09 = array(
     7 => '评论',
     8 => '作者',
     9 => '所有',
-    10 => '搜寻',
-    11 => '搜寻结果',
-    12 => '相配',
-    13 => '搜寻结果：没有相配的',
+    10 => '搜索',
+    11 => '搜索结果',
+    12 => '匹配',
+    13 => '搜索结果：没有匹配的结果',
     14 => '没有你寻找的东西︰',
     15 => '请再尝试',
     16 => '标题',
     17 => '日期',
     18 => '作者',
-    19 => "搜寻整个 {$_CONF['site_name']} 的新旧文章资料库",
+    19 => "搜寻整个 {$_CONF['site_name']} 网站的新旧文章资料库",
     20 => '日期',
     21 => '到',
     22 => '(日期格式 年-月-日 YYYY-MM-DD)',
@@ -974,7 +975,7 @@ $LANG29 = array(
     16 => '用户名',
     17 => '全名',
     18 => '电子邮件',
-    34 => '命令和控制',
+    34 => '管理中心',
     35 => '已递交的文章',
     36 => 'Comment',
     37 => 'Time',
@@ -1026,8 +1027,8 @@ $LANG32 = array(
     1 => '安装插件能损坏你的主系统。 必需要特别小心。 最好不要安装任何你不了解的插件。',
     2 => '插件安装声明',
     3 => '插件安装表格',
-    4 => '插件档案',
-    5 => '插件清单',
+    4 => '插件文件',
+    5 => '插件列表',
     6 => '警告︰插件已经被安装过！',
     7 => '你想安装的插件已经存在，请先把它删除再安装。',
     8 => '插件不能通过兼容性校验。',
@@ -1320,7 +1321,7 @@ $LANG_ACCESS = array(
     'nogroupsforcoregroup' => '这小组不属於任何其它的小组',
     'grouphasnorights' => ' 这小组没有管理权。',
     'newgroup' => '新小组',
-    'adminhome' => '管理员首页',
+    'adminhome' => '管理首页',
     'save' => '保存',
     'cancel' => '取消',
     'delete' => '删除',
@@ -1581,7 +1582,7 @@ $LANG_WEEK = array(
 # display administration lists and edit pages
 
 $LANG_ADMIN = array(
-    'search' => '搜寻',
+    'search' => '搜索',
     'limit_results' => '限制结果',
     'submit' => '提交',
     'edit' => '编辑',
@@ -1615,11 +1616,11 @@ $LANG_ADMIN = array(
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
+    'latest_news' => '最新消息',
+    'translate' => '点击旗帜，就能自动翻译本站为该国语言。',
+    'prev' => '向前',
+    'next' => '向后',
+    'playpause' => '播放/暂停'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1636,7 +1637,7 @@ $LANG_commentmodes = array(
     'flat' => '平面的',
     'nested' => '嵌套的',
     'threaded' => '线状的',
-    'nocomment' => '勿评论'
+    'nocomment' => '无评论'
 );
 
 $LANG_cookiecodes = array(
@@ -1651,7 +1652,7 @@ $LANG_cookiecodes = array(
 );
 
 $LANG_dateformats = array(
-    0 => '系统指定的'
+    0 => '系统默认'
 );
 
 $LANG_featurecodes = array(
@@ -1660,8 +1661,8 @@ $LANG_featurecodes = array(
 );
 
 $LANG_frontpagecodes = array(
-    0 => '只显在主提版',
-    1 => '显在标题版'
+    0 => '只显示标题',
+    1 => '显在首页'
 );
 
 $LANG_postmodes = array(
@@ -1670,13 +1671,13 @@ $LANG_postmodes = array(
 );
 
 $LANG_sortcodes = array(
-    'ASC' => '最老的在前',
-    'DESC' => '最新的在前'
+    'ASC' => '从旧到新',
+    'DESC' => '从新到旧'
 );
 
 $LANG_trackbackcodes = array(
-    0 => '迹回已启动',
-    -1 => '迹回已关掉'
+    0 => '启动Trackback',
+    -1 => '关闭Trackback'
 );
 
 ###############################################################################
@@ -1697,8 +1698,8 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => '志乐',
-    'title' => '志乐设定'
+    'label' => 'glFusion',
+    'title' => 'glFusion设定'
 );
 
 $LANG_confignames['Core'] = array(
@@ -1706,11 +1707,11 @@ $LANG_confignames['Core'] = array(
     'site_url' => '网站 URL',
     'site_admin_url' => '管理 URL',
     'site_mail' => '网站电邮',
-    'noreply_mail' => '无可回信的电邮',
+    'noreply_mail' => '不回复电邮',
     'site_name' => '网站名称',
-    'site_slogan' => '标语',
-    'microsummary_short' => '细微摘要',
-    'path_log' => '记录',
+    'site_slogan' => '副标题',
+    'microsummary_short' => '摘要',
+    'path_log' => '日志',
     'path_language' => '语言',
     'backup_path' => '备份',
     'path_data' => '数据',
@@ -1718,10 +1719,10 @@ $LANG_confignames['Core'] = array(
     'path_pear' => 'Pear 路径',
     'have_pear' => '有 Pear 吗?',
     'mail_settings' => '电邮设定',
-    'allow_mysqldump' => '准许 MySQL Dump',
+    'allow_mysqldump' => '允许 MySQL Dump',
     'mysqldump_path' => 'Executable 路径',
     'mysqldump_options' => 'MySQL Dump 选项',
-    'theme' => '画面主题',
+    'theme' => '主题/皮肤',
     'menu_elements' => '才当成分',
     'path_themes' => '画面主题的路径',
     'disable_new_user_registration' => '关闭新登记',
@@ -1869,8 +1870,8 @@ $LANG_confignames['Core'] = array(
     'comment_limit' => '评论限定',
     'comment_mode' => '评论方式',
     'comment_code' => '评论默认',
-    'comment_edit' => 'Allow Comment Edit?',
-    'comment_edittime' => 'Comment Edit Time (seconds)',
+    'comment_edit' => '允许编辑评论？',
+    'comment_edittime' => '评论可编辑时间(秒)',
     'commentsubmission' => 'Queue Comment Submissions',
     'passwordspeedlimit' => '密码速度限定',
     'login_attempts' => '最多登入企图次数',
@@ -1879,8 +1880,8 @@ $LANG_confignames['Core'] = array(
     'admin_html' => '管理员 HTML',
     'skip_html_filter_for_root' => '根用户跳过 HTML 过滤?',
     'allowed_protocols' => '许可 Protocols',
-    'disable_autolinks' => '关闭 Autolinks?',
-    'digg_enabled' => 'Show Digg.com Links?',
+    'disable_autolinks' => '关闭自动链接?',
+    'digg_enabled' => '显示 Digg.com 链接?',
     'censormode' => '检查方式?',
     'censorreplace' => '检查代替文字',
     'censorlist' => '检查列',
