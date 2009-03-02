@@ -1180,34 +1180,6 @@ function plugin_templatesetvars_links ($templatename, &$template)
     }
 }
 
-/**
-* Automatic uninstall function for plugins
-*
-* @return   array
-*
-* This code is automatically uninstalling the plugin.
-* It passes an array to the core code function that removes
-* tables, groups, features and php blocks from the tables.
-* Additionally, this code can perform special actions that cannot be
-* foreseen by the core code (interactions with other plugins for example)
-*
-*/
-function plugin_autouninstall_linksXX ()
-{
-    $out = array (
-        /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('links','linksubmission','linkcategories'),
-        /* give the full name of the group, as in the db */
-        'groups' => array('Links Admin'),
-        /* give the full name of the feature, as in the db */
-        'features' => array('links.edit', 'links.moderate', 'links.submit'),
-        /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array('phpblock_topic_categories', 'phpblock_topic_links'),
-        /* give all vars with their name */
-        'vars'=> array()
-    );
-    return $out;
-}
 
 // +--------------------------------------------------------------------------+
 // | Category HTML functions                                                  |

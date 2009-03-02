@@ -74,7 +74,7 @@ $INSTALL_plugin['links'] = array(
         'variable' => 'edit_feature_id'),
   array('type' => 'feature', 'feature' => 'links.moderate', 'desc' => 'Ability to moderate the Links Plugin',
         'variable' => 'moderate_feature_id'),
-  array('type' => 'feature', 'feature' => 'links.submit', 'desc' => 'Ability to submit Calendar events',
+  array('type' => 'feature', 'feature' => 'links.submit', 'desc' => 'Ability to submit Links',
         'variable' => 'submit_feature_id'),
 
   array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'edit_feature_id',
@@ -83,15 +83,6 @@ $INSTALL_plugin['links'] = array(
         'log' => 'Adding feature to the admin group'),
   array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'submit_feature_id',
         'log' => 'Adding feature to the admin group'),
-
-//  array('type' => 'sql', 'sql' => $_SQL['d1']),
-//  array('type' => 'sql', 'sql' => $_SQL['d2']),
-//  array('type' => 'sql', 'sql' => $_SQL['d3']),
-/*
-  array('type' => 'block', 'name' => 'Events', 'title' => 'Events',
-          'phpblockfn' => 'phpblock_calendar', 'block_type' => 'phpblock',
-          'group_id' => 'admin_group_id'),
-*/
 );
 
 
