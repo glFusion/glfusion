@@ -6275,7 +6275,7 @@ function COM_convertDate2Timestamp( $date, $time = '' )
 
     if( $time == '' )
     {
-        $timestamp = mktime( 0, 0, 0, $atoks[1], $atoks[2], $atoks[0] );
+        $timestamp = @mktime( 0, 0, 0, $atoks[1], $atoks[2], $atoks[0] );
     }
     else
     {
@@ -6294,7 +6294,7 @@ function COM_convertDate2Timestamp( $date, $time = '' )
             }
         }
 
-        $timestamp = mktime( $btoks[0], $btoks[1], $btoks[2],
+        $timestamp = @mktime( $btoks[0], $btoks[1], $btoks[2],
                              $atoks[1], $atoks[2], $atoks[0] );
     }
 
