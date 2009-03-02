@@ -67,7 +67,9 @@ function _img_RotateImage($srcImage, $direction,$mimeType)
             return array(false,'Invalid direction passed to rotate, must be left or right');
     }
 
-    $tmpImage = $srcImage . '.rt';
+//    $tmpImage = $srcImage . '.rt';
+    $tmp = pathinfo($srcImage);
+    $tmpImage = $tmp['dirname'] .'/' . $tmp['filename'] . '_RT.' . $tmp['extension'];
 
     UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/convert" . '"' . " -quality 100 -rotate " . $IM_rotate . " $srcImage $tmpImage");
     if ( $_CONF['jhead_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg') ) {
