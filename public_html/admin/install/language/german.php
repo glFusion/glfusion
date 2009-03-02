@@ -166,15 +166,12 @@ $LANG_INSTALL = array(
     'use_utf8'                  => '<br />Zeichensatz benutzen UTF-8 ',
     'welcome_help'              => 'Willkommen beim glFusion-CMS Installations-Zauberer. Einen neuen glFusion-Auftritt installieren, auf den neusten Stand bringen, oder einen existierenden Geeklog v1.5 Auftritt importieren.<br /><br />Bitte die Sprache für den Zauberer auswählen, die gestellte Aufgabe und dann <strong>nächstes</strong> drücken.',
     'wizard_version'            => 'v' . GVERSION . ' Installations-Zauberer',
-/* --- Updated --- */
-//    'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />This directory contains the <strong>db-config.php.dist</strong> or <strong>db-config.php</strong> file.<br /><br />Examples: /home/www/glfuison/private or c:/www/glfusion/private.<br /><br /><strong>Hint:</strong> The absolute path to your public_html/ directory appears to be:<br />%s<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
-     'system_path_prompt'        => 'Den vollen, absoluten Pfad auf dem Server zum glFusion <strong>private/</strong>-Verzeichnis.<br /><br />Dies Verzeichnis enthält die <strong>db-config.php.dist</strong> oder <strong>db-config.php</strong>-Datei.<br /><br />Beispiel: /home/www/glfuison/private oder c:/www/glfusion/private',
-/* --- New --- */
-    'advanced_settings'         => 'Advanced Settings',
-    'log_path'                  => 'Logs Path',
-    'lang_path'                 => 'Language Path',
-    'backup_path'               => 'Backups Path',
-    'data_path'                 => 'Data Path',
+    'system_path_prompt'        => 'Den vollen, absoluten Pfad auf dem Server zum glFusion <strong>private/</strong>-Verzeichnis.<br /><br />Dies Verzeichnis enthält die <strong>db-config.php.dist</strong> oder <strong>db-config.php</strong>-Datei.<br /><br />Beispiel: /home/www/glfuison/private oder c:/www/glfusion/private.<br /><br /><strong>Hinweis:</strong> Der absolute Pfad zum public_html/ -Verzeichnis scheint:<br />%s zu sein.<br /><br /><strong>Bei weitere Einstellungen</strong> kann man einige der Standardpfade verändern.  Im allgemeinen muss man diese Pfade nicht angeben oder ändern. Das System legt sie automatsich fest.',
+    'advanced_settings'         => 'Weitere Einstellungen',
+    'log_path'                  => 'Pfad zu Logs',
+    'lang_path'                 => 'Pfad zu Language',
+    'backup_path'               => 'Pfad zu Backups',
+    'data_path'                 => 'Pfad zu Data',
 );
 
 // +---------------------------------------------------------------------------+
