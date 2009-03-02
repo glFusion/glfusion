@@ -9,6 +9,7 @@
 #
 # Authors: P. Sack   <psack AT pr-ide DOT de>
 #          Dirk Haun <dirk AT haun-online DOT de>
+#          Markus Wollschlaeger
 #
 # Based on the original english.php, started by Jason Whittenburg.
 #
@@ -31,7 +32,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'utf-8';
 
@@ -97,12 +97,12 @@ $LANG01 = array(
     45 => 'MySQL Fehlernummer',
     46 => 'MySQL Fehlermeldung',
     47 => 'Anmelden',
-    48 => 'Ihr Profil',
+    48 => 'Mein Profil',
     49 => 'Einstellungen',
     50 => 'Fehler im SQL-Befehl',
     51 => 'Hilfe',
     52 => 'Neu',
-    53 => 'Admin-Home',
+    53 => 'Kommandozentrale',
     54 => 'Konnte die Datei nicht öffnen:',
     55 => 'Fehler in',
     56 => 'Abstimmen',
@@ -180,12 +180,12 @@ $LANG01 = array(
     128 => 'Einloggen mit OpenID:',
     129 => 'Konfiguration',
     130 => 'Webservices',
-    500 => 'Please remove the admin/install/ directory!',
-    501 => 'Root Debug is Enabled',
-    502 => 'No fail SQL is Enabled',
-    503 => 'Maintenance Mode - Non-admin logins disabled',
-    'ctl' => 'Clear Template Cache',
-    'logview' => 'Logview'
+    500 => 'Bite das Verzeichnis admin/install/ löschen!',
+    501 => 'Root Debug ist eingeschaltet',
+    502 => 'No fail SQL ist eingeschaltet',
+    503 => 'Maintenance Mode - Non-admin logins ist ausgeschaltet',
+    'ctl' => 'Template-Cache löschen',
+    'logview' => 'Logdatei sehen'
 );
 
 ###############################################################################
@@ -219,19 +219,19 @@ $LANG03 = array(
     25 => 'Sind Sie sicher, dass Sie diesen Beitrag als möglichen Missbrauch melden wollen?',
     26 => '%s meldete den folgenden Beitrag als möglichen Missbrauch:',
     27 => 'Hinweis auf Missbrauch',
-    28 => 'Preview Changes',
-    29 => 'Submit Changes',
-    30 => 'Edited on',
-    31 => 'by',
-    32 => 'Editing a Comment',
-    33 => 'Editing a Comment Submission',
-    34 => 'Preview Submission Changes',
-    35 => 'Save Changes to Queue',
-    36 => 'Notify me of new replies',
-    37 => 'New Comment Reply',
-    38 => 'Someone has replied to your comment.',
-    39 => 'You may view the comment thread at the following address: ',
-    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
+    28 => 'Voransicht der Änderungen',
+    29 => 'Änderungen abschicken',
+    30 => 'Editiert am',
+    31 => 'von',
+    32 => 'Kommentar editieren',
+    33 => 'Eingereichten Kommentar editieren',
+    34 => 'Vorschau der Veränderungen',
+    35 => 'Veränderungen in Warteschlange speichern',
+    36 => 'Mich bei Antworten benachrichtigen',
+    37 => 'Neue Antwort auf Kommentar',
+    38 => 'Jemand hat auf den Kommentar geantwortet.',
+    39 => 'Der Kommentarverlauf kann hier eingesehen werden: ',
+    40 => 'Zum Abschalten weiterer Benachrichtigungen bitte diesem Link folgen: '
 );
 
 ###############################################################################
@@ -529,12 +529,12 @@ $LANG09 = array(
     60 => 'pro Seite',
     61 => 'Suche korrigieren',
     62 => '#',
-    63 => 'Description',
-    64 => 'Showing %d - %d of %d results',
-    65 => 'Story',
-    66 => 'Comment',
-    67 => 'Show %d Results',
-    68 => 'Sort By'
+    63 => 'Beschreibung',
+    64 => ' %d - %d von %d Ergebnissen',
+    65 => 'Artikel',
+    66 => 'Kommentar',
+    67 => 'Zeige %d Ergebnisse',
+    68 => 'Sortieren nach'
 );
 
 ###############################################################################
@@ -735,7 +735,7 @@ $LANG21 = array(
     65 => 'Reihenfolge',
     66 => 'Autotags',
     67 => 'Ankreuzen, um Autotags zu interpretieren',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
+    68 => 'Der Newsfeed für diesen Block ist zu lang, um angezeigt werden zu können. Bitte im Block-Editor eine maximale Anzahl Artikel zum Import vorgeben, oder ein übergeordnetes Maximum im der Konfiguration.'
 );
 
 ###############################################################################
@@ -804,19 +804,19 @@ $LANG24 = array(
     60 => '',
     61 => 'automatisch archivieren',
     62 => 'automatisch löschen',
-    63 => 'Auto Close Comments',
+    63 => 'Kommentare automatisch schließen',
     64 => '',
     65 => '',
-    66 => 'There are no topics available for you to submit your story.',
+    66 => 'Es gibt keine Kategorien, in die der Artikel gespeichert werden kann.',
     67 => 'Editierbereich vergrößern',
     68 => 'Editierbereich verkleinern',
     69 => 'Veröffentlichungsdatum',
-    70 => 'Auswahl der Toolbar',
-    71 => 'Basic Toolbar',
-    72 => 'Common Toolbar',
-    73 => 'Advanced Toolbar',
-    74 => 'Advanced II Toolbar',
-    75 => 'Full Featured',
+    70 => 'Auswahl der Funktionsleiste',
+    71 => 'Basis Funktionsleiste',
+    72 => 'Normal Funktionsleiste',
+    73 => 'Fortgeschrittene Funktionsleiste',
+    74 => 'Fortgeschrittene II Funktionsleiste',
+    75 => 'Volle Feature',
     76 => 'Veröffentlichung',
     77 => 'JavaScript muß für den Advanced Editor an sein. Der Advanced Editor kann im Configuration Admin Panel ausgeschaltet werden.',
     78 => 'Klick <a href="%s/story.php?mode=edit&amp;sid=%s&amp;editopt=default">hier</a>, um den  Default-Editor zu verwenden',
@@ -977,15 +977,15 @@ $LANG29 = array(
     18 => 'E-Mail',
     34 => 'Kommandozentrale',
     35 => 'Beiträge: Artikel',
-    36 => 'Comment',
-    37 => 'Time',
+    36 => 'Kommentar',
+    37 => 'Zeit',
     38 => 'Abschicken',
     39 => 'Derzeit gibt es keine Beiträge zu moderieren.',
-    40 => 'Neue User',
-    41 => 'Comment Submissions',
-    42 => 'User Name',
-    43 => 'Auto-pubish Comments?',
-    'info' => 'Approve or Decline submissions'
+    40 => 'Neue Benutzer',
+    41 => 'Eingereichte Kommentare',
+    42 => 'Benutzername',
+    43 => 'Kommentare automatisch veröffentlichen?',
+    'info' => 'Einreichungen zustimmen oder ablehnen'
 );
 
 ###############################################################################
@@ -1024,7 +1024,7 @@ $LANG31 = array(
 # admin/plugins.php
 
 $LANG32 = array(
-    1 => 'Installing plugins could possibly cause damage to your glFusion installation and, possibly, to your system.  It is important that you only install plugins downloaded from the <a href="http://www.gllabs.org">glFusion Homepage</a> as we thoroughly test all plugins submitted to our site on a variety of operating systems.  It is important that you understand that the plugin installation process will require the execution of a few filesystem commands which could lead to security problems particularly if you use plugins from third party sites.  Even with this warning you are getting, we do not gaurantee the success of any installation nor are we liable for damage caused by installing a glFusion plugin.  In other words, install at your own risk.  For the wary, directions on how to manually install a plugin is included with each plugin package.',
+    1 => 'Das Installieren eines Plugins könnte den glFusion-Auftritt beschädigen und möglicherweise den Webserver. Es ist wichtig, nur Pugins zu benutzen, die von <a href="http://www.gllabs.org">glFusion Homepage</a> runtergeladen wurden, da dort alle eingereichten Plugins gründlich getestet werden, ob sie auf verschiedenen Betriebssystemen funktionieren. Es ist wichtig zu verstehen, dass der Plugin-Installationsprozess ein paar Dateibefehle erfordert, die Sicherheitsprobleme verursachen könnten besonders wenn man Plugins aus dritter Hand nimmt.  Even with this warning you are getting, we do not gaurantee the success of any installation nor are we liable for damage caused by installing a glFusion plugin.  Mit anderen Worten: Installation auf eigene Gefahr. Für die Vorsichtigen gibt es Anleitungen bei jedem Plugin, wie man manuell installiert.',
     2 => 'Plugin-Installation -- Disclaimer',
     3 => 'Plugin-Installationsformular',
     4 => 'Plugin-Datei',
@@ -1062,43 +1062,43 @@ $LANG32 = array(
     36 => 'Code',
     37 => 'Aktuell',
     38 => 'Bitte aktualisieren!',
-    39 => 'Unable to open temporary upload directory.',
-    40 => 'Unable to locate the required plugin.xml file in the plugin archive. This may be an older plugin that has not been updated to work with glFusion\'s automated installer. You will need to manually install this plugin.',
-    41 => 'Permission error on file: %s<br />',
-    42 => 'File / Directory Permission Errors',
-    43 => 'glFusion could not copy all the files to the proper directories due to permission errors. The plugin installation has been aborted.<br />Below is a list of all permission errors encountered.<br /><br />',
-    44 => 'Please correct the permission errors above and try the upload again.',
-    45 => 'Unable to copy %s to the %s directory.<br />',
-    46 => 'Unable to locate the uploaded plugin.',
-    47 => 'Unable to create temporary work directory.',
-    48 => 'Unable to decompress the uploaded plugin.',
-    49 => 'This plugin requires glFusion v%s or higher',
-    50 => 'This plugin requires PHP v%s or higher',
-    51 => '%s requires the <b>%s</b> plugin to be installed, please install %s and try the upload again.',
-    52 => 'A current version of %s is already installed',
-    53 => '%s v%s is older than the currently installed version of %s',
-    54 => 'There was an error installing the plugin, please see the error.log for details.',
-    55 => 'Auto Installer file autoinstall.php not found, you must manually run the installation from the Plugin Administration screen.',
-    56 => 'Automated Plugin Installer Error',
-    57 => 'Select a plugin from your workstation to upload to your glFusion powered site.',
-    58 => 'Upload',
-    59 => 'Cancel',
-    60 => 'Install',
+    39 => 'Kann kein temporäres Hochladeverzeichnis erstellen.',
+    40 => 'Kann die nötige plugin.xml im Plugin-Archiv nicht finden. Es könnte ein älteres Plugin sein, dass noch nicht auf den glFusion Autoinstaller vorbereitet wurde. Dieses Plugin muss manuell installiert werden.',
+    41 => 'Rechte-Fehler bei Datei: %s<br />',
+    42 => 'Datei-, Verzeichnis-, Rechte-Fehler',
+    43 => 'Wegen Rechte-Fehler konnte glFusion nicht alle Dateien in die richtigen Verzeichnisse kopieren. Die Plugin-Installation wurde abgebrochen.<br />Unten ist eine Liste aller Rechte-Fehler, die aufgetreten sind.<br /><br />',
+    44 => 'Bitte die Rechte-Fehler oben korrigieren und noch mal hochladen.',
+    45 => 'Kann %s nicht ins %s -Verzeichnis kopieren.<br />',
+    46 => 'Kann das hochgeladene Plugin nicht finden.',
+    47 => 'Kann kein temporäres Arbeitsverzeichnis erstellen.',
+    48 => 'Kann das hochgeladene Plugin nicht entpacken.',
+    49 => 'Dieses Plugin braucht glFusion v%s oder höher.',
+    50 => 'Dieses Plugin braucht PHP v%s oder höher.',
+    51 => '%s erfordert, dass das <b>%s</b>-Plugin installiert ist. Bitte %s installieren und noch mal hochladen.',
+    52 => 'Eine aktuelle Version von %s ist bereits installiert',
+    53 => '%s v%s ist älter als die gegenwärtig installierte Version %s',
+    54 => 'Es gab einen Fehler bei der Installation dieses Plugins. Bitte im error.log nach Details schauen.',
+    55 => 'Die Autoinstaller-Datei autoinstall.php kann nicht gefunden werden. Bitte die Installation manuell vom Plugin Administration screen ausführen.',
+    56 => 'Fehler im Plugin-Autoinstaller',
+    57 => 'Auf der Festplatte ein Plugin zum Hochladen in den glFusion-Auftritt auswählen.',
+    58 => 'Hochladen',
+    59 => 'Abbrechen',
+    60 => 'Installieren',
     61 => 'Upgrade',
-    62 => 'has been successfully uploaded and is now ready to be processed.',
-    63 => 'Description',
-    64 => 'The plugin appears to be',
-    65 => 'You already have this plugin installed.',
-    66 => 'The current installed version is',
-    67 => 'If the version you have uploaded is not newer than the installed version, select <b>Cancel</b> to abort the upgrade.',
-    68 => 'This plugin appears to be an older plugin that does not support glFusion\'s automated installer. Would you like to continue the automatic file copy and then perform a manual install from the Plugin Administration screen?',
-    69 => 'IMPORTANT',
-    70 => 'The automated installer is not able to verify that this plugin will work with your current version of glFusion. If you choose to have the files automatically copied, you will need to run the manual install from the Plugin Administration screen.',
-    71 => 'Continue',
-    72 => 'A version of this plugin is installed but disabled. glFusion cannot upgrade a disabled plugin. Please re-enable the plugin and perform the upload again.',
-    73 => 'Automated Plugin Installer',
-    74 => 'Unable to locate the plugin\'s XML description file.',
-    75 => 'Unable to copy %s to %s<br />'
+    62 => 'wurde erfolgreich hochgeladen und ist jetzt bereit zur Weiterverarbeitung.',
+    63 => 'Beschreibung',
+    64 => 'Das Plugin scheint zu sein',
+    65 => 'Dieses Plugin wurde schon installiert.',
+    66 => 'Die gegenwärtig installierte Version ist',
+    67 => 'Wenn die Version, die hochgeladen wurde, nicht neuer ist als die installierte Version <b>abbrechen</b> wählen, um den Upgrade zu unterbrechen.',
+    68 => 'Das Plugin scheint ein älteres Plugin zu sein, dass glFusions Autoinstaller nicht unterstützt. Soll das automatische Hochladen des Plugins fortgesetzt werden? Anschließend muss das Plugin manuell installiert werden vom Plugin Administration screen?',
+    69 => 'WICHTIG',
+    70 => 'Der Autoinstaller kann nicht feststellen, dass dieses Plugin mit der gegenwärtigen Version von glFusion funktionieren wird. Wenn diese Dateien automatisch kopiert werden sollen, muss das Plugin vom Plugin Administration screen aus noch manuell installiert werden .',
+    71 => 'Fortfahren',
+    72 => 'Eine Version des Plugins ist schon installiert, aber abgeschaltet. glFusion kann keine abgeschalteten Plugins upgraden. Bitte das Plugin wieder einschalten und noch mal hochladen.',
+    73 => 'Plugin Autoinstaller',
+    74 => 'Kann die XML Beschreibungsdatei des Plugins nicht finden.',
+    75 => 'Kann %s nicht nach %s kopieren<br />'
 );
 
 ###############################################################################
@@ -1122,7 +1122,7 @@ $LANG33 = array(
     20 => 'Ja',
     21 => 'Nein',
     22 => '<i>(keine Newsfeeds)</i>',
-    23 => 'alle Artikel',
+    23 => 'Alle Artikel',
     24 => 'Newsfeed-Editor',
     25 => 'Newsfeed-Titel',
     26 => 'Limit',
@@ -1162,11 +1162,11 @@ $LANG33 = array(
 
 $LANG_LOGVIEW = array(
     'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
+    'info' => 'glFusion Logdatei-Verwaltung',
+    'logs' => 'Logdatei',
+    'view' => 'Logdatei ansehen',
+    'clear' => 'Logdatei löschen',
+    'log_file' => 'Logdatei'
 );
 
 ###############################################################################
@@ -1187,8 +1187,8 @@ $MESSAGE = array(
     12 => 'Der Block wurde gelöscht.',
     13 => 'Ihre Kategorie wurde gespeichert.',
     14 => 'Die Kategorie und alle zugehörigen Artikel wurden gelöscht.',
-    15 => 'Your comment has been submitted for review and will be published when approved by a moderator.',
-    16 => 'You have been unsubscribed. You will no longer be notified of new replies',
+    15 => 'Der Kommentar wurde in die Warteschlage eingetragen und wird veröffentlicht, wenn ein Moderator zustimmt.',
+    16 => 'Sie wurden ausgetragen und erhalten keine Benachrichtigungen mehr.',
     17 => '',
     18 => '',
     19 => '',
@@ -1198,7 +1198,7 @@ $MESSAGE = array(
     23 => '',
     24 => '',
     25 => '',
-    26 => 'There was an error sending your message, please contact the Site Administrator',
+    26 => 'Es trat ein Fehler auf beim Absenden der Nachricht. Bitte den Site Administrator benachrichtigen',
     27 => 'Nachricht wurde verschickt.',
     28 => 'Das Plugin wurde gespeichert.',
     29 => '',
@@ -1269,14 +1269,14 @@ $MESSAGE = array(
     94 => 'Backup Failed: Dateigröße unter 1kb',
     95 => 'Es gab einen Fehler.',
     96 => 'Sorry, kein Zugang zur Admin-Seite. Unzulässige Zugangsversuche werden gelogged.',
-    97 => 'Not all required fields have been passed validation - default custom membership message',
-    98 => 'The plugin was successfully uploaded.',
-    99 => 'The plugin already exists.',
-    100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
-    500 => 'The Template Cache has been successfully cleared',
-    501 => 'Security Token is Invalid - Possible session timeout.',
-    502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
-    503 => 'Plugin installation is disabled in demo mode.'
+    97 => 'Nicht alle erforderlichen Felder konnten bestätigt werden - default custom membership message',
+    98 => 'Das Plugin wurde erfolgreich hochgeladen.',
+    99 => 'Das Plugin existiert schon.',
+    100 => 'Die Plugin-Datei die hochgeladen wurde, war kein GZip oder Zip komprimiertes Archiv.',
+    500 => 'Der Template-Cache wurde geleert',
+    501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
+    502 => 'Das Plugin wurde erfolgreich kopiert. Bitte Install aus der Liste unten auswählen',
+    503 => 'Die Plugin-Installation ist im Demomodus ausgeschaltet.'
 );
 
 ###############################################################################
@@ -1616,11 +1616,11 @@ $LANG_ADMIN = array(
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
+    'latest_news' => 'Letzte Nachrichten',
+    'translate' => 'Auf die Flagge klicken für eine automatisch Übersetzung dieses Auftritts in die jeweilige Landessprache',
+    'prev' => 'vorige',
+    'next' => 'nächste',
+    'playpause' => 'Anspielen/Pause'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1687,14 +1687,14 @@ $LANG_CONFIG = array(
     'home' => 'Home',
     'admin_home' => 'Verwaltung der Site',
     'sections' => 'Bereich Konfiguration',
-    'restore' => 'Funktion aktivieren',
+    'restore' => 'Zurücksetzen',
     'add_element' => 'Element hinzufügen',
     'save_changes' => 'Änderungen speichern',
     'reset_form' => 'Angaben zurücksetzen',
     'changes_made' => 'Änderungen wurden erfolgreich übernommen',
     'title' => 'Konfigurations-Manager',
-    'disable' => 'Click to disable this option',
-    'enable' => 'Enable'
+    'disable' => 'Funktion deaktivieren',
+    'enable' => 'Funktion aktivieren'
 );
 
 $LANG_configsections['Core'] = array(
@@ -1721,7 +1721,7 @@ $LANG_confignames['Core'] = array(
     'mail_settings' => 'Einstellungen ',
     'allow_mysqldump' => 'MySQL Dump erlauben',
     'mysqldump_path' => 'Pfad zu Executable',
-    'mysqldump_options' => 'MySQL Dump Options',
+    'mysqldump_options' => 'MySQL Dump Optionen',
     'theme' => 'Theme',
     'menu_elements' => 'Elemente des Menüs ',
     'path_themes' => 'Pfad zu Themes',
@@ -1870,9 +1870,9 @@ $LANG_confignames['Core'] = array(
     'comment_limit' => 'Max. Anzahl Kommentare',
     'comment_mode' => 'Kommentar-Anzeigemodus',
     'comment_code' => 'Kommentar Grundeinstellung',
-    'comment_edit' => 'Allow Comment Edit?',
-    'comment_edittime' => 'Comment Edit Time (seconds)',
-    'commentsubmission' => 'Queue Comment Submissions',
+    'comment_edit' => 'Dürfen Kommentare editiert werden?',
+    'comment_edittime' => 'Zeitspanne fürs Editieren (Sekunden)',
+    'commentsubmission' => 'Moderation von Kommentaren',
     'passwordspeedlimit' => 'Passwort Speed-Limit',
     'login_attempts' => 'Max. Login-Versuche',
     'login_speedlimit' => 'Login Speed-Limit',
@@ -1881,7 +1881,7 @@ $LANG_confignames['Core'] = array(
     'skip_html_filter_for_root' => 'HTML des Root wird nicht gefiltert?',
     'allowed_protocols' => 'Erlaubte Protokolle',
     'disable_autolinks' => 'Autolinks ausschalten?',
-    'digg_enabled' => 'Show Digg.com Links?',
+    'digg_enabled' => 'Digg.com Links anzeigen?',
     'censormode' => 'Zensur-Modus?',
     'censorreplace' => 'Zensurwort wird ersetzt mit',
     'censorlist' => 'Liste zensierter Wörter',
@@ -1893,40 +1893,39 @@ $LANG_confignames['Core'] = array(
     'atom_max_stories' => 'Max. Artikel im Webservices-Feed',
     'disable_webservices' => 'Webservices ausschalten?',
     'restrict_webservices' => 'Webservices beschränken?',
-    'article_comment_close_days' => 'Days to close comments (default)',
-    'comment_close_rec_stories' => 'Number of most recent stories enabled for comments',
-    'use_safe_html' => 'Use Safe HTML Mode?',
-    'jhead_enabled' => 'Enable JHEAD?',
-    'jpegtrans_enabled' => 'Enable jpegtrans?',
-    'path_to_jhead' => 'Path to jhead executable',
-    'path_to_jpegtrans' => 'Path to jpegtrans executable',
-    'allow_reply_notifications' => 'Allow comment reply notifications?',
-    'search_style' => 'Results List Style',
-    'search_limits' => 'Page Limits',
-    'search_show_num' => 'Show Result Number?',
-    'search_show_type' => 'Show Result Type?',
-    'search_show_user' => 'Show Author?',
-    'search_show_hits' => 'Show Number of Hits?',
-    'search_show_sort' => 'Allow User to Sort Results?',
-    'search_show_limit' => 'Show Page Limits?',
-    'search_no_data' => 'If No Data is Avaliable, Display',
-    'search_separator' => 'Group Separator',
-    'search_def_keytype' => 'Default Search Method',
+    'article_comment_close_days' => 'Tage bis Kommentare geschlossen werden (Grundeinstellung)',
+    'comment_close_rec_stories' => 'Anzahl der letzten Artikel, bei denen Kommentare eingeschaltet sind.',
+    'use_safe_html' => 'Den sicheren HTML-Modus benutzen?',
+    'jhead_enabled' => 'JHEAD einschalten?',
+    'jpegtrans_enabled' => 'jpegtrans einschalten?',
+    'path_to_jhead' => 'Pfad zu jhead executable',
+    'path_to_jpegtrans' => 'Pfad zu jpegtrans executable',
+    'allow_reply_notifications' => 'Benachrichtigung auf Kommentarantworten erlauben?',
+    'search_style' => 'Stil der Ergebnisliste',
+    'search_limits' => 'Seiten Limits',
+    'search_show_num' => 'Ergebnisanzahl anzeigen?',
+    'search_show_type' => 'Ergebnistyp anzeigen?',
+    'search_show_user' => 'Author anzeigen?',
+    'search_show_hits' => 'Anzahl Treffer anzeigen?',
+    'search_show_sort' => 'Darf Benutzer Ergebnisse sortieren?',
+    'search_show_limit' => 'Page Limits anzeigen?',
+    'search_no_data' => 'Wenn keine Daten verfügbar sind, anzeigen',
+    'search_separator' => 'Group Trenner',
+    'search_def_keytype' => 'Grundeinstellung Suchmethode',
     'mail_backend' => 'Mail Backend',
-    'mail_sendmail_path' => 'Path to Sendmail',
-    'mail_sendmail_args' => 'Sendmail Parameters',
+    'mail_sendmail_path' => 'Pfad zu Sendmail',
+    'mail_sendmail_args' => 'Sendmail Parameter',
     'mail_smtp_host' => 'SMTP Hostname',
     'mail_smtp_port' => 'SMTP Port',
-    'mail_smtp_auth' => 'Require SMTP Auth?',
+    'mail_smtp_auth' => 'SMTP Auth erforderlich?',
     'mail_smtp_username' => 'SMTP Auth Username',
     'mail_smtp_password' => 'SMTP Auth Password',
     'mail_smtp_secure' => 'SMTP Security Protocol',
-    'default_search_order' => 'Default Sort Order',
-    'compress_css' => 'Compress CSS',
-    'jpg_orig_quality' => 'JPEG Quality Factor',
-    'allow_embed_object' => 'Allow EMBED Object',
-    'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
-    'use_from_site_mail' => 'Force email from address to be site email'
+    'default_search_order' => 'Grundeinstellung der Sortierung',
+    'compress_css' => 'CSS komprimieren',
+    'jpg_orig_quality' => 'JPEG Qualitätsfaktor',
+    'allow_embed_object' => 'EMBED Object erlauben',
+    'story_submit_by_perm_only' => 'Nur Abonements erlauben bei Kategorien mit Schreibberechtigung'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2003,11 +2002,11 @@ $LANG_configselects['Core'] = array(
     15 => array('Nummerisch' => 'sortnum', 'Alphabetisch' => 'alpha'),
     16 => array('Kein Login benötigt' => 0, 'Nur erweiterte Suche' => 1, 'Einfache und erweiterte Suche' => 2),
     17 => array('Kommentare eingeschaltet' => 0, 'Kommentare ausgeschaltet' => -1),
-    18 => array('Google' => 'google', 'Table' => 'table'),
-    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
+    18 => array('Google' => 'google', 'Tabelle' => 'table'),
+    19 => array('Exakter Ausdruck' => 'phrase', 'Alle Worte' => 'all', 'Irgendeines der Worte' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
-    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
+    21 => array('nichts' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
+    22 => array('Datum' => 'date', 'Titel' => 'title', 'Author' => 'uid', 'Treffer' => 'hits')
 );
 
 ?>
