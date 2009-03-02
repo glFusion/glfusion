@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Added PLG_profileIconDisplay() to allow plugins to display an icon uder
+  the profile image (Mark & Eric)
 - Account Settings interface naming consistency fixes (Eric)
 - Removed unused gltips.thtml template file (Eric)
 - Log error message when token check fails (Mark)

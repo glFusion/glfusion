@@ -1397,6 +1397,34 @@ function PLG_profileBlocksDisplay ($uid)
     return $retval;
 }
 
+
+/**
+* glFusion is about to display the user's profile. Plugins now get a chance to
+* add their own icons under the profile image.
+*
+* @param    int      $uid        user id of the user profile to be edited
+* @return   array                Returns an array of arrays (one set for each plugin),
+*                                The return array contains:
+*                                   - url - full URL that icon will link to
+*                                   - text - hover text
+*                                   - icon - full URL to icon
+*
+*/
+function PLG_profileIconDisplay ($uid)
+{
+    global $_PLUGINS;
+
+    $retval = array();
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_profileicondisplay_' . $pi_name;
+        if (function_exists($function)) {
+            $retval[] = $function ($uid);
+        }
+    }
+    return $retval;
+}
+
 /**
 * The user wants to save changes to his/her profile. Any plugin that added its
 * own variables or blocks to the profile input form will now have to extract

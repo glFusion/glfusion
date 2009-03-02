@@ -50,6 +50,13 @@ function popitup(url)
 						<img src="{layout_url}/images/online.png" alt="{lang_online}" title="{lang_online}"{xhtml}>
 					</li>
 					{!endif}
+					<!-- BEGIN profileicon -->
+					<li>
+                      <a href="{profile_icon_url}">
+					  <img src="{profile_icon_icon}" alt="{profile_icon_text}" title="{profile_icon_text}"{xhtml}>
+					  </a>
+					</li>
+					<!-- END profileicon -->
 				</ul>
 			</div> <!-- end profile-meta -->
 			{!if user_bio}

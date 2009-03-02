@@ -333,6 +333,19 @@ function userprofile($user, $msg = 0, $plugin = '')
     $user_templates->set_var ('lang_all_postings_by',
                               $LANG04[86] . ' ' . $display_name);
 
+    // hook to the profile icon display
+
+    $profileIcons = PLG_profileIconDisplay($user);
+    if ( is_array($profileIcons) && count($profileIcons) > 0 ) {
+	    $user_templates->set_block('profile', 'profileicon', 'pi');
+        for ($x=0;$x<count($profileIcons);$x++) {
+            $user_templates->set_var('profile_icon_url',$profileIcons[$x]['url']);
+            $user_templates->set_var('profile_icon_icon',$profileIcons[$x]['icon']);
+            $user_templates->set_var('profile_icon_text',$profileIcons[$x]['text']);
+            $user_templates->parse('pi', 'profileicon',true);
+        }
+    }
+
     // Call custom registration function if enabled and exists
     if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userDisplay') ) {
         $user_templates->set_var ('customfields', CUSTOM_userDisplay ($user));

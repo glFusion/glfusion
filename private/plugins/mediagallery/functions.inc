@@ -2947,6 +2947,31 @@ function MG_deleteMemberAlbums( $album_id ){
     DB_query( $sql );
 }
 
+function plugin_profileicondisplay_mediagallery( $uid ) {
+    global $MG_albums,$_TABLES, $_MG_CONF, $_CONF, $_USER,$LANG_MG01;
+
+    $retval = array();
+
+    // hook a link for the user's member album...
+
+    if ($_MG_CONF['member_albums'] == 1 && $uid > 1 ) {
+        $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $uid . " AND album_parent=" . $_MG_CONF['member_album_root'] . " LIMIT 1";
+
+        $result = DB_query($sql);
+        $numRows = DB_numRows($result);
+
+        if ( $numRows > 0 ) {
+            $A = DB_fetchArray($result);
+            $album_id = $A['album_id'];
+            $retval['url'] = $_MG_CONF['site_url'].'/album.php?aid='.$album_id;
+            $retval['text'] = $LANG_MG01['album'];
+            $retval['icon'] = $_CONF['site_url'].'/fckeditor/editor/plugins/mediagallery/images/mediagallery.gif';
+        }
+    }
+
+    return $retval;
+}
+
 // display user info in profile
 
 function plugin_profileblocksdisplay_mediagallery( $uid ) {
