@@ -31,6 +31,8 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+
 $LANG_CHARSET = 'iso-8859-15';
 
 ###############################################################################
@@ -802,7 +804,7 @@ $LANG24 = array(
     60 => '',
     61 => 'automatisch archivieren',
     62 => 'automatisch löschen',
-	63 => 'Kommentare automatisch schließen',
+    63 => 'Kommentare automatisch schließen',
     64 => '',
     65 => '',
     66 => 'Es gibt keine Kategorien, in die der Artikel gespeichert werden kann.',
@@ -1268,16 +1270,11 @@ $MESSAGE = array(
     95 => 'Es gab einen Fehler.',
     96 => 'Sorry, kein Zugang zur Admin-Seite. Unzulässige Zugangsversuche werden gelogged.',
     97 => 'Nicht alle erforderlichen Felder konnten bestätigt werden - default custom membership message',
-
-
-
     98 => 'Das Plugin wurde erfolgreich hochgeladen.',
     99 => 'Das Plugin existiert schon.',
     100 => 'Die Plugin-Datei die hochgeladen wurde, war kein GZip oder Zip komprimiertes Archiv.',
     500 => 'Der Template-Cache wurde geleert',
     501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
-
-
     502 => 'Das Plugin wurde erfolgreich kopiert. Bitte Install aus der Liste unten auswählen',
     503 => 'Die Plugin-Installation ist im Demomodus ausgeschaltet.'
 );
@@ -1620,7 +1617,6 @@ $LANG_ADMIN = array(
 
 $LANG_WIDGETS = array(
     'latest_news' => 'Letzte Nachrichten',
-
     'translate' => 'Auf die Flagge klicken für eine automatisch Übersetzung dieses Auftritts in die jeweilige Landessprache',
     'prev' => 'vorige',
     'next' => 'nächste',
@@ -1697,7 +1693,6 @@ $LANG_CONFIG = array(
     'reset_form' => 'Angaben zurücksetzen',
     'changes_made' => 'Änderungen wurden erfolgreich übernommen',
     'title' => 'Konfigurations-Manager',
-
     'disable' => 'Funktion deaktivieren',
     'enable' => 'Funktion aktivieren'
 );
@@ -1930,7 +1925,8 @@ $LANG_confignames['Core'] = array(
     'compress_css' => 'CSS komprimieren',
     'jpg_orig_quality' => 'JPEG Qualitätsfaktor',
     'allow_embed_object' => 'EMBED Object erlauben',
-    'story_submit_by_perm_only' => 'Nur Abonements erlauben bei Kategorien mit Schreibberechtigung'
+    'story_submit_by_perm_only' => 'Nur Abonements erlauben bei Kategorien mit Schreibberechtigung',
+    'use_from_site_mail' => 'Force email from address to be site email'
 );
 
 $LANG_configsubgroups['Core'] = array(

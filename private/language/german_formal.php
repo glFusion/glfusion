@@ -32,6 +32,8 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+
 $LANG_CHARSET = 'iso-8859-15';
 
 ###############################################################################
@@ -1924,7 +1926,8 @@ $LANG_confignames['Core'] = array(
     'compress_css' => 'CSS komprimieren',
     'jpg_orig_quality' => 'JPEG Qualitätsfaktor',
     'allow_embed_object' => 'EMBED Object erlauben',
-    'story_submit_by_perm_only' => 'Nur Abonements erlauben bei Kategorien mit Schreibberechtigung'
+    'story_submit_by_perm_only' => 'Nur Abonements erlauben bei Kategorien mit Schreibberechtigung',
+    'use_from_site_mail' => 'Force email from address to be site email'
 );
 
 $LANG_configsubgroups['Core'] = array(

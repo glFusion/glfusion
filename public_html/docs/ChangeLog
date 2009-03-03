@@ -5,6 +5,13 @@ v1.1.2
 - Fixed crash on Windows platform when time is calculated as negative (Mark)
 - Added PLG_profileIconDisplay() to allow plugins to display an icon uder
   the profile image (Mark & Eric)
+- Fixed ImageMagick error when rotating images, patch by LeeG (Mark)
+- Added option to force the site email as the From: email address (Mark)
+- Added RFI checks to all SQL and language files (Mark)
+- Added clear float after mooslider in lib-widgets (Mark)
+- Clear array prior to use in lib-plugins to prevent previous plugin menu
+  entries from showing (Mark)
+- Fixed bug where Keep Unscaled Image setting was ignored (Mark)
 - Account Settings interface naming consistency fixes (Eric)
 - Removed unused gltips.thtml template file (Eric)
 - Log error message when token check fails (Mark)
@@ -170,6 +177,14 @@ Site Tailor Plugin
 ------------------
 - Implemented the hmenu and vmenu auto tags (Mark)
 - Fixed issue where color was not properly used (Eric)
+- Improved instance cache operations when editing a menu element (Mark)
+- Improved handling of missing plugins when associated with a menu item (Mark)
+- Fixed 'Display After' not showing proper entries when editing a second
+  level menu (Mark)
+- Fixed issue where a blank URL would always have http:// added to the
+  beginning of the string (Mark)
+
+
 
 StaticPages Plugin
 ------------------
