@@ -177,6 +177,8 @@ $LANG_ST01 = array (
 	'confirm_reset'         => 'This will reset the menu colors and graphics to the installation values and automatically clear the Template Cache. Are you sure you want to continue? When done, make sure to clear your local browser cache as well.',
 	'menu_properties'       => 'Menu Properties for',
 	'disabled_plugin'       => 'Not found or disabled plugin',
+	'clone'                 => 'Copy',
+	'clone_menu_label'      => 'Name for Cloned Menu',
 );
 
 $LANG_HC = array (

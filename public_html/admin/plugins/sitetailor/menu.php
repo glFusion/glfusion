@@ -108,6 +108,96 @@ function ST_displayMenuList( ) {
  * Create a new menu
  */
 
+function ST_cloneMenu( $menu_id ) {
+    global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, $_ST_CONF,
+           $LANG_ST_MENU_TYPES, $LANG_ADMIN, $stMenu;
+
+    $retval = '';
+
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php',
+                  'text' => $LANG_ST01['menu_list']),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home']),
+    );
+    $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['add_newmenu'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[2],
+                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
+
+
+    $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
+    $T->set_file (array ('admin' => 'clonemenu.thtml'));
+
+    $T->set_var(array(
+        'site_admin_url'    => $_CONF['site_admin_url'],
+        'site_url'          => $_CONF['site_url'],
+        'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
+        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: '.$LANG_ST01['clone'],
+        'lang_admin'        => $LANG_ST00['admin'],
+        'version'           => $_ST_CONF['version'],
+        'menu_id'           => $menu_id,
+        'xhtml'             => XHTML,
+    ));
+    $T->parse('output', 'admin');
+    $retval .= $T->finish($T->get_var('output'));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    return $retval;
+}
+
+/*
+ * Saves a clone menu element
+ */
+
+function ST_saveCloneMenu( ) {
+    global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF, $stMenu, $_GROUPS;
+
+    $menu_name  = addslashes(COM_applyFilter($_POST['menuname']));
+    $menu       = COM_applyFilter($_POST['menu'],true);
+
+    $sql = "SELECT * FROM {$_TABLES['st_menus']} WHERE id=".$menu;
+    $result = DB_query($sql);
+    if ( DB_numRows($result) > 0 ) {
+        $M = DB_fetchArray($result);
+        $menu_type   = $M['menu_type'];
+        $menu_active = $M['menu_active'];
+        $group_id    = $M['group_id'];
+
+        $sqlFieldList  = 'menu_name,menu_type,menu_active,group_id';
+        $sqlDataValues = "'$menu_name',$menu_type,$menu_active,$group_id";
+        DB_save($_TABLES['st_menus'], $sqlFieldList, $sqlDataValues);
+        $menu_id = DB_insertId();
+        $sql = "SELECT * FROM {$_TABLES['st_menus_config']} WHERE menu_id=".$menu;
+        $result = DB_query($sql);
+        while ($C = DB_fetchArray($result) ) {
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'".addslashes($C['conf_name'])."','".addslashes($C['conf_value'])."'");
+        }
+
+        $meadmin    = SEC_hasRights('sitetailor.admin');
+        $root       = SEC_inGroup('Root');
+        $groups     = $_GROUPS;
+
+        $sql = "SELECT * FROM {$_TABLES['st_menu_elements']} WHERE menu_id=".$menu;
+        $result = DB_query($sql);
+        while ($M = DB_fetchArray($result)) {
+            $M['menu_id'] = $menu_id;
+            $element            = new mbElement();
+            $element->constructor( $M, $meadmin, $root, $groups );
+            $element->id        = $element->createElementID($M['menu_id']);
+            $element->saveElement();
+        }
+    }
+    CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('css');
+    $randID = rand();
+    DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
+    st_initMenu(true);
+}
+
+
+/*
+ * Create a new menu
+ */
+
 function ST_createMenu( ) {
     global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, $_ST_CONF,
            $LANG_ST_MENU_TYPES, $LANG_ADMIN, $stMenu;
@@ -267,8 +357,6 @@ function ST_displayTree( $menu_id ) {
     $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[3],
                                 $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
-
-
 
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
     $T->set_file (array ('admin' => 'menutree.thtml'));
@@ -1342,6 +1430,10 @@ if ( isset($_REQUEST['mid']) ) {
 }
 if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
     switch ( $mode ) {
+        case 'clone' :
+            $menu = COM_applyFilter($_GET['menuid'],true);
+            $content = ST_cloneMenu($menu_id);
+            break;
         case 'menu' :
             // display the tree
             $content = ST_displayTree( $menu_id );
@@ -1382,6 +1474,10 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'savenewmenu' :
             ST_saveNewMenu();
+            $content = ST_displayMenuList( );
+            break;
+        case 'saveclonemenu' :
+            ST_saveCloneMenu();
             $content = ST_displayMenuList( );
             break;
         case 'saveeditmenu' :

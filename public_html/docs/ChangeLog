@@ -177,6 +177,7 @@ Polls Plugin
 
 Site Tailor Plugin
 ------------------
+- Implemented clone menu and multi-language support (Mark)
 - Implemented the hmenu and vmenu auto tags (Mark)
 - Fixed issue where color was not properly used (Eric)
 - Improved instance cache operations when editing a menu element (Mark)

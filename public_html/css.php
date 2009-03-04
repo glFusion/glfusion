@@ -100,6 +100,7 @@ function css_out(){
     // load files
     foreach($files as $file) {
         css_loadfile($file);
+        print "\n";
     }
 
     // end output buffering and get contents

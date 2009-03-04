@@ -419,19 +419,43 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
 
     $optionHash = md5($wrapper.$ulclass.$liclass.$parentclass.$lastclass.$selected);
 
-    $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
-
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval && $noid == 0) {
-        return $retval;
-    }
-    $retval = '';
     $menuID = '';
-    if ( is_array($stMenu) ) {
-        foreach($stMenu AS $id) {
-            if ( $id['menu_name'] == $name ) {
-                $menuID = $id['menu_id'];
-                break;
+    $lang = COM_getLanguageId();
+
+    if (!empty($lang)) {
+        $mlname = $name . '_'.$lang;
+
+        $cacheInstance = 'stmenu_' . $mlname . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
+
+        $retval = CACHE_check_instance($cacheInstance, 0);
+        if ( $retval && $noid == 0) {
+            return $retval;
+        }
+        $retval = '';
+        if ( is_array($stMenu) ) {
+            foreach($stMenu AS $id) {
+                if ( $id['menu_name'] == $mlname ) {
+                    $menuID = $id['menu_id'];
+                    break;
+                }
+            }
+        }
+    }
+    if ( $menuID == '' ) {
+        $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
+
+        $retval = CACHE_check_instance($cacheInstance, 0);
+        if ( $retval && $noid == 0) {
+            return $retval;
+        }
+        $retval = '';
+        $menuID = '';
+        if ( is_array($stMenu) ) {
+            foreach($stMenu AS $id) {
+                if ( $id['menu_name'] == $name ) {
+                    $menuID = $id['menu_id'];
+                    break;
+                }
             }
         }
     }

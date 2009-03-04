@@ -1,3 +1,6 @@
+
+
+
 #gl_moomenu{menu_id} a {
   text-decoration:none;
   white-space:nowrap;
@@ -156,3 +159,6 @@
   width:177px;
 }
 <![endif]-->
+
+.dummyclass{menu_id} {
+}
