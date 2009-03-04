@@ -1,3 +1,10 @@
+<script type="text/javascript">
+function reload(form){
+  var val=form.lang.value;
+  self.location='index.php?lang=' + val ;
+}
+</script>
+
 <form id="welcome" name="welcome" method="post" action="index.php">
   <input type="hidden" name="task" value="" />
   {hiddenfields}

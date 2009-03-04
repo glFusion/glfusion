@@ -339,7 +339,7 @@ function INST_getLanguageTask( )
     $T->set_file('page', 'languagetask.thtml');
 
     // create language select
-    $lang_select = '<select name="lang" style="width:200px;">' . LB;
+    $lang_select = '<select name="lang" style="width:200px;" onchange="reload(this.form)">' . LB;
     foreach (glob('language/*.php') as $filename) {
         $filename = preg_replace('/.php/', '', preg_replace('/language\//', '', $filename));
         $lang_select .= '<option value="' . $filename . '"' . (($filename == $language) ? ' selected="selected"' : '') . '>' . INST_prettifyLanguageName($filename) . '</option>' . LB;
@@ -1724,6 +1724,9 @@ if ( isset($_GLFUSION['language']) ) {
 }
 if ( isset($_POST['lang']) ) {
     $lng = $_POST['lang'];
+}
+if ( isset($_GET['lang']) ) {
+    $lng = $_GET['lang'];
 }
 
 // sanitize value and check for file
