@@ -232,7 +232,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         $sql = "SELECT d.lid, d.cid, d.title, url, homepage, version, size, platform, submitter, logourl, status, ";
         $sql .= "date, hits, rating, votes, comments, description, grp_access FROM ({$_FM_TABLES['filemgmt_filedetail']} d, ";
         $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t) LEFT JOIN {$_FM_TABLES['filemgmt_cat']} c ON d.cid=c.cid ";
-        $sql .= "WHERE status > 0 AND d.lid=t.lid ORDER BY date DESC LIMIT $offset, $show";
+        $sql .= "WHERE status > 0 ".$groupsql." AND d.lid=t.lid ORDER BY date DESC LIMIT $offset, $show";
         $result = DB_query($sql);
         $numrows = DB_numROWS($result);
         $countsql = DB_query("SELECT COUNT(*) FROM ".$_FM_TABLES['filemgmt_filedetail']." WHERE status > 0");

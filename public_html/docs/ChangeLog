@@ -122,6 +122,8 @@ CAPTCHA Plugin
 
 FileMgmt Plugin
 ---------------
+- Fixed bug where main index file list did not filter by group
+  permissions (Mark)
 - Enhanced what's new lists (mark)
 - Ability to use remote URL instead of local file (Mark)
 - Email filemgmt Admin group when new uploads are submitted (Mark)
