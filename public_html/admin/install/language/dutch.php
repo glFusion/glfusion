@@ -176,6 +176,8 @@ $LANG_INSTALL = array(
     'lang_path'                 => 'Taal Pad',
     'backup_path'               => 'Backups Pad',
     'data_path'                 => 'Data Pad',
+    'language_support'          => 'Language Support',
+    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
 );
 
 // +---------------------------------------------------------------------------+

@@ -24,6 +24,12 @@
           <option value="migrate">{lang_geeklog_migrate}</option>
         </select>
       </span>
+      <p>
+        <strong>{lang_language_support}</strong>
+      </p>
+      <p>
+        {lang_language_pack}
+      </p>
     </div>
     <div class="stephelp">
       {lang_welcome}

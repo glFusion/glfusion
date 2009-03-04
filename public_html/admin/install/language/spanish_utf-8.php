@@ -157,7 +157,6 @@ $LANG_INSTALL = array(
     'sitedata_help'             => 'Seleccione el tipo de base de datos que utilizará. Generalmente <strong>MySQL</strong>. También selecciona si deseas utilizar el conjunto de caracteres <strong>UTF-8</strong> (esto debería de ser seleccionado para sitios multi lenguajes.)<br /><br /><br />Ingrese el nombre del Host del servidor de la base de datos. No debería de ser el mismo servidor web, en caso de duda verifique con su proveedor de alojamiento.<br /><br />Ingrese el nombre de su base de datos. <strong>La base de datos debe de existir.</strong> si no conoce el nombre de la base de datos, contacte a su proveedor de alojamiento.<br /><br />Ingrese el nombre de usuario para conectarse a la base de datos. Si no conoce el nombre del usuario de la base de datos, contacte a su proveedor de alojamiento.<br /><br /><br />Ingrese la contraseña para conectarse a la base de datos. Si no conoce la contraseña de la base de datos, contacte a su proveedor de alojamiento.<br /><br />Ingrese un prefijo a ser utilizado en la tabla para las tablas de la base de datos. Esto es de utilidad para separar múltiples sitios o sistemas en la misma base de datos.<br /><br />Ingrese el nombre de su sitio. Será mostrado en la cabecera el sitio. Por ejemplo, glFusion o Mark Marbles. No se preocupe, luego podrá cambiarlo.<br /><br />Ingrese el lema de su sitio. Será mostrado en la cabecera de su sitio debajo del nombre del sitio. Por ejemplo, sinergia - estabilidad - estilo. No se preocupe, luego podrá cambiarlo.<br /><br />Ingrese la dirección de correo electrónico principal de su sitio. Esta es la dirección de correo electrónico por defecto para la cuenta de Administrador. No se preocupe, luego podrá cambiarla.<br /><br />Ingrese la dirección de correo electrónico de no réplica de su sitio. Será utilizada para enviar automáticamente  nuevos usuarios, contraseñas, restablecimiento, y otras notificaciones por correo electrónico. No se preocupe, luego podrá cambiarlo. <br /><br />Por favor confirme que ésta es la dirección web o URL utilizada para acceder a la página principal de su sitio.<br /><br /><br />Por favor confirme que ésta es la dirección web o URL utilizada para acceder a la sección de administración de su sitio.',
     'sitedata_missing'          => 'Los siguientes problemas fueron encontrados con la información que ha ingresado del sitio:',
     'system_path'               => 'Ajustes de ruta',
-
     'unable_mkdir'              => 'No fue posible crear el directorio',
     'unable_to_find_ver'        => 'No fue posible determinar la versión de glFusion.',
     'upgrade_error'             => 'Error de actualización',
@@ -167,14 +166,15 @@ $LANG_INSTALL = array(
     'use_utf8'                  => 'Utilizar UTF-8',
     'welcome_help'              => 'Bienvenido al Asistente de instalación del CMS glFusion. Puede instalar un nuevo sitio glFusion, actualizar un sitio glFusion existente, o migrar desde un sitio Geeklog v1.5 existente.<br /><br />Por favor seleccione el idioma para el asistente, y la tarea a realizar, luego presione <strong>Siguiente</strong>.',
     'wizard_version'            => 'v' . GVERSION . ' Asistente de instalación',
-/* --- Updated --- */
     'system_path_prompt'        => 'Ingrese la ruta completa, ruta absoluta de su servidor al directorio <strong>private/</strong> de glFusion.<br /><br />Este directorio contiene el archivo <strong>db-config.php.dist</strong> o <strong>db-config.php</strong>.<br /><br />Ejemplos: /home/www/glfuison/private o c:/www/glfusion/private.<br /><br /><strong>Sugerencia:</strong> La ruta absoluta de su directorio public_html/ parece ser:<br />%s<br /><br /><strong>Configuraciones avanzadas</strong> Te permite sobre escribir varias de las rutas por defecto. Generalmente no necesitas modificar o definir esas rutas. El sistema las determinará automáticamente.',
-/* --- New --- */
     'advanced_settings'         => 'Configuraciones avanzadas',
     'log_path'                  => 'Ruta de registros',
     'lang_path'                 => 'Ruta de idiomas',
     'backup_path'               => 'Ruta de respaldos',
     'data_path'                 => 'Ruta de la información',
+/* --- New --- */
+    'language_support'          => 'Language Support',
+    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
 );
 
 // +---------------------------------------------------------------------------+

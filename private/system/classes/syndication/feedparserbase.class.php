@@ -210,7 +210,7 @@ if (!defined ('GVERSION')) {
       {
         if($key != 'extensions')
         {
-            $value = $this->safeXML( $value );
+            $value = $this->_safeXML( $value );
             $xml .= "<$key>$value</$key>\n>";
         } else {
             if(is_array($value))

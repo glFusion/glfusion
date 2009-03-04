@@ -363,6 +363,8 @@ function INST_getLanguageTask( )
         'lang_site_upgrade'     => $LANG_INSTALL['site_upgrade'],
         'lang_geeklog_migrate'  => $LANG_INSTALL['geeklog_migrate'],
         'lang_proceed'          => $LANG_INSTALL['proceed'],
+        'lang_language_support' => $LANG_INSTALL['language_support'],
+        'lang_language_pack'    => $LANG_INSTALL['language_pack'],
         'hiddenfields'          => _buildHiddenFields(),
     ));
 

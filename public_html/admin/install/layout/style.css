@@ -200,6 +200,25 @@ h1.moofx-toggler-down {
   color:#666;
   margin-top:15px;
 }
+
+.stepfields a:link.non-ul,
+a:visited.non-ul,
+a:hover.non-ul,
+a:active.non-ul {
+  color:#000;
+  text-decoration:none;
+}
+.stepfields a:link {
+  color:#00f;
+}
+.stepfields a:visited {
+  color:#000;
+  text-decoration:none;
+}
+.stepfields a:hover {
+  color:#008000;
+}
+
 .stepfields-envchk {
   float:left;
   padding:10px 0;

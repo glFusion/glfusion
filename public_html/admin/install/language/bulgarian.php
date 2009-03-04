@@ -159,7 +159,6 @@ $LANG_INSTALL = array(
     'sitedata_help'             => 'Изберете тип-а на датабазата от листа. Тов е главния <strong>MySQL</strong>. Както и изберете каде да бъде използван <strong>UTF-8</strong> character set (това ще е главно нужно за сайтове със мулти-езици.)<br /><br /><br />Въведете името на вашия съврвер със датабазата. Това може да не е същия нет сървер, затова проверете вашия доставчик на хостинг ако несте сигорни.<br /><br />Въведете името на вашата датабаза. <strong>Има датабаза със такова име.</strong> Ако не знаете името на датабазата , свържете се със вашия хостинг доставчик.<br /><br />Въведете потребителя за да се свържете към датабазата. Ако не знаете потребителското име на датабазата, свържете се със вашия хостинг доставчик.<br /><br /><br />Въведете паролата към вашата датабаза. Ако не знаете паролата към датабазата, свържете се със вашия хостинг доставчик.<br /><br />Въведете наставката за таблиците във датабазата. Това е полезно когато имате мулти-сайтове или имате повече от една системи във една датабаза.<br /><br />Въведете името на сайта ви. То ще бъде показано като заглавието на сайта. Пример, glFusion или Mark\'s Marbles. Не се безпокойте ако объркате, то винаги може да се смени по късно.<br /><br />Въведете информацията за вашия сайт. Тя ще бъде показана под заглавието на сайта. Пример, synergy - stability - style. Не се безпокойте ако объркате, то винаги може да се смени по късно.<br /><br />Въведете главния email адрес на сайта ви. Този email адрес ще е основия за Администраторския акаунт. Не се безпокойте ако объркате, то винаги може да се смени по късно.<br /><br />Въвдете вашия no reply email адрес. Той ще бъде използван автоматично да изпраща на потребители, смяна на паролите, и други информителни съобщения. Не се безпокойте ако объркате, то винаги може да се смени по късно.<br /><br />Please confirm that this is the web address or URL used to access the homepage of your site.<br /><br />Моля потвърдете че това е интернет адреса  или URL използван за админ секцията на сайта.',
     'sitedata_missing'          => 'Следните проблеми излезнаха при от ваведената от вас информация:',
     'system_path'               => 'Настройки на Пътя',
-    'system_path_prompt'        => 'Въведете пълния път към вашата папка със glFusion\'s <strong>private/</strong> directory.<br /><br />Тази дериктория садържа <strong>db-config.php.dist</strong> или <strong>db-config.php</strong> файла.<br /><br />Примери: /home/www/glfuison/private или c:/www/glfusion/private',
     'unable_mkdir'              => 'Не мога да създам дериктория',
     'unable_to_find_ver'        => 'Не мога да определя версията на glFusion .',
     'upgrade_error'             => 'Грешка при Обновяването',
@@ -169,6 +168,17 @@ $LANG_INSTALL = array(
     'use_utf8'                  => 'Използвайте UTF-8',
     'welcome_help'              => 'Добре дошли във Инсталациония Помощтник на glFusion CMS. Вие можете да инсталирате нов glFusion сайт,да обновите вече съществуващ сайт, Или да мигрирате от съществуващ Geekblog 1.5 сайт.<br /><br />Моля изберете език за инсталатора и натиснете <strong>Напред</strong>.',
     'wizard_version'            => 'v' . GVERSION . ' Инсталационен Помощтник',
+/* --- Updated --- */
+/*    'system_path_prompt'        => 'Въведете пълния път към вашата папка със glFusion\'s <strong>private/</strong> directory.<br /><br />Тази дериктория садържа <strong>db-config.php.dist</strong> или <strong>db-config.php</strong> файла.<br /><br />Примери: /home/www/glfuison/private или c:/www/glfusion/private', */
+    'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />This directory contains the <strong>db-config.php.dist</strong> or <strong>db-config.php</strong> file.<br /><br />Examples: /home/www/glfuison/private or c:/www/glfusion/private.<br /><br /><strong>Hint:</strong> The absolute path to your public_html/ directory appears to be:<br />%s<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
+/* --- New --- */
+    'advanced_settings'         => 'Advanced Settings',
+    'log_path'                  => 'Logs Path',
+    'lang_path'                 => 'Language Path',
+    'backup_path'               => 'Backups Path',
+    'data_path'                 => 'Data Path',
+    'language_support'          => 'Language Support',
+    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
 );
 
 // +---------------------------------------------------------------------------+

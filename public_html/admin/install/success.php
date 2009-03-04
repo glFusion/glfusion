@@ -69,6 +69,10 @@ if ($type == 'install') {
 $display .= '<li style="padding-bottom:3px">' . $LANG_SUCCESS[16] . ' <tt>' . $_CONF['path'] . 'db-config.php</tt> ' . $LANG_SUCCESS[17] . ' <tt>' . $_CONF['path_html'] . 'siteconfig.php</tt> ' . $LANG_SUCCESS[18] . ' 755.</li>
 </ol>';
 
+$display .= '<p><strong>'.$LANG_INSTALL['language_support'].'</strong></p>';
+$display .= '<p>'.$LANG_INSTALL['language_pack'].'</p>';
+
+
 $display .= COM_endBlock ();
 $display .= COM_siteFooter ();
 

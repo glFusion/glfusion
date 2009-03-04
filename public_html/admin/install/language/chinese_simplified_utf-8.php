@@ -164,7 +164,6 @@ $LANG_INSTALL = array(
     'sitedata_help'             => '<br />从下拉菜单选择数据库类型。通常是<strong>MySQL</strong>。同时请选择数据库表是否使用了<strong>UTF-8</strong>字符集(对于多语言站点一般需要选择该选项，请注意和数据库实际设置一致)。<br /><br />输入数据库服务器的主机名。可能会和您的web服务器不同，当您不确定时请咨询服务器提供商。<br /><br /><br />输入数据库名称。<strong>数据库必须已经存在。</strong>如果您不知道数据库的名字，请联系您的服务器提供商。<br /><br /><br />输入数据库用户名。如果您不知道数据库用户名，请联系服务器提供商。<br /><br /><br />输入数据库密码，如果您不知道该密码请联系服务器提供商。<br /><br /><br /><br />输入一个数据表前缀，表前缀可以用来在一个数据库中区分多个网站的数据表。<br /><br /><br />输入您网站的名字，它将会显示为网站标题。例如glFusion或Mark\'s Marbles。不必担心，您可以在以后再更改它。<br /><br /><br />请输入网站副标题。它将会显示在网站标题下方。例如synergy - stability - style。不必担心，您可以在以后再更改它。<br /><br />输入您网站的主电子邮件地址。该地址将被作为默认管理员的电邮.不必担心，您可以在以后再更改它。<br /><br /><br />输入您网站的不监控电邮地址。该地址将被用来发送自动生成的电子邮件、重置密码信、或其他提醒邮件。不必担心，您可以在以后再更改它。<br /><br /><br />请确认填写正确的网站首页访问路径或URL。<br /><br /><br />请确认填写正确的网站管理后台的路径或URL。',
     'sitedata_missing'          => '您输入的网站数据存在以下问题：',
     'system_path'               => '路径设置',
-    'system_path_prompt'        => '请输入glFusion的<strong>private/</strong>目录的完整绝对路径。<br /><br />该路径包括<strong>db-config.php.dist</strong>或<strong>db-config.php</strong>文件。<br /><br />例如: /home/www/glfuison/private 或  c:/www/glfusion/private',
     'unable_mkdir'              => '无法创建目录',
     'unable_to_find_ver'        => '无法检测glFusion的版本号',
     'upgrade_error'             => '升级出错',
@@ -174,6 +173,17 @@ $LANG_INSTALL = array(
     'use_utf8'                  => '使用UTF-8',
     'welcome_help'              => '欢迎使用glFusion CMS安装向导。您可以全新安装一个网站、从glFusion的旧版本升级、或者从一个现存的Geeklog v1.5网站迁移数据。<br /><br />请选择向导的语言以及需要执行的任务，然后点击<strong>下一步</strong>继续。',
     'wizard_version'            => 'v' . GVERSION . '安装向导工具',
+/* --- Updated --- */
+/*    'system_path_prompt'        => '请输入glFusion的<strong>private/</strong>目录的完整绝对路径。<br /><br />该路径包括<strong>db-config.php.dist</strong>或<strong>db-config.php</strong>文件。<br /><br />例如: /home/www/glfuison/private 或  c:/www/glfusion/private', */
+    'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />This directory contains the <strong>db-config.php.dist</strong> or <strong>db-config.php</strong> file.<br /><br />Examples: /home/www/glfuison/private or c:/www/glfusion/private.<br /><br /><strong>Hint:</strong> The absolute path to your public_html/ directory appears to be:<br />%s<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
+/* --- New --- */
+    'advanced_settings'         => 'Advanced Settings',
+    'log_path'                  => 'Logs Path',
+    'lang_path'                 => 'Language Path',
+    'backup_path'               => 'Backups Path',
+    'data_path'                 => 'Data Path',
+    'language_support'          => 'Language Support',
+    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
 );
 
 // +---------------------------------------------------------------------------+
