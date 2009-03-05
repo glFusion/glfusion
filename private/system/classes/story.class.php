@@ -650,6 +650,8 @@ class Story
                 /* Move trackbacks */
                 $sql = "UPDATE {$_TABLES['trackback']} SET sid='{$newsid}' WHERE sid='{$checksid}' AND type='article'";
                 DB_query($sql);
+
+                CACHE_remove_instance('story_'.$checksid);
             }
         }
 
