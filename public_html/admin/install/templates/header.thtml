@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset={charset}" />
-<link rel="stylesheet" type="text/css" href="layout/style.css?ver=20090215" />
+<link rel="stylesheet" type="text/css" href="layout/style.css?ver=20090304" />
 <script type="text/javascript" src="layout/mootools-release-1.11.packed.js"></script>
 <script type="text/javascript">
 	Window.onDomReady(function(){ new Accordion($$('h1.moofx-toggler'), $$('div.moofx-slider'), {onActive: function(toggler, i) { toggler.addClass('moofx-toggler-down'); },onBackground: function(toggler, i) { toggler.removeClass('moofx-toggler-down'); },duration: 300,opacity: false, alwaysHide:true, show: 1}); });
@@ -49,7 +49,7 @@ function check(e) {
           <div class="floatright install-slogan">{wizard_version}</div>
           <div class="floatleft">
             <a href="http://www.glfusion.org" target="_blank">
-              <img src="layout/logo.png" alt="" title="" id="header-site-logo" />
+              <img src="layout/installlogo.png" alt="" title="" id="headersitelogo" />
             </a>
           </div>
         </div>
