@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Fixed user profile display bugs - now properly honor show online,
+  record last login, and show fullname configuration settings (Mark)
+- Implemented improved handling of user profile page when user photos are
+  disabled (Mark & Eric)
+- Remove cached story (old version) if SID changes (Mark)
 - Fixed crash on Windows platform when time is calculated as negative (Mark)
 - Added PLG_profileIconDisplay() to allow plugins to display an icon uder
   the profile image (Mark & Eric)
