@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | dutch.php                                                                |
 // |                                                                          |
-// | Dutch language file for the glFusion installation script                 |
+// | Dutch language file voor het glFusion installatiescript                  |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
@@ -65,7 +65,7 @@ $LANG_INSTALL = array(
     'db_name'                   => 'Database Naam',
     'db_name_error'             => 'Database Naam mag niet leeg zijn.',
     'db_pass'                   => 'Database Password / wachtwoord',
-    'db_table_prefix'           => 'Database Table Prefix',
+    'db_table_prefix'           => 'Database Tabel Prefix',
     'db_type'                   => 'Database Type',
     'db_type_error'             => 'Database Type moet geselecteerd zijn',
     'db_user'                   => 'Database Gebruikers naam',
@@ -73,7 +73,7 @@ $LANG_INSTALL = array(
     'dbconfig_not_found'        => 'Kan het bestand/file db-config.php of db-config.php.dist niet vinden. Verifieer a.u.b. dat het juiste pad is ingevuld verwijzend naar je prive directory.',
     'dbconfig_not_writable'     => 'Het db-config.php bestand is niet beschrijfbaar. Verifieer a.u.b. dat de web server voldoende rechten (permissies) heeft om in het bestand te schrijven.',
     'directory_permissions'     => 'Directory Permissie / rechten',
-    'enabled'					=> 'Geactiveerd/ mogelijk gemaakt',
+    'enabled'					=> 'Geactiveerd / mogelijk gemaakt',
     'env_check'					=> 'Omgeving (instelling) controle',
     'error'                     => 'Foutmelding',
     'file_permissions'          => 'Bestand Permissies / rechten',
@@ -84,7 +84,7 @@ $LANG_INSTALL = array(
     'forum'                     => 'Laden van Forum Plugin?',
     'forum_desc'                => 'Een online community forum systeem. Verschaft community collaboratie (samenwerking) en gezamenlijke interactie.',
     'geeklog_migrate'           => 'Migratie van een Geeklog v1.5+ Site',
-    'hosting_env'               => 'Hosting omgeving/instellingen controlle',
+    'hosting_env'               => 'Hosting omgeving/instellingen controle',
     'install'                   => 'Installatie',
     'install_heading'           => 'glFusion Installatie',
     'install_steps'             => 'INSTALLATIE STAPPEN (fasen)',
@@ -113,15 +113,15 @@ $LANG_INSTALL = array(
     'on'                        => 'Aan',
     'online_help_text'          => 'Online installatie help<br /> at glFusion.org',
     'online_install_help'       => 'Online Installatie Help',
-    'open_basedir'				=> 'Als <strong>open_basedir</strong> restricties zijn toegepast op je site, kan dit permissie (rechten) problemen veroorzaken gedurende de installatie. De Bestandsysteem Controlle (Check) verderop geeft mogelijke issues aan.',
+    'open_basedir'				=> 'Als <strong>open_basedir</strong> restricties zijn toegepast op je site, kan dit permissie (rechten) problemen veroorzaken gedurende de installatie. De Bestandsysteem Controle (Check) verderop geeft mogelijke issues aan.',
     'path_info'					=> 'Pad voor Informatie',
-    'path_prompt'               => 'Pad naar prive/ directory',
+    'path_prompt'               => 'Pad naar prive / directory',
     'path_settings'             => 'Pad settings',
     'perform_upgrade'			=> 'Uitvoeren Upgrade',
     'php_req_version'			=> 'glFusion vereist PHP versie 4.3.0 of nieuwer.',
     'php_settings'				=> 'PHP Settings',
     'php_version'				=> 'PHP Versie',
-    'php_warning'				=> 'Indien één van de items hieronder zijn gemarkeerd <span class="no">rood</span>, kun je problemen tegenkomen op je glFusion site. Controlleer met je hosting provider of de informatie klopt of dat deze PHP instellingen gewijzigd kunnen worden.',
+    'php_warning'				=> 'Indien één van de items hieronder zijn gemarkeerd <span class="no">rood</span>, kun je problemen tegenkomen op je glFusion site. Controleer met je hosting provider of de informatie klopt of dat deze PHP instellingen gewijzigd kunnen worden.',
     'plugin_install'			=> 'Plugin Installatie',
     'plugin_upgrade_error'      => 'Er was een probleem upgrading de %s plugin, controleer de error.log voor meer details.<br />',
     'plugin_upgrade_error_desc' => 'De volgende plugins zijn niet ge-upgrade. Controleer de error.log voor meer details.<br />',
@@ -133,7 +133,7 @@ $LANG_INSTALL = array(
     'recommended'               => 'Aanbevolen',
     'register_globals'			=> 'Indien PHP\'s <strong>register_globals</strong> is toegestaan, kunnen mogelijk veiligheidsrisico\'s onstaan.',
     'safe_mode'					=> 'Indien PHP\'s <strong>safe_mode</strong> is toegestaan, sommige functies van glFusion kunnen dan niet meer goed werken. Specifiek de Media Gallery plugin.',
-    'samplecontent_desc'        => 'Indien gecontrolleerd, installatie van voorbeeld content zoals blocks, stories, en statitsche pagina\'s. <strong> Dit is aanbevolen voor nieuwe gebruikers.</strong>',
+    'samplecontent_desc'        => 'Indien gecontroleerd, installatie van voorbeeld content zoals blocks, stories, en statitsche pagina\'s. <strong> Dit is aanbevolen voor nieuwe gebruikers.</strong>',
     'select_task'               => 'Selecteer Taak',
     'session_error'             => 'Jou sessie is verlopen. Start de installatieprocedure opnieuw a.u.b.',
     'setting'                   => 'Instellingen',
@@ -172,12 +172,12 @@ $LANG_INSTALL = array(
     'system_path_prompt'        => 'Voer het volledige pad in, het zogenaamde absolute pad op je server naar glFusion\'s <strong>private/</strong> directory.<br /><br />Deze directory bevat de  <strong>db-config.php.dist</strong> of <strong>db-config.php</strong> bestand.<br /><br />Voorbeelden: /home/www/glfuison/private of c:/www/glfusion/private.<br /><br /><strong>Hint:</strong> Het absolute pad naar je public_html/ directory schijnt te zijn:<br />%s<br /><br /><strong>Geavanceerde Instellingen</strong> staan jou toe om standaard instellingen te overschrijven.  Over het algemeen hoef jij deze instellingen niet aan te passen of te wijzigen, het systeem bepaald dat automatisch voor jou.',
 /* --- New --- */
     'advanced_settings'         => 'Geavanceerde settings',
-    'log_path'                  => 'Logs Pad',
-    'lang_path'                 => 'Taal Pad',
-    'backup_path'               => 'Backups Pad',
-    'data_path'                 => 'Data Pad',
-    'language_support'          => 'Language Support',
-    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
+    'log_path'                  => 'Logs-pad',
+    'lang_path'                 => 'Taal-pad',
+    'backup_path'               => 'Backup-pad',
+    'data_path'                 => 'Data-pad',
+    'language_support'          => 'Taal ondersteuning',
+    'language_pack'             => 'glFusion heeft als standaard instelling Engels, na de installatie kun je via de link <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">een taal pakket Pack</a> downloaden en installeren die alle tot nu toe geondersteunde talen bevat.',
 );
 
 // +---------------------------------------------------------------------------+
