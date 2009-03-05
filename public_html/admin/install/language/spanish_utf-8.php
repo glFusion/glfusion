@@ -89,7 +89,7 @@ $LANG_INSTALL = array(
     'install_steps'             => 'PASOS DE INSTALACIÓN',
     'invalid_geeklog_version'   => 'El instalador no fue capaz de localizar el archivo siteconfig.php. ¿Está seguro que está migrando de Geeklog v1.5.0 o versión superior?  Si usted tiene una instalación anterior a Geeklog v1.5.0, por favor actualice primeramente a la última versión de Geeklog v1.5.0 y luego intente de nuevo la migración.',
     'language'                  => 'Idioma',
-    'language_task'             => 'Idioma & Tarea',
+    'language_task'             => 'Idioma & tarea',
     'libcustom_not_writable'    => 'lib-custom.php no tiene permisos de escritura.',
     'links'                     => '¿Cargar la Extensión Enlaces?',
     'links_desc'                => 'Un sistema de administración de enlaces. proporciona enlaces a otros sitios interesantes, organizado por categoría.',
@@ -173,8 +173,8 @@ $LANG_INSTALL = array(
     'backup_path'               => 'Ruta de respaldos',
     'data_path'                 => 'Ruta de la información',
 /* --- New --- */
-    'language_support'          => 'Language Support',
-    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
+    'language_support'          => 'Soporte de idioma',
+    'language_pack'             => 'glFusion vienen en idioma inglés, pero una vez que lo has instalado puedes descargar e instalar  el <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Paquete de idioma</a> el cual contiene los archivos de idioma para todos los idomoas soportados.',
 );
 
 // +---------------------------------------------------------------------------+
