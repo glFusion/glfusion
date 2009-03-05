@@ -240,7 +240,8 @@ $LANG_confignames['links'] = array(
     'aftersave' => 'אחרי שמירת הקישור',
     'show_category_descriptions' => 'הצגת תיאור הקטגוריה?',
     'root' => 'קוד הזיהוי של הקטגוריה הראשית',
-    'default_permissions' => 'הרשאות ברירת המחדל של קישורים'
+    'default_permissions' => 'הרשאות ברירת המחדל של קישורים',
+    'target_blank' => 'Open Links in New Window',
 );
 
 $LANG_configsubgroups['links'] = array(

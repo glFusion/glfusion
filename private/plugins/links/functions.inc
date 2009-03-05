@@ -143,12 +143,17 @@ function plugin_getwhatsnew_links()
 
             $title = COM_truncate($A['title'], $_CONF['title_trim_length'],
                                   '...');
-            $link_title = array();
-            if ($title != $A['title']) {
-                $link_title = array('title' => $A['title']);
+            $attr = array();
+            if ( $_LI_CONF['target_blank'] == 1 ) {
+                $attr = array(
+                    'title' => $A['title'],
+                    'target' => '_blank');
+            } else {
+                $attr = array(
+                    'title' => $A['title']);
             }
 
-            $newlinks[] = COM_createLink($title, $lcount, $link_title) . LB;
+            $newlinks[] = COM_createLink($title, $lcount, $attr) . LB;
         }
 
         $retval .= COM_makeList($newlinks, 'list-new-plugins');
@@ -620,6 +625,8 @@ function plugin_feedupdatecheck_links ($feed, $topic, $update_data, $limit, $upd
 */
 function plugin_upgrade_links()
 {
+    global $_TABLES, $_CONF, $_LI_CONF;
+
     if ( @file_exists($_CONF['path'].'plugins/links/upgrade.php') ) {
         require_once $_CONF['path'].'plugins/links/upgrade.php';
         return links_upgrade();

@@ -187,6 +187,10 @@ function plugin_initconfig_links()
         $c->add('show_category_descriptions', $_LI_DEFAULT['show_category_descriptions'], 'select', 0, 0, 1, 50, true, 'links');
 
         $c->add('fs_admin', NULL, 'fieldset', 0, 1, NULL, 0, true, 'links');
+
+        $c->add('target_blank', $_LI_DEFAULT['target_blank'], 'select',
+                0, 1, 0, 55, true, 'links');
+
         $c->add('hidenewlinks', $_LI_DEFAULT['hidenewlinks'], 'select',
                 0, 1, 0, 60, true, 'links');
         $c->add('newlinksinterval', $_LI_DEFAULT['newlinksinterval'], 'text',

@@ -238,7 +238,8 @@ $LANG_confignames['links'] = array(
     'aftersave' => 'After Saving Link',
     'show_category_descriptions' => 'Show Category Description?',
     'root' => 'ID of Root Category',
-    'default_permissions' => 'Link Default Permissions'
+    'default_permissions' => 'Link Default Permissions',
+    'target_blank' => 'Open Links in New Window',
 );
 
 $LANG_configsubgroups['links'] = array(

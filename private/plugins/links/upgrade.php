@@ -51,6 +51,11 @@ function links_upgrade()
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='links'");
 
     switch( $currentVersion ) {
+        case '2.0.0' :
+        case '2.0.1' :
+            $c = config::get_instance();
+            $c->add('target_blank',FALSE,'select',0, 1, 0, 55, true, 'links');
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_LI_CONF['pi_version']."',pi_gl_version='".$_LI_CONF['gl_version']."' WHERE pi_name='links' LIMIT 1");
             break;

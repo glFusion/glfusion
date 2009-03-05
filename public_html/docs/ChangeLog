@@ -152,6 +152,7 @@ Forum Plugin
 
 Links Plugin
 ------------
+- New option to load links in a new browser window (Mark)
 - Validate the link is of valid structure prior to saving (Mark)
 - Rewrote the links user submission to no longer use the generic submit.php.
   Now if errors are encountered, data entry is preserved (Mark)

@@ -342,7 +342,7 @@ function links_list($message)
 */
 function prepare_link_item ($A, &$template)
 {
-    global $_CONF, $_USER, $LANG_ADMIN, $LANG_LINKS, $_IMAGE_TYPE;
+    global $_LI_CONF, $_CONF, $_USER, $LANG_ADMIN, $LANG_LINKS, $_IMAGE_TYPE;
 
     $url = COM_buildUrl ($_CONF['site_url']
                  . '/links/portal.php?what=link&amp;item=' . $A['lid']);
@@ -353,9 +353,17 @@ function prepare_link_item ($A, &$template)
     $template->set_var ('link_description',
                         nl2br (stripslashes ($A['description'])));
     $content = stripslashes ($A['title']);
-    $attr = array(
-        'title' => stripslashes ($A['url']),
-        'class' => 'ext-link');
+
+    if ( $_LI_CONF['target_blank'] == 1 ) {
+        $attr = array(
+            'title' => stripslashes ($A['url']),
+            'class' => 'ext-link',
+            'target' => '_blank');
+    } else {
+        $attr = array(
+            'title' => stripslashes ($A['url']),
+            'class' => 'ext-link');
+    }
     $html = COM_createLink($content, $url, $attr);
     $template->set_var ('link_html', $html);
     if (!COM_isAnonUser() && !SEC_hasRights('links.edit')) {

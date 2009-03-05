@@ -242,7 +242,8 @@ $LANG_confignames['links'] = array(
     'aftersave' => 'Pärast linkide salvestamist',
     'show_category_descriptions' => 'Näita kategooriate kirjeldust?',
     'root' => 'Peakategooria ID',
-    'default_permissions' => 'Linkide vaikimisi õigused'
+    'default_permissions' => 'Linkide vaikimisi õigused',
+    'target_blank' => 'Open Links in New Window',
 );
 
 $LANG_configsubgroups['links'] = array(

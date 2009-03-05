@@ -240,7 +240,8 @@ $LANG_confignames['links'] = array(
     'aftersave' => 'Nach Abspeichern des Links',
     'show_category_descriptions' => 'Kategoriebeschreibung anzeigen?',
     'root' => 'ID der Oberkategorie',
-    'default_permissions' => 'Grundeinstellung Rechte'
+    'default_permissions' => 'Grundeinstellung Rechte',
+    'target_blank' => 'Open Links in New Window',
 );
 
 $LANG_configsubgroups['links'] = array(
