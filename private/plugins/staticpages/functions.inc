@@ -958,7 +958,7 @@ function plugin_geticon_staticpages ()
 */
 function plugin_upgrade_staticpages()
 {
-    global $_CONF;
+    global $_TABLES, $_CONF, $_SP_CONF;
 
     if ( @file_exists($_CONF['path'].'plugins/staticpages/upgrade.php') ) {
         require_once $_CONF['path'].'plugins/staticpages/upgrade.php';

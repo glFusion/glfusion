@@ -227,7 +227,7 @@ function plugin_feedupdatecheck_commentfeeds ($feed, $topic, $update_data, $limi
 * Called by the plugin Editor to run the SQL Update for a plugin update
 */
 function plugin_upgrade_commentfeeds() {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $_CF_CONF;
 
     require_once $_CONF['path'].'plugins/commentfeeds/upgrade.php';
 

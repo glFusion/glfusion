@@ -1081,6 +1081,8 @@ function plugin_getheadercss_polls() {
 */
 function plugin_upgrade_polls()
 {
+    global $_TABLES, $_CONF, $_PO_CONF;
+
     if ( @file_exists($_CONF['path'].'plugins/polls/upgrade.php') ) {
         require_once $_CONF['path'].'plugins/polls/upgrade.php';
         return polls_upgrade();
