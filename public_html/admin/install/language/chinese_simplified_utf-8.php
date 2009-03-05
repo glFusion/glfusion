@@ -173,17 +173,14 @@ $LANG_INSTALL = array(
     'use_utf8'                  => '使用UTF-8',
     'welcome_help'              => '欢迎使用glFusion CMS安装向导。您可以全新安装一个网站、从glFusion的旧版本升级、或者从一个现存的Geeklog v1.5网站迁移数据。<br /><br />请选择向导的语言以及需要执行的任务，然后点击<strong>下一步</strong>继续。',
     'wizard_version'            => 'v' . GVERSION . '安装向导工具',
-/* --- Updated --- */
-/*    'system_path_prompt'        => '请输入glFusion的<strong>private/</strong>目录的完整绝对路径。<br /><br />该路径包括<strong>db-config.php.dist</strong>或<strong>db-config.php</strong>文件。<br /><br />例如: /home/www/glfuison/private 或  c:/www/glfusion/private', */
-    'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />This directory contains the <strong>db-config.php.dist</strong> or <strong>db-config.php</strong> file.<br /><br />Examples: /home/www/glfuison/private or c:/www/glfusion/private.<br /><br /><strong>Hint:</strong> The absolute path to your public_html/ directory appears to be:<br />%s<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
-/* --- New --- */
-    'advanced_settings'         => 'Advanced Settings',
-    'log_path'                  => 'Logs Path',
-    'lang_path'                 => 'Language Path',
-    'backup_path'               => 'Backups Path',
-    'data_path'                 => 'Data Path',
-    'language_support'          => 'Language Support',
-    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
+    'system_path_prompt'        => '请输入glFusion的<strong>private/</strong>目录的完整绝对路径。<br /><br />该路径包括<strong>db-config.php.dist</strong>或<strong>db-config.php</strong>文件。<br /><br />例如: /home/www/glfuison/private 或  c:/www/glfusion/private<br /><br /><strong>提示：</strong> 您的public_html/的绝对路径应该是：<br />%s<br /><br /><strong>高级设置</strong>允许您强制更改这些默认路径，但一般情况下您不需要修改这些路径，系统会自动为您设置。',
+    'advanced_settings'         => '高级设置',
+    'log_path'                  => '日志文件路径',
+    'lang_path'                 => '语言文件路径',
+    'backup_path'               => '备份文件路径',
+    'data_path'                 => '数据文件路径',
+    'language_support'          => '多语言支持',
+    'language_pack'             => '在glFusion完成安装后，您可以下载并安装<a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">语言包</a>， 该语言包包含所有支持的语言文件。',
 );
 
 // +---------------------------------------------------------------------------+
