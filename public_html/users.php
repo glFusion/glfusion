@@ -133,7 +133,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         }
     } else {
         $username = $A['username'];
-        $fullname = $A['fullname'];
+        $fullname = '';
     }
     $username = htmlspecialchars($username);
     $fullname = htmlspecialchars($fullname);
@@ -180,14 +180,17 @@ function userprofile($user, $msg = 0, $plugin = '')
 
     $user_templates->set_var ('lang_membersince', $LANG04[67]);
     $user_templates->set_var ('user_regdate', $A['regdate']);
-    if ($A['showonline']) {
-        $user_templates->set_var('lang_lastlogin', $LANG28[35]);
-        if (empty($lastlogin)) {
-            $user_templates->set_var('user_lastlogin', $LANG28[36]);
-        } else {
-            $user_templates->set_var('user_lastlogin', $lasttime[0]);
-        }
 
+    if ($_CONF['lastlogin']) {
+        $user_templates->set_var('lang_lastlogin', $LANG28[35]);
+        if ( !empty($lastlogin) ) {
+            $user_templates->set_var('user_lastlogin', $lasttime[0]);
+        } else {
+            $user_templates->set_var('user_lastlogin', $LANG28[36]);
+        }
+    }
+
+    if ($A['showonline']) {
         $online_result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE uid=" . $user);
         if ( DB_numRows($online_result) > 0 ) {
             $user_templates->set_var ('online', 'online');
