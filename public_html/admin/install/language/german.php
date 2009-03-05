@@ -172,8 +172,8 @@ $LANG_INSTALL = array(
     'lang_path'                 => 'Pfad zu Language',
     'backup_path'               => 'Pfad zu Backups',
     'data_path'                 => 'Pfad zu Data',
-    'language_support'          => 'Language Support',
-    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
+    'language_support'          => 'Sprachunterstützung',
+    'language_pack'             => 'glFusion kommt zunächst mit englischer Sprachunterstützung. Nach der Installation kann man das <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Sprachpaket</a> runterladen und installieren, dass alle unterstützten Sprachen enthält.',
 );
 
 // +---------------------------------------------------------------------------+
