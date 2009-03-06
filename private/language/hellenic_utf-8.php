@@ -37,7 +37,7 @@ if (!defined ('GVERSION')) {
 }
 
 
-$LANG_CHARSET = 'UTF-8';
+$LANG_CHARSET = 'utf-8';
 
 ###############################################################################
 # Array Format:
@@ -1525,7 +1525,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1581,7 +1581,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1616,7 +1616,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
