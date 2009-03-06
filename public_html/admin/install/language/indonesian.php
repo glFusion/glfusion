@@ -164,7 +164,7 @@ $LANG_INSTALL = array(
     'sitedata_help'             => 'Pilih Jenis(type) database yang akan digunakan dari drop down list. Biasana, ini <strong>MySQL</strong>. Juga pilih apakah penggunaan <strong>UTF-8</strong> character telah ditentukan (hal ini biasanya sudah dilakukan untuk situs-situs multi lingual.)<br /><br /><br />Masukkkan hostname server database. Ini mungkin tidak sama dengan web server anda, jadi, pastikan dengan menanyakan pada hosting provider anda bila anda tidak yakin.<br /><br />Masukkkan nama database anda. <strong>Database-nya kemungkinan besar sudah ada.</strong>Jika anda tidak tau nama database anda, hubungi hosting provider anda.<br /><br />Masukkan username untuk menghubungkan dengan database. Jika anda tidak tau usernamenya, hubungi hosting provider anda.<br /><br /><br />Masukkan password untuk menghubungkan dengan database anda. Jika anda tidak tau passwordnya, hubungi hosting provider anda.<br /><br />Masukkanc table prefix untuk digunakan dalam tabel database. Hal ini berguna untuk memisahkan beberapa situs yang menggunakan satu database.<br /><br /> Masukkkan nama Situs anda, akan ditampilkan dalam Header situs anda. Contoh, glFusion atau Mark\'s Marbles. Jangan Kawatir, anda bisa mengubahnya lagi nanti setelah situs berjalan.<br /><br />Masukkkan slogan situs anda. Akan tampil di bawah judul situs. Contohnya, synergy - stability - style. Jangan Kawatir, anda bisa mengubahnya lagi nanti.<br /><br />Masukkan alamat email utama situs anda. Alamat email ini untuk account admin. Jangan kawatir, anda juga bisa mengubahnya lagi nanti.<br /><br />Masukkan alamat email noreply site anda. Akan digunakan untuk mengirim informasi tentang user secara otomatis. Jangan Kawatir, ini bisa anda ubah lagi nanti.<br /><br />Mohon Pastikan bahwa ini adalah alamat web atau URL yang akan digunakan untuk mengakses situs anda.<br /><br /><br />Mohon pastikan bawa ini adalah alamat untuk mengakses wilayah admin di situs anda.',
     'sitedata_missing'          => 'Kami mendeteksi ada masalah dengan data situs yang anda masukkan:',
     'system_path'               => 'Path Settings',
-    'unable_mkdir'              => 'Tidak bisa membuaat Directori',
+    'unable_mkdir'              => 'Tidak bisa membuat Directori',
     'unable_to_find_ver'        => 'Tidak bisa mengenali versi glFusion.',
     'upgrade_error'             => 'Kerusakan Upgrade',
     'upgrade_error_text'        => 'Terjadi kerusakan pada proses instalasi upgrade glFusion anda.',
@@ -181,7 +181,7 @@ $LANG_INSTALL = array(
     'data_path'                 => 'Path Data',
 /* --- New --- */
     'language_support'          => 'Language Support',
-    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
+    'language_pack'             => 'glFusion di download dalam bahasa Inggris, tapi, setelah instalasi, anda bisa mendownload dan menginstal <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack (Paket Bahasa)</a> yang berisikan semua file bahasa yang sudah diterjemahkan glFusion.',
 );
 
 // +---------------------------------------------------------------------------+
