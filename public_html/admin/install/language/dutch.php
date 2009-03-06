@@ -41,11 +41,11 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
 
 $LANG_CHARSET = 'iso-8859-1';
 
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
 // index.php
 
 $LANG_INSTALL = array(
@@ -158,7 +158,6 @@ $LANG_INSTALL = array(
     'sitedata_help'             => 'Selecteer het type van de database dat je gebruikt uit de drop down lijst. Dit is in het algemeen <strong>MySQL</strong>. Selecteer ook of je gebruik maakt van de <strong>UTF-8</strong> karakter set (dit is in het algemeen gecontroleerd bij meervoudige taal sites.)<br /><br /><br />Geeft de  hostnaam van de database server. Dit mag niet dezelfde zijn als je web server, controleer met je hosting provider voor alle zekerheid.<br /><br />Voer de naam van je database in. <strong>De database moet al bestaan.</strong> Indien je niet de naam van je database weet neem contact op met je hosting provider.<br /><br />Voer de gebruikersnaam in om verbinding te leggen met je database. Indien je niet de gebruikersnaam van de database weet neem contact op met je hosting provider.<br /><br /><br />Voer het wachtwoord in om verbinding te maken met de database. Indien je niet de database wachtwoord weer neem contact op met je hosting provider.<br /><br />Voer de tabel prefix die gebruikt gaat worden voor de database tabellen. Dit is bruikbaar bij verschillende afzonderlijke sites of systemen als een enkelvoudige database wordt gebruikt.<br /><br />Voer de naam van je site in. Dit zal worden weergegeven in de site header. Bijvoorbeeld, glFusion of Mark\'s Marbles. Verontrust niet dit kan achteraf altijd gewijzigd worden.<br /><br />Voer de slogan van je site in. Dit wordt weergegeven in desite header net onder de site naam. Bijvoorbeeld, synergy - stability - style. Verontrust niet dit kan achteraf altijd gewijzigd worden.<br /><br />Voor je site\'s hoofd email adres in. Dit is het email adres voor het standaard Admin account. Verontrust niet dit kan achteraf altijd gewijzigd worden.<br /><br />Voer jesite\'s geen antwoord (no reply) email adres in. Dit wordt automatisch gebruikt bij het versturen van nieuwe gebruiks, wachtwoord reset of elke andere e-mail notificatie. Verontrust niet dit kan achteraf altijd gewijzigd worden.<br /><br />Bevestig a.u.b. dat dit web adres of URL die gebruikt wordt om toegang te krijgen tot de homepagina van je site.<br /><br /><br />Bevestig a.u.b. dat dit web adres of URL die gebruikt wordt om toegang te krijgen tot de admin sectie van je site.',
     'sitedata_missing'          => 'De volgende problemen zijn gedetecteerd met de site gegegevens die je hebt ingevoerd',
     'system_path'               => 'Pad instellingen',
-
     'unable_mkdir'              => 'Kan geen directory creeëren',
     'unable_to_find_ver'        => 'kan niet glFusion versie bepalen.',
     'upgrade_error'             => 'Upgrade Foutmelding',
@@ -168,9 +167,7 @@ $LANG_INSTALL = array(
     'use_utf8'                  => 'Gebruik UTF-8',
     'welcome_help'              => 'Welkom bij de glFusion CMS Installatie Wizard. Je kunt een nieuwe glFusion site installatie uitvoeren, een upgrade van een bestaande glFusion site doen of een migratie doen van een bestaande  Geeklog v1.5 site.<br /><br />Selecteer a.u.b. een taal voor de wizard en een taak die mote worden uitgevoerd en klik daarna op <strong>Volgende</strong>.',
     'wizard_version'            => 'v' . GVERSIE . ' Installatie Wizard',
-/* --- Updated --- */
     'system_path_prompt'        => 'Voer het volledige pad in, het zogenaamde absolute pad op je server naar glFusion\'s <strong>private/</strong> directory.<br /><br />Deze directory bevat de  <strong>db-config.php.dist</strong> of <strong>db-config.php</strong> bestand.<br /><br />Voorbeelden: /home/www/glfuison/private of c:/www/glfusion/private.<br /><br /><strong>Hint:</strong> Het absolute pad naar je public_html/ directory schijnt te zijn:<br />%s<br /><br /><strong>Geavanceerde Instellingen</strong> staan jou toe om standaard instellingen te overschrijven.  Over het algemeen hoef jij deze instellingen niet aan te passen of te wijzigen, het systeem bepaald dat automatisch voor jou.',
-/* --- New --- */
     'advanced_settings'         => 'Geavanceerde settings',
     'log_path'                  => 'Logs-pad',
     'lang_path'                 => 'Taal-pad',

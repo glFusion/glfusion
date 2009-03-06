@@ -47,11 +47,11 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
 
 $LANG_CHARSET = 'iso-8859-1';
 
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
 // index.php
 
 $LANG_INSTALL = array(
@@ -179,7 +179,6 @@ $LANG_INSTALL = array(
     'lang_path'                 => 'Path Bahasa',
     'backup_path'               => 'Path Backup',
     'data_path'                 => 'Path Data',
-/* --- New --- */
     'language_support'          => 'Language Support',
     'language_pack'             => 'glFusion di download dalam bahasa Inggris, tapi, setelah instalasi, anda bisa mendownload dan menginstal <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Language Pack (Paket Bahasa)</a> yang berisikan semua file bahasa yang sudah diterjemahkan glFusion.',
 );

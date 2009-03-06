@@ -40,11 +40,11 @@
 // |Foundation, Inc.", 59 Temple Place - Suite 330, Boston, MA 02111-1307,USA.|
 // +--------------------------------------------------------------------------+
 
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
 
 $LANG_CHARSET = 'utf-8';
 
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
 // index.php
 
 $LANG_INSTALL = array(
@@ -172,7 +172,6 @@ $LANG_INSTALL = array(
     'lang_path'                 => 'Ruta de idiomas',
     'backup_path'               => 'Ruta de respaldos',
     'data_path'                 => 'Ruta de la información',
-/* --- New --- */
     'language_support'          => 'Soporte de idioma',
     'language_pack'             => 'glFusion vienen en idioma inglés, pero una vez que lo has instalado puedes descargar e instalar  el <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Paquete de idioma</a> el cual contiene los archivos de idioma para todos los idomoas soportados.',
 );
