@@ -158,14 +158,16 @@ function plugin_getheaderjs_sitetailor() {
 function plugin_getheadercode_sitetailor() {
     global $_CONF, $_ST_CONF, $stMenu, $themeAPI;
 
-    if ( $themeAPI > 1 ) {
-        return '';
-    }
-
     $st_header = '';
-
-    $st_header = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $_CONF['site_url'] . '/admin/plugins/sitetailor/css/mooRainbow.css"' . XHTML . ">" . LB;
-
+    $this_dir = basename( dirname( $_SERVER['SCRIPT_NAME'] ) );
+	if ( $this_dir == 'sitetailor' ) {
+        $st_header .= '<meta http-equiv="cache-control" content="no-cache" />' . LB;
+        $st_header .= '<meta http-equiv="pragma" content="no-cache" />' . LB;
+    }
+    if ( $themeAPI > 1 ) {
+        return $st_header;
+    }
+    $st_header .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $_CONF['site_url'] . '/admin/plugins/sitetailor/css/mooRainbow.css"' . XHTML . ">" . LB;
     if ( is_array($stMenu) ) {
         foreach ($stMenu AS $menu) {
             if ( $menu['active'] == 1 ) {
