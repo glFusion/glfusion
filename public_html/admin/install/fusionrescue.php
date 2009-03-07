@@ -242,18 +242,26 @@ function getDBLogin( ) {
     ';
 }
 
-function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
+function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group = 'Core') {
     global $rescueFields;
+
+    if ( $group == 'Core' ) {
+        $where = "group_name='".$group."' AND ";
+    } else {
+        $where = '';
+    }
+
+    $group = addslashes($group);
 
     $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
     @mysql_select_db($dbname) or die('error selecting database');
     $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
     $result = @mysql_query($sql,$db) or die('Cannot execute query');
     if ( @mysql_num_rows($result) < 1 ) die('Invalid glFusion Database');
-    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE group_name='Core' AND ((type <> 'subgroup') AND (type <> 'fieldset')) ORDER BY subgroup,sort_order ASC";
+    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE group_name='".$group."' AND ((type <> 'subgroup') AND (type <> 'fieldset')) ORDER BY subgroup,sort_order ASC";
     $result = @mysql_query($sql,$db) or die('Cannot execute query');
     while ($row = mysql_fetch_array($result,MYSQL_ASSOC) ) {
-        if ( in_array($row['name'],$rescueFields)) {
+        if ( $group != 'Core' || in_array($row['name'],$rescueFields)) {
             $config[$row['name']] = $row['value'];
             $configDetail[$row['name']]['type'] = $row['type'];
             if ( $row['name'] == 'site_url' || $row['name'] == 'site_admin_url' ) {
@@ -265,6 +273,22 @@ function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
 
     echo '
 <form method="post" action="fusionrescue.php">
+
+<center>Group: <select name="group">
+<option value="Core"'.($group == 'Core' ? ' selected="selected"' : '') . '>Core</option>
+<option value="calendar"'.($group == 'calendar' ? ' selected="selected"' : '').'>Calendar</option>
+<option value="captcha"'.($group == 'captcha' ? ' selected="selected"' : '').'>CAPTCHA</option>
+<option value="filemgmt"'.($group == 'filemgmt' ? ' selected="selected"' : '').'>FileMgmt</option>
+<option value="forum"'.($group == 'forum' ? ' selected="selected"' : '').'>Forum</option>
+<option value="links"'.($group == 'links' ? ' selected="selected"' : '').'>Links</option>
+<option value="polls"'.($group == 'polls' ? ' selected="selected"' : '').'>Polls</option>
+<option value="spamx"'.($group == 'spamx' ? ' selected="selected"' : '').'>Spamx</option>
+<option value="staticpages"'.($group == 'staticpages' ? ' selected="selected"' : '').'>Staticpages</option>
+</select>
+<input type="submit" value="submit" name="mode" />
+</center>
+<br />
+
 <input type="hidden" name="dbserver" value="' . $dbserver .'" />
 <input type="hidden" name="dbuser" value="' . $dbuser . '" />
 <input type="hidden" name="dbpass" value="' . $dbpass . '" />
@@ -298,7 +322,7 @@ foreach ($config as $option => $value) {
 
 echo '
 </table>
-<center><input type="submit" name="mode" value="save" />&nbsp;&nbsp;<input type="submit" name="mode" value="repair" /></center>
+<center><input type="submit" name="mode" value="save" />&nbsp;&nbsp;<input type="submit" name="mode" value="repair" />&nbsp;&nbsp;<input type="submit" name="mode" value="cancel" /></center>
 </form>
 ';
 }
@@ -315,18 +339,20 @@ function repairSessions( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
     exit;
 }
 
-function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
+function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='Core' ) {
     global $rescueFields;
+
+    $retval = '';
 
     $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
     @mysql_select_db($dbname) or die('error selecting database');
 
-    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE group_name='Core' AND ((type <> 'subgroup') AND (type <> 'fieldset'))";
+    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE group_name='".$group."' AND ((type <> 'subgroup') AND (type <> 'fieldset'))";
 
     $result = @mysql_query($sql,$db) or die('Cannot execute query');
 
     while ($row = mysql_fetch_array($result,MYSQL_ASSOC) ) {
-        if ( in_array($row['name'],$rescueFields)) {
+        if ( $group != 'Core' || in_array($row['name'],$rescueFields)) {
             $config[$row['name']] = @unserialize($row['value']);
             $default[$row['name']] = $row['default_value'];
         }
@@ -339,9 +365,9 @@ function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
     $changed = 0;
     foreach ($cfgvalues as $option => $value) {
         if ( isset($reset[$option]) && $reset[$option] == 1 ) {
-            $sql = "UPDATE " . $dbprefix . "conf_values SET value='" . $default[$option] . "' WHERE name='" . $option . "'";
+            $sql = "UPDATE " . $dbprefix . "conf_values SET value='" . $default[$option] . "' WHERE name='" . $option . "' AND group_name='".$group."'";
             mysql_query($sql,$db);
-            echo 'Resetting ' . $option . '<br />';
+            $retval .= 'Resetting ' . $option . '<br />';
             $changed++;
         } else {
             $sVal = validateInput($value);
@@ -350,20 +376,27 @@ function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix ) {
                 if (function_exists($fn)) {
                     $sVal = $fn($sVal);
                 }
-                $sql = "UPDATE " . $dbprefix . "conf_values SET value='" . serialize($sVal) . "' WHERE name='" . $option . "'";
+                $sql = "UPDATE " . $dbprefix . "conf_values SET value='" . serialize($sVal) . "' WHERE name='" . $option . "' AND group_name='".$group."'";
                 mysql_query($sql,$db);
-                echo 'Saving ' . $option . '<br />';
+                $retval .= 'Saving ' . $option . '<br />';
                 $changed++;
             }
         }
     }
     if ( $changed == 0 ) {
-        echo 'No changes detected<br />';
+        $retval .= 'No changes detected<br />';
     } else {
         @unlink($cfgvalue['path_data'] .'$$$config$$$.cache');
         @unlink($config['path_data'] .'$$$config$$$.cache');
+        @unlink($cfgvalue['path_data'] .'layout_cache/$$$config$$$.cache');
+        @unlink($config['path_data'] .'layout_cache/$$$config$$$.cache');
     }
-    echo '<br />Done!';
+    //echo '<br />Done!';
+
+    echo $retval;
+
+    getNewPaths($dbserver,$dbuser,$dbpass,$dbname,$dbprefix,$group);
+
 }
 
 function printHeader() {
@@ -404,7 +437,8 @@ switch ( $mode ) {
         $dbpasswd = $_POST['dbpass'];
         $dbname   = $_POST['dbname'];
         $dbprefix = $_POST['dbprefix'];
-        getNewPaths($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix);
+        $group    = isset($_POST['group']) ? $_POST['group'] : 'Core';
+        getNewPaths($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix,$group);
         break;
     case 'save' :
         $dbserver = $_POST['dbserver'];
@@ -412,7 +446,8 @@ switch ( $mode ) {
         $dbpasswd = $_POST['dbpass'];
         $dbname   = $_POST['dbname'];
         $dbprefix = $_POST['dbprefix'];
-        saveNewPaths($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix);
+        $group    = isset($_POST['group']) ? $_POST['group'] : 'Core';
+        saveNewPaths($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix,$group);
         break;
     case 'repair' :
         $dbserver = $_POST['dbserver'];
@@ -421,6 +456,10 @@ switch ( $mode ) {
         $dbname   = $_POST['dbname'];
         $dbprefix = $_POST['dbprefix'];
         repairSessions($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix);
+        break;
+
+    case 'cancel' :
+        echo 'Goodbye...';
         break;
 
     default :

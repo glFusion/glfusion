@@ -750,7 +750,7 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
 */
 function COM_getThemes( $all = false )
 {
-    global $_CONF;
+    global $_CONF, $_PLUGINS;
 
     $index = 1;
 
@@ -771,8 +771,15 @@ function COM_getThemes( $all = false )
             if( is_dir( $_CONF['path_themes'] . $dir) && $dir <> '.' && $dir <> '..' && $dir <> 'CVS' && substr( $dir, 0 , 1 ) <> '.' )
             {
                 clearstatcache();
-                $themes[$index] = $dir;
-                $index++;
+                if ( $dir == 'chameleon' ) {
+                    if (in_array($dir,$_PLUGINS)) {
+                        $themes[$index] = $dir;
+                        $index++;
+                    }
+                } else {
+                    $themes[$index] = $dir;
+                    $index++;
+                }
             }
         }
     }
@@ -4926,7 +4933,8 @@ function COM_getUserDateTimeFormat( $date='' )
 
     // Format the date
 
-    $date = strftime( $dateformat, $stamp );
+//    $date = strftime( $dateformat, $stamp );
+    $date = iconv('ISO-8859-1', 'UTF-8', strftime($dateformat, $stamp));
 
     return array( $date, $stamp );
 }
