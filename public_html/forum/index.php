@@ -160,7 +160,13 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
             $displayrecs++;
 
             $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $P['date']);
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $firstdate = iconv('ISO-8859-1','UTF-8',$firstdate);
+            }
             $lastdate  = strftime($CONF_FORUM['default_Datetime_format'], $P['lastupdated']);
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $lastdate = iconv('ISO-8859-1','UTF-8',$lastdate);
+            }
 
             if ($p['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
@@ -194,9 +200,14 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
 
             $topiclink = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
+            $tdate = strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] );
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $tdate = iconv('ISO-8859-1','UTF-8',$tdate);
+            }
+
             $data_arr[] = array('forum'   => '<a href="'.$_CONF['site_url'].'/forum/index.php?forum='.$P['forum_id'].'">'.$P['forum_name'].'</a>',
                                 'subject' => $topiclink,
-                                'date'    => $link . strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] ) . '</a>'
+                                'date'    => $link . $tdate . '</a>'
                                 );
 
             if ($displayrecs >= 100) {
@@ -484,7 +495,13 @@ if ($op == 'lastx') {
         $displayrecs++;
 
         $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $P['date']);
+        if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+            $firstdate = iconv('ISO-8859-1','UTF-8',$firstdate);
+        }
         $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $P['lastupdated']);
+        if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+            $lastdate = iconv('ISO-8859-1','UTF-8',$lastdate);
+        }
 
         if ($p['uid'] > 1) {
             $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
@@ -518,9 +535,14 @@ if ($op == 'lastx') {
 
         $topiclink = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] .'/forum/viewtopic.php?showtopic=' . $topic_id . '" title="' . htmlspecialchars($P['subject']) . '::' . $topicinfo . '">' . $P['subject'] . '</a>';
 
+        $tdate = strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] );
+        if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+            $tdate = iconv('ISO-8859-1','UTF-8',$tdate);
+        }
+
         $data_arr[] = array('forum'   => $P['forum_name'],
                             'subject' => $topiclink, /*$link . $P['subject'] . '</a>',*/
-                            'date'    => $link . strftime( $CONF_FORUM['default_Datetime_format'], $P['date'] ) . '</a>'
+                            'date'    => $link . $tdate . '</a>'
                             );
 
         if ($displayrecs >= $CONF_FORUM['show_popular_perpage']) {

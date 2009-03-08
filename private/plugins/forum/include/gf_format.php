@@ -1168,16 +1168,22 @@ function gf_makeFilemgmtCatSelect($uid) {
 function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
-    global $CONF_FORUM;
+    global $CONF_FORUM,$_SYSTEM;
 
     $retval = '';
 
     switch ($fieldname) {
         case 'date':
             $retval = strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $retval = iconv('ISO-8859-1','UTF-8',$retval);
+            }
             break;
         case 'lastupdated':
             $retval = strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $retval = iconv('ISO-8859-1','UTF-8',$retval);
+            }
             break;
         case 'subject':
             $testText        = gf_formatTextBlock($A['comment'],'text','text');

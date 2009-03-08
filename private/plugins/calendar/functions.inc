@@ -98,7 +98,7 @@ function plugin_getmenuitems_calendar ()
 */
 function phpblock_calendar( $help='', $title='' )
 {
-    global $_CONF, $_TABLES, $_USER, $_CA_CONF, $LANG_CAL_1, $_DB_dbms;
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $_CA_CONF, $LANG_CAL_1, $_DB_dbms;
 
     $retval = '';
 
@@ -204,12 +204,18 @@ function phpblock_calendar( $help='', $title='' )
                     $startDate = $theEvent['datestart'];
                     $theTime1 = strtotime( $startDate );
                     $dayName1 = strftime( '%A', $theTime1 );
+                    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                        $dayName1 = iconv('ISO-8859-1','UTF-8',$dayName1);
+                    }
                     $abbrDate1 = strftime( $dateonly, $theTime1 );
 
                     // End Date strings...
                     $endDate = $theEvent['dateend'];
                     $theTime2 = strtotime( $endDate );
                     $dayName2 = strftime( '%A', $theTime2 );
+                    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                        $dayName2 = iconv('ISO-8859-1','UTF-8',$dayName2);
+                    }
                     $abbrDate2 = strftime( $dateonly, $theTime2 );
 
                     if ( COM_getCharset() == 'utf-8' ) {

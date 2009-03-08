@@ -964,7 +964,7 @@ function forum_deleteForum($id) {
 
 
 function phpblock_forum_newposts() {
-    global $_CONF, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version;
+    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version;
 
     if ( !COM_checkVersion($pi_version, '2.6') ) {
         return '';
@@ -1088,12 +1088,16 @@ function phpblock_forum_newposts() {
                $block->set_var ('LANG_REPLIES', $LANG_GF01['REPLIES']);
                $block->set_var ('views', $A['views']);
                $block->set_var ('replies', $A['replies']);
-               if ($CONF_FORUM['allow_user_dateformat']) {
-                   $date = COM_getUserDateTimeFormat ($postdate);
-                   $block->set_var ('date', $date[0]);
-               } else {
-                   $block->set_var ('date', strftime($CONF_FORUM['default_Datetime_format'], $postdate));
-               }
+                if ($CONF_FORUM['allow_user_dateformat']) {
+                    $date = COM_getUserDateTimeFormat ($postdate);
+                    $block->set_var ('date', $date[0]);
+                } else {
+                    $tdate = strftime($CONF_FORUM['default_Datetime_format'], $postdate);
+                    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                        $tdate = iconv('ISO-8859-1','UTF-8',$tdate);
+                    }
+                    $block->set_var ('date', $tdate);
+                }
 
                $block->parse ('block_records', 'topicrecord',true);
 
@@ -1132,7 +1136,7 @@ function phpblock_forum_newposts() {
 function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 {
     global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM,
-           $LANG_GF02, $mode, $order,$pi_version, $_GROUPS;
+           $LANG_GF02, $mode, $order,$pi_version, $_GROUPS,$_SYSTEM;
 
     if ( !COM_checkVersion($pi_version, '2.6') ) {
         return '';
@@ -1226,7 +1230,13 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             }
 
             $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $A['date']);
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $first = iconv('ISO-8859-1','UTF-8',$firstdate);
+            }
             $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $A['lastupdated']);
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $lastdate = iconv('ISO-8859-1','UTF-8',$lastdate);
+            }
 
             if ($A['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($A['uid']) . ', ';

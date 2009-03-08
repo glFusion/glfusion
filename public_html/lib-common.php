@@ -4895,7 +4895,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
 
 function COM_getUserDateTimeFormat( $date='' )
 {
-    global $_TABLES, $_USER, $_CONF;
+    global $_TABLES, $_USER, $_CONF, $_SYSTEM;
 
     // Get display format for time
 
@@ -4933,8 +4933,11 @@ function COM_getUserDateTimeFormat( $date='' )
 
     // Format the date
 
-//    $date = strftime( $dateformat, $stamp );
-    $date = iconv('ISO-8859-1', 'UTF-8', strftime($dateformat, $stamp));
+    $date = strftime( $dateformat, $stamp );
+
+    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+        $date = iconv('ISO-8859-1','UTF-8',$date);
+    }
 
     return array( $date, $stamp );
 }

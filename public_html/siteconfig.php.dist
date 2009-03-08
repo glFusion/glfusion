@@ -75,6 +75,15 @@ $_SYSTEM['no_fail_sql']      = false;
 
 $_SYSTEM['no_cache_config']  = false;
 
+// +--------------------------------------------------------------------------+
+// | Swedish Date Hack - enable special hack to return UTF-8 Swedish          |
+// |                     date / time                                          |
+// |                                                                          |
+// | If your site language is Swedish and your site is configured for         |
+// | UTF-8 character set, enable this option to return the correct date/time  |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['swedish_date_hack'] = false;
 
 // +--------------------------------------------------------------------------+
 // | You should not need to change any settings below this line,              |
