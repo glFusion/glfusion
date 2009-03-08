@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Implemented $_SYSTEM['swedish_date_hack'] to resolve PHP's strftime()
+  deficiencies with UTF-8 Swedish characters. (Mark)
 - Fixed user profile display bugs - now properly honor show online,
   record last login, and show fullname configuration settings (Mark)
 - Implemented improved handling of user profile page when user photos are
