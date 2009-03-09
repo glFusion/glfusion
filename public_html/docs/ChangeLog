@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- W3 validation fix for forum centerblock provided by Ironmax (Eric)
+- Updated Docs icon in Command & Control (Eric)
+- Flipped orientation of cart icon in public_html/layout/nouveau/images/ (Eric)
+- Removed nowrap from FileMgmt categories and sub-categories for better layout (Eric)
 - Implemented $_SYSTEM['swedish_date_hack'] to resolve PHP's strftime()
   deficiencies with UTF-8 Swedish characters. (Mark)
 - Ability to change a topic and story owner (Mark)
