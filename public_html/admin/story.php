@@ -260,6 +260,8 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
         }
     }
 
+
+
     $story = new Story();
     if ($mode == 'preview') {
         // Handle Magic GPC Garbage:
@@ -283,7 +285,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
                                 COM_getBlockTemplate ('_msg_block', 'header'));
         $display .= $LANG24[42];
         $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-        COM_accessLog("User {$_USER['username']} tried to illegally access story $sid.");
+        COM_accessLog("User {$_USER['username']} tried to illegally access story $sid. - STORY_PERMISSION_DENIED or STORY_NO_ACCESS_PARAMS - ".$result);
         return $display;
     } elseif( ($result == STORY_EDIT_DENIED) || ($result == STORY_EXISTING_NO_EDIT_PERMISSION) ) {
         $display .= COM_startBlock($LANG_ACCESS['accessdenied'], '',
@@ -291,7 +293,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
         $display .= $LANG24[41];
         $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         $display .= STORY_renderArticle ($A, 'p');
-        COM_accessLog("User {$_USER['username']} tried to illegally edit story $sid.");
+        COM_accessLog("User {$_USER['username']} tried to illegally edit story $sid. - STORY_EDIT_DENIED or STORY_EXISTING_NO_EDIT_PERMISSION");
         return $display;
     } elseif( $result == STORY_INVALID_SID ) {
         if( $mode == 'editsubmission' )
@@ -304,6 +306,17 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
         }
     } elseif( $result == STORY_DUPLICATE_SID) {
         $display .= COM_errorLog ($LANG24[24], 2);
+    }
+
+    $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3);
+    if ( $allowedTopicList == '' )
+    {
+        $display .= COM_startBlock($LANG_ACCESS['accessdenied'], '',
+                                COM_getBlockTemplate ('_msg_block', 'header'));
+        $display .= $LANG24[42];
+        $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+        COM_accessLog("User {$_USER['username']} tried to illegally access story $sid. No allowed topics.");
+        return $display;
     }
 
     // Load HTML templates
@@ -381,7 +394,6 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
             $navbar->add_menuitem($LANG24[85],'showhideEditorDiv("all",5);return false;',true);
         }
 
-//        $navbar->set_selected($LANG24[80]);
         if ($mode == 'preview') {
             $story_templates->set_var ('show_preview', '');
             $story_templates->set_var ('show_htmleditor', 'none');
@@ -426,6 +438,14 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('owner_name', $ownername);
     $story_templates->set_var('owner', $ownername);
     $story_templates->set_var('owner_id', $story->EditElements('owner_id'));
+
+    if ( SEC_inGroup('Story Admin') ) {
+        $story_templates->set_var('owner_dropdown',COM_buildOwnerList('owner_id',$story->EditElements('owner_id')));
+    } else {
+        $ownerInfo = '<input type="hidden" name="owner_id" value="'.$story->editElements('owner_id').'" />'.$ownername;
+        $story_templates->set_var('owner_dropdown',$ownerInfo);
+    }
+
     $story_templates->set_var('lang_group', $LANG_ACCESS['group']);
     $story_templates->set_var('group_dropdown',
                               SEC_getGroupDropdown ($story->EditElements('group_id'), 3));
@@ -533,13 +553,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_optionarchive', $LANG24[61]);
     $story_templates->set_var('lang_optiondelete', $LANG24[62]);
     $story_templates->set_var('lang_title', $LANG_ADMIN['title']);
-//    if ($A['postmode'] == 'plaintext') {
-//        $A['title'] = str_replace ('$', '&#36;', $A['title']);
-//    }
-//
-//    $A['title'] = str_replace('{','&#123;',$A['title']);
-//    $A['title'] = str_replace('}','&#125;',$A['title']);
-//    $A['title'] = str_replace('"','&quot;',$A['title']);
+
     $story_templates->set_var('story_title', $story->EditElements('title'));//stripslashes ($A['title']));
     $story_templates->set_var('lang_topic', $LANG_ADMIN['topic']);
     if(empty($currenttopic) && ($story->EditElements('tid') == ''))
@@ -549,8 +563,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     } else if ($story->EditElements('tid') == '') {
         $story->setTid($currenttopic);
     }
-    $story_templates->set_var ('topic_options',
-                               COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3));
+    $story_templates->set_var ('topic_options',$allowedTopicList);
     $story_templates->set_var('lang_show_topic_icon', $LANG24[56]);
     if ($story->EditElements('show_topic_icon') == 1) {
         $story_templates->set_var('show_topic_icon_checked', 'checked="checked"');

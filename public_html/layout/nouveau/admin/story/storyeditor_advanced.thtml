@@ -260,7 +260,10 @@
             </div>
             <fieldset id="se_perms" style="margin-top:10px; display:none;">
                 <legend>{lang_permissions}</legend>
-                <p><b>{lang_owner}:</b> {owner_name}<input type="hidden" name="owner_id" value="{owner_id}"{xhtml}></p>
+                <p><b>{lang_owner}:</b> {owner_dropdown}
+{#                {owner_name} #}
+{#                <input type="hidden" name="owner_id" value="{owner_id}"{xhtml}> #}
+                </p>
                 <p><b>{lang_group}:</b> {group_dropdown}</p>
                 <p><b>{lang_permissions}:</b></p>
                 <p>{lang_perm_key}</p>

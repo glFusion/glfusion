@@ -131,12 +131,17 @@ function edittopic ($tid = '')
     $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);
     $topic_templates->set_var('lang_accessrights',$LANG_ACCESS['accessrights']);
     $topic_templates->set_var('lang_owner', $LANG_ACCESS['owner']);
+
+
     $ownername = COM_getDisplayName ($A['owner_id']);
     $topic_templates->set_var('owner_username', DB_getItem ($_TABLES['users'],
                               'username', "uid = {$A['owner_id']}"));
     $topic_templates->set_var('owner_name', $ownername);
     $topic_templates->set_var('owner', $ownername);
     $topic_templates->set_var('owner_id', $A['owner_id']);
+
+    $topic_templates->set_var('owner_dropdown',COM_buildOwnerList('owner_id',$A['owner_id']));
+
     $topic_templates->set_var('lang_group', $LANG_ACCESS['group']);
     $topic_templates->set_var('lang_save', $LANG_ADMIN['save']);
     $topic_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);

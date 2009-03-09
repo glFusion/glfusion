@@ -7203,6 +7203,26 @@ function COM_isWritable($path) {
     return true;
 }
 
+function COM_buildOwnerList($fieldName,$owner_id=2)
+{
+    global $_TABLES;
+
+    $result = DB_query("SELECT * FROM {$_TABLES['users']} WHERE status=3");
+    $nRows  = DB_numRows($result);
+
+    $owner_select = '<select name="'.$fieldName.'">';
+    for ($i=0; $i<$nRows;$i++) {
+        $row = DB_fetchArray($result);
+        if ( $row['uid'] == 1 ) {
+            continue;
+        }
+        $owner_select .= '<option value="' . $row['uid'] . '"' . ($owner_id == $row['uid'] ? 'selected="selected"' : '') . '>' . COM_getDisplayName($row['uid']) . '</option>';
+    }
+    $owner_select .= '</select>';
+
+    return $owner_select;
+}
+
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
  *

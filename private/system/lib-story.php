@@ -551,7 +551,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'article_url', $articleUrl );
         $article->set_var( 'recent_post_anchortag', $recent_post_anchortag );
 
-        if( $story->checkAccess() == 3 AND SEC_hasrights( 'story.edit' ) AND ( $index != 'p' ))
+        $access = $story->checkAccess();
+        $storyAccess = min($access, SEC_hasTopicAccess($story->DisplayElements('tid')));
+
+        if( $storyAccess == 3 AND SEC_hasrights( 'story.edit' ) AND ( $index != 'p' ))
         {
             $article->set_var( 'edit_link',
                 COM_createLink($LANG01[4], $_CONF['site_admin_url']

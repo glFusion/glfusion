@@ -216,7 +216,6 @@ function enablearchive(obj) {
                                                         <input type="hidden" name="comments" value="{story_comments}"{xhtml}>
                                                         <input type="hidden" name="trackbacks" value="{story_trackbacks}"{xhtml}>
                                                         <input type="hidden" name="numemails" value="{story_emails}"{xhtml}>
-                                                        <input type="hidden" name="owner_id" value="{owner_id}"{xhtml}>
                                                     </td>
                                                     <td>{lang_comments}:{story_comments}</td>
                                                     <td>{lang_trackbacks}:{story_trackbacks}</td>
@@ -233,7 +232,7 @@ function enablearchive(obj) {
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_owner}:</td>
-                                        <td>{owner_name}</td>
+                                        <td>{owner_dropdown}</td>
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_group}:</td>

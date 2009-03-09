@@ -772,7 +772,11 @@ class Story
                 if ( $taccess < 3 ) {
                     return STORY_EXISTING_NO_EDIT_PERMISSION;
                 }
-                $this->_owner_id = $article['owner_id'];
+                if ( !empty($array['owner_id']) ) {
+                    $this->_owner_id = $array['owner_id'];
+                } else {
+                    $this->_owner_id = $article['owner_id'];
+                }
             }
         }
 
