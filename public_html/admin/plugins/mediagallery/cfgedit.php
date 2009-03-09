@@ -744,6 +744,9 @@ function MG_saveConfig( ) {
         $enable_ffmpeg = 0;
     }
 
+    if (!preg_match('/^.*\/$/', $tmp_path)) {
+        $tmp_path .= '/';
+    }
 
     // sanity check on values...
 
