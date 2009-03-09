@@ -115,13 +115,15 @@ h1.moofx-toggler-down {
 #footer div {
   padding-top:5px;
 }
-#footer div a:link {
-  color:#ccc;
+#footer a {
+  color:#999;
   text-decoration:none;
+  font-weight:bold;
 }
-#footer div a:hover {
+#footer a:hover {
   color:#7ea8c2;
   text-decoration:none;
+  font-weight:bold;
 }
 .toprcorner {
   background:transparent url(top-r-corner.png) 100% 0 no-repeat;
