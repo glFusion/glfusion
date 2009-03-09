@@ -180,7 +180,7 @@ $LANG_INSTALL = array(
     'backup_path'               => '備份檔案路徑',
     'data_path'                 => '資料檔案路徑',
     'language_support'          => '多語言支援',
-    'language_pack'             => '在glFusion完成安裝後，您可以下載並安裝<a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">語言包</a>， 該語言包包含所有支援的語言檔。',
+    'language_pack'             => '在glFusion完成安裝後，您可以下載並安裝<a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">語言包</a>， 該語言包包含所有支援的語言檔。',
 );
 
 // +---------------------------------------------------------------------------+

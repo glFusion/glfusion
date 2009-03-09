@@ -179,7 +179,7 @@ $LANG_INSTALL = array(
     'backup_path'               => 'Ścieżka kopi zapasowej',
     'data_path'                 => 'Ścieżka plików',
     'language_support'          => 'Pliki językowe',
-    'language_pack'             => 'glFusion oparty jest o język Angielski, po instalacji możesz pobrać i zainstalować <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Paczkę Językową (Language Pack)</a> który zawiera obsługiwane pliki językowe.',
+    'language_pack'             => 'glFusion oparty jest o język Angielski, po instalacji możesz pobrać i zainstalować <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paczkę Językową (Language Pack)</a> który zawiera obsługiwane pliki językowe.',
 );
 
 // +---------------------------------------------------------------------------+
