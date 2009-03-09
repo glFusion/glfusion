@@ -6,6 +6,7 @@
   <div class="step floatleft">
     <div class="stepheading">
       <span class="floatright buttons">
+        {recheck}
         <button type="submit" name="prev"  onclick="submitForm( checkenv, '{previousaction}' );">
           <img src="layout/arrow-back.gif" alt=""/>
           {lang_previous}

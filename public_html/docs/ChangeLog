@@ -4,13 +4,14 @@ v1.1.2
 ------
 - Implemented $_SYSTEM['swedish_date_hack'] to resolve PHP's strftime()
   deficiencies with UTF-8 Swedish characters. (Mark)
+- Ability to change a topic and story owner (Mark)
 - Fixed user profile display bugs - now properly honor show online,
   record last login, and show fullname configuration settings (Mark)
 - Implemented improved handling of user profile page when user photos are
   disabled (Mark & Eric)
 - Remove cached story (old version) if SID changes (Mark)
 - Fixed crash on Windows platform when time is calculated as negative (Mark)
-- Added PLG_profileIconDisplay() to allow plugins to display an icon uder
+- Added PLG_profileIconDisplay() to allow plugins to display an icon under
   the profile image (Mark & Eric)
 - Fixed ImageMagick error when rotating images, patch by LeeG (Mark)
 - Added option to force the site email as the From: email address (Mark)
@@ -161,6 +162,8 @@ Links Plugin
 
 Media Gallery Plugin
 --------------------
+- Added a check to ensure the trailing backslash is placed on the temp
+  directory path (Mark)
 - Fixed issue where enrolling in Member Albums would cause SQL error (Mark)
 - Fixed bug with generating unique slideshow ids (Mark)
 - Improved error trapping for permission issues on upload (Mark)

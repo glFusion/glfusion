@@ -837,7 +837,14 @@ function INST_checkEnvironment($dbconfig_path='')
         $button = 'Recheck';
         $action = 'checkenvironment';
         $T->set_var('error_message',$LANG_INSTALL['correct_perms']);
+
+        $recheck  = '<button type="submit" name="submit" onclick="submitForm( checkenv, \'checkenvironment\' );">' . LB;
+        $recheck .= 'Recheck' . LB;
+        $recheck .= '<img src="layout/arrow-recheck.gif" alt=""/>' . LB;
+        $recheck .= '</button>' . LB;
+
     } else {
+        $recheck = '';
         $T->set_var('location',$LANG_INSTALL['directory_permissions']);
         $T->set_var('status', 1 ? '<span class="yes">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
         $classCounter++;
@@ -858,10 +865,20 @@ function INST_checkEnvironment($dbconfig_path='')
             $previousaction = 'pathsetting';
         }
     }
+    $button = $LANG_INSTALL['next'];
+
+    if ( $_GLFUSION['method'] == 'upgrade' ) {
+        $action = 'doupgrade';
+        $previousaction = '';
+    } else {
+        $action = 'getsiteinformation';
+        $previousaction = 'pathsetting';
+    }
     $T->set_var(array(
         'previousaction'    => $previousaction,
         'nextaction'        => $action,
         'button'            => $button,
+        'recheck'           => $recheck,
         'back_to_top'       => $LANG_INSTALL['back_to_top'],
         'lang_previous'     => $LANG_INSTALL['previous'],
         'lang_host_env'     => $LANG_INSTALL['hosting_env'],
