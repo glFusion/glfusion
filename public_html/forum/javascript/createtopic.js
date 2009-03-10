@@ -22,7 +22,7 @@ var is_mac = (clientPC.indexOf("mac")!=-1);
 
 // Define the bbCode tags
 bbcode = new Array();
-bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[olist]','[/olist]','[img]','[/img]','[url]','[/url]');
+bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[olist]','[/olist]','[img]','[/img]','[url]','[/url]','[file]','[/file]');
 imageTag = false;
 
 // Shows the help messages in the helpline window
@@ -229,7 +229,7 @@ function AddRowsToTable() {
 
      var iteration = lastRow;
      var row = tbl.insertRow(lastRow);
-     
+
      var cellRight = row.insertCell(0);
      var el = document.createElement('input');
      el.setAttribute('type', 'FILE');

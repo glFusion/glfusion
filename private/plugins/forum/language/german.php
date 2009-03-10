@@ -290,7 +290,8 @@ $LANG_GF01 = array(
     'a_help' => 'Alle offenen BBcode-Tags schließen',
     's_help' => 'Schriftfarbe: [color=red]text[/color]  Tipp: Du kannst auch color=#FF0000 benutzen',
     'f_help' => 'Schriftgröße: [size=x-small]small text[/size]',
-    'h_help' => 'Ausführliche Hilfe'
+    'h_help' => 'Ausführliche Hilfe',
+    't_help' => 'Use [file]#[/file] to embed an attached image in the post',
 );
 
 $LANG_GF02 = array(
@@ -917,15 +918,16 @@ $LANG_confignames['forum'] = array(
     'uploadpath' => 'Upload Path',
     'downloadURL' => 'Download URL',
     'fileperms' => 'File Permissions',
-    'max_uploadimage_width' => 'Max Image Width',
-    'max_uploadimage_height' => 'Max Image Height',
-    'max_uploadimage_size' => 'Max Image Size',
-    'inlineimage_width' => 'Inline Image Width',
-    'inlineimage_height' => 'Inline Image Height',
+    'max_uploadimage_width' => 'Max Image Width (px)',
+    'max_uploadimage_height' => 'Max Image Height (px)',
+    'inlineimage_width' => 'Inline Image Width (px)',
+    'inlineimage_height' => 'Inline Image Height (px)',
     'allowablefiletypes' => 'Allowable File Types',
     'inlineimageypes' => 'Allows Image Types',
     'showtopic_review_order' => 'Order to Display Old Topics When Replying',
-    'allow_memberlist' => 'Allow Site Member List'
+    'allow_memberlist' => 'Allow Site Member List',
+    'enable_fm_integration' => 'Enable FileMgmt Integration for attachments',
+    'max_uploadfile_size' => 'Max Size for Attachments (bytes)',
 );
 
 $LANG_configsubgroups['forum'] = array(

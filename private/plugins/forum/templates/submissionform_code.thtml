@@ -10,6 +10,9 @@
         {hide_imgbutton_begin}
         <input type="button" class="button" accesskey="p" name="addbbcode14" value="Img" style="width: 40px"  onclick="bbstyle(14)" onmouseover="helpline('p')" {xhtml}>
         {hide_imgbutton_end}
+        {hide_attbutton_begin}
+        <input type="button" class="button" accesskey="t" name="addbbcode18"  value="Attachment" style="width: 65px"  onclick="bbstyle(18)" onmouseover="helpline('t')" {xhtml}>
+        {hide_attbutton_end}
         <input type="button" class="button" accesskey="w" name="addbbcode16" value="URL" style="text-decoration: underline; width: 40px" onclick="bbstyle(16)" onmouseover="helpline('w')" {xhtml}>
         <input type="button" class="button" name="help" value="Help?" style="text-decoration: underline; width: 40px" onclick="poptastic('{site_url}/forum/bbcode.html');" onmouseover="helpline('h')" {xhtml}>
         <br{xhtml}><br{xhtml}>

@@ -654,6 +654,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $topicnavbar->set_var ('LANG_shelp', $LANG_GF01['s_help']);
     $topicnavbar->set_var ('LANG_fhelp', $LANG_GF01['f_help']);
     $topicnavbar->set_var ('LANG_hhelp', $LANG_GF01['h_help']);
+    $topicnavbar->set_var ('LANG_thelp', $LANG_GF01['t_help']);
 
     if ( !isset($_USER['uid']) ) {
         $_USER['uid'] = 1;
@@ -860,6 +861,24 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     } else {
         $submissionform_code->set_var ('hide_imgbutton_begin','<!--');
         $submissionform_code->set_var ('hide_imgbutton_end','-->');
+    }
+
+    if ($method == 'newtopic') {
+        if (SEC_inGroup($newtopic['use_attachment_grpid']) && $CONF_FORUM['maxattachments'] > 0) {
+            $submissionform_code->set_var('hide_attbutton_begin','');
+            $submissionform_code->set_var('hide_attbutton_end','');
+        } else {
+            $submissionform_code->set_var('hide_attbutton_begin','<!--');
+            $submissionform_code->set_var('hide_attbutton_end','-->');
+        }
+    } else {
+        if (SEC_inGroup($newtopic['use_attachment_grpid']) && $CONF_FORUM['maxattachments'] > 0) {
+            $submissionform_code->set_var('hide_attbutton_begin','');
+            $submissionform_code->set_var('hide_attbutton_end','');
+        } else {
+            $submissionform_code->set_var('hide_attbutton_begin','<!--');
+            $submissionform_code->set_var('hide_attbutton_end','-->');
+        }
     }
 
     $submissionform_code->parse ('output', 'submissionform_code');

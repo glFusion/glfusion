@@ -399,7 +399,7 @@ function plugin_initconfig_forum()
                 0, 1, 0, 50, true, 'forum');
         $c->add('max_uploadimage_height', $_FF_DEFAULT['max_uploadimage_height'], 'text',
                 0, 1, 0, 60, true, 'forum');
-//FIXME, validate this setting!
+
         $c->add('max_uploadfile_size', $_FF_DEFAULT['max_uploadfile_size'], 'text',
                 0, 1, 0, 70, true, 'forum');
         $c->add('inlineimage_width', $_FF_DEFAULT['inlineimage_width'], 'text',
@@ -411,7 +411,7 @@ function plugin_initconfig_forum()
         $c->add('inlineimageypes',$_FF_DEFAULT['inlineimageypes'], '*text',
                 0,1,NULL,110,true,'forum');
         $c->add('enable_fm_integration', $_FF_DEFAULT['enable_fm_integration'], 'select',
-                0,1,NULL,120, true, 'forum');
+                0,1,0,120, true, 'forum');
 
         $c->add('ff_topic_post_settings', NULL, 'fieldset', 0, 2, NULL, 0, true,'forum');
 
