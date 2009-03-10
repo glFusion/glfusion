@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Made Google style search results title larger for improved readability (Eric)
 - W3 validation fix for forum centerblock provided by Ironmax (Eric)
 - Updated Docs icon in Command & Control (Eric)
 - Flipped orientation of cart icon in public_html/layout/nouveau/images/ (Eric)
