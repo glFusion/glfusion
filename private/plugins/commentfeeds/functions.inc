@@ -82,7 +82,7 @@ function plugin_getfeednames_commentfeeds()
 
     $feeds = array ();
 
-    $result = DB_query ("SELECT tid, topic FROM {$_TABLES['topics']} ".COM_getPermSQL('AND')." ORDER BY topic ASC");
+    $result = DB_query ("SELECT tid, topic FROM {$_TABLES['topics']} ".COM_getPermSQL('WHERE')." ORDER BY topic ASC");
     $num = DB_numRows ($result);
 
     if ($num > 0) {
