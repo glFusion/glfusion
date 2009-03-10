@@ -522,8 +522,8 @@ class Search {
         else if ($style == 'google')
         {
             $obj->setStyle('inline');
-            $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<strong>%d.</strong>');
-            $obj->setField($LANG09[16], 'title',       true,       true,  '%s<br'.XHTML.'>');
+            $obj->setField('',          ROW_NUMBER,    $show_num,  false, '<span style="font-size:larger; font-weight:bold;">%d.');
+            $obj->setField($LANG09[16], 'title',       true,       true,  '%s</span><br'.XHTML.'>');
             $obj->setField('',          'description', true,       false, '%s<br'.XHTML.'>');
             $obj->setField('',          '_html',       true,       false, '<span style="color:green;">');
             $obj->setField($LANG09[18], 'uid',         $show_user, true,  $LANG01[104].' %s ');
