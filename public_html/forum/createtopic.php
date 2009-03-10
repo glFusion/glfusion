@@ -872,7 +872,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             $submissionform_code->set_var('hide_attbutton_end','-->');
         }
     } else {
-        if (SEC_inGroup($newtopic['use_attachment_grpid']) && $CONF_FORUM['maxattachments'] > 0) {
+        if (SEC_inGroup($edittopic['use_attachment_grpid']) && $CONF_FORUM['maxattachments'] > 0) {
             $submissionform_code->set_var('hide_attbutton_begin','');
             $submissionform_code->set_var('hide_attbutton_end','');
         } else {
