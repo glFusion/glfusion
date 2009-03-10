@@ -528,7 +528,7 @@ function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type
 
     $query = trim(addslashes($query));
 
-    $sql   = "SELECT id,name,forum,date,subject as title,comment as description,views AS hits,uid, CONCAT('/forum/viewtopic.php?showtopic=',id,'&topic=',id,'#',id) AS url ";
+    $sql   = "SELECT id,name,forum,date,subject as title,comment as description,views AS hits,uid, CONCAT('/forum/viewtopic.php?showtopic=',id,'&amp;topic=',id,'#',id) AS url ";
     $sql  .= "FROM {$_TABLES['gf_topic']} t ";
     $sql  .= "LEFT JOIN {$_TABLES['gf_forums']} f ON t.forum=f.forum_id ";
     $sql  .= forum_buildSearchAccessSql('WHERE');

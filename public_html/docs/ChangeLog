@@ -143,6 +143,7 @@ FileMgmt Plugin
 
 Forum Plugin
 ------------
+- Fixed HTML validation error with Forum search results (Mark)
 - Added [file]#[/file] button and help information (Mark)
 - Several fixes dealing with busy / quiet forum icons (Mark)
 - Reworked New Posts and added to navigation menu (Mark)
