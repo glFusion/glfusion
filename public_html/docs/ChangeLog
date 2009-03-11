@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Added ability for path to speck.gif to be set on install (Eric)
 - Fixed broken reference to images/speck.gif in gl_moorotator-block.js (Eric)
 - Fixed stripslashes error where fullname was not properly stripped on
   user edit (Mark)
