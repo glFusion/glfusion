@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Fix issue with creating icons and block help links properly with SSL sites
+  (Mark)
 - Added ability for path to speck.gif to be set on install (Eric)
 - Fixed broken reference to images/speck.gif in gl_moorotator-block.js (Eric)
 - Fixed stripslashes error where fullname was not properly stripped on
@@ -218,6 +220,7 @@ Site Tailor Plugin
 
 StaticPages Plugin
 ------------------
+- By default, check Enable Search box (Mark)
 - Improved handling of disabled plugins when there is a menu item that
   points to it. (Mark)
 - Fixed bug where sub-menus did not display the correct items in the
