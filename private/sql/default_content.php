@@ -469,10 +469,11 @@ $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, 
 <script type=\"text/javascript\">
 	window.addEvent(\'domready\', function() {
 		var rotator = new gl_mooRotator_block(\'gl_moorotator_block\', {
-			controls: false,  //if true, make sure to specify the absolute path to blankimage var in gl_moorotator-block.js above.
+			controls: false,  //if true, make sure to specify the absolute URL to blankimage var in gl_moorotator-block.js above.
 			delay: 4000,
 			duration: 800,
-			autoplay: true
+			autoplay: true,
+			blankimage: \'xxxSITEURLxxx/images/speck.gif\'
 		});
 	});
 </script>
