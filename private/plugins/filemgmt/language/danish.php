@@ -165,6 +165,7 @@ $LANG_confignames['filemgmt'] = array(
     'showwhatsnewcomments'  => 'Vis Kommentar i WhatsNew blok?',
     'numcategoriesperrow'   => 'Kategorier pr række',
     'numsubcategories2show' => 'Under Kategorier pr række',
+    'outside_webroot'       => 'Store Files Outside Web Root',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Main Settings'
