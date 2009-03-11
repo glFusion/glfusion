@@ -163,6 +163,8 @@ function glfusion_112()
     $c->add('story_submit_by_perm_only',0,'select',4,20,0,780,TRUE);
     $c->add('use_from_site_mail',0,'select',0,1,0,150,TRUE);
     $c->del('pdf_enabled','Core');
+    $c->del('show_popular_perpage','forum');
+    $c->del('FileStoreURL','filemgmt');
 }
 
 
