@@ -48,6 +48,8 @@ function filemgmt_upgrade()
     include $_CONF['path'].'/plugins/filemgmt/config.php';
     include $_CONF['path'].'/plugins/filemgmt/filemgmt.php';
 
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+
     $cur_version = DB_getItem($_TABLES['plugins'],'pi_version', "pi_name='filemgmt'");
 
     switch ( $cur_version ) {
@@ -78,7 +80,8 @@ function filemgmt_upgrade()
             require_once $_CONF['path'] . 'plugins/filemgmt/install_defaults.php';
             plugin_initconfig_filemgmt();
         case '1.7.0.fusion' :
-
+            $c = config::get_instance();
+            $c->del('FileStoreURL','filemgmt');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$CONF_FM['pi_version']."',pi_gl_version = '".$CONF_FM['gl_version']."' WHERE pi_name = 'filemgmt'");
             return true;
