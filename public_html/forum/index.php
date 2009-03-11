@@ -545,7 +545,7 @@ if ($op == 'lastx') {
                             'date'    => $link . $tdate . '</a>'
                             );
 
-        if ($displayrecs >= $CONF_FORUM['show_popular_perpage']) {
+        if ($displayrecs >= $CONF_FORUM['show_last_post_count']) {
             break;
         }
     }
