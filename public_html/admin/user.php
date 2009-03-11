@@ -578,6 +578,7 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
             }
 
             $curphoto = addslashes ($curphoto);
+            $username = addslashes ($username);
             DB_query("UPDATE {$_TABLES['users']} SET username = '$username', fullname = '$fullname', passwd = '$passwd2', email = '$email', homepage = '$homepage', photo = '$curphoto', status='$userstatus' WHERE uid = $uid");
             if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userSave'))) {
                 CUSTOM_userSave($uid);
@@ -1212,7 +1213,7 @@ if (isset ($_POST['passwd']) && isset ($_POST['passwd_conf']) &&
         COM_accessLog("User {$_USER['username']} tried to illegally delete user $uid and failed CSRF checks.");
         echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
     }
-} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) { // save
+} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
     $delphoto = '';
     if (isset ($_POST['delete_photo'])) {
         $delphoto = $_POST['delete_photo'];
@@ -1224,9 +1225,10 @@ if (isset ($_POST['passwd']) && isset ($_POST['passwd_conf']) &&
         $_POST['userstatus'] = USER_ACCOUNT_ACTIVE;
     }
     $display = saveusers (COM_applyFilter ($_POST['uid'], true),
-            $_POST['username'], $_POST['fullname'],
-            $_POST['passwd'], $_POST['passwd_conf'], $_POST['email'],
-            $_POST['regdate'], $_POST['homepage'],
+            COM_stripslashes($_POST['username']), COM_stripslashes($_POST['fullname']),
+            COM_stripslashes($_POST['passwd']), COM_stripslashes($_POST['passwd_conf']),
+            COM_stripslashes($_POST['email']),
+            $_POST['regdate'], COM_stripSlashes($_POST['homepage']),
             $_POST['gl_groups'],
             $delphoto, $_POST['userstatus'], $_POST['oldstatus']);
     if (!empty($display)) {
