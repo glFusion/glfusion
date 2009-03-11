@@ -112,7 +112,7 @@ function mydownloads() {
 }
 
 function listNewDownloads(){
-    global $_CONF,$_TABLES,$_FM_TABLES,$myts,$eh,$mytree,$filemgmt_FileSnapURL,$LANG_FM02;
+    global $_CONF,$_FM_CONF, $_TABLES,$_FM_TABLES,$myts,$eh,$mytree,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$LANG_FM02;
 
     // List downloads waiting for validation
     $sql = "SELECT lid, cid, title, url, homepage, version, size, logourl, submitter, comments, platform ";
@@ -138,7 +138,7 @@ function listNewDownloads(){
             $size = $myts->makeTboxData4Edit($size);
             $description = $myts->makeTareaData4Edit($description);
             $tmpfilenames = explode(";",$tmpnames);
-//            $tempfileurl = $filemgmt_FileStoreURL . 'tmp/' .$tmpfilenames[0];
+            $tempfileurl = $filemgmt_FileStoreURL . 'tmp/' .$tmpfilenames[0];
             $tempfilepath = $filemgmt_FileStore . 'tmp/' .$tmpfilenames[0];
             if (isset($tmpfilenames[1]) and $tmpfilenames[1] != '') {
                 $tempsnapurl = $filemgmt_FileSnapURL . 'tmp/' .$tmpfilenames[1];
@@ -190,7 +190,12 @@ function listNewDownloads(){
             $display .= '<input type="hidden" name="lid" value="'.$lid.'"' . XHTML . '>';
             $display .= '<span style="padding-left:10px;">';
             $display .= '<input type="submit" value="'._MD_APPROVE.'" onclick=\'this.form.op.value="approve"\'' . XHTML . '></span>';
-            $display .= '</td><td style="padding:10px;">Download to preview:&nbsp;<a href="' .  $_CONF['site_url'].'/filemgmt/visit.php?tid='.$lid  . '">tempfile</a></td></tr>';
+            if ( $_FM_CONF['outside_webroot'] == 1 ) {
+                $display .= '</td><td style="padding:10px;">Download to preview:&nbsp;<a href="' .  $_CONF['site_url'].'/filemgmt/visit.php?tid='.$lid  . '">tempfile</a></td></tr>';
+            } else {
+                $display .= '</td><td style="padding:10px;">Download to preview:&nbsp;<a href="' . $tempfileurl . '">tempfile</a></td></tr>';
+            }
+
             if ($numrows > 1 and $i < $numrows ) {
                $i++;
             }
@@ -1007,7 +1012,7 @@ function addCat() {
 }
 
 function addDownload() {
-    global $_CONF,$_USER,$_FM_TABLES,$filemgmt_FileSnapURL,$filemgmt_FileStore,$filemgmt_SnapStore;
+    global $_CONF,$_USER,$_FM_TABLES,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$filemgmt_FileStore,$filemgmt_SnapStore;
     global $myts,$eh;
 
 //    $filename = $myts->makeTboxData4Save($_FILES['newfile']['name']);

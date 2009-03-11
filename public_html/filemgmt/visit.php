@@ -43,6 +43,8 @@ require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 
+USES_lib_image();
+
 if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
     COM_errorLOG("Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}, Remote address is: {$_SERVER['REMOTE_ADDR']}");
     redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOACCESS);
@@ -93,26 +95,33 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         COM_accessLOG("Visit.php => Download File:{$url}, User ID is:{$uid}, Remote address is: {$_SERVER['REMOTE_ADDR']}");
         $pos = MBYTE_strpos( $url, ':' );
         if( $pos === false ) {
-
-            if ( $tempFile == 1 ) {
-                $fullurl = $tempfilepath;
-            } else {
-                $fullurl = $filemgmt_FileStore . $url;
-            }
-
-            if ( file_exists($fullurl) ) {
-                if ($fd = fopen ($fullurl, "rb")) {
-                    header("Content-type: application/octet-stream");
-                    header("Content-Disposition: inline; filename=\"{$url}\"");
-                    header('Expires: 0');
-                    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-                    header('Pragma: public');
-                    fpassthru($fd);
-                    fclose ($fd);
-                    exit;
+            if ( $_FM_CONF['outside_webroot'] == 1 ) {
+                if ( $tempFile == 1 ) {
+                    $fullurl = $tempfilepath;
                 } else {
-                    COM_errorLog("FileMgmt: Error - Unable to download selected file: ". $url);
+                    $fullurl = $filemgmt_FileStore . $url;
                 }
+                if ( file_exists($fullurl) ) {
+                    if ($fd = fopen ($fullurl, "rb")) {
+                        header('Content-Type: application/octet-stream; name="'.$url.'"');
+                        header('Content-Disposition: attachment; filename="'.$url.'"');
+                        header('Accept-Ranges: bytes');
+                        header('Pragma: no-cache');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                        header('Content-transfer-encoding: binary');
+                        fpassthru($fd);
+                        flush();
+                    } else {
+                        COM_errorLog("FileMgmt: Error - Unable to download selected file: ". $url);
+                    }
+                }
+            } else {
+                $fullurl = $filemgmt_FileStoreURL .$url;
+                $fullurl = stripslashes($fullurl);
+                header("Location: $fullurl");
+                echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=".$fullurl."\"></meta></head><body></body></html>";
+                exit();
             }
         } else {
             $protocol = MBYTE_substr( $url, 0, $pos + 1 );
@@ -127,7 +136,6 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                 }
             }
             if( !$found_it ) {
-//                $fullurl =  $filemgmt_FileStoreURL.$url;
                 exit;
             } else {
                 $fullurl = $url;

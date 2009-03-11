@@ -81,7 +81,7 @@ function filemgmt_upgrade()
             plugin_initconfig_filemgmt();
         case '1.7.0.fusion' :
             $c = config::get_instance();
-            $c->del('FileStoreURL','filemgmt');
+            $c->add('outside_webroot', 0, 'select', 0, 2, 0, 100, true, 'filemgmt');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$CONF_FM['pi_version']."',pi_gl_version = '".$CONF_FM['gl_version']."' WHERE pi_name = 'filemgmt'");
             return true;

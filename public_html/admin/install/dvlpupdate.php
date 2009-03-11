@@ -164,7 +164,9 @@ function glfusion_112()
     $c->add('use_from_site_mail',0,'select',0,1,0,150,TRUE);
     $c->del('pdf_enabled','Core');
     $c->del('show_popular_perpage','forum');
-    $c->del('FileStoreURL','filemgmt');
+    $_FM_DEFAULT['FileStoreURL']     = $_CONF['site_url']  . '/filemgmt_data/files/';
+    $c->add('FileStoreURL', $_FM_DEFAULT['FileStoreURL'], 'text',0, 2, 0, 70, true, 'filemgmt');
+    $c->add('outside_webroot', 0, 'select', 0, 2, 0, 90, true, 'filemgmt');
 }
 
 

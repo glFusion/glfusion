@@ -77,7 +77,7 @@ if (!isset($_FM_CONF['perpage'])) {
     $filemgmt_FileStore         = $_FM_CONF['FileStore'];
     $filemgmt_SnapStore         = $_FM_CONF['SnapStore'];
     $filemgmt_SnapCat           = $_FM_CONF['SnapCat'];
-//    $filemgmt_FileStoreURL      = $_FM_CONF['FileStoreURL'];
+    $filemgmt_FileStoreURL      = $_FM_CONF['FileStoreURL'];
     $filemgmt_FileSnapURL       = $_FM_CONF['FileSnapURL'];
     $filemgmt_SnapCatURL        = $_FM_CONF['SnapCatURL'];
     $filemgmtWhatsNewPeriodDays = $_FM_CONF['whatsnewperioddays'];
@@ -413,7 +413,7 @@ function plugin_searchtypes_filemgmt()
 */
 function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
 {
-    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF;
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL;
 
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
         return '';

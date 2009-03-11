@@ -99,7 +99,7 @@ if ( isset($filemgmt_FileStore) && $filemgmt_FileStore != '' && (strpos($filemgm
     $_FM_CONF['FileStore']        = $filemgmt_FileStore;
     $_FM_CONF['SnapStore']        = $filemgmt_SnapStore;
     $_FM_CONF['SnapCat']          = $filemgmt_SnapCat;
-//    $_FM_CONF['FileStoreURL']     = $filemgmt_FileStoreURL;
+    $_FM_CONF['FileStoreURL']     = $filemgmt_FileStoreURL;
     $_FM_CONF['FileSnapURL']      = $filemgmt_FileSnapURL;
     $_FM_CONF['SnapCatURL']       = $filemgmt_SnapCatURL;
 }
@@ -176,12 +176,13 @@ function plugin_initconfig_filemgmt()
                 0, 2, 0, 50, true, 'filemgmt');
         $c->add('SnapCat', $_FM_DEFAULT['SnapCat'], 'text',
                 0, 2, 0, 60, true, 'filemgmt');
-//        $c->add('FileStoreURL', $_FM_DEFAULT['FileStoreURL'], 'text',
-//                0, 2, 0, 70, true, 'filemgmt');
+        $c->add('FileStoreURL', $_FM_DEFAULT['FileStoreURL'], 'text',
+                0, 2, 0, 70, true, 'filemgmt');
         $c->add('FileSnapURL', $_FM_DEFAULT['FileSnapURL'], 'text',
                 0, 2, 0, 80, true, 'filemgmt');
         $c->add('SnapCatURL', $_FM_DEFAULT['SnapCatURL'], 'text',
                 0, 2, 0, 90, true, 'filemgmt');
+        $c->add('outside_webroot', 0, 'select', 0, 2, 0, 100, true, 'filemgmt');
     }
 
     return true;
