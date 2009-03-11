@@ -459,6 +459,7 @@ function staticpageeditor ($sp_id, $mode = '', $editor = '')
         $A['sp_old_id'] = '';
         $A['commentcode'] = $_CONF['comment_code'];
         $A['sp_where'] = 1; // default new pages to "top of page"
+        $A['sp_search'] = 1;
     } elseif (!empty ($sp_id) && $mode == 'clone') {
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 3));
         $A = DB_fetchArray ($result);
