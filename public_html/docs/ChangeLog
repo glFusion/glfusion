@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Fixed stripslashes error where fullname was not properly stripped on
+  user edit (Mark)
+- Fixed SQL error when admin saves user, loginname was not properly escaped
+  and would cause SQL error if it contained an apostrophe (Mark)
 - Made Google style search results title larger for improved readability (Eric)
 - W3 validation fix for forum centerblock provided by Ironmax (Eric)
 - Updated Docs icon in Command & Control (Eric)
@@ -135,6 +139,8 @@ CAPTCHA Plugin
 
 FileMgmt Plugin
 ---------------
+- Added ability to store files outside of the web root (Mark)
+- Removed unused configuration option fileStoreURL (Mark)
 - Fixed bug where main index file list did not filter by group
   permissions (Mark)
 - Enhanced what's new lists (mark)
@@ -143,6 +149,7 @@ FileMgmt Plugin
 
 Forum Plugin
 ------------
+- Removed unused configuration option - show_popular_perpage (Mark)
 - Fixed HTML validation error with Forum search results (Mark)
 - Added [file]#[/file] button and help information (Mark)
 - Several fixes dealing with busy / quiet forum icons (Mark)
