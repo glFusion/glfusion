@@ -125,6 +125,7 @@ function ST_saveLogo() {
             } else {
                 $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
                 $rc = move_uploaded_file($file['tmp_name'], $_CONF['path_html'] . 'images/' . $newlogoname);
+                @chmod($_CONF['path_html'] . 'images/' . $newlogoname,0644);
                 if ( $rc ) {
                     @unlink($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
                     $logo_name = $newlogoname;
