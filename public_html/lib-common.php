@@ -1705,7 +1705,7 @@ function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml' 
         $helpimg = $_CONF['layout_url'] . '/images/button_help.' . $_IMAGE_TYPE;
         $help_content = '<img src="' . $helpimg. '" alt="?"' . XHTML . '>';
         $help_attr = array('class'=>'blocktitle');
-        if( !stristr( $helpfile, 'http://' ))
+        if( !stristr( $helpfile, 'http://' ) && !stristr($helpfile,'https://') )
         {
             $help_url = $_CONF['site_url'] . "/help/$helpfile";
         }
@@ -6438,7 +6438,7 @@ function COM_createImage($url, $alt = "", $attr = array())
 
     $retval = '';
 
-    if (strpos($url, 'http://') !== 0) {
+    if (strpos($url, 'http://') !== 0 && strpos($url,'https://') !== 0 ) {
         $url = $_CONF['layout_url'] . $url;
     }
     $attr_str = 'src="' . $url . '"';
