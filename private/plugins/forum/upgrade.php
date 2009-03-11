@@ -50,6 +50,8 @@ require_once $_CONF['path'].'plugins/forum/forum.php';
 function forum_upgrade() {
     global $_CONF, $_TABLES, $CONF_FORUM, $_FF_CONF;
 
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+
     $curversion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name = 'forum'");
 
     switch ($curversion) {
@@ -88,6 +90,7 @@ function forum_upgrade() {
                     0,1,0,120, true, 'forum');
             $c->add('allow_memberlist', 0, 'select',
                     0, 0, 0, 25, true, 'forum');
+            $c->del('show_popular_perpage','forum');
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.1',pi_gl_version='1.1.2' WHERE pi_name = 'forum'");
         default :
             DB_query("ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id",1);

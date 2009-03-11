@@ -74,7 +74,7 @@ if (!isset($CONF_FORUM['registration_required'])) {
     $CONF_FORUM['use_glfilter'] = 1; // always use the filter...
 
     // How many messages to show on the Most Popular page
-    $CONF_FORUM['popular_limit'] = '20';
+    $CONF_FORUM['popular_limit'] = 20;
     // How many lines to show on one page in the search results
     $CONF_FORUM['show_search_perpage'] = 15;
     // How many users to show on one page in the memberlist results

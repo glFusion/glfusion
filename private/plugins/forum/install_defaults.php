@@ -112,7 +112,6 @@ $_FF_DEFAULT['default_Topic_Datetime_format'] = '%B %d %Y %H:%M %p';
 $_FF_DEFAULT['contentinfo_numchars']    = 256;
 $_FF_DEFAULT['linkinfo_width']          = 40;
 $_FF_DEFAULT['quoteformat'] = "[QUOTE][u]Quote by: %s[/u][p]%s[/p][/QUOTE]";
-$_FF_DEFAULT['show_popular_perpage']    = '20';
 $_FF_DEFAULT['show_last_post_count']    = '20';
 $_FF_DEFAULT['use_glmenu']              = false;
 $_FF_DEFAULT['grouptags'] = array(
@@ -378,8 +377,6 @@ function plugin_initconfig_forum()
                 0, 0, 0, 230, true, 'forum');
         $c->add('quoteformat', $_FF_DEFAULT['quoteformat'], 'text',
                 0, 0, 0, 240, true, 'forum');
-        $c->add('show_popular_perpage', $_FF_DEFAULT['show_popular_perpage'], 'text',
-                0, 0, 0, 250, true, 'forum');
         $c->add('show_last_post_count', $_FF_DEFAULT['show_last_post_count'], 'text',
                 0, 0, 0, 260, true, 'forum');
         $c->add('grouptags',$_FF_DEFAULT['grouptags'],'*text',
