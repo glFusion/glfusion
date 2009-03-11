@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.2
 ------
+- Fixed broken reference to images/speck.gif in gl_moorotator-block.js (Eric)
 - Fixed stripslashes error where fullname was not properly stripped on
   user edit (Mark)
 - Fixed SQL error when admin saves user, loginname was not properly escaped
