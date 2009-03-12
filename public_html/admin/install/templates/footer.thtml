@@ -1,0 +1,10 @@
+    </div>
+    <div id="footer">
+      <div class="bottomrcorner">
+        <div class="bottomlcorner"></div>
+      </div>
+      <div>{copyright}</div>
+    </div>
+  </div>
+</body>
+</html>

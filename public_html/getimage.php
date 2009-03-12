@@ -41,13 +41,15 @@
 */
 
 require_once 'lib-common.php';
+
 require_once $_CONF['path_system'] . 'classes/downloader.class.php';
 
-$display = '';
-
 $downloader = new downloader();
+
 $downloader->setLogFile($_CONF['path_log'] . 'error.log');
+
 $downloader->setLogging(true);
+
 $downloader->setAllowedExtensions(array('gif' => 'image/gif',
                                         'jpg' => 'image/jpeg',
                                         'jpeg' => 'image/jpeg',
@@ -55,10 +57,17 @@ $downloader->setAllowedExtensions(array('gif' => 'image/gif',
                                        )
                                  );
 
-$mode  = $inputHandler->getVar('strict','mode','get','');
-$image = $inputHandler->getVar('strict','image','get','');
-
+$mode = '';
+if (isset($_GET['mode'])) {
+    $mode = $_GET['mode'];
+}
+$image = '';
+if (isset($_GET['image'])) {
+    $image = COM_applyFilter ($_GET['image']);
+}
 if (strstr($image, '..')) {
+    // Can you believe this, some jackass tried to relative pathing to access
+    // files they shouldn't have access to?
     COM_accessLog('Someone tried to illegally access files using getimage.php');
     exit;
 }
@@ -91,10 +100,10 @@ if (is_file($downloader->getPath() . $image)) {
     $display = COM_errorLog('File, ' . $image . ', was not found in getimage.php');
 
     if ($mode == 'show') {
-        $pageHandle->addContent($display);
-        $pageHandle->displayPage();
+        echo COM_siteHeader ('menu') . $display . COM_siteFooter ();
     } else {
         header ('HTTP/1.0 404 Not Found');
     }
 }
+
 ?>

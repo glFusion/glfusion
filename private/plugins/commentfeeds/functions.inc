@@ -47,7 +47,8 @@ if (!defined ('GVERSION')) {
  *
  */
 
-require_once ($_CONF['path'] . 'plugins/commentfeeds/config.php');
+require_once $_CONF['path'].'plugins/commentfeeds/config.php';
+require_once $_CONF['path'].'plugins/commentfeeds/commentfeeds.php';
 
 // +---------------------------------------------------------------------------+
 // | glFusion Plugin API Implementation                                        |
@@ -65,7 +66,7 @@ function plugin_chkVersion_commentfeeds ()
 {
     global $_CF_CONF;
 
-    return $_CF_CONF['version'];
+    return $_CF_CONF['pi_version'];
 }
 
 
@@ -81,7 +82,7 @@ function plugin_getfeednames_commentfeeds()
 
     $feeds = array ();
 
-    $result = DB_query ("SELECT tid, topic FROM {$_TABLES['topics']} ".COM_getPermSQL('AND')." ORDER BY topic ASC");
+    $result = DB_query ("SELECT tid, topic FROM {$_TABLES['topics']} ".COM_getPermSQL('WHERE')." ORDER BY topic ASC");
     $num = DB_numRows ($result);
 
     if ($num > 0) {
@@ -107,7 +108,7 @@ function plugin_getfeednames_commentfeeds()
 */
 function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
 {
-    global $_CONF, $_TABLES, $_CF_CONF,$pageHandle;
+    global $_CONF, $_TABLES, $_CF_CONF;
 
     $result = DB_query( "SELECT topic,limits,content_length FROM {$_TABLES['syndication']} WHERE fid = '$feed'" );
     $S = DB_fetchArray( $result );
@@ -141,7 +142,7 @@ function plugin_getfeedcontent_commentfeeds ($feed, &$link, &$update)
         $title = stripslashes( $row['title'] );
         $body = stripslashes( $row['comment'] );
         $body = SYND_truncateSummary( $body, $S['content_length'] );
-        $articleLink = $pageHandle->buildUrl( $_CONF['site_url']
+        $articleLink = COM_buildUrl( $_CONF['site_url']
                   ."/article.php?story={$row['sid']}");
 
         $link = $articleLink."#comments";
@@ -222,23 +223,14 @@ function plugin_feedupdatecheck_commentfeeds ($feed, $topic, $update_data, $limi
     return ($current != $update_data) ? false : true;
 }
 
-
 /**
-* Removes the datastructures for this plugin from the glFusion database
-*
-* This may get called by the install routine to undo anything done to this
-* point.
-*
-* @return   boolean     true: uninstalled successfully
-*
+* Called by the plugin Editor to run the SQL Update for a plugin update
 */
-function plugin_uninstall_commentfeeds ()
-{
-    global $_CONF, $_TABLES;
+function plugin_upgrade_commentfeeds() {
+    global $_CONF, $_TABLES, $_CF_CONF;
 
-    require_once($_CONF['path'] . 'plugins/commentfeeds/install.inc');
+    require_once $_CONF['path'].'plugins/commentfeeds/upgrade.php';
 
-    $rc = plugin_remove_commentfeeds();
-    return $rc;
+    return commentfeeds_upgrade();
 }
 ?>

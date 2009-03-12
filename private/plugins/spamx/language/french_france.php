@@ -12,6 +12,11 @@
  * Licensed under GNU General Public License
  */
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 $LANG_SX00 = array(

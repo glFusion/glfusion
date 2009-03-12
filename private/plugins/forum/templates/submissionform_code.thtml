@@ -1,17 +1,20 @@
 <!-- start submissionform_code.thtml -->
     <td class="pluginCellSubTitle">&nbsp;{LANG_code}:</td>
     <td class="pluginCellText pluginCellFill">&nbsp;
-        <input type="button" class="button" accesskey="b" name="addbbcode0" value=" B " style="font-weight:bold; width: 30px" onclick="bbstyle(0)" onmouseover="helpline('b')" {xhtml}>
-        <input type="button" class="button" accesskey="i" name="addbbcode2" value=" i " style="font-style:italic; width: 30px" onclick="bbstyle(2)" onmouseover="helpline('i')" {xhtml}>
-        <input type="button" class="button" accesskey="u" name="addbbcode4" value=" u " style="text-decoration: underline; width: 30px" onclick="bbstyle(4)" onmouseover="helpline('u')" {xhtml}>
-        <input type="button" class="button" accesskey="q" name="addbbcode6" value="Quote" style="width: 50px" onclick="bbstyle(6)" onmouseover="helpline('q')" {xhtml}>
-        <input type="button" class="button" accesskey="c" name="addbbcode8" value="Code" style="width: 40px" onclick="bbstyle(8)" onmouseover="helpline('c')" {xhtml}>
-        <input type="button" class="button" accesskey="l" name="addbbcode10" value="List" style="width: 40px" onclick="bbstyle(10)" onmouseover="helpline('l')" {xhtml}>
+        <input type="button" class="button" accesskey="b" name="addbbcode0" value=" B " style="text-align:center;font-weight:bold; width:30px;" onclick="bbstyle(0)" onmouseover="helpline('b')" {xhtml}>
+        <input type="button" class="button" accesskey="i" name="addbbcode2" value=" i " style="text-align:center;font-style:italic; width:30px;" onclick="bbstyle(2)" onmouseover="helpline('i')" {xhtml}>
+        <input type="button" class="button" accesskey="u" name="addbbcode4" value=" u " style="text-align:center;text-decoration: underline; width:30px;" onclick="bbstyle(4)" onmouseover="helpline('u')" {xhtml}>
+        <input type="button" class="button" accesskey="q" name="addbbcode6" value="Quote" style="style="text-align:center;width:6em;" onclick="bbstyle(6)" onmouseover="helpline('q')" {xhtml}>
+        <input type="button" class="button" accesskey="c" name="addbbcode8" value="Code" style="text-align:center;width:4em;" onclick="bbstyle(8)" onmouseover="helpline('c')" {xhtml}>
+        <input type="button" class="button" accesskey="l" name="addbbcode10" value="List" style="text-align:center;width:4em;" onclick="bbstyle(10)" onmouseover="helpline('l')" {xhtml}>
         {hide_imgbutton_begin}
-        <input type="button" class="button" accesskey="p" name="addbbcode14" value="Img" style="width: 40px"  onclick="bbstyle(14)" onmouseover="helpline('p')" {xhtml}>
+        <input type="button" class="button" accesskey="p" name="addbbcode14" value="Img" style="text-align:center;width:4em;"  onclick="bbstyle(14)" onmouseover="helpline('p')" {xhtml}>
         {hide_imgbutton_end}
-        <input type="button" class="button" accesskey="w" name="addbbcode16" value="URL" style="text-decoration: underline; width: 40px" onclick="bbstyle(16)" onmouseover="helpline('w')" {xhtml}>
-        <input type="button" class="button" name="help" value="Help?" style="text-decoration: underline; width: 40px" onclick="poptastic('{site_url}/forum/bbcode.html');" onmouseover="helpline('h')" {xhtml}>
+        {hide_attbutton_begin}
+        <input type="button" class="button" accesskey="t" name="addbbcode18"  value="Attachment" style="text-align:center;width:7em;"  onclick="bbstyle(18)" onmouseover="helpline('t')" {xhtml}>
+        {hide_attbutton_end}
+        <input type="button" class="button" accesskey="w" name="addbbcode16" value="URL" style="text-align:center;text-decoration: underline; width:5em;" onclick="bbstyle(16)" onmouseover="helpline('w')" {xhtml}>
+        <input type="button" class="button" name="help" value="Help?" style="text-align:center;text-decoration:underline; width:5em;" onclick="poptastic('{site_url}/forum/bbcode.html');" onmouseover="helpline('h')" {xhtml}>
         <br{xhtml}><br{xhtml}>
             {LANG_fontcolor}:
             <select name="addbbcode18" onchange="bbfontstyle('[color=' + this.form.addbbcode18.options[this.form.addbbcode18.selectedIndex].value + ']', '[/color]')" onmouseover="helpline('s')">

@@ -40,7 +40,12 @@
 require_once '../../../lib-common.php';
 
 if (!SEC_hasRights('forum.edit')) {
-    $pageHandle->displayAccessError('',$LANG_GF00['admin_only'],'gf_functions.php');
+  echo COM_siteHeader();
+  echo COM_startBlock($LANG_GF00['access_denied']);
+  echo $LANG_GF00['admin_only'];
+  echo COM_endBlock();
+  echo adminfooter();
+  echo COM_siteFooter(true);
   exit();
 }
 
@@ -55,7 +60,7 @@ $navbarMenu = array(
 
 // Site admin can add common footer code here
 function adminfooter() {
-    global $_CONF, $LANG_GF01,$pageHandle;
+    global $_CONF, $LANG_GF01;
 
     $footertemplate = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
     $footertemplate->set_file (array ('footertemplate'=>'footer.thtml'));
@@ -63,7 +68,7 @@ function adminfooter() {
     $footertemplate->set_var ('forumname', $LANG_GF01['forumname']);
 
     $footertemplate->parse ('output', 'footertemplate');
-    $pageHandle->addContent( $footertemplate->finish ($footertemplate->get_var('output')) );
+    echo $footertemplate->finish ($footertemplate->get_var('output'));
 
 }
 

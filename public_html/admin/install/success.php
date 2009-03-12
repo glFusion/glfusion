@@ -38,18 +38,15 @@
 
 require_once '../../lib-common.php';
 
-if (!defined('XHTML')) {
-    define('XHTML', ' /');
-}
-
 $type = (isset( $_GET['type'] ) && !empty( $_GET['type'] )) ? $_GET['type'] : 'install';
-$language = (isset( $_GET['language'] ) && !empty( $_GET['language'] )) ? $_GET['language'] : 'english';
+$lng  = (isset( $_GET['language'] ) && !empty( $_GET['language'] )) ? $_GET['language'] : 'english';
+$language = preg_replace('/[^a-z0-9\-_]/', '', $lng);
 require_once( 'language/' . $language . '.php' );
 
 // enable detailed error reporting
-$_CONF['rootdebug'] = true;
+$_SYSTEM['rootdebug'] = true;
 
-$display = COM_siteHeader( 'menu', $LANG_SUCCESS[0] );
+$display  = COM_siteHeader( 'menu', $LANG_SUCCESS[0] );
 $display .= COM_startBlock( $LANG_SUCCESS[1] . GVERSION . $LANG_SUCCESS[2] );
 
 $display .= '<p>' . $LANG_SUCCESS[3] . (($type == 'install') ? $LANG_SUCCESS[20] : $LANG_SUCCESS[21]) . $LANG_SUCCESS[4] . '</p>' ;
@@ -72,10 +69,9 @@ if ($type == 'install') {
 $display .= '<li style="padding-bottom:3px">' . $LANG_SUCCESS[16] . ' <tt>' . $_CONF['path'] . 'db-config.php</tt> ' . $LANG_SUCCESS[17] . ' <tt>' . $_CONF['path_html'] . 'siteconfig.php</tt> ' . $LANG_SUCCESS[18] . ' 755.</li>
 </ol>';
 
-// note for those upgrading from Geeklog 1.2.5-1 or older
-if (DB_count ($_TABLES['users'], 'username', 'NewAdmin') > 0) {
-    $display .= '<p>' . $LANG_SUCCESS[19] . '</p>.';
-}
+$display .= '<p><strong>'.$LANG_INSTALL['language_support'].'</strong></p>';
+$display .= '<p>'.$LANG_INSTALL['language_pack'].'</p>';
+
 
 $display .= COM_endBlock ();
 $display .= COM_siteFooter ();

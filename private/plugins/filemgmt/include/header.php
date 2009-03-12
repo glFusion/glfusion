@@ -67,7 +67,16 @@ if (isset($_USER['uid'])) {
 }
 
 if ((!$FilemgmtUser) && (!$FilemgmtAdmin)) {
-    $pageHandle->displayAccessError('',_GL_NOUSERACCESS,'FileMgmt Admin');
+    $display .= COM_siteHeader('menu');
+    $display .= COM_startBlock(_GL_ERRORNOACCESS);
+    $display .= _MD_USER." ".$_USER['username']. " " ._GL_NOUSERACCESS;
+    $display .= COM_endBlock();
+    $display .= COM_siteFooter();
+    if (!isset($_USER['username'])) {
+        $_USER['username'] = 'anonymous';
+    }
+    COM_errorLog("UID:$uid ({$_USER['username']}), Remote address is: {$_SERVER['REMOTE_ADDR']} " . _GL_NOUSERACCESS,1);
+    echo $display;
     exit;
 }
 

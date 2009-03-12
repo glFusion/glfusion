@@ -26,6 +26,10 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 global $LANG32;
 
 $LANG_POLLS = array(
@@ -111,17 +115,17 @@ $PLG_polls_MESSAGE3002 = $LANG32[9];
 $LANG_configsections['polls'] = array(
     'label' => 'Polls',
     'title' => 'Polls Configuration'
-);  
+);
 
 $LANG_confignames['polls'] = array(
-    'pollsloginrequired' => 'Polls Login Required?',
-    'hidepollsmenu' => 'Hide Polls Menu Entry?',
+    'pollsloginrequired' => 'Polls Login Required',
+    'hidepollsmenu' => 'Hide Polls Menu Entry',
     'maxquestions' => 'Max. Questions per Poll',
     'maxanswers' => 'Max. Options per Question',
-    'answerorder' => 'Sort Results ...',
-    'pollcookietime' => 'Voter Cookie valid for',
-    'polladdresstime' => 'Voter IP Address valid for',
-    'delete_polls' => 'Delete Polls with Owner?',
+    'answerorder' => 'Sort Results',
+    'pollcookietime' => 'Voter Cookie Valid For',
+    'polladdresstime' => 'Voter IP Address Valid For',
+    'delete_polls' => 'Delete Polls with Owner',
     'aftersave' => 'After Saving Poll',
     'default_permissions' => 'Poll Default Permissions'
 );

@@ -23,6 +23,11 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 ###############################################################################
@@ -107,8 +112,12 @@ $LANG_STATIC = array(
     'copy' => 'Копіювати',
     'limit_results' => 'Обмежити результати',
     'search' => 'Пошук',
-    'submit' => 'Відіслати'
+    'submit' => 'Відіслати',
+    'delete_confirm' => 'Are you sure you want to delete this page?'
 );
+
+$PLG_staticpages_MESSAGE19 = '';
+$PLG_staticpages_MESSAGE20 = '';
 
 // Messages for the plugin upgrade
 $PLG_staticpages_MESSAGE3001 = 'Plugin upgrade not supported.';

@@ -288,6 +288,12 @@ FCKTableHandler.CheckIsSelectionRectangular = function()
 	if ( cells.length < 1 )
 		return false ;
 
+	// Check if the selected cells are all in the same table section (thead, tfoot or tbody)
+	for (var i = 0; i < cells.length; i++)
+	{
+		if ( cells[i].parentNode.parentNode != cells[0].parentNode.parentNode )
+			return false ;
+	}
 	this._MarkCells( cells, '_CellSelected' ) ;
 
 	var tableMap = this._CreateTableMap( cells[0] ) ;

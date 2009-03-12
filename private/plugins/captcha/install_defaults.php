@@ -47,6 +47,7 @@ if (!defined ('GVERSION')) {
 global $_CP_DEFAULT;
 $_CP_DEFAULT = array();
 
+$_CP_DEFAULT['expire'] = 900;
 $_CP_DEFAULT['anonymous_only'] = '1';
 $_CP_DEFAULT['remoteusers'] = 0;
 $_CP_DEFAULT['debug'] = 0;
@@ -107,6 +108,8 @@ function plugin_initconfig_captcha()
                 0, 0, 0, 50, true, 'captcha');
         $c->add('logging', $_CP_DEFAULT['logging'],'select',
                 0, 0, 0, 60, true, 'captcha');
+        $c->add('expire', $_CP_DEFAULT['expire'],'text',
+                0, 0, 0, 70, true, 'captcha');
 
         $c->add('cp_integration', NULL, 'fieldset', 0, 1, NULL, 0, true,
                 'captcha');

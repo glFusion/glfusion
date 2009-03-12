@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -51,24 +51,31 @@ $mytimer->startTimer();
 
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 $mytimer = new timerobject();
 $mytimer->startTimer();
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-
-$showtopic = $inputHandler->getVar('integer','showtopic','request',0);
-$show      = $inputHandler->getVar('integer','show','request',0);
-$page      = $inputHandler->getVar('integer','page','request',0);
-$mode      = $inputHandler->getVar('strict','mode','request','');
-$highlight = $inputHandler->getVar('strict','highlight','request','');
-$topic     = $inputHandler->getVar('strict','topic','request','');
-
+$showtopic = isset($_REQUEST['showtopic']) ? COM_applyFilter($_REQUEST['showtopic'],true) : 0;
+$show      = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) : 0;
+$page      = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
+$mode      = isset($_REQUEST['mode']) ? COM_applyFilter($_REQUEST['mode']) : '';
+$highlight = isset($_REQUEST['query']) ? COM_applyFilter($_REQUEST['query']) : '';
+$topic     = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic']) : '';
+//$forum = DB_getItem($_TABLES['gf_topic'],"forum","id='$showtopic'");
 $result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['gf_topic']} WHERE id = '$showtopic'"); // <- new
 list($forum, $topic_pid, $subject) = DB_fetchArray($result); // <- new
+//$topic_pid = DB_getItem($_TABLES['gf_topic'], "pid","id='$showtopic'");
+
 
 if ($topic_pid == '') {
-    $pageHandle->displayError($LANG_GF02['msg171']);
+    echo COM_siteHeader();
+    echo COM_startBlock();
+    alertMessage($LANG_GF02['msg172'],$LANG_GF02['msg171']);
+    echo COM_endBlock();
+    echo COM_siteFooter();
+    exit;
 }
 if ($topic_pid != 0) {
     $showtopic = $topic_pid;
@@ -109,13 +116,12 @@ if(isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
     echo '</head>' . LB;
     echo '<body class="sitebody">';
 } else {
-    $pageTitle = $inputHandler->filterVar('text',$subject,''); //strip_tags(COM_checkWords($subject));
-    $pageTitle = $inputHandler->censor($pageTitle);
+    $pageTitle = strip_tags(COM_checkWords($subject));
     gf_siteHeader($pageTitle);
     //Check is anonymous users can access
     forum_chkUsercanAccess();
     // Now display the forum header
-    $pageHandle->addContent(ForumHeader($forum,$showtopic));
+    ForumHeader($forum,$showtopic);
 }
 
 if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
@@ -166,7 +172,7 @@ $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/'
 $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
 $forum_outline_header->set_var('xhtml',XHTML);
 $forum_outline_header->parse ('output', 'forum_outline_header');
-$pageHandle->addContent($forum_outline_header->finish($forum_outline_header->get_var('output')));
+echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
 if ($mode != 'preview') {
 
@@ -296,17 +302,14 @@ if ($mode != 'preview') {
     $topicnavbar->set_var ('LANG_HOME', $LANG_GF01['HOMEPAGE']);
     $topicnavbar->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page,$numpages));
     $topicnavbar->parse ('output', 'topicnavbar');
-    $pageHandle->addContent($topicnavbar->finish($topicnavbar->get_var('output')));
+    echo $topicnavbar->finish($topicnavbar->get_var('output'));
 } else {
     $preview_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $preview_header->set_file ('header', 'topicpreview_header.thtml');
     $preview_header->set_var ('xhtml',XHTML);
     $preview_header->parse ('output', 'header');
-    $pageHandle->addContent($preview_header->finish($preview_header->get_var('output')));
+    echo $preview_header->finish($preview_header->get_var('output'));
 }
-
-//$intervalTime = $mytimer->stopTimer();
-//COM_errorLog("Topic Display Time2: $intervalTime");
 
 // Update the topic view counter and user access log
 DB_query("UPDATE {$_TABLES['gf_topic']} SET views=views+1 WHERE id='$showtopic'");
@@ -314,20 +317,16 @@ if(isset($_USER['uid']) && $_USER['uid'] > 1 ) {
     $query = DB_query("SELECT pid,forum FROM {$_TABLES['gf_topic']} WHERE id={$showtopic}");
     list ($showtopicpid,$forumid) = DB_fetchArray($query);
     if ($showtopicpid == 0 ) {
-        $showtopicpid = 0; // $showtopics;
+        $showtopicpid = $showtopic;
     }
     $lrows = DB_count($_TABLES['gf_log'],array('uid','topic'),array($_USER['uid'],$showtopic));
     $logtime = time();
     if ($lrows < 1) {
-        DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('$_USER[uid]','$forum','$showtopic','$logtime')");
+        DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('$_USER[uid]','$forum','$showtopicpid','$logtime')");
     } else {
-        DB_query("UPDATE {$_TABLES['gf_log']} SET time=$logtime WHERE uid=$_USER[uid] AND topic=$showtopic");
+        DB_query("UPDATE {$_TABLES['gf_log']} SET time=$logtime WHERE uid=$_USER[uid] AND topic=$showtopicpid");
     }
 }
-
-// Retrieve all the records for this topic
-//$intervalTime = $mytimer->stopTimer();
-//COM_errorLog("Topic Display Time2b: $intervalTime");
 
 $sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$showtopic' OR pid='$showtopic' ORDER BY id $order LIMIT $offset, $show";
 $result  = DB_query($sql);
@@ -335,14 +334,12 @@ $result  = DB_query($sql);
 // Display each post in this topic
 $onetwo = 1;
 while($topicRec = DB_fetchArray($result)) {
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Topic Display Time: $intervalTime");
     if ($CONF_FORUM['show_anonymous_posts'] == 0 AND $topicRec['uid'] == 1) {
-       $pageHandle->addContent('<div class="pluginAlert" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>');
+       echo '<div class="pluginAlert" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
         break;
        //Do nothing - but this way I don't always have to do this check
     } else {
-        $pageHandle->addContent(showtopic($topicRec,$mode,$onetwo,$page));
+        echo showtopic($topicRec,$mode,$onetwo,$page);
         $onetwo = ($onetwo == 1) ? 2 : 1;
     }
 }
@@ -384,21 +381,20 @@ if ($mode != 'preview') {
 $topic_footer->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page, $numpages));
 $topic_footer->set_var ('forum_id', $forum);
 $topic_footer->parse ('output', 'topicfooter');
-$pageHandle->addContent($topic_footer->finish($topic_footer->get_var('output')));
+echo $topic_footer->finish($topic_footer->get_var('output'));
 
 $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
 $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
 $forum_outline_footer->set_var ('xhtml',XHTML);
 $forum_outline_footer->parse ('output', 'forum_outline_footer');
-$pageHandle->addContent($forum_outline_footer->finish ($forum_outline_footer->get_var('output')));
+echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
 
 $intervalTime = $mytimer->stopTimer();
 
 if(!isset($_REQUEST['onlytopic']) || $_REQUEST['onlytopic'] != 1) {
-    $pageHandle->addContent(BaseFooter());
+    echo BaseFooter();
     gf_siteFooter();
 } else {
-    echo $pageHandle->getContent();
     echo '</body>' . LB;
     echo '</html>' . LB;
 }

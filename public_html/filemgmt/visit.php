@@ -43,6 +43,8 @@ require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 
+USES_lib_image();
+
 if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
     COM_errorLOG("Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}, Remote address is: {$_SERVER['REMOTE_ADDR']}");
     redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOACCESS);
@@ -53,7 +55,19 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     } else {
         $uid = 1;    // Set to annonymous GL User ID
     }
-    $lid = $inputHandler->getVar('integer','lid','get',0);
+    $tempFile = 0;
+    if ( isset($_GET['lid']) ) {
+        $lid = COM_applyFilter($_GET['lid'],true);
+        $status = 'status>0';
+    }
+    if ( isset($_GET['tid']) ) {
+        $lid = COM_applyFilter($_GET['tid'],true);
+        $tempFile = 1;
+        $status = ' status = 0';
+    }
+    if ($tempFile == 1 && !SEC_hasRights('filemgmt.edit')) {
+        exit;
+    }
     $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
     $groupsql = filemgmt_buildAccessSql();
 
@@ -64,19 +78,73 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
     if ($testaccess_cnt == 0 OR DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",$lid ) == 0) {
         COM_errorLOG("filemgmt visit.php ERROR: Invalid attempt to download a file. User:{$_USER['username']}, IP:{$_SERVER['REMOTE_ADDR']}, File ID:{$lid}");
-        $pageHandle->redirect($_CONF['site_url'] . '/filemgmt/index.php');
+        echo COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
         exit;
     } else {
-        DB_query("INSERT INTO {$_FM_TABLES['filemgmt_history']} (uid, lid, remote_ip, date) VALUES ($uid, $lid, '{$_SERVER['REMOTE_ADDR']}', NOW())") or $eh->show("0013");
-        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET hits=hits+1 WHERE lid=$lid AND status>0");
-        $result = DB_query("SELECT url FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid=$lid AND status>0");
-        list($url) = DB_fetchArray($result);
-        $fullurl = $filemgmt_FileStoreURL .$url;
-        $fullurl = stripslashes($fullurl);
+        $result = DB_query("SELECT url,platform FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid=$lid AND ".$status);
+        list($url,$tmpnames) = DB_fetchArray($result);
+        if ( $tempFile == 1 ) {
+            $tmpfilenames = explode(";",$tmpnames);
+            $tempfilepath = $filemgmt_FileStore . 'tmp/' .$tmpfilenames[0];
+        } else {
+            DB_query("INSERT INTO {$_FM_TABLES['filemgmt_history']} (uid, lid, remote_ip, date) VALUES ($uid, $lid, '{$_SERVER['REMOTE_ADDR']}', NOW())") or $eh->show("0013");
+            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET hits=hits+1 WHERE lid=$lid AND status>0");
+        }
+        $allowed_protocols = array('http','https','ftp');
+        $found_it = false;
         COM_accessLOG("Visit.php => Download File:{$url}, User ID is:{$uid}, Remote address is: {$_SERVER['REMOTE_ADDR']}");
-        header("Location: $fullurl");
-        echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=".$fullurl."\"></meta></head><body></body></html>";
-        exit();
+        $pos = MBYTE_strpos( $url, ':' );
+        if( $pos === false ) {
+            if ( $_FM_CONF['outside_webroot'] == 1 ) {
+                if ( $tempFile == 1 ) {
+                    $fullurl = $tempfilepath;
+                } else {
+                    $fullurl = $filemgmt_FileStore . $url;
+                }
+                if ( file_exists($fullurl) ) {
+                    if ($fd = fopen ($fullurl, "rb")) {
+                        header('Content-Type: application/octet-stream; name="'.$url.'"');
+                        header('Content-Disposition: attachment; filename="'.$url.'"');
+                        header('Accept-Ranges: bytes');
+                        header('Pragma: no-cache');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                        header('Content-transfer-encoding: binary');
+                        fpassthru($fd);
+                        flush();
+                    } else {
+                        COM_errorLog("FileMgmt: Error - Unable to download selected file: ". $url);
+                    }
+                }
+            } else {
+                $fullurl = $filemgmt_FileStoreURL .$url;
+                $fullurl = stripslashes($fullurl);
+                header("Location: $fullurl");
+                echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=".$fullurl."\"></meta></head><body></body></html>";
+                exit();
+            }
+        } else {
+            $protocol = MBYTE_substr( $url, 0, $pos + 1 );
+            $found_it = false;
+            foreach( $allowed_protocols as $allowed ) {
+                if( substr( $allowed, -1 ) != ':' ) {
+                    $allowed .= ':';
+                }
+                if( $protocol == $allowed ) {
+                    $found_it = true;
+                    break;
+                }
+            }
+            if( !$found_it ) {
+                exit;
+            } else {
+                $fullurl = $url;
+            }
+            $fullurl = stripslashes($fullurl);
+            Header("Location: $fullurl");
+            echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=".$fullurl."\"></meta></head><body></body></html>";
+            exit();
+        }
     }
 }
 ?>

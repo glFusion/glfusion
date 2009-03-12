@@ -38,10 +38,9 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
-$mode = $inputHandler->getVar('strict','mode','get');
 // MAIN
-if ($mode == 'logout') {
-    $pageHandle->redirect($_CONF['site_url'] . '/users.php?mode=logout');
+if (isset($_GET['mode']) && ($_GET['mode'] == 'logout')) {
+    print COM_refresh($_CONF['site_url'] . '/users.php?mode=logout');
 }
 
 // this defines the amount of icons displayed next to another in the CC-block
@@ -80,7 +79,7 @@ function render_cc_item (&$template, $url = '', $image = '', $label = '')
 */
 function commandcontrol()
 {
-    global $_CONF, $pageHandle,$_TABLES, $LANG01, $LANG29, $LANG_LOGVIEW, $_DB_dbms;
+    global $_CONF, $_TABLES, $LANG01, $LANG29, $LANG_LOGVIEW,$_IMAGE_TYPE, $_DB_dbms;
 
     $retval = '';
 
@@ -102,44 +101,44 @@ function commandcontrol()
     $cc_arr = array(
                   array('condition' => SEC_hasRights('story.edit'),
                         'url' => $_CONF['site_admin_url'] . '/story.php',
-                        'lang' => $LANG01[11], 'image' => $pageHandle->getImage('icons/story.png')),
+                        'lang' => $LANG01[11], 'image' => '/images/icons/story.'),
                   array('condition' => SEC_hasRights('block.edit'),
                         'url' => $_CONF['site_admin_url'] . '/block.php',
-                        'lang' => $LANG01[12], 'image' => $pageHandle->getImage('icons/block.png')),
+                        'lang' => $LANG01[12], 'image' => '/images/icons/block.'),
                   array('condition' => SEC_hasRights('topic.edit'),
                         'url' => $_CONF['site_admin_url'] . '/topic.php',
-                        'lang' => $LANG01[13], 'image' => $pageHandle->getImage('icons/topic.png')),
+                        'lang' => $LANG01[13], 'image' => '/images/icons/topic.'),
                   array('condition' => SEC_hasRights('user.edit'),
                         'url' => $_CONF['site_admin_url'] . '/user.php',
-                        'lang' => $LANG01[17], 'image' => $pageHandle->getImage('icons/user.png')),
+                        'lang' => $LANG01[17], 'image' => '/images/icons/user.'),
                   array('condition' => SEC_hasRights('group.edit'),
                         'url' => $_CONF['site_admin_url'] . '/group.php',
-                        'lang' => $LANG01[96], 'image' => $pageHandle->getImage('icons/group.png')),
+                        'lang' => $LANG01[96], 'image' => '/images/icons/group.'),
                   array('condition' => SEC_hasRights('user.mail'),
                         'url' => $_CONF['site_admin_url'] . '/mail.php',
-                        'lang' => $LANG01[105], 'image' => $pageHandle->getImage('icons/mail.png')),
+                        'lang' => $LANG01[105], 'image' => '/images/icons/mail.'),
                   array('condition' => SEC_hasRights ('syndication.edit'),
                         'url' => $_CONF['site_admin_url'] . '/syndication.php',
-                        'lang' => $LANG01[38], 'image' => $pageHandle->getImage('icons/syndication.png')),
+                        'lang' => $LANG01[38], 'image' => '/images/icons/syndication.'),
                   array('condition' => $showTrackbackIcon,
                         'url' => $_CONF['site_admin_url'] . '/trackback.php',
-                        'lang' => $LANG01[116], 'image' => $pageHandle->getImage('icons/trackback.png')),
+                        'lang' => $LANG01[116], 'image' => '/images/icons/trackback.'),
                   array('condition' => SEC_hasRights('plugin.edit'),
                         'url' => $_CONF['site_admin_url'] . '/plugins.php',
-                        'lang' => $LANG01[98], 'image' => $pageHandle->getImage('icons/plugins.png')),
+                        'lang' => $LANG01[98], 'image' => '/images/icons/plugins.'),
                   array('condition' => SEC_inGroup('Root'),
                         'url' => $_CONF['site_admin_url'] . '/clearctl.php',
-                        'lang' => $LANG01['ctl'], 'image' => $pageHandle->getImage('icons/ctl.png')),
+                        'lang' => $LANG01['ctl'], 'image' => '/images/icons/ctl.'),
                   array('condition' => SEC_inGroup('Root'),
                         'url' => $_CONF['site_admin_url'] . '/logview.php',
-                        'lang' => $LANG_LOGVIEW['logview'], 'image' => $pageHandle->getImage('icons/logview.png'))
+                        'lang' => $LANG_LOGVIEW['logview'], 'image' => '/images/icons/logview.')
     );
     $admin_templates->set_var('cc_icon_width', floor(100/ICONS_PER_ROW));
 
     for ($i = 0; $i < count ($cc_arr); $i++) {
         if ($cc_arr[$i]['condition']) {
             $item = render_cc_item ($admin_templates, $cc_arr[$i]['url'],
-                    $cc_arr[$i]['image'],
+                    $_CONF['layout_url'] . $cc_arr[$i]['image'] . $_IMAGE_TYPE,
                     $cc_arr[$i]['lang']);
             $items[$cc_arr[$i]['lang']] = $item;
         }
@@ -159,26 +158,26 @@ function commandcontrol()
     $cc_arr = array(
         array('condition' => ($_CONF['allow_mysqldump'] == 1) && ($_DB_dbms == 'mysql') && SEC_inGroup ('Root'),
             'url' => $_CONF['site_admin_url'] . '/database.php',
-            'lang' => $LANG01[103], 'image' => $pageHandle->getImage('icons/database.png')),
+            'lang' => $LANG01[103], 'image' => '/images/icons/database.'),
         array('condition' => ($_CONF['link_documentation'] == 1),
             'url' => $_CONF['site_url'] . '/docs/',
-            'lang' => $LANG01[113], 'image' => $pageHandle->getImage('icons/docs.png')),
+            'lang' => $LANG01[113], 'image' => '/images/icons/docs.'),
         array('condition' => (SEC_inGroup ('Root') &&
                               ($_CONF['link_versionchecker'] == 1)),
             'url' => 'http://www.glfusion.org/versionchecker.php?version=' . GVERSION,
-            'lang' => $LANG01[107], 'image' => $pageHandle->getImage('icons/versioncheck.png')),
+            'lang' => $LANG01[107], 'image' => '/images/icons/versioncheck.'),
         array('condition' => (SEC_inGroup ('Root')),
             'url'=>$_CONF['site_admin_url'] . '/configuration.php',
-            'lang' => $LANG01[129], 'image' => $pageHandle->getImage('icons/configuration.png')),
+            'lang' => $LANG01[129], 'image' => '/images/icons/configuration.'),
         array('condition' => SEC_isModerator(),
             'url'=>$_CONF['site_admin_url'] . '/moderation.php',
-            'lang' => $LANG01[10], 'image' => $pageHandle->getImage('icons/moderation.png')),
+            'lang' => $LANG01[10], 'image' => '/images/icons/moderation.'),
     );
 
     for ($i = 0; $i < count ($cc_arr); $i++) {
         if ($cc_arr[$i]['condition']) {
             $item = render_cc_item ($admin_templates, $cc_arr[$i]['url'],
-                    $cc_arr[$i]['image'],
+                    $_CONF['layout_url'] . $cc_arr[$i]['image'] . $_IMAGE_TYPE,
                     $cc_arr[$i]['lang']);
             $items[$cc_arr[$i]['lang']] = $item;
         }
@@ -190,7 +189,7 @@ function commandcontrol()
      // logout is always the last entry
     $item = render_cc_item ($admin_templates,
                     $_CONF['site_url'] . '/users.php?mode=logout',
-                    $pageHandle->getImage('icons/logout.png'),
+                    $_CONF['layout_url'] . '/images/icons/logout.' . $_IMAGE_TYPE,
                     $LANG01[35]);
     $items[$LANG01[35]] = $item;
     reset($items);
@@ -228,7 +227,7 @@ function commandcontrol()
 */
 function security_check_reminder()
 {
-    global $_CONF, $_TABLES, $MESSAGE, $pageHandle;
+    global $_CONF, $_TABLES, $_IMAGE_TYPE, $MESSAGE;
 
     $retval = '';
 
@@ -238,7 +237,7 @@ function security_check_reminder()
 
     $done = DB_getItem ($_TABLES['vars'], 'value', "name = 'security_check'");
     if ($done != 1) {
-        $pageHandle->addMessage(92);
+        $retval .= COM_showMessage(92);
     }
 
     return $retval;
@@ -246,16 +245,24 @@ function security_check_reminder()
 
 // MAIN
 
-$msg = $inputHandler->getVar('integer','msg','get',0);
-$plugin = $inputHandler->getVar('strict','plugin','get','');
+$display = COM_siteHeader('menu', $LANG29[34]);
+
+$msg = 0;
+if (isset($_GET['msg'])) {
+    $msg = COM_applyFilter($_GET['msg'], true);
+}
 if ($msg > 0) {
-    $pageHandle->addMessage($msg, $plugin);
+    $plugin = '';
+    if (isset($_GET['plugin'])) {
+        $plugin = COM_applyFilter($_GET['plugin']);
+    }
+    $display .= COM_showMessage($msg, $plugin);
 }
 
-$pageHandle->setShowExtraBlocks(false);
-$pageHandle->setPageTitle($LANG29[34]);
-$pageHandle->addContent(security_check_reminder());
-$pageHandle->addContent(commandcontrol());
-$pageHandle->displayPage();
+$display .= security_check_reminder();
+$display .= commandcontrol();
+$display .= COM_siteFooter();
+
+echo $display;
 
 ?>

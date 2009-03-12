@@ -49,12 +49,13 @@ if (!SEC_hasRights("filemgmt.edit")) {
     redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOADMIN);
     exit();
 }
-$lid = $inputHandler->getVar('integer','lid','get',0);
+$lid = COM_applyFilter($_GET['lid'],true);
 
 $result=DB_query("SELECT title FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid=$lid");
 list($dtitle)=DB_fetchARRAY($result);
 
 $result=DB_query("SELECT date,uid,remote_ip FROM {$_FM_TABLES['filemgmt_history']} WHERE lid=$lid");
+$display = COM_siteHeader('none');
 
 $display .= "<table width='100%' border='0' cellspacing='1' cellpadding='4' class='plugin'><tr>";
 $display .= "<td colspan='3'><center><H2>". $LANG_FILEMGMT['DownloadReport'] ."</H2></center></td></tr><tr>";
@@ -87,7 +88,8 @@ while(list($date,$uid,$remote_ip)=DB_fetchARRAY($result)){
 
 }
 $display .= "</table>";
-$display .= "<br />";
-$pageHandle->addContent($display);
-$pageHandle->displayPage();
+$display .= "<br>";
+$display .= COM_siteFooter();
+echo $display;
+
 ?>

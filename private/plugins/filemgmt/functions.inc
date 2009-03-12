@@ -45,8 +45,6 @@ if (file_exists ($langfile)) {
     include_once $_CONF['path'] . 'plugins/filemgmt/language/english.php';
 }
 
-include $_CONF['path'] . 'plugins/filemgmt/config.php';
-
 /*
 * Check and see if we need to load the plugin configuration
 */
@@ -87,6 +85,9 @@ if (!isset($_FM_CONF['perpage'])) {
     $filemgmt_showWhatsNewComments = $_FM_CONF['showwhatsnewcomments'];
 }
 
+require_once $_CONF['path'].'plugins/filemgmt/filemgmt.php';
+require_once $_CONF['path'].'plugins/filemgmt/config.php';
+
 /**
 * Returns the items for this plugin that should appear on the main menu
 *
@@ -115,7 +116,7 @@ function plugin_getmenuitems_filemgmt()
 */
 function plugin_chkVersion_filemgmt() {
     global $CONF_FM;
-    return $CONF_FM['version'];
+    return $CONF_FM['pi_version'];
 }
 
 
@@ -125,12 +126,9 @@ function plugin_chkVersion_filemgmt() {
 function plugin_upgrade_filemgmt() {
     global $_CONF, $_TABLES,$_FM_TABLES,$CONF_FM;
 
-    require_once($_CONF['path'] . 'plugins/filemgmt/glupgrade.inc');
+    require_once $_CONF['path'] . 'plugins/filemgmt/upgrade.php';
 
-    $rc = plugin_plgupgrade_filemgmt();
-
-    return true;
-
+    return filemgmt_upgrade();
 }
 
 
@@ -161,29 +159,30 @@ function plugin_commentsupport_filemgmt()
  * @return  mixed   HTML string (redirect?) for success or comment form if failure.
  */
 function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
-    global $_CONF,$_FM_TABLES, $LANG03, $_TABLES,$inputHandler,$pageHandle;
+    global $_CONF,$_FM_TABLES, $LANG03, $_TABLES;
 
     $title = strip_tags ($title);
-    $pid = $inputHandler->filterVar('integer',$pid,'');
-    $postmode = $inputHandler->filterVar('strict',$postmode,'');
+    $pid = COM_applyFilter ($pid, true);
+    $postmode = COM_applyFilter ($postmode);
 
     $ret = CMT_saveComment ( $title, $comment, $id, $pid, 'filemgmt',$postmode);
 
     if ( $ret > 0 ) { // failure
-        $pageHandle->addContent(CMT_commentform ($title, $comment, $id, $pid,
-                    'filemgmt', $LANG03[14], $postmode));
-        $pageHandle->displayPage();
+        return COM_siteHeader()
+            . CMT_commentform ($title, $comment, $id, $pid,
+                    'filemgmt', $LANG03[14], $postmode)
+            . COM_siteFooter();
     } else { // success
         $comments = DB_count ($_TABLES['comments'], 'sid', $id);
         DB_change($_FM_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',$id);
-        $pageHandle->redirect($pageHandle->buildUrl ($_CONF['site_url']
-            . "/filemgmt/index.php?id=$id")) ;
+        return (COM_refresh (COM_buildUrl ($_CONF['site_url']
+            . "/filemgmt/index.php?id=$id")) );
     }
 }
 function plugin_editcomment_filemgmt($cid,$id) {
-    global $_CONF,$pageHandle;
+    global $_CONF;
 
-    $pageHandle->redirect ($pageHandle->buildUrl ($_CONF['site_url'].'/filemgmt/index.php?id=$id'));
+    echo COM_refresh (COM_buildUrl ($_CONF['site_url'].'/filemgmt/index.php?id=$id'));
     exit;
 }
 
@@ -195,12 +194,12 @@ function plugin_editcomment_filemgmt($cid,$id) {
  * @param   string  $id     Item id to which $cid belongs
  * @return  mixed   false for failure, HTML string (redirect?) for success
  */function plugin_deletecomment_filemgmt($cid,$id) {
-    global $_CONF,$_FM_TABLES, $_TABLES,$pageHandle;
+    global $_CONF,$_FM_TABLES, $_TABLES;
 
     if (SEC_hasRights("filemgmt.edit")) {
         if (CMT_deleteComment($cid, $id, 'filemgmt') == 0) {
             // Now redirect the program flow to the view of the file and its comments
-            $pageHandle->COM_refresh($_CONF['site_url'] . "/filemgmt/index.php?id=$id");
+            return (COM_refresh($_CONF['site_url'] . "/filemgmt/index.php?id=$id"));
         } else {
             return false;
         }
@@ -503,34 +502,6 @@ function plugin_getadminoption_filemgmt()
 }
 
 
-
-/**
-* Removes the datastructures for this plugin from the glFusion database
-* This may get called by the install routine to undue anything created during the install.
-* Added check to see that plugin is first disabled.
-*/
-function plugin_uninstall_filemgmt($installCheck='')
-{
-    global $_CONF, $LANG_FM00, $LANG_FILEMGMT, $_TABLES,$_FM_TABLES,$pageHandle;
-
-     // Check and see if plugin is still enabled - if so display warning and exit
-    if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "' .$pi_name. '"')) {
-        COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
-        $pageHandle->addContent( COM_startBlock($LANG_FM00['warning']));
-        $pageHandle->addContent($LANG_FM00['enabled']);
-        $pageHandle->addContent(COM_endBlock());
-        $pageHandle->displayPage();
-        echo $display;
-        exit;
-    }
-
-    require_once($_CONF['path'] . 'plugins/filemgmt/install.inc');
-
-    $rc = plugin_remove_filemgmt();
-    return $rc;
-}
-
-
 // Common function used to build group access SQL
 function filemgmt_buildAccessSql($clause='AND') {
     global $_TABLES,$_USER;
@@ -702,7 +673,6 @@ function plugin_whatsnewsupported_filemgmt() {
 function plugin_getwhatsnew_filemgmt() {
     global $_TABLES, $_FM_TABLES, $_CONF, $LANG_FILEMGMT, $LANG01;
     global $filemgmtWhatsNewTitleLength,$filemgmtWhatsNewPeriodDays,$filemgmt_showWhatsNewComments;
-    global $mydownloads_publicpriv;
 
     $retval = '';
 
@@ -719,16 +689,21 @@ function plugin_getwhatsnew_filemgmt() {
             $retval .= $LANG_FILEMGMT['no_new_files'] . '<br' . XHTML . '>' . LB;
         } else {
             for( $i = 0; $i < $nrows1; $i++ ) {
-                list($lid, $title) = DB_fetchArray( $result );
-                $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid\">";
-                $str .= stripslashes(substr($title,0,$filemgmtWhatsNewTitleLength));
+                list($lid, $ftitle) = DB_fetchArray( $result );
+                $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$lid}\">";
+				if( strlen( $ftitle ) > $filemgmtWhatsNewTitleLength ) {
+					$titleTrimLength = $filemgmtWhatsNewTitleLength - 3;
+                    $str .= COM_truncate( $ftitle,$titleTrimLength, '...' );
+				} else {
+					$str .= $ftitle;
+				}
                 $str .= '</a>';
                 $items[] = $str;
             }
         }
         if ($filemgmt_showWhatsNewComments) {
             // Search for new comments
-            $sql  = "SELECT a.lid,c.title FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
+            $sql  = "SELECT a.lid,a.title,c.title FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
             $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
             $sql .= "LEFT JOIN {$_TABLES['comments']} c ON c.sid = concat('fileid_' ,a.lid )";
             $sql .= filemgmt_buildAccessSql('WHERE');
@@ -741,11 +716,17 @@ function plugin_getwhatsnew_filemgmt() {
                 $retval .= $LANG_FILEMGMT['no_comments'] . '<br' . XHTML . '>' . LB;
             } else {
                 for( $i = 0; $i < $nrows2; $i++ ) {
-                    list($lid, $title) = DB_fetchArray( $result );
-                    $titleLength = $filemgmtWhatsNewTitleLength + 13;        // Compensate for the added HTML
-                    $title = "<b>C:</b>&nbsp;".$title;
-                    $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid\">";
-                    $str .= stripslashes(substr($title,0,$titleLength));
+                    list($lid, $ftitle, $ctitle) = DB_fetchArray( $result );
+                    $titlePrefix = "<b>C:</b>&nbsp;";
+                    $ctitle = $titlePrefix . $ctitle;
+                    $titleLength = $filemgmtWhatsNewTitleLength + strlen( $titlePrefix ) - 3;        // Compensate for the added HTML
+                    $str = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$lid}\">";
+					if( strlen( $ctitle ) > $titleLength ) {
+						$titleTrimLength = $titleLength - 3;
+	                    $str .= COM_truncate( $ctitle,$titleTrimLength, '...' );
+					} else {
+						$str .= $ctitle;
+					}
                     $str .= '</a>';
                     $items[] = $str;
                 }
@@ -762,7 +743,6 @@ function plugin_getwhatsnew_filemgmt() {
         return $retval;
     }
 }
-
 
 
 /**

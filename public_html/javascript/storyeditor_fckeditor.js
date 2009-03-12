@@ -7,7 +7,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -60,6 +60,7 @@
         if (undefined == window.glfusionEditorBasePath) {
             glfusionEditorBasePath = geeklogEditorBasePath;
         }
+
         oFCKeditor2.BasePath = glfusionEditorBasePath ;
         oFCKeditor2.Config['CustomConfigurationsPath'] = glfusionEditorBaseUrl + '/fckeditor/myconfig.js';
         oFCKeditor2.ToolbarSet = 'editor-toolbar3' ;

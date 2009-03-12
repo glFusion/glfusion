@@ -415,7 +415,7 @@ class Story
 
         $sid = addslashes(COM_applyFilter($sid));
 
-        if (!empty($sid) && (($mode == 'edit') || ($mode == 'view'))) {
+        if (!empty($sid) && (($mode == 'edit') || ($mode == 'view') || ($mode == 'clone'))) {
             $sql = array();
 
             $sql['mysql']
@@ -554,6 +554,22 @@ class Story
             $this->_numemails = 0;
             $this->_statuscode = 0;
             $this->_owner_id = $this->_uid;
+        } elseif ($mode == 'clone') {
+            $this->_sid = COM_makesid();
+            $this->_old_sid = $this->_sid;
+            $this->_originalSid = '';
+            $this->_uid = $_USER['uid'];
+            $this->_date = time();
+            $this->_expire = time();
+            $this->_commentcode = $_CONF['comment_code'];
+            $this->_trackbackcode = $_CONF['trackback_code'];
+            $this->_hits = 0;
+            $this->_comments = 0;
+            $this->_trackbacks = 0;
+            $this->_numemails = 0;
+            $this->_statuscode = 0;
+            $this->_featured = 0;
+            $this->_owner_id = $_USER['uid'];
         }
 
         $this->_sanitizeData();
@@ -634,6 +650,8 @@ class Story
                 /* Move trackbacks */
                 $sql = "UPDATE {$_TABLES['trackback']} SET sid='{$newsid}' WHERE sid='{$checksid}' AND type='article'";
                 DB_query($sql);
+
+                CACHE_remove_instance('story_'.$checksid);
             }
         }
 
@@ -664,6 +682,7 @@ class Story
         $this->_in_transit = 1;
         $sql = 'REPLACE INTO ' . $_TABLES['stories'] . ' (';
         $values = ' VALUES (';
+        $fields = '';
         reset($this->_dbFields);
 
         /* This uses the database field array to generate a SQL Statement. This
@@ -753,7 +772,11 @@ class Story
                 if ( $taccess < 3 ) {
                     return STORY_EXISTING_NO_EDIT_PERMISSION;
                 }
-                $this->_owner_id = $article['owner_id'];
+                if ( !empty($array['owner_id']) ) {
+                    $this->_owner_id = $array['owner_id'];
+                } else {
+                    $this->_owner_id = $article['owner_id'];
+                }
             }
         }
 

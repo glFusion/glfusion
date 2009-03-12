@@ -53,6 +53,10 @@ if (!defined ('GVERSION')) {
 global $_CA_DEFAULT;
 $_CA_DEFAULT = array();
 
+// when set to 1 will only allow admins to submit events, otherwise
+// anonymous and logged-in users can submit events to the queue.
+$_CA_DEFAULT['only_admin_submit'] = 0;
+
 // when set to 1 will only allow logged-in users to view the list of past events
 // (also see $_CONF['loginrequired'] in glFusion's main configuration)
 $_CA_DEFAULT['calendarloginrequired']   = 0;
@@ -142,6 +146,8 @@ function plugin_initconfig_calendar()
         $c->add('fs_main', NULL, 'fieldset', 0, 0, NULL, 0, true, 'calendar');
         $c->add('calendarloginrequired', $_CA_DEFAULT['calendarloginrequired'],
                 'select', 0, 0, 0, 10, true, 'calendar');
+        $c->add('only_admin_submit', $_CA_DEFAULT['only_admin_submit'],
+                'select', 0, 0, 0, 15, true, 'calendar');
         $c->add('hidecalendarmenu', $_CA_DEFAULT['hidecalendarmenu'],
                 'select', 0, 0, 1, 20, true, 'calendar');
         $c->add('personalcalendars', $_CA_DEFAULT['personalcalendars'],

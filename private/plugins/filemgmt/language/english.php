@@ -34,6 +34,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $LANG_FM00 = array (
     'access_denied'     => 'Access Denied',
     'access_denied_msg' => 'Only Root Users have Access to this Page.  Your user name and IP have been recorded.',
@@ -52,7 +56,12 @@ $LANG_FM00 = array (
     'warning'           => 'De-Install Warning',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
     'WhatsNewLabel'    => 'Files',
-    'WhatsNewPeriod'   => ' last %s days'
+    'WhatsNewPeriod'   => ' last %s days',
+    'new_upload'        => 'New File submitted at ',
+    'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
+    'details'           => 'File Details',
+    'filename'          => 'Filename',
+    'uploaded_by'       => 'Uploaded By',
 );
 
 // Admin Navbar
@@ -132,29 +141,30 @@ $LANG_configsections['filemgmt'] = array(
     'title'                 => 'FileMgmt Configuration'
 );
 $LANG_confignames['filemgmt'] = array(
-    'whatsnew'              => 'Enable WhatsNew Listing?',
+    'whatsnew'              => 'Enable WhatsNew Listing',
     'perpage'               => 'Displayed Downloads per Page',
     'popular_download'      => 'Hits to be Popular',
     'newdownloads'          => 'Number of Downloads as New on Top Page',
     'trimdesc'              => 'Trim File Descriptions in Listing',
-    'dlreport'              => 'Restrict access to Download report',
-    'selectpriv'            => 'Restrict access to group \'Logged-In Users\' only',
-    'uploadselect'          => 'Allow Logged-In uploads',
-    'uploadpublic'          => 'Allow Anonymous uploads',
+    'dlreport'              => 'Restrict Access to Download Report',
+    'selectpriv'            => 'Restrict Access to Group \'Logged-In Users\' Only',
+    'uploadselect'          => 'Allow Logged-In Uploads',
+    'uploadpublic'          => 'Allow Anonymous Uploads',
     'useshots'              => 'Display Category Images',
     'shotwidth'             => 'Thumbnail Img Width',
-    'Emailoption'           => 'Email submitter if file approved',
-    'FileStore'             => 'Directory to store files',
-    'SnapStore'             => 'Directory to store file thumbnails',
-    'SnapCat'               => 'Directory to store category thumbnails',
-    'FileStoreURL'          => 'URL to files',
-    'FileSnapURL'           => 'URL to file thumbnails',
-    'SnapCatURL'            => 'URL to category thumbnails',
+    'Emailoption'           => 'Email Submitter if File Approved',
+    'FileStore'             => 'Directory to Store Files',
+    'SnapStore'             => 'Directory to Store File Thumbnails',
+    'SnapCat'               => 'Directory to Store Category Thumbnails',
+    'FileStoreURL'          => 'URL to Files',
+    'FileSnapURL'           => 'URL to File Thumbnails',
+    'SnapCatURL'            => 'URL to Category Thumbnails',
     'whatsnewperioddays'    => 'What\'s New Days',
     'whatsnewtitlelength'   => 'What\'s New Title Length',
-    'showwhatsnewcomments'  => 'Show Comment in What\'s New Block?',
-    'numcategoriesperrow'   => 'Categories per row',
-    'numsubcategories2show' => 'Sub Categories per row',
+    'showwhatsnewcomments'  => 'Show Comments in What\'s New Block',
+    'numcategoriesperrow'   => 'Categories per Row',
+    'numsubcategories2show' => 'Sub Categories per Row',
+    'outside_webroot'       => 'Store Files Outside Web Root',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Main Settings'

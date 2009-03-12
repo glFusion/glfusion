@@ -39,10 +39,10 @@
 
 require_once 'gf_functions.php';
 
+echo COM_siteHeader();
+echo COM_startBlock($LANG_GF91['gfstats']);
 
-$pageHandle->addContent(COM_startBlock($LANG_GF91['gfstats']));
-
-$pageHandle->addContent(glfNavbar($navbarMenu,$LANG_GF06['1']));
+echo glfNavbar($navbarMenu,$LANG_GF06['1']);
 
 // CATEGORIES
 $numcats=DB_query("SELECT id FROM {$_TABLES['gf_categories']}");
@@ -117,13 +117,12 @@ if ($totalviews['TOTAL'] != 0) {
     $indextemplate->set_var ('avgtviews', $avgtviews);
 
     $indextemplate->parse ('output', 'indextemplate');
-    $pageHandle->addContent($indextemplate->finish ($indextemplate->get_var('output')));
+    echo $indextemplate->finish ($indextemplate->get_var('output'));
 
 
-$pageHandle->addContent(COM_endBlock());
-$pageHandle->addContent(adminfooter());
+echo COM_endBlock();
+echo adminfooter();
 
-$pageHandle->setShowExtraBlocks(false);
-$pageHandle->displayPage();
+echo COM_siteFooter();
 
 ?>

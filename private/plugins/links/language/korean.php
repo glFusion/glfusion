@@ -26,6 +26,11 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 ###############################################################################
@@ -97,7 +102,7 @@ $LANG_LINKS_SUBMIT = array(
 ###############################################################################
 # Messages for COM_showMessage the submission form
 
-$PLG_links_MESSAGE1 = "{$_CONF['site_name']} 의 링크에 등록해 주셔서 감사합니다。 스탭이 내용을 확인하고 있습니다。 승인이 되면 <a 
+$PLG_links_MESSAGE1 = "{$_CONF['site_name']} 의 링크에 등록해 주셔서 감사합니다。 스탭이 내용을 확인하고 있습니다。 승인이 되면 <a
 href={$_CONF['site_url']}/links/index.php> 링크</a> 부문에 표시됩니다。";
 $PLG_links_MESSAGE2 = '링크는 무사히 등록 되었습니다。';
 $PLG_links_MESSAGE3 = '링크의 삭제가 완료 되었습니다。';
@@ -237,7 +242,8 @@ $LANG_confignames['links'] = array(
     'aftersave' => 'After Saving Link',
     'show_category_descriptions' => 'Show Category Description?',
     'root' => 'ID of Root Category',
-    'default_permissions' => 'Link Default Permissions'
+    'default_permissions' => 'Link Default Permissions',
+    'target_blank' => 'Open Links in New Window',
 );
 
 $LANG_configsubgroups['links'] = array(

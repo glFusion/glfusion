@@ -208,7 +208,7 @@ margin:20px auto auto;
 
 #gl_container_fluid {
 background:#FFF;
-min-width:700px;
+min-width:955px;
 margin:20px;
 }
 
@@ -928,17 +928,6 @@ margin-left:65px;
 z-index:1000;
 }
 
-#header-site-text {
-padding:25px 0 15px 20px;
-}
-
-#header-site-text a {
-font-style:italic;
-font-weight:bold;
-font-size:xx-large;
-color:#FFF;
-text-decoration:none;
-}
 #header-textbox {
 background:url(layout/nouveau/images/bg_search.jpg) no-repeat right -22px #FFF;
 color:#000;
@@ -1006,7 +995,6 @@ background:#f2f2f2 50% 50%;
 border:1px solid #ccc;
 padding:5px;
 margin:0;
-height:185px;
 width:170px;
 }
 

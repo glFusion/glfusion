@@ -12,6 +12,11 @@
  * $Id: english.php,v 1.23 2008/04/13 11:59:08 dhaun Exp $
  */
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 $LANG_SX00 = array(

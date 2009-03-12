@@ -34,7 +34,7 @@
 
 require_once '../lib-common.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-$id = $inputHandler->getVar('integer','id','get',0);
+$id = COM_applyFilter($_GET['id'],true);
 
 if ($_USER['uid'] > 1 AND $id >= 1) {
     if (DB_count($_TABLES['gf_bookmarks'],array('uid','topic_id'),array($_USER['uid'],$id))) {

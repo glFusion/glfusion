@@ -1,0 +1,82 @@
+<form name="sitedata" id="sitedata" action="index.php" method="post">
+  <input type="hidden" name="task" value="" />
+  {hiddenfields}
+  <div class="step floatleft">
+    <div class="stepheading">
+      <span class="floatright buttons">
+        <button type="submit" name="prev" onclick="submitForm( sitedata, 'checkenvironment' );">
+          <img src="layout/arrow-back.gif" alt=""/>
+          {lang_prev}
+        </button>
+        <button type="submit" name="submit" onclick="submitForm( sitedata, 'gotsiteinformation' );">
+          {lang_install}
+          <img src="layout/arrow-next.gif" alt=""/>
+        </button>
+      </span>
+      {lang_site_information}
+    </div>
+    <div class="stepfields">
+      <span>
+        <label>{lang_database_type}:</label><br />
+        <select name="dbtype">
+          <option value="mysql" {noinnodb_selected}>MySQL</option>
+          <option value="mysql-innodb" {innodb_selected}>MySQL with InnoDB Table support</option>
+        </select>
+        <label style="font-weight:normal;">&nbsp;{lang_utf8}:</label>
+        <input type="checkbox" name="use_utf8" checked="checked" class="box"/>
+      </span>
+      <span>
+        <label>{lang_database_hostname}:</label><br />
+        <input type="text" name="dbhost" value="{db_host}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_database_name}:</label><br />
+        <input type="text" name="dbname" value="{db_name}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_database_user}:</label><br />
+        <input type="text" name="dbuser" value="{db_user}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_database_password}:</label><br />
+        <input type="password" name="dbpass" value="{db_pass}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_database_table_prefix}:</label><br />
+        <input type="text" name="dbprefix" value="{db_prefix}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_site_name}:</label><br />
+        <input type="text" name="sitename" value="{site_name}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_site_slogan}:</label><br />
+        <input type="text" name="siteslogan" value="{site_slogan}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_site_email}:</label><br />
+        <input type="text" name="sitemail" value="{site_mail}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_site_noreply_email}:</label><br />
+        <input type="text" name="noreplymail" value="{noreply_mail}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_site_url}:</label><br />
+        <input type="text" name="siteurl" value="{site_url}" size="46" onkeypress="return check(event)"/>
+      </span>
+      <span>
+        <label>{lang_site_admin_url}:</label><br />
+        <input type="text" name="siteadminurl" value="{site_admin_url}" size="46" onkeypress="return check(event)"/>
+      </span>
+    </div>
+    <div class="stephelp">
+      {lang_sitedata_help}
+      <div id="back-to-top">
+        <a href="#top">
+          {back_to_top}&nbsp;<img title="{back_to_top}" alt="{back_to_top}" src="layout/top.png"/>
+        </a>
+      </div>
+    </div>
+  </div>
+</form>

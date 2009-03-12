@@ -37,11 +37,12 @@
 // +--------------------------------------------------------------------------+
 
 require_once 'gf_functions.php';
+require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 if (isset($_POST['migrate']) && $_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] AND $_POST['selforum'] != "select" AND !empty( $_POST['cb_chkentry']) ) {
     $num_stories = 0;
     $num_posts = 0;
-    $forum = $inputHandler->getVar('strict','selforum','post','');//COM_applyFilter($_POST['selforum']);
+    $forum = COM_applyFilter($_POST['selforum']);
     foreach($_POST['cb_chkentry'] as $sid ) {
         if($_POST['seltopic'] == 'submissions') {
             $topic = DB_getItem($_TABLES['storysubmission'],"tid","sid='$sid'");
@@ -67,7 +68,7 @@ if (isset($_POST['migrate']) && $_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] A
        }
     }
     gf_resyncforum($forum);
-    $pageHandle->redirect($_CONF['site_admin_url'] . "/plugins/forum/migrate.php?num_stories=". $num_stories. "&num_posts=".$num_posts);
+    echo COM_refresh($_CONF['site_admin_url'] . "/plugins/forum/migrate.php?num_stories=". $num_stories. "&num_posts=".$num_posts);
     exit;
 }
 
@@ -237,9 +238,13 @@ function migrate_deletestory ($sid)
     return;
 }
 
+
+
+echo COM_siteHeader();
+
 // Check if the number of records was specified to show
-$page = $inputHandler->getVar('integer','page','get',0); //isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
-$show = $inputHandler->getVar('integer','show','get',20); //isset($_GET['show']) ? COM_applyFilter($_GET['show'],true) : 0;
+$page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+$show = isset($_GET['show']) ? COM_applyFilter($_GET['show'],true) : 0;
 if (empty($show)) {
     $show = 20;
 }
@@ -248,8 +253,8 @@ if (empty($page) || $page < 1) {
     $page = 1;
 }
 
-$pageHandle->addContent(COM_startBlock($LANG_GF02['msg193']));
-$pageHandle->addContent(glfNavbar($navbarMenu,$LANG_GF06['5']));
+echo COM_startBlock($LANG_GF02['msg193']);
+echo glfNavbar($navbarMenu,$LANG_GF06['5']);
 
 $p = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $p->set_file (array ('page'=>'migratestories.thtml','records' => 'migrate_records.thtml'));
@@ -319,8 +324,9 @@ if ($numrows > 0) {
     $p->set_var ('page_navigation',COM_printPageNavigation($base_url,$page,$numpages));
 }
 $p->parse ('output', 'page');
-$pageHandle->addContent($p->finish ($p->get_var('output')));
+echo $p->finish ($p->get_var('output'));
 
-$pageHandle->addContent(COM_endBlock());
-$pageHandle->displayPage();
+echo COM_endBlock();
+echo COM_siteFooter();
+
 ?>

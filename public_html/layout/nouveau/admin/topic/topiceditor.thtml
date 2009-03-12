@@ -40,7 +40,10 @@
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_owner}:</td>
-                                        <td>{owner_name}<input type="hidden" name="owner_id" value="{owner_id}"{xhtml}></td>
+                                        <td>
+{#                                            {owner_name}<input type="hidden" name="owner_id" value="{owner_id}"{xhtml}> #}
+                                            {owner_dropdown}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="alignright">{lang_group}:</td>

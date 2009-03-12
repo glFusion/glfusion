@@ -34,7 +34,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-
 if (!defined('INSTALLER_VERSION')) {
 define('INSTALLER_VERSION','1');
 
@@ -42,17 +41,18 @@ function INSTALLER_install_group($step, &$vars)
 {
     global $_TABLES;
 
-    COM_errorLog("Creating group {$step['group']}...");
+    COM_errorLog("AutoInstall: Creating group {$step['group']}...");
     $grp_name = addslashes($step['group']);
     $grp_desc = addslashes($step['desc']);
     DB_query("INSERT INTO {$_TABLES['groups']} (grp_name, grp_descr) VALUES ('$grp_name', '$grp_desc')", 1);
     if (DB_error()) {
-        COM_errorLog("Group creation failed!");
+        COM_errorLog("AutoInstall: Group creation failed!");
         return 1;
     }
     $grp_id = DB_insertId();
     $vars[$step['variable']] = $grp_id;
     $vars['__groups'][$step['variable']] = $grp_name;
+
     if (isset($step['addroot'])) {
         DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($grp_id, 1)", 1);
     }
@@ -64,7 +64,7 @@ function INSTALLER_install_addgroup($step, &$vars)
 {
     global $_TABLES;
 
-    COM_errorLog("Adding a group to another group...");
+    COM_errorLog("AutoInstall: Adding a group to another group...");
     if (array_key_exists('parent_var',$step)) {
         $parent_grp = $vars[$step['parent_var']];
     } elseif (array_key_exists('parent_grp',$step)) {
@@ -82,13 +82,13 @@ function INSTALLER_install_addgroup($step, &$vars)
     $parent_grp = intval($parent_grp);
     $child_grp = intval($child_grp);
     if ($parent_grp == 0 || $child_grp == 0) {
-        COM_errorLog("Parent or child group missing!");
+        COM_errorLog("AutoInstall: Parent or child group missing!");
         return 1;
     }
 
     DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_grp_id) VALUES ($parent_grp, $child_grp)", 1);
     if (DB_error()) {
-        COM_errorLog("Failed to assign group!");
+        COM_errorLog("AutoInstall: Failed to assign group!");
         return 1;
     }
     return "DELETE FROM {$_TABLES['group_assignments']} where ug_main_grp_id = $parent_grp and grp_id = $child_grp";
@@ -98,12 +98,12 @@ function INSTALLER_install_feature($step, &$vars)
 {
     global $_TABLES;
 
-    COM_errorLog("Creating feature {$step['feature']}...");
+    COM_errorLog("AutoInstall: Creating feature {$step['feature']}...");
     $ft_name = addslashes($step['feature']);
     $ft_desc = addslashes($step['desc']);
     DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr) VALUES ('$ft_name', '$ft_desc')", 1);
     if (DB_error()) {
-        COM_errorLog("Feature creation failed!");
+        COM_errorLog("AutoInstall: Feature creation failed!");
         return 1;
     }
     $ft_id = DB_insertId();
@@ -117,14 +117,15 @@ function INSTALLER_install_mapping($step, &$vars)
     global $_TABLES;
 
     if (isset($step['log'])) {
-        COM_errorLog($step['log']);
+        COM_errorLog("AutoInstall: ".$step['log']);
     } else {
-        COM_errorLog("Mapping a feature to a group...");
+        COM_errorLog("AutoInstall: Mapping a feature to a group...");
     }
     if (array_key_exists('findgroup', $step)) {
-        $grp_id = DB_getItem($_TABLES['groups'],'grp_id',"grp_name = '" . addslashes($step['findgroup']) . "'");
+        $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = '" . addslashes($step['findgroup']) . "'"));
+
         if ($grp_id == 0) {
-            COM_errorLog("Could not find existing '{$step['findgroup']}' group!");
+            COM_errorLog("AutoInstall: Could not find existing '{$step['findgroup']}' group!");
             return 1;
         }
     } else {
@@ -133,7 +134,7 @@ function INSTALLER_install_mapping($step, &$vars)
     $ft_id = $vars[$step['feature']];
     DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
     if (DB_error()) {
-        COM_errorLog("Mapping failed!");
+        COM_errorLog("AutoInstall: Mapping failed!");
         return 1;
     }
     return "DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $ft_id AND acc_grp_id = $grp_id";
@@ -143,12 +144,13 @@ function INSTALLER_install_table($step, &$vars)
 {
     global $_DB_dbms, $_TABLES;
 
-    COM_errorLog("Creating table {$step['table']}...");
+    COM_errorLog("AutoInstall: Creating table {$step['table']}...");
     static $use_innodb = null;
     if ($use_innodb === null) {
         if (($_DB_dbms == 'mysql') &&
+
             (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
-            $use_innodb = true;
+        $use_innodb = true;
         }
         $use_innodb = false;
     }
@@ -160,7 +162,7 @@ function INSTALLER_install_table($step, &$vars)
 
     DB_query($sql, 1);
     if (DB_error()) {
-        COM_errorLog("Failed to create table {$step['table']}!");
+        COM_errorLog("AutoInstall: Failed to create table {$step['table']}!");
         return 1;
     }
     return "DROP TABLE {$step['table']}";
@@ -169,12 +171,12 @@ function INSTALLER_install_table($step, &$vars)
 function INSTALLER_install_sql($step, &$vars)
 {
     if (isset($step['log'])) {
-        COM_errorLog($step['log']);
+        COM_errorLog("AutoInstall: ".$step['log']);
     }
 
     DB_query($step['sql'], 1);
     if (DB_error()) {
-        COM_errorLog("SQL failed!");
+        COM_errorLog("AutoInstall: SQL failed! ".htmlspecialchars($step['sql']));
         return 1;
     }
     return isset($step['rev']) ? $step['rev'] : '';
@@ -184,7 +186,7 @@ function INSTALLER_install_block($step, &$vars)
 {
     global $_TABLES, $_CONF, $_USER;
 
-    COM_errorLog("Creating block {$step['name']}...");
+    COM_errorLog("AutoInstall: Creating block {$step['name']}...");
     $is_enabled = isset($step['is_enabled']) ? intval($step['is_enabled']) : 1;
     $rdflimit = isset($step['rdflimit']) ? intval($step['rdflimit']) : 0;
     $onleft = isset($step['onleft']) ? intval($step['onleft']) : 0;
@@ -195,14 +197,15 @@ function INSTALLER_install_block($step, &$vars)
     $phpblockfn = isset($step['phpblockfn']) ? addslashes($step['phpblockfn']) : '';
     $help = isset($step['help']) ? addslashes($step['help']) : '';
     $content = isset($step['content']) ? addslashes($step['content']) : '';
-    $owner_id = $_USER['uid'];
-    $group_id = $vars[$step['group_id']];
+    $blockorder = isset($step['blockorder']) ? intval($step['blockorder']) : 9999;
+    $owner_id = isset($_USER['uid']) ? $_USER['uid'] : 2;
+    $group_id = isset($vars[$step['group_id']]) ? $vars[$step['group_id']] : 1;
     list($perm_owner,$perm_group,$perm_members,$perm_anon) = $_CONF['default_permissions_block'];
     DB_query("INSERT INTO {$_TABLES['blocks']} "
            . "(is_enabled,name,type,title,tid,blockorder,content,allow_autotags,rdflimit,onleft,phpblockfn,help,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon)"
-   . " VALUES ($is_enabled,'$name','$type','$title','all',9999,'$content',$allow_autotags,$rdflimit,$onleft,'$phpblockfn','$help',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon)", 1);
+   . " VALUES ($is_enabled,'$name','$type','$title','all',$blockorder,'$content',$allow_autotags,$rdflimit,$onleft,'$phpblockfn','$help',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon)", 1);
     if (DB_error()) {
-        COM_errorLog("Block creation failed!");
+        COM_errorLog("AutoInstall: Block creation failed!");
         return 1;
     }
     $bid = DB_insertId();
@@ -228,7 +231,7 @@ function INSTALLER_install_createvar($step, &$vars)
         $where = "ft_name = '{$step['feature']}'";
         $major = '__feature';
     } else {
-        COM_errorLog("Don't know what var to create");
+        COM_errorLog("AutoInstall: Don't know what var to create");
         return 1;
     }
     $vars[$step['variable']] = DB_getItem($table, $col, $where);
@@ -245,7 +248,7 @@ function INSTALLER_install_mkdir($step, &$vars)
             $dirs = $step['dirs'];
         }
         foreach ($dirs as $path) {
-            COM_errorlog("Creating directory $path");
+            COM_errorlog("AutoInstall: Creating directory $path");
             $ret = @mkdir($path);
             file_put_contents($path . '/index.html', '');
         }
@@ -262,13 +265,13 @@ function INSTALLER_fail_rmdir($step)
             $dirs = $step['dirs'];
         }
         foreach ($dirs as $path) {
-            COM_errorlog("FAIL: removing directory $path");
+            COM_errorlog("AutoInstall: FAIL: removing directory $path");
             @rmdir($path);
         }
     }
 }
 
-function INSTALLER_fail($rev)
+function INSTALLER_fail($pluginName,$rev)
 {
     $A = array_reverse($rev);
     foreach ($A as $sql) {
@@ -278,29 +281,46 @@ function INSTALLER_fail($rev)
             if (array_key_exists('type', $sql)) {
                 $function = 'INSTALLER_fail_'.$type;
                 if (function_exists($function)) {
-                    COM_errorlog("FAIL: calling $function");
+                    COM_errorlog("AutoInstall: FAIL: calling $function");
                     $function($sql);
                 }
             }
         } else {
-            COM_errorLog("FAIL: $sql");
+            COM_errorLog("AutoInstall: FAIL: $sql");
             DB_query($sql, 1);
         }
     }
+    PLG_uninstall($pluginName);
 }
 
 function INSTALLER_install($A)
 {
     global $_TABLES;
 
+    COM_errorLog("AutoInstall: **** Start Installation ****");
+
     if (!isset($A['installer']) OR $A['installer']['version'] != INSTALLER_VERSION) {
-        COM_errorLog('Invalid or Unknown installer version');
+        COM_errorLog('AutoInstall: Invalid or Unknown installer version');
+        COM_errorLog("AutoInstall: **** END Installation ****");
         return 2;
     }
     if (!isset($A['plugin'])) {
-        COM_errorLog("Missing plugin description!");
+        COM_errorLog("AutoInstall: Missing plugin description!");
+        COM_errorLog("AutoInstall: **** END Installation ****");
         return 1;
     }
+    if ( !isset($A['plugin']['name'])) {
+        COM_errorLog("AutoInstall: Missing plugin name!");
+        COM_errorLog("AutoInstall: **** END Installation ****");
+        return 1;
+    }
+    if (!COM_checkVersion(GVERSION, $A['plugin']['gl_ver'])) {
+        COM_errorLog("AutoInstall: Plugin requires glFusion v".$A['plugin']['gl_ver']." or greater");
+        COM_errorLog("AutoInstall: **** END Installation ****");
+        return 1;
+    }
+
+    $pluginName = $A['plugin']['name'];
 
     $vars = Array('__groups' => Array(), '__features' => Array(), '__blocks' => Array());
     $reverse = Array();
@@ -308,8 +328,9 @@ function INSTALLER_install($A)
         if ($meta === 'installer') { // must use === when since 0 == 'anystring' is true
         } elseif ($meta === 'plugin') {
             if (!isset($meta['name'])) {
-                COM_errorLog("Missing plugin name!");
-                INSTALLER_fail($reverse);
+                COM_errorLog("AutoInstall: Missing plugin name!");
+                INSTALLER_fail($pluginName,$reverse);
+                COM_errorLog("AutoInstall: **** END Installation ****");
                 return 1;
             }
         } else {
@@ -317,7 +338,8 @@ function INSTALLER_install($A)
             if (function_exists($function)) {
                 $result = $function($step, $vars);
                 if (is_numeric($result)) {
-                    INSTALLER_fail($reverse);
+                    INSTALLER_fail($pluginName,$reverse);
+                    COM_errorLog("AutoInstall: **** END Installation ****");
                     return $result;
                 } else if (!empty($result)) {
                     $reverse[] = $result;
@@ -325,7 +347,8 @@ function INSTALLER_install($A)
             } else {
                 $dump = var_dump($step);
                 COM_errorLog('Can\'t process step: '.$dump);
-                INSTALLER_fail($reverse);
+                INSTALLER_fail($pluginName,$reverse);
+                COM_errorLog("AutoInstall: **** END Installation ****");
                 return 1;
             }
         }
@@ -333,8 +356,21 @@ function INSTALLER_install($A)
 
     $plugin = $A['plugin'];
 
-    // Finally, register the plugin with Geeklog
-    COM_errorLog ("Registering {$plugin['display']} plugin with Geeklog", 1);
+    $cfgFunction = 'plugin_load_configuration_'.$plugin['name'];
+    // Load the online configuration records
+    if (function_exists($cfgFunction)) {
+        if (!$cfgFunction()) {
+            COM_errorLog("AutoInstall: Failed to load the default configuration");
+            INSTALLER_fail($pluginName,$reverse);
+            COM_errorLog("AutoInstall: **** END Installation ****");
+            return 1;
+        }
+    } else {
+        COM_errorLog("AutoInstall: No default config found: ".$cfgFunction);
+    }
+
+    // Finally, register the plugin with glFusion
+    COM_errorLog ("AutoInstall: Registering {$plugin['display']} plugin with glFusion", 1);
 
     // silently delete an existing entry
     DB_delete($_TABLES['plugins'], 'pi_name', $plugin['name']);
@@ -342,6 +378,16 @@ function INSTALLER_install($A)
     DB_query("INSERT INTO {$_TABLES['plugins']} (pi_name, pi_version, pi_gl_version, pi_homepage, pi_enabled) "
            . "VALUES ('{$plugin['name']}', '{$plugin['ver']}', '{$plugin['gl_ver']}', '{$plugin['url']}', 1)", 1);
 
+    // run any post install routines
+    $postInstallFunction = 'plugin_postinstall_'.$plugin['name'];
+    if ( function_exists($postInstallFunction) ) {
+        $postInstallFunction();
+    } else {
+        COM_errorLog("AutoInstall: No post installation routine found.");
+    }
+
+    COM_errorLog("AutoInstall: **** END Installation ****");
+    CTL_clearCache();
     return 0;
 }
 
@@ -356,26 +402,26 @@ function INSTALLER_uninstall($A)
             $ft_name = addslashes($step['feature']);
             $ft_id = DB_getItem($_TABLES['features'], 'ft_id', "ft_name = '$ft_name'");
 
-            COM_errorLog("Removing feature {$step['feature']}....");
+            COM_errorLog("AutoInstall: Removing feature {$step['feature']}....");
             DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $ft_id", 1);
             DB_query("DELETE FROM {$_TABLES['features']} WHERE ft_id = $ft_id", 1);
         } else if ($step['type'] == 'group') {
             $grp_name = addslashes($step['group']);
             $grp_id = DB_getItem($_TABLES['groups'], 'grp_id', "grp_name = '$grp_name'");
 
-            COM_errorLog("Removing group {$step['group']}....");
+            COM_errorLog("AutoInstall: Removing group {$step['group']}....");
             DB_query("DELETE FROM {$_TABLES['access']} WHERE acc_grp_id = $grp_id", 1);
             DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id OR ug_grp_id = $grp_id", 1);
             DB_query("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id", 1);
         } else if ($step['type'] == 'table') {
-            COM_errorLog("Dropping table {$step['table']}....");
+            COM_errorLog("AutoInstall: Dropping table {$step['table']}....");
             DB_query("DROP TABLE {$step['table']}",1);
         } else if ($step['type'] == 'block') {
-            COM_errorLog("Removing block {$step['name']}....");
+            COM_errorLog("AutoInstall: Removing block {$step['name']}....");
             DB_query("DELETE FROM {$_TABLES['blocks']} WHERE name = '{$step['name']}'", 1);
         } else if ($step['type'] == 'sql') {
             if (isset($step['rev_log'])) {
-                COM_errorLog($step['rev_log']);
+                COM_errorLog("AutoInstall: ". $step['rev_log']);
             }
             if (isset($step['rev'])) {
                 DB_query($step['rev'],1);
@@ -390,11 +436,11 @@ function INSTALLER_uninstall($A)
 
     if (array_key_exists('plugin', $A)) {
         $plugin = $A['plugin'];
-        COM_errorLog("Removing plugin {$plugin['name']} from plugins table", 1);
+        COM_errorLog("AutoInstall: Removing plugin {$plugin['name']} from plugins table", 1);
         DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = '{$plugin['name']}'", 1);
     }
 
-    COM_errorLog("Uninstall complete");
+    COM_errorLog("AutoInstall: Uninstall complete");
     return true;
 }
 

@@ -37,21 +37,25 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!@file_exists('siteconfig.php') ) {
+    header("Location:admin/install/index.php");
+    exit;
+}
+
 require_once 'lib-common.php';
 USES_lib_story();
 
-$newstories     = false;
-$displayall     = false;
-$microsummary   = false;
-
-$mDisplay = $inputHandler->getVar('strict','display','get');
-
-if (($mDisplay == 'new') && (empty ($topic))) {
-    $newstories = true;
-} else if (($mDisplay  == 'all') && (empty ($topic))) {
-    $displayall = true;
-} else if ($mDisplay  == 'microsummary') {
-    $microsummary = true;
+$newstories = false;
+$displayall = false;
+$microsummary = false;
+if (isset ($_GET['display'])) {
+    if (($_GET['display'] == 'new') && (empty ($topic))) {
+        $newstories = true;
+    } else if (($_GET['display'] == 'all') && (empty ($topic))) {
+        $displayall = true;
+    } else if ($_GET['display'] == 'microsummary') {
+        $microsummary = true;
+    }
 }
 
 // Retrieve the archive topic - currently only one supported
@@ -92,13 +96,18 @@ if( $microsummary )
     if ( $A = DB_fetchArray( $result ) ) {
         $pagetitle = $_CONF['microsummary_short'].$A['title'];
     } else {
-        if(isset( $_CONF['pagetitle'] )) {
+        if(isset( $_CONF['pagetitle'] ))
+        {
             $pagetitle = $_CONF['pagetitle'];
         }
-        if( empty( $pagetitle )) {
-            if( empty( $topic )) {
+        if( empty( $pagetitle ))
+        {
+            if( empty( $topic ))
+            {
                 $pagetitle = $_CONF['site_slogan'];
-            } else {
+            }
+            else
+            {
                 $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
                                                        "tid = '$topic'" ));
             }
@@ -108,10 +117,16 @@ if( $microsummary )
     die($pagetitle);
 }
 
-$page = $inputHandler->getVar('int','page','get',1);
-if ($page == 0) {
-    $page = 1;
+
+$page = 1;
+if (isset ($_GET['page'])) {
+    $page = COM_applyFilter ($_GET['page'], true);
+    if ($page == 0) {
+        $page = 1;
+    }
 }
+
+$display = '';
 
 if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely
@@ -122,18 +137,25 @@ if (!$newstories && !$displayall) {
     }
 }
 
-if ( $topic ) {
-    $pageHandle->addLink('microsummary',$_CONF['site_url'].'/index.php?display=microsummary&amp;topic=' . urlencode($topic),'','',array('title'=>'Microsummary'));
+if($topic)
+{
+    $header = '<link rel="microsummary" href="' . $_CONF['site_url']
+            . '/index.php?display=microsummary&amp;topic=' . urlencode($topic)
+            . '" title="Microsummary"' . XHTML . '>';
 } else {
-    $pageHandle->addLink('microsummary',$_CONF['site_url'].'/index.php?display=microsummary','','',array('title'=>'Microsummary'));
+    $header = '<link rel="microsummary" href="' . $_CONF['site_url']
+            . '/index.php?display=microsummary" title="Microsummary"' . XHTML . '>';
 }
+$display .= COM_siteHeader('menu', '', $header);
 
-$pageHandle->addContent(glfusion_SecurityCheck());
+$display .= glfusion_SecurityCheck();
 
-$msg    = $inputHandler->getVar('integer','msg','get','');
-$plugin = $inputHandler->getVar('strict','plugin','get','');
-if ($msg !== '') {
-    $pageHandle->addMessage($msg, $plugin);
+if (isset ($_GET['msg'])) {
+    $plugin = '';
+    if (isset ($_GET['plugin'])) {
+        $plugin = COM_applyFilter ($_GET['plugin']);
+    }
+    $display .= COM_showMessage (COM_applyFilter ($_GET['msg'], true), $plugin);
 }
 
 
@@ -141,7 +163,7 @@ if ($msg !== '') {
 // Requires a plugin to have a function called plugin_centerblock_<plugin_name>
 $displayBlock = PLG_showCenterblock (1, $page, $topic); // top blocks
 if (!empty ($displayBlock)) {
-    $pageHandle->addContent($displayBlock);
+    $display .= $displayBlock;
     // Check if theme has added the template which allows the centerblock
     // to span the top over the rightblocks
     if (file_exists($_CONF['path_layout'] . 'topcenterblock-span.thtml')) {
@@ -152,7 +174,7 @@ if (!empty ($displayBlock)) {
             $topspan->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
             $topspan->set_var( 'layout_url', $_CONF['layout_url'] );
             $topspan->parse ('output', 'topspan');
-            $pageHandle->addContent($topspan->finish ($topspan->get_var('output')));
+            $display .= $topspan->finish ($topspan->get_var('output'));
             $GLOBALS['centerspan'] = true;
     }
 }
@@ -205,7 +227,6 @@ if (empty ($archivetid)) {
 } else {
     $asql .= ' OR statuscode = ' . STORY_ARCHIVE_ON_EXPIRE . ") AND tid != '$archivetid'";
 }
-
 $expiresql = DB_query ($asql);
 while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray ($expiresql)) {
     if ($statuscode == STORY_ARCHIVE_ON_EXPIRE) {
@@ -273,16 +294,15 @@ $msql['mysql']="SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
          . $userfields . ", t.topic, t.imageurl "
          . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
          . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-        . $sql . " ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
+         . $sql . "ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
 
-//print $msql;exit;
-//$msql="SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-//         . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-//         . $userfields . ", t.topic, t.imageurl "
-//         . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-//         . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-//         . $sql . "ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
-
+$msql['mssql']="SELECT STRAIGHT_JOIN s.sid, s.uid, s.draft_flag, s.tid, s.date, s.title, cast(s.introtext as text) as introtext, cast(s.bodytext as text) as bodytext, s.hits, s.numemails, s.comments, s.trackbacks, s.related, s.featured, s.show_topic_icon, s.commentcode, s.trackbackcode, s.statuscode, s.expire, s.postmode, s.frontpage, s.in_transit, s.owner_id, s.group_id, s.perm_owner, s.perm_group, s.perm_members, s.perm_anon, s.advanced_editor_mode, "
+         . " UNIX_TIMESTAMP(s.date) AS unixdate, "
+         . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
+         . $userfields . ", t.topic, t.imageurl "
+         . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
+         . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
+         . $sql . "ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
 
 $result = DB_query ($msql);
 
@@ -301,22 +321,22 @@ if ( $A = DB_fetchArray( $result ) ) {
     }
 
     // display first article
-    $pageHandle->addContent(STORY_renderArticle ($story, 'y'));
+    $display .= STORY_renderArticle ($story, 'y');
 
     // get plugin center blocks after featured article
     if ($story->DisplayElements('featured') == 1) {
-        $pageHandle->addContent(PLG_showCenterblock (2, $page, $topic));
+        $display .= PLG_showCenterblock (2, $page, $topic);
     }
 
     // get remaining stories
     while ($A = DB_fetchArray ($result)) {
         $story = new Story();
         $story->loadFromArray($A);
-        $pageHandle->addContent(STORY_renderArticle ($story, 'y'));
+        $display .= STORY_renderArticle ($story, 'y');
     }
 
     // get plugin center blocks that follow articles
-    $pageHandle->addContent(PLG_showCenterblock (3, $page, $topic)); // bottom blocks
+    $display .= PLG_showCenterblock (3, $page, $topic); // bottom blocks
 
     // Print Google-like paging navigation
     if (!isset ($_CONF['hide_main_page_navigation']) ||
@@ -329,22 +349,27 @@ if ( $A = DB_fetchArray( $result ) ) {
         } else {
             $base_url = $_CONF['site_url'] . '/index.php?topic=' . $topic;
         }
-        $pageHandle->addContent(COM_printPageNavigation ($base_url, $page, $num_pages));
+        $display .= COM_printPageNavigation ($base_url, $page, $num_pages);
     }
 } else { // no stories to display
     if (!isset ($_CONF['hide_no_news_msg']) ||
             ($_CONF['hide_no_news_msg'] == 0)) {
-        $pageHandle->addContent(COM_startBlock ($LANG05[1], '',
-                    COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2]);
+        $display .= COM_startBlock ($LANG05[1], '',
+                    COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2];
         if (!empty ($topic)) {
             $topicname = DB_getItem ($_TABLES['topics'], 'topic',
                                      "tid = '$topic'");
-            $pageHandle->addContent(sprintf ($LANG05[3], $topicname));
+            $display .= sprintf ($LANG05[3], $topicname);
         }
-        $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));
+        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     }
 
-    $pageHandle->addContent(PLG_showCenterblock (3, $page, $topic)); // bottom blocks
+    $display .= PLG_showCenterblock (3, $page, $topic); // bottom blocks
 }
-$pageHandle->displayPage();
+
+$display .= COM_siteFooter (true); // The true value enables right hand blocks.
+
+// Output page
+echo $display;
+
 ?>

@@ -42,12 +42,16 @@ include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 include_once $_CONF['path'].'system/classes/navbar.class.php';
 
-$op = $inputHandler->getVar('strict','op','request','');
-
+$op = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 $display = '';
 if (!SEC_hasRights('filemgmt.edit')) {
     if ($op != 'comment') {
-        $pageHandle->displayAccessError('',_GL_ERRORNOACCESS,'FileMgmt admin screen');
+        $display .= COM_siteHeader('menu');
+        $display .= COM_startBlock(_GL_ERRORNOACCESS);
+        $display .= _MD_USER." ".$_USER['username']. " " ._GL_NOUSERACCESS;
+        $display .= COM_endBlock();
+        $display .= COM_siteFooter();
+        echo $display;
         exit;
     }
 }
@@ -84,15 +88,18 @@ function filemgmt_navbar($selected='') {
 
 }
 
-$myts   = new MyTextSanitizer;
+$myts = new MyTextSanitizer;
 $mytree = new XoopsTree($_DB_name,$_FM_TABLES['filemgmt_cat'],"cid","pid");
-$eh     = new ErrorHandler;
+$eh = new ErrorHandler;
 
 function mydownloads() {
-    global $_CONF,$LANG_FM02,$_FM_TABLES, $pageHandle;
+    global $_CONF,$LANG_FM02,$_FM_TABLES;
 
-    $display = COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
+    $display = COM_siteHeader('menu');
+    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
+
     $display .= filemgmt_navbar();
+
     $result = DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE status > 0");
     list($numrows) = DB_fetchARRAY($result);
     $display .= "<br" . XHTML . "><br" . XHTML . "><div style=\"text-align:center;padding:10px;\">";
@@ -100,26 +107,21 @@ function mydownloads() {
     $display .= "</div>";
     $display .= "<br" . XHTML . ">";
     $display .= COM_endBlock();
-
-    $pageHandle->addContent($display);
-    $pageHandle->displayPage();
+    $display .= COM_siteFooter();
+    echo $display;
 }
 
 function listNewDownloads(){
-    global $_CONF,$_TABLES,$_FM_TABLES,$myts,$eh,$mytree,
-           $filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$LANG_FM02,
-           $inputHandler, $pageHandle;
+    global $_CONF,$_FM_CONF, $_TABLES,$_FM_TABLES,$myts,$eh,$mytree,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$LANG_FM02;
 
     // List downloads waiting for validation
     $sql = "SELECT lid, cid, title, url, homepage, version, size, logourl, submitter, comments, platform ";
     $sql .= "FROM {$_FM_TABLES['filemgmt_filedetail']} where status=0 ORDER BY date DESC";
     $result = DB_query($sql);
     $numrows = DB_numROWS($result);
-
-    $pageHandle->addContent(COM_startBlock('<b>'._MD_ADMINTITLE.'</b>'));
-    $pageHandle->addContent(filemgmt_navbar($LANG_FM02['nav4']));
-
-    $display = '';
+    $display = COM_siteHeader('menu');
+    $display .= COM_startBlock('<b>'._MD_ADMINTITLE.'</b>');
+    $display .= filemgmt_navbar($LANG_FM02['nav4']);
 
     $i = 1;
     if ($numrows > 0) {
@@ -137,6 +139,7 @@ function listNewDownloads(){
             $description = $myts->makeTareaData4Edit($description);
             $tmpfilenames = explode(";",$tmpnames);
             $tempfileurl = $filemgmt_FileStoreURL . 'tmp/' .$tmpfilenames[0];
+            $tempfilepath = $filemgmt_FileStore . 'tmp/' .$tmpfilenames[0];
             if (isset($tmpfilenames[1]) and $tmpfilenames[1] != '') {
                 $tempsnapurl = $filemgmt_FileSnapURL . 'tmp/' .$tmpfilenames[1];
             } else {
@@ -187,7 +190,12 @@ function listNewDownloads(){
             $display .= '<input type="hidden" name="lid" value="'.$lid.'"' . XHTML . '>';
             $display .= '<span style="padding-left:10px;">';
             $display .= '<input type="submit" value="'._MD_APPROVE.'" onclick=\'this.form.op.value="approve"\'' . XHTML . '></span>';
-            $display .= '</td><td style="padding:10px;">Download to preview:&nbsp;<a href="' . $tempfileurl . '">tempfile</a></td></tr>';
+            if ( $_FM_CONF['outside_webroot'] == 1 ) {
+                $display .= '</td><td style="padding:10px;">Download to preview:&nbsp;<a href="' .  $_CONF['site_url'].'/filemgmt/visit.php?tid='.$lid  . '">tempfile</a></td></tr>';
+            } else {
+                $display .= '</td><td style="padding:10px;">Download to preview:&nbsp;<a href="' . $tempfileurl . '">tempfile</a></td></tr>';
+            }
+
             if ($numrows > 1 and $i < $numrows ) {
                $i++;
             }
@@ -198,18 +206,16 @@ function listNewDownloads(){
         $display .= '<div style="padding:20px">' . _MD_NOSUBMITTED .'</div>';
     }
 
-    $pageHandle->addContent($display);
-    $pageHandle->addContent(COM_endBlock());
-    $pageHandle->displayPage();
+    $display .= COM_endBlock();
+    $display .= COM_siteFooter();
+    echo $display;
 }
 
 
 function categoryConfigAdmin(){
-    global $_CONF, $_TABLES, $LANG_FM02, $_FM_TABLES, $myts, $eh, $mytree,
-           $pageHandle,$inputHandle;
+    global $_CONF, $_TABLES, $LANG_FM02, $_FM_TABLES, $myts, $eh, $mytree;
 
-    $display = '';
-
+    $display = COM_siteHeader('menu');
     $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= filemgmt_navbar($LANG_FM02['nav2']);
     $display .= '<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="width:100%;">';
@@ -254,15 +260,15 @@ function categoryConfigAdmin(){
     $display .= '</td></tr></table>';
 
     $display .= COM_endBlock();
+    $display .= COM_siteFooter();
+    echo $display;
 
-    $pageHandle->addContent($display);
-    $pageHandle->displayPage();
 }
 
 function newfileConfigAdmin(){
-    global $_CONF,$myts,$eh,$mytree,$LANG_FM02,$pageHandle;
+    global $_CONF,$myts,$eh,$mytree,$LANG_FM02;
 
-    $display = '';
+    $display = COM_siteHeader('menu');
     $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= filemgmt_navbar($LANG_FM02['nav3']);
     $display .= '<form method="post" enctype="multipart/form-data" action="index.php" style="margin:0px;">';
@@ -270,9 +276,15 @@ function newfileConfigAdmin(){
     $display .= '<tr><td colspan="2" class="pluginHeader" style="width:100%;padding:5px;">' . _MD_ADDNEWFILE . '</td></tr>';
     $display .= '<tr><td align="right">'._MD_FILETITLE.'</td><td>';
     $display .= '<input type="text" name="title" size="50" maxlength="100"' . XHTML . '>';
+
     $display .= '</td></tr><tr><td align="right" style="white-space:nowrap;">File:</td><td>';
     $display .= '<input type="file" name="newfile" size="50" maxlength="100"' . XHTML . '>';
     $display .= '</td></tr>';
+
+    $display .= '<tr><td align="right" style="white-space:nowrap;">URL:</td><td>';
+    $display .= '<input type="text" name="fileurl" size="50" maxlength="250"' . XHTML . '>';
+    $display .= '</td></tr>';
+
     $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_CATEGORYC.'</td><td>';
     $display .= $mytree->makeMySelBox('title', 'title');
     $display .= '</td></tr><tr><td></td><td></td></tr>';
@@ -296,13 +308,13 @@ function newfileConfigAdmin(){
     $display .= '</td></tr></table>';
     $display .= '</form>';
     $display .= COM_endBlock();
+    $display .= COM_siteFooter();
+    echo $display;
 
-    $pageHandle->addContent($display);
-    $pageHandle->displayPage();
 }
 
 function modDownload() {
-    global $_CONF,$_FM_TABLES,$_USER,$myts,$eh,$mytree,$filemgmt_SnapStore,$filemgmt_FileSnapURL,$pageHandle;
+    global $_CONF,$_FM_TABLES,$_USER,$myts,$eh,$mytree,$filemgmt_SnapStore,$filemgmt_FileSnapURL;
 
     $lid = $_GET['lid'];
     $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
@@ -312,8 +324,7 @@ function modDownload() {
         exit();
     }
 
-    $display = '';
-
+    $display = COM_siteHeader('menu');
     $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
 
     $display .= '<form method="post" enctype="multipart/form-data" action="index.php">';
@@ -345,7 +356,8 @@ function modDownload() {
     $display .= '<tr><td width="25%">'._MD_REPLFILENAME.'</td><td colspan="2"><input type="file" name="newfile" size="50" maxlength="200"' . XHTML . '></td></tr>' .LB;
     $display .= '<tr><td>'._MD_HOMEPAGEC.'</td><td colspan="2"><input type="text" name="homepage" value="'.$homepage.'" size="50" maxlength="150"' . XHTML . '></td></tr>' .LB;
     $display .= '<tr><td>'._MD_VERSIONC.'</td><td colspan="2"><input type="text" name="version" value="'.$version.'" size="10" maxlength="10"' . XHTML . '></td></tr>' .LB;
-    $display .= '<tr><td>'._MD_FILESIZEC.'</td><td colspan="2"><input type="text" name="size" value="'.$size.'" size="10" maxlength="20" disabled="disabled"' . XHTML . '>'._MD_BYTES.'</td></tr>' .LB;
+//    $display .= '<tr><td>'._MD_FILESIZEC.'</td><td colspan="2"><input type="text" name="size" value="'.$size.'" size="10" maxlength="20" disabled="disabled"' . XHTML . '>'._MD_BYTES.'</td></tr>' .LB;
+    $display .= '<tr><td>'._MD_FILESIZEC.'</td><td colspan="2"><input type="text" name="size" value="'.$size.'" size="10" maxlength="20"' . XHTML . '>'._MD_BYTES.'</td></tr>' .LB;
     $display .= '<tr><td style="vertical-align:top;">'._MD_DESCRIPTIONC.'</td><td colspan="2"><textarea name="description" cols="55" rows="10">'.$description.'</textarea></td></tr>' .LB;
     $display .= '<tr><td>'._MD_CATEGORYC.'</td><td colspan="2">';
     $display .= $mytree->makeMySelBox("title", "title", $cid,0,"cid");
@@ -461,18 +473,17 @@ function modDownload() {
 //    $display .= CloseTable();
     $display .= "<br" . XHTML . ">";
     $display .= COM_endBlock();
-
-    $pageHandle->addContent($display);
-    $pageHandle->displayPage();
+    $display .= COM_siteFooter();
+    echo $display;
 }
 
 function listBrokenDownloads() {
-    global $_CONF,$_TABLES,$_FM_TABLES,$LANG_FM02,$myts,$eh,$pageHandle;
+    global $_CONF,$_TABLES,$_FM_TABLES,$LANG_FM02,$myts,$eh;
 
     $result = DB_query("SELECT * FROM {$_FM_TABLES['filemgmt_brokenlinks']} ORDER BY reportid");
     $totalbrokendownloads = DB_numROWS($result);
 
-    $display = '';
+    $display = COM_siteHeader('menu');
     $display .= COM_startBlock('<b>'._MD_ADMINTITLE.'</b>');
     $display .= filemgmt_navbar($LANG_FM02['nav5']);
 
@@ -527,12 +538,12 @@ function listBrokenDownloads() {
     }
 
     $display .= COM_endBlock();
-    $pageHandle->addContent($display);
-    $pageHandle->displayPage();
+    $display .= COM_siteFooter();
+    echo $display;
 }
 
 function delBrokenDownloads() {
-    global $_FM_TABLES,$eh,$pageHandle;
+    global $_FM_TABLES,$eh;
 
     $lid = $_POST['lid'];
     DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid'");
@@ -563,19 +574,15 @@ function delVote() {
 
 
 function modDownloadS() {
-    global $_CONF,$_FM_TABLES,$myts,$eh,$filemgmt_SnapStore,$filemgmt_FileStore,
-           $pageHandle,$inputHandler;
+    global $_CONF,$_FM_TABLES,$myts,$eh,$filemgmt_SnapStore,$filemgmt_FileStore;
 
-    $cid = $inputHandler->getVar('strict','cid','post','');
-    $url = $inputHandler->getVar('url','url','post','');
-    $silentEdit = $inputHandler->getVar('integer','silentedit','post',0);
+    $cid = $_POST["cid"];
 
-//    $cid = $_POST["cid"];
-
-//    if (($_POST["url"]) || ($_POST["url"]!="")) {
-        $url = rawurlencode($myts->makeTboxData4Save($url));
-//    }
-//    $silentEdit = COM_applyFilter($_POST['silentedit'],true);
+    if (($_POST["url"]) || ($_POST["url"]!="")) {
+        $fileurl    = COM_applyFilter($_POST['url']);
+        $url = rawurlencode($myts->makeTboxData4Save($_POST['url']));
+    }
+    $silentEdit = COM_applyFilter($_POST['silentedit'],true);
 
     $currentfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'url', "lid='{$_POST['lid']}'");
     $currentfileFQN = $filemgmt_FileStore . $myts->makeTboxData4Save(rawurldecode($currentfile));
@@ -601,6 +608,11 @@ function modDownloadS() {
                 @unlink($filemgmt_FileStore.$currentfile);
             }
         }
+    } else if ( !empty ($fileurl) )  {
+        $size = COM_applyFilter($_POST['size'],true);
+        $size = $myts->makeTboxData4Save($size);
+        $url = $fileurl;
+        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size." WHERE lid='{$_POST['lid']}'");
     }
     $currentsnapfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'logourl', "lid='{$_POST['lid']}'");
     $currentSnapFQN = $filemgmt_SnapStore . $myts->makeTboxData4Save(rawurldecode($currentsnapfile));
@@ -651,8 +663,7 @@ function modDownloadS() {
     $homepage       = $myts->makeTboxData4Save($_POST['homepage']);
     $version        = $myts->makeTboxData4Save($_POST['version']);
     $description    = $myts->makeTareaData4Save($_POST['description']);
-    $commentoption  = $inputHandler->getVar('integer','commentoption','post',0);
-
+    $commentoption  = $_POST['commentoption'];
     if ( $silentEdit ) {
     	DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, comments='$commentoption' WHERE lid='{$_POST['lid']}'");
 	} else {
@@ -702,11 +713,10 @@ function delDownload() {
 }
 
 function modCat() {
-    global $_CONF,$_TABLES,$_FM_TABLES,$myts,$eh,$mytree,$LANG_FM02,
-           $inputHandler,$pageHandle;
+    global $_CONF,$_TABLES,$_FM_TABLES,$myts,$eh,$mytree,$LANG_FM02;
 
-    $cid = $inputHandler->getVar('strict','cid','post','');
-    $display = '';
+    $cid = $_POST["cid"];
+    $display = COM_siteHeader('menu');
     $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= filemgmt_navbar($LANG_FM02['nav2']);
     $display .= '<form action="index.php" method="post" enctype="multipart/form-data" style="margin:0px;">';
@@ -737,17 +747,15 @@ function modCat() {
     $display .= '</td></tr></table>';
     $display .= "</form>";
     $display .= COM_endBlock();
-    $pageHandle->addContent($display);
-    $pageHandle->displayPage();
+    $display .= COM_siteFooter();
+    echo $display;
 }
 
 
 function delNewDownload() {
     global $_FM_TABLES,$filemgmt_FileStore,$filemgmt_SnapCat,$filemgmt_SnapStore,$myts,$eh;
 
-    $lid = $inputHandler->getVar('strict','lid','post','');
-    $lid = $inputHandler->prepareForDB($lid);
-
+    $lid = $_POST['lid'];
     if (DB_count($_FM_TABLES['filemgmt_filedetail'],'lid',$lid) == 1) {
         $tmpnames = explode(";",DB_getItem($_FM_TABLES['filemgmt_filedetail'],'platform',"lid='$lid'"));
         $tmpfilename = $tmpnames[0];
@@ -776,8 +784,7 @@ function delNewDownload() {
 
 
 function modCatS() {
-    global $_CONF,$_FM_TABLES,$myts,$eh, $filemgmt_SnapCat,
-           $pageHandle, $inputHandler;
+    global $_CONF,$_FM_TABLES,$myts,$eh, $filemgmt_SnapCat;
 
     $cid =  $_POST['cid'];
     $sid =  $_POST['pid'];
@@ -816,13 +823,14 @@ function modCatS() {
                                              'image/png'   => '.png'
                                      )      );
         if (!$upload->setPath ($filemgmt_SnapCat)) {
-            $pageHandle->setPageTitle($LANG24[30]);
-            $pageHandle->addContent(COM_startBlock ($LANG24[30], '',
-                    COM_getBlockTemplate ('_msg_block', 'header')));
-            $pageHandle->addContent($upload->printErrors (false));
-            $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                            'footer')));
-            $pageHandle->displayPage();
+            $display = COM_siteHeader ('menu', $LANG24[30]);
+            $display .= COM_startBlock ($LANG24[30], '',
+                    COM_getBlockTemplate ('_msg_block', 'header'));
+            $display .= $upload->printErrors (false);
+            $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                            'footer'));
+            $display .= COM_siteFooter ();
+            echo $display;
             exit; // don't return
         }
 
@@ -833,14 +841,14 @@ function modCatS() {
         $upload->uploadFiles ();
 
         if ($upload->areErrors ()) {
-            $pageHandle->setPageTitle($LANG24[30]);
-            $pageHandle->addContent(COM_startBlock ($LANG24[30], '',
-                    COM_getBlockTemplate ('_msg_block', 'header')));
-            $pageHandle->addContent($upload->printErrors (false));
-            $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                            'footer')));
-            $pageHandle->displayPage();
-
+            $display = COM_siteHeader ('menu', $LANG24[30]);
+            $display .= COM_startBlock ($LANG24[30], '',
+                    COM_getBlockTemplate ('_msg_block', 'header'));
+            $display .= $upload->printErrors (false);
+            $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                            'footer'));
+            $display .= COM_siteFooter ();
+            echo $display;
             exit; // don't return
         }
     } else {
@@ -927,8 +935,7 @@ function delCat() {
 }
 
 function addCat() {
-    global $_CONF, $_FM_TABLES, $filemgmt_SnapCat,$filemgmt_SnapCatURL,$myts,$eh,
-            $pageHandle,$inputHandler;
+    global $_CONF, $_FM_TABLES, $filemgmt_SnapCat,$filemgmt_SnapCatURL,$myts,$eh;
 
     $pid = $_POST['cid'];
     $title = $_POST['title'];
@@ -965,13 +972,14 @@ function addCat() {
                                                  'image/png'   => '.png'
                                          )      );
             if (!$upload->setPath ($filemgmt_SnapCat)) {
-                $pageHandle->setPageTitle($LANG24[30]);
-                $pageHandle->addContent(COM_startBlock ($LANG24[30], '',
-                        COM_getBlockTemplate ('_msg_block', 'header')));
-                $pageHandle->addContent($upload->printErrors (false));
-                $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                                'footer')));
-                $pageHandle->displayPage();
+                $display = COM_siteHeader ('menu', $LANG24[30]);
+                $display .= COM_startBlock ($LANG24[30], '',
+                        COM_getBlockTemplate ('_msg_block', 'header'));
+                $display .= $upload->printErrors (false);
+                $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                                'footer'));
+                $display .= COM_siteFooter ();
+                echo $display;
                 exit; // don't return
             }
             $upload->setFieldName('uploadfile');
@@ -981,13 +989,14 @@ function addCat() {
             $upload->uploadFiles ();
 
             if ($upload->areErrors ()) {
-                $pageHandle->setPageTitle($LANG24[30]);
-                $pageHandle->addContent(COM_startBlock ($LANG24[30], '',
-                        COM_getBlockTemplate ('_msg_block', 'header')));
-                $pageHandle->addContent($upload->printErrors (false));
-                $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                                'footer')));
-                $pageHandle->displayPage();
+                $display = COM_siteHeader ('menu', $LANG24[30]);
+                $display .= COM_startBlock ($LANG24[30], '',
+                        COM_getBlockTemplate ('_msg_block', 'header'));
+                $display .= $upload->printErrors (false);
+                $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                                'footer'));
+                $display .= COM_siteFooter ();
+                echo $display;
                 exit; // don't return
             }
         } else {
@@ -1015,6 +1024,7 @@ function addDownload() {
     $version = $myts->makeTboxData4Save($_POST['version']);
     $description = $myts->makeTareaData4Save($_POST['description']);
     $commentoption = $_POST['commentoption'];
+    $fileurl = COM_applyFilter($_POST['fileurl']);
 
     $submitter = $_USER['uid'];
 
@@ -1033,7 +1043,7 @@ function addDownload() {
            $eh->show("1105");
      }
      // Check if a file was uploaded
-    if ($_FILES['newfile']['size'] == 0) {
+    if ($_FILES['newfile']['size'] == 0  && empty($fileurl)) {
         $eh->show("1017");
     }
 
@@ -1066,6 +1076,12 @@ function addDownload() {
             $url = $myts->makeTboxData4Save(rawurlencode($filename));
             $AddNewFile = true;
         }
+    }
+
+    if ( $upload->numFiles() == 0 && !$upload->areErrors() && !empty($fileurl) ) {
+        $url = $fileurl;
+        $size = 'n/a';
+        $AddNewFile = true;
     }
 
     $upload = new upload();
@@ -1234,7 +1250,7 @@ function approve(){
 }
 
 function filemgmt_comments($firstcomment) {
-    global $_USER,$_CONF,$pageHandle;
+    global $_USER,$_CONF;
 
     $comment_id  = "filemgmt-".$_GET['lid'];
     $file = $_GET['filename'];
@@ -1242,22 +1258,21 @@ function filemgmt_comments($firstcomment) {
         $story=$comment_id;
         $pid=0;
         $type="filemgmt";
-        $pageHandle->redirect($_CONF['site_url'] . "/comment.php?sid=$story&amp;pid=$pid&amp;type=$type");
+        echo COM_refresh($_CONF['site_url'] . "/comment.php?sid=$story&amp;pid=$pid&amp;type=$type");
     } else {
-        $pageHandle->addContent(COM_userComments($comment_id,$file,'filemgmt','','nested'));
-        $pageHandle->displayPage();
+        $display = COM_siteHeader() . COM_userComments($comment_id,$file,'filemgmt','','nested');
+        $display .= COM_siteFooter();
     }
+    echo $display;
     exit();
 
 }
 
 function filemgmt_error($errormsg) {
-    global $pageHandle;
-
-    $pageHandle->addContent(COM_startBlock("<b>"._MD_ADMINTITLE."</b>"));
-    $pageHandle->addContent($errormsg);
-    $pageHandle->addContent(COM_endBlock());
-    $pageHandle->displayPage();
+    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
+    $display .= $errormsg;
+    $display .= COM_endBlock();
+    echo $display;
     exit();
 }
 

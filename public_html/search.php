@@ -38,15 +38,16 @@ require_once $_CONF['path_system'] . 'classes/search.class.php';
 
 $searchObj = new Search();
 
-$mode = $inputHandler->getVar('strict','mode','get','');
-
-if ($mode == 'search') {
-    $pageHandle->setPageTitle($LANG09[11]);
-    $pageHandle->addContent($searchObj->doSearch());
+if (isset ($_GET['mode']) && ($_GET['mode'] == 'search')) {
+    $display = COM_siteHeader('menu', $LANG09[11]);
+    $display .= $searchObj->doSearch();
 } else {
-    $pageHandle->setPageTitle($LANG09[1]);
-    $pageHandle->addContent($searchObj->showForm());
+    $display = COM_siteHeader ('menu', $LANG09[1]);
+    $display .= $searchObj->showForm();
 }
 
-$pageHandle->displayPage();
+$display .= COM_siteFooter();
+
+echo $display;
+
 ?>

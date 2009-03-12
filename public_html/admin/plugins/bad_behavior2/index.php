@@ -42,7 +42,14 @@ require_once ('../../../lib-common.php');
 $display = '';
 
 if (!SEC_inGroup ('Bad Behavior2 Admin')) {
-    $pageHandle->displayAccessError('',$LANG20[6],'bad behavior admin screen');
+    $display .= COM_siteHeader ('menu');
+    $display .= COM_startBlock ($LANG20[1], '',
+                                COM_getBlockTemplate ('_msg_block', 'header'));
+    $display .= '<p>' . $LANG20[6] . '</p>';
+    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_siteFooter ();
+
+    echo $display;
     exit;
 }
 
@@ -57,7 +64,7 @@ require_once $_CONF['path_html'] . '/bad_behavior2/bad-behavior-glfusion.php';
 */
 function listEntries ($page = 1, $msg = '')
 {
-    global $_CONF, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE,$pageHandle;
+    global $_CONF, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
 
     $retval = '';
 
@@ -76,7 +83,7 @@ function listEntries ($page = 1, $msg = '')
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
     if (!empty ($msg)) {
-        $pageHandle->addMessage($msg,'bad_behavior2');
+        $retval .= COM_showMessage ($msg, 'bad_behavior2');
     }
 
     $templates = new Template ($_CONF['path'] . 'plugins/'
@@ -241,19 +248,20 @@ function viewEntry ($id, $page = 1)
 }
 
 // MAIN
-$pageHandle->setShowExtraBlocks(false);
-$pageHandle->setPageTitle($LANG_BAD_BEHAVIOR['page_title']);
+$rightblocks = false;
+$display .= COM_siteHeader ('menu', $LANG_BAD_BEHAVIOR['page_title']);
 
-$mode = $inputHandler->getVar('strict','mode','get','');
-$page = $inputHandler->getVar('integer','page','get',0);
-$id   = $inputHandler->getVar('integer','id','get',0);
-
+$mode = COM_applyFilter ($_GET['mode']);
 if ($mode == 'list') {
-    $pageHandle->addContent(listEntries ($page));
+    $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
+    $display .= listEntries ($page);
 } else if ($mode == 'view') {
-    $pageHandle->addContent(viewEntry ($id, $page));
+    $id = isset($_GET['id']) ? COM_applyFilter ($_GET['id'], true) : 0;
+    $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
+    $display .= viewEntry ($id, $page);
 } else {
-    $display = COM_startBlock ($LANG_BAD_BEHAVIOR['block_title_admin'], '',
+    $rightblocks = true;
+    $display .= COM_startBlock ($LANG_BAD_BEHAVIOR['block_title_admin'], '',
                             COM_getBlockTemplate ('_admin_block', 'header'));
     $entries = DB_count (WP_BB_LOG);
     if ($entries > 0) {
@@ -270,8 +278,10 @@ if ($mode == 'list') {
         $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block',
                                                         'footer'));
     }
-    $pageHandle->addContent($display);
 }
 
-$pageHandle->displayPage();
+$display .= COM_siteFooter ($rightblocks);
+
+echo $display;
+
 ?>

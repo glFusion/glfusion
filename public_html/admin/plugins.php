@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -40,14 +37,51 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+// Uncomment the line below if you need to debug the HTTP variables being passed
+// to the script.  This will sometimes cause errors but it will allow you to see
+// the data being passed in a POST operation
+// echo COM_debug($_POST);
+
 // Number of plugins to list per page
 // We use 25 here instead of the 50 entries in other lists to leave room
 // for the list of uninstalled plugins.
 define ('PLUGINS_PER_PAGE', 25);
 
+$display = '';
+
 if (!SEC_hasrights ('plugin.edit')) {
-    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[38],'the plugin administration screen.');
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_startBlock ($MESSAGE[30], '',
+                                COM_getBlockTemplate ('_msg_block', 'header'));
+    $display .= $MESSAGE[38];
+    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_siteFooter ();
+    COM_accessLog ("User {$_USER['username']} tried to illegally access the plugin administration screen.");
+    echo $display;
     exit;
+}
+
+function showuploadform( )
+{
+    global $_CONF,$LANG_ADMIN;
+
+    $retval = '';
+
+    $retval .= COM_startBlock ($LANG32[13],'', COM_getBlockTemplate ('_admin_block', 'header'));
+
+    $T = new Template($_CONF['path_layout'] . 'admin/plugins');
+    $T->set_file('form','plugin_upload_form.thtml');
+
+    $T->set_var(array(
+        'form_action_url'   =>  $_CONF['site_admin_url'] .'/plugin_upload.php',
+        'lang_instructions' => 'Select a plugin from your local system to uploads',
+    ));
+
+    $retval .= $T->parse('output', 'form');
+
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+    return $retval;
 }
 
 /**
@@ -90,6 +124,9 @@ function plugineditor ($pi_name, $confirmed = 0)
 
     $plg_templates = new Template($_CONF['path_layout'] . 'admin/plugins');
     $plg_templates->set_file('editor', 'editor.thtml');
+    $plg_templates->set_var( 'xhtml', XHTML );
+    $plg_templates->set_var('site_url', $_CONF['site_url']);
+    $plg_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
     $plg_templates->set_var('layout_url', $_CONF['layout_url']);
     $plg_templates->set_var('start_block_editor', COM_startBlock ($LANG32[13],
             '', COM_getBlockTemplate ('_admin_block', 'header')));
@@ -161,8 +198,10 @@ function changePluginStatus ($pi_name_arr)
             PLG_enableStateChange ($P['pi_name'], true);
             DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '{$P['pi_name']}'");
         } else if (!isset($pi_name_arr[$P['pi_name']]) && $P['pi_enabled'] == 1) {  // disable it
-            PLG_enableStateChange ($P['pi_name'], false);
-            DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '{$P['pi_name']}'");
+            $rc = PLG_enableStateChange ($P['pi_name'], false);
+            if ( $rc !== -2 ) {
+                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '{$P['pi_name']}'");
+            }
         }
     }
     CTL_clearCache();
@@ -182,7 +221,7 @@ function changePluginStatus ($pi_name_arr)
 */
 function saveplugin($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepage)
 {
-    global $_CONF, $_TABLES, $LANG32, $pageHandle;
+    global $_CONF, $_TABLES, $LANG32;
 
     $retval = '';
 
@@ -192,10 +231,10 @@ function saveplugin($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepag
         } else {
             $enabled = 0;
         }
-        $pi_name        = addslashes ($pi_name);
-        $pi_version     = addslashes ($pi_version);
-        $pi_gl_version  = addslashes ($pi_gl_version);
-        $pi_homepage    = addslashes ($pi_homepage);
+        $pi_name = addslashes ($pi_name);
+        $pi_version = addslashes ($pi_version);
+        $pi_gl_version = addslashes ($pi_gl_version);
+        $pi_homepage = addslashes ($pi_homepage);
 
         $currentState = DB_getItem ($_TABLES['plugins'], 'pi_enabled',
                                     "pi_name= '{$pi_name}' LIMIT 1");
@@ -205,12 +244,15 @@ function saveplugin($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepag
 
         DB_save ($_TABLES['plugins'], 'pi_name, pi_version, pi_gl_version, pi_enabled, pi_homepage', "'$pi_name', '$pi_version', '$pi_gl_version', $enabled, '$pi_homepage'");
 
-        $pageHandle->redirect($_CONF['site_admin_url'] . '/plugins.php?msg=28');
+        $retval = COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=28');
     } else {
-        $pageHandle->setPageTitle($LANG32[13]);
-        $pageHandle->addMessageText($LANG32[13]);
-        $pageHandle->addContent(plugineditor($pi_name));
-        $pageHandle->displayPage();
+        $retval .= COM_siteHeader ('menu', $LANG32[13]);
+        $retval .= COM_startBlock ($LANG32[13], '',
+                            COM_getBlockTemplate ('_msg_block', 'header'));
+        $retval .= COM_errorLog ('error saving plugin, no pi_name provided', 1);
+        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= plugineditor ($pi_name);
+        $retval .= COM_siteFooter ();
     }
     CACHE_remove_instance('stmenu');
     return $retval;
@@ -225,9 +267,7 @@ function saveplugin($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepag
 function show_newplugins ($token)
 {
     global $_CONF, $_TABLES, $LANG32;
-
-    USES_lib_admin();
-
+    require_once( $_CONF['path_system'] . 'lib-admin.php' );
     $plugins = array ();
     $plugins_dir = $_CONF['path'] . 'plugins/';
     $fd = opendir ($plugins_dir);
@@ -296,7 +336,7 @@ function show_newplugins ($token)
 */
 function do_update ($pi_name)
 {
-    global $_CONF, $LANG32, $LANG08, $MESSAGE, $pageHandle;
+    global $_CONF, $LANG32, $LANG08, $MESSAGE, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -311,15 +351,15 @@ function do_update ($pi_name)
     $result = PLG_upgrade ($pi_name);
     if ($result > 0 ) {
         if ($result === TRUE) { // Catch returns that are just true/false
-            $pageHandle->redirect($_CONF['site_admin_url']
+            $retval .= COM_refresh ($_CONF['site_admin_url']
                     . '/plugins.php?msg=60');
         } else {  // Plugin returned a message number
-            $pageHandle->redirect($_CONF['site_admin_url']
+            $retval = COM_refresh ($_CONF['site_admin_url']
                     . '/plugins.php?msg=' . $result . '&amp;plugin='
                     . $pi_name);
         }
     } else {  // Plugin function returned a false
-        $pageHandle->addMessage(95);
+        $retval .= COM_showMessage(95);
     }
     CACHE_remove_instance('stmenu');
     return $retval;
@@ -335,8 +375,7 @@ function do_update ($pi_name)
 */
 function do_uninstall ($pi_name)
 {
-    global $_CONF, $_DB_table_prefix, $_TABLES, $LANG32, $LANG08, $MESSAGE,
-           $pageHandle;
+    global $_CONF, $_DB_table_prefix, $_TABLES, $LANG32, $LANG08, $MESSAGE, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -354,14 +393,29 @@ function do_uninstall ($pi_name)
         require_once ($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc');
     }
 
+    if ( !function_exists('plugin_autouninstall_'.$pi_name) && file_exists($_CONF['path'].'plugins/'.$pi_name.'/autoinstall.php') ) {
+        require_once $_CONF['path'].'plugins/'.$pi_name.'/autoinstall.php';
+    }
+
+    $msg = '';
     if (PLG_uninstall ($pi_name)) {
-        $pageHandle->addMessage(45);
+        $msg = 45;
+        $retval .= COM_showMessage (45);
     } else {
-        $pageHandle->addMessage(95);
+        $msg = 95;
+        $retval .= COM_showMessage (95);
     }
     CACHE_remove_instance('stmenu');
     CACHE_remove_instance('whatsnew');
-    return $retval;
+
+    if ( $msg != '' ) {
+        $refreshURL = $_CONF['site_admin_url'].'/plugins.php?msg='.$msg;
+    } else {
+        $refreshURL = $_CONF['site_admin_url'].'/plugins.php';
+    }
+
+    echo COM_refresh($refreshURL);
+    exit;
 }
 
 /**
@@ -372,7 +426,7 @@ function do_uninstall ($pi_name)
 */
 function listplugins ($token)
 {
-    global $_CONF, $_TABLES, $LANG32, $LANG_ADMIN, $pageHandle;
+    global $_CONF, $_TABLES, $LANG32, $LANG_ADMIN, $_IMAGE_TYPE;
 
     require_once $_CONF['path_system'] . 'lib-admin.php';
 
@@ -397,7 +451,7 @@ function listplugins ($token)
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG32[11],
-        $pageHandle->getImage('icons/plugins.png')
+        $_CONF['layout_url'] . '/images/icons/plugins.' . $_IMAGE_TYPE
     );
 
     $text_arr = array(
@@ -426,64 +480,80 @@ function listplugins ($token)
 }
 
 // MAIN
-
-$pageHandle->setShowExtraBlocks(false);
-
+$display = '';
 if (isset ($_POST['pluginenabler']) && SEC_checkToken()) {
     changePluginStatus ($_POST['enabledplugins']);
+
     // force a refresh so that the information of the plugin that was just
     // enabled / disabled (menu entries, etc.) is displayed properly
     header ('Location: ' . $_CONF['site_admin_url'] . '/plugins.php');
     exit;
 }
 
-$mode = $inputHandler->getVar('strict','mode','request','');
-
+$mode = '';
+if (isset ($_REQUEST['mode'])) {
+    $mode = $_REQUEST['mode'];
+}
 if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
-    $pi_name = $inputHandler->getVar('strict','pi_name','post','');
+    $pi_name = COM_applyFilter ($_POST['pi_name']);
     if (($_POST['confirmed'] == 1) && (SEC_checkToken())) {
+        $display .= COM_siteHeader ('menu', $LANG32[30]);
+        $display .= do_uninstall ($pi_name);
         $token = SEC_createToken();
-        $pageHandle->setPageTitle($LANG32[30]);
-        $pageHandle->addContent(do_uninstall($pi_name));
-        $pageHandle->addContent(listplugins($token));
-        $pageHandle->addContent(show_newplugins($token));
-        $pageHandle->displayPage();
+        $display .= listplugins ($token);
+        $display .= showuploadform($token);
+        $display .= show_newplugins($token);
+        $display .= COM_siteFooter ();
     } else { // ask user for confirmation
-        $pageHandle->setPageTitle($LANG32[30]);
-        $pageHandle->addMessageText($LANG32[31]);
-        $pageHandle->addContent(plugineditor($pi_name,1));
-        $pageHandle->displayPage();
+        $display .= COM_siteHeader ('menu', $LANG32[30]);
+        $display .= COM_startBlock ($LANG32[30], '',
+                            COM_getBlockTemplate ('_msg_block', 'header'));
+        $display .= $LANG32[31];
+        $display .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= plugineditor ($pi_name, 1);
+        $display .= COM_siteFooter ();
     }
+
 } else if (($mode == $LANG32[34]) && !empty ($LANG32[34]) && SEC_checkToken()) { // update
-    $pi_name = $inputHandler->getVar('strict','pi_name','post','');
-    $pageHandle->setPageTitle($LANG32[13]);
-    $pageHandle->addContent(do_update($pi_name));
-    $pageHandle->displayPage();
+        $pi_name = COM_applyFilter ($_POST['pi_name']);
+        $display .= COM_siteHeader ('menu', $LANG32[13]);
+        $display .= do_update ($pi_name);
+        $display .= COM_siteFooter ();
+
 } else if ($mode == 'edit') {
-    $pi_name = $inputHandler->getVar('strict','pi_name','get','');
-    $pageHandle->setPageTitle($LANG32[13]);
-    $pageHandle->addContent(plugineditor($pi_name));
-    $pageHandle->displayPage();
+    $display .= COM_siteHeader ('menu', $LANG32[13]);
+    $display .= plugineditor (COM_applyFilter ($_GET['pi_name']));
+    $display .= COM_siteFooter ();
 
 } else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save']) && SEC_checkToken()) {
-    $enabled = $inputHandler->getVar('strict','enabled','post','');
-    $pi_name = $inputHandler->getVar('strict','pi_name','post','');
-    $pi_version = $inputHandler->getVar('strict','pi_version','post','');
-    $pi_gl_version = $inputHandler->getVar('strict','pi_gl_version','post','');
-    $pi_homepage = $inputHandler->getVar('url','pi_homepage','post','');
-    $pageHandle->addContent(saveplugin($pi_name,$pi_version,$pi_gl_version,$enabled,$pi_homepage));
+    $enabled = '';
+    if (isset($_POST['enabled'])) {
+        $enabled = COM_applyFilter($_POST['enabled']);
+    }
+    $display .= saveplugin (COM_applyFilter ($_POST['pi_name']),
+                            COM_applyFilter ($_POST['pi_version']),
+                            COM_applyFilter ($_POST['pi_gl_version']),
+                            $enabled, COM_applyFilter ($_POST['pi_homepage']));
 
 } else { // 'cancel' or no mode at all
-    $pageHandle->setPageTitle($LANG32[5]);
-    $msg = $inputHandler->getVar('integer','msg','request',0);
-    $plugin = $inputHandler->getVar('strict','plugin','request','');
-    if ($msg > 0) {
-        $pageHandle->addMessage($msg, $plugin);
+    $display .= COM_siteHeader ('menu', $LANG32[5]);
+    if (isset ($_REQUEST['msg'])) {
+        $msg = COM_applyFilter ($_REQUEST['msg'], true);
+        if (!empty ($msg)) {
+            $plugin = '';
+            if (isset ($_REQUEST['plugin'])) {
+                $plugin = COM_applyFilter ($_REQUEST['plugin']);
+            }
+            $display .= COM_showMessage ($msg, $plugin);
+        }
     }
     $token = SEC_createToken();
-    $pageHandle->addContent(listplugins ($token));
-    $pageHandle->addContent(show_newplugins($token));
+
+    $display .= listplugins ($token);
+    $display .= showuploadform($token);
+    $display .= show_newplugins($token);
+    $display .= COM_siteFooter();
 }
 
-$pageHandle->displayPage();
+echo $display;
 ?>

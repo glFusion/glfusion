@@ -29,6 +29,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $LANG_CP00 = array (
     'menulabel'         => 'CAPTCHA',
     'plugin'            => 'CAPTCHA',
@@ -83,9 +87,9 @@ $LANG_confignames['captcha'] = array(
     'gfxFormat'             => 'Graphics Format',
     'imageset'			    => 'Static Image Set',
     'debug'                 => 'Debug',
-    'gfxPath'               => 'Full Path to ImageMagick\'s convert utility',
-    'remoteusers'           => 'Force CAPTCHA for all Remote Users',
-    'logging'               => 'Log invalid CAPTCHA attempts',
+    'gfxPath'               => 'Full Path to ImageMagick\'s Convert Utility',
+    'remoteusers'           => 'Force CAPTCHA for All Remote Users',
+    'logging'               => 'Log Invalid CAPTCHA Attempts',
     'anonymous_only'        => 'Anonymous Only',
     'enable_comment'        => 'Enable Comment',
     'enable_story'          => 'Enable Story',
@@ -97,7 +101,7 @@ $LANG_confignames['captcha'] = array(
     'enable_rating'         => 'Enable Rating Plugin Support',
     'enable_links'          => 'Enable Links Plugin Support',
     'enable_calendar'       => 'Enable Calendar Plugin Support',
-
+    'expire'                => 'How Many Seconds a CAPTCHA Session is Valid',
 );
 $LANG_configsubgroups['captcha'] = array(
     'sg_main'               => 'Configuration Settings'

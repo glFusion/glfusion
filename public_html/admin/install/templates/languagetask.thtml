@@ -1,0 +1,45 @@
+<script type="text/javascript">
+function reload(form){
+  var val=form.lang.value;
+  self.location='index.php?lang=' + val ;
+}
+</script>
+
+<form id="welcome" name="welcome" method="post" action="index.php">
+  <input type="hidden" name="task" value="" />
+  {hiddenfields}
+  <div class="step floatleft">
+    <div class="stepheading">
+      <span class="floatright buttons">
+        <button type="submit" name="submit" onclick="submitForm( welcome, '' );">
+          {lang_next}
+          <img src="layout/arrow-next.gif" alt=""/>
+        </button>
+      </span>
+      {step_heading}
+    </div>
+    <div class="stepfields">
+      <span>
+        <label>{lang_select_language}:</label><br />
+        {language_select}
+      </span>
+      <span>
+        <label>{lang_select_task}:</label><br />
+        <select name="type">
+          <option value="install">{lang_new_install}</option>
+          <option value="upgrade">{lang_site_upgrade}</option>
+          <option value="migrate">{lang_geeklog_migrate}</option>
+        </select>
+      </span>
+      <p>
+        <strong>{lang_language_support}</strong>
+      </p>
+      <p>
+        {lang_language_pack}
+      </p>
+    </div>
+    <div class="stephelp">
+      {lang_welcome}
+    </div>
+  </div>
+</form>

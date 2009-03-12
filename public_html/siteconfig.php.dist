@@ -1,28 +1,94 @@
 <?php
-
-/*
- * glFusion site configuration
- *
- * You should not need to edit this file. See the installation instructions
- * for details.
- *
- */
+// +--------------------------------------------------------------------------+
+// | glFusion CMS                                                             |
+// +--------------------------------------------------------------------------+
+// | siteconfig.php                                                           |
+// |                                                                          |
+// | Site configuration settings                                              |
+// +--------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-global $_CONF;
+global $_CONF, $_SYSTEM;
 $_CONF = array();
+$_SYSTEM = array();
 
-// To disable your site quickly, simply set this flag to false
-$_CONF['site_enabled'] = true;
+// +--------------------------------------------------------------------------+
+// | Enables 'per user' libraries for images for the Advanced Editor          |
+// +--------------------------------------------------------------------------+
+$_CONF_FCK['editor_images_by_user'] = false;
 
-// If you have errors on your site, can't login, or can't get to the
-// config UI, then you can comment this in to set the root debug option
-// on and get detailed error messages:
-// $_CONF['rootdebug'] = true;
 
+// ** System Maintenance and debugging options **
+
+// +--------------------------------------------------------------------------+
+// | Site Enabled - if set to true, the site will accept users                |
+// |                if set to false, users will be shown a site down msg.     |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['site_enabled'] = true;
+
+
+// +--------------------------------------------------------------------------+
+// | Maintenance Mode - Allows a site admin to disable the site               |
+// |                    for non-admin (and anonymous) users.                  |
+// |                                                                          |
+// | This mode is useful if you have some maintenance work to do like         |
+// | installing a new plugin or reorganizing content, etc.                    |
+// |                                                                          |
+// | You _MUST_ login to your site as an admin user _BEFORE_ enabling         |
+// | this option since it will disable all non-admin users.                   |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['maintenance_mode'] = false;
+
+
+// +--------------------------------------------------------------------------+
+// | Root debug - Display detailed error messages.                            |
+// |                                                                          |
+// | NOTE: This option should not be enabled on production sites since it     |
+// |       will display configuration options and other details that could    |
+// |       expose confidential data such as database logins, etc.             |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['rootdebug']        = false;
+
+
+// +--------------------------------------------------------------------------+
+// | No Fail SQL - Do not fail (crash) if SQL errors are encountered          |
+// |                                                                          |
+// | Use this option if your site becomes unavailable because of the          |
+// | dreaded 'An SQL error has occurred' message.  This will disable          |
+// | the error temporarily to allow you to debug or resolve the issue.        |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['no_fail_sql']      = false;
+
+// +--------------------------------------------------------------------------+
+// | No Cache Config - disable configuration caching                          |
+// |                                                                          |
+// | If you experience issues with the caching the configuration options.     |
+// | you can disable the caching feature by setting this to true.             |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['no_cache_config']  = false;
+
+// +--------------------------------------------------------------------------+
+// | Swedish Date Hack - enable special hack to return UTF-8 Swedish          |
+// |                     date / time                                          |
+// |                                                                          |
+// | If your site language is Swedish and your site is configured for         |
+// | UTF-8 character set, enable this option to return the correct date/time  |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['swedish_date_hack'] = false;
+
+// +--------------------------------------------------------------------------+
+// | You should not need to change any settings below this line,              |
+// | these settings are created during the site installation.                 |
+// +--------------------------------------------------------------------------+
 
 $_CONF['path'] = '/path/to/glfusion/';
 $_CONF['path_system'] = $_CONF['path'] . 'system/';
@@ -31,18 +97,7 @@ $_CONF['default_charset'] = 'iso-8859-1';
 
 $_CONF_FCK['imagelibrary'] = '/images/library';
 
-// If you are receiving unknown SQL errors set this to 1 to allow
-// the site to continue to load and enable debugging of the
-// problem.
-
-$_CONF['no_fail_sql'] = 0;
-
-// Useful Stuff
-
 if (!defined('LB')) {
   define('LB',"\n");
-}
-if (!defined('VERSION')) {
-  define('VERSION', '1.5.0');
 }
 ?>

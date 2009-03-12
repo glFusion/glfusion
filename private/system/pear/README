@@ -1,9 +1,9 @@
-This directory contains the PEAR packages that are needed by Geeklog. If you
+This directory contains the PEAR packages that are needed by glFusion. If you
 don't have PEAR installed on your webserver, simply set the "Have Pear?" option
-in the configutation to "False" and Geeklog will pick up the PEAR packages from
+in the configutation to "False" and glFusion will pick up the PEAR packages from
 here.
 
-Currently, Geeklog uses the following PEAR packages:
+Currently, glFusion uses the following PEAR packages:
 
 - PEAR
 - Date
@@ -17,4 +17,4 @@ Currently, Geeklog uses the following PEAR packages:
 - XML_RPC
 
 The Archive and Console packages are included as they are used by the base PEAR
-package (e.g. when you try to update PEAR) but are not used by Geeklog itself.
+package (e.g. when you try to update PEAR) but are not used by glFusion itself.

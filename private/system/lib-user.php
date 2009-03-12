@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -507,16 +510,17 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
 */
 function USER_deletePhoto ($photo, $abortonerror = true)
 {
-    global $_CONF, $LANG04, $pageHandle;
+    global $_CONF, $LANG04;
 
     if (!empty ($photo)) {
         $filetodelete = $_CONF['path_images'] . 'userphotos/' . $photo;
         if (file_exists ($filetodelete)) {
             if (!@unlink ($filetodelete)) {
                 if ($abortonerror) {
-                    $pageHandle->setPageTitle($LANG04[21]);
-                    $pageHandle->addContent(COM_errorLog ("Unable to remove file $photo"));
-                    $pageHandle->displayPage();
+                    $display = COM_siteHeader ('menu', $LANG04[21])
+                             . COM_errorLog ("Unable to remove file $photo")
+                             . COM_siteFooter ();
+                    echo $display;
                     exit;
                 } else {
                     // just log the problem, but don't abort

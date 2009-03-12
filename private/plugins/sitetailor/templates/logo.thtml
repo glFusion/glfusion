@@ -15,6 +15,10 @@
           <input type="radio" name="usegraphic" value="0" {text_logo_selected}{xhtml}>
         </div>
         <div class="required">
+          <label>{$LANG_ST01[use_no_logo]}:</label>
+          <input type="radio" name="usegraphic" value="-1" {no_logo_selected}{xhtml}>
+        </div>
+        <div class="required">
           <label for="siteslogan">{$LANG_ST01[display_site_slogan]}:</label>
           <input type="checkbox" name="siteslogan" id="siteslogan" value="1" {slogan_selected}{xhtml}>
         </div>

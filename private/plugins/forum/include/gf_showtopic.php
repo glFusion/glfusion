@@ -51,7 +51,7 @@ if( !function_exists( 'str_ireplace' ))
 USES_lib_user();
 
 function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
-    global $CONF_FORUM,$_CONF,$_TABLES,$_USER,$LANG_GF01,$LANG_GF02;
+    global $CONF_FORUM,$_CONF,$_TABLES,$_USER,$LANG_GF01,$LANG_GF02,$_SYSTEM;
     global $fromblock,$highlight;
     global $oldPost,$forumfiles;
     global $canPost;
@@ -60,17 +60,10 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
 
     $oldPost = 0;
 
-    //$mytimer = new timerobject();
-    //$mytimer->setPercision(2);
-    //$mytimer->startTimer();
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Show Topic Display Time1: $intervalTime");
-
     if (!class_exists('StringParser') ) {
         require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
     }
 
-//    $topictemplate = new Template($_CONF['path_layout'] . 'forum/layout');
     $topictemplate = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $topictemplate->set_file (array (
             'topictemplate' =>  'topic.thtml',
@@ -94,6 +87,9 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
 
     $min_height = 50;     // Base minimum  height of topic - will increase if avatar or sig is used
     $date = strftime( $CONF_FORUM['default_Topic_Datetime_format'], $showtopic['date'] );
+    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+        $date = iconv('ISO-8859-1','UTF-8',$date);
+    }
 
     $userQuery = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid='{$showtopic['uid']}'");
     if ($showtopic['uid'] > 1 AND DB_numRows($userQuery) == 1) {
@@ -186,7 +182,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $showtopic['comment'] = str_ireplace("[code]<code>",'[code]',$showtopic['comment']);
         $showtopic['comment'] = str_ireplace("</code>[/code]",'[/code]',$showtopic['comment']);
         $showtopic['comment'] = str_replace(array("<br" . XHTML . ">\r\n","<br" . XHTML . ">\n\r","<br" . XHTML . ">\r","<br" . XHTML . ">\n"), '<br' . XHTML . '>', $showtopic['comment'] );
-
         $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=\s(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
         /* Reformat code blocks - version 2.3.3 and prior */
         $showtopic['comment'] = str_replace( '<pre class="forumCode">', '[code]', $showtopic['comment'] );
@@ -272,6 +267,9 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $topictemplate->set_var ('posted_date', $date[0]);
     } else {
         $date = strftime( $CONF_FORUM['default_Topic_Datetime_format'], $showtopic['date'] );
+        if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+            $date = iconv('ISO-8859-1','UTF-8',$date);
+        }
         $topictemplate->set_var ('posted_date', $date);
     }
 

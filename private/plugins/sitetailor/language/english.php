@@ -29,6 +29,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 $LANG_ST00 = array (
     'menulabel'         => 'Site Tailor',
     'plugin'            => 'sitetailor',
@@ -77,6 +81,7 @@ $LANG_ST01 = array (
     'logo_options'      => 'Site Tailor Logo Options',
     'use_graphic_logo'  => 'Use Graphic Logo',
     'use_text_logo'     => 'Use Text Logo',
+    'use_no_logo'       => 'Do Not Display a Logo',
     'display_site_slogan'   => 'Display Site Slogan',
     'upload_logo'       => 'Upload New Logo',
     'current_logo'      => 'Current Logo',
@@ -171,6 +176,9 @@ $LANG_ST01 = array (
 	'defaults'              => 'Reset To Default Values',
 	'confirm_reset'         => 'This will reset the menu colors and graphics to the installation values and automatically clear the Template Cache. Are you sure you want to continue? When done, make sure to clear your local browser cache as well.',
 	'menu_properties'       => 'Menu Properties for',
+	'disabled_plugin'       => 'Not found or disabled plugin',
+	'clone'                 => 'Copy',
+	'clone_menu_label'      => 'Name for Cloned Menu',
 );
 
 $LANG_HC = array (

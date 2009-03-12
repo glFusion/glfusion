@@ -17,7 +17,7 @@
 // |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
 // |          Dirk Haun         - dirk AT haun-online DOT de                  |
 // |          Vincent Furia     - vinny01 AT users DOT sourceforge DOT net    |
-// |          Jared Wenerd      - wenerd87 AT gmail DOT com                    |
+// |          Jared Wenerd      - wenerd87 AT gmail DOT com                   |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -43,7 +43,7 @@ if (!defined ('GVERSION')) {
 if( $_CONF['allow_user_photo'] )
 {
     // only needed for the USER_getPhoto function
-    USES_lib_user();
+    require_once $_CONF['path_system'] . 'lib-user.php';
 }
 
 /**
@@ -64,7 +64,7 @@ if( $_CONF['allow_user_photo'] )
 */
 function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $pageHandle;
+    global $_CONF, $_TABLES, $_USER, $LANG01;
 
     $parts = explode( '/', $_SERVER['PHP_SELF'] );
     $page = array_pop( $parts );
@@ -73,6 +73,9 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     $commentbar = new Template( $_CONF['path_layout'] . 'comment' );
     $commentbar->set_file( array( 'commentbar' => 'commentbar.thtml' ));
+    $commentbar->set_var( 'xhtml', XHTML );
+    $commentbar->set_var( 'site_url', $_CONF['site_url'] );
+    $commentbar->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $commentbar->set_var( 'layout_url', $_CONF['layout_url'] );
 
     $commentbar->set_var( 'lang_comments', $LANG01[3] );
@@ -93,7 +96,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var('story_title', $cmt_title);
 
     if( $type == 'article' ) {
-        $articleUrl = $pageHandle->buildUrl( $_CONF['site_url']
+        $articleUrl = COM_buildUrl( $_CONF['site_url']
                                     . "/article.php?story=$sid" );
         $commentbar->set_var( 'story_link', $articleUrl );
         $commentbar->set_var( 'article_url', $articleUrl );
@@ -210,7 +213,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 */
 function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = false, $preview = false, $ccode = 0 )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03, $MESSAGE, $pageHandle, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03, $MESSAGE, $_IMAGE_TYPE;
 
     $indent = 0;  // begin with 0 indent
     $retval = ''; // initialize return value
@@ -220,7 +223,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                                 'thread'  => 'thread.thtml'  ));
 
     // generic template variables
-
+    $template->set_var( 'xhtml', XHTML );
+    $template->set_var( 'site_url', $_CONF['site_url'] );
+    $template->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $template->set_var( 'layout_url', $_CONF['layout_url'] );
     $template->set_var( 'lang_authoredby', $LANG01[42] );
     $template->set_var( 'lang_on', $LANG01[36] );
@@ -294,7 +299,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         // comment variables
         $template->set_var( 'indent', $indent );
-        $template->set_var( 'author_name', $A['username'] );
+        $template->set_var( 'author_name', strip_tags(COM_applyFilter($A['username'] )));
         $template->set_var( 'author_id', $A['uid'] );
         $template->set_var( 'cid', $A['cid'] );
         $template->set_var( 'cssid', $row % 2 );
@@ -315,8 +320,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             }
             if( !empty( $photo )) {
                 $template->set_var( 'author_photo', $photo );
-                $camera_icon = '<img src="' . $pageHandle->getImage('smallcamera.png')
-                    . '" alt=""' . XHTML . '>';
+                $camera_icon = '<img src="' . $_CONF['layout_url']
+                    . '/images/smallcamera.' . $_IMAGE_TYPE . '" alt=""' . XHTML . '>';
                 $template->set_var( 'camera_icon',
                     COM_createLink(
                         $camera_icon,
@@ -340,9 +345,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             );
 
         } else {
-            $template->set_var( 'author', $A['username'] );
-            $template->set_var( 'author_fullname', $A['username'] );
-            $template->set_var( 'author_link', $A['username'] );
+            $template->set_var( 'author', strip_tags(COM_applyFilter($A['username'] )));
+            $template->set_var( 'author_fullname', strip_tags(COM_applyFilter($A['username'] )));
+            $template->set_var( 'author_link', strip_tags(COM_applyFilter($A['username'] )));
             $template->set_var( 'author_photo', '' );
             $template->set_var( 'camera_icon', '' );
             $template->set_var( 'start_author_anchortag', '' );
@@ -408,8 +413,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
                 . '&amp;' . CSRF_TOKEN . '=' . $token;
             $edit = COM_createLink( $LANG01[4], $editlink) . ' | ';
-        } else {
-            $edit = '';
         }
 
         // If deletion is allowed, displays delete link
@@ -559,7 +562,9 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
     $template = new Template( $_CONF['path_layout'] . 'comment' );
     $template->set_file( array( 'commentarea' => 'startcomment.thtml' ));
-
+    $template->set_var( 'xhtml', XHTML );
+    $template->set_var( 'site_url', $_CONF['site_url'] );
+    $template->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $template->set_var( 'layout_url', $_CONF['layout_url'] );
     $template->set_var( 'commentbar',
             CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode ));
@@ -681,7 +686,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 */
 function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS,$inputHandler,$pageHandle;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS;
 
     $retval = '';
 
@@ -693,17 +698,27 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
     }
 
     $commentuid = $uid;
-
-    if ( ($mode == 'edit' || $mode == $LANG03[28]) ) {
-        $cid = $inputHandler->getVar('strict','cid','request','');
-        if (!empty($cid) ) {
-            $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = '$cid'");
-        }
+    if ( ($mode == 'edit' || $mode == $LANG03[28]) && isset($_REQUEST['cid']) ) {
+        $cid = COM_applyFilter ($_REQUEST['cid']);
+        $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = '$cid'");
     }
 
     if (empty($_USER['username']) &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['commentsloginrequired'] == 1))) {
-        $pageHandle->displayLoginRequired( );
+        $retval .= COM_startBlock ($LANG_LOGIN[1], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'));
+        $loginreq = new Template($_CONF['path_layout'] . 'submit');
+        $loginreq->set_file('loginreq', 'submitloginrequired.thtml');
+        $loginreq->set_var( 'xhtml', XHTML );
+        $loginreq->set_var('login_message', $LANG_LOGIN[2]);
+        $loginreq->set_var('site_url', $_CONF['site_url']);
+        $loginreq->set_var('site_admin_url', $_CONF['site_admin_url']);
+        $loginreq->set_var('lang_login', $LANG_LOGIN[3]);
+        $loginreq->set_var('lang_newuser', $LANG_LOGIN[4]);
+        $loginreq->parse('errormsg', 'loginreq');
+        $retval .= $loginreq->finish($loginreq->get_var('errormsg'));
+        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        return $retval;
     } else {
         COM_clearSpeedlimit ($_CONF['commentspeedlimit'], 'comment');
 
@@ -721,7 +736,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         } else {
 
-            if (($_CONF['advanced_editor'] == 1)) {
+            if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
                 $postmode = 'html';
             } elseif (empty ($postmode)) {
                 $postmode = $_CONF['postmode'];
@@ -738,14 +753,13 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             // $commenttext is what the user entered and goes back into the
             // <textarea> -> don't strip HTML
 
-            $commenttext = @htmlspecialchars ($comment,ENT_QUOTES, COM_getCharset());
-//            $commenttext = htmlspecialchars ($comment);
+            $commenttext = htmlspecialchars (COM_stripslashes ($comment));
 
             $fakepostmode = $postmode;
             if ($postmode == 'html') {
-                $comment = $inputHandler->censor ($inputHandler->filterVar('html',$comment,''));
+                $comment = COM_checkWords (COM_checkHTML  (COM_stripslashes ($comment)));
             } else {
-                $comment = htmlspecialchars ($inputHandler->censor ($comment));
+                $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)));
                 $newcomment = COM_makeClickableLinks ($comment);
                 if (strcmp ($comment, $newcomment) != 0) {
                     $comment = nl2br ($newcomment);
@@ -757,16 +771,13 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $commenttext = str_replace('{','&#123;',$commenttext);
             $commenttext = str_replace('}','&#125;',$commenttext);
 
-            $title = $inputHandler->censor (strip_tags ($title));
+            $title = COM_checkWords (strip_tags (COM_stripslashes ($title)));
             // $title = str_replace('$','&#36;',$title); done in CMT_getComment
 
             $_POST['title'] = $title;
             $newcomment = $comment;
-
             if (!empty ($sig)) {
                 if (($postmode == 'html') || ($fakepostmode == 'html')) {
-
-
                     $newcomment .= '<p>---<br' . XHTML . '>' . nl2br ($sig) . '</p>';
                 } else {
                     $newcomment .= LB . LB . '---' . LB . $sig;
@@ -778,6 +789,9 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             if (($mode == $LANG03[14] || $mode == $LANG03[28]) && !empty($title) && !empty($comment) ) {
                 $start = new Template( $_CONF['path_layout'] . 'comment' );
                 $start->set_file( array( 'comment' => 'startcomment.thtml' ));
+                $start->set_var( 'xhtml', XHTML );
+                $start->set_var( 'site_url', $_CONF['site_url'] );
+                $start->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
                 $start->set_var( 'layout_url', $_CONF['layout_url'] );
                 $start->set_var( 'hide_if_preview', 'style="display:none"' );
 
@@ -785,12 +799,12 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $A = array();
                 foreach ($_POST as $key => $value) {
                     if (($key == 'pid') || ($key == 'cid')) {
-                        $A[$key] = $inputHandler->filterVar('integer',$_POST[$key],'');
+                        $A[$key] = COM_applyFilter ($_POST[$key], true);
                     } else if (($key == 'title') || ($key == 'comment')) {
                         // these have already been filtered above
                         $A[$key] = $_POST[$key];
                     } else {
-                        $A[$key] = $inputHandler->filterVar('strict',$_POST[$key],'');
+                        $A[$key] = COM_applyFilter ($_POST[$key]);
                     }
                 }
 
@@ -823,9 +837,9 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             }
 
             $comment_template = new Template($_CONF['path_layout'] . 'comment');
-            if (($_CONF['advanced_editor'] == 1)) {
+            if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
                 $comment_template->set_file('form','commentform_advanced.thtml');
-                $ae_uid = addslashes($inputHandler->getVar('integer',$_USER['uid'],''));
+                $ae_uid = addslashes(COM_applyFilter($_USER['uid'],true));
                 $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
                 DB_Query($sql,1);
             } else {
@@ -836,6 +850,9 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             } else {
                 $comment_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
             }
+            $comment_template->set_var('xhtml', XHTML);
+            $comment_template->set_var('site_url', $_CONF['site_url']);
+            $comment_template->set_var('site_admin_url', $_CONF['site_admin_url']);
             $comment_template->set_var('layout_url', $_CONF['layout_url']);
             $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
             if ($_CONF['show_fullname'] == 1) {
@@ -867,7 +884,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 //Anonymous user
                 $comment_template->set_var('uid', 1);
                 if ( isset($_POST['username']) ) {
-                    $name = $_POST['username']; //for preview
+                    $name = strip_tags(COM_applyFilter($_POST['username'])); //for preview
                 } elseif (isset($_COOKIE['anon-name'])) {
                     $name = $_COOKIE['anon-name']; //stored as cookie, name used before
                 } else {
@@ -878,7 +895,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $comment_template->set_var('username', $usernameblock);
 
                 $comment_template->set_var('action_url', $_CONF['site_url'] . '/users.php?mode=new');
-                $comment_template->set_var('lang_logoutorcreateaccount', $LANG03[04]);
+                $comment_template->set_var('lang_logoutorcreateaccount',$LANG03[04]);
             }
 
             if ($postmode == 'html') {
@@ -947,7 +964,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
  */
 function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $inputHandler;
+    global $_CONF, $_TABLES, $_USER, $LANG03;
 
     $ret = 0;
 
@@ -999,11 +1016,18 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         return $someError;
     }
 
-    $comment = CMT_prepareText($comment, $postmode,false);
-
-    $title = $inputHandler->censor(strip_tags($title));
-
-//    $title = COM_checkWords (strip_tags (COM_stripslashes ($title)));
+    // Clean 'em up a bit!
+    if ($postmode == 'html') {
+        $comment = COM_checkWords (COM_checkHTML (COM_stripslashes ($comment)));
+    } else {
+        $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)));
+        $newcomment = COM_makeClickableLinks ($comment);
+        if (strcmp ($comment, $newcomment) != 0) {
+            $comment = nl2br ($newcomment);
+            $postmode = 'html';
+        }
+    }
+    $title = COM_checkWords (strip_tags (COM_stripslashes ($title)));
 
     // Get signature
     $sig = '';
@@ -1057,8 +1081,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         }
         $cid = DB_insertId();
         //set Anonymous user name if present
-        $name = $inputHandler->getVar('strict','username','post','');
-        if (!empty($username) && strcmp($username,$LANG03[24]) != 0) {
+        if (isset($_POST['username']) && strcmp($_POST['username'],$LANG03[24]) != 0) {
+            $name = strip_tags(COM_applyFilter ($_POST['username']));
             DB_change($_TABLES['comments'],'name',$name,'cid',$cid);
             setcookie('anon-name', $name);
         }
@@ -1075,6 +1099,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             CMT_sendNotification ($title, $comment, $uid, $_SERVER['REMOTE_ADDR'],
                               $type, $cid);
         }
+//        CACHE_remove_instance('whatsnew');
     } else {
         COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with invalid $title and/or $comment.');
@@ -1100,8 +1125,8 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid)
     global $_CONF, $_TABLES, $LANG03, $LANG08, $LANG09;
 
     // we have to undo the addslashes() call from savecomment()
-    $title      = stripslashes ($title);
-    $comment    = stripslashes ($comment);
+    $title = stripslashes ($title);
+    $comment = stripslashes ($comment);
 
     // strip HTML if posted in HTML mode
     if (preg_match ('/<.*>/', $comment) != 0) {
@@ -1212,13 +1237,25 @@ function CMT_deleteComment ($cid, $sid, $type)
 */
 function CMT_reportAbusiveComment ($cid, $type)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN,
-           $pageHandle;
+    global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN;
 
     $retval = '';
 
-    if (!isset($_USER) || !isset($_USER['uid']) || $_USER['uid'] < 2 ) {
-        $pageHandle->displayLoginRequired( );
+    if (empty ($_USER['username'])) {
+        $retval .= COM_startBlock ($LANG_LOGIN[1], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'));
+        $loginreq = new Template ($_CONF['path_layout'] . 'submit');
+        $loginreq->set_file ('loginreq', 'submitloginrequired.thtml');
+        $loginreq->set_var ('xhtml', XHTML);
+        $loginreq->set_var ('login_message', $LANG_LOGIN[2]);
+        $loginreq->set_var ('site_url', $_CONF['site_url']);
+        $loginreq->set_var ('lang_login', $LANG_LOGIN[3]);
+        $loginreq->set_var ('lang_newuser', $LANG_LOGIN[4]);
+        $loginreq->parse ('errormsg', 'loginreq');
+        $retval .= $loginreq->finish ($loginreq->get_var ('errormsg'));
+        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+
+        return $retval;
     }
 
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'mail');
@@ -1234,6 +1271,9 @@ function CMT_reportAbusiveComment ($cid, $type)
 
     $start = new Template($_CONF['path_layout'] . 'comment');
     $start->set_file(array('report' => 'reportcomment.thtml'));
+    $start->set_var('xhtml', XHTML);
+    $start->set_var('site_url', $_CONF['site_url']);
+    $start->set_var('layout_url', $_CONF['layout_url']);
     $start->set_var('lang_report_this', $LANG03[25]);
     $start->set_var('lang_send_report', $LANG03[10]);
     $start->set_var('cid', $cid);
@@ -1277,15 +1317,29 @@ function CMT_reportAbusiveComment ($cid, $type)
 function CMT_sendReport ($cid, $type)
 {
     global $_CONF, $_TABLES, $_USER, $LANG03, $LANG08, $LANG09, $LANG_LOGIN;
-    global $pageHandle;
 
-    if (COM_isAnonUser()) {
-        $pageHandle->displayLoginRequired( );
+    if (empty ($_USER['username'])) {
+        $retval = COM_siteHeader ('menu', $LANG_LOGIN[1]);
+        $retval .= COM_startBlock ($LANG_LOGIN[1], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'));
+        $loginreq = new Template ($_CONF['path_layout'] . 'submit');
+        $loginreq->set_file ('loginreq', 'submitloginrequired.thtml');
+        $loginreq->set_var ('xhtml', XHTML);
+        $loginreq->set_var ('login_message', $LANG_LOGIN[2]);
+        $loginreq->set_var ('site_url', $_CONF['site_url']);
+        $loginreq->set_var ('lang_login', $LANG_LOGIN[3]);
+        $loginreq->set_var ('lang_newuser', $LANG_LOGIN[4]);
+        $loginreq->parse ('errormsg', 'loginreq');
+        $retval .= $loginreq->finish ($loginreq->get_var ('errormsg'));
+        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_siteFooter ();
+
+        return $retval;
     }
 
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'mail');
     if (COM_checkSpeedlimit ('mail') > 0) {
-        $pageHanle->redirect($_CONF['site_url'] . '/index.php');
+        return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
 
     $username = DB_getItem ($_TABLES['users'], 'username',
@@ -1293,8 +1347,8 @@ function CMT_sendReport ($cid, $type)
     $result = DB_query ("SELECT uid,title,comment,sid,ipaddress FROM {$_TABLES['comments']} WHERE cid = $cid AND type = '$type'");
     $A = DB_fetchArray ($result);
 
-    $title = $A['title'];
-    $comment = $A['comment'];
+    $title = stripslashes ($A['title']);
+    $comment = stripslashes ($A['comment']);
 
     // strip HTML if posted in HTML mode
     if (preg_match ('/<.*>/', $comment) != 0) {
@@ -1339,7 +1393,7 @@ function CMT_sendReport ($cid, $type)
 
     COM_updateSpeedlimit ('mail');
 
-    $pageHandle->redirect($_CONF['site_url'] . '/index.php?msg=27');
+    return COM_refresh ($_CONF['site_url'] . '/index.php?msg=27');
 }
 
 
@@ -1356,21 +1410,25 @@ function CMT_sendReport ($cid, $type)
 */
 function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
 
-    global $_USER, $_TABLES, $LANG03, $_CONF,$inputHandler;
+    global $_USER, $_TABLES, $LANG03, $_CONF;
 
     if ($postmode == 'html') {
-        $htmlFilter = new htmlFilter();
-        $htmlFilter->setElement('img',0);
-        $comment = $htmlFilter->filterHTML($comment);
-//        $comment = $htmlFilter->formatBlock($comment,'html');
-        $comment = $inputHandler->censor($comment);
+        $comment = COM_checkWords (COM_checkHTML (COM_stripslashes ($comment)));
     } else {
     	//plaintext
-        $comment = htmlspecialchars ($inputHandler->censor($comment));
+        $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)));
         $newcomment = COM_makeClickableLinks ($comment);
         if (strcmp ($comment, $newcomment) != 0) {
             $comment = nl2br ($newcomment);
         }
+    }
+
+    if ($edit) {
+        $comment .= LB . '<spam class="comment-edit">' . $LANG03[30] . ' '
+                 . strftime( $_CONF['date'], time() ) . ' ' .$LANG03[31] .' '
+                 . $_USER['username'] . '</span><!-- /COMMENTEDIT -->';
+        $text = $comment;
+
     }
 
     if (empty ($_USER['uid'])) {
@@ -1398,5 +1456,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
 
     return $comment;
 }
+
+
 
 ?>

@@ -72,19 +72,25 @@ if (!in_array('links', $_PLUGINS)) {
 function links_list($message)
 {
     global $_CONF, $_TABLES, $_LI_CONF, $LANG_LINKS_ADMIN, $LANG_LINKS,
-           $LANG_LINKS_STATS, $inputHandler, $pageHandle;
+           $LANG_LINKS_STATS;
 
+    $cid = $_LI_CONF['root'];
     $display = '';
-
-    $cid    = $inputHandler->getVar('strict','category',array('get','post'),$_LI_CONF['root']);
-    $page   = $inputHandler->getVar('integer','page','get',0);
-    $cat    = $inputHandler->prepareForDB($cid);
-
+    if (isset($_GET['category'])) {
+        $cid = strip_tags(COM_stripslashes($_GET['category']));
+    } elseif (isset($_POST['category'])) {
+        $cid = strip_tags(COM_stripslashes($_POST['category']));
+    }
+    $cat = addslashes($cid);
+    $page = 0;
+    if (isset ($_GET['page'])) {
+        $page = COM_applyFilter ($_GET['page'], true);
+    }
     if ($page == 0) {
         $page = 1;
     }
 
-    if (empty($cid) || $cid == '') {
+    if (empty($cid)) {
         if ($page > 1) {
             $page_title = sprintf ($LANG_LINKS[114] . ' (%d)', $page);
         } else {
@@ -110,24 +116,25 @@ function links_list($message)
         $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['linkcategories']} WHERE cid='{$cat}'");
         $A = DB_fetchArray($result);
         if (SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'], $A['perm_group'], $A['perm_members'], $A['perm_anon']) < 2) {
-            $pageHandle->setPageTitle($page_title);
-            $pageHandle->addMessage(5,'links');
-            $pageHandle->displayPage();
+            $display .= COM_siteHeader ('menu', $page_title);
+            $display .= COM_showMessage (5, 'links');
+            $display .= COM_siteFooter ();
+            echo $display;
             exit;
         }
     }
 
-    $pageHandle->setPageTitle($page_title);
+    $display .= COM_siteHeader ('menu', $page_title);
 
     if (is_array($message) && !empty($message[0])) {
-        $display = COM_startBlock($message[0], '',
+        $display .= COM_startBlock($message[0], '',
                                  COM_getBlockTemplate('_msg_block', 'header'));
         $display .= $message[1];
         $display .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
     } else if (isset($_REQUEST['msg'])) {
-        $msg = $inputHandler->getVar('integer','msg','request',0); //COM_applyFilter($_REQUEST['msg'], true);
+        $msg = COM_applyFilter($_REQUEST['msg'], true);
         if ($msg > 0) {
-            $pageHandle->addMessage($msg, 'links');
+            $display .= COM_showMessage($msg, 'links');
         }
     }
 
@@ -158,16 +165,14 @@ function links_list($message)
         $sql = "SELECT cid,pid,category,description FROM {$_TABLES['linkcategories']} WHERE pid='{$cat}'";
         $sql .= COM_getLangSQL('cid', 'AND');
         $sql .= COM_getPermSQL('AND') . " ORDER BY category";
-
         $result = DB_query($sql);
         $nrows  = DB_numRows ($result);
-
         if ($nrows > 0) {
             $linklist->set_var ('lang_categories', $LANG_LINKS_ADMIN[14]);
             for ($i = 1; $i <= $nrows; $i++) {
                 $C = DB_fetchArray($result);
                 // Get number of child links user can see in this category
-                $ccid = $inputHandler->prepareForDB($C['cid']);
+                $ccid = addslashes($C['cid']);
                 $result1 = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['links']} WHERE cid='{$ccid}'" . COM_getPermSQL('AND'));
                 $D = DB_fetchArray($result1);
 
@@ -239,7 +244,7 @@ function links_list($message)
     $from_where = " FROM {$_TABLES['links']}";
     if ($_LI_CONF['linkcols'] > 0) {
         if (!empty($cid)) {
-            $from_where .= " WHERE cid='" . $inputHandler->prepareForDB($cid) . "'";
+            $from_where .= " WHERE cid='" . addslashes($cid) . "'";
         } else {
             $from_where .= " WHERE cid=''";
         }
@@ -289,7 +294,7 @@ function links_list($message)
                 }
                 $currentcid = $A['cid'];
                 $currentcategory = DB_getItem($_TABLES['linkcategories'],
-                        'category', "cid = '" . $inputHandler->prepareForDB($currentcid) . "'");
+                        'category', "cid = '" . addslashes($currentcid) . "'");
                 $linklist->set_var('link_category', $currentcategory);
             }
 
@@ -322,7 +327,9 @@ function links_list($message)
     }
     $linklist->set_var ('blockfooter',COM_endBlock());
     $linklist->parse ('output', 'linklist');
-    $pageHandle->addContent($linklist->finish ($linklist->get_var ('output')));
+    $display .= $linklist->finish ($linklist->get_var ('output'));
+
+    return $display;
 }
 
 
@@ -335,21 +342,28 @@ function links_list($message)
 */
 function prepare_link_item ($A, &$template)
 {
-    global $_CONF, $_USER, $LANG_ADMIN, $LANG_LINKS, $_IMAGE_TYPE,
-           $inputHandler, $pageHandle;
+    global $_LI_CONF, $_CONF, $_USER, $LANG_ADMIN, $LANG_LINKS, $_IMAGE_TYPE;
 
-    $url = $pageHandle->buildUrl ($_CONF['site_url']
+    $url = COM_buildUrl ($_CONF['site_url']
                  . '/links/portal.php?what=link&amp;item=' . $A['lid']);
     $template->set_var ('link_url', $url);
     $template->set_var ('link_actual_url', $A['url']);
-    $template->set_var ('link_name', $A['title']);
+    $template->set_var ('link_name', stripslashes ($A['title']));
     $template->set_var ('link_hits', COM_numberFormat ($A['hits']));
     $template->set_var ('link_description',
-                        nl2br ($A['description']));
-    $content = $A['title'];
-    $attr = array(
-        'title' => $A['url'],
-        'class' => 'ext-link');
+                        nl2br (stripslashes ($A['description'])));
+    $content = stripslashes ($A['title']);
+
+    if ( $_LI_CONF['target_blank'] == 1 ) {
+        $attr = array(
+            'title' => stripslashes ($A['url']),
+            'class' => 'ext-link',
+            'target' => '_blank');
+    } else {
+        $attr = array(
+            'title' => stripslashes ($A['url']),
+            'class' => 'ext-link');
+    }
     $html = COM_createLink($content, $url, $attr);
     $template->set_var ('link_html', $html);
     if (!COM_isAnonUser() && !SEC_hasRights('links.edit')) {
@@ -385,8 +399,9 @@ function prepare_link_item ($A, &$template)
 $display = '';
 $mode = '';
 $root = $_LI_CONF['root'];
-
-$mode = $inputHandler->getVar('strict','mode','request','');
+if (isset ($_REQUEST['mode'])) {
+    $mode = $_REQUEST['mode'];
+}
 
 $message = array();
 
@@ -448,9 +463,11 @@ if ( $mode == $LANG12[8] && !empty($LANG12[8]) ) {
 
 
 if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
-    $lid = $inputHandler->getVar('strict','lid','get','');
+    if (isset ($_GET['lid'])) {
+        $lid = COM_applyFilter($_GET['lid']);
+    }
     if (!empty($lid)) {
-        $lidsl = $inputHandler->prepareForDB($lid);
+        $lidsl = addslashes($lid);
         $result = DB_query("SELECT url, title FROM {$_TABLES['links']} WHERE lid = '$lidsl'");
         list($url, $title) = DB_fetchArray($result);
 
@@ -469,10 +486,9 @@ if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
 
 if (COM_isAnonUser() &&
     (($_CONF['loginrequired'] == 1) || ($_LI_CONF['linksloginrequired'] == 1))) {
-    $pageHandle->setPageTitle($LANG_LINKS[114]);
-
-    $pageHandle->addContent(COM_startBlock ($LANG_LOGIN[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header')));
+    $display .= COM_siteHeader ('menu', $LANG_LINKS[114]);
+    $display .= COM_startBlock ($LANG_LOGIN[1], '',
+                                COM_getBlockTemplate ('_msg_block', 'header'));
     $login = new Template ($_CONF['path_layout'] . 'submit');
     $login->set_file (array ('login' => 'submitloginrequired.thtml'));
     $login->set_var ( 'xhtml', XHTML );
@@ -481,12 +497,14 @@ if (COM_isAnonUser() &&
     $login->set_var ('lang_login', $LANG_LOGIN[3]);
     $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
     $login->parse ('output', 'login');
-    $pageHandle->addContent($login->finish ($login->get_var ('output')));
-    $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));
+    $display .= $login->finish ($login->get_var ('output'));
+    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
 } else {
-    links_list($message);
+    $display .= links_list($message);
 }
 
-$pageHandle->displayPage();
+$display .= COM_siteFooter ();
+
+echo $display;
 
 ?>

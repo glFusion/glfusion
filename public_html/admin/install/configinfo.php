@@ -61,6 +61,10 @@ if (isset($_CONF['mail_settings']['password'])) {
     unset($_CONF['mail_settings']['password']);
 }
 
+if (isset($_CONF['mail_smtp_password']) ) {
+    unset($_CONF['mail_smtp_password']);
+}
+
 $display = "<html>\n<head><title>Configuration Settings</title></head>\n<body>\n";
 $n = 0;
 $display .= '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="border: thin black solid;">';

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | FileMgmt configuration options                                           |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
+// | $Id:: config.php 3274 2008-09-30 03:30:57Z mevans0263                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
@@ -37,8 +37,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
-$CONF_FM['version'] = '1.7.0.fusion';
 
 // Permissions that will be used for new files into the repository
 $filemgmtFilePermissions = (int) 0755;
@@ -83,16 +81,4 @@ $_FMDOWNLOAD['inconlib']    = array(
     'vsd'  => "visio.gif",
     'none' => "file.gif"
     );
-
-/*************************************************************************
- *          Do not modify any settings below this area                   *
- *************************************************************************/
-$_FM_TABLES['filemgmt_cat']         = $_DB_table_prefix . 'filemgmt_category';
-$_FM_TABLES['filemgmt_filedetail']  = $_DB_table_prefix . 'filemgmt_filedetail';
-$_FM_TABLES['filemgmt_filedesc']    = $_DB_table_prefix . 'filemgmt_filedesc';
-$_FM_TABLES['filemgmt_brokenlinks'] = $_DB_table_prefix . 'filemgmt_broken';
-$_FM_TABLES['filemgmt_modreq']      = $_DB_table_prefix . 'filemgmt_mod';
-$_FM_TABLES['filemgmt_votedata']    = $_DB_table_prefix . 'filemgmt_votedata';
-$_FM_TABLES['filemgmt_history']     = $_DB_table_prefix . 'filemgmt_downloadhistory';
-
 ?>

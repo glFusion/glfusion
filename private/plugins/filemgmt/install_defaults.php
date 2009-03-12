@@ -182,6 +182,7 @@ function plugin_initconfig_filemgmt()
                 0, 2, 0, 80, true, 'filemgmt');
         $c->add('SnapCatURL', $_FM_DEFAULT['SnapCatURL'], 'text',
                 0, 2, 0, 90, true, 'filemgmt');
+        $c->add('outside_webroot', 0, 'select', 0, 2, 0, 100, true, 'filemgmt');
     }
 
     return true;

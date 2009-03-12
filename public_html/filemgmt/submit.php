@@ -46,6 +46,164 @@ include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 
+
+function FM_notifyAdmins( $filename,$file_user_id,$description ) {
+    global $LANG_DIRECTION, $LANG_CHARSET, $LANG_FM00, $_USER, $_FM_CONF, $_CONF, $_TABLES;
+
+    require_once $_CONF['path'].'lib/phpmailer/class.phpmailer.php';
+
+    if( empty( $LANG_DIRECTION )) {
+        // default to left-to-right
+        $direction = 'ltr';
+    } else {
+        $direction = $LANG_DIRECTION;
+    }
+    if( empty( $LANG_CHARSET )) {
+        $charset = $_CONF['default_charset'];
+        if( empty( $charset )) {
+            $charset = 'iso-8859-1';
+        }
+    } else {
+        $charset = $LANG_CHARSET;
+    }
+
+    COM_clearSpeedlimit(300,'fmnotify');
+    $last = COM_checkSpeedlimit ('fmnotify');
+    if ( $last == 0 ) {
+        $mail = new PHPMailer();
+        $mail->CharSet = $charset;
+        if ($_CONF['mail_backend'] == 'smtp' ) {
+            $mail->Host     = $_CONF['mail_smtp_host'] . ':' . $_CONF['mail_smtp_port'];
+            $mail->SMTPAuth = $_CONF['mail_smtp_auth'];
+            $mail->Username = $_CONF['mail_smtp_username'];
+            $mail->Password = $_CONF['mail_smtp_password'];
+            $mail->Mailer = "smtp";
+        } elseif ($_CONF['mail_backend'] == 'sendmail') {
+            $mail->Mailer = "sendmail";
+            $mail->Sendmail = $_CONF['mail_sendmail_path'];
+        } else {
+            $mail->Mailer = "mail";
+        }
+        $mail->WordWrap = 76;
+        $mail->IsHTML(true);
+        $mail->Subject = $LANG_FM00['new_upload'] . $_CONF['site_name'];
+
+        if (!isset($file_user_id) || $file_user_id < 2  ) {
+            $uname = 'Anonymous';
+        } else {
+            $uname = DB_getItem($_TABLES['users'],'username','uid=' . $file_user_id);
+        }
+        // build the template...
+        $T = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
+        $T->set_file ('email', 'notifyemail.thtml');
+
+        $T->set_var(array(
+            'direction'         =>  $direction,
+            'charset'           =>  $charset,
+            'lang_new_upload'   =>  $LANG_FM00['new_upload_body'],
+            'lang_details'      =>  $LANG_FM00['details'],
+            'lang_filename'     =>  $LANG_FM00['filename'],
+            'lang_uploaded_by'  =>  $LANG_FM00['uploaded_by'],
+            'username'          =>  $uname,
+            'filename'          =>  $filename,
+            'description'       =>  $description,
+            'url_moderate'      =>  '<a href="' . $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?op=listNewDownloads">Click here to view</a>',
+            'site_name'         =>  $_CONF['site_name'] . ' - ' . $_CONF['site_slogan'],
+            'site_url'          =>  $_CONF['site_url'],
+        ));
+        $T->parse('output','email');
+        $body .= $T->finish($T->get_var('output'));
+        $mail->Body    = $body;
+
+        $altbody  = $LANG_FM00['new_upload_body'] . $_CONF['site_name'];
+        $altbody .= "\n\r\n\r";
+        $altbody .= $LANG_FM00['details'];
+        $altbody .= "\n\r";
+        $altbody .= $LANG_FM00['filename'] . ' ' . $filename . "\n\r";
+        $altbody .= "\n\r";
+        $altbody .= $description . "\n\r";
+        $altbody .= "\n\r";
+        $altbody .= $LANG_FM00['uploaded_by'] . ' ' . $uname . "\n\r";
+        $altbody .= "\n\r\n\r";
+        $altbody .= $_CONF['site_name'] . "\n\r";
+        $altbody .= $_CONF['site_url'] . "\n\r";
+
+        $mail->AltBody = $altbody;
+
+        $mail->From = $_CONF['site_mail'];
+        $mail->FromName = $_CONF['site_name'];
+
+        $group_id = DB_getItem($_TABLES['groups'],'grp_id','grp_name="filemgmt Admin"');
+
+        $groups = FM_getGroupList($group_id);
+        $groupList = implode(',',$groups);
+
+	    $sql = "SELECT DISTINCT {$_TABLES['users']}.uid,username,fullname,email "
+	          ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} "
+	          ."WHERE {$_TABLES['users']}.uid > 1 "
+	          ."AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid "
+	          ."AND ({$_TABLES['group_assignments']}.ug_main_grp_id IN ({$groupList}))";
+
+        $result = DB_query($sql);
+        $nRows = DB_numRows($result);
+        $toCount = 0;
+        for ($i=0;$i < $nRows; $i++ ) {
+            $row = DB_fetchArray($result);
+            if ( $row['email'] != '' ) {
+    			COM_errorLog("FileMgmt Upload: Sending notification email to: " . $row['email'] . " - " . $row['username']);
+                $toCount++;
+                $mail->AddAddress($row['email'], $row['username']);
+            }
+        }
+        if ( $toCount > 0 ) {
+        	if(!$mail->Send()) {
+            	COM_errorLog("FileMgmt Upload: Unable to send moderation email - error:" . $mail->ErrorInfo);
+        	}
+    	} else {
+        	COM_errorLog("FileMgmt Upload: Error - Did not find any administrators to email");
+    	}
+        COM_updateSpeedlimit ('fmnotify');
+    }
+    return true;
+}
+
+
+/**
+* Get a list (actually an array) of all groups this group belongs to.
+*
+* @param   basegroup   int     id of group
+* @return              array   array of all groups 'basegroup' belongs to
+*
+*/
+function FM_getGroupList ($basegroup)
+{
+    global $_TABLES;
+
+    $to_check = array ();
+    array_push ($to_check, $basegroup);
+
+    $checked = array ();
+
+    while (sizeof ($to_check) > 0) {
+        $thisgroup = array_pop ($to_check);
+        if ($thisgroup > 0) {
+            $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $thisgroup");
+            $numGroups = DB_numRows ($result);
+            for ($i = 0; $i < $numGroups; $i++) {
+                $A = DB_fetchArray ($result);
+                if (!in_array ($A['ug_grp_id'], $checked)) {
+                    if (!in_array ($A['ug_grp_id'], $to_check)) {
+                        array_push ($to_check, $A['ug_grp_id']);
+                    }
+                }
+            }
+            $checked[] = $thisgroup;
+        }
+    }
+
+    return $checked;
+}
+
 if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
     // Get the number of files in the database and post it in the title.
@@ -140,6 +298,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                     $returnMove = move_uploaded_file($tmp, "{$filemgmt_FileStore}{$name}");             // move file to your upload directory
                 } else {
                     $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
+                    FM_notifyAdmins($name,$submitter,$description);
                 }
 //                $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
                 if (!$returnMove) {
@@ -229,7 +388,8 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
     } else {
 
-        $display  = COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
+        $display .= COM_siteHeader('menu');
+        $display .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
         $display .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"8\" class=\"plugin\"><tr><td style=\"padding-top:10px;padding-left:50px;\">\n";
         $display .= "<ul><li>"._MD_SUBMITONCE."</li>\n";
         $display .= "<li>"._MD_ALLPENDING."</li>\n";
@@ -303,9 +463,9 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $display .= "</form>\n";
         $display .= "</td></tr></table>";
         $display .= COM_endBlock();
+        $display .= COM_siteFooter();
+        echo $display;
 
-        $pageHandle->addContent($display);
-        $pageHandle->displayPage();
     }
 
 } else {

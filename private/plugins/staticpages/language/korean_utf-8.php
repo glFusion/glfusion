@@ -24,6 +24,11 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 ###############################################################################
@@ -108,8 +113,12 @@ $LANG_STATIC = array(
     'copy' => '복사',
     'limit_results' => '좁혀가며 검색',
     'search' => '검색',
-    'submit' => '등록'
+    'submit' => '등록',
+    'delete_confirm' => 'Are you sure you want to delete this page?'
 );
+
+$PLG_staticpages_MESSAGE19 = '';
+$PLG_staticpages_MESSAGE20 = '';
 
 // Messages for the plugin upgrade
 $PLG_staticpages_MESSAGE3001 = 'Plugin upgrade not supported.';

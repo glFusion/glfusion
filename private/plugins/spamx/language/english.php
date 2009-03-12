@@ -3,14 +3,18 @@
 /**
  * File: english.php
  * This is the English language file for the glFusion Spam-X plugin
- * 
+ *
  * Copyright (C) 2004-2008 by the following authors:
  * Author        Tom Willett        tomw AT pigstye DOT net
- * 
+ *
  * Licensed under GNU General Public License
  *
  * $Id$
  */
+
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
 
 global $LANG32;
 

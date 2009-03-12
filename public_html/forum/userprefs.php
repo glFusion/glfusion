@@ -53,17 +53,17 @@ forum_chkUsercanAccess(true);
 
 // SAVE SETTINGS
 if(isset($_POST['submit'])) {
-    $xtopicsperpage = $inputHandler->getVar('integer','xtopicsperpage','post',0);//COM_applyFilter($_POST['xtopicsperpage'],true);
-    $xpostsperpage = $inputHandler->getVar('integer','xpostsperpage','post',0);//COM_applyFilter($_POST['xpostsperpage'],true);
-    $xpopularlimit = $inputHandler->getVar('integer','xpopularlimit','post',0);//COM_applyFilter($_POST['xpopularlimit'],true);
-    $xmessagesperpage = $inputHandler->getVar('integer','xmessagesperpage','post',0);//COM_applyFilter($_POST['xmessagesperpage'],true);
-    $xsearchlines = $inputHandler->getVar('integer','xsearchlines','post',0);//COM_applyFilter($_POST['xsearchlines'],true);
-    $xmembersperpage = $inputHandler->getVar('integer','xmembersperpage','post',0);//COM_applyFilter($_POST['xmembersperpage'],true);
-    $xemailnotify = $inputHandler->getVar('integer','xemailnotify','post',0);//COM_applyFilter($_POST['xemailnotify'],true);
-    $xviewanonposts = $inputHandler->getVar('integer','xviewanonposts','post',0);//COM_applyFilter($_POST['xviewanonposts'],true);
-    $xalwaysnotify = $inputHandler->getVar('integer','xalwaysnotify','post',0);//COM_applyFilter($_POST['xalwaysnotify'],true);
-    $xnotifyonce = $inputHandler->getVar('integer','xnotifyonce','post',0);//COM_applyFilter($_POST['xnotifyonce'],true);
-    $xshowiframe = $inputHandler->getVar('integer','xshowiframe','post',0);//COM_applyFilter($_POST['xshowiframe'],true);
+    $xtopicsperpage = COM_applyFilter($_POST['xtopicsperpage'],true);
+    $xpostsperpage = COM_applyFilter($_POST['xpostsperpage'],true);
+    $xpopularlimit = COM_applyFilter($_POST['xpopularlimit'],true);
+    $xmessagesperpage = COM_applyFilter($_POST['xmessagesperpage'],true);
+    $xsearchlines = COM_applyFilter($_POST['xsearchlines'],true);
+    $xmembersperpage = COM_applyFilter($_POST['xmembersperpage'],true);
+    $xemailnotify = COM_applyFilter($_POST['xemailnotify'],true);
+    $xviewanonposts = COM_applyFilter($_POST['xviewanonposts'],true);
+    $xalwaysnotify = COM_applyFilter($_POST['xalwaysnotify'],true);
+    $xnotifyonce = COM_applyFilter($_POST['xnotifyonce'],true);
+    $xshowiframe = COM_applyFilter($_POST['xshowiframe'],true);
 
     DB_query("UPDATE {$_TABLES['gf_userprefs']} SET
         topicsperpage='$xtopicsperpage',
@@ -79,7 +79,7 @@ if(isset($_POST['submit'])) {
      WHERE uid='{$_USER['uid']}'");
 
 
-  $pageHandle->addContent(forum_statusMessage($LANG_GF92['setsavemsg'],$_CONF['site_url'] .'/forum/userprefs.php',$LANG_GF92['setsavemsg']));
+  forum_statusMessage($LANG_GF92['setsavemsg'],$_CONF['site_url'] .'/forum/userprefs.php',$LANG_GF92['setsavemsg']);
   gf_siteFooter();
   exit();
 }
@@ -138,6 +138,7 @@ if (!isset($_POST['$submit'])) {
         $showiframe_yes = '';
     }
 
+//    $usersettings = new Template($_CONF['path_layout'] . 'forum/layout/userprefs');
     $usersettings = new Template($_CONF['path'] . 'plugins/forum/templates/userprefs');
     $usersettings->set_file (array ('usersettings'=>'user_settings.thtml'));
     $usersettings->set_var ('xhtml',XHTML);
@@ -193,7 +194,7 @@ if (!isset($_POST['$submit'])) {
     }
 
     $usersettings->parse ('output', 'usersettings');
-    $pageHandle->addContent($usersettings->finish($usersettings->get_var('output')));
+    echo $usersettings->finish($usersettings->get_var('output'));
 
 }
 

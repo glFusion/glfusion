@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
 
 
   
@@ -15,9 +14,7 @@
   <meta name="robots" content="noindex,nofollow" />
 
   
-  <title>Calendar Plugin - glFusion CMS</title>
-</head>
-
+  <title>Calendar Plugin - glFusion CMS</title></head>
 
 <body style="direction: ltr;">
 
@@ -77,25 +74,19 @@ Configuration Options</a></h1>
       <td class="col0 leftalign"><a name="desc_calendarloginrequired"></a>Calendar Login Required </td>
 
 
-      <td class="col1 leftalign">When
-set to True, only registered users can access the calendar. Please note
-that Login Required setting in glFusion's main configuration takes
-precedence over this setting. So when Login Required is True, anonymous
-users can not access the calendar even when this setting is False. </td>
+      <td class="col1 leftalign">When set to True, only registered users can access the calendar. Please note that the Login Required setting in glFusion's main configuration takes precedence over this setting. So when Login Required is True, anonymous users can not access the calendar even when this setting is False. </td>
 
 
     </tr>
 
 
-    <tr class="row2">
+    <tr><td><a name="desc_only_admin_submit"></a>Only Allow Admins to Submit</td><td>When set to True, only site administrators can add events. This will disable the ability for users to submit events.</td></tr><tr class="row2">
 
 
       <td class="col0 leftalign"><a name="desc_hidecalendarmenu"></a>Hide Calendar Menu Entry </td>
 
 
-      <td class="col1 leftalign">Whether to hide the
-&ldquo;Calendar&rdquo; entry from glFusion's menu bar (when set
-to 1) or to show it (when set to 0). </td>
+      <td class="col1 leftalign">Whether to hide the “Calendar” entry from glFusion's menu bar (when set to True) or to show it (when set to False). </td>
 
 
     </tr>
@@ -108,8 +99,7 @@ to 1) or to show it (when set to 0). </td>
       </td>
 
 
-      <td class="col1 leftalign">Allow account holders to
-have a personal calendar </td>
+      <td class="col1 leftalign">Allow account holders to have a personal calendar. </td>
 
 
     </tr>
@@ -121,9 +111,7 @@ have a personal calendar </td>
       <td class="col0 leftalign"><a name="desc_eventsubmission"></a>Enable Submission Queue </td>
 
 
-      <td class="col1 leftalign">Whether
-events submitted by users will have to be approved by an admin first
-(when set = 1) or show up immediately (when set = 0). </td>
+      <td class="col1 leftalign">Whether events submitted by users will have to be approved by an admin first (when set to True) or show up immediately (when set to False). </td>
 
 
     </tr>
@@ -132,11 +120,11 @@ events submitted by users will have to be approved by an admin first
     <tr class="row5">
 
 
-      <td class="col0 leftalign"><a name="desc_showupcomingevents"></a>Show upcoming Events </td>
+      <td class="col0 leftalign"><a name="desc_showupcomingevents"></a>Show Upcoming Events </td>
 
 
       <td class="col1 leftalign">Whether to show upcoming
-events (0 = no, 1 = yes) in a separate block. </td>
+events in a separate block. </td>
 
 
     </tr>
@@ -149,7 +137,7 @@ events (0 = no, 1 = yes) in a separate block. </td>
 
 
       <td class="col1 leftalign">Number of days that the
-&ldquo;Upcoming Events&rdquo; block will look ahead. </td>
+&#8220;Upcoming Events&#8221; block will look ahead. </td>
 
 
     </tr>
@@ -163,8 +151,7 @@ events (0 = no, 1 = yes) in a separate block. </td>
 
       <td class="col1 leftalign">Which
 format to use when submitting or editing an event. Can be 12 (for the
-12 hours am/pm format) or 24 (for the 24 hours format). Uses the same
-value as $_CONF['hour_mode'] by default. </td>
+12 hour am/pm format) or 24 (for the 24 hour format). </td>
 
 
     </tr>
@@ -192,7 +179,7 @@ calendar. </td>
 
       <td class="col1 leftalign">Whether
 to send an email notification when a new event was submitted for the
-site's calendar (when set to = 1) or not (when set to = 0). No
+site's calendar (when set to True) or not (when set to False). No
 notification is ever sent for events in personal calendars. </td>
 
 
@@ -205,13 +192,7 @@ notification is ever sent for events in personal calendars. </td>
       <td class="col0 leftalign"><a name="desc_delete_event"></a>Delete Events with Owner </td>
 
 
-      <td class="col1 leftalign">Defines
-what to do when a user is deleted that is the owner of an event. When
-set to 0, all events owned by the deleted user will be assigned to a
-user of the &ldquo;Root&rdquo; group (e.g. the site admin).
-When set to 1, the
-events are deleted. This only applies to site events - a user's
-personal events are always deleted. </td>
+      <td class="col1 leftalign">Defines what to do when a user is deleted that is the owner of an event. When set to False, all events owned by the deleted user will be assigned to a user of the “Root” group (i.e. the site admin). When set to True, the events are deleted. This only applies to site events - a user's personal events are always deleted. </td>
 
 
     </tr>
@@ -223,24 +204,13 @@ personal events are always deleted. </td>
       <td class="col0 leftalign"><a name="desc_aftersave"></a>After Saving Event </td>
 
 
-      <td class="col1 leftalign">Which page to go to after
-an event has been saved: <br />
-
-
+      <td class="col1 leftalign">Which page to go to after an event has been saved:<br /> 
 * 'item': display the event details <br />
-
-
 * 'list': show admin's list of events (default) <br />
-
-
 * 'plugin': display the calendar <br />
-
-
 * 'home': display the site's homepage <br />
-
-
-* 'admin': go to the &ldquo;Admin Home&rdquo; page, i.e.
-Command &amp; Control </td>
+* 'admin': go to the “Admin Home” page, (i.e. Command & Control) <br />
+</td>
 
 
     </tr>
@@ -262,14 +232,14 @@ Options</a></h2>
 
 
 <div class="level2">
-<p>Please note that some of the options from glFusion&rsquo;s
+<p>Please note that some of the options from glFusion&#8217;s
 main configuration are also relevant for the calendar plugin.
 </p>
 
 
 <p>
 Times and dates are formatted according to the current language and the
-locale settings from glFusion&rsquo;s main configuration.
+locale settings from glFusion&#8217;s main configuration.
 </p>
 
 
@@ -285,5 +255,4 @@ locale settings from glFusion&rsquo;s main configuration.
 </div>
 
 
-</body>
-</html>
+</body></html>

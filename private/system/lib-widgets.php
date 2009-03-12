@@ -105,7 +105,7 @@ EOJ;
 EOS;
     }
 
-    $display .= '</div>';
+    $display .= '</div><div style="clear:both;"></div>';
 
     return $display;
 }
@@ -122,7 +122,7 @@ $query = "SELECT bid, rdfurl, rdflimit, UNIX_TIMESTAMP(rdfupdated) AS date FROM 
     $blocksql['mssql'] .= $query;
     $result = DB_query( $blocksql );
     $nrows = DB_numRows( $result );
-   
+
     $blocks = array();
     for( $i = 0; $i < $nrows; $i++ )
     {

@@ -54,8 +54,9 @@ if (file_exists ($langfile)) {
 $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 
 $pi_version = floatval (DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'"));
-require_once ($_CONF['path'] . 'plugins/forum/config.php');
-//$CONF_FORUM['showtopic_review_order'] = 'DESC';
+
+require_once $_CONF['path'].'plugins/forum/forum.php';
+require_once $_CONF['path'].'plugins/forum/config.php';
 
 /*
 * Check and see if we need to load the plugin configuration
@@ -73,7 +74,7 @@ if (!isset($CONF_FORUM['registration_required'])) {
     $CONF_FORUM['use_glfilter'] = 1; // always use the filter...
 
     // How many messages to show on the Most Popular page
-    $CONF_FORUM['popular_limit'] = '20';
+    $CONF_FORUM['popular_limit'] = 20;
     // How many lines to show on one page in the search results
     $CONF_FORUM['show_search_perpage'] = 15;
     // How many users to show on one page in the memberlist results
@@ -213,6 +214,7 @@ function plugin_user_delete_forum ($uid)
     global $_TABLES;
 
     $username = DB_getItem($_TABLES['users'], "username", "uid=$uid");
+    $username = addslashes($username);
     DB_query("DELETE FROM {$_TABLES['gf_moderators']} WHERE mod_username='$username'");
     DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid ='$uid'");
     DB_query("DELETE FROM {$_TABLES['gf_userinfo']} WHERE uid ='$uid'");
@@ -267,7 +269,7 @@ function plugin_profilevariablesedit_forum($uid, &$template)
 
 function plugin_profilevariablesdisplay_forum ($uid, &$template)
 {
-    global $CONF_FORUM,$_TABLES, $_CONF, $LANG_GF02,$LANG_GF04, $inputHandler;
+    global $CONF_FORUM,$_TABLES, $_CONF, $LANG_GF02,$LANG_GF04;
 
     $postlimit="10";        // How many posts you want displayed
 
@@ -279,7 +281,7 @@ function plugin_profilevariablesdisplay_forum ($uid, &$template)
         $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
         if (SEC_inGroup($groupname) OR $grp_id == 2) {
             if ($CONF_FORUM['use_censor']) {
-                $subject = $inputHandler->censor($subject);
+                $subject = COM_checkWords($subject);
             }
             $numposts++;
             $postdate = COM_getUserDateTimeFormat ($date);
@@ -353,8 +355,7 @@ function plugin_statssummary_forum() {
 */
 function plugin_showstats_forum($showsitestats)
 {
-    global $_USER, $_CONF, $CONF_FORUM,$_TABLES, $LANG_GF00,$LANG_GF01,
-           $inputHandler;
+    global $_USER, $_CONF, $CONF_FORUM,$_TABLES, $LANG_GF00,$LANG_GF01;
 
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $CONF_FORUM['registration_required'] == 1 )  {
         return '';
@@ -391,7 +392,7 @@ function plugin_showstats_forum($showsitestats)
                 $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
                 if (SEC_inGroup($groupname) OR $grp_id == 2) {
                     if ($CONF_FORUM['use_censor']) {
-                        $subject = $inputHandler->censor($subject);
+                        $subject = COM_checkWords($subject);
                     }
                     $url = $_CONF['site_url']. "/forum/viewtopic.php?showtopic=$id";
                     $S['topicsubject'] = '<a href="' . $url . '">' . COM_truncate($subject,$CONF_FORUM['show_subject_length'],'...') . '</a>';
@@ -427,7 +428,7 @@ function plugin_showstats_forum($showsitestats)
                 $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
                 if (SEC_inGroup($groupname) OR $grp_id == 2) {
                     if ($CONF_FORUM['use_censor']) {
-                        $subject = $inputHandler->censor($subject);
+                        $subject = COM_checkWords($subject);
                     }
                     $url = $_CONF['site_url']. "/forum/viewtopic.php?showtopic=$id";
                     $S['topicsubject'] = '<a href="' . $url . '">' . COM_truncate($subject,$CONF_FORUM['show_subject_length'],'...') . '</a>';
@@ -527,7 +528,7 @@ function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type
 
     $query = trim(addslashes($query));
 
-    $sql   = "SELECT id,name,forum,date,subject as title,comment as description,views AS hits,uid, CONCAT('/forum/viewtopic.php?showtopic=',id,'&topic=',id,'#',id) AS url ";
+    $sql   = "SELECT id,name,forum,date,subject as title,comment as description,views AS hits,uid, CONCAT('/forum/viewtopic.php?showtopic=',id,'&amp;topic=',id,'#',id) AS url ";
     $sql  .= "FROM {$_TABLES['gf_topic']} t ";
     $sql  .= "LEFT JOIN {$_TABLES['gf_forums']} f ON t.forum=f.forum_id ";
     $sql  .= forum_buildSearchAccessSql('WHERE');
@@ -656,8 +657,7 @@ function forum_buildFeedsSql ($forumID, $limits)
 
 function plugin_getfeedcontent_forum ($feed, &$link, &$update)
 {
-    global $_CONF, $_TABLES, $CONF_FORUM, $LANG_GF01, $pi_version,
-           $inputHandler;
+    global $_CONF, $_TABLES, $CONF_FORUM, $LANG_GF01, $pi_version;
 
     $content = array();
     $lids = array();
@@ -725,7 +725,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
         $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$A['id']}";
 
         if ($CONF_FORUM['use_censor']) {
-            $A['subject'] = $inputHandler->censor($A['subject']);
+            $A['subject'] = COM_checkWords($A['subject']);
         }
         $content[] = array ('title'     => $A['forum_name'] . ' :: ' . $A['subject'],
                             'summary'   => $desc,
@@ -781,9 +781,9 @@ function plugin_feedupdatecheck_forum ($feed, $topic, $update_data, $limit)
 * If newer then you may want to run the update
 */
 function plugin_chkVersion_forum() {
-    global $CONF_FORUM;
-    return $CONF_FORUM['version'] ;
+    global $_FF_CONF;
 
+    return $_FF_CONF['pi_version'] ;
 }
 
 
@@ -793,52 +793,26 @@ function plugin_chkVersion_forum() {
 function plugin_upgrade_forum() {
     global $_CONF, $_TABLES,$CONF_FORUM;
 
-    require_once $_CONF['path'] . 'plugins/forum/glupgrade.inc';
+    require_once $_CONF['path'] . 'plugins/forum/upgrade.php';
 
-    $rc = plugin_plgupgrade_forum();
-
-    return true;
-
+    return forum_upgrade();
 }
 
-/**
-* Removes the datastructures for this plugin from the glFusion database
-* This may get called by the install routine to undue anything created during the install.
-* Added check to see that plugin is first disabled.
-*/
-function plugin_uninstall_forum($installCheck='')
-{
-    global $_CONF, $_TABLES, $LANG_GF00,$pageHandle;
-
-     // Check and see if plugin is still enabled - if so display warning and exit
-    if ($installCheck != '' && DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name = "forum"')) {
-        COM_errorLog("Plugin is installed and enabled. Disable first if you want to de-install it",1);
-        $pageHandle->addContent(COM_startBlock($LANG_GF00['warning']));
-        $pageHandle->addContent($LANG_GF00['enabled']);
-        $pageHandle->addContent(COM_endBlock());
-        $pageHandle->displayPage();
-        exit;
-    }
-    require_once $_CONF['path'] . 'plugins/forum/install.inc';
-
-    $rc = plugin_remove_forum();
-    return $rc;
-}
 
 //  ------- GENERAL FORUM FUNCTIONS --------
 
 function forum_chkUsercanPost() {
-    global $_CONF,$CONF_FORUM,$LANG_GF00, $LANG_GF01, $LANG_GF02, $_TABLES, $_USER,
-           $inputHandler, $pageHandle;
+    global $_CONF,$CONF_FORUM,$LANG_GF00, $LANG_GF01, $LANG_GF02, $_TABLES, $_USER;
 
     //Check is anonymous users can post
     if($CONF_FORUM['registered_to_post'] && $_USER['uid'] < 2){
         $url = $_CONF['site_url']. '/users.php?mode=new';
-        $pageHandle->addRaw('<meta http-equiv="refresh" content="3; URL=' .$url. '">');
-        $pageHandle->addContent(COM_startBlock($LANG_GF00['access_denied']));
-        $pageHandle->addContent('<br' . XHTML . '>' .$LANG_GF01['loginreqpost']. '<br' . XHTML . '>');
-        $pageHandle->addContent(COM_endBlock());
-        $pageHandle->displayPage();
+        $display .= COM_startBlock($LANG_GF00['access_denied']);
+        $display .= '<br' . XHTML . '>' .$LANG_GF01['loginreqpost']. '<br' . XHTML . '>';
+        $display .= '<meta http-equiv="refresh" content="3; URL=' .$url. '">';
+        $display .= COM_endBlock();
+        $display .= COM_siteFooter();
+        echo $display;
         exit;
     }
     // Check if IP of user has been banned
@@ -846,28 +820,28 @@ function forum_chkUsercanPost() {
     $sqlresult = DB_query ("SELECT * FROM {$_TABLES['gf_banned_ip']} WHERE host_ip like '$ip'");
     $numRows = DB_numRows($sqlresult);
     if ( $numRows > 0 ) {
-        $pageHandle->addContent(COM_startBlock($LANG_GF00['access_denied']));
-        $pageHandle->addContent($LANG_GF02['msg14']);
-        $pageHandle->addContent(printf ($LANG_GF02['msg15'],$_CONF['site_mail']));
-        $pageHandle->addContent(COM_endBlock());
-        $pageHandle->displayPage();
+        echo COM_startBlock($LANG_GF00['access_denied']);
+        echo ($LANG_GF02['msg14']);
+        printf ($LANG_GF02['msg15'],$_CONF['site_mail']);
+        echo COM_endBlock();
+        echo COM_siteFooter(true);
         exit();
     }
 }
 
 function forum_chkUsercanAccess($secure=false) {
-    global $_CONF, $LANG_GF01, $LANG_GF02, $CONF_FORUM, $_USER, $pageHandle;
+    global $_CONF, $LANG_GF01, $LANG_GF02, $CONF_FORUM, $_USER;
 
     if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
-        $pageHandle->addContent('<table width="100%" height="100"><tr><td><center>');
-        $pageHandle->addContent(printf($LANG_GF01['loginreqview'], '<A HREF="' .$_CONF['site_url']. '/users.php?mode=new">', '<A HREF="' .$_CONF['site_url']. '/users.php">'));
-        $pageHandle->addContent('</center></td></tr></table>');
-        $pageHandle->displayPage();
+            echo  '<table width="100%" height="100"><tr><td><center>';
+        printf($LANG_GF01['loginreqview'], '<A HREF="' .$_CONF['site_url']. '/users.php?mode=new">', '<A HREF="' .$_CONF['site_url']. '/users.php">');
+        echo '</center></td></tr></table>';
+        echo COM_siteFooter();
         exit;
     } elseif($secure AND empty($_USER['uid'])) {
-        $pageHandle->addContent('<br' . XHTML . '>');
-        $pageHandle->addContent(BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg83'],false));
-        $pageHandle->displayPage();
+        echo '<br' . XHTML . '>';
+        BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg83'],false);
+        echo COM_siteFooter();
         exit;
     }
 }
@@ -939,8 +913,9 @@ function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
         $statusmsg->set_var ('prompt',$prompt);
     }
     $statusmsg->parse ('output', 'statusmsg');
-    return $statusmsg->finish ($statusmsg->get_var('output'));
+    echo $statusmsg->finish ($statusmsg->get_var('output'));
 
+    return;
 }
 
 
@@ -989,7 +964,7 @@ function forum_deleteForum($id) {
 
 
 function phpblock_forum_newposts() {
-    global $_CONF, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version, $inputHandler;
+    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $LANG_GF01, $LANG_GF02, $mode, $CONF_FORUM,$pi_version;
 
     if ( !COM_checkVersion($pi_version, '2.6') ) {
         return '';
@@ -999,9 +974,8 @@ function phpblock_forum_newposts() {
         return;
     }
     $post_limit = $CONF_FORUM['sideblock_numposts'];
-    $mode = $inputHandler->getVar('strict','mode','get','');
-    $order = $inputHandler->getVar('strict','order','get','');
-
+    $mode = COM_applyFilter($_GET['mode']);
+    $order = COM_applyFilter($_GET['order']);
     if (DB_getItem($_TABLES['plugins'],'pi_enabled', 'pi_name="forum"')) {
         // Check if user has clicked on a sort option in the block
         if ($mode == 'forumblock') {
@@ -1073,7 +1047,7 @@ function phpblock_forum_newposts() {
             if ($no_newposts==0 AND (SEC_inGroup($groupname) OR $grp_id == 2)) {
                 $displaycount++;
                 if ($CONF_FORUM['use_censor']) {
-                    $A['subject'] = $inputHandler->censor($A['subject']);
+                    $A['subject'] = COM_checkWords($A['subject']);
                 }
                 $fullsubject = $A['subject'];
                 if (strlen ($A['subject']) > $CONF_FORUM['sb_subject_size']) {
@@ -1114,12 +1088,16 @@ function phpblock_forum_newposts() {
                $block->set_var ('LANG_REPLIES', $LANG_GF01['REPLIES']);
                $block->set_var ('views', $A['views']);
                $block->set_var ('replies', $A['replies']);
-               if ($CONF_FORUM['allow_user_dateformat']) {
-                   $date = COM_getUserDateTimeFormat ($postdate);
-                   $block->set_var ('date', $date[0]);
-               } else {
-                   $block->set_var ('date', strftime($CONF_FORUM['default_Datetime_format'], $postdate));
-               }
+                if ($CONF_FORUM['allow_user_dateformat']) {
+                    $date = COM_getUserDateTimeFormat ($postdate);
+                    $block->set_var ('date', $date[0]);
+                } else {
+                    $tdate = strftime($CONF_FORUM['default_Datetime_format'], $postdate);
+                    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                        $tdate = iconv('ISO-8859-1','UTF-8',$tdate);
+                    }
+                    $block->set_var ('date', $tdate);
+                }
 
                $block->parse ('block_records', 'topicrecord',true);
 
@@ -1158,8 +1136,7 @@ function phpblock_forum_newposts() {
 function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 {
     global $_CONF, $_USER, $_TABLES, $LANG_GF01,$CONF_FORUM,
-           $LANG_GF02, $mode, $order,$pi_version, $_GROUPS,
-           $inputHandler;
+           $LANG_GF02, $mode, $order,$pi_version, $_GROUPS,$_SYSTEM;
 
     if ( !COM_checkVersion($pi_version, '2.6') ) {
         return '';
@@ -1242,8 +1219,8 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         while ($A = DB_fetchArray ($result)) {
             $A['subject'] = @htmlspecialchars($A['subject'],ENT_COMPAT,$CONF_FORUM['charset']);
             if ($CONF_FORUM['use_censor']) {
-                $A['subject'] = $inputHandler->censor($A['subject']);
-                $A['comment'] = $inputHandler->censor($A['comment']);
+                $A['subject'] = COM_checkWords($A['subject']);
+                $A['comment'] = COM_checkWords($A['comment']);
             }
 
             $fullsubject = "{$A['subject']}\n{$LANG_GF01['POSTEDBY']}:{$A['name']}{$LANG_GF01['VIEWS']}:{$A['views']}, {$LANG_GF01['REPLIES']}:{$A['replies']}";
@@ -1253,7 +1230,13 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             }
 
             $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $A['date']);
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $first = iconv('ISO-8859-1','UTF-8',$firstdate);
+            }
             $lastdate = strftime($CONF_FORUM['default_Datetime_format'], $A['lastupdated']);
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $lastdate = iconv('ISO-8859-1','UTF-8',$lastdate);
+            }
 
             if ($A['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($A['uid']) . ', ';
@@ -1262,7 +1245,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $topicinfo = "{$LANG_GF01['STARTEDBY']},{$A['name']},";
             }
 
-            $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}: {$A['views']}, {$LANG_GF01['REPLIES']}: {$A['replies']}<br" . XHTML . ">";
+            $topicinfo .= "{$firstdate}&lt;br" . XHTML . "&gt;{$LANG_GF01['VIEWS']}: {$A['views']}, {$LANG_GF01['REPLIES']}: {$A['replies']}&lt;br" . XHTML . "&gt;";
 
             if (empty ($A['last_reply_rec']) || $A['last_reply_rec'] < 1) {
                 $lastid = $A['id'];
@@ -1479,7 +1462,7 @@ function phpblock_forum_menu() {
 
     $retval = '<ul>';
     $retval .= "<li><a href=\"{$_CONF['site_url']}/forum/index.php\" title=\"{$LANG_GF02['msg196']}\">{$LANG_GF01['INDEXPAGE']}</a></li>";
-    if (isset($_USER['uid']) && $_USER['uid'] > 1) {
+    if ($_USER['uid'] > 1) {
         $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/userprefs.php' . '" title="' . $LANG_GF01['USERPREFS'] . '">' . $LANG_GF01['USERPREFS'] . '</a></li>';
         $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/notify.php' . '" title="' . $LANG_GF01['SUBSCRIPTIONS'] . '">' . $LANG_GF01['SUBSCRIPTIONS'] . '</a></li>';
         $retval .= '<li><a href="' . $_CONF['site_url'] . '/forum/index.php?op=bookmarks' . '" title="' . $LANG_GF01['BOOKMARKS'] . '">' . $LANG_GF01['BOOKMARKS'] . '</a></li>';

@@ -351,7 +351,23 @@ function PLG_enableStateChange ($type, $enable)
 */
 function PLG_isModerator()
 {
-    return PLG_callFunctionForAllPlugins('ismoderator');
+    global $_PLUGINS;
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_ismoderator_' . $pi_name;
+        if (function_exists($function)) {
+            if ( $function() == true ) {
+                return true;
+            }
+        }
+    }
+    $function = 'custom_ismoderator';
+    if (function_exists($function)) {
+        if ( $function() == true ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -861,9 +877,8 @@ function PLGINT_getOptionsforMenus($var_names, $required_names, $function_name)
             if (($plg_array !== false) && (count ($plg_array) > 0)) {
                 // Check if plugin is returning a single record array or multiple records
                 $entries = count ($plg_array[0]);
-                if ($entries == 0) {
-                    $sets_array = array ();
-                } else if ($entries == 1) {
+                $sets_array = array();
+                if ($entries == 1) {
                     // Single record - so we need to prepare the sets_array;
                     $sets_array[0] = $plg_array;
                 } else {
@@ -1382,6 +1397,34 @@ function PLG_profileBlocksDisplay ($uid)
     return $retval;
 }
 
+
+/**
+* glFusion is about to display the user's profile. Plugins now get a chance to
+* add their own icons under the profile image.
+*
+* @param    int      $uid        user id of the user profile to be edited
+* @return   array                Returns an array of arrays (one set for each plugin),
+*                                The return array contains:
+*                                   - url - full URL that icon will link to
+*                                   - text - hover text
+*                                   - icon - full URL to icon
+*
+*/
+function PLG_profileIconDisplay ($uid)
+{
+    global $_PLUGINS;
+
+    $retval = array();
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_profileicondisplay_' . $pi_name;
+        if (function_exists($function)) {
+            $retval[] = $function ($uid);
+        }
+    }
+    return $retval;
+}
+
 /**
 * The user wants to save changes to his/her profile. Any plugin that added its
 * own variables or blocks to the profile input form will now have to extract
@@ -1506,7 +1549,7 @@ function PLG_collectTags()
 */
 function PLG_replaceTags($content, $plugin = '')
 {
-    global $_CONF, $_TABLES, $LANG32,$inputHandler,$pageHandle;
+    global $_CONF, $_TABLES, $LANG32;
 
     if (isset ($_CONF['disable_autolinks']) && ($_CONF['disable_autolinks'] == 1)) {
         // autolinks are disabled - return $content unchanged
@@ -1585,11 +1628,11 @@ function PLG_replaceTags($content, $plugin = '')
                 $url = '';
                 $linktext = $autotag['parm2'];
                 if ($autotag['tag'] == 'story') {
-                    $autotag['parm1'] = $inputHandler->filterVar('strict',$autotag['parm1'],'');
-                    $url = $pageHandle->buildUrl ($_CONF['site_url']
+                    $autotag['parm1'] = COM_applyFilter ($autotag['parm1']);
+                    $url = COM_buildUrl ($_CONF['site_url']
                          . '/article.php?story=' . $autotag['parm1']);
                     if (empty ($linktext)) {
-                        $linktext = DB_getItem ($_TABLES['stories'], 'title', "sid = '{$autotag['parm1']}'");
+                        $linktext = stripslashes (DB_getItem ($_TABLES['stories'], 'title', "sid = '{$autotag['parm1']}'"));
                     }
                 }
 
@@ -2080,10 +2123,12 @@ function PLG_runScheduledTask ()
     if (function_exists ('CUSTOM_runScheduledTask')) {
         CUSTOM_runScheduledTask();
     }
-    foreach ($_PLUGINS as $pi_name) {
-        $function = 'plugin_runScheduledTask_' . $pi_name;
-        if (function_exists ($function)) {
-            $function ();
+    if ( is_array($_PLUGINS) ) {
+        foreach ($_PLUGINS as $pi_name) {
+            $function = 'plugin_runScheduledTask_' . $pi_name;
+            if (function_exists ($function)) {
+                $function ();
+            }
         }
     }
 }
@@ -2352,7 +2397,7 @@ function PLG_wsEnabled($type)
 */
 function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
 {
-    global $_CONF, $pageHandle;
+    global $_CONF;
 
     if (isset($message) && (!empty($message) || is_numeric($message))) {
         $msg = "msg=$message";
@@ -2414,7 +2459,7 @@ function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
         break;
     }
 
-    $pageHandle->redirect($url);
+    return COM_refresh($url);
 }
 
 ?>

@@ -9,9 +9,9 @@
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
-// | Copyright (C) 2005-2007 Michael Hampton                                  |
+// | Copyright (C) 2005-2009 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -45,7 +45,7 @@ if (!defined ('BAD_BEHAVIOR_PLUGIN')) {
     define('BAD_BEHAVIOR_PLUGIN', 'bad_behavior2');
 }
 if (!defined ('BAD_BEHAVIOR_VERSION')) {
-    define ('BAD_BEHAVIOR_VERSION', '2.0.24');
+    define ('BAD_BEHAVIOR_VERSION', '2.0.26');
 }
 
 define('WP_BB_LOG', $_DB_table_prefix . 'bad_behavior2');
@@ -58,6 +58,8 @@ if (file_exists ($langfile)) {
     include ($_CONF['path'] . 'plugins/' . BAD_BEHAVIOR_PLUGIN
              . '/language/english.php');
 }
+
+require_once $_CONF['path'].'plugins/bad_behavior2/bad_behavior2.php';
 
 function plugin_cclabel_bad_behavior2 ()
 {
@@ -84,16 +86,6 @@ function plugin_getadminoption_bad_behavior2 ()
     }
 }
 
-function plugin_uninstall_bad_behavior2 ()
-{
-    global $_CONF, $_TABLES, $_DB_table_prefix;
-
-    require_once($_CONF['path'] . 'plugins/bad_behavior2/install.inc');
-
-    $rc = plugin_remove_bad_behavior2();
-    return $rc;
-}
-
 function plugin_chkversion_bad_behavior2 ()
 {
     return BAD_BEHAVIOR_VERSION;
@@ -101,13 +93,11 @@ function plugin_chkversion_bad_behavior2 ()
 
 function plugin_upgrade_bad_behavior2 ()
 {
-    global $_TABLES;
+    global $_TABLES, $_CONF;
 
-    // Bad Behavior handles its database changes automatically,
-    // so only update the version number
-    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_version = '" . BAD_BEHAVIOR_VERSION . "', pi_gl_version = '1.4.1', pi_homepage = 'http://www.bad-behavior.ioerror.us/' WHERE pi_name = 'bad_behavior2'");
+    require_once $_CONF['path'].'plugins/bad_behavior2/upgrade.php';
 
-    return true;
+    return bad_behavior2_upgrade();
 }
 
 function plugin_getheadercode_bad_behavior2() {

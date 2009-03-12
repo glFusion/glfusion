@@ -473,7 +473,7 @@ if (isset ($_REQUEST['view'])) {
     $view = COM_applyFilter ($_REQUEST['view']);
 }
 
-if (!in_array ($view, array ('month', 'week', 'day', 'addentry', 'savepersonal'))) {
+if (!in_array ($view, array ('month', 'week', 'day'))) {
     $view = '';
 }
 
@@ -636,9 +636,6 @@ case 'day':
     } else {
         $cal_templates->set_var('allday_events', '&nbsp;');
     }
-
-    //$cal_templates->set_var('first_colspan', $maxcols);
-    //$cal_templates->set_var('title_colspan', $maxcols + 1);
     for ($i = 0; $i <= 23; $i++) {
         $numevents = $hourcols[$i];
         if ($numevents > 0) {
@@ -832,12 +829,6 @@ case 'week':
                 . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum")
             );
         }
-/*
-        $cal_templates->set_var ('langlink_addevent' . $i,
-            COM_createLink($add_str, $_CONF['site_url'] . '/calendar/index.php?op=add&amp;type=calendar&amp;'
-            . addMode ($mode) . "day=$daynum&amp;month=$monthnum&amp;year=$yearnum")
-        );
-*/
         if ($mode == 'personal') {
             $calsql = "SELECT eid,title,datestart,dateend,timestart,timeend,allday,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['personal_events']} WHERE (uid = {$_USER['uid']}) AND ((allday=1 AND datestart = \"$yearnum-$monthnum-$daynum\") OR (datestart >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND datestart <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (dateend >= \"$yearnum-$monthnum-$daynum 00:00:00\" AND dateend <= \"$yearnum-$monthnum-$daynum 23:59:59\") OR (\"$yearnum-$monthnum-$daynum\" BETWEEN datestart AND dateend)) ORDER BY datestart,timestart";
         } else {
@@ -893,23 +884,6 @@ case 'week':
 
     $display .= $cal_templates->parse('output','week');
     $display .= COM_siteFooter();
-    break;
-
-case 'addentry':
-    if (SEC_checkToken()) {
-        $display .= plugin_submit_calendar($mode);
-        $display .= COM_siteFooter();
-    } else {
-        $display = COM_refresh($_CONF['site_url'] . '/calendar/index.php');
-    }
-    break;
-
-case 'savepersonal':
-    if (SEC_checkToken()) {
-        $display = plugin_savesubmission_calendar($_POST);
-    } else {
-        $display = COM_refresh($_CONF['site_url'] . '/calendar/index.php');
-    }
     break;
 
 default: // month view
@@ -1165,6 +1139,7 @@ $cal_templates->set_var('cal_curyr_num', $currentyear);
 $cal_templates->set_var('lang_cal_displaymo', $LANG_MONTH[$month + 0]);
 $cal_templates->set_var('cal_displaymo_num', $month);
 $cal_templates->set_var('cal_displayyr_num', $year);
+
 if ($mode == 'personal') {
     $cal_templates->set_var('lang_addevent', $LANG_CAL_2[8]);
     $cal_templates->set_var('addevent_formurl', '/calendar/index.php');
@@ -1183,6 +1158,7 @@ if ($mode == 'personal') {
     }
 }
 $cal_templates->parse('add_event_option','addevent',true);
+
 $cal_templates->parse('output','calendar');
 $display .= $cal_templates->finish($cal_templates->get_var('output'));
 

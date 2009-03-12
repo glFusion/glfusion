@@ -40,9 +40,9 @@ if (!in_array('filemgmt', $_PLUGINS)) {
 }
 
 if (isset ($_GET['lid'])) {
-    $pageHandle->redirect ($_CONF['site_url'] . '/filemgmt/index.php?id=' . $_GET['lid']);
+    echo COM_refresh ($_CONF['site_url'] . '/filemgmt/index.php?id=' . $_GET['lid']);
 } else {
-    $pageHandle->redirect ($_CONF['site_url'] . '/filemgmt/index.php');
+    echo COM_refresh ($_CONF['site_url'] . '/filemgmt/index.php');
 }
 
 ?>

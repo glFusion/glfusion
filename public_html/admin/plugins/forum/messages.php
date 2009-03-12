@@ -40,13 +40,13 @@
 require_once 'gf_functions.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
-$forum  = $inputHandler->getVar('integer','forum','request',0); //COM_applyFilter($_REQUEST['forum'],true);
-$op     = $inputHandler->getVar('strict','op','request',''); //COM_applyFilter($_REQUEST['op']);
-$id     = $inputHandler->getVar('integer','id','request',0); //COM_applyFilter($_REQUEST['id'],true);
-$member = $inputHandler->getVar('integer','member','request',0);// COM_applyFilter($_REQUEST['member'],true);
-$parentonly = $inputHandler->getVar('integer','parentonly','request',0); //COM_applyFilter($_REQUEST['parentonly'],true);
-$show   = $inputHandler->getVar('integer','show','request',0); //COM_applyFilter($_REQUEST['show'],true);
-$page   = $inputHandler->getVar('integer','page','request',0); //COM_applyFilter($_REQUEST['page'],true);
+$forum = COM_applyFilter($_REQUEST['forum'],true);
+$op = COM_applyFilter($_REQUEST['op']);
+$id = COM_applyFilter($_REQUEST['id'],true);
+$member = COM_applyFilter($_REQUEST['member'],true);
+$parentonly = COM_applyFilter($_REQUEST['parentonly'],true);
+$show = COM_applyFilter($_REQUEST['show'],true);
+$page = COM_applyFilter($_REQUEST['page'],true);
 
 function selectHTML_forum($selected='') {
     global $_CONF,$_TABLES;
@@ -143,7 +143,7 @@ $sql = "SELECT * FROM {$_TABLES['gf_topic']} $whereSQL ORDER BY id DESC";
 $result = DB_query($sql);
 $num_messages = DB_numRows($result);
 
-
+echo COM_siteHeader();
 ///$report = new Template($_CONF['path_layout'] . 'forum/layout/admin');
 $report = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $report->set_file (array ('messages'=>'messages.thtml', 'records' => 'message_line.thtml'));
@@ -223,6 +223,8 @@ if ($num_messages == 0) {
 
 
 $report->parse ('output', 'messages');
-$pageHandle->addContent($report->finish ($report->get_var('output')));
-$pageHandle->displayPage();
+echo $report->finish ($report->get_var('output'));
+echo COM_siteFooter();
+
+
 ?>

@@ -26,7 +26,7 @@ window.addEvent('domready',function() {
         <td class="alignright" style="vertical-align:top;"><b>{lang_message}</b></td>
         <td>
           <div id="text_editor" style="display:{show_texteditor};">
-            <textarea id="message_text" name="message_text" cols="60" rows="10">{message_text}</textarea>
+            <textarea id="message_text" name="message_text" cols="60" rows="10" style="width:90%;">{message_text}</textarea>
           </div>
           <div  id="html_editor" style="display:{show_htmleditor};">
             <textarea id="message_html" name="message_html" rows="10" cols="60" style="width:90%;">{message_html}</textarea>

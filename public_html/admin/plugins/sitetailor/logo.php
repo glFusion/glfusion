@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -77,6 +77,7 @@ function ST_logoEdit() {
         'xhtml'                 => XHTML,
         'graphic_logo_selected' => $_ST_CONF['use_graphic_logo'] == 1 ? ' checked="checked"' : '',
         'text_logo_selected'    => $_ST_CONF['use_graphic_logo'] == 0 ? ' checked="checked"' : '',
+        'no_logo_selected'      => $_ST_CONF['use_graphic_logo'] == -1 ? ' checked="checked"' : '',
         'slogan_selected'       => $_ST_CONF['display_site_slogan'] == 1 ? ' checked="checked"' : '',
         'current_logo_graphic'  => $current_logo,
     ));
@@ -124,6 +125,7 @@ function ST_saveLogo() {
             } else {
                 $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
                 $rc = move_uploaded_file($file['tmp_name'], $_CONF['path_html'] . 'images/' . $newlogoname);
+                @chmod($_CONF['path_html'] . 'images/' . $newlogoname,0644);
                 if ( $rc ) {
                     @unlink($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
                     $logo_name = $newlogoname;

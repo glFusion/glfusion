@@ -26,6 +26,10 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 global $LANG32;
 
 ###############################################################################
@@ -47,7 +51,7 @@ $LANG_CAL_1 = array(
     8 => 'By adding this event to your calendar you can quickly view only the events you are interested in by clicking "My Calendar" from the User Functions area.',
     9 => 'Add to My Calendar',
     10 => 'Remove from My Calendar',
-    11 => "Adding Event to %s's Calendar",
+    11 => 'Adding Event to %s\'s Calendar',
     12 => 'Event',
     13 => 'Starts',
     14 => 'Ends',
@@ -96,7 +100,6 @@ $_LANG_CAL_SEARCH = array(
     'date_time' => 'Date & Time',
     'location' => 'Location',
     'description' => 'Description'
-
 );
 
 ###############################################################################
@@ -126,7 +129,7 @@ $LANG_CAL_2 = array(
     40 => 'Week',
     41 => 'Month',
     42 => 'Add Master Event',
-    43 => 'Event Submissions',
+    43 => 'Event Submissions'
 );
 
 ###############################################################################
@@ -172,16 +175,16 @@ $LANG_CAL_ADMIN = array(
 );
 
 $LANG_CAL_MESSAGE = array(
-    'save'      => 'Your event has been successfully saved.',
-    'delete'    => 'The event has been successfully deleted.',
-    'private'   => 'The event has been saved to your calendar',
-    'login'     => 'Cannot open your personal calendar until you login',
-    'removed'   => 'Event was successfully removed from your personal calendar',
+    'save' => 'Your event has been successfully saved.',
+    'delete' => 'The event has been successfully deleted.',
+    'private' => 'The event has been saved to your calendar',
+    'login' => 'Cannot open your personal calendar until you login',
+    'removed' => 'Event was successfully removed from your personal calendar',
     'noprivate' => 'Sorry, personal calendars are not enabled on this site',
-    'unauth'    => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged',
+    'unauth' => 'Sorry, you do not have access to the event administration page.  Please note that all attempts to access unauthorized features are logged'
 );
 
-$PLG_calendar_MESSAGE4  = "Thank-you for submitting an event to {$_CONF['site_name']}.  It has been submitted to our staff for approval.  If approved, your event will be seen here, in our <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendar</a> section.";
+$PLG_calendar_MESSAGE4 = "Thank-you for submitting an event to {$_CONF['site_name']}.  It has been submitted to our staff for approval.  If approved, your event will be seen here, in our <a href=\"{$_CONF['site_url']}/calendar/index.php\">calendar</a> section.";
 $PLG_calendar_MESSAGE17 = 'Your event has been successfully saved.';
 $PLG_calendar_MESSAGE18 = 'The event has been successfully deleted.';
 $PLG_calendar_MESSAGE24 = 'The event has been saved to your calendar.';
@@ -198,18 +201,19 @@ $LANG_configsections['calendar'] = array(
 );
 
 $LANG_confignames['calendar'] = array(
-    'calendarloginrequired' => 'Calendar Login Required?',
-    'hidecalendarmenu' => 'Hide Calendar Menu Entry?',
-    'personalcalendars' => 'Enable Personal Calendars?',
-    'eventsubmission' => 'Enable Submission Queue?',
-    'showupcomingevents' => 'Show upcoming Events?',
+    'calendarloginrequired' => 'Calendar Login Required',
+    'hidecalendarmenu' => 'Hide Calendar Menu Entry',
+    'personalcalendars' => 'Enable Personal Calendars',
+    'eventsubmission' => 'Enable Submission Queue',
+    'showupcomingevents' => 'Show Upcoming Events',
     'upcomingeventsrange' => 'Upcoming Events Range',
     'event_types' => 'Event Types',
     'hour_mode' => 'Hour Mode',
-    'notification' => 'Notification Email?',
-    'delete_event' => 'Delete Events with Owner?',
+    'notification' => 'Notification Email',
+    'delete_event' => 'Delete Events with Owner',
     'aftersave' => 'After Saving Event',
-    'default_permissions' => 'Event Default Permissions'
+    'default_permissions' => 'Event Default Permissions',
+    'only_admin_submit' => 'Only Allow Admins to Submit',
 );
 
 $LANG_configsubgroups['calendar'] = array(
@@ -224,8 +228,8 @@ $LANG_fs['calendar'] = array(
 // Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['calendar'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    6 => array('12' => '12', '24' => '24'),
+    1 => array('True' => true, 'False' => false),
+    6 => array('12' => 12, '24' => 24),
     9 => array('Forward to Event' => 'item', 'Display Admin List' => 'list', 'Display Calendar' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
 );

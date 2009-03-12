@@ -1,17 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
 
   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
 
   <link rel="stylesheet" type="text/css" href="layout/style.css" />
 
   <meta name="robots" content="noindex,nofollow" />
-  <title>CAPTCHA Plugin - glFusion CMS</title>
-
-
-</head>
-
+  <title>CAPTCHA Plugin - glFusion CMS</title></head>
 
 <body style="direction: ltr;">
 
@@ -34,13 +29,13 @@ Documentation Project </span> <a style="float: right; padding-right: 10px; paddi
 
       <td class="col1 leftalign">Select <strong>GD
 Libs</strong> to use GD <acronym title="Hypertext Preprocessor">PHP</acronym> Graphics
-Library <br />
+Library. <br />
 
 Select <strong>ImageMagick</strong> to use the ImageMagick
-convert utility <br />
+convert utility. <br />
 
 Select <strong>Static Images</strong> to use the prebuilt
-images supplied with CAPTCHA </td>
+images supplied with CAPTCHA. </td>
 
     </tr>
 
@@ -62,7 +57,7 @@ that is much easier to read. </td>
 
       <td class="col0 leftalign"><a name="desc_gfxFormat"></a>Graphics Format </td>
 
-      <td class="col1 leftalign">specifies the format of
+      <td class="col1 leftalign">Specifies the format of
 the CAPTCHA graphic (<acronym title="Joint Photographics Experts Group">JPG</acronym>
 or <acronym title="Portable Network Graphics">PNG</acronym>).
       </td>
@@ -73,11 +68,11 @@ or <acronym title="Portable Network Graphics">PNG</acronym>).
 
       <td class="col0 leftalign"><a name="desc_gfxPath"></a>Full
 Path to
-ImageMagick's convert utility </td>
+ImageMagick's Convert Utility </td>
 
-      <td class="col1">specifies the full path to
-ImageMagick&rsquo;s convert program i.e.; /usr/local/bin/convert or
-/usr/bin/convert </td>
+      <td class="col1">Specifies the full path to
+ImageMagick&#8217;s convert program (i.e. /usr/local/bin/convert or
+/usr/bin/convert). </td>
 
     </tr>
 
@@ -92,11 +87,20 @@ in the glFusion error.log file.</td>
 
     <tr>
 
-      <td><a name="desc_logging"></a>Login
-invalid CAPTCHA attempls?</td>
+      <td><a name="desc_logging"></a>Log
+Invalid CAPTCHA Attempts</td>
 
-      <td>Should CAPTCHA failures be logged in the glFusion
-captcha.log file.</td>
+      <td>If enabled, CAPTCHA failures will be logged in the glFusion captcha.log file.</td>
+
+    </tr>
+
+    <tr>
+
+      <td><a name="desc_expire"></a>How Many Seconds a CAPTCHA Session is Valid</td>
+
+      <td>How
+many seconds a CAPTCHA session is considered valid. &nbsp;Once this
+time limit has expired, the CAPTCHA will fail due to session timeout.</td>
 
     </tr>
 
@@ -119,7 +123,7 @@ Only</td>
     <tr>
 
       <td><a name="desc_remoteusers"></a>Force
-CAPTCHA for all Remote Users</td>
+CAPTCHA for All Remote Users</td>
 
       <td>Force CAPTCHA for all 'remote' users (Open ID type
 users).</td>
@@ -131,7 +135,7 @@ users).</td>
       <td><a name="desc_enable_comment"></a>Enable
 Comment</td>
 
-      <td>Enable CAPTCHA For comments.</td>
+      <td>Enable CAPTCHA for comments.</td>
 
     </tr>
 
@@ -140,7 +144,7 @@ Comment</td>
       <td><a name="desc_enable_story"></a>Enable
 Story</td>
 
-      <td>Enable CAPTCHA for story submission.</td>
+      <td>Enable CAPTCHA for story submissions.</td>
 
     </tr>
 
@@ -158,7 +162,7 @@ Registration</td>
       <td><a name="desc_enable_contact"></a>Enable
 Contact</td>
 
-      <td>Enable CAPTCHA for contact users.</td>
+      <td>Enable CAPTCHA for contact users (via email).</td>
 
     </tr>
 
@@ -176,7 +180,7 @@ Email Story</td>
       <td><a name="desc_enable_forum"></a>Enable
 Forum</td>
 
-      <td>Enable CAPTCHA for Forum posting.</td>
+      <td>Enable CAPTCHA for Forum postings.</td>
 
     </tr>
 
@@ -216,5 +220,4 @@ Calendar Plugin Support</td>
 
 </div>
 
-</body>
-</html>
+</body></html>

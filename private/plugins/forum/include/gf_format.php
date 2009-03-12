@@ -52,51 +52,41 @@ if (!class_exists('StringParser') ) {
 }
 
 function gf_siteHeader($subject = '') {
-    global $CONF_FORUM, $pageHandle;
+    global $CONF_FORUM;
 
     // Display Common headers
-    if (!isset($CONF_FORUM['showblocks']))
-        $CONF_FORUM['showblocks'] = 'leftblocks';
-    if (!isset($CONF_FORUM['usermenu']))
-        $CONF_FORUM['usermenu'] = 'blockmenu';
+    if (!isset($CONF_FORUM['showblocks'])) $CONF_FORUM['showblocks'] = 'leftblocks';
+    if (!isset($CONF_FORUM['usermenu'])) $CONF_FORUM['usermenu'] = 'blockmenu';
 
     if ($CONF_FORUM['showblocks'] == 'noblocks' OR $CONF_FORUM['showblocks'] == 'rightblocks') {
-        $pageHandle->setShowNavigationBlocks(false);
-
+        echo COM_siteHeader('none', $subject);
     } elseif ($CONF_FORUM['showblocks'] == 'leftblocks' OR $CONF_FORUM['showblocks'] == 'allblocks' ) {
         if ($CONF_FORUM['usermenu'] == 'blockmenu') {
-            $pageHandle->setNavigationBlocksFunction(array('forum_showBlocks',$CONF_FORUM['leftblocks']));
+            echo COM_siteHeader( array('forum_showBlocks',$CONF_FORUM['leftblocks']), $subject );
         } else {
-            $pageHandle->setShowNavigationBlocks(true);
+            echo COM_siteHeader('menu', $subject);
         }
     } else {
-        $pageHandle->setShowNavigationBlocks(true);
-    }
-    if ( $subject != '' ) {
-        $pageHandle->setPageTitle($subject);
+        echo COM_siteHeader('menu', $subject);
     }
 }
 
 function gf_siteFooter() {
-    global $CONF_FORUM,$pageHandle;
-
-    $pageHandle->setShowExtraBlocks(true);
+    global $CONF_FORUM;
 
     if ($CONF_FORUM['showblocks'] == 'noblocks' OR $CONF_FORUM['showblocks'] == 'leftblocks') {
-        $pageHandle->setShowExtraBlocks(false);
-
+        echo COM_siteFooter(false);
     } elseif ($CONF_FORUM['showblocks'] == 'rightblocks') {
         if ($CONF_FORUM['usermenu'] == 'blockmenu') {
-            $pageHandle->setExtraBlocksFunction(array('forum_showBlocks',$CONF_FORUM['leftblocks']));
+            echo COM_siteFooter(true, array('forum_showBlocks',$CONF_FORUM['leftblocks']) );
         } else {
-            $pageHandle->setShowExtraBlocks(true);
+            echo COM_siteFooter(true);
         }
     } elseif ($CONF_FORUM['showblocks'] == 'allblocks') {
-        $pageHandle->setShowExtraBlocks(true);
+        echo COM_siteFooter(true);
     } else {
-        $pageHandle->setShowExtraBlocks(false);
+        echo COM_siteFooter();
     }
-    $pageHandle->displayPage();
 }
 
 function convertlinebreaks ($text) {
@@ -311,13 +301,15 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
 function forumNavbarMenu($current='') {
     global $CONF_FORUM, $_CONF,$_USER,$LANG_GF01,$LANG_GF02;
 
-    include ($_CONF['path_system'] . 'classes/navbar.class.php');
+    USES_class_navbar();
+
     $navmenu = new navbar;
     $navmenu->add_menuitem($LANG_GF01['INDEXPAGE'],"{$_CONF['site_url']}/forum/index.php");
     if ($_USER['uid'] > 1) {
         $navmenu->add_menuitem($LANG_GF01['USERPREFS'],"{$_CONF['site_url']}/forum/userprefs.php");
         $navmenu->add_menuitem($LANG_GF01['SUBSCRIPTIONS'],"{$_CONF['site_url']}/forum/notify.php");
         $navmenu->add_menuitem($LANG_GF01['BOOKMARKS'],"{$_CONF['site_url']}/forum/index.php?op=bookmarks");
+        $navmenu->add_menuitem($LANG_GF02['new_posts'],"{$_CONF['site_url']}/forum/index.php?op=newposts");
     }
     if ( $CONF_FORUM['allow_memberlist'] && $_USER['uid'] > 1 ) {
         $navmenu->add_menuitem($LANG_GF02['msg88'],"{$_CONF['site_url']}/forum/memberlist.php");
@@ -332,15 +324,13 @@ function forumNavbarMenu($current='') {
 }
 
 function ForumHeader($forum,$showtopic) {
-    global $_TABLES, $_USER, $_CONF, $CONF_FORUM, $LANG_GF01, $LANG_GF02, $pageHandle;
-
-    $retval = '';
+    global $_TABLES, $_USER, $_CONF, $CONF_FORUM, $LANG_GF01, $LANG_GF02;
 
     $forum_outline_header = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $forum_outline_header->set_file (array ('forum_outline_header'=>'forum_outline_header.thtml'));
     $forum_outline_header->set_var('xhtml',XHTML);
     $forum_outline_header->parse ('output', 'forum_outline_header');
-    $retval = $forum_outline_header->finish($forum_outline_header->get_var('output'));
+    echo $forum_outline_header->finish($forum_outline_header->get_var('output'));
 
     $navbar = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $navbar->set_file (array ('topicheader'=>'navbar.thtml'));
@@ -359,7 +349,7 @@ function ForumHeader($forum,$showtopic) {
         $navbar->set_var('navmenu','');
     }
     $navbar->parse ('output', 'topicheader');
-    $retval .= $navbar->finish($navbar->get_var('output'));
+    echo $navbar->finish($navbar->get_var('output'));
 
     if (($forum != '') || ($showtopic != '')) {
         if ($showtopic != '') {
@@ -375,8 +365,7 @@ function ForumHeader($forum,$showtopic) {
             $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
             $forum_outline_footer->set_var('xhtml',XHTML);
             $forum_outline_footer->parse ('output', 'forum_outline_footer');
-            $retval .= $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
-            $pageHandle->addContent($retval);
+            echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
             gf_siteFooter();
             exit;
         }
@@ -386,8 +375,7 @@ function ForumHeader($forum,$showtopic) {
     $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
     $forum_outline_footer->set_var ('xhtml',XHTML);
     $forum_outline_footer->parse ('output', 'forum_outline_footer');
-    $retval .=  $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
-    return $retval;
+    echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
 }
 
 function gf_checkHTMLforSQL($str,$postmode='html') {
@@ -414,7 +402,7 @@ function gf_checkHTMLforSQL($str,$postmode='html') {
 * @return       string      filtered HTML code
 */
 function gf_cleanHTML($message) {
-    global $_CONF, $inputHandler;
+    global $_CONF;
 
     if( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
@@ -423,27 +411,27 @@ function gf_cleanHTML($message) {
         return $message;
     }
 
-    return $inputHandler->filterVar('html', $message,'');
+    return COM_filterHTML( $message);
 }
 
 
 function gf_preparefordb($message,$postmode) {
-    global $CONF_FORUM, $_CONF, $inputHandler;
+    global $CONF_FORUM, $_CONF;
 
     // if magic quotes is on, remove the slashes from the $_POST
-//    if(get_magic_quotes_gpc() ) {
-//       $message = stripslashes($message);
-//    }
+    if(get_magic_quotes_gpc() ) {
+       $message = stripslashes($message);
+    }
 
     if ( $CONF_FORUM['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML') ) {
         $message = gf_checkHTMLforSQL($message,$postmode);
     }
 
     if ($CONF_FORUM['use_censor']) {
-        $message = $inputHandler->censor($message);
+        $message = COM_checkWords($message);
     }
 
-    $message = $inputHandler->prepareForDB($message);
+    $message = addslashes($message);
     return $message;
 }
 
@@ -474,7 +462,7 @@ function geshi_formatted($str,$type='PHP') {
 
 
 function gf_checkHTML($str) {
-    global $CONF_FORUM, $_CONF, $inputHandler;
+    global $CONF_FORUM, $_CONF;
 
     // just return if admin doesn't want to filter html
     if ( $CONF_FORUM['use_glfilter'] != 1 ) {
@@ -487,12 +475,12 @@ function gf_checkHTML($str) {
     {
         return $str;
     }
-    return $inputHandler->filterVar('html',$str,''); // COM_filterHTML($str);
+    return COM_filterHTML($str);
 }
 
 
 function gf_formatTextBlock($str,$postmode='html',$mode='') {
-    global $_CONF, $CONF_FORUM, $inputHandler;
+    global $_CONF, $CONF_FORUM;
 
     $bbcode = new StringParser_BBCode ();
     $bbcode->setGlobalCaseSensitive (false);
@@ -550,7 +538,7 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
     $bbcode->setRootParagraphHandling (true);
 
     if ($CONF_FORUM['use_censor']) { // and $mode == 'preview') {
-        $str = $inputHandler->censor($str);
+        $str = COM_checkWords($str);
     }
     $str = $bbcode->parse ($str);
 
@@ -583,7 +571,7 @@ function bbcode_oldpost($text) {
 }
 
 function gf_formatOldPost($str,$postmode='html',$mode='') {
-    global $CONF_FORUM, $inputHandler;
+    global $CONF_FORUM;
 
     $oldPost = 0;
 
@@ -623,7 +611,7 @@ function gf_formatOldPost($str,$postmode='html',$mode='') {
                       'code', array ('listitem', 'block', 'inline', 'link'), array ());
 
     if ( $CONF_FORUM['use_censor'] ) {
-        $str = $inputHandler->censor($str);
+        $str = COM_checkWords($str);
     }
     $str = $bbcode->parse ($str);
 
@@ -813,7 +801,6 @@ function gf_getImage($image,$directory='') {
         'rank_mod'          =>    'rank_mod.gif',
     );
 
-    $fullImagePath = '';
     if ($directory != '')  {
         if ( $directory == 'moods' ) {
             $fullImagePath = $_CONF['site_url'].'/forum/images/'.$directory .'/'.$image.'.gif';
@@ -821,30 +808,26 @@ function gf_getImage($image,$directory='') {
             $fullImagePath = $_CONF['site_url'].'/forum/images/'.$directory .'/'.$imageMap[$image];
         }
     } else {
-        if ( isset($imageMap[$image]) ) {
-            $fullImagePath = $_CONF['site_url'].'/forum/images/'.$imageMap[$image];
-        }
+        $fullImagePath = $_CONF['site_url'].'/forum/images/'.$imageMap[$image];
     }
     $fullImageURL = $fullImagePath;
     return $fullImageURL;
 }
 
 
-function BlockMessage($title,$message='',$sitefooter=true)
-{
-    $retval = '';
+function BlockMessage($title,$message='',$sitefooter=true){
 
-    $retval .= COM_startBlock($title);
-    $retval .= $message;
-    $retval .= COM_endBlock();
-
-    return $retval;
+    echo COM_startBlock($title);
+    echo $message;
+    echo COM_endBlock();
+    if ($sitefooter) {
+        echo COM_siteFooter();
+    }
+    return;
 }
 
 function alertMessage($message,$title='',$prompt='') {
     global $_CONF, $CONF_FORUM,$LANG_GF02;
-
-    $retval = '';
 
     $alertmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $alertmsg->set_file (array (
@@ -865,8 +848,8 @@ function alertMessage($message,$title='',$prompt='') {
     $alertmsg->parse ('alert_header', 'outline_header');
     $alertmsg->parse ('alert_footer', 'outline_footer');
     $alertmsg->parse ('output', 'alertmsg');
-    $retval = $alertmsg->finish ($alertmsg->get_var('output'));
-    return $retval;
+    echo $alertmsg->finish ($alertmsg->get_var('output'));
+    return;
 }
 
 
@@ -898,7 +881,7 @@ function BaseFooter($showbottom=true) {
         $footer->set_var ('search_forum', f_forumsearch() );
         $footer->set_var ('select_forum', f_forumjump() );
         $footer->parse ('output', 'footerblock');
-        return $footer->finish($footer->get_var('output'));
+        echo $footer->finish($footer->get_var('output'));
     }
 }
 
@@ -1185,16 +1168,22 @@ function gf_makeFilemgmtCatSelect($uid) {
 function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
-    global $CONF_FORUM;
+    global $CONF_FORUM,$_SYSTEM;
 
     $retval = '';
 
     switch ($fieldname) {
         case 'date':
             $retval = strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $retval = iconv('ISO-8859-1','UTF-8',$retval);
+            }
             break;
         case 'lastupdated':
             $retval = strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
+            if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+                $retval = iconv('ISO-8859-1','UTF-8',$retval);
+            }
             break;
         case 'subject':
             $testText        = gf_formatTextBlock($A['comment'],'text','text');

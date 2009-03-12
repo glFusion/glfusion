@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset={charset}" />
+<link rel="stylesheet" type="text/css" href="layout/style.css?ver=20090304" />
+<script type="text/javascript" src="layout/mootools-release-1.11.packed.js"></script>
+<script type="text/javascript">
+	Window.onDomReady(function(){ new Accordion($$('h1.moofx-toggler'), $$('div.moofx-slider'), {onActive: function(toggler, i) { toggler.addClass('moofx-toggler-down'); },onBackground: function(toggler, i) { toggler.removeClass('moofx-toggler-down'); },duration: 300,opacity: false, alwaysHide:true, show: 1}); });
+</script>
+<meta name="robots" content="noindex,nofollow" />
+<title>{page_title}</title>
+<!--[if lte IE 6]>
+<link rel="stylesheet" type="text/css" href="layout/ie6.css" />
+<script defer type="text/javascript" src="layout/gl_moopngfix.js"></script>
+<![endif]-->
+<!--[if IE 7]>
+<link rel="stylesheet" type="text/css" href="layout/ie7.css" />
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="layout/ie7.css" />
+<![endif]-->
+<script type="text/javascript">
+function submitForm( frm, task ) {
+ 	frm.task.value = task;
+    frm.submit();
+}
+function check(e) {
+     var key;
+
+     if(window.event)
+          key = window.event.keyCode;     //IE
+     else
+          key = e.which;     //firefox
+
+     if(key == 13) {
+          return false;
+	 }
+     else
+          return true;
+}
+</script>
+</head>
+<body dir="ltr">
+ <a name="top"></a>
+  <div id="container_fixed">
+    <div id="header">
+      <div class="toprcorner">
+        <div class="toplcorner">
+          <div class="floatright install-slogan">{wizard_version}</div>
+          <div class="floatleft">
+            <a href="http://www.glfusion.org" target="_blank">
+              <img src="layout/installlogo.png" alt="" title="" id="headersitelogo" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="moomenu"></div>
+    <div id="wrapper">
+        {progress_bar}

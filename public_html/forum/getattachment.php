@@ -34,8 +34,7 @@
 
 require_once '../lib-common.php';
 
-$id = $inputHandler->getVar('integer','id','get',0);
-$id = $inputHandler->prepareForDB($id);
+$id = COM_applyFilter($_GET['id'], true);
 $sql = "SELECT filename,repository_id FROM {$_TABLES['gf_attachments']} WHERE id=$id;";
 $res = DB_query($sql);
 $A = DB_fetchArray($res);
@@ -47,7 +46,7 @@ if ($A === FALSE) {
 }
 
 if ($A['repository_id'] > 0) {
-    $pageHandle->redirect("{$_CONF['site_url']}/filemgmt/visit.php?lid={$A['repository_id']}");
+    echo COM_refresh("{$_CONF['site_url']}/filemgmt/visit.php?lid={$A['repository_id']}");
     exit;
 }
 

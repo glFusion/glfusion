@@ -33,7 +33,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-function _img_getIMversion() {
+function _img_getIMversion()
+{
     global $_CONF;
 
     // get im version
@@ -50,7 +51,8 @@ function _img_getIMversion() {
 /*
  * ImageMagick specific rotate function
  */
-function _img_RotateImage($srcImage, $direction,$mimeType) {
+function _img_RotateImage($srcImage, $direction,$mimeType)
+{
     global $_CONF;
 
     switch( $direction ) {
@@ -65,7 +67,9 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
             return array(false,'Invalid direction passed to rotate, must be left or right');
     }
 
-    $tmpImage = $srcImage . '.rt';
+//    $tmpImage = $srcImage . '.rt';
+    $tmp = pathinfo($srcImage);
+    $tmpImage = $tmp['dirname'] .'/' . $tmp['filename'] . '_RT.' . $tmp['extension'];
 
     UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/convert" . '"' . " -quality 100 -rotate " . $IM_rotate . " $srcImage $tmpImage");
     if ( $_CONF['jhead_enabled'] == 1 && ($mimeType == 'image/jpeg' || $mimeType == 'image/jpg') ) {
@@ -76,7 +80,8 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
     return array(true,'');
 }
 
-function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $dImageHeight, $dImageWidth, $mimeType) {
+function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $dImageHeight, $dImageWidth, $mimeType)
+{
     global $_CONF;
 
     $version = _img_getIMversion();
@@ -147,9 +152,8 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
 /*
  * ImageMagick Specific method to convert image
  */
-
-
-function _img_convertImageFormat($srcImage,$destImage,$destFormat, $mimeType) {
+function _img_convertImageFormat($srcImage,$destImage,$destFormat, $mimeType)
+{
     global $_CONF;
 
     COM_errorLog("_img_convertImageFormat: Converting image to " . $destFormat);
@@ -170,7 +174,9 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat, $mimeType) {
     return array(true,'');
 }
 
-function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $mimeType ) {
+function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $mimeType )
+{
+    global $_CONF;
 
     if ( $_CONF['debug_image_upload'] ) {
         COM_errorLog("_img_watermarkImage: Using ImageMagick to watermark image.");

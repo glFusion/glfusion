@@ -59,7 +59,7 @@ if (!isset($_SP_CONF['allow_php'])) {
     $_SP_CONF = $sp_config->get_config('staticpages');
 }
 
-$_SP_CONF['version'] = '1.5.1';
+require_once $_CONF['path'].'plugins/staticpages/staticpages.php';
 
 // +---------------------------------------------------------------------------+
 // | Plugin API - Services                                                     |
@@ -80,7 +80,7 @@ include_once $plugin_path . 'services.inc.php';
 */
 function plugin_getmenuitems_staticpages()
 {
-    global $_CONF, $_TABLES, $_SP_CONF, $pageHandle;
+    global $_CONF, $_TABLES, $_SP_CONF;
 
     $order = '';
     if (!empty ($_SP_CONF['sort_menu_by'])) {
@@ -101,7 +101,7 @@ function plugin_getmenuitems_staticpages()
     $menuitems = array ();
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray ($result);
-        $menuitems[$A['sp_label']] = $pageHandle->buildURL ($_CONF['site_url'] . '/staticpages/index.php?page=' . $A['sp_id']);
+        $menuitems[$A['sp_label']] = COM_buildURL ($_CONF['site_url'] . '/staticpages/index.php?page=' . $A['sp_id']);
     }
 
     return $menuitems;
@@ -270,9 +270,7 @@ function SP_countVisiblePages ()
 function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nested')
 {
     global $_CONF, $_TABLES, $_USER,
-           $LANG01, $LANG11, $LANG_STATIC, $_IMAGE_TYPE, $_SP_CONF,
-           $pageHandle;
-
+           $LANG01, $LANG11, $LANG_STATIC, $_IMAGE_TYPE, $_SP_CONF;
 
     $retval = '';
 
@@ -301,7 +299,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             $icon_url = $_CONF['layout_url'] . '/images/print.' . $_IMAGE_TYPE;
             $attr = array('title' => $LANG_STATIC['printable_format']);
             $printicon = COM_createImage($icon_url, $LANG01[65], $attr);
-            $print_url = $pageHandle->buildURL ($_CONF['site_url']
+            $print_url = COM_buildURL ($_CONF['site_url']
                 . '/staticpages/index.php?page=' . $page . '&amp;disp_mode=print');
             $icon = COM_createLink($printicon, $print_url);
             $spage->set_var('print_icon', $icon);
@@ -395,7 +393,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 */
 function SP_printPage ($page, $A)
 {
-    global $_CONF, $LANG01, $_TABLES, $pageHandle;
+    global $_CONF, $LANG01, $_TABLES;
 
     $template_path = staticpages_templatePath ();
     $print = new Template ($template_path);
@@ -407,7 +405,7 @@ function SP_printPage ($page, $A)
 
     $print->set_var ('page_title', $_CONF['site_name'] . ' - '
                                    . $A['sp_title']);
-    $sp_url = $pageHandle->buildUrl ($_CONF['site_url']
+    $sp_url = COM_buildUrl ($_CONF['site_url']
                                . '/staticpages/index.php?page=' . $page);
     $print->set_var ('sp_url', $sp_url);
     $print->set_var ('sp_title', $A['sp_title']);
@@ -485,7 +483,7 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
 */
 function plugin_showstats_staticpages($showsitestats)
 {
-    global $_CONF, $_TABLES, $LANG_STATIC, $pageHandle;
+    global $_CONF, $_TABLES, $LANG_STATIC;
     $retval = '';
 
     $perms = SP_getPerms ();
@@ -507,7 +505,7 @@ function plugin_showstats_staticpages($showsitestats)
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray ($result);
             $A['sp_title'] = $A['sp_title'];
-            $A['sid'] = COM_createLink($A['sp_title'], $pageHandle->buildUrl ($_CONF['site_url']
+            $A['sid'] = COM_createLink($A['sp_title'], COM_buildUrl ($_CONF['site_url']
                       . "/staticpages/index.php?page={$A['sp_id']}"));
             $A['sp_hits'] = COM_NumberFormat ($A['sp_hits']);
             $data_arr[$i] = $A;
@@ -705,7 +703,6 @@ function SP_getPerms ($table = '', $access = '2', $u_id = '')
 function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
 {
     global $_CONF, $_TABLES, $_SP_CONF, $LANG_STATIC, $_IMAGE_TYPE, $LANG01;
-    global $pageHandle;
 
     $retval = '';
 
@@ -792,7 +789,7 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
                 $icon_url = $_CONF['layout_url'] . '/images/print.' . $_IMAGE_TYPE;
                 $attr = array('title' => $LANG_STATIC['printable_format']);
                 $printicon = COM_createImage($icon_url, $LANG01[65], $attr);
-                $print_url = $pageHandle->buildURL ($_CONF['site_url']
+                $print_url = COM_buildURL ($_CONF['site_url']
                     . '/staticpages/index.php?page=' . $S['sp_id'] . '&amp;mode=print');
                 $icon = COM_createLink($printicon, $print_url);
                 $spage->set_var('print_icon', $icon);
@@ -896,7 +893,7 @@ function plugin_chkVersion_staticpages()
 {
     global $_SP_CONF;
 
-    return $_SP_CONF['version'];
+    return $_SP_CONF['pi_version'];
 }
 
 /**
@@ -905,7 +902,7 @@ function plugin_chkVersion_staticpages()
 */
 function plugin_autotags_staticpages($op, $content = '', $autotag = '')
 {
-    global $_CONF, $_TABLES, $pageHandle;
+    global $_CONF, $_TABLES;
 
     static $recursive = array();
 
@@ -914,7 +911,7 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
     } else if ($op == 'parse') {
         if ($autotag['tag'] == 'staticpage' ) {
             $sp_id = COM_applyFilter($autotag['parm1']);
-            $url = $pageHandle->buildUrl($_CONF['site_url']
+            $url = COM_buildUrl($_CONF['site_url']
                                 . '/staticpages/index.php?page=' . $sp_id);
             if (empty($autotag['parm2'])) {
                 $linktext = DB_getItem ($_TABLES['staticpage'],
@@ -961,49 +958,18 @@ function plugin_geticon_staticpages ()
 */
 function plugin_upgrade_staticpages()
 {
-    // the plugin needs these function so complain when they don't exist
-    if (!function_exists('PLG_uninstall') ||
-            !function_exists('COM_createLink')) {
-        return 3002;
+    global $_TABLES, $_CONF, $_SP_CONF;
+
+    if ( @file_exists($_CONF['path'].'plugins/staticpages/upgrade.php') ) {
+        require_once $_CONF['path'].'plugins/staticpages/upgrade.php';
+        return staticpages_upgrade();
+    } else {
+        // upgrades are done by the install script - return a generic error
+        COM_errorLog("StaticPages plugin upgrade function not implemented");
+        return 3001;
     }
-
-    // upgrades are done by the install script - return a generic error
-    COM_errorLog("Plugin upgrade function not implemented");
-    return 3001;
 }
 
-
-/**
-* Automatic uninstall function for plugins
-*
-* @return   array
-*
-* This code is automatically uninstalling the plugin.
-* It passes an array to the core code function that removes
-* tables, groups, features and php blocks from the tables.
-* Additionally, this code can perform special actions that cannot be
-* foreseen by the core code (interactions with other plugins for example)
-*
-*/
-function plugin_autouninstall_staticpages ()
-{
-    $out = array (
-        /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('staticpage'),
-        /* give the full name of the group, as in the db */
-        'groups' => array('Static Page Admin'),
-        /* give the full name of the feature, as in the db */
-        'features' => array('staticpages.edit', 'staticpages.delete', 'staticpages.PHP'),
-        /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array('phpblock_calendar'),
-        /* give all vars with their name */
-        'vars'=> array(),
-        /* give the full name of the plugins config data to be removed from the config table */
-        'config_data' => array('staticpages')
-    );
-
-    return $out;
-}
 
 /**
 * Get path for the template files.
@@ -1036,7 +1002,7 @@ function staticpages_templatePath ($path = '')
 
 function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $LANG_ADMIN, $LANG_STATIC, $_TABLES, $pageHandle;
+    global $_CONF, $LANG_ADMIN, $LANG_STATIC, $_TABLES;
 
     switch($fieldname) {
         case "edit":
@@ -1047,9 +1013,15 @@ function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
             $retval = COM_createLink($icon_arr['copy'],
                 "{$_CONF['site_admin_url']}/plugins/staticpages/index.php?mode=clone&amp;sp_id={$A['sp_id']}");
             break;
+        case "delete" :
+            $icon_url = "{$_CONF['site_url']}/staticpages/images/delete.png";
+            $icon = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
+            $retval = '<a href="'.$_CONF['site_admin_url'].'/plugins/staticpages/index.php?mode='.$LANG_ADMIN['delete'].'&amp;sp_id='.$A['sp_id'].'&amp;'.CSRF_TOKEN.'='.SEC_createToken().'" onclick="return confirm(\''.$LANG_STATIC['delete_confirm'].'\');">';
+            $retval .= $icon.'</a>';
+            break;
         case "sp_title":
             $sp_title = $A['sp_title'];
-            $url = $pageHandle->buildUrl ($_CONF['site_url'] .
+            $url = COM_buildUrl ($_CONF['site_url'] .
                                  '/staticpages/index.php?page=' . $A['sp_id']);
             $retval = COM_createLink($sp_title, $url, array('title'=>$LANG_STATIC['title_display']));
             break;

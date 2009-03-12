@@ -226,7 +226,7 @@ function SYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = ''
 */
 function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid )
 {
-    global $_TABLES, $_CONF, $LANG01, $pageHandle;
+    global $_TABLES, $_CONF, $LANG01;
 
     $content = array ();
     $sids = array();
@@ -270,7 +270,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
             $storytext = SYND_truncateSummary( $fulltext, $contentLength );
 
             $fulltext = trim( $fulltext );
-            $fulltext = preg_replace( "/(\015)/", "", $fulltext );
+            $fulltext = str_replace(array("\015\012", "\015"), "\012", $fulltext);
 
             if($row['postmode']=='plaintext'){
     	        if(!empty($storytext)){
@@ -281,7 +281,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
                 }
             }
 
-            $storylink = $pageHandle->buildUrl( $_CONF['site_url']
+            $storylink = COM_buildUrl( $_CONF['site_url']
                                        . '/article.php?story=' . $row['sid'] );
             $extensionTags = PLG_getFeedElementExtensions('article', $row['sid'], $feedType, $feedVersion, $tid, $fid);
             if( $_CONF['trackback_enabled'] && ($feedType == 'RSS') && ($row['trackbackcode'] >= 0))
@@ -328,7 +328,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 */
 function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid)
 {
-    global $_TABLES, $_CONF, $LANG01, $pageHandle;
+    global $_TABLES, $_CONF, $LANG01;
 
     $where = '';
     if( !empty( $limit ))
@@ -390,7 +390,7 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
         $fulltext = PLG_replaceTags( $fulltext );
         $storytext = SYND_truncateSummary( $fulltext, $contentLength );
         $fulltext = trim( $fulltext );
-        $fulltext = preg_replace( "/(\015)/", "", $fulltext );
+        $fulltext = str_replace(array("\015\012", "\015"), "\012", $fulltext);
 
         if($row['postmode']=='plaintext'){
             if(!empty($storytext)){
@@ -401,7 +401,7 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
             }
         }
 
-        $storylink = $pageHandle->buildUrl( $_CONF['site_url'] . '/article.php?story='
+        $storylink = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
                                    . $row['sid'] );
         $extensionTags = PLG_getFeedElementExtensions('article', $row['sid'], $feedType, $feedVersion, $fid, ($frontpage_only ? '::frontpage' : '::all'));
         if( $_CONF['trackback_enabled'] && ($feedType == 'RSS') && ($row['trackbackcode'] >= 0))
@@ -618,7 +618,7 @@ function SYND_truncateSummary( $text, $length )
     {
         $text = stripslashes( $text );
         $text = trim( $text );
-        $text = preg_replace( "/(\015)/", "", $text );
+        $text = str_replace(array("\015\012", "\015"), "\012", $text);
         if(( $length > 3 ) && ( MBYTE_strlen( $text ) > $length ))
         {
             $text = substr( $text, 0, $length - 3 ) . '...';

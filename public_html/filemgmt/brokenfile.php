@@ -43,9 +43,9 @@ require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'] .'plugins/filemgmt/include/functions.php';
 
-$lid = $inputHandler->getVar('integer','lid','request',0);
+$lid = COM_applyFilter($_REQUEST['lid'],true);
 if ($lid == 0) {
-    $pageHandle->redirect($_CONF['site_url'] .'/filemgmt/index.php');
+    echo COM_refresh($_CONF['site_url'] .'/filemgmt/index.php');
     exit;
 }
 
@@ -78,7 +78,8 @@ if ( isset($_POST['submit']) ) {
     exit();
 
 } else {
-    $display  = COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
+    $display = COM_siteHeader('menu');
+    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= "<form action=\"brokenfile.php\" method=\"post\">";
     $display .= '<input type="hidden" name="lid" value="'.$lid.'"' . XHTML . '>';
     $display .= '<table border="0" cellpadding="1" cellspacing="0" width="80%" class="plugin"><tr>';
@@ -91,9 +92,8 @@ if ( isset($_POST['submit']) ) {
     $display .= '&nbsp;<input type="button" value="'._MD_CANCEL.'" onclick="javascript:history.go(-1)"' . XHTML . '>';
     $display .= "</td></tr></table></form>";
     $display .= COM_endBlock();
-
-    $pageHandle->addContent($display);
-    $pageHandle->displayPage();
+    $display .= COM_siteFooter();
+    echo $display;
 }
 
 ?>

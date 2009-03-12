@@ -38,7 +38,15 @@ require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
 if (!SEC_hasRights ('staticpages.edit')) {
-    $pageHandle->displayAccessError($LANG_STATIC['access_denied'],$LANG_STATIC['access_denied_msg'],'static pages administration');
+    $display = COM_siteHeader ('menu', $LANG_STATIC['access_denied']);
+    $display .= COM_startBlock ($LANG_STATIC['access_denied'], '',
+                        COM_getBlockTemplate ('_msg_block', 'header'));
+    $display .= $LANG_STATIC['access_denied_msg'];
+    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_siteFooter ();
+    COM_accessLog ("User {$_USER['username']} tried to illegally access the static pages administration screen.");
+    echo $display;
+    exit;
 }
 
 
@@ -53,7 +61,7 @@ function form ($A, $error = false)
 {
     global $_CONF, $_TABLES, $_USER, $_GROUPS, $_SP_CONF, $mode, $sp_id,
            $LANG21, $LANG_STATIC, $LANG_ACCESS, $LANG_ADMIN, $LANG24,
-           $LANG_postmodes, $MESSAGE, $pageHandle,$inputHandler;
+           $LANG_postmodes, $MESSAGE;
 
     $template_path = staticpages_templatePath ('admin');
     if (!empty($sp_id) && $mode=='edit') {
@@ -70,7 +78,9 @@ function form ($A, $error = false)
         }
         SEC_setDefaultPermissions ($A, $_SP_CONF['default_permissions']);
         $access = 3;
-        if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1))
+        if (isset ($_CONF['advanced_editor']) &&
+          ($_CONF['advanced_editor'] == 1) &&
+          file_exists ($template_path . '/editor_advanced.thtml'))
         {
              $A['advanced_editor_mode'] = 1;
         }
@@ -388,7 +398,8 @@ function liststaticpages()
         array('text' => $LANG_ADMIN['title'], 'field' => 'sp_title', 'sort' => true),
         array('text' => $LANG_STATIC['writtenby'], 'field' => 'sp_uid', 'sort' => false),
         array('text' => $LANG_STATIC['head_centerblock'], 'field' => 'sp_centerblock', 'sort' => true),
-        array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true)
+        array('text' => $LANG_STATIC['date'], 'field' => 'unixdate', 'sort' => true),
+        array('text' => $LANG_ADMIN['delete'],'field' => 'delete','sort' => false),
     );
     $defsort_arr = array('field' => 'sp_title', 'direction' => 'asc');
 
@@ -448,6 +459,7 @@ function staticpageeditor ($sp_id, $mode = '', $editor = '')
         $A['sp_old_id'] = '';
         $A['commentcode'] = $_CONF['comment_code'];
         $A['sp_where'] = 1; // default new pages to "top of page"
+        $A['sp_search'] = 1;
     } elseif (!empty ($sp_id) && $mode == 'clone') {
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 3));
         $A = DB_fetchArray ($result);

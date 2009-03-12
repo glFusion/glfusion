@@ -38,7 +38,11 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-$_SQL[] = "
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+$_SQL['events'] = "
 CREATE TABLE {$_TABLES['events']} (
   eid varchar(20) NOT NULL default '',
   title varchar(128) default NULL,
@@ -71,7 +75,7 @@ CREATE TABLE {$_TABLES['events']} (
 ) TYPE=MyISAM
 ";
 
-$_SQL[] = "
+$_SQL['eventsubmission'] = "
 CREATE TABLE {$_TABLES['eventsubmission']} (
   eid varchar(20) NOT NULL default '',
   title varchar(128) default NULL,
@@ -93,7 +97,7 @@ CREATE TABLE {$_TABLES['eventsubmission']} (
 ) TYPE=MyISAM
 ";
 
-$_SQL[] = "
+$_SQL['personal_events'] = "
 CREATE TABLE {$_TABLES['personal_events']} (
   eid varchar(20) NOT NULL default '',
   title varchar(128) default NULL,
@@ -123,8 +127,5 @@ CREATE TABLE {$_TABLES['personal_events']} (
 ) TYPE=MyISAM
 ";
 
-$_SQL[] = "INSERT INTO {$_TABLES['eventsubmission']} (eid, title, description, location, datestart, dateend, url, allday, zipcode, state, city, address2, address1, event_type, timestart, timeend) VALUES ('2008050110130162','Installed the Calendar plugin','Today, you successfully installed the Calendar plugin.','Your webserver',CURDATE(),CURDATE(),'http://www.glfusion.org/',1,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL)";
-
-$_SQL[] = "INSERT INTO {$_TABLES['blocks']} (is_enabled, name, type, title, tid, blockorder, content, onleft, phpblockfn, owner_id, group_id, perm_owner, perm_group) VALUES (1,'events_block','phpblock','Events','all',4,'',1,'phpblock_calendar',{$_USER['uid']},#group#,3,3)";
-
+$_SQL['defaultevent'] = "INSERT INTO {$_TABLES['eventsubmission']} (eid, title, description, location, datestart, dateend, url, allday, zipcode, state, city, address2, address1, event_type, timestart, timeend) VALUES ('2008050110130162','Installed the Calendar plugin','Today, you successfully installed the Calendar plugin.','Your webserver',CURDATE(),CURDATE(),'http://www.glfusion.org/',1,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL)";
 ?>

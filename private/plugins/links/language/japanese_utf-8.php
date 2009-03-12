@@ -29,6 +29,11 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 ###############################################################################
@@ -239,7 +244,8 @@ $LANG_confignames['links'] = array(
     'aftersave' => 'リンク保存後の画面遷移',
     'show_category_descriptions' => 'カテゴリの説明を表示する',
     'root' => 'トップカテゴリのID',
-    'default_permissions' => 'パーミッション'
+    'default_permissions' => 'パーミッション',
+    'target_blank' => 'Open Links in New Window',
 );
 
 $LANG_configsubgroups['links'] = array(

@@ -30,56 +30,51 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../../../lib-common.php');
-require_once($_CONF['path'] . '/plugins/commentfeeds/config.php');
-require_once($_CONF['path'] . '/plugins/commentfeeds/functions.inc');
-require_once($_CONF['path'] . '/plugins/commentfeeds/install.inc');
+require_once '../../../lib-common.php';
+require_once $_CONF['path'].'/plugins/commentfeeds/autoinstall.php';
 
-// Only let Root users access this page
+USES_lib_install();
+
 if (!SEC_inGroup('Root')) {
-    $pageHandle->displayAccessError('',$LANG_ACCESS['plugin_access_denied_msg'],'CommentFeeds install/uninstall page.');
+    // Someone is trying to illegally access this page
+    COM_errorLog("Someone has tried to illegally access the CommentFeeds install/uninstall page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+    $display = COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
+             . COM_startBlock ($LANG_ACCESS['accessdenied'])
+             . $LANG_ACCESS['plugin_access_denied_msg']
+             . COM_endBlock ()
+             . COM_siteFooter ();
+    echo $display;
     exit;
 }
 
-// MAIN
+/**
+* Main Function
+*/
 
-$action = $inputHandler->getVar('strict','action','request','');
-
-if ($action == 'uninstall') {
-    $uninstall_plugin = 'plugin_uninstall_' . $pi_name;
-    if ($uninstall_plugin ()) {
-        $pageHandle->redirect ($_CONF['site_admin_url']
-                                . '/plugins.php?msg=45');
-    } else {
-        $pageHandle->redirect ($_CONF['site_admin_url']
-                                . '/plugins.php?msg=73');
-    }
-
-} else if (DB_count ($_TABLES['plugins'], 'pi_name', $pi_name) == 0) {
-    // plugin not installed
-    if (commentfeeds_compatible_with_this_glfusion_version ()) {
-        if (plugin_install_commentfeeds ($_DB_table_prefix)) {
-            $pageHandle->redirect ($_CONF['site_admin_url']
-                                    . '/plugins.php?msg=44');
+if (SEC_checkToken()) {
+    $action = COM_applyFilter($_GET['action']);
+    if ($action == 'install') {
+        if (plugin_install_commentfeeds()) {
+    		// Redirects to the plugin editor
+    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=44');
+    		exit;
         } else {
-            $pageHandle->redirect ($_CONF['site_admin_url']
-                                    . '/plugins.php?msg=72');
+    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=72');
+    		exit;
         }
-    } else {
-        // plugin needs a newer version of glFusion
-        $pageHandle->setPageTitle($LANG32[8]);
-        $pageHandle->addContent(COM_startBlock ($LANG32[8])
-                 . '<p>' . $LANG32[9] . '</p>'
-                 . COM_endBlock ());
+    } else if ($action == 'uninstall') {
+    	if (plugin_uninstall_commentfeeds('installed')) {
+    		/**
+    		* Redirects to the plugin editor
+    		*/
+    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=45');
+    		exit;
+    	} else {
+    		echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=73');
+    		exit;
+    	}
     }
-} else {
-    // plugin already installed
-    $pageHandle->setPageTitle($LANG01[77]);
-    $pageHandle->addContent(COM_startBlock ($LANG32[6])
-             . '<p>' . $LANG32[7] . '</p>'
-             . COM_endBlock ());
 }
 
-$pageHandle->displayPage();
-
+echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php');
 ?>

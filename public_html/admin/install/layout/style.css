@@ -1,70 +1,317 @@
 /* STYLE STYLESHEET *****************************************
 
 *****************************************************************/
-
-.glform label, .glform label-left, .glform label-right .glform input {
-display:block;
-width:200px;
-float:left;
-margin-bottom:10px;
-}
-.glform label .glform label-left .glform label-right {
-text-align:right;
-width:200px;
-padding-right:20px;
+h1.title, h1.moofx-toggler {
+  margin:0;
+  padding:5px 0 0 12px;
+  font-size:14px;
+  color:#666;
+  cursor:pointer;
 }
 
-.glform br {
-clear:left;
+h1.moofx-toggler {
+  background: url(arrow_open.png) no-repeat 0 100%;
 }
 
-.glform p {
-clear:left;
+h1.moofx-toggler-down {
+  background: url(arrow_down.png) no-repeat 0 100%;
 }
 
-#gl_container_fluid {
-  background:#FFFFFF; /*needs to be set here*/
-  min-width:540px;
-  margin:20px 20px !important;
-  margin:20px 20px 30px 20px;
+.buttons a, .buttons button{
+  display:block;
+  float:left;
+  margin:0 5px;
+  background-color:#f5f5f5;
+  border:1px solid #dedede;
+  border-top:1px solid #eee;
+  border-left:1px solid #eee;
+  font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+  font-size:100%;
+  line-height:130%;
+  text-decoration:none;
+  font-weight:bold;
+  color:#565656;
+  cursor:pointer;
 }
-#gl_header {
+
+.buttons button{
+  width:auto;
+  overflow:visible;
+  padding:4px 7px 3px 7px; /* IE6 */
+}
+
+.buttons button[type]{
+  padding:5px 7px 6px 7px; /* Firefox */
+  line-height:17px; /* Safari */
+}
+
+*:first-child+html button[type]{
+  padding:4px 7px 3px 7px; /* IE7 */
+}
+
+.buttons button img {
+  margin:-5px 0 -8px !important;
+  padding:0;
+  border:none;
+  width:24px;
+  height:24px;
+}
+
+.Row1 {
+  background:#e7e7e7;
+  color:#000;
+  line-height:120%;
+}
+
+.Row2 {
+  background:#f1f5fa;
+  color:#000;
+  line-height:120%;
+}
+
+.pathtext {
+  font-size:11px;
+  color:#666;
+}
+
+.pathtext-status {
+  text-align:right;
+  white-space:nowrap;
+}
+
+.yes, .Writeable {
+  font-weight: bold;
+  color: #46882b;
+}
+.no, .Unwriteable {
+  font-weight: bold;
+  color: #cc0000;
+}
+
+#container_fixed {
+  background:#fff;
+  min-width:955px;
+  width:955px;
+  margin:20px auto auto;
+}
+
+#header {
   background:url(header-bg.png) 0 0 repeat-x;
-  height:100px;
+  height:50px;
 }
-#gl_wrapper {
-  background:#FFF;
+#wrapper {
+  background:#fff;
   float:left;
   padding:10px 20px 20px;
-  width:93%;
+  width:915px;
 }
-#gl_content-full {
-  background:#FFFFFF;
-  margin:0 10px 0 10px;
-  height:1%; /*fix for peek-a-boo bug in IE*/
-}
-#gl_footer {
+#footer {
   background:#000;
   clear:left;
   height:40px;
+  color:#fff;
+  text-align:center;
 }
-.top-r-corner {
+#footer div {
+  padding-top:5px;
+}
+#footer a {
+  color:#999;
+  text-decoration:none;
+  font-weight:bold;
+}
+#footer a:hover {
+  color:#7ea8c2;
+  text-decoration:none;
+  font-weight:bold;
+}
+.toprcorner {
   background:transparent url(top-r-corner.png) 100% 0 no-repeat;
-  height:100px;
+  height:50px;
 }
-.top-l-corner {
+.toplcorner {
   background:transparent url(top-l-corner.png) 0 0 no-repeat;
-  height:100px;
+  height:50px;
 }
-.bottom-r-corner {
-  background:#FFF url(bottom-r-corner.png) 100% 0 no-repeat !important;
-  background:#FFF url(bottom-r-corner.png) 100% 10px no-repeat;
+.bottomrcorner {
+  background:#fff url(bottom-r-corner.png) 100% 100% no-repeat !important;
+  background:#fff url(bottom-r-corner.png) 100% 10px no-repeat;
   height:5px;
 }
-.bottom-l-corner {
+.bottomlcorner {
   background:transparent url(bottom-l-corner.png) 0 0 no-repeat !important;
   background:transparent url(bottom-l-corner.png) 0 10px no-repeat;
   height:5px;
+}
+.steplist{
+  margin:0;
+  width:180px;
+  color:#666;
+}
+.steplist .steplist-top {
+  background:url(steplist-top.png) no-repeat  top;
+  height:145px;
+  display:block;
+  padding:0;
+}
+.steplist .steplist-content {
+  background:url(steplist-repeat.png) repeat-y;
+  padding:10px 22px;
+  margin-top:-18px;
+}
+.steplist-content ul {
+  margin:0;
+  padding:0;
+  list-style-type:none;
+}
+.steplist-content li {
+  margin:0;
+  padding:10px 0;
+  border-bottom:1px solid #ccc;
+}
+.steplist .steplist-bottom {
+  background: url(steplist-bottom.png) no-repeat bottom;
+  padding:0;
+  height:23px;
+}
+.steplist-help {
+  padding-top:10px;
+}
+.steplist-help span {
+  float:left;
+  padding-right:5px;
+}
+.step {
+  padding:0 0 0 15px;
+  width:715px;
+}
+.stepheading {
+  color:#666;
+  font-size:200%;
+  font-weight:bold;
+  height:45px;
+  border-bottom:1px solid #ccc;
+}
+.stepheading span {
+  font-size:12px;
+}
+.stepfields {
+  float:left;
+  padding:10px 0;
+  width:324px;
+  color:#666;
+  margin-top:15px;
+}
+
+.stepfields a:link.non-ul,
+a:visited.non-ul,
+a:hover.non-ul,
+a:active.non-ul {
+  color:#000;
+  text-decoration:none;
+}
+.stepfields a:link {
+  color:#00f;
+}
+.stepfields a:visited {
+  color:#000;
+  text-decoration:none;
+}
+.stepfields a:hover {
+  color:#008000;
+}
+
+.stepfields-envchk {
+  float:left;
+  padding:10px 0;
+  width:324px;
+  color:#666;
+  font-size:100%;
+  width:100%;
+}
+.stepfields-envchk h2 {
+  color:#565656;
+  font-size:120%;
+}
+.stepfields-envchk h2.top {
+  margin-top:5px;
+}
+.stepfields-envchk p {
+  padding:0 0 10px;
+}
+.stepfields-error {
+  float:left;
+  padding:10px 0;
+  width:695px;
+  color:#f00;
+  font-size:150%;
+}
+.stepfields-error img {
+  float:left;
+  vertical-align:middle;
+  padding: 0 10px;
+}
+.stepfields span {
+  float:left;
+  clear:left;
+  padding:5px 0;
+  font-weight:bold;
+  font-size:14px;
+  width:304px;
+}
+.stepfields span label {
+  padding-top:5px;
+}
+.stepfields span select {
+  width:200px;
+  margin:5px 0;
+}
+.stepfields input {
+  margin:5px 0;
+  width:299px;
+}
+.stepfields input.box {
+  width:17px;
+}
+.stepfields select {
+  color:#666;
+}
+.stephelp {
+  float:left;
+  padding:10px 0 10px 20px;
+  margin-top:15px;
+  width:370px;
+  border-left:1px solid #ccc;
+  color:#666;
+}
+#back-to-top a {
+  float:right;
+  text-decoration:none;
+  color:#666;
+  font-weight:bold;
+  font-size:14px;
+  padding:10px 0 0;
+}
+#spacer0 {
+  height:33px;
+}
+#spacer1 {
+  height:35px;
+}
+#spacer2 {
+  height:35px;
+}
+#spacer3 {
+  height:35px;
+}
+#spacer4 {
+  height:40px;
+}
+#spacer5 {
+  height:45px;
+}
+#spacer6 {
+  height:15px;
 }
 /* GLOBAL SEMANTICS ***********************************************/
 a {
@@ -74,11 +321,11 @@ a:link.non-ul,
 a:visited.non-ul,
 a:hover.non-ul,
 a:active.non-ul {
-  color:#000000;
+  color:#000;
   text-decoration:none;
 }
 a:link {
-  color:#0000FF;
+  color:#00f;
 }
 a:visited {
   color:#fff;
@@ -87,11 +334,8 @@ a:visited {
 a:hover {
   color:#008000;
 }
-a:active {
-  color:#FF0000;
-}
 body {
-  background:#000000;
+  background:#000;
   font:76% arial,verdana,tahoma,helvetica,sans-serif;
   margin:0;
   padding:0;
@@ -130,8 +374,8 @@ form div.notes li {
 }
 form fieldset div.notes {
   background-color:#ffffe1;
-  border:1px solid #666666;
-  color:#666666;
+  border:1px solid #666;
+  color:#666;
   float:right;
   font-size:.75em;
   height:auto;
@@ -142,15 +386,14 @@ form fieldset div.notes {
   width:150px;
 }
 form fieldset div.notes h4 {
-  background:url(../../professional/images/icon_info.png) no-repeat top left;
-  border-bottom:1px solid #666666;
-  color:#666666;
+  border-bottom:1px solid #666;
+  color:#666;
   font-size:1.3em;
   margin:0 0 5px 0;
   padding:3px 0px 2px 27px;
 }
 form fieldset div.notes p {
-  color:#666666;
+  color:#666;
   margin:0em 0em 1.2em 0em;
 }
 form fieldset div.notes p.last {
@@ -179,31 +422,30 @@ input {
 input,
 submit,
 td {
-  color:#000000;
+  color:#666;
 }
 p {
   margin-top:5px;
 }
 p, fieldset, table, pre {
-margin-bottom:0em;
+  margin-bottom:0em;
 }
 select {
-  color:#000000;
+  color:#000;
   font-size:.9em;
 }
 table {
-  border:0px;
 }
 textarea {
-  color:#000000;
+  color:#000;
   font-family:arial,verdana,tahoma,helvetica,sans-serif;
 }
 th {
-  background-color:#DAE0ED;
-  color:#000000;
+  background-color:#dae0ed;
+  color:#565656;
   font-size:larger;
   font-weight:bold;
-  padding-left:3px;
+  padding:3px 5px;
   text-align:left;
 }
 ul {
@@ -250,44 +492,41 @@ margin-left:0em;
   float:right;
 }
 .install-slogan {
-  padding:40px 30px 0 10px;
+  padding:20px 20px 0 10px;
+  color:#fff;
 }
 .support a:link,
 .support a:hover {
-  color:#FFF;
+  color:#fff;
   padding-top:30px;
 }
 /* General formatting class***********************/
 .b {
   font-weight:bold;
 }
-.ext-link {
-  background: url(../../professional/images/external.png) right center no-repeat;
-  background-attachment: scroll;
+.larger {
+  font-size:larger;
+}
+.current {
   background-color: transparent;
-  padding-right: 13px;
+  background: url(arrow.png) right center no-repeat;
+  font-weight:bold;
+}
+.complete {
+  background-color: transparent;
+  background: url(check.png) right center no-repeat;
 }
 /* Header ***************************************/
-#header-site-logo {
-  margin:0 0 -5px /* <-- adjust this to move the SLOGAN up or down */ 5px;
+#headersitelogo {
+  margin:8px 0 0 15px;
   z-index:90;
 }
-/*GL_MOOMENU CSS**************************/
-#gl_moomenu {
-  background:#000 url(gl_moomenu1-bg.gif) repeat;  /*main menu background*/
-  height:27px;
+#moomenu {
+  background:#000 url(gl_moomenu1-bg.gif) repeat;
+  height:10px;
   margin:0;
   position:relative;
   z-index:50;
-}
-#gl_moomenu a:link{
-  color:#FFF;
-  text-decoration:none;
-  padding-top:5px;
-}
-#gl_moomenu a:hover {
-  color:#CCC;
-  text-decoration:none;
 }
 /* Installation ******************************************************************/
 .heading {
@@ -297,7 +536,7 @@ margin-left:0em;
 .installation-container {
 }
 .install-path-container-outer {
-  background: #FFFFFF;
+  background: #fff;
   border: 1px solid;
   margin-left: auto;
   margin-right: auto;
@@ -307,13 +546,7 @@ margin-left:0em;
   margin-left: auto;
   margin-right: auto;
   border: 0px solid;
-  color: #FFFFFF;
-}
-.installation-body-container {
-  background:#FFFFFF;
-  color:#000000;
-  text-align:left;
-  width:100%;
+  color: #fff;
 }
 .install-type-container-outer {
   height: 130px;
@@ -345,7 +578,7 @@ margin-left:0em;
 }
 .install a:link,
 .upgrade a:link{
-  color:#FFF;
+  color:#fff;
 }
 .upgrade-rtl {
   position: relative;
@@ -353,7 +586,7 @@ margin-left:0em;
   top: -77px;
   width: 220px;
   height: 55px;
-  background-color: #CCC;
+  background-color: #ccc;
   text-align: center;
   font-size: 20pt;
   font-family: "Verdana";
@@ -364,7 +597,7 @@ margin-left:0em;
 }
 .install a:hover,
 .upgrade a:hover{
-  color:#CCC;
+  color:#ccc;
 }
 .file-permission-list {
   padding: 0px;
@@ -386,11 +619,9 @@ margin-left:0em;
 }
 
 /* Misc ******************************************************************/
-.error {
-  color: #FF0000;
-}
+
 .codeblock  {
-  background-color:#CCC;
+  background-color:#ccc;
   color:#000;
   width: 400px;
   height: 15px;

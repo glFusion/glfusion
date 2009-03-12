@@ -108,6 +108,96 @@ function ST_displayMenuList( ) {
  * Create a new menu
  */
 
+function ST_cloneMenu( $menu_id ) {
+    global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, $_ST_CONF,
+           $LANG_ST_MENU_TYPES, $LANG_ADMIN, $stMenu;
+
+    $retval = '';
+
+    $menu_arr = array(
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php',
+                  'text' => $LANG_ST01['menu_list']),
+            array('url'  => $_CONF['site_admin_url'],
+                  'text' => $LANG_ADMIN['admin_home']),
+    );
+    $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$LANG_ST01['add_newmenu'],'', COM_getBlockTemplate('_admin_block', 'header'));
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[2],
+                                $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
+
+
+    $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
+    $T->set_file (array ('admin' => 'clonemenu.thtml'));
+
+    $T->set_var(array(
+        'site_admin_url'    => $_CONF['site_admin_url'],
+        'site_url'          => $_CONF['site_url'],
+        'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
+        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: '.$LANG_ST01['clone'],
+        'lang_admin'        => $LANG_ST00['admin'],
+        'version'           => $_ST_CONF['version'],
+        'menu_id'           => $menu_id,
+        'xhtml'             => XHTML,
+    ));
+    $T->parse('output', 'admin');
+    $retval .= $T->finish($T->get_var('output'));
+    $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+    return $retval;
+}
+
+/*
+ * Saves a clone menu element
+ */
+
+function ST_saveCloneMenu( ) {
+    global $_CONF, $_TABLES, $LANG_ST00, $_ST_CONF, $stMenu, $_GROUPS;
+
+    $menu_name  = addslashes(COM_applyFilter($_POST['menuname']));
+    $menu       = COM_applyFilter($_POST['menu'],true);
+
+    $sql = "SELECT * FROM {$_TABLES['st_menus']} WHERE id=".$menu;
+    $result = DB_query($sql);
+    if ( DB_numRows($result) > 0 ) {
+        $M = DB_fetchArray($result);
+        $menu_type   = $M['menu_type'];
+        $menu_active = $M['menu_active'];
+        $group_id    = $M['group_id'];
+
+        $sqlFieldList  = 'menu_name,menu_type,menu_active,group_id';
+        $sqlDataValues = "'$menu_name',$menu_type,$menu_active,$group_id";
+        DB_save($_TABLES['st_menus'], $sqlFieldList, $sqlDataValues);
+        $menu_id = DB_insertId();
+        $sql = "SELECT * FROM {$_TABLES['st_menus_config']} WHERE menu_id=".$menu;
+        $result = DB_query($sql);
+        while ($C = DB_fetchArray($result) ) {
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'".addslashes($C['conf_name'])."','".addslashes($C['conf_value'])."'");
+        }
+
+        $meadmin    = SEC_hasRights('sitetailor.admin');
+        $root       = SEC_inGroup('Root');
+        $groups     = $_GROUPS;
+
+        $sql = "SELECT * FROM {$_TABLES['st_menu_elements']} WHERE menu_id=".$menu;
+        $result = DB_query($sql);
+        while ($M = DB_fetchArray($result)) {
+            $M['menu_id'] = $menu_id;
+            $element            = new mbElement();
+            $element->constructor( $M, $meadmin, $root, $groups );
+            $element->id        = $element->createElementID($M['menu_id']);
+            $element->saveElement();
+        }
+    }
+    CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('css');
+    $randID = rand();
+    DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
+    st_initMenu(true);
+}
+
+
+/*
+ * Create a new menu
+ */
+
 function ST_createMenu( ) {
     global $_CONF, $_TABLES, $LANG_ST00, $LANG_ST01, $LANG_ST_ADMIN, $_ST_CONF,
            $LANG_ST_MENU_TYPES, $LANG_ADMIN, $stMenu;
@@ -267,8 +357,6 @@ function ST_displayTree( $menu_id ) {
     $retval  .= COM_startBlock($LANG_ST01['menu_builder'].' :: '.$stMenu[$menu_id]['menu_name'],'', COM_getBlockTemplate('_admin_block', 'header'));
     $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST_ADMIN[3],
                                 $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor-menubuilder.png');
-
-
 
     $T = new Template($_CONF['path'] . 'plugins/sitetailor/templates/');
     $T->set_file (array ('admin' => 'menutree.thtml'));
@@ -511,7 +599,7 @@ function ST_saveNewMenuElement ( ) {
              * check URL if it needs http:// appended...
              */
             if ( trim($E['element_subtype']) != '' ) {
-                if(strpos($E['element_subtype'], "http") !== 0 && strpos($E['element_subtype'],"%site") === false) {
+                if(strpos($E['element_subtype'], "http") !== 0 && strpos($E['element_subtype'],"%site") === false && rtrim($E['element_subtype']) != '') {
                     $E['element_subtype'] = 'http://' . $E['element_subtype'];
                 }
             }
@@ -527,7 +615,7 @@ function ST_saveNewMenuElement ( ) {
     // check if URL needs the http:// added
 
     if ( trim($E['element_url']) != '' ) {
-        if ( strpos($E['element_url'],"http") !== 0 && strpos($E['element_url'],"%site") === false && $E['element_url'][0] != '#') {
+        if ( strpos($E['element_url'],"http") !== 0 && strpos($E['element_url'],"%site") === false && $E['element_url'][0] != '#' && rtrim($E['element_url']) != '' ) {
             $E['element_url'] = 'http://' . $E['element_url'];
         }
     }
@@ -621,11 +709,22 @@ function ST_editElement( $menu_id, $mid ) {
     $plugin_select = '<select id="pluginname" name="pluginname">' . LB;
     $plugin_menus = _stPLG_getMenuItems(); // PLG_getMenuItems();
 
+    $found = 0;
     $num_plugins = count($plugin_menus);
     for( $i = 1; $i <= $num_plugins; $i++ )
     {
-        $plugin_select .= '<option value="' . key($plugin_menus) . '"' . ($stMenu[$menu_id]['elements'][$mid]->subtype==key($plugin_menus) ? ' selected="selected"' : '') . '>' . key($plugin_menus) . '</option>' . LB;
+        $plugin_select .= '<option value="' . key($plugin_menus) . '"';
+
+        if ( $stMenu[$menu_id]['elements'][$mid]->subtype==key($plugin_menus) ) {
+            $plugin_select .= ' selected="selected"';
+            $found++;
+        }
+        $plugin_select .= '>' . key($plugin_menus) . '</option>' . LB;
+
         next( $plugin_menus );
+    }
+    if ( $found == 0 ) {
+        $plugin_select .= '<option value="'.$stMenu[$menu_id]['elements'][$mid]->subtype.'" selected="selected">'.$LANG_ST01['disabled_plugin'].'</option>'.LB;
     }
     $plugin_select .= '</select>' . LB;
 
@@ -686,7 +785,7 @@ function ST_editElement( $menu_id, $mid ) {
 
     $order_select = '<select id="menuorder" name="menuorder">' . LB;
     $order_select .= '<option value="0">' . $LANG_ST01['first_position'] . '</option>' . LB;
-    $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['st_menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=0 ORDER BY element_order ASC");
+    $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['st_menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=".$stMenu[$menu_id]['elements'][$mid]->pid." ORDER BY element_order ASC");
     $order = 10;
 
     while ($row = DB_fetchArray($result)) {
@@ -763,7 +862,7 @@ function ST_saveEditMenuElement ( ) {
             break;
         case 6 :
             $subtype = COM_applyFilter($_POST['menuurl']);
-            if ( strpos($subtype,"http") !== 0 && strpos($subtype,"%site") === false && $subtype[0] != '#') {
+            if ( strpos($subtype,"http") !== 0 && strpos($subtype,"%site") === false && $subtype[0] != '#' && rtrim($subtype) != '' ) {
                 $subtype = 'http://' . $subtype;
             }
             break;
@@ -776,7 +875,7 @@ function ST_saveEditMenuElement ( ) {
     }
     $active     = COM_applyFilter($_POST['menuactive'],true);
     $url        = trim(addslashes(COM_applyFilter($_POST['menuurl'])));
-    if ( strpos($url,"http") !== 0 && strpos($url,"%site") === false && $url[0] != '#') {
+    if ( strpos($url,"http") !== 0 && strpos($url,"%site") === false && $url[0] != '#' && rtrim($url) != '') {
         $url = 'http://' . $url;
     }
     $group_id   = COM_applyFilter($_POST['group'],true);
@@ -788,14 +887,9 @@ function ST_saveEditMenuElement ( ) {
     $sql        = "UPDATE {$_TABLES['st_menu_elements']} SET pid=$pid, element_order=$neworder, element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url', element_target='$target', group_id=$group_id WHERE id=$id";
 
     DB_query($sql);
-
-    CACHE_remove_instance('stmenu');
-
-    st_initMenu();
-
+    st_initMenu(true);
     $stMenu[$menu_id]['elements'][$pid]->reorderMenu();
-
-    st_initMenu();
+    st_initMenu(true);
 }
 
 
@@ -1336,6 +1430,10 @@ if ( isset($_REQUEST['mid']) ) {
 }
 if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
     switch ( $mode ) {
+        case 'clone' :
+            $menu = COM_applyFilter($_GET['menuid'],true);
+            $content = ST_cloneMenu($menu_id);
+            break;
         case 'menu' :
             // display the tree
             $content = ST_displayTree( $menu_id );
@@ -1362,18 +1460,24 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'saveedit' :
             ST_saveEditMenuElement();
-            $content = ST_displayTree( $menu_id );
-            $currentSelect = $LANG_ST01['menu_builder'];
+            CACHE_remove_instance('stmenu');
+            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;id=' . $menu_id);
+            exit;
             break;
         case 'save' :
             // save the new or edited element
             $menu_id = COM_applyFilter($_POST['menuid'],true);
             ST_saveNewMenuElement();
+            CACHE_remove_instance('stmenu');
             echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;id=' . $menu_id);
             exit;
             break;
         case 'savenewmenu' :
             ST_saveNewMenu();
+            $content = ST_displayMenuList( );
+            break;
+        case 'saveclonemenu' :
+            ST_saveCloneMenu();
             $content = ST_displayMenuList( );
             break;
         case 'saveeditmenu' :

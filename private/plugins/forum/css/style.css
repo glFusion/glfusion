@@ -1,3 +1,14 @@
+.forumpost ul {
+  list-style-position: outside;
+  margin-left: 15px;
+  padding-left: 15px;
+  list-style: disc;
+  vertical-align: middle;
+}
+.forumpost li {
+  margin: 0px;
+  padding: 0px;
+}
 .gftool-tip {
 color:#fff;
 width:200px;

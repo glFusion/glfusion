@@ -57,7 +57,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                            $data_arr, $options = '', $form_arr='')
 {
     global $_CONF, $_TABLES, $LANG01, $LANG_ADMIN, $LANG_ACCESS, $MESSAGE,
-           $pageHandle;
+           $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -104,7 +104,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     $icons_type_arr = array('edit', 'copy', 'list', 'addchild');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
-        $icon_url = $pageHandle->getImage($icon_type.'.png');
+        $icon_url = "{$_CONF['layout_url']}/images/$icon_type.$_IMAGE_TYPE";
         $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
     }
 
@@ -117,7 +117,6 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('header_text', '<input type="checkbox" name="chk_selectall" title="'.$LANG01[126].'" onclick="caItems(this.form);"' . XHTML . '>');
         $admin_templates->set_var('class', "admin-list-field");
         $admin_templates->set_var('show_deleteimage', '');
-
         $admin_templates->parse('header_row', 'header', true);
         $admin_templates->clear_var('on_click');
     } else {
@@ -211,8 +210,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             $query_arr, $defsort_arr, $filter = '', $extra = '',
             $options = '', $form_arr='')
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG01,
-           $MESSAGE, $inputHandler, $pageHandle;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG01, $_IMAGE_TYPE, $MESSAGE;
 
     // set all variables to avoid warnings
     $retval = '';
@@ -220,13 +218,21 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $order_sql = '';
     $limit = '';
     $prevorder = '';
+    if (isset ($_GET['prevorder'])) { # what was the last sorting?
+        $prevorder = COM_applyFilter ($_GET['prevorder']);
+    }
 
-    $prevorder   = $inputHandler->getVar('strict','prevorder','get','');
-    $query       = $inputHandler->getVar('raw','q','request','');
-    $query_limit = $inputHandler->getVar('integer','query_limit','request',0);
+    $query = '';
+    if (isset ($_REQUEST['q'])) { # get query (text-search)
+        $query = $_REQUEST['q'];
+    }
 
-    if($query_limit == 0) {
-        $query_limit = 50;
+    $query_limit = "";
+    if (isset($_REQUEST['query_limit'])) { # get query-limit (list-length)
+        $query_limit = COM_applyFilter ($_REQUEST['query_limit'], true);
+        if($query_limit == 0) {
+            $query_limit = 50;
+        }
     }
 
     // we assume that the current page is 1 to set it.
@@ -234,9 +240,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $page = '';
     // get the current page from the interface. The variable is linked to the
     // component, i.e. the plugin/function calling this here to avoid overlap
-    $page = $inputHandler->getVar('integer',$component.'listpage','request',0);
-    $curpage = $page;
-
+    if (isset ($_REQUEST[$component . 'listpage'])) {
+        $page = COM_applyFilter ($_REQUEST[$component . 'listpage'], true);
+        $curpage = $page;
+    }
     if ($curpage <= 0) {
         $curpage = 1; #current page has to be larger 0
     }
@@ -272,6 +279,9 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     ));
 
     # insert std. values into the template
+    $admin_templates->set_var( 'xhtml', XHTML );
+    $admin_templates->set_var('site_url', $_CONF['site_url']);
+    $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
     $admin_templates->set_var('layout_url', $_CONF['layout_url']);
     $admin_templates->set_var('form_url', $form_url);
     $admin_templates->set_var('lang_edit', $LANG_ADMIN['edit']);
@@ -298,7 +308,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $icons_type_arr = array('edit', 'copy', 'list', 'addchild');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
-        $icon_url = $pageHandle->getImage($icon_type.'.png');
+        $icon_url = "{$_CONF['layout_url']}/images/$icon_type.$_IMAGE_TYPE";
         $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
     }
 
@@ -310,11 +320,11 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var('lang_search', $LANG_ADMIN['search']);
         $admin_templates->set_var('lang_submit', $LANG_ADMIN['submit']);
         $admin_templates->set_var('lang_limit_results', $LANG_ADMIN['limit_results']);
-        $admin_templates->set_var('last_query', $inputHandler->getVar('text','query','get',''));
+        $admin_templates->set_var('last_query', COM_applyFilter($query));
         $admin_templates->set_var('filter', $filter);
     }
 
-    $sql_query = $inputHandler->prepareForDB ($query); # replace quotes etc for security
+    $sql_query = addslashes ($query); # replace quotes etc for security
     $sql = $query_arr['sql']; # get sql from array that builds data
 
     $order_var = ''; # number that is displayed in URL
@@ -322,11 +332,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $order_var_link = ''; # Variable for google paging.
 
     // is the order set in the link (when sorting the list)
-    $order = $inputHandler->getVar('strict','order','get','');
-    if (empty ($order)) {
+    if (!isset ($_GET['order'])) {
         $order = $defsort_arr['field']; // no, get the default
     } else {
-        $order_var = $order;
+        $order_var = COM_applyFilter ($_GET['order'], true);
         $order_var_link = "&amp;order=$order_var"; # keep the variable for the google paging
         $order = $header_arr[$order_var]['field'];  # current order field name
     }
@@ -342,9 +351,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     //}
 
     $direction = '';
-    $direction = $inputHandler->getVar('strict','direction','get','');
-    if (empty ($direction)) { # get direction to sort after
+    if (!isset ($_GET['direction'])) { # get direction to sort after
         $direction = $defsort_arr['direction'];
+    } else {
+        $direction = COM_applyFilter ($_GET['direction']);
     }
     $direction = strtoupper ($direction);
     if ($order == $prevorder) { #reverse direction if prev. order was the same
@@ -359,7 +369,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $arrow = 'bararrowup';
     }
     # make actual order arrow image
-    $img_arrow_url = $pageHandle->getImage($arrow.'.png');
+    $img_arrow_url = "{$_CONF['layout_url']}/images/$arrow.$_IMAGE_TYPE";
     $img_arrow = '&nbsp;' . COM_createImage($img_arrow_url, $arrow);
 
     if (!empty ($order_for_query)) { # concat order string
@@ -591,6 +601,9 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '') {
     }
     $admin_templates->set_var('menu_fields', $menu_fields);
     $admin_templates->set_var('lang_instructions', $text);
+    $admin_templates->set_var('xhtml', XHTML);
+    $admin_templates->set_var('site_url', $_CONF['site_url']);
+    $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
     $admin_templates->set_var('layout_url', $_CONF['layout_url']);
     $admin_templates->parse('top_menu', 'top_menu');
     $retval = $admin_templates->finish($admin_templates->get_var('top_menu'));
@@ -600,7 +613,7 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '') {
 
 function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $LANG_ADMIN, $LANG21, $pageHandle;
+    global $_CONF, $LANG_ADMIN, $LANG21, $_IMAGE_TYPE;
 
     $retval = false;
 
@@ -615,7 +628,7 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 }
                 break;
             case 'title':
-                $retval = $A['title'];
+                $retval = stripslashes ($A['title']);
                 if (empty ($retval)) {
                     $retval = '(' . $A['name'] . ')';
                 }
@@ -639,15 +652,15 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 if ($access == 3) {
                     if ($A['onleft'] == 1) {
                         $side = $LANG21[40];
-                        $blockcontrol_image = $pageHandle->getImage('admin/block-right.png');
+                        $blockcontrol_image = 'block-right.' . $_IMAGE_TYPE;
                         $moveTitleMsg = $LANG21[59];
                         $switchside = '1';
                     } else {
-                        $blockcontrol_image = $pageHandle->getImage('admin/block-left.png');
+                        $blockcontrol_image = 'block-left.' . $_IMAGE_TYPE;
                         $moveTitleMsg = $LANG21[60];
                         $switchside = '0';
                     }
-                    $retval.="<img src=\"$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\"" . XHTML . ">"
+                    $retval.="<img src=\"{$_CONF['layout_url']}/images/admin/$blockcontrol_image\" width=\"45\" height=\"20\" usemap=\"#arrow{$A['bid']}\" alt=\"\"" . XHTML . ">"
                             ."<map id=\"arrow{$A['bid']}\" name=\"arrow{$A['bid']}\">"
                             ."<area coords=\"0,0,12,20\"  title=\"{$LANG21[58]}\" href=\"{$_CONF['site_admin_url']}/block.php?mode=move&amp;bid={$A['bid']}&amp;where=up&amp;".CSRF_TOKEN."={$token}\" alt=\"{$LANG21[58]}\"" . XHTML . ">"
                             ."<area coords=\"13,0,29,20\" title=\"$moveTitleMsg\" href=\"{$_CONF['site_admin_url']}/block.php?mode=move&amp;bid={$A['bid']}&amp;where=$switchside&amp;".CSRF_TOKEN."={$token}\" alt=\"$moveTitleMsg\"" . XHTML . ">"
@@ -665,7 +678,7 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
 
 function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $thisUsersGroups, $inputHandler;
+    global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $thisUsersGroups;
 
     $retval = false;
 
@@ -677,8 +690,7 @@ function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr)
     // Extra test required to handle that different ways this option is passed and need to be able to
     // over-ride the option using the posted form when the URL contains the variable as well
     $show_all_groups = false;
-    $q = $inputHandler->getVar('strict','q','post','');
-    if (!empty($q)) {   // Form has been posted - test actual option in this form
+    if (isset($_POST['q'])) {   // Form has been posted - test actual option in this form
         if ($_POST['chk_showall'] == 1) {
             $show_all_groups = true;
         }
@@ -731,7 +743,7 @@ function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr)
 
 function ADMIN_getListField_users($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $pageHandle;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -746,8 +758,8 @@ function ADMIN_getListField_users($fieldname, $fieldvalue, $A, $icon_arr)
         case 'username':
             $photoico = '';
             if (!empty ($A['photo'])) {
-                $photoico = "&nbsp;<img src=\"" . $pageHandle->getImage('smallcamera.png')
-                          . '" alt="{$LANG04[77]}"' . XHTML . '>';
+                $photoico = "&nbsp;<img src=\"{$_CONF['layout_url']}/images/smallcamera."
+                          . $_IMAGE_TYPE . '" alt="{$LANG04[77]}"' . XHTML . '>';
             } else {
                 $photoico = '';
             }
@@ -810,8 +822,7 @@ function ADMIN_getListField_users($fieldname, $fieldvalue, $A, $icon_arr)
 
 function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG24, $LANG_ACCESS,
-           $pageHandle;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG24, $LANG_ACCESS, $_IMAGE_TYPE;
 
     static $topics;
 
@@ -828,9 +839,9 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case "title":
             $A['title'] = str_replace('$', '&#36;', $A['title']);
-            $article_url = $pageHandle->buildUrl ($_CONF['site_url'] . '/article.php?story='
+            $article_url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='
                                   . $A['sid']);
-            $retval = COM_createLink($A['title'], $article_url);
+            $retval = COM_createLink(stripslashes($A['title']), $article_url);
             break;
         case "draft_flag":
             if ($A['draft_flag'] == 1) {
@@ -866,6 +877,32 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
                 }
             }
             break;
+        case "copy":
+        case "copy_adv":
+            $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
+                                     $A['perm_owner'], $A['perm_group'],
+                                     $A['perm_members'], $A['perm_anon']);
+            if ($access == 3) {
+                if (SEC_hasTopicAccess ($A['tid']) == 3) {
+                    $access = $LANG_ACCESS['copy'];
+                } else {
+                    $access = $LANG_ACCESS['readonly'];
+                }
+            } else {
+                $access = $LANG_ACCESS['readonly'];
+            }
+            if ($fieldname == 'access') {
+                $retval = $access;
+            } else if ($access == $LANG_ACCESS['copy']) {
+                if ($fieldname == 'copy_adv') {
+                    $retval = COM_createLink($icon_arr['copy'],
+                        "{$_CONF['site_admin_url']}/story.php?mode=clone&amp;editor=adv&amp;sid={$A['sid']}");
+                } else if ($fieldname == 'copy') {
+                    $retval = COM_createLink($icon_arr['copy'],
+                        "{$_CONF['site_admin_url']}/story.php?mode=clone&amp;editor=std&amp;sid={$A['sid']}");
+                }
+            }
+            break;
         case "featured":
             if ($A['featured'] == 1) {
                 $retval = $LANG24[35];
@@ -874,8 +911,8 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
             }
             break;
         case "ping":
-            $pingico = '<img src="' . $pageHandle->getImage('sendping.png')
-                     . '" alt="' . $LANG24[21] . '" title="'
+            $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
+                     . $_IMAGE_TYPE . '" alt="' . $LANG24[21] . '" title="'
                      . $LANG24[21] . '"' . XHTML . '>';
             if (($A['draft_flag'] == 0) && ($A['unixdate'] < time())) {
                 $url = $_CONF['site_admin_url']
@@ -905,7 +942,7 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
 
 function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $pageHandle;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -1035,7 +1072,7 @@ function ADMIN_getListField_moderation($fieldname, $fieldvalue, $A, $icon_arr)
                 $retval = DB_getItem ($_TABLES['topics'], 'topic',
                                       "tid = '{$A[3]}'");
             } else {
-                $retval = COM_makeClickableLinks ($fieldvalue);
+                $retval = COM_makeClickableLinks (stripslashes ($fieldvalue));
             }
             break;
     }

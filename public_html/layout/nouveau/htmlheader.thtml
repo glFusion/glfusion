@@ -24,6 +24,10 @@
 <!--[if IE 7]>
 <link rel="stylesheet" type="text/css" href="{layout_url}/ie7.css" title="{theme}"{xthml}>
 <![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="{layout_url}/ie7.css" title="{theme}"{xthml}>
+<script defer type="text/javascript" src="{site_url}/javascript/sitetailor_ie6vertmenu.js"></script>
+<![endif]-->
 </head>
 <body dir="{direction}" style="background:#000000;">
 <div>

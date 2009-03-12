@@ -43,7 +43,13 @@ if (!defined ('GVERSION')) {
 }
 
 require_once $_CONF['path_system'] . '/classes/story.class.php';
-require_once $_CONF['path_system'] . '/lib-webservices.php';
+
+/* Check for PHP5 */
+if (PHP_VERSION < 5) {
+    $_CONF['disable_webservices'] = true;
+} else {
+    require_once $_CONF['path_system'] . '/lib-webservices.php';
+}
 
 if ($_CONF['allow_user_photo']) {
     // only needed for the USER_getPhoto function
@@ -75,7 +81,7 @@ if (!defined ('STORY_ARCHIVE_ON_EXPIRE')) {
 function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $query='')
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG05, $LANG11, $LANG_TRB,
-           $mode, $_GROUPS,$pageHandle;
+           $_IMAGE_TYPE, $mode, $_GROUPS;
 
     static $storycounter = 0;
 
@@ -176,9 +182,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             if (!empty($photo)) {
                 $article->set_var('contributedby_photo', $photo);
                 $article->set_var('author_photo', $photo);
-
-                $camera_icon = '<img src="' . $pageHandle->getImage('smallcamera.png')
-                             . '" alt=""'
+                $camera_icon = '<img src="' . $_CONF['layout_url']
+                             . '/images/smallcamera.' . $_IMAGE_TYPE . '" alt=""'
                              . XHTML . '>';
                 $article->set_var('camera_icon',
                                   COM_createLink($camera_icon, $profileUrl));
@@ -229,7 +234,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'story_topic_url', $topicurl );
 
         $recent_post_anchortag = '';
-        $articleUrl = $pageHandle->buildURL($_CONF['site_url'] . '/article.php?story='
+        $articleUrl = COM_buildUrl($_CONF['site_url'] . '/article.php?story='
                                     . $story->getSid());
         $article->set_var('story_title', $story->DisplayElements('title'));
         $article->set_var('lang_permalink', $LANG01[127]);
@@ -324,8 +329,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var( 'send_trackback_link',
                     COM_createLink($LANG_TRB['send_trackback'], $url)
                 );
-                $pingico = '<img src="' . $pageHandle->getImage('sendping.png')
-                    . '" alt="' . $LANG_TRB['send_trackback']
+                $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
+                    . $_IMAGE_TYPE . '" alt="' . $LANG_TRB['send_trackback']
                     . '" title="' . $LANG_TRB['send_trackback'] . '"' . XHTML . '>';
                 $article->set_var( 'send_trackback_icon',
                     COM_createLink($pingico, $url)
@@ -366,7 +371,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
             if(( $story->DisplayElements('commentcode') >= 0 ) and ( $show_comments ))
             {
-                $commentsUrl = $pageHandle->buildURL( $_CONF['site_url']
+                $commentsUrl = COM_buildUrl( $_CONF['site_url']
                         . '/article.php?story=' . $story->getSid() ) . '#comments';
                 $article->set_var( 'comments_url', $commentsUrl );
                 $article->set_var( 'comments_text',
@@ -418,7 +423,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                     ( $story->DisplayElements('trackbackcode') >= 0 ) && ( $show_comments ))
             {
                 $num_trackbacks = COM_numberFormat( $story->DisplayElements('trackbacks') );
-                $trackbacksUrl = $pageHandle->buildUrl( $_CONF['site_url']
+                $trackbacksUrl = COM_buildUrl( $_CONF['site_url']
                         . '/article.php?story=' . $story->getSid() ) . '#trackback';
                 $article->set_var( 'trackbacks_url', $trackbacksUrl );
                 $article->set_var( 'trackbacks_text', $num_trackbacks . ' '
@@ -436,8 +441,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 {
                     $pingurl = $_CONF['site_admin_url']
                         . '/trackback.php?mode=sendall&amp;id=' . $story->getSid();
-                    $pingico = '<img src="' . $pageHandle->getImage('sendping.png')
-                        . '" alt="' . $LANG_TRB['send_trackback']
+                    $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
+                        . $_IMAGE_TYPE . '" alt="' . $LANG_TRB['send_trackback']
                         . '" title="' . $LANG_TRB['send_trackback'] . '"' . XHTML . '>';
                     $article->set_var( 'send_trackback_icon',
                         COM_createLink($pingico, $pingurl)
@@ -472,8 +477,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             {
                 $emailUrl = $_CONF['site_url'] . '/profiles.php?sid=' . $story->getSid()
                           . '&amp;what=emailstory';
-                $emailicon = '<img src="' . $pageHandle->getImage('mail.png')
-                    . '" alt="' . $LANG01[64] . '" title="'
+                $emailicon = '<img src="' . $_CONF['layout_url'] . '/images/mail.'
+                    . $_IMAGE_TYPE . '" alt="' . $LANG01[64] . '" title="'
                     . $LANG11[2] . '"' . XHTML . '>';
                 $article->set_var( 'email_icon',
                     COM_createLink($emailicon, $emailUrl)
@@ -482,7 +487,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                 $article->set_var( 'lang_email_story', $LANG11[2] );
                 $article->set_var( 'lang_email_story_alt', $LANG01[64] );
             }
-            $printUrl = $pageHandle->buildUrl( $_CONF['site_url'] . '/article.php?story='
+            $printUrl = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
                                       . $story->getSid() . '&amp;mode=print' );
             if( $_CONF['hideprintericon'] == 1 )
             {
@@ -490,8 +495,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             }
             else
             {
-                $printicon = '<img src="' . $pageHandle->getImage('print.png')
-                    . '" alt="' . $LANG01[65]
+                $printicon = '<img src="' . $_CONF['layout_url']
+                    . '/images/print.' . $_IMAGE_TYPE . '" alt="' . $LANG01[65]
                     . '" title="' . $LANG11[3] . '"' . XHTML . '>';
                 $article->set_var( 'print_icon',
                     COM_createLink($printicon, $printUrl, array('rel' => 'nofollow'))
@@ -504,8 +509,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             {
                 $pdfUrl = $_CONF['site_url'] . '/pdfgenerator.php?pageType=2&amp;'
                         . 'pageData=' . urlencode( $printUrl );
-                $pdficon = '<img src="'. $pageHandle->getImage('pdf.png')
-                             . '" alt="'. $LANG01[111]
+                $pdficon = '<img src="'. $_CONF['layout_url'] . '/images/pdf.'
+                             . $_IMAGE_TYPE . '" alt="'. $LANG01[111]
                              .'" title="'. $LANG11[5] .'"' . XHTML . '>';
                 $article->set_var( 'pdf_icon',
                     COM_createLink($pdficon, $pdfUrl)
@@ -528,8 +533,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                     $feedTitle = sprintf($LANG11[6],$title);
                 }
                 if ( $feeds > 0 ) {
-                    $feedicon = '<img src="'. $pageHandle->getImage('rss_small.png')
-                             . '" alt="'. $feedTitle
+                    $feedicon = '<img src="'. $_CONF['layout_url'] . '/images/rss_small.'
+                             . $_IMAGE_TYPE . '" alt="'. $feedTitle
                              .'" title="'. $feedTitle .'"' . XHTML . '>';
                     $article->set_var( 'feed_icon',COM_createLink($feedicon, $feedUrl,array("type" =>"application/rss+xml")));
                 } else {
@@ -546,7 +551,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'article_url', $articleUrl );
         $article->set_var( 'recent_post_anchortag', $recent_post_anchortag );
 
-        if( $story->checkAccess() == 3 AND SEC_hasrights( 'story.edit' ) AND ( $index != 'p' ))
+        $access = $story->checkAccess();
+        $storyAccess = min($access, SEC_hasTopicAccess($story->DisplayElements('tid')));
+
+        if( $storyAccess == 3 AND SEC_hasrights( 'story.edit' ) AND ( $index != 'p' ))
         {
             $article->set_var( 'edit_link',
                 COM_createLink($LANG01[4], $_CONF['site_admin_url']
@@ -555,7 +563,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->set_var( 'edit_url', $_CONF['site_admin_url']
                     . '/story.php?mode=edit&amp;sid=' . $story->getSid() );
             $article->set_var( 'lang_edit_text',  $LANG01[4] );
-            $editicon = $pageHandle->getImage('edit.png');
+            $editicon = $_CONF['layout_url'] . '/images/edit.' . $_IMAGE_TYPE;
             $editiconhtml = '<img src="' . $editicon . '" alt="' . $LANG01[4] . '" title="' . $LANG01[4] . '"' . XHTML . '>';
             $article->set_var( 'edit_icon',
                 COM_createLink(
@@ -694,7 +702,7 @@ function STORY_deleteImage ($image)
     $filename = $_CONF['path_images'] . 'articles/' . $image;
     if (!@unlink ($filename)) {
         // log the problem but don't abort the script
-        echo COM_errorLog ('Unable to remove the following image from the article: ' . $filename);
+        COM_errorLog ('Unable to remove the following image from the article: ' . $filename);
     }
 
     // remove unscaled image, if it exists
@@ -705,7 +713,7 @@ function STORY_deleteImage ($image)
     if (file_exists ($lFilename_large_complete)) {
         if (!@unlink ($lFilename_large_complete)) {
             // again, log the problem but don't abort the script
-            echo COM_errorLog ('Unable to remove the following image from the article: ' . $lFilename_large_complete);
+            COM_errorLog ('Unable to remove the following image from the article: ' . $lFilename_large_complete);
         }
     }
 }
@@ -744,7 +752,7 @@ function STORY_deleteImages ($sid)
 */
 function STORY_getItemInfo ($sid, $what)
 {
-    global $_CONF, $_TABLES, $pageHandle;
+    global $_CONF, $_TABLES;
 
     $properties = explode (',', $what);
     $fields = array ();
@@ -813,7 +821,7 @@ function STORY_getItemInfo ($sid, $what)
                 $retval[] = stripslashes ($A['title']);
                 break;
             case 'url':
-                $retval[] = $pageHandle->buildUrl ($_CONF['site_url']
+                $retval[] = COM_buildUrl ($_CONF['site_url']
                                           . '/article.php?story=' . $sid);
                 break;
             default:
@@ -904,12 +912,14 @@ function plugin_wsEnabled_story()
  */
 function service_submit_story($args, &$output, &$svc_msg)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG24, $MESSAGE, $_GROUPS,
-           $pageHandle, $inputHandler;
+    global $_CONF, $_TABLES, $_USER, $LANG24, $MESSAGE, $_GROUPS;
 
     if (!SEC_hasRights('story.edit')) {
-        $pageHandle->displayAccessError( $MESSAGE[30],$MESSAGE[31],'story submission' );
-//        return PLG_RET_AUTH_FAILED;
+        $output .= COM_siteHeader('menu', $MESSAGE[30])
+                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
+                . COM_siteFooter();
+
+        return PLG_RET_AUTH_FAILED;
     }
 
     $gl_edit = false;
@@ -961,10 +971,10 @@ function service_submit_story($args, &$output, &$svc_msg)
 
     if ($args['gl_svc']) {
         if (isset($args['mode'])) {
-            $args['mode'] = $inputHandler->filterVar('strict',$args['mode'],'');
+            $args['mode'] = COM_applyBasicFilter($args['mode']);
         }
         if (isset($args['editopt'])) {
-            $args['editopt'] = $inputHandler->filterVar('strict',$args['editopt'],'');
+            $args['editopt'] = COM_applyBasicFilter($args['editopt']);
         }
     }
 
@@ -1016,22 +1026,22 @@ function service_submit_story($args, &$output, &$svc_msg)
         if (!isset($args['perm_owner'])) {
             $args['perm_owner'] = $_CONF['default_permissions_story'][0];
         } else {
-            $args['perm_owner'] = $inputHandler->filterVar('integer',$args['perm_owner'],'');
+            $args['perm_owner'] = COM_applyBasicFilter($args['perm_owner'], true);
         }
         if (!isset($args['perm_group'])) {
             $args['perm_group'] = $_CONF['default_permissions_story'][1];
         } else {
-            $args['perm_group'] = $inputHandler->filterVar('integer',$args['perm_group'],'');
+            $args['perm_group'] = COM_applyBasicFilter($args['perm_group'], true);
         }
         if (!isset($args['perm_members'])) {
             $args['perm_members'] = $_CONF['default_permissions_story'][2];
         } else {
-            $args['perm_members'] = $inputHandler->filterVar('integer',$args['perm_members'], '');
+            $args['perm_members'] = COM_applyBasicFilter($args['perm_members'], true);
         }
         if (!isset($args['perm_anon'])) {
             $args['perm_anon'] = $_CONF['default_permissions_story'][3];
         } else {
-            $args['perm_anon'] = $inputHandler->filterVar('integer',$args['perm_anon'], 0);
+            $args['perm_anon'] = COM_applyBasicFilter($args['perm_anon'], true);
         }
 
         if (!isset($args['draft_flag'])) {
@@ -1047,6 +1057,20 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
     }
     /* - END: Set all the defaults - */
+
+    // TEST CODE
+    /* foreach ($args as $k => $v) {
+        if (!is_array($v)) {
+            echo "$k => $v\r\n";
+        } else {
+            echo "$k => $v\r\n";
+            foreach ($v as $k1 => $v1) {
+                echo "        $k1 => $v1\r\n";
+            }
+        }
+    }*/
+    // exit ();
+    // END TEST CODE
 
     if (!isset($args['sid'])) {
         $args['sid'] = '';
@@ -1084,39 +1108,36 @@ function service_submit_story($args, &$output, &$svc_msg)
 
     switch ($result) {
     case STORY_DUPLICATE_SID:
-        $pageHandle->setPageTitle($LANG24[5]);
-        $pageHandle->addContent(COM_errorLog ($LANG24[24], 2));
+        $output .= COM_siteHeader ('menu', $LANG24[5]);
+        $output .= COM_errorLog ($LANG24[24], 2);
         if (!$args['gl_svc']) {
             if ( $args['type'] == 'submission' ) {
-                $pageHandle->addContent(storyeditor($sid,'editsubmission'));
+                $output .= storyeditor($sid,'editsubmission');
             } else {
-                $pageHandle->addContent(storyeditor ($sid));
+                $output .= storyeditor ($sid);
             }
         }
-//        $pageHandle->displayPage();
+        $output .= COM_siteFooter ();
         return PLG_RET_ERROR;
     case STORY_EXISTING_NO_EDIT_PERMISSION:
-        $pageHandle->setPageTitle($MESSAGE[30]);
-        $pageHandle->addMessageText($MESSAGE[30]);
-
-//        $output .= COM_siteHeader('menu', $MESSAGE[30])
-//                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
-//                . COM_siteFooter ();
+        $output .= COM_siteHeader('menu', $MESSAGE[30])
+                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
+                . COM_siteFooter ();
         COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
         return PLG_RET_PERMISSION_DENIED;
     case STORY_NO_ACCESS_PARAMS:
-        $pageHandle->setPageTitle($MESSAGE[30]);
-        $pageHandle->addMessageText($MESSAGE[30]);
-//        $output .= COM_siteHeader('menu', $MESSAGE[30])
-//                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
-//                . COM_siteFooter ();
+        $output .= COM_siteHeader('menu', $MESSAGE[30])
+                . COM_showMessageText($MESSAGE[31], $MESSAGE[30])
+                . COM_siteFooter ();
         COM_accessLog("User {$_USER['username']} tried to illegally submit or edit story $sid.");
         return PLG_RET_PERMISSION_DENIED;
     case STORY_EMPTY_REQUIRED_FIELDS:
-        $pageHandle->addContent(COM_errorLog($LANG24[31],2));
+        $output .= COM_siteHeader('menu');
+        $output .= COM_errorLog($LANG24[31],2);
         if (!$args['gl_svc']) {
-            $pageHandle->addContent(storyeditor($sid));
+            $output .= storyeditor($sid);
         }
+        $output .= COM_siteFooter();
         return PLG_RET_ERROR;
     default:
         break;
@@ -1129,7 +1150,7 @@ function service_submit_story($args, &$output, &$svc_msg)
             $delete = count($args['delete']);
             for ($i = 1; $i <= $delete; $i++) {
                 $ai_filename = DB_getItem ($_TABLES['article_images'],'ai_filename', "ai_sid = '{$sid}' AND ai_img_num = " . key($args['delete']));
-            STORY_deleteImage ($ai_filename);
+                STORY_deleteImage ($ai_filename);
 
                 DB_query ("DELETE FROM {$_TABLES['article_images']} WHERE ai_sid = '$sid' AND ai_img_num = " . key($args['delete']));
                 next($args['delete']);
@@ -1144,8 +1165,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         }
 
         if (count($_FILES) > 0 AND $_CONF['maximagesperarticle'] > 0) {
-            USES_class_upload();
-//            require_once($_CONF['path_system'] . 'classes/upload.class.php');
+            require_once($_CONF['path_system'] . 'classes/upload.class.php');
             $upload = new upload();
 
             if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {
@@ -1168,14 +1188,12 @@ function service_submit_story($args, &$output, &$svc_msg)
                     ));
             $upload->setFieldName('file');
             if (!$upload->setPath($_CONF['path_images'] . 'articles')) {
-                $pageHandle->displayError($upload->printErrors(false));
-
-//                $output = COM_siteHeader ('menu', $LANG24[30]);
-//                $output .= COM_startBlock ($LANG24[30], '', COM_getBlockTemplate ('_msg_block', 'header'));
-//                $output .= $upload->printErrors (false);
-//                $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-//                $output .= COM_siteFooter ();
-//                echo $output;
+                $output = COM_siteHeader ('menu', $LANG24[30]);
+                $output .= COM_startBlock ($LANG24[30], '', COM_getBlockTemplate ('_msg_block', 'header'));
+                $output .= $upload->printErrors (false);
+                $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+                $output .= COM_siteFooter ();
+                echo $output;
                 exit;
             }
 
@@ -1214,14 +1232,13 @@ function service_submit_story($args, &$output, &$svc_msg)
             $upload->uploadFiles();
 
             if ($upload->areErrors()) {
-                $pageHandle->displayError($upload->printErrors(false));
-//                $retval = COM_siteHeader('menu', $LANG24[30]);
-//                $retval .= COM_startBlock ($LANG24[30], '',
-//                            COM_getBlockTemplate ('_msg_block', 'header'));
-//                $retval .= $upload->printErrors(false);
-//                $retval .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
-//                $retval .= COM_siteFooter();
-//                echo $retval;
+                $retval = COM_siteHeader('menu', $LANG24[30]);
+                $retval .= COM_startBlock ($LANG24[30], '',
+                            COM_getBlockTemplate ('_msg_block', 'header'));
+                $retval .= $upload->printErrors(false);
+                $retval .= COM_endBlock(COM_getBlockTemplate ('_msg_block', 'footer'));
+                $retval .= COM_siteFooter();
+                echo $retval;
                 exit;
             }
             for ($z = 0; $z < $_CONF['maximagesperarticle']; $z++ ) {
@@ -1241,9 +1258,8 @@ function service_submit_story($args, &$output, &$svc_msg)
         if ($_CONF['maximagesperarticle'] > 0) {
             $errors = $story->insertImages();
             if (count($errors) > 0) {
-                $pageHandle->setPageTitle($LANG24[54]);
-
-                $output = COM_startBlock ($LANG24[54], '',
+                $output = COM_siteHeader ('menu', $LANG24[54]);
+                $output .= COM_startBlock ($LANG24[54], '',
                                 COM_getBlockTemplate ('_msg_block', 'header'));
                 $output .= $LANG24[55] . '<p>';
                 for ($i = 1; $i <= count($errors); $i++) {
@@ -1251,9 +1267,9 @@ function service_submit_story($args, &$output, &$svc_msg)
                     next($errors);
                 }
                 $output .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-                $pageHandle->addContent($output);
-                $pageHandle->addContent(storyeditor($sid));
-                $pageHandle->displayPage();
+                $output .= storyeditor($sid);
+                $output .= COM_siteFooter();
+                echo $output;
                 exit;
             }
         }
@@ -1270,8 +1286,9 @@ function service_submit_story($args, &$output, &$svc_msg)
 
         // in case of an error go back to the story editor
         if ($plugin_error !== false) {
-            $pageHandle->setPageTitle($LANG24[5]);
-            $pageHandle->addContent(storyeditor ($sid, 'retry', $plugin_error));
+            $output .= COM_siteHeader ('menu', $LANG24[5]);
+            $output .= storyeditor ($sid, 'retry', $plugin_error);
+            $output .= COM_siteFooter ();
             return PLG_RET_ERROR;
         }
 
@@ -1280,10 +1297,10 @@ function service_submit_story($args, &$output, &$svc_msg)
         COM_olderStuff ();
 
         if ($story->type == 'submission') {
-            $pageHandle->redirect ($_CONF['site_admin_url'] . '/moderation.php?msg=9');
+            $output = COM_refresh ($_CONF['site_admin_url'] . '/moderation.php?msg=9');
         } else {
             $output = PLG_afterSaveSwitch($_CONF['aftersave_story'],
-                    $pageHandle->buildURL("{$_CONF['site_url']}/article.php?story=$sid"),
+                    COM_buildURL("{$_CONF['site_url']}/article.php?story=$sid"),
                         'story', 9);
         }
 
@@ -1303,14 +1320,14 @@ function service_submit_story($args, &$output, &$svc_msg)
  */
 function service_delete_story($args, &$output, &$svc_msg)
 {
-    global $_CONF, $_TABLES, $_USER,$inputHandler,$pageHandle;
+    global $_CONF, $_TABLES, $_USER;
 
     if (empty($args['sid']) && !empty($args['id'])) {
         $args['sid'] = $args['id'];
     }
 
     if ($args['gl_svc']) {
-        $args['sid'] = $inputHandler->filterVar('strict',$args['sid'],'');
+        $args['sid'] = COM_applyBasicFilter($args['sid']);
     }
 
     $sid = $args['sid'];
@@ -1322,7 +1339,7 @@ function service_delete_story($args, &$output, &$svc_msg)
     $access = min ($access, SEC_hasTopicAccess ($A['tid']));
     if ($access < 3) {
         COM_accessLog ("User {$_USER['username']} tried to illegally delete story $sid.");
-        $pageHandle->redirect($_CONF['site_admin_url'] . '/story.php');
+        $output = COM_refresh ($_CONF['site_admin_url'] . '/story.php');
         if ($_USER['uid'] > 1) {
             return PLG_RET_PERMISSION_DENIED;
         } else {
@@ -1341,7 +1358,7 @@ function service_delete_story($args, &$output, &$svc_msg)
     COM_rdfUpToDateCheck ();
     COM_olderStuff ();
 
-    $pageHandle->redirect ($_CONF['site_admin_url'] . '/story.php?msg=10');
+    $output = COM_refresh ($_CONF['site_admin_url'] . '/story.php?msg=10');
 
     return PLG_RET_OK;
 }
@@ -1355,7 +1372,7 @@ function service_delete_story($args, &$output, &$svc_msg)
  */
 function service_get_story($args, &$output, &$svc_msg)
 {
-    global $_CONF, $_TABLES, $_USER, $inputHandler,$pageHandle;
+    global $_CONF, $_TABLES, $_USER;
 
     $output = array();
     $retval = '';
@@ -1391,10 +1408,10 @@ function service_get_story($args, &$output, &$svc_msg)
 
     if ($args['gl_svc']) {
         if (isset($args['mode'])) {
-            $args['mode'] = $inputHandler->filterVar('strict',$args['mode'],'');
+            $args['mode'] = COM_applyBasicFilter($args['mode']);
         }
         if (isset($args['sid'])) {
-            $args['sid'] = $inputHandler->filterVar('strict',$args['sid'],'');
+            $args['sid'] = COM_applyBasicFilter($args['sid']);
         }
 
         if (empty($args['sid'])) {
@@ -1464,7 +1481,7 @@ function service_get_story($args, &$output, &$svc_msg)
         $sql = array();
 
         if (isset($args['offset'])) {
-            $offset = $inputHandler->filterVar('integer',$args['offset'], '',0);
+            $offset = COM_applyBasicFilter($args['offset'], true);
         } else {
             $offset = 0;
         }

@@ -37,6 +37,7 @@ if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
     exit;
 }
+
 if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] == 1 )  {
     $display = MG_siteHeader();
     $display .= COM_startBlock ($LANG_LOGIN[1], '',

@@ -38,7 +38,6 @@
 
 // Prevent PHP from reporting uninitialized variables
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
-//error_reporting( E_ALL );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -59,8 +58,9 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.2.0.svn');
+    define('GVERSION', '1.1.2');
 }
+//define('DEMO_MODE',true);
 
 /**
 * Turn this on to get various debug messages from the code in this library
@@ -79,8 +79,18 @@ $_COM_VERBOSE = false;
   * Must make sure that the function hasn't been disabled before calling it.
   *
   */
-if( function_exists('set_error_handler') ) {
-    $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
+if( function_exists('set_error_handler') )
+{
+    if( PHP_VERSION >= 5 )
+    {
+        /* Tell the error handler to use the default error reporting options.
+         * you may like to change this to use it in more/less cases, if so,
+         * just use the syntax used in the call to error_reporting() above.
+         */
+        $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
+    } else {
+        $defaultErrorHandler = set_error_handler('COM_handleError');
+    }
 }
 
 /**
@@ -105,7 +115,7 @@ if (get_magic_quotes_gpc() == 1) {
 require_once 'siteconfig.php' ;
 require_once $_CONF['path_system'] . 'classes/config.class.php';
 
-$config = config::get_instance();
+$config =& config::get_instance();
 $config->set_configfile($_CONF['path'] . 'db-config.php');
 $config->load_baseconfig();
 $config->initConfig();
@@ -114,7 +124,7 @@ $_CONF = $config->get_config('Core');
 
 // Before we do anything else, check to ensure site is enabled
 
-if (isset($_CONF['site_enabled']) && !$_CONF['site_enabled']) {
+if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
 
     if (empty($_CONF['site_disabled_msg'])) {
         header("HTTP/1.1 503 Service Unavailable");
@@ -133,12 +143,6 @@ if (isset($_CONF['site_enabled']) && !$_CONF['site_enabled']) {
     exit;
 }
 
-/*
- * Setup the input handler
- */
-require_once $_CONF['path_system'] . 'classes/htmlfilter.class.php';
-require_once $_CONF['path_system'] . 'classes/sanitize.class.php';
-$inputHandler =& sanitize::getInstance();
 
 
 // timezone hack - set the webserver's timezone
@@ -147,12 +151,18 @@ if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
     putenv( 'TZ=' . $_CONF['timezone'] );
 }
 
+
+// +--------------------------------------------------------------------------+
+// | Library Includes                                                         |
+// +--------------------------------------------------------------------------+
+
 /**
 * If needed, add our PEAR path to the list of include paths
 *
 */
-if( !$_CONF['have_pear'] ) {
-    $curPHPIncludePath = ini_get( 'include_path' );
+if( !$_CONF['have_pear'] )
+{
+    $curPHPIncludePath = get_include_path();
     if( defined( 'PATH_SEPARATOR' )) {
         $separator = PATH_SEPARATOR;
     } else {
@@ -162,11 +172,27 @@ if( !$_CONF['have_pear'] ) {
             $separator = ':';
         }
     }
-    if( ini_set( 'include_path', $_CONF['path_pear'] . $separator
+    if( set_include_path( $_CONF['path_pear'] . $separator
                                  . $curPHPIncludePath ) === false ) {
-        COM_errorLog( 'ini_set failed - there may be problems using the PEAR classes.', 1);
+        COM_errorLog( 'set_include_path failed - there may be problems using the PEAR classes.', 1);
     }
 }
+
+
+if( !function_exists( 'file_put_contents' ))
+{
+    require_once( 'PHP/Compat.php' );
+
+    PHP_Compat::loadFunction( 'file_put_contents' );
+}
+
+if( !function_exists( 'stripos' ))
+{
+    require_once( 'PHP/Compat.php' );
+
+    PHP_Compat::loadFunction( 'stripos' );
+}
+
 
 /**
 * Include page time -- used to time how fast each page was created
@@ -181,12 +207,12 @@ $_PAGE_TIMER->startTimer();
 * Include URL class
 *
 * This provides optional URL rewriting functionality.
+* Please note this code is still experimental and is only currently used by the
+* staticpages plugin.
 */
 
 require_once( $_CONF['path_system'] . 'classes/url.class.php' );
 $_URL = new url( $_CONF['url_rewrite'] );
-
-
 
 /**
 * This is our HTML template class.  It is the same one found in PHPLib and is
@@ -274,17 +300,23 @@ if( !empty( $_USER['tzid'] ) && !ini_get( 'safe_mode' ) &&
 */
 require_once( $_CONF['path_system'] . 'lib-mbyte.php' );
 
+/**
+* Image processing library
+*
+*/
+
 require_once( $_CONF['path_system'] . 'imglib/lib-image.php' );
-
-
 
 // Set theme
 // Need to modify this code to check if theme was cached in user cookie.  That
 // way if user logged in and set theme and then logged out we would still know
 // which theme to show them.
 
-$usetheme = $inputHandler->getVar('filename','usetheme','post','');
-
+$usetheme = '';
+if( isset( $_POST['usetheme'] ))
+{
+    $usetheme = COM_sanitizeFilename($_POST['usetheme'], true);
+}
 if( !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme ))
 {
     $_CONF['theme'] = $usetheme;
@@ -293,9 +325,11 @@ if( !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme ))
 }
 else if( $_CONF['allow_user_themes'] == 1 )
 {
-    $theme = $inputHandler->getVar('filename',$_CONF['cookie_theme'],'cookie','');
-    if (!empty($theme) && empty( $_USER['theme'] )) {
-        if( is_dir( $_CONF['path_themes'] . $theme )) {
+    if( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] ))
+    {
+        $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
+        if( is_dir( $_CONF['path_themes'] . $theme ))
+        {
             $_USER['theme'] = $theme;
         }
     }
@@ -310,12 +344,16 @@ else if( $_CONF['allow_user_themes'] == 1 )
         }
     }
 
-    if( !empty( $_USER['theme'] )) {
-        if( is_dir( $_CONF['path_themes'] . $_USER['theme'] )) {
+    if( !empty( $_USER['theme'] ))
+    {
+        if( is_dir( $_CONF['path_themes'] . $_USER['theme'] ))
+        {
             $_CONF['theme'] = $_USER['theme'];
             $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
             $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
-        } else {
+        }
+        else
+        {
             $_USER['theme'] = $_CONF['theme'];
         }
     }
@@ -342,13 +380,6 @@ if (!isset($themeAPI) ) {
     $themeAPI = 1;
 }
 
-/**
-* Initialize the output Handler
-*/
-require_once $_CONF['path_system'] . 'classes/output.class.php';
-$pageHandle = new outputHandler();
-$pageHandle->setRewriteEnabled($_CONF['url_rewrite']);
-
 // ensure XHTML constant is defined to avoid problems elsewhere
 
 if (!defined('XHTML')) {
@@ -364,22 +395,26 @@ if (empty($_IMAGE_TYPE)) {
 
 // Similarly set language
 
-$uLanguage = $inputHandler->getVar('filename',$_CONF['cookie_language'],'cookie','');
-
-if( $uLanguage != '' && empty( $_USER['language'] ))
+if( isset( $_COOKIE[$_CONF['cookie_language']] ) && empty( $_USER['language'] ))
 {
-    $language = $uLanguage;
+    $language = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_language']]);
     if( is_file( $_CONF['path_language'] . $language . '.php' ) &&
-            ( $_CONF['allow_user_language'] == 1 )) {
+            ( $_CONF['allow_user_language'] == 1 ))
+    {
         $_USER['language'] = $language;
         $_CONF['language'] = $language;
     }
-} else if( !empty( $_USER['language'] )) {
+}
+else if( !empty( $_USER['language'] ))
+{
     if( is_file( $_CONF['path_language'] . $_USER['language'] . '.php' ) &&
-           ( $_CONF['allow_user_language'] == 1 )) {
+            ( $_CONF['allow_user_language'] == 1 ))
+    {
         $_CONF['language'] = $_USER['language'];
     }
-} else if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] )) {
+}
+else if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] ))
+{
     $_CONF['language'] = COM_getLanguage();
 }
 
@@ -598,7 +633,19 @@ else
 
 $_RIGHTS = explode( ',', SEC_getUserPermissions() );
 
-$topic = $inputHandler->getVar('strict','topic',array('get','post'));
+if( isset( $_GET['topic'] ))
+{
+    $topic = COM_applyFilter( $_GET['topic'] );
+}
+else if( isset( $_POST['topic'] ))
+{
+    $topic = COM_applyFilter( $_POST['topic'] );
+}
+else
+{
+    $topic = '';
+}
+
 
 // +---------------------------------------------------------------------------+
 // | HTML WIDGETS                                                              |
@@ -703,7 +750,7 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
 */
 function COM_getThemes( $all = false )
 {
-    global $_CONF;
+    global $_CONF, $_PLUGINS;
 
     $index = 1;
 
@@ -724,8 +771,15 @@ function COM_getThemes( $all = false )
             if( is_dir( $_CONF['path_themes'] . $dir) && $dir <> '.' && $dir <> '..' && $dir <> 'CVS' && substr( $dir, 0 , 1 ) <> '.' )
             {
                 clearstatcache();
-                $themes[$index] = $dir;
-                $index++;
+                if ( $dir == 'chameleon' ) {
+                    if (in_array($dir,$_PLUGINS)) {
+                        $themes[$index] = $dir;
+                        $index++;
+                    }
+                } else {
+                    $themes[$index] = $dir;
+                    $index++;
+                }
             }
         }
     }
@@ -743,7 +797,7 @@ function COM_getThemes( $all = false )
 */
 function COM_renderMenu( &$header, $plugin_menu )
 {
-    global $_CONF, $_USER, $LANG01, $topic, $pageHandle;
+    global $_CONF, $_USER, $LANG01, $topic;
 
     if( empty( $_CONF['menu_elements'] ))
     {
@@ -841,7 +895,7 @@ function COM_renderMenu( &$header, $plugin_menu )
                 $url = $_CONF['site_url'] . '/directory.php';
                 if( !empty( $topic ))
                 {
-                    $url = $pageHandle->buildUrl( $url . '?topic='
+                    $url = COM_buildUrl( $url . '?topic='
                                          . urlencode( $topic ));
                 }
                 $label = $LANG01[117];
@@ -1138,8 +1192,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         if( empty( $topic )) {
             $pagetitle = $_CONF['site_slogan'];
         } else {
-            $pagetitle = DB_getItem( $_TABLES['topics'], 'topic',
-                                                   "tid = '$topic'" );
+            $pagetitle = stripslashes(DB_getItem( $_TABLES['topics'], 'topic',
+                                                   "tid = '$topic'" ));
         }
     }
     if( !empty( $pagetitle ))
@@ -1414,7 +1468,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         }
         $L->parse('output','logo');
         $theme->set_var('logo_block',$L->finish($L->get_var('output')));
-    } else {
+    } else if ( $_ST_CONF['use_graphic_logo'] == 0 ) {
         $L = new Template( $_CONF['path_layout'] );
         $L->set_file( array(
             'logo'          => 'logo-text.thtml',
@@ -1428,6 +1482,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         }
         $L->parse('output','logo');
         $theme->set_var('logo_block',$L->finish($L->get_var('output')));
+    } else {
+        $theme->set_var('logo_block','');
     }
 
     $theme->set_var( 'site_logo', $_CONF['layout_url']
@@ -1642,14 +1698,14 @@ function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml' 
     $block->set_var( 'site_url', $_CONF['site_url'] );
     $block->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $block->set_var( 'layout_url', $_CONF['layout_url'] );
-    $block->set_var( 'block_title',  $title );
+    $block->set_var( 'block_title', stripslashes( $title ));
 
     if( !empty( $helpfile ))
     {
         $helpimg = $_CONF['layout_url'] . '/images/button_help.' . $_IMAGE_TYPE;
         $help_content = '<img src="' . $helpimg. '" alt="?"' . XHTML . '>';
         $help_attr = array('class'=>'blocktitle');
-        if( !stristr( $helpfile, 'http://' ))
+        if( !stristr( $helpfile, 'http://' ) && !stristr($helpfile,'https://') )
         {
             $help_url = $_CONF['site_url'] . "/help/$helpfile";
         }
@@ -1851,7 +1907,7 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
     if (count($select_set) > 1) {
         for ($i = 0; $i < $nrows; $i++) {
             $A = DB_fetchArray($result, true);
-            $retval[$A[0]] = $A[1];
+            $retval[$A[0]] = stripslashes($A[1]);
         }
     } else {
         for ($i = 0; $i < $nrows; $i++) {
@@ -1936,11 +1992,11 @@ function COM_checkList( $table, $selection, $where='', $selected='' )
 
             if(( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' ))
             {
-                $retval .= XHTML . '><span class="gldefault">' . $A[1] . '</span></li>' . LB;
+                $retval .= XHTML . '><span class="gldefault">' . stripslashes( $A[1] ) . '</span></li>' . LB;
             }
             else
             {
-                $retval .= XHTML . '><span>' .  $A[1] . '</span></li>' . LB;
+                $retval .= XHTML . '><span>' . stripslashes( $A[1] ) . '</span></li>' . LB;
             }
         }
     }
@@ -2308,7 +2364,7 @@ function COM_showTopics( $topic='' )
 
     while( $A = DB_fetchArray( $result ) )
     {
-        $topicname = $A['topic'];
+        $topicname = stripslashes( $A['topic'] );
         $sections->set_var( 'option_url', $_CONF['site_url']
                             . '/index.php?topic=' . $A['tid'] );
         $sections->set_var( 'option_label', $topicname );
@@ -2601,7 +2657,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         // what's our current URL?
         $thisUrl = COM_getCurrentURL();
 
-        if ($_CONF['hide_adminmenu'] && strpos($thisUrl, $_CONF['site_admin_url']) === false) {
+        if ($_CONF['hide_adminmenu'] && @strpos($thisUrl, $_CONF['site_admin_url']) === false) {
             return '';
         }
 
@@ -3186,7 +3242,6 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 function COM_filterHTML( $str, $permissions = 'story.edit' )
 {
     global $_CONF;
-    global $htmlconfig;
 
     if( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
@@ -3197,8 +3252,7 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
     require_once $_CONF['path'] . 'lib/htmLawed/htmLawed.php';
 
     if ( $_CONF['allow_embed_object'] == 1 ) {
-        $str = htmLawed($str,array( 'safe'=>0,
-                                    'show_setting' => 'htmlconfig',
+        $str = htmLawed($str,array( 'safe'=>1,
                                     'elements'=>'*+embed+object',
                                     'balance'=>1,
                                     'valid_xhtml'=>0
@@ -3206,13 +3260,11 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
                         );
     } else {
         $str = htmLawed($str,array( 'safe'=>1,
-                                    'show_setting' => 'htmlconfig',
                                     'balance'=>1,
                                     'valid_xhtml'=>1
                                     )
                         );
     }
-
     return $str;
 }
 
@@ -3402,13 +3454,18 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     if ( $html ) {
         $mail->Body = COM_filterHTML($message);
     } else {
-        $mail->Body = $message; // strip_tags($message);
+        $mail->Body = $message;
     }
 
     $mail->Subject = $subject;
 
     if (is_array($from) && isset($from[0]) && $from[0] != '' ) {
-        $mail->From = $from[0];
+        if ( $_CONF['use_from_site_mail'] == 1 ) {
+            $mail->From = $_CONF['site_mail'];
+            $mail->AddReplyTo($from[0]);
+        } else {
+            $mail->From = $from[0];
+        }
     } else {
         $mail->From = $_CONF['site_mail'];
     }
@@ -3459,7 +3516,7 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
 
 function COM_olderStuff()
 {
-    global $_TABLES, $_CONF, $pageHandle;
+    global $_TABLES, $_CONF;
 
     $sql = "SELECT sid,tid,title,comments,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE (perm_anon = 2) AND (frontpage = 1) AND (date <= NOW()) AND (draft_flag = 0)" . COM_getTopicSQL( 'AND', 1 ) . " ORDER BY featured DESC, date DESC LIMIT {$_CONF['limitnews']}, {$_CONF['limitnews']}";
     $result = DB_query( $sql );
@@ -3485,9 +3542,8 @@ function COM_olderStuff()
             {
                 if( $day != 'noday' )
                 {
-                    $daylist = COM_makeList( $oldnews, 'list-older-stories' );
-                    $daylist = preg_replace( "/(\015\012)|(\015)|(\012)/",
-                                             '', $daylist );
+                   $daylist = COM_makeList($oldnews, 'list-older-stories');
+                    $daylist = str_replace(array("\015", "\012"), '', $daylist);
                     $string .= $daylist . '<br' . XHTML . '>';
                 }
 
@@ -3498,7 +3554,7 @@ function COM_olderStuff()
                 $day = $daycheck;
             }
 
-            $oldnews_url = $pageHandle->buildUrl( $_CONF['site_url'] . '/article.php?story='
+            $oldnews_url = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
                 . $A['sid'] );
             $oldnews[] = COM_createLink($A['title'], $oldnews_url)
                 .' (' . COM_numberFormat( $A['comments'] ) . ')';
@@ -3507,7 +3563,7 @@ function COM_olderStuff()
         if( !empty( $oldnews ))
         {
             $daylist = COM_makeList( $oldnews, 'list-older-stories' );
-            $daylist = preg_replace( "/(\015\012)|(\015)|(\012)/", '', $daylist );
+            $daylist = str_replace(array("\015", "\012"), '', $daylist);
             $string .= $daylist;
             $string = addslashes( $string );
 
@@ -3812,7 +3868,7 @@ function COM_formatBlock( $A, $noboxes = false )
 
     if( !empty( $A['content'] ) && ( trim( $A['content'] ) != '' ) && !$noboxes )
     {
-        $blockcontent = $A['content'];
+        $blockcontent = stripslashes( $A['content'] );
 
         // Hack: If the block content starts with a '<' assume it
         // contains HTML and do not call nl2br() which would only add
@@ -3961,7 +4017,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 
         // build a list
         $content = COM_makeList($articles, 'list-feed');
-        $content = preg_replace("/(\015\012)|(\015)|(\012)/", '', $content);
+        $content = str_replace(array("\015", "\012"), '', $content);
 
         if (strlen($content) > 65000) {
             $content = $LANG21[68];
@@ -4159,7 +4215,7 @@ function COM_hit()
 
 function COM_emailUserTopics()
 {
-    global $_CONF, $_TABLES, $LANG04, $LANG08, $LANG24, $pageHandle;
+    global $_CONF, $_TABLES, $LANG04, $LANG08, $LANG24;
 
     if ($_CONF['emailstories'] == 0) {
         return;
@@ -4182,7 +4238,6 @@ function COM_emailUserTopics()
     for( $x = 0; $x < $nrows; $x++ )
     {
         $U = DB_fetchArray( $users );
-
         $storysql = array();
         $storysql['mysql'] = "SELECT sid,uid,date AS day,title,introtext,bodytext";
 
@@ -4243,7 +4298,7 @@ function COM_emailUserTopics()
 
             $mailtext .= "\n------------------------------\n\n";
             $mailtext .= "$LANG08[31]: "
-                . COM_undoSpecialChars( $S['title'] ) . "\n";
+                . COM_undoSpecialChars( stripslashes( $S['title'] )) . "\n";
             if( $_CONF['contributedbyline'] == 1 )
             {
                 if( empty( $authors[$S['uid']] ))
@@ -4273,7 +4328,7 @@ function COM_emailUserTopics()
                 $mailtext .= $storytext . "\n\n";
             }
 
-            $mailtext .= $LANG08[33] . ' ' . $pageHandle->buildUrl( $_CONF['site_url']
+            $mailtext .= $LANG08[33] . ' ' . COM_buildUrl( $_CONF['site_url']
                       . '/article.php?story=' . $S['sid'] ) . "\n";
         }
 
@@ -4293,6 +4348,7 @@ function COM_emailUserTopics()
         $from = COM_formatEmailAddress('',$mailfrom);
         $to   = COM_formatEmailAddress( $U['username'],$U['email'] );
         COM_mail ($to, $subject, $mailtext, $from);
+
     }
 
     DB_query( "UPDATE {$_TABLES['vars']} SET value = NOW() WHERE name = 'lastemailedstories'" );
@@ -4313,7 +4369,7 @@ function COM_emailUserTopics()
 function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_WHATSNEW, $page, $newstories;
-    global $_ST_CONF, $pageHandle;
+    global $_ST_CONF;
 
     if ( !isset($_ST_CONF['whatsnew_cache_time']) ) {
         $_ST_CONF['whatsnew_cache_time'] = 3600;
@@ -4430,7 +4486,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
                 if(( $A['type'] == 'article' ) || empty( $A['type'] ))
                 {
-                    $url = $pageHandle->buildUrl( $_CONF['site_url']
+                    $url = COM_buildUrl( $_CONF['site_url']
                         . '/article.php?story=' . $A['sid'] ) . '#comments';
                 }
 
@@ -4489,7 +4545,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             {
                 $A = DB_fetchArray( $result );
 
-                $url = $pageHandle->buildUrl( $_CONF['site_url']
+                $url = COM_buildUrl( $_CONF['site_url']
                     . '/article.php?story=' . $A['sid'] ) . '#trackback';
 
                 $title = COM_undoSpecialChars( stripslashes( $A['title'] ));
@@ -4839,7 +4895,7 @@ function COM_printPageNavigation( $base_url, $curpage, $num_pages,
 
 function COM_getUserDateTimeFormat( $date='' )
 {
-    global $_TABLES, $_USER, $_CONF;
+    global $_TABLES, $_USER, $_CONF, $_SYSTEM;
 
     // Get display format for time
 
@@ -4878,6 +4934,10 @@ function COM_getUserDateTimeFormat( $date='' )
     // Format the date
 
     $date = strftime( $dateformat, $stamp );
+
+    if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
+        $date = iconv('ISO-8859-1','UTF-8',$date);
+    }
 
     return array( $date, $stamp );
 }
@@ -5442,9 +5502,9 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
 
 function COM_buildURL( $url )
 {
-    global $pageHandle;
+    global $_URL;
 
-    return $pageHandle->buildURL( $url );
+    return $_URL->buildURL( $url );
 }
 
 /**
@@ -5458,9 +5518,9 @@ function COM_buildURL( $url )
 
 function COM_setArgNames( $names )
 {
-    global $inputHandler;
+    global $_URL;
 
-    return $inputHandler->setArgNames( $names );
+    return $_URL->setArgNames( $names );
 }
 
 /**
@@ -5581,7 +5641,7 @@ function COM_getPermSQL( $type = 'WHERE', $u_id = 0, $access = 2, $table = '' )
     }
 
     $UserGroups = array();
-    if( COM_isAnonUser() || ( $uid == $_USER['uid'] ))
+    if(( empty( $_USER['uid'] ) && ( $uid == 1 )) || ( $uid == $_USER['uid'] ))
     {
         if( empty( $_GROUPS ))
         {
@@ -6226,7 +6286,7 @@ function COM_convertDate2Timestamp( $date, $time = '' )
 
     if( $time == '' )
     {
-        $timestamp = mktime( 0, 0, 0, $atoks[1], $atoks[2], $atoks[0] );
+        $timestamp = @mktime( 0, 0, 0, $atoks[1], $atoks[2], $atoks[0] );
     }
     else
     {
@@ -6245,7 +6305,7 @@ function COM_convertDate2Timestamp( $date, $time = '' )
             }
         }
 
-        $timestamp = mktime( $btoks[0], $btoks[1], $btoks[2],
+        $timestamp = @mktime( $btoks[0], $btoks[1], $btoks[2],
                              $atoks[1], $atoks[2], $atoks[0] );
     }
 
@@ -6378,7 +6438,7 @@ function COM_createImage($url, $alt = "", $attr = array())
 
     $retval = '';
 
-    if (strpos($url, 'http://') !== 0) {
+    if (strpos($url, 'http://') !== 0 && strpos($url,'https://') !== 0 ) {
         $url = $_CONF['layout_url'] . $url;
     }
     $attr_str = 'src="' . $url . '"';
@@ -6441,15 +6501,14 @@ function COM_getLanguageFromBrowser()
 */
 function COM_getLanguage()
 {
-    global $_CONF, $_USER, $inputHandler;
+    global $_CONF, $_USER;
 
     $langfile = '';
-    $uLanguage = $inputHandler->getVar('filename',$_CONF['cookie_language'],'cookie','');
 
     if (!empty($_USER['language'])) {
         $langfile = $_USER['language'];
-    } elseif ($uLanguage != '') {
-        $langfile = $uLanguage;
+    } elseif (!empty($_COOKIE[$_CONF['cookie_language']])) {
+        $langfile = $_COOKIE[$_CONF['cookie_language']];
     } elseif (isset($_CONF['languages'])) {
         $langfile = COM_getLanguageFromBrowser();
     }
@@ -6545,7 +6604,7 @@ function COM_getLangSQL( $field, $type = 'WHERE', $table = '' )
 */
 function phpblock_switch_language()
 {
-    global $_CONF, $pageHandle;
+    global $_CONF;
 
     $retval = '';
 
@@ -6570,7 +6629,7 @@ function phpblock_switch_language()
             }
         }
 
-        $switchUrl = $pageHandle->buildUrl( $_CONF['site_url'] . '/switchlang.php?lang='
+        $switchUrl = COM_buildUrl( $_CONF['site_url'] . '/switchlang.php?lang='
                                    . $newLangId );
         $retval .= COM_createLink($newLang, $switchUrl);
     }
@@ -6712,7 +6771,7 @@ function COM_getCharset()
   */
 function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='')
 {
-    global $_CONF, $_USER;
+    global $_CONF, $_USER, $_SYSTEM;
 
     // Handle @ operator
     if (error_reporting() == 0) {
@@ -6728,8 +6787,8 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
      * If we have a root user, then output detailed error message:
      */
     if ((is_array($_USER) && function_exists('SEC_inGroup'))
-            || (isset($_CONF['rootdebug']) && $_CONF['rootdebug'])) {
-        if ($_CONF['rootdebug'] || SEC_inGroup('Root')) {
+            || (isset($_SYSTEM['rootdebug']) && $_SYSTEM['rootdebug'])) {
+        if ($_SYSTEM['rootdebug'] || SEC_inGroup('Root')) {
 
             header('HTTP/1.1 500 Internal Server Error');
             header('Status: 500 Internal Server Error');
@@ -6741,9 +6800,9 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             echo("<html><head><title>$title</title></head>\n<body>\n");
 
             echo('<h1>An error has occurred:</h1>');
-            if ($_CONF['rootdebug']) {
+            if ($_SYSTEM['rootdebug']) {
                 echo('<h2 style="color: red">This is being displayed as "Root Debugging" is enabled
-                        in your glFusion configuration.</h2><p>If this is a production
+                        in your glFusion siteconfig.php.</h2><p>If this is a production
                         website you <strong><em>should disable</em></strong> this
                         option once you have resolved any issues you are
                         troubleshooting.</p>');
@@ -6753,7 +6812,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             echo("<p>$errno - $errstr @ $errfile line $errline</p>");
 
             if (!function_exists('SEC_inGroup') || !SEC_inGroup('Root')) {
-                if ('force' != ''.$_CONF['rootdebug']) {
+                if ('force' != ''.$_SYSTEM['rootdebug']) {
                     $errcontext = COM_rootDebugClean($errcontext);
                 } else {
                     echo('<h2 style="color: red">Root Debug is set to "force", this
@@ -6787,7 +6846,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     }
 
     // if we do not throw the error back to an admin, still log it in the error.log
-//    COM_errorLog("$errno - $errstr @ $errfile line $errline", 1);
+    COM_errorLog("$errno - $errstr @ $errfile line $errline", 1);
 
     header('HTTP/1.1 500 Internal Server Error');
     header('Status: 500 Internal Server Error');
@@ -7078,6 +7137,91 @@ function COM_404()
 exit;
 }
 
+/**
+* Decompress an archive
+*
+* @param    string  $file   soure file
+* @param    string  $target destination directory
+* @return   bool            true on success, false on fail
+*
+*/
+function COM_decompress($file, $target)
+{
+    global $_CONF;
+
+    // decompression library doesn't like target folders ending in "/"
+    if (substr($target, -1) == "/") $target = substr($target, 0, -1);
+    $ext = substr($file, strrpos($file,'.')+1);
+
+    // .tar, .tar.bz, .tar.gz, .tgz
+    if (in_array($ext, array('tar','bz','bz2','gz','tgz'))) {
+
+        require_once 'Archive/Tar.php';
+
+        if (strpos($ext, 'bz') !== false) $compress_type = COMPRESS_BZIP;
+        else if (strpos($ext,'gz') !== false) $compress_type = COMPRESS_GZIP;
+        else $compress_type = COMPRESS_NONE;
+
+        $tar = new Archive_Tar($file);
+        $ok = $tar->extract($target);
+        if ($ok == '' ){
+            $ok = 1;
+        }
+
+        return ($ok<1?false:true);
+
+    } else if ($ext == 'zip') {
+
+      require_once $_CONF['path'].'/lib/ZipLib.class.php';
+
+      $zip = new ZipLib();
+      $ok = $zip->Extract($file, $target);
+
+      return ($ok==-1?false:true);
+
+    }
+
+    // unsupported file type
+    return false;
+}
+
+function COM_isWritable($path) {
+    if ($path{strlen($path)-1}=='/')
+        return COM_isWritable($path.uniqid(mt_rand()).'.tmp');
+
+    if (@file_exists($path)) {
+        if (!($f = @fopen($path, 'r+')))
+            return false;
+        @fclose($f);
+        return true;
+    }
+
+    if (!($f = @fopen($path, 'w')))
+        return false;
+    @fclose($f);
+    @unlink($path);
+    return true;
+}
+
+function COM_buildOwnerList($fieldName,$owner_id=2)
+{
+    global $_TABLES;
+
+    $result = DB_query("SELECT * FROM {$_TABLES['users']} WHERE status=3");
+    $nRows  = DB_numRows($result);
+
+    $owner_select = '<select name="'.$fieldName.'">';
+    for ($i=0; $i<$nRows;$i++) {
+        $row = DB_fetchArray($result);
+        if ( $row['uid'] == 1 ) {
+            continue;
+        }
+        $owner_select .= '<option value="' . $row['uid'] . '"' . ($owner_id == $row['uid'] ? 'selected="selected"' : '') . '>' . COM_getDisplayName($row['uid']) . '</option>';
+    }
+    $owner_select .= '</select>';
+
+    return $owner_select;
+}
 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
@@ -7138,12 +7282,28 @@ function USES_class_upload() {
     require_once $_CONF['path_system'] . 'classes/upload.class.php';
 }
 
-
-
 // Now include all plugin functions
 foreach( $_PLUGINS as $pi_name )
 {
     require_once( $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' );
+}
+
+if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 && !SEC_inGroup('Root') ) {
+    if (empty($_CONF['site_disabled_msg'])) {
+        header("HTTP/1.1 503 Service Unavailable");
+        header("Status: 503 Service Unavailable");
+        echo $_CONF['site_name'] . ' is temporarily undergoing maintenance.  Please check back soon.';
+    } else {
+        // if the msg starts with http: assume it's a URL we should redirect to
+        if (preg_match("/^(https?):/", $_CONF['site_disabled_msg']) === 1) {
+            echo COM_refresh($_CONF['site_disabled_msg']);
+        } else {
+            header("HTTP/1.1 503 Service Unavailable");
+            header("Status: 503 Service Unavailable");
+            echo $_CONF['site_disabled_msg'];
+        }
+    }
+    exit;
 }
 
 // Check and see if any plugins (or custom functions)

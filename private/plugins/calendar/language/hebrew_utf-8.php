@@ -24,6 +24,11 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 ###############################################################################
@@ -206,7 +211,8 @@ $LANG_confignames['calendar'] = array(
     'notification' => 'הודעת תזכורת באימייל?',
     'delete_event' => 'מחיקת אירועים ביחד עם שולחיהם?',
     'aftersave' => 'לאחר שמירת האירוע',
-    'default_permissions' => 'אישורי ברירת המחדל של אירוע'
+    'default_permissions' => 'אישורי ברירת המחדל של אירוע',
+    'only_admin_submit' => 'Only Allow Admins to Submit'
 );
 
 $LANG_configsubgroups['calendar'] = array(

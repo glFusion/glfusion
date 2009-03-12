@@ -111,8 +111,7 @@ function WS_error($error_code, $error_desc = '')
  */
 function WS_dissectURI(&$args)
 {
-    global $WS_PLUGIN, $WS_INTROSPECTION, $WS_VERBOSE,
-           $inputHandler;
+    global $WS_PLUGIN, $WS_INTROSPECTION, $WS_VERBOSE;
 
     $WS_PLUGIN = '';
     $args = array();
@@ -124,9 +123,9 @@ function WS_dissectURI(&$args)
     $uri_parts = explode('&', $_SERVER['QUERY_STRING']);
     foreach ($uri_parts as $param) {
         $uri_parts = explode('=', $param);
-        $param_key = $inputHandler->filterVar('strict',$uri_parts[0],'');
+        $param_key = COM_applyFilter($uri_parts[0]);
         if (count($uri_parts) > 1) {
-            $param_val = $inputHandler->filterVar('strict',$uri_parts[1],'');
+            $param_val = COM_applyFilter($uri_parts[1]);
         }
 
         switch ($param_key) {

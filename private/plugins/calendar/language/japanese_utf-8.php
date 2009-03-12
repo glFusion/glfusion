@@ -29,6 +29,11 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 global $LANG32;
 
 ###############################################################################
@@ -211,7 +216,8 @@ $LANG_confignames['calendar'] = array(
     'notification' => 'メールで通知する',
     'delete_event' => '所有者の削除と共に削除する',
     'aftersave' => 'イベント保存後の画面遷移',
-    'default_permissions' => 'パーミッション'
+    'default_permissions' => 'パーミッション',
+    'only_admin_submit' => 'Only Allow Admins to Submit'
 );
 
 $LANG_configsubgroups['calendar'] = array(

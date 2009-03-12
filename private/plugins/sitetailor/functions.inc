@@ -46,8 +46,9 @@ if (file_exists ($langfile)) {
     include_once $_CONF['path'] . 'plugins/sitetailor/language/english.php';
 }
 
-require_once $_CONF['path'] . 'plugins/sitetailor/config.php';
-require_once $_CONF['path'] . 'plugins/sitetailor/classes/classMenuElement.php';
+require_once $_CONF['path'].'plugins/sitetailor/sitetailor.php';
+require_once $_CONF['path'].'plugins/sitetailor/config.php';
+require_once $_CONF['path'].'plugins/sitetailor/classes/classMenuElement.php';
 
 global $stMenu;
 
@@ -157,14 +158,16 @@ function plugin_getheaderjs_sitetailor() {
 function plugin_getheadercode_sitetailor() {
     global $_CONF, $_ST_CONF, $stMenu, $themeAPI;
 
-    if ( $themeAPI > 1 ) {
-        return '';
-    }
-
     $st_header = '';
-
-    $st_header = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $_CONF['site_url'] . '/admin/plugins/sitetailor/css/mooRainbow.css"' . XHTML . ">" . LB;
-
+    $this_dir = basename( dirname( $_SERVER['SCRIPT_NAME'] ) );
+	if ( $this_dir == 'sitetailor' ) {
+        $st_header .= '<meta http-equiv="cache-control" content="no-cache" />' . LB;
+        $st_header .= '<meta http-equiv="pragma" content="no-cache" />' . LB;
+    }
+    if ( $themeAPI > 1 ) {
+        return $st_header;
+    }
+    $st_header .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $_CONF['site_url'] . '/admin/plugins/sitetailor/css/mooRainbow.css"' . XHTML . ">" . LB;
     if ( is_array($stMenu) ) {
         foreach ($stMenu AS $menu) {
             if ( $menu['active'] == 1 ) {
@@ -277,17 +280,15 @@ function plugin_getadminoption_sitetailor() {
 function plugin_chkVersion_sitetailor() {
     global $_ST_CONF;
 
-    return $_ST_CONF['version'];
+    return $_ST_CONF['pi_version'];
 }
 
 function plugin_upgrade_sitetailor() {
     global $_CONF;
 
-    require_once ($_CONF['path'] . '/plugins/sitetailor/glupgrade.inc');
+    require_once $_CONF['path'].'/plugins/sitetailor/upgrade.inc';
 
-    $rc = plugin_plgupgrade_sitetailor();
-
-    return $rc;
+    return sitetailor_upgrade();
 }
 
 function plugin_autotags_sitetailor($op,$content='',$autotag='') {
@@ -297,33 +298,11 @@ function plugin_autotags_sitetailor($op,$content='',$autotag='') {
         return array('hmenu','vmenu');
     } else if ($op == 'parse') {
         /*
-         * Process the auto tag to remove any embedded &nbsp;
+         * Check to see if the menu name has spaces, if so, concatenate into a single parm
          */
-        $tag = str_replace('&nbsp;',' ',$autotag['tagstr']);
-        $parms = explode (' ', $tag);
-        // Extra test to see if autotag was entered with a space
-        // after the module name
-        if (substr ($parms[0], -1) == ':') {
-            $startpos = strlen ($parms[0]) + strlen ($parms[1]) + 2;
-            $label = str_replace (']', '', substr ($tag, $startpos));
-            $tagid = $parms[1];
-        } else {
-            $label = str_replace (']', '',
-                     substr ($tag, strlen ($parms[0]) + 1));
-            $parms = explode (':', $parms[0]);
-            if (count ($parms) > 2) {
-                // whoops, there was a ':' in the tag id ...
-                array_shift ($parms);
-                $tagid = implode (':', $parms);
-            } else {
-                $tagid = $parms[1];
-            }
+        if ( isset($autotag['parm2']) ) {
+            $autotag['parm1'] .= ' ' . $autotag['parm2'];
         }
-        $autotag['parm1'] = str_replace(']','',$tagid);
-        $autotag['parm2'] = $label;
-        /*
-         * end of tag replacement
-         */
         switch( $autotag['tag'] ) {
             case 'hmenu' :
                 $menu = st_getMenu($autotag['parm1'],"gl_moomenu","gl_moomenu",'',"parent");
@@ -338,31 +317,6 @@ function plugin_autotags_sitetailor($op,$content='',$autotag='') {
     }
 }
 
-
-/**
-* Removes the data structures for this plugin from the glFusion database.
-* This routine will get called from the Plugin install program if user select De-Install or if Delete is used in the Plugin Editor.
-* The Plugin Installer will also call this routine upon and install error to remove anything it has created.
-* The Plugin installer will pass the optional parameter which will then double check that plugin has first been disabled.
-*
-* For this plugin, this routine will also remove the Block definition.
-*
-* Returns True if all Plugin related data is removed without error
-*
-* @param    string   $installCheck     Defult is blank but if set, check if plugin is disabled first
-*
-* @return   boolean True if successful false otherwise
-*
-*/
-function plugin_uninstall_sitetailor($installCheck='') {
-    global $_CONF;
-
-    require_once $_CONF['path'] . '/plugins/sitetailor/install.inc';
-
-    $rc = plugin_remove_sitetailor();
-
-    return ( $rc );
-}
 
 function st_initMenu($skipCache=false) {
     global $stMenu,$_GROUPS, $_ST_CONF, $_TABLES, $_USER;
@@ -467,19 +421,43 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
 
     $optionHash = md5($wrapper.$ulclass.$liclass.$parentclass.$lastclass.$selected);
 
-    $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
-
-    $retval = CACHE_check_instance($cacheInstance, 0);
-    if ( $retval && $noid == 0) {
-        return $retval;
-    }
-    $retval = '';
     $menuID = '';
-    if ( is_array($stMenu) ) {
-        foreach($stMenu AS $id) {
-            if ( $id['menu_name'] == $name ) {
-                $menuID = $id['menu_id'];
-                break;
+    $lang = COM_getLanguageId();
+
+    if (!empty($lang)) {
+        $mlname = $name . '_'.$lang;
+
+        $cacheInstance = 'stmenu_' . $mlname . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
+
+        $retval = CACHE_check_instance($cacheInstance, 0);
+        if ( $retval && $noid == 0) {
+            return $retval;
+        }
+        $retval = '';
+        if ( is_array($stMenu) ) {
+            foreach($stMenu AS $id) {
+                if ( $id['menu_name'] == $mlname ) {
+                    $menuID = $id['menu_id'];
+                    break;
+                }
+            }
+        }
+    }
+    if ( $menuID == '' ) {
+        $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
+
+        $retval = CACHE_check_instance($cacheInstance, 0);
+        if ( $retval && $noid == 0) {
+            return $retval;
+        }
+        $retval = '';
+        $menuID = '';
+        if ( is_array($stMenu) ) {
+            foreach($stMenu AS $id) {
+                if ( $id['menu_name'] == $name ) {
+                    $menuID = $id['menu_id'];
+                    break;
+                }
             }
         }
     }

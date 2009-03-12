@@ -24,6 +24,7 @@ a_help = "{LANG_ahelp}";
 s_help = "{LANG_shelp}";
 f_help = "{LANG_fhelp}";
 h_help = "{LANG_hhelp}";
+t_help = "{LANG_thelp}";
 </script>
 
 <script type="text/javascript" src="{site_url}/forum/javascript/createtopic.js"></script>

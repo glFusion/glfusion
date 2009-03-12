@@ -27,6 +27,11 @@
 #
 ###############################################################################
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
+
 $LANG_CHARSET = 'iso-8859-1';
 
 ###############################################################################
@@ -175,6 +180,9 @@ $LANG01 = array(
     129 => 'Configuration',
     130 => 'Webservices',
     500 => 'Please remove the admin/install/ directory!',
+    501 => 'Root Debug is Enabled',
+    502 => 'No fail SQL is Enabled',
+    503 => 'Maintenance Mode - Non-admin logins disabled',
     'ctl' => 'Clear Template Cache',
     'logview' => 'Logview'
 );
@@ -798,7 +806,7 @@ $LANG24 = array(
     63 => 'Auto Close Comments',
     64 => '',
     65 => '',
-    66 => '',
+    66 => 'There are no topics available for you to submit your story.',
     67 => 'Augmentez le contenu en r&eacute;visant la taille de l\'article',
     68 => 'R&eacute;duisez le contenu en r&eacute;visant la taille de l\'article',
     69 => 'Publiez la date de l\'article',
@@ -1052,7 +1060,44 @@ $LANG32 = array(
     35 => '&eacute;dition',
     36 => 'Code',
     37 => 'Donn&eacute;es',
-    38 => 'Mettre &agrave; jour!'
+    38 => 'Mettre &agrave; jour!',
+    39 => 'Unable to open temporary upload directory.',
+    40 => 'Unable to locate the required plugin.xml file in the plugin archive. This may be an older plugin that has not been updated to work with glFusion\'s automated installer. You will need to manually install this plugin.',
+    41 => 'Permission error on file: %s<br />',
+    42 => 'File / Directory Permission Errors',
+    43 => 'glFusion could not copy all the files to the proper directories due to permission errors. The plugin installation has been aborted.<br />Below is a list of all permission errors encountered.<br /><br />',
+    44 => 'Please correct the permission errors above and try the upload again.',
+    45 => 'Unable to copy %s to the %s directory.<br />',
+    46 => 'Unable to locate the uploaded plugin.',
+    47 => 'Unable to create temporary work directory.',
+    48 => 'Unable to decompress the uploaded plugin.',
+    49 => 'This plugin requires glFusion v%s or higher',
+    50 => 'This plugin requires PHP v%s or higher',
+    51 => '%s requires the <b>%s</b> plugin to be installed, please install %s and try the upload again.',
+    52 => 'A current version of %s is already installed',
+    53 => '%s v%s is older than the currently installed version of %s',
+    54 => 'There was an error installing the plugin, please see the error.log for details.',
+    55 => 'Auto Installer file autoinstall.php not found, you must manually run the installation from the Plugin Administration screen.',
+    56 => 'Automated Plugin Installer Error',
+    57 => 'Select a plugin from your workstation to upload to your glFusion powered site.',
+    58 => 'Upload',
+    59 => 'Cancel',
+    60 => 'Install',
+    61 => 'Upgrade',
+    62 => 'has been successfully uploaded and is now ready to be processed.',
+    63 => 'Description',
+    64 => 'The plugin appears to be',
+    65 => 'You already have this plugin installed.',
+    66 => 'The current installed version is',
+    67 => 'If the version you have uploaded is not newer than the installed version, select <b>Cancel</b> to abort the upgrade.',
+    68 => 'This plugin appears to be an older plugin that does not support glFusion\'s automated installer. Would you like to continue the automatic file copy and then perform a manual install from the Plugin Administration screen?',
+    69 => 'IMPORTANT',
+    70 => 'The automated installer is not able to verify that this plugin will work with your current version of glFusion. If you choose to have the files automatically copied, you will need to run the manual install from the Plugin Administration screen.',
+    71 => 'Continue',
+    72 => 'A version of this plugin is installed but disabled. glFusion cannot upgrade a disabled plugin. Please re-enable the plugin and perform the upload again.',
+    73 => 'Automated Plugin Installer',
+    74 => 'Unable to locate the plugin\'s XML description file.',
+    75 => 'Unable to copy %s to %s<br />'
 );
 
 ###############################################################################
@@ -1109,6 +1154,18 @@ $LANG33 = array(
     53 => 'All Frontpage Stories',
     54 => 'Please select the type of feed to create.',
     55 => 'Articles'
+);
+
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
 );
 
 ###############################################################################
@@ -1216,7 +1273,9 @@ $MESSAGE = array(
     99 => 'The plugin already exists.',
     100 => 'The plugin file you uploaded was not a GZip or Zip compressed archive.',
     500 => 'The Template Cache has been successfully cleared',
-    501 => 'Security Token is Invalid - Possible session timeout.'
+    501 => 'Security Token is Invalid - Possible session timeout.',
+    502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
+    503 => 'Plugin installation is disabled in demo mode.'
 );
 
 ###############################################################################
@@ -1550,6 +1609,19 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
+###############################################################################
+# Widgets - Strings
+# 
+# These are some standard strings used by the widget static pages
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News',
+    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
+    'prev' => 'Previous',
+    'next' => 'Next',
+    'playpause' => 'Play/Pause'
+);
+
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1851,7 +1923,9 @@ $LANG_confignames['Core'] = array(
     'default_search_order' => 'Default Sort Order',
     'compress_css' => 'Compress CSS',
     'jpg_orig_quality' => 'JPEG Quality Factor',
-    'allow_embed_object' => 'Allow EMBED Object'
+    'allow_embed_object' => 'Allow EMBED Object',
+    'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
+    'use_from_site_mail' => 'Force email from address to be site email'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1934,16 +2008,5 @@ $LANG_configselects['Core'] = array(
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
     22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
 );
-###############################################################################
-# lib-widget.php
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 
 ?>

@@ -8,6 +8,7 @@
     <table style="width:100%;">
       <tr>
           <th style="width:60%;">Menu Name</th>
+          <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[clone]}</th>
           <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[active]}</th>
           <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[elements]}</th>
           <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[options]}</th>
@@ -16,6 +17,11 @@
       <!-- BEGIN menurow -->
         <tr class="pluginRow{rowclass}" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRow{rowclass}';">
           <td style="width:60%;">{info}</td>
+          <td class="aligncenter" style="width:10%;text-align:center;">
+            <a href="{site_admin_url}/plugins/sitetailor/menu.php?mode=clone&amp;id={menu_id}">
+            <img src="{site_admin_url}/plugins/sitetailor/images/copy.png" alt="{$LANG_ST01[clone]}"{xhtml}>
+            </a>
+          </td>
           <td class="aligncenter" style="width:10%;text-align:center;">{menuactive}</td>
           <td class="aligncenter" style="width:10%;text-align:center;">
             <a href="{site_admin_url}/plugins/sitetailor/menu.php?mode=menu&amp;id={menu_id}">
