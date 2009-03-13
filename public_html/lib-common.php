@@ -58,7 +58,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.2');
+    define('GVERSION', '1.1.3.svn');
 }
 //define('DEMO_MODE',true);
 

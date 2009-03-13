@@ -169,10 +169,18 @@ function glfusion_112()
     $c->add('outside_webroot', 0, 'select', 0, 2, 0, 90, true, 'filemgmt');
 }
 
+function glfusion_113()
+{
+    global $_TABLES, $_CONF;
+
+    echo 'No updates at this time...<br />';
+
+}
+
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_112();
+glfusion_113();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();
