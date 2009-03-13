@@ -156,6 +156,8 @@ function glfusion_112()
 {
     global $_TABLES, $_CONF;
 
+    echo 'Performing glFusion v1.1.2 Modifications...<br /><br />';
+
     COM_errorLog("glFusion: Running code update for glFusion v1.1.2svn");
 
     $c = config::get_instance();
@@ -169,10 +171,21 @@ function glfusion_112()
     $c->add('outside_webroot', 0, 'select', 0, 2, 0, 90, true, 'filemgmt');
 }
 
+function glfusion_120()
+{
+    global $_TABLES, $_CONF;
+
+    echo 'Performing glFusion v1.2.0 Modifications...<br /><br />';
+
+    COM_errorLog("glFusion: Running code update for glFusion v1.2.0svn");
+
+    echo 'No modifications necessary at this time...<br /><br />';
+}
+
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_112();
+glfusion_120();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();
