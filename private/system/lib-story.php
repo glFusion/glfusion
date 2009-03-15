@@ -573,7 +573,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             );
             $article->set_var( 'edit_image', $editiconhtml);
         }
-
+        PLG_templateSetVars($article_filevar,$article);
         if( $story->DisplayElements('featured') == 1 )
         {
             $article->set_var( 'lang_todays_featured_article', $LANG05[4] );
@@ -591,7 +591,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->create_instance($instance_id,$article_filevar);
         }
     } // end of if cached
-    PLG_templateSetVars($article_filevar,$article);
     $article->parse('finalstory',$article_filevar);
 
     return $article->finish( $article->get_var( 'finalstory' ));
