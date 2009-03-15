@@ -342,10 +342,12 @@ function userprofile($user, $msg = 0, $plugin = '')
     if ( is_array($profileIcons) && count($profileIcons) > 0 ) {
 	    $user_templates->set_block('profile', 'profileicon', 'pi');
         for ($x=0;$x<count($profileIcons);$x++) {
-            $user_templates->set_var('profile_icon_url',$profileIcons[$x]['url']);
-            $user_templates->set_var('profile_icon_icon',$profileIcons[$x]['icon']);
-            $user_templates->set_var('profile_icon_text',$profileIcons[$x]['text']);
-            $user_templates->parse('pi', 'profileicon',true);
+            if ( $profileIcons[$x]['url'] != '' && $profileIcons[$x]['icon'] != '' ) {
+                $user_templates->set_var('profile_icon_url',$profileIcons[$x]['url']);
+                $user_templates->set_var('profile_icon_icon',$profileIcons[$x]['icon']);
+                $user_templates->set_var('profile_icon_text',$profileIcons[$x]['text']);
+                $user_templates->parse('pi', 'profileicon',true);
+            }
         }
     }
 
