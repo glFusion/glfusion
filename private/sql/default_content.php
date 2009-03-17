@@ -75,12 +75,14 @@ $_DATA['polls'][] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, ty
 // Site Tailor Default Data
 $_ST_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`id`, `pid`, `menu_id`, `element_label`, `element_type`, `element_subtype`, `element_order`, `element_active`, `element_url`, `element_target`, `group_id`) VALUES
 (7, 0, 1, 'Widgets', 1, '', 70, 1, '', '', 2),
-(8, 7, 1, 'moorotator', 5, 'gl_moorotator', 10, 1, '', '', 2),
-(9, 7, 1, 'moosimplebox', 5, 'gl_moosimplebox', 20, 1, '', '', 2),
-(10, 7, 1, 'mooslide', 5, 'gl_mooslide', 30, 1, '', '', 2),
-(11, 7, 1, 'moospring', 5, 'gl_moospring', 40, 1, '', '', 2),
-(12, 7, 1, 'mootickerRSS', 5, 'gl_mootickerRSS', 50, 1, '', '', 2),
-(13, 0, 1, 'Typography', 5, 'typography', 80, 1, '', '', 2);
+(8, 7, 1, 'moodrawers', 5, 'gl_moodrawers', 10, 1, '', '', 2),
+(9, 7, 1, 'moomorph', 5, 'gl_moomorph', 20, 1, '', '', 2),
+(10, 7, 1, 'moorotator', 5, 'gl_moorotator', 30, 1, '', '', 2),
+(11, 7, 1, 'moosimplebox', 5, 'gl_moosimplebox', 40, 1, '', '', 2),
+(12, 7, 1, 'mooslide', 5, 'gl_mooslide', 50, 1, '', '', 2),
+(13, 7, 1, 'moospring', 5, 'gl_moospring', 60, 1, '', '', 2),
+(14, 7, 1, 'mootickerRSS', 5, 'gl_mootickerRSS', 70, 1, '', '', 2),
+(15, 0, 1, 'Typography', 5, 'typography', 80, 1, '', '', 2);
 ";
 
 // Spamx Default Data
@@ -464,7 +466,58 @@ window.addEvent(\'domready\',function(){
 	})
 })
 </script>', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 0, 0, 0, 'html', 0) ";
+$_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_moodrawers', 2, 'gl_moodrawers', '<script type=\"text/javascript\">
+window.addEvent(\'domready\', function() {
+//-vertical slide
+	var mySlideV = new Fx.Slide(\'gl_moodrawerV\').hide();
+		$(\'toggleV\').addEvent(\'click\', function(e){
+			e = new Event(e);
+			mySlideV.toggle();
+			e.stop();
+        });
+//--horizontal
+    var mySlideH = new Fx.Slide(\'gl_moodrawerH\', {mode: \'horizontal\'}).hide();
+        $(\'toggleH\').addEvent(\'click\', function(e){
+            e = new Event(e);
+            mySlideH.toggle();
+            e.stop();
+        });
+});
+</script>
 
+<div style=\"width:300px; padding:10px; clear:both;\" id=\"gl_moodrawerV\">
+<span class=\"info\">Using MooTools, you can place any content you want in drawers!
+<p>This is an example of a vertical drawer.</p>
+</span>
+</div>
+
+<a href=\"#\" style=\"float: left;\" id=\"toggleV\">Introducing Vertical MooDrawers</a><br />
+<a href=\"#\" style=\"float: left;\" id=\"toggleH\">Introducing Horizontal MooDrawers</a><br />
+
+<div style=\"width:300px; padding:10px; clear:both;\" id=\"gl_moodrawerH\">
+<span class=\"info\">Using MooTools, you can place any content you want in drawers!
+<p>This is an example of a horizontal drawer.</p>
+</span>
+</div>', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 0, 0, 0, 'html', 0) ";
+$_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('gl_moomorph', 2, 'gl_moomorph', '<div class=\"morph-start\" id=\"msgbox\">
+	<div style=\"padding:5px;color:#FFFFFF;background:url(xxxSITEURLxxx/layout/nouveau/images/header-bg.png) #1A3955;\">
+		<span class=\"floatright\"></span>
+			System Message - 09/29 09:47PM
+	</div>
+	<div style=\"padding:5px 15px 15px 15px;border-top:3px solid black;background:#E7E7E7;\">
+		<p style=\"padding:5px\"><img src=\"xxxSITEURLxxx/layout/nouveau/images/sysmessage.png\" border=\"0\" align=\"left\" alt=\"\" style=\"padding-right:5px; padding-bottom:3px\" />
+			Use this to morph between two CSS states.<br />
+			After 5 seconds, this message will automatically fade away and roll up.
+		</p>
+	</div>
+</div>
+<script type=\"text/javascript\">
+	var fx = new Fx.Styles(\'msgbox\', { duration: 3000 });
+	fx.addEvent(\'onComplete\',function () { $(\'msgbox\').setStyle(\'display\', \'none\'); });
+	fx.start.delay(5000, fx, { \'opacity\' : 0 });
+</script>', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 0, 0, 0, 'html', 0) ";
+
+// Blocks Default Data
 $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (19,1,'moorotator','normal','Visit glFusion','all',0,'<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moorotator-block.js\"></script>
 <script type=\"text/javascript\">
 	window.addEvent(\'domready\', function() {
