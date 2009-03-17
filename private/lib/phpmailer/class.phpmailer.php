@@ -256,7 +256,7 @@ class PHPMailer {
   var $boundary        = array();
   var $language        = array();
   var $error_count     = 0;
-  var $LE              = "\r\n";
+  var $LE              = "\n";
   var $sign_cert_file  = "";
   var $sign_key_file   = "";
   var $sign_key_pass   = "";
