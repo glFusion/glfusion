@@ -37,7 +37,7 @@
         </select>
         :
         <select name="start_minute">
-            {start_minute_options}
+            {startminute_options}
         </select>
         {startampm_selection}
       </span>

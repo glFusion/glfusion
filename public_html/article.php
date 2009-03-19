@@ -129,6 +129,8 @@ if ($A['count'] > 0) {
                 $story->{$varname} = $output[$fieldname];
             }
         }
+       $story->_username = $output['username'];
+       $story->_fullname = $output['fullname'];
     }
     if ($output == STORY_PERMISSION_DENIED) {
         $display .= COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])

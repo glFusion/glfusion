@@ -120,7 +120,7 @@ class config {
         // Reads from a cache file if there is one
         if ( !$_SYSTEM['no_cache_config'] ) {
             if ( function_exists('COM_isWritable') ) {
-                if ( COM_isWritable($_CONF['path'].'data/layout_cache/'.CONFIG_CACHE_FILE_NAME)) {
+                if ( COM_isWritable($_CONF['path_data'].'layout_cache/'.CONFIG_CACHE_FILE_NAME)) {
                     if ($this->_readFromCache()) {
                         $this->_post_configuration();
                         return $this->config_array;
@@ -997,7 +997,7 @@ class config {
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path_data'] . 'layout_cache/' . CONFIG_CACHE_FILE_NAME;
         clearstatcache();
         if (file_exists($cache_file)) {
             $s = file_get_contents($cache_file);
@@ -1018,7 +1018,7 @@ class config {
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path_data'] . 'layout_cache/' . CONFIG_CACHE_FILE_NAME;
         $s = serialize($this->config_array);
         $fh = @fopen($cache_file, 'wb');
         if ($fh !== false) {
@@ -1043,7 +1043,7 @@ class config {
     {
         global $_CONF;
 
-        $cache_file = $_CONF['path'] . 'data/layout_cache/' . CONFIG_CACHE_FILE_NAME;
+        $cache_file = $_CONF['path_data'] . 'layout_cache/' . CONFIG_CACHE_FILE_NAME;
         @unlink($cache_file);
     }
 }

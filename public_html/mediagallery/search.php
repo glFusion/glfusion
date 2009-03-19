@@ -629,7 +629,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
     if (isset($_MG_USERPREFS['tn_size']) && $_MG_USERPREFS['tn_size'] != -1 ) {
         $tn_size = $_MG_USERPREFS['tn_size'];
     } else {
-        $tn_size = 200;
+        $tn_size = $_MG_CONF['gallery_tn_size'];
     }
 
     switch ($tn_size ) {

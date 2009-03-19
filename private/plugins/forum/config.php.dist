@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -41,28 +41,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-/*
- * Enable or disable the filemanager integration for storing
- * uploaded files.
- */
+$CONF_FORUM = array();
 
-$CONF_FORUM['enable_fm_integration'] = 0;
-$CONF_FORUM['allow_memberlist']      = 0;
-
-$CONF_FORUM['version'] = '3.1.0.fusion';
-
-/*************************************************************************
-*          Do not modify any settings below this area                    *
-*************************************************************************/
-$_TABLES['gf_userprefs']    = $_DB_table_prefix . 'forum_userprefs';
-$_TABLES['gf_topic']        = $_DB_table_prefix . 'forum_topic';
-$_TABLES['gf_categories']   = $_DB_table_prefix . 'forum_categories';
-$_TABLES['gf_forums']       = $_DB_table_prefix . 'forum_forums';
-$_TABLES['gf_watch']        = $_DB_table_prefix . 'forum_watch';
-$_TABLES['gf_moderators']   = $_DB_table_prefix . 'forum_moderators';
-$_TABLES['gf_banned_ip']    = $_DB_table_prefix . 'forum_banned_ip';
-$_TABLES['gf_log']          = $_DB_table_prefix . 'forum_log';
-$_TABLES['gf_userinfo']     = $_DB_table_prefix . 'forum_userinfo';
-$_TABLES['gf_attachments']  = $_DB_table_prefix . 'forum_attachments';
-$_TABLES['gf_bookmarks']    = $_DB_table_prefix . 'forum_bookmarks';
 ?>

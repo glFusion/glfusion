@@ -537,7 +537,7 @@ function editpreferences()
     }
 
     if ( $_CONF['have_pear'] == false ) {
-        require_once $_CONF['path'] . 'system/pear/Date/TimeZone.php';
+        require_once $_CONF['path_system'] . 'pear/Date/TimeZone.php';
     } else {
         require_once 'Date/TimeZone.php';
     }

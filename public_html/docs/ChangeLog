@@ -6,7 +6,43 @@ v1.2.0
 
 v1.1.3
 ------
- *** Will be merged in from glFusion v1.1.3 branch ***
+- Added set_time_limit() calls in plugin upload to prevent max_execution_time
+  exceeded errors. (Mark)
+- contributedby_user and contributedby_fullname were not set in story templates
+  (Mark)
+- Fixed incorrect use of &amp with trackback url (mark)
+- 0000400: Default topic was not selected on new stories (mark)
+- 0000395: Removing a plugins files causes glFusion to crash (mark)
+- 0000396: htmlLawed has been upgraded to v1.1.7.2 (mark)
+- 0000397: Incorrect paths are used throughout the system.
+           $_CONF['path'].'system/' instead of $_CONF['path_system'] (mark)
+- 0000390: Postcards do not display properly in mail client (mark)
+- 0000386: CUSTOM_templateSetVars() does not work for story templates (mark)
+- 0000384: icon for additional profile api broken (mark)
+- Added default mooDrawer and mooMorph example widgets (Eric)
+
+Calendar Plugin
+---------------
+- 0000391: Cannot edit minutes field in Event Start Date after 1.1.2
+           upgrade (mark)
+
+CAPTCHA Plugin
+--------------
+- When using type 'general' return the necessary HTML from
+  plugin_settemplatevariable() call (mark)
+
+Forum Plugin
+------------
+- Removed duplicate configuration data from config.php (Mark)
+
+Media Gallery Plugin
+--------------------
+- 0000393: Search results do not honor the gallery view thumbnail size. (mark)
+
+Site Tailor
+-----------
+- No longer user id= URL parameter, instead use menu=. The id can conflict
+  with some web appliances that pass an internal id=  (Mark)
 
 v1.1.2
 ------

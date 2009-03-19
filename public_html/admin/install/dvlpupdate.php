@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -169,6 +169,17 @@ function glfusion_112()
     $_FM_DEFAULT['FileStoreURL']     = $_CONF['site_url']  . '/filemgmt_data/files/';
     $c->add('FileStoreURL', $_FM_DEFAULT['FileStoreURL'], 'text',0, 2, 0, 70, true, 'filemgmt');
     $c->add('outside_webroot', 0, 'select', 0, 2, 0, 90, true, 'filemgmt');
+}
+
+function glfusion_113()
+{
+    global $_TABLES, $_CONF;
+
+    echo 'Performing glFusion v1.1.3 Modifications...<br /><br />';
+
+    COM_errorLog("glFusion: Running code update for glFusion v1.1.3svn");
+
+    echo 'No modifications necessary at this time...<br /><br />';
 }
 
 function glfusion_120()

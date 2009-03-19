@@ -255,10 +255,14 @@ function plugin_templatesetvars_captcha($name, &$template) {
         DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter","'$csid','$time','','0'");
 
         $captcha = CAPTCHA_getHTML($csid,$name);
+        if ( $name == 'general' ) {
+            return $captcha;
+        }
         $template->set_var('captcha', $captcha);
     } else {
         $template->set_var('captcha', '');
     }
+    return '';
 }
 
 // Internal CAPTCHA functions...

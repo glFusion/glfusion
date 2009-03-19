@@ -380,6 +380,12 @@ class Story
                 $this->{$varname}= stripslashes($story[$fieldname]);
             }
         }
+        if (array_key_exists('username', $story)) {
+            $this->_username = $story['username'];
+        }
+        if (array_key_exists('fullname', $story)) {
+            $this->_fullname = $story['fullname'];
+         }
 
         // Overwrite the date with the timestamp.
         $this->_date = $story['unixdate'];

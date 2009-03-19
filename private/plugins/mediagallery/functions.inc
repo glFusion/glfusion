@@ -3300,7 +3300,7 @@ function MG_execWrapper($cmd) {
     }
 }
 
-require_once $_CONF['path'] . '/system/imglib/lib-image.php';
+require_once $_CONF['path_system'] . 'imglib/lib-image.php';
 
 /*
  * Get mime type of image

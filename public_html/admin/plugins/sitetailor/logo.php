@@ -30,7 +30,8 @@
 // +--------------------------------------------------------------------------+
 
 require_once('../../../lib-common.php');
-require_once $_CONF['path'] . 'system/lib-admin.php';
+
+USES_lib_admin();
 
 $display = '';
 

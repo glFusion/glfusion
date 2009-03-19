@@ -40,7 +40,8 @@ include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
-include_once $_CONF['path'].'system/classes/navbar.class.php';
+
+USES_class_navbar() ;
 
 $op = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
 $display = '';

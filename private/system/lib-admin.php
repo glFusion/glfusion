@@ -996,7 +996,7 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
 }
 
 function ADMIN_getListField_plugins($fieldname, $fieldvalue, $A, $icon_arr, $token) {
-    global $_CONF, $LANG_ADMIN, $LANG32;
+    global $_CONF, $LANG_ADMIN, $LANG32,$_PLUGINS;
     $retval = '';
 
     switch($fieldname) {
@@ -1020,6 +1020,13 @@ function ADMIN_getListField_plugins($fieldname, $fieldvalue, $A, $icon_arr, $tok
                 if ($A['pi_enabled'] == 1) {
                     $retval .= " <b>{$LANG32[38]}</b>";
                 }
+            }
+            break;
+        case 'pi_name' :
+            if ( array_search($fieldvalue,$_PLUGINS) === false ) {
+                $retval = '<span style="color:red;font-weight:700;">'.$fieldvalue.'</span>';
+            } else {
+                $retval = $fieldvalue;
             }
             break;
         case 'enabled':
