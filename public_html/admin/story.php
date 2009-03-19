@@ -260,8 +260,6 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
         }
     }
 
-
-
     $story = new Story();
     if ($mode == 'preview') {
         // Handle Magic GPC Garbage:
@@ -306,6 +304,13 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
         }
     } elseif( $result == STORY_DUPLICATE_SID) {
         $display .= COM_errorLog ($LANG24[24], 2);
+    }
+
+    if(empty($currenttopic) && ($story->EditElements('tid') == '')) {
+        $story->setTid( DB_getItem ($_TABLES['topics'], 'tid',
+                                'is_default = 1' . COM_getPermSQL ('AND')));
+    } else if ($story->EditElements('tid') == '') {
+        $story->setTid($currenttopic);
     }
 
     $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3);
@@ -556,13 +561,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
 
     $story_templates->set_var('story_title', $story->EditElements('title'));//stripslashes ($A['title']));
     $story_templates->set_var('lang_topic', $LANG_ADMIN['topic']);
-    if(empty($currenttopic) && ($story->EditElements('tid') == ''))
-    {
-        $story->setTid( DB_getItem ($_TABLES['topics'], 'tid',
-                                'is_default = 1' . COM_getPermSQL ('AND')));
-    } else if ($story->EditElements('tid') == '') {
-        $story->setTid($currenttopic);
-    }
+
     $story_templates->set_var ('topic_options',$allowedTopicList);
     $story_templates->set_var('lang_show_topic_icon', $LANG24[56]);
     if ($story->EditElements('show_topic_icon') == 1) {
