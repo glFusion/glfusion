@@ -170,7 +170,7 @@ function processOldPluginInstall(  )
     }
 
     if ( file_exists($tmp.'/'.$pluginData['id'].'/system/') ) {
-        list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/system/', $_CONF['path'].'system/');
+        list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/system/', $_CONF['path_system']);
         if ( $rc > 0 ) {
             $permError = 1;
             foreach($failed AS $filename) {
@@ -254,7 +254,7 @@ function processOldPluginInstall(  )
         }
     }
     if ( file_exists($tmp.'/'.$pluginData['id'].'/system/') ) {
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/system/', $_CONF['path'].'system/');
+        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/system/', $_CONF['path_system']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -262,7 +262,7 @@ function processOldPluginInstall(  )
             $t = explode('|',$faillist);
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
-                    $permErrorList .= sprintf($LANG45,$failedFile,$_CONF['path'].'system/');
+                    $permErrorList .= sprintf($LANG45,$failedFile,$_CONF['path_system']);
                 }
             }
         }
@@ -332,7 +332,7 @@ function processPluginUpload()
     }
 
     // decompress into temp directory
-
+    set_time_limit( 60 );
     if (!($tmp = io_mktmpdir())) {
         return _pi_errorBox($LANG32[47]);
     }
@@ -409,7 +409,7 @@ function processPluginUpload()
 
     $permError = 0;
     $permErrorList = '';
-
+    set_time_limit( 30 );
     // test copy to proper directories
     list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
     if ( $rc > 0 ) {
@@ -506,7 +506,7 @@ function post_uploadProcess() {
         echo COM_refresh($_CONF['site_admin_url'] . '/plugins.php?msg=503');
         exit;
     }
-
+    set_time_limit( 30 );
     $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
     list($success,$failed,$size,$faillist) = explode(',',$rc);
     if ( $failed > 0 ) {
@@ -519,6 +519,7 @@ function post_uploadProcess() {
             }
         }
     }
+    set_time_limit( 30 );
     if ( file_exists($tmp.'/'.$pluginData['id'].'/admin/') ) {
         $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'/admin/plugins/'.$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
@@ -534,6 +535,7 @@ function post_uploadProcess() {
         }
         _pi_deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/admin/');
     }
+    set_time_limit( 30 );
     if ( file_exists($tmp.'/'.$pluginData['id'].'/public_html/') ) {
         $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].'/'.$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
@@ -549,6 +551,7 @@ function post_uploadProcess() {
         }
         _pi_deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/public_html/');
     }
+    set_time_limit( 30 );
     if ( file_exists($tmp.'/'.$pluginData['id'].'/themefiles/') ) {
         // determine where to copy them, first check to see if layout was defined in xml
         if ( isset($pluginData['layout']) && $pluginData['layout'] != '') {
@@ -571,7 +574,7 @@ function post_uploadProcess() {
         }
         _pi_deleteDir($_CONF['path'].'plugins/'.$pluginData['id'].'/themefiles/');
     }
-
+    set_time_limit( 30 );
     if ( $permError != 0 ) {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
         _pi_deleteDir($tmp);
@@ -688,7 +691,7 @@ function post_uploadProcess() {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$masterErrorMsg.'<br />'.$LANG32[44];
         return _pi_errorBox($errorMessage);
     }
-
+    set_time_limit( 30 );
     if ( $upgrade == 0 ) { // fresh install
 
         USES_lib_install();
@@ -819,7 +822,7 @@ function io_mkdir_p($target){
 */
 function _pi_deleteDir($path) {
     if (!is_string($path) || $path == "") return false;
-
+    set_time_limit( 30 );
     if (is_dir($path)) {
       if (!$dh = @opendir($path)) return false;
 
@@ -1197,7 +1200,7 @@ if ( isset($_POST['submit']) ) {
     if ( isset($_POST['pi_name']) ) {
         $pi_name = COM_applyFilter($_POST['pi_name']);
 
-        @unlink($_CONF['path'] . 'data/temp/' . $pi_name . '*');
+        @unlink($_CONF['path_data'] . 'temp/' . $pi_name . '*');
     }
     echo COM_refresh($_CONF['site_admin_url'] .'/plugins.php');
     exit;
