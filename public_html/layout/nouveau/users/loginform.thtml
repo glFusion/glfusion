@@ -1,38 +1,29 @@
-    {start_block_loginagain}
-    <table cellpadding="3" cellspacing="0">
-        <tr>
-            <td>
-                <form action="{site_url}/users.php" method="post">
-                    <table cellspacing="0" cellpadding="3">
-                        <tr>
-                            <td colspan="2">{lang_message}</td>
-                        </tr>
-                        <tr>
-                            <td class="alignright"><b><label for="loginname">{lang_username}</label>:</b></td>
-                            <td><input type="text" size="16" name="loginname"{xhtml}></td>
-                        </tr>
+<!-- begin public_html/layout/nouveau/users/loginform.thtml -->
+        <div style="width:100%; text-align:center;">
+            <div style="font-size:1.2em;">{start_block_loginagain}</div>
+            <p style="font-size:.8em;">{lang_message}</p>
+            <form action="{site_url}/users.php" method="post" style="margin-top:1em; margin-bottom:1em;">
+                <div style="padding:1em; width:30em; margin:auto; background:#f2f2f2; border:1px solid #ccc; font-size:.8em;">
+                <img class="floatleft" src="{layout_url}/images/lock.png" alt=""{xhtml}>
+                    <p style="text-align:right;">
+                        <b><label for="loginname">{lang_username}:</label></b>&nbsp;&nbsp;<input type="text" size="25" name="loginname" value="" id="loginname2" style="width:12em;"{xhtml}><br{xhtml}>
                         {services}
-                        <tr>
-                            <td class="alignright"><b><label for="passwd">{lang_password}</label>:</b></td>
-                            <td><input type="password" name="passwd" size="16"{xhtml}>
-                                &nbsp;<a href="{site_url}/users.php?mode=getpassword" rel="nofollow">{lang_forgetpassword}</a><br{xhtml}
-                                <div style="position:relative; top:-43px; left:111px">&nbsp;{lang_newreglink}</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="alignright">&nbsp;</td>
-                            <td class="alignleft">
-                                <input type="submit" value="{lang_login}"{xhtml}>
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {openid_login}
-            </td>
-        </tr>
-    </table>
-    {end_block}
+                    </p>
+                    <p style="text-align:right;">
+                        <b><label for="passwd">{lang_password}:</label></b>&nbsp;&nbsp;<input type="password" size="25" name="passwd" id="passwd2" style="width:12em;"{xhtml}><br{xhtml}>
+                    </p>
+                    <p style="text-align:right; padding-right:.5em;">
+                        <input style="margin-top:.5em;" type="submit" value="{lang_login}"{xhtml}>
+                    </p>
+                    <p style="text-align:right; padding-top:1em;">       
+                        {lang_newreglink}
+                    </p>
+                    <p style="text-align:right;"> 
+                        <a href="{site_url}/users.php?mode=getpassword" rel="nofollow">{lang_forgetpassword}</a>
+                    </p>
+                </div>
+            </form>
+            {openid_login}
+            {end_block}
+        </div>
+<!-- end public_html/layout/nouveau/users/loginform.thtml -->
