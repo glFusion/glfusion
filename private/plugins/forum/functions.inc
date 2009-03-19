@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -42,11 +42,11 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-$langfile = $_CONF['path'] . 'plugins/forum/language/' . $_CONF['language'] . '.php';
+$langfile = $_CONF['path'].'plugins/forum/language/'.$_CONF['language'].'.php';
 if (file_exists ($langfile)) {
     include_once $langfile;
 } else {
-    include_once $_CONF['path'] . 'plugins/forum/language/english.php';
+    include_once $_CONF['path'].'plugins/forum/language/english.php';
 }
 
 // Need to add this line because PLG_enableStateChange does an include of this file inside a plugin function and $_TABLES is not global.
@@ -55,50 +55,44 @@ $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 
 $pi_version = floatval (DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name='forum'"));
 
-require_once $_CONF['path'].'plugins/forum/forum.php';
 require_once $_CONF['path'].'plugins/forum/config.php';
+require_once $_CONF['path'].'plugins/forum/forum.php';
+require_once $_CONF['path_system'] . 'classes/config.class.php';
 
-/*
-* Check and see if we need to load the plugin configuration
-*/
-if (!isset($CONF_FORUM['registration_required'])) {
-    require_once $_CONF['path_system'] . 'classes/config.class.php';
+$ff_config = config::get_instance();
+$_FF_FORUM = $ff_config->get_config('forum');
 
-    $ff_config = config::get_instance();
-    $_FF_FORUM = $ff_config->get_config('forum');
+if ( is_array($_FF_FORUM) && is_array($CONF_FORUM) ) {
+    $CONF_FORUM = array_merge($_FF_FORUM, $CONF_FORUM);
+}
 
-    if ( is_array($_FF_FORUM) && is_array($CONF_FORUM) ) {
-        $CONF_FORUM = array_merge($_FF_FORUM, $CONF_FORUM);
-    }
+// How many messages to show on the Most Popular page
+$CONF_FORUM['popular_limit'] = 20;
+// How many lines to show on one page in the search results
+$CONF_FORUM['show_search_perpage'] = 15;
+// How many users to show on one page in the memberlist results
+$CONF_FORUM['show_members_perpage'] = 100;
+// View Anonymous Posts - registed users can set this false
+$CONF_FORUM['show_anonymous_posts'] = 1;
+// Only send Notification once - even if more posts are created since your last visit
+$CONF_FORUM['notify_once'] = 1;
 
-    $CONF_FORUM['use_glfilter'] = 1; // always use the filter...
-
-    // How many messages to show on the Most Popular page
-    $CONF_FORUM['popular_limit'] = 20;
-    // How many lines to show on one page in the search results
-    $CONF_FORUM['show_search_perpage'] = 15;
-    // How many users to show on one page in the memberlist results
-    $CONF_FORUM['show_members_perpage'] = 100;
-    // View Anonymous Posts - registed users can set this false
-    $CONF_FORUM['show_anonymous_posts'] = 1;
-    // Only send Notification once - even if more posts are created since your last visit
-    $CONF_FORUM['notify_once'] = 1;
-
-    if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
-        $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
-        if ( DB_numRows($result) > 0 ) {
-            $userprefs = DB_fetchArray($result);
-            $CONF_FORUM['show_topics_perpage']        = $userprefs['topicsperpage'];
-            $CONF_FORUM['show_posts_perpage']         = $userprefs['postsperpage'];
-            $CONF_FORUM['popular_limit']              = $userprefs['popularlimit'];
-            $CONF_FORUM['show_members_perpage']       = $userprefs['membersperpage'];
-            $CONF_FORUM['show_search_perpage']        = $userprefs['searchlines'];
-            $CONF_FORUM['show_topicreview']           = $userprefs['showiframe'];
-            $CONF_FORUM['show_anonymous_posts']       = $userprefs['viewanonposts'];
-            $CONF_FORUM['notify_once']                = $userprefs['notify_once'];
-        }
+if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
+    $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
+    if ( DB_numRows($result) > 0 ) {
+        $userprefs = DB_fetchArray($result);
+        $CONF_FORUM['show_topics_perpage']        = $userprefs['topicsperpage'];
+        $CONF_FORUM['show_posts_perpage']         = $userprefs['postsperpage'];
+        $CONF_FORUM['popular_limit']              = $userprefs['popularlimit'];
+        $CONF_FORUM['show_members_perpage']       = $userprefs['membersperpage'];
+        $CONF_FORUM['show_search_perpage']        = $userprefs['searchlines'];
+        $CONF_FORUM['show_topicreview']           = $userprefs['showiframe'];
+        $CONF_FORUM['show_anonymous_posts']       = $userprefs['viewanonposts'];
+        $CONF_FORUM['notify_once']                = $userprefs['notify_once'];
     }
 }
+$CONF_FORUM['use_glfilter'] = 1; // always use the filter...
+
 $CONF_FORUM['leftblocks'] = array ('forum_menu');
 $CONF_FORUM['leftblocks'] = glfGetUserBlocks($CONF_FORUM['leftblocks']);
 
