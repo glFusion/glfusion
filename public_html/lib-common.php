@@ -568,7 +568,7 @@ switch ($_CONF['language']) {
 // Handle Who's Online block
 if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
     // The following code handles anonymous users so they show up properly
-    DB_query( "DELETE FROM {$_TABLES['sessions']} WHERE remote_ip = '{$_SERVER['REMOTE_ADDR']}' AND uid = 1" );
+    DB_delete($_TABLES['sessions'], array('remote_ip', 'uid'),array($_SERVER['REMOTE_ADDR'], 1));
 
     $tries = 0;
     do
@@ -756,8 +756,6 @@ function COM_getThemes( $all = false )
 
     $themes = array();
 
-    $fd = opendir( $_CONF['path_themes'] );
-
     // If users aren't allowed to change their theme then only return the default theme
 
     if(( $_CONF['allow_user_themes'] == 0 ) && !$all )
@@ -766,6 +764,8 @@ function COM_getThemes( $all = false )
     }
     else
     {
+        $fd = opendir( $_CONF['path_themes'] );
+
         while(( $dir = @readdir( $fd )) == TRUE )
         {
             if( is_dir( $_CONF['path_themes'] . $dir) && $dir <> '.' && $dir <> '..' && $dir <> 'CVS' && substr( $dir, 0 , 1 ) <> '.' )
@@ -1060,7 +1060,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
            $theme_headercode, $theme_layout,$stMenu,$themeAPI;
 
     if ( $themeAPI == 1 ) {
-        require_once $_CONF['path'] . 'system/lib-compatibility.php';
+        require_once $_CONF['path_system'] . 'lib-compatibility.php';
         return COM_siteHeaderv1($what, $pagetitle, $headercode);
         exit;
     }
@@ -1342,7 +1342,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
 
     if ( $themeAPI == 1 ) {
-        require_once $_CONF['path'] . 'system/lib-compatibility.php';
+        require_once $_CONF['path_system'] . 'lib-compatibility.php';
         return COM_siteFooterv1( $rightblock, $custom);
         exit;
     }
@@ -5487,7 +5487,7 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
     }
     $property = addslashes($property);
 
-    DB_query("DELETE FROM {$_TABLES['speedlimit']} WHERE (type = '$type') AND (ipaddress = '$property')");
+    DB_delete($_TABLES['speedlimit'], array('type', 'ipaddress'), array($type, $property));
 }
 
 /**
@@ -7283,9 +7283,12 @@ function USES_class_upload() {
 }
 
 // Now include all plugin functions
-foreach( $_PLUGINS as $pi_name )
-{
-    require_once( $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' );
+foreach( $_PLUGINS as $pi_name ) {
+    if (@file_exists($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc') ) {
+        require_once( $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' );
+    } else {
+        unset($_PLUGINS[array_search($pi_name, $_PLUGINS)]);
+    }
 }
 
 if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 && !SEC_inGroup('Root') ) {
@@ -7327,7 +7330,7 @@ if( $_CONF['cron_schedule_interval'] > 0 )
  */
 function phpblock_autotranslations() {
    global $_CONF, $LANG_WIDGETS;
-   require_once $_CONF['path'] . 'system/lib-widgets.php';
+   require_once $_CONF['path_system'] . 'lib-widgets.php';
    return(WIDGET_autotranslations());
 }
 
