@@ -24,7 +24,7 @@
           </td>
           <td class="aligncenter" style="width:10%;text-align:center;">{menuactive}</td>
           <td class="aligncenter" style="width:10%;text-align:center;">
-            <a href="{site_admin_url}/plugins/sitetailor/menu.php?mode=menu&amp;id={menu_id}">
+            <a href="{site_admin_url}/plugins/sitetailor/menu.php?mode=menu&amp;menu={menu_id}">
             <img src="{site_admin_url}/plugins/sitetailor/images/edit.png" alt="{$LANG_ST01[edit]}"{xhtml}>
             </a>
           </td>

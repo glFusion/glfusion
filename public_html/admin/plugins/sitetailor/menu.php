@@ -30,8 +30,9 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../../../lib-common.php';
-require_once $_CONF['path'] . 'system/lib-admin.php';
+require_once $_CONF['path'].'plugins/sitetailor/classes/classMenuElement.php';
 
+USES_lib_admin();
 $display = '';
 
 // Only let admin users access this page
@@ -426,7 +427,7 @@ function ST_createElement ( $menu_id ) {
     $retval = '';
 
     $menu_arr = array(
-            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php?mode=menu&amp;id='.$menu_id,
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php?mode=menu&amp;menu='.$menu_id,
                   'text' => 'Back to ' . $stMenu[$menu_id]['menu_name']),
             array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php',
                   'text' => $LANG_ST01['menu_list']),
@@ -542,7 +543,7 @@ function ST_createElement ( $menu_id ) {
         'site_admin_url'    => $_CONF['site_admin_url'],
         'site_url'          => $_CONF['site_url'],
         'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
-        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: <a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php?mode=menu&amp;id='.$menu_id.'">'.$stMenu[$menu_id]['menu_name'].'</a> :: '.$LANG_ST01['create_elements'],
+        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: <a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$stMenu[$menu_id]['menu_name'].'</a> :: '.$LANG_ST01['create_elements'],
         'menuname'          => $menu_name,
         'menuid'            => $menu_id,
         'type_select'       => $type_select,
@@ -661,7 +662,7 @@ function ST_editElement( $menu_id, $mid ) {
     $retval = '';
 
     $menu_arr = array(
-            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php?mode=menu&amp;id='.$menu_id,
+            array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php?mode=menu&amp;menu='.$menu_id,
                   'text' => 'Back to ' . $stMenu[$menu_id]['menu_name']),
             array('url'  => $_CONF['site_admin_url'] .'/plugins/sitetailor/menu.php',
                   'text' => $LANG_ST01['menu_list']),
@@ -804,7 +805,7 @@ function ST_editElement( $menu_id, $mid ) {
         'site_admin_url'    => $_CONF['site_admin_url'],
         'site_url'          => $_CONF['site_url'],
         'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
-        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">Menu List</a> :: <a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php?mode=menu&amp;id='.$menu_id.'">'.$stMenu[$menu_id]['menu_name'].'</a> :: Edit Element',
+        'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">Menu List</a> :: <a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$stMenu[$menu_id]['menu_name'].'</a> :: Edit Element',
         'menulabel'         => $stMenu[$menu_id]['elements'][$mid]->label,
         'menuorder'         => $stMenu[$menu_id]['elements'][$mid]->order,
         'order_select'      => $order_select,
@@ -1419,15 +1420,13 @@ if ( isset($_REQUEST['menumid']) ) {
 } else {
     $menu_id = 0;
 }
-if ( isset($_REQUEST['id']) ) {
-    $menu_id = COM_applyFilter($_REQUEST['id'],true);
-}
 if ( isset($_REQUEST['menu'] ) ) {
     $menu_id = COM_applyFilter($_REQUEST['menu'],true);
 }
 if ( isset($_REQUEST['mid']) ) {
     $mid = COM_applyFilter($_REQUEST['mid'],true);
 }
+
 if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
     switch ( $mode ) {
         case 'clone' :
@@ -1448,7 +1447,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             $mid       = COM_applyFilter($_GET['mid'],true);
             $menu_id   = COM_applyFilter($_GET['menu'],true);
             ST_moveElement( $menu_id, $mid, $direction );
-            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;id=' . $menu_id);
+            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;
         case 'edit' :
@@ -1461,7 +1460,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
         case 'saveedit' :
             ST_saveEditMenuElement();
             CACHE_remove_instance('stmenu');
-            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;id=' . $menu_id);
+            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;
         case 'save' :
@@ -1469,7 +1468,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             $menu_id = COM_applyFilter($_POST['menuid'],true);
             ST_saveNewMenuElement();
             CACHE_remove_instance('stmenu');
-            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;id=' . $menu_id);
+            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;
         case 'savenewmenu' :
@@ -1506,7 +1505,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             $menu_id   = COM_applyFilter($_GET['menuid'],true);
             ST_deleteChildElements( $id, $menu_id );
             $stMenu[$menu_id]['elements'][0]->reorderMenu();
-            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;id=' . $menu_id);
+            echo COM_refresh($_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php?mode=menu&amp;menu=' . $menu_id);
             exit;
             break;
         case 'deletemenu' :
