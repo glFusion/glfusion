@@ -19,13 +19,13 @@
           <td style="width:60%;">{info}</td>
           <td class="aligncenter" style="width:10%;text-align:center;">
             <a href="{site_admin_url}/plugins/sitetailor/menu.php?mode=clone&amp;id={menu_id}">
-            <img src="{site_admin_url}/plugins/sitetailor/images/copy.png" alt="{$LANG_ST01[clone]}"{xhtml}>
+            <img src="{layout_url}/images/copy.png" alt="{$LANG_ST01[clone]}"{xhtml}>
             </a>
           </td>
           <td class="aligncenter" style="width:10%;text-align:center;">{menuactive}</td>
           <td class="aligncenter" style="width:10%;text-align:center;">
             <a href="{site_admin_url}/plugins/sitetailor/menu.php?mode=menu&amp;menu={menu_id}">
-            <img src="{site_admin_url}/plugins/sitetailor/images/edit.png" alt="{$LANG_ST01[edit]}"{xhtml}>
+            <img src="{layout_url}/images/edit.png" alt="{$LANG_ST01[edit]}"{xhtml}>
             </a>
           </td>
           <td class="aligncenter" style="width:10%;text-align:center;">
