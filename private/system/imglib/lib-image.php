@@ -40,16 +40,16 @@ if (!defined ('GVERSION')) {
 
 switch ( $_CONF['image_lib'] ) {
     case 'imagemagick' :    // ImageMagick...
-        require_once($_CONF['path'] . '/system/imglib/im_image.php');
+        require_once($_CONF['path_system'] . 'imglib/im_image.php');
         break;
     case 'netpbm' :    // NetPBM
-        require_once($_CONF['path'] . '/system/imglib/pbm_image.php');
+        require_once($_CONF['path_system'] . 'imglib/pbm_image.php');
         break;
     case 'gdlib' :    // GD Library
-        require_once($_CONF['path'] . '/system/imglib/gd_image.php');
+        require_once($_CONF['path_system'] . 'imglib/gd_image.php');
         break;
     default:
-        require_once($_CONF['path'] . '/system/imglib/gd_image.php');
+        require_once($_CONF['path_system'] . 'imglib/gd_image.php');
         break;
 }
 

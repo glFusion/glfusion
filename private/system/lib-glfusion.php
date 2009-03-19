@@ -260,7 +260,7 @@ function CTL_clearCache($plugin='')
         $plugin = '__' . $plugin . '__';
     }
 
-    CTL_clearCacheDirectories($_CONF['path'] . 'data/layout_cache/', $plugin);
+    CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
 }
 
 // +-------------------------------------------------------------------------+

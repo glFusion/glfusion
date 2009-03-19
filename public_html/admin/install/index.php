@@ -1678,7 +1678,7 @@ function INST_migrateGeeklog()
         return _displayError(DB_NO_DATABASE,'');
     }
 
-    include $_CONF['path'].'system/lib-database.php';
+    include $_CONF['path_system'].'lib-database.php';
 
     // Peform a few basic check to ensure we are not trying to migrate a glFusion site.
 

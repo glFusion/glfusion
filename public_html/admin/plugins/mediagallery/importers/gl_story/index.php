@@ -30,9 +30,9 @@
 require_once '../../../../../lib-common.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
-require_once $_CONF['path'] . 'system/lib-story.php';
-require_once $_CONF['path'] . 'system/classes/story.class.php';
 
+USES_lib_story();
+USES_class_story();
 
 class mgAlbumg {
 

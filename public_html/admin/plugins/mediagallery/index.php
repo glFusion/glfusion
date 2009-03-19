@@ -221,7 +221,7 @@ if ( $msg > 0 ) {
     $statusMsg = '';
 }
 
-require_once $_CONF['path'] . 'system/lib-admin.php';
+USES_lib_admin();
 
 $T = new Template($_MG_CONF['template_path']);
 $T->set_file (array ('admin' => 'administration.thtml'));

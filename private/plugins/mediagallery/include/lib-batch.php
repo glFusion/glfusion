@@ -805,8 +805,8 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
             case 'gl_storyimport' :
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
-                require_once $_CONF['path'] . 'system/lib-story.php';
-                require_once $_CONF['path'] . 'system/classes/story.class.php';
+                require_once $_CONF['path_system'] . 'lib-story.php';
+                require_once $_CONF['path_system'] . 'classes/story.class.php';
 
                 $album_id = $row['aid'];
                 $srcFile  = $row['data'];

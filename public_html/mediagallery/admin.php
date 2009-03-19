@@ -56,7 +56,7 @@ function MG_invalidRequest( ) {
 function MG_navbar($selected='',$album_id) {
     global $_CONF, $_MG_CONF, $LANG_MG01, $LANG_MG03, $glversion;
 
-    include_once($_CONF['path']."system/classes/navbar.class.php");
+    USES_class_navbar();
 
     $T = new Template( MG_getTemplatePath($album_id) );
 

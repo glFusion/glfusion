@@ -148,18 +148,18 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
 
         $article->set_var( 'story_id', $story->getSid() );
 
-        if( $_CONF['contributedbyline'] == 1 )
-        {
-            $article->set_var( 'lang_contributed_by', $LANG01[1] );
-            $article->set_var( 'contributedby_uid', $story->DisplayElements('uid') );
+        if ($_CONF['contributedbyline'] == 1) {
+            $article->set_var('lang_contributed_by', $LANG01[1]);
+            $article->set_var('contributedby_uid', $story->DisplayElements('uid'));
             $fullname = $story->DisplayElements('fullname');
-            $article->set_var( 'contributedby_user', $story->DisplayElements('username') );
-            if (empty ($fullname)) {
-                $article->set_var( 'contributedby_fullname', $story->DisplayElements('username') );
+            $username = $story->DisplayElements('username');
+            $article->set_var('contributedby_user', $username);
+            if (empty($fullname)) {
+                $article->set_var('contributedby_fullname', $username);
             } else {
-                $article->set_var( 'contributedby_fullname',$story->DisplayElements('fullname') );
+                $article->set_var('contributedby_fullname',$fullname);
             }
-            $authorname = COM_getDisplayName( $story->DisplayElements('uid'), $story->DisplayElements('username'), $fullname );
+            $authorname = COM_getDisplayName( $story->DisplayElements('uid'),$username, $fullname);
 
             $article->set_var( 'author', $authorname );
             $profileUrl = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid='
@@ -1447,6 +1447,8 @@ function service_get_story($args, &$output, &$svc_msg)
             $varname = '_' . $fieldname;
             $output[$fieldname] = $story->{$varname};
         }
+        $output['username'] = $story->_username;
+        $output['fullname'] = $story->_fullname;
 
         if ($args['gl_svc']) {
             if (($output['statuscode'] == STORY_ARCHIVE_ON_EXPIRE) ||
