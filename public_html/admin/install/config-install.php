@@ -156,6 +156,7 @@ function install_config($site_url)
     $c->add('show_right_blocks',FALSE,'select',2,11,1,1350,TRUE);
     $c->add('showfirstasfeatured',0,'select',2,11,0,1360,TRUE);
     $c->add('compress_css',TRUE,'select',2,11,0,1370,TRUE);
+    $c->add('template_comments',TRUE,'select',2,11,0,1373,TRUE);
 
     $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
     $c->add('cache_templates',TRUE,'select',2,12,0,1375,TRUE);

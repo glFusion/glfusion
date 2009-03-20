@@ -123,6 +123,17 @@ class Template
 
 
  /**
+  * A hash of strings forming a translation table which translates variable names
+  * into names of files containing the variable content.
+  * $location[varname] = "full path to template";
+  *
+  * @var       array
+  * @access    private
+  * @see       set_file
+  */
+  var $location     = array();
+
+ /**
   * The in memory template
   *
   * @var       array
@@ -377,13 +388,15 @@ class Template
                 $this->halt("set_file: For varname $varname filename is empty.");
                 return false;
             }
+            $tFilename = $this->filename($filename);
             if ( isset($_CONF['cache_templates']) && $_CONF['cache_templates'] == true ) {
-                $filename = $this->check_cache($varname, $this->filename($filename));
+                $filename = $this->check_cache($varname, $tFilename);
                 $this->file[$varname] = $filename;
             } else {
-                $templateCode = $this->compile_template($varname,$this->filename($filename));
+                $templateCode = $this->compile_template($varname,$tFilename);
                 $this->templateCode[$varname] = $templateCode;
             }
+            $this->location[$varname] = $tFilename;
         } else {
             reset($varname);
             while(list($v, $f) = each($varname)) {
@@ -394,13 +407,15 @@ class Template
                     $this->halt("set_file: For varname $v filename is empty.");
                     return false;
                 }
+                $tFilename = $this->filename($f);
                 if ( isset($_CONF['cache_templates']) && $_CONF['cache_templates'] == true ) {
-                    $f = $this->check_cache($v, $this->filename($f));
+                     $f = $this->check_cache($v, $tFilename);
                     $this->file[$v] = $f;
                 } else {
-                    $f = $this->compile_template($v, $this->filename($f));
+                    $f = $this->compile_template($v,$tFilename);
                     $this->templateCode[$v] = $f;
                 }
+                $this->location[$v] = $tFilename;
             }
         }
         return true;
@@ -778,6 +793,7 @@ class Template
             if ($this->debug & 4) {
                 echo "<p><b>parse:</b> (with scalar) target = $target, varname = $varname, append = $append</p>\n";
             }
+            $this->set_var('templatelocation',$this->location[$varname]);
             $str = $this->subst($varname);
             if ($append) {
                 $this->set_var($target, $this->get_var($target) . $str);
@@ -790,6 +806,7 @@ class Template
                 if ($this->debug & 4) {
                     echo "<p><b>parse:</b> (with array) target = $target, i = $i, varname = $v, append = $append</p>\n";
                 }
+                $this->set_var('templatelocation',$this->location[$v]);
                 $str = $this->subst($v);
                 if ($append) {
                     $this->set_var($target, $this->get_var($target) . $str);
@@ -1518,13 +1535,18 @@ class Template
     */
     function cache_write($filename, $tmplt)
     {
-        global $TEMPLATE_OPTIONS;
+        global $TEMPLATE_OPTIONS, $_CONF;
 
         // order of operations could matter a lot so get rid of
         // template comments first: emits nothing to the output file
         // since the regex is multiline, make sure there is a comment before calling it
         if (strpos($tmplt, '{#') !== false) {
-            $tmplt = preg_replace('/\{#.*#\}(\n)?/sm', '', $tmplt);
+            if ( isset($_CONF['template_comments']) && $_CONF['template_comments'] == true ) {
+                $tmplt = str_replace('{#','<!-- ',$tmplt);
+                $tmplt = str_replace('#}',' -->',$tmplt);
+            } else {
+                $tmplt = preg_replace('/\{#.*#\}(\n)?/sm', '', $tmplt);
+            }
         }
 
         $tmplt = $this->replace_extended($tmplt);
@@ -1691,6 +1713,8 @@ class Template
     */
     function compile_blocks($filestub, $parent)
     {
+        global $_CONF;
+
         $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
         $matches = array();
         $str = $parent[2];
@@ -1707,7 +1731,12 @@ class Template
         // template comments first: emits nothing to the output file
         // since the regex is multiline, make sure there is a comment before calling it
         if (strpos($str, '{#') !== false) {
-            $tmplt = preg_replace('/\{#.*#\}(\n)?/sm', '', $str);
+            if ( isset($_CONF['template_comments']) && $_CONF['template_comments'] == true ) {
+                $str = str_replace('{#','<!-- ',$str);
+                $str = str_replace('#}',' -->',$str);
+            } else {
+                $str = preg_replace('/\{#.*#\}(\n)?/sm', '', $str);
+            }
         }
 
         $tmplt = $this->replace_extended($str);
@@ -1737,41 +1766,46 @@ class Template
     */
     function compile_template($varname, $filename)
     {
-      global $TEMPLATE_OPTIONS, $_CONF;
+        global $TEMPLATE_OPTIONS, $_CONF;
 
-      if ($this->debug & 8) {
-          printf("<compile_template> Var %s for file %s<br>", $varname, $filename);
-      }
+        if ($this->debug & 8) {
+            printf("<compile_template> Var %s for file %s<br>", $varname, $filename);
+        }
 
-      $str = @file_get_contents($filename);
+        $str = @file_get_contents($filename);
 
-      // check for begin/end block stuff
-      $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
-      $matches = array();
-      if (preg_match_all($reg, $str, $matches, PREG_SET_ORDER)) {
-          $phpstub = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '__%s' . '.php';
-          foreach ($matches as $m) {
-              $str = str_replace($m[0], '<?php echo $this->block_echo(\''.$m[1].'\'); ?>', $str);
-              $this->compile_blocks($phpstub, $m);
-          }
-      }
+        // check for begin/end block stuff
+        $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
+        $matches = array();
+        if (preg_match_all($reg, $str, $matches, PREG_SET_ORDER)) {
+            $phpstub = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '__%s' . '.php';
+            foreach ($matches as $m) {
+                $str = str_replace($m[0], '<?php echo $this->block_echo(\''.$m[1].'\'); ?>', $str);
+                $this->compile_blocks($phpstub, $m);
+            }
+        }
 
-      // order of operations could matter a lot so get rid of
-      // template comments first: emits nothing to the output file
-      // since the regex is multiline, make sure there is a comment before calling it
-      if (strpos($str, '{#') !== false) {
-          $tmplt = preg_replace('/\{#.*#\}(\n)?/sm', '', $str);
-      }
+        // order of operations could matter a lot so get rid of
+        // template comments first: emits nothing to the output file
+        // since the regex is multiline, make sure there is a comment before calling it
+        if (strpos($str, '{#') !== false) {
+            if ( isset($_CONF['template_comments']) && $_CONF['template_comments'] == true ) {
+                $str = str_replace('{#','<!-- ',$str);
+                $str = str_replace('#}',' -->',$str);
+            } else {
+                $str = preg_replace('/\{#.*#\}(\n)?/sm', '', $str);
+            }
+        }
 
-      $tmplt = $this->replace_extended($str);
-      $tmplt = $this->replace_lang($tmplt);
-      $tmplt = $this->replace_vars($tmplt);
+        $tmplt = $this->replace_extended($str);
+        $tmplt = $this->replace_lang($tmplt);
+        $tmplt = $this->replace_vars($tmplt);
 
       // clean up concatenation.
-      $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
-                            "\n", $tmplt);
+          $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
+                                "\n", $tmplt);
 
-      return $tmplt;
+        return $tmplt;
 
     }
 

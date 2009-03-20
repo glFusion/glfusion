@@ -177,6 +177,7 @@ function glfusion_113()
     $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
     $c->add('cache_templates',TRUE,'select',2,12,0,1375,TRUE);
     $c->add('instance_cache' ,TRUE,'select',2,12,0,1380,TRUE);
+    $c->add('template_comments',TRUE,'select',2,11,0,1373,TRUE);
 }
 
 
