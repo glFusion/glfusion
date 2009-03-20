@@ -6,6 +6,7 @@ v1.2.0
 
 v1.1.3
 ------
+- 0000380: Menu graphic <li> background does not display in IE6 (Eric)
 - Fixed hard coded 'Edit a Comment' (Mark)
 - Implemented no cache option for templates to improve performance on UNC
   shared (Mark)
