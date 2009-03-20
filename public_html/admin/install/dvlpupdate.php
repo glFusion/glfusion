@@ -195,6 +195,7 @@ function glfusion_120()
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
+glfusion_113();
 glfusion_120();
 
 // probably need to clear the template cache so do it here
