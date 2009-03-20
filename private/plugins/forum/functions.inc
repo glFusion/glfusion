@@ -252,7 +252,7 @@ function plugin_profilevariablesedit_forum($uid, &$template)
     $template->set_var('forum_occupation', $A['occupation']);
 
     $template->set_var ('lang_forum', $LANG_GF04['label_forum']);
-    $template->set_var ('lang_location', $LANG_GF04['label_location']);
+/*    $template->set_var ('lang_location', $LANG_GF04['label_location']); */
     $template->set_var ('lang_aim', $LANG_GF04['label_aim']);
     $template->set_var ('lang_icq', $LANG_GF04['label_icq']);
     $template->set_var ('lang_yim', $LANG_GF04['label_yim']);

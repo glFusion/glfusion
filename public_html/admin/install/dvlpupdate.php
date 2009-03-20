@@ -175,11 +175,10 @@ function glfusion_113()
 {
     global $_TABLES, $_CONF;
 
-    echo 'Performing glFusion v1.1.3 Modifications...<br /><br />';
-
-    COM_errorLog("glFusion: Running code update for glFusion v1.1.3svn");
-
-    echo 'No modifications necessary at this time...<br /><br />';
+    $c = config::get_instance();
+    $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
+    $c->add('cache_templates',TRUE,'select',2,12,0,1375,TRUE);
+    $c->add('instance_cache' ,TRUE,'select',2,12,0,1380,TRUE);
 }
 
 function glfusion_120()

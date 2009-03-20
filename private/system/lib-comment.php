@@ -865,7 +865,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template->set_var('type', $type);
 
             if ($mode == 'edit' || $mode == $LANG03[28]) { //edit modes
-            	$comment_template->set_var('start_block_postacomment', COM_startBlock("Edit a Comment"));
+            	$comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[41]));
             	$comment_template->set_var('cid', '<input type="hidden" name="cid" value="' . $_REQUEST['cid'] . '"' . XHTML . '>');
             }
             else {

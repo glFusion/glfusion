@@ -67,8 +67,6 @@ if (!defined ('GVERSION')) {
 // Turn this on to get various debug messages from the code in this library
 $_SEC_VERBOSE = false;
 
-
-
 /* Constants for account stats */
 define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
 define('USER_ACCOUNT_AWAITING_ACTIVATION', 1); // Account awaiting user to login.
@@ -157,6 +155,9 @@ function SEC_getUserGroups($uid='')
         } else {
             $nrows = 0;
         }
+    }
+    if ( count($groups) == 0 ) {
+        $groups = array('All Users' => 2);
     }
 
     ksort($groups);
