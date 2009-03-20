@@ -20,16 +20,16 @@ NOTE: paths specified below are relative to this file
 	border-bottom:0;
 }
 #gl_moomenu1 {
-	height:2.2em; /*set to 54px if you use 2 row menus*/
-	background:url(images/gl_moomenu1-bg.png)repeat;
+    height:2.2em; /*set to 54px if you use 2 row menus*/
+    background:url(../../images/menu/menu-bg.gif)repeat;
 }
 .gl_moomenu1 li:hover,
 .gl_moomenu1 li a:hover{
-	background:url(images/gl_moomenu1-hover.gif) repeat;
+    background:url(../../images/menu/menu_hover_bg.gif) repeat;
 }
 #gl_moomenu1 li li a.parent,
 #gl_moomenu1 li li a.parent:hover {
-	background:url(images/gl_moomenu1-parent_ie6.gif) 95% 50% no-repeat;
+    background:url(images/menu/gl_moomenu1-parent_ie6.gif) 95% 50% no-repeat;
 }
 .gl_moomenu1 li ul {
 	width:177px;
