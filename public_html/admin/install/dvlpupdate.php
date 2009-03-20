@@ -173,8 +173,10 @@ function glfusion_113()
 {
     global $_TABLES, $_CONF;
 
-    echo 'No updates at this time...<br />';
-
+    $c = config::get_instance();
+    $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
+    $c->add('cache_templates',TRUE,'select',2,12,0,1375,TRUE);
+    $c->add('instance_cache' ,TRUE,'select',2,12,0,1380,TRUE);
 }
 
 

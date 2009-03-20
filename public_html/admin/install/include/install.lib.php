@@ -714,6 +714,18 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.2' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.2';
             $done = true;
+        case '1.1.2' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+
+            $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
+            $c->add('cache_templates',0,'select',2,12,0,1375,TRUE);
+            $c->add('instance_cache' ,0,'select',2,12,0,1380,TRUE);
+
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.3',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.3' WHERE name='glfusion'",1);
+            $current_fusion_version = '1.1.3';
+            $done = true;
             break;
         default:
             $done = true;

@@ -157,6 +157,10 @@ function install_config($site_url)
     $c->add('showfirstasfeatured',0,'select',2,11,0,1360,TRUE);
     $c->add('compress_css',TRUE,'select',2,11,0,1370,TRUE);
 
+    $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
+    $c->add('cache_templates',TRUE,'select',2,12,0,1375,TRUE);
+    $c->add('instance_cache' ,TRUE,'select',2,12,0,1380,TRUE);
+
     // Subgroup: Blocks
     $c->add('sg_blocks', NULL, 'subgroup', 3, 0, NULL, 0, TRUE);
 
