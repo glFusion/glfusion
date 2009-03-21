@@ -1,7 +1,7 @@
 <?php
 
 ###############################################################################
-# english_utf-8.php
+# english.php
 #
 # This is the English language file for glFusion
 # Special thanks to Mischa Polivanov for his work on this project
