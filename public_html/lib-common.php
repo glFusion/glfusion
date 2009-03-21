@@ -4006,9 +4006,9 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
                 $title = utf8_decode($feed->articles[$i]['title']);
             }
             if ($feed->articles[$i]['link'] != '') {
-                $content = COM_createLink($title, $feed->articles[$i]['link']);
+                $content = COM_createLink($title, $feed->articles[$i]['link'], $attr = array('target' => '_blank'));
             } elseif ($feed->articles[$i]['enclosureurl'] != '') {
-                $content = COM_createLink($title, $feed->articles[$i]['enclosureurl']);
+                $content = COM_createLink($title, $feed->articles[$i]['enclosureurl'], $attr = array('target' => '_blank'));
             } else {
                 $content = $title;
             }
