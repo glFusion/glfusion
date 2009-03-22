@@ -575,7 +575,7 @@ function delVote() {
 
 
 function modDownloadS() {
-    global $_CONF,$_FM_TABLES,$myts,$eh,$filemgmt_SnapStore,$filemgmt_FileStore;
+    global $_CONF,$_FM_TABLES,$myts,$eh,$filemgmt_SnapStore,$filemgmt_FileStore,$_FMDOWNLOAD;
 
     $cid = $_POST["cid"];
 
@@ -604,6 +604,30 @@ function modDownloadS() {
         } else {
             $url = rawurlencode($myts->makeTboxData4Save($upload->_currentFile['name']));
             $size = $myts->makeTboxData4Save($upload->_currentFile['size']);
+
+            $pos = strrpos($newfile,'.') + 1;
+            $fileExtension = strtolower(substr($newfile, $pos));
+            if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
+                if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
+                    COM_errorLOG("AddNewFile - New Upload file is rejected by config rule:$uploadfilename");
+                    $eh->show("1109");
+                } else {
+                    $fileExtension = $_FMDOWNLOAD[$fileExtension];
+                    $pos = strrpos($url,'.') + 1;
+                    $url = strtolower(substr($url, 0,$pos)) . $fileExtension;
+
+                    $pos2 = strrpos($newfile,'.') + 1;
+                    $filename = substr($newfile,0,$pos2) . $fileExtension;
+                    $rc = @copy ( $filemgmt_FileStore.$newfile , $filemgmt_FileStore.$filename );
+                    if ( $rc === false ) {
+                        $errmsg = "Upload Error: Unable to copy new file";
+                        COM_errorLog($errmsg);
+                        $eh->show("1106");
+                    }
+                    @unlink($filemgmt_FileStore.$newfile);
+                }
+            }
+
             DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size." WHERE lid='{$_POST['lid']}'");
             if ( $currentfile != $newfile ) {
                 @unlink($filemgmt_FileStore.$currentfile);
@@ -1014,7 +1038,7 @@ function addCat() {
 
 function addDownload() {
     global $_CONF,$_USER,$_FM_TABLES,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$filemgmt_FileStore,$filemgmt_SnapStore;
-    global $myts,$eh;
+    global $myts,$eh,$_FMDOWNLOAD;
 
 //    $filename = $myts->makeTboxData4Save($_FILES['newfile']['name']);
 //    $url = $myts->makeTboxData4Save(rawurlencode($filename));
@@ -1075,6 +1099,22 @@ function addDownload() {
             $size = $myts->makeTboxData4Save(intval($upload->_currentFile['size']));
             $filename = $myts->makeTboxData4Save($upload->_currentFile['name']);
             $url = $myts->makeTboxData4Save(rawurlencode($filename));
+
+            $pos = strrpos($filename,'.') + 1;
+            $fileExtension = strtolower(substr($filename, $pos));
+            if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
+                if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
+                    COM_errorLOG("AddNewFile - New Upload file is rejected by config rule:$uploadfilename");
+                    $eh->show("1109");
+                } else {
+                    $fileExtension = $_FMDOWNLOAD[$fileExtension];
+                    $pos = strrpos($url,'.') + 1;
+                    $url = strtolower(substr($url, 0,$pos)) . $fileExtension;
+
+                    $pos2 = strrpos($filename,'.') + 1;
+                    $filename = substr($filename,0,$pos2) . $fileExtension;
+                }
+            }
             $AddNewFile = true;
         }
     }
