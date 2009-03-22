@@ -227,7 +227,8 @@ $LANG03 = array(
     37 => 'New Comment Reply',
     38 => 'Someone has replied to your comment.',
     39 => 'You may view the comment thread at the following address: ',
-    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
+    40 => 'If you wish to recieve no further notifications of replies, visit the following link: ',
+    41 => 'Edit a Comment'
 );
 
 ###############################################################################
@@ -1517,7 +1518,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1573,7 +1574,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1608,7 +1609,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-#
+# 
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
@@ -1922,7 +1923,10 @@ $LANG_confignames['Core'] = array(
     'jpg_orig_quality' => 'JPEG Quality Factor',
     'allow_embed_object' => 'Allow EMBED Object',
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
-    'use_from_site_mail' => 'Force email from address to be site email'
+    'use_from_site_mail' => 'Force email from address to be site email',
+    'cache_templates' => 'Enable Template Caching',
+    'instance_cache' => 'Enable Instance Caching',
+    'template_comments' => 'Enable Template Comments'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1977,7 +1981,8 @@ $LANG_fs['Core'] = array(
     'fs_perm_story' => 'Story Default Permission',
     'fs_perm_topic' => 'Topic Default Permission',
     'fs_perm_block' => 'Block Default Permission',
-    'fs_webservices' => 'Webservices'
+    'fs_webservices' => 'Webservices',
+    'fs_caching' => 'Caching'
 );
 
 $LANG_configselects['Core'] = array(

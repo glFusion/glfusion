@@ -232,7 +232,8 @@ $LANG03 = array(
     37 => 'Neue Antwort auf Kommentar',
     38 => 'Jemand hat auf den Kommentar geantwortet.',
     39 => 'Der Kommentarverlauf kann hier eingesehen werden: ',
-    40 => 'Zum Abschalten weiterer Benachrichtigungen bitte diesem Link folgen: '
+    40 => 'Zum Abschalten weiterer Benachrichtigungen bitte diesem Link folgen: ',
+    41 => 'Edit a Comment'
 );
 
 ###############################################################################
@@ -1927,7 +1928,10 @@ $LANG_confignames['Core'] = array(
     'jpg_orig_quality' => 'JPEG Qualitätsfaktor',
     'allow_embed_object' => 'EMBED Object erlauben',
     'story_submit_by_perm_only' => 'Nur Abonements erlauben bei Kategorien mit Schreibberechtigung',
-    'use_from_site_mail' => 'Force email from address to be site email'
+    'use_from_site_mail' => 'Force email from address to be site email',
+    'cache_templates' => 'Enable Template Caching',
+    'instance_cache' => 'Enable Instance Caching',
+    'template_comments' => 'Enable Template Comments'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1982,7 +1986,8 @@ $LANG_fs['Core'] = array(
     'fs_perm_story' => 'Grundeinstellung Artikelrechte',
     'fs_perm_topic' => 'Grundeinstellung Kategorierechte',
     'fs_perm_block' => 'Grundeinstellung Blockrechte',
-    'fs_webservices' => 'Webservices'
+    'fs_webservices' => 'Webservices',
+    'fs_caching' => 'Caching'
 );
 
 $LANG_configselects['Core'] = array(
