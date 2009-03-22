@@ -624,6 +624,7 @@ function modDownloadS() {
                         COM_errorLog($errmsg);
                         $eh->show("1106");
                     }
+                    @unlink($filemgmt_FileStore.$newfile);
                 }
             }
 
