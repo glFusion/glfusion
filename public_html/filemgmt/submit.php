@@ -288,6 +288,9 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                     /* Grab the filename without extension and add the mapped extension */
                     $pos = strrpos($url,'.') + 1;
                     $url = strtolower(substr($url, 0,$pos)) . $fileExtension;
+
+                    $pos2 = strrpos($name,'.') + 1;
+                    $name = substr($name,0,$pos2) . $fileExtension;
                 }
             } else {
                 $tmpfilename = $tmpfilename . ".$fileExtension";
@@ -300,7 +303,6 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                     $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
                     FM_notifyAdmins($name,$submitter,$description);
                 }
-//                $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
                 if (!$returnMove) {
                     if ($directUploadAccess) {
                         COM_errorLOG("Filemgmt submit error: Direct upload, file could not be created: $tmp to {$filemgmt_FileStore}{$name}");
