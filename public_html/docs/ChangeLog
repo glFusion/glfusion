@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.3
 ------
+- 0000263: Hide "Comments (0)" indication when there are 0 comments (Eric)
 - 0000342: Default text size for textarea (Eric)
 - 0000371: make RSS feeds open in new (_blank) window (Eric)
 - 0000380: Menu graphic <li> background does not display in IE6 (Eric)
