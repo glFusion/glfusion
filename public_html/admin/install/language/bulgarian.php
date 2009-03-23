@@ -170,15 +170,15 @@ $LANG_INSTALL = array(
     'wizard_version'            => 'v' . GVERSION . ' Инсталационен Помощтник',
 /* --- Updated --- */
 /*    'system_path_prompt'        => 'Въведете пълния път към вашата папка със glFusion\'s <strong>private/</strong> directory.<br /><br />Тази дериктория садържа <strong>db-config.php.dist</strong> или <strong>db-config.php</strong> файла.<br /><br />Примери: /home/www/glfuison/private или c:/www/glfusion/private', */
-    'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />This directory contains the <strong>db-config.php.dist</strong> or <strong>db-config.php</strong> file.<br /><br />Examples: /home/www/glfuison/private or c:/www/glfusion/private.<br /><br /><strong>Hint:</strong> The absolute path to your public_html/ directory appears to be:<br />%s<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
+    'system_path_prompt'        => 'Въведете пълния път към  glFusion\ <strong>private/</strong> directory.<br /><br />Тази директория съдържа <strong>db-config.php.dist</strong> или <strong>db-config.php</strong> файл.<br /><br />Примери: /home/www/glfuison/private или c:/www/glfusion/private.<br /><br /><strong>Забележка:</strong> Пълния път към  public_html/ дерикторията изглежда че е:<br />%s<br /><br /><strong>Още настройки</strong> ви позволява да принуди някой от пътищата. Не е нужно да се редактират тези пътища, системата ще ги определи автоматично.',
 /* --- New --- */
-    'advanced_settings'         => 'Advanced Settings',
-    'log_path'                  => 'Logs Path',
-    'lang_path'                 => 'Language Path',
-    'backup_path'               => 'Backups Path',
-    'data_path'                 => 'Data Path',
-    'language_support'          => 'Language Support',
-    'language_pack'             => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
+    'advanced_settings'         => 'Още настройки',
+    'log_path'                  => 'път към logs',
+    'lang_path'                 => 'път към езиците',
+    'backup_path'               => 'път към бакъпите',
+    'data_path'                 => 'път към дата',
+    'language_support'          => 'Помощ за езиците',
+    'language_pack'             => 'glFusion е на Английски, но след инсталацията можете да свалите и инсталирате <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Езиков пакет</a> който съдържа всички езикови файлове подържани от нас.',
 );
 
 // +---------------------------------------------------------------------------+
