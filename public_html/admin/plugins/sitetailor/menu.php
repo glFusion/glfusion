@@ -1552,50 +1552,51 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             $content = ST_displayMenuList( );
             break;
     }
-} else {
-    if ( isset($_POST['defaults']) ) {
-        $menu_id = COM_applyFilter($_POST['menu_id'],true);
-        switch ( $stMenu[$menu_id]['menu_type']) {
-            case 1: // horizontal cascading (navigation menu)
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#151515'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#3667c0'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#CCCCCC'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#FFFFFF'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#679EF1'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#151515'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#333333'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#333333'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#000000'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','menu_parent.png'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
-                break;
-            case 2: // horizontal simple (footer menu)
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#3677C0'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#679EF1'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#999999'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
-                break;
-            case 3: //vertical simple
-            case 4: // vertical cascading (block)
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#DDDDDD'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#BBBBBB'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#0000FF'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#0000FF'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#FFFFFF'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#999999'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','vmenu_parent.gif'");
-                DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
-                break;
-        }
-        CACHE_remove_instance('stmenu');
-        CACHE_remove_instance('css');
-
+} else if ( isset($_POST['defaults']) ) {
+    $menu_id = COM_applyFilter($_POST['menu_id'],true);
+    switch ( $stMenu[$menu_id]['menu_type']) {
+        case 1: // horizontal cascading (navigation menu)
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#151515'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#3667c0'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#CCCCCC'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#FFFFFF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#679EF1'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_background_color','#151515'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_bg_color','#333333'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#333333'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_shadow_color','#000000'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'use_images','1'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_bg_filename','menu_bg.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_hover_filename','menu_hover_bg.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','menu_parent.png'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+            break;
+        case 2: // horizontal simple (footer menu)
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#3677C0'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#679EF1'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#999999'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+            break;
+        case 3: //vertical simple
+        case 4: // vertical cascading (block)
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_bg_color','#DDDDDD'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_bg_color','#BBBBBB'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_text_color','#0000FF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'main_menu_hover_text_color','#FFFFFF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_text_color','#0000FF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_hover_text_color','#FFFFFF'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'submenu_highlight_color','#999999'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_parent_filename','vmenu_parent.gif'");
+            DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'menu_alignment','1'");
+            break;
     }
+    CACHE_remove_instance('stmenu');
+    CACHE_remove_instance('css');
+} else if ( isset($_POST['cancel']) && isset($_POST['menu']) ) {
+    $menu_id = COM_applyFilter($_POST['menu'],true);
+    $content = ST_displayTree( $menu_id );
+} else {
     // display the tree
     $content = ST_displayMenuList( );
 }
