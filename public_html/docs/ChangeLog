@@ -6,27 +6,25 @@ v1.2.0
 
 v1.1.3
 ------
-- 0000263: Hide "Trackbacks (0)" indication when there are 0 trackbacks (Eric)
+- 0000415: css.php and js.php consume too much CPU (mark)
+- 0000408: "Edit a Comment' is hard coded in the source (mark)
+- 0000411: Sending trackbacks to WordPress sites fail (mark)
+- 0000410: Uploading large plugins could error with max_execution_time exceeded
+           (mark)
+- 0000409: Template Caching is very slow when using network shares (mark)
+- 0000407: The template library does not properly handle double dashes (--) in
+           the item id when creating the instance cache HTML comment (mark)
 - 0000263: Hide "Comments (0)" indication when there are 0 comments (Eric)
 - 0000342: Default text size for textarea (Eric)
-- 0000371: make RSS feeds open in new (_blank) window (Eric)
 - 0000380: Menu graphic <li> background does not display in IE6 (Eric)
-- Fixed hard coded 'Edit a Comment' (Mark)
-- Implemented no cache option for templates to improve performance on UNC
-  shared (Mark)
 - 0000402: "No boxes" should read "No Blocks" in Account Settings (Eric)
+- 0000387: Clean up loginform.thtml (Eric)
 - 0000385: copy icon broken in site tailor (Eric)
-- 0000387: Clean up (re-design) loginform.thtml (Eric)
-- Added set_time_limit() calls in plugin upload to prevent max_execution_time
-  exceeded errors. (Mark)
-- contributedby_user and contributedby_fullname were not set in story templates
-  (Mark)
-- Fixed incorrect use of &amp with trackback url (mark)
 - 0000400: Default topic was not selected on new stories (mark)
-- 0000395: Removing a plugins files causes glFusion to crash (mark)
-- 0000396: htmlLawed has been upgraded to v1.1.7.2 (mark)
 - 0000397: Incorrect paths are used throughout the system.
            $_CONF['path'].'system/' instead of $_CONF['path_system'] (mark)
+- 0000396: htmlLawed has been upgraded to v1.1.7.2 (mark)
+- 0000395: Removing a plugins files causes glFusion to crash (mark)
 - 0000390: Postcards do not display properly in mail client (mark)
 - 0000386: CUSTOM_templateSetVars() does not work for story templates (mark)
 - 0000384: icon for additional profile api broken (mark)
@@ -39,8 +37,13 @@ Calendar Plugin
 
 CAPTCHA Plugin
 --------------
-- When using type 'general' return the necessary HTML from
-  plugin_settemplatevariable() call (mark)
+- 0000412: If using the 'general' option to enable CAPTCHA in a static page,
+           there is no template variable to pass (mark)
+
+FileMgmt Plugin
+---------------
+- 0000413: If uploads are not moderated, the extension mapping rename is not
+           performed. (mark)
 
 Forum Plugin
 ------------
@@ -52,8 +55,10 @@ Media Gallery Plugin
 
 Site Tailor
 -----------
-- No longer user id= URL parameter, instead use menu=. The id can conflict
-  with some web appliances that pass an internal id=  (Mark)
+- 0000259: Cancelling edit of menu item returns to menu listing instead of
+           element list (mark)
+- 0000414: When trying to edit a menu's elements, it crashes with editTree()
+           error. (mark)
 
 v1.1.2
 ------
