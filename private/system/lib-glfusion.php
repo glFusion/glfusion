@@ -261,6 +261,13 @@ function CTL_clearCache($plugin='')
     }
 
     CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
+
+    foreach (glob($_CONF['path_html']."stylecache_*.*") as $filename) {
+        @unlink($filename);
+    }
+    foreach (glob($_CONF['path_html']."jscache_*.*") as $filename) {
+        @unlink($filename);
+    }
 }
 
 // +-------------------------------------------------------------------------+

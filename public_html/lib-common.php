@@ -7321,7 +7321,6 @@ if( $_CONF['cron_schedule_interval'] > 0 )
     }
 }
 
-
 /**
  * This block will display a list of flags that link to the Google automatic
  * translation service.
@@ -7334,4 +7333,279 @@ function phpblock_autotranslations() {
    return(WIDGET_autotranslations());
 }
 
+function css_out(){
+    global $_CONF, $_PLUGINS, $_TABLES;
+    global $_ST_CONF, $stMenu, $themeAPI, $themeStyle;
+
+    $tpl = $_CONF['theme'];
+
+    $cacheID = 'css_' . $tpl;
+    $cacheFile = $_CONF['path_html'].'/stylecache_'.$_CONF['theme'].'.css';
+    $cacheURL  = $_CONF['site_url'].'/stylecache_'.$_CONF['theme'].'.css';
+
+    if ( @file_exists($cacheFile) ) {
+        return;
+    }
+
+    $files   = array();
+
+    // Let's look in the custom directory first...
+    if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
+        $files[] = $_CONF['path_layout'] . 'custom/style.css';
+    } else {
+        $files[] = $_CONF['path_layout'] . 'style.css';
+    }
+    if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
+        $files[] = $_CONF['path_layout'] . 'custom/style-colors.css';
+    } else {
+        $files[] = $_CONF['path_layout'] . 'style-colors.css';
+    }
+
+    foreach ( $_PLUGINS as $pi_name ) {
+        if ( function_exists('plugin_getheadercss_'.$pi_name) ) {
+            $function = 'plugin_getheadercss_'.$pi_name;
+            $pHeader = array();
+            $pHeader = $function();
+            if ( is_array($pHeader) ) {
+                foreach($pHeader AS $item => $file) {
+                    $files[] = $file;
+                }
+            }
+        }
+    }
+
+    // check cache age & handle conditional request
+    if(css_cacheok($cacheFile,$files)){
+        return $cacheURL;
+    }
+COM_errorLog("cache out of date");
+    // start output buffering and build the stylesheet
+    ob_start();
+
+    // load files
+    foreach($files as $file) {
+        css_loadfile($file);
+        print "\n";
+    }
+
+    // end output buffering and get contents
+    $css = ob_get_contents();
+    ob_end_clean();
+
+    // compress whitespace and comments
+    if($_CONF['compress_css']){
+        $css = css_compress($css);
+    }
+    // save cache file
+    $fp = fopen($cacheFile,'w');
+    fwrite($fp,$css);
+    fclose($fp);
+    return $cacheURL;
+}
+
+/**
+ * Checks if a CSS Cache file still is valid
+ *
+ */
+function css_cacheok($cache,$files){
+    $ctime = @filemtime($cache);
+    if(!$ctime) { return false; } //There is no cache
+
+    // now walk the files
+
+    foreach($files as $file){
+        if(@filemtime($file) > $ctime){
+            return false;
+        }
+    }
+    return true;
+}
+/**
+ * Loads a given file
+ */
+function css_loadfile($file){
+    if(!@file_exists($file)) return '';
+    $css = readfile($file);
+    return;
+}
+/**
+ * Very simple CSS optimizer
+ *
+ */
+function css_compress($css){
+    //strip comments through a callback
+    $css = preg_replace_callback('#(/\*)(.*?)(\*/)#s','css_comment_cb',$css);
+
+    //strip (incorrect but common) one line comments
+    $css = preg_replace('/(?<!:)\/\/.*$/m','',$css);
+
+    // strip whitespaces
+    $css = preg_replace('![\r\n\t ]+!',' ',$css);
+    $css = preg_replace('/ ?([:;,{}\/]) ?/','\\1',$css);
+
+    // shorten colors
+    $css = preg_replace("/#([0-9a-fA-F]{1})\\1([0-9a-fA-F]{1})\\2([0-9a-fA-F]{1})\\3/", "#\\1\\2\\3",$css);
+
+    return $css;
+}
+
+/**
+ * Callback for css_compress()
+ *
+ * Keeps short comments (< 5 chars) to maintain typical browser hacks
+ *
+ */
+function css_comment_cb($matches){
+    if(strlen($matches[2]) > 4) return '';
+    return $matches[0];
+}
+
+function js_out(){
+    global $_CONF, $_PLUGINS, $themeAPI;
+
+    $tpl = $_CONF['theme'];
+
+
+    $cacheFile = $_CONF['path_html'].'/jscache_'.$_CONF['theme'].'.js';
+    $cacheURL  = $_CONF['site_url'].'/jscache_'.$_CONF['theme'].'.js';
+
+    if ( @file_exists($cacheFile) ) {
+        return;
+    }
+
+    /*
+     * Static list of standard JavaScript used by glFusion...
+     */
+
+    $files = array(
+        $_CONF['path_html'] . 'javascript/mootools/mootools-release-1.11.packed.js',
+        $_CONF['path_html'] . 'fckeditor/fckeditor.js',
+        $_CONF['path_html'] . 'javascript/common.js',
+        $_CONF['path_html'] . 'javascript/fValidator.js',
+        $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js',
+        $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js',
+
+    );
+
+    if ( $themeAPI < 2 ) {
+        $files[] = $_CONF['path_html'] . 'javascript/sitetailor_ie6vertmenu.js';
+    }
+    /*
+     * Check to see if the theme has any JavaScript to include...
+     */
+
+    $function = $_CONF['theme'] . '_themeJS';
+
+    if( function_exists( $function ))
+    {
+        $jTheme = $function( );
+        if ( is_array($jTheme) ) {
+            foreach($jTheme AS $item => $file) {
+                $files[] = $file;
+            }
+        }
+    }
+
+    /*
+     * Let the plugins add their JavaScript needs here...
+     */
+
+    foreach ( $_PLUGINS as $pi_name ) {
+        if ( function_exists('plugin_getheaderjs_'.$pi_name) ) {
+            $function = 'plugin_getheaderjs_'.$pi_name;
+            $pHeader = array();
+            $pHeader = $function();
+            if ( is_array($pHeader) ) {
+                foreach($pHeader AS $item => $file) {
+                    $files[] = $file;
+                }
+            }
+        }
+    }
+
+    /*
+     * Let the plugins add any global JS variables
+     */
+    foreach ( $_PLUGINS as $pi_name ) {
+        if ( function_exists('plugin_getglobaljs_'.$pi_name) ) {
+            $function = 'plugin_getglobaljs_'.$pi_name;
+            $globalJS = array();
+            $globalJS = $function();
+            if ( is_array($globalJS) ) {
+                foreach($globalJS AS $name => $value) {
+                    $pluginJSvars[$name] = $value;
+                }
+            }
+        }
+    }
+
+    if(js_cacheok($cacheFile,$files)){
+        return $cacheURL;
+    }
+
+    // start output buffering and build the script
+    ob_start();
+
+    // add some global variables
+    print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
+    print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
+    print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php';" . LB;
+
+    // send any global plugin JS vars
+
+    if ( is_array($pluginJSvars) ) {
+        foreach ($pluginJSvars AS $name => $value) {
+            print "var " . $name . " = '".$value."';";
+        }
+    }
+
+    // load files
+    foreach($files as $file){
+        js_load($file);
+    }
+
+    // end output buffering and get contents
+    $js = ob_get_contents();
+    ob_end_clean();
+
+    $js .= "\n"; // https://bugzilla.mozilla.org/show_bug.cgi?id=316033
+
+    // save cache file
+    $fp = fopen($cacheFile,'w');
+    fwrite($fp,$js);
+    fclose($fp);
+    return $cacheURL;
+}
+
+/**
+ * Load the given file, handle include calls and print it
+ */
+function js_load($file){
+    if (!@file_exists($file))
+        return;
+
+    $js = readfile($file);
+
+    return;
+}
+
+/**
+ * Checks if a JavaScript Cache file still is valid
+ *
+ */
+function js_cacheok($cache,$files){
+
+    $ctime = @filemtime($cache);
+    if(!$ctime) return false; //There is no cache
+
+    // now walk the files
+    foreach($files as $file){
+        if(@filemtime($file) > $ctime){
+            return false;
+        }
+    }
+    return true;
+}
+css_out();
+js_out();
 ?>
