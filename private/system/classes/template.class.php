@@ -1861,6 +1861,7 @@ class Template
               $path_cache .= $_CONF['language'] . '/';
           }
           $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
+          $iid = str_replace('-','_',$iid);
           $filename = $path_cache.'instance__'.$iid.'.php';
           $tmplt = '<!-- begin cached as '.htmlspecialchars($iid)." -->\n"
                  . $tmplt
