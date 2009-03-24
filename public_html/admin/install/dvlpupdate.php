@@ -175,29 +175,35 @@ function glfusion_113()
 {
     global $_TABLES, $_CONF;
 
+    COM_errorLog("glFusion: Running code update for glFusion v1.1.3svn");
+
     $c = config::get_instance();
     $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
     $c->add('cache_templates',TRUE,'select',2,12,0,1375,TRUE);
-    $c->add('instance_cache' ,TRUE,'select',2,12,0,1380,TRUE);
-    $c->add('template_comments',TRUE,'select',2,11,0,1373,TRUE);
+    $c->add('template_comments',FALSE,'select',2,11,0,1373,TRUE);
+    $c->del('instance_cache', 'Core');
+
+    return 'glFusion v1.1.3svn updates successfully applied.<br />';
 }
 
 function glfusion_120()
 {
     global $_TABLES, $_CONF;
 
-    echo 'Performing glFusion v1.2.0 Modifications...<br /><br />';
-
     COM_errorLog("glFusion: Running code update for glFusion v1.2.0svn");
-
-    echo 'No modifications necessary at this time...<br /><br />';
+    return 'glFusion v1.2.0.svn - No updates necessary.<br />';
 }
 
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_113();
-glfusion_120();
+$retval .= 'Performing glFusion v1.1.3 updates...<br />';
+
+$retval .= glfusion_113();
+
+$retval .= 'Performing glFusion v1.2.0.svn updates...<br />';
+
+$retval .= glfusion_120();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();
