@@ -1925,8 +1925,7 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments',
+    'template_comments' => 'Include Template Comments in Page Source',
 );
 
 $LANG_configsubgroups['Core'] = array(
