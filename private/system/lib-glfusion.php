@@ -268,6 +268,8 @@ function CTL_clearCache($plugin='')
     foreach (glob($_CONF['path_html']."jscache_*.*") as $filename) {
         @unlink($filename);
     }
+    css_out();
+    js_out();
 }
 
 // +-------------------------------------------------------------------------+

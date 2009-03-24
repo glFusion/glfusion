@@ -7378,7 +7378,7 @@ function css_out(){
     if(css_cacheok($cacheFile,$files)){
         return $cacheURL;
     }
-COM_errorLog("cache out of date");
+
     // start output buffering and build the stylesheet
     ob_start();
 

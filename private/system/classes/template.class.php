@@ -59,6 +59,7 @@ $TEMPLATE_OPTIONS = array(
     'path_cache'    => $_CONF['path_data'].'layout_cache/',   // location of template cache
     'path_prefixes' => array(                               // used to strip directories off file names. Order is important here.
                         $_CONF['path_themes'],  // this is not path_layout. When stripping directories, you want files in different themes to end up in different directories.
+                        $_CONF['path'],
                         '/'                     // this entry must always exist and must always be last
                        ),
     'incl_phpself_header' => true,          // set this to true if your template cache exists within your web server's docroot.
@@ -1540,12 +1541,14 @@ class Template
         // order of operations could matter a lot so get rid of
         // template comments first: emits nothing to the output file
         // since the regex is multiline, make sure there is a comment before calling it
+
         if (strpos($tmplt, '{#') !== false) {
             if ( isset($_CONF['template_comments']) && $_CONF['template_comments'] == true ) {
                 $tmplt = str_replace('{#','<!-- ',$tmplt);
                 $tmplt = str_replace('#}',' -->',$tmplt);
             } else {
-                $tmplt = preg_replace('/\{#.*#\}(\n)?/sm', '', $tmplt);
+//                $tmplt = preg_replace('/\{#.*#\}(\n)?/sm', '', $tmplt);
+                $tmplt = preg_replace('!\{#.*?#\}(\n)?!sm', '', $tmplt);
             }
         }
 
@@ -1735,7 +1738,7 @@ class Template
                 $str = str_replace('{#','<!-- ',$str);
                 $str = str_replace('#}',' -->',$str);
             } else {
-                $str = preg_replace('/\{#.*#\}(\n)?/sm', '', $str);
+                $str = preg_replace('!\{#.*?#\}(\n)?!sm', '', $str);
             }
         }
 
@@ -1793,7 +1796,7 @@ class Template
                 $str = str_replace('{#','<!-- ',$str);
                 $str = str_replace('#}',' -->',$str);
             } else {
-                $str = preg_replace('/\{#.*#\}(\n)?/sm', '', $str);
+                $str = preg_replace('!\{#.*?#\}(\n)?!sm', '', $str);
             }
         }
 
@@ -1852,25 +1855,22 @@ class Template
     function create_instance($iid, $filevar) {
       global $TEMPLATE_OPTIONS, $_CONF;
 
-      if ( isset($_CONF['instance_cache']) && $_CONF['instance_cache'] == true ) {
-          $old_unknowns = $this->unknowns;
-          $this->unknowns = 'PHP';
-          $tmplt = $this->parse($iid, $filevar);
-          $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-          if ($TEMPLATE_OPTIONS['cache_by_language']) {
-              $path_cache .= $_CONF['language'] . '/';
-          }
-          $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
-          $iid = str_replace('-','_',$iid);
-          $filename = $path_cache.'instance__'.$iid.'.php';
-          $tmplt = '<!-- begin cached as '.htmlspecialchars($iid)." -->\n"
-                 . $tmplt
-                 . '<!-- end cached as '.htmlspecialchars($iid)." -->\n";
-          $this->cache_write($filename, $tmplt);
-          $this->unknowns = $old_unknowns;
-          return $filename;
+      $old_unknowns = $this->unknowns;
+      $this->unknowns = 'PHP';
+      $tmplt = $this->parse($iid, $filevar);
+      $path_cache = $TEMPLATE_OPTIONS['path_cache'];
+      if ($TEMPLATE_OPTIONS['cache_by_language']) {
+          $path_cache .= $_CONF['language'] . '/';
       }
-      return '';
+      $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
+      $iid = str_replace('-','_',$iid);
+      $filename = $path_cache.'instance__'.$iid.'.php';
+      $tmplt = '<!-- begin cached as '.htmlspecialchars($iid)." -->\n"
+             . $tmplt
+             . '<!-- end cached as '.htmlspecialchars($iid)." -->\n";
+      $this->cache_write($filename, $tmplt);
+      $this->unknowns = $old_unknowns;
+      return $filename;
     }
 
    /******************************************************************************
@@ -1902,18 +1902,16 @@ class Template
     function check_instance($iid, $filevar) {
       global $TEMPLATE_OPTIONS, $_CONF;
 
-      if ( isset($_CONF['instance_cache']) && $_CONF['instance_cache'] == true ) {
-          $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-          if ($TEMPLATE_OPTIONS['cache_by_language']) {
-              $path_cache .= $_CONF['language'] . '/';
-          }
-          $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
-          $filename = $path_cache.'instance__'.$iid.'.php';
-          if (file_exists($filename) && array_key_exists($filevar, $this->file)) {
-              $this->file[$filevar] = $filename;
-              return true;
-          }
-          return false;
+      $path_cache = $TEMPLATE_OPTIONS['path_cache'];
+      if ($TEMPLATE_OPTIONS['cache_by_language']) {
+          $path_cache .= $_CONF['language'] . '/';
+      }
+      $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
+      $iid = str_replace('-','_',$iid);
+      $filename = $path_cache.'instance__'.$iid.'.php';
+      if (file_exists($filename) && array_key_exists($filevar, $this->file)) {
+          $this->file[$filevar] = $filename;
+          return true;
       }
       return false;
     }
@@ -1987,6 +1985,7 @@ function CACHE_remove_instance($iid)
     global $TEMPLATE_OPTIONS;
 
     $iid = str_replace(array('..', '/', '\\', ':'), '', $iid);
+    $iid = str_replace('-','_',$iid);
     $path_cache = substr($TEMPLATE_OPTIONS['path_cache'], 0, -1);
     CACHE_clean_directories($path_cache, 'instance__'.$iid);
 }
@@ -2009,17 +2008,16 @@ function CACHE_create_instance($iid, $data, $bypass_lang = false)
 {
     global $TEMPLATE_OPTIONS, $_CONF;
 
-    if ( isset($_CONF['instance_cache']) && $_CONF['instance_cache'] == true ) {
-        if ($TEMPLATE_OPTIONS['cache_by_language']) {
-            if (!is_dir($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'])) {
-                @mkdir($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language']);
-                @touch($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'] . '/index.html');
-            }
+    if ($TEMPLATE_OPTIONS['cache_by_language']) {
+        if (!is_dir($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'])) {
+            @mkdir($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language']);
+            @touch($TEMPLATE_OPTIONS['path_cache'] . $_CONF['language'] . '/index.html');
         }
-
-        $filename = CACHE_instance_filename($iid, $bypass_lang);
-        file_put_contents($filename, $data);
     }
+
+    $filename = CACHE_instance_filename($iid, $bypass_lang);
+    file_put_contents($filename, $data);
+
 }
 
 /******************************************************************************
@@ -2056,12 +2054,10 @@ function CACHE_check_instance($iid, $bypass_lang = false)
 {
     global $_CONF;
 
-    if ( isset($_CONF['instance_cache']) && $_CONF['instance_cache'] == true ) {
-        $filename = CACHE_instance_filename($iid, $bypass_lang);
-        if (file_exists($filename)) {
-            $str = @file_get_contents($filename);
-            return $str === FALSE ? false : $str;
-        }
+    $filename = CACHE_instance_filename($iid, $bypass_lang);
+    if (file_exists($filename)) {
+        $str = @file_get_contents($filename);
+        return $str === FALSE ? false : $str;
     }
     return false;
 }
@@ -2082,11 +2078,9 @@ function CACHE_get_instance_update($iid, $bypass_lang = false)
 {
     global $_CONF;
 
-    if ( isset($_CONF['instance_cache']) && $_CONF['instance_cache'] == true ) {
-        $filename = CACHE_instance_filename($iid, $bypass_lang);
-        return @filemtime($filename);
-    }
-    return 0;
+    $filename = CACHE_instance_filename($iid, $bypass_lang);
+    return @filemtime($filename);
+
 }
 
 /******************************************************************************
@@ -2106,17 +2100,14 @@ function CACHE_instance_filename($iid,$bypass_lang = false)
 {
     global $TEMPLATE_OPTIONS, $_CONF;
 
-    if ( isset($_CONF['instance_cache']) && $_CONF['instance_cache'] == true ) {
-        $path_cache = $TEMPLATE_OPTIONS['path_cache'];
-        if (!$bypass_lang && $TEMPLATE_OPTIONS['cache_by_language']) {
-            $path_cache .= $_CONF['language'] . '/';
-        }
-        $iid = COM_sanitizeFilename($iid, true);
-        $filename = $path_cache.'instance__'.$iid.'.php';
-
-        return $filename;
+    $path_cache = $TEMPLATE_OPTIONS['path_cache'];
+    if (!$bypass_lang && $TEMPLATE_OPTIONS['cache_by_language']) {
+        $path_cache .= $_CONF['language'] . '/';
     }
-    return '';
+    $iid = COM_sanitizeFilename($iid, true);
+    $filename = $path_cache.'instance__'.$iid.'.php';
+
+    return $filename;
 }
 
 /******************************************************************************
