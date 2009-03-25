@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.3
 ------
+- Added config switch to include template location comments in page source (Mark & Eric)
 - Improved error detection when sending emails (Mark)
 - Tweaked plugin upload to not crash when hitting certain permission
   errors (Mark)
