@@ -5,9 +5,9 @@
 // | $Id::                                                                    $|
 // | Coppermine v1.4x Import Script                                            |
 // +---------------------------------------------------------------------------+
-// | Copyright (C) 2005-2008 by the following authors:                         |
+// | Copyright (C) 2005-2009 by the following authors:                         |
 // |                                                                           |
-// | Mark R. Evans              - mark@gllabs.org                              |
+// | Mark R. Evans              - mark AT glfusion DOT org                     |
 // +---------------------------------------------------------------------------+
 // |                                                                           |
 // | This program is free software; you can redistribute it and/or             |
@@ -189,6 +189,7 @@ class mgAlbumCPG {
         $this->owner_id         = $_USER['uid'];
         $this->group_id         = $album['group_id'];
         $this->mod_group_id     = $album['mod_group_id'];
+        $this->media_count      = $album['media_count'];
     }
 
     function createAlbum( ) {
@@ -436,6 +437,14 @@ function MG_buildImportAlbums( $configdir ) {
     	$A['album_desc']		= html_entity_decode($row['description']);
     	$A['category']  		= 0;
 
+    	$result4 = @mysql_query("SELECT COUNT(*) FROM " . $CONFIG['TABLE_PREFIX'] . "pictures WHERE aid=".$A['album_id']);
+    	list($number_of_items) = @mysql_fetch_array($result4,MYSQL_BOTH);
+    	if ( $number_of_items == '' ) {
+    	    $number_of_items = 0;
+    	}
+    	$number_of_items = intval($number_of_items);
+	    $A['media_count']  = $number_of_items;
+
     	if ( $row['category'] > 10000 ) {  // user gallery
     		$owner_id = $row['category'] - 10000;
     		if ( !isset( $mgAlbums[$new_aid]) ) {
@@ -448,10 +457,14 @@ function MG_buildImportAlbums( $configdir ) {
 	    		} else {
 		    		$cpg_username = 'admin';
 	    		}
+	    		$result4 = @mysql_query("SELECT COUNT(*) FROM " . $CONFIG['TABLE_PREFIX'] . "pictures WHERE aid=".$A['album_id']);
+	    		list($number_of_items) = @mysql_fetch_array($result4,MYSQL_BOTH);
 	    		$B['album_id']     = $row['category'];
 	    		$B['album_title']  = 'User Gallery for ' . $cpg_username;
 	    		$B['album_parent'] = 20001;
 	    		$B['category']     = -1;
+	    		$B['media_count']  = $A['media_count'];
+
 		        $album  = new mgAlbumCPG();
        			$album->constructor($B);
 				$album->owner_name = $cpg_username;
@@ -499,7 +512,6 @@ function MG_importSelectAlbums($configdir ) {
 
 	$T->parse('output','page');
 	$display .= $T->finish($T->get_var('output'));
-	$display .= MG_siteFooter();
 	return $display;
 }
 
