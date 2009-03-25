@@ -6,6 +6,9 @@ v1.2.0
 
 v1.1.3
 ------
+- Improved error detection when sending emails (Mark)
+- Tweaked plugin upload to not crash when hitting certain permission
+  errors (Mark)
 - 0000415: css.php and js.php consume too much CPU (mark)
 - 0000408: "Edit a Comment' is hard coded in the source (mark)
 - 0000411: Sending trackbacks to WordPress sites fail (mark)
@@ -51,6 +54,7 @@ Forum Plugin
 
 Media Gallery Plugin
 --------------------
+- Fixed some cosmetic issues with Coppermine import (Mark)
 - 0000393: Search results do not honor the gallery view thumbnail size. (mark)
 
 Site Tailor
