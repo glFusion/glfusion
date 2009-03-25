@@ -21,20 +21,20 @@
             <input type="hidden" name="sub_group" value="{open_sg}"{xhtml}>
             <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
             <div id="ce_{subgroup_name}">
-            {# BEGIN fieldset #}
+            <!-- BEGIN fieldset -->
             <fieldset style="margin-top:10px;"><legend>{fs_display}</legend>
-            {# BEGIN notes #}
+            <!-- BEGIN notes -->
             <div class="notes">
              <h4>{fs_display}</h4>
              <p class="last">{fs_help}</p>
              <span class="warningsmall">{fs_warning}</span>
             </div>
-            {# END notes #}
+            <!-- END notes -->
             <table class="inputTable" style="width:100%;">
             {fs_contents}
             </table>
             </fieldset>
-            {# END fieldset #}
+            <!-- END fieldset -->
             </div>
             <input type="hidden" name="form_submit" value="true"{xhtml}>
             <div id="bottom_buttons" class="aligncenter">

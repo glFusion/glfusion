@@ -1,40 +1,40 @@
 {# begin {templatelocation} #}
-{# BEGIN delete-button #}
+<!-- BEGIN delete-button -->
 <input type="button" class="del-link" value="x" onclick="glfremove(this);"{xhtml}>
-{# END delete-button #}
+<!-- END delete-button -->
 
-{# BEGIN text-element #}
+<!-- BEGIN text-element -->
 <tr><td class="key">{display_name} {doc_link} {unset_link}</td>
 <td>
 <input type="text" class="opt" name="{name}" style="width:300px" value="{value}"{xhtml}>
 {delete}
 </td></tr>
-{# END text-element #}
+<!-- END text-element -->
 
-{# BEGIN placeholder-element #}
+<!-- BEGIN placeholder-element -->
 <tr><td class="key">{display_name}</td><td>
 <input type="hidden" name="{name}" value="{value}"{xhtml}>
 {delete}
 </td></tr>
-{# END placeholder-element #}
+<!-- END placeholder-element -->
 
-{# BEGIN select-element #}
+<!-- BEGIN select-element -->
 <tr><td class="key">{display_name} {doc_link} {unset_link}</td>
 <td>
 <select name="{name}" class="opt">
-  {# BEGIN select-options #}
+  <!-- BEGIN select-options -->
     <option {selected}  value="{opt_value}">{opt_name}</option>
-  {# END select-options #}
+  <!-- END select-options -->
 </select></td></tr>
-{# END select-element #}
+<!-- END select-element -->
 
-{# BEGIN unset-param #}
+<!-- BEGIN unset-param -->
 <tr><td class="key">{display_name} {doc_link}</td>
 <td><a href="#" onclick="restore('{name}');">{lang_enable}</a></td>
 </tr>
-{# END unset-param #}
+<!-- END unset-param -->
 
-{# BEGIN list-element #}
+<!-- BEGIN list-element -->
 <tr><td class="key" style="vertical-align:top">{display_name} {doc_link} {unset_link}</td>
 <td>
 <input type="button" value="+" onclick="hide_show_tbl(selectChildByID(this.parentNode, 'arr_table{arr_name}'), this);"{xhtml}>
@@ -47,17 +47,17 @@
 {my_add_element_button}
 </table>
 </td></tr>
-{# END list-element #}
+<!-- END list-element -->
 
-{# BEGIN keyed-add-button #}
+<!-- BEGIN keyed-add-button -->
 <tr><td colspan="2">
 <input type="button" value="{lang_add_element}" class="add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}')"{xhtml}><input style="width: 65px"{xhtml}>
 </td></tr>
-{# END keyed-add-button #}
+<!-- END keyed-add-button -->
 
-{# BEGIN unkeyed-add-button #}
+<!-- BEGIN unkeyed-add-button -->
 <tr><td colspan="2">
 <input type="button" value="{lang_add_element}" class="add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}')"{xhtml}>
 </td></tr>
-{# END unkeyed-add-button #}
+<!-- END unkeyed-add-button -->
 {# end {templatelocation} #}
