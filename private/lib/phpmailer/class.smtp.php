@@ -114,17 +114,36 @@ class SMTP
       $port = $this->SMTP_PORT;
     }
 
+    if( function_exists('set_error_handler') )
+    {
+        if( PHP_VERSION >= 5 )
+        {
+            /* Tell the error handler to use the default error reporting options.
+             * you may like to change this to use it in more/less cases, if so,
+             * just use the syntax used in the call to error_reporting() above.
+             */
+            $defaultErrorHandler = set_error_handler('SMTP_handleError', error_reporting());
+        } else {
+            $defaultErrorHandler = set_error_handler('SMTP_handleError');
+        }
+    }
+
     #connect to the smtp server
-    $this->smtp_conn = @fsockopen($host,    # the host of the server
+    $this->smtp_conn = fsockopen ($host,    # the host of the server
                                   $port,    # the port to use
                                   $errno,   # error number if any
                                   $errstr,  # error message if any
                                   $tval);   # give up after ? secs
+
+    restore_error_handler();
+
+
     # verify we connected properly
     if(empty($this->smtp_conn)) {
       $this->error = array("error" => "Failed to connect to server",
                            "errno" => $errno,
                            "errstr" => $errstr);
+
       if($this->do_debug >= 1) {
         echo "SMTP -> ERROR: " . $this->error["error"] .
                  ": $errstr ($errno)" . $this->CRLF;
@@ -1058,5 +1077,14 @@ class SMTP
 
 }
 
+function SMTP_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='')
+{
+    global $_CONF, $_USER, $_SYSTEM;
 
- ?>
+    COM_errorLog($errstr);
+
+    return;
+}
+
+
+?>

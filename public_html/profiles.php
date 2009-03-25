@@ -406,16 +406,24 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     $mailfrom = COM_formatEmailAddress ($from, $fromemail);
     $subject = COM_undoSpecialChars(strip_tags(stripslashes('Re: '.$A['title'])));
 
-    COM_mail ($mailto, $subject, $mailtext, $mailfrom,$html);
+    $rc = COM_mail ($mailto, $subject, $mailtext, $mailfrom,$html);
     COM_updateSpeedlimit ('mail');
 
-    // Increment numemails counter for story
-    DB_query ("UPDATE {$_TABLES['stories']} SET numemails = numemails + 1 WHERE sid = '$sid'");
-
-    if ($_CONF['url_rewrite']) {
-        $retval = COM_refresh($storyurl . '?msg=27');
+    if ( $rc ) {
+        if ($_CONF['url_rewrite']) {
+            $retval = COM_refresh($storyurl . '?msg=27');
+        } else {
+            $retval = COM_refresh($storyurl . '&amp;msg=27');
+        }
     } else {
-        $retval = COM_refresh($storyurl . '&amp;msg=27');
+        // Increment numemails counter for story
+        DB_query ("UPDATE {$_TABLES['stories']} SET numemails = numemails + 1 WHERE sid = '$sid'");
+
+        if ($_CONF['url_rewrite']) {
+            $retval = COM_refresh($storyurl . '?msg=26');
+        } else {
+            $retval = COM_refresh($storyurl . '&amp;msg=26');
+        }
     }
     return $retval;
 }

@@ -3432,7 +3432,8 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
     $mail->CharSet = COM_getCharset();
     if ($_CONF['mail_backend'] == 'smtp' ) {
         $mail->IsSMTP();
-        $mail->Host     = $_CONF['mail_smtp_host'] . ':' . $_CONF['mail_smtp_port'];
+        $mail->Host     = $_CONF['mail_smtp_host'];
+        $mail->Port     = $_CONF['mail_smtp_port'];
         if ( $_CONF['mail_smtp_secure'] != 'none' ) {
             $mail->SMTPSecure = $_CONF['mail_smtp_secure'];
         }
