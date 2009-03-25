@@ -1,9 +1,10 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
-<!--
+{#
 glfusionEditorBasePath = "{site_url}/fckeditor/" ;
 glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
 
--->
+#}
 </script>
 <script type="text/javaScript" src="{site_url}/javascript/submitmailuser_fckeditor.js"></script>
 
@@ -80,3 +81,4 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
     </table>
     {end_block}
 </form>
+{# end {templatelocation} #}

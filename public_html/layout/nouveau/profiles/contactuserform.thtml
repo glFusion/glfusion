@@ -1,9 +1,10 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
-<!--
+{#
 window.addEvent('domready',function() {
     var myValidator = new fValidator("contact");
 });
--->
+#}
 </script>
 <div class="glfform">
   <form action="{site_url}/profiles.php" method="post" id="contact">
@@ -34,3 +35,4 @@ window.addEvent('domready',function() {
     </div>
   </form>
 </div>
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <!-- BEGIN delete-button -->
 <input type="button" class="del-link" value="x" onclick="glfremove(this);"{xhtml}>
 <!-- END delete-button -->
@@ -59,3 +60,4 @@
 <input type="button" value="{lang_add_element}" class="add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}')"{xhtml}>
 </td></tr>
 <!-- END unkeyed-add-button -->
+{# end {templatelocation} #}

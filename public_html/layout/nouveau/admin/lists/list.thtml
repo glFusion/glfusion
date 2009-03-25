@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                             {search_menu}
                             <form action="{form_url}" method="post">
                                 {formfields_top}
@@ -14,3 +15,4 @@
                             </form>
                             <p class="aligncenter" style="{show_message}"><b>{message}</b></p>
                             {google_paging}
+{# end {templatelocation} #}

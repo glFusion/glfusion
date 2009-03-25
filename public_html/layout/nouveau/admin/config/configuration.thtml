@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
 <div id="configuration">
 <form method="post" action="configuration.php" name="group">
@@ -15,17 +16,13 @@
                 {lang_changes_made}:
                 {change_block}
             </div>
-
             <form action="{site_admin_url}/configuration.php" method="post" name="subgroup">
             <input type="hidden" name="conf_group" value="{open_group}"{xhtml}>
             <input type="hidden" name="sub_group" value="{open_sg}"{xhtml}>
             <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
-
             <div id="ce_{subgroup_name}">
-
             <!-- BEGIN fieldset -->
             <fieldset style="margin-top:10px;"><legend>{fs_display}</legend>
-
             <!-- BEGIN notes -->
             <div class="notes">
              <h4>{fs_display}</h4>
@@ -45,8 +42,8 @@
                 <input type="submit" name="form_reset" value="{lang_reset_form}"{xhtml}>
             </div>
             </form>
-
         </td>
     </tr>
 </table>
 </div>
+{# end {templatelocation} #}

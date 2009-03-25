@@ -1,9 +1,10 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
-<!--
+{#
 window.addEvent('domready',function() {
     var myValidator = new fValidator("contact");
 });
--->
+#}
 </script>
 {start_block_mailstory2friend}
 <div class="glfform">
@@ -37,3 +38,4 @@ window.addEvent('domready',function() {
 </form>
 </div>
 {end_block}
+{# end {templatelocation} #}

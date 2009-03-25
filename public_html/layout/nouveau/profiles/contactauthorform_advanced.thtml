@@ -1,11 +1,12 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
-<!--
+{#
 glfusionEditorBasePath = "{site_url}/fckeditor/" ;
 glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
 window.addEvent('domready',function() {
     var myValidator = new fValidator("contact");
 });
--->
+#}
 </script>
 <script type="text/javaScript" src="{site_url}/javascript/submitcontactuser_fckeditor.js"></script>
 {start_block_mailstory2friend}
@@ -60,3 +61,4 @@ window.addEvent('domready',function() {
     </table>
 </form>
 {end_block}
+{# end {templatelocation} #}

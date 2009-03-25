@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div>
 {$LANG32[64]} <b>{pi_name}</b>
 <br />
@@ -23,3 +24,4 @@
   <input type="submit" name="cancel" value="{$LANG32[59]}" />
 </form>
 </div>
+{# end {templatelocation} #}

@@ -1,4 +1,5 @@
-<!-- Hide the Advanced Editor as Javascript is required. If JS is not enabled then the message below in the <nonscript> tags will be displayed -->
+{# begin {templatelocation} #}
+{# Hide the Advanced Editor as Javascript is required. If JS is not enabled then the message below in the <nonscript> tags will be displayed #}
 <noscript>
 <div class="pluginAlert" style="border:1px dashed #ccc;text-align:center;margin-top:10px;padding:15px;">{lang_nojavascript} </div>
 </noscript>
@@ -155,3 +156,4 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
 </table>
 </form>
 {end_block}
+{# end {templatelocation} #}

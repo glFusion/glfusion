@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                                 <tr>
                                 	<td>
                                 		<table width = 100%>
@@ -10,3 +11,4 @@
                                 		&nbsp;
                                     </td>
                                 </tr>
+{# end {templatelocation} #}

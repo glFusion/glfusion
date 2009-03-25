@@ -1,1 +1,3 @@
+{# begin {templatelocation} #}
 <th class="alignleft">{label}</th>
+{# end {templatelocation} #}

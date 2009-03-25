@@ -1,5 +1,5 @@
-<!-- Start of header.thtml -->
-    <div id="gl_container_fluid"><!-- options: fixed | fluid-->
+{# begin {templatelocation} #}
+    <div id="gl_container_fluid"> {# options: fixed | fluid #}
         <div id="gl_header">
             <div class="top-r-corner">
                 <div class="top-l-corner">
@@ -12,12 +12,12 @@
 								<input type="hidden" name="results" value="{num_search_results}"{xhtml}>
 							</div>
 						</form>
-					</div> <!-- end of header-flag-n-search  -->
+					</div>
 					{logo_block}
                 </div>
             </div>
-        </div> <!-- end of gl_header -->
-		<!-- start of gl_menu -->
+        </div> {# end of gl_header #}
+		{# start of gl_menu #}
         {!if st_hmenu}
           {st_hmenu}
 		{!else}
@@ -47,7 +47,7 @@
                         {datetime}
                     </span>
                 </div>
-<!-- START OF CONTENT AREA -->
-                <a name="content-start" id="content-start"></a><!--for screenreaders -->
+{# START OF CONTENT AREA #}
+                <a name="content-start" id="content-start"></a> {# for screenreaders #}
                 {content}
-<!-- End of header.thtml -->
+{# end {templatelocation} #}

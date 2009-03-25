@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 function popitup(url)
@@ -85,14 +86,14 @@ function popitup(url)
 					</li>
 					<!-- END profileicon -->
 				</ul>
-			</div> <!-- end profile-meta -->
+			</div> {# end profile-meta #}
 			{!if user_bio}
 			<div class="profile-bio">
 				<b>{lang_bio} {username}</b><br{xhtml}>
 				<p>{user_bio}</p>
 			</div>
 			{!endif}
-		</div> <!-- end profile-col1 -->
+		</div> {# end profile-col1 #}
 		<div class="profile-col2">
 			<div class="profile-header">
 				<span>
@@ -131,3 +132,4 @@ function popitup(url)
 		</div>
 {end_block}
 <div style="clear:both;"></div>
+{# end {templatelocation} #}

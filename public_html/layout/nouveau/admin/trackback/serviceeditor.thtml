@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form action="{site_admin_url}/trackback.php" method="post">
     <table cellspacing="0" cellpadding="2" width="100%">
         <tr>
@@ -40,3 +41,4 @@
         </tr>
     </table>
 </form>
+{# end {templatelocation} #}

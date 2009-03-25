@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <br />
 {$LANG32[57]}
 <br />
@@ -6,3 +7,4 @@
    <input type="hidden" name="action" value="processupload" />
    <input type="submit" name="submit" value="{$LANG32[58]}" />&nbsp;&nbsp;
 </form>
+{# end {templatelocation} #}

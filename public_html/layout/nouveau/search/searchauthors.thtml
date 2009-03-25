@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                                     <tr>
                                         <td class="alignright">{lang_authors}:</td>
                                         <td>
@@ -7,3 +8,4 @@
                                             </select>
                                         </td>
                                     </tr>
+{# end {templatelocation} #}
