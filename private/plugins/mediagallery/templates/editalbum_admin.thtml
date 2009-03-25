@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
     <tr class="pluginRow2">
       <td style="width:40%;" class="mgAdminAlignRight">{lang_ri_enable}</td>
       <td align="left">
@@ -24,3 +25,4 @@
         {max_size_input}&nbsp;Kb {lang_unlimited}
       </td>
     </tr>
+{# end {templatelocation} #}

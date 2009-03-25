@@ -1,4 +1,4 @@
-<!-- start index.thtml -->
+{# begin {templatelocation} #}
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:5px;">
   <tr>
     <td class="pluginCellTitle alignleft">{statsmsg}</td>
@@ -64,4 +64,4 @@
     <td style="padding-left:20px;">{avgtviews}</td>
   </tr>
 </table>
-<!-- end header.thtml -->
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form name="globalperm" enctype="multipart/form-data"  method="post" action="{s_form_action}">
 <div>
 <input type="hidden" name="action" value="{action}"{xhtml}>
@@ -60,3 +61,4 @@
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

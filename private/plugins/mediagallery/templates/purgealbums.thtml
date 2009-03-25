@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 function doCheckAll()
@@ -28,14 +29,14 @@ function doUnCheckAll()
       <th align="center">{lang_username}</th>
       <th align="center">{lang_last_login}</th>
     </tr>
-    <!-- BEGIN UserRow -->
+    {# BEGIN UserRow #}
     <tr class="pluginRow{rowclass}">
       <td align="center">{select}</td>
       <td align="left">{title}</td>
       <td align="left">{owner}</td>
       <td align="left">{lastlogin}</td>
     </tr>
-    <!-- END UserRow -->
+    {# END UserRow #}
     <tr>
       <td colspan="2" align="left">
         <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}"{xhtml}>
@@ -49,3 +50,4 @@ function doUnCheckAll()
 <input type="reset"  value="{lang_reset}"  name="mode"{xhtml}>
 </div>
 </form>
+{# end {templatelocation} #}

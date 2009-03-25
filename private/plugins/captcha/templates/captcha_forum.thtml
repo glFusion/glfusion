@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
   <tr>
     <td class="pluginCellSubTitle">
 <script type="text/javascript">
@@ -33,3 +34,4 @@ function new_captcha()
       <br{xhtml}>{lang_captcha_help}
     </td>
   </tr>
+{# end {templatelocation} #}

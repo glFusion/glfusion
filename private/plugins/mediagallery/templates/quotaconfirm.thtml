@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form method="post" action="{s_form_action}">
 <table width="100%" cellpadding="3" cellspacing="1" border="0">
 <tr>
@@ -13,3 +14,4 @@
 </tr>
 </table>
 </form>
+{# end {templatelocation} #}

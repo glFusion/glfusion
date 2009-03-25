@@ -1,4 +1,4 @@
-
+{# begin {templatelocation} #}
   <form name="postcard" method="post" action="{s_form_action}">
     <div>
     <input type="hidden" name="mid" value="{mid}"{xhtml}>
@@ -94,3 +94,4 @@
     </div>
     </div>
   </form>
+{# end {templatelocation} #}

@@ -1,6 +1,5 @@
-<!-- start mod_add.thtml -->
+{# begin {templatelocation} #}
 <script type="text/javascript">
-    <!-- Begin
     function toggleModeratorMode(mode) {
         if (mode == 'user') {
             document.getElementById('lblusers').style.display="";
@@ -14,7 +13,6 @@
             document.getElementById('selgroup').style.display="";
         }
     }
-    //  End -->
 </script>
 
 <form name="modform" action="{action_url}" method="post">
@@ -64,4 +62,4 @@
     </tr>
 </table>
 </form>
-<!-- end mod_add.thtml -->
+{# end {templatelocation} #}

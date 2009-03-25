@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 function doCheckAll()
@@ -9,7 +10,6 @@ function doCheckAll()
     }
   }
 }
-
 function doUnCheckAll()
 {
   with (document.category) {
@@ -27,9 +27,10 @@ function doUnCheckAll()
 <p>&nbsp;</p>
 <div style="text-align:center;">
 <input type="hidden" name="action" value="category"{xhtml}>
-<!-- <input type="submit" name="mode"   value="{lang_save}"> -->
+{# <input type="submit" name="mode"   value="{lang_save}"> #}
 <input type="submit" name="mode"   value="{lang_cancel}"{xhtml}>
 <input type="submit" name="mode"   value="{lang_create}"{xhtml}>
 <input type="submit" name="mode"   value="{lang_delete}"  onclick="javascript:return confirm('{lang_delete_confirm}');"{xhtml}>
 </div>
 </form>
+{# end {templatelocation} #}

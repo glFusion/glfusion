@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <br{xhtml}>
 {lang_static_sort_help}
 <br{xhtml}>
@@ -60,3 +61,4 @@
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

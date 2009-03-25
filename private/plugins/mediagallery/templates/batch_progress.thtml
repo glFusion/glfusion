@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {META}
 <script type="text/javascript">
 //<![CDATA[
@@ -123,13 +124,12 @@ function updateButton()
 			<input class="mainoption" type="submit" name="submit_button" value="{L_NEXT}" onclick="javascript:ticker=0"{xhtml}>&nbsp;
 			&nbsp;&nbsp;&nbsp;
 			<input class="mainoption" type="submit" name="cancel_button" value="{L_CANCEL}"{xhtml}>
-			    <script type="text/javascript"><!--
+			    <script type="text/javascript">
 				updateButton();
-			//-->
-			</script>
-
+                </script>
 		</td>
 	</tr>
 </table>
 </div>
 </form>
+{# end {templatelocation} #}

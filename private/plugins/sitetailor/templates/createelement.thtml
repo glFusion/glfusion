@@ -1,9 +1,10 @@
-<!-- Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it -->
+{# begin {templatelocation} #}
+{# Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it #}
 <script type="text/javascript">
     document.getElementById('sitetailor').style.display=''
 </script>
 <script type="text/javascript">
-<!--
+{#
 window.addEvent('load',function() {
     $('menutype').addEvent('change',toggleFields);
     $('pid').addEvent('change',function(){
@@ -104,7 +105,7 @@ function toggleFields() {
             break;
     }
 }
--->
+#}
 </script>
 
   <div class="glfform">
@@ -177,3 +178,4 @@ function toggleFields() {
   </div>
   </form>
   </div>
+{# end {templatelocation} #}

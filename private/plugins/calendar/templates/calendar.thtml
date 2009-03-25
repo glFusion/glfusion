@@ -1,6 +1,5 @@
-
-                                <!-- Begin Calendar -->
-
+{# begin {templatelocation} #}
+                                {# Begin Calendar #}
                                 <table width="100%" cellpadding="5" cellspacing="0" border="0" class="cal-header">
                                     <tr align="center" class="dayview_times">
                                         <td width="33%" align="center"><a href="{site_url}/calendar/index.php?mode={mode}&amp;view=day">{lang_day}</a></td>
@@ -105,5 +104,5 @@
                                         </td>
                                     </tr>
                                 </table>
-
-                                <!-- End Calendar -->
+                                {# End Calendar #}
+{# end {templatelocation} #}

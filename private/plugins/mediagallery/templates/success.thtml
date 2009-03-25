@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table width="100%" cellspacing="0" cellpadding="0">
   <tr class="pluginRow2">
     <td colspan="2" style="vertical-align:middle;">
@@ -35,3 +36,4 @@
     </td>
   </tr>
 </table>
+{# end {templatelocation} #}

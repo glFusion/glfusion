@@ -1,7 +1,8 @@
+{# begin {templatelocation} #}
 <table border="0" width="100%" cellspacing="0" cellpadding="0" style="margin:0px auto;">
-<!-- BEGIN AlbumRow -->
+{# BEGIN AlbumRow #}
 <tr>
-<!-- BEGIN AlbumColumn -->
+{# BEGIN AlbumColumn #}
   <td style="width:100%;">
   <div class="mgPluginMI">
     <table width="100%" border="0" cellspacing="5" cellpadding="0">
@@ -33,8 +34,9 @@
     </table>
     </div>
   </td>
-<!-- END AlbumColumn -->
+{# END AlbumColumn #}
 </tr>
-<!-- END AlbumRow -->
+{# END AlbumRow #}
 </table>
 <div class="pluginRow2" style="vertical-align:middle;padding:5px;text-align:center;">{bottom_pagination}</div>
+{# end {templatelocation} #}

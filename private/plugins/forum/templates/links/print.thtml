@@ -1,7 +1,7 @@
-<!-- start print.thtml -->
+{# begin {templatelocation} #}
 <a href="{printlink}" rel="nofollow">{LANG_print}</a>
-<!--   Alternative layout to use Images -->
-<!--
+{#   Alternative layout to use Images #}
+{#
 <a href="{printlink}" rel="nofollow">{printlinkimg}</a>
--->
-<!-- end print.thtml -->
+#}
+{# end {templatelocation} #}

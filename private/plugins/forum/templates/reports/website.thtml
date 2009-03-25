@@ -1,2 +1,3 @@
-<!-- website.thtml -->
+{# begin {templatelocation} #}
                         <td style="background: center url({layout_url}/navbar/images/button.gif);" nowrap><a class="pluginButton" {websitelink}{LANG_website}</a></td>
+{# end {templatelocation} #}

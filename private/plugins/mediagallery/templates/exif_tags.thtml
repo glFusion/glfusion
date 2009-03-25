@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 function doCheckAll()
@@ -31,7 +32,7 @@ function doUnCheckAll()
         {lang_exiftag}
       </th>
     </tr>
-    <!-- BEGIN exifRow -->
+    {# BEGIN exifRow #}
     <tr class="pluginRow{rowcounter}">
       <td align="center">
         <input type="checkbox" name="sel[]" value="{tag}" {selected}{xhtml}>
@@ -41,7 +42,7 @@ function doUnCheckAll()
         {exif_tag}
       </td>
    </tr>
-   <!-- END exifRow -->
+   {# END exifRow #}
    <tr>
      <td colspan="2" align="left">
        <input onclick="javascript:doCheckAll()" type="button" value="{lang_check_all}"{xhtml}>
@@ -61,3 +62,4 @@ function doUnCheckAll()
    </tr>
  </table>
  </form>
+ {# end {templatelocation} #}

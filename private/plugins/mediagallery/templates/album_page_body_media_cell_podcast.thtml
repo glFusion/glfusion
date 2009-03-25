@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div class="plugin">
   <h1>{media_title}</h1>
   <h2>{musicalbum} {lang_hyphen} {artist}</h2>
@@ -15,3 +16,4 @@
   <hr>
 </div>
 <div style="clear:both;"></div>
+{# end {templatelocation} #}

@@ -1,6 +1,7 @@
+{# begin {templatelocation} #}
   <table width="100%" border="0" cellspacing="3" cellpadding="5">
-   	<!-- BEGIN ImageRow -->
-  	<!-- BEGIN ImageColumn -->
+   	{# BEGIN ImageRow #}
+  	{# BEGIN ImageColumn #}
     <tr class="pluginRow{rowclass}">
       <td class="pluginRow2" style="text-align:center;vertical-align:middle;">
         <img src="{u_thumbnail}" height="{height}" width="{width}" alt=""{xhtml}>
@@ -21,6 +22,7 @@
         </table>
       </td>
     </tr>
-    <!-- END ImageColumn -->
-    <!-- END ImageRow -->
+    {# END ImageColumn #}
+    {# END ImageRow #}
   </table>
+  {# end {templatelocation} #}

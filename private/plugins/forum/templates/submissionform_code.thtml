@@ -1,4 +1,4 @@
-<!-- start submissionform_code.thtml -->
+{# begin {templatelocation} #}
     <td class="pluginCellSubTitle">&nbsp;{LANG_code}:</td>
     <td class="pluginCellText pluginCellFill">&nbsp;
         <input type="button" class="button" accesskey="b" name="addbbcode0" value=" B " style="text-align:center;font-weight:bold; width:30px;" onclick="bbstyle(0)" onmouseover="helpline('b')" {xhtml}>
@@ -46,4 +46,4 @@
         <br{xhtml}><br{xhtml}>
         <input type="text" name="helpbox" size="70" maxlength="100" class="helpline" value="{LANG_codetip}"{xhtml}>
     </td>
-<!-- end submissionform_code.thtml -->
+{# end {templatelocation} #}

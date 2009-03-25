@@ -1,4 +1,4 @@
-<!-- start userprefs/navbar.thtml -->
+{# begin {templatelocation} #}
 <head>
     <script language="JavaScript 1.2" src="{site_url}/forum/javascript/mainheader.js"></script>
 </script>
@@ -30,4 +30,4 @@
         <td width="5" background="{imgset}/lb-br.gif"><img src="{imgset}/pixel.gif" width="5" height="5"></td>
     </tr>
 </table><br>
-<!-- end userprefs/navbar.thtml -->
+{# end {templatelocation} #}

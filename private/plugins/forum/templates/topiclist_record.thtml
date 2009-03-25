@@ -1,4 +1,4 @@
-<!-- start topiclist_record.thtml -->
+{# begin {templatelocation} #}
 <tr class="pluginRollOut" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRollOut pluginLinks';">
     <td class="aligncenter pluginCol" style="white-space:nowrap;">{folderimg}&nbsp;<span id="forumbookmark{topic_id}"><a href="#" onclick="ajax_toggleForumBookmark({topic_id});return false;">{bookmark_icon}</a></span>&nbsp;</td>
     <td style="width:65%;" onmouseover="this.style.cursor='pointer';" onclick="window.location.href='viewtopic.php?showtopic={topic_id}'">
@@ -23,4 +23,4 @@
             </table>
     </td>
 </tr>
-<!-- end topiclist_record.thtml -->
+{# end {templatelocation} #}

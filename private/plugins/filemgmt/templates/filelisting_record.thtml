@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <tr class="pluginRow{cssid}">
     <td style="margin:0px;padding:0px;">
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin" style="margin:0px;padding:0px;">
@@ -18,9 +19,9 @@
                             <td colspan="3">{file_description}</td>
                         </tr>
                         <tr>
-                            <!-- Enable one the following two table columns to change the filelisting format or alter to meet your needs -->
+                            {# Enable one the following two table columns to change the filelisting format or alter to meet your needs #}
 
-                            <!-- 1) Enable this row if you just want to show the icon that has to be clicked to view snapshot image -->
+                            {# 1) Enable this row if you just want to show the icon that has to be clicked to view snapshot image #}
                             <td width="15%" style="display:{show_snapshoticon};">
                             {!if snapshot_url}
                                 <a href="{snapshot_url}" rel="lightbox" target="_blank" title="{LANG_CLICK2SEE}">{snapshot_icon}{LANG_SCREENSHOT}</a>
@@ -29,12 +30,12 @@
                             {!endif}
                             </td>
 
-                            <!-- 2) Enable this row if you just want to show the a thumbnail image of the download snapshot image -->
-                            <!--
+                            {# 2) Enable this row if you just want to show the a thumbnail image of the download snapshot image #}
+                            {#
                             <td width="15%" style="display:{show_snapshoticon};">
                                 <img src="{snapshot_url}" width="75" height="75" alt=""{xhtml}>
                             </td>
-                            -->
+                            #}
 
                             <td width="15%" style="display:{show_snapshoticon_na};">{LANG_MD_SCREENSHOT_NA}</td>
                             <td colspan="2" width="85%" align="right"><b>{LANG_VERSION}:</b>&nbsp;
@@ -60,6 +61,4 @@
         </table>
     </td>
 </tr>
-
-
-
+{# end {templatelocation} #}

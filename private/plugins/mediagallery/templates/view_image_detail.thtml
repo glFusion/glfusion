@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div class=out style="width:{border_width}px">
 <div class="in ltin tpin">
 {url_link}
@@ -5,3 +6,4 @@
 {url_close}
 </div>
 </div>
+{# end {templatelocation} #}

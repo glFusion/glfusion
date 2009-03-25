@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form method="post" id="newalbum" action="{s_form_action}">
 <div style="text-align:center;">
 <h3>{lang_create_album}</h3>
@@ -31,3 +32,4 @@
 </table>
 <input type="hidden" name="step" value="addit">
 </form>
+{# end {templatelocation} #}

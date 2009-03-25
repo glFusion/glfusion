@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <br{xhtml}>
 <br{xhtml}>
 <form method="post" action="{s_form_action}" name="mg_static_sort" ENCTYPE="multipart/form-data">
@@ -41,3 +42,4 @@
 <input type="submit" value="{lang_cancel}" name="mode">
 </center>
 </form>
+{# end {templatelocation} #}

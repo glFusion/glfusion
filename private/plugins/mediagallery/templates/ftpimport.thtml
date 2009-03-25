@@ -1,5 +1,5 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
-<!--
 function doCheckAll()
 {
   with (document.mediaupload) {
@@ -9,7 +9,6 @@ function doCheckAll()
     }
   }
 }
-
 function doUnCheckAll()
 {
   with (document.mediaupload) {
@@ -19,7 +18,7 @@ function doUnCheckAll()
     }
   }
 }
-// End script --></script>
+</script>
 <div>
   {lang_ftp_help}
 </div>
@@ -54,3 +53,4 @@ function doUnCheckAll()
     </table>
   </div>
 </form>
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
     <form method="post" id="login" action="{s_form_action}">
     <div style="text-align:center;">
     <table border="0" align="center">
@@ -13,3 +14,4 @@
     </div>
     <input type="hidden" name="step" value="process_login" />
     </form>
+{# end {templatelocation} #}

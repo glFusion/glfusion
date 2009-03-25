@@ -1,4 +1,4 @@
-<!-- start submissionform_main.thtml -->
+{# begin {templatelocation} #}
        </tr>
         <tr>
             <td class="pluginCellSubTitle">&nbsp;{LANG_SUBJECT}:</td>
@@ -80,5 +80,4 @@
             </td>
         </tr>
 </table>
-
-<!-- end submissionform_main.thtml -->
+{# end {templatelocation} #}

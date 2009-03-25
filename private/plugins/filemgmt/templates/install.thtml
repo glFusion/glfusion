@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <a href="{admin_url}"><img src="{img}" border="0"></a>
 &nbsp;&nbsp; <b><font size="4"> {install_header} </font></b>
 <p>{installmsg1}</p>
@@ -6,3 +7,4 @@
 <input type='submit' value='{btnmsg}' name='B1'>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{plugin_admin_url}">{editor}</a>
 <input type='hidden' value='{action}' name='action'>
 </form>
+{# end {templatelocation} #}

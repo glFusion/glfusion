@@ -1,4 +1,4 @@
-<!-- start board_forums.thtml -->
+{# begin {templatelocation} #}
 <tr style="padding:0px 0px 5px 2px;">
   <td class="pluginCellSubTitle">
     <table style="border:none;" cellspacing="0" cellpadding="0">
@@ -44,4 +44,4 @@
     </form>
   </td>
 </tr>
-<!-- end board_forums.thtml -->
+{# end {templatelocation} #}

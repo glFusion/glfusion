@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <tr>
   <td colspan="2">
     <hr>
@@ -45,3 +46,4 @@ function new_captcha()
     </table>
   </td>
 </tr>
+{# end {templatelocation} #}

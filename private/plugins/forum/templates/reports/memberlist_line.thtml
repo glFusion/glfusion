@@ -1,4 +1,4 @@
-<!-- memberlist_line.thtml -->
+{# begin {templatelocation} #}
 <tr class="pluginRow{csscode}">
     <td class="aligncenter">{member_uid}</td>
     <td>&nbsp;<a href="{site_url}/users.php?mode=profile&amp;uid={member_uid}">{member_name}</a></td>
@@ -9,3 +9,4 @@
     <td width="1%">{website_link}</td>
     <td width="1%">{lastposts_link}</td>
 </tr>
+{# end {templatelocation} #}

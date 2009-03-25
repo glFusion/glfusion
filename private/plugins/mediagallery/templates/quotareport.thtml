@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form name="quotareport" action="{site_admin_url}/quotareport.php" method="post">
   <table width="100%" border="0" cellspacing="0" cellpadding="5">
     <tr>
@@ -20,7 +21,7 @@
 		</tr>
 	</thead>
 	<tbody>
-  <!-- BEGIN UserRow -->
+  {# BEGIN UserRow #}
   <tr class="pluginRow{rowclass}">
     <td align="center"><input type="checkbox" value="{uid}" name="uid[]"></td>
     <td align="left">{username}</td>
@@ -28,7 +29,7 @@
     <td align="right">{quota}</td>
     <td align="right">{used}</td>
   </tr>
-  <!-- END UserRow -->
+  {# END UserRow #}
   <tr>
     <td colspan="5">{lang_batch_update} <input type="text" size="3" name="bquota" value=""></td>
   </tr>
@@ -38,3 +39,4 @@
 </table>
 </form>
 <center>{pagenav}</center>
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
   {start_block_editor}
   <form action="{site_admin_url}/plugins/staticpages/index.php" method="post">
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -142,3 +143,4 @@
       </table>
   </form>
   {end_block}
+{# end {templatelocation} #}

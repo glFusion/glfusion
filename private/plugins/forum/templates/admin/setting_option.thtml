@@ -1,4 +1,4 @@
-<!-- start setting_option.thtml -->
+{# begin {templatelocation} #}
 <tr style="vertical-align:middle;">
 	<td class="pluginCellSubTitle"width="160">{LANG_title}</td>
     <td class="pluginCellText pluginCellFill">
@@ -11,4 +11,4 @@
             </table>
     </td>
 </tr>
-<!-- end setting_option.thtml -->
+{# end {templatelocation} #}

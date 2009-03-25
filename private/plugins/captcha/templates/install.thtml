@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr>
 <td rowspan="2" width="60px" align="left"><img src="{img}" border="0" alt=""{xhtml}></td>

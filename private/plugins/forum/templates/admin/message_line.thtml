@@ -1,4 +1,4 @@
-<!-- start message_line.thtml -->
+{# begin {templatelocation} #}
 <tr class="pluginRow{csscode} pluginLinks">
     <td><input type="checkbox" name="chkrecid[]" value="{id}"{xhtml}></td>
     <td>{name}</td>
@@ -7,4 +7,4 @@
     <td class="aligncenter">{replies}</td>
     <td class="aligncenter"><a href="{phpself}?op=delrecord&amp;id={id}" onclick='return confirm("{LANG_DELCONFIRM}");'>{LANG_Delete}</a>&nbsp;|&nbsp;<a href="{siteurl}/forum/viewtopic.php?forum={forum}&amp;showtopic={topicid}">{LANG_Moderate}</a></td>
 </tr>
-<!-- end message_line.thtml -->
+{# end {templatelocation} #}

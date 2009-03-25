@@ -1,5 +1,5 @@
-<!-- start homepage.thtml -->
+{# begin {templatelocation} #}
     {outline_header}
     {category_records}
     {outline_footer}
-<!-- end homepage.thtml -->
+{# end {templatelocation} #}

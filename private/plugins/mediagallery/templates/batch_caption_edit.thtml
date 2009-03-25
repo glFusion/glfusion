@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {lang_batch_caption_help}
 <br{xhtml}><br{xhtml}>
 <form name="media" method="post" action="{s_form_action}">
@@ -14,3 +15,4 @@
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

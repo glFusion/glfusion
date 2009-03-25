@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form name="digibugc4p" id="digibugc4p" action="http://www.digibug.com/dapi/order.php" method="post">
 <div>
 <input type="hidden" name="digibug_api_version" value="100"{xhtml}>
@@ -16,3 +17,4 @@
 </div>
 </form>
 <a href="#" onclick="document.digibugc4p.return_url.value=document.location; document.digibugc4p.submit();return false;" onmouseover="window.status='Print this Picture at digibuy.com'; return true" onmouseout="window.status='';return true"><img src="{site_url}/images/digibug.gif" alt="{lang_print_digibug}"{xhtml}></a>&nbsp;&nbsp;
+{# end {templatelocation} #}

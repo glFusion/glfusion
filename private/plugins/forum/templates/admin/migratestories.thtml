@@ -1,6 +1,5 @@
-<!-- start migratestories.thtml -->
+{# begin {templatelocation} #}
 <script type="text/javascript">
-    <!-- Begin
     var allChecked;
     function checkAll(field)
     {
@@ -8,7 +7,6 @@
     for (i = 0; i < field.length; i++)
         field[i].checked = true ;
     }
-
     function uncheckAll(field)
     {
     allChecked=false;
@@ -20,8 +18,6 @@
       if (yes) return true;
       else return false;
     }
-
-    //  End -->
 </script>
 <form name="storymigrate" action="{action_url}" method="post">
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top:25px; margin-bottom:15px;">
@@ -55,4 +51,4 @@
     </tr>
 </table>
 </form>
-<!-- end migratestories.thtml -->
+{# end {templatelocation} #}

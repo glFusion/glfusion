@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr>
 <td rowspan="2" style="width:60px;text-align:left;"><img src="{img}" style="border:none;" alt="" {xhtml}></td>
@@ -33,3 +34,4 @@
 <input type="hidden" value="{action}" name="action"{xhtml}>
 </div>
 </form>
+{# end {templatelocation} #}

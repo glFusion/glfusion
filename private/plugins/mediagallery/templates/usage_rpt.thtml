@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form method="post" action="{s_form_action}">
 <table width="100%" cellpadding="3" cellspacing="1" border="0">
   <tr>
@@ -10,7 +11,7 @@
 	  <td align="center">{lang_album_title}</td>
 	  <td align="center">{lang_media_title}</td>
   </tr>
-  <!-- BEGIN usagerow -->
+  {# BEGIN usagerow #}
   <tr>
 	  <td class="pluginRow{rowclass}" align="center">{usage_time}</td>
 	  <td class="pluginRow{rowclass}">{user_id}</td>
@@ -20,7 +21,7 @@
 		  {media_title}
       </td>
   </tr>
-  <!-- END usagerow -->
+  {# END usagerow #}
   <tr>
 	  <th colspan="5">&nbsp;</th>
   </tr>
@@ -31,3 +32,4 @@
   </table>
 </form>
 <p>&nbsp;</p>
+{# end {templatelocation} #}

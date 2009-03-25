@@ -1,4 +1,4 @@
-<!-- start categorylisting.thtml -->
+{# begin {templatelocation} #}
 <table width="100%" cellspacing="0" cellpadding="0" style="border:none;margin:2px;padding-right:15px;" class="pluginHeader">
     <tr class="pluginLinks" style="vertical-align: middle; height:25px;">
         <td style="height:18px;width:10px;">{forumindeximg}</td>
@@ -17,4 +17,4 @@
     </tr>
     {forum_records}
 </table>
-<!-- end categorylisting.thtml -->
+{# end {templatelocation} #}

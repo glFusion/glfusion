@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {block_header}
 <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFF;border:0px;margin-top:15px;">
     <tr>
@@ -40,4 +41,4 @@
 <br{xhtml}>
 {comment_records}
 {block_footer}
-
+{# end {templatelocation} #}

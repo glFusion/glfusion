@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                                 <noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
                                 <script type="text/JavaScript" src="{site_url}/polls/polls_editor.js"></script>
                                 <form action="{site_admin_url}/plugins/polls/index.php" method="post">
@@ -44,3 +45,4 @@
                                     <p>{lang_permissions_msg}</p>
                                     <p><input type="submit" name="mode" value="{lang_save}"{xhtml}><input type="submit" name="mode" value="{lang_cancel}"{xhtml}>{delete_option}<input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}></p>
                                 </form>
+{# end {templatelocation} #}

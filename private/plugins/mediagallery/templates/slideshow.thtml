@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0px auto;">
 <tr>
 <td class="pluginCellTitle" style="width:75%;vertical-align:middle;">
@@ -43,10 +44,8 @@ var transitions = new Array;
 var current_transition = 0;
 var loop = 0;
 
-<!-- BEGIN photo_url -->
 {URL}
 {CAPTION}
-<!-- END photo_url -->
 
 transitions[0]  = "progid:DXImageTransform.Microsoft.Fade(duration=1)";
 transitions[1]  = "progid:DXImageTransform.Microsoft.Blinds(Duration=1,bands=20)";
@@ -316,3 +315,4 @@ function setCaption(text) {
     </tr>
   </table>
 </form>
+{# end {templatelocation} #}

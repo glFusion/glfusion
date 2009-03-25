@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
 <script type="text/javascript" src="{site_url}/js/defaults_editor.js"></script>
 <script type="text/javascript">
@@ -332,7 +333,7 @@ function change(what) {
 <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
 </div>
 </form>
-<!-- JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor -->
+{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
 <script type="text/javascript">
 //<![CDATA[
 var el;
@@ -346,3 +347,4 @@ for(i=0;i<el.length;i++){
 }
 //]]>
 </script>
+{# end {templatelocation} #}

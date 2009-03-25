@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <h1>{lang_title}</h1>
 <form name="confirm" method="post" action="{s_form_action}">
 <div>
@@ -10,3 +11,4 @@
 <input type="submit" name="mode" value="{lang_cancel}"{xhtml}>
 </div>
 </form>
+{# end {templatelocation} #}

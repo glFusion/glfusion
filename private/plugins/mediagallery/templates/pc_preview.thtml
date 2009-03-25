@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table border="1" cellspacing="10" cellpadding="10" align="center" width="100%">
 <tr>
 <th><span style="font-weight:bold;">{lang_postcard_preview}</span></th>
@@ -71,3 +72,4 @@
 </td>
 </tr>
 </table>
+{# end {templatelocation} #}

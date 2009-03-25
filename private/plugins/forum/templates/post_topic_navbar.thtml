@@ -1,4 +1,4 @@
-
+{# begin {templatelocation} #}
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;">
     <tr>
         <td>{navbreadcrumbsimg}</td>
@@ -43,3 +43,4 @@ t_help = "{LANG_thelp}";
     <input type="hidden" name="editid" value="{hidden_editid}"{xhtml}>
     <input type="hidden" name="page" value="{page}"{xhtml}>
     <input type="hidden" name="uniqueid" value="{uniqueid}"{xhtml}>
+{# end {templatelocation} #}

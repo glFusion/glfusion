@@ -1,4 +1,4 @@
-<!-- start singlecategorylisting.thtml -->
+{# begin {templatelocation} #}
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;" class="pluginHeader">
     <tr class="pluginLinks" style="vertical-align: middle; height:25px;">
 
@@ -18,4 +18,4 @@
     </tr>
     {forum_records}
 </table>
-<!-- end singlecategorylisting.thtml -->
+{# end {templatelocation} #}

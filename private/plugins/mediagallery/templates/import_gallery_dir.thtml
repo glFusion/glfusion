@@ -1,4 +1,4 @@
-<!-- $Id$ -->
+{# begin {templatelocation} #}
 <h1>{import_wizard} Import to Media Gallery Wizard</h1>
 Please enter the directory where Gallery stores its albums (the directory that holds albumdb.dat).
 This directory must be the <b>absolute</b> path on your server, meaning the full path from the root directory.
@@ -16,3 +16,4 @@ This directory must be the <b>absolute</b> path on your server, meaning the full
             <input type="submit" value="cancel" name="mode" />
 </div>
 </form>
+{# end {templatelocation} #}

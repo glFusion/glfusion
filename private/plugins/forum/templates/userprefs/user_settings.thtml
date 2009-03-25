@@ -1,4 +1,4 @@
-<!-- start userprefs/user_settings.thtml -->
+{# begin {templatelocation} #}
 {navmenu}
 <table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline" style="margin-top:20px;">
     <tr>
@@ -137,5 +137,4 @@
     </tr>
 </table>
 </form>
-
-<!-- end userprefs/user_settings.thtml -->
+{# end {templatelocation} #}

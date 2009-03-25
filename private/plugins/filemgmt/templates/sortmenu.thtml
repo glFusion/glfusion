@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table width="100%" style="margin-top:10px;">
     <tr>
         <td class="pluginTinyText" style="text-align:center;">
@@ -19,3 +20,4 @@
         <td class="pluginTinyText" style="text-align:center;font-weight:bold;">{LANG_CURSORTBY}&nbsp;{orderbyTrans}</td>
     </tr>
 </table>
+{# end {templatelocation} #}

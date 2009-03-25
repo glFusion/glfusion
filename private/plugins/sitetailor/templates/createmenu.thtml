@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
     document.getElementById('sitetailor').style.display='';
 window.addEvent('load',function() {
@@ -31,3 +32,4 @@ window.addEvent('load',function() {
   </div>
   </form>
   </div>
+{# end {templatelocation} #}

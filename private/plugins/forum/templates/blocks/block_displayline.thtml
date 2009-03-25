@@ -1,4 +1,4 @@
-<!-- start block_displayline.thtml -->
+{# begin {templatelocation} #}
 <table width="100%" border="0" cellpadding="0" cellspacing="0" >
 <tr>
     <td width="100%" class="pluginRow{css_id} pluginTinyText alignleft">
@@ -6,4 +6,4 @@
     </td>
 </tr>
 </table>
-<!-- end block_displayline.thtml -->
+{# end {templatelocation} #}

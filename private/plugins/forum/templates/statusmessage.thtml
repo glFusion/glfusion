@@ -1,4 +1,4 @@
-<!-- start statusmessage.thtml -->
+{# begin {templatelocation} #}
 {autoredirect_javascript}
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="plugin" style="margin-top:10px;">
     <tr>
@@ -11,4 +11,4 @@
         <td class="pluginCellText pluginCellFill" style="padding:5px 20px 25px 120px;vertical-align:middle;">{prompt}</td>
     </tr>
 </table>
-<!-- end statusmessage.thtml -->
+{# end {templatelocation} #}

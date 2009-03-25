@@ -1,4 +1,4 @@
-<!-- start migrate_records.thtml -->
+{# begin {templatelocation} #}
 <tr class="pluginRow{cssid}">
     <td width="5%"><input type="checkbox" name="cb_chkentry[]" value="{sid}"{xhtml}></td>
     <td width="15%">{topic}</td>
@@ -6,4 +6,4 @@
     <td width="25%" style="white-space:nowrap;">{date}</td>
     <td class="aligncenter" width="10%">{num_comments}</td>
 </tr>
-<!-- end migrate_records.thtml -->
+{# end {templatelocation} #}

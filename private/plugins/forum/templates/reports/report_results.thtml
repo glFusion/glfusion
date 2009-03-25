@@ -1,4 +1,4 @@
-<!-- start report_results.thtml -->
+{# begin {templatelocation} #}
 {navmenu}
 <table width="100%" border="0" cellspacing="1" cellpadding="3" class="plugin" style="margin-top:20px;margin-bottom:10px;">
     <tr class="aligncenter">
@@ -9,4 +9,4 @@
     </tr>
         {report_records}
 </table>
-<!-- end report_results.thtml -->
+{# end {templatelocation} #}

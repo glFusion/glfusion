@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                                         <table id="po_{question_id}" {style} width="100%">
                                             <tr>
                                                 <td align="right" valign="top">{lang_question}:</td>
@@ -15,3 +16,4 @@
                                                 <td colspan="2"><hr{xhtml}></td>
                                             </tr>
                                         </table>
+{# end {templatelocation} #}

@@ -1,12 +1,11 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
-<!--
 function change(what) {
     value = '{path_mg}/watermarks/' + what.options[what.selectedIndex].value;
     if (value != '')
         if (document.images)
             document.images['myImage'].src = value;
 }
-//-->
 </script>
 
 
@@ -326,3 +325,4 @@ function change(what) {
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

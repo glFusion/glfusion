@@ -1,4 +1,4 @@
-<!-- start topicfooter.thtml -->
+{# begin {templatelocation} #}
 </table>
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
     <tr>
@@ -20,4 +20,4 @@
     </tr>
 </table>
 <br{xhtml}>
-<!-- end topicfooter.thtml -->
+{# end {templatelocation} #}

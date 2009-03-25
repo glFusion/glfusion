@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 function doCheckAll()
@@ -73,3 +74,4 @@ jkpopwin.focus()
 <input type="submit" name="mode"   value="{lang_delete}"   onclick="return confirm('{lang_delete_confirm}');"{xhtml}>
 </div>
 </form>
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div class="plugin">
 <h1>Media Gallery Export Routine</h1>
 The Media Gallery Export routine is one step in the process of exporting your media files from
@@ -62,3 +63,4 @@ For more detailed directions, see the <a href="http://www.gllabs.org/wiki/doku.p
   </div>
 </form>
 </div>
+{# end {templatelocation} #}

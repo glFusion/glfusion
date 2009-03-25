@@ -1,4 +1,5 @@
-<!-- Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it -->
+{# begin {templatelocation} #}
+{# Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it #}
 <script type="text/javascript">
     document.getElementById('sitetailor').style.display=''
 </script>
@@ -14,7 +15,7 @@
           <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[options]}</th>
           <th class="aligncenter" style="width:10%;text-align:center;">{$LANG_ST01[delete]}</th>
       </tr>
-      <!-- BEGIN menurow -->
+      {# BEGIN menurow #}
         <tr class="pluginRow{rowclass}" onmouseover="className='pluginRollOver';" onmouseout="className='pluginRow{rowclass}';">
           <td style="width:60%;">{info}</td>
           <td class="aligncenter" style="width:10%;text-align:center;">
@@ -35,8 +36,9 @@
           </td>
           <td class="aligncenter" style="width:10%;text-align:center;">{delete_menu}</td>
         </tr>
-      <!-- END menurow -->
+      {# END menurow #}
     </table>
     <input type="hidden" id="menu" name="menu" value="{menuid}"{xhtml}>
     <input type="hidden" name="mode" value="menuactivate"{xhtml}>
   </form>
+{# end {templatelocation} #}

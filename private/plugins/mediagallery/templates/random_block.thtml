@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {framecss}
 <div class="mgPluginMI">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0px auto;">
@@ -14,3 +15,4 @@
     </tr>
   </table>
 </div>
+{# end {templatelocation} #}

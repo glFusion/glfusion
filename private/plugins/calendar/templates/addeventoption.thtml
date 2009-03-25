@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {!if addevent_name}
 <form method="post" action="{site_url}{addevent_formurl}">
     <div>
@@ -9,3 +10,4 @@
     </div>
 </form>
 {!endif}
+{# end {templatelocation} #}
