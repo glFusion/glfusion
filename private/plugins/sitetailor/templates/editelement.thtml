@@ -4,7 +4,7 @@
     document.getElementById('sitetailor').style.display=''
 </script>
 <script type="text/javascript">
-{#
+<!--
 window.addEvent('load',function() {
     $('menutype').addEvent('change',toggleFields);
     $('pid').addEvent('change',function(){
@@ -98,7 +98,7 @@ function toggleFields() {
 
     }
 }
-#}
+-->
 </script>
 
 

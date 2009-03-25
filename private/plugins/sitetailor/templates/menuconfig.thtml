@@ -5,7 +5,7 @@
     document.getElementById('sitetailor').style.display=''
 </script>
 <script type="text/javascript">
-{#
+<!--
 window.addEvent('domready', function() {
 
 	var tmbg = new MooRainbow('tmbgrb', {
@@ -560,7 +560,7 @@ function hsv(a){
 		};
 		return[H,S,V]
 	}
-#}
+-->
 </script>
 
     <div class="glfform">

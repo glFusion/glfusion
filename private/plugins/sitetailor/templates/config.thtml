@@ -5,7 +5,7 @@
     document.getElementById('sitetailor').style.display=''
 </script>
 <script type="text/javascript">
-{#
+<!--
 window.addEvent('domready', function() {
 	var tmbg = new MooRainbow('tmbgrb', {
 		'startColor': {tmbgcolorrgb},
@@ -456,7 +456,7 @@ function hsv(a){
 	}
 
 
-#}
+-->
 </script>
 <div class="plugin">
   <div class="pluginCellTitle" style="padding:5px;">

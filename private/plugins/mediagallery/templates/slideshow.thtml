@@ -44,8 +44,10 @@ var transitions = new Array;
 var current_transition = 0;
 var loop = 0;
 
+<!-- BEGIN photo_url -->
 {URL}
 {CAPTION}
+<!-- END photo_url -->
 
 transitions[0]  = "progid:DXImageTransform.Microsoft.Fade(duration=1)";
 transitions[1]  = "progid:DXImageTransform.Microsoft.Blinds(Duration=1,bands=20)";

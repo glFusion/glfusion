@@ -10,7 +10,7 @@
   <param name="bgcolor" value="{bgcolor}"{xhtml}>
   <param name="loop" value="{loop}"{xhtml}>
   <param name="filename" value="{filename}"{xhtml}>
-  {#[if gte IE 7]> <!#}
+  <!--[if gte IE 7]> <!-->
   <object type="video/quicktime" data="{movie}" width="{width}" height="{height}">
     <param name="autoplay" value="{autoplay}"{xhtml}>
     <param name="controller" value="{controller}"{xhtml}>
@@ -21,9 +21,9 @@
     <param name="loop" value="{loop}"{xhtml}>
    alt : <a href="{movie}">Download</a>
   </object>
-  {#<![endif]#}
-  {#[if lt IE 7]>
+  <!--<![endif]-->
+  <!--[if lt IE 7]>
    alt : <a href="{movie}">Download</a>
-  <![endif]#}
+  <![endif]-->
 </object>
 {# end {templatelocation} #}
