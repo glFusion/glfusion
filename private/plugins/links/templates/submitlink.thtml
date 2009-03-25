@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form action="{site_url}/links/index.php" method="post">
     <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
@@ -33,3 +34,4 @@
         </tr>
     </table>
 </form>
+{# end {templatelocation} #}

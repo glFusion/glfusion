@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 var counter = 0;
@@ -33,3 +34,4 @@ function new_captcha()
 <input type="text" id="captcha" name="captcha" size="25" maxlength="40" value="{captchastring}"{xhtml}>
 <input type="hidden" name="csid" value="{csid}"{xhtml}><br{xhtml}>
 <div style="margin-left: 95px;">{lang_captcha_help}</div>
+{# end {templatelocation} #}

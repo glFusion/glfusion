@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div class="mgPluginAdmin">
 <table width="100%" border="0" cellpadding="2">
   <tr>
@@ -119,3 +120,4 @@
    </tr>
 </table>
 </div>
+{# end {templatelocation} #}

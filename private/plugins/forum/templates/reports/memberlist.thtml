@@ -1,4 +1,4 @@
-<!-- start memberlist.thtml -->
+{# begin {templatelocation} #}
 {navmenu}
  <form method="post" action="{site_url}/forum/memberlist.php" style="margin:0px;">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -23,4 +23,4 @@
     </tr>
 </table>
 </form>
-<!-- start memberlist.thtml -->
+{# end {templatelocation} #}

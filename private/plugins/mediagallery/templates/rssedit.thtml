@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form method="post" action="{s_form_action}" name="mg_rss_form" enctype="multipart/form-data">
   <table width="100%" border="0" cellspacing="0" cellpadding="5">
     <tr>
@@ -49,3 +50,4 @@
 <input type="reset"  value="{lang_reset}"  name="mode"{xhtml}>
 </div>
 </form>
+{# end {templatelocation} #}

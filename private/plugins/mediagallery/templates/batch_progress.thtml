@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {META}
 <script type="text/javascript">
 //<![CDATA[
@@ -133,3 +134,4 @@ function updateButton()
 </table>
 </div>
 </form>
+{# end {templatelocation} #}

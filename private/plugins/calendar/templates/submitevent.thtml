@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {explanation}
 <form class="form-theme" action="{site_url}{submit_url}" method="post">
   <hr style="margin:5px;" />
@@ -115,3 +116,4 @@
   </div>
   <div class="clear-left"></div>
 </form>
+{# end {templatelocation} #}

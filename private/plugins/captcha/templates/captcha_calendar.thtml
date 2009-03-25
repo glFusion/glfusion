@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table width="100%" style="border:none;">
   <tr>
     <td {colone}>
@@ -35,3 +36,4 @@ function new_captcha()
     </td>
   </tr>
 </table>
+{# end {templatelocation} #}

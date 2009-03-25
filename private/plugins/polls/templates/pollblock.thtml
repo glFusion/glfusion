@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <span class="floatright">{edit_icon}</span><div class="poll-topic">{poll_topic}</div>
 <form action="{poll_vote_url}" id="Vote" method="post">
     <div>
@@ -12,3 +13,4 @@
 <span class="pluginTinyText">
     <a href="{site_url}/polls/index.php">{lang_polltopics}</a> | {num_votes} {lang_votes} {poll_comments}
 </span>
+{# end {templatelocation} #}

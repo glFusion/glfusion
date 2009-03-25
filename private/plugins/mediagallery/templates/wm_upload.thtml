@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {lang_wmupload_help}
 <br{xhtml}><br{xhtml}>
 <form method="post" enctype="multipart/form-data" name="watermarkupload" action="{s_form_action}">
@@ -35,3 +36,4 @@
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

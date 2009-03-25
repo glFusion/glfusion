@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 function dodisabled(){
@@ -113,11 +114,11 @@ var gfxformat = document.getElementById('gfxformat');
 <input type="checkbox" name="calendar" {calendarchecked}{xhtml}>&nbsp;&nbsp;
 <label>{lang_enable_calendar}</label>
 <br{xhtml}><br{xhtml}>
-<!--
+{#
 <input type="checkbox" name="rating" {ratingchecked}{xhtml}>&nbsp;&nbsp;
 <label><b>{lang_enable_rating}</b></label>
 <br{xhtml}><br{xhtml}>
--->
+#}
 </fieldset>
 <div style="text-align:center;padding-top:20px;padding-bottom:10px;">
 <input type="submit" name="mode" value="{lang_save}"{xhtml}>&nbsp;&nbsp;&nbsp;<input type="submit" name="mode" value="{lang_cancel}"{xhtml}>
@@ -131,3 +132,4 @@ var gfxformat = document.getElementById('gfxformat');
 dodisabled();
 //]]>
 </script>
+{# end {templatelocation} #}

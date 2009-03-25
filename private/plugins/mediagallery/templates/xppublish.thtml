@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {lang_help1}
 <br{xhtml}><br{xhtml}>
 <span style="font-weight:bold;">{lang_help2_title}</span><br{xhtml}>
@@ -9,3 +10,4 @@
 <span style="font-weight:bold;">{lang_help3_title}</span><br{xhtml}>
 {lang_help3}
 <br{xhtml}><br{xhtml}>
+{# end {templatelocation} #}

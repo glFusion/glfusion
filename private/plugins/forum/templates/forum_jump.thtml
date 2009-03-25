@@ -1,4 +1,4 @@
-<!-- start forum_jump.thtml -->
+{# begin {templatelocation} #}
 <table cellspacing="0" cellpadding="0" width="100%" style="border:none;">
     <tr>
         <td style="vertical-align:middle;">
@@ -10,4 +10,4 @@
          </td>
     </tr>
 </table>
-<!-- end forum_jump.thtml -->
+{# end {templatelocation} #}

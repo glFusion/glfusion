@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <h1 style="padding-bottom:0px;margin-bottom:0px;">{media_title}</h1>
 <div class="pluginSmallText">
  {lang_published} {media_owner} {lang_on} {media_time}
@@ -17,3 +18,4 @@
 </div>
 <hr{xhtml}>
 <div style="clear:both;"></div>
+{# end {templatelocation} #}

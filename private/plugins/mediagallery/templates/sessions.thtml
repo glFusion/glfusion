@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 function doCheckAll()
@@ -33,3 +34,4 @@ function doUnCheckAll()
 <input type="submit" name="mode"   value="{lang_delete}"{xhtml}>
 </div>
 </form>
+{# end {templatelocation} #}

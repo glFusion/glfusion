@@ -1,7 +1,7 @@
-<!-- start forum_time.thtml -->
+{# begin {templatelocation} #}
 <table width="100%" border="0" cellspacing="0" cellpadding="5" class="pluginFooter">
     <tr>
         <td class="pluginSmallText aligncenter">&nbsp;{message}</td>
     </tr>
 </table>
-<!-- end forum_time.thtml -->
+{# end {templatelocation} #}

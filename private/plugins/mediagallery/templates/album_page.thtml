@@ -1,10 +1,11 @@
+{# begin {templatelocation} #}
 {lbslideshow}
 <script type="text/javascript" src="{site_url}/players/audio-player.js"></script>
   {album_header}
   {album_body}
   {album_noimages}
   {album_footer}
-<!-- JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor -->
+{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
 <script type="text/javascript">
 //<![CDATA[
 var el;
@@ -18,3 +19,4 @@ for(i=0;i<el.length;i++){
 }
 //]]>
 </script>
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <br{xhtml}>
 <form method="post" action="{s_form_action}" name="mg_static_album_sort" ENCTYPE="multipart/form-data">
   <div class="plugin">
@@ -40,3 +41,4 @@
 <input type="submit" value="{lang_cancel}" name="mode">
 </center>
 </form>
+{# end {templatelocation} #}

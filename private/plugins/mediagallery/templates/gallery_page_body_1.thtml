@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table border="0" width="100%" cellspacing="0" cellpadding="0" style="margin:0px auto;">
 <!-- BEGIN AlbumRow -->
 <tr>
@@ -38,3 +39,4 @@
 <!-- END AlbumRow -->
 </table>
 <div class="pluginRow2" style="vertical-align:middle;padding:5px;text-align:center;">{bottom_pagination}</div>
+{# end {templatelocation} #}

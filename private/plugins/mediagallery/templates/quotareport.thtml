@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form name="quotareport" action="{site_admin_url}/quotareport.php" method="post">
   <table width="100%" border="0" cellspacing="0" cellpadding="5">
     <tr>
@@ -38,3 +39,4 @@
 </table>
 </form>
 <center>{pagenav}</center>
+{# end {templatelocation} #}

@@ -1,4 +1,4 @@
-<!-- start navbar.thtml -->
+{# begin {templatelocation} #}
 <div>
   {menu}
 </div>
@@ -21,4 +21,4 @@
         </td>
     </tr>
 </table>
-<!-- end navbar.thtml -->
+{# end {templatelocation} #}

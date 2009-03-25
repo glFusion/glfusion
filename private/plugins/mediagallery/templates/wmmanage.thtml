@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 function doCheckAll()
@@ -74,3 +75,4 @@ jkpopwin.focus()
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

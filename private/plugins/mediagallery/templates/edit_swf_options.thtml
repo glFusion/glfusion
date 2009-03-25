@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <h2>{lang_playback_options}</h2>
 <table width="100%" border="0" cellspacing="0" cellpadding="5">
   <tr>
@@ -118,3 +119,4 @@
     </td>
   </tr>
 </table>
+{# end {templatelocation} #}

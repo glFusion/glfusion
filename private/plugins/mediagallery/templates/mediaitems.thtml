@@ -1,4 +1,4 @@
-
+{# begin {templatelocation} #}
   <table width="100%" border="0">
     <tr>
       <th>{lang_select}</th>
@@ -64,3 +64,4 @@
      </td>
    </tr>
  </table>
+{# end {templatelocation} #}

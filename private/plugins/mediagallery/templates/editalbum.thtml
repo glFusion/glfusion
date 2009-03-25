@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 <!--
 function change(what) {
@@ -326,3 +327,4 @@ function change(what) {
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

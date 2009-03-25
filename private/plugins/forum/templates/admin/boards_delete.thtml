@@ -1,4 +1,4 @@
-<!-- start boards_delete.thtml -->
+{# begin {templatelocation} #}
 <form action="{PHP_SELF}" method="post">
             <table width="100%" border="0" cellspacing="0" cellpadding="3" class="plugin" style="margin-top:10px;">
                 <tr>
@@ -20,4 +20,4 @@
                 </tr>
              </table>
 </form>
-<!-- end boards_delete.thtml -->
+{# end {templatelocation} #}

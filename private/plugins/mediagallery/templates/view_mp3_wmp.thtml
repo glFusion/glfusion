@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <span style="padding:5px;{margin-right}width:{framewidth}px;border:silver solid;border-width:1px;text-align:center;">
 {u_pic}
 </span>
@@ -22,3 +23,4 @@
   <param name="autoStart" value="0">
 </object>
 <!--<![endif]-->
+{# end {templatelocation} #}

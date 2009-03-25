@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {start_block_last10mediaitems}
 <div class="plugin">
   <table border="0">
@@ -11,3 +12,4 @@
   </table>
 </div>
 {end_block}
+{# end {templatelocation} #}

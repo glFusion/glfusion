@@ -1,13 +1,11 @@
-<!-- start moderators.thtml -->
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
-    <!-- Begin
     function confirmSubmit(text) {
         var yes = confirm(text);
         if (yes) return true;
         else return false;
     }
-    //  End -->
 //]]>
 </script>
 <form name="modform" action="{action_url}" method="post">
@@ -51,4 +49,4 @@
     </tr>
 </table>
 </form>
-<!-- end moderators.thtml -->
+{# end {templatelocation} #}

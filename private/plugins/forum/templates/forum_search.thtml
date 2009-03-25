@@ -1,4 +1,4 @@
-<!-- start forum_search.thtml -->
+{# begin {templatelocation} #}
           <form action="index.php" method="post" id="searchbox" onsubmit="return (this.query.value != '');" style="margin:0px;padding:2px;">
           <input type="hidden" name="op" value="search"{xhtml}><input type="hidden" name="forum" value="{forum}"{xhtml}>
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -14,4 +14,4 @@
                 </tr>
             </table>
           </form>
-<!-- end forum_search.thtml -->
+{# end {templatelocation} #}

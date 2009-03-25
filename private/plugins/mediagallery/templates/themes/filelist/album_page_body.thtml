@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table style="width:100%;border:none;margin:0px auto;">
 <tr class="pluginRow2">
   <td style="width:52px;text-align:center;">&nbsp;</td>
@@ -13,3 +14,4 @@
 <!-- END ImageColumn -->
 <!-- END ImageRow -->
 </table>
+{# end {templatelocation} #}

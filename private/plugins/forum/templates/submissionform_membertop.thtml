@@ -1,4 +1,4 @@
-<!-- start submissionform_membertop.thtml -->
+{# begin {templatelocation} #}
 <script type="text/javascript" src="{site_url}/forum/javascript/createtopic.js"></script>
     <table width="100%" border="0" cellspacing="1" cellpadding="3" class="pluginSolidOutline alignleft">
         <tr>
@@ -8,4 +8,4 @@
             <td class="pluginCellText pluginCellFill" width="90%"><input type="hidden" name="name" size="35" value="{username}"{xhtml}>{username}</td>
         </tr>
         <tr>
-<!-- end submissionform_membertop.thtml -->
+{# end {templatelocation} #}

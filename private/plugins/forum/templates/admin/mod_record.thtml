@@ -1,4 +1,4 @@
-<!-- start mod_record.thtml -->
+{# begin {templatelocation} #}
 <tr class="pluginRow{cssid} aligncenter">
     <td class="alignleft"><input type="checkbox" name="chk_moddelete[]" value="{id}"{xhtml}></td>
     <td class="alignleft" width="15%">{name}</td>
@@ -13,4 +13,4 @@
         [&nbsp;<a href="#" onclick="document.modform.recid.value='{id}';document.modform.operation.value='delete';document.modform.submit();return false;">{LANG_DELETE}</a>&nbsp;]
     </td>
 </tr>
-<!-- end mod_record.thtml -->
+{# end {templatelocation} #}

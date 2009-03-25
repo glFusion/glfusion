@@ -1,4 +1,4 @@
-<!-- start footer.thtml -->
+{# begin {templatelocation} #}
 <br{xhtml}>
 {forumname}
-<!-- end footer.thtml -->
+{# end {templatelocation} #}

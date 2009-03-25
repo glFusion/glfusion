@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
   <tr>
     <td>&nbsp;</td>
     <td>
@@ -40,3 +41,4 @@ function new_captcha()
       </table>
     </td>
   </tr>
+{# end {templatelocation} #}

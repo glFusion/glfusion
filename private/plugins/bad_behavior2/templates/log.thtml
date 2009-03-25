@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table border="0" cellspacing="1" cellpadding="3" width="100%">
     <tr>
         <th align="right">#</th>
@@ -9,3 +10,4 @@
 {log_row}
 </table>
 {google_paging}
+{# end {templatelocation} #}

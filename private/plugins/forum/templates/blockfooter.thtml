@@ -1,5 +1,5 @@
-        <!-- start blockfooter.thtml -->
+{# begin {templatelocation} #}
      </td>
   </tr>
 </table>
-<!-- end blockfooter.thtml -->
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div class="block-center">
     <table style="border:none;" cellpadding="0" cellspacing="0">
         <tr>
@@ -41,3 +42,4 @@
     </table>
     <br{xhtml}>
 </div>
+{# end {templatelocation} #}

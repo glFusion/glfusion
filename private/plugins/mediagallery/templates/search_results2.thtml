@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
         <table width="100%" border="0" cellspacing="0" style="margin:0px auto;">
           <tr>
             <td class="pluginCellTitle" colspan="1" style="text-align:left;">
@@ -48,7 +49,7 @@
   </tr>
 </table>
 
-<!-- JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor -->
+{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
 <script type="text/javascript">
 //<![CDATA[
 var el;
@@ -62,3 +63,4 @@ for(i=0;i<el.length;i++){
 }
 //]]>
 </script>
+{# end {templatelocation} #}

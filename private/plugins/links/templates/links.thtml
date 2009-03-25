@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {blockheader}
 
 {category_dropdown}
@@ -9,3 +10,4 @@
 {page_navigation}
 
 {blockfooter}
+{# end {templatelocation} #}

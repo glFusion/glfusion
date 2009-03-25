@@ -1,4 +1,4 @@
-<!-- start blockheader.thtml -->
+{# begin {templatelocation} #}
 <table cellpadding="0" cellspacing="0" width="100%" style="border:none;">
     <tr>
         <td style="height:22px;padding-left:5px;vertical-align:middle" class="pluginTitle">{block_title}</td>
@@ -6,4 +6,4 @@
     <tr>
         <td style="width:100%;" class="pluginTitle alignleft">
             <table cellpadding="0" cellspacing="0" width="100%" class="plugin" style="border:1px solid;">
-<!-- end blockheader.thtml -->
+{# end {templatelocation} #}

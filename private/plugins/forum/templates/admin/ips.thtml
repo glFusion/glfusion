@@ -1,4 +1,4 @@
-<!-- start ips.thtml -->
+{# begin {templatelocation} #}
 <tr style="width:100%;" class="forumClass3">
     <td>
         <table style="width:100%;" cellspacing="0" cellpadding="2" border="1">
@@ -11,4 +11,4 @@
         </table>
     </td>
 </tr>
-<!-- end ips.thtml -->
+{# end {templatelocation} #}

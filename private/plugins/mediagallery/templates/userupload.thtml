@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {lang_upload_help}
 <br{xhtml}><br{xhtml}>
 <div>{lang_upload_size}</div>
@@ -113,3 +114,4 @@
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

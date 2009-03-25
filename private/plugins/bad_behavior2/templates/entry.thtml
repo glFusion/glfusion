@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <p>{lang_ip}: {start_ip_lookup_anchortag}{ip}{end_ip_lookup_anchortag}
     <br{xhtml}>
 {lang_date}: {date_and_time}<br>
@@ -7,3 +8,4 @@
 <pre>{http_response}</pre>
 
 <p>{start_backlink_anchortag}{lang_back}{end_backlink_anchortag}</p>
+{# end {templatelocation} #}

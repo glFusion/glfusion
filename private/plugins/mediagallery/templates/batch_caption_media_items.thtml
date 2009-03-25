@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
   <table width="100%" border="0" cellspacing="3" cellpadding="5">
    	<!-- BEGIN ImageRow -->
   	<!-- BEGIN ImageColumn -->
@@ -24,3 +25,4 @@
     <!-- END ImageColumn -->
     <!-- END ImageRow -->
   </table>
+  {# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form action="{site_admin_url}/plugins/calendar/index.php" name="events" method="post">
   <hr style="margin:5px;" />
     <div class="form-description">{lang_eventtitle}:</div>
@@ -140,3 +141,4 @@
     </div>
   <div class="clear-left"></div>
 </form>
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <span style="{float}padding:1px;{margin-right}width:{width}px;border:none;text-align:center;">
   {autotag}
   <br {xhtml}>
@@ -6,3 +7,4 @@
     {caption}
   </span>
 </span>
+{# end {templatelocation} #}

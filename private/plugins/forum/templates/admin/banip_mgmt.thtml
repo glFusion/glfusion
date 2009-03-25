@@ -1,4 +1,4 @@
-<!-- start banip_mgmt.thtml -->
+{# begin {templatelocation} #}
 {startblock}
 {navbar}
 <form  name="frm_messages" action="{phpself}" method="post" style="margin:0px;">
@@ -20,4 +20,4 @@
 </table>
 </form>
 {endblock}
-<!-- end banip_mgmt.thtml -->
+{# end {templatelocation} #}

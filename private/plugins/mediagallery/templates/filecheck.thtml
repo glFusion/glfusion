@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript"><!--
 function doCheckAll()
 {
@@ -8,7 +9,6 @@ function doCheckAll()
     }
   }
 }
-
 function doUnCheckAll()
 {
   with (document.filecheck) {
@@ -38,3 +38,4 @@ function doUnCheckAll()
 <input type="submit" name="mode"   value="{lang_delete}"  onclick="return confirm('{lang_delete_confirm}');">
 </center>
 </form>
+{# end {templatelocation} #}

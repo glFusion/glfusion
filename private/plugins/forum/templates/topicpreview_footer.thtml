@@ -1,4 +1,4 @@
-<!-- start topicpreview_footer.thtml -->
+{# begin {templatelocation} #}
 </table>
 {endblock}
-<!-- end topicpreview_footer.thtml -->
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div style="text-align:center;">
 {u_pic}
 </div>
@@ -13,3 +14,4 @@
 <embed height="45" width="300" loop="false" src="{movie}" pluginspage="http://www.apple.com/quicktime/download/" type="video/quicktime" controller="true" autoplay="{autoplay}" autoref="true" kioskmode="1" scale="aspect"></embed>
 </object>
 </div>
+{# end {templatelocation} #}

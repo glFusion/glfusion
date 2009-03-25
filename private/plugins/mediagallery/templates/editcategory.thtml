@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <br{xhtml}>
 {lang_cat_edit_help}
 <br{xhtml}>
@@ -32,3 +33,4 @@
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

@@ -1,4 +1,4 @@
-<!-- start messages.thtml -->
+{# begin {templatelocation} #}
 {startblock}
 {navbar}
 <form  name="frm_messages" action="{phpself}" method="post" style="margin:0px;">
@@ -33,4 +33,5 @@
 </table>
 </form>
 {endblock}
-<!-- end messages.thtml -->
+{# end {templatelocation} #}
+

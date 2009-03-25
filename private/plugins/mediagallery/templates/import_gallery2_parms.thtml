@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <h1>Import to Gallery v2 to Media Gallery Wizard</h1>
 Enter the following information about your Gallery v2 Installation.
 <br><br>
@@ -36,3 +37,4 @@ This information can be found in the <b>config.php</b> file located in the Galle
 <input type="submit" name="mode" value="cancel">
 </p>
 </form>
+{# end {templatelocation} #}

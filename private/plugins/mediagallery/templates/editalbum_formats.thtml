@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div id="pe_media" class="jsenabled_hide">
   <table width="100%" border="0" cellspacing="0" cellpadding="5">
     <tr>
@@ -46,3 +47,4 @@
     </tr>
   </table>
 </div>
+{# end {templatelocation} #}

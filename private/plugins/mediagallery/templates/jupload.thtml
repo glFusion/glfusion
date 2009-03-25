@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script language="javascript" type="text/javascript">
   function onAlbumChange() {
     if (document.form_album.album_id.selectedIndex >= 0) {
@@ -34,3 +35,4 @@ Java 1.4 or higher plugin required.
 <script type="text/JavaScript">
 onAlbumChange();
 </script>
+{# end {templatelocation} #}

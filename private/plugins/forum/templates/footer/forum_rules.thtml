@@ -1,4 +1,4 @@
-<!-- start forum_rules.thtml -->
+{# begin {templatelocation} #}
 <table width="100%" cellpadding="0" cellspacing="2" border="0" class="pluginSubTitle alignright">
     <tr>
             <td >
@@ -21,4 +21,4 @@
             </td>
     </tr>
 </table>
-<!-- end forum_rules.thtml -->
+{# end {templatelocation} #}

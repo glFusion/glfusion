@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <h1 style="padding-bottom:0px;margin-bottom:0px;">{media_title}</h1>
 <h2 style="padding-top:0px;padding-bottom:2px;margin-top:2px;margin-bottom:2px;">{musicalbum} {lang_hyphen} {artist}</h2>
 <div class="pluginSmallText">
@@ -34,3 +35,4 @@
 {mp3_podcast}
 <hr{xhtml}>
 <div style="clear:both;"></div>
+{# end {templatelocation} #}

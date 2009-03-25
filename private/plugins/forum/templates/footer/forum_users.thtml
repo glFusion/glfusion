@@ -1,4 +1,4 @@
-<!-- start forum_users.thtml -->
+{# begin {templatelocation} #}
 <table border="0" width="100%" cellpadding="4" cellspacing="2" class="pluginFooter">
         <tr>
                 <td class="pluginMediumText alignleft pluginCellText"><b>{LANG_msg07}</b><div style="background:transparent; width:100%; height:2px; border-top: 1px solid #C8DAF7;"></div></td>
@@ -7,4 +7,4 @@
                 <td class="pluginLinks alignleft pluginCellText">{onlineusers}</td>
         </tr>
 </table>
-<!-- end forum_users.thtml -->
+{# end {templatelocation} #}

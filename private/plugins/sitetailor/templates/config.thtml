@@ -1,5 +1,6 @@
+{# begin {templatelocation} #}
 <script type="text/javascript" src="{site_admin_url}/plugins/sitetailor/js/mooRainbow.js?ver=1"></script>
-<!-- Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it -->
+{# Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it #}
 <script type="text/javascript">
     document.getElementById('sitetailor').style.display=''
 </script>
@@ -564,3 +565,4 @@ function hsv(a){
     </form>
   </div>
 </div>
+{# end {templatelocation} #}

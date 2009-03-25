@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {parent_album}
 <form name="sortalbum" method="post" action="{s_form_action}">
   <div>
@@ -29,3 +30,4 @@
 </div>
 </div>
 </form>
+{# end {templatelocation} #}

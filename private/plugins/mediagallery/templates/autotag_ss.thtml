@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <span style="{float}padding:3px;{margin-right}width:{framewidth}px;{border}text-align:center;">
   <span id="slideshowContainer{ss_count}" class="slideshowContainer" style="float:left;text-align:center;vertical-align:middle;margin:5px;width:{maxwidth}px;height:{maxheight}px;position:relative;">
     {pics}
@@ -24,3 +25,4 @@
     {caption}
   </span>
 </span>
+{# end {templatelocation} #}

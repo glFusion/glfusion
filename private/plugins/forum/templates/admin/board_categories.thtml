@@ -1,4 +1,4 @@
-<!-- start board_categories.thtml -->
+{# begin {templatelocation} #}
         <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:10px; margin-bottom:20px;">
             <tr>
                 <td>
@@ -46,4 +46,4 @@
                 </td>
             </tr>
         </table>
-<!-- end board_categories.thtml -->
+{# end {templatelocation} #}

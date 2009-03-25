@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form method="post" action="{s_form_action}">
 <table width="100%" border="0" cellpadding="3" cellspacing="1">
 <tr>
@@ -17,3 +18,4 @@
   <input type="submit" name="mode" value="{lang_cancel}"{xhtml}>
 </div>
 </form>
+{# end {templatelocation} #}

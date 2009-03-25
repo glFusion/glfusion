@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <table border="0" cellspacing="0" cellpadding="2" style="margin-top:5px;">
     <tr>
         <td>
@@ -8,3 +9,4 @@
         </td>
     </tr>
 </table>
+{# end {templatelocation} #}

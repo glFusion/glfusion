@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form method="post" action="{s_form_action}" name="mg_useredit_form" ENCTYPE="multipart/form-data">
 <input type="hidden" name="uid" value="{uid}">
   <table width="100%" border="0" cellspacing="0" cellpadding="5">
@@ -27,3 +28,4 @@
 <input type="reset"  value="{lang_reset}"  name="mode">
 </div>
 </form>
+{# end {templatelocation} #}

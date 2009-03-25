@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={charset}">
@@ -18,3 +19,4 @@
 </object>
 </body>
 </html>
+{# end {templatelocation} #}

@@ -1,2 +1,3 @@
-<!-- blank.thtml -->
+{# begin {templatelocation} #}
                         <td width="100%" height:20px;" nowrap><span class="pluginSolidFill">{LANG_blank}</span></td>
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div class="plugin">
 <table width="100%" border="0" align="left">
 <tr class="pluginCellTitle">
@@ -21,3 +22,4 @@
 </form>
 <br{xhtml}><br{xhtml}>
 </div>
+{# end {templatelocation} #}

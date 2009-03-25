@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
     <form method="post" id="options" action="{s_form_action}">
     <div style="text-align:center;">
     <h3>{lang_select_album}</h3>
@@ -12,3 +13,4 @@
 	<input type="button" value="{lang_create_album}" onClick="options.step.value='create';options.submit();">
 	</div>
     </form>
+{# end {templatelocation} #}
