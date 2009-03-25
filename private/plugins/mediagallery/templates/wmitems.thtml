@@ -6,8 +6,8 @@
     <th>{lang_owner}</th>
     <th>{lang_title}</th>
   </tr>
-{# BEGIN ImageRow #}
-{# BEGIN ImageColumn #}
+<!-- BEGIN ImageRow -->
+<!-- BEGIN ImageColumn -->
   <tr class="pluginRow{row_class}">
     <td style="text-align:center;">
         <input type="checkbox" name="sel[]" value="{wm_id}"{xhtml}>
@@ -21,8 +21,8 @@
     </td>
     <td><textarea name="wmtitle[]" cols="40" rows="2">{wm_desc}</textarea></td>
    </tr>
-{# END ImageColumn #}
-{# END ImageRow #}
+<!-- END ImageColumn -->
+<!-- END ImageRow -->
    <tr><td colspan="5" align="left">
    <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}"{xhtml}>
    <input onclick="javascript:doUnCheckAll()" type="button" value="{lang_uncheckall}"{xhtml}>

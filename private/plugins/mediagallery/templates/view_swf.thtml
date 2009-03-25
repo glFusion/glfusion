@@ -12,9 +12,9 @@
     params.wmode="{wmode}";
     params.allowScriptAccess="{asa}";
     params.loop="{loop}";
-    {# BEGIN flashvars #}
+    <!-- BEGIN flashvars -->
     {fv}
-    {# END flashvars #}
+    <!-- END flashvars -->
     swfobject.embedSWF("{movie}", "{id}", "{width}", "{height}", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
 </script>
 <div id="{id2}" style="width:{resolution_x}px;height:{resolution_y}px;">

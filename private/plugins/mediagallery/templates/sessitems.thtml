@@ -7,7 +7,7 @@
       <th>{lang_session_count}</th>
       <th>{lang_action}</th>
     </tr>
-    {# BEGIN sessRow #}
+    <!-- BEGIN sessRow -->
     <tr class="pluginRow{row_class}">
       <td align="center" style="vertical-align:middle;">
         <input type="checkbox" name="sel[]" value="{session_id}"{xhtml}>
@@ -26,7 +26,7 @@
         <a href="{session_continue}&amp;limit=0">Continue</a>
       </td>
    </tr>
-   {# END sessRow #}
+   <!-- END sessRow -->
    <tr>
      <td colspan="5" align="left">
        <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}"{xhtml}>

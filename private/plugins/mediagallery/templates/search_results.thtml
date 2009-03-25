@@ -6,7 +6,7 @@
     <th style="text-align:left;">{lang_description}</th>
     <th style="text-align:center;">{lang_views}</th>
   </tr>
-  {# BEGIN SearchRow #}
+  <!-- BEGIN SearchRow -->
   <tr class="pluginRow{rowclass}">
     <td style="width:110px;text-align:center;>{tn}</td>
     <td style="text-align:left;">
@@ -19,7 +19,7 @@
       {media_views}
     </td>
   </tr>
-  {# END SearchRow #}
+  <!-- END SearchRow -->
 </table>
 <div style="text-align:center;">{pagination}</div>
 {# end {templatelocation} #}

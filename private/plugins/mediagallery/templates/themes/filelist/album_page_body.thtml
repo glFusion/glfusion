@@ -8,10 +8,10 @@
   <td style="text-align:left;"><b>User</b></td>
   <td style="text-align:left;"><b>Updated</b></td>
 </tr>
-{# BEGIN ImageRow #}
-{# BEGIN ImageColumn #}
+<!-- BEGIN ImageRow -->
+<!-- BEGIN ImageColumn -->
 {CELL_DISPLAY_IMAGE}
-{# END ImageColumn #}
-{# END ImageRow #}
+<!-- END ImageColumn -->
+<!-- END ImageRow -->
 </table>
 {# end {templatelocation} #}

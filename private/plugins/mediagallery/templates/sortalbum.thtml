@@ -8,7 +8,7 @@
       <th>{lang_count}</th>
       <th>{lang_order}</th>
     </tr>
-    {# BEGIN AlbumRow #}
+    <!-- BEGIN AlbumRow -->
     <tr class="pluginRow{row_class}">
       <td style="width:80%;height:25px;">{album_title}</td>
       <td style="text-align:center;">{media_count}</td>
@@ -17,7 +17,7 @@
         <input type="hidden" name="aid[]" value="{album_id}"{xhtml}>
       </td>
     </tr>
-    {# END AlbumRow #}
+    <!-- END AlbumRow -->
   </table>
 <br{xhtml}>
 <div style="text-align:center;">

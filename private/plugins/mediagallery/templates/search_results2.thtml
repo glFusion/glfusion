@@ -25,15 +25,15 @@
 
 <div class="mgPluginMI">
 <table style="width:100%;border:none;margin:0px auto;">
-{# BEGIN ImageRow #}
+<!-- BEGIN ImageRow -->
 <tr>
-{# BEGIN ImageColumn #}
+<!-- BEGIN ImageColumn -->
 <td style="width:{table_column_width};vertical-align:top;">
 {CELL_DISPLAY_IMAGE}
 </td>
-{# END ImageColumn #}
+<!-- END ImageColumn -->
 </tr>
-{# END ImageRow #}
+<!-- END ImageRow -->
 </table>
 </div>
       {album_noimages}

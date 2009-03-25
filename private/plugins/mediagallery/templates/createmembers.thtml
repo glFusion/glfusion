@@ -27,12 +27,12 @@ function doUnCheckAll()
       <th align="left" style="width:20px;">{lang_select}</th>
       <th align="center">{lang_username}</th>
     </tr>
-    {# BEGIN UserRow #}
+    <!-- BEGIN UserRow -->
     <tr class="{rowclass}">
       <td align="center">{select}</td>
       <td align="left">{username}</td>
     </tr>
-    {# END UserRow #}
+    <!-- END UserRow -->
     <tr>
       <td colspan="2" align="left">
         <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}"{xhtml}>

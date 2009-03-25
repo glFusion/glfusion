@@ -4,13 +4,13 @@
 <tr>
   <td class="pluginCellTitle" colspan="3"><span style="font-weight:bold;">{lang_user_prefs}</span></td>
 </tr>
-  {# BEGIN prefRow #}
+  <!-- BEGIN prefRow -->
 <tr>
   <td>{lang_prompt}</td>
   <td>{input_field}</td>
   <td>{lang_help}</td>
 </tr>
-{# END prefRow #}
+<!-- END prefRow -->
 </table>
 <p>&nbsp;</p>
 <div style="text-align:center;">

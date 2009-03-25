@@ -5,7 +5,7 @@
       {directory}
     </th>
   </tr>
-{# BEGIN fileRow #}
+<!-- BEGIN fileRow -->
   <tr class="pluginRow{row_class}">
     <td style="width:10%;text-align:center;">
         <input type="checkbox" name="sel[]" value="{filename}">
@@ -15,6 +15,6 @@
         {filename}
     </td>
    </tr>
-{# END fileRow #}
+<!-- END fileRow -->
  </table>
 {# end {templatelocation} #}

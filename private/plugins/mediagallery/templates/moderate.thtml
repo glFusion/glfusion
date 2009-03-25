@@ -36,7 +36,7 @@ function doUnCheckAll()
     <th style="width:7%;"><span style="font-weight:bold;">{lang_delete}</span></th>
     <th style="width:7%;"><span style="font-weight:bold;">{lang_approve}</span></th>
   </tr>
-  {# BEGIN QueueRow #}
+  <!-- BEGIN QueueRow -->
   <tr class="pluginRow{row_class}">
     <td align="center">
       {media_edit}
@@ -54,7 +54,7 @@ function doUnCheckAll()
       <input type="hidden" name="id[{item_number}]" value="{media_id}"{xhtml}>
     </td>
   </tr>
-  {# END QueueRow #}
+  <!-- END QueueRow -->
   <tr>
     <td colspan="8" style="text-align:right;">
       <input onclick="javascript:doCheckAll()" type="button" value="{lang_checkall}"{xhtml}>
