@@ -74,7 +74,7 @@ function processOldPlugin( $tmpDir )
             continue;
         }
 
-        if ( is_dir($tmpDir . '/' . $file) ) {
+        if ( @is_dir($tmpDir . '/' . $file) ) {
             $pi_name = $file;
             $dirCount++;
         }
@@ -802,7 +802,7 @@ function io_mkdir_p($target){
 
     if (@is_dir($target)||empty($target)) return 1; // best case check first
 
-    if (@file_exists($target) && !is_dir($target)) return 0;
+    if (@file_exists($target) && !@is_dir($target)) return 0;
     //recursion
     if (io_mkdir_p(substr($target,0,strrpos($target,'/')))){
         $ret = @mkdir($target,0755);
@@ -823,7 +823,7 @@ function io_mkdir_p($target){
 function _pi_deleteDir($path) {
     if (!is_string($path) || $path == "") return false;
     set_time_limit( 30 );
-    if (is_dir($path)) {
+    if (@is_dir($path)) {
       if (!$dh = @opendir($path)) return false;
 
       while ($f = readdir($dh)) {
@@ -852,7 +852,7 @@ function _pi_parseXML($tmpDirectory)
         if ( $file == '..' || $file == '.' ) {
             continue;
         }
-        if ( is_dir($tmpDirectory . '/' . $file) ) {
+        if ( @is_dir($tmpDirectory . '/' . $file) ) {
             $filename = $tmpDirectory . '/' . $file . '/plugin.xml';
             break;
         }
@@ -1013,15 +1013,15 @@ function _pi_dir_copy($srcdir, $dstdir )
     $fail = 0;
     $sizetotal = 0;
     $fifail = '';
-    if (!is_dir($dstdir)) io_mkdir_p($dstdir);
+    if (!@is_dir($dstdir)) io_mkdir_p($dstdir);
     if ($curdir = @opendir($srcdir)) {
         while ($file = readdir($curdir)) {
             if ($file != '.' && $file != '..') {
                 $srcfile = $srcdir . '/' . $file;
                 $dstfile = $dstdir . '/' . $file;
                 if (is_file($srcfile)) {
-                    if (copy($srcfile, $dstfile)) {
-                        touch($dstfile, filemtime($srcfile)); $num++;
+                    if (@copy($srcfile, $dstfile)) {
+                        @touch($dstfile, filemtime($srcfile)); $num++;
                         @chmod($dstfile, 0644);
                         $sizetotal = ($sizetotal + filesize($dstfile));
                     } else {
@@ -1030,7 +1030,7 @@ function _pi_dir_copy($srcdir, $dstdir )
                         $fifail = $fifail.$srcfile.'|';
                     }
                 }
-                else if (is_dir($srcfile)) {
+                else if (@is_dir($srcfile)) {
                     $res = explode(',',$ret);
                     $ret = _pi_dir_copy($srcfile, $dstfile, $verbose);
                     $mod = explode(',',$ret);
@@ -1061,7 +1061,7 @@ function _pi_test_copy($srcdir, $dstdir)
 
     $failedFiles = array();
 
-    if(!is_dir($dstdir)) {
+    if(!@is_dir($dstdir)) {
         $rc = io_mkdir_p($dstdir);
         if ($rc == false ) {
             $failedFiles[] = $dstdir;
@@ -1083,7 +1083,7 @@ function _pi_test_copy($srcdir, $dstdir)
                         $fail++;
                         $fifail = $fifail.$srcfile.'|';
                     }
-                } else if(is_dir($srcfile)) {
+                } else if(@is_dir($srcfile)) {
                     $res = explode(',',$ret);
                     list($ret,$failed) = _pi_test_copy($srcfile, $dstfile, $verbose);
                     $failedFiles = array_merge($failedFiles,$failed);
