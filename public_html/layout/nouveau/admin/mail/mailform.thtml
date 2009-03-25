@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form action="{php_self}" method="post">
     {startblock_email}
     <table cellspacing="0" cellpadding="2" width="100%" style="margin:5px 0px 10px 0px;">
@@ -57,3 +58,4 @@
     </table>
     {end_block}
 </form>
+{# end {templatelocation} #}

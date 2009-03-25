@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <fieldset style="margin-top:10px;">
     <legend>{lang_digest_top_header}</legend>
       <div class="notes">
@@ -6,4 +7,4 @@
        </div>
     <div>{email_topic_checklist}</div>
 </fieldset>
-
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form action="{site_url}/comment.php" method="post">
     <div>
         <div id="commentarea">
@@ -16,3 +17,4 @@
         </p>
     </div>
 </form>
+{# end {templatelocation} #}

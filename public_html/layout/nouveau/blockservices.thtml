@@ -1,2 +1,4 @@
+{# begin {templatelocation} #}
 <b><label for="service">{lang_service}</label>:</b><br{xhtml}>
 {select_service}<br{xhtml}>
+{# end {templatelocation} #}

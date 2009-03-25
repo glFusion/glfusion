@@ -1,5 +1,6 @@
+{# begin {templatelocation} #}
 <script src="{site_url}/javascript/nogray_date_calendar_vs1_min.js" type="text/javascript"></script>
-<!-- Hide the Advanced Editor as Javascript is required. If JS is not enabled then the message below in the <nonscript> tags will be displayed -->
+{# Hide the Advanced Editor as Javascript is required. If JS is not enabled then the message below in the <nonscript> tags will be displayed #}
 <noscript>
     <div class="pluginAlert aligncenter" style="border:1px dashed #ccc;margin-top:10px;padding:15px;">{lang_nojavascript}
     <p>{no_javascript_return_link}</p>
@@ -14,7 +15,7 @@
 <script type="text/javascript" src="{site_url}/javascript/storyeditor_fckeditor.js"></script>
 <br{xhtml}>
 <div id="advanced_editor" style="display:none;">
-    <!-- Hide the Advanced Editor as Javascript is required. If JS is enabled then the JS below will un-hide it -->
+    {# Hide the Advanced Editor as Javascript is required. If JS is enabled then the JS below will un-hide it #}
     <script type="text/javascript">
         document.getElementById('advanced_editor').style.display=''
     </script>
@@ -61,7 +62,7 @@
                 <td style="padding-left:25px;">{lang_draft}:<input type="checkbox" name="draft_flag" {is_checked}{xhtml}><span style="padding-left:30px;">{lang_postmode}:</span>&nbsp;<select id="sel_editmode" name="postmode" {change_editormode}>{post_options}</select></td>
             </tr>
         </table>
-        <!-- Basic textarea field - no editor -->
+        {# Basic textarea field - no editor #}
         <div id="text_editor" style="width:98%;margin-top:10px;padding:10px;display:{show_texteditor};">
             {lang_introtext}:
             <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeTextAreaSize('introtext','larger');"{xhtml}>
@@ -76,7 +77,7 @@
             <textarea id="bodytext" style="width:98%;padding:5px 5px 5px 10px;" name="bodytext" cols="45" rows="14">{story_bodytext}</textarea>
             </div>
         </div>
-        <!-- HTML Editor -->
+        {# HTML Editor #}
         <div id="html_editor" style="margin-top:10px; padding:5px; border:1px solid #ECE9D8;display:{show_htmleditor};">
             {lang_introtext}:
             <img src="{layout_url}/images/expand.png" style="vertical-align:middle;" title="{lang_expandhelp}" alt="" onclick="changeHTMLTextAreaSize('introhtml','larger');"{xhtml}>
@@ -287,7 +288,7 @@
     </div>
 
     <script type="text/javascript">
-        <!-- This code will only be executed by a browser that suppports Javascript -->
+        {# This code will only be executed by a browser that suppports Javascript #}
 
         var jstest = {showarchivedisabled};
         if (jstest) {
@@ -346,3 +347,4 @@
     });
     </script>
 </div>
+{# end {templatelocation} #}

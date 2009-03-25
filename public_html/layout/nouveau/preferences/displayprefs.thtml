@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div id="pe_layout" class="jsenabled_hide">
         {display_block}
         {comment_block}
@@ -10,3 +11,4 @@
 <div id="pe_privacy" class="jsenabled_hide">
         {privacy_block}
 </div>
+{# end {templatelocation} #}

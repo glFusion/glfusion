@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
         <script type="text/javascript">
             // Setup editor path for FCKeditor JS Functions
             glfusionEditorBasePath = "{site_url}/fckeditor/" ;
@@ -31,7 +32,7 @@
                         {lang_bodytext}:
                         <textarea id="bodytext" style="padding:5px 10px 5px 10px; width:100%;" name="bodytext" cols="45" rows="14">{story_bodytext}</textarea>
                     </div>
-                    <!-- HTML Editor -->
+                    {# HTML Editor #}
                     <div id="html_editor" style="margin-top:10px; padding-left:10px;display:{show_htmleditor};">
                         <div style="vertical-align:top;">
                           {lang_introtext}:<br{xhtml}>
@@ -67,3 +68,4 @@
                 </tr>
             </table>
         </form>
+{# end {templatelocation} #}

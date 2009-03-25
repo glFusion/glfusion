@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <noscript><div class="pluginAlert" style="padding:10px;">{no_javascript_warning}</div></noscript>
 <script type="text/JavaScript" src="{site_url}/javascript/profile_editor.js"></script>
 
@@ -70,7 +71,7 @@
                     <td style="width:100px;"><label for="homepage">{lang_homepage}:</label></td>
                     <td><input type="text" id="homepage" name="homepage" size="48" maxlength="128" value="{homepage_value}"{xhtml}></td>
                 </tr>
-				{customfields}
+                {customfields}
                 <tr>
                     <td style="width:100px;"><label for="location">{lang_location}:</label></td>
                     <td><input type="text" id="location" name="location" size="48" maxlength="96" value="{location_value}"{xhtml}></td>
@@ -102,7 +103,7 @@
     </p>
 </form>
 </div>
-<!-- JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor -->
+{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
 <script type="text/JavaScript">
 //<![CDATA[
     /* Initially the navbar is hidden - in case JS is disabled. Enable it now */
@@ -128,3 +129,4 @@
     }
 //]]>
 </script>
+{# end {templatelocation} #}

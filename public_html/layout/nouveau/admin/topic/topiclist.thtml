@@ -1,4 +1,6 @@
+{# begin {templatelocation} #}
                             {top_menu}
                             <table cellspacing="0" cellpadding="2" width="100%">
                                 {list_row}
                             </table>
+{# end {templatelocation} #}

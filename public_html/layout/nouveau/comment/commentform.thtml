@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                                 {start_block_postacomment}
                                             <form action="{site_url}/comment.php" method="post">
                                                 <table cellspacing="0" cellpadding="3" width="95%">
@@ -47,3 +48,4 @@
                                                 </table>
                                             </form>
                                 {end_block}
+{# end {templatelocation} #}

@@ -1,3 +1,5 @@
+{# begin {templatelocation} #}
 <div class="moderation-cc">
     {cc_rows}
 </div>
+{# end {templatelocation} #}

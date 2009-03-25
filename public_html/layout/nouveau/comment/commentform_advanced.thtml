@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
  <script type="text/javascript">
     // Setup editor path for FCKeditor JS Functions
     glfusionEditorBasePath = "{site_url}/fckeditor/" ;
@@ -62,3 +63,4 @@
                     </table>
                 </form>
     {end_block}
+{# end {templatelocation} #}

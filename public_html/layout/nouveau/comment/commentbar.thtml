@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <div class="block-divider"> </div>
 <a id="comments" name="comments"></a>
 <div class="commentbar-line1">
@@ -28,3 +29,4 @@
 <div class="commentbar-line3" style="clear:both; text-align:center; margin-bottom:10px;">
     {lang_disclaimer}
 </div>
+{# end {templatelocation} #}

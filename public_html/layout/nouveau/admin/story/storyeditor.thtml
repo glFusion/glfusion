@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/javascript">
 //<![CDATA[
 function enablearchive(obj) {
@@ -274,7 +275,7 @@ function enablearchive(obj) {
                                 </table>
                             </form>
 <script type="text/javascript">
-<!-- This code will only be executed by a browser that supports Javascript -->
+{# This code will only be executed by a browser that supports Javascript #}
 var jstest = {showarchivedisabled};
 if (jstest) {
     document.frmstory.expire_month.disabled=true;
@@ -287,3 +288,4 @@ if (jstest) {
     document.frmstory.storycode11.disabled=true;
 }
 </script>
+{# end {templatelocation} #}

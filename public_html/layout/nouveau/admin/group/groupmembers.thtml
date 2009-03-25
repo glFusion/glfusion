@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <script type="text/JavaScript" src="{site_url}/javascript/moveusers.js"></script>
 <table cellspacing="0" cellpadding="2" width="100%" style="margin:5px 0px 10px 0px;">
     <tr>
@@ -47,3 +48,4 @@
         </table>
     </form>
 </div>
+{# end {templatelocation} #}

@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {start_feed_editor}
 <form action="{site_admin_url}/syndication.php" method="post">
     <table cellspacing="0" cellpadding="3" width="100%">
@@ -77,3 +78,4 @@
     </table>
 </form>
 {end_block}
+{# end {templatelocation} #}

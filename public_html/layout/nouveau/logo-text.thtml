@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 					<div style="padding-top:25px;padding-left:20px;padding-bottom:15px;">
 						<a href="{site_url}" rel="bookmark" title="{site_slogan}"
 style="font-style:italic;font-weight:bold;font-size:xx-large;color:#FFF; text-decoration:none;">
@@ -5,3 +6,4 @@ style="font-style:italic;font-weight:bold;font-size:xx-large;color:#FFF; text-de
 						</a>
 						<div id="header-site-slogan">{site_slogan}</div>
 					</div>
+{# end {templatelocation} #}

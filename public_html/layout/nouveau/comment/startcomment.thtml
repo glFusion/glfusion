@@ -1,5 +1,7 @@
+{# begin {templatelocation} #}
 <div id="commentarea">
 {commentbar}
 {comments}
 <p class="aligncenter">{pagenav}</p>
 </div>
+{# end {templatelocation} #}

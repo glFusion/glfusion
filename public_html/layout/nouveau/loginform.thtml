@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form action="{site_url}/users.php" method="post" style="margin-top:5px;margin-bottom:5px;">
     <div>
         <label for="loginname">{lang_username}:</label><br{xhtml}>
@@ -11,3 +12,4 @@
 <p>{lang_signup}<br{xhtml}>
 {lang_forgetpassword}</p>
 {openid_login}
+{# end {templatelocation} #}

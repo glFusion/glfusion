@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                                     <tr>
                                         <td colspan="2"><b>{lang_securitygroups}</b></td>
                                     </tr>
@@ -6,3 +7,4 @@
                                             {group_options}
                                         </td>
                                     </tr>
+{# end {templatelocation} #}

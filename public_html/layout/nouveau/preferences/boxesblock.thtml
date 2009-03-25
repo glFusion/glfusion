@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <fieldset style="margin-top:10px;">
     <legend>{lang_boxes_title}</legend>
       <div class="notes" style="width:200px;">
@@ -8,3 +9,4 @@
         {boxes_checklist}
     </div>
 </fieldset>
+{# end {templatelocation} #}

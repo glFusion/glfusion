@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
     <fieldset style="margin-top:10px;"><legend>{lang_misc_title}</legend>
         <div class="notes" style="width:250px;">
         <h4>{lang_misc_help_title}</h4>
@@ -32,3 +33,4 @@
             </tr>
         </table>
     </fieldset>
+{# end {templatelocation} #}

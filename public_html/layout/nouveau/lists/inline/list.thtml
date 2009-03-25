@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {list_top}
 <br />
 {item_row}
@@ -5,3 +6,4 @@
 <br{xhtml}>
 <p class="aligncenter">{google_paging}</p>
 {list_bottom}
+{# end {templatelocation} #}

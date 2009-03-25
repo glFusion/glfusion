@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                                 {start_block_editor}
                                 <form action="{site_admin_url}/block.php" method="post">
                                     <table cellspacing="0" cellpadding="3" width="100%">
@@ -134,3 +135,4 @@
                                     </table>
                                 </form>
                                 {end_block}
+{# end {templatelocation} #}

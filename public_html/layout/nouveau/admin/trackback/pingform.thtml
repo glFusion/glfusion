@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 {lang_ping_explain}
 {ping_results}
 <form action="{php_self}" method="post">
@@ -19,3 +20,4 @@
     <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
     <p class="warningsmall aligncenter">{lang_may_take_a_while}</p>
 </form>
+{# end {templatelocation} #}

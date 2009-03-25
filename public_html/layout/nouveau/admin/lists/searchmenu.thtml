@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <form action="{form_url}" method="post">
     <div class="admin-list-search">
         {filter}
@@ -16,3 +17,4 @@
         &nbsp;&nbsp;{lang_records_found}:&nbsp;{records_found}
     </div>
 </form>
+{# end {templatelocation} #}

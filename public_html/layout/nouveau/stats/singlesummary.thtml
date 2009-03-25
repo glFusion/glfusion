@@ -1,6 +1,8 @@
+{# begin {templatelocation} #}
                                 <tr>
                                     <td>
                                         {item_text}
                                     </td>
                                     <td class="alignright">{item_stat}</td>
                                 </tr>
+{# end {templatelocation} #}

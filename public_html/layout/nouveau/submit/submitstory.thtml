@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                             <form action="{site_url}/submit.php" method="post">
                                 <table cellspacing="0" cellpadding="3">
                                     <tr>
@@ -46,3 +47,4 @@
                                     </tr>
                                 </table>
                             </form>
+{# end {templatelocation} #}

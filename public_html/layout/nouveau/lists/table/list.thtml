@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                             {list_top}
                             <br />
                             <table class="admin-list-table" style="{show_sorts}">
@@ -10,3 +11,4 @@
                             <br{xhtml}>
                             <p class="aligncenter">{google_paging}</p>
                             {list_bottom}
+                            {# end {templatelocation} #}

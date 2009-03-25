@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
                             {search_intro}
                             <form action="{site_url}/search.php" method="get">
                                 <table cellspacing="0" cellpadding="3">
@@ -49,3 +50,4 @@
                                     </tr>
                                 </table>
                             </form>
+{# end {templatelocation} #}

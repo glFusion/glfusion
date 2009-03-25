@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <fieldset style="margin-top:10px;"><legend>{lang_privacy_title}</legend>
       <div class="notes" style="width:250px;">
         <h4>{lang_privacy_help_title}</h4>
@@ -18,3 +19,4 @@
   </tr>
 </table>
 </fieldset>
+{# end {templatelocation} #}

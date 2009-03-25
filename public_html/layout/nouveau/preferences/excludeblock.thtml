@@ -1,3 +1,4 @@
+{# begin {templatelocation} #}
 <fieldset style="margin-top:10px;">
     <legend>{lang_exclude_title}</legend>
       <div class="notes" style="width:200px;">
@@ -13,3 +14,4 @@
         </tr>
     </table>
 </fieldset>
+{# end {templatelocation} #}
