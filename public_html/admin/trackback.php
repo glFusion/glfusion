@@ -177,6 +177,7 @@ function deleteTrackbackComment ($id)
         TRB_deleteTrackbackComment ($id);
         if ($type == 'article') {
             DB_query ("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks - 1 WHERE (sid = '$sid')");
+            CACHE_remove_instance('story_'.$sid);
         }
         $msg = 62;
     } else {
