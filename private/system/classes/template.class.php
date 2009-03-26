@@ -227,32 +227,32 @@ class Template
   */
   var $last_error     = "";
 
- /******************************************************************************
-  * Class constructor. May be called with two optional parameters.
-  * The first parameter sets the template directory the second parameter
-  * sets the policy regarding handling of unknown variables.
-  *
-  * usage: Template([string $root = array()], [string $unknowns = "remove"])
-  *
-  * @param     $root        path to template directory
-  * @param     $string      what to do with undefined variables
-  * @see       set_root
-  * @see       set_unknowns
-  * @access    public
-  * @return    void
-  */
-  function Template($root = array(), $unknowns = "")
-  {
-    global $TEMPLATE_OPTIONS;
+    /******************************************************************************
+    * Class constructor. May be called with two optional parameters.
+    * The first parameter sets the template directory the second parameter
+    * sets the policy regarding handling of unknown variables.
+    *
+    * usage: Template([string $root = array()], [string $unknowns = "remove"])
+    *
+    * @param     $root        path to template directory
+    * @param     $string      what to do with undefined variables
+    * @see       set_root
+    * @see       set_unknowns
+    * @access    public
+    * @return    void
+    */
+    function Template($root = array(), $unknowns = "")
+    {
+        global $TEMPLATE_OPTIONS;
 
-    $this->set_root($root);
-    $this->set_unknowns($unknowns);
-    if (is_array($TEMPLATE_OPTIONS) AND array_key_exists('default_vars',$TEMPLATE_OPTIONS) and is_array($TEMPLATE_OPTIONS['default_vars'])) {
-      foreach ($TEMPLATE_OPTIONS['default_vars'] as $k => $v) {
-        $this->set_var($k, $v);
-      }
+        $this->set_root($root);
+        $this->set_unknowns($unknowns);
+        if (is_array($TEMPLATE_OPTIONS) AND array_key_exists('default_vars',$TEMPLATE_OPTIONS) and is_array($TEMPLATE_OPTIONS['default_vars'])) {
+            foreach ($TEMPLATE_OPTIONS['default_vars'] as $k => $v) {
+                $this->set_var($k, $v);
+            }
+        }
     }
-  }
 
 
    /******************************************************************************
@@ -667,11 +667,11 @@ class Template
             } else if (isset($this->varvals[$varname]) OR empty($varname)) {
                 return $this->slow_subst($varname);
             } else {
-              // $varname does not reference a file so return
-              if ($this->debug & 4) {
-                echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
-              }
-              return true;
+                // $varname does not reference a file so return
+                if ($this->debug & 4) {
+                    echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
+                }
+                return true;
             }
 
             ob_start();
@@ -1547,7 +1547,6 @@ class Template
                 $tmplt = str_replace('{#','<!-- ',$tmplt);
                 $tmplt = str_replace('#}',' -->',$tmplt);
             } else {
-//                $tmplt = preg_replace('/\{#.*#\}(\n)?/sm', '', $tmplt);
                 $tmplt = preg_replace('!\{#.*?#\}(\n)?!sm', '', $tmplt);
             }
         }
@@ -1804,9 +1803,9 @@ class Template
         $tmplt = $this->replace_lang($tmplt);
         $tmplt = $this->replace_vars($tmplt);
 
-      // clean up concatenation.
-          $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
-                                "\n", $tmplt);
+        // clean up concatenation.
+        $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
+                             "\n", $tmplt);
 
         return $tmplt;
 
@@ -1828,7 +1827,7 @@ class Template
             $vars = array($vars);
         }
         foreach ($vars as $varname) {
-          $this->nocache[$varname] = true;
+            $this->nocache[$varname] = true;
         }
     }
 
