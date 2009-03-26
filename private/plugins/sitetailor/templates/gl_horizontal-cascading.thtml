@@ -1,4 +1,6 @@
 
+
+
 #gl_moomenu{menu_id} a {
   text-decoration:none;
   white-space:nowrap;
@@ -148,6 +150,15 @@
   background:transparent url({site_url}/images/menu/{menu_parent_filename}) no-repeat scroll 95% 50%;
 }
 .gl_moomenu{menu_id} {float:{alignment};}
+
+<!--[if IE 7]>
+#gl_moomenu{menu_id} {
+  width:100%;
+}
+.gl_moomenu{menu_id} li ul {
+  width:177px;
+}
+<![endif]-->
 
 .dummyclass{menu_id} {
 }
