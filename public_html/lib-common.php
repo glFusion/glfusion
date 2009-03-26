@@ -1857,12 +1857,14 @@ function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = 
     $retval = '';
 
     $topics = COM_topicArray($selection, $sortcol, $ignorelang, $access);
-    foreach ($topics as $tid => $topic) {
-        $retval .= '<option value="' . $tid . '"';
-        if ($tid == $selected) {
-            $retval .= ' selected="selected"';
+    if ( is_array($topics) ) {
+        foreach ($topics as $tid => $topic) {
+            $retval .= '<option value="' . $tid . '"';
+            if ($tid == $selected) {
+                $retval .= ' selected="selected"';
+            }
+            $retval .= '>' . $topic . '</option>' . LB;
         }
-        $retval .= '>' . $topic . '</option>' . LB;
     }
 
     return $retval;
@@ -7284,11 +7286,13 @@ function USES_class_upload() {
 }
 
 // Now include all plugin functions
-foreach( $_PLUGINS as $pi_name ) {
-    if (@file_exists($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc') ) {
-        require_once( $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' );
-    } else {
-        unset($_PLUGINS[array_search($pi_name, $_PLUGINS)]);
+if ( is_array($_PLUGINS) ) {
+    foreach( $_PLUGINS as $pi_name ) {
+        if (@file_exists($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc') ) {
+            require_once( $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' );
+        } else {
+            unset($_PLUGINS[array_search($pi_name, $_PLUGINS)]);
+        }
     }
 }
 
@@ -7362,14 +7366,16 @@ function css_out(){
         $files[] = $_CONF['path_layout'] . 'style-colors.css';
     }
 
-    foreach ( $_PLUGINS as $pi_name ) {
-        if ( function_exists('plugin_getheadercss_'.$pi_name) ) {
-            $function = 'plugin_getheadercss_'.$pi_name;
-            $pHeader = array();
-            $pHeader = $function();
-            if ( is_array($pHeader) ) {
-                foreach($pHeader AS $item => $file) {
-                    $files[] = $file;
+    if ( is_array($_PLUGINS) ) {
+        foreach ( $_PLUGINS as $pi_name ) {
+            if ( function_exists('plugin_getheadercss_'.$pi_name) ) {
+                $function = 'plugin_getheadercss_'.$pi_name;
+                $pHeader = array();
+                $pHeader = $function();
+                if ( is_array($pHeader) ) {
+                    foreach($pHeader AS $item => $file) {
+                        $files[] = $file;
+                    }
                 }
             }
         }
@@ -7384,9 +7390,11 @@ function css_out(){
     ob_start();
 
     // load files
-    foreach($files as $file) {
-        css_loadfile($file);
-        print "\n";
+    if ( is_array($files) ) {
+        foreach($files as $file) {
+            css_loadfile($file);
+            print "\n";
+        }
     }
 
     // end output buffering and get contents
@@ -7414,9 +7422,11 @@ function css_cacheok($cache,$files){
 
     // now walk the files
 
-    foreach($files as $file){
-        if(@filemtime($file) > $ctime){
-            return false;
+    if ( is_array($files) ) {
+        foreach($files as $file){
+            if(@filemtime($file) > $ctime){
+                return false;
+            }
         }
     }
     return true;
@@ -7511,14 +7521,16 @@ function js_out(){
      * Let the plugins add their JavaScript needs here...
      */
 
-    foreach ( $_PLUGINS as $pi_name ) {
-        if ( function_exists('plugin_getheaderjs_'.$pi_name) ) {
-            $function = 'plugin_getheaderjs_'.$pi_name;
-            $pHeader = array();
-            $pHeader = $function();
-            if ( is_array($pHeader) ) {
-                foreach($pHeader AS $item => $file) {
-                    $files[] = $file;
+    if ( is_array($_PLUGINS) ) {
+        foreach ( $_PLUGINS as $pi_name ) {
+            if ( function_exists('plugin_getheaderjs_'.$pi_name) ) {
+                $function = 'plugin_getheaderjs_'.$pi_name;
+                $pHeader = array();
+                $pHeader = $function();
+                if ( is_array($pHeader) ) {
+                    foreach($pHeader AS $item => $file) {
+                        $files[] = $file;
+                    }
                 }
             }
         }
@@ -7527,14 +7539,16 @@ function js_out(){
     /*
      * Let the plugins add any global JS variables
      */
-    foreach ( $_PLUGINS as $pi_name ) {
-        if ( function_exists('plugin_getglobaljs_'.$pi_name) ) {
-            $function = 'plugin_getglobaljs_'.$pi_name;
-            $globalJS = array();
-            $globalJS = $function();
-            if ( is_array($globalJS) ) {
-                foreach($globalJS AS $name => $value) {
-                    $pluginJSvars[$name] = $value;
+    if (is_array($_PLUGINS) ) {
+        foreach ( $_PLUGINS as $pi_name ) {
+            if ( function_exists('plugin_getglobaljs_'.$pi_name) ) {
+                $function = 'plugin_getglobaljs_'.$pi_name;
+                $globalJS = array();
+                $globalJS = $function();
+                if ( is_array($globalJS) ) {
+                    foreach($globalJS AS $name => $value) {
+                        $pluginJSvars[$name] = $value;
+                    }
                 }
             }
         }
@@ -7561,8 +7575,10 @@ function js_out(){
     }
 
     // load files
-    foreach($files as $file){
-        js_load($file);
+    if ( is_array($files) ) {
+        foreach($files as $file){
+            js_load($file);
+        }
     }
 
     // end output buffering and get contents
@@ -7600,9 +7616,11 @@ function js_cacheok($cache,$files){
     if(!$ctime) return false; //There is no cache
 
     // now walk the files
-    foreach($files as $file){
-        if(@filemtime($file) > $ctime){
-            return false;
+    if ( is_array($files) ) {
+        foreach($files as $file){
+            if(@filemtime($file) > $ctime){
+                return false;
+            }
         }
     }
     return true;
