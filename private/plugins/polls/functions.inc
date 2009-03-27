@@ -1068,10 +1068,16 @@ function plugin_getheadercss_polls() {
     global $_CONF;
 
     $styles = array();
-    $styles[] = $_CONF['path_html'] . '/polls/style.css';
+
+    if ( @file_exists($_CONF['path_layout'].'plugins/polls/style.css') ) {
+        $styles[] = $_CONF['path_layout'].'plugins/polls/style.css';
+    } else {
+        $styles[] = $_CONF['path_html'] . '/polls/style.css';
+    }
 
 	return ($styles);
 }
+
 
 /**
 * Update the Polls plugin
