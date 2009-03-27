@@ -243,10 +243,12 @@ function plugin_getheadercss_mediagallery() {
 
     $styles = array();
 
-    if ( $_MG_CONF['template_path'] == $_CONF['path'] . 'plugins/mediagallery/templates' ) {
+    if ( @file_exists($_CONF['path_layout'].'plugins/mediagallery/style.css') ) {
+        $styleFile = $_CONF['path_layout'].'plugins/mediagallery/style.css';
+    } else if ( $_MG_CONF['template_path'] == $_CONF['path'] . 'plugins/mediagallery/templates' ) {
 	    $styleFile = $_MG_CONF['path_html'] . 'style.css';
 	} else {
-		$styleFile = $_CONF['layout_path'] . '/mediagallery/style.css';
+		$styleFile = $_CONF['path_layout'] . '/mediagallery/style.css';
 	}
 	$styles[] = $styleFile;
 

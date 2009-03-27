@@ -461,7 +461,10 @@ class getid3_id3v2
 				$unprocessed = substr($unprocessed, $endpos + 1);
 			}
 			unset($unprocessed);
-		}
+        } elseif (eregi('^([0-9]+|CR|RX)$', $genrestring)) {
+        	// some tagging program (including some that use TagLib) fail to include null byte after numeric genre
+			$genrestring = '('.$genrestring.')';
+        }
 		if (getid3_id3v1::LookupGenreID($genrestring)) {
 
 			$returnarray['genre'][] = $genrestring;
@@ -1259,7 +1262,8 @@ class getid3_id3v2
 			$parsedFrame['description']      = $frame_description;
 			$parsedFrame['data']             = substr($parsedFrame['data'], $frame_terminatorpos + strlen($this->TextEncodingTerminatorLookup($frame_textencoding)));
 
-			$imagechunkcheck = getid3_lib::GetDataImageSize($parsedFrame['data']);
+			$imageinfo = array();
+			$imagechunkcheck = getid3_lib::GetDataImageSize($parsedFrame['data'], $imageinfo);
 			if (($imagechunkcheck[2] >= 1) && ($imagechunkcheck[2] <= 3)) {
 				$parsedFrame['image_mime']       = 'image/'.getid3_lib::ImageTypesLookup($imagechunkcheck[2]);
 				if ($imagechunkcheck[0]) {
@@ -2805,10 +2809,12 @@ class getid3_id3v2
 			TBP	BPM (Beats Per Minute)
 			TBPM	BPM (beats per minute)
 			TCM	Composer
+			TCMP	Part of a compilation
 			TCO	Content type
 			TCOM	Composer
 			TCON	Content type
 			TCOP	Copyright message
+			TCP	Part of a compilation
 			TCR	Copyright message
 			TDA	Date
 			TDAT	Date
@@ -2871,15 +2877,22 @@ class getid3_id3v2
 			TRK	Track number/Position in set
 			TRSN	Internet radio station name
 			TRSO	Internet radio station owner
+			TS2	Album-Artist sort order
+			TSA	Album sort order
+			TSC	Composer sort order
 			TSI	Size
 			TSIZ	Size
+			TSO2	Album-Artist sort order
 			TSOA	Album sort order
+			TSOC	Composer sort order
 			TSOP	Performer sort order
 			TSOT	Title sort order
+			TSP	Performer sort order
 			TSRC	ISRC (international standard recording code)
 			TSS	Software/hardware and settings used for encoding
 			TSSE	Software/Hardware and settings used for encoding
 			TSST	Set subtitle
+			TST	Title sort order
 			TT1	Content group description
 			TT2	Title/Songname/Content description
 			TT3	Subtitle/Description refinement
@@ -2980,10 +2993,12 @@ class getid3_id3v2
 			TBP	bpm
 			TBPM	bpm
 			TCM	composer
+			TCMP	part_of_a_compilation
 			TCO	genre
 			TCOM	composer
 			TCON	genre
 			TCOP	copyright_message
+			TCP	part_of_a_compilation
 			TCR	copyright_message
 			TDA	date
 			TDAT	date
@@ -3046,15 +3061,22 @@ class getid3_id3v2
 			TRK	track_number
 			TRSN	internet_radio_station_name
 			TRSO	internet_radio_station_owner
+			TS2	album_artist_sort_order
+			TSA	album_sort_order
+			TSC	composer_sort_order
 			TSI	size
 			TSIZ	size
+			TSO2	album_artist_sort_order
 			TSOA	album_sort_order
+			TSOC	composer_sort_order
 			TSOP	performer_sort_order
 			TSOT	title_sort_order
+			TSP	performer_sort_order
 			TSRC	isrc
 			TSS	encoder_settings
 			TSSE	encoder_settings
 			TSST	set_subtitle
+			TST	title_sort_order
 			TT1	description
 			TT2	title
 			TT3	subtitle

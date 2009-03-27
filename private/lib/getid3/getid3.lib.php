@@ -67,7 +67,7 @@ class getid3_lib
 		// convert a float to type int, only if possible
 		if (getid3_lib::trunc($floatnum) == $floatnum) {
 			// it's not floating point
-			if ($floatnum <= 1073741824) { // 2^30
+			if ($floatnum <= 2147483647) { // 2^31
 				// it's within int range
 				$floatnum = (int) $floatnum;
 			}
@@ -588,6 +588,9 @@ class getid3_lib
 	// Allan Hansen <ahØartemis*dk>
 	// getid3_lib::md5_data() - returns md5sum for a file from startuing position to absolute end position
 	function hash_data($file, $offset, $end, $algorithm) {
+		if ($end >= pow(2, 31)) {
+			return false;
+		}
 
 		switch ($algorithm) {
 			case 'md5':
@@ -1061,7 +1064,7 @@ class getid3_lib
 						$charval += (ord($string{++$i}) & 0x3F);
 					}
 					if (($charval >= 32) && ($charval <= 127)) {
-						$HTMLstring .= chr($charval);
+						$HTMLstring .= htmlentities(chr($charval));
 					} else {
 						$HTMLstring .= '&#'.$charval.';';
 					}
@@ -1153,13 +1156,13 @@ class getid3_lib
 	}
 
 
-	function GetDataImageSize($imgData) {
+	function GetDataImageSize($imgData, &$imageinfo) {
 		$GetDataImageSize = false;
 		if ($tempfilename = tempnam('*', 'getID3')) {
 			if ($tmp = @fopen($tempfilename, 'wb')) {
 				fwrite($tmp, $imgData);
 				fclose($tmp);
-				$GetDataImageSize = @GetImageSize($tempfilename);
+				$GetDataImageSize = @GetImageSize($tempfilename, $imageinfo);
 			}
 			@unlink($tempfilename);
 		}

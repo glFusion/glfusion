@@ -655,7 +655,11 @@ function plugin_savesubmission_calendar($A)
 
 function plugin_getheadercode_calendar()
 {
-    global $_CONF;
+    global $_CONF, $themeAPI;
+
+    if ( $themeAPI > 1 ) {
+        return;
+    }
 
     $str = null;
 
@@ -666,6 +670,22 @@ function plugin_getheadercode_calendar()
     }
 
     return $str;
+}
+
+function plugin_getheadercss_calendar()
+{
+    global $_CONF;
+
+    $styles = array();
+
+    if ( @file_exists($_CONF['path_layout'].'plugins/calendar/style.css') ) {
+        $styleFile = $_CONF['path_layout'].'plugins/calendar/style.css';
+    } else {
+        $styleFile = $_CONF['path_html'].'/calendar/style.css';
+    }
+	$styles[] = $styleFile;
+
+    return $styles;
 }
 
 /**

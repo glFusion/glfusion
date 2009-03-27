@@ -446,7 +446,12 @@ function plugin_getheadercss_forum() {
     global $_CONF;
 
     $styles = array();
-    $styles[] = $_CONF['path'] . 'plugins/forum/css/style.css';
+
+    if ( @file_exists($_CONF['path_layout'].'plugins/forum/style.css') ) {
+        $styles[] = $_CONF['path_layout'].'plugins/forum/style.css';
+    } else {
+        $styles[] = $_CONF['path'] . 'plugins/forum/css/style.css';
+    }
     return($styles);
 }
 
