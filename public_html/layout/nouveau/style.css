@@ -199,7 +199,7 @@ width:65%;
 zoom:1;
 }
 
-#gl_container_fixed {
+#gl_container_fixed { /* if you adjust the width and use the forum plugin, also adjust #gl_container_fixed div.php below */
 background:#FFF;
 min-width:955px;
 width:955px;
@@ -1897,6 +1897,10 @@ overflow:auto;
 height:auto;
 width:auto;
 min-height:100px;
+}
+
+#gl_container_fixed div.php {
+width:608px;
 }
 
 #ft,.clearboth {
