@@ -6,6 +6,7 @@ v1.2.0
 
 v1.1.3
 ------
+- 0000403: Search box text is hard coded in header.thtml (Eric)
 - 0000418: Forum code block max width breaks fixed width layouts (Eric)
 - 0000416: After mailing users, screen refreshes to admin/moderation.php not admin/index.php (Eric)
 - 0000290: Language & Layout inconsistencies (Eric)
