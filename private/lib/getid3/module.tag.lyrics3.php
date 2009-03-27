@@ -20,6 +20,11 @@ class getid3_lyrics3
 	function getid3_lyrics3(&$fd, &$ThisFileInfo) {
 		// http://www.volweb.cz/str/tags.htm
 
+		if ($ThisFileInfo['filesize'] >= pow(2, 31)) {
+			$ThisFileInfo['warning'][] = 'Unable to check for Lyrics3 because file is larger than 2GB';
+			return false;
+		}
+
 		fseek($fd, (0 - 128 - 9 - 6), SEEK_END);          // end - ID3v1 - LYRICSEND - [Lyrics3size]
 		$lyrics3_id3v1 = fread($fd, 128 + 9 + 6);
 		$lyrics3lsz    = substr($lyrics3_id3v1,  0,   6); // Lyrics3size
@@ -107,6 +112,11 @@ class getid3_lyrics3
 
 	function getLyrics3Data(&$ThisFileInfo, &$fd, $endoffset, $version, $length) {
 		// http://www.volweb.cz/str/tags.htm
+
+		if ($endoffset >= pow(2, 31)) {
+			$ThisFileInfo['warning'][] = 'Unable to check for Lyrics3 because file is larger than 2GB';
+			return false;
+		}
 
 		fseek($fd, $endoffset, SEEK_SET);
 		if ($length <= 0) {

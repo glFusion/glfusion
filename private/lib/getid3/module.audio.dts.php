@@ -84,7 +84,9 @@ class getid3_dts
         $ThisFileInfo['audio']['sample_rate']         = $ThisFileInfo['dts']['sample_rate'];
         $ThisFileInfo['audio']['channels']            = $ThisFileInfo['dts']['channels'];
         $ThisFileInfo['audio']['bitrate']             = $ThisFileInfo['dts']['bitrate'];
-        $ThisFileInfo['playtime_seconds']             = ($ThisFileInfo['avdataend'] - $ThisFileInfo['avdataoffset']) / ($ThisFileInfo['dts']['bitrate'] / 8);
+        if (isset($ThisFileInfo['avdataend'])) {
+        	$ThisFileInfo['playtime_seconds']         = ($ThisFileInfo['avdataend'] - $ThisFileInfo['avdataoffset']) / ($ThisFileInfo['dts']['bitrate'] / 8);
+        }
 
         return true;
     }
