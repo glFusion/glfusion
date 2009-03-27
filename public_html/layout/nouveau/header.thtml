@@ -6,7 +6,7 @@
                     <div class="header-flag-n-search">
 						<form method="get" action="{site_url}/search.php">
 							<div>
-								<input id="header-textbox" type="text" name="query" maxlength="255" value="{$LANG09[10]}" title="{$LANG09[10]}" onfocus="if (this.value=='Search')this.value='';" onblur="if(this.value=='')this.value='{$LANG09[10]}';"{xhtml}>
+								<input id="header-textbox" type="text" name="query" maxlength="255" value="{$LANG09[10]}" title="{$LANG09[10]}" onfocus="if (this.value=='{$LANG09[10]}')this.value='';" onblur="if(this.value=='')this.value='{$LANG09[10]}';"{xhtml}>
 								<input type="hidden" name="type" value="all"{xhtml}>
 								<input type="hidden" name="mode" value="search"{xhtml}>
 								<input type="hidden" name="results" value="{num_search_results}"{xhtml}>
