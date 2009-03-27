@@ -6,7 +6,9 @@ v1.2.0
 
 v1.1.3
 ------
+- 0000416: After mailing users, screen refreshes to admin/moderation.php not admin/index.php (Eric)
 - 0000290: Language & Layout inconsistencies (Eric)
+- Added config switch to include template location comments in page source (Mark & Eric)
 - Improved error detection when sending emails (Mark)
 - Tweaked plugin upload to not crash when hitting certain permission
   errors (Mark)
