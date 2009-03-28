@@ -1458,196 +1458,167 @@ margin:10px;
 min-height:3.0em;
 }
 
+ul {
+list-style-position:outside;
+margin-left:5px;
+padding-left:15px;
+list-style:disc;
+}
+
 ul.arrow li {
-background:transparent url(layout/nouveau/images/arrow.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/arrow.png) no-repeat scroll 0 50%;
 }
 
 ul.bug li {
-background:transparent url(layout/nouveau/images/bug.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/bug.png) no-repeat scroll 0 50%;
 }
 
 ul.cart li {
-background:transparent url(layout/nouveau/images/cart.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/cart.png) no-repeat scroll 0 50%;
 }
 
 ul.check li {
-background:transparent url(layout/nouveau/images/check.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/check.png) no-repeat scroll 0 50%;
 }
 
 ul.script li {
-background:transparent url(layout/nouveau/images/script.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/script.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-blue li {
-background:transparent url(layout/nouveau/images/bullet-blue.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/bullet-blue.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-grey li {
-background:transparent url(layout/nouveau/images/bullet-grey.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/bullet-grey.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-plus li {
-background:transparent url(layout/nouveau/images/bullet-plus.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/bullet-plus.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-rss li {
-background:transparent url(layout/nouveau/images/bullet-rss.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/bullet-rss.png) no-repeat scroll 0 50%;
 }
 
 ul.bullet-star li {
-background:transparent url(layout/nouveau/images/bullet-star.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/bullet-star.png) no-repeat scroll 0 50%;
 }
 
 ul.disc li {
-background:transparent url(layout/nouveau/images/disc.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/disc.png) no-repeat scroll 0 50%;
 }
 
 ul.headphones li {
-background:transparent url(layout/nouveau/images/headphones.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/headphones.png) no-repeat scroll 0 50%;
 }
 
 ul.mic li {
-background:transparent url(layout/nouveau/images/mic.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/mic.png) no-repeat scroll 0 50%;
 }
 
 ul.speaker li {
-background:transparent url(layout/nouveau/images/speaker.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/speaker.png) no-repeat scroll 0 50%;
 }
 
 ul.video li {
-background:transparent url(layout/nouveau/images/video.png) no-repeat scroll 2px;
-padding-left:28px;
+background:transparent url(layout/nouveau/images/video.png) no-repeat scroll 0 50%;
 }
 
 li.num-1 {
-background:transparent url(layout/nouveau/images/number-1.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-1.png) no-repeat scroll 0 50%;
 }
 
 li.num-2 {
-background:transparent url(layout/nouveau/images/number-2.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-2.png) no-repeat scroll 0 50%;
 }
 
 li.num-3 {
-background:transparent url(layout/nouveau/images/number-3.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-3.png) no-repeat scroll 0 50%;
 }
 
 li.num-4 {
-background:transparent url(layout/nouveau/images/number-4.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-4.png) no-repeat scroll 0 50%;
 }
 
 li.num-5 {
-background:transparent url(layout/nouveau/images/number-5.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-5.png) no-repeat scroll 0 50%;
 }
 
 li.num-6 {
-background:transparent url(layout/nouveau/images/number-6.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-6.png) no-repeat scroll 0 50%;
 }
 
 li.num-7 {
-background:transparent url(layout/nouveau/images/number-7.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-7.png) no-repeat scroll 0 50%;
 }
 
 li.num-8 {
-background:transparent url(layout/nouveau/images/number-8.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-8.png) no-repeat scroll 0 50%;
 }
 
 li.num-9 {
-background:transparent url(layout/nouveau/images/number-9.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-9.png) no-repeat scroll 0 50%;
 }
 
 li.num-1g {
-background:transparent url(layout/nouveau/images/number-1g.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-1g.png) no-repeat scroll 0 50%;
 }
 
 li.num-2g {
-background:transparent url(layout/nouveau/images/number-2g.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-2g.png) no-repeat scroll 0 50%;
 }
 
 li.num-3g {
-background:transparent url(layout/nouveau/images/number-3g.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-3g.png) no-repeat scroll 0 50%;
 }
 
 li.num-4g {
-background:transparent url(layout/nouveau/images/number-4g.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-4g.png) no-repeat scroll 0 50%;
 }
 
 li.num-5g {
-background:transparent url(layout/nouveau/images/number-5g.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-5g.png) no-repeat scroll 0 50%;
 }
 
 li.num-6g {
-background:transparent url(layout/nouveau/images/number-6g.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-6g.png) no-repeat scroll 0 50%;
 }
 
 li.num-7g {
-background:transparent url(layout/nouveau/images/number-7g.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-7g.png) no-repeat scroll 0 50%;
 }
 
 li.num-8g {
-background:transparent url(layout/nouveau/images/number-8g.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-8g.png) no-repeat scroll 0 50%;
 }
 
 li.num-9g {
-background:transparent url(layout/nouveau/images/number-9g.png) no-repeat scroll 0;
-padding-left:28px;
-padding-bottom:3px;
+background:transparent url(layout/nouveau/images/number-9g.png) no-repeat scroll 0 50%;
 }
 
 ul.arrow,ul.bug,ul.cart,ul.check,ul.script,ul.bullet-blue,ul.bullet-grey,ul.bullet-plus,ul.bullet-rss,ul.bullet-star,ul.disc,ul.headphones,ul.mic,ul.speaker,ul.video,ul.number {
-list-style-image:none;
 list-style-position:outside;
-list-style-type:none;
+list-style:none;
 margin-bottom:10px;
 margin-left:0;
 padding-left:0;
+}
+
+ul.arrow li,ul.bug li,ul.cart li,ul.check li,ul.script li,ul.bullet-blue li,ul.bullet-grey li,ul.bullet-plus li,ul.bullet-rss li,ul.bullet-star li,ul.disc li,ul.headphones li,ul.mic li,ul.speaker li,ul.video li,ul.number li {
+padding-left:30px;
+}
+
+ul.blank,li.blankul.arrow li.blank ,ul.bug li.blank ,ul.cart li.blank ,ul.check li.blank ,ul.script li.blank ,ul.bullet-blue li.blank ,ul.bullet-grey li.blank ,ul.bullet-plus li.blank ,ul.bullet-rss li.blank ,ul.bullet-star li.blank ,ul.disc li.blank,ul.headphones li.blank ,ul.mic li.blank ,ul.speaker li.blank ,ul.video li.blank  {
+background:transparent url(layout/nouveau/images/blank.png) no-repeat scroll 0 50%;
+}
+
+ul.arrow li ul,ul.bug li ul,ul.cart li ul,ul.check li ul,ul.script li ul,ul.bullet-blue li ul,ul.bullet-grey li ul,ul.bullet-plus li ul,ul.bullet-rss li ul,ul.bullet-star li ul,ul.disc li ul,ul.headphones li ul,ul.mic li ul,ul.speaker li ul,ul.video li ul,ul.number li ul{
+list-style:none;
+}
+
+li.num-1,li.num-2,li.num-3,li.num-4,li.num-5,li.num-6,li.num-7,li.num-8,li.num-9,li.num-1g,li.num-2g,li.num-3g,li.num-4g,li.num-5g,li.num-6g,li.num-7g,li.num-8g,li.num-9g {
+padding:2px 0 2px 30px;
 }
 
 .story-featured pre, .story-body pre {
@@ -1900,7 +1871,7 @@ min-height:100px;
 }
 
 #gl_container_fixed div.php {
-width:608px;
+width:596px;
 }
 
 #ft,.clearboth {
