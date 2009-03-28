@@ -1660,7 +1660,6 @@ class Template
         }
         $phpfile = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '.php';
 
-        $source_fstat = filemtime(__FILE__);
         $template_fstat = filemtime($filename);
         if (file_exists($phpfile)) {
             $cache_fstat = filemtime($phpfile);
@@ -1672,15 +1671,7 @@ class Template
             printf("<check_cache> Look for %s<br>", $filename);
         }
 
-        if ($template_fstat > $cache_fstat OR $source_fstat > $cache_fstat) {
-            // remove old files, especially old block files.
-            $phpfilespec = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '*.php';
-            $oldfiles = @glob($phpfilespec, GLOB_NOESCAPE|GLOB_NOSORT);
-            if (is_array($oldfiles)) {
-                foreach($oldfiles as $oldfile) {
-                    @unlink($oldfile);
-                }
-            }
+        if ($template_fstat > $cache_fstat ) {
 
             $str = @file_get_contents($filename);
 

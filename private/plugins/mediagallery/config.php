@@ -57,6 +57,16 @@ $_MG_CONF['path_mediaobjects'] = $_CONF['path_html'] . $_MG_CONF['path_mg'] . '/
 $_MG_CONF['mediaobjects_url']  = $_CONF['site_url']  . '/' . $_MG_CONF['path_mg'] . '/mediaobjects';
 
 /*
+ * By default, Media Gallery plays MP4 video files as QuickTime
+ * videos, using the QuickTime player.
+ *
+ * If you prefer to use the Flash Video Player for MP4 files,
+ * set this value to true.
+ *
+ */
+$_MG_CONF['play_mp4_flv'] = false;
+
+/*
  * Number of seconds to wait between ratings
  */
 $_MG_CONF['rating_speedlimit'] = 45;
