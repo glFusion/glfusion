@@ -275,7 +275,7 @@ COM_errorLog("*** entering _mg_gr_fetch_albums ****");
 
 	$retval .= 'album_count='.$nalbums."\n";
   	$retval .= 'can_create_root='. ($MG_albums[0]->owner_id ? 'yes' : 'no') ."\n";
-
+COM_errorLog($retval);
   	_mg_gr_finish(GR_STAT_SUCCESS, $retval,'Fetch albums successful.');
 }
 
@@ -300,7 +300,8 @@ function _mg_recurse_children( $album_id, $counter, $check_writable ) {
       	if ( $MG_albums[$children[$i]]->summary != '' ) {
       	    $retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
       	}
-      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->gid."\n";
+//      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->gid."\n";
+      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->id."\n";
       	$retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
       	$retval .= 'album.max_size.'.$aid.'='.'0'."\n";
       	$retval .= 'album.thumb_size.'.$aid.'='.'200'."\n";

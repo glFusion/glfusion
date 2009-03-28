@@ -6,12 +6,16 @@ v1.2.0
 
 v1.1.3
 ------
+- Fixed issue where 1 or 111 would show up in templates (Mark)
+- Fixed old reference to css.php in FCKeditor (Mark)
+- Updated getID3() to latest production release (Mark)
 - 0000330: Static page bullets not working in IE and proper nesting of typography icons (Eric)
 - 0000403: Search box text is hard coded in header.thtml (Eric)
 - 0000418: Forum code block max width breaks fixed width layouts (Eric)
 - 0000416: After mailing users, screen refreshes to admin/moderation.php not admin/index.php (Eric)
 - 0000290: Language & Layout inconsistencies (Eric)
-- Added config switch to include template location comments in page source (Mark & Eric)
+- Added config switch to include template location comments in page
+  source (Mark & Eric)
 - Improved error detection when sending emails (Mark)
 - Tweaked plugin upload to not crash when hitting certain permission
   errors (Mark)
@@ -41,6 +45,7 @@ v1.1.3
 
 Calendar Plugin
 ---------------
+- Implemented getheadercss() (Mark)
 - 0000391: Cannot edit minutes field in Event Start Date after 1.1.2
            upgrade (mark)
 
@@ -56,12 +61,22 @@ FileMgmt Plugin
 
 Forum Plugin
 ------------
+- Added ability to have custom style.css in theme/plugins/forum/ (Mark)
 - Removed duplicate configuration data from config.php (Mark)
 
 Media Gallery Plugin
 --------------------
+- Added $_MG_CONF['play_mp4_flv'] option to play MP4 video in Flash Video
+  Player (Mark)
+- Added ability to have custom style.css in theme/plugins/mediagallery/ (Mark)
+- Fixed gallery_remote issue where parent/child relationship was not properly
+  set (Mark)
 - Fixed some cosmetic issues with Coppermine import (Mark)
 - 0000393: Search results do not honor the gallery view thumbnail size. (mark)
+
+Polls Plugin
+------------
+- Added ability to have custom style.css in theme/plugins/polls/ (Mark)
 
 Site Tailor
 -----------
@@ -84,7 +99,8 @@ v1.1.2
 - W3 validation fix for forum centerblock provided by Ironmax (Eric)
 - Updated Docs icon in Command & Control (Eric)
 - Flipped orientation of cart icon in public_html/layout/nouveau/images/ (Eric)
-- Removed nowrap from FileMgmt categories and sub-categories for better layout (Eric)
+- Removed nowrap from FileMgmt categories and sub-categories for better
+  layout (Eric)
 - Implemented $_SYSTEM['swedish_date_hack'] to resolve PHP's strftime()
   deficiencies with UTF-8 Swedish characters. (Mark)
 - Ability to change a topic and story owner (Mark)

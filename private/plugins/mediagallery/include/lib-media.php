@@ -1540,7 +1540,11 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         case 'video/quicktime' :
         case 'video/x-qtc' :
         case 'video/x-m4v' :
-            list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayMOV($aid,$media[$mediaObject],$full);
+            if ($media[$mediaObject]['media_mime_ext'] == 'mp4' && isset($_MG_CONF['play_mp4_flv']) && $_MG_CONF['play_mp4_flv'] == true) {
+                list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayFLV($aid,$media[$mediaObject],$full);
+            } else {
+                list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayMOV($aid,$media[$mediaObject],$full);
+            }
             break;
         case 'embed' :
 	        list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayEmbed($aid,$media[$mediaObject],$full,$mediaObject);
