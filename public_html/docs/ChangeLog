@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.3
 ------
+- Limit long term session cookie to user's ip to limit chances of
+  user masquerading (Mark)
 - 0000289 cleanup story options and incorporate template options (mark)
 - 0000423 Not all staticpage options are cloned (mark)
 - 0000369 Can we make theme code name-neutral (again) (mark)
