@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -214,7 +214,7 @@ function handleView($view = true)
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
-    $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = $cid";
+    $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = '$cid'";
     $A = DB_fetchArray( DB_query($sql) );
     $sid   = $A['sid'];
     $title = $A['title'];
@@ -227,7 +227,7 @@ function handleView($view = true)
     if ( $format != 'threaded' && $format != 'nested' && $format != 'flat' ) {
         if ( $_USER['uid'] > 1 ) {
             $format = DB_getItem( $_TABLES['usercomment'], 'commentmode',
-                                  "uid = {$_USER['uid']}" );
+                                  "uid = '{$_USER['uid']}'" );
         } else {
             $format = $_CONF['comment_mode'];
         }
@@ -300,7 +300,7 @@ function handleEdit() {
     }
 
     $result = DB_query ("SELECT title,comment FROM {$_TABLES['comments']} "
-        . "WHERE cid = $cid AND sid = '$sid' AND type = '$type'");
+        . "WHERE cid = '$cid' AND sid = '$sid' AND type = '$type'");
     if ( DB_numRows($result) == 1 ) {
         $A = DB_fetchArray ($result);
         $title = $A['title'];
@@ -376,7 +376,7 @@ function handleEditSubmit()
 
         // save the comment into the comment table
         DB_query("UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
-                . " WHERE cid=$cid AND sid='$sid'");
+                . " WHERE cid='$cid' AND sid='$sid'");
 
         if (DB_error() ) { //saving to non-existent comment or comment in wrong article
             COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
