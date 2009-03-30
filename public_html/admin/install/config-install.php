@@ -116,6 +116,7 @@ function install_config($site_url)
     $c->add('limitnews',10,'text',1,7,NULL,1180,TRUE);
     $c->add('minnews',1,'text',1,7,NULL,1190,TRUE);
     $c->add('contributedbyline',1,'select',1,7,0,1200,TRUE);
+    $c->add('hidestorydate',0,'select',1,7,0,1205,TRUE);
     $c->add('hideviewscount',0,'select',1,7,0,1210,TRUE);
     $c->add('hideemailicon',0,'select',1,7,0,1220,TRUE);
     $c->add('hideprintericon',0,'select',1,7,0,1230,TRUE);

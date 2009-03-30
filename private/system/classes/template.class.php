@@ -243,7 +243,7 @@ class Template
     */
     function Template($root = array(), $unknowns = "")
     {
-        global $TEMPLATE_OPTIONS;
+        global $_CONF, $TEMPLATE_OPTIONS;
 
         $this->set_root($root);
         $this->set_unknowns($unknowns);
@@ -251,6 +251,9 @@ class Template
             foreach ($TEMPLATE_OPTIONS['default_vars'] as $k => $v) {
                 $this->set_var($k, $v);
             }
+        }
+        if ( $_CONF['cache_templates'] ) {
+            clearstatcache();
         }
     }
 
@@ -2128,7 +2131,5 @@ function CACHE_security_hash()
     return $hash;
 
 }
-
-clearstatcache();
 
 ?>

@@ -173,10 +173,19 @@ function glfusion_113()
 {
     global $_TABLES, $_CONF;
 
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD remote_ip varchar(15) default NULL AFTER num_reminders";
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("glFusion 1.1.3svn Development update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),1);
+        next($_SQL);
+    }
+
     $c = config::get_instance();
+    $c->add('hidestorydate',0,'select',1,7,0,1205,TRUE);
     $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
     $c->add('cache_templates',TRUE,'select',2,12,0,1375,TRUE);
-//    $c->add('instance_cache' ,TRUE,'select',2,12,0,1380,TRUE);
     $c->add('template_comments',FALSE,'select',2,11,0,1373,TRUE);
     $c->del('instance_cache', 'Core');
 }
