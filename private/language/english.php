@@ -1903,6 +1903,7 @@ $LANG_confignames['Core'] = array(
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Include Template Comments in Page Source',
+    'hidestorydate' => 'Hide Story Date',
 );
 
 $LANG_configsubgroups['Core'] = array(
