@@ -579,7 +579,7 @@ if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
         $curtime = time();
 
         // Insert anonymous user session
-        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ($sess_id, $curtime, '{$_SERVER['REMOTE_ADDR']}', 1)", 1 );
+        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ('$sess_id', '$curtime', '{$_SERVER['REMOTE_ADDR']}', 1)", 1 );
         $tries++;
     }
     while(( $result === false) && ( $tries < 5 ));
@@ -3601,7 +3601,7 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
         if( !COM_isAnonUser() )
         {
             $_USER['noboxes'] = DB_getItem( $_TABLES['userindex'], 'noboxes',
-                                            "uid = {$_USER['uid']}" );
+                                            "uid = '{$_USER['uid']}'" );
         }
         else
         {
@@ -4963,7 +4963,7 @@ function COM_getUserCookieTimeout()
         return;
     }
 
-    $timeoutvalue = DB_getItem( $_TABLES['users'], 'cookietimeout', "uid = {$_USER['uid']}" );
+    $timeoutvalue = DB_getItem( $_TABLES['users'], 'cookietimeout', "uid = '{$_USER['uid']}'" );
 
     if( empty( $timeoutvalue ))
     {

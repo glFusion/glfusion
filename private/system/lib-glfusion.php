@@ -199,8 +199,14 @@ function phpblock_storypicker() {
         }
     }
 
-    if (empty($topic) && isset($_REQUEST['topic'])) {
-        $topic = COM_applyFilter($_REQUEST['topic']);
+    if ( empty($topic) ) {
+        if ( isset($_GET['topic']) ) {
+            $topic = COM_applyFilter($_GET['topic']);
+        } elseif (isset($_POST['topic']) ) {
+            $topic = COM_applyFilter($_POST['topic']);
+        } else {
+            $topic = '';
+        }
     }
     if (!empty($topic)) {
         $topicsql = " AND tid = '$topic'";

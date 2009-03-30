@@ -154,14 +154,14 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
                               $_CONF['site_url'] . '/comment.php' );
         $hidden = '';
         if( $_REQUEST['mode'] == 'view' ) {
-            $hidden .= '<input type="hidden" name="cid" value="' . $_REQUEST['cid'] . '"' . XHTML . '>';
-            $hidden .= '<input type="hidden" name="pid" value="' . $_REQUEST['cid'] . '"' . XHTML . '>';
+            $hidden .= '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>';
+            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>';
         }
         else if( $_REQUEST['mode'] == 'display' ) {
-            $hidden .= '<input type="hidden" name="pid" value="' . $_REQUEST['pid'] . '"' . XHTML . '>';
+            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['pid'])) . '"' . XHTML . '>';
         }
         $commentbar->set_var( 'hidden_field', $hidden .
-                '<input type="hidden" name="mode" value="' . $_REQUEST['mode'] . '"' . XHTML . '>' );
+                '<input type="hidden" name="mode" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['mode'])) . '"' . XHTML . '>' );
     } else if( $type == 'article' ) {
         $commentbar->set_var( 'parent_url',
                               $_CONF['site_url'] . '/article.php' );
@@ -461,7 +461,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         // highlight search terms if specified
         if( !empty( $_REQUEST['query'] )) {
             $A['comment'] = COM_highlightQuery( $A['comment'],
-                                                $_REQUEST['query'] );
+                                                strip_tags($_REQUEST['query']) );
         }
 
         $A['comment'] = str_replace( '$', '&#36;',  $A['comment'] );
@@ -866,7 +866,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
             if ($mode == 'edit' || $mode == $LANG03[28]) { //edit modes
             	$comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[41]));
-            	$comment_template->set_var('cid', '<input type="hidden" name="cid" value="' . $_REQUEST['cid'] . '"' . XHTML . '>');
+            	$comment_template->set_var('cid', '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>');
             }
             else {
                 $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
