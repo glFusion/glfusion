@@ -15,7 +15,6 @@ digg_window = 'new'; //open's Digg.com window in a new window, if left blank wil
 {# end Digg.com icon code #}
         {email_icon}
         {print_icon}
-        {pdf_icon}
         {feed_icon}
         {edit_icon}
     </span>
