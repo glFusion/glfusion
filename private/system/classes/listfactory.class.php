@@ -344,7 +344,7 @@ class ListFactory {
             $ord = $this->_sort_arr['field'];
         }
 
-        $order_sql = ' ORDER BY ' . $ord . ' ' . strtoupper($this->_sort_arr['direction']);
+        $order_sql = ' ORDER BY "' . addslashes($ord) . '" "' . addslashes(strtoupper($this->_sort_arr['direction'])) . '"';
 
         if (isset($_REQUEST['results'])) {
             $this->_per_page = COM_applyFilter($_REQUEST['results'], true);
@@ -498,6 +498,7 @@ class ListFactory {
                 } else {
                     $this->_query_arr[$i]['sql'] .= $order_sql . $limit_sql;
                 }
+//                $q = str_replace('--','',$this->_query_arr[$i]['sql']);
 
                 $result = DB_query($this->_query_arr[$i]['sql']);
 
