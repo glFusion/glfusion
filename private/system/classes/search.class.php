@@ -80,21 +80,42 @@ class Search {
         global $_CONF, $_TABLES;
 
         // Set search criteria
-        if (isset ($_REQUEST['query'])) {
-            $this->_query = strip_tags (COM_stripslashes ($_REQUEST['query']));
+        if ( isset($_GET['query']) ){
+            $this->_query = strip_tags (COM_stripslashes ($_GET['query']));
+        } else if ( isset($_POST['query']) ) {
+            $this->_query = strip_tags (COM_stripslashes ($_POST['query']));
+        } else {
+            $this->_query = '';
         }
-        if (isset ($_REQUEST['topic'])) {
-            $this->_topic = COM_applyFilter ($_REQUEST['topic']);
+        if ( isset($_GET['topic']) ){
+            $this->_topic = strip_tags (COM_stripslashes ($_GET['topic']));
+        } else if ( isset($_POST['topic']) ) {
+            $this->_topic = strip_tags (COM_stripslashes ($_POST['topic']));
+        } else {
+            $this->_topic = '';
         }
-        if (isset ($_REQUEST['datestart'])) {
-            $this->_dateStart = COM_applyFilter ($_REQUEST['datestart']);
+        if (isset ($_GET['datestart'])) {
+            $this->_dateStart = COM_applyFilter ($_GET['datestart']);
+        } else if (isset($_POST['datestart']) ) {
+            $this->_dateStart = COM_applyFilter ($_POST['datestart']);
+        } else {
+            $this->_dateStart = '';
         }
-        if (isset ($_REQUEST['dateend'])) {
-            $this->_dateEnd = COM_applyFilter ($_REQUEST['dateend']);
+        if (isset ($_GET['dateend'])) {
+            $this->_dateEnd = COM_applyFilter ($_GET['dateend']);
+        } else if (isset($_POST['dateend']) ) {
+            $this->_dateEnd = COM_applyFilter ($_POST['dateend']);
+        } else {
+            $this->_dateEnd = '';
         }
-        if (isset ($_REQUEST['author'])) {
-            $this->_author = COM_applyFilter($_REQUEST['author']);
-
+        if (isset ($_GET['author'])) {
+            $this->_author = COM_applyFilter($_GET['author']);
+        } else if ( isset($_POST['author']) ) {
+            $this->_author = COM_applyFilter($_POST['author']);
+        } else {
+            $this->_author = '';
+        }
+        if ( $this->_author != '' ) {
             // In case we got a username instead of uid, convert it.  This should
             // make custom themes for search page easier.
             if (!is_numeric($this->_author) && !preg_match('/^([0-9]+)$/', $this->_author) && $this->_author != '')
@@ -103,8 +124,20 @@ class Search {
             if ($this->_author < 1)
                 $this->_author = '';
         }
-        $this->_type = isset($_REQUEST['type']) ? COM_applyFilter($_REQUEST['type']) : 'all';
-        $this->_keyType = isset($_REQUEST['keyType']) ? COM_applyFilter($_REQUEST['keyType']) : $_CONF['search_def_keytype'];
+        if ( isset($_GET['type']) ) {
+            $this->_type = COM_applyFilter($_GET['type']);
+        } else if ( isset($_POST['type']) ) {
+            $this->_type = COM_applyFilter($_POST['type']);
+        } else {
+            $this->_type = 'all';
+        }
+        if ( isset($_GET['keyType']) ) {
+            $this->_keyType = COM_applyFilter($_GET['keyType']);
+        } else if ( isset($_POST['keyType']) ) {
+            $this->_keyType = COM_applyFilter($_POST['keyType']);
+        } else {
+            $this->_keyType = $_CONF['search_def_keytype'];
+        }
     }
 
     /**

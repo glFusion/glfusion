@@ -373,7 +373,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $img_arrow = '&nbsp;' . COM_createImage($img_arrow_url, $arrow);
 
     if (!empty ($order_for_query)) { # concat order string
-        $order_sql = "ORDER BY $order_for_query $direction";
+        $order_sql = "ORDER BY '$order_for_query' '$direction'";
     }
     $th_subtags = ''; // other tags in the th, such as onclick and mouseover
     $header_text = ''; // title as displayed to the user

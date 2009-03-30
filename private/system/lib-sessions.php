@@ -138,8 +138,11 @@ function SESS_sessionCheck()
                         }
                         $userpass = DB_getItem ($_TABLES['users'], 'passwd',
                                                 "uid = $userid");
+                        $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid='$userid'",1);
+                        $rip    = DB_fetchArray($result,$true);
+                        $remote_ip = $rip[0];
                     }
-                    if (empty ($cookie_password) || ($cookie_password <> $userpass)) {
+                    if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($remote_ip <> $_SERVER['REMOTE_ADDR'])) {
                         // User may have modified their UID in cookie, ignore them
                     } else if ($userid > 1) {
                         // Check user status
@@ -182,9 +185,14 @@ function SESS_sessionCheck()
                 if ($userid > 1) {
                     $userpass = DB_getItem ($_TABLES['users'], 'passwd',
                                             "uid = $userid");
+                    $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid='$userid'",1);
+                    $rip    = DB_fetchArray($result,$true);
+                    $remote_ip = $rip[0];
+//                    $remote_ip = DB_getItem ($_TABLES['users'], 'remote_ip',
+//                                            "uid = $userid");
                     $cookie_password = $_COOKIE[$_CONF['cookie_password']];
                 }
-                if (empty ($cookie_password) || ($cookie_password <> $userpass)) {
+                if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($remote_ip <> $_SERVER['REMOTE_ADDR'])) {
                     // User could have modified UID in cookie, don't do shit
                 } else if ($userid > 1) {
                     // Check user status
