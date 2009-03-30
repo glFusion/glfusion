@@ -520,6 +520,7 @@ CREATE TABLE {$_TABLES['users']} (
   pwrequestid varchar(16) default NULL,
   status smallint(5) unsigned NOT NULL default '1',
   num_reminders tinyint(1) NOT NULL default 0,
+  remote_ip varchar(15) NOT NULL default '',
   PRIMARY KEY  (uid),
   KEY LOGIN (uid,passwd,username),
   INDEX users_username(username),
