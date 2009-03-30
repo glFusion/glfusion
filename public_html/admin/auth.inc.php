@@ -82,6 +82,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
             setcookie($_CONF['cookie_name'], $_USER['uid'],
                       time() + $cooktime, $_CONF['cookie_path'],
                       $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+            DB_query("UPDATE {$_TABLES['users']} set remote_ip='".$_SERVER['REMOTE_ADDR']."' WHERE uid='".$_USER['uid']."'",1);
         }
     }
     if (!SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,syndication.edit','OR')) {
