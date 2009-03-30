@@ -37,7 +37,7 @@ if (!defined ('GVERSION')) {
 
 //set glFusion style COM_siteHeader/Footer functions.
 //Comment out to use old Geeklog functions.
-$themeAPI = 2; 
+$themeAPI = 2;
 
 $_IMAGE_TYPE = 'png';
 
@@ -71,7 +71,7 @@ $_BLOCK_TEMPLATE['forum_menu'] = 'blockheader-left.thtml,blockfooter-left.thtml'
 // $_BLOCK_TEMPLATE['configmanager_subblock'] = 'blockheader-left.thtml,blockfooter-left.thtml';
 
 
-function nouveau_themeJS() {
+function theme_themeJS() {
     global $_CONF;
 
     $js = array();

@@ -64,12 +64,10 @@ function form ($A, $error = false)
            $LANG_postmodes, $MESSAGE;
 
     $template_path = staticpages_templatePath ('admin');
-    if (!empty($sp_id) && $mode=='edit') {
+    if (!empty($sp_id) && ($mode=='edit' || $mode =='clone' )) {
         $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
     } else {
-        if ($mode != 'clone') {
-            $A['sp_inblock'] = $_SP_CONF['in_block'];
-        }
+        $A['sp_inblock'] = $_SP_CONF['in_block'];
         $A['owner_id'] = $_USER['uid'];
         if (isset ($_GROUPS['Static Page Admin'])) {
             $A['group_id'] = $_GROUPS['Static Page Admin'];
@@ -464,11 +462,11 @@ function staticpageeditor ($sp_id, $mode = '', $editor = '')
         $result = DB_query ("SELECT *,UNIX_TIMESTAMP(sp_date) AS unixdate FROM {$_TABLES['staticpage']} WHERE sp_id = '$sp_id'" . COM_getPermSQL ('AND', 0, 3));
         $A = DB_fetchArray ($result);
         $A['sp_id'] = COM_makesid ();
+        $sp_id = $A['sp_id'];
         $A['sp_uid'] = $_USER['uid'];
         $A['unixdate'] = time ();
         $A['sp_hits'] = 0;
         $A['sp_old_id'] = '';
-        $A['commentcode'] = $_CONF['comment_code'];
     } else {
         $A = $_POST;
         if (empty ($A['unixdate'])) {

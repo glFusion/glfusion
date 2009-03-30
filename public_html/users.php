@@ -888,8 +888,10 @@ function displayLoginErrorAndAbort($msg, $message_title, $message_text)
 
 
 // MAIN
-if (isset ($_REQUEST['mode'])) {
-    $mode = $_REQUEST['mode'];
+if ( isset($_POST['mode']) ) {
+    $mode = $_POST['mode'];
+} elseif (isset($_GET['mode']) ) {
+    $mode = $_GET['mode'];
 } else {
     $mode = '';
 }
@@ -899,6 +901,7 @@ $display = '';
 switch ($mode) {
 case 'logout':
     if (!empty ($_USER['uid']) AND $_USER['uid'] > 1) {
+        DB_query("UPDATE {$_TABLES['users']} set remote_ip='' WHERE uid='".$_USER['uid']."'",1);
         SESS_endUserSession ($_USER['uid']);
         PLG_logoutUser ($_USER['uid']);
     }
@@ -1221,6 +1224,7 @@ default:
                            SEC_encryptPassword($passwd), time() + $cooktime,
                            $_CONF['cookie_path'], $_CONF['cookiedomain'],
                            $_CONF['cookiesecure']);
+                DB_query("UPDATE {$_TABLES['users']} set remote_ip='".$_SERVER['REMOTE_ADDR']."' WHERE uid='".$_USER['uid']."'",1);
             }
         } else {
             $userid = $_COOKIE[$_CONF['cookie_name']];
@@ -1273,8 +1277,10 @@ default:
 
         $display .= COM_siteHeader('menu');
 
-        if (isset ($_REQUEST['msg'])) {
-            $msg = COM_applyFilter ($_REQUEST['msg'], true);
+        if ( isset($_POST['msg']) ) {
+            $msg = COM_applyFilter($_POST['msg'],true);
+        } elseif (isset($_GET['msg']) ) {
+            $msg = COM_applyFilter($_GET['msg'],true);
         } else {
             $msg = 0;
         }

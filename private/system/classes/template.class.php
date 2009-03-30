@@ -227,23 +227,23 @@ class Template
   */
   var $last_error     = "";
 
- /******************************************************************************
-  * Class constructor. May be called with two optional parameters.
-  * The first parameter sets the template directory the second parameter
-  * sets the policy regarding handling of unknown variables.
-  *
-  * usage: Template([string $root = array()], [string $unknowns = "remove"])
-  *
-  * @param     $root        path to template directory
-  * @param     $string      what to do with undefined variables
-  * @see       set_root
-  * @see       set_unknowns
-  * @access    public
-  * @return    void
-  */
-  function Template($root = array(), $unknowns = "")
-  {
-    global $TEMPLATE_OPTIONS;
+    /******************************************************************************
+    * Class constructor. May be called with two optional parameters.
+    * The first parameter sets the template directory the second parameter
+    * sets the policy regarding handling of unknown variables.
+    *
+    * usage: Template([string $root = array()], [string $unknowns = "remove"])
+    *
+    * @param     $root        path to template directory
+    * @param     $string      what to do with undefined variables
+    * @see       set_root
+    * @see       set_unknowns
+    * @access    public
+    * @return    void
+    */
+    function Template($root = array(), $unknowns = "")
+    {
+        global $_CONF, $TEMPLATE_OPTIONS;
 
     $this->set_root($root);
     $this->set_unknowns($unknowns);
@@ -251,6 +251,9 @@ class Template
       foreach ($TEMPLATE_OPTIONS['default_vars'] as $k => $v) {
         $this->set_var($k, $v);
       }
+        if ( $_CONF['cache_templates'] ) {
+            clearstatcache();
+        }
     }
   }
 
@@ -2129,7 +2132,5 @@ function CACHE_security_hash()
     return $hash;
 
 }
-
-clearstatcache();
 
 ?>

@@ -1794,9 +1794,9 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
     $sql = "SELECT $selection FROM $table";
     if( $where != '' )
     {
-        $sql .= " WHERE $where";
+        $sql .= " WHERE \"$where\"";
     }
-    $sql .= " ORDER BY {$select_set[$sortcol]}";
+    $sql .= " ORDER BY \"{$select_set[$sortcol]}\"";
     $result = DB_query( $sql );
     $nrows = DB_numRows( $result );
 
@@ -1901,7 +1901,7 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
             $sql .= $permsql . COM_getLangSQL('tid', 'AND');
         }
     }
-    $sql .=  " ORDER BY $select_set[$sortcol]";
+    $sql .=  " ORDER BY \"$select_set[$sortcol]\"";
 
     $result = DB_query($sql);
     $nrows = DB_numRows($result);
@@ -1943,7 +1943,7 @@ function COM_checkList( $table, $selection, $where='', $selected='' )
 
     if( !empty( $where ))
     {
-        $sql .= " WHERE $where";
+        $sql .= " WHERE \"$where\"";
     }
 
     $result = DB_query( $sql );
@@ -2723,7 +2723,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
                 }
                 else
                 {
-                    $sresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['storysubmission']} WHERE" . $topicsql );
+                    $sresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['storysubmission']} WHERE " . $topicsql );
                     $S = DB_fetchArray( $sresult );
                     $modnum += $S['count'];
                 }
@@ -3950,7 +3950,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
     require_once $_CONF['path_system']
                  . '/classes/syndication/feedparserbase.class.php';
 
-    $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = $bid");
+    $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = \"$bid\"");
     list($last_modified, $etag) = DB_fetchArray($result);
 
     // Load the actual feed handlers:
@@ -4036,7 +4036,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
                      $factory->errorStatus[1] . ' ' .
                      $factory->errorStatus[2]);
         $content = addslashes($LANG21[4]);
-        DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = $bid");
+        DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = \"$bid\"");
     }
 }
 
@@ -4996,7 +4996,7 @@ function phpblock_whosonline()
         $byname .= ',remoteusername,remoteservice';
     }
 
-    $result = DB_query( "SELECT DISTINCT {$_TABLES['sessions']}.uid,{$byname},photo,showonline FROM {$_TABLES['sessions']},{$_TABLES['users']},{$_TABLES['userprefs']} WHERE {$_TABLES['users']}.uid = {$_TABLES['sessions']}.uid AND {$_TABLES['users']}.uid = {$_TABLES['userprefs']}.uid AND start_time >= $expire_time AND {$_TABLES['sessions']}.uid <> 1 ORDER BY {$byname}" );
+    $result = DB_query( "SELECT DISTINCT {$_TABLES['sessions']}.uid,{$byname},photo,showonline FROM {$_TABLES['sessions']},{$_TABLES['users']},{$_TABLES['userprefs']} WHERE {$_TABLES['users']}.uid = {$_TABLES['sessions']}.uid AND {$_TABLES['users']}.uid = {$_TABLES['userprefs']}.uid AND start_time >= $expire_time AND {$_TABLES['sessions']}.uid <> 1 ORDER BY \"{$byname}\"" );
     $nrows = DB_numRows( $result );
 
     $num_anon = 0;
@@ -7348,10 +7348,6 @@ function css_out(){
     $cacheFile = $_CONF['path_html'].'/stylecache_'.$_CONF['theme'].'.css';
     $cacheURL  = $_CONF['site_url'].'/stylecache_'.$_CONF['theme'].'.css';
 
-    if ( @file_exists($cacheFile) ) {
-        return;
-    }
-
     $files   = array();
 
     // Let's look in the custom directory first...
@@ -7480,10 +7476,6 @@ function js_out(){
     $cacheFile = $_CONF['path_html'].'/jscache_'.$_CONF['theme'].'.js';
     $cacheURL  = $_CONF['site_url'].'/jscache_'.$_CONF['theme'].'.js';
 
-    if ( @file_exists($cacheFile) ) {
-        return;
-    }
-
     /*
      * Static list of standard JavaScript used by glFusion...
      */
@@ -7505,7 +7497,7 @@ function js_out(){
      * Check to see if the theme has any JavaScript to include...
      */
 
-    $function = $_CONF['theme'] . '_themeJS';
+    $function = 'theme_themeJS';
 
     if( function_exists( $function ))
     {

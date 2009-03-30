@@ -715,8 +715,15 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.1.2';
             $done = true;
         case '1.1.2' :
+            require_once $_CONF['path'] . 'sql/updates/mysql_1.1.2_to_1.1.3.php';
+            list($rc,$errors) = INST_updateDB($_SQL);
+            if ( $rc === false ) {
+                return array($rc,$errors);
+            }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
+
+            $c->add('hidestorydate',0,'select',1,7,0,1205,TRUE);
 
             $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
             $c->add('cache_templates',0,'select',2,12,0,1375,TRUE);

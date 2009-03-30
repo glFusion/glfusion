@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -334,9 +334,20 @@ class ListFactory {
      */
     function ExecuteQueries()
     {
-        // Get the details for sorting the list
-        $this->_sort_arr['field'] = isset($_REQUEST['order']) ? COM_applyFilter($_REQUEST['order']) : $this->_def_sort_arr['field'];
-        $this->_sort_arr['direction'] = isset($_REQUEST['direction']) ? COM_applyFilter($_REQUEST['direction']) : $this->_def_sort_arr['direction'];
+        if ( isset($_POST['order']) ) {
+            $this->_sort_arr['field'] = COM_applyFilter($_POST['order']);
+        } elseif (isset($_GET['order']) ) {
+            $this->_sort_arr['field'] = COM_applyFilter($_GET['order']);
+        } else {
+            $this->_sort_arr['field'] = $this->_def_sort_arr['field'];
+        }
+        if ( isset($_POST['direction']) ) {
+            $this->_sort_arr['direction'] = COM_applyFilter($_POST['direction']);
+        } elseif (isset($_GET['direction']) ) {
+            $this->_sort_arr['direction'] = COM_applyFilter($_GET['direction']);
+        } else {
+            $this->_sort_arr['direction'] = $this->_def_sort_arr['direction'];
+        }
         if (is_numeric($this->_sort_arr['field'])) {
             $ord = $this->_def_sort_arr['field'];
             $this->_sort_arr['field'] = SQL_TITLE;
@@ -346,8 +357,10 @@ class ListFactory {
 
         $order_sql = ' ORDER BY ' . $ord . ' ' . strtoupper($this->_sort_arr['direction']);
 
-        if (isset($_REQUEST['results'])) {
-            $this->_per_page = COM_applyFilter($_REQUEST['results'], true);
+        if ( isset($_POST['results']) ) {
+            $this->_per_page = COM_applyFilter($_POST['results'], true);
+        } elseif (isset($_GET['results']) ) {
+            $this->_per_page = COM_applyFilter($_GET['results'], true);
         }
 
         // Calculate the limits for each query
@@ -355,36 +368,53 @@ class ListFactory {
         $num_query_results = $this->_per_page - count($this->_preset_rows);
         $pp_total = count($this->_preset_rows);
 
-        $this->_page = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'], true) : 1;
-        if ( isset($_REQUEST['np']) && $_REQUEST['np'] == 1 ) {
+        if ( isset($_POST['page']) ) {
+            $this->_page = COM_applyFilter($_POST['page'], true);
+        } elseif (isset($_GET['page']) ) {
+            $this->_page = COM_applyFilter($_GET['page'], true);
+        } else {
+            $this->_page = 1;
+        }
+        if ( (isset($_POST['np']) && $_POST['np'] == 1 ) || (isset($_GET['np']) && $_GET['np'] == 1 ) ) {
             $this->_page++;
         }
         $prevPage = 0;
-        if ( isset($_REQUEST['pp']) && $_REQUEST['pp'] == 1) {
+        if ( (isset($_POST['pp']) && $_POST['pp'] == 1 ) || (isset($_GET['pp']) && $_GET['pp'] == 1 ) ) {
             $this->_page--;
             $prevPage = 1;
         }
         if ( $this->_page < 1 ) {
             $this->_page = 1;
         }
-
-        if ( isset($_REQUEST['i']) ) {
-            $encode = urldecode($_REQUEST['i']);
+        if ( isset($_POST['i']) ) {
+            $encode = urldecode($_POST['i']);
+        } elseif (isset($_GET['i']) ) {
+            $encode = urldecode($_GET['i']);
+        } else {
+            $encode = '';
+        }
+        if ( $encode != '' ) {
             $decode = base64_decode($encode);
             $vars = explode(',',$decode);
             for ($i=0;$i<count($vars);$i++) {
                 list($name,$value) = explode('=',$vars[$i]);
-                $_post_offset[$name] = $value;
+                $_post_offset[$name] = intval($value);
             }
         }
 
-        if ( isset($_REQUEST['j']) ) {
-            $encode = urldecode($_REQUEST['j']);
+        if ( isset($_POST['j']) ) {
+            $encode = urldecode($_POST['j']);
+        } elseif (isset($_GET['j']) ) {
+            $encode = urldecode($_GET['j']);
+        } else {
+            $encode = '';
+        }
+        if ( $encode != '' ) {
             $decode = base64_decode($encode);
             $vars = explode(',',$decode);
             for ($i=0;$i<count($vars);$i++) {
                 list($name,$value) = explode('=',$vars[$i]);
-                $_post_pp[$name] = $value;
+                $_post_pp[$name] = intval($value);
             }
         }
         /*
@@ -498,7 +528,6 @@ class ListFactory {
                 } else {
                     $this->_query_arr[$i]['sql'] .= $order_sql . $limit_sql;
                 }
-
                 $result = DB_query($this->_query_arr[$i]['sql']);
 
                 while ($A = DB_fetchArray($result)) {

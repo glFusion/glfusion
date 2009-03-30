@@ -114,7 +114,9 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'story_hits', $story->DisplayElements('hits'),false,true );
     }
 
-    $article->set_var( 'story_date', $story->DisplayElements('date'), false, true); // make sure date format is in user's preferred format
+    if ( $_CONF['hidestorydate'] != 1 ) {
+        $article->set_var( 'story_date', $story->DisplayElements('date'), false, true); // make sure date format is in user's preferred format
+    }
 
     // begin instance caching...
     if( $story->DisplayElements('featured') == 1 )
@@ -143,8 +145,10 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'site_url', $_CONF['site_url'] );
         $article->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
         $article->set_var( 'site_name', $_CONF['site_name'] );
-        $article->set_var( 'story_date_short', $story->DisplayElements('shortdate') );
-        $article->set_var( 'story_date_only', $story->DisplayElements('dateonly') );
+        if ( $_CONF['hidestorydate'] != 1 ) {
+            $article->set_var( 'story_date_short', $story->DisplayElements('shortdate') );
+            $article->set_var( 'story_date_only', $story->DisplayElements('dateonly') );
+        }
 
         $article->set_var( 'story_id', $story->getSid() );
 

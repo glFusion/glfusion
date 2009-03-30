@@ -156,8 +156,6 @@ function glfusion_112()
 {
     global $_TABLES, $_CONF;
 
-    echo 'Performing glFusion v1.1.2 Modifications...<br /><br />';
-
     COM_errorLog("glFusion: Running code update for glFusion v1.1.2svn");
 
     $c = config::get_instance();
@@ -175,9 +173,17 @@ function glfusion_113()
 {
     global $_TABLES, $_CONF;
 
-    COM_errorLog("glFusion: Running code update for glFusion v1.1.3svn");
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} ADD remote_ip varchar(15) default NULL AFTER num_reminders";
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("glFusion 1.1.3svn Development update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),1);
+        next($_SQL);
+    }
 
     $c = config::get_instance();
+    $c->add('hidestorydate',0,'select',1,7,0,1205,TRUE);
     $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
     $c->add('cache_templates',TRUE,'select',2,12,0,1375,TRUE);
     $c->add('template_comments',FALSE,'select',2,11,0,1373,TRUE);
