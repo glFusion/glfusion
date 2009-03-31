@@ -5,14 +5,14 @@
 // | $Id::                                                                    $|
 // | This is the English language page for the Media Gallery Plugin            |
 // +---------------------------------------------------------------------------|
-// | Copyright (C) 2002,2005,2006 by the following authors:                    |
+// | Copyright (C) 2005-2009 by the following authors:                         |
 // |                                                                           |
 // | Author:                                                                   |
-// | Mark R. Eavns               -    mark@glfusion.org                        |
+// | Mark R. Eavns               -    mark AT glfusion DOT org                 |
 // +---------------------------------------------------------------------------|
 // |                                                                           |
 // | If you translate this file, please consider uploading a copy at           |
-// |    http://www.glfusion.org so others can benefit from your                  |
+// |    http://www.glfusion.org so others can benefit from your                |
 // |    translation.  Thank you!                                               |
 // |                                                                           |
 // | This program is free software; you can redistribute it and/or             |
@@ -29,7 +29,7 @@
 // | along with this program; if not, write to the Free Software               |
 // | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA|
 // |                                                                           |
-// +---------------------------------------------------------------------------|
+// +---------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
