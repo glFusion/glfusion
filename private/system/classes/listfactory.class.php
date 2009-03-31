@@ -342,9 +342,9 @@ class ListFactory {
             $this->_sort_arr['field'] = $this->_def_sort_arr['field'];
         }
         if ( isset($_POST['direction']) ) {
-            $this->_sort_arr['direction'] = COM_applyFilter($_POST['direction']);
+            $this->_sort_arr['direction'] = $_POST['direction'] == 'asc' ? 'asc' : 'desc';
         } elseif (isset($_GET['direction']) ) {
-            $this->_sort_arr['direction'] = COM_applyFilter($_GET['direction']);
+            $this->_sort_arr['direction'] = $_GET['direction'] == 'asc' ? 'asc' : 'desc';
         } else {
             $this->_sort_arr['direction'] = $this->_def_sort_arr['direction'];
         }
@@ -354,9 +354,11 @@ class ListFactory {
         } else {
             $ord = $this->_sort_arr['field'];
         }
-
-        $order_sql = ' ORDER BY ' . $ord . ' ' . strtoupper($this->_sort_arr['direction']);
-
+        if ( !$this->array_search_recursive($ord,$this->_fields) ) {
+            $order_sql = ' ORDER BY date DESC';
+        } else {
+            $order_sql = ' ORDER BY ' . addslashes($ord) . ' ' . addslashes(strtoupper($this->_sort_arr['direction']));
+        }
         if ( isset($_POST['results']) ) {
             $this->_per_page = COM_applyFilter($_POST['results'], true);
         } elseif (isset($_GET['results']) ) {
@@ -807,6 +809,32 @@ class ListFactory {
             $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
         return $retval;
+    }
+
+
+
+    /**
+     * Recursively searches an array
+     *
+     * @access public
+     * @return bool true / false
+     *
+     */
+    function array_search_recursive($needle, $haystack)
+    {
+        $found = 0;
+        foreach($haystack as $id => $val) {
+            if($val === $needle) {
+                $found++;
+                break;
+            } else if(is_array($val)){
+                $found=$this->array_search_recursive($needle, $val);
+                if($found>0){
+                    break;
+                }
+            }
+        }
+        return $found;
     }
 }
 
