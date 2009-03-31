@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # croatian.php
 # This is the croatian language page for glFusion!
@@ -27,7 +26,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'iso-8859-2';
 
@@ -156,7 +154,6 @@ $LANG01 = array(
     108 => 'Bri¹i Cache',
     109 => 'Report abuse',
     110 => 'Report this post to the site admin',
-    111 => 'View PDF Version',
     112 => 'Registered Users',
     113 => 'Documentation',
     114 => 'TRACKBACKS',
@@ -389,7 +386,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -579,7 +577,6 @@ $LANG11 = array(
     2 => 'Po¹alji tekst emailom',
     3 => 'Tekst za printanje',
     4 => 'Opcije teksta',
-    5 => 'PDF Story Format',
     6 => 'Subscribe to '
 );
 
@@ -1155,18 +1152,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1274,6 +1259,18 @@ $MESSAGE = array(
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
     503 => 'Plugin installation is disabled in demo mode.'
+);
+
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
 );
 
 ###############################################################################
@@ -1396,26 +1393,6 @@ $LANG_LOGIN = array(
     2 => '®ao mi je. Da bi pristupili ovdje morate biti registrirani korisnik..',
     3 => 'Prijava',
     4 => 'Novi korisnik'
-);
-
-###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'The PDF feature has been disabled',
-    2 => 'The document provided was not rendered. The document was received but could not be processed.  Please make sure to submit only html formatted documents that have been written to the xHTML standard. Please note that overly complex html documents may not render correctly or at all.The document resulting from your attempt was 0 bytes in length, and has been deleted. If you\'re sure that your document should render fine, please re-submit it.',
-    3 => 'Unknown error during PDF generation',
-    4 => "No page data was given or you want to use the ad-hoc PDF generation tool below.  If you think you are getting this page\n          in error then please contact the system administrator.  Otherwise, you may use the form below to generate PDF's in an ad-hoc fashion.",
-    5 => 'Loading your document.',
-    6 => 'Please wait while your document is loaded.',
-    7 => 'You may right click the button below and choose \'save target...\' or \'save link location...\' to save a copy of your document.',
-    8 => "The path given in the configuration file to the HTMLDoc binary is invalid or this system cannot execute it.  Please contact the site administrator if this problem\n          persists.",
-    9 => 'PDF Generator',
-    10 => "This is the Ad-hoc PDF Generation tool. It will attempt to convert any URL you give into a PDF.  Please note that some web pages will not render properly with this feature.  This\n           is a limitation of the HTMLDoc PDF generation tool and such errors should not be reported to the administrators of this site",
-    11 => 'URL',
-    12 => 'Generate PDF!',
-    13 => 'The PHP configuration on this server does not allow URLs to be used with the fopen() command.  The system administrator must edit the php.ini file and set allow_url_fopen to On',
-    14 => 'The PDF you requested either does not exist or you tried to illegally access a file.'
 );
 
 ###############################################################################
@@ -1765,7 +1742,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1925,8 +1901,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

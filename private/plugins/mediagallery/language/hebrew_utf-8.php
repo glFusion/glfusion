@@ -1,5 +1,4 @@
 <?php
-
 // +---------------------------------------------------------------------------+
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
@@ -32,12 +31,12 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------|
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-
+###############################################################################
+# installation....
 $LANG_MG00 = array(
     'menulabel' => 'גלריית המדיה',
     'plugin' => 'Media Gallery',
@@ -105,7 +104,8 @@ $LANG_MG00 = array(
     'success_upgrade' => 'Media Gallery Successfully Upgraded'
 );
 
-// administration items....
+###############################################################################
+# administration items....
 $LANG_MG01 = array(
     'save' => 'שמירה',
     'yes' => 'כן',
@@ -675,7 +675,8 @@ $LANG_MG01 = array(
     'gallery_only' => 'Media Gallery Replaces glFusion Index Page'
 );
 
-// error messages
+###############################################################################
+# error messages
 $LANG_MG02 = array(
     'error_header' => 'שגיאה בגלריית המדיה',
     'generic_error' => 'גלריית המדיה נתקלה בשגיאה במהלך עיבוד בקשתכם. אנא נסו שנית',
@@ -718,7 +719,8 @@ $LANG_MG02 = array(
     'format_not_allowed' => 'Format not allowed'
 );
 
-// userland items...
+###############################################################################
+# userland items
 $LANG_MG03 = array(
     'featured_album' => 'אלבום מדיה מוצג',
     'updated_prompt' => 'עודכן ',
@@ -880,7 +882,6 @@ $LANG_MG03 = array(
     'uid_rated' => 'Your User ID has already rated this item.'
 );
 
-// EXIF labels
 $LANG_MG04 = array(
     'exif_header' => 'מאפייני התמונה',
     'aperture' => 'ערך נקב',
@@ -1133,7 +1134,6 @@ $LANG_MG04 = array(
     'flash_95' => 'הפלאש הבזיק, מצב אוטומטי, התגלה החזר אור, מצב הפחתת עין אדומה'
 );
 
-// Slideshow transitions
 $LANG_MG05 = array(
     'blend' => 'עירבוב',
     'blinds' => 'וילונות',
@@ -1153,7 +1153,6 @@ $LANG_MG05 = array(
     'random' => 'אקראי'
 );
 
-// XP Publishing Wizard
 $LANG_MG06 = array(
     'title' => 'אשף פירסום גלריית המדיה',
     'welcome' => 'ברוכים הבאים אל',
@@ -1237,7 +1236,6 @@ $LANG_MG07 = array(
     'resolution_y' => 'גובה הוידאו'
 );
 
-// installation / upgrade items...
 $LANG_MG08 = array(
     'success' => 'Plugin גלריית המדיה הותקן בהצלחה.',
     'review' => 'אנא עיברו על <b>אפשרויות המערכת</b> ועל <b>ברירות מחדל המערכת</b> כדי להשלים את ההתקנה והכיוון.',
@@ -1274,7 +1272,6 @@ $LANG_MG10 = array(
     'album_desc' => 'תיאור'
 );
 
-###############################################################################
 $PLG_mediagallery_MESSAGE1 = 'עידכון ה-plugin של גלריית המדיה: העידכון הושלם בהצלחה.';
 $PLG_mediagallery_MESSAGE2 = 'שידרוג ה-plugin של גלריית המדיה: לא ניתן לעדכן גירסה זו אוטומטית. פנו לדוקומנטציה של ה-plugin.';
 $PLG_mediagallery_MESSAGE3 = 'שידרוג ה-plugin של גלריית המדיה נכשל - בידקו את error.log';

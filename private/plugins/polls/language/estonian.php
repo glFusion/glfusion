@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # estonian.php
 # This is the estonian language page for the glFusion Polls Plug-in
@@ -30,7 +29,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

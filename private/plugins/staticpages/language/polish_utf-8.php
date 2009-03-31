@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # polish.php
 # This is the Polish language page for the glFusion Static Page Plug-in!
@@ -26,7 +25,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # spanish.php
 # This is the spanish language page for the glFusion Static Page Plug-in!
@@ -26,7 +25,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

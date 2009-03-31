@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # french_canada_utf-8.php
 #
@@ -29,7 +28,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

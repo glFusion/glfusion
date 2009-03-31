@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # estonian_utf-8.php
 # This is the estonian language page for the glFusion links Plug-in
@@ -30,7 +29,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 
@@ -243,7 +241,7 @@ $LANG_confignames['links'] = array(
     'show_category_descriptions' => 'Näita kategooriate kirjeldust?',
     'root' => 'Peakategooria ID',
     'default_permissions' => 'Linkide vaikimisi õigused',
-    'target_blank' => 'Open Links in New Window',
+    'target_blank' => 'Open Links in New Window'
 );
 
 $LANG_configsubgroups['links'] = array(

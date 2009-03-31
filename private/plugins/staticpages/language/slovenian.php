@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # slovenian.php-saved as for version 1.4.1
 # This is the english language page for the glFusion Static Page Plug-in!
@@ -28,7 +27,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

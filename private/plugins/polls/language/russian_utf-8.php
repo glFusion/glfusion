@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # russian_utf-8.php
 # This is the russian language file for the glFusion Polls plugin
@@ -26,7 +25,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

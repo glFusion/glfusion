@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # russian.php
 # This is the russian language page for the glFusion Polls Plug-in!
@@ -26,7 +25,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

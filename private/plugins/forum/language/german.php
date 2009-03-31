@@ -1,5 +1,4 @@
 <?php
-
 // +--------------------------------------------------------------------------+
 // | Forum Plugin for glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
@@ -39,7 +38,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -291,7 +289,7 @@ $LANG_GF01 = array(
     's_help' => 'Schriftfarbe: [color=red]text[/color]  Tipp: Du kannst auch color=#FF0000 benutzen',
     'f_help' => 'Schriftgröße: [size=x-small]small text[/size]',
     'h_help' => 'Ausführliche Hilfe',
-    't_help' => 'Use [file]#[/file] to embed an attached image in the post',
+    't_help' => 'Use [file]#[/file] to embed an attached image in the post'
 );
 
 $LANG_GF02 = array(
@@ -543,7 +541,6 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
-// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Statistik',
     2 => 'Einstellungen',
@@ -554,7 +551,6 @@ $LANG_GF06 = array(
     7 => 'IP-Verw.'
 );
 
-// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'View Forums',
     2 => 'Einstellungen',
@@ -563,14 +559,12 @@ $LANG_GF07 = array(
     5 => 'Mitglieder'
 );
 
-// Forum User Features
 $LANG_GF08 = array(
     1 => 'Benachrichtigungen für Themen',
     2 => 'Benachrichtigungen für ganze Foren',
     3 => 'Ausnahmen'
 );
 
-// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Attachments',
     'maxattachments' => 'Max %s allowed',
@@ -606,7 +600,6 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Average views per:'
 );
 
-// Settings.php
 $LANG_GF92 = array(
     'gfsettings' => 'Discussion Forum Settings',
     'gensettings' => 'General Settings',
@@ -714,7 +707,6 @@ $LANG_GF92 = array(
     'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts'
 );
 
-// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Discussion Forum Board Admin',
     'vieworder' => 'View Order',
@@ -839,7 +831,6 @@ $LANG_GF97 = array(
     'msgmembers' => 'Member List.'
 );
 
-###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade: Update completed successfully.';
 $PLG_forum_MESSAGE2 = 'Forum Plugin upgrade: We are unable to update this version automatically. Refer to the plugin documentation.';
 $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade failed - check error.log';
@@ -927,7 +918,7 @@ $LANG_confignames['forum'] = array(
     'showtopic_review_order' => 'Order to Display Old Topics When Replying',
     'allow_memberlist' => 'Allow Site Member List',
     'enable_fm_integration' => 'Enable FileMgmt Integration for attachments',
-    'max_uploadfile_size' => 'Max Size for Attachments (bytes)',
+    'max_uploadfile_size' => 'Max Size for Attachments (bytes)'
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -943,7 +934,7 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Attachment Settings'
 );
 
-
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),

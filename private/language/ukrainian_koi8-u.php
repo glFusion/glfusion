@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # ukrainian.php
 # This is the ukrainian language page for glFusion!
@@ -31,7 +30,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'KOI8-U';
 
@@ -160,7 +158,6 @@ $LANG01 = array(
     108 => 'Очистити кеш',
     109 => 'Допов╕сти про образу',
     110 => 'Допов╕сти про цей пост адм╕н╕стратору',
-    111 => 'Переглянути PDF-верс╕ю',
     112 => 'Заре╓строван╕ користувач╕',
     113 => 'Документац╕я',
     114 => 'Трекбеки',
@@ -393,7 +390,8 @@ $LANG04 = array(
     157 => 'Опц╕я вилучення',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -583,7 +581,6 @@ $LANG11 = array(
     2 => 'В╕д╕слати статтю ',
     3 => 'Форма статт╕ для друку',
     4 => 'Параметри',
-    5 => 'Формат статт╕ PDF',
     6 => 'Subscribe to '
 );
 
@@ -1159,18 +1156,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1278,6 +1263,18 @@ $MESSAGE = array(
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
     503 => 'Plugin installation is disabled in demo mode.'
+);
+
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
 );
 
 ###############################################################################
@@ -1400,26 +1397,6 @@ $LANG_LOGIN = array(
     2 => 'Вибачте, щоб мати доступ до ц╕╓╖ област╕, вам потр╕бно заре╓струватися.',
     3 => 'Ув╕йти',
     4 => 'Новий користувач'
-);
-
-###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'Функц╕ю PDF в╕дключено',
-    2 => 'Рендер╕нг документу не в╕дбувся. Документ було отримано, але обробка не завершилась.  Будь-ласка, надсилайте документи лише у формат╕ html, написан╕ за стандартом xHTML. Майте на уваз╕, що дуже складн╕ документи можуть обробитись з помилками або взагал╕ не обробитись. Документ ╕з вашо╖ спроби мав 0 байт╕в у довжину, тому його було знищено. Якщо ви впевнен╕, що ваш документ повинен обробитись правильно, будь-ласка перешл╕ть його.',
-    3 => 'Нев╕дома помилка п╕д час генерац╕╖ PDF',
-    4 => 'Не надано даних про стор╕нку, можливо ви хочете використати ad-hoc PDF.  Якщо ви вважа╓те, що отримали це пов╕домлення помилково, зверн╕ться до адм╕н╕стратора сайту.  В ╕ншому раз╕ ви можете скористатися формою внизу для генерац╕╖ PDF в режим╕ ad-hoc.',
-    5 => 'Завантажую ваш документ.',
-    6 => 'Будь-ласка, зачекайте доки ваш документ завантажиться.',
-    7 => 'Ви можете натиснути правою кнопкою мишки внизу ╕ обрати \'зберегти посилання...\', щоб зберегти коп╕ю вашого документу.',
-    8 => 'Шлях до програми HTMLDoc, вказаний в конф╕гурац╕йному файл╕, неправильний або ця система не в змоз╕ ╖╖ запустити.  Будь-ласка, зверн╕ться до адм╕н╕стратора сайту.',
-    9 => 'Генератор PDF',
-    10 => 'Це ╕нструмент для генерування Ad-hoc PDF. В╕н спробу╓ перетворити URL, який ви вкажете,на PDF файл.  Майте на уваз╕, що деяк╕ веб-стор╕нки можуть бути оьроьлен╕ з помилками.  Це обмеження програми HTMLDoc, ╕ про так╕ помилки не потр╕бно допов╕дати адм╕н╕страторам сайту',
-    11 => 'URL',
-    12 => 'Згенерувати PDF!',
-    13 => 'Конв╕гурац╕я PHP на цьому сервер╕ не дозволя╓ використання URL-╕в через команду fopen().  Адм╕н╕стратор системи повинен в╕дредагувати файл php.ini ╕ встановити allow_url_fopen в значення On',
-    14 => 'PDF, який вам потр╕бен або не ╕сну╓, або ви намагалися незаконно отримати доступ до файлу.'
 );
 
 ###############################################################################
@@ -1769,7 +1746,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1929,8 +1905,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

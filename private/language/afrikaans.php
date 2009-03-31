@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # afrikaans.php
 # Hierdie is die Afrikaanse taallêer vir glFusion 1.4
@@ -27,7 +26,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'iso-8859-1';
 
@@ -156,7 +154,6 @@ $LANG01 = array(
     108 => 'Vee Kas skoon',
     109 => 'Meld misbruik aan',
     110 => 'Rapporteer hierdie plasing aan die werfadmin',
-    111 => 'Vertoon PDF Weergawe',
     112 => 'Geregistreerde Gebruikers',
     113 => 'Dokumentasie',
     114 => 'TRACKBACKS',
@@ -389,7 +386,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -579,7 +577,6 @@ $LANG11 = array(
     2 => 'Epos Artikel aan \'n Vriend',
     3 => 'Drukbare artikelformaat',
     4 => 'Artikelopsies',
-    5 => 'PDF Artikelformaat',
     6 => 'Subscribe to '
 );
 
@@ -1155,18 +1152,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1274,6 +1259,18 @@ $MESSAGE = array(
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
     503 => 'Plugin installation is disabled in demo mode.'
+);
+
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
 );
 
 ###############################################################################
@@ -1396,26 +1393,6 @@ $LANG_LOGIN = array(
     2 => 'Jammer, om toegang to hierdie blad te verkry moet u as gebruiker ingeteken wees.',
     3 => 'Intekening',
     4 => 'Nuwe Gebruiker'
-);
-
-###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'Die PDF funksie is gedeaktiveer',
-    2 => 'Die verskafde dokument is nie vertaal nie.  Die dokument is ontvang maar kon nie verwerk word nie.  Maak seker dat u slegs html formaat dokument voorl&ecirc; wat aan die xHTML standaard voldoen. Neem kennis dat onnodig komplekse html dokumente nie noodwendig korrek of enigsins vertaal sal word nie. Die dokument uit u poging was 0 grepe in lengte en is verwyder. As u seker is dat u dokument behoorlik vertaal behoort te word, stuur dit weereens.',
-    3 => 'Onbekende fout tydens skep van PDF',
-    4 => 'Geen bladsy is verskaf of u wil dalk die ad-hoc PDF funksie hieronder gebruik.  As u glo dat u verkeerdelik die blad gekry het, kontak die stelseladministrateur.  Andersins kan u die onderstaande vorm gebruik om die PDF op \'n ad-hoc wyse te skep.',
-    5 => 'Besig om u dokument te laai.',
-    6 => 'Wag asseblief terwyl u dokument gelaai word.',
-    7 => 'U kan met regterknop op die onderstaande knop kliek en dan kies \'save target...\' of \'save link location...\' om \'n kopie van u dokument te stoor.',
-    8 => 'Die gegewe pad wat in die konfigurasie l&ecirc;er van die HTMLDoc program is ongeldig of di&eacute; stelsel kan dit nie uitvoer nie.  Kontak die werfadministrateur as die probleem voortduur.',
-    9 => 'PDF-Skrywer',
-    10 => 'Hierdie is die Ad-hoc PDF-skrywer hulpmiddel. Dit sal poog om enige URL wat u verskaf na \'n PDF om te skakel.  Neem kennis dat sommige web-bladsye nie korrek vertaal sal word met hierdie funksie nie.  Dit is \'n beperking van die HTMLDoc PDF-skrywer program en sulke foute moet dus nie aan die administrateur van die werf gerapporteer word nie',
-    11 => 'URL',
-    12 => 'Skryf PDF!',
-    13 => 'Die PHP konfigurasie op hierde bediener laat nie toe dat URL\'le gebruik word met die fopen() bevel nie.  Die stelseladministrateur moet die php.ini l&ecirc;er wysig en die set allow_url_fopen veranderlike na On toe stel',
-    14 => 'Die PDF wat u versoek het bestaan nie of u het probeer om onregmatiglik toegang tot \'n l&ecirc;er te verkry.'
 );
 
 ###############################################################################
@@ -1765,7 +1742,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1925,8 +1901,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # hebrew.php # last Update  26/6/2008
 # Version 1.5.0 #1.0
@@ -28,7 +27,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'utf-8';
 $LANG_DIRECTION = 'rtl';
@@ -158,7 +156,6 @@ $LANG01 = array(
     108 => 'נקו את זיכרון המטמון',
     109 => 'דווחו על שימוש לרעה',
     110 => 'דווחו על תגובה זו למנהל האתר',
-    111 => 'צפו בגירסת PDF',
     112 => 'משתמשים רשומים',
     113 => 'דוקומנטציה',
     114 => 'הפניות',
@@ -391,7 +388,8 @@ $LANG04 = array(
     157 => 'אפשרות מחיקה',
     158 => 'איזור זמן',
     159 => 'הודעת אימייל זו נוצרה אוטומטית. אנא אל תענו לה.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -581,7 +579,6 @@ $LANG11 = array(
     2 => 'שליחת המאמר לחבר',
     3 => 'גירסה להדפסה',
     4 => 'אפשרויות למאמר זה',
-    5 => 'המאמר בפורמט PDF',
     6 => 'Subscribe to '
 );
 
@@ -1157,18 +1154,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1276,6 +1261,18 @@ $MESSAGE = array(
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
     503 => 'Plugin installation is disabled in demo mode.'
+);
+
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
 );
 
 ###############################################################################
@@ -1398,26 +1395,6 @@ $LANG_LOGIN = array(
     2 => 'מצטערים, כדי להיכנס לאזור זה הינכם נדרשים להתחבר כמשתמשים',
     3 => 'התחברות למערכת',
     4 => 'משתמש חדש'
-);
-
-###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'יכולת ה-PDF מנוטרלת',
-    2 => 'המסמך שבוקש לא הוגש. המסמך נמצא אבל לא הצליח להתקבל. אנא ודאו שהנכם מגישים רק מסמכים בפורמט HTML שנכתבו בסטנדרט xHTML. אנא שימו לב שמסמכי HTML יותר מדי מורכבים עלולים לא להיות מוגשים כמו שצריך או בכלל. המסמך שנוצר כתוצאה מנסיונכם תפס בגודלו 0 bytes, ונמחק. אם הנכם בטוחים שהמסמך שלכם צריך לעבור הגשה ללא בעיה, אנא הגישו אותו מחדש.',
-    3 => 'בעיה לא ידועה בעת יצירת ה-PDF',
-    4 => 'שום מידע על העמוד לא ניתן או שהנכם מעוניינים להשתמש בכלי יצירת PDF יש מאין שלהלן. אם הנכם מרגישים שאתם מקבלים עמוד זה בטעות אז אנא צרו קשר עם מנהלי המערכת. אם לא, תוכלו להשתמש בטופס שלהלן כדי ליצור PDF בצורת אד הוק.',
-    5 => 'טוען את המסמך שלך.',
-    6 => 'אנא חכו עד שהמסמך שלך ייטען.',
-    7 => 'הנכם יכולים לעשות right click על הכפתור שלהלן ולבחור \'save target...\' או \'save link location...\' כדי לשמור עותק של המסמך שלכם.',
-    8 => 'המיקום שניתן בקובץ ההגדרות ל-HTMLDoc binary הוא לא אפשרי או שהמערכת אינה יכולה להריץ אותו. אנא צור קשר עם מנהלי האתר אם בעיה זו ממשיכה.',
-    9 => 'יוצר PDF',
-    10 => 'זהו כלי יצירת PDF אד הוק. הוא ינסה להמיר כל עמוד אינטרנט שתציינו ל-PDF. אנא שימו לב שיש עמודי אינטרנט שלא מוגשים כמו שצריך לצורך יכולת זו. זוהי מגבלה של ה-HTMLDoc PDF generation tool וטעויות כאלו לא צריכות להיות מדווחות למנהלי אתר זה',
-    11 => 'כתובת',
-    12 => 'צרו PDF!',
-    13 => 'הגדרות ה-PHP שבשרת הזה לא מאפשרות לעמודי אינטרנט להיות בשימוש של הפקודה fopen(). מנהל המערכת חייב לערוך את קובץ ה-php.ini ולקבוע את allow_url_fopen על On',
-    14 => 'ה-PDF שביקשתם לא קיים או שניסיתם לגשת לקובץ בצורה לא מורשית.'
 );
 
 ###############################################################################
@@ -1767,7 +1744,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'דומיין עוגייה',
     'cookiesecure' => 'אבטחת עוגייה',
     'lastlogin' => 'תיעוד הזדהות אחרונה במערכת',
-    'pdf_enabled' => 'איפשור PDF?',
     'num_search_results' => 'כמות תוצאות החיפוש',
     'loginrequired' => 'נדרשת הזדהות במערכת?',
     'submitloginrequired' => 'נדרשת הזדהות בשביל הגשות?',
@@ -1927,8 +1903,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # farsi.php
 # This is the farsi language page for the glFusion Static Page Plug-in!
@@ -26,7 +25,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

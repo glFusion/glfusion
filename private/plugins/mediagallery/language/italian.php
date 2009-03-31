@@ -1,5 +1,4 @@
 <?php
-
 // +---------------------------------------------------------------------------+
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
@@ -29,12 +28,12 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------|
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-
+###############################################################################
+# installation....
 $LANG_MG00 = array(
     'menulabel' => 'Media Gallery',
     'plugin' => 'Media Gallery',
@@ -102,7 +101,8 @@ $LANG_MG00 = array(
     'success_upgrade' => 'Media Gallery Successfully Upgraded'
 );
 
-// administration items....
+###############################################################################
+# administration items....
 $LANG_MG01 = array(
     'save' => 'salva',
     'yes' => 'Si',
@@ -150,7 +150,7 @@ $LANG_MG01 = array(
     'root_level' => 'Root Level (NON DEVI crearlo qui)',
     'admin_main_help' => 'La maggior parte delle possibilità per amministrare MediaGallery sono gestibili direttamente dal pannello utente.',
     'configuration_help' => 'Imposta le opzioni di Media Gallery per modificare l\'aspetto standard del plugin.',
-    'media_edit_help' => 'Edita i singoli media e i loro attributi. Per ottenere una visualizzazione più grande del media indicato, fai clic sul media qui sotto e un\\'immagine più grande si aprirà in una finestra popup.',
+    'media_edit_help' => 'Edita i singoli media e i loro attributi. Per ottenere una visualizzazione più grande del media indicato, fai clic sul media qui sotto e un\'immagine più grande si aprirà in una finestra popup.',
     'album_edit_help' => 'Imposta gli attributi degli Album, compresi i permessi, caratteristiche, titolo e descrizione.',
     'album_delete_help' => 'Questo cancellerà l\'Album e tutti i sotto-Album in un sol colpo. Devi selezionare se spostare gli elementi di supporto a una nuova cartella o cancellarli permanentemente.<br' . XHTML . '><b>L\'operazione non è annullabile</b>',
     'configuration_title' => 'Configurazione di Media Gallery',
@@ -672,7 +672,8 @@ $LANG_MG01 = array(
     'gallery_only' => 'Media Gallery Replaces glFusion Index Page'
 );
 
-// error messages
+###############################################################################
+# error messages
 $LANG_MG02 = array(
     'error_header' => 'Errore in Media Gallery',
     'generic_error' => 'Media Gallery ha incontrato un errore processando la tua richiesta. Per favore prova ancora',
@@ -696,7 +697,7 @@ $LANG_MG02 = array(
     'album_nonexist' => 'L\'Album non esiste, non ho potuto effettuare l\'upload',
     'upload_not_found' => 'Non ho trovato il file caricato.  Controlla gli "error Logs" del tuo webserver e controlla che i paramentri di massime dimensioni permesse (nel file php.ini) siano più grandi delle dimensioni del documento che stai cercando di caricare.',
     'upload_not_readable' => 'Non ho potuto aprire il documento caricato / importato.  Controlla che i permessi del file siano corretti e accertati che il webserver abbia impostato come READ l\'accesso ai file',
-    'rate_speedlimit' => 'Hai votato un Media SOLO %s secondi fa. Questo sito richiede almeno %s secondi tra un voto e l\\'altro',
+    'rate_speedlimit' => 'Hai votato un Media SOLO %s secondi fa. Questo sito richiede almeno %s secondi tra un voto e l\'altro',
     'inmemoriam_not_installed' => 'Il plugin Inmemoriam non è installato o non è attivo.',
     'geekary_not_installed' => 'Geekary Plugin not installed or not enabled.',
     'upload_exceeds_max_filesize' => '%s - Exceeds the maximum configured filesize for this album',
@@ -715,7 +716,8 @@ $LANG_MG02 = array(
     'format_not_allowed' => 'Format not allowed'
 );
 
-// userland items...
+###############################################################################
+# userland items
 $LANG_MG03 = array(
     'featured_album' => 'L\'Album del giorno',
     'updated_prompt' => 'Aggiornato il:',
@@ -877,7 +879,6 @@ $LANG_MG03 = array(
     'uid_rated' => 'Your User ID has already rated this item.'
 );
 
-// EXIF labels
 $LANG_MG04 = array(
     'exif_header' => 'Proprietà della foto',
     'aperture' => 'Apertura',
@@ -1130,7 +1131,6 @@ $LANG_MG04 = array(
     'flash_95' => 'con flash, auto mode, return light detected, modalità di riduzione degli orcchi rossi impostata'
 );
 
-// Slideshow transitions
 $LANG_MG05 = array(
     'blend' => 'Miscela',
     'blinds' => 'Tendine',
@@ -1150,7 +1150,6 @@ $LANG_MG05 = array(
     'random' => 'Casuale'
 );
 
-// XP Publishing Wizard
 $LANG_MG06 = array(
     'title' => 'Media Gallery Publishing Wizard',
     'welcome' => 'Benvenuto a',
@@ -1234,7 +1233,6 @@ $LANG_MG07 = array(
     'resolution_y' => 'Video Height'
 );
 
-// installation / upgrade items...
 $LANG_MG08 = array(
     'success' => 'Media Gallery Plugin has been successfully installed.',
     'review' => 'Please review the <b>System Options</b> and the <b>System Defaults</b> to complete the installation and configuration.',
@@ -1271,7 +1269,6 @@ $LANG_MG10 = array(
     'album_desc' => 'Description'
 );
 
-###############################################################################
 $PLG_mediagallery_MESSAGE1 = 'Media Gallery plugin upgrade: L\'update ha avuto successo.';
 $PLG_mediagallery_MESSAGE2 = 'Media Gallery plugin upgrade: Non sono stato capace di upgradare questa versione automaticamente... Controlla la documentazione del plugin.';
 $PLG_mediagallery_MESSAGE3 = 'Media Gallery plugin - l\'upgrade è fallito - controlla il file error.log';

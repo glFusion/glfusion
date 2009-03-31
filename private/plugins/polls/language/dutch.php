@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # dutch.php
 # This is the Dutch language file for the glFusion Polls plugin
@@ -28,7 +27,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

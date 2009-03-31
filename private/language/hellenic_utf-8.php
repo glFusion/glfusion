@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # hellenic.php
 # This is the Hellenic language page for glFusion!
@@ -35,7 +34,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'utf-8';
 
@@ -164,7 +162,6 @@ $LANG01 = array(
     108 => 'Καθαρισμός Cache',
     109 => 'Αναφορά του παρόντος κειμένου ώς καταχρηστικό',
     110 => 'Αναφορά του παρόντος άρθρου στον Διαχειριστή του συστήματος',
-    111 => 'Δείτε την έκδοση PDF',
     112 => 'Καταχωρημένοι Χρήστες',
     113 => 'Τεκμηρίωση',
     114 => 'TRACKBACKS',
@@ -397,7 +394,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -587,7 +585,6 @@ $LANG11 = array(
     2 => 'Στείλτε το άρθρο σε έναν φίλο/φίλη μέσω ηλεκτρονικού ταχυδρομίου',
     3 => 'Διαμόρφωση άρθρου για εκτύπωση',
     4 => 'Μενού επιλογών άρθρου',
-    5 => 'Άρθρο σε μορφή PDF',
     6 => 'Subscribe to '
 );
 
@@ -1163,18 +1160,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1282,6 +1267,18 @@ $MESSAGE = array(
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
     503 => 'Plugin installation is disabled in demo mode.'
+);
+
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
 );
 
 ###############################################################################
@@ -1404,26 +1401,6 @@ $LANG_LOGIN = array(
     2 => 'Για να προσπελάσετε αυτήν την περιοχή πρέπει να συνδεθείτε σαν χρήστης.',
     3 => 'Σύνδεση',
     4 => 'Νέος χρήστης '
-);
-
-###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'Η χρηση εγγράφων PDF έχει απενεργοποιηθεί',
-    2 => 'Το παρόν έγγραφο δεν έχει μετραταπεί. Παρακαλώ, εξακριβώστε οτι αποστείλατε την HTML έκδοση ενός εγγράφου που τηρεί το πρότυπο xHTML. Επίσης, πρέπει να ξέρεται ότι υπάρχει η πιθανότητα να μην μετατραπουν σωστά πολύπλοκα έγγραφα σε HTML. Το μέγεθος του αρχείου μετατροπής είναι 0 bytes και έχει διαγραφεί. Αν είστε σίγουρος(η) ότι το έγγραφο θα μετατραπεί σωστά, παρακαλώ να το αποστείλετε ξανά.',
-    3 => 'Άγνωστο σφάλμα κατα την δημιουργία εγγράφου PDF',
-    4 => "Δεν καταχωρήθηκαν δεδομένα απο τον χρήστη ή θέλετε να δημιουργήσετε εξειδικευμένο έγγραφο PDF απο το εργαλείο παρακάτω. Αν νομίζετε οτι βλέπετε αυτήν την σελίδα\n       απο λάθος τότε επικοινωνήστε με τους διαχηριστές του συστήματος. Διαφορετικά, μπορείτε να χρησιμοποιήσετε την φόρμα παρακάτω για να δημιουργήσετε το έγγραφο σε PDF διαμόρφωση\n.",
-    5 => 'Φόρτωση του Εγγράφου',
-    6 => 'Παρακαλώ, περιμένετε μέχρι να τελειώσει η φόρτωση του εγγράφου σας.',
-    7 => 'Μπορείτε να αποθηκεύσετε το έγγραφο σας επιλέγοντας το κουμπί παρακάτω με το δεξί πλήκτρο του ποντικιού και επιλέγοντας "Αποθήκευση ως...".',
-    8 => "Η διαδρομη που δώσατε στο αρχείο της παραμετροποίησης (config.php) για το εκτελέσιμο HTMLDoc είναι λανθασμένος και το σύστημα δεν μπορεί να το εκτελέσει. Παρακαλώ, επικοινωνηστε με τους διαχηριστές του συστήματος αν το πρόβλημα\n	επιμείνει.",
-    9 => 'Δημιουργία αρχείου PDF',
-    10 => "Αυτός είναι ο εξειδικευμένος τρόπος δημιουργίας αρχείων PDF. Το παρόν εργαλείο θα επιχειρήσει την μετατροπή ενος URL σε αρχείο PDF. Παρακαλώ, σημειώστε ότι κάποιες σελίδες δεν θα εμφανίζονται σωστά στο τελικό αρχείο. Αυτό οφείλεται σε αδυναμλία του προγράμματος HTMLDoc PDF. Τα τυχόν λάθη στην μετρατροπή\n     θα πρέπει να αναφέρονται στην ιστοσελίδα του HTMLDoc PDF.",
-    11 => 'URL',
-    12 => 'Δημιουργία PDF!',
-    13 => 'Η παραμετρόποιηση της γλώσσας PHP στην παρούσα ιστοσελίδα δεν επιτρέπει την χρήση URL με την εντολή fopen(). Ο διαχηριστής του συστήματος πρέπει να θέσει την μεταβλητη "allow_url_fopen" στην θέση "on" στο αρχείο παραμετροποίησης της PHP',
-    14 => 'Το αρχείο PDF που διαλέξατε δεν υπάρχει η δεν επιτρέπεται η πρόσβαση σε αυτό.'
 );
 
 ###############################################################################
@@ -1773,7 +1750,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1933,8 +1909,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

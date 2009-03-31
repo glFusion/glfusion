@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # chinese_traditional_utf-8.php
 #
@@ -30,7 +29,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'utf-8';
 
@@ -159,7 +157,6 @@ $LANG01 = array(
     108 => '清除緩衝貯存區',
     109 => '報告濫用',
     110 => '報告此濫登文給網站管理員',
-    111 => '看PDF 版本',
     112 => '登記用戶',
     113 => '使用說明',
     114 => '跡回',
@@ -392,7 +389,8 @@ $LANG04 = array(
     157 => '刪除選項',
     158 => '時區',
     159 => '這電郵是自動產生的。請不要回信。',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -582,7 +580,6 @@ $LANG11 = array(
     2 => '寄文章給朋友',
     3 => '可印的文章格式',
     4 => '文章選項',
-    5 => 'PDF 文章版本',
     6 => 'Subscribe to '
 );
 
@@ -1158,18 +1155,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1277,6 +1262,18 @@ $MESSAGE = array(
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
     503 => 'Plugin installation is disabled in demo mode.'
+);
+
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
 );
 
 ###############################################################################
@@ -1399,26 +1396,6 @@ $LANG_LOGIN = array(
     2 => '抱歉，要求登入才可存取這個區域。',
     3 => '登入',
     4 => '新用戶'
-);
-
-###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'PDF 版本的作用已被禁止',
-    2 => '所提供的檔沒有呈遞。檔已收到，但是無法處理。請肯定你所提交的檔是 html 格式的檔寫於 xHTML 的標準。請注意過分複雜的 html 檔也可能無法正確呈遞。你的檔提交的結果是 0 bytes 而且已被刪除。你若肯定你的檔應該順利的呈遞，其再次提交。',
-    3 => '不知名的PDF 檔製作錯誤。',
-    4 => '沒提供頁數資料或你要用以下的特別 PDF 製作工具。若你認為你所得到的這頁是錯誤。 請聯絡系統管理員。要不然，你可用以下的表格來特別製作 PDF。',
-    5 => '正在裝置你的檔。',
-    6 => '你的檔被裝置時請等待。',
-    7 => '你可用右擊以下的按鈕，然後選 \'save target...\' or \'save link location...\' 來存續你的檔的一個拷貝。',
-    8 => '在配置檔案裏的 HTMLDoc二進位檔案路徑有錯誤，或此系統無法執行此檔案。若此問題繼續發生，請聯絡網站管理員。',
-    9 => 'PDF 製作器',
-    10 => '這是特別的 PDF 製作工具。它會將任何 URL 轉換成 PDF 版本。請注意，有些網頁不會正確的被這工具處理成功。這是 HTMLDoc PDF 製作工具的有限之處，而這樣的錯誤不需要報告給此網站的管理員。',
-    11 => 'URL',
-    12 => '製作 PDF!',
-    13 => '此伺服器的 PHP 配置不准許 fopen() 命令用在 URL 上。 系統管理員必須先修改  php.ini 檔案，然後設定 allow_url_fopen 到 On',
-    14 => '你要求的 PDF 不存在或你在非法的入取一個檔案。'
 );
 
 ###############################################################################
@@ -1768,7 +1745,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie 功能變數名稱',
     'cookiesecure' => 'Cookie 保護',
     'lastlogin' => '記錄最後登入?',
-    'pdf_enabled' => '啟動PDF 嗎?',
     'num_search_results' => '搜尋結果次數',
     'loginrequired' => '需要登入嗎?',
     'submitloginrequired' => '提交需要登入嗎?',
@@ -1928,8 +1904,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

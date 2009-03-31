@@ -1,5 +1,4 @@
 <?php
-
 /**
  * File: farsi.php
  * This is the Farsi (Persian) language page for the glFusion Spam-X Plug-in!
@@ -17,7 +16,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

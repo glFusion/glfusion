@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # hebrew_utf-8.php
 #
@@ -28,7 +27,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 
@@ -241,7 +239,7 @@ $LANG_confignames['links'] = array(
     'show_category_descriptions' => 'הצגת תיאור הקטגוריה?',
     'root' => 'קוד הזיהוי של הקטגוריה הראשית',
     'default_permissions' => 'הרשאות ברירת המחדל של קישורים',
-    'target_blank' => 'Open Links in New Window',
+    'target_blank' => 'Open Links in New Window'
 );
 
 $LANG_configsubgroups['links'] = array(
