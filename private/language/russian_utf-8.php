@@ -1278,6 +1278,18 @@ $MESSAGE = array(
 );
 
 ###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
+);
+
+###############################################################################
 
 $LANG_ACCESS = array(
     'access' => 'Доступ',
@@ -1586,6 +1598,19 @@ $LANG_ADMIN = array(
     'list' => 'list',
     'list_all' => 'List all',
     'na' => '-'
+);
+
+###############################################################################
+# Widgets - Strings
+# 
+# These are some standard strings used by the widget static pages
+
+$LANG_WIDGETS = array(
+    'latest_news' => 'Latest News',
+    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
+    'prev' => 'Previous',
+    'next' => 'Next',
+    'playpause' => 'Play/Pause'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
