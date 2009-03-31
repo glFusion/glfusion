@@ -245,17 +245,17 @@ class Template
     {
         global $_CONF, $TEMPLATE_OPTIONS;
 
-    $this->set_root($root);
-    $this->set_unknowns($unknowns);
-    if (is_array($TEMPLATE_OPTIONS) AND array_key_exists('default_vars',$TEMPLATE_OPTIONS) and is_array($TEMPLATE_OPTIONS['default_vars'])) {
-      foreach ($TEMPLATE_OPTIONS['default_vars'] as $k => $v) {
-        $this->set_var($k, $v);
-      }
+        $this->set_root($root);
+        $this->set_unknowns($unknowns);
+        if (is_array($TEMPLATE_OPTIONS) AND array_key_exists('default_vars',$TEMPLATE_OPTIONS) and is_array($TEMPLATE_OPTIONS['default_vars'])) {
+            foreach ($TEMPLATE_OPTIONS['default_vars'] as $k => $v) {
+                $this->set_var($k, $v);
+            }
+        }
         if ( $_CONF['cache_templates'] ) {
             clearstatcache();
         }
     }
-  }
 
 
    /******************************************************************************
@@ -670,11 +670,11 @@ class Template
             } else if (isset($this->varvals[$varname]) OR empty($varname)) {
                 return $this->slow_subst($varname);
             } else {
-              // $varname does not reference a file so return
-              if ($this->debug & 4) {
-                echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
-              }
-              return true;
+                // $varname does not reference a file so return
+                if ($this->debug & 4) {
+                    echo "<p><b>subst:</b> varname $varname does not reference a file</p>\n";
+                }
+                return true;
             }
 
             ob_start();
@@ -1550,7 +1550,6 @@ class Template
                 $tmplt = str_replace('{#','<!-- ',$tmplt);
                 $tmplt = str_replace('#}',' -->',$tmplt);
             } else {
-//                $tmplt = preg_replace('/\{#.*#\}(\n)?/sm', '', $tmplt);
                 $tmplt = preg_replace('!\{#.*?#\}(\n)?!sm', '', $tmplt);
             }
         }
@@ -1798,9 +1797,9 @@ class Template
         $tmplt = $this->replace_lang($tmplt);
         $tmplt = $this->replace_vars($tmplt);
 
-      // clean up concatenation.
-          $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
-                                "\n", $tmplt);
+        // clean up concatenation.
+        $tmplt = str_replace('?'.'><'.'?php ', // makes the cache file easier on the eyes (need the concat to avoid PHP interpreting the ? >< ?php incorrectly
+                             "\n", $tmplt);
 
         return $tmplt;
 
@@ -1822,7 +1821,7 @@ class Template
             $vars = array($vars);
         }
         foreach ($vars as $varname) {
-          $this->nocache[$varname] = true;
+            $this->nocache[$varname] = true;
         }
     }
 

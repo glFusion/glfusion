@@ -381,12 +381,12 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         $mailtext .= $LANG01[1] . ' ' . $author . LB;
     }
     if ( $html ) {
-        $mailtext .= $A['introtext'] . '<br />'.$A['bodytext'].'<br /><br />'
+        $mailtext .= PLG_replaceTags($A['introtext']) . '<br />'.PLG_replaceTags($A['bodytext']).'<br /><br />'
         . '------------------------------------------------------------<br />';
     } else {
         $mailtext .= LB
-            . COM_undoSpecialChars(stripslashes(strip_tags($A['introtext']))).LB.LB
-            . COM_undoSpecialChars(stripslashes(strip_tags($A['bodytext']))).LB.LB
+            . COM_undoSpecialChars(stripslashes(strip_tags(PLG_replaceTags($A['introtext'])))).LB.LB
+            . COM_undoSpecialChars(stripslashes(strip_tags(PLG_replaceTags($A['bodytext'])))).LB.LB
             . '------------------------------------------------------------'.LB;
     }
     if ($A['commentcode'] == 0) { // comments allowed

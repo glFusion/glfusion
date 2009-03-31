@@ -312,6 +312,7 @@ function TRB_saveTrackbackComment ($sid, $type, $url, $title = '', $blog = '', $
         DB_query ("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks + 1 WHERE (sid = '$sid')");
     }
     CACHE_remove_instance('whatsnew');
+    CACHE_remove_instance('story_'.$sid);
     return $comment_id;
 }
 
