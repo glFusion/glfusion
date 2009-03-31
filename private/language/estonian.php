@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # estonian.php
 # This is the estonian language page for glFusion!
@@ -28,7 +27,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'iso-8859-1';
 
@@ -157,7 +155,6 @@ $LANG01 = array(
     108 => 'Tühjenda puhvermälu',
     109 => 'Teata kuritahtlikkusest',
     110 => 'Teata sellest postitusest lehe administraatorile',
-    111 => 'Vaata PDF versiooni',
     112 => 'Registreeritud kasutajaid',
     113 => 'Dokumentatsioon',
     114 => 'TRACKBACKID',
@@ -390,7 +387,8 @@ $LANG04 = array(
     157 => 'Kustutamisvalik',
     158 => 'Ajavöönd',
     159 => 'See E-kiri on automaatselt genereeritud . Ära vasta  sellele.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -580,7 +578,6 @@ $LANG11 = array(
     2 => 'Saada lugu sõbrale',
     3 => 'Lugu prinditaval kujul',
     4 => 'Loo valikud',
-    5 => 'PDF lugude formaat',
     6 => 'Subscribe to '
 );
 
@@ -1156,18 +1153,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1400,26 +1385,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'PDF oskused on välja lülitatud',
-    2 => 'Etteantud faili ei teisendatud. Dokument laeti korrektselt, kuid seda ei suudetud töödelda. Jälgi hoolikalt, et laeksid vaid XHTML standardile vastavaid HTML dokumente. Pea meeles, et keeruka kujundusega HTML dokumente võidakse teisendada ebakorrektselt või üldse mitte teisendada. Sinu faili töötluse tulemusena loodi 0 baidi suurusega fail ja see kustutati. Kui sa oled kindel, et sinu faili saab edukalt töödelda, siis lae see uuesti.',
-    3 => 'PDF-i genereerimisel tekkis tundmatu viga',
-    4 => 'No page data was given or you want to use the ad-hoc PDF generation tool below.  If you think you are getting this page in error then please contact the system administrator.  Otherwise, you may use the form below to generate PDF\'s in an ad-hoc fashion.',
-    5 => 'Laen dokumenti.',
-    6 => 'Palun oota, kuni sinu dokumenti laetakse.',
-    7 => 'Sa võid oma dokumendi salvestamiseks teha alloleval lingil hiirega paremklõpsu ning valida menüüst kas "Save target...", "Salvesta sihtmärk...", "Save Link location..." vms.',
-    8 => 'Konfiguratsioonis määratud tee HTMLDoc rakenduseni on kas vale või seda rakendust ei saa käivitada. Palun pöördu probleemi püsimisel lehe administraatori poole.',
-    9 => 'PDF-i genereerija',
-    10 => 'This is the Ad-hoc PDF Generation tool. It will attempt to convert any URL you give into a PDF.  Please note that some web pages will not render properly with this feature.  This is a limitation of the HTMLDoc PDF generation tool and such errors should not be reported to the administrators of this site',
-    11 => 'URL',
-    12 => 'Genereeri PDF!',
-    13 => 'Selle lehe häälestus ei luba kasutada PHP funktsiooni fopen(). Süsteemiadministraator peab selle funktsiooni lubamiseks muutma php.ini faili ning selles allow_url_fopen sisse lülitama.',
-    14 => 'PDF faili, mida soovid vaadata kas pole olemas või üritad sa seda vaadata ilma selleks piisavaid õigusi omamata.'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1608,19 +1573,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1766,7 +1718,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Küpsise domeen',
     'cookiesecure' => 'Turvaühenduse küpsis',
     'lastlogin' => 'Salvestan viimatise logimise aeg?',
-    'pdf_enabled' => 'PDF lubatud?',
     'num_search_results' => 'Otsingutulemuste arv',
     'loginrequired' => 'Vajab sisselogimist?',
     'submitloginrequired' => 'Sisestamine vajab sisselogimist?',
@@ -1926,8 +1877,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

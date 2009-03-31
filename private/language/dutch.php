@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # dutch.php
 #
@@ -33,7 +32,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'iso-8859-1';
 
@@ -162,7 +160,6 @@ $LANG01 = array(
     108 => 'Leeg Cache',
     109 => 'Rapporteer misbruik',
     110 => 'Rapporteer dit bericht aan de sitebeheerder',
-    111 => 'Bekijk de PDF-versie',
     112 => 'Geregistreerde gebruikers',
     113 => 'Documentatie',
     114 => 'TRACKBACKS',
@@ -395,7 +392,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -585,7 +583,6 @@ $LANG11 = array(
     2 => 'Email artikel naar collega',
     3 => 'Afdrukversie artikel',
     4 => 'Artikel opties',
-    5 => 'PDF formaat',
     6 => 'Subscribe to '
 );
 
@@ -1161,18 +1158,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1405,26 +1390,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'De PDF-optie is geblokkeerd',
-    2 => 'Het aangeleverde document is niet verwerkt. Het document is wel ontvangen, maar kon niet worden omgezet. Verzend alleen html-documenten die zijn geschreven volgens de xHTML standaard. Besef a.u.b. dat al te complexe html-documenten niet goed  - of zelfs helemaal niet -  worden verwerkt. Het document dat na uw poging is aangemaakt was 0 bytes in grootte en is verwijderd. Als u er zeker van bent dat uw document goed verwerkt zou moeten worden, probeert u het dan opnieuw te verzenden.',
-    3 => 'Onbekende fout tijdens de aanmaak van het PDF document',
-    4 => "No page data was given or you want to use the ad-hoc PDF generation tool below.  If you think you are getting this page\n          in error then please contact the system administrator.  Otherwise, you may use the form below to generate PDF's in an ad-hoc fashion.",
-    5 => 'Uw document wordt geladen.',
-    6 => 'Wacht a.u.b. terwijl uw document wordt geladen.',
-    7 => 'U kunt de rechts-klikken op de onderstaande knop en kiezen voor \'opslaan doel...\' of \'opslaan link lokatie...\' om een copy van uw document te bewaren.',
-    8 => "Het pad naar de HTMLDoc binary in het configuratiebestand is ongeldig of kan niet worden uitgevoerd.  Neem a.u.b. contact op met de beheerder als het probleem\n         zich blijft voordoen.",
-    9 => 'PDF Generator',
-    10 => "Dit is de Ad-hoc PDF Generation tool. Deze zal proberen om uw bestand te converteren.  Besef a.u.b. dat sommige webpaginas niet goed verwerkt kunnen worden.  Dit\n           is een beperking van de HTMLDoc PDF generation tool en zulke fouten kunnen worden gemeld aan de beheerder van deze site",
-    11 => 'URL',
-    12 => 'Genereer PDF!',
-    13 => 'De PHP configuratie op deze server staat het gebruik van URLs met het fopen() commando niet toe.  De systeembeheerder moet het php.ini bestand aanpassen en het allow_url_fopen zetten op: On',
-    14 => 'De PDF die u heeft opgevraagd bestaat niet of u heeft geen toegang tot dit bestand.'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1613,19 +1578,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1771,7 +1723,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1931,8 +1882,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

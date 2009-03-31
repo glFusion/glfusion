@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # japanese_utf-8.php
 #
@@ -32,7 +31,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 
@@ -245,7 +243,7 @@ $LANG_confignames['links'] = array(
     'show_category_descriptions' => 'カテゴリの説明を表示する',
     'root' => 'トップカテゴリのID',
     'default_permissions' => 'パーミッション',
-    'target_blank' => 'Open Links in New Window',
+    'target_blank' => 'Open Links in New Window'
 );
 
 $LANG_configsubgroups['links'] = array(

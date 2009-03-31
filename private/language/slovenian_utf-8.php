@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # slovenian_utf-8.php
 # language file for glFusion version 1.0 by mb
@@ -30,7 +29,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'utf-8';
 
@@ -159,7 +157,6 @@ $LANG01 = array(
     108 => 'Izprazni cache',
     109 => 'Prijavi zlorabo',
     110 => 'Prijavi ta prispevek skrbniku strani',
-    111 => 'Različica PDF',
     112 => 'Prijavljeni uporabniki',
     113 => 'Dokumentacija',
     114 => 'TRACKBACKS',
@@ -392,7 +389,8 @@ $LANG04 = array(
     157 => 'Briši opcijo',
     158 => 'Časovni pas',
     159 => 'Ta pošta je poslana samodejno. Prosim ne odgovarjaj najo.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -582,7 +580,6 @@ $LANG11 = array(
     2 => 'Pošlji članek prijatelju po e-pošti',
     3 => 'Za tisk prijazna stran',
     4 => 'Dodatne možnosti',
-    5 => 'Članek v formatu PDF',
     6 => 'Subscribe to '
 );
 
@@ -1158,18 +1155,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1402,26 +1387,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'Funkcija PDF je onemogočena',
-    2 => 'Priskrbljeni dokument ni bil renderiran. Bil je prejet, ampak ga ni bilo mogoče procesirati. Pepričaj se, da oddajaš samo dokumente v obliki html, ki so bili napisani po standardu xHTML. Izjemno kompleksni dokumenti se lahko renderirajo nepravilno ali pa sploh ne. Dokument, ki je nastal v poskusu renderiranja, je imel 0 bajtov in je bil izbrisan. Če si prepričan/a, da bi se ta dokument moral pravilno renderirati, ga pošlji ponovno.',
-    3 => 'Neznana napaka med izdelavo dokumenta PDF',
-    4 => 'Podatki o strani niso bili podani ali pa hočeš uporabiti orodje za ad-hoc izdelavo dokumentov PDF spodaj. Če misliš, da si to stran dobil/a pomotoma, prosim sporoči to skrbniku sistema. V nasprotnem primeru lahko uporabiš spodnji obrazec in ustvariš dokumente PDF na način ad-hoc.',
-    5 => 'Nalagam dokument.',
-    6 => 'Prosim počakaj, dokument se nalaga.',
-    7 => 'Spodnji gumb lahko desnokliknete in izberete \'shrani ciljni dokument ...\' ali \'shrani mesto povezave ...\', da shranite kopijo dokumenta.',
-    8 => 'Pot do izvršilne datoteke HTMLDoc, ki je zapisana v nastavitvah, je napačna, zato je sistem ne more zagnati. Če se težava ponavlja, to prosim sporočite skrbniku strani.',
-    9 => 'Izdelovalnik PDF',
-    10 => 'To je orodje za ad-hoc izdelavo dokumentov PDF. Orodje bo poskusilo predelati vse URL-je  v PDF-ju. Prosim zavedaj se, da se nekatere spletne strani s tem načinom ne bodo pravilno renderirale.  To je omejitev orodja HTMLDoc za izdelavo dokumentov PDF, zato teh napak ni treba prijavljati skrbniku strani.',
-    11 => 'URL',
-    12 => 'Izdelaj PDF!',
-    13 => 'PHP konfiguracija na tem strežniku ne dovoli odpiranja URL-jev z ukazom fopen(). Skrbnik strani mora popraviti datoteko php.ini, tako da v njej prestavi allow_url_fopen na On.',
-    14 => 'Zahtevani PDF ne obstaja ali pa si poskusil/a do datoteke dostopiti nedovoljeno.'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1610,19 +1575,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1768,7 +1720,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Domena piškotka',
     'cookiesecure' => 'Varni piškotek',
     'lastlogin' => 'Zapomni si zadnjo prijavo?',
-    'pdf_enabled' => 'PDF omogočen?',
     'num_search_results' => 'Število rezultatov iskanja',
     'loginrequired' => 'Zahtevana prijava?',
     'submitloginrequired' => 'Zahtevana prijava za pošiljanja?',
@@ -1928,8 +1879,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

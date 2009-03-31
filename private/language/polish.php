@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # polish.php
 # This is the Polish language page for glFusion!
@@ -27,7 +26,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'iso-8859-2';
 
@@ -156,7 +154,6 @@ $LANG01 = array(
     108 => 'Opró¿nij Cache',
     109 => 'Zg³o¶ nadu¿ycie',
     110 => 'Powiadom administratora o tym wpisie',
-    111 => 'Wersja PDF',
     112 => 'Zarejestrowani U¿ytkownicy',
     113 => 'Dokumentacja',
     114 => 'POWIADOMIENIA ZWROTNE',
@@ -389,7 +386,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Strefa Czasowa',
     159 => 'Ta wiadomo¶æ zosta³a wygenerowana automatycznie. Proszê nie odpowiadaæ.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -579,7 +577,6 @@ $LANG11 = array(
     2 => 'Wy¶lij Znajomemu',
     3 => 'Wersja Do Wydruku',
     4 => 'Opcje Artyku³u',
-    5 => 'Format PDF',
     6 => 'Subscribe to '
 );
 
@@ -1155,18 +1152,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1399,26 +1384,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'Opcja PDF zosta³a wy³±czona',
-    2 => 'Dany dokument nie zosta³ wygenerowany. Dokument zosta³ otrzymany ale nie móg³ byæ przetworzony.  Upewnij siê, ¿e przes³ane dokumenty html zosta³y zapisane w standardowym xHTML. Proszê mieæ na uwadze, ¿e skomplikowane dokumenty html-owe mog± zostaæ przetworzone z b³êdem lub w ogóle. Dokument, który próbowa³a¶/e¶ wygenrowaæ mia³ rozmiar 0 bajtów i zosta³ usuniêty. Je¶li uwa¿asz, ¿e Twój dokument powinien zostaæ wygenerowany prawid³owo, prze¶lij go raz jeszcze.',
-    3 => 'Nieznany b³±d podczas generowania pliku PDF',
-    4 => "Nie okre¶lono ¿adnej strony albo chcesz u¿yæ poni¿szego narzêdzia do generowania PDF-a ad-hoc.  Je¶li uwa¿asz, ¿e strona to b³±d\n          skontaktuj siê z administratorem systemu.  W przeciwnym razie, u¿yj poni¿szego formularza aby wygenerowaæ PDF-a metod± ad-hoc.",
-    5 => '£adowanie dokumentu.',
-    6 => 'Proszê poczekaæ na za³adowanie dokumentu.',
-    7 => 'Kliknij prawym przyciskiem myszy i wybierz \'zapisz element docelowy jako...\' lub \'zapisz link...\' aby zachowaæ kopiê dokumentu na Twoim komputerze.',
-    8 => "The path given in the configuration file to the HTMLDoc binary is invalid or this system cannot execute it.  Please contact the site administrator if this problem\n          persists.",
-    9 => 'Generator PDF',
-    10 => "This is the Ad-hoc PDF Generation tool. It will attempt to convert any URL you give into a PDF.  Please note that some web pages will not render properly with this feature.  This\n           is a limitation of the HTMLDoc PDF generation tool and such errors should not be reported to the administrators of this site",
-    11 => 'URL',
-    12 => 'Generuj PDF!',
-    13 => 'Konfiguracja PHP na tym serwerze nie pozwala na u¿ycie URL z komend± fopen().  Administrator systemu musi edytowaæ plik php.ini i ustawiæ allow_url_fopen na On',
-    14 => '¯±dany PDF albo nie istnieje albo nie masz do niego uprawnieñ.'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1607,19 +1572,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1765,7 +1717,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1925,8 +1876,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # chinese_simplified_utf-8.php
 #
@@ -27,6 +26,10 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 ###############################################################################
+
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
 
 $LANG_CHARSET = 'utf-8';
 
@@ -155,7 +158,6 @@ $LANG01 = array(
     108 => '清除缓冲贮存区',
     109 => '报告滥用',
     110 => '报告此滥登文给网站管理员',
-    111 => '看PDF 版本',
     112 => '登记用户',
     113 => '使用说明',
     114 => '迹回',
@@ -226,7 +228,8 @@ $LANG03 = array(
     37 => 'New Comment Reply',
     38 => 'Someone has replied to your comment.',
     39 => 'You may view the comment thread at the following address: ',
-    40 => 'If you wish to recieve no further notifications of replies, visit the following link: '
+    40 => 'If you wish to recieve no further notifications of replies, visit the following link: ',
+    41 => 'Edit a Comment'
 );
 
 ###############################################################################
@@ -387,7 +390,8 @@ $LANG04 = array(
     157 => '删除选项',
     158 => '时区',
     159 => '这电邮是自动产生的。请不要回信。',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -577,7 +581,6 @@ $LANG11 = array(
     2 => '寄文章给朋友',
     3 => '可印的文章格式',
     4 => '文章选项',
-    5 => 'PDF 文章版本',
     6 => 'Subscribe to '
 );
 
@@ -1153,18 +1156,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1397,26 +1388,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'PDF 版本的作用已被禁止',
-    2 => '所提供的文件没有呈递。文件已收到，但是无法处理。请肯定你所提交的文件是 html 格式的文件写于 xHTML 的标准。请注意过分复杂的 html 文件也可能无法正确呈递。你的文件提交的结果是 0 bytes 而且已被删除。你若肯定你的文件应该顺利的呈递，其再次提交。',
-    3 => '不知名的PDF 文件制作错误。',
-    4 => '没提供页数资料或你要用以下的特别 PDF 制作工具。若你认为你所得到的这页是错误。 请联络系统管理员。要不然，你可用以下的表格来特别制作 PDF。',
-    5 => '正在装置你的文件。',
-    6 => '你的文件被装置时请等待。',
-    7 => '你可用右击以下的按钮，然后选 \'save target...\' or \'save link location...\' 来存续你的文件的一个拷贝。',
-    8 => '在配置档案里的 HTMLDoc二进制档案路径有错误，或此系统无法执行此档案。若此问题继续发生，请联络网站管理员。',
-    9 => 'PDF 制作器',
-    10 => '这是特别的 PDF 制作工具。它会将任何 URL 转换成 PDF 版本。请注意，有些网页不会正确的被这工具处理成功。这是 HTMLDoc PDF 制作工具的有限之处，而这样的错误不需要报告给此网站的管理员。',
-    11 => 'URL',
-    12 => '制作 PDF!',
-    13 => '此服务器的 PHP 配置不准许 fopen() 命令用在 URL 上。 系统管理员必须先修改  php.ini 档案，然后设定 allow_url_fopen 到 On',
-    14 => '你要求的 PDF 不存在或你在非法的入取一个档案。'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1516,7 +1487,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-#
+# 
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -1572,7 +1543,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-#
+# 
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -1603,19 +1574,6 @@ $LANG_ADMIN = array(
     'list' => '列',
     'list_all' => '列所有',
     'na' => '-'
-);
-
-###############################################################################
-# Widgets - Strings
-#
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => '最新消息',
-    'translate' => '点击旗帜，就能自动翻译本站为该国语言。',
-    'prev' => '向前',
-    'next' => '向后',
-    'playpause' => '播放/暂停'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
@@ -1763,7 +1721,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie 域名',
     'cookiesecure' => 'Cookie 保护',
     'lastlogin' => '记录最后登入?',
-    'pdf_enabled' => '激活PDF 吗?',
     'num_search_results' => '搜寻结果次数',
     'loginrequired' => '需要登入吗?',
     'submitloginrequired' => '提交需要登入吗?',
@@ -1921,7 +1878,10 @@ $LANG_confignames['Core'] = array(
     'jpg_orig_quality' => 'JPEG Quality Factor',
     'allow_embed_object' => 'Allow EMBED Object',
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
-    'use_from_site_mail' => 'Force email from address to be site email'
+    'use_from_site_mail' => 'Force email from address to be site email',
+    'cache_templates' => 'Enable Template Caching',
+    'template_comments' => 'Include Template Comments in Page Source',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1976,7 +1936,8 @@ $LANG_fs['Core'] = array(
     'fs_perm_story' => '文章默认许可设定',
     'fs_perm_topic' => '主题默认许可设定',
     'fs_perm_block' => '组件默认许可设定',
-    'fs_webservices' => 'Webservices'
+    'fs_webservices' => 'Webservices',
+    'fs_caching' => 'Caching'
 );
 
 $LANG_configselects['Core'] = array(

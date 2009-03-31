@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # russian.php
 # This is the russian language page for the glFusion Links Plug-in!
@@ -26,7 +25,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 
@@ -239,7 +237,7 @@ $LANG_confignames['links'] = array(
     'show_category_descriptions' => 'Show Category Description?',
     'root' => 'ID of Root Category',
     'default_permissions' => 'Link Default Permissions',
-    'target_blank' => 'Open Links in New Window',
+    'target_blank' => 'Open Links in New Window'
 );
 
 $LANG_configsubgroups['links'] = array(

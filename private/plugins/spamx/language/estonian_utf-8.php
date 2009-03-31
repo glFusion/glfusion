@@ -1,5 +1,4 @@
 <?php
-
 /**
  * File: estonian_utf-8.php
  * This is the Estonian language file for the glFusion Spam-X plugin
@@ -16,7 +15,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

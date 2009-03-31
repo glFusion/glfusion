@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # farsi.php
 # اين زبان فارسي است براي جيک لاگ؟
@@ -14,7 +13,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'utf-8';
 $LANG_DIRECTION = 'rtl';
@@ -144,7 +142,6 @@ $LANG01 = array(
     108 => 'پاك كردن كش',
     109 => 'گزارش از تجاوز كردن به حقوق شما',
     110 => 'گزارش دادن اين پست به ريس سايت',
-    111 => ' مشاهده نسخه Pdf ',
     112 => 'كاربران ثبت شده',
     113 => 'مستندات سطح بالا',
     114 => 'TRACKBACKS',
@@ -377,7 +374,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -567,7 +565,6 @@ $LANG11 = array(
     2 => 'ميل کردن مقاله به دوستان',
     3 => 'مقاله قابل چاپ',
     4 => 'اختيارات مقاله',
-    5 => 'قالبPdfمقاله',
     6 => 'Subscribe to '
 );
 
@@ -1143,18 +1140,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1387,26 +1372,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'قابليت ساختن |PDF |در اين سايت محدود شده است',
-    2 => 'اين پرونده در حال حاضر قابل نمايش نيست. پرونده دريافت شده اما قابل پردازش نميباشدو. لطفا از اينكه در آن تنها از عبارات |HTML| استفاده شده كه از استاندارد "xHTML" استفاده شده بهيچ وجه پرونده هاي بيش از اندازه پيچيده نمايش داده نخواهند شد. نتيجه پرونده شما 0 بايت ميباشد و پاك خواهد شد . اگر شما مطمين هستيد كه پرونده ارساليتان به طور صحيح به نمايش در خواهد آمد لطفا دوباره سعي كنيد',
-    3 => 'خطاي ناشناخته هنگام ساختن پي دي اف',
-    4 => 'هيچ صفحه اي انتخاب نشده يا شما خواستار استفاده از ابزار ad-hokدر زير هستيد.  اگر فكر ميكنيد خطايي رخ داده لطفا با ادمين سايت تماس بگيريديا براي ساختار از فرم زير براي ساخت |PDF| در |AD-HOK| بهره بگيريد',
-    5 => 'بارگذاري ‌داكيومنت شما',
-    6 => 'لطفا تا هنگام لود شدن پرونده خود صبر كنيد',
-    7 => 'شما بايد راست كليك كنيد روي دكمه زير و انتخاب كنيد\'save target...\'يا \'save link location...\' براي ذخيره كردن داكيومنت خود',
-    8 => 'مسير داده شده در فايل پيكره بندي براي داكيومنت  |HTML| شما موجود نيست يل اين سيستم قادر به اجراي آن نميباشد . اگر اين  خطا ول كن شما نيست ! لطفا با ادمين سايت تماس بگيريد',
-    9 => ' توليد کننده PDF ',
-    10 => 'اين يك  ابزار توليد كننده پي دي اف به نام  | |Ad-hocميباشد . اين نرم افزار خواهد توانست|URL| داده شده از طرف شما را به |PDF| تبديل نمايد.ممكن است بعضي از صفحات قابل نمايش نباشند. اين نرم افزار يكسري محدوديت ها دارد . لطفا همه خطا ها را به رييس سايت منتقل نكنيد . وعبارات ساده را مورد استفاده قرار دهيدتا به مشكلي بر نخوريد',
-    11 => 'URL',
-    12 => 'ساختن PDF!',
-    13 => 'تنظيمات |PHP| اين سرور اجازه استفاده از دستور fopen()را نميدهد.با ادمين سايت تماس بگيريد',
-    14 => 'مورد درخواست شما وجود ندارد يا اينكه شما اجازه دسترسي به آن را نداريد و دسترسي شما غير قانوني ميباشد '
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1595,19 +1560,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1753,7 +1705,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1913,8 +1864,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

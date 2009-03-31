@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # korean_utf-8.php
 # This is the Japanese language page for the glFusion links Plug-in!
@@ -29,7 +28,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 
@@ -242,7 +240,8 @@ $LANG_confignames['links'] = array(
     'aftersave' => 'After Saving Link',
     'show_category_descriptions' => 'Show Category Description?',
     'root' => 'ID of Root Category',
-    'default_permissions' => 'Link Default Permissions'
+    'default_permissions' => 'Link Default Permissions',
+    'target_blank' => 'Open Links in New Window'
 );
 
 $LANG_configsubgroups['links'] = array(

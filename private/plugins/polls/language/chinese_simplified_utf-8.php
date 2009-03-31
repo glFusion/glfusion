@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # chinese_simplified_utf-8.php
 # This is the Chinese Simplified UTF-8 language page for
@@ -29,7 +28,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * File: spanish.php
  * This is the Spanish language page for the glFusion Spam-X Plug-in!
@@ -15,7 +14,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

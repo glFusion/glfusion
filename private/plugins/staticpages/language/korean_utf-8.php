@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # korean_utf-8.php
 # This is the english language page for the glFusion Static Page Plug-in!
@@ -27,7 +26,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

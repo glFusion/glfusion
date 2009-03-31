@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # japanese_utf-8.php
 #
@@ -34,7 +33,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'utf-8';
 
@@ -147,7 +145,7 @@ $LANG01 = array(
     92 => '秒',
     93 => '',
     94 => '本ページのすべての商標と著作権はそれぞれの所有者に帰属します。',
-    95 => 'Powered By',
+    95 => 'Powered by',
     96 => 'グループ',
     97 => 'ワードリスト',
     98 => 'プラグイン',
@@ -163,7 +161,6 @@ $LANG01 = array(
     108 => 'キャッシュをクリア',
     109 => '迷惑報告',
     110 => '投稿をサイト管理者に通知する',
-    111 => 'PDFで閲覧',
     112 => '登録ユーザ数',
     113 => 'ドキュメント',
     114 => 'トラックバック',
@@ -396,7 +393,8 @@ $LANG04 = array(
     157 => 'アカウント削除オプション',
     158 => 'タイムゾーン',
     159 => 'このメールは自動送信されたものです。返信しないでください。',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -586,7 +584,6 @@ $LANG11 = array(
     2 => '友達に記事をメールする',
     3 => '印刷フォームページ',
     4 => '記事のオプション',
-    5 => 'PDF 記事フォーマット',
     6 => 'Subscribe to '
 );
 
@@ -1162,18 +1159,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1406,26 +1391,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'PDF生成ができません。',
-    2 => 'ドキュメントは変換されませんでした。受け取ったドキュメントを処理されていません。XHTML標準によって書かれたHTML形式のドキュメントであることを確認してください。複雑すぎるHTMLのドキュメントは正しく変換されなかったり，まったく変換されない場合があります。ドキュメントの変換結果は0バイトのサイズの場合は削除されています。ドキュメントが変換可能だと確信できる場合はもう一度実行してみてください。',
-    3 => 'PDFの生成で不明なエラーが発生しました。',
-    4 => 'ページのデータが与えられていないか，以下のアドホックなPDF生成ツールを使用してください。このページがエラーだと思われる場合はシステムの管理者に連絡してください。もしくは以下のフォームからアドホックな方式によるPDFの生成を行ってください。',
-    5 => 'ドキュメントを読み込み中です。',
-    6 => 'ドキュメントを読み込むまでしばらくお待ちください。',
-    7 => '下のボタンでマウスの右ボタンをクリックしたメニューから，「対象を保存……」または「リンクの場所を保存……」を選択してドキュメントのコピーを保存してください。',
-    8 => '設定ファイルに指定されたHTMLDocバイナリのパスが誤っている，あるいはシステムを実行できません。この問題が解決しない場合はサイトの管理者に連絡してください。',
-    9 => 'PDF生成',
-    10 => 'これはアドホックなPDF生成ツールです。URLで指定した内容をPDFに変換しようとします。この機能では適切に変換されないWebページもあることに注意してください。これはHTMLDoc PDF生成ツールの制限なので，このサイトの管理者には報告しないでください。',
-    11 => 'URL',
-    12 => 'PDFを生成！',
-    13 => 'このサーバのPHP設定はURLをfopen()コマンドに使用することを許可していません。システム管理者はphp.iniを編集して，allow_url_fopenをOnにしてください。',
-    14 => 'PDFが存在しない，あるいは不正なファイルにアクセスしようとしました。'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1614,19 +1579,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1772,7 +1724,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'クッキーのドメイン',
     'cookiesecure' => 'セキュア(HTTPS)なクッキー',
     'lastlogin' => '最終のログインを記録する',
-    'pdf_enabled' => 'PDFを有効にする',
     'num_search_results' => '検索結果表示数',
     'loginrequired' => 'すべてにログインを要求する',
     'submitloginrequired' => '投稿[ログイン要求]',
@@ -1932,8 +1883,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

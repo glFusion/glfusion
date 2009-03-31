@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # korean_utf-8.php
 # This is the Korean UTF-8 language page for the glFusion Calendar Plug-in!
@@ -29,7 +28,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

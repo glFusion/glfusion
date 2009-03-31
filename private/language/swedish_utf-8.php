@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # swedish.php
 # This is the swedish language page for glFusion!
@@ -31,7 +30,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'utf-8';
 
@@ -144,7 +142,7 @@ $LANG01 = array(
     92 => 'sekunder',
     93 => '',
     94 => 'Alla varumärken och copyright på denna sida ägs av deras respektive ägare.',
-    95 => 'Powered By',
+    95 => 'Powered by',
     96 => 'Grupper',
     97 => 'Ordlista',
     98 => 'Insticksmodul',
@@ -160,7 +158,6 @@ $LANG01 = array(
     108 => 'Radera buffert',
     109 => 'Report abuse',
     110 => 'Report this post to the site admin',
-    111 => 'View PDF Version',
     112 => 'Registered Users',
     113 => 'Documentation',
     114 => 'TRACKBACKS',
@@ -393,7 +390,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -583,7 +581,6 @@ $LANG11 = array(
     2 => 'Eposta artikel till någon',
     3 => 'Skriv ut artikel',
     4 => 'Artikelalternativ',
-    5 => 'Artikel i PDF-format',
     6 => 'Subscribe to '
 );
 
@@ -1159,18 +1156,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1403,26 +1388,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'PDF-funktionen är avstängd',
-    2 => 'Dokumentet kunde inte renderas.  Dokumentet kunde hämtas, men kunde inte renderas.  Var noga med att bara skicka in html-formatterade dokument som är skrivna enligt xHTML.  Notera att komplexa dokument kanske inte kan renderas korrekt, eller över huvud taget.  Ditt renderade dokumentet var 0 byte stort och har raderats.  Om du är övertygad om att ditt dokument borde kunna renderas, så bör du skicka in det igen.',
-    3 => 'Okänt fel vid PDF-generering',
-    4 => 'Inget siddata gavs, eller så vill du använda ad-hoc PDF-genereringsverktyget nedan.  Om du anser att du inte borde få detta felmeddelande så bör du kontakta systemadministratören.  Annars kan du prova att använda formuläret nedan för att generera PDF-filer med mer handpåläggning.',
-    5 => 'Laddar ditt dokument.',
-    6 => 'Vänta medan ditt dokument laddas.',
-    7 => 'Du kan högerklicka på knappen nedan och välja \'spara mål...\' eller \'spara länk...\' för att spara en kopia av ditt dokument.',
-    8 => 'Den angivna sökvägen till HTMLDoc-binären är felaktig, eller så kan det här systemet inte exekvera den.  Kontakta systemadministratören om detta fel kvarstår.',
-    9 => 'PDF-generator',
-    10 => 'Detta är Ad-hoc PDF-generering.  Verktyget kommer att försöka konvertera valfri URL till en PDF.  Tänk på att vissa sidor inte renderas ordentligt med den här funktionen, men detta är en begränsning av HTMLDoc PDF-genereringsverktyget, och dessa felmeddelanden bör inte rapporteras till systemadministratörerna på denna sajt',
-    11 => 'URL',
-    12 => 'Generera PDF!',
-    13 => 'PHP-konfigurationen på den här servern tillåter inte öppning av URL:er med fopen()-kommandot.  Systemadministratören måste redigera php.ini-filen och aktivera allow_url_fopen',
-    14 => 'PDF-filen du begärde existerar inte, eller så försökte du hämta en fil som du inte har tillgång till.'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1611,19 +1576,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1769,7 +1721,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1929,8 +1880,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

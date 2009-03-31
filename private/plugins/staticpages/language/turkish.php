@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # turkish.php
 # This is the turkish language page for the glFusion Static Page Plug-in!
@@ -27,7 +26,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

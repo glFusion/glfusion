@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # czech.php
 # This is the czech language (ISO 8859-2) page for the glFusion Calendar Plug-in!
@@ -26,7 +25,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

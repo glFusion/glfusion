@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # french_canada.php
 # This is a french language version for glFusion!
@@ -30,7 +29,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'iso-8859-1';
 
@@ -159,7 +157,6 @@ $LANG01 = array(
     108 => 'Vider la cache',
     109 => 'Rapportez un abus',
     110 => 'D&eacute;noncez ce message &agrave; l\'administrateur',
-    111 => 'Version PDF',
     112 => 'Utilisateurs enregistr&eacute;s',
     113 => 'Documentation',
     114 => 'PISTELS',
@@ -392,7 +389,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -582,7 +580,6 @@ $LANG11 = array(
     2 => 'Envoyer cet article &agrave; un ami',
     3 => 'Version imprimable',
     4 => 'Option des articles',
-    5 => 'Article en format PDF',
     6 => 'Subscribe to '
 );
 
@@ -1158,18 +1155,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1402,26 +1387,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'La fonction PDF a &eacute;t&eacute; d&eacute;sactiv&eacute;e',
-    2 => 'Le document fourni a &eacute;t&eacute; re&ccedil;u mais n\'a pu être trait&eacute;. Merci de ne soumettre que des documents HTML trait&eacute;s selon les standards xHTML. Prenez note que les documents trop complexes peuvent g&eacute;n&eacute;rer des erreurs ou ne pas être trait&eacute;s. Un document produit par vos soins mesurait 0 bytes et &agrave; &eacute;t&eacute; effac&eacute;. Si vous êtes certain de la qualit&eacute; de votre document, vous pouvez essayer de le soumettre de nouveau.',
-    3 => 'Erreur inconnue lors de la conversion PDF',
-    4 => "Aucune page soumise, ou alors vous pr&eacute;f&eacute;rez utiliser l\'outil PDF ci-dessous. Si vous pensez qu\'une erreur est survenue et que cette page\n          s\'affiche sans raison, contactez l\'administrateur du site.   Siinon, vous êtes pri&eacute; d\'utiliser l\'outil PDF ci-dessous.",
-    5 => 'Chargement du document.',
-    6 => 'Merci de patienter lors du chargement.',
-    7 => 'Vous pouvez cliquer avec le bouton de droite et choisir \'sauvegarde...\' ou \'sauvegarde du lien...\' pour sauvegarder une copie de votre document.',
-    8 => "Le chemin d\'acc&egrave;s fourni au moment de configurer le fichier au format binaire est non-valide, ou le syst&egrave;me ne peut l\'ex&eacute;cuter. Contactez l\'administrateur du site si le probl&egrave;me\n          persiste.",
-    9 => 'G&eacute;n&eacute;rateur PDF',
-    10 => "Voici l\'outil de conversion PDF. Il est programm&eacute; pour convertir un URL en un fichier PDF. Notez que certaines pages mal programm&eacute;es ne donnent pas de bons r&eacute;sultats. Ceci\n           repr&eacute;sente une limite inh&eacute;rente &agrave; cet outil de conversion PDF et ne constitue pas une erreur du syst&egrave;me en soi",
-    11 => 'URL',
-    12 => 'Convertir en PDF!',
-    13 => 'La configuration PHP sur ce serveur ne permet pas l\'utilisation de la commande fopen(). L\'administrateur du site doit modifier le fichier php.ini et permettre allow_url_fopen &agrave; On',
-    14 => 'Soit le fichier PDF demand&eacute; n\'existe pas, soit vous avez essay&eacute; d\'y acc&eacute;der de fa&ccedil;on ill&eacute;gale.'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1610,19 +1575,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1768,7 +1720,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1928,8 +1879,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

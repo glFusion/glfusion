@@ -1,5 +1,4 @@
 <?php
-
 // +---------------------------------------------------------------------------+
 // | 媒体画廊 Plugin 1.6                                                         |
 // +---------------------------------------------------------------------------+
@@ -30,12 +29,12 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------|
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-
+###############################################################################
+# installation....
 $LANG_MG00 = array(
     'menulabel' => '媒体画廊',
     'plugin' => '媒体画廊',
@@ -103,7 +102,8 @@ $LANG_MG00 = array(
     'success_upgrade' => '媒体画廊以更新成功。'
 );
 
-// administration items....
+###############################################################################
+# administration items....
 $LANG_MG01 = array(
     'save' => '保存',
     'yes' => '是',
@@ -673,7 +673,8 @@ $LANG_MG01 = array(
     'gallery_only' => '媒体画廊代替志乐的主页'
 );
 
-// error messages
+###############################################################################
+# error messages
 $LANG_MG02 = array(
     'error_header' => '媒体画廊错误',
     'generic_error' => '在处理你的要求时媒体画廊遇到一个错误。请再式一次',
@@ -716,7 +717,8 @@ $LANG_MG02 = array(
     'format_not_allowed' => '格式不允许'
 );
 
-// userland items...
+###############################################################################
+# userland items
 $LANG_MG03 = array(
     'featured_album' => '主要媒体影集',
     'updated_prompt' => '上载:',
@@ -878,7 +880,6 @@ $LANG_MG03 = array(
     'uid_rated' => 'Your User ID has already rated this item.'
 );
 
-// EXIF labels
 $LANG_MG04 = array(
     'exif_header' => '照片性质',
     'aperture' => '光圈',
@@ -1131,7 +1132,6 @@ $LANG_MG04 = array(
     'flash_95' => '闪光灯有闪, 自动式, 有探测到反光, 防红眼式'
 );
 
-// Slideshow transitions
 $LANG_MG05 = array(
     'blend' => '混和',
     'blinds' => '掩饰',
@@ -1151,7 +1151,6 @@ $LANG_MG05 = array(
     'random' => '任意'
 );
 
-// XP Publishing Wizard
 $LANG_MG06 = array(
     'title' => '媒体画廊发表精灵',
     'welcome' => '欢迎来到',
@@ -1235,7 +1234,6 @@ $LANG_MG07 = array(
     'resolution_y' => '动画 高度'
 );
 
-// installation / upgrade items...
 $LANG_MG08 = array(
     'success' => '媒体画廊插件已成功安装.',
     'review' => '起读<b>系统选项</b> 和 <b>系统默认</b> 来完成安装和设置.',
@@ -1272,7 +1270,6 @@ $LANG_MG10 = array(
     'album_desc' => '描述'
 );
 
-###############################################################################
 $PLG_mediagallery_MESSAGE1 = '媒体插件升级: 升级成功.';
 $PLG_mediagallery_MESSAGE2 = '媒体插件升级: 我们无法自动升级。请查考插件说明。';
 $PLG_mediagallery_MESSAGE3 = '媒体插件升级失败 – 察看志乐的 error.log';

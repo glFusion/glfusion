@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # slovenian.php - version 1.0.0
 # This is the slovenian language page for the glFusion Calendar Plug-in!
@@ -30,7 +29,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

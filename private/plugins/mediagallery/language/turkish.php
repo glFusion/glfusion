@@ -1,5 +1,4 @@
 <?php
-
 // +---------------------------------------------------------------------------+
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
@@ -27,12 +26,12 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------|
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-
+###############################################################################
+# installation....
 $LANG_MG00 = array(
     'menulabel' => 'Media Gallery',
     'plugin' => 'Media Gallery',
@@ -100,7 +99,8 @@ $LANG_MG00 = array(
     'success_upgrade' => 'Media Gallery Successfully Upgraded'
 );
 
-// administration items....
+###############################################################################
+# administration items....
 $LANG_MG01 = array(
     'save' => 'Kaydet',
     'yes' => 'evet',
@@ -670,7 +670,8 @@ $LANG_MG01 = array(
     'gallery_only' => 'Media Gallery Replaces glFusion Index Page'
 );
 
-// error messages
+###############################################################################
+# error messages
 $LANG_MG02 = array(
     'error_header' => 'Media Gallery Hatasý',
     'generic_error' => 'Sorgulamanýz sýrasýnda Media Gallery hatasý oluþtu. Lütfen tekrar deneyin',
@@ -713,7 +714,8 @@ $LANG_MG02 = array(
     'format_not_allowed' => 'Format not allowed'
 );
 
-// userland items...
+###############################################################################
+# userland items
 $LANG_MG03 = array(
     'featured_album' => 'Öncelikli Media Album',
     'updated_prompt' => 'Güncelleme:',
@@ -875,7 +877,6 @@ $LANG_MG03 = array(
     'uid_rated' => 'Your User ID has already rated this item.'
 );
 
-// EXIF labels
 $LANG_MG04 = array(
     'exif_header' => 'Fotoðraf Özellikleri',
     'aperture' => 'Aperture Value',
@@ -1128,7 +1129,6 @@ $LANG_MG04 = array(
     'flash_95' => 'Flaþ kullanýldý, auto mode, return light detected, red-eye reduction mode'
 );
 
-// Slideshow transitions
 $LANG_MG05 = array(
     'blend' => 'Blend',
     'blinds' => 'Blinds',
@@ -1148,7 +1148,6 @@ $LANG_MG05 = array(
     'random' => 'Rastgele'
 );
 
-// XP Publishing Wizard
 $LANG_MG06 = array(
     'title' => 'Media Gallery Web Yayým Sihirbazý',
     'welcome' => ' Hoþ Geldiniz ',
@@ -1232,7 +1231,6 @@ $LANG_MG07 = array(
     'resolution_y' => 'Video Height'
 );
 
-// installation / upgrade items...
 $LANG_MG08 = array(
     'success' => 'Media Gallery Eklentisi Baþarýyla kuruldu.',
     'review' => 'Please review the <b>System Ayarlarý</b> and the <b>System Defaults</b> to complete the installation and configuration.',
@@ -1269,7 +1267,6 @@ $LANG_MG10 = array(
     'album_desc' => 'Description'
 );
 
-###############################################################################
 $PLG_mediagallery_MESSAGE1 = 'Media Gallery Eklentisi Güncelleme: Güncelleme Baþarýyla tamamlandý.';
 $PLG_mediagallery_MESSAGE2 = 'Media Gallery Eklentisi Güncelleme: Bu version otomatik olarak güncellenemiyor. Eklentidökümantasyonuna göz atýnýz.';
 $PLG_mediagallery_MESSAGE3 = 'Media Gallery Eklentisi Güncelleme baþarýsýz -  error.log u kontrol edin';

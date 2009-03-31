@@ -28,12 +28,12 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------|
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-
+###############################################################################
+# installation....
 $LANG_MG00 = array(
     'menulabel' => 'Media Gallery',
     'plugin' => 'Media Gallery',
@@ -101,7 +101,8 @@ $LANG_MG00 = array(
     'success_upgrade' => 'Media Gallery Successfully Upgraded'
 );
 
-// administration items....
+###############################################################################
+# administration items....
 $LANG_MG01 = array(
     'save' => 'salva',
     'yes' => 'Si',
@@ -671,7 +672,8 @@ $LANG_MG01 = array(
     'gallery_only' => 'Media Gallery Replaces glFusion Index Page'
 );
 
-// error messages
+###############################################################################
+# error messages
 $LANG_MG02 = array(
     'error_header' => 'Errore in Media Gallery',
     'generic_error' => 'Media Gallery ha incontrato un errore processando la tua richiesta. Per favore prova ancora',
@@ -714,7 +716,8 @@ $LANG_MG02 = array(
     'format_not_allowed' => 'Format not allowed'
 );
 
-// userland items...
+###############################################################################
+# userland items
 $LANG_MG03 = array(
     'featured_album' => 'L\'Album del giorno',
     'updated_prompt' => 'Aggiornato il:',
@@ -876,7 +879,6 @@ $LANG_MG03 = array(
     'uid_rated' => 'Your User ID has already rated this item.'
 );
 
-// EXIF labels
 $LANG_MG04 = array(
     'exif_header' => 'Proprietà della foto',
     'aperture' => 'Apertura',
@@ -1129,7 +1131,6 @@ $LANG_MG04 = array(
     'flash_95' => 'con flash, auto mode, return light detected, modalità di riduzione degli orcchi rossi impostata'
 );
 
-// Slideshow transitions
 $LANG_MG05 = array(
     'blend' => 'Miscela',
     'blinds' => 'Tendine',
@@ -1149,7 +1150,6 @@ $LANG_MG05 = array(
     'random' => 'Casuale'
 );
 
-// XP Publishing Wizard
 $LANG_MG06 = array(
     'title' => 'Media Gallery Publishing Wizard',
     'welcome' => 'Benvenuto a',
@@ -1233,7 +1233,6 @@ $LANG_MG07 = array(
     'resolution_y' => 'Video Height'
 );
 
-// installation / upgrade items...
 $LANG_MG08 = array(
     'success' => 'Media Gallery Plugin has been successfully installed.',
     'review' => 'Please review the <b>System Options</b> and the <b>System Defaults</b> to complete the installation and configuration.',
@@ -1270,7 +1269,6 @@ $LANG_MG10 = array(
     'album_desc' => 'Description'
 );
 
-###############################################################################
 $PLG_mediagallery_MESSAGE1 = 'Media Gallery plugin upgrade: L\'update ha avuto successo.';
 $PLG_mediagallery_MESSAGE2 = 'Media Gallery plugin upgrade: Non sono stato capace di upgradare questa versione automaticamente... Controlla la documentazione del plugin.';
 $PLG_mediagallery_MESSAGE3 = 'Media Gallery plugin - l\'upgrade è fallito - controlla il file error.log';

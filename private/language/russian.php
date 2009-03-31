@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # russian.php
 # This is the russian language page for glFusion!
@@ -43,7 +42,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'Windows-1251';
 
@@ -172,7 +170,6 @@ $LANG01 = array(
     108 => 'Очистить кэш',
     109 => 'Сообщить о недопустимом использовании',
     110 => 'Уведомить администрацию об этом постинге',
-    111 => 'Просмотреть PDF',
     112 => 'Зарегистрированные пользователи',
     113 => 'Документация',
     114 => 'TRACKBACKS',
@@ -405,7 +402,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -595,7 +593,6 @@ $LANG11 = array(
     2 => 'Отправить статью другу',
     3 => 'Печатная форма статьи',
     4 => 'Параметры статьи',
-    5 => 'Формат PDF',
     6 => 'Subscribe to '
 );
 
@@ -1171,18 +1168,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1415,26 +1400,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'Создание PDF отключено',
-    2 => 'Документ не был переведён в формат PDF. Документ был получен, но не был обработан.  Пожалуйста, используйте только HTML документы, согласующиеся со стандартом xHTML. Учтите, что слишком сложные документы могут не быть обработаны успешно. Итог обработки имел длину 0 байт и был удалён. Если вы считаете, что доукмент должен нормально превращаться в PDF, повторите попытку.',
-    3 => 'Неизвестная ошибка при создании PDF',
-    4 => 'Не предоставлено данных о странице - возможно, вы намеревались использовать превращение в PDF \'на лету\' указанным ниже инструментом. Если вы считаете, что произошёл сбой, сообщите системному администратору.  В противном случае, воспользуйтесь приведённым ниже бланком, чтобы создать PDF \'на лету\'.',
-    5 => 'Загружаю ваш документ.',
-    6 => 'Подождите, документ загружается.',
-    7 => 'Вы можете нажать правой клавишей на кнопку ниже и выбрать \'сохранить как...\' или \'сохранить ссылку...\' чтобы сохранить копию документа.',
-    8 => 'Путь к библиотеке HTMLDoc в конфигурационном файле указан неверно, или произошёл сбой при попытке её использовать.  Если ошибка повторяется, обратитесь к системному администратору.',
-    9 => 'Генератор PDF',
-    10 => 'Это - инструмент создания PDF Ad-hoc (\'на лету\'). Будет сделана попытка превращения URL в PDF.  Пожалуйста, имейте в виду, что не все страницы правильно преобразуются в PDF. Это - ограничения библиотеки HTMLDoc, и не следует сообщать о них администрации сайта',
-    11 => 'URL',
-    12 => 'Создать PDF!',
-    13 => 'НАстройки PHP не позволяют открывать ссылки (URL) при помощи fopen().  Системный администратор должен установить в php.ini флаг allow_url_fopen = On',
-    14 => 'PDF не существует, или уже у вас нет прав его просматривать.'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1623,19 +1588,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1781,7 +1733,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1941,8 +1892,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

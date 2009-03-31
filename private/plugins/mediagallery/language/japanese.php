@@ -1,5 +1,4 @@
 <?php
-
 // +---------------------------------------------------------------------------+
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
@@ -29,12 +28,12 @@
 // |                                                                           |
 // +---------------------------------------------------------------------------|
 
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-
+###############################################################################
+# installation....
 $LANG_MG00 = array(
     'menulabel' => 'メディアギャラリ',
     'plugin' => 'メディアギャラリ',
@@ -102,7 +101,8 @@ $LANG_MG00 = array(
     'success_upgrade' => 'Media Gallery Successfully Upgraded'
 );
 
-// administration items....
+###############################################################################
+# administration items....
 $LANG_MG01 = array(
     'save' => '保存/実行',
     'yes' => 'Yes',
@@ -672,7 +672,8 @@ $LANG_MG01 = array(
     'gallery_only' => 'Media Gallery Replaces glFusion Index Page'
 );
 
-// error messages
+###############################################################################
+# error messages
 $LANG_MG02 = array(
     'error_header' => 'メディアギャラリエラー',
     'generic_error' => 'メディアギャラリでリクエストを処理中にエラーが発生しました。もう一度試してみてください。',
@@ -715,7 +716,8 @@ $LANG_MG02 = array(
     'format_not_allowed' => 'Format not allowed'
 );
 
-// userland items...
+###############################################################################
+# userland items
 $LANG_MG03 = array(
     'featured_album' => '注目アルバム',
     'updated_prompt' => '更新 ',
@@ -877,7 +879,6 @@ $LANG_MG03 = array(
     'uid_rated' => 'Your User ID has already rated this item.'
 );
 
-// EXIF labels
 $LANG_MG04 = array(
     'exif_header' => '写真のプロパティ',
     'aperture' => 'レンズ口径',
@@ -1130,7 +1131,6 @@ $LANG_MG04 = array(
     'flash_95' => 'ストロボ使用, 自動モード, return light detected, 赤目軽減モード'
 );
 
-// Slideshow transitions
 $LANG_MG05 = array(
     'blend' => 'ブレンド',
     'blinds' => 'ブラインド',
@@ -1150,7 +1150,6 @@ $LANG_MG05 = array(
     'random' => 'ランダム'
 );
 
-// XP Publishing Wizard
 $LANG_MG06 = array(
     'title' => 'メディアギャラリXP公開ウィザード',
     'welcome' => 'ようこそ，',
@@ -1234,7 +1233,6 @@ $LANG_MG07 = array(
     'resolution_y' => 'Video Height'
 );
 
-// installation / upgrade items...
 $LANG_MG08 = array(
     'success' => 'Media Gallery Plugin has been successfully installed.',
     'review' => 'Please review the <b>System Options</b> and the <b>System Defaults</b> to complete the installation and configuration.',
@@ -1271,7 +1269,6 @@ $LANG_MG10 = array(
     'album_desc' => 'Description'
 );
 
-###############################################################################
 $PLG_mediagallery_MESSAGE1 = 'メディアギャラリプラグインのアップグレード: アップグレードに成功しました。';
 $PLG_mediagallery_MESSAGE2 = 'メディアギャラリプラグインのアップグレード: このバージョンは自動的にアップグレードできません。プラグイン添付のドキュメントをご覧ください。';
 $PLG_mediagallery_MESSAGE3 = 'メディアギャラリプラグインのアップグレードに失敗しました。error.log を確認してください。';

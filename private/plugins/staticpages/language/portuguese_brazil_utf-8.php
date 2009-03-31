@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # portuguese_brazil.php
 # Esta é a página em português do Brasil para o plug-in glFusion Static Page!
@@ -29,7 +28,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

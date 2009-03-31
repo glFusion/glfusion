@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # italian.php
 # Traduzione italiana per glFusion!
@@ -28,7 +27,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 $LANG_CHARSET = 'utf-8';
 
@@ -141,7 +139,7 @@ $LANG01 = array(
     92 => 'secondi',
     93 => '',
     94 => 'Tutti i marchi e copyrights su questa pagina appartengono ai rispettivi proprietari.',
-    95 => 'Powered By',
+    95 => 'Powered by',
     96 => 'Gruppi',
     97 => 'Lista parole',
     98 => 'Plug-in',
@@ -157,7 +155,6 @@ $LANG01 = array(
     108 => 'Svuota Cache',
     109 => 'Segnala abuso',
     110 => 'Segnala questo inserimento all\'ammin. del sito',
-    111 => 'Visualizza Versione PDF',
     112 => 'Utenti Registrati',
     113 => 'Documentazione',
     114 => 'TRACKBACKS',
@@ -390,7 +387,8 @@ $LANG04 = array(
     157 => 'Delete Option',
     158 => 'Time Zone',
     159 => 'This email was generated automatically. Please do not reply to this email.',
-    160 => 'Online'
+    160 => 'Online',
+    161 => 'Password Strength'
 );
 
 ###############################################################################
@@ -580,7 +578,6 @@ $LANG11 = array(
     2 => 'Invia l\'Articolo a un amico',
     3 => 'Articolo in Formato Stampabile',
     4 => 'Opzioni',
-    5 => 'Articolo in Formato PDF',
     6 => 'Subscribe to '
 );
 
@@ -1156,18 +1153,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1400,26 +1385,6 @@ $LANG_LOGIN = array(
 );
 
 ###############################################################################
-# pdfgenerator.php
-
-$LANG_PDF = array(
-    1 => 'La funzionalit&agrave; PDF &egrave; stata disabilitata',
-    2 => 'Il documento fornito non &grave; stato renderizzato. Il documento &egrave; stato ricevuto ma non &grave stato possibile processarlo. Prego controlla di aver inviato solo documenti in formato HTML che siano stati scritti secondo lo standard xHTML. Prego nota che documenti estremamente complessi potrebbero non esserre renderizzati correttamente o non esserlo affatto. Il documento risultante dal tuo tentativo era di 0 byte di lunghezza, ed &grave; stato eliminato. Se sei sicuro che il tuo documento dovesse essere renderizzato per bene, prego reinvialo.',
-    3 => 'Errore sconosciuto nella generazione del PDF',
-    4 => "Dati pagina non forniti, o vuoi utilizare lo strumento di generazione PDF ad-hoc sotto. Se pensi di aver ricevuto questa pagina\n per errore, contatta prego l\'amminstratore di sistema. Altrimenti, puoi utilizzare il form sottostante per generare PDF in modalit&agrave; ad-hoc.",
-    5 => 'Carico il tuo documento.',
-    6 => 'Attendi prego mentre il tuo documento viene caricato.',
-    7 => 'Puoi fare clic con il pulsante destro sotto e scegliere \'registra  collegamento...\' o \'scarica documento collegato...\' per registrare una copia del documento.',
-    8 => "Il percorso fornito nel file di configurazione per l\'eseguibile di  HTMLDoc &egrave; invalido o questo sistema non pu&ograve; eseguirlo. Prego contatta l\'amministratore del sito se questo problema\npersiste.",
-    9 => 'Generatore PDF',
-    10 => "Questo &egrave; lo strumento di Generazione PDF Ad-hoc. Prover&agrave; a convertire qualsiasi URL gli si fornisca in un PDF. Prego nota che alcune pagine web non saranno visualizzate correttamente con questa funzionalit&agrave;. Questa\n&grave; una limitazione dello strumento di generazione PDF HTMLDoc e tali errori non dovrebbero essere segnalati all\'amministratore di questo sito",
-    11 => 'URL',
-    12 => 'Genera PDF!',
-    13 => 'La configurazione PHP su questo server non permette di utilizzare URL con il comando fopen(). L\'amministratore di sistema deve modificare il file  php.ini ed impostare allow_url_fopen ad On',
-    14 => 'Il PDF da te richiesto o non esiste o hai provato ad accedervi illegalmente.'
-);
-
-###############################################################################
 # trackback.php
 
 $LANG_TRB = array(
@@ -1608,19 +1573,6 @@ $LANG_ADMIN = array(
     'na' => '-'
 );
 
-###############################################################################
-# Widgets - Strings
-# 
-# These are some standard strings used by the widget static pages
-
-$LANG_WIDGETS = array(
-    'latest_news' => 'Latest News',
-    'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
-    'prev' => 'Previous',
-    'next' => 'Next',
-    'playpause' => 'Play/Pause'
-);
-
 # Localisation of the texts for the various drop-down menus that are actually
 # stored in the database. If these exist, they override the texts from the
 # database.
@@ -1766,7 +1718,6 @@ $LANG_confignames['Core'] = array(
     'cookiedomain' => 'Cookie Domain',
     'cookiesecure' => 'Cookie Secure',
     'lastlogin' => 'Record Last Login?',
-    'pdf_enabled' => 'PDF Enabled?',
     'num_search_results' => 'Number of Search Results',
     'loginrequired' => 'Login Required?',
     'submitloginrequired' => 'Submit Login Required?',
@@ -1926,8 +1877,8 @@ $LANG_confignames['Core'] = array(
     'story_submit_by_perm_only' => 'Only allow submission to topics with write permission',
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
-    'instance_cache' => 'Enable Instance Caching',
-    'template_comments' => 'Enable Template Comments'
+    'template_comments' => 'Enable Template Comments',
+    'hidestorydate' => 'Hide Story Date'
 );
 
 $LANG_configsubgroups['Core'] = array(

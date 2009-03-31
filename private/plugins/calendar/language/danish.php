@@ -1,5 +1,4 @@
 <?php
-
 ###############################################################################
 # danish.php
 # This is the Danish language page for the glFusion Calendar Plug-in!
@@ -28,7 +27,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 

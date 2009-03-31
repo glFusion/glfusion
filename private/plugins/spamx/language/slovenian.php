@@ -1,5 +1,4 @@
 <?php
-
 /**
  * File: # slovenian.php - version 1.4.1
  * This is the slovenian language file for the glFusion Spam-X plugin
@@ -18,7 +17,6 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
-
 
 global $LANG32;
 
