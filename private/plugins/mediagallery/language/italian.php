@@ -1,5 +1,4 @@
 <?php
-
 // +---------------------------------------------------------------------------+
 // | Media Gallery Plugin 1.6                                                  |
 // +---------------------------------------------------------------------------+
@@ -150,7 +149,7 @@ $LANG_MG01 = array(
     'root_level' => 'Root Level (NON DEVI crearlo qui)',
     'admin_main_help' => 'La maggior parte delle possibilità per amministrare MediaGallery sono gestibili direttamente dal pannello utente.',
     'configuration_help' => 'Imposta le opzioni di Media Gallery per modificare l\'aspetto standard del plugin.',
-    'media_edit_help' => 'Edita i singoli media e i loro attributi. Per ottenere una visualizzazione più grande del media indicato, fai clic sul media qui sotto e un\\'immagine più grande si aprirà in una finestra popup.',
+    'media_edit_help' => 'Edita i singoli media e i loro attributi. Per ottenere una visualizzazione più grande del media indicato, fai clic sul media qui sotto e un\'immagine più grande si aprirà in una finestra popup.',
     'album_edit_help' => 'Imposta gli attributi degli Album, compresi i permessi, caratteristiche, titolo e descrizione.',
     'album_delete_help' => 'Questo cancellerà l\'Album e tutti i sotto-Album in un sol colpo. Devi selezionare se spostare gli elementi di supporto a una nuova cartella o cancellarli permanentemente.<br' . XHTML . '><b>L\'operazione non è annullabile</b>',
     'configuration_title' => 'Configurazione di Media Gallery',
@@ -696,7 +695,7 @@ $LANG_MG02 = array(
     'album_nonexist' => 'L\'Album non esiste, non ho potuto effettuare l\'upload',
     'upload_not_found' => 'Non ho trovato il file caricato.  Controlla gli "error Logs" del tuo webserver e controlla che i paramentri di massime dimensioni permesse (nel file php.ini) siano più grandi delle dimensioni del documento che stai cercando di caricare.',
     'upload_not_readable' => 'Non ho potuto aprire il documento caricato / importato.  Controlla che i permessi del file siano corretti e accertati che il webserver abbia impostato come READ l\'accesso ai file',
-    'rate_speedlimit' => 'Hai votato un Media SOLO %s secondi fa. Questo sito richiede almeno %s secondi tra un voto e l\\'altro',
+    'rate_speedlimit' => 'Hai votato un Media SOLO %s secondi fa. Questo sito richiede almeno %s secondi tra un voto e l\'altro',
     'inmemoriam_not_installed' => 'Il plugin Inmemoriam non è installato o non è attivo.',
     'geekary_not_installed' => 'Geekary Plugin not installed or not enabled.',
     'upload_exceeds_max_filesize' => '%s - Exceeds the maximum configured filesize for this album',
