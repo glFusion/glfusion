@@ -4077,7 +4077,7 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
             $retval .= '<span class="warningsmall">' . $LANG01[31] . ' ';
         }
 
-        $allow_page_break = false;
+        $allow_page_break = true;
     }
     $retval = '<span class="warningsmall">' . $LANG01[31] . ' ';
 
