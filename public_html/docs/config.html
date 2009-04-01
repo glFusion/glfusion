@@ -1199,7 +1199,7 @@ Table Style - Presents the results in a tablular format.</td>
 
 
 
-	<tr class="row4">
+	<tr><td><a name="desc_hidestorydate"></a>Hide Story Date</td><td>If True, the publish date for the story will appear in the story header. &nbsp;If False, the date will not be displayed.</td></tr><tr class="row4">
 
 
 
@@ -1801,7 +1801,7 @@ CUSTOM_menuEntries (see lib-custom.php for details). </td>
 
 <div class="level2">
 
-<table class="inline">
+<table style="width: 971px; height: 269px;" class="inline">
 
 
 
@@ -1853,7 +1853,16 @@ up the page loads, but it makes the CSS difficult to read if you view
 the page source.</td>
 
 
-    </tr>
+    </tr><tr><td><a name="desc_template_comments"></a>Include Template Comments in Page Source </td><td>Each
+template contains some internal comments (surrounded with {# #} ) that
+are removed before the template is sent to the browser. &nbsp;If this
+option is set to True, the {# #} will become &amp;lt;-- --%&amp;gt;
+HTML comments and will be included in the output to the browser.
+&nbsp;Also, the beginning and end of each template, along with it's
+physical location on the server will be included in the output.
+&nbsp;This feature is useful if you are trying to determine which
+template controls a specific display item, or when developing a new
+theme.<br />If this is set to False, the comments are removed prior to sending the output to the browser.</td></tr>
 
 
 
@@ -1871,7 +1880,13 @@ the page source.</td>
 
 
 
-<h1><a name="blocks" id="blocks">Blocks</a></h1>
+<h1>Caching</h1><table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2"><tbody><tr><td style="width: 250px;"><a name="desc_cache_templates"></a>Enable Template Caching </td><td>If
+this option is enabled (set to TRUE) all templates will be cached,
+which should improve performance of the web site. &nbsp;In some cases,
+caching could slow performance down. &nbsp;For example, if the disk
+access is slow on the web server or if the web server is accessing
+Windows shared drives, setting this option to FALSE may improve
+performance.</td></tr></tbody></table><h1><a name="blocks" id="blocks">Blocks</a></h1>
 
 
 
@@ -6236,7 +6251,7 @@ filter.</td>
 		
 <div id="gl_footer">
 		    
-<p><a href="http://www.glfusion.org">glFusion Project</a> - Updated 2009-02-12</p>
+<p><a href="http://www.glfusion.org">glFusion Project</a> - Updated 2009-04-01</p>
 
 
 
