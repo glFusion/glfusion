@@ -177,7 +177,7 @@ function glfusion_113()
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
-        COM_errorLOG("glFusion 1.1.3svn Development update: Executing SQL => " . current($_SQL));
+        COM_errorLOG("glFusion 1.1.3 Development update: Executing SQL => " . current($_SQL));
         DB_query(current($_SQL),1);
         next($_SQL);
     }
