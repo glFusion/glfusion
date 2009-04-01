@@ -28,11 +28,15 @@
             <div class="notes">
                 <h4>{lang_password_help_title}</h4>
                 <p class="last">
-                    {lang_password_help}<br{xhtml}><br{xhtml}>
-                    <span class="warningsmall">{lang_enter_current_password}</span>
+                    <span class="warningsmall">{lang_enter_current_password}</span><br{xhtml}><br{xhtml}>
+                    {lang_password_help}
                 </p>
             </div>
             <table class="inputTable" border="0">
+                <tr>
+                    <td><label for="old_passwd" class="warningsmall">{lang_old_password}:</label></td>
+                    <td><input type="password" id="old_passwd" name="old_passwd" size="32" maxlength="32" value=""{xhtml}></td>
+                </tr>
                 <tr>
                     <td style="width:150px;"><label for="passwd">{lang_password}:</label></td>
                     <td><input type="password" id="passwd" name="passwd" size="32" maxlength="32" value="{password_value}" onkeyup="runPassword(this.value, 'mypassword');"{xhtml}></td>
@@ -63,10 +67,6 @@
                 <tr>
                     <td><label for="email_conf">{lang_email_conf}:</label></td>
                     <td><input type="text" id="email_conf" name="email_conf" size="50" maxlength="96" value="{email_value}"{xhtml}></td>
-                </tr>
-                <tr>
-                    <td><label for="old_passwd" class="warningsmall">{lang_old_password}:</label></td>
-                    <td><input type="password" id="old_passwd" name="old_passwd" size="32" maxlength="32" value=""{xhtml}></td>
                 </tr>
             </table>
             {delete_account_option}
