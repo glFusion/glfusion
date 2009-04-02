@@ -1794,7 +1794,7 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
     $sql = "SELECT $selection FROM $table";
     if( $where != '' )
     {
-        $sql .= " WHERE \"$where\"";
+        $sql .= " WHERE $where";
     }
     $sql .= " ORDER BY {$select_set[$sortcol]}";
     $result = DB_query( $sql );
@@ -1943,7 +1943,7 @@ function COM_checkList( $table, $selection, $where='', $selected='' )
 
     if( !empty( $where ))
     {
-        $sql .= " WHERE \"$where\"";
+        $sql .= " WHERE $where";
     }
 
     $result = DB_query( $sql );
