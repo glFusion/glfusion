@@ -759,12 +759,11 @@ Template Comments in Page Source </td>
 <td class="col1 leftalign">Each
 template contains some internal comments (surrounded with {# #} ) that
 are removed before the template is sent to the browser. &nbsp;If
-this
-option is set to True, the {# #} will become &amp;lt;--
---%&amp;gt;
+this option is set to True, the {# and #} will become &lt;!--
+--&gt;
 HTML comments and will be included in the output to the browser.
 &nbsp;Also, the beginning and end of each template, along with it's
-physical location on the server will be included in the output.
+physical location on the server, will be included in the output.
 &nbsp;This feature is useful if you are trying to determine which
 template controls a specific display item, or when developing a new
 theme.<br />
