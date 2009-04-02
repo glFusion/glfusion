@@ -726,7 +726,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('hidestorydate',0,'select',1,7,0,1205,TRUE);
 
             $c->add('fs_caching', NULL, 'fieldset', 2, 12, NULL, 0, TRUE);
-            $c->add('cache_templates',0,'select',2,12,0,1375,TRUE);
+            $c->add('cache_templates',1,'select',2,12,0,1375,TRUE);
             $c->add('template_comments',FALSE,'select',2,11,0,1373,TRUE);
 
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.3',name='glfusion'",1);

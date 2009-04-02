@@ -76,19 +76,6 @@ define('GR_SERVER_VERSION', '2.15');
 function _mg_gr_checkuser( ) {
     global $_USER, $_CONF;
 
-    $userid = $_COOKIE[$_CONF['cookie_name']];
-
-    if (empty ($userid) || ($userid == 'deleted')) {
-        unset ($userid);
-    } else {
-        $userid = COM_applyFilter ($userid, true);
-        if ($userid > 1) {
-            // Create new session
-            $userdata = SESS_getUserDataFromId($userid);
-            $_USER = $userdata;
-        }
-    }
-
     if (!isset($_USER['uid']) || $_USER['uid'] < 2 )  {
         _mg_gr_finish(GR_STAT_LOGIN_MISSING,'Login session has expired','Login has expired');
     }
@@ -152,47 +139,6 @@ function _mg_gr_login( $loginname, $passwd ) {
         $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
         SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
         PLG_loginUser ($_USER['uid']);
-
-        // Now that we handled session cookies, handle longterm cookie
-        if (!isset($_COOKIE[$_CONF['cookie_name']]) || !isset($_COOKIE['password'])) {
-            // Either their cookie expired or they are new
-            $cooktime = COM_getUserCookieTimeout();
-            if ($VERBOSE) {
-                COM_errorLog("Trying to set permanent cookie with time of $cooktime",1);
-            }
-            if ($cooktime > 0) {
-                // They want their cookie to persist for some amount of time so set it now
-                if ($VERBOSE) {
-                    COM_errorLog('Trying to set permanent cookie',1);
-                }
-                setcookie ($_CONF['cookie_name'], $_USER['uid'],
-                           time() + $cooktime, $_CONF['cookie_path'],
-                           $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-                setcookie ($_CONF['cookie_password'], md5 ($passwd),
-                           time() + $cooktime, $_CONF['cookie_path'],
-                           $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-            }
-        } else {
-            $userid = $_COOKIE[$_CONF['cookie_name']];
-            if (empty ($userid) || ($userid == 'deleted')) {
-                unset ($userid);
-            } else {
-                $userid = COM_applyFilter ($userid, true);
-                if ($userid > 1) {
-                    if ($VERBOSE) {
-                        COM_errorLog ('NOW trying to set permanent cookie',1);
-                        COM_errorLog ('Got '.$userid.' from perm cookie in users.php',1);
-                    }
-                    // Create new session
-                    $userdata = SESS_getUserDataFromId ($userid);
-                    $_USER = $userdata;
-                    if ($VERBOSE) {
-                        COM_errorLog ('Got '.$_USER['username'].' for the username in user.php',1);
-                    }
-                }
-            }
-        }
-
         // Now that we have users data see if their theme cookie is set.
         // If not set it
         setcookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
@@ -208,7 +154,6 @@ function _mg_gr_login( $loginname, $passwd ) {
 function _mg_gr_fetch_albums($refnum, $check_writeable) {
 	global $MG_albums, $_MG_USERPREFS, $_MG_CONF, $_USER;
 
-COM_errorLog("*** entering _mg_gr_fetch_albums ****");
     _mg_gr_checkuser( );
 
   	$retval = '';
@@ -227,7 +172,11 @@ COM_errorLog("*** entering _mg_gr_fetch_albums ****");
       	    $retval .= 'album.title.'.$aid.'='.$MG_albums[$children[$i]]->title."\n";
         if ( $MG_albums[$children[$i]]->description != '' )
       	    $retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
-      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$children[$i]]->parent."\n";
+        if ( $refnum ) {
+      	    $retval .= 'album.parent.'.$aid.'='.$MG_albums[$children[$i]]->gid."\n";
+      	} else {
+            $retval .= 'album.parent.'.$aid.'='.$MG_albums[$children[$i]]->parent."\n";
+        }
       	$retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
       	$maxsize = $MG_albums[$children[$i]]->max_image_width;
       	if ( $MG_albums[$children[$i]]->max_image_height > $MG_albums[$children[$i]]->max_image_width ) {
@@ -268,18 +217,17 @@ COM_errorLog("*** entering _mg_gr_fetch_albums ****");
 
       	$subs = $MG_albums[$children[$i]]->getChildren();
       	if ( count($subs) > 0 ) {
-            list($nalbums, $clist) = _mg_recurse_children( $MG_albums[$children[$i]]->id, $nalbums, $check_writable);
+            list($nalbums, $clist) = _mg_recurse_children( $MG_albums[$children[$i]]->id, $nalbums, $check_writable, $refnum);
             $retval .= $clist;
         }
 	}
 
 	$retval .= 'album_count='.$nalbums."\n";
   	$retval .= 'can_create_root='. ($MG_albums[0]->owner_id ? 'yes' : 'no') ."\n";
-COM_errorLog($retval);
   	_mg_gr_finish(GR_STAT_SUCCESS, $retval,'Fetch albums successful.');
 }
 
-function _mg_recurse_children( $album_id, $counter, $check_writable ) {
+function _mg_recurse_children( $album_id, $counter, $check_writable, $refnum = 0 ) {
     global $MG_albums, $_MG_USERPREFS;
 
     $retval = '';
@@ -300,8 +248,12 @@ function _mg_recurse_children( $album_id, $counter, $check_writable ) {
       	if ( $MG_albums[$children[$i]]->summary != '' ) {
       	    $retval .= 'album.summary.'.$aid.'='.$MG_albums[$children[$i]]->description."\n";
       	}
-//      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->gid."\n";
-      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->id."\n";
+      	if ( $refnum) {
+          	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->gid."\n";
+      	} else {
+      	    $retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->id."\n";
+        }
+//      	$retval .= 'album.parent.'.$aid.'='.$MG_albums[$MG_albums[$children[$i]]->parent]->id."\n";
       	$retval .= 'album.resize_size.'.$aid.'='.'0'."\n";
       	$retval .= 'album.max_size.'.$aid.'='.'0'."\n";
       	$retval .= 'album.thumb_size.'.$aid.'='.'200'."\n";
@@ -332,7 +284,7 @@ function _mg_gr_fetch_album_images($aid, $albumstoo) {
     $retval = '';
 
     if ( !empty($MG_albums[$aid]->title) ) {
-        $retval .= "album.caption=" . $MG_albums[$aid]->title;
+        $retval .= "album.caption=" . $MG_albums[$aid]->title . "\n";
     }
 
     $arrayCounter = 0;
@@ -342,6 +294,7 @@ function _mg_gr_fetch_album_images($aid, $albumstoo) {
     $result = DB_query( $sql );
     $nRows  = DB_numRows( $result );
     $mediaRows = 0;
+
     if ( $nRows > 0 ) {
         while ( $row = DB_fetchArray($result)) {
             $media = new Media();
@@ -353,6 +306,7 @@ function _mg_gr_fetch_album_images($aid, $albumstoo) {
     }
     $numimages = 0;
     $msize = array();
+
     for ($i=0;$i<$arrayCounter;$i++) {
         $x = $i + 1;
 
@@ -435,6 +389,7 @@ function _mg_gr_fetch_album_images($aid, $albumstoo) {
 
         $numimages++;
     }
+
     $retval .= 'image_count='.$numimages."\n";
     $retval .= 'baseurl='.$_MG_CONF['mediaobjects_url'] . '/'."\n";
 
