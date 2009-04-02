@@ -50,10 +50,8 @@
                 <label>{$LANG04[161]}:</label>
                 </td>
                 <td>
-                <div style="width: 100px;">
-                	<div id="mypassword_text" style="font-size:10px;"></div>
-                	<div id="mypassword_bar"  style="font-size:1px; height: 2px; width: 0px; border: 1px solid white;"></div>
-                </div>
+                    <div id="mypassword_text" style="font-size:normal;"></div>
+                    <div id="mypassword_bar"  style="display:none;"></div>
                 </td>
                 </tr>
                 <tr>

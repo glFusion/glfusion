@@ -158,46 +158,46 @@ function runPassword(strPassword, strFieldID)
  	if (nScore >= 90)
  	{
  		var strText = "Very Secure";
- 		var strColor = "#0ca908";
+ 		var strColor = "#33cc00";
  	}
  	// -- Secure
  	else if (nScore >= 80)
  	{
  		var strText = "Secure";
- 		vstrColor = "#7ff67c";
+ 		vstrColor = "#33cc00";
 	}
 	// -- Very Strong
  	else if (nScore >= 70)
  	{
  		var strText = "Very Strong";
- 		var strColor = "#1740ef";
+ 		var strColor = "#33cc00";
 	}
 	// -- Strong
  	else if (nScore >= 60)
  	{
  		var strText = "Strong";
- 		var strColor = "#5a74e3";
+ 		var strColor = "#666666";
 	}
 	// -- Average
  	else if (nScore >= 50)
  	{
  		var strText = "Average";
- 		var strColor = "#33cc00";
+ 		var strColor = "#999999";
 	}
 	// -- Weak
  	else if (nScore >= 25)
  	{
  		var strText = "Weak";
- 		var strColor = "#993300";
+ 		var strColor = "#ff0000";
 	}
 	// -- Very Weak
  	else
  	{
  		var strText = "Very Weak";
- 		var strColor = "#e71a1a";
+ 		var strColor = "#ff0000";
 	}
 	ctlBar.style.backgroundColor = strColor;
-	ctlText.innerHTML = "<span style='color: " + strColor + ";'>" + strText + " - " + nScore + "</span>";
+	ctlText.innerHTML = "<span style='font-weight:bold; color: " + strColor + ";'>" + strText + " - " + nScore + "/100</span>";
 }
 
 // Checks a string for a list of characters
