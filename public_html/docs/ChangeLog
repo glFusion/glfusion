@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.3
 ------
+- What's New block did not honor the URL rewrite setting for stories (Mark)
 - 0000424: Reorder fields on 'Username & Password' tab to be more intuitive (Eric)
 - Increased size of Forum category title text (Eric)
 - Limit long term session cookie to user's ip to limit chances of

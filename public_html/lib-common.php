@@ -4435,7 +4435,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 $retval .= '<ul>';
                 while ($A=DB_fetchArray($result)) {
                     $retval .= '<li>' . COM_createLink(COM_truncate($A['title'],$_CONF['title_trim_length'] ,'...'),
-                        $_CONF['site_url'] . '/article.php?story=' . $A['sid']) . '</li>';
+                        COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid'])) . '</li>';
                 }
                 $retval .= '</ul>';
             }
