@@ -268,7 +268,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
     $expirytime = (string) (time() - $lifespan);
     if (!isset($_COOKIE[$_CONF['cookie_session']])) {
         // ok, delete any old sessons for this user
-        DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = $userid",1);
+        DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = '$userid'",1);
         if ( DB_error() ) {
             DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
             COM_errorLog("***** REPAIR SESSIONS TABLE *****");
@@ -304,7 +304,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
     if ($result) {
         if ($_CONF['lastlogin'] == true) {
             // Update userinfo record to record the date and time as lastlogin
-            DB_query("UPDATE {$_TABLES['userinfo']} SET lastlogin = UNIX_TIMESTAMP() WHERE uid=$userid");
+            DB_query("UPDATE {$_TABLES['userinfo']} SET lastlogin = UNIX_TIMESTAMP() WHERE uid='$userid'");
         }
         if ($_SESS_VERBOSE) COM_errorLog("Assigned the following session id: $sessid",1);
         if ($_SESS_VERBOSE) COM_errorLog("*************leaving SESS_newSession*****************",1);
@@ -425,7 +425,7 @@ function SESS_updateSessionTime($sessid, $md5_based=0)
     if ($md5_based == 1) {
         $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (md5_sess_id = '$sessid')";
     } else {
-        $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (sess_id = $sessid)";
+        $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (sess_id = '$sessid')";
     }
 
     $result = DB_query($sql);
@@ -446,7 +446,7 @@ function SESS_endUserSession($userid)
 {
     global $_TABLES;
 
-    $sql = "DELETE FROM {$_TABLES['sessions']} WHERE (uid = $userid)";
+    $sql = "DELETE FROM {$_TABLES['sessions']} WHERE (uid = '$userid')";
     $result = DB_query($sql);
 
     return 1;
