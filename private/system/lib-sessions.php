@@ -495,7 +495,7 @@ function SESS_getUserDataFromId($userid)
 
     $sql = "SELECT *,format FROM {$_TABLES['dateformats']},{$_TABLES["users"]},{$_TABLES['userprefs']} "
      . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
-     . "{$_TABLES['userprefs']}.uid = $userid AND {$_TABLES['users']}.uid = $userid";
+     . "{$_TABLES['userprefs']}.uid = $userid AND {$_TABLES['users']}.uid = '$userid'";
 
     if(!$result = DB_query($sql)) {
         $userdata = array("error" => "1");

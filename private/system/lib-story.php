@@ -1157,7 +1157,7 @@ function service_submit_story($args, &$output, &$svc_msg)
                 $ai_filename = DB_getItem ($_TABLES['article_images'],'ai_filename', "ai_sid = '{$sid}' AND ai_img_num = " . key($args['delete']));
                 STORY_deleteImage ($ai_filename);
 
-                DB_query ("DELETE FROM {$_TABLES['article_images']} WHERE ai_sid = '$sid' AND ai_img_num = " . key($args['delete']));
+                DB_query ("DELETE FROM {$_TABLES['article_images']} WHERE ai_sid = '$sid' AND ai_img_num = '" . key($args['delete']) ."'");
                 next($args['delete']);
             }
         }

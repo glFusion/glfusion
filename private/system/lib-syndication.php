@@ -447,7 +447,7 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
-    $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = $fid");
+    $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = '$fid'");
     $A = DB_fetchArray( $result );
     if( $A['is_enabled'] == 1 )
     {
@@ -596,7 +596,7 @@ function SYND_updateFeed( $fid )
             COM_errorLog ("update_info for feed $fid is $data", 1);
         }
 
-        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = NOW(), update_info = $data WHERE fid = $fid");
+        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = NOW(), update_info = $data WHERE fid = '$fid'");
     }
 }
 

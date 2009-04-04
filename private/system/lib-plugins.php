@@ -222,10 +222,10 @@ function PLG_uninstall ($type)
                                   "grp_name = '{$remvars['groups'][$i]}'");
             if (!empty ($grp_id)) {
                 COM_errorLog ("Attempting to remove the {$remvars['groups'][$i]} group", 1);
-                DB_query ("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id");
+                DB_query ("DELETE FROM {$_TABLES['groups']} WHERE grp_id = '$grp_id'");
                 COM_errorLog ('...success', 1);
                 COM_errorLog ("Attempting to remove the {$remvars['groups'][$i]} group from all groups.", 1);
-                DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id");
+                DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$grp_id'");
                 COM_errorLog ('...success', 1);
             }
         }
@@ -236,7 +236,7 @@ function PLG_uninstall ($type)
                                     "ft_name = '{$remvars['features'][$i]}'");
             if (!empty ($access_id)) {
                 COM_errorLog ("Attempting to remove {$remvars['features'][$i]} rights from all groups" ,1);
-                DB_query ("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = $access_id");
+                DB_query ("DELETE FROM {$_TABLES['access']} WHERE acc_ft_id = '$access_id'");
                 COM_errorLog ('...success', 1);
                 COM_errorLog ("Attempting to remove the {$remvars['features'][$i]} feature", 1);
                 DB_query ("DELETE FROM {$_TABLES['features']} WHERE ft_name = '{$remvars['features'][$i]}'");
