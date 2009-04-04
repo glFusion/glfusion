@@ -3,7 +3,8 @@
  * PHPMailer language file.
  * Romanian Version
  * @package PHPMailer
- * @author Catalin Constantin <catalin@dazoot.ro?> */
+ * @author Catalin Constantin <catalin@dazoot.ro>
+ */
 
 $PHPMAILER_LANG = array();
 

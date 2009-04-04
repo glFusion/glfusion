@@ -21,3 +21,4 @@ $PHPMAILER_LANG["encoding"]             = 'Codificação desconhecida: ';
 $PHPMAILER_LANG["signing"]              = 'Signing Error: ';
 
 ?>
+

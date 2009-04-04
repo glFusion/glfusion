@@ -1,7 +1,8 @@
 <?php
 /**
  * PHPMailer language file.
- * Russian Version by Alexey Chumakov <alex@chumakov.ru?> */
+ * Russian Version by Alexey Chumakov <alex@chumakov.ru>
+ */
 
 $PHPMAILER_LANG = array();
 
@@ -22,3 +23,4 @@ $PHPMAILER_LANG["encoding"]             = 'Неизвестный вид кодировки: ';
 $PHPMAILER_LANG["signing"]              = 'Signing Error: ';
 
 ?>
+
