@@ -56,7 +56,7 @@
     <td colspan="2"><hr{xhtml}></td>
 </tr>
 {group_edit}
-<tr><td>&nbsp;</td></tr>
+<tr><td colspan="2">&nbsp;</td></tr>
 <tr>
     <td colspan="2">
         <input type="submit" value="{lang_save}" name="mode"{xhtml}>
