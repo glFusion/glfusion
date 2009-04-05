@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -167,7 +167,7 @@ function ST_saveCloneMenu( ) {
         $sqlDataValues = "'$menu_name',$menu_type,$menu_active,$group_id";
         DB_save($_TABLES['st_menus'], $sqlFieldList, $sqlDataValues);
         $menu_id = DB_insertId();
-        $sql = "SELECT * FROM {$_TABLES['st_menus_config']} WHERE menu_id=".$menu;
+        $sql = "SELECT * FROM {$_TABLES['st_menus_config']} WHERE menu_id='".$menu."'";
         $result = DB_query($sql);
         while ($C = DB_fetchArray($result) ) {
             DB_save($_TABLES['st_menus_config'],"menu_id,conf_name,conf_value","$menu_id,'".addslashes($C['conf_name'])."','".addslashes($C['conf_value'])."'");
@@ -1430,8 +1430,8 @@ if ( isset($_REQUEST['mid']) ) {
 if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
     switch ( $mode ) {
         case 'clone' :
-            $menu = COM_applyFilter($_GET['menuid'],true);
-            $content = ST_cloneMenu($menu_id);
+            $menu = COM_applyFilter($_GET['id'],true);
+            $content = ST_cloneMenu($menu);
             break;
         case 'menu' :
             // display the tree

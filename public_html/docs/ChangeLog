@@ -1,5 +1,12 @@
 glFusion ChangeLog
 
+v1.1.4
+------
+
+Site Tailor
+-----------
+- 0000434: [Menu] copy menu does not work (mark)
+
 v1.1.3
 ------
 - What's New block did not honor the URL rewrite setting for stories (Mark)

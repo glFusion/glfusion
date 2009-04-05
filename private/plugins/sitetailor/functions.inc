@@ -284,9 +284,9 @@ function plugin_chkVersion_sitetailor() {
 }
 
 function plugin_upgrade_sitetailor() {
-    global $_CONF;
+    global $_CONF, $_ST_CONF;
 
-    require_once $_CONF['path'].'/plugins/sitetailor/upgrade.inc';
+    require_once $_CONF['path'].'/plugins/sitetailor/upgrade.php';
 
     return sitetailor_upgrade();
 }

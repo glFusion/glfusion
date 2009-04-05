@@ -52,7 +52,8 @@ function sitetailor_upgrade()
             }
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_homepage='http://www.glfusion.org' WHERE pi_name='sitetailor'",1);
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='2.0.0' WHERE pi_name='sitetailor' LIMIT 1");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='{$_ST_CONF['pi_version']}' WHERE pi_name='sitetailor' LIMIT 1");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='{$_ST_CONF['gl_version']}' WHERE pi_name='sitetailor' LIMIT 1");
             break;
     }
     if ( DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='sitetailor'") == $_ST_CONF['pi_version']) {
