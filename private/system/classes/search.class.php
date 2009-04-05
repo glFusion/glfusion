@@ -400,7 +400,7 @@ class Search {
                 $DE = explode($delim, $this->_dateEnd);
                 $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
                 $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-                $sql .= "AND (UNIX_TIMESTAMP(date) BETWEEN '{$this->_dateStart}' AND '{$this->_dateEnd}') ";
+                $sql .= "AND (date BETWEEN '{$this->_dateStart}' AND '{$this->_dateEnd}') ";
             }
         }
         if (!empty($this->_topic))
@@ -457,7 +457,7 @@ class Search {
                 $DE = explode($delim, $this->_dateEnd);
                 $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
                 $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-                $sql .= "AND (UNIX_TIMESTAMP(c.date) BETWEEN '$startdate' AND '$enddate') ";
+                $sql .= "AND (c.date BETWEEN '$startdate' AND '$enddate') ";
             }
         }
         if (!empty($this->_topic))

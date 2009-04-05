@@ -211,7 +211,7 @@ function CUSTOM_userCreate ($uid)
 
     // Note: In this case, we can trust the $uid variable to contain the new
     // account's uid.
-    DB_query("UPDATE {$_TABLES['users']} SET email = '$email', homepage = '$homepage', fullname = '$fullname' WHERE uid = $uid");
+    DB_query("UPDATE {$_TABLES['users']} SET email = '$email', homepage = '$homepage', fullname = '$fullname' WHERE uid = '$uid'");
 
     return true;
 }
@@ -288,7 +288,7 @@ function CUSTOM_userSave($uid)
             $cooktime = 0;
         }
 
-        DB_query("UPDATE {$_TABLES['users']} SET cookietimeout = $cooktime WHERE uid = $uid");
+        DB_query("UPDATE {$_TABLES['users']} SET cookietimeout = $cooktime WHERE uid = '$uid'");
     }
 }
 

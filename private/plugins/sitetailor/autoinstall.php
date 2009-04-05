@@ -103,28 +103,6 @@ function plugin_install_sitetailor()
     return true;
 }
 
-/**
-* When the install went through, give the plugin a chance for any
-* plugin-specific post-install fixes
-*
-* @return   boolean     true = proceed with install, false = an error occured
-*
-*/
-function plugin_postinstall_sitetailorXXX()
-{
-    global $_CONF, $_TABLES, $_SQL_DEF;
-
-    if ( is_array($_SQL_DEF) ) {
-        foreach ($_SQL_DEF AS $sql) {
-            DB_query($sql,1);
-            COM_errorLog("Ran query: " . $sql );
-        }
-    } else {
-        COM_errorLog("***** No post install defaults found ***** ");
-    }
-    return true;
-}
-
 
 /**
 * Automatic uninstall function for plugins
@@ -153,57 +131,5 @@ function plugin_autouninstall_sitetailor ()
         'vars'=> array()
     );
     return $out;
-}
-
-/**
-* Removes the data structures for this plugin from the glFusion database.
-* This routine will get called from the Plugin install program if user select De-Install or if Delete is used in the Plugin Editor.
-* The Plugin Installer will also call this routine upon and install error to remove anything it has created.
-* The Plugin installer will pass the optional parameter which will then double check that plugin has first been disabled.
-*
-* For this plugin, this routine will also remove the Block definition.
-*
-* Returns True if all Plugin related data is removed without error
-*
-* @param    string   $installCheck     Default is blank but if set, check if plugin is disabled first
-*
-* @return   boolean True if successful false otherwise
-*
-*/
-function plugin_uninstall_sitetailorZZZ() {
-    global $_CONF, $_DB_table_prefix, $_TABLES, $LANG_ST00, $NEWFEATURE;
-    global $pi_name, $pi_version, $gl_version, $pi_url, $base_path;
-
-    $TABLES     = array ( 'st_config','st_menus','st_menu_config','st_menus_config','st_menu_elements');
-
-    // Unregister the plugin with glFusion
-    COM_errorLog('Attempting to unregister the ' . $pi_name . ' Plugin from glFusion',1);
-    DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name = '" . $pi_name . "'",1);
-
-    // Drop Menu Editor tables
-    foreach($TABLES as $table) {
-        COM_errorLog("Removing Table $table",1);
-        DB_query("DROP TABLE " . $_DB_table_prefix . $table,1);
-    }
-
-    // Remove Security for this plugin
-    $grp_id  = DB_getItem($_TABLES['vars'], 'value', "name = '{$pi_name}_gid'");
-    $cgrp_id = DB_getItem($_TABLES['vars'],'value', "name = '{$pi_name}_cid'");
-
-    COM_errorLog("Removing $pi_name Admin Group", 1);
-    DB_query("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $grp_id",1);
-    DB_query("DELETE FROM {$_TABLES['vars']} WHERE name = '{$pi_name}_gid'");
-    DB_query("DELETE FROM {$_TABLES['groups']} WHERE grp_id = $cgrp_id",1);
-    DB_query("DELETE FROM {$_TABLES['vars']} WHERE name = '{$pi_name}_cid'");
-
-    COM_errorLog("Removing root users from admin of $pi_name");
-    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $grp_id",1);
-    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $cgrp_id",1);
-
-    COM_errorLog("Removing comments for " . $pi_name);
-    DB_query("DELETE FROM {$_TABLES['comments']} WHERE type='" . $pi_name . "'",1);
-
-    COM_errorLog('...success',1);
-    return true;
 }
 ?>

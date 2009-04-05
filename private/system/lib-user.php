@@ -64,7 +64,7 @@ function USER_deleteAccount ($uid)
             } else {
                 $rootgrp = DB_getItem ($_TABLES['groups'], 'grp_id',
                                        "grp_name = 'Root'");
-                $result = DB_query ("SELECT COUNT(DISTINCT {$_TABLES['users']}.uid) AS count FROM {$_TABLES['users']},{$_TABLES['group_assignments']} WHERE {$_TABLES['users']}.uid > 1 AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid AND ({$_TABLES['group_assignments']}.ug_main_grp_id = $rootgrp)");
+                $result = DB_query ("SELECT COUNT(DISTINCT {$_TABLES['users']}.uid) AS count FROM {$_TABLES['users']},{$_TABLES['group_assignments']} WHERE {$_TABLES['users']}.uid > 1 AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid AND ({$_TABLES['group_assignments']}.ug_main_grp_id = '$rootgrp')");
                 $A = DB_fetchArray ($result);
                 if ($A['count'] <= 1) {
                     // make sure there's at least 1 Root user left
@@ -108,9 +108,9 @@ function USER_deleteAccount ($uid)
     DB_delete ($_TABLES['userinfo'], 'uid', $uid);
 
     // avoid having orphand stories/comments by making them anonymous posts
-    DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = $uid");
-    DB_query ("UPDATE {$_TABLES['stories']} SET uid = 1 WHERE uid = $uid");
-    DB_query ("UPDATE {$_TABLES['stories']} SET owner_id = 1 WHERE owner_id = $uid");
+    DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = '$uid'");
+    DB_query ("UPDATE {$_TABLES['stories']} SET uid = 1 WHERE uid = '$uid'");
+    DB_query ("UPDATE {$_TABLES['stories']} SET owner_id = 1 WHERE owner_id = '$uid'");
 
     // delete story submissions
     DB_delete ($_TABLES['storysubmission'], 'uid', $uid);
@@ -124,12 +124,12 @@ function USER_deleteAccount ($uid)
     // in case the user owned any objects that require Admin access, assign
     // them to the Root user with the lowest uid
     $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name = 'Root'");
-    $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $rootgroup ORDER BY ug_uid LIMIT 1");
+    $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$rootgroup' ORDER BY ug_uid LIMIT 1");
     $A = DB_fetchArray ($result);
     $rootuser = $A['ug_uid'];
 
-    DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = $uid");
-    DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = $uid");
+    DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = '$uid'");
+    DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = '$uid'");
 
     // now delete the user itself
     DB_delete ($_TABLES['users'], 'uid', $uid);
@@ -594,7 +594,7 @@ function  USER_delGroup ($groupid, $uid = '')
     }
 
     if (($groupid > 0) && SEC_inGroup ($groupid, $uid)) {
-        DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $groupid AND ug_uid = $uid");
+        DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$groupid' AND ug_uid = '$uid'");
         return true;
     } else {
         return false;
@@ -691,7 +691,7 @@ function USER_getChildGroups($groupid)
     while (sizeof($to_check) > 0) {
         $thisgroup = array_pop($to_check);
         if ($thisgroup > 0) {
-            $result = DB_query("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $thisgroup");
+            $result = DB_query("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$thisgroup'");
             $numGroups = DB_numRows($result);
             for ($i = 0; $i < $numGroups; $i++) {
                 $A = DB_fetchArray($result);
