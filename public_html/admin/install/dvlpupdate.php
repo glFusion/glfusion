@@ -190,10 +190,25 @@ function glfusion_113()
     $c->del('instance_cache', 'Core');
 }
 
+function glfusion_114()
+{
+    global $_TABLES, $_CONF;
+
+    $_SQL = array();
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("glFusion 1.1.4 Development update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),1);
+        next($_SQL);
+    }
+
+    $c = config::get_instance();
+}
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_113();
+glfusion_114();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();
