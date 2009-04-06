@@ -55,10 +55,11 @@ define('DB_EXISTS',                11);
 define('SITE_DATA_MISSING',        12);
 define('SITE_DATA_ERROR',          13);
 define('LIBCUSTOM_NOT_WRITABLE',   14);
-define('CORE_UPGRADE_ERROR',       15);
-define('PLUGIN_UPGRADE_ERROR',     16);
-define('INVALID_GEEKLOG_VERSION',  17);
-define('NO_MIGRATE_GLFUSION',      18);
+define('LIBCUSTOM_NOT_FOUND',      15);
+define('CORE_UPGRADE_ERROR',       16);
+define('PLUGIN_UPGRADE_ERROR',     17);
+define('INVALID_GEEKLOG_VERSION',  18);
+define('NO_MIGRATE_GLFUSION',      19);
 
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
@@ -280,6 +281,9 @@ function _displayError($error,$step,$errorText='')
             break;
         case LIBCUSTOM_NOT_WRITABLE :
             $T->set_var('text',$LANG_INSTALL['libcustom_not_writable']);
+            break;
+        case LIBCUSTOM_NOT_FOUND :
+            $T->set_var('text',$LANG_INSTALL['libcustom_not_found']);
             break;
         case CORE_UPGRADE_ERROR :
             $T->set_var('text',$LANG_INSTALL['core_upgrade_error'].'<br /><br /><br />'.$errorText);
@@ -1237,6 +1241,9 @@ function INST_installAndContentPlugins()
             if ( $rc === false ) {
                 return _displayError(LIBCUSTOM_NOT_WRITABLE,'getsiteinformation');
             }
+        } else {
+            // no lib-custom.php.dist found
+            return _displayError(LIBCUSTOM_NOT_FOUND,'getsiteinformation');
         }
     }
 
@@ -1247,6 +1254,9 @@ function INST_installAndContentPlugins()
             if ( $rc === false ) {
                 return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
             }
+        } else {
+            // no site config found return error
+            return _displayError(SITECONFIG_NOT_FOUND,'getsiteinformation');
         }
     }
 
@@ -1628,7 +1638,7 @@ function INST_doPluginUpgrade()
 
     $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
     foreach ($stdPlugins AS $pi_name) {
-        DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='1.1.2', pi_homepage='http://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
+        DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='1.1.4', pi_homepage='http://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
     }
 
     INST_clearCache();

@@ -112,6 +112,8 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
 
     USES_lib_admin();
 
+    $retval = '';
+
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
         array('text' => $LANG_GF01['TOPIC'],  'field' => 'subject'),
@@ -455,7 +457,10 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
 }
 
 if ($op == 'lastx') {
+
     USES_lib_admin();
+
+    $retval = '';
 
     $header_arr = array(
         array('text' => $LANG_GF01['FORUM'],  'field' => 'forum'),
@@ -503,7 +508,7 @@ if ($op == 'lastx') {
             $lastdate = iconv('ISO-8859-1','UTF-8',$lastdate);
         }
 
-        if ($p['uid'] > 1) {
+        if ($P['uid'] > 1) {
             $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
         } else {
             $topicinfo = "{$LANG_GF01['STARTEDBY']} {$P['name']},";

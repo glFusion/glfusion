@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Installation did not properly detect missing siteconfig.php.dist file (Mark)
+- Advanced search using date range did not return stories or comments in
+  that date range (Mark)
 
 Site Tailor
 -----------
