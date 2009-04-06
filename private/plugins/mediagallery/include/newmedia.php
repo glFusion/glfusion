@@ -59,6 +59,7 @@ function MG_userUpload( $album_id ) {
     // build category list...
     $result = DB_query("SELECT * FROM {$_TABLES['mg_category']} ORDER BY cat_id ASC");
     $nRows = DB_numRows($result);
+    $catRow = array();
     for ( $i=0; $i < $nRows; $i++ ) {
         $catRow[$i] = DB_fetchArray($result);
     }

@@ -8,8 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2007-2008 by the following authors:                        |
+// | Copyright (C) 2007-2009 by the following authors:                        |
 // |                                                                          |
+// | Mark R. Evans      - mark AT glfusion DOT org                            |
 // | Joe Mucchiello     - joe AT throwingdice DOT com                         |
 // |                                                                          |
 // | Based on phpLib Template Library                                         |
@@ -121,7 +122,6 @@ class Template
   * @see       set_file
   */
   var $file     = array();
-
 
  /**
   * A hash of strings forming a translation table which translates variable names
@@ -797,7 +797,9 @@ class Template
             if ($this->debug & 4) {
                 echo "<p><b>parse:</b> (with scalar) target = $target, varname = $varname, append = $append</p>\n";
             }
-            $this->set_var('templatelocation',$this->location[$varname]);
+            if ( isset($this->location[$varname]) ) {
+                $this->set_var('templatelocation',$this->location[$varname]);
+            }
             $str = $this->subst($varname);
             if ($append) {
                 $this->set_var($target, $this->get_var($target) . $str);
@@ -1707,7 +1709,7 @@ class Template
     * @see    cache_write,compile_template,set_block
     *
     */
-    function compile_blocks($filestub, $parent)
+    function compile_blocks($parent)
     {
         global $_CONF;
 
@@ -1719,7 +1721,7 @@ class Template
             foreach ($matches as $m) {
                 $replace = '<?php echo $this->block_echo(\''.$m[1].'\'); ?>';
                 $str = str_replace($m[0], $replace, $str);
-                $this->compile_blocks($filestub, $m);
+                $this->compile_blocks($m);
             }
         }
 
@@ -1747,7 +1749,7 @@ class Template
     }
 
    /******************************************************************************
-    * Called by filename(), compilte_template verifies that the cache file is not out of
+    * Called by filename(), compile_template verifies that the cache file is not out of
     * date. If it is, it recreates it from the existing template file.
     *
     * As an internal function, you should never call it directly
@@ -1774,10 +1776,10 @@ class Template
         $reg = "/\s*<!--\s+BEGIN ([-\w\d_]+)\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END \\1\s+-->\s*?\n?/smU";
         $matches = array();
         if (preg_match_all($reg, $str, $matches, PREG_SET_ORDER)) {
-            $phpstub = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '__%s' . '.php';
+//            $phpstub = $TEMPLATE_OPTIONS['path_cache'] . $extra_path . $basefile . '__%s' . '.php';
             foreach ($matches as $m) {
                 $str = str_replace($m[0], '<?php echo $this->block_echo(\''.$m[1].'\'); ?>', $str);
-                $this->compile_blocks($phpstub, $m);
+                $this->compile_blocks($m);
             }
         }
 

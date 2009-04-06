@@ -114,10 +114,26 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($id != 0))
 
 // NOTIFY MAIN
 
-$notifytype = COM_applyFilter($_REQUEST['filter']);
-$op = COM_applyFilter($_REQUEST['op']);
-$show = COM_applyFilter($_GET['show'],true);
-$page = COM_applyFilter($_GET['page'],true);
+if ( isset($_REQUEST['filter']) ) {
+    $notifytype = COM_applyFilter($_REQUEST['filter']);
+} else {
+    $notifytype = '';
+}
+if ( isset($_REQUEST['op']) ) {
+    $op = COM_applyFilter($_REQUEST['op']);
+} else {
+    $op = '';
+}
+if ( isset($_GET['show']) ) {
+    $show = COM_applyFilter($_GET['show'],true);
+} else {
+    $show = 0;
+}
+if ( isset($_GET['page']) ) {
+    $page = COM_applyFilter($_GET['page'],true);
+} else {
+    $page = 0;
+}
 
 // Page Navigation Logic
 if ($show == 0) {

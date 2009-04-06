@@ -1343,7 +1343,7 @@ function forum_modPermission($forum,$uid='',$permission='') {
 function forum_canPost($forum) {
     global $_CONF, $CONF_FORUM,$_USER;
 
-    if ( $CONF_FORUM['registered_to_post'] && (!isset($_USER) || $_USER['uid'] < 2 )) {
+    if ( $CONF_FORUM['registered_to_post'] && (!isset($_USER['uid']) || $_USER['uid'] < 2 )) {
         return false;
     }
     if (SEC_inGroup('Root') || SEC_hasRights('forum.edit')) {

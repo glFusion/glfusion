@@ -276,6 +276,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Violet',
     'WHITE' => 'White',
     'BLACK' => 'Black',
+    'ID'    => 'ID',
     'b_help' => 'Bold text: [b]text[/b]',
     'i_help' => 'Italic text: [i]text[/i]',
     'u_help' => 'Underline text: [u]text[/u]',

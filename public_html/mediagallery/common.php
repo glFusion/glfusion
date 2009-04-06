@@ -107,14 +107,6 @@ if ( $_MG_CONF['album_display_rows'] < 1 ) {
     $_MG_CONF['album_display_rows'] = 9;
 }
 
-$glversion = explode(".", VERSION);
-
-if ( $glversion[1] < 5 ) {
-    if ( !defined('XHTML')) {
-        define('XHTML','');
-    }
-}
-
 $result = DB_query("SELECT pi_version FROM {$_TABLES['plugins']} WHERE pi_name='mediagallery'",1);
 $row = DB_fetchArray($result,true);
 $mg_installed_version = $row[0];

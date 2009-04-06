@@ -1040,6 +1040,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if ( is_array($what) ) {
         $theme_what = array();
     }
+
+
     $theme_what         = $what;
     $theme_pagetitle    = $pagetitle;
     $theme_headercode   = $headercode;
@@ -1325,6 +1327,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $content = ob_get_contents();
     ob_end_clean();
+
 
     $theme = new Template( $_CONF['path_layout'] );
     $theme->set_file( array(
