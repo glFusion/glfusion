@@ -2274,14 +2274,14 @@ function phpblock_mg_randommedia(){
     $sql = "SELECT ma.album_id,m.media_id,m.media_filename,m.media_title FROM {$_TABLES['mg_albums']} as a LEFT JOIN {$_TABLES['mg_media_albums']} as ma
             on a.album_id=ma.album_id LEFT JOIN {$_TABLES['mg_media']} as m on ma.media_id=m.media_id WHERE
             m.media_type=0 AND a.enable_random=1 AND a.hidden=0 " . COM_getPermSQL('and') . " ORDER BY " . $randomSelect . " LIMIT 1";
-COM_errorLog($sql);
+
     $result = DB_query( $sql,1 );
     $nRows  = DB_numRows( $result );
     if ( $nRows > 0 ) {
         $row    = DB_fetchArray( $result );
         $gotit = true;
     } else {
-COM_errorLog("no rows found");
+
         $gotit = false;
     }
 
