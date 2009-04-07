@@ -156,8 +156,7 @@ if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
 * If needed, add our PEAR path to the list of include paths
 *
 */
-if( !$_CONF['have_pear'] )
-{
+if( !$_CONF['have_pear'] ) {
     $curPHPIncludePath = get_include_path();
     if( defined( 'PATH_SEPARATOR' )) {
         $separator = PATH_SEPARATOR;
@@ -291,14 +290,11 @@ require_once $_CONF['path_system'].'imglib/lib-image.php';
 
 $usetheme = $inputHandler->getVar('filename','usetheme','post','');
 
-if( !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme ))
-{
+if( !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme )) {
     $_CONF['theme'] = $usetheme;
     $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
     $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
-}
-else if( $_CONF['allow_user_themes'] == 1 )
-{
+} else if( $_CONF['allow_user_themes'] == 1 ) {
     $theme = $inputHandler->getVar('filename',$_CONF['cookie_theme'],'cookie','');
     if (!empty($theme) && empty( $_USER['theme'] )) {
         if( is_dir( $_CONF['path_themes'] . $theme )) {
@@ -338,11 +334,16 @@ else if( $_CONF['allow_user_themes'] == 1 )
 * Include theme functions file
 */
 
-// Include theme functions file which may/may not do anything
+// Include theme functions file if it exists
 
 if (file_exists($_CONF['path_layout'] . 'functions.php')) {
     require_once $_CONF['path_layout'].'functions.php';
 }
+
+/*
+ * glFusion uses an enhanced theme API, set as version 2.
+ * Version 1 supports the old legacy table based themes.
+ */
 
 if (!isset($themeAPI) ) {
     $themeAPI = 1;
@@ -574,8 +575,7 @@ if (empty($LANG_DIRECTION)) {
 
 COM_switchLocaleSettings();
 
-if( setlocale( LC_ALL, $_CONF['locale'] ) === false )
-{
+if( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
 }
 
@@ -586,12 +586,9 @@ if( setlocale( LC_ALL, $_CONF['locale'] ) === false )
 *
 */
 
-if( !COM_isAnonUser() )
-{
+if( !COM_isAnonUser() ) {
     $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
-}
-else
-{
+} else {
     $_GROUPS = SEC_getUserGroups( 1 );
 }
 
@@ -604,7 +601,6 @@ else
 
 $_RIGHTS = explode( ',', SEC_getUserPermissions() );
 $topic = $inputHandler->getVar('strict','topic',array('get','post'));
-
 
 // +---------------------------------------------------------------------------+
 // | HTML WIDGETS                                                              |
@@ -631,45 +627,29 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
 {
     global $_BLOCK_TEMPLATE, $_COM_VERBOSE, $_CONF;
 
-    if( $_COM_VERBOSE )
-    {
+    if( $_COM_VERBOSE ) {
         COM_errorLog( "_BLOCK_TEMPLATE[$blockname] = " . $_BLOCK_TEMPLATE[$blockname], 1 );
     }
 
-    if( !empty( $_BLOCK_TEMPLATE[$blockname] ))
-    {
+    if( !empty( $_BLOCK_TEMPLATE[$blockname] )) {
         $templates = explode( ',', $_BLOCK_TEMPLATE[$blockname] );
-        if( $which == 'header' )
-        {
-            if( !empty( $templates[0] ))
-            {
+        if( $which == 'header' ) {
+            if( !empty( $templates[0] )) {
                 $template = $templates[0];
-            }
-            else
-            {
+            } else {
                 $template = 'blockheader.thtml';
             }
-        }
-        else
-        {
-            if( !empty( $templates[1] ))
-            {
+        } else {
+            if( !empty( $templates[1] )) {
                 $template = $templates[1];
-            }
-            else
-            {
+            } else {
                 $template = 'blockfooter.thtml';
             }
         }
-    }
-    else
-    {
-        if( $which == 'header' )
-        {
+    } else {
+        if( $which == 'header' ) {
             $template = 'blockheader.thtml';
-        }
-        else
-        {
+        } else {
             $template = 'blockfooter.thtml';
         }
     }
@@ -678,19 +658,16 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
     // position specific then look to see if there is a position specific
     // override.
     $templateLC = strtolower($template);
-    if( !empty($position) && ( strpos($templateLC, $position) === false ) )
-    {
+    if( !empty($position) && ( strpos($templateLC, $position) === false ) ) {
         // Trim .thtml from the end.
         $positionSpecific = substr($template, 0, strlen($template) - 6);
         $positionSpecific .= '-' . $position . '.thtml';
-        if( file_exists( $_CONF['path_layout'] . $positionSpecific ) )
-        {
+        if( file_exists( $_CONF['path_layout'] . $positionSpecific ) ) {
             $template = $positionSpecific;
         }
     }
 
-    if( $_COM_VERBOSE )
-    {
+    if( $_COM_VERBOSE ) {
         COM_errorLog( "Block template for the $which of $blockname is: $template", 1 );
     }
 

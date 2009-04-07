@@ -192,6 +192,24 @@ function glfusion_113()
     return 'glFusion v1.1.3svn updates successfully applied.<br />';
 }
 
+function glfusion_114()
+{
+    global $_TABLES, $_CONF;
+
+    $_SQL = array();
+
+    $_SQL[] = "UPDATE {$_TABLES['conf_values']} SET type='passwd' WHERE name='mail_smtp_password' LIMIT 1";
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("glFusion 1.1.4 Development update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),1);
+        next($_SQL);
+    }
+
+    $c = config::get_instance();
+}
+
 function glfusion_120()
 {
     global $_TABLES, $_CONF;
@@ -200,12 +218,11 @@ function glfusion_120()
     return 'glFusion v1.2.0.svn - No updates necessary.<br />';
 }
 
-
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-$retval .= 'Performing glFusion v1.1.3 updates...<br />';
+$retval .= 'Performing glFusion v1.1.4 updates...<br />';
 
-$retval .= glfusion_113();
+$retval .= glfusion_114();
 
 $retval .= 'Performing glFusion v1.2.0.svn updates...<br />';
 

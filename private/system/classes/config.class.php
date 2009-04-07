@@ -680,9 +680,10 @@ class config {
         $t = new Template($GLOBALS['_CONF']['path_layout'] . 'admin/config');
         $t -> set_file('element', 'config_element.thtml');
 
-        $blocks = array('delete-button', 'text-element', 'placeholder-element',
-                        'select-element', 'list-element', 'unset-param',
-                        'keyed-add-button', 'unkeyed-add-button');
+        $blocks = array('delete-button', 'text-element','passwd-element',
+                        'placeholder-element','select-element', 'list-element',
+                        'unset-param','keyed-add-button', 'unkeyed-add-button');
+
         if ( is_array($blocks) ) {
             foreach ($blocks as $block) {
                 $t->set_block('element', $block);
@@ -746,6 +747,8 @@ class config {
             return $t->finish($t->parse('output', 'unset-param'));
         } elseif ($type == "text") {
             return $t->finish($t->parse('output', 'text-element'));
+        } elseif ($type == "passwd") {
+            return $t->finish($t->parse('output', 'passwd-element'));
         } elseif ($type == "placeholder") {
             return $t->finish($t->parse('output', 'placeholder-element'));
         } elseif ($type == 'select') {

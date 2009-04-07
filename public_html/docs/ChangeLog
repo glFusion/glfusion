@@ -8,10 +8,18 @@ v1.2.0
 
 v1.1.4
 ------
+- Implemented 'passwd' configuration type, this allows passwords in the
+  configuration screen to be properly masked (Mark)
+- Story submission does not clear the Site Tailor menu cache which results
+  in the topic story count being wrong (Mark) (story.class.php)
 - Installation did not properly detect missing siteconfig.php.dist file (Mark)
 - Advanced search using date range did not return stories or comments in
   that date range (Mark)
 - Several small E_ALL fixes (Mark)
+
+Media Gallery
+-------------
+- Random image block did not change (Mark)
 
 Site Tailor
 -----------
