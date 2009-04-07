@@ -60,7 +60,7 @@ function install_config($site_url)
     $c->add('mail_backend','mail','select',0,1,20,60,TRUE);
     $c->add('mail_sendmail_path','','text',0,1,NULL,70,TRUE);
     $c->add('mail_sendmail_args','','text',0,1,NULL,80,TRUE);
-    $c->add('mail_smtp_host','','text',0,1,NULL,90,TRUE);
+    $c->add('mail_smtp_host','','passwd',0,1,NULL,90,TRUE);
     $c->add('mail_smtp_port','25','text',0,1,NULL,100,TRUE);
     $c->add('mail_smtp_auth',FALSE,'select',0,1,0,110,TRUE);
     $c->add('mail_smtp_username','','text',0,1,NULL,120,TRUE);

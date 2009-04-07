@@ -733,6 +733,16 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.3' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.3';
             $done = true;
+        case '1.1.3' :
+            require_once $_CONF['path'] . 'sql/updates/mysql_1.1.3_to_1.1.4.php';
+            list($rc,$errors) = INST_updateDB($_SQL);
+            if ( $rc === false ) {
+                return array($rc,$errors);
+            }
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.4',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.4' WHERE name='glfusion'",1);
+            $current_fusion_version = '1.1.4';
+            $done = true;
             break;
         default:
             $done = true;

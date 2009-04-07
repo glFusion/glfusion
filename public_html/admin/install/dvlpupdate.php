@@ -196,6 +196,8 @@ function glfusion_114()
 
     $_SQL = array();
 
+    $_SQL[] = "UPDATE {$_TABLES['conf_values']} SET type='passwd' WHERE name='mail_smtp_password' LIMIT 1";
+
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
         COM_errorLOG("glFusion 1.1.4 Development update: Executing SQL => " . current($_SQL));

@@ -11,6 +11,14 @@
 </td></tr>
 <!-- END text-element -->
 
+<!-- BEGIN passwd-element -->
+<tr><td class="key">{display_name} {doc_link} {unset_link}</td>
+<td>
+<input type="password" class="opt" name="{name}" style="width:300px" value="{value}"{xhtml}>
+{delete}
+</td></tr>
+<!-- END passwd-element -->
+
 <!-- BEGIN placeholder-element -->
 <tr><td class="key">{display_name}</td><td>
 <input type="hidden" name="{name}" value="{value}"{xhtml}>
