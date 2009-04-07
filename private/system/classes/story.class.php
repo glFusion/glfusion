@@ -734,6 +734,7 @@ class Story
         }
 
         CACHE_remove_instance('whatsnew');
+        CACHE_remove_instance('stmenu');
         return STORY_SAVED;
     }
 
