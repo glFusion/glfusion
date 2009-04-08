@@ -12,6 +12,11 @@ v1.1.4
 
 Media Gallery
 -------------
+- 0000428 Wiki type keywords - Added [alink] auto tag to allow text links
+  to albums (Mark)
+- 0000437 Slideshow autotag does not honor caption option in config. (Mark)
+- Improved error handling when a user tries to access a media item they
+  do not have permission to view (Mark)
 - Random image block did not change (Mark)
 
 Site Tailor

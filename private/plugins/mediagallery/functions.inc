@@ -590,7 +590,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
         return $content;
     }
     if ($op == 'tagname' ) {
-        return array('album','media','img','slideshow','fslideshow','video','audio','download','image','oimage','mlink','playall');
+        return array('album','media','img','slideshow','fslideshow','video','audio','download','image','oimage','mlink','alink','playall');
     } else if ($op == 'parse') {
         /*
          * Process the auto tag to remove any embedded &nbsp;
@@ -772,7 +772,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
             $align = '';
         }
         // sanity check incase the album has been deleted or something...
-        if ( $autotag['tag'] != 'media' && $autotag['tag'] != 'image' && $autotag['tag'] != 'video' && $autotag['tag'] != 'audio' && $autotag['tag'] != 'download' && $autotag['tag'] != 'oimage' && $autotag['tag'] != 'img' && $autotag['tag'] != 'mlink' && $autotag['tag'] != 'playall') {
+        if ( $autotag['tag'] != 'media' && $autotag['tag'] != 'image' && $autotag['tag'] != 'video' && $autotag['tag'] != 'audio' && $autotag['tag'] != 'download' && $autotag['tag'] != 'oimage' && $autotag['tag'] != 'img' && $autotag['tag'] != 'mlink' && $autotag['tag'] != 'alink' && $autotag['tag'] != 'playall') {
             if ( !isset($MG_albums[$parm1]->id) ) {
                 $link = '';
                 $content = str_replace ($autotag['tagstr'], $link, $content);
@@ -1414,7 +1414,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                 }
                 // if none of the above, assume height and width both specified.
 
-                if ($caption == '' ) {
+                if ($caption == '' && $_MG_CONF['autotag_caption'] ) {
                     $caption = $MG_albums[$aid]->title;
                 }
                 $captionHTML = '<br' . XHTML . '><span style="width:' . $width . 'px;font-style:italic;font-size: smaller;text-indent:0;">' . $caption . '</span>' . LB;
@@ -1468,7 +1468,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                     $content = str_replace ($autotag['tagstr'], $link, $content);
                     return $content;
                 }
-                if ($caption == '' ) {
+                if ($caption == '' && $_MG_CONF['autotag_caption'] ) {
                     $caption = $MG_albums[$parm1]->title;
                 }
                 $T->set_file (array('tag'      => 'autotag_ss.thtml'));
@@ -1744,6 +1744,25 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                     $content = str_replace ($autotag['tagstr'], $link, $content);
                 }
                 return $content;
+                break;
+            case 'alink' :
+                if ( $parm1 == '' || $parm1 == 0 ) {
+                    $side_count--;
+                    return $content;
+                }
+                if ( !isset($MG_albums[$parm1]->id) || $MG_albums[$parm1]->access == 0 ) {
+                    $link = '';
+                    $content = str_replace ($autotag['tagstr'], $link, $content);
+                    $side_count--;
+                    return $content;
+                }
+                if ( $caption == '' ) {
+                    $caption = $MG_albums[$parm1]->title;
+                }
+                $link = '<a href="'.$_MG_CONF['site_url'] . '/album.php?aid=' . $MG_albums[$parm1]->id .'">'.$caption.'</a>';
+                $content = str_replace ($autotag['tagstr'], $link, $content);
+                return $content;
+
                 break;
             case 'media' :
             /* image, oimage and img are depreciated */
