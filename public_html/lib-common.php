@@ -6,7 +6,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -7296,6 +7296,16 @@ if ( is_array($_PLUGINS) ) {
     }
 }
 
+if ( @file_exists($_CONF['path_language'].'custom') ) {
+    $langfilespec = $_CONF['path_language'].'custom/'. $_CONF['language'] . '*.php';
+    $langfiles = @glob($langfilespec, GLOB_NOESCAPE|GLOB_NOSORT);
+    if (@is_array($langfiles)) {
+        foreach($langfiles as $langfile) {
+            require_once($langfile);
+        }
+    }
+}
+
 if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 && !SEC_inGroup('Root') ) {
     if (empty($_CONF['site_disabled_msg'])) {
         header("HTTP/1.1 503 Service Unavailable");
@@ -7570,6 +7580,7 @@ function js_out(){
     if ( is_array($files) ) {
         foreach($files as $file){
             js_load($file);
+            print "\n";
         }
     }
 
