@@ -142,7 +142,16 @@ function SESS_sessionCheck()
                         $rip    = DB_fetchArray($result);
                         $remote_ip = $rip['remote_ip'];
                     }
-                    if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($remote_ip <> $_SERVER['REMOTE_ADDR'])) {
+                    $remote_ip_array = explode('.',$remote_ip);
+                    $server_ip_array = explode('.',$_SERVER['REMOTE_ADDR']);
+                    if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                         $remote_ip_array[1] == $server_ip_array[1] &&
+                         $remote_ip_array[2] == $server_ip_array[2] ) {
+                        $ipmatch = true;
+                    } else {
+                        $ipmatch = false;
+                    }
+                    if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($ipmatch == false)) {
                         // User may have modified their UID in cookie, ignore them
                         setcookie ($_CONF['cookie_name'], '', time() - 10000,
                                    $_CONF['cookie_path'], $_CONF['cookiedomain'],
@@ -192,8 +201,17 @@ function SESS_sessionCheck()
                     $rip    = DB_fetchArray($result);
                     $remote_ip = $rip['remote_ip'];
                     $cookie_password = $_COOKIE[$_CONF['cookie_password']];
+                    $remote_ip_array = explode('.',$remote_ip);
+                    $server_ip_array = explode('.',$_SERVER['REMOTE_ADDR']);
+                    if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                         $remote_ip_array[1] == $server_ip_array[1] &&
+                         $remote_ip_array[2] == $server_ip_array[2] ) {
+                        $ipmatch = true;
+                    } else {
+                        $ipmatch = false;
+                    }
                 }
-                if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($remote_ip <> $_SERVER['REMOTE_ADDR'])) {
+                if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($ipmatch == false)) {
                     // User could have modified UID in cookie, don't do shit
                     setcookie ($_CONF['cookie_name'], '', time() - 10000,
                                $_CONF['cookie_path'], $_CONF['cookiedomain'],
@@ -296,9 +314,9 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
 
     // Create new session
     if (empty ($md5_sessid)) {
-        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, uid, start_time, remote_ip) VALUES ($sessid, $userid, $currtime, '$remote_ip')";
+        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '$userid', '$currtime', '$remote_ip')";
     } else {
-        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, md5_sess_id, uid, start_time, remote_ip) VALUES ($sessid, '$md5_sessid', $userid, $currtime, '$remote_ip')";
+        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, md5_sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '$md5_sessid', '$userid', '$currtime', '$remote_ip')";
     }
     $result = DB_query($sql);
     if ($result) {
