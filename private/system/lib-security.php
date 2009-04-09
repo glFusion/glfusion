@@ -848,7 +848,7 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
                 // Add to remote users:
                 $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id',
                                          "grp_name='Remote Users'");
-                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ($remote_grp, $uid)");
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', '$uid')");
                 return 3; // Remote auth precludes usersubmission,
                           // and integrates user activation, see?
             } else {
@@ -910,7 +910,7 @@ function SEC_addUserToGroup($uid, $gname)
     global $_TABLES, $_CONF;
 
     $remote_grp = DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name='". $gname ."'");
-    DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ($remote_grp, $uid)");
+    DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', '$uid')");
 }
 
 /**
@@ -1111,13 +1111,13 @@ function SEC_createToken($ttl = 1200)
     DB_Query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='$pageURL'";
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='{$_USER['uid']}' AND urlfor='$pageURL'";
     DB_Query($sql);
 
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), {$_USER['uid']}, '$pageURL', $ttl)";
+           . "VALUES ('$token', NOW(), '{$_USER['uid']}', '$pageURL', '$ttl')";
     DB_Query($sql);
 
     $last_token = $token;
@@ -1223,11 +1223,11 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
     DB_Query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='$action'";
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='{$_USER['uid']}' AND urlfor='$action'";
     DB_Query($sql);
 
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), {$_USER['uid']}, '$action', $ttl)";
+           . "VALUES ('$token', NOW(), '{$_USER['uid']}', '$action', '$ttl')";
     DB_Query($sql);
 
     /* And return the token to the user */
