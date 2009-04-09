@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -513,7 +516,7 @@ function SESS_getUserDataFromId($userid)
 
     $sql = "SELECT *,format FROM {$_TABLES['dateformats']},{$_TABLES["users"]},{$_TABLES['userprefs']} "
      . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
-     . "{$_TABLES['userprefs']}.uid = $userid AND {$_TABLES['users']}.uid = '$userid'";
+     . "{$_TABLES['userprefs']}.uid = '$userid' AND {$_TABLES['users']}.uid = '$userid'";
 
     if(!$result = DB_query($sql)) {
         $userdata = array("error" => "1");
