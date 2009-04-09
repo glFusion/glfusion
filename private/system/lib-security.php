@@ -708,7 +708,9 @@ function SEC_authenticate($username, $password, &$uid)
 {
     global $_CONF, $_TABLES, $LANG01;
 
-    $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE username='$username' AND ((remoteservice is null) or (remoteservice = ''))");
+    $escaped_name = addslashes($username);
+
+    $result = DB_query("SELECT status, passwd, email, uid FROM {$_TABLES['users']} WHERE username='$escaped_name' AND ((remoteservice is null) or (remoteservice = ''))");
     $tmp = DB_error();
     $nrows = DB_numRows($result);
 
