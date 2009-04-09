@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Add CRLF between each JavaScript file (Mark)
+- Additional injects checks (Mark)
+- 0000422 Use of adveditor in block editor does not permit use of image insert
+  or file upload connector (Mark)
 - Implemented 'passwd' configuration type, this allows passwords in the
   configuration screen to be properly masked (Mark)
 - Story submission does not clear the Site Tailor menu cache which results
