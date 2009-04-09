@@ -180,6 +180,8 @@ function mediagallery_upgrade()
         case "1.6.0" :
         case "1.6.1" :
         case "1.6.2" :
+        case "1.6.3" :
+        case "1.6.4" :
             // nothing to do yet...
         default :
             if ( $_DB_dbms != 'mssql' ) {
