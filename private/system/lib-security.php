@@ -750,7 +750,7 @@ function SEC_checkUserStatus($userid)
     global $_CONF, $_TABLES;
 
     // Check user status
-    $status = DB_getItem($_TABLES['users'], 'status', "uid=$userid");
+    $status = DB_getItem($_TABLES['users'], 'status', "uid='$userid'");
 
     // only do redirects if we aren't on users.php in a valid mode (logout or
     // default)

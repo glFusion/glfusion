@@ -89,7 +89,7 @@ function SESS_sessionCheck()
     // We MUST do this up here, so it's set even if the cookie's not present.
     $user_logged_in = 0;
     $logged_in = 0;
-    $userdata = Array();
+    $userdata = array();
 
     // Check for a cookie on the users's machine.  If the cookie exists, build
     // an array of the users info and setup the theme.
@@ -101,7 +101,7 @@ function SESS_sessionCheck()
         }
 
         $userid = SESS_getUserIdFromSession($sessid, $_CONF['session_cookie_timeout'], $_SERVER['REMOTE_ADDR'], $_CONF['cookie_ip']);
-
+        $userid = intval($userid);
         if ($_SESS_VERBOSE) {
             COM_errorLog("Got $userid as User ID from the session ID",1);
         }
@@ -129,7 +129,7 @@ function SESS_sessionCheck()
                 if (empty ($userid) || ($userid == 'deleted')) {
                     unset ($userid);
                 } else {
-                    $userid = COM_applyFilter ($userid, true);
+                    $userid = intval(COM_applyFilter ($userid, true));
                     $cookie_password = '';
                     $userpass = '';
                     if ($userid > 1) {
@@ -137,7 +137,7 @@ function SESS_sessionCheck()
                             $cookie_password = $_COOKIE[$_CONF['cookie_password']];
                         }
                         $userpass = DB_getItem ($_TABLES['users'], 'passwd',
-                                                "uid = $userid");
+                                                "uid = '$userid'");
                         $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid='$userid'",1);
                         $rip    = DB_fetchArray($result);
                         $remote_ip = $rip['remote_ip'];
@@ -182,12 +182,12 @@ function SESS_sessionCheck()
             if (empty ($userid) || ($userid == 'deleted')) {
                 unset ($userid);
             } else {
-                $userid = COM_applyFilter ($userid, true);
+                $userid = intval(COM_applyFilter ($userid, true));
                 $cookie_password = '';
                 $userpass = '';
                 if ($userid > 1) {
                     $userpass = DB_getItem ($_TABLES['users'], 'passwd',
-                                            "uid = $userid");
+                                            "uid = '$userid'");
                     $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid='$userid'",1);
                     $rip    = DB_fetchArray($result);
                     $remote_ip = $rip['remote_ip'];
