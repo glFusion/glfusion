@@ -64,7 +64,9 @@ if( $_CONF['allow_user_photo'] )
 */
 function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01;
+    global $_CONF, $_TABLES, $_USER, $pageHandle, $inputHandler, $LANG01;
+
+    $encoding = COM_getEncodingt();
 
     $parts = explode( '/', $_SERVER['PHP_SELF'] );
     $page = array_pop( $parts );
@@ -73,11 +75,6 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     $commentbar = new Template( $_CONF['path_layout'] . 'comment' );
     $commentbar->set_file( array( 'commentbar' => 'commentbar.thtml' ));
-    $commentbar->set_var( 'xhtml', XHTML );
-    $commentbar->set_var( 'site_url', $_CONF['site_url'] );
-    $commentbar->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
-    $commentbar->set_var( 'layout_url', $_CONF['layout_url'] );
-
     $commentbar->set_var( 'lang_comments', $LANG01[3] );
     $commentbar->set_var( 'lang_refresh', $LANG01[39] );
     $commentbar->set_var( 'lang_reply', $LANG01[60] );
@@ -96,7 +93,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var('story_title', $cmt_title);
 
     if( $type == 'article' ) {
-        $articleUrl = COM_buildUrl( $_CONF['site_url']
+        $articleUrl = $pageHandle->buildUrl( $_CONF['site_url']
                                     . "/article.php?story=$sid" );
         $commentbar->set_var( 'story_link', $articleUrl );
         $commentbar->set_var( 'article_url', $articleUrl );
@@ -117,7 +114,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
         list($plgurl, $plgid) = PLG_getCommentUrlId($type);
         $commentbar->set_var( 'story_link', "$plgurl?$plgid=$sid" );
-        $cmt_title = htmlspecialchars($cmt_title);
+        $cmt_title = htmlspecialchars($cmt_title,ENT_COMPAT,$encoding);
     }
     $commentbar->set_var('comment_title', $cmt_title);
     if( !empty( $_USER['uid'] ) && ( $_USER['uid'] > 1 )) {
@@ -153,15 +150,19 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         $commentbar->set_var( 'parent_url',
                               $_CONF['site_url'] . '/comment.php' );
         $hidden = '';
-        if( $_REQUEST['mode'] == 'view' ) {
-            $hidden .= '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>';
-            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>';
-        }
-        else if( $_REQUEST['mode'] == 'display' ) {
-            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['pid'])) . '"' . XHTML . '>';
+
+        $mode = $inputHandler->getVar('strict','mode',array('post','get'),'');
+        $cid  = $inputHandler->getVar('strict','cid',array('post','get'),'');
+        $pid  = $inputHandler->getVar('strict','pid',array('post','get'),'');
+
+        if( $mode == 'view' ) {
+            $hidden .= '<input type="hidden" name="cid" value="' . htmlspecialchars($cid) . '"' . XHTML . '>';
+            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars($cid) . '"' . XHTML . '>';
+        } else if( $mode == 'display' ) {
+            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars($pid) . '"' . XHTML . '>';
         }
         $commentbar->set_var( 'hidden_field', $hidden .
-                '<input type="hidden" name="mode" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['mode'])) . '"' . XHTML . '>' );
+                '<input type="hidden" name="mode" value="' . htmlspecialchars($mode) . '"' . XHTML . '>' );
     } else if( $type == 'article' ) {
         $commentbar->set_var( 'parent_url',
                               $_CONF['site_url'] . '/article.php' );
@@ -223,10 +224,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                                 'thread'  => 'thread.thtml'  ));
 
     // generic template variables
-    $template->set_var( 'xhtml', XHTML );
-    $template->set_var( 'site_url', $_CONF['site_url'] );
-    $template->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
-    $template->set_var( 'layout_url', $_CONF['layout_url'] );
     $template->set_var( 'lang_authoredby', $LANG01[42] );
     $template->set_var( 'lang_on', $LANG01[36] );
     $template->set_var( 'lang_permlink', $LANG01[120] );
@@ -284,7 +281,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             if ($A['uid'] == $B['uid']) {
                 $editname = $A['username'];
             } else {
-                $editname = DB_getItem($_TABLES['users'], 'username', "uid={$B['cid']}");
+                $editname = DB_getItem($_TABLES['users'], 'username', "uid='{$B['uid']}'");
             }
             //add edit info to text
             $A['comment'] .= LB . '<span class="comment-edit">' . $LANG03[30] . ' '

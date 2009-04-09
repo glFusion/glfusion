@@ -32,7 +32,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('lib-common.php');
+require_once 'lib-common.php';
 
 /**
 * Switch language in a URL.
@@ -112,9 +112,9 @@ if (isset ($_SERVER['HTTP_REFERER'])) {
 // if not allowed, just ignore and return
 if ($_CONF['allow_user_language'] == 1) {
 
-    COM_setArgNames (array ('lang'));
-
-    $lang = strtolower (COM_applyFilter (COM_getArgument ('lang')));
+    $inputHandler->setArgNames (array ('lang'));
+    $lang = strtolower($inputHandler->getVar('strict','lang','get','');
+//    $lang = strtolower (COM_applyFilter (COM_getArgument ('lang')));
     $lang = preg_replace( '/[^a-z0-9\-_]/', '', $lang );
     $oldlang = COM_getLanguageId ();
 
@@ -150,6 +150,6 @@ if (empty ($ret_url)) {
     $ret_url = $_CONF['site_url'] . '/';
 }
 
-header ("Location: $ret_url");
+$pageHandle->redirect($ret_url);
 
 ?>

@@ -179,6 +179,24 @@ class config {
         return array_key_exists($group, $this->config_array);
     }
 
+    function get($param_name,$group='Core') {
+        global $_CONF;
+
+        // future - check $_CONF first, if set return that
+        // otherwise return from the config array
+        //
+        // the goal will be to retire the $_CONF global as
+        // the standard method to retrieve configuration data
+        //
+        // this will allow the siteconfig.php to have $_CONF
+        // settings that will always take precedence of the
+        // online configuration.
+
+        if (isset($this->config_array[$group][$param_name]) )
+            return $this->config_array[$group][$param_name];
+        return '';
+    }
+
     /**
      * This function sets a configuration variable to a value in the database
      * and in the current array. If the variable does not already exist,
@@ -509,7 +527,7 @@ class config {
      */
     function get_ui($grp, $sg='0', $change_result=null)
     {
-        global $_CONF, $LANG_CONFIG, $LANG_configsubgroups;
+        global $_CONF, $LANG_CONFIG, $LANG_configsubgroups, $pageHandle;
 
         if(!array_key_exists($grp, $LANG_configsubgroups)) {
             $LANG_configsubgroups[$grp] = array();
@@ -609,17 +627,19 @@ class config {
             }
         }
 
-        $display  = COM_siteHeader('none', $LANG_CONFIG['title']);
+        $pageHandle->setPageTitle($LANG_CONFIG['title']);
+        $pageHandle->setShowNavigationBlocks(false);
+        $pageHandle->setShowExtraBlocks(false);
+
         $t->set_var('config_menu',$this->_UI_configmanager_menu($grp,$sg));
         if ($change_result != null AND $change_result !== array()) {
             $t->set_var('change_block',$this->_UI_get_change_block($change_result));
         } else {
             $t->set_var('show_changeblock','none');
         }
-        $display .= $t->finish($t->parse("OUTPUT", "main"));
-        $display .= COM_siteFooter(false);
-
-        return $display;
+        $pageHandle->addContent( $t->finish($t->parse("OUTPUT", "main")));
+        $pageHandle->displayPage();
+        exit;
     }
 
     function _UI_get_change_block($changes)
@@ -658,17 +678,9 @@ class config {
 
     function _UI_perm_denied()
     {
-        global $_USER, $MESSAGE;
+        global $_USER, $MESSAGE, $pageHandle;
 
-        $display = COM_siteHeader('menu', $MESSAGE[30])
-            . COM_startBlock($MESSAGE[30], '',
-                             COM_getBlockTemplate ('_msg_block', 'header'))
-            . $MESSAGE[96]
-            . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
-            . COM_siteFooter();
-        COM_accessLog("User {$_USER['username']} tried to illegally access the config administration screen.");
-
-        return $display;
+        $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[96],'config administration');
     }
 
     function _UI_get_conf_element($group, $name, $display_name, $type, $val,

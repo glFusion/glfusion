@@ -78,7 +78,7 @@ $_USER = SESS_sessionCheck();
 */
 function SESS_sessionCheck()
 {
-    global $_CONF, $_TABLES, $_USER, $_SESS_VERBOSE;
+    global $_CONF, $_TABLES, $_USER, $_SESS_VERBOSE, $inputHandler;
 
     if ($_SESS_VERBOSE) {
         COM_errorLog("***Inside SESS_sessionCheck***",1);
@@ -89,19 +89,19 @@ function SESS_sessionCheck()
     // We MUST do this up here, so it's set even if the cookie's not present.
     $user_logged_in = 0;
     $logged_in = 0;
-    $userdata = Array();
+    $userdata = array();
 
     // Check for a cookie on the users's machine.  If the cookie exists, build
     // an array of the users info and setup the theme.
 
-    if (isset ($_COOKIE[$_CONF['cookie_session']])) {
-        $sessid = COM_applyFilter ($_COOKIE[$_CONF['cookie_session']]);
+    $sessid = $inputHandler->getVar('strict',$_CONF['cookie_session'],'cookie','');
+    if ( $sessid != '' ) {
         if ($_SESS_VERBOSE) {
             COM_errorLog("got $sessid as the session id from lib-sessions.php",1);
         }
 
         $userid = SESS_getUserIdFromSession($sessid, $_CONF['session_cookie_timeout'], $_SERVER['REMOTE_ADDR'], $_CONF['cookie_ip']);
-
+        $userid = intval($userid);
         if ($_SESS_VERBOSE) {
             COM_errorLog("Got $userid as User ID from the session ID",1);
         }
@@ -124,42 +124,43 @@ function SESS_sessionCheck()
             }
         } else {
             // Session probably expired, now check permanent cookie
-            if (isset ($_COOKIE[$_CONF['cookie_name']])) {
-                $userid = $_COOKIE[$_CONF['cookie_name']];
-                if (empty ($userid) || ($userid == 'deleted')) {
-                    unset ($userid);
-                } else {
-                    $userid = COM_applyFilter ($userid, true);
-                    $cookie_password = '';
-                    $userpass = '';
-                    if ($userid > 1) {
-                        if (array_key_exists('cookie_password', $_CONF)) {
-                            $cookie_password = $_COOKIE[$_CONF['cookie_password']];
-                        }
-                        $userpass = DB_getItem ($_TABLES['users'], 'passwd',
-                                                "uid = $userid");
-                        $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid='$userid'",1);
-                        $rip    = DB_fetchArray($result);
-                        $remote_ip = $rip['remote_ip'];
+            $userid = $inputHandler->getVar('strict',$_CONF['cookie_name'],'cookie',0);
+            if (empty ($userid) || ($userid == 'deleted') || $userid == '') {
+                unset ($userid);
+            } else {
+                $userid = $inputHandler->filterVar('integer',$userid,'',0);
+                $cookie_password = '';
+                $userpass = '';
+                if ($userid > 1) {
+                    if (array_key_exists('cookie_password', $_CONF)) {
+                        $cookie_password = $_COOKIE[$_CONF['cookie_password']];
                     }
-                    if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($remote_ip <> $_SERVER['REMOTE_ADDR'])) {
-                        // User may have modified their UID in cookie, ignore them
-                        setcookie ($_CONF['cookie_name'], '', time() - 10000,
-                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                                   $_CONF['cookiesecure']);
-                    } else if ($userid > 1) {
-                        // Check user status
-                        $status = SEC_checkUserStatus ($userid);
-                        if (($status == USER_ACCOUNT_ACTIVE) ||
-                                ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
-                            $user_logged_in = 1;
+                    $userpass = DB_getItem ($_TABLES['users'], 'passwd',
+                                            "uid = '$userid'");
+                    $remote_ip_array = explode('.',$remote_ip);
+                    $server_ip_array = explode('.',$_SERVER['REMOTE_ADDR']);
+                    if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                         $remote_ip_array[1] == $server_ip_array[1] &&
+                         $remote_ip_array[2] == $server_ip_array[2] ) {
+                        $ipmatch = true;
+                    } else {
+                        $ipmatch = false;
+                    }
+                }
+                if (empty ($cookie_password) || ($cookie_password <> $userpass)) {
+                    // User may have modified their UID in cookie, ignore them
+                } else if ($userid > 1) {
+                    // Check user status
+                    $status = SEC_checkUserStatus ($userid);
+                    if (($status == USER_ACCOUNT_ACTIVE) ||
+                            ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
+                        $user_logged_in = 1;
 
-                            $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
-                            SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-                            $userdata = SESS_getUserDataFromId($userid);
-                            $_USER = $userdata;
-                            $_USER['auto_login'] = true;
-                        }
+                        $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
+                        SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+                        $userdata = SESS_getUserDataFromId($userid);
+                        $_USER = $userdata;
+                        $_USER['auto_login'] = true;
                     }
                 }
             }
@@ -171,47 +172,46 @@ function SESS_sessionCheck()
 
         // Check if the persistent cookie exists
 
-        if (isset ($_COOKIE[$_CONF['cookie_name']])) {
-            // Session cookie doesn't exist but a permanent cookie does.
-            // Start a new session cookie;
-            if ($_SESS_VERBOSE) {
-                COM_errorLog('perm cookie found from lib-sessions.php',1);
+        $userid = $inputHandler->getVar('strict',$_CONF['cookie_name'],'cookie','');
+        if (empty ($userid) || ($userid == 'deleted') || $userid == '') {
+            unset ($userid);
+        } else {
+            $userid = $inputHandler->filterVar('integer',$userid,'',0);
+            $cookie_password = '';
+            $userpass = '';
+            if ($userid > 1) {
+                $userpass = DB_getItem ($_TABLES['users'], 'passwd',
+                                        "uid = '$userid'");
+                $cookie_password = $inputHandler->getVar('strict',$_CONF['cookie_password'],'cookie','');
+                $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid='$userid'",1);
+                $rip    = DB_fetchArray($result);
+                $remote_ip = $rip['remote_ip'];
+                $remote_ip_array = explode('.',$remote_ip);
+                $server_ip_array = explode('.',$_SERVER['REMOTE_ADDR']);
+                if ( $remote_ip_array[0] == $server_ip_array[0] &&
+                     $remote_ip_array[1] == $server_ip_array[1] &&
+                     $remote_ip_array[2] == $server_ip_array[2] ) {
+                    $ipmatch = true;
+                } else {
+                    $ipmatch = false;
+                }
             }
 
-            $userid = $_COOKIE[$_CONF['cookie_name']];
-            if (empty ($userid) || ($userid == 'deleted')) {
-                unset ($userid);
-            } else {
-                $userid = COM_applyFilter ($userid, true);
-                $cookie_password = '';
-                $userpass = '';
-                if ($userid > 1) {
-                    $userpass = DB_getItem ($_TABLES['users'], 'passwd',
-                                            "uid = $userid");
-                    $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid='$userid'",1);
-                    $rip    = DB_fetchArray($result);
-                    $remote_ip = $rip['remote_ip'];
-                    $cookie_password = $_COOKIE[$_CONF['cookie_password']];
-                }
-                if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($remote_ip <> $_SERVER['REMOTE_ADDR'])) {
-                    // User could have modified UID in cookie, don't do shit
-                    setcookie ($_CONF['cookie_name'], '', time() - 10000,
-                               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                               $_CONF['cookiesecure']);
-                } else if ($userid > 1) {
-                    // Check user status
-                    $status = SEC_checkUserStatus($userid);
-                    if (($status == USER_ACCOUNT_ACTIVE) ||
-                            ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
-                        $user_logged_in = 1;
+            if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($ipmatch == false)) {
+                // User could have modified UID in cookie, don't do shit
+            } else if ($userid > 1) {
+                // Check user status
+                $status = SEC_checkUserStatus($userid);
+                if (($status == USER_ACCOUNT_ACTIVE) ||
+                        ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
+                    $user_logged_in = 1;
 
-                        // Create new session and write cookie
-                        $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
-                        SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-                        $userdata = SESS_getUserDataFromId($userid);
-                        $_USER = $userdata;
-                        $_USER['auto_login'] = true;
-                    }
+                    // Create new session and write cookie
+                    $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
+                    SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+                    $userdata = SESS_getUserDataFromId($userid);
+                    $_USER = $userdata;
+                    $_USER['auto_login'] = true;
                 }
             }
         }
@@ -296,9 +296,9 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
 
     // Create new session
     if (empty ($md5_sessid)) {
-        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, uid, start_time, remote_ip) VALUES ($sessid, $userid, $currtime, '$remote_ip')";
+        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '$userid', '$currtime', '$remote_ip')";
     } else {
-        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, md5_sess_id, uid, start_time, remote_ip) VALUES ($sessid, '$md5_sessid', $userid, $currtime, '$remote_ip')";
+        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, md5_sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '$md5_sessid', '$userid', '$currtime', '$remote_ip')";
     }
     $result = DB_query($sql);
     if ($result) {
@@ -495,7 +495,7 @@ function SESS_getUserDataFromId($userid)
 
     $sql = "SELECT *,format FROM {$_TABLES['dateformats']},{$_TABLES["users"]},{$_TABLES['userprefs']} "
      . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
-     . "{$_TABLES['userprefs']}.uid = $userid AND {$_TABLES['users']}.uid = '$userid'";
+     . "{$_TABLES['userprefs']}.uid = '$userid' AND {$_TABLES['users']}.uid = '$userid'";
 
     if(!$result = DB_query($sql)) {
         $userdata = array("error" => "1");

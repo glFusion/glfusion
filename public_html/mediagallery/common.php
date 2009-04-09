@@ -92,7 +92,7 @@ while ($row = DB_fetchArray($result)) {
 
 // read user prefs, if any...
 if ( isset($_USER['uid']) && $_USER['uid'] > 1 ) {
-    $result = DB_query("SELECT * FROM " . $_TABLES['mg_userprefs'] . " WHERE uid=" . $_USER['uid'], 1);
+    $result = DB_query("SELECT * FROM " . $_TABLES['mg_userprefs'] . " WHERE uid='" . $_USER['uid']."'", 1);
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {
         $_MG_USERPREFS = DB_fetchArray($result);
@@ -120,7 +120,7 @@ $ratedIds = array();
 if ( $uid == 1 ) {
     $sql = "SELECT media_id FROM {$_TABLES['mg_rating']} WHERE (ip_address='$ip')";
 } else {
-    $sql = "SELECT media_id FROM {$_TABLES['mg_rating']} WHERE (uid=$uid OR ip_address='$ip')";
+    $sql = "SELECT media_id FROM {$_TABLES['mg_rating']} WHERE (uid='$uid' OR ip_address='$ip')";
 }
 $result = DB_query($sql,1);
 while ( $row = DB_fetchArray($result) ) {

@@ -334,20 +334,11 @@ class ListFactory {
      */
     function ExecuteQueries()
     {
-        if ( isset($_POST['order']) ) {
-            $this->_sort_arr['field'] = COM_applyFilter($_POST['order']);
-        } elseif (isset($_GET['order']) ) {
-            $this->_sort_arr['field'] = COM_applyFilter($_GET['order']);
-        } else {
-            $this->_sort_arr['field'] = $this->_def_sort_arr['field'];
-        }
-        if ( isset($_POST['direction']) ) {
-            $this->_sort_arr['direction'] = $_POST['direction'] == 'asc' ? 'asc' : 'desc';
-        } elseif (isset($_GET['direction']) ) {
-            $this->_sort_arr['direction'] = $_GET['direction'] == 'asc' ? 'asc' : 'desc';
-        } else {
-            $this->_sort_arr['direction'] = $this->_def_sort_arr['direction'];
-        }
+        global $inputHandler;
+
+        $this->_sort_arr['field'] = $inputHandler->getVar('strict','order',array('post','get'),$this->_def_sort_arr['field']);
+        $this->_sort_arr['direction'] = $inputHandler->getVar('strict','direction',array('post','get'),'desc') == 'asc' ? 'asc' : 'desc';
+
         if (is_numeric($this->_sort_arr['field'])) {
             $ord = $this->_def_sort_arr['field'];
             $this->_sort_arr['field'] = SQL_TITLE;
@@ -359,42 +350,29 @@ class ListFactory {
         } else {
             $order_sql = ' ORDER BY ' . addslashes($ord) . ' ' . addslashes(strtoupper($this->_sort_arr['direction']));
         }
-        if ( isset($_POST['results']) ) {
-            $this->_per_page = COM_applyFilter($_POST['results'], true);
-        } elseif (isset($_GET['results']) ) {
-            $this->_per_page = COM_applyFilter($_GET['results'], true);
-        }
+        $inputHandler->getVar('integer','results',array('post','get'),0);
 
         // Calculate the limits for each query
 
         $num_query_results = $this->_per_page - count($this->_preset_rows);
         $pp_total = count($this->_preset_rows);
 
-        if ( isset($_POST['page']) ) {
-            $this->_page = COM_applyFilter($_POST['page'], true);
-        } elseif (isset($_GET['page']) ) {
-            $this->_page = COM_applyFilter($_GET['page'], true);
-        } else {
-            $this->_page = 1;
-        }
-        if ( (isset($_POST['np']) && $_POST['np'] == 1 ) || (isset($_GET['np']) && $_GET['np'] == 1 ) ) {
+        $inputHandler->getVar('integer','page',array('post','get'),1);
+
+        if ( $inputHandler->getVar('integer','np',array('post','get'),0) == 1 ) {
             $this->_page++;
         }
         $prevPage = 0;
-        if ( (isset($_POST['pp']) && $_POST['pp'] == 1 ) || (isset($_GET['pp']) && $_GET['pp'] == 1 ) ) {
+        if ( $inputHandler->getVar('integer','pp',array('post','get'),0) == 1 ) {
             $this->_page--;
             $prevPage = 1;
         }
         if ( $this->_page < 1 ) {
             $this->_page = 1;
         }
-        if ( isset($_POST['i']) ) {
-            $encode = urldecode($_POST['i']);
-        } elseif (isset($_GET['i']) ) {
-            $encode = urldecode($_GET['i']);
-        } else {
-            $encode = '';
-        }
+
+        $encode = urldecode($inputHandler->getVar('text','i',array('post','get')));
+
         if ( $encode != '' ) {
             $decode = base64_decode($encode);
             $vars = explode(',',$decode);
@@ -403,14 +381,8 @@ class ListFactory {
                 $_post_offset[$name] = intval($value);
             }
         }
+        $encode = urldecode($inputHandler->getVar('text','j',array('post','get')));
 
-        if ( isset($_POST['j']) ) {
-            $encode = urldecode($_POST['j']);
-        } elseif (isset($_GET['j']) ) {
-            $encode = urldecode($_GET['j']);
-        } else {
-            $encode = '';
-        }
         if ( $encode != '' ) {
             $decode = base64_decode($encode);
             $vars = explode(',',$decode);
@@ -449,8 +421,8 @@ class ListFactory {
              * Calculate the offset based on how many we can fit on a page
              */
             $name = $limits[$i]['name'];
-            if ( isset($_post_offset[$name]) && isset($_REQUEST['np']) && $_REQUEST['np'] == 1 ) {
-                $limits[$i]['offset'] = COM_applyFilter($_post_offset[$name],true) + COM_applyFilter($_post_pp[$name],true);
+            if ( isset($_post_offset[$name]) && $inputHandler->getVar('integer','np',array('post','get'),0) == 1 ) {
+                $limits[$i]['offset'] = $inputHandler->filterVar('integer',$_post_offset[$name],'',0) + $inputHandler->filterVar('integer',$_post_pp[$name],'',0);
             } else {
                 $limits[$i]['offset'] = ($this->_page - 1) * $limits[$i]['pp'];
                 if ( $limits[$i]['offset'] < 0 ) {

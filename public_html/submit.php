@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -38,12 +38,8 @@
 // +--------------------------------------------------------------------------+
 
 require_once 'lib-common.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
+USES_lib_story();
 
 /**
 * Shows a given submission form
@@ -121,7 +117,7 @@ function submissionform($type='story', $mode = '', $topic = '')
 */
 function submitstory($topic = '')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG12, $LANG24;
+    global $_CONF, $_TABLES, $_USER, $LANG12, $LANG24,$inputHandler;
 
     $retval = '';
 
@@ -157,8 +153,8 @@ function submitstory($topic = '')
     if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) &&
         file_exists ($_CONF['path_layout'] . 'submit/submitstory_advanced.thtml')) {
         $storyform->set_file('storyform','submitstory_advanced.thtml');
-        $ae_uid = addslashes(COM_applyFilter($_USER['uid'],true));
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
+        $ae_uid = addslashes($inputHandler->getVar('integer',$_USER['uid'],''));
+        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='$ae_uid' AND urlfor='advancededitor'";
         DB_Query($sql,1);
         if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
             $storyform->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
@@ -311,7 +307,7 @@ function sendNotification ($table, $story)
 */
 function savestory ($A)
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER, $pageHandle;
 
     $retval = '';
 
@@ -332,7 +328,7 @@ function savestory ($A)
     if( $result == STORY_NO_ACCESS_TOPIC )
     {
         // user doesn't have access to this topic - bail
-        $retval = COM_refresh ($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     } elseif( ( $result == STORY_SAVED ) || ( $result == STORY_SAVED_SUBMISSION ) ) {
         if (isset ($_CONF['notification']) &&
                 in_array ('story', $_CONF['notification']))
@@ -342,10 +338,10 @@ function savestory ($A)
 
         if( $result == STORY_SAVED )
         {
-            $retval = COM_refresh( COM_buildUrl( $_CONF['site_url']
+            $retval = $pageHandle->redirect( $pageHandle->buildUrl( $_CONF['site_url']
                                . '/article.php?story=' . $story->getSid() ) );
         } else {
-            $retval = COM_refresh( $_CONF['site_url'] . '/index.php?msg=2' );
+            $retval = $pageHandle->redirect( $_CONF['site_url'] . '/index.php?msg=2' );
         }
     }
 
@@ -361,23 +357,20 @@ function savestory ($A)
 */
 function savesubmission($type, $A)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG12;
+    global $_CONF, $_TABLES, $_USER, $LANG12, $pageHandle;
 
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'submit');
 
     $last = COM_checkSpeedlimit ('submit');
 
     if ($last > 0) {
-        $retval = COM_siteHeader ();
-        $retval .= COM_startBlock ($LANG12[26], '',
+        $retval = COM_startBlock ($LANG12[26], '',
                            COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[30]
             . $last
             . $LANG12[31]
-            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . COM_siteFooter ();
-
-        return $retval;
+            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $pageHandle->displayError($retval);
     }
 
     if (!empty ($type) && ($type != 'story')) {
@@ -394,22 +387,23 @@ function savesubmission($type, $A)
         } elseif (empty ($retval)) {
             // plugin should include its own redirect - but in case handle
             // it here and redirect to the main page
-            return COM_refresh ($_CONF['site_url'] . '/index.php');
+            $pageHandle->redirect ($_CONF['site_url'] . '/index.php');
         } else {
-            return $retval;
+            $pageHandle->redirect($retval);
+//            return $retval;
         }
     }
 
     if (!empty ($A['title']) && !empty ($A['introtext'])) {
         $retval = savestory ($A);
     } else {
-        $retval = COM_siteHeader ();
-        $retval .= COM_startBlock ($LANG12[22], '',
+        $retval = COM_startBlock ($LANG12[22], '',
                            COM_getBlockTemplate ('_msg_block', 'header'))
             . $LANG12[23] // return missing fields error
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
-            . submissionform($type)
-            . COM_siteFooter ();
+            . submissionform($type);
+        $pageHandle->addContent($retval);
+        $pageHandle->displayPage();
     }
 
     return $retval;
@@ -417,20 +411,10 @@ function savesubmission($type, $A)
 
 // MAIN
 
-$display = '';
+$pageHandle->setShowExtraBlocks(false);
 
-// note that 'type' _may_ come in through $_GET even when the
-// other parameters are in $_POST
-if (isset ($_POST['type'])) {
-    $type = COM_applyFilter ($_POST['type']);
-} else {
-    $type = COM_applyFilter ($_GET['type']);
-}
-
-$mode = '';
-if (isset ($_REQUEST['mode'])) {
-    $mode = COM_applyFilter ($_REQUEST['mode']);
-}
+$type = $inputHandler->getVar('strict','type',array('post','get'),'');
+$mode = $inputHandler->getVar('strict','mode','request','');
 
 if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     // purge any tokens we created for the advanced editor
@@ -438,47 +422,44 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
         $_USER['uid'] = 1;
     }
     $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
-    DB_Query($sql,1);
+    DB_query($sql,1);
     if (empty ($_USER['username']) &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
-        $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     } else {
         if ($type == 'story') {
             $msg = PLG_itemPreSave ($type, $_POST);
             if (!empty ($msg)) {
-                $_POST['mode'] =  $LANG12[32];
+                $mode =  $LANG12[32];
                 $subForm = submitstory($topic);
-                $display .= COM_siteHeader ('menu', $pagetitle)
-                         . COM_errorLog ($msg, 2)
-                         . $subForm
-                         . COM_siteFooter();
-                echo $display;
+                $pageHandle->setPageTitle($pagetitle);
+                $pageHandle->addContent(COM_errorLog ($msg, 2));
+                $pageHandle->addContent($subForm);
+                $pageHandle->displayPage();
                 exit;
             }
         }
-        $display .= savesubmission ($type, $_POST);
+        $pageHandle->addContent(savesubmission ($type, $_POST));
     }
 } else {
     if ((strlen ($type) > 0) && ($type <> 'story')) {
         if (SEC_hasRights ("$type.edit") ||
             SEC_hasRights ("$type.admin"))  {
-            echo COM_refresh ($_CONF['site_admin_url']
+            $pageHandle->redirect($_CONF['site_admin_url']
                     . "/plugins/$type/index.php?mode=edit");
             exit;
         }
     } elseif (SEC_hasRights ('story.edit')) {
         $topic = '';
-        if (isset ($_REQUEST['topic'])) {
-            $topic = '&topic=' . urlencode(COM_applyFilter($_REQUEST['topic']));
+        $topic = $inputHandler->getVar('strict','topic','request','');
+        if (!empty($topic)) {
+            $topic = '&topic=' . urlencode($topic);
         }
-        echo COM_refresh ($_CONF['site_admin_url']
+        $pageHandle->redirect($_CONF['site_admin_url']
                 . '/story.php?mode=edit' . $topic);
         exit;
     }
-    $topic = '';
-    if (isset ($_REQUEST['topic'])) {
-        $topic = COM_applyFilter ($_REQUEST['topic']);
-    }
+    $topic = $inputHandler->getVar('strict','topic','request','');
 
     switch ($type) {
         case 'story':
@@ -488,12 +469,8 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
             $pagetitle = '';
             break;
     }
-    $subForm = submissionform($type,$mode,$topic);
-    $display .= COM_siteHeader ('menu', $pagetitle);
-    $display .= $subForm;
-    $display .= COM_siteFooter();
+    $pageHandle->setPageTitle($pagetitle);
+    $pageHandle->addContent(submissionform($type,$mode,$topic));
+    $pageHandle->displayPage();
 }
-
-echo $display;
-
 ?>

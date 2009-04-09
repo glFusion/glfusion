@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -35,7 +38,8 @@
 // +--------------------------------------------------------------------------+
 
 require_once 'lib-common.php';
-require_once $_CONF['path_system'] . 'lib-user.php';
+
+USES_lib_user();
 
 // Set this to true to have this script generate various debug messages in
 // error.log
@@ -249,18 +253,19 @@ function edituser()
 */
 function confirmAccountDelete ($form_reqid)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04;
+    global $_CONF, $_TABLES, $_USER, $LANG04, $inputHandler, $pageHandle;
 
     if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'), array ($form_reqid, $_USER['uid'])) != 1) {
         // not found - abort
-        return COM_refresh ($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
 
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
-    if (empty($_POST['old_passwd']) ||
-            (SEC_encryptPassword($_POST['old_passwd']) != $_USER['passwd'])) {
-         return COM_refresh($_CONF['site_url']
+    $old_passwd = $inputHandler->getVar('strict','old_passwd','post','');
+    if (empty($old_passwd) ||
+            (SEC_encryptPassword($old_passwd) != $_USER['passwd'])) {
+         $pageHandle->redirect($_CONF['site_url']
                             . '/usersettings.php?msg=84');
     }
 
@@ -270,8 +275,9 @@ function confirmAccountDelete ($form_reqid)
 
     $retval = '';
 
-    $retval .= COM_siteHeader ('menu', $LANG04[97]);
-    $retval .= COM_startBlock ($LANG04[97], '',
+    $pageHandle->setPageTitle($LANG04[97]);
+
+    $retval = COM_startBlock ($LANG04[97], '',
                                COM_getBlockTemplate ('_msg_block', 'header'));
     $retval .= '<p>' . $LANG04[98] . '</p>' . LB;
     $retval .= '<form action="' . $_CONF['site_url']
@@ -283,9 +289,9 @@ function confirmAccountDelete ($form_reqid)
             . '"' . XHTML . '>' . LB;
     $retval .= '</div></form>' . LB;
     $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $retval .= COM_siteFooter ();
 
-    return $retval;
+    $pageHandle->addContent($retval);
+    $pageHandle->displayPage();
 }
 
 /**
@@ -297,19 +303,19 @@ function confirmAccountDelete ($form_reqid)
 */
 function deleteUserAccount ($form_reqid)
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER,$pageHandle;
 
     if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'),
                   array ($form_reqid, $_USER['uid'])) != 1) {
         // not found - abort
-        return COM_refresh ($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
 
     if (!USER_deleteAccount ($_USER['uid'])) {
-        return COM_refresh ($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
 
-    return COM_refresh ($_CONF['site_url'] . '/index.php?msg=57');
+    $pageHandle->redirect($_CONF['site_url'] . '/index.php?msg=57');
 }
 
 /**
@@ -758,7 +764,7 @@ function emailAddressExists ($email, $uid)
 */
 function handlePhotoUpload ($delete_photo = '')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG24;
+    global $_CONF, $_TABLES, $_USER, $LANG24, $pageHandle;
 
     require_once ($_CONF['path_system'] . 'classes/upload.class.php');
 
@@ -779,14 +785,13 @@ function handlePhotoUpload ($delete_photo = '')
                                          'image/png'   => '.png'
                                  )      );
     if (!$upload->setPath ($_CONF['path_images'] . 'userphotos')) {
-        $display = COM_siteHeader ('menu', $LANG24[30]);
-        $display .= COM_startBlock ($LANG24[30], '',
-                COM_getBlockTemplate ('_msg_block', 'header'));
-        $display .= $upload->printErrors (false);
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                        'footer'));
-        $display .= COM_siteFooter ();
-        echo $display;
+        $pageHandle->setPageTitle($LANG24[30]);
+        $pageHandle->addContent(COM_startBlock ($LANG24[30], '',
+                COM_getBlockTemplate ('_msg_block', 'header')));
+        $pageHandle->addContent($upload->printErrors (false));
+        $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                        'footer')));
+        $pageHandle->displayPage();
         exit; // don't return
     }
 
@@ -843,14 +848,13 @@ function handlePhotoUpload ($delete_photo = '')
         $upload->uploadFiles ();
 
         if ($upload->areErrors ()) {
-            $display = COM_siteHeader ('menu', $LANG24[30]);
-            $display .= COM_startBlock ($LANG24[30], '',
-                    COM_getBlockTemplate ('_msg_block', 'header'));
-            $display .= $upload->printErrors (false);
-            $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
-                                                            'footer'));
-            $display .= COM_siteFooter ();
-            echo $display;
+            $pageHandle->setPageTitle($LANG24[30]);
+            $pageHandle->addContent(COM_startBlock ($LANG24[30], '',
+                    COM_getBlockTemplate ('_msg_block', 'header')));
+            $pageHandle->addContent($upload->printErrors (false));
+            $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block',
+                                                            'footer')));
+            $pageHandle->displayPage();
             exit; // don't return
         }
     } else if (!$delete_photo && !empty ($curphoto)) {
@@ -868,7 +872,8 @@ function handlePhotoUpload ($delete_photo = '')
 */
 function saveuser($A)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG24, $_US_VERBOSE;
+    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG24, $_US_VERBOSE,
+           $pageHandle, $inputHandler;
 
     if ($_US_VERBOSE) {
         COM_errorLog('**** Inside saveuser in usersettings.php ****', 1);
@@ -888,7 +893,7 @@ function saveuser($A)
     if (!isset($A['cooktime'])) {
         $A['cooktime'] = 0;
     } else {
-        $A['cooktime'] = COM_applyFilter ($A['cooktime'], true);
+        $A['cooktime'] = $inputHandler->filterVar('integer',$A['cooktime'],'',0);
     }
     // If empty or invalid - set to user default
     // So code after this does not fail the user password required test
@@ -903,7 +908,7 @@ function saveuser($A)
         if (empty($A['old_passwd']) ||
                 (SEC_encryptPassword($A['old_passwd']) != $_USER['passwd'])) {
 
-            return COM_refresh ($_CONF['site_url']
+            $pageHandle->redirect($_CONF['site_url']
                                 . '/usersettings.php?msg=83');
         }
         if ($_CONF['custom_registration'] &&
@@ -915,17 +920,17 @@ function saveuser($A)
                 if (!is_numeric($ret)) {
                     $ret = 97;
                 }
-                return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
+                $pageHandle->redirect("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
             }
         }
     }
 
     // no need to filter the password as it's encoded anyway
     if ($_CONF['allow_username_change'] == 1) {
-        $A['new_username'] = COM_applyFilter ($A['new_username']);
+        $A['new_username'] = $inputHandler->filterVar('strict',$A['new_username'],'','');
         if (!empty ($A['new_username']) &&
                 ($A['new_username'] != $_USER['username'])) {
-            $A['new_username'] = addslashes ($A['new_username']);
+            $A['new_username'] = $inputHandler->prepareForDB($A['new_username']);
             if (DB_count ($_TABLES['users'], 'username', $A['new_username']) == 0) {
                 if ($_CONF['allow_user_photo'] == 1) {
                     $photo = DB_getItem ($_TABLES['users'], 'photo',
@@ -936,21 +941,20 @@ function saveuser($A)
                         $imgpath = $_CONF['path_images'] . 'userphotos/';
                         if (rename ($imgpath . $photo,
                                     $imgpath . $newphoto) === false) {
-                            $display = COM_siteHeader ('menu', $LANG04[21]);
-                            $display .= COM_errorLog ('Could not rename userphoto "' . $photo . '" to "' . $newphoto . '".');
-                            $display .= COM_siteFooter ();
+                            $pageHandle->setPageTitle($LANG04[21]);
+                            $pageHandle->addContent(COM_errorLog ('Could not rename userphoto "' . $photo . '" to "' . $newphoto . '".'));
+                            $pageHandle->displayPage();
 
-                            return $display;
                         }
                         DB_change ($_TABLES['users'], 'photo',
-                               addslashes ($newphoto), "uid", $_USER['uid']);
+                               $inputHandler->prepareForDB($newphoto), "uid", $_USER['uid']);
                     }
                 }
 
                 DB_change ($_TABLES['users'], 'username', $A['new_username'],
                            "uid", $_USER['uid']);
             } else {
-                return COM_refresh ($_CONF['site_url']
+                $pageHandle->redirect ($_CONF['site_url']
                         . '/usersettings.php?msg=51');
             }
         }
@@ -966,25 +970,25 @@ function saveuser($A)
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
     }
 
-    $A['email'] = COM_applyFilter ($A['email']);
-    $A['email_conf'] = COM_applyFilter ($A['email_conf']);
-    $A['homepage'] = COM_applyFilter ($A['homepage']);
+    $A['email'] = $inputHandler->filterVar('strict',$A['email'],'');
+    $A['email_conf'] = $inputHandler->filterVar('strict',$A['email_conf'],'');
+    $A['homepage'] = $inputHandler->filterVar('strict',$A['homepage'],'');
 
     // basic filtering only
-    $A['fullname'] = strip_tags (COM_stripslashes ($A['fullname']));
-    $A['location'] = strip_tags (COM_stripslashes ($A['location']));
-    $A['sig'] = strip_tags (COM_stripslashes ($A['sig']));
-    $A['about'] = strip_tags (COM_stripslashes ($A['about']));
-    $A['pgpkey'] = strip_tags (COM_stripslashes ($A['pgpkey']));
+    $A['fullname'] = strip_tags ($A['fullname']);
+    $A['location'] = strip_tags ($A['location']);
+    $A['sig'] = strip_tags ($A['sig']);
+    $A['about'] = strip_tags ($A['about']);
+    $A['pgpkey'] = strip_tags ($A['pgpkey']);
 
     if (!COM_isEmail ($A['email'])) {
-        return COM_refresh ($_CONF['site_url']
+        $pageHandle->redirect ($_CONF['site_url']
                 . '/usersettings.php?msg=52');
     } else if ($A['email'] !== $A['email_conf']) {
-        return COM_refresh ($_CONF['site_url']
+        $pageHandle->redirect ($_CONF['site_url']
                 . '/usersettings.php?msg=78');
     } else if (emailAddressExists ($A['email'], $_USER['uid'])) {
-        return COM_refresh ($_CONF['site_url']
+        $pageHandle->redirect ($_CONF['site_url']
                 . '/usersettings.php?msg=56');
     } else {
 
@@ -1003,10 +1007,10 @@ function saveuser($A)
                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
                           $_CONF['cookiesecure']);
             } elseif (SEC_encryptPassword($A['old_passwd']) != $_USER['passwd']) {
-                return COM_refresh ($_CONF['site_url']
+                $pageHandle->redirect ($_CONF['site_url']
                                     . '/usersettings.php?msg=68');
             } elseif ($A['passwd'] != $A['passwd_conf']) {
-                return COM_refresh ($_CONF['site_url']
+                $pageHandle->redirect ($_CONF['site_url']
                                     . '/usersettings.php?msg=67');
             }
         }
@@ -1075,7 +1079,7 @@ function saveuser($A)
             COM_errorLog('**** Leaving saveuser in usersettings.php ****', 1);
         }
 
-        return COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid='
+        $pageHandle->redirect ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid='
                             . $_USER['uid'] . '&amp;msg=5');
     }
 }
@@ -1092,36 +1096,20 @@ function saveuser($A)
 */
 function userprofile ($user, $msg = 0)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09, $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09, $LANG_LOGIN,
+           $pageHandle, $inputHandler;
 
     $retval = '';
 
     if (empty ($_USER['username']) &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['profileloginrequired'] == 1))) {
-        $retval .= COM_siteHeader ('menu');
-        $retval .= COM_startBlock ($LANG_LOGIN[1], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'));
-        $login = new Template($_CONF['path_layout'] . 'submit');
-        $login->set_file (array ('login'=>'submitloginrequired.thtml'));
-        $login->set_var ( 'xhtml', XHTML );
-        $login->set_var ('login_message', $LANG_LOGIN[2]);
-        $login->set_var ('site_url', $_CONF['site_url']);
-        $login->set_var ('site_admin_url', $_CONF['site_admin_url']);
-        $login->set_var ('layout_url', $_CONF['layout_url']);
-        $login->set_var ('lang_login', $LANG_LOGIN[3]);
-        $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-        $login->parse ('output', 'login');
-        $retval .= $login->finish ($login->get_var('output'));
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-        $retval .= COM_siteFooter ();
-
-        return $retval;
+        $pageHandle->displayLoginRequired( );
     }
 
     $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,homepage,about,location,pgpkey,photo,email FROM {$_TABLES['userinfo']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['users']}.uid = '$user'");
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
-        return COM_refresh ($_CONF['site_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
     $A = DB_fetchArray ($result);
 
@@ -1329,7 +1317,7 @@ function userprofile ($user, $msg = 0)
 */
 function savepreferences($A)
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER, $inputHandler, $pageHandle;
 
     if (isset ($A['noicons']) && ($A['noicons'] == 'on')) {
         $A['noicons'] = 1;
@@ -1362,7 +1350,7 @@ function savepreferences($A)
         $A['showonline'] = 0;
     }
 
-    $A['maxstories'] = COM_applyFilter ($A['maxstories'], true);
+    $A['maxstories'] = $inputHandler->filterVar('integer',$A['maxstories'],'');
     if (empty ($A['maxstories'])) {
         $A['maxstories'] = 0;
     } else if ($A['maxstories'] > 0) {
@@ -1411,20 +1399,20 @@ function savepreferences($A)
     }
 
     if (isset ($A['tzid'])) {
-        $A['tzid'] = COM_applyFilter ($A['tzid']);
+        $A['tzid'] = $inputHandler->filterVar('strict',$A['tzid'],'');
     } else {
         $A['tzid'] = '';
     }
 
     if (isset($A['theme'])) {
-        $A['theme'] = COM_applyFilter($A['theme']);
+        $A['theme'] = $inputHandler->filterVar('strict',$A['theme'],'');
     }
     if (empty($A['theme'])) {
         $A['theme'] = $_CONF['theme'];
     }
 
     if (isset($A['language'])) {
-        $A['language'] = COM_applyFilter($A['language']);
+        $A['language'] = $inputHandler->filterVar('strict',$A['language'],'');
     }
     if (empty($A['language'])) {
         $A['language'] = $_CONF['language'];
@@ -1445,7 +1433,7 @@ function savepreferences($A)
                $_CONF['cookie_path'], $_CONF['cookiedomain'],
                $_CONF['cookiesecure']);
 
-    $A['dfid'] = COM_applyFilter ($A['dfid'], true);
+    $A['dfid'] = $inputHandler->filterVar('integer',$A['dfid'],'');
 
     DB_query("UPDATE {$_TABLES['userprefs']} SET noicons='{$A['noicons']}', willing='{$A['willing']}', dfid='{$A['dfid']}', tzid='{$A['tzid']}', emailfromadmin='{$A['emailfromadmin']}', emailfromuser='{$A['emailfromuser']}', showonline='{$A['showonline']}' WHERE uid='{$_USER['uid']}'");
 
@@ -1454,19 +1442,19 @@ function savepreferences($A)
     }
     DB_save($_TABLES['userindex'],"uid,tids,aids,boxes,noboxes,maxstories,etids","'{$_USER['uid']}','$tids','$aids','$selectedblocks','{$A['noboxes']}',{$A['maxstories']},'$etids'");
 
-    $A['commentmode'] = COM_applyFilter ($A['commentmode']);
+    $A['commentmode'] = $inputHandler->filterVar('strict',$A['commentmode'],'');
     if (empty ($A['commentmode'])) {
         $A['commentmode'] = $_CONF['comment_mode'];
     }
     $A['commentmode'] = addslashes ($A['commentmode']);
 
-    $A['commentorder'] = COM_applyFilter ($A['commentorder']);
+    $A['commentorder'] = $inputHandler->filterVar('strict',$A['commentorder'],'');
     if (empty ($A['commentorder'])) {
         $A['commentorder'] = 'ASC';
     }
     $A['commentorder'] = addslashes ($A['commentorder']);
 
-    $A['commentlimit'] = COM_applyFilter ($A['commentlimit'], true);
+    $A['commentlimit'] = $inputHandler->filterVar('integer',$A['commentlimit'],'');
     if ($A['commentlimit'] <= 0) {
         $A['commentlimit'] = $_CONF['comment_limit'];
     }
@@ -1477,81 +1465,82 @@ function savepreferences($A)
 }
 
 // MAIN
-$mode = '';
-if (isset($_POST['btncancel']) AND $_POST['btncancel'] == $LANG_ADMIN['cancel']) {
-    echo COM_refresh($_CONF['site_url']);
-    exit;
-} else if (isset($_POST['btnsubmit']) AND ($_POST['btnsubmit'] == $LANG04[96]) && ($_POST['mode'] != 'deleteconfirmed')) {
-    $mode = 'confirmdelete';
-} else if (isset ($_POST['mode'])) {
-    $mode = COM_applyFilter ($_POST['mode']);
-} else if (isset ($_GET['mode'])) {
-    $mode = COM_applyFilter ($_GET['mode']);
-}
 
-$display = '';
+$pageHandle->setShowExtraBlocks(false);
+
+$btncancel = $inputHandler->getVar('strict','btncancel','post','');
+$btnsubmit = $inputHandler->getVar('strict','btnsubmit','post','');
+$mode      = $inputHandler->getVar('strict','mode',array('post','get'),'');
+
+if ($btncancel == $LANG_ADMIN['cancel']) {
+    $pageHandle->redirect($_CONF['site_url']);
+    exit;
+} else if ($btnsubmit == $LANG04[96] && $mode != 'deleteconfirmed') {
+    $mode = 'confirmdelete';
+}
 
 if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     switch ($mode) {
     case 'saveuser':
         savepreferences ($_POST);
-        $display .= saveuser($_POST);
+        $pageHandle->addContent(saveuser($_POST));
         PLG_profileExtrasSave ();
         break;
 
     case 'savepreferences':
         savepreferences ($_POST);
-        $display .= COM_refresh ($_CONF['site_url']
+        $pageHandle->redirect($_CONF['site_url']
                                  . '/usersettings.php?mode=preferences&amp;msg=6');
         break;
 
     case 'confirmdelete':
         if (($_CONF['allow_account_delete'] == 1) && ($_USER['uid'] > 1)) {
-            $accountId = COM_applyFilter ($_POST['account_id']);
+            $accountId = $inputHandler->getVar('strict','account_id','post','');
             if (!empty ($accountId)) {
-                $display .= confirmAccountDelete ($accountId);
+                $pageHandle->addContent(confirmAccountDelete ($accountId));
             } else {
-                $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+                $pageHandle->redirect($_CONF['site_url'] . '/index.php');
             }
         } else {
-            $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+            $pageHandle->redirect ($_CONF['site_url'] . '/index.php');
         }
         break;
 
     case 'deleteconfirmed':
         if (($_CONF['allow_account_delete'] == 1) && ($_USER['uid'] > 1)) {
-            $accountId = COM_applyFilter ($_POST['account_id']);
+            $accountId = $inputHandler->getVar('strict','account_id','post','');
             if (!empty ($accountId)) {
-                $display .= deleteUserAccount ($accountId);
+                $pageHandle->addContent(deleteUserAccount ($accountId));
             } else {
-                $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+                $pageHandle->redirect($_CONF['site_url'] . '/index.php');
             }
         } else {
-            $display = COM_refresh ($_CONF['site_url'] . '/index.php');
+            $pageHandle->redirect ($_CONF['site_url'] . '/index.php');
         }
         break;
 
     case 'plugin':
         PLG_profileExtrasSave ($_POST['plugin']);
-        $display = COM_refresh ($_CONF['site_url']
+        $pageHandle->redirect ($_CONF['site_url']
                                 . '/usersettings.php?msg=5');
         break;
 
     default: // also if $mode == 'edit', 'preferences', or 'comments'
-        $display .= COM_siteHeader('menu', $LANG04[16]);
-        $display .= COM_showMessageFromParameter();
-        $display .= edituser();
-        $display .= COM_siteFooter();
+        $pageHandle->setPageTitle($LANG04[16]);
+        $msg = $inputHandler->getVar('integer','msg','get',0);
+        if ($msg > 0) {
+            $pageHandle->addMessage($msg);
+        }
+        $pageHandle->addContent(edituser());
+        $pageHandle->displayPage();
         break;
     }
 } else {
-    $display .= COM_siteHeader ('menu');
-    $display .= COM_startBlock ($LANG04[70] . '!');
-    $display .= '<br' . XHTML . '>' . $LANG04[71] . '<br' . XHTML . '><br' . XHTML . '>';
-    $display .= COM_endBlock ();
-    $display .= COM_siteFooter ();
+    $pageHandle->addContent(COM_startBlock ($LANG04[70] . '!'));
+    $pageHandle->addContent('<br' . XHTML . '>' . $LANG04[71] . '<br' . XHTML . '><br' . XHTML . '>');
+    $pageHandle->addContent(COM_endBlock ());
+    $pageHandle->displayPage();
 }
 
-echo $display;
-
+$pageHandle->displayPage();
 ?>

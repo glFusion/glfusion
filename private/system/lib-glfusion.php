@@ -93,7 +93,7 @@ function glfusion_SecurityCheck() {
 
 function phpblock_blogroll ()
 {
-    global $_CONF, $_TABLES, $_ST_CONF;
+    global $_CONF, $_TABLES, $_ST_CONF, $pageHandle;
 
     // configuration options:
 
@@ -120,7 +120,7 @@ function phpblock_blogroll ()
 
             } else {
                 $url = $_CONF['site_url']
-                     . COM_buildUrl ('/links/portal.php?what=link&amp;item=' . $A['lid']);
+                     . $pageHandle->buildUrl ($_CONF['site_url'] . '/links/portal.php?what=link&amp;item=' . $A['lid']);
                 $link = '<a href="' . $url . '" title="' . $A['url'] . '">';
 
             }
@@ -182,15 +182,16 @@ function phpblock_blogroll ()
  *      Does not handle stories that may have expired.
  */
 function phpblock_storypicker() {
-    global $_TABLES, $_CONF, $topic;
+    global $_TABLES, $_CONF, $topic, $pageHandle;
 
     $LANG_STORYPICKER = Array('choose' => 'Choose a story');
     $max_stories = 5; //how many stories to display in the list
 
     $topicsql = '';
     $sid = '';
-    if (isset($_GET['story'])) {
-        $sid = COM_applyFilter($_GET['story']);
+    $sid = $inputHandler->getVar('strict','story','get','');
+
+    if ($sid != '') {
         $stopic = DB_getItem($_TABLES['stories'], 'tid', 'sid = \''.addslashes($sid).'\'');
         if (!empty($stopic)) {
             $topic = $stopic;
@@ -199,14 +200,8 @@ function phpblock_storypicker() {
         }
     }
 
-    if ( empty($topic) ) {
-        if ( isset($_GET['topic']) ) {
-            $topic = COM_applyFilter($_GET['topic']);
-        } elseif (isset($_POST['topic']) ) {
-            $topic = COM_applyFilter($_POST['topic']);
-        } else {
-            $topic = '';
-        }
+    if (empty($topic)) {
+        $topic = $inputHandler->getVar('strict','topic','request','');
     }
     if (!empty($topic)) {
         $topicsql = " AND tid = '$topic'";
@@ -229,7 +224,7 @@ function phpblock_storypicker() {
     $res = DB_query($sql);
     $list = '';
     while ($A = DB_fetchArray($res)) {
-        $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
+        $url = $pageHandle->buildUrl ($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
         $list .= '<li><a href=' . $url .'>'
 		//uncomment the 2 lines below to limit of characters displayed in the title
 		. htmlspecialchars(COM_truncate($A['title'],41,'...')) . "</a></li>\n";

@@ -8,6 +8,10 @@ v1.2.0
 
 v1.1.4
 ------
+- Add CRLF between each JavaScript file (Mark)
+- Additional security tweaks (Mark)
+- 0000422 Use of adveditor in block editor does not permit use of image insert
+  or file upload connector (Mark)
 - Implemented 'passwd' configuration type, this allows passwords in the
   configuration screen to be properly masked (Mark)
 - Story submission does not clear the Site Tailor menu cache which results
@@ -15,10 +19,14 @@ v1.1.4
 - Installation did not properly detect missing siteconfig.php.dist file (Mark)
 - Advanced search using date range did not return stories or comments in
   that date range (Mark)
-- Several small E_ALL fixes (Mark)
 
 Media Gallery
 -------------
+- 0000428 Wiki type keywords - Added [alink] auto tag to allow text links
+  to albums (Mark)
+- 0000437 Slideshow autotag does not honor caption option in config. (Mark)
+- Improved error handling when a user tries to access a media item they
+  do not have permission to view (Mark)
 - Random image block did not change (Mark)
 
 Site Tailor
