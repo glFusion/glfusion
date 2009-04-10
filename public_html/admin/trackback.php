@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -40,27 +43,19 @@ require_once 'auth.inc.php';
 
 if (!$_CONF['trackback_enabled'] && !$_CONF['pingback_enabled'] &&
         !$_CONF['ping_enabled']) {
-    echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+    $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
     exit;
 }
-
-$display = '';
 
 if (!SEC_hasRights ('story.ping')) {
-    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[34];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the trackback administration screen.");
-    echo $display;
+    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[34],'the trackback administration screen.');
     exit;
 }
 
-require_once $_CONF['path_system'] . 'lib-trackback.php';
-require_once $_CONF['path_system'] . 'lib-pingback.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
+USES_lib_trackback();
+USES_lib_pingback();
+USES_lib_story();
+
 
 /**
 * Display trackback comment submission form.
@@ -117,9 +112,6 @@ function trackback_editor ($target = '', $url = '', $title = '', $excerpt = '', 
     $template = new Template ($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file (array ('editor' => 'trackbackeditor.thtml'));
 
-    $template->set_var('xhtml', XHTML);
-    $template->set_var('site_url', $_CONF['site_url']);
-    $template->set_var('site_admin_url', $_CONF['site_admin_url']);
     $template->set_var('layout_url', $_CONF['layout_url']);
     $template->set_var('php_self', $_CONF['site_admin_url']
                                     . '/trackback.php');
@@ -166,9 +158,9 @@ function trackback_editor ($target = '', $url = '', $title = '', $excerpt = '', 
 */
 function deleteTrackbackComment ($id)
 {
-    global $_TABLES;
+    global $_TABLES,$pageHandle,$inputHandler;
 
-    $cid = addslashes ($id);
+    $cid = $inputHandler->prepareForDB($id);
     $result = DB_query ("SELECT sid,type FROM {$_TABLES['trackback']} WHERE cid = '$cid'");
     list ($sid, $type) = DB_fetchArray ($result);
     $url = getItemInfo ($type, $sid, 'url');
@@ -189,7 +181,7 @@ function deleteTrackbackComment ($id)
         $url .= '&amp;msg=' . $msg;
     }
 
-    return COM_refresh ($url);
+    $pageHandle->redirect($url);
 }
 
 /**
@@ -243,9 +235,6 @@ function sendPingbacks ($type, $id)
         $template = new Template ($_CONF['path_layout'] . 'admin/trackback');
         $template->set_file (array ('list' => 'pingbacklist.thtml',
                                     'item' => 'pingbackitem.thtml'));
-        $template->set_var('xhtml', XHTML);
-        $template->set_var('site_url', $_CONF['site_url']);
-        $template->set_var('site_admin_url', $_CONF['site_admin_url']);
         $template->set_var('layout_url', $_CONF['layout_url']);
         $template->set_var('lang_resend', $LANG_TRB['resend']);
         $template->set_var('lang_results', $LANG_TRB['pingback_results']);
@@ -294,9 +283,6 @@ function pingbackForm ($targetUrl = '')
 
     $template = new Template ($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file (array ('list' => 'pingbackform.thtml'));
-    $template->set_var('xhtml', XHTML);
-    $template->set_var('site_url', $_CONF['site_url']);
-    $template->set_var('site_admin_url', $_CONF['site_admin_url']);
     $template->set_var('layout_url', $_CONF['layout_url']);
 
     $template->set_var('lang_explain', $LANG_TRB['pingback_explain']);
@@ -336,9 +322,6 @@ function sendPings ($type, $id)
     $template = new Template ($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file (array ('list' => 'pinglist.thtml',
                                 'item' => 'pingitem.thtml'));
-    $template->set_var('xhtml', XHTML);
-    $template->set_var('site_url', $_CONF['site_url']);
-    $template->set_var('site_admin_url', $_CONF['site_admin_url']);
     $template->set_var('layout_url', $_CONF['layout_url']);
     $template->set_var('lang_resend', $LANG_TRB['resend']);
     $template->set_var('lang_results', $LANG_TRB['ping_results']);
@@ -483,9 +466,9 @@ function getItemInfo ($type, $id, $what)
 */
 function listServices()
 {
-    global $LANG_ADMIN, $LANG_TRB, $_CONF, $_IMAGE_TYPE, $_TABLES;
+    global $LANG_ADMIN, $LANG_TRB, $_CONF, $pageHandle, $_TABLES;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
@@ -511,7 +494,7 @@ function listServices()
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG_TRB['service_explain'],
-        $_CONF['layout_url'] . '/images/icons/trackback.' . $_IMAGE_TYPE
+        $pageHandle->getImage('/icons/trackback.png')
     );
 
     $text_arr = array(
@@ -562,7 +545,7 @@ function listServices()
 */
 function editServiceForm ($pid, $msg = '', $new_name = '', $new_site_url = '', $new_ping_url = '', $new_method = '', $new_enabled = -1)
 {
-    global $_CONF, $_TABLES, $LANG_TRB, $LANG_ADMIN, $MESSAGE;
+    global $_CONF, $_TABLES, $LANG_TRB, $LANG_ADMIN, $MESSAGE,$pageHandle;
 
     $retval = '';
 
@@ -590,21 +573,18 @@ function editServiceForm ($pid, $msg = '', $new_name = '', $new_site_url = '', $
         $A['is_enabled'] = $new_enabled;
     }
 
-    $retval .= COM_siteHeader ('menu', $LANG_TRB['edit_service']);
+    $pageHandle->setPageTitle($LANG_TRB['edit_service']);
 
     if (!empty ($msg)) {
-        $retval .= showTrackbackMessage ('Error', $msg);
+        $pageHandle->addContent(showTrackbackMessage ('Error', $msg));
     }
 
-    $retval .= COM_startBlock ($LANG_TRB['edit_service'], $_CONF['site_url']
+    $retval = COM_startBlock ($LANG_TRB['edit_service'], $_CONF['site_url']
                                . '/docs/trackback.html#ping',
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
     $template = new Template ($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file (array ('editor' => 'serviceeditor.thtml'));
-    $template->set_var('xhtml', XHTML);
-    $template->set_var('site_url', $_CONF['site_url']);
-    $template->set_var('site_admin_url', $_CONF['site_admin_url']);
     $template->set_var('layout_url', $_CONF['layout_url']);
     $template->set_var('max_url_length', 255);
     $template->set_var('method_ping', 'weblogUpdates.ping');
@@ -671,9 +651,9 @@ function editServiceForm ($pid, $msg = '', $new_name = '', $new_site_url = '', $
     $retval .= $template->finish ($template->get_var ('output'));
 
     $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
-    $retval .= COM_siteFooter ();
+    $pageHandle->addContent($retval);
 
-    return $retval;
+    return;
 }
 
 /**
@@ -690,7 +670,7 @@ function editServiceForm ($pid, $msg = '', $new_name = '', $new_site_url = '', $
 */
 function saveService ($pid, $name, $site_url, $ping_url, $method, $enabled)
 {
-    global $_CONF, $_TABLES, $LANG_TRB;
+    global $_CONF, $_TABLES, $LANG_TRB, $pageHandle, $inputHandler;
 
     $enabled = ($enabled == 'on' ? 1 : 0);
     if ($method == 'extended') {
@@ -699,9 +679,9 @@ function saveService ($pid, $name, $site_url, $ping_url, $method, $enabled)
         $method = 'weblogUpdates.ping';
     }
 
-    $name     = strip_tags (COM_stripslashes ($name));
-    $site_url = strip_tags (COM_stripslashes ($site_url));
-    $ping_url = strip_tags (COM_stripslashes ($ping_url));
+    $name     = strip_tags ($name);
+    $site_url = strip_tags ($site_url);
+    $ping_url = strip_tags ($ping_url);
 
     $errormsg = '';
     if (empty ($name)) {
@@ -724,9 +704,9 @@ function saveService ($pid, $name, $site_url, $ping_url, $method, $enabled)
                                 $method, $enabled);
     }
 
-    $name     = addslashes ($name);
-    $site_url = addslashes ($site_url);
-    $ping_url = addslashes ($ping_url);
+    $name     = $inputHandler->prepareForDB($name);
+    $site_url = $inputHandler->prepareForDB($site_url);
+    $ping_url = $inputHandler->prepareForDB($ping_url);
 
     if ($pid > 0) {
         DB_save ($_TABLES['pingservice'],
@@ -738,7 +718,7 @@ function saveService ($pid, $name, $site_url, $ping_url, $method, $enabled)
                  "'$name','$site_url','$ping_url','$method','$enabled'");
     }
 
-    return COM_refresh ($_CONF['site_admin_url']
+    $pageHandle->redirect($_CONF['site_admin_url']
                         . '/trackback.php?mode=listservice&amp;msg=65');
 }
 
@@ -751,13 +731,14 @@ function saveService ($pid, $name, $site_url, $ping_url, $method, $enabled)
 */
 function changeServiceStatus ($pid_arr)
 {
-    global $_TABLES;
+    global $_TABLES, $inputHandler;
 
     // first, disable all
     DB_query ("UPDATE {$_TABLES['pingservice']} SET is_enabled = '0'");
     if (isset($pid_arr)) {
         foreach ($pid_arr as $pid) { //enable those listed
-            $pid = addslashes (COM_applyFilter ($pid, true));
+            $pid = $inputHandler->filterVar('integer',$pid,'');
+            $pid = $inputHandler->prepareForDB($pid);
             if (!empty ($pid)) {
                 DB_query ("UPDATE {$_TABLES['pingservice']} SET is_enabled = '1' WHERE pid = '$pid'");
             }
@@ -809,13 +790,11 @@ function freshPingback ()
 
 
 // MAIN
-$display = '';
-$mode = '';
+
+$changedservices = array();
+$changedservices = $inputHandler->getVar('raw','changedservices','post','');
+
 if ($_CONF['ping_enabled'] && isset($_POST['serviceChanger']) && SEC_checkToken()) {
-    $changedservices = array();
-    if (isset($_POST['changedservices'])) {
-        $changedservices = $_POST['changedservices'];
-    }
     changeServiceStatus($changedservices);
 }
 
@@ -840,10 +819,7 @@ if (isset ($_POST['mode']) && is_array ($_POST['mode'])) {
         $mode = '';
     }
 } else {
-    if (isset($_REQUEST['mode'])) {
-        $mode = COM_applyFilter ($_REQUEST['mode']);
-    }
-
+    $mode = $inputHandler->getVar('strict','mode','request','');
 }
 
 // sanity check for modes, depending on enabled features ...
@@ -882,96 +858,91 @@ if (empty ($mode)) {
 }
 
 if (($mode == 'delete') && SEC_checkToken()) {
-    $cid = COM_applyFilter($_REQUEST['cid'], true);
+    $cid = $inputHandler->getVar('integer','cid','request',0);
     if ($cid > 0) {
-        $display = deleteTrackbackComment($cid);
+        $pageHandle->addContent(deleteTrackbackComment($cid));
     } else {
-        $display = COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
     }
 } else if ($mode == 'send') {
-    $target = COM_applyFilter ($_POST['target']);
-    $url = COM_applyFilter ($_POST['url']);
-    $title = COM_stripslashes ($_POST['title']);
-    $excerpt = COM_stripslashes ($_POST['excerpt']);
-    $blog = COM_stripslashes ($_POST['blog_name']);
+    $target     = $inputHandler->getVar('strict','target','post','');
+    $url        = $inputHandler->getVar('strict','url','post','');
+
+    $title      = $inputHandler->getVar('text','title','post','');
+    $excerpt    = $inputHandler->getVar('text','excerpt','post','');
+    $blog       = $inputHandler->getVar('text','blog_name','post','');
 
     if (empty ($target)) {
-        $display .= COM_siteHeader ('menu', $LANG_TRB['trackback']);
-        $display .= showTrackbackMessage ($LANG_TRB['target_missing'],
-                                          $LANG_TRB['target_required']);
-        $display .= trackback_editor ($target, $url, $title, $excerpt, $blog);
+        $pageHandle->setPageTitle($LANG_TRB['trackback']);
+        $pageHandle->addContent(showTrackbackMessage ($LANG_TRB['target_missing'],
+                                          $LANG_TRB['target_required']));
+        $pageHandle->addContent(trackback_editor ($target, $url, $title, $excerpt, $blog));
     } else if (empty ($url)) {
-        $display .= COM_siteHeader ('menu', $LANG_TRB['trackback']);
-        $display .= showTrackbackMessage ($LANG_TRB['url_missing'],
-                                          $LANG_TRB['url_required']);
-        $display .= trackback_editor ($target, $url, $title, $excerpt, $blog);
+        $pageHandle->setPageTitle($LANG_TRB['trackback']);
+        $pageHandle->addContent(showTrackbackMessage ($LANG_TRB['url_missing'],
+                                          $LANG_TRB['url_required']));
+        $pageHandle->addContent(trackback_editor ($target, $url, $title, $excerpt, $blog));
     } elseif (SEC_checkToken()) {
         // prepare for send
-        $send_title = TRB_filterTitle ($title);
-        $send_excerpt = TRB_filterExcerpt ($excerpt);
-        $send_blog = TRB_filterBlogname ($blog);
+        $send_title     = TRB_filterTitle ($title);
+        $send_excerpt   = TRB_filterExcerpt ($excerpt);
+        $send_blog      = TRB_filterBlogname ($blog);
 
         $result = TRB_sendTrackbackPing ($target, $url, $send_title,
                                          $send_excerpt, $send_blog);
 
-        $display .= COM_siteHeader ('menu', $LANG_TRB['trackback']);
+        $pageHandle->setPageTitle($LANG_TRB['trackback']);
         if ($result === true) {
-            $display .= COM_showMessage (64);
-            $display .= trackback_editor ();
+            $pageHandle->addMessage(64);
+            $pageHandle->addContent(trackback_editor ());
         } else {
             $message = '<p>' . $LANG_TRB['send_error_details']
                      . '<br' . XHTML . '><span class="warningsmall">'
                      . htmlspecialchars ($result) . '</span></p>';
-            $display .= showTrackbackMessage($LANG_TRB['send_error'], $message);
+            $pageHandle->addContent(showTrackbackMessage($LANG_TRB['send_error'], $message));
 
             // display editor with the same contents again
-            $display .= trackback_editor ($target, $url, $title, $excerpt, $blog);
+            $pageHandle->addContent(trackback_editor ($target, $url, $title, $excerpt, $blog));
         }
     }
-    $display .= COM_siteFooter ();
 } else if ($mode == 'new') {
-    $type = COM_applyFilter ($_REQUEST['type']);
+    $type = $inputHandler->getVar('strict','type','request','');
     if (empty ($type)) {
         $type = 'article';
     }
-    $id = COM_applyFilter ($_REQUEST['id']);
+    $id = $inputHandler->getVar('strict','id','request','');
     if (!empty ($id)) {
         list ($url, $title, $excerpt) = getItemInfo ($type, $id,
                                                      'url,title,excerpt');
         $excerpt = trim (strip_tags ($excerpt));
         $blog = TRB_filterBlogname ($_CONF['site_name']);
+        $pageHandle->setPageTitle($LANG_TRB['trackback']);
 
-        $display .= COM_siteHeader ('menu', $LANG_TRB['trackback'])
-                 . trackback_editor ($target, $url, $title, $excerpt, $blog)
-                 . COM_siteFooter ();
+        $pageHandle->addContent(trackback_editor ($target, $url, $title, $excerpt, $blog));
     } else {
-        $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
     }
 } else if ($mode == 'pingback') {
-    $type = COM_applyFilter ($_REQUEST['type']);
+    $type = $inputHandler->getVar('strict','type','request','');
     if (empty ($type)) {
         $type = 'article';
     }
-    $id = COM_applyFilter ($_REQUEST['id']);
+    $id = $inputHandler->getVar('strict','id','request','');
     if (!empty ($id)) {
-        $display .= COM_siteHeader ('menu', $LANG_TRB['pingback'])
-                  . COM_startBlock ($LANG_TRB['pingback_results'])
+        $pageHandle->setPageTitle($LANG_TRB['pingback']);
+        $pageHandle->addContent(COM_startBlock ($LANG_TRB['pingback_results'])
                   . sendPingbacks ($type, $id)
-                  . COM_endBlock ()
-                  . COM_siteFooter ();
+                  . COM_endBlock ());
     } else {
-        $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+        $pageHandle->redirect ($_CONF['site_admin_url'] . '/index.php');
     }
 } else if ($mode == 'sendall') {
-    $id = COM_applyFilter ($_REQUEST['id']);
+    $id = $inputHandler->getVar('strict','id','request','');
     if (empty ($id)) {
-        echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
         exit;
     }
-    $type = '';
-    if (isset ($_REQUEST['type'])) {
-        $type = COM_applyFilter ($_REQUEST['type']);
-    }
+    $type = $inputHandler->getVar('strict','type','request','');
     if (empty ($type)) {
         $type = 'article';
     }
@@ -995,15 +966,15 @@ if (($mode == 'delete') && SEC_checkToken()) {
             if ($type != 'article') {
                 $url .= '&amp;type=' . $type;
             }
-            echo COM_refresh ($url);
+            $pageHandle->redirect($url);
             exit;
         }
     }
 
     $title = getItemInfo ($type, $id, 'title');
 
-    $display .= COM_siteHeader ('menu', $LANG_TRB['send_pings']);
-    $display .= COM_startBlock (sprintf ($LANG_TRB['send_pings_for'], $title));
+    $pageHandle->setPageTitle($LANG_TRB['send_pings']);
+    $display  = COM_startBlock (sprintf ($LANG_TRB['send_pings_for'], $title));
 
     $template = new Template ($_CONF['path_layout'] . 'admin/trackback');
     $template->set_file (array ('form' => 'pingform.thtml'));
@@ -1075,43 +1046,32 @@ if (($mode == 'delete') && SEC_checkToken()) {
     $display .= $template->finish ($template->get_var ('output'));
 
     $display .= COM_endBlock ();
-    $display .= COM_siteFooter ();
+
+    $pageHandle->addContent($display);
+
 } else if ($mode == 'pretrackback') {
-    $id = COM_applyFilter ($_REQUEST['id']);
-    if (empty ($id)) {
-        echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+    $id = $inputHandler->getVar('strict','id','request','');
+    if (empty ($id) || $id == '') {
+        $pageHandle->redirect ($_CONF['site_admin_url'] . '/index.php');
         exit;
     }
-    $type = '';
-    if (isset ($_REQUEST['type'])) {
-        $type = COM_applyFilter ($_REQUEST['type']);
-    }
-    if (empty ($type)) {
-        $type = 'article';
-    }
+    $type = $inputHandler->getVar('strict','type','request','article');
 
     $fulltext = getItemInfo ($type, $id, 'description');
-
-    $display .= COM_siteHeader ('menu', $LANG_TRB['trackback'])
-              . COM_startBlock ($LANG_TRB['select_url'], $_CONF['site_url']
+    $pageHandle->setPageTitle($LANG_TRB['send_pings']);
+    $display = COM_startBlock ($LANG_TRB['select_url'], $_CONF['site_url']
                                 . '/docs/trackback.html#trackback')
               . prepareAutodetect ($type, $id, $fulltext)
-              . COM_endBlock ()
-              . COM_siteFooter ();
+              . COM_endBlock ();
+    $pageHandle->addContent($display);
 } else if ($mode == 'autodetect') {
-    $id = COM_applyFilter ($_REQUEST['id']);
+    $id = $inputHandler->getVar('strict','id','request','');
     $url = $_REQUEST['url'];
     if (empty ($id) || empty ($url)) {
-        echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+        $pageHandle->redirect ($_CONF['site_admin_url'] . '/index.php');
         exit;
     }
-    $type = '';
-    if (isset ($_REQUEST['type'])) {
-        $type = COM_applyFilter ($_REQUEST['type']);
-    }
-    if (empty ($type)) {
-        $type = 'article';
-    }
+    $type = $inputHandler->getVar('strict','type','request','article');
 
     $trackbackUrl = TRB_detectTrackbackUrl ($url);
 
@@ -1120,137 +1080,123 @@ if (($mode == 'delete') && SEC_checkToken()) {
     $excerpt = trim (strip_tags ($excerpt));
     $blog = TRB_filterBlogname ($_CONF['site_name']);
 
-    $display .= COM_siteHeader ('menu', $LANG_TRB['trackback']);
+    $pageHandle->setPageTitle($LANG_TRB['send_pings']);
     if ($trackbackUrl === false) {
-        $display .= showTrackbackMessage ($LANG_TRB['not_found'],
-                                          $LANG_TRB['autodetect_failed']);
+        $pageHandle->addContent(showTrackbackMessage ($LANG_TRB['not_found'],
+                                          $LANG_TRB['autodetect_failed']));
     }
-    $display .= trackback_editor ($trackbackUrl, $url, $title, $excerpt, $blog)
-             . COM_siteFooter ();
+    $pageHandle->addContent(trackback_editor ($trackbackUrl, $url, $title, $excerpt, $blog));
+
 } else if (($mode == 'fresh') || ($mode == 'preview')) {
-    $display .= COM_siteHeader ('menu', $LANG_TRB['trackback']);
+    $pageHandle->setPageTitle($LANG_TRB['trackback']);
 
-    if (isset ($_REQUEST['msg'])) {
-        $msg = COM_applyFilter ($_REQUEST['msg'], true);
-        if ($msg > 0) {
-            $display .= COM_showMessage ($msg);
+    $msg = $inputHandler->getVar('integer','msg','request',0);
+    if ($msg > 0) {
+        $pageHandle->addMessage($msg);
+    }
+
+    $target = $inputHandler->getVar('strict','target','request','');
+    $url    = $inputHandler->getVar('strict','url','request','');
+    $title  = $inputHandler->getVar('strict','title','request','');
+    $excerpt = $inputHandler->getVar('raw','excerpt','request','');
+    $blog   = $inputHandler->getVar('raw','blog_name','request','');
+    $id     = $inputHandler->getVar('strict','id','request','');
+    $type   = $inputHandler->getVar('strict','type','request','');
+
+    if (!empty ($id) && !empty ($type)) {
+        list ($newurl, $newtitle, $newexcerpt) =
+                            getItemInfo ($type, $id, 'url,title,excerpt');
+        $newexcerpt = trim (strip_tags ($newexcerpt));
+
+        if (empty ($url) && !empty ($newurl)) {
+            $url = $newurl;
         }
-    }
+        if (empty ($title) && !empty ($newtitle)) {
+            $title = $newtitle;
+        }
+        if (empty ($newexcerpt) && !empty ($newexcerpt)) {
+            $excerpt = $newexcerpt;
+        }
 
-    $target = '';
-    if (isset ($_REQUEST['target'])) {
-        $target = COM_applyFilter ($_REQUEST['target']);
-    }
-    $url = '';
-    if (isset ($_REQUEST['url'])) {
-        $url = COM_applyFilter ($_REQUEST['url']);
-    }
-    $title = '';
-    if (isset ($_REQUEST['title'])) {
-        $title = COM_stripslashes ($_REQUEST['title']);
-    }
-    $excerpt = '';
-    if (isset ($_REQUEST['excerpt'])) {
-        $excerpt = COM_stripslashes ($_REQUEST['excerpt']);
-    }
-    $blog = '';
-    if (isset ($_REQUEST['blog_name'])) {
-        $blog = COM_stripslashes ($_REQUEST['blog_name']);
-    }
-
-    if (isset ($_REQUEST['id']) && isset ($_REQUEST['type'])) {
-        $id = COM_applyFilter ($_REQUEST['id']);
-        $type = COM_applyFilter ($_REQUEST['type']);
-        if (!empty ($id) && !empty ($type)) {
-            list ($newurl, $newtitle, $newexcerpt) =
-                                getItemInfo ($type, $id, 'url,title,excerpt');
-            $newexcerpt = trim (strip_tags ($newexcerpt));
-
-            if (empty ($url) && !empty ($newurl)) {
-                $url = $newurl;
-            }
-            if (empty ($title) && !empty ($newtitle)) {
-                $title = $newtitle;
-            }
-            if (empty ($newexcerpt) && !empty ($newexcerpt)) {
-                $excerpt = $newexcerpt;
-            }
-
-            if (empty ($blog)) {
-                $blog = TRB_filterBlogname ($_CONF['site_name']);
-            }
+        if (empty ($blog)) {
+            $blog = TRB_filterBlogname ($_CONF['site_name']);
         }
     }
 
     if (($mode == 'preview') && empty ($url)) {
-        $display .= showTrackbackMessage ($LANG_TRB['url_missing'],
-                                          $LANG_TRB['url_required']);
+        $pageHandle->addContent(showTrackbackMessage ($LANG_TRB['url_missing'],
+                                          $LANG_TRB['url_required']));
     }
 
-    $display .= trackback_editor ($target, $url, $title, $excerpt, $blog);
+    $pageHandle->addContent(trackback_editor ($target, $url, $title, $excerpt, $blog));
 
-    $display .= COM_siteFooter ();
+
 } elseif (($mode == 'deleteservice') && SEC_checkToken()) {
-    $pid = COM_applyFilter ($_POST['service_id'], true);
+    $pid = $inputHandler->getVar('integer','service_id','post',0);
     if ($pid > 0) {
         DB_delete ($_TABLES['pingservice'], 'pid', $pid);
-        $display = COM_refresh ($_CONF['site_admin_url']
+        $pageHandle->redirect ($_CONF['site_admin_url']
                  . '/trackback.php?mode=listservice&amp;msg=66');
     } else {
-        $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+        $pageHandle->redirect ($_CONF['site_admin_url'] . '/index.php');
     }
 } elseif (($mode == 'saveservice') && SEC_checkToken()) {
     $is_enabled = '';
     if (isset($_POST['is_enabled'])) {
         $is_enabled = $_POST['is_enabled'];
     }
-    $display .= saveService(COM_applyFilter($_POST['service_id'], true),
-                            $_POST['service_name'], $_POST['service_site_url'],
-                            $_POST['service_ping_url'], $_POST['method'],
-                            $is_enabled);
-} else if ($mode == 'editservice') {
-    $service_id = 0;
-    if (isset ($_GET['service_id'])) {
-        $service_id = COM_applyFilter ($_GET['service_id'], true);
-    }
-    $pid = COM_applyFilter ($service_id, true);
+    $service_id = $inputHandler->getVar('integer','service_id','post',0);
+    $service_name = $inputHandler->getVar('strict','service_name','post','');
+    $service_site_url = $inputHandler->getVar('url','service_site_url','post','');
+    $service_ping_url = $inputHandler->getVar('url','service_ping_url','post','');
+    $service_method   = $inputHandler->getVar('strict','method','post','');
 
-    $display .= editServiceForm ($pid);
+    $pageHandle->addContent( saveService($service_id,
+                            $service_name, $service_site_url,
+                            $service_ping_url, $service_method,
+                            $is_enabled));
+} else if ($mode == 'editservice') {
+    $service_id = $inputHandler->getVar('integer','service_id','get',0);
+    $pid = $service_id;
+
+    $pageHandle->addContent(editServiceForm ($pid));
 } else if ($mode == 'listservice') {
-    $display .= COM_siteHeader ('menu', $LANG_TRB['services_headline']);
-    if (isset ($_REQUEST['msg'])) {
-        $display .= COM_showMessage (COM_applyFilter ($_REQUEST['msg'], true));
+    $pageHandle->setPageTitle($LANG_TRB['services_headline']);
+    $msg = $inputHandler->getVar('integer','msg','request',0);
+    if ( $msg > 0 ) {
+        $pageHandle->addMessage($msg);
     }
-    $display .= listServices ();
-    $display .= COM_siteFooter();
+    $pageHandle->addContent(listServices ());
+
 } else if ($mode == 'freepb') {
-    $display .= COM_siteHeader ('menu', $LANG_TRB['pingback']);
-    $display .= pingbackForm ();
-    $display .= COM_siteFooter();
+    $pageHandle->setPageTitle($LANG_TRB['pingback']);
+
+    $pageHandle->addContent(pingbackForm ());
+
 } else if ($mode == 'sendpingback') {
-    $target = COM_applyFilter ($_POST['target']);
-    $display .= COM_siteHeader ('menu', $LANG_TRB['pingback']);
+    $target = $inputHandler->getVar('strict','target','post','');
+    $pageHandle->setPageTitle($LANG_TRB['pingback']);
     if (empty ($target)) {
-        $display .= showTrackbackMessage ($LANG_TRB['pbtarget_missing'],
-                                          $LANG_TRB['pbtarget_required']);
+        $pageHandle->addContent(showTrackbackMessage ($LANG_TRB['pbtarget_missing'],
+                                          $LANG_TRB['pbtarget_required']));
     } elseif (SEC_checkToken()) {
         $result = PNB_sendPingback ($_CONF['site_url'], $target);
         if (empty ($result)) {
-            $display .= COM_showMessage (74);
+            $pageHandle->addMessage(74);
             $target = '';
         } else {
             $message = '<p>' . $LANG_TRB['pb_error_details'] . '<br' . XHTML . '>'
                      . '<span class="warningsmall">'
                      . htmlspecialchars ($result) . '</span></p>';
-            $display .= showTrackbackMessage ($LANG_TRB['send_error'], $message);
+            $pageHandle->addContent(showTrackbackMessage ($LANG_TRB['send_error'], $message));
         }
     }
-    $display .= pingbackForm ($target);
-    $display .= COM_siteFooter ();
+    $pageHandle->addContent(pingbackForm ($target));
+
 } else {
-    $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+    $pageHandle->redirect ($_CONF['site_admin_url'] . '/index.php');
 }
 
-echo $display;
+$pageHandle->displayPage();
 
 ?>

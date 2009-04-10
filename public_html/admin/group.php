@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -51,23 +54,11 @@ require_once '../lib-common.php';
 */
 require_once 'auth.inc.php';
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
-
 $display = '';
 
 // Make sure user has rights to access this page
 if (!SEC_hasRights ('group.edit')) {
-    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[37];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to illegally access the group administration screen.");
-    echo $display;
+    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[37],'group administration screen.');
     exit;
 }
 
@@ -81,7 +72,7 @@ if (!SEC_hasRights ('group.edit')) {
 function editgroup($grp_id = '')
 {
     global $_TABLES, $_CONF, $_USER, $LANG_ACCESS, $LANG_ADMIN, $MESSAGE,
-           $LANG28, $VERBOSE;
+           $LANG28, $VERBOSE,$inputHandler;
 
     $retval = '';
 
@@ -106,18 +97,13 @@ function editgroup($grp_id = '')
 
     $group_templates = new Template($_CONF['path_layout'] . 'admin/group');
     $group_templates->set_file('editor','groupeditor.thtml');
-    $group_templates->set_var('site_url', $_CONF['site_url']);
-    $group_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
     $group_templates->set_var('layout_url', $_CONF['layout_url']);
     $group_templates->set_var('lang_save', $LANG_ADMIN['save']);
     $group_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     $group_templates->set_var('lang_admingroup',$LANG28[49]);
     $group_templates->set_var('lang_admingrp_msg', $LANG28[50]);
-    $group_templates->set_var( 'xhtml', XHTML );
     $showall = 0;
-    if (isset ($_GET['chk_showall'])) {
-        $showall =  COM_applyFilter ($_GET['chk_showall'], true);
-    }
+    $showall = $inputHandler->getVar('integer','chk_showall','get',0);
     $group_templates->set_var('show_all', $showall);
 
     if (!empty ($grp_id)) {
@@ -423,7 +409,8 @@ function printrights ($grp_id = '', $core = 0)
 */
 function savegroup ($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $features, $groups)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $VERBOSE;
+    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $VERBOSE,
+           $pageHandle, $inputHandler;
 
     $retval = '';
     if (!empty ($grp_name) && !empty ($grp_descr)) {
@@ -434,13 +421,13 @@ function savegroup ($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $f
             !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $GroupAdminGroups)) {
             COM_accessLog ("User {$_USER['username']} tried to edit group '$grp_name' ($grp_id) with insufficient privileges.");
 
-            return COM_refresh ($_CONF['site_admin_url'] . '/group.php');
+            $pageHande->redirect($_CONF['site_admin_url'] . '/group.php');
         }
 
         if ($grp_gl_core == 1 AND !is_array ($features)) {
             COM_errorLog ("Sorry, no valid features were passed to this core group ($grp_id) and saving could cause problem...bailing.");
 
-            return COM_refresh ($_CONF['site_admin_url'] . '/group.php');
+            $pageHandle->redirect($_CONF['site_admin_url'] . '/group.php');
         }
 
         // group names have to be unique, so check if this one exists already
@@ -448,21 +435,17 @@ function savegroup ($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $f
                             "grp_name = '$grp_name'");
         if ($g_id > 0) {
             if (empty ($grp_id) || ($grp_id != $g_id)) {
-                // there already is a group with that name - complain
-                $retval .= COM_siteHeader ('menu', $LANG_ACCESS['groupeditor']);
-                $retval .= COM_startBlock ($LANG_ACCESS['groupexists'], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'));
-                $retval .= $LANG_ACCESS['groupexistsmsg'];
-                $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-                $retval .= editgroup ($grp_id);
-                $retval .= COM_siteFooter ();
-
-                return $retval;
+                $pageHandle->setPageTitle($LANG_ACCESS['groupeditor']);
+                $pageHandle->addContent(COM_startBlock ($LANG_ACCESS['groupexists'], '',
+                           COM_getBlockTemplate ('_msg_block', 'header')));
+                $pageHandle->addContent($LANG_ACCESS['groupexistsmsg']);
+                $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));
+                $pageHandle->addContent(editgroup ($grp_id));
+                $pageHandle->displayPage();
+                exit;
             }
         }
-
-        $grp_descr = COM_stripslashes ($grp_descr);
-        $grp_descr = addslashes ($grp_descr);
+        $grp_descr = $inputHandler->filterVar('sql',$grp_descr,'','');
 
         if (empty ($grp_id)) {
             DB_save ($_TABLES['groups'], 'grp_name,grp_descr,grp_gl_core',
@@ -480,11 +463,10 @@ function savegroup ($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $f
         if (empty($grp_id) || ($grp_id < 1)) {
             // "this shouldn't happen"
             COM_errorLog("Internal error: invalid group id");
-            $retval .= COM_siteHeader('menu', $LANG_ACCESS['groupeditor']);
-            $retval .= COM_showMessage(95);
-            $retval .= COM_siteFooter();
-
-            return $retval;
+            $pageHandle->addMessage(95);
+            $pageHandle->setPageTitle($LANG_ACCESS['groupeditor']);
+            $pageHandle->displayPage();
+            exit;
         }
 
         // Use the field grp_gl_core to indicate if this is non-core GL Group is an Admin related group
@@ -550,20 +532,19 @@ function savegroup ($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $f
             PLG_groupChanged ($grp_id, 'edit');
         }
         if ($_POST['chk_showall'] == 1) {
-            echo COM_refresh($_CONF['site_admin_url'] . '/group.php?msg=49&showall=1');
+            $pageHandle->redirect($_CONF['site_admin_url'] . '/group.php?msg=49&showall=1');
         } else {
-            echo COM_refresh($_CONF['site_admin_url'] . '/group.php?msg=49');
+            $pageHandle->redirect($_CONF['site_admin_url'] . '/group.php?msg=49');
         }
     } else {
-        $retval .= COM_siteHeader ('menu', $LANG_ACCESS['groupeditor']);
-        $retval .= COM_startBlock ($LANG_ACCESS['missingfields'], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'));
-        $retval .= $LANG_ACCESS['missingfieldsmsg'];
-        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-        $retval .= editgroup ($grp_id);
-        $retval .= COM_siteFooter ();
-
-        return $retval;
+        $pageHandle->setPageTitle($LANG_ACCESS['groupeditor']);
+        $pageHandle->addContent(COM_startBlock ($LANG_ACCESS['missingfields'], '',
+                           COM_getBlockTemplate ('_msg_block', 'header')));
+        $pageHandle->addContent($LANG_ACCESS['missingfieldsmsg']);
+        $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));
+        $pageHandle->addContent(editgroup ($grp_id));
+        $pageHandle->displayPage();
+        exit;
     }
 }
 
@@ -612,9 +593,9 @@ function getGroupList ($basegroup)
 */
 function listusers ($grp_id)
 {
-    global $_CONF, $_TABLES, $LANG28, $LANG_ACCESS, $LANG_ADMIN, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG28, $LANG_ACCESS, $LANG_ADMIN, $pageHandle;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
@@ -677,7 +658,7 @@ function listusers ($grp_id)
     $retval .= ADMIN_createMenu(
         $menu_arr,
         '&nbsp;',
-        $_CONF['layout_url'] . '/images/icons/group.' . $_IMAGE_TYPE
+        $pageHandle->getImage('icons/group.png')
     );
 
     $text_arr = array (
@@ -717,7 +698,7 @@ function listusers ($grp_id)
 
 function listgroups()
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG28, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG28, $pageHandle;
 
     require_once $_CONF['path_system'] . 'lib-admin.php';
 
@@ -751,7 +732,7 @@ function listgroups()
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG_ACCESS['newgroupmsg'],
-        $_CONF['layout_url'] . '/images/icons/group.' . $_IMAGE_TYPE
+        $pageHandle->getImage('icons/group.png')
     );
 
     $text_arr = array(
@@ -933,9 +914,9 @@ function savegroupusers ($groupid, $groupmembers)
         DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ('$groupid', '$adduser[$i]')");
     }
     if ($_POST['chk_showall'] == 1) {
-        echo COM_refresh($_CONF['site_admin_url'] . '/group.php?msg=49&showall=1');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/group.php?msg=49&showall=1');
     } else {
-        echo COM_refresh($_CONF['site_admin_url'] . '/group.php?msg=49');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/group.php?msg=49');
     }
 }
 
@@ -948,20 +929,20 @@ function savegroupusers ($groupid, $groupmembers)
 */
 function deleteGroup ($grp_id)
 {
-    global $_CONF, $_TABLES, $_USER;
+    global $_CONF, $_TABLES, $_USER,$pageHandle;
 
     if (!SEC_inGroup ('Root') && (DB_getItem ($_TABLES['groups'], 'grp_name',
             "grp_id = $grp_id") == 'Root')) {
         COM_accessLog ("User {$_USER['username']} tried to delete the Root group with insufficient privileges.");
 
-        return COM_refresh ($_CONF['site_admin_url'] . '/group.php');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/group.php');
     }
 
     $GroupAdminGroups = SEC_getUserGroups ();
     if (!in_array ($grp_id, $GroupAdminGroups) && !SEC_groupIsRemoteUserAndHaveAccess($grp_id, $GroupAdminGroups)) {
         COM_accessLog ("User {$_USER['username']} tried to delete group $grp_id with insufficient privileges.");
 
-        return COM_refresh ($_CONF['site_admin_url'] . '/group.php');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/group.php');
     }
 
     DB_delete ($_TABLES['access'], 'acc_grp_id', $grp_id);
@@ -971,34 +952,32 @@ function deleteGroup ($grp_id)
 
     PLG_groupChanged ($grp_id, 'delete');
     if ($_POST['chk_showall'] == 1) {
-        return COM_refresh($_CONF['site_admin_url'] . '/group.php?msg=50&showall=1');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/group.php?msg=50&showall=1');
     } else {
-        return COM_refresh($_CONF['site_admin_url'] . '/group.php?msg=50');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/group.php?msg=50');
     }
 }
 
 // MAIN
-$mode = '';
-if (isset($_REQUEST['mode'])) {
-    $mode = $_REQUEST['mode'];
-}
+$mode = $inputHandler->getVar('strict','mode','request','');
+$grp_id = $inputHandler->getVar('integer','grp_id','request',0);
+$chk_grpadmin = $inputHandler->getVar('strict','chk_grpadmin','post','');
+//$features = array();
+//$features = $inputHandler->getVar('strict','features','post',array(''));
+//$groups = array();
+//$groups = $inputHandler->getVar('strict',$_TABLES['groups'],'post',array(''));
 
 if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
-    $grp_id = COM_applyFilter ($_REQUEST['grp_id'], true);
     if (!isset ($grp_id) || empty ($grp_id) || ($grp_id == 0)) {
         COM_errorLog ('Attempted to delete group grp_id=' . $grp_id);
-        $display .= COM_refresh ($_CONF['site_admin_url'] . '/group.php');
+        $pageHandle->redirect ($_CONF['site_admin_url'] . '/group.php');
     } elseif (SEC_checkToken()) {
         $display .= deleteGroup ($grp_id);
     } else {
         COM_accessLog("User {$_USER['username']} tried to illegally delete group $grp_id and failed CSRF checks.");
-        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
     }
 } elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
-    $chk_grpadmin = '';
-    if (isset($_POST['chk_grpadmin'])) {
-        $chk_grpadmin = COM_applyFilter($_POST['chk_grpadmin']);
-    }
     $features = array();
     if (isset($_POST['features'])) {
         $features = $_POST['features'];
@@ -1007,6 +986,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     if (isset($_POST[$_TABLES['groups']])) {
         $groups = $_POST[$_TABLES['groups']];
     }
+//print_r($groups);exit;
     $display .= savegroup(COM_applyFilter($_POST['grp_id'], true),
                           COM_applyFilter($_POST['grp_name']),
                           $_POST['grp_descr'], $chk_grpadmin,

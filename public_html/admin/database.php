@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -72,9 +75,9 @@ function compareBackupFiles($pFileA, $pFileB)
 */
 function listbackups()
 {
-    global $_CONF, $_TABLES, $_IMAGE_TYPE, $LANG08, $LANG_ADMIN, $LANG_DB_BACKUP;
+    global $_CONF, $_TABLES, $pageHandle, $LANG08, $LANG_ADMIN, $LANG_DB_BACKUP;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
@@ -90,9 +93,6 @@ function listbackups()
                 $backups[] = $file;
             }
         }
-
-        // AS, 2004-03-29 - Sort backup files by date, newest first.
-        // Order given by 'readdir' might not be correct.
         usort($backups, 'compareBackupFiles');
 
         $data_arr = array();
@@ -125,7 +125,7 @@ function listbackups()
             $menu_arr,
             "<p>{$LANG_DB_BACKUP['db_explanation']}</p>" .
             '<p>' . sprintf($LANG_DB_BACKUP['total_number'], $index) . '</p>',
-            $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE
+            $pageHandle->getImage('icons/database.png')
         );
 
         $header_arr = array(      // display 'text' and use table field 'field'
@@ -166,8 +166,9 @@ function listbackups()
 */
 function dobackup()
 {
-    global $_CONF, $LANG08, $LANG_DB_BACKUP, $MESSAGE, $_IMAGE_TYPE,
-           $_DB_host, $_DB_name, $_DB_user, $_DB_pass, $_DB_mysqldump_path;
+    global $_CONF, $LANG08, $LANG_DB_BACKUP, $MESSAGE,
+           $_DB_host, $_DB_name, $_DB_user, $_DB_pass, $_DB_mysqldump_path,
+           $pageHandle;
 
     $retval = '';
 
@@ -196,9 +197,9 @@ function dobackup()
             exec($command);
             if (file_exists($backupfile) && filesize($backupfile) > 1000) {
                 @chmod($backupfile, 0644);
-                $retval .= COM_showMessage(93);
+                $pageHandle->addMessage(93);
             } else {
-                $retval .= COM_showMessage(94);
+                $pageHandle->addMessage(94);
                 COM_errorLog('Backup Filesize was less than 1kb', 1);
                 COM_errorLog("Command used for mysqldump: $log_command", 1);
             }
@@ -254,33 +255,16 @@ $display = '';
 
 // If user isn't a root user or if the backup feature is disabled, bail.
 if (!SEC_inGroup('Root') OR $_CONF['allow_mysqldump'] == 0) {
-    $display .= COM_siteHeader('menu', $LANG_DB_BACKUP['last_ten_backups']);
-    $display .= COM_startBlock($MESSAGE[30], '',
-                    COM_getBlockTemplate('_msg_block', 'header'));
-    $display .= $MESSAGE[46];
-    $display .= COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'));
-    $display .= COM_siteFooter();
-    COM_accessLog("User {$_USER['username']} tried to illegally access the database backup screen.");
-    echo $display;
-    exit;
+    $pageHandle->displayAccessError($LANG_DB_BACKUP['last_ten_backups'],$MESSAGE[46],'database backup');
 }
 
-$mode = '';
-if (isset($_GET['mode'])) {
-    if ($_GET['mode'] == 'backup') {
-        $mode = 'backup';
-    } else if ($_GET['mode'] == 'download') {
-        $mode = 'download';
-    }
-} else if (isset($_POST['mode'])) {
-    if (($_POST['mode'] == 'delete') && isset($_POST['delitem'])) {
-        $mode = 'delete';
-    }
-}
+$mode    = $inputHandler->getVar('strict','mode',array('get','post'),'');
+$delitem = $inputHandler->getVar('strict','delitem','post','');
+$file    = $inputHandler->getVar('strict','file','get','');
 
 if ($mode == 'download') {
     $file = '';
-    if (isset($_GET['file'])) {
+    if (!empty($file)) {
         $file = preg_replace('/[^a-zA-Z0-9\-_\.]/', '', $_GET['file']);
         $file = str_replace('..', '', $file);
         if (!file_exists($_CONF['backup_path'] . $file)) {
@@ -293,7 +277,8 @@ if ($mode == 'download') {
     }
 }
 
-$display .= COM_siteHeader('menu', $LANG_DB_BACKUP['last_ten_backups']);
+$pageHandle->setPageTitle($LANG_DB_BACKUP['last_ten_backups']);
+$pageHandle->setShowExtraBlocks(false);
 
 if ($mode == 'backup') {
     // Perform the backup if asked
@@ -314,10 +299,7 @@ if ($mode == 'backup') {
 
 // Show all backups
 
-$display .= listbackups();
+$pageHandle->addContent(listbackups());
 
-$display .= COM_siteFooter();
-
-echo $display;
-
+$pageHandle->displayPage();
 ?>

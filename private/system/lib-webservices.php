@@ -783,69 +783,13 @@ function WS_authenticate()
         $username = $_SERVER['PHP_AUTH_USER'];
         $password = $_SERVER['PHP_AUTH_PW'];
 
+        $username = COM_applyFilter($username);
+        $password = COM_applyFilter($password);
+
         if ($WS_VERBOSE) {
             COM_errorLog("WS: Attempting to log in user '$username'");
         }
 
-/** this does not work! *******************************************************
-
-    } elseif (!empty($_SERVER['HTTP_X_WSSE']) &&
-            (strpos($_SERVER['HTTP_X_WSSE'], 'UsernameToken') !== false)) {
-
-        // this is loosely based on a code snippet taken from Elgg (elgg.org)
-
-        $wsse = str_replace('UsernameToken', '', $_SERVER['HTTP_X_WSSE']);
-        $wsse = explode(',', $wsse);
-
-        $username = '';
-        $pwdigest = '';
-        $created = '';
-        $nonce = '';
-
-        foreach ($wsse as $element) {
-            $element = explode('=', $element);
-            $key = array_shift($element);
-            if (count($element) == 1) {
-                $val = $element[0];
-            } else {
-                $val = implode('=', $element);
-            }
-            $key = trim($key);
-            $val = trim($val, "\x22\x27");
-            if ($key == 'Username') {
-                $username = $val;
-            } elseif ($key == 'PasswordDigest') {
-                $pwdigest = $val;
-            } elseif ($key == 'Created') {
-                $created = $val;
-            } elseif ($key == 'Nonce') {
-                $nonce = $val;
-            }
-        }
-
-        if (!empty($username) && !empty($pwdigest) && !empty($created) &&
-                !empty($nonce)) {
-
-            $uname = addslashes($username);
-            $pwd = DB_getItem($_TABLES['users'], 'passwd',
-                              "username = '$uname'");
-            // ... and here we would need the _unencrypted_ password
-
-            if (!empty($pwd)) {
-                $mydigest = pack('H*', sha1($nonce . $created . $pwd));
-                $mydigest = base64_encode($mydigest);
-
-                if ($pwdigest == $mydigest) {
-                    $password = $pwd;
-                }
-            }
-        }
-
-        if ($WS_VERBOSE) {
-            COM_errorLog("WS: Attempting to log in user '$username' (via WSSE)");
-        }
-
-******************************************************************************/
 
     } elseif (!empty($_SERVER['REMOTE_USER'])) {
         /* PHP installed as CGI may not have access to authorization headers of
@@ -854,6 +798,9 @@ function WS_authenticate()
 
         list($auth_type, $auth_data) = explode(' ', $_SERVER['REMOTE_USER']);
         list($username, $password) = explode(':', base64_decode($auth_data));
+
+        $username = COM_applyFilter($username);
+        $password = COM_applyFilter($password);
 
         if ($WS_VERBOSE) {
             COM_errorLog("WS: Attempting to log in user '$username' (via \$_SERVER['REMOTE_USER'])");
