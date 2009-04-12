@@ -37,7 +37,8 @@
 // +--------------------------------------------------------------------------+
 
 // Prevent PHP from reporting uninitialized variables
-error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+// error_reporting( E_ALL );
 
 // this file can't be used on its own
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
@@ -138,7 +139,8 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
  */
 require_once $_CONF['path_system'].'classes/htmlfilter.class.php';
 require_once $_CONF['path_system'].'classes/sanitize.class.php';
-$inputHandler =& sanitize::getInstance();
+$inputHandler = new sanitize();
+//$inputHandler =& sanitize::getInstance();
 
 // timezone hack - set the webserver's timezone
 if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&

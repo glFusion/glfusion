@@ -787,7 +787,7 @@ function INST_innodbSupported()
 function INST_pluginAutoInstall( $plugin )
 {
     global $_CONF, $_TABLES, $_DB_table_prefix;
-    global $_DB_dbms;
+    global $_DB_dbms, $inputHandler;
 
     $ret = false;
 
