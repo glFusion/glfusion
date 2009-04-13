@@ -735,7 +735,10 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
 function MG_quickCreate( $parent, $title, $desc='' ) {
     global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST;
 
-    $grp_id                 = DB_getItem($_TABLES['vars'], 'value','name="mediagallery_gid"');
+    $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+    $row = DB_fetchArray($result);
+    $grp_id = $row['grp_id'];
+
     $album = new mgAlbum();
 
     if ($_MG_CONF['htmlallowed'] == 1 ) {
