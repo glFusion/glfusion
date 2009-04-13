@@ -338,6 +338,16 @@ if ($A['count'] > 0) {
             $delete_option = (SEC_hasRights('story.edit') && ($story->getAccess() == 3)
                              ? true : false);
             require_once ( $_CONF['path_system'] . 'lib-comment.php' );
+            if ( isset($_GET['mode']) ) {
+                $mode = COM_applyFilter($_GET['mode']);
+            } else {
+                $mode = '';
+            }
+            if ( isset($_GET['page']) ) {
+                $page = intval(COM_applyFilter($_GET['page'],true));
+            } else {
+                $page = 1;
+            }
             $story_template->set_var ('commentbar',
                     CMT_userComments ($story->getSid(), $story->displayElements('title'), 'article',
                                       $order, $mode, 0, $page, false, $delete_option, $story->displayElements('commentcode')));
