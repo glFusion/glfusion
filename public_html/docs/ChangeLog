@@ -14,8 +14,14 @@ v1.1.4
 - Advanced search using date range did not return stories or comments in
   that date range (Mark)
 
+Forum
+-----
+- Fixed issue where duplicate forum names (different categories) did not show
+  in the forum selection list for moderation functions. (Mark)
+
 Media Gallery
 -------------
+- FTP batch import would crash with SQL error (Mark)
 - 0000428 Wiki type keywords - Added [alink] auto tag to allow text links
   to albums (Mark)
 - 0000437 Slideshow autotag does not honor caption option in config. (Mark)
