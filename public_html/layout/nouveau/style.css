@@ -1862,7 +1862,7 @@ float:right;
 padding-left:5px;
 }
 
-div .php {
+div .php, div .text {
 max-height:400px;
 overflow:auto;
 height:auto;
@@ -1870,7 +1870,7 @@ width:auto;
 min-height:100px;
 }
 
-#gl_container_fixed div.php {
+#gl_container_fixed div .php, #gl_container_fixed div .text {
 width:596px;
 }
 
