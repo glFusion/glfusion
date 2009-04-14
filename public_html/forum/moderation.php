@@ -181,9 +181,8 @@ if (forum_modPermission($forum,$_USER['uid'])) {
             exit();
         } else {
             $date = time();
-            $movetoforum = gf_preparefordb($_POST['movetoforum'],text);
             $movetitle = gf_preparefordb($_POST['movetitle'],text);
-            $newforumid = DB_getItem($_TABLES['gf_forums'],"forum_id","forum_name='$movetoforum'");
+            $newforumid = intval(COM_applyFilter($_POST['movetoforum'],true));
             /* Check and see if we are splitting this forum thread */
 
             if (isset($_POST['splittype'])) {  // - Yes
@@ -328,7 +327,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
           }
         }
         /* Check and see if user had moderation rights to another forum to complete the topic move */
-        $sql = "SELECT DISTINCT forum_name FROM {$_TABLES['gf_moderators']} a , {$_TABLES['gf_forums']} b ";
+        $sql = "SELECT DISTINCT forum_id,forum_name,forum_dscp FROM {$_TABLES['gf_moderators']} a , {$_TABLES['gf_forums']} b ";
         $sql .= "where a.mod_forum = b.forum_id AND ( a.mod_uid='{$_USER['uid']}' OR a.mod_groupid in ($modgroups))";
         $query = DB_query($sql);
 
@@ -341,15 +340,14 @@ if (forum_modPermission($forum,$_USER['uid'])) {
             $promptform  .= '<input type="hidden" name="moveid" value="' .$fortopicid. '"' . XHTML . '>';
             $promptform  .= '<input type="hidden" name="confirm_move" value="1"' . XHTML . '>';
             $promptform  .= '<input type="hidden" name="forum" value="' .$forum. '"' . XHTML . '>';
-            $promptform .= '<div>'.$LANG_GF03['selectforum'];
-            $promptform .= '&nbsp;<select name="movetoforum" style="width:120px;">';
+            $promptform .= '<div style="padding:5px;">'.$LANG_GF03['selectforum'];
+            $promptform .= '&nbsp;<select name="movetoforum">';
             while($showforums = DB_fetchArray($query)){
-                $promptform  .= "<option>$showforums[forum_name]</option>";
+                $promptform .= '<option value="'.$showforums['forum_id'].'">'.$showforums['forum_name']. '('.COM_truncate($showforums['forum_dscp'],15,'...').')</option>';
             }
             $promptform  .= '</select>';
             $promptform .= '</div><div style="padding:10 0 5 0px;">'.$LANG_GF02['msg186'].':&nbsp;';
             $promptform .= '<input type="text" size="60" name="movetitle" value="' .$topictitle. '"' . XHTML . '>';
-
 
             /* Check and see request to move complete topic or split the topic */
             if (DB_getItem($_TABLES['gf_topic'],"pid","id='$fortopicid'") == 0) {
