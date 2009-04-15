@@ -2505,6 +2505,7 @@ margin:0 0 5px 80px;
 
 #gl_mooticker li {
 list-style-type:none;
+padding-left:2em;
 }
 
 #gl_mooticker .tickertitle {
