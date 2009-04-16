@@ -1242,6 +1242,7 @@ function userprofile ($user, $msg = 0)
         // first, get a list of all stories the current visitor has access to
         $sql = "SELECT sid FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
         $result = DB_query($sql);
+
         $numsids = DB_numRows($result);
         for ($i = 1; $i <= $numsids; $i++) {
             $S = DB_fetchArray ($result);
@@ -1301,6 +1302,7 @@ function userprofile ($user, $msg = 0)
     if (!empty ($sidList)) {
         $sql .= " AND (sid in ($sidList))";
     }
+
     $result = DB_query ($sql);
     $N = DB_fetchArray ($result);
     $user_templates->set_var ('number_comments', COM_numberFormat($N['count']));
@@ -1387,10 +1389,14 @@ function savepreferences($A)
     }
 
     $selectedblocks = '';
+    $selectedBoxes = array();
     if (count ($BOXES) > 0) {
-        $boxes = addslashes (implode (',', $BOXES));
-
+        foreach ($BOXES AS $box) {
+            $selectedBoxes[] = "'".addslashes($box)."'";
+        }
+        $boxes = implode (',', $selectedBoxes);
         $blockresult = DB_query("SELECT bid,name FROM {$_TABLES['blocks']} WHERE bid NOT IN ($boxes)");
+
         $numRows = DB_numRows($blockresult);
         for ($x = 1; $x <= $numRows; $x++) {
             $row = DB_fetchArray ($blockresult);
