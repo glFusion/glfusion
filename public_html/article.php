@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -51,19 +51,12 @@
 */
 require_once 'lib-common.php';
 require_once $_CONF['path_system'] . 'lib-story.php';
-// require_once $_CONF['path_system'] . 'lib-comment.php';
+
 if ($_CONF['trackback_enabled']) {
     require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-
-// echo COM_debug($_POST);
-
 // MAIN
-//CMT_updateCommentcodes();
 $display = '';
 
 $order = '';
@@ -104,7 +97,7 @@ if ((strcasecmp ($order, 'ASC') != 0) && (strcasecmp ($order, 'DESC') != 0)) {
     $order = '';
 }
 
-$result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '$sid'" . COM_getPermSql ('AND'));
+$result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'" . COM_getPermSql ('AND'));
 $A = DB_fetchArray($result);
 if ($A['count'] > 0) {
 
@@ -220,7 +213,7 @@ if ($A['count'] > 0) {
         $display .= COM_siteHeader ('menu', $pagetitle, $rdf);
 
         if (isset($_GET['msg'])) {
-            $msg = COM_applyFilter($_GET['msg'], true);
+            $msg = intval(COM_applyFilter($_GET['msg'], true));
             if ($msg > 0) {
                 $plugin = '';
                 if (isset($_GET['plugin'])) {
@@ -229,7 +222,7 @@ if ($A['count'] > 0) {
                 $display .= COM_showMessage($msg, $plugin);
             }
         }
-        DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".$story->getSid()."') AND (date <= NOW()) AND (draft_flag = 0)");
+        DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".addslashes($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");
 
         // Display whats related
 
@@ -261,17 +254,10 @@ if ($A['count'] > 0) {
             $story_template->set_var ('lang_print_story', $LANG11[3]);
             $story_template->set_var ('lang_print_story_alt', $LANG01[65]);
         }
-        if ($_CONF['pdf_enabled'] == 1) {
-            $pdfUrl = $_CONF['site_url']
-                    . '/pdfgenerator.php?pageType=2&amp;pageData='
-                    . urlencode ($printUrl);
-            $story_options[] = COM_createLink($LANG11[5], $pdfUrl);
-            $story_template->set_var ('pdf_story_url', $printUrl);
-            $story_template->set_var ('lang_pdf_story', $LANG11[5]);
-        }
+
         if ($_CONF['backend'] == 1) {
             $tid = $story->displayElements('tid');
-            $result = DB_query("SELECT filename, title, format FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '$tid' AND is_enabled = 1");
+            $result = DB_query("SELECT filename, title, format FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '".addslashes($tid)."' AND is_enabled = 1");
             $feeds = DB_numRows($result);
             for ($i = 0; $i < $feeds; $i++) {
                 list($filename, $title, $format) = DB_fetchArray($result);

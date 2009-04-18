@@ -112,6 +112,8 @@ function SEC_getUserGroups($uid='')
         } else {
             $uid = $_USER['uid'];
         }
+    } else {
+        $uid = intval($uid);
     }
 
     if (array_key_exists($uid, $runonce)) {
@@ -300,7 +302,7 @@ function SEC_hasTopicAccess($tid)
         return 0;
     }
 
-    $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['topics']} WHERE tid = '$tid'");
+    $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['topics']} WHERE tid = '".addslashes($tid)."'");
     $A = DB_fetchArray($result);
 
     return SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
@@ -727,7 +729,7 @@ function SEC_authenticate($username, $password, &$uid)
         } elseif ($U['status'] == USER_ACCOUNT_AWAITING_ACTIVATION) {
             // Awaiting user activation, activate:
             DB_change($_TABLES['users'], 'status', USER_ACCOUNT_ACTIVE,
-                      'username', $username);
+                      'username', $escaped_name);
             return USER_ACCOUNT_ACTIVE;
         } else {
             return $U['status']; // just return their status
@@ -752,7 +754,7 @@ function SEC_checkUserStatus($userid)
     global $_CONF, $_TABLES;
 
     // Check user status
-    $status = DB_getItem($_TABLES['users'], 'status', "uid='$userid'");
+    $status = DB_getItem($_TABLES['users'], 'status', "uid='".intval($userid)."'");
 
     // only do redirects if we aren't on users.php in a valid mode (logout or
     // default)
@@ -766,7 +768,7 @@ function SEC_checkUserStatus($userid)
         }
     }
     if ($status == USER_ACCOUNT_AWAITING_ACTIVATION) {
-        DB_change($_TABLES['users'], 'status', USER_ACCOUNT_ACTIVE, 'uid', $userid);
+        DB_change($_TABLES['users'], 'status', USER_ACCOUNT_ACTIVE, 'uid', intval($userid));
     } elseif ($status == USER_ACCOUNT_AWAITING_APPROVAL) {
         // If we aren't on users.php with a default action then go to it
         if ($redirect) {
@@ -911,7 +913,9 @@ function SEC_addUserToGroup($uid, $gname)
 {
     global $_TABLES, $_CONF;
 
-    $remote_grp = DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name='". $gname ."'");
+    $uid = intval($uid);
+
+    $remote_grp = DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name='". addslashes($gname) ."'");
     DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', '$uid')");
 }
 
@@ -994,7 +998,7 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
 
     if (!empty ($feature_name)) {
         $feat_id = DB_getItem ($_TABLES['features'], 'ft_id',
-                               "ft_name = '$feature_name'");
+                               "ft_name = '".addslashes($feature_name)."'");
         if (!empty ($feat_id)) {
             // Before removing the feature itself, remove it from all groups
             if ($logging) {
@@ -1050,7 +1054,7 @@ function SEC_getGroupDropdown ($group_id, $access)
     } else {
         // They can't set the group then
         $groupdd .= DB_getItem ($_TABLES['groups'], 'grp_name',
-                                "grp_id = '$group_id'")
+                                "grp_id = '".addslashes($group_id)."'")
                  . '<input type="hidden" name="group_id" value="' . $group_id
                  . '"' . XHTML . '>';
     }
@@ -1119,7 +1123,7 @@ function SEC_createToken($ttl = 1200)
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), '{$_USER['uid']}', '$pageURL', '$ttl')";
+           . "VALUES ('$token', NOW(), '{$_USER['uid']}', '$pageURL', '".intval($ttl)."')";
     DB_Query($sql);
 
     $last_token = $token;
@@ -1160,7 +1164,7 @@ function SEC_checkToken()
 
                          ELSE 0
                       END
-                    FROM {$_TABLES['tokens']} WHERE token='$token'";
+                    FROM {$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
         }
         $tokens = DB_Query($sql);
         $numberOfTokens = DB_numRows($tokens);
@@ -1187,7 +1191,7 @@ function SEC_checkToken()
             }
 
             // It's a one time token. So eat it.
-            $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='$token'";
+            $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
             DB_Query($sql);
         }
     } else {
@@ -1225,11 +1229,11 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
     DB_Query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='{$_USER['uid']}' AND urlfor='$action'";
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='{$_USER['uid']}' AND urlfor='".addslashes($action)."'";
     DB_Query($sql);
 
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), '{$_USER['uid']}', '$action', '$ttl')";
+           . "VALUES ('$token', NOW(), '{$_USER['uid']}', '".addslashes($action)."', '$ttl')";
     DB_Query($sql);
 
     /* And return the token to the user */
@@ -1247,7 +1251,7 @@ function SEC_checkTokenGeneral($token,$action='general')
     if(trim($token) != '') {
         $token = COM_applyFilter($token);
         $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
-           . "{$_TABLES['tokens']} WHERE token='$token'";
+           . "{$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
 
         $tokens = DB_Query($sql);
         $numberOfTokens = DB_numRows($tokens);

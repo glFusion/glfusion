@@ -88,7 +88,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         return $retval;
     }
 
-    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = '$user'");
+    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = '".intval($user)."'");
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
         return COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -172,7 +172,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         $A['photo'] = '(none)'; // user does not have a photo
     }
 
-    $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = {$A['uid']}");
+    $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = '".intval($A['uid'])."'");
     $lasttime = COM_getUserDateTimeFormat ($lastlogin);
 
     $photo = USER_getPhoto ($user, $A['photo'], $A['email'], -1,0);
@@ -191,7 +191,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     }
 
     if ($A['showonline']) {
-        $online_result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE uid='" . $user ."'");
+        $online_result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE uid='" . intval($user) ."'");
         if ( DB_numRows($online_result) > 0 ) {
             $user_templates->set_var ('online', 'online');
         }
@@ -235,7 +235,7 @@ function userprofile($user, $msg = 0, $plugin = '')
 
     // list of last 10 stories by this user
     if (sizeof ($tids) > 0) {
-        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '$user') AND (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
+        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '".intval($user)."') AND (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
         $sql .= " ORDER BY unixdate DESC LIMIT 10";
         $result = DB_query ($sql);
         $nrows = DB_numRows ($result);
@@ -283,7 +283,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     $sidList = "'$sidList'";
 
     // then, find all comments by the user in those stories
-    $sql = "SELECT sid,title,cid,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['comments']} WHERE (uid = '$user') GROUP BY sid,title,cid,UNIX_TIMESTAMP(date)";
+    $sql = "SELECT sid,title,cid,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['comments']} WHERE (uid = '".intval($user)."') GROUP BY sid,title,cid,UNIX_TIMESTAMP(date)";
 
     // SQL NOTE:  Using a HAVING clause is usually faster than a where if the
     // field is part of the select
@@ -321,12 +321,12 @@ function userprofile($user, $msg = 0, $plugin = '')
 
     // posting stats for this user
     $user_templates->set_var ('lang_number_stories', $LANG04[84]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = '$user') AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
+    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = '".intval($user)."') AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
     $result = DB_query($sql);
     $N = DB_fetchArray ($result);
     $user_templates->set_var ('number_stories', COM_numberFormat ($N['count']));
     $user_templates->set_var ('lang_number_comments', $LANG04[85]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['comments']} WHERE (uid = '$user')";
+    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['comments']} WHERE (uid = '".intval($user)."')";
     if (!empty ($sidList)) {
         $sql .= " AND (sid in ($sidList))";
     }
@@ -426,6 +426,7 @@ function requestpassword ($username, $msg = 0)
     $retval = '';
 
     // no remote users!
+    $username = addslashes($username);
     $result = DB_query ("SELECT uid,email,passwd,status FROM {$_TABLES['users']} WHERE username = '$username' AND ((remoteservice IS NULL) OR (remoteservice=''))");
     $nrows = DB_numRows ($result);
     if ($nrows == 1) {
@@ -435,7 +436,7 @@ function requestpassword ($username, $msg = 0)
         }
         $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
         DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",
-                   'uid', $A['uid']);
+                   'uid', intval($A['uid']));
 
         $mailtext = sprintf ($LANG04[88], $username);
         $mailtext .= $_CONF['site_url'] . '/users.php?mode=newpwd&uid=' . $A['uid'] . '&rid=' . $reqid . "\n\n";
@@ -493,7 +494,7 @@ function newpasswordform ($uid, $requestid)
 
     $pwform->set_var ('user_id', $uid);
     $pwform->set_var ('user_name', DB_getItem ($_TABLES['users'], 'username',
-                                               "uid = '{$uid}'"));
+                                               "uid = '".intval($uid)."'"));
     $pwform->set_var ('request_id', $requestid);
 
     $pwform->set_var ('lang_explain', $LANG04[90]);
@@ -576,7 +577,7 @@ function createuser ($username, $email, $email_conf)
             $uid = USER_createAccount ($username, $email);
 
             if ($_CONF['usersubmission'] == 1) {
-                if (DB_getItem ($_TABLES['users'], 'status', "uid = $uid")
+                if (DB_getItem ($_TABLES['users'], 'status', "uid = '".intval($uid)."'")
                         == USER_ACCOUNT_AWAITING_APPROVAL) {
                     $retval = COM_refresh ($_CONF['site_url']
                                            . '/index.php?msg=48');
@@ -987,8 +988,10 @@ case 'newpwd':
     $reqid = COM_applyFilter ($_GET['rid']);
     if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
             !empty ($reqid) && (strlen ($reqid) == 16)) {
+        $uid = intval($uid);
+        $safereqid = addslashes($reqid);
         $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
-                           array ($uid, $reqid));
+                           array ($uid, $safereqid));
         if ($valid == 1) {
             $display .= COM_siteHeader ('menu', $LANG04[92]);
             $display .= newpasswordform ($uid, $reqid);
@@ -1016,8 +1019,10 @@ case 'setnewpwd':
         $reqid = COM_applyFilter ($_POST['rid']);
         if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
                 !empty ($reqid) && (strlen ($reqid) == 16)) {
+            $uid = intval($uid);
+            $safereqid = addslashes($reqid);
             $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
-                               array ($uid, $reqid));
+                               array ($uid, $safereqid));
             if ($valid == 1) {
                 $passwd = SEC_encryptPassword($_POST['passwd']);
                 DB_change ($_TABLES['users'], 'passwd', "$passwd",
@@ -1057,7 +1062,7 @@ case 'emailpasswd':
         $email = COM_applyFilter ($_POST['email']);
         if (empty ($username) && !empty ($email)) {
             $username = DB_getItem ($_TABLES['users'], 'username',
-                                    "email = '$email' AND ((remoteservice IS NULL) OR (remoteservice = ''))");
+                                    "email = '".addslashes($email)."' AND ((remoteservice IS NULL) OR (remoteservice = ''))");
         }
         if (!empty ($username)) {
             $display .= requestpassword ($username, 55);
@@ -1198,7 +1203,7 @@ default:
     }
 
     if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
-        DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',$uid);
+        DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',intval($uid));
         $userdata = SESS_getUserDataFromId($uid);
         $_USER = $userdata;
         $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
@@ -1224,7 +1229,7 @@ default:
                            SEC_encryptPassword($passwd), time() + $cooktime,
                            $_CONF['cookie_path'], $_CONF['cookiedomain'],
                            $_CONF['cookiesecure']);
-                DB_query("UPDATE {$_TABLES['users']} set remote_ip='".$_SERVER['REMOTE_ADDR']."' WHERE uid='".$_USER['uid']."'",1);
+                DB_query("UPDATE {$_TABLES['users']} set remote_ip='".addslashes($_SERVER['REMOTE_ADDR'])."' WHERE uid='".$_USER['uid']."'",1);
             }
         } else {
             $userid = $_COOKIE[$_CONF['cookie_name']];

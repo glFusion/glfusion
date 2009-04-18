@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -267,7 +270,7 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
 
     $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS day,DATE_FORMAT(date, '%e') AS mday FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
     if ($topic != 'all') {
-        $sql .= " AND (tid = '$topic')";
+        $sql .= " AND (tid = '".addslashes($topic)."')";
     }
     $sql .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
          . COM_getLangSQL ('sid', 'AND') . " ORDER BY date ASC";
@@ -345,7 +348,7 @@ function DIR_displayYear ($topic, $year, $main = false)
     $monthsql['mysql'] = "SELECT DISTINCT MONTH(date) AS month,COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
     $monthsql['mssql'] = "SELECT MONTH(date) AS month,COUNT(sid) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= NOW())";
     if ($topic != 'all') {
-        $monthsql['mysql'] .= " AND (tid = '$topic')";
+        $monthsql['mysql'] .= " AND (tid = '".addslashes($topic)."')";
         $monthsql['mssql'] .= " AND (tid = '$topic')";
     }
     $monthsql['mysql'] .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
@@ -466,11 +469,11 @@ $topic = COM_applyFilter ($topic);
 if (empty ($topic)) {
     $topic = 'all';
 }
-$year = COM_applyFilter ($year, true);
+$year = intval(COM_applyFilter ($year, true));
 if ($year < 0) {
     $year = 0;
 }
-$month = COM_applyFilter ($month, true);
+$month = intval(COM_applyFilter ($month, true));
 if (($month < 1) || ($month > 12)) {
     $month = 0;
 }

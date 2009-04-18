@@ -52,6 +52,8 @@ function USER_deleteAccount ($uid)
 {
     global $_CONF, $_TABLES, $_USER;
 
+    $uid = intval($uid);
+
     // first some checks ...
     if ((($uid == $_USER['uid']) && ($_CONF['allow_account_delete'] == 1)) ||
             SEC_hasRights ('user.delete')) {
@@ -303,11 +305,11 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     } else {
         if (!empty($remoteusername)) {
             $fields .= ',remoteusername';
-            $values .= ",'$remoteusername'";
+            $values .= ",'".addslashes($remoteusername)."'";
         }
         if (!empty($service)) {
             $fields .= ',remoteservice';
-            $values .= ",'$service'";
+            $values .= ",'".addslashes($service)."'";
         }
     }
 
@@ -315,7 +317,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     // Get the uid of the user, possibly given a service:
     if ($remoteusername != '')
     {
-        $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '$remoteusername' AND remoteservice='$service'");
+        $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '".addslashes($remoteusername)."' AND remoteservice='".addslashes($service)."'");
     } else {
         $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username' AND remoteservice IS NULL");
     }
@@ -414,6 +416,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
     global $_CONF, $_TABLES, $_USER;
 
     $userphoto = '';
+    $uid = intval($uid);
 
     if ($_CONF['allow_user_photo'] == 1) {
 
@@ -556,7 +559,11 @@ function USER_addGroup ($groupid, $uid = '')
             // If logged in set to current uid
             $uid = $_USER['uid'];
         }
+    } else {
+        $uid = intval($uid);
     }
+
+    $groupid = intval($groupid);
 
     if (($groupid < 1) || SEC_inGroup ($groupid, $uid)) {
         return false;
@@ -591,7 +598,11 @@ function  USER_delGroup ($groupid, $uid = '')
             // If logged in set to current uid
             $uid = $_USER['uid'];
         }
+    } else {
+        $uid = intval($uid);
     }
+
+    $groupid = intval($groupid);
 
     if (($groupid > 0) && SEC_inGroup ($groupid, $uid)) {
         DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$groupid' AND ug_uid = '$uid'");
@@ -658,7 +669,7 @@ function USER_uniqueUsername($username)
     $try = $username;
     do {
         $try = addslashes($try);
-        $uid = DB_getItem($_TABLES['users'], 'uid', "username = '$try'");
+        $uid = DB_getItem($_TABLES['users'], 'uid', "username = '".addslashes($try)."'");
         if (!empty($uid)) {
             $r = rand(2, 9999);
             if (strlen($username) > 12) {

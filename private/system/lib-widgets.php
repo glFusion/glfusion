@@ -115,7 +115,7 @@ EOS;
 function WIDGET_mootickerRSS($block = 'gl_mootickerRSS', $id = 'gl_mooticker') {
     global $_CONF, $_TABLES, $LANG_WIDGETS;
 
-$query = "SELECT bid, rdfurl, rdflimit, UNIX_TIMESTAMP(rdfupdated) AS date FROM {$_TABLES['blocks']} WHERE type = 'portal' AND is_enabled = 0";
+    $query = "SELECT bid, rdfurl, rdflimit, UNIX_TIMESTAMP(rdfupdated) AS date FROM {$_TABLES['blocks']} WHERE type = 'portal' AND is_enabled = 0";
 
     // Update feeds from blocks where 'is_enabled' -tag is set to 0
     $blocksql['mysql'] = $query;
@@ -137,7 +137,7 @@ $query = "SELECT bid, rdfurl, rdflimit, UNIX_TIMESTAMP(rdfupdated) AS date FROM 
     };
 
     $retval = '';
-    $result = DB_query("SELECT *, rdfupdated as date FROM {$_TABLES['blocks']} WHERE name='" . $block . "'");
+    $result = DB_query("SELECT *, rdfupdated as date FROM {$_TABLES['blocks']} WHERE name='" . addslashes($block) . "'");
     $numRows = DB_numRows($result);
     if ( $numRows < 1 || $result == NULL ) {
         return $retval;

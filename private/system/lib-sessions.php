@@ -289,7 +289,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
     $expirytime = (string) (time() - $lifespan);
     if (!isset($_COOKIE[$_CONF['cookie_session']])) {
         // ok, delete any old sessons for this user
-        DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = '$userid'",1);
+        DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = '".intval($userid)."'",1);
         if ( DB_error() ) {
             DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
             COM_errorLog("***** REPAIR SESSIONS TABLE *****");
@@ -313,19 +313,19 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
         }
     }
     // Remove the anonymous sesssion for this user
-    DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = 1 AND remote_ip = '$remote_ip'");
+    DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = 1 AND remote_ip = '".addslashes($remote_ip)."'");
 
     // Create new session
     if (empty ($md5_sessid)) {
         $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '$userid', '$currtime', '$remote_ip')";
     } else {
-        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, md5_sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '$md5_sessid', '$userid', '$currtime', '$remote_ip')";
+        $sql = "INSERT INTO {$_TABLES['sessions']} (sess_id, md5_sess_id, uid, start_time, remote_ip) VALUES ('$sessid', '$md5_sessid', '$userid', '$currtime', '".addslashes($remote_ip)."')";
     }
     $result = DB_query($sql);
     if ($result) {
         if ($_CONF['lastlogin'] == true) {
             // Update userinfo record to record the date and time as lastlogin
-            DB_query("UPDATE {$_TABLES['userinfo']} SET lastlogin = UNIX_TIMESTAMP() WHERE uid='$userid'");
+            DB_query("UPDATE {$_TABLES['userinfo']} SET lastlogin = UNIX_TIMESTAMP() WHERE uid='".intval($userid)."'");
         }
         if ($_SESS_VERBOSE) COM_errorLog("Assigned the following session id: $sessid",1);
         if ($_SESS_VERBOSE) COM_errorLog("*************leaving SESS_newSession*****************",1);
@@ -397,10 +397,10 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip, $md5_based=
 
     if ($md5_based == 1) {
         $sql = "SELECT uid FROM {$_TABLES['sessions']} WHERE "
-        . "(md5_sess_id = '$sessid') AND (start_time > $mintime) AND (remote_ip = '$remote_ip')";
+        . "(md5_sess_id = '".addslashes($sessid)."') AND (start_time > $mintime) AND (remote_ip = '".addslashes($remote_ip)."')";
     } else {
         $sql = "SELECT uid FROM {$_TABLES['sessions']} WHERE "
-        . "(sess_id = '$sessid') AND (start_time > $mintime) AND (remote_ip = '$remote_ip')";
+        . "(sess_id = '".addslashes($sessid)."') AND (start_time > $mintime) AND (remote_ip = '".addslashes($remote_ip)."')";
     }
 
     if ($_SESS_VERBOSE) {
@@ -444,9 +444,9 @@ function SESS_updateSessionTime($sessid, $md5_based=0)
     $newtime = (string) time();
 
     if ($md5_based == 1) {
-        $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (md5_sess_id = '$sessid')";
+        $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (md5_sess_id = '".addslashes($sessid)."')";
     } else {
-        $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (sess_id = '$sessid')";
+        $sql = "UPDATE {$_TABLES['sessions']} SET start_time=$newtime WHERE (sess_id = '".addslashes($sessid)."')";
     }
 
     $result = DB_query($sql);
@@ -467,7 +467,7 @@ function SESS_endUserSession($userid)
 {
     global $_TABLES;
 
-    $sql = "DELETE FROM {$_TABLES['sessions']} WHERE (uid = '$userid')";
+    $sql = "DELETE FROM {$_TABLES['sessions']} WHERE (uid = '".intval($userid)."')";
     $result = DB_query($sql);
 
     return 1;
@@ -488,7 +488,7 @@ function SESS_getUserData($username)
 
     $sql = "SELECT *,format FROM {$_TABLES['users']}, {$_TABLES['userprefs']}, {$_TABLES['dateformats']} "
         . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
-        . "{$_TABLES['userprefs']}.uid = {$_TABLES['users']}.uid AND username = '$username'";
+        . "{$_TABLES['userprefs']}.uid = {$_TABLES['users']}.uid AND username = '".addslashes($username)."'";
 
     if(!$result = DB_query($sql)) {
         COM_errorLog("error in get_userdata");
@@ -516,7 +516,7 @@ function SESS_getUserDataFromId($userid)
 
     $sql = "SELECT *,format FROM {$_TABLES['dateformats']},{$_TABLES["users"]},{$_TABLES['userprefs']} "
      . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
-     . "{$_TABLES['userprefs']}.uid = '$userid' AND {$_TABLES['users']}.uid = '$userid'";
+     . "{$_TABLES['userprefs']}.uid = '$userid' AND {$_TABLES['users']}.uid = '".intval($userid)."'";
 
     if(!$result = DB_query($sql)) {
         $userdata = array("error" => "1");

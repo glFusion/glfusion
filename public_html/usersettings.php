@@ -656,7 +656,7 @@ function editpreferences()
     // daily digest block
     if ($_CONF['emailstories'] == 1) {
         $user_etids = DB_getItem ($_TABLES['userindex'], 'etids',
-                                  "uid = {$_USER['uid']}");
+                                  "uid = '{$_USER['uid']}'");
         if (empty ($user_etids)) { // an empty string now means "all topics"
             $user_etids = buildTopicList ();
         } elseif ($user_etids == '-') { // this means "no topics"
@@ -733,14 +733,14 @@ function emailAddressExists ($email, $uid)
 {
     global $_TABLES;
 
-    $old_email = DB_getItem($_TABLES['users'], 'email', "uid = '$uid'");
+    $old_email = DB_getItem($_TABLES['users'], 'email', "uid = '".intval($uid)."'");
     if ($email == $old_email) {
         // email address didn't change so don't care
         return false;
     }
 
     $email = addslashes($email);
-    $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE email = '$email' AND uid <> '$uid' AND (remoteservice IS NULL OR remoteservice = '')");
+    $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE email = '$email' AND uid <> '".intval($uid)."' AND (remoteservice IS NULL OR remoteservice = '')");
     if (DB_numRows($result) > 0) {
         // email address is already in use for another non-remote account
         return true;
@@ -798,7 +798,7 @@ function handlePhotoUpload ($delete_photo = '')
     }
 
     $curphoto = DB_getItem ($_TABLES['users'], 'photo',
-                            "uid = {$_USER['uid']}");
+                            "uid = '{$_USER['uid']}'");
     if (empty ($curphoto)) {
         $delete_photo = false;
     }
@@ -875,7 +875,7 @@ function saveuser($A)
     }
 
     $reqid = DB_getItem ($_TABLES['users'], 'pwrequestid',
-                         "uid = {$_USER['uid']}");
+                         "uid = '{$_USER['uid']}'");
     if ($reqid != $A['uid']) {
         DB_change ($_TABLES['users'], 'pwrequestid', "NULL",
                    'uid', $_USER['uid']);
@@ -926,10 +926,10 @@ function saveuser($A)
         if (!empty ($A['new_username']) &&
                 ($A['new_username'] != $_USER['username'])) {
             $A['new_username'] = addslashes ($A['new_username']);
-            if (DB_count ($_TABLES['users'], 'username', $A['new_username']) == 0) {
+            if (DB_count ($_TABLES['users'], 'username', addslashes($A['new_username'])) == 0) {
                 if ($_CONF['allow_user_photo'] == 1) {
                     $photo = DB_getItem ($_TABLES['users'], 'photo',
-                                         "uid = {$_USER['uid']}");
+                                         "uid = '{$_USER['uid']}'");
                     if (!empty ($photo)) {
                         $newphoto = preg_replace ('/' . $_USER['username'] . '/',
                                     $A['new_username'], $photo, 1);
@@ -1118,7 +1118,7 @@ function userprofile ($user, $msg = 0)
         return $retval;
     }
 
-    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,homepage,about,location,pgpkey,photo,email FROM {$_TABLES['userinfo']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['users']}.uid = '$user'");
+    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,homepage,about,location,pgpkey,photo,email FROM {$_TABLES['userinfo']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['users']}.uid = '".intval($user)."'");
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
         return COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -1204,7 +1204,7 @@ function userprofile ($user, $msg = 0)
 
     // list of last 10 stories by this user
     if (sizeof ($tids) > 0) {
-        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '$user') AND (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
+        $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['stories']} WHERE (uid = '".intval($user)."') AND (draft_flag = 0) AND (date <= NOW()) AND (tid IN ($topics))" . COM_getPermSQL ('AND');
         $sql .= " ORDER BY unixdate DESC LIMIT 10";
         $result = DB_query ($sql);
         $nrows = DB_numRows ($result);
@@ -1254,7 +1254,7 @@ function userprofile ($user, $msg = 0)
     $sidList = "'$sidList'";
 
     // then, find all comments by the user in those stories
-    $sql = "SELECT sid,title,cid,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['comments']} WHERE (uid = '$user') GROUP BY sid,title,cid,UNIX_TIMESTAMP(date)";
+    $sql = "SELECT sid,title,cid,UNIX_TIMESTAMP(date) AS unixdate FROM {$_TABLES['comments']} WHERE (uid = '".intval($user)."') GROUP BY sid,title,cid,UNIX_TIMESTAMP(date)";
 
     // SQL NOTE:  Using a HAVING clause is usually faster than a where if the
     // field is part of the select
@@ -1293,7 +1293,7 @@ function userprofile ($user, $msg = 0)
 
     // posting stats for this user
     $user_templates->set_var ('lang_number_stories', $LANG04[84]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = '$user') AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
+    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = '".intval($user)."') AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
     $result = DB_query($sql);
     $N = DB_fetchArray ($result);
     $user_templates->set_var ('number_stories', COM_numberFormat ($N['count']));
@@ -1377,24 +1377,28 @@ function savepreferences($A)
     $AIDS  = @array_values($A['selauthors']);
     $BOXES = @array_values($A["{$_TABLES['blocks']}"]);
     $ETIDS = @array_values($A['etids']);
+    $allowed_etids = buildTopicList ();
+    $AETIDS = explode (' ', $allowed_etids);
 
     $tids = '';
     if (sizeof ($TIDS) > 0) {
-        $tids = addslashes (implode (' ', $TIDS));
+        $tids = addslashes (implode (' ', array_intersect ($AETIDS, $TIDS)));
     }
-
     $aids = '';
     if (sizeof ($AIDS) > 0) {
+        foreach ($AIDS as $key => $val) {
+            $AIDS[$key] = intval($val);
+        }
         $aids = addslashes (implode (' ', $AIDS));
     }
-
     $selectedblocks = '';
     $selectedBoxes = array();
     if (count ($BOXES) > 0) {
-        foreach ($BOXES AS $box) {
-            $selectedBoxes[] = "'".addslashes($box)."'";
+        foreach ($BOXES AS $key => $val) {
+            $BOXES[$key] = intval($val);
         }
-        $boxes = implode (',', $selectedBoxes);
+        $boxes = addslashes(implode(',', $BOXES));
+
         $blockresult = DB_query("SELECT bid,name FROM {$_TABLES['blocks']} WHERE bid NOT IN ($boxes)");
 
         $numRows = DB_numRows($blockresult);
@@ -1411,8 +1415,6 @@ function savepreferences($A)
 
     $etids = '';
     if (sizeof ($ETIDS) > 0) {
-        $allowed_etids = buildTopicList ();
-        $AETIDS = explode (' ', $allowed_etids);
         $etids = addslashes (implode (' ', array_intersect ($AETIDS, $ETIDS)));
     }
 
@@ -1438,7 +1440,7 @@ function savepreferences($A)
 
     // Save theme, when doing so, put in cookie so we can set the user's theme
     // even when they aren't logged in
-    $theme = addslashes ($A['theme']);
+    $theme    = addslashes ($A['theme']);
     $language = addslashes ($A['language']);
     DB_query("UPDATE {$_TABLES['users']} SET theme='$theme',language='$language' WHERE uid = '{$_USER['uid']}'");
     setcookie ($_CONF['cookie_theme'], $A['theme'], time() + 31536000,
@@ -1451,7 +1453,7 @@ function savepreferences($A)
                $_CONF['cookie_path'], $_CONF['cookiedomain'],
                $_CONF['cookiesecure']);
 
-    $A['dfid'] = COM_applyFilter ($A['dfid'], true);
+    $A['dfid'] = intval(COM_applyFilter ($A['dfid'], true));
 
     DB_query("UPDATE {$_TABLES['userprefs']} SET noicons='{$A['noicons']}', willing='{$A['willing']}', dfid='{$A['dfid']}', tzid='{$A['tzid']}', emailfromadmin='{$A['emailfromadmin']}', emailfromuser='{$A['emailfromuser']}', showonline='{$A['showonline']}' WHERE uid='{$_USER['uid']}'");
 

@@ -157,8 +157,8 @@ function submitstory($topic = '')
     if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) &&
         file_exists ($_CONF['path_layout'] . 'submit/submitstory_advanced.thtml')) {
         $storyform->set_file('storyform','submitstory_advanced.thtml');
-        $ae_uid = addslashes(COM_applyFilter($_USER['uid'],true));
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
+        $ae_uid = addslashes(intval(COM_applyFilter($_USER['uid'],true)));
+        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='$ae_uid' AND urlfor='advancededitor'";
         DB_Query($sql,1);
         if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
             $storyform->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
@@ -437,7 +437,7 @@ if (($mode == $LANG12[8]) && !empty ($LANG12[8])) { // submit
     if ( !isset($_USER['uid'] ) ) {
         $_USER['uid'] = 1;
     }
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='{$_USER['uid']}' AND urlfor='advancededitor'";
     DB_Query($sql,1);
     if (empty ($_USER['username']) &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {

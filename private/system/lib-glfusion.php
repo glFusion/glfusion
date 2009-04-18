@@ -209,14 +209,14 @@ function phpblock_storypicker() {
         }
     }
     if (!empty($topic)) {
-        $topicsql = " AND tid = '$topic'";
+        $topicsql = " AND tid = '".addslashes($topic)."'";
     }
     if (empty($topicsql)) {
         $topic = DB_getItem($_TABLES['topics'], 'tid', 'archive_flag = 1');
         if (empty($topic)) {
             $topicsql = '';
         } else {
-            $topicsql = " AND tid <> '$topic'";
+            $topicsql = " AND tid <> '".addslashes($topic)."'";
         }
     }
     $sql = 'SELECT sid, title FROM ' .$_TABLES['stories']

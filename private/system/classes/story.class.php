@@ -547,7 +547,7 @@ class Story
             $this->_expire = time();
             $this->_expiredate = 0;
 
-            if (DB_getItem($_TABLES['topics'], 'archive_flag', "tid = '{$this->_tid}'") == 1) {
+            if (DB_getItem($_TABLES['topics'], 'archive_flag', "tid = '".addslashes($this->_tid)."'") == 1) {
                 $this->_frontpage = 0;
             } elseif (isset($_CONF['frontpage'])) {
                 $this->_frontpage = $_CONF['frontpage'];
@@ -662,7 +662,7 @@ class Story
         }
 
         /* Acquire Comment Count */
-        $sql = "SELECT count(1) FROM {$_TABLES['comments']} WHERE type='article' AND sid='{$this->_sid}'";
+        $sql = "SELECT count(1) FROM {$_TABLES['comments']} WHERE type='article' AND sid='".addslashes($this->_sid)."'";
         $result = DB_query($sql);
 
         if ($result && (DB_numRows($result) == 1)) {
@@ -762,7 +762,7 @@ class Story
          */
         $sql
         = 'SELECT owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon ' . ' FROM ' . $_TABLES['stories']
-            . ' WHERE sid=\'' . $this->_sid . '\'';
+            . ' WHERE sid=\'' . addslashes($this->_sid) . '\'';
         $result = DB_query($sql);
 
         if ($result && (DB_numRows($result) > 0)) {
@@ -795,7 +795,7 @@ class Story
         }
 
         /* Load up the topic name and icon */
-        $topic = DB_query("SELECT topic, imageurl FROM {$_TABLES['topics']} WHERE tid='{$this->_tid}'");
+        $topic = DB_query("SELECT topic, imageurl FROM {$_TABLES['topics']} WHERE tid='".addslashes($this->_tid)."'");
         $topic = DB_fetchArray($topic);
         $this->_topic = $topic['topic'];
         $this->_imageurl = $topic['imageurl'];
@@ -962,7 +962,7 @@ class Story
             $this->_bodytext = addslashes($this->_bodytext);
             $this->_postmode = addslashes($this->_postmode);
             DB_save($_TABLES['storysubmission'], 'sid,tid,uid,title,introtext,bodytext,date,postmode',
-                        "{$this->_sid},'{$this->_tid}',{$this->_uid},'{$this->_title}'," .
+                        "'{$this->_sid}','{$this->_tid}','".addslashes($this->_uid)."','{$this->_title}'," .
                         "'{$this->_introtext}','{$this->_bodytext}',NOW(),'{$this->_postmode}'");
 
             return STORY_SAVED_SUBMISSION;

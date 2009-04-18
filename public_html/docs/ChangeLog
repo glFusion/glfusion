@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Fine tuned SQL calls to help prevent injection / other issues (Mark)
+- Force IE8 to use IE7 compatibility mode to resolve text entry issues with
+  the forum plugin (Mark)
+- Properly filter the topics array prior to using in SQL in usersettings.php
+  (Mark)
 - Add CRLF between each JavaScript file (Mark)
 - Additional security tweaks (Mark)
 - 0000422 Use of adveditor in block editor does not permit use of image insert

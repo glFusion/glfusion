@@ -1118,7 +1118,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
             $sid = COM_applyFilter( COM_getArgument( 'story' ));
         }
         if( !empty( $sid )) {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='$sid'" );
+            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".addslashes($sid)."'" );
         }
     } else {
         $topic = COM_applyFilter( $_GET['topic'] );
@@ -1193,7 +1193,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
             $pagetitle = $_CONF['site_slogan'];
         } else {
             $pagetitle = stripslashes(DB_getItem( $_TABLES['topics'], 'topic',
-                                                   "tid = '$topic'" ));
+                                                   "tid = '".addslashes($topic)."'" ));
         }
     }
     if( !empty( $pagetitle ))
@@ -1393,7 +1393,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             COM_setArgNames( array( 'story', 'mode' ));
             $sid = COM_applyFilter( COM_getArgument( 'story' ));
         } if( !empty( $sid )) {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='$sid'" );
+            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".addslashes($sid)."'" );
         }
     } else {
         $topic = COM_applyFilter( $_GET['topic'] );
@@ -4117,7 +4117,7 @@ function COM_getPassword( $loginname )
 {
     global $_TABLES, $LANG01;
 
-    $result = DB_query( "SELECT passwd FROM {$_TABLES['users']} WHERE username='$loginname'" );
+    $result = DB_query( "SELECT passwd FROM {$_TABLES['users']} WHERE username='".addslashes($loginname)."'" );
     $tmp = DB_error();
     $nrows = DB_numRows( $result );
 
@@ -4161,6 +4161,8 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
         } else {
             $uid = $_USER['uid'];
         }
+    } else {
+        $uid = intval($uid);
     }
 
     if (array_key_exists($uid, $cache)) {

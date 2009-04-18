@@ -134,7 +134,7 @@ if ($_CONF['allow_user_language'] == 1) {
 
             // if user is not anonymous, store the preference in the database
             if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
-                DB_query ("UPDATE {$_TABLES['users']} SET language = '{$langfile}' WHERE uid = {$_USER['uid']}");
+                DB_query ("UPDATE {$_TABLES['users']} SET language = '".addslashes($langfile)."' WHERE uid = '{$_USER['uid']}'");
             }
         }
     }

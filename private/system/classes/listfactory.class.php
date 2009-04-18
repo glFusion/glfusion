@@ -360,9 +360,9 @@ class ListFactory {
             $order_sql = ' ORDER BY ' . addslashes($ord) . ' ' . addslashes(strtoupper($this->_sort_arr['direction']));
         }
         if ( isset($_POST['results']) ) {
-            $this->_per_page = COM_applyFilter($_POST['results'], true);
+            $this->_per_page = intval(COM_applyFilter($_POST['results'], true));
         } elseif (isset($_GET['results']) ) {
-            $this->_per_page = COM_applyFilter($_GET['results'], true);
+            $this->_per_page = intval(COM_applyFilter($_GET['results'], true));
         }
 
         // Calculate the limits for each query
@@ -371,9 +371,9 @@ class ListFactory {
         $pp_total = count($this->_preset_rows);
 
         if ( isset($_POST['page']) ) {
-            $this->_page = COM_applyFilter($_POST['page'], true);
+            $this->_page = intval(COM_applyFilter($_POST['page'], true));
         } elseif (isset($_GET['page']) ) {
-            $this->_page = COM_applyFilter($_GET['page'], true);
+            $this->_page = intval(COM_applyFilter($_GET['page'], true));
         } else {
             $this->_page = 1;
         }
@@ -450,7 +450,7 @@ class ListFactory {
              */
             $name = $limits[$i]['name'];
             if ( isset($_post_offset[$name]) && isset($_REQUEST['np']) && $_REQUEST['np'] == 1 ) {
-                $limits[$i]['offset'] = COM_applyFilter($_post_offset[$name],true) + COM_applyFilter($_post_pp[$name],true);
+                $limits[$i]['offset'] = intval(COM_applyFilter($_post_offset[$name],true)) + intval(COM_applyFilter($_post_pp[$name],true));
             } else {
                 $limits[$i]['offset'] = ($this->_page - 1) * $limits[$i]['pp'];
                 if ( $limits[$i]['offset'] < 0 ) {

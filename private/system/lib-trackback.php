@@ -699,7 +699,7 @@ function TRB_renderTrackbackComments ($sid, $type, $title, $permalink, $trackbac
     $template->set_var ('trackback_url', $trackback_url);
 
     $result = DB_query ("SELECT cid,url,title,blog,excerpt,ipaddress,UNIX_TIMESTAMP(date) AS day "
-        . "FROM {$_TABLES['trackback']} WHERE sid = '$sid' AND type = '$type' ORDER BY date");
+        . "FROM {$_TABLES['trackback']} WHERE sid = '".addslashes($sid)."' AND type = '$type' ORDER BY date");
     $numrows = DB_numRows ($result);
 
     $template->set_var ('trackback_comment_count', $numrows);
@@ -896,7 +896,7 @@ function TRB_sendNotificationEmail ($cid, $what = 'trackback')
     global $_CONF, $_TABLES, $LANG03, $LANG08, $LANG09, $LANG29, $LANG_TRB;
 
     $cid = addslashes ($cid);
-    $result = DB_query ("SELECT sid,type,title,excerpt,url,blog,ipaddress FROM {$_TABLES['trackback']} WHERE (cid = '$cid')");
+    $result = DB_query ("SELECT sid,type,title,excerpt,url,blog,ipaddress FROM {$_TABLES['trackback']} WHERE (cid = '".addslashes($cid)."')");
     $A = DB_fetchArray ($result);
     $type = $A['type'];
     $id = $A['sid'];

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -73,7 +73,7 @@ if( $microsummary )
 
     // if a topic was provided only select those stories.
     if (!empty($topic)) {
-        $sql .= " AND s.tid = '$topic' ";
+        $sql .= " AND s.tid = '".addslashes($topic)."' ";
     } elseif (!$newstories) {
         $sql .= " AND frontpage <> 0 ";
     }
@@ -91,7 +91,7 @@ if( $microsummary )
             . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u "
             . "ON s.uid=u.uid LEFT JOIN  {$_TABLES['topics']} AS t ON "
             . "s.tid=t.tid WHERE "
-            . $sql . " ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
+            . $sql . " ORDER BY featured DESC, date DESC LIMIT 0, 1";
 
     if ( $A = DB_fetchArray( $result ) ) {
         $pagetitle = $_CONF['microsummary_short'].$A['title'];
@@ -109,7 +109,7 @@ if( $microsummary )
             else
             {
                 $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                                                       "tid = '$topic'" ));
+                                                       "tid = '".addslashes($topic)."'" ));
             }
         }
         $pagetitle = $_CONF['site_name'] . ' - ' . $pagetitle;
@@ -120,7 +120,7 @@ if( $microsummary )
 
 $page = 1;
 if (isset ($_GET['page'])) {
-    $page = COM_applyFilter ($_GET['page'], true);
+    $page = intval(COM_applyFilter ($_GET['page'], true));
     if ($page == 0) {
         $page = 1;
     }
@@ -194,7 +194,7 @@ if ($U['maxstories'] >= $_CONF['minnews']) {
 }
 if ((!empty ($topic)) && ($maxstories == 0)) {
     $topiclimit = DB_getItem ($_TABLES['topics'], 'limitnews',
-                              "tid = '{$topic}'");
+                              "tid = '".addslashes($topic)."'");
     if ($topiclimit >= $_CONF['minnews']) {
         $maxstories = $topiclimit;
     }
@@ -232,15 +232,15 @@ while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray (
     if ($statuscode == STORY_ARCHIVE_ON_EXPIRE) {
         if (!empty ($archivetid) ) {
             COM_errorLOG("Archive Story: $sid, Topic: $archivetid, Title: $title, Expired: $expire");
-            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='{$sid}'");
+            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='".addslashes($sid)."'");
             CACHE_remove_instance('story_'.$sid);
             CACHE_remove_instance('whatsnew');
         }
     } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
         COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
         STORY_deleteImages ($sid);
-        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='{$sid}' AND type = 'article'");
-        DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='{$sid}'");
+        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='".addslashes($sid)."' AND type = 'article'");
+        DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='".addslashes($sid)."'");
         CACHE_remove_instance('story_'.$sid);
         CACHE_remove_instance('whatsnew');
     }
@@ -254,7 +254,7 @@ if (empty ($topic)) {
 
 // if a topic was provided only select those stories.
 if (!empty($topic)) {
-    $sql .= " AND s.tid = '$topic' ";
+    $sql .= " AND s.tid = '".addslashes($topic)."' ";
 } elseif (!$newstories) {
     $sql .= " AND frontpage = 1 ";
 }
@@ -358,7 +358,7 @@ if ( $A = DB_fetchArray( $result ) ) {
                     COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2];
         if (!empty ($topic)) {
             $topicname = DB_getItem ($_TABLES['topics'], 'topic',
-                                     "tid = '$topic'");
+                                     "tid = '".addslashes($topic)."'");
             $display .= sprintf ($LANG05[3], $topicname);
         }
         $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));

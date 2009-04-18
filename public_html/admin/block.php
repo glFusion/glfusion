@@ -634,6 +634,8 @@ function saveblock ($bid, $name, $title, $help, $type, $blockorder, $content, $t
             $rdfupdated = '0000-00-00 00:00:00';
         }
 
+        $name = addslashes($name);
+
         if ($bid > 0) {
             DB_save($_TABLES['blocks'],'bid,name,title,help,type,blockorder,content,tid,rdfurl,rdfupdated,rdflimit,phpblockfn,onleft,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon,is_enabled,allow_autotags,rdf_last_modified,rdf_etag',"$bid,'$name','$title','$help','$type','$blockorder','$content','$tid','$rdfurl','$rdfupdated','$rdflimit','$phpblockfn',$onleft,$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon,$is_enabled,$allow_autotags,NULL,NULL");
         } else {
