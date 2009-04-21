@@ -1855,6 +1855,7 @@ color:#465584;
 margin:5px auto 8px;
 min-height:25px;
 padding:4px;
+overflow:auto;
 }
 
 .quotemain img {
@@ -1870,7 +1871,7 @@ width:auto;
 min-height:100px;
 }
 
-#gl_container_fixed div .php, #gl_container_fixed div .text {
+#gl_container_fixed div .php, #gl_container_fixed div .text, #gl_container_fixed div .quotemain  {
 width:596px;
 }
 
