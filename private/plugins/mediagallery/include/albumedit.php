@@ -610,6 +610,8 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'lang_force_child_update' => $LANG_MG01['force_child_update'],
         'lang_allow_download'   => $LANG_MG01['allow_download'],
         'owner_select'          => $owner_select,
+        'email_mod_select'      => $email_mod_select,
+        'lang_email_mods_on_submission' => $LANG_MG01['email_mods_on_submission'],
     ));
 
     if ( SEC_hasRights('mediagallery.admin')) {
@@ -643,7 +645,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'display_image_size'    => $display_image_size_select,
         'rows_input'            => $rows_input,
         'columns_input'         => $columns_input,
-        'email_mod_select'      => $email_mod_select,
         'playback_type'         => $playback_type,
         'album_title'           => $A['album_title'],
         'album_desc'            => $A['album_desc'],
@@ -700,7 +701,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'lang_av_play_options'  => $LANG_MG01['av_play_options'],
         'lang_attached_thumbnail' => $LANG_MG01['attached_thumbnail'],
         'lang_thumbnail'        => $LANG_MG01['thumbnail'],
-        'lang_email_mods_on_submission' => $LANG_MG01['email_mods_on_submission'],
         'lang_album_attributes' => $LANG_MG01['album_attributes'],
         'lang_album_cover'      => $LANG_MG01['album_cover'],
         'lang_enable_views'     => $LANG_MG01['enable_views'],
