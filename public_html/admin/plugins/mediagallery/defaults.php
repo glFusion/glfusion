@@ -251,7 +251,11 @@ function MG_editDefaults( ) {
     $usergroups = SEC_getUserGroups();
     $groupdd = '';
     $moddd = '';
-    $default_group_id = DB_getItem($_TABLES['vars'],'value','name="mediagallery_gid"');
+
+    $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+    $grow = DB_fetchArray($gresult);
+    $default_group_id = $grow['grp_id'];
+
     if ( !isset($_MG_CONF['ad_mod_group_id'] ) ) {
         $_MG_CONF['ad_mod_group_id'] = $default_group_id;
     }

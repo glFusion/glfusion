@@ -185,7 +185,10 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['usealternate']      = isset($_MG_CONF['ad_use_alternate']) ? $_MG_CONF['ad_use_alternate'] : 0;
         $A['skin']              = 'default';
 
-        $grp_id = DB_getItem($_TABLES['vars'], 'value','name="mediagallery_gid"');
+        $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+        $grow = DB_fetchArray($gresult);
+        $grp_id = $grow['grp_id'];
+
         $A['group_id'] = $grp_id;
         $A['mod_group_id'] = $grp_id;
 
@@ -1065,7 +1068,10 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
         $perm_owner                 = $album->perm_owner; // already set by existing album?
         $perm_group                 = $album->perm_group; // already set by existing album?
         if ( $update == 0 ) {
-            $grp_id = DB_getItem($_TABLES['vars'], 'value','name="mediagallery_gid"');
+            $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+            $grow = DB_fetchArray($gresult);
+            $grp_id = $grow['grp_id'];
+
             $album->group_id            = $grp_id;  // only do these two if create....
             $album->mod_group_id        = $_MG_CONF['member_mod_group_id'];
             if ( $album->mod_group_id == '' || $album->mod_group_id < 1 ) {
