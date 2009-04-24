@@ -2648,7 +2648,7 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
         } else {
             $wheresql = "WHERE featured = 1";
         }
-        $query = DB_query("SELECT count(*) as count FROM {$_TABLES['stories']} $wheresql");
+        $query = DB_query("SELECT count(*) as count FROM {$_TABLES['stories']} " . $wheresql);
         $result = DB_fetchArray($query);
         if ($result['count'] == 0 && $cbpos == 2) {
             $cbpos = 1;//top of page
