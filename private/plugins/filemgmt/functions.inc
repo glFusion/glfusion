@@ -173,8 +173,8 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode) {
                     'filemgmt', $LANG03[14], $postmode)
             . COM_siteFooter();
     } else { // success
-        $comments = DB_count ($_TABLES['comments'], 'sid', $id);
-        DB_change($_FM_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',$id);
+        $comments = DB_count ($_TABLES['comments'], 'sid', addslashes($id));
+        DB_change($_FM_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',addslashes($id));
         return (COM_refresh (COM_buildUrl ($_CONF['site_url']
             . "/filemgmt/index.php?id=$id")) );
     }
@@ -248,7 +248,7 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
 
     $sql = "SELECT $fields FROM {$_FM_TABLES['filemgmt_filedetail']} d, ";
     $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t ";
-    $sql .= "WHERE d.lid='$id' AND d.lid=t.lid AND status > 0";
+    $sql .= "WHERE d.lid='".addslashes($id)."' AND d.lid=t.lid AND status > 0";
     $result=DB_query($sql);
     list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $description)=DB_fetchARRAY($result);
 
@@ -768,7 +768,7 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
                              . $file_id);
         if (empty ($autotag['parm2'])) {
             $linktext = stripslashes (DB_getItem ($_FM_TABLES['filemgmt_filedetail'],
-                                      'title', "lid = '$file_id'"));
+                                      'title', "lid = '".addslashes($file_id)."'"));
         } else {
             $linktext = $autotag['parm2'];
         }

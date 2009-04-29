@@ -58,7 +58,7 @@ if ( isset($_POST['submit']) ) {
     $ip = $_SERVER['REMOTE_ADDR'];
     if ( $sender != 0 ) {
         // Check if REG user is trying to report twice.
-        $result=DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid' AND sender='$sender'");
+        $result=DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".addslashes($lid)."' AND sender='".intval($sender)."'");
         list ($count)=DB_fetchARRAY($result);
         if ( $count > 0 ) {
             redirect_header("index.php",2,_MD_ALREADYREPORTED);
@@ -66,14 +66,14 @@ if ( isset($_POST['submit']) ) {
         }
     } else {
         // Check if the sender is trying to vote more than once.
-        $result=DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid' AND ip='$ip'");
+        $result=DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".addslashes($lid)."' AND ip='".addslashes($ip)."'");
         list ($count)=DB_fetchARRAY($result);
         if ( $count > 0 ) {
             redirect_header("index.php",2,_MD_ALREADYREPORTED);
             exit();
         }
     }
-    DB_query("INSERT INTO {$_FM_TABLES['filemgmt_brokenlinks']} (lid, sender, ip) VALUES ('$lid', '$sender', '$ip')") or die('');
+    DB_query("INSERT INTO {$_FM_TABLES['filemgmt_brokenlinks']} (lid, sender, ip) VALUES ('".addslashes($lid)."', '".addslashes($sender)."', '".addslashes($ip)."')") or die('');
     redirect_header("index.php",2,_MD_THANKSFORINFO);
     exit();
 

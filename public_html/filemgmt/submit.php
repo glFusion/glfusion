@@ -91,7 +91,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
         if (!isset($file_user_id) || $file_user_id < 2  ) {
             $uname = 'Anonymous';
         } else {
-            $uname = DB_getItem($_TABLES['users'],'username','uid=' . $file_user_id);
+            $uname = DB_getItem($_TABLES['users'],'username','uid=' . intval($file_user_id));
         }
         // build the template...
         $T = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
