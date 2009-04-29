@@ -163,11 +163,11 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
 
             $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $P['date']);
             if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $firstdate = iconv('ISO-8859-1','UTF-8',$firstdate);
+                $firstdate = @iconv('ISO-8859-1','UTF-8',$firstdate);
             }
             $lastdate  = strftime($CONF_FORUM['default_Datetime_format'], $P['lastupdated']);
             if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $lastdate = iconv('ISO-8859-1','UTF-8',$lastdate);
+                $lastdate = @iconv('ISO-8859-1','UTF-8',$lastdate);
             }
 
             if ($p['uid'] > 1) {

@@ -57,17 +57,15 @@ $mytimer = new timerobject();
 $mytimer->startTimer();
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$showtopic = isset($_REQUEST['showtopic']) ? COM_applyFilter($_REQUEST['showtopic'],true) : 0;
-$show      = isset($_REQUEST['show']) ? COM_applyFilter($_REQUEST['show'],true) : 0;
-$page      = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
+$showtopic = isset($_REQUEST['showtopic']) ? intval(COM_applyFilter($_REQUEST['showtopic'],true)) : 0;
+$show      = isset($_REQUEST['show']) ? intval(COM_applyFilter($_REQUEST['show'],true)) : 0;
+$page      = isset($_REQUEST['page']) ? intval(COM_applyFilter($_REQUEST['page'],true)) : 0;
 $mode      = isset($_REQUEST['mode']) ? COM_applyFilter($_REQUEST['mode']) : '';
 $highlight = isset($_REQUEST['query']) ? COM_applyFilter($_REQUEST['query']) : '';
 $topic     = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic']) : '';
-//$forum = DB_getItem($_TABLES['gf_topic'],"forum","id='$showtopic'");
-$result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['gf_topic']} WHERE id = '$showtopic'"); // <- new
-list($forum, $topic_pid, $subject) = DB_fetchArray($result); // <- new
-//$topic_pid = DB_getItem($_TABLES['gf_topic'], "pid","id='$showtopic'");
 
+$result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['gf_topic']} WHERE id=$showtopic");
+list($forum, $topic_pid, $subject) = DB_fetchArray($result);
 
 if ($topic_pid == '') {
     echo COM_siteHeader();
@@ -95,7 +93,6 @@ $sql .= "LEFT JOIN {$_TABLES['gf_categories']} c on c.id=b.forum_cat ";
 $sql .= "WHERE a.id=$showtopic";
 $viewtopic = DB_fetchArray(DB_query($sql),false);
 $canPost = forum_canPost($viewtopic);
-//$numpages = ceil(($viewtopic['replies'] + 1) / $show);
 
 $sql = "SELECT COUNT(pid) as replies FROM {$_TABLES['gf_topic']} WHERE pid=" . $showtopic;
 $res = DB_query($sql);
@@ -142,7 +139,7 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
 } else {
     if ( $topic != '' ) {
-        $sql = "SELECT id FROM {$_TABLES['gf_topic']} WHERE pid='".$showtopic."'";
+        $sql = "SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=".$showtopic."";
         $idResult = DB_query($sql);
         $ids = array();
         while ( $I = DB_fetchArray($idResult)) {

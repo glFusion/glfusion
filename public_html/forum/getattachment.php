@@ -35,7 +35,7 @@
 require_once '../lib-common.php';
 
 $id = COM_applyFilter($_GET['id'], true);
-$sql = "SELECT filename,repository_id FROM {$_TABLES['gf_attachments']} WHERE id=$id;";
+$sql = "SELECT filename,repository_id FROM {$_TABLES['gf_attachments']} WHERE id=".intval($id).";";
 $res = DB_query($sql);
 $A = DB_fetchArray($res);
 

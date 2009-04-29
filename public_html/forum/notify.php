@@ -47,9 +47,9 @@ if (!in_array('forum', $_PLUGINS)) {
 }
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$id    = isset($_REQUEST['id']) ? COM_applyFilter($_REQUEST['id'],true) : 0;
-$forum = isset($_REQUEST['forum']) ? COM_applyFilter($_REQUEST['forum'],true) : 0;
-$topic = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic'],true) : 0;
+$id    = isset($_REQUEST['id']) ? intval(COM_applyFilter($_REQUEST['id'],true)) : 0;
+$forum = isset($_REQUEST['forum']) ? intval(COM_applyFilter($_REQUEST['forum'],true)) : 0;
+$topic = isset($_REQUEST['topic']) ? intval(COM_applyFilter($_REQUEST['topic'],true)) : 0;
 
 // Display Common headers
 gf_siteHeader();
@@ -60,9 +60,9 @@ forum_chkUsercanAccess(true);
 // NOTIFY CODE -> SAVE
 if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($id != 0)) {
     $sql = "SELECT * FROM {$_TABLES['gf_watch']} WHERE ((topic_id='$id') AND (uid='{$_USER['uid']}') OR ";
-    $sql .= "((forum_id='$forum') AND (topic_id='0') and (uid='{$_USER['uid']}')))";
+    $sql .= "((forum_id=$forum) AND (topic_id=0) and (uid='{$_USER['uid']}')))";
     $notifyquery = DB_query("$sql");
-    $pid = DB_getItem($_TABLES['gf_topic'],'pid',"id='$id'");
+    $pid = DB_getItem($_TABLES['gf_topic'],'pid',"id=$id");
     if ($pid == 0) {
         $pid = $id;
     }
@@ -70,7 +70,7 @@ if ((isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'save') && ($id != 0))
         $A = DB_fetchArray($notifyquery);
         if ($A['topic_id'] == 0) {     // User has subscribed to complete forum
            // Check and see if user has a non-subscribe record for this topic id
-            $query = DB_query("SELECT id FROM {$_TABLES['gf_watch']} WHERE uid='{$_USER['uid']}' AND forum_id='$forum' and topic_id < '0' " );
+            $query = DB_query("SELECT id FROM {$_TABLES['gf_watch']} WHERE uid='{$_USER['uid']}' AND forum_id=$forum and topic_id < 0 " );
             if (DB_numRows($query) > 0 ) {
                 list($watchrec) = DB_fetchArray($query);
                 DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$watchrec");
@@ -125,12 +125,12 @@ if ( isset($_REQUEST['op']) ) {
     $op = '';
 }
 if ( isset($_GET['show']) ) {
-    $show = COM_applyFilter($_GET['show'],true);
+    $show = intval(COM_applyFilter($_GET['show'],true));
 } else {
     $show = 0;
 }
 if ( isset($_GET['page']) ) {
-    $page = COM_applyFilter($_GET['page'],true);
+    $page = intval(COM_applyFilter($_GET['page'],true));
 } else {
     $page = 0;
 }
@@ -147,9 +147,9 @@ if ($page == 0) {
 /* Check to see if user has checked multiple records to delete */
 if ($op == 'delchecked') {
     foreach ($_POST['chkrecid'] as $id) {
-        $id = COM_applyFilter($id);
-        if (DB_getItem($_TABLES['gf_watch'],'uid',"id='$id'") == $_USER['uid']) {
-            DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE ID='$id'");
+        $id = intval(COM_applyFilter($id,true));
+        if (DB_getItem($_TABLES['gf_watch'],'uid',"id=$id") == $_USER['uid']) {
+            DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$id");
         }
     }
 }

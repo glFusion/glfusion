@@ -156,11 +156,11 @@ function do_bbcode_file ($action, $attributes, $content, $params, $node_object) 
     }
     $sql = "SELECT id,filename,repository_id,show_inline,topic_id FROM {$_TABLES['gf_attachments']} ";
     if (isset($_POST['uniqueid']) AND $_POST['uniqueid'] > 0) {  // User is previewing a new post
-        $sql .= "WHERE topic_id = {$_POST['uniqueid']} AND tempfile=1 ";
+        $sql .= "WHERE topic_id = ".intval($_POST['uniqueid'])." AND tempfile=1 ";
     } else if(isset($previewitem['id'])) {
-         $sql .= "WHERE topic_id = {$previewitem['id']} ";
+         $sql .= "WHERE topic_id = ".intval($previewitem['id'])." ";
     } else if(isset($topicRec['id'])){
-        $sql .= "WHERE topic_id = {$topicRec['id']} ";
+        $sql .= "WHERE topic_id = ".intval($topicRec['id'])." ";
     } else {
         return '';
     }
@@ -353,12 +353,12 @@ function ForumHeader($forum,$showtopic) {
 
     if (($forum != '') || ($showtopic != '')) {
         if ($showtopic != '') {
-            $forum_id = DB_getItem($_TABLES['gf_topic'],'forum',"id='$showtopic'");
-            $grp_id = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='$forum_id'");
+            $forum_id = DB_getItem($_TABLES['gf_topic'],'forum',"id=".intval($showtopic));
+            $grp_id = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id=".intval($forum_id));
         } elseif ($forum != "") {
-            $grp_id = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='$forum'");
+            $grp_id = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id=".intval($forum));
         }
-        $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
+        $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id=".intval($grp_id));
         if (!SEC_inGroup($groupname)) {
             BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg77'],false);
             $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
@@ -1081,28 +1081,28 @@ function gf_updateLastPost($forumid,$topicparent=0) {
 
     if ($topicparent == 0) {
         // Get the last topic in this forum
-        $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE forum=$forumid");
+        $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE forum=".intval($forumid));
         list($topicparent) = DB_fetchArray($query);
         if ($topicparent > 0) {
             $lastrecid = $topicparent;
-            DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=$lastrecid WHERE forum_id=$forumid");
+            DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=".intval($lastrecid)." WHERE forum_id=".intval($forumid));
         }
     } else {
-        $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE pid=$topicparent");
+        $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE pid=".intval($topicparent));
         list($lastrecid) = DB_fetchArray($query);
     }
 
     if ($lastrecid == NULL AND $topicparent > 0) {
-        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$topicparent");
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$topicparent, lastupdated='$topicdatecreated' WHERE id={$topicparent}");
+        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=".intval($topicparent));
+        DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=".intval($topicparent).", lastupdated='".addslashes($topicdatecreated)."' WHERE id=".intval($topicparent));
     } elseif ($topicparent > 0) {
-        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$lastrecid");
-        DB_query("UPDATE {$_TABLES['gf_topic']}  SET last_reply_rec=$lastrecid, lastupdated=$topicdatecreated WHERE id={$topicparent}");
+        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=".intval($lastrecid));
+        DB_query("UPDATE {$_TABLES['gf_topic']}  SET last_reply_rec=".intval($lastrecid).", lastupdated='".addslashes($topicdatecreated)."' WHERE id=".intval($topicparent));
     }
     if ($topicparent > 0) {
         // Recalculate and Update the number of replies
-        $numreplies = DB_Count($_TABLES['gf_topic'], "pid", $topicparent);
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '$numreplies' WHERE id=$topicparent");
+        $numreplies = DB_Count($_TABLES['gf_topic'], "pid", intval($topicparent));
+        DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '".intval($numreplies)."' WHERE id=".intval($topicparent));
     }
 }
 
@@ -1110,7 +1110,7 @@ function gf_showattachments($topic,$mode='') {
     global $_TABLES,$_CONF,$CONF_FORUM,$_FM_TABLES;
 
     $retval = '';
-    $sql = "SELECT id,repository_id,filename FROM {$_TABLES['gf_attachments']} WHERE topic_id=$topic ";
+    $sql = "SELECT id,repository_id,filename FROM {$_TABLES['gf_attachments']} WHERE topic_id=".intval($topic)." ";
     if ($mode != 'edit') {
         $sql .= "AND show_inline=0 ";
     }
@@ -1219,7 +1219,7 @@ function forum_showBlocks($showblocks)
     }
 
     foreach($showblocks as $block) {
-        $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='$block'";
+        $sql = "SELECT bid, name,type,title,content,rdfurl,phpblockfn,help,allow_autotags FROM {$_TABLES['blocks']} WHERE name='".addslashes($block)."'";
         $result = DB_query($sql);
         if (DB_numRows($result) == 1) {
             $A = DB_fetchArray($result);

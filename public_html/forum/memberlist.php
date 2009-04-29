@@ -80,10 +80,10 @@ if ($op == "last10posts") {
     $report->set_var ('imgset', $CONF_FORUM['imgset']);
     $report->set_var ('layout_url', $_CONF['layout_url']);
     $report->set_var ('phpself', $_CONF['site_url'] .'/forum/memberlist.php?op=last10posts&amp;showuser='.$showuser);
-    $report->set_var ('startblock', COM_startBlock($LANG_GF02['msg86'] . DB_getItem($_TABLES['users'],"username", "uid=$showuser")) );
+    $report->set_var ('startblock', COM_startBlock($LANG_GF02['msg86'] . DB_getItem($_TABLES['users'],"username", "uid=".intval($showuser))) );
     $report->set_var ('endblock', COM_endBlock());
 
-    $report->set_var ('LANG_TITLE', $LANG_GF02['msg86'] . DB_getItem($_TABLES['users'],"username", "uid=$showuser"));
+    $report->set_var ('LANG_TITLE', $LANG_GF02['msg86'] . DB_getItem($_TABLES['users'],"username", "uid=".intval($showuser)));
     $report->set_var ('spacerwidth', '50%');
     $report->set_var ('returnlink', "href=\"{$_CONF['site_url']}/forum/memberslist.php\">");
     $report->set_var ('LANG_return', $LANG_GF02['msg169']);
@@ -113,7 +113,7 @@ if ($op == "last10posts") {
 
     $sql = "SELECT a.date,a.subject,a.comment,a.replies,a.views,a.id,a.forum FROM {$_TABLES['gf_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
-    $sql .= "WHERE (a.uid = $showuser) AND b.grp_id IN ($grouplist) ";
+    $sql .= "WHERE (a.uid = ".intval($showuser).") AND b.grp_id IN ($grouplist) ";
     $sql .= "ORDER BY a.date DESC LIMIT {$CONF_FORUM['show_last_post_count']}";
     $result = DB_query($sql);
     $nrows = DB_numRows($result);
