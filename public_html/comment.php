@@ -116,6 +116,7 @@ function handleSubmit()
             }
             break;
         default: // assume plugin
+            $comment = '';
             if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
                 if ( $_POST['postmode'] == 'html' ) {
                     $comment = $_POST['comment_html'];
@@ -214,7 +215,7 @@ function handleView($view = true)
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
-    $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = '".addslashes($cid)."'";
+    $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = $cid";
     $A = DB_fetchArray( DB_query($sql) );
     $sid   = $A['sid'];
     $title = $A['title'];
@@ -227,7 +228,7 @@ function handleView($view = true)
     if ( $format != 'threaded' && $format != 'nested' && $format != 'flat' ) {
         if ( $_USER['uid'] > 1 ) {
             $format = DB_getItem( $_TABLES['usercomment'], 'commentmode',
-                                  "uid = '{$_USER['uid']}'" );
+                                  "uid = {$_USER['uid']}" );
         } else {
             $format = $_CONF['comment_mode'];
         }
@@ -289,9 +290,27 @@ function handleView($view = true)
 function handleEdit() {
     global $_TABLES, $LANG03,$_USER,$_CONF;
 
-    $cid = COM_applyFilter ($_REQUEST['cid']);
-    $sid = COM_applyFilter ($_REQUEST['sid']);
-    $type = COM_applyFilter ($_REQUEST['type']);
+    if ( isset($_POST['cid']) ) {
+        $cid = COM_applyFilter ($_POST['cid'],true);
+    } else if (isset($_GET['cid']) ) {
+        $cid = COM_applyFilter ($_GET['cid'],true);
+    } else {
+        $cid = -1;
+    }
+    if ( isset($_POST['sid']) ) {
+        $sid = COM_applyFilter ($_POST['sid']);
+    } else if (isset($_GET['sid']) ) {
+        $sid = COM_applyFilter ($_GET['sid']);
+    } else {
+        $sid = '';
+    }
+    if ( isset($_POST['type']) ) {
+        $type = COM_applyFilter ($_POST['type']);
+    } else if (isset($_GET['type']) ) {
+        $type = COM_applyFilter ($_GET['type']);
+    } else {
+        $type = '';
+    }
 
     if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
         COM_errorLog("handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
@@ -300,7 +319,7 @@ function handleEdit() {
     }
 
     $result = DB_query ("SELECT title,comment FROM {$_TABLES['comments']} "
-        . "WHERE cid = '".addslashes($cid)."' AND sid = '".addslashes($sid)."' AND type = '".addslashes($type)."'");
+        . "WHERE cid = $cid AND sid = '".addslashes($sid)."' AND type = '".addslashes($type)."'");
     if ( DB_numRows($result) == 1 ) {
         $A = DB_fetchArray ($result);
         $title = $A['title'];
@@ -341,12 +360,12 @@ function handleEditSubmit()
 {
     global $_CONF, $_TABLES, $_USER, $LANG03;
 
-    $type = COM_applyFilter ($_POST['type']);
-    $sid = COM_applyFilter ($_POST['sid']);
-    $cid = COM_applyFilter ($_POST['cid']);
-    $postmode = COM_applyFilter ($_POST['postmode']);
+    $type       = COM_applyFilter ($_POST['type']);
+    $sid        = COM_applyFilter ($_POST['sid']);
+    $cid        = COM_applyFilter ($_POST['cid'],true);
+    $postmode   = COM_applyFilter ($_POST['postmode']);
 
-    $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = '".addslashes($cid)."'");
+    $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = $cid");
     if ( empty($_USER['uid'])) {
         $uid = 1;
     } else {
@@ -376,7 +395,7 @@ function handleEditSubmit()
 
         // save the comment into the comment table
         DB_query("UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
-                . " WHERE cid='".addslashes($cid)."' AND sid='".addslashes($sid)."'");
+                . " WHERE cid=$cid AND sid='".addslashes($sid)."'");
 
         if (DB_error() ) { //saving to non-existent comment or comment in wrong article
             COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
@@ -413,7 +432,7 @@ switch ($mode) {
 case $LANG03[28]: //Preview Changes (for edit)
 
 case $LANG03[14]: // Preview
-
+    $comment = '';
     if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
         if ( $_POST['postmode'] == 'html' ) {
             $comment = $_POST['comment_html'];
@@ -487,7 +506,7 @@ case 'edit':
 case 'que':
     if ( SEC_checkToken() && SEC_hasRights('comment.moderate') ) {
         //get comment
-        $cid = COM_applyFilter ($_GET['cid']);
+        $cid = COM_applyFilter ($_GET['cid'],true);
         $sid = COM_applyFilter ($_GET['sid']);
         resubmitToModeration($cid);
 

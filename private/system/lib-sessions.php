@@ -81,7 +81,7 @@ $_USER = SESS_sessionCheck();
 */
 function SESS_sessionCheck()
 {
-    global $_CONF, $_TABLES, $_USER, $_SESS_VERBOSE;
+    global $_CONF, $_TABLES, $_USER, $_SESS_VERBOSE, $_SYSTEM;
 
     if ($_SESS_VERBOSE) {
         COM_errorLog("***Inside SESS_sessionCheck***",1);
@@ -89,7 +89,6 @@ function SESS_sessionCheck()
 
     unset($_USER);
 
-    // We MUST do this up here, so it's set even if the cookie's not present.
     $user_logged_in = 0;
     $logged_in = 0;
     $userdata = array();
@@ -140,8 +139,8 @@ function SESS_sessionCheck()
                             $cookie_password = $_COOKIE[$_CONF['cookie_password']];
                         }
                         $userpass = DB_getItem ($_TABLES['users'], 'passwd',
-                                                "uid = '$userid'");
-                        $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid='$userid'",1);
+                                                "uid = $userid");
+                        $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid=$userid",1);
                         $rip    = DB_fetchArray($result);
                         $remote_ip = $rip['remote_ip'];
                     }
@@ -153,6 +152,9 @@ function SESS_sessionCheck()
                         $ipmatch = true;
                     } else {
                         $ipmatch = false;
+                    }
+                    if ( isset($_SYSTEM['skip_ip_check']) && $_SYSTEM['skip_ip_check'] == 1 ) {
+                        $ipmatch = true;
                     }
                     if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($ipmatch == false)) {
                         // User may have modified their UID in cookie, ignore them
@@ -199,8 +201,8 @@ function SESS_sessionCheck()
                 $userpass = '';
                 if ($userid > 1) {
                     $userpass = DB_getItem ($_TABLES['users'], 'passwd',
-                                            "uid = '$userid'");
-                    $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid='$userid'",1);
+                                            "uid = $userid");
+                    $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid=$userid",1);
                     $rip    = DB_fetchArray($result);
                     $remote_ip = $rip['remote_ip'];
                     $cookie_password = $_COOKIE[$_CONF['cookie_password']];
@@ -213,6 +215,9 @@ function SESS_sessionCheck()
                     } else {
                         $ipmatch = false;
                     }
+                }
+                if ( isset($_SYSTEM['skip_ip_check']) && $_SYSTEM['skip_ip_check'] == 1 ) {
+                    $ipmatch = true;
                 }
                 if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($ipmatch == false)) {
                     // User could have modified UID in cookie, don't do shit
@@ -289,7 +294,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan, $md5_based=0)
     $expirytime = (string) (time() - $lifespan);
     if (!isset($_COOKIE[$_CONF['cookie_session']])) {
         // ok, delete any old sessons for this user
-        DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = '".intval($userid)."'",1);
+        DB_query("DELETE FROM {$_TABLES['sessions']} WHERE uid = ".intval($userid),1);
         if ( DB_error() ) {
             DB_query("REPAIR TABLE {$_TABLES['sessions']}",1);
             COM_errorLog("***** REPAIR SESSIONS TABLE *****");
@@ -467,7 +472,7 @@ function SESS_endUserSession($userid)
 {
     global $_TABLES;
 
-    $sql = "DELETE FROM {$_TABLES['sessions']} WHERE (uid = '".intval($userid)."')";
+    $sql = "DELETE FROM {$_TABLES['sessions']} WHERE (uid = ".intval($userid).")";
     $result = DB_query($sql);
 
     return 1;
@@ -516,7 +521,7 @@ function SESS_getUserDataFromId($userid)
 
     $sql = "SELECT *,format FROM {$_TABLES['dateformats']},{$_TABLES["users"]},{$_TABLES['userprefs']} "
      . "WHERE {$_TABLES['dateformats']}.dfid = {$_TABLES['userprefs']}.dfid AND "
-     . "{$_TABLES['userprefs']}.uid = '$userid' AND {$_TABLES['users']}.uid = '".intval($userid)."'";
+     . "{$_TABLES['userprefs']}.uid = ".intval($userid)." AND {$_TABLES['users']}.uid = ".intval($userid);
 
     if(!$result = DB_query($sql)) {
         $userdata = array("error" => "1");

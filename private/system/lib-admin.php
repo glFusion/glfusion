@@ -233,9 +233,9 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
     $query_limit = 0;
     if ( isset($_GET['query_limit']) ) {
-        $query_limit = COM_applyFilter ($_GET['query_limit'], true);
+        $query_limit = intval(COM_applyFilter ($_GET['query_limit'], true));
     } else if ( isset($_POST['query_limit']) ) {
-        $query_limit = COM_applyFilter ($_POST['query_limit'], true);
+        $query_limit = intval(COM_applyFilter ($_POST['query_limit'], true));
     }
     if($query_limit == 0) {
         $query_limit = 50;
@@ -247,10 +247,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     // get the current page from the interface. The variable is linked to the
     // component, i.e. the plugin/function calling this here to avoid overlap
     if ( isset($_GET[$component . 'listpage'])) {
-        $page = COM_applyFilter ($_GET[$component . 'listpage'], true);
+        $page = intval(COM_applyFilter ($_GET[$component . 'listpage'], true));
         $curpage = $page;
     } else if ( isset($_POST[$component . 'listpage'])) {
-        $page = COM_applyFilter ($_POST[$component . 'listpage'], true);
+        $page = intval(COM_applyFilter ($_POST[$component . 'listpage'], true));
         $curpage = $page;
     }
     if ($curpage <= 0) {
@@ -365,7 +365,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     } else {
         $direction = COM_applyFilter ($_GET['direction']);
     }
-    $direction = strtoupper ($direction);
+    $direction = strtoupper($direction) == 'DESC' ? 'DESC' : 'ASC';
+
     if ($order == $prevorder) { #reverse direction if prev. order was the same
         $direction = ($direction == 'DESC') ? 'ASC' : 'DESC';
     } else {

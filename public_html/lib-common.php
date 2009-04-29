@@ -568,7 +568,7 @@ switch ($_CONF['language']) {
 // Handle Who's Online block
 if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
     // The following code handles anonymous users so they show up properly
-    DB_delete($_TABLES['sessions'], array('remote_ip', 'uid'),array($_SERVER['REMOTE_ADDR'], 1));
+    DB_delete($_TABLES['sessions'], array('remote_ip', 'uid'),array(addslashes($_SERVER['REMOTE_ADDR']), 1));
 
     $tries = 0;
     do
@@ -579,7 +579,7 @@ if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
         $curtime = time();
 
         // Insert anonymous user session
-        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ('$sess_id', '$curtime', '{$_SERVER['REMOTE_ADDR']}', 1)", 1 );
+        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ('$sess_id', '$curtime', '".addslashes($_SERVER['REMOTE_ADDR'])."', 1)", 1 );
         $tries++;
     }
     while(( $result === false) && ( $tries < 5 ));
@@ -1761,6 +1761,7 @@ function COM_endBlock( $template='blockfooter.thtml' )
 * @return   string  Formated HTML of option values
 *
 */
+
 function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where='' )
 {
     global $_DB_table_prefix;
@@ -1926,78 +1927,70 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
 *
 * Creates a group of checkbox form fields with given arguments
 *
-* @param        string      $table      DB Table to pull data from
-* @param        string      $selection  Comma delimited list of fields to pull from table
-* @param        string      $where      Where clause of SQL statement
-* @param        string      $selected   Value to set to CHECKED
-* @see function COM_optionList
-* @return   string  HTML with Checkbox code
+* @param    string  $table      DB Table to pull data from
+* @param    string  $selection  Comma delimited list of fields to pull from table
+* @param    string  $where      Where clause of SQL statement
+* @param    string  $selected   Value to set to CHECKED
+* @param    string  $fieldname  Name to use for the checkbox array
+* @return   string              HTML with Checkbox code
+* @see      COM_optionList
 *
 */
-
-function COM_checkList( $table, $selection, $where='', $selected='' )
+function COM_checkList($table, $selection, $where = '', $selected = '', $fieldname = '')
 {
     global $_TABLES, $_COM_VERBOSE;
 
     $sql = "SELECT $selection FROM $table";
 
-    if( !empty( $where ))
-    {
+    if( !empty( $where )) {
         $sql .= " WHERE $where";
     }
 
     $result = DB_query( $sql );
     $nrows = DB_numRows( $result );
 
-    if( !empty( $selected ))
-    {
-        if( $_COM_VERBOSE )
-        {
+    if( !empty( $selected )) {
+        if( $_COM_VERBOSE ) {
             COM_errorLog( "exploding selected array: $selected in COM_checkList", 1 );
         }
 
         $S = explode( ' ', $selected );
-    }
-    else
-    {
-        if( $_COM_VERBOSE)
-        {
+    } else {
+        if( $_COM_VERBOSE) {
             COM_errorLog( 'selected string was empty COM_checkList', 1 );
         }
 
         $S = array();
     }
     $retval = '<ul class="checkboxes-list">' . LB;
-    for( $i = 0; $i < $nrows; $i++ )
-    {
+    for( $i = 0; $i < $nrows; $i++ ) {
         $access = true;
         $A = DB_fetchArray( $result, true );
 
-        if( $table == $_TABLES['topics'] AND SEC_hasTopicAccess( $A['tid'] ) == 0 )
-        {
+        if( $table == $_TABLES['topics'] AND SEC_hasTopicAccess( $A['tid'] ) == 0 ) {
             $access = false;
         }
 
-        if( $access )
-        {
-            $retval .= '<li><input type="checkbox" name="' . $table . '[]" value="' . $A[0] . '"';
+        if (empty($fieldname)) {
+            // Not a good idea, as that will expose our table name and prefix!
+            // Make sure you pass a distinct field name!
+            $fieldname = $table;
+        }
+
+        if( $access ) {
+            $retval .= '<li><input type="checkbox" name="' . $fieldname . '[]" value="' . $A[0] . '"';
 
             $sizeS = sizeof( $S );
-            for( $x = 0; $x < $sizeS; $x++ )
-            {
-                if( $A[0] == $S[$x] )
-                {
+            for( $x = 0; $x < $sizeS; $x++ ) {
+                if( $A[0] == $S[$x] ) {
                     $retval .= ' checked="checked"';
                     break;
                 }
             }
 
-            if(( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' ))
-            {
+            if(( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' )) {
                 $retval .= XHTML . '><span class="gldefault">' . stripslashes( $A[1] ) . '</span></li>' . LB;
-            }
-            else
-            {
+            } else {
                 $retval .= XHTML . '><span>' . stripslashes( $A[1] ) . '</span></li>' . LB;
             }
         }
@@ -2271,7 +2264,7 @@ function COM_showTopics( $topic='' )
     if( !COM_isAnonUser() )
     {
         $tids = DB_getItem( $_TABLES['userindex'], 'tids',
-                            "uid = '{$_USER['uid']}'" );
+                            "uid = {$_USER['uid']}" );
         if( !empty( $tids ))
         {
             $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
@@ -3601,7 +3594,7 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
         if( !COM_isAnonUser() )
         {
             $_USER['noboxes'] = DB_getItem( $_TABLES['userindex'], 'noboxes',
-                                            "uid = '{$_USER['uid']}'" );
+                                            "uid = {$_USER['uid']}" );
         }
         else
         {
@@ -3664,7 +3657,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
         if( !COM_isAnonUser() )
         {
             $result = DB_query( "SELECT boxes,noboxes FROM {$_TABLES['userindex']} "
-                               ."WHERE uid = '{$_USER['uid']}'" );
+                               ."WHERE uid = {$_USER['uid']}" );
             list($_USER['boxes'], $_USER['noboxes']) = DB_fetchArray( $result );
         }
         else
@@ -3693,7 +3686,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 
     if( !empty( $topic ))
     {
-        $commonsql .= " AND (tid = '$topic' OR tid = 'all')";
+        $commonsql .= " AND (tid = '".addslashes($topic)."' OR tid = 'all')";
     }
     else
     {
@@ -3950,7 +3943,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
     require_once $_CONF['path_system']
                  . '/classes/syndication/feedparserbase.class.php';
 
-    $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = \"$bid\"");
+    $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".intval($bid));
     list($last_modified, $etag) = DB_fetchArray($result);
 
     // Load the actual feed handlers:
@@ -3989,9 +3982,9 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         }
 
         if (empty($last_modified) || empty($etag)) {
-            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = '$bid'");
+            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".intval($bid));
         } else {
-            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = '$last_modified', rdf_etag = '$etag' WHERE bid = '$bid'");
+            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = '$last_modified', rdf_etag = '$etag' WHERE bid = ".intval($bid));
         }
 
         $charset = COM_getCharset();
@@ -4028,7 +4021,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 
         // Standard theme based function to put it in the block
         $result = DB_change($_TABLES['blocks'], 'content',
-                            addslashes($content), 'bid', $bid);
+                            addslashes($content), 'bid', intval($bid));
     } else if ($factory->errorStatus !== false) {
         // failed to aquire info, 0 out the block and log an error
         COM_errorLog("Unable to aquire feed reader for $rdfurl", 1);
@@ -4036,7 +4029,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
                      $factory->errorStatus[1] . ' ' .
                      $factory->errorStatus[2]);
         $content = addslashes($LANG21[4]);
-        DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = \"$bid\"");
+        DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".intval($bid));
     }
 }
 
@@ -4170,7 +4163,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
     }
 
     if (empty($username)) {
-        $query = DB_query("SELECT username, fullname, remoteusername, remoteservice FROM {$_TABLES['users']} WHERE uid='$uid'");
+        $query = DB_query("SELECT username, fullname, remoteusername, remoteservice FROM {$_TABLES['users']} WHERE uid=$uid");
         list($username, $fullname, $remoteusername, $remoteservice) = DB_fetchArray($query);
     }
     $ret = $username;
@@ -4965,7 +4958,7 @@ function COM_getUserCookieTimeout()
         return;
     }
 
-    $timeoutvalue = DB_getItem( $_TABLES['users'], 'cookietimeout', "uid = '{$_USER['uid']}'" );
+    $timeoutvalue = DB_getItem( $_TABLES['users'], 'cookietimeout', "uid = {$_USER['uid']}" );
 
     if( empty( $timeoutvalue ))
     {
@@ -5416,7 +5409,7 @@ function COM_checkSpeedlimit($type = 'submit', $max = 1, $property = '')
     }
     $property = addslashes($property);
 
-    $res  = DB_query("SELECT date FROM {$_TABLES['speedlimit']} WHERE (type = '$type') AND (ipaddress = '$property') ORDER BY date ASC");
+    $res  = DB_query("SELECT date FROM {$_TABLES['speedlimit']} WHERE (type = '".addslashes($type)."') AND (ipaddress = '$property') ORDER BY date ASC");
 
     // If the number of allowed tries has not been reached,
     // return 0 (didn't hit limit)
@@ -5452,6 +5445,7 @@ function COM_updateSpeedlimit($type = 'submit', $property = '')
         $property = $_SERVER['REMOTE_ADDR'];
     }
     $property = addslashes($property);
+    $type     = addslashes($type);
 
     DB_save($_TABLES['speedlimit'], 'ipaddress,date,type',
             "'$property',UNIX_TIMESTAMP(),'$type'");
@@ -5470,7 +5464,7 @@ function COM_clearSpeedlimit($speedlimit = 60, $type = '')
 
     $sql = "DELETE FROM {$_TABLES['speedlimit']} WHERE ";
     if (!empty($type)) {
-        $sql .= "(type = '$type') AND ";
+        $sql .= "(type = '".addslashes($type)."') AND ";
     }
     $sql .= "(date < UNIX_TIMESTAMP() - $speedlimit)";
     DB_query($sql);
@@ -5491,6 +5485,7 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
         $property = $_SERVER['REMOTE_ADDR'];
     }
     $property = addslashes($property);
+    $type     = addslashes($type);
 
     DB_delete($_TABLES['speedlimit'], array('type', 'ipaddress'), array($type, $property));
 }
@@ -7078,7 +7073,7 @@ function CMT_updateCommentcodes() {
     $cleared = 0;
 
     if ($_CONF['comment_close_rec_stories'] > 0) {
-        $results = DB_query("SELECT sid FROM {$_TABLES['stories']} ORDER BY date DESC LIMIT {$_CONF['comment_close_rec_stories']}");
+        $results = DB_query("SELECT sid FROM {$_TABLES['stories']} ORDER BY date DESC LIMIT ".intval($_CONF['comment_close_rec_stories']));
         while($A = DB_fetchArray($results))  {
             $allowedcomments[] = $A['sid'];
         }
@@ -7086,7 +7081,7 @@ function CMT_updateCommentcodes() {
         $sql = '';
         if ( is_array($allowedcomments) ) {
             foreach ($allowedcomments as $sid) {
-                $sql .= "AND sid <> '$sid' ";
+                $sql .= "AND sid <> '".addslashes($sid)."' ";
             }
             $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE commentcode = 0 " . $sql;
             $result = DB_query($sql,1);

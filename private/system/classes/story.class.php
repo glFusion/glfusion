@@ -657,7 +657,7 @@ class Story
                 $sql = "UPDATE {$_TABLES['trackback']} SET sid='{$newsid}' WHERE sid='{$checksid}' AND type='article'";
                 DB_query($sql);
 
-                CACHE_remove_instance('story_'.$checksid);
+                CACHE_remove_instance('story_'.$this->_originalSid);
             }
         }
 
@@ -729,7 +729,7 @@ class Story
             if ( !empty($checksid) ) {
                 DB_delete($_TABLES['storysubmission'], 'sid', $checksid);
             } else {
-                DB_delete($_TABLES['storysubmission'], 'sid', $this->_sid);
+                DB_delete($_TABLES['storysubmission'], 'sid', addslashes($this->_sid));
             }
         }
 
@@ -962,7 +962,7 @@ class Story
             $this->_bodytext = addslashes($this->_bodytext);
             $this->_postmode = addslashes($this->_postmode);
             DB_save($_TABLES['storysubmission'], 'sid,tid,uid,title,introtext,bodytext,date,postmode',
-                        "'{$this->_sid}','{$this->_tid}','".addslashes($this->_uid)."','{$this->_title}'," .
+                        "'{$this->_sid}','{$this->_tid}','".intval($this->_uid)."','{$this->_title}'," .
                         "'{$this->_introtext}','{$this->_bodytext}',NOW(),'{$this->_postmode}'");
 
             return STORY_SAVED_SUBMISSION;

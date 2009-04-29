@@ -110,9 +110,9 @@ function USER_deleteAccount ($uid)
     DB_delete ($_TABLES['userinfo'], 'uid', $uid);
 
     // avoid having orphand stories/comments by making them anonymous posts
-    DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = '$uid'");
-    DB_query ("UPDATE {$_TABLES['stories']} SET uid = 1 WHERE uid = '$uid'");
-    DB_query ("UPDATE {$_TABLES['stories']} SET owner_id = 1 WHERE owner_id = '$uid'");
+    DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = $uid");
+    DB_query ("UPDATE {$_TABLES['stories']} SET uid = 1 WHERE uid = $uid");
+    DB_query ("UPDATE {$_TABLES['stories']} SET owner_id = 1 WHERE owner_id = $uid");
 
     // delete story submissions
     DB_delete ($_TABLES['storysubmission'], 'uid', $uid);
@@ -130,8 +130,8 @@ function USER_deleteAccount ($uid)
     $A = DB_fetchArray ($result);
     $rootuser = $A['ug_uid'];
 
-    DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = '$uid'");
-    DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = '$uid'");
+    DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = $uid");
+    DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = $uid");
 
     // now delete the user itself
     DB_delete ($_TABLES['users'], 'uid', $uid);
@@ -151,6 +151,8 @@ function USER_deleteAccount ($uid)
 function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 {
     global $_CONF, $_TABLES, $LANG04;
+
+    $uid = intval($uid);
 
     if ( $passwd == '' ) {
         $passwd = USER_createPassword(8);
@@ -437,7 +439,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
         }
         if ((empty ($photo) || ($photo == '(none)')) ||
                 (empty ($email) && $_CONF['use_gravatar'])) {
-            $result = DB_query ("SELECT email,photo FROM {$_TABLES['users']} WHERE uid = '$uid'");
+            $result = DB_query ("SELECT email,photo FROM {$_TABLES['users']} WHERE uid = $uid");
             list($newemail, $newphoto) = DB_fetchArray ($result);
             if (empty ($photo) || ($photo == '(none)')) {
                 $photo = $newphoto;
@@ -605,7 +607,7 @@ function  USER_delGroup ($groupid, $uid = '')
     $groupid = intval($groupid);
 
     if (($groupid > 0) && SEC_inGroup ($groupid, $uid)) {
-        DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$groupid' AND ug_uid = '$uid'");
+        DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$groupid' AND ug_uid = $uid");
         return true;
     } else {
         return false;
@@ -669,7 +671,7 @@ function USER_uniqueUsername($username)
     $try = $username;
     do {
         $try = addslashes($try);
-        $uid = DB_getItem($_TABLES['users'], 'uid', "username = '".addslashes($try)."'");
+        $uid = DB_getItem($_TABLES['users'], 'uid', "username = '".$try."'");
         if (!empty($uid)) {
             $r = rand(2, 9999);
             if (strlen($username) > 12) {

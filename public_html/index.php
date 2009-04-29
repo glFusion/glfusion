@@ -180,7 +180,7 @@ if (!empty ($displayBlock)) {
 }
 
 if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
-    $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = '{$_USER['uid']}'");
+    $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}");
     $U = DB_fetchArray($result);
 } else {
     $U['maxstories'] = 0;
@@ -279,7 +279,7 @@ if ($newstories) {
     $sql .= "AND (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) ";
 }
 
-$offset = ($page - 1) * $limit;
+$offset = intval(($page - 1) * $limit);
 $userfields = 'u.uid, u.username, u.fullname';
 if ($_CONF['allow_user_photo'] == 1) {
     $userfields .= ', u.photo';

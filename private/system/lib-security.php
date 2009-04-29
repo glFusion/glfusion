@@ -121,7 +121,7 @@ function SEC_getUserGroups($uid='')
     }
 
     $result = DB_query("SELECT ug_main_grp_id,grp_name FROM {$_TABLES["group_assignments"]},{$_TABLES["groups"]}"
-            . " WHERE grp_id = ug_main_grp_id AND ug_uid = '$uid'",1);
+            . " WHERE grp_id = ug_main_grp_id AND ug_uid = ".intval($uid),1);
 
     if ($result == -1) {
         $once[$uid] = $groups;
@@ -680,7 +680,7 @@ function SEC_getFeatureGroup ($feature, $uid = '')
 
     $group = 0;
 
-    $ft_id = DB_getItem ($_TABLES['features'], 'ft_id', "ft_name = '$feature'");
+    $ft_id = DB_getItem ($_TABLES['features'], 'ft_id', "ft_name = '".addslashes($feature)."'");
     if (($ft_id > 0) && (sizeof ($ugroups) > 0)) {
         $grouplist = implode (',', $ugroups);
         $result = DB_query ("SELECT acc_grp_id FROM {$_TABLES['access']} WHERE (acc_ft_id = $ft_id) AND (acc_grp_id IN ($grouplist)) ORDER BY acc_grp_id LIMIT 1");
@@ -754,7 +754,7 @@ function SEC_checkUserStatus($userid)
     global $_CONF, $_TABLES;
 
     // Check user status
-    $status = DB_getItem($_TABLES['users'], 'status', "uid='".intval($userid)."'");
+    $status = DB_getItem($_TABLES['users'], 'status', "uid=".intval($userid));
 
     // only do redirects if we aren't on users.php in a valid mode (logout or
     // default)
@@ -848,16 +848,16 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
                 USER_createAccount($loginname, $authmodule->email, SEC_encryptPassword($passwd), $authmodule->fullname, $authmodule->homepage, $remoteusername, $remoteservice);
                 $uid = DB_getItem($_TABLES['users'], 'uid', "remoteusername = '$remoteusername' AND remoteservice='$remoteservice'");
                 // Store full remote account name:
-                DB_query("UPDATE {$_TABLES['users']} SET remoteusername='$remoteusername', remoteservice='$remoteservice', status=3 WHERE uid='$uid'");
+                DB_query("UPDATE {$_TABLES['users']} SET remoteusername='$remoteusername', remoteservice='$remoteservice', status=3 WHERE uid=$uid");
                 // Add to remote users:
                 $remote_grp = DB_getItem($_TABLES['groups'], 'grp_id',
                                          "grp_name='Remote Users'");
-                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', '$uid')");
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', $uid)");
                 return 3; // Remote auth precludes usersubmission,
                           // and integrates user activation, see?
             } else {
                 // user existed, update local password:
-                DB_change($_TABLES['users'], 'passwd', SEC_encryptPassword($passwd), array('remoteusername','remoteservice'), array($remoteusername,$remoteservice));
+                DB_change($_TABLES['users'], 'passwd', addslashes(SEC_encryptPassword($passwd)), array('remoteusername','remoteservice'), array(addslashes($remoteusername),addslashes($remoteservice)));
                 // and return their status
                 return DB_getItem($_TABLES['users'], 'status', "remoteusername='$remoteusername' AND remoteservice='$remoteservice'");
             }
@@ -916,7 +916,7 @@ function SEC_addUserToGroup($uid, $gname)
     $uid = intval($uid);
 
     $remote_grp = DB_getItem ($_TABLES['groups'], 'grp_id', "grp_name='". addslashes($gname) ."'");
-    DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', '$uid')");
+    DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ('$remote_grp', $uid)");
 }
 
 /**
@@ -1114,17 +1114,17 @@ function SEC_createToken($ttl = 1200)
         $sql = "DELETE FROM {$_TABLES['tokens']} WHERE (DATE_ADD(created, INTERVAL ttl SECOND) < NOW())"
            . " AND (ttl > 0)";
     }
-    DB_Query($sql);
+    DB_query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='{$_USER['uid']}' AND urlfor='$pageURL'";
-    DB_Query($sql);
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".addslashes($pageURL)."'";
+    DB_query($sql);
 
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), '{$_USER['uid']}', '$pageURL', '".intval($ttl)."')";
-    DB_Query($sql);
+           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".addslashes($pageURL)."', '".intval($ttl)."')";
+    DB_query($sql);
 
     $last_token = $token;
 
@@ -1156,7 +1156,7 @@ function SEC_checkToken()
     if(trim($token) != '') {
         if($_DB_dbms != 'mssql') {
             $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
-               . "{$_TABLES['tokens']} WHERE token='$token'";
+               . "{$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
         } else {
             $sql = "SELECT owner_id, urlfor, expired =
                       CASE
@@ -1166,7 +1166,7 @@ function SEC_checkToken()
                       END
                     FROM {$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
         }
-        $tokens = DB_Query($sql);
+        $tokens = DB_query($sql);
         $numberOfTokens = DB_numRows($tokens);
         if($numberOfTokens != 1) {
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
@@ -1229,11 +1229,11 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
     DB_Query($sql);
 
     /* Destroy tokens for this user/url combination */
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='{$_USER['uid']}' AND urlfor='".addslashes($action)."'";
+    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='".addslashes($action)."'";
     DB_Query($sql);
 
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), '{$_USER['uid']}', '".addslashes($action)."', '$ttl')";
+           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".addslashes($action)."', '$ttl')";
     DB_Query($sql);
 
     /* And return the token to the user */

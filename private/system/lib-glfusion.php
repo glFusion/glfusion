@@ -55,10 +55,12 @@ function glf_template_set_root($root) {
             $x = str_replace("/templates", "",$p);
             $retval[] = $x;
         }
-        $retval[] = $r . '/custom';
-        $retval[] = $r;
-        $retval[] = $_CONF['path_themes'] . 'nouveau/' .
-            substr($r, strlen($_CONF['path_layout']));
+        if ( $r != '' ) {
+            $retval[] = $r . '/custom';
+            $retval[] = $r;
+            $retval[] = $_CONF['path_themes'] . 'nouveau/' .
+                substr($r, strlen($_CONF['path_layout']));
+        }
     }
     return $retval;
 }
@@ -107,7 +109,7 @@ function phpblock_blogroll ()
 
     if ( function_exists('LINKS_countLinksAndClicks') ) {
 
-        $result = DB_query ("SELECT lid,url,title,description,hits FROM {$_TABLES['links']} WHERE cid = '$cat'" . COM_getPermSql ('AND') . " ORDER BY $sort");
+        $result = DB_query ("SELECT lid,url,title,description,hits FROM {$_TABLES['links']} WHERE cid = '".addslashes($cat)."'" . COM_getPermSql ('AND') . " ORDER BY $sort");
         $numLinks = DB_numRows ($result);
 
         $links = array ();
@@ -294,7 +296,7 @@ function glfGetUserBlocks(&$blocks) {
     // Get user preferences on blocks
     if( !isset( $_USER['noboxes'] ) || !isset( $_USER['boxes'] )) {
         if( !empty( $_USER['uid'] )) {
-            $result = DB_query( "SELECT boxes,noboxes FROM {$_TABLES['userindex']} WHERE uid = '{$_USER['uid']}'" );
+            $result = DB_query( "SELECT boxes,noboxes FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}" );
             list($_USER['boxes'], $_USER['noboxes']) = DB_fetchArray( $result );
         } else {
             $_USER['boxes'] = '';

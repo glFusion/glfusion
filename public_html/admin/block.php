@@ -518,6 +518,7 @@ function saveblock ($bid, $name, $title, $help, $type, $blockorder, $content, $t
 
     $retval = '';
 
+    $bid   = intval($bid);
     $title = addslashes (COM_stripslashes (strip_tags ($title)));
     $phpblockfn = addslashes (COM_stripslashes (trim ($phpblockfn)));
     if (empty($title)) {

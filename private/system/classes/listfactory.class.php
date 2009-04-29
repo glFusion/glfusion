@@ -523,7 +523,7 @@ class ListFactory {
                 continue;
             }
             if ($this->_query_arr[$i]['type'] == 'sql' ) {
-                $limit_sql = " LIMIT {$limits[$i]['offset']},{$limits[$i]['limit']}";
+                $limit_sql = " LIMIT ".intval($limits[$i]['offset']).",".intval($limits[$i]['limit']);
                 if (is_array($this->_query_arr[$i]['sql'])) {
                     $this->_query_arr[$i]['sql']['mysql'] .= $order_sql . $limit_sql;
                     $this->_query_arr[$i]['sql']['mssql'] .= $order_sql . $limit_sql;

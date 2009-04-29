@@ -88,7 +88,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         return $retval;
     }
 
-    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = '".intval($user)."'");
+    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".intval($user));
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
         return COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -172,7 +172,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         $A['photo'] = '(none)'; // user does not have a photo
     }
 
-    $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = '".intval($A['uid'])."'");
+    $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = ".intval($A['uid']));
     $lasttime = COM_getUserDateTimeFormat ($lastlogin);
 
     $photo = USER_getPhoto ($user, $A['photo'], $A['email'], -1,0);
@@ -191,7 +191,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     }
 
     if ($A['showonline']) {
-        $online_result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE uid='" . intval($user) ."'");
+        $online_result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE uid=" . intval($user));
         if ( DB_numRows($online_result) > 0 ) {
             $user_templates->set_var ('online', 'online');
         }
@@ -321,12 +321,12 @@ function userprofile($user, $msg = 0, $plugin = '')
 
     // posting stats for this user
     $user_templates->set_var ('lang_number_stories', $LANG04[84]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = '".intval($user)."') AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
+    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (uid = ".intval($user).") AND (draft_flag = 0) AND (date <= NOW())" . COM_getPermSQL ('AND');
     $result = DB_query($sql);
     $N = DB_fetchArray ($result);
     $user_templates->set_var ('number_stories', COM_numberFormat ($N['count']));
     $user_templates->set_var ('lang_number_comments', $LANG04[85]);
-    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['comments']} WHERE (uid = '".intval($user)."')";
+    $sql = "SELECT COUNT(*) AS count FROM {$_TABLES['comments']} WHERE (uid = ".intval($user).")";
     if (!empty ($sidList)) {
         $sql .= " AND (sid in ($sidList))";
     }
@@ -494,7 +494,7 @@ function newpasswordform ($uid, $requestid)
 
     $pwform->set_var ('user_id', $uid);
     $pwform->set_var ('user_name', DB_getItem ($_TABLES['users'], 'username',
-                                               "uid = '".intval($uid)."'"));
+                                               "uid = ".intval($uid)));
     $pwform->set_var ('request_id', $requestid);
 
     $pwform->set_var ('lang_explain', $LANG04[90]);
@@ -577,7 +577,7 @@ function createuser ($username, $email, $email_conf)
             $uid = USER_createAccount ($username, $email);
 
             if ($_CONF['usersubmission'] == 1) {
-                if (DB_getItem ($_TABLES['users'], 'status', "uid = '".intval($uid)."'")
+                if (DB_getItem ($_TABLES['users'], 'status', "uid = ".intval($uid))
                         == USER_ACCOUNT_AWAITING_APPROVAL) {
                     $retval = COM_refresh ($_CONF['site_url']
                                            . '/index.php?msg=48');
@@ -902,7 +902,7 @@ $display = '';
 switch ($mode) {
 case 'logout':
     if (!empty ($_USER['uid']) AND $_USER['uid'] > 1) {
-        DB_query("UPDATE {$_TABLES['users']} set remote_ip='' WHERE uid='".$_USER['uid']."'",1);
+        DB_query("UPDATE {$_TABLES['users']} set remote_ip='' WHERE uid=".$_USER['uid'],1);
         SESS_endUserSession ($_USER['uid']);
         PLG_logoutUser ($_USER['uid']);
     }
@@ -1025,7 +1025,7 @@ case 'setnewpwd':
                                array ($uid, $safereqid));
             if ($valid == 1) {
                 $passwd = SEC_encryptPassword($_POST['passwd']);
-                DB_change ($_TABLES['users'], 'passwd', "$passwd",
+                DB_change ($_TABLES['users'], 'passwd', addslashes($passwd),
                            "uid", $uid);
                 DB_delete ($_TABLES['sessions'], 'uid', $uid);
                 DB_change ($_TABLES['users'], 'pwrequestid', "NULL",
@@ -1229,7 +1229,7 @@ default:
                            SEC_encryptPassword($passwd), time() + $cooktime,
                            $_CONF['cookie_path'], $_CONF['cookiedomain'],
                            $_CONF['cookiesecure']);
-                DB_query("UPDATE {$_TABLES['users']} set remote_ip='".addslashes($_SERVER['REMOTE_ADDR'])."' WHERE uid='".$_USER['uid']."'",1);
+                DB_query("UPDATE {$_TABLES['users']} set remote_ip='".addslashes($_SERVER['REMOTE_ADDR'])."' WHERE uid=".$_USER['uid'],1);
             }
         } else {
             $userid = $_COOKIE[$_CONF['cookie_name']];

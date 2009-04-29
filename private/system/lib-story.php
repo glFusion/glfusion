@@ -798,7 +798,7 @@ function STORY_getItemInfo ($sid, $what)
                 }
                 if (empty ($feedfile)) {
                     $feedfile = DB_getItem ($_TABLES['syndication'], 'filename',
-                                            "topic = '{$A['tid']}'");
+                                            "topic = '".addslashes($A['tid'])."'");
                 }
                 if (empty ($feedfile)) {
                     $retval[] = '';
@@ -1138,10 +1138,10 @@ function service_submit_story($args, &$output, &$svc_msg)
         if (array_key_exists('delete', $args)) {
             $delete = count($args['delete']);
             for ($i = 1; $i <= $delete; $i++) {
-                $ai_filename = DB_getItem ($_TABLES['article_images'],'ai_filename', "ai_sid = '".addslashes($sid)."' AND ai_img_num = " . key($args['delete']));
+                $ai_filename = DB_getItem ($_TABLES['article_images'],'ai_filename', "ai_sid = '".addslashes($sid)."' AND ai_img_num = " . intval(key($args['delete'])));
                 STORY_deleteImage ($ai_filename);
 
-                DB_query ("DELETE FROM {$_TABLES['article_images']} WHERE ai_sid = '".addslashes($sid)."' AND ai_img_num = '" . key($args['delete']) ."'");
+                DB_query ("DELETE FROM {$_TABLES['article_images']} WHERE ai_sid = '".addslashes($sid)."' AND ai_img_num = '" . intval(key($args['delete'])) ."'");
                 next($args['delete']);
             }
         }
@@ -1239,7 +1239,7 @@ function service_submit_story($args, &$output, &$svc_msg)
         	        if ( $ai_img_num < 1 ) {
         	            $ai_img_num = 1;
         	        }
-                    DB_query("INSERT INTO {$_TABLES['article_images']} (ai_sid, ai_img_num, ai_filename) VALUES ('".addslashes($sid)."', $ai_img_num, '" . $filenames[$z] . "')");
+                    DB_query("INSERT INTO {$_TABLES['article_images']} (ai_sid, ai_img_num, ai_filename) VALUES ('".addslashes($sid)."', $ai_img_num, '" . addslashes($filenames[$z]) . "')");
                 }
             }
         }
