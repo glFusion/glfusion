@@ -100,7 +100,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     if ( $_DB_dbms == "mssql" ) {
         $sql        = "SELECT *,CAST(album_desc AS TEXT) as album_desc FROM " . $_TABLES['mg_albums'] . " WHERE album_id=" . $album_id;
     } else {
-        $sql        = "SELECT * FROM " . $_TABLES['mg_albums'] . " WHERE album_id=" . $album_id;
+        $sql        = "SELECT * FROM " . $_TABLES['mg_albums'] . " WHERE album_id=" . intval($album_id);
     }
 
     $result     = DB_query( $sql );
@@ -1137,7 +1137,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     if ( $album->wm_id == 'blank.png' ) {
         $wm_id = 0;
     } else {
-        $wm_id = DB_getItem($_TABLES['mg_watermarks'],'wm_id','filename="' . $album->wm_id . '"');
+        $wm_id = DB_getItem($_TABLES['mg_watermarks'],'wm_id','filename="' . addslashes($album->wm_id) . '"');
     }
     if ( $wm_id == '' )
         $wm_id = 0;
@@ -1152,7 +1152,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     if (SEC_hasRights('mediagallery.admin')) {
         if ( $album->featured ) {
             // check for other featured albums, we can only have one
-            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE featured=1 AND cbpage='" . $album->cbpage . "'";
+            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE featured=1 AND cbpage='" . addslashes($album->cbpage) . "'";
             $result = DB_query($sql);
             $nRows  = DB_numRows($result);
             if ( $nRows > 0 ) {
@@ -1318,10 +1318,13 @@ function MG_staticSortAlbum($startaid, $sortfield, $sortorder, $process_subs) {
         case '1' :  // descending
             $sql_order = " ASC";
             break;
+        default:
+            $sql_order = " ASC";
+            break;
     }
 
     if ( $process_subs == 0 ) {
-        $sql = "SELECT album_id,album_order FROM {$_TABLES['mg_albums']} WHERE album_parent=" . $startaid . " " . $sql_sort_by . $sql_order;
+        $sql = "SELECT album_id,album_order FROM {$_TABLES['mg_albums']} WHERE album_parent=" . intval($startaid) . " " . $sql_sort_by . $sql_order;
 
         $order = 10;
         $result = DB_query($sql);
