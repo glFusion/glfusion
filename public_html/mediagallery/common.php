@@ -562,4 +562,23 @@ $bytes = array('B','KB','MB','GB','TB');
   return round($size, 2)." ".$val;
 }
 
+/**
+* Get the path of the feed directory or a specific feed file
+*
+* @param    string  $feedfile   (option) feed file name
+* @return   string              path of feed directory or file
+*
+*/
+function MG_getFeedPath( $feedfile = '' )
+{
+    global $_CONF;
+
+    $feedpath = $_CONF['rdf_file'];
+    $pos = strrpos( $feedpath, '/' );
+    $feed = substr( $feedpath, 0, $pos + 1 );
+    $feed .= $feedfile;
+
+    return $feed;
+}
+
 ?>

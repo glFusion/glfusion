@@ -282,7 +282,7 @@ function MG_saveUserUpload( $album_id ) {
     // equal the actual count of items shown in the database, if not, fix the counts and log
     // the error
 
-    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',intval($album_id);
+    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',intval($album_id));
     $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".intval($album_id));
     if ( $dbCount != $aCount) {
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .

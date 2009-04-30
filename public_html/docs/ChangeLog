@@ -32,6 +32,7 @@ Forum
 
 Media Gallery
 -------------
+- Moved RSS feed files to the glFusion backend/ directory (Mark)
 - Email moderators option did not appear in album edit / create (Mark)
 - Under some circumstances creating an album would fail with an SQL error (Mark)
 - Fixed issue where 'slideshow' auto tag did not honor the media_order

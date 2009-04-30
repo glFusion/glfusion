@@ -36,11 +36,16 @@ if (!defined ('GVERSION')) {
 
 require_once $_CONF['path'] . 'lib/feedcreator/feedcreator.class.php';
 
+
+
 function MG_buildAlbumRSS( $aid ) {
     global $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
 
+    $feedpath = MG_getFeedPath();
+
     $fname = sprintf($_MG_CONF['rss_feed_name'] . "%06d.rss", $aid);
-    $feedname = $_MG_CONF['path_html'] . "rss/" . $fname;
+//    $feedname = $_MG_CONF['path_html'] . "rss/" . $fname;
+    $feedname = $feedpath . '/' . $fname;
 
     if ( $MG_albums[$aid]->enable_rss != 1 ) {
         @unlink($feedname);
@@ -120,7 +125,8 @@ function MG_buildAlbumRSS( $aid ) {
  	}
 
     $rss->link = $_MG_CONF['site_url'];
-    $rss->syndicationURL = $_MG_CONF['site_url'] . '/rss/' . $fname;
+//    $rss->syndicationURL = $_MG_CONF['site_url'] . '/rss/' . $fname;
+    $rss->syndicationURL = $feedpath . '/' . $fname;
 
     MG_processAlbumFeedItems( $rss, $aid );
     if ( !empty($MG_albums[$aid]->children) && $MG_albums[$aid]->rssChildren ) {
@@ -270,8 +276,11 @@ function MG_parseAlbumsRSS( &$rss, $aid ) {
 function MG_buildFullRSS( ) {
     global $LANG_CHARSET, $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
 
+    $feedpath = MG_getFeedPath();
+
     if ( $_MG_CONF['rss_full_enabled'] != 1 ) {
-        @unlink($_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss');
+//        @unlink($_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss');
+        @unlink($feedpath . '/' . $_MG_CONF['rss_feed_name'] . '.rss');
         return;
     }
     $rss = new UniversalFeedCreator();
@@ -285,8 +294,10 @@ function MG_buildFullRSS( ) {
     MG_parseAlbumsRSS($rss, 0);
     // valid format strings are: RSS0.91, RSS1.0, RSS2.0, PIE0.1 (deprecated),
     // MBOX, OPML, ATOM, ATOM0.3, HTML, JS
-    $rss->saveFeed($_MG_CONF['rss_feed_type'], $_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss',0);
-    @chmod($_MG_CONF['path_html'] . 'rss/' . $_MG_CONF['rss_feed_name'] . '.rss', 0664);
+//    $rss->saveFeed($_MG_CONF['rss_feed_type'], $_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss',0);
+    $rss->saveFeed($_MG_CONF['rss_feed_type'], $feedpath . "/" . $_MG_CONF['rss_feed_name'] . '.rss',0);
+//    @chmod($_MG_CONF['path_html'] . 'rss/' . $_MG_CONF['rss_feed_name'] . '.rss', 0664);
+    @chmod($feedpath . '/' . $_MG_CONF['rss_feed_name'] . '.rss', 0664);
 
     return;
 }

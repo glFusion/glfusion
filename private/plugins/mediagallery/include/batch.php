@@ -583,6 +583,8 @@ function MG_deleteChildAlbums( $album_id ){
     $sql = "DELETE FROM " . $_TABLES['mg_albums'] . " WHERE album_id = " . $album_id;
     DB_query( $sql );
     $feedname = sprintf($_MG_CONF['rss_feed_name'] . "%06d", $album_id);
-    @unlink($_MG_CONF['path_html'] . 'rss/' . $feedname . '.rss');
+    $feedpath = MG_getFeedPath();
+//    @unlink($_MG_CONF['path_html'] . 'rss/' . $feedname . '.rss');
+    @unlink($feedpath . '/' . $feedname . '.rss');
 }
 ?>

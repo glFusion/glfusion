@@ -495,7 +495,8 @@ $T->set_var(array(
 
 if ( $MG_albums[$album_id]->enable_rss ) {
     $rssfeedname = sprintf($_MG_CONF['rss_feed_name'] . "%06d", $album_id);
-    $rsslink = '<a href="' . $_MG_CONF['site_url'] . '/rss/' . $rssfeedname . '.rss"' . ' type="application/rss+xml">';
+//    $rsslink = '<a href="' . $_MG_CONF['site_url'] . '/rss/' . $rssfeedname . '.rss"' . ' type="application/rss+xml">';
+    $rsslink = '<a href="' . $_CONF['site_url'] . '/backend/' . $rssfeedname . '.rss"' . ' type="application/rss+xml">';
     $rsslink .= '<img src="' . MG_getImageFile('feed.png')  . '" style="border:none;" alt=""' . XHTML . '></a>';
     $T->set_var('rsslink', $rsslink);
 } else {
