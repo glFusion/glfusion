@@ -109,7 +109,7 @@ if(isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
     echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">' . LB;
     echo '<head>' . LB;
     echo '<title></title>' . LB;
-    echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$_CONF['site_url']}/stylecache_{$_CONF['theme']}.css\" />" . LB;
+    echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$_CONF['site_url']}/css.php?t={$_CONF['theme']}\" />" . LB;
     echo '</head>' . LB;
     echo '<body class="sitebody">';
 } else {
