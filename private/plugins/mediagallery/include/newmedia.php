@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: newmedia.php 3070 2008-09-07 02:40:49Z mevans0263                 $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -34,8 +34,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/lib-upload.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/sort.php';
 
 /**
 * User upload form
@@ -282,11 +282,11 @@ function MG_saveUserUpload( $album_id ) {
     // equal the actual count of items shown in the database, if not, fix the counts and log
     // the error
 
-    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',$album_id);
-    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".$album_id);
+    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',intval($album_id);
+    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".intval($album_id));
     if ( $dbCount != $aCount) {
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .
-                 " WHERE album_id=" . $album_id );
+                 " WHERE album_id=" . intval($album_id) );
         COM_errorLog("MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
     }
 
@@ -480,11 +480,11 @@ function MG_saveJuploadUpload( $album_id ) {
     // equal the actual count of items shown in the database, if not, fix the counts and log
     // the error
 
-    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',$album_id);
-    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".$album_id);
+    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',intval($album_id));
+    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".intval($album_id));
     if ( $dbCount != $aCount) {
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .
-                 " WHERE album_id=" . $album_id );
+                 " WHERE album_id=" . intval($album_id) );
         COM_errorLog("MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
     }
     MG_SortMedia( $album_id );

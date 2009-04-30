@@ -296,8 +296,8 @@ function MG_ftpProcess( $album_id ) {
     }
 
     foreach ($_POST['pic'] as $pic_id) {
-        $album_lb_id = COM_applyFilter($_POST['album_lb_id_' . $pic_id]);
-        $aid         = COM_applyFilter($_POST[$album_lb_id]);
+        $album_lb_id = COM_applyFilter($_POST['album_lb_id_' . $pic_id],true);
+        $aid         = COM_applyFilter($_POST[$album_lb_id],true);
         $filename    = COM_applyFilter($_POST['picfile_' . $pic_id]);        // full path and name
         $file        = basename($filename);                 // basefilename
         if ( is_dir($filename)) {

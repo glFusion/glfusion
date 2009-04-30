@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: rssfeed.php 3070 2008-09-07 02:40:49Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -152,7 +152,7 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
     global $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . ' ORDER BY m.media_time DESC';
+            " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . ' ORDER BY m.media_time DESC';
 
     $result = DB_query( $sql );
     $nRows  = DB_numRows( $result );

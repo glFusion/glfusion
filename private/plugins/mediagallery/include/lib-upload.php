@@ -739,7 +739,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     }
 
     if ( $replace > 0 ) {
-	    $sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . $replace . "'";
+	    $sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($replace) . "'";
 	    $result = DB_query($sql);
 	    $row = DB_fetchArray($result);
 	    $media_filename = $row['media_filename'];
@@ -778,6 +778,22 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	        } while( MG_file_exists( $media_filename  ) );
 
 	    }
+    }
+    // replace a few mime extentions here...
+    //
+    $mimeExtLower = strtolower($mimeExt);
+    if ( $mimeExtLower == 'php' ) {
+        $mimeExt = 'phps';
+    } else if ( $mimeExtLower == 'pl' ) {
+        $mimeExt = 'txt';
+    } else if ( $mimeExtLower == 'cgi' ) {
+        $mimeExt = 'txt';
+    } else if ( $mimeExtLower == 'py' ) {
+        $mimeExt = 'txt';
+    } else if ( $mimeExtLower == 'sh' ) {
+        $mimeExt = 'txt';
+    } else if ( $mimeExtLower == 'rb' ) {
+        $mimeExt = 'txt';
     }
 
     $disp_media_filename = $media_filename . '.' . $mimeExt;
@@ -1132,18 +1148,18 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 
         if ( $replace > 0 ) {
 	        $sql = "UPDATE " . $tableMedia . " SET
-	        					media_filename='$media_filename',
+	        					media_filename='".addslashes($media_filename)."',
 	        					media_original_filename='$original_filename',
-	        					media_mime_ext='$mimeExt',
-	        					mime_type='$mimeType',
-	        					media_time='$media_time',
-	        					media_user_id='$media_user_id',
-	        					media_type='$mediaType',
-	        					media_upload_time='$media_upload_time',
-	        					media_watermarked='$successfulWatermark',
-	        					media_resolution_x='$resolution_x',
-	        					media_resolution_y='$resolution_y'
-	        					WHERE media_id='$replace'";
+	        					media_mime_ext='".addslashes($mimeExt)."',
+	        					mime_type='".addslashes($mimeType)."',
+	        					media_time='".addslashes($media_time)."',
+	        					media_user_id='".addslashes($media_user_id)."',
+	        					media_type='".addslashes($mediaType)."',
+	        					media_upload_time='".addslashes($media_upload_time)."',
+	        					media_watermarked='".addslashes($successfulWatermark)."',
+	        					media_resolution_x='".addslashes($resolution_x)."',
+	        					media_resolution_y='".addslashes($resolution_y)."'
+	        					WHERE media_id='".addslashes($replace)."'";
         	DB_query( $sql );
     	} else {
 

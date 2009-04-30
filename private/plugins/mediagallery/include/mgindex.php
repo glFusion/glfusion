@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: mgindex.php 2869 2008-07-31 14:38:32Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -118,7 +118,6 @@ function MG_index() {
 	$admin_box .= '<div>';
 	$admin_box .= '<select onchange="javascript:forms[\'adminbox\'].submit();" name="mode">' . LB;
 	$admin_box .= '<option label="Options" value="">' . $LANG_MG01['options'] . '</option>' . LB;
-//	$admin_box .= '<option value="search">' . $LANG_MG01['search'] . '</option>' . LB;
 
 	if ( ($MG_albums[0]->member_uploads || $MG_albums[0]->access == 3) && (isset($_USER['uid']) && $_USER['uid'] > 1 ) )  {
 	    $admin_box .= '<option value="upload">' . $LANG_MG01['add_media'] . '</option>' . LB;
@@ -165,7 +164,7 @@ function MG_index() {
 	    $lastlogin = time();
 	} else {
 	    if ( isset($_USER['uid']) && $_USER['uid'] > 1 ) {
-	        $lastlogin    = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = '" . $_USER['uid'] . "'");
+	        $lastlogin    = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = " . $_USER['uid']);
 	    } else {
 	        $lastlogin = time();
 	    }
@@ -466,7 +465,7 @@ function MG_index() {
 	            if ( $owner_id == '' || !isset($MG_albums[$achild[$indexCounter]]->owner_id) ) {
 	                $owner_id = 0;
 	            }
-	            $ownername = DB_getItem ($_TABLES['users'],'username', "uid=$owner_id");
+	            $ownername = DB_getItem ($_TABLES['users'],'username', "uid=".intval($owner_id));
 
 	            $F = new Template($_MG_CONF['template_path']);
 

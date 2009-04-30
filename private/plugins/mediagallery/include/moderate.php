@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: moderate.php 3070 2008-09-07 02:40:49Z mevans0263                 $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -65,7 +65,7 @@ function MG_userModerate( $album_id, $actionURL = '' ) {
         }
         $album_title = 'All Albums';
     } else {
-        $sql = "SELECT * FROM {$_TABLES['mg_albums']} WHERE album_id=" . $album_id;
+        $sql = "SELECT * FROM {$_TABLES['mg_albums']} WHERE album_id=" . intval($album_id);
         $result = DB_query($sql);
         $nrows = DB_numRows($result);
         $row = DB_fetchArray($result);
@@ -85,7 +85,7 @@ function MG_userModerate( $album_id, $actionURL = '' ) {
                 ON ma.media_id=m.media_id ORDER BY ma.media_order DESC";
     } else {
         $sql = "SELECT * FROM {$_TABLES['mg_media_album_queue']} as ma INNER JOIN {$_TABLES['mg_mediaqueue']} as m
-                ON ma.media_id=m.media_id WHERE ma.album_id=" . $album_id . " ORDER BY ma.media_order DESC";
+                ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($album_id) . " ORDER BY ma.media_order DESC";
     }
 
     $result = DB_query($sql);
@@ -173,8 +173,8 @@ function MG_userModerate( $album_id, $actionURL = '' ) {
         $column_width = $width + 5;
 
         $media_date = MG_getUserDateTimeFormat($row['media_time']);
-        $username = DB_getItem($_TABLES['users'],'username','uid=' . $row['media_user_id']);
-        $aTitle = DB_getItem($_TABLES['mg_albums'],'album_title', 'album_id=' . $row['album_id']);
+        $username = DB_getItem($_TABLES['users'],'username','uid=' . intval($row['media_user_id']));
+        $aTitle = DB_getItem($_TABLES['mg_albums'],'album_title', 'album_id=' . intval($row['album_id']));
         if ( $aTitle == "" ) {
             $aTitle = "<i>" . $LANG_MG02['album_not_found'] . "</i>";
         } else {
@@ -238,7 +238,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         }
     } else {
-        $sql = "SELECT * FROM {$_TABLES['mg_albums']} WHERE album_id=" . $album_id;
+        $sql = "SELECT * FROM {$_TABLES['mg_albums']} WHERE album_id=" . intval($album_id);
         $result = DB_query($sql);
         $nrows = DB_numRows($result);
         $row   = DB_fetchArray($result);
@@ -263,7 +263,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
             //
             // copy all the mg_media fields over to the prod database
             //
-            $sql    = "SELECT * FROM {$_TABLES['mg_mediaqueue']} WHERE media_id='" . $id[$i] . "'";
+            $sql    = "SELECT * FROM {$_TABLES['mg_mediaqueue']} WHERE media_id='" . addslashes($id[$i]) . "'";
             $result = DB_query($sql);
             $row    = DB_fetchArray($result);
             $owner_uid = $row['media_user_id'];
@@ -305,7 +305,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
 					. "'" . $row['maint'] . "');";
 
             DB_query($sql);
-            $sql = "DELETE FROM " . $_TABLES['mg_mediaqueue'] . " WHERE media_id='" . $id[$i] . "'";
+            $sql = "DELETE FROM " . $_TABLES['mg_mediaqueue'] . " WHERE media_id='" . addslashes($id[$i]) . "'";
             DB_query($sql);
             $media_upload_time = $row['media_upload_time'];
             $media_filename    = $row['media_filename'];
@@ -315,7 +315,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
             // copy all the mg_media_album fields over to the prod database
             //
 
-            $sql = "SELECT * FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . $id[$i] . "'";
+            $sql = "SELECT * FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . addslashes($id[$i]) . "'";
             $result = DB_query($sql);
             $nRows = DB_numRows($result);
             for ( $x=0; $x < $nRows; $x++ ) {
@@ -327,7 +327,7 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
                        $row['media_id'] . "',32000+$x)";
 
                 DB_query($sql);
-                $sql = "DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . $id[$i] . "'";
+                $sql = "DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . addslashes($id[$i]) . "'";
                 DB_query($sql);
                 $statusReport .= "Media ID " . $id[$i] . $LANG_MG01['queue_processed'];
                 MG_SortMedia( $row['album_id'] );
@@ -375,12 +375,12 @@ function MG_saveModeration( $album_id, $actionURL = '' ) {
                 }
             }
         } elseif ($modaction[$i] == "delete") {
-            $sql    = "SELECT * FROM {$_TABLES['mg_mediaqueue']} WHERE media_id='" . $id[$i] . "'";
+            $sql    = "SELECT * FROM {$_TABLES['mg_mediaqueue']} WHERE media_id='" . addslashes($id[$i]) . "'";
             $result = DB_query($sql);
             $row    = DB_fetchArray($result);
 
-            DB_query("DELETE FROM " . $_TABLES['mg_mediaqueue'] . " WHERE media_id='" . $id[$i] . "'");
-            DB_query("DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . $id[$i] . "'");
+            DB_query("DELETE FROM " . $_TABLES['mg_mediaqueue'] . " WHERE media_id='" . addslashes($id[$i]) . "'");
+            DB_query("DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . addslashes($id[$i]) . "'");
 
             // now remove the media...
 

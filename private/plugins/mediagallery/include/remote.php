@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: remote.php 3070 2008-09-07 02:40:49Z mevans0263                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -234,15 +234,13 @@ function MG_saveRemoteUpload( $albumId ) {
     // equal the actual count of items shown in the database, if not, fix the counts and log
     // the error
 
-    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',$albumId);
-    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".$albumId);
+    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',intval($albumId));
+    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".intval($albumId));
     if ( $dbCount != $aCount) {
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .
-                 " WHERE album_id=" . $albumId );
+                 " WHERE album_id=" . intval($albumId) );
         COM_errorLog("MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
     }
-
-//    MG_SortMedia( $albumId );
 
     $T->set_var('status_message',$statusMsg);
 
@@ -269,7 +267,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 
     // make sure we have the proper permissions to upload to this album....
 
-    $sql = "SELECT * FROM {$_TABLES['mg_albums']} WHERE album_id=". $albumId;
+    $sql = "SELECT * FROM {$_TABLES['mg_albums']} WHERE album_id=". intval($albumId);
     $aResult = DB_query($sql);
     $aRows   = DB_numRows( $aResult );
     if ( $aRows != 1 ) {
@@ -435,7 +433,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 
     // Check and see if moderation is on.  If yes, place in mediasubmission
 
-    if ($albumInfo['moderate'] == 1 && !$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) { //  && !SEC_hasRights('mediagallery.create')) {
+    if ($albumInfo['moderate'] == 1 && !$MG_albums[0]->owner_id ) { //  && !SEC_hasRights('mediagallery.create')) {
       $tableMedia       = $_TABLES['mg_mediaqueue'];
       $tableMediaAlbum  = $_TABLES['mg_media_album_queue'];
       $queue = 1;
@@ -473,14 +471,14 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
     $remoteURL = addslashes($URL);
 
     $sql = "INSERT INTO " . $tableMedia . " (media_id,media_filename,media_original_filename,media_mime_ext,media_exif,mime_type,media_title,media_desc,media_keywords,media_time,media_views,media_comments,media_votes,media_rating,media_tn_attached,media_tn_image,include_ss,media_user_id,media_user_ip,media_approval,media_type,media_upload_time,media_category,media_watermarked,v100,maint,media_resolution_x,media_resolution_y,remote_media,remote_url)
-            VALUES ('$new_media_id','$media_filename','$original_filename','$mimeExt','1','$mimeType','$media_caption','$media_desc','$media_keywords','$media_time','0','0','0','0.00','$attachedThumbnail','','1','$media_user_id','','0','$mediaType','$media_upload_time','$category','0','0','0',$resolution_x,$resolution_y,1,'$remoteURL');";
+            VALUES ('".addslashes($new_media_id)."','".addslashes($media_filename)."','".addslashes($original_filename)."','".addslashes($mimeExt)."','1','".addslashes($mimeType)."','$media_caption','$media_desc','$media_keywords','".addslashes($media_time)."','0','0','0','0.00','".addslashes($attachedThumbnail)."','','1','".intval($media_user_id)."','','0','".addslashes($mediaType)."','".addslashes($media_upload_time)."','".addslashes($category)."','0','0','0',$resolution_x,$resolution_y,1,'$remoteURL');";
     DB_query( $sql );
 
     if ( $_MG_CONF['verbose'] ) {
         COM_errorLog("MG Upload: Updating Album information");
     }
 
-    $sql = "SELECT MAX(media_order) + 10 AS media_seq FROM " . $_TABLES['mg_media_albums'] . " WHERE album_id = " . $albumId;
+    $sql = "SELECT MAX(media_order) + 10 AS media_seq FROM " . $_TABLES['mg_media_albums'] . " WHERE album_id = " . intval($albumId);
     $result = DB_query( $sql );
     $row = DB_fetchArray( $result );
     $media_seq = $row['media_seq'];
@@ -488,7 +486,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
         $media_seq = 10;
     }
 
-    $sql = "INSERT INTO " . $tableMediaAlbum . " (media_id, album_id, media_order) VALUES ('$new_media_id', $albumId, $media_seq )";
+    $sql = "INSERT INTO " . $tableMediaAlbum . " (media_id, album_id, media_order) VALUES ('".addslashes($new_media_id)."', ".intval($albumId).", $media_seq )";
     DB_query( $sql );
 
     if ( $mediaType == 1 && $resolution_x > 0 && $resolution_y > 0 ) {
