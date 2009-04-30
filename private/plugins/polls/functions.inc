@@ -120,7 +120,7 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
     $retval = '';
 
     $commentcode = DB_getItem ($_TABLES['polltopics'], 'commentcode',
-                               "pid = '$id'");
+                               "pid = '".addslashes($id)."'");
     if ($commentcode != 0) {
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -160,7 +160,7 @@ function plugin_deletecomment_polls($cid, $id)
     $retval = '';
 
     $has_editPermissions = SEC_hasRights ('polls.edit');
-    $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['polltopics']} WHERE pid = '{$id}'");
+    $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['polltopics']} WHERE pid = '".addslashes($id)."'");
     $A = DB_fetchArray ($result);
 
     if ($has_editPermissions && SEC_hasAccess ($A['owner_id'],
@@ -336,22 +336,22 @@ function plugin_user_delete_polls ($uid)
 {
     global $_TABLES, $_PO_CONF;
 
-    if (DB_count ($_TABLES['polltopics'], 'owner_id', $uid) == 0) {
+    if (DB_count ($_TABLES['polltopics'], 'owner_id', intval($uid)) == 0) {
         // there are no polls owned by this user
         return;
     }
 
     if ($_PO_CONF['delete_polls'] == 1) {
         // delete the polls
-        $result = DB_query ("SELECT pid FROM {$_TABLES['polltopics']} WHERE owner_id = $uid");
+        $result = DB_query ("SELECT pid FROM {$_TABLES['polltopics']} WHERE owner_id=".intval($uid));
         $numPolls = DB_numRows ($result);
         for ($i = 0; $i < $numPolls; $i++) {
             list($pid) = DB_fetchArray ($result);
             DB_delete ($_TABLES['pollanswers'], 'pid', $pid);
             DB_delete ($_TABLES['pollvoters'], 'pid', $pid);
-            DB_query ("DELETE FROM {$_TABLES['comments']} WHERE sid = '$pid' AND type = 'polls'");
+            DB_query ("DELETE FROM {$_TABLES['comments']} WHERE sid = '".addslashes($pid)."' AND type = 'polls'");
         }
-        DB_delete ($_TABLES['polltopics'], 'owner_id', $uid);
+        DB_delete ($_TABLES['polltopics'], 'owner_id', intval($uid));
     } else {
         // assign ownership to a user from the Root group
         $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id',
@@ -359,7 +359,7 @@ function plugin_user_delete_polls ($uid)
         $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $rootgroup ORDER BY ug_uid LIMIT 1");
         list($rootuser) = DB_fetchArray ($result);
 
-        DB_query ("UPDATE {$_TABLES['polltopics']} SET owner_id = $rootuser WHERE owner_id = $uid");
+        DB_query ("UPDATE {$_TABLES['polltopics']} SET owner_id = $rootuser WHERE owner_id = ".intval($uid));
     }
 }
 
@@ -441,7 +441,7 @@ function POLLS_pollVote($pid, $showall=true)
 
     $topic = DB_query("SELECT topic,voters,commentcode,is_open,hideresults,owner_id "
         . ",group_id,perm_owner,perm_group,perm_anon,perm_members "
-        . "FROM {$_TABLES['polltopics']} WHERE pid='$pid'" . COM_getPermSql('AND'));
+        . "FROM {$_TABLES['polltopics']} WHERE pid='".addslashes($pid)."'" . COM_getPermSql('AND'));
     $ntopics = DB_numRows($topic);
 
     if($ntopics == 0 ) {
@@ -452,7 +452,7 @@ function POLLS_pollVote($pid, $showall=true)
         if ($ntopics == 1) {
             $questions_sql = "SELECT question,qid "
                 . "FROM {$_TABLES['pollquestions']} "
-                . "WHERE pid='$pid' ORDER BY qid";
+                . "WHERE pid='".addslashes($pid)."' ORDER BY qid";
 
             $questions = DB_query($questions_sql);
             $nquestions = DB_numRows($questions );
@@ -532,7 +532,7 @@ function POLLS_pollVote($pid, $showall=true)
                     }
                     $answer_sql = "SELECT answer,aid "
                         . "FROM {$_TABLES['pollanswers']} "
-                        . "WHERE pid='$pid'$filter ORDER BY qid, aid";
+                        . "WHERE pid='".addslashes($pid)."'$filter ORDER BY qid, aid";
                     $answers = DB_query($answer_sql);
                     $nanswers = DB_numRows($answers );
                     for($i=0; $i<$nanswers; $i++) {
@@ -556,7 +556,7 @@ function POLLS_pollVote($pid, $showall=true)
                 $poll->set_var('poll_notification', $notification);
                 if($P['commentcode'] >= 0 ) {
                     $num_comments = DB_count($_TABLES['comments'],
-                            array('sid', 'type'), array($pid, 'polls'));
+                            array('sid', 'type'), array(addslashes($pid), 'polls'));
                     $poll->set_var('num_comments',
                             COM_numberFormat($num_comments));
                     $poll->set_var('lang_comments', $LANG01[3]);
@@ -676,7 +676,7 @@ function POLLS_pollsave($pid, $aid)
         exit;
     }
 
-    DB_change($_TABLES['polltopics'],'voters',"voters + 1",'pid',$pid,'',true);
+    DB_change($_TABLES['polltopics'],'voters',"voters + 1",'pid',addslashes($pid),'',true);
     // This call to DB-change will properly supress the insertion of quotes around $value in the sql
     $answers = count($aid);
     for ($i = 0; $i < $answers; $i++) {
@@ -685,18 +685,18 @@ function POLLS_pollsave($pid, $aid)
             'votes',
             "votes + 1",
             array('pid', 'qid', 'aid'),
-            array($pid,  $i,    COM_applyFilter($aid[$i], true)),
+            array(addslashes($pid),  $i, COM_applyFilter($aid[$i], true)),
             '',
             true
         );
     }
 
     // This always does an insert so no need to provide key_field and key_value args
-    DB_save($_TABLES['pollvoters'],'ipaddress,date,pid',"'{$_SERVER['REMOTE_ADDR']}'," . time() . ",'$pid'");
+    DB_save($_TABLES['pollvoters'],'ipaddress,date,pid',"'".addslashes($_SERVER['REMOTE_ADDR'])."'," . time() . ",'".addslashes($pid)."'");
     $retval .= COM_startBlock ($LANG_POLLS['savedvotetitle'], '',
                        COM_getBlockTemplate ('_msg_block', 'header'))
         . $LANG_POLLS['savedvotemsg'] . ' "'
-        . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '{$pid}'")
+        . DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".addslashes($pid)."'")
         . '"'
         . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
         . POLLS_pollResults($pid);
@@ -726,7 +726,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
     $retval = '';
     $topic_sql = "SELECT topic,voters,is_open,hideresults,commentcode,owner_id,group_id,"
         . "perm_owner,perm_group,perm_members,perm_anon "
-        . "FROM {$_TABLES['polltopics']} WHERE pid='$pid'";
+        . "FROM {$_TABLES['polltopics']} WHERE pid='".addslashes($pid)."'";
     $topic = DB_query($topic_sql);
     $P = DB_fetchArray($topic);
 
@@ -753,7 +753,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
     if ($ntopic == 1) {
         $questions_sql = "SELECT qid,pid,question "
             . "FROM {$_TABLES['pollquestions']} "
-            . "WHERE pid='$pid' "
+            . "WHERE pid='".addslashes($pid)."' "
             . "ORDER BY qid";
         $questions = DB_query ($questions_sql);
         $nquestions = DB_numRows($questions);
@@ -806,13 +806,13 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
 
                 $answer_sql = "SELECT votes,answer,remark "
                     . "FROM {$_TABLES['pollanswers']} "
-                    . "WHERE pid='$pid' and qid='{$Q['qid']}' "
+                    . "WHERE pid='".addslashes($pid)."' and qid='".addslashes($Q['qid'])."' "
                     . "ORDER BY $order";
                 $answers = DB_query ($answer_sql);
                 $nanswers = DB_numRows($answers);
 
                 $a_summ_sql = "SELECT SUM(votes) as votesumm FROM {$_TABLES['pollanswers']} "
-                    . "WHERE pid='$pid' and qid='{$Q['qid']}' "
+                    . "WHERE pid='".addslashes($pid)."' and qid='".addslashes($Q['qid'])."' "
                     . "GROUP BY qid";
                 $a_summ = DB_query ($a_summ_sql);
                 $S = DB_fetchArray($a_summ);
@@ -855,7 +855,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
 
             if($P['commentcode'] >= 0 ) {
                 $num_comments = DB_count($_TABLES['comments'],
-                        array('sid', 'type' ), array($pid, 'polls' ));
+                        array('sid', 'type' ), array(addslashes($pid), 'polls' ));
                 $poll->set_var('num_comments',
                         COM_numberFormat($num_comments));
                 $poll->set_var('lang_comments', $LANG01[3]);
@@ -907,7 +907,7 @@ function POLLS_ipAlreadyVoted($pid, $ip = '' )
 
     if(DB_count($_TABLES['pollvoters'],
                  array('ipaddress', 'pid'),
-                 array($ip, $pid)) > 0) {
+                 array(addslashes($ip), addslashes($pid))) > 0) {
         $retval = true;
     }
 
@@ -954,7 +954,7 @@ function plugin_displaycomment_polls ($id, $cid, $title, $order, $format, $page,
     $sql = "SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, "
         . "perm_group, perm_members, perm_anon "
         . "FROM {$_TABLES['polltopics']} "
-        . "WHERE (pid = '$id')" . COM_getPermSQL('AND')
+        . "WHERE (pid = '".addslashes($id)."')" . COM_getPermSQL('AND')
         . ' GROUP BY pid';
     $result = DB_query ($sql);
     $A = DB_fetchArray ($result);
