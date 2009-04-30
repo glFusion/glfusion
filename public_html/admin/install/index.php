@@ -772,7 +772,6 @@ function INST_checkEnvironment($dbconfig_path='')
                         $_PATH['public_html'].'mediagallery/mediaobjects/orig/0/',
                         $_PATH['public_html'].'mediagallery/mediaobjects/disp/0/',
                         $_PATH['public_html'].'mediagallery/mediaobjects/tn/0/',
-                        $_PATH['public_html'].'mediagallery/rss/',
                         $_PATH['public_html'].'mediagallery/watermarks/',
 
                         $_PATH['public_html'].'filemgmt_data/',
