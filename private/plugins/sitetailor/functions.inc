@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2008 by the following authors:                            |
+// | Copyright (C)  2008-2009 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -366,12 +366,12 @@ function st_initMenu($skipCache=false) {
         }
 
         // retrieve configuration options for this menu...
-        $cfgResult = DB_query("SELECT * FROM {$_TABLES['st_menus_config']} WHERE menu_id=".$menu['id']);
+        $cfgResult = DB_query("SELECT * FROM {$_TABLES['st_menus_config']} WHERE menu_id=".intval($menu['id']));
         while ($cfgRow = DB_fetchArray($cfgResult)) {
             $stMenu[$menu['id']]['config'][$cfgRow['conf_name']] = $cfgRow['conf_value'];
         }
 
-        $sql = "SELECT * FROM {$_TABLES['st_menu_elements']} WHERE menu_id=".$menuID." ORDER BY element_order ASC";
+        $sql = "SELECT * FROM {$_TABLES['st_menu_elements']} WHERE menu_id=".intval($menuID)." ORDER BY element_order ASC";
         $elementResult      = DB_query( $sql, 1);
         $element            = new mbElement();
         $element->id        = 0;
