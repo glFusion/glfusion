@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -100,7 +100,7 @@ $orderBy = MG_getSortOrder($album_id,$sortOrder);
 $sql = "SELECT * FROM " .
         $_TABLES['mg_media_albums'] . " as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
         " ON ma.media_id=m.media_id
-        WHERE ma.album_id=" . $album_id .
+        WHERE ma.album_id=" . intval($album_id) .
         $orderBy;
 
 $result = DB_query( $sql );

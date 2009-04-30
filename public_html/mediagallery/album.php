@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,8 +30,8 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
-require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/classMedia.php';
+require_once $_CONF['path'].'plugins/mediagallery/include/classFrame.php';
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -61,19 +61,19 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] 
 */
 
 if ( isset($_GET['aid']) ) {
-    $album_id  = COM_applyFilter($_GET['aid'],true);
+    $album_id  = intval(COM_applyFilter($_GET['aid'],true));
 } else {
     $album_id = 0;
 }
 
 if (isset($_GET['page']) ) {
-    $page      = COM_applyFilter($_GET['page'],true);
+    $page      = intval(COM_applyFilter($_GET['page'],true));
 } else {
     $page = 0;
 }
 
 if ( isset($_GET['sort']) ) {
-    $sortOrder = COM_applyFilter($_GET['sort'],true);
+    $sortOrder = intval(COM_applyFilter($_GET['sort'],true));
 } else {
     $sortOrder = 0;
 }
@@ -455,7 +455,7 @@ $owner_id = $MG_albums[$album_id]->owner_id;
 if ( $owner_id == '' || !isset($MG_albums[$album_id]->owner_id) ) {
     $owner_id = 0;
 }
-$ownername = DB_getItem ($_TABLES['users'],'username', "uid=$owner_id");
+$ownername = DB_getItem ($_TABLES['users'],'username', "uid=".intval($owner_id));
 $album_last_update = MG_getUserDateTimeFormat($MG_albums[$album_id]->last_update);
 
 $T = new Template( MG_getTemplatePath($album_id) );

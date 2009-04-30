@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -57,7 +57,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] 
 
 $pcid = COM_applyFilter($_GET['id']);
 
-$result = DB_query("SELECT * FROM {$_TABLES['mg_postcard']} WHERE pc_id='" . $pcid . "'");
+$result = DB_query("SELECT * FROM {$_TABLES['mg_postcard']} WHERE pc_id='" . addslashes($pcid) . "'");
 $numRows = DB_numRows($result);
 
 if ( $numRows < 1 ) {
@@ -89,7 +89,7 @@ $message    = $P['message'];
 
 $retval = '';
 
-$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . $mid . '"');
+$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
 
 if ( $MG_albums[$aid]->access == 0 ) {
     $display  = MG_siteHeader();
@@ -102,7 +102,7 @@ if ( $MG_albums[$aid]->access == 0 ) {
 }
 
 $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-        " ON ma.media_id=m.media_id WHERE m.media_id='" . $mid . "'";
+        " ON ma.media_id=m.media_id WHERE m.media_id='" . addslashes($mid) . "'";
 $result = DB_query( $sql );
 $nRows = DB_numRows( $result );
 if ( $nRows < 1 ) {

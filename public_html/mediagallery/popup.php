@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -51,7 +51,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] 
 $s      = COM_applyFilter($_GET['s'],true);
 $sort   = COM_applyFilter($_GET['sort'],true);
 
-$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . $s . '"');
+$aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($s) . '"');
 
 if ( $MG_albums[$aid]->access == 0 ) {
     $display  = MG_siteHeader();
@@ -65,10 +65,10 @@ if ( $MG_albums[$aid]->access == 0 ) {
 
 $mid = $s;
 
-$orderBy = MG_getSortOrder($aid,$sortOrder);
+$orderBy = MG_getSortOrder($aid,$sort);
 
 $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-        " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . $orderBy;
+        " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . $orderBy;
 $result = DB_query( $sql );
 $nRows = DB_numRows( $result );
 

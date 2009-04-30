@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -114,7 +114,7 @@ $mg_installed_version = $row[0];
 /*
  * Pull all rated media
  */
-$ip     = $_SERVER['REMOTE_ADDR'];
+$ip     = addslashes($_SERVER['REMOTE_ADDR']);
 $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
 $ratedIds = array();
 if ( $uid == 1 ) {
@@ -226,7 +226,6 @@ function MG_getSortOrder( $aid, $sortOrder ) {
         case 11 :
             $orderBy = ' ORDER BY m.media_title ASC';
             break;
-
         default :
             $orderBy = ' ORDER BY ma.media_order DESC';
             break;
@@ -284,7 +283,7 @@ function MG_quotaUsage( $uid ) {
     global $_MG_CONF, $_TABLES;
 
     $quota = 0;
-    $result = DB_query("SELECT album_disk_usage FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $uid);
+    $result = DB_query("SELECT album_disk_usage FROM {$_TABLES['mg_albums']} WHERE owner_id=" . intval($uid));
     while ($A=DB_fetchArray($result)) {
         $quota += $A['album_disk_usage'];
     }
@@ -294,7 +293,7 @@ function MG_quotaUsage( $uid ) {
 function MG_getUserQuota( $uid ) {
     global $_TABLES;
 
-    $result = DB_query("SELECT quota FROM {$_TABLES['mg_userprefs']} WHERE uid=" . $uid);
+    $result = DB_query("SELECT quota FROM {$_TABLES['mg_userprefs']} WHERE uid=" . intval($uid));
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {
         $row = DB_fetchArray($result);
@@ -306,7 +305,7 @@ function MG_getUserQuota( $uid ) {
 function MG_getUserActive( $uid ) {
     global $_TABLES;
 
-    $result = DB_query("SELECT active FROM {$_TABLES['mg_userprefs']} WHERE uid=" . $uid);
+    $result = DB_query("SELECT active FROM {$_TABLES['mg_userprefs']} WHERE uid=" . intval($uid));
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {
         $row = DB_fetchArray($result);
@@ -333,8 +332,8 @@ function MG_usage( $application, $album_title, $media_title, $media_id ) {
 
     $log_time = $now;
     $user_id  = intval($_USER['uid']);
-    $user_ip  = $REMOTE_ADDR;
-    $user_name = $_USER['username'];
+    $user_ip  = addslashes($REMOTE_ADDR);
+    $user_name = addslashes($_USER['username']);
 
     $title  = addslashes($album_title);
     $ititle = addslashes($media_title);

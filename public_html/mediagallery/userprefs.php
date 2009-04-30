@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -62,12 +62,12 @@ if ($mode == $LANG_MG01['cancel'] ) {
 }
 
 if ( $mode == $LANG_MG01['submit'] && !empty($LANG_MG01['submit']) ) {
-    $display_rows    = COM_applyFilter($_POST['display_rows'],true);
-    $display_columns = COM_applyFilter($_POST['display_columns'],true);
-    $mp3_player      = COM_applyFilter($_POST['mp3_player'],true);
-    $playback_mode   = COM_applyFilter($_POST['playback_mode'],true);
-    $tn_size         = COM_applyFilter($_POST['tn_size'],true);
-    $uid             = $_USER['uid'];
+    $display_rows    = intval(COM_applyFilter($_POST['display_rows'],true));
+    $display_columns = intval(COM_applyFilter($_POST['display_columns'],true));
+    $mp3_player      = intval(COM_applyFilter($_POST['mp3_player'],true));
+    $playback_mode   = intval(COM_applyFilter($_POST['playback_mode'],true));
+    $tn_size         = intval(COM_applyFilter($_POST['tn_size'],true));
+    $uid             = intval($_USER['uid']);
 
     if ( $display_columns < 0 || $display_columns > 5 ) {
         $display_columns = 3;

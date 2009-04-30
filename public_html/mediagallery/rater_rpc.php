@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -77,7 +77,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] 
     die("Sorry, user must login first");
 }
 
-$sql = "SELECT media_votes,media_rating,media_user_id FROM {$_TABLES['mg_media']} WHERE media_id='" . $id_sent . "'";
+$sql = "SELECT media_votes,media_rating,media_user_id FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($id_sent) . "'";
 $result         = DB_query($sql);
 $row            = DB_fetchArray($result);
 $count          = $row['media_votes'];
@@ -91,9 +91,9 @@ $sum = ($vote_sent * 2 ) +$current_rating; // add together the current vote valu
 $tense = ($count==1) ? $LANG_MG03['vote'] : $LANG_MG03['votes']; //plural form votes/vote
 
 if ( $uid == 1 ) {
-    $sql = "SELECT id FROM {$_TABLES['mg_rating']} WHERE ip_address='$ip' AND media_id='$id_sent'";
+    $sql = "SELECT id FROM {$_TABLES['mg_rating']} WHERE ip_address='".addslashes($ip)."' AND media_id='".addslashes($id_sent)."'";
 } else {
-    $sql = "SELECT id FROM {$_TABLES['mg_rating']} WHERE (uid=$uid OR ip_address='$ip') AND media_id='$id_sent'";
+    $sql = "SELECT id FROM {$_TABLES['mg_rating']} WHERE (uid=$uid OR ip_address='".addslashes($ip)."') AND media_id='".addslashes($id_sent)."'";
 }
 $checkResult = DB_query($sql);
 if ( DB_numRows($checkResult) > 0 ) {
@@ -120,7 +120,7 @@ $new_rating = $sum / $added;
 if(!$voted && !$speedlimiterror) {     //if the user hasn't yet voted, then vote normally...
 	if (($vote_sent >= 1 && $vote_sent <= $units) && ($ip == $ip_num)) { // keep votes within range, make sure IP matches - no monkey business!
         $sql = "UPDATE {$_TABLES['mg_media']} SET media_votes = $added, media_rating = '$new_rating'
-                        WHERE media_id='" . $id_sent . "'";
+                        WHERE media_id='" . addslashes($id_sent) . "'";
         DB_query($sql);
 
         $sql = "SELECT MAX(id) + 1 AS newid FROM " . $_TABLES['mg_rating'];
@@ -130,14 +130,14 @@ if(!$voted && !$speedlimiterror) {     //if the user hasn't yet voted, then vote
         if ( $newid < 1 ) {
             $newid = 1;
         }
-        $sql = "INSERT INTO {$_TABLES['mg_rating']} (id,ip_address,uid,media_id,ratingdate,owner_id) VALUES (" . $newid . ", '" . $ip . "'," . $uid . ",'" . $id_sent . "'," . $ratingdate . "," . $owner_id . " )";
+        $sql = "INSERT INTO {$_TABLES['mg_rating']} (id,ip_address,uid,media_id,ratingdate,owner_id) VALUES (" . $newid . ", '" . addslashes($ip) . "'," . $uid . ",'" . addslashes($id_sent) . "'," . $ratingdate . "," . $owner_id . " )";
         DB_query($sql);
         COM_updateSpeedlimit ('mgrate');
 	}
 } //end for the "if(!$voted)"
 // these are new queries to get the new values!
 
-$sql = "SELECT media_votes,media_rating FROM {$_TABLES['mg_media']} WHERE media_id='" . $id_sent . "'";
+$sql = "SELECT media_votes,media_rating FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($id_sent) . "'";
 $result         = DB_query($sql);
 $row            = DB_fetchArray($result);
 $count          = $row['media_votes'];

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -67,7 +67,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] 
     die("Sorry, user must login first");
 }
 
-$sql = "SELECT media_votes,media_rating,media_user_id FROM {$_TABLES['mg_media']} WHERE media_id='" . $id_sent . "'";
+$sql = "SELECT media_votes,media_rating,media_user_id FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($id_sent) . "'";
 $result         = DB_query($sql);
 $row            = DB_fetchArray($result);
 $count          = $row['media_votes'];
@@ -77,7 +77,7 @@ if ( !isset($owner_id) || $owner_id == '' ) {
     $owner_id = 2;
 }
 
-$sql = "SELECT id FROM {$_TABLES['mg_rating']} WHERE (uid=$uid OR ip_address='$ip') AND media_id='$id'";
+$sql = "SELECT id FROM {$_TABLES['mg_rating']} WHERE (uid=".intval($uid)." OR ip_address='".addslashes($ip)."') AND media_id='".addslashes($id)."'";
 $checkResult = DB_query($sql);
 if ( DB_numRows($checkResult) > 0 ) {
     $voted = 1;
@@ -105,7 +105,7 @@ $new_rating = $sum / $added;
 if(!$voted  && !$speedlimiterror) {
     if (($vote_sent >= 1 && $vote_sent <= ($units * 2) ) && ($ip == $ip_num)) { // keep votes within range
         $sql = "UPDATE {$_TABLES['mg_media']} SET media_votes = $added, media_rating = '$new_rating'
-                        WHERE media_id='" . $id_sent . "'";
+                        WHERE media_id='" . addslashes($id_sent) . "'";
         DB_query($sql);
 
         $sql = "SELECT MAX(id) + 1 AS newid FROM " . $_TABLES['mg_rating'];
@@ -115,7 +115,7 @@ if(!$voted  && !$speedlimiterror) {
         if ( $newid < 1 ) {
             $newid = 1;
         }
-        $sql = "INSERT INTO {$_TABLES['mg_rating']} (id,ip_address,uid,media_id,ratingdate,owner_id) VALUES (" . $newid . ", '" . $ip . "'," . $uid . ",'" . $id_sent . "'," . $ratingdate . "," . $owner_id . " )";
+        $sql = "INSERT INTO {$_TABLES['mg_rating']} (id,ip_address,uid,media_id,ratingdate,owner_id) VALUES (" . $newid . ", '" . addslashes($ip) . "'," . $uid . ",'" . addslashes($id_sent) . "'," . $ratingdate . "," . $owner_id . " )";
         DB_query($sql);
         COM_updateSpeedlimit ('mgrate');
     }

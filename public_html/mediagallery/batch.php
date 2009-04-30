@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -69,7 +69,7 @@ $display = MG_siteHeader();
 if ( isset ($_POST['cancel_button'] ) ) {
     $session_id = COM_applyFilter($_GET['sid']);
     // Pull the session status info
-    $sql = "SELECT * FROM {$_TABLES['mg_sessions']} WHERE session_id='" . $session_id . "'";
+    $sql = "SELECT * FROM {$_TABLES['mg_sessions']} WHERE session_id='" . addslashes($session_id) . "'";
     $result = DB_query($sql,1);
     if ( DB_error() ) {
         COM_errorLog("Media Gallery Error - Unable to retrieve batch session data");
@@ -101,10 +101,10 @@ if (($mode == 'continue') ) {
             }
         }
         if ( isset($_POST['item_limit']) ) {
-            $item_limit = COM_applyFilter($_POST['item_limit'],true);
+            $item_limit = intval(COM_applyFilter($_POST['item_limit'],true));
         } else {
             if ( isset($_GET['limit']) ) {
-                $item_limit = COM_applyFilter($_GET['limit'],true);
+                $item_limit = intval(COM_applyFilter($_GET['limit'],true));
             } else {
                 $item_limit = $_MG_CONF['def_item_limit'];
             }

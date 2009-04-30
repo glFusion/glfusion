@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -87,7 +87,7 @@ function MG_previewPostCard() {
 
     $retval = '';
 
-    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . $mid . '"');
+    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
 
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ($_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval  = MG_siteHeader();
@@ -100,7 +100,7 @@ function MG_previewPostCard() {
     }
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE m.media_id='" . $mid . "'";
+            " ON ma.media_id=m.media_id WHERE m.media_id='" . addslashes($mid) . "'";
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
     if ( $nRows < 1 ) {
@@ -198,7 +198,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
         $fromemail  = $_USER['email'];
     }
 
-    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . $mid . '"');
+    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ($_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
@@ -210,7 +210,7 @@ function MG_editPostCard( $mode, $mid, $msg='' ) {
     }
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE m.media_id='" . $mid . "'";
+            " ON ma.media_id=m.media_id WHERE m.media_id='" . addslashes($mid) . "'";
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
     if ( $nRows < 1 ) {
@@ -313,7 +313,7 @@ function MG_sendPostCard() {
 
     $retval = '';
 
-    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . $mid . '"');
+    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mid) . '"');
 
     if ( $MG_albums[$aid]->access == 0 || $MG_albums[$aid]->enable_postcard == 0 || ( $_USER['uid'] < 2 && $MG_albums[$aid]->enable_postcard != 2)) {
         $retval = MG_siteHeader();
@@ -326,7 +326,7 @@ function MG_sendPostCard() {
     }
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE m.media_id='" . $mid . "'";
+            " ON ma.media_id=m.media_id WHERE m.media_id='" . addslashes($mid) . "'";
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
     if ( $nRows < 1 ) {
@@ -356,7 +356,7 @@ function MG_sendPostCard() {
         $uid        = intval($_USER['uid']);
     }
 
-    $sql = "INSERT INTO {$_TABLES['mg_postcard']} (pc_id,mid,to_name,to_email,from_name,from_email,subject,message,pc_time,uid) VALUES ('$pcId','$mid','$toname','$toemail','$fromname','$fromemail','$newsubject','$newmessage',$pc_time,$uid)";
+    $sql = "INSERT INTO {$_TABLES['mg_postcard']} (pc_id,mid,to_name,to_email,from_name,from_email,subject,message,pc_time,uid) VALUES ('$pcId','".addslashes($mid)."','".addslashes($toname)."','".addslashes($toemail)."','".addslashes($fromname)."','".addslashes($fromemail)."','$newsubject','$newmessage',$pc_time,$uid)";
     $result = DB_query($sql);
     if ( DB_error() ) {
         COM_errorLog("Media Gallery: Error saving postcard");

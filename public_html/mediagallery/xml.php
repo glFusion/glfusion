@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -98,7 +98,7 @@ function MG_getItems ()
 			$orderBy = MG_getSortOrder($aid, 0);
 
 			$sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-			        " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . " AND m.include_ss=1 " . $orderBy;
+			        " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . " AND m.include_ss=1 " . $orderBy;
 
 			$result = DB_query( $sql );
 			$nRows  = DB_numRows( $result );

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -87,7 +87,7 @@ function MG_getMP3Items ($aid)
 			$orderBy = MG_getSortOrder($aid, 0);
 
 			$sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-			        " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . " AND m.media_type=2 AND m.mime_type='audio/mpeg' " . $orderBy;
+			        " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . " AND m.media_type=2 AND m.mime_type='audio/mpeg' " . $orderBy;
 
 			$result = DB_query( $sql );
 			$nRows  = DB_numRows( $result );
