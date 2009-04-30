@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Moved css and js cache files to layout_cache/ directory (Mark)
 - Added $_SYSTEM['skip_ip_check'] to disable the long term cookie IP check
   (Mark)
 - Handle disabled set_time_limit() function better in plugin upload routines

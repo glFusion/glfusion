@@ -7352,8 +7352,8 @@ function css_out(){
     $tpl = $_CONF['theme'];
 
     $cacheID = 'css_' . $tpl;
-    $cacheFile = $_CONF['path_html'].'/stylecache_'.$_CONF['theme'].'.css';
-    $cacheURL  = $_CONF['site_url'].'/stylecache_'.$_CONF['theme'].'.css';
+    $cacheFile = $_CONF['path'].'/data/layout_cache/stylecache_'.$_CONF['theme'].'.css';
+    $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
 
     $files   = array();
 
@@ -7480,8 +7480,8 @@ function js_out(){
     $tpl = $_CONF['theme'];
 
 
-    $cacheFile = $_CONF['path_html'].'/jscache_'.$_CONF['theme'].'.js';
-    $cacheURL  = $_CONF['site_url'].'/jscache_'.$_CONF['theme'].'.js';
+    $cacheFile = $_CONF['path'].'/data/layout_cache/jscache_'.$_CONF['theme'].'.js';
+    $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
 
     /*
      * Static list of standard JavaScript used by glFusion...
