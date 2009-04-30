@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Added $_SYSTEM['skip_ip_check'] to disable the long term cookie IP check
+  (Mark)
+- Handle disabled set_time_limit() function better in plugin upload routines
+  (Mark)
 - Fine tuned SQL calls to help prevent injection / other issues (Mark)
 - Force IE8 to use IE7 compatibility mode to resolve text entry issues with
   the forum plugin (Mark)
@@ -21,12 +25,17 @@ v1.1.4
 
 Forum
 -----
-- Set width for text formatted code blocks in forum when using a fixed width layout (Eric)
+- Set width for text formatted code blocks in forum when using a fixed width
+  layout (Eric)
 - Fixed issue where duplicate forum names (different categories) did not show
   in the forum selection list for moderation functions. (Mark)
 
 Media Gallery
 -------------
+- Email moderators option did not appear in album edit / create (Mark)
+- Under some circumstances creating an album would fail with an SQL error (Mark)
+- Fixed issue where 'slideshow' auto tag did not honor the media_order
+  field (Mark).
 - FTP batch import would crash with SQL error (Mark)
 - 0000428 Wiki type keywords - Added [alink] auto tag to allow text links
   to albums (Mark)
