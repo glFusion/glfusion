@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.0
 ------
+- Set height of logview window to facilitate easier horizontal scrolling (Eric)
 - Set width for text formatted code blocks in forum when using a fixed width layout (Eric)
 - Updated sanitize class (Mark)
 - Added new HTML filtering class (Mark)
