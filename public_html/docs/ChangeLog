@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Set height of logview window to facilitate easier horizontal scrolling (Eric)
 - Moved css and js cache files to layout_cache/ directory (Mark)
 - Added $_SYSTEM['skip_ip_check'] to disable the long term cookie IP check
   (Mark)
