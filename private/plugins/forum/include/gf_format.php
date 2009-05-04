@@ -1174,13 +1174,13 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
 
     switch ($fieldname) {
         case 'date':
-            $retval = strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
+            $retval = @strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
             if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
                 $retval = iconv('ISO-8859-1','UTF-8',$retval);
             }
             break;
         case 'lastupdated':
-            $retval = strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
+            $retval = @strftime( $CONF_FORUM['default_Datetime_format'], $fieldvalue );
             if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
                 $retval = iconv('ISO-8859-1','UTF-8',$retval);
             }
