@@ -208,7 +208,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 *
 * @param    string  $username   user's login name
 * @param    string  $useremail  user's email address
-* @return   bool                true = success, false = an error occured
+* @return   boolean             true = success, false = an error occured
 *
 */
 function USER_sendActivationEmail ($username, $useremail)
@@ -506,11 +506,11 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
 /**
 * Delete a user's photo (i.e. the actual file)
 *
-* @param    string  $photo          name of the photo (without the path)
-* @param    bool    $abortonerror   true: abort script on error, false: don't
-* @return   void
+* NOTE:     Will silently ignore non-existing files.
 *
-* @note     Will silently ignore non-existing files.
+* @param    string  $photo          name of the photo (without the path)
+* @param    boolean $abortonerror   true: abort script on error, false: don't
+* @return   void
 *
 */
 function USER_deletePhoto ($photo, $abortonerror = true)
@@ -657,7 +657,7 @@ function USER_emailMatches ($email, $domain_list)
 *
 * @param    string  $username   initial username
 * @return   string              unique username
-* @bugs     Race conditions apply ...
+* @todo     Bugs: Race conditions apply ...
 *
 */
 function USER_uniqueUsername($username)

@@ -53,7 +53,7 @@ if( $_CONF['allow_user_photo'] )
 *
 * @param    string  $sid    ID of item in question
 * @param    string  $title  Title of item
-* @param    string  $type   Type of item (i.e. story, photo, etc)
+* @param    string  $type   Type of item (i.e. article, photo, etc)
 * @param    string  $order  Order that comments are displayed in
 * @param    string  $mode   Mode (nested, flat, etc.)
 * @param    int     $ccode  Comment code: -1=no comments, 0=allowed, 1=closed
@@ -258,6 +258,13 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 $A['photo'] = $_USER['photo'];
             } else {
                 $A['photo'] = '';
+            }
+        }
+        if (! isset($A['email'])) {
+            if (isset($_USER['email'])) {
+                $A['email'] = $_USER['email'];
+            } else {
+                $A['email'] = '';
             }
         }
         $mode = 'flat';
@@ -956,7 +963,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 /**
  * Save a comment
  *
- * @author   Vincent Furia <vinny01 AT users DOT sourceforge DOT net>
+ * @author   Vincent Furia, vinny01 AT users DOT sourceforge DOT net
  * @param    string      $title      Title of comment
  * @param    string      $comment    Text of comment
  * @param    string      $sid        ID of object receiving comment
@@ -1118,10 +1125,10 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 *
 * @param    $title      string      comment title
 * @param    $comment    string      text of the comment
-* @param    $uid        integer     user id
+* @param    $uid        int         user id
 * @param    $ipaddress  string      poster's IP address
 * @param    $type       string      type of comment ('article', 'poll', ...)
-* @param    $cid        integer     comment id
+* @param    $cid        int         comment id
 *
 */
 function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid)
@@ -1179,7 +1186,7 @@ function CMT_sendNotification ($title, $comment, $uid, $ipaddress, $type, $cid)
  * requesting user has the correct permissions and that the comment exits
  * for the specified $type and $sid.
  *
- * @author  Vincent Furia <vinny01 AT users DOT sourceforge DOT net>
+ * @author  Vincent Furia, vinny01 AT users DOT sourceforge DOT net
  * @param   string      $type   article, poll, or plugin identifier
  * @param   string      $sid    id of object comment belongs to
  * @param   int         $cid    Comment ID

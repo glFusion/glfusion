@@ -10,9 +10,10 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2007-2009 by the following authors:                         |
 // |                                                                          |
 // | Authors: Ramnath R Iyer        - rri AT silentyak DOT com                |
+// |          Dirk Haun             - dirk AT haun-online DOT de               |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -54,7 +55,7 @@ if (PHP_VERSION < 5) {
 /**
  * Displays an error message with the appropriate HTTP error-code
  *
- * @param   string  $error_name     the name of the error
+ * @param   string  $error_code     the name of the error
  * @param   string  $error_desc     a short description of the actual error (optional)
  */
 function WS_error($error_code, $error_desc = '')
@@ -107,7 +108,7 @@ function WS_error($error_code, $error_desc = '')
 /**
  * Dissects the URI and obtains parameters
  *
- * @param   array   $args       the array to store any input parameters
+ * @param   array   &$args       the array to store any input parameters
  */
 function WS_dissectURI(&$args)
 {
@@ -452,7 +453,7 @@ function WS_delete()
  * @param   array      &$args       the array to which the content is to be appended
  * @param   object      $atom_doc   current DOMDocument
  * @param   object      $node       the 'content' node
- * @bugs    I guess we could at least support 'text/plain', 'text/html', etc.
+ * @todo    I guess we could at least support 'text/plain', 'text/html', etc.
  */
 function WS_getContent(&$args, $atom_doc, $node)
 {
@@ -643,8 +644,10 @@ function WS_xmlToArgs(&$args)
 /**
  * Converts an array into an XML entry node
  *
- * @param   DOMDocument &$atom_doc  the Atom document to which the entry should be appended
  * @param   array       $arr        the array which is to be converted into XML
+ * @param   array       $extn_elements Geeklog-specific extension elements
+ * @param   object      &$entry_elem   entry to append to
+ * @param   DOMDocument &$atom_doc  the Atom document to which the entry should be appended
  */
 function WS_arrayToEntryXML($arr, $extn_elements, &$entry_elem, &$atom_doc)
 {
@@ -922,16 +925,17 @@ function WS_writeSync()
 
 }
 
-/*
-* Create a new ID, preferrably from a provided 'Slug:' header
-*
-* @param    string  $slug           Content of the 'Slug:' header
-* @param    int     $max_length     max. length of the created ID
-* @return   string                  new ID
-*
-* For more information on the 'Slug:' header, see RFC 5023, section 9.7
-*
-*/
+/**
+ * Create a new ID, preferrably from a provided 'Slug:' header
+ *
+ * For more information on the 'Slug:' header, see RFC 5023, section 9.7
+ *
+ * @param    string  $slug           Content of the 'Slug:' header
+ * @param    int     $max_length     max. length of the created ID
+ * @return   string                  new ID
+ * @link     http://tools.ietf.org/html/rfc5023#section-9.7
+ * 
+ */
 function WS_makeId($slug = '', $max_length = 40)
 {
     $sid = COM_makeSid();

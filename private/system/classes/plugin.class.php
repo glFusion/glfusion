@@ -40,7 +40,7 @@ if (!defined ('GVERSION')) {
 * This is a poorly thought out class that is used pretty much as a structure
 * when we need to pass plugin data back and forth
 *
-* @author   Tony Bibbs <tony AT tonybibbs DOT com>
+* @author   Tony Bibbs, tony AT tonybibbs DOT com
 *
 */
 class Plugin {
@@ -58,7 +58,7 @@ class Plugin {
     var $num_searchresults = 0;
     var $searchheading = array();
     var $searchresults = array();
-    var $num_itemssearched = 0;
+    var $num_itemssearched = 0; 
     var $num_searchheadings = 0;
     /**
     * @access private
@@ -72,7 +72,7 @@ class Plugin {
     var $submissionhelpfile = '';
     var $getsubmissionssql = '';
     var $submissionheading = array();
-
+    
 
     // PUBLIC METHODS
 
@@ -151,7 +151,7 @@ class Plugin {
     * Sets whether or not the plugin supports expanded search
     * results
     *
-    * @author Tony Bibbs <tony AT geeklog DOT net>
+    * @author Tony Bibbs, tony AT geeklog DOT net
     * @access public
     * @param boolean $switch True if expanded search is supported otherwise false
     *
@@ -168,7 +168,7 @@ class Plugin {
     /**
     * Returns if plugin supports expanded searches
     *
-    * @author Tony Bibbs <tony AT geeklog DOT net>
+    * @author Tony Bibbs, tony AT geeklog DOT net
     * @access public
     * @return boolean True if expanded search is supported otherwise false
     *

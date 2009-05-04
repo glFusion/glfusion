@@ -734,8 +734,9 @@ function STORY_deleteImages ($sid)
 * This is the story equivalent of PLG_getItemInfo. See lib-plugins.php for
 * details.
 *
-* @param    string  $sid    story ID
-* @param    string  $what   comma-separated list of story properties
+* @param    string  $sid        story ID or '*'
+* @param    string  $what       comma-separated list of story properties
+* @param    int     $uid        user ID or 0 = current user
 * @return   mixed           string or array of strings with the information
 *
 */
@@ -747,25 +748,38 @@ function STORY_getItemInfo ($sid, $what)
     $fields = array ();
     foreach ($properties as $p) {
         switch ($p) {
-            case 'description':
-                $fields[] = 'introtext';
-                $fields[] = 'bodytext';
-                break;
-            case 'excerpt':
-                $fields[] = 'introtext';
-                break;
-            case 'feed':
-                $fields[] = 'tid';
-                break;
-            case 'title':
-                $fields[] = 'title';
-                break;
-            default: // including 'url'
-                // nothing to do
-                break;
+        case 'date-created':
+            $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
+            break;
+        case 'description':
+            $fields[] = 'introtext';
+            $fields[] = 'bodytext';
+            break;
+        case 'excerpt':
+            $fields[] = 'introtext';
+            break;
+        case 'feed':
+            $fields[] = 'tid';
+            break;
+        case 'id':
+            $fields[] = 'sid';
+            break;
+        case 'title':
+            $fields[] = 'title';
+            break;
+        case 'url':
+            if ($sid == '*') {
+                // in this case, we need the sid to build the URL
+                $fields[] = 'sid';
+            }
+            break;
+        default:
+            // nothing to do
+            break;
         }
     }
 
+    $fields = array_unique($fields);
     if (count ($fields) > 0) {
          $result = DB_query ("SELECT " . implode (',', $fields)
                      . " FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'"
@@ -833,7 +847,8 @@ function STORY_getItemInfo ($sid, $what)
 *
 * This is used to delete a story from the list of stories.
 *
-* @sid      string      ID of the story to delete
+* @param    string  $sid    ID of the story to delete
+* @return   string          HTML, e.g. a meta redirect
 *
 */
 function STORY_deleteStory($sid)

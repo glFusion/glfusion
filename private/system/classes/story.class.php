@@ -50,9 +50,9 @@ if (!defined ('GVERSION')) {
  * @filesource
  * @version 0.1
  * @since GL 1.4.2
- * @copyright Copyright &copy; 2006
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @author Michael Jervis <mike AT fuckingbrit DOT com>
+ * @copyright Copyright &copy; 2006-2009
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @author Michael Jervis, mike AT fuckingbrit DOT com
  *
  */
 
@@ -1949,8 +1949,8 @@ class Story
         }
 
         $this->_title = htmlspecialchars(strip_tags(COM_checkWords($title)));
-        $this->_introtext = COM_checkHTML(COM_checkWords($intro));
-        $this->_bodytext = COM_checkHTML(COM_checkWords($body));
+        $this->_introtext = COM_checkHTML(COM_checkWords($intro), 'story.edit');
+        $this->_bodytext = COM_checkHTML(COM_checkWords($body), 'story.edit');
     }
 
 

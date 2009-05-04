@@ -89,10 +89,8 @@ if (!defined('CSRF_TOKEN')) {
 *       be used once at the beginning of a page.  The resulting array $_GROUPS can then be
 *       used through out the page.
 *
-* @return array Array of group ID's user belongs to
-*
 * @param        int     $uid            User ID to get information for. If empty current user.
-* @return	array	Associative Array grp_name -> ug_main_grp_id
+* @return	array	Associative Array grp_name -> ug_main_grp_id of group ID's user belongs to
 *
 */
 function SEC_getUserGroups($uid='')
@@ -188,7 +186,7 @@ function SEC_groupIsRemoteUserAndHaveAccess($groupid, $groups)
     global $_TABLES, $_CONF;
     if(!isset($_CONF['remote_users_group_id']))
     {
-        $result = DB_Query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name='Remote Users'");
+        $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name='Remote Users'");
         if( $result )
         {
             $row = DB_fetchArray( $result );
@@ -489,9 +487,9 @@ function SEC_getPermissionsHTML($perm_owner,$perm_group,$perm_members,$perm_anon
 * This is part of the glFusion security implmentation.  This function
 * will get all the permissions the current user has call itself recursively.
 *
-* @param        int     $grp_id     DO NOT USE (Used for reccursion) Current group function is working on
-* @uid		int	$uid        User to check, if empty current user.
-* @return       string   returns comma delimited list of features the user has access to
+* @param    int     $grp_id     DO NOT USE (Used for reccursion) Current group function is working on
+* @param    int     $uid        User to check, if empty current user.
+* @return   string  returns comma delimited list of features the user has access to
 *
 */
 function SEC_getUserPermissions($grp_id='',$uid='')
@@ -608,7 +606,7 @@ function SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_ano
 * to prepare the permissions to be save to the database
 *
 * @param        array       $perm_x     Array of permission values
-* @return       int         integer representation of a permission array 2 = read 3 = edit/read
+* @return       int         int representation of a permission array 2 = read 3 = edit/read
 * @see SEC_getPermissionValues
 *
 */
@@ -744,9 +742,10 @@ function SEC_authenticate($username, $password, &$uid)
 /**
 * Return the current user status for a user.
 *
+* NOTE:     May not return for banned/non-approved users.
+*
 * @param    int  $userid   Valid uid value.
 * @return   int            user status, 0-3
-* @note     May not return for banned/non-approved users.
 *
 */
 function SEC_checkUserStatus($userid)
@@ -903,11 +902,11 @@ function SEC_collectRemoteAuthenticationModules()
   * Rather self explanitory shortcut function
   * Is this the right place for this, Dirk?
   *
-  * @author Trinity L Bays <trinity93 AT gmail DOT com>
+  * @author Trinity L Bays, trinity93 AT gmail DOT com
   *
   * @param  string  $uid Their user id
   * @param  string  $gname The group name
-  * @return bool    status, true or false.
+  * @return boolean status, true or false.
   */
 function SEC_addUserToGroup($uid, $gname)
 {
@@ -988,7 +987,7 @@ function SEC_buildAccessSql ($clause = 'AND')
 * This function can be used by plugins during uninstall.
 *
 * @param    string  $feature_name   name of the feature, e.g. 'foo.edit'
-* @param    bool    $logging        whether to log progress in error.log
+* @param    boolean $logging        whether to log progress in error.log
 * @return   void
 *
 */
@@ -1085,7 +1084,7 @@ function SEC_encryptPassword($password)
   * added to forms and urls in the admin section as a non-cookie double-check
   * that the admin user really wanted to do that...
   *
-  * @param $ttl integer Time to live for token in seconds. Default is 20 minutes.
+  * @param $ttl int Time to live for token in seconds. Default is 20 minutes.
   *
   * @return string  Generated token, it'll be an MD5 hash (32chars)
   */
@@ -1138,7 +1137,7 @@ function SEC_createToken($ttl = 1200)
   * Checks the POST and GET data for a security token, if one exists, validates that it's for this
   * user and URL.
   *
-  * @return bool    true iff the token is valid and for this user.
+  * @return boolean     true if the token is valid and for this user.
   */
 function SEC_checkToken()
 {
