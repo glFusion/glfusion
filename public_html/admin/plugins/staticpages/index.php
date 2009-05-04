@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -588,6 +591,9 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete']) && SEC_ch
     $display .= COM_siteFooter ();
 } else if ($mode == 'clone') {
     if (!empty ($sp_id)) {
+        @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure']);
         $display .= COM_siteHeader('menu', $LANG_STATIC['staticpageeditor']);
         $display .= staticpageeditor($sp_id,$mode);
         $display .= COM_siteFooter();
