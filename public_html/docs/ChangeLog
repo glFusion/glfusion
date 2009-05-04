@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Group editor did not properly save additional groups or features (Mark)
 - Set height of logview window to facilitate easier horizontal scrolling (Eric)
 - Moved css and js cache files to layout_cache/ directory (Mark)
 - Added $_SYSTEM['skip_ip_check'] to disable the long term cookie IP check
@@ -34,6 +35,7 @@ Forum
 
 Media Gallery
 -------------
+- FTP import did not properly add trailing backslash if missing (Mark)
 - Moved RSS feed files to the glFusion backend/ directory (Mark)
 - Email moderators option did not appear in album edit / create (Mark)
 - Under some circumstances creating an album would fail with an SQL error (Mark)
@@ -50,6 +52,10 @@ Media Gallery
 Site Tailor
 -----------
 - 0000434: [Menu] copy menu does not work (mark)
+
+StaticPages
+-----------
+- Unable to upload images via the advanced editor when cloning a story (Mark)
 
 v1.1.3
 ------
