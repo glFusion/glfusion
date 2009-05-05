@@ -29,6 +29,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+if (!defined ('GVERSION')) {
+    die ('This file can not be used on its own.');
+}
+
 /* -------------------------------------------------------------------------
  * Media Gallery Global Configuration Options
  * ----------------------------------------------------------------------- */
@@ -140,6 +144,13 @@ $_MG_CONF['skip_file_find']          = 0;
  */
 
 $_MG_CONF['use_default_resolution']  = 0;
+
+
+/*
+ * if set to 1, MG will use the larger stars in the album view for ratings
+ */
+
+$_MG_CONF['use_large_stars'] = 0;
 
 
 /*

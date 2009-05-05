@@ -519,7 +519,14 @@ class Media {
             if ( $MG_albums[$this->album_id]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
                 $static = 'static';
             }
-            $rating_box = mgRating_bar($this->id, $this->votes, ($this->rating*$this->votes)/2, $voted,   5,        $static,'sm');//                                       $id,       $total_votes,  $total_value,                , $voted=0, $units='', $static='',$size=''
+            if ( $_MG_CONF['use_large_stars'] == 1 ) {
+                $starSize = '';
+            } else {
+                $starSize = 'sm';
+            }
+            $rating_box = mgRating_bar($this->id, $this->votes,
+                                       ($this->rating*$this->votes)/2, $voted,
+                                       5,$static,$starSize);
         } else {
             $rating_box = '';
         }
