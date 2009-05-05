@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- 0000441: Advanced path settings in the installation screen are not updated
+  if base path changes (Mark)
 - Group editor did not properly save additional groups or features (Mark)
 - Set height of logview window to facilitate easier horizontal scrolling (Eric)
 - Moved css and js cache files to layout_cache/ directory (Mark)
