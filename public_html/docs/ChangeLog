@@ -56,10 +56,11 @@ Media Gallery
 
 Site Tailor
 -----------
-- 0000434: [Menu] copy menu does not work (mark)
+- 0000434: [Menu] copy menu does not work (Mark)
 
 StaticPages
 -----------
+- Added option to edit the author and owner (Mark)
 - Unable to upload images via the advanced editor when cloning a story (Mark)
 
 v1.1.3

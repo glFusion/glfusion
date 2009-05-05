@@ -53,7 +53,7 @@
           </tr>
           <tr>
               <td align="right">{lang_writtenby}:</td>
-              <td>{name}<input type="hidden" name="sp_uid" value="{sp_uid}"{xhtml}></td>
+              <td>{writtenby_dropdown}</td>
           </tr>
           <tr>
               <td align="right">{lang_lastupdated}:</td>
@@ -98,7 +98,7 @@
           </tr>
           <tr>
               <td align="right">{lang_owner}:</td>
-              <td>{owner_name}<input type="hidden" name="owner_id" value="{owner_id}"{xhtml}></td>
+              <td>{owner_dropdown}</td>
           </tr>
           <tr>
               <td align="right">{lang_group}:</td>

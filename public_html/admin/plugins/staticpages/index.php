@@ -378,6 +378,10 @@ function form ($A, $error = false)
         $sp_template->set_var('end_block',
                 COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
         $sp_template->set_var( 'xhtml', XHTML );
+
+        $sp_template->set_var('owner_dropdown',COM_buildOwnerList('owner_id',$A['owner_id']));
+        $sp_template->set_var('writtenby_dropdown',COM_buildOwnerList('sp_uid',$A['sp_uid']));
+
         $sp_template->set_var( 'gltoken_name', CSRF_TOKEN );
         $sp_template->set_var( 'gltoken', SEC_createToken() );
         $retval .= $sp_template->parse('output','form');
