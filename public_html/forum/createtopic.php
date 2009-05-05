@@ -552,10 +552,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         if ( ($forum != 0) && $forum != $edittopic['forum'] ) {
             echo '<br' . XHTML . '>';
             BlockMessage('ERROR',$LANG_GF02['msg87'],false);
-            $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
-            $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-            $forum_outline_footer->parse ('output', 'forum_outline_footer');
-            echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
             gf_siteFooter();
             exit;
         }
@@ -565,10 +561,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         if (!forum_modPermission($forum,$_USER['uid'],'mod_edit')) {
             echo '<br' . XHTML . '>';
             BlockMessage('ERROR',$LANG_GF02['msg87'],false);
-            $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
-            $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-            $forum_outline_footer->parse ('output', 'forum_outline_footer');
-            echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
             gf_siteFooter();
             exit;
         }
@@ -578,10 +570,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
         if (!forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
             echo '<br' . XHTML . '>';
             BlockMessage('ERROR',$LANG_GF02['msg87'],false);
-            $forum_outline_footer = new Template($_CONF['path'] . 'plugins/forum/templates/');
-            $forum_outline_footer->set_file (array ('forum_outline_footer'=>'forum_outline_footer.thtml'));
-            $forum_outline_footer->parse ('output', 'forum_outline_footer');
-            echo $forum_outline_footer->finish ($forum_outline_footer->get_var('output'));
             gf_siteFooter();
             exit;
         }
