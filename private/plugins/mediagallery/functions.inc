@@ -2274,7 +2274,7 @@ function plugin_getuseroption_mediagallery() {
     }
 }
 
-function phpblock_mg_randommedia(){
+function phpblock_mg_randommedia($parm1=array(),$parm2=''){
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03, $_DB_dbms, $mg_installed_version;
 
     $retval = '';
@@ -2352,6 +2352,11 @@ function phpblock_mg_randommedia(){
             $height = $_MG_CONF['random_width'];
             $width = round($imgwidth / $ratio);
         }
+
+        if ( $parm2 == 'album' ) {
+            $url_media = $url_album;
+        }
+
 
         // frame template variables
         $F->set_var(array(
