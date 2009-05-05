@@ -30,6 +30,7 @@ v1.1.4
 
 Forum
 -----
+- Root users could not post to read only forums (Mark)
 - Set width for text formatted code blocks in forum when using a fixed width
   layout (Eric)
 - Fixed issue where duplicate forum names (different categories) did not show

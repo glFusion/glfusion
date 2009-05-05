@@ -1335,6 +1335,10 @@ function forum_modPermission($forum,$uid='',$permission='') {
         }
     }
 
+    if (SEC_inGroup('Root') || SEC_hasRights('forum.edit')) {
+        return true;
+    }
+
     /* If I get this far then I exited the loop without finding a permission record */
     return FALSE;
 
