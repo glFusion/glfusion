@@ -35,6 +35,9 @@ Forum
 
 Media Gallery
 -------------
+- Added option to phpblock_mg_randommedia to link to album instead of media.
+  Modify the block function to phpblock_mg_randommedia(album) (Mark)
+- Added option to statically sort an album by rating (Mark)
 - FTP import did not properly add trailing backslash if missing (Mark)
 - Moved RSS feed files to the glFusion backend/ directory (Mark)
 - Email moderators option did not appear in album edit / create (Mark)
