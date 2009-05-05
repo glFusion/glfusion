@@ -80,16 +80,16 @@
         <input type="file" dir="ltr" name="repfilename" id="repfilename" size="60"{xhtml}></p>
 
         <p><label for="remoteurl">{lang_remote_url}</label><br{xhtml}>
-        <textarea name="remoteurl" id="remoteurl" cols="60" rows="5">{remoteurl}</textarea></p>
+        <textarea name="remoteurl" id="remoteurl" cols="60" rows="5" style="width:95%;">{remoteurl}</textarea></p>
 
         <p><label for="media_title">{lang_title}</label><br{xhtml}>
-        <textarea name="media_title" id="media_title" cols="60" rows="2">{media_title}</textarea></p>
+        <textarea name="media_title" id="media_title" cols="60" rows="2" style="width:95%;">{media_title}</textarea></p>
 
         <p><label for="media_desc">{description}</label><br{xhtml}>
-        <textarea name="media_desc" id="media_desc" cols="60" rows="5">{media_desc}</textarea></p>
+        <textarea name="media_desc" id="media_desc" cols="60" rows="5" style="width:95%;">{media_desc}</textarea></p>
 
         <p><label for="media_keywords">{lang_keywords}</label><br{xhtml}>
-        <textarea name="media_keywords" id="media_keywords" cols="60" rows="2">{media_keywords}</textarea></p>
+        <textarea name="media_keywords" id="media_keywords" cols="60" rows="2" style="width:95%;">{media_keywords}</textarea></p>
 
         <p><label for="artist">{lang_artist}</label><br{xhtml}>
         <input type="text" name="artist" id="artist" size="80" value="{artist}"{xhtml}></p>

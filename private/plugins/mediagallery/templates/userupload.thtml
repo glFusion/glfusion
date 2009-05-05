@@ -21,13 +21,13 @@
   <input type="file" dir="ltr" name="thumbnail[]" size="60"{xhtml}>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_caption}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="caption[]" cols="60" rows="2"></textarea>
+  <textarea name="caption[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_description}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="description[]" cols="60" rows="2"></textarea>
+  <textarea name="description[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_keywords}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="keywords[]" cols="60" rows="2"></textarea>
+  <textarea name="keywords[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_category}</span>&nbsp;&nbsp;</label>
   {cat_select}
@@ -45,13 +45,13 @@
   <input type="file" dir="ltr" name="thumbnail[]" size="60"{xhtml}>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_caption}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="caption[]" cols="60" rows="2"></textarea>
+  <textarea name="caption[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_description}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="description[]" cols="60" rows="2"></textarea>
+  <textarea name="description[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_keywords}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="keywords[]" cols="60" rows="2"></textarea>
+  <textarea name="keywords[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_category}</span>&nbsp;&nbsp;</label>
   {cat_select}
@@ -70,13 +70,13 @@
   <input type="file" dir="ltr" name="thumbnail[]" size="60"{xhtml}>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_caption}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="caption[]" cols="60" rows="2"></textarea>
+  <textarea name="caption[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_description}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="description[]" cols="60" rows="2"></textarea>
+  <textarea name="description[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_keywords}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="keywords[]" cols="60" rows="2"></textarea>
+  <textarea name="keywords[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_category}</span>&nbsp;&nbsp;</label>
   {cat_select}
@@ -94,13 +94,13 @@
   <input type="file" dir="ltr" name="thumbnail[]" size="60"{xhtml}>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_caption}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="caption[]" cols="60" rows="2"></textarea>
+  <textarea name="caption[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_description}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="description[]" cols="60" rows="2"></textarea>
+  <textarea name="description[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_keywords}</span>&nbsp;&nbsp;</label><br{xhtml}>
-  <textarea name="keywords[]" cols="60" rows="2"></textarea>
+  <textarea name="keywords[]" cols="60" rows="2" style="width:95%;"></textarea>
   <br{xhtml}><br{xhtml}>
 <label><span style="font-weight:bold;">{lang_category}</span>&nbsp;&nbsp;</label>
   {cat_select}

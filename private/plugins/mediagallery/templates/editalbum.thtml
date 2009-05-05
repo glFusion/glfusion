@@ -31,13 +31,13 @@ function change(what) {
     <tr class="pluginRow1">
       <td class="mgAdminAlignRight">{lang_title}</td>
       <td style="text-align:left;">
-        <textarea name="album_name" cols="50" rows="2">{album_title}</textarea>
+        <textarea name="album_name" cols="50" rows="2" style="width:95%;">{album_title}</textarea>
       </td>
     </tr>
     <tr class="pluginRow2">
       <td class="mgAdminAlignRight">{lang_description}</td>
       <td style="text-align:left;">
-        <textarea name="album_desc" cols="50" rows="5">{album_desc}</textarea>
+        <textarea name="album_desc" cols="50" rows="5" style="width:95%;">{album_desc}</textarea>
       </td>
     </tr>
     <tr class="pluginRow1">
