@@ -41,7 +41,7 @@ if ( !isset($_GET['t']) ) {
 $theme = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$_GET['t'] );
 $theme = str_replace( '..', '', $theme );
 $buf = '';
-if ( file_exists ($_CONF['path'] . '/data/layout_cache/jscache_'.$theme.'.js') ) {
+if ( @file_exists ($_CONF['path'] . '/data/layout_cache/jscache_'.$theme.'.js') ) {
     header('Content-type: text/javascript');
     $buf = file_get_contents($_CONF['path'] . '/data/layout_cache/jscache_'.$theme.'.js');
     echo $buf;
