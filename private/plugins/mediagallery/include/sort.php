@@ -241,7 +241,7 @@ function MG_saveAlbumSort( $album_id ) {
 }
 
 function MG_staticSortMedia( $album_id, $actionURL='' ) {
-    global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST;
+    global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $_POST;
 
     $album_title = DB_getItem($_TABLES['mg_albums'],'album_title','album_id=' . intval($album_id));
 
@@ -289,6 +289,7 @@ function MG_staticSortMedia( $album_id, $actionURL='' ) {
         'lang_media_upload_time'    => $LANG_MG01['media_upload_time'],
         'lang_media_title'          => $LANG_MG01['mod_mediatitle'],
         'lang_media_filename'       => $LANG_MG01['media_original_filename'],
+        'lang_rating'               => $LANG_MG03['rating'],
         'lang_ascending'            => $LANG_MG01['ascending'],
         'lang_descending'           => $LANG_MG01['descending'],
         'lang_sort_options'         => $LANG_MG01['sort_options'],
@@ -307,12 +308,7 @@ function MG_saveStaticSortMedia( $album_id, $actionURL='' ) {
     global $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $_POST;
 
     // check permissions...
-/*--
-    if ( !SEC_hasRights('mediagallery.admin')) {
-        COM_errorLog("Someone has tried to illegally sort albums in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
-        return(MG_genericError($LANG_MG00['access_denied_msg']));
-    }
--- */
+
     if ( $album_id == 0 ) {
         COM_errorLog("Media Gallery: Invalid album_id passed to sort");
         return(MG_genericError($LANG_MG00['access_denied_msg']));
@@ -338,6 +334,9 @@ function MG_saveStaticSortMedia( $album_id, $actionURL='' ) {
             break;
         case '3' : // media original filename
             $sql_sort_by = " ORDER BY m.media_original_filename ";
+            break;
+        case '4' : // rating
+            $sql_sort_by = " ORDER BY m.media_rating ";
             break;
         default :
             $sql_sort_by = " ORDER BY m.media_time ";
@@ -439,6 +438,12 @@ function MG_SortMedia( $album_id ) {
         case '6' :  // title
             $sql_sort_by = " ORDER BY m.media_title DESC";
             break;
+//        case '7' :  // title
+//            $sql_sort_by = " ORDER BY m.media_rating ASC";
+//            break;
+//        case '8' :  // title
+//            $sql_sort_by = " ORDER BY m.media_rating DESC";
+//            break;
     }
 
     $sql = "SELECT  *

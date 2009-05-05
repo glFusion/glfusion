@@ -362,6 +362,8 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $album_sort_select .= '<option value="4"' . ($A['album_sort_order']==4 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_upload'] . '</option>';
     $album_sort_select .= '<option value="5"' . ($A['album_sort_order']==5 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_alpha'] . '</option>';
     $album_sort_select .= '<option value="6"' . ($A['album_sort_order']==6 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_alpha_asc'] . '</option>';
+//    $album_sort_select .= '<option value="7"' . ($A['album_sort_order']==7 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_rating'] . '</option>';
+//    $album_sort_select .= '<option value="8"' . ($A['album_sort_order']==8 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_rating_asc'] . '</option>';
 
     $album_sort_select .= '</select>';
 
@@ -1238,6 +1240,12 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
             case 6 :  // title, desc
                 MG_staticSortAlbum( $aid, 0, 0, 0 );
                 break;
+            case 7 :  // rating, desc
+                MG_staticSortAlbum( $aid, 3, 0, 0 );
+                break;
+            case 8 :  // rating, desc
+                MG_staticSortAlbum( $aid, 3, 1, 0 );
+                break;
             default : // skip it...
                 break;
         }
@@ -1258,6 +1266,12 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
             case 6 :  // title, desc
                 MG_staticSortAlbum( $MG_albums[$aid]->parent, 0, 0, 0 );
                 break;
+            case 7 :  // rating, desc
+                MG_staticSortAlbum( $MG_albums[$aid]->parent, 3, 0, 0 );
+                break;
+            case 8 :  // rating, desc
+                MG_staticSortAlbum( $MG_albums[$aid]->parent, 3, 1, 0 );
+                break;
             default : // skip it...
                 break;
         }
@@ -1276,6 +1290,12 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
                 break;
             case 6 :  // title, desc
                 MG_staticSortAlbum( $aid, 0, 0, 0 );
+                break;
+            case 7 :  // rating, desc
+                MG_staticSortAlbum( $aid, 3, 0, 0 );
+                break;
+            case 8 :  // rating, desc
+                MG_staticSortAlbum( $aid, 3, 1, 0 );
                 break;
             default : // skip it...
                 break;
@@ -1305,6 +1325,9 @@ function MG_staticSortAlbum($startaid, $sortfield, $sortorder, $process_subs) {
             break;
         case '2' : // last_update
             $sql_sort_by = " ORDER BY last_update ";
+            break;
+        case '3' : // rating
+            $sql_sort_by = " ORDER BY media_rating ";
             break;
         default :
             $sql_sort_by = " ORDER BY album_title ";
