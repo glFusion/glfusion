@@ -63,6 +63,7 @@ Site Tailor
 
 StaticPages
 -----------
+- Handle session timeouts more gracefully (Mark)
 - Added option to edit the author and owner (Mark)
 - Unable to upload images via the advanced editor when cloning a story (Mark)
 
