@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -242,8 +242,73 @@ function getDBLogin( ) {
     ';
 }
 
+function processPlugins($dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group = 'Core')
+{
+    $plugins = array();
+
+    $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
+    @mysql_select_db($dbname) or die('error selecting database');
+
+
+    $sql = "SELECT * FROM " . $dbprefix . "conf_values WHERE name='allow_embed_object' OR name='use_safe_html'";
+    $result = @mysql_query($sql,$db) or die('Cannot execute query');
+    if ( @mysql_num_rows($result) < 1 ) die('Invalid glFusion Database');
+
+    $sql = "SELECT * FROM " . $dbprefix . "plugins";
+    $result = @mysql_query($sql,$db) or die('Cannot execute query');
+    while ($plugins[] = mysql_fetch_array($result,MYSQL_ASSOC) ) { }
+
+    echo '
+<form method="post" action="fusionrescue.php">
+
+<center>Group: <select name="group">
+<option value="Core"'.($group == 'Core' ? ' selected="selected"' : '') . '>Core</option>
+<option value="calendar"'.($group == 'calendar' ? ' selected="selected"' : '').'>Calendar</option>
+<option value="captcha"'.($group == 'captcha' ? ' selected="selected"' : '').'>CAPTCHA</option>
+<option value="filemgmt"'.($group == 'filemgmt' ? ' selected="selected"' : '').'>FileMgmt</option>
+<option value="forum"'.($group == 'forum' ? ' selected="selected"' : '').'>Forum</option>
+<option value="links"'.($group == 'links' ? ' selected="selected"' : '').'>Links</option>
+<option value="polls"'.($group == 'polls' ? ' selected="selected"' : '').'>Polls</option>
+<option value="spamx"'.($group == 'spamx' ? ' selected="selected"' : '').'>Spamx</option>
+<option value="staticpages"'.($group == 'staticpages' ? ' selected="selected"' : '').'>Staticpages</option>
+<option value="plugin"'.($group == 'plugin' ? ' selected="selected"' : '').'>Plugin Admin</option>
+</select>
+<input type="submit" value="submit" name="mode" />
+</center>
+<br />
+
+<input type="hidden" name="dbserver" value="' . $dbserver .'" />
+<input type="hidden" name="dbuser" value="' . $dbuser . '" />
+<input type="hidden" name="dbpass" value="' . $dbpass . '" />
+<input type="hidden" name="dbname" value="' . $dbname . '" />
+<input type="hidden" name="dbprefix" value="' . $dbprefix . '" />
+
+<table style="width:50%;border:none;padding:5px;text-align:center;" align="center" cellspacing="5" cellpadding="5">
+<tr><th style="text-align:right;">Plugin</th><th style="text-align:left;">Enabled</th></tr>
+';
+
+    foreach ($plugins as $row) {
+        if ( $row['pi_name'] != '' ) {
+            echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;">' . $row['pi_name'] . '</td>';
+            echo '<td style="text-align:left;"><input type="checkbox" name="enabled[' . $row['pi_name'] . ']" value="1" '. ($row['pi_enabled'] ? ' checked="checked"' : '') .'/></td></tr>';
+        }
+    }
+
+echo '
+</table>
+<center><input type="submit" name="mode" value="saveplugins" />&nbsp;&nbsp;<input type="submit" name="mode" value="cancel" /></center>
+</form>
+';
+}
+
+
+
 function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group = 'Core') {
     global $rescueFields;
+
+    if ( $group == 'plugin') {
+        return processPlugins($dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group );
+    }
 
     if ( $group == 'Core' ) {
         $where = "group_name='".$group."' AND ";
@@ -284,6 +349,7 @@ function getNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group = 
 <option value="polls"'.($group == 'polls' ? ' selected="selected"' : '').'>Polls</option>
 <option value="spamx"'.($group == 'spamx' ? ' selected="selected"' : '').'>Spamx</option>
 <option value="staticpages"'.($group == 'staticpages' ? ' selected="selected"' : '').'>Staticpages</option>
+<option value="plugin"'.($group == 'plugin' ? ' selected="selected"' : '').'>Plugin Admin</option>
 </select>
 <input type="submit" value="submit" name="mode" />
 </center>
@@ -391,9 +457,34 @@ function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='
         @unlink($cfgvalue['path_data'] .'layout_cache/$$$config$$$.cache');
         @unlink($config['path_data'] .'layout_cache/$$$config$$$.cache');
     }
-    //echo '<br />Done!';
 
     echo $retval;
+
+    getNewPaths($dbserver,$dbuser,$dbpass,$dbname,$dbprefix,$group);
+
+}
+
+function savePlugins( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='Core' ) {
+
+    $retval = '';
+
+    $db = @mysql_connect($dbserver,$dbuser,$dbpass) or die('Cannot connect to DB server');
+    @mysql_select_db($dbname) or die('error selecting database');
+
+    $sql = "UPDATE " . $dbprefix . "plugins SET pi_enabled=0";
+
+    $result = @mysql_query($sql,$db) or die('Cannot execute query');
+
+    $enabled = array();
+    $enabled = $_POST['enabled'];
+
+    $changed = 0;
+    foreach ($enabled as $plugin => $value) {
+        $sql = "UPDATE " . $dbprefix . "plugins SET pi_enabled=1 WHERE pi_name='".addslashes($plugin)."'";
+        mysql_query($sql,$db);
+    }
+
+    echo '<center>Plugins have been updated<br /><br /></center>';
 
     getNewPaths($dbserver,$dbuser,$dbpass,$dbname,$dbprefix,$group);
 
@@ -457,7 +548,15 @@ switch ( $mode ) {
         $dbprefix = $_POST['dbprefix'];
         repairSessions($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix);
         break;
-
+    case 'saveplugins' :
+        $dbserver = $_POST['dbserver'];
+        $dbuser   = $_POST['dbuser'];
+        $dbpasswd = $_POST['dbpass'];
+        $dbname   = $_POST['dbname'];
+        $dbprefix = $_POST['dbprefix'];
+        $group    = isset($_POST['group']) ? $_POST['group'] : 'Core';
+        savePlugins($dbserver,$dbuser,$dbpasswd,$dbname,$dbprefix,$group);
+        break;
     case 'cancel' :
         echo 'Goodbye...';
         break;
