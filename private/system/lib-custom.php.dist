@@ -87,6 +87,30 @@ function CUSTOM_userCreateHook($uid)
 
 ------ */
 
+
+/**
+ * Sample Custom JavaScript include
+ *
+ * This example will load the gl_moochronometer.js file in the site header.
+ *
+ */
+
+/* --- REMOVE THIS LINE TO ENABLE THE CUSTOM_themeJS() function -----
+function CUSTOM_js() {
+    global $_CONF;
+
+    $js = array();
+
+// MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating
+
+    $js[] = $_CONF['path_html'] .'javascript/mootools/gl_moochronometer.js';
+
+    // add any additional JS files here..
+
+    return($js);
+}
+------------ REMOVE THIS LINE TO ENABLE the CUSTOM_themeJS() function --- */
+
 /**
 * Sample PHP Block function
 *

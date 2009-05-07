@@ -6869,8 +6869,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             </head>
             <body>
             <div style=\"width: 100%; text-align: center;\">
-            Unfortunately, an error has occurred rendering this page. Please try
-            again later.
+            There has been an error in building this page. Please try again later.
             </div>
             </body>
         </html>
@@ -7506,9 +7505,20 @@ function js_out(){
 
     $function = 'theme_themeJS';
 
-    if( function_exists( $function ))
-    {
+    if( function_exists( $function )) {
         $jTheme = $function( );
+        if ( is_array($jTheme) ) {
+            foreach($jTheme AS $item => $file) {
+                $files[] = $file;
+            }
+        }
+    }
+
+    /*
+     * Check to see if there are any custom javascript files to include
+     */
+    if( function_exists( 'CUSTOM_js' )) {
+        $jTheme = CUSTOM_js( );
         if ( is_array($jTheme) ) {
             foreach($jTheme AS $item => $file) {
                 $files[] = $file;
