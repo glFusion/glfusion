@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Added CUSTOM_js() hook to allow addition of other JS files (Mark)
 - 0000441: Advanced path settings in the installation screen are not updated
   if base path changes (Mark)
 - Group editor did not properly save additional groups or features (Mark)
@@ -27,6 +28,10 @@ v1.1.4
 - Installation did not properly detect missing siteconfig.php.dist file (Mark)
 - Advanced search using date range did not return stories or comments in
   that date range (Mark)
+
+FileMgmt
+--------
+- Ability to change the owner (submitter) of a file (Mark)
 
 Forum
 -----
