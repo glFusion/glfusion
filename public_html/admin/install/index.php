@@ -1590,7 +1590,7 @@ function INST_doSiteUpgrade()
         $display .= '<h2>' . $LANG_INSTALL['upgrade_error'] . '</h2>
             <p>' . $LANG_INSTALL['upgrade_error_text'] . '</p>' . LB;
         $display .= $errors;
-        return _displayError(CORE_UPGRADE_ERROR,'done',$display);
+        return _displayError(CORE_UPGRADE_ERROR,'checkenvironment',$display);
     }
     return;
 }
