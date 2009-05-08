@@ -34,11 +34,11 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-error_reporting( E_ALL );
-//error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+
+error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.1.4.svn');
+    define('GVERSION', '1.1.4');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -767,7 +767,7 @@ function INST_checkEnvironment($dbconfig_path='')
         $_PATH['admin_path'] .= '/';
     }
 
-    $file_list = array( $_PATH['dbconfig_path'],
+    $file_list = array( /*$_PATH['dbconfig_path'],*/
                         $_PATH['dbconfig_path'].'db-config.php',
                         $_PATH['data_path'],
                         $_PATH['log_path'].'error.log',
@@ -778,7 +778,7 @@ function INST_checkEnvironment($dbconfig_path='')
                         $_PATH['data_path'].'temp/',
                         $_PATH['dbconfig_path'].'system/lib-custom.php',
 
-                        $_PATH['public_html'],
+                        /*$_PATH['public_html'],*/
                         $_PATH['public_html'].'siteconfig.php',
                         $_PATH['public_html'].'backend/glfusion.rss',
                         $_PATH['public_html'].'images/articles/',
@@ -1399,6 +1399,18 @@ function INST_installAndContentPlugins()
     // Setup nouveau as the default
     $config->set('theme', 'nouveau');
     DB_query("UPDATE {$_TABLES['users']} SET theme='nouveau' WHERE uid=2",1);
+
+    $var = time() - rand();
+    $session_cookie = 'pw'.md5($var);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_password'",1);
+
+    $var = time() - rand();
+    $session_cookie = 'pc'.md5($var);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_name'",1);
+
+    $var = time() - rand();
+    $session_cookie = 'sc'.md5($var);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_session'",1);
 
     $config->_purgeCache();
     // rebuild the config array
