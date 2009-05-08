@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Added ability to enable / disable plugins in fusionrescue.php (Mark)
+- Added permission check for MG tmp directory during install / upgrade (Mark)
 - Added CUSTOM_js() hook to allow addition of other JS files (Mark)
 - 0000441: Advanced path settings in the installation screen are not updated
   if base path changes (Mark)
