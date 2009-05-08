@@ -33,6 +33,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+require_once $_CONF['path'] . 'plugins/mediagallery/include/rssfeed.php';
+
 function mediagallery_upgrade()
 {
     global $_TABLES, $_CONF, $_MG_CONF, $_DB_dbms, $TEMPLATE_OPTIONS;
@@ -182,7 +184,9 @@ function mediagallery_upgrade()
         case "1.6.2" :
         case "1.6.3" :
         case "1.6.4" :
-            // nothing to do yet...
+            if ( MG_upgrade_165() == 0 ) {
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.5' WHERE pi_name='mediagallery' LIMIT 1");
+            }
         default :
             if ( $_DB_dbms != 'mssql' ) {
                 // we missed media_keywords field somewhere along the way...
@@ -1683,5 +1687,27 @@ function MG_upgrade_160() {
         next($_SQL);
     }
     return 0;
+}
+
+function MG_upgrade_165() {
+    global $_TABLES, $_CONF, $_MG_CONF;
+
+    MG_buildFullRSS();
+    MGUPG_rebuildAllAlbumsRSS(0);
+
+    return 0;
+}
+
+function MGUPG_rebuildAllAlbumsRSS( $aid ){
+    global $MG_albums;
+
+    MG_buildAlbumRSS($aid);
+
+    if ( !empty($MG_albums[$aid]->children)) {
+        $children = $MG_albums[$aid]->getChildren();
+        foreach($children as $child) {
+            MGUPG_rebuildAllAlbumsRSS($MG_albums[$child]->id);
+        }
+    }
 }
 ?>
