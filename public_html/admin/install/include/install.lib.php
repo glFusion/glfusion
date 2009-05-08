@@ -967,7 +967,8 @@ function INST_identifyglFusionVersion ()
             $row = DB_fetchArray($result);
             if ( $row['value'] == '1.1.3' ) {
                 $version = $row['value'];
-            return $version;
+                return $version;
+            }
         }
     }
 
