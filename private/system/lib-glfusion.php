@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -270,12 +270,6 @@ function CTL_clearCache($plugin='')
 
     CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
 
-    foreach (glob($_CONF['path_html']."stylecache_*.*") as $filename) {
-        @unlink($filename);
-    }
-    foreach (glob($_CONF['path_html']."jscache_*.*") as $filename) {
-        @unlink($filename);
-    }
     css_out();
     js_out();
 }
