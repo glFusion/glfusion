@@ -288,21 +288,31 @@ if ($_CONF['allow_user_photo'] == 1) {
     }
 }
 
-$msql = array();
-$msql['mysql']="SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-         . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-         . $userfields . ", t.topic, t.imageurl "
-         . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-         . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-         . $sql . "ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
+if ( isset( $_SYSTEM['sort_story_by'] ) ) {
+    switch ( $_SYSTEM['sort_story_by'] ) {
+        case 0 : // date
+            $orderBy = ' date DESC ';
+            break;
+        case 1 : // title
+            $orderBy = ' title DESC ';
+            break;
+        case 2 : // ID
+            $orderBy = ' sid DESC ';
+            break;
+        default :
+            $orderBy = ' date DESC ';
+            break;
+    }
+} else {
+    $orderBy = ' date DESC ';
+}
 
-$msql['mssql']="SELECT STRAIGHT_JOIN s.sid, s.uid, s.draft_flag, s.tid, s.date, s.title, cast(s.introtext as text) as introtext, cast(s.bodytext as text) as bodytext, s.hits, s.numemails, s.comments, s.trackbacks, s.related, s.featured, s.show_topic_icon, s.commentcode, s.trackbackcode, s.statuscode, s.expire, s.postmode, s.frontpage, s.in_transit, s.owner_id, s.group_id, s.perm_owner, s.perm_group, s.perm_members, s.perm_anon, s.advanced_editor_mode, "
-         . " UNIX_TIMESTAMP(s.date) AS unixdate, "
+$msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
          . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
          . $userfields . ", t.topic, t.imageurl "
          . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
          . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-         . $sql . "ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
+         . $sql . "ORDER BY featured DESC," . $orderBy . " LIMIT $offset, $limit";
 
 $result = DB_query ($msql);
 
