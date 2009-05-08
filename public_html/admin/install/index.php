@@ -776,6 +776,7 @@ function INST_checkEnvironment($dbconfig_path='')
                         $_PATH['log_path'].'spamx.log',
                         $_PATH['data_path'].'layout_cache/',
                         $_PATH['data_path'].'temp/',
+                        $_PATH['dbconfig_path'].'plugins/mediagallery/tmp/',
                         $_PATH['dbconfig_path'].'system/lib-custom.php',
 
                         /*$_PATH['public_html'],*/
