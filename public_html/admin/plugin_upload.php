@@ -63,8 +63,8 @@ function processOldPlugin( $tmpDir )
     $pi_name = '';
     $dirCount = 0;
 
-    if (!$dh = @opendir($tmpDir)) {
-        _pi_deleteDir($tmpDir);
+    if (!$dh = @opendir($_CONF['path_data'].$tmpDir)) {
+        _pi_deleteDir($_CONF['path_data'].$tmpDir);
         return ( _pi_errorBox( $LANG32[39] ));
 
     }
@@ -74,7 +74,7 @@ function processOldPlugin( $tmpDir )
             continue;
         }
 
-        if ( @is_dir($tmpDir . '/' . $file) ) {
+        if ( @is_dir($_CONF['path_data'].$tmpDir . '/' . $file) ) {
             $pi_name = $file;
             $dirCount++;
         }
@@ -82,7 +82,7 @@ function processOldPlugin( $tmpDir )
     closedir($dh);
 
     if ( $pi_name == '' || $dirCount > 1) {
-        _pi_deleteDir($tmpDir);
+        _pi_deleteDir($_CONF['path_data'].$tmpDir);
         return _pi_errorBox($LANG32[40]);
     }
 
@@ -91,7 +91,7 @@ function processOldPlugin( $tmpDir )
         $P = DB_fetchArray($result);
 
         if ( $P['pi_enabled'] != 1 ) {
-            _pi_deleteDir($tmpDir);
+            _pi_deleteDir($_CONF['path_data'].$tmpDir);
             return _pi_errorBox($LANG32[72]);
         }
 
@@ -131,27 +131,32 @@ function processOldPluginInstall(  )
     $pluginData['id']               = COM_applyFilter($_POST['pi_name']);
     $pluginData['name']             = $pluginData['id'];
     $upgrade                        = COM_applyFilter($_POST['upgrade'],true);
-    $tmp                            = COM_applyFilter($_POST['temp_dir']);
+    $tdir                           = COM_applyFilter($_POST['temp_dir']);
+
+    $tdir = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$tdir );
+    $tdir = str_replace( '..', '', $tdir );
+
+    $tmp = $_CONF['path_data'].$tdir;
 
     $permError = 0;
     $permErrorList = '';
 
     // test copy to proper directories
-    list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'plugins/'.$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'/admin/plugins/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].'/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
@@ -160,7 +165,7 @@ function processOldPluginInstall(  )
     }
 
     if ( file_exists($tmp.'/'.$pluginData['id'].'/themefiles/') ) {
-        list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/themefiles/', $_CONF['path_html'].'/layout/nouveau/');
+        list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/themefiles/', $_CONF['path_html'].'layout/nouveau/');
         if ( $rc > 0 ) {
             $permError = 1;
             foreach($failed AS $filename) {
@@ -199,7 +204,7 @@ function processOldPluginInstall(  )
     $permErrorList = '';
 
     // copy to proper directories
-    $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
+    $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'plugins/'.$pluginData['id']);
     list($success,$failed,$size,$faillist) = explode(',',$rc);
     if ( $failed > 0 ) {
         $permError++;
@@ -207,12 +212,12 @@ function processOldPluginInstall(  )
         $t = explode('|',$faillist);
         if ( is_array($t) ) {
             foreach ($t AS $failedFile) {
-                $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'/plugins/'.$pluginData['id']);
+                $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'plugins/'.$pluginData['id']);
             }
         }
     }
     if ( file_exists($tmp.'/'.$pluginData['id'].'/admin/') ) {
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'/admin/plugins/'.$pluginData['id']);
+        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -220,13 +225,13 @@ function processOldPluginInstall(  )
             $t = explode('|',$faillist);
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
-                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path_html'].'/admin/plugins/'.$pluginData['id']);
+                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
                 }
             }
         }
     }
     if ( file_exists($tmp.'/'.$pluginData['id'].'/public_html/') ) {
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].'/'.$pluginData['id']);
+        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -234,13 +239,13 @@ function processOldPluginInstall(  )
             $t = explode('|',$faillist);
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
-                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path_html'].'/'.$pluginData['id']);
+                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path_html'].$pluginData['id']);
                 }
             }
         }
     }
     if ( file_exists($tmp.'/'.$pluginData['id'].'/themefiles/') ) {
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/themefiles/', $_CONF['path_html'].'/layout/nouveau/');
+        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/themefiles/', $_CONF['path_html'].'layout/nouveau/');
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -248,7 +253,7 @@ function processOldPluginInstall(  )
             $t = explode('|',$faillist);
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
-                    $permErrorList .= sprintf($LANG45,$failedFile,$_CONF['path_html'].'/layout/nouveau/');
+                    $permErrorList .= sprintf($LANG45,$failedFile,$_CONF['path_html'].'layout/nouveau/');
                 }
             }
         }
@@ -339,8 +344,8 @@ function processPluginUpload()
         return _pi_errorBox($LANG32[47]);
     }
 
-    if ( !COM_decompress($Finalfilename,$tmp) ) {
-        _pi_deleteDir($tmp);
+    if ( !COM_decompress($Finalfilename,$_CONF['path_data'].$tmp) ) {
+        _pi_deleteDir($_CONF['path_data'].$tmp);
         return _pi_errorBox($LANG32[48]);
     }
     @unlink($Finalfilename);
@@ -348,7 +353,7 @@ function processPluginUpload()
     // read XML data file, places in $pluginData;
 
     $pluginData = array();
-    $rc = _pi_parseXML($tmp);
+    $rc = _pi_parseXML($_CONF['path_data'].$tmp);
 
     if ( $rc == -1 ) {
         // no xml file found
@@ -361,13 +366,13 @@ function processPluginUpload()
 
     // proper glfusion version
     if (!COM_checkVersion(GVERSION, $pluginData['glfusionversion'])) {
-        _pi_deleteDir($tmp);
+        _pi_deleteDir($_CONF['path_data'].$tmp);
         return _pi_errorBox(sprintf($LANG32[49],$pluginData['glfusionversion']));
     }
 
     if ( !COM_checkVersion(phpversion (),$pluginData['phpversion'])) {
         $retval .= sprintf($LANG32[50],$pluginData['phpversion']);
-        _pi_deleteDir($tmp);
+        _pi_deleteDir($_CONF['path_data'].$tmp);
         return _pi_errorBox(sprintf($LANG32[50],$pluginData['phpversion']));
     }
 
@@ -381,7 +386,7 @@ function processPluginUpload()
         }
     }
     if ( $errors != '' ) {
-        _pi_deleteDir($tmp);
+        _pi_deleteDir($_CONF['path_data'].$tmp);
         return _pi_errorBox($errors);
     }
     // check if plugin already exists
@@ -392,17 +397,17 @@ function processPluginUpload()
     if ( DB_numRows($result) > 0 ) {
         $P = DB_fetchArray($result);
         if ($P['pi_version'] == $pluginData['version'] ) {
-            _pi_deleteDir($tmp);
+            _pi_deleteDir($_CONF['path_data'].$tmp);
             return _pi_errorBox(sprintf($LANG32[52],$pluginData['id']));
         }
         // if we are here, it must be an upgrade or disabled plugin....
         $rc = COM_checkVersion($pluginData['version'],$P['pi_version']);
         if ( $rc < 1 ) {
-            _pi_deleteDir($tmp);
+            _pi_deleteDir($_CONF['path_data'].$tmp);
             return _pi_errorBox(sprintf($LANG32[53],$pluginData['id'],$pluginData['version'],$pluginVersion));
         }
         if ( $P['pi_enabled'] != 1 ) {
-            _pi_deleteDir($tmp);
+            _pi_deleteDir($_CONF['path_data'].$tmp);
             return _pi_errorBox($LANG32[72]);
         }
 
@@ -415,21 +420,21 @@ function processPluginUpload()
         @set_time_limit( 30 );
     }
     // test copy to proper directories
-    list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($_CONF['path_data'].$tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'plugins/'.$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'/admin/plugins/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($_CONF['path_data'].$tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
             $permErrorList .= sprintf($LANG32[41],$filename);
         }
     }
-    list($rc,$failed) = _pi_test_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].'/'.$pluginData['id']);
+    list($rc,$failed) = _pi_test_copy($_CONF['path_data'].$tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].$pluginData['id']);
     if ( $rc > 0 ) {
         $permError = 1;
         foreach($failed AS $filename) {
@@ -439,7 +444,7 @@ function processPluginUpload()
 
     if ( $permError != 0 ) {
         $errorMessage = '<h2>'.$LANG32[42].'</h2>'.$LANG32[43].$permErrorList.'<br />'.$LANG32[44];
-        _pi_deleteDir($tmp);
+        _pi_deleteDir($_CONF['path_data'].$tmp);
         return _pi_errorBox($errorMessage);
     }
 
@@ -489,7 +494,10 @@ function post_uploadProcess() {
     $pluginData['url']              = COM_applyFilter($_POST['pi_url']);
     $pluginData['glfusionversion']  = COM_applyFilter($_POST['pi_gl_version']);
     $upgrade                        = COM_applyFilter($_POST['upgrade'],true);
-    $tmp                            = COM_applyFilter($_POST['temp_dir']);
+    $tdir                           = COM_applyFilter($_POST['temp_dir']);
+    $tdir = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$tdir );
+    $tdir = str_replace( '..', '', $tdir );
+    $tmp = $_CONF['path_data'].$tdir;
 
     $pluginData = array();
     $rc = _pi_parseXML($tmp);
@@ -513,7 +521,7 @@ function post_uploadProcess() {
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 30 );
     }
-    $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'/plugins/'.$pluginData['id']);
+    $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/', $_CONF['path'].'plugins/'.$pluginData['id']);
     list($success,$failed,$size,$faillist) = explode(',',$rc);
     if ( $failed > 0 ) {
         $permError++;
@@ -521,7 +529,7 @@ function post_uploadProcess() {
         $t = explode('|',$faillist);
         if ( is_array($t) ) {
             foreach ($t AS $failedFile) {
-                $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'/plugins/'.$pluginData['id']);
+                $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'plugins/'.$pluginData['id']);
             }
         }
     }
@@ -529,7 +537,7 @@ function post_uploadProcess() {
         @set_time_limit( 30 );
     }
     if ( file_exists($tmp.'/'.$pluginData['id'].'/admin/') ) {
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'/admin/plugins/'.$pluginData['id']);
+        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/admin/', $_CONF['path_html'].'admin/plugins/'.$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -537,7 +545,7 @@ function post_uploadProcess() {
             $t = explode('|',$faillist);
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
-                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'/plugins/'.$pluginData['id']);
+                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'plugins/'.$pluginData['id']);
                 }
             }
         }
@@ -547,7 +555,7 @@ function post_uploadProcess() {
         @set_time_limit( 30 );
     }
     if ( file_exists($tmp.'/'.$pluginData['id'].'/public_html/') ) {
-        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].'/'.$pluginData['id']);
+        $rc = _pi_dir_copy($tmp.'/'.$pluginData['id'].'/public_html/', $_CONF['path_html'].$pluginData['id']);
         list($success,$failed,$size,$faillist) = explode(',',$rc);
         if ( $failed > 0 ) {
             $permError++;
@@ -555,7 +563,7 @@ function post_uploadProcess() {
             $t = explode('|',$faillist);
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
-                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'/plugins/'.$pluginData['id']);
+                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'plugins/'.$pluginData['id']);
                 }
             }
         }
@@ -580,7 +588,7 @@ function post_uploadProcess() {
             $t = explode('|',$faillist);
             if ( is_array($t) ) {
                 foreach ($t AS $failedFile) {
-                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'/plugins/'.$pluginData['id']);
+                    $permErrorList .= sprintf($LANG32[45],$failedFile,$_CONF['path'].'plugins/'.$pluginData['id']);
                 }
             }
         }
@@ -718,9 +726,9 @@ function post_uploadProcess() {
         $gl_version      = $pluginData['glfusionversion'];
         $pi_url          = $pluginData['url'];
 
-        if ( file_exists($_CONF['path'].'/plugins/'.$pluginData['id'].'/autoinstall.php') ) {
+        if ( file_exists($_CONF['path'].'plugins/'.$pluginData['id'].'/autoinstall.php') ) {
 
-            require_once $_CONF['path'].'/plugins/'.$pluginData['id'].'/autoinstall.php';
+            require_once $_CONF['path'].'plugins/'.$pluginData['id'].'/autoinstall.php';
 
             $ret = INSTALLER_install($INSTALL_plugin[$pi_name]);
 
@@ -800,7 +808,8 @@ function io_mktmpdir() {
     $tmpdir = $base.$dir;
 
     if(io_mkdir_p($tmpdir)) {
-        return($tmpdir);
+//        return($tmpdir);
+        return($dir);
     } else {
         return false;
     }
