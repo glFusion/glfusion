@@ -1390,8 +1390,9 @@ function INST_installAndContentPlugins()
         $config->set('language', $lng);
     }
 
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='".GVERSION."', name='glfusion'",1);
     DB_change($_TABLES['vars'], 'value', GVERSION,
-                                'name', 'database_version');
+                                'name', 'glfusion');
 
     $_CONF['path_html']         = $html_path;
     $_CONF['site_url']          = $site_url;

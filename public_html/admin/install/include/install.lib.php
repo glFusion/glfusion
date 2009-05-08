@@ -741,8 +741,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             }
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.4',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.4' WHERE name='glfusion'",1);
+            DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.4';
-            break;
         default:
             break;
     }
@@ -960,6 +960,16 @@ function INST_identifyglFusionVersion ()
     }
 
     $version = '';
+
+    $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='database_version'",1);
+    if ( $result !== false ) {
+        if ( DB_numRows($result) > 0 ) {
+            $row = DB_fetchArray($result);
+            if ( $row['value'] == '1.1.3' ) {
+                $version = $row['value'];
+            return $version;
+        }
+    }
 
     $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='glfusion'",1);
     if ( $result !== false ) {
