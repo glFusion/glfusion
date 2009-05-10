@@ -106,7 +106,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
             'lang_uploaded_by'  =>  $LANG_FM00['uploaded_by'],
             'username'          =>  $uname,
             'filename'          =>  $filename,
-            'description'       =>  $description,
+            'description'       =>  stripslashes($description),
             'url_moderate'      =>  '<a href="' . $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?op=listNewDownloads">Click here to view</a>',
             'site_name'         =>  $_CONF['site_name'] . ' - ' . $_CONF['site_slogan'],
             'site_url'          =>  $_CONF['site_url'],
