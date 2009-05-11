@@ -812,7 +812,7 @@ class Search {
         $text = strip_tags($text);
         $words = explode(' ', $text);
         if (count($words) <= $num_words) {
-            return stripslashes(COM_highlightQuery($text, $keyword, 'b'));
+            return stripslashes($this->_highlightQuery($text, $keyword, 'b'));
         }
 
         $rt = '';
@@ -863,7 +863,7 @@ class Search {
             $rt .= $words[$key + $i] . ' ';
         $rt .= ' <b>...</b>';
 
-        return stripslashes(COM_highlightQuery($rt, $keyword, 'b'));
+        return stripslashes($this->_highlightQuery($rt, $keyword, 'b'));
     }
 
     /**
@@ -918,6 +918,42 @@ class Search {
         }
         return $sql;
     }
+
+    function _highlightQuery( $text, $query, $class = 'highlight')
+    {
+        $query = str_replace( '+', ' ', $query );
+
+        // escape all the other PCRE special characters
+        $query = preg_quote( $query );
+
+        // ugly workaround:
+        // Using the /e modifier in preg_replace will cause all double quotes to
+        // be returned as \" - so we replace all \" in the result with unescaped
+        // double quotes. Any actual \" in the original text therefore have to be
+        // turned into \\" first ...
+        $text = str_replace( '\\"', '\\\\"', $text );
+
+        if ( $this->_keyType == 'phrase' ) {
+            $mywords = array($query);
+        } else {
+            $mywords = explode( ' ', $query );
+        }
+        foreach( $mywords as $searchword )
+        {
+            if( !empty( $searchword ))
+            {
+                $searchword = preg_quote( str_replace( "'", "\'", $searchword ));
+                $text = @preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+            }
+        }
+
+        // ugly workaround, part 2
+        $text = str_replace( '\\"', '"', $text );
+
+        return $text;
+    }
+
+
 }
 
 ?>
