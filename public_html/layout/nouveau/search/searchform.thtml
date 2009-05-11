@@ -4,7 +4,7 @@
                                 <table cellspacing="0" cellpadding="3">
                                     <tr>
                                         <td class="alignright">{lang_keywords}:</td>
-                                        <td><input type="text" name="query" size="35" maxlength="35" value="{query}"{xhtml}>
+                                        <td><input type="text" name="query" size="35" maxlength="255" value="{query}"{xhtml}>
                                         <select name="keyType">
                                             <option value="phrase" {key_phrase_selected}>{lang_exact_phrase}</option>
                                             <option value="all" {key_all_selected}>{lang_all_words}</option>

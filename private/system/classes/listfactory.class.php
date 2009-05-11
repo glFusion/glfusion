@@ -791,7 +791,8 @@ class ListFactory {
         $list_templates->set_var('google_paging',$gp);
         $list_templates->set_var('page_url',$page_url);
 
-        $list_top = @sprintf($list_top, $offset+1, $r+$offset-1, $this->_total_found);
+        $search_numbers = @sprintf($LANG09[64],$offset+1, $r+$offset-1, $this->_total_found);
+        $list_top = '<p>'.$search_numbers.'<br />'.$list_top.'<p>';
         $list_templates->set_var('list_top', $list_top);
         $list_templates->set_var('list_bottom', $list_bottom);
 

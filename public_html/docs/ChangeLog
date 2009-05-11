@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Search did not display proper results when search string contained % (Mark)
 - Added ability to enable / disable plugins in fusionrescue.php (Mark)
 - Added permission check for MG tmp directory during install / upgrade (Mark)
 - Added CUSTOM_js() hook to allow addition of other JS files (Mark)
