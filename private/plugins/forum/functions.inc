@@ -1309,6 +1309,10 @@ function forum_modPermission($forum,$uid='',$permission='') {
         return FALSE;  // Invalid ID or anonymous user
     }
 
+    if (($uid == $_USER['uid']) && (SEC_inGroup('Root') || SEC_hasRights('forum.edit'))) {
+        return true;
+    }
+
     /* Retrieve all moderator records for this forum */
     $modrecords = DB_query("SELECT * FROM {$_TABLES['gf_moderators']} WHERE mod_forum='$forum'");
     while ($A = DB_fetchArray($modrecords)) {
@@ -1333,10 +1337,6 @@ function forum_modPermission($forum,$uid='',$permission='') {
                  }
             }
         }
-    }
-
-    if (SEC_inGroup('Root') || SEC_hasRights('forum.edit')) {
-        return true;
     }
 
     /* If I get this far then I exited the loop without finding a permission record */
