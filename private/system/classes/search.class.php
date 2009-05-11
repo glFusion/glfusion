@@ -777,9 +777,7 @@ class Search {
             if ( $row['description'] == '' ) {
                 $row['description'] = $_CONF['search_no_data'];
             } else {
-COM_errorLog("Before: " . $row['description']);
                 $row['description'] = stripslashes($row['description']);
-COM_errorLog("After: " . $row['description']);
             }
 
             if ($row['description'] != $_CONF['search_no_data'])
