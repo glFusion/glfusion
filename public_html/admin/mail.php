@@ -111,10 +111,18 @@ function display_mailform ()
         $groups[$A['grp_id']] = ucwords ($A['grp_name']);
     }
     asort ($groups);
+/* --------
     foreach ($groups as $groupID => $groupName) {
         $group_options .= '<option value="' . $groupID . '">' . $groupName
                        . '</option>';
     }
+---------- */
+    foreach ($groups as $groupID => $groupName) {
+        if (SEC_inGroup('Root') || (SEC_inGroup($groupName) && ($groupName <> 'Logged-in Users') && ($groupName <> 'Mail Admin'))) {
+            $group_options .= '<option value="' . $groupID . '">' . $groupName . '</option>';
+        }
+    }
+
     $mail_templates->set_var ('group_options', $group_options);
     $mail_templates->set_var ('lang_from', $LANG31[2]);
     $mail_templates->set_var ('site_name', $_CONF['site_name']);
