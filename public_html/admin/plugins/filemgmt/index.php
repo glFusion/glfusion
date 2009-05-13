@@ -769,7 +769,7 @@ function modCat() {
     $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$writeaccess) . '</select></td></tr>';
     $display .= '<tr><td>' ._MD_IMGURLMAIN. '</td><td><input type="file" name="imgurl" value="'.$imgurl.'" size="50" maxlength="100"></td></tr>';
     $display .= '<tr><td>' . _MD_PARENT. '</td><td>';
-    $display .= $mytree->makeMySelBox("title", "title", $pid, 1, "pid");
+    $display .= $mytree->makeMySelBox("title", "title", $pid, 1, "pid",'',$cid);
     $display .= '</td></tr>';
     $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
     $display .= '<input type="submit" value="'._MD_SAVE.'">';

@@ -206,7 +206,7 @@ class XoopsTree{
     //makes a nicely ordered selection box
     //$preset_id is used to specify a preselected item
     //set $none to 1 to add a option with value 0
-    function makeMySelBox($title,$order="",$preset_id=0, $none=0, $sel_name="", $onchange=""){
+    function makeMySelBox($title,$order="",$preset_id=0, $none=0, $sel_name="", $onchange="",$exclude=''){
     if ( $sel_name == "" ) {
         $sel_name = $this->id;
     }
@@ -224,7 +224,11 @@ class XoopsTree{
     if ( $none ) {
         $retval .= "<option value='0'>----</option>\n";
     }
+
     while ( list($catid, $name) = DB_fetchARRAY($result) ) {
+        if ( $catid == $exclude ) {
+            continue;
+        }
         if ( $catid == $preset_id ) {
             $sel = " selected='selected'";
         } else {
@@ -234,6 +238,9 @@ class XoopsTree{
         $sel = "";
         $arr = $this->getChildTreeArray($catid);
         foreach ( $arr as $option ) {
+            if ( $option[$this->id] == $exclude ) {
+                continue;
+            }
             $option['prefix'] = str_replace(".","--",$option['prefix']);
             $catpath = $option['prefix']."&nbsp;".$myts->makeTboxData4Show($option[$title]);
             if ( $option[$this->id] == $preset_id ) {
@@ -244,6 +251,7 @@ class XoopsTree{
         }
     }
     $retval .= "</select>\n";
+
     return $retval;
     }
 

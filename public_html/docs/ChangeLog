@@ -43,6 +43,7 @@ v1.1.4
 
 FileMgmt
 --------
+- Do not allow user to select the current category as it's own parent (Mark)
 - Call stripslashes() on file description prior to emailing admins of new
   upload (Mark)
 - Ability to change the owner (submitter) of a file (Mark)
