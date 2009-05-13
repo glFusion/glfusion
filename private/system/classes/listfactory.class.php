@@ -342,9 +342,9 @@ class ListFactory {
             $this->_sort_arr['field'] = $this->_def_sort_arr['field'];
         }
         if ( isset($_POST['direction']) ) {
-            $this->_sort_arr['direction'] = $_POST['direction'] == 'asc' ? 'asc' : 'desc';
+            $this->_sort_arr['direction'] = ($_POST['direction'] == 'asc' ? 'asc' : 'desc');
         } elseif (isset($_GET['direction']) ) {
-            $this->_sort_arr['direction'] = $_GET['direction'] == 'asc' ? 'asc' : 'desc';
+            $this->_sort_arr['direction'] = ($_GET['direction'] == 'asc' ? 'asc' : 'desc');
         } else {
             $this->_sort_arr['direction'] = $this->_def_sort_arr['direction'];
         }
