@@ -1092,6 +1092,20 @@ text-align:left;
 width:10%;
 }
 
+.stats-header-title-narrow {
+padding-left:5px;
+padding-right:5px;
+text-align:left;
+width:60%;
+}
+
+.stats-header-count-wide {
+padding-left:5px;
+padding-right:5px;
+text-align:right;
+width:40%;
+}
+
 .story {
 background:transparent;
 color:#000;

@@ -2,6 +2,11 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Integrated last 10 logged in users into stats
+  Integrated User Activity (phpblock_lastlogin) block (Mark)
+- Trim trailing spaces from username during login authentication (Mark)
+- Only allow non-Root mail.admin users to email users in groups the mail.admin
+  user belongs to (Mark)
 - Search did not display proper results when search string contained % (Mark)
 - Added ability to enable / disable plugins in fusionrescue.php (Mark)
 - Added permission check for MG tmp directory during install / upgrade (Mark)
@@ -21,6 +26,8 @@ v1.1.4
 - Properly filter the topics array prior to using in SQL in usersettings.php
   (Mark)
 - Add CRLF between each JavaScript file (Mark)
+- Language overrides - the ability to override language file entries using
+  a custom language file (Mark)
 - Additional security tweaks (Mark)
 - 0000422 Use of adveditor in block editor does not permit use of image insert
   or file upload connector (Mark)

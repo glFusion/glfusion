@@ -58,8 +58,9 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.4.svn');
+    define('GVERSION', '1.1.4');
 }
+
 //define('DEMO_MODE',true);
 
 /**
@@ -144,13 +145,11 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
 }
 
 
-
 // timezone hack - set the webserver's timezone
 if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
         function_exists( 'putenv' )) {
     putenv( 'TZ=' . $_CONF['timezone'] );
 }
-
 
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
@@ -160,8 +159,7 @@ if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
 * If needed, add our PEAR path to the list of include paths
 *
 */
-if( !$_CONF['have_pear'] )
-{
+if( !$_CONF['have_pear'] ) {
     $curPHPIncludePath = get_include_path();
     if( defined( 'PATH_SEPARATOR' )) {
         $separator = PATH_SEPARATOR;
@@ -179,16 +177,14 @@ if( !$_CONF['have_pear'] )
 }
 
 
-if( !function_exists( 'file_put_contents' ))
-{
-    require_once( 'PHP/Compat.php' );
+if( !function_exists( 'file_put_contents' )) {
+    require_once 'PHP/Compat.php';
 
     PHP_Compat::loadFunction( 'file_put_contents' );
 }
 
-if( !function_exists( 'stripos' ))
-{
-    require_once( 'PHP/Compat.php' );
+if( !function_exists( 'stripos' )) {
+    require_once 'PHP/Compat.php';
 
     PHP_Compat::loadFunction( 'stripos' );
 }
@@ -199,7 +195,7 @@ if( !function_exists( 'stripos' ))
 *
 */
 
-require_once( $_CONF['path_system'] . 'classes/timer.class.php' );
+require_once $_CONF['path_system'].'classes/timer.class.php';
 $_PAGE_TIMER = new timerobject();
 $_PAGE_TIMER->startTimer();
 
@@ -211,16 +207,15 @@ $_PAGE_TIMER->startTimer();
 * staticpages plugin.
 */
 
-require_once( $_CONF['path_system'] . 'classes/url.class.php' );
+require_once $_CONF['path_system'].'classes/url.class.php';
 $_URL = new url( $_CONF['url_rewrite'] );
 
 /**
-* This is our HTML template class.  It is the same one found in PHPLib and is
-* licensed under the LGPL.  See that file for details
+* This is our HTML template class.
 *
 */
 
-require_once( $_CONF['path_system'] . 'classes/template.class.php' );
+require_once $_CONF['path_system'].'classes/template.class.php';
 
 /**
 * This is the database library.
@@ -229,7 +224,7 @@ require_once( $_CONF['path_system'] . 'classes/template.class.php' );
 *
 */
 
-require_once( $_CONF['path_system'] . 'lib-database.php' );
+require_once $_CONF['path_system'].'lib-database.php';
 
 /**
 * Check to see if the Bad Behavior2 Security Plugin is enabled, if yes
@@ -237,7 +232,7 @@ require_once( $_CONF['path_system'] . 'lib-database.php' );
 *
 */
 if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("bad_behavior2","1")) > 0) {
-    require_once($_CONF['path_html'] . 'bad_behavior2/bad-behavior-glfusion.php');
+    require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
 }
 
 /**
@@ -245,21 +240,21 @@ if (DB_count($_TABLES['plugins'], array("pi_name","pi_enabled"),array("bad_behav
 *
 */
 
-require_once( $_CONF['path_system'] . 'lib-security.php' );
+require_once $_CONF['path_system'].'lib-security.php';
 
 /**
 * This is the syndication library used to offer (RSS) feeds.
 *
 */
 
-require_once( $_CONF['path_system'] . 'lib-syndication.php' );
+require_once $_CONF['path_system'].'lib-syndication.php';
 
 /**
 * This is the glFusion customization library
 *
 */
 
-require_once( $_CONF['path_system'] . 'lib-glfusion.php' );
+require_once $_CONF['path_system'].'lib-glfusion.php';
 
 /**
 * This is the custom library.
@@ -270,21 +265,21 @@ require_once( $_CONF['path_system'] . 'lib-glfusion.php' );
 *
 */
 
-require_once( $_CONF['path_system'] . 'lib-custom.php' );
+require_once $_CONF['path_system'].'lib-custom.php';
 
 /**
 * Include plugin class.
 *
 */
 
-require_once( $_CONF['path_system'] . 'lib-plugins.php' );
+require_once $_CONF['path_system'].'lib-plugins.php';
 
 /**
 * Session management library
 *
 */
 
-require_once( $_CONF['path_system'] . 'lib-sessions.php' );
+require_once $_CONF['path_system'].'lib-sessions.php';
 
 /* --------------------------------------------------------------------
 // timezone hack - set the webserver's timezone per user's preference
@@ -298,14 +293,14 @@ if( !empty( $_USER['tzid'] ) && !ini_get( 'safe_mode' ) &&
 * Multibyte functions
 *
 */
-require_once( $_CONF['path_system'] . 'lib-mbyte.php' );
+require_once $_CONF['path_system'].'lib-mbyte.php';
 
 /**
 * Image processing library
 *
 */
 
-require_once( $_CONF['path_system'] . 'imglib/lib-image.php' );
+require_once $_CONF['path_system'].'imglib/lib-image.php';
 
 // Set theme
 // Need to modify this code to check if theme was cached in user cookie.  That
@@ -313,20 +308,16 @@ require_once( $_CONF['path_system'] . 'imglib/lib-image.php' );
 // which theme to show them.
 
 $usetheme = '';
-if( isset( $_POST['usetheme'] ))
-{
+if( isset( $_POST['usetheme'] )) {
     $usetheme = COM_sanitizeFilename($_POST['usetheme'], true);
 }
-if( !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme ))
-{
+if( !empty( $usetheme ) && is_dir( $_CONF['path_themes'] . $usetheme )) {
     $_CONF['theme'] = $usetheme;
     $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
     $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
 }
-else if( $_CONF['allow_user_themes'] == 1 )
-{
-    if( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] ))
-    {
+else if( $_CONF['allow_user_themes'] == 1 ) {
+    if( isset( $_COOKIE[$_CONF['cookie_theme']] ) && empty( $_USER['theme'] )) {
         $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
         if( is_dir( $_CONF['path_themes'] . $theme ))
         {
@@ -344,16 +335,13 @@ else if( $_CONF['allow_user_themes'] == 1 )
         }
     }
 
-    if( !empty( $_USER['theme'] ))
-    {
+    if( !empty( $_USER['theme'] )) {
         if( is_dir( $_CONF['path_themes'] . $_USER['theme'] ))
         {
             $_CONF['theme'] = $_USER['theme'];
             $_CONF['path_layout'] = $_CONF['path_themes'] . $_CONF['theme'] . '/';
             $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
-        }
-        else
-        {
+        } else {
             $_USER['theme'] = $_CONF['theme'];
         }
     }
@@ -395,8 +383,7 @@ if (empty($_IMAGE_TYPE)) {
 
 // Similarly set language
 
-if( isset( $_COOKIE[$_CONF['cookie_language']] ) && empty( $_USER['language'] ))
-{
+if( isset( $_COOKIE[$_CONF['cookie_language']] ) && empty( $_USER['language'] )) {
     $language = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_language']]);
     if( is_file( $_CONF['path_language'] . $language . '.php' ) &&
             ( $_CONF['allow_user_language'] == 1 ))
@@ -404,17 +391,13 @@ if( isset( $_COOKIE[$_CONF['cookie_language']] ) && empty( $_USER['language'] ))
         $_USER['language'] = $language;
         $_CONF['language'] = $language;
     }
-}
-else if( !empty( $_USER['language'] ))
-{
+} else if( !empty( $_USER['language'] )) {
     if( is_file( $_CONF['path_language'] . $_USER['language'] . '.php' ) &&
             ( $_CONF['allow_user_language'] == 1 ))
     {
         $_CONF['language'] = $_USER['language'];
     }
-}
-else if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] ))
-{
+} else if( !empty( $_CONF['languages'] ) && !empty( $_CONF['language_files'] )) {
     $_CONF['language'] = COM_getLanguage();
 }
 
@@ -603,8 +586,7 @@ if (empty($LANG_DIRECTION)) {
 
 COM_switchLocaleSettings();
 
-if( setlocale( LC_ALL, $_CONF['locale'] ) === false )
-{
+if( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
 }
 
@@ -615,12 +597,9 @@ if( setlocale( LC_ALL, $_CONF['locale'] ) === false )
 *
 */
 
-if( !COM_isAnonUser() )
-{
+if( !COM_isAnonUser() ) {
     $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
-}
-else
-{
+} else {
     $_GROUPS = SEC_getUserGroups( 1 );
 }
 
@@ -633,16 +612,11 @@ else
 
 $_RIGHTS = explode( ',', SEC_getUserPermissions() );
 
-if( isset( $_GET['topic'] ))
-{
+if( isset( $_GET['topic'] )) {
     $topic = COM_applyFilter( $_GET['topic'] );
-}
-else if( isset( $_POST['topic'] ))
-{
+} else if( isset( $_POST['topic'] )) {
     $topic = COM_applyFilter( $_POST['topic'] );
-}
-else
-{
+} else {
     $topic = '';
 }
 
@@ -7222,6 +7196,30 @@ function COM_buildOwnerList($fieldName,$owner_id=2)
     return $owner_select;
 }
 
+function phpblock_lastlogin()
+{
+    global $_TABLES, $_CONF, $LANG10;
+
+    $retval = '';
+
+    $result = DB_query("SELECT u.uid AS uid, u.username AS 'username', ui.lastlogin AS 'login' FROM ".$_TABLES['userinfo']." AS ui LEFT JOIN ".$_TABLES['users']." AS u ON ui.uid=u.uid LEFT JOIN {$_TABLES['userprefs']} AS up ON u.uid=up.uid WHERE u.uid NOT IN (1) AND 0 != ui.lastlogin AND up.showonline != 0 ORDER BY ui.lastlogin DESC LIMIT 5");
+
+    $nrows  = DB_numRows ($result);
+    if ($nrows > 0) {
+        $retval = sprintf($LANG10[29],$nrows);
+        for ($i = 0; $i < $nrows; $i++) {
+            if (0 < $i)
+                $retval .= ', ';
+            $A = DB_fetchArray($result);
+            $A['username'] = stripslashes(str_replace('$','&#36;',$A['username']));
+            $A['user'] = "<a href=\"" . $_CONF['site_url']
+                      . "/users.php?mode=profile&amp;uid={$A['uid']}" . "\">{$A['username']}</a>";
+            $retval .= $A['user'];
+        }
+    }
+    return $retval;
+}
+
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
  *
@@ -7285,7 +7283,7 @@ function USES_class_upload() {
 if ( is_array($_PLUGINS) ) {
     foreach( $_PLUGINS as $pi_name ) {
         if (@file_exists($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc') ) {
-            require_once( $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' );
+            require_once $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc';
         } else {
             unset($_PLUGINS[array_search($pi_name, $_PLUGINS)]);
         }
@@ -7297,7 +7295,7 @@ if ( @file_exists($_CONF['path_language'].'custom') ) {
     $langfiles = @glob($langfilespec, GLOB_NOESCAPE|GLOB_NOSORT);
     if (@is_array($langfiles)) {
         foreach($langfiles as $langfile) {
-            require_once($langfile);
+            require_once $langfile;
         }
     }
 }
