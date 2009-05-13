@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- User profile page did not properly honor showonline status and
+  accept email from user status (Mark)
 - Integrated last 10 logged in users into stats
   Integrated User Activity (phpblock_lastlogin) block (Mark)
 - Trim trailing spaces from username during login authentication (Mark)

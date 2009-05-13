@@ -88,7 +88,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         return $retval;
     }
 
-    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".intval($user));
+    $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,emailfromadmin,emailfromuser,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".intval($user));
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
         return COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -172,7 +172,7 @@ function userprofile($user, $msg = 0, $plugin = '')
         $A['photo'] = '(none)'; // user does not have a photo
     }
 
-    $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = ".intval($A['uid']));
+    $lastlogin = $A['lastlogin'];
     $lasttime = COM_getUserDateTimeFormat ($lastlogin);
 
     $photo = USER_getPhoto ($user, $A['photo'], $A['email'], -1,0);
@@ -181,7 +181,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     $user_templates->set_var ('lang_membersince', $LANG04[67]);
     $user_templates->set_var ('user_regdate', $A['regdate']);
 
-    if ($_CONF['lastlogin']) {
+    if ($_CONF['lastlogin'] && $A['showonline']) {
         $user_templates->set_var('lang_lastlogin', $LANG28[35]);
         if ( !empty($lastlogin) ) {
             $user_templates->set_var('user_lastlogin', $lasttime[0]);
@@ -191,15 +191,20 @@ function userprofile($user, $msg = 0, $plugin = '')
     }
 
     if ($A['showonline']) {
-        $online_result = DB_query("SELECT uid FROM {$_TABLES['sessions']} WHERE uid=" . intval($user));
-        if ( DB_numRows($online_result) > 0 ) {
+        if ( DB_count($_TABLES['sessions'],'uid',intval($user))) {
             $user_templates->set_var ('online', 'online');
         }
     }
 
     $user_templates->set_var ('lang_email', $LANG04[5]);
     $user_templates->set_var ('user_id', $user);
-    $user_templates->set_var ('lang_sendemail', $LANG04[81]);
+
+    if ( $A['email'] == '' || $A['emailfromuser'] == 0 ) {
+        $user_templates->set_var ('lang_sendemail', '');
+    } else {
+        $user_templates->set_var ('lang_sendemail', $LANG04[81]);
+    }
+
     $user_templates->set_var ('lang_homepage', $LANG04[6]);
     $user_templates->set_var ('user_homepage', COM_killJS ($A['homepage']));
     $user_templates->set_var ('lang_location', $LANG04[106]);
