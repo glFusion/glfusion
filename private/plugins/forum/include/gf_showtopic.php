@@ -91,7 +91,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $date = iconv('ISO-8859-1','UTF-8',$date);
     }
 
-    $userQuery = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid='".intval($showtopic['uid'])."'");
+    $userQuery = DB_query("SELECT * FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".intval($showtopic['uid']));
     if ($showtopic['uid'] > 1 AND DB_numRows($userQuery) == 1) {
         $userarray = DB_fetchArray($userQuery);
         $username = COM_getDisplayName($showtopic['uid']);
@@ -313,7 +313,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             }
         }
 
-        if(isset($userarray['email']) && $userarray['email'] != '' && $showtopic["uid"] > 1) {
+        if(isset($userarray['email']) && $userarray['email'] != '' && $showtopic["uid"] > 1 && $userarray['emailfromuser'] == 1) {
             $email_link = "{$_CONF['site_url']}/profiles.php?uid={$showtopic['uid']}";
             $email_linkimg = '<img src="'.gf_getImage('email_button').'" border="0" align="middle" alt="'.$LANG_GF01['EmailLink'].'" title="'.$LANG_GF01['EmailLink'].'"' . XHTML . '>';
             $topictemplate->set_var ('emaillink', $email_link);
