@@ -116,10 +116,10 @@ if ($CONF_FORUM['allow_smilies']) {
 }
 
 $A["name"] = COM_checkWords($A["name"]);
-$A["name"] = @htmlspecialchars($A["name"],ENT_QUOTES,$CONF_FORUM['charset']);
+$A["name"] = @htmlspecialchars($A["name"],ENT_QUOTES,COM_getEncodingt());
 
 $A["subject"] = COM_checkWords($A["subject"]);
-$A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,$CONF_FORUM['charset']));
+$A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,COM_getEncodingt()));
 
 $A['comment'] = gf_FormatForPrint( $A['comment'], $A['postmode'] );
 

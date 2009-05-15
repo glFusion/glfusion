@@ -161,9 +161,9 @@ function prepareStringForDB($message,$postmode="html",$censor=TRUE,$htmlfilter=T
         }
     } else {
         if(get_magic_quotes_gpc() ) {
-            $message = @htmlspecialchars($message,ENT_QUOTES,$CONF_FORUM['charset']);
+            $message = @htmlspecialchars($message,ENT_QUOTES,COM_getEncodingt());
         } else {
-            $message = addslashes(@htmlspecialchars($message,ENT_QUOTES,$CONF_FORUM['charset']));
+            $message = addslashes(@htmlspecialchars($message,ENT_QUOTES,COM_getEncodingt()));
         }
     }
     return $message;

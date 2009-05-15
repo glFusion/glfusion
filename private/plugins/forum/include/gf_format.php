@@ -100,7 +100,7 @@ function bbcode_stripcontents ($text) {
 function bbcode_htmlspecialchars($text) {
     global $CONF_FORUM;
 
-    return (@htmlspecialchars ($text,ENT_QUOTES, $CONF_FORUM['charset']));
+    return (@htmlspecialchars ($text,ENT_QUOTES, COM_getEncodingt()));
 }
 
 function gf_fixtemplate($text) {
@@ -118,9 +118,9 @@ function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
     }
     if (!isset ($attributes['default'])) {
         if ( stristr($content,'http') ) {
-            return '<a href="'.$content.'">'.@htmlspecialchars ($content,ENT_QUOTES, $CONF_FORUM['charset']).'</a>';
+            return '<a href="'.$content.'">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         } else {
-            return '<a href="http://'.$content.'">'.@htmlspecialchars ($content,ENT_QUOTES, $CONF_FORUM['charset']).'</a>';
+            return '<a href="http://'.$content.'">'.@htmlspecialchars ($content,ENT_QUOTES, COM_getEncodingt()).'</a>';
         }
     }
     if ( stristr($attributes['default'],'http') ) {
@@ -242,7 +242,7 @@ function do_bbcode_img ($action, $attributes, $content, $params, $node_object) {
             $align = '';
         }
 
-        return '<img src="'.htmlspecialchars($content,ENT_QUOTES, $CONF_FORUM['charset']).'" ' . $dim . $align . ' alt=""' . XHTML . '>';
+        return '<img src="'.htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt()).'" ' . $dim . $align . ' alt=""' . XHTML . '>';
     } else {
         return '[img]' . $content . '[/img]';
     }
@@ -289,7 +289,7 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
             $codeblock = '</p>' . geshi_formatted($content,strtoupper($attributes['default'])) . '<p>';
         }
     } else {
-        $codeblock = '<pre class="codeblock">'  . @htmlspecialchars($content,ENT_QUOTES, $CONF_FORUM['charset']) . '</pre>';
+        $codeblock = '<pre class="codeblock">'  . @htmlspecialchars($content,ENT_QUOTES, COM_getEncodingt()) . '</pre>';
     }
 
     $codeblock = str_replace('{','&#123;',$codeblock);
@@ -1188,7 +1188,7 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
         case 'subject':
             $testText        = gf_formatTextBlock($A['comment'],'text','text');
             $testText        = strip_tags($testText);
-            $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+            $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
             $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . ($A['pid'] == 0 ? $A['id'] : $A['pid']) . '&amp;topic='.$A['id'].'#'.$A['id'].'" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';
             break;
         case 'bookmark' :

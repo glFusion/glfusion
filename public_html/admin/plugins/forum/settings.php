@@ -104,11 +104,11 @@ if(isset($_POST['savesettings']) && $_POST['savesettings'] == 'yes'){
     $level3 = COM_applyFilter($_POST['level3'],true);
     $level4 = COM_applyFilter($_POST['level4'],true);
     $level5 = COM_applyFilter($_POST['level5'],true);
-    $level1name = @htmlspecialchars($_POST['level1name'],ENT_QUOTES,$CONF_FORUM['charset']);
-    $level2name = @htmlspecialchars($_POST['level2name'],ENT_QUOTES,$CONF_FORUM['charset']);
-    $level3name = @htmlspecialchars($_POST['level3name'],ENT_QUOTES,$CONF_FORUM['charset']);
-    $level4name = @htmlspecialchars($_POST['level4name'],ENT_QUOTES,$CONF_FORUM['charset']);
-    $level5name = @htmlspecialchars($_POST['level5name'],ENT_QUOTES,$CONF_FORUM['charset']);
+    $level1name = @htmlspecialchars($_POST['level1name'],ENT_QUOTES,COM_getEncodingt());
+    $level2name = @htmlspecialchars($_POST['level2name'],ENT_QUOTES,COM_getEncodingt());
+    $level3name = @htmlspecialchars($_POST['level3name'],ENT_QUOTES,COM_getEncodingt());
+    $level4name = @htmlspecialchars($_POST['level4name'],ENT_QUOTES,COM_getEncodingt());
+    $level5name = @htmlspecialchars($_POST['level5name'],ENT_QUOTES,COM_getEncodingt());
     $cb_enable = COM_applyFilter($_POST['cb_enable'],true);
     $cb_homepage = COM_applyFilter($_POST['cb_homepage'],true);
     $cb_where = COM_applyFilter($_POST['cb_where'],true);
