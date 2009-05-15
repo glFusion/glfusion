@@ -152,7 +152,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
         } else {
             $subject = strip_tags ($subject);
             $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-            $subject = htmlspecialchars (trim ($subject), ENT_QUOTES);
+            $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
             $retval .= COM_siteHeader ('menu', $LANG04[81])
                     . COM_errorLog ($LANG08[3], 2)
                     . contactform ($uid, $subject, $message)
@@ -161,7 +161,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     } else {
         $subject = strip_tags ($subject);
         $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-        $subject = htmlspecialchars (trim ($subject), ENT_QUOTES);
+        $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
         $retval .= COM_siteHeader ('menu', $LANG04[81])
                 . COM_errorLog ($LANG08[4], 2)
                 . contactform ($uid, $subject, $message)
@@ -187,7 +187,8 @@ function contactform ($uid, $subject = '', $message = '')
     $retval = '';
 
     if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
-                             ($_CONF['emailuserloginrequired'] == 1))) {
+                             ($_CONF['emailuserloginrequired'] == 1))
+                         && ($uid != 2)) {
         $retval = COM_startBlock ($LANG_LOGIN[1], '',
                           COM_getBlockTemplate ('_msg_block', 'header'));
         $login = new Template($_CONF['path_layout'] . 'submit');
@@ -256,7 +257,7 @@ function contactform ($uid, $subject = '', $message = '')
                 if (isset ($_POST['author'])) {
                     $sender = strip_tags ($_POST['author']);
                     $sender = substr ($sender, 0, strcspn ($sender, "\r\n"));
-                    $sender = htmlspecialchars (trim ($sender), ENT_QUOTES);
+                    $sender = htmlspecialchars (trim ($sender), ENT_QUOTES,COM_getEncodingt());
                 }
                 $mail_template->set_var ('username', $sender);
             } else {
@@ -270,7 +271,7 @@ function contactform ($uid, $subject = '', $message = '')
                 if (isset ($_POST['authoremail'])) {
                     $email = strip_tags ($_POST['authoremail']);
                     $email = substr ($email, 0, strcspn ($email, "\r\n"));
-                    $email = htmlspecialchars (trim ($email), ENT_QUOTES);
+                    $email = htmlspecialchars (trim ($email), ENT_QUOTES,COM_getEncodingt());
                 }
                 $mail_template->set_var ('useremail', $email);
             } else {
@@ -649,7 +650,7 @@ switch ($what) {
             if (isset ($_GET['subject'])) {
                 $subject = strip_tags ($_GET['subject']);
                 $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-                $subject = htmlspecialchars (trim ($subject), ENT_QUOTES);
+                $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
             }
             $display .= COM_siteHeader ('menu', $LANG04[81])
                      . contactform ($uid, $subject)
