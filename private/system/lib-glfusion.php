@@ -299,7 +299,7 @@ function glfGetUserBlocks(&$blocks) {
     }
     $sql .= " AND (tid = 'all' AND type <> 'layout')";
     if( !empty( $_USER['boxes'] )) {
-        $BOXES = str_replace( ' ', ',', $_USER['boxes'] );
+        $BOXES = str_replace( ' ', ',', trim($_USER['boxes']) );
         $sql .= " AND (bid NOT IN ($BOXES) OR bid = '-1')";
     }
 

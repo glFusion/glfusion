@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.4
 ------
+- Remove spaces from block arrays to ensure no trailing spaces are converted
+  to commas (Fix provided by James) (Mark)
 - Allow anonymous users to email admin using contact form regarless of login
   requirement (Mark)
 - User profile page did not properly honor showonline status and

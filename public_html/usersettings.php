@@ -676,7 +676,7 @@ function editpreferences()
     // boxes block
     $selectedblocks = '';
     if (strlen($A['boxes']) > 0) {
-        $blockresult = DB_query("SELECT bid FROM {$_TABLES['blocks']} WHERE bid NOT IN (" . str_replace(' ',',',$A['boxes']) . ")");
+        $blockresult = DB_query("SELECT bid FROM {$_TABLES['blocks']} WHERE bid NOT IN (" . str_replace(' ',',',trim($A['boxes'])) . ")");
         for ($x = 1; $x <= DB_numRows($blockresult); $x++) {
             $row = DB_fetchArray($blockresult);
             $selectedblocks .= $row['bid'];
@@ -693,7 +693,7 @@ function editpreferences()
                  . "(type = 'gldefault' AND is_enabled = 1 AND name IN ('whats_new_block','older_stories'))) "
                  . "ORDER BY onleft desc,blockorder,title";
     $preferences->set_var ('boxes_checklist', COM_checkList ($_TABLES['blocks'],
-            'bid,title,type', $whereblock, $selectedblocks));
+            'bid,title,type', $whereblock, $selectedblocks,'blocks'));
     $preferences->parse ('boxes_block', 'boxes', true);
 
     // comment preferences block

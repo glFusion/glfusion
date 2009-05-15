@@ -3676,7 +3676,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 
     if( !empty( $_USER['boxes'] ))
     {
-        $BOXES = str_replace( ' ', ',', $_USER['boxes'] );
+        $BOXES = str_replace( ' ', ',', trim($_USER['boxes']) );
 
         $commonsql .= " AND (bid NOT IN ($BOXES) OR bid = '-1')";
     }
