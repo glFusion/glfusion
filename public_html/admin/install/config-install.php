@@ -64,7 +64,7 @@ function install_config($site_url)
     $c->add('mail_smtp_port','25','text',0,1,NULL,100,TRUE);
     $c->add('mail_smtp_auth',FALSE,'select',0,1,0,110,TRUE);
     $c->add('mail_smtp_username','','text',0,1,NULL,120,TRUE);
-    $c->add('mail_smtp_password','','text',0,1,NULL,130,TRUE);
+    $c->add('mail_smtp_password','','passwd',0,1,NULL,130,TRUE);
     $c->add('mail_smtp_secure','none','select',0,1,21,140,TRUE);
     $c->add('use_from_site_mail',FALSE,'select',0,1,0,150,TRUE);
 
@@ -368,7 +368,7 @@ function install_config($site_url)
     $c->add('default_permissions_block',array(3, 2, 2, 2),'@select',7,39,12,1810,TRUE);
 
     $c->add('fs_webservices', NULL, 'fieldset', 7, 40, NULL, 0, TRUE);
-    $c->add('disable_webservices',   0, 'select', 7, 40, 0, 1840, TRUE);
+    $c->add('disable_webservices',   1, 'select', 7, 40, 0, 1840, TRUE);
     $c->add('restrict_webservices',  0, 'select', 7, 40, 0, 1850, TRUE);
     $c->add('atom_max_stories',     10, 'text',   7, 40, 0, 1860, TRUE);
 }
