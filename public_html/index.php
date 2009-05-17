@@ -93,6 +93,8 @@ if( $microsummary )
             . "s.tid=t.tid WHERE "
             . $sql . " ORDER BY featured DESC, date DESC LIMIT 0, 1";
 
+    $result = DB_query($msql);
+
     if ( $A = DB_fetchArray( $result ) ) {
         $pagetitle = $_CONF['microsummary_short'].$A['title'];
     } else {
