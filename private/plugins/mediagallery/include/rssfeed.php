@@ -60,6 +60,8 @@ function MG_buildAlbumRSS( $aid ) {
 
     $rss->encoding = strtoupper ($_CONF['default_charset']);
 
+    $imgurl = '';
+
 	$image = new FeedImage();
 	$image->title = $MG_albums[$aid]->title;
     $filename = $MG_albums[$aid]->findCover();
@@ -177,7 +179,7 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
 				// optional -- applies only if this is a podcast
 			    $item->podcast = new PodcastItem();
 			    $item->podcast->enclosure_url = $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
-			    $item->podcast->enclosure_length = filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
+			    $item->podcast->enclosure_length = @filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
 			    $item->podcast->enclosure_type = $row['mime_type'];
 			}
 
