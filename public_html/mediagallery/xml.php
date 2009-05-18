@@ -143,6 +143,10 @@ function MG_getItems ()
 						$retval .= "            <mime>" . $row['mime_type'] . "</mime>\n";
 						$retval .= "            <guid isPermaLink=\"false\">" . $viewURL . "</guid>\n";
 						$retval .= "            <pubDate>" . date('r', $row['media_upload_time']) . "</pubDate>\n";
+                    	$retval .= "            <media:content url=\"" . $PhotoURL . "\" type=\"" . $row['mime_type'] . "\" width=\"" . $imgsize[0] . "\" height=\"" . $imgsize[1] . "\">\n";
+                	    $retval .= "               <media:title type=\"plain\">" . cdata($row['media_title']) . "</media:title>\n";
+                	    $retval .= "               <media:thumbnail url=\"" . $ThumbURL . "\" width=\"" . $imgsize[0] . "\" height=\"" . $imgsize[1] . "\" time=\"" . date('r', $row['media_upload_time']) . "\"/>\n";
+                	    $retval .= "            </media:content>\n";
 						$retval .= "        </item>\n";
 			    	}
 			    }
@@ -150,6 +154,10 @@ function MG_getItems ()
         }
 		return $retval;
     }
+}
+
+function cdata($text) {
+    return '<![CDATA[' . $text . ']]>';
 }
 
 function MG_xml() {

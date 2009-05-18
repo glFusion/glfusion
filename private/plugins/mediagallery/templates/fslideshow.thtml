@@ -18,8 +18,8 @@
 	var attributes = {};
 	params.allowfullscreen="true";
 	flashvars.action="{autoplay}";
-	flashvars.xmlUrl="{site_url}/xml.php?aid={aid}%26src={src}%26type=full";
-    swfobject.embedSWF("{site_url}/players/slideshow.swf", "fslideshow", "{width}", "{height}", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
+	flashvars.xmlUrl="{site_url}/xml.php?aid={aid}%26src={src}%26type=full&noLink=true&showControls=always&transInType=Fade&transOutType=Random";
+    swfobject.embedSWF("{site_url}/players/minislideshow.swf", "fslideshow", "{width}", "{height}", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
 </script>
 <div style="text-align:center;background-color: white; width: 100%; height: 100%">
 <div id="fslideshow">
