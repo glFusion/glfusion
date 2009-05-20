@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>{page_title}{page_site_splitter}{site_name}</title>
+<meta http-equiv="Content-Script-Type" content="text/javascript"{xhtml}>
+<meta http-equiv="Content-Style-Type" content="text/css"{xhtml}>
+<meta http-equiv="Content-Type" content="text/html; charset={charset}"{xhtml}>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+{# <meta http-equiv="Pragma" content="no-cache"{xhtml}> #}
+<link rel="SHORTCUT ICON" href="{layout_url}/images/favicon.ico"{xhtml}>
+{# Load Stylesheets #}
+<link rel="stylesheet" type="text/css" href="{site_url}/css.php?t={theme}" title="{theme}"{xhtml}>
+{feed_url}
+{rel_links}
+{# Load JavaScript #}
+<script type="text/javascript" src="{site_url}/js.php?t={theme}"></script>
+{# Load plugin Header Code #}
+{plg_headercode}
+<!--[if lte IE 6]>
+<link rel="stylesheet" type="text/css" href="{layout_url}/ie6.css" title="{theme}"{xthml}>
+<script defer type="text/javascript" src="{site_url}/javascript/mootools/gl_mooie6warning.js"></script>
+<script defer type="text/javascript" src="{site_url}/javascript/mootools/gl_moopngfix.js"></script>
+<script defer type="text/javascript" src="{site_url}/javascript/sitetailor_ie6vertmenu.js"></script>
+<![endif]-->
+<!--[if IE 7]>
+<link rel="stylesheet" type="text/css" href="{layout_url}/ie7.css" title="{theme}"{xthml}>
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="{layout_url}/ie7.css" title="{theme}"{xthml}>
+<script defer type="text/javascript" src="{site_url}/javascript/sitetailor_ie6vertmenu.js"></script>
+<![endif]-->
+</head>
+<body dir="{direction}" style="background:#000000;">
+<div>
+  <a name="top"></a>
+  <a href="#content-start"> {# for screenreaders #}
+  <img class="hidden" src="{layout_url}/images/speck.gif" alt="skip navigation"{xhtml}>
+  </a>
+</div>
+{# end {templatelocation} #}
