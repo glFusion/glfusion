@@ -9,12 +9,12 @@
 {meta_data}
 <link rel="SHORTCUT ICON" href="{layout_url}/images/favicon.ico"{xhtml}>
 {# Load Stylesheets #}
-<link rel="stylesheet" type="text/css" href="{site_url}/stylecache_{theme}.css?i={cacheid}" title="{theme}"{xhtml}>
+<link rel="stylesheet" type="text/css" href="{site_url}/css.php?t={theme}" title="{theme}"{xhtml}>
 {css_links}
 {feed_url}
 {rel_links}
 {# Load JavaScript #}
-<script type="text/javascript" src="{site_url}/jscache_{theme}.js"></script>
+<script type="text/javascript" src="{site_url}/js.php?t={theme}"></script>
 {# Load JavaScript Links #}
 {js_links}
 {# Load plugin Header Code #}

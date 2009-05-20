@@ -1,5 +1,0 @@
-{# begin {templatelocation} #}
-    <div id="gl_navigation" class="gl_blockstyle1"> {# gl_blockstyle1 - default title w/shading | gl_blockstyle2 - title w/out shading | gl_blockstyle3 - no title or shading | See style.css for more info #}
-        <div class="block-columnpad">{glfusion_blocks}</div>
-    </div>
-{# end {templatelocation} #}
