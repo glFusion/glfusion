@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -171,7 +171,7 @@ function MG_search($id,$page) {
 
     // pull the query from the search database...
 
-    $result = DB_query("SELECT * FROM {$_TABLES['mg_sort']} WHERE sort_id='" . $id . "'");
+    $result = DB_query("SELECT * FROM {$_TABLES['mg_sort']} WHERE sort_id='" . addslashes($id) . "'");
     $nrows  = DB_numRows($result);
     if ( $nrows < 1 ) {
         return(MG_displaySearchBox('<div class="pluginAlert">' . $LANG_MG03['no_search_found'] . '</div>'));
@@ -524,7 +524,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
 	            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
 
-	            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $M['media_id'] . "'");
+	            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($M['media_id']) . "'");
 	            while ( $poRow = DB_fetchArray($poResult) ) {
 	                $playback_options[$poRow['option_name']] = $poRow['option_value'];
 	            }
@@ -554,7 +554,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	                        $resolution_y = $MG_mediaFileInfo['video']['resolution_y'];
 	                    }
 	                    if ( $resolution_x != 0 ) {
-	                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . $M['media_id'] . "'";
+	                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . addslashes($M['media_id']) . "'";
 	                        DB_query( $sql,1 );
 	                    }
 	                } else {
@@ -881,25 +881,26 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     // build the query and put into our database...
 
     $sqltmp = " WHERE 1=1 ";
+    $keywords_db = addslashes($keywords);
     if ( $stype == 'phrase' ) { // search phrase
         switch ( $skeywords ) {
             case 0 :
-                $sqltmp .= "AND (m.media_title LIKE '%$keywords%' OR m.media_desc LIKE '%$keywords%' OR m.media_keywords LIKE '%$keywords%' OR m.artist LIKE '%$keywords%' OR m.album LIKE '%$keywords%' OR m.genre LIKE '%$keywords%')";
+                $sqltmp .= "AND (m.media_title LIKE '%$keywords_db%' OR m.media_desc LIKE '%$keywords%' OR m.media_keywords LIKE '%$keywords%' OR m.artist LIKE '%$keywords%' OR m.album LIKE '%$keywords%' OR m.genre LIKE '%$keywords%')";
                 break;
             case 1 :
-                $sqltmp .= "AND (m.media_keywords LIKE '%$keywords%')";
+                $sqltmp .= "AND (m.media_keywords LIKE '%$keywords_db%')";
                 break;
             case 2 :
-                $sqltmp .= "AND (m.media_title LIKE '%$keywords%' OR m.media_desc LIKE '%$keywords%')";
+                $sqltmp .= "AND (m.media_title LIKE '%$keywords_db%' OR m.media_desc LIKE '%$keywords%')";
                 break;
             case 3 :
-                $sqltmp .= "AND (m.artist LIKE '%$keywords%')";
+                $sqltmp .= "AND (m.artist LIKE '%$keywords_db%')";
                 break;
             case 4 :
-                $sqltmp .= "AND (m.album LIKE '%$keywords%')";
+                $sqltmp .= "AND (m.album LIKE '%$keywords_db%')";
                 break;
             case 5 :
-                $sqltmp .= "AND (m.genre LIKE '%$keywords%')";
+                $sqltmp .= "AND (m.genre LIKE '%$keywords_db%')";
                 break;
         }
     } else if ( $stype == 'any') {
@@ -961,7 +962,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
         $tmp = substr($tmp, 0, strlen($tmp) - 4);
         $sqltmp .= "($tmp)";
     } else {
-        $sqltmp = "WHERE (m.media_title LIKE '%$keywords%' OR m.media_desc LIKE '%$keywords%' OR m.media_keywords LIKE '%$keywords%')";
+        $sqltmp = "WHERE (m.media_title LIKE '%$keywords_db%' OR m.media_desc LIKE '%$keywords_db%' OR m.media_keywords LIKE '%$keywords_db%')";
     }
 
     if ( $category != 0 ) {
@@ -1000,7 +1001,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
     exit;
 } elseif (isset($_GET['id']) ) {
     $id = COM_applyFilter($_GET['id']);
-    $page = COM_applyFilter($_GET['page']);
+    $page = intval(COM_applyFilter($_GET['page'],true));
     if ( $page < 1 )
       $page = 1;
     $display .= MG_search($id,$page);

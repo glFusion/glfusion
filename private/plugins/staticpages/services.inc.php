@@ -105,7 +105,9 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         }
     }
 
-    $args['sp_uid'] = $_USER['uid'];
+    if ( empty($args['sp_uid']) ) {
+        $args['sp_uid'] = $_USER['uid'];
+    }
 
     if (empty($args['sp_title']) && !empty($args['title'])) {
         $args['sp_title'] = $args['title'];
@@ -120,7 +122,9 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         $args['sp_tid'] = $args['category'][0];
     }
 
-    $args['owner_id'] = $_USER['uid'];
+    if ( empty($args['owner_id']) ) {
+        $args['owner_id'] = $_USER['uid'];
+    }
 
     if (empty($args['group_id'])) {
         $args['group_id'] = SEC_getFeatureGroup('staticpages.edit', $_USER['uid']);
@@ -339,7 +343,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
             $sp_title = COM_checkWords ($sp_title);
         }
         if ($_SP_CONF['filter_html'] == 1) {
-            $sp_content = COM_checkHTML ($sp_content);
+            $sp_content = COM_checkHTML ($sp_content,'staticpages.edit');
         }
         $sp_title = strip_tags ($sp_title);
         $sp_label = strip_tags ($sp_label);
@@ -355,7 +359,20 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
 
         // make sure there's only one "entire page" static page per topic
         if (($sp_centerblock == 1) && ($sp_where == 0)) {
-            DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_centerblock = 0 WHERE sp_centerblock = 1 AND sp_where = 0 AND sp_tid = '$sp_tid'" . COM_getLangSQL ('sp_id', 'AND'));
+            $sql = "UPDATE {$_TABLES['staticpage']} SET sp_centerblock = 0 WHERE sp_centerblock = 1 AND sp_where = 0 AND sp_tid = '".addslashes($sp_tid)."'";
+
+            // multi-language configuration - allow one entire page
+            // centerblock for all or none per language
+            if ((!empty($_CONF['languages']) &&
+                    !empty($_CONF['language_files'])) &&
+                    (($sp_tid == 'all') || ($sp_tid == 'none'))) {
+                $ids = explode('_', $sp_id);
+                if (count($ids) > 1) {
+                    $lang_id = array_pop($ids);
+                    $sql .= " AND sp_id LIKE '%\\_".addslashes($lang_id)."'";
+                }
+            }
+            DB_query($sql);
         }
 
         $formats = array ('allblocks', 'blankpage', 'leftblocks', 'noblocks');
@@ -534,7 +551,6 @@ function service_get_staticpages($args, &$output, &$svc_msg)
             $output = DB_fetchArray ($result, false);
             // WE ASSUME $output doesn't have any confidential fields
 
-//            $_CONF['pagetitle'] = stripslashes ($output['sp_title']);
             $_CONF['pagetitle'] = $output['sp_title'];
 
         } else { // an error occured (page not found, access denied, ...)

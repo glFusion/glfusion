@@ -50,9 +50,9 @@ if (!defined ('GVERSION')) {
  * @filesource
  * @version 0.1
  * @since GL 1.4.2
- * @copyright Copyright &copy; 2006
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @author Michael Jervis <mike AT fuckingbrit DOT com>
+ * @copyright Copyright &copy; 2006-2009
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ * @author Michael Jervis, mike AT fuckingbrit DOT com
  *
  */
 
@@ -547,7 +547,7 @@ class Story
             $this->_expire = time();
             $this->_expiredate = 0;
 
-            if (DB_getItem($_TABLES['topics'], 'archive_flag', "tid = '{$this->_tid}'") == 1) {
+            if (DB_getItem($_TABLES['topics'], 'archive_flag', "tid = '".addslashes($this->_tid)."'") == 1) {
                 $this->_frontpage = 0;
             } elseif (isset($_CONF['frontpage'])) {
                 $this->_frontpage = $_CONF['frontpage'];
@@ -657,12 +657,12 @@ class Story
                 $sql = "UPDATE {$_TABLES['trackback']} SET sid='{$newsid}' WHERE sid='{$checksid}' AND type='article'";
                 DB_query($sql);
 
-                CACHE_remove_instance('story_'.$checksid);
+                CACHE_remove_instance('story_'.$this->_originalSid);
             }
         }
 
         /* Acquire Comment Count */
-        $sql = "SELECT count(1) FROM {$_TABLES['comments']} WHERE type='article' AND sid='{$this->_sid}'";
+        $sql = "SELECT count(1) FROM {$_TABLES['comments']} WHERE type='article' AND sid='".addslashes($this->_sid)."'";
         $result = DB_query($sql);
 
         if ($result && (DB_numRows($result) == 1)) {
@@ -729,7 +729,7 @@ class Story
             if ( !empty($checksid) ) {
                 DB_delete($_TABLES['storysubmission'], 'sid', $checksid);
             } else {
-                DB_delete($_TABLES['storysubmission'], 'sid', $this->_sid);
+                DB_delete($_TABLES['storysubmission'], 'sid', addslashes($this->_sid));
             }
         }
 
@@ -762,7 +762,7 @@ class Story
          */
         $sql
         = 'SELECT owner_id, group_id, perm_owner, perm_group, perm_members, perm_anon ' . ' FROM ' . $_TABLES['stories']
-            . ' WHERE sid=\'' . $this->_sid . '\'';
+            . ' WHERE sid=\'' . addslashes($this->_sid) . '\'';
         $result = DB_query($sql);
 
         if ($result && (DB_numRows($result) > 0)) {
@@ -795,7 +795,7 @@ class Story
         }
 
         /* Load up the topic name and icon */
-        $topic = DB_query("SELECT topic, imageurl FROM {$_TABLES['topics']} WHERE tid='{$this->_tid}'");
+        $topic = DB_query("SELECT topic, imageurl FROM {$_TABLES['topics']} WHERE tid='".addslashes($this->_tid)."'");
         $topic = DB_fetchArray($topic);
         $this->_topic = $topic['topic'];
         $this->_imageurl = $topic['imageurl'];
@@ -962,7 +962,7 @@ class Story
             $this->_bodytext = addslashes($this->_bodytext);
             $this->_postmode = addslashes($this->_postmode);
             DB_save($_TABLES['storysubmission'], 'sid,tid,uid,title,introtext,bodytext,date,postmode',
-                        "{$this->_sid},'{$this->_tid}',{$this->_uid},'{$this->_title}'," .
+                        "'{$this->_sid}','{$this->_tid}','".intval($this->_uid)."','{$this->_title}'," .
                         "'{$this->_introtext}','{$this->_bodytext}',NOW(),'{$this->_postmode}'");
 
             return STORY_SAVED_SUBMISSION;
@@ -1949,8 +1949,8 @@ class Story
         }
 
         $this->_title = htmlspecialchars(strip_tags(COM_checkWords($title)));
-        $this->_introtext = COM_checkHTML(COM_checkWords($intro));
-        $this->_bodytext = COM_checkHTML(COM_checkWords($body));
+        $this->_introtext = COM_checkHTML(COM_checkWords($intro), 'story.edit');
+        $this->_bodytext = COM_checkHTML(COM_checkWords($body), 'story.edit');
     }
 
 

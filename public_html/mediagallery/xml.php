@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -98,7 +98,7 @@ function MG_getItems ()
 			$orderBy = MG_getSortOrder($aid, 0);
 
 			$sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-			        " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . " AND m.include_ss=1 " . $orderBy;
+			        " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . " AND m.include_ss=1 " . $orderBy;
 
 			$result = DB_query( $sql );
 			$nRows  = DB_numRows( $result );
@@ -143,6 +143,10 @@ function MG_getItems ()
 						$retval .= "            <mime>" . $row['mime_type'] . "</mime>\n";
 						$retval .= "            <guid isPermaLink=\"false\">" . $viewURL . "</guid>\n";
 						$retval .= "            <pubDate>" . date('r', $row['media_upload_time']) . "</pubDate>\n";
+                    	$retval .= "            <media:content url=\"" . $PhotoURL . "\" type=\"" . $row['mime_type'] . "\" width=\"" . $imgsize[0] . "\" height=\"" . $imgsize[1] . "\">\n";
+                	    $retval .= "               <media:title type=\"plain\">" . cdata($row['media_title']) . "</media:title>\n";
+                	    $retval .= "               <media:thumbnail url=\"" . $ThumbURL . "\" width=\"" . $imgsize[0] . "\" height=\"" . $imgsize[1] . "\" time=\"" . date('r', $row['media_upload_time']) . "\"/>\n";
+                	    $retval .= "            </media:content>\n";
 						$retval .= "        </item>\n";
 			    	}
 			    }
@@ -150,6 +154,10 @@ function MG_getItems ()
         }
 		return $retval;
     }
+}
+
+function cdata($text) {
+    return '<![CDATA[' . $text . ']]>';
 }
 
 function MG_xml() {

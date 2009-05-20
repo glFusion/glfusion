@@ -103,7 +103,7 @@ function MG_displayASF( $aid, $I, $full ) {
     $playback_options['bgcolor']            = $_MG_CONF['asf_bgcolor'];
     $playback_options['playcount']          = $_MG_CONF['asf_playcount'];
 
-    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $I['media_id'] . "'");
+    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($I['media_id']) . "'");
     while ($poRow = DB_fetchArray($poResult)) {
         $playback_options[$poRow['option_name']] = $poRow['option_value'];
     }
@@ -139,7 +139,7 @@ function MG_displayASF( $aid, $I, $full ) {
                 $resolution_y = $ThisFileInfo['video']['resolution_y'];
             }
             if ( $resolution_x != 0 ) {
-                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . $I['media_id'] . "'";
+                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . addslashes($I['media_id']) . "'";
                 DB_query( $sql );
             }
         } else {
@@ -270,7 +270,7 @@ function MG_displayMOV( $aid, $I, $full ) {
     $playback_options['width']          = $_MG_CONF['mov_width'];
     $playback_options['bgcolor']        = $_MG_CONF['mov_bgcolor'];
 
-    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $I['media_id'] . "'");
+    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($I['media_id']) . "'");
     while ( $poRow = DB_fetchArray($poResult) ) {
         $playback_options[$poRow['option_name']] = $poRow['option_value'];
     }
@@ -306,7 +306,7 @@ function MG_displayMOV( $aid, $I, $full ) {
                 $resolution_y = $ThisFileInfo['video']['resolution_y'];
             }
             if ( $resolution_x != 0 ) {
-                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . $I['media_id'] . "'";
+                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . addslashes($I['media_id']) . "'";
                 DB_query( $sql );
             }
         } else {
@@ -411,7 +411,7 @@ function MG_displaySWF( $aid, $I, $full ) {
     $playback_options['swf_version'] = $_MG_CONF['swf_version'];
     $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
 
-    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $I['media_id'] . "'");
+    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($I['media_id']) . "'");
     while ( $poRow = DB_fetchArray($poResult) ) {
         $playback_options[$poRow['option_name']] = $poRow['option_value'];
     }
@@ -446,7 +446,7 @@ function MG_displaySWF( $aid, $I, $full ) {
                 $resolution_y = $ThisFileInfo['video']['resolution_y'];
             }
             if ( $resolution_x != 0 ) {
-                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . $I['media_id'] . "'";
+                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . addslashes($I['media_id']) . "'";
                 DB_query( $sql );
             }
         } else {
@@ -577,7 +577,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
     $playback_options['swf_version'] = $_MG_CONF['swf_version'];
     $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
 
-    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $I['media_id'] . "'");
+    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($I['media_id']) . "'");
     while ( $poRow = DB_fetchArray($poResult) ) {
         $playback_options[$poRow['option_name']] = $poRow['option_value'];
     }
@@ -613,7 +613,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
                 $resolution_y = $ThisFileInfo['video']['resolution_y'];
             }
             if ( $resolution_x != 0 ) {
-                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . $I['media_id'] . "'";
+                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . addslashes($I['media_id']) . "'";
                 DB_query( $sql );
             }
         } else {
@@ -845,7 +845,7 @@ function MG_displayMP3( $aid, $I, $full ) {
     $playback_options['uimode']             = $_MG_CONF['mp3_uimode'];
     $playback_options['loop']               = $_MG_CONF['mp3_loop'];
 
-    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $I['media_id'] . "'");
+    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($I['media_id']) . "'");
     while ( $poRow = DB_fetchArray($poResult) ) {
         $playback_options[$poRow['option_name']] = $poRow['option_value'];
         $playback_options[$poRow['option_name']. '_tf'] = ( $poRow['option_value'] ? 'true' : 'false');
@@ -1353,7 +1353,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $retval = '';
 
-    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . $mediaObject . '"');
+    $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mediaObject) . '"');
 
     $pid = $MG_albums[$aid]->pid;
     if ( method_exists($MG_albums[$aid],'getOffset') ) {
@@ -1461,7 +1461,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     if (!$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
         $media_views = $media[$mediaObject]['media_views'] + 1;
-        DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . $media[$mediaObject]['media_id'] . "'");
+        DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . addslashes($media[$mediaObject]['media_id']) . "'");
     }
 
     $columns_per_page   = ($MG_albums[$aid]->display_columns == 0 ? $_MG_CONF['ad_display_columns'] : $MG_albums[$aid]->display_columns);

@@ -231,11 +231,12 @@ function PNB_sendExtendedPing ($url, $blogname, $blogurl, $changedurl, $feedurl)
 * given link located somewhere in the given piece of HTML. It returns
 * the actual link text plus some of the text before and after the link.
 *
+* NOTE:     Returns an empty string when $url is not found in $html.
+*
 * @param    string  $html   The piece of HTML to search through
 * @param    string  $url    URL that should be contained in $html somewhere
 * @param    int     $xlen   Max. length of excerpt (default: 255 characters)
 * @return   string          Extract: The link text and some surrounding text
-* @note     Returns an empty string when $url is not found in $html.
 *
 */
 function PNB_makeExcerpt($html, $url, $xlen = 255)

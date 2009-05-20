@@ -252,7 +252,7 @@ function plugin_templatesetvars_captcha($name, &$template) {
         $counter = 0;
         $validation = '';  // this will be filled in by the CAPTCHA
 
-        DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter","'$csid','$time','','0'");
+        DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter","'".addslashes($csid)."','$time','','0'");
 
         $captcha = CAPTCHA_getHTML($csid,$name);
         if ( $name == 'general' ) {
@@ -350,7 +350,7 @@ function CAPTCHA_checkInput( $type, $str ) {
     } else {
         $csid = COM_applyFilter($_POST['csid']);
         // check the time
-        $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . $csid . "'");
+        $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . addslashes($csid) . "'");
         $now = time();
         if ( $cTime == '' || $cTime+$_CP_CONF['expire'] < $now ) {
             CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use an expired CAPTCHA in " . $type . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
@@ -358,7 +358,7 @@ function CAPTCHA_checkInput( $type, $str ) {
             $rc = 0;
             return ( array( $rc, $msg ) );
         }
-        $validationString = DB_getItem($_TABLES['cp_sessions'],'validation',"session_id='" . $csid . "'");
+        $validationString = DB_getItem($_TABLES['cp_sessions'],'validation',"session_id='" . addslashes($csid) . "'");
         if ( $validationString == '' ) {
            // no active session was found
             CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use old CAPTCHA Session in " . $type . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
@@ -374,7 +374,7 @@ function CAPTCHA_checkInput( $type, $str ) {
         }
         if ( $validationString == $str && $str != '' ) {
             // we got it, so delete the record to keep others from using it
-            DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE session_id='" . $csid . "'",1);
+            DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE session_id='" . addslashes($csid) . "'",1);
             $rc = 1;
         }
     }

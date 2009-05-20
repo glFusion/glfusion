@@ -143,7 +143,7 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
     $sql = "SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, "
         . "perm_group, perm_members, perm_anon "
         . "FROM {$_TABLES['staticpage']} "
-        . "WHERE (sp_id = '$id')" . COM_getPermSQL('AND')
+        . "WHERE (sp_id = '".addslashes($id)."')" . COM_getPermSQL('AND')
         . ' GROUP BY sp_id';
     $result = DB_query ($sql);
     $A = DB_fetchArray ($result);
@@ -185,7 +185,7 @@ function plugin_savecomment_staticpages($title, $comment, $id, $pid, $postmode)
     $retval = '';
 
     $commentcode = DB_getItem ($_TABLES['staticpage'], 'commentcode',
-                               "sp_id = '$id'");
+                               "sp_id = '".addslashes($id)."'");
     if ($commentcode != 0) {
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -219,7 +219,7 @@ function plugin_deletecomment_staticpages($cid, $id)
 
     $has_editPermissions = SEC_hasRights ('staticpages.edit');
     $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon "
-        . "FROM {$_TABLES['staticpage']} WHERE sp_id = '{$id}'");
+        . "FROM {$_TABLES['staticpage']} WHERE sp_id = '".addslashes($id)."'");
     $A = DB_fetchArray ($result);
 
     if ($has_editPermissions && SEC_hasAccess ($A['owner_id'],
@@ -367,7 +367,7 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
                 $_USER['noboxes'] = 0;
             } else {
                 $_USER['noboxes'] = DB_getItem($_TABLES['userindex'],
-                                        'noboxes', "uid = '{$_USER['uid']}'");
+                                        'noboxes', "uid = {$_USER['uid']}");
             }
         }
 
@@ -415,7 +415,7 @@ function SP_printPage ($page, $A)
     if ($A['commentcode'] >= 0) {
         $commentsUrl = $sp_url . '#comments';
         $comments = DB_count($_TABLES['comments'],
-                             array('sid', 'type'), array($page, 'staticpages'));
+                             array('sid', 'type'), array(addslashes($page), 'staticpages'));
         $numComments = COM_numberFormat ($comments);
         $print->set_var ('story_comments', $numComments);
         $print->set_var ('comments_url', $commentsUrl);
@@ -467,7 +467,7 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
         }
 
         // increment hit counter for page
-        DB_query("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '$page'");
+        DB_query("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '".addslashes($page)."'");
 
     }
 
@@ -863,14 +863,14 @@ function plugin_user_delete_staticpages($uid)
 {
     global $_TABLES, $_SP_CONF;
 
-    if (DB_count ($_TABLES['staticpage'], 'sp_uid', $uid) +
-            DB_count ($_TABLES['staticpage'], 'owner_id', $uid) == 0) {
+    if (DB_count ($_TABLES['staticpage'], 'sp_uid', intval($uid)) +
+            DB_count ($_TABLES['staticpage'], 'owner_id', intval($uid)) == 0) {
         return;
     }
 
     if ($_SP_CONF['delete_pages'] == 1) {
         // delete the pages
-        DB_query ("DELETE FROM {$_TABLES['staticpage']} WHERE (sp_uid = $uid) OR (owner_id = $uid)");
+        DB_query ("DELETE FROM {$_TABLES['staticpage']} WHERE (sp_uid = ".intval($uid).") OR (owner_id = ".intval($uid).")");
     } else {
         // assign ownership to a user from the Root group
         $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id',
@@ -879,8 +879,8 @@ function plugin_user_delete_staticpages($uid)
         $A = DB_fetchArray ($result);
         $rootuser = $A['ug_uid'];
 
-        DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_uid = $rootuser WHERE sp_uid = $uid");
-        DB_query ("UPDATE {$_TABLES['staticpage']} SET owner_id = $rootuser WHERE owner_id = $uid");
+        DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_uid = $rootuser WHERE sp_uid = ".intval($uid));
+        DB_query ("UPDATE {$_TABLES['staticpage']} SET owner_id = $rootuser WHERE owner_id = ".intval($uid));
     }
 }
 
@@ -911,25 +911,29 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
     } else if ($op == 'parse') {
         if ($autotag['tag'] == 'staticpage' ) {
             $sp_id = COM_applyFilter($autotag['parm1']);
-            $url = COM_buildUrl($_CONF['site_url']
-                                . '/staticpages/index.php?page=' . $sp_id);
-            if (empty($autotag['parm2'])) {
-                $linktext = DB_getItem ($_TABLES['staticpage'],
-                                         'sp_title', "sp_id = '$sp_id'");
-            } else {
-                $linktext = $autotag['parm2'];
+            if (! empty($sp_id)) {
+                $url = COM_buildUrl($_CONF['site_url']
+                                    . '/staticpages/index.php?page=' . $sp_id);
+                if (empty($autotag['parm2'])) {
+                    $linktext = DB_getItem ($_TABLES['staticpage'],
+                                             'sp_title', "sp_id = '".addslashes($sp_id)."'");
+                } else {
+                    $linktext = $autotag['parm2'];
+                }
+                $link = COM_createLink($linktext, $url);
+                $content = str_replace($autotag['tagstr'], $link, $content);
             }
-            $link = COM_createLink($linktext, $url);
-            $content = str_replace($autotag['tagstr'], $link, $content);
         } else if ($autotag['tag'] == 'staticpage_content') {
             $sp_id = COM_applyFilter($autotag['parm1']);
-            if (isset($recursive[$sp_id])) {
-                $content = '';
-            } else {
-                $recursive[$sp_id] = true;
-                $sp_content = SP_returnStaticpage($sp_id, 'autotag');
-                $content = str_replace($autotag['tagstr'], $sp_content,
-                                       $content);
+            if (! empty($sp_id)) {
+                if (isset($recursive[$sp_id])) {
+                    $content = '';
+                } else {
+                    $recursive[$sp_id] = true;
+                    $sp_content = SP_returnStaticpage($sp_id, 'autotag');
+                    $content = str_replace($autotag['tagstr'], $sp_content,
+                                           $content);
+                }
             }
         }
 

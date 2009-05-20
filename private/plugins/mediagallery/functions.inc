@@ -93,8 +93,8 @@ function plugin_savecomment_mediagallery($title,$comment,$id,$pid,$postmode) {
     if ( $ret > 0 ) {
         return COM_siteHeader() . CMT_commentform ($title, $comment, $id, $pid, 'mediagallery', $LANG03[14], $postmode) . COM_siteFooter();
     } else {
-        $comments = DB_count ($_TABLES['comments'], array('sid','type'), array($id, 'mediagallery'));
-        DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',$id);
+        $comments = DB_count ($_TABLES['comments'], array('sid','type'), array(addslashes($id), 'mediagallery'));
+        DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',addslashes($id));
         return (COM_refresh ($_MG_CONF['site_url'] . "/media.php?s=$id") );
     }
 }
@@ -116,12 +116,12 @@ function plugin_deletecomment_mediagallery($cid,$id) {
 
     // find the album that holds this peice of media
 
-    $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} WHERE media_id='" . $id . "'";
+    $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} WHERE media_id='" . addslashes($id) . "'";
     $result = DB_query($sql);
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {
         $row = DB_fetchArray($result);
-        $sql = "SELECT group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['mg_albums']} WHERE album_id='" . $row['album_id'] .'"';
+        $sql = "SELECT group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['mg_albums']} WHERE album_id='" . $row['album_id'] ."'";
         $result = DB_query($sql);
         $nRows = DB_numRows($result);
         if ( $nRows > 0 ) {
@@ -142,8 +142,8 @@ function plugin_deletecomment_mediagallery($cid,$id) {
     if ($access == 3 || SEC_hasRights('mediagallery.admin')){
         if (CMT_deleteComment($cid, $id, 'mediagallery') == 0) {
             //reduce count in media table
-            $comments = DB_count ($_TABLES['comments'], array('sid','type'), array($id, 'mediagallery'));
-            DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id', $id);
+            $comments = DB_count ($_TABLES['comments'], array('sid','type'), array(addslashes($id), 'mediagallery'));
+            DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id', addslashes($id));
             // Now redirect the program flow to the view of the file and its comments
             return (COM_refresh($_MG_CONF['site_url'] . "/media.php?s=$id"));
 
@@ -1479,7 +1479,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                 $maxheight = 0;
                 $ss_count++;
                 $sql = "SELECT m.media_filename,m.media_mime_ext,m.remote_url FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-                       " ON ma.media_id=m.media_id WHERE ma.album_id='" . addslashes($aid) . "' AND m.media_type=0 AND m.include_ss=1";
+                       " ON ma.media_id=m.media_id WHERE ma.album_id='" . addslashes($aid) . "' AND m.media_type=0 AND m.include_ss=1 ORDER BY ma.media_order DESC";
                 $result = DB_query($sql);
                 while ($row = DB_fetchArray($result)) {
                     switch ( $src ) {
@@ -1963,7 +1963,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                             $url = $_MG_CONF['site_url'] . '/media.php?s=' . $parm1;
                         }
                     } else {
-                        $linkAID = intval(DB_getItem($_TABLES['mg_media_albums'],'album_id','media_id="' . $linkID . '"'));
+                        $linkAID = intval(DB_getItem($_TABLES['mg_media_albums'],'album_id','media_id="' . addslashes($linkID) . '"'));
                         if ( $linkAID != 0 ) {
                             $url = $_MG_CONF['site_url'] . '/media.php?s=' . $linkID;
                             if ( $autotag['tag'] != 'image' && $MG_albums[$linkAID]->hidden != 1 && $enable_link != 0 ) {
@@ -2259,7 +2259,7 @@ function plugin_getuseroption_mediagallery() {
     $title = $LANG_MG01['user_prefs'];
 
     if ( $_MG_CONF['member_albums'] == 1 && $_MG_CONF['link_to_member_album'] == 1 && !COM_isAnonUser() ) {
-        $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id='" . $_USER['uid'] . "' AND album_parent='" . $_MG_CONF['member_album_root'] . "' LIMIT 1";
+        $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $_USER['uid'] . " AND album_parent='" . $_MG_CONF['member_album_root'] . "' LIMIT 1";
         $result = DB_query($sql);
         $numRows = DB_numRows($result);
         if ( $numRows > 0 ) {
@@ -2274,7 +2274,7 @@ function plugin_getuseroption_mediagallery() {
     }
 }
 
-function phpblock_mg_randommedia(){
+function phpblock_mg_randommedia($parm1=array(),$parm2=''){
     global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03, $_DB_dbms, $mg_installed_version;
 
     $retval = '';
@@ -2351,6 +2351,11 @@ function phpblock_mg_randommedia(){
             $height = $_MG_CONF['random_width'];
             $width = round($imgwidth / $ratio);
         }
+
+        if ( $parm2 == 'album' ) {
+            $url_media = $url_album;
+        }
+
 
         // frame template variables
         $F->set_var(array(
@@ -2448,7 +2453,7 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
             $cbenable = 1;
 
         if ( $cbenable == 1 ) {
-            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id='" . $_USER['uid'] . "' AND album_parent='" . $_MG_CONF['member_album_root'] . "' LIMIT 1";
+            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . $_USER['uid'] . " AND album_parent='" . $_MG_CONF['member_album_root'] . "' LIMIT 1";
             $result = DB_query($sql);
             $numRows = DB_numRows($result);
             if ( $numRows > 0 ) {
@@ -2626,7 +2631,7 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
         }
     }
 
-    $result = DB_query("SELECT album_id, cbpage, cbposition FROM {$_TABLES['mg_albums']} WHERE featured='1' AND (cbpage='" . $sTopic . "' OR cbpage='all') " . COM_getPermSQL('and') . " LIMIT 1");
+    $result = DB_query("SELECT album_id, cbpage, cbposition FROM {$_TABLES['mg_albums']} WHERE featured='1' AND (cbpage='" . addslashes($sTopic) . "' OR cbpage='all') " . COM_getPermSQL('and') . " LIMIT 1");
 
     if (DB_numRows($result) == 1) {
         list($album_id,$cbpage,$cbpos) = DB_fetchArray($result);
@@ -2643,11 +2648,11 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
 
         // Check if there are no featured articles in this topic and if so then place it at the top of the page
         if ($topic != "") {
-            $wheresql = "WHERE tid='$topic' AND featured > 0";
+            $wheresql = "WHERE tid='".addslashes($topic)."' AND featured > 0";
         } else {
             $wheresql = "WHERE featured = 1";
         }
-        $query = DB_query("SELECT count(*) as count FROM {$_TABLES['stories']} $wheresql");
+        $query = DB_query("SELECT count(*) as count FROM {$_TABLES['stories']} " . $wheresql);
         $result = DB_fetchArray($query);
         if ($result['count'] == 0 && $cbpos == 2) {
             $cbpos = 1;//top of page
@@ -2869,13 +2874,13 @@ function plugin_upgrade_mediagallery() {
 function plugin_user_create_mediagallery( $uid, $force = 0 ) {
     global $_TABLES, $_MG_CONF, $LANG_MG01;
 
-    $sql = "INSERT INTO {$_TABLES['mg_userprefs']} (uid, active, display_rows, display_columns, mp3_player, playback_mode, tn_size, quota, member_gallery) VALUES (" . $uid . ",1,0,0,-1,-1,-1," . $_MG_CONF['member_quota'] . ",0)";
+    $sql = "INSERT INTO {$_TABLES['mg_userprefs']} (uid, active, display_rows, display_columns, mp3_player, playback_mode, tn_size, quota, member_gallery) VALUES (" . intval($uid) . ",1,0,0,-1,-1,-1," . $_MG_CONF['member_quota'] . ",0)";
     DB_query($sql,1);
 
     $retval = -1;
     if ( $force == 1 || ($_MG_CONF['member_albums'] == 1 && $_MG_CONF['member_auto_create'] == 1) ) {
-        $username               = DB_getItem($_TABLES['users'],'username','uid=' . $uid);
-        $fullname               = DB_getItem($_TABLES['users'],'fullname','uid=' . $uid);
+        $username               = DB_getItem($_TABLES['users'],'username','uid=' . intval($uid));
+        $fullname               = DB_getItem($_TABLES['users'],'fullname','uid=' . intval($uid));
         $grp_id                 = DB_getItem($_TABLES['groups'],'grp_id','grp_name="mediagallery Admin"');
 
         if ( $grp_id == NULL || $grp_id == '' || $grp_id < 2 ) {
@@ -2902,7 +2907,7 @@ function plugin_user_create_mediagallery( $uid, $force = 0 ) {
         $album->id              = $album->createAlbumID();
         $retval = $album->id;
         $album->saveAlbum();
-        $result = DB_query("UPDATE {$_TABLES['mg_userprefs']} SET member_gallery=1 WHERE uid='" . $uid."'",1);
+        $result = DB_query("UPDATE {$_TABLES['mg_userprefs']} SET member_gallery=1 WHERE uid=" . intval($uid),1);
     }
     return $retval;
 }
@@ -2912,19 +2917,19 @@ function plugin_user_delete_mediagallery( $uid ) {
 
     // remove any user preferences in the database
 
-    $sql = "DELETE FROM {$_TABLES['mg_userprefs']} WHERE uid='" . $uid."'";
+    $sql = "DELETE FROM {$_TABLES['mg_userprefs']} WHERE uid=" . intval($uid);
     DB_query($sql,1);
 
     if ( $_MG_CONF['member_albums'] ) {
         if ( $_MG_CONF['member_album_archive'] == 0 ) {
-            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id='" . $uid."'";
+            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . intval($uid);
             $result = DB_query($sql);
             while ( $A = DB_fetchArray($result) ) {
                 MG_deleteMemberAlbums($A['album_id']);
             }
         } else {
             // update parent album to be archive album
-            $sql = "UPDATE {$_TABLES['mg_albums']} SET album_parent=" . $_MG_CONF['member_album_archive'] . " WHERE owner_id='" . $uid . "' AND album_parent='" . $_MG_CONF['member_album_root'] ."'";
+            $sql = "UPDATE {$_TABLES['mg_albums']} SET album_parent=" . $_MG_CONF['member_album_archive'] . " WHERE owner_id=" . intval($uid) . " AND album_parent='" . $_MG_CONF['member_album_root'] ."'";
             DB_query($sql);
         }
     }
@@ -2937,7 +2942,7 @@ function MG_deleteMemberAlbums( $album_id ){
             FROM " . $_TABLES['mg_media_albums'] .
             " as ma LEFT JOIN " . $_TABLES['mg_media'] .
             " as m ON ma.media_id=m.media_id
-            WHERE ma.album_id = '" . $album_id ."'";
+            WHERE ma.album_id = '" . addslashes($album_id) ."'";
 
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
@@ -2948,23 +2953,23 @@ function MG_deleteMemberAlbums( $album_id ){
     }
     if ( count( $mediarow ) != 0 ) {
         for ( $i = 0; $i < count( $mediarow ); $i++ ) {
-            $sql = "SELECT COUNT(media_id) AS count FROM " . $_TABLES['mg_media_albums'] . "  WHERE media_id = '" . $mediarow[$i]['media_id'] . "'";
+            $sql = "SELECT COUNT(media_id) AS count FROM " . $_TABLES['mg_media_albums'] . "  WHERE media_id = '" . addslashes($mediarow[$i]['media_id']) . "'";
             $result = DB_query( $sql );
             $row = DB_fetchArray( $result );
             if ( $row['count'] <= 1 ) {
                 @unlink($_MG_CONF['path_mediaobjects'] . 'tn/'   . $mediarow[$i]['media_filename'][0] .'/' . $mediarow[$i]['media_filename'] . '.*');
                 @unlink($_MG_CONF['path_mediaobjects'] . 'disp/' . $mediarow[$i]['media_filename'][0] .'/' . $mediarow[$i]['media_filename'] . '.*');
                 @unlink($_MG_CONF['path_mediaobjects'] . 'orig/' . $mediarow[$i]['media_filename'][0] .'/' . $mediarow[$i]['media_filename'] . '.' . $mediarow[$i]['media_mime_ext']);
-                $sql = "DELETE FROM " . $_TABLES['mg_media'] . "  WHERE media_id = '" . $mediarow[$i]['media_id'] . "'";
+                $sql = "DELETE FROM " . $_TABLES['mg_media'] . "  WHERE media_id = '" . addslashes($mediarow[$i]['media_id']) . "'";
                 DB_query( $sql );
-                DB_delete($_TABLES['comments'], 'sid', $mediarow[$i]['media_id']);
-                DB_delete($_TABLES['mg_playback_options'],'media_id', $mediarow[$i]['media_id']);
+                DB_delete($_TABLES['comments'], 'sid', addslashes($mediarow[$i]['media_id']));
+                DB_delete($_TABLES['mg_playback_options'],'media_id', addslashes($mediarow[$i]['media_id']));
             }
         }
     }
-    $sql = "DELETE FROM " . $_TABLES['mg_media_albums'] . " WHERE album_id = '" . $album_id ."'";
+    $sql = "DELETE FROM " . $_TABLES['mg_media_albums'] . " WHERE album_id = '" . addslashes($album_id) ."'";
     DB_query( $sql );
-    $sql = "DELETE FROM " . $_TABLES['mg_albums'] . " WHERE album_id = '" . $album_id."'";
+    $sql = "DELETE FROM " . $_TABLES['mg_albums'] . " WHERE album_id = '" . addslashes($album_id)."'";
     DB_query( $sql );
 }
 
@@ -2976,7 +2981,7 @@ function plugin_profileicondisplay_mediagallery( $uid ) {
     // hook a link for the user's member album...
 
     if ($_MG_CONF['member_albums'] == 1 && $uid > 1 ) {
-        $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id='" . $uid . "' AND album_parent='" . $_MG_CONF['member_album_root'] . "' LIMIT 1";
+        $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE owner_id=" . intval($uid) . " AND album_parent='" . $_MG_CONF['member_album_root'] . "' LIMIT 1";
 
         $result = DB_query($sql);
         $numRows = DB_numRows($result);
@@ -3018,7 +3023,7 @@ function plugin_profileblocksdisplay_mediagallery( $uid ) {
         'mrow'   => 'mediarow.thtml',
     ));
 
-    $username = DB_getItem($_TABLES['users'], 'username', 'uid=' . $uid);
+    $username = DB_getItem($_TABLES['users'], 'username', 'uid=' . intval($uid));
     if ( $username == '' ) {
         return '';
     }
@@ -3036,7 +3041,7 @@ function plugin_profileblocksdisplay_mediagallery( $uid ) {
 
     $sql = "SELECT a.album_id,m.media_upload_time,m.media_id,m.media_filename,m.mime_type,m.media_mime_ext,m.media_title,m.remote_media,m.media_type FROM {$_TABLES['mg_albums']} as a LEFT JOIN {$_TABLES['mg_media_albums']} as ma
             on a.album_id=ma.album_id LEFT JOIN {$_TABLES['mg_media']} as m on ma.media_id=m.media_id WHERE
-            m.media_user_id='" . $uid . "' AND a.hidden=0 " . COM_getPermSQL('and') . " ORDER BY m.media_upload_time DESC LIMIT 5";
+            m.media_user_id=" . intval($uid) . " AND a.hidden=0 " . COM_getPermSQL('and') . " ORDER BY m.media_upload_time DESC LIMIT 5";
 
     $result = DB_query($sql);
     $mCount = 0;
@@ -3164,7 +3169,7 @@ function plugin_profileblocksdisplay_mediagallery( $uid ) {
 
     $sql = "SELECT album_id,album_title,album_desc,tn_attached "
          . "FROM " . $_TABLES['mg_albums']
-         . " WHERE owner_id='" . $uid . "' AND hidden=0 " . COM_getPermSQL('and') . " ORDER BY last_update DESC LIMIT 10";
+         . " WHERE owner_id=" . intval($uid) . " AND hidden=0 " . COM_getPermSQL('and') . " ORDER BY last_update DESC LIMIT 10";
 
     $result = DB_query($sql);
     $aCount = 0;

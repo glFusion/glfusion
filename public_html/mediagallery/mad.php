@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -67,7 +67,7 @@ if (!SEC_hasRights('mediagallery.admin')) {
 // only take media ids, we'll build the path
 
 $mid = COM_applyFilter($_REQUEST['mid']);
-$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . $mid . "'";
+$sql = "SELECT * FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($mid) . "'";
 $result = DB_query($sql);
 $numRows = DB_numRows($result);
 if ($numRows > 0) {

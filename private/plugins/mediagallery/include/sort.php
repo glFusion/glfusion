@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: sort.php 3070 2008-09-07 02:40:49Z mevans0263                     $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -47,7 +47,7 @@ function MG_reorderAlbum( $parent = 0)
 
     $sql = "SELECT album_id, album_order
             FROM " . $_TABLES['mg_albums'] .
-            " WHERE album_parent=" . $parent . "
+            " WHERE album_parent=" . intval($parent) . "
             ORDER BY album_order ASC";
 
     $result = DB_query( $sql );
@@ -127,7 +127,7 @@ function MG_sortAlbums( $parent=0, $actionURL ) {
     $sql = "SELECT a.album_id, a.album_title as album_title, a.album_desc, a.album_order, a.owner_id, a.group_id, a.perm_owner,a.perm_group,a.perm_members,a.perm_anon,
             COUNT(ma.media_id) AS media_count, album_cover
             FROM " . $_TABLES['mg_albums'] . " as a LEFT JOIN " . $_TABLES['mg_media_albums'] .
-            " as ma ON a.album_id=ma.album_id WHERE album_parent=$parent
+            " as ma ON a.album_id=ma.album_id WHERE album_parent=".intval($parent)."
             GROUP BY a.album_id
             ORDER BY a.album_order DESC";
 
@@ -180,8 +180,8 @@ function MG_sortAlbums( $parent=0, $actionURL ) {
     }
 
     if ( $parent != 0 ) {
-        $parent_album_title = DB_getItem($_TABLES['mg_albums'],'album_title','album_id=' . $parent);
-        $parent_parent = DB_getItem($_TABLES['mg_albums'], 'album_parent', 'album_id=' . $parent);
+        $parent_album_title = DB_getItem($_TABLES['mg_albums'],'album_title','album_id=' . intval($parent));
+        $parent_parent = DB_getItem($_TABLES['mg_albums'], 'album_parent', 'album_id=' . intval($parent));
         $parent_album = '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=albumsort&amp;album_id=' . $parent_parent . '">' . strip_tags($parent_album_title) . '</a>';
         $T->set_var('parent_album', '<h1>' . $LANG_MG01['parent_album'] . ' : ' . $parent_album . '</h1>');
     }
@@ -227,7 +227,7 @@ function MG_saveAlbumSort( $album_id ) {
     }
 
     for ( $i=0; $i < $numItems; $i++ ) {
-        $sql = "UPDATE {$_TABLES['mg_albums']} SET album_order=" . $album[$i]['seq'] . " WHERE album_id=" . $album[$i]['aid'];
+        $sql = "UPDATE {$_TABLES['mg_albums']} SET album_order=" . intval($album[$i]['seq']) . " WHERE album_id=" . intval($album[$i]['aid']);
         DB_query($sql);
         if ( DB_error() ) {
             COM_errorLog("MediaGallery: Error updating album sort order MG_saveAlbumSort()");
@@ -237,14 +237,13 @@ function MG_saveAlbumSort( $album_id ) {
     MG_reorderAlbum( $parent );
 
     echo COM_refresh($_MG_CONF['site_url'] . '/admin.php?album_id=0&mode=albumsort');
-//    echo COM_refresh($_MG_CONF['site_url'] . '/index.php');
     exit;
 }
 
 function MG_staticSortMedia( $album_id, $actionURL='' ) {
-    global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST;
+    global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $_POST;
 
-    $album_title = DB_getItem($_TABLES['mg_albums'],'album_title','album_id=' . $album_id);
+    $album_title = DB_getItem($_TABLES['mg_albums'],'album_title','album_id=' . intval($album_id));
 
     $retval = '';
     $retval .= COM_startBlock ($LANG_MG01['static_media_sort'] . ' - ' . strip_tags($album_title), '',
@@ -270,7 +269,7 @@ function MG_staticSortMedia( $album_id, $actionURL='' ) {
             " as ma INNER JOIN " .
             $_TABLES['mg_media'] .
             " as m ON ma.media_id=m.media_id" .
-            " WHERE ma.album_id=" . $album_id .
+            " WHERE ma.album_id=" . intval($album_id) .
             " ORDER BY ma.media_order DESC LIMIT 1";
 
     $result = DB_query( $sql );
@@ -281,8 +280,6 @@ function MG_staticSortMedia( $album_id, $actionURL='' ) {
     }
 
     $T->set_var(array(
-//        'media_thumbnail'           => $thumbnail,
-//        'media_id'                  => $media_id,
         'album_id'                  => $album_id,
         's_form_action'             => $actionURL,
         'lang_save'                 => $LANG_MG01['save'],
@@ -292,6 +289,7 @@ function MG_staticSortMedia( $album_id, $actionURL='' ) {
         'lang_media_upload_time'    => $LANG_MG01['media_upload_time'],
         'lang_media_title'          => $LANG_MG01['mod_mediatitle'],
         'lang_media_filename'       => $LANG_MG01['media_original_filename'],
+        'lang_rating'               => $LANG_MG03['rating'],
         'lang_ascending'            => $LANG_MG01['ascending'],
         'lang_descending'           => $LANG_MG01['descending'],
         'lang_sort_options'         => $LANG_MG01['sort_options'],
@@ -310,12 +308,7 @@ function MG_saveStaticSortMedia( $album_id, $actionURL='' ) {
     global $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG03, $_POST;
 
     // check permissions...
-/*--
-    if ( !SEC_hasRights('mediagallery.admin')) {
-        COM_errorLog("Someone has tried to illegally sort albums in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
-        return(MG_genericError($LANG_MG00['access_denied_msg']));
-    }
--- */
+
     if ( $album_id == 0 ) {
         COM_errorLog("Media Gallery: Invalid album_id passed to sort");
         return(MG_genericError($LANG_MG00['access_denied_msg']));
@@ -342,24 +335,29 @@ function MG_saveStaticSortMedia( $album_id, $actionURL='' ) {
         case '3' : // media original filename
             $sql_sort_by = " ORDER BY m.media_original_filename ";
             break;
+        case '4' : // rating
+            $sql_sort_by = " ORDER BY m.media_rating ";
+            break;
         default :
             $sql_sort_by = " ORDER BY m.media_time ";
             break;
     }
 
-    switch( $sortorder )
-    {
+    switch( $sortorder ) {
         case '0' :  // ascending
             $sql_order = " DESC";
             break;
         case '1' :  // descending
             $sql_order = " ASC";
             break;
+        default :
+            $sql_order = " ASC";
+            break;
     }
 
     $sql = "SELECT  *
             FROM " . $_TABLES['mg_media_albums'] . " as ma LEFT  JOIN " . $_TABLES['mg_media'] . " as m ON m.media_id = ma.media_id
-            WHERE ma.album_id=" . $album_id .
+            WHERE ma.album_id=" . intval($album_id) .
             $sql_sort_by . $sql_order;
 
     $order = 10;
@@ -391,7 +389,7 @@ function MG_reorderMedia($album_id) {
 
     $sql = "SELECT media_id, media_order
             FROM " . $_TABLES['mg_media_albums'] .
-            " WHERE album_id = " . $album_id .
+            " WHERE album_id = " . intval($album_id) .
             " ORDER BY media_order ASC";
 
     $result = DB_query($sql);
@@ -404,7 +402,7 @@ function MG_reorderMedia($album_id) {
     for ($x=0; $x < $nrows; $x++) {
         $sql = "UPDATE " . $_TABLES['mg_media_albums'] .
             " SET media_order = " . $i .
-            " WHERE media_id='" . $row[$x]['media_id'] . "' AND album_id = " . $album_id;
+            " WHERE media_id='" . $row[$x]['media_id'] . "' AND album_id = " . intval($album_id);
         DB_query($sql);
         $i += 10;
     }
@@ -440,11 +438,17 @@ function MG_SortMedia( $album_id ) {
         case '6' :  // title
             $sql_sort_by = " ORDER BY m.media_title DESC";
             break;
+//        case '7' :  // title
+//            $sql_sort_by = " ORDER BY m.media_rating ASC";
+//            break;
+//        case '8' :  // title
+//            $sql_sort_by = " ORDER BY m.media_rating DESC";
+//            break;
     }
 
     $sql = "SELECT  *
             FROM " . $_TABLES['mg_media_albums'] . " as ma LEFT  JOIN " . $_TABLES['mg_media'] . " as m ON m.media_id = ma.media_id
-            WHERE ma.album_id=" . $album_id .
+            WHERE ma.album_id=" . intval($album_id) .
             $sql_sort_by;
 
     $order = 10;
@@ -462,11 +466,9 @@ function MG_SortMedia( $album_id ) {
     $i = 0;
     for ($x = 0; $x < $media_count; $x++ ) {
         $sql = "UPDATE " . $_TABLES['mg_media_albums'] . " SET media_order=" . $media_order[$x] .
-                " WHERE media_id='" . $media_id[$x] . "' AND album_id=" . $album_id;
+                " WHERE media_id='" . $media_id[$x] . "' AND album_id=" . intval($album_id);
         $res = DB_query($sql);
     }
     return;
 }
-
-
 ?>

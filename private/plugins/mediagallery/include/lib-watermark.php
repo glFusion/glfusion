@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: lib-watermark.php 2869 2008-07-31 14:38:32Z mevans0263            $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -75,10 +75,10 @@ function MG_watermarkManage( $actionURL = '' ) {
     $retval .= '<h2>' . $LANG_MG01['wm_management'] . '</h2>';
 
     $whereClause = " WHERE wm_id<>0 AND ";
-    if ( $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
+    if ( $MG_albums[0]->owner_id) {
         $whereClause .= "1=1";
     } else {
-        $whereClause .= "owner_id=" . $_USER['uid'];
+        $whereClause .= "owner_id=" . intval($_USER['uid']);
     }
 
     $sql = "SELECT * FROM {$_TABLES['mg_watermarks']} " . $whereClause . " ORDER BY owner_id";
@@ -169,7 +169,6 @@ function MG_watermarkManage( $actionURL = '' ) {
 
     $T->parse('output','admin');
     $retval .= $T->finish($T->get_var('output'));
-//    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -185,7 +184,7 @@ function MG_watermarkSave( $actionURL = '' ) {
     $numItems = count($_POST['wid']);
 
     for ($i=0; $i < $numItems; $i++) {
-        $media[$i]['wid'] = $_POST['wid'][$i];
+        $media[$i]['wid'] = COM_applyFilter($_POST['wid'][$i]);
         $media[$i]['title'] = $_POST['wmtitle'][$i];
     }
 
@@ -198,7 +197,7 @@ function MG_watermarkSave( $actionURL = '' ) {
             $media_title = addslashes(COM_checkHTML($media_title_safe));
         }
         $wid = $media[$i]['wid'];
-        $sql = "UPDATE {$_TABLES['mg_watermarks']} SET description='" . $media_title . "' WHERE wm_id='" . $media[$i]['wid'] . "'";
+        $sql = "UPDATE {$_TABLES['mg_watermarks']} SET description='" . $media_title . "' WHERE wm_id='" . addslashes($media[$i]['wid']) . "'";
         DB_query($sql);
     }
     echo COM_refresh($actionURL);
@@ -217,10 +216,10 @@ function MG_watermarkDelete( $actionURL = '') {
     $numItems = count($_POST['sel']);
 
     for ($i=0; $i < $numItems; $i++) {
-        $wm_id = $_POST['sel'][$i];
-        $filename = DB_getItem($_TABLES['mg_watermarks'],'filename','wm_id="' . $wm_id . '"');
+        $wm_id = COM_applyFilter($_POST['sel'][$i],true);
+        $filename = DB_getItem($_TABLES['mg_watermarks'],'filename','wm_id="' . intval($wm_id) . '"');
         if ( $filename != "" ) {
-           $sql = "DELETE FROM {$_TABLES['mg_watermarks']} WHERE wm_id='" . $wm_id . "'";
+           $sql = "DELETE FROM {$_TABLES['mg_watermarks']} WHERE wm_id='" . intval($wm_id) . "'";
             $result = DB_query($sql);
             if ( DB_error() ) {
                 COM_errorLog("MG Admin: Error removing watermark");
@@ -229,7 +228,7 @@ function MG_watermarkDelete( $actionURL = '') {
 
             // now check and see if this is assigned to any albums....
 
-            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE wm_id='" . $wm_id . "'";
+            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE wm_id='" . intval($wm_id) . "'";
             $result = DB_query($sql);
             $nRows  = DB_numRows($result);
             if ( $nRows > 0 ) {
@@ -288,14 +287,13 @@ function MG_watermarkUpload( $actionURL = '') {
         'lang_warning'          => $warning
     ));
 
-    if ( $MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/ ) {
+    if ( $MG_albums[0]->owner_id ) {
         $public = '<label for="wm_public">' . $LANG_MG01['public_access'] . ':&nbsp;&nbsp;</label><input type="checkbox" name="wm_public" id="wm_public" value="1"' . XHTML . '><br' . XHTML . '><br' . XHTML . '>';
         $T->set_var('public', $public);
     }
 
     $T->parse('output','upload');
     $retval .= $T->finish($T->get_var('output'));
-//    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -419,7 +417,7 @@ function MG_watermarkUploadSave() {
                     $media_title = addslashes(htmlspecialchars(COM_checkHTML(COM_checkWords(COM_killJS($media_title_safe)))));
                 }
 
-                $saveFileName = $uid . '_' .$filename;
+                $saveFileName = addslashes($uid . '_' .$filename);
                 $sql = "INSERT INTO {$_TABLES['mg_watermarks']} (wm_id,owner_id,filename,description)
                         VALUES ($wm_id,'$uid','$saveFileName','$media_title')";
                 DB_query( $sql );
@@ -445,7 +443,6 @@ function MG_watermarkUploadSave() {
 
     $T->parse('output', 'mupload');
     $retval .= $T->finish($T->get_var('output'));
-//    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -495,7 +492,7 @@ function MG_watermark( $origImage, $aid, $runJhead ) {
 function MG_watermarkBatchProcess( $album_id, $mid ) {
     global $_CONF, $_MG_CONF, $_TABLES, $MG_albums;
 
-    $sql    = "SELECT media_id,media_watermarked,media_type,media_filename,media_mime_ext FROM {$_TABLES['mg_media']} WHERE media_id='" . $mid . "'";
+    $sql    = "SELECT media_id,media_watermarked,media_type,media_filename,media_mime_ext FROM {$_TABLES['mg_media']} WHERE media_id='" . addslashes($mid) . "'";
     $result = DB_query($sql);
     $nRows  = DB_numRows($result);
     if ( $nRows > 0 ) {
@@ -524,7 +521,7 @@ function MG_watermarkBatchProcess( $album_id, $mid ) {
         }
         // update the database to show they have been watermarked...
         if ( $rc == true ) {
-            DB_query("UPDATE {$_TABLES['mg_media']} SET media_watermarked=1 WHERE media_id='" . $mid . "'");
+            DB_query("UPDATE {$_TABLES['mg_media']} SET media_watermarked=1 WHERE media_id='" . addslashes($mid) . "'");
         }
     }
     return;

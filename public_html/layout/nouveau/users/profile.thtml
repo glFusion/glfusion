@@ -49,11 +49,13 @@ function popitup(url)
 						</a>
 					</li>
 					{!endif}
+					{!if lang_sendemail}
 					<li>
 						<a href="{site_url}/profiles.php?uid={user_id}">
 							<img src="{layout_url}/images/mail.png" alt="{lang_sendemail}" title="{lang_sendemail}"{xhtml}>
 						</a>
 					</li>
+					{!endif}
 					{!if user_homepage}
 					<li>
 						<a href="{user_homepage}" target="_blank">

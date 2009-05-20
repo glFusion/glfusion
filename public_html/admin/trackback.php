@@ -100,10 +100,10 @@ function trackback_editor ($target = '', $url = '', $title = '', $excerpt = '', 
     }
 
     if (empty ($url) && empty ($blog)) {
-        $blog = htmlspecialchars ($_CONF['site_name']);
+        $blog = htmlspecialchars ($_CONF['site_name'],ENT_COMPAT,COM_getEncodingt());
     }
-    $title = htmlspecialchars ($title);
-    $excerpt = htmlspecialchars ($excerpt, ENT_NOQUOTES);
+    $title = htmlspecialchars ($title,ENT_COMPAT,COM_getEncodingt());
+    $excerpt = htmlspecialchars ($excerpt, ENT_NOQUOTES,COM_getEncodingt());
 
     $retval .= COM_startBlock ($LANG_TRB['editor_title'], $_CONF['site_url']
                                . '/docs/trackback.html#trackback',
@@ -898,7 +898,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
         } else {
             $message = '<p>' . $LANG_TRB['send_error_details']
                      . '<br' . XHTML . '><span class="warningsmall">'
-                     . htmlspecialchars ($result) . '</span></p>';
+                     . htmlspecialchars ($result,ENT_COMPAT,COM_getEncodingt()) . '</span></p>';
             $pageHandle->addContent(showTrackbackMessage($LANG_TRB['send_error'], $message));
 
             // display editor with the same contents again
@@ -1187,7 +1187,7 @@ if (($mode == 'delete') && SEC_checkToken()) {
         } else {
             $message = '<p>' . $LANG_TRB['pb_error_details'] . '<br' . XHTML . '>'
                      . '<span class="warningsmall">'
-                     . htmlspecialchars ($result) . '</span></p>';
+                     . htmlspecialchars ($result,ENT_COMPAT,COM_getEncodingt()) . '</span></p>';
             $pageHandle->addContent(showTrackbackMessage ($LANG_TRB['send_error'], $message));
         }
     }

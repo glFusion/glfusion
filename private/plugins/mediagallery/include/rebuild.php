@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: rebuild.php 3070 2008-09-07 02:40:49Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -80,10 +80,10 @@ function MG_albumResizeDisplay( $aid, $actionURL ) {
         echo COM_refresh($_MG_CONF['site_url'] . '/album.php?aid=' . $aid);
     }
 
-    require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
+    require_once $_CONF['path'].'plugins/mediagallery/include/lib-upload.php';
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-        " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . " AND m.media_type=0";
+        " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . " AND m.media_type=0";
     $result = DB_query($sql);
     $nRows = DB_numRows($result);
 
@@ -183,7 +183,7 @@ function MG_albumRebuildThumbs( $aid, $actionURL ) {
     require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-        " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . " AND m.media_type=0";
+        " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . " AND m.media_type=0";
     $result = DB_query($sql);
     $nRows = DB_numRows($result);
     $session_description = sprintf($LANG_MG01['batch_rebuild_thumbs'], $MG_albums[$aid]->title);

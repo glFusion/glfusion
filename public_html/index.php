@@ -73,7 +73,7 @@ if( $microsummary ) {
 
     // if a topic was provided only select those stories.
     if (!empty($topic)) {
-        $sql .= " AND s.tid = '$topic' ";
+        $sql .= " AND s.tid = '".addslashes($topic)."' ";
     } elseif (!$newstories) {
         $sql .= " AND frontpage <> 0 ";
     }
@@ -91,7 +91,9 @@ if( $microsummary ) {
             . "FROM {$_TABLES['stories']} AS s LEFT JOIN {$_TABLES['users']} AS u "
             . "ON s.uid=u.uid LEFT JOIN  {$_TABLES['topics']} AS t ON "
             . "s.tid=t.tid WHERE "
-            . $sql . " ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
+            . $sql . " ORDER BY featured DESC, date DESC LIMIT 0, 1";
+
+    $result = DB_query($msql);
 
     if ( $A = DB_fetchArray( $result ) ) {
         $pagetitle = $_CONF['microsummary_short'].$A['title'];
@@ -104,7 +106,7 @@ if( $microsummary ) {
                 $pagetitle = $_CONF['site_slogan'];
             } else {
                 $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                                                       "tid = '$topic'" ));
+                                                       "tid = '".addslashes($topic)."'" ));
             }
         }
         $pagetitle = $_CONF['site_name'] . ' - ' . $pagetitle;
@@ -157,7 +159,7 @@ if (!empty ($displayBlock)) {
 }
 
 if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
-    $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = '{$_USER['uid']}'");
+    $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}");
     $U = DB_fetchArray($result);
 } else {
     $U['maxstories'] = 0;
@@ -171,7 +173,7 @@ if ($U['maxstories'] >= $_CONF['minnews']) {
 }
 if ((!empty ($topic)) && ($maxstories == 0)) {
     $topiclimit = DB_getItem ($_TABLES['topics'], 'limitnews',
-                              "tid = '{$topic}'");
+                              "tid = '".addslashes($topic)."'");
     if ($topiclimit >= $_CONF['minnews']) {
         $maxstories = $topiclimit;
     }
@@ -210,15 +212,15 @@ while (list ($sid, $expiretopic, $title, $expire, $statuscode) = DB_fetchArray (
     if ($statuscode == STORY_ARCHIVE_ON_EXPIRE) {
         if (!empty ($archivetid) ) {
             COM_errorLOG("Archive Story: $sid, Topic: $archivetid, Title: $title, Expired: $expire");
-            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='{$sid}'");
+            DB_query ("UPDATE {$_TABLES['stories']} SET tid = '$archivetid', frontpage = '0', featured = '0' WHERE sid='".addslashes($sid)."'");
             CACHE_remove_instance('story_'.$sid);
             CACHE_remove_instance('whatsnew');
         }
     } else if ($statuscode == STORY_DELETE_ON_EXPIRE) {
         COM_errorLOG("Delete Story and comments: $sid, Topic: $expiretopic, Title: $title, Expired: $expire");
         STORY_deleteImages ($sid);
-        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='{$sid}' AND type = 'article'");
-        DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='{$sid}'");
+        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid='".addslashes($sid)."' AND type = 'article'");
+        DB_query("DELETE FROM {$_TABLES['stories']} WHERE sid='".addslashes($sid)."'");
         CACHE_remove_instance('story_'.$sid);
         CACHE_remove_instance('whatsnew');
     }
@@ -232,7 +234,7 @@ if (empty ($topic)) {
 
 // if a topic was provided only select those stories.
 if (!empty($topic)) {
-    $sql .= " AND s.tid = '$topic' ";
+    $sql .= " AND s.tid = '".addslashes($topic)."' ";
 } elseif (!$newstories) {
     $sql .= " AND frontpage = 1 ";
 }
@@ -257,7 +259,7 @@ if ($newstories) {
     $sql .= "AND (date >= (date_sub(NOW(), INTERVAL {$_CONF['newstoriesinterval']} SECOND))) ";
 }
 
-$offset = ($page - 1) * $limit;
+$offset = intval(($page - 1) * $limit);
 $userfields = 'u.uid, u.username, u.fullname';
 if ($_CONF['allow_user_photo'] == 1) {
     $userfields .= ', u.photo';
@@ -266,14 +268,33 @@ if ($_CONF['allow_user_photo'] == 1) {
     }
 }
 
-$fullSQL = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
-           . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
-           . $userfields . ", t.topic, t.imageurl "
-           . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
-           . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
-           . $sql . "ORDER BY featured DESC, date DESC LIMIT $offset, $limit";
+if ( isset( $_SYSTEM['sort_story_by'] ) ) {
+    switch ( $_SYSTEM['sort_story_by'] ) {
+        case 0 : // date
+            $orderBy = ' date DESC ';
+            break;
+        case 1 : // title
+            $orderBy = ' title DESC ';
+            break;
+        case 2 : // ID
+            $orderBy = ' sid DESC ';
+            break;
+        default :
+            $orderBy = ' date DESC ';
+            break;
+    }
+} else {
+    $orderBy = ' date DESC ';
+}
 
-$result = DB_query ($fullSQL);
+$msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
+         . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
+         . $userfields . ", t.topic, t.imageurl "
+         . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
+         . "{$_TABLES['topics']} AS t WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND"
+         . $sql . "ORDER BY featured DESC," . $orderBy . " LIMIT $offset, $limit";
+
+$result = DB_query ($msql);
 
 $nrows = DB_numRows ($result);
 
@@ -327,7 +348,7 @@ if ( $A = DB_fetchArray( $result ) ) {
                     COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2]);
         if (!empty ($topic)) {
             $topicname = DB_getItem ($_TABLES['topics'], 'topic',
-                                     "tid = '$topic'");
+                                     "tid = '".addslashes($topic)."'");
             $pageHandle->addContent(sprintf ($LANG05[3], $topicname));
         }
         $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));

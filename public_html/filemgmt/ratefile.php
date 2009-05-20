@@ -68,7 +68,7 @@ if($_POST['submit']) {
 
        // Check if Download POSTER is voting (UNLESS Anonymous users allowed to post)
     if ($ratinguser != 0) {
-        $result=DB_query("SELECT submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
+        $result=DB_query("SELECT submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".addslashes($lid)."'");
         while(list($ratinguserDB)=DB_fetchARRAY($result)) {
             if ($ratinguserDB==$ratinguser) {
                 redirect_header("index.php",4,_MD_CANTVOTEOWN);
@@ -77,7 +77,7 @@ if($_POST['submit']) {
         }
 
        // Check if REG user is trying to vote twice.
-       $result=DB_query("SELECT ratinguser FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='$lid'");
+       $result=DB_query("SELECT ratinguser FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='".addslashes($lid)."'");
        while(list($ratinguserDB)=DB_fetchARRAY($result)) {
            if ($ratinguserDB==$ratinguser) {
                redirect_header("index.php",4,_MD_VOTEONCE);
@@ -88,7 +88,7 @@ if($_POST['submit']) {
     // Check if ANONYMOUS user is trying to vote more than once per day.
     if ($ratinguser==0){
         $yesterday = (time()-(86400 * $anonwaitdays));
-        $result=DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='$lid' AND ratinguser=0 AND ratinghostname = '$ip'  AND ratingtimestamp > $yesterday");
+        $result=DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='".addslashes($lid)."' AND ratinguser=0 AND ratinghostname = '".addslashes($ip)."'  AND ratingtimestamp > $yesterday");
         list($anonvotecount) = DB_fetchARRAY($result);
         if ($anonvotecount >= 1) {
             redirect_header("index.php",4,_MD_VOTEONCE);
@@ -98,7 +98,7 @@ if($_POST['submit']) {
 
     //All is well.  Add to Line Item Rate to DB.
     $datetime = time();
-    DB_query("INSERT INTO {$_FM_TABLES['filemgmt_votedata']} (lid, ratinguser, rating, ratinghostname, ratingtimestamp) VALUES ('$lid', '$ratinguser', '$rating', '$ip', '$datetime')");
+    DB_query("INSERT INTO {$_FM_TABLES['filemgmt_votedata']} (lid, ratinguser, rating, ratinghostname, ratingtimestamp) VALUES ('".addslashes($lid)."', '".intval($ratinguser)."', '".intval($rating)."', '".addslashes($ip)."', '$datetime')");
     //All is well.  Calculate Score & Add to Summary (for quick retrieval & sorting) to DB.
     updaterating($lid);
     $ratemessage = _MD_VOTEAPPRE."<br" . XHTML . ">".sprintf(_MD_THANKYOU,$_CONF[site_name]);
@@ -110,7 +110,7 @@ if($_POST['submit']) {
     $lid = COM_applyFilter($_GET['lid'],true);
     $display = COM_siteHeader('menu');
     $display .= COM_startBlock("<b>"._MD_RATEFILETITLE."</b>");
-    $result=DB_query("SELECT title FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
+    $result=DB_query("SELECT title FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".addslashes($lid)."'");
     list($title) = DB_fetchARRAY($result);
     $title = $myts->makeTboxData4Show($title);
     $display .= '<table border="0" cellpadding="1" cellspacing="0" width="80%" class="plugin"><tr>';

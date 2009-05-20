@@ -52,20 +52,20 @@ gf_siteHeader();
 
 // Check for access privilege and pass true to check that user is signed in.
 forum_chkUsercanAccess(true);
-$forum = COM_applyFilter($_REQUEST['forum'],true);
-$showtopic = COM_applyFilter($_REQUEST['showtopic'],true);
+$forum       = intval(COM_applyFilter($_REQUEST['forum'],true));
+$showtopic   = intval(COM_applyFilter($_REQUEST['showtopic'],true));
 ForumHeader($forum,$showtopic);
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$fortopicid = COM_applyFilter($_REQUEST['fortopicid'],true);
-$moveid = COM_applyFilter($_REQUEST['moveid'],true);
-$top = COM_applyFilter($_REQUEST['top']);
-$movetoforum = COM_applyFilter($_REQUEST['movetoforum'],true);
-$msgid = COM_applyFilter($_REQUEST['msgid'],true);
-$msgpid = COM_applyFilter($_REQUEST['msgpid'],true);
-$fortopicid = COM_applyFilter($_REQUEST['fortopicid'],true);
+$fortopicid  = intval(COM_applyFilter($_REQUEST['fortopicid'],true));
+$moveid      = intval(COM_applyFilter($_REQUEST['moveid'],true));
+$top         = intval(COM_applyFilter($_REQUEST['top']));
+$movetoforum = intval(COM_applyFilter($_REQUEST['movetoforum'],true));
+$msgid       = intval(COM_applyFilter($_REQUEST['msgid'],true));
+$msgpid      = intval(COM_applyFilter($_REQUEST['msgpid'],true));
+$fortopicid  = intval(COM_applyFilter($_REQUEST['fortopicid'],true));
 $modfunction = COM_applyFilter($_REQUEST['modfunction']);
-$submit = $_POST['submit'];
+$submit      = $_POST['submit'];
 
 if ($forum == 0) {
     alertMessage($LANG_GF02['msg71']);
@@ -77,7 +77,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
     //Moderator check OK, everything dealing with moderator permissions go here.
     if($_POST['modconfirmdelete'] == 1 && $msgid != '') {
         if ($submit == $LANG_GF01['CANCEL']) {
-               echo COM_refresh("viewtopic.php?showtopic=$msgpid");
+            echo COM_refresh("viewtopic.php?showtopic=$msgpid");
             exit();
         } else {
             $topicparent = DB_getITEM($_TABLES['gf_topic'],"pid","id='$msgid'");
@@ -91,9 +91,9 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                     }
                 }
 
-                DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id='$msgid')");
-                DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (pid='$msgid')");
-                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id='$msgid')");
+                DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id=$msgid)");
+                DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (pid=$msgid)");
+                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id=$msgid)");
                 $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum);
                 $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum and pid=0");
                 $topicCount = DB_numRows($topicsQuery);
@@ -117,7 +117,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                     }
                 }
 
-                DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-1 WHERE (id='$topicparent')");
+                DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-1 WHERE (id=$topicparent)");
                 DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id='$msgid')");
                 $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum);
                 DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count=$postCount WHERE forum_id=$forum");
@@ -133,20 +133,20 @@ if (forum_modPermission($forum,$_USER['uid'])) {
             if ($topicparent == 0) {
                 $topicparent = $msgid;
             } else {
-                $lsql = DB_query("SELECT MAX(id) FROM {$_TABLES['gf_topic']} WHERE pid='$topicparent' ");
+                $lsql = DB_query("SELECT MAX(id) FROM {$_TABLES['gf_topic']} WHERE pid=$topicparent ");
                 list($lastrecid) = DB_fetchArray($lsql);
                 if ($lastrecid == NULL) {
                     $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$topicparent");
-                    DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$topicparent, lastupdated='$topicdatecreated' WHERE id='$topicparent'");
+                    DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$topicparent, lastupdated='$topicdatecreated' WHERE id=$topicparent");
                 } else {
                     $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$lastrecid");
-                    DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$lastrecid, lastupdated=$topicdatecreated WHERE id={$topicparent}");
+                    DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$lastrecid, lastupdated=$topicdatecreated WHERE id=$topicparent");
                 }
                 CACHE_remove_instance('forumcb');
             }
 
             // Remove any lastviewed records in the log so that the new updated topic indicator will appear
-            DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic='$topicparent'");
+            DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic=$topicparent");
 
             if ($top == 'yes') {
                 $link = "{$_CONF['site_url']}/forum/index.php?forum=$forum";
@@ -167,7 +167,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
             exit();
         } else {
             $hostip = COM_applyFilter($_POST['hostip']);
-            DB_query("INSERT INTO {$_TABLES['gf_banned_ip']} (host_ip) VALUES ('$hostip')");
+            DB_query("INSERT INTO {$_TABLES['gf_banned_ip']} (host_ip) VALUES ('".addslashes($hostip)."')");
             $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$fortopicid";
             forum_statusMessage($LANG_GF02['msg56'],$link,$LANG_GF02['msg56']);
             gf_siteFooter();
@@ -181,19 +181,18 @@ if (forum_modPermission($forum,$_USER['uid'])) {
             exit();
         } else {
             $date = time();
-            $movetoforum = gf_preparefordb($_POST['movetoforum'],text);
             $movetitle = gf_preparefordb($_POST['movetitle'],text);
-            $newforumid = DB_getItem($_TABLES['gf_forums'],"forum_id","forum_name='$movetoforum'");
+            $newforumid = intval(COM_applyFilter($_POST['movetoforum'],true));
             /* Check and see if we are splitting this forum thread */
 
             if (isset($_POST['splittype'])) {  // - Yes
-                $curpostpid = DB_getItem($_TABLES['gf_topic'],"pid","id='$moveid'");
+                $curpostpid = DB_getItem($_TABLES['gf_topic'],"pid","id=$moveid");
                 if ($_POST['splittype'] == 'single') {  // Move only the single post - create a new topic
-                    $topicdate = DB_getItem($_TABLES['gf_topic'],"date","id='$moveid'");
-                    $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum='$newforumid', pid='0',lastupdated='$topicdate', ";
-                    $sql .= "subject='$movetitle', replies = '0' WHERE id='$moveid' ";
+                    $topicdate = DB_getItem($_TABLES['gf_topic'],"date","id=$moveid");
+                    $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum=$newforumid, pid=0,lastupdated='$topicdate', ";
+                    $sql .= "subject='$movetitle', replies = '0' WHERE id=$moveid ";
                     DB_query($sql);
-                    DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-1 WHERE id='$curpostpid' ");
+                    DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-1 WHERE id=$curpostpid ");
                     // Update Topic and Post Count for the effected forums
 
                     // new forum
@@ -212,21 +211,21 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                     gf_updateLastPost($newforumid,$moveid);
 
                 } else { // move all posts from this point forward.
-                    $movesql = DB_query("SELECT id,date FROM {$_TABLES['gf_topic']} WHERE pid='$curpostpid' AND id >= '$moveid'");
+                    $movesql = DB_query("SELECT id,date FROM {$_TABLES['gf_topic']} WHERE pid=$curpostpid AND id >= $moveid");
                     $numreplies = DB_numRows($movesql); // how many replies are being moved.
                     $topicparent = 0;
                     while($movetopic = DB_fetchArray($movesql)) {
                         if ($topicparent == 0) {
-                            $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum='$newforumid', pid='0',lastupdated='{$movetopic['date']}', ";
-                            $sql .= "replies=$numreplies - 1, subject='$movetitle' WHERE id='{$movetopic['id']}'";
+                            $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum=$newforumid, pid=0,lastupdated='{$movetopic['date']}', ";
+                            $sql .= "replies=$numreplies - 1, subject='$movetitle' WHERE id={$movetopic['id']}";
                             DB_query($sql);
                             $topicparent = $movetopic['id'];
                         } else {
-                            $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum='$newforumid', pid='$topicparent', ";
+                            $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum=$newforumid, pid=$topicparent, ";
                             $sql .= "subject='$movetitle' WHERE id='{$movetopic['id']}'";
                             DB_query($sql);
-                            $topicdate = DB_getItem($_TABLES['gf_topic'],"date","id='{$movetopic['id']}'");
-                            DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated='$topicdate' WHERE id='$topicparent'");
+                            $topicdate = DB_getItem($_TABLES['gf_topic'],"date","id={$movetopic['id']}");
+                            DB_query("UPDATE {$_TABLES['gf_topic']} SET lastupdated='$topicdate' WHERE id=$topicparent");
                         }
                     }
 
@@ -252,12 +251,12 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 $moveResult = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=$moveid");
                 $postCount = DB_numRows($moveResult)+1;  // Need to account for the parent post
                 while($movetopic = DB_fetchArray($moveResult)) {
-                    DB_query("UPDATE {$_TABLES['gf_topic']} SET forum='$newforumid' WHERE id='{$movetopic['id']}'");
+                    DB_query("UPDATE {$_TABLES['gf_topic']} SET forum=$newforumid WHERE id={$movetopic['id']}");
                 }
                 // Update any topic subscription records - need to change the forum ID record
-                DB_query("UPDATE {$_TABLES['gf_watch']} SET forum_id = '$newforumid' WHERE topic_id='{$moveid}'");
+                DB_query("UPDATE {$_TABLES['gf_watch']} SET forum_id=$newforumid WHERE topic_id=$moveid");
                 // this moves the parent record.
-                DB_query("UPDATE {$_TABLES['gf_topic']} SET forum = '$newforumid', moved = '1' WHERE id=$moveid");
+                DB_query("UPDATE {$_TABLES['gf_topic']} SET forum=$newforumid, moved='1' WHERE id=$moveid");
 
                 // new forum
                 $postCount = DB_Count($_TABLES['gf_topic'],'forum',$newforumid);
@@ -275,7 +274,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 gf_updateLastPost($forum);
 
                 // Remove any lastviewed records in the log so that the new updated topic indicator will appear
-                DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic='$moveid'");
+                DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic=$moveid");
                 $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$moveid";
                 forum_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163']);
             }
@@ -293,7 +292,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
         } else {
             $alertmessage = '';
         }
-        $subject = DB_getITEM($_TABLES['gf_topic'],"subject","id='$msgpid'");
+        $subject = DB_getITEM($_TABLES['gf_topic'],"subject","id=$msgpid");
         $alertmessage .= sprintf($LANG_GF02['msg64'],$fortopicid,$subject);
 
         $promptform  = '<div><form action="' .$_CONF['site_url'] . '/forum/moderation.php" method="post">';
@@ -328,7 +327,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
           }
         }
         /* Check and see if user had moderation rights to another forum to complete the topic move */
-        $sql = "SELECT DISTINCT forum_name FROM {$_TABLES['gf_moderators']} a , {$_TABLES['gf_forums']} b ";
+        $sql = "SELECT DISTINCT forum_id,forum_name,forum_dscp FROM {$_TABLES['gf_moderators']} a , {$_TABLES['gf_forums']} b ";
         $sql .= "where a.mod_forum = b.forum_id AND ( a.mod_uid='{$_USER['uid']}' OR a.mod_groupid in ($modgroups))";
         $query = DB_query($sql);
 
@@ -341,15 +340,14 @@ if (forum_modPermission($forum,$_USER['uid'])) {
             $promptform  .= '<input type="hidden" name="moveid" value="' .$fortopicid. '"' . XHTML . '>';
             $promptform  .= '<input type="hidden" name="confirm_move" value="1"' . XHTML . '>';
             $promptform  .= '<input type="hidden" name="forum" value="' .$forum. '"' . XHTML . '>';
-            $promptform .= '<div>'.$LANG_GF03['selectforum'];
-            $promptform .= '&nbsp;<select name="movetoforum" style="width:120px;">';
+            $promptform .= '<div style="padding:5px;">'.$LANG_GF03['selectforum'];
+            $promptform .= '&nbsp;<select name="movetoforum">';
             while($showforums = DB_fetchArray($query)){
-                $promptform  .= "<option>$showforums[forum_name]</option>";
+                $promptform .= '<option value="'.$showforums['forum_id'].'">'.$showforums['forum_name']. '('.COM_truncate($showforums['forum_dscp'],15,'...').')</option>';
             }
             $promptform  .= '</select>';
             $promptform .= '</div><div style="padding:10 0 5 0px;">'.$LANG_GF02['msg186'].':&nbsp;';
             $promptform .= '<input type="text" size="60" name="movetitle" value="' .$topictitle. '"' . XHTML . '>';
-
 
             /* Check and see request to move complete topic or split the topic */
             if (DB_getItem($_TABLES['gf_topic'],"pid","id='$fortopicid'") == 0) {

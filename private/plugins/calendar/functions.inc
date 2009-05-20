@@ -122,7 +122,6 @@ function phpblock_calendar( $help='', $title='' )
         if($_DB_dbms == 'mssql') {
             $eventSql .= "WHERE dateend >= DATEADD(hh, 24, NOW()) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
         } else {
-//            $eventSql .= "WHERE dateend >= (getUTCDate() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
             $eventSql .= "WHERE dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range ) ";
         }
         $eventSql .= 'ORDER BY datestart,timestart';
@@ -132,7 +131,6 @@ function phpblock_calendar( $help='', $title='' )
             . "FROM {$_TABLES['personal_events']} ";
             if($_DB_dbms == 'mssql') {
                 $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= DATEADD(hh, 24, getUTCDate())  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
-//                $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR) AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
             } else {
                 $personaleventsql .= "WHERE uid = {$_USER['uid']} AND dateend >= (NOW() - INTERVAL 24 HOUR)  AND (TO_DAYS(datestart) - TO_DAYS(NOW()) < $range) ";
             }
@@ -394,10 +392,10 @@ function plugin_moderationapprove_calendar ($id)
     } else {
         $group_id = SEC_getFeatureGroup ('calendar.moderate');
     }
-    DB_query ("UPDATE {$_TABLES['events']} SET owner_id = '{$_USER['uid']}',"
+    DB_query ("UPDATE {$_TABLES['events']} SET owner_id = {$_USER['uid']},"
              ."group_id = '$group_id',perm_owner = {$A['perm_owner']}, "
              ."perm_group = {$A['perm_group']}, perm_members = {$A['perm_members']},"
-             ."perm_anon = {$A['perm_anon']} WHERE eid = $id");
+             ."perm_anon = {$A['perm_anon']} WHERE eid = '".addslashes($id)."'");
 }
 
 /**
@@ -417,7 +415,7 @@ function plugin_moderationdelete_calendar($id)
 
     // these tables should not contain any rows with ml_id = $id
     // this is done 'just in case'
-    DB_delete ($_TABLES['eventsubmission'], 'eid', $id);
+    DB_delete ($_TABLES['eventsubmission'], 'eid', addslashes($id));
 
     return '';
 }
@@ -594,7 +592,7 @@ function plugin_savesubmission_calendar($A)
 
             DB_save ($_TABLES['eventsubmission'],
                      'eid,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
-                     "{$A['eid']},'{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
+                     "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
 
             if (isset ($_CA_CONF['notification']) &&
                     ($_CA_CONF['notification'] == 1)) {
@@ -620,7 +618,7 @@ function plugin_savesubmission_calendar($A)
 
             DB_save ($_TABLES['events'],
                      'eid,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon',
-                     "{$A['eid']},'{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}',$owner_id,{$A['group_id']},{$A['perm_owner']},{$A['perm_group']},{$A['perm_members']},{$A['perm_anon']}");
+                     "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}',$owner_id,{$A['group_id']},{$A['perm_owner']},{$A['perm_group']},{$A['perm_members']},{$A['perm_anon']}");
 
             if (isset($_CA_CONF['notification']) &&
                     ($_CA_CONF['notification'] == 1)) {
@@ -979,7 +977,7 @@ function CALENDAR_deleteEvent($eid, $type = '')
     global $_CONF, $_TABLES, $_USER;
 
     if (empty($type)) { // delete regular event
-        $result = DB_query("SELECT * FROM {$_TABLES['events']} WHERE eid = '$eid'");
+        $result = DB_query("SELECT * FROM {$_TABLES['events']} WHERE eid = '".addslashes($eid)."'");
         $A = DB_fetchArray($result);
         $access = SEC_hasAccess($A['owner_id'], $A['group_id'],
                     $A['perm_owner'], $A['perm_group'], $A['perm_members'],
@@ -990,15 +988,15 @@ function CALENDAR_deleteEvent($eid, $type = '')
                                . '/plugins/calendar/index.php');
         }
 
-        DB_delete($_TABLES['events'], 'eid', $eid);
-        DB_delete($_TABLES['personal_events'], 'eid', $eid);
+        DB_delete($_TABLES['events'], 'eid', addslashes($eid));
+        DB_delete($_TABLES['personal_events'], 'eid', addslashes($eid));
         COM_rdfUpToDateCheck('calendar', $A['event_type'], $A['eid']);
         COM_rdfUpToDateCheck('article', 'calendar', $eid);
 
         return COM_refresh($_CONF['site_admin_url'] . '/plugins/calendar/index.php?msg=18');
     } elseif ($type == 'submission') {
         if (plugin_ismoderator_calendar()) {
-            DB_delete($_TABLES['eventsubmission'], 'eid', $eid);
+            DB_delete($_TABLES['eventsubmission'], 'eid', addslashes($eid));
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally delete event submission $eid.");
         }
@@ -1268,7 +1266,7 @@ function plugin_autotags_calendar ($op, $content = '', $autotag = '')
         $url = $_CONF['site_url'] . '/calendar/event.php?eid=' . $eid;
         if (empty ($autotag['parm2'])) {
             $linktext = stripslashes (DB_getItem ($_TABLES['events'],
-                                      'title', "eid = '$eid'"));
+                                      'title', "eid = '".addslashes($eid)."'"));
         } else {
             $linktext = $autotag['parm2'];
         }
@@ -1307,7 +1305,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
 {
     global $_CONF, $_TABLES;
 
-    $limit = DB_getItem($_TABLES['syndication'], 'limits', "fid = '$feed'");
+    $limit = DB_getItem($_TABLES['syndication'], 'limits', "fid = '".addslashes($feed)."'");
 
     $where = '';
     if( !empty( $limit )) {
@@ -1325,7 +1323,7 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
     }
 
     $sql = "SELECT eid,owner_id,title,description FROM {$_TABLES['events']} "
-          ."WHERE perm_anon > 0 AND dateend >= NOW()$where "
+          ."WHERE perm_anon > 0 AND dateend >= NOW() $where "
           ."ORDER BY datestart,timestart $limitsql";
     $result = DB_query($sql);
 
@@ -1398,7 +1396,7 @@ function plugin_feedupdatecheck_calendar ($feed, $topic, $update_data, $limit,
         }
         else
         {
-            $limitsql = ' LIMIT ' . $limit;
+            $limitsql = ' LIMIT ' . intval($limit);
         }
     }
     else
@@ -1560,11 +1558,11 @@ function plugin_user_delete_calendar ($uid)
 {
     global $_TABLES, $_CA_CONF;
 
-    DB_delete ($_TABLES['personal_events'], 'owner_id', $uid);
+    DB_delete ($_TABLES['personal_events'], 'owner_id', intval($uid));
 
     if ($_CA_CONF['delete_event'] == 1) {
         // delete the events
-        DB_delete ($_TABLES['events'], 'owner_id', $uid);
+        DB_delete ($_TABLES['events'], 'owner_id', intval($uid));
 
     } else {
         // assign ownership to a user from the Root group
@@ -1572,7 +1570,7 @@ function plugin_user_delete_calendar ($uid)
                                  "grp_name = 'Root'");
         $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $rootgroup ORDER BY ug_uid LIMIT 1");
         list($rootuser) = DB_fetchArray ($result);
-        DB_query ("UPDATE {$_TABLES['events']} SET owner_id = $rootuser WHERE owner_id = $uid");
+        DB_query ("UPDATE {$_TABLES['events']} SET owner_id = $rootuser WHERE owner_id = ".intval($uid));
     }
 }
 
@@ -1706,7 +1704,7 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
     global $_TABLES, $LANG_CAL_1;
 
     // Make sure the query is SQL safe
-    $query = trim(addslashes(htmlspecialchars($query)));
+    $query = addslashes(trim(htmlspecialchars($query)));
 
     $sql_e = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, hits, CONCAT('/calendar/event.php?eid=',eid) AS url ";
     $sql_e .= "FROM {$_TABLES['events']} WHERE 1=1 ";
@@ -1729,7 +1727,7 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
         }
     }
     if (!empty ($author))
-        $sql .= "AND (owner_id = '$author') ";
+        $sql .= "AND (owner_id = '".addslashes($author)."') ";
 
     // Search the public events
     $search_e = new SearchCriteria('calendar', array($LANG_CAL_1[16],$LANG_CAL_1[24]));

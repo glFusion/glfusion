@@ -57,7 +57,7 @@ $cid  = isset($_GET['cid']) ? COM_applyFilter($_GET['cid'],true) : 0;
 $orderby  = isset($_GET['orderby']) ? @html_entity_decode(COM_applyFilter($_GET['orderby'],false)) : '';
 
 $groupsql = filemgmt_buildAccessSql();
-$sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE cid='$cid' $groupsql";
+$sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_cat']} WHERE cid='".intval($cid)."' $groupsql";
 list($category_rows) = DB_fetchArray( DB_query($sql));
 if ($cid == 0 OR $category_rows == 0) {
     echo COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
@@ -135,7 +135,7 @@ if ( $eor == 0 ) {
 }
 
 // Get a list of subcategories for this category
-$query = DB_query("SELECT cid from  {$_FM_TABLES['filemgmt_cat']} where pid='$cid'");
+$query = DB_query("SELECT cid from  {$_FM_TABLES['filemgmt_cat']} where pid='".intval($cid)."'");
 $categories = $cid;
 while( list($category) = DB_fetchArray($query)) {
     $categories = $categories . ",$category";
@@ -143,7 +143,7 @@ while( list($category) = DB_fetchArray($query)) {
 $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
 $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
 //$sql .= "WHERE a.cid in ($categories) AND status > 0 $groupsql";
-$sql .= "WHERE a.cid=".$cid." AND status > 0 $groupsql";
+$sql .= "WHERE a.cid=".intval($cid)." AND status > 0 $groupsql";
 list($maxrows) = DB_fetchArray(DB_query($sql));
 $numpages = ceil($maxrows / $show);
 
@@ -160,7 +160,7 @@ if($maxrows > 0) {
     $sql .= "FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN  {$_FM_TABLES['filemgmt_filedesc']} b on a.lid=b.lid ";
     $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} c ON a.cid=c.cid ";
-    $sql .= "WHERE a.cid='$cid' AND a.status > 0 $groupsql ORDER BY {$orderby} LIMIT $offset, $show";
+    $sql .= "WHERE a.cid='".intval($cid)."' AND a.status > 0 $groupsql ORDER BY {$orderby} LIMIT $offset, $show";
     $result = DB_query($sql);
 
     $numrows = DB_numROWS($result);

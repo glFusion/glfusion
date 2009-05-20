@@ -91,7 +91,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
         if (!isset($file_user_id) || $file_user_id < 2  ) {
             $uname = 'Anonymous';
         } else {
-            $uname = DB_getItem($_TABLES['users'],'username','uid=' . $file_user_id);
+            $uname = DB_getItem($_TABLES['users'],'username','uid=' . intval($file_user_id));
         }
         // build the template...
         $T = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
@@ -106,7 +106,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
             'lang_uploaded_by'  =>  $LANG_FM00['uploaded_by'],
             'username'          =>  $uname,
             'filename'          =>  $filename,
-            'description'       =>  $description,
+            'description'       =>  stripslashes($description),
             'url_moderate'      =>  '<a href="' . $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?op=listNewDownloads">Click here to view</a>',
             'site_name'         =>  $_CONF['site_name'] . ' - ' . $_CONF['site_slogan'],
             'site_url'          =>  $_CONF['site_url'],

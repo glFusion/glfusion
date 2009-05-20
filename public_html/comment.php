@@ -89,7 +89,7 @@ function handleSubmit()
     switch ( $type ) {
         case 'article':
             $commentcode = DB_getItem ($_TABLES['stories'], 'commentcode',
-                                       "sid = '$sid'" . COM_getPermSQL('AND')
+                                       "sid = '".addslashes($sid)."'" . COM_getPermSQL('AND')
                                        . " AND (draft_flag = 0) AND (date <= NOW()) "
                                        . COM_getTopicSQL('AND'));
             if (!isset($commentcode) || ($commentcode != 0)) {
@@ -134,14 +134,15 @@ function handleSubmit()
                 $pageHandle->displayPage();
 
             } else { // success
-                $comments = DB_count ($_TABLES['comments'], 'sid', $sid);
-                DB_change ($_TABLES['stories'], 'comments', $comments, 'sid', $sid);
+                $comments = DB_count ($_TABLES['comments'], 'sid', addslashes($sid));
+                DB_change ($_TABLES['stories'], 'comments', $comments, 'sid', addslashes($sid));
                 COM_olderStuff (); // update comment count in Older Stories block
                 $pageHandle->redirect($pageHandle->buildUrl ($_CONF['site_url']
                     . "/article.php?story=$sid"));
             }
             break;
         default: // assume plugin
+            $comment = '';
             if (($_CONF['advanced_editor'] == 1)) {
                 if ( $postmode == 'html' ) {
                     $comment = $comment_html;
@@ -180,7 +181,7 @@ function handleDelete()
     switch ($type) {
     case 'article':
         $has_editPermissions = SEC_hasRights('story.edit');
-        $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid = '$sid'");
+        $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'");
         $A = DB_fetchArray($result);
 
         if ($has_editPermissions && SEC_hasAccess($A['owner_id'],
@@ -188,9 +189,9 @@ function handleDelete()
                 $A['perm_members'], $A['perm_anon']) == 3) {
             CMT_deleteComment($cid, $sid,
                               'article');
-            $comments = DB_count($_TABLES['comments'], 'sid', $sid);
+            $comments = DB_count($_TABLES['comments'], 'sid', addslashes($sid));
             DB_change($_TABLES['stories'], 'comments', $comments,
-                      'sid', $sid);
+                      'sid', addslashes($sid));
             CACHE_remove_instance('whatsnew');
             $pageHandle->redirect($pageHandle->buildUrl ($_CONF['site_url']
                                     . "/article.php?story=$sid") . '#comments');
@@ -236,7 +237,7 @@ function handleView($view = true)
         $pageHandle->redirect($_CONF['site_url'] . '/index.php');
     }
 
-    $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = '$cid'";
+    $sql = "SELECT sid, title, type FROM {$_TABLES['comments']} WHERE cid = $cid";
     $A = DB_fetchArray( DB_query($sql) );
     $sid   = $A['sid'];
     $title = $A['title'];
@@ -246,7 +247,7 @@ function handleView($view = true)
     if ( $format != 'threaded' && $format != 'nested' && $format != 'flat' ) {
         if ( $_USER['uid'] > 1 ) {
             $format = DB_getItem( $_TABLES['usercomment'], 'commentmode',
-                                  "uid = '{$_USER['uid']}'" );
+                                  "uid = {$_USER['uid']}" );
         } else {
             $format = $_CONF['comment_mode'];
         }
@@ -255,7 +256,7 @@ function handleView($view = true)
     switch ( $type ) {
         case 'article':
             $sql = 'SELECT COUNT(*) AS count, commentcode, owner_id, group_id, perm_owner, perm_group, '
-                 . "perm_members, perm_anon FROM {$_TABLES['stories']} WHERE (sid = '$sid') "
+                 . "perm_members, perm_anon FROM {$_TABLES['stories']} WHERE (sid = '".addslashes($sid)."') "
                  . 'AND (draft_flag = 0) AND (commentcode >= 0) AND (date <= NOW())' . COM_getPermSQL('AND')
                  . COM_getTopicSQL('AND') . ' GROUP BY sid,owner_id, group_id, perm_owner, perm_group,perm_members, perm_anon ';
             $result = DB_query ($sql);
@@ -319,7 +320,7 @@ function handleEdit() {
     }
 
     $result = DB_query ("SELECT title,comment FROM {$_TABLES['comments']} "
-        . "WHERE cid = '$cid' AND sid = '$sid' AND type = '$type'");
+        . "WHERE cid = $cid AND sid = '".addslashes($sid)."' AND type = '".addslashes($type)."'");
     if ( DB_numRows($result) == 1 ) {
         $A = DB_fetchArray ($result);
         $title = $A['title'];
@@ -416,14 +417,16 @@ function handleEditSubmit()
 
         // save the comment into the comment table
         DB_query("UPDATE {$_TABLES['comments']} SET comment = '$comment', title = '$title'"
-                . " WHERE cid='$cid' AND sid='$sid'");
+                . " WHERE cid=$cid AND sid='".addslashes($sid)."'");
 
         if (DB_error() ) { //saving to non-existent comment or comment in wrong article
             COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
             . 'to edit to a non-existent comment or the cid/sid did not match');
             $pageHandle->redirect($_CONF['site_url'] . '/index.php');
         }
-        DB_save($_TABLES['commentedits'],'cid,uid,time',"$cid,$uid,NOW()");
+        $safecid = addslashes($cid);
+        $safeuid = addslashes($uid);
+        DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,NOW()");
     } else {
         COM_errorLog("handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with invalid $title and/or $comment.');
@@ -454,7 +457,7 @@ switch ($mode) {
 case $LANG03[28]: //Preview Changes (for edit)
 
 case $LANG03[14]: // Preview
-
+    $comment = '';
     $title          = $inputHandler->getVar('text','title','post','');
     $sid            = $inputHandler->getVar('strict','sid','post','');
     $pid            = $inputHandler->getVar('strict','pid','post',0);
@@ -566,7 +569,7 @@ default:  // New Comment
         if (empty ($title)) {
             if ($type == 'article') {
                 $title = DB_getItem($_TABLES['stories'], 'title',
-                                    "sid = '{$sid}'" . COM_getPermSQL('AND')
+                                    "sid = '".addslashes($sid)."'" . COM_getPermSQL('AND')
                                     . COM_getTopicSQL('AND'));
             }
             $title = str_replace ('$', '&#36;', $title);

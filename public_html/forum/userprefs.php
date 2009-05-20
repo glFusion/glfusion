@@ -53,17 +53,17 @@ forum_chkUsercanAccess(true);
 
 // SAVE SETTINGS
 if(isset($_POST['submit'])) {
-    $xtopicsperpage = COM_applyFilter($_POST['xtopicsperpage'],true);
-    $xpostsperpage = COM_applyFilter($_POST['xpostsperpage'],true);
-    $xpopularlimit = COM_applyFilter($_POST['xpopularlimit'],true);
-    $xmessagesperpage = COM_applyFilter($_POST['xmessagesperpage'],true);
-    $xsearchlines = COM_applyFilter($_POST['xsearchlines'],true);
-    $xmembersperpage = COM_applyFilter($_POST['xmembersperpage'],true);
-    $xemailnotify = COM_applyFilter($_POST['xemailnotify'],true);
-    $xviewanonposts = COM_applyFilter($_POST['xviewanonposts'],true);
-    $xalwaysnotify = COM_applyFilter($_POST['xalwaysnotify'],true);
-    $xnotifyonce = COM_applyFilter($_POST['xnotifyonce'],true);
-    $xshowiframe = COM_applyFilter($_POST['xshowiframe'],true);
+    $xtopicsperpage     = intval(COM_applyFilter($_POST['xtopicsperpage'],true));
+    $xpostsperpage      = intval(COM_applyFilter($_POST['xpostsperpage'],true));
+    $xpopularlimit      = intval(COM_applyFilter($_POST['xpopularlimit'],true));
+    $xmessagesperpage   = intval(COM_applyFilter($_POST['xmessagesperpage'],true));
+    $xsearchlines       = intval(COM_applyFilter($_POST['xsearchlines'],true));
+    $xmembersperpage    = intval(COM_applyFilter($_POST['xmembersperpage'],true));
+    $xemailnotify       = intval(COM_applyFilter($_POST['xemailnotify'],true));
+    $xviewanonposts     = intval(COM_applyFilter($_POST['xviewanonposts'],true));
+    $xalwaysnotify      = intval(COM_applyFilter($_POST['xalwaysnotify'],true));
+    $xnotifyonce        = intval(COM_applyFilter($_POST['xnotifyonce'],true));
+    $xshowiframe        = intval(COM_applyFilter($_POST['xshowiframe'],true));
 
     DB_query("UPDATE {$_TABLES['gf_userprefs']} SET
         topicsperpage='$xtopicsperpage',

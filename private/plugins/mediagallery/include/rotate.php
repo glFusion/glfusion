@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: rotate.php 3070 2008-09-07 02:40:49Z mevans0263                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -38,7 +38,7 @@ if (!defined ('GVERSION')) {
 function MG_rotateMedia( $album_id, $media_id, $direction, $actionURL='') {
     global $_TABLES, $_MG_CONF, $_POST;
 
-    $sql = "SELECT * FROM " . $_TABLES['mg_media'] . " WHERE media_id='" . $media_id . "'";
+    $sql = "SELECT * FROM " . $_TABLES['mg_media'] . " WHERE media_id='" . addslashes($media_id) . "'";
     $result=DB_query($sql);
     $row = DB_fetchArray($result);
     if ( DB_error() != 0 )  {

@@ -572,7 +572,7 @@ class Search {
         } else {
             $obj->setDefaultSort('date');
         }
-        $obj->setRowFunction(Array($this, 'searchFormatCallBack'));
+        $obj->setRowFunction(array($this, 'searchFormatCallBack'));
 
         // Start search timer
         $searchtimer = new timerobject();
@@ -720,8 +720,7 @@ class Search {
         }
         else
         {
-            $retval .= $LANG09[64] . " ($searchtime {$LANG09[27]}). " . COM_createLink($LANG09[61], $url.'refine');
-            $retval = '<p>' . $retval . '</p>' . LB;
+            $retval .= " ($searchtime {$LANG09[27]}). <br />" . COM_createLink($LANG09[61], $url.'refine');
             $retval = $obj->getFormattedOutput($results, $LANG09[11], $retval, '', $_CONF['search_show_sort'], $_CONF['search_show_limit']);
         }
 
@@ -746,8 +745,7 @@ class Search {
     {
         global $_CONF;
 
-        if ($preSort)
-        {
+        if ($preSort) {
             $row[SQL_TITLE] = is_array($row[SQL_TITLE]) ? implode($_CONF['search_separator'],$row[SQL_TITLE]) : $row[SQL_TITLE];
 
             if (is_numeric($row['uid']))
@@ -761,15 +759,12 @@ class Search {
                 }
                 $row['uid'] = $this->_names[ $row['uid'] ];
             }
-        }
-        else
-        {
+        } else {
             $row[SQL_TITLE] = COM_createLink($row[SQL_TITLE], $this->_searchURL.'&amp;type='.$row[SQL_NAME].'&amp;mode=search');
 
             $row['url'] = ($row['url'][0] == '/' ? $_CONF['site_url'] : '') . $row['url'];
             if ($this->_url_rewrite[$row[SQL_NAME]])
                 $row['url'] = COM_buildUrl($row['url']);
-//            $row['url'] .= (strpos($row['url'],'?') ? '&amp;' : '?') . 'query=' . urlencode($this->_query);
 
             if ( $row['title'] == '' ) {
                 $row['title'] = $row[SQL_TITLE];
@@ -781,6 +776,8 @@ class Search {
 
             if ( $row['description'] == '' ) {
                 $row['description'] = $_CONF['search_no_data'];
+            } else {
+                $row['description'] = stripslashes($row['description']);
             }
 
             if ($row['description'] != $_CONF['search_no_data'])
@@ -814,8 +811,9 @@ class Search {
     {
         $text = strip_tags($text);
         $words = explode(' ', $text);
-        if (count($words) <= $num_words)
-            return COM_highlightQuery($text, $keyword, 'b');
+        if (count($words) <= $num_words) {
+            return stripslashes($this->_highlightQuery($text, $keyword, 'b'));
+        }
 
         $rt = '';
         if ( $keyword == '' ) {
@@ -865,7 +863,7 @@ class Search {
             $rt .= $words[$key + $i] . ' ';
         $rt .= ' <b>...</b>';
 
-        return COM_highlightQuery($rt, $keyword, 'b');
+        return stripslashes($this->_highlightQuery($rt, $keyword, 'b'));
     }
 
     /**
@@ -920,6 +918,42 @@ class Search {
         }
         return $sql;
     }
+
+    function _highlightQuery( $text, $query, $class = 'highlight')
+    {
+        $query = str_replace( '+', ' ', $query );
+
+        // escape all the other PCRE special characters
+        $query = preg_quote( $query );
+
+        // ugly workaround:
+        // Using the /e modifier in preg_replace will cause all double quotes to
+        // be returned as \" - so we replace all \" in the result with unescaped
+        // double quotes. Any actual \" in the original text therefore have to be
+        // turned into \\" first ...
+        $text = str_replace( '\\"', '\\\\"', $text );
+
+        if ( $this->_keyType == 'phrase' ) {
+            $mywords = array($query);
+        } else {
+            $mywords = explode( ' ', $query );
+        }
+        foreach( $mywords as $searchword )
+        {
+            if( !empty( $searchword ))
+            {
+                $searchword = preg_quote( str_replace( "'", "\'", $searchword ));
+                $text = @preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+            }
+        }
+
+        // ugly workaround, part 2
+        $text = str_replace( '\\"', '"', $text );
+
+        return $text;
+    }
+
+
 }
 
 ?>

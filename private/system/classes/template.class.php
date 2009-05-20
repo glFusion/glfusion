@@ -298,7 +298,7 @@ class Template
             if (substr($r, -1) == '/') {
                 $r = substr ($r, 0, -1);
             }
-            if (!is_dir($r)) {
+            if (!@is_dir($r)) {
                 $missing[] = $r;
                 continue;
             }

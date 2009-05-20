@@ -5,14 +5,15 @@
 <meta http-equiv="Content-Script-Type" content="text/javascript"{xhtml}>
 <meta http-equiv="Content-Style-Type" content="text/css"{xhtml}>
 <meta http-equiv="Content-Type" content="text/html; charset={charset}"{xhtml}>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 {# <meta http-equiv="Pragma" content="no-cache"{xhtml}> #}
 <link rel="SHORTCUT ICON" href="{layout_url}/images/favicon.ico"{xhtml}>
 {# Load Stylesheets #}
-<link rel="stylesheet" type="text/css" href="{site_url}/stylecache_{theme}.css?i={cacheid}" title="{theme}"{xhtml}>
+<link rel="stylesheet" type="text/css" href="{site_url}/css.php?t={theme}" title="{theme}"{xhtml}>
 {feed_url}
 {rel_links}
 {# Load JavaScript #}
-<script type="text/javascript" src="{site_url}/jscache_{theme}.js"></script>
+<script type="text/javascript" src="{site_url}/js.php?t={theme}"></script>
 {# Load plugin Header Code #}
 {plg_headercode}
 <!--[if lte IE 6]>

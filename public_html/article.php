@@ -75,7 +75,7 @@ if ((strcasecmp ($order, 'ASC') != 0) && (strcasecmp ($order, 'DESC') != 0)) {
     $order = '';
 }
 
-$result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '$sid'" . COM_getPermSql ('AND'));
+$result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'" . COM_getPermSql ('AND'));
 $A = DB_fetchArray($result);
 if ($A['count'] > 0) {
 
@@ -193,7 +193,7 @@ if ($A['count'] > 0) {
         if ( $msg > 0 ) {
             $pageHandle->addMessage($msg, $plugin);
         }
-        DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".$story->getSid()."') AND (date <= NOW()) AND (draft_flag = 0)");
+        DB_query ("UPDATE {$_TABLES['stories']} SET hits = hits + 1 WHERE (sid = '".addslashes($story->getSid())."') AND (date <= NOW()) AND (draft_flag = 0)");
 
         // Display whats related
 
@@ -225,17 +225,10 @@ if ($A['count'] > 0) {
             $story_template->set_var ('lang_print_story', $LANG11[3]);
             $story_template->set_var ('lang_print_story_alt', $LANG01[65]);
         }
-        if ($_CONF['pdf_enabled'] == 1) {
-            $pdfUrl = $_CONF['site_url']
-                    . '/pdfgenerator.php?pageType=2&amp;pageData='
-                    . urlencode ($printUrl);
-            $story_options[] = COM_createLink($LANG11[5], $pdfUrl);
-            $story_template->set_var ('pdf_story_url', $printUrl);
-            $story_template->set_var ('lang_pdf_story', $LANG11[5]);
-        }
+
         if ($_CONF['backend'] == 1) {
             $tid = $story->displayElements('tid');
-            $result = DB_query("SELECT filename, title, format FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '$tid' AND is_enabled = 1");
+            $result = DB_query("SELECT filename, title, format FROM {$_TABLES['syndication']} WHERE type = 'article' AND topic = '".addslashes($tid)."' AND is_enabled = 1");
             $feeds = DB_numRows($result);
             for ($i = 0; $i < $feeds; $i++) {
                 list($filename, $title, $format) = DB_fetchArray($result);
@@ -302,6 +295,16 @@ if ($A['count'] > 0) {
             $delete_option = (SEC_hasRights('story.edit') && ($story->getAccess() == 3)
                              ? true : false);
             require_once ( $_CONF['path_system'] . 'lib-comment.php' );
+            if ( isset($_GET['mode']) ) {
+                $mode = COM_applyFilter($_GET['mode']);
+            } else {
+                $mode = '';
+            }
+            if ( isset($_GET['page']) ) {
+                $page = intval(COM_applyFilter($_GET['page'],true));
+            } else {
+                $page = 1;
+            }
             $story_template->set_var ('commentbar',
                     CMT_userComments ($story->getSid(), $story->displayElements('title'), 'article',
                                       $order, $mode, 0, $page, false, $delete_option, $story->displayElements('commentcode')));

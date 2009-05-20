@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C)  2008 by the following authors:                            |
+// | Copyright (C)  2008-2009 by the following authors:                       |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -83,15 +83,15 @@ class mbElement {
         $this->url              = addslashes($this->url);
 
         $sqlFieldList  = 'id,pid,menu_id,element_label,element_type,element_subtype,element_order,element_active,element_url,element_target,group_id';
-        $sqlDataValues = "$this->id,$this->pid,'$this->menu_id','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url','$this->target',$this->group_id";
+        $sqlDataValues = "$this->id,$this->pid,'".addslashes($this->menu_id)."','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url','$this->target',$this->group_id";
         DB_save($_TABLES['st_menu_elements'], $sqlFieldList, $sqlDataValues);
     }
 
     function reorderMenu( ) {
         global $_TABLES, $stMenu;
 
-        $pid = $this->id;
-        $menu_id = $this->menu_id;
+        $pid = intval($this->id);
+        $menu_id = intval($this->menu_id);
 
         $orderCount = 10;
 
@@ -678,7 +678,7 @@ class mbElement {
                         $sql = "SELECT tid,topic,imageurl FROM {$_TABLES['topics']}" . $langsql;
                         if( !empty( $_USER['uid'] ) && ( $_USER['uid'] > 1 )) {
                             $tids = DB_getItem( $_TABLES['userindex'], 'tids',
-                                                "uid = '{$_USER['uid']}'" );
+                                                "uid = {$_USER['uid']}" );
                             if( !empty( $tids )) {
                                 $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
                                      . "'))" . COM_getPermSQL( 'AND' );

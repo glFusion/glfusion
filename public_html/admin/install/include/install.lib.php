@@ -623,13 +623,13 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
     // Because the upgrade sql syntax can vary from dbms-to-dbms we are
     // leaving that up to each glFusion database driver
 
-    $done = false;
     $progress = '';
-    while ($done == false) {
-        switch ($current_fusion_version) {
+
+    switch ($current_fusion_version) {
         case '1.0.0':
         case '1.0.1':
         case '1.0.2':
+            $_SQL = array();
             require_once $_CONF['path'] . 'sql/updates/mysql_1.0.1_to_1.1.0.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
@@ -649,7 +649,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             foreach ($_SQLi as $sqli) {
                 DB_query($sqli,1);
             }
-
+            $_SQLi = array();
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
 
@@ -702,7 +702,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.0',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.0' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.0';
-            $_SQL = '';
+            $_SQL = array();
         case '1.1.0' :
         case '1.1.1' :
             require_once $_CONF['path_system'].'classes/config.class.php';
@@ -713,8 +713,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.2',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.2' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.2';
-            $done = true;
         case '1.1.2' :
+            $_SQL = array();
             require_once $_CONF['path'] . 'sql/updates/mysql_1.1.2_to_1.1.3.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
@@ -732,8 +732,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.3',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.3' WHERE name='glfusion'",1);
             $current_fusion_version = '1.1.3';
-            $done = true;
         case '1.1.3' :
+            $_SQL = array();
             require_once $_CONF['path'] . 'sql/updates/mysql_1.1.3_to_1.1.4.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
@@ -741,13 +741,12 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             }
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.4',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.4' WHERE name='glfusion'",1);
+            DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.4';
-            $done = true;
-            break;
         default:
-            $done = true;
-        }
+            break;
     }
+
 
     // delete the security check flag on every update to force the user
     // to run admin/sectest.php again
@@ -961,6 +960,17 @@ function INST_identifyglFusionVersion ()
     }
 
     $version = '';
+
+    $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='database_version'",1);
+    if ( $result !== false ) {
+        if ( DB_numRows($result) > 0 ) {
+            $row = DB_fetchArray($result);
+            if ( $row['value'] == '1.1.3' ) {
+                $version = $row['value'];
+                return $version;
+            }
+        }
+    }
 
     $result = DB_query("SELECT * FROM {$_TABLES['vars']} WHERE name='glfusion'",1);
     if ( $result !== false ) {

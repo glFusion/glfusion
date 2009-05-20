@@ -61,7 +61,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     }
 
     // check for correct 'to' user preferences
-    $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = '$uid'");
+    $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = ".intval($uid));
     $P = DB_fetchArray ($result);
     if (SEC_inGroup ('Root') || SEC_hasRights ('user.mail')) {
         $isAdmin = true;
@@ -81,7 +81,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 
     if (!empty($author) && !empty($subject) && !empty($message)) {
         if (COM_isemail($authoremail)) {
-            $result = DB_query("SELECT username,fullname,email FROM {$_TABLES['users']} WHERE uid = $uid");
+            $result = DB_query("SELECT username,fullname,email FROM {$_TABLES['users']} WHERE uid = ".intval($uid));
             $A = DB_fetchArray($result);
 
             // Append the user's signature to the message
@@ -152,7 +152,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
         } else {
             $subject = strip_tags ($subject);
             $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-            $subject = htmlspecialchars (trim ($subject), ENT_QUOTES);
+            $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
             $retval .= COM_siteHeader ('menu', $LANG04[81])
                     . COM_errorLog ($LANG08[3], 2)
                     . contactform ($uid, $subject, $message)
@@ -161,7 +161,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     } else {
         $subject = strip_tags ($subject);
         $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-        $subject = htmlspecialchars (trim ($subject), ENT_QUOTES);
+        $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
         $retval .= COM_siteHeader ('menu', $LANG04[81])
                 . COM_errorLog ($LANG08[4], 2)
                 . contactform ($uid, $subject, $message)
@@ -187,7 +187,8 @@ function contactform ($uid, $subject = '', $message = '')
     $retval = '';
 
     if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
-                             ($_CONF['emailuserloginrequired'] == 1))) {
+                             ($_CONF['emailuserloginrequired'] == 1))
+                         && ($uid != 2)) {
         $retval = COM_startBlock ($LANG_LOGIN[1], '',
                           COM_getBlockTemplate ('_msg_block', 'header'));
         $login = new Template($_CONF['path_layout'] . 'submit');
@@ -203,7 +204,7 @@ function contactform ($uid, $subject = '', $message = '')
         $retval .= $login->finish ($login->get_var('output'));
         $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     } else {
-        $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = '$uid'");
+        $result = DB_query ("SELECT emailfromadmin,emailfromuser FROM {$_TABLES['userprefs']} WHERE uid = ".intval($uid));
         $P = DB_fetchArray ($result);
         if (SEC_inGroup ('Root') || SEC_hasRights ('user.mail')) {
             $isAdmin = true;
@@ -226,7 +227,7 @@ function contactform ($uid, $subject = '', $message = '')
 
             if (($_CONF['advanced_editor'] == 1)) {
                 $mail_template->set_file('form','contactuserform_advanced.thtml');
-                $ae_uid = addslashes(COM_applyFilter($_USER['uid'],true));
+                $ae_uid = intval(COM_applyFilter($_USER['uid'],true));
                 $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
                 DB_Query($sql,1);
             } else {
@@ -256,7 +257,7 @@ function contactform ($uid, $subject = '', $message = '')
                 if (isset ($_POST['author'])) {
                     $sender = strip_tags ($_POST['author']);
                     $sender = substr ($sender, 0, strcspn ($sender, "\r\n"));
-                    $sender = htmlspecialchars (trim ($sender), ENT_QUOTES);
+                    $sender = htmlspecialchars (trim ($sender), ENT_QUOTES,COM_getEncodingt());
                 }
                 $mail_template->set_var ('username', $sender);
             } else {
@@ -270,7 +271,7 @@ function contactform ($uid, $subject = '', $message = '')
                 if (isset ($_POST['authoremail'])) {
                     $email = strip_tags ($_POST['authoremail']);
                     $email = substr ($email, 0, strcspn ($email, "\r\n"));
-                    $email = htmlspecialchars (trim ($email), ENT_QUOTES);
+                    $email = htmlspecialchars (trim ($email), ENT_QUOTES,COM_getEncodingt());
                 }
                 $mail_template->set_var ('useremail', $email);
             } else {
@@ -349,7 +350,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         return $retval;
     }
 
-    $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE sid = '$sid'";
+    $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'";
     $result = DB_query ($sql);
     $A = DB_fetchArray ($result);
     $shortmsg = COM_stripslashes ($shortmsg);
@@ -417,7 +418,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         }
     } else {
         // Increment numemails counter for story
-        DB_query ("UPDATE {$_TABLES['stories']} SET numemails = numemails + 1 WHERE sid = '$sid'");
+        DB_query ("UPDATE {$_TABLES['stories']} SET numemails = numemails + 1 WHERE sid = '".addslashes($sid)."'");
 
         if ($_CONF['url_rewrite']) {
             $retval = COM_refresh($storyurl . '?msg=26');
@@ -485,7 +486,7 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
 
     if (($_CONF['advanced_editor'] == 1)) {
         $mail_template->set_file('form','contactauthorform_advanced.thtml');
-        $ae_uid = addslashes(COM_applyFilter($_USER['uid'],true));
+        $ae_uid = intval(intval(COM_applyFilter($_USER['uid'],true)));
         $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
         DB_Query($sql,1);
     } else {

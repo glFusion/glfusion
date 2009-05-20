@@ -1,7 +1,9 @@
 {# begin {templatelocation} #}
                             {search_menu}
+                            {!if form_url}
                             <form action="{form_url}" method="post">
                                 {formfields_top}
+                            {!endif}
                                 <table class="admin-list-table">
                                     <tr style="background:#FFFFFF;">
                                      {header_row}
@@ -12,7 +14,9 @@
                                     <input style="padding:5px 0px 0px 9px;{show_deleteimage}" name="delbutton" alt="delbutton" type="image" src="{layout_url}/images/deleteitem.png" title="{lang_deleteall}" onclick="return confirm('{lang_delconfirm}');"{xhtml}>
                                     {formfields_bottom}
                                 </div>
+                            {!if form_url}
                             </form>
+                            {!endif}
                             <p class="aligncenter" style="{show_message}"><b>{message}</b></p>
                             {google_paging}
 {# end {templatelocation} #}

@@ -61,6 +61,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 if (!defined ('GVERSION')) {
     define('GVERSION', '1.2.0.svn');
 }
+
 //define('DEMO_MODE',true);
 
 /**
@@ -148,7 +149,6 @@ if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
     putenv( 'TZ=' . $_CONF['timezone'] );
 }
 
-
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
 // +--------------------------------------------------------------------------+
@@ -179,7 +179,7 @@ if( !$_CONF['have_pear'] ) {
 *
 */
 
-require_once( $_CONF['path_system'] . 'classes/timer.class.php' );
+require_once $_CONF['path_system'].'classes/timer.class.php';
 $_PAGE_TIMER = new timerobject();
 $_PAGE_TIMER->startTimer();
 
@@ -541,7 +541,7 @@ switch ($_CONF['language']) {
 // Handle Who's Online block
 if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
     // The following code handles anonymous users so they show up properly
-    DB_delete($_TABLES['sessions'], array('remote_ip', 'uid'),array($_SERVER['REMOTE_ADDR'], 1));
+    DB_delete($_TABLES['sessions'], array('remote_ip', 'uid'),array(addslashes($_SERVER['REMOTE_ADDR']), 1));
 
     $tries = 0;
     do
@@ -552,7 +552,7 @@ if (COM_isAnonUser() && isset($_SERVER['REMOTE_ADDR'])) {
         $curtime = time();
 
         // Insert anonymous user session
-        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ('$sess_id', '$curtime', '{$_SERVER['REMOTE_ADDR']}', 1)", 1 );
+        $result = DB_query( "INSERT INTO {$_TABLES['sessions']} (sess_id, start_time, remote_ip, uid) VALUES ('$sess_id', '$curtime', '".addslashes($_SERVER['REMOTE_ADDR'])."', 1)", 1 );
         $tries++;
     }
     while(( $result === false) && ( $tries < 5 ));
@@ -1057,7 +1057,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
             $sid = COM_applyFilter( COM_getArgument( 'story' ));
         }
         if( !empty( $sid )) {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='$sid'" );
+            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".addslashes($sid)."'" );
         }
     } else {
         $topic = COM_applyFilter( $_GET['topic'] );
@@ -1333,7 +1333,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             COM_setArgNames( array( 'story', 'mode' ));
             $sid = COM_applyFilter( COM_getArgument( 'story' ));
         } if( !empty( $sid )) {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='$sid'" );
+            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".addslashes($sid)."'" );
         }
     } else {
         $topic = COM_applyFilter( $_GET['topic'] );
@@ -1701,6 +1701,7 @@ function COM_endBlock( $template='blockfooter.thtml' )
 * @return   string  Formated HTML of option values
 *
 */
+
 function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where='' )
 {
     global $_DB_table_prefix;
@@ -1866,78 +1867,70 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
 *
 * Creates a group of checkbox form fields with given arguments
 *
-* @param        string      $table      DB Table to pull data from
-* @param        string      $selection  Comma delimited list of fields to pull from table
-* @param        string      $where      Where clause of SQL statement
-* @param        string      $selected   Value to set to CHECKED
-* @see function COM_optionList
-* @return   string  HTML with Checkbox code
+* @param    string  $table      DB Table to pull data from
+* @param    string  $selection  Comma delimited list of fields to pull from table
+* @param    string  $where      Where clause of SQL statement
+* @param    string  $selected   Value to set to CHECKED
+* @param    string  $fieldname  Name to use for the checkbox array
+* @return   string              HTML with Checkbox code
+* @see      COM_optionList
 *
 */
-
-function COM_checkList( $table, $selection, $where='', $selected='' )
+function COM_checkList($table, $selection, $where = '', $selected = '', $fieldname = '')
 {
     global $_TABLES, $_COM_VERBOSE;
 
     $sql = "SELECT $selection FROM $table";
 
-    if( !empty( $where ))
-    {
+    if( !empty( $where )) {
         $sql .= " WHERE $where";
     }
 
     $result = DB_query( $sql );
     $nrows = DB_numRows( $result );
 
-    if( !empty( $selected ))
-    {
-        if( $_COM_VERBOSE )
-        {
+    if( !empty( $selected )) {
+        if( $_COM_VERBOSE ) {
             COM_errorLog( "exploding selected array: $selected in COM_checkList", 1 );
         }
 
         $S = explode( ' ', $selected );
-    }
-    else
-    {
-        if( $_COM_VERBOSE)
-        {
+    } else {
+        if( $_COM_VERBOSE) {
             COM_errorLog( 'selected string was empty COM_checkList', 1 );
         }
 
         $S = array();
     }
     $retval = '<ul class="checkboxes-list">' . LB;
-    for( $i = 0; $i < $nrows; $i++ )
-    {
+    for( $i = 0; $i < $nrows; $i++ ) {
         $access = true;
         $A = DB_fetchArray( $result, true );
 
-        if( $table == $_TABLES['topics'] AND SEC_hasTopicAccess( $A['tid'] ) == 0 )
-        {
+        if( $table == $_TABLES['topics'] AND SEC_hasTopicAccess( $A['tid'] ) == 0 ) {
             $access = false;
         }
 
-        if( $access )
-        {
-            $retval .= '<li><input type="checkbox" name="' . $table . '[]" value="' . $A[0] . '"';
+        if (empty($fieldname)) {
+            // Not a good idea, as that will expose our table name and prefix!
+            // Make sure you pass a distinct field name!
+            $fieldname = $table;
+        }
+
+        if( $access ) {
+            $retval .= '<li><input type="checkbox" name="' . $fieldname . '[]" value="' . $A[0] . '"';
 
             $sizeS = sizeof( $S );
-            for( $x = 0; $x < $sizeS; $x++ )
-            {
-                if( $A[0] == $S[$x] )
-                {
+            for( $x = 0; $x < $sizeS; $x++ ) {
+                if( $A[0] == $S[$x] ) {
                     $retval .= ' checked="checked"';
                     break;
                 }
             }
 
-            if(( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' ))
-            {
+            if(( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' )) {
                 $retval .= XHTML . '><span class="gldefault">' . $A[1] . '</span></li>' . LB;
-            }
-            else
-            {
+            } else {
                 $retval .= XHTML . '><span>' .  $A[1] . '</span></li>' . LB;
             }
         }
@@ -2211,7 +2204,7 @@ function COM_showTopics( $topic='' )
     if( !COM_isAnonUser() )
     {
         $tids = DB_getItem( $_TABLES['userindex'], 'tids',
-                            "uid = '{$_USER['uid']}'" );
+                            "uid = {$_USER['uid']}" );
         if( !empty( $tids ))
         {
             $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
@@ -3544,7 +3537,7 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
         if( !COM_isAnonUser() )
         {
             $_USER['noboxes'] = DB_getItem( $_TABLES['userindex'], 'noboxes',
-                                            "uid = '{$_USER['uid']}'" );
+                                            "uid = {$_USER['uid']}" );
         }
         else
         {
@@ -3607,7 +3600,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
         if( !COM_isAnonUser() )
         {
             $result = DB_query( "SELECT boxes,noboxes FROM {$_TABLES['userindex']} "
-                               ."WHERE uid = '{$_USER['uid']}'" );
+                               ."WHERE uid = {$_USER['uid']}" );
             list($_USER['boxes'], $_USER['noboxes']) = DB_fetchArray( $result );
         }
         else
@@ -3636,7 +3629,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 
     if( !empty( $topic ))
     {
-        $commonsql .= " AND (tid = '$topic' OR tid = 'all')";
+        $commonsql .= " AND (tid = '".addslashes($topic)."' OR tid = 'all')";
     }
     else
     {
@@ -3652,7 +3645,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
 
     if( !empty( $_USER['boxes'] ))
     {
-        $BOXES = str_replace( ' ', ',', $_USER['boxes'] );
+        $BOXES = str_replace( ' ', ',', trim($_USER['boxes']) );
 
         $commonsql .= " AND (bid NOT IN ($BOXES) OR bid = '-1')";
     }
@@ -3893,7 +3886,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
     require_once $_CONF['path_system']
                  . '/classes/syndication/feedparserbase.class.php';
 
-    $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = \"$bid\"");
+    $result = DB_query("SELECT rdf_last_modified, rdf_etag FROM {$_TABLES['blocks']} WHERE bid = ".intval($bid));
     list($last_modified, $etag) = DB_fetchArray($result);
 
     // Load the actual feed handlers:
@@ -3932,9 +3925,9 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
         }
 
         if (empty($last_modified) || empty($etag)) {
-            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = '$bid'");
+            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".intval($bid));
         } else {
-            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = '$last_modified', rdf_etag = '$etag' WHERE bid = '$bid'");
+            DB_query("UPDATE {$_TABLES['blocks']} SET rdfupdated = '$update', rdf_last_modified = '$last_modified', rdf_etag = '$etag' WHERE bid = ".intval($bid));
         }
 
         $charset = COM_getCharset();
@@ -3971,7 +3964,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
 
         // Standard theme based function to put it in the block
         $result = DB_change($_TABLES['blocks'], 'content',
-                            addslashes($content), 'bid', $bid);
+                            addslashes($content), 'bid', intval($bid));
     } else if ($factory->errorStatus !== false) {
         // failed to aquire info, 0 out the block and log an error
         COM_errorLog("Unable to aquire feed reader for $rdfurl", 1);
@@ -3979,7 +3972,7 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
                      $factory->errorStatus[1] . ' ' .
                      $factory->errorStatus[2]);
         $content = addslashes($LANG21[4]);
-        DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = \"$bid\"");
+        DB_query("UPDATE {$_TABLES['blocks']} SET content = '$content', rdf_last_modified = NULL, rdf_etag = NULL WHERE bid = ".intval($bid));
     }
 }
 
@@ -4060,7 +4053,7 @@ function COM_getPassword( $loginname )
 {
     global $_TABLES, $LANG01;
 
-    $result = DB_query( "SELECT passwd FROM {$_TABLES['users']} WHERE username='$loginname'" );
+    $result = DB_query( "SELECT passwd FROM {$_TABLES['users']} WHERE username='".addslashes($loginname)."'" );
     $tmp = DB_error();
     $nrows = DB_numRows( $result );
 
@@ -4104,6 +4097,8 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
         } else {
             $uid = $_USER['uid'];
         }
+    } else {
+        $uid = intval($uid);
     }
 
     if (array_key_exists($uid, $cache)) {
@@ -4111,7 +4106,7 @@ function COM_getDisplayName( $uid = '', $username='', $fullname='', $remoteusern
     }
 
     if (empty($username)) {
-        $query = DB_query("SELECT username, fullname, remoteusername, remoteservice FROM {$_TABLES['users']} WHERE uid='$uid'");
+        $query = DB_query("SELECT username, fullname, remoteusername, remoteservice FROM {$_TABLES['users']} WHERE uid=$uid");
         list($username, $fullname, $remoteusername, $remoteservice) = DB_fetchArray($query);
     }
     $ret = $username;
@@ -4906,7 +4901,7 @@ function COM_getUserCookieTimeout()
         return;
     }
 
-    $timeoutvalue = DB_getItem( $_TABLES['users'], 'cookietimeout', "uid = '{$_USER['uid']}'" );
+    $timeoutvalue = DB_getItem( $_TABLES['users'], 'cookietimeout', "uid = {$_USER['uid']}" );
 
     if( empty( $timeoutvalue ))
     {
@@ -5357,7 +5352,7 @@ function COM_checkSpeedlimit($type = 'submit', $max = 1, $property = '')
     }
     $property = addslashes($property);
 
-    $res  = DB_query("SELECT date FROM {$_TABLES['speedlimit']} WHERE (type = '$type') AND (ipaddress = '$property') ORDER BY date ASC");
+    $res  = DB_query("SELECT date FROM {$_TABLES['speedlimit']} WHERE (type = '".addslashes($type)."') AND (ipaddress = '$property') ORDER BY date ASC");
 
     // If the number of allowed tries has not been reached,
     // return 0 (didn't hit limit)
@@ -5393,6 +5388,7 @@ function COM_updateSpeedlimit($type = 'submit', $property = '')
         $property = $_SERVER['REMOTE_ADDR'];
     }
     $property = addslashes($property);
+    $type     = addslashes($type);
 
     DB_save($_TABLES['speedlimit'], 'ipaddress,date,type',
             "'$property',UNIX_TIMESTAMP(),'$type'");
@@ -5411,7 +5407,7 @@ function COM_clearSpeedlimit($speedlimit = 60, $type = '')
 
     $sql = "DELETE FROM {$_TABLES['speedlimit']} WHERE ";
     if (!empty($type)) {
-        $sql .= "(type = '$type') AND ";
+        $sql .= "(type = '".addslashes($type)."') AND ";
     }
     $sql .= "(date < UNIX_TIMESTAMP() - $speedlimit)";
     DB_query($sql);
@@ -5432,6 +5428,7 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
         $property = $_SERVER['REMOTE_ADDR'];
     }
     $property = addslashes($property);
+    $type     = addslashes($type);
 
     DB_delete($_TABLES['speedlimit'], array('type', 'ipaddress'), array($type, $property));
 }
@@ -6699,6 +6696,41 @@ function COM_getCharset()
 }
 
 /**
+* Get a valid encoding for htmlspecialchars()
+*
+* @return   string      character set, e.g. 'utf-8'
+*
+*
+*/
+function COM_getEncodingt() {
+	global $_CONF, $LANG_CHARSET;
+
+	static $encoding = null;
+
+    $valid_charsets = array('iso-8859-1','iso-8859-15','utf-8','cp866','cp1251','cp1252','koi8-r','big5','gb2312','big5-hkscs','shift_jis sjis','euc-jp');
+
+	if ($encoding === null) {
+		if (isset($LANG_CHARSET)) {
+			$encoding = $LANG_CHARSET;
+		} else if (isset($_CONF['default_charset'])) {
+			$encoding = $_CONF['default_charset'];
+		} else {
+			$encoding = 'iso-8859-1';
+		}
+	}
+
+	$encoding = strtolower($encoding);
+
+	if ( in_array($encoding,$valid_charsets) ) {
+	    return $encoding;
+	} else {
+	    return 'iso-8859-1';
+	}
+
+	return $encoding;
+}
+
+/**
   * Handle errors.
   *
   * This function will handle all PHP errors thrown at it, without exposing
@@ -6818,8 +6850,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             </head>
             <body>
             <div style=\"width: 100%; text-align: center;\">
-            Unfortunately, an error has occurred rendering this page. Please try
-            again later.
+            There has been an error in building this page. Please try again later.
             </div>
             </body>
         </html>
@@ -7022,7 +7053,7 @@ function CMT_updateCommentcodes() {
     $cleared = 0;
 
     if ($_CONF['comment_close_rec_stories'] > 0) {
-        $results = DB_query("SELECT sid FROM {$_TABLES['stories']} ORDER BY date DESC LIMIT {$_CONF['comment_close_rec_stories']}");
+        $results = DB_query("SELECT sid FROM {$_TABLES['stories']} ORDER BY date DESC LIMIT ".intval($_CONF['comment_close_rec_stories']));
         while($A = DB_fetchArray($results))  {
             $allowedcomments[] = $A['sid'];
         }
@@ -7030,7 +7061,7 @@ function CMT_updateCommentcodes() {
         $sql = '';
         if ( is_array($allowedcomments) ) {
             foreach ($allowedcomments as $sid) {
-                $sql .= "AND sid <> '$sid' ";
+                $sql .= "AND sid <> '".addslashes($sid)."' ";
             }
             $sql = "UPDATE {$_TABLES['stories']} SET commentcode = 1 WHERE commentcode = 0 " . $sql;
             $result = DB_query($sql,1);
@@ -7172,33 +7203,28 @@ function COM_buildOwnerList($fieldName,$owner_id=2)
     return $owner_select;
 }
 
-function COM_getEncodingt()
+function phpblock_lastlogin()
 {
-	global $_CONF, $LANG_CHARSET;
+    global $_TABLES, $_CONF, $LANG10;
 
-	static $encoding = null;
+    $retval = '';
 
-    $valid_charsets = array('iso-8859-1','iso-8859-15','utf-8','cp866','cp1251','cp1252','koi8-r','big5','gb2312','big5-hkscs','shift_jis sjis','euc-jp');
+    $result = DB_query("SELECT u.uid AS uid, u.username AS 'username', ui.lastlogin AS 'login' FROM ".$_TABLES['userinfo']." AS ui LEFT JOIN ".$_TABLES['users']." AS u ON ui.uid=u.uid LEFT JOIN {$_TABLES['userprefs']} AS up ON u.uid=up.uid WHERE u.uid NOT IN (1) AND 0 != ui.lastlogin AND up.showonline != 0 ORDER BY ui.lastlogin DESC LIMIT 5");
 
-	if ($encoding === null) {
-		if (isset($LANG_CHARSET)) {
-			$encoding = $LANG_CHARSET;
-		} else if (isset($_CONF['default_charset'])) {
-			$encoding = $_CONF['default_charset'];
-		} else {
-			$encoding = 'iso-8859-1';
-		}
-	}
-
-	$encoding = strtolower($encoding);
-
-	if ( in_array($encoding,$valid_charsets) ) {
-	    return $encoding;
-	} else {
-	    return 'iso-8859-1';
-	}
-
-	return $encoding;
+    $nrows  = DB_numRows ($result);
+    if ($nrows > 0) {
+        $retval = sprintf($LANG10[29],$nrows);
+        for ($i = 0; $i < $nrows; $i++) {
+            if (0 < $i)
+                $retval .= ', ';
+            $A = DB_fetchArray($result);
+            $A['username'] = stripslashes(str_replace('$','&#36;',$A['username']));
+            $A['user'] = "<a href=\"" . $_CONF['site_url']
+                      . "/users.php?mode=profile&amp;uid={$A['uid']}" . "\">{$A['username']}</a>";
+            $retval .= $A['user'];
+        }
+    }
+    return $retval;
 }
 
 /**
@@ -7264,7 +7290,7 @@ function USES_class_upload() {
 if ( is_array($_PLUGINS) ) {
     foreach( $_PLUGINS as $pi_name ) {
         if (@file_exists($_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc') ) {
-            require_once( $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc' );
+            require_once $_CONF['path'] . 'plugins/' . $pi_name . '/functions.inc';
         } else {
             unset($_PLUGINS[array_search($pi_name, $_PLUGINS)]);
         }
@@ -7276,7 +7302,7 @@ if ( @file_exists($_CONF['path_language'].'custom') ) {
     $langfiles = @glob($langfilespec, GLOB_NOESCAPE|GLOB_NOSORT);
     if (@is_array($langfiles)) {
         foreach($langfiles as $langfile) {
-            require_once($langfile);
+            require_once $langfile;
         }
     }
 }
@@ -7330,8 +7356,8 @@ function css_out(){
     $tpl = $_CONF['theme'];
 
     $cacheID = 'css_' . $tpl;
-    $cacheFile = $_CONF['path_html'].'/stylecache_'.$_CONF['theme'].'.css';
-    $cacheURL  = $_CONF['site_url'].'/stylecache_'.$_CONF['theme'].'.css';
+    $cacheFile = $_CONF['path'].'/data/layout_cache/stylecache_'.$_CONF['theme'].'.css';
+    $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
 
     $files   = array();
 
@@ -7458,8 +7484,8 @@ function js_out(){
     $tpl = $_CONF['theme'];
 
 
-    $cacheFile = $_CONF['path_html'].'/jscache_'.$_CONF['theme'].'.js';
-    $cacheURL  = $_CONF['site_url'].'/jscache_'.$_CONF['theme'].'.js';
+    $cacheFile = $_CONF['path'].'/data/layout_cache/jscache_'.$_CONF['theme'].'.js';
+    $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
 
     /*
      * Static list of standard JavaScript used by glFusion...
@@ -7484,9 +7510,20 @@ function js_out(){
 
     $function = 'theme_themeJS';
 
-    if( function_exists( $function ))
-    {
+    if( function_exists( $function )) {
         $jTheme = $function( );
+        if ( is_array($jTheme) ) {
+            foreach($jTheme AS $item => $file) {
+                $files[] = $file;
+            }
+        }
+    }
+
+    /*
+     * Check to see if there are any custom javascript files to include
+     */
+    if( function_exists( 'CUSTOM_js' )) {
+        $jTheme = CUSTOM_js( );
         if ( is_array($jTheme) ) {
             foreach($jTheme AS $item => $file) {
                 $files[] = $file;
@@ -7541,7 +7578,7 @@ function js_out(){
     // add some global variables
     print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
     print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
-    print "var glfusionStyleCSS      = '".$_CONF['site_url']."/stylecache_" . $_CONF['theme'] . ".css';" . LB;
+    print "var glfusionStyleCSS      = '".$_CONF['site_url']."/css.php?t=" . $_CONF['theme'] . "';" . LB;
 
     // send any global plugin JS vars
 

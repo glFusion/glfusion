@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -129,7 +129,7 @@ function listNewDownloads(){
         $display .= '<table width="100%" border="0" class="plugin">';
         $display .= '<tr><td width="100%" class="pluginHeader" style="padding:5px;">' . _MD_DLSWAITING. "&nbsp;($numrows)</td></tr>";
         while(list($lid, $cid, $title, $url, $homepage, $version, $size, $logourl, $submitter, $comments, $tmpnames) = DB_fetchARRAY($result)) {
-            $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='$lid'");
+            $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".addslashes($lid)."'");
             list($description) = DB_fetchARRAY($result2);
             $title = $myts->makeTboxData4Edit($title);
             $url = rawurldecode($myts->makeTboxData4Edit($url));
@@ -318,7 +318,7 @@ function modDownload() {
     global $_CONF,$_FM_TABLES,$_USER,$myts,$eh,$mytree,$filemgmt_SnapStore,$filemgmt_FileSnapURL;
 
     $lid = $_GET['lid'];
-    $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
+    $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".addslashes($lid)."'");
     $nrows = DB_numROWS($result);
     if ($nrows == 0) {
         redirect_header("index.php",2,_MD_NOMATCH);
@@ -333,7 +333,7 @@ function modDownload() {
     $display .= '<input type="hidden" name="lid" value="'.$lid.'"' . XHTML . '>';
     $display .= '<table width="100%" border="0" class="plugin">';
 
-    list($cid, $title, $url, $homepage, $version, $size, $logourl,$comments) = DB_fetchARRAY($result);
+    list($cid, $title, $url, $homepage, $version, $size, $logourl,$comments,$submitter) = DB_fetchARRAY($result);
     $title = $myts->makeTboxData4Edit($title);
     $pathstring = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php\">"._MD_MAIN."</a>&nbsp;:&nbsp;";
     $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_CONF['site_url']}/filemgmt/viewcat.php");
@@ -348,7 +348,7 @@ function modDownload() {
     $version = $myts->makeTboxData4Edit($version);
     $size = $myts->makeTboxData4Edit($size);
     $logourl = rawurldecode($myts->makeTboxData4Edit($logourl));
-    $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid=$lid");
+    $result2 = DB_query("SELECT description FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='".addslashes($lid)."'");
     list($description)=DB_fetchARRAY($result2);
     $description = $myts->makeTareaData4Edit($description);
     $display .= '<tr><td>'._MD_FILEID.'</td><td colspan="2"><b>'.$lid.'</b></td></tr>';
@@ -381,6 +381,12 @@ function modDownload() {
         $display .= '<input type="radio" name="commentoption" value="0" checked="checked"' . XHTML . '>&nbsp;'._MD_NO.'&nbsp;';
     }
     $display .= '</td></tr>' .LB;
+
+    $display .= '<tr><td>'._MD_OWNER.'</td><td colspan="2">';
+    $display .= COM_buildOwnerList('owner_id',$submitter);
+    $display .= '</td></tr>'.LB;
+
+
     $display .= '<tr><td>Silent Edit</td><td colspan="2">';
     $display .= '<input type="checkbox" name="silentedit" value="1"' . XHTML . '>';
     $display .= '</td></tr>' . LB;
@@ -408,7 +414,7 @@ function modDownload() {
     $display .= sprintf(_MD_DLRATINGS,$totalvotes);
     $display .= '</th></tr>';
     // Show Registered Users Votes
-    $result5 = DB_query("SELECT ratingid, ratinguser, rating, ratinghostname, ratingtimestamp FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='$lid' AND ratinguser != 0 ORDER BY ratingtimestamp DESC");
+    $result5 = DB_query("SELECT ratingid, ratinguser, rating, ratinghostname, ratingtimestamp FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='".addslashes($lid)."' AND ratinguser != 0 ORDER BY ratingtimestamp DESC");
     $votes = DB_numROWS($result5);
     $display .= '<tr><td colspan="7">';
     $display .= sprintf(_MD_REGUSERVOTES,$votes);
@@ -443,7 +449,7 @@ function modDownload() {
     }
     $display .= '</table></form>' .LB;
     // Show Unregistered Users Votes
-    $result5 = DB_query("SELECT ratingid, rating, ratinghostname, ratingtimestamp FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='$lid' AND ratinguser=0 ORDER BY ratingtimestamp DESC");
+    $result5 = DB_query("SELECT ratingid, rating, ratinghostname, ratingtimestamp FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='".addslashes($lid)."' AND ratinguser=0 ORDER BY ratingtimestamp DESC");
     $votes = DB_numROWS($result5);
     $display .= '<form method="post" action="index.php" onsubmit="alert(this.form.op.value)">';
     $display .= '<input type="hidden" name="op" value=""' . XHTML . '>';
@@ -471,7 +477,6 @@ function modDownload() {
     }
     $display .= "<tr><td colspan=\"6\">&nbsp;<br" . XHTML . "></td></tr>\n";
     $display .= "</table></form>";
-//    $display .= CloseTable();
     $display .= "<br" . XHTML . ">";
     $display .= COM_endBlock();
     $display .= COM_siteFooter();
@@ -504,11 +509,11 @@ function listBrokenDownloads() {
         while(list($reportid, $lid, $sender, $ip) = DB_fetchARRAY($result)) {
            $result2 = DB_query("SELECT title, url, submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
            if ($sender != 0) {
-               $result3 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='$sender'");
+               $result3 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".addslashes($sender)."'");
                list($sendername, $email) = DB_fetchARRAY($result3);
             }
             list($title, $url, $owner) = DB_fetchARRAY($result2);
-            $result4 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='$owner'");
+            $result4 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".addslashes($owner)."'");
             list($ownername, $owneremail) = DB_fetchARRAY($result4);
             $display .= '<tr class="pluginRow'.$cssid.'"><td><a href="'.$_CONF['site_url'].'/filemgmt/visit.php?lid='.$lid.'">'.$title.'</a></td>';
 
@@ -547,8 +552,8 @@ function delBrokenDownloads() {
     global $_FM_TABLES,$eh;
 
     $lid = $_POST['lid'];
-    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid'");
-    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedetail']}  WHERE lid='$lid'");
+    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".addslashes($lid)."'");
+    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedetail']}  WHERE lid='".addslashes($lid)."'");
     redirect_header("index.php?op=listBrokenDownloads",1,_MD_FILEDELETED);
     exit();
 }
@@ -556,8 +561,8 @@ function delBrokenDownloads() {
 function ignoreBrokenDownloads() {
     global $_FM_TABLES,$eh;
 
-    $lid = $_POST['lid'];
-    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid'");
+    $lid = intval($_POST['lid']);
+    DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='".addslashes($lid)."'");
     redirect_header("index.php?op=listBrokenDownloads",1,_MD_BROKENDELETED);
     exit();
 }
@@ -565,9 +570,9 @@ function ignoreBrokenDownloads() {
 function delVote() {
    global $_CONF,$_FM_TABLES,$eh;
 
-   $rid = $_POST['rid'];
-   $lid = $_POST['lid'];
-   DB_query("DELETE FROM {$_FM_TABLES['filemgmt_votedata']} WHERE ratingid='$rid'");
+   $rid = intval($_POST['rid']);
+   $lid = intval($_POST['lid']);
+   DB_query("DELETE FROM {$_FM_TABLES['filemgmt_votedata']} WHERE ratingid='".addslashes($rid)."'");
    updaterating($lid);
    redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?lid=$lid&amp;op=modDownload",2,_MD_VOTEDELETED);
    exit();
@@ -584,8 +589,9 @@ function modDownloadS() {
         $url = rawurlencode($myts->makeTboxData4Save($_POST['url']));
     }
     $silentEdit = COM_applyFilter($_POST['silentedit'],true);
+    $submitter  = intval(COM_applyFilter($_POST['owner_id'],true));
 
-    $currentfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'url', "lid='{$_POST['lid']}'");
+    $currentfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'url', "lid=".intval($_POST['lid']));
     $currentfileFQN = $filemgmt_FileStore . $myts->makeTboxData4Save(rawurldecode($currentfile));
     $newfile = rawurlencode($myts->makeTboxData4Save($_FILES['newfile']['name']));
     COM_errorLOG("Currentfilename is:'$currentfile' and new file is:'$newfile'");
@@ -628,7 +634,7 @@ function modDownloadS() {
                 }
             }
 
-            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size." WHERE lid='{$_POST['lid']}'");
+            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size." WHERE lid=".intval($_POST['lid']));
             if ( $currentfile != $newfile ) {
                 @unlink($filemgmt_FileStore.$currentfile);
             }
@@ -637,9 +643,9 @@ function modDownloadS() {
         $size = COM_applyFilter($_POST['size'],true);
         $size = $myts->makeTboxData4Save($size);
         $url = $fileurl;
-        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size." WHERE lid='{$_POST['lid']}'");
+        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size." WHERE lid=".intval($_POST['lid']));
     }
-    $currentsnapfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'logourl', "lid='{$_POST['lid']}'");
+    $currentsnapfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'logourl', "lid=".intval($_POST['lid']));
     $currentSnapFQN = $filemgmt_SnapStore . $myts->makeTboxData4Save(rawurldecode($currentsnapfile));
     $newsnapfile = rawurlencode($myts->makeTboxData4Save($_FILES['newfileshot']['name']));
 
@@ -671,7 +677,7 @@ function modDownloadS() {
             $eh->show("1106");
         } else {
             $logourl = rawurlencode($myts->makeTboxData4Save($upload->_currentFile['name']));
-            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET logourl='$logourl' WHERE lid='{$_POST['lid']}'");
+            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET logourl='$logourl' WHERE lid=".intval($_POST['lid']));
             if ( $currentsnapfile != $newfile ) {
                 @unlink($filemgmt_SnapStore.$currentsnapfile);
             }
@@ -679,7 +685,7 @@ function modDownloadS() {
     } elseif(isset($_POST['deletesnap'])) {
         if (file_exists($currentSnapFQN) && (!is_dir($currentSnapFQN))) {
             $err=@unlink ($currentSnapFQN);
-            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET logourl='' WHERE lid='{$_POST['lid']}'");
+            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET logourl='' WHERE lid=".intval($_POST['lid']));
             COM_errorLOG("Delete repository snapfile:$currentSnapFQN.");
         }
     }
@@ -690,11 +696,11 @@ function modDownloadS() {
     $description    = $myts->makeTareaData4Save($_POST['description']);
     $commentoption  = $_POST['commentoption'];
     if ( $silentEdit ) {
-    	DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, comments='$commentoption' WHERE lid='{$_POST['lid']}'");
+    	DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, comments='$commentoption', submitter=$submitter WHERE lid=".intval($_POST['lid']));
 	} else {
-   		DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, date=".time().", comments='$commentoption' WHERE lid='{$_POST['lid']}'");
+   		DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, date=".time().", comments='$commentoption', submitter=$submitter WHERE lid=".intval($_POST['lid']));
 	}
-    DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' WHERE lid='{$_POST['lid']}'");
+    DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' WHERE lid=".intval($_POST['lid']));
     CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_url']}/filemgmt/index.php",2,_MD_DBUPDATED);
     exit();
@@ -703,7 +709,7 @@ function modDownloadS() {
 function delDownload() {
     global $_FM_TABLES,$_CONF,$myts,$filemgmt_FileStore,$filemgmt_SnapStore,$eh;
 
-    $lid = $myts->makeTboxData4Save($_POST['lid']);
+    $lid = $myts->makeTboxData4Save(intval($_POST['lid']));
     $name = $myts->makeTboxData4Save(rawurldecode($_POST['url']));
     $tmpurl = rawurlencode($_POST['url']);
     $tmpfile  = $filemgmt_FileStore . $name;
@@ -763,7 +769,7 @@ function modCat() {
     $display .= COM_optionList($_TABLES['groups'], "grp_id,grp_name",$writeaccess) . '</select></td></tr>';
     $display .= '<tr><td>' ._MD_IMGURLMAIN. '</td><td><input type="file" name="imgurl" value="'.$imgurl.'" size="50" maxlength="100"></td></tr>';
     $display .= '<tr><td>' . _MD_PARENT. '</td><td>';
-    $display .= $mytree->makeMySelBox("title", "title", $pid, 1, "pid");
+    $display .= $mytree->makeMySelBox("title", "title", $pid, 1, "pid",'',$cid);
     $display .= '</td></tr>';
     $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
     $display .= '<input type="submit" value="'._MD_SAVE.'">';
@@ -780,7 +786,7 @@ function modCat() {
 function delNewDownload() {
     global $_FM_TABLES,$filemgmt_FileStore,$filemgmt_SnapCat,$filemgmt_SnapStore,$myts,$eh;
 
-    $lid = $_POST['lid'];
+    $lid = intval($_POST['lid']);
     if (DB_count($_FM_TABLES['filemgmt_filedetail'],'lid',$lid) == 1) {
         $tmpnames = explode(";",DB_getItem($_FM_TABLES['filemgmt_filedetail'],'platform',"lid='$lid'"));
         $tmpfilename = $tmpnames[0];
@@ -1192,9 +1198,9 @@ function addDownload() {
 function approve(){
     global $_FM_TABLES,$_TABLES,$_CONF,$myts,$eh,$filemgmt_FileStore,$filemgmt_SnapStore,$filemgmt_Emailoption,$filemgmtFilePermissions;
 
-    $lid = $_POST['lid'];
+    $lid = intval($_POST['lid']);
     $title = $_POST['title'];
-    $cid = $_POST['cid'];
+    $cid = intval($_POST['cid']);
     if ( empty($cid) ) {
         $cid = 0;
     }
@@ -1293,7 +1299,7 @@ function approve(){
 function filemgmt_comments($firstcomment) {
     global $_USER,$_CONF;
 
-    $comment_id  = "filemgmt-".$_GET['lid'];
+    $comment_id  = "filemgmt-".intval($_GET['lid']);
     $file = $_GET['filename'];
     if ($firstcomment) {
         $story=$comment_id;

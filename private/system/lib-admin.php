@@ -50,6 +50,7 @@ if (!defined ('GVERSION')) {
 * @param    array   $text_arr       array with different text strings
 * @param    array   $data_arr       array with sql query data - array of list records
 * @param    array   $options        array of options - intially just used for the Check-All feature
+* @param    array   $form_arr       optional extra forms at top or bottom
 * @return   string                  HTML output of function
 *
 */
@@ -203,6 +204,8 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
 * @param    array   $defsort_arr    default sorting values
 * @param    string  $filter         additional drop-down filters
 * @param    string  $extra          additional values passed to fieldfunction
+* @param    array   $options        array of options - intially just used for the Check-All feature
+* @param    array   $form_arr       optional extra forms at top or bottom
 * @return   string                  HTML output of function
 *
 */
@@ -233,17 +236,12 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     $page = '';
     // get the current page from the interface. The variable is linked to the
     // component, i.e. the plugin/function calling this here to avoid overlap
-    $page = $inputHandler->getVar('integer',$component.'listpage','request',0);
+    $page = $inputHandler->getVar('integer',$component.'listpage',array('post','get'),0);
     $curpage = $page;
 
     if ($curpage <= 0) {
         $curpage = 1; #current page has to be larger 0
     }
-
-    #$unfiltered='';
-    #if (!empty($query_arr['unfiltered'])) {
-    #    $unfiltered = $query_arr['unfiltered'];
-    #}
 
     $help_url = ''; # do we have a help url for the block-header?
     if (!empty ($text_arr['help_url'])) {
@@ -330,22 +328,14 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $order = $header_arr[$order_var]['field'];  # current order field name
     }
     $order_for_query = $order;
-    // this code sorts only by the field if its in table.field style.
-    // removing this however makes match for arrow-display impossible, so removed it.
-    // maybe now for more fields the table has to be added to the sortfield?
-    //$order = explode ('.', $order);
-    //if (count ($order) > 1) {
-    //    $order = $order[1];
-    //} else {
-    //    $order = $order[0];
-    //}
 
     $direction = '';
     $direction = $inputHandler->getVar('strict','direction','get','');
     if (empty ($direction)) { # get direction to sort after
         $direction = $defsort_arr['direction'];
     }
-    $direction = strtoupper ($direction);
+    $direction = strtoupper($direction) == 'DESC' ? 'DESC' : 'ASC';
+
     if ($order == $prevorder) { #reverse direction if prev. order was the same
         $direction = ($direction == 'DESC') ? 'ASC' : 'DESC';
     } else {
@@ -383,7 +373,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             } else {
                 $separator = '?';
             }
-            $th_subtags .= " onclick=\"window.location.href='$form_url$separator" #onclick action
+            $th_subtags .= " onclick=\"window.location.href='$form_url$separator" // onclick action
                     ."order=$order_var&amp;prevorder=$order&amp;direction=$direction";
             if (!empty ($page)) {
                 $th_subtags .= '&amp;' . $component . 'listpage=' . $page;
@@ -445,7 +435,6 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             $filter_str .= ")";
         }
         $num_pages_sql = $sql . $filter_str;
-        // COM_errorLog($num_pages_sql);
         $num_pages_result = DB_query($num_pages_sql);
         $num_rows = DB_numRows($num_pages_result);
         $num_pages = ceil ($num_rows / $limit);
@@ -569,8 +558,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 * @return   string                  HTML output of function
 *
 */
-function ADMIN_createMenu($menu_arr, $text, $icon = '') {
+function ADMIN_createMenu($menu_arr, $text, $icon = '')
+{
     global $_CONF;
+
     $admin_templates = new Template($_CONF['path_layout'] . 'admin/lists');
     $admin_templates->set_file (
         array ('top_menu' => 'topmenu.thtml')
@@ -598,6 +589,17 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '') {
 }
 
 
+/**
+ * The following functions are helper functions used as $fieldfunction with
+ * ADMIN_list and ADMIN_simpleList (see above)
+ *
+ */
+
+
+/**
+ * used for the list of blocks in admin/block.php
+ *
+ */
 function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
     global $_CONF, $LANG_ADMIN, $LANG21, $pageHandle;
@@ -663,19 +665,20 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
     return $retval;
 }
 
-function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr)
+/**
+ * used for the list of groups and in the group editor in admin/group.php
+ *
+ */
+function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr, $selected = '')
 {
     global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $thisUsersGroups, $inputHandler;
 
     $retval = false;
 
-    if( !is_array($thisUsersGroups) )
-    {
+    if(! is_array($thisUsersGroups)) {
         $thisUsersGroups = SEC_getUserGroups();
     }
 
-    // Extra test required to handle that different ways this option is passed and need to be able to
-    // over-ride the option using the posted form when the URL contains the variable as well
     $show_all_groups = false;
     $q = $inputHandler->getVar('strict','q','post','');
     if (!empty($q)) {   // Form has been posted - test actual option in this form
@@ -689,46 +692,71 @@ function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr)
     if (in_array ($A['grp_id'], $thisUsersGroups ) ||
         SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
         switch($fieldname) {
-            case 'edit':
-                if ($show_all_groups) {
-                    $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/group.php?mode=edit&amp;grp_id={$A['grp_id']}&amp;chk_showall=1");
-                } else {
-                    $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/group.php?mode=edit&amp;grp_id={$A['grp_id']}");
-                }
-                break;
-            case 'grp_gl_core':
-                if ($A['grp_gl_core'] == 1) {
-                    $retval = $LANG_ACCESS['yes'];
-                } else {
-                    $retval = $LANG_ACCESS['no'];
-                }
-                break;
-            case 'list':
-                if ($show_all_groups) {
-                    $retval = COM_createLink($icon_arr['list'],
-                        "{$_CONF['site_admin_url']}/group.php?mode=listusers&amp;grp_id={$A['grp_id']}&amp;chk_showall=1")
-                        ."&nbsp;&nbsp;"
-                        . COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/group.php?mode=editusers&amp;grp_id={$A['grp_id']}&amp;chk_showall=1");
-                } else {
-                    $retval = COM_createLink($icon_arr['list'],
-                        "{$_CONF['site_admin_url']}/group.php?mode=listusers&amp;grp_id={$A['grp_id']}")
-                        ."&nbsp;&nbsp;"
-                        . COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/group.php?mode=editusers&amp;grp_id={$A['grp_id']}");
-                }
-                break;
-            default:
-                $retval = $fieldvalue;
-                break;
+        case 'edit':
+            $url = $_CONF['site_admin_url'] . '/group.php?mode=edit&amp;grp_id='
+                 . $A['grp_id'];
+            if ($show_all_groups) {
+                $url .= '&amp;chk_showall=1';
+            }
+            $retval = COM_createLink($icon_arr['edit'], $url);
+            break;
+
+        case 'grp_gl_core':
+            if ($A['grp_gl_core'] == 1) {
+                $retval = $LANG_ACCESS['yes'];
+            } else {
+                $retval = $LANG_ACCESS['no'];
+            }
+            break;
+
+        case 'list':
+            $url = $_CONF['site_admin_url'] . '/group.php?mode=';
+            if ($show_all_groups) {
+                $param = '&amp;grp_id=' . $A['grp_id'] . '&amp;chk_showall=1';
+            } else {
+                $param = '&amp;grp_id=' . $A['grp_id'];
+            }
+
+            $retval = COM_createLink($icon_arr['list'],
+                                     $url . 'listusers' . $param);
+            if (($A['grp_name'] != 'All Users') &&
+                    ($A['grp_name'] != 'Logged-in Users')) {
+                $retval .= '&nbsp;&nbsp;' . COM_createLink($icon_arr['edit'],
+                                                $url . 'editusers' . $param);
+            }
+            break;
+
+        case 'checkbox':
+            $retval = '<input type="checkbox" name="groups[]" value="'
+                    . $A['grp_id'] . '"';
+            if (is_array($selected) && in_array($A['grp_id'], $selected)) {
+                $retval .= ' checked="checked"';
+            }
+            $retval .= XHTML . '>';
+            break;
+
+        case 'disabled-checkbox':
+            $retval = '<input type="checkbox" checked="checked" '
+                    . 'disabled="disabled"' . XHTML . '>';
+            break;
+
+        case 'grp_name':
+            $retval = ucwords($fieldvalue);
+            break;
+
+        default:
+            $retval = $fieldvalue;
+            break;
         }
     }
 
     return $retval;
 }
 
+/**
+ * used for the list of users in admin/user.php
+ *
+ */
 function ADMIN_getListField_users($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $pageHandle;
@@ -808,6 +836,10 @@ function ADMIN_getListField_users($fieldname, $fieldvalue, $A, $icon_arr)
     return $retval;
 }
 
+/**
+ * used for the list of stories in admin/story.php
+ *
+ */
 function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG24, $LANG_ACCESS,
@@ -914,7 +946,7 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
         case 'tid':
             if (!isset ($topics[$A['tid']])) {
                 $topics[$A['tid']] = DB_getItem ($_TABLES['topics'], 'topic',
-                                                 "tid = '{$A['tid']}'");
+                                                 "tid = '".addslashes($A['tid'])."'");
             }
             $retval = $topics[$A['tid']];
             break;
@@ -929,6 +961,10 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
     return $retval;
 }
 
+/**
+ * used for the list of feeds in admin/syndication.php
+ *
+ */
 function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $pageHandle;
@@ -970,7 +1006,7 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
                 $retval = $LANG33[44];
             } else {
                 $retval = DB_getItem ($_TABLES['topics'], 'topic',
-                                      "tid = '{$A['header_tid']}'");
+                                      "tid = '".addslashes($A['header_tid'])."'");
             }
             break;
         case 'filename':
@@ -984,7 +1020,12 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
     return $retval;
 }
 
-function ADMIN_getListField_plugins($fieldname, $fieldvalue, $A, $icon_arr, $token) {
+/**
+ * used for the list of plugins in admin/plugins.php
+ *
+ */
+function ADMIN_getListField_plugins($fieldname, $fieldvalue, $A, $icon_arr, $token)
+{
     global $_CONF, $LANG_ADMIN, $LANG32,$_PLUGINS;
     $retval = '';
 
@@ -1035,6 +1076,10 @@ function ADMIN_getListField_plugins($fieldname, $fieldvalue, $A, $icon_arr, $tok
     return $retval;
 }
 
+/**
+ * used for the lists of submissions and draft stories in admin/moderation.php
+ *
+ */
 function ADMIN_getListField_moderation($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN;
@@ -1046,36 +1091,72 @@ function ADMIN_getListField_moderation($fieldname, $fieldvalue, $A, $icon_arr)
         $type = $A['_moderation_type'];
     }
     switch ($fieldname) {
-        case 'edit':
-            $retval = COM_createLink($icon_arr['edit'], $A['edit']);
-            break;
-        case 'delete':
-            $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"delete\"" . XHTML . ">";
-            break;
-        case 'approve':
-            $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"approve\"" . XHTML . ">"
-                     ."<input type=\"hidden\" name=\"id[{$A['row']}]\" value=\"{$A[0]}\"" . XHTML . ">";
-            break;
-        case 'day':
-            $retval = strftime ($_CONF['daytime'], $A['day']);
-            break;
-        case 'tid':
-            $retval = DB_getItem ($_TABLES['topics'], 'topic',
-                                  "tid = '{$A['tid']}'");
-            break;
-        default:
-            if (($fieldname == 3) && ($type == 'story')) {
-                $retval = DB_getItem ($_TABLES['topics'], 'topic',
-                                      "tid = '{$A[3]}'");
-            } else {
-                $retval = COM_makeClickableLinks (stripslashes ($fieldvalue));
-            }
-            break;
+    case 'edit':
+        $retval = COM_createLink($icon_arr['edit'], $A['edit']);
+        break;
+
+    case 'delete':
+        $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"delete\"" . XHTML . ">";
+        break;
+
+    case 'approve':
+        $retval = "<input type=\"radio\" name=\"action[{$A['row']}]\" value=\"approve\"" . XHTML . ">"
+                 ."<input type=\"hidden\" name=\"id[{$A['row']}]\" value=\"{$A[0]}\"" . XHTML . ">";
+        break;
+
+    case 'day':
+        $retval = strftime($_CONF['daytime'], $A['day']);
+        break;
+
+    case 'tid':
+        $retval = DB_getItem($_TABLES['topics'], 'topic',
+                             "tid = '".addslashes($A['tid'])."'");
+        break;
+
+    case 'uid':
+        $name = '';
+        if ($A['uid'] == 1) {
+            $name = htmlspecialchars(COM_stripslashes(DB_getItem($_TABLES['commentsubmissions'], 'name', "cid = '".addslashes($A['id'])."'")));
+        }
+        if (empty($name)) {
+            $name = DB_getItem($_TABLES['users'], 'username',
+                               "uid = ".intval($A['uid']));
+        }
+        if ($A['uid'] == 1) {
+            $retval = $name;
+        } else {
+            $retval = COM_createLink($name, $_CONF['site_url']
+                            . '/users.php?mode=profile&amp;uid=' . $A['uid']);
+        }
+        break;
+
+    case 'publishfuture':
+        if (!SEC_inGroup('Comment Submitters', $A['uid']) && ($A['uid'] > 1)) {
+            $retval = "<input type=\"checkbox\" name=\"publishfuture[]\" value=\"{$A['uid']}\"" . XHTML . ">";
+        } else {
+            $retval = $LANG_ADMIN['na'];
+        }
+        break;
+
+    default:
+        if (($fieldname == 3) && ($type == 'story')) {
+            $retval = DB_getItem($_TABLES['topics'], 'topic',
+                                  "tid = '".addslashes($A[3])."'");
+        } elseif (($fieldname == 2) && ($type == 'comment')) {
+            $retval = COM_truncate(strip_tags($A['comment']), 40, '...');
+        } else {
+            $retval = COM_makeClickableLinks(stripslashes($fieldvalue));
+        }
+        break;
     }
 
     return $retval;
 }
 
+/**
+ * used for the list of ping services in admin/trackback.php
+ *
+ */
 function ADMIN_getListField_trackback($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
     global $_CONF, $LANG_TRB;
@@ -1114,6 +1195,54 @@ function ADMIN_getListField_trackback($fieldname, $fieldvalue, $A, $icon_arr, $t
         default:
             $retval = $fieldvalue;
             break;
+    }
+
+    return $retval;
+}
+
+/**
+ * used in the user editor in admin/user.php
+ *
+ */
+function ADMIN_getListField_usergroups($fieldname, $fieldvalue, $A, $icon_arr, $selected = '')
+{
+    global $thisUsersGroups;
+
+    $retval = false;
+
+    if(! is_array($thisUsersGroups)) {
+        $thisUsersGroups = SEC_getUserGroups();
+    }
+
+    if (in_array($A['grp_id'], $thisUsersGroups ) ||
+          SEC_groupIsRemoteUserAndHaveAccess($A['grp_id'], $thisUsersGroups)) {
+        switch($fieldname) {
+        case 'checkbox':
+            $checked = '';
+            if (is_array($selected) && in_array($A['grp_id'], $selected)) {
+                $checked = ' checked="checked"';
+            }
+            if (($A['grp_name'] == 'All Users') ||
+                ($A['grp_name'] == 'Logged-in Users') ||
+                ($A['grp_name'] == 'Remote Users')) {
+                $retval = '<input type="checkbox" disabled="disabled"'
+                        . $checked . XHTML . '>'
+                        . '<input type="hidden" name="groups[]" value="'
+                        . $A['grp_id'] . '"' . $checked . XHTML . '>';
+            } else {
+                $retval = '<input type="checkbox" name="groups[]" value="'
+                        . $A['grp_id'] . '"' . $checked . XHTML . '>';
+            }
+            break;
+
+        case 'grp_name':
+            $retval = ucwords($fieldvalue);
+            break;
+
+        default:
+            $retval = $fieldvalue;
+            break;
+        }
     }
 
     return $retval;

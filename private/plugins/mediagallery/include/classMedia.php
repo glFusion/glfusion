@@ -312,7 +312,7 @@ class Media {
 		            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
 		            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
 
-		            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $this->id . "'");
+		            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($this->id) . "'");
 		            while ( $poRow = DB_fetchArray($poResult) ) {
 		                $playback_options[$poRow['option_name']] = $poRow['option_value'];
 		            }
@@ -336,7 +336,7 @@ class Media {
 		                        $resolution_y = $ThisFileInfo['video']['resolution_y'];
 		                    }
 		                    if ( $resolution_x != 0 ) {
-		                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . $this->id . "'";
+		                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . addslashes($this->id) . "'";
 		                        DB_query( $sql,1 );
 		                    }
 		                } else {
@@ -468,7 +468,7 @@ class Media {
         }
 
         if ( $this->owner_id != "" && $this->owner_id > 1 ) {
-	        $username = DB_getItem($_TABLES['users'],'username',"uid=$this->owner_id");
+	        $username = DB_getItem($_TABLES['users'],'username',"uid=".intval($this->owner_id));
         } else {
 	        $username = 'anonymous';
         }
@@ -519,7 +519,14 @@ class Media {
             if ( $MG_albums[$this->album_id]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
                 $static = 'static';
             }
-            $rating_box = mgRating_bar($this->id, $this->votes, ($this->rating*$this->votes)/2, $voted,   5,        $static,'sm');//                                       $id,       $total_votes,  $total_value,                , $voted=0, $units='', $static='',$size=''
+            if ( $_MG_CONF['use_large_stars'] == 1 ) {
+                $starSize = '';
+            } else {
+                $starSize = 'sm';
+            }
+            $rating_box = mgRating_bar($this->id, $this->votes,
+                                       ($this->rating*$this->votes)/2, $voted,
+                                       5,$static,$starSize);
         } else {
             $rating_box = '';
         }

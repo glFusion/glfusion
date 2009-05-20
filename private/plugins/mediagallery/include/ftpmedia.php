@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: ftpmedia.php 3070 2008-09-07 02:40:49Z mevans0263                 $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -110,6 +110,11 @@ function MG_listDir ($dir, $album_id, $purgefiles, $recurse ) {
     if (!$dh = @opendir($directory))
     {
         return(MG_errorHandler( $LANG_MG02['directory_error']));
+    }
+
+    $directory = trim($directory);
+    if ( $directory[strlen($directory)-1] != '/' ) {
+        $directory =  $directory . '/';
     }
 
     /*
@@ -297,7 +302,8 @@ function MG_ftpProcess( $album_id ) {
 
     foreach ($_POST['pic'] as $pic_id) {
         $album_lb_id = COM_applyFilter($_POST['album_lb_id_' . $pic_id]);
-        $aid         = COM_applyFilter($_POST[$album_lb_id]);
+        $aid         = COM_applyFilter($_POST[$album_lb_id],true);
+
         $filename    = COM_applyFilter($_POST['picfile_' . $pic_id]);        // full path and name
         $file        = basename($filename);                 // basefilename
         if ( is_dir($filename)) {

@@ -495,7 +495,7 @@ class ListFactory {
                 continue;
             }
             if ($this->_query_arr[$i]['type'] == 'sql' ) {
-                $limit_sql = " LIMIT {$limits[$i]['offset']},{$limits[$i]['limit']}";
+                $limit_sql = " LIMIT ".intval($limits[$i]['offset']).",".intval($limits[$i]['limit']);
                 if (is_array($this->_query_arr[$i]['sql'])) {
                     $this->_query_arr[$i]['sql']['mysql'] .= $order_sql . $limit_sql;
                     $this->_query_arr[$i]['sql']['mssql'] .= $order_sql . $limit_sql;
@@ -763,7 +763,8 @@ class ListFactory {
         $list_templates->set_var('google_paging',$gp);
         $list_templates->set_var('page_url',$page_url);
 
-        $list_top = @sprintf($list_top, $offset+1, $r+$offset-1, $this->_total_found);
+        $search_numbers = @sprintf($LANG09[64],$offset+1, $r+$offset-1, $this->_total_found);
+        $list_top = '<p>'.$search_numbers.'<br />'.$list_top.'<p>';
         $list_templates->set_var('list_top', $list_top);
         $list_templates->set_var('list_bottom', $list_bottom);
 

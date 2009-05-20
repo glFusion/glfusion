@@ -10,7 +10,38 @@ v1.2.0
 
 v1.1.4
 ------
+- Remove spaces from block arrays to ensure no trailing spaces are converted
+  to commas (Fix provided by James) (Mark)
+- Allow anonymous users to email admin using contact form regarless of login
+  requirement (Mark)
+- User profile page did not properly honor showonline status and
+  accept email from user status (Mark)
+- Integrated last 10 logged in users into stats
+  Integrated User Activity (phpblock_lastlogin) block (Mark)
+- Trim trailing spaces from username during login authentication (Mark)
+- Only allow non-Root mail.admin users to email users in groups the mail.admin
+  user belongs to (Mark)
+- Search did not display proper results when search string contained % (Mark)
+- Added ability to enable / disable plugins in fusionrescue.php (Mark)
+- Added permission check for MG tmp directory during install / upgrade (Mark)
+- Added CUSTOM_js() hook to allow addition of other JS files (Mark)
+- 0000441: Advanced path settings in the installation screen are not updated
+  if base path changes (Mark)
+- Group editor did not properly save additional groups or features (Mark)
+- Set height of logview window to facilitate easier horizontal scrolling (Eric)
+- Moved css and js cache files to layout_cache/ directory (Mark)
+- Added $_SYSTEM['skip_ip_check'] to disable the long term cookie IP check
+  (Mark)
+- Handle disabled set_time_limit() function better in plugin upload routines
+  (Mark)
+- Fine tuned SQL calls to help prevent injection / other issues (Mark)
+- Force IE8 to use IE7 compatibility mode to resolve text entry issues with
+  the forum plugin (Mark)
+- Properly filter the topics array prior to using in SQL in usersettings.php
+  (Mark)
 - Add CRLF between each JavaScript file (Mark)
+- Language overrides - the ability to override language file entries using
+  a custom language file (Mark)
 - Additional security tweaks (Mark)
 - 0000422 Use of adveditor in block editor does not permit use of image insert
   or file upload connector (Mark)
@@ -22,8 +53,33 @@ v1.1.4
 - Advanced search using date range did not return stories or comments in
   that date range (Mark)
 
+FileMgmt
+--------
+- Do not allow user to select the current category as it's own parent (Mark)
+- Call stripslashes() on file description prior to emailing admins of new
+  upload (Mark)
+- Ability to change the owner (submitter) of a file (Mark)
+
+Forum
+-----
+- Fixed issue where duplicate forum names (different categories) did not show
+  in the forum selection list for moderation functions. (Mark)
+
 Media Gallery
 -------------
+- Upgraded minislideshow.swf to latest version (Mark)
+- New config setting: $_MG_CONF['use_large_stars'] - if set to 1, the larger
+  stars will be used in the album view instead of the smaller stars. (Mark)
+- Added option to phpblock_mg_randommedia to link to album instead of media.
+  Modify the block function to phpblock_mg_randommedia(album) (Mark)
+- Added option to statically sort an album by rating (Mark)
+- FTP import did not properly add trailing backslash if missing (Mark)
+- Moved RSS feed files to the glFusion backend/ directory (Mark)
+- Email moderators option did not appear in album edit / create (Mark)
+- Under some circumstances creating an album would fail with an SQL error (Mark)
+- Fixed issue where 'slideshow' auto tag did not honor the media_order
+  field (Mark).
+- FTP batch import would crash with SQL error (Mark)
 - 0000428 Wiki type keywords - Added [alink] auto tag to allow text links
   to albums (Mark)
 - 0000437 Slideshow autotag does not honor caption option in config. (Mark)
@@ -33,7 +89,13 @@ Media Gallery
 
 Site Tailor
 -----------
-- 0000434: [Menu] copy menu does not work (mark)
+- 0000434: [Menu] copy menu does not work (Mark)
+
+StaticPages
+-----------
+- Handle session timeouts more gracefully (Mark)
+- Added option to edit the author and owner (Mark)
+- Unable to upload images via the advanced editor when cloning a story (Mark)
 
 v1.1.3
 ------

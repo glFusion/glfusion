@@ -34,8 +34,8 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-error_reporting( E_ALL );
-//error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
+
+error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined('GVERSION')) {
     define('GVERSION', '1.2.0.svn');
@@ -496,6 +496,13 @@ function INST_gotPathSetting($dbc_path = '')
 
     $_GLFUSION['currentstep'] = 'pathsetting';
 
+    // initialize the advanced paths to empty
+
+    $log_path    = '';
+    $lang_path   = '';
+    $backup_path = '';
+    $data_path   = '';
+
     // was it passed from the previous step, or via $_POST?
     if ( $dbc_path == '' ) {
         $dbconfig_path = INST_stripslashes($_POST['private_path']);
@@ -516,43 +523,39 @@ function INST_gotPathSetting($dbc_path = '')
     // store entered path into the session var
     $_GLFUSION['dbconfig_path'] = $dbconfig_path;
 
+    // check and see if the advanced path settings were entered...
+
     if ( isset($_POST['logpath']) && $_POST['logpath'] != '') {
         $log_path = INST_stripslashes($_POST['logpath']);
         if (!preg_match('/^.*\/$/', $log_path)) {
             $log_path .= '/';
         }
-    } else {
-        $log_path = $dbconfig_path .'logs/';
+        $_GLFUSION['log_path']      = $log_path;
     }
+
     if ( isset($_POST['langpath']) && $_POST['langpath'] != '') {
         $lang_path = INST_stripslashes($_POST['langpath']);
         if (!preg_match('/^.*\/$/', $lang_path)) {
             $lang_path .= '/';
         }
-    } else {
-        $lang_path = $dbconfig_path .'language/';
+        $_GLFUSION['lang_path']     = $lang_path;
     }
+
     if ( isset($_POST['backuppath']) && $_POST['backuppath'] != '') {
         $backup_path = INST_stripslashes($_POST['backuppath']);
         if (!preg_match('/^.*\/$/', $backup_path)) {
             $backup_path .= '/';
         }
-    } else {
-        $backup_path = $dbconfig_path .'backups/';
+        $_GLFUSION['backup_path']   = $backup_path;
     }
+
     if ( isset($_POST['datapath']) && $_POST['datapath'] != '') {
         $data_path = INST_stripslashes($_POST['datapath']);
         if (!preg_match('/^.*\/$/', $data_path)) {
             $data_path .= '/';
         }
-    } else {
-        $data_path = $dbconfig_path .'data/';
+        $_GLFUSION['data_path']     = $data_path;
     }
-
-    $_GLFUSION['log_path']      = $log_path;
-    $_GLFUSION['lang_path']     = $lang_path;
-    $_GLFUSION['backup_path']   = $backup_path;
-    $_GLFUSION['data_path']     = $data_path;
 
     // now, lets see if it exists, if not, try to rename the .dist file...
 
@@ -577,6 +580,28 @@ function INST_gotPathSetting($dbc_path = '')
     if ( !INST_isWritable($dbconfig_path.'db-config.php') ) {
         return _displayError(DBCONFIG_NOT_WRITABLE,'pathsetting');
     }
+
+    /* now set the other paths */
+
+    if ( $log_path == '' ) {
+        $log_path = $dbconfig_path .'logs/';
+    }
+
+    if ( $lang_path == '') {
+        $lang_path = $dbconfig_path .'language/';
+    }
+
+    if ( $backup_path == '' ) {
+        $backup_path = $dbconfig_path .'backups/';
+    }
+    if ( $data_path == '' ) {
+        $data_path = $dbconfig_path .'data/';
+    }
+
+    $_GLFUSION['log_path']      = $log_path;
+    $_GLFUSION['lang_path']     = $lang_path;
+    $_GLFUSION['backup_path']   = $backup_path;
+    $_GLFUSION['data_path']     = $data_path;
 
     // we have a good path to /private, off to the next step...
     return INST_checkEnvironment($dbconfig_path);
@@ -742,7 +767,7 @@ function INST_checkEnvironment($dbconfig_path='')
         $_PATH['admin_path'] .= '/';
     }
 
-    $file_list = array( $_PATH['dbconfig_path'],
+    $file_list = array( /*$_PATH['dbconfig_path'],*/
                         $_PATH['dbconfig_path'].'db-config.php',
                         $_PATH['data_path'],
                         $_PATH['log_path'].'error.log',
@@ -751,9 +776,10 @@ function INST_checkEnvironment($dbconfig_path='')
                         $_PATH['log_path'].'spamx.log',
                         $_PATH['data_path'].'layout_cache/',
                         $_PATH['data_path'].'temp/',
+                        $_PATH['dbconfig_path'].'plugins/mediagallery/tmp/',
                         $_PATH['dbconfig_path'].'system/lib-custom.php',
 
-                        $_PATH['public_html'],
+                        /*$_PATH['public_html'],*/
                         $_PATH['public_html'].'siteconfig.php',
                         $_PATH['public_html'].'backend/glfusion.rss',
                         $_PATH['public_html'].'images/articles/',
@@ -772,7 +798,6 @@ function INST_checkEnvironment($dbconfig_path='')
                         $_PATH['public_html'].'mediagallery/mediaobjects/orig/0/',
                         $_PATH['public_html'].'mediagallery/mediaobjects/disp/0/',
                         $_PATH['public_html'].'mediagallery/mediaobjects/tn/0/',
-                        $_PATH['public_html'].'mediagallery/rss/',
                         $_PATH['public_html'].'mediagallery/watermarks/',
 
                         $_PATH['public_html'].'filemgmt_data/',
@@ -1365,9 +1390,6 @@ function INST_installAndContentPlugins()
         $config->set('language', $lng);
     }
 
-    DB_change($_TABLES['vars'], 'value', GVERSION,
-                                'name', 'database_version');
-
     $_CONF['path_html']         = $html_path;
     $_CONF['site_url']          = $site_url;
     $_CONF['site_admin_url']    = $site_admin_url;
@@ -1375,6 +1397,18 @@ function INST_installAndContentPlugins()
     // Setup nouveau as the default
     $config->set('theme', 'nouveau');
     DB_query("UPDATE {$_TABLES['users']} SET theme='nouveau' WHERE uid=2",1);
+
+    $var = time() - rand();
+    $session_cookie = 'pw'.md5($var);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_password'",1);
+
+    $var = time() - rand();
+    $session_cookie = 'pc'.md5($var);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_name'",1);
+
+    $var = time() - rand();
+    $session_cookie = 'sc'.md5($var);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET value='".serialize($session_cookie)."' WHERE name='cookie_session'",1);
 
     $config->_purgeCache();
     // rebuild the config array
@@ -1553,7 +1587,7 @@ function INST_doSiteUpgrade()
         $display .= '<h2>' . $LANG_INSTALL['upgrade_error'] . '</h2>
             <p>' . $LANG_INSTALL['upgrade_error_text'] . '</p>' . LB;
         $display .= $errors;
-        return _displayError(CORE_UPGRADE_ERROR,'done',$display);
+        return _displayError(CORE_UPGRADE_ERROR,'checkenvironment',$display);
     }
     return;
 }

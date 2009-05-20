@@ -153,8 +153,8 @@ function submitstory($topic = '')
     if (isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1) &&
         file_exists ($_CONF['path_layout'] . 'submit/submitstory_advanced.thtml')) {
         $storyform->set_file('storyform','submitstory_advanced.thtml');
-        $ae_uid = addslashes($inputHandler->getVar('integer',$_USER['uid'],''));
-        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id='$ae_uid' AND urlfor='advancededitor'";
+        $ae_uid = $inputHandler->getVar('integer',$_USER['uid'],'');
+        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
         DB_Query($sql,1);
         if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {
             $storyform->set_var('glfusionStyleBasePath',$_CONF['layout_url']);
@@ -268,7 +268,7 @@ function sendNotification ($table, $story)
     $introtext = COM_undoSpecialChars( $story->displayElements('introtext') . "\n" . $story->displayElements('bodytext') );
     $storyauthor = COM_getDisplayName( $story->displayelements('uid') );
     $topic = stripslashes(DB_getItem ($_TABLES['topics'], 'topic',
-                                       'tid = \''.$story->displayElements('tid').'\''));
+                                       'tid = \''.addslashes($story->displayElements('tid')).'\''));
     $mailbody = "$LANG08[31]: {$title}\n"
               . "$LANG24[7]: {$storyauthor}\n"
               . "$LANG08[32]: " . strftime ($_CONF['date']) . "\n"

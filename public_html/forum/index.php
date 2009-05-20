@@ -163,11 +163,11 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
 
             $firstdate = strftime($CONF_FORUM['default_Datetime_format'], $P['date']);
             if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $firstdate = iconv('ISO-8859-1','UTF-8',$firstdate);
+                $firstdate = @iconv('ISO-8859-1','UTF-8',$firstdate);
             }
             $lastdate  = strftime($CONF_FORUM['default_Datetime_format'], $P['lastupdated']);
             if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
-                $lastdate = iconv('ISO-8859-1','UTF-8',$lastdate);
+                $lastdate = @iconv('ISO-8859-1','UTF-8',$lastdate);
             }
 
             if ($p['uid'] > 1) {
@@ -440,7 +440,7 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
     $defsort_arr = array('field'     => 'date',
                          'direction' => 'DESC');
 
-    $sql = "SELECT * FROM {$_TABLES['gf_bookmarks']} AS bookmarks LEFT JOIN {$_TABLES['gf_topic']} AS topics ON bookmarks.topic_id=topics.id LEFT JOIN {$_TABLES['gf_forums']} AS forums ON topics.forum=forums.forum_id WHERE bookmarks.uid=" . $_USER['uid'];
+    $sql = "SELECT * FROM {$_TABLES['gf_bookmarks']} AS bookmarks LEFT JOIN {$_TABLES['gf_topic']} AS topics ON bookmarks.topic_id=topics.id LEFT JOIN {$_TABLES['gf_forums']} AS forums ON topics.forum=forums.forum_id WHERE topics.id != '' AND bookmarks.uid=" . $_USER['uid'];
     $query_arr = array('table'          => 'gf_bookmarks',
                        'sql'            => $sql,
                        'query_fields'   => array('topics.date','topics.subject','topics.comment','topics.name','topics.replies','topics.views','id','forum','forum_name'),

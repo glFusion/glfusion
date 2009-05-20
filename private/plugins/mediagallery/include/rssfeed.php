@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: rssfeed.php 3070 2008-09-07 02:40:49Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -36,11 +36,16 @@ if (!defined ('GVERSION')) {
 
 require_once $_CONF['path'] . 'lib/feedcreator/feedcreator.class.php';
 
+
+
 function MG_buildAlbumRSS( $aid ) {
     global $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
 
+    $feedpath = MG_getFeedPath();
+
     $fname = sprintf($_MG_CONF['rss_feed_name'] . "%06d.rss", $aid);
-    $feedname = $_MG_CONF['path_html'] . "rss/" . $fname;
+//    $feedname = $_MG_CONF['path_html'] . "rss/" . $fname;
+    $feedname = $feedpath . '/' . $fname;
 
     if ( $MG_albums[$aid]->enable_rss != 1 ) {
         @unlink($feedname);
@@ -54,6 +59,8 @@ function MG_buildAlbumRSS( $aid ) {
     $rss->descriptionHtmlSyndicated = true;
 
     $rss->encoding = strtoupper ($_CONF['default_charset']);
+
+    $imgurl = '';
 
 	$image = new FeedImage();
 	$image->title = $MG_albums[$aid]->title;
@@ -120,7 +127,8 @@ function MG_buildAlbumRSS( $aid ) {
  	}
 
     $rss->link = $_MG_CONF['site_url'];
-    $rss->syndicationURL = $_MG_CONF['site_url'] . '/rss/' . $fname;
+//    $rss->syndicationURL = $_MG_CONF['site_url'] . '/rss/' . $fname;
+    $rss->syndicationURL = $feedpath . '/' . $fname;
 
     MG_processAlbumFeedItems( $rss, $aid );
     if ( !empty($MG_albums[$aid]->children) && $MG_albums[$aid]->rssChildren ) {
@@ -152,7 +160,7 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
     global $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
 
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . ' ORDER BY m.media_time DESC';
+            " ON ma.media_id=m.media_id WHERE ma.album_id=" . intval($aid) . ' ORDER BY m.media_time DESC';
 
     $result = DB_query( $sql );
     $nRows  = DB_numRows( $result );
@@ -171,7 +179,7 @@ function MG_processAlbumFeedItems( &$rss, $aid ) {
 				// optional -- applies only if this is a podcast
 			    $item->podcast = new PodcastItem();
 			    $item->podcast->enclosure_url = $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
-			    $item->podcast->enclosure_length = filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
+			    $item->podcast->enclosure_length = @filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
 			    $item->podcast->enclosure_type = $row['mime_type'];
 			}
 
@@ -270,8 +278,11 @@ function MG_parseAlbumsRSS( &$rss, $aid ) {
 function MG_buildFullRSS( ) {
     global $LANG_CHARSET, $MG_albums, $_MG_CONF, $_CONF, $_TABLES;
 
+    $feedpath = MG_getFeedPath();
+
     if ( $_MG_CONF['rss_full_enabled'] != 1 ) {
-        @unlink($_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss');
+//        @unlink($_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss');
+        @unlink($feedpath . '/' . $_MG_CONF['rss_feed_name'] . '.rss');
         return;
     }
     $rss = new UniversalFeedCreator();
@@ -285,8 +296,10 @@ function MG_buildFullRSS( ) {
     MG_parseAlbumsRSS($rss, 0);
     // valid format strings are: RSS0.91, RSS1.0, RSS2.0, PIE0.1 (deprecated),
     // MBOX, OPML, ATOM, ATOM0.3, HTML, JS
-    $rss->saveFeed($_MG_CONF['rss_feed_type'], $_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss',0);
-    @chmod($_MG_CONF['path_html'] . 'rss/' . $_MG_CONF['rss_feed_name'] . '.rss', 0664);
+//    $rss->saveFeed($_MG_CONF['rss_feed_type'], $_MG_CONF['path_html'] . "rss/" . $_MG_CONF['rss_feed_name'] . '.rss',0);
+    $rss->saveFeed($_MG_CONF['rss_feed_type'], $feedpath . "/" . $_MG_CONF['rss_feed_name'] . '.rss',0);
+//    @chmod($_MG_CONF['path_html'] . 'rss/' . $_MG_CONF['rss_feed_name'] . '.rss', 0664);
+    @chmod($feedpath . '/' . $_MG_CONF['rss_feed_name'] . '.rss', 0664);
 
     return;
 }

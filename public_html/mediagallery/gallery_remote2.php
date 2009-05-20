@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -133,7 +133,7 @@ function _mg_gr_login( $loginname, $passwd ) {
     }
 
     if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
-        DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',$uid);
+        DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',intval($uid));
         $userdata = SESS_getUserDataFromId($uid);
         $_USER=$userdata;
         $sessid = SESS_newSession($_USER['uid'], $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
@@ -289,7 +289,7 @@ function _mg_gr_fetch_album_images($aid, $albumstoo) {
 
     $arrayCounter = 0;
     $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
-            " ON ma.media_id=m.media_id WHERE m.media_type=0 AND ma.album_id=" . $aid;
+            " ON ma.media_id=m.media_id WHERE m.media_type=0 AND ma.album_id=" . intval($aid);
 
     $result = DB_query( $sql );
     $nRows  = DB_numRows( $result );
@@ -548,10 +548,10 @@ function _mg_gr_move_album($albname, $destaname) {
 
     $retval = '';
 
-    if ( ($MG_albums[$albname]->access != 3 || $MG_albums[$destaname]->access != 3) && !$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/ ) {
+    if ( ($MG_albums[$albname]->access != 3 || $MG_albums[$destaname]->access != 3) && !$MG_albums[0]->owner_id ) {
         _mg_gr_finish(GR_STAT_NO_WRITE_PERMISSION, $retval,'No write permissions');
     }
-    $sql = "UPDATE {$_TABLES['mg_albums']} SET album_parent=" . $destaname . " WHERE album_id=" . $albname;
+    $sql = "UPDATE {$_TABLES['mg_albums']} SET album_parent=" . intval($destaname) . " WHERE album_id=" . intval($albname);
     DB_query($sql);
     _mg_gr_finish(GR_STAT_SUCCESS, $retval, 'Album reparented');
 }

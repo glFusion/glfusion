@@ -127,20 +127,12 @@ function MG_editMemberDefaults( ) {
     $album_list_root .= '<option value="0">' . $LANG_MG01['root_album'] . '</option>';
     $album_list_root .= $album_jumpbox;
     $album_list_root .= '</select>';
-/*
-    $MG_albums[0]->buildJumpBox($_MG_CONF['member_album_archive']);
-    $member_archive   = '<select name="member_archive">';
-    $member_archive .= '<option value="0">' . $LANG_MG01['do_not_archive'] . '</option>';
-    $member_archive .= $album_jumpbox;
-    $member_archive .= '</select>';
-*/
+
     $MG_albums[0]->buildAlbumBox($_MG_CONF['member_album_archive'],3,-1,'upload');
     $member_archive   = '<select name="member_archive">';
     $member_archive .= '<option value="0">' . $LANG_MG01['do_not_archive'] . '</option>';
     $member_archive .= $album_selectbox;
     $member_archive .= '</select>';
-
-
 
     $T->set_var('site_url', $_CONF['site_url']);
     $T->set_var('site_admin_url', $_CONF['site_admin_url']);
@@ -157,7 +149,9 @@ function MG_editMemberDefaults( ) {
     $groupdd = '';
     $moddd = '';
 
-    $grp_id = DB_getItem($_TABLES['vars'], 'value','name="mediagallery_gid"');
+    $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+    $grow = DB_fetchArray($gresult);
+    $grp_id = $grow['grp_id'];
     if ( !isset($_MG_CONF['ad_group_id'])) {
         $_MG_CONF['ad_group_id'] = $grp_id;
     }

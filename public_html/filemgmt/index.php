@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -67,7 +67,6 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     $lid = COM_applyFilter(COM_getArgument( 'id' ),true);
 
     $display = COM_siteHeader('menu');
-//    $lid = isset($_GET['id']) ? COM_applyFilter($_GET['id'],true) : 0;
     if ($lid == 0) {  // Check if the script is being called from the commentbar
         $lid = str_replace('fileid_','',isset($_POST['id']) ? $_POST['id'] : 0);
     }
@@ -76,10 +75,10 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
     $sql = "SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-    $sql .= "WHERE a.lid='$lid' $groupsql AND a.status > 0";
+    $sql .= "WHERE a.lid='".addslashes($lid)."' $groupsql AND a.status > 0";
     list($fileAccessCnt) = DB_fetchArray( DB_query($sql));
 
-    if ($fileAccessCnt > 0 AND DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",$lid ) == 1) {
+    if ($fileAccessCnt > 0 AND DB_count($_FM_TABLES['filemgmt_filedetail'],"lid",addslashes($lid) ) == 1) {
 
         $p->set_var('block_header', COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>"));
         $p->set_var('block_footer', COM_endBlock());
@@ -88,10 +87,10 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
         $sql = "SELECT d.lid, d.cid, d.title, d.url, d.homepage, d.version, d.size, d.logourl, d.submitter, d.status, d.date, ";
         $sql .= "d.hits, d.rating, d.votes, d.comments, t.description FROM {$_FM_TABLES['filemgmt_filedetail']} d, ";
-        $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t WHERE d.lid='$lid' AND d.lid=t.lid AND status > 0";
+        $sql .= "{$_FM_TABLES['filemgmt_filedesc']} t WHERE d.lid='".addslashes($lid)."' AND d.lid=t.lid AND status > 0";
 
         $result = DB_query($sql);
-        list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $comments, $description) = DB_fetchARRAY($result);
+        list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $comments, $description) = DB_fetchArray($result);
 
         $pathstring = "<a href='{$_CONF['site_url']}/filemgmt/index.php'>"._MD_MAIN."</a>&nbsp;:&nbsp;";
         $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_CONF['site_url']}/filemgmt/viewcat.php");
@@ -109,7 +108,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         $datetime = formatTimestamp($time);
         $description = PLG_replaceTags($myts->makeTareaData4Show($description,0)); //no html
         $result2 = DB_query("SELECT username,fullname,photo FROM {$_TABLES['users']} WHERE uid = $submitter");
-        list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
+        list ($submitter_name,$submitter_fullname,$photo) = DB_fetchArray($result2);
         $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
         include $_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
 

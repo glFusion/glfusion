@@ -86,6 +86,20 @@ $_SYSTEM['no_cache_config']  = false;
 $_SYSTEM['swedish_date_hack'] = false;
 
 // +--------------------------------------------------------------------------+
+// | Skip IP Check - disables glFusion's checking of the long term cookie     |
+// |                 against the user's IP address.                           |
+// |                                                                          |
+// | As a security precaution, glFusion validates that the IP address used    |
+// | to set the long term cookie matches the IP address of the user each time |
+// | it is checked.  This can cause issues for users who change IPs often,    |
+// | for example, if they are behind a proxy server farm.                     |
+// |                                                                          |
+// | If this value is set to true, the IP address will not be checked.        |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['skip_ip_check'] = false;
+
+// +--------------------------------------------------------------------------+
 // | You should not need to change any settings below this line,              |
 // | these settings are created during the site installation.                 |
 // +--------------------------------------------------------------------------+

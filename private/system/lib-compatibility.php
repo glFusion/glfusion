@@ -102,7 +102,7 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
         }
         if( !empty( $sid ))
         {
-            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='$sid'" );
+            $topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".addslashes($sid)."'" );
         }
     }
     else
@@ -190,7 +190,7 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
         else
         {
             $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                                                   "tid = '$topic'" ));
+                                                   "tid = '".addslashes($topic)."'" ));
         }
     }
     if( !empty( $pagetitle ))

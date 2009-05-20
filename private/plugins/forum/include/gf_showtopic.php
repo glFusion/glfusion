@@ -91,14 +91,14 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $date = iconv('ISO-8859-1','UTF-8',$date);
     }
 
-    $userQuery = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid='{$showtopic['uid']}'");
+    $userQuery = DB_query("SELECT * FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".intval($showtopic['uid']));
     if ($showtopic['uid'] > 1 AND DB_numRows($userQuery) == 1) {
         $userarray = DB_fetchArray($userQuery);
         $username = COM_getDisplayName($showtopic['uid']);
         $userlink = "<a href=\"{$_CONF['site_url']}/users.php?mode=profile&amp;uid={$showtopic['uid']}\" ";
         $userlink .= "class=\"authorname {$onetwo}\"><b>{$username}</b></a>";
         $uservalid = true;
-        $postcount = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE uid='{$showtopic['uid']}'");
+        $postcount = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE uid='".intval($showtopic['uid'])."'");
         $posts = DB_numRows($postcount);
         // STARS CODE
         $starimage = "<img src=\"%s\" alt=\"{$LANG_GF01['FORUM']} %s\" title=\"{$LANG_GF01['FORUM']} %s\"" . XHTML . ">";
@@ -137,7 +137,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
 
         $regdate = $LANG_GF01['REGISTERED']. ': ' . strftime('%m/%d/%y',strtotime($userarray['regdate'])). '<br' . XHTML . '>';
         $numposts = $LANG_GF01['POSTS']. ': ' .$posts;
-        if (DB_count( $_TABLES['sessions'], 'uid', $showtopic['uid']) > 0 AND DB_getItem($_TABLES['userprefs'],'showonline',"uid={$showtopic['uid']}") == 1) {
+        if (DB_count( $_TABLES['sessions'], 'uid', intval($showtopic['uid'])) > 0 AND DB_getItem($_TABLES['userprefs'],'showonline',"uid=".intval($showtopic['uid'])."") == 1) {
             $avatar .= '<br' . XHTML . '>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['ONLINE'];
             $onlinestatus = $LANG_GF01['ONLINE'];
         } else {
@@ -198,9 +198,9 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     if ($mode == 'preview' AND strpos($showtopic['comment'],'[file]') === false) {
         $usql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 ";
         if (isset($_POST['uniqueid']) AND $_POST['uniqueid'] > 0) {  // User is previewing a new post
-            $usql .= "WHERE topic_id = {$_POST['uniqueid']} AND tempfile=1 ";
+            $usql .= "WHERE topic_id = ".intval($_POST['uniqueid'])." AND tempfile=1 ";
         } else if(isset($showtopic['id'])) {
-             $usql .= "WHERE topic_id = {$showtopic['id']} ";
+             $usql .= "WHERE topic_id = ".intval($showtopic['id'])." ";
         }
         DB_query($usql);
     }
@@ -250,12 +250,12 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         }
     } else {
         $replytopicid = $showtopic['pid'];
-        $is_lockedtopic = DB_getItem($_TABLES['gf_topic'],'locked', "id={$showtopic['pid']}");
+        $is_lockedtopic = DB_getItem($_TABLES['gf_topic'],'locked', "id=".intval($showtopic['pid']));
         $topictemplate->set_var ('read_msg','');
     }
     // Bookmark feature
     if ($_USER['uid'] > 1 ) {
-        if (DB_count($_TABLES['gf_bookmarks'],array('uid','topic_id'),array($_USER['uid'],$showtopic['id']))) {
+        if (DB_count($_TABLES['gf_bookmarks'],array('uid','topic_id'),array($_USER['uid'],intval($showtopic['id'])))) {
             $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""' . XHTML . '>');
         } else {
             $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_off_sm').'" title="'.$LANG_GF02['msg203'].'" alt=""' . XHTML . '>');
@@ -275,7 +275,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
 
     if ($mode != 'preview') {
         if ($is_lockedtopic == 0) {
-            $is_readonly = DB_getItem($_TABLES['gf_forums'],'is_readonly','forum_id=' . $showtopic['forum']);
+            $is_readonly = DB_getItem($_TABLES['gf_forums'],'is_readonly','forum_id=' . intval($showtopic['forum']));
             if ($is_readonly == 0 OR forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_edit')) {
                 if ( $canPost != 0 ) {
                     $quotelink = "{$_CONF['site_url']}/forum/createtopic.php?method=postreply&amp;forum={$showtopic['forum']}&amp;id=$replytopicid&amp;quoteid={$showtopic['id']}";
@@ -313,7 +313,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             }
         }
 
-        if(isset($userarray['email']) && $userarray['email'] != '' && $showtopic["uid"] > 1) {
+        if(isset($userarray['email']) && $userarray['email'] != '' && $showtopic["uid"] > 1 && $userarray['emailfromuser'] == 1) {
             $email_link = "{$_CONF['site_url']}/profiles.php?uid={$showtopic['uid']}";
             $email_linkimg = '<img src="'.gf_getImage('email_button').'" border="0" align="middle" alt="'.$LANG_GF01['EmailLink'].'" title="'.$LANG_GF01['EmailLink'].'"' . XHTML . '>';
             $topictemplate->set_var ('emaillink', $email_link);
@@ -355,11 +355,11 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $imagerecs = '';
         if (is_array($forumfiles)) $imagerecs = implode(',',$forumfiles);
         if (!empty($_POST['uniqueid'])) {
-            $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id={$_POST['uniqueid']} ";
+            $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id=".intval($_POST['uniqueid'])." ";
             if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
             DB_query($sql);
         } else if (isset($_POST['id'])) {
-            $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id={$_POST['id']} ";
+            $sql = "UPDATE {$_TABLES['gf_attachments']} SET show_inline = 0 WHERE topic_id=".intval($_POST['id'])." ";
             if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
             DB_query($sql);
         }

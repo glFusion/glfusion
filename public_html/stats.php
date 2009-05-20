@@ -225,6 +225,44 @@ if ($nrows > 0) {
     $pageHandle->addContent(COM_endBlock());
 }
 
+// Last 10 Logins
+
+if ( SEC_inGroup('Root') ) {
+    $result = DB_query("SELECT u.uid AS uid, u.username AS 'username', ui.lastlogin AS 'login' FROM ".$_TABLES['userinfo']." AS ui LEFT JOIN ".$_TABLES['users']." AS u ON ui.uid=u.uid WHERE u.uid NOT IN (1) AND ui.lastlogin != 0 ORDER BY ui.lastlogin DESC LIMIT 10");
+} else {
+    $result = DB_query("SELECT u.uid AS uid, u.username AS 'username', ui.lastlogin AS 'login', up.showonline FROM ".$_TABLES['userinfo']." AS ui LEFT JOIN ".$_TABLES['users']." AS u ON ui.uid=u.uid LEFT JOIN {$_TABLES['userprefs']} AS up ON u.uid=up.uid WHERE u.uid NOT IN (1) AND ui.lastlogin != 0 AND up.showonline != 0 ORDER BY ui.lastlogin DESC LIMIT 10");
+}
+$nrows  = DB_numRows ($result);
+
+if ($nrows > 0) {
+    $header_arr = array(
+        array('text' => $LANG10[4], 'field' => 'user', 'header_class' => 'stats-header-title-narrow'),
+        array('text' => $LANG10[5], 'field' => 'date', 'header_class' => 'stats-header-count-wide','field_class' => 'stats-list-count'),
+    );
+    $data_arr = array();
+    $text_arr = array('has_menu'     =>  false,
+                      'title'        => $LANG10[6],
+    );
+    for ($i = 0; $i < $nrows; $i++) {
+        $A = DB_fetchArray($result);
+        $A['username'] = stripslashes(str_replace('$','&#36;',$A['username']));
+        $A['user'] = "<a href=\"" . $_CONF['site_url']
+                  . "/users.php?mode=profile&amp;uid={$A['uid']}" . "\">{$A['username']}</a>";
+        if ( $A['login'] ) {
+            $lastlogin = COM_getUserDateTimeFormat($A['login']);
+            $A['date'] = $lastlogin[0];
+        } else {
+            $A['date'] = $LANG28[36];
+        }
+        $data_arr[$i] = $A;
+    }
+    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+} else {
+    $display .= COM_startBlock($LANG10[6]);
+    $display .= $LANG10[28];
+    $display .= COM_endBlock();
+}
+
 // Now show stats for any plugins that want to be included
 $pageHandle->addContent(PLG_getPluginStats(2));
 $pageHandle->displayPage();

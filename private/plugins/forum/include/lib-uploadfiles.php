@@ -87,16 +87,16 @@ function gf_check4files($id,$tempfile=false) {
                 if ($_POST[$chk_usefilemgmt] == 1) {
                     $cid = COM_applyFilter($_POST[$filemgmtcat],true);
                     $sql = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} (cid, title, url, size, submitter, status,date ) ";
-                    $sql .= "VALUES ('$cid', '$realfilename', '$realfilename', '{$uploadfile['size']}', '{$_USER['uid']}', 1, UNIX_TIMESTAMP())";
+                    $sql .= "VALUES ('".addslashes($cid)."', '".addslashes($realfilename)."', '".addslashes($realfilename)."', '".addslashes($uploadfile['size'])."', '{$_USER['uid']}', 1, UNIX_TIMESTAMP())";
                     DB_query($sql);
                     $newid = DB_insertID();
                     DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,repository_id,filename,tempfile)
-                        VALUES ('$id',$newid,'$filename',$temp)");
+                        VALUES ('".addslashes($id)."',$newid,'".addslashes($filename)."',$temp)");
                     $description = glfPrepareForDB($_POST[$filemgmt_desc]);
                     DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')");
                 } else {
                     DB_query("INSERT INTO {$_TABLES['gf_attachments']} (topic_id,filename,tempfile)
-                        VALUES ('$id','$filename',$temp)");
+                        VALUES ('".addslashes($id)."','".addslashes($filename)."',$temp)");
                 }
 
             } else {
@@ -107,8 +107,8 @@ function gf_check4files($id,$tempfile=false) {
         }
     }
 
-    if (!$tempfile AND $_POST['uniqueid'] > 0 AND DB_COUNT($_TABLES['gf_topic'],'id',$id)) {
-        DB_query("UPDATE {$_TABLES['gf_attachments']} SET topic_id=$id, tempfile=0 WHERE topic_id={$_POST['uniqueid']}");
+    if (!$tempfile AND $_POST['uniqueid'] > 0 AND DB_COUNT($_TABLES['gf_topic'],'id',intval($id))) {
+        DB_query("UPDATE {$_TABLES['gf_attachments']} SET topic_id=$id, tempfile=0 WHERE topic_id=".intval($_POST['uniqueid']));
     }
 
     return $retval;

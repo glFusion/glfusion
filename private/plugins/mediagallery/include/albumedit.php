@@ -100,7 +100,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     if ( $_DB_dbms == "mssql" ) {
         $sql        = "SELECT *,CAST(album_desc AS TEXT) as album_desc FROM " . $_TABLES['mg_albums'] . " WHERE album_id=" . $album_id;
     } else {
-        $sql        = "SELECT * FROM " . $_TABLES['mg_albums'] . " WHERE album_id=" . $album_id;
+        $sql        = "SELECT * FROM " . $_TABLES['mg_albums'] . " WHERE album_id=" . intval($album_id);
     }
 
     $result     = DB_query( $sql );
@@ -185,7 +185,10 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['usealternate']      = isset($_MG_CONF['ad_use_alternate']) ? $_MG_CONF['ad_use_alternate'] : 0;
         $A['skin']              = 'default';
 
-        $grp_id = DB_getItem($_TABLES['vars'], 'value','name="mediagallery_gid"');
+        $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+        $grow = DB_fetchArray($gresult);
+        $grp_id = $grow['grp_id'];
+
         $A['group_id'] = $grp_id;
         $A['mod_group_id'] = $grp_id;
 
@@ -359,6 +362,8 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $album_sort_select .= '<option value="4"' . ($A['album_sort_order']==4 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_upload'] . '</option>';
     $album_sort_select .= '<option value="5"' . ($A['album_sort_order']==5 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_alpha'] . '</option>';
     $album_sort_select .= '<option value="6"' . ($A['album_sort_order']==6 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_alpha_asc'] . '</option>';
+//    $album_sort_select .= '<option value="7"' . ($A['album_sort_order']==7 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_rating'] . '</option>';
+//    $album_sort_select .= '<option value="8"' . ($A['album_sort_order']==8 ? 'selected="selected"' : '') . '>' . $LANG_MG03['sort_rating_asc'] . '</option>';
 
     $album_sort_select .= '</select>';
 
@@ -607,6 +612,8 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'lang_force_child_update' => $LANG_MG01['force_child_update'],
         'lang_allow_download'   => $LANG_MG01['allow_download'],
         'owner_select'          => $owner_select,
+        'email_mod_select'      => $email_mod_select,
+        'lang_email_mods_on_submission' => $LANG_MG01['email_mods_on_submission'],
     ));
 
     if ( SEC_hasRights('mediagallery.admin')) {
@@ -640,7 +647,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'display_image_size'    => $display_image_size_select,
         'rows_input'            => $rows_input,
         'columns_input'         => $columns_input,
-        'email_mod_select'      => $email_mod_select,
         'playback_type'         => $playback_type,
         'album_title'           => $A['album_title'],
         'album_desc'            => $A['album_desc'],
@@ -697,7 +703,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         'lang_av_play_options'  => $LANG_MG01['av_play_options'],
         'lang_attached_thumbnail' => $LANG_MG01['attached_thumbnail'],
         'lang_thumbnail'        => $LANG_MG01['thumbnail'],
-        'lang_email_mods_on_submission' => $LANG_MG01['email_mods_on_submission'],
         'lang_album_attributes' => $LANG_MG01['album_attributes'],
         'lang_album_cover'      => $LANG_MG01['album_cover'],
         'lang_enable_views'     => $LANG_MG01['enable_views'],
@@ -735,7 +740,10 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
 function MG_quickCreate( $parent, $title, $desc='' ) {
     global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST;
 
-    $grp_id                 = DB_getItem($_TABLES['vars'], 'value','name="mediagallery_gid"');
+    $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+    $row = DB_fetchArray($result);
+    $grp_id = $row['grp_id'];
+
     $album = new mgAlbum();
 
     if ($_MG_CONF['htmlallowed'] == 1 ) {
@@ -1062,7 +1070,10 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
         $perm_owner                 = $album->perm_owner; // already set by existing album?
         $perm_group                 = $album->perm_group; // already set by existing album?
         if ( $update == 0 ) {
-            $grp_id = DB_getItem($_TABLES['vars'], 'value','name="mediagallery_gid"');
+            $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+            $grow = DB_fetchArray($gresult);
+            $grp_id = $grow['grp_id'];
+
             $album->group_id            = $grp_id;  // only do these two if create....
             $album->mod_group_id        = $_MG_CONF['member_mod_group_id'];
             if ( $album->mod_group_id == '' || $album->mod_group_id < 1 ) {
@@ -1128,7 +1139,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     if ( $album->wm_id == 'blank.png' ) {
         $wm_id = 0;
     } else {
-        $wm_id = DB_getItem($_TABLES['mg_watermarks'],'wm_id','filename="' . $album->wm_id . '"');
+        $wm_id = DB_getItem($_TABLES['mg_watermarks'],'wm_id','filename="' . addslashes($album->wm_id) . '"');
     }
     if ( $wm_id == '' )
         $wm_id = 0;
@@ -1143,7 +1154,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     if (SEC_hasRights('mediagallery.admin')) {
         if ( $album->featured ) {
             // check for other featured albums, we can only have one
-            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE featured=1 AND cbpage='" . $album->cbpage . "'";
+            $sql = "SELECT album_id FROM {$_TABLES['mg_albums']} WHERE featured=1 AND cbpage='" . addslashes($album->cbpage) . "'";
             $result = DB_query($sql);
             $nRows  = DB_numRows($result);
             if ( $nRows > 0 ) {
@@ -1229,6 +1240,12 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
             case 6 :  // title, desc
                 MG_staticSortAlbum( $aid, 0, 0, 0 );
                 break;
+            case 7 :  // rating, desc
+                MG_staticSortAlbum( $aid, 3, 0, 0 );
+                break;
+            case 8 :  // rating, desc
+                MG_staticSortAlbum( $aid, 3, 1, 0 );
+                break;
             default : // skip it...
                 break;
         }
@@ -1249,6 +1266,12 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
             case 6 :  // title, desc
                 MG_staticSortAlbum( $MG_albums[$aid]->parent, 0, 0, 0 );
                 break;
+            case 7 :  // rating, desc
+                MG_staticSortAlbum( $MG_albums[$aid]->parent, 3, 0, 0 );
+                break;
+            case 8 :  // rating, desc
+                MG_staticSortAlbum( $MG_albums[$aid]->parent, 3, 1, 0 );
+                break;
             default : // skip it...
                 break;
         }
@@ -1267,6 +1290,12 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
                 break;
             case 6 :  // title, desc
                 MG_staticSortAlbum( $aid, 0, 0, 0 );
+                break;
+            case 7 :  // rating, desc
+                MG_staticSortAlbum( $aid, 3, 0, 0 );
+                break;
+            case 8 :  // rating, desc
+                MG_staticSortAlbum( $aid, 3, 1, 0 );
                 break;
             default : // skip it...
                 break;
@@ -1297,6 +1326,9 @@ function MG_staticSortAlbum($startaid, $sortfield, $sortorder, $process_subs) {
         case '2' : // last_update
             $sql_sort_by = " ORDER BY last_update ";
             break;
+        case '3' : // rating
+            $sql_sort_by = " ORDER BY media_rating ";
+            break;
         default :
             $sql_sort_by = " ORDER BY album_title ";
             break;
@@ -1309,10 +1341,13 @@ function MG_staticSortAlbum($startaid, $sortfield, $sortorder, $process_subs) {
         case '1' :  // descending
             $sql_order = " ASC";
             break;
+        default:
+            $sql_order = " ASC";
+            break;
     }
 
     if ( $process_subs == 0 ) {
-        $sql = "SELECT album_id,album_order FROM {$_TABLES['mg_albums']} WHERE album_parent=" . $startaid . " " . $sql_sort_by . $sql_order;
+        $sql = "SELECT album_id,album_order FROM {$_TABLES['mg_albums']} WHERE album_parent=" . intval($startaid) . " " . $sql_sort_by . $sql_order;
 
         $order = 10;
         $result = DB_query($sql);

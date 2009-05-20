@@ -52,6 +52,8 @@ function USER_deleteAccount ($uid)
 {
     global $_CONF, $_TABLES, $_USER;
 
+    $uid = intval($uid);
+
     // first some checks ...
     if ((($uid == $_USER['uid']) && ($_CONF['allow_account_delete'] == 1)) ||
             SEC_hasRights ('user.delete')) {
@@ -108,9 +110,9 @@ function USER_deleteAccount ($uid)
     DB_delete ($_TABLES['userinfo'], 'uid', $uid);
 
     // avoid having orphand stories/comments by making them anonymous posts
-    DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = '$uid'");
-    DB_query ("UPDATE {$_TABLES['stories']} SET uid = 1 WHERE uid = '$uid'");
-    DB_query ("UPDATE {$_TABLES['stories']} SET owner_id = 1 WHERE owner_id = '$uid'");
+    DB_query ("UPDATE {$_TABLES['comments']} SET uid = 1 WHERE uid = $uid");
+    DB_query ("UPDATE {$_TABLES['stories']} SET uid = 1 WHERE uid = $uid");
+    DB_query ("UPDATE {$_TABLES['stories']} SET owner_id = 1 WHERE owner_id = $uid");
 
     // delete story submissions
     DB_delete ($_TABLES['storysubmission'], 'uid', $uid);
@@ -128,8 +130,8 @@ function USER_deleteAccount ($uid)
     $A = DB_fetchArray ($result);
     $rootuser = $A['ug_uid'];
 
-    DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = '$uid'");
-    DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = '$uid'");
+    DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = $uid");
+    DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = $uid");
 
     // now delete the user itself
     DB_delete ($_TABLES['users'], 'uid', $uid);
@@ -149,6 +151,8 @@ function USER_deleteAccount ($uid)
 function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 {
     global $_CONF, $_TABLES, $LANG04;
+
+    $uid = intval($uid);
 
     if ( $passwd == '' ) {
         $passwd = USER_createPassword(8);
@@ -204,7 +208,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 *
 * @param    string  $username   user's login name
 * @param    string  $useremail  user's email address
-* @return   bool                true = success, false = an error occured
+* @return   boolean             true = success, false = an error occured
 *
 */
 function USER_sendActivationEmail ($username, $useremail)
@@ -303,11 +307,11 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     } else {
         if (!empty($remoteusername)) {
             $fields .= ',remoteusername';
-            $values .= ",'$remoteusername'";
+            $values .= ",'".addslashes($remoteusername)."'";
         }
         if (!empty($service)) {
             $fields .= ',remoteservice';
-            $values .= ",'$service'";
+            $values .= ",'".addslashes($service)."'";
         }
     }
 
@@ -315,7 +319,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     // Get the uid of the user, possibly given a service:
     if ($remoteusername != '')
     {
-        $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '$remoteusername' AND remoteservice='$service'");
+        $uid = DB_getItem ($_TABLES['users'], 'uid', "remoteusername = '".addslashes($remoteusername)."' AND remoteservice='".addslashes($service)."'");
     } else {
         $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username' AND remoteservice IS NULL");
     }
@@ -414,6 +418,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
     global $_CONF, $_TABLES, $_USER;
 
     $userphoto = '';
+    $uid = intval($uid);
 
     if ($_CONF['allow_user_photo'] == 1) {
 
@@ -434,7 +439,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
         }
         if ((empty ($photo) || ($photo == '(none)')) ||
                 (empty ($email) && $_CONF['use_gravatar'])) {
-            $result = DB_query ("SELECT email,photo FROM {$_TABLES['users']} WHERE uid = '$uid'");
+            $result = DB_query ("SELECT email,photo FROM {$_TABLES['users']} WHERE uid = $uid");
             list($newemail, $newphoto) = DB_fetchArray ($result);
             if (empty ($photo) || ($photo == '(none)')) {
                 $photo = $newphoto;
@@ -501,11 +506,11 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
 /**
 * Delete a user's photo (i.e. the actual file)
 *
-* @param    string  $photo          name of the photo (without the path)
-* @param    bool    $abortonerror   true: abort script on error, false: don't
-* @return   void
+* NOTE:     Will silently ignore non-existing files.
 *
-* @note     Will silently ignore non-existing files.
+* @param    string  $photo          name of the photo (without the path)
+* @param    boolean $abortonerror   true: abort script on error, false: don't
+* @return   void
 *
 */
 function USER_deletePhoto ($photo, $abortonerror = true)
@@ -555,7 +560,11 @@ function USER_addGroup ($groupid, $uid = '')
             // If logged in set to current uid
             $uid = $_USER['uid'];
         }
+    } else {
+        $uid = intval($uid);
     }
+
+    $groupid = intval($groupid);
 
     if (($groupid < 1) || SEC_inGroup ($groupid, $uid)) {
         return false;
@@ -590,10 +599,14 @@ function  USER_delGroup ($groupid, $uid = '')
             // If logged in set to current uid
             $uid = $_USER['uid'];
         }
+    } else {
+        $uid = intval($uid);
     }
 
+    $groupid = intval($groupid);
+
     if (($groupid > 0) && SEC_inGroup ($groupid, $uid)) {
-        DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$groupid' AND ug_uid = '$uid'");
+        DB_query ("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$groupid' AND ug_uid = $uid");
         return true;
     } else {
         return false;
@@ -643,7 +656,7 @@ function USER_emailMatches ($email, $domain_list)
 *
 * @param    string  $username   initial username
 * @return   string              unique username
-* @bugs     Race conditions apply ...
+* @todo     Bugs: Race conditions apply ...
 *
 */
 function USER_uniqueUsername($username)
@@ -657,7 +670,7 @@ function USER_uniqueUsername($username)
     $try = $username;
     do {
         $try = addslashes($try);
-        $uid = DB_getItem($_TABLES['users'], 'uid', "username = '$try'");
+        $uid = DB_getItem($_TABLES['users'], 'uid', "username = '".$try."'");
         if (!empty($uid)) {
             $r = rand(2, 9999);
             if (strlen($username) > 12) {

@@ -75,7 +75,7 @@ function gf_FormatForPrint( $str, $postmode='html' ) {
 }
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
-$id = COM_applyFilter($_REQUEST['id'],true);
+$id = intval(COM_applyFilter($_REQUEST['id'],true));
 
 //Check is anonymous users can access
 if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
@@ -89,14 +89,14 @@ if ($CONF_FORUM['registration_required'] && $_USER['uid'] < 2) {
 
 
 //Check is anonymous users can access
-if ($id == 0 OR DB_count($_TABLES['gf_topic'],"id","$id") == 0) {
+if ($id == 0 OR DB_count($_TABLES['gf_topic'],"id",$id) == 0) {
         echo COM_siteHeader();
         forum_statusMessage($LANG_GF02['msg166'], $_CONF['site_url'] . "/forum/index.php?forum=$forum",$LANG_GF02['msg166']);
         echo COM_siteFooter();
         exit;
 }
 
-$forum = DB_getItem($_TABLES['gf_topic'],"forum","id='{$id}'");
+$forum = DB_getItem($_TABLES['gf_topic'],"forum","id=$id");
 $query = DB_query("SELECT grp_name from {$_TABLES['groups']} groups, {$_TABLES['gf_forums']} forum WHERE forum.forum_id='{$forum}' AND forum.grp_id=groups.grp_id");
 list ($groupname) = DB_fetchArray($query);
 if (!SEC_inGroup($groupname) AND $grp_id != 2) {
@@ -107,7 +107,7 @@ if (!SEC_inGroup($groupname) AND $grp_id != 2) {
 }
 
 
-$result = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE (id='$id')");
+$result = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE (id=$id)");
 $A = DB_fetchArray($result);
 
 if ($CONF_FORUM['allow_smilies']) {
@@ -116,10 +116,10 @@ if ($CONF_FORUM['allow_smilies']) {
 }
 
 $A["name"] = COM_checkWords($A["name"]);
-$A["name"] = @htmlspecialchars($A["name"],ENT_QUOTES,$CONF_FORUM['charset']);
+$A["name"] = @htmlspecialchars($A["name"],ENT_QUOTES,COM_getEncodingt());
 
 $A["subject"] = COM_checkWords($A["subject"]);
-$A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,$CONF_FORUM['charset']));
+$A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,COM_getEncodingt()));
 
 $A['comment'] = gf_FormatForPrint( $A['comment'], $A['postmode'] );
 
@@ -147,7 +147,7 @@ echo"
         <br>
 ";
 
-$result2 = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE (pid='$id')");
+$result2 = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE (pid=$id)");
 while($B = DB_fetchArray($result2)){
 $date = strftime('%B %d %Y @ %I:%M %p', $B['date']);
 

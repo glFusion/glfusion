@@ -46,12 +46,12 @@ if ($_CONF['trackback_enabled']) {
 /**
 * Check if a feed for all stories needs to be updated.
 *
-* @param    bool    $frontpage_only true: only articles shown on the frontpage
+* @param    boolean $frontpage_only true: only articles shown on the frontpage
 * @param    string  $update_info    list of story ids
 * @param    string  $limit          number of entries or number of hours
 * @param    string  $updated_topic  (optional) topic to be updated
 * @param    string  $updated_id     (optional) entry id to be updated
-* @return   bool                    false = feed needs to be updated
+* @return   boolean                 false = feed needs to be updated
 *
 */
 function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $updated_topic = '', $updated_id = '' )
@@ -129,7 +129,7 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
 * @param    string  $limit          number of entries or number of hours
 * @param    string  $updated_topic  (optional) topic to be updated
 * @param    string  $updated_id     (optional) entry id to be updated
-* @return   bool                    false = feed needs to be updated
+* @return   boolean                 false = feed needs to be updated
 *
 */
 function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic = '', $updated_id = '' )
@@ -187,7 +187,7 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
 * @param    string  limit           number of entries or number of hours
 * @param    string  updated_topic   (optional) specific topic to update
 * @param    string  updated_id      (optional) specific id to update
-* @return   bool                    false = feed has to be updated, true = ok
+* @return   boolean                 false = feed has to be updated, true = ok
 *
 */
 function SYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = '', $updated_id = '' )
@@ -231,7 +231,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
     $content = array ();
     $sids = array();
 
-    if( DB_getItem( $_TABLES['topics'], 'perm_anon', "tid = '$tid'") >= 2)
+    if( DB_getItem( $_TABLES['topics'], 'perm_anon', "tid = '".addslashes($tid)."'") >= 2)
     {
         $where = '';
         if( !empty( $limit ))
@@ -253,9 +253,9 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
         }
 
         $topic = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
-                               "tid = '$tid'" ));
+                               "tid = '".addslashes($tid)."'" ));
 
-        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND tid = '$tid' AND perm_anon > 0 ORDER BY date DESC $limitsql" );
+        $result = DB_query( "SELECT sid,uid,title,introtext,bodytext,postmode,UNIX_TIMESTAMP(date) AS modified,commentcode,trackbackcode FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND tid = '".addslashes($tid)."' AND perm_anon > 0 ORDER BY date DESC $limitsql" );
 
         $nrows = DB_numRows( $result );
 
@@ -317,7 +317,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 /**
 * Get content for a feed that holds all stories.
 *
-* @param    bool     $frontpage_only true: only articles shown on the frontpage
+* @param    boolean  $frontpage_only true: only articles shown on the frontpage
 * @param    string   $limit    number of entries or number of stories
 * @param    string   $link     link to homepage
 * @param    string   $update   list of story ids
@@ -447,7 +447,7 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
-    $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = '$fid'");
+    $result = DB_query( "SELECT * FROM {$_TABLES['syndication']} WHERE fid = '".addslashes($fid)."'");
     $A = DB_fetchArray( $result );
     if( $A['is_enabled'] == 1 )
     {
@@ -596,7 +596,7 @@ function SYND_updateFeed( $fid )
             COM_errorLog ("update_info for feed $fid is $data", 1);
         }
 
-        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = NOW(), update_info = $data WHERE fid = '$fid'");
+        DB_query( "UPDATE {$_TABLES['syndication']} SET updated = NOW(), update_info = $data WHERE fid = '".addslashes($fid)."'");
     }
 }
 

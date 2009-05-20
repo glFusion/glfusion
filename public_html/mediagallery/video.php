@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -81,9 +81,9 @@ $u_tn = '';
 // -- get the movie info...
 
 if ( $mediaQueue == 1 ) {
-    $sql = "SELECT * FROM {$_TABLES['mg_mediaqueue']} AS m LEFT JOIN {$_TABLES['mg_media_album_queue']} AS ma ON m.media_id=ma.media_id WHERE m.media_id='" . $video_id . "'";
+    $sql = "SELECT * FROM {$_TABLES['mg_mediaqueue']} AS m LEFT JOIN {$_TABLES['mg_media_album_queue']} AS ma ON m.media_id=ma.media_id WHERE m.media_id='" . addslashes($video_id) . "'";
 } else {
-    $sql = "SELECT * FROM {$_TABLES['mg_media']} AS m LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON m.media_id=ma.media_id WHERE m.media_id='" . $video_id . "'";
+    $sql = "SELECT * FROM {$_TABLES['mg_media']} AS m LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON m.media_id=ma.media_id WHERE m.media_id='" . addslashes($video_id) . "'";
 }
 $result = DB_query($sql);
 $nRows = DB_numRows($result);
@@ -133,7 +133,7 @@ if ( $nRows > 0 ) {
             $playback_options['bgcolor']    = $_MG_CONF['swf_wmode'];
             $playback_options['swf_version'] = $_MG_CONF['swf_version'];
 
-            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $row['media_id'] . "'");
+            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
             $poNumRows = DB_numRows($poResult);
             for ($i=0; $i < $poNumRows; $i++ ) {
                 $poRow = DB_fetchArray($poResult);
@@ -165,7 +165,7 @@ if ( $nRows > 0 ) {
                         $resolution_y = $ThisFileInfo['video']['resolution_y'];
                     }
                     if ( $resolution_x != 0 ) {
-                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . $row['media_id'] . "'";
+                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . addslashes($row['media_id']) . "'";
                         DB_query( $sql );
                     }
                 } else {
@@ -226,7 +226,7 @@ if ( $nRows > 0 ) {
             $playback_options['swf_version'] = $_MG_CONF['swf_version'];
             $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
 
-            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $row['media_id'] . "'");
+            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
             while ( $poRow = DB_fetchArray($poResult) ) {
                 $playback_options[$poRow['option_name']] = $poRow['option_value'];
             }
@@ -262,7 +262,7 @@ if ( $nRows > 0 ) {
                         $resolution_y = $ThisFileInfo['video']['resolution_y'];
                     }
                     if ( $resolution_x != 0 ) {
-                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . $row['media_id'] . "'";
+                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . addslashes($row['media_id']) . "'";
                         DB_query( $sql );
                     }
                 } else {
@@ -419,7 +419,7 @@ if ( $nRows > 0 ) {
 	            $playback_options['bgcolor'] = $_MG_CONF['asf_bgcolor'];
 	            $playback_options['playcount'] = $_MG_CONF['asf_playcount'];
 
-	            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $row['media_id'] . "'");
+	            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
 	            $poNumRows = DB_numRows($poResult);
 	            for ($i=0; $i < $poNumRows; $i++ ) {
 	                $poRow = DB_fetchArray($poResult);
@@ -455,7 +455,7 @@ if ( $nRows > 0 ) {
             $playback_options['width']          = $_MG_CONF['mov_width'];
             $playback_options['bgcolor']        = $_MG_CONF['mov_bgcolor'];
 
-            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $row['media_id'] . "'");
+            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
             $poNumRows = DB_numRows($poResult);
             for ($i=0; $i < $poNumRows; $i++ ) {
                 $poRow = DB_fetchArray($poResult);
@@ -487,7 +487,7 @@ if ( $nRows > 0 ) {
                         $resolution_y = $ThisFileInfo['video']['resolution_y'];
                     }
                     if ( $resolution_x != 0 ) {
-                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . $row['media_id'] . "'";
+                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . addslashes($row['media_id']) . "'";
                         DB_query( $sql );
                     }
                 } else {
@@ -555,7 +555,7 @@ if ( $nRows > 0 ) {
 		            $playback_options['playcount'] = $_MG_CONF['asf_playcount'];
 	        }
 
-            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $row['media_id'] . "'");
+            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
             $poNumRows = DB_numRows($poResult);
             for ($i=0; $i < $poNumRows; $i++ ) {
                 $poRow = DB_fetchArray($poResult);
@@ -599,7 +599,7 @@ if ( $nRows > 0 ) {
             $playback_options['width']              = isset($_MG_CONF['mp3_width']) ? $_MG_CONF['mp3_width'] : 0;
             $playback_options['loop']               = $_MG_CONF['mp3_loop'];
 
-            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $row['media_id'] . "'");
+            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . addslashes($row['media_id']) . "'");
             $poNumRows = DB_numRows($poResult);
             for ($i=0; $i < $poNumRows; $i++ ) {
                 $poRow = DB_fetchArray($poResult);
@@ -664,7 +664,7 @@ if ( $nRows > 0 ) {
 
     if (!SEC_hasRights('mediagallery.admin')) {
         $media_views = $row['media_views'] + 1;
-        DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . $row['media_id'] . "'");
+        DB_query("UPDATE " . $_TABLES['mg_media'] . " SET media_views=" . $media_views . " WHERE media_id='" . addslashes($row['media_id']) . "'");
     }
 
     $T->parse('output','video');

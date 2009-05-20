@@ -1,10 +1,10 @@
 staticpage.txt
 
-Media Gallery supports the ability to create an album list using Geeklog's
+Media Gallery supports the ability to create an album list using glFusion's
 Static Page.
 
 In order to use this, you must have PHP enabled for static pages. See the
-Geeklog documentation for information about enabling PHP for static pages.
+glFusion documentation for information about enabling PHP for static pages.
 
 Create a static page
 

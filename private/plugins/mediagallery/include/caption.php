@@ -38,6 +38,9 @@ if (!defined ('GVERSION')) {
 function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
     global $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST, $_DB_dbms;
 
+    $album_id = intval($album_id);
+    $start    = COM_applyFilter($start,true);
+
     if ($actionURL == '' ) {
         $actionURL = $_MG_CONF['site_url'] . '/index.php';
     }
@@ -160,8 +163,6 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
                             $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.png';
                             $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'generic.png';
                         }
-//                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/tn/' . $row['media_filename'][0] .'/' . $row['media_filename'] . '.jpg';
-//                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'tn/' . $row['media_filename'][0] .'/' . $row['media_filename'] . '.jpg';
                         break;
                     case 1 :
                         switch ( $row['media_mime_ext'] ) {
@@ -261,7 +262,6 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
     ));
     $T->parse('output','admin');
     $retval .= $T->finish($T->get_var('output'));
-//    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
     return $retval;
 }
 
@@ -288,7 +288,7 @@ function MG_batchCaptionSave( $album_id, $start, $actionURL ) {
             $desc     = addslashes(htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($media_desc[$i])))));
         }
 
-        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_title='" . $title . "', `media_desc` ='" . $desc  . "' WHERE media_id='" . $media_id[$i] ."'";
+        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_title='" . $title . "', `media_desc` ='" . $desc  . "' WHERE media_id='" . addslashes(COM_applyFilter($media_id[$i])) ."'";
         DB_query($sql);
 
     }

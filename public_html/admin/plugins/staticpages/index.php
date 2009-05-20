@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -375,6 +378,10 @@ function form ($A, $error = false)
         $sp_template->set_var('end_block',
                 COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
         $sp_template->set_var( 'xhtml', XHTML );
+
+        $sp_template->set_var('owner_dropdown',COM_buildOwnerList('owner_id',$A['owner_id']));
+        $sp_template->set_var('writtenby_dropdown',COM_buildOwnerList('sp_uid',$A['sp_uid']));
+
         $sp_template->set_var( 'gltoken_name', CSRF_TOKEN );
         $sp_template->set_var( 'gltoken', SEC_createToken() );
         $retval .= $sp_template->parse('output','form');
@@ -588,59 +595,118 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete']) && SEC_ch
     $display .= COM_siteFooter ();
 } else if ($mode == 'clone') {
     if (!empty ($sp_id)) {
+        @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure']);
         $display .= COM_siteHeader('menu', $LANG_STATIC['staticpageeditor']);
         $display .= staticpageeditor($sp_id,$mode);
         $display .= COM_siteFooter();
     } else {
         $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
     }
-} else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save']) && SEC_checkToken()) {
-    // purge any tokens we created for the advanced editor
-    $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
-    DB_Query($sql,1);
+} else if (($mode == $LANG_ADMIN['save']) && !empty ($LANG_ADMIN['save'])) {
+    if ( SEC_checkToken() ) {
+        // purge any tokens we created for the advanced editor
+        $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id={$_USER['uid']} AND urlfor='advancededitor'";
+        DB_query($sql,1);
 
-    if (!empty ($sp_id)) {
-        if (!isset ($_POST['sp_onmenu'])) {
-            $_POST['sp_onmenu'] = '';
+        if (!empty ($sp_id)) {
+            if (!isset ($_POST['sp_onmenu'])) {
+                $_POST['sp_onmenu'] = '';
+            }
+            if (!isset ($_POST['sp_php'])) {
+                $_POST['sp_php'] = '';
+            }
+            if (!isset ($_POST['sp_nf'])) {
+                $_POST['sp_nf'] = '';
+            }
+            if (!isset ($_POST['sp_centerblock'])) {
+                $_POST['sp_centerblock'] = '';
+            }
+            $help = '';
+            if (isset ($_POST['sp_help'])) {
+                $sp_help = COM_sanitizeUrl ($_POST['sp_help'], array ('http', 'https'));
+            }
+            if (!isset ($_POST['sp_inblock'])) {
+                $_POST['sp_inblock'] = '';
+            }
+            $sp_uid = COM_applyFilter ($_POST['sp_uid'], true);
+            if ($sp_uid == 0) {
+                $sp_uid = $_USER['uid'];
+            }
+            if (!isset ($_POST['postmode'])) {
+                $_POST['postmode'] = '';
+            }
+            $display .= submitstaticpage ($sp_id, $sp_uid, COM_stripslashes($_POST['sp_title']),
+                COM_stripslashes($_POST['sp_content']), COM_applyFilter ($_POST['sp_hits'], true),
+                COM_applyFilter ($_POST['sp_format']), $_POST['sp_onmenu'],
+                $_POST['sp_label'], COM_applyFilter ($_POST['commentcode'], true),
+                COM_applyFilter ($_POST['owner_id'], true),
+                COM_applyFilter ($_POST['group_id'], true), $_POST['perm_owner'],
+                $_POST['perm_group'], $_POST['perm_members'], $_POST['perm_anon'],
+                $_POST['sp_php'], $_POST['sp_nf'],
+                COM_applyFilter ($_POST['sp_old_id']), $_POST['sp_centerblock'],
+                $sp_help, COM_applyFilter ($_POST['sp_tid']),
+                COM_applyFilter ($_POST['sp_where'], true), $_POST['sp_inblock'],
+                COM_applyFilter ($_POST['postmode']),
+                isset($_POST['sp_search']) ? 1 : 0);
+        } else {
+            $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
         }
-        if (!isset ($_POST['sp_php'])) {
-            $_POST['sp_php'] = '';
-        }
-        if (!isset ($_POST['sp_nf'])) {
-            $_POST['sp_nf'] = '';
-        }
-        if (!isset ($_POST['sp_centerblock'])) {
-            $_POST['sp_centerblock'] = '';
-        }
-        $help = '';
-        if (isset ($_POST['sp_help'])) {
-            $sp_help = COM_sanitizeUrl ($_POST['sp_help'], array ('http', 'https'));
-        }
-        if (!isset ($_POST['sp_inblock'])) {
-            $_POST['sp_inblock'] = '';
-        }
-        $sp_uid = COM_applyFilter ($_POST['sp_uid'], true);
-        if ($sp_uid == 0) {
-            $sp_uid = $_USER['uid'];
-        }
-        if (!isset ($_POST['postmode'])) {
-            $_POST['postmode'] = '';
-        }
-        $display .= submitstaticpage ($sp_id, $sp_uid, COM_stripslashes($_POST['sp_title']),
-            COM_stripslashes($_POST['sp_content']), COM_applyFilter ($_POST['sp_hits'], true),
-            COM_applyFilter ($_POST['sp_format']), $_POST['sp_onmenu'],
-            $_POST['sp_label'], COM_applyFilter ($_POST['commentcode'], true),
-            COM_applyFilter ($_POST['owner_id'], true),
-            COM_applyFilter ($_POST['group_id'], true), $_POST['perm_owner'],
-            $_POST['perm_group'], $_POST['perm_members'], $_POST['perm_anon'],
-            $_POST['sp_php'], $_POST['sp_nf'],
-            COM_applyFilter ($_POST['sp_old_id']), $_POST['sp_centerblock'],
-            $sp_help, COM_applyFilter ($_POST['sp_tid']),
-            COM_applyFilter ($_POST['sp_where'], true), $_POST['sp_inblock'],
-            COM_applyFilter ($_POST['postmode']),
-            isset($_POST['sp_search']) ? 1 : 0);
     } else {
-        $display = COM_refresh ($_CONF['site_admin_url'] . '/index.php');
+        //token expired?
+        @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+        $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
+        $display .= COM_showMessage(501);
+        $editor = '';
+        if (isset ($_GET['editor'])) {
+            $editor = COM_applyFilter ($_GET['editor']);
+        }
+        $mode = 'edit';
+        $owner_id = $_POST['owner_id'];
+        $group_id = $_POST['group_id'];
+        $perm_owner = $_POST['perm_owner'];
+        $perm_group = $_POST['perm_group'];
+        $perm_members = $_POST['perm_members'];
+        $perm_anon = $_POST['perm_anon'];
+        list($perm_owner,$perm_group,$perm_members,$perm_anon) = SEC_getPermissionValues($perm_owner,$perm_group,$perm_members,$perm_anon);
+        $_POST['perm_owner'] = $perm_owner;
+        $_POST['perm_group'] = $perm_group;
+        $_POST['perm_members'] = $perm_members;
+        $_POST['perm_anon'] = $perm_anon;
+        $sp_centerblock = $_POST['sp_centerblock'];
+        $sp_help = '';
+        if (!empty($_POST['sp_help'])) {
+            $sp_help = $_POST['sp_help'];
+        }
+        $sp_inblock = $_POST['sp_inblock'];
+        $sp_search = $_POST['sp_search'];
+        $sp_onmenu = $_POST['sp_onmenu'];
+        $sp_nf     = $_POST['sp_nf'];
+        if ($sp_onmenu == 'on') {
+            $_POST['sp_onmenu'] = 1;
+        } else {
+            $_POST['sp_onmenu'] = 0;
+        }
+        if ($sp_nf == 'on') {
+            $_POST['sp_nf'] = 1;
+        } else {
+            $_POST['sp_nf'] = 0;
+        }
+        if ($sp_centerblock == 'on') {
+            $_POST['sp_centerblock'] = 1;
+        } else {
+            $_POST['sp_centerblock'] = 0;
+        }
+        if ($sp_inblock == 'on') {
+            $_POST['sp_inblock'] = 1;
+        } else {
+            $_POST['sp_inblock'] = 0;
+        }
+        $display .= staticpageeditor ($sp_id, '', $editor);
+        $display .= COM_siteFooter ();
     }
 } else {
     $display .= COM_siteHeader ('menu', $LANG_STATIC['staticpagelist']);

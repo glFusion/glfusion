@@ -34,6 +34,12 @@
 		<input type="radio" name="sortyby" value="3"{xhtml}>
       </td>
     </tr>
+    <tr class="pluginRow1">
+      <td class="mgAdminAlignRight required" style="width:50%;">{lang_rating}</td>
+      <td class="mgAdminAlignLeft">
+		<input type="radio" name="sortyby" value="4"{xhtml}>
+      </td>
+    </tr>
     <tr>
       <th colspan="2">
         {lang_order_options}

@@ -206,7 +206,7 @@ function TRB_filterExcerpt ($excerpt)
 *
 * @param    string  $sid    ID of the parent object of the comment
 * @param    string  $type   type of the parent object ('article' = story, etc.)
-* @return   bool            true = user can delete the comment, false = nope
+* @return   boolean         true = user can delete the comment, false = nope
 *
 */
 function TRB_allowDelete ($sid, $type)
@@ -310,16 +310,16 @@ function TRB_saveTrackbackComment ($sid, $type, $url, $title = '', $blog = '', $
     } else if ($_CONF['multiple_trackbacks'] == 1) {
         // delete any earlier trackbacks from the same URL
         DB_delete ($_TABLES['trackback'], array ('url', 'sid', 'type'),
-                   array ($url, $sid, $type));
+                   array ($url, addslashes($sid), addslashes($type)));
     } // else: multiple trackbacks allowed
 
     DB_save ($_TABLES['trackback'], 'sid,url,title,blog,excerpt,date,type,ipaddress',
-             "'$sid','$url','$title','$blog','$excerpt',NOW(),'$type','{$_SERVER['REMOTE_ADDR']}'");
+             "'".addslashes($sid)."','$url','$title','$blog','$excerpt',NOW(),'".addslashes($type)."','".addslashes($_SERVER['REMOTE_ADDR'])."'");
 
     $comment_id = DB_insertId ();
 
     if ($type == 'article') {
-        DB_query ("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks + 1 WHERE (sid = '$sid')");
+        DB_query ("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks + 1 WHERE (sid = '".addslashes($sid)."')");
     }
     CACHE_remove_instance('whatsnew');
     CACHE_remove_instance('story_'.$sid);
@@ -354,7 +354,7 @@ function TRB_deleteTrackbackComment ($cid)
 * @param    string      $blog       name of the blog that sent the comment
 * @param    string      $excerpt    excerpt from the comment
 * @param    timestamp   $date       date and time when the comment was sent
-* @param    bool        $delete_option  whether to display a link to delete the trackback comment
+* @param    boolean     $delete_option  whether to display a link to delete the trackback comment
 * @param    string      $cid        id of this trackback comment
 * @param    string      $ipaddress  IP address the comment was sent from
 * @param    string      $token      security token
@@ -482,8 +482,8 @@ function TRB_containsBacklink ($body, $urlToCheck)
 *
 * @param    string  $sid        ID of entry that got pinged
 * @param    string  $type       type of that entry ('article' for stories, etc.)
-* @para     string  $urlToGet   URL of the page that supposedly links to us
-* @return   bool                true = links to us, false = doesn't
+* @param    string  $urlToGet   URL of the page that supposedly links to us
+* @return   boolean             true = links to us, false = doesn't
 *
 */
 function TRB_linksToUs ($sid, $type, $urlToGet)
@@ -547,7 +547,7 @@ function TRB_linksToUs ($sid, $type, $urlToGet)
 *
 * @param    string  $sid    ID of entry that got pinged
 * @param    string  $type   type of that entry ('article' for stories, etc.)
-* @return   bool            true = success, false = an error occured
+* @return   boolean         true = success, false = an error occured
 *
 * P.S. "Critical" errors are rejected with a HTTP 403 Forbidden status code.
 *      According to RFC2616, this status code means
@@ -717,7 +717,7 @@ function TRB_renderTrackbackComments ($sid, $type, $title, $permalink, $trackbac
     $template->set_var ('trackback_url', $trackback_url);
 
     $result = DB_query ("SELECT cid,url,title,blog,excerpt,ipaddress,UNIX_TIMESTAMP(date) AS day "
-        . "FROM {$_TABLES['trackback']} WHERE sid = '$sid' AND type = '$type' ORDER BY date");
+        . "FROM {$_TABLES['trackback']} WHERE sid = '".addslashes($sid)."' AND type = '".addslashes($type)."' ORDER BY date");
     $numrows = DB_numRows ($result);
 
     $template->set_var ('trackback_comment_count', $numrows);
@@ -915,7 +915,7 @@ function TRB_sendNotificationEmail ($cid, $what = 'trackback')
            $pageHandle, $inputHandler;
 
     $cid = $inputHandler->prepareForDB($cid);
-    $result = DB_query ("SELECT sid,type,title,excerpt,url,blog,ipaddress FROM {$_TABLES['trackback']} WHERE (cid = '$cid')");
+    $result = DB_query ("SELECT sid,type,title,excerpt,url,blog,ipaddress FROM {$_TABLES['trackback']} WHERE (cid = '".addslashes($cid)."')");
     $A = DB_fetchArray ($result);
     $type = $A['type'];
     $id = $A['sid'];
