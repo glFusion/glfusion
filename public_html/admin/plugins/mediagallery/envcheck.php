@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -318,25 +318,6 @@ function MG_checkEnvironment( ) {
         ));
         $T->parse('CRow','CheckRow',true);
     }
-
-    // Now check /rss directory ...
-    if ( !is_writable( $_MG_CONF['path_html'] . 'rss/' ) ) {
-        $T->set_var(array(
-            'config_item'   =>  $_MG_CONF['path_html'] . 'rss/',
-            'status'        =>  '<font color="red">' . $LANG_MG01['not_writable'] . '</font>'
-        ));
-        $T->parse('CRow', 'CheckRow', true);
-        $errCount++;
-    }
-
-    if ( $errCount == 0 ) {
-        $T->set_var(array(
-            'config_item'       =>  $LANG_MG01['rss_directory'],
-            'status'            =>  '<font color="green">' . $LANG_MG01['ok'] . '</font>'
-        ));
-        $T->parse('CRow','CheckRow',true);
-    }
-
 
     // check php.ini settings...
 

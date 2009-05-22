@@ -1,5 +1,14 @@
 glFusion ChangeLog
 
+v1.1.5
+------
+
+Media Gallery
+-------------
+- Added ability for random image block to go directly to an image in the
+  album view. (Mark)
+- Removed check for rss/ directory after configuration save (Mark)
+
 v1.1.4
 ------
 - Remove spaces from block arrays to ensure no trailing spaces are converted
