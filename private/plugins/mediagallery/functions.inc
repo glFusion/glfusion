@@ -2324,7 +2324,7 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
         $T->set_var('site_admin_url', $_CONF['site_admin_url']);
 
         $url_media      = $_MG_CONF['site_url'] . '/media.php?s=' . $row['media_id'];
-        $url_album      = $_MG_CONF['site_url'] . '/album.php?aid=' . $row['album_id'];
+        $url_album      = $_MG_CONF['site_url'] . '/album.php?aid=' . $row['album_id'] .'&amp;s='.$row['media_id'].'#'.$row['media_id'];
 
         $msize = false;
         foreach ($_MG_CONF['validExtensions'] as $ext ) {

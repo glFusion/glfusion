@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<a name="{media_id}"></a>
   <h1>{media_title}</h1>
   <div class="mgPluginMeta">
      {lang_published} {media_owner} {lang_on} {media_time}

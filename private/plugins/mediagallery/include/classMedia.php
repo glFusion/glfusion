@@ -581,10 +581,13 @@ class Media {
             'genre'				=> $this->genre != '' ? $this->genre : '',
             'alt_edit_link'     => $edit_item,
             'filesize'          => $fileSize,
+            'media_id'          => $this->id,
+
         ));
 
         // frame template variables
         $F->set_var(array(
+            'media_id'          => $this->id,
             'media_link_start'  => $media_start_link,
             'media_link_end'    => '</a>',
             'url_media_item'    =>  $url_media_item,
