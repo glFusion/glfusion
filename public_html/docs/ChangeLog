@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Fixed issue trying to retrieve user photo when anonymous user (Mark)
 
 Media Gallery
 -------------
