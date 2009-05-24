@@ -891,17 +891,21 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
         case "access":
         case "edit":
         case "edit_adv":
-            $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
-                                     $A['perm_owner'], $A['perm_group'],
-                                     $A['perm_members'], $A['perm_anon']);
-            if ($access == 3) {
-                if (SEC_hasTopicAccess ($A['tid']) == 3) {
-                    $access = $LANG_ACCESS['edit'];
+            if ( SEC_inGroup('Story Admin') ) {
+                $access = $LANG_ACCESS['edit'];
+            } else {
+                $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
+                                         $A['perm_owner'], $A['perm_group'],
+                                         $A['perm_members'], $A['perm_anon']);
+                if ($access == 3) {
+                    if (SEC_hasTopicAccess ($A['tid']) == 3) {
+                        $access = $LANG_ACCESS['edit'];
+                    } else {
+                        $access = $LANG_ACCESS['readonly'];
+                    }
                 } else {
                     $access = $LANG_ACCESS['readonly'];
                 }
-            } else {
-                $access = $LANG_ACCESS['readonly'];
             }
             if ($fieldname == 'access') {
                 $retval = $access;
@@ -917,17 +921,21 @@ function ADMIN_getListField_stories($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case "copy":
         case "copy_adv":
-            $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
-                                     $A['perm_owner'], $A['perm_group'],
-                                     $A['perm_members'], $A['perm_anon']);
-            if ($access == 3) {
-                if (SEC_hasTopicAccess ($A['tid']) == 3) {
-                    $access = $LANG_ACCESS['copy'];
+            if ( SEC_inGroup('Story Admin') ) {
+                $access = $LANG_ACCESS['copy'];
+            } else {
+                $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
+                                         $A['perm_owner'], $A['perm_group'],
+                                         $A['perm_members'], $A['perm_anon']);
+                if ($access == 3) {
+                    if (SEC_hasTopicAccess ($A['tid']) == 3) {
+                        $access = $LANG_ACCESS['copy'];
+                    } else {
+                        $access = $LANG_ACCESS['readonly'];
+                    }
                 } else {
                     $access = $LANG_ACCESS['readonly'];
                 }
-            } else {
-                $access = $LANG_ACCESS['readonly'];
             }
             if ($fieldname == 'access') {
                 $retval = $access;

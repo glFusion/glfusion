@@ -510,11 +510,15 @@ class Story
                 if (!isset($story['owner_id'])) {
                     $story['owner_id'] = 1;
                 }
-                $access = SEC_hasAccess($story['owner_id'], $story['group_id'],
-                            $story['perm_owner'], $story['perm_group'],
-                            $story['perm_members'], $story['perm_anon']);
+                if ( SEC_inGroup('Story Admin') ) {
+                    $this->_access = 3;
+                } else {
+                    $access = SEC_hasAccess($story['owner_id'], $story['group_id'],
+                                $story['perm_owner'], $story['perm_group'],
+                                $story['perm_members'], $story['perm_anon']);
 
-                $this->_access = min($access, SEC_hasTopicAccess($this->_tid));
+                    $this->_access = min($access, SEC_hasTopicAccess($this->_tid));
+                }
 
                 if ($this->_access == 0) {
                     return STORY_PERMISSION_DENIED;
@@ -773,11 +777,15 @@ class Story
                 $article = DB_fetchArray($result);
                 /* Check Security */
 
-                $access = SEC_hasAccess($article['owner_id'], $article['group_id'], $article['perm_owner'], $article['perm_group'],
-                                    $article['perm_members'], $article['perm_anon']);
-                $taccess = min($access, SEC_hasTopicAccess($this->_tid));
-                if ( $taccess < 3 ) {
-                    return STORY_EXISTING_NO_EDIT_PERMISSION;
+                if ( SEC_inGroup('Story Admin') ) {
+                    $access = 3;
+                } else {
+                    $access = SEC_hasAccess($article['owner_id'], $article['group_id'], $article['perm_owner'], $article['perm_group'],
+                                        $article['perm_members'], $article['perm_anon']);
+                    $taccess = min($access, SEC_hasTopicAccess($this->_tid));
+                    if ( $taccess < 3 ) {
+                        return STORY_EXISTING_NO_EDIT_PERMISSION;
+                    }
                 }
                 if ( !empty($array['owner_id']) ) {
                     $this->_owner_id = $array['owner_id'];
@@ -787,11 +795,15 @@ class Story
             }
         }
 
-        $access = SEC_hasAccess($this->_owner_id, $this->_group_id, $this->_perm_owner, $this->_perm_group,
-                                    $this->_perm_members, $this->_perm_anon);
+        if ( SEC_inGroup('Story Admin') ) {
+            $access = 3;
+        } else {
+            $access = SEC_hasAccess($this->_owner_id, $this->_group_id, $this->_perm_owner, $this->_perm_group,
+                                        $this->_perm_members, $this->_perm_anon);
 
-        if (($access < 3) || !SEC_hasTopicAccess($this->_tid) || !SEC_inGroup($this->_group_id)) {
-            return STORY_NO_ACCESS_PARAMS;
+            if (($access < 3) || !SEC_hasTopicAccess($this->_tid) || !SEC_inGroup($this->_group_id)) {
+                return STORY_NO_ACCESS_PARAMS;
+            }
         }
 
         /* Load up the topic name and icon */

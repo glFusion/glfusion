@@ -312,8 +312,11 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     } else if ($story->EditElements('tid') == '') {
         $story->setTid($currenttopic);
     }
-
-    $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3);
+    if ( SEC_inGroup('Story Admin') ) {
+        $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,0);
+    } else {
+        $allowedTopicList = COM_topicList ('tid,topic', $story->EditElements('tid'), 1, true,3);
+    }
     if ( $allowedTopicList == '' )
     {
         $display .= COM_startBlock($LANG_ACCESS['accessdenied'], '',

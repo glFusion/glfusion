@@ -84,7 +84,12 @@ function edittopic ($tid = '')
     } else {
         $result = DB_query("SELECT * FROM {$_TABLES['topics']} WHERE tid ='$tid'");
         $A = DB_fetchArray($result);
-        $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
+
+        if ( SEC_inGroup('Topic Admin') ) {
+            $access = 3;
+        } else {
+            $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
+        }
         if ($access == 0 OR $access == 2) {
             $retval .= COM_startBlock ($LANG27[12], '',
                                COM_getBlockTemplate ('_msg_block', 'header'));
@@ -244,12 +249,20 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id
     if (DB_count ($_TABLES['topics'], 'tid', $tid) > 0) {
         $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['topics']} WHERE tid = '{$tid}'");
         $A = DB_fetchArray ($result);
-        $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
-                $A['perm_owner'], $A['perm_group'], $A['perm_members'],
-                $A['perm_anon']);
+        if ( SEC_inGroup('Topic Admin') ) {
+            $access = 3;
+        } else {
+            $access = SEC_hasAccess ($A['owner_id'], $A['group_id'],
+                    $A['perm_owner'], $A['perm_group'], $A['perm_members'],
+                    $A['perm_anon']);
+        }
     } else {
-        $access = SEC_hasAccess ($owner_id, $group_id, $perm_owner, $perm_group,
-                $perm_members, $perm_anon);
+        if ( SEC_inGroup('Topic Admin') ) {
+            $access = 3;
+        } else {
+            $access = SEC_hasAccess ($owner_id, $group_id, $perm_owner, $perm_group,
+                    $perm_members, $perm_anon);
+        }
     }
     if (($access < 3) || !SEC_inGroup ($group_id)) {
         $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
@@ -356,7 +369,11 @@ function listtopics()
     for ($i = 0; $i < $nrows; $i++) {
         $A = DB_fetchArray($result);
 
-        $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
+        if ( SEC_inGroup('Topic Admin') ) {
+            $access = 3;
+        } else {
+            $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
+        }
 
         if ($access > 0) {
             if ($access == 3) {
@@ -418,8 +435,12 @@ function deleteTopic ($tid)
 
     $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['topics']} WHERE tid ='$tid'");
     $A = DB_fetchArray ($result);
-    $access = SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'],
-            $A['perm_group'], $A['perm_members'], $A['perm_anon']);
+    if ( SEC_inGroup('Topic Admin') ) {
+        $access = 3;
+    } else {
+        $access = SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'],
+                $A['perm_group'], $A['perm_members'], $A['perm_anon']);
+    }
     if ($access < 3) {
         COM_accessLog ("User {$_USER['username']} tried to illegally delete topic $tid.");
         return COM_refresh ($_CONF['site_admin_url'] . '/topic.php');
