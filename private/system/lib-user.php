@@ -427,7 +427,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
         }
 
         // collect user's information with as few SQL requests as possible
-        if ($uid == 0) {
+        if ($uid == 0 && isset($_USER['uid']) && $_USER['uid'] > 1) {
             $uid = $_USER['uid'];
             if (empty ($email)) {
                 $email = $_USER['email'];
