@@ -92,7 +92,7 @@ function commandcontrol()
     $admin_templates->set_var('site_url', $_CONF['site_url']);
     $admin_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
 
-    $retval .= COM_startBlock ('glFusion ' . GVERSION . ' -- ' . $LANG29[34], '',
+    $retval .= COM_startBlock ('glFusion ' . GVERSION . PATCHLEVEL . ' -- ' . $LANG29[34], '',
                                COM_getBlockTemplate ('_admin_block', 'header'));
 
     $showTrackbackIcon = (($_CONF['trackback_enabled'] ||
