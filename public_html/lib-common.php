@@ -62,6 +62,8 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.2.0.svn');
 }
 
+define('PATCHLEVEL','.pl1');
+
 //define('DEMO_MODE',true);
 
 /**
@@ -2910,7 +2912,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $adminmenu->set_var( 'option_url',
                'http://www.glfusion.org/versionchecker.php?version=' . GVERSION );
             $adminmenu->set_var( 'option_label', $LANG01[107] );
-            $adminmenu->set_var( 'option_count', GVERSION );
+            $adminmenu->set_var( 'option_count', GVERSION . PATCHLEVEL );
 
             $menu_item = $adminmenu->parse( 'item', 'option' );
             $link_array[$LANG01[107]] = $menu_item;

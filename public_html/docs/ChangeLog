@@ -8,6 +8,20 @@ v1.2.0
 - Added new HTML filtering class (Mark)
 - Added new output handling class (Mark)
 
+v1.1.4.pl1
+------
+- Fixed permission issue where story.admins and topic.admins were not given
+  the proper permissions on stories and topics. (Mark)
+- Fixed issue trying to retrieve user photo when anonymous user (Mark)
+
+Media Gallery
+-------------
+- Fixed permission issue where non-members could view the full image using
+  the popup.php script. (Mark)
+- Added ability for random image block to go directly to an image in the
+  album view. (Mark)
+- Removed check for rss/ directory after configuration save (Mark)
+
 v1.1.4
 ------
 - Remove spaces from block arrays to ensure no trailing spaces are converted

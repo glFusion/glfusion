@@ -78,7 +78,53 @@ if ( isset($_GET['sort']) ) {
     $sortOrder = 0;
 }
 
+if ( isset($_GET['s']) ) {
+    $media_id = COM_applyFilter($_GET['s'],true);
+} else {
+    $media_id = 0;
+}
+
 if ( $page != 0 ) {
+    $page = $page - 1;
+} else if ($media_id != 0 ) {
+
+    $mid = $media_id;
+    $aid = $album_id;
+
+    $orderBy = MG_getSortOrder($aid,$sortOrder);
+
+    $sql = "SELECT * FROM {$_TABLES['mg_media_albums']} as ma LEFT JOIN " . $_TABLES['mg_media'] . " as m " .
+            " ON ma.media_id=m.media_id WHERE ma.album_id=" . $aid . $orderBy;
+    $result = DB_query( $sql );
+    $nRows = DB_numRows( $result );
+    $total_media = $nRows;
+    $media = array();
+    while ( $row = DB_fetchArray($result) ) {
+        $media[] = $row;
+        $ids[] = $row['media_id'];
+    }
+    $key = array_search($mid,$ids);
+    if ( $key === false ) {
+        // didn't find it, very odd...
+    }
+    $mediaOffset = $key;
+    $columns_per_page   = ($MG_albums[$aid]->display_columns == 0 ? $_MG_CONF['ad_display_columns'] : $MG_albums[$aid]->display_columns);
+    $rows_per_page      = ($MG_albums[$aid]->display_rows == 0 ? $_MG_CONF['ad_display_rows'] : $MG_albums[$aid]->display_rows);
+
+    if (isset($_MG_USERPREFS['display_rows']) && $_MG_USERPREFS['display_rows'] > 0 ) {
+        $rows_per_page = $_MG_USERPREFS['display_rows'];
+    }
+    if (isset($_MG_USERPREFS['display_columns'] ) && $_MG_USERPREFS['display_columns'] > 0 ) {
+        $columns_per_page = $_MG_USERPREFS['display_columns'];
+    }
+    $media_per_page     = $columns_per_page * $rows_per_page;
+
+    if ( $MG_albums[$aid]->albums_first ) {
+        $childCount = $MG_albums[$aid]->getChildCount();
+        $page = intval(($mediaOffset + $childCount) / $media_per_page) + 1;
+    } else {
+        $page = intval(($mediaOffset)  / $media_per_page) + 1;
+    }
     $page = $page - 1;
 }
 

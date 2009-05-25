@@ -48,12 +48,26 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_MG_CONF['loginrequired'] 
     exit;
 }
 
+if ( !isset($_USER['uid']) ) {
+    $_USER['uid'] = 1;
+}
+
 $s      = COM_applyFilter($_GET['s'],true);
 $sort   = COM_applyFilter($_GET['sort'],true);
 
 $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($s) . '"');
 
 if ( $MG_albums[$aid]->access == 0 ) {
+    $display  = MG_siteHeader();
+    $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
+             . '<br />' . $LANG_MG00['access_denied_msg']
+             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= MG_siteFooter();
+    echo $display;
+    exit;
+}
+
+if ( $MG_albums[$aid]->full == 2 || $_MG_CONF['discard_original'] == 1 || ( $MG_albums[$aid]->full == 1 && $_USER['uid'] < 2 )) {
     $display  = MG_siteHeader();
     $display .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',COM_getBlockTemplate ('_msg_block', 'header'))
              . '<br />' . $LANG_MG00['access_denied_msg']
