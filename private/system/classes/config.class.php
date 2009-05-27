@@ -38,7 +38,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
+if (!defined ('CONFIG_CACHE_FILE_NAME')) {
+    define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
+}
 
 class config {
     var $dbconfig_file;
