@@ -1,5 +1,18 @@
 glFusion ChangeLog
 
+v1.1.4.pl2
+----------
+- Small change to config.class.php to allow for easier multi-site
+  implementations (Mark)
+- Fix to allow direct calling of style/js cache files to help reduce
+  server load on sites that must reload the PHP processor each time (Mark)
+- Added path_rdf to fusionrecue.php set of fields to edit (Mark)
+
+Media Gallery
+-------------
+- Fixed issue where the image rotate option was not available in the media
+  edit screen (Mark)
+
 v1.1.4.pl1
 ------
 - Fixed permission issue where story.admins and topic.admins were not given

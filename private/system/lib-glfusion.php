@@ -262,13 +262,22 @@ function CTL_clearCacheDirectories($path, $needle = '')
 
 function CTL_clearCache($plugin='')
 {
-    global $TEMPLATE_OPTIONS, $_CONF;
+    global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
 
     if (!empty($plugin)) {
         $plugin = '__' . $plugin . '__';
     }
 
     CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
+
+    if ( $_SYSTEM['use_direct_style_js'] ) {
+        foreach (glob($_CONF['path_html'].$_CONF['css_cache_filename']."*.*") as $filename) {
+            @unlink($filename);
+        }
+        foreach (glob($_CONF['path_html'].$_CONF['js_cache_filename']."*.*") as $filename) {
+            @unlink($filename);
+        }
+    }
 
     css_out();
     js_out();

@@ -38,12 +38,17 @@ require_once 'siteconfig.php';
 if ( !isset($_GET['t']) ) {
 	exit;
 }
+
+if ( !isset($_CONF['css_cache_filename']) ) {
+    $_CONF['css_cache_filename'] = 'stylecache_';
+}
+
 $theme = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$_GET['t'] );
 $theme = str_replace( '..', '', $theme );
 $buf = '';
-if ( @file_exists ($_CONF['path'] . '/data/layout_cache/stylecache_'.$theme.'.css') ) {
+if ( @file_exists ($_CONF['path'] . '/data/layout_cache/'.$_CONF['css_cache_filename'].$theme.'.css') ) {
     header('Content-type: text/css');
-    $buf = file_get_contents($_CONF['path'] . '/data/layout_cache/stylecache_'.$theme.'.css');
+    $buf = file_get_contents($_CONF['path'] . '/data/layout_cache/'.$_CONF['css_cache_filename'].$theme.'.css');
     echo $buf;
 }
 ?>

@@ -38,12 +38,17 @@ require_once 'siteconfig.php';
 if ( !isset($_GET['t']) ) {
 	exit;
 }
+
+if ( !isset($_CONF['js_cache_filename']) ) {
+    $_CONF['js_cache_filename'] = 'jscache_';
+}
+
 $theme = preg_replace( '/[^a-zA-Z0-9\-_\.]/', '',$_GET['t'] );
 $theme = str_replace( '..', '', $theme );
 $buf = '';
-if ( @file_exists ($_CONF['path'] . '/data/layout_cache/jscache_'.$theme.'.js') ) {
+if ( @file_exists ($_CONF['path'] . '/data/layout_cache/'.$_CONF['js_cache_filename'] . $theme.'.js') ) {
     header('Content-type: text/javascript');
-    $buf = file_get_contents($_CONF['path'] . '/data/layout_cache/jscache_'.$theme.'.js');
+    $buf = file_get_contents($_CONF['path'] . '/data/layout_cache/'.$_CONF['js_cache_filename'].$theme.'.js');
     echo $buf;
 }
 ?>

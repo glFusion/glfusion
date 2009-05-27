@@ -100,6 +100,27 @@ $_SYSTEM['swedish_date_hack'] = false;
 $_SYSTEM['skip_ip_check'] = false;
 
 // +--------------------------------------------------------------------------+
+// | Use direct style / js - Directly call the style / jss cache files        |
+// |                                                                          |
+// | If loading the PHP processor on your site adds additional load to your   |
+// | site you can skip that process and load the cache files directly from    |
+// | htmlheader.thtml                                                         |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['use_direct_style_js'] = false;
+
+// +--------------------------------------------------------------------------+
+// | glFusion cache filenames - You generally do not need to adjust these.    |
+// |                                                                          |
+// | When running multiple sites off the same code base, having the ability   |
+// | to define unique cache file names per site can be beneficial.            |
+// +--------------------------------------------------------------------------+
+
+define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
+$_CONF['css_cache_filename'] = 'stylecache_';
+$_CONF['js_cache_filename'] = 'jscache_';
+
+// +--------------------------------------------------------------------------+
 // | You should not need to change any settings below this line,              |
 // | these settings are created during the site installation.                 |
 // +--------------------------------------------------------------------------+

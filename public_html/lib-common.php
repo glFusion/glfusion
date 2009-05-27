@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.1.4');
 }
 
-define('PATCHLEVEL','.pl1');
+define('PATCHLEVEL','.pl2');
 
 //define('DEMO_MODE',true);
 
@@ -1031,7 +1031,7 @@ function COM_renderMenu( &$header, $plugin_menu )
 
 function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
            $theme_headercode, $theme_layout,$stMenu,$themeAPI;
 
@@ -1255,8 +1255,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
 
-    if( !empty( $_USER['username'] ))
-    {
+    if( !empty( $_USER['username'] )) {
         $msg .= ', ' . COM_getDisplayName( $_USER['uid'], $_USER['username'],
                                            $_USER['fullname'] );
     }
@@ -1269,6 +1268,17 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
                                    . '/images/logo.' . $_IMAGE_TYPE );
     $header->set_var( 'css_url', $_CONF['layout_url'] . '/style.css' );
     $header->set_var( 'theme', $_CONF['theme'] );
+
+    if ( $_SYSTEM['use_direct_style_js'] ) {
+        $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
+        $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js?t='.$_CONF['theme'];
+    } else {
+        $style_cache_url = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+        $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
+    }
+
+    $header->set_var('style_cache_url',$style_cache_url);
+    $header->set_var('js_cache_url',$js_cache_url);
 
     $header->set_var( 'charset', COM_getCharset());
     if( empty( $LANG_DIRECTION )) {
@@ -7380,13 +7390,25 @@ function phpblock_autotranslations() {
 }
 
 function css_out(){
-    global $_CONF, $_PLUGINS, $_TABLES;
+    global $_CONF, $_SYSTEM, $_PLUGINS, $_TABLES;
     global $_ST_CONF, $stMenu, $themeAPI, $themeStyle;
+
+    if ( !isset($_CONF['css_cache_filename']) ) {
+        $_CONF['css_cache_filename'] = 'csscache_';
+    }
 
     $tpl = $_CONF['theme'];
 
     $cacheID = 'css_' . $tpl;
-    $cacheFile = $_CONF['path'].'/data/layout_cache/stylecache_'.$_CONF['theme'].'.css';
+
+    if ( $_SYSTEM['use_direct_style_js'] ) {
+        $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
+        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].'.css?t='.$_CONF['theme'];
+    } else {
+        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
+        $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+    }
+
     $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
 
     $files   = array();
@@ -7509,13 +7531,21 @@ function css_comment_cb($matches){
 }
 
 function js_out(){
-    global $_CONF, $_PLUGINS, $themeAPI;
+    global $_CONF, $_SYSTEM, $_PLUGINS, $themeAPI;
 
     $tpl = $_CONF['theme'];
 
+    if ( !isset($_CONF['js_cache_filename']) ) {
+        $_CONF['js_cache_filename'] = 'jscache_';
+    }
 
-    $cacheFile = $_CONF['path'].'/data/layout_cache/jscache_'.$_CONF['theme'].'.js';
-    $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
+    if ( $_SYSTEM['use_direct_style_js'] ) {
+        $cacheFile = $_CONF['path_html'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
+        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].'.js?t='.$_CONF['theme'];
+    } else {
+        $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js';
+        $cacheURL  = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
+    }
 
     /*
      * Static list of standard JavaScript used by glFusion...

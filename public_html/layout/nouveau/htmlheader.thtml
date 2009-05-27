@@ -9,11 +9,11 @@
 {# <meta http-equiv="Pragma" content="no-cache"{xhtml}> #}
 <link rel="SHORTCUT ICON" href="{layout_url}/images/favicon.ico"{xhtml}>
 {# Load Stylesheets #}
-<link rel="stylesheet" type="text/css" href="{site_url}/css.php?t={theme}" title="{theme}"{xhtml}>
+<link rel="stylesheet" type="text/css" href="{style_cache_url}" title="{theme}"{xhtml}>
 {feed_url}
 {rel_links}
 {# Load JavaScript #}
-<script type="text/javascript" src="{site_url}/js.php?t={theme}"></script>
+<script type="text/javascript" src="{js_cache_url}"></script>
 {# Load plugin Header Code #}
 {plg_headercode}
 <!--[if lte IE 6]>
