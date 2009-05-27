@@ -110,7 +110,7 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
     $nRows = DB_numRows( $result );
 
     $batchOptionSelect = '<select name="batchOption">';
-    if ( $_MG_CONF['graphicspackage'] == 2 && !function_exists("imagerotate") ) {
+    if ( $_CONF['image_lib'] == 'gdlib' && !function_exists("imagerotate") ) {
 	    $batchOptionSelect .= '';
     } else {
     	$batchOptionSelect .= '<option value="rrt">' . $LANG_MG01['rotate_right'] . '</option>';
@@ -583,7 +583,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
             }
             $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/tn/' . $pThumbnail;
             $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $pThumbnail);
-            if ( $_MG_CONF['graphicspackage'] == 2 && !function_exists("imagerotate") ) {
+            if ( $_CONF['image_lib'] == 'gdlib' && !function_exists("imagerotate") ) {
 	            $rotate_right = '';
 	            $rotate_left  = '';
             } else {
