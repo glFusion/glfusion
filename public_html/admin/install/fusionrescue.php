@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 //
 
-$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','path_log','path_language','backup_path','path_data','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure');
+$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure');
 
 function FR_stripslashes( $text ) {
     if( get_magic_quotes_gpc() == 1 ) {
