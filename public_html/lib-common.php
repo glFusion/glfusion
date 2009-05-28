@@ -7394,7 +7394,7 @@ function css_out(){
     global $_ST_CONF, $stMenu, $themeAPI, $themeStyle;
 
     if ( !isset($_CONF['css_cache_filename']) ) {
-        $_CONF['css_cache_filename'] = 'csscache_';
+        $_CONF['css_cache_filename'] = 'stylecache_';
     }
 
     $tpl = $_CONF['theme'];
