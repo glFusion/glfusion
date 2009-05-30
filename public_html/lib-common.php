@@ -7403,7 +7403,7 @@ function css_out(){
 
     if ( $_SYSTEM['use_direct_style_js'] ) {
         $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
-        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].'.css?t='.$_CONF['theme'];
+        $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
     } else {
         $cacheFile = $_CONF['path'].'/data/layout_cache/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
         $cacheURL  = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
