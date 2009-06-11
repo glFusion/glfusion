@@ -90,8 +90,6 @@ function INST_header($currentAction='',$nextAction='',$prevAction='')
         'progress_bar'      =>  _buildProgressBar($currentStep),
     ));
 
-//    $pb = _buildProgressBar($currentStep,&$header);
-
     $header->parse('output','header');
     return $header->finish($header->get_var('output'));
 }
@@ -126,7 +124,7 @@ function php_v()
 }
 
 /**
- * Check if the user's PHP version is supported by Geeklog
+ * Check if the user's PHP version is supported by glFusion
  *
  * @return bool True if supported, falsed if not supported
  *
@@ -171,7 +169,7 @@ function mysql_v($_DB_host, $_DB_user, $_DB_pass)
 }
 
 /**
- * Check if the user's MySQL version is supported by Geeklog
+ * Check if the user's MySQL version is supported by glFusion
  *
  * @param   array   $db     Database information
  * @return  bool    True if supported, falsed if not supported
@@ -275,7 +273,7 @@ function INST_dbConnect($db)
 }
 
 /**
- * Check if a Geeklog database exists
+ * Check if a glFusion database exists
  *
  * @param   array   $db Array containing connection info
  * @return  bool        True if a database exists, false if not
@@ -331,7 +329,7 @@ function INST_checkPlugins()
 * This is somewhat speculative but should provide the user with a working
 * site even if, for example, a site backup was installed elsewhere.
 *
-* @param    string  $path           proper /path/to/Geeklog
+* @param    string  $path           proper /path/to/glfusion
 * @param    string  $path_html      path to public_html
 * @param    string  $site_url       The site's URL
 * @param    string  $site_admin_url URL to the admin directory
@@ -383,7 +381,7 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
     }
     if (substr($_CONF['rdf_file'], strlen($path_html)) != $path_html) {
         // this may not be correct but neither was the old value apparently ...
-        $config->set('rdf_file', $path_html . 'backend/geeklog.rss');
+        $config->set('rdf_file', $path_html . 'backend/glfusion.rss');
     }
 
     if (! empty($site_url) && ($_CONF['site_url'] != $site_url)) {
@@ -407,13 +405,22 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
 function INST_getHtmlPath()
 {
     $path = str_replace('\\', '/', __FILE__);
+    if ( $path[1] == '/' ) {
+        $double = true;
+    } else {
+        $double = false;
+    }
     $path = str_replace('//', '/', $path);
     $parts = explode('/', $path);
     $num_parts = count($parts);
     if (($num_parts < 3) || ($parts[$num_parts - 1] != 'install.lib.php')) {
         die('Fatal error - can not figure out my own path');
     }
-    return implode('/', array_slice($parts, 0, $num_parts - 4)) . '/';
+    $returnPath = implode('/', array_slice($parts, 0, $num_parts - 4)) . '/';
+    if ( $double ) {
+        $returnPath = '/'.$returnPath;
+    }
+    return $returnPath;
 }
 
 /**
@@ -423,14 +430,22 @@ function INST_getHtmlPath()
 function INST_getAdminPath()
 {
     $path = str_replace('\\', '/', __FILE__);
+    if ( $path[1] == '/' ) {
+        $double = true;
+    } else {
+        $double = false;
+    }
     $path = str_replace('//', '/', $path);
     $parts = explode('/', $path);
     $num_parts = count($parts);
     if (($num_parts < 3) || ($parts[$num_parts - 1] != 'install.lib.php')) {
         die('Fatal error - can not figure out my own path');
     }
-
-    return implode('/', array_slice($parts, 0, $num_parts - 3)) . '/';
+    $returnPath = implode('/', array_slice($parts, 0, $num_parts - 3)) . '/';
+    if ( $double ) {
+        $returnPath = '/'.$returnPath;
+    }
+    return $returnPath;
 }
 
 /**
