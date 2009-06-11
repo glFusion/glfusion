@@ -1314,7 +1314,7 @@ default:
                 displayLoginErrorAndAbort(82, $LANG04[113], $LANG04[112]);
             } else { // Show login form
                 if(($msg != 69) && ($msg != 70)) {
-                    if ($_CONF['custom_registration'] AND function_exists('CUSTOM_loginErrorHandler')) {
+                    if ($_CONF['custom_registration'] AND function_exists('CUSTOM_loginErrorHandler') && $msg != 0) {
                         // Typically this will be used if you have a custom main site page and need to control the login process
                         $display .= CUSTOM_loginErrorHandler($msg);
                     } else {
