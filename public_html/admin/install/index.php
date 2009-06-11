@@ -1279,15 +1279,21 @@ function INST_installAndContentPlugins()
             if ( $rc === false ) {
                 return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
             }
+            if ( !@file_exists($_PATH['public_html'].'siteconfig.php') ) {
+                return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
+            }
         } else {
             // no site config found return error
             return _displayError(SITECONFIG_NOT_FOUND,'getsiteinformation');
         }
     }
 
-    // Edit siteconfig.php and enter the correct GL path and system directory path
+    // Edit siteconfig.php and enter the correct path and system directory path
     $siteconfig_path = $_PATH['public_html'] . 'siteconfig.php';
     $siteconfig_file = fopen($siteconfig_path, 'r');
+    if ( $siteconfig_file === false ) {
+        return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
+    }
     $siteconfig_data = fread($siteconfig_file, filesize($siteconfig_path));
     fclose($siteconfig_file);
 
@@ -1740,7 +1746,7 @@ function INST_migrateGeeklog()
     if ( DB_numRows($result) > 0 ) {
         return _displayError(NO_MIGRATE_GLFUSION,'');
     }
-/* ----------------------------------------------------------
+
     // setup the environment to match glFusion 1.0.0
 
     DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'",1);
@@ -1753,7 +1759,7 @@ function INST_migrateGeeklog()
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
 
     DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.0.0' WHERE name='glfusion'",1);
---------------------------------------------------------------- */
+
     return INST_checkEnvironment();
 }
 
