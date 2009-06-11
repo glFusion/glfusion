@@ -212,7 +212,7 @@ function plugin_whatsnewcomment_polls()
     if ( $nrows > 0 ) {
         for ($x = 0; $x < $nrows; $x++ ) {
             $A = DB_fetchArray($result);
-            $cmtReturn['url'] = COM_buildUrl($_CONF['site_url'].'/polls/index.php?pid='.$A['sid']).'#comments';
+            $cmtReturn['url'] = $_CONF['site_url'].'/polls/index.php?pid='.$A['sid'].'#comments';
             $cmtReturn['type'] = 'polls';
             $cmtReturn['dups'] = $A['dups'];
             $cmtReturn['title'] = $A['title'];
