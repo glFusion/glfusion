@@ -1225,11 +1225,11 @@ if (isset ($_POST['passwd']) && isset ($_POST['passwd_conf']) &&
         $_POST['userstatus'] = USER_ACCOUNT_ACTIVE;
     }
     $display = saveusers (COM_applyFilter ($_POST['uid'], true),
-            COM_stripslashes($_POST['username']), COM_stripslashes($_POST['fullname']),
-            COM_stripslashes($_POST['passwd']), COM_stripslashes($_POST['passwd_conf']),
-            COM_stripslashes($_POST['email']),
+            trim(COM_stripslashes($_POST['username'])), COM_stripslashes($_POST['fullname']),
+            trim(COM_stripslashes($_POST['passwd'])), trim(COM_stripslashes($_POST['passwd_conf'])),
+            trim(COM_stripslashes($_POST['email'])),
             $_POST['regdate'], COM_stripSlashes($_POST['homepage']),
-            $_POST['gl_groups'],
+            $_POST[$_TABLES['groups']],
             $delphoto, $_POST['userstatus'], $_POST['oldstatus']);
     if (!empty($display)) {
         $tmp = COM_siteHeader('menu', $LANG28[22]);
