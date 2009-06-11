@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -890,7 +893,7 @@ function PLGINT_getOptionsforMenus($var_names, $required_names, $function_name)
             $plg_array = $function();
             if (($plg_array !== false) && (count ($plg_array) > 0)) {
                 // Check if plugin is returning a single record array or multiple records
-                $entries = count ($plg_array[0]);
+                $entries = @count ($plg_array[0]);
                 $sets_array = array();
                 if ($entries == 1) {
                     // Single record - so we need to prepare the sets_array;
@@ -1556,7 +1559,7 @@ function PLG_collectTags()
 
     // Determine which Core Modules and Plugins support AutoLinks
     //                        'tag'   => 'module'
-    $autolinkModules = array ('story' => 'glfusion');
+    $autolinkModules = array ('story' => 'glfusion','story_introtext' => 'glfusion');
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_autotags_' . $pi_name;
@@ -1673,11 +1676,59 @@ function PLG_replaceTags($content, $plugin = '')
                         $linktext = stripslashes (DB_getItem ($_TABLES['stories'], 'title', "sid = '".addslashes($autotag['parm1'])."'"));
                     }
                 }
-
                 if (!empty ($url)) {
                     $filelink = COM_createLink($linktext, $url);
                     $content = str_replace ($autotag['tagstr'], $filelink,
                                             $content);
+                }
+                if ( $autotag['tag'] == 'story_introtext' ) {
+                    $url = '';
+                    $linktext = '';
+                    USES_lib_story();
+                    if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
+                        $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}");
+                        $U = DB_fetchArray($result);
+                    } else {
+                        $U['maxstories'] = 0;
+                        $U['aids'] = '';
+                        $U['tids'] = '';
+                    }
+
+                    $sql = " (date <= NOW()) AND (draft_flag = 0)";
+
+                    if (empty ($topic)) {
+                        $sql .= COM_getLangSQL ('tid', 'AND', 's');
+                    }
+
+                    $sql .= COM_getPermSQL ('AND', 0, 2, 's');
+
+                    if (!empty($U['aids'])) {
+                        $sql .= " AND s.uid NOT IN (" . str_replace( ' ', ",", $U['aids'] ) . ") ";
+                    }
+
+                    if (!empty($U['tids'])) {
+                        $sql .= " AND s.tid NOT IN ('" . str_replace( ' ', "','", $U['tids'] ) . "') ";
+                    }
+
+                    $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
+
+                    $userfields = 'u.uid, u.username, u.fullname';
+
+                    $msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
+                             . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
+                             . $userfields . ", t.topic, t.imageurl "
+                             . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
+                             . "{$_TABLES['topics']} AS t WHERE s.sid = '".$autotag['parm1']."' AND (s.uid = u.uid) AND (s.tid = t.tid) AND"
+                             . $sql;
+
+                    $result = DB_query ($msql);
+                    $nrows = DB_numRows ($result);
+                    if ( $A = DB_fetchArray( $result ) ) {
+                        $story = new Story();
+                        $story->loadFromArray($A);
+                        $linktext = STORY_renderArticle ($story, 'y');
+                    }
+                    $content = str_replace($autotag['tagstr'],$linktext,$content);
                 }
             } else if (function_exists ($function) AND
                     (empty ($plugin) OR ($plugin == $autotag['module']))) {
@@ -2000,6 +2051,31 @@ function PLG_getWhatsNew()
     }
 
     return array($newheadlines, $newbylines, $newcontent);
+}
+
+/**
+* Ask plugins if they want to add something to glFusion's What's New comment block.
+*
+* @return   array   array( array(dups, type, title, sid, lastdate) )
+*
+*/
+function PLG_getWhatsNewComment()
+{
+    global $_PLUGINS;
+
+    $commentrows = array();
+    $comments    = array();
+
+    foreach ($_PLUGINS as $pi_name) {
+        $fn = 'plugin_whatsnewcomment_' . $pi_name;
+        if ( function_exists($fn) ) {
+            $commentrows = $fn();
+            if ( is_array($commentrows) ) {
+                $comments = array_merge($commentrows,$comments);
+            }
+        }
+    }
+    return $comments;
 }
 
 /**

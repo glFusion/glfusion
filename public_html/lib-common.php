@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.1.4');
 }
 
-define('PATCHLEVEL','.pl2');
+define('PATCHLEVEL','.pl3');
 
 //define('DEMO_MODE',true);
 
@@ -4353,7 +4353,7 @@ function COM_emailUserTopics()
 function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_WHATSNEW, $page, $newstories;
-    global $_ST_CONF;
+    global $_ST_CONF, $_PLUGINS;
 
     if ( !isset($_ST_CONF['whatsnew_cache_time']) ) {
         $_ST_CONF['whatsnew_cache_time'] = 3600;
@@ -4434,72 +4434,71 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         }
     }
 
-    if( $_CONF['hidenewcomments'] == 0 )
-    {
+    if( $_CONF['hidenewcomments'] == 0 ) {
         // Go get the newest comments
         $retval .= '<h3>' . $LANG01[83] . ' <small>'
                 . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
                                         $_CONF['newcommentsinterval'] )
                 . '</small></h3>';
 
+        $newcomments = array();
+        $commentrow  = array();
+
+        // get story whats new
+
         $stwhere = '';
 
-        if( !COM_isAnonUser() )
-        {
+        if( !COM_isAnonUser() ) {
             $stwhere .= "({$_TABLES['stories']}.owner_id IS NOT NULL AND {$_TABLES['stories']}.perm_owner IS NOT NULL) OR ";
             $stwhere .= "({$_TABLES['stories']}.group_id IS NOT NULL AND {$_TABLES['stories']}.perm_group IS NOT NULL) OR ";
             $stwhere .= "({$_TABLES['stories']}.perm_members IS NOT NULL)";
-        }
-        else
-        {
+        } else {
             $stwhere .= "({$_TABLES['stories']}.perm_anon IS NOT NULL)";
         }
-        $sql = "SELECT DISTINCT COUNT(*) AS dups, type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid, max({$_TABLES['comments']}.date) AS lastdate FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['stories']} ON (({$_TABLES['stories']}.sid = {$_TABLES['comments']}.sid)" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.commentcode >= 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . ") WHERE ({$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND))) AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid ORDER BY 5 DESC LIMIT 15";
-
+        $sql = "SELECT DISTINCT COUNT(*) AS dups, type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['stories']} ON (({$_TABLES['stories']}.sid = {$_TABLES['comments']}.sid)" . COM_getPermSQL( 'AND', 0, 2, $_TABLES['stories'] ) . " AND ({$_TABLES['stories']}.draft_flag = 0) AND ({$_TABLES['stories']}.commentcode >= 0)" . $topicsql . COM_getLangSQL( 'sid', 'AND', $_TABLES['stories'] ) . ") WHERE ({$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND))) AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['stories']}.title, {$_TABLES['stories']}.title, {$_TABLES['stories']}.sid ORDER BY 5 DESC LIMIT 15";
         $result = DB_query( $sql );
-
         $nrows = DB_numRows( $result );
 
-        if( $nrows > 0 )
-        {
-            $newcomments = array();
-
-            for( $x = 0; $x < $nrows; $x++ )
-            {
-                $A = DB_fetchArray( $result );
-
-                if(( $A['type'] == 'article' ) || empty( $A['type'] ))
-                {
-                    $url = COM_buildUrl( $_CONF['site_url']
+        if ( $nrows > 0 ) {
+            for ($x = 0; $x < $nrows; $x++ ) {
+                $A = DB_fetchArray($result);
+                $A['url'] = COM_buildUrl( $_CONF['site_url']
                         . '/article.php?story=' . $A['sid'] ) . '#comments';
-                }
+                $commentrow[] = $A;
+            }
+        }
 
-                $title = COM_undoSpecialChars( stripslashes( $A['title'] ));
+        $pluginComments = PLG_getWhatsNewComment();
+        $commentrow = array_merge($pluginComments,$commentrow);
+
+        usort($commentrow,'_commentsort');
+
+        $nrows = count($commentrow);
+
+        if( $nrows > 0 ) {
+            $newcomments = array();
+            for( $x = 0; $x < $nrows; $x++ ) {
+                $url = $commentrow[$x]['url'];
+                $title = COM_undoSpecialChars( stripslashes( $commentrow[$x]['title'] ));
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
                                             '...' );
-                if( $title != $titletouse )
-                {
+                if( $title != $titletouse ) {
                     $attr = array('title' => htmlspecialchars($title));
-                }
-                else
-                {
+                } else {
                     $attr = array();
                 }
                 $acomment = str_replace( '$', '&#36;', $titletouse );
                 $acomment = str_replace( ' ', '&nbsp;', $acomment );
 
-                if( $A['dups'] > 1 )
-                {
-                    $acomment .= ' [+' . $A['dups'] . ']';
+                if( $commentrow[$x]['dups'] > 1 ) {
+                    $acomment .= ' [+' . $commentrow[$x]['dups'] . ']';
                 }
 
                 $newcomments[] = COM_createLink($acomment, $url, $attr);
             }
 
             $retval .= COM_makeList( $newcomments, 'list-new-comments' );
-        }
-        else
-        {
+        } else {
             $retval .= $LANG01[86] . '<br' . XHTML . '>' . LB;
         }
         if(( $_CONF['hidenewplugins'] == 0 )
@@ -4599,6 +4598,10 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
     return $retval;
 }
+
+
+
+
 
 /**
 * Creates the string that indicates the timespan in which new items were found
@@ -7265,6 +7268,14 @@ function phpblock_lastlogin()
         }
     }
     return $retval;
+}
+
+function _commentsort($a, $b)
+{
+    if ( $a['lastdate'] == $b['lastdate'] ) {
+        return 0;
+    }
+    return ($b['lastdate'] < $a['lastdate']) ? -1 : 1;
 }
 
 /**

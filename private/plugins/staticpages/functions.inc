@@ -10,6 +10,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -71,6 +74,7 @@ include_once $plugin_path . 'services.inc.php';
 // | glFusion Plugin API Implementations                                       |
 // +---------------------------------------------------------------------------+
 
+
 /**
 * Returns the items for this plugin that should appear on the main menu
 *
@@ -108,7 +112,7 @@ function plugin_getmenuitems_staticpages()
 }
 
 /**
-* glFusion is checking to see if this plugin supports comments, tell it no.
+* glFusion is checking to see if this plugin supports comments.
 *
 * NOTE: to support comments you must used the same date/time based ID for your
 * widget.  In other words, to make primary keys for your plugin you should call
@@ -200,7 +204,7 @@ function plugin_savecomment_staticpages($title, $comment, $id, $pid, $postmode)
         $retval = COM_refresh ($_CONF['site_url']
                                 . "/staticpages/index.php?page=$id");
     }
-
+    CACHE_remove_instance('whatsnew_');
     return $retval;
 }
 
@@ -233,8 +237,48 @@ function plugin_deletecomment_staticpages($cid, $id)
                     . "tried to illegally delete comment $cid from staticpage $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
-
+    CACHE_remove_instance('whatsnew_');
     return $retval;
+}
+
+function plugin_whatsnewcomment_staticpages()
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $stwhere = '';
+    if( !COM_isAnonUser() ) {
+        $stwhere .= "({$_TABLES['staticpage']}.owner_id IS NOT NULL AND {$_TABLES['staticpage']}.perm_owner IS NOT NULL) OR ";
+        $stwhere .= "({$_TABLES['staticpage']}.group_id IS NOT NULL AND {$_TABLES['staticpage']}.perm_group IS NOT NULL) OR ";
+        $stwhere .= "({$_TABLES['staticpage']}.perm_members IS NOT NULL)";
+    } else {
+        $stwhere .= "({$_TABLES['staticpage']}.perm_anon IS NOT NULL)";
+    }
+    $sql = "SELECT DISTINCT COUNT(*) AS dups, {$_TABLES['staticpage']}.sp_title AS title,
+            {$_TABLES['staticpage']}.sp_id AS sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate
+            FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['staticpage']} ON (({$_TABLES['staticpage']}.sp_id = {$_TABLES['comments']}.sid)"
+            . COM_getPermSQL( 'AND', 0, 2, $_TABLES['staticpage'] ) .
+            " AND ({$_TABLES['staticpage']}.commentcode >= 0)" .
+            COM_getLangSQL( 'sp_id', 'AND', $_TABLES['staticpage'] ) . ")
+            WHERE ({$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
+            AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['staticpage']}.sp_title,
+            {$_TABLES['staticpage']}.sp_title, {$_TABLES['staticpage']}.sp_id
+            ORDER BY 4 DESC LIMIT 15";
+
+    $result = DB_query( $sql );
+    $nrows = DB_numRows( $result );
+    if ( $nrows > 0 ) {
+        for ($x = 0; $x < $nrows; $x++ ) {
+            $A = DB_fetchArray($result);
+
+            $cmtReturn['url'] = COM_buildUrl($_CONF['site_url'].'/staticpages/index.php?page='.$A['sid']).'#comments';
+            $cmtReturn['type'] = 'staticpage';
+            $cmtReturn['dups'] = $A['dups'];
+            $cmtReturn['title'] = $A['title'];
+            $cmtReturn['lastdate'] = $A['lastdate'];
+            $commentrow[] = $cmtReturn;
+        }
+    }
+    return $commentrow;
 }
 
 /**

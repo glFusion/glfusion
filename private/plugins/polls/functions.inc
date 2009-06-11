@@ -10,6 +10,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -126,7 +129,7 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
     }
 
     $ret = CMT_saveComment ($title, $comment, $id, $pid, 'polls', $postmode);
-    if ($ret > 0) { // failure //FIXME: some failures should not return to comment form
+    if ($ret > 0) {
         $retval .= COM_siteHeader('menu', $LANG03[1])
                 . CMT_commentForm ($title, $comment, $id, $pid, 'polls',
                                    $LANG03[14], $postmode)
@@ -135,7 +138,7 @@ function plugin_savecomment_polls($title, $comment, $id, $pid, $postmode)
         $retval = COM_refresh ($_CONF['site_url']
                                 . "/polls/index.php?pid=$id&amp;aid=-1");
     }
-
+    CACHE_remove_instance('whatsnew_');
     return $retval;
 }
 function plugin_editcomment_polls($cid,$id) {
@@ -174,10 +177,51 @@ function plugin_deletecomment_polls($cid, $id)
                     . "tried to illegally delete comment $cid from poll $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
-
+    CACHE_remove_instance('whatsnew_');
     return $retval;
 }
 
+function plugin_whatsnewcomment_polls()
+{
+    global $_CONF, $_TABLES, $_USER;
+    global $_ST_CONF;
+
+    $commentrow = array();
+
+    $stwhere = '';
+    if( !COM_isAnonUser() ) {
+        $stwhere .= "({$_TABLES['polltopics']}.owner_id IS NOT NULL AND {$_TABLES['polltopics']}.perm_owner IS NOT NULL) OR ";
+        $stwhere .= "({$_TABLES['polltopics']}.group_id IS NOT NULL AND {$_TABLES['polltopics']}.perm_group IS NOT NULL) OR ";
+        $stwhere .= "({$_TABLES['polltopics']}.perm_members IS NOT NULL)";
+    } else {
+        $stwhere .= "({$_TABLES['polltopics']}.perm_anon IS NOT NULL)";
+    }
+    $sql = "SELECT DISTINCT COUNT(*) AS dups, {$_TABLES['polltopics']}.topic AS title,
+            {$_TABLES['polltopics']}.pid AS sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate
+            FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['polltopics']} ON (({$_TABLES['polltopics']}.pid = {$_TABLES['comments']}.sid)"
+            . COM_getPermSQL( 'AND', 0, 2, $_TABLES['polltopics'] ) .
+            " AND ({$_TABLES['polltopics']}.commentcode >= 0)" .
+            /* COM_getLangSQL( 'pid', 'AND', $_TABLES['polltopics'] ) .*/ ")
+            WHERE ({$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
+            AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['polltopics']}.topic,
+            {$_TABLES['polltopics']}.topic, {$_TABLES['polltopics']}.pid
+            ORDER BY 4 DESC LIMIT 15";
+
+    $result = DB_query( $sql );
+    $nrows = DB_numRows( $result );
+    if ( $nrows > 0 ) {
+        for ($x = 0; $x < $nrows; $x++ ) {
+            $A = DB_fetchArray($result);
+            $cmtReturn['url'] = COM_buildUrl($_CONF['site_url'].'/polls/index.php?pid='.$A['sid']).'#comments';
+            $cmtReturn['type'] = 'polls';
+            $cmtReturn['dups'] = $A['dups'];
+            $cmtReturn['title'] = $A['title'];
+            $cmtReturn['lastdate'] = $A['lastdate'];
+            $commentrow[] = $cmtReturn;
+        }
+    }
+    return $commentrow;
+}
 
 /**
 * Helper function: count number of polls and total number of votes
