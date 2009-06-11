@@ -1,5 +1,47 @@
 glFusion ChangeLog
 
+v1.1.4.pl3
+----------
+- Fix install issue on servers with \\path\to\glfusion directory
+  notation (Mark)
+- Trim spaces from username and email when creating a new user (Mark)
+- When custom registration is enabled, the user cannot select a login link
+  to display the login screen (Mark)
+- Added cache_templates field to fusionrescue.php (Mark)
+- Added [story_introtext:##storyid##] Auto tag (Mark)
+- Adding groups to user in user edit could fail under certain conditions (Mark)
+- New PLG_getwhatsnewcomment() API to allow plugins to list new comments
+  in the What's New block (Mark)
+- Installation - ensure siteconfig.php was successfully created (Mark)
+
+FileMgmt Plugin
+---------------
+- Fixed issue where new files did not always show up in the What's New
+  list (Mark)
+
+Forum Plugin
+------------
+- Clear the centerblock cache after importing story (Mark)
+
+Media Gallery
+-------------
+- Media Gallery does not always honor 'parent' album permissions when going
+  directly to a sub-album. (Mark)
+- Coppermine import now pulls the user who uploaded the image from the
+  Coppermine database and imports into Media Gallery (Mark)
+
+StaticPages
+-----------
+- Fixed issues where comments were not properly deleted, did not change
+  when the static page id changed, and did not show up in the what's new
+  block. (Mark)
+
+Polls
+-----
+- Fixed issues where comments were not properly deleted, did not change
+  when the polls id changed, and did not show up in the what's new
+  block. (Mark)
+
 v1.1.4.pl2
 ----------
 - Small change to config.class.php to allow for easier multi-site
