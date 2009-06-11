@@ -140,6 +140,12 @@ if ( !isset($MG_albums[$album_id]->id) ) {
 if ( $MG_albums[$album_id]->access == 0 || ($MG_albums[$album_id]->hidden == 1 && $MG_albums[$album_id]->access !=3 )) {
 	$errorMessage = $LANG_MG02['albumaccessdeny'];
 }
+
+$aOffset = $MG_albums[$album_id]->getOffset();
+if ( $aOffset == -1 ) {
+    $errorMessage = $LANG_MG02['albumaccessdeny'];
+}
+
 if ( $errorMessage != '' ) {
     $display = MG_siteHeader();
     COM_errorLog("Media Gallery Error - User attempted to view an album that does not exist.");
@@ -358,7 +364,7 @@ if ( $total_print_pages == 0 ) {
     $total_print_pages = 1;
 }
 
-$aOffset = $MG_albums[$album_id]->getOffset();
+//$aOffset = $MG_albums[$album_id]->getOffset();
 if ( $aOffset > 0 ) {
     $aPage = intval(($aOffset)  / ($_MG_CONF['album_display_columns'] * $_MG_CONF['album_display_rows'])) + 1;
 } else {
