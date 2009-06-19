@@ -8,7 +8,7 @@
 # This is the Chinese Simplified (UTF-8) language set for glFusion 1.0
 #
 # Copyright (C) 2009 Albert Zhu
-#      i AT cpro DOT me
+#      wh AT ieee DOT org
 # sam AT stonemicro DOT com
 #
 # This program is free software; you can redistribute it and/or
@@ -177,7 +177,7 @@ $LANG01 = array(
     128 => '用OpenID 登入:',
     129 => '设定',
     130 => '网络服务',
-    500 => 'Please remove the admin/install/ directory!',
+    500 => '请删除 admin/install/ 文件夹!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
     503 => 'Maintenance Mode - Non-admin logins disabled',
@@ -1269,12 +1269,12 @@ $MESSAGE = array(
 # admin/logview.php
 
 $LANG_LOGVIEW = array(
-    'logview' => 'Logview',
-    'info' => 'glFusion Log file administration',
-    'logs' => 'Logs',
-    'view' => 'View Log File',
-    'clear' => 'Clear Log File',
-    'log_file' => 'Log File'
+    'logview' => '查看日志',
+    'info' => 'glFusion日志文件管理',
+    'logs' => '日志',
+    'view' => '查看',
+    'clear' => '清空',
+    'log_file' => '日志文件'
 );
 
 ###############################################################################
@@ -1671,8 +1671,8 @@ $LANG_CONFIG = array(
     'reset_form' => '恢复表格原状',
     'changes_made' => '更改已成功地安置于',
     'title' => '设定管理',
-    'disable' => 'Click to disable this option',
-    'enable' => 'Enable'
+    'disable' => '点击关闭此功能',
+    'enable' => '激活此功能'
 );
 
 $LANG_configsections['Core'] = array(
@@ -1962,7 +1962,7 @@ $LANG_fs['Core'] = array(
     'fs_perm_topic' => '主题默认许可设定',
     'fs_perm_block' => '组件默认许可设定',
     'fs_webservices' => 'Webservices',
-    'fs_caching' => 'Caching'
+    'fs_caching' => '缓存'
 );
 
 $LANG_configselects['Core'] = array(
