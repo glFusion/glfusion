@@ -108,6 +108,7 @@ $LANG_BB2_RESPONSE = array (
 	'c1fa729b' => 'Use of rotating proxy servers detected',
     'cd361abb' => 'Referer did not point to a form on this site',
 	'd60b87c7' => 'Trackback received via proxy server',
+    'e3990b47' => 'Obviously fake trackback received',
 	'dfd9b1ad' => 'Request contained a malicious JavaScript or SQL injection attack',
 	'e4de0453' => 'User-Agent claimed to be msnbot, claim appears to be false',
 	'e87553e1' => 'I know you and I don\'t like you, dirty spammer.',
