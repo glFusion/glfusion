@@ -1085,6 +1085,7 @@ class upload
                     $this->_currentFile['type'] = $this->_filesToUpload["type"][$key];
                     $this->_currentFile['size'] = $this->_filesToUpload["size"][$key];
                     $this->_currentFile['error'] = $this->_filesToUpload["error"][$key];
+                    $this->_currentFile['localerror'] = array();
 
                     $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
                     if ( $metaData['mime_type'] != '' ) {
@@ -1097,10 +1098,12 @@ class upload
                         // Verify file meets size limitations
                         if (!$this->_fileSizeOk()) {
                             $this->_addError('File, ' . $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit');
+                            $this->_currentFile['localerror'][] = $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit';
                         }
 
                         // If all systems check, do the upload
-                        if ($this->checkMimeType() AND $this->_imageSizeOK() AND !$this->areErrors()) {
+//                        if ($this->checkMimeType() AND $this->_imageSizeOK() AND !$this->areErrors()) {
+                        if ($this->checkMimeType() AND $this->_imageSizeOK() AND empty($this->_currentFile['localerror'])) {
                             if ($this->_copyFile()) {
                                 $this->_uploadedFiles[] = $this->_fileUploadDirectory . '/' . $this->_getDestinationName();
                             }
