@@ -698,7 +698,7 @@ function WS_arrayToEntryXML($arr, $extn_elements, &$entry_elem, &$atom_doc)
         $entry_elem->appendChild($link_self);
     }
 
-    $content = $atom_doc->createElement('atom:content', $arr['content']);
+    $content = $atom_doc->createElement('atom:content', htmlentities($arr['content']));
     $content->setAttribute('type', $arr['content_type']);
     $entry_elem->appendChild($content);
 
@@ -934,7 +934,7 @@ function WS_writeSync()
  * @param    int     $max_length     max. length of the created ID
  * @return   string                  new ID
  * @link     http://tools.ietf.org/html/rfc5023#section-9.7
- * 
+ *
  */
 function WS_makeId($slug = '', $max_length = 40)
 {
