@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.1.4');
 }
 
-define('PATCHLEVEL','.pl3');
+define('PATCHLEVEL','.pl4');
 
 //define('DEMO_MODE',true);
 
@@ -3308,7 +3308,9 @@ function COM_isEmail( $email )
 {
     global $_CONF;
 
-    require_once $_CONF['path'] . 'lib/email-address-validation/EmailAddressValidator.php';
+    if (!class_exists('EmailAddressValidator') ) {
+        require_once $_CONF['path'] . 'lib/email-address-validation/EmailAddressValidator.php';
+    }
 
     $validator = new EmailAddressValidator;
     return ( $validator->check_email_address( $email ) ? true : false );
