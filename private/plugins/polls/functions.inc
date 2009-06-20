@@ -869,7 +869,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
                     if ($S['votesumm'] == 0) {
                         $percent = 0;
                     } else {
-                        $percent = $A['votes'] / $S['votesumm'];
+                        $percent = intval($A['votes'] / $S['votesumm']);
                     }
                     $poll->set_var('cssida', 1);
                     $poll->set_var('cssidb', 2);
@@ -883,7 +883,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
                     if ($scale < 120) {
                         $poll->parse('poll_votes', 'votes_num', true );
                     } else {
-                        $width = $percent * $scale;
+                        $width = intval($percent * $scale);
                         $poll->set_var('bar_width', $width);
                         $poll->parse('poll_votes', 'votes_bar', true);
                     }
