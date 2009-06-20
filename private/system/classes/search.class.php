@@ -87,6 +87,7 @@ class Search {
         } else {
             $this->_query = '';
         }
+        $this->_query = preg_replace('/\s\s+/', ' ', $this->_query);
         if ( isset($_GET['topic']) ){
             $this->_topic = strip_tags (COM_stripslashes ($_GET['topic']));
         } else if ( isset($_POST['topic']) ) {
@@ -810,6 +811,8 @@ class Search {
     function _shortenText($keyword, $text, $num_words = 7)
     {
         $text = strip_tags($text);
+        $text = str_replace(array("\011", "\012", "\015"), ' ', trim($text));
+        $text = preg_replace('/\s\s+/', ' ', $text);
         $words = explode(' ', $text);
         if (count($words) <= $num_words) {
             return stripslashes($this->_highlightQuery($text, $keyword, 'b'));
@@ -936,6 +939,7 @@ class Search {
         if ( $this->_keyType == 'phrase' ) {
             $mywords = array($query);
         } else {
+//            $query = preg_replace('/\s\s+/', ' ', $query);
             $mywords = explode( ' ', $query );
         }
         foreach( $mywords as $searchword )
