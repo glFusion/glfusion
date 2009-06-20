@@ -1044,12 +1044,8 @@ function addCat() {
 
 function addDownload() {
     global $_CONF,$_USER,$_FM_TABLES,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$filemgmt_FileStore,$filemgmt_SnapStore;
-    global $myts,$eh,$_FMDOWNLOAD;
+    global $myts,$eh,$_FMDOWNLOAD,$filemgmtFilePermissions;
 
-//    $filename = $myts->makeTboxData4Save($_FILES['newfile']['name']);
-//    $url = $myts->makeTboxData4Save(rawurlencode($filename));
-//    $snapfilename = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
-//    $logourl = $myts->makeTboxData4Save(rawurlencode($snapfilename));
     $title = $myts->makeTboxData4Save($_POST['title']);
     $homepage = $myts->makeTboxData4Save($_POST['homepage']);
     $version = $myts->makeTboxData4Save($_POST['version']);
@@ -1058,8 +1054,6 @@ function addDownload() {
     $fileurl = COM_applyFilter($_POST['fileurl']);
 
     $submitter = $_USER['uid'];
-
-//    $size = $myts->makeTboxData4Save(intval($_FILES['newfile']['size']));
 
     $result = DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE url='$url'");
     list($numrows) = DB_fetchARRAY($result);
@@ -1162,15 +1156,9 @@ function addDownload() {
             $AddNewFile = true;
         }
     }
-/*
-    if (uploadNewFile($_FILES["newfile"],$filemgmt_FileStore)) {
-        $AddNewFile = true;
-    }
-    if (uploadNewFile($_FILES["newfileshot"],$filemgmt_SnapStore)) {
-        $AddNewFile = true;
-    }
-*/
+
     if ($AddNewFile){
+        $chown = @chmod ($filemgmt_FileStore.$filename,$filemgmtFilePermissions);
         $fields = 'cid, title, url, homepage, version, size, logourl, submitter, status, date, hits, rating, votes, comments';
         $sql = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} ($fields) VALUES ";
         $sql .= "('$cid','$title','$url','$homepage','$version','$size','$logourl','$submitter',1,UNIX_TIMESTAMP(),0,0,0,'$commentoption')";
