@@ -115,7 +115,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
             .'</tr>'.LB
             .'<tr>'.LB
             .'<td align="right">'.$LANG20[5].'&nbsp;</td>'.LB
-            .'<td><input type="password" name="passwd" size="16" maxlength="16"' . XHTML . '></td>'
+            .'<td><input type="password" name="passwd" size="16" ' . XHTML . '></td>'
             .'</tr>'.LB
             .'<tr>'.LB
             .'<td colspan="2" align="center" class="warning">'.$LANG20[6].'<input type="hidden" name="warn" value="1"' . XHTML . '>'
