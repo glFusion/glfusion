@@ -1701,7 +1701,14 @@ function plugin_searchtypes_calendar()
 */
 function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
 {
-    global $_TABLES, $LANG_CAL_1;
+    global $_TABLES, $LANG_CAL_1, $_USER;
+
+    if ( COM_isAnonUser() ) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+
 
     // Make sure the query is SQL safe
     $query = addslashes(trim(htmlspecialchars($query)));
@@ -1709,8 +1716,9 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
     $sql_e = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, hits, CONCAT('/calendar/event.php?eid=',eid) AS url ";
     $sql_e .= "FROM {$_TABLES['events']} WHERE 1=1 ";
 
-    $sql_p = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, '0' AS hits, CONCAT('/calendar/event.php?eid=',eid) AS url ";
-    $sql_p .= "FROM {$_TABLES['personal_events']} WHERE 1=1 ";
+    $sql_p = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, ";
+    $sql_p .= "CONCAT('/calendar/event.php?mode=personal&eid=',eid) AS url ";
+    $sql_p .= "FROM {$_TABLES['personal_events']} WHERE (uid = $uid) ";
 
     $sql = COM_getPermSQL('AND') . ' ';
 
@@ -1736,6 +1744,10 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
     $search_e->setSQL($sql_tmp);
     $search_e->setFTSQL($ftsql_tmp);
     $search_e->setRank(2);
+
+    if ( COM_isAnonUser() ) {
+        return $search_e;
+    }
 
     // Search personal events
     $search_p = new SearchCriteria('calendar', array($LANG_CAL_1[16],$LANG_CAL_1[23]));
