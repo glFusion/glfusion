@@ -464,7 +464,9 @@ function editpoll ($pid = '')
                 $poll_templates->set_var ('answer_text',
                                           htmlspecialchars ($A['answer']));
                 $poll_templates->set_var ('answer_votes', $A['votes']);
-                $poll_templates->set_var ('remark_text', $A['remark']);
+                $poll_templates->set_var ('remark_text',
+                                        htmlspecialchars($A['remark']));
+
             } else {
                 $poll_templates->set_var ('answer_text', '');
                 $poll_templates->set_var ('answer_votes', '');
