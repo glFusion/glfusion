@@ -536,12 +536,18 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     } else {
         $exif_info = '';
     }
-
+/*
     $media_time_month  = gmdate("m", $row['media_time'] + (3600 * -5));
     $media_time_day    = gmdate("d", $row['media_time'] + (3600 * -5));
     $media_time_year   = gmdate("Y", $row['media_time'] + (3600 * -5));
     $media_time_hour   = gmdate("H", $row['media_time'] + (3600 * -5));
     $media_time_minute = gmdate("i", $row['media_time'] + (3600 * -5));
+*/
+    $media_time_month  = date("m", $row['media_time']);
+    $media_time_day    = date("d", $row['media_time']);
+    $media_time_year   = date("Y", $row['media_time']);
+    $media_time_hour   = date("H", $row['media_time']);
+    $media_time_minute = date("i", $row['media_time']);
 
     $month_select = '<select name="media_month">';
     $month_select .= COM_getMonthFormOptions($media_time_month);
