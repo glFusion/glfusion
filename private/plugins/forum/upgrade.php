@@ -92,6 +92,28 @@ function forum_upgrade() {
                     0, 0, 0, 25, true, 'forum');
             $c->del('show_popular_perpage','forum');
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.1',pi_gl_version='1.1.2' WHERE pi_name = 'forum'");
+        case '3.1.1' :
+        case '3.1.2' :
+        case '3.1.3' :
+            $c = config::get_instance();
+            $c->add('enable_user_rating_system', 0, 'select', 0,0,0,22, false, 'forum');
+            DB_query("ALTER TABLE {$_TABLES['gf_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
+            DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD `rating` INT( 8 ) NOT NULL ");
+            $sql = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_assoc']} ( "
+                    . "`user_id` mediumint( 9 ) NOT NULL , "
+                    . "`voter_id` mediumint( 9 ) NOT NULL , "
+                    . "`grade` smallint( 6 ) NOT NULL  , "
+                    . "`topic_id` int( 11 ) NOT NULL , "
+                    . " PRIMARY KEY (`user_id`,`voter_id`,`topic_id`), "
+                    . " KEY `user_id` (`user_id`), "
+                    . " KEY `voter_id` (`voter_id`) );";
+            DB_query($sql);
+            // add forum.html feature
+            DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('forum.html','Can post using HTML',0)",1);
+            $ft_id = DB_insertId();
+            $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'forum Admin'"));
+            DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.4',pi_gl_version='1.1.4' WHERE pi_name = 'forum'");
         default :
             DB_query("ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FF_CONF['pi_version']."',pi_gl_version='".$_FF_CONF['gl_version']."' WHERE pi_name = 'forum'");

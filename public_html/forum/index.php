@@ -110,6 +110,10 @@ forum_chkUsercanAccess();
 
 if ($op == 'newposts' AND $_USER['uid'] > 1) {
 
+    if ( $CONF_FORUM['enable_user_rating_system'] ) {
+        $rating = intval(DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($showtopic['uid'])));
+    }
+
     USES_lib_admin();
 
     $retval = '';
@@ -143,7 +147,11 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
     $order      = 1;
     $direction  = "DESC";
 
-    $sql = "SELECT * FROM {$_TABLES['gf_topic']} a LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id WHERE (pid=0) $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0 ORDER BY $orderby $direction";
+    if ($CONF_FORUM['enable_user_rating_system']) {
+        $sql = "SELECT * FROM {$_TABLES['gf_topic']} a LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id WHERE (pid=0) AND b.rating_view <= ".$rating." $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0 ORDER BY $orderby $direction";
+    } else {
+        $sql = "SELECT * FROM {$_TABLES['gf_topic']} a LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id WHERE (pid=0) $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0 ORDER BY $orderby $direction";
+    }
 
     $result = DB_query($sql);
 
@@ -305,12 +313,23 @@ if ($op == 'search') {
     }
     $nrows = DB_numRows($result);
     if ($nrows > 0) {
+        if ($CONF_FORUM['enable_user_rating_system'] && !COM_isAnonUser() ) {
+            $user_rating = intval(DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($_USER['uid'])));
+        }
         $csscode = 1;
         for ($i = 1; $i <= $nrows; $i++) {
             $P = DB_fetchArray($result);
-            $forumgrpid = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='{$P['forum']}'");
+            $fres = DB_query("SELECT grp_id,view_rating FROM {$_TABLES['gf_forums']} WHERE forum_id={$P['forum']}");
+            list($forumgrpid,$view_rating) = DB_fetchArray($fres);
+//            $forumgrpid = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='{$P['forum']}'");
             $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$forumgrpid'");
             if (SEC_inGroup($groupname)) {
+                if ( $CONF_FORUM['enable_user_rating_system'] && !COM_isAnonUser() ) {
+                    if ( $view_rating > $user_rating ) {
+                        continue;
+                    }
+                }
+
                 if ($CONF_FORUM['use_censor']) {
                     $P['subject'] = COM_checkWords($P['subject']);
                 }
@@ -383,11 +402,21 @@ if ($op == 'popular') {
     }
     $grouplist = implode(',',$groups);
 
+// if user rating, then make sure view_rating < user rating
+// add a check if root or forum admin...
+
+    if ( !COM_isAnonUser() && $CONF_FORUM['enable_user_rating_system'] ) {
+        $grade = intval(DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($_USER['uid'])));
+        $ratingSQL = ' AND b.rating_view <= '.$grade;
+    } else {
+        $ratingSQL = '';
+    }
+
     $sql  = "SELECT a.id, a.forum, a.name, a.date, a.lastupdated, a.last_reply_rec, a.subject, ";
     $sql .= "a.comment, a.uid, a.name, a.pid, a.replies, a.views, b.forum_name  ";
     $sql .= "FROM {$_TABLES['gf_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
-    $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 ";
+    $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 " . $ratingSQL;
 
     $query_arr = array('table'          => 'topic',
                        'sql'            => $sql,
@@ -481,10 +510,19 @@ if ($op == 'lastx') {
     }
     $grouplist = implode(',',$groups);
 
+// if user rating, add view_rating < user_rating
+
+    if ( !COM_isAnonUser() && $CONF_FORUM['enable_user_rating_system'] ) {
+        $grade = intval(DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($_USER['uid'])));
+        $ratingSQL = ' AND b.rating_view <= '.$grade .' ';
+    } else {
+        $ratingSQL = '';
+    }
+
     $sql  = "SELECT * ";
     $sql .= "FROM {$_TABLES['gf_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
-    $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 ";
+    $sql .= "WHERE pid=0 AND b.grp_id IN ($grouplist) AND b.no_newposts = 0 " . $ratingSQL;
     $sql .= "ORDER BY lastupdated DESC LIMIT {$CONF_FORUM['show_last_post_count']}";
     $result = DB_query ($sql);
 
@@ -577,33 +615,37 @@ if ($op == 'subscribe') {
 }
 
 // MAIN CODE BEGINS to view forums or topics within a forum
-
 ForumHeader($forum,0);
+$errMsg = '';
+if( can_view_forum($forum)) {
+	// Check if the number of records was specified to show - part of page navigation.
+	// Will be 0 if not set - as I'm now passing this tru gf_applyFilter() at top of script
+	if ($show == 0 AND $CONF_FORUM['show_topics_perpage'] > 0) {
+	    $show = $CONF_FORUM['show_topics_perpage'];
+	} elseif ($show == 0) {
+	    $show = 20;
+	}
 
-// Check if the number of records was specified to show - part of page navigation.
-// Will be 0 if not set - as I'm now passing this tru gf_applyFilte() at top of script
-if ($show == 0 AND $CONF_FORUM['show_topics_perpage'] > 0) {
-    $show = $CONF_FORUM['show_topics_perpage'];
-} elseif ($show == 0) {
-    $show = 20;
-}
+	// Check if this is the first page.
+	if ($page == 0) {
+	    $page = 1;
+	}
 
-// Check if this is the first page.
-if ($page == 0) {
-    $page = 1;
-}
+	if($forum > 0) {
+    	$addforumvar = "&amp;forum=" .$forum;
+    	$topiclistsql = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0 and forum='$forum'");
+	} else {
+   		$topiclistsql = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0");
+	}
 
-if($forum > 0) {
-    $addforumvar = "&amp;forum=" .$forum;
-    $topiclistsql = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0 and forum='$forum'");
+	$topicCount = DB_numRows($topiclistsql);
+	$numpages = ceil($topicCount / $show);
+	$offset = ($page - 1) * $show;
+	$base_url = $_CONF['site_url'] . '/forum/index.php?forum='.$forum.'&amp;show='.$show;
 } else {
-   $topiclistsql = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE pid=0");
+	$errMsg = '<div class="pluginAlert" style="padding:10px;margin:10px;">'.$LANG_GF02['rate_too_low_forum'].'</div>';
+	$offset = 0;
 }
-
-$topicCount = DB_numRows($topiclistsql);
-$numpages = ceil($topicCount / $show);
-$offset = ($page - 1) * $show;
-$base_url = $_CONF['site_url'] . '/forum/index.php?forum='.$forum.'&amp;show='.$show;
 
 //Display Categories
 if ($forum == 0) {
@@ -682,107 +724,108 @@ if ($forum == 0) {
         while ($B = DB_FetchArray($forumQuery)) {
             //$exectime = $mytimer->stopTimer();
             //COM_errorLog("Start Forum Listing - time:$exectime");
+			if(can_view_forum($B['forum_id'])) {
+            	$lastforum_noaccess = false;
+        	    $topicCount = $B['topic_count'];
+            	$postCount = $B['post_count'];
+            	if ( $CONF_FORUM['show_moderators'] ) {
+                	$modsql = DB_query("SELECT * FROM {$_TABLES['gf_moderators']} WHERE mod_forum='{$B['forum_id']}'");
+               	 	$moderatorcnt = 1;
+                	if (DB_numRows($modsql) > 0) {
+                    	while($showmods = DB_fetchArray($modsql,false)) {
+                        	if ($showmods['mod_uid'] == '0') {
+                            	if ($showmods['mod_groupid'] > 0) {
+                                	$showmods['mod_username'] = DB_getItem($_TABLES['groups'], 'grp_name', "grp_id='{$showmods['mod_groupid']}'");
+                            	}
+	                            if($moderatorcnt == 1 OR $moderators == '') {
+    	                            $moderators = $showmods['mod_username'];
+        	                    } else {
+            	                    $moderators .= ', ' . $showmods['mod_username'];
+                	            }
+                    	    } else {
+                        	    if($moderatorcnt == 1 OR $moderators == '') {
+	                                $moderators = COM_getDisplayName($showmods['mod_uid']);
+    	                        } else {
+        	                        $moderators .= ', ' . COM_getDisplayName($showmods['mod_uid']);
+            	                }
+                	        }
+                    	    $moderatorcnt++;
+	                    }
+    	            } else {
+        	            $moderators = $LANG_GF01['no_one'];
+            	    }
+                	$forumlisting->set_var ('moderator', sprintf($LANG_GF01['MODERATED'],$moderators));
+	            } else {
+    	            $forumlisting->set_var ('moderator', '');
+        	    }
+           		$numForumsDisplayed ++;
+            	if ($postCount > 0) {
+                	if ( strlen($B['subject']) > 25 ) {
+                    	$B['subject'] = substr($B['subject'],0,25);
+	                    $B['subject'] .= "..";
+    	            }
+        	        if ($CONF_FORUM['use_censor']) {
+            	        $B['subject'] = COM_checkWords($B['subject']);
+                	}
+	                if (isset($_USER['uid']) && $_USER['uid'] > 1) {
+    	                // Determine if there are new topics since last visit for this user.
+        	            $lsql = DB_query("SELECT * FROM {$_TABLES['gf_log']} WHERE uid='{$_USER['uid']}' AND forum='{$B['forum_id']}' AND time > 0");
+            	        if ($topicCount > DB_numRows($lsql)) {
+                	        $folderimg = '<img src="'.gf_getImage('busyforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg111'].'" title="'.$LANG_GF02['msg111'].'"' . XHTML . '>';
+                	    } else {
+                    	    $folderimg = '<img src="'.gf_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"' . XHTML . '>';
+                    	}
+	                } else {
+    	                $folderimg = '<img src="'.gf_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"' . XHTML . '>';
+	                }
 
-            $lastforum_noaccess = false;
-            $topicCount = $B['topic_count'];
-            $postCount = $B['post_count'];
-            if ( $CONF_FORUM['show_moderators'] ) {
-                $modsql = DB_query("SELECT * FROM {$_TABLES['gf_moderators']} WHERE mod_forum='{$B['forum_id']}'");
-                $moderatorcnt = 1;
-                if (DB_numRows($modsql) > 0) {
-                    while($showmods = DB_fetchArray($modsql,false)) {
-                        if ($showmods['mod_uid'] == '0') {
-                            if ($showmods['mod_groupid'] > 0) {
-                                $showmods['mod_username'] = DB_getItem($_TABLES['groups'], 'grp_name', "grp_id='{$showmods['mod_groupid']}'");
-                            }
-                            if($moderatorcnt == 1 OR $moderators == '') {
-                                $moderators = $showmods['mod_username'];
-                            } else {
-                                $moderators .= ', ' . $showmods['mod_username'];
-                            }
-                        } else {
-                            if($moderatorcnt == 1 OR $moderators == '') {
-                                $moderators = COM_getDisplayName($showmods['mod_uid']);
-                            } else {
-                                $moderators .= ', ' . COM_getDisplayName($showmods['mod_uid']);
-                            }
-                        }
-                        $moderatorcnt++;
-                    }
-                } else {
-                    $moderators = $LANG_GF01['no_one'];
-                }
-                $forumlisting->set_var ('moderator', sprintf($LANG_GF01['MODERATED'],$moderators));
-            } else {
-                $forumlisting->set_var ('moderator', '');
-            }
-            $numForumsDisplayed ++;
-            if ($postCount > 0) {
-                if ( strlen($B['subject']) > 25 ) {
-                    $B['subject'] = substr($B['subject'],0,25);
-                    $B['subject'] .= "..";
-                }
-                if ($CONF_FORUM['use_censor']) {
-                    $B['subject'] = COM_checkWords($B['subject']);
-                }
-                if (isset($_USER['uid']) && $_USER['uid'] > 1) {
-                    // Determine if there are new topics since last visit for this user.
-                    $lsql = DB_query("SELECT * FROM {$_TABLES['gf_log']} WHERE uid='{$_USER['uid']}' AND forum='{$B['forum_id']}' AND time > 0");
-                    if ($topicCount > DB_numRows($lsql)) {
-                        $folderimg = '<img src="'.gf_getImage('busyforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['msg111'].'" title="'.$LANG_GF02['msg111'].'"' . XHTML . '>';
-                    } else {
-                        $folderimg = '<img src="'.gf_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"' . XHTML . '>';
-                    }
-                } else {
-                    $folderimg = '<img src="'.gf_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"' . XHTML . '>';
-                }
+    	            $lastdate1 = strftime('%d', $B['date']);
+        	        if ($lastdate1 == date('d')) {
+            	        $lasttime = strftime('%I:%M&nbsp;%p', $B['date']);
+                	    $lastdate = $LANG_GF01['TODAY'] .$lasttime;
+	                } elseif ($CONF_FORUM['allow_user_dateformat']) {
+    	                $lastdate = COM_getUserDateTimeFormat($B['date']);
+        	            $lastdate = $lastdate[0];
+            	    } else {
+                	    $lastdate =strftime('%b/%d/%y %I:%M&nbsp;%p',$B['date']);
+	                }
 
-                $lastdate1 = strftime('%d', $B['date']);
-                if ($lastdate1 == date('d')) {
-                    $lasttime = strftime('%I:%M&nbsp;%p', $B['date']);
-                    $lastdate = $LANG_GF01['TODAY'] .$lasttime;
-                } elseif ($CONF_FORUM['allow_user_dateformat']) {
-                    $lastdate = COM_getUserDateTimeFormat($B['date']);
-                    $lastdate = $lastdate[0];
-                } else {
-                    $lastdate =strftime('%b/%d/%y %I:%M&nbsp;%p',$B['date']);
-                }
+    	            $lastpostmsgDate  = '<span class="forumtxt">' . $LANG_GF01['ON']. '</span>' .$lastdate;
+        	        if($B['uid'] > 1) {
+            	        $lastposterName = COM_getDisplayName($B['uid']);
+                	    $by = '<a href="' .$_CONF['site_url']. '/users.php?mode=profile&amp;uid=' .$B['uid']. '">' .$lastposterName. '</a>';
+	                } else {
+    	                $by = $B['name'];
+        	        }
+            	    $lastpostmsgBy = $LANG_GF01['BY']. $by;
+                	$forumlisting->set_var ('lastpostmsgDate', $lastpostmsgDate);
+	                $forumlisting->set_var ('lastpostmsgTopic', $B['subject']);
+    	            $forumlisting->set_var ('lastpostmsgBy', $lastpostmsgBy);
 
-                $lastpostmsgDate  = '<span class="forumtxt">' . $LANG_GF01['ON']. '</span>' .$lastdate;
-                if($B['uid'] > 1) {
-                    $lastposterName = COM_getDisplayName($B['uid']);
-                    $by = '<a href="' .$_CONF['site_url']. '/users.php?mode=profile&amp;uid=' .$B['uid']. '">' .$lastposterName. '</a>';
-                } else {
-                    $by = $B['name'];
-                }
-                $lastpostmsgBy = $LANG_GF01['BY']. $by;
-                $forumlisting->set_var ('lastpostmsgDate', $lastpostmsgDate);
-                $forumlisting->set_var ('lastpostmsgTopic', $B['subject']);
-                $forumlisting->set_var ('lastpostmsgBy', $lastpostmsgBy);
+    	        }  else {
+        	        $forumlisting->set_var ('lastpostmsgDate', $LANG_GF01['nolastpostmsg']);
+            	    $forumlisting->set_var ('lastpostmsgTopic', '');
+                	$forumlisting->set_var ('lastpostmsgBy', '');
+	                $folderimg = '<img src="'.gf_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"' . XHTML . '>';
+    	        }
 
-            }  else {
-                $forumlisting->set_var ('lastpostmsgDate', $LANG_GF01['nolastpostmsg']);
-                $forumlisting->set_var ('lastpostmsgTopic', '');
-                $forumlisting->set_var ('lastpostmsgBy', '');
-                $folderimg = '<img src="'.gf_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"' . XHTML . '>';
-            }
+    	        if ($B['pid'] == 0) {
+        	        $topicparent = $B['id'];
+            	} else {
+	                $topicparent = $B['pid'];
+    	        }
 
-            if ($B['pid'] == 0) {
-                $topicparent = $B['id'];
-            } else {
-                $topicparent = $B['pid'];
-            }
-
-            $forumlisting->set_var ('folderimg', $folderimg);
-            $forumlisting->set_var ('forum_id', $B['forum_id']);
-            $forumlisting->set_var ('forum_name', $B['forum_name']);
-            $forumlisting->set_var ('forum_desc', $B['forum_dscp']);
-            $forumlisting->set_var ('topics', $topicCount);
-            $forumlisting->set_var ('posts', $postCount);
-            $forumlisting->set_var ('topic_id', $topicparent);
-            $forumlisting->set_var ('lastpostid', $B['id']);
-            $forumlisting->set_var ('LANGGF01_LASTPOST', $LANG_GF01['LASTPOST']);
-            $forumlisting->parse ('forum_records', 'forum_record',true);
+	            $forumlisting->set_var ('folderimg', $folderimg);
+    	        $forumlisting->set_var ('forum_id', $B['forum_id']);
+        	    $forumlisting->set_var ('forum_name', $B['forum_name']);
+	            $forumlisting->set_var ('forum_desc', $B['forum_dscp']);
+    	        $forumlisting->set_var ('topics', $topicCount);
+        	    $forumlisting->set_var ('posts', $postCount);
+	            $forumlisting->set_var ('topic_id', $topicparent);
+    	        $forumlisting->set_var ('lastpostid', $B['id']);
+        	    $forumlisting->set_var ('LANGGF01_LASTPOST', $LANG_GF01['LASTPOST']);
+            	$forumlisting->parse ('forum_records', 'forum_record',true);
+			}
         }
 
         if ($numForumsDisplayed > 0 ) {
@@ -815,7 +858,11 @@ if ($forum == 0) {
     $forumlisting->parse ('outline_header', 'forum_outline_header');
     $forumlisting->parse ('outline_footer', 'forum_outline_footer');
     $forumlisting->parse ('output', 'forumlisting');
-    echo $forumlisting->finish ($forumlisting->get_var('output'));
+    if ( $errMsg != '' ) {
+        echo $errMsg;
+    } else {
+        echo $forumlisting->finish ($forumlisting->get_var('output'));
+    }
 }
 
  // Display Forums
@@ -916,7 +963,7 @@ if ($forum > 0) {
     $totalresults = DB_numRows($topicResults);
 
     // Retrieve Forum details and Category name
-    $sql  = "SELECT forum.forum_name,category.cat_name,category.id,forum.is_readonly,forum.grp_id FROM {$_TABLES['gf_forums']} forum ";
+    $sql  = "SELECT forum.forum_name,forum.forum_id AS forum, category.cat_name,category.id,forum.is_readonly,forum.grp_id,forum.rating_post,forum.rating_view FROM {$_TABLES['gf_forums']} forum ";
     $sql .= "LEFT JOIN {$_TABLES['gf_categories']} category on category.id=forum.forum_cat ";
     $sql .= "WHERE forum.forum_id = $forum";
     $category = DB_fetchArray(DB_query($sql));
@@ -1131,7 +1178,11 @@ if ($forum > 0) {
     $topiclisting->parse ('outline_header', 'forum_outline_header');
     $topiclisting->parse ('outline_footer', 'forum_outline_footer');
     $topiclisting->parse ('output', 'topiclisting');
-    echo $topiclisting->finish ($topiclisting->get_var('output'));
+    if ( $errMsg != '' ) {
+        echo $errMsg;
+    } else {
+        echo $topiclisting->finish ($topiclisting->get_var('output'));
+    }
 
 }
 

@@ -77,10 +77,14 @@ $INSTALL_plugin['forum'] = array(
         'variable' => 'edit_feature_id'),
   array('type' => 'feature', 'feature' => 'forum.user', 'desc' => 'Ability to use the Forum Plugin',
         'variable' => 'user_feature_id'),
+  array('type' => 'feature', 'feature' => 'forum.html', 'desc' => 'Ability to use HTML in Forum posts',
+        'variable' => 'html_feature_id'),
 
   array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'edit_feature_id',
         'log' => 'Adding feature to the admin group'),
   array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'user_feature_id',
+        'log' => 'Adding feature to the admin group'),
+  array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'html_feature_id',
         'log' => 'Adding feature to the admin group'),
 
   array('type' => 'block', 'name' => 'forum_news', 'title' => 'Forum Posts',
@@ -153,11 +157,11 @@ function plugin_autouninstall_forum ()
 {
     $out = array (
         /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('gf_topic','gf_categories','gf_forums','gf_settings','gf_watch','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo','gf_attachments','gf_bookmarks'),
+        'tables' => array('gf_topic','gf_categories','gf_forums','gf_settings','gf_watch','gf_moderators','gf_banned_ip', 'gf_log', 'gf_userprefs','gf_userinfo','gf_attachments','gf_bookmarks','gf_rating_assoc'),
         /* give the full name of the group, as in the db */
         'groups' => array('forum Admin'),
         /* give the full name of the feature, as in the db */
-        'features' => array('forum.edit', 'forum.user'),
+        'features' => array('forum.edit', 'forum.user','forum.html'),
         /* give the full name of the block, including 'phpblock_', etc */
         'php_blocks' => array('phpblock_forum_newposts','phpblock_forum_menu'),
         /* give all vars with their name */

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -232,6 +232,20 @@ $_SQL['gf_attachments'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_attachments'
   PRIMARY KEY  (`id`),
   KEY `topic_id` (`topic_id`)
 ) Type=MyISAM  AUTO_INCREMENT=1 ;";
+
+#
+# Table structures for table 'forum_rating_assoc'
+#
+
+$_SQL['gf_rating_assoc'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_assoc']} (
+  `user_id` mediumint(9) NOT NULL,
+  `voter_id` mediumint(9) NOT NULL,
+  `grade` smallint(6) NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`voter_id`,`topic_id`),
+  KEY `user_id` (`user_id`),
+  KEY `voter_id` (`voter_id`)
+) Type=MyISAM ; ";
 
 
 $_SQL['d1'] = "INSERT INTO {$_TABLES['gf_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";

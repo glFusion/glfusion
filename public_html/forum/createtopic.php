@@ -86,6 +86,16 @@ if(empty($_USER['uid']) || $_USER['uid'] == 1 ) {
     $uid = $_USER['uid'];
 }
 
+// final permission check....
+$result = DB_query("SELECT forum_id AS forum,is_readonly,grp_id,rating_post FROM {$_TABLES['gf_forums']} WHERE forum_id=".intval($forum));
+$forumArray = DB_fetchArray($result);
+if ( !forum_canPost($forumArray) ) {
+    echo '<br' . XHTML . '>';
+    BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg03'],false);
+    echo COM_siteFooter();
+    exit;
+}
+
 // ADD EDITED TOPIC
 if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_POST['editpost'] == 'yes')) {
     $editid = COM_applyFilter($_POST['editid'],true);
@@ -954,7 +964,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     } else {
          $postmode_msg = $LANG_GF01['HTMLMODE'];
     }
-    if($CONF_FORUM['allow_html'] || SEC_inGroup( 'Root' )) {
+    if($CONF_FORUM['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) {
         $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
     }
 

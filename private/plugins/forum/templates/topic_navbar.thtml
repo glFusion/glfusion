@@ -3,6 +3,7 @@
     var site_url = '{site_url}';
 </script>
 <script type="text/javascript" src="{site_url}/forum/javascript/ajax_bookmark.js"></script>
+<script type="text/javascript" src="{site_url}/forum/javascript/ajax_rate.js"></script>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:2px;padding-right:10px;">
     <tr>
         <td>{navbreadcrumbsimg}</td>

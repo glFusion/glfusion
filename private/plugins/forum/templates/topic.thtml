@@ -45,11 +45,15 @@
     </div>
     <div>
       {magical_image}
+	  {# forum grading system code added #}
+	  {vote_html}
+	  {# end forums dragin code #}
       <div style="padding-top:3px;">{avatar}</div>
       {member_badge}
       <p>
       {regdate}
       {numposts}<br{xhtml}>
+	  {grade}
       {location}<br{xhtml}>
       {ipaddress}
       </p>

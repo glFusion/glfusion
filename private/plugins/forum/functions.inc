@@ -1345,7 +1345,7 @@ function forum_modPermission($forum,$uid='',$permission='') {
 }
 
 function forum_canPost($forum) {
-    global $_CONF, $CONF_FORUM,$_USER;
+    global $_CONF, $CONF_FORUM,$_USER, $_TABLES;
 
     if ( $CONF_FORUM['registered_to_post'] && (!isset($_USER) || $_USER['uid'] < 2 )) {
         return false;
@@ -1353,7 +1353,7 @@ function forum_canPost($forum) {
     if (SEC_inGroup('Root') || SEC_hasRights('forum.edit')) {
         return true;
     }
-    if (forum_modPermission($forum,$_USER['uid'],'mod_edit')) {
+    if (forum_modPermission($forum['forum'],$_USER['uid'],'mod_edit')) {
         return true;
     }
     if ( $forum['is_readonly'] ) {
@@ -1362,9 +1362,27 @@ function forum_canPost($forum) {
     if (!SEC_inGroup($forum['grp_id'])) {
         return false;
     }
+    if ( $CONF_FORUM['enable_user_rating_system']) {
+    	if ( COM_isAnonUser() ) {
+    		//Annon user can only post in forums with 0 or less
+    		if($forum['rating_post'] < 1) {
+    			return true;
+    		} else {
+    			return false;
+    		}
+    	}
+    	//get users forum rating
+    	$user_score_res = DB_query("SELECT rating FROM {$_TABLES['gf_userinfo']} WHERE uid = {$_USER['uid']}");
+    	$user_score_row = DB_fetchArray($user_score_res);
+    	if($forum['rating_post'] > intval($user_score_row['rating'])) {
+    		return false;
+    	} else {
+    		return true;
+    	}
+    }
+
     return true;
 }
-
 
 function forum_delAttachment($deleteid) {
     global $_TABLES,$_FM_TABLES,$CONF_FORUM,$filemgmt_FileStore;
@@ -1497,5 +1515,31 @@ function glmenu_showforums() {
         }
     }
     return $retval;
+}
+
+function can_view_forum($forum_id) {
+    global $_USER, $_TABLES, $CONF_FORUM;
+
+    if ( !$CONF_FORUM['enable_user_rating_system'] || SEC_inGroup('Root')) {
+	    return true; //since user rating is not enabled
+	}
+
+	$forum_requirment_res = DB_query("SELECT rating_view FROM {$_TABLES['gf_forums']} WHERE forum_id = ". intval($forum_id));
+	$forum_requirment_row = DB_fetchArray($forum_requirment_res);
+	if (COM_isAnonUser() ) {
+		//Annon user can only view forums with 0 or less
+		if($forum_requirment_row['rating_view'] < 1)
+			return true;
+		else
+			return false;
+	}
+	//get users forum rating
+	$user_score_res = DB_query("SELECT rating FROM {$_TABLES['gf_userinfo']} WHERE uid = {$_USER['uid']}");
+	$user_score_row = DB_fetchArray($user_score_res);
+
+	if($forum_requirment_row['rating_view'] > intval($user_score_row['rating']))
+		return false;
+	else
+		return true;
 }
 ?>

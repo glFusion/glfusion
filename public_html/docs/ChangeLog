@@ -1,5 +1,53 @@
 glFusion ChangeLog
 
+v1.1.5 (Not Yet Released)
+-------------------------
+- Installation - Now support migrating Geeklog v1.4.1+ sites (Mark)
+
+Bad Behaviour2 Plugin
+---------------------
+- Updated code base to v2.0.28 (Mark)
+
+Forum Plugin v3.1.4
+-------------------
+- Implemented Community Moderation System (Mark)
+- Added forum.html feature (auto assigned to Forum Admin group) - allows
+  owners to use HTML in forum posts. (Mark)
+- Added phpBB3 migration utility (Mark)
+
+v1.1.4.pl4
+----------
+- Fixed another XML issue with the web services routines (Mark)
+- Added width:100% in submitstory_advanced.thtml template to ensure the
+  WYSIWYG editor uses the full width of the page (Mark)
+- Removed the maxlength for the admin password prompt (Mark)
+- Ensure extra whitespace is properly removed in search strings (Mark)
+- Leap year fix in calendar.class.php (Mark)
+- Uploads fails to upload files when 1 file in the bunch errors (Mark)
+- Webservices did not properly escape all HTML entities (Mark)
+
+Calendar Plugin
+---------------
+- Improved searching of personal calendars (Mark)
+
+FileMgmt Plugin
+---------------
+- Apply file permissions for admin uploads too (Mark)
+
+Links Plugin
+------------
+- Added support for auto tags in the link descriptions (Mark)
+
+Media Gallery Plugin
+--------------------
+- Fixed issue where the media item date/time did not use local time when
+  editing (Mark)
+
+Polls Plugin
+------------
+- Fixed division by zero errors (Mark)
+- Special characters are not preserved in the remarks field (Mark)
+
 v1.1.4.pl3
 ----------
 - Fix install issue on servers with \\path\to\glfusion directory

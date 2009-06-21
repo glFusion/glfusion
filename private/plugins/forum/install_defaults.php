@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -327,6 +327,8 @@ function plugin_initconfig_forum()
                 0, 0, 0, 10, true, 'forum');
         $c->add('registered_to_post', $_FF_DEFAULT['registered_to_post'], 'select',
                 0, 0, 0, 20, true, 'forum');
+        $c->add('enable_user_rating_system', 0, 'select',
+                0,0,0,22, false, 'forum');
         $c->add('allow_memberlist', $_FF_DEFAULT['allow_memberlist'], 'select',
                 0, 0, 0, 25, true, 'forum');
         $c->add('allow_notification', $_FF_DEFAULT['allow_notification'], 'select',

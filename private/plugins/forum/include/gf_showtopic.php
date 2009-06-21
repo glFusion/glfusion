@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -42,8 +42,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-if( !function_exists( 'str_ireplace' ))
-{
+if( !function_exists( 'str_ireplace' )) {
     require_once( 'PHP/Compat.php' );
     PHP_Compat::loadFunction( 'str_ireplace' );
 }
@@ -162,11 +161,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $moodimage = '<img align="middle" src="'.gf_getImage($showtopic['mood'],'moods') .'" title="'.$showtopic['mood'].'" alt=""' . XHTML . '><br' . XHTML . '>';
         $min_height = $min_height + 30;
     }
-
-
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Show Topic Display Time3: $intervalTime");
-
     // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function
     if ($CONF_FORUM['pre2.5_mode']) {
         // try to determine if we have an old post...
@@ -209,9 +203,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     $showtopic['subject'] = gf_formatTextBlock($showtopic['subject'],'text',$mode);
 
     $showtopic['subject'] = COM_truncate($showtopic['subject'],$CONF_FORUM['show_subject_length'],'...');
-
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Show Topic Display Time2: $intervalTime");
 
     if ($mode != 'preview' && $uservalid && ($_USER['uid'] > 1) && ($_USER['uid'] == $showtopic['uid'])) {
         /* Check if user can still edit this post - within allowed edit timeframe */
@@ -364,11 +355,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             DB_query($sql);
         }
     }
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Show Topic Display Time4: $intervalTime");
-
-//    $showtopic['comment'] = str_replace('{','&#123;',$showtopic['comment']);
-//    $showtopic['comment'] = str_replace('}','&#125;',$showtopic['comment']);
 
     $uniqueid = isset($_POST['uniqueid']) ? COM_applyFilter($_POST['uniqueid'],true) : 0;
     if ($showtopic['id'] > 0) {
@@ -383,6 +369,49 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     } else {
         $topictemplate->set_var('ipaddress','');
     }
+
+    $voteHTML = '';
+    if ( $CONF_FORUM['enable_user_rating_system']) {
+        if ( $showtopic['uid'] > 1 ) { //not an anonymous poster
+            // grab the poster's current rating...
+    	    $rating = intval(DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($showtopic['uid'])));
+    		if ($rating > 0) {
+    			$grade = '+'. $rating;
+    		} else {
+    			$grade = $rating;
+    		}
+
+    		//Find out if user has rights to increase / decrease score
+    		if ( $_USER['uid'] > 1 && $_USER['uid'] != $showtopic['uid'] ) { //Can't vote for yourself & must be logged in
+    			$user_already_voted_res = DB_query("SELECT grade FROM {$_TABLES['gf_rating_assoc']} WHERE user_id = {$showtopic['uid']} AND voter_id = {$_USER['uid']}");
+    			if (DB_numRows($user_already_voted_res) <= 0 ) {
+    			// user has never voted for this poster
+    			    $vote_language = $LANG_GF01['grade_user'];
+    			    $plus_vote  = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.jpg" alt="plus" /></a>';
+                    $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.jpg" alt="minus" /></a>';
+                } else {
+                    // user has already voted for this poster
+                    $vote_language = $LANG_GF01['retract_grade'];
+    				$user_already_voted_row = DB_fetchArray($user_already_voted_res);
+                    if ($user_already_voted_row['grade'] > 0 ) {
+                        // gave a +1 show the minus to retract
+                        $plus_vote = '';
+                        $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.jpg" alt="minus" /></a>';
+    				} else {
+                        // gave a -1 show the plus to retract
+                        $minus_vote = '';
+                        $plus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.jpg" alt="plus" /></a>';
+    				}
+    			}
+    			$voteHTML = '<div class="c'.$showtopic['uid'].'"><span id="vote'.$showtopic['id'].'">'.$vote_language.'<br />'.$minus_vote.$plus_vote.'<br />'.$LANG_GF01['grade'].': '.$grade.'</span></div>';
+            } else {
+                // display 'rating'
+      			$voteHTML =  $LANG_GF01['grade'].': '.$grade;
+            }
+
+        }
+    }
+    $topictemplate->set_var ('vote_html', $voteHTML);
 
     $topictemplate->set_var ('layout_url', $_CONF['layout_url']);
     $topictemplate->set_var ('csscode', $onetwo);
@@ -416,9 +445,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     $topictemplate->set_var ('member_badge',forumPLG_getMemberBadge($showtopic['uid']));
     $topictemplate->parse ('output', 'topictemplate');
     $retval .= $topictemplate->finish ($topictemplate->get_var('output'));
-
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Show Topic Display Time5: $intervalTime");
 
     return $retval;
 }

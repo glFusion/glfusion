@@ -86,7 +86,7 @@ if (empty($show) AND $CONF_FORUM['show_posts_perpage'] > 0) {
     $show = 20;
 }
 
-$sql  = "SELECT a.forum,a.pid,a.locked,a.subject,a.replies,b.forum_cat,b.forum_name,b.is_readonly,b.grp_id,c.cat_name,c.id ";
+$sql  = "SELECT a.forum,a.pid,a.locked,a.subject,a.replies,b.forum_cat,b.forum_name,b.is_readonly,b.grp_id,b.rating_post,c.cat_name,c.id ";
 $sql .= "FROM {$_TABLES['gf_topic']} a ";
 $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON b.forum_id=a.forum ";
 $sql .= "LEFT JOIN {$_TABLES['gf_categories']} c on c.id=b.forum_cat ";
@@ -334,11 +334,17 @@ $result  = DB_query($sql);
 
 // Display each post in this topic
 $onetwo = 1;
+$cantView = 0;
 while($topicRec = DB_fetchArray($result)) {
     if ($CONF_FORUM['show_anonymous_posts'] == 0 AND $topicRec['uid'] == 1) {
        echo '<div class="pluginAlert" style="padding:10px;margin:10px;">Your preferences have block anonymous posts enabled</div>';
         break;
        //Do nothing - but this way I don't always have to do this check
+	} else if(!can_view_forum($forum)) {
+	    if ( $cantView == 0 ) {
+    		echo '<div class="pluginAlert" style="padding:10px;margin:10px;">'.$LANG_GF02['rate_too_low_thread'].'</div>';
+    	}
+    	$cantView++;
     } else {
         echo showtopic($topicRec,$mode,$onetwo,$page);
         $onetwo = ($onetwo == 1) ? 2 : 1;

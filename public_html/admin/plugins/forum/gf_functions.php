@@ -56,6 +56,8 @@ $navbarMenu = array(
     $LANG_GF06['5']   => $_CONF['site_admin_url'] .'/plugins/forum/migrate.php',
     $LANG_GF06['6']   => $_CONF['site_admin_url'] .'/plugins/forum/messages.php',
     $LANG_GF06['7']   => $_CONF['site_admin_url'] .'/plugins/forum/ips.php',
+    $LANG_GF06['8']   => $_CONF['site_admin_url'] .'/plugins/forum/rating.php',
+    $LANG_GF06['9']   => $_CONF['site_admin_url'] .'/plugins/forum/import.php',
 );
 
 // Site admin can add common footer code here
