@@ -322,23 +322,27 @@ class Media {
 		                $resolution_y = $this->resolution_y;
 		            } else {
 		                if ( $this->media_resolution_x == 0 && $this->remote_media != 1) {
-		                    $ThisFileInfo = MG_getMediaMetaData($_MG_CONF['path_mediaobjects'] . 'orig/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext);
-		                    if ( $ThisFileInfo['video']['resolution_x'] < 1 || $ThisFileInfo['video']['resolution_y'] < 1 ) {
-		                        if (isset($ThisFileInfo['meta']['onMetaData']['width']) && isset($ThisFileInfo['meta']['onMetaData']['height']) ) {
-		                            $resolution_x = $ThisFileInfo['meta']['onMetaData']['width'];
-		                            $resolution_y = $ThisFileInfo['meta']['onMetaData']['height'];
-		                        } else {
-		                            $resolution_x = -1;
-		                            $resolution_y = -1;
-		                        }
-		                    } else {
-		                        $resolution_x = $ThisFileInfo['video']['resolution_x'];
-		                        $resolution_y = $ThisFileInfo['video']['resolution_y'];
-		                    }
-		                    if ( $resolution_x != 0 ) {
-		                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . addslashes($this->id) . "'";
-		                        DB_query( $sql,1 );
-		                    }
+                            $size = @filesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext);
+                            // skip files over 8M in size..
+                            if ( $size < 8388608 ) {
+    		                    $ThisFileInfo = MG_getMediaMetaData($_MG_CONF['path_mediaobjects'] . 'orig/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext);
+    		                    if ( $ThisFileInfo['video']['resolution_x'] < 1 || $ThisFileInfo['video']['resolution_y'] < 1 ) {
+    		                        if (isset($ThisFileInfo['meta']['onMetaData']['width']) && isset($ThisFileInfo['meta']['onMetaData']['height']) ) {
+    		                            $resolution_x = $ThisFileInfo['meta']['onMetaData']['width'];
+    		                            $resolution_y = $ThisFileInfo['meta']['onMetaData']['height'];
+    		                        } else {
+    		                            $resolution_x = -1;
+    		                            $resolution_y = -1;
+    		                        }
+    		                    } else {
+    		                        $resolution_x = $ThisFileInfo['video']['resolution_x'];
+    		                        $resolution_y = $ThisFileInfo['video']['resolution_y'];
+    		                    }
+    		                    if ( $resolution_x != 0 ) {
+    		                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . addslashes($this->id) . "'";
+    		                        DB_query( $sql,1 );
+    		                    }
+                            }
 		                } else {
 		                    $resolution_x = $this->resolution_x;
 		                    $resolution_y = $this->resolution_y;
