@@ -318,11 +318,14 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 
     $retval = '';
 
+    $sp_url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='.$page);
+    $headercode = '<link rel="canonical" href="' . $sp_url . '"' . XHTML . '>'.LB;
+
     if ($A['sp_format'] == 'allblocks' OR $A['sp_format'] == 'leftblocks') {
-        $retval .= COM_siteHeader ('menu');
+        $retval .= COM_siteHeader('menu', $A['sp_title'], $headercode);
     } else {
         if ($A['sp_format'] <> 'blankpage') {
-            $retval .= COM_siteHeader ('none');
+            $retval .= COM_siteHeader('none', $A['sp_title'], $headercode);
         }
     }
     if (($A['sp_inblock'] == 1) && ($A['sp_format'] != 'blankpage')) {
@@ -456,6 +459,9 @@ function SP_printPage ($page, $A)
     $print->set_var ('sp_content',
             SP_render_content ($A['sp_content'], $A['sp_php']));
     $print->set_var ('sp_hits', COM_numberFormat ($A['sp_hits']));
+    $printable = COM_buildURL($_CONF['site_url']
+               . '/staticpages/index.php?page=' . $page . '&amp;mode=print');
+    $print->set_var('printable_url', $printable);
     if ($A['commentcode'] >= 0) {
         $commentsUrl = $sp_url . '#comments';
         $comments = DB_count($_TABLES['comments'],
@@ -643,6 +649,7 @@ function plugin_dopluginsearch_staticpages($query, $datestart, $dateend, $topic,
     $search->setSQL($sql);
     $search->setFTSQL($ftsql);
     $search->setRank(3);
+    $search->setURLRewrite(true);
 
     return $search;
 }
@@ -1141,7 +1148,7 @@ function SP_render_content ($sp_content, $sp_php)
 /**
  * Return true since this plugin supports webservices
  *
- * @return  bool	True, of webservices are supported
+ * @return  bool	True, if webservices are supported
  */
 function plugin_wsEnabled_staticpages() {
     return true;

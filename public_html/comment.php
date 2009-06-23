@@ -269,15 +269,25 @@ function handleView($view = true)
             break;
 
         default: // assume plugin
+            $order = '';
+            if (isset($_REQUEST['order'])) {
+                $order = COM_applyFilter($_REQUEST['order']);
+            }
+            $page = 0;
+            if (isset($_REQUEST['page'])) {
+                $page = COM_applyFilter($_REQUEST['page'], true);
+            }
             if ( !($display = PLG_displayComment($type, $sid, $cid, $title,
-                                  COM_applyFilter ($_REQUEST['order']), $format,
-                                  COM_applyFilter ($_REQUEST['page'], true), $view)) ) {
+                                  $order, $format, $page, $view)) ) {
                 return COM_refresh($_CONF['site_url'] . '/index.php');
             }
             break;
     }
 
-    return COM_siteHeader() . $display . COM_siteFooter();
+    return COM_siteHeader('menu', $title)
+           . COM_showMessageFromParameter()
+           . $display
+           . COM_siteFooter();
 }
 
 /**
@@ -545,13 +555,14 @@ default:  // New Comment
             $title = str_replace ( '&lt;', '<', $title );
             $title = str_replace ( '&gt;', '>', $title );
         }
-        $display .= COM_siteHeader('menu', $LANG03[1])
+            $noindex = '<meta name="robots" content="noindex"'.XHTML.'>'.LB;
+            $display .= COM_siteHeader('menu', $LANG03[1], $noindex)
                  . CMT_commentForm ($title, '', $sid,
                         COM_applyFilter ($_REQUEST['pid'], true), $type, $mode,
                         $postmode)
                  . COM_siteFooter();
     } else {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
+        $display .= COM_refresh($_CONF['site_url'].'/index.php');
     }
     break;
 }

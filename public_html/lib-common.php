@@ -1663,13 +1663,12 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 * but anything that uses that format, e.g. Stats page.  They are used like
 * COM_siteHeader and COM_siteFooter but for internal page elements.
 *
-*
-* @param        string      $title      Value to set block title to
-* @param        string      $helpfile   Help file, if one exists
-* @param        string      $template   HTML template file to use to format the block
+* @param    string  $title      Value to set block title to
+* @param    string  $helpfile   Help file, if one exists
+* @param    string  $template   HTML template file to use to format the block
+* @return   string              Formatted HTML containing block header
 * @see COM_endBlock
-* @see COM_siteHeader  For similiar construct
-* @return   string  Formatted HTML containing block header
+* @see COM_siteHeader
 *
 */
 
@@ -2022,13 +2021,13 @@ function COM_debug( $A )
 * of an article with a future publish date reaching it's
 * publish time and if so updates the RDF file.
 *
+* NOTE: When called without parameters, this will only check for new entries to
+*       include in the feeds. Pass the $updated_XXX parameters when the content
+*       of an existing entry has changed.
+*
 * @param    string  $updated_type   (optional) feed type to update
 * @param    string  $updated_topic  (optional) feed topic to update
 * @param    string  $updated_id     (optional) feed id to update
-*
-* @note When called without parameters, this will only check for new entries to
-*       include in the feeds. Pass the $updated_XXX parameters when the content
-*       of an existing entry has changed.
 *
 * @see file lib-syndication.php
 *
@@ -2412,7 +2411,7 @@ function COM_showTopics( $topic='' )
 /**
 * Shows the user their menu options
 *
-* This shows the average joe use their menu options. This is the user block on left side
+* This shows the average Joe User their menu options. This is the user block on the left side
 *
 * @param        string      $help       Help file to show
 * @param        string      $title      Title of Menu

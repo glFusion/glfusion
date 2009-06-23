@@ -36,7 +36,7 @@
 * serve the images from outside of the webtree to a place that the webserver
 * user can actually write too
 *
-* @author   Tony Bibbs <tony@tonybibbs.com>
+* @author   Tony Bibbs, tony AT tonybibbs DOT com
 *
 */
 
@@ -53,7 +53,8 @@ $downloader->setLogging(true);
 $downloader->setAllowedExtensions(array('gif' => 'image/gif',
                                         'jpg' => 'image/jpeg',
                                         'jpeg' => 'image/jpeg',
-                                        'png' => 'image/x-png',
+                                        'png'  => 'image/png',
+                                        'png'  => 'image/x-png'
                                        )
                                  );
 
@@ -90,7 +91,36 @@ switch ($mode) {
 }
 
 // Let's see if we don't have a legit file.  If not bail
-if (is_file($downloader->getPath() . $image)) {
+$pathToImage = $downloader->getPath() . $image;
+if (is_file($pathToImage)) {
+
+    // support conditional GET, if possible
+    $st = @stat($pathToImage);
+    if (is_array($st)) {
+        // cf. RFC 2616, Section 3.3.1 Full Date
+        $last_mod = str_replace('+0000', 'GMT', gmdate('r', $st['mtime']));
+        $etag     = '"' . md5($image) . '"';
+
+        $mod_since  = '';
+        $none_match = '';
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            $mod_since = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+        }
+        if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+            $none_match = $_SERVER['HTTP_IF_NONE_MATCH'];
+        }
+
+        if (($last_mod == $mod_since) && ($etag == $none_match)) {
+            // image hasn't change - we're done
+            header('HTTP/1.1 304 Not Modified');
+            header('Status: 304 Not Modified');
+            exit;
+        }
+
+        header('Last-Modified: ' . $last_mod);
+        header('ETag: ' . $etag);
+    }
+
     if ($mode == 'show') {
         echo '<html><body><img src="' . $_CONF['site_url'] . '/getimage.php?mode=articles&amp;image=' . $image . '" alt=""' . XHTML . '></body></html>';
     } else {
@@ -99,10 +129,12 @@ if (is_file($downloader->getPath() . $image)) {
 } else {
     $display = COM_errorLog('File, ' . $image . ', was not found in getimage.php');
 
+    // send 404 in any case
+    header('HTTP/1.1 404 Not Found');
+    header('Status: 404 Not Found');
+
     if ($mode == 'show') {
-        echo COM_siteHeader ('menu') . $display . COM_siteFooter ();
-    } else {
-        header ('HTTP/1.0 404 Not Found');
+        echo COM_siteHeader('menu') . $display . COM_siteFooter();
     }
 }
 

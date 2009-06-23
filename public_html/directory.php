@@ -34,7 +34,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('lib-common.php');
+require_once 'lib-common.php';
 
 // configuration option:
 // List stories for the current month on top of the overview page
@@ -451,6 +451,35 @@ function DIR_displayAll ($topic, $list_current_month = false)
     return $retval;
 }
 
+/**
+* Return a canonical link
+*
+* @param    string  $topic  current topic or all
+* @param    int     $year   current year
+* @param    int     $month  current month
+* @return   string          <link rel="canonical" ...> tag
+*
+*/
+function DIR_canonicalLink($topic, $year = 0, $month = 0)
+{
+    global $_CONF;
+
+    $script = $_CONF['site_url'].'/'.THIS_SCRIPT;
+
+    $tp = '?topic=' . urlencode($topic);
+    $parts = '';
+    if (($year != 0) && ($month != 0)) {
+        $parts .= "&amp;year=$year&amp;month=$month";
+    } elseif ($year != 0) {
+        $parts .= "&amp;year=$year";
+    } elseif ($topic == 'all') {
+        $tp = '';
+    }
+    $url = COM_buildUrl($script . $tp . $parts);
+
+    return '<link rel="canonical" href="'.$url.'"'.XHTML.'>' . LB;
+}
+
 // MAIN
 $display = '';
 
@@ -478,20 +507,35 @@ if (($month < 1) || ($month > 12)) {
     $month = 0;
 }
 
+$topicName = '';
+if ($topic != 'all') {
+    $topicName = DB_getItem($_TABLES['topics'], 'topic',
+                            "tid = '" . addslashes($topic) . "'");
+}
 if (($year != 0) && ($month != 0)) {
     $title = sprintf ($LANG_DIR['title_month_year'],
                       $LANG_MONTH[$month], $year);
-    $display .= COM_siteHeader ('menu', $title);
+    if ($topic != 'all') {
+        $title .= ': ' . $topicName;
+    }
+    $display .= COM_siteHeader('menu', $title,DIR_canonicalLink($topic,$year,$month));
     $display .= DIR_displayMonth ($topic, $year, $month, true);
     $display .= DIR_navBar ($topic, $year, $month);
 } else if ($year != 0) {
     $title = sprintf ($LANG_DIR['title_year'], $year);
-    $display .= COM_siteHeader ('menu', $title);
-    $display .= DIR_displayYear ($topic, $year, true);
-    $display .= DIR_navBar ($topic, $year);
+    if ($topic != 'all') {
+        $title .= ': ' . $topicName;
+    }
+    $display .= COM_siteHeader('menu', $title, DIR_canonicalLink($topic,$year));
+    $display .= DIR_displayYear($topic, $year, true);
+    $display .= DIR_navBar($topic, $year);
 } else {
-    $display .= COM_siteHeader ('menu', $LANG_DIR['title']);
-    $display .= DIR_displayAll ($topic, $conf_list_current_month);
+    $title = $LANG_DIR['title'];
+    if ($topic != 'all') {
+        $title .= ': ' . $topicName;
+    }
+    $display .= COM_siteHeader('menu', $title, DIR_canonicalLink($topic));
+    $display .= DIR_displayAll($topic, $conf_list_current_month);
 }
 
 $display .= COM_siteFooter (true);
