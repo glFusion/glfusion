@@ -64,7 +64,7 @@ if ($cid == 0 OR $category_rows == 0) {
     exit;
 }
 
-$display = COM_siteHeader('menu');
+$display = COM_siteHeader('menu',$LANG_FILEMGMT['usermenu1']);
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
