@@ -95,7 +95,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $userarray = DB_fetchArray($userQuery);
         $username = COM_getDisplayName($showtopic['uid']);
         $userlink = "<a href=\"{$_CONF['site_url']}/users.php?mode=profile&amp;uid={$showtopic['uid']}\" ";
-        $userlink .= "class=\"authorname {$onetwo}\"><b>{$username}</b></a>";
+        $userlink .= "class=\"authorname {$onetwo}\" rel=\"nofollow\"><b>{$username}</b></a>";
         $uservalid = true;
         $postcount = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE uid='".intval($showtopic['uid'])."'");
         $posts = DB_numRows($postcount);
@@ -387,8 +387,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     			if (DB_numRows($user_already_voted_res) <= 0 ) {
     			// user has never voted for this poster
     			    $vote_language = $LANG_GF01['grade_user'];
-    			    $plus_vote  = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.jpg" alt="plus" /></a>';
-                    $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.jpg" alt="minus" /></a>';
+    			    $plus_vote  = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.png" alt="plus" /></a>';
+                    $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.png" alt="minus" /></a>';
                 } else {
                     // user has already voted for this poster
                     $vote_language = $LANG_GF01['retract_grade'];
@@ -396,11 +396,11 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
                     if ($user_already_voted_row['grade'] > 0 ) {
                         // gave a +1 show the minus to retract
                         $plus_vote = '';
-                        $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.jpg" alt="minus" /></a>';
+                        $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.png" alt="minus" /></a>';
     				} else {
                         // gave a -1 show the plus to retract
                         $minus_vote = '';
-                        $plus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.jpg" alt="plus" /></a>';
+                        $plus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.png" alt="plus" /></a>';
     				}
     			}
     			$voteHTML = '<div class="c'.$showtopic['uid'].'"><span id="vote'.$showtopic['id'].'">'.$vote_language.'<br />'.$minus_vote.$plus_vote.'<br />'.$LANG_GF01['grade'].': '.$grade.'</span></div>';

@@ -118,7 +118,13 @@ if(isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
     echo '<body class="sitebody">';
 } else {
     $pageTitle = strip_tags(COM_checkWords($subject));
-    gf_siteHeader($pageTitle);
+
+    $canonical = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic";
+    if ( $page > 1 ) {
+        $canonical .= "&amp;page=$page";
+    }
+    $headercode = '<link rel="canonical" href="' . $canonical . '" />';
+    gf_siteHeader($pageTitle,$headercode);
     //Check is anonymous users can access
     forum_chkUsercanAccess();
     // Now display the forum header

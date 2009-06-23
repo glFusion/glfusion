@@ -100,8 +100,8 @@ if ($_USER['uid'] > 1 AND $_USER['uid'] == $vid && $pid >= 1) {
 		if (DB_numRows($user_already_voted_res) <= 0 ) {
 		// user has never voted for this poster
 		    $vote_language = $LANG_GF01['grade_user'];
-		    $plus_vote  = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$pid.','.$tid.',1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.jpg" alt="plus" /></a>';
-            $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$pid.','.$tid.',-1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.jpg" alt="minus" /></a>';
+		    $plus_vote  = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$pid.','.$tid.',1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.png" alt="plus" /></a>';
+            $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$pid.','.$tid.',-1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.png" alt="minus" /></a>';
         } else {
             // user has already voted for this poster
             $vote_language = $LANG_GF01['retract_grade'];
@@ -109,11 +109,11 @@ if ($_USER['uid'] > 1 AND $_USER['uid'] == $vid && $pid >= 1) {
             if ($user_already_voted_row['grade'] > 0 ) {
                 // gave a +1 show the minus to retract
                 $plus_vote = '';
-                $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$pid.','.$tid.',-1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.jpg" alt="minus" /></a>';
+                $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$pid.','.$tid.',-1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.png" alt="minus" /></a>';
 			} else {
                 // gave a -1 show the plus to retract
                 $minus_vote = '';
-                $plus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$pid.','.$tid.',1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.jpg" alt="plus" /></a>';
+                $plus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$pid.','.$tid.',1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.png" alt="plus" /></a>';
 			}
 		}
 		$voteHTML = $vote_language.'<br />'.$minus_vote.$plus_vote.'<br />'.$LANG_GF01['grade'].': '.$grade;

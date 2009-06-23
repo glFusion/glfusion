@@ -217,6 +217,7 @@ function plugin_user_delete_forum ($uid)
     DB_query("UPDATE {$_TABLES['gf_topic']} SET uid = 1 WHERE uid = '$uid'");
 }
 
+/*--------------------------------------------------
 function plugin_profileextrassave_forum()
 {
     global $_CONF,$_USER, $_TABLES;
@@ -236,7 +237,6 @@ function plugin_profileextrassave_forum()
    }
 }
 
-
 function plugin_profilevariablesedit_forum($uid, &$template)
 {
     global $_TABLES, $LANG_GF04;
@@ -252,7 +252,7 @@ function plugin_profilevariablesedit_forum($uid, &$template)
     $template->set_var('forum_occupation', $A['occupation']);
 
     $template->set_var ('lang_forum', $LANG_GF04['label_forum']);
-/*    $template->set_var ('lang_location', $LANG_GF04['label_location']); */
+//    $template->set_var ('lang_location', $LANG_GF04['label_location']);
     $template->set_var ('lang_aim', $LANG_GF04['label_aim']);
     $template->set_var ('lang_icq', $LANG_GF04['label_icq']);
     $template->set_var ('lang_yim', $LANG_GF04['label_yim']);
@@ -304,7 +304,7 @@ function plugin_profilevariablesdisplay_forum ($uid, &$template)
            'username', "uid = $uid")));
     $template->set_var ('forum_headline_last10posts', $LANG_GF02['msg157']);
 
-    /* Display Instant Messaging Handles */
+    // Display Instant Messaging Handles
     $result = DB_query ("SELECT uid,location,aim,yim,icq,yim,msnm,interests,occupation FROM {$_TABLES['gf_userinfo']} WHERE uid = $uid");
     $A = DB_fetchArray ($result);
     $template->set_var('forum_location', $A['location']);
@@ -324,7 +324,7 @@ function plugin_profilevariablesdisplay_forum ($uid, &$template)
     $template->set_var ('lang_interests', $LANG_GF04['label_interests']);
     $template->set_var ('lang_occupation', $LANG_GF04['label_occupation']);
 }
-
+----------------------------------------------------------------------------- */
 function plugin_statssummary_forum() {
     global $_USER, $CONF_FORUM, $_CONF, $_TABLES, $LANG_GF00;
 

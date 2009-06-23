@@ -103,12 +103,14 @@ if (isset($_USER['uid']) && $_USER['uid'] > 1 && $op == 'markallread') {
 
 // Display Common headers
 ob_start();
-echo gf_siteHeader();
+// echo gf_siteHeader($LANG_GF01['INDEXPAGE']);
 
 //Check if anonymous users allowed to access forum
 forum_chkUsercanAccess();
 
 if ($op == 'newposts' AND $_USER['uid'] > 1) {
+
+    echo gf_siteHeader($LANG_GF02['new_posts']);
 
     if ( $CONF_FORUM['enable_user_rating_system'] ) {
         $rating = intval(DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($showtopic['uid'])));
@@ -235,6 +237,9 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
 }
 
 if ($op == 'search') {
+
+    echo gf_siteHeader($LANG_GF02['msg45']);
+
     $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $report->set_file (array ('report' => 'reports/report_results.thtml',
                     'records' => 'reports/report_record.thtml',
@@ -367,6 +372,8 @@ if ($op == 'search') {
 
 if ($op == 'popular') {
 
+    echo gf_siteHeader($LANG_GF02['msg152']);
+
     USES_lib_admin();
 
     $retval = '';
@@ -435,6 +442,8 @@ if ($op == 'popular') {
 
 if ($op == 'bookmarks' && $_USER['uid'] > 1) {
 
+    echo gf_siteHeader($LANG_GF01['BOOKMARKS']);
+
     USES_lib_admin();
 
     $retval = '';
@@ -486,6 +495,8 @@ if ($op == 'bookmarks' && $_USER['uid'] > 1) {
 }
 
 if ($op == 'lastx') {
+
+    echo gf_siteHeader($LANG_GF01['LASTX']);
 
     USES_lib_admin();
 
@@ -614,6 +625,7 @@ if ($op == 'subscribe') {
     exit();
 }
 
+echo gf_siteHeader($LANG_GF01['INDEXPAGE']);
 // MAIN CODE BEGINS to view forums or topics within a forum
 ForumHeader($forum,0);
 $errMsg = '';

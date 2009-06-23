@@ -1,3 +1,3 @@
 {# begin {templatelocation} #}
-<td style="padding-right:3px;"><a href="{pmlink}">{pmlinkimg}</a></td>
+<td style="padding-right:3px;"><a href="{pmlink}" rel="nofollow">{pmlinkimg}</a></td>
 {# end {templatelocation} #}

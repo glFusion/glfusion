@@ -51,7 +51,7 @@ if (!class_exists('StringParser') ) {
     require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 }
 
-function gf_siteHeader($subject = '') {
+function gf_siteHeader($subject = '',$headercode='') {
     global $CONF_FORUM;
 
     // Display Common headers
@@ -59,15 +59,15 @@ function gf_siteHeader($subject = '') {
     if (!isset($CONF_FORUM['usermenu'])) $CONF_FORUM['usermenu'] = 'blockmenu';
 
     if ($CONF_FORUM['showblocks'] == 'noblocks' OR $CONF_FORUM['showblocks'] == 'rightblocks') {
-        echo COM_siteHeader('none', $subject);
+        echo COM_siteHeader('none', $subject,$headercode);
     } elseif ($CONF_FORUM['showblocks'] == 'leftblocks' OR $CONF_FORUM['showblocks'] == 'allblocks' ) {
         if ($CONF_FORUM['usermenu'] == 'blockmenu') {
-            echo COM_siteHeader( array('forum_showBlocks',$CONF_FORUM['leftblocks']), $subject );
+            echo COM_siteHeader( array('forum_showBlocks',$CONF_FORUM['leftblocks']), $subject,$headercode );
         } else {
-            echo COM_siteHeader('menu', $subject);
+            echo COM_siteHeader('menu', $subject,$headercode);
         }
     } else {
-        echo COM_siteHeader('menu', $subject);
+        echo COM_siteHeader('menu', $subject,$headercode);
     }
 }
 

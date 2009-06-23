@@ -96,7 +96,7 @@ function forum_upgrade() {
         case '3.1.2' :
         case '3.1.3' :
             $c = config::get_instance();
-            $c->add('enable_user_rating_system', 0, 'select', 0,0,0,22, false, 'forum');
+            $c->add('enable_user_rating_system',FALSE, 'select', 0,0,0,22, TRUE, 'forum');
             DB_query("ALTER TABLE {$_TABLES['gf_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
             DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD `rating` INT( 8 ) NOT NULL ");
             $sql = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_assoc']} ( "
