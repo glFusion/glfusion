@@ -824,7 +824,7 @@ class upload
     }
 
     /**
-    * This function will print any debmug messages out.
+    * This function will print any debug messages out.
     *
     */
     function printDebugMsgs()

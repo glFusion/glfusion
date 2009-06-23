@@ -44,6 +44,7 @@ require_once $_CONF['path_system'] . 'lib-security.php';
 // the data being passed in a POST operation
 // echo COM_debug($_POST);
 
+$display = '';
 if (!SEC_hasRights ('block.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_startBlock ($MESSAGE[30], '',
