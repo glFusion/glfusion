@@ -1036,7 +1036,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         // Now we need to process an uploaded thumbnail
 
         if ( $gotTN == 1 ) {
-	        $mp3TNFilename = $_MG_CONF['path_tmp'] . '/mp3tn' . time() . '.jpg';
+	        $mp3TNFilename = $_MG_CONF['tmp_path'] . '/mp3tn' . time() . '.jpg';
 	        $fn = fopen( $mp3TNFilename,"w");
 	        fwrite($fn,$mp3AttachdedThumbnail);
 	        fclose($fn);
