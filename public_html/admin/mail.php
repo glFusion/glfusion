@@ -90,8 +90,6 @@ function display_mailform ()
     $mail_templates->set_var('lang_postmode', $LANG03[2]);
     $mail_templates->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
 
-
-
     $mail_templates->set_var ('site_url', $_CONF['site_url']);
     $mail_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
     $mail_templates->set_var ('layout_url', $_CONF['layout_url']);
@@ -111,12 +109,7 @@ function display_mailform ()
         $groups[$A['grp_id']] = ucwords ($A['grp_name']);
     }
     asort ($groups);
-/* --------
-    foreach ($groups as $groupID => $groupName) {
-        $group_options .= '<option value="' . $groupID . '">' . $groupName
-                       . '</option>';
-    }
----------- */
+
     foreach ($groups as $groupID => $groupName) {
         if (SEC_inGroup('Root') || (SEC_inGroup($groupName) && ($groupName <> 'Logged-in Users') && ($groupName <> 'Mail Admin'))) {
             $group_options .= '<option value="' . $groupID . '">' . $groupName . '</option>';
@@ -145,6 +138,10 @@ function display_mailform ()
 
     $mail_templates->parse ('output', 'form');
     $retval = $mail_templates->finish ($mail_templates->get_var ('output'));
+
+    @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                time() + 1200, $_CONF['cookie_path'],
+               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
 
     return $retval;
 }
