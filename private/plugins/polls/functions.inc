@@ -869,7 +869,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
                     if ($S['votesumm'] == 0) {
                         $percent = 0;
                     } else {
-                        $percent = intval($A['votes'] / $S['votesumm']);
+                        $percent = $A['votes'] / $S['votesumm'];
                     }
                     $poll->set_var('cssida', 1);
                     $poll->set_var('cssidb', 2);
