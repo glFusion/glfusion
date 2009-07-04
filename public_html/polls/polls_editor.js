@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2003-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors:   Blaine Lang - blaine@portalparts.com                          |
 // +--------------------------------------------------------------------------+

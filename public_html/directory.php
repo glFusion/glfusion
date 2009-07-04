@@ -13,7 +13,7 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2004-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
 // +--------------------------------------------------------------------------+
@@ -73,7 +73,7 @@ if (empty ($_USER['username']) && (($_CONF['loginrequired'] == 1) ||
 * @param    int     $month  Month
 * @param    int     $year   Year
 * @return   int             Number of days in that month
-* @bugs     Will fail from 2038 onwards ...
+* @todo     Bug: Will fail from 2038 onwards ...
 *
 * "The last day of any given month can be expressed as the "0" day
 * of the next month", http://www.php.net/manual/en/function.mktime.php
@@ -98,7 +98,7 @@ function DIR_lastDayOfMonth ($month, $year)
 * @param    string  $topic          current topic
 * @param    int     $year           current year
 * @param    int     $month          current month
-* @param    bool    $standalone     true: don't display form inline
+* @param    boolean $standalone     true: don't display form inline
 *
 */
 function DIR_topicList ($topic = 'all', $year = 0, $month = 0, $standalone = false)
@@ -246,7 +246,7 @@ function DIR_navBar ($topic, $year, $month = 0)
 * @param    string  $topic  current topic
 * @param    int     $year   year to display
 * @param    int     $month  month to display
-* @param    bool    $main   true: display view on its own page
+* @param    boolean $main   true: display view on its own page
 * @return   string          list of articles for the given month
 *
 */
@@ -321,7 +321,7 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
 *
 * @param    string  $topic  current topic
 * @param    int     $year   year to display
-* @param    bool    $main   true: display view on its own page
+* @param    boolean $main   true: display view on its own page
 * @return   string          list of months (+ number of stories) for given year
 *
 */
@@ -410,7 +410,7 @@ function DIR_displayYear ($topic, $year, $main = false)
 * the stories for the current month at the top of the page.
 *
 * @param    string  $topic                  current topic
-* @param    bool    $list_current_month     true = list stories f. current month
+* @param    boolean $list_current_month     true = list stories f. current month
 * @return   string                          list of all the years in the db
 *
 */
@@ -454,7 +454,7 @@ function DIR_displayAll ($topic, $list_current_month = false)
 /**
 * Return a canonical link
 *
-* @param    string  $topic  current topic or all
+* @param    string  $topic  current topic or 'all'
 * @param    int     $year   current year
 * @param    int     $month  current month
 * @return   string          <link rel="canonical" ...> tag
