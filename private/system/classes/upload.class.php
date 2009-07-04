@@ -13,10 +13,10 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2009 by the following authors:                        |
 // |                                                                          |
-// | Authors: Tony Bibbs       - tony@tonybibbs.com                           |
-// |          Dirk Haun        - dirk@haun-online.de                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -44,7 +44,7 @@ if (!defined ('GVERSION')) {
 * submitted via POST method.  Please read documentation as there are a number of
 * security related features that will come in handy for you.
 *
-* @author       Tony Bibbs <tony@tonybibbs.com>
+* @author       Tony Bibbs, tony AT tonybibbs DOT com
 *
 */
 class upload

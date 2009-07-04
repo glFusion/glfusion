@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2007-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Choplair         - chopinou AT choplair DOT org                 |
 // |          Dirk Haun        - dirk AT haun-online DOT de                   |

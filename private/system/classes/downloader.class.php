@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
 // +--------------------------------------------------------------------------+
@@ -515,18 +515,30 @@ class downloader
         $pos = strrpos($fileName,'.') + 1;
         $fextension = substr($fileName, $pos);
 
+        // If application has not set the allowedExtensions then initialize to the default
+        if(sizeof($this->_allowedExtensions) == 0) {
+            $this->_allowedExtensions = array_flip($this->_availableExtensions);
+        }
+
         // Send headers.
         if ($this->checkExtension($fextension)) {
             // Display file inside browser.
             header('Content-Type: ' . $this->_availableMimeTypes[$fextension]);
-            header('Content-transfer-encoding: binary');
-            header('Content-length: ' . filesize($this->_sourceDirectory . $fileName));
-            header('Content-Disposition: attachment; filename="' . $fileName . '"');
+            header('Content-Transfer-Encoding: binary');
+            header('Content-Length: '
+                   . filesize($this->_sourceDirectory . $fileName));
+
+            // send images as 'inline' everything else as 'attachment'
+            if (substr($this->_availableMimeTypes[$fextension], 0, 6) == 'image/') {
+                header('Content-Disposition: inline; filename="' . $fileName . '"');
+            } else {
+                header('Content-Disposition: attachment; filename="' . $fileName . '"');
+            }
 
             // Send file contents.
             $fp = fopen($this->_sourceDirectory . $fileName, 'rb');
-
-            fpassthru( $fp );
+            fpassthru($fp);
+            fclose($fp);
         }
 
         return true;

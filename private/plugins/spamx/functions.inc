@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2004-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors      Tom Willett     tomw AT pigstye DOT net                     |
 // |              Dirk Haun       dirk AT haun-online DOT de                  |
