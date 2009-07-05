@@ -1249,9 +1249,24 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             if (empty ($A['last_reply_rec']) || $A['last_reply_rec'] < 1) {
                 $lastid = $A['id'];
                 $lastpostinfo = wordwrap(strip_tags(substr($A['comment'],0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
+
                 $testText = gf_formatTextBlock($A['comment'],'text','text');
                 $testText = strip_tags($testText);
-                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+                $shortComment = '';
+                $commentArray = explode(' ',$testText);
+                $wordCount = count($commentArray);
+                $lengthCount = 0;
+                $tailString = '';
+                foreach ($commentArray AS $word) {
+                    $lengthCount = $lengthCount + strlen($word);
+                    $shortComment .= $word.' ';
+                    if ( $lengthCount >= $CONF_FORUM['contentinfo_numchars'] ) {
+                        $tailString = '...';
+                        break;
+                    }
+                }
+                $shortComment = trim($shortComment).$tailString;
+                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags($shortComment)));
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['gf_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1265,7 +1280,21 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 $lastpostinfo = wordwrap(strip_tags(substr($lastcomment,0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
                 $testText = gf_formatTextBlock($B['comment'],'text','text');
                 $testText = strip_tags($testText);
-                $lastpostinfogll = preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...'));
+                $shortComment = '';
+                $commentArray = explode(' ',$testText);
+                $wordCount = count($commentArray);
+                $lengthCount = 0;
+                $tailString = '';
+                foreach ($commentArray AS $word) {
+                    $lengthCount = $lengthCount + strlen($word);
+                    $shortComment .= $word.' ';
+                    if ( $lengthCount >= $CONF_FORUM['contentinfo_numchars'] ) {
+                        $tailString = '...';
+                        break;
+                    }
+                }
+                $shortComment = trim($shortComment).$tailString;
+                $lastpostinfogll = preg_replace('#\r?\n#','<br>',strip_tags($shortComment));
             }
 
             $cssid = ($cssid ==1) ? 2: 1;
@@ -1453,7 +1482,11 @@ function forumPLG_restoreEmoticons($str) {
 }
 
 function forumPLG_getPMlink($member) {
-    global $_TABLES,$_CONF;
+    global $_TABLES,$_CONF, $_PLUGINS;
+
+    if (in_array('pm', $_PLUGINS)) {
+        return "{$_CONF['site_url']}/pm/compose.php?mode=new&amp;username={$member};";
+    }
     if (DB_getItem($_TABLES['plugins'],'pi_enabled',"pi_name='messenger'") == 1) {
         return "{$_CONF['site_url']}/messenger/index.php?action=newpm&amp;toname={$member};";
     } else {
