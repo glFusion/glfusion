@@ -77,6 +77,10 @@ $CONF_FORUM['show_anonymous_posts'] = 1;
 // Only send Notification once - even if more posts are created since your last visit
 $CONF_FORUM['notify_once'] = 1;
 
+if ( !isset($CONF_FORUM['enable_user_rating_system']) ) {
+    $CONF_FORUM['enable_user_rating_system'] = 0;
+}
+
 if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
     $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
     if ( DB_numRows($result) > 0 ) {
@@ -217,114 +221,7 @@ function plugin_user_delete_forum ($uid)
     DB_query("UPDATE {$_TABLES['gf_topic']} SET uid = 1 WHERE uid = '$uid'");
 }
 
-/*--------------------------------------------------
-function plugin_profileextrassave_forum()
-{
-    global $_CONF,$_USER, $_TABLES;
 
-    require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-    $uid = $_USER['uid'];
-    if ($uid > 1) {
-        $location   = gf_preparefordb($_POST['forum_location'],'html');
-        $aim        = gf_preparefordb($_POST['forum_aim'],'html');
-        $icq        = gf_preparefordb($_POST['forum_icq'],'html');
-        $yim        = gf_preparefordb($_POST['forum_yim'],'html');
-        $msnm       = gf_preparefordb($_POST['forum_msnm'],'html');
-        $interests  = gf_preparefordb($_POST['forum_interests'],'html');
-        $occupation = gf_preparefordb($_POST['forum_occupation'],'html');
-        DB_save ($_TABLES['gf_userinfo'], "uid,location,aim,yim,icq,msnm,interests,occupation",
-                 "'$uid','$location','$aim','$yim','$icq','$msnm','$interests','$occupation'");
-   }
-}
-
-function plugin_profilevariablesedit_forum($uid, &$template)
-{
-    global $_TABLES, $LANG_GF04;
-
-    $result = DB_query ("SELECT uid,location,aim,yim,icq,yim,msnm,interests,occupation FROM {$_TABLES['gf_userinfo']} WHERE uid = $uid");
-    $A = DB_fetchArray ($result);
-    $template->set_var('forum_location', $A['location']);
-    $template->set_var('forum_aim', $A['aim']);
-    $template->set_var('forum_icq', $A['icq']);
-    $template->set_var('forum_yim', $A['yim']);
-    $template->set_var('forum_msnm', $A['msnm']);
-    $template->set_var('forum_interests', $A['interests']);
-    $template->set_var('forum_occupation', $A['occupation']);
-
-    $template->set_var ('lang_forum', $LANG_GF04['label_forum']);
-//    $template->set_var ('lang_location', $LANG_GF04['label_location']);
-    $template->set_var ('lang_aim', $LANG_GF04['label_aim']);
-    $template->set_var ('lang_icq', $LANG_GF04['label_icq']);
-    $template->set_var ('lang_yim', $LANG_GF04['label_yim']);
-    $template->set_var ('lang_msnm', $LANG_GF04['label_msnm']);
-    $template->set_var ('lang_interests', $LANG_GF04['label_interests']);
-    $template->set_var ('lang_occupation', $LANG_GF04['label_occupation']);
-}
-
-function plugin_profilevariablesdisplay_forum ($uid, &$template)
-{
-    global $CONF_FORUM,$_TABLES, $_CONF, $LANG_GF02,$LANG_GF04;
-
-    $postlimit="10";        // How many posts you want displayed
-
-    $query = DB_query ("SELECT id,date,forum,subject FROM {$_TABLES['gf_topic']} WHERE uid = {$uid} ORDER BY date DESC LIMIT 100");
-    $numposts = 0;
-
-    while (list($postid,$date,$forum_id,$subject) = DB_fetchArray($query))  {
-        $grp_id = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='$forum_id'");
-        $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
-        if (SEC_inGroup($groupname) OR $grp_id == 2) {
-            if ($CONF_FORUM['use_censor']) {
-                $subject = COM_checkWords($subject);
-            }
-            $numposts++;
-            $postdate = COM_getUserDateTimeFormat ($date);
-            $template->set_var ('row_number', $numposts . '.');
-            $template->set_var ('story_begin_href', '<a href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $postid . '">');
-            $template->set_var ('story_title', $subject);
-            $template->set_var ('story_end_href', '</a>');
-            $template->set_var ('story_date', $postdate[0]);
-            $template->parse ('forum_post_row', 'strow', true);
-            if ($numposts >= $postlimit) {
-                break;
-            }
-        }
-    }
-
-    if ($numposts == 0) {
-        $template->set_var ('forum_post_row', '<tr><td>' .$LANG_GF02['msg155']. '</td></tr>');
-    }
-
-    $count = DB_count ($_TABLES['gf_topic'], 'uid', $uid);
-    $template->set_var ('forum_lang_number_posts', $LANG_GF02['msg156']);
-    $template->set_var ('forum_number_posts', $count);
-
-    $template->set_var ('forum_start_block_last10posts', COM_startBlock
-        ( $LANG_GF02['msg158'] . DB_getItem ($_TABLES['users'],
-           'username', "uid = $uid")));
-    $template->set_var ('forum_headline_last10posts', $LANG_GF02['msg157']);
-
-    // Display Instant Messaging Handles
-    $result = DB_query ("SELECT uid,location,aim,yim,icq,yim,msnm,interests,occupation FROM {$_TABLES['gf_userinfo']} WHERE uid = $uid");
-    $A = DB_fetchArray ($result);
-    $template->set_var('forum_location', $A['location']);
-    $template->set_var('forum_aim', $A['aim']);
-    $template->set_var('forum_icq', $A['icq']);
-    $template->set_var('forum_yim', $A['yim']);
-    $template->set_var('forum_msnm', $A['msnm']);
-    $template->set_var('forum_interests', $A['interests']);
-    $template->set_var('forum_occupation', $A['occupation']);
-
-    $template->set_var ('lang_forum', $LANG_GF04['label_forum']);
-    $template->set_var ('lang_location', $LANG_GF04['label_location']);
-    $template->set_var ('lang_aim', $LANG_GF04['label_aim']);
-    $template->set_var ('lang_icq', $LANG_GF04['label_icq']);
-    $template->set_var ('lang_yim', $LANG_GF04['label_yim']);
-    $template->set_var ('lang_msnm', $LANG_GF04['label_msnm']);
-    $template->set_var ('lang_interests', $LANG_GF04['label_interests']);
-    $template->set_var ('lang_occupation', $LANG_GF04['label_occupation']);
-}
------------------------------------------------------------------------------ */
 function plugin_statssummary_forum() {
     global $_USER, $CONF_FORUM, $_CONF, $_TABLES, $LANG_GF00;
 
