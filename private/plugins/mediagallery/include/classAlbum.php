@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: classAlbum.php 3093 2008-09-10 23:53:51Z mevans0263               $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -922,6 +922,10 @@ class mgAlbum {
                             break;
                         }
                     }
+                    if ($mediasize == false ) {
+                        $album_last_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
+                        $mediasize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
+                    }
                 }
             }
             $album_media_count  = $this->media_count;
@@ -1015,22 +1019,7 @@ class mgAlbum {
                 $tn_width  = 200;
                 break;
         }
-/*
-        switch ($tn_size ) {
-            case '0' :      //small
-                $tn_height = 100;
-                break;
-            case '1' :      //medium
-                $tn_height = 150;
-                break;
-            case '2' :
-                $tn_height = 200;
-                break;
-            default :
-                $tn_height = 150;
-                break;
-        }
-*/
+
         if ( $mediasize[0] > $mediasize[1] ) {
             $ratio = $mediasize[0] / $tn_height;
             $newwidth = $tn_height;
