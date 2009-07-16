@@ -145,6 +145,7 @@ function editgroup($grp_id = '')
                                        sprintf ($delbutton, $jsconfirm));
             $group_templates->set_var ('delete_option_no_confirmation',
                                        sprintf ($delbutton, ''));
+
             $group_templates->set_var ('group_core', 0);
         } else {
             $group_templates->set_var ('group_core', 1);
@@ -156,13 +157,9 @@ function editgroup($grp_id = '')
 
     $group_templates->set_var('lang_groupname', $LANG_ACCESS['groupname']);
 
-    if ($A['grp_gl_core'] != 1) {
-        $group_templates->set_var('groupname_inputtype', 'text');
-        $group_templates->set_var('groupname_static', '');
-    } else {
-        $group_templates->set_var('groupname_inputtype', 'hidden');
-        $group_templates->set_var('groupname_static', $A['grp_name']);
-    }
+    $group_templates->set_var('groupname_inputtype', 'text');
+    $group_templates->set_var('groupname_static', '');
+
     if (isset ($A['grp_name'])) {
         $group_templates->set_var('group_name', $A['grp_name']);
     } else {
@@ -192,28 +189,11 @@ function editgroup($grp_id = '')
     }
 
     $groupoptions = '';
-    if ($A['grp_gl_core'] == 1) {
-        $group_templates->set_var('lang_securitygroupmsg',
-                                  $LANG_ACCESS['coregroupmsg']);
-        $group_templates->set_var('hide_adminoption',
-                                  ' style="display:none;"');
 
-        $count = 0;
-        if (! empty($selected)) {
-            $inclause = str_replace(' ', ',', $selected);
-            $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['groups']} WHERE grp_id <> $grp_id AND grp_id IN ($inclause)");
-            list($count) = DB_fetchArray($result);
-        }
-        if ($count == 0) {
-            // this group doesn't belong to anything...give a friendly message
-            $groupoptions = '<p class="pluginRow1">'
-                          . $LANG_ACCESS['nogroupsforcoregroup'] . '</p>';
-        }
-    } else {
-        $group_templates->set_var('lang_securitygroupmsg',
-                                  $LANG_ACCESS['groupmsg']);
-        $group_templates->set_var('hide_adminoption', '');
-    }
+    $group_templates->set_var('lang_securitygroupmsg',
+                              $LANG_ACCESS['groupmsg']);
+    $group_templates->set_var('hide_adminoption', '');
+
     if ($VERBOSE) {
         COM_errorLog("SELECTED: $selected");
     }
@@ -224,7 +204,7 @@ function editgroup($grp_id = '')
         $whereGroups = '(grp_id IN (' . implode (',', $thisUsersGroups) . '))';
 
         $header_arr = array(
-                        array('text' => $LANG28[86], 'field' => ($A['grp_gl_core'] == 1 ? 'disabled-checkbox' : 'checkbox'), 'sort' => false),
+                        array('text' => $LANG28[86], 'field' => ($A['grp_gl_core'] == 1 ? 'checkbox' : 'checkbox'), 'sort' => false),
                         array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
                         array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
         );
@@ -235,16 +215,11 @@ function editgroup($grp_id = '')
                           'title' => '', 'instructions' => '',
                           'icon' => '', 'form_url' => $form_url );
 
-        if ($A['grp_gl_core'] == 1) {
-            $inclause = str_replace(' ', ',', $selected);
-            $sql = "SELECT grp_id, grp_name, grp_descr FROM {$_TABLES['groups']} WHERE grp_id <> $grp_id AND grp_id IN ($inclause)";
-        } else {
-            $xsql = '';
-            if (! empty($grp_id)) {
-                $xsql = " AND (grp_id <> $grp_id)";
-            }
-            $sql = "SELECT grp_id, grp_name, grp_descr FROM {$_TABLES['groups']} WHERE (grp_name <> 'Root')" . $xsql . ' AND ' . $whereGroups;
+        $xsql = '';
+        if (! empty($grp_id)) {
+            $xsql = " AND (grp_id <> $grp_id)";
         }
+        $sql = "SELECT grp_id, grp_name, grp_descr FROM {$_TABLES['groups']} WHERE (grp_name <> 'Root')" . $xsql . ' AND ' . $whereGroups;
         $query_arr = array('table' => 'groups',
                            'sql' => $sql,
                            'query_fields' => array('grp_name'),
@@ -260,7 +235,7 @@ function editgroup($grp_id = '')
     $group_templates->set_var('lang_rights', $LANG_ACCESS['rights']);
 
     if ($A['grp_gl_core'] == 1) {
-        $group_templates->set_var('lang_rightsmsg', $LANG_ACCESS['corerightsdescr']);
+        $group_templates->set_var('lang_rightsmsg', $LANG_ACCESS['rightsdescr']);
     } else {
         $group_templates->set_var('lang_rightsmsg', $LANG_ACCESS['rightsdescr']);
     }
@@ -402,7 +377,7 @@ function printrights ($grp_id = '', $core = 0)
     for ($i = 0; $i < $nfeatures; $i++) {
         $A = DB_fetchArray($features);
 
-        if ((empty($grpftarray[$A['ft_name']]) OR ($grpftarray[$A['ft_name']] == 'direct')) AND ($core != 1)) {
+        if ((empty($grpftarray[$A['ft_name']]) OR ($grpftarray[$A['ft_name']] == 'direct')) AND ($core != 2)) {
             if (($ftcount > 0) && ($ftcount % 3 == 0)) {
                 $retval .= '</tr>' . LB . '<tr>';
             }
@@ -421,7 +396,7 @@ function printrights ($grp_id = '', $core = 0)
                     . $A['ft_name'] . '</span></td>';
         } else {
             // either this is an indirect right OR this is a core feature
-            if ((($core == 1) AND (isset($grpftarray[$A['ft_name']]) AND (($grpftarray[$A['ft_name']] == 'indirect') OR ($grpftarray[$A['ft_name']] == 'direct')))) OR ($core != 1)) {
+            if ((($core == 1) AND (isset($grpftarray[$A['ft_name']]) AND (($grpftarray[$A['ft_name']] == 'indirect') OR ($grpftarray[$A['ft_name']] == 'direct')))) OR ($core != 2)) {
                 if (($ftcount > 0) && ($ftcount % 3 == 0)) {
                     $retval .= '</tr>' . LB . '<tr>';
                 }
