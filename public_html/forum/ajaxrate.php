@@ -32,16 +32,14 @@
 require_once '../lib-common.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
-$vid  = intval(COM_applyFilter($_GET['vid'],true));
-$pid  = intval(COM_applyFilter($_GET['pid'],true));
-$tid  = intval(COM_applyFilter($_GET['tid'],true));
-$vote = intval(COM_applyFilter($_GET['vote'],true));
-$mode = intval(COM_applyFilter($_GET['mode'],true));
+$vid  = isset($_GET['vid']) ? intval(COM_applyFilter($_GET['vid'],true)) : 0;
+$pid  = isset($_GET['pid']) ? intval(COM_applyFilter($_GET['pid'],true)) : 0;
+$tid  = isset($_GET['tid']) ? intval(COM_applyFilter($_GET['tid'],true)) : 0;
+$vote = isset($_GET['vote']) ? intval(COM_applyFilter($_GET['vote'],true)) : 0;
+$mode = isset($_GET['mode']) ? intval(COM_applyFilter($_GET['mode'],true)) : 0;
 
-if ($_USER['uid'] > 1 AND $_USER['uid'] == $vid && $pid >= 1) {
-//    COM_errorLog("AJAXRATE: vid=".$vid." pid=".$pid." tid=".$tid." vote=".$vote." mode=".$mode);
+if (!COM_isAnonUser() && $_USER['uid'] == $vid && $pid >= 1) {
     if ( $mode == 1 ) {
-    	$poster_uid = COM_applyFilter($_POST['poster_uid']);
     	if ($_USER['uid'] == $pid) {
     		exit;
     	}

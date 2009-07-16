@@ -53,6 +53,8 @@ require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 $retval = '';
 $forumfiles = array();
 
+$subject = '';
+
 gf_siteHeader();
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
@@ -146,9 +148,9 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
             // If user has moderator edit rights only
             $locked = 0;
             $sticky = 0;
-            if ($_POST['modedit'] == 1) {
-                if ($_POST['locked_switch'] == 1)  $locked = 1;
-                if ($_POST['sticky_switch'] == 1)  $sticky = 1;
+            if (isset($_POST['modedit']) && $_POST['modedit'] == 1) {
+                if (isset($_POST['locked_switch']) && $_POST['locked_switch'] == 1)  $locked = 1;
+                if (isset($_POST['sticky_switch']) && $_POST['sticky_switch'] == 1)  $sticky = 1;
             }
             $sql = "UPDATE {$_TABLES['gf_topic']} SET subject='$subject',comment='$comment',postmode='$postmode', ";
             $sql .= "mood='".addslashes($mood)."', sticky='$sticky', locked='$locked' WHERE (id='".addslashes($editid)."')";
@@ -486,9 +488,15 @@ $numAttachments = 0;
 
 if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']) {
     $previewitem = array();
+    $previewitem['forum'] = $forum;
+    $previewitem['pid']     = COM_applyFilter($_POST['editpid'],true);
+    $previewitem['id']      = COM_applyFilter($_POST['id'],true);
+    $previewitem['locked']  = 0;
+    $previewitem['views']   = 0;
     if ($method == 'edit') {
         $previewitem['uid']  = $edittopic['uid'];
         $previewitem['name'] = $edittopic['name'];
+
         /* Check for any uploaded files */
         $editpost = COM_applyfilter($_POST['id'],true);
         $previewitem['id'] = $editpost;
@@ -497,7 +505,8 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
 
     } else {
         if ($uid > 1) {
-            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes($_POST['aname']))));
+//            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes($_POST['aname']))));
+            $previewitem['name'] = $_USER['username'];
             $previewitem['uid'] = $_USER['uid'];
         } else {
             $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes(urldecode($_POST['aname'])))));
@@ -540,6 +549,7 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
     echo '<br' . XHTML . '>';
 
     // If Moderator and editing the parent topic - see if form has skicky or locked checkbox on
+    $editmoderator = FALSE;
     if ($editmoderator AND $editpid == 0) {
         if($method == 'edit') {
             if($_POST['locked_switch'] == 1 ) {
@@ -979,7 +989,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             $comment = str_replace( '</pre>', '[/code]', $comment );
         }
         $edit_prompt = $LANG_GF02['msg190'] . '<br' . XHTML . '><input type="checkbox" name="silentedit" ';
-        if ($_POST['silentedit'] == 1 OR ( !isset($_POST['modedit']) AND $CONF_FORUM['silent_edit_default'])) {
+        if ((isset($_POST['silentedit']) && $_POST['silentedit'] == 1) OR ( !isset($_POST['modedit']) AND $CONF_FORUM['silent_edit_default'])) {
              $edit_prompt .= 'checked="checked" ';
         }
         $edit_prompt .= 'value="1"' . XHTML . '>';
@@ -1050,7 +1060,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     if($method == 'edit') {
         if($CONF_FORUM['allow_smilies']) {
-            if (function_exists(msg_restoreEmoticons) AND $CONF_FORUM['use_smilies_plugin']) {
+            if (function_exists('msg_restoreEmoticons') AND $CONF_FORUM['use_smilies_plugin']) {
                 $comment = msg_restoreEmoticons($comment);
             } else {
                 $comment = forum_xchsmilies($comment,true);

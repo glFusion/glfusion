@@ -112,8 +112,8 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
 
     echo gf_siteHeader($LANG_GF02['new_posts']);
 
-    if ( $CONF_FORUM['enable_user_rating_system'] ) {
-        $rating = intval(DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($showtopic['uid'])));
+    if ( $CONF_FORUM['enable_user_rating_system'] && !COM_isAnonUser() ) {
+        $rating = intval(DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($_USER['uid'])));
     }
 
     USES_lib_admin();
@@ -180,7 +180,7 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
                 $lastdate = @iconv('ISO-8859-1','UTF-8',$lastdate);
             }
 
-            if ($p['uid'] > 1) {
+            if ($P['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($P['uid']) . ', ';
             } else {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} {$P['name']},";
@@ -324,9 +324,9 @@ if ($op == 'search') {
         $csscode = 1;
         for ($i = 1; $i <= $nrows; $i++) {
             $P = DB_fetchArray($result);
-            $fres = DB_query("SELECT grp_id,view_rating FROM {$_TABLES['gf_forums']} WHERE forum_id={$P['forum']}");
+            $fres = DB_query("SELECT grp_id,rating_view FROM {$_TABLES['gf_forums']} WHERE forum_id={$P['forum']}");
             list($forumgrpid,$view_rating) = DB_fetchArray($fres);
-//            $forumgrpid = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='{$P['forum']}'");
+
             $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$forumgrpid'");
             if (SEC_inGroup($groupname)) {
                 if ( $CONF_FORUM['enable_user_rating_system'] && !COM_isAnonUser() ) {
@@ -613,6 +613,7 @@ if ($op == 'lastx') {
 }
 
 if ($op == 'subscribe') {
+    echo gf_siteHeader();
     if ($forum != 0) {
         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('$forum','0','{$_USER['uid']}', now() )");
         // Delete all individual topic notification records
@@ -1066,21 +1067,23 @@ if ($forum > 0) {
 
         if ($record['last_reply_rec'] > 0) {
             $lastreplysql = DB_query("SELECT topic.*,att.filename FROM {$_TABLES['gf_topic']} topic LEFT JOIN {$_TABLES['gf_attachments']} att ON topic.id=att.topic_id WHERE topic.id={$record['last_reply_rec']}");
-            $lastreply = DB_fetchArray($lastreplysql);
-            $lastreply['subject'] = COM_truncate($record['subject'],$CONF_FORUM['show_subject_length'],'...');
+            if ( DB_numRows($lastreplysql) > 0 ) {
+                $lastreply = DB_fetchArray($lastreplysql);
+                $lastreply['subject'] = COM_truncate($record['subject'],$CONF_FORUM['show_subject_length'],'...');
 
-            if ($CONF_FORUM['use_censor']) {
-                $lastreply['subject'] = COM_checkWords($lastreply['subject']);
-            }
-            $lastdate1 = strftime('%m/%d/%Y', $lastreply['date']);
-            if ($lastdate1 == date('m/d/Y')) {
-                $lasttime = strftime('%H:%M&nbsp;%p', $lastreply['date']);
-                $lastdate = $LANG_GF01['TODAY'] . $lasttime;
-            } elseif ($CONF_FORUM['use_userdate_format']) {
-                $lastdate = COM_getUserDateTimeFormat($lastreply['date']);
-                $lastdate = $lastdate[0];
-            } else {
-                $lastdate = strftime('%b/%d/%y %I:%M&nbsp;%p',$lastreply['date']);
+                if ($CONF_FORUM['use_censor']) {
+                    $lastreply['subject'] = COM_checkWords($lastreply['subject']);
+                }
+                $lastdate1 = strftime('%m/%d/%Y', $lastreply['date']);
+                if ($lastdate1 == date('m/d/Y')) {
+                    $lasttime = strftime('%H:%M&nbsp;%p', $lastreply['date']);
+                    $lastdate = $LANG_GF01['TODAY'] . $lasttime;
+                } elseif ($CONF_FORUM['allow_user_dateformat']) {
+                    $lastdate = COM_getUserDateTimeFormat($lastreply['date']);
+                    $lastdate = $lastdate[0];
+                } else {
+                    $lastdate = strftime('%b/%d/%y %I:%M&nbsp;%p',$lastreply['date']);
+                }
             }
         } else {
             $lastdate = strftime('%b/%d/%y %I:%M&nbsp;%p',$record['lastupdated']);
