@@ -13,7 +13,7 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
 // |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
@@ -59,74 +59,6 @@ if (!SEC_hasRights('user.edit')) {
     exit;
 }
 
-/**
-* Display a list of checkboxes for the user's group assignments
-*
-* @param    string  $table      DB Table to pull data from
-* @param    string  $selection  Comma delimited list of fields to pull from table
-* @param    string  $where      Where clause of SQL statement
-* @param    string  $selected   Value to set to CHECKED
-* @return   string              HTML with Checkbox code
-* @see function COM_checkList
-*
-*/
-function GROUP_checkList($table, $selection, $where='', $selected='', $orderby='')
-{
-    global $_TABLES, $LANG_ACCESS;
-
-    $retval = '';
-
-    $sql = "SELECT $selection FROM $table";
-    if (!empty($where)) {
-        $sql .= " WHERE $where";
-    }
-    if (!empty($orderby)) {
-        $sql .= " ORDER BY $orderby";
-    }
-    $result = DB_query($sql);
-    $nrows = DB_numRows($result);
-
-    if (empty($selected)) {
-        $S = array();
-    } else {
-        $S = explode(' ', $selected);
-    }
-    $num_selected = count($S);
-
-    for ($i = 0; $i < $nrows; $i++) {
-        $A = DB_fetchArray($result, true);
-
-        $readonly = false;
-        $input = '<input type="checkbox"';
-
-        for ($x = 0; $x < $num_selected; $x++) {
-            if ($A[0] == $S[$x]) {
-                $input .= ' checked="checked"';
-
-                if (($A[1] == 'All Users') || ($A[1] == 'Logged-in Users')) {
-                    $readonly = true;
-                }
-            }
-        }
-        if ($A[1] == 'Remote Users') {
-            $readonly = true;
-        }
-
-        if ($readonly) {
-            $input .= ' disabled="disabled"' . XHTML . '>'
-                   . '<input type="hidden" name="' . $table . '[]" value="'
-                   . $A[0] . '" checked="checked"' . XHTML . '>';
-            $retval .= '<span title="' . $LANG_ACCESS['readonly'] . '">'
-                    . $input . stripslashes($A[1]) . '</span><br' . XHTML . '>' . LB;
-        } else {
-            $input .= ' name="' . $table . '[]" value="' . $A[0] . '"';
-            $retval .= $input . XHTML . '>' . stripslashes($A[1])
-                    . '<br' . XHTML . '>' . LB;
-        }
-    }
-
-    return $retval;
-}
 
 /**
 * Shows the user edit form
@@ -140,6 +72,8 @@ function edituser($uid = '', $msg = '')
 {
     global $_CONF, $_TABLES, $_USER, $LANG28, $LANG_ACCESS, $LANG_ADMIN,
            $MESSAGE;
+
+    USES_lib_admin();
 
     $retval = '';
     $newuser = 0;
@@ -349,9 +283,37 @@ function edituser($uid = '', $msg = '')
             $thisUsersGroups[] = $remoteGroup;
         }
         $where = 'grp_id IN (' . implode (',', $thisUsersGroups) . ')';
-        $user_templates->set_var ('group_options',
-                GROUP_checkList ($_TABLES['groups'], 'grp_id,grp_name',
-                                 $where, $selected, 'grp_name'));
+
+        $header_arr = array(
+                        array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false),
+                        array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
+                        array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
+        );
+        $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
+
+        $form_url = $_CONF['site_admin_url']
+                  . '/user.php?mode=edit&amp;uid=' . $uid;
+        $text_arr = array('has_menu' => false,
+                          'title' => '', 'instructions' => '',
+                          'icon' => '', 'form_url' => $form_url,
+                          'inline' => true
+        );
+
+        $sql = "SELECT grp_id, grp_name, grp_descr FROM {$_TABLES['groups']} WHERE " . $where;
+        $query_arr = array('table' => 'groups',
+                           'sql' => $sql,
+                           'query_fields' => array('grp_name'),
+                           'default_filter' => '',
+                           'query' => '',
+                           'query_limit' => 0
+        );
+
+        $groupoptions = ADMIN_list('usergroups',
+                                   'ADMIN_getListField_usergroups',
+                                   $header_arr, $text_arr, $query_arr,
+                                   $defsort_arr, '', explode(' ', $selected));
+        $user_templates->set_var('group_options', $groupoptions);
+
         $user_templates->parse('group_edit', 'groupedit', true);
     } else {
         // user doesn't have the rights to edit a user's groups so set to -1
@@ -480,12 +442,23 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
         return edituser ($uid, 67);
     }
 
-    if (!empty ($username) && !empty ($email)) {
-
-        if (!COM_isEmail ($email)) {
-            return edituser ($uid, 52);
+    $validEmail = true;
+    if (empty($username)) {
+        $validEmail = false;
+    } elseif (empty($email)) {
+        if (empty($uid)) {
+            $validEmail = false;
+        } else {
+            $ws_user = DB_getItem($_TABLES['users'], 'remoteservice',"uid = ".intval($uid));
+            if (empty($ws_user)) {
+                $validEmail = false;
+            }
         }
-
+    }
+    if ( $validEmail ) {
+        if (!empty($email) && !COM_isEmail($email)) {
+           return edituser ($uid, 52);
+        }
         $uname = addslashes ($username);
         if (empty ($uid)) {
             $ucount = DB_getItem ($_TABLES['users'], 'COUNT(*)',
@@ -1229,7 +1202,7 @@ if (isset ($_POST['passwd']) && isset ($_POST['passwd_conf']) &&
             trim(COM_stripslashes($_POST['passwd'])), trim(COM_stripslashes($_POST['passwd_conf'])),
             trim(COM_stripslashes($_POST['email'])),
             $_POST['regdate'], COM_stripSlashes($_POST['homepage']),
-            $_POST[$_TABLES['groups']],
+            $_POST['groups'],
             $delphoto, $_POST['userstatus'], $_POST['oldstatus']);
     if (!empty($display)) {
         $tmp = COM_siteHeader('menu', $LANG28[22]);
