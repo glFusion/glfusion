@@ -1,0 +1,31 @@
+<form method="post" action="{form_action}">
+<input type="hidden" name="mode" value="{mode}" />
+<table style="width:100%;border:none;padding:5px;" cellspacing="5" cellpadding="5">
+<tr>
+  <td style="text-align:right;">PHPBB3 Database Server</td>
+  <td><input type="text" name="phpbb3dbserver" value="" /></td>
+</tr>
+<tr>
+  <td style="text-align:right;">PHPBB3 Database User</td>
+  <td><input type="text" name="phpbb3dbuser" value="" /></td>
+</tr>
+<tr>
+  <td style="text-align:right;">PHPBB3 Database Password</td>
+  <td><input type="password" name="phpbb3dbpass" value="" /></td>
+</tr>
+<tr>
+  <td style="text-align:right;">PHPBB3 Database Name</td>
+  <td><input type="text" name="phpbb3dbname" value="" /></td>
+</tr>
+<tr>
+  <td style="text-align:right;">PHPBB3 Database Prefix</td>
+  <td><input type="text" name="phpbb3dbprefix" value="" /></td>
+</tr>
+</table>
+<br />
+<center>
+<input type="submit" value="Submit" name="submit" />
+<input type="submit" value="Cancel" name="mode" />
+</center>
+<br />
+</form>
