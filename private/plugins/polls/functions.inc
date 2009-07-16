@@ -105,6 +105,14 @@ function plugin_commentsupport_polls()
     return true;
 }
 
+function plugin_getcommenturlid_polls( ) {
+    global $_CONF;
+    $retval = array();
+    $retval[] = $_CONF['site_url'] . '/polls/index.php';
+    $retval[] = 'pid';
+    return $retval;
+}
+
 /**
  * Poll saves a comment
  *
@@ -619,12 +627,25 @@ function POLLS_pollVote($pid, $showall=true)
                         $P['perm_owner'], $P['perm_group'], $P['perm_members'],
                         $P['perm_anon']) == 3 ? true : false);
 
-                    require_once $_CONF['path_system'] . 'lib-comment.php';
+                    USES_lib_comments();
 
-                    $order = '';
-                    $mode  = '';
+                    $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+                    if ( isset($_POST['order']) ) {
+                        $order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+                    } elseif (isset($_GET['order']) ) {
+                        $order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+                    } else {
+                        $order = 'DESC';
+                    }
+                    if ( isset($_POST['mode']) ) {
+                        $mode = COM_applyFilter($_POST['mode']);
+                    } elseif ( isset($_GET['mode']) ) {
+                        $mode = COM_applyFilter($_GET['mode']);
+                    } else {
+                        $mode = '';
+                    }
                     $retval .= CMT_userComments($pid, $P['topic'], 'polls',
-                                                $order, $mode, 0, 1, false,
+                                                $order, $mode, 0, $page, false,
                                                 $delete_option, $P['commentcode']);
                 }
             }
@@ -920,9 +941,26 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
                     SEC_hasAccess($P['owner_id'], $P['group_id'],
                     $P['perm_owner'], $P['perm_group'], $P['perm_members'],
                     $P['perm_anon']) == 3 ? true : false);
-                require_once $_CONF['path_system'] . 'lib-comment.php';
+
+                USES_lib_comments();
+
+                $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+                if ( isset($_POST['order']) ) {
+                    $order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+                } elseif (isset($_GET['order']) ) {
+                    $order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+                } else {
+                    $order = 'DESC';
+                }
+                if ( isset($_POST['mode']) ) {
+                    $mode = COM_applyFilter($_POST['mode']);
+                } elseif ( isset($_GET['mode']) ) {
+                    $mode = COM_applyFilter($_GET['mode']);
+                } else {
+                    $mode = '';
+                }
                 $retval .= CMT_userComments($pid, $P['topic'], 'polls',
-                                            $order, $mode, 0, 1, false,
+                                            $order, $mode, 0, $page, false,
                                             $delete_option, $P['commentcode']);
             }
         }
