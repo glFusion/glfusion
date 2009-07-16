@@ -7714,4 +7714,8 @@ function js_cacheok($cache,$files){
 }
 css_out();
 js_out();
+
+if ( function_exists('CUSTOM_splashpage') ) {
+    CUSTOM_splashpage();
+}
 ?>
