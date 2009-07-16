@@ -48,9 +48,10 @@ include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 //$myts =& MyTextSanitizer::getInstance(); // MyTextSanitizer object
 $myts = new MyTextSanitizer;
 
-if($_POST['submit']) {
+if ( isset($_POST['submit']) ) {
+// if($_POST['submit']) {
     $eh = new ErrorHandler; //ErrorHandler object
-    if(!FilemgmtUser){
+    if(!$FilemgmtUser){
         $ratinguser = 0;
     }else{
         $ratinguser = $uid;
@@ -101,7 +102,7 @@ if($_POST['submit']) {
     DB_query("INSERT INTO {$_FM_TABLES['filemgmt_votedata']} (lid, ratinguser, rating, ratinghostname, ratingtimestamp) VALUES ('".addslashes($lid)."', '".intval($ratinguser)."', '".intval($rating)."', '".addslashes($ip)."', '$datetime')");
     //All is well.  Calculate Score & Add to Summary (for quick retrieval & sorting) to DB.
     updaterating($lid);
-    $ratemessage = _MD_VOTEAPPRE."<br" . XHTML . ">".sprintf(_MD_THANKYOU,$_CONF[site_name]);
+    $ratemessage = _MD_VOTEAPPRE."<br" . XHTML . ">".sprintf(_MD_THANKYOU,$_CONF['site_name']);
     redirect_header("index.php",4,$ratemessage);
     exit();
 

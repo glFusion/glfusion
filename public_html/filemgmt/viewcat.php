@@ -185,7 +185,6 @@ if($maxrows > 0) {
         $homepage = $myts->makeTboxData4Show($homepage);
         $version = $myts->makeTboxData4Show($version);
         $size = $myts->makeTboxData4Show($size);
-        $platform = $myts->makeTboxData4Show($platform);
         $logourl = $myts->makeTboxData4Show($logourl);
         $datetime = formatTimestamp($time);
         $description = PLG_replaceTags($myts->makeTareaData4Show($description,0)); //no html
