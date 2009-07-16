@@ -462,7 +462,7 @@ if ( $nRows > 0 ) {
                 $playback_options[$poRow['option_name']] = $poRow['option_value'];
             }
 
-            if ( $row['resolution_x'] > 0 ) {
+            if ( isset($row['resolution_x']) && $row['resolution_x'] > 0 ) {
                 $resolution_x = $row['resolution_x'];
                 $resolution_y = $row['resolution_y'];
             } else {
