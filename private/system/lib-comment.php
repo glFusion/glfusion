@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -40,10 +43,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-if( $_CONF['allow_user_photo'] )
-{
+if( $_CONF['allow_user_photo'] ) {
     // only needed for the USER_getPhoto function
-    require_once $_CONF['path_system'] . 'lib-user.php';
+    USES_lib_user();
 }
 
 /**
@@ -313,7 +315,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         if( $A['uid'] > 1 ) {
             $fullname = COM_getDisplayName( $A['uid'], $A['username'],
-                                            $A['fullname'] );
+                                            isset($A['fullname']) ? $A['fullname'] : '' );
             $template->set_var( 'author_fullname', $fullname );
             $template->set_var( 'author', $fullname );
             $alttext = $fullname;
@@ -401,15 +403,19 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->set_var( 'type', $A['type'] );
 
         //COMMENT edit rights
-        if ( $_USER['uid'] == $A['uid'] && $_CONF['comment_edit'] == 1
-                && (time() - $A['nice_date']) < $_CONF['comment_edittime'] &&
-                DB_getItem($_TABLES['comments'], 'COUNT(*)', "pid = ".intval($A['cid'])) == 0) {
-            $edit_option = true;
-            if ( empty($token)) {
-                $token = SEC_createToken();
+        if ( !COM_isAnonUser() ) {
+            if ( $_USER['uid'] == $A['uid'] && $_CONF['comment_edit'] == 1
+                    && (time() - $A['nice_date']) < $_CONF['comment_edittime'] &&
+                    DB_getItem($_TABLES['comments'], 'COUNT(*)', "pid = ".intval($A['cid'])) == 0) {
+                $edit_option = true;
+                if ( empty($token)) {
+                    $token = SEC_createToken();
+                }
+            } else if ( SEC_hasRights( 'comment.moderate' )) {
+                $edit_option = true;
+            } else {
+                $edit_option = false;
             }
-        } else if ( SEC_hasRights( 'comment.moderate' )) {
-            $edit_option = true;
         } else {
             $edit_option = false;
         }
@@ -420,6 +426,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
                 . '&amp;' . CSRF_TOKEN . '=' . $token;
             $edit = COM_createLink( $LANG01[4], $editlink) . ' | ';
+        } else {
+            $editlink = '';
+            $edit = '';
         }
 
         // If deletion is allowed, displays delete link
@@ -537,6 +546,8 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 {
     global $_CONF, $_TABLES, $_USER, $LANG01;
 
+    $retval = '';
+
     if( !empty( $_USER['uid'] ) ) {
         $result = DB_query( "SELECT commentorder,commentmode,commentlimit FROM {$_TABLES['usercomment']} WHERE uid = {$_USER['uid']}" );
         $U = DB_fetchArray( $result );
@@ -551,6 +562,11 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
     if( $order != 'ASC' && $order != 'DESC' ) {
         $order = 'ASC';
+    }
+
+    $validmodes = array('flat','nested','nocomment','threaded');
+    if ( !in_array($mode,$validmodes) ) {
+        $mode = $_CONF['comment_mode'];
     }
 
     if( empty( $mode )) {
@@ -671,9 +687,22 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
         // Pagination
         $tot_pages =  ceil( $count / $limit );
-        $pLink = $_CONF['site_url'] . "/article.php?story=$sid&amp;type=$type&amp;order=$order&amp;mode=$mode";
+
+        if( $type == 'article' ) {
+            $pLink = $_CONF['site_url'] . "/article.php?story=$sid&amp;type=$type&amp;order=$order&amp;mode=$mode";
+            $pageStr = 'page=';
+        } else { // plugin
+            // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
+            list($plgurl, $plgid,$plg_page_str) = PLG_getCommentUrlId($type);
+            $pLink = $plgurl.'?'.$plgid.'='.$sid."&amp;type=$type&amp;order=$order&amp;mode=$mode";
+            if ( $plg_page_str != '' ) {
+                $pageStr = $plg_page_str;
+            } else {
+                $pageStr = 'page=';
+            }
+        }
         $template->set_var( 'pagenav',
-                         COM_printPageNavigation($pLink, $page, $tot_pages));
+                         COM_printPageNavigation($pLink, $page, $tot_pages,$pageStr));
 
         $template->set_var( 'comments', $thecomments );
         $retval = $template->parse( 'output', 'commentarea' );
@@ -850,7 +879,11 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $comment_template = new Template($_CONF['path_layout'] . 'comment');
             if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
                 $comment_template->set_file('form','commentform_advanced.thtml');
-                $ae_uid = intval(COM_applyFilter($_USER['uid'],true));
+                if ( COM_isAnonUser() ) {
+                    $ae_uid = 1;
+                } else {
+                    $ae_uid = intval(COM_applyFilter($_USER['uid'],true));
+                }
                 $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
                 DB_Query($sql,1);
             } else {
@@ -1467,7 +1500,4 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
 
     return $comment;
 }
-
-
-
 ?>
