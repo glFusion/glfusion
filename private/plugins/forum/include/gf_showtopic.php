@@ -204,7 +204,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
 
     $showtopic['subject'] = COM_truncate($showtopic['subject'],$CONF_FORUM['show_subject_length'],'...');
 
-    if ($mode != 'preview' && $uservalid && ($_USER['uid'] > 1) && ($_USER['uid'] == $showtopic['uid'])) {
+    if ($mode != 'preview' && $uservalid && (!COM_isAnonUser()) && (isset($_USER['uid']) && $_USER['uid'] == $showtopic['uid'])) {
         /* Check if user can still edit this post - within allowed edit timeframe */
         $editAllowed = false;
         if ($CONF_FORUM['allowed_editwindow'] > 0) {
@@ -245,7 +245,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $topictemplate->set_var ('read_msg','');
     }
     // Bookmark feature
-    if ($_USER['uid'] > 1 ) {
+    if (!COM_isAnonUser() ) {
         if (DB_count($_TABLES['gf_bookmarks'],array('uid','topic_id'),array($_USER['uid'],intval($showtopic['id'])))) {
             $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""' . XHTML . '>');
         } else {
@@ -331,7 +331,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         }
         $backlink = '<center><a href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $replytopicid. '">' .$back2. '</a></center>';
     } else {
-        if ($_GET['onlytopic'] != 1) {
+        if (!isset($_GET['onlytopic']) || $_GET['onlytopic'] != 1) {
             $topictemplate->set_var ('posted_date', '');
             $topictemplate->set_var ('preview_topic_subject', $showtopic['subject']);
         } else {
@@ -363,7 +363,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $topictemplate->set_var('attachments',gf_showattachments($uniqueid));
     }
 
-    if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') ) {
+    if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
         $iplink = '<a href="' . $_CONF['site_url'] . '/nettools/whois.php?domain=' . $showtopic['ip'] . '">' . $showtopic['ip'] . '</a>';
         $topictemplate->set_var('ipaddress',$iplink);
     } else {

@@ -305,13 +305,13 @@ function forumNavbarMenu($current='') {
 
     $navmenu = new navbar;
     $navmenu->add_menuitem($LANG_GF01['INDEXPAGE'],"{$_CONF['site_url']}/forum/index.php");
-    if ($_USER['uid'] > 1) {
+    if ( !COM_isAnonUser() ) {
         $navmenu->add_menuitem($LANG_GF01['USERPREFS'],"{$_CONF['site_url']}/forum/userprefs.php");
         $navmenu->add_menuitem($LANG_GF01['SUBSCRIPTIONS'],"{$_CONF['site_url']}/forum/notify.php");
         $navmenu->add_menuitem($LANG_GF01['BOOKMARKS'],"{$_CONF['site_url']}/forum/index.php?op=bookmarks");
         $navmenu->add_menuitem($LANG_GF02['new_posts'],"{$_CONF['site_url']}/forum/index.php?op=newposts");
     }
-    if ( $CONF_FORUM['allow_memberlist'] && $_USER['uid'] > 1 ) {
+    if ( $CONF_FORUM['allow_memberlist'] && !COM_isAnonUser() ) {
         $navmenu->add_menuitem($LANG_GF02['msg88'],"{$_CONF['site_url']}/forum/memberlist.php");
     }
     $navmenu->add_menuitem($LANG_GF01['LASTX'],"{$_CONF['site_url']}/forum/index.php?op=lastx");
@@ -785,6 +785,7 @@ function gf_getImage($image,$directory='') {
         'top'               =>    'top.gif',
         'topic_markread'    =>    'topic_markread.png',
         'topic_viewnew'     =>    'topic_viewnew.png',
+        'viewnew'           =>    'topic_viewnew.png',
         'trash'             =>    'trash.gif',
         'viewallnew'        =>    'viewallnew.gif',
         'view_last_reply'   =>    'view_last_reply.gif',
@@ -1168,7 +1169,7 @@ function gf_makeFilemgmtCatSelect($uid) {
 function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
-    global $CONF_FORUM,$_SYSTEM;
+    global $CONF_FORUM,$_SYSTEM,$LANG_GF02;
 
     $retval = '';
 

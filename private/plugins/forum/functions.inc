@@ -1228,14 +1228,14 @@ function forum_modPermission($forum,$uid='',$permission='') {
     global $_USER,$_TABLES;
 
     if ($uid == '') {
-        $uid = $_USER['uid'];
+        $uid = 1;
     }
 
     if ($uid <=1) {
         return FALSE;  // Invalid ID or anonymous user
     }
 
-    if (($uid == $_USER['uid']) && (SEC_inGroup('Root') || SEC_hasRights('forum.edit'))) {
+    if ((isset($_USER['uid']) && $uid == $_USER['uid']) && (SEC_inGroup('Root') || SEC_hasRights('forum.edit'))) {
         return true;
     }
 
@@ -1273,13 +1273,19 @@ function forum_modPermission($forum,$uid='',$permission='') {
 function forum_canPost($forum) {
     global $_CONF, $CONF_FORUM,$_USER, $_TABLES;
 
+    if ( COM_isAnonUser() ) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+
     if ( $CONF_FORUM['registered_to_post'] && (!isset($_USER) || $_USER['uid'] < 2 )) {
         return false;
     }
     if (SEC_inGroup('Root') || SEC_hasRights('forum.edit')) {
         return true;
     }
-    if (forum_modPermission($forum['forum'],$_USER['uid'],'mod_edit')) {
+    if (forum_modPermission($forum['forum'],$uid,'mod_edit')) {
         return true;
     }
     if ( $forum['is_readonly'] ) {
