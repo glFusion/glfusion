@@ -953,7 +953,9 @@ $LANG28 = array(
     82 => "Your account on {$_CONF['site_name']} has not been accesssed since %s and will be disabled if not accessed in the 30 days.",
     83 => "Your account on {$_CONF['site_name']} has not been used since it was created and will deleted soon if not accessed.",
     84 => "Your login name is: %s  for our site: {$_CONF['site_url']}",
-    85 => 'If you have forgotten the password use the following link: %s'
+    85 => 'If you have forgotten the password use the following link: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1342,7 +1344,8 @@ $LANG_ACCESS = array(
     'group_id' => 'ID групи',
     'plugin_access_denied_msg' => 'Ви намагаєтесь незаконно отримати доступ до адміністрування модулів.  Зазначте, що всі подібні спроби записуються.',
     'groupexists' => 'Таке ім\'я групи вже існує',
-    'groupexistsmsg' => 'Уже існує група з таким ім\'ям. Імена груп повинні бути унікальними.'
+    'groupexistsmsg' => 'Уже існує група з таким ім\'ям. Імена груп повинні бути унікальними.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################

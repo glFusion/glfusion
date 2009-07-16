@@ -8,7 +8,7 @@
 # This is the Chinese Simplified (UTF-8) language set for glFusion 1.0
 #
 # Copyright (C) 2009 Albert Zhu
-#      wh AT ieee DOT org
+#      i AT cpro DOT me
 # sam AT stonemicro DOT com
 #
 # This program is free software; you can redistribute it and/or
@@ -177,7 +177,7 @@ $LANG01 = array(
     128 => '用OpenID 登入:',
     129 => '设定',
     130 => '网络服务',
-    500 => '请删除 admin/install/ 文件夹!',
+    500 => 'Please remove the admin/install/ directory!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
     503 => 'Maintenance Mode - Non-admin logins disabled',
@@ -953,7 +953,9 @@ $LANG28 = array(
     82 => "你的账户于 {$_CONF['site_name']} 自从 %s 就未曾运用，如果此账户在三十天内不再运用，它会变成无效。",
     83 => "你的账户于 {$_CONF['site_name']} 自从登记时就未曾运用。若不继续运用，它将变成无效。",
     84 => "你的用户名是: %s 我们的网站是: {$_CONF['site_url']}",
-    85 => '若你忘记你的密码请跟从这个连结: %s'
+    85 => '若你忘记你的密码请跟从这个连结: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1269,12 +1271,12 @@ $MESSAGE = array(
 # admin/logview.php
 
 $LANG_LOGVIEW = array(
-    'logview' => '查看日志',
-    'info' => 'glFusion日志文件管理',
-    'logs' => '日志',
-    'view' => '查看',
-    'clear' => '清空',
-    'log_file' => '日志文件'
+    'logview' => 'Logview',
+    'info' => 'glFusion Log file administration',
+    'logs' => 'Logs',
+    'view' => 'View Log File',
+    'clear' => 'Clear Log File',
+    'log_file' => 'Log File'
 );
 
 ###############################################################################
@@ -1342,7 +1344,8 @@ $LANG_ACCESS = array(
     'group_id' => '小组 ID',
     'plugin_access_denied_msg' => '你在非法的进入插件管理页.  请注意所有的非法登入都被登记.',
     'groupexists' => '小组名称已存在',
-    'groupexistsmsg' => '目前已有用此名的小组. 小组名称必须独特.'
+    'groupexistsmsg' => '目前已有用此名的小组. 小组名称必须独特.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################
@@ -1671,8 +1674,8 @@ $LANG_CONFIG = array(
     'reset_form' => '恢复表格原状',
     'changes_made' => '更改已成功地安置于',
     'title' => '设定管理',
-    'disable' => '点击关闭此功能',
-    'enable' => '激活此功能'
+    'disable' => 'Click to disable this option',
+    'enable' => 'Enable'
 );
 
 $LANG_configsections['Core'] = array(
@@ -1962,7 +1965,7 @@ $LANG_fs['Core'] = array(
     'fs_perm_topic' => '主题默认许可设定',
     'fs_perm_block' => '组件默认许可设定',
     'fs_webservices' => 'Webservices',
-    'fs_caching' => '缓存'
+    'fs_caching' => 'Caching'
 );
 
 $LANG_configselects['Core'] = array(

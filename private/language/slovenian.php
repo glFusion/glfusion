@@ -952,7 +952,9 @@ $LANG28 = array(
     82 => "Vaš raèun na {$_CONF['site_name']} ni bil uporabljen od %s in bo onemogoèen, èe ga ne uporabite v 30 dneh.",
     83 => "Vaš raèun na {$_CONF['site_name']} ni bil uporabljen odkar je bil ustvarjen in bo pobrisak kmalu, èe ga ne uporabite.",
     84 => "Vaše uporabniško ime je: %s  za internetno stran: {$_CONF['site_url']}",
-    85 => 'èe ste pozabili geslo, uporabite tole povezavo: %s'
+    85 => 'èe ste pozabili geslo, uporabite tole povezavo: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1341,7 +1343,8 @@ $LANG_ACCESS = array(
     'group_id' => 'ID skupine',
     'plugin_access_denied_msg' => 'Nedovoljeno poskušaš dostopiti do strani za skrbništvo vtiènikov. Vedi, da se vsi nedovoljeni poskusi dostopa do te strani beležijo.',
     'groupexists' => 'Ime skupine že obstaja',
-    'groupexistsmsg' => 'Skupina s tem imenom že obstaja. Imena skupin morajo biti razlièna.'
+    'groupexistsmsg' => 'Skupina s tem imenom že obstaja. Imena skupin morajo biti razlièna.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################

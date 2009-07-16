@@ -953,7 +953,9 @@ $LANG28 = array(
     82 => "Ihr Account auf der Seite {$_CONF['site_name']} wurde nicht benutzt seit %s und wird innerhalb  30 .",
     83 => "Ihr Account auf der Seite {$_CONF['site_name']} wurde seit der Einrichtung nicht benutzt \und wird gelöscht, wenn Sie nicht in Kürze einloggen.",
     84 => "Ihr Einlogname ist: %s  auf der Site: {$_CONF['site_url']}",
-    85 => 'Wenn Du das Passwort vergessen hast, benutze folgenden Link: %s'
+    85 => 'Wenn Du das Passwort vergessen hast, benutze folgenden Link: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1342,7 +1344,8 @@ $LANG_ACCESS = array(
     'group_id' => 'Gruppen-ID',
     'plugin_access_denied_msg' => 'Du versuchst ohne Berechtigung auf die Plugin-Verwaltungsseite zuzugreifen.  Bitte beachte, dass alle Versuche, ohne Berechtigung auf diese Seite zuzugreifen, aufgezeichnet werden.',
     'groupexists' => 'Gruppenname existiert schon',
-    'groupexistsmsg' => 'Es existiert bereits eine Gruppe mit diesem Namen. Gruppennamen müssen eindeutig sein.'
+    'groupexistsmsg' => 'Es existiert bereits eine Gruppe mit diesem Namen. Gruppennamen müssen eindeutig sein.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################

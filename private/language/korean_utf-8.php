@@ -950,7 +950,9 @@ $LANG28 = array(
     82 => "Your account on {$_CONF['site_name']} has not been accesssed since %s and will be disabled if not accessed in the 30 days.",
     83 => "Your account on {$_CONF['site_name']} has not been used since it was created and will deleted soon if not accessed.",
     84 => "Your login name is: %s  for our site: {$_CONF['site_url']}",
-    85 => 'If you have forgotten the password use the following link: %s'
+    85 => 'If you have forgotten the password use the following link: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1339,7 +1341,8 @@ $LANG_ACCESS = array(
     'group_id' => '그룹아이디ID',
     'plugin_access_denied_msg' => '이 플러그인의 관리권한이 없으므로 관리화면으로 접속하려고 합니다.  이 행위는 기록됩니다.',
     'groupexists' => '이 그룹 이름은 이미 존재합니다.',
-    'groupexistsmsg' => '같은 그룹이름이 있습니다.  그룹이름은 각각 다를 필요가 있습니다.'
+    'groupexistsmsg' => '같은 그룹이름이 있습니다.  그룹이름은 각각 다를 필요가 있습니다.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################

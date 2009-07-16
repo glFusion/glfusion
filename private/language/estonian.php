@@ -950,7 +950,9 @@ $LANG28 = array(
     82 => "Sinu kontot {$_CONF['site_name']}  lehel pole kasutatud %s alates ning see suletakse , kui seda ei kasutata ka järgmise 30 päeva jooksul.",
     83 => "Sinu kontot {$_CONF['site_name']} lehel pole selle tegemisest alates kasutatud ja see kustutatakse peatselt, kui seda kohe ei kasutata.",
     84 => "Meie lehel: {$_CONF['site_url']} on sinu kasutajanimi  : %s",
-    85 => 'Kui unustasid oma salasõna, kasuta järgmist linki: %s'
+    85 => 'Kui unustasid oma salasõna, kasuta järgmist linki: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1339,7 +1341,8 @@ $LANG_ACCESS = array(
     'group_id' => 'Grupi ID',
     'plugin_access_denied_msg' => 'Sa üritasid ligi pääseda pluginate administreerimislehele, milleks polnud sul õigust. Pane tähele, et kõik õigustamata katsed sellele lehele ligi pääseda logitakse.',
     'groupexists' => 'Grupi nimi on juba olemas',
-    'groupexistsmsg' => 'Sama nimega grupp on juba olemas. Grupi nimed peavad olema üksteisest erinevad.'
+    'groupexistsmsg' => 'Sama nimega grupp on juba olemas. Grupi nimed peavad olema üksteisest erinevad.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################
