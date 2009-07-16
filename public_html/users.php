@@ -1100,7 +1100,6 @@ case 'new':
     break;
 
 default:
-
     // prevent dictionary attacks on passwords
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
     if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
@@ -1122,6 +1121,7 @@ default:
     $uid = '';
     if (!empty($loginname) && !empty($passwd) && empty($service)) {
         if (empty($service) && $_CONF['user_login_method']['standard']) {
+            COM_updateSpeedlimit('login');
             $status = SEC_authenticate($loginname, $passwd, $uid);
         } else {
             $status = -1;
@@ -1130,6 +1130,7 @@ default:
     } elseif (( $_CONF['usersubmission'] == 0) && $_CONF['user_login_method']['3rdparty'] && ($service != '')) {
         /* Distributed Authentication */
         //pass $loginname by ref so we can change it ;-)
+        COM_updateSpeedlimit('login');
         $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
 
     } elseif ($_CONF['user_login_method']['openid'] &&
@@ -1282,9 +1283,6 @@ default:
             $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
         }
     } else {
-        // On failed login attempt, update speed limit
-        COM_updateSpeedlimit('login');
-
         $display .= COM_siteHeader('menu');
 
         if ( isset($_POST['msg']) ) {
