@@ -105,7 +105,7 @@ function processOldPlugin( $tmpDir )
         'form_action_url'    => $_CONF['site_admin_url'] .'/plugin_upload.php',
         'action'             => 'processoldupload',
         'pi_name'            => $pi_name,
-        'plugin_old_version' => $pluginVersion,
+        'plugin_old_version' => $P['pi_version'],
         'upgrade'            => $upgrade,
         'temp_dir'           => $tmpDir,
     ));
@@ -404,7 +404,7 @@ function processPluginUpload()
         $rc = COM_checkVersion($pluginData['version'],$P['pi_version']);
         if ( $rc < 1 ) {
             _pi_deleteDir($_CONF['path_data'].$tmp);
-            return _pi_errorBox(sprintf($LANG32[53],$pluginData['id'],$pluginData['version'],$pluginVersion));
+            return _pi_errorBox(sprintf($LANG32[53],$pluginData['id'],$pluginData['version'],$P['pi_version']));
         }
         if ( $P['pi_enabled'] != 1 ) {
             _pi_deleteDir($_CONF['path_data'].$tmp);
@@ -460,7 +460,7 @@ function processPluginUpload()
         'pi_gl_version'     => $pluginData['glfusionversion'],
         'pi_desc'           => $pluginData['description'],
         'pi_author'         => $pluginData['author'],
-        'plugin_old_version' => $pluginVersion,
+        'plugin_old_version' => $P['pi_version'],
         'upgrade'           => $upgrade,
         'temp_dir'          => $tmp,
     ));
