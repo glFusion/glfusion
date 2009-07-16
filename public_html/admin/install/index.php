@@ -1776,7 +1776,7 @@ function INST_doPluginUpgrade()
 
     $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
     foreach ($stdPlugins AS $pi_name) {
-        DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='1.1.4', pi_homepage='http://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
+        DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='".GVERSION."', pi_homepage='http://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
     }
 
     INST_clearCache();
