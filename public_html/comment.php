@@ -555,12 +555,13 @@ default:  // New Comment
             $title = str_replace ( '&lt;', '<', $title );
             $title = str_replace ( '&gt;', '>', $title );
         }
-            $noindex = '<meta name="robots" content="noindex"'.XHTML.'>'.LB;
-            $display .= COM_siteHeader('menu', $LANG03[1], $noindex)
-                 . CMT_commentForm ($title, '', $sid,
-                        COM_applyFilter ($_REQUEST['pid'], true), $type, $mode,
-                        $postmode)
-                 . COM_siteFooter();
+        $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
+        $noindex = '<meta name="robots" content="noindex"'.XHTML.'>'.LB;
+        $display .= COM_siteHeader('menu', $LANG03[1], $noindex)
+             . CMT_commentForm ($title, '', $sid,
+                    $pid, $type, $mode,
+                    $postmode)
+             . COM_siteFooter();
     } else {
         $display .= COM_refresh($_CONF['site_url'].'/index.php');
     }

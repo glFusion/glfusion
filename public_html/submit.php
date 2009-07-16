@@ -424,14 +424,14 @@ $type = '';
 // other parameters are in $_POST
 if (isset ($_POST['type'])) {
     $type = COM_applyFilter ($_POST['type']);
-} else {
+} elseif (isset($_GET['type']) ) {
     $type = COM_applyFilter ($_GET['type']);
 }
 
 $mode = '';
 if (isset ($_POST['mode'])) {
     $mode = COM_applyFilter ($_POST['mode']);
-} else {
+} elseif ( isset($_GET['mode']) )  {
     $mode = COM_applyFilter ($_GET['mode']);
 }
 

@@ -148,7 +148,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     $user_templates->set_var ('username', $username);
     $user_templates->set_var ('user_fullname', $fullname);
 
-    if (SEC_hasRights('user.edit') || $_USER['uid'] == $A['uid']) {
+    if (SEC_hasRights('user.edit') || (isset($_USER['uid']) && $_USER['uid'] == $A['uid'])) {
         global $_IMAGE_TYPE, $LANG_ADMIN;
 
         $edit_icon = '<img src="' . $_CONF['layout_url'] . '/images/edit.'
@@ -347,7 +347,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     if ( is_array($profileIcons) && count($profileIcons) > 0 ) {
 	    $user_templates->set_block('profile', 'profileicon', 'pi');
         for ($x=0;$x<count($profileIcons);$x++) {
-            if ( $profileIcons[$x]['url'] != '' && $profileIcons[$x]['icon'] != '' ) {
+            if ( isset($profileIcons[$x]['url']) && $profileIcons[$x]['url'] != '' && isset($profileIcons[$x]['icon']) && $profileIcons[$x]['icon'] != '' ) {
                 $user_templates->set_var('profile_icon_url',$profileIcons[$x]['url']);
                 $user_templates->set_var('profile_icon_icon',$profileIcons[$x]['icon']);
                 $user_templates->set_var('profile_icon_text',$profileIcons[$x]['text']);

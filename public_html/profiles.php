@@ -227,7 +227,11 @@ function contactform ($uid, $subject = '', $message = '')
 
             if (($_CONF['advanced_editor'] == 1)) {
                 $mail_template->set_file('form','contactuserform_advanced.thtml');
-                $ae_uid = intval(COM_applyFilter($_USER['uid'],true));
+                if ( isset($_USER['uid']) ) {
+                    $ae_uid = intval(COM_applyFilter($_USER['uid'],true));
+                } else {
+                    $ae_uid = 1;
+                }
                 $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
                 DB_Query($sql,1);
             } else {

@@ -267,7 +267,7 @@ if ($A['count'] > 0) {
                 $feedType = SYND_getMimeType($format);
                 $story_options[] = COM_createLink($feedTitle, $feedUrl,
                                                   array('type'  => $feedType,
-                                                        'class' => $feedClass));
+                                                        'class' => ''));
             }
         }
         $related = STORY_whatsRelated($story->displayElements('related'),
@@ -327,6 +327,8 @@ if ($A['count'] > 0) {
             require_once ( $_CONF['path_system'] . 'lib-comment.php' );
             if ( isset($_GET['mode']) ) {
                 $mode = COM_applyFilter($_GET['mode']);
+            } elseif ( isset($_POST['mode']) ) {
+                $mode = COM_applyFilter($_POST['mode']);
             } else {
                 $mode = '';
             }
