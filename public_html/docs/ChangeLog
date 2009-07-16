@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.5
 -------------------------
+- Fixed incorrect field type for SMTP host (Mark)
 - Updated FCKeditor to v2.6.4.1 (Mark)
 - Search dates were not properly validated prior to use (Mark)
 - Fixed several E_ALL errors (Mark)
