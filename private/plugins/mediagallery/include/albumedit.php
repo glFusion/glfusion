@@ -179,7 +179,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['media_count']       = 0;
         $A['full_display']      = $_MG_CONF['ad_full_display'];
         $A['playback_type']     = $_MG_CONF['ad_playback_type'];
-        $A['podcast']			= $_MG_CONF['ad_podcast'];
+        $A['podcast']			= isset($_MG_CONF['ad_podcast']) ? $_MG_CONF['ad_podcast'] : 0;
         $A['mp3ribbon']         = 0;
         $A['rsschildren']       = 0;
         $A['usealternate']      = isset($_MG_CONF['ad_use_alternate']) ? $_MG_CONF['ad_use_alternate'] : 0;

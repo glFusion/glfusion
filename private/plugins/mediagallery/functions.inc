@@ -160,6 +160,7 @@ function plugin_getcommenturlid_mediagallery( ) {
     $retval = array();
     $retval[] = $_MG_CONF['site_url'] . '/media.php';
     $retval[] = 's';
+    $retval[] = 'page=';
     return $retval;
 }
 
