@@ -126,6 +126,15 @@ function plugin_commentsupport_staticpages()
     return true;
 }
 
+function plugin_getcommenturlid_staticpages( ) {
+    global $_CONF;
+    $retval = array();
+    $retval[] = $_CONF['site_url'] . '/staticpages/index.php';
+    $retval[] = 'page';
+    $retval[] = 'cmtpage=';
+    return $retval;
+}
+
 /**
 * Plugin should display [a] comment[s]
 *
@@ -244,6 +253,8 @@ function plugin_deletecomment_staticpages($cid, $id)
 function plugin_whatsnewcomment_staticpages()
 {
     global $_CONF, $_TABLES, $_USER;
+
+    $commentrow = array();
 
     $stwhere = '';
     if( !COM_isAnonUser() ) {
@@ -375,9 +386,14 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             SEC_hasAccess($A['owner_id'], $A['group_id'],
             $A['perm_owner'], $A['perm_group'], $A['perm_members'],
             $A['perm_anon']) == 3 ? true : false);
+
+
         require_once $_CONF['path_system'] . 'lib-comment.php';
+
+        $cmt_page = isset($_GET['cmtpage']) ? COM_applyFilter($_GET['cmtpage'],true) : 0;
+
         $spage->set_var ('commentbar', CMT_userComments($page, $A['sp_title'], 'staticpages',
-                                    $comment_order, $comment_mode, 0, 1, false,
+                                    $comment_order, $comment_mode, 0, $cmt_page, false,
                                     $delete_option, $A['commentcode']));
     }
 
@@ -1069,10 +1085,8 @@ function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
                 "{$_CONF['site_admin_url']}/plugins/staticpages/index.php?mode=clone&amp;sp_id={$A['sp_id']}");
             break;
         case "delete" :
-            $icon_url = "{$_CONF['site_url']}/staticpages/images/delete.png";
-            $icon = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
-            $retval = '<a href="'.$_CONF['site_admin_url'].'/plugins/staticpages/index.php?mode='.$LANG_ADMIN['delete'].'&amp;sp_id='.$A['sp_id'].'&amp;'.CSRF_TOKEN.'='.SEC_createToken().'" onclick="return confirm(\''.$LANG_STATIC['delete_confirm'].'\');">';
-            $retval .= $icon.'</a>';
+            $retval = COM_createLink('<img src="'.$_CONF['site_url'].'/staticpages/images/delete.png" alt="Delete" />',
+                $_CONF['site_admin_url'].'/plugins/staticpages/index.php?mode='.$LANG_ADMIN['delete'].'&amp;sp_id='.$A['sp_id'].'&amp;'.CSRF_TOKEN.'='.SEC_createToken().'" onclick="return confirm(\''.$LANG_STATIC['delete_confirm'].'\');"');
             break;
         case "sp_title":
             $sp_title = $A['sp_title'];
