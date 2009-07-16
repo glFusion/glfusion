@@ -36,6 +36,4 @@ if (!defined ('GVERSION')) {
 
 $_SQL[] = "ALTER TABLE {$_TABLES['users']} CHANGE username username varchar (48) NOT NULL default ''";
 $_SQL[] = "ALTER TABLE {$_TABLES['topics']} CHANGE sortnum sortnum mediumint(8) default NULL";
-$_SQL[] = "ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_in_transit";
-$_SQL[] = "ALTER TABLE {$_TABLES['stories']} DROP COLUMN in_transit";
 ?>
