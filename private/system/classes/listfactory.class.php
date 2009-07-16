@@ -149,6 +149,7 @@ class ListFactory {
     var $_page_url = '';
     var $_style = 'table';
     var $_limits = array();
+    var $_total_found = 0;
 
     /**
      * Constructor
