@@ -38,7 +38,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.1.4');
+    define('GVERSION', '1.1.5');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -399,12 +399,15 @@ function INST_getPathSetting()
 
     $_GLFUSION['currentstep'] = 'pathsetting';
 
+/* --- Allow user to create an existing siteconfig.php with the necessary permissions
+
     if ( isset($_GLFUSION['method']) && $_GLFUSION['method'] == 'install' ) {
         // if it isn't there, ask again...
         if ( @file_exists('../../siteconfig.php') ) {
             return _displayError(SITECONFIG_EXISTS,'');
         }
     }
+------------ */
 
     $fusion_path    = strtr(__FILE__, '\\', '/'); // replace all '\' with '/'
     for ($i = 0; $i < 4; $i++) {
@@ -468,6 +471,8 @@ function INST_getPathSetting()
     $T->parse('output','page');
     return $T->finish($T->get_var('output'));
 }
+
+
 
 /*
  * Validate the dbconfig_path
@@ -567,6 +572,7 @@ function INST_gotPathSetting($dbc_path = '')
             if ( $rc !== true ) {
                 return _displayError(DBCONFIG_NOT_WRITABLE,'pathsetting');
             }
+            @chmod($dbconfig_path.'db-config.php',0777);
         } else {
             return _displayError(DBCONFIG_NOT_FOUND,'pathsetting');
         }
@@ -1279,6 +1285,7 @@ function INST_installAndContentPlugins()
             if ( $rc === false ) {
                 return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
             }
+            @chmod($_PATH['public_html'].'siteconfig.php',0777);
             if ( !@file_exists($_PATH['public_html'].'siteconfig.php') ) {
                 return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
             }
@@ -1548,15 +1555,106 @@ function INST_doSiteUpgrade()
     global $_GLFUSION, $_CONF,  $_TABLES, $_DB_dbms, $LANG_INSTALL;
 
     if ( $_GLFUSION['migrate'] == 1 ) {
-        // setup the environment to match glFusion 1.0.0
-        DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE `type` type varchar(30) NOT NULL default 'article'",1);
-        DB_query("UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'",1);
-        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.2' WHERE pi_name = 'calendar'",1);
-        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.0' WHERE pi_name = 'links'",1);
-        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1' WHERE pi_name = 'polls'",1);
-        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1' WHERE pi_name = 'spamx'",1);
-        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
-        DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.0.0', name='glfusion'",1);
+        $glVer = INST_identifyGeeklogVersion();
+        switch ($glVer) {
+            case '1.5.0' :
+            case '1.5.1' :
+            case '1.5.2' :
+            case '1.5.2sr1' :
+            case '1.5.2sr2' :
+            case '1.5.2sr3' :
+            case '1.5.2sr4' :
+                // setup the environment to match glFusion 1.0.0
+                DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE `type` type varchar(30) NOT NULL default 'article'",1);
+                DB_query("UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'",1);
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.2' WHERE pi_name = 'calendar'",1);
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.0' WHERE pi_name = 'links'",1);
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1' WHERE pi_name = 'polls'",1);
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1' WHERE pi_name = 'spamx'",1);
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
+                DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.0.0', name='glfusion'",1);
+                break;
+            case '1.6.0' :
+                // setup the environment to match glFusion 1.1.0
+                DB_delete($_TABLES['conf_values'], 'name', 'advanced_html');
+                DB_delete($_TABLES['conf_values'], 'name', 'mysqldump_filename_mask');
+                DB_delete($_TABLES['conf_values'], 'name', 'doctype');
+                DB_delete($_TABLES['conf_values'], 'name', 'commentsubmission');
+                DB_delete($_TABLES['conf_values'], 'name', 'allow_reply_notifications');
+                DB_delete($_TABLES['conf_values'], 'name', 'cookie_anon_name');
+                DB_delete($_TABLES['conf_values'], 'name', 'clickable_links');
+                DB_delete($_TABLES['conf_values'], 'name', 'compressed_output');
+                DB_delete($_TABLES['conf_values'], 'name', 'frame_options');
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.2' WHERE pi_name = 'calendar'",1);
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.0' WHERE pi_name = 'links'",1);
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1' WHERE pi_name = 'polls'",1);
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1' WHERE pi_name = 'spamx'",1);
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
+                DB_delete($_TABLES['plugins'],'pi_name', 'xmlsitemap');
+                // sync up with 1.1.0
+                $_SQLi = array();
+                $_SQLi[] = "ALTER TABLE {$_TABLES['blocks']} DROP INDEX blocks_bid";
+                $_SQLi[] = "ALTER TABLE {$_TABLES['events']} DROP INDEX events_eid";
+                $_SQLi[] = "ALTER TABLE {$_TABLES['group_assignments']} DROP INDEX ug_main_grp_id";
+                $_SQLi[] = "ALTER TABLE {$_TABLES['sessions']} DROP INDEX sess_id";
+                $_SQLi[] = "ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_sid";
+                $_SQLi[] = "ALTER TABLE {$_TABLES['userindex']} DROP INDEX userindex_uid";
+                $_SQLi[] = "ALTER TABLE {$_TABLES['polltopics']} DROP INDEX pollquestions_pid";
+                foreach ($_SQLi as $sqli) {
+                    DB_query($sqli,1);
+                }
+                $_SQLi = array();
+                require_once $_CONF['path_system'].'classes/config.class.php';
+                $c = config::get_instance();
+                $c->add('comment_code',0,'select',4,21,17,1670,TRUE);
+                $c->add('comment_edit',0,'select',4,21,0,1680,TRUE);
+                $c->add('comment_edittime',1800,'text',4,21,NULL,1690,TRUE);
+                $c->add('article_comment_close_days',30,'text',4,21,NULL,1700,TRUE);
+                $c->add('comment_close_rec_stories',0,'text',4,21,NULL,1710,TRUE);
+                $c->add('jhead_enabled',0,'select',5,22,0,1480,TRUE);
+                $c->add('path_to_jhead','','text',5,22,NULL,1490,TRUE);
+                $c->add('jpegtrans_enabled',0,'select',5,22,0,1500,TRUE);
+                $c->add('path_to_jpegtrans','','text',5,22,NULL,1510,TRUE);
+                $c->add('hide_adminmenu',TRUE,'select',3,12,1,1170,TRUE);
+                $c->add('fs_search', NULL, 'fieldset', 0, 6, NULL, 0, TRUE);
+                $c->add('search_style','google','select',0,6,18,650,TRUE);
+                $c->add('search_limits','10,15,25,30','text',0,6,NULL,660,TRUE);
+                $c->add('num_search_results',25,'text',0,6,NULL,670,TRUE);
+                $c->add('search_show_limit',TRUE,'select',0,6,1,680,TRUE);
+                $c->add('search_show_sort',TRUE,'select',0,6,1,690,TRUE);
+                $c->add('search_show_num',TRUE,'select',0,6,1,700,TRUE);
+                $c->add('search_show_type',TRUE,'select',0,6,1,710,TRUE);
+                $c->add('search_show_user',TRUE,'select',0,6,1,720,TRUE);
+                $c->add('search_show_hits',TRUE,'select',0,6,1,730,TRUE);
+                $c->add('search_no_data','<i>Not available...</i>','text',0,6,NULL,740,TRUE);
+                $c->add('search_separator',' &gt; ','text',0,6,NULL,750,TRUE);
+                $c->add('search_def_keytype','phrase','select',0,6,19,760,TRUE);
+                $c->add('default_search_order','date','select',0,6,22,770,TRUE);
+                $c->add('search_use_fulltext',FALSE,'hidden',0,6);
+                $c->add('mail_backend','mail','select',0,1,20,60,TRUE);
+                $c->add('mail_sendmail_path','','text',0,1,NULL,70,TRUE);
+                $c->add('mail_sendmail_args','','text',0,1,NULL,80,TRUE);
+                $c->add('mail_smtp_host','','text',0,1,NULL,90,TRUE);
+                $c->add('mail_smtp_port','','text',0,1,NULL,100,TRUE);
+                $c->add('mail_smtp_auth',FALSE,'select',0,1,0,110,TRUE);
+                $c->add('mail_smtp_username','','text',0,1,NULL,120,TRUE);
+                $c->add('mail_smtp_password','','text',0,1,NULL,130,TRUE);
+                $c->add('mail_smtp_secure','none','select',0,1,21,140,TRUE);
+                $c->add('compress_css',TRUE,'select',2,11,0,1370,TRUE);
+                $c->add('allow_embed_object',TRUE,'select',7,34,1,1720,TRUE);
+                $c->add('digg_enabled',1,'select',1,7,0,1235,TRUE);
+                // now delete the old setting - we don't want it anymore...
+                $c->del('mail_settings','Core');
+                $c->del('use_safe_html','Core');
+                $c->del('user_html','Core');
+                $c->del('admin_html','Core');
+                $c->del('allowed_protocols','Core');
+                DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.0',name='glfusion'",1);
+                DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.0' WHERE name='glfusion'",1);
+                $current_fusion_version = '1.1.0';
+                $_SQL = array();
+                break;
+        }
     }
 
     $version = INST_identifyglFusionVersion();
@@ -1696,7 +1794,7 @@ function INST_doPluginUpgrade()
 }
 
 /**
- * Migrates a Geeklog 1.5+ site to glFusion
+ * Migrates a Geeklog 1.4.1+ site to glFusion
  *
  * @return  string          HTML
  *
@@ -1708,7 +1806,7 @@ function INST_migrateGeeklog()
     // Do we have a valid Geeklog v1.5+ site:
 
     if ( !@file_exists('../../siteconfig.php') ) {
-        return _displayError(INVALID_GEEKLOG_VERSION,'');
+        return INST_getGeeklogConfigPath();         // assume a v1.4.1 site...
     }
     include '../../siteconfig.php';
 
@@ -1747,20 +1845,338 @@ function INST_migrateGeeklog()
         return _displayError(NO_MIGRATE_GLFUSION,'');
     }
 
-    // setup the environment to match glFusion 1.0.0
-
-    DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE type type varchar(30) NOT NULL default 'article'",1);
-    DB_query("UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'",1);
-
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.0.2' WHERE pi_name = 'calendar'",1);
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.0' WHERE pi_name = 'links'",1);
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '2.0.1' WHERE pi_name = 'polls'",1);
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1' WHERE pi_name = 'spamx'",1);
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
-
-    DB_query("REPLACE INTO {$_TABLES['vars']} SET value='1.0.0' WHERE name='glfusion'",1);
-
     return INST_checkEnvironment();
+}
+
+/**
+ * Retrieve path to private/ directory
+ *
+ * Prompt the user to enter (or verify) the path to the system
+ * private directory.
+ *
+ * @return  string          HTML form for path entry
+ *
+ */
+function INST_getGeeklogConfigPath()
+{
+    global $_GLFUSION, $LANG_INSTALL;
+
+    if ( ($rc = _checkSession() ) !== 0 ) {
+        return $rc;
+    }
+
+    $_GLFUSION['currentstep'] = 'geeklogpathsetting';
+
+    if ( isset($_GLFUSION['method']) && $_GLFUSION['method'] == 'install' ) {
+        // if it isn't there, ask again...
+        if ( @file_exists('../../siteconfig.php') ) {
+            return _displayError(SITECONFIG_EXISTS,'');
+        }
+    }
+
+    $fusion_path    = strtr(__FILE__, '\\', '/'); // replace all '\' with '/'
+    for ($i = 0; $i < 4; $i++) {
+        $remains = strrchr($fusion_path, '/');
+        if ($remains === false) {
+            break;
+        } else {
+            $fusion_path = substr($fusion_path, 0, -strlen($remains));
+        }
+    }
+
+    if (!preg_match('/^.*\/$/', $fusion_path)) {
+        $fusion_path .= '/';
+    }
+
+    $dbconfig_path = $fusion_path;
+
+    // check the session to see if we have already defined the path...
+    if ( isset($_GLFUSION['dbconfig_path']) ) {
+        $dbconfig_path = $_GLFUSION['dbconfig_path'];
+    }
+    $dbconfig_file  = 'db-config.php';
+
+    $htmlpath = INST_getHtmlPath();
+
+    $T = new TemplateLite('templates/');
+    $T->set_file('page', 'geeklogpathsetting.thtml');
+
+
+    if (@file_exists($dbconfig_path . $dbconfig_file) || @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file) || @file_exists($dbconfig_path.'private/'.$dbconfig_file)
+    || @file_exists($dbconfig_path . $dbconfig_file.'.dist') || @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file.'.dist') || @file_exists($dbconfig_path.'private/'.$dbconfig_file.'.dist')
+    ) {
+        if ( @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file)  || @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file.'.dist')) {
+            $dbconfig_path   = $dbconfig_path.'public_html/';
+        } else if ( @file_exists($dbconfig_path.'private/'.$dbconfig_file) || @file_exists($dbconfig_path.'private/'.$dbconfig_file.'.dist')) {
+            $dbconfig_path   = $dbconfig_path.'private/';
+        }
+        if ($dbconfig_path != '' ) {
+            // found it, set the session
+            $_GLFUSION['dbconfig_path'] = $dbconfig_path;
+        }
+    }
+    $T->set_var(array(
+        'dbconfig_path'     => $dbconfig_path,
+        'step_heading'      => $LANG_INSTALL['system_path'],
+        'lang_next'         => $LANG_INSTALL['next'],
+        'lang_prev'         => $LANG_INSTALL['previous'],
+        'lang_sys_path_help'=> sprintf($LANG_INSTALL['system_path_prompt'],$htmlpath),
+        'lang_path_prompt'  => $LANG_INSTALL['path_prompt'],
+        'hiddenfields'      => _buildHiddenFields(),
+    ));
+    $T->parse('output','page');
+    return $T->finish($T->get_var('output'));
+}
+
+/**
+ * Validate private/ directory path.
+ *
+ * Check to see if db-config.php or db-config.php.dist exist
+ * in the specified directory.
+ *
+ * @note   This will return _displayError() if files not found
+ *         or will call INST_checkEnvironment() to validate
+ *         directory and file permissions.
+ *
+ *         The only way to get to this function is when there is
+ *         no existing siteconfig.php - so we assume that this is
+ *         a Geeklog version < 1.5.0.
+ *
+ * @return  string          HTML
+ *
+ */
+function INST_gotGeeklogPathSetting($dbc_path = '')
+{
+    global $_GLFUSION, $_DB, $_CONF, $LANG_INSTALL;
+    global $_DB_host,$_DB_name,$_DB_user,$_DB_pass,$_DB_table_prefix, $_TABLES,$_DB_dbms;
+
+    if ( ($rc = _checkSession() ) !== 0 ) {
+        return $rc;
+    }
+
+    $_GLFUSION['currentstep'] = 'geeklogpathsetting';
+
+    // was it passed from the previous step, or via $_POST?
+    if ( $dbc_path == '' ) {
+        $dbconfig_path = INST_stripslashes($_POST['private_path']);
+    } else {
+        $dbconfig_path = $dbc_path;
+    }
+
+    // check to see if the path contains the actual filename?
+    if (!strstr($dbconfig_path, 'db-config.php')) {
+        // If the user did not provide a trailing '/' then add one
+        if (!preg_match('/^.*\/$/', $dbconfig_path)) {
+            $dbconfig_path .= '/';
+        }
+    } else {
+        $dbconfig_path = str_replace('db-config.php', '', $dbconfig_path);
+    }
+
+    // store entered path into the session var
+    $_GLFUSION['dbconfig_path'] = $dbconfig_path;
+
+    // first, check to see that the Geeklog config.php file exists
+
+    if (!@file_exists($dbconfig_path.'config.php' ) ) {
+        return _displayError(INVALID_GEEKLOG_VERSION,'');
+    }
+
+    // setup the db-config
+    if ( @file_exists($dbconfig_path.'db-config.php.dist') ) {
+        // found it, try to rename..
+        $rc = @copy($dbconfig_path.'db-config.php.dist',$dbconfig_path.'db-config.php');
+        if ( $rc !== true ) {
+            return _displayError(DBCONFIG_NOT_WRITABLE,'geeklogpathsetting');
+        }
+    } else {
+        return _displayError(DBCONFIG_NOT_FOUND,'geeklogpathsetting');
+    }
+
+    // if it isn't there, ask again...
+    if ( !@file_exists($dbconfig_path.'db-config.php') ) {
+        return _displayError(DBCONFIG_NOT_FOUND,'geeklogpathsetting');
+    }
+    // found it, but it is read-only...
+    if ( !INST_isWritable($dbconfig_path.'db-config.php') ) {
+        return _displayError(DBCONFIG_NOT_WRITABLE,'geeklogpathsetting');
+    }
+
+    // read the legacy geeklog config.php file and start the party!
+
+    require_once($dbconfig_path.'config.php');
+
+    $tmpPathHtml = $_CONF['path_html'];
+
+    // install the stock siteconfig.php file
+
+    if ( @file_exists($_CONF['path_html'].'siteconfig.php.dist') ) {
+        $rc = @copy($_CONF['path_html'].'siteconfig.php.dist',$_CONF['path_html'].'siteconfig.php');
+        if ( $rc === false ) {
+            return _displayError(SITECONFIG_NOT_WRITABLE,'geeklogpathsetting');
+        }
+        if ( !@file_exists($_CONF['path_html'].'siteconfig.php') ) {
+            return _displayError(SITECONFIG_NOT_WRITABLE,'geeklogpathsetting');
+        }
+    } else {
+        // no site config found return error
+        return _displayError(SITECONFIG_NOT_FOUND,'geeklogpathsetting');
+    }
+
+    // Edit siteconfig.php and enter the correct path and system directory path
+    $siteconfig_path = $_CONF['path_html'] . 'siteconfig.php';
+
+    $siteconfig_file = fopen($siteconfig_path, 'r');
+    if ( $siteconfig_file === false ) {
+        return _displayError(SITECONFIG_NOT_WRITABLE,'geeklogpathsetting');
+    }
+    $siteconfig_data = fread($siteconfig_file, filesize($siteconfig_path));
+    fclose($siteconfig_file);
+
+    $siteconfig_data = str_replace("\$_CONF['path'] = '/path/to/glfusion/';",
+                        "\$_CONF['path'] = '" . str_replace('db-config.php', '', $_CONF['path']) . "';",
+                        $siteconfig_data);
+
+    $siteconfig_data = preg_replace
+            (
+             '/\$_CONF\[\'default_charset\'\] = \'[^\']*\';/',
+             "\$_CONF['default_charset'] = '" . $_CONF['default_charset'] . "';",
+             $siteconfig_data
+            );
+
+    $siteconfig_file = fopen($siteconfig_path, 'w');
+    if (!fwrite($siteconfig_file, $siteconfig_data)) {
+        return _displayError(SITECONFIG_NOT_WRITABLE,'geeklogpathsetting');
+    }
+    fclose ($siteconfig_file);
+
+    $config_file = $dbconfig_path.'db-config.php';
+
+    $db = array('host' => $_DB_host,
+                'name' => $_DB_name,
+                'user' => $_DB_user,
+                'pass' => $_DB_pass,
+                'table_prefix' => $_DB_table_prefix,
+                'type' => 'mysql');
+
+    $dbconfig_file = fopen($config_file, 'r');
+    $dbconfig_data = fread($dbconfig_file, filesize($config_file));
+    fclose($dbconfig_file);
+
+    $dbconfig_data = str_replace("\$_DB_host = 'localhost';"   , "\$_DB_host = '" . $_DB_host . "';", $dbconfig_data); // Host
+    $dbconfig_data = str_replace("\$_DB_name = 'glfusion';"    , "\$_DB_name = '" . $_DB_name . "';", $dbconfig_data); // Database
+    $dbconfig_data = str_replace("\$_DB_user = 'username';"    , "\$_DB_user = '" . $_DB_user . "';", $dbconfig_data); // Username
+    $dbconfig_data = str_replace("\$_DB_pass = 'password';"    , "\$_DB_pass = '" . $_DB_pass . "';", $dbconfig_data); // Password
+    $dbconfig_data = str_replace("\$_DB_table_prefix = 'gl_';" , "\$_DB_table_prefix = '" . $_DB_table_prefix . "';", $dbconfig_data); // Table prefix
+
+    // Write changes to db-config.php
+    $dbconfig_file = fopen($config_file, 'w');
+    if (!fwrite($dbconfig_file, $dbconfig_data)) {
+        return _displayError(DBCONFIG_NOT_WRITABLE,'geeklogpathsetting');
+    }
+    fclose($dbconfig_file);
+
+    // let's do the DB and plugin upgrades, this will bring us to a v1.5.0 state
+    // then we can fall into the standard upgrade routines
+
+    require $siteconfig_path;
+    require $config_file; //db-config
+
+    require $_CONF['path_system'].'lib-database.php';
+
+    // validate we have a v1.4.1 site before we do any more...
+
+    $sql = "SELECT ft_name FROM {$_TABLES['features']} WHERE ft_name = 'syndication.edit'";
+    $result = DB_query($sql,1);
+    if ( DB_numRows($result) < 1 ) {
+        @unlink($siteconfig_path);
+        @unlink($config_file);
+        return _displayError(INVALID_GEEKLOG_VERSION,'');
+    }
+
+    require_once $_CONF['path'] . 'sql/updates/geeklog_mysql_1.4.1_to_1.5.0.php';
+    INST_updateDB($_SQL,false);
+
+    upgrade_addWebservicesFeature();
+
+    create_ConfValues();
+    require_once $_CONF['path_system'] . 'classes/config.class.php';
+    $config = config::get_instance();
+
+    if (file_exists($_CONF['path'] . 'config.php')) {
+        // Read the values from config.php and use them to populate conf_values
+
+        $tmp_path = $_CONF['path']; // We'll need this to remember what the correct path is.
+                                    // Including config.php will overwrite all our $_CONF values.
+        require $tmp_path . 'config.php';
+
+        // Load some important values from config.php into conf_values
+        foreach ($_CONF as $key => $val) {
+            $config->set($key, $val);
+        }
+        require $siteconfig_path;
+        require $config_file; //db-config
+    }
+
+    // Update the configuration with the correct paths.
+    $config->set('path_html', $tmpPathHtml);
+    $config->set('path_log', $_CONF['path'] . 'logs/');
+    $config->set('path_language', $_CONF['path'] . 'language/');
+    $config->set('backup_path', $_CONF['path'] . 'backups/');
+    $config->set('path_data', $_CONF['path'] . 'data/');
+    $config->set('path_images', $tmpPathHtml . 'images/');
+    $config->set('path_themes', $tmpPathHtml . 'layout/');
+    $config->set('rdf_file', $tmpPathHtml . 'backend/glfusion.rss');
+    $config->set('path_pear', $_CONF['path_system'] . 'pear/');
+
+    $_CONF['path_html'] = $tmpPathHtml;
+
+    $error = '';
+    $upgradeError = 0;
+    if (INST_pluginExists('calendar')) {
+        $check = upgrade_CalendarPlugin();
+        if (!$check) {
+            $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Calendar');
+            $upgradeError++;
+        }
+    }
+    if (INST_pluginExists('polls')) {
+        $check = upgrade_PollsPlugin();
+        if (!$check) {
+            $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Polls');
+            $upgradeError++;
+        }
+    }
+    if (INST_pluginExists('staticpages')) {
+        $check = upgrade_StaticpagesPlugin();
+        if (!$check) {
+            $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Staticpages');
+            $upgradeError++;
+        }
+    }
+    if (INST_pluginExists('links')) {
+        $check = upgrade_LinksPlugin();
+        if (!$check) {
+            $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'Links');
+            $upgradeError++;
+        }
+    }
+    if (INST_pluginExists('spamx')) {
+        $check = upgrade_SpamXPlugin();
+        if (!$check) {
+            $error .= sprintf($LANG_INSTALL['plugin_upgrade_error'],'SpamX');
+            $upgradeError++;
+        }
+    }
+
+    if ( $upgradeError ) {
+        $error .= '<br />Please restore your database backup and try again.<br />';
+        return _displayError(PLUGIN_UPGRADE_ERROR,'done',$error);
+    }
+
+    $current_gl_version = '1.5.0';
+
+    return INST_checkEnvironment($dbconfig_path);
 }
 
 
@@ -1768,7 +2184,7 @@ function INST_migrateGeeklog()
  * Start of the main program
  */
 
-$_SYSTEM['no_cache_config']  = true;
+$_SYSTEM['no_cache_config'] = true;
 
 /*
  * The driver, based on inputs received, we'll decide what to do and where to go
@@ -1848,6 +2264,12 @@ switch($mode) {
         break;
     case 'gotpathsetting':
         $pageBody =   INST_gotPathSetting();
+        break;
+    case 'geeklogpathsetting' :
+        $pageBody = INST_getGeeklogConfigPath();
+        break;
+    case 'gotgeeklogpathsetting' :
+        $pageBody = INST_gotGeeklogPathSetting();
         break;
     case 'checkenvironment' :
         $pageBody = INST_checkEnvironment();
