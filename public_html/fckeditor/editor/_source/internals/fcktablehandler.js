@@ -294,6 +294,7 @@ FCKTableHandler.CheckIsSelectionRectangular = function()
 		if ( cells[i].parentNode.parentNode != cells[0].parentNode.parentNode )
 			return false ;
 	}
+
 	this._MarkCells( cells, '_CellSelected' ) ;
 
 	var tableMap = this._CreateTableMap( cells[0] ) ;
