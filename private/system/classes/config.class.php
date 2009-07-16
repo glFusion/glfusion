@@ -431,7 +431,7 @@ class config {
                        $LANG_configselects[$group][$cur[2]] : null),
                       'value' =>
                       (($cur[4] == 'unset') ?
-                       'unset' : unserialize($cur[4])),
+                       'unset' : @unserialize($cur[4])),
                       'reset' => $cur[5]);
         }
 
@@ -850,7 +850,7 @@ class config {
              */
             $value = DB_getItem($_TABLES['conf_values'], 'value',
                                 "group_name='Core' AND name='cookiedomain'");
-            $this->config_array['Core']['cookiedomain'] = unserialize($value);
+            $this->config_array['Core']['cookiedomain'] = @unserialize($value);
         }
 
         $success_array = array();
