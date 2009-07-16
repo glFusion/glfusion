@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -128,7 +131,9 @@ if (isset ($_REQUEST['pid'])) {
         $aid = $_POST['aid'];
     }
 } elseif (isset($_POST['id'])) {       // Refresh from comment tool bar
-    $qid = COM_applyFilter ($_POST['id']);
+    $pid = COM_applyFilter ($_POST['id']);
+} elseif ( isset($_GET['id']) ) {
+    $pid = COM_applyFilter($_GET['id']);
 }
 $order = '';
 if (isset ($_REQUEST['order'])) {
