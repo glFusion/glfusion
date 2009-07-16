@@ -588,7 +588,7 @@ function modDownloadS() {
         $fileurl    = COM_applyFilter($_POST['url']);
         $url = rawurlencode($myts->makeTboxData4Save($_POST['url']));
     }
-    $silentEdit = COM_applyFilter($_POST['silentedit'],true);
+    $silentEdit = isset($_POST['silentedit']) ? COM_applyFilter($_POST['silentedit'],true) : 0;
     $submitter  = intval(COM_applyFilter($_POST['owner_id'],true));
 
     $currentfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'url', "lid=".intval($_POST['lid']));
@@ -1055,8 +1055,6 @@ function addDownload() {
 
     $submitter = $_USER['uid'];
 
-    $result = DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE url='$url'");
-    list($numrows) = DB_fetchARRAY($result);
     $errormsg = "";
 
     // Check if Title blank
