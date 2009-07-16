@@ -12,7 +12,7 @@ window.addEvent('domready',function() {
   <div style="margin-bottom:10px;">{lang_instructions}</div>
   <div>
     <label for="username">{lang_username}:</label>
-    <input class="fValidate['required']" type="text" size="16" maxlength="16" id="username" name="username" value="{username}"{xhtml}>
+    <input class="fValidate['required']" type="text" size="16" maxlength="32" id="username" name="username" value="{username}"{xhtml}>
   </div>
   <div>
     <label for="email">{lang_email}:</label>

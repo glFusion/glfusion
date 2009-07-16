@@ -6,7 +6,7 @@
     <table cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td align="right" class="alignleft" style="vertical-align:middle;padding-left:10px;"><b>{USERNAME}</b><br{xhtml}><small style="color:#676767">{USERNAME_HELP}</small></td>
-            <td align="left" valign="middle"><input type="text" name="username" size="16" maxlength="16" value="{username}"{xhtml}></td>
+            <td align="left" valign="middle"><input type="text" name="username" size="16" maxlength="32" value="{username}"{xhtml}></td>
         </tr>
         {passwd_input}
         <tr>

@@ -10,5 +10,6 @@
 </div>
 <div id="pe_privacy" class="jsenabled_hide">
         {privacy_block}
+        {privacy_plugin}
 </div>
 {# end {templatelocation} #}
