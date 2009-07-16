@@ -391,7 +391,9 @@ function listtopics()
                 $topic_templates->set_var ('default_topic', '');
             }
             if (empty ($A['imageurl'])) {
-                $topic_templates->set_var ('image_tag', '');
+                $topic_templates->set_var ('image_tag', '<img src="' . $_CONF['site_url'].'/images/topics/topic_gl.png'
+                                           . '" alt=""' . XHTML . '>');
+//                $topic_templates->set_var ('image_tag', '');
             } else {
                 $imageurl = COM_getTopicImageUrl ($A['imageurl']);
                 $topic_templates->set_var ('image_tag', '<img src="' . $imageurl
