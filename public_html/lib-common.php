@@ -58,10 +58,10 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.4');
+    define('GVERSION', '1.1.5');
 }
 
-define('PATCHLEVEL','.pl4');
+define('PATCHLEVEL','.pl0');
 
 //define('DEMO_MODE',true);
 
@@ -1155,7 +1155,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     if (!$_CONF['disable_webservices']) {
         $relLinks['service'] = '<link rel="service" '
                     . 'type="application/atomsvc+xml" ' . 'href="'
-                    . $_CONF['site_url'] . '/webservices/atom/?introspection" '
+                    . $_CONF['site_url'] . '/webservices/atom/index.php?introspection" '
                     . 'title="' . $LANG01[130] . '"' . XHTML . '>' . LB;
     }
     // TBD: add a plugin API and a lib-custom.php function
