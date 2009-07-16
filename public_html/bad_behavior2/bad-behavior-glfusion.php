@@ -118,6 +118,7 @@ function bb2_read_settings() {
 			     'httpbl_key'     => $bb2_settings_defaults['httpbl_key'],
 			     'httpbl_threat'  => $bb2_settings_defaults['httpbl_threat'],
 			     'httpbl_maxage'  => $bb2_settings_defaults['httpbl_maxage'],
+			     'strict'         => $bb2_settings_defaults['strict'],
 			     'is_installed'   => $isInstalled );
 }
 
@@ -166,7 +167,7 @@ function bb2_insert_stats($force = false) {
     }
     if ($retval !== null) {
         return $retval;
-    } 
+    }
 
     $blocked = bb2_db_query("SELECT COUNT(*) AS blocked FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000'");
     $row = bb2_db_rows($blocked);
