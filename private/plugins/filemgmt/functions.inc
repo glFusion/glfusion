@@ -568,7 +568,7 @@ function filemgmt_buildSql ($topic, $limits)
             }
             $where .= "date >= DATE_SUB(NOW(),INTERVAL $hours HOUR)";
         } else {
-            $limitsql = ' ORDER BY filemgmt.date DESC LIMIT ' . $limits;
+            $limitsql = ' ORDER BY filedetail.date DESC LIMIT ' . $limits;
         }
     }
     else
@@ -631,7 +631,7 @@ function plugin_feedupdatecheck_filemgmt ($feed, $topic, $update_data, $limit)
     $is_current = true;
 
     $sql  = "SELECT *,cat.title as cat_title,filedetail.title as file_title FROM {$_FM_TABLES['filemgmt_filedetail']} filedetail LEFT JOIN {$_FM_TABLES['filemgmt_cat']} cat ON filedetail.cid=cat.cid ";
-    $sql .= filemgmt_buildSql( $topic,$limits );
+    $sql .= filemgmt_buildSql( $topic,$limit );
 
     $result = DB_query ($sql);
     $num = DB_numRows ($result);
