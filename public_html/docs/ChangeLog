@@ -1,12 +1,34 @@
 glFusion ChangeLog
 
-v1.1.5 (Not Yet Released)
+v1.1.5
 -------------------------
-- Installation - Now support migrating Geeklog v1.4.1+ sites (Mark)
+- Updated FCKeditor to v2.6.4.1 (Mark)
+- Search dates were not properly validated prior to use (Mark)
+- Fixed several E_ALL errors (Mark)
+- Multi-page comment support was broken for plugins (Mark)
+- Support usernames upto 32 characters in length (Mark)
+- Installation - Now support migrating Geeklog v1.4.1+ sites,
+  including 1.6.0 (Mark)
+- Improved SEO support throughout the system (Mark)
+- Core groups can now be edited. (Mark) **NOT YET COMMITTED**
+- Plugin auto installer did not display correct installed version
+  number (Mark)
+- Display default glFusion topic icon if no icon is specified (Mark)
+- Allow user edit for remote users (Mark)
 
 Bad Behaviour2 Plugin
 ---------------------
 - Updated code base to v2.0.28 (Mark)
+
+Calendar Plugin
+---------------
+- Fixed issue where calendar submissions were not placed on the
+  proper calendar (Mark)
+
+FileMgmt Plugin
+---------------
+- Improved page titles (Mark)
+- Implemented multi-page comment support (Mark)
 
 Forum Plugin v3.1.4
 -------------------
@@ -14,9 +36,26 @@ Forum Plugin v3.1.4
 - Added forum.html feature (auto assigned to Forum Admin group) - allows
   owners to use HTML in forum posts. (Mark)
 - Added phpBB3 migration utility (Mark)
+- Improved page titles (Mark)
+
+Media Gallery
+-------------
+- Fixed comment handling - multi-page comments did not work and
+  user could not select comment order. (Mark)
+
+Polls
+-----
+- Fixed comment handling - multi-page comments did not work and
+  user could not select comment order. (Mark)
+
+StaticPages
+----------
+- Fixed comment handling - allow multi-page comments (Mark)
 
 v1.1.4.pl4
 ----------
+- Fixed bug where you could not use the image insert in the advanced
+  editor in the mail user form (Mark)
 - Fixed another XML issue with the web services routines (Mark)
 - Added width:100% in submitstory_advanced.thtml template to ensure the
   WYSIWYG editor uses the full width of the page (Mark)
@@ -34,14 +73,23 @@ FileMgmt Plugin
 ---------------
 - Apply file permissions for admin uploads too (Mark)
 
+Forum Plugin
+------------
+- Added support for new PM plugin (Mark)
+
 Links Plugin
 ------------
 - Added support for auto tags in the link descriptions (Mark)
+- Improved SQL security (Mark)
 
 Media Gallery Plugin
 --------------------
 - Fixed issue where the media item date/time did not use local time when
   editing (Mark)
+- Fix issue processing large FLV files (Mark)
+- Modify album create to use the parent's group if no user specified
+  group available (Mark)
+-
 
 Polls Plugin
 ------------
