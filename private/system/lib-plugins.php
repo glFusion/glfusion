@@ -431,6 +431,9 @@ function PLG_getCommentUrlId($type)
     if (empty($ret[1])) {
         $ret[1] = 'id';
     }
+    if (empty($ret[2])) {
+        $ret[2] = 'page=';
+    }
 
     return $ret;
 }
