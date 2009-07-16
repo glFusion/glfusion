@@ -63,7 +63,7 @@ if (!SEC_hasrights ('plugin.edit')) {
 
 function showuploadform( )
 {
-    global $_CONF,$LANG_ADMIN;
+    global $_CONF,$LANG_ADMIN,$LANG32;
 
     $retval = '';
 

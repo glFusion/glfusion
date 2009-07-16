@@ -98,11 +98,8 @@ function itemlist($type, $token)
     if ((strlen ($type) > 0) && ($type <> 'story')) {
         $function = 'plugin_itemlist_' . $type;
         if (function_exists ($function)) {
-            // Great, we found the plugin, now call its itemlist method
             $plugin = new Plugin();
-//            $plugin = $function();
-//            if (isset ($plugin)) {
-            $plugin = $function($token);   // http://project.geeklog.net/tracking/view.php?id=619
+            $plugin = $function($token);
             if (is_string($plugin)) {
                 return '<div class="block-box">'.$plugin.'</div>';
             } elseif (is_object($plugin)) {
@@ -119,6 +116,15 @@ function itemlist($type, $token)
         $H =  array($LANG29[10],$LANG29[14],$LANG29[15]);
         $section_title = $LANG29[35];
         $section_help = 'ccstorysubmission.html';
+    }
+    if ( !isset($H[0]) || empty($H[0]) ) {
+        $H[0] = $LANG29[10];
+    }
+    if ( !isset($H[1]) || empty($H[0]) ) {
+        $H[1] = $LANG29[14];
+    }
+    if ( !isset($H[2]) || empty($H[2]) ) {
+        $H[2] = $LANG29[15];
     }
 
     // run SQL but this time ignore any errors

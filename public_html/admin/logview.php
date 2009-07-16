@@ -49,7 +49,15 @@ if (!SEC_inGroup('Root')) {
     exit;
 }
 
-$log = isset($_REQUEST['log']) ? COM_applyFilter($_REQUEST['log']) : '';
+if ( isset($_GET['log']) ) {
+    $log = COM_applyFilter($_GET['log']);
+} else if ( isset( $_POST['log']) ) {
+    $log = COM_applyFilter($_POST['log']);
+} else {
+    $log = '';
+}
+
+$log = preg_replace('/[^a-z0-9\.\-_]/', '', $log);
 
 $retval = '';
 
@@ -71,7 +79,9 @@ $retval .= $LANG_LOGVIEW['logs'].':&nbsp;&nbsp;&nbsp;';
 $files = array();
 if ($dir = @opendir($_CONF['path_log'])) {
     while(($file = readdir($dir)) !== false) {
-        if (is_file($_CONF['path_log'] . $file)) { array_push($files,$file); }
+        if (is_file($_CONF['path_log'] . $file) && $file != 'index.html' ) {
+            array_push($files,$file);
+        }
     }
     closedir($dir);
 }
