@@ -898,6 +898,9 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $playback_options['height'] = 50;
                 $playback_options['width']  = 300;
             }
+            $win_width = $playback_options['width'];
+            $win_height = $playback_options['height'];
+
             $V = new Template( MG_getTemplatePath($aid) );
 
             $tfile = 'view_mp3_swf.thtml';
@@ -1309,7 +1312,10 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
         if ( $media_size_disp == false ) {
             $u_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
             $media_size_disp[0] = 200;
-            $media_size_orig[1] = 150;
+            $media_size_disp[1] = 150;
+            if ( $media_size_orig == false ) {
+                $mesia_size_orig = $media_size_disp;
+            }
         } else {
             $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
             if ( !file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'])) {
@@ -1318,6 +1324,10 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
                 $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
             }
         }
+    }
+    if ( $media_size_orig == false ) {
+        $media_size_orig[0] = 200;
+        $media_size_orig[1] = 150;
     }
 
     $imageWidth  = $full ? $media_size_orig[0] : $media_size_disp[0];
@@ -1355,7 +1365,11 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mediaObject) . '"');
 
-    $pid = $MG_albums[$aid]->pid;
+    if ( isset($MG_albums[$aid]->pid) ) {
+        $pid = $MG_albums[$aid]->pid;
+    } else {
+        $pid = 0;
+    }
     if ( method_exists($MG_albums[$aid],'getOffset') ) {
         $aOffset = $MG_albums[$aid]->getOffset();
     } else {
@@ -1917,9 +1931,21 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             }
             if ( DB_count($_TABLES['comments'],'sid',$mid) > 0  || $_MG_CONF['commentbar'] ) {
                 $cid        = $mid;
-                $page       = 0;
-                $comorder   = isset($_POST['order']) ? COM_applyFilter($_POST['order']) : 'ASC';
-                $commode    = isset($_POST['mode']) ? COM_applyFilter($_POST['mode']) : '';
+                $page       = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+                if ( isset($_POST['order']) ) {
+                    $comorder  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+                } elseif (isset($_GET['order']) ) {
+                    $comorder =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+                } else {
+                    $comorder = 'DESC';
+                }
+                if ( isset($_POST['mode']) ) {
+                    $commode = COM_applyFilter($_POST['mode']);
+                } elseif ( isset($_GET['mode']) ) {
+                    $commode = COM_applyFilter($_GET['mode']);
+                } else {
+                    $commode = 'flat';
+                }
                 $commentbar = CMT_userComments ($cid,$media[$mediaObject]['media_title'],
                               'mediagallery',$comorder,$commode,0,$page,false,$delete_option);
                 $retval    .= $commentbar;
