@@ -68,6 +68,8 @@ $_SQL['gf_forums'] = "CREATE TABLE {$_TABLES['gf_forums']} (
   topic_count mediumint(8) NOT NULL default '0',
   post_count mediumint(8) NOT NULL default '0',
   last_post_rec mediumint(8) NOT NULL default '0',
+  rating_view mediumint(8) NOT NULL default '0',
+  rating_post mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (forum_id),
   KEY forum_cat (forum_cat)
 ) TYPE=MyISAM;";
@@ -196,6 +198,7 @@ $_SQL['gf_banned_ip'] = "CREATE TABLE {$_TABLES['gf_banned_ip']} (
 
 $_SQL['gf_userinfo'] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
   `uid` mediumint(8) NOT NULL default '0',
+  `rating` mediumint(8) NOT NULL default '0',
   `location` varchar(128) NOT NULL default '',
   `aim` varchar(128) NOT NULL default '',
   `icq` varchar(128) NOT NULL default '',
