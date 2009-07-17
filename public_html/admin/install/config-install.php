@@ -203,6 +203,7 @@ function install_config($site_url)
     $c->add('allow_account_delete',0,'select',4,16,0,270,TRUE);
     $c->add('hide_author_exclusion',0,'select',4,16,0,280,TRUE);
     $c->add('show_fullname',0,'select',4,16,0,290,TRUE);
+    $c->add('hide_exclude_content',1,'select',4,16,0,295,TRUE);
     $c->add('show_servicename',TRUE,'select',4,16,1,300,TRUE);
     $c->add('custom_registration',FALSE,'select',4,16,1,310,TRUE);
     $c->add('user_login_method',array('standard' => true, 'openid' => false, '3rdparty' => false),'@select',4,16,1,320,TRUE);

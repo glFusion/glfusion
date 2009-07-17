@@ -208,9 +208,37 @@ function glfusion_114()
     $c = config::get_instance();
 }
 
+function glfusion_115()
+{
+    global $_TABLES, $_CONF;
+
+    $_SQL = array();
+
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} CHANGE username username varchar (48) NOT NULL default ''";
+    $_SQL[] = "ALTER TABLE {$_TABLES['topics']} CHANGE sortnum sortnum mediumint(8) default NULL";
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("glFusion 1.1.5 Development update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),1);
+        next($_SQL);
+    }
+
+    DB_query("ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_in_transit",1);
+    DB_query("ALTER TABLE {$_TABLES['stories']} DROP COLUMN in_transit",1);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET type='text' WHERE name='mail_smtp_host'",1);
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.5',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.5' WHERE name='glfusion'",1);
+    DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+    $c->add('hide_exclude_content',0,'select',4,16,0,295,TRUE);
+}
+
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_114();
+glfusion_115();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();

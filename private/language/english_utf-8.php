@@ -1712,6 +1712,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'Allow Account Deletion',
     'hide_author_exclusion' => 'Allow Hide Author',
     'show_fullname' => 'Show Fullname',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'Show Service Name',
     'custom_registration' => 'Enable Custom Registration',
     'user_login_method' => 'User Login Method',
