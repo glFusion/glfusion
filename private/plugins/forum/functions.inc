@@ -183,6 +183,7 @@ function plugin_getadminoption_forum()
 * Returns the user menuitem option for this plugin
 * Only one menu item can be returned.
 */
+/* --------------------------------------------------------------
 function plugin_getuseroption_forum()
 {
     global $_USER, $CONF_FORUM, $_CONF, $LANG_GF00;
@@ -195,7 +196,7 @@ function plugin_getuseroption_forum()
         return array($LANG_GF00['useradminmenu'], $_CONF['site_url'] . '/forum/userprefs.php', 0);
     }
 }
-
+--------------------------------------------------------------- */
 
 function plugin_user_create_forum ($uid)
 {
@@ -1478,4 +1479,123 @@ function can_view_forum($forum_id) {
 	else
 		return true;
 }
+
+$LANG_MYACCOUNT['pe_forumprefs'] = $LANG_GF92['forum_prefs'];
+
+function plugin_profileedit_forum($uid,$panel,$fieldset)
+{
+    global $_CONF, $CONF_FORUM, $_TABLES, $_USER, $LANG_GF01,$LANG_GF02,$LANG_GF92;
+
+    if ( COM_isAnonUser() ) {
+        return;
+    }
+
+    if ($panel != '' || $fieldset != '' ) {
+        return;
+    }
+
+    $retval = '';
+
+    // Get user specific settings from database
+    $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid='{$_USER['uid']}'");
+    $nrows = DB_numRows($result);
+
+    if ($nrows == 0) {
+        // Insert a new blank record. Defaults are set in SQL Defintion for table.
+        DB_query("INSERT INTO {$_TABLES['gf_userprefs']} (uid) VALUES ('{$_USER['uid']}')");
+        $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid='{$_USER['uid']}'");
+    }
+
+    $A = DB_fetchArray($result);
+
+    $viewanonposts_checked = $A['viewanonposts'] == 1 ? ' checked="checked"' : '';
+    $alwaysnotify_checked  = $A['alwaysnotify']  == 1 ? ' checked="checked"' : '';
+    $enablenotify_checked  = $A['enablenotify']  == 1 ? ' checked="checked"' : '';
+    $notifyonce_checked    = $A['notify_once']   == 1 ? ' checked="checked"' : '';
+    $showiframe_checked    = $A['showiframe']    == 1 ? ' checked="checked"' : '';
+
+    $usersettings = new Template($_CONF['path'] . 'plugins/forum/templates/userprefs');
+    $usersettings->set_file (array ('usersettings'=>'profile_user_settings.thtml'));
+    $usersettings->set_var ('LANG_GF92[topicspp]', $LANG_GF92['topicspp']);
+    $usersettings->set_var ('topicsperpage', $A['topicsperpage']);
+    $usersettings->set_var ('LANG_GF92[postspp]', $LANG_GF92['postspp']);
+    $usersettings->set_var ('postsperpage', $A['postsperpage']);
+    $usersettings->set_var ('LANG_GF02[msg122]', $LANG_GF02['msg122']);
+    $usersettings->set_var ('LANG_GF02[msg123]', $LANG_GF02['msg123']);
+    $usersettings->set_var ('popularlimit', $A['popularlimit']);
+    $usersettings->set_var ('LANG_GF02[msg126]', $LANG_GF02['msg126']);
+    $usersettings->set_var ('LANG_GF02[msg127]', $LANG_GF02['msg127']);
+    $usersettings->set_var ('searchlines', $A['searchlines']);
+    $usersettings->set_var ('LANG_GF02[msg128]', $LANG_GF02['msg128']);
+    $usersettings->set_var ('LANG_GF02[msg129]', $LANG_GF02['msg129']);
+    $usersettings->set_var ('membersperpage', $A['membersperpage']);
+    $usersettings->set_var ('LANG_GF02[msg130]', $LANG_GF02['msg130']);
+    $usersettings->set_var ('LANG_GF02[msg131]', $LANG_GF02['msg131']);
+    $usersettings->set_var ('viewanonposts', $A['viewanonposts']);
+    $usersettings->set_var ('viewanonposts_checked', $viewanonposts_checked);
+
+    $usersettings->set_var ('LANG_GF02[msg167]', $LANG_GF02['msg167']);
+    $usersettings->set_var ('LANG_GF02[msg168]', $LANG_GF02['msg168']);
+    $usersettings->set_var ('enablenotify', $A['enablenotify']);
+    $usersettings->set_var ('emailnotify_checked', $emailnotify_checked);
+
+    $usersettings->set_var ('LANG_GF02[msg184]', $LANG_GF02['msg184']);
+    $usersettings->set_var ('LANG_GF02[msg185]', $LANG_GF02['msg185']);
+    $usersettings->set_var ('notifyonce_checked', $notifyonce_checked);
+
+    $usersettings->set_var ('LANG_GF02[msg132]', $LANG_GF02['msg132']);
+    $usersettings->set_var ('LANG_GF02[msg133]', $LANG_GF02['msg133']);
+    $usersettings->set_var ('alwaysnotify', $A['alwaysnotify']);
+    $usersettings->set_var ('alwaysnotify_checked', $alwaysnotify_checked);
+
+    $usersettings->set_var ('LANG_GF92[showiframe]', $LANG_GF92['showiframe']);
+    $usersettings->set_var ('LANG_GF92[showiframedscp]', $LANG_GF92['showiframedscp']);
+    $usersettings->set_var ('showiframe', $A['showiframe']);
+    $usersettings->set_var ('showiframe_checked', $showiframe_checked);
+
+    $usersettings->set_var('lang_forum_prefs',$LANG_GF92['forum_prefs']);
+    $usersettings->set_var('lang_forumprefs_help_title',$LANG_GF92['forumprefs_help_title']);
+    $usersettings->set_var('lang_forumprefs_help', $LANG_GF92['forumprefs_help']);
+
+    $usersettings->parse ('output', 'usersettings');
+    $retval .= $usersettings->finish($usersettings->get_var('output'));
+
+    return $retval;
+}
+
+function plugin_profilesave_forum( )
+{
+    global $_CONF, $_TABLES, $_PM_CONF, $_USER;
+
+    if ( COM_isAnonUser() ) {
+        return;
+    }
+
+    $xtopicsperpage     = intval(COM_applyFilter($_POST['xtopicsperpage'],true));
+    $xpostsperpage      = intval(COM_applyFilter($_POST['xpostsperpage'],true));
+    $xpopularlimit      = intval(COM_applyFilter($_POST['xpopularlimit'],true));
+    $xmessagesperpage   = intval(COM_applyFilter($_POST['xmessagesperpage'],true));
+    $xsearchlines       = intval(COM_applyFilter($_POST['xsearchlines'],true));
+    $xmembersperpage    = intval(COM_applyFilter($_POST['xmembersperpage'],true));
+    $xemailnotify       = isset($_POST['xemailnotify']) && $_POST['xemailnotify'] == 'on' ? 1 : 0;
+    $xviewanonpost      = isset($_POST['xviewanonposts']) && $_POST['xviewanonposts'] == 'on' ? 1 : 0;
+    $xviewanonposts     = isset($_POST['xviewanonposts']) && $_POST['xviewanonposts'] == 'on' ? 1 : 0;
+    $xalwaysnotify      = isset($_POST['xalwaysnotify']) && $_POST['xalwaysnotify'] == 'on' ? 1 : 0;
+    $xnotifyonce        = isset($_POST['xnotifyonce']) && $_POST['xnotifyonce'] == 'on' ? 1 : 0;
+    $xshowiframe        = isset($_POST['xshowiframe']) && $_POST['xshowiframe'] == 'on' ? 1 : 0;
+
+    DB_query("UPDATE {$_TABLES['gf_userprefs']} SET
+        topicsperpage='$xtopicsperpage',
+        postsperpage='$xpostsperpage',
+        popularlimit='$xpopularlimit',
+        searchlines='$xsearchlines',
+        membersperpage='$xmembersperpage',
+        enablenotify='$xemailnotify',
+        viewanonposts='$xviewanonposts',
+        alwaysnotify='$xalwaysnotify',
+        notify_once='$xnotifyonce',
+        showiframe='$xshowiframe'
+     WHERE uid='{$_USER['uid']}'");
+}
+
 ?>
