@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.5
 -------------------------
+- Implemented new profile APIs (Mark)
+- New configuration option to hide the 'Content' tab in the Account
+  Settings (Mark)
 - Fixed incorrect field type for SMTP host (Mark)
 - Updated FCKeditor to v2.6.4.1 (Mark)
 - Search dates were not properly validated prior to use (Mark)
@@ -33,6 +36,7 @@ FileMgmt Plugin
 
 Forum Plugin v3.1.4
 -------------------
+- Moved user preferences to user profile (Mark)
 - Implemented Community Moderation System (Mark)
 - Added forum.html feature (auto assigned to Forum Admin group) - allows
   owners to use HTML in forum posts. (Mark)
@@ -41,6 +45,7 @@ Forum Plugin v3.1.4
 
 Media Gallery
 -------------
+- Moved user preferences to user profile (Mark)
 - Fixed comment handling - multi-page comments did not work and
   user could not select comment order. (Mark)
 
