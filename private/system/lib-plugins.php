@@ -1332,6 +1332,66 @@ function PLG_groupChanged ($grp_id, $mode)
 * now get a chance to add their own variables and input fields to the form.
 *
 * @param    int  $uid        user id of the user profile to be edited
+* @param    char $panel      profile panel being displayed
+* @param    char $fieldset   fieldset being displayed
+* @return   void
+*
+*/
+function PLG_profileEdit ($uid, $panel = '', $fieldset='')
+{
+    global $_PLUGINS;
+
+    $retval = '';
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_profileedit_' . $pi_name;
+        if (function_exists($function)) {
+            $retval .= $function ($uid, $panel,$fieldset);
+        }
+    }
+
+    $function = 'CUSTOM_profileedit';
+    if (function_exists($function)) {
+        $retval .= $function($uid, $panel, $fieldset);
+    }
+
+    return $retval;
+}
+
+/**
+* The user wants to save changes to his/her profile. Any plugin that added its
+* own variables or blocks to the profile input form will now have to extract
+* its data and save it.
+* Plugins will have to refer to the global $_POST array to get the
+* actual data.
+*
+* @param    string  $plugin     name of a specific plugin or empty (all plugins)
+* @return   void
+*
+*/
+function PLG_profileSave ($plugin = '')
+{
+    if (empty ($plugin)) {
+        PLG_callFunctionForAllPlugins ('profilesave');
+
+        $function = 'CUSTOM_profilesave';
+        if (function_exists($function)) {
+            $function();
+        }
+
+    } else {
+        PLG_callFunctionForOnePlugin ('plugin_profilesave_' . $plugin);
+    }
+}
+
+
+/**
+* glFusion is about to display the edit form for the user's profile. Plugins
+* now get a chance to add their own variables and input fields to the form.
+*
+* THIS FUNCTION IS DEPRECIATED - see PLG_profileEdit()
+*
+* @param    int  $uid        user id of the user profile to be edited
 * @param    ref  $template   reference of the Template for the profile edit form
 * @return   void
 *
@@ -1356,6 +1416,8 @@ function PLG_profileVariablesEdit ($uid, &$template)
 /**
 * glFusion is about to display the edit form for the user's profile. Plugins
 * now get a chance to add their own blocks below the standard form.
+*
+* THIS FUNCTION IS DEPRECIATED - see PLG_profileEdit()
 *
 * @param    int      $uid   user id of the user profile to be edited
 * @return   string          HTML for additional block(s)
@@ -1471,6 +1533,8 @@ function PLG_profileIconDisplay ($uid)
 * its data and save it.
 * Plugins will have to refer to the global $_POST array to get the
 * actual data.
+*
+* THIS FUNCTION IS DEPRECIATED - see PLG_profileSave()
 *
 * @param    string  $plugin     name of a specific plugin or empty (all plugins)
 * @return   void

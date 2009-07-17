@@ -50,7 +50,7 @@ $_US_VERBOSE = false;
 */
 function edituser()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG_ADMIN;
+    global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG_ADMIN;
 
     $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = '{$_USER['uid']}' AND {$_TABLES['userprefs']}.uid = '{$_USER['uid']}' AND {$_TABLES['userinfo']}.uid = {$_USER['uid']}");
     $A = DB_fetchArray ($result);
@@ -66,8 +66,12 @@ function edituser()
     $cnt = 0;
     if ( is_array($LANG_MYACCOUNT) ) {
         foreach ($LANG_MYACCOUNT as $id => $label) {
-            $navbar->add_menuitem($label,'showhideProfileEditorDiv("'.$id.'",'.$cnt.');return false;',true);
-            $cnt++;
+            if ( $id == 'pe_content' && $_CONF['hide_exclude_content'] == 1 && $_CONF['emailstories'] == 0 ) {
+                continue;
+            } else {
+                $navbar->add_menuitem($label,'showhideProfileEditorDiv("'.$id.'",'.$cnt.');return false;',true);
+                $cnt++;
+            }
         }
         $navbar->set_selected($LANG_MYACCOUNT['pe_namepass']);
     }
@@ -161,6 +165,9 @@ function edituser()
     $preferences->set_var ('new_username_value',
                            htmlspecialchars ($_USER['username']));
     $preferences->set_var ('password_value', '');
+
+    $preferences->set_var('plugin_namepass_name',PLG_profileEdit($_USER['uid'],'namepass','name'));
+
     if ($_CONF['allow_username_change'] == 1) {
         $preferences->parse ('username_option', 'username', true);
     } else {
@@ -199,6 +206,9 @@ function edituser()
         $preferences->set_var ('userphoto_option', '');
     }
 
+    $preferences->set_var('plugin_namepass_pwdemail',PLG_profileEdit($_USER['uid'],'namepass','pwdemail'));
+    $preferences->set_var('plugin_namepass',PLG_profileEdit($_USER['uid'],'namepass'));
+
     $result = DB_query("SELECT about,pgpkey FROM {$_TABLES['userinfo']} WHERE uid = {$_USER['uid']}");
     $A = DB_fetchArray($result);
 
@@ -231,6 +241,11 @@ function edituser()
     if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userEdit'))) {
         $preferences->set_var ('customfields', CUSTOM_userEdit($_USER['uid']) );
     }
+
+    $preferences->set_var('plugin_userinfo_personalinfo',PLG_profileEdit($_USER['uid'],'userinfo','personalinfo'));
+    $preferences->set_var('plugin_userinfo',PLG_profileEdit($_USER['uid'],'userinfo'));
+
+    $preferences->set_var('plugin_panel',PLG_profileEdit($_USER['uid']));
 
     PLG_profileVariablesEdit ($_USER['uid'], $preferences);
 
@@ -346,7 +361,7 @@ function buildTopicList ()
 */
 function editpreferences()
 {
-    global $_TABLES, $_CONF, $LANG04, $_USER, $_GROUPS;
+    global $_TABLES, $_CONF, $_SYSTEM, $LANG04, $_USER, $_GROUPS;
 
     $result = DB_query("SELECT noicons,willing,dfid,tzid,noboxes,maxstories,tids,aids,boxes,emailfromadmin,emailfromuser,showonline FROM {$_TABLES['userprefs']},{$_TABLES['userindex']} WHERE {$_TABLES['userindex']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']}");
 
@@ -591,6 +606,8 @@ function editpreferences()
                . COM_optionList ($_TABLES['dateformats'], 'dfid,description',
                                  $A['dfid']) . '</select>';
     $preferences->set_var ('dateformat_selector', $selection);
+    $preferences->set_var('plugin_layout_display',PLG_profileEdit($_USER['uid'],'layout','display'));
+
     $preferences->parse ('display_block', 'display', true);
 
     // privacy options block
@@ -610,50 +627,63 @@ function editpreferences()
         $preferences->set_var ('showonline_checked', '');
     }
     PLG_profileVariablesEdit ($_USER['uid'], $preferences);
+
+    $preferences->set_var('plugin_layout',PLG_profileEdit($_USER['uid'],'layout'));
+
+
+    $preferences->set_var('plugin_privacy_privacy',PLG_profileEdit($_USER['uid'],'privacy','privacy'));
+    $preferences->set_var('plugin_privacy',PLG_profileEdit($_USER['uid'],'privacy'));
+
     $preferences->parse ('privacy_block', 'privacy', true);
 
     // excluded items block
-    $permissions = COM_getPermSQL ('');
-    $preferences->set_var ('exclude_topic_checklist',
 
-    COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
+    if ( $_CONF['hide_exclude_content'] != 1 ) {
+        $permissions = COM_getPermSQL ('');
+        $preferences->set_var ('exclude_topic_checklist',
 
-    if (($_CONF['contributedbyline'] == 1) &&
-        ($_CONF['hide_author_exclusion'] == 0)) {
-        $preferences->set_var ('lang_authors', $LANG04[56]);
-        $sql = "SELECT DISTINCT story.uid, users.username,users.fullname FROM {$_TABLES['stories']} story, {$_TABLES['users']} users WHERE story.uid = users.uid";
-        if ($_CONF['show_fullname'] == 1) {
-            $sql .= ' ORDER BY users.fullname';
-        } else {
-            $sql .= ' ORDER BY users.username';
-        }
-        $query = DB_query ($sql);
-        $nrows = DB_numRows ($query );
-        $authors = explode (' ', $A['aids']);
+        COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
 
-        $selauthors = '';
-        for( $i = 0; $i < $nrows; $i++ ) {
-            $B = DB_fetchArray ($query);
-            $selauthors .= '<option value="' . $B['uid'] . '"';
-            if (in_array (sprintf ('%d', $B['uid']), $authors)) {
-               $selauthors .= ' selected';
+        if (($_CONF['contributedbyline'] == 1) &&
+            ($_CONF['hide_author_exclusion'] == 0)) {
+            $preferences->set_var ('lang_authors', $LANG04[56]);
+            $sql = "SELECT DISTINCT story.uid, users.username,users.fullname FROM {$_TABLES['stories']} story, {$_TABLES['users']} users WHERE story.uid = users.uid";
+            if ($_CONF['show_fullname'] == 1) {
+                $sql .= ' ORDER BY users.fullname';
+            } else {
+                $sql .= ' ORDER BY users.username';
             }
-            $selauthors .= '>' . COM_getDisplayName ($B['uid'], $B['username'],
-                                                     $B['fullname'])
-                        . '</option>' . LB;
-        }
+            $query = DB_query ($sql);
+            $nrows = DB_numRows ($query );
+            $authors = explode (' ', $A['aids']);
 
-        if (DB_count($_TABLES['topics']) > 10) {
-            $Selboxsize = intval (DB_count ($_TABLES['topics']) * 1.5);
+            $selauthors = '';
+            for( $i = 0; $i < $nrows; $i++ ) {
+                $B = DB_fetchArray ($query);
+                $selauthors .= '<option value="' . $B['uid'] . '"';
+                if (in_array (sprintf ('%d', $B['uid']), $authors)) {
+                   $selauthors .= ' selected';
+                }
+                $selauthors .= '>' . COM_getDisplayName ($B['uid'], $B['username'],
+                                                         $B['fullname'])
+                            . '</option>' . LB;
+            }
+
+            if (DB_count($_TABLES['topics']) > 10) {
+                $Selboxsize = intval (DB_count ($_TABLES['topics']) * 1.5);
+            } else {
+                $Selboxsize = 15;
+            }
+            $preferences->set_var ('exclude_author_checklist', '<select name="selauthors[]" multiple="multiple" size="'. $Selboxsize. '">' . $selauthors . '</select>');
         } else {
-            $Selboxsize = 15;
+            $preferences->set_var ('lang_authors', '');
+            $preferences->set_var ('exclude_author_checklist', '');
         }
-        $preferences->set_var ('exclude_author_checklist', '<select name="selauthors[]" multiple="multiple" size="'. $Selboxsize. '">' . $selauthors . '</select>');
+        $preferences->set_var('plugin_content_exclude',PLG_profileEdit($_USER['uid'],'content','exclude'));
+        $preferences->parse ('exclude_block', 'exclude', true);
     } else {
-        $preferences->set_var ('lang_authors', '');
-        $preferences->set_var ('exclude_author_checklist', '');
+        $preferences->set_var ('exclude_block', '');
     }
-    $preferences->parse ('exclude_block', 'exclude', true);
 
     // daily digest block
     if ($_CONF['emailstories'] == 1) {
@@ -668,33 +698,42 @@ function editpreferences()
                              $user_etids, 'topics');
         $preferences->set_var('email_topic_checklist',
                 str_replace($_TABLES['topics'], 'etids', $tmp));
+        $preferences->set_var('plugin_content_digest',PLG_profileEdit($_USER['uid'],'content','digest'));
         $preferences->parse('digest_block', 'digest', true);
     } else {
         $preferences->set_var('digest_block', '');
     }
 
-    // boxes block
-    $selectedblocks = '';
-    if (strlen($A['boxes']) > 0) {
-        $blockresult = DB_query("SELECT bid FROM {$_TABLES['blocks']} WHERE bid NOT IN (" . str_replace(' ',',',trim($A['boxes'])) . ")");
-        for ($x = 1; $x <= DB_numRows($blockresult); $x++) {
-            $row = DB_fetchArray($blockresult);
-            $selectedblocks .= $row['bid'];
-            if ($x <> DB_numRows($blockresult)) {
-                $selectedblocks .= ' ';
+
+    if ( $_CONF['hide_exclude_content'] != 1 ) {
+        // boxes block
+        $selectedblocks = '';
+        if (strlen($A['boxes']) > 0) {
+            $blockresult = DB_query("SELECT bid FROM {$_TABLES['blocks']} WHERE bid NOT IN (" . str_replace(' ',',',trim($A['boxes'])) . ")");
+            for ($x = 1; $x <= DB_numRows($blockresult); $x++) {
+                $row = DB_fetchArray($blockresult);
+                $selectedblocks .= $row['bid'];
+                if ($x <> DB_numRows($blockresult)) {
+                    $selectedblocks .= ' ';
+                }
             }
         }
+        $whereblock = '';
+        if (!empty ($permissions)) {
+            $whereblock .= $permissions . ' AND ';
+        }
+        $whereblock .= "((type != 'layout' AND type != 'gldefault' AND is_enabled = 1) OR "
+                     . "(type = 'gldefault' AND is_enabled = 1 AND name IN ('whats_new_block','older_stories'))) "
+                     . "ORDER BY onleft desc,blockorder,title";
+        $preferences->set_var ('boxes_checklist', COM_checkList ($_TABLES['blocks'],
+                'bid,title,type', $whereblock, $selectedblocks,'blocks'));
+        $preferences->set_var('plugin_content_boxes',PLG_profileEdit($_USER['uid'],'content','boxes'));
+        $preferences->parse ('boxes_block', 'boxes', true);
+    } else {
+        $preferences->set_var ('boxes_block', '');
     }
-    $whereblock = '';
-    if (!empty ($permissions)) {
-        $whereblock .= $permissions . ' AND ';
-    }
-    $whereblock .= "((type != 'layout' AND type != 'gldefault' AND is_enabled = 1) OR "
-                 . "(type = 'gldefault' AND is_enabled = 1 AND name IN ('whats_new_block','older_stories'))) "
-                 . "ORDER BY onleft desc,blockorder,title";
-    $preferences->set_var ('boxes_checklist', COM_checkList ($_TABLES['blocks'],
-            'bid,title,type', $whereblock, $selectedblocks,'blocks'));
-    $preferences->parse ('boxes_block', 'boxes', true);
+
+    $preferences->set_var('plugin_content',PLG_profileEdit($_USER['uid'],'content'));
 
     // comment preferences block
     $result = DB_query("SELECT commentmode,commentorder,commentlimit FROM {$_TABLES['usercomment']} WHERE uid = {$_USER['uid']}");
@@ -718,6 +757,7 @@ function editpreferences()
     $selection .= '</select>';
     $preferences->set_var ('sortorder_selector', $selection);
     $preferences->set_var ('commentlimit_value', $A['commentlimit']);
+    $preferences->set_var('plugin_layout_comment',PLG_profileEdit($_USER['uid'],'layout','comment'));
     $preferences->parse ('comment_block', 'comment', true);
 
     return $preferences->finish ($preferences->parse ('output', 'prefs'));
@@ -1510,6 +1550,7 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
         savepreferences ($_POST);
         $display .= saveuser($_POST);
         PLG_profileExtrasSave ();
+        PLG_profileSave();
         break;
 
     case 'savepreferences':

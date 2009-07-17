@@ -12,6 +12,7 @@
             <td style="vertical-align:top;"><b>{lang_authors}</b><br{xhtml}>
             {exclude_author_checklist}</td>
         </tr>
+        {plugin_content_exclude}
     </table>
 </fieldset>
 {# end {templatelocation} #}

@@ -17,9 +17,7 @@
     <td style="width:100px;"><label for="showonline">{lang_showonline}:</label></td>
     <td><input type="checkbox" id="showonline" name="showonline" {showonline_checked}{xhtml}></td>
   </tr>
-
-  {plugin_privacy}
-
+  {plugin_privacy_privacy}
 </table>
 </fieldset>
 {# end {templatelocation} #}
