@@ -69,6 +69,7 @@ $INSTALL_plugin['forum'] = array(
   array('type' => 'table', 'table' => $_TABLES['gf_userinfo'], 'sql' => $_SQL['gf_userinfo']),
   array('type' => 'table', 'table' => $_TABLES['gf_bookmarks'], 'sql' => $_SQL['gf_bookmarks']),
   array('type' => 'table', 'table' => $_TABLES['gf_attachments'], 'sql' => $_SQL['gf_attachments']),
+  array('type' => 'table', 'table' => $_TABLES['gf_rating_assoc'], 'sql' => $_SQL['gf_rating_assoc']),
 
   array('type' => 'group', 'group' => 'forum Admin', 'desc' => 'Users in this group can administer the Forum plugin',
         'variable' => 'admin_group_id', 'addroot' => true),
