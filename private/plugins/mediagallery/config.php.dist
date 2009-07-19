@@ -245,4 +245,11 @@ $_MG_CONF['disable_lightbox'] = false;
 
 $_MG_CONF['update_parent_lastupdated'] = false;
 
+/*
+ * If you want to allow users who 'own' (uploaded) a media item to be able
+ * to also edit the media item, set this value to true.
+ */
+
+$_MG_CONF['allow_user_edit'] = false;
+
 ?>

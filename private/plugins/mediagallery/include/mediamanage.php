@@ -498,17 +498,6 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         }
     }
 
-    if ( $MG_albums[$album_id]->access != 3 && !SEC_inGroup($MG_albums[$album_id]->mod_group_id)) {
-        COM_errorLog("Someone has tried to illegally sort albums in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
-        return(MG_genericError( $LANG_MG00['access_denied_msg'] ));
-    }
-
-    // Build Album List
-    $level = 0;
-    $album_jumpbox = '<select name="albums" width="40">';
-    $MG_albums[0]->buildJumpBox($album_id);
-    $album_jumpbox .= '</select>';
-
     // pull the media information from the database...
 
     if ($_DB_dbms == "mssql" ) {
@@ -523,6 +512,17 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     $result = DB_query($sql);
     $row    = DB_fetchArray($result);
 
+    if ( $MG_albums[$album_id]->access != 3 && !SEC_inGroup($MG_albums[$album_id]->mod_group_id) && $row['media_user_id'] != $_USER['uid'] ) {
+        COM_errorLog("Someone has tried to illegally sort albums in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        return(MG_genericError( $LANG_MG00['access_denied_msg'] ));
+    }
+
+    // Build Album List
+    $level = 0;
+    $album_jumpbox = '<select name="albums" width="40">';
+    $MG_albums[0]->buildJumpBox($album_id);
+    $album_jumpbox .= '</select>';
+
     // should check the above for errors, etc...
 
     if ( $row['media_type'] == 0 ) {
@@ -536,13 +536,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     } else {
         $exif_info = '';
     }
-/*
-    $media_time_month  = gmdate("m", $row['media_time'] + (3600 * -5));
-    $media_time_day    = gmdate("d", $row['media_time'] + (3600 * -5));
-    $media_time_year   = gmdate("Y", $row['media_time'] + (3600 * -5));
-    $media_time_hour   = gmdate("H", $row['media_time'] + (3600 * -5));
-    $media_time_minute = gmdate("i", $row['media_time'] + (3600 * -5));
-*/
+
     $media_time_month  = date("m", $row['media_time']);
     $media_time_day    = date("d", $row['media_time']);
     $media_time_year   = date("Y", $row['media_time']);
@@ -1081,7 +1075,23 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $username = '';
     }
 
-    $T->set_var('username',$username);
+//    $T->set_var('username',$username);
+
+    $userselect = '<select name="owner_name"> ';
+    $sql = "SELECT * FROM {$_TABLES['users']} WHERE status=3 AND uid > 1 ORDER BY username ASC";
+    $result = DB_query($sql);
+    while ($userRow = DB_fetchArray($result) ) {
+        $userselect .= '<option value="'.$userRow['uid'].'"'
+        . ($userRow['uid'] == $row['media_user_id'] ? ' selected="selected"' : '')
+        .'>'.$userRow['username'].'</option>' .LB;
+    }
+    $userselect .= '</select>';
+
+    if ( SEC_hasRights('mediagallery.admin') ) {
+        $T->set_var('username',$userselect);
+    } else {
+        $T->set_var('username',$username);
+    }
 
     $cat_select = '<select name="cat_id" id="cat_id">';
     $cat_select .= '<option value="">' . $LANG_MG01['no_category'] . '</option>';
@@ -1269,6 +1279,13 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 
     $media_time = mktime($media_time_hour,$media_time_minute,0,$media_time_month,$media_time_day,$media_time_year,1);
 
+    if ( isset($_POST['owner_name']) ) {
+        $owner_id = COM_applyFilter($_POST['owner_name'],true);
+        $owner_sql = ',media_user_id='.$owner_id.' ';
+    } else {
+        $owner_sql = '';
+    }
+
     $sql = "UPDATE " . ($queue ? $_TABLES['mg_mediaqueue'] : $_TABLES['mg_media']) . "
             SET media_title='"  . addslashes($media_title) . "',
             media_desc='"       . addslashes($media_desc) . "',
@@ -1280,8 +1297,9 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
             artist='"           . $artist . "',
             album='"            . $musicalbum . "',
             genre='"            . $genre . "',
-            remote_url='"       . $remote_url . "'
-            WHERE media_id='"   . addslashes($media_id) . "'";
+            remote_url='"       . $remote_url . "' " .
+            $owner_sql .
+            "WHERE media_id='"   . addslashes($media_id) . "'";
 
     DB_query($sql);
     if ( DB_error() != 0 ) {

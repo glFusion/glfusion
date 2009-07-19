@@ -32,8 +32,7 @@
   <fieldset>
     <legend>{lang_media_attributes}</legend>
 
-    <p><label>{uploaded_by}</label>
-    {username}</p>
+
 
     <p><label>{lang_comments}</label>
     {media_comments}</p>
@@ -70,6 +69,9 @@
     </div>
     <fieldset>
       <legend>{lang_mediaattributes}</legend>
+        <p><label>{uploaded_by}</label>
+        {username}</p>
+
         <p><label for="original_filename">{lang_original_filename}</label><br{xhtml}>
         <input type="text" size="80" name="original_filename" id="original_filename" value="{original_filename}"{xhtml}></p>
 

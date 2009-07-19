@@ -1709,7 +1709,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         }
     }
 
-    if ($MG_albums[$aid]->access == 3 ) {
+    if ($MG_albums[$aid]->access == 3 || ($_MG_CONF['allow_user_edit'] == true && isset($_USER['uid']) && $media[$mediaObject]['media_user_id'] == $_USER['uid'])) {
         $edit_item = '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=mediaedit&amp;s=1&amp;album_id=' . $aid . '&amp;mid=' . $mid . '">' . $LANG_MG01['edit'] . '</a>';
     } else {
         $edit_item = '';
