@@ -45,6 +45,8 @@ Forum Plugin v3.1.4
 
 Media Gallery
 -------------
+- Added new option to allow media owner to edit media item (Mark)
+- Added new feature to allow mediagallery.admin to edit media owner (Mark)
 - Moved user preferences to user profile (Mark)
 - Fixed comment handling - multi-page comments did not work and
   user could not select comment order. (Mark)
