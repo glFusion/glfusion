@@ -1591,6 +1591,7 @@ function INST_doSiteUpgrade()
                 DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.1.1' WHERE pi_name = 'spamx'",1);
                 DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
                 DB_delete($_TABLES['plugins'],'pi_name', 'xmlsitemap');
+                DB_delete($_TABLES['conf_values'],'group_name','xmlsitemap');
                 // sync up with 1.1.0
                 $_SQLi = array();
                 $_SQLi[] = "ALTER TABLE {$_TABLES['blocks']} DROP INDEX blocks_bid";
