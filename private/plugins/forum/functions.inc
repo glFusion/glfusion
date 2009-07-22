@@ -1537,7 +1537,7 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     $usersettings->set_var ('LANG_GF02[msg167]', $LANG_GF02['msg167']);
     $usersettings->set_var ('LANG_GF02[msg168]', $LANG_GF02['msg168']);
     $usersettings->set_var ('enablenotify', $A['enablenotify']);
-    $usersettings->set_var ('emailnotify_checked', $emailnotify_checked);
+    $usersettings->set_var ('emailnotify_checked', $enablenotify_checked);
 
     $usersettings->set_var ('LANG_GF02[msg184]', $LANG_GF02['msg184']);
     $usersettings->set_var ('LANG_GF02[msg185]', $LANG_GF02['msg185']);
@@ -1574,7 +1574,7 @@ function plugin_profilesave_forum( )
     $xtopicsperpage     = intval(COM_applyFilter($_POST['xtopicsperpage'],true));
     $xpostsperpage      = intval(COM_applyFilter($_POST['xpostsperpage'],true));
     $xpopularlimit      = intval(COM_applyFilter($_POST['xpopularlimit'],true));
-    $xmessagesperpage   = intval(COM_applyFilter($_POST['xmessagesperpage'],true));
+    $xpostsperpage      = intval(COM_applyFilter($_POST['xpostsperpage'],true));
     $xsearchlines       = intval(COM_applyFilter($_POST['xsearchlines'],true));
     $xmembersperpage    = intval(COM_applyFilter($_POST['xmembersperpage'],true));
     $xemailnotify       = isset($_POST['xemailnotify']) && $_POST['xemailnotify'] == 'on' ? 1 : 0;
