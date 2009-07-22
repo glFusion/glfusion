@@ -7289,6 +7289,10 @@ function USES_lib_admin() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-admin.php';
 }
+function USES_lib_bbcode() {
+    global $_CONF;
+    require_once $_CONF['path_system'] . 'lib-bbcode.php';
+}
 function USES_lib_comments() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-comment.php';
