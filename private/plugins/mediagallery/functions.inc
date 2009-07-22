@@ -3400,6 +3400,7 @@ function plugin_profileedit_mediagallery($uid,$panel,$fieldset)
     }
 
     $retval = '';
+    $x = 0;
 
     // let's see if anything is actually set...
     if ( !isset($_MG_USERPREFS['mp3_player']) ) {
@@ -3514,7 +3515,7 @@ function plugin_profilesave_mediagallery()
 
     $display_rows    = intval(COM_applyFilter($_POST['display_rows'],true));
     $display_columns = intval(COM_applyFilter($_POST['display_columns'],true));
-    $mp3_player      = intval(COM_applyFilter($_POST['mp3_player'],true));
+    $mp3_player      = isset($_POST['mp3_player']) ? intval(COM_applyFilter($_POST['mp3_player'],true)) : 0;
     $playback_mode   = intval(COM_applyFilter($_POST['playback_mode'],true));
     $tn_size         = intval(COM_applyFilter($_POST['tn_size'],true));
     $uid             = intval($_USER['uid']);
