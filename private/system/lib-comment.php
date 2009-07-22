@@ -467,10 +467,10 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         }
 
         //and finally: format the actual text of the comment, but check only the text, not sig or edit
-        $text = str_replace('<!-- COMMENTSIG --><span class="comment-sig">', '', $A['comment']);
-        $text = str_replace('</span><!-- /COMMENTSIG -->', '', $text);
-        $text = str_replace('<span class="comment-edit">', '', $text);
-        $text = str_replace('</span><!-- /COMMENTEDIT -->', '', $text);
+        $text = str_replace('<!-- COMMENTSIG --><div class="comment-sig">', '', $A['comment']);
+        $text = str_replace('</div><!-- /COMMENTSIG -->', '', $text);
+        $text = str_replace('<div class="comment-edit">', '', $text);
+        $text = str_replace('</div><!-- /COMMENTEDIT -->', '', $text);
         if( preg_match( '/<.*>/', $text ) == 0 ) {
             $A['comment'] = nl2br( $A['comment'] );
         }
@@ -763,6 +763,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
     } else {
         COM_clearSpeedlimit ($_CONF['commentspeedlimit'], 'comment');
 
+        $last = 0;
         if ($mode != 'edit' && $mode != $LANG03[28]) {
             //not edit mode or preview changes
             $last = COM_checkSpeedlimit ('comment');
@@ -1443,13 +1444,13 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
     if ($uid > 1) {
         $sig = DB_getItem ($_TABLES['users'], 'sig', "uid = ".intval($uid));
         if (!empty ($sig)) {
-            $comment .= '<!-- COMMENTSIG --><span class="comment-sig">';
+            $comment .= '<!-- COMMENTSIG --><div class="comment-sig">';
             if ( $postmode == 'html') {
-                $comment .= '<br />---<br />' . nl2br ($sig);
+                $comment .= '---<br />' . nl2br ($sig);
             } else {
-                $comment .=  LB . LB . '---' . LB . $sig;
+                $comment .=  nl2br('---' . LB . $sig);
             }
-        $comment .= '</span><!-- /COMMENTSIG -->';
+        $comment .= '</div><!-- /COMMENTSIG -->';
         }
     }
 
