@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.5
 -------------------------
+- Add option for user to select search result format (Mark)
+- Add block name to the admin list of blocks (Mark)
+- Updated htmLawed to v1.1.8.1 (Mark)
 - Implemented new profile APIs (Mark)
 - New configuration option to hide the 'Content' tab in the Account
   Settings (Mark)
@@ -36,6 +39,9 @@ FileMgmt Plugin
 
 Forum Plugin v3.1.4
 -------------------
+- Query optimization on topic list page - reduced server load and
+  overall performance improvement (Mark)
+- Implemented BBcode signature support (Mark)
 - Moved user preferences to user profile (Mark)
 - Implemented Community Moderation System (Mark)
 - Added forum.html feature (auto assigned to Forum Admin group) - allows
@@ -45,6 +51,7 @@ Forum Plugin v3.1.4
 
 Media Gallery
 -------------
+- Added new command line interface for batch imports into Media Gallery (Mark)
 - Added new option to allow media owner to edit media item (Mark)
 - Added new feature to allow mediagallery.admin to edit media owner (Mark)
 - Moved user preferences to user profile (Mark)
