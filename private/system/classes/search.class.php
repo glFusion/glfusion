@@ -501,7 +501,7 @@ class Search {
      */
     function doSearch()
     {
-        global $_CONF, $LANG01, $LANG09, $LANG31;
+        global $_CONF, $LANG01, $LANG09, $LANG31, $_TABLES, $_USER;
 
         $debug_info = '';
 
@@ -548,6 +548,12 @@ class Search {
         $show_user = $_CONF['search_show_user'];
         $show_hits = $_CONF['search_show_hits'];
         $style = isset($_CONF['search_style']) ? $_CONF['search_style'] : 'google';
+        if ( !COM_isAnonUser() ) {
+            $userStyle = DB_getItem($_TABLES['userprefs'],'search_result_format','uid='.$_USER['uid']);
+            if ( $userStyle != '' ) {
+                $style = $userStyle;
+            }
+        }
 
         if ($style == 'table')
         {

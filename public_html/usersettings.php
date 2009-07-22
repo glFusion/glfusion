@@ -361,9 +361,10 @@ function buildTopicList ()
 */
 function editpreferences()
 {
-    global $_TABLES, $_CONF, $_SYSTEM, $LANG04, $_USER, $_GROUPS;
+    global $_TABLES, $_CONF, $_SYSTEM, $LANG04, $_USER, $_GROUPS,
+           $LANG_confignames, $LANG_configselects;
 
-    $result = DB_query("SELECT noicons,willing,dfid,tzid,noboxes,maxstories,tids,aids,boxes,emailfromadmin,emailfromuser,showonline FROM {$_TABLES['userprefs']},{$_TABLES['userindex']} WHERE {$_TABLES['userindex']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']}");
+    $result = DB_query("SELECT noicons,willing,dfid,tzid,noboxes,maxstories,tids,aids,boxes,emailfromadmin,emailfromuser,showonline,search_result_format FROM {$_TABLES['userprefs']},{$_TABLES['userindex']} WHERE {$_TABLES['userindex']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']}");
 
     $A = DB_fetchArray($result);
 
@@ -607,6 +608,15 @@ function editpreferences()
                                  $A['dfid']) . '</select>';
     $preferences->set_var ('dateformat_selector', $selection);
     $preferences->set_var('plugin_layout_display',PLG_profileEdit($_USER['uid'],'layout','display'));
+
+    $search_result_select  = '<select name="search_result_format" id="search_result_format">'.LB;
+    foreach ($LANG_configselects['Core'][18] AS $name => $type ) {
+        $search_result_select .= '<option value="'. $type . '"' . ($A['search_result_format'] == $type ? 'selected="selected"' : '') . '>'.$name.'</option>'.LB;
+    }
+    $search_result_select .= '</select>';
+
+    $preferences->set_var('search_result_select',$search_result_select);
+    $preferences->set_var('lang_search_format',$LANG_confignames['Core']['search_show_type']);
 
     $preferences->parse ('display_block', 'display', true);
 
@@ -1481,6 +1491,12 @@ function savepreferences($A)
         $A['language'] = $_CONF['language'];
     }
 
+    if ( isset($A['search_result_format']) ) {
+        $A['search_result_format'] = COM_applyFilter($A['search_result_format']);
+    } else {
+        $A['search_result_format'] = 'google';
+    }
+
     // Save theme, when doing so, put in cookie so we can set the user's theme
     // even when they aren't logged in
     $theme    = addslashes ($A['theme']);
@@ -1498,7 +1514,7 @@ function savepreferences($A)
 
     $A['dfid'] = intval(COM_applyFilter ($A['dfid'], true));
 
-    DB_query("UPDATE {$_TABLES['userprefs']} SET noicons=".intval($A['noicons']).", willing=".intval($A['willing']).", dfid=".intval($A['dfid']).", tzid='".addslashes($A['tzid'])."', emailfromadmin='".addslashes($A['emailfromadmin'])."', emailfromuser=".intval($A['emailfromuser']).", showonline=".intval($A['showonline'])." WHERE uid={$_USER['uid']}");
+    DB_query("UPDATE {$_TABLES['userprefs']} SET search_result_format='".addslashes($A['search_result_format'])."',noicons=".intval($A['noicons']).", willing=".intval($A['willing']).", dfid=".intval($A['dfid']).", tzid='".addslashes($A['tzid'])."', emailfromadmin='".addslashes($A['emailfromadmin'])."', emailfromuser=".intval($A['emailfromuser']).", showonline=".intval($A['showonline'])." WHERE uid={$_USER['uid']}");
 
     if (empty ($etids)) {
         $etids = '-';

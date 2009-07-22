@@ -495,6 +495,7 @@ CREATE TABLE {$_TABLES['userprefs']} (
   emailfromadmin tinyint(1) NOT NULL default '1',
   emailfromuser tinyint(1) NOT NULL default '1',
   showonline tinyint(1) NOT NULL default '1',
+  search_result_format varchar( 48 ) NOT NULL DEFAULT 'google',
   PRIMARY KEY  (uid)
 ) TYPE=MyISAM
 ";

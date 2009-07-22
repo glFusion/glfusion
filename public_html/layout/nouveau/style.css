@@ -2570,3 +2570,14 @@ display:block;
 float:left;
 padding:3px 3px 0;
 }
+
+.signature {
+  overflow:hidden;
+  width: 500px;
+  max-height: 150px;
+}
+
+.comment-sig {
+  color:#666666;
+  padding-top:1ex;
+}
