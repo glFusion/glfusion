@@ -336,7 +336,7 @@ function handleEdit() {
         $commenttext = COM_undoSpecialChars ($A['comment']);
 
         //remove signature
-        $pos = strpos( $commenttext,'<!-- COMMENTSIG --><span class="comment-sig">');
+        $pos = strpos( $commenttext,'<!-- COMMENTSIG --><div class="comment-sig">');
         if ( $pos > 0) {
             $commenttext = substr($commenttext, 0, $pos);
         }
@@ -352,10 +352,11 @@ function handleEdit() {
                . 'to edit a comment that doesn\'t exist as described.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
+    $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
 
     return COM_siteHeader('menu', $LANG03[1])
            . CMT_commentForm ($title, $commenttext, $sid,
-                  COM_applyFilter ($_REQUEST['pid'], true), $type, 'edit', $postmode)
+                  $pid, $type, 'edit', $postmode)
            . COM_siteFooter();
 }
 
