@@ -1181,6 +1181,7 @@ function SEC_checkToken()
                 $return = false;
             } else if($tokendata['urlfor'] != $_SERVER['HTTP_REFERER']) {
                 COM_errorLog("CheckToken: Token failed - token URL does not match referer URL.");
+                COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
                 $return = false;
             } else if($tokendata['expired']) {
                 COM_errorLog("CheckToken: Token failed - token has expired.");
@@ -1270,6 +1271,7 @@ function SEC_checkTokenGeneral($token,$action='general')
                 $return = false;
             } else if($tokendata['urlfor'] != $action) {
                 COM_errorLog("CheckToken: Token failed - token URL does not match referer URL.");
+                COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $action);
                 $return = false;
             } else {
                 $return = true; // Everything is OK
