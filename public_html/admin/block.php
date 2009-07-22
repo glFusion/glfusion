@@ -432,6 +432,7 @@ function listblocks()
         array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
         array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true),
         array('text' => $LANG21[46], 'field' => 'move', 'sort' => false),
+        array('text' => $LANG21[48], 'field' => 'name', 'sort' => true),
         array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
         array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true),
         array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true),
