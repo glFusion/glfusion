@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | Forum Plugin for glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
-// | mysql_install_3.0.php                                                    |
+// | mysql_install.php                                                        |
 // |                                                                          |
 // | SQL Commands for new install of the Forum plugin.                        |
 // +--------------------------------------------------------------------------+
@@ -52,7 +52,6 @@ $_SQL['gf_categories'] = "CREATE TABLE {$_TABLES['gf_categories']} (
 #
 # Table structure for table `forum_forums`
 #
-
 
 $_SQL['gf_forums'] = "CREATE TABLE {$_TABLES['gf_forums']} (
   forum_order int(4) NOT NULL default '0',
@@ -206,6 +205,7 @@ $_SQL['gf_userinfo'] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
   `msnm` varchar(128) NOT NULL default '',
   `interests` varchar(255) NOT NULL default '',
   `occupation` varchar(255) NOT NULL default '',
+  `signature` mediumtext NOT NULL default '',
   PRIMARY KEY  (`uid`)
 ) TYPE=MyISAM COMMENT='Forum Extra User Profile Information';";
 

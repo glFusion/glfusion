@@ -97,8 +97,10 @@ function forum_upgrade() {
         case '3.1.3' :
             $c = config::get_instance();
             $c->add('enable_user_rating_system',FALSE, 'select', 0,0,0,22, TRUE, 'forum');
+            $c->add('bbcode_signature', TRUE, 'select',0, 0, 0, 37, true, 'forum');
             DB_query("ALTER TABLE {$_TABLES['gf_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
             DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD `rating` INT( 8 ) NOT NULL ");
+            DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD signature MEDIUMTEXT NOT NULL" );
             $sql = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_assoc']} ( "
                     . "`user_id` mediumint( 9 ) NOT NULL , "
                     . "`voter_id` mediumint( 9 ) NOT NULL , "
@@ -113,7 +115,7 @@ function forum_upgrade() {
             $ft_id = DB_insertId();
             $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'forum Admin'"));
             DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.4',pi_gl_version='1.1.4' WHERE pi_name = 'forum'");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.4',pi_gl_version='1.1.5' WHERE pi_name = 'forum'");
         default :
             DB_query("ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FF_CONF['pi_version']."',pi_gl_version='".$_FF_CONF['gl_version']."' WHERE pi_name = 'forum'");

@@ -130,6 +130,7 @@ $_FF_DEFAULT['max_uploadimage_height']  = '1600';
 $_FF_DEFAULT['max_uploadfile_size']     = '6553600';     // 6.400 MB
 $_FF_DEFAULT['inlineimage_width']       = '300';
 $_FF_DEFAULT['inlineimage_height']      = '300';
+$_FF_DEFAULT['bbcode_signature']        = true;
 
 $_FF_DEFAULT['allowablefiletypes']    = array(
         'application/x-gzip-compressed'     => '.tgz',
@@ -224,6 +225,7 @@ if ( isset($_TABLES['gf_settings']) ) {
             $_FF_CONF['allow_smilies']          = $A['allowsmilies'];
         if ( isset($A['allow_notify']) )
             $_FF_CONF['allow_notification']     = $A['allow_notify'];
+
         if ( isset($A['allow_userdatefmt'] ) )
             $_FF_CONF['allow_user_dateformat']  = $A['allow_userdatefmt'];
         if ( isset($A['showiframe']) )
@@ -334,12 +336,14 @@ function plugin_initconfig_forum()
                 0, 0, 0, 30, true, 'forum');
         $c->add('allow_notification', $_FF_DEFAULT['allow_notification'], 'select',
                 0, 0, 0, 35, true, 'forum');
-        $c->add('show_topicreview', $_FF_DEFAULT['show_topicreview'], 'select',
+        $c->add('bbcode_signature', $_FF_DEFAULT['bbcode_signature'], 'select',
                 0, 0, 0, 40, true, 'forum');
+        $c->add('show_topicreview', $_FF_DEFAULT['show_topicreview'], 'select',
+                0, 0, 0, 45, true, 'forum');
         $c->add('showtopic_review_order', $_FF_DEFAULT['showtopic_review_order'], 'select',
-                0, 0, 5, 45, true, 'forum');
+                0, 0, 5, 50, true, 'forum');
         $c->add('allow_user_dateformat', $_FF_DEFAULT['allow_user_dateformat'], 'select',
-                0, 0, 0, 50, true, 'forum');
+                0, 0, 0, 55, true, 'forum');
         $c->add('use_pm_plugin', $_FF_DEFAULT['use_pm_plugin'], 'select',
                 0, 0, 0, 60, true, 'forum');
         $c->add('use_autorefresh', $_FF_DEFAULT['use_autorefresh'], 'select',

@@ -298,6 +298,10 @@ $LANG_GF01 = array(
     'rate_too_low'  => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
+    /* --- bbcode signature --- */
+    'signature' => 'Signature',
+    'edit_signature' => 'Edit BBcode Signature',
+    'signature_preview' => 'Signature Preview',
 );
 
 $LANG_GF02 = array(
@@ -960,6 +964,7 @@ $LANG_confignames['forum'] = array(
     'enable_fm_integration' => 'Enable FileMgmt Integration for attachments',
     'max_uploadfile_size' => 'Max Size for Attachments (bytes)',
     'enable_user_rating_system' => 'Enable User Rating System',
+    'bbcode_signature' => 'Enable BBcode Signature',
 );
 
 $LANG_configsubgroups['forum'] = array(

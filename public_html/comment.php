@@ -388,14 +388,14 @@ function handleEditSubmit()
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment with one or more missing values.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
-    } elseif ( $uid != $commentuid && !SEC_hasRights( 'comment.moderate' ) ) {
+    } elseif ( $uid != $commentuid && !SEC_inGroup( 'Root' ) ) {
         //check permissions
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment without proper permission.');
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
-    $comment = CMT_prepareText($_POST['comment'], $postmode);
+    $comment = CMT_prepareText($_POST['comment'], $postmode,true,$cid);
     $title = COM_checkWords (strip_tags (COM_stripslashes ($_POST['title'])));
 
     if (!empty ($title) && !empty ($comment)) {
@@ -508,21 +508,6 @@ case 'sendreport':
 case 'edit':
     if (SEC_checkToken()) {
         $display .= handleEdit();
-    } else {
-        $display .= COM_refresh($_CONF['site_url'] . '/index.php');
-    }
-    break;
-
-case 'que':
-    if ( SEC_checkToken() && SEC_hasRights('comment.moderate') ) {
-        //get comment
-        $cid = COM_applyFilter ($_GET['cid'],true);
-        $sid = COM_applyFilter ($_GET['sid']);
-        resubmitToModeration($cid);
-
-        $display .= COM_refresh(COM_buildUrl ($_CONF['site_url']
-                                    . "/article.php?story=$sid"));
-
     } else {
         $display .= COM_refresh($_CONF['site_url'] . '/index.php');
     }

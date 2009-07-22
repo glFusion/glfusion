@@ -1,0 +1,95 @@
+{# begin {templatelocation} #}
+<script type="text/javascript">
+b_help = "{$LANG_GF01[b_help]}";
+i_help = "{$LANG_GF01[i_help]}";
+u_help = "{$LANG_GF01[u_help]}";
+q_help = "{$LANG_GF01[q_help]}";
+c_help = "{$LANG_GF01[c_help]}";
+l_help = "{$LANG_GF01[l_help]}";
+o_help = "{$LANG_GF01[o_help]}";
+p_help = "{$LANG_GF01[p_help]}";
+w_help = "{$LANG_GF01[w_help]}";
+a_help = "{$LANG_GF01[a_help]}";
+s_help = "{$LANG_GF01[s_help]}";
+f_help = "{$LANG_GF01[f_help]}";
+h_help = "{$LANG_GF01[h_help]}";
+t_help = "{$LANG_GF01[t_help]}";
+</script>
+<script type="text/javascript" src="{site_url}/forum/javascript/bbcode.js"></script>
+<form id="sig_form" name="sig_form" action="{site_url}/forum/usersig.php" method="post">
+
+  <div id="forum" class="sig-edit">
+    {# common header area - show where we are #}
+    <h2>FORUM :: <strong>{$LANG_GF01[edit_signature]}</strong></h2>
+    {# end of common header #}
+    <div style="clear:both;"></div>
+    <hr />
+
+    {!if error_message}
+      <div style="padding-top:5px;padding-bottom:5px;background-color:#ff3300;">
+      {error_message}
+      </div>
+    {!endif}
+
+    {!if preview_sig}
+    <div id="preview" style="width:500px;padding-bottom:10px;">
+      <fieldset><legend>{$LANG_GF01[signature_preview]}</legend>
+      <div class="signature">
+        {preview_sig}
+      </div>
+      </fieldset>
+    </div>
+    {!endif}
+
+    <div id="format-buttons">
+        <input type="button" class="button" accesskey="b" name="addbbcode0" value=" B " style="text-align:center;font-weight:bold; width:30px;" onclick="bbstyle(0)" onmouseover="helpline('b')" {xhtml}>
+        <input type="button" class="button" accesskey="i" name="addbbcode2" value=" i " style="text-align:center;font-style:italic; width:30px;" onclick="bbstyle(2)" onmouseover="helpline('i')" {xhtml}>
+        <input type="button" class="button" accesskey="u" name="addbbcode4" value=" u " style="text-align:center;text-decoration: underline; width:30px;" onclick="bbstyle(4)" onmouseover="helpline('u')" {xhtml}>
+        <input type="button" class="button" accesskey="q" name="addbbcode6" value="Quote" style="text-align:center;width:6em;" onclick="bbstyle(6)" onmouseover="helpline('q')" {xhtml}>
+        <input type="button" class="button" accesskey="c" name="addbbcode8" value="Code" style="text-align:center;width:4em;" onclick="bbstyle(8)" onmouseover="helpline('c')" {xhtml}>
+        <input type="button" class="button" accesskey="l" name="addbbcode10" value="List" style="text-align:center;width:4em;" onclick="bbstyle(10)" onmouseover="helpline('l')" {xhtml}>
+        <input type="button" class="button" accesskey="p" name="addbbcode14" value="Img" style="text-align:center;width:4em;"  onclick="bbstyle(14)" onmouseover="helpline('p')" {xhtml}>
+        <input type="button" class="button" accesskey="w" name="addbbcode16" value="URL" style="text-align:center;text-decoration: underline; width:5em;" onclick="bbstyle(16)" onmouseover="helpline('w')" {xhtml}>
+        <input type="button" class="button" name="help" value="Help?" style="text-align:center;text-decoration:underline; width:5em;" onclick="poptastic('{site_url}/forum/bbcode.html');" onmouseover="helpline('h')" {xhtml}>
+        <br{xhtml}><br{xhtml}>
+            {$LANG_GF01[FONTCOLOR]}:
+            <select name="addbbcode18" onchange="bbfontstyle('[color=' + this.form.addbbcode18.options[this.form.addbbcode18.selectedIndex].value + ']', '[/color]')" onmouseover="helpline('s')">
+                <option style="color:black;" value="#">{$LANG_GF01[DEFAULT]}</option>
+                <option style="color:darkred;" value="darkred">{$LANG_GF01[DKRED]}</option>
+                <option style="color:red;" value="red">{$LANG_GF01[RED]}</option>
+                <option style="color:orange;" value="orange">{$LANG_GF01[ORANGE]}</option>
+                <option style="color:brown;" value="brown">{$LANG_GF01[BROWN]}</option>
+                <option style="color:yellow;" value="yellow">{$LANG_GF01[YELLOW]}</option>
+                <option style="color:green;" value="green">{$LANG_GF01[GREEN]}</option>
+                <option style="color:olive;" value="olive">{$LANG_GF01[OLIVE]}</option>
+                <option style="color:cyan;" value="cyan">{$LANG_GF01[CYAN]}</option>
+                <option style="color:blue;" value="blue">{$LANG_GF01[BLUE]}</option>
+                <option style="color:darkblue;" value="darkblue">{$LANG_GF01[DKBLUE]}</option>
+                <option style="color:indigo;" value="indigo">{$LANG_GF01[INDIGO]}</option>
+                <option style="color:violet;" value="violet">{$LANG_GF01[VIOLET]}</option>
+                <option style="color:white;" value="white">{$LANG_GF01[WHITE]}</option>
+                <option style="color:black;" value="black">{$LANG_GF01[BLACK]}</option>
+        </select>
+        {$LANG_GF01[FONTSIZE]}:
+        <select name="addbbcode20" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]')" onmouseover="helpline('f')">
+                    <option value="7">{$LANG_GF01[TINY]}</option>
+                    <option value="9">{$LANG_GF01[SMALL]}</option>
+                    <option value="12" selected="selected">{$LANG_GF01[NORMAL]}</option>
+                    <option value="18">{$LANG_GF01[LARGE]}</option>
+                    <option  value="24">{$LANG_GF01[HUGE]}</option>
+        </select>
+        &nbsp;<a href="javascript:bbstyle(-1)" onmouseover="helpline('a')">{$LANG_GF01[CLOSETAGS]}</a>
+        <br{xhtml}><br{xhtml}>
+        <input type="text" name="helpbox" size="70" maxlength="100" class="helpline" value="{$LANG_GF01[CODETIP]}"{xhtml}>
+
+    </div>
+
+    <div id="message-box" style="padding-top:10px;">
+      <textarea tabindex="3" id="signature" name="signature" class="inputbox" style="width:80%;font-size: 1em;font-family: 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;" onkeyup="storeCaret(this);" onclick="storeCaret(this);" onselect="storeCaret(this);" cols="76" rows="10">{signature}</textarea>
+    </div>
+  </div>
+  <input type="hidden" name="{gltoken_name}" value="{gltoken}" />
+  <input type="submit" name="submit" value="{$LANG_GF01[SUBMIT]}" tabindex="4" />
+  <input type="submit" name="preview" value="{$LANG_GF01[PREVIEW]}" tabindex="5" />
+  <input type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="6" />
+</form>

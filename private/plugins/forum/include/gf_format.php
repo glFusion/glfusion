@@ -306,7 +306,9 @@ function forumNavbarMenu($current='') {
     $navmenu = new navbar;
     $navmenu->add_menuitem($LANG_GF01['INDEXPAGE'],"{$_CONF['site_url']}/forum/index.php");
     if ( !COM_isAnonUser() ) {
-        $navmenu->add_menuitem($LANG_GF01['USERPREFS'],"{$_CONF['site_url']}/forum/userprefs.php");
+        if ($CONF_FORUM['bbcode_signature'] ) {
+            $navmenu->add_menuitem($LANG_GF01['signature'],"{$_CONF['site_url']}/forum/usersig.php");
+        }
         $navmenu->add_menuitem($LANG_GF01['SUBSCRIPTIONS'],"{$_CONF['site_url']}/forum/notify.php");
         $navmenu->add_menuitem($LANG_GF01['BOOKMARKS'],"{$_CONF['site_url']}/forum/index.php?op=bookmarks");
         $navmenu->add_menuitem($LANG_GF02['new_posts'],"{$_CONF['site_url']}/forum/index.php?op=newposts");
@@ -320,7 +322,6 @@ function forumNavbarMenu($current='') {
         $navmenu->set_selected($current);
     }
     return $navmenu->generate();
-
 }
 
 function ForumHeader($forum,$showtopic) {
@@ -1225,6 +1226,31 @@ function forum_showBlocks($showblocks)
         if (DB_numRows($result) == 1) {
             $A = DB_fetchArray($result);
             $retval .= COM_formatBlock($A,$noboxes);
+        }
+    }
+
+    return $retval;
+}
+
+function GF_getSignature( $tagline, $signature, $postmode = 'html'  )
+{
+    global $_CONF, $CONF_FORUM, $_TABLES;
+
+    USES_lib_bbcode();
+
+    $retval = '';
+    $sig    = '';
+
+    if ( $CONF_FORUM['bbcode_signature'] && $signature != '') {
+        $retval = '<div class="signature">'.BBC_formatTextBlock( $signature, 'text').'</div><div style="clear:both;"></div>';
+    } else {
+        if (!empty ($tagline)) {
+            if ( $postmode == 'html' ) {
+                $retval = nl2br($tagline);
+            } else {
+                $retval = $tagline;
+            }
+            $retval = '<strong>'.$retval.'</strong>';
         }
     }
 
