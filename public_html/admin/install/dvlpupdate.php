@@ -44,6 +44,8 @@ if (!SEC_inGroup('Root')) {
     exit;
 }
 
+$retval = '';
+
 function glfusion_110() {
     global $_TABLES, $_CONF;
 
@@ -231,7 +233,7 @@ function glfusion_115()
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.5',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.5' WHERE name='glfusion'",1);
     DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
-
+    DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray='23' WHERE name='censormode'",1);
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
     $c->add('hide_exclude_content',0,'select',4,16,0,295,TRUE);

@@ -1650,6 +1650,8 @@ function INST_doSiteUpgrade()
                 $c->del('user_html','Core');
                 $c->del('admin_html','Core');
                 $c->del('allowed_protocols','Core');
+                DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray='23' WHERE name='censormode'",1);
+                DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray='18' WHERE name='search_style'",1);
                 DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.0',name='glfusion'",1);
                 DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.0' WHERE name='glfusion'",1);
                 $current_fusion_version = '1.1.0';

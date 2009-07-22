@@ -352,7 +352,7 @@ function install_config($site_url)
     $c->add('skip_html_filter_for_root',0,'select',7,34,0,1730,TRUE);
 
     $c->add('fs_censoring', NULL, 'fieldset', 7, 35, NULL, 0, TRUE);
-    $c->add('censormode',1,'select',7,35,0,1760,TRUE);
+    $c->add('censormode',1,'select',7,35,23,1760,TRUE);
     $c->add('censorreplace','*censored*','text',7,35,NULL,1770,TRUE);
     $c->add('censorlist', array('fuck','cunt','fucker','fucking','pussy','cock','c0ck',' cum ','twat','clit','bitch','fuk','fuking','motherfucker'),'%text',7,35,NULL,1780,TRUE);
 
