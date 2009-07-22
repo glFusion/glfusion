@@ -296,9 +296,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                 $editname = DB_getItem($_TABLES['users'], 'username', "uid=".intval($B['uid']));
             }
             //add edit info to text
-            $A['comment'] .= LB . '<span class="comment-edit">' . $LANG03[30] . ' '
+            $A['comment'] .= LB . '<div class="comment-edit">' . $LANG03[30] . ' '
                               . strftime($_CONF['date'],$B['time']) . ' ' . $LANG03[31] . ' '
-                              . $editname . '</span><!-- /COMMENTEDIT -->';
+                              . $editname . '</div><!-- /COMMENTEDIT -->';
         }
 
         // determines indentation for current comment
@@ -406,12 +406,13 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         if ( !COM_isAnonUser() ) {
             if ( $_USER['uid'] == $A['uid'] && $_CONF['comment_edit'] == 1
                     && (time() - $A['nice_date']) < $_CONF['comment_edittime'] &&
+                    $ccode == 0 &&
                     DB_getItem($_TABLES['comments'], 'COUNT(*)', "pid = ".intval($A['cid'])) == 0) {
                 $edit_option = true;
                 if ( empty($token)) {
                     $token = SEC_createToken();
                 }
-            } else if ( SEC_hasRights( 'comment.moderate' )) {
+            } else if (SEC_inGroup('Root') ) {
                 $edit_option = true;
             } else {
                 $edit_option = false;
@@ -434,7 +435,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         // If deletion is allowed, displays delete link
         if( $delete_option ) {
             $deloption = '';
-            if ( SEC_hasRights('comment.moderate')) {
+            if ( SEC_inGroup('Root') ) {
                 if( !empty( $A['ipaddress'] ) ) {
                     if( empty( $_CONF['ip_lookup'] )) {
                         $deloption = $A['ipaddress'] . '  | ';
@@ -782,11 +783,6 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $postmode = $_CONF['postmode'];
             }
 
-            $sig = '';
-            if ($uid > 1) {
-                $sig = DB_getItem ($_TABLES['users'], 'sig', "uid = ".intval($uid));
-            }
-
             // Note:
             // $comment / $newcomment is what goes into the preview / is
             // actually stored in the database -> strip HTML
@@ -816,13 +812,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
             $_POST['title'] = $title;
             $newcomment = $comment;
-            if (!empty ($sig)) {
-                if (($postmode == 'html') || ($fakepostmode == 'html')) {
-                    $newcomment .= '<p>---<br' . XHTML . '>' . nl2br ($sig) . '</p>';
-                } else {
-                    $newcomment .= LB . LB . '---' . LB . $sig;
-                }
-            }
+
             $_POST['comment'] = $newcomment;
 
             // Preview mode:
@@ -929,8 +919,6 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 $comment_template->set_var('uid', 1);
                 if ( isset($_POST['username']) ) {
                     $name = strip_tags(COM_applyFilter($_POST['username'])); //for preview
-                } elseif (isset($_COOKIE['anon-name'])) {
-                    $name = $_COOKIE['anon-name']; //stored as cookie, name used before
                 } else {
                     $name = $LANG03[24]; //anonymous user
                 }
@@ -1059,32 +1047,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     if ($someError = PLG_commentPreSave($uid, $title, $comment, $sid, $pid, $type, $postmode)) {
         return $someError;
     }
-
-    // Clean 'em up a bit!
-    if ($postmode == 'html') {
-        $comment = COM_checkWords (COM_checkHTML (COM_stripslashes ($comment)));
-    } else {
-        $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)));
-        $newcomment = COM_makeClickableLinks ($comment);
-        if (strcmp ($comment, $newcomment) != 0) {
-            $comment = nl2br ($newcomment);
-            $postmode = 'html';
-        }
-    }
     $title = COM_checkWords (strip_tags (COM_stripslashes ($title)));
-
-    // Get signature
-    $sig = '';
-    if ($uid > 1) {
-        $sig = DB_getItem($_TABLES['users'],'sig', "uid = ".intval($uid));
-    }
-    if (!empty ($sig)) {
-        if ($postmode == 'html') {
-            $comment .= '<p>---<br' . XHTML . '>' . nl2br($sig) . '</p>';
-        } else {
-            $comment .= LB . LB . '---' . LB . $sig;
-        }
-    }
+    $comment = CMT_prepareText($comment,$postmode);
 
     // check for non-int pid's
     // this should just create a top level comment that is a reply to the original item
@@ -1129,7 +1093,6 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         if (isset($_POST['username']) && strcmp($_POST['username'],$LANG03[24]) != 0) {
             $name = strip_tags(COM_applyFilter ($_POST['username']));
             DB_change($_TABLES['comments'],'name',addslashes($name),'cid',intval($cid));
-            setcookie('anon-name', $name);
         }
         DB_unlockTable ($_TABLES['comments']);
 
@@ -1285,7 +1248,7 @@ function CMT_reportAbusiveComment ($cid, $type)
 
     $retval = '';
 
-    if (empty ($_USER['username'])) {
+    if ( COM_isAnonUser() ) {
         $retval .= COM_startBlock ($LANG_LOGIN[1], '',
                            COM_getBlockTemplate ('_msg_block', 'header'));
         $loginreq = new Template ($_CONF['path_layout'] . 'submit');
@@ -1362,7 +1325,7 @@ function CMT_sendReport ($cid, $type)
 {
     global $_CONF, $_TABLES, $_USER, $LANG03, $LANG08, $LANG09, $LANG_LOGIN;
 
-    if (empty ($_USER['username'])) {
+    if ( COM_isAnonUser() ) {
         $retval = COM_siteHeader ('menu', $LANG_LOGIN[1]);
         $retval .= COM_startBlock ($LANG_LOGIN[1], '',
                            COM_getBlockTemplate ('_msg_block', 'header'));
@@ -1467,14 +1430,6 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
         }
     }
 
-    if ($edit) {
-        $comment .= LB . '<spam class="comment-edit">' . $LANG03[30] . ' '
-                 . strftime( $_CONF['date'], time() ) . ' ' .$LANG03[31] .' '
-                 . $_USER['username'] . '</span><!-- /COMMENTEDIT -->';
-        $text = $comment;
-
-    }
-
     if (empty ($_USER['uid'])) {
         $uid = 1;
     } elseif ($edit && is_numeric($cid) ){
@@ -1490,7 +1445,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
         if (!empty ($sig)) {
             $comment .= '<!-- COMMENTSIG --><span class="comment-sig">';
             if ( $postmode == 'html') {
-                $comment .= '<p>---<br' . XHTML . '>' . nl2br ($sig);
+                $comment .= '<br />---<br />' . nl2br ($sig);
             } else {
                 $comment .=  LB . LB . '---' . LB . $sig;
             }
