@@ -1715,6 +1715,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'User können Account löschen',
     'hide_author_exclusion' => 'Beim Artikel steht kein Autor',
     'show_fullname' => 'Fullname wird angezeigt',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'Name des Service wird angezeigt',
     'custom_registration' => '"Custom Registration" aktivieren',
     'user_login_method' => 'User Login-Methode ',
@@ -1992,7 +1993,8 @@ $LANG_configselects['Core'] = array(
     19 => array('Exakter Ausdruck' => 'phrase', 'Alle Worte' => 'all', 'Irgendeines der Worte' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('nichts' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Datum' => 'date', 'Titel' => 'title', 'Author' => 'uid', 'Treffer' => 'hits')
+    22 => array('Datum' => 'date', 'Titel' => 'title', 'Author' => 'uid', 'Treffer' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
 );
 
 ?>

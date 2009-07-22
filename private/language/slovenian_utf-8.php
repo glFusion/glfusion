@@ -1713,6 +1713,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'Dovoli brisanje računa',
     'hide_author_exclusion' => 'Dovoli skrivanje avtorja',
     'show_fullname' => 'Prikaži polno ime',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'Prikaži ime servisa',
     'custom_registration' => 'Omogoči registracijo po meri',
     'user_login_method' => 'Način prijave uporabnika',
@@ -1990,7 +1991,8 @@ $LANG_configselects['Core'] = array(
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
 );
 
 ?>

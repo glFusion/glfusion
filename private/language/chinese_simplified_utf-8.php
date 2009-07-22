@@ -1714,6 +1714,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => '允许用户删除',
     'hide_author_exclusion' => '允许隐藏作者',
     'show_fullname' => '显现全名',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => '显现服务名',
     'custom_registration' => '激活自定登记',
     'user_login_method' => '用户登入方式',
@@ -1991,7 +1992,8 @@ $LANG_configselects['Core'] = array(
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
 );
 
 ?>
