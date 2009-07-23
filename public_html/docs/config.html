@@ -2,9 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
 <meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type" />
 <link href="layout/style.css" type="text/css" rel="stylesheet" />
-<meta content="noindex,nofollow" name="robots" /><title>glFusion - Content Management with Style</title>
-
-</head>
+<meta content="noindex,nofollow" name="robots" /><title>glFusion - Content Management with Style</title></head>
 <body style="direction: ltr;">
 <div id="gl_container_fluid">
 <div id="gl_header"> <span style="color: rgb(255, 255, 255); float: left; padding-left: 10px; padding-top: 5px; vertical-align: middle;">glFusion
@@ -1006,7 +1004,10 @@ accounts on remote services (like LDAP or LiveJournal), this option
 will at the service's name to the username to avoid confusion with
 local users of the same name. Set to false to disable. </td>
 </tr>
-<tr class="row9">
+<tr><td><a name="desc_hide_exclude_content"></a>Hide Exclude Content Tab</td><td>When set to true, glFusion will hide the <span style="font-weight: bold;">Content</span>
+tab in the user profile screen. &nbsp;This tab allows users to block
+certain content and content authors, but it can also cause some
+confusion with site users.</td></tr><tr class="row9">
 <td class="col0 leftalign"><a name="desc_custom_registration">Enable Custom Registration</a>
 </td>
 <td class="col1 leftalign">When set to true,
@@ -2017,9 +2018,9 @@ stored in the database. Again, most of this information is put there
 during the installation and you should not normally have to edit this
 file.
 </p>
-<table class="inline">
+<table style="width: 803px; height: 1239px;" class="inline">
 <tbody>
-<tr class="row0">
+<tr><td colspan="3" rowspan="1">$_CONF variables</td></tr><tr class="row0">
 <td class="col0 leftalign">path </td>
 <td class="col1 leftalign">/path/to/glfusion/ </td>
 <td class="col2 leftalign">Base file system path for
@@ -2034,7 +2035,16 @@ directory for your
 site (trailing slash necessary). This directory holds the code
 libraries used throughout glFusion </td>
 </tr>
-<tr class="row2">
+<tr><td>default_charset</td><td>iso-8859-1</td><td>Character encoding used
+by glFusion when serving <acronym title="HyperText Markup Language">HTML</acronym>
+pages or sending email. Only used if the language file did not already
+set another character encoding. For multi-language setups, using
+'utf-8' as the default character set is recommended.</td></tr><tr><td>css_cache_filename</td><td>stylecache_</td><td>When
+running multiple sites off the same code base, having the ability to
+define unique cache files per site can be beneficial. &nbsp;You
+normally do not need to adjust this setting.</td></tr><tr><td>js_cache_filename</td><td>jscache_</td><td>When running multiple sites off the same code base, having the ability
+to define unique cache files per site can be beneficial. &nbsp;You normally
+do not need to adjust this setting.</td></tr><tr><td colspan="3" rowspan="1">$_SYSTEM variables</td></tr><tr class="row2">
 <td class="col0 leftalign">site_enabled </td>
 <td class="col1 leftalign">true </td>
 <td class="col2 leftalign">A glFusion site can be
@@ -2042,15 +2052,10 @@ disabled quickly (e.g. for maintenance) by setting this to 'false'. <br />
 <br />
 Also see the site_disabled_msg configuration option. </td>
 </tr>
-<tr class="row3">
-<td class="col0 leftalign">default_charset </td>
-<td class="col1 leftalign">iso-8859-1 </td>
-<td class="col2 leftalign">Character encoding used
-by glFusion when serving <acronym title="HyperText Markup Language">HTML</acronym>
-pages or sending email. Only used if the language file did not already
-set another character encoding. For multi-language setups, using
-'utf-8' as the default character set is recommended. </td>
-</tr>
+<tr><td>maintenance_mode</td><td>false</td><td>Allows the site admin to disable the site for non-admin (and anonymous) users.<br /><br />This mode is useful if you have maintenance work to do like installing a new plugin or reorganizing content. &nbsp;You <span style="font-weight: bold;">must</span> login to your site as an admin user <span style="font-weight: bold;">before</span> enabling this option since it will disable all non-admin users.</td></tr><tr><td>rootdebug</td><td>false</td><td>Display detailed error messages. &nbsp;This option can be useful in diagnosing errors on yoru site.<br /><br />This
+option should not be enabled on production sites since it will display
+configuration data and other details that could expose confidential
+data such as database logins, etc.</td></tr>
 <tr>
 <td>no_fail_sql</td>
 <td>0</td>
@@ -2064,7 +2069,23 @@ can
 be very helpful in diagnosing the database errors.<br />
 </td>
 </tr>
-<tr>
+<tr><td>no_cache_config</td><td>false</td><td>Disable configuration
+caching. &nbsp;If you experience issues with the caching of the
+configuration options you can disable the caching feature by setting
+this value to true.</td></tr><tr><td>skip_ip_check</td><td>false</td><td>Disable
+glFusion's checking of the long term cookie against the user's IP
+address. &nbsp;As a security precaution, glFusion validates that the IP
+address used to create the long term cookie (used to automatically log
+you in) matches the IP address of the user each time it is checked.
+&nbsp;This can cause issues for users who change IPs often, for
+example, if they are behind a proxy server farm.</td></tr><tr><td>use_direct_style_js</td><td>false</td><td>Directly
+call the style / JS cache files. &nbsp;If loading the PHP processor on
+your site adds additional load to your web server, you can skip that
+process and load the cache files directly from the htmlheader.thtml
+template.</td></tr><tr><td colspan="3" rowspan="1">$_CONF_FCK - Advanced Editor configuration options</td></tr><tr><td>$_CONF_FCK['editor_images_by_user']</td><td>false</td><td>Enables
+'per user' libraries for images when using the Advanced Editor.
+&nbsp;Each user will have their own 'private' library so they cannot
+see or use other users images.</td></tr><tr>
 <td>$_CONF_FCK['imagelibrary']</td>
 <td>/image/library/</td>
 <td>The relative path to the directory where the Advanced
@@ -2461,7 +2482,7 @@ in web services feed.</td>
 <!-- end of gl_wrapper -->
 <div id="gl_footer">
 <p><a href="http://www.glfusion.org">glFusion Project</a>
-- Updated 2009-04-01</p>
+- Updated 2009-07-22</p>
 </div>
 <!-- end of gl_footer--> </div>
 <!-- end of gl_container -->

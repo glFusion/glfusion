@@ -18,7 +18,7 @@ v1.1.5
 - Installation - Now support migrating Geeklog v1.4.1+ sites,
   including 1.6.0 (Mark)
 - Improved SEO support throughout the system (Mark)
-- Core groups can now be edited. (Mark) **NOT YET COMMITTED**
+- Core groups can now be edited. (Mark)
 - Plugin auto installer did not display correct installed version
   number (Mark)
 - Display default glFusion topic icon if no icon is specified (Mark)
