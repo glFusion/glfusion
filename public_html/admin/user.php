@@ -291,8 +291,6 @@ function edituser($uid = '', $msg = '')
         );
         $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
 
-        $form_url = $_CONF['site_admin_url']
-                  . '/user.php?mode=edit&amp;uid=' . $uid;
         $text_arr = array('has_menu' => false,
                           'title' => '', 'instructions' => '',
                           'icon' => '', 'form_url' => $form_url,
