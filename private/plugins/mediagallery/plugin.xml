@@ -2,8 +2,8 @@
     <id>mediagallery</id>
     <name>Media Gallery</name>
     <description>Online Media Management System (Photo Albums, etc.)</description>
-    <version>1.6.5</version>
-    <glfusionversion>1.1.4</glfusionversion>
+    <version>1.6.6</version>
+    <glfusionversion>1.1.5</glfusionversion>
     <phpversion>4.3.0</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>
