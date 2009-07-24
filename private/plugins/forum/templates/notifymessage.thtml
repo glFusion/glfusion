@@ -7,9 +7,7 @@
 <td colspan="2">
 {site_name} {$LANG_GF02[msg22]} - If this email doesn't display correctly, <a href="{site_url}/forum/viewtopic.php?showtopic={post_id}&lastpost=true#{topic_id}">view the online version.</a>
 </td>
-</table>
-<hr>
-<table width="100%" cellspacing="0" cellpadding="0" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;">
+<tr><td colspan="2"><hr></td></tr>
 <tr>
 <td width="20%"><strong>{$LANG_GF01[SUBJECT]}:</strong></td>
 <td><a href="{site_url}/forum/viewtopic.php?showtopic={post_id}&lastpost=true#{topic_id}">{post_subject}</a>
@@ -22,18 +20,23 @@
 <td width="20%"><strong>{$LANG_GF01[POSTEDON]}:</strong></td>
 <td>{post_date}</td>
 </tr>
-</table>
-<hr>
-<table width="100%" cellspacing="0" cellpadding="0" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;">
+<tr><td colspan="2"><hr></td></tr>
 <tr>
 <td colspan="2" style="line-height:125%;">
 {post_comment}
 </td>
 </tr>
-</table>
-<hr>
+<tr><td colspan="2"><hr></td></tr>
+<tr>
+<td colspan="2">
 <span style="font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; line-height: 125%;">{$LANG_GF02[msg26]}</span>
-<br>
+</td>
+</tr>
+<tr>
+<td colspan="2">
 <span style="font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; line-height: 125%;">{notify_msg}</span>
+</td>
+</tr>
+</table>
 </body>
 </html>
