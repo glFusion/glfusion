@@ -47,7 +47,7 @@ if ( !function_exists('plugin_getmenuitems_forum') ) {
     exit;
 }
 
-require_once $_CONF['path'].'plugins/forum/include/html2text.php';
+require_once $_CONF['path'].'lib/html2text/html2text.php';
 
 if (!class_exists('StringParser') ) {
     require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
@@ -1260,7 +1260,7 @@ function GF_getSignature( $tagline, $signature, $postmode = 'html'  )
 }
 
 function gf_FormatForEmail( $str, $postmode='html' ) {
-    global $CONF_FORUM;
+    global $_CONF, $CONF_FORUM;
 
      // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function
     if ($CONF_FORUM['pre2.5_mode']) {
@@ -1274,13 +1274,13 @@ function gf_FormatForEmail( $str, $postmode='html' ) {
         $showtopic['comment'] = str_replace( '<pre class="forumCode">', '[code]', $showtopic['comment'] );
         $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
     }
-    $CONF_FORUM['use_geshi'] = true;
+    $CONF_FORUM['use_geshi']     = true;
+    $CONF_FORUM['allow_smilies'] = false;
     $str = gf_formatTextBlock($str,$postmode,'text');
 
-    $str = str_replace('{','&#123;',$str);
-    $str = str_replace('}','&#125;',$str);
+    $str = str_replace('<img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>','',$str);
 
-    // we don't have a stylesheet for printing, so replace our div with the style...
+    // we don't have a stylesheet for email, so replace our div with the style...
     $str = str_replace('<div class="quotemain">','<div style="border: 1px dotted #000;border-left: 4px solid #8394B2;color:#465584;  padding: 4px;  margin: 5px auto 8px auto;">',$str);
     return $str;
 }
