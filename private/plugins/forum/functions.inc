@@ -1417,6 +1417,7 @@ function forumPLG_getMemberBadge($uid) {
             $retval .= plugin_getmedals_medals($uid);
         }
     }
+    return $retval;
 }
 
 function phpblock_forum_menu() {
