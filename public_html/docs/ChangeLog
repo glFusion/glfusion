@@ -40,6 +40,9 @@ FileMgmt Plugin
 
 Forum Plugin v3.1.4
 -------------------
+- Implemented Eric Kingsley's forum notification mod - option to include full
+  post in notification email (Mark)
+- Implemented a hook for Eric Kingsley's Medals plugin (Mark)
 - Query optimization on topic list page - reduced server load and
   overall performance improvement (Mark)
 - Implemented BBcode signature support (Mark)
