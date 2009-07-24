@@ -1401,15 +1401,20 @@ function forumPLG_getPMlink($member) {
 function forumPLG_getMemberBadge($uid) {
     global $_CONF,$CONF_FORUM;
 
+    $retval = '';
+
     if ($uid > 1) {
         if (!SEC_inGroup('Root',$uid)) {
             foreach ($CONF_FORUM['grouptags'] as $groupid => $buttonimg) {
                 if (SEC_inGroup($groupid,$uid)) {
-                    return "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$buttonimg}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+                    $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$buttonimg}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
                 }
             }
         } else {
-            return "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$CONF_FORUM['grouptags']['Root']}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$CONF_FORUM['grouptags']['Root']}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+        }
+        if ( function_exists('plugin_getmedals_medals') ) {
+            $retval .= plugin_getmedals_medals($uid);
         }
     }
 }
@@ -1513,6 +1518,7 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     $enablenotify_checked  = $A['enablenotify']  == 1 ? ' checked="checked"' : '';
     $notifyonce_checked    = $A['notify_once']   == 1 ? ' checked="checked"' : '';
     $showiframe_checked    = $A['showiframe']    == 1 ? ' checked="checked"' : '';
+    $notifyfull_checked    = $A['notify_full']   == 1 ? ' checked="checked"' : '';
 
     $usersettings = new Template($_CONF['path'] . 'plugins/forum/templates/userprefs');
     $usersettings->set_file (array ('usersettings'=>'profile_user_settings.thtml'));
@@ -1548,6 +1554,10 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     $usersettings->set_var ('alwaysnotify', $A['alwaysnotify']);
     $usersettings->set_var ('alwaysnotify_checked', $alwaysnotify_checked);
 
+    $usersettings->set_var ('lang_notify_full', $LANG_GF02['notify_full']);
+    $usersettings->set_var ('notifyfull', $A['notify_full']);
+    $usersettings->set_var ('notifyfull_checked', $notifyfull_checked);
+
     $usersettings->set_var ('LANG_GF92[showiframe]', $LANG_GF92['showiframe']);
     $usersettings->set_var ('LANG_GF92[showiframedscp]', $LANG_GF92['showiframedscp']);
     $usersettings->set_var ('showiframe', $A['showiframe']);
@@ -1582,6 +1592,7 @@ function plugin_profilesave_forum( )
     $xviewanonposts     = isset($_POST['xviewanonposts']) && $_POST['xviewanonposts'] == 'on' ? 1 : 0;
     $xalwaysnotify      = isset($_POST['xalwaysnotify']) && $_POST['xalwaysnotify'] == 'on' ? 1 : 0;
     $xnotifyonce        = isset($_POST['xnotifyonce']) && $_POST['xnotifyonce'] == 'on' ? 1 : 0;
+    $notifyfull         = isset($_POST['notifyfull']) && $_POST['notifyfull'] == 'on' ? 1 : 0;
     $xshowiframe        = isset($_POST['xshowiframe']) && $_POST['xshowiframe'] == 'on' ? 1 : 0;
 
     DB_query("UPDATE {$_TABLES['gf_userprefs']} SET
@@ -1594,6 +1605,7 @@ function plugin_profilesave_forum( )
         viewanonposts='$xviewanonposts',
         alwaysnotify='$xalwaysnotify',
         notify_once='$xnotifyonce',
+        notify_full='$notifyfull',
         showiframe='$xshowiframe'
      WHERE uid='{$_USER['uid']}'");
 }

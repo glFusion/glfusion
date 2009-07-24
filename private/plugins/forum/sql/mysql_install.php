@@ -156,6 +156,7 @@ $_SQL['gf_userprefs'] = "CREATE TABLE {$_TABLES['gf_userprefs']} (
   viewanonposts tinyint(1) NOT NULL default '1',
   enablenotify tinyint(1) NOT NULL default '1',
   alwaysnotify tinyint(1) NOT NULL default '0',
+  notify_full tinyint(1) NOT NULL default '0',
   membersperpage int(3) NOT NULL default '20',
   showiframe tinyint(1) NOT NULL default '1',
   notify_once tinyint(1) NOT NULL default '0',

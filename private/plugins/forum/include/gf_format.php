@@ -47,6 +47,8 @@ if ( !function_exists('plugin_getmenuitems_forum') ) {
     exit;
 }
 
+require_once $_CONF['path'].'plugins/forum/include/html2text.php';
+
 if (!class_exists('StringParser') ) {
     require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 }
@@ -1248,7 +1250,7 @@ function GF_getSignature( $tagline, $signature, $postmode = 'html'  )
             if ( $postmode == 'html' ) {
                 $retval = nl2br($tagline);
             } else {
-                $retval = $tagline;
+                $retval = nl2br($tagline);
             }
             $retval = '<strong>'.$retval.'</strong>';
         }
@@ -1257,4 +1259,86 @@ function GF_getSignature( $tagline, $signature, $postmode = 'html'  )
     return $retval;
 }
 
+function gf_FormatForEmail( $str, $postmode='html' ) {
+    global $CONF_FORUM;
+
+     // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function
+    if ($CONF_FORUM['pre2.5_mode']) {
+        if ( stristr($showtopic['comment'],'[code') == false ) {
+            $showtopic['comment'] = str_replace('<pre>','[code]',$showtopic['comment']);
+            $showtopic['comment'] = str_replace('</pre>','[/code]',$showtopic['comment']);
+        }
+        $showtopic['comment'] = str_replace(array("<br />\r\n","<br />\n\r","<br />\r","<br />\n"), '<br />', $showtopic['comment'] );
+        $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=\s(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
+        /* Reformat code blocks - version 2.3.3 and prior */
+        $showtopic['comment'] = str_replace( '<pre class="forumCode">', '[code]', $showtopic['comment'] );
+        $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
+    }
+    $CONF_FORUM['use_geshi'] = true;
+    $str = gf_formatTextBlock($str,$postmode,'text');
+
+    $str = str_replace('{','&#123;',$str);
+    $str = str_replace('}','&#125;',$str);
+
+    // we don't have a stylesheet for printing, so replace our div with the style...
+    $str = str_replace('<div class="quotemain">','<div style="border: 1px dotted #000;border-left: 4px solid #8394B2;color:#465584;  padding: 4px;  margin: 5px auto 8px auto;">',$str);
+    return $str;
+}
+
+function gfm_getoutput( $id ) {
+    global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$CONF_FORUM;
+
+    $id = COM_applyFilter($id,true);
+    $result = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE id={$id}");
+    $A = DB_fetchArray($result);
+    $A['name'] = COM_checkWords($A['name']);
+    $A['name'] = @htmlspecialchars($A['name'],ENT_QUOTES, COM_getEncodingt());
+    $A['subject'] = COM_checkWords($A['subject']);
+    $A['subject'] = @htmlspecialchars($A["subject"],ENT_QUOTES, COM_getEncodingt());
+    $A['comment'] = gf_FormatForEmail( $A['comment'], $A['postmode'] );
+    $notifymsg = sprintf($LANG_GF02['msg27'],"<a href=\"$_CONF[site_url]/forum/notify.php\">$_CONF[site_url]/forum/notify.php</a>");
+    $date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
+    if ($A[pid] == '0') {
+        $postid = $A['id'];
+    } else {
+        $postid = $A['pid'];
+    }
+
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates');
+    $T->set_file ('email', 'notifymessage.thtml');
+
+    $T->set_var(array(
+        'post_id'       => $postid,
+        'topic_id'      => $A['id'],
+        'post_subject'  => $A['subject'],
+        'post_date'     => $date,
+        'post_name'     => $A['name'],
+        'post_comment'  => $A['comment'],
+        'notify_msg'    => $notifymsg,
+        'site_name'     => $_CONF['site_name'],
+    ));
+    $T->parse('output','email');
+    $message = $T->finish($T->get_var('output'));
+
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates');
+    $T->set_file ('email', 'notifymessage_text.thtml');
+
+    $T->set_var(array(
+        'post_id'       => $postid,
+        'topic_id'      => $A['id'],
+        'post_subject'  => $A['subject'],
+        'post_date'     => $date,
+        'post_name'     => $A['name'],
+        'post_comment'  => $A['comment'],
+        'notify_msg'    => $notifymsg,
+        'site_name'     => $_CONF['site_name'],
+    ));
+    $T->parse('output','email');
+    $msgText = $T->finish($T->get_var('output'));
+
+    $html2txt = new html2text($msgText,false);
+
+    $messageText = $html2txt->get_text();
+    return array($message,$messageText);
+}
 ?>

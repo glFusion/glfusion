@@ -149,9 +149,17 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
 
                 if ($userarray['photo'] != "") {
                     $avatar = USER_getPhoto($showtopic['uid'],'','',$CONF_FORUM['avatar_width']);
-                    $min_height = $min_height + 50;
+                    $min_height = $min_height + 150;
                 } else {
                     $avatar = '';
+                }
+                if ( $CONF_FORUM['enable_user_rating_system']) {
+                    if ( $showtopic['uid'] > 1 ) {
+                        $min_height = $min_height + 10;
+                    }
+                }
+                if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
+                    $min_height = $min_height + 5;
                 }
                 $regdate = $LANG_GF01['REGISTERED']. ': ' . strftime('%m/%d/%y',strtotime($userarray['regdate'])). '<br' . XHTML . '>';
                 $numposts = $LANG_GF01['POSTS']. ': ' .$posts;
@@ -424,6 +432,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     			    $vote_language = $LANG_GF01['grade_user'];
     			    $plus_vote  = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.png" alt="plus" /></a>';
                     $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.png" alt="minus" /></a>';
+                    $min_height = $min_height + 10;
                 } else {
                     // user has already voted for this poster
                     $vote_language = $LANG_GF01['retract_grade'];
@@ -432,10 +441,12 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
                         // gave a +1 show the minus to retract
                         $plus_vote = '';
                         $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.png" alt="minus" /></a>';
+                        $min_height = $min_height + 10;
     				} else {
                         // gave a -1 show the plus to retract
                         $minus_vote = '';
                         $plus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.png" alt="plus" /></a>';
+                        $min_height = $min_height + 10;
     				}
     			}
     			$voteHTML = '<div class="c'.$showtopic['uid'].'"><span id="vote'.$showtopic['id'].'">'.$vote_language.'<br />'.$minus_vote.$plus_vote.'<br />'.$LANG_GF01['grade'].': '.$grade.'</span></div>';
@@ -443,7 +454,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
                 // display 'rating'
       			$voteHTML =  $LANG_GF01['grade'].': '.$grade;
             }
-
         }
     }
     $topictemplate->set_var ('vote_html', $voteHTML);

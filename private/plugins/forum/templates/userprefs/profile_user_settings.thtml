@@ -39,6 +39,10 @@
         <td><input type="checkbox" id="xnotifyonce" name="xnotifyonce" {notifyonce_checked}{xhtml}></td>
       </tr>
       <tr>
+        <td style="width:100px;"><label for="notifyfull">{lang_notify_full}:</label></td>
+        <td><input type="checkbox" id="notifyfull" name="notifyfull" {notifyfull_checked}{xhtml}></td>
+      </tr>
+      <tr>
         <td style="width:100px;"><label for="xshowiframe">{LANG_GF92[showiframe]}:</label></td>
         <td><input type="checkbox" id="xshowiframe" name="xshowiframe" {showiframe_checked}{xhtml}></td>
       </tr>

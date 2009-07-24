@@ -1,0 +1,39 @@
+<html>
+<head>
+</head>
+<body>
+<table width="750" cellspacing="0" cellpadding="0">
+<tr>
+<td colspan="2" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;">
+{site_name} {$LANG_GF02[msg22]} - If this email doesn't display correctly, <a href="{site_url}/forum/viewtopic.php?showtopic={post_id}&lastpost=true#{topic_id}">view the online version.</a>
+</td>
+</table>
+<hr>
+<table>
+<tr>
+<td width="20%" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;"><strong>{$LANG_GF01[SUBJECT]}:</strong></td>
+<td style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;"><a href="{site_url}/forum/viewtopic.php?showtopic={post_id}&lastpost=true#{topic_id}">{post_subject}</a>
+</tr>
+<tr>
+<td width="20%" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;"><strong>{$LANG_GF01[BY]}</strong></td>
+<td style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;">{post_name}</td>
+</tr>
+<tr>
+<td width="20%" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;"><strong>{$LANG_GF01[POSTEDON]}:</strong></td>
+<td style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;">{post_date}</td>
+</tr>
+</table>
+<hr>
+<table>
+<tr>
+<td colspan="2" style="font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; line-height: 125%;">
+{post_comment}
+</td>
+</tr>
+</table>
+<hr>
+<span style="font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; line-height: 125%;">{$LANG_GF02[msg26]}</span>
+<br>
+<span style="font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; line-height: 125%;">{notify_msg}</span>
+</body>
+</html>

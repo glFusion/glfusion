@@ -504,7 +504,8 @@ $LANG_GF02 = array(
     'PostReply' => 'Post New Reply',
     'PostTopic' => 'Post New Topic',
     'EditTopic' => 'Edit Topic',
-    'quietforum' => 'Forum has no new topics'
+    'quietforum' => 'Forum has no new topics',
+    'notify_full' => 'Include full post in notification',
 );
 
 $LANG_GF03 = array(

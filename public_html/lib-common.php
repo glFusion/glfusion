@@ -3395,7 +3395,7 @@ function COM_formatEmailAddress( $name, $address )
 *       of all recipients. Use with care.
 *
 */
-function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority = 0, $cc = '' )
+function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority = 0, $cc = '', $altBody = '' )
 {
     global $_CONF;
 
@@ -3438,6 +3438,10 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         $mail->Body = COM_filterHTML($message);
     } else {
         $mail->Body = $message;
+    }
+
+    if ( $altBody != '' ) {
+        $mail->AltBody = $altBody;
     }
 
     $mail->Subject = $subject;
