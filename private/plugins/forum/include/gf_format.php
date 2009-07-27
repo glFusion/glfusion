@@ -1316,6 +1316,7 @@ function gfm_getoutput( $id ) {
         'post_comment'  => $A['comment'],
         'notify_msg'    => $notifymsg,
         'site_name'     => $_CONF['site_name'],
+        'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$topic_id),
     ));
     $T->parse('output','email');
     $message = $T->finish($T->get_var('output'));
@@ -1332,6 +1333,7 @@ function gfm_getoutput( $id ) {
         'post_comment'  => $A['comment'],
         'notify_msg'    => $notifymsg,
         'site_name'     => $_CONF['site_name'],
+        'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$topic_id),
     ));
     $T->parse('output','email');
     $msgText = $T->finish($T->get_var('output'));

@@ -5,7 +5,7 @@
 <table width="100%" cellspacing="0" cellpadding="0" style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; line-height: 125%;">
 <tr>
 <td colspan="2">
-{site_name} {$LANG_GF02[msg22]} - If this email doesn't display correctly, <a href="{site_url}/forum/viewtopic.php?showtopic={post_id}&lastpost=true#{topic_id}">view the online version.</a>
+{site_name} {$LANG_GF02[msg22]} - {online_version}
 </td>
 <tr><td colspan="2"><hr></td></tr>
 <tr>

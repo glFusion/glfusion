@@ -251,7 +251,7 @@ $LANG_GF01 = array(
     'PREVIEW_HEADER' => 'Post Preview',
     'BOOKMARKS' => 'Bookmarks',
     'LASTX' => 'Latest Posts',
-    'CODE' => 'Code',
+    'CODE' => 'Formatting',
     'FONTCOLOR' => 'Font Color',
     'FONTSIZE' => 'Font Size',
     'CLOSETAGS' => 'Close Tags',
@@ -291,6 +291,7 @@ $LANG_GF01 = array(
     'f_help' => 'Font size: [size=x-small]small text[/size]',
     'h_help' => 'Click to view more detailed help',
     't_help' => 'Use [file]#[/file] to embed an attached image in the post',
+    'e_help' => 'List item: [*]text',
     /* --- Community moderation tags --- */
     'grade'         => '<br /><b>Group Comfort<br />Level:</b>',
     'grade_user'    => '<br /><b>Evaluate User</b>',
@@ -506,6 +507,7 @@ $LANG_GF02 = array(
     'EditTopic' => 'Edit Topic',
     'quietforum' => 'Forum has no new topics',
     'notify_full' => 'Include full post in notification',
+    'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.',
 );
 
 $LANG_GF03 = array(
