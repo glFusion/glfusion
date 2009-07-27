@@ -1,10 +1,10 @@
 {# begin {templatelocation} #}
-       </tr>
         <tr>
             <td class="pluginCellSubTitle">&nbsp;{LANG_SUBJECT}:</td>
             <td class="pluginCellText pluginCellFill"><input type="text" name="subject" value="{subject}" id="subject" tabindex="5" size="70"{xhtml}>
             </td>
         </tr>
+        {bbcode_buttons}
         <tr>
             <td class="pluginCellSubTitle" style="vertical-align:top;padding-top:10px;">{smilies}</td>
             <td class="pluginCellText pluginCellFill" style="padding-left: 5px;">
@@ -38,10 +38,12 @@
           <textarea name="filemgmt_desc{fcounter__loopvar}" cols="40" rows="3"></textarea>
         </td>
         <td style="vertical-align:top;padding-left:10px;">
+        {!if LANG_category}
           {LANG_category}:&nbsp;
           <select name="filemgmtcat{fcounter__loopvar}">
           {filemgmt_category_options}
           </select>
+        {!endif}
         </td>
       </tr>
 {!endloop}

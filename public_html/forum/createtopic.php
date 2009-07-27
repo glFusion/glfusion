@@ -664,6 +664,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $topicnavbar->set_var ('LANG_fhelp', $LANG_GF01['f_help']);
     $topicnavbar->set_var ('LANG_hhelp', $LANG_GF01['h_help']);
     $topicnavbar->set_var ('LANG_thelp', $LANG_GF01['t_help']);
+    $topicnavbar->set_var ('LANG_ehelp', $LANG_GF01['e_help']);
 
     if ( !isset($_USER['uid']) ) {
         $_USER['uid'] = 1;
@@ -889,9 +890,8 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             $submissionform_code->set_var('hide_attbutton_end','-->');
         }
     }
-
     $submissionform_code->parse ('output', 'submissionform_code');
-    echo $submissionform_code->finish($submissionform_code->get_var('output'));
+    $bbcode_buttons = $submissionform_code->finish($submissionform_code->get_var('output'));
 
     if(!$CONF_FORUM['allow_smilies']) {
         $smilies = '';
@@ -980,7 +980,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     $submissionform_main = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main.thtml'));
-
+$submissionform_main->set_var('bbcode_buttons',$bbcode_buttons);
     if($method == 'edit') {
         if ($CONF_FORUM['pre2.5_mode']) {
             /* Reformat code blocks - version 2.3.3 and prior */
