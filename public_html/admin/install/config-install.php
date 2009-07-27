@@ -97,8 +97,8 @@ function install_config($site_url)
     $c->add('search_style','google','select',0,6,18,650,TRUE);
     $c->add('search_limits','10,15,25,30','text',0,6,NULL,660,TRUE);
     $c->add('num_search_results',25,'text',0,6,NULL,670,TRUE);
-    $c->add('search_show_limit',TRUE,'select',0,6,1,680,TRUE);
-    $c->add('search_show_sort',TRUE,'select',0,6,1,690,TRUE);
+//    $c->add('search_show_limit',TRUE,'select',0,6,1,680,TRUE);
+//    $c->add('search_show_sort',TRUE,'select',0,6,1,690,TRUE);
     $c->add('search_show_num',TRUE,'select',0,6,1,700,TRUE);
     $c->add('search_show_type',TRUE,'select',0,6,1,710,TRUE);
     $c->add('search_show_user',TRUE,'select',0,6,1,720,TRUE);

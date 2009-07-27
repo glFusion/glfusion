@@ -777,7 +777,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('hide_exclude_content',0,'select',4,16,0,295,TRUE);
-
+            $c->del('search_show_limit', 'Core');
+            $c->del('search_show_sort', 'Core');
             $current_fusion_version = '1.1.5';
         default:
             break;
