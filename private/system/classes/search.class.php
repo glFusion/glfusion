@@ -739,7 +739,7 @@ class Search {
         else
         {
             $retval .= " ($searchtime {$LANG09[27]}). <br />" . COM_createLink($LANG09[61], $url.'refine');
-            $retval = $obj->getFormattedOutput($results, $LANG09[11], $retval, '', $_CONF['search_show_sort'], $_CONF['search_show_limit']);
+            $retval = $obj->getFormattedOutput($results, $LANG09[11], $retval, '');
         }
 
 //        echo '<pre>'.$debug_info.'</pre>';
