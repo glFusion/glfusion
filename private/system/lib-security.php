@@ -1090,7 +1090,7 @@ function SEC_encryptPassword($password)
   */
 function SEC_createToken($ttl = 1200)
 {
-    global $_USER, $_TABLES, $_DB_dbms;
+    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
     static $last_token;
 
@@ -1098,8 +1098,14 @@ function SEC_createToken($ttl = 1200)
         return $last_token;
     }
 
+    if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
+        $pageURL  = $_SERVER['REMOTE_ADDR'];
+    } else {
+        $pageURL = COM_getCurrentURL();
+    }
+
     /* Figure out the full url to the current page */
-    $pageURL = COM_getCurrentURL();
+//    $pageURL = COM_getCurrentURL();
 
     /* Generate the token */
     $token = md5($_USER['uid'].$pageURL.uniqid (rand (), 1));
@@ -1122,7 +1128,7 @@ function SEC_createToken($ttl = 1200)
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".addslashes($pageURL)."', '".intval($ttl)."')";
+           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".$pageURL."', '".intval($ttl)."')";
     DB_query($sql);
 
     $last_token = $token;
@@ -1141,10 +1147,16 @@ function SEC_createToken($ttl = 1200)
   */
 function SEC_checkToken()
 {
-    global $_USER, $_TABLES, $_DB_dbms;
+    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
     $token = ''; // Default to no token.
     $return = false; // Default to fail.
+
+    if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
+        $referCheck  = $_SERVER['REMOTE_ADDR'];
+    } else {
+        $referCheck = $_SERVER['HTTP_REFERER'];
+    }
 
     if(array_key_exists(CSRF_TOKEN, $_GET)) {
         $token = COM_applyFilter($_GET[CSRF_TOKEN]);
@@ -1179,8 +1191,8 @@ function SEC_checkToken()
             if( $_USER['uid'] != $tokendata['owner_id'] ) {
                 COM_errorLog("CheckToken: Token failed - userid does not match token owner id");
                 $return = false;
-            } else if($tokendata['urlfor'] != $_SERVER['HTTP_REFERER']) {
-                COM_errorLog("CheckToken: Token failed - token URL does not match referer URL.");
+            } else if($tokendata['urlfor'] != $referCheck) {
+                COM_errorLog("CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
                 COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
                 $return = false;
             } else if($tokendata['expired']) {
@@ -1192,7 +1204,7 @@ function SEC_checkToken()
 
             // It's a one time token. So eat it.
             $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
-            DB_Query($sql);
+            DB_query($sql);
         }
     } else {
         $return = false; // no token.
@@ -1234,7 +1246,7 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
 
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
            . "VALUES ('$token', NOW(), {$_USER['uid']}, '".addslashes($action)."', '$ttl')";
-    DB_Query($sql);
+    DB_query($sql);
 
     /* And return the token to the user */
     return $token;
