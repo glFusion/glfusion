@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Email did not honor the priority flag (Mark)
+- Ability to use remote IP instead of referring URL for security tokens (Mark)
 - Fixed censor mode select (Mark)
 - Add option for user to select search result format (Mark)
 - Add block name to the admin list of blocks (Mark)
@@ -40,6 +42,7 @@ FileMgmt Plugin
 
 Forum Plugin v3.1.4
 -------------------
+- Streamlined the BBcode editor bar (Mark)
 - Implemented Eric Kingsley's forum notification mod - option to include full
   post in notification email (Mark)
 - Implemented a hook for Eric Kingsley's Medals plugin (Mark)
@@ -55,6 +58,8 @@ Forum Plugin v3.1.4
 
 Media Gallery
 -------------
+- Renamed the 'Graphics Package' tab in the MG admin screen to
+  'Host Environment' to better reflect the real meaning of the tab (Mark)
 - Added new command line interface for batch imports into Media Gallery (Mark)
 - Added new option to allow media owner to edit media item (Mark)
 - Added new feature to allow mediagallery.admin to edit media owner (Mark)
