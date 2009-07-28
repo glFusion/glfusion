@@ -3365,16 +3365,13 @@ function COM_emailEscape( $string )
 function COM_formatEmailAddress( $name, $address )
 {
     $formatted_name = COM_emailEscape( $name );
-
     // if the name comes back unchanged, it's not UTF-8, so preg_match is fine
     if(( $formatted_name == $name ) && preg_match( '/[^0-9a-z ]/i', $name ))
     {
         $formatted_name = str_replace( '"', '\\"', $formatted_name );
-        $formatted_name = '"' . $formatted_name . '"';
+//        $formatted_name = '"' . $formatted_name . '"';
     }
     return array($address,$formatted_name);
-
-//    return $formatted_name . ' <' . $address . '>';
 }
 
 /**
@@ -3389,6 +3386,7 @@ function COM_formatEmailAddress( $name, $address )
 * @param    boolean     $html       (optional) true if to be sent as HTML email
 * @param    int         $priority   (optional) add X-Priority header, if > 0
 * @param    string      $cc         (optional) other recipients (name + email)
+* @param    string      $altBody    (optional) alternative message body (plain text)
 * @return   boolean                 true if successful,  otherwise false
 *
 * @note Please note that using the $cc parameter will expose the email addresses
@@ -3484,6 +3482,10 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
         if ( isset($cc) && $cc != '' ) {
             $mail->AddCC($cc);
         }
+    }
+
+    if ( $priority ) {
+        $mail->Priority = 1;
     }
 
     if(!$mail->Send()) {
