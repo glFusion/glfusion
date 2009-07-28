@@ -192,13 +192,6 @@ function send_messages ($vars)
         $priority = 0;
     }
 
-    // If you want to send html mail
-//    if (isset ($vars['html'])) {
-//        $html = true;
-//    } else {
-//        $html = false;
-//    }
-
     $groupList = implode (',', USER_getChildGroups($vars['to_group']));
 
     // and now mail it
@@ -218,7 +211,6 @@ function send_messages ($vars)
     $from = array();
     $from = COM_formatEmailAddress ($vars['fra'], $vars['fraepost']);
     $subject = COM_stripslashes ($vars['subject']);
-//    $message = COM_stripslashes ($vars['message']);
 
     // Loop through and send the messages!
     $successes = array ();
