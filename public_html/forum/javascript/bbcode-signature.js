@@ -22,70 +22,12 @@ var is_mac = (clientPC.indexOf("mac")!=-1);
 var baseHeight;
 // Define the bbCode tags
 bbcode = new Array();
-bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[olist]','[/olist]','[*]','[img]','[/img]','[url]','[/url]','[file]','[/file]');
+bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=1]','[/list]','[*]','[img]','[/img]','[url]','[/url]');
 imageTag = false;
 
 // Shows the help messages in the helpline window
 function helpline(help) {
-    document.sig_form.helpbox.value = eval(help + "_help");
-}
-
-
-// Replacement for arrayname.length property
-function getarraysize(thearray) {
-    for (i = 0; i < thearray.length; i++) {
-        if ((thearray[i] == "undefined") || (thearray[i] == "") || (thearray[i] == null))
-            return i;
-        }
-    return thearray.length;
-}
-
-// Replacement for arrayname.push(value) not implemented in IE until version 5.5
-// Appends element to the array
-function arraypush(thearray,value) {
-    thearray[ getarraysize(thearray) ] = value;
-}
-
-// Replacement for arrayname.pop() not implemented in IE until version 5.5
-// Removes and returns the last element of an array
-function arraypop(thearray) {
-    thearraysize = getarraysize(thearray);
-    retval = thearray[thearraysize - 1];
-    delete thearray[thearraysize - 1];
-    return retval;
-}
-
-
-function checkForm() {
-
-    formErrors = false;
-
-    if (document.sig_form.signature.value.length < 2) {
-        formErrors = "You must enter a message when posting.";
-    }
-
-    if (formErrors) {
-        alert(formErrors);
-        return false;
-    } else {
-        bbstyle(-1);
-        //formObj.preview.disabled = true;
-        //formObj.submit.disabled = true;
-        return true;
-    }
-}
-
-function emoticon(text) {
-    var txtarea = document.sig_form.signature;
-    text = ' ' + text + ' ';
-    if (txtarea.createTextRange && txtarea.caretPos) {
-        var caretPos = txtarea.caretPos;
-        caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? caretPos.text + text + ' ' : caretPos.text + text;
-        txtarea.focus();
-    } else {
-        txtarea.value  += text;
-        txtarea.focus();
-    }
+    document.profileform.helpbox.value = eval(help + "_help");
 }
 
 /**
@@ -100,7 +42,7 @@ function bbstyle(bbnumber)
 	else
 	{
 		insert_text('[*]');
-		document.forms['sig_form'].elements['signature'].focus();
+		document.forms['profileform'].elements['signature'].focus();
 	}
 }
 
@@ -111,7 +53,7 @@ function bbfontstyle(bbopen, bbclose)
 {
 	theSelection = false;
 
-	var textarea = document.forms['sig_form'].elements['signature'];
+	var textarea = document.forms['profileform'].elements['signature'];
 
 	textarea.focus();
 
@@ -124,15 +66,15 @@ function bbfontstyle(bbopen, bbclose)
 		{
 			// Add tags around selection
 			document.selection.createRange().text = bbopen + theSelection + bbclose;
-			document.forms['sig_form'].elements['signature'].focus();
+			document.forms['profileform'].elements['signature'].focus();
 			theSelection = '';
 			return;
 		}
 	}
-	else if (document.forms['sig_form'].elements['signature'].selectionEnd && (document.forms['sig_form'].elements['signature'].selectionEnd - document.forms['sig_form'].elements['signature'].selectionStart > 0))
+	else if (document.forms['profileform'].elements['signature'].selectionEnd && (document.forms['profileform'].elements['signature'].selectionEnd - document.forms['profileform'].elements['signature'].selectionStart > 0))
 	{
-		mozWrap(document.forms['sig_form'].elements['signature'], bbopen, bbclose);
-		document.forms['sig_form'].elements['signature'].focus();
+		mozWrap(document.forms['profileform'].elements['signature'], bbopen, bbclose);
+		document.forms['profileform'].elements['signature'].focus();
 		theSelection = '';
 		return;
 	}
@@ -173,11 +115,11 @@ function insert_text(text, spaces, popup)
 
 	if (!popup)
 	{
-		textarea = document.forms['sig_form'].elements['signature'];
+		textarea = document.forms['profileform'].elements['signature'];
 	}
 	else
 	{
-		textarea = opener.document.forms['sig_form'].elements['signature'];
+		textarea = opener.document.forms['profileform'].elements['signature'];
 	}
 	if (spaces)
 	{
@@ -287,34 +229,38 @@ function getCaretPosition(txtarea)
 	return caretPos;
 }
 
-var newwindow;
-function poptastic(url)
-{
-    newwindow=window.open(url,'name','height=500,width=700,resizable=yes,scrollbars=yes');
-    if (window.focus) {newwindow.focus()}
+var xmlhttp = null;
+
+function ajax_previewsig() {
+
+    xmlhttp = new XMLHttpRequest();
+
+    var qs = '';
+    var signature = document.profileform.signature.value;
+    var params = "signature=" + signature;
+
+    xmlhttp.open('POST', site_url + '/forum/sigpreview.php', true);
+    //Send the proper header information along with the request
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.setRequestHeader("Content-length", params.length);
+    xmlhttp.setRequestHeader("Connection", "close");
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            receiveSigPreview(xmlhttp.responseXML);
+        }
+    };
+    xmlhttp.send(params);
+
 }
+function receiveSigPreview(dom) {
+    var html = '';
+    try{
+        var oxml = dom.getElementsByTagName('html');
+        html = oxml[0].childNodes[0].nodeValue;
+    }catch(e){}
 
-
-function AddRowsToTable() {
-     var tbl = document.getElementById('tblforumfile');
-     var lastRow = tbl.rows.length;
-
-     // if there is no header row in the table, then iteration = lastRow + 1
-
-     var iteration = lastRow;
-     var row = tbl.insertRow(lastRow);
-
-     var cellRight = row.insertCell(0);
-     var el = document.createElement('input');
-     el.setAttribute('type', 'FILE');
-     el.setAttribute('name', 'mfile_forum[]');
-     el.setAttribute('size', '40');
-     cellRight.appendChild(el);
+    if (html != '') {
+        var obj = document.getElementById('sigpreview');
+        obj.innerHTML = html;
+    }
 }
-
-function RemoveRowFromTable() {
-     var tbl = document.getElementById('tblforumfile');
-     var lastRow = tbl.rows.length;
-     if (lastRow > 0) tbl.deleteRow(lastRow - 1);
-}
-

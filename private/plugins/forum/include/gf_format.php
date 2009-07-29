@@ -308,9 +308,6 @@ function forumNavbarMenu($current='') {
     $navmenu = new navbar;
     $navmenu->add_menuitem($LANG_GF01['INDEXPAGE'],"{$_CONF['site_url']}/forum/index.php");
     if ( !COM_isAnonUser() ) {
-        if ($CONF_FORUM['bbcode_signature'] ) {
-            $navmenu->add_menuitem($LANG_GF01['signature'],"{$_CONF['site_url']}/forum/usersig.php");
-        }
         $navmenu->add_menuitem($LANG_GF01['SUBSCRIPTIONS'],"{$_CONF['site_url']}/forum/notify.php");
         $navmenu->add_menuitem($LANG_GF01['BOOKMARKS'],"{$_CONF['site_url']}/forum/index.php?op=bookmarks");
         $navmenu->add_menuitem($LANG_GF02['new_posts'],"{$_CONF['site_url']}/forum/index.php?op=newposts");

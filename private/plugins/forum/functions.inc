@@ -1496,6 +1496,11 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
         return;
     }
 
+    if ( $panel == 'userinfo' && $fieldset == 'personalinfo' && $CONF_FORUM['bbcode_signature'] ) {
+        $signature = DB_getItem($_TABLES['gf_userinfo'],'signature','uid='.$_USER['uid']);
+        return GF_sigEditorProfile($signature);
+    }
+
     if ($panel != '' || $fieldset != '' ) {
         return;
     }
@@ -1576,7 +1581,7 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
 
 function plugin_profilesave_forum( )
 {
-    global $_CONF, $_TABLES, $_PM_CONF, $_USER;
+    global $_CONF, $_TABLES, $CONF_FORUM, $_USER;
 
     if ( COM_isAnonUser() ) {
         return;
@@ -1609,6 +1614,53 @@ function plugin_profilesave_forum( )
         notify_full='$notifyfull',
         showiframe='$xshowiframe'
      WHERE uid='{$_USER['uid']}'");
+
+
+    if ( isset($_POST['signature'] ) ){
+        $signature = COM_stripslashes($_POST['signature']);
+
+        // see if user already has a preference record...
+        // Get user specific settings from database
+        $result = DB_query("SELECT * FROM {$_TABLES['gf_userinfo']} WHERE uid={$_USER['uid']}");
+        $nrows = DB_numRows($result);
+        if ($nrows == 0) {
+            // Insert a new blank record. Defaults are set in SQL Defintion for table.
+            DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid) VALUES ('{$_USER['uid']}')");
+        }
+        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".addslashes($signature)."' WHERE uid=".$_USER['uid'];
+        DB_query($sql);
+    }
+}
+
+function GF_sigEditorProfile( $signature = '', $errors = array() )
+{
+    global $_CONF, $CONF_FORUM, $_TABLES, $_USER;
+
+    $retval = '';
+
+    USES_lib_bbcode();
+
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $T->set_file (array (
+        'signature'    =>  'signature_profile.thtml',
+    ));
+
+    $T->set_var(array(
+        'signature'   => $signature,
+        'preview_signature' => BBC_formatTextBlock($signature,'text'),
+    ));
+    $error_message = '';
+    if ( count($errors) > 0 ) {
+        foreach($errors AS $error) {
+            $error_message .= $error .'<br />';
+        }
+    }
+    $T->set_var('error_message',$error_message);
+
+    $T->parse ('output', 'signature');
+    $retval .= $T->finish ($T->get_var('output'));
+
+    return $retval;
 }
 
 ?>

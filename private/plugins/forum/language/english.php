@@ -300,7 +300,7 @@ $LANG_GF01 = array(
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
     /* --- bbcode signature --- */
-    'signature' => 'Signature',
+    'signature' => 'Forum Signature',
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Signature Preview',
 );

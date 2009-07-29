@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Rename signature (in user profile) to Tag Line (Mark)
 - Email did not honor the priority flag (Mark)
 - Ability to use remote IP instead of referring URL for security tokens (Mark)
 - Fixed censor mode select (Mark)
@@ -42,6 +43,7 @@ FileMgmt Plugin
 
 Forum Plugin v3.1.4
 -------------------
+- Moved BBcode signature to the About You profile panel (Mark)
 - Streamlined the BBcode editor bar (Mark)
 - Implemented Eric Kingsley's forum notification mod - option to include full
   post in notification email (Mark)

@@ -655,6 +655,9 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
     } elseif ($statusmode == 2) {
         $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[116]));
         $user_templates->set_var('lang_message', $LANG04[117]);
+    } elseif ($statusmode == -1) {
+        $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[65]));
+        $user_templates->set_var('lang_message', $LANG04[113]);
     } else {
         $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[65]));
         if ($_CONF['disable_new_user_registration']) {
@@ -1100,6 +1103,7 @@ case 'new':
     break;
 
 default:
+    $status = -2;
     // prevent dictionary attacks on passwords
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
     if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
@@ -1124,7 +1128,7 @@ default:
             COM_updateSpeedlimit('login');
             $status = SEC_authenticate($loginname, $passwd, $uid);
         } else {
-            $status = -1;
+            $status = -2;
         }
 
     } elseif (( $_CONF['usersubmission'] == 0) && $_CONF['user_login_method']['3rdparty'] && ($service != '')) {
@@ -1205,7 +1209,7 @@ default:
             exit;
         }
     } else {
-        $status = -1;
+        $status = -2;
     }
 
     if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.

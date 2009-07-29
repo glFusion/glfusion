@@ -7,7 +7,7 @@
 {navbar}
 </div>
 <div class="clearboth" style="min-width:600px;">
-<form action="{site_url}/usersettings.php" method="post" {enctype}>
+<form id="profileform" name="profileform" action="{site_url}/usersettings.php" method="post" {enctype}>
     <div id="pe_preview" class="jsenabled_hide" style="display:none;">
         <fieldset style="margin-top:10px;">
             <legend>{lang_preview_title}</legend>
