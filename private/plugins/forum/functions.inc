@@ -1080,6 +1080,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         if ( $retval ) {
             return $retval;
         }
+        USES_lib_html2text();
         $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file (array ('block'=>'centerblock.thtml','record' => 'centerblock_displayline.thtml'));
         $block->set_var ('phpself', $_CONF['site_url'] .'/index.php');
@@ -1146,10 +1147,11 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
             if (empty ($A['last_reply_rec']) || $A['last_reply_rec'] < 1) {
                 $lastid = $A['id'];
-                $lastpostinfo = wordwrap(strip_tags(substr($A['comment'],0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
 
-                $testText = gf_formatTextBlock($A['comment'],'text','text');
+                $testText = gf_formatTextBlock($A['comment'],'text','noquote');
                 $testText = strip_tags($testText);
+                $html2txt = new html2text($testText,false);
+                $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
                 $wordCount = count($commentArray);
@@ -1164,7 +1166,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags($shortComment)));
+                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)));
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['gf_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1175,9 +1177,10 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 } else {
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
                 }
-                $lastpostinfo = wordwrap(strip_tags(substr($lastcomment,0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
-                $testText = gf_formatTextBlock($B['comment'],'text','text');
+                $testText = gf_formatTextBlock($B['comment'],'text','noquote');
                 $testText = strip_tags($testText);
+                $html2txt = new html2text($testText,false);
+                $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
                 $wordCount = count($commentArray);
@@ -1192,12 +1195,11 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-                $lastpostinfogll = preg_replace('#\r?\n#','<br>',strip_tags($shortComment));
+                $lastpostinfo = preg_replace('#\r?\n#','<br />',strip_tags($shortComment));
             }
 
             $cssid = ($cssid ==1) ? 2: 1;
             $block->set_var ('lastpostinfo', $lastpostinfo);
-            $block->set_var ('lastpostinfogll', $lastpostinfogll);
             $block->set_var ('lastpostid', $lastid);
             $block->set_var ('topicinfo', $topicinfo);
             $block->set_var ('cssid', $cssid);

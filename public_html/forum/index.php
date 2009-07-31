@@ -117,6 +117,7 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
     }
 
     USES_lib_admin();
+    USES_lib_html2text();
 
     $retval = '';
 
@@ -192,6 +193,8 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
                 $lastid = $P['id'];
                 $testText = gf_formatTextBlock($P['comment'],'text','text');
                 $testText = strip_tags($testText);
+                $html2txt = new html2text($testText,false);
+                $testText = trim($html2txt->get_text());
                 $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment,date FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
@@ -206,6 +209,8 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
                 }
                 $testText = gf_formatTextBlock($B['comment'],'text','text');
                 $testText = strip_tags($testText);
+                $html2txt = new html2text($testText,false);
+                $testText = trim($html2txt->get_text());
                 $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
             }
             $link = '<a class="gf_mootip" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . htmlspecialchars($P['subject']) . '::' . $lastpostinfogll . '" rel="nofollow">';
@@ -499,6 +504,7 @@ if ($op == 'lastx') {
     echo gf_siteHeader($LANG_GF01['LASTX']);
 
     USES_lib_admin();
+    USES_lib_html2text();
 
     $retval = '';
 
@@ -569,6 +575,8 @@ if ($op == 'lastx') {
             $lastid = $P['id'];
             $testText = gf_formatTextBlock($P['comment'],'text','text');
             $testText = strip_tags($testText);
+            $html2txt = new html2text($testText,false);
+            $testText = trim($html2txt->get_text());
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
         } else {
             $qlreply = DB_query("SELECT id,uid,name,comment,date FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
@@ -583,6 +591,8 @@ if ($op == 'lastx') {
             }
             $testText = gf_formatTextBlock($B['comment'],'text','text');
             $testText = strip_tags($testText);
+            $html2txt = new html2text($testText,false);
+            $testText = trim($html2txt->get_text());
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
         }
         $link = '<a class="gf_mootip" style="text-decoration:none; white-space:nowrap;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $topic_id . '&amp;lastpost=true#' . $lastid . '" title="' . htmlspecialchars($P['subject']) . '::' . $lastpostinfogll . '" rel="nofollow">';

@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
 // |                                                                          |
 // | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -47,7 +48,7 @@ if ( !function_exists('plugin_getmenuitems_forum') ) {
     exit;
 }
 
-require_once $_CONF['path'].'lib/html2text/html2text.php';
+USES_lib_html2text();
 
 if (!class_exists('StringParser') ) {
     require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
@@ -517,8 +518,10 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
                       'list', array ('inline','block', 'listitem'), array ());
     $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
                       'listitem', array ('list'), array ());
-    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>', 'end_tag' => '</div><p>'),
-                      'inline', array('listitem','block','inline','link'), array());
+    if ($mode != 'noquote' ) {
+        $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>', 'end_tag' => '</div><p>'),
+                          'inline', array('listitem','block','inline','link'), array());
+    }
     $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
     $bbcode->addCode ('link', 'callback_replace_single', 'do_bbcode_url', array (),
@@ -1171,6 +1174,8 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
     global $CONF_FORUM,$_SYSTEM,$LANG_GF02;
 
+    USES_lib_html2text();
+
     $retval = '';
 
     switch ($fieldname) {
@@ -1189,6 +1194,8 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
         case 'subject':
             $testText        = gf_formatTextBlock($A['comment'],'text','text');
             $testText        = strip_tags($testText);
+            $html2txt        = new html2text($testText,false);
+            $testText        = trim($html2txt->get_text());
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
             $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . ($A['pid'] == 0 ? $A['id'] : $A['pid']) . '&amp;topic='.$A['id'].'#'.$A['id'].'" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';
             break;

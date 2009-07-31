@@ -7303,6 +7303,10 @@ function USES_lib_comments() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-comment.php';
 }
+function USES_lib_html2text() {
+    global $_CONF;
+    require_once $_CONF['path'] . 'lib/html2text/html2text.php';
+}
 function USES_lib_image() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'imglib/lib-image.php';
