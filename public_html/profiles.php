@@ -95,8 +95,8 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
                 }
             }
 
-            $subject = COM_stripslashes ($subject);
-            $message = COM_stripslashes ($message);
+            $subject = COM_filterHTML(COM_stripslashes ($subject));
+            $message = COM_filterHTML(COM_stripslashes ($message));
 
             // do a spam check with the unfiltered message text and subject
             $mailtext = $subject . "\n" . $message . $sig;
@@ -284,9 +284,9 @@ function contactform ($uid, $subject = '', $message = '')
             $mail_template->set_var ('lang_subject', $LANG08[13]);
             $mail_template->set_var ('subject', $subject);
             $mail_template->set_var ('lang_message', $LANG08[14]);
-            $mail_template->set_var ('message', $message);
-            $mail_template->set_var ('message_text',$message);
-            $mail_template->set_var ('message_html',$message);
+            $mail_template->set_var ('message', htmlspecialchars($message));
+            $mail_template->set_var ('message_text',htmlspecialchars($message));
+            $mail_template->set_var ('message_html',htmlspecialchars($message));
             $mail_template->set_var ('lang_nohtml', $LANG08[15]);
             $mail_template->set_var ('lang_submit', $LANG08[16]);
             $mail_template->set_var ('uid', $uid);
@@ -354,12 +354,19 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         return $retval;
     }
 
-    $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'";
-    $result = DB_query ($sql);
-    $A = DB_fetchArray ($result);
+    $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day,postmode FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND');
+    $result = DB_query($sql);
+    if (DB_numRows($result) == 0) {
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+    $A = DB_fetchArray($result);
+
     $shortmsg = COM_stripslashes ($shortmsg);
     $mailtext = sprintf ($LANG08[23], $from, $fromemail) . LB;
     if (strlen ($shortmsg) > 0) {
+        if ( $html ) {
+            $shortmsg = COM_filterHTML($shortmsg);
+        }
         $mailtext .= LB . sprintf ($LANG08[28], $from) . $shortmsg . LB;
     }
 
@@ -467,6 +474,12 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
         return $retval;
     }
 
+    $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND'));
+    $A = DB_fetchArray($result);
+    if ($A['count'] == 0) {
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+
     if ($msg > 0) {
         $retval .= COM_showMessage ($msg);
     }
@@ -525,9 +538,9 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     $mail_template->set_var('lang_toemailaddress', $LANG08[19]);
     $mail_template->set_var('toemail', $toemail);
     $mail_template->set_var('lang_shortmessage', $LANG08[27]);
-    $mail_template->set_var('shortmsg', $shortmsg);
-    $mail_template->set_var('message_text', $shortmsg);
-    $mail_template->set_var('message_html', $shortmsg);
+    $mail_template->set_var('shortmsg', htmlspecialchars($shortmsg));
+    $mail_template->set_var('message_text', htmlspecialchars($shortmsg));
+    $mail_template->set_var('message_html', htmlspecialchars($shortmsg));
     $mail_template->set_var('lang_warning', $LANG08[22]);
     $mail_template->set_var('lang_sendmessage', $LANG08[16]);
     $mail_template->set_var('story_id',$sid);
