@@ -952,13 +952,13 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     $eventform->set_var('event_type',$event_type);
     $eventform->set_var('url',$url);
     $eventform->set_var('allday',$allday);
-    $eventform->set_var('location',$location);
+    $eventform->set_var('location',htmlspecialchars($location));
     $eventform->set_var('address1',$address1);
     $eventform->set_var('address2',$address2);
     $eventform->set_var('city',$city);
     $eventform->set_var('state',$state);
     $eventform->set_var('zipcode',$zipcode);
-    $eventform->set_var('description',$description);
+    $eventform->set_var('description',htmlspecialchars($description));
     $eventform->set_var('postmode',$postmode);
     $eventform->parse('theform', 'eventform');
     $retval .= $eventform->finish($eventform->get_var('theform'));
