@@ -30,6 +30,6 @@ FCKConfig.ToolbarSets["editor-toolbar4"] = [
 
 FCKConfig.ToolbarSets["forum-toolbar"] = [
     ['FontName','FontSize','TextColor','BGColor','Bold','Italic','Underline','StrikeThrough',
-    '-','JustifyLeft','JustifyCenter','JustifyRight',
-    '-','UnorderedList','OrderedList','Image','Link','Unlink']
+    '-','JustifyLeft','JustifyCenter','JustifyRight'],
+    ['UnorderedList','OrderedList','Image','Link','Unlink','code','SpellCheck','FitWindow']
 ] ;

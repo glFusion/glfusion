@@ -60,6 +60,7 @@ FCKConfig.AutoGrowMax = 400 ;
 
 FCKConfig.Plugins.Add( 'mediagallery' );
 FCKConfig.Plugins.Add( 'video' );
+FCKConfig.Plugins.Add( 'code' );
 FCKConfig.AutoDetectLanguage	= true ;
 FCKConfig.DefaultLanguage		= 'en' ;
 FCKConfig.ContentLangDirection	= 'ltr' ;

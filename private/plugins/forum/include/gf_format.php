@@ -491,6 +491,8 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
     }
     if ( $CONF_FORUM['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
         $bbcode->addParser(array('block','inline','link','listitem'), 'gf_checkHTML');      // calls GL's checkHTML on all text blocks
+        $str = str_replace('<pre>','[code]',$str);
+        $str = str_replace('</pre>','[/code]',$str);
     }
     if ( $postmode != 'html' && $postmode != 'HTML') {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
