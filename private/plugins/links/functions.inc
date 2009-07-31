@@ -841,10 +841,10 @@ function plugin_submit_links($A = array())
     $linkform->set_var('xhtml', XHTML);
 
     if ( isset($A['title']) ) {
-        $linkform->set_var('title',$A['title']);
+        $linkform->set_var('title',strip_tags($A['title']));
     }
     if ( isset($A['description'] ) ) {
-        $linkform->set_var('description',$A['description']);
+        $linkform->set_var('description',htmlspecialchars($A['description']));
     }
     if ( isset($A['url']) ) {
         $linkform->set_var('url',$A['url']);
