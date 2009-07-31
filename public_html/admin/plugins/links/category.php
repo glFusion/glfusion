@@ -381,6 +381,11 @@ function links_save_category($cid, $old_cid, $pid, $category, $description, $tid
                         perm_members='{$perm_members}',perm_anon='{$perm_anon}'
                     WHERE cid = '{$old_cid}'";
             $result = DB_query($sql);
+            $sql = "UPDATE {$_TABLES['linkcategories']}
+                    SET pid='{$cid}'
+                    WHERE pid='{$old_cid}'";
+            $result = DB_query($sql);
+
             // Also need to update links for this category
             $sql = "UPDATE {$_TABLES['links']} SET cid='{$cid}' WHERE cid='{$old_cid}'";
             $result = DB_query($sql);
