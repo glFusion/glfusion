@@ -1,7 +1,7 @@
 // +--------------------------------------------------------------------------+
 // | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | storyeditor_fckeditor.js                                                 |
+// | submitcomment_fckeditor.js                                               |
 // |                                                                          |
 // | Javascript functions for FCKEditor Integration into glFusion             |
 // +--------------------------------------------------------------------------+
@@ -48,6 +48,11 @@
         if ( undefined != window.glfusionStyleBasePath ) {
             oFCKeditor1.Config['EditorAreaCSS'] = glfusionStyleCSS;
         }
+        oFCKeditor1.Config['LinkBrowser'] = false;
+        oFCKeditor1.Config['ImageBrowser'] = false;
+        oFCKeditor1.Config['FlashBrowser'] = false;
+        oFCKeditor1.Config['ImageUpload'] = false;
+        oFCKeditor1.Config['LinkUpload'] = false;
         oFCKeditor1.ToolbarSet = 'editor-toolbar1' ;
         oFCKeditor1.Height = 200 ;
         oFCKeditor1.ReplaceTextarea() ;
