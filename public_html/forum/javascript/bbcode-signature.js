@@ -246,21 +246,16 @@ function ajax_previewsig() {
     xmlhttp.setRequestHeader("Connection", "close");
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4) {
-            receiveSigPreview(xmlhttp.responseXML);
+            receiveSigPreview(xmlhttp.responseText);
         }
     };
     xmlhttp.send(params);
 
 }
-function receiveSigPreview(dom) {
-    var html = '';
-    try{
-        var oxml = dom.getElementsByTagName('html');
-        html = oxml[0].childNodes[0].nodeValue;
-    }catch(e){}
+function receiveSigPreview(signature) {
+    var preview = $('sigpreview');
 
-    if (html != '') {
-        var obj = document.getElementById('sigpreview');
-        obj.innerHTML = html;
+    if (signature != '') {
+        preview.setHTML(signature);
     }
 }
