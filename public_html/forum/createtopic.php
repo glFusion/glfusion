@@ -895,12 +895,6 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $submissionform_code->parse ('output', 'submissionform_code');
     $bbcode_buttons = $submissionform_code->finish($submissionform_code->get_var('output'));
 
-    if(!$CONF_FORUM['allow_smilies']) {
-        $smilies = '';
-    } else {
-        $smilies =  forumPLG_showsmilies($wysiwyg);
-    }
-
     // if this is the first time showing the new submission form - then check if notify option should be on
     if (!isset($_POST['preview'])) {
         if ($editpid > 0) {
@@ -1034,6 +1028,12 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     }
 
     $subject = str_replace('"', '&quot;',$subject);
+
+    if(!$CONF_FORUM['allow_smilies']) {
+        $smilies = '';
+    } else {
+        $smilies =  forumPLG_showsmilies($wysiwyg);
+    }
 
     $submissionform_main->set_var ('LANG_SUBJECT', $LANG_GF01['SUBJECT']);
     $submissionform_main->set_var ('LANG_OPTIONS', $LANG_GF01['OPTIONS']);
