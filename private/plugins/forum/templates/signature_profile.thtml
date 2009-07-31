@@ -1,4 +1,5 @@
 {# begin {templatelocation} #}
+<tr><td style="text-align:right;">
 <script type="text/javascript">
 //<![CDATA[
 b_help = "{$LANG_GF01[b_help]}";
@@ -21,7 +22,7 @@ site_url = "{site_url}";
 </script>
 <script type="text/javascript" src="{site_url}/forum/javascript/bbcode-signature.js"></script>
 
-<tr><td style="text-align:right;"><b>{$LANG_GF01[signature]}:</b></td><td>
+<b>{$LANG_GF01[signature]}:</b></td><td>
 
   <div id="forum" class="sig-edit">
 
@@ -70,9 +71,7 @@ site_url = "{site_url}";
   </div>
   <button type="button" name="preview" onclick="ajax_previewsig();return false;">{$LANG_GF01[PREVIEW]}</button>
 
-  <div style="clear:both;"></div>
-
-  <div id="preview" style="width:500px;padding-top:10px;">
+  <div id="preview" style="padding-top:10px;">
     <fieldset><legend>{$LANG_GF01[signature_preview]}</legend>
     <div class="signature">
       <hr />
@@ -80,5 +79,4 @@ site_url = "{site_url}";
     </div>
     </fieldset>
   </div>
-
 </td></tr>
