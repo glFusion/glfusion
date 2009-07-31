@@ -2581,3 +2581,12 @@ padding:3px 3px 0;
   color:#666666;
   padding-top:1ex;
 }
+
+pre {
+  background-color: #fff;
+  font-family: "Consolas" , "Courier New" ,Courier,mono,serif;
+  font-size: 12px;
+  color: blue;
+  padding: 5px;
+  border: 1px dashed blue;
+}
