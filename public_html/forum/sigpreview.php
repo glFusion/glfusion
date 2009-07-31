@@ -53,14 +53,8 @@ if ( isset($_POST['signature']) ) {
 
 $preview_sig = BBC_formatTextBlock($signature,'text');
 
-$html = htmlentities ($preview_sig);
-
-$retval = "<result>";
-$retval .= "<html>$html</html>";
-$retval .= "</result>";
-
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("content-type: text/xml");
 
-print $retval;
+print $preview_sig;
 ?>
