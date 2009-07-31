@@ -44,7 +44,7 @@ if (!in_array('forum', $_PLUGINS)) {
     exit;
 }
 
-require_once $_CONF['path'] . 'plugins/forum/include/include_html.php';
+// require_once $_CONF['path'] . 'plugins/forum/include/include_html.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/include/lib-uploadfiles.php';
@@ -52,6 +52,8 @@ require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 $retval = '';
 $forumfiles = array();
+
+$wysiwyg = 0;
 
 $subject = '';
 
@@ -896,7 +898,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     if(!$CONF_FORUM['allow_smilies']) {
         $smilies = '';
     } else {
-        $smilies =  forumPLG_showsmilies();
+        $smilies =  forumPLG_showsmilies($wysiwyg);
     }
 
     // if this is the first time showing the new submission form - then check if notify option should be on
@@ -975,12 +977,36 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
          $postmode_msg = $LANG_GF01['HTMLMODE'];
     }
     if($CONF_FORUM['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) {
-        $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
+        if ( $method == 'edit' ) {
+            if ( $postmode == 'html' && $CONF_FORUM['use_wysiwyg_editor'] == 1 ) {
+                $mode_prompt = '<input type="hidden" name="postmode" value="html" />';
+                $wysiwyg = 1;
+            } else {
+                $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
+            }
+        } elseif ( $CONF_FORUM['use_wysiwyg_editor'] && $CONF_FORUM['post_htmlmode']) {
+            $mode_prompt = '<input type="hidden" name="postmode" value="html" />';
+            $wysiwyg = 1;
+        } else {
+            $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
+        }
     }
 
     $submissionform_main = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main.thtml'));
-$submissionform_main->set_var('bbcode_buttons',$bbcode_buttons);
+    if ( $method == 'edit' ) {
+        if ( $postmode == 'html' && $CONF_FORUM['use_wysiwyg_editor'] == 1 ) {
+            $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main_advanced.thtml'));
+            $wysiwyg = 1;
+        } else {
+            $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main.thtml'));
+        }
+    } elseif (($CONF_FORUM['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) && $CONF_FORUM['use_wysiwyg_editor'] && $CONF_FORUM['post_htmlmode']) {
+        $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main_advanced.thtml'));
+        $wysiwyg = 1;
+    } else {
+        $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main.thtml'));
+    }
+    $submissionform_main->set_var('bbcode_buttons',$bbcode_buttons);
     if($method == 'edit') {
         if ($CONF_FORUM['pre2.5_mode']) {
             /* Reformat code blocks - version 2.3.3 and prior */

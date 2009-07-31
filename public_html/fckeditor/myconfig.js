@@ -27,3 +27,9 @@ FCKConfig.ToolbarSets["editor-toolbar4"] = [
     '-','OrderedList','UnorderedList','Outdent','Indent'],
     ['PasteText','PasteWord','-','FontName','FontSize','TextColor','BGColor','-','Rule','-','video','Table','FitWindow','SpellCheck','-','About']
 ] ;
+
+FCKConfig.ToolbarSets["forum-toolbar"] = [
+    ['FontName','FontSize','TextColor','BGColor','Bold','Italic','Underline','StrikeThrough',
+    '-','JustifyLeft','JustifyCenter','JustifyRight',
+    '-','UnorderedList','OrderedList','Image','Link','Unlink']
+] ;

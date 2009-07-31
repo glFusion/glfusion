@@ -435,6 +435,8 @@ function plugin_initconfig_forum()
                 0, 2, 0, 70, true, 'forum');
         $c->add('allow_html', $_FF_DEFAULT['allow_html'], 'select',
                 0, 2, 0, 80, true, 'forum');
+        $c->add('use_wysiwyg_editor', false, 'select',
+                0, 2, 0, 85, true, 'forum');
         $c->add('post_htmlmode', $_FF_DEFAULT['post_htmlmode'], 'select',
                 0, 2, 0, 90, true, 'forum');
         $c->add('use_censor', $_FF_DEFAULT['use_censor'], 'select',

@@ -968,6 +968,7 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Max Size for Attachments (bytes)',
     'enable_user_rating_system' => 'Enable User Rating System',
     'bbcode_signature' => 'Enable BBcode Signature',
+    'use_wysiwyg_editor' => 'Enable WYSIWYG HTML Editor',
 );
 
 $LANG_configsubgroups['forum'] = array(

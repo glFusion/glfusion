@@ -243,6 +243,7 @@ function glfusion_115()
     // Forum plugin
     $c->add('enable_user_rating_system',FALSE, 'select', 0,0,0,22, TRUE, 'forum');
     $c->add('bbcode_signature', TRUE, 'select',0, 0, 0, 37, true, 'forum');
+    $c->add('use_wysiwyg_editor', false, 'select', 0, 2, 0, 85, true, 'forum');
     DB_query("ALTER TABLE {$_TABLES['gf_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
     DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD `rating` INT( 8 ) NOT NULL ",1);
     DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD signature MEDIUMTEXT NOT NULL",1 );

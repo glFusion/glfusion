@@ -1360,16 +1360,21 @@ function forum_delAttachment($deleteid) {
 // +---------------------------------------------------------------------------+
 
 
-function forumPLG_showsmilies() {
+function forumPLG_showsmilies($wysiwyg = 0) {
     global $_CONF,$CONF_FORUM;
 
-    // Check and see if glMessenger is installed
+    // Check and see if smiley plugin is installed
     if ($CONF_FORUM['use_smilies_plugin'] AND function_exists(msg_showsmilies)) {
         return msg_showsmilies();
     } else {
         $t = new Template($_CONF['path'] . 'plugins/forum/templates/');
         $t->set_file ('smilies' , 'smilies.thtml');
         $t->set_var ('imgset', "{$_CONF['site_url']}/forum/images");
+        if ( $wysiwyg ) {
+            $t->set_var ('emoticon','emoticon_wysiwyg');
+        } else {
+            $t->set_var ('emoticon','emoticon');
+        }
         $t->parse ('output', 'smilies');
         return $t->finish($t->get_var('output'));
     }
@@ -1377,7 +1382,7 @@ function forumPLG_showsmilies() {
 
 function forumPLG_restoreEmoticons($str) {
 
-    // Check and see if glMessenger is installed
+    // Check and see if smiley plugin is installed
     if (function_exists(msg_showsmilies)) {
         return msg_restoreEmoticons($str);
     } else {
