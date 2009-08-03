@@ -7,6 +7,7 @@
 <td colspan="2">
 {site_name} {$LANG_GF02[msg22]} - {online_version}
 </td>
+</tr>
 <tr><td colspan="2"><hr></td></tr>
 <tr>
 <td width="20%"><strong>{$LANG_GF01[SUBJECT]}:</strong></td>
