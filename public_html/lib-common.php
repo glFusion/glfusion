@@ -4211,6 +4211,8 @@ function COM_emailUserTopics()
     if ($_CONF['emailstories'] == 0) {
         return;
     }
+    USES_lib_story();
+
     $subject = strip_tags( $_CONF['site_name'] . $LANG08[30] . strftime( '%Y-%m-%d', time() ));
 
     $authors = array();
@@ -4226,106 +4228,139 @@ function COM_emailUserTopics()
     $lastrun = DB_getItem( $_TABLES['vars'], 'value', "name = 'lastemailedstories'" );
 
     // For each user, pull the stories they want and email it to them
-    for( $x = 0; $x < $nrows; $x++ )
-    {
+    for( $x = 0; $x < $nrows; $x++ ) {
         $U = DB_fetchArray( $users );
-        $storysql = array();
-        $storysql['mysql'] = "SELECT sid,uid,date AS day,title,introtext,bodytext";
-
-        $storysql['mssql'] = "SELECT sid,uid,date AS day,title,CAST(introtext AS text) AS introtext,CAST(bodytext AS text) AS introtext";
-
+        $storysql  = "SELECT sid,uid,date AS day,title,introtext,bodytext";
         $commonsql = " FROM {$_TABLES['stories']} WHERE draft_flag = 0 AND date <= NOW() AND date >= '{$lastrun}'";
+        $topicsql  = "SELECT tid FROM {$_TABLES['topics']}"
+                        . COM_getPermSQL( 'WHERE', $U['uuid'] );
+        $tresult   = DB_query( $topicsql );
+        $trows     = DB_numRows( $tresult );
 
-        $topicsql = "SELECT tid FROM {$_TABLES['topics']}"
-                  . COM_getPermSQL( 'WHERE', $U['uuid'] );
-        $tresult = DB_query( $topicsql );
-        $trows = DB_numRows( $tresult );
-
-        if( $trows == 0 )
-        {
+        if( $trows == 0 ) {
             // this user doesn't seem to have access to any topics ...
             continue;
         }
 
         $TIDS = array();
-        for( $i = 0; $i < $trows; $i++ )
-        {
+        for( $i = 0; $i < $trows; $i++ ) {
             $T = DB_fetchArray( $tresult );
             $TIDS[] = $T['tid'];
         }
 
-        if( !empty( $U['etids'] ))
-        {
+        if( !empty( $U['etids'] )) {
             $ETIDS = explode( ' ', $U['etids'] );
             $TIDS = array_intersect( $TIDS, $ETIDS );
         }
 
-        if( sizeof( $TIDS ) > 0)
-        {
+        if( sizeof( $TIDS ) > 0) {
             $commonsql .= " AND (tid IN ('" . implode( "','", $TIDS ) . "'))";
         }
 
         $commonsql .= COM_getPermSQL( 'AND', $U['uuid'] );
         $commonsql .= ' ORDER BY featured DESC, date DESC';
 
-        $storysql['mysql'] .= $commonsql;
-        $storysql['mssql'] .= $commonsql;
+        $storysql .= $commonsql;
 
         $stories = DB_query( $storysql );
-        $nsrows = DB_numRows( $stories );
+        $nsrows  = DB_numRows( $stories );
 
-        if( $nsrows == 0 )
-        {
+        if( $nsrows == 0 ) {
             // If no new stories where pulled for this user, continue with next
             continue;
         }
 
-        $mailtext = $LANG08[29] . strftime( $_CONF['shortdate'], time() ) . "\n";
+        $T = new Template($_CONF['path_layout']);
+        $T->set_file(array('message'     => 'digest.thtml',
+                           'story'       => 'digest_story.thtml'));
 
-        for( $y = 0; $y < $nsrows; $y++ )
-        {
+        $TT = new Template($_CONF['path_layout']);
+        $TT->set_file(array('message'     => 'digest_text.thtml',
+                           'story'        => 'digest_story_text.thtml'));
+
+        $T->set_var('week_date',strftime( $_CONF['shortdate'], time() ));
+        $TT->set_var('week_date',strftime( $_CONF['shortdate'], time() ));
+
+        $T->set_var('site_name',$_CONF['site_name']);
+        $TT->set_var('site_name',$_CONF['site_name']);
+
+        $T->set_var('remove_msg',sprintf($LANG08[36],$_CONF['site_name'],$_CONF['site_url']));
+        $TT->set_var('remove_msg',sprintf($LANG08[37],$_CONF['site_name'],$_CONF['site_url']));
+
+        for( $y = 0; $y < $nsrows; $y++ ) {
             // Loop through stories building the requested email message
             $S = DB_fetchArray( $stories );
 
-            $mailtext .= "\n------------------------------\n\n";
-            $mailtext .= "$LANG08[31]: "
-                . COM_undoSpecialChars( stripslashes( $S['title'] )) . "\n";
-            if( $_CONF['contributedbyline'] == 1 )
-            {
-                if( empty( $authors[$S['uid']] ))
-                {
+            $story = new Story();
+            $args = array ( 'sid' => $S['sid'],'mode' => 'view');
+            $output = STORY_LOADED_OK;
+            $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
+            if($result == PLG_RET_OK) {
+                /* loadFromArray cannot be used, since it overwrites the timestamp */
+                reset($story->_dbFields);
+
+                while (list($fieldname,$save) = each($story->_dbFields)) {
+                    $varname = '_' . $fieldname;
+
+                    if (array_key_exists($fieldname, $output)) {
+                        $story->{$varname} = $output[$fieldname];
+                    }
+                }
+               $story->_username = $output['username'];
+               $story->_fullname = $output['fullname'];
+            }
+            $story_url = COM_buildUrl( $_CONF['site_url'] . '/article.php?story=' . $S['sid'] );
+            $title     = COM_undoSpecialChars( stripslashes( $S['title'] ));
+            if( $_CONF['contributedbyline'] == 1 ) {
+                if( empty( $authors[$S['uid']] )) {
                     $storyauthor = COM_getDisplayName ($S['uid']);
                     $authors[$S['uid']] = $storyauthor;
-                }
-                else
-                {
+                } else {
                     $storyauthor = $authors[$S['uid']];
                 }
-                $mailtext .= "$LANG24[7]: " . $storyauthor . "\n";
             }
 
-            $mailtext .= "$LANG08[32]: " . strftime( $_CONF['date'], strtotime( $S['day' ])) . "\n\n";
+            $story_date = strftime( $_CONF['date'], strtotime( $S['day' ]));
 
-            if( $_CONF['emailstorieslength'] > 0 )
-            {
+            if( $_CONF['emailstorieslength'] > 0 ) {
                 $storytext = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
 
-                if( $_CONF['emailstorieslength'] > 1 )
-                {
+                if( $_CONF['emailstorieslength'] > 1 ) {
                     $storytext = COM_truncate( $storytext,
                                     $_CONF['emailstorieslength'], '...' );
                 }
-
-                $mailtext .= $storytext . "\n\n";
+            } else {
+                $storytext = $story->DisplayElements('introtext');
             }
+            $storytext = $story->DisplayElements('introtext');
+            $storytext_text = COM_undoSpecialChars( strip_tags( PLG_replaceTags( stripslashes( $S['introtext'] ))));
+            $T->set_var ('story_introtext',$storytext);
+            $TT->set_var ('story_introtext',$storytext_text);
 
-            $mailtext .= $LANG08[33] . ' ' . COM_buildUrl( $_CONF['site_url']
-                      . '/article.php?story=' . $S['sid'] ) . "\n";
+            $T->set_var(array(
+                'story_url'     => $story_url,
+                'story_title'   => $title,
+                'story_author'  => $storyauthor,
+                'story_date'    => $story_date,
+                'story_text'    => $storytext,
+            ));
+            $T->parse('digest_stories', 'story', true);
+
+            $TT->set_var(array(
+                'story_url'     => $story_url,
+                'story_title'   => $title,
+                'story_author'  => $storyauthor,
+                'story_date'    => $story_date,
+                'story_text'    => $storytext_text,
+            ));
+            $TT->parse('digest_stories', 'story', true);
         }
 
-        $mailtext .= "\n------------------------------\n";
-        $mailtext .= "\n$LANG08[34]\n";
-        $mailtext .= "\n------------------------------\n";
+        $T->parse('digest', 'message', true);
+        $TT->parse('digest', 'message', true);
+
+        $mailtext = $T->finish($T->get_var('digest'));
+        $mailtext_text = $TT->finish($TT->get_var('digest'));
 
         if ($_CONF['site_mail'] !== $_CONF['noreply_mail']) {
             $mailfrom = $_CONF['noreply_mail'];
@@ -4338,12 +4373,12 @@ function COM_emailUserTopics()
         $from = array();
         $from = COM_formatEmailAddress('',$mailfrom);
         $to   = COM_formatEmailAddress( $U['username'],$U['email'] );
-        COM_mail ($to, $subject, $mailtext, $from);
+        COM_mail ($to, $subject, $mailtext, $from,1,0,'',$mailtext_text);
 
     }
-
     DB_query( "UPDATE {$_TABLES['vars']} SET value = NOW() WHERE name = 'lastemailedstories'" );
 }
+
 
 /**
 * Shows any new information in a block
