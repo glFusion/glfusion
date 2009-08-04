@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Reworked daily digest code to support both HTML and text messages.  It is
+  now template driven (Mark)
 - Rename signature (in user profile) to Tag Line (Mark)
 - Email did not honor the priority flag (Mark)
 - Ability to use remote IP instead of referring URL for security tokens (Mark)
