@@ -456,7 +456,9 @@ $LANG08 = array(
     32 => '날짜',
     33 => ' 다음 장소에서 전체글 보기가 가능합니다',
     34 => '마지막 메세지.',
-    35 => '죄송합니다만, 이 사용자의 메일은 접수될 수 없습니다.'
+    35 => '죄송합니다만, 이 사용자의 메일은 접수될 수 없습니다.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################

@@ -35,71 +35,70 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-$LANG_FM00 = array (
-    'access_denied'     => 'Acceso Denegado',
+###############################################################################
+
+$LANG_FM00 = array(
+    'access_denied' => 'Acceso Denegado',
     'access_denied_msg' => 'Solo usuarios administradores tiene acceso hacia est&aacute; p&aacute;gina. Su nombre de usuario y direcci&oacute;n IP han sido registrados en bit&aacute;cora.',
-    'admin'             => 'Administraci&oacute;n de Componente',
-    'install_header'    => 'Instalar/Desinstalar Componente',
-    'installed'         => 'El componente y recuadro est&aacute;n ahora instalados,<p><i>Disfruten,<br>Atentamente <a href="MAILTO:blaine@portalparts.com">Blaine</a></i>',
-    'uninstalled'       => 'El componente no est&aacute; instalado',
-    'install_success'   => 'Instalaci&oacute;n exitosa<p><b>Siguientes pasos</b>:
-        <ol><li>Utilice el administrador del Gestor de Ficheros (Filemgmt) para completar la configuraci&oacute;n</ol>
-        <p>Revise las <a href="%s">Notas de Instalaci&oacute;n</a> para m&aacute;s informaci&oacute;n.',
-    'install_failed'    => 'La instalaci&oacute;n fall&oacute; - Revise error.log para averiguar por qu&eacute;.',
-    'uninstall_msg'     => 'Componente desinstalado exitosamente',
-    'install'           => 'Instalar',
-    'uninstall'         => 'Desinstalar',
-    'editor'            => 'Editor de componente',
-    'warning'           => 'Advertencia de desinstalaci&oacute;n',
-    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">El componente est&aacute; instalado y habilitado.<br>Deshabilite primero si quiere desinstalar.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Editor de Componente</a></div',
-    'WhatsNewLabel'    => 'Nuevos ficheros',
-    'WhatsNewPeriod'   => ' en %s d&iacute;as',
-    'new_upload'        => 'New File submitted at ',
-    'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
-    'details'           => 'File Details',
-    'filename'          => 'Filename',
-    'uploaded_by'       => 'Uploaded By',
+    'admin' => 'Administraci&oacute;n de Componente',
+    'install_header' => 'Instalar/Desinstalar Componente',
+    'installed' => 'El componente y recuadro est&aacute;n ahora instalados,<p><i>Disfruten,<br' . XHTML . '>Atentamente <a href="MAILTO:blaine@portalparts.com">Blaine</a></i>',
+    'uninstalled' => 'El componente no est&aacute; instalado',
+    'install_success' => "Instalaci&oacute;n exitosa<p><b>Siguientes pasos</b>:\n        <ol><li>Utilice el administrador del Gestor de Ficheros (Filemgmt) para completar la configuraci&oacute;n</ol>\n        <p>Revise las <a href=\"%s\">Notas de Instalaci&oacute;n</a> para m&aacute;s informaci&oacute;n.",
+    'install_failed' => 'La instalaci&oacute;n fall&oacute; - Revise error.log para averiguar por qu&eacute;.',
+    'uninstall_msg' => 'Componente desinstalado exitosamente',
+    'install' => 'Instalar',
+    'uninstall' => 'Desinstalar',
+    'editor' => 'Editor de componente',
+    'warning' => 'Advertencia de desinstalaci&oacute;n',
+    'enabled' => "<p style=\"padding: 15px 0px 5px 25px;\">El componente est&aacute; instalado y habilitado.<br" . XHTML . ">Deshabilite primero si quiere desinstalar.</p><div style=\"padding:5px 0px 5px 25px;\"><a href=\"{$_CONF['site_admin_url']}/plugins.php\">Editor de Componente</a></div",
+    'WhatsNewLabel' => 'Nuevos ficheros',
+    'WhatsNewPeriod' => ' en %s d&iacute;as',
+    'new_upload' => 'New File submitted at ',
+    'new_upload_body' => 'A new file has been submitted to the upload queue at ',
+    'details' => 'File Details',
+    'filename' => 'Filename',
+    'uploaded_by' => 'Uploaded By'
 );
 
-// Admin Navbar
 $LANG_FM02 = array(
-    'nav1'  => 'Configuraci&oacute;n',
-    'nav2'  => 'Categor&iacute;as',
-    'nav3'  => 'A&ntilde;adir fichero',
-    'nav4'  => 'Descargas (%s)',
-    'nav5'  => 'Ficheros rotos (%s)'
+    'nav1' => 'Configuraci&oacute;n',
+    'nav2' => 'Categor&iacute;as',
+    'nav3' => 'A&ntilde;adir fichero',
+    'nav4' => 'Descargas (%s)',
+    'nav5' => 'Ficheros rotos (%s)'
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "Nueva p&aacute;gina",
-    'adminhome' => "Inicio de Administraci&oacute;n",
-    'plugin_name' => "Administrador de ficheros",
-    'searchlabel' => "Lista de ficheros",
-    'searchlabel_results' => "Resultados del listado de ficheros",
-    'downloads' => "Descargas",
-    'report' => "Mejores descargas",
-    'usermenu1' => "Descargas",
-    'usermenu2' => "&nbsp;&nbsp;Mejor calificados",
-    'usermenu3' => "A&ntilde;ade una descarga",
-    'admin_menu' => "Gestor de ficheros",
-    'writtenby' => "Escrito por",
-    'date' => "&Uacute;ltima actualizaci&oacute;n",
-    'title' => "T&iacute;tulo",
-    'content' => "Contenido",
-    'hits' => "Accesos",
-    'Filelisting' => "Lista de ficheros",
-    'DownloadReport' => "Historial de descargas para un solo fichero",
-    'StatsMsg1' => "Lo m&aacute;s descargado del dep&oacute;sito",
-    'StatsMsg2' => "Al perecer este sitio carece de ficheros definidos para el Componente de Gestor de Ficheros o nadie los ha accedido todav&iacute;a.",
-    'usealtheader' => "Use Cabecera Alt.",
-    'url' => "URL",
-    'edit' => "Editar",
-    'lastupdated' => "Ultima actualizaci&oacute;n",
-    'pageformat' => "Formato de p&aacute;gina",
-    'leftrightblocks' => "Recuadros derecho e izquierdo",
-    'blankpage' => "P&aacute;gina en blanco",
-    'noblocks' => "Sin recuadros",
-    'leftblocks' => "Recuadros izquierdos",
+    'newpage' => 'Nueva p&aacute;gina',
+    'adminhome' => 'Inicio de Administraci&oacute;n',
+    'plugin_name' => 'Administrador de ficheros',
+    'searchlabel' => 'Lista de ficheros',
+    'searchlabel_results' => 'Resultados del listado de ficheros',
+    'downloads' => 'Descargas',
+    'report' => 'Mejores descargas',
+    'usermenu1' => 'Descargas',
+    'usermenu2' => '&nbsp;&nbsp;Mejor calificados',
+    'usermenu3' => 'A&ntilde;ade una descarga',
+    'admin_menu' => 'Gestor de ficheros',
+    'writtenby' => 'Escrito por',
+    'date' => '&Uacute;ltima actualizaci&oacute;n',
+    'title' => 'T&iacute;tulo',
+    'content' => 'Contenido',
+    'hits' => 'Accesos',
+    'Filelisting' => 'Lista de ficheros',
+    'DownloadReport' => 'Historial de descargas para un solo fichero',
+    'StatsMsg1' => 'Lo m&aacute;s descargado del dep&oacute;sito',
+    'StatsMsg2' => 'Al perecer este sitio carece de ficheros definidos para el Componente de Gestor de Ficheros o nadie los ha accedido todav&iacute;a.',
+    'usealtheader' => 'Use Cabecera Alt.',
+    'url' => 'URL',
+    'edit' => 'Editar',
+    'lastupdated' => 'Ultima actualizaci&oacute;n',
+    'pageformat' => 'Formato de p&aacute;gina',
+    'leftrightblocks' => 'Recuadros derecho e izquierdo',
+    'blankpage' => 'P&aacute;gina en blanco',
+    'noblocks' => 'Sin recuadros',
+    'leftblocks' => 'Recuadros izquierdos',
     'addtomenu' => 'A&ntilde;adir al men&uacute;',
     'label' => 'Etiqueta',
     'nofiles' => 'N&uacute;mero de ficheros (descargas) en nuestro dep&oacute;sito',
@@ -120,72 +119,73 @@ $LANG_FILEMGMT = array(
     'system_locked' => 'Sistema bloqueado',
     'system_locked_msg' => 'El Componente de Gestor de Fichero est&aacute; instalado y bloqueado. Si se quiere desinstalar este componente, por favor lea el fichero README que acompa&ntilde;a a &eacute;ste.',
     'uninstall_complete' => 'Desinstalaci&oacute;n completada',
-    'uninstall_complete_msg' => 'Las estructuras de datos para el Componente de Gestor de Ficheros han sido eliminadas exitosamente de la base de datos de Geeklog<br><br>Se requiere eliminar manualmente todos los ficheros en el dep&oacute;sito en el disco duro.',
+    'uninstall_complete_msg' => 'Las estructuras de datos para el Componente de Gestor de Ficheros han sido eliminadas exitosamente de la base de datos de Geeklog<br' . XHTML . '><br' . XHTML . '>Se requiere eliminar manualmente todos los ficheros en el dep&oacute;sito en el disco duro.',
     'uninstall_failed' => 'Fall&oacute; desinstalaci&oacute;n.',
     'uninstall_failed_msg' => 'La instalaci&oacute;n de el Componente de Gestor de Ficheros fall&oacute;. Revise el fichero error.log para averiguar por qu&eacute;',
     'install_noop' => 'Instalaci&oacute;n del componente',
-    'install_noop_msg' => 'La instalaci&oacute;n del componente de gestor de Ficheros se llev&oacute; a cabo sin acci&oacute;n alguna.<br><br>Por favor revise el fichero install.cfg.',
+    'install_noop_msg' => 'La instalaci&oacute;n del componente de gestor de Ficheros se llev&oacute; a cabo sin acci&oacute;n alguna.<br' . XHTML . '><br' . XHTML . '>Por favor revise el fichero install.cfg.',
     'all_html_allowed' => 'Todos el HTML est&aacute; permitido',
-    'no_new_files'  => 'Sin nuevos eventos',
-    'no_comments'   => 'Sin nuevos comentarios',
-    'more'          => '<em>m&aacute;s ...</em>'
+    'no_new_files' => 'Sin nuevos eventos',
+    'no_comments' => 'Sin nuevos comentarios',
+    'more' => '<em>m&aacute;s ...</em>'
 );
 
+$PLG_filemgmt_MESSAGE1 = 'El proceso de instalaci&oacute;n de Componente de Gestor de Ficheros (Filemgmt) fue interrumpido<br' . XHTML . '>Fichero: plugins/filemgmt/filemgmt.php sin atributos de escritura.';
+$PLG_filemgmt_MESSAGE3 = 'Este componente requiere Geeklog Versi&oacute;n 1.4 o m&aacute;s reciente, proceso de actualizaci&oacute;n interrumpido.';
+$PLG_filemgmt_MESSAGE4 = 'Versi&oacute;n de c&oacute;digo del Componente es anterior a 1.5 - proceso de actualizaci&oacute;n interrumpido.';
+$PLG_filemgmt_MESSAGE5 = 'El proceso de actualizaci&oacute;n de Componente de Gestor de Ficheros fue interrumpido.<br' . XHTML . '>La versi&oacute;n del componente es distinta a 1.3';
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(
-    'label'                 => 'FileMgmt',
-    'title'                 => 'FileMgmt Configuration'
+    'label' => 'FileMgmt',
+    'title' => 'FileMgmt Configuration'
 );
+
 $LANG_confignames['filemgmt'] = array(
-    'whatsnew'              => 'Enable WhatsNew Listing?',
-    'perpage'               => 'Displayed Downloads per Page',
-    'popular_download'      => 'Hits to be Popular',
-    'newdownloads'          => 'Number of Downloads as New on Top Page',
-    'trimdesc'              => 'Trim File Descriptions in Listing',
-    'dlreport'              => 'Restrict access to Download report',
-    'selectpriv'            => 'Restrict access to group \'Logged-In Users\' only',
-    'uploadselect'          => 'Allow Logged-In uploads',
-    'uploadpublic'          => 'Allow Anonymous uploads',
-    'useshots'              => 'Display Category Images',
-    'shotwidth'             => 'Thumbnail Img Width',
-    'Emailoption'           => 'Email submitter if file approved',
-    'FileStore'             => 'Directory to store files',
-    'SnapStore'             => 'Directory to store file thumbnails',
-    'SnapCat'               => 'Directory to store category thumbnails',
-    'FileStoreURL'          => 'URL to files',
-    'FileSnapURL'           => 'URL to file thumbnails',
-    'SnapCatURL'            => 'URL to category thumbnails',
-    'whatsnewperioddays'    => 'What\'s New Days',
-    'whatsnewtitlelength'   => 'What\'s New Title Length',
-    'showwhatsnewcomments'  => 'Show Comment in What\'s New Block?',
-    'numcategoriesperrow'   => 'Categories per row',
+    'whatsnew' => 'Enable WhatsNew Listing?',
+    'perpage' => 'Displayed Downloads per Page',
+    'popular_download' => 'Hits to be Popular',
+    'newdownloads' => 'Number of Downloads as New on Top Page',
+    'trimdesc' => 'Trim File Descriptions in Listing',
+    'dlreport' => 'Restrict access to Download report',
+    'selectpriv' => 'Restrict access to group \'Logged-In Users\' only',
+    'uploadselect' => 'Allow Logged-In uploads',
+    'uploadpublic' => 'Allow Anonymous uploads',
+    'useshots' => 'Display Category Images',
+    'shotwidth' => 'Thumbnail Img Width',
+    'Emailoption' => 'Email submitter if file approved',
+    'FileStore' => 'Directory to store files',
+    'SnapStore' => 'Directory to store file thumbnails',
+    'SnapCat' => 'Directory to store category thumbnails',
+    'FileStoreURL' => 'URL to files',
+    'FileSnapURL' => 'URL to file thumbnails',
+    'SnapCatURL' => 'URL to category thumbnails',
+    'whatsnewperioddays' => 'What\'s New Days',
+    'whatsnewtitlelength' => 'What\'s New Title Length',
+    'showwhatsnewcomments' => 'Show Comment in What\'s New Block?',
+    'numcategoriesperrow' => 'Categories per row',
     'numsubcategories2show' => 'Sub Categories per row',
-    'outside_webroot'       => 'Store Files Outside Web Root',
+    'outside_webroot' => 'Store Files Outside Web Root'
 );
+
 $LANG_configsubgroups['filemgmt'] = array(
-    'sg_main'               => 'Main Settings'
+    'sg_main' => 'Main Settings'
 );
+
 $LANG_fs['filemgmt'] = array(
-    'fs_public'             => 'Public FileMgmt Settings',
-    'fs_admin'              => 'FileMgmt Admin Settings',
-    'fs_permissions'        => 'Default Permissions',
-    'fm_access'             => 'FileMgmt Access Control',
-    'fm_general'            => 'FileMgmt General Settings',
+    'fs_public' => 'Public FileMgmt Settings',
+    'fs_admin' => 'FileMgmt Admin Settings',
+    'fs_permissions' => 'Default Permissions',
+    'fm_access' => 'FileMgmt Access Control',
+    'fm_general' => 'FileMgmt General Settings'
 );
+
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['filemgmt'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
+    1 => array('True' => true, 'False' => false),
+    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25, '30' => 30, '50' => 50)
 );
-
-
-
-$PLG_filemgmt_MESSAGE1 = 'El proceso de instalaci&oacute;n de Componente de Gestor de Ficheros (Filemgmt) fue interrumpido<br>Fichero: plugins/filemgmt/filemgmt.php sin atributos de escritura.';
-$PLG_filemgmt_MESSAGE3 = 'Este componente requiere Geeklog Versi&oacute;n 1.4 o m&aacute;s reciente, proceso de actualizaci&oacute;n interrumpido.';
-$PLG_filemgmt_MESSAGE4 = 'Versi&oacute;n de c&oacute;digo del Componente es anterior a 1.5 - proceso de actualizaci&oacute;n interrumpido.';
-$PLG_filemgmt_MESSAGE5 = 'El proceso de actualizaci&oacute;n de Componente de Gestor de Ficheros fue interrumpido.<br>La versi&oacute;n del componente es distinta a 1.3';
 
 // Language variables used by the plugin - general users access code.
 
@@ -229,7 +229,7 @@ define("_MD_DESCRIPTIONC","Descripci&oacute;n:");
 define("_MD_EMAILC","Correo electr&oacute;nico: ");
 define("_MD_CATEGORYC","Categor&iacute;a: ");
 define("_MD_LASTUPDATEC","&Uacute;ltima actualizaci&oacute;n: ");
-define("_MD_DLNOW","Â¡Descarga ahora!");
+define("_MD_DLNOW","¡Descarga ahora!");
 define("_MD_VERSION","Ver");
 define("_MD_SUBMITDATE","Fecha");
 define("_MD_DLTIMES","Descargado %s veces");
@@ -275,12 +275,12 @@ define("_MD_VOTEONCE","Por favor evita votar m&aacute;s de una vez por el mismo 
 define("_MD_RATINGSCALE","La escala va de 1 a 10, donde 1 significa pobre y 10 significa excelente.");
 define("_MD_BEOBJECTIVE","Por favor, se objetivo. Si todos reciben un 1 o un 10, las calificaciones son de poca utilidad.");
 define("_MD_DONOTVOTE","Evita votar por tu propio recurso.");
-define("_MD_RATEIT","Â¡Calificar esta descarga!");
+define("_MD_RATEIT","¡Calificar esta descarga!");
 
 define("_MD_INTFILEAT","Interesante fichero de descarga en %s"); // %s is your site name
 define("_MD_INTFILEFOUND","Hay una descarga interesante que encontr&eacute; en %s"); // %s is your site name
 
-define("_MD_RECEIVED","Hemos recibido la informaci&oacute;n de la descarga. Â¡Gracias!");
+define("_MD_RECEIVED","Hemos recibido la informaci&oacute;n de la descarga. ¡Gracias!");
 define("_MD_WHENAPPROVED","Recibir&aacute;s un mensaje de correo electr&oacute;nico cuando sea aprobado.");
 define("_MD_SUBMITONCE","Env&iacute;a tu fichero/gui&oacute;n una sola vez.");
 define("_MD_APPROVED", "Tu fichero ha sido aprobado");
@@ -379,21 +379,21 @@ define("_MD_IMGURLMAIN","Imagen (la altura ser&aacute; modificada a 50 pixeles):
 define("_MD_PARENT","Categor&iacute;a Padre:");
 define("_MD_SAVE","Guardar cambios");
 define("_MD_CATDELETED","Categor&iacute;a eliminada.");
-define("_MD_WARNING","ADVERTENCIA: Â¿Est&aacute;s seguro que quieres eliminar esta categor&iacute;a y TODOS sus ficheros y comentarios?");
+define("_MD_WARNING","ADVERTENCIA: ¿Est&aacute;s seguro que quieres eliminar esta categor&iacute;a y TODOS sus ficheros y comentarios?");
 define("_MD_YES","Si");
 define("_MD_NO","No");
-define("_MD_NEWCATADDED","Â¡Nueva categor&iacute;a agregada con &eacute;xito!");
+define("_MD_NEWCATADDED","¡Nueva categor&iacute;a agregada con &eacute;xito!");
 define("_MD_CONFIGUPDATED","Nueva configuraci&oacute;n guardada");
 define("_MD_ERROREXIST","ERROR: La informaci&oacute;n que proporcionaste acerca del fichero ya est&aacute; en la base de datos!");
-define("_MD_ERRORNOFILE","ERROR: Â¡Imposible encontrar registro del fichero en la base de datos!");
-define("_MD_ERRORTITLE","ERROR: Â¡Necesitas ingresar un T&Iacute;TULO!");
-define("_MD_ERRORDESC","ERROR: Â¡Necesitas ingresar DESCRIPCI&Oacute;N!");
+define("_MD_ERRORNOFILE","ERROR: ¡Imposible encontrar registro del fichero en la base de datos!");
+define("_MD_ERRORTITLE","ERROR: ¡Necesitas ingresar un T&Iacute;TULO!");
+define("_MD_ERRORDESC","ERROR: ¡Necesitas ingresar DESCRIPCI&Oacute;N!");
 define("_MD_NEWDLADDED","Nueva descarga a&ntilde;adida a la base de datos.");
 define("_MD_NEWDLADDED_DUPFILE","ADVERTENCIA: Fichero duplicado. Nueva descarga agregada a la base de datos.");
 define("_MD_NEWDLADDED_DUPSNAP","ADVERTENCIA: Imagen duplicada. Nueva descarga agregada a la base de datos.");
 define("_MD_HELLO","Hola %s");
 define("_MD_WEAPPROVED","Hemos aprobado tu env&iacute;o de descarga en nuestra secci&oacute;n de descargas. El nombre del fichero es: ");
-define("_MD_THANKSSUBMIT","Â¡Gracias por tu env&iacute;o!");
+define("_MD_THANKSSUBMIT","¡Gracias por tu env&iacute;o!");
 define("_MD_UPLOADAPPROVED","Tu fichero subido ha sido aprobado");
 define("_MD_DLSPERPAGE","Descargas mostradas por p&aacute;gina: ");
 define("_MD_HITSPOP","Accesos para considerar popular: ");
@@ -414,7 +414,7 @@ define("_MD_ANONUSERVOTES","Votos de usuarios an&oacute;nimos (total de votos: %
 define("_MD_YOURFILEAT","Tu fichero enviado a %s"); // this is an approved mail subject. %s is your site name
 define("_MD_VISITAT","Visita nuestra secci&oacute;n de descargas en %s");
 define("_MD_DLRATINGS","Calificaci&oacute;n de descarga (total de votos: %s)");
-define("_MD_CONFUPDATED","Â¡Configuraci&oacute;n actualizada con &eacute;xito!");
+define("_MD_CONFUPDATED","¡Configuraci&oacute;n actualizada con &eacute;xito!");
 define("_MD_NOFILES","No se encontraron ficheros");
 
 // Additional glFusion Defines

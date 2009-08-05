@@ -176,7 +176,8 @@ $LANG_INSTALL = array(
     'backup_path' => 'S&ouml;kv&auml;g Till Backup',
     'data_path' => 'S&ouml;kv&auml;g till Data',
     'language_support' => 'Language Support',
-    'language_pack' => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Language Pack</a> which contains the language files for all supported languages.'
+    'language_pack' => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

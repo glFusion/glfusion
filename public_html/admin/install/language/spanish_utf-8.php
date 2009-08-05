@@ -177,7 +177,8 @@ $LANG_INSTALL = array(
     'backup_path' => 'Ruta de respaldos',
     'data_path' => 'Ruta de la información',
     'language_support' => 'Soporte de idioma',
-    'language_pack' => 'glFusion vienen en idioma inglés, pero una vez que lo has instalado puedes descargar e instalar  el <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paquete de idioma</a> el cual contiene los archivos de idioma para todos los idomoas soportados.'
+    'language_pack' => 'glFusion vienen en idioma inglés, pero una vez que lo has instalado puedes descargar e instalar  el <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paquete de idioma</a> el cual contiene los archivos de idioma para todos los idomoas soportados.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

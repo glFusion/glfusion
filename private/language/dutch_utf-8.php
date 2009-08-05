@@ -461,7 +461,9 @@ $LANG08 = array(
     32 => 'Datum',
     33 => 'Lees het volledige artikel bij',
     34 => 'Eind van het Bericht',
-    35 => 'Helaas, deze gebruiker accepteert geen email.'
+    35 => 'Helaas, deze gebruiker accepteert geen email.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################

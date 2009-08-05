@@ -276,6 +276,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Lila',
     'WHITE' => 'Weiß',
     'BLACK' => 'Schwarz',
+    'ID' => 'ID',
     'b_help' => 'Fettschrift: [b]text[/b]',
     'i_help' => 'Schräg gestellt: [i]text[/i]',
     'u_help' => 'Unterstrichen: [u]text[/u]',
@@ -290,13 +291,16 @@ $LANG_GF01 = array(
     'f_help' => 'Schriftgröße: [size=x-small]small text[/size]',
     'h_help' => 'Ausführliche Hilfe',
     't_help' => 'Use [file]#[/file] to embed an attached image in the post',
-    /* --- Community moderation tags --- */
-    'grade'         => '<br /><b>Group Comfort Level:</b>',
-    'grade_user'    => '<br /><b>Evaluate User</b>',
+    'e_help' => 'List item: [*]text',
+    'grade' => '<br /><b>Group Comfort Level:</b>',
+    'grade_user' => '<br /><b>Evaluate User</b>',
     'retract_grade' => '<br /><b>Retract Evaluation</b>',
-    'rate_too_low'  => 'Your rating level is too low for posting to this forum',
+    'rate_too_low' => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
+    'signature' => 'Forum Signature',
+    'edit_signature' => 'Edit BBcode Signature',
+    'signature_preview' => 'Signature Preview'
 );
 
 $LANG_GF02 = array(
@@ -499,7 +503,9 @@ $LANG_GF02 = array(
     'PostReply' => 'Post New Reply',
     'PostTopic' => 'Post New Topic',
     'EditTopic' => 'Edit Topic',
-    'quietforum' => 'Keine neuen Beiträge'
+    'quietforum' => 'Keine neuen Beiträge',
+    'notify_full' => 'Include full post in notification',
+    'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.'
 );
 
 $LANG_GF03 = array(
@@ -557,7 +563,7 @@ $LANG_GF06 = array(
     6 => 'Beiträge',
     7 => 'IP-Verw.',
     8 => 'Community Moderation',
-    9 => 'Import',
+    9 => 'Import'
 );
 
 $LANG_GF07 = array(
@@ -713,7 +719,10 @@ $LANG_GF92 = array(
     'geshiformat' => 'Code Formatting',
     'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Edit Timeframe',
-    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts'
+    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts',
+    'forum_prefs' => 'Forum Preferences',
+    'forumprefs_help_title' => 'Forum Prefs Help',
+    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>'
 );
 
 $LANG_GF93 = array(
@@ -840,27 +849,6 @@ $LANG_GF97 = array(
     'msgmembers' => 'Member List.'
 );
 
-$LANG_GF98 = array(
-    'user_ratings'  => 'User Ratings',
-    'forum_settings' => 'Community Moderation Forum Settings.  Define the minimum user rating to view and post in the forums.',
-    'board_ratings' => 'Board Rating Settings',
-    'user_ratings_desc' => 'Community Moderation user ratings.  You can modify the user settings or view who a user has rated or see a user\'s rating',
-    'rating'    => 'Rating',
-    'uid'       => 'UID',
-    'user_rating_title' => 'Community Moderation User Ratings',
-    'no_subject_defined' => 'No subject defined',
-    'admin_set_value' => 'Administrator set new user rating',
-    'no_topic_defined' => 'No topic defined',
-    'voter' => 'Voter',
-    'grade' => 'Grade',
-    'topic' => 'Topic',
-    'user_votes_desc' => 'This screen shows how the user has voted (rated) other users.',
-    'user_rating_details' => 'User Rating Details for: ',
-    'user_voting_details' => 'User Voting Details for: ',
-    'save_changes'  => 'Save Changes',
-);
-
-###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade completed - no errors';
 $PLG_forum_MESSAGE2 = 'Forum Plugin upgrade: We are unable to update this version automatically. Refer to the plugin documentation.';
 $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade failed - check error.log';
@@ -950,6 +938,8 @@ $LANG_confignames['forum'] = array(
     'enable_fm_integration' => 'Enable FileMgmt Integration for attachments',
     'max_uploadfile_size' => 'Max Size for Attachments (bytes)',
     'enable_user_rating_system' => 'Enable User Rating System',
+    'bbcode_signature' => 'Enable BBcode Signature',
+    'use_wysiwyg_editor' => 'Enable WYSIWYG HTML Editor'
 );
 
 $LANG_configsubgroups['forum'] = array(

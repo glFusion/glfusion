@@ -455,7 +455,9 @@ $LANG08 = array(
     32 => 'Tanggal',
     33 => 'baca selengkapnya pada',
     34 => 'Akhir pesan',
-    35 => 'Maaf, user ini tidak menerima email.'
+    35 => 'Maaf, user ini tidak menerima email.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################

@@ -77,9 +77,9 @@ $LANG_BAD_BEHAVIOR = array(
 );
 
 $LANG_BB2_RESPONSE = array(
-    '00000000' => 'Request Passed - No User Agent Specified',
+    00000000 => 'Request Passed - No User Agent Specified',
     '136673cd' => 'IP address found on external blacklist',
-    '17566707' => 'Required header \'Accept\' missing',
+    17566707 => 'Required header \'Accept\' missing',
     '17f4e8c8' => 'User-Agent was found on blacklist',
     '21f11d3f' => 'User-Agent claimed to be AvantGo, claim appears false',
     '2b021b1f' => 'IP address found on http:BL blacklist',
@@ -88,7 +88,7 @@ $LANG_BB2_RESPONSE = array(
     '408d7e72' => 'POST comes too quickly after GET',
     '41feed15' => 'Header \'Pragma\' without \'Cache-Control\' prohibited for HTTP/1.1 requests',
     '45b35e30' => 'Header \'Referer\' is corrupt',
-    '57796684' => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
+    57796684 => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
     '582ec5e4' => '"Header \'TE\' present but TE not specified in \'Connection\' header',
     '69920ee5' => 'Header \'Referer\' present but blank',
     '6c502ff1' => 'Bot not fully compliant with RFC 2965',

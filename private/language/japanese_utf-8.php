@@ -462,7 +462,9 @@ $LANG08 = array(
     32 => '日付',
     33 => '以下の場所で記事全体を読むことができます。',
     34 => 'メッセージは以上です',
-    35 => '残念ながらこのユーザはメールを受け付けておりません。'
+    35 => '残念ながらこのユーザはメールを受け付けておりません。',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################

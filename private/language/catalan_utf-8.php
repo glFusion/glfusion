@@ -453,7 +453,9 @@ $LANG08 = array(
     32 => 'Data',
     33 => 'Llegeix la Notícia completa a',
     34 => 'Fi del missatge',
-    35 => 'Ho sento, aquest usuari prefereix no rebre missatges.'
+    35 => 'Ho sento, aquest usuari prefereix no rebre missatges.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################

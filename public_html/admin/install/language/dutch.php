@@ -178,7 +178,8 @@ $LANG_INSTALL = array(
     'backup_path' => 'Backup-pad',
     'data_path' => 'Data-pad',
     'language_support' => 'Taal ondersteuning',
-    'language_pack' => 'glFusion heeft als standaard instelling Engels, na de installatie kun je via de link <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">een taal pakket Pack</a> downloaden en installeren die alle tot nu toe geondersteunde talen bevat.'
+    'language_pack' => 'glFusion heeft als standaard instelling Engels, na de installatie kun je via de link <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">een taal pakket Pack</a> downloaden en installeren die alle tot nu toe geondersteunde talen bevat.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

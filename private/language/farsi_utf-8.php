@@ -443,7 +443,9 @@ $LANG08 = array(
     32 => 'روز',
     33 => 'بخوانيد مقاله كامل را در',
     34 => 'پايان پيام',
-    35 => 'متاسفيم تنظيمات اين كاربر براي دريافت اي ميل تنظيم نشده'
+    35 => 'متاسفيم تنظيمات اين كاربر براي دريافت اي ميل تنظيم نشده',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################

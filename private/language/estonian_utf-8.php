@@ -456,7 +456,9 @@ $LANG08 = array(
     32 => 'Päev',
     33 => 'Loe kogu artiklit aadressil',
     34 => 'Sõnumi lõpp',
-    35 => 'Kahjuks see kasutaja ei soovi kirju saada.'
+    35 => 'Kahjuks see kasutaja ei soovi kirju saada.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################

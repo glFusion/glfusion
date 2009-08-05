@@ -454,7 +454,9 @@ $LANG08 = array(
     32 => 'Dato',
     33 => 'Læs den fulde historie på',
     34 => 'Slutning af Besked',
-    35 => 'Sorry, this user prefers not to receive any emails.'
+    35 => 'Sorry, this user prefers not to receive any emails.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################
