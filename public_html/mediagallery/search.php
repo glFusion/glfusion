@@ -763,6 +763,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         'artist'			=> (isset($M['artist']) && $M['artist'] != ' ') ? $M['artist'] : '',
         'musicalbum'		=> (isset($M['album']) && $M['album'] != ' ') ? $M['album'] : '',
         'genre'				=> (isset($M['genre']) && $M['genre'] != ' ') ? $M['genre'] : '',
+        'search_album'      => $LANG_MG01['album'] . ': <a href="'.$_MG_CONF['site_url'].'/album.php?aid='.$M['album_id'].'">'.$MG_albums[$M['album_id']]->title.'</a>',
     ));
 
     // frame template variables
@@ -781,6 +782,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         'frWidth'           =>  $newwidth  - $frWidth,
         'frHeight'          =>  $newheight - $frHeight,
         'media_tag'         =>  strip_tags($M['media_desc']),
+        'search_album'      => $LANG_MG01['album'] . ': <a href="'.$_MG_CONF['site_url'].'/album.php?aid='.$M['album_id'].'">'.$MG_albums[$M['album_id']]->title.'</a>',
 
     ));
     $F->parse('media','media_frame');

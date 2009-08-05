@@ -6,6 +6,9 @@
     {media_item_thumbnail}
     {mp3_podcast}
       <div style="font-weight:bold;">{media_title}</div>
+      {!if search_album}
+      <div class="pluginSmallText">{search_album}</div>
+      {!endif}
        {!if media_views}
       <div class="pluginSmallText">{media_views}</div>
       {!endif}

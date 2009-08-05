@@ -10,6 +10,9 @@
   <tr>
     <td align="center">
       <div class="pluginMediumText">{media_title}</div>
+      {!if search_album}
+      <div class="pluginSmallText">{search_album}</div>
+      {!endif}
       <div class="pluginSmallText">{media_time}</div>
       {!if media_comments}
       <div class="pluginSmallText">{media_comments}</div>
