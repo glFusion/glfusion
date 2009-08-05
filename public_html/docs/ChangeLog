@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Fixed issue with URL rewrite that appears on some hosting services where
+  the parameter array is not properly recognized (Mark)
 - Reworked daily digest code to support both HTML and text messages.  It is
   now template driven (Mark)
 - Rename signature (in user profile) to Tag Line (Mark)
@@ -35,6 +37,8 @@ Bad Behaviour2 Plugin
 
 Calendar Plugin
 ---------------
+- Improved data validation to ensure values are properly set before
+  attempting to use them. (Mark)
 - Fixed potential XSS issue when invalid data is presented during
   add / edit event (Mark)
 - Fixed issue where calendar submissions were not placed on the
@@ -74,6 +78,8 @@ Links Plugin
 
 Media Gallery
 -------------
+- Added {search_album} template variable to the search output, allowing
+  the album an item resides to be included in the search results display (Mark)
 - Renamed the 'Graphics Package' tab in the MG admin screen to
   'Host Environment' to better reflect the real meaning of the tab (Mark)
 - Added new command line interface for batch imports into Media Gallery (Mark)
