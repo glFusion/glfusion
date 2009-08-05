@@ -179,7 +179,7 @@ $LANG01 = array(
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
     503 => 'Maintenance Mode - Non-admin logins disabled',
-    'ctl' => 'Clear Template Cache',
+    'ctl' => 'Clear Cache',
     'logview' => 'Logview'
 );
 
@@ -460,6 +460,7 @@ $LANG08 = array(
     35 => 'Sorry, this user prefers not to receive any emails.',
     36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
     37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.',
+
 );
 
 ###############################################################################
@@ -1994,6 +1995,7 @@ $LANG_configselects['Core'] = array(
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
     22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
     23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3),
+
 );
 
 ?>
