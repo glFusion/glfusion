@@ -5,10 +5,10 @@
 // | $Id::                                                                    $|
 // | This is the English language page for the Media Gallery Plugin            |
 // +---------------------------------------------------------------------------|
-// | Copyright (C) 2002,2005,2006 by the following authors:                    |
+// | Copyright (C) 2005-2009 by the following authors:                         |
 // |                                                                           |
 // | Author:                                                                   |
-// | Mark R. Eavns               -    mark@glfusion.org                        |
+// | Mark R. Eavns               -    mark AT glfusion DOT org                 |
 // +---------------------------------------------------------------------------|
 // |                                                                           |
 // | If you translate this file, please consider uploading a copy at           |
@@ -29,7 +29,7 @@
 // | along with this program; if not, write to the Free Software               |
 // | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA|
 // |                                                                           |
-// +---------------------------------------------------------------------------|
+// +---------------------------------------------------------------------------+
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -86,7 +86,7 @@ $LANG_MG00 = array (
     'mg_enroll_header'  => 'Album Enrollment',
     'whatsnew_title'    => 'Media Gallery',
     /* --- New in v1.6.0 --- */
-    'template_cache'    => 'Caching Template Library v2.0 or higher. Installed: ',
+    'template_cache'    => 'Template Cache Library Installed',
     'env_check'         => 'Environment Check',
     'gl_version_error'  => 'glFusion version is not v1.0.0 or higher',
     'gl_version_ok'     => 'glFusion version is v1.0.0 or higher',
@@ -265,6 +265,7 @@ $LANG_MG01 = array (
     'phpinfo'                   => 'PHP Information',
     'album_cover'               => 'Album Cover',
     'album_attributes'          => 'Album Attributes',
+    'media_attributes'          => 'Media Attributes',
     'attached_thumbnail'        => 'Attached Thumbnail',
     'thumbnail'                 => 'Thumbnail',
     'new_upload_subject'        => 'New media item uploaded at ',
@@ -314,7 +315,7 @@ $LANG_MG01 = array (
     'global_attr_help'          => 'This will change the attributes for <b>ALL</b> of your albums, use with caution!<br' . XHTML . '><br' . XHTML . '>Select which fields you wish to update by choosing their value and selecting the <b>Update</b> checkbox.',
     'globalperm'                => 'Global Perm Edit',
     'global_perm_editor'        => 'Global Album Permissions Editor',
-    'global_perm_help'          => 'This will change the permissions for <b>ALL</b> of your albums, use with caution!<br'. XHTML . '><br' . XHTML . '>Select which fields you wish to update by choosing their value and selecting the <b>Update</b> checkbox.',
+    'global_perm_help'          => 'This will change the permissions for <b>ALL</b> of your albums, use with caution!<br' . XHTML . '><br' . XHTML . '>Select which fields you wish to update by choosing their value and selecting the <b>Update</b> checkbox.',
     'attribute'                 => 'Attribute',
     'value'                     => 'Value',
     'update'                    => 'Update',
@@ -797,6 +798,7 @@ $LANG_MG03 = array (
     'all_categories'        => 'All Categories',
     'category'              => 'Category',
     'per_page'              => 'per page',
+    'title_desc_keywords'   => 'Title, Desc and Keywords',
     'keywords_only'         => 'Keywords Only',
     'title_desc_only'       => 'Title and Desc Only',
     'exact_phrase'          => 'Exact Phrase',
@@ -867,7 +869,7 @@ $LANG_MG03 = array (
     'ftp_help'              => 'Transfer files that are already on your server into Media Gallery. The files must already have been uploaded to your server some other way (like FTP) and must be placed in a directory where they are accessibly by the web server.',
     'no_new_items'          => 'No new media items',
     'no_comments'           => 'No new media comments',
-    'search_results'        => 'Search Results',
+    'search_results'        =>  'Media Gallery Search Results',
     'no_search_found'       => 'No search results found',
     'search_error'          => 'You must enter at least 1 search word',
     'artist'                => 'Artist',

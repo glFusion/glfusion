@@ -99,7 +99,7 @@ $LANG_MG00 = array (
     'need_cache'        => 'Media Gallery v1.6 requires that you have the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:templatecache">Caching Template Library Enhancement</a> installed.  Please download and install the library.',
     'need_memory'       => 'Media Gallery v1.6 recommends that you have at least 48M of memory configured for the <strong>memory_limit</strong> setting in php.ini.',
     'thank_you'         => 'Thank you for upgrading to the latest release of Media Gallery. Please double check your System Configuration Options, there are many new features in this release that you may need to configure.',
-    'support'           => 'For support, questions or enhancement requests, please visit <a href="http://www.glfusion.org">glFusion Site</a>.  For the latest documentation, please visist the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:mediagallery">glFusion Wiki</a>.',
+    'support'           => 'For support, questions or enhancement requests, please visit <a href="http://www.glfusion.org">glFusion Web Site</a>.  For the latest documentation, please visist the <a href="http://www.glfusion.org/wiki/doku.php?id=glfusion:mediagallery">glFusion Wiki</a>.',
     'success_upgrade'   => 'Media Gallery Successfully Upgraded',
 );
 
@@ -632,8 +632,8 @@ $LANG_MG01 = array (
     'remote_media_type'         => 'Remote Media Type',
     'remote_help'               => 'This screen allows you to upload (include) remote streaming FLV files or video files from sites such as Google Video and YouTube',
     'remote_url'                => 'Remote URL',
-    'alternate_url'             => 'Alternate URL',
     'embed'                     => 'Embedded Video',
+    'alternate_url'             => 'Alternate URL',
     'flv_stream'                => 'Streaming FLV',
     'remote_thumbnail'          => 'Remote Thumbnail',
     'flv'                       => 'FLV',
@@ -886,7 +886,7 @@ $LANG_MG03 = array (
     'click_here'            => 'click here',
     'published'             => 'Published by',
     'on'                    => 'On',
-    'no_flash'              => '<div style="width:200px;border:1px solid;text-align:center;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
+    'no_flash'              => '<div style="width:200px;border:1px solid;text-align:center;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br' . XHTML . '><p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;"' . XHTML . '></a></p></div>',
     'tagline'               => 'Gallery powered by <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url'            => 'Download <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url'         => 'Download <a href="%s">xppubwiz.reg (Windows Vista)</a>',
