@@ -1572,6 +1572,9 @@ function plugin_user_delete_calendar ($uid)
                                  "grp_name = 'Root'");
         $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $rootgroup ORDER BY ug_uid LIMIT 1");
         list($rootuser) = DB_fetchArray ($result);
+        if (intval($rootuser) < 2 ) {
+            $rootuser = 2;
+        }
         DB_query ("UPDATE {$_TABLES['events']} SET owner_id = $rootuser WHERE owner_id = ".intval($uid));
     }
 }
