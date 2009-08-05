@@ -5547,7 +5547,7 @@ function COM_buildURL( $url )
 * @return   boolean         True if successful
 */
 
-function COM_setArgNames( $names )
+function COM_setArgNames( $names = array() )
 {
     global $_URL;
 
@@ -7072,7 +7072,7 @@ function COM_renderWikiText($wikitext)
 
     require_once 'Text/Wiki.php';
 
-    $wiki = &new Text_Wiki();
+    $wiki = new Text_Wiki();
     $wiki->disableRule('wikilink');
     $wiki->disableRule('freelink');
     $wiki->disableRule('interwiki');

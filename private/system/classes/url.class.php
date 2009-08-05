@@ -148,7 +148,7 @@ class url {
     * @return       boolean     true on success otherwise false
     *
     */
-    function setArgNames($names)
+    function setArgNames($names = array())
     {
         if (count($names) < count($this->_arguments)) {
             print "URL Class: number of names passed to setArgNames must be equal or greater than number of arguments found in URL";
