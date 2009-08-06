@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: albumedit.php 3070 2008-09-07 02:40:49Z mevans0263                $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -183,14 +183,14 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['mp3ribbon']         = 0;
         $A['rsschildren']       = 0;
         $A['usealternate']      = isset($_MG_CONF['ad_use_alternate']) ? $_MG_CONF['ad_use_alternate'] : 0;
-        $A['skin']              = 'default';
+        $A['skin']              = $_MG_CONF['ad_skin'];
 
         $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
         $grow = DB_fetchArray($gresult);
         $grp_id = $grow['grp_id'];
 
-        $A['group_id'] = $grp_id;
-        $A['mod_group_id'] = $grp_id;
+        $A['group_id']      = $grp_id;
+        $A['mod_group_id']  = $grp_id;
 
         $A['perm_owner']    = $_MG_CONF['ad_perm_owner'];
         $A['perm_group']    = $_MG_CONF['ad_perm_group'];
@@ -1078,6 +1078,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
         if ( $update == 0 ) {
             if (isset($MG_albums[$album->parent]->group_id ) ) {
                 $grp_id = $MG_albums[$album->parent]->group_id;
+                $album->group_id = $grp_id;
             } else {
                 $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
                 $grow = DB_fetchArray($gresult);
