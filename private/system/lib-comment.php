@@ -777,11 +777,12 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 . $LANG03[8]
                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
         } else {
-
-            if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
-                $postmode = 'html';
-            } elseif (empty ($postmode)) {
-                $postmode = $_CONF['postmode'];
+            if ( empty($postmode) ) {
+                if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
+                    $postmode = 'html';
+                } elseif (empty ($postmode)) {
+                    $postmode = $_CONF['postmode'];
+                }
             }
 
             // Note:
@@ -1446,9 +1447,9 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
         if (!empty ($sig)) {
             $comment .= '<!-- COMMENTSIG --><div class="comment-sig">';
             if ( $postmode == 'html') {
-                $comment .= '---<br />' . nl2br ($sig);
+                $comment .= nl2br(LB . '---' . LB . $sig);
             } else {
-                $comment .=  nl2br('---' . LB . $sig);
+                $comment .=  nl2br(LB . '---' . LB . $sig);
             }
         $comment .= '</div><!-- /COMMENTSIG -->';
         }
