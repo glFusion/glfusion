@@ -91,7 +91,7 @@ function handleSubmit()
             if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
                 if ( $_POST['postmode'] == 'html' ) {
                     $comment = $_POST['comment_html'];
-                } else if ( $_POST['postmode'] == 'text' ) {
+                } else if ( $_POST['postmode'] == 'plaintext' ) {
                     $comment = $_POST['comment_text'];
                 }
             } else {
@@ -120,7 +120,7 @@ function handleSubmit()
             if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
                 if ( $_POST['postmode'] == 'html' ) {
                     $comment = $_POST['comment_html'];
-                } else if ( $_POST['postmode'] == 'text' ) {
+                } else if ( $_POST['postmode'] == 'plaintext' ) {
                     $comment = $_POST['comment_text'];
                 }
             } else {
@@ -447,7 +447,7 @@ case $LANG03[14]: // Preview
     if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
         if ( $_POST['postmode'] == 'html' ) {
             $comment = $_POST['comment_html'];
-        } else if ( $_POST['postmode'] == 'text' ) {
+        } else if ( $_POST['postmode'] == 'plaintext' ) {
             $comment = $_POST['comment_text'];
         }
     } else {
