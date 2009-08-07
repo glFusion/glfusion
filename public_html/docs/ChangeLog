@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Comments did not properly retain the post mode setting (Mark)
 - Fixed issue with URL rewrite that appears on some hosting services where
   the parameter array is not properly recognized (Mark)
 - Reworked daily digest code to support both HTML and text messages.  It is
@@ -78,6 +79,10 @@ Links Plugin
 
 Media Gallery
 -------------
+- Fixed issue where the default album theme was not being used on new
+  albums (Mark)
+- Fixed issue where the parent album's group ownership was not always
+  properly inherited by new child albums (Mark)
 - Added {search_album} template variable to the search output, allowing
   the album an item resides to be included in the search results display (Mark)
 - Renamed the 'Graphics Package' tab in the MG admin screen to
