@@ -79,6 +79,7 @@ Links Plugin
 
 Media Gallery
 -------------
+- Implemented the PLG_itemSaved() API (Mark)
 - Fixed issue where the default album theme was not being used on new
   albums (Mark)
 - Fixed issue where the parent album's group ownership was not always
@@ -101,6 +102,7 @@ Polls
 
 StaticPages
 ----------
+- Implemented PLG_itemSaved() API (Mark)
 - Fixed comment handling - allow multi-page comments (Mark)
 
 v1.1.4.pl4
