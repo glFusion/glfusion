@@ -96,7 +96,15 @@ class url {
                 array_shift($this->_arguments);
             }
         } else if (isset ($_ENV['ORIG_PATH_INFO'])) {
+            $scriptName = array();
+            $scriptName = explode('/',$_SERVER['SCRIPT_NAME']);
+            array_shift($scriptName);
             $this->_arguments = explode('/', substr($_ENV['ORIG_PATH_INFO'],1));
+            if ( $this->_arguments[0] == $scriptName[0] ) {
+                $this->_arguments = array();
+            }
+        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) {
+            $this->_arguments = explode('/', substr($_SERVER['ORIG_PATH_INFO'], 1));
         } else {
             $this->_arguments = array ();
         }
@@ -159,7 +167,7 @@ class url {
             for ($i = 1; $i <= count($this->_arguments); $i++) {
                 $newArray[current($names)] = current($this->_arguments);
                 next($names);
-		next($this->_arguments);
+        		next($this->_arguments);
             }
             $this->_arguments = $newArray;
             reset($this->_arguments);
