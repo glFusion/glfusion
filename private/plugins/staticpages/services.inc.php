@@ -397,7 +397,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
                       array(addslashes($sp_old_id), 'staticpages'));
 
         }
-
+        PLG_itemSaved($sp_id,'staticpage');
         $url = COM_buildURL($_CONF['site_url'] . '/staticpages/index.php?page='
                             . $sp_id);
         $output .= PLG_afterSaveSwitch($_SP_CONF['aftersave'], $url,
@@ -459,7 +459,7 @@ function service_delete_staticpages($args, &$output, &$svc_msg)
 
     DB_delete ($_TABLES['staticpage'], 'sp_id', $sp_id);
     DB_delete($_TABLES['comments'], array('sid',  'type'),array($sp_id, 'staticpages'));
-
+    PLG_itemSaved($sp_id,'staticpage');
 
     return PLG_RET_OK;
 }
