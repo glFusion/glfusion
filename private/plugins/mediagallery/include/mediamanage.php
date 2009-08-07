@@ -383,7 +383,7 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
         $sql = "UPDATE {$_TABLES['mg_media_albums']} SET media_order=" . intval($media[$i]['seq']) . " WHERE album_id=" . intval($album_id) . " AND media_id='" . addslashes($media[$i]['mid']) . "'";
         DB_query($sql);
     }
-
+    PLG_itemSaved($media[$i]['mid'],'mediagallery');
     MG_reorderMedia($album_id);
 
     // Now do the album cover...
@@ -1305,7 +1305,7 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
     if ( DB_error() != 0 ) {
         echo COM_errorLog("Media Gallery: ERROR Updating image in media database");
     }
-
+    PLG_itemSaved($media_id,'mediagallery');
     $media_id_db = addslashes($media_id);
 
     // process playback options if any...

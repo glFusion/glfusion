@@ -1186,6 +1186,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	            DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$new_media_id','width',       '$resolution_x'");
 	            DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$new_media_id','height',      '$resolution_y'");
 	        }
+            PLG_itemSaved($new_media_id,'mediagallery');
 
 	        // update the media count for the album, only if no moderation...
 	        if ( $queue == 0 ) {
