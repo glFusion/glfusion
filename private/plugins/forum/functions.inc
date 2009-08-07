@@ -1195,7 +1195,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-                $lastpostinfo = preg_replace('#\r?\n#','<br />',strip_tags($shortComment));
+                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)));
             }
 
             $cssid = ($cssid ==1) ? 2: 1;
