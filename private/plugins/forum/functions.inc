@@ -1138,9 +1138,8 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
             if ($A['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($A['uid']) . ', ';
-                //$topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($A['uid']));
             } else {
-                $topicinfo = "{$LANG_GF01['STARTEDBY']},{$A['name']},";
+                $topicinfo = "{$LANG_GF01['STARTEDBY']} {$A['name']},";
             }
 
             $topicinfo .= "{$firstdate}&lt;br" . XHTML . "&gt;{$LANG_GF01['VIEWS']}: {$A['views']}, {$LANG_GF01['REPLIES']}: {$A['replies']}&lt;br" . XHTML . "&gt;";
