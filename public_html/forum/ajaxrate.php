@@ -32,6 +32,10 @@
 require_once '../lib-common.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
+if ( !$CONF_FORUM['enable_user_rating_system'] ) {
+    die;
+}
+
 $vid  = isset($_GET['vid']) ? intval(COM_applyFilter($_GET['vid'],true)) : 0;
 $pid  = isset($_GET['pid']) ? intval(COM_applyFilter($_GET['pid'],true)) : 0;
 $tid  = isset($_GET['tid']) ? intval(COM_applyFilter($_GET['tid'],true)) : 0;

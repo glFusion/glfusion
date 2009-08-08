@@ -33,6 +33,11 @@
 require_once 'gf_functions.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
+if ( !$CONF_FORUM['enable_user_rating_system'] ) {
+    echo COM_refresh($_CONF['site_url'].'/forum/index.php');
+    exit;
+}
+
 USES_lib_admin();
 
 $retval = '';
