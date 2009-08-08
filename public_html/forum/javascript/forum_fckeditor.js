@@ -54,7 +54,7 @@
         oFCKeditor1.Config['FlashBrowser'] = false;
         oFCKeditor1.Config['ImageUpload'] = false;
         oFCKeditor1.Config['LinkUpload'] = false;
-        oFCKeditor1.Config['SkinPath'] = glfusionEditorBasePath + 'editor/skins/default/' ;
+        oFCKeditor1.Config['SkinPath'] = glfusionEditorBasePath + 'editor/skins/office2003/' ;
 
         oFCKeditor1.ToolbarSet = 'forum-toolbar' ;
 
