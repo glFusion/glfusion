@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Fixed typo in install script example path and clarified help text (Eric)
 - Comments did not properly retain the post mode setting (Mark)
 - Fixed issue with URL rewrite that appears on some hosting services where
   the parameter array is not properly recognized (Mark)
@@ -52,6 +53,7 @@ FileMgmt Plugin
 
 Forum Plugin v3.1.4
 -------------------
+- Added Permlink feature to icon_minipost.gif in forum posts (Eric)
 - Implemented WYSIWYG editor (Mark)
 - Fixed bug where deleting a category did not delete all the forum posts
   associated with the forums in that category (Mark)
