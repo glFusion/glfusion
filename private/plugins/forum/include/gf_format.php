@@ -298,6 +298,12 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
     $codeblock = str_replace('{','&#123;',$codeblock);
     $codeblock = str_replace('}','&#125;',$codeblock);
 
+    if ( $CONF_FORUM['use_wysiwyg_editor'] == 1 ) {
+        $codeblock = str_replace('&lt;','<',$codeblock);
+        $codeblock = str_replace('&gt;','>',$codeblock);
+        $codeblock = str_replace('&amp;','&',$codeblock);
+    }
+
     return $codeblock;
 }
 
