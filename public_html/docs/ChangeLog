@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Added default sitedown.html page (Eric)
 - Fixed typo in install script example path and clarified help text (Eric)
 - Comments did not properly retain the post mode setting (Mark)
 - Fixed issue with URL rewrite that appears on some hosting services where
