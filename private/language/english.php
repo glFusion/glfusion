@@ -1912,6 +1912,7 @@ $LANG_confignames['Core'] = array(
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Include Template Comments in Page Source',
     'hidestorydate' => 'Hide Story Date',
+    'maintenance_mode' => 'Enable Maintenance Mode',
 );
 
 $LANG_configsubgroups['Core'] = array(

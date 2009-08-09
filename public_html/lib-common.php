@@ -7408,7 +7408,15 @@ if ( @file_exists($_CONF['path_language'].'custom') ) {
     }
 }
 
-if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 && !SEC_inGroup('Root') ) {
+if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 ) {
+    $_CONF['maintenance_mode'] = 1;
+}
+if ( isset($_CONF['maintenance_mode']) && $_CONF['maintenance_mode'] == 1 ) {
+    if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == -1 ) {
+        $_CONF['maintenance_mode'] = 0;
+    }
+}
+if ( isset($_CONF['maintenance_mode']) && $_CONF['maintenance_mode'] == 1 && !SEC_inGroup('Root') ) {
     if (empty($_CONF['site_disabled_msg'])) {
         header("HTTP/1.1 503 Service Unavailable");
         header("Status: 503 Service Unavailable");

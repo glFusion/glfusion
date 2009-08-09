@@ -84,7 +84,7 @@ function glfusion_SecurityCheck() {
     if ( $_SYSTEM['no_fail_sql'] ) {
         $msg .= $LANG01[502].'<br />';
     }
-    if ( $_SYSTEM['maintenance_mode'] ) {
+    if ( $_CONF['maintenance_mode'] ) {
         $msg .= $LANG01[503].'<br />';
     }
     if ( $msg != '' ) {

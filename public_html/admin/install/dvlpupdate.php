@@ -237,6 +237,7 @@ function glfusion_115()
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
     $c->add('hide_exclude_content',0,'select',4,16,0,295,TRUE);
+    $c->add('maintenance_mode',0,'select',0,0,0,511,TRUE);
     $c->del('search_show_limit', 'Core');
     $c->del('search_show_sort', 'Core');
 

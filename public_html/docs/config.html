@@ -70,7 +70,12 @@ to display
 when a glFusion site is disabled. If the text begins with
 &#8220;http:&#8221; then visitors are redirected to that <acronym title="Uniform Resource Locator">URL</acronym>. </td>
 </tr>
-<tr class="row6">
+<tr><td><a name="desc_maintenance_mode"></a>Enable Maintenance Mode</td><td>Setting
+this to TRUE will block all non-admin users from using the site.
+&nbsp;All non-admin users will see the Site Disabled Message or URL.
+&nbsp;Admin users will still be able to access all features of the
+site. &nbsp;This is useful when you need to perform maintenance on the
+site and do not want any users to access during the maintenance.<br /><br /><span style="font-weight: bold;">You must login as an admin user before setting this to true!</span></td></tr><tr class="row6">
 <td class="col0 leftalign"><a name="desc_copyrightyear">Copyright Year</a> </td>
 <td class="col1 leftalign">Set this to the year you
 want to
@@ -2052,7 +2057,7 @@ disabled quickly (e.g. for maintenance) by setting this to 'false'. <br />
 <br />
 Also see the site_disabled_msg configuration option. </td>
 </tr>
-<tr><td>maintenance_mode</td><td>false</td><td>Allows the site admin to disable the site for non-admin (and anonymous) users.<br /><br />This mode is useful if you have maintenance work to do like installing a new plugin or reorganizing content. &nbsp;You <span style="font-weight: bold;">must</span> login to your site as an admin user <span style="font-weight: bold;">before</span> enabling this option since it will disable all non-admin users.</td></tr><tr><td>rootdebug</td><td>false</td><td>Display detailed error messages. &nbsp;This option can be useful in diagnosing errors on yoru site.<br /><br />This
+<tr><td>maintenance_mode</td><td>false</td><td><span style="font-weight: bold;">Depreciated - Please use the online configuration utility - setting Enable Maintenance Mode</span><br /><br />Allows the site admin to disable the site for non-admin (and anonymous) users.<br /><br />This mode is useful if you have maintenance work to do like installing a new plugin or reorganizing content. &nbsp;You <span style="font-weight: bold;">must</span> login to your site as an admin user <span style="font-weight: bold;">before</span> enabling this option since it will disable all non-admin users.</td></tr><tr><td>rootdebug</td><td>false</td><td>Display detailed error messages. &nbsp;This option can be useful in diagnosing errors on yoru site.<br /><br />This
 option should not be enabled on production sites since it will display
 configuration data and other details that could expose confidential
 data such as database logins, etc.</td></tr>
