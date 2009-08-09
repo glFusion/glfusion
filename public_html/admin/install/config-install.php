@@ -50,7 +50,8 @@ function install_config($site_url)
     $c->add('site_name','','text',0,0,NULL,60,TRUE);
     $c->add('site_slogan','','text',0,0,NULL,70,TRUE);
     $c->add('microsummary_short','GL: ','text',0,0,NULL,80,TRUE);
-    $c->add('site_disabled_msg','glFusion Site is down. Please come back soon.','text',0,0,NULL,510,TRUE);
+    $site_disabled_msg = urldecode($site_url) . '/sitedown.html';
+    $c->add('site_disabled_msg',$site_disabled_msg,'text',0,0,NULL,510,TRUE);
     $c->add('copyrightyear','2009','text',0,0,NULL,1440,FALSE);
     $c->add('url_rewrite',FALSE,'select',0,0,1,1800,TRUE);
 
