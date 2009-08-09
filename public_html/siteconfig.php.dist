@@ -40,9 +40,14 @@ $_SYSTEM['site_enabled'] = true;
 // |                                                                          |
 // | You _MUST_ login to your site as an admin user _BEFORE_ enabling         |
 // | this option since it will disable all non-admin users.                   |
+// |                                                                          |
 // +--------------------------------------------------------------------------+
 
 $_SYSTEM['maintenance_mode'] = false;
+
+// uncomment the line below if you accidentally log out of your site
+// while in maintenance mode.
+// $_SYSTEM['maintenance_mode'] = -1;
 
 
 // +--------------------------------------------------------------------------+
