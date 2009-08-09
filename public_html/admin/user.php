@@ -436,7 +436,7 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
     if ($_USER_VERBOSE) COM_errorLog("**** entering saveusers****",1);
     if ($_USER_VERBOSE) COM_errorLog("group size at beginning = " . sizeof($groups),1);
 
-    if ( $uid == '' || $uid == 1 ) {
+    if ( $uid == 1 ) {
         return listusers();
     }
 
@@ -1222,7 +1222,7 @@ if (isset ($_POST['passwd']) && isset ($_POST['passwd_conf']) &&
     if (isset ($_GET['uid'])) {
         $uid = COM_applyFilter ($_GET['uid'], true);
     }
-    if ( $uid == '' || $uid == 1 ) {
+    if ( $uid == 1 ) {
         $display .= COM_siteHeader('menu', $LANG28[11]);
         $display .= COM_showMessageFromParameter();
         $display .= listusers();
