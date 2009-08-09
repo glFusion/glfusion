@@ -90,6 +90,7 @@ $LANG_GF01 = array(
     'CLOSE' => 'Schließen',
     'ON' => 'Am: ',
     'ON2' => '&nbsp;&nbsp;<b>Am: </b>',
+    'ON3' => 'am',
     'IN' => 'In: ',
     'BY' => 'Von: ',
     'RE' => 'Re: ',

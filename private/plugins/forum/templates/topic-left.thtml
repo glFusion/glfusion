@@ -7,10 +7,10 @@
   <td style="padding-left:6px; padding-right:6px;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td style="width:8px;" class="aligncenter"><img src="{site_url}/forum/images/icon_minipost.gif" alt=""{xhtml}></td>
+        <td style="width:8px;" class="aligncenter"><a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}&amp;lastpost=true#{topic_id}"><img src="{site_url}/forum/images/icon_minipost.gif" alt="{$LANG_GF01[PERMLINK]}" title="{$LANG_GF01[PERMLINK]}"{xhtml}></a></td>
         {# <td nowrap>&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon} #}
         <td>
-          by {userlink} ({onlinestatus})&nbsp;on&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon}
+          {$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;{$LANG_GF01[ON3]}&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon}
           <span id="forumbookmark{topic_id}" style="padding-left:10px;"><a href="#" onclick="ajax_toggleForumBookmark({topic_id});return false;">{bookmark_icon}</a></span>
         </td>
         <td class="alignright">

@@ -89,6 +89,7 @@ $LANG_GF01 = array(
     'CLOSE' => 'Close',
     'ON' => 'On: ',
     'ON2' => '&nbsp;&nbsp;<b>On: </b>',
+    'ON3' => 'on',
     'IN' => 'In: ',
     'BY' => 'By: ',
     'RE' => 'Re: ',
