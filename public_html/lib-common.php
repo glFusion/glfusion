@@ -7412,7 +7412,7 @@ if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == 1 ) 
     $_CONF['maintenance_mode'] = 1;
 }
 if ( isset($_CONF['maintenance_mode']) && $_CONF['maintenance_mode'] == 1 ) {
-    if ( isset($_SYSTEM['maintenance_mode']) && $_SYSTEM['maintenance_mode'] == -1 ) {
+    if ( isset($_SYSTEM['maintenance_mode']) && ($_SYSTEM['maintenance_mode'] === -1) ) {
         $_CONF['maintenance_mode'] = 0;
     }
 }
