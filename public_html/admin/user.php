@@ -42,7 +42,7 @@ $_USER_VERBOSE = false;
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'lib-user.php';
+USES_lib_user();
 
 $display = '';
 
@@ -306,10 +306,14 @@ function edituser($uid = '', $msg = '')
                            'query_limit' => 0
         );
 
+        $selArray = explode(' ',$selected);
+        $al_selected[0] = $uid;
+        $al_selected[1] = $selArray;
+
         $groupoptions = ADMIN_list('usergroups',
                                    'ADMIN_getListField_usergroups',
                                    $header_arr, $text_arr, $query_arr,
-                                   $defsort_arr, '', explode(' ', $selected));
+                                   $defsort_arr, '', $al_selected);
         $user_templates->set_var('group_options', $groupoptions);
 
         $user_templates->parse('group_edit', 'groupedit', true);
@@ -626,7 +630,7 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
         if ($userChanged) {
             PLG_userInfoChanged ($uid);
         }
-
+        CACHE_remove_instance('stmenu');
         $errors = DB_error();
         if (empty($errors)) {
             echo PLG_afterSaveSwitch (
@@ -880,7 +884,7 @@ function batchdeleteexec()
             }
         }
     }
-
+    CACHE_remove_instance('stmenu');
     // Since this function is used for deletion only, it's necessary to say that
     // zero were deleted instead of just leaving this message away.
     COM_numberFormat($c); // just in case we have more than 999 ...
@@ -1098,7 +1102,7 @@ function importusers()
     } // end foreach
 
     unlink ($filename);
-
+    CACHE_remove_instance('stmenu');
     $retval .= '<p>' . sprintf ($LANG28[32], $successes, $failures);
 
     $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
@@ -1145,7 +1149,7 @@ function deleteUser ($uid)
     if (!USER_deleteAccount ($uid)) {
         return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
     }
-
+    CACHE_remove_instance('stmenu');
     return COM_refresh ($_CONF['site_admin_url'] . '/user.php?msg=22');
 }
 
