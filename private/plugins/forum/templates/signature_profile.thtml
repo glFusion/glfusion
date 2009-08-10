@@ -1,4 +1,7 @@
 {# begin {templatelocation} #}
+</table>
+<div style="clear:both;"></div>
+<table class="inputTable">
 <tr><td style="text-align:right;">
 <script type="text/javascript">
 //<![CDATA[
@@ -21,11 +24,8 @@ site_url = "{site_url}";
 //]]>
 </script>
 <script type="text/javascript" src="{site_url}/forum/javascript/bbcode-signature.js"></script>
-
 <b>{$LANG_GF01[signature]}:</b></td><td>
-
   <div id="forum" class="sig-edit">
-
     <div id="format-buttons">
       <input class="button2" type="button" title="{$LANG_GF01[b_help]}" onclick="bbstyle(0)" style="font-weight: bold; width: 30px;" value=" B " name="addbbcode0" accesskey="b"/>
       <input class="button2" type="button" title="{$LANG_GF01[i_help]}" onclick="bbstyle(2)" style="font-style: italic; width: 30px;" value=" i " name="addbbcode2" accesskey="i"/>
@@ -70,7 +70,7 @@ site_url = "{site_url}";
     </div>
   </div>
   <button type="button" name="preview" onclick="ajax_previewsig();return false;">{$LANG_GF01[PREVIEW]}</button>
-
+<div style="clear:both;"></div>
   <div id="preview" style="padding-top:10px;">
     <fieldset><legend>{$LANG_GF01[signature_preview]}</legend>
     <div class="signature">
@@ -80,3 +80,5 @@ site_url = "{site_url}";
     </fieldset>
   </div>
 </td></tr>
+</table>
+<table class="inputTable">
