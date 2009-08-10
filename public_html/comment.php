@@ -383,8 +383,18 @@ function handleEditSubmit()
         $uid = $_USER['uid'];
     }
 
+    if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
+        if ( $_POST['postmode'] == 'html' ) {
+            $comment = $_POST['comment_html'];
+        } else if ( $_POST['postmode'] == 'plaintext' ) {
+            $comment = $_POST['comment_text'];
+        }
+    } else {
+        $comment = $_POST['comment'];
+    }
+
     //check for bad input
-    if (empty ($sid) || empty ($_POST['title']) || empty ($_POST['comment']) || !is_numeric ($cid)
+    if (empty ($sid) || empty ($_POST['title']) || empty ($comment) || !is_numeric ($cid)
             || $cid < 1 ) {
         COM_errorLog("handleEditSubmit(): {{$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment with one or more missing values.');
@@ -396,7 +406,7 @@ function handleEditSubmit()
         return COM_refresh($_CONF['site_url'] . '/index.php');
     }
 
-    $comment = CMT_prepareText($_POST['comment'], $postmode,true,$cid);
+    $comment = CMT_prepareText($comment, $postmode,true,$cid);
     $title = COM_checkWords (strip_tags (COM_stripslashes ($_POST['title'])));
 
     if (!empty ($title) && !empty ($comment)) {
