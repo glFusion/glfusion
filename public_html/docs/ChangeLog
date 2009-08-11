@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Fix 1px right margin gap in rightblocks in webkit only browsers (Eric)
 - Moved maintenance_mode to the online configuration (Mark)
 - Added default sitedown.html page (Eric)
 - Fixed typo in install script example path and clarified help text (Eric)
