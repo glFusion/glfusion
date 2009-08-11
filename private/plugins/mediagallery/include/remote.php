@@ -100,12 +100,20 @@ function MG_remoteUpload( $album_id ) {
             'lang_keywords'     => $LANG_MG01['keywords'],
             'lang_destination_album' => $LANG_MG01['destination_album'],
             'lang_file_number'  => $LANG_MG01['file_number'],
+            'lang_jpg'          => $LANG_MG01['jpg'],
+            'lang_gif'          => $LANG_MG01['gif'],
             'cat_select'        => $cat_select,
             'album_id'          => $album_id,
             'action'            => 'remoteupload',
             'album_select'      => $album_selectbox,
             'xhtml'             => XHTML,
     ));
+
+    if ( $_MG_CONF['disable_remote_images'] == 1 ) {
+        $T->set_var('enable_remote_images','');
+    } else {
+        $T->set_var('enable_remote_images','true');
+    }
 
     $T->parse('output', 'mupload');
     $retval .= $T->finish($T->get_var('output'));
@@ -159,9 +167,16 @@ function MG_saveRemoteUpload( $albumId ) {
         if ( $thumbnail != '' ) {
 	        $attachedThumbnail = 1;
         } else {
-	        $attachedThumbnail = 0;
+//Jon Deliz:THUMBNAIL: custom code to check and see if uploadType is 4 (JPG) or 6 (GIF).
+// If you add other options for photos and want the thumbnail generation to work, you must
+// add them to this list!!!
+    	    if ( in_array($uploadType, array(4,6) ) && $_MG_CONF['disable_remote_images'] != 1 ) {
+     	        $attachedThumbnail=1;
+    	        $thumbnail=$URL;
+            } else {
+    	        $attachedThumbnail = 0;
+            }
         }
-
         // set the mime type here
         switch ( $uploadType ) {
 	        case 0 : 			// streaming FLV
@@ -195,19 +210,22 @@ function MG_saveRemoteUpload( $albumId ) {
 	        case 4 :
 	        	$mimeType = 'image/jpg';
 	        	break;
-	        case 5 :
-	        	$mimeType = 'embed';
-	        	$videoFile = 'Embedded Video';
-       			if (!preg_match("/embed/i", $URL) && !preg_match("/movie/i",$URL)) {
-	       			$statusMsg .= sprintf($LANG_MG02['invalid_embed_url'] . '<br>',$i);
-		            $errorFound++;
+            case 5 :
+                $mimeType = 'embed';
+                $videoFile = 'Embedded Video';
+                if (!preg_match("/embed/i", $URL) && !preg_match("/movie/i",$URL)) {
+                    $statusMsg .= sprintf($LANG_MG02['invalid_embed_url'] . '<br>',$i);
+                    $errorFound++;
                     $retval = MG_errorHandler( $statusMsg  );
                     return $retval;
                     exit;
-	            }
-	        	break;
-	        default :
-	            $fileNumber = $i + 1;
+                }
+                break;
+            case 6 :
+                $mimeType = 'image/gif';
+                break;
+            default :
+                $fileNumber = $i + 1;
                 $retval = MG_errorHandler( $LANG_MG01['file_number'] . ' ' . $fileNumber . ' - ' . $LANG_MG02['no_format'] );
                 return $retval;
                 exit;
@@ -402,6 +420,11 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 
         // Now we need to process an uploaded thumbnail
 
+    if ( $_MG_CONF['verbose']) {
+        COM_errorLog("MG Upload: attachedThumbnail: " . $attachedThumbnail);
+        COM_errorLog("MG Upload: thumbnail: " . $thumbnail);
+    }
+
     if ( $attachedThumbnail == 1 && $thumbnail != '' ) {
 	    // see if it is remote, if yes go get it...
 		if (preg_match("/http/i", $thumbnail)) {
@@ -434,13 +457,13 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
     // Check and see if moderation is on.  If yes, place in mediasubmission
 
     if ($albumInfo['moderate'] == 1 && !$MG_albums[0]->owner_id ) { //  && !SEC_hasRights('mediagallery.create')) {
-      $tableMedia       = $_TABLES['mg_mediaqueue'];
-      $tableMediaAlbum  = $_TABLES['mg_media_album_queue'];
-      $queue = 1;
+        $tableMedia       = $_TABLES['mg_mediaqueue'];
+        $tableMediaAlbum  = $_TABLES['mg_media_album_queue'];
+        $queue = 1;
     } else {
-      $tableMedia = $_TABLES['mg_media'];
-      $tableMediaAlbum = $_TABLES['mg_media_albums'];
-      $queue = 0;
+        $tableMedia = $_TABLES['mg_media'];
+        $tableMediaAlbum = $_TABLES['mg_media_albums'];
+        $queue = 0;
     }
 
     $pathParts = array();
@@ -532,31 +555,91 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 
 function MG_getRemoteThumbnail( $remotefile, $localfile ) {
 
-    if ( ($handle = @fopen ($remotefile, "rb")) == false ) {
-	    return false;
-	}
-    if ( ( $localhandle = fopen($localfile,"wb") ) == false ) {
-	    close($handle);
-	    return false;
+//Jon Deliz:THUMBNAIL:rewrite of this function to use CURL if available, if not, then try the standard "fopen"
+// Error checking in place for CURL to return false if failure
+
+    global $MG_albums, $_CONF, $_MG_CONF, $_USER, $_TABLES, $LANG_MG00, $LANG_MG01, $LANG_MG02, $new_media_id;
+
+    if ( isset($_MG_CONF['disable_remote_images']) && $_MG_CONF['disable_remote_images'] ) {
+        return false;
     }
 
-    $data = "";
+    if ($_MG_CONF['verbose']) {
+        COM_errorLog("Entering MG getRemoteThumbnail");
+    }
 
-    if ($handle) {
-	    do {
-	        $data = fread($handle, 8192);
-	        if (strlen($data) == 0) {
-	            break;
-	       }
-	    fwrite($localhandle,$data);
-	    } while(true);
-    } else {
-	    return false;
-	}
+    if ( !function_exists('curl_init') ) {
+        if ( $_MG_CONF['verbose'] ) {
+            COM_errorLog("MG_getRemoteThumbnail - No CURL support, trying fopen");
+        }
+        if ( ($handle = @fopen ($remotefile, "rb")) == false ) {
+            if ($_MG_CONF['verbose']) {
+                COM_errorLog("Exiting MG getRemoteThumbnail(return false: handle == false)");
+            }
+    	    return false;
+	    }
+        if ( ( $localhandle = fopen($localfile,"wb") ) == false ) {
+        	if ( $handle ) {
+	            close($handle);
+	        }
 
-    fclose ($handle);
-    fclose ($localhandle);
+            if ($_MG_CONF['verbose']) {
+                COM_errorLog("Exiting MG getRemoteThumbnail(return false: localhandle == false)");
+            }
+            return false;
+        }
 
+        $data = "";
+
+        if ($handle) {
+	        do {
+	            $data = fread($handle, 8192);
+	            if (strlen($data) == 0) {
+	                break;
+	            }
+	            fwrite($localhandle,$data);
+	        } while(true);
+        } else {
+            if ($_MG_CONF['verbose']) {
+                COM_errorLog("Exiting MG getRemoteThumbnail(return false: !handle)");
+            }
+    	    return false;
+	    }
+
+        fclose ($handle);
+        fclose ($localhandle);
+
+    } else { //if(!function_exists('curl_init')...
+        $ch = curl_init($remotefile);
+        $fp = fopen($localfile, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+
+        $cginfo = array();
+        $cginfo = curl_getinfo($ch);
+
+        if (curl_errno($ch) ||  $cginfo['http_code'] != 200 ) {
+            COM_errorLog("MG_getRemoteThumbnail: HTTP code = ". $hcode .
+                "\n\tcurl_errno = ". curl_errno($ch) .
+                "\n\tcurl_error text = ". curl_error($ch));
+
+            curl_close($ch);
+            fclose($fp);
+            if ($_MG_CONF['verbose']) {
+                COM_errorLog("Exiting MG getRemoteThumbnail(returning false: curl_errno || curl_getinfo)");
+            }
+	        return false;
+        }
+        curl_close($ch);
+        fclose($fp);
+    }
+
+    if ($_MG_CONF['verbose']) {
+        COM_errorLog("Exiting MG getRemoteThumbnail");
+    }
     return true;
 }
 ?>

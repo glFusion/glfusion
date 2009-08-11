@@ -1278,7 +1278,14 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
 
     $retval = '';
     $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
-    if ( $media_size_disp == false ) {
+
+// Modified by Jon Deliz
+    if ($I['remote_media'] == 1 ) {
+	    $media_size_disp[0] = $I['media_resolution_x'];
+	    $media_size_disp[1] = $I['media_resolution_y'];
+    }
+
+    if ( $media_size_disp == false && $I['remote_media'] == 0) {
         $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg');
     }
     $media_size_orig = @getimagesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -1313,15 +1320,17 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
             $u_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
             $media_size_disp[0] = 200;
             $media_size_disp[1] = 150;
-            if ( $media_size_orig == false ) {
-                $mesia_size_orig = $media_size_disp;
-            }
         } else {
-            $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
-            if ( !file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'])) {
-                $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
+//Modified by Jon Deliz
+            if ($I['remote_media'] == 1 ) {
+		        $u_image = $I['remote_url'];
             } else {
-                $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
+                $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
+                if ( !file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'])) {
+                    $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
+                } else {
+                    $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
+                }
             }
         }
     }

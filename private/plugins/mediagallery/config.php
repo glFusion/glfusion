@@ -252,4 +252,13 @@ $_MG_CONF['update_parent_lastupdated'] = false;
  */
 
 $_MG_CONF['allow_user_edit'] = false;
+
+/*
+ * If remote images are enabled, Media Gallery will attempt to open the image
+ * file on the remote host. With some hosting services, attempting to remotely
+ * open files is disabled.  To disable remote image process, set this value
+ * to true.
+ */
+
+$_MG_CONF['disable_remote_images'] = false;
 ?>

@@ -84,6 +84,7 @@ Links Plugin
 
 Media Gallery
 -------------
+- Implemented Jon Deliz's modifications to allow remote JPG/GIF images (Mark)
 - Implemented the PLG_itemSaved() API (Mark)
 - Fixed issue where the default album theme was not being used on new
   albums (Mark)

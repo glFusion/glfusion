@@ -30,6 +30,10 @@ function formControl(){
     <select name="type[]" onchange="formControl()">
       <option value="-1">------</option>
       <option value="0">{lang_flv_stream}</option>
+      {!if enable_remote_images}
+      <option value="4">{lang_jpg}</option>
+      <option value="6">{lang_gif}</option>
+      {!endif}
       <option value="5">{lang_embed}</option>
     </select>
     <br{xhtml}>
@@ -66,6 +70,10 @@ function formControl(){
       <select name="type[]" onchange="formControl()">
         <option value="-1">------</option>
         <option value="0">{lang_flv_stream}</option>
+        {!if enable_remote_images}
+        <option value="4">{lang_jpg}</option>
+        <option value="6">{lang_gif}</option>
+        {!endif}
         <option value="5">{lang_embed}</option>
       </select>
     <br{xhtml}>
@@ -102,6 +110,10 @@ function formControl(){
       <select name="type[]" onchange="formControl()">
         <option value="-1">------</option>
         <option value="0">{lang_flv_stream}</option>
+        {!if enable_remote_images}
+        <option value="4">{lang_jpg}</option>
+        <option value="6">{lang_gif}</option>
+        {!endif}
         <option value="5">{lang_embed}</option>
       </select>
     <br{xhtml}>
@@ -135,6 +147,10 @@ function formControl(){
       <select name="type[]" onchange="formControl()">
         <option value="-1">------</option>
         <option value="0">{lang_flv_stream}</option>
+        {!if enable_remote_images}
+        <option value="4">{lang_jpg}</option>
+        <option value="6">{lang_gif}</option>
+        {!endif}
         <option value="5">{lang_embed}</option>
       </select>
     <br{xhtml}>
