@@ -1255,7 +1255,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
 
     $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
 
-    if( !empty( $_USER['username'] )) {
+    if( !empty( $_USER['username'] ) && !COM_isAnonUser()) {
         $msg .= ', ' . COM_getDisplayName( $_USER['uid'], $_USER['username'],
                                            $_USER['fullname'] );
     }
@@ -1416,7 +1416,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
 
-    if( !empty( $_USER['username'] )) {
+    if( !empty( $_USER['username'] ) && !COM_isAnonUser()) {
         $msg .= ', ' . COM_getDisplayName( $_USER['uid'], $_USER['username'],
                                            $_USER['fullname'] );
     }
