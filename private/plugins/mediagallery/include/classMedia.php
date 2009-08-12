@@ -556,7 +556,11 @@ class Media {
     	$L->set_var('xhtml',XHTML);
     	$L->set_var('href',$url_media_item);
     	if ( $this->type == 0 ) {
-    	    $L->set_var('hrefdirect',$_MG_CONF['mediaobjects_url'] . '/' . $direct_url);
+    	    if ( $this->remote == 1 ) {
+        	    $L->set_var('hrefdirect',$this->remote_url);
+        	} else {
+        	    $L->set_var('hrefdirect',$_MG_CONF['mediaobjects_url'] . '/' . $direct_url);
+        	}
     	}
     	$L->set_var('caption',PLG_replaceTags($this->title));
     	$L->set_var('id','id' . rand());

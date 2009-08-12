@@ -537,7 +537,10 @@ class downloader
 
             // Send file contents.
             $fp = fopen($this->_sourceDirectory . $fileName, 'rb');
-            fpassthru($fp);
+            while (!feof($fp)) {
+                echo fread($fp, 1024);
+                flush();
+            }
             fclose($fp);
         }
 
@@ -545,5 +548,4 @@ class downloader
     }
 
 }
-
 ?>

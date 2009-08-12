@@ -112,12 +112,15 @@ function MG_remoteUpload( $album_id ) {
     ));
 
     $allow_url_fopen =  @ini_get('allow_url_fopen');
+/* --------
     if ( !function_exists('curl_init') && $allow_url_fopen != 1 ) {
         $T->set_var('enable_remote_images','');
-    } elseif ( $_MG_CONF['disable_remote_images'] == 1 ) {
-        $T->set_var('enable_remote_images','');
-    } else {
+    } else
+ ---------- */
+    if ( $_MG_CONF['enable_remote_images'] == 1 ) {
         $T->set_var('enable_remote_images','true');
+    } else {
+        $T->set_var('enable_remote_images','');
     }
 
     $T->parse('output', 'mupload');
@@ -175,7 +178,7 @@ function MG_saveRemoteUpload( $albumId ) {
 //Jon Deliz:THUMBNAIL: custom code to check and see if uploadType is 4 (JPG) or 6 (GIF).
 // If you add other options for photos and want the thumbnail generation to work, you must
 // add them to this list!!!
-    	    if ( in_array($uploadType, array(4,6,7,8) ) && $_MG_CONF['disable_remote_images'] != 1 ) {
+    	    if ( in_array($uploadType, array(4,6,7,8) ) && $_MG_CONF['enable_remote_images'] == 1 ) {
      	        $attachedThumbnail=1;
     	        $thumbnail=$URL;
             } else {
@@ -442,7 +445,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
     if ( $attachedThumbnail == 1 && $thumbnail != '' ) {
 	    // see if it is remote, if yes go get it...
 		if (preg_match("/http/i", $thumbnail)) {
-			$tmp_thumbnail = $_MG_CONF['path_tmp'] . '/' . $media_filename . '.jpg';
+			$tmp_thumbnail = $_MG_CONF['tmp_path'] . '/' . $media_filename . '.jpg';
 			$rc = MG_getRemoteThumbnail($thumbnail,$tmp_thumbnail);
 			$tmp_image_size = @getimagesize($tmp_thumbnail);
 			if ( $tmp_image_size != false ) {
@@ -573,13 +576,9 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 
 
 function MG_getRemoteThumbnail( $remotefile, $localfile ) {
-
-//Jon Deliz:THUMBNAIL:rewrite of this function to use CURL if available, if not, then try the standard "fopen"
-// Error checking in place for CURL to return false if failure
-
     global $MG_albums, $_CONF, $_MG_CONF, $_USER, $_TABLES, $LANG_MG00, $LANG_MG01, $LANG_MG02, $new_media_id;
 
-    if ( isset($_MG_CONF['disable_remote_images']) && $_MG_CONF['disable_remote_images'] ) {
+    if ( !isset($_MG_CONF['enable_remote_images']) || $_MG_CONF['enabled_remote_images'] == false ) {
         return false;
     }
 

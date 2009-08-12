@@ -142,17 +142,21 @@ if ( $total_media > 0 ) {
                 continue;
             }
         } else {
-            $imgsize = false;
-            foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext) ) {
-                    $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext;
-                    $PhotoPath = $_MG_CONF['path_mediaobjects'] . 'disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext;
-                    $imgsize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext);
-                    break;
+            if ($mediaObject[$i]['remote_media'] != 1 ) {
+                $imgsize = false;
+                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext) ) {
+                        $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext;
+                        $PhotoPath = $_MG_CONF['path_mediaobjects'] . 'disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext;
+                        $imgsize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $ext);
+                        break;
+                    }
                 }
-            }
-            if ( $imgsize == false ) {
-                continue;
+                if ( $imgsize == false ) {
+                    continue;
+                }
+            } else {
+                $PhotoURL = $mediaObject[$i]['remote_url'];
             }
         }
 

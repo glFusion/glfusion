@@ -253,12 +253,12 @@ $_MG_CONF['update_parent_lastupdated'] = false;
 $_MG_CONF['allow_user_edit'] = false;
 
 /*
- * If remote images are enabled, Media Gallery will attempt to open the image
- * file on the remote host. With some hosting services, attempting to remotely
- * open files is disabled.  To disable remote image process, set this value
- * to true.
+ * Media Gallery provides limited support for including remotely hosted
+ * images in your albums.  Your web host must support the CURL PHP extension
+ * or allow opening remote URLs to take full advantage of this features.
+ * To enable remote image support, set this value to true.
  */
 
-$_MG_CONF['disable_remote_images'] = false;
+$_MG_CONF['enable_remote_images'] = false;
 
 ?>
