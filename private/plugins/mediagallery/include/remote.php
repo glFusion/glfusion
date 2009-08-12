@@ -102,6 +102,8 @@ function MG_remoteUpload( $album_id ) {
             'lang_file_number'  => $LANG_MG01['file_number'],
             'lang_jpg'          => $LANG_MG01['jpg'],
             'lang_gif'          => $LANG_MG01['gif'],
+            'lang_png'          => $LANG_MG01['png'],
+            'lang_bmp'          => $LANG_MG01['bmp'],
             'cat_select'        => $cat_select,
             'album_id'          => $album_id,
             'action'            => 'remoteupload',
@@ -109,7 +111,10 @@ function MG_remoteUpload( $album_id ) {
             'xhtml'             => XHTML,
     ));
 
-    if ( $_MG_CONF['disable_remote_images'] == 1 ) {
+    $allow_url_fopen =  @ini_get('allow_url_fopen');
+    if ( !function_exists('curl_init') && $allow_url_fopen != 1 ) {
+        $T->set_var('enable_remote_images','');
+    } elseif ( $_MG_CONF['disable_remote_images'] == 1 ) {
         $T->set_var('enable_remote_images','');
     } else {
         $T->set_var('enable_remote_images','true');
@@ -170,7 +175,7 @@ function MG_saveRemoteUpload( $albumId ) {
 //Jon Deliz:THUMBNAIL: custom code to check and see if uploadType is 4 (JPG) or 6 (GIF).
 // If you add other options for photos and want the thumbnail generation to work, you must
 // add them to this list!!!
-    	    if ( in_array($uploadType, array(4,6) ) && $_MG_CONF['disable_remote_images'] != 1 ) {
+    	    if ( in_array($uploadType, array(4,6,7,8) ) && $_MG_CONF['disable_remote_images'] != 1 ) {
      	        $attachedThumbnail=1;
     	        $thumbnail=$URL;
             } else {
@@ -223,6 +228,12 @@ function MG_saveRemoteUpload( $albumId ) {
                 break;
             case 6 :
                 $mimeType = 'image/gif';
+                break;
+            case 7 :
+                $mimeType = 'image/png';
+                break;
+            case 8 : //new case item added to handle GIF images. Approx. line 209
+                $mimeType = 'image/bmp';
                 break;
             default :
                 $fileNumber = $i + 1;
@@ -279,6 +290,9 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
         COM_errorLog("MG Upload: Entering MG_getRemote()");
         COM_errorLog("MG Upload: URL to process: " . htmlentities($URL));
     }
+
+    $resolution_x = 0;
+    $resolution_y = 0;
 
     $urlArray = array();
     $urlArray = parse_url($URL);
@@ -430,6 +444,11 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 		if (preg_match("/http/i", $thumbnail)) {
 			$tmp_thumbnail = $_MG_CONF['path_tmp'] . '/' . $media_filename . '.jpg';
 			$rc = MG_getRemoteThumbnail($thumbnail,$tmp_thumbnail);
+			$tmp_image_size = @getimagesize($tmp_thumbnail);
+			if ( $tmp_image_size != false ) {
+        	    $resolution_x = $tmp_image_size[0];
+        	    $resolution_y = $tmp_image_size[1];
+        	}
 			$thumbnail = $tmp_thumbnail;
 		} else {
 		    $rc = true;
@@ -486,7 +505,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
         COM_errorLog("MG Upload: Inserting media record into mg_media");
     }
 
-    if ( $resolution_x == 0 || $resolution_y == 0 ) {
+    if ( ($resolution_x == 0 || $resolution_y == 0) && ($mediaType != 0)) {
 	    $resolution_x = 320;
 	    $resolution_y = 240;
     }

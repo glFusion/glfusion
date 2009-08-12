@@ -33,6 +33,8 @@ function formControl(){
       {!if enable_remote_images}
       <option value="4">{lang_jpg}</option>
       <option value="6">{lang_gif}</option>
+      <option value="7">{lang_png}</option>
+      <option value="8">{lang_bmp}</option>
       {!endif}
       <option value="5">{lang_embed}</option>
     </select>
@@ -73,6 +75,8 @@ function formControl(){
         {!if enable_remote_images}
         <option value="4">{lang_jpg}</option>
         <option value="6">{lang_gif}</option>
+        <option value="7">{lang_png}</option>
+        <option value="8">{lang_bmp}</option>
         {!endif}
         <option value="5">{lang_embed}</option>
       </select>
@@ -113,6 +117,8 @@ function formControl(){
         {!if enable_remote_images}
         <option value="4">{lang_jpg}</option>
         <option value="6">{lang_gif}</option>
+        <option value="7">{lang_png}</option>
+        <option value="8">{lang_bmp}</option>
         {!endif}
         <option value="5">{lang_embed}</option>
       </select>
@@ -150,6 +156,8 @@ function formControl(){
         {!if enable_remote_images}
         <option value="4">{lang_jpg}</option>
         <option value="6">{lang_gif}</option>
+        <option value="7">{lang_png}</option>
+        <option value="8">{lang_bmp}</option>
         {!endif}
         <option value="5">{lang_embed}</option>
       </select>

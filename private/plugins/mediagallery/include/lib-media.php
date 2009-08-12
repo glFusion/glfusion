@@ -1281,8 +1281,16 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
 
 // Modified by Jon Deliz
     if ($I['remote_media'] == 1 ) {
-	    $media_size_disp[0] = $I['media_resolution_x'];
-	    $media_size_disp[1] = $I['media_resolution_y'];
+        if ( $I['media_resolution_x'] != 0 && $I['media_resolution_y'] != 0 ) {
+    	    $media_size_disp[0] = $I['media_resolution_x'];
+            $media_size_disp[1] = $I['media_resolution_y'];
+        } else {
+            $media_size_disp = @getimagesize($I['remote_url']);
+            if ( $media_size_disp = false ) {
+                $media_size_disp[0] = 0;
+                $media_size_disp[1] = 0;
+            }
+        }
     }
 
     if ( $media_size_disp == false && $I['remote_media'] == 0) {
@@ -1316,7 +1324,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
     if ( $full == 1 ) {
         $u_image    = $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
     } else {
-        if ( $media_size_disp == false ) {
+        if ( $media_size_disp == false && !$I['remote_media']) {
             $u_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
             $media_size_disp[0] = 200;
             $media_size_disp[1] = 150;
@@ -1349,17 +1357,22 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
         'media_link_start'  =>  $media_link_start,
         'media_link_end'    =>  $media_link_end,
         'media_thumbnail'   =>  $u_image,
-        'media_size'        =>  'width="' . $imageWidth . '" height="' . $imageHeight . '"',
+        'media_size'        =>  ($imageWidth != 0 && $imageHeight != 0 ) ? 'width="' . $imageWidth . '" height="' . $imageHeight . '"' : '',
         'media_height'      =>  $imageHeight,
         'media_width'       =>  $imageWidth,
-        'border_width'      =>  $imageWidth + 15,
-        'border_height'     =>  $imageHeight + 15,
+
         'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
         'xhtml'             =>  XHTML,
     ));
+    if ( $imageWidth > 0 && $imageHeight > 0 ) {
+        $F->set_var(array(
+            'border_width'      =>  $imageWidth + 15,
+            'border_height'     =>  $imageHeight + 15,
+        ));
+    }
     $F->parse('media','media_frame');
     $retval = $F->finish($F->get_var('media'));
     return array($retval,$u_image,$imageWidth,$imageHeight,$raw_link_url);
