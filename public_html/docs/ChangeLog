@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.5
 ------
+- Fixed issue where the advanced editor did not pickup the style sheet
+  if use_direct_css_js was set to true in siteconfig.php (Mark)
 - Fix 1px right margin gap in rightblocks in webkit only browsers (Eric)
 - Moved maintenance_mode to the online configuration (Mark)
 - Added default sitedown.html page (Eric)
