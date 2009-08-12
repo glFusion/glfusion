@@ -445,7 +445,6 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
     }
     if ( $menuID == '' ) {
         $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
-
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval && $noid == 0) {
             return $retval;
@@ -454,14 +453,13 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
         $menuID = '';
         if ( is_array($stMenu) ) {
             foreach($stMenu AS $id) {
-                if ( $id['menu_name'] == $name ) {
+                if ( strcasecmp(trim($id['menu_name']), trim($name)) == 0 ) {
                     $menuID = $id['menu_id'];
                     break;
                 }
             }
         }
     }
-
     if ( $menuID != '' && $stMenu[$menuID]['active'] == 1 && $stMenu[$menuID]['menu_perm'] == 3) {
         if ( $stMenu[$menuID]['menu_type'] == 1 ) {
             $retval .= '<div id="gl_moomenu'.($noid == 0 ? $menuID : '').'">'. LB;
