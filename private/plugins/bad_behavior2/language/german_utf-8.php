@@ -42,6 +42,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+###############################################################################
+
 $LANG_BAD_BEHAVIOR = array(
     'plugin_display_name' => 'Bad Behavior2',
     'page_title' => 'Bad Behavior2',
@@ -118,11 +120,8 @@ $LANG_BB2_RESPONSE = array(
     'f9f2b8b9' => 'A User-Agent is required but none was provided.'
 );
 
-
 $PLG_bad_behavior_MESSAGE1 = 'Wenn Du diesen Hinweis siehst, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lies Dir die Installationsanleitung noch einmal sorgfältig durch.';
 $PLG_bad_behavior_MESSAGE100 = 'Die IP-Adresse wurde wieder freigegeben.';
 $PLG_bad_behavior_MESSAGE101 = 'Es gab ein Problem beim Freigeben der IP-Adresse.';
-
-
 
 ?>

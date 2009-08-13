@@ -1,5 +1,4 @@
 <?php
-
 /**
  * File: german_utf-8.php
  * This is the German language file for the glFusion Spam-X plugin
@@ -19,7 +18,7 @@ if (!defined ('GVERSION')) {
 
 global $LANG32;
 
-$LANG_SX00 = array (
+$LANG_SX00 = array(
     'inst1' => '<p>Wenn Du dies tust, dann sind andere ',
     'inst2' => 'in der Lage, Deine persönliche Blacklist anzusehen und zu importieren, und wir können eine effektivere ',
     'inst3' => 'verteilte Datenbank aufbauen.</p><p>Falls Du Deine Webseite übermittelt hast und sie nicht auf der Liste belassen willst, ',
@@ -45,7 +44,7 @@ $LANG_SX00 = array (
     'rsscreated' => 'RSS-Feed erstellt',
     'add1' => 'Hinzugefügt ',
     'add2' => ' Einträge von ',
-    'add3' => "'s Blacklist.",
+    'add3' => '\'s Blacklist.',
     'adminc' => 'Administrationskommandos:',
     'mblack' => 'Meine Blacklist:',
     'rlinks' => 'Ähnliche Links:',
@@ -94,17 +93,17 @@ $LANG_SX00 = array (
     'foundspam' => 'Spam-Beitrag gefunden, übereinstimmend mit ',
     'foundspam2' => ' geschrieben von Benutzer ',
     'foundspam3' => ' von IP ',
-	'deletespam' => 'Spam löschen',
-	'numtocheck' => 'Anzahl der zu prüfenden Kommentare',
-	'note1'		=> '<p>Note: Massenlöschung ist als Hilfe gedacht, wenn Du belästigst wirst durch',
-	'note2'		=> ' Kommentar-Spam und Spam-X ihn nicht "einfängt".</p><ul><li>Zuerst finde die Links oder andere ',
-	'note3'		=> 'Identifikatoren dieses Spam-Kommentars und füge es Deiner persönl. Blacklist hinzu.</li><li>Dann ',
-	'note4'		=> 'komme hierher zurück und lasse Spam-X die letzten Kommentare nach Spam prüfen.</li></ul><p>Kommentare ',
-	'note5'		=> 'werden von den neuesten zu den ältesten geprüft -- mehr Kommentare zu prüfen ',
-	'note6'		=> 'benötigt mehr Zeit für die Prüfung.</p>',
-	'masshead'	=> '<hr' . XHTML . '><h1 align="center">Massenlöschung der Spam-Kommentare</h1>',
-	'masstb' => '<hr' . XHTML . '><h1 align="center">Masslöschung von Trackback-Spam</h1>',
-	'comdel'	=> ' Kommentare gelöscht.',
+    'deletespam' => 'Spam löschen',
+    'numtocheck' => 'Anzahl der zu prüfenden Kommentare',
+    'note1' => '<p>Note: Massenlöschung ist als Hilfe gedacht, wenn Du belästigst wirst durch',
+    'note2' => ' Kommentar-Spam und Spam-X ihn nicht "einfängt".</p><ul><li>Zuerst finde die Links oder andere ',
+    'note3' => 'Identifikatoren dieses Spam-Kommentars und füge es Deiner persönl. Blacklist hinzu.</li><li>Dann ',
+    'note4' => 'komme hierher zurück und lasse Spam-X die letzten Kommentare nach Spam prüfen.</li></ul><p>Kommentare ',
+    'note5' => 'werden von den neuesten zu den ältesten geprüft -- mehr Kommentare zu prüfen ',
+    'note6' => 'benötigt mehr Zeit für die Prüfung.</p>',
+    'masshead' => '<hr' . XHTML . '><h1 align="center">Massenlöschung der Spam-Kommentare</h1>',
+    'masstb' => '<hr' . XHTML . '><h1 align="center">Masslöschung von Trackback-Spam</h1>',
+    'comdel' => ' Kommentare gelöscht.',
     'initial_Pimport' => '<p>Persönliche Blacklist importieren"',
     'initial_import' => 'Initiale MT-Blacklist importieren',
     'import_success' => '<p>%d Blacklist-Einträge erfolgreich importiert.',
@@ -117,7 +116,6 @@ $LANG_SX00 = array (
     'ipofurlblack' => 'Spam-X IP oder URL-Blacklist',
     'headerblack' => 'Spam-X HTTP Header-Blacklist',
     'headers' => 'Request Headers:',
-
     'stats_headline' => 'Spam-X Statistiken',
     'stats_page_title' => 'Blacklist',
     'stats_entries' => 'Einträge',
@@ -127,20 +125,17 @@ $LANG_SX00 = array (
     'stats_ipofurl' => 'Gesperrt durch IP von URL',
     'stats_header' => 'HTTP-Headers',
     'stats_deleted' => 'Beiträge als Spam gelöscht',
-
     'plugin_name' => 'Spam-X',
     'slvwhitelist' => 'SLV-Whitelist'
 );
 
-
-/* Define Messages that are shown when Spam-X module action is taken */
+// Define Messages that are shown when Spam-X module action is taken
 $PLG_spamx_MESSAGE128 = 'Spam entdeckt. Beitrag wurde gelöscht.';
-$PLG_spamx_MESSAGE8   = 'Spam entdeckt. E-Mail an Admin gesendet.';
+$PLG_spamx_MESSAGE8 = 'Spam entdeckt. E-Mail an Admin gesendet.';
 
 // Messages for the plugin upgrade
 $PLG_spamx_MESSAGE3001 = 'Plugin-Upgrade nicht unterstützt.';
 $PLG_spamx_MESSAGE3002 = $LANG32[9];
-
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['spamx'] = array(
@@ -151,7 +146,7 @@ $LANG_configsections['spamx'] = array(
 $LANG_confignames['spamx'] = array(
     'action' => 'Spam-X - Aktionen',
     'notification_email' => 'Benachrichtigungs-E-Mail',
-    'admin_override' => "Admin-Beiträge nicht filtern",
+    'admin_override' => 'Admin-Beiträge nicht filtern',
     'logging' => 'Logging aktivieren',
     'timeout' => 'Timeout'
 );
@@ -164,9 +159,10 @@ $LANG_fs['spamx'] = array(
     'fs_main' => 'Spam-X Haupteinstellungen'
 );
 
+// Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['spamx'] = array(
     0 => array('Ja' => 1, 'Falsch' => 0),
-    1 => array('Ja' => TRUE, 'Falsch' => FALSE)
+    1 => array('Ja' => true, 'Falsch' => false)
 );
 
 ?>
