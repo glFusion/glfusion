@@ -108,10 +108,19 @@ Polls
 - Fixed comment handling - multi-page comments did not work and
   user could not select comment order. (Mark)
 
+SiteTailor
+----------
+- Fixed issue where hmenu auto tag assumed horizontal-cascading
+  menu type (Mark)
+
 StaticPages
 ----------
 - Implemented PLG_itemSaved() API (Mark)
 - Fixed comment handling - allow multi-page comments (Mark)
+
+Translations
+------------
+- Updated German translations from Tony Kluever
 
 v1.1.4.pl4
 ----------

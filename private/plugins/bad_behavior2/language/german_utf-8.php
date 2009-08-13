@@ -19,7 +19,7 @@
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
-// | Modifiziert: August 09 Tony Kluever       |
+// | Modifiziert: August 09 Tony Kluever								      |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -46,11 +46,11 @@ $LANG_BAD_BEHAVIOR = array(
     'plugin_display_name' => 'Bad Behavior2',
     'page_title' => 'Bad Behavior2',
     'block_title_admin' => 'Bad Behavior2-Administration',
-    'block_title_list' => 'Logdatei-Einträge',
+    'block_title_list' => 'Logdatei-EintrÃ¤ge',
     'block_title_entry' => 'Detailansicht',
     'block_title_donate' => 'Spende',
-    'list_entries' => 'Logdatei-Einträge anzeigen (%d)',
-    'list_no_entries' => 'Keine Logdatei-Einträge',
+    'list_entries' => 'Logdatei-EintrÃ¤ge anzeigen (%d)',
+    'list_no_entries' => 'Keine Logdatei-EintrÃ¤ge',
     'row_ip' => 'IP-Addresse',
     'row_user_agent' => 'User Agent',
     'row_referer' => 'Referrer',
@@ -60,20 +60,20 @@ $LANG_BAD_BEHAVIOR = array(
     'row_date' => 'Datum',
     'row_reason' => 'Grund',
     'self_test' => 'Bad Behavior-Selbsttest',
-    'link_back' => 'Zurück zur Liste der Logdatei-Einträge',
+    'link_back' => 'ZurÃ¼ck zur Liste der Logdatei-EintrÃ¤ge',
     'title_show_headers' => 'HTTP-Header zeigen',
     'title_lookup_ip' => 'Informationen zur IP-Adresse',
     'error' => 'Fehler',
-    'fsockopen_not_available' => 'Die PHP-Funktion <code>fsockopen</code> ist leider nicht verfügbar. Selbsttest nicht durchführbar.',
-    'fsockopen_failed' => 'Konnte keine Socket-Verbindung öffnen. Selbsttest nicht durchführbar.',
-    'donate_msg' => 'Wenn Du dieses Plugin nützlich findest, denke doch bitte über eine Spende an den Autor von Bad Behavior, Michael Hampton, nach. <a href="http://www.bad-behavior.ioerror.us/">Zur Bad Behavior-Homepage</a>.',
+    'fsockopen_not_available' => 'Die PHP-Funktion <code>fsockopen</code> ist leider nicht verfÃ¼gbar. Selbsttest nicht durchfÃ¼hrbar.',
+    'fsockopen_failed' => 'Konnte keine Socket-Verbindung Ã¶ffnen. Selbsttest nicht durchfÃ¼hrbar.',
+    'donate_msg' => 'Wenn Du dieses Plugin nÃ¼tzlich findest, denke doch bitte Ã¼ber eine Spende an den Autor von Bad Behavior, Michael Hampton, nach. <a href="http://www.bad-behavior.ioerror.us/">Zur Bad Behavior-Homepage</a>.',
     'denied_reason' => 'Grund',
-    'results' => 'Bad Behavior2-Einträge',
+    'results' => 'Bad Behavior2-EintrÃ¤ge',
     'search' => 'Suchen',
     'stats_headline' => 'Bad Behavior2 - Statistiken',
     'stats_reason' => 'Grund',
     'stats_blocked' => 'Gesperrt',
-    'stats_no_hits' => 'Keine Einträge.',
+    'stats_no_hits' => 'Keine EintrÃ¤ge.',
     'blocked_ips' => 'Abgeblockte Requests nach IP-Adresse',
     'unblock' => 'IP-Adresse freigeben'
 );
@@ -119,7 +119,7 @@ $LANG_BB2_RESPONSE = array(
 );
 
 
-$PLG_bad_behavior_MESSAGE1 = 'Wenn Du diesen Hinweis siehst, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lies Dir die Installationsanleitung noch einmal sorgfältig durch.';
+$PLG_bad_behavior_MESSAGE1 = 'Wenn Du diesen Hinweis siehst, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lies Dir die Installationsanleitung noch einmal sorgfÃ¤ltig durch.';
 $PLG_bad_behavior_MESSAGE100 = 'Die IP-Adresse wurde wieder freigegeben.';
 $PLG_bad_behavior_MESSAGE101 = 'Es gab ein Problem beim Freigeben der IP-Adresse.';
 
