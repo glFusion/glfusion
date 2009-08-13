@@ -125,6 +125,7 @@ function plugin_getheadercss_sitetailor() {
             }
         }
     }
+//print_r($st_header);exit;
     return $st_header;
 }
 
@@ -292,7 +293,8 @@ function plugin_upgrade_sitetailor() {
 }
 
 function plugin_autotags_sitetailor($op,$content='',$autotag='') {
-    global $_CONF;
+
+    global $stMenu, $_CONF;
 
     if ($op == 'tagname' ) {
         return array('hmenu','vmenu');
@@ -305,7 +307,13 @@ function plugin_autotags_sitetailor($op,$content='',$autotag='') {
         }
         switch( $autotag['tag'] ) {
             case 'hmenu' :
-                $menu = st_getMenu($autotag['parm1'],"gl_moomenu","gl_moomenu",'',"parent");
+                $menu = '';
+                $menuID = trim($autotag['parm1']);
+                if ( $stMenu[$menuID]['menu_type'] == 1 ) {
+                    $menu = st_getMenu($menuID,"gl_moomenu","gl_moomenu",'',"parent");
+                } else {
+                    $menu = st_getMenu($menuID,'st-fmenu','','','','st-f-last');
+                }
                 $content = str_replace($autotag['tagstr'],$menu,$content);
                 break;
             case 'vmenu' :
