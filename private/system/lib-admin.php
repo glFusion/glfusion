@@ -1240,7 +1240,7 @@ function ADMIN_getListField_usergroups($fieldname, $fieldvalue, $A, $icon_arr, $
     }
     if ( is_array($al_selected) ) {
         $selected = $al_selected[1];
-        $uid      = $al_selected[0];
+        $uid      = (int) $al_selected[0];
     }
 
     if (in_array($A['grp_id'], $thisUsersGroups ) ||
@@ -1250,10 +1250,12 @@ function ADMIN_getListField_usergroups($fieldname, $fieldvalue, $A, $icon_arr, $
             $checked = '';
             if (is_array($selected) && in_array($A['grp_id'], $selected)) {
                 $checked = ' checked="checked"';
-                $tresult = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['group_assignments']} WHERE ug_uid=".$uid." AND ug_main_grp_id=".$A['grp_id']);
-                list($gcount) = DB_fetchArray($tresult);
-                if ( $gcount < 1 ) {
-                    $checked = ' checked="checked" disabled="disabled"';
+                if ( $uid != '' && $uid > 0 ) {
+                    $tresult = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['group_assignments']} WHERE ug_uid=".$uid." AND ug_main_grp_id=".$A['grp_id']);
+                    list($gcount) = DB_fetchArray($tresult);
+                    if ( $gcount < 1 ) {
+                        $checked = ' checked="checked" disabled="disabled"';
+                    }
                 }
             }
             if (($A['grp_name'] == 'All Users') ||
