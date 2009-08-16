@@ -206,7 +206,7 @@ $_SQL['gf_userinfo'] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
   `msnm` varchar(128) NOT NULL default '',
   `interests` varchar(255) NOT NULL default '',
   `occupation` varchar(255) NOT NULL default '',
-  `signature` mediumtext NOT NULL default '',
+  `signature` mediumtext,
   PRIMARY KEY  (`uid`)
 ) TYPE=MyISAM COMMENT='Forum Extra User Profile Information';";
 
