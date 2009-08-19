@@ -967,6 +967,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     if($postmode == 'html' || $postmode == 'HTML') {
         $postmode_msg = $LANG_GF01['TEXTMODE'];
+        $postmode = 'html';
     } else {
          $postmode_msg = $LANG_GF01['HTMLMODE'];
     }
