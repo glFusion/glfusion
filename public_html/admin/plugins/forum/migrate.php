@@ -77,7 +77,7 @@ function migratetopic($forum,$sid,$tid,$storydate,$uid,$subject,$introtext,$body
     $comment = $introtext . $bodytext;
     $comment = prepareStringForDB($comment);
     $subject = prepareStringForDB($subject);
-    $postmode = "HTML";
+    $postmode = "html";
     $name = DB_getITEM($_TABLES['users'],'username',"uid=$uid");
     $email = DB_getITEM($_TABLES['users'],'email',"uid=$uid");
     $website = DB_getITEM($_TABLES['users'],'homepage',"uid=$uid");
@@ -121,7 +121,7 @@ function migrateComments($forum,$sid, $parent) {
 
         $comment = prepareStringForDB($comment);
         $subject = prepareStringForDB($subject);
-        $postmode = "HTML";
+        $postmode = "html";
         $name = DB_getITEM($_TABLES['users'],'username',"uid=$uid");
         $email = DB_getITEM($_TABLES['users'],'email',"uid=$uid");
         $website = DB_getITEM($_TABLES['users'],'homepage',"uid=$uid");
