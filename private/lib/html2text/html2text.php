@@ -205,8 +205,8 @@ class html2text
         "ucwords(\"\n\n\\1\n\n\")",             // H4 - H6
         "\n\n\t",                               // <P>
         "\n",                                   // <br>
-        'strtoupper("\\1")',                    // <b>
-        'strtoupper("\\1")',                    // <strong>
+        "'\\1'",                                // <b>
+        "'\\1'",                                // <strong>
         '_\\1_',                                // <i>
         '_\\1_',                                // <em>
         "\n\n",                                 // <ul> and </ul>
@@ -441,7 +441,6 @@ class html2text
         if ( $this->width > 0 ) {
             $text = wordwrap($text, $this->width);
         }
-
         $this->text = $text;
 
         $this->_converted = true;
