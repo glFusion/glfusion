@@ -1,5 +1,17 @@
 glFusion ChangeLog
 
+v1.1.5.pl1
+----------
+- Fixed a crash in html2text when [b]$ combinations existed in the forum post
+  or the story. (Mark).
+- Upgrading to v1.1.5 did not always created the search_result_format field
+  in the database (Mark).
+
+Forum Plugin
+------------
+- Fixed story migration to set postmode to 'html' instead of 'HTML' which
+  caused problems when using the WYSIWYG editor. (Mark)
+
 v1.1.5
 ------
 - Fixed issue where the advanced editor did not pickup the style sheet
