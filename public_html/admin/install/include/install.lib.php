@@ -759,12 +759,6 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.4';
         case '1.1.4' :
-            $_SQL = array();
-            require_once $_CONF['path'] . 'sql/updates/mysql_1.1.4_to_1.1.5.php';
-            list($rc,$errors) = INST_updateDB($_SQL);
-            if ( $rc === false ) {
-                return array($rc,$errors);
-            }
             DB_query("ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_in_transit",1);
             DB_query("ALTER TABLE {$_TABLES['stories']} DROP COLUMN in_transit",1);
             DB_query("ALTER TABLE {$_TABLES['userprefs']} ADD search_result_format VARCHAR( 48 ) NOT NULL DEFAULT 'google'",1);
@@ -780,11 +774,19 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->add('maintenance_mode',0,'select',0,0,0,520,TRUE);
             $c->del('search_show_limit', 'Core');
             $c->del('search_show_sort', 'Core');
+
+            $_SQL = array();
+            require_once $_CONF['path'] . 'sql/updates/mysql_1.1.4_to_1.1.5.php';
+            list($rc,$errors) = INST_updateDB($_SQL);
+            if ( $rc === false ) {
+                return array($rc,$errors);
+            }
             $current_fusion_version = '1.1.5';
         default:
             break;
     }
 
+    DB_query("ALTER TABLE {$_TABLES['userprefs']} ADD search_result_format VARCHAR( 48 ) NOT NULL DEFAULT 'google'",1);
 
     // delete the security check flag on every update to force the user
     // to run admin/sectest.php again
