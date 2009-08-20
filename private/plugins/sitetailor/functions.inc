@@ -294,7 +294,7 @@ function plugin_upgrade_sitetailor() {
 
 function plugin_autotags_sitetailor($op,$content='',$autotag='') {
 
-    global $stMenu, $_CONF;
+    global $stMenu, $_TABLES, $_CONF;
 
     if ($op == 'tagname' ) {
         return array('hmenu','vmenu');
@@ -309,12 +309,17 @@ function plugin_autotags_sitetailor($op,$content='',$autotag='') {
             case 'hmenu' :
                 $menu = '';
                 $menuID = trim($autotag['parm1']);
-                if ( $stMenu[$menuID]['menu_type'] == 1 ) {
-                    $menu = st_getMenu($menuID,"gl_moomenu","gl_moomenu",'',"parent");
+                $id = DB_getItem($_TABLES['st_menus'],'id','menu_name="'.addslashes($menuID).'"');
+                if ( $id > 0 ) {
+                    if ( $stMenu[$id]['menu_type'] == 1 ) {
+                        $menu = st_getMenu($menuID,"gl_moomenu","gl_moomenu",'',"parent");
+                    } else {
+                        $menu = st_getMenu($menuID,'st-fmenu','','','','st-f-last');
+                    }
+                    $content = str_replace($autotag['tagstr'],$menu,$content);
                 } else {
-                    $menu = st_getMenu($menuID,'st-fmenu','','','','st-f-last');
+                    $content = str_replace($autotag['tagstr'],$menu,$content);
                 }
-                $content = str_replace($autotag['tagstr'],$menu,$content);
                 break;
             case 'vmenu' :
                 $menu = phpblock_getMenu('',$autotag['parm1']);
