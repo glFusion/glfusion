@@ -1,5 +1,14 @@
 glFusion ChangeLog
 
+v1.1.5.pl2
+----------
+- Missing install template for importing CMS paths from Geeklog (Mark)
+
+SiteTailor Plugin
+-----------------
+- When using the [hmenu] auto tag, cascading menus did not render
+  properly (Mark)
+
 v1.1.5.pl1
 ----------
 - Fixed a crash in html2text when [b]$ combinations existed in the forum post
@@ -11,11 +20,6 @@ Forum Plugin
 ------------
 - Fixed story migration to set postmode to 'html' instead of 'HTML' which
   caused problems when using the WYSIWYG editor. (Mark)
-
-SiteTailor Plugin
------------------
-- When using the [hmenu] auto tag, cascading menus did not render
-  properly (Mark)
 
 v1.1.5
 ------
