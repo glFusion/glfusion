@@ -90,6 +90,10 @@ if(empty($_USER['uid']) || $_USER['uid'] == 1 ) {
     $uid = $_USER['uid'];
 }
 
+if ( intval($forum) == 0 && intval($id) != 0 ) {
+    $forum = DB_getItem($_TABLES['gf_topic'],'forum','id='.intval($id));
+}
+
 // final permission check....
 $result = DB_query("SELECT forum_id AS forum,is_readonly,grp_id,rating_post FROM {$_TABLES['gf_forums']} WHERE forum_id=".intval($forum));
 $forumArray = DB_fetchArray($result);
@@ -447,7 +451,6 @@ if ($id > 0) {
     $sql .= "WHERE a.forum_id=$forum";
     $newtopic = DB_fetchArray(DB_query($sql),false);
 }
-
 if ($method == 'edit') {
     $editAllowed = false;
     if (forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
