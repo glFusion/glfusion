@@ -1,5 +1,16 @@
 glFusion ChangeLog
 
+v1.1.5.pl3
+----------
+- Fixed issue when daily digest is enabled and user changes their password,
+  all topics are marked as no-access
+- Ensure root user is properly set when deleting a user
+
+Forum Plugin
+------------
+- Fixed issue where moderators were unable to edit forum posts.
+- Updated the topic-left.thtml with community moderation variables.
+
 v1.1.5.pl2
 ----------
 - Missing install template for importing CMS paths from Geeklog (Mark)
