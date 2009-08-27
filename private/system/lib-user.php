@@ -129,6 +129,9 @@ function USER_deleteAccount ($uid)
     $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$rootgroup' ORDER BY ug_uid LIMIT 1");
     $A = DB_fetchArray ($result);
     $rootuser = $A['ug_uid'];
+    if ( $rootuser == '' || $rootuser < 2 ) {
+        $rootuser = 2;
+    }
 
     DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = $uid");
     DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = $uid");
