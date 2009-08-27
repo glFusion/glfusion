@@ -705,7 +705,7 @@ function editpreferences()
             $user_etids = '';
         }
         $tmp = COM_checkList($_TABLES['topics'], 'tid,topic', $permissions,
-                             $user_etids, 'topics');
+                             $user_etids, 'dgtopics');
         $preferences->set_var('email_topic_checklist',
                 str_replace($_TABLES['topics'], 'etids', $tmp));
         $preferences->set_var('plugin_content_digest',PLG_profileEdit($_USER['uid'],'content','digest'));
@@ -1429,7 +1429,7 @@ function savepreferences($A)
     $TIDS  = @array_values($A['topics']);
     $AIDS  = @array_values($A['selauthors']);
     $BOXES = @array_values($A['blocks']);
-    $ETIDS = @array_values($A['etids']);
+    $ETIDS = @array_values($A['dgtopics']);
     $allowed_etids = buildTopicList ();
     $AETIDS = explode (' ', $allowed_etids);
 
