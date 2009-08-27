@@ -35,6 +35,9 @@
     </div>
     <div>
       {magical_image}
+	  {# forum grading system code added #}
+	  {vote_html}
+	  {# end forums dragin code #}
       <div style="padding-top:3px;">{avatar}</div>
       {member_badge}
       <p>
@@ -67,10 +70,26 @@
         <td style="white-space:nowrap;">
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
-              {profile_link}
-              {email_link}
-              {website_link}
-              {pm_link}
+              {!if profile_link}
+                {profile_link}
+              {!else}
+                <td>&nbsp;</td>
+              {!endif}
+              {!if email_link}
+                {email_link}
+              {!else}
+                <td>&nbsp;</td>
+              {!endif}
+              {!if website_link}
+                {website_link}
+              {!else}
+                <td>&nbsp;</td>
+              {!endif}
+              {!if pm_link}
+                {pm_link}
+              {!else}
+                <td>&nbsp;</td>
+              {!endif}
             </tr>
           </table>
         </td>
