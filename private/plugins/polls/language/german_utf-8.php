@@ -31,12 +31,6 @@ if (!defined ('GVERSION')) {
 
 global $LANG32;
 
-###############################################################################
-# Array Format:
-# $LANGXX[YY]:  $LANG - variable name
-#               XX    - file id number
-#               YY    - phrase id number
-###############################################################################
 
 $LANG_POLLS = array(
     'polls' => 'Umfragen',
@@ -116,6 +110,7 @@ $PLG_polls_MESSAGE20 = 'Umfrage wurde gelöscht.';
 $PLG_polls_MESSAGE3001 = 'Plugin-Upgrade nicht unterstützt.';
 $PLG_polls_MESSAGE3002 = $LANG32[9];
 
+
 // Localization of the Admin Configuration UI
 $LANG_configsections['polls'] = array(
     'label' => 'Umfragen',
@@ -148,7 +143,7 @@ $LANG_fs['polls'] = array(
 $LANG_configselects['polls'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('Wie eingereicht' => 'submitorder', 'Nach Abstimmung' => 'voteorder'),
+    2 => array('Wie eingesendet' => 'submitorder', 'Nach Abstimmung' => 'voteorder'),
     9 => array('Zur Umfrage weiterleiten' => 'item', 'Admin Liste anzeigen' => 'list', 'Öffentliche Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
     12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3)
 );

@@ -89,7 +89,7 @@ $LANG_GF01 = array(
     'CLOSE' => 'Schließen',
     'ON' => 'Am: ',
     'ON2' => '&nbsp;&nbsp;<b>Am: </b>',
-    'ON3' => 'am',
+	'ON3' => 'am',
     'IN' => 'In: ',
     'BY' => 'Von: ',
     'RE' => 'Aw: ',
@@ -242,7 +242,7 @@ $LANG_GF01 = array(
     'NOTIFYNOT' => 'NICHT!',
     'LASTREPLYBY' => 'Letzter Beitrag von:&nbsp;%s',
     'UID' => 'UID',
-    'ANON_POST_BEGIN' => 'Anonyme Nachrichten',
+    'ANON_POST_BEGIN' => 'Gast-Nachrichten',
     'ANON_POST_END' => 'anzeigbar',
     'INDEXPAGE' => 'Alle Foren',
     'FEATURE' => 'Feature',
@@ -276,7 +276,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Lila',
     'WHITE' => 'Weiß',
     'BLACK' => 'Schwarz',
-    'ID' => 'ID',
+	'ID'	=> 'ID',
     'b_help' => 'Fettschrift: [b]text[/b]',
     'i_help' => 'Schräg gestellt: [i]text[/i]',
     'u_help' => 'Unterstrichen: [u]text[/u]',
@@ -291,16 +291,18 @@ $LANG_GF01 = array(
     'f_help' => 'Schriftgröße: [size=x-small]small text[/size]',
     'h_help' => 'Ausführliche Hilfe',
     't_help' => 'Verwende [file]#[/file] , um ein angehangenes Bild in diesen Beitrag einzufügen',
-    'e_help' => 'Listenobjekt: [*]text',
-    'grade' => '<br /><b>Gruppen - Komfortlevel:</b>',
-    'grade_user' => '<br /><b>Benutzer evaluieren</b>',
+	'e_help' => 'Listenobjekt: [*]text',
+    /* --- Community moderation tags --- */
+    'grade'         => '<br /><b>Gruppen - Komfortlevel:</b>',
+    'grade_user'    => '<br /><b>Benutzer evaluieren</b>',
     'retract_grade' => '<br /><b>Evaluierung zurückziehen</b>',
-    'rate_too_low' => 'Dein Bewertungslevel ist zu niedrig, um in diesem Forum zu schreiben',
+    'rate_too_low'  => 'Dein Bewertungslevel ist zu niedrig, um in diesem Forum zu schreiben',
     'rate_too_low_forum' => 'Dein Bewertungslevel ist nicht hoch genug, um dieses Forum zu lesen',
     'rate_too_low_thread' => 'Dein Bewertungslevel ist nicht hoch genug, um dieses Thema zu lesen',
+    /* --- bbcode signature --- */
     'signature' => 'Signatur',
     'edit_signature' => 'Bearbeite BBcode-Signatur',
-    'signature_preview' => 'Signatur-Vorschau'
+    'signature_preview' => 'Signatur-Vorschau',
 );
 
 $LANG_GF02 = array(
@@ -505,7 +507,7 @@ $LANG_GF02 = array(
     'EditTopic' => 'Thema bearbeiten',
     'quietforum' => 'Forum hat keine neuen Themen',
     'notify_full' => 'Gesamten Beitrag in Benachrichtigung übernehmen',
-    'view_online' => 'Wenn diese E-Mail nicht korrekt angezeigt wird, <a href="%s">schau sie Dir Online an</a>.'
+	'view_online' => 'Wenn diese E-Mail nicht korrekt angezeigt wird, <a href="%s">schau sie Dir Online an</a>.',
 );
 
 $LANG_GF03 = array(
@@ -554,6 +556,7 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
+// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Statistik',
     2 => 'Einstellungen',
@@ -563,9 +566,10 @@ $LANG_GF06 = array(
     6 => 'Beiträge',
     7 => 'IP-Verwaltung',
     8 => 'Community-Moderation',
-    9 => 'Import'
+    9 => 'Import',
 );
 
+// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Foren anschauen',
     2 => 'Einstellungen',
@@ -574,12 +578,14 @@ $LANG_GF07 = array(
     5 => 'Mitglieder'
 );
 
+// Forum User Features
 $LANG_GF08 = array(
     1 => 'Benachrichtigungen für Themen',
     2 => 'Benachrichtigungen für ganze Foren',
     3 => 'Ausnahmen'
 );
 
+// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Anhänge',
     'maxattachments' => 'Max. %s erlaubt',
@@ -615,6 +621,7 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Durchschnittliche Aufrufe je:'
 );
 
+// Settings.php
 $LANG_GF92 = array(
     'gfsettings' => 'Forum-Einstellungen',
     'gensettings' => 'Allgemeine Einstellungen',
@@ -722,9 +729,10 @@ $LANG_GF92 = array(
     'edit_timewindowdscp' => 'Erlaubte Zeit (Min.), um Mitgliedern das Bearbeiten ihrer Beiträge zu ermöglichen',
     'forum_prefs' => 'Forum-Präferenzen',
     'forumprefs_help_title' => 'Forum-Präferenzen: Hilfe',
-    'forumprefs_help' => 'Forum-Plugin: Benutzerpräferenzen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>'
+    'forumprefs_help' => 'Forum-Plugin: Benutzerpräferenzen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>',
 );
 
+// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Forum-Administration',
     'vieworder' => 'Sortierung anzeigen??????',
@@ -849,6 +857,27 @@ $LANG_GF97 = array(
     'msgmembers' => 'Mitgliederliste.'
 );
 
+$LANG_GF98 = array(
+    'user_ratings'  => 'Benutzerbewertungen',
+    'forum_settings' => 'Community-Moderation: Forum-Einstellungen.  Definiere die min. Benutzerbewertung die benötigt wird, um in den Foren zu lesen und zu schreiben.',
+    'board_ratings' => 'Forum: Bewertungseinstellungen',
+    'user_ratings_desc' => 'Community-Moderation: Benutzerbewertungen.  Du kannst die Benutzereinstellungen ändern oder Dir ansehen welcher Benutzer bewertet hat oder die Bewertung eines Benutzers ansehen',
+    'rating'    => 'Bewertung',
+    'uid'       => 'UID',
+    'user_rating_title' => 'Community-Moderation: Benutzerbewertungen',
+    'no_subject_defined' => 'Kein Betreff definiert',
+    'admin_set_value' => 'Administrator set new user rating',
+    'no_topic_defined' => 'Keine Themen definiert',
+    'voter' => 'Abstimmer',
+    'grade' => 'Note',
+    'topic' => 'Thema',
+    'user_votes_desc' => 'Dieser Bildschirm zeigt, wie Benutzer über andere Benutzer abgestimmt (sie bewertet) haben.',
+    'user_rating_details' => 'Details - Benutzerbewertung für: ',
+    'user_voting_details' => 'Details - Benutzerabstimmung für: ',
+    'save_changes'  => 'Änderungen speichern',
+);
+
+###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum-Plugin-Upgrade abgeschlossen - Keine Fehler';
 $PLG_forum_MESSAGE2 = 'Forum-Plugin-Upgrade: Wir können diese Version nicht automatisch upgraden. Schau in die Plugin-Dokumentation.';
 $PLG_forum_MESSAGE5 = 'Forum-Plugin-Upgrade fehlgeschlagen - Schau in die Datei error.log';
@@ -870,8 +899,8 @@ $LANG_confignames['forum'] = array(
     'show_moods' => 'Stimmungen-Auswahl aktivieren',
     'allow_smilies' => 'Smilies aktivieren',
     'allow_notification' => 'E-Mail-Benachrichtigungen erlauben',
-    'allow_user_dateformat' => 'Benutzerdef. Datums-/Zeitformate erlauben',
     'show_topicreview' => 'Themenvorschau anzeigen beim Antworten',
+    'allow_user_dateformat' => 'Benutzerdef. Datums-/Zeitformate erlauben',
     'use_autorefresh' => 'Seite aktualisieren nach Einsendung',
     'autorefresh_delay' => 'Verzögerung in Sekunden',
     'show_subject_length' => 'Max. Länge für den Betreff des Themas',
@@ -939,7 +968,7 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Max. Größe für Anhänge (Bytes)',
     'enable_user_rating_system' => 'Aktiviere Benutzer-Bewertungssystem',
     'bbcode_signature' => 'Aktiviere BBcode-Signatur',
-    'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor aktivieren'
+	'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor aktivieren',
 );
 
 $LANG_configsubgroups['forum'] = array(

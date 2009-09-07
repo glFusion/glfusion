@@ -148,7 +148,7 @@ $LANG_confignames['filemgmt'] = array(
     'dlreport'              => 'Zugriff zum Download-Bericht einschränken',
     'selectpriv'            => 'Zugriff auf Gruppe \'Logged-In Users\' beschränken',
     'uploadselect'          => 'Erlaube angemeldeten Benutzern Uploads',
-    'uploadpublic'          => 'Erlaube anonymen Benutzern Uploads',
+    'uploadpublic'          => 'Erlaube Gästen Uploads',
     'useshots'              => 'Kategoriebilder anzeigen',
     'shotwidth'             => 'Vorschaubild-Breite',
     'Emailoption'           => 'E-Mail an Einsender, wenn Datei bestätigt wurde',
@@ -275,7 +275,7 @@ define("_MD_VOTEAPPRE","Deine Bewertung wurde dankend angenommen.");
 define("_MD_THANKYOU","Danke, dass Du dir Zeit genommen hast, hier bei %s Deine Bewertung abzugeben"); // %s is your site name
 define("_MD_VOTEFROMYOU","Der Input von Benutzern wie Dir, hilft anderen Besucher zu entscheiden, welche Dateien sie downloaden sollen.");
 define("_MD_VOTEONCE","Bitte bewerte die gleiche Sache nicht mehr als einmal.");
-define("_MD_RATINGSCALE","Die Skala geht von 1 - 10, wobei 1 schlecht ist und 10 exellent.");
+define("_MD_RATINGSCALE","Die Skala geht von 1 - 10, wobei 1 schlecht ist und 10 exzellent.");
 define("_MD_BEOBJECTIVE","Bitte sei objektiv, wenn jeder eine Wertung von einer 1 oder einer 10 erhält, dann sind die Bewertungen nicht sehr hilfreich.");
 define("_MD_DONOTVOTE","Bitte bewerte nicht Deine eigenen Sachen.");
 define("_MD_RATEIT","Bewerten!");
@@ -285,11 +285,11 @@ define("_MD_INTFILEFOUND","Hier ist ein interessanter Download, den ich bei %s g
 
 define("_MD_RECEIVED","Wir haben Deine Download-Information erhalten. Danke!");
 define("_MD_WHENAPPROVED","Du erhältst eine E-Mail, wenn er bestätigt wurde.");
-define("_MD_SUBMITONCE","Übermittle Deine Datei/Skript nur einmal.");
+define("_MD_SUBMITONCE","Übermittle Deine Datei nur einmal.");
 define("_MD_APPROVED", "Deine Datei wurde bestätigt");
-define("_MD_ALLPENDING","Alle Datei-/Skript-Informationen erwarten eine Überprüfung.");
+define("_MD_ALLPENDING","Alle Dateiinformationen erwarten eine Überprüfung.");
 define("_MD_DONTABUSE","Benutzername und IP wurden aufgezeichnet, bitte missbrauche das System nicht.");
-define("_MD_TAKEDAYS","Es kann einige Tage dauern, bis Deine Datei/Skript unserer Datenbank hinzugefügt wird.");
+define("_MD_TAKEDAYS","Es kann einige Tage dauern, bis Deine Datei unserer Datenbank hinzugefügt wird.");
 define("_MD_FILEAPPROVED", "Deine Datei wurde unserer Datei-Repository hinzugefügt");
 
 define("_MD_RANK","Rang");
@@ -408,14 +408,14 @@ define("_MD_TRIMDESC","Dateibeschreibungen in der Auflistung kürzen: ");
 define("_MD_DLREPORT","Eingeschränkter Zugriff zu Download-Bericht");
 define("_MD_WHATSNEWDESC","WasIstNeu-Auflistung aktivieren");
 define("_MD_SELECTPRIV","Zugriff auf nur auf Gruppe 'Logged-In Users' beschränken: ");
-define("_MD_ACCESSPRIV","Anonymen Zugriff aktivieren: ");
+define("_MD_ACCESSPRIV","Gast-Zugriff aktivieren: ");
 define("_MD_UPLOADSELECT","Erlaube angemeldeten Benutzern Uploads: ");
-define("_MD_UPLOADPUBLIC","Erlaube anonymen Benutzern Uploads: ");
+define("_MD_UPLOADPUBLIC","Erlaube Gästen Uploads: ");
 define("_MD_USESHOTS","Kategoriebilder anzeigen: ");
 define("_MD_IMGWIDTH","Vorschaubild-Breite: ");
 define("_MD_MUSTBEVALID","Vorschaubild muss ein gültiges Bild aus dem %s Ordner sein (Bsp. shot.gif). Lass es frei für kein Bild.");
 define("_MD_REGUSERVOTES","Stimmen registrierter Benutzer (Stimmen: %s)");
-define("_MD_ANONUSERVOTES","Stimmen anonymer Benutzer (Stimmen: %s)");
+define("_MD_ANONUSERVOTES","Stimmen von Gästena (Stimmen: %s)");
 define("_MD_YOURFILEAT","Deine eingesande Datei bei %s"); // this is an approved mail subject. %s is your site name
 define("_MD_VISITAT","Besuche unser Download-Sektion bei %s");
 define("_MD_DLRATINGS","Download-Bewertung (Stimmen: %s)");

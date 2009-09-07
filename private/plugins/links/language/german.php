@@ -29,6 +29,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+
 global $LANG32;
 
 ###############################################################################
@@ -84,7 +85,7 @@ $LANG_LINKS_SEARCH = array(
 # for the submission form
 
 $LANG_LINKS_SUBMIT = array(
-    1 => 'Einen Link einreichen',
+    1 => 'Einen Link einsenden',
     2 => 'Link',
     3 => 'Kategorie',
     4 => 'Andere',
