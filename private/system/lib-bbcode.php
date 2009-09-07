@@ -61,6 +61,13 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
     $bbcode->addParser(array('block','inline','link','listitem'), 'PLG_replacetags');
 
     $bbcode->addParser ('list', '_bbcode_stripcontents');
+
+    if ( is_array($parser) && count($parser) > 0 ) {
+        foreach ($parser AS $extraparser) {
+            $bbcode->addParser($extraparser[0],$extraparser[1]);
+        }
+    }
+
     $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '<b>', 'end_tag' => '</b>'),
                       'inline', array ('listitem', 'block', 'inline', 'link'), array ());
     $bbcode->addCode ('i', 'simple_replace', null, array ('start_tag' => '<i>', 'end_tag' => '</i>'),
@@ -89,6 +96,20 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
                       'image', array ('listitem', 'block', 'inline', 'link'), array ());
     $bbcode->addCode ('code', 'usecontent', '_bbcode_code', array ('usecontent_param' => 'default'),
                       'code', array ('listitem', 'block', 'inline', 'link'), array ());
+
+    if ( is_array($code) && count($code) > 0 ) {
+        foreach ($code AS $extracode) {
+            $bbcode->addCode(
+                $extracode[0],
+                $extracode[1],
+                $extracode[2],
+                $extracode[3],
+                $extracode[4],
+                $extracode[5],
+                $extracode[6]
+            );
+        }
+    }
 
     $bbcode->setCodeFlag ('quote', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);
     $bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
@@ -235,5 +256,4 @@ function _geshi($str,$type='PHP') {
 
     return $geshi->parse_code();
 }
-
 ?>
