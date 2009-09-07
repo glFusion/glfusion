@@ -593,6 +593,11 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
     if ($op == 'tagname' ) {
         return array('album','media','img','slideshow','fslideshow','video','audio','download','image','oimage','mlink','alink','playall');
     } else if ($op == 'parse') {
+
+        if (!isset($mgAutoTagArray['count']) || empty($mgAutoTagArray['count'])) {
+            $mgAutoTagArray['count'] = 0;
+        }
+
         /*
          * Process the auto tag to remove any embedded &nbsp;
          */
