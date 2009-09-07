@@ -1,5 +1,45 @@
 glFusion ChangeLog
 
+v1.1.5.pl#
+----------
+- Updated German Language files
+- Added the ability to pass additional parsers and code handlers to
+  lib-bbcode.
+
+FileMgmt Plugin
+---------------
+- FileMgmt did not honor the comment setting for each file and always
+  displayed the comment bar.
+- Do not display the upload form for anonymous users if upload public
+  set to false.
+
+Forum Plugin
+------------
+- Fixed invalid index on rating_assoc table (bumped version to 3.1.5)
+- Fix to allow Smiley plugin to work with WYSIWYG editor
+- Ensure the profile edit functions return the proper value
+- Filter memberslist to ensure only registered users are shown
+
+Media Gallery Plugin
+--------------------
+- When using the destination block on auto tags, the auto tag counter
+  was not properly initialized.
+
+Language File Updates
+---------------------
+German Translation updates to:
+ - Bad Behavior
+ - Media Gallery
+ - Site Tailor
+ - Links
+ - Captcha
+ - FileMmgt
+ - Calendar
+ - Forum
+ - Spamx
+ - Polls
+
+
 v1.1.5.pl3
 ----------
 - Fixed issue when daily digest is enabled and user changes their password,
