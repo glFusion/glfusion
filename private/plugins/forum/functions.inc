@@ -1365,8 +1365,8 @@ function forumPLG_showsmilies($wysiwyg = 0) {
     global $_CONF,$CONF_FORUM;
 
     // Check and see if smiley plugin is installed
-    if ($CONF_FORUM['use_smilies_plugin'] AND function_exists(msg_showsmilies)) {
-        return msg_showsmilies();
+    if ($CONF_FORUM['use_smilies_plugin'] AND function_exists('msg_showsmilies')) {
+        return msg_showsmilies($wysiwyg);
     } else {
         $t = new Template($_CONF['path'] . 'plugins/forum/templates/');
         $t->set_file ('smilies' , 'smilies.thtml');
@@ -1498,8 +1498,10 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
 {
     global $_CONF, $CONF_FORUM, $_TABLES, $_USER, $LANG_GF01,$LANG_GF02,$LANG_GF92;
 
+    $retval = '';
+
     if ( COM_isAnonUser() ) {
-        return;
+        return $retval;
     }
 
     if ( $panel == 'userinfo' && $fieldset == 'personalinfo' && $CONF_FORUM['bbcode_signature'] ) {
@@ -1508,10 +1510,8 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     }
 
     if ($panel != '' || $fieldset != '' ) {
-        return;
+        return $retval;
     }
-
-    $retval = '';
 
     // Get user specific settings from database
     $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid='{$_USER['uid']}'");
