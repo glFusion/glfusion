@@ -412,7 +412,7 @@ $LANG_MYACCOUNT = array(
 
 $LANG05 = array(
     1 => 'Keine Artikel',
-    2 => 'Es gibt keine Artikel, die angezeigt werden könnten. Entweder gibt es für diese Kategorie keine Artikel oder Deine Einstellungen sind zu restriktiv.',
+    2 => 'Es gibt keine Artikel, die angezeigt werden könnten. Entweder gibt es für diese Kategorie keine Artikel oder Deine Einstellungen sind zu restriktiv ',
     3 => ' für die Kategorie %s.',
     4 => 'Hauptartikel',
     5 => 'weiter',
@@ -460,8 +460,8 @@ $LANG08 = array(
     33 => 'Kompletter Artikel unter',
     34 => 'Ende dieser Nachricht',
     35 => 'Sorry, dieser Benutzer möchte keine E-Mails bekommen.',
-    36 => 'Du erhältst diese Nachricht, weil Du den %s Daily-Digest abonniert hast. Um ihn zu entfernen oder Deine Präferenzen zu ändern, bearbeite die <strong>Daily-Digest</strong> Präferenzen in <a href="%s/usersettings.php?mode=edit">Mein Account</a> - Inhaltssektion.',
-    37 => 'Du erhältst diese Nachricht, weil Du den %s Daily-Digest abonniert hast. Um ihn zu entfernen oder Deine Präferenzen zu ändern, bearbeite bitte Deine Präferenzen für Daily-Digest in der %s/usersettings.php?mode=edit Mein Account - Inhaltssektion.'
+	36 => 'Du erhältst diese Nachricht, weil Du den %s Daily-Digest abonniert hast. Um ihn zu entfernen oder Deine Präferenzen zu ändern, bearbeite die <strong>Daily-Digest</strong> Präferenzen in <a href="%s/usersettings.php?mode=edit">Mein Account</a> - Inhaltssektion.',
+    37 => 'Du erhältst diese Nachricht, weil Du den %s Daily-Digest abonniert hast. Um ihn zu entfernen oder Deine Präferenzen zu ändern, bearbeite bitte Deine Präferenzen für Daily-Digest in der %s/usersettings.php?mode=edit Mein Account - Inhaltssektion.',
 );
 
 ###############################################################################
@@ -550,7 +550,7 @@ $LANG10 = array(
     6 => 'Letzte 10 angemeldete Benutzer',
     7 => 'Top Ten der Artikel',
     8 => 'Artikelüberschrift',
-    9 => 'Angezeigt',
+    9 => 'Aufrufe',
     10 => 'Es gibt keine Artikel oder sie wurden von niemandem gelesen.',
     11 => 'Top Ten der meistkommentierten Artikel',
     12 => 'Kommentare',
@@ -571,7 +571,7 @@ $LANG10 = array(
     27 => 'Anzahl aktiver Benutzer',
     28 => 'Keine Benutzer angemeldet.',
     29 => 'Letzte angemeldete %d Benutzer:',
-    30 => 'Angezeigt',
+    30 => 'Aufrufe',
     31 => ''
 );
 
@@ -1160,6 +1160,18 @@ $LANG33 = array(
 );
 
 ###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Log-Ansicht',
+    'info' => 'glFusion Logdatei-Administration',
+    'logs' => 'Logs',
+    'view' => 'Logatei anzeigen',
+    'clear' => 'Logdatei löschen',
+    'log_file' => 'Logdatei'
+);
+
+###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1254,9 +1266,9 @@ $MESSAGE = array(
     89 => 'Kann OpenID-Server nicht finden bzgl. der angegebenen Identity-URL.',
     90 => 'OpenID- Identifizierung abgebrochen.',
     91 => 'Du hast eine ungültige Identität-URL spezifiziert.',
-    92 => "Bitte <a href=\"{$_CONF['site_admin_url']}/sectest.php\">die Sicherheit Ihrer Site überprüfen</a> bevor Sie sie benutzen!",
+    92 => "Bitte <a href=\"{$_CONF['site_admin_url']}/sectest.php\">die Sicherheit Deiner Seite überprüfen</a> bevor Du sie benutzt!",
     93 => 'Database back up war erfolgreich.',
-    94 => 'Backup Failed: Dateigröße unter 1kb',
+    94 => 'Backup fehlgeschlagen: Dateigröße unter 1kb',
     95 => 'Es gab einen Fehler.',
     96 => 'Sorry, kein Zugang zur Admin-Seite. Unzulässige Zugangsversuche werden aufgezeichnet.',
     97 => 'Nicht alle erforderlichen Felder konnten bestätigt werden - default custom membership message',
@@ -1267,18 +1279,6 @@ $MESSAGE = array(
     501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
     502 => 'Das Plugin wurde erfolgreich kopiert. Bitte Install aus der Liste unten auswählen',
     503 => 'Die Plugin-Installation ist im Demomodus ausgeschaltet.'
-);
-
-###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Log-Ansicht',
-    'info' => 'glFusion Logdatei-Administration',
-    'logs' => 'Logs',
-    'view' => 'Logatei anzeigen',
-    'clear' => 'Logdatei löschen',
-    'log_file' => 'Logdatei'
 );
 
 ###############################################################################
@@ -1913,7 +1913,7 @@ $LANG_confignames['Core'] = array(
     'cache_templates' => 'Template-Caching aktivieren',
     'template_comments' => 'Template-Kommentare aktivieren',
     'hidestorydate' => 'Artikeldatum verstecken',
-    'maintenance_mode' => 'Wartungsmodus aktivieren'
+	'maintenance_mode' => 'Wartungsmodus aktivieren',
 );
 
 $LANG_configsubgroups['Core'] = array(
