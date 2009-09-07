@@ -108,7 +108,6 @@ function forum_upgrade() {
                     . "`voter_id` mediumint( 9 ) NOT NULL , "
                     . "`grade` smallint( 6 ) NOT NULL  , "
                     . "`topic_id` int( 11 ) NOT NULL , "
-                    . " PRIMARY KEY (`user_id`,`voter_id`,`topic_id`), "
                     . " KEY `user_id` (`user_id`), "
                     . " KEY `voter_id` (`voter_id`) );";
             DB_query($sql);
@@ -118,8 +117,12 @@ function forum_upgrade() {
             $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'forum Admin'"));
             DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.4',pi_gl_version='1.1.5' WHERE pi_name = 'forum'");
+        case '3.1.4' :
+            DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} DROP PRIMARY KEY",1);
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.5',pi_gl_version='1.1.5' WHERE pi_name = 'forum'");
         default :
             DB_query("ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id",1);
+            DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} DROP PRIMARY KEY",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FF_CONF['pi_version']."',pi_gl_version='".$_FF_CONF['gl_version']."' WHERE pi_name = 'forum'");
             return true;
     }

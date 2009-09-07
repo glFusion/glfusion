@@ -246,7 +246,6 @@ $_SQL['gf_rating_assoc'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_asso
   `voter_id` mediumint(9) NOT NULL,
   `grade` smallint(6) NOT NULL,
   `topic_id` int(11) NOT NULL,
-  PRIMARY KEY (`user_id`,`voter_id`,`topic_id`),
   KEY `user_id` (`user_id`),
   KEY `voter_id` (`voter_id`)
 ) Type=MyISAM ; ";
