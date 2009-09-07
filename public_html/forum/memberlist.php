@@ -223,9 +223,9 @@ if ($op == "last10posts") {
     }
 
     if ($chkactivity) {
-        $memberlistsql = DB_query("SELECT user.uid FROM {$_TABLES['users']} user, {$_TABLES['gf_topic']} topic WHERE user.uid <> 1 AND user.uid=topic.uid GROUP by uid");
+        $memberlistsql = DB_query("SELECT user.uid FROM {$_TABLES['users']} user, {$_TABLES['gf_topic']} topic WHERE user.uid <> 1 AND user.status = 3 AND user.uid=topic.uid GROUP by uid");
     } else {
-        $memberlistsql = DB_query("SELECT uid FROM {$_TABLES['users']} ");
+        $memberlistsql = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE uid <> 1 AND status = 3 ");
     }
 
     $membercount   = DB_numRows($memberlistsql);
@@ -238,19 +238,18 @@ if ($op == "last10posts") {
     if ($chkactivity) {
         $sql = "SELECT user.uid,user.uid,user.username,user.regdate,user.email,user.homepage, count(*) as posts, userprefs.emailfromuser ";
         $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs, {$_TABLES['gf_topic']} topic WHERE";
-        $sql .= " user.uid <> 1 AND user.uid=topic.uid AND user.uid=userprefs.uid ";
+        $sql .= " user.uid <> 1 AND user.status = 3 AND user.uid=topic.uid AND user.uid=userprefs.uid ";
         $sql .= "GROUP by uid ORDER BY $orderby $direction LIMIT $offset,$show ";
     } else {
         // Option to order by posts - only valid if option for 'forum activity' cheeked
         $orderby = ($orderby == 'posts') ? 'username' : $orderby;
         $sql = "SELECT user.uid,user.uid,user.username,user.regdate,user.email,user.homepage, userprefs.emailfromuser ";
-        $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs WHERE user.uid > 1 ";
+        $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs WHERE user.uid > 1 AND user.status = 3 ";
         $sql .= "AND user.uid=userprefs.uid ORDER BY $orderby $direction LIMIT $offset,$show ";
     }
 
     $query = DB_query($sql);
 
-//    $report->set_var ('imgset', $CONF_FORUM['imgset']);
     $report->set_var ('layout_url', $_CONF['layout_url']);
     $report->set_var ('site_url', $_CONF['site_url']);
     $report->set_var ('startblock', COM_startBlock($LANG_GF02['msg88']) );
