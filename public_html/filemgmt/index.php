@@ -126,31 +126,35 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
             $title = '';
         }
 
-        $cmt_page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 1;
-        if ( isset($_POST['order']) ) {
-            $cmt_order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
-        } elseif (isset($_GET['order']) ) {
-            $cmt_order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
-        } else {
-            $cmt_order = 'DESC';
-        }
-        if ( isset($_POST['mode']) ) {
-            $cmt_mode = COM_applyFilter($_POST['mode']);
-        } elseif ( isset($_GET['mode']) ) {
-            $cmt_mode = COM_applyFilter($_GET['mode']);
-        } else {
-            $cmt_mode = '';
-        }
-        $valid_cmt_modes = array('flat','nested','nocomment','threaded');
-        if ( !in_array($cmt_mode,$valid_cmt_modes) ) {
-            $cmt_mode = 'flat';
-        }
+        if ( $comments ) {
+            $cmt_page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 1;
+            if ( isset($_POST['order']) ) {
+                $cmt_order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+            } elseif (isset($_GET['order']) ) {
+                $cmt_order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+            } else {
+                $cmt_order = 'DESC';
+            }
+            if ( isset($_POST['mode']) ) {
+                $cmt_mode = COM_applyFilter($_POST['mode']);
+            } elseif ( isset($_GET['mode']) ) {
+                $cmt_mode = COM_applyFilter($_GET['mode']);
+            } else {
+                $cmt_mode = '';
+            }
+            $valid_cmt_modes = array('flat','nested','nocomment','threaded');
+            if ( !in_array($cmt_mode,$valid_cmt_modes) ) {
+                $cmt_mode = 'flat';
+            }
 
-        $p->set_var('comment_records', CMT_userComments( "fileid_{$lid}", $title, 'filemgmt',$cmt_order,$cmt_mode,0,$cmt_page,false,$delete_option));
+            $p->set_var('comment_records', CMT_userComments( "fileid_{$lid}", $title, 'filemgmt',$cmt_order,$cmt_mode,0,$cmt_page,false,$delete_option));
+        } else {
+            $p->set_var('comment_records','');
+        }
         $p->parse ('output', 'page');
         $display .= $p->finish ($p->get_var('output'));
 
-    }   else {
+    } else {
         $display = COM_siteHeader('menu',$LANG_FILEMGMT['usermenu1']);
         $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $p->set_file (array (
