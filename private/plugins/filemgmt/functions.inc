@@ -85,6 +85,10 @@ if (!isset($_FM_CONF['perpage'])) {
     $filemgmt_showWhatsNewComments = $_FM_CONF['showwhatsnewcomments'];
 }
 
+if ( COM_isAnonUser() ) {
+    $mydownloads_uploadselect = $mydownloads_uploadpublic;
+}
+
 require_once $_CONF['path'].'plugins/filemgmt/filemgmt.php';
 require_once $_CONF['path'].'plugins/filemgmt/config.php';
 
