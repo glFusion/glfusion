@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- Better support for legacy plugins
 - Ensure template class if available when logging errors
 - Ensure character encoding is properly passed to all htmlentities calls
 - Add custom_registration field to allowed fields in fusionrescue.php
