@@ -203,7 +203,7 @@ function MBYTE_eregi_replace($pattern, $replace, $str)
     if ($mb_enabled) {
         $result = mb_eregi_replace($pattern, $replace, $str);
     } else {
-        $result = eregi_replace($pattern, $replace, $str);
+        $result = preg_replace('/'.$pattern.'/i', $replace, $str);
     }
 
     return $result;
