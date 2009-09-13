@@ -2141,11 +2141,15 @@ function COM_errorLog( $logentry, $actionid = '' )
                 break;
 
            case 2:
-                $retval .= COM_startBlock( $LANG01[55] . ' ' . $timestamp, '',
-                               COM_getBlockTemplate( '_msg_block', 'header' ))
-                        . nl2br( $logentry )
-                        . COM_endBlock( COM_getBlockTemplate( '_msg_block',
-                                                              'footer' ));
+                if ( class_exists('Template') ) {
+                    $retval .= COM_startBlock( $LANG01[55] . ' ' . $timestamp, '',
+                                   COM_getBlockTemplate( '_msg_block', 'header' ))
+                            . nl2br( $logentry )
+                            . COM_endBlock( COM_getBlockTemplate( '_msg_block',
+                                                                  'footer' ));
+                } else {
+                    $retval .= nl2br($logentry);
+                }
                 break;
 
             case 3:
@@ -2162,12 +2166,16 @@ function COM_errorLog( $logentry, $actionid = '' )
                 else
                 {
                     fputs( $file, "$timestamp - $logentry \n" );
-                    $retval .= COM_startBlock( $LANG01[34] . ' - ' . $timestamp,
-                                   '', COM_getBlockTemplate( '_msg_block',
-                                   'header' ))
-                            . nl2br( $logentry )
-                            . COM_endBlock( COM_getBlockTemplate( '_msg_block',
-                                                                  'footer' ));
+                    if ( class_exists('Template') ) {
+                        $retval .= COM_startBlock( $LANG01[34] . ' - ' . $timestamp,
+                                       '', COM_getBlockTemplate( '_msg_block',
+                                       'header' ))
+                                . nl2br( $logentry )
+                                . COM_endBlock( COM_getBlockTemplate( '_msg_block',
+                                                                      'footer' ));
+                    } else {
+                        $retval .= nl2br( $logentry );
+                    }
                 }
                 break;
         }
@@ -3046,23 +3054,25 @@ function COM_checkWords( $Message )
             switch( $_CONF['censormode'])
             {
                 case 1: # Exact match
-                    $RegExPrefix = '/(\s*)';
-                    $RegExSuffix = '(\W*)/iu';
+                    $RegExPrefix = '(\s*)';
+                    $RegExSuffix = '(\W*)';
                     break;
 
                 case 2: # Word beginning
-                    $RegExPrefix = '/(\s*)';
-                    $RegExSuffix = '(\w*)/iu';
+                    $RegExPrefix = '(\s*)';
+                    $RegExSuffix = '(\w*)';
                     break;
 
                 case 3: # Word fragment
-                    $RegExPrefix   = '/(\w*)';
-                    $RegExSuffix   = '(\w*)/iu';
+                    $RegExPrefix   = '(\w*)';
+                    $RegExSuffix   = '(\w*)';
                     break;
             }
+
             foreach ($_CONF['censorlist'] as $c) {
                 if (!empty($c)) {
-            		$EditedMessage = preg_replace($RegExPrefix.$c.$RegExSuffix, $_CONF['censorreplace'], $EditedMessage);
+                    $EditedMessage = MBYTE_eregi_replace($RegExPrefix . $c
+                        . $RegExSuffix, "\\1$Replacement\\2", $EditedMessage);
                 }
             }
         }
