@@ -524,9 +524,9 @@ function saveblock ($bid, $name, $title, $help, $type, $blockorder, $content, $t
     $title = addslashes (COM_stripslashes (strip_tags ($title)));
     $phpblockfn = addslashes (COM_stripslashes (trim ($phpblockfn)));
     if (empty($title)) {
-        @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                    time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                        time() + 1200, $_CONF['cookie_path'],
+                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $retval .= COM_siteHeader ('menu', $LANG21[63])
                 . COM_startBlock ($LANG21[63], '',
                           COM_getBlockTemplate ('_msg_block', 'header'))
@@ -674,9 +674,9 @@ function saveblock ($bid, $name, $title, $help, $type, $blockorder, $content, $t
             // Layout block missing content
             $retval .= $LANG21[36];
         }
-        @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                    time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                        time() + 1200, $_CONF['cookie_path'],
+                        $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
                 . editblock ($bid)
                 . COM_siteFooter ();
@@ -892,9 +892,9 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
                     $_POST['perm_members'], $_POST['perm_anon'],
                     $is_enabled, $allow_autotags);
 } else if ($mode == 'edit') {
-    @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                time() + 1200, $_CONF['cookie_path'],
-               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
     $display .= COM_siteHeader ('menu', $LANG21[3])
              . editblock ($bid)
              . COM_siteFooter ();

@@ -79,9 +79,9 @@ if ($status == USER_ACCOUNT_ACTIVE) {
 
             // They want their cookie to persist for some amount of time so set it now
 
-            setcookie($_CONF['cookie_name'], $_USER['uid'],
+            SEC_setCookie($_CONF['cookie_name'], $_USER['uid'],
                       time() + $cooktime, $_CONF['cookie_path'],
-                      $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+                      $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
             DB_query("UPDATE {$_TABLES['users']} set remote_ip='".$_SERVER['REMOTE_ADDR']."' WHERE uid='".$_USER['uid']."'",1);
         }
     }

@@ -1052,9 +1052,9 @@ function saveuser($A)
                 } else {
                     $cooktime = -1000;
                 }
-                setcookie($_CONF['cookie_password'], $passwd, time() + $cooktime,
-                          $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                          $_CONF['cookiesecure']);
+                SEC_setCookie($_CONF['cookie_password'], $passwd, time() + $cooktime,
+                              $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                              $_CONF['cookiesecure'],true);
             } elseif (SEC_encryptPassword($A['old_passwd']) != $current_password) {
                 return COM_refresh ($_CONF['site_url']
                                     . '/usersettings.php?msg=68');
@@ -1070,13 +1070,13 @@ function saveuser($A)
 
         if ($A['cooktime'] <= 0) {
             $cooktime = 1000;
-            setcookie ($_CONF['cookie_name'], $_USER['uid'], time() - $cooktime,
-                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                       $_CONF['cookiesecure']);
+            SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'], time() - $cooktime,
+                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                           $_CONF['cookiesecure'],true);
         } else {
-            setcookie ($_CONF['cookie_name'], $_USER['uid'],
-                       time() + $A['cooktime'], $_CONF['cookie_path'],
-                       $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+            SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'],
+                           time() + $A['cooktime'], $_CONF['cookie_path'],
+                           $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
         }
 
         if ($_CONF['allow_user_photo'] == 1) {
@@ -1502,15 +1502,15 @@ function savepreferences($A)
     $theme    = addslashes ($A['theme']);
     $language = addslashes ($A['language']);
     DB_query("UPDATE {$_TABLES['users']} SET theme='$theme',language='$language' WHERE uid = {$_USER['uid']}");
-    setcookie ($_CONF['cookie_theme'], $A['theme'], time() + 31536000,
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
-    setcookie ($_CONF['cookie_language'], $A['language'], time() + 31536000,
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
-    setcookie ($_CONF['cookie_tzid'], $A['tzid'], time() + 31536000,
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
+    SEC_setCookie ($_CONF['cookie_theme'], $A['theme'], time() + 31536000,
+                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                   $_CONF['cookiesecure'],false);
+    SEC_setCookie ($_CONF['cookie_language'], $A['language'], time() + 31536000,
+                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                   $_CONF['cookiesecure'],false);
+    SEC_setCookie ($_CONF['cookie_tzid'], $A['tzid'], time() + 31536000,
+                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                   $_CONF['cookiesecure'],false);
 
     $A['dfid'] = intval(COM_applyFilter ($A['dfid'], true));
 

@@ -8,14 +8,18 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
 // |          Mark Limburg     - mlimburg AT users DOT sourceforge DOT net    |
 // |          Vincent Furia    - vmf AT abtech DOT org                        |
 // |          Michael Jervis   - mike AT fuckingbrit DOT com                  |
+// |          Dirk Haun          - dirk AT haun-online DOT de                 |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -1295,4 +1299,49 @@ function SEC_checkTokenGeneral($token,$action='general')
     return $return;
 }
 
+
+/**
+* Send a cookie
+*
+* Use this function to set browser cookies
+*
+* @param string $name   the name of the cookie
+* @param string $value  the value of the cookie
+* @param int    $expire the time the cookie expires - this is a Unix timestamp
+* @param string $path   the path on the server in which the cookie will be available - defaults to $_CONF['cookie_path']
+* @param string $domain the domain that the cookie is available - defaults to $_CONF['cookiedomain']
+* @param bool   $secure indicates that the cookie shoul only be transmitted over secure HTTPS connection - defaults to $_CONF['cookiesecure']
+* @param bool   $httponly when true the cookie will be made accessible only through the HTTP protocol
+*
+*/
+function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = false)
+{
+    global $_CONF;
+
+    $retval = false;
+
+    if ($path == '') {
+        $path = $_CONF['cookie_path'];
+    }
+
+    if ($domain == '') {
+        $domain = $_CONF['cookiedomain'];
+    }
+
+    if ($secure == '') {
+        $secure = $_CONF['cookiesecure'];
+    }
+
+    if ( $httponly ) {
+        if (version_compare(PHP_VERSION, '5.2.0', '>=')) {
+            $retval = @setcookie($name, $value, $expire, $path, $domain, $secure, true);
+        } else {
+            $retval = @setcookie($name, $value, $expire, $path, $domain . '; httponly', $secure);
+        }
+    } else {
+        $retval = @setcookie($name, $value, $expire, $path, $domain, $secure);
+    }
+
+    return $retval;
+}
 ?>

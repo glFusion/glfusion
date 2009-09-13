@@ -139,9 +139,9 @@ function display_mailform ()
     $mail_templates->parse ('output', 'form');
     $retval = $mail_templates->finish ($mail_templates->get_var ('output'));
 
-    @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                time() + 1200, $_CONF['cookie_path'],
-               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
 
     return $retval;
 }

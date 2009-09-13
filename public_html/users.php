@@ -914,15 +914,15 @@ case 'logout':
         SESS_endUserSession ($_USER['uid']);
         PLG_logoutUser ($_USER['uid']);
     }
-    setcookie ($_CONF['cookie_session'], '', time() - 10000,
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
-    setcookie ($_CONF['cookie_password'], '', time() - 10000,
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
-    setcookie ($_CONF['cookie_name'], '', time() - 10000,
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
+    SEC_setCookie ($_CONF['cookie_session'], '', time() - 10000,
+                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                   $_CONF['cookiesecure'],true);
+    SEC_setCookie ($_CONF['cookie_password'], '', time() - 10000,
+                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                   $_CONF['cookiesecure'],true);
+    SEC_setCookie ($_CONF['cookie_name'], '', time() - 10000,
+                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                   $_CONF['cookiesecure'],true);
     $display = COM_refresh($_CONF['site_url'] . '/index.php?msg=8');
     break;
 
@@ -1232,13 +1232,13 @@ default:
                 if ($VERBOSE) {
                     COM_errorLog('Trying to set permanent cookie',1);
                 }
-                setcookie ($_CONF['cookie_name'], $_USER['uid'],
-                           time() + $cooktime, $_CONF['cookie_path'],
-                           $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-                setcookie ($_CONF['cookie_password'],
-                           SEC_encryptPassword($passwd), time() + $cooktime,
-                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                           $_CONF['cookiesecure']);
+                SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'],
+                               time() + $cooktime, $_CONF['cookie_path'],
+                               $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
+                SEC_setCookie ($_CONF['cookie_password'],
+                               SEC_encryptPassword($passwd), time() + $cooktime,
+                               $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                               $_CONF['cookiesecure'],true);
                 DB_query("UPDATE {$_TABLES['users']} set remote_ip='".addslashes($_SERVER['REMOTE_ADDR'])."' WHERE uid=".$_USER['uid'],1);
             }
         } else {
@@ -1264,9 +1264,9 @@ default:
 
         // Now that we have users data see if their theme cookie is set.
         // If not set it
-        setcookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
-                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                   $_CONF['cookiesecure']);
+        SEC_setcookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
+                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                       $_CONF['cookiesecure'],true);
 
         if (!empty($_SERVER['HTTP_REFERER'])
                 && (strstr($_SERVER['HTTP_REFERER'], '/users.php') === false)

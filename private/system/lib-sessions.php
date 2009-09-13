@@ -158,9 +158,9 @@ function SESS_sessionCheck()
                     }
                     if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($ipmatch == false)) {
                         // User may have modified their UID in cookie, ignore them
-                        setcookie ($_CONF['cookie_name'], '', time() - 10000,
-                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                                   $_CONF['cookiesecure']);
+                        SEC_setCookie ($_CONF['cookie_name'], '', time() - 10000,
+                                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                                       $_CONF['cookiesecure'],true);
                     } else if ($userid > 1) {
                         // Check user status
                         $status = SEC_checkUserStatus ($userid);
@@ -221,9 +221,9 @@ function SESS_sessionCheck()
                 }
                 if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($ipmatch == false)) {
                     // User could have modified UID in cookie, don't do shit
-                    setcookie ($_CONF['cookie_name'], '', time() - 10000,
-                               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                               $_CONF['cookiesecure']);
+                    SEC_setcookie ($_CONF['cookie_name'], '', time() - 10000,
+                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                                   $_CONF['cookiesecure'],true);
                 } else if ($userid > 1) {
                     // Check user status
                     $status = SEC_checkUserStatus($userid);
@@ -371,8 +371,7 @@ function SESS_setSessionCookie($sessid, $cookietime, $cookiename, $cookiepath, $
         COM_errorLog ("Setting session cookie: setcookie($cookiename, $sessid, 0, $cookiepath, $cookiedomain, $cookiesecure);", 1);
     }
 
-    if (setcookie ($cookiename, $sessid, 0, $cookiepath, $cookiedomain,
-                   $cookiesecure) === false) {
+    if (SEC_setCookie ($cookiename, $sessid, 0, $cookiepath, $cookiedomain, $cookiesecure,true) === false) {
         COM_errorLog ('Failed to set session cookie.', 1);
     }
 }

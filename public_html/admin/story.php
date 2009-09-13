@@ -839,9 +839,9 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
         echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
     }
 } else if (($mode == $LANG_ADMIN['preview']) && !empty ($LANG_ADMIN['preview'])) {
-    @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                time() + 1200, $_CONF['cookie_path'],
-               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
     $display .= COM_siteHeader('menu', $LANG24[5]);
     $editor = '';
     if (!empty ($_GET['editor'])) {
@@ -852,9 +852,9 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     $display .= COM_siteFooter();
     echo $display;
 } else if ($mode == 'edit') {
-    @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                time() + 1200, $_CONF['cookie_path'],
-               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
     $display .= COM_siteHeader('menu', $LANG24[5]);
     $sid = '';
     if (isset ($_GET['sid'])) {
@@ -885,9 +885,9 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     }
     echo $display;
 } else if ($mode == 'editsubmission') {
-    @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                time() + 1200, $_CONF['cookie_path'],
-               $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
     $display .= COM_siteHeader('menu', $LANG24[5]);
     $display .= storyeditor (COM_applyFilter ($_GET['id']), $mode);
     $display .= COM_siteFooter();
@@ -902,9 +902,9 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
         if (!empty ($_GET['editor'])) {
             $editor = COM_applyFilter ($_GET['editor']);
         }
-        @setcookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                    time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure']);
+        SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                       time() + 1200, $_CONF['cookie_path'],
+                       $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
         $display  = COM_siteHeader('menu', $LANG24[5]);
         $display .= COM_showMessage(501);
         $display .= storyeditor (COM_applyFilter ($_POST['sid']), 'preview', '', '',$editor);

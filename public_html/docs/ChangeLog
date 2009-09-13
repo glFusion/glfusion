@@ -1,10 +1,18 @@
 glFusion ChangeLog
 
-v1.1.5.pl#
+v1.1.6
 ----------
+- Implemented improved cookie handling
+- Add custom_registration to fusionrescue.php
+- PHP 5.3.0 fixes
+- Accessibility updates
 - Updated German Language files
 - Added the ability to pass additional parsers and code handlers to
   lib-bbcode.
+
+Calendar Plugin
+---------------
+- Maintain the owner of events placed in the submission queue
 
 FileMgmt Plugin
 ---------------
@@ -24,6 +32,7 @@ Media Gallery Plugin
 --------------------
 - When using the destination block on auto tags, the auto tag counter
   was not properly initialized.
+- Expand auto tags in title when used in Random Image block
 
 Language File Updates
 ---------------------
