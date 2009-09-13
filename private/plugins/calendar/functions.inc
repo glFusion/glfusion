@@ -360,7 +360,7 @@ function plugin_moderationvalues_calendar()
     return array (
         'eid',
         $_TABLES['events'],
-        "eid,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url",
+        "eid,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url,owner_id",
         $_TABLES['eventsubmission']
     );
 }
@@ -392,7 +392,11 @@ function plugin_moderationapprove_calendar ($id)
     } else {
         $group_id = SEC_getFeatureGroup ('calendar.moderate');
     }
-    DB_query ("UPDATE {$_TABLES['events']} SET owner_id = {$_USER['uid']},"
+/*    DB_query ("UPDATE {$_TABLES['events']} SET owner_id = {$_USER['uid']},"
+             ."group_id = '$group_id',perm_owner = {$A['perm_owner']}, "
+             ."perm_group = {$A['perm_group']}, perm_members = {$A['perm_members']},"
+             ."perm_anon = {$A['perm_anon']} WHERE eid = '".addslashes($id)."'"); */
+    DB_query ("UPDATE {$_TABLES['events']} SET "
              ."group_id = '$group_id',perm_owner = {$A['perm_owner']}, "
              ."perm_group = {$A['perm_group']}, perm_members = {$A['perm_members']},"
              ."perm_anon = {$A['perm_anon']} WHERE eid = '".addslashes($id)."'");
@@ -585,14 +589,21 @@ function plugin_savesubmission_calendar($A)
     }
     $A['timestart'] = $A['start_hour'] . ':' . $A['start_minute'] . ':00';
     $A['timeend'] = $A['end_hour'] . ':' . $A['end_minute'] . ':00';
+
+    if (COM_isAnonUser()) {
+        $owner_id = 1; // anonymous user
+    } else {
+        $owner_id = $_USER['uid'];
+    }
+
     if ($A['calendar_type'] == 'master') { // add to site calendar
 
         if (($_CA_CONF['eventsubmission'] == 1) &&
                 !SEC_hasRights('calendar.submit')) {
 
             DB_save ($_TABLES['eventsubmission'],
-                     'eid,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
-                     "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
+                     'eid,title,event_type,url,owner_id,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
+                     "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}',$owner_id,'{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
 
             if (isset ($_CA_CONF['notification']) &&
                     ($_CA_CONF['notification'] == 1)) {

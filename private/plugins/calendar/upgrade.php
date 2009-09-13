@@ -48,10 +48,14 @@ function calendar_upgrade()
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='calendar'");
 
     switch( $currentVersion ) {
-        case "1.0.2" :
+        case '1.0.2' :
             // add new configuration option
             $c = config::get_instance();
             $c->add('only_admin_submit', 0,'select', 0, 0, 0, 15, true, 'calendar');
+        case '1.0.3':
+        case '1.0.4':
+        case '1.0.5':
+            DB_query("ALTER TABLE {$_TABLES['eventsubmission']} ADD  owner_id MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '1' AFTER url");
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CA_CONF['pi_version']."',pi_gl_version='".$_CA_CONF['gl_version']."' WHERE pi_name='calendar' LIMIT 1");
             break;
