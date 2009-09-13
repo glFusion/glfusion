@@ -119,7 +119,7 @@ function forum_upgrade() {
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.4',pi_gl_version='1.1.5' WHERE pi_name = 'forum'");
         case '3.1.4' :
             DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} DROP PRIMARY KEY",1);
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.5',pi_gl_version='1.1.5' WHERE pi_name = 'forum'");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.5',pi_gl_version='1.1.6' WHERE pi_name = 'forum'");
         default :
             DB_query("ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id",1);
             DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} DROP PRIMARY KEY",1);

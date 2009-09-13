@@ -50,6 +50,6 @@ $_ST_CONF = array();
 $_ST_CONF['pi_name']            = 'sitetailor';
 $_ST_CONF['pi_display_name']    = 'Site Tailor';
 $_ST_CONF['pi_version']         = '2.0.2';
-$_ST_CONF['gl_version']         = '1.1.5';
+$_ST_CONF['gl_version']         = '1.1.6';
 $_ST_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>

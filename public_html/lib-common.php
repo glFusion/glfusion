@@ -58,10 +58,10 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.5');
+    define('GVERSION', '1.1.6');
 }
 
-define('PATCHLEVEL','.pl3');
+define('PATCHLEVEL','.pl0');
 
 //define('DEMO_MODE',true);
 
@@ -3046,24 +3046,23 @@ function COM_checkWords( $Message )
             switch( $_CONF['censormode'])
             {
                 case 1: # Exact match
-                    $RegExPrefix = '(\s*)';
-                    $RegExSuffix = '(\W*)';
+                    $RegExPrefix = '/(\s*)';
+                    $RegExSuffix = '(\W*)/iu';
                     break;
 
                 case 2: # Word beginning
-                    $RegExPrefix = '(\s*)';
-                    $RegExSuffix = '(\w*)';
+                    $RegExPrefix = '/(\s*)';
+                    $RegExSuffix = '(\w*)/iu';
                     break;
 
                 case 3: # Word fragment
-                    $RegExPrefix   = '(\w*)';
-                    $RegExSuffix   = '(\w*)';
+                    $RegExPrefix   = '/(\w*)';
+                    $RegExSuffix   = '(\w*)/iu';
                     break;
             }
             foreach ($_CONF['censorlist'] as $c) {
                 if (!empty($c)) {
-                    $EditedMessage = MBYTE_eregi_replace($RegExPrefix . $c
-                        . $RegExSuffix, "\\1$Replacement\\2", $EditedMessage);
+            		$EditedMessage = preg_replace($RegExPrefix.$c.$RegExSuffix, $_CONF['censorreplace'], $EditedMessage);
                 }
             }
         }
@@ -3071,6 +3070,7 @@ function COM_checkWords( $Message )
 
     return $EditedMessage;
 }
+
 
 /**
 *  Takes some amount of text and replaces all javascript events on*= with in
