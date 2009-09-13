@@ -42,7 +42,7 @@
                                 {version}&nbsp;&nbsp;<b>{LANG_SUBMITDATE}:</b>&nbsp;{datetime}&nbsp;&nbsp;&nbsp;<b>{LANG_RATING}</b>{rating}{votestring}&nbsp;
                                 {begin_dlreport_link}<img src="{site_url}/filemgmt/images/counter.gif" width="14" height="14" border="0" align="middle" title="{download_times}" alt="{download_times}"{xhtml}>{end_dlreport_link}&nbsp;{download_count}&nbsp;&nbsp;
                                 <img src="{site_url}/filemgmt/images/size.gif" width="14" height="14" border="0" align="middle" title="{LANG_FILESIZE}" alt="{LANG_FILESIZE}"{xhtml}>&nbsp;
-                                {file_size}&nbsp;&nbsp;<a href="{homepage_url}" target="_blank"><img src="{site_url}/filemgmt/images/home.gif" width="14" height="14" border="0" align="middle" title="{LANG_HOMEPAGE}:{homepage}" alt=""{xhtml}></a>
+                                {file_size}&nbsp;&nbsp;<a href="{homepage_url}" target="_blank"><img src="{site_url}/filemgmt/images/home.gif" width="14" height="14" border="0" align="middle" title="{LANG_HOMEPAGE}:{homepage}" alt="{LANG_HOMEPAGE}:{homepage}"{xhtml}></a>
                             </td>
                         </tr>
                         <tr>
