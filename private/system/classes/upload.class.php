@@ -104,6 +104,10 @@ class upload
     /**
     * @access private
     */
+    var $_jpegQuality = 0;                // compatibility only - not used
+    /**
+    * @access private
+    */
     var $_pathToMogrify = '';             // String
     /**
     * @access private
@@ -1102,7 +1106,6 @@ class upload
                         }
 
                         // If all systems check, do the upload
-//                        if ($this->checkMimeType() AND $this->_imageSizeOK() AND !$this->areErrors()) {
                         if ($this->checkMimeType() AND $this->_imageSizeOK() AND empty($this->_currentFile['localerror'])) {
                             if ($this->_copyFile()) {
                                 $this->_uploadedFiles[] = $this->_fileUploadDirectory . '/' . $this->_getDestinationName();
@@ -1166,6 +1169,69 @@ class upload
         } else {
             return true;
         }
+    }
+
+    // kept for comapatibility...
+
+    /**
+    * Sets the path to where the mogrify ImageMagick function is
+    *
+    * @param     string    $path_to_mogrify    Absolute path to mogrify
+    * @return    boolean   True if set, false otherwise
+    *
+    */
+    function setMogrifyPath($path_to_mogrify)
+    {
+        return true;
+    }
+
+    /**
+    * Sets the path to where the netpbm utilities are
+    *
+    * @param     string    $path_to_netpbm    Absolute path to netpbm dir
+    * @return    boolean   True if set, false otherwise
+    *
+    */
+    function setNetPBM($path_to_netpbm)
+    {
+        return true;
+    }
+
+    /**
+    * Configure upload to use GD library
+    *
+    * @return    boolean   True if set, false otherwise
+    *
+    */
+    function setGDLib()
+    {
+        return true;
+    }
+
+    /**
+    * If enabled will ignore the MIME checks on file uploads
+    *
+    * @param    boolean     $switch     flag, true or false
+    *
+    */
+    function setIgnoreMimeCheck($switch)
+    {
+    }
+
+
+    /**
+    * Set JPEG quality
+    *
+    * NOTE:     The 'quality' is an arbitrary value used by the IJG library.
+    *           It is not a percent value! The default (and a good value) is 75.
+    *
+    * @param    int       $quality  JPEG quality (0-100)
+    * @return   boolean   true if we set values OK, otherwise false
+    *
+    */
+    function setJpegQuality($quality)
+    {
+        return true;
     }
 }
 
