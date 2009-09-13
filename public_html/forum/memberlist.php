@@ -315,7 +315,7 @@ if ($op == "last10posts") {
         }
         if($siteMembers['homepage'] != '') {
             $homepage = $siteMembers['homepage'];
-            if(!eregi("http",$homepage)) {
+            if(!preg_match("/http/i",$homepage)) {
                 $homepage = 'http://' .$homepage;
             }
             $report->set_var ('image', gf_getImage('home'));
