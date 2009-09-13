@@ -211,14 +211,6 @@ function CUSTOM_userCreate ($uid)
 {
     global $_CONF, $_TABLES;
 
-    // Ensure all data is prepared correctly before inserts, quotes may need to
-    // be escaped with addslashes()
-    $email = '';
-    if (isset ($_POST['email'])) {
-        $email = COM_applyFilter ($_POST['email']);
-        $email = addslashes ($email);
-    }
-
     $homepage = '';
     if (isset ($_POST['homepage'])) {
         $homepage = COM_applyFilter ($_POST['homepage']);
@@ -235,7 +227,7 @@ function CUSTOM_userCreate ($uid)
 
     // Note: In this case, we can trust the $uid variable to contain the new
     // account's uid.
-    DB_query("UPDATE {$_TABLES['users']} SET email = '$email', homepage = '$homepage', fullname = '$fullname' WHERE uid = '$uid'");
+    DB_query("UPDATE {$_TABLES['users']} SET homepage = '$homepage', fullname = '$fullname' WHERE uid = '$uid'");
 
     return true;
 }
@@ -243,6 +235,9 @@ function CUSTOM_userCreate ($uid)
 // Delete any records from custom tables you may have used
 function CUSTOM_userDelete($uid)
 {
+
+    // no special deletion needed for this example code
+
     return true;
 }
 
