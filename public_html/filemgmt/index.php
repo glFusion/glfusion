@@ -203,7 +203,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                     if ( $mydownloads_useshots && $myrow['imgurl'] && $myrow['imgurl'] != "http://") {
                         $imgurl = $myts->makeTboxData4Edit($myrow['imgurl']);
                         $category_image_link = '<a href="' .$_CONF['site_url'] .'/filemgmt/viewcat.php?cid=' .$myrow['cid'] .'">';
-                        $category_image_link .= '<img src="' .$filemgmt_SnapCatURL.$imgurl .'" width="'.$mydownloads_shotwidth.'" border="0" alt=""' . XHTML . '></a>';
+                        $category_image_link .= '<img src="' .$filemgmt_SnapCatURL.$imgurl .'" width="'.$mydownloads_shotwidth.'" border="0" alt="'.$myts->makeTboxData4Show($myrow['title']).'"' . XHTML . '></a>';
                         $p->set_var('category_link',$category_image_link);
                     } else {
                         $p->set_var('category_link','&nbsp;');
