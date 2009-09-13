@@ -357,7 +357,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         }
         if(isset($userarray['homepage']) && $userarray['homepage'] != '') {
             $homepage = $userarray['homepage'];
-            if(!eregi("http",$homepage)) {
+            if (!preg_match("/http/i",$homepage) ) {
+//            if(!eregi("http",$homepage)) {
                 $homepage = 'http://' .$homepage;
             }
             $homepageimg = '<img src="'.gf_getImage('website_button').'" border="0" align="middle" alt="'.$LANG_GF01['WebsiteLink'].'" title="'.$LANG_GF01['WebsiteLink'].'"' . XHTML . '>';

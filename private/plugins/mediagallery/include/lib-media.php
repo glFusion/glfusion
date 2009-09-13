@@ -213,7 +213,7 @@ function MG_displayASF( $aid, $I, $full ) {
             return array($u_image,'',$resolution_x,$resolution_y,'');
             break;
         case 3: // use mms links
-            $mms_path = ereg_replace('http','mms',$_MG_CONF['mediaobjects_url']);
+            $mms_path = preg_replace("/http/i",'mms',$_MG_CONF['mediaobjects_url']);
             $u_pic = $mms_path . '/orig/'.  $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
             $raw_link_url = $mms_path . '/orig/'.  $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
             if ( $I['media_tn_attached'] == 1 ) {
@@ -973,7 +973,7 @@ function MG_displayMP3( $aid, $I, $full ) {
             return array($u_image,'',$win_width,$win_height,'');
             break;
         case 3: // use mms links
-            $mms_path = ereg_replace('http','mms',$_MG_CONF['mediaobjects_url']);
+            $mms_path = preg_replace("/http/i",'mms',$_MG_CONF['mediaobjects_url']);
             $u_pic = $mms_path . '/orig/'.  $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
 
             if ( $I['media_tn_attached'] == 1 ) {

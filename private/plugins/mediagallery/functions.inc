@@ -2392,7 +2392,7 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
             'media_height'      =>  $height,
             'media_width'       =>  $width,
             'border_width'      =>  $width + 14,
-            'media_title'       =>  strip_tags($row['media_title']),
+            'media_title'       =>  PLG_replaceTags(strip_tags($row['media_title'])),
             'lang_browse_album' =>  $LANG_MG03['browse_album'],
             'xhtml'             =>  XHTML,
             'framecss'          =>  '', //$fCSS,

@@ -147,7 +147,7 @@ function INST_phpOutOfDate()
  */
 function mysql_v($_DB_host, $_DB_user, $_DB_pass)
 {
-    if (@mysql_connect($_DB_host, $_DB_user, $_DB_pass) === false) {
+    if (($res = @mysql_connect($_DB_host, $_DB_user, $_DB_pass)) === false) {
         return false;
     }
 
@@ -163,7 +163,7 @@ function mysql_v($_DB_host, $_DB_user, $_DB_pass)
         $mysqlminorv = 0;
         $mysqlrev = 0;
     }
-    @mysql_close();
+    @mysql_close($res);
 
     return array($mysqlmajorv, $mysqlminorv, $mysqlrev);
 }
@@ -782,6 +782,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 return array($rc,$errors);
             }
             $current_fusion_version = '1.1.5';
+        case '1.1.5' :
+            $current_fusion_version = '1.1.6';
         default:
             break;
     }
