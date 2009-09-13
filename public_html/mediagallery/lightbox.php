@@ -97,7 +97,7 @@ function MG_getItems ($mode='sv')
         				if ( $row['remote_media'] == 1 ) {
         				    $PhotoURL = $row['remote_url'];
         				}
-					    $retval .= '<slide src="' . $PhotoURL . '" caption="' . htmlentities(strip_tags($row['media_title'])) . '"/>' . "\n";
+					    $retval .= '<slide src="' . $PhotoURL . '" caption="' . htmlentities(strip_tags($row['media_title']), ENT_QUOTES, COM_getEncodingt()) . '"/>' . "\n";
 			    	}
 			    }
 			}

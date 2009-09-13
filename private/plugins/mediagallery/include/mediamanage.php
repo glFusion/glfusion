@@ -1107,7 +1107,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 
     if ( $back != '' ) {
         $T->set_var(array(
-            'rpath'     => htmlentities($back),
+            'rpath'     => htmlentities($back, ENT_QUOTES, COM_getEncodingt()),
         ));
     } else {
         $T->set_var(array(

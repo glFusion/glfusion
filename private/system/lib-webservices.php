@@ -327,7 +327,7 @@ function WS_get()
             if ($ret == PLG_RET_OK) {
                 foreach ($topics as $t) {
                     $topic = $atom_doc->createElement('atom:category');
-                    $topic->setAttribute('term', htmlentities($t));
+                    $topic->setAttribute('term', htmlentities($t, ENT_QUOTES, COM_getEncodingt()));
                     $categories->appendChild($topic);
                 }
             }
@@ -392,14 +392,14 @@ function WS_get()
             $feed_link = $atom_doc->createElement('atom:link');
             $feed_link->setAttribute('rel', 'self');
             $feed_link->setAttribute('type', 'application/atom+xml');
-            $feed_link->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . htmlentities($WS_PLUGIN));
+            $feed_link->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . htmlentities($WS_PLUGIN, ENT_QUOTES, COM_getEncodingt()));
             $feed_elem->appendChild($feed_link);
 
             if (!empty($svc_msg['offset'])) {
                 $next_link = $atom_doc->createElement('atom:link');
                 $next_link->setAttribute('rel', 'next');
                 $next_link->setAttribute('type', 'application/atom+xml');
-                $next_link->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . htmlentities($WS_PLUGIN) . '&offset=' . $svc_msg['offset']);
+                $next_link->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . htmlentities($WS_PLUGIN, ENT_QUOTES, COM_getEncodingt()) . '&offset=' . $svc_msg['offset']);
                 $feed_elem->appendChild($next_link);
             }
 
@@ -694,11 +694,11 @@ function WS_arrayToEntryXML($arr, $extn_elements, &$entry_elem, &$atom_doc)
         $link_self = $atom_doc->createElement('atom:link');
         $link_self->setAttribute('rel', 'edit');
         $link_self->setAttribute('type', 'application/atom+xml');
-        $link_self->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . htmlentities($WS_PLUGIN) . '&id=' . htmlentities($arr['id']));
+        $link_self->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . htmlentities($WS_PLUGIN, ENT_QUOTES, COM_getEncodingt()) . '&id=' . htmlentities($arr['id'], ENT_QUOTES, COM_getEncodingt()));
         $entry_elem->appendChild($link_self);
     }
 
-    $content = $atom_doc->createElement('atom:content', htmlentities($arr['content']));
+    $content = $atom_doc->createElement('atom:content', htmlentities($arr['content'], ENT_QUOTES, COM_getEncodingt()));
     $content->setAttribute('type', $arr['content_type']);
     $entry_elem->appendChild($content);
 

@@ -245,7 +245,7 @@ function MG_search($id,$page) {
         'page_number'           => sprintf("%s %d %s %d",$LANG_MG03['page'], $current_print_page, $LANG_MG03['of'], $total_print_pages),
         'lang_search_results'   => $LANG_MG03['search_results'],
         'lang_return_to_index'  => $LANG_MG03['return_to_index'],
-        'return_url'            => $S['referer'] == '' ? $_MG_CONF['site_url'] : htmlentities($S['referer']),
+        'return_url'            => $S['referer'] == '' ? $_MG_CONF['site_url'] : htmlentities($S['referer'], ENT_QUOTES, COM_getEncodingt()),
         'search_keywords'       => $S['keywords'],
         'lang_search'           => $LANG_MG01['search'],
         'xhtml'                 => XHTML,

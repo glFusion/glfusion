@@ -281,8 +281,8 @@ if ($op == 'search') {
     $query = addslashes(COM_stripslashes($_REQUEST['query']));
     $report->set_var ('layout_url', $_CONF['layout_url']);
     $report->set_var ('phpself',$_CONF['site_url'] . '/forum/index.php?op=search');
-    $report->set_var ('LANG_TITLE',$LANG_GF02['msg119']. ' ' . htmlentities($html_query));
-    $report->set_var ('startblock', COM_startBlock( $LANG_GF02['msg119']. ' ' . htmlentities($html_query)));
+    $report->set_var ('LANG_TITLE',$LANG_GF02['msg119']. ' ' . htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()));
+    $report->set_var ('startblock', COM_startBlock( $LANG_GF02['msg119']. ' ' . htmlentities($html_query, ENT_QUOTES, COM_getEncodingt())));
     $report->set_var ('endblock', COM_endBlock());
     $report->set_var ('spacerwidth', '70%');
     $report->set_var ('returnlink', "href=\"{$_CONF['site_url']}/forum/index.php\">");
@@ -295,7 +295,7 @@ if ($op == 'search') {
     $report->set_var ('LANG_Heading2', $LANG_GF01['REPLIES']);
     $report->set_var ('LANG_Heading3', $LANG_GF01['VIEWS']);
     $report->set_var ('LANG_Heading4', $LANG_GF01['DATE']);
-    $report->set_var ('op', "&amp;op=search&amp;query=" . htmlentities($html_query));
+    $report->set_var ('op', "&amp;op=search&amp;query=" . htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()));
     $report->set_var ('prevorder', $order);
     $report->set_var ('direction', $direction);
     $report->set_var ('page', '1');
@@ -344,7 +344,7 @@ if ($op == 'search') {
                     $P['subject'] = COM_checkWords($P['subject']);
                 }
                 $postdate = COM_getUserDateTimeFormat($P['date']);
-                $link = "<a href=\"{$_CONF['site_url']}/forum/viewtopic.php?forum={$P['forum']}&amp;showtopic={$P['id']}&amp;highlight=" . htmlentities($html_query) . "\">";
+                $link = "<a href=\"{$_CONF['site_url']}/forum/viewtopic.php?forum={$P['forum']}&amp;showtopic={$P['id']}&amp;highlight=" . htmlentities($html_query, ENT_QUOTES, COM_getEncodingt()) . "\">";
                 $report->set_var('post_start_ahref',$link);
                 $report->set_var('post_subject', $P['subject']);
                 $report->set_var('post_end_ahref', '</a>');
