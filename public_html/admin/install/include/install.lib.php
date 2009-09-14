@@ -783,6 +783,9 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             }
             $current_fusion_version = '1.1.5';
         case '1.1.5' :
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.6',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.6' WHERE name='glfusion'",1);
+            DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.6';
         default:
             break;
