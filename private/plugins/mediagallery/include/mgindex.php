@@ -97,7 +97,8 @@ function MG_index() {
 	));
 
 	if ( $_MG_CONF['rss_full_enabled'] ) {
-	    $rsslink = '<a href="' . $_CONF['site_url'] . '/backend/' . $_MG_CONF['rss_feed_name'] . '.rss"' . ' type="application/rss+xml">';
+	    $feedUrl = MG_getFeedUrl($_MG_CONF['rss_feed_name'].'.rss');
+	    $rsslink = '<a href="' . $feedUrl . '"' . ' type="application/rss+xml">';
 	    $rsslink .= '<img src="' . MG_getImageFile('feed.png') . '" alt="" style="border:none;"' . XHTML . '></a>';
 	    $T->set_var('rsslink', $rsslink);
 	} else {
