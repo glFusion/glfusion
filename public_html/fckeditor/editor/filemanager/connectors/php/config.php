@@ -38,7 +38,7 @@ if ( isset($_COOKIE[$cookiename]) ) {
     $token = '';
 }
 
-if (SEC_checkTokenGeneral($token,'advancededitor')) {
+if (SEC_checkTokenGeneral($token,'advancededitor')  && !COM_isAnonUser()) {
     $Config['Enabled'] = true;
 } else {
     $Config['Enabled'] = false;
