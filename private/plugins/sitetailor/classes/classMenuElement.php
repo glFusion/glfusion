@@ -823,7 +823,7 @@ class mbElement {
                 }
                 break;
             case '5' : // static page
-                $this->url = $_CONF['site_url'] . '/staticpages/index.php?page=' . $this->subtype;
+                $this->url = COM_buildURL ($_CONF['site_url'] . '/staticpages/index.php?page=' . $this->subtype);
                 break;
             case '6' : // external URL
                 /*
