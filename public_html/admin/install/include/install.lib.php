@@ -339,6 +339,10 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
 {
     // no "global $_CONF" here!
 
+    if ( !@file_exists($path . 'system/classes/config.class.php') ) {
+        echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        exit;
+    }
     require_once $path . 'system/classes/config.class.php';
 
     $config = config::get_instance();
@@ -528,6 +532,10 @@ function INST_createDatabaseStructures ($use_innodb = false)
     // postgresql.class.php, etc)
 
     // Get DBMS-specific create table array and data array
+    if ( !@file_exists($_CONF['path'] . 'sql/' . $_DB_dbms . '_tableanddata.php') ) {
+        echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        exit;
+    }
     require_once $_CONF['path'] . 'sql/' . $_DB_dbms . '_tableanddata.php';
 
     $progress = '';
@@ -645,6 +653,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.0.1':
         case '1.0.2':
             $_SQL = array();
+            if ( !@file_exists($_CONF['path'] . 'sql/updates/mysql_1.0.1_to_1.1.0.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path'] . 'sql/updates/mysql_1.0.1_to_1.1.0.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
@@ -665,6 +677,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 DB_query($sqli,1);
             }
             $_SQLi = array();
+            if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
 
@@ -720,6 +736,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL = array();
         case '1.1.0' :
         case '1.1.1' :
+            if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('story_submit_by_perm_only',0,'select',4,20,0,780,TRUE);
@@ -730,10 +750,18 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.1.2';
         case '1.1.2' :
             $_SQL = array();
+            if ( !@file_exists($_CONF['path'] . 'sql/updates/mysql_1.1.2_to_1.1.3.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path'] . 'sql/updates/mysql_1.1.2_to_1.1.3.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
                 return array($rc,$errors);
+            }
+            if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
             }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
@@ -749,6 +777,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.1.3';
         case '1.1.3' :
             $_SQL = array();
+            if ( !@file_exists($_CONF['path'] . 'sql/updates/mysql_1.1.3_to_1.1.4.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path'] . 'sql/updates/mysql_1.1.3_to_1.1.4.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
@@ -768,6 +800,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.5' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
 
+            if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('hide_exclude_content',0,'select',4,16,0,295,TRUE);
@@ -776,6 +812,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $c->del('search_show_sort', 'Core');
 
             $_SQL = array();
+            if ( !@file_exists($_CONF['path'] . 'sql/updates/mysql_1.1.4_to_1.1.5.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path'] . 'sql/updates/mysql_1.1.4_to_1.1.5.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
@@ -835,6 +875,10 @@ function INST_pluginAutoInstall( $plugin )
 
     $ret = false;
 
+    if ( !@file_exists($_CONF['path'] . '/system/lib-install.php') ) {
+        echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        exit;
+    }
     require_once $_CONF['path'] . '/system/lib-install.php';
 
     if ( file_exists($_CONF['path'].'/plugins/'.$plugin.'/autoinstall.php') ) {
@@ -1222,6 +1266,15 @@ function INST_return_bytes($val) {
     }
 
     return $val;
+}
+
+function INST_sanitizePath($path)
+{
+    $path = strip_tags($path);
+    $path = str_replace(array('"', "'"), '', $path);
+    $path = str_replace('..', '', $path);
+
+    return $path;
 }
 
 ?>

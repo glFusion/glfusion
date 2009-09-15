@@ -60,6 +60,7 @@ define('CORE_UPGRADE_ERROR',       16);
 define('PLUGIN_UPGRADE_ERROR',     17);
 define('INVALID_GEEKLOG_VERSION',  18);
 define('NO_MIGRATE_GLFUSION',      19);
+define('FILE_INCLUDE_ERROR',       20);
 
 require_once 'include/install.lib.php';
 require_once 'include/template-lite.class.php';
@@ -85,7 +86,19 @@ $glFusionVars = array('language','method','migrate','expire','dbconfig_path','lo
 if ( is_array($_POST) ) {
     foreach ($_POST AS $name => $value) {
         if ( in_array($name,$glFusionVars)) {
-            $_GLFUSION[$name] = INST_stripslashes($value);
+//            $_GLFUSION[$name] = INST_stripslashes($value);
+            switch ($name) {
+                case 'dbconfig_path' :
+                case 'log_path' :
+                case 'lang_path':
+                case 'backup_path':
+                case 'data_path' :
+                    $_GLFUSION[$name] = INST_sanitizePath(INST_stripslashes($value));
+                    break;
+                default :
+                    $_GLFUSION[$name] = INST_stripslashes($value);
+                    break;
+            }
         }
     }
 }
@@ -300,6 +313,9 @@ function _displayError($error,$step,$errorText='')
         case NO_MIGRATE_GLFUSION :
             $T->set_var('text',$LANG_INSTALL['no_migrate_glfusion']);
             break;
+        case FILE_INCLUDE_ERROR :
+            $T->set_var('text','Internal Error - please contact support@glfusion.org');
+            break;
         default :
             $T->set_var('text',$errorText);
             break;
@@ -510,7 +526,7 @@ function INST_gotPathSetting($dbc_path = '')
 
     // was it passed from the previous step, or via $_POST?
     if ( $dbc_path == '' ) {
-        $dbconfig_path = INST_stripslashes($_POST['private_path']);
+        $dbconfig_path = INST_sanitizePath(INST_stripslashes($_POST['private_path']));
     } else {
         $dbconfig_path = $dbc_path;
     }
@@ -531,7 +547,7 @@ function INST_gotPathSetting($dbc_path = '')
     // check and see if the advanced path settings were entered...
 
     if ( isset($_POST['logpath']) && $_POST['logpath'] != '') {
-        $log_path = INST_stripslashes($_POST['logpath']);
+        $log_path = INST_sanitizePath(INST_stripslashes($_POST['logpath']));
         if (!preg_match('/^.*\/$/', $log_path)) {
             $log_path .= '/';
         }
@@ -539,7 +555,7 @@ function INST_gotPathSetting($dbc_path = '')
     }
 
     if ( isset($_POST['langpath']) && $_POST['langpath'] != '') {
-        $lang_path = INST_stripslashes($_POST['langpath']);
+        $lang_path = INST_sanitizePath(INST_stripslashes($_POST['langpath']));
         if (!preg_match('/^.*\/$/', $lang_path)) {
             $lang_path .= '/';
         }
@@ -547,7 +563,7 @@ function INST_gotPathSetting($dbc_path = '')
     }
 
     if ( isset($_POST['backuppath']) && $_POST['backuppath'] != '') {
-        $backup_path = INST_stripslashes($_POST['backuppath']);
+        $backup_path = INST_sanitizePath(INST_stripslashes($_POST['backuppath']));
         if (!preg_match('/^.*\/$/', $backup_path)) {
             $backup_path .= '/';
         }
@@ -555,7 +571,7 @@ function INST_gotPathSetting($dbc_path = '')
     }
 
     if ( isset($_POST['datapath']) && $_POST['datapath'] != '') {
-        $data_path = INST_stripslashes($_POST['datapath']);
+        $data_path = INST_sanitizePath(INST_stripslashes($_POST['datapath']));
         if (!preg_match('/^.*\/$/', $data_path)) {
             $data_path .= '/';
         }
@@ -733,8 +749,17 @@ function INST_checkEnvironment($dbconfig_path='')
     if ( $_GLFUSION['method'] == 'upgrade' && @file_exists('../../siteconfig.php')) {
         require '../../siteconfig.php';
         $_GLFUSION['dbconfig_path'] = $_CONF['path'];
+        if ( !file_exists($_CONF['path'].'db-config.php') ) {
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        }
         require $_CONF['path'].'db-config.php';
+        if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        }
         require_once $_CONF['path_system'].'lib-database.php';
+        if ( !file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        }
         require_once $_CONF['path_system'].'classes/config.class.php';
         $config = config::get_instance();
         $config->set_configfile($_CONF['path'] . 'db-config.php');
@@ -751,7 +776,7 @@ function INST_checkEnvironment($dbconfig_path='')
     } else {
         $_PATH['public_html']   = INST_getHtmlPath();
         if ( $dbconfig_path == '' ) {
-            $_PATH['dbconfig_path'] = INST_stripslashes($_POST['private_path']);
+            $_PATH['dbconfig_path'] = INST_sanitizePath(INST_stripslashes($_POST['private_path']));
         } else {
             $_PATH['dbconfig_path']     = $dbconfig_path;
         }
@@ -966,6 +991,9 @@ function INST_getSiteInformation()
     $utf8           = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
     $dbconfig_path  = $_GLFUSION['dbconfig_path'];
 
+    if ( !file_exists($dbconfig_path.'db-config.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require $dbconfig_path.'db-config.php';
 
     if ( isset($_GLFUSION['db_type']) ) {
@@ -1062,6 +1090,9 @@ function INST_gotSiteInformation()
 
     $dbconfig_path = $_GLFUSION['dbconfig_path'];
 
+    if ( !file_exists($dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     include $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php';
     $validator = new EmailAddressValidator;
 
@@ -1304,6 +1335,9 @@ function INST_installAndContentPlugins()
     $siteconfig_data = fread($siteconfig_file, filesize($siteconfig_path));
     fclose($siteconfig_file);
 
+    if ( !file_exists($siteconfig_path) ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require $siteconfig_path;
     $siteconfig_data = str_replace("\$_CONF['path'] = '{$_CONF['path']}';",
                         "\$_CONF['path'] = '" . str_replace('db-config.php', '', $_PATH['dbconfig_path']) . "';",
@@ -1325,6 +1359,9 @@ function INST_installAndContentPlugins()
 
     $config_file = $_GLFUSION['dbconfig_path'].'db-config.php';
 
+    if ( !file_exists($config_file) ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require $config_file;
 
     $db = array('host' => (isset($_GLFUSION['db_host']) ? $_GLFUSION['db_host'] : $_DB_host),
@@ -1353,6 +1390,9 @@ function INST_installAndContentPlugins()
     fclose($dbconfig_file);
     require $config_file;
 
+    if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require $_CONF['path_system'].'lib-database.php';
 
     list($rc,$errors) = INST_createDatabaseStructures($use_innodb);
@@ -1373,6 +1413,9 @@ function INST_installAndContentPlugins()
 
     INST_personalizeAdminAccount($site_mail, $site_url);
 
+    if ( !file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require_once $_CONF['path_system'].'classes/config.class.php';
     require_once 'config-install.php';
     install_config($site_url);
@@ -1425,6 +1468,9 @@ function INST_installAndContentPlugins()
 
     $config->_purgeCache();
     // rebuild the config array
+    if ( !file_exists($siteconfig_path) ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     include $siteconfig_path;
     $config->set_configfile($_CONF['path'] . 'db-config.php');
     $config->load_baseconfig();
@@ -1440,6 +1486,9 @@ function INST_installAndContentPlugins()
 
     global $_CONF, $_SYSTEM, $_DB, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
 
+    if ( !file_exists($_CONF['path_html'].'lib-common.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require $_CONF['path_html'].'lib-common.php';
 
     INST_pluginAutoInstall('bad_behavior2');
@@ -1500,6 +1549,9 @@ function INST_doPluginInstall()
         }
     }
     if ( isset($_POST['installdefaultdata']) ) {
+        if ( !file_exists($_CONF['path'].'sql/default_content.php') ) {
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        }
         require_once $_CONF['path'].'sql/default_content.php';
         // pull a list of all plugins that are installed....
         $result = DB_query("SELECT pi_name FROM {$_TABLES['plugins']} WHERE pi_enabled = 1");
@@ -1605,6 +1657,9 @@ function INST_doSiteUpgrade()
                     DB_query($sqli,1);
                 }
                 $_SQLi = array();
+                if ( !file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                    return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                }
                 require_once $_CONF['path_system'].'classes/config.class.php';
                 $c = config::get_instance();
                 $c->add('comment_code',0,'select',4,21,17,1670,TRUE);
@@ -1680,6 +1735,9 @@ function INST_doSiteUpgrade()
     INST_clearCache();
 
     if ( $rc ) {
+        if ( !file_exists($_CONF['path_system'] . 'classes/config.class.php') ) {
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        }
         require_once $_CONF['path_system'] . 'classes/config.class.php';
         $config = config::get_instance();
         $config->_purgeCache();
@@ -1829,6 +1887,9 @@ function INST_migrateGeeklog()
         return _displayError(DB_NO_DATABASE,'');
     }
 
+    if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     include $_CONF['path_system'].'lib-database.php';
 
     // Peform a few basic check to ensure we are not trying to migrate a glFusion site.
@@ -1961,7 +2022,7 @@ function INST_gotGeeklogPathSetting($dbc_path = '')
 
     // was it passed from the previous step, or via $_POST?
     if ( $dbc_path == '' ) {
-        $dbconfig_path = INST_stripslashes($_POST['private_path']);
+        $dbconfig_path = INST_sanitizePath(INST_stripslashes($_POST['private_path']));
     } else {
         $dbconfig_path = $dbc_path;
     }
@@ -2007,6 +2068,9 @@ function INST_gotGeeklogPathSetting($dbc_path = '')
 
     // read the legacy geeklog config.php file and start the party!
 
+    if ( !file_exists($dbconfig_path.'config.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require_once($dbconfig_path.'config.php');
 
     $tmpPathHtml = $_CONF['path_html'];
@@ -2082,9 +2146,18 @@ function INST_gotGeeklogPathSetting($dbc_path = '')
     // let's do the DB and plugin upgrades, this will bring us to a v1.5.0 state
     // then we can fall into the standard upgrade routines
 
+    if ( !file_exists($siteconfig_path) ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require $siteconfig_path;
+    if ( !file_exists($config_file) ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require $config_file; //db-config
 
+    if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require $_CONF['path_system'].'lib-database.php';
 
     // validate we have a v1.4.1 site before we do any more...
@@ -2097,12 +2170,18 @@ function INST_gotGeeklogPathSetting($dbc_path = '')
         return _displayError(INVALID_GEEKLOG_VERSION,'');
     }
 
+    if ( !file_exists($_CONF['path'] . 'sql/updates/geeklog_mysql_1.4.1_to_1.5.0.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require_once $_CONF['path'] . 'sql/updates/geeklog_mysql_1.4.1_to_1.5.0.php';
     INST_updateDB($_SQL,false);
 
     upgrade_addWebservicesFeature();
 
     create_ConfValues();
+    if ( !file_exists($_CONF['path_system'] . 'classes/config.class.php') ) {
+        return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+    }
     require_once $_CONF['path_system'] . 'classes/config.class.php';
     $config = config::get_instance();
 
@@ -2111,13 +2190,22 @@ function INST_gotGeeklogPathSetting($dbc_path = '')
 
         $tmp_path = $_CONF['path']; // We'll need this to remember what the correct path is.
                                     // Including config.php will overwrite all our $_CONF values.
+        if ( !file_exists($tmp_path . 'config.php') ) {
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        }
         require $tmp_path . 'config.php';
 
         // Load some important values from config.php into conf_values
         foreach ($_CONF as $key => $val) {
             $config->set($key, $val);
         }
+        if ( !file_exists($siteconfig_path) ) {
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        }
         require $siteconfig_path;
+        if ( !file_exists($config_file) ) {
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        }
         require $config_file; //db-config
     }
 
@@ -2224,6 +2312,9 @@ if (!empty($lng) && is_file('language/' . $lng . '.php')) {
 }
 
 $_GLFUSION['language'] = $language;
+if ( !file_exists('language/'.$language.'.php') ) {
+    return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+}
 require_once 'language/'.$language.'.php';
 
 if ( isset($_POST['task']) ) {
@@ -2295,8 +2386,14 @@ switch($mode) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
         } else {
             require '../../siteconfig.php';
+            if ( !file_exists($_CONF['path'].'db-config.php') ) {
+                return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+            }
             require $_CONF['path'].'db-config.php';
             $_GLFUSION['dbconfig_path'] = $_CONF['path'];
+            if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
+                return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+            }
             require_once $_CONF['path_system'].'lib-database.php';
             $version = INST_identifyglFusionVersion();
             if ($version == '' || $version == 'empty' ) {
@@ -2311,8 +2408,14 @@ switch($mode) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
         } else {
             require '../../siteconfig.php';
+            if ( !file_exists($_CONF['path'].'db-config.php') ) {
+                return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+            }
             require $_CONF['path'].'db-config.php';
             $_GLFUSION['dbconfig_path'] = $_CONF['path'];
+            if ( !file_exists($_CONF['path_system'] . 'lib-database.php') ) {
+                return _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+            }
             require $_CONF['path_system'] . 'lib-database.php';
             $pageBody = INST_doSiteUpgrade();
         }

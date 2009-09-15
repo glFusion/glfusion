@@ -41,6 +41,7 @@ require_once '../../lib-common.php';
 $type = (isset( $_GET['type'] ) && !empty( $_GET['type'] )) ? $_GET['type'] : 'install';
 $lng  = (isset( $_GET['language'] ) && !empty( $_GET['language'] )) ? $_GET['language'] : 'english';
 $language = preg_replace('/[^a-z0-9\-_]/', '', $lng);
+
 require_once( 'language/' . $language . '.php' );
 
 // enable detailed error reporting
