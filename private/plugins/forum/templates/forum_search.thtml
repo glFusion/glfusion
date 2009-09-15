@@ -7,7 +7,7 @@
             <td class="alignleft" width="50%">
             <table border="0" cellspacing="2" cellpadding="0">
             <tr>
-            <td><label for "query"></label><input type="text" name="query" id="query" value="" style="width:165px"{xhtml}></td>
+            <td><label for="query"></label><input type="text" name="query" id="query" value="" style="width:165px"{xhtml}></td>
             <td><input type="submit" name="btnsubmit" value="{search}"{xhtml}></td>
             </tr>
             </table>
