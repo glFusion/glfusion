@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- Security enhancements to the installation scripts
 - Better support for legacy plugins
 - Ensure template class if available when logging errors
 - Ensure character encoding is properly passed to all htmlentities calls
@@ -32,9 +33,15 @@ Forum Plugin
 
 Media Gallery Plugin
 --------------------
+- RSS feeds were not being referenced in the correct directory
 - When using the destination block on auto tags, the auto tag counter
   was not properly initialized.
 - Expand auto tags in title when used in Random Image block
+
+Site Tailor Plugin
+------------------
+- Menu builder did not always honor the URL rewrite setting when building
+  links for static pages
 
 Language File Updates
 ---------------------
