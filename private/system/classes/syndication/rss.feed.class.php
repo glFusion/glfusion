@@ -314,6 +314,13 @@ if (!defined ('GVERSION')) {
       {
         $xml .= '<comments>'.$this->_safeXML( $article['commenturl'] )."</comments>\n";
       }
+      if( array_key_exists( 'author', $article ) )
+      {
+        if( $article['author'] != '' )
+        {
+          $xml .= '<dc:creator>'.$this->_safeXML( $article['author'] )."</dc:creator>\n";
+        }
+      }
       if( array_key_exists( 'topic', $article ) )
       {
         $topic = $article['topic'];
