@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- Add author to RSS 2.0 syndication feeds for articles
+- Do not error when trying to upgrade a disabled bundled plugin
 - Security enhancements to the installation scripts
 - Better support for legacy plugins
 - Ensure template class if available when logging errors
@@ -30,6 +32,14 @@ Forum Plugin
 - Fix to allow Smiley plugin to work with WYSIWYG editor
 - Ensure the profile edit functions return the proper value
 - Filter memberslist to ensure only registered users are shown
+
+Links Plugin
+------------
+- If login is required and user is not logged in, display a message that
+  login is required instead of simply redirecting to the index page.
+- Improved error messages displayed when there is a problem submitting
+  a link.
+- Loosened up the URL checking routines
 
 Media Gallery Plugin
 --------------------
