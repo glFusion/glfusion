@@ -974,7 +974,15 @@ function INST_pluginAutoUpgrade( $plugin, $forceInstall = 0 )
             }
         } else {
             if ( !$active && $forceInstall == 1 ) {
-                $rc = INST_pluginAutoInstall($plugin);
+                // don't force install if already installed but marked inactive...
+                $pcount = DB_count($_TABLES['plugins'],'pi_name',$plugin);
+                if ( $pcount < 1 ) {
+                    $rc = INST_pluginAutoInstall($plugin);
+                } else {
+                    $rc = true;
+                }
+            } else {
+                $rc = true;
             }
         }
     } else {
