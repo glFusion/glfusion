@@ -869,7 +869,7 @@ function plugin_submit_links($A = array())
 */
 function plugin_save_submit_links($A)
 {
-    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG12;
+    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG12, $LANG_LINKS;
 
     $retval = '';
     /* check CAPTCHA */
@@ -905,11 +905,13 @@ function plugin_save_submit_links($A)
             $validcat = true;
         }
     }
-    // check link
-    if (!preg_match("/^(http(s?):\\/\\/|ftp:\\/\\/{1})((\w+\.)+)\w{2,}(\/?)$/i", $A['url'])) {
-        $retval .= COM_startBlock($LANG12[22], '',
+
+    $urlregex2 = "/^(https?|ftp)\:\/\//i";
+    if ( !preg_match($urlregex2,$A['url']) ) {
+//    if (!preg_match("/^(http(s?):\\/\\/|ftp:\\/\\/{1})((\w+\.)+)\w{2,}(\/?)$/i", $A['url'])) {
+        $retval .= COM_startBlock($LANG_LINKS['error_header'], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
-                . $LANG12[23]
+                . $LANG_LINKS['verification_failed']
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
                 . plugin_submit_links($A);
 
@@ -918,9 +920,9 @@ function plugin_save_submit_links($A)
 
 
     if (!$validcat) {
-        $retval = COM_startBlock($LANG12[22], '',
+        $retval = COM_startBlock($LANG_LINKS['error_header'], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
-                . $LANG12[23]
+                . $LANG_LINKS['category_not_found']
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
                 . plugin_submit_links($A);
 
