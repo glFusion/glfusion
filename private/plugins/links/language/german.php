@@ -29,7 +29,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-
 global $LANG32;
 
 ###############################################################################
@@ -56,7 +55,10 @@ $LANG_LINKS = array(
     124 => 'Go',
     125 => 'Kategorien',
     126 => 'Du bist hier:',
-    'root' => 'Root'
+    'root' => 'Root',
+    'error_header' => 'Link Submission Error',
+    'verification_failed' => 'The URL specified does not appear to be a valid URL',
+    'category_not_found' => 'The Category does not appear to be valid'
 );
 
 ###############################################################################
