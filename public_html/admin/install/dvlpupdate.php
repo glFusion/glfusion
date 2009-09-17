@@ -254,22 +254,32 @@ function glfusion_115()
             . "`voter_id` mediumint( 9 ) NOT NULL , "
             . "`grade` smallint( 6 ) NOT NULL  , "
             . "`topic_id` int( 11 ) NOT NULL , "
-            . " PRIMARY KEY (`user_id`,`voter_id`,`topic_id`), "
             . " KEY `user_id` (`user_id`), "
             . " KEY `voter_id` (`voter_id`) );";
     DB_query($sql);
+    DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} ADD topic_id int(11) NOT NULL AFTER grade",1);
     // add forum.html feature
     DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('forum.html','Can post using HTML',0)",1);
     $ft_id = DB_insertId();
     $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'forum Admin'"));
     DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
     DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.4',pi_gl_version='1.1.5' WHERE pi_name = 'forum'");
-
 }
+
+function glfusion_116()
+{
+    global $_TABLES, $_CONF;
+
+    $_SQL = array();
+
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.6',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.6' WHERE name='glfusion'",1);
+}
+
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_115();
+glfusion_116();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();
