@@ -439,7 +439,7 @@ function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='
             $changed++;
         } else {
             $sVal = validateInput($value);
-            if ( $config[$option] != $sVal ) {
+            if ( $config[$option] != $sVal && $option != 'user_login_method' && $option != 'event_types' && $option != 'default_permissions' && $option != 'grouptags') {
                 $fn = 'rescue_' . $option . '_validate';
                 if (function_exists($fn)) {
                     $sVal = $fn($sVal);
