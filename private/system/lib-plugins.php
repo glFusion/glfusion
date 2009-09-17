@@ -13,7 +13,7 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
 // |          Blaine Lang      - blaine AT portalparts DOT com                |
@@ -2388,6 +2388,41 @@ function PLG_itemSaved($id, $type)
     }
 
     return $error;
+}
+
+/**
+* "Generic" plugin API: Delete item
+*
+* To be called whenever glFusion removes an item from the database.
+* Plugins can define their own 'itemdeleted' function to be notified whenever
+* an item is deleted.
+*
+* @param    string  $id     ID of the item
+* @param    string  $type   type of the item, e.g. 'article'
+* @return   void
+* @since    glFusion v1.1.6
+*
+*/
+function PLG_itemDeleted($id, $type)
+{
+    global $_PLUGINS;
+
+    $t = explode('.', $type);
+    $plg_type = $t[0];
+
+    $plugins = count($_PLUGINS);
+    for ($del = 0; $del < $plugins; $del++) {
+        if ($_PLUGINS[$del] != $plg_type) {
+            $function = 'plugin_itemdeleted_' . $_PLUGINS[$del];
+            if (function_exists($function)) {
+                $function($id, $type);
+            }
+        }
+    }
+
+    if (function_exists('CUSTOM_itemdeleted')) {
+        CUSTOM_itemdeleted($id, $type);
+    }
 }
 
 /**
