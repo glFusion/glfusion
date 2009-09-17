@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- Added PLG_itemDeleted API call Feature #000514
 - Add author to RSS 2.0 syndication feeds for articles
 - Do not error when trying to upgrade a disabled bundled plugin
 - Security enhancements to the installation scripts
