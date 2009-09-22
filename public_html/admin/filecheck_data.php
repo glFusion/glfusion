@@ -1749,7 +1749,6 @@ $glfusionFiles['private/plugins/sitetailor/sitetailor.php']=1;
 $glfusionFiles['private/plugins/sitetailor/sql/mysql_install.php']=1;
 $glfusionFiles['private/plugins/sitetailor/templates/animate.thtml']=1;
 $glfusionFiles['private/plugins/sitetailor/templates/clonemenu.thtml']=1;
-$glfusionFiles['private/plugins/sitetailor/templates/config.thtml']=1;
 $glfusionFiles['private/plugins/sitetailor/templates/createelement.thtml']=1;
 $glfusionFiles['private/plugins/sitetailor/templates/createmenu.thtml']=1;
 $glfusionFiles['private/plugins/sitetailor/templates/custom/index.html']=1;
