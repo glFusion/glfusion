@@ -213,6 +213,7 @@ class config {
             $this->config_array[$group][$name] = $value;
             $this->_post_configuration();
             $this->_writeIntoCache();
+            $this->_purgeCache();
         } else {
             $this->_purgeCache();
         }
@@ -239,6 +240,7 @@ class config {
                "name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
         $this->_DB_escapedQuery($sql);
         $this->_writeIntoCache();
+        $this->_purgeCache();
     }
 
     function restore_param($name, $group)
@@ -280,6 +282,7 @@ class config {
         $sql .= " WHERE name = '{$escaped_name}' AND group_name = '{$escaped_grp}'";
         $this->_DB_escapedQuery($sql);
         $this->_writeIntoCache();
+        $this->_purgeCache();
     }
 
     /**
@@ -350,6 +353,7 @@ class config {
 
         $this->config_array[$group][$param_name] = $default_value;
         $this->_writeIntoCache();
+        $this->_purgeCache();
     }
 
     /**
@@ -363,6 +367,7 @@ class config {
                   array(addslashes($param_name), addslashes($group)));
         unset($this->config_array[$group][$param_name]);
         $this->_writeIntoCache();
+        $this->_purgeCache();
     }
 
     /**
@@ -722,26 +727,11 @@ class config {
                 $on = $name;
             }
             if (! is_numeric($on)) {
-                if (!empty($GLOBALS['_CONF']['site_url'])) {
-                    $baseUrl = $GLOBALS['_CONF']['site_url'];
+                $helpUrl = $this->_get_ConfigHelp($group, $o);
+                if (! empty($helpUrl)) {
+                    $t->set_var('doc_link', $helpUrl);
                 } else {
-                    $baseUrl = 'http://www.glfusion.org';
-                }
-                if ($group == 'Core') {
-                    $descUrl = $baseUrl . '/docs/config.html#desc_' . $o;
-                    $t->set_var('doc_url', $descUrl);
-                    $t->set_var('doc_link',
-                        '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>');
-                } else {
-                    if ( @file_exists($_CONF['path_html'] . '/docs/' . $group . '.html') ) {
-                        $descUrl = $baseUrl . '/docs/' . $group . '.html#desc_' . $o;
-                        $t->set_var('doc_url', $descUrl);
-                        $t->set_var('doc_link',
-                            '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>');
-                    } else {
-                        $t->set_var('doc_url','');
-                        $t->set_var('doc_link','');
-                    }
+                    $t->set_var('doc_link', '');
                 }
             }
         }
@@ -991,6 +981,64 @@ class config {
         } else {
             DB_query($sql);
         }
+    }
+
+    /**
+    * Helper function: Get the URL to the help section for a config option
+    *
+    * @param    string  $group      'Core' or plugin name
+    * @param    string  $option     name of the config option
+    * @return   string              full URL to help or empty string
+    *
+    */
+    function _get_ConfigHelp($group, $option)
+    {
+        global $_CONF;
+
+        static $coreUrl;
+
+        $retval = '';
+
+        $descUrl = '';
+
+        $doclang = COM_getLanguageName();
+
+        if ($group == 'Core') {
+            if (isset($coreUrl)) {
+                $descUrl = $coreUrl;
+            } elseif (!empty($GLOBALS['_CONF']['site_url']) &&
+                    !empty($GLOBALS['_CONF']['path_html'])) {
+                $baseUrl = $GLOBALS['_CONF']['site_url'];
+                $cfg = 'docs/' . $doclang . '/config.html';
+                if (@file_exists($GLOBALS['_CONF']['path_html'] . $cfg)) {
+                    $descUrl = $baseUrl . '/' . $cfg;
+                } else {
+                    $descUrl = $baseUrl . '/docs/english/config.html';
+                }
+                $coreUrl = $descUrl;
+            } else {
+                $descUrl = 'http://www.glfusion.org/docs/english/config.html';
+            }
+            if (! empty($descUrl)) {
+                $helpUrl = $descUrl . '#desc_' . $option;
+            }
+            $retval = '<a href="#" onclick="popupWindow(\'' . $helpUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
+        } else {
+            list ($doc_url, $popuptype) = PLG_getConfigElementHelp($group, $option, $doclang );
+            if ( $doc_url != '' ) {
+                if ( $popuptype == 2 ) {
+                    $retval = '<a href="'.$doc_url.'" onclick="window.open(this.href);return false;" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
+                } else {
+                    $retval = '<a href="#" onclick="popupWindow(\'' . $doc_url . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
+                }
+            } else if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/'. $group . '.html') ) {
+                $descUrl = $baseUrl . '/docs/' . $doclang . '/'. $group . '.html#desc_' . $option;
+                $retval = '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
+            } else {
+                $retval = '';
+            }
+        }
+        return $retval;
     }
 
     /**

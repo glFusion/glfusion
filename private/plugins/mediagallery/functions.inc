@@ -2655,18 +2655,6 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
         } else
             $cbenable = 1;
 
-        // Check if there are no featured articles in this topic and if so then place it at the top of the page
-        if ($topic != "") {
-            $wheresql = "WHERE tid='".addslashes($topic)."' AND featured > 0";
-        } else {
-            $wheresql = "WHERE featured = 1";
-        }
-        $query = DB_query("SELECT count(*) as count FROM {$_TABLES['stories']} " . $wheresql);
-        $result = DB_fetchArray($query);
-        if ($result['count'] == 0 && $cbpos == 2) {
-            $cbpos = 1;//top of page
-        }
-
         if ($cbenable AND $cbpos == $where) {
             $T = new Template( MG_getTemplatePath(0) );
             $T->set_file ('page', 'cb_featured_album.thtml');

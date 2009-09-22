@@ -361,8 +361,10 @@ else if( $_CONF['allow_user_themes'] == 1 ) {
 */
 
 // Include theme functions file which may/may not do anything
-
-if (file_exists($_CONF['path_layout'] . 'functions.php')) {
+if (file_exists($_CONF['path_layout'] . 'custom/functions.php') ) {
+    require_once $_CONF['path_layout'] . 'custom/functions.php';
+}
+elseif (file_exists($_CONF['path_layout'] . 'functions.php')) {
     require_once $_CONF['path_layout'] . 'functions.php';
 }
 
@@ -590,6 +592,30 @@ COM_switchLocaleSettings();
 
 if( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
+}
+
+/**
+* Get the name of the current language, minus the character set
+*
+* Strips the character set from $_CONF['language'].
+*
+* @return   string  language name
+*
+*/
+function COM_getLanguageName()
+{
+    global $_CONF;
+
+    $retval = '';
+
+    $charset = '_' . strtolower(COM_getCharset());
+    if (substr($_CONF['language'], -strlen($charset)) == $charset) {
+        $retval = substr($_CONF['language'], 0, -strlen($charset));
+    } else {
+        $retval = $_CONF['language'];
+    }
+
+    return $retval;
 }
 
 /**
@@ -2950,8 +2976,14 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
 
         if( $_CONF['link_documentation'] == 1 )
         {
+            $doclang = COM_getLanguageName();
+            if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/index.html') ) {
+                $docUrl = $_CONF['site_url'].'/docs/'.$doclang.'/index.html';
+            } else {
+                $docUrl = $_CONF['site_url'].'/docs/english/index.html';
+            }
             $adminmenu->set_var( 'option_url',
-                                 $_CONF['site_url'] . '/docs/index.html' );
+                                 $docUrl );
             $adminmenu->set_var( 'option_label', $LANG01[113] );
             $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
             $menu_item = $adminmenu->parse( 'item', 'option' );

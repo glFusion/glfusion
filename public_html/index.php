@@ -333,11 +333,12 @@ if ( $A = DB_fetchArray( $result ) ) {
     }
 
     // display first article
-    $display .= STORY_renderArticle ($story, 'y');
-
-    // get plugin center blocks after featured article
     if ($story->DisplayElements('featured') == 1) {
+        $display .= STORY_renderArticle ($story, 'y');
         $display .= PLG_showCenterblock (2, $page, $topic);
+    } else {
+        $display .= PLG_showCenterblock (2, $page, $topic);
+        $display .= STORY_renderArticle ($story, 'y');
     }
 
     // get remaining stories
@@ -364,6 +365,7 @@ if ( $A = DB_fetchArray( $result ) ) {
         $display .= COM_printPageNavigation ($base_url, $page, $num_pages);
     }
 } else { // no stories to display
+    $display .= PLG_showCenterblock (2, $page, $topic);
     if (!isset ($_CONF['hide_no_news_msg']) ||
             ($_CONF['hide_no_news_msg'] == 0)) {
         $display .= COM_startBlock ($LANG05[1], '',

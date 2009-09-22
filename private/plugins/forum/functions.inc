@@ -1043,6 +1043,10 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         return;
     }
 
+    if ( $CONF_FORUM['centerblock_where'] != $where ) {
+        return;
+    }
+
     require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
     $retval = '';
@@ -1057,19 +1061,6 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $cb_enable = 0;
     } elseif ($cb_homepage == 0 and $page > 1) {
         $cb_where = 1;      // Top of Page
-    }
-
-    // Check if there are no featured articles in this topic
-    // and if so then place it at the top of the page
-    if (!empty ($topic)) {
-        $wheresql = "WHERE tid='$topic' AND featured > 0";
-    } else {
-        $wheresql = 'WHERE featured = 1';
-    }
-    $query = DB_query ("SELECT count(*) as count FROM {$_TABLES['stories']} $wheresql");
-    $result = DB_fetchArray ($query);
-    if ($result['count'] == 0 and $cb_where == 2) {
-        $cb_where = 1;
     }
 
     if ($cb_enable AND ($cb_where == $where)) {

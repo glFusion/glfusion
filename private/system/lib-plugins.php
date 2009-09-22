@@ -2710,4 +2710,30 @@ function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
     return COM_refresh($url);
 }
 
+/**
+* Ask plugin for the URL to its configuration help
+*
+* @param    string  $option  plugin name
+* @param    string  $doclang the current language
+* @return   array
+* @since    glFusion v1.1.6
+*
+*/
+function PLG_getConfigElementHelp($type, $option, $doclang = 'english' )
+{
+    $args[0] = $option;
+    $args[1] = $doclang;
+    $function = 'plugin_getconfigelementhelp_' . $type;
+
+    $retval = array();
+
+    $retval = PLG_callFunctionForOnePlugin($function,$args);
+    if ( $retval === false ) {
+        return array('',0);
+    } else {
+        return $retval;
+    }
+//    return PLG_callFunctionForOnePlugin($function, $args);
+}
+
 ?>
