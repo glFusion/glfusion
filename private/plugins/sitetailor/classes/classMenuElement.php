@@ -622,7 +622,13 @@ class mbElement {
                                 }
 
                                 if( $_CONF['link_documentation'] == 1 ) {
-                                    $url = $_CONF['site_url'] . '/docs/index.html';
+                                    $doclang = COM_getLanguageName();
+                                    if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/index.html') ) {
+                                        $docUrl = $_CONF['site_url'].'/docs/'.$doclang.'/index.html';
+                                    } else {
+                                        $docUrl = $_CONF['site_url'].'/docs/english/index.html';
+                                    }
+                                    $url = $docUrl;
                                     $label = $LANG01[113] . ' (N/A)';
                                     $link_array[$LANG01[113]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }

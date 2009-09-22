@@ -31,7 +31,7 @@
 #gl_moomenu-vert-l{menu_id} ul li,
 #gl_moomenu-vert-r{menu_id} ul li {
 	position:relative;
-	z-index:40;
+	z-index:{under};
 	width:100%;
 	margin:0;
     padding:0;

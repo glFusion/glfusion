@@ -949,6 +949,7 @@ function ST_deleteMenu($menu_id) {
     ST_deleteChildElements(0,$menu_id);
 
     DB_query("DELETE FROM {$_TABLES['st_menus']} WHERE id=".$menu_id);
+    DB_query("DELETE FROM {$_TABLES['st_menus_config']} WHERE menu_id=".$menu_id);
 
     CACHE_remove_instance('stmenu');
     CACHE_remove_instance('css');

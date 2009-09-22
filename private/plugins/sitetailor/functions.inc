@@ -75,15 +75,20 @@ function plugin_getheadercss_sitetailor() {
                     $st_header[] = CACHE_instance_filename($cacheInstance,0);
                 } else {
                     $ms = new Template( $_CONF['path'].'plugins/sitetailor/templates/' );
+                    $under = 0;
+                    $over = 0;
                     switch ($menu['menu_type']) {
                         case 1 :    // horizontal with multi-level
                             $stylefile = 'gl_horizontal-cascading.thtml';
+                            $under = 50;
+                            $over = 51;
                             break;
                         case 2 :    // horizontal with no cascading menus
                             $stylefile = 'gl_horizontal-simple.thtml';
                             break;
                         case 3 :
                             $stylefile = 'gl_vertical-cascading.thtml';
+                            $under = 40;
                             break;
                         case 4 :
                             $stylefile = 'gl_vertical-simple.thtml';
@@ -117,6 +122,21 @@ function plugin_getheadercss_sitetailor() {
                     if ( $themeStyle == 'table' ) {
                         $ms->set_var('themeapi','1');
                     }
+                    if ( $menu['menu_id'] < 4 ) {
+                        $under *= 10;
+                        $over *= 10;
+                    }
+                    if ( $under > 0 ) {
+                        $ms->set_var('under', $under);
+                    } else {
+                        $ms->set_var('under',50);
+                    }
+                    if ( $over > 0 ) {
+                        $ms->set_var('over', $over);
+                    } else {
+                        $ms->set_var('over',50);
+                    }
+
                     $ms->parse ('output', 'style');
                     $fCSS = $ms->finish ($ms->get_var('output'));
                     CACHE_create_instance($cacheInstance, $fCSS, 0);
@@ -125,7 +145,6 @@ function plugin_getheadercss_sitetailor() {
             }
         }
     }
-//print_r($st_header);exit;
     return $st_header;
 }
 
@@ -322,7 +341,7 @@ function plugin_autotags_sitetailor($op,$content='',$autotag='') {
                 }
                 break;
             case 'vmenu' :
-                $menu = phpblock_getMenu('',$autotag['parm1']);
+                $menu = phpblock_getMenu('',trim($autotag['parm1']));
                 $content = str_replace($autotag['tagstr'],$menu,$content);
                 break;
         }

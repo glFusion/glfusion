@@ -16,7 +16,7 @@
 #gl_moomenu{menu_id} {
   height:auto;
   position:relative;
-  z-index:50;
+  z-index:{under};
   margin:0;
 }
 #gl_moomenu{menu_id} ul {
@@ -73,14 +73,14 @@
   position:relative;
 }
 .gl_moomenu{menu_id} li:hover {
-  z-index:51;
+  z-index:{over};
 }
 .gl_moomenu{menu_id} li ul {
   float:none;
   left:-999em;
   position:absolute;
   width:14.6em;
-  z-index:50;
+  z-index:{under};
 }
 .gl_moomenu{menu_id} li:hover ul,.gl_moomenu{menu_id} li.sfHover ul {
   left:-1px;
@@ -92,7 +92,7 @@
 .gl_moomenu{menu_id} li li:hover ul,.gl_moomenu{menu_id} li li.sfHover ul,.gl_moomenu{menu_id} li li li:hover ul,.gl_moomenu{menu_id} li li li.sfHover ul,.gl_moomenu{menu_id} li li li li:hover ul,.gl_moomenu{menu_id} li li li li.sfHover ul {
   left:14.65em;
   top:-1px;
-  z-index:50;
+  z-index:{under};
 }
 .gl_moomenu{menu_id} li li {
   position:relative;
