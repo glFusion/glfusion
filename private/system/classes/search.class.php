@@ -451,7 +451,7 @@ class Search {
         if ($_DB_dbms == 'mssql')
             $sql .= "'/comment.php?mode=view&amp;cid=' + CAST(c.cid AS varchar(10)) AS url ";
         else
-            $sql .= "CONCAT('/article.php?story=',s.sid) AS url ";
+            $sql .= "CONCAT('/article.php?story=',s.sid,'#comments') AS url ";
 
         $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
         $sql .= "LEFT JOIN {$_TABLES['stories']} AS s ON ((s.sid = c.sid) ";
@@ -598,6 +598,8 @@ class Search {
         // Have plugins do their searches
         $page = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'], true) : 1;
         $result_plugins = PLG_doSearch($this->_query, $this->_dateStart, $this->_dateEnd, $this->_topic, $this->_type, $this->_author, $this->_keyType, $page, 5);
+        $result_plugins_comment = PLG_doSearchComment($this->_query, $this->_dateStart, $this->_dateEnd, $this->_topic, $this->_type, $this->_author, $this->_keyType, $page, 5);
+        $result_plugins = array_merge($result_plugins, $result_plugins_comment);
 
         // Add core searches
         if ($this->_type == 'all' || $this->_type == 'stories')

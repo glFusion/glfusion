@@ -422,9 +422,7 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
     if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
         return '';
     }
-
-    $query = trim(addslashes($query));
-
+    $query = trim(addslashes(htmlspecialchars($query)));
 
     $sql  = "SELECT a.lid AS id, a.cid, a.title,submitter AS uid,comments,hits,date,description, CONCAT('/filemgmt/index.php?id=',a.lid) AS url ";
     $sql .= "FROM {$_FM_TABLES['filemgmt_filedetail']} a ";
@@ -456,6 +454,58 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
     $search->setRank(3);
 
     return $search;
+}
+
+/**
+* this searches the plugins comments matching the user query and returns an array of
+* for the header and table rows back to search.php where it will be formated and
+* printed
+*
+* @query            string          Keywords user is looking for
+* @datestart        date/time       Start date to get results for
+* @dateend          date/time       End date to get results for
+* @topic            string          The topic they were searching in
+* @type             string          Type of items they are searching
+* @author           string          Get all results by this author
+*
+*/
+function plugin_dopluginsearch_comment_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
+{
+    global $_USER, $mydownloads_publicpriv, $LANG_FILEMGMT, $_TABLES, $_FM_TABLES, $_CONF, $filemgmt_FileStoreURL, $LANG09;
+
+    $query = trim(addslashes(htmlspecialchars($query)));
+
+    $sql =  "SELECT c.cid AS id1, a.lid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+    $sql .= "CONCAT('/filemgmt/index.php?id=',a.lid,'#comments') AS url ";
+    $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
+    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_filedetail']} a ON c.sid=CONCAT('fileid_',a.lid) ";
+    $sql .= "LEFT JOIN {$_FM_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
+    $sql .= "WHERE (c.type='filemgmt') AND (u.uid = c.uid) ";
+    $sql .= filemgmt_buildAccessSql('AND');
+    $sql .= " AND a.status > 0 ";
+
+    if (!empty($datestart) && !empty($dateend)) {
+        $delim = substr($datestart, 4, 1);
+        if (!empty($delim)) {
+            $DS = explode($delim, $datestart);
+            $DE = explode($delim, $dateend);
+            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
+            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
+            $sql .= "AND (c.date BETWEEN '$startdate' AND '$enddate') ";
+        }
+    }
+    if (!empty($author)) {
+        $sql .= "AND (c.uid = '$author') ";
+    }
+
+    $search_c = new SearchCriteria('comments', $LANG09[66]);
+    $columns = array('comment','c.title');
+    list($sql,$ftsql) = $search_c->buildSearchSQL($keyType, $query, $columns, $sql);
+    $search_c->setSQL($sql);
+    $search_c->setFTSQL($ftsql);
+    $search_c->setRank(2);
+
+    return $search_c;
 }
 
 

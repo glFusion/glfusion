@@ -792,7 +792,7 @@ function PLG_doSearch($query, $datestart, $dateend, $topic, $type, $author, $key
     $search_results = array();
 
     // Search a single plugin if needed
-    if ($type != 'all')
+    if ($type != 'all' )
     {
         $function = 'plugin_dopluginsearch_' . $type;
         if (function_exists($function))
@@ -824,6 +824,53 @@ function PLG_doSearch($query, $datestart, $dateend, $topic, $type, $author, $key
     $function = 'CUSTOM_dopluginsearch';
     if (function_exists($function))
         $search_results[] = $function($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage);
+
+    return $search_results;
+}
+
+/**
+* This function gives each plugin the opportunity to do their search
+* and return their results.  Results comeback in an array of HTML
+* formatted table rows that can be quickly printed by search.php
+*
+* @param    string  $query      What the user searched for
+* @param    date    $datestart  beginning of date range to search for
+* @param    date    $dateend    ending date range to search for
+* @param    string  $topic      the topic the user searched within
+* @param    string  $type       Type of items they are searching, or 'all'
+* @param    int     $author     UID...only return results for this person
+* @param    string  $keyType    search key type: 'all', 'phrase', 'any'
+* @param    int     $page       page number of current search (deprecated)
+* @param    int     $perpage    number of results per page (deprecated)
+* @return   array               Returns search results
+*
+*/
+function PLG_doSearchComment($query, $datestart, $dateend, $topic, $type, $author, $keyType = 'all', $page = 1, $perpage = 10)
+{
+    global $_PLUGINS;
+    /*
+        The new API does not use $page, $perpage
+        $type is now only used in the core and should not be passed to the plugin
+    */
+
+    $search_results = array();
+
+    if ( $type == 'all' || $type == 'comments' )
+    {
+        foreach ($_PLUGINS as $pi_name)
+        {
+            $function = 'plugin_dopluginsearch_comment_' . $pi_name;
+            if (function_exists($function))
+            {
+                $result = $function($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage);
+                if (is_array($result))
+                    $search_results = array_merge($search_results, $result);
+                else
+                    $search_results[] = $result;
+            }
+            // no else because implementation of this API function not required
+        }
+    }
 
     return $search_results;
 }

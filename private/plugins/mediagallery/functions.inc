@@ -370,7 +370,7 @@ function plugin_getwhatsnew_mediagallery() {
         $retval .= $LANG_MG03['no_new_items'] . '<br' . XHTML . '>' . LB;
     }
     if ( $_MG_CONF['disable_whatsnew_comments'] == 0 ) {
-         $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB(NOW(), INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
+        $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB(NOW(), INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
 
         $result = DB_query( $sql,1);
         $nrows2 = DB_numRows( $result );
@@ -2195,7 +2195,7 @@ function plugin_searchtypes_mediagallery()
 *
 */
 function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage) {
-    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01;
+    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01,$LANG09;
 
     if ( $_MG_CONF['disable_search_integration'] == 1) {
         return '';
@@ -2238,7 +2238,61 @@ function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic
     $search->setRank(3);
 
     return $search;
+}
 
+/**
+* this searches the plugins comments matching the user query and returns an array of
+* for the header and table rows back to search.php where it will be formated and
+* printed
+*
+* @query            string          Keywords user is looking for
+* @datestart        date/time       Start date to get results for
+* @dateend          date/time       End date to get results for
+* @topic            string          The topic they were searching in
+* @type             string          Type of items they are searching
+* @author           string          Get all results by this author
+*
+*/
+function plugin_dopluginsearch_comment_mediagallery($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
+{
+    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01,$LANG09;
+
+    if ( $_MG_CONF['disable_search_integration'] == 1) {
+        return '';
+    }
+
+    $query = trim(addslashes(htmlspecialchars($query)));
+
+    $sql =  "SELECT c.cid AS id1, ma.media_id AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+    $sql .= "CONCAT('/mediagallery/media.php?s=',ma.media_id,'#comments') AS url ";
+    $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
+    $sql .= "LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id ";
+    $sql .= "LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id ";
+    $sql .= "WHERE (c.type='mediagallery') AND (u.uid = c.uid) ";
+    $sql .= COM_getPermSQL('AND') . ' ';
+
+    if (!empty($datestart) && !empty($dateend)) {
+        $delim = substr($datestart, 4, 1);
+        if (!empty($delim)) {
+            $DS = explode($delim, $datestart);
+            $DE = explode($delim, $dateend);
+            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
+            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
+            $sql .= "AND (c.date BETWEEN '$startdate' AND '$enddate') ";
+        }
+    }
+    if (!empty($author)) {
+        $sql .= "AND (c.uid = '$author') ";
+    }
+
+    $search_c = new SearchCriteria('comments', $LANG09[66]);
+    $columns = array('comment','c.title');
+    list($sql,$ftsql) = $search_c->buildSearchSQL($keyType, $query, $columns, $sql);
+    $search_c->setSQL($sql);
+    $search_c->setFTSQL($ftsql);
+    $search_c->setRank(2);
+
+    return $search_c;
 }
 
 /**
