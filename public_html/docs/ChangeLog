@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- Allow plugin comments to be included in search results
 - Tweaks to contact user / author templates; consistent widths and display
 - Allow custom/functions.php in theme directory
 - Ensure enabling / removing configuration options clears the config
@@ -50,6 +51,8 @@ Links Plugin
 
 Media Gallery Plugin
 --------------------
+- Increased z-index of lightbox to compensate for z-index fix with
+  Site Tailor menu auto tags
 - RSS feeds were not being referenced in the correct directory
 - When using the destination block on auto tags, the auto tag counter
   was not properly initialized.
@@ -66,6 +69,10 @@ Site Tailor Plugin
   whitespaces from the menu name, thus it didn't actually work.
 - Menu builder did not always honor the URL rewrite setting when building
   links for static pages
+
+Static Pages Plugin
+-------------------
+- 'Last updated' date does not use same format as other dates
 
 Language File Updates
 ---------------------
