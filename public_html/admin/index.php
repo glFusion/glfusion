@@ -155,12 +155,20 @@ function commandcontrol()
     }
 
     // and finally, add the remaining admin items
+
+    $doclang = COM_getLanguageName();
+    if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/index.html') ) {
+        $docUrl = $_CONF['site_url'].'/docs/'.$doclang.'/index.html';
+    } else {
+        $docUrl = $_CONF['site_url'].'/docs/english/index.html';
+    }
+
     $cc_arr = array(
         array('condition' => ($_CONF['allow_mysqldump'] == 1) && ($_DB_dbms == 'mysql') && SEC_inGroup ('Root'),
             'url' => $_CONF['site_admin_url'] . '/database.php',
             'lang' => $LANG01[103], 'image' => '/images/icons/database.'),
         array('condition' => ($_CONF['link_documentation'] == 1),
-            'url' => $_CONF['site_url'] . '/docs/',
+            'url' => $docUrl,
             'lang' => $LANG01[113], 'image' => '/images/icons/docs.'),
         array('condition' => (SEC_inGroup ('Root') &&
                               ($_CONF['link_versionchecker'] == 1)),
