@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- Tweaks to contact user / author templates; consistent widths and display
+- Allow custom/functions.php in theme directory
+- Ensure enabling / removing configuration options clears the config
+  cache file
+- Moved documentation into language directories
+- Added PLG_getConfigElementHelp API call
 - Added PLG_itemDeleted API call Feature #000514
 - Add author to RSS 2.0 syndication feeds for articles
 - Do not error when trying to upgrade a disabled bundled plugin
@@ -51,6 +57,13 @@ Media Gallery Plugin
 
 Site Tailor Plugin
 ------------------
+- Made field order consistent between create element & edit element
+- Properly delete menu config entries when deleting a menu (fix provided
+  by Mark Howard)
+- Fixed z-index issue when multiple menus are on the same page (fix
+  provided by Mark Howard)
+- Fixed a bug with the vmenu auto tag where it did not properly trim
+  whitespaces from the menu name, thus it didn't actually work.
 - Menu builder did not always honor the URL rewrite setting when building
   links for static pages
 
