@@ -3,18 +3,18 @@
 <head>
 
 
-  
+
   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
 
 
-  
-  <link rel="stylesheet" type="text/css" href="layout/style.css" />
+
+  <link href="../docstyle.css" type="text/css" rel="stylesheet" />
 
 
-  
+
   <meta name="robots" content="noindex,nofollow" />
 
-  
+
   <title>Spam-X Plugin - glFusion CMS</title>
 </head>
 
@@ -60,7 +60,7 @@ glFusion and the Spam-X plugin will check the following for spam:
 
 
   <li class="level1">
-    
+
     <div class="li"> Story submissions</div>
 
 
@@ -68,7 +68,7 @@ glFusion and the Spam-X plugin will check the following for spam:
 
 
   <li class="level1">
-    
+
     <div class="li"> Comments</div>
 
 
@@ -76,7 +76,7 @@ glFusion and the Spam-X plugin will check the following for spam:
 
 
   <li class="level1">
-    
+
     <div class="li"> Trackbacks and Pingbacks</div>
 
 
@@ -84,7 +84,7 @@ glFusion and the Spam-X plugin will check the following for spam:
 
 
   <li class="level1">
-    
+
     <div class="li"> Event submissions</div>
 
 
@@ -92,7 +92,7 @@ glFusion and the Spam-X plugin will check the following for spam:
 
 
   <li class="level1">
-    
+
     <div class="li"> Link submissions</div>
 
 
@@ -100,7 +100,7 @@ glFusion and the Spam-X plugin will check the following for spam:
 
 
   <li class="level1">
-    
+
     <div class="li"> Forum Posts</div>
 
 
@@ -108,7 +108,7 @@ glFusion and the Spam-X plugin will check the following for spam:
 
 
   <li class="level1">
-    
+
     <div class="li"> The text sent with the
 &ldquo;Email story to a friend&rdquo; option</div>
 
@@ -117,7 +117,7 @@ glFusion and the Spam-X plugin will check the following for spam:
 
 
   <li class="level1">
-    
+
     <div class="li"> Emails sent to users via the
 &ldquo;send email&rdquo; form from their profile page</div>
 
@@ -126,7 +126,7 @@ glFusion and the Spam-X plugin will check the following for spam:
 
 
   <li class="level1">
-    
+
     <div class="li"> A user's profile</div>
 
 
@@ -162,7 +162,7 @@ glFusion ships with the following examine modules:
 
 
   <li class="level1">
-    
+
     <div class="li"> Spam Link Verification (SLV)</div>
 
 
@@ -170,7 +170,7 @@ glFusion ships with the following examine modules:
 
 
   <li class="level1">
-    
+
     <div class="li"> Personal Blacklist</div>
 
 
@@ -178,7 +178,7 @@ glFusion ships with the following examine modules:
 
 
   <li class="level1">
-    
+
     <div class="li"> IP Filter</div>
 
 
@@ -186,7 +186,7 @@ glFusion ships with the following examine modules:
 
 
   <li class="level1">
-    
+
     <div class="li"> IP of <acronym title="Uniform Resource Locator">URL</acronym> Filter</div>
 
 
@@ -194,7 +194,7 @@ glFusion ships with the following examine modules:
 
 
   <li class="level1">
-    
+
     <div class="li"> <acronym title="Hyper Text Transfer Protocol">HTTP</acronym>
 Header Filter</div>
 
@@ -404,7 +404,7 @@ enter:
     </tr>
 
 
-  
+
   </tbody>
 </table>
 
@@ -541,7 +541,7 @@ Configuration File
 The Spam-X plugin's configuration can be changed from the Configuration
 admin panel:
 Spam-X Main Settings</p>
-<h1><a id="spam-x_configuration_options" name="spam-x_configuration_options">Spam-X 
+<h1><a id="spam-x_configuration_options" name="spam-x_configuration_options">Spam-X
 Configuration Options</a></h1>
 
 <div class="level1">
@@ -560,7 +560,7 @@ Configuration Options</a></h1>
 
       <td class="col0 leftalign"><a name="desc_logging"></a>Enable Logging </td>
 
-      <td class="col1 leftalign">Whether to log recognized spam posts in the spamx.log 
+      <td class="col1 leftalign">Whether to log recognized spam posts in the spamx.log
 logfile (if set to True) or not (False). </td>
     </tr>
 
@@ -568,10 +568,10 @@ logfile (if set to True) or not (False). </td>
 
       <td class="col0 leftalign"><a name="desc_admin_override"></a>Don't Filter Admin Posts </td>
 
-      <td class="col1 leftalign">The Spam-X plugin will filter posts by any user - 
-even site admins. This can be a problem sometimes, e.g. when you want to post a 
-note about spam that itself contains &ldquo;spammy&rdquo; URLs or keywords. When this option 
-is set to True then posts made by users in the 'spamx Admin' group are not 
+      <td class="col1 leftalign">The Spam-X plugin will filter posts by any user -
+even site admins. This can be a problem sometimes, e.g. when you want to post a
+note about spam that itself contains &ldquo;spammy&rdquo; URLs or keywords. When this option
+is set to True then posts made by users in the 'spamx Admin' group are not
 checked for spam. </td>
     </tr>
 
@@ -579,7 +579,7 @@ checked for spam. </td>
 
       <td class="col0 leftalign"><a name="desc_timeout"></a>Timeout </td>
 
-      <td class="col1 leftalign">Timeout (in seconds) for contacting external services 
+      <td class="col1 leftalign">Timeout (in seconds) for contacting external services
 such as SLV. </td>
     </tr>
 
@@ -587,7 +587,7 @@ such as SLV. </td>
 
       <td class="col0 leftalign"><a name="desc_notification_email"></a>Notification Email </td>
 
-      <td class="col1 leftalign">Email address to which spam notifications are sent 
+      <td class="col1 leftalign">Email address to which spam notifications are sent
 when the Mail Admin action module is enabled. </td>
     </tr>
 
@@ -595,8 +595,8 @@ when the Mail Admin action module is enabled. </td>
 
       <td class="col0 leftalign"><a name="desc_action"></a>Spam-X Actions </td>
 
-      <td class="col1 leftalign">This only exists as a fallback in case 
-$_CONF['spamx'] in glFusion's main configuration is not set. (i.e. 
+      <td class="col1 leftalign">This only exists as a fallback in case
+$_CONF['spamx'] in glFusion's main configuration is not set. (i.e.
 $_CONF['spamx'] takes precedence). </td>
     </tr>
   </tbody>
