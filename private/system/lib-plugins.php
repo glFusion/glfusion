@@ -2395,47 +2395,40 @@ function PLG_runScheduledTask ()
 /**
 * "Generic" plugin API: Save item
 *
-* To be called (eventually) whenever glFusion saves an item into the database.
-* Plugins can hook into this and modify the item (which is already in the
-* database but not visible on the site yet).
-*
-* Plugins can signal an error by returning an error message (otherwise, they
-* should return 'false' to signal "no errors"). In case of an error, all the
-* plugins called up to that point will be invoked through an "abort" call to
-* undo their changes.
+* To be called whenever glFusion saves an item into the database.
+* Plugins can define their own 'itemsaved' function to be notified whenever
+* an item is saved or modified.
 *
 * @param    string  $id     unique ID of the item
 * @param    string  $type   type of the item, e.g. 'article'
-* @returns  mixed           Boolean false for "no error", or an error msg text
+* @param    string  $old_id (optional) old ID when the ID was changed
+* @returns  bool            false
 *
 */
-function PLG_itemSaved($id, $type)
+function PLG_itemSaved($id, $type, $old_id = '')
 {
     global $_PLUGINS;
 
-    $error = false;
+    $t = explode('.', $type);
+    $plg_type = $t[0];
 
-    $plugins = count ($_PLUGINS);
+    $plugins = count($_PLUGINS);
     for ($save = 0; $save < $plugins; $save++) {
-        $function = 'plugin_itemsaved_' . $_PLUGINS[$save];
-        if (function_exists($function)) {
-            $error = $function($id, $type);
-            if ($error !== false) {
-                // plugin reported a problem - abort
-
-                for ($abort = 0; $abort < $save; $abort++) {
-                    $function = 'plugin_abortsave_' . $_PLUGINS[$abort];
-                    if (function_exists($function)) {
-                        $function($id, $type);
-                    }
-                }
-                break; // out of for($save) loop
+        if ($_PLUGINS[$save] != $plg_type) {
+            $function = 'plugin_itemsaved_' . $_PLUGINS[$save];
+            if (function_exists($function)) {
+                $function($id, $type, $old_id);
             }
         }
     }
 
-    return $error;
+    if (function_exists('CUSTOM_itemsaved')) {
+        CUSTOM_itemsaved($id, $type, $old_id);
+    }
+
+    return false;
 }
+
 
 /**
 * "Generic" plugin API: Delete item

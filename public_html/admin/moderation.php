@@ -393,7 +393,7 @@ function moderation ($mid, $action, $type, $count)
                 DB_save ($_TABLES['stories'],'sid,uid,tid,title,introtext,bodytext,related,date,show_topic_icon,commentcode,trackbackcode,postmode,frontpage,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon',
                 "'{$A['sid']}',{$A['uid']},'{$A['tid']}','{$A['title']}','{$A['introtext']}','{$A['bodytext']}','{$A['related']}','{$A['date']}','{$_CONF['show_topic_icon']}','{$_CONF['comment_code']}','{$_CONF['trackback_code']}','{$A['postmode']}',$frontpage,{$A['owner_id']},{$T['group_id']},{$T['perm_owner']},{$T['perm_group']},{$T['perm_members']},{$T['perm_anon']}");
                 DB_delete($_TABLES['storysubmission'],"$id",$mid[$i]);
-
+                PLG_itemSaved($A['sid'], 'article');
                 COM_rdfUpToDateCheck ();
                 COM_olderStuff ();
             } else if ($type == 'draft') {

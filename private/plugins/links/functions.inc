@@ -947,6 +947,8 @@ function plugin_save_submit_links($A)
                     'lid,cid,url,description,title,date,owner_id',
                     "{$A['lid']},'{$A['cid']}','{$A['url']}','{$A['description']}','{$A['title']}',NOW(),$owner_id");
 
+        PLG_itemSaved($A['lid'], 'links');
+
         if ($_LI_CONF['notification'] == 1) {
             LINKS_sendNotification($_TABLES['linksubmission'], $A);
         }

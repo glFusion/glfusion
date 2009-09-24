@@ -701,6 +701,7 @@ function modDownloadS() {
    		DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, date=".time().", comments='$commentoption', submitter=$submitter WHERE lid=".intval($_POST['lid']));
 	}
     DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' WHERE lid=".intval($_POST['lid']));
+    PLG_itemSaved(intval($_POST['lid']),'filemgmt');
     CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_url']}/filemgmt/index.php",2,_MD_DBUPDATED);
     exit();
@@ -723,6 +724,8 @@ function delDownload() {
     DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedesc']}    WHERE lid='$lid'");
     DB_query("DELETE FROM {$_FM_TABLES['filemgmt_votedata']}    WHERE lid='$lid'");
     DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid'");
+
+    PLG_itemDeleted($lid,'filemgmt');
 
     // Check for duplicate files of the same filename (actual filename in repository)
     // We don't want to delete actual file if there are more then 1 record linking to it.
@@ -938,6 +941,8 @@ function delCat() {
        DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
        DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='$lid'");
        DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid'");
+
+       PLG_itemDeleted($lid,'filemgmt');
 
        $name = rawurldecode($url);
             $fullname  = $filemgmt_FileStore . $name;
@@ -1163,6 +1168,7 @@ function addDownload() {
         DB_query($sql);
         $newid = DB_insertID();
         DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')");
+        PLG_itemSaved($newid,'filemgmt');
         CACHE_remove_instance('whatsnew');
         if (isset($duplicatefile) && $duplicatefile) {
             redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_NEWDLADDED_DUPFILE);
@@ -1262,6 +1268,7 @@ function approve(){
     if ($AddNewFile) {
         DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', logourl='$logourl', status=1, date=".time() .", comments='$commentoption' where lid='$lid'");
         DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' where lid='$lid'");
+        PLG_itemSaved($lid,'filemgmt');
         CACHE_remove_instance('whatsnew');
         // Send a email to submitter notifying them that file was approved
         if ($filemgmt_Emailoption) {

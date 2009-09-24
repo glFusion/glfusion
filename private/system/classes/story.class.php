@@ -1004,6 +1004,7 @@ class Story
             $this->_perm_anon = $T['perm_anon'];
 
             $this->saveToDatabase();
+            PLG_itemSaved($this->_sid, 'article');
 
             COM_rdfUpToDateCheck();
             COM_olderStuff();

@@ -146,7 +146,7 @@ function MG_batchDeleteMedia( $album_id, $actionURL = '' ) {
         DB_query($sql);
         DB_delete($_TABLES['comments'], 'sid', addslashes($_POST['sel'][$i]));
         DB_delete($_TABLES['mg_playback_options'],'media_id', addslashes($_POST['sel'][$i]));
-        PLG_itemSaved($_POST['sel'][$i],'mediagallery');
+        PLG_itemDeleted($_POST['sel'][$i],'mediagallery');
         $mediaCount--;
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $mediaCount .
                  " WHERE album_id='" . $album_id . "'");
@@ -571,7 +571,7 @@ function MG_deleteChildAlbums( $album_id ){
                 DB_query( $sql );
                 DB_delete($_TABLES['comments'], 'sid', $mediarow[$i]['media_id']);
                 DB_delete($_TABLES['mg_playback_options'],'media_id', $mediarow[$i]['media_id']);
-                PLG_itemSaved($mediarow[$i]['media_id'],'mediagallery');
+                PLG_itemDeleted($mediarow[$i]['media_id'],'mediagallery');
             }
         }
     }

@@ -1666,15 +1666,10 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     // Actually parse the template and make variable substitutions
     $theme->parse( 'index_footer', 'footer' );
 
-    // The following lines allow users to embed PHP in their templates.  This
-    // is almost a contradition to the reasons for using templates but this may
-    // prove useful at times ...
-    // Don't use PHP in templates if you can live without it!
-
     $tmp = $theme->finish($theme->parse( 'index_header', 'header' ));
-    $retval = eval( '?>' . $tmp );
+    echo $tmp;  // send the header.thtml
 
-    $retval .= $theme->finish( $theme->get_var( 'index_footer' ));
+    $retval = $theme->finish( $theme->get_var( 'index_footer' ));
     return $retval;
 }
 

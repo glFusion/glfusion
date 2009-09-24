@@ -1283,14 +1283,10 @@ function service_submit_story($args, &$output, &$svc_msg)
 
     if ($result == STORY_SAVED) {
         // see if any plugins want to act on that story
-        $plugin_error = PLG_itemSaved ($sid, 'article');
-
-        // in case of an error go back to the story editor
-        if ($plugin_error !== false) {
-            $output .= COM_siteHeader ('menu', $LANG24[5]);
-            $output .= storyeditor ($sid, 'retry', $plugin_error);
-            $output .= COM_siteFooter ();
-            return PLG_RET_ERROR;
+        if ((! empty($args['old_sid'])) && ($args['old_sid'] != $sid)) {
+            PLG_itemSaved($sid, 'article', $args['old_sid']);
+        } else {
+            PLG_itemSaved($sid, 'article');
         }
 
         // update feed(s) and Older Stories block
@@ -1354,6 +1350,8 @@ function service_delete_story($args, &$output, &$svc_msg)
 
     // delete Trackbacks
     DB_query ("DELETE FROM {$_TABLES['trackback']} WHERE sid = '".addslashes($sid)."' AND type = 'article';");
+
+    PLG_itemDeleted($sid, 'article');
 
     // update RSS feed and Older Stories block
     COM_rdfUpToDateCheck ();
