@@ -225,6 +225,7 @@ $LANG_ST_TYPES = array(
     5                   => 'Statische Seite',
     6                   => 'Externe URL',
     7                   => 'PHP-Funktion',
+    8                   => 'Label',
 );
 
 
