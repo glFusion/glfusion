@@ -9,7 +9,7 @@ v1.1.6
   cache file
 - Moved documentation into language directories
 - Added PLG_getConfigElementHelp API call
-- Added PLG_itemDeleted API call Feature #000514
+- Full support for PLG_itemSaved() and PLG_itemDeleted() APIs
 - Add author to RSS 2.0 syndication feeds for articles
 - Do not error when trying to upgrade a disabled bundled plugin
 - Security enhancements to the installation scripts
@@ -60,6 +60,8 @@ Media Gallery Plugin
 
 Site Tailor Plugin
 ------------------
+- New element type - Label - allows you to have a non-link label
+  as a menu element
 - Made field order consistent between create element & edit element
 - Properly delete menu config entries when deleting a menu (fix provided
   by Mark Howard)
