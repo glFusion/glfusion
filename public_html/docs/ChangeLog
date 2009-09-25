@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- Ensure topic selection is presistent when viewing admin story list
 - Allow plugin comments to be included in search results
 - Tweaks to contact user / author templates; consistent widths and display
 - Allow custom/functions.php in theme directory

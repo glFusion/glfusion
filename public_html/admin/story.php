@@ -120,6 +120,8 @@ function liststories()
         $current_topic = COM_applyFilter($_GET['tid']);
     } elseif (!empty ($_POST['tid'])) {
         $current_topic = COM_applyFilter($_POST['tid']);
+    } elseif ( !empty($_GET['ptid'])) {
+        $current_topic = COM_applyFilter($_GET['ptid']);
     } else {
         $current_topic = $LANG09[9];
     }
@@ -196,7 +198,7 @@ function liststories()
     );
     $text_arr = array(
         'has_extras' => true,
-        'form_url'   => $_CONF['site_admin_url'] . '/story.php'
+        'form_url'   => $_CONF['site_admin_url'] . '/story.php?ptid='.urlencode($current_topic)
     );
 
     $sql = "SELECT {$_TABLES['stories']}.*, {$_TABLES['users']}.username, {$_TABLES['users']}.fullname, "
