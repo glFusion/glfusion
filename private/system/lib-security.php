@@ -406,7 +406,7 @@ function SEC_hasRights($features,$operator='AND')
                 COM_errorLog('SECURITY: user does not have access to ' . $features[$i],1);
             }
             return false;
-                } else {
+        } else {
             if ($_SEC_VERBOSE) {
                 COM_errorLog('SECURITY: user has access to ' . $features[$i],1);
             }
