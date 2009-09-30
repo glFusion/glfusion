@@ -802,8 +802,8 @@ if ($forum == 0) {
     	                $folderimg = '<img src="'.gf_getImage('quietforum').'" style="border:none;vertical-align:middle;" alt="'.$LANG_GF02['quietforum'].'" title="'.$LANG_GF02['quietforum'].'"' . XHTML . '>';
 	                }
 
-    	            $lastdate1 = strftime('%d', $B['date']);
-        	        if ($lastdate1 == date('d')) {
+    	            $lastdate1 = strftime('%Y-%m-%d',$B['date']);
+        	        if ($lastdate1 == date('Y-m-d') ) {
             	        $lasttime = strftime('%I:%M&nbsp;%p', $B['date']);
                 	    $lastdate = $LANG_GF01['TODAY'] .$lasttime;
 	                } elseif ($CONF_FORUM['allow_user_dateformat']) {
