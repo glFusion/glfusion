@@ -37,6 +37,8 @@ FileMgmt Plugin
 
 Forum Plugin
 ------------
+- Fixed issue where the index page would incorrectly display Today
+  as the last post date when in fact that wasn't true.
 - Fixed invalid index on rating_assoc table (bumped version to 3.1.5)
 - Fix to allow Smiley plugin to work with WYSIWYG editor
 - Ensure the profile edit functions return the proper value
