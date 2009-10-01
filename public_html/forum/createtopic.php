@@ -44,7 +44,6 @@ if (!in_array('forum', $_PLUGINS)) {
     exit;
 }
 
-// require_once $_CONF['path'] . 'plugins/forum/include/include_html.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/include/lib-uploadfiles.php';
@@ -260,7 +259,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     $subject = COM_truncate($subject,100);
                     $subject = gf_preparefordb(strip_tags($_POST['subject']),'text');
 
-//                    $subject = COM_truncate($subject,100);
                     $comment = gf_preparefordb($_POST['comment'],$postmode);
                     $mood = COM_applyFilter($_POST['mood']);
                     $locked = 0;
@@ -1215,87 +1213,4 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
         }
     }
 }
-
-
-/*
-* Function is called to check for notifications that may be setup by forum users
-* A record in the forum_watch table is created for each users's subsctribed notifications
-* Users can subscribe to a complete forum or individual topics.
-* If they have both selected - we only want to send one notification - hense the SQL LIMIT 1
-*
-* This function needs to be called when there is a new topic or a reply
-*/
-function gf_chknotificationsXX($forumid,$topicid,$userid,$type='topic') {
-    global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$CONF_FORUM;
-
-    $pid = DB_getItem($_TABLES['gf_topic'],'pid',"id='$topicid'");
-    if ($pid == 0) {
-      $pid = $topicid;
-    }
-
-    $sql = "SELECT * FROM {$_TABLES['gf_watch']} WHERE ((topic_id='$pid') OR ((forum_id='$forumid') AND (topic_id='0') )) GROUP BY uid";
-    $sqlresult = DB_query($sql);
-    $postername = COM_getDisplayName($userid);
-    $nrows = DB_numRows($sqlresult);
-
-    for ($i =1; $i <= $nrows; $i++) {
-        $N = DB_fetchArray($sqlresult);
-        // Don't need to send a notification to the user that posted this message and users with NOTIFY disabled
-        if ($N['uid'] > 1 AND $N['uid'] != $userid AND $CONF_FORUM['allow_notification'] == '1' ) {
-
-            // if the topic_id is 0 for this record - user has subscribed to complete forum. Check if they have opted out of this forum topic.
-            if (DB_count($_TABLES['gf_watch'],array('uid','forum_id','topic_id'),array($N['uid'],$forumid,-$topicid)) == 0) {
-
-                // Check if user does not want to receive multiple notifications for same topic and already has been notified
-                $userNotifyOnceOption = DB_getItem($_TABLES['gf_userprefs'],'notify_once',"uid='{$N['uid']}'");
-                // Retrieve the log record for this user if it exists then check if user has viewed this topic yet
-                // The logtime value may be 0 which indicates the user has not yet viewed the topic
-                $lsql = DB_query("SELECT time FROM {$_TABLES['gf_log']} WHERE uid='{$N['uid']}' AND forum='$forumid' AND topic='$topicid'");
-                if (DB_numRows($lsql) == 1) {
-                    $nologRecord = false;
-                    list ($logtime) = DB_fetchArray($lsql);
-                } else {
-                    $nologRecord = true;
-                    $logtime = 0;
-                }
-
-                if  ($userNotifyOnceOption == 0 OR ($userNotifyOnceOption == 1 AND ($nologRecord OR $logtime != 0)) ) {
-                    $topicrec = DB_query("SELECT subject,name,forum,last_reply_rec FROM {$_TABLES['gf_topic']} WHERE id='$pid'");
-                    $A = DB_fetchArray($topicrec);
-                    $userrec = DB_query("SELECT username,email,status FROM {$_TABLES['users']} WHERE uid='{$N['uid']}'");
-                    $B = DB_fetchArray($userrec);
-                    if ($B['status'] == USER_ACCOUNT_ACTIVE) {
-                        $subjectline = "{$_CONF['site_name']} {$LANG_GF02['msg22']}";
-                        $message  = "{$LANG_GF01['HELLO']} {$B['username']},\n\n";
-                        if ($type=='forum') {
-                            $forum_name = DB_getItem($_TABLES['gf_forums'],forum_name, "forum_id='$forumid'");
-                            $message .= sprintf($LANG_GF02['msg23b'],$A['subject'],$A['name'],$forum_name, $_CONF['site_name'],$_CONF['site_url'],$pid);
-                        } else {
-                            if ( $A['last_reply_rec'] != '' && $A['last_reply_rec'] != 0 ) {
-                                $last_reply_rec = $A['last_reply_rec'];
-                            } else {
-                                $last_reply_rec = $topicid;
-                            }
-                            $message .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
-                            $message .= sprintf($LANG_GF02['msg23c'],$_CONF['site_url'],$pid,$last_reply_rec);
-                        }
-                        $message .= $LANG_GF02['msg26'];
-                        $message .= sprintf($LANG_GF02['msg27'],"{$_CONF['site_url']}/forum/notify.php");
-                        $message .= "{$LANG_GF02['msg25']}{$_CONF['site_name']} {$LANG_GF01['ADMIN']}\n";
-                        // Check and see if Site admin has enabled email notifications
-                        if ($CONF_FORUM['allow_notification']) {
-                            if ($nologRecord and $userNotifyOnceOption == 1 ) {
-                                DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('{$N['uid']}', '$forumid', '$topicid','0') ");
-                            }
-                            $to = array();
-                            $to = COM_formatEmailAddress('',$B['email']);
-                            COM_mail($to,$subjectline,$message);
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 ?>
