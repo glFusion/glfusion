@@ -644,23 +644,12 @@ function plugin_dopluginsearch_staticpages($query, $datestart, $dateend, $topic,
     $sql .= "WHERE (sp.sp_uid = u.uid) AND (sp_php <> 1) AND (sp_search = 1) ";
     $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 'sp') . ' ';
 
-    if (!empty($datestart) && !empty($dateend))
-    {
-        $delim = substr($datestart, 4, 1);
-        if (!empty($delim))
-        {
-            $DS = explode($delim, $datestart);
-            $DE = explode($delim, $dateend);
-            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-            $sql .= "AND (UNIX_TIMESTAMP(sp_date) BETWEEN '$startdate' AND '$enddate') ";
-        }
-    }
     if (!empty ($author))
         $sql .= "AND (sp_uid = '$author') ";
 
     $search = new SearchCriteria('staticpages', $LANG_STATIC['staticpages']);
     $columns = array('sp_content','sp_title');
+    $sql .= $search->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(sp_date)', $datestart, $dateend);
     list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
     $search->setSQL($sql);
     $search->setFTSQL($ftsql);
@@ -696,22 +685,13 @@ function plugin_dopluginsearch_comment_staticpages($query, $datestart, $dateend,
     $sql .= "WHERE (c.type='staticpages') AND (u.uid = c.uid) ";
     $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 'sp') . ' ';
 
-    if (!empty($datestart) && !empty($dateend)) {
-        $delim = substr($datestart, 4, 1);
-        if (!empty($delim)) {
-            $DS = explode($delim, $datestart);
-            $DE = explode($delim, $dateend);
-            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-            $sql .= "AND (c.date BETWEEN '$startdate' AND '$enddate') ";
-        }
-    }
     if (!empty($author)) {
         $sql .= "AND (c.uid = '$author') ";
     }
 
-    $search_c = new SearchCriteria('comments', $LANG09[66]);
+    $search_c = new SearchCriteria('comments', $LANG_STATIC['staticpages'] . ' > ' . $LANG09[66]);
     $columns = array('comment','c.title');
+    $sql .= $search_c->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(c.date)', $datestart, $dateend);
     list($sql,$ftsql) = $search_c->buildSearchSQL($keyType, $query, $columns, $sql);
     $search_c->setSQL($sql);
     $search_c->setFTSQL($ftsql);

@@ -431,23 +431,12 @@ function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $t
     $sql .= filemgmt_buildAccessSql('WHERE');
     $sql .= " AND a.status > 0 ";
 
-    if (!empty($datestart) && !empty($dateend))
-    {
-        $delim = substr($datestart, 4, 1);
-        if (!empty($delim))
-        {
-            $DS = explode($delim, $datestart);
-            $DE = explode($delim, $dateend);
-            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-            $sql .= "AND (date BETWEEN '$startdate' AND '$enddate') ";
-        }
-    }
     if (!empty ($author))
         $sql .= "AND (submitter = '$author') ";
 
     $search = new SearchCriteria('filemgmt', 'FileMgmt');
     $columns = array('c.description','a.title');
+    $sql .= $search->getDateRangeSQL('AND', 'date', $datestart, $dateend);
     list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
     $search->setSQL($sql);
     $search->setFTSQL($ftsql);
@@ -484,22 +473,13 @@ function plugin_dopluginsearch_comment_filemgmt($query, $datestart, $dateend, $t
     $sql .= filemgmt_buildAccessSql('AND');
     $sql .= " AND a.status > 0 ";
 
-    if (!empty($datestart) && !empty($dateend)) {
-        $delim = substr($datestart, 4, 1);
-        if (!empty($delim)) {
-            $DS = explode($delim, $datestart);
-            $DE = explode($delim, $dateend);
-            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-            $sql .= "AND (c.date BETWEEN '$startdate' AND '$enddate') ";
-        }
-    }
     if (!empty($author)) {
         $sql .= "AND (c.uid = '$author') ";
     }
 
-    $search_c = new SearchCriteria('comments', $LANG09[66]);
+    $search_c = new SearchCriteria('comments', 'FileMgmt > '.$LANG09[66]);
     $columns = array('comment','c.title');
+    $sql .= $search_c->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(c.date)', $datestart, $dateend);
     list($sql,$ftsql) = $search_c->buildSearchSQL($keyType, $query, $columns, $sql);
     $search_c->setSQL($sql);
     $search_c->setFTSQL($ftsql);

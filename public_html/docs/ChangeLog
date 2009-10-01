@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- Spruced up the search results - for comments show type of comment
+  (i.e.; Story > Comment or FileMgmt > Comment)
+- Search using date range did not always work properly across all plugins
 - Ensure topic selection is presistent when viewing admin story list
 - Allow plugin comments to be included in search results
 - Tweaks to contact user / author templates; consistent widths and display
