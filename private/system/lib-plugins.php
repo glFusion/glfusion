@@ -92,7 +92,7 @@ function PLG_callFunctionForAllPlugins($function_name)
             $function();
         }
     }
-    $function = 'custom_' . $function_name;
+    $function = 'CUSTOM_' . $function_name;
     if (function_exists($function)) {
         $function();
     }
@@ -375,7 +375,7 @@ function PLG_isModerator()
             }
         }
     }
-    $function = 'custom_ismoderator';
+    $function = 'CUSTOM_ismoderator';
     if (function_exists($function)) {
         if ( $function() == true ) {
             return true;
@@ -736,32 +736,6 @@ function PLG_getSearchTypes()
 
     asort($types);
     return $types;
-}
-
-/**
-* Determines if a specific plugin supports glFusion's
-* expanded search results feature
-*
-* @author Tony Bibbs, tony AT tonybibbs DOT com
-* @access public
-* @param string $type Plugin name
-* @return boolean True if it is supported, otherwise false
-*
-* NOTE: This function is not currently used
-*
-*/
-function PLG_supportsExpandedSearch($type)
-{
-    $retval = '';
-    $function = 'plugin_supportsexpandedsearch_' . $type;
-    if (function_exists($function)) {
-        $retval = $function();
-    }
-    if (empty($retval) OR !is_bool($retval)) {
-        $retval = false;
-    }
-
-    return $retval;
 }
 
 /**
@@ -1420,12 +1394,6 @@ function PLG_profileSave ($plugin = '')
 {
     if (empty ($plugin)) {
         PLG_callFunctionForAllPlugins ('profilesave');
-
-        $function = 'CUSTOM_profilesave';
-        if (function_exists($function)) {
-            $function();
-        }
-
     } else {
         PLG_callFunctionForOnePlugin ('plugin_profilesave_' . $plugin);
     }
