@@ -121,9 +121,6 @@ if (count ($plg_stats) > 0) {
 
 $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
 
-// old stats plugin API call, for backward compatibilty
-$display .= PLG_getPluginStats (1);
-
 // Detailed story statistics
 
 $result = DB_query("SELECT sid,title,hits FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= NOW()) AND (Hits > 0)" . COM_getPermSQL ('AND') . $topicsql . " ORDER BY hits DESC LIMIT 10");
