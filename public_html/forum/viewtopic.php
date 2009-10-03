@@ -326,7 +326,8 @@ if(isset($_USER['uid']) && $_USER['uid'] > 1 ) {
     if ($showtopicpid == 0 ) {
         $showtopicpid = $showtopic;
     }
-    $lrows = DB_count($_TABLES['gf_log'],array('uid','topic'),array($_USER['uid'],$showtopic));
+
+    $lrows = DB_count($_TABLES['gf_log'],array('uid','topic'),array($_USER['uid'],$showtopicpid));
     $logtime = time();
     if ($lrows < 1) {
         DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('$_USER[uid]','$forum','$showtopicpid','$logtime')");
