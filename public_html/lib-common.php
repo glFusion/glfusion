@@ -7531,6 +7531,18 @@ function css_out(){
         $files[] = $_CONF['path_layout'] . 'style-colors.css';
     }
 
+    /*
+     * Check to see if there are any custom CSS files to include
+     */
+    if( function_exists( 'CUSTOM_css' )) {
+        $customCSS = CUSTOM_css( );
+        if ( is_array($customCSS) ) {
+            foreach($customCSS AS $item => $file) {
+                $files[] = $file;
+            }
+        }
+    }
+
     if ( is_array($_PLUGINS) ) {
         foreach ( $_PLUGINS as $pi_name ) {
             if ( function_exists('plugin_getheadercss_'.$pi_name) ) {
