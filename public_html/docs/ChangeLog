@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- New showblock auto tag
+- Added CUSTOM_css() hook
 - Spruced up the search results - for comments show type of comment
   (i.e.; Story > Comment or FileMgmt > Comment)
 - Search using date range did not always work properly across all plugins
@@ -40,6 +42,9 @@ FileMgmt Plugin
 
 Forum Plugin
 ------------
+- Finally resolved the issue with the Active Forum icon would not always
+  display when there were new posts in a forum.  Thanks to LeeG for providing
+  me enough details to resolve this bug.
 - Fixed issue where the index page would incorrectly display Today
   as the last post date when in fact that wasn't true.
 - Fixed invalid index on rating_assoc table (bumped version to 3.1.5)
@@ -66,6 +71,8 @@ Media Gallery Plugin
 
 Site Tailor Plugin
 ------------------
+- Fixed issue where quotes were not properly filtered when magic_quotes_gpc
+  is enabled in PHP.
 - New element type - Label - allows you to have a non-link label
   as a menu element
 - Made field order consistent between create element & edit element

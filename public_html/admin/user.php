@@ -506,6 +506,17 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
             return edituser($uid, 56);
         }
 
+        if ($_CONF['custom_registration'] && function_exists('CUSTOM_userCheck')) {
+            $ret = CUSTOM_userCheck($username, $email);
+            if (! empty($ret)) {
+                // need a numeric return value - otherwise use default message
+                if (! is_numeric($ret['number'])) {
+                    $ret['number'] = 97;
+                }
+                return edituser($uid, $ret['number']);
+            }
+        }
+
         if (empty ($uid) || !empty ($passwd)) {
             $passwd2 = SEC_encryptPassword($passwd);
         } else {

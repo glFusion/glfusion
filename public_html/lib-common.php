@@ -684,7 +684,7 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
         $templates = explode( ',', $_BLOCK_TEMPLATE[$blockname] );
         if( $which == 'header' )
         {
-            if( !empty( $templates[0] ))
+            if( !empty( $templates[0] )  && file_exists($_CONF['path_layout'].$templates[0]) )
             {
                 $template = $templates[0];
             }
@@ -695,7 +695,7 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
         }
         else
         {
-            if( !empty( $templates[1] ))
+            if( !empty( $templates[1] ) && file_exists($_CONF['path_layout'].$templates[1] ) )
             {
                 $template = $templates[1];
             }

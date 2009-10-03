@@ -608,15 +608,12 @@ function PLG_itemPreSave($type, $content)
 }
 
 /**
-* The way this function works is very specific to how glFusion shows its
-* statistics.  On stats.php, there is the top box which gives overall
-* statistics for glFusion and then there are blocks below it that give
-* more specific statistics for various components of glFusion.
+* Allow a plugin to place entries into the glFusion stats page.
 *
-* This plugin API function suffers from a variety of bugs and bad design
-* decisions for which we have to provide backward compatibility, so please
-* bear with us ...
-*
+* $showsitestats == 2 - Return data for the stats summary
+* $showsitestats == 3 - Return data for the stats detail
+
+
 * The only parameter to this function, $showsitestats, was documented as being
 * 1 for the site stats and 0 for the plugin-specific stats. However, the latter
 * was always called with a value of 2, so plugins only did a check for 1 and
@@ -659,14 +656,6 @@ function PLG_getPluginStats ($showsitestats)
                     $retval[$pi_name] = $summary;
                 }
             }
-        } else if ($showsitestats == 1) {
-            $function1 = 'plugin_showstats_' . $pi_name;
-            $function2 = 'plugin_statssummary_' . $pi_name;
-            if (!function_exists ($function2)) {
-                if (function_exists ($function1)) {
-                    $retval .= $function1 ($showsitestats);
-                }
-            }
         } else if ($showsitestats == 2) {
             $function = 'plugin_showstats_' . $pi_name;
             if (function_exists ($function)) {
@@ -681,14 +670,6 @@ function PLG_getPluginStats ($showsitestats)
             $summary = $function ();
             if (is_array ($summary)) {
                 $retval['Custom'] = $summary;
-            }
-        }
-    } elseif ($showsitestats == 1) {
-        $function1 = 'CUSTOM_showstats';
-        $function2 = 'CUSTOM_statssummary';
-        if (!function_exists ($function2)) {
-            if (function_exists ($function1)) {
-                $retval .= $function1 ($showsitestats);
             }
         }
     } elseif ($showsitestats == 2) {
@@ -1641,7 +1622,7 @@ function PLG_collectTags()
 
     // Determine which Core Modules and Plugins support AutoLinks
     //                        'tag'   => 'module'
-    $autolinkModules = array ('story' => 'glfusion','story_introtext' => 'glfusion');
+    $autolinkModules = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion');
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_autotags_' . $pi_name;
@@ -1672,7 +1653,7 @@ function PLG_collectTags()
 */
 function PLG_replaceTags($content, $plugin = '')
 {
-    global $_CONF, $_TABLES, $LANG32;
+    global $_CONF, $_TABLES, $_BLOCK_TEMPLATE, $LANG32;
 
     if (isset ($_CONF['disable_autolinks']) && ($_CONF['disable_autolinks'] == 1)) {
         // autolinks are disabled - return $content unchanged
@@ -1811,6 +1792,50 @@ function PLG_replaceTags($content, $plugin = '')
                         $linktext = STORY_renderArticle ($story, 'y');
                     }
                     $content = str_replace($autotag['tagstr'],$linktext,$content);
+                }
+                if ( $autotag['tag'] == 'showblock' ) {
+                    $blockName = COM_applyBasicFilter($autotag['parm1']);
+                    $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".addslashes($blockName)."'");
+                    if ( DB_numRows($result) > 0 ) {
+                        $B = DB_fetchArray($result);
+                        $template = '';
+                        $side     = '';
+                        $px = explode (' ', trim ($autotag['parm2']));
+                        if (is_array ($px)) {
+                            foreach ($px as $part) {
+                                if (substr ($part, 0, 9) == 'template:') {
+                                    $a = explode (':', $part);
+                                    $template = $a[1];
+                                    $skip++;
+                                } elseif (substr ($part, 0, 5) == 'side:') {
+                                    $a = explode (':', $part);
+                                    $side = $a[1];
+                                    $skip++;
+                                    break;
+                                }
+                            }
+                            if ($skip != 0) {
+                                if (count ($px) > $skip) {
+                                    for ($i = 0; $i < $skip; $i++) {
+                                        array_shift ($px);
+                                    }
+                                    $caption = trim (implode (' ', $px));
+                                } else {
+                                    $caption = '';
+                                }
+                            }
+                        }
+                        if ( $template != '' ) {
+                            $_BLOCK_TEMPLATE[$blockName] = 'blockheader-'.$template.'.thtml,blockfooter-'.$template.'.thtml';
+                        }
+                        if ( $side == 'left' ) {
+                            $B['onleft'] = 1;
+                        } else if ( $side == 'right' ) {
+                            $B['onleft'] = 0;
+                        }
+                        $linktext = COM_formatBlock( $B );
+                        $content = str_replace($autotag['tagstr'],$linktext,$content);
+                    }
                 }
             } else if (function_exists ($function) AND
                     (empty ($plugin) OR ($plugin == $autotag['module']))) {
