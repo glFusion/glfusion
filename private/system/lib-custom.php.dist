@@ -80,7 +80,7 @@ function CUSTOM_404()
 
 /* --- REMOVE THE COMMENTS TO ENABLE...
 
-function CUSTOM_userCreateHook($uid)
+function CUSTOM_user_create($uid)
 {
     SEC_addUserToGroup($uid, 'Place Group Name Here');
 }
