@@ -51,7 +51,7 @@ function bb2_misc_headers($settings, $package)
 	// NOTE: this blocks the whois.sc bot. No big loss.
 	// Exceptions: MT (not fixable); LJ (refuses to fix; may be
 	// blocked again in the future)
-	if (array_key_exists('Range', $package['headers_mixed']) && strpos($package['headers_mixed']['Range'], "=0-") !== FALSE) {
+	if ($settings['strict'] && array_key_exists('Range', $package['headers_mixed']) && strpos($package['headers_mixed']['Range'], "=0-") !== FALSE) {
 		if (strncmp($ua, "MovableType", 11) && strncmp($ua, "URI::Fetch", 10) && strncmp($ua, "php-openid/", 11)) {
 			return "7ad04a8a";
 		}

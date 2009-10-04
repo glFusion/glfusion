@@ -29,6 +29,19 @@ v1.1.6
 - Added the ability to pass additional parsers and code handlers to
   lib-bbcode.
 
+Bad Behavior2 Plugin
+--------------------
+- Updated to v2.0.29
+    - Users authenticating to a Bad Behavior-protected site using a
+      third party OpenID were blocked with a message stating that:
+      “Data may not be posted from offsite forms.”
+    - A few specialized web crawlers use an unusual form of the Range:
+      HTTP header in their requests, requesting a range starting with 0.
+      This behavior, while technically permitted by the HTTP specification,
+      is most often seen with malicious crawlers; web browsers and major
+      search engines do not use it. Bad Behavior will now block these
+      requests only when strict mode is enabled.
+
 Calendar Plugin
 ---------------
 - Maintain the owner of events placed in the submission queue
