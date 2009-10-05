@@ -398,7 +398,7 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
             PLG_itemDeleted($sp_old_id, 'staticpages');
 
         }
-        PLG_itemSaved($sp_id,'staticpage');
+        PLG_itemSaved($sp_id,'staticpages');
         $url = COM_buildURL($_CONF['site_url'] . '/staticpages/index.php?page='
                             . $sp_id);
         $output .= PLG_afterSaveSwitch($_SP_CONF['aftersave'], $url,
