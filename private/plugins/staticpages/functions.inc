@@ -250,7 +250,7 @@ function plugin_deletecomment_staticpages($cid, $id)
     return $retval;
 }
 
-function plugin_whatsnewcomment_staticpages()
+function plugin_getwhatsnewcomment_staticpages()
 {
     global $_CONF, $_TABLES, $_USER;
 

@@ -189,7 +189,7 @@ function plugin_deletecomment_polls($cid, $id)
     return $retval;
 }
 
-function plugin_whatsnewcomment_polls()
+function plugin_getwhatsnewcomment_polls()
 {
     global $_CONF, $_TABLES, $_USER;
     global $_ST_CONF;

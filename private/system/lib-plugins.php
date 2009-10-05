@@ -2174,7 +2174,7 @@ function PLG_getWhatsNewComment()
     $comments    = array();
 
     foreach ($_PLUGINS as $pi_name) {
-        $fn = 'plugin_whatsnewcomment_' . $pi_name;
+        $fn = 'plugin_getwhatsnewcomment_' . $pi_name;
         if ( function_exists($fn) ) {
             $commentrows = $fn();
             if ( is_array($commentrows) ) {
@@ -2186,7 +2186,7 @@ function PLG_getWhatsNewComment()
 }
 
 /**
-* Allows plugins and Core GL Components to filter out spam.
+* Allows plugins and core Components to filter out spam.
 *
 * The Spam-X Plugin is now part of the glFusion Distribution
 * This plugin API will call the main function in the Spam-X plugin
