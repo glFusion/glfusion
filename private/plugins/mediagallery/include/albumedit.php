@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: albumedit.php 3070 2008-09-07 02:40:49Z mevans0263                $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -179,18 +179,18 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['media_count']       = 0;
         $A['full_display']      = $_MG_CONF['ad_full_display'];
         $A['playback_type']     = $_MG_CONF['ad_playback_type'];
-        $A['podcast']			= $_MG_CONF['ad_podcast'];
+        $A['podcast']			= isset($_MG_CONF['ad_podcast']) ? $_MG_CONF['ad_podcast'] : 0;
         $A['mp3ribbon']         = 0;
         $A['rsschildren']       = 0;
         $A['usealternate']      = isset($_MG_CONF['ad_use_alternate']) ? $_MG_CONF['ad_use_alternate'] : 0;
-        $A['skin']              = 'default';
+        $A['skin']              = $_MG_CONF['ad_skin'];
 
         $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
         $grow = DB_fetchArray($gresult);
         $grp_id = $grow['grp_id'];
 
-        $A['group_id'] = $grp_id;
-        $A['mod_group_id'] = $grp_id;
+        $A['group_id']      = $grp_id;
+        $A['mod_group_id']  = $grp_id;
 
         $A['perm_owner']    = $_MG_CONF['ad_perm_owner'];
         $A['perm_group']    = $_MG_CONF['ad_perm_group'];
@@ -740,9 +740,15 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
 function MG_quickCreate( $parent, $title, $desc='' ) {
     global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST;
 
-    $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
-    $row = DB_fetchArray($result);
-    $grp_id = $row['grp_id'];
+    if ( $parent == 0 ) {
+        $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+        $row = DB_fetchArray($result);
+        $grp_id = $row['grp_id'];
+        $mod_grp_id = $row['grp_id'];
+    } else {
+        $grp_id = $MG_albums[$parent]->group_id;
+        $mod_grp_id = $MG_albums[$parent]->mod_group_id;
+    }
 
     $album = new mgAlbum();
 
@@ -760,7 +766,7 @@ function MG_quickCreate( $parent, $title, $desc='' ) {
     $album->parent          = $parent;
     $album->group_id        = $grp_id;
     $album->owner_id        = $_USER['uid'];
-    $album->mod_group_id    = $grp_id;
+    $album->mod_group_id    = $mod_grp_id;
 
     // simple check to see if we can create off the album root...
     if (!SEC_hasRights('mediagallery.admin')) {
@@ -1070,11 +1076,16 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
         $perm_owner                 = $album->perm_owner; // already set by existing album?
         $perm_group                 = $album->perm_group; // already set by existing album?
         if ( $update == 0 ) {
-            $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
-            $grow = DB_fetchArray($gresult);
-            $grp_id = $grow['grp_id'];
+            if (isset($MG_albums[$album->parent]->group_id ) ) {
+                $grp_id = $MG_albums[$album->parent]->group_id;
+                $album->group_id = $grp_id;
+            } else {
+                $gresult = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_name LIKE 'mediagallery Admin'");
+                $grow = DB_fetchArray($gresult);
+                $grp_id = $grow['grp_id'];
 
-            $album->group_id            = $grp_id;  // only do these two if create....
+                $album->group_id            = $grp_id;  // only do these two if create....
+            }
             $album->mod_group_id        = $_MG_CONF['member_mod_group_id'];
             if ( $album->mod_group_id == '' || $album->mod_group_id < 1 ) {
                 $album->mod_group_id = $grp_id;

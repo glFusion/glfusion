@@ -66,9 +66,12 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     COM_setArgNames( array('id') );
     $lid = COM_applyFilter(COM_getArgument( 'id' ),true);
 
-    $display = COM_siteHeader('menu');
     if ($lid == 0) {  // Check if the script is being called from the commentbar
-        $lid = str_replace('fileid_','',isset($_POST['id']) ? $_POST['id'] : 0);
+        if ( isset($_GET['id']) ) {
+            $lid = intval(str_replace('fileid_','',$_GET['id']));
+        } elseif ( isset($_POST['id']) ) {
+            $lid = intval(str_replace('fileid_','',$_POST['id']));
+        }
     }
 
     $groupsql = filemgmt_buildAccessSql();
@@ -91,7 +94,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
         $result = DB_query($sql);
         list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $comments, $description) = DB_fetchArray($result);
-
+        $display = COM_siteHeader('menu',$dtitle);
         $pathstring = "<a href='{$_CONF['site_url']}/filemgmt/index.php'>"._MD_MAIN."</a>&nbsp;:&nbsp;";
         $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_CONF['site_url']}/filemgmt/viewcat.php");
         $pathstring .= $nicepath;
@@ -122,12 +125,37 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         if ( !isset($title)) {
             $title = '';
         }
-        $p->set_var('comment_records', CMT_userComments( "fileid_{$lid}", $title, 'filemgmt',$_POST['order'],$_POST['mode'],0,1,false,$delete_option));
+
+        if ( $comments ) {
+            $cmt_page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 1;
+            if ( isset($_POST['order']) ) {
+                $cmt_order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+            } elseif (isset($_GET['order']) ) {
+                $cmt_order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+            } else {
+                $cmt_order = 'DESC';
+            }
+            if ( isset($_POST['mode']) ) {
+                $cmt_mode = COM_applyFilter($_POST['mode']);
+            } elseif ( isset($_GET['mode']) ) {
+                $cmt_mode = COM_applyFilter($_GET['mode']);
+            } else {
+                $cmt_mode = '';
+            }
+            $valid_cmt_modes = array('flat','nested','nocomment','threaded');
+            if ( !in_array($cmt_mode,$valid_cmt_modes) ) {
+                $cmt_mode = 'flat';
+            }
+
+            $p->set_var('comment_records', CMT_userComments( "fileid_{$lid}", $title, 'filemgmt',$cmt_order,$cmt_mode,0,$cmt_page,false,$delete_option));
+        } else {
+            $p->set_var('comment_records','');
+        }
         $p->parse ('output', 'page');
         $display .= $p->finish ($p->get_var('output'));
 
-    }   else {
-
+    } else {
+        $display = COM_siteHeader('menu',$LANG_FILEMGMT['usermenu1']);
         $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $p->set_file (array (
             'page'             =>     'filelisting.thtml',
@@ -174,8 +202,8 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
                     if ( $mydownloads_useshots && $myrow['imgurl'] && $myrow['imgurl'] != "http://") {
                         $imgurl = $myts->makeTboxData4Edit($myrow['imgurl']);
-                        $category_image_link = '<a href="' .$_CONF[site_url] .'/filemgmt/viewcat.php?cid=' .$myrow['cid'] .'">';
-                        $category_image_link .= '<img src="' .$filemgmt_SnapCatURL.$imgurl .'" width="'.$mydownloads_shotwidth.'" border="0" alt=""' . XHTML . '></a>';
+                        $category_image_link = '<a href="' .$_CONF['site_url'] .'/filemgmt/viewcat.php?cid=' .$myrow['cid'] .'">';
+                        $category_image_link .= '<img src="' .$filemgmt_SnapCatURL.$imgurl .'" width="'.$mydownloads_shotwidth.'" border="0" alt="'.$myts->makeTboxData4Show($myrow['title']).'"' . XHTML . '></a>';
                         $p->set_var('category_link',$category_image_link);
                     } else {
                         $p->set_var('category_link','&nbsp;');
@@ -255,7 +283,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
                     $description = PLG_replaceTags($myts->makeTareaData4Show($description,0)); //no html
                     $breakPosition = strpos($description,"<br /><br />");
                     if (($breakPosition > 0) AND ($breakPosition < strlen($description)) AND $mydownloads_trimdesc) {
-                        $description = substr($description, 0,$breakPosition) . "<p style=\"text-align:left;\"><a href=\"{$_CONF[site_url]}/filemgmt/index.php?id=$lid&amp;comments=1\">{$LANG_FILEMGMT['more']}</a></p>";
+                        $description = substr($description, 0,$breakPosition) . "<p style=\"text-align:left;\"><a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid&amp;comments=1\">{$LANG_FILEMGMT['more']}</a></p>";
                     }
                     $result2 = DB_query("SELECT username,fullname,photo  FROM {$_TABLES['users']} WHERE uid = $submitter");
                     list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);

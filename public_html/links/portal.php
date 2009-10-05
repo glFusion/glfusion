@@ -59,7 +59,6 @@ if (!in_array('links', $_PLUGINS)) {
     exit;
 }
 
-
 // MAIN
 
 $url = '';
@@ -68,7 +67,6 @@ COM_setArgNames(array('what', 'item'));
 $what = COM_getArgument('what');
 
 if ($what == 'link') {
-
     $item = COM_applyFilter(COM_getArgument('item'));
     if (!empty($item)) {
         // Hack: due to PLG_afterSaveSwitch settings, we may get
@@ -76,14 +74,12 @@ if ($what == 'link') {
         $i = explode('&', $item);
         $item = $i[0];
     }
-
     if (!empty($item)) {
-        $url = DB_getItem($_TABLES['links'], 'url', "lid = '{$item}'");
+        $url = DB_getItem($_TABLES['links'], 'url', "lid = '".addslashes($item)."'");
         if (!empty($url)) {
-            DB_change($_TABLES['links'], 'hits','hits + 1', 'lid',$item, '', true);
+            DB_change($_TABLES['links'], 'hits','hits + 1', 'lid',addslashes($item), '', true);
         }
     }
-
 }
 
 if (empty($url)) {

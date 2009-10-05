@@ -84,7 +84,7 @@ function glfusion_SecurityCheck() {
     if ( $_SYSTEM['no_fail_sql'] ) {
         $msg .= $LANG01[502].'<br />';
     }
-    if ( $_SYSTEM['maintenance_mode'] ) {
+    if ( $_CONF['maintenance_mode'] ) {
         $msg .= $LANG01[503].'<br />';
     }
     if ( $msg != '' ) {
@@ -95,7 +95,7 @@ function glfusion_SecurityCheck() {
 
 function phpblock_blogroll ()
 {
-    global $_CONF, $_TABLES, $_ST_CONF, $pageHandle;
+    global $_CONF, $_TABLES, $_ST_CONF;
 
     // configuration options:
 
@@ -122,7 +122,7 @@ function phpblock_blogroll ()
 
             } else {
                 $url = $_CONF['site_url']
-                     . $pageHandle->buildUrl ($_CONF['site_url'] . '/links/portal.php?what=link&amp;item=' . $A['lid']);
+                     . COM_buildUrl ('/links/portal.php?what=link&amp;item=' . $A['lid']);
                 $link = '<a href="' . $url . '" title="' . $A['url'] . '">';
 
             }
@@ -184,16 +184,15 @@ function phpblock_blogroll ()
  *      Does not handle stories that may have expired.
  */
 function phpblock_storypicker() {
-    global $_TABLES, $_CONF, $topic, $pageHandle;
+    global $_TABLES, $_CONF, $topic;
 
     $LANG_STORYPICKER = Array('choose' => 'Choose a story');
     $max_stories = 5; //how many stories to display in the list
 
     $topicsql = '';
     $sid = '';
-    $sid = $inputHandler->getVar('strict','story','get','');
-
-    if ($sid != '') {
+    if (isset($_GET['story'])) {
+        $sid = COM_applyFilter($_GET['story']);
         $stopic = DB_getItem($_TABLES['stories'], 'tid', 'sid = \''.addslashes($sid).'\'');
         if (!empty($stopic)) {
             $topic = $stopic;
@@ -202,8 +201,14 @@ function phpblock_storypicker() {
         }
     }
 
-    if (empty($topic)) {
-        $topic = $inputHandler->getVar('strict','topic','request','');
+    if ( empty($topic) ) {
+        if ( isset($_GET['topic']) ) {
+            $topic = COM_applyFilter($_GET['topic']);
+        } elseif (isset($_POST['topic']) ) {
+            $topic = COM_applyFilter($_POST['topic']);
+        } else {
+            $topic = '';
+        }
     }
     if (!empty($topic)) {
         $topicsql = " AND tid = '".addslashes($topic)."'";
@@ -226,7 +231,7 @@ function phpblock_storypicker() {
     $res = DB_query($sql);
     $list = '';
     while ($A = DB_fetchArray($res)) {
-        $url = $pageHandle->buildUrl ($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
+        $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
         $list .= '<li><a href=' . $url .'>'
 		//uncomment the 2 lines below to limit of characters displayed in the title
 		. htmlspecialchars(COM_truncate($A['title'],41,'...')) . "</a></li>\n";
@@ -257,13 +262,22 @@ function CTL_clearCacheDirectories($path, $needle = '')
 
 function CTL_clearCache($plugin='')
 {
-    global $TEMPLATE_OPTIONS, $_CONF;
+    global $TEMPLATE_OPTIONS, $_CONF, $_SYSTEM;
 
     if (!empty($plugin)) {
         $plugin = '__' . $plugin . '__';
     }
 
     CTL_clearCacheDirectories($_CONF['path_data'] . 'layout_cache/', $plugin);
+
+    if ( $_SYSTEM['use_direct_style_js'] ) {
+        foreach (glob($_CONF['path_html'].$_CONF['css_cache_filename']."*.*") as $filename) {
+            @unlink($filename);
+        }
+        foreach (glob($_CONF['path_html'].$_CONF['js_cache_filename']."*.*") as $filename) {
+            @unlink($filename);
+        }
+    }
 
     css_out();
     js_out();

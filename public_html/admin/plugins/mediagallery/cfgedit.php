@@ -298,7 +298,6 @@ function MG_editConfig( ) {
         'at_src_select'         => $at_src_select,
         'at_delay'              => $_MG_CONF['at_delay'],
         'flv_select'            => $flv_select,
-        'search_enable_rating_select' => $search_rating_select,
         'search_playback_type'  => $search_playback_type,
         'search_columns'        => $_MG_CONF['search_columns'],
         'search_rows'           => $_MG_CONF['search_rows'],

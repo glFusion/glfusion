@@ -87,6 +87,7 @@ class Search {
         } else {
             $this->_query = '';
         }
+        $this->_query = preg_replace('/\s\s+/', ' ', $this->_query);
         if ( isset($_GET['topic']) ){
             $this->_topic = strip_tags (COM_stripslashes ($_GET['topic']));
         } else if ( isset($_POST['topic']) ) {
@@ -101,11 +102,17 @@ class Search {
         } else {
             $this->_dateStart = '';
         }
+        if ( $this->_validateDate($this->_dateStart) == false ) {
+            $this->_dateStart = '';
+        }
         if (isset ($_GET['dateend'])) {
             $this->_dateEnd = COM_applyFilter ($_GET['dateend']);
         } else if (isset($_POST['dateend']) ) {
             $this->_dateEnd = COM_applyFilter ($_POST['dateend']);
         } else {
+            $this->_dateEnd = '';
+        }
+        if ( $this->_validateDate($this->_dateEnd) == false ) {
             $this->_dateEnd = '';
         }
         if (isset ($_GET['author'])) {
@@ -191,7 +198,7 @@ class Search {
     {
         global $_USER, $_CONF;
 
-        if ( !isset($_USER) || $_USER['uid'] < 2 ) {
+        if ( COM_isAnonUser() ) {
             //check if an anonymous user is attempting to illegally access privilege search capabilities
             if (($this->_type != 'all') OR !empty($this->_dateStart) OR !empty($this->_dateEnd) OR ($this->_author > 0) OR !empty($this->_topic)) {
                 if (($_CONF['loginrequired'] == 1) OR ($_CONF['searchloginrequired'] >= 1)) {
@@ -223,7 +230,7 @@ class Search {
     {
         global $_CONF, $_USER;
 
-        if ((!isset($_USER) || $_USER['uid'] < 2) AND (($_CONF['loginrequired'] == 1) OR ($_CONF['searchloginrequired'] >= 1))) {
+        if ( COM_isAnonUser() AND (($_CONF['loginrequired'] == 1) OR ($_CONF['searchloginrequired'] >= 1))) {
             return false;
         }
 
@@ -355,8 +362,9 @@ class Search {
         $limits = explode(',', $_CONF['search_limits']);
         foreach ($limits as $limit) {
             $options .= "<option value=\"$limit\"";
-            if ($_CONF['num_search_results'] == $limit)
+            if ($_CONF['num_search_results'] == $limit) {
                 $options .= ' selected="selected"';
+            }
             $options .= ">$limit</option>" . LB;
         }
         $searchform->set_var('search_limits', $options);
@@ -391,25 +399,16 @@ class Search {
         $sql .= "WHERE (draft_flag = 0) AND (date <= NOW()) AND (u.uid = s.uid) ";
         $sql .= COM_getPermSQL('AND') . COM_getTopicSQL('AND') . COM_getLangSQL('sid', 'AND') . ' ';
 
-        if (!empty($this->_dateStart) && !empty($this->_dateEnd))
-        {
-            $delim = substr($this->_dateStart, 4, 1);
-            if (!empty($delim))
-            {
-                $DS = explode($delim, $this->_dateStart);
-                $DE = explode($delim, $this->_dateEnd);
-                $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-                $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-                $sql .= "AND (date BETWEEN '{$this->_dateStart}' AND '{$this->_dateEnd}') ";
-            }
-        }
-        if (!empty($this->_topic))
+        if (!empty($this->_topic)) {
             $sql .= "AND (s.tid = '$this->_topic') ";
-        if (!empty($this->_author))
+        }
+        if (!empty($this->_author)) {
             $sql .= "AND (s.uid = '$this->_author') ";
+        }
 
         $search = new SearchCriteria('stories', $LANG09[65]);
         $columns = array('introtext','bodytext','title');
+        $sql .= $search->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(s.date)', $this->_dateStart, $this->_dateEnd);
         list($sql,$ftsql) = $search->buildSearchSQL($this->_keyType, $query, $columns, $sql);
         $search->setSQL($sql);
         $search->setFTSQL($ftsql);
@@ -441,32 +440,21 @@ class Search {
         if ($_DB_dbms == 'mssql')
             $sql .= "'/comment.php?mode=view&amp;cid=' + CAST(c.cid AS varchar(10)) AS url ";
         else
-            $sql .= "CONCAT('/article.php?story=',s.sid) AS url ";
+            $sql .= "CONCAT('/article.php?story=',s.sid,'#comments') AS url ";
 
         $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
         $sql .= "LEFT JOIN {$_TABLES['stories']} AS s ON ((s.sid = c.sid) ";
         $sql .= COM_getPermSQL('AND',0,2,'s') . COM_getTopicSQL('AND',0,'s') . COM_getLangSQL('sid','AND','s') . ") ";
         $sql .= "WHERE (u.uid = c.uid) AND (s.draft_flag = 0) AND (s.commentcode >= 0) AND (s.date <= NOW()) ";
 
-        if (!empty($this->_dateStart) && !empty($this->_dateEnd))
-        {
-            $delim = substr($this->_dateStart, 4, 1);
-            if (!empty($delim))
-            {
-                $DS = explode($delim, $this->_dateStart);
-                $DE = explode($delim, $this->_dateEnd);
-                $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-                $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-                $sql .= "AND (c.date BETWEEN '$startdate' AND '$enddate') ";
-            }
-        }
         if (!empty($this->_topic))
             $sql .= "AND (s.tid = '$this->_topic') ";
         if (!empty($this->_author))
             $sql .= "AND (c.uid = '$this->_author') ";
 
-        $search = new SearchCriteria('comments', $LANG09[66]);
+        $search = new SearchCriteria('comments', $LANG09[65] . ' > '. $LANG09[66]);
         $columns = array('comment','c.title');
+        $sql .= $search->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(c.date)', $this->_dateStart, $this->_dateEnd);
         list($sql,$ftsql) = $search->buildSearchSQL($this->_keyType, $query, $columns, $sql);
         $search->setSQL($sql);
         $search->setFTSQL($ftsql);
@@ -491,7 +479,7 @@ class Search {
      */
     function doSearch()
     {
-        global $_CONF, $LANG01, $LANG09, $LANG31;
+        global $_CONF, $LANG01, $LANG09, $LANG31, $_TABLES, $_USER;
 
         $debug_info = '';
 
@@ -538,6 +526,12 @@ class Search {
         $show_user = $_CONF['search_show_user'];
         $show_hits = $_CONF['search_show_hits'];
         $style = isset($_CONF['search_style']) ? $_CONF['search_style'] : 'google';
+        if ( !COM_isAnonUser() ) {
+            $userStyle = DB_getItem($_TABLES['userprefs'],'search_result_format','uid='.$_USER['uid']);
+            if ( $userStyle != '' ) {
+                $style = $userStyle;
+            }
+        }
 
         if ($style == 'table')
         {
@@ -582,6 +576,8 @@ class Search {
         // Have plugins do their searches
         $page = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'], true) : 1;
         $result_plugins = PLG_doSearch($this->_query, $this->_dateStart, $this->_dateEnd, $this->_topic, $this->_type, $this->_author, $this->_keyType, $page, 5);
+        $result_plugins_comment = PLG_doSearchComment($this->_query, $this->_dateStart, $this->_dateEnd, $this->_topic, $this->_type, $this->_author, $this->_keyType, $page, 5);
+        $result_plugins = array_merge($result_plugins, $result_plugins_comment);
 
         // Add core searches
         if ($this->_type == 'all' || $this->_type == 'stories')
@@ -709,6 +705,8 @@ class Search {
         }
         else
             $searchQuery = $LANG09[55] . " '<b>$escquery</b>'";
+        // Clean the query string so that sprintf works as expected
+        $searchQuery = str_replace("%", "%%", $searchQuery);
 
         $retval = "{$LANG09[25]} $searchQuery. ";
         if (count($results) == 0)
@@ -721,7 +719,7 @@ class Search {
         else
         {
             $retval .= " ($searchtime {$LANG09[27]}). <br />" . COM_createLink($LANG09[61], $url.'refine');
-            $retval = $obj->getFormattedOutput($results, $LANG09[11], $retval, '', $_CONF['search_show_sort'], $_CONF['search_show_limit']);
+            $retval = $obj->getFormattedOutput($results, $LANG09[11], $retval, '');
         }
 
 //        echo '<pre>'.$debug_info.'</pre>';
@@ -777,7 +775,7 @@ class Search {
             if ( $row['description'] == '' ) {
                 $row['description'] = $_CONF['search_no_data'];
             } else {
-                $row['description'] = stripslashes($row['description']);
+                $row['description'] = $row['description'];
             }
 
             if ($row['description'] != $_CONF['search_no_data'])
@@ -810,24 +808,24 @@ class Search {
     function _shortenText($keyword, $text, $num_words = 7)
     {
         $text = strip_tags($text);
+        $text = str_replace(array("\011", "\012", "\015"), ' ', trim($text));
+        $text = str_replace('&nbsp;', ' ', $text);
+        $text = preg_replace('/\s\s+/', ' ', $text);
         $words = explode(' ', $text);
-        if (count($words) <= $num_words) {
+        $word_count = count($words);
+        if ($word_count <= $num_words) {
             return stripslashes($this->_highlightQuery($text, $keyword, 'b'));
         }
 
         $rt = '';
-        if ( $keyword == '' ) {
-            $pos = false;
-        } else {
-            $pos = stripos($text, $keyword);
-        }
+        $pos = $this->_stripos($text, $keyword);
         if ($pos !== false)
         {
             $pos_space = strpos($text, ' ', $pos);
             if (empty($pos_space))
             {
                 // Keyword at the end of text
-                $key = count($words);
+                $key = $word_count - 1;
                 $start = 0 - $num_words;
                 $end = 0;
                 $rt = '<b>...</b> ';
@@ -835,19 +833,32 @@ class Search {
             else
             {
                 $str = substr($text, $pos, $pos_space - $pos);
-                $key = array_search($str, $words);
-                $m = ($num_words - 1) / 2;
-                if ($key <= $m)
-                {
-                    // Keyword at the start of text
+                $m = (int) (($num_words - 1) / 2);
+                $key = $this->_arraySearch($keyword, $words);
+                if ($key === false) {
+                    // Keyword(s) not found - show start of text
+                    $key = 0;
                     $start = 0;
                     $end = $num_words - 1;
-                }
-                else
-                {
+                } elseif ($key <= $m) {
+                    // Keyword at the start of text
+                    $start = 0 - $key;
+                    $end = $num_words - 1;
+                    $end = ($key + $m <= $word_count - 1)
+                         ? $key : $word_count - $m - 1;
+                    $abs_length = abs($start) + abs($end) + 1;
+                    if ($abs_length < $num_words) {
+                        $end += ($num_words - $abs_length);
+                    }
+                } else {
                     // Keyword in the middle of text
                     $start = 0 - $m;
-                    $end = $m;
+                    $end = ($key + $m <= $word_count - 1)
+                         ? $m : $word_count - $key - 1;
+                    $abs_length = abs($start) + abs($end) + 1;
+                    if ($abs_length < $num_words) {
+                        $start -= ($num_words - $abs_length);
+                    }
                     $rt = '<b>...</b> ';
                 }
             }
@@ -859,11 +870,51 @@ class Search {
             $end = $num_words - 1;
         }
 
-        for ($i = $start; $i <= $end; $i++)
+        for ($i = $start; $i <= $end; $i++) {
             $rt .= $words[$key + $i] . ' ';
+        }
+        if ($key + $i != $word_count) {
+            $rt .= ' <b>...</b>';
+        }
         $rt .= ' <b>...</b>';
 
         return stripslashes($this->_highlightQuery($rt, $keyword, 'b'));
+    }
+
+    /**
+    * Search array of words for keyword(s)
+    *
+    * @param   string  $needle    keyword(s), separated by spaces
+    * @param   array   $haystack  array of words to search through
+    * @return  mixed              index in $haystack or false when not found
+    * @access  private
+    *
+    */
+    function _arraySearch($needle, $haystack)
+    {
+        $keywords = explode(' ', $needle);
+        $num_keywords = count($keywords);
+
+        foreach ($haystack as $key => $value) {
+            if ($this->_stripos($value, $keywords[0]) !== false) {
+                if ($num_keywords == 1) {
+                    return $key;
+                } else {
+                    $matched_all = true;
+                    for ($i = 1; $i < $num_keywords; $i++) {
+                        if ($this->_stripos($haystack[$key + $i], $keywords[$i]) === false) {
+                            $matched_all = false;
+                            break;
+                        }
+                    }
+                    if ($matched_all) {
+                        return $key;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -925,7 +976,6 @@ class Search {
 
         // escape all the other PCRE special characters
         $query = preg_quote( $query );
-
         // ugly workaround:
         // Using the /e modifier in preg_replace will cause all double quotes to
         // be returned as \" - so we replace all \" in the result with unescaped
@@ -934,9 +984,11 @@ class Search {
         $text = str_replace( '\\"', '\\\\"', $text );
 
         if ( $this->_keyType == 'phrase' ) {
-            $mywords = array($query);
+            $squery = str_replace('/',' ',$query);
+            $mywords = array($squery);
         } else {
-            $mywords = explode( ' ', $query );
+            $squery = str_replace('/',' ',$query);
+            $mywords = explode( ' ', $squery );
         }
         foreach( $mywords as $searchword )
         {
@@ -949,11 +1001,37 @@ class Search {
 
         // ugly workaround, part 2
         $text = str_replace( '\\"', '"', $text );
-
         return $text;
     }
 
+    function _stripos($haystack, $needle)
+    {
+        if (function_exists('stripos')) {
+            return stripos($haystack, $needle);
+        } else {
+            return strpos(strtolower($haystack), strtolower($needle));
+        }
+    }
 
+    function _validateDate( $dateString )
+    {
+        $delim = substr($dateString, 4, 1);
+        if (!empty($delim)) {
+            $DS = explode($delim, $dateString);
+            if ( intval($DS[0]) < 1970 ) {
+                return false;
+            }
+            if ( intval($DS[1]) < 1 || intval($DS[1]) > 12 ) {
+                return false;
+            }
+            if ( intval($DS[2]) < 1 || intval($DS[2]) > 31 ) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
 }
 
 ?>

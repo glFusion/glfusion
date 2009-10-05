@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -36,12 +33,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once 'lib-common.php';
+require_once ('lib-common.php');
 
-$pageHandle->setPageTitle($LANG_404[1]);
-
-$pageHandle->addContent(COM_startBlock ($LANG_404[1]));
-
+$display = COM_siteHeader ('menu', $LANG_404[1]);
+$display .= COM_startBlock ($LANG_404[1]);
 if (isset ($_SERVER['SCRIPT_URI'])) {
     $url = strip_tags ($_SERVER['SCRIPT_URI']);
 } else {
@@ -53,8 +48,11 @@ if (isset ($_SERVER['SCRIPT_URI'])) {
     }
     $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
 }
-$pageHandle->addContent(sprintf ($LANG_404[2], $url))
-$pageHandle->addContent($LANG_404[3]);
-$pageHandle->addContent(COM_endBlock ());
-$pageHandle->displayPage();
+$display .= sprintf ($LANG_404[2], $url);
+$display .= $LANG_404[3];
+$display .= COM_endBlock ();
+$display .= COM_siteFooter ();
+
+echo $display
+
 ?>

@@ -8,5 +8,6 @@
     <div>
         {boxes_checklist}
     </div>
+    {plugin_content_boxes}
 </fieldset>
 {# end {templatelocation} #}

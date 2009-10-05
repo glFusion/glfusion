@@ -303,7 +303,7 @@
   width: 100%;
   background-color: #000;
   cursor: pointer;
-  z-index:50;
+  z-index:500;
 }
 
 #lbCenter, #lbBottomContainer {
@@ -311,7 +311,7 @@
   left: 50%;
   overflow: hidden;
   background-color: #fff;
-  z-index:51;
+  z-index:510;
 }
 
 .lbLoading {

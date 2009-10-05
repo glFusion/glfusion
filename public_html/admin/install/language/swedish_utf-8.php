@@ -85,12 +85,12 @@ $LANG_INSTALL = array(
     'filesystem_check' => 'Kontrollera filsystem',
     'forum' => 'Ladda Forum Till&auml;gg?',
     'forum_desc' => 'Ett online forum system. Ger gemenskap, samarbete och interaktivitet.',
-    'geeklog_migrate' => 'Migrera en Geeklog v1.5+ Sajt',
+    'geeklog_migrate' => 'Migrera en Geeklog v1.4.1+ Sajt',
     'hosting_env' => 'Webbplatskontroll',
     'install' => 'Installera',
     'install_heading' => 'glFusion Installation',
     'install_steps' => 'INSTALLATIONS STEG',
-    'invalid_geeklog_version' => 'Installeraren kan inte hitta siteconfig.php. &auml;r du s&auml;ker p&aring; att du migrerar fr&aring;n Geeklog v.1.5.0 eller h&ouml;gre? Om du anv&auml;nder en &auml;ldre Geeklog installation, v&auml;ndligen uppgradea till minst Geeklog v1.5.0 och f&ouml;rs&ouml;k sen att migrera igen.',
+    'invalid_geeklog_version' => 'Installeraren kan inte hitta siteconfig.php. &auml;r du s&auml;ker p&aring; att du migrerar fr&aring;n Geeklog v.1.4.1 eller h&ouml;gre? Om du anv&auml;nder en &auml;ldre Geeklog installation, v&auml;ndligen uppgradea till minst Geeklog v1.4.1 och f&ouml;rs&ouml;k sen att migrera igen.',
     'language' => 'Spr&aring;l',
     'language_task' => 'Spr&aring;k & Uppgift',
     'libcustom_not_writable' => 'lib-custom.php &auml;r inte skrivbar.',
@@ -167,16 +167,17 @@ $LANG_INSTALL = array(
     'upgrade_steps' => 'UPPGRADERINGSSTEG',
     'upload_max_filesize' => 'glFusion till&aring;ter dig att ladda upp till&auml;gg, bilder och filer. Du b&ouml;r till&aring;ta minst 8M som uppladdningstorlek.',
     'use_utf8' => 'Anv&auml;nd UTF-8',
-    'welcome_help' => 'V&auml;lkommen till glFusion CMS Installations Verktyg. Du kan installera en ny glFusion sajt, uppgradera en existerande glFusion sajt eller migrera fr&aring;n en existerande Geeklog v1.5 sajt.<br /><br />V&auml;nligen v&auml;lj spr&aring;k f&ouml;r verktygen, och sen uppgiften att utf&ouml;ra, tryck sedan <strong>N&auml;sta</strong>.',
+    'welcome_help' => 'V&auml;lkommen till glFusion CMS Installations Verktyg. Du kan installera en ny glFusion sajt, uppgradera en existerande glFusion sajt eller migrera fr&aring;n en existerande Geeklog v1.4.1 sajt.<br /><br />V&auml;nligen v&auml;lj spr&aring;k f&ouml;r verktygen, och sen uppgiften att utf&ouml;ra, tryck sedan <strong>N&auml;sta</strong>.',
     'wizard_version' => 'v1.1.3.svn Installation Verktyg',
-    'system_path_prompt' => 'Fyll i hela den absoluta s&ouml;kv&auml;gen till din servers glFusions <strong>private/</strong> katalog.<br /><br />Den h&auml;r katalogen inneh&aring;ller <strong>db-config.php.dist</strong> eller <strong>db-config.php</strong> filen.<br /><br />Exempel: /home/www/glfuison/private eller c:/www/glfusion/private.<br /><br /><strong>Tips:</strong> Den absoluta s&ouml;kv&auml;gen till din public_html/ katalog verkar vara:<br />%s<br /><br /><strong>Avancerade Inst&auml;llningar</strong> till&aring;ter dig att forcera vissa av standard s&ouml;kv&auml;garna. Vanligtvis beh&ouml;ver du inte modifiera eller specificera dessa s&ouml;kv&auml;gar, systemet kommer best&auml;mma dem automatiskt.',
+    'system_path_prompt' => 'Fyll i hela den absoluta s&ouml;kv&auml;gen till din servers glFusions <strong>private/</strong> katalog.<br /><br />Den h&auml;r katalogen inneh&aring;ller <strong>db-config.php.dist</strong> eller <strong>db-config.php</strong> filen.<br /><br />Exempel: /home/www/glfusion/private eller c:/www/glfusion/private.<br /><br /><strong>Tips:</strong> Den absoluta s&ouml;kv&auml;gen till din <strong>public_html/</strong> <i>(inte <strong>private/</strong>)</i> katalog verkar vara:<br /><br />%s<br /><br /><strong>Avancerade Inst&auml;llningar</strong> till&aring;ter dig att forcera vissa av standard s&ouml;kv&auml;garna. Vanligtvis beh&ouml;ver du inte modifiera eller specificera dessa s&ouml;kv&auml;gar, systemet kommer best&auml;mma dem automatiskt.',
     'advanced_settings' => 'Avancerade Inst&auml;llningar',
     'log_path' => 'S&ouml;kv&auml;g till Logs',
     'lang_path' => 'S&ouml;kv&auml;g till Spr&aring;k (Lang)',
     'backup_path' => 'S&ouml;kv&auml;g Till Backup',
     'data_path' => 'S&ouml;kv&auml;g till Data',
     'language_support' => 'Language Support',
-    'language_pack' => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Language Pack</a> which contains the language files for all supported languages.'
+    'language_pack' => 'glFusion ships in English, but after installation you can download and install the <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Language Pack</a> which contains the language files for all supported languages.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

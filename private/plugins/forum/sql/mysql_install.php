@@ -2,13 +2,13 @@
 // +--------------------------------------------------------------------------+
 // | Forum Plugin for glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
-// | mysql_install_3.0.php                                                    |
+// | mysql_install.php                                                        |
 // |                                                                          |
 // | SQL Commands for new install of the Forum plugin.                        |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -53,7 +53,6 @@ $_SQL['gf_categories'] = "CREATE TABLE {$_TABLES['gf_categories']} (
 # Table structure for table `forum_forums`
 #
 
-
 $_SQL['gf_forums'] = "CREATE TABLE {$_TABLES['gf_forums']} (
   forum_order int(4) NOT NULL default '0',
   forum_name varchar(255) NOT NULL default '0',
@@ -68,6 +67,8 @@ $_SQL['gf_forums'] = "CREATE TABLE {$_TABLES['gf_forums']} (
   topic_count mediumint(8) NOT NULL default '0',
   post_count mediumint(8) NOT NULL default '0',
   last_post_rec mediumint(8) NOT NULL default '0',
+  rating_view mediumint(8) NOT NULL default '0',
+  rating_post mediumint(8) NOT NULL default '0',
   PRIMARY KEY  (forum_id),
   KEY forum_cat (forum_cat)
 ) TYPE=MyISAM;";
@@ -155,6 +156,7 @@ $_SQL['gf_userprefs'] = "CREATE TABLE {$_TABLES['gf_userprefs']} (
   viewanonposts tinyint(1) NOT NULL default '1',
   enablenotify tinyint(1) NOT NULL default '1',
   alwaysnotify tinyint(1) NOT NULL default '0',
+  notify_full tinyint(1) NOT NULL default '0',
   membersperpage int(3) NOT NULL default '20',
   showiframe tinyint(1) NOT NULL default '1',
   notify_once tinyint(1) NOT NULL default '0',
@@ -196,6 +198,7 @@ $_SQL['gf_banned_ip'] = "CREATE TABLE {$_TABLES['gf_banned_ip']} (
 
 $_SQL['gf_userinfo'] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
   `uid` mediumint(8) NOT NULL default '0',
+  `rating` mediumint(8) NOT NULL default '0',
   `location` varchar(128) NOT NULL default '',
   `aim` varchar(128) NOT NULL default '',
   `icq` varchar(128) NOT NULL default '',
@@ -203,6 +206,7 @@ $_SQL['gf_userinfo'] = "CREATE TABLE {$_TABLES['gf_userinfo']} (
   `msnm` varchar(128) NOT NULL default '',
   `interests` varchar(255) NOT NULL default '',
   `occupation` varchar(255) NOT NULL default '',
+  `signature` mediumtext,
   PRIMARY KEY  (`uid`)
 ) TYPE=MyISAM COMMENT='Forum Extra User Profile Information';";
 
@@ -232,6 +236,19 @@ $_SQL['gf_attachments'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_attachments'
   PRIMARY KEY  (`id`),
   KEY `topic_id` (`topic_id`)
 ) Type=MyISAM  AUTO_INCREMENT=1 ;";
+
+#
+# Table structures for table 'forum_rating_assoc'
+#
+
+$_SQL['gf_rating_assoc'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_assoc']} (
+  `user_id` mediumint(9) NOT NULL,
+  `voter_id` mediumint(9) NOT NULL,
+  `grade` smallint(6) NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  KEY `user_id` (`user_id`),
+  KEY `voter_id` (`voter_id`)
+) Type=MyISAM ; ";
 
 
 $_SQL['d1'] = "INSERT INTO {$_TABLES['gf_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";

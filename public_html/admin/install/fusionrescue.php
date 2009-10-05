@@ -30,7 +30,7 @@
 // +--------------------------------------------------------------------------+
 //
 
-$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','path_log','path_language','backup_path','path_data','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure');
+$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration');
 
 function FR_stripslashes( $text ) {
     if( get_magic_quotes_gpc() == 1 ) {
@@ -383,6 +383,8 @@ foreach ($config as $option => $value) {
         echo '</td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
     } elseif ($configDetail[$option]['type'] != '@text' &&  $configDetail[$option]['type'] != '%text' && $configDetail[$option]['type'] != '@select' && $configDetail[$option]['type'] != '*text' && $configDetail[$option]['type'] != '**placeholder')  {
         echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;width:20%;">' . $option . '</td><td><input type="text" name="cfgvalue[' . $option . ']" size="90" value="' . @unserialize($value) . '" /></td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
+    }  else {
+        echo '<tr onmouseover="this.className=\'hover\';" onmouseout="this.className=\'\';"><td style="text-align:right;width:20%;">' . $option . '</td><td><input type="text" name="cfgvalue[' . $option . ']" size="90" value="' . @unserialize($value) . '" /></td><td style="text-align:center;width:20%;"><input type="checkbox" name="default[' . $option . ']" value="1" /></td></tr>';
     }
 }
 
@@ -437,7 +439,7 @@ function saveNewPaths( $dbserver, $dbuser, $dbpass, $dbname, $dbprefix, $group='
             $changed++;
         } else {
             $sVal = validateInput($value);
-            if ( $config[$option] != $sVal ) {
+            if ( $config[$option] != $sVal && $option != 'user_login_method' && $option != 'event_types' && $option != 'default_permissions' && $option != 'grouptags') {
                 $fn = 'rescue_' . $option . '_validate';
                 if (function_exists($fn)) {
                     $sVal = $fn($sVal);

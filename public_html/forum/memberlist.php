@@ -52,15 +52,51 @@ if ( !$CONF_FORUM['allow_memberlist'] || COM_isAnonUser() ) {
 }
 
 // Use filter to remove all possible hostile SQL injections - only expecting numeric data
-$show       = COM_applyFilter($_GET['show'],true);
-$page       = COM_applyFilter($_GET['page'],true);
-$prevorder  = COM_applyFilter($_GET['prevorder'],true);
-$order      = COM_applyFilter($_GET['order'],true);
-$sort       = COM_applyFilter($_GET['sort'],true);
-$direction  = COM_applyFilter($_GET['direction']);
-$showuser   = COM_applyFilter($_GET['showuser'],true);
-$op         = COM_applyFilter($_GET['op']);
-$chkactivity = COM_applyFilter($_REQUEST['chkactivity'],true);
+if ( isset($_GET['show']) ) {
+    $show       = COM_applyFilter($_GET['show'],true);
+} else {
+    $show = $CONF_FORUM['show_members_perpage'];
+}
+if ( isset($_GET['page']) ) {
+    $page       = COM_applyFilter($_GET['page'],true);
+} else {
+    $page = 0;
+}
+if ( isset($_GET['prevorder']) ) {
+    $prevorder  = COM_applyFilter($_GET['prevorder'],true);
+} else {
+    $prevorder = 0;
+}
+if ( isset($_GET['order']) ) {
+    $order      = COM_applyFilter($_GET['order'],true);
+} else {
+    $order = 0;
+}
+if ( isset($_GET['sort']) ) {
+    $sort       = COM_applyFilter($_GET['sort'],true);
+} else {
+    $sort = 0;
+}
+if ( isset($_GET['direction']) ) {
+    $direction  = COM_applyFilter($_GET['direction']) == 'asc' ? 'asc' : 'desc';
+} else {
+    $direction = 'asc';
+}
+if ( isset($_GET['showuser'] ) ) {
+    $showuser   = COM_applyFilter($_GET['showuser'],true);
+} else {
+    $showuser = 0;
+}
+if ( isset($_GET['op'] ) ) {
+    $op         = COM_applyFilter($_GET['op']);
+} else {
+    $op = '';
+}
+if ( isset($_GET['chkactivity'] ) ) {
+    $chkactivity = COM_applyFilter($_REQUEST['chkactivity'],true);
+} else {
+    $chkactivity = 0;
+}
 
 // Display Common headers
 gf_siteHeader();
@@ -187,9 +223,9 @@ if ($op == "last10posts") {
     }
 
     if ($chkactivity) {
-        $memberlistsql = DB_query("SELECT user.uid FROM {$_TABLES[users]} user, {$_TABLES[gf_topic]} topic WHERE user.uid <> 1 AND user.uid=topic.uid GROUP by uid");
+        $memberlistsql = DB_query("SELECT user.uid FROM {$_TABLES['users']} user, {$_TABLES['gf_topic']} topic WHERE user.uid <> 1 AND user.status = 3 AND user.uid=topic.uid GROUP by uid");
     } else {
-        $memberlistsql = DB_query("SELECT uid FROM {$_TABLES[users]} ");
+        $memberlistsql = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE uid <> 1 AND status = 3 ");
     }
 
     $membercount   = DB_numRows($memberlistsql);
@@ -201,20 +237,19 @@ if ($op == "last10posts") {
 
     if ($chkactivity) {
         $sql = "SELECT user.uid,user.uid,user.username,user.regdate,user.email,user.homepage, count(*) as posts, userprefs.emailfromuser ";
-        $sql .= " FROM {$_TABLES[users]} user, {$_TABLES[userprefs]} userprefs, {$_TABLES[gf_topic]} topic WHERE";
-        $sql .= " user.uid <> 1 AND user.uid=topic.uid AND user.uid=userprefs.uid ";
+        $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs, {$_TABLES['gf_topic']} topic WHERE";
+        $sql .= " user.uid <> 1 AND user.status = 3 AND user.uid=topic.uid AND user.uid=userprefs.uid ";
         $sql .= "GROUP by uid ORDER BY $orderby $direction LIMIT $offset,$show ";
     } else {
         // Option to order by posts - only valid if option for 'forum activity' cheeked
         $orderby = ($orderby == 'posts') ? 'username' : $orderby;
         $sql = "SELECT user.uid,user.uid,user.username,user.regdate,user.email,user.homepage, userprefs.emailfromuser ";
-        $sql .= " FROM {$_TABLES[users]} user, {$_TABLES[userprefs]} userprefs WHERE user.uid > 1 ";
+        $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs WHERE user.uid > 1 AND user.status = 3 ";
         $sql .= "AND user.uid=userprefs.uid ORDER BY $orderby $direction LIMIT $offset,$show ";
     }
 
     $query = DB_query($sql);
 
-    $report->set_var ('imgset', $CONF_FORUM['imgset']);
     $report->set_var ('layout_url', $_CONF['layout_url']);
     $report->set_var ('site_url', $_CONF['site_url']);
     $report->set_var ('startblock', COM_startBlock($LANG_GF02['msg88']) );
@@ -280,7 +315,7 @@ if ($op == "last10posts") {
         }
         if($siteMembers['homepage'] != '') {
             $homepage = $siteMembers['homepage'];
-            if(!eregi("http",$homepage)) {
+            if(!preg_match("/http/i",$homepage)) {
                 $homepage = 'http://' .$homepage;
             }
             $report->set_var ('image', gf_getImage('home'));

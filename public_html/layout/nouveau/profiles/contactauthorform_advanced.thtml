@@ -52,6 +52,9 @@ window.addEvent('domready',function() {
       </tr>
       {captcha}
       <tr>
+        <td colspan="2"><hr{xhtml}></td>
+      </tr>
+      <tr>
         <td colspan="2">
           <input type="hidden" name="sid" value="{story_id}"{xhtml}>
           <input type="hidden" name="what" value="sendstory"{xhtml}>

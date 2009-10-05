@@ -87,12 +87,12 @@ $LANG_INSTALL = array(
     'filesystem_check' => 'Bestandssysteem controle',
     'forum' => 'Laden van Forum Plugin?',
     'forum_desc' => 'Een online community forum systeem. Verschaft community collaboratie (samenwerking) en gezamenlijke interactie.',
-    'geeklog_migrate' => 'Migratie van een Geeklog v1.5+ Site',
+    'geeklog_migrate' => 'Migratie van een Geeklog v1.4.1+ Site',
     'hosting_env' => 'Hosting omgeving/instellingen controle',
     'install' => 'Installatie',
     'install_heading' => 'glFusion Installatie',
     'install_steps' => 'INSTALLATIE STAPPEN (fasen)',
-    'invalid_geeklog_version' => 'De installatieprocedure kan het bestand siteconfig.php  niet vinden. Weet je zeker dat je migreert van Geeklog versie v1.5.0 of hoger?  Indien je een oudere Geeklog installatie hebt dien je deze te opwaarderen naar minimaal Geeklog v1.5.0 en probeer dan opnieuw de migratie.',
+    'invalid_geeklog_version' => 'De installatieprocedure kan het bestand siteconfig.php  niet vinden. Weet je zeker dat je migreert van Geeklog versie v1.4.1 of hoger?  Indien je een oudere Geeklog installatie hebt dien je deze te opwaarderen naar minimaal Geeklog v1.4.1 en probeer dan opnieuw de migratie.',
     'language' => 'Taal',
     'language_task' => 'Taal & Taak',
     'libcustom_not_writable' => 'lib-custom.php is niet schrijfbaar.',
@@ -169,16 +169,17 @@ $LANG_INSTALL = array(
     'upgrade_steps' => 'UPGRADE STAPPEN',
     'upload_max_filesize' => 'glFusion staat toe om plugins, images, en bestanden te uploaden. Er dient minimaal 8M beschikbaar te zijn als upload grootte.',
     'use_utf8' => 'Gebruik UTF-8',
-    'welcome_help' => 'Welkom bij de glFusion CMS Installatie Wizard. Je kunt een nieuwe glFusion site installatie uitvoeren, een upgrade van een bestaande glFusion site doen of een migratie doen van een bestaande  Geeklog v1.5 site.<br /><br />Selecteer a.u.b. een taal voor de wizard en een taak die mote worden uitgevoerd en klik daarna op <strong>Volgende</strong>.',
+    'welcome_help' => 'Welkom bij de glFusion CMS Installatie Wizard. Je kunt een nieuwe glFusion site installatie uitvoeren, een upgrade van een bestaande glFusion site doen of een migratie doen van een bestaande  Geeklog v1.4.1 site.<br /><br />Selecteer a.u.b. een taal voor de wizard en een taak die mote worden uitgevoerd en klik daarna op <strong>Volgende</strong>.',
     'wizard_version' => 'vGVERSIE Installatie Wizard',
-    'system_path_prompt' => 'Voer het volledige pad in, het zogenaamde absolute pad op je server naar glFusion\'s <strong>private/</strong> directory.<br /><br />Deze directory bevat de  <strong>db-config.php.dist</strong> of <strong>db-config.php</strong> bestand.<br /><br />Voorbeelden: /home/www/glfuison/private of c:/www/glfusion/private.<br /><br /><strong>Hint:</strong> Het absolute pad naar je public_html/ directory schijnt te zijn:<br />%s<br /><br /><strong>Geavanceerde Instellingen</strong> staan jou toe om standaard instellingen te overschrijven.  Over het algemeen hoef jij deze instellingen niet aan te passen of te wijzigen, het systeem bepaald dat automatisch voor jou.',
+    'system_path_prompt' => 'Voer het volledige pad in, het zogenaamde absolute pad op je server naar glFusion\'s <strong>private/</strong> directory.<br /><br />Deze directory bevat de  <strong>db-config.php.dist</strong> of <strong>db-config.php</strong> bestand.<br /><br />Voorbeelden: /home/www/glfusion/private of c:/www/glfusion/private.<br /><br /><strong>Hint:</strong> Het absolute pad naar je <strong>public_html/</strong> <i>(niet <strong>private/</strong>)</i> directory schijnt te zijn:<br /><br />%s<br /><br /><strong>Geavanceerde Instellingen</strong> staan jou toe om standaard instellingen te overschrijven.  Over het algemeen hoef jij deze instellingen niet aan te passen of te wijzigen, het systeem bepaald dat automatisch voor jou.',
     'advanced_settings' => 'Geavanceerde settings',
     'log_path' => 'Logs-pad',
     'lang_path' => 'Taal-pad',
     'backup_path' => 'Backup-pad',
     'data_path' => 'Data-pad',
     'language_support' => 'Taal ondersteuning',
-    'language_pack' => 'glFusion heeft als standaard instelling Engels, na de installatie kun je via de link <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">een taal pakket Pack</a> downloaden en installeren die alle tot nu toe geondersteunde talen bevat.'
+    'language_pack' => 'glFusion heeft als standaard instelling Engels, na de installatie kun je via de link <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">een taal pakket Pack</a> downloaden en installeren die alle tot nu toe geondersteunde talen bevat.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

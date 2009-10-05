@@ -270,7 +270,7 @@ function editpersonalevent ($A)
     }
 
     $cal_templates->set_var('lang_location',$LANG_CAL_1[39]);
-    $cal_templates->set_var('event_location', stripslashes ($A['location']));
+    $cal_templates->set_var('event_location', htmlspecialchars(stripslashes ($A['location'])));
 
     $cal_templates->set_var('lang_addressline1', $LANG_CAL_1[32]);
     $cal_templates->set_var('event_address1', stripslashes ($A['address1']));
@@ -292,7 +292,7 @@ function editpersonalevent ($A)
 
     $cal_templates->set_var('lang_description', $LANG_CAL_1[5]);
     $cal_templates->set_var('event_description',
-                            nl2br (stripslashes ($A['description'])));
+                            nl2br (htmlspecialchars(stripslashes ($A['description']))));
 
     $cal_templates->set_var('lang_htmlnotallowed', $LANG_CAL_1[44]);
     $cal_templates->set_var('lang_submit', $LANG_CAL_1[45]);

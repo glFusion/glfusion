@@ -25,7 +25,7 @@
                 </tr>
                 <tr>
                     <td class="alignright" style="vertical-align:top;"><b>{lang_story}:</b></td>
-                    <td style="vertical-align:top;">
+                    <td style="vertical-align:top;width:100%;">
                     <div id="text_editor" style="width:90%; margin-top:10px; padding-left:10px;display:{show_texteditor};">
                         {lang_introtext}:
                         <textarea id="introtext"  style="width:100%; padding:5px 10px 5px 10px;" name="introtext" cols="45" rows="14">{story_introtext}</textarea>

@@ -10,6 +10,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -71,6 +74,7 @@ include_once $plugin_path . 'services.inc.php';
 // | glFusion Plugin API Implementations                                       |
 // +---------------------------------------------------------------------------+
 
+
 /**
 * Returns the items for this plugin that should appear on the main menu
 *
@@ -108,7 +112,7 @@ function plugin_getmenuitems_staticpages()
 }
 
 /**
-* glFusion is checking to see if this plugin supports comments, tell it no.
+* glFusion is checking to see if this plugin supports comments.
 *
 * NOTE: to support comments you must used the same date/time based ID for your
 * widget.  In other words, to make primary keys for your plugin you should call
@@ -120,6 +124,15 @@ function plugin_commentsupport_staticpages()
 {
     // Static Pages will use comments
     return true;
+}
+
+function plugin_getcommenturlid_staticpages( ) {
+    global $_CONF;
+    $retval = array();
+    $retval[] = $_CONF['site_url'] . '/staticpages/index.php';
+    $retval[] = 'page';
+    $retval[] = 'cmtpage=';
+    return $retval;
 }
 
 /**
@@ -200,7 +213,7 @@ function plugin_savecomment_staticpages($title, $comment, $id, $pid, $postmode)
         $retval = COM_refresh ($_CONF['site_url']
                                 . "/staticpages/index.php?page=$id");
     }
-
+    CACHE_remove_instance('whatsnew_');
     return $retval;
 }
 
@@ -233,8 +246,50 @@ function plugin_deletecomment_staticpages($cid, $id)
                     . "tried to illegally delete comment $cid from staticpage $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
-
+    CACHE_remove_instance('whatsnew_');
     return $retval;
+}
+
+function plugin_getwhatsnewcomment_staticpages()
+{
+    global $_CONF, $_TABLES, $_USER;
+
+    $commentrow = array();
+
+    $stwhere = '';
+    if( !COM_isAnonUser() ) {
+        $stwhere .= "({$_TABLES['staticpage']}.owner_id IS NOT NULL AND {$_TABLES['staticpage']}.perm_owner IS NOT NULL) OR ";
+        $stwhere .= "({$_TABLES['staticpage']}.group_id IS NOT NULL AND {$_TABLES['staticpage']}.perm_group IS NOT NULL) OR ";
+        $stwhere .= "({$_TABLES['staticpage']}.perm_members IS NOT NULL)";
+    } else {
+        $stwhere .= "({$_TABLES['staticpage']}.perm_anon IS NOT NULL)";
+    }
+    $sql = "SELECT DISTINCT COUNT(*) AS dups, {$_TABLES['staticpage']}.sp_title AS title,
+            {$_TABLES['staticpage']}.sp_id AS sid, UNIX_TIMESTAMP(max({$_TABLES['comments']}.date)) AS lastdate
+            FROM {$_TABLES['comments']} LEFT JOIN {$_TABLES['staticpage']} ON (({$_TABLES['staticpage']}.sp_id = {$_TABLES['comments']}.sid)"
+            . COM_getPermSQL( 'AND', 0, 2, $_TABLES['staticpage'] ) .
+            " AND ({$_TABLES['staticpage']}.commentcode >= 0)" .
+            COM_getLangSQL( 'sp_id', 'AND', $_TABLES['staticpage'] ) . ")
+            WHERE ({$_TABLES['comments']}.date >= (DATE_SUB(NOW(), INTERVAL {$_CONF['newcommentsinterval']} SECOND)))
+            AND ((({$stwhere}))) GROUP BY {$_TABLES['comments']}.sid,type, {$_TABLES['staticpage']}.sp_title,
+            {$_TABLES['staticpage']}.sp_title, {$_TABLES['staticpage']}.sp_id
+            ORDER BY 4 DESC LIMIT 15";
+
+    $result = DB_query( $sql );
+    $nrows = DB_numRows( $result );
+    if ( $nrows > 0 ) {
+        for ($x = 0; $x < $nrows; $x++ ) {
+            $A = DB_fetchArray($result);
+
+            $cmtReturn['url'] = COM_buildUrl($_CONF['site_url'].'/staticpages/index.php?page='.$A['sid']).'#comments';
+            $cmtReturn['type'] = 'staticpage';
+            $cmtReturn['dups'] = $A['dups'];
+            $cmtReturn['title'] = $A['title'];
+            $cmtReturn['lastdate'] = $A['lastdate'];
+            $commentrow[] = $cmtReturn;
+        }
+    }
+    return $commentrow;
 }
 
 /**
@@ -274,11 +329,14 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 
     $retval = '';
 
+    $sp_url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='.$page);
+    $headercode = '<link rel="canonical" href="' . $sp_url . '"' . XHTML . '>'.LB;
+
     if ($A['sp_format'] == 'allblocks' OR $A['sp_format'] == 'leftblocks') {
-        $retval .= COM_siteHeader ('menu');
+        $retval .= COM_siteHeader('menu', $A['sp_title'], $headercode);
     } else {
         if ($A['sp_format'] <> 'blankpage') {
-            $retval .= COM_siteHeader ('none');
+            $retval .= COM_siteHeader('none', $A['sp_title'], $headercode);
         }
     }
     if (($A['sp_inblock'] == 1) && ($A['sp_format'] != 'blankpage')) {
@@ -328,9 +386,14 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
             SEC_hasAccess($A['owner_id'], $A['group_id'],
             $A['perm_owner'], $A['perm_group'], $A['perm_members'],
             $A['perm_anon']) == 3 ? true : false);
+
+
         require_once $_CONF['path_system'] . 'lib-comment.php';
+
+        $cmt_page = isset($_GET['cmtpage']) ? COM_applyFilter($_GET['cmtpage'],true) : 0;
+
         $spage->set_var ('commentbar', CMT_userComments($page, $A['sp_title'], 'staticpages',
-                                    $comment_order, $comment_mode, 0, 1, false,
+                                    $comment_order, $comment_mode, 0, $cmt_page, false,
                                     $delete_option, $A['commentcode']));
     }
 
@@ -412,6 +475,9 @@ function SP_printPage ($page, $A)
     $print->set_var ('sp_content',
             SP_render_content ($A['sp_content'], $A['sp_php']));
     $print->set_var ('sp_hits', COM_numberFormat ($A['sp_hits']));
+    $printable = COM_buildURL($_CONF['site_url']
+               . '/staticpages/index.php?page=' . $page . '&amp;mode=print');
+    $print->set_var('printable_url', $printable);
     if ($A['commentcode'] >= 0) {
         $commentsUrl = $sp_url . '#comments';
         $comments = DB_count($_TABLES['comments'],
@@ -578,29 +644,60 @@ function plugin_dopluginsearch_staticpages($query, $datestart, $dateend, $topic,
     $sql .= "WHERE (sp.sp_uid = u.uid) AND (sp_php <> 1) AND (sp_search = 1) ";
     $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 'sp') . ' ';
 
-    if (!empty($datestart) && !empty($dateend))
-    {
-        $delim = substr($datestart, 4, 1);
-        if (!empty($delim))
-        {
-            $DS = explode($delim, $datestart);
-            $DE = explode($delim, $dateend);
-            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-            $sql .= "AND (UNIX_TIMESTAMP(sp_date) BETWEEN '$startdate' AND '$enddate') ";
-        }
-    }
     if (!empty ($author))
         $sql .= "AND (sp_uid = '$author') ";
 
     $search = new SearchCriteria('staticpages', $LANG_STATIC['staticpages']);
     $columns = array('sp_content','sp_title');
+    $sql .= $search->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(sp_date)', $datestart, $dateend);
     list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
     $search->setSQL($sql);
     $search->setFTSQL($ftsql);
     $search->setRank(3);
+    $search->setURLRewrite(true);
 
     return $search;
+}
+
+/**
+* this searches the plugins comments matching the user query and returns an array of
+* for the header and table rows back to search.php where it will be formated and
+* printed
+*
+* @query            string          Keywords user is looking for
+* @datestart        date/time       Start date to get results for
+* @dateend          date/time       End date to get results for
+* @topic            string          The topic they were searching in
+* @type             string          Type of items they are searching
+* @author           string          Get all results by this author
+*
+*/
+function plugin_dopluginsearch_comment_staticpages($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
+{
+    global $_TABLES, $LANG_STATIC, $LANG09;
+
+    $query = trim(addslashes(htmlspecialchars($query)));
+
+    $sql =  "SELECT c.cid AS id1, c.sid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+    $sql .= "CONCAT('/staticpages/index.php?page=', c.sid,'#comments') AS url ";
+    $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
+    $sql .= "LEFT JOIN {$_TABLES['staticpage']} s ON c.cid=s.sp_id ";
+    $sql .= "WHERE (c.type='staticpages') AND (u.uid = c.uid) ";
+    $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 'sp') . ' ';
+
+    if (!empty($author)) {
+        $sql .= "AND (c.uid = '$author') ";
+    }
+
+    $search_c = new SearchCriteria('comments', $LANG_STATIC['staticpages'] . ' > ' . $LANG09[66]);
+    $columns = array('comment','c.title');
+    $sql .= $search_c->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(c.date)', $datestart, $dateend);
+    list($sql,$ftsql) = $search_c->buildSearchSQL($keyType, $query, $columns, $sql);
+    $search_c->setSQL($sql);
+    $search_c->setFTSQL($ftsql);
+    $search_c->setRank(2);
+
+    return $search_c;
 }
 
 
@@ -815,7 +912,8 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
             $spage->set_var('info_separator', 'hidden');
             if ($_SP_CONF['show_date'] == 1) {
                 $curtime = COM_getUserDateTimeFormat($S['sp_date']);
-                $lastupdate = $LANG_STATIC['lastupdated']. ' ' . $curtime[0];
+                $lastupdate = $LANG_STATIC['lastupdated']. ' ' . strftime( $_CONF['daytime'], $curtime[1] );
+//                $lastupdate = $LANG_STATIC['lastupdated']. ' ' . $curtime[0];
                 $spage->set_var('lastupdate', $lastupdate);
             }
 
@@ -1018,10 +1116,8 @@ function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
                 "{$_CONF['site_admin_url']}/plugins/staticpages/index.php?mode=clone&amp;sp_id={$A['sp_id']}");
             break;
         case "delete" :
-            $icon_url = "{$_CONF['site_url']}/staticpages/images/delete.png";
-            $icon = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
-            $retval = '<a href="'.$_CONF['site_admin_url'].'/plugins/staticpages/index.php?mode='.$LANG_ADMIN['delete'].'&amp;sp_id='.$A['sp_id'].'&amp;'.CSRF_TOKEN.'='.SEC_createToken().'" onclick="return confirm(\''.$LANG_STATIC['delete_confirm'].'\');">';
-            $retval .= $icon.'</a>';
+            $retval = COM_createLink('<img src="'.$_CONF['site_url'].'/staticpages/images/delete.png" alt="Delete" />',
+                $_CONF['site_admin_url'].'/plugins/staticpages/index.php?mode='.$LANG_ADMIN['delete'].'&amp;sp_id='.$A['sp_id'].'&amp;'.CSRF_TOKEN.'='.SEC_createToken().'" onclick="return confirm(\''.$LANG_STATIC['delete_confirm'].'\');"');
             break;
         case "sp_title":
             $sp_title = $A['sp_title'];
@@ -1097,7 +1193,7 @@ function SP_render_content ($sp_content, $sp_php)
 /**
  * Return true since this plugin supports webservices
  *
- * @return  bool	True, of webservices are supported
+ * @return  bool	True, if webservices are supported
  */
 function plugin_wsEnabled_staticpages() {
     return true;

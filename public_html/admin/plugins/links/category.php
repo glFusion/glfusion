@@ -381,6 +381,11 @@ function links_save_category($cid, $old_cid, $pid, $category, $description, $tid
                         perm_members='{$perm_members}',perm_anon='{$perm_anon}'
                     WHERE cid = '{$old_cid}'";
             $result = DB_query($sql);
+            $sql = "UPDATE {$_TABLES['linkcategories']}
+                    SET pid='{$cid}'
+                    WHERE pid='{$old_cid}'";
+            $result = DB_query($sql);
+
             // Also need to update links for this category
             $sql = "UPDATE {$_TABLES['links']} SET cid='{$cid}' WHERE cid='{$old_cid}'";
             $result = DB_query($sql);
@@ -415,7 +420,11 @@ function links_save_category($cid, $old_cid, $pid, $category, $description, $tid
             $result = DB_query($sql);
         }
     }
-
+    if (($update == 'existing') && ($cid != $old_cid)) {
+        PLG_itemSaved($cid, 'links.category', $old_cid);
+    } else {
+        PLG_itemSaved($cid, 'links.category');
+    }
     return 10; // success message
 }
 
@@ -447,6 +456,7 @@ function links_delete_category($cid)
             if (($sf == 0) && ($sl == 0)) {
                 // No subfolder/links so OK to delete
                 DB_delete($_TABLES['linkcategories'], 'cid', $cid);
+                PLG_itemDeleted($cid, 'links.category');
                 return 13;
             } else {
                 // Subfolders and/or sublinks exist so return a message

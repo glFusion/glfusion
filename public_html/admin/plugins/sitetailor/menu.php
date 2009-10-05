@@ -94,7 +94,7 @@ function ST_displayMenuList( ) {
         'site_admin_url'    => $_CONF['site_admin_url'],
         'site_url'          => $_CONF['site_url'],
         'lang_admin'        => $LANG_ST00['admin'],
-        'version'           => $_ST_CONF['version'],
+        'version'           => $_ST_CONF['pi_version'],
         'xhtml'             => XHTML,
     ));
     $T->parse('output', 'admin');
@@ -135,7 +135,7 @@ function ST_cloneMenu( $menu_id ) {
         'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: '.$LANG_ST01['clone'],
         'lang_admin'        => $LANG_ST00['admin'],
-        'version'           => $_ST_CONF['version'],
+        'version'           => $_ST_CONF['pi_version'],
         'menu_id'           => $menu_id,
         'xhtml'             => XHTML,
     ));
@@ -249,7 +249,7 @@ function ST_createMenu( ) {
         'form_action'       => $_CONF['site_admin_url'] . '/plugins/sitetailor/menu.php',
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: '.$LANG_ST01['add_newmenu'],
         'lang_admin'        => $LANG_ST00['admin'],
-        'version'           => $_ST_CONF['version'],
+        'version'           => $_ST_CONF['pi_version'],
         'menutype_select'   => $menuTypeSelect,
         'group_select'      => $group_select,
         'xhtml'             => XHTML,
@@ -377,7 +377,7 @@ function ST_displayTree( $menu_id ) {
         'site_url'          => $_CONF['site_url'],
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">'.$LANG_ST01['menu_list'].'</a> :: '.$stMenu[$menu_id]['menu_name'].' :: '.$LANG_ST01['elements'],
         'lang_admin'        => $LANG_ST00['admin'],
-        'version'           => $_ST_CONF['version'],
+        'version'           => $_ST_CONF['pi_version'],
         'menu_tree'         => $stMenu[$menu_id]['elements'][0]->editTree(0,2),
         'menuid'            => $menu_id,
         'menuname'          => $stMenu[$menu_id]['menu_name'],
@@ -573,7 +573,7 @@ function ST_saveNewMenuElement ( ) {
     // build post vars
     $E['menu_id']           = COM_applyFilter($_POST['menuid'],true);
     $E['pid']               = COM_applyFilter($_POST['pid'],true);
-    $E['element_label']     = htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel'])));
+    $E['element_label']     = htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($_POST['menulabel']))));
     $E['element_type']      = COM_applyFilter($_POST['menutype'],true);
     $E['element_target']    = COM_applyFilter($_POST['urltarget']);
     $afterElementID         = COM_applyFilter($_POST['menuorder'],true);
@@ -841,7 +841,7 @@ function ST_saveEditMenuElement ( ) {
     $id            = COM_applyFilter($_POST['id'],true);
     $menu_id       = COM_applyFilter($_POST['menu']);
     $pid           = COM_applyFilter($_POST['pid'],true);
-    $label         = addslashes(htmlspecialchars(strip_tags(COM_checkWords($_POST['menulabel']))));
+    $label         = addslashes(htmlspecialchars(strip_tags(COM_checkWords(COM_stripslashes($_POST['menulabel'])))));
     $type          = COM_applyFilter($_POST['menutype'],true);
     $target        = COM_applyFilter($_POST['urltarget']);
 
@@ -949,6 +949,7 @@ function ST_deleteMenu($menu_id) {
     ST_deleteChildElements(0,$menu_id);
 
     DB_query("DELETE FROM {$_TABLES['st_menus']} WHERE id=".$menu_id);
+    DB_query("DELETE FROM {$_TABLES['st_menus_config']} WHERE menu_id=".$menu_id);
 
     CACHE_remove_instance('stmenu');
     CACHE_remove_instance('css');

@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -90,6 +90,7 @@ $LANG_GF01 = array(
     'CLOSE' => 'Close',
     'ON' => 'On: ',
     'ON2' => '&nbsp;&nbsp;<b>On: </b>',
+    'ON3' => 'on',
     'IN' => 'In: ',
     'BY' => 'By: ',
     'RE' => 'Re: ',
@@ -251,7 +252,7 @@ $LANG_GF01 = array(
     'PREVIEW_HEADER' => 'Post Preview',
     'BOOKMARKS' => 'Bookmarks',
     'LASTX' => 'Latest Posts',
-    'CODE' => 'Code',
+    'CODE' => 'Formatting',
     'FONTCOLOR' => 'Font Color',
     'FONTSIZE' => 'Font Size',
     'CLOSETAGS' => 'Close Tags',
@@ -291,13 +292,24 @@ $LANG_GF01 = array(
     'f_help' => 'Font size: [size=x-small]small text[/size]',
     'h_help' => 'Click to view more detailed help',
     't_help' => 'Use [file]#[/file] to embed an attached image in the post',
-
+    'e_help' => 'List item: [*]text',
+    /* --- Community moderation tags --- */
+    'grade'         => '<br /><b>Group Comfort<br />Level:</b>',
+    'grade_user'    => '<br /><b>Evaluate User</b>',
+    'retract_grade' => '<br /><b>Retract Evaluation</b>',
+    'rate_too_low'  => 'Your rating level is too low for posting to this forum',
+    'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
+    'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
+    /* --- bbcode signature --- */
+    'signature' => 'Forum Signature',
+    'edit_signature' => 'Edit BBcode Signature',
+    'signature_preview' => 'Signature Preview',
 );
 
 $LANG_GF02 = array(
     'msg01' => 'Sorry you must register to use these forums',
     'msg02' => 'You should not be here!<br' . XHTML . '>Restricted access to this forum only',
-    'msg03' => '',
+    'msg03' => 'Permission Error.  Please contact site administrator.',
     'msg04' => '',
     'msg05' => '<CENTER><I>Sorry, no topics have been created yet.</CENTER></I>',
     'msg06' => ' new posts since your last visit',
@@ -494,7 +506,9 @@ $LANG_GF02 = array(
     'PostReply' => 'Post New Reply',
     'PostTopic' => 'Post New Topic',
     'EditTopic' => 'Edit Topic',
-    'quietforum' => 'Forum has no new topics'
+    'quietforum' => 'Forum has no new topics',
+    'notify_full' => 'Include full post in notification',
+    'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.',
 );
 
 $LANG_GF03 = array(
@@ -551,7 +565,9 @@ $LANG_GF06 = array(
     4 => 'Moderator',
     5 => 'Convert',
     6 => 'Messages',
-    7 => 'IP Mgmt'
+    7 => 'IP Mgmt',
+    8 => 'Community Moderation',
+    9 => 'Import',
 );
 
 // User Functions Navbar
@@ -711,7 +727,10 @@ $LANG_GF92 = array(
     'geshiformat' => 'Code Formatting',
     'geshiformatdscp' => 'Use the Geshi Code Formatting Feature',
     'edit_timewindow' => 'Edit Timeframe',
-    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts'
+    'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts',
+    'forum_prefs' => 'Forum Preferences',
+    'forumprefs_help_title' => 'Forum Prefs Help',
+    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
 );
 
 // Board Admin
@@ -839,6 +858,26 @@ $LANG_GF97 = array(
     'msgmembers' => 'Member List.'
 );
 
+$LANG_GF98 = array(
+    'user_ratings'  => 'User Ratings',
+    'forum_settings' => 'Community Moderation Forum Settings.  Define the minimum user rating to view and post in the forums.',
+    'board_ratings' => 'Board Rating Settings',
+    'user_ratings_desc' => 'Community Moderation user ratings.  You can modify the user settings or view who a user has rated or see a user\'s rating',
+    'rating'    => 'Rating',
+    'uid'       => 'UID',
+    'user_rating_title' => 'Community Moderation User Ratings',
+    'no_subject_defined' => 'No subject defined',
+    'admin_set_value' => 'Administrator set new user rating',
+    'no_topic_defined' => 'No topic defined',
+    'voter' => 'Voter',
+    'grade' => 'Grade',
+    'topic' => 'Topic',
+    'user_votes_desc' => 'This screen shows how the user has voted (rated) other users.',
+    'user_rating_details' => 'User Rating Details for: ',
+    'user_voting_details' => 'User Voting Details for: ',
+    'save_changes'  => 'Save Changes',
+);
+
 ###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade completed - no errors';
 $PLG_forum_MESSAGE2 = 'Forum Plugin upgrade: We are unable to update this version automatically. Refer to the plugin documentation.';
@@ -928,6 +967,9 @@ $LANG_confignames['forum'] = array(
     'allow_memberlist' => 'Allow Site Member List',
     'enable_fm_integration' => 'Enable FileMgmt Integration for attachments',
     'max_uploadfile_size' => 'Max Size for Attachments (bytes)',
+    'enable_user_rating_system' => 'Enable User Rating System',
+    'bbcode_signature' => 'Enable BBcode Signature',
+    'use_wysiwyg_editor' => 'Enable WYSIWYG HTML Editor',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -942,7 +984,6 @@ $LANG_fs['forum'] = array(
     'ff_rank_settings' => 'Rank Settings',
     'ff_attachments_settings' => 'Attachment Settings'
 );
-
 
 $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),

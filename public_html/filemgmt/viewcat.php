@@ -64,7 +64,7 @@ if ($cid == 0 OR $category_rows == 0) {
     exit;
 }
 
-$display = COM_siteHeader('menu');
+$display = COM_siteHeader('menu',$LANG_FILEMGMT['usermenu1']);
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
@@ -185,7 +185,6 @@ if($maxrows > 0) {
         $homepage = $myts->makeTboxData4Show($homepage);
         $version = $myts->makeTboxData4Show($version);
         $size = $myts->makeTboxData4Show($size);
-        $platform = $myts->makeTboxData4Show($platform);
         $logourl = $myts->makeTboxData4Show($logourl);
         $datetime = formatTimestamp($time);
         $description = PLG_replaceTags($myts->makeTareaData4Show($description,0)); //no html

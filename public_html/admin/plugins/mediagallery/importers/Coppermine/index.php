@@ -1,30 +1,30 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Media Gallery Plugin 1.6                                                  |
-// +---------------------------------------------------------------------------+
-// | $Id::                                                                    $|
-// | Coppermine v1.4x Import Script                                            |
-// +---------------------------------------------------------------------------+
-// | Copyright (C) 2005-2009 by the following authors:                         |
-// |                                                                           |
-// | Mark R. Evans              - mark AT glfusion DOT org                     |
-// +---------------------------------------------------------------------------+
-// |                                                                           |
-// | This program is free software; you can redistribute it and/or             |
-// | modify it under the terms of the GNU General Public License               |
-// | as published by the Free Software Foundation; either version 2            |
-// | of the License, or (at your option) any later version.                    |
-// |                                                                           |
-// | This program is distributed in the hope that it will be useful,           |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of            |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
-// | GNU General Public License for more details.                              |
-// |                                                                           |
-// | You should have received a copy of the GNU General Public License         |
-// | along with this program; if not, write to the Free Software Foundation,   |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.           |
-// |                                                                           |
-// +---------------------------------------------------------------------------+
+// +--------------------------------------------------------------------------+
+// | Media Gallery Plugin - glFusion CMS                                      |
+// +--------------------------------------------------------------------------+
+// | $Id::                                                                   $|
+// | Coppermine v1.4x Import Script                                           |
+// +--------------------------------------------------------------------------+
+// | Copyright (C) 2005-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans              - mark AT glfusion DOT org                    |
+// +--------------------------------------------------------------------------+
+// |                                                                          |
+// | This program is free software; you can redistribute it and/or            |
+// | modify it under the terms of the GNU General Public License              |
+// | as published by the Free Software Foundation; either version 2           |
+// | of the License, or (at your option) any later version.                   |
+// |                                                                          |
+// | This program is distributed in the hope that it will be useful,          |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
+// | GNU General Public License for more details.                             |
+// |                                                                          |
+// | You should have received a copy of the GNU General Public License        |
+// | along with this program; if not, write to the Free Software Foundation,  |
+// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
+// |                                                                          |
+// +--------------------------------------------------------------------------+
 //
 
 require_once '../../../../../lib-common.php';
@@ -108,6 +108,7 @@ class mgAlbumCPG {
     var $afrHeight;
     var $dfrWidth;
     var $dfrHeight;
+    var $ownername;
 
     function mgAlbumCPG () {
 	    global $_MG_CONF;
@@ -181,15 +182,16 @@ class mgAlbumCPG {
     function constructor( $album ) {
 	    global $_USER;
         $this->id               = $album['album_id'];
-        $this->title            = str_replace("&#39;","'",$album['album_title']);
-        $this->parent           = $album['album_parent'];
-        $this->description      = $album['album_desc'];
-        $this->order            = $album['album_order'];
+        $this->title            = @str_replace("&#39;","'",$album['album_title']);
+        $this->parent           = isset($album['album_parent']) ? $album['album_parent'] : 0;
+        $this->description      = isset($album['album_desc']) ? $album['album_desc'] : '';
+        $this->order            = 0;
 
         $this->owner_id         = $_USER['uid'];
-        $this->group_id         = $album['group_id'];
-        $this->mod_group_id     = $album['mod_group_id'];
-        $this->media_count      = $album['media_count'];
+        $this->group_id         = isset($ablum['group_id']) ? $album['group_id'] : 0;
+        $this->mod_group_id     = isset($album['mod_group_id']) ? $album['mod_group_id'] : 0;
+        $this->media_count      = isset($album['media_count']) ? $album['media_count'] : 0;
+        $this->ownername        = isset($album['ownername']) ? $album['ownername'] : '';
     }
 
     function createAlbum( ) {
@@ -396,10 +398,10 @@ function MG_buildImportAlbums( $configdir ) {
 		die("Error connecting to database - MG_buildImportAlbums");
 	}
 
-	@mysql_select_db($CONFIG['dbname']); //  or die("eror selecting database");
+	mysql_select_db($CONFIG['dbname']); //  or die("eror selecting database");
 	$sql = "SELECT * FROM " . $CONFIG['TABLE_PREFIX'] . "categories order by pos DESC";
 	$result = @mysql_query($sql,$dbImport);
-	$nRows  = mysql_numrows($result);
+	$nRows  = @mysql_numrows($result);
     for ($i=0; $i < $nRows; $i++ ) {
 		$row = @mysql_fetch_array($result, MYSQL_BOTH);
 		$A['album_id']			= $row['cid'] + 20000;
@@ -447,30 +449,30 @@ function MG_buildImportAlbums( $configdir ) {
 
     	if ( $row['category'] > 10000 ) {  // user gallery
     		$owner_id = $row['category'] - 10000;
-    		if ( !isset( $mgAlbums[$new_aid]) ) {
-		    	$sql = "SELECT * FROM " . $CONFIG['TABLE_PREFIX'] . "users WHERE user_id=" . $owner_id;
-		    	$result3 = @mysql_query($sql,$dbImport);
-	    		$nRows3  = @mysql_numrows($result3);
-	    		if ( $nRows3 > 0 ) {
-		    		$row3 = @mysql_fetch_array($result3, MYSQL_BOTH);
-		    		$cpg_username = $row3['user_name'];
-	    		} else {
-		    		$cpg_username = 'admin';
-	    		}
-	    		$result4 = @mysql_query("SELECT COUNT(*) FROM " . $CONFIG['TABLE_PREFIX'] . "pictures WHERE aid=".$A['album_id']);
-	    		list($number_of_items) = @mysql_fetch_array($result4,MYSQL_BOTH);
-	    		$B['album_id']     = $row['category'];
-	    		$B['album_title']  = 'User Gallery for ' . $cpg_username;
-	    		$B['album_parent'] = 20001;
-	    		$B['category']     = -1;
-	    		$B['media_count']  = $A['media_count'];
 
-		        $album  = new mgAlbumCPG();
-       			$album->constructor($B);
-				$album->owner_name = $cpg_username;
-
-        		$mgAlbums[$album->id] = $album;
+	    	$sql = "SELECT * FROM " . $CONFIG['TABLE_PREFIX'] . "users WHERE user_id=" . $owner_id;
+	    	$result3 = @mysql_query($sql,$dbImport);
+    		$nRows3  = @mysql_numrows($result3);
+    		if ( $nRows3 > 0 ) {
+	    		$row3 = @mysql_fetch_array($result3, MYSQL_BOTH);
+	    		$cpg_username = $row3['user_name'];
+    		} else {
+	    		$cpg_username = 'admin';
     		}
+    		$result4 = @mysql_query("SELECT COUNT(*) FROM " . $CONFIG['TABLE_PREFIX'] . "pictures WHERE aid=".$A['album_id']);
+    		list($number_of_items) = @mysql_fetch_array($result4,MYSQL_BOTH);
+    		$B['album_id']     = $row['category'];
+    		$B['album_title']  = 'User Gallery for ' . $cpg_username;
+    		$B['album_parent'] = 20001;
+    		$B['category']     = -1;
+    		$B['media_count']  = $A['media_count'];
+
+	        $album  = new mgAlbumCPG();
+   			$album->constructor($B);
+			$album->owner_name = $cpg_username;
+
+    		$mgAlbums[$album->id] = $album;
+
     		$A['album_parent'] = $row['category'];
 		} else {
     		$A['album_parent']		= ($row['category'] == 0 ? 0 : $row['category']+20000);
@@ -479,7 +481,6 @@ function MG_buildImportAlbums( $configdir ) {
         $album  = new mgAlbumCPG();
         $album->constructor($A);
         $mgAlbums[$album->id] = $album;
-//        COM_errorLog("MG-CPG Import:  Added " . $album->title . " to album list");
     }
 
     foreach( $mgAlbums as $id => $album) {
@@ -491,12 +492,13 @@ function MG_buildImportAlbums( $configdir ) {
     @mysql_close($dbImport);
     $_DB = new database($_DB_host,$_DB_name,$_DB_user,$_DB_pass,'COM_errorLog');
 	@mysql_select_db($_DB_name);
-//	COM_errorLog("MG-CPG Import: Completed building album list");
     return;
 }
 
 function MG_importSelectAlbums($configdir ) {
 	global $mgAlbums, $_MG_CONF, $CONFIG, $_DB_name, $_TABLES, $_CONF, $LANG_MG02, $_USER, $_POST;
+
+    $display = '';
 
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file (array('page' => 'import_select_items.thtml'));
@@ -523,8 +525,6 @@ function MG_importAlbums( $aid, $parent, $configdir, $session_id ) {
 
 	COM_errorLog("MG-CPG Import: Preparing to import albums");
 
-//	MG_buildImportAlbums($configdir,1);
-
     $_DB = new database($_DB_host,$_DB_name,$_DB_user,$_DB_pass,'COM_errorLog');
 	@mysql_select_db($_DB_name);
 
@@ -533,7 +533,7 @@ function MG_importAlbums( $aid, $parent, $configdir, $session_id ) {
 	$checkCounter = 0;
 	for ($i=0; $i < $nrows; $i++ ) {
 		$x = $mgAlbums[$children[$i]]->id;
-	    if ( $_POST['gallery'][$x] == 1 ) {
+	    if ( isset($_POST['gallery'][$x]) && $_POST['gallery'][$x] == 1 ) {
 			// get GL userid if possible
 			$gl_user_id = DB_getItem($_TABLES['users'],'uid',"username='" . $mgAlbums[$children[$i]]->ownername . "'");
 	    	$sql = "SELECT MAX(album_id) + 1 AS nextalbum_id FROM " . $_TABLES['mg_albums'];
@@ -583,41 +583,11 @@ function MG_importAlbums( $aid, $parent, $configdir, $session_id ) {
 		    }
 		  	$rc = $mgAlbums[$children[$i]]->createAlbum();
 
-/*---
-
-			// save user gallery stuff for later...
-			if ( $mgAlbums[$children[$i]]->id == 20001 ) {
-				$user_gallery_mg_id = $album->id;
-			}
-
-		  	// let's create the album....
-
-		  	$rc = $album->createAlbum();
-
---- */
 	  		MG_importFiles($mgAlbums[$children[$i]]->mgid, $mgAlbums[$children[$i]]->id,$configdir, $session_id);
 
         	if (!empty($mgAlbums[$children[$i]]->children) ) {
 	            MG_importAlbums($mgAlbums[$children[$i]]->id, $A['album_id'],$configdir, $session_id);
 	        }
-/*
-		  	if ( $rc == true ) {
-		  		// now import any sub-categories to this one...
-	        	if (!empty($mgAlbums[$children[$i]]->children) ) {
-		            $subChildren = $mgAlbums[$children[$i]]->getChildren();
-		            foreach($subChildren AS $child1) {
-			            $mgAlbums[$child1]->mg_parent = $album->id;
-		            }
-		            MG_importAlbums($mgAlbums[$children[$i]]->id, $album->id, $configdir);
-		        }
-
-			  	// now import any albums to this category...
-
-			  	if ( $mgAlbums[$children[$i]]->category != -1 ) {
-			  		MG_importFiles($album->id, $mgAlbums[$children[$i]]->id,$configdir);
-		  		}
-	  		}
---- */
 		}
 	}
 }
@@ -651,15 +621,18 @@ function MG_importFiles( $album_id, $import_album_id, $configdir, $session_id ) 
 	$result = @mysql_query($sql,$dbImport);
 	$nRows  = @mysql_numrows($result);
     for ($i=0; $i < $nRows; $i++ ) {
+
 		$row = @mysql_fetch_array($result, MYSQL_BOTH);
 
-        $fileList[$counter]['aid'] = $album_id;
-        $fileList[$counter]['data'] = $configdir . '/albums/' . $row['filepath'] . $row['filename'];
-        $fileList[$counter]['data3'] = addslashes($row['title']);
-        $fileList[$counter]['data2'] = addslashes(html_entity_decode($row['caption']));
-        $fileList[$counter]['mid']   = $row['hits'];
-        $counter++;
+        $fileList[$counter]['aid']      = $album_id;
+        $fileList[$counter]['data']     = $configdir . '/albums/' . $row['filepath'] . $row['filename'];
+        $fileList[$counter]['data3']    = addslashes($row['title']);
+        $fileList[$counter]['data2']    = addslashes(html_entity_decode($row['caption']));
+        $fileList[$counter]['mid']      = intval($row['hits']);
+        $owner_name                     = $row['owner_name'];
+        $fileList[$counter]['uid'] = $owner_name;
 
+        $counter++;
 		$cpgImages[$i]['comments'] = array();
         // they are stored in the comments database and tie back to the pid
 
@@ -671,7 +644,7 @@ function MG_importFiles( $album_id, $import_album_id, $configdir, $session_id ) 
 	    	$cpgImages[$i]['comments'][$z]['author'] 	= addslashes($cRow['msg_author']);
 	    	$cpgImages[$i]['comments'][$z]['sid'] 		= $new_media_id;
 	    	$cpgImages[$i]['comments'][$z]['date'] 		= $cRow['msg_date'];
-	    	$cpgImages[$i]['comments'][$z]['title'] 	= 'Coppermine Comment';
+	    	$cpgImages[$i]['comments'][$z]['title'] 	= $row['title'] == '' ? 'Coppermine Comment' : $row['title'];
 	    	$cpgImages[$i]['comments'][$z]['comment'] 	= addslashes($cRow['msg_body']);
 	    	$cpgImages[$i]['comments'][$z]['ipaddress'] = $cRow['msg_raw_ip'];
 	    	$cpgImages[$i]['comments'][$z]['cmt_date'] 	= $cRow['msg_date'];
@@ -680,7 +653,7 @@ function MG_importFiles( $album_id, $import_album_id, $configdir, $session_id ) 
     }
     $cpgImageCount = $nRows;
 
-    // OK, now reconnect with the Geeklog Database and see what kind of damage
+    // OK, now reconnect with the glFusion Database and see what kind of damage
     // we can do...
 
     @mysql_close($dbImport);
@@ -689,7 +662,9 @@ function MG_importFiles( $album_id, $import_album_id, $configdir, $session_id ) 
 
     for ($i=0; $i < $counter; $i++) {
         $aid      = $fileList[$i]['aid'];
-        $mid      = $fileList[$i]['mid'];
+        $sdata[0] = $fileList[$i]['mid'];
+        $sdata[1] = $fileList[$i]['uid'];
+        $mid      = serialize($sdata);
         $data     = $fileList[$i]['data'];
         $data2    = $fileList[$i]['data2'];
         $data3    = $fileList[$i]['data3'];
@@ -722,6 +697,14 @@ function MG_importFiles( $album_id, $import_album_id, $configdir, $session_id ) 
 
     }
 	COM_errorLog("MG-CPG Import: Completed importing files for this album");
+}
+
+function convert_datetime($str) {
+    list($date, $time) = explode(' ', $str);
+    list($year, $month, $day) = explode('-', $date);
+    list($hour, $minute, $second) = explode(':', $time);
+    $timestamp = mktime($hour, $minute, $second, $month, $day, $year);
+    return $timestamp;
 }
 
 // -- main processing here...

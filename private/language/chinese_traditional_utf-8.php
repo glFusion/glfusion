@@ -458,7 +458,9 @@ $LANG08 = array(
     32 => '日期',
     33 => '完整的文章在：',
     34 => '電郵結束',
-    35 => '對不起，此用戶不願意收電信.'
+    35 => '對不起，此用戶不願意收電信.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################
@@ -952,7 +954,9 @@ $LANG28 = array(
     82 => "你的帳戶於 {$_CONF['site_name']} 自從 %s 就未曾運用，如果此帳戶在三十天內不再運用，它會變成無效。",
     83 => "你的帳戶於 {$_CONF['site_name']} 自從登記時就未曾運用。若不繼續運用，它將變成無效。",
     84 => "你的用戶名是: %s 我們的網站是: {$_CONF['site_url']}",
-    85 => '若你忘記你的密碼請跟從這個連結: %s'
+    85 => '若你忘記你的密碼請跟從這個連結: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1341,7 +1345,8 @@ $LANG_ACCESS = array(
     'group_id' => '小組 ID',
     'plugin_access_denied_msg' => '你在非法的進入插件管理頁.  請注意所有的非法登入都被登記.',
     'groupexists' => '小組名稱已存在',
-    'groupexistsmsg' => '目前已有用此名的小組. 小組名稱必須獨特.'
+    'groupexistsmsg' => '目前已有用此名的小組. 小組名稱必須獨特.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################
@@ -1710,6 +1715,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => '允許用戶刪除',
     'hide_author_exclusion' => '允許隱藏作者',
     'show_fullname' => '顯現全名',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => '顯現服務名',
     'custom_registration' => '啟動自定登記',
     'user_login_method' => '用戶登入方式',
@@ -1905,7 +1911,8 @@ $LANG_confignames['Core'] = array(
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Enable Template Comments',
-    'hidestorydate' => 'Hide Story Date'
+    'hidestorydate' => 'Hide Story Date',
+    'maintenance_mode' => 'Enable Maintenance Mode'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1987,7 +1994,8 @@ $LANG_configselects['Core'] = array(
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
 );
 
 ?>

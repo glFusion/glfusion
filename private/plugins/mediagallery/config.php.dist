@@ -245,4 +245,20 @@ $_MG_CONF['disable_lightbox'] = false;
 
 $_MG_CONF['update_parent_lastupdated'] = false;
 
+/*
+ * If you want to allow users who 'own' (uploaded) a media item to be able
+ * to also edit the media item, set this value to true.
+ */
+
+$_MG_CONF['allow_user_edit'] = false;
+
+/*
+ * Media Gallery provides limited support for including remotely hosted
+ * images in your albums.  Your web host must support the CURL PHP extension
+ * or allow opening remote URLs to take full advantage of this features.
+ * To enable remote image support, set this value to true.
+ */
+
+$_MG_CONF['enable_remote_images'] = false;
+
 ?>

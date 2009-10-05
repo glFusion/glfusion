@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -42,8 +42,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-if( !function_exists( 'str_ireplace' ))
-{
+if( !function_exists( 'str_ireplace' )) {
     require_once( 'PHP/Compat.php' );
     PHP_Compat::loadFunction( 'str_ireplace' );
 }
@@ -57,6 +56,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     global $canPost;
 
     $retval = '';
+
+    static $cacheUserArray = array();
 
     $oldPost = 0;
 
@@ -91,66 +92,107 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $date = iconv('ISO-8859-1','UTF-8',$date);
     }
 
-    $userQuery = DB_query("SELECT * FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".intval($showtopic['uid']));
-    if ($showtopic['uid'] > 1 AND DB_numRows($userQuery) == 1) {
-        $userarray = DB_fetchArray($userQuery);
-        $username = COM_getDisplayName($showtopic['uid']);
+    $foundUser = 0;
+    if ( $showtopic['uid'] > 1 ) {
+        if ( isset($cacheUserArray[$showtopic['uid']]) ) {
+            $userarray = $cacheUserArray[$showtopic['uid']];
+            $username = $userarray['display_name'];
+            $posts = $userarray['posts'];
+            $user_level = $userarray['user_level'];
+            $user_levelname = $userarray['user_levelname'];
+            $avatar = $userarray['avatar'];
+            $onlinestatus = $userarray['onlinestatus'];
+            $min_height = $userarray['min_height'];
+            $regdate = $userarray['regdate'];
+            $numposts = $userarray['numposts'];
+            $foundUser = 1;
+        } else {
+            $sql = "SELECT * FROM {$_TABLES['users']} users LEFT JOIN {$_TABLES['userprefs']} userprefs ON users.uid=userprefs.uid LEFT JOIN {$_TABLES['userinfo']} userinfo ON users.uid=userinfo.uid LEFT JOIN {$_TABLES['gf_userinfo']} gf_userinfo ON users.uid=gf_userinfo.uid WHERE users.uid=".intval($showtopic['uid']);
+            $userQuery = DB_query($sql);
+            if ( DB_numRows($userQuery) == 1 ) {
+                $userarray = DB_fetchArray($userQuery);
+                $username = COM_getDisplayName($showtopic['uid']);
+                $userarray['display_name'] = $username;
+
+                $postcount = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE uid='".intval($showtopic['uid'])."'");
+                $posts = DB_numRows($postcount);
+                $userarray['posts'] = $posts;
+
+                $starimage = "<img src=\"%s\" alt=\"{$LANG_GF01['FORUM']} %s\" title=\"{$LANG_GF01['FORUM']} %s\"" . XHTML . ">";
+
+                if ($posts < $CONF_FORUM['level2']) {
+                    $user_level = sprintf($starimage, gf_getImage('rank1','ranks'), $CONF_FORUM['level1name'],$CONF_FORUM['level1name']);
+                    $user_levelname = $CONF_FORUM['level1name'];
+                } elseif (($posts >= $CONF_FORUM['level2']) && ($posts < $CONF_FORUM['level3'])){
+                    $user_level = sprintf($starimage,gf_getImage('rank2','ranks'),$CONF_FORUM['level2name'],$CONF_FORUM['level2name']);
+                    $user_levelname = $CONF_FORUM['level2name'];
+                } elseif (($posts >= $CONF_FORUM['level3']) && ($posts < $CONF_FORUM['level4'])){
+                    $user_level = sprintf($starimage,gf_getImage('rank3','ranks'),$CONF_FORUM['level3name'],$CONF_FORUM['level3name']);
+                    $user_levelname = $CONF_FORUM['level3name'];
+                } elseif (($posts >= $CONF_FORUM['level4']) && ($posts < $CONF_FORUM['level5'])){
+                    $user_level = sprintf($starimage,gf_getImage('rank4','ranks'),$CONF_FORUM['level4name'],$CONF_FORUM['level4name']);
+                    $user_levelname = $CONF_FORUM['level4name'];
+                } elseif (($posts > $CONF_FORUM['level5'])){
+                    $user_level = sprintf($starimage,gf_getImage('rank5','ranks'),$CONF_FORUM['level5name'],$CONF_FORUM['level5name']);
+                    $user_levelname = $CONF_FORUM['level5name'];
+                }
+                if (forum_modPermission($showtopic['forum'],$showtopic['uid'])) {
+                    $user_level = sprintf($starimage,gf_getImage('rank_mod','ranks'),$LANG_GF01['moderator'],$LANG_GF01['moderator']);
+                    $user_levelname=$LANG_GF01['moderator'];
+                }
+                if (SEC_inGroup(1,$showtopic['uid'])) {
+                    $user_level = sprintf($starimage,gf_getImage('rank_admin','ranks'),$LANG_GF01['admin'],$LANG_GF01['admin']);
+                    $user_levelname=$LANG_GF01['admin'];
+                }
+                $userarray['user_level'] = $user_level;
+                $userarray['user_levelname'] = $user_levelname;
+
+                if ($userarray['photo'] != "") {
+                    $avatar = USER_getPhoto($showtopic['uid'],'','',$CONF_FORUM['avatar_width']);
+                    $min_height = $min_height + 150;
+                } else {
+                    $avatar = '';
+                }
+                if ( $CONF_FORUM['enable_user_rating_system']) {
+                    if ( $showtopic['uid'] > 1 ) {
+                        $min_height = $min_height + 10;
+                    }
+                }
+                if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
+                    $min_height = $min_height + 5;
+                }
+                $regdate = $LANG_GF01['REGISTERED']. ': ' . strftime('%m/%d/%y',strtotime($userarray['regdate'])). '<br' . XHTML . '>';
+                $numposts = $LANG_GF01['POSTS']. ': ' .$posts;
+                if (DB_count( $_TABLES['sessions'], 'uid', intval($showtopic['uid'])) > 0 AND DB_getItem($_TABLES['userprefs'],'showonline',"uid=".intval($showtopic['uid'])."") == 1) {
+                    $avatar .= '<br' . XHTML . '>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['ONLINE'];
+                    $onlinestatus = $LANG_GF01['ONLINE'];
+                } else {
+                    $avatar .= '<br' . XHTML . '>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['OFFLINE'];
+                    $onlinestatus = $LANG_GF01['OFFLINE'];
+                }
+                $userarray['avatar'] = $avatar;
+                $userarray['onlinestatus'] = $onlinestatus;
+                $userarray['min_height'] = $min_height;
+                $userarray['regdate']    = $regdate;
+                $userarray['numposts']   = $numposts;
+
+                $cacheUserArray[$showtopic['uid']] = $userarray;
+                $foundUser = 1;
+            }
+        }
+    }
+    if ($foundUser) {
         $userlink = "<a href=\"{$_CONF['site_url']}/users.php?mode=profile&amp;uid={$showtopic['uid']}\" ";
-        $userlink .= "class=\"authorname {$onetwo}\"><b>{$username}</b></a>";
+        $userlink .= "class=\"authorname {$onetwo}\" rel=\"nofollow\"><b>{$username}</b></a>";
         $uservalid = true;
-        $postcount = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE uid='".intval($showtopic['uid'])."'");
-        $posts = DB_numRows($postcount);
-        // STARS CODE
-        $starimage = "<img src=\"%s\" alt=\"{$LANG_GF01['FORUM']} %s\" title=\"{$LANG_GF01['FORUM']} %s\"" . XHTML . ">";
-        if ($posts < $CONF_FORUM['level2']) {
-            $user_level = sprintf($starimage, gf_getImage('rank1','ranks'), $CONF_FORUM['level1name'],$CONF_FORUM['level1name']);
-            $user_levelname = $CONF_FORUM['level1name'];
-        } elseif (($posts >= $CONF_FORUM['level2']) && ($posts < $CONF_FORUM['level3'])){
-            $user_level = sprintf($starimage,gf_getImage('rank2','ranks'),$CONF_FORUM['level2name'],$CONF_FORUM['level2name']);
-            $user_levelname = $CONF_FORUM['level2name'];
-        } elseif (($posts >= $CONF_FORUM['level3']) && ($posts < $CONF_FORUM['level4'])){
-            $user_level = sprintf($starimage,gf_getImage('rank3','ranks'),$CONF_FORUM['level3name'],$CONF_FORUM['level3name']);
-            $user_levelname = $CONF_FORUM['level3name'];
-        } elseif (($posts >= $CONF_FORUM['level4']) && ($posts < $CONF_FORUM['level5'])){
-            $user_level = sprintf($starimage,gf_getImage('rank4','ranks'),$CONF_FORUM['level4name'],$CONF_FORUM['level4name']);
-            $user_levelname = $CONF_FORUM['level4name'];
-        } elseif (($posts > $CONF_FORUM['level5'])){
-            $user_level = sprintf($starimage,gf_getImage('rank5','ranks'),$CONF_FORUM['level5name'],$CONF_FORUM['level5name']);
-            $user_levelname = $CONF_FORUM['level5name'];
-        }
 
-        if (forum_modPermission($showtopic['forum'],$showtopic['uid'])) {
-            $user_level = sprintf($starimage,gf_getImage('rank_mod','ranks'),$LANG_GF01['moderator'],$LANG_GF01['moderator']);
-            $user_levelname=$LANG_GF01['moderator'];
-        }
-
-        if (SEC_inGroup(1,$showtopic['uid'])) {
-            $user_level = sprintf($starimage,gf_getImage('rank_admin','ranks'),$LANG_GF01['admin'],$LANG_GF01['admin']);
-            $user_levelname=$LANG_GF01['admin'];
-        }
-        if ($userarray['photo'] != "") {
-            $avatar = USER_getPhoto($showtopic['uid'],'','',$CONF_FORUM['avatar_width']);
-            $min_height = $min_height + 50;
-        } else {
-            $avatar = '';
-        }
-
-        $regdate = $LANG_GF01['REGISTERED']. ': ' . strftime('%m/%d/%y',strtotime($userarray['regdate'])). '<br' . XHTML . '>';
-        $numposts = $LANG_GF01['POSTS']. ': ' .$posts;
-        if (DB_count( $_TABLES['sessions'], 'uid', intval($showtopic['uid'])) > 0 AND DB_getItem($_TABLES['userprefs'],'showonline',"uid=".intval($showtopic['uid'])."") == 1) {
-            $avatar .= '<br' . XHTML . '>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['ONLINE'];
-            $onlinestatus = $LANG_GF01['ONLINE'];
-        } else {
-            $avatar .= '<br' . XHTML . '>' .$LANG_GF01['STATUS']. ' ' .$LANG_GF01['OFFLINE'];
-            $onlinestatus = $LANG_GF01['OFFLINE'];
-        }
-
-        if($userarray['sig'] != '') {
+        if($userarray['sig'] != '' || $userarray['signature'] != '' ) {
             $sig = '<hr style="width:95%;color=:black;text-align:left;margin-left:0; margin-bottom:5;padding:0" noshade="noshade"' . XHTML . '>';
-            $sig .= '<b>' .nl2br($userarray['sig']). '</b>';
+
+            $usersig = GF_getSignature( $userarray['sig'],$userarray['signature'], 'html' );
+            $sig .= $usersig;
             $min_height = $min_height + 30;
         }
-
 
     } else {
         $uservalid = false;
@@ -162,11 +204,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $moodimage = '<img align="middle" src="'.gf_getImage($showtopic['mood'],'moods') .'" title="'.$showtopic['mood'].'" alt=""' . XHTML . '><br' . XHTML . '>';
         $min_height = $min_height + 30;
     }
-
-
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Show Topic Display Time3: $intervalTime");
-
     // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function
     if ($CONF_FORUM['pre2.5_mode']) {
         // try to determine if we have an old post...
@@ -210,10 +247,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
 
     $showtopic['subject'] = COM_truncate($showtopic['subject'],$CONF_FORUM['show_subject_length'],'...');
 
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Show Topic Display Time2: $intervalTime");
-
-    if ($mode != 'preview' && $uservalid && ($_USER['uid'] > 1) && ($_USER['uid'] == $showtopic['uid'])) {
+    if ($mode != 'preview' && $uservalid && (!COM_isAnonUser()) && (isset($_USER['uid']) && $_USER['uid'] == $showtopic['uid'])) {
         /* Check if user can still edit this post - within allowed edit timeframe */
         $editAllowed = false;
         if ($CONF_FORUM['allowed_editwindow'] > 0) {
@@ -254,7 +288,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $topictemplate->set_var ('read_msg','');
     }
     // Bookmark feature
-    if ($_USER['uid'] > 1 ) {
+    if (!COM_isAnonUser() ) {
         if (DB_count($_TABLES['gf_bookmarks'],array('uid','topic_id'),array($_USER['uid'],intval($showtopic['id'])))) {
             $topictemplate->set_var('bookmark_icon','<img src="'.gf_getImage('star_on_sm').'" title="'.$LANG_GF02['msg204'].'" alt=""' . XHTML . '>');
         } else {
@@ -323,7 +357,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         }
         if(isset($userarray['homepage']) && $userarray['homepage'] != '') {
             $homepage = $userarray['homepage'];
-            if(!eregi("http",$homepage)) {
+            if (!preg_match("/http/i",$homepage) ) {
+//            if(!eregi("http",$homepage)) {
                 $homepage = 'http://' .$homepage;
             }
             $homepageimg = '<img src="'.gf_getImage('website_button').'" border="0" align="middle" alt="'.$LANG_GF01['WebsiteLink'].'" title="'.$LANG_GF01['WebsiteLink'].'"' . XHTML . '>';
@@ -340,7 +375,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         }
         $backlink = '<center><a href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $replytopicid. '">' .$back2. '</a></center>';
     } else {
-        if ($_GET['onlytopic'] != 1) {
+        if (!isset($_GET['onlytopic']) || $_GET['onlytopic'] != 1) {
             $topictemplate->set_var ('posted_date', '');
             $topictemplate->set_var ('preview_topic_subject', $showtopic['subject']);
         } else {
@@ -364,11 +399,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             DB_query($sql);
         }
     }
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Show Topic Display Time4: $intervalTime");
-
-//    $showtopic['comment'] = str_replace('{','&#123;',$showtopic['comment']);
-//    $showtopic['comment'] = str_replace('}','&#125;',$showtopic['comment']);
 
     $uniqueid = isset($_POST['uniqueid']) ? COM_applyFilter($_POST['uniqueid'],true) : 0;
     if ($showtopic['id'] > 0) {
@@ -377,12 +407,57 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         $topictemplate->set_var('attachments',gf_showattachments($uniqueid));
     }
 
-    if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') ) {
+    if ( SEC_inGroup('Root') && function_exists('plugin_cclabel_nettools') && isset($showtopic['ip']) ) {
         $iplink = '<a href="' . $_CONF['site_url'] . '/nettools/whois.php?domain=' . $showtopic['ip'] . '">' . $showtopic['ip'] . '</a>';
         $topictemplate->set_var('ipaddress',$iplink);
     } else {
         $topictemplate->set_var('ipaddress','');
     }
+
+    $voteHTML = '';
+    if ( $CONF_FORUM['enable_user_rating_system']) {
+        if ( $showtopic['uid'] > 1 ) { //not an anonymous poster
+            // grab the poster's current rating...
+    	    $rating = intval(DB_getItem($_TABLES['gf_userinfo'],'rating','uid='.intval($showtopic['uid'])));
+    		if ($rating > 0) {
+    			$grade = '+'. $rating;
+    		} else {
+    			$grade = $rating;
+    		}
+
+    		//Find out if user has rights to increase / decrease score
+    		if ( $_USER['uid'] > 1 && $_USER['uid'] != $showtopic['uid'] ) { //Can't vote for yourself & must be logged in
+    			$user_already_voted_res = DB_query("SELECT grade FROM {$_TABLES['gf_rating_assoc']} WHERE user_id = {$showtopic['uid']} AND voter_id = {$_USER['uid']}");
+    			if (DB_numRows($user_already_voted_res) <= 0 ) {
+    			// user has never voted for this poster
+    			    $vote_language = $LANG_GF01['grade_user'];
+    			    $plus_vote  = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.png" alt="plus" /></a>';
+                    $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,1);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.png" alt="minus" /></a>';
+                    $min_height = $min_height + 10;
+                } else {
+                    // user has already voted for this poster
+                    $vote_language = $LANG_GF01['retract_grade'];
+    				$user_already_voted_row = DB_fetchArray($user_already_voted_res);
+                    if ($user_already_voted_row['grade'] > 0 ) {
+                        // gave a +1 show the minus to retract
+                        $plus_vote = '';
+                        $minus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',-1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/minus.png" alt="minus" /></a>';
+                        $min_height = $min_height + 10;
+    				} else {
+                        // gave a -1 show the plus to retract
+                        $minus_vote = '';
+                        $plus_vote = '<a href="#" onclick="ajax_voteuser('.$_USER['uid'].','.$showtopic['uid'].','.$showtopic['id'].',1,0);return false;"><img src="'.$_CONF['site_url'].'/forum/images/plus.png" alt="plus" /></a>';
+                        $min_height = $min_height + 10;
+    				}
+    			}
+    			$voteHTML = '<div class="c'.$showtopic['uid'].'"><span id="vote'.$showtopic['id'].'">'.$vote_language.'<br />'.$minus_vote.$plus_vote.'<br />'.$LANG_GF01['grade'].': '.$grade.'</span></div>';
+            } else {
+                // display 'rating'
+      			$voteHTML =  $LANG_GF01['grade'].': '.$grade;
+            }
+        }
+    }
+    $topictemplate->set_var ('vote_html', $voteHTML);
 
     $topictemplate->set_var ('layout_url', $_CONF['layout_url']);
     $topictemplate->set_var ('csscode', $onetwo);
@@ -416,9 +491,6 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     $topictemplate->set_var ('member_badge',forumPLG_getMemberBadge($showtopic['uid']));
     $topictemplate->parse ('output', 'topictemplate');
     $retval .= $topictemplate->finish ($topictemplate->get_var('output'));
-
-    //$intervalTime = $mytimer->stopTimer();
-    //COM_errorLog("Show Topic Display Time5: $intervalTime");
 
     return $retval;
 }

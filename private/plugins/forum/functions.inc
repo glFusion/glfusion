@@ -77,6 +77,10 @@ $CONF_FORUM['show_anonymous_posts'] = 1;
 // Only send Notification once - even if more posts are created since your last visit
 $CONF_FORUM['notify_once'] = 1;
 
+if ( !isset($CONF_FORUM['enable_user_rating_system']) ) {
+    $CONF_FORUM['enable_user_rating_system'] = 0;
+}
+
 if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
     $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
     if ( DB_numRows($result) > 0 ) {
@@ -179,6 +183,7 @@ function plugin_getadminoption_forum()
 * Returns the user menuitem option for this plugin
 * Only one menu item can be returned.
 */
+/* --------------------------------------------------------------
 function plugin_getuseroption_forum()
 {
     global $_USER, $CONF_FORUM, $_CONF, $LANG_GF00;
@@ -191,7 +196,7 @@ function plugin_getuseroption_forum()
         return array($LANG_GF00['useradminmenu'], $_CONF['site_url'] . '/forum/userprefs.php', 0);
     }
 }
-
+--------------------------------------------------------------- */
 
 function plugin_user_create_forum ($uid)
 {
@@ -217,113 +222,6 @@ function plugin_user_delete_forum ($uid)
     DB_query("UPDATE {$_TABLES['gf_topic']} SET uid = 1 WHERE uid = '$uid'");
 }
 
-function plugin_profileextrassave_forum()
-{
-    global $_CONF,$_USER, $_TABLES;
-
-    require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
-    $uid = $_USER['uid'];
-    if ($uid > 1) {
-        $location   = gf_preparefordb($_POST['forum_location'],'html');
-        $aim        = gf_preparefordb($_POST['forum_aim'],'html');
-        $icq        = gf_preparefordb($_POST['forum_icq'],'html');
-        $yim        = gf_preparefordb($_POST['forum_yim'],'html');
-        $msnm       = gf_preparefordb($_POST['forum_msnm'],'html');
-        $interests  = gf_preparefordb($_POST['forum_interests'],'html');
-        $occupation = gf_preparefordb($_POST['forum_occupation'],'html');
-        DB_save ($_TABLES['gf_userinfo'], "uid,location,aim,yim,icq,msnm,interests,occupation",
-                 "'$uid','$location','$aim','$yim','$icq','$msnm','$interests','$occupation'");
-   }
-}
-
-
-function plugin_profilevariablesedit_forum($uid, &$template)
-{
-    global $_TABLES, $LANG_GF04;
-
-    $result = DB_query ("SELECT uid,location,aim,yim,icq,yim,msnm,interests,occupation FROM {$_TABLES['gf_userinfo']} WHERE uid = $uid");
-    $A = DB_fetchArray ($result);
-    $template->set_var('forum_location', $A['location']);
-    $template->set_var('forum_aim', $A['aim']);
-    $template->set_var('forum_icq', $A['icq']);
-    $template->set_var('forum_yim', $A['yim']);
-    $template->set_var('forum_msnm', $A['msnm']);
-    $template->set_var('forum_interests', $A['interests']);
-    $template->set_var('forum_occupation', $A['occupation']);
-
-    $template->set_var ('lang_forum', $LANG_GF04['label_forum']);
-/*    $template->set_var ('lang_location', $LANG_GF04['label_location']); */
-    $template->set_var ('lang_aim', $LANG_GF04['label_aim']);
-    $template->set_var ('lang_icq', $LANG_GF04['label_icq']);
-    $template->set_var ('lang_yim', $LANG_GF04['label_yim']);
-    $template->set_var ('lang_msnm', $LANG_GF04['label_msnm']);
-    $template->set_var ('lang_interests', $LANG_GF04['label_interests']);
-    $template->set_var ('lang_occupation', $LANG_GF04['label_occupation']);
-}
-
-function plugin_profilevariablesdisplay_forum ($uid, &$template)
-{
-    global $CONF_FORUM,$_TABLES, $_CONF, $LANG_GF02,$LANG_GF04;
-
-    $postlimit="10";        // How many posts you want displayed
-
-    $query = DB_query ("SELECT id,date,forum,subject FROM {$_TABLES['gf_topic']} WHERE uid = {$uid} ORDER BY date DESC LIMIT 100");
-    $numposts = 0;
-
-    while (list($postid,$date,$forum_id,$subject) = DB_fetchArray($query))  {
-        $grp_id = DB_getItem($_TABLES['gf_forums'],'grp_id',"forum_id='$forum_id'");
-        $groupname = DB_getItem($_TABLES['groups'],'grp_name',"grp_id='$grp_id'");
-        if (SEC_inGroup($groupname) OR $grp_id == 2) {
-            if ($CONF_FORUM['use_censor']) {
-                $subject = COM_checkWords($subject);
-            }
-            $numposts++;
-            $postdate = COM_getUserDateTimeFormat ($date);
-            $template->set_var ('row_number', $numposts . '.');
-            $template->set_var ('story_begin_href', '<a href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . $postid . '">');
-            $template->set_var ('story_title', $subject);
-            $template->set_var ('story_end_href', '</a>');
-            $template->set_var ('story_date', $postdate[0]);
-            $template->parse ('forum_post_row', 'strow', true);
-            if ($numposts >= $postlimit) {
-                break;
-            }
-        }
-    }
-
-    if ($numposts == 0) {
-        $template->set_var ('forum_post_row', '<tr><td>' .$LANG_GF02['msg155']. '</td></tr>');
-    }
-
-    $count = DB_count ($_TABLES['gf_topic'], 'uid', $uid);
-    $template->set_var ('forum_lang_number_posts', $LANG_GF02['msg156']);
-    $template->set_var ('forum_number_posts', $count);
-
-    $template->set_var ('forum_start_block_last10posts', COM_startBlock
-        ( $LANG_GF02['msg158'] . DB_getItem ($_TABLES['users'],
-           'username', "uid = $uid")));
-    $template->set_var ('forum_headline_last10posts', $LANG_GF02['msg157']);
-
-    /* Display Instant Messaging Handles */
-    $result = DB_query ("SELECT uid,location,aim,yim,icq,yim,msnm,interests,occupation FROM {$_TABLES['gf_userinfo']} WHERE uid = $uid");
-    $A = DB_fetchArray ($result);
-    $template->set_var('forum_location', $A['location']);
-    $template->set_var('forum_aim', $A['aim']);
-    $template->set_var('forum_icq', $A['icq']);
-    $template->set_var('forum_yim', $A['yim']);
-    $template->set_var('forum_msnm', $A['msnm']);
-    $template->set_var('forum_interests', $A['interests']);
-    $template->set_var('forum_occupation', $A['occupation']);
-
-    $template->set_var ('lang_forum', $LANG_GF04['label_forum']);
-    $template->set_var ('lang_location', $LANG_GF04['label_location']);
-    $template->set_var ('lang_aim', $LANG_GF04['label_aim']);
-    $template->set_var ('lang_icq', $LANG_GF04['label_icq']);
-    $template->set_var ('lang_yim', $LANG_GF04['label_yim']);
-    $template->set_var ('lang_msnm', $LANG_GF04['label_msnm']);
-    $template->set_var ('lang_interests', $LANG_GF04['label_interests']);
-    $template->set_var ('lang_occupation', $LANG_GF04['label_occupation']);
-}
 
 function plugin_statssummary_forum() {
     global $_USER, $CONF_FORUM, $_CONF, $_TABLES, $LANG_GF00;
@@ -532,23 +430,12 @@ function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type
     $sql  .= "LEFT JOIN {$_TABLES['gf_forums']} f ON t.forum=f.forum_id ";
     $sql  .= forum_buildSearchAccessSql('WHERE');
 
-    if (!empty($datestart) && !empty($dateend))
-    {
-        $delim = substr($datestart, 4, 1);
-        if (!empty($delim))
-        {
-            $DS = explode($delim, $datestart);
-            $DE = explode($delim, $dateend);
-            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-            $sql .= "AND (UNIX_TIMESTAMP(date) BETWEEN '$startdate' AND '$enddate') ";
-        }
-    }
     if (!empty ($author))
         $sql .= "AND (uid = '$author') ";
 
     $search = new SearchCriteria('forum', 'Forum');
     $columns = array('comment','subject');
+    $sql .= $search->getDateRangeSQL('AND', 'date', $datestart, $dateend);
     list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
     $search->setSQL($sql);
     $search->setFTSQL($ftsql);
@@ -1145,6 +1032,10 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         return;
     }
 
+    if ( $CONF_FORUM['centerblock_where'] != $where ) {
+        return;
+    }
+
     require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 
     $retval = '';
@@ -1161,19 +1052,6 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $cb_where = 1;      // Top of Page
     }
 
-    // Check if there are no featured articles in this topic
-    // and if so then place it at the top of the page
-    if (!empty ($topic)) {
-        $wheresql = "WHERE tid='$topic' AND featured > 0";
-    } else {
-        $wheresql = 'WHERE featured = 1';
-    }
-    $query = DB_query ("SELECT count(*) as count FROM {$_TABLES['stories']} $wheresql");
-    $result = DB_fetchArray ($query);
-    if ($result['count'] == 0 and $cb_where == 2) {
-        $cb_where = 1;
-    }
-
     if ($cb_enable AND ($cb_where == $where)) {
         $cacheInstance = 'forumcb__' . CACHE_security_hash() . '__' . $_CONF['theme'];
 
@@ -1182,6 +1060,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         if ( $retval ) {
             return $retval;
         }
+        USES_lib_html2text();
         $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
         $block->set_file (array ('block'=>'centerblock.thtml','record' => 'centerblock_displayline.thtml'));
         $block->set_var ('phpself', $_CONF['site_url'] .'/index.php');
@@ -1239,19 +1118,34 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
             if ($A['uid'] > 1) {
                 $topicinfo = "{$LANG_GF01['STARTEDBY']} " . COM_getDisplayName($A['uid']) . ', ';
-                //$topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],COM_getDisplayName($A['uid']));
             } else {
-                $topicinfo = "{$LANG_GF01['STARTEDBY']},{$A['name']},";
+                $topicinfo = "{$LANG_GF01['STARTEDBY']} {$A['name']},";
             }
 
             $topicinfo .= "{$firstdate}&lt;br" . XHTML . "&gt;{$LANG_GF01['VIEWS']}: {$A['views']}, {$LANG_GF01['REPLIES']}: {$A['replies']}&lt;br" . XHTML . "&gt;";
 
             if (empty ($A['last_reply_rec']) || $A['last_reply_rec'] < 1) {
                 $lastid = $A['id'];
-                $lastpostinfo = wordwrap(strip_tags(substr($A['comment'],0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
-                $testText = gf_formatTextBlock($A['comment'],'text','text');
+
+                $testText = gf_formatTextBlock($A['comment'],'text','noquote');
                 $testText = strip_tags($testText);
-                $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
+                $html2txt = new html2text($testText,false);
+                $testText = trim($html2txt->get_text());
+                $shortComment = '';
+                $commentArray = explode(' ',$testText);
+                $wordCount = count($commentArray);
+                $lengthCount = 0;
+                $tailString = '';
+                foreach ($commentArray AS $word) {
+                    $lengthCount = $lengthCount + strlen($word);
+                    $shortComment .= $word.' ';
+                    if ( $lengthCount >= $CONF_FORUM['contentinfo_numchars'] ) {
+                        $tailString = '...';
+                        break;
+                    }
+                }
+                $shortComment = trim($shortComment).$tailString;
+                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)));
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['gf_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1262,15 +1156,29 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 } else {
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
                 }
-                $lastpostinfo = wordwrap(strip_tags(substr($lastcomment,0,$CONF_FORUM['contentinfo_numchars'])),$CONF_FORUM['linkinfo_width'],"<br" . XHTML . ">\n");
-                $testText = gf_formatTextBlock($B['comment'],'text','text');
+                $testText = gf_formatTextBlock($B['comment'],'text','noquote');
                 $testText = strip_tags($testText);
-                $lastpostinfogll = preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...'));
+                $html2txt = new html2text($testText,false);
+                $testText = trim($html2txt->get_text());
+                $shortComment = '';
+                $commentArray = explode(' ',$testText);
+                $wordCount = count($commentArray);
+                $lengthCount = 0;
+                $tailString = '';
+                foreach ($commentArray AS $word) {
+                    $lengthCount = $lengthCount + strlen($word);
+                    $shortComment .= $word.' ';
+                    if ( $lengthCount >= $CONF_FORUM['contentinfo_numchars'] ) {
+                        $tailString = '...';
+                        break;
+                    }
+                }
+                $shortComment = trim($shortComment).$tailString;
+                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)));
             }
 
             $cssid = ($cssid ==1) ? 2: 1;
             $block->set_var ('lastpostinfo', $lastpostinfo);
-            $block->set_var ('lastpostinfogll', $lastpostinfogll);
             $block->set_var ('lastpostid', $lastid);
             $block->set_var ('topicinfo', $topicinfo);
             $block->set_var ('cssid', $cssid);
@@ -1302,14 +1210,14 @@ function forum_modPermission($forum,$uid='',$permission='') {
     global $_USER,$_TABLES;
 
     if ($uid == '') {
-        $uid = $_USER['uid'];
+        $uid = 1;
     }
 
     if ($uid <=1) {
         return FALSE;  // Invalid ID or anonymous user
     }
 
-    if (($uid == $_USER['uid']) && (SEC_inGroup('Root') || SEC_hasRights('forum.edit'))) {
+    if ((isset($_USER['uid']) && $uid == $_USER['uid']) && (SEC_inGroup('Root') || SEC_hasRights('forum.edit'))) {
         return true;
     }
 
@@ -1345,15 +1253,21 @@ function forum_modPermission($forum,$uid='',$permission='') {
 }
 
 function forum_canPost($forum) {
-    global $_CONF, $CONF_FORUM,$_USER;
+    global $_CONF, $CONF_FORUM,$_USER, $_TABLES;
 
-    if ( $CONF_FORUM['registered_to_post'] && (!isset($_USER['uid']) || $_USER['uid'] < 2 )) {
+    if ( COM_isAnonUser() ) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+
+    if ( $CONF_FORUM['registered_to_post'] && (!isset($_USER) || $_USER['uid'] < 2 )) {
         return false;
     }
     if (SEC_inGroup('Root') || SEC_hasRights('forum.edit')) {
         return true;
     }
-    if (forum_modPermission($forum,$_USER['uid'],'mod_edit')) {
+    if (forum_modPermission($forum['forum'],$uid,'mod_edit')) {
         return true;
     }
     if ( $forum['is_readonly'] ) {
@@ -1362,9 +1276,27 @@ function forum_canPost($forum) {
     if (!SEC_inGroup($forum['grp_id'])) {
         return false;
     }
+    if ( $CONF_FORUM['enable_user_rating_system']) {
+    	if ( COM_isAnonUser() ) {
+    		//Annon user can only post in forums with 0 or less
+    		if($forum['rating_post'] < 1) {
+    			return true;
+    		} else {
+    			return false;
+    		}
+    	}
+    	//get users forum rating
+    	$user_score_res = DB_query("SELECT rating FROM {$_TABLES['gf_userinfo']} WHERE uid = {$_USER['uid']}");
+    	$user_score_row = DB_fetchArray($user_score_res);
+    	if($forum['rating_post'] > intval($user_score_row['rating'])) {
+    		return false;
+    	} else {
+    		return true;
+    	}
+    }
+
     return true;
 }
-
 
 function forum_delAttachment($deleteid) {
     global $_TABLES,$_FM_TABLES,$CONF_FORUM,$filemgmt_FileStore;
@@ -1409,16 +1341,21 @@ function forum_delAttachment($deleteid) {
 // +---------------------------------------------------------------------------+
 
 
-function forumPLG_showsmilies() {
+function forumPLG_showsmilies($wysiwyg = 0) {
     global $_CONF,$CONF_FORUM;
 
-    // Check and see if glMessenger is installed
-    if ($CONF_FORUM['use_smilies_plugin'] AND function_exists(msg_showsmilies)) {
-        return msg_showsmilies();
+    // Check and see if smiley plugin is installed
+    if ($CONF_FORUM['use_smilies_plugin'] AND function_exists('msg_showsmilies')) {
+        return msg_showsmilies($wysiwyg);
     } else {
         $t = new Template($_CONF['path'] . 'plugins/forum/templates/');
         $t->set_file ('smilies' , 'smilies.thtml');
         $t->set_var ('imgset', "{$_CONF['site_url']}/forum/images");
+        if ( $wysiwyg ) {
+            $t->set_var ('emoticon','emoticon_wysiwyg');
+        } else {
+            $t->set_var ('emoticon','emoticon');
+        }
         $t->parse ('output', 'smilies');
         return $t->finish($t->get_var('output'));
     }
@@ -1426,7 +1363,7 @@ function forumPLG_showsmilies() {
 
 function forumPLG_restoreEmoticons($str) {
 
-    // Check and see if glMessenger is installed
+    // Check and see if smiley plugin is installed
     if (function_exists(msg_showsmilies)) {
         return msg_restoreEmoticons($str);
     } else {
@@ -1435,7 +1372,11 @@ function forumPLG_restoreEmoticons($str) {
 }
 
 function forumPLG_getPMlink($member) {
-    global $_TABLES,$_CONF;
+    global $_TABLES,$_CONF, $_PLUGINS;
+
+    if (in_array('pm', $_PLUGINS)) {
+        return "{$_CONF['site_url']}/pm/compose.php?mode=new&amp;username={$member};";
+    }
     if (DB_getItem($_TABLES['plugins'],'pi_enabled',"pi_name='messenger'") == 1) {
         return "{$_CONF['site_url']}/messenger/index.php?action=newpm&amp;toname={$member};";
     } else {
@@ -1446,17 +1387,23 @@ function forumPLG_getPMlink($member) {
 function forumPLG_getMemberBadge($uid) {
     global $_CONF,$CONF_FORUM;
 
+    $retval = '';
+
     if ($uid > 1) {
         if (!SEC_inGroup('Root',$uid)) {
             foreach ($CONF_FORUM['grouptags'] as $groupid => $buttonimg) {
                 if (SEC_inGroup($groupid,$uid)) {
-                    return "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$buttonimg}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+                    $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$buttonimg}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
                 }
             }
         } else {
-            return "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$CONF_FORUM['grouptags']['Root']}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+            $retval .= "<img src=\"{$_CONF['site_url']}/forum/images/badges/{$CONF_FORUM['grouptags']['Root']}\" alt=\"\"" . XHTML . "><br" . XHTML . ">";
+        }
+        if ( function_exists('plugin_getmedals_medals') ) {
+            $retval .= plugin_getmedals_medals($uid);
         }
     }
+    return $retval;
 }
 
 function phpblock_forum_menu() {
@@ -1498,4 +1445,208 @@ function glmenu_showforums() {
     }
     return $retval;
 }
+
+function can_view_forum($forum_id) {
+    global $_USER, $_TABLES, $CONF_FORUM;
+
+    if ( !$CONF_FORUM['enable_user_rating_system'] || SEC_inGroup('Root')) {
+	    return true; //since user rating is not enabled
+	}
+
+	$forum_requirment_res = DB_query("SELECT rating_view FROM {$_TABLES['gf_forums']} WHERE forum_id = ". intval($forum_id));
+	$forum_requirment_row = DB_fetchArray($forum_requirment_res);
+	if (COM_isAnonUser() ) {
+		//Annon user can only view forums with 0 or less
+		if($forum_requirment_row['rating_view'] < 1)
+			return true;
+		else
+			return false;
+	}
+	//get users forum rating
+	$user_score_res = DB_query("SELECT rating FROM {$_TABLES['gf_userinfo']} WHERE uid = {$_USER['uid']}");
+	$user_score_row = DB_fetchArray($user_score_res);
+
+	if($forum_requirment_row['rating_view'] > intval($user_score_row['rating']))
+		return false;
+	else
+		return true;
+}
+
+$LANG_MYACCOUNT['pe_forumprefs'] = $LANG_GF92['forum_prefs'];
+
+function plugin_profileedit_forum($uid,$panel,$fieldset)
+{
+    global $_CONF, $CONF_FORUM, $_TABLES, $_USER, $LANG_GF01,$LANG_GF02,$LANG_GF92;
+
+    $retval = '';
+
+    if ( COM_isAnonUser() ) {
+        return $retval;
+    }
+
+    if ( $panel == 'userinfo' && $fieldset == 'personalinfo' && $CONF_FORUM['bbcode_signature'] ) {
+        $signature = DB_getItem($_TABLES['gf_userinfo'],'signature','uid='.$_USER['uid']);
+        return GF_sigEditorProfile($signature);
+    }
+
+    if ($panel != '' || $fieldset != '' ) {
+        return $retval;
+    }
+
+    // Get user specific settings from database
+    $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid='{$_USER['uid']}'");
+    $nrows = DB_numRows($result);
+
+    if ($nrows == 0) {
+        // Insert a new blank record. Defaults are set in SQL Defintion for table.
+        DB_query("INSERT INTO {$_TABLES['gf_userprefs']} (uid) VALUES ('{$_USER['uid']}')");
+        $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid='{$_USER['uid']}'");
+    }
+
+    $A = DB_fetchArray($result);
+
+    $viewanonposts_checked = $A['viewanonposts'] == 1 ? ' checked="checked"' : '';
+    $alwaysnotify_checked  = $A['alwaysnotify']  == 1 ? ' checked="checked"' : '';
+    $enablenotify_checked  = $A['enablenotify']  == 1 ? ' checked="checked"' : '';
+    $notifyonce_checked    = $A['notify_once']   == 1 ? ' checked="checked"' : '';
+    $showiframe_checked    = $A['showiframe']    == 1 ? ' checked="checked"' : '';
+    $notifyfull_checked    = $A['notify_full']   == 1 ? ' checked="checked"' : '';
+
+    $usersettings = new Template($_CONF['path'] . 'plugins/forum/templates/userprefs');
+    $usersettings->set_file (array ('usersettings'=>'profile_user_settings.thtml'));
+    $usersettings->set_var ('LANG_GF92[topicspp]', $LANG_GF92['topicspp']);
+    $usersettings->set_var ('topicsperpage', $A['topicsperpage']);
+    $usersettings->set_var ('LANG_GF92[postspp]', $LANG_GF92['postspp']);
+    $usersettings->set_var ('postsperpage', $A['postsperpage']);
+    $usersettings->set_var ('LANG_GF02[msg122]', $LANG_GF02['msg122']);
+    $usersettings->set_var ('LANG_GF02[msg123]', $LANG_GF02['msg123']);
+    $usersettings->set_var ('popularlimit', $A['popularlimit']);
+    $usersettings->set_var ('LANG_GF02[msg126]', $LANG_GF02['msg126']);
+    $usersettings->set_var ('LANG_GF02[msg127]', $LANG_GF02['msg127']);
+    $usersettings->set_var ('searchlines', $A['searchlines']);
+    $usersettings->set_var ('LANG_GF02[msg128]', $LANG_GF02['msg128']);
+    $usersettings->set_var ('LANG_GF02[msg129]', $LANG_GF02['msg129']);
+    $usersettings->set_var ('membersperpage', $A['membersperpage']);
+    $usersettings->set_var ('LANG_GF02[msg130]', $LANG_GF02['msg130']);
+    $usersettings->set_var ('LANG_GF02[msg131]', $LANG_GF02['msg131']);
+    $usersettings->set_var ('viewanonposts', $A['viewanonposts']);
+    $usersettings->set_var ('viewanonposts_checked', $viewanonposts_checked);
+
+    $usersettings->set_var ('LANG_GF02[msg167]', $LANG_GF02['msg167']);
+    $usersettings->set_var ('LANG_GF02[msg168]', $LANG_GF02['msg168']);
+    $usersettings->set_var ('enablenotify', $A['enablenotify']);
+    $usersettings->set_var ('emailnotify_checked', $enablenotify_checked);
+
+    $usersettings->set_var ('LANG_GF02[msg184]', $LANG_GF02['msg184']);
+    $usersettings->set_var ('LANG_GF02[msg185]', $LANG_GF02['msg185']);
+    $usersettings->set_var ('notifyonce_checked', $notifyonce_checked);
+
+    $usersettings->set_var ('LANG_GF02[msg132]', $LANG_GF02['msg132']);
+    $usersettings->set_var ('LANG_GF02[msg133]', $LANG_GF02['msg133']);
+    $usersettings->set_var ('alwaysnotify', $A['alwaysnotify']);
+    $usersettings->set_var ('alwaysnotify_checked', $alwaysnotify_checked);
+
+    $usersettings->set_var ('lang_notify_full', $LANG_GF02['notify_full']);
+    $usersettings->set_var ('notifyfull', $A['notify_full']);
+    $usersettings->set_var ('notifyfull_checked', $notifyfull_checked);
+
+    $usersettings->set_var ('LANG_GF92[showiframe]', $LANG_GF92['showiframe']);
+    $usersettings->set_var ('LANG_GF92[showiframedscp]', $LANG_GF92['showiframedscp']);
+    $usersettings->set_var ('showiframe', $A['showiframe']);
+    $usersettings->set_var ('showiframe_checked', $showiframe_checked);
+
+    $usersettings->set_var('lang_forum_prefs',$LANG_GF92['forum_prefs']);
+    $usersettings->set_var('lang_forumprefs_help_title',$LANG_GF92['forumprefs_help_title']);
+    $usersettings->set_var('lang_forumprefs_help', $LANG_GF92['forumprefs_help']);
+
+    $usersettings->parse ('output', 'usersettings');
+    $retval .= $usersettings->finish($usersettings->get_var('output'));
+
+    return $retval;
+}
+
+function plugin_profilesave_forum( )
+{
+    global $_CONF, $_TABLES, $CONF_FORUM, $_USER;
+
+    if ( COM_isAnonUser() ) {
+        return;
+    }
+
+    $xtopicsperpage     = intval(COM_applyFilter($_POST['xtopicsperpage'],true));
+    $xpostsperpage      = intval(COM_applyFilter($_POST['xpostsperpage'],true));
+    $xpopularlimit      = intval(COM_applyFilter($_POST['xpopularlimit'],true));
+    $xpostsperpage      = intval(COM_applyFilter($_POST['xpostsperpage'],true));
+    $xsearchlines       = intval(COM_applyFilter($_POST['xsearchlines'],true));
+    $xmembersperpage    = intval(COM_applyFilter($_POST['xmembersperpage'],true));
+    $xemailnotify       = isset($_POST['xemailnotify']) && $_POST['xemailnotify'] == 'on' ? 1 : 0;
+    $xviewanonpost      = isset($_POST['xviewanonposts']) && $_POST['xviewanonposts'] == 'on' ? 1 : 0;
+    $xviewanonposts     = isset($_POST['xviewanonposts']) && $_POST['xviewanonposts'] == 'on' ? 1 : 0;
+    $xalwaysnotify      = isset($_POST['xalwaysnotify']) && $_POST['xalwaysnotify'] == 'on' ? 1 : 0;
+    $xnotifyonce        = isset($_POST['xnotifyonce']) && $_POST['xnotifyonce'] == 'on' ? 1 : 0;
+    $notifyfull         = isset($_POST['notifyfull']) && $_POST['notifyfull'] == 'on' ? 1 : 0;
+    $xshowiframe        = isset($_POST['xshowiframe']) && $_POST['xshowiframe'] == 'on' ? 1 : 0;
+
+    DB_query("UPDATE {$_TABLES['gf_userprefs']} SET
+        topicsperpage='$xtopicsperpage',
+        postsperpage='$xpostsperpage',
+        popularlimit='$xpopularlimit',
+        searchlines='$xsearchlines',
+        membersperpage='$xmembersperpage',
+        enablenotify='$xemailnotify',
+        viewanonposts='$xviewanonposts',
+        alwaysnotify='$xalwaysnotify',
+        notify_once='$xnotifyonce',
+        notify_full='$notifyfull',
+        showiframe='$xshowiframe'
+     WHERE uid='{$_USER['uid']}'");
+
+
+    if ( isset($_POST['signature'] ) ){
+        $signature = COM_stripslashes($_POST['signature']);
+
+        // see if user already has a preference record...
+        // Get user specific settings from database
+        $result = DB_query("SELECT * FROM {$_TABLES['gf_userinfo']} WHERE uid={$_USER['uid']}");
+        $nrows = DB_numRows($result);
+        if ($nrows == 0) {
+            // Insert a new blank record. Defaults are set in SQL Defintion for table.
+            DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid) VALUES ('{$_USER['uid']}')");
+        }
+        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".addslashes($signature)."' WHERE uid=".$_USER['uid'];
+        DB_query($sql);
+    }
+}
+
+function GF_sigEditorProfile( $signature = '', $errors = array() )
+{
+    global $_CONF, $CONF_FORUM, $_TABLES, $_USER;
+
+    $retval = '';
+
+    USES_lib_bbcode();
+
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $T->set_file (array (
+        'signature'    =>  'signature_profile.thtml',
+    ));
+
+    $T->set_var(array(
+        'signature'   => $signature,
+        'preview_signature' => BBC_formatTextBlock($signature,'text'),
+    ));
+    $error_message = '';
+    if ( count($errors) > 0 ) {
+        foreach($errors AS $error) {
+            $error_message .= $error .'<br />';
+        }
+    }
+    $T->set_var('error_message',$error_message);
+
+    $T->parse ('output', 'signature');
+    $retval .= $T->finish ($T->get_var('output'));
+
+    return $retval;
+}
+
 ?>

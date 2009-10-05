@@ -86,12 +86,12 @@ $LANG_INSTALL = array(
     'filesystem_check' => 'Verificar sistema de archivos',
     'forum' => '¿Cargar Extensión Foro?',
     'forum_desc' => 'Un sistema de foro y comunidad en línea. Proporciona colaboración e interactividad de la comunidad.',
-    'geeklog_migrate' => 'Migrar un sitio web potenciado por Geeklog v1.5+',
+    'geeklog_migrate' => 'Migrar un sitio web potenciado por Geeklog v1.4.1+',
     'hosting_env' => 'Verificar ambiente anfitrión',
     'install' => 'Instalar',
     'install_heading' => 'Instalación de glFusion',
     'install_steps' => 'PASOS DE INSTALACIÓN',
-    'invalid_geeklog_version' => 'El instalador no fue capaz de localizar el archivo siteconfig.php. ¿Está seguro que está migrando de Geeklog v1.5.0 o versión superior?  Si usted tiene una instalación anterior a Geeklog v1.5.0, por favor actualice primeramente a la última versión de Geeklog v1.5.0 y luego intente de nuevo la migración.',
+    'invalid_geeklog_version' => 'El instalador no fue capaz de localizar el archivo siteconfig.php. ¿Está seguro que está migrando de Geeklog v1.4.1 o versión superior?  Si usted tiene una instalación anterior a Geeklog v1.4.1, por favor actualice primeramente a la última versión de Geeklog v1.4.1 y luego intente de nuevo la migración.',
     'language' => 'Idioma',
     'language_task' => 'Idioma & tarea',
     'libcustom_not_writable' => 'lib-custom.php no tiene permisos de escritura.',
@@ -168,16 +168,17 @@ $LANG_INSTALL = array(
     'upgrade_steps' => 'PASOS DE ACTUALIZACIÓN',
     'upload_max_filesize' => 'glFusion le permite cargar extensiones, imágenes y archivos. Debe de permitir al menos 8M para la carga de subida en las configuraciones de PHP (max upload size).',
     'use_utf8' => 'Utilizar UTF-8',
-    'welcome_help' => 'Bienvenido al Asistente de instalación del CMS glFusion. Puede instalar un nuevo sitio glFusion, actualizar un sitio glFusion existente, o migrar desde un sitio Geeklog v1.5 existente.<br /><br />Por favor seleccione el idioma para el asistente, y la tarea a realizar, luego presione <strong>Siguiente</strong>.',
+    'welcome_help' => 'Bienvenido al Asistente de instalación del CMS glFusion. Puede instalar un nuevo sitio glFusion, actualizar un sitio glFusion existente, o migrar desde un sitio Geeklog v1.4.1 existente.<br /><br />Por favor seleccione el idioma para el asistente, y la tarea a realizar, luego presione <strong>Siguiente</strong>.',
     'wizard_version' => 'v1.1.3.svn Asistente de instalación',
-    'system_path_prompt' => 'Ingrese la ruta completa, ruta absoluta de su servidor al directorio <strong>private/</strong> de glFusion.<br /><br />Este directorio contiene el archivo <strong>db-config.php.dist</strong> o <strong>db-config.php</strong>.<br /><br />Ejemplos: /home/www/glfuison/private o c:/www/glfusion/private.<br /><br /><strong>Sugerencia:</strong> La ruta absoluta de su directorio public_html/ parece ser:<br />%s<br /><br /><strong>Configuraciones avanzadas</strong> Te permite sobre escribir varias de las rutas por defecto. Generalmente no necesitas modificar o definir esas rutas. El sistema las determinará automáticamente.',
+    'system_path_prompt' => 'Ingrese la ruta completa, ruta absoluta de su servidor al directorio <strong>private/</strong> de glFusion.<br /><br />Este directorio contiene el archivo <strong>db-config.php.dist</strong> o <strong>db-config.php</strong>.<br /><br />Ejemplos: /home/www/glfusion/private o c:/www/glfusion/private.<br /><br /><strong>Sugerencia:</strong> La ruta absoluta de su directorio <strong>public_html/</strong> <i>(no <strong>private/</strong>)</i> parece ser:<br />%s<br /><br /><strong>Configuraciones avanzadas</strong> Te permite sobre escribir varias de las rutas por defecto. Generalmente no necesitas modificar o definir esas rutas. El sistema las determinará automáticamente.',
     'advanced_settings' => 'Configuraciones avanzadas',
     'log_path' => 'Ruta de registros',
     'lang_path' => 'Ruta de idiomas',
     'backup_path' => 'Ruta de respaldos',
     'data_path' => 'Ruta de la información',
     'language_support' => 'Soporte de idioma',
-    'language_pack' => 'glFusion vienen en idioma inglés, pero una vez que lo has instalado puedes descargar e instalar  el <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paquete de idioma</a> el cual contiene los archivos de idioma para todos los idomoas soportados.'
+    'language_pack' => 'glFusion vienen en idioma inglés, pero una vez que lo has instalado puedes descargar e instalar  el <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paquete de idioma</a> el cual contiene los archivos de idioma para todos los idomoas soportados.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

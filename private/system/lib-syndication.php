@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2003-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun        - dirk AT haun-online DOT de                   |
 // |          Michael Jervis   - mike AT fuckingbrit DOT com                  |
@@ -226,7 +226,7 @@ function SYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = ''
 */
 function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid )
 {
-    global $_TABLES, $_CONF, $LANG01, $pageHandle;
+    global $_TABLES, $_CONF, $LANG01;
 
     $content = array ();
     $sids = array();
@@ -281,7 +281,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
                 }
             }
 
-            $storylink = $pageHandle->buildUrl( $_CONF['site_url']
+            $storylink = COM_buildUrl( $_CONF['site_url']
                                        . '/article.php?story=' . $row['sid'] );
             $extensionTags = PLG_getFeedElementExtensions('article', $row['sid'], $feedType, $feedVersion, $tid, $fid);
             if( $_CONF['trackback_enabled'] && ($feedType == 'RSS') && ($row['trackbackcode'] >= 0))
@@ -328,7 +328,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 */
 function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid)
 {
-    global $_TABLES, $_CONF, $LANG01, $pageHandle;
+    global $_TABLES, $_CONF, $LANG01;
 
     $where = '';
     if( !empty( $limit ))
@@ -401,7 +401,7 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
             }
         }
 
-        $storylink = $pageHandle->buildUrl( $_CONF['site_url'] . '/article.php?story='
+        $storylink = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
                                    . $row['sid'] );
         $extensionTags = PLG_getFeedElementExtensions('article', $row['sid'], $feedType, $feedVersion, $fid, ($frontpage_only ? '::frontpage' : '::all'));
         if( $_CONF['trackback_enabled'] && ($feedType == 'RSS') && ($row['trackbackcode'] >= 0))

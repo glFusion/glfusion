@@ -141,13 +141,12 @@ function MG_batchDeleteMedia( $album_id, $actionURL = '' ) {
             @unlink($_MG_CONF['path_mediaobjects'] . 'tn/'   . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
             @unlink($_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
         }
-//        @unlink($_MG_CONF['path_mediaobjects'] . 'tn/'   . $row['media_filename'][0] .'/' . $row['media_filename'] . '.jpg');
-//        @unlink($_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] .'/' . $row['media_filename'] . '.jpg');
         @unlink($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] .'/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
         $sql = "DELETE FROM {$_TABLES['mg_media']} WHERE media_id='"    . addslashes($_POST['sel'][$i]) . "'";
         DB_query($sql);
         DB_delete($_TABLES['comments'], 'sid', addslashes($_POST['sel'][$i]));
         DB_delete($_TABLES['mg_playback_options'],'media_id', addslashes($_POST['sel'][$i]));
+        PLG_itemDeleted($_POST['sel'][$i],'mediagallery');
         $mediaCount--;
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $mediaCount .
                  " WHERE album_id='" . $album_id . "'");
@@ -489,7 +488,6 @@ function MG_deleteAlbum( $album_id, $target_id, $actionURL='' ) {
                     if ( $nRows > 0 ) {
                         $row = DB_fetchArray($result);
                         $filename = $row['media_filename'];
-//                        $cover_media_id = $row['media_id'];
                         $sql = "UPDATE " . $_TABLES['mg_albums'] . " SET album_cover = '-1', album_cover_filename='" . $filename . "' WHERE album_id = " . $target_id;
                         DB_query($sql);
                     } else {
@@ -568,13 +566,12 @@ function MG_deleteChildAlbums( $album_id ){
                     @unlink($_MG_CONF['path_mediaobjects'] . 'tn/'   . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
                     @unlink($_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
                 }
-//                @unlink($_MG_CONF['path_mediaobjects'] . 'tn/'   . $mediarow[$i]['media_filename'][0] .'/' . $mediarow[$i]['media_filename'] . '.jpg');
-//                @unlink($_MG_CONF['path_mediaobjects'] . 'disp/' . $mediarow[$i]['media_filename'][0] .'/' . $mediarow[$i]['media_filename'] . '.jpg');
                 @unlink($_MG_CONF['path_mediaobjects'] . 'orig/' . $mediarow[$i]['media_filename'][0] .'/' . $mediarow[$i]['media_filename'] . '.' . $mediarow[$i]['media_mime_ext']);
                 $sql = "DELETE FROM " . $_TABLES['mg_media'] . "  WHERE media_id = '" . $mediarow[$i]['media_id'] . "'";
                 DB_query( $sql );
                 DB_delete($_TABLES['comments'], 'sid', $mediarow[$i]['media_id']);
                 DB_delete($_TABLES['mg_playback_options'],'media_id', $mediarow[$i]['media_id']);
+                PLG_itemDeleted($mediarow[$i]['media_id'],'mediagallery');
             }
         }
     }
@@ -584,7 +581,6 @@ function MG_deleteChildAlbums( $album_id ){
     DB_query( $sql );
     $feedname = sprintf($_MG_CONF['rss_feed_name'] . "%06d", $album_id);
     $feedpath = MG_getFeedPath();
-//    @unlink($_MG_CONF['path_html'] . 'rss/' . $feedname . '.rss');
     @unlink($feedpath . '/' . $feedname . '.rss');
 }
 ?>

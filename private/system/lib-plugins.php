@@ -8,9 +8,12 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
 // |          Blaine Lang      - blaine AT portalparts DOT com                |
@@ -89,7 +92,7 @@ function PLG_callFunctionForAllPlugins($function_name)
             $function();
         }
     }
-    $function = 'custom_' . $function_name;
+    $function = 'CUSTOM_' . $function_name;
     if (function_exists($function)) {
         $function();
     }
@@ -372,7 +375,7 @@ function PLG_isModerator()
             }
         }
     }
-    $function = 'custom_ismoderator';
+    $function = 'CUSTOM_ismoderator';
     if (function_exists($function)) {
         if ( $function() == true ) {
             return true;
@@ -427,6 +430,9 @@ function PLG_getCommentUrlId($type)
     }
     if (empty($ret[1])) {
         $ret[1] = 'id';
+    }
+    if (empty($ret[2])) {
+        $ret[2] = 'page=';
     }
 
     return $ret;
@@ -602,15 +608,12 @@ function PLG_itemPreSave($type, $content)
 }
 
 /**
-* The way this function works is very specific to how glFusion shows its
-* statistics.  On stats.php, there is the top box which gives overall
-* statistics for glFusion and then there are blocks below it that give
-* more specific statistics for various components of glFusion.
+* Allow a plugin to place entries into the glFusion stats page.
 *
-* This plugin API function suffers from a variety of bugs and bad design
-* decisions for which we have to provide backward compatibility, so please
-* bear with us ...
-*
+* $showsitestats == 2 - Return data for the stats summary
+* $showsitestats == 3 - Return data for the stats detail
+
+
 * The only parameter to this function, $showsitestats, was documented as being
 * 1 for the site stats and 0 for the plugin-specific stats. However, the latter
 * was always called with a value of 2, so plugins only did a check for 1 and
@@ -653,14 +656,6 @@ function PLG_getPluginStats ($showsitestats)
                     $retval[$pi_name] = $summary;
                 }
             }
-        } else if ($showsitestats == 1) {
-            $function1 = 'plugin_showstats_' . $pi_name;
-            $function2 = 'plugin_statssummary_' . $pi_name;
-            if (!function_exists ($function2)) {
-                if (function_exists ($function1)) {
-                    $retval .= $function1 ($showsitestats);
-                }
-            }
         } else if ($showsitestats == 2) {
             $function = 'plugin_showstats_' . $pi_name;
             if (function_exists ($function)) {
@@ -675,14 +670,6 @@ function PLG_getPluginStats ($showsitestats)
             $summary = $function ();
             if (is_array ($summary)) {
                 $retval['Custom'] = $summary;
-            }
-        }
-    } elseif ($showsitestats == 1) {
-        $function1 = 'CUSTOM_showstats';
-        $function2 = 'CUSTOM_statssummary';
-        if (!function_exists ($function2)) {
-            if (function_exists ($function1)) {
-                $retval .= $function1 ($showsitestats);
             }
         }
     } elseif ($showsitestats == 2) {
@@ -733,32 +720,6 @@ function PLG_getSearchTypes()
 }
 
 /**
-* Determines if a specific plugin supports glFusion's
-* expanded search results feature
-*
-* @author Tony Bibbs, tony AT tonybibbs DOT com
-* @access public
-* @param string $type Plugin name
-* @return boolean True if it is supported, otherwise false
-*
-* NOTE: This function is not currently used
-*
-*/
-function PLG_supportsExpandedSearch($type)
-{
-    $retval = '';
-    $function = 'plugin_supportsexpandedsearch_' . $type;
-    if (function_exists($function)) {
-        $retval = $function();
-    }
-    if (empty($retval) OR !is_bool($retval)) {
-        $retval = false;
-    }
-
-    return $retval;
-}
-
-/**
 * This function gives each plugin the opportunity to do their search
 * and return their results.  Results comeback in an array of HTML
 * formatted table rows that can be quickly printed by search.php
@@ -786,7 +747,7 @@ function PLG_doSearch($query, $datestart, $dateend, $topic, $type, $author, $key
     $search_results = array();
 
     // Search a single plugin if needed
-    if ($type != 'all')
+    if ($type != 'all' )
     {
         $function = 'plugin_dopluginsearch_' . $type;
         if (function_exists($function))
@@ -818,6 +779,53 @@ function PLG_doSearch($query, $datestart, $dateend, $topic, $type, $author, $key
     $function = 'CUSTOM_dopluginsearch';
     if (function_exists($function))
         $search_results[] = $function($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage);
+
+    return $search_results;
+}
+
+/**
+* This function gives each plugin the opportunity to do their search
+* and return their results.  Results comeback in an array of HTML
+* formatted table rows that can be quickly printed by search.php
+*
+* @param    string  $query      What the user searched for
+* @param    date    $datestart  beginning of date range to search for
+* @param    date    $dateend    ending date range to search for
+* @param    string  $topic      the topic the user searched within
+* @param    string  $type       Type of items they are searching, or 'all'
+* @param    int     $author     UID...only return results for this person
+* @param    string  $keyType    search key type: 'all', 'phrase', 'any'
+* @param    int     $page       page number of current search (deprecated)
+* @param    int     $perpage    number of results per page (deprecated)
+* @return   array               Returns search results
+*
+*/
+function PLG_doSearchComment($query, $datestart, $dateend, $topic, $type, $author, $keyType = 'all', $page = 1, $perpage = 10)
+{
+    global $_PLUGINS;
+    /*
+        The new API does not use $page, $perpage
+        $type is now only used in the core and should not be passed to the plugin
+    */
+
+    $search_results = array();
+
+    if ( $type == 'all' || $type == 'comments' )
+    {
+        foreach ($_PLUGINS as $pi_name)
+        {
+            $function = 'plugin_dopluginsearch_comment_' . $pi_name;
+            if (function_exists($function))
+            {
+                $result = $function($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage);
+                if (is_array($result))
+                    $search_results = array_merge($search_results, $result);
+                else
+                    $search_results[] = $result;
+            }
+            // no else because implementation of this API function not required
+        }
+    }
 
     return $search_results;
 }
@@ -890,7 +898,7 @@ function PLGINT_getOptionsforMenus($var_names, $required_names, $function_name)
             $plg_array = $function();
             if (($plg_array !== false) && (count ($plg_array) > 0)) {
                 // Check if plugin is returning a single record array or multiple records
-                $entries = count ($plg_array[0]);
+                $entries = @count ($plg_array[0]);
                 $sets_array = array();
                 if ($entries == 1) {
                     // Single record - so we need to prepare the sets_array;
@@ -1326,6 +1334,60 @@ function PLG_groupChanged ($grp_id, $mode)
 * now get a chance to add their own variables and input fields to the form.
 *
 * @param    int  $uid        user id of the user profile to be edited
+* @param    char $panel      profile panel being displayed
+* @param    char $fieldset   fieldset being displayed
+* @return   void
+*
+*/
+function PLG_profileEdit ($uid, $panel = '', $fieldset='')
+{
+    global $_PLUGINS;
+
+    $retval = '';
+
+    foreach ($_PLUGINS as $pi_name) {
+        $function = 'plugin_profileedit_' . $pi_name;
+        if (function_exists($function)) {
+            $retval .= $function ($uid, $panel,$fieldset);
+        }
+    }
+
+    $function = 'CUSTOM_profileedit';
+    if (function_exists($function)) {
+        $retval .= $function($uid, $panel, $fieldset);
+    }
+
+    return $retval;
+}
+
+/**
+* The user wants to save changes to his/her profile. Any plugin that added its
+* own variables or blocks to the profile input form will now have to extract
+* its data and save it.
+* Plugins will have to refer to the global $_POST array to get the
+* actual data.
+*
+* @param    string  $plugin     name of a specific plugin or empty (all plugins)
+* @return   void
+*
+*/
+function PLG_profileSave ($plugin = '')
+{
+    if (empty ($plugin)) {
+        PLG_callFunctionForAllPlugins ('profilesave');
+    } else {
+        PLG_callFunctionForOnePlugin ('plugin_profilesave_' . $plugin);
+    }
+}
+
+
+/**
+* glFusion is about to display the edit form for the user's profile. Plugins
+* now get a chance to add their own variables and input fields to the form.
+*
+* THIS FUNCTION IS DEPRECIATED - see PLG_profileEdit()
+*
+* @param    int  $uid        user id of the user profile to be edited
 * @param    ref  $template   reference of the Template for the profile edit form
 * @return   void
 *
@@ -1350,6 +1412,8 @@ function PLG_profileVariablesEdit ($uid, &$template)
 /**
 * glFusion is about to display the edit form for the user's profile. Plugins
 * now get a chance to add their own blocks below the standard form.
+*
+* THIS FUNCTION IS DEPRECIATED - see PLG_profileEdit()
 *
 * @param    int      $uid   user id of the user profile to be edited
 * @return   string          HTML for additional block(s)
@@ -1466,6 +1530,8 @@ function PLG_profileIconDisplay ($uid)
 * Plugins will have to refer to the global $_POST array to get the
 * actual data.
 *
+* THIS FUNCTION IS DEPRECIATED - see PLG_profileSave()
+*
 * @param    string  $plugin     name of a specific plugin or empty (all plugins)
 * @return   void
 *
@@ -1556,7 +1622,7 @@ function PLG_collectTags()
 
     // Determine which Core Modules and Plugins support AutoLinks
     //                        'tag'   => 'module'
-    $autolinkModules = array ('story' => 'glfusion');
+    $autolinkModules = array ('story' => 'glfusion','story_introtext' => 'glfusion', 'showblock' => 'glfusion');
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_autotags_' . $pi_name;
@@ -1587,7 +1653,7 @@ function PLG_collectTags()
 */
 function PLG_replaceTags($content, $plugin = '')
 {
-    global $_CONF, $_TABLES, $LANG32,$inputHandler,$pageHandle;
+    global $_CONF, $_TABLES, $_BLOCK_TEMPLATE, $LANG32;
 
     if (isset ($_CONF['disable_autolinks']) && ($_CONF['disable_autolinks'] == 1)) {
         // autolinks are disabled - return $content unchanged
@@ -1666,18 +1732,110 @@ function PLG_replaceTags($content, $plugin = '')
                 $url = '';
                 $linktext = $autotag['parm2'];
                 if ($autotag['tag'] == 'story') {
-                    $autotag['parm1'] = $inputHandler->filterVar('strict',$autotag['parm1'],'');
-                    $url = $pageHandle->buildUrl ($_CONF['site_url']
+                    $autotag['parm1'] = COM_applyFilter ($autotag['parm1']);
+                    $url = COM_buildUrl ($_CONF['site_url']
                          . '/article.php?story=' . $autotag['parm1']);
                     if (empty ($linktext)) {
                         $linktext = stripslashes (DB_getItem ($_TABLES['stories'], 'title', "sid = '".addslashes($autotag['parm1'])."'"));
                     }
                 }
-
                 if (!empty ($url)) {
                     $filelink = COM_createLink($linktext, $url);
                     $content = str_replace ($autotag['tagstr'], $filelink,
                                             $content);
+                }
+                if ( $autotag['tag'] == 'story_introtext' ) {
+                    $url = '';
+                    $linktext = '';
+                    USES_lib_story();
+                    if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
+                        $result = DB_query("SELECT maxstories,tids,aids FROM {$_TABLES['userindex']} WHERE uid = {$_USER['uid']}");
+                        $U = DB_fetchArray($result);
+                    } else {
+                        $U['maxstories'] = 0;
+                        $U['aids'] = '';
+                        $U['tids'] = '';
+                    }
+
+                    $sql = " (date <= NOW()) AND (draft_flag = 0)";
+
+                    if (empty ($topic)) {
+                        $sql .= COM_getLangSQL ('tid', 'AND', 's');
+                    }
+
+                    $sql .= COM_getPermSQL ('AND', 0, 2, 's');
+
+                    if (!empty($U['aids'])) {
+                        $sql .= " AND s.uid NOT IN (" . str_replace( ' ', ",", $U['aids'] ) . ") ";
+                    }
+
+                    if (!empty($U['tids'])) {
+                        $sql .= " AND s.tid NOT IN ('" . str_replace( ' ', "','", $U['tids'] ) . "') ";
+                    }
+
+                    $sql .= COM_getTopicSQL ('AND', 0, 's') . ' ';
+
+                    $userfields = 'u.uid, u.username, u.fullname';
+
+                    $msql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, "
+                             . 'UNIX_TIMESTAMP(s.expire) as expireunix, '
+                             . $userfields . ", t.topic, t.imageurl "
+                             . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, "
+                             . "{$_TABLES['topics']} AS t WHERE s.sid = '".$autotag['parm1']."' AND (s.uid = u.uid) AND (s.tid = t.tid) AND"
+                             . $sql;
+
+                    $result = DB_query ($msql);
+                    $nrows = DB_numRows ($result);
+                    if ( $A = DB_fetchArray( $result ) ) {
+                        $story = new Story();
+                        $story->loadFromArray($A);
+                        $linktext = STORY_renderArticle ($story, 'y');
+                    }
+                    $content = str_replace($autotag['tagstr'],$linktext,$content);
+                }
+                if ( $autotag['tag'] == 'showblock' ) {
+                    $blockName = COM_applyBasicFilter($autotag['parm1']);
+                    $result = DB_query("SELECT * FROM {$_TABLES['blocks']} WHERE name = '".addslashes($blockName)."'");
+                    if ( DB_numRows($result) > 0 ) {
+                        $B = DB_fetchArray($result);
+                        $template = '';
+                        $side     = '';
+                        $px = explode (' ', trim ($autotag['parm2']));
+                        if (is_array ($px)) {
+                            foreach ($px as $part) {
+                                if (substr ($part, 0, 9) == 'template:') {
+                                    $a = explode (':', $part);
+                                    $template = $a[1];
+                                    $skip++;
+                                } elseif (substr ($part, 0, 5) == 'side:') {
+                                    $a = explode (':', $part);
+                                    $side = $a[1];
+                                    $skip++;
+                                    break;
+                                }
+                            }
+                            if ($skip != 0) {
+                                if (count ($px) > $skip) {
+                                    for ($i = 0; $i < $skip; $i++) {
+                                        array_shift ($px);
+                                    }
+                                    $caption = trim (implode (' ', $px));
+                                } else {
+                                    $caption = '';
+                                }
+                            }
+                        }
+                        if ( $template != '' ) {
+                            $_BLOCK_TEMPLATE[$blockName] = 'blockheader-'.$template.'.thtml,blockfooter-'.$template.'.thtml';
+                        }
+                        if ( $side == 'left' ) {
+                            $B['onleft'] = 1;
+                        } else if ( $side == 'right' ) {
+                            $B['onleft'] = 0;
+                        }
+                        $linktext = COM_formatBlock( $B );
+                        $content = str_replace($autotag['tagstr'],$linktext,$content);
+                    }
                 }
             } else if (function_exists ($function) AND
                     (empty ($plugin) OR ($plugin == $autotag['module']))) {
@@ -2003,7 +2161,32 @@ function PLG_getWhatsNew()
 }
 
 /**
-* Allows plugins and Core GL Components to filter out spam.
+* Ask plugins if they want to add something to glFusion's What's New comment block.
+*
+* @return   array   array( array(dups, type, title, sid, lastdate) )
+*
+*/
+function PLG_getWhatsNewComment()
+{
+    global $_PLUGINS;
+
+    $commentrows = array();
+    $comments    = array();
+
+    foreach ($_PLUGINS as $pi_name) {
+        $fn = 'plugin_getwhatsnewcomment_' . $pi_name;
+        if ( function_exists($fn) ) {
+            $commentrows = $fn();
+            if ( is_array($commentrows) ) {
+                $comments = array_merge($commentrows,$comments);
+            }
+        }
+    }
+    return $comments;
+}
+
+/**
+* Allows plugins and core Components to filter out spam.
 *
 * The Spam-X Plugin is now part of the glFusion Distribution
 * This plugin API will call the main function in the Spam-X plugin
@@ -2205,46 +2388,74 @@ function PLG_runScheduledTask ()
 /**
 * "Generic" plugin API: Save item
 *
-* To be called (eventually) whenever glFusion saves an item into the database.
-* Plugins can hook into this and modify the item (which is already in the
-* database but not visible on the site yet).
-*
-* Plugins can signal an error by returning an error message (otherwise, they
-* should return 'false' to signal "no errors"). In case of an error, all the
-* plugins called up to that point will be invoked through an "abort" call to
-* undo their changes.
+* To be called whenever glFusion saves an item into the database.
+* Plugins can define their own 'itemsaved' function to be notified whenever
+* an item is saved or modified.
 *
 * @param    string  $id     unique ID of the item
 * @param    string  $type   type of the item, e.g. 'article'
-* @returns  mixed           Boolean false for "no error", or an error msg text
+* @param    string  $old_id (optional) old ID when the ID was changed
+* @returns  bool            false
 *
 */
-function PLG_itemSaved($id, $type)
+function PLG_itemSaved($id, $type, $old_id = '')
 {
     global $_PLUGINS;
 
-    $error = false;
+    $t = explode('.', $type);
+    $plg_type = $t[0];
 
-    $plugins = count ($_PLUGINS);
+    $plugins = count($_PLUGINS);
     for ($save = 0; $save < $plugins; $save++) {
-        $function = 'plugin_itemsaved_' . $_PLUGINS[$save];
-        if (function_exists($function)) {
-            $error = $function($id, $type);
-            if ($error !== false) {
-                // plugin reported a problem - abort
-
-                for ($abort = 0; $abort < $save; $abort++) {
-                    $function = 'plugin_abortsave_' . $_PLUGINS[$abort];
-                    if (function_exists($function)) {
-                        $function($id, $type);
-                    }
-                }
-                break; // out of for($save) loop
+        if ($_PLUGINS[$save] != $plg_type) {
+            $function = 'plugin_itemsaved_' . $_PLUGINS[$save];
+            if (function_exists($function)) {
+                $function($id, $type, $old_id);
             }
         }
     }
 
-    return $error;
+    if (function_exists('CUSTOM_itemsaved')) {
+        CUSTOM_itemsaved($id, $type, $old_id);
+    }
+
+    return false;
+}
+
+
+/**
+* "Generic" plugin API: Delete item
+*
+* To be called whenever glFusion removes an item from the database.
+* Plugins can define their own 'itemdeleted' function to be notified whenever
+* an item is deleted.
+*
+* @param    string  $id     ID of the item
+* @param    string  $type   type of the item, e.g. 'article'
+* @return   void
+* @since    glFusion v1.1.6
+*
+*/
+function PLG_itemDeleted($id, $type)
+{
+    global $_PLUGINS;
+
+    $t = explode('.', $type);
+    $plg_type = $t[0];
+
+    $plugins = count($_PLUGINS);
+    for ($del = 0; $del < $plugins; $del++) {
+        if ($_PLUGINS[$del] != $plg_type) {
+            $function = 'plugin_itemdeleted_' . $_PLUGINS[$del];
+            if (function_exists($function)) {
+                $function($id, $type);
+            }
+        }
+    }
+
+    if (function_exists('CUSTOM_itemdeleted')) {
+        CUSTOM_itemdeleted($id, $type);
+    }
 }
 
 /**
@@ -2467,7 +2678,7 @@ function PLG_wsEnabled($type)
 */
 function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
 {
-    global $_CONF, $pageHandle;
+    global $_CONF;
 
     if (isset($message) && (!empty($message) || is_numeric($message))) {
         $msg = "msg=$message";
@@ -2529,7 +2740,33 @@ function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
         break;
     }
 
-    $pageHandle->redirect($url);
+    return COM_refresh($url);
+}
+
+/**
+* Ask plugin for the URL to its configuration help
+*
+* @param    string  $option  plugin name
+* @param    string  $doclang the current language
+* @return   array
+* @since    glFusion v1.1.6
+*
+*/
+function PLG_getConfigElementHelp($type, $option, $doclang = 'english' )
+{
+    $args[0] = $option;
+    $args[1] = $doclang;
+    $function = 'plugin_getconfigelementhelp_' . $type;
+
+    $retval = array();
+
+    $retval = PLG_callFunctionForOnePlugin($function,$args);
+    if ( $retval === false ) {
+        return array('',0);
+    } else {
+        return $retval;
+    }
+//    return PLG_callFunctionForOnePlugin($function, $args);
 }
 
 ?>

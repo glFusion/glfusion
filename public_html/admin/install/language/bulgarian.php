@@ -90,7 +90,7 @@ $LANG_INSTALL = array(
     'install' => 'Инсталирай',
     'install_heading' => 'glFusion Инсталация',
     'install_steps' => 'Стъпки на инсталация',
-    'invalid_geeklog_version' => 'Инсталатора не можа да намери siteconfig.php. Сигорни ли сте че мигрирате от Geeklog v1.5.0 или по горна версия?  Ако името по стара Geeklog инсталация, моля обновеете до Geeklog v1.5.0 и пробвайте отново.',
+    'invalid_geeklog_version' => 'Инсталатора не можа да намери siteconfig.php. Сигорни ли сте че мигрирате от Geeklog v1.4.1 или по горна версия?  Ако името по стара Geeklog инсталация, моля обновеете до Geeklog v1.4.1 и пробвайте отново.',
     'language' => 'Език',
     'language_task' => 'Език и Задачи',
     'libcustom_not_writable' => 'lib-custom.php Няма права за писане.',
@@ -167,16 +167,17 @@ $LANG_INSTALL = array(
     'upgrade_steps' => 'СТЪПКИ ЗА ОБНОВЯВАНЕ',
     'upload_max_filesize' => 'glFusion ви позволява да качвате добавки,картини,и други файлове. Трябва да сте позволили поне 8MB като махимално място за качване.',
     'use_utf8' => 'Използвайте UTF-8',
-    'welcome_help' => 'Добре дошли във Инсталациония Помощтник на glFusion CMS. Вие можете да инсталирате нов glFusion сайт,да обновите вече съществуващ сайт, Или да мигрирате от съществуващ Geekblog 1.5 сайт.<br /><br />Моля изберете език за инсталатора и натиснете <strong>Напред</strong>.',
+    'welcome_help' => 'Добре дошли във Инсталациония Помощтник на glFusion CMS. Вие можете да инсталирате нов glFusion сайт,да обновите вече съществуващ сайт, Или да мигрирате от съществуващ Geekblog 1.4.1 сайт.<br /><br />Моля изберете език за инсталатора и натиснете <strong>Напред</strong>.',
     'wizard_version' => 'v1.1.3.svn Инсталационен Помощтник',
-    'system_path_prompt' => 'Въведете пълния път към  glFusion\ <strong>private/</strong> directory.<br /><br />Тази директория съдържа <strong>db-config.php.dist</strong> или <strong>db-config.php</strong> файл.<br /><br />Примери: /home/www/glfuison/private или c:/www/glfusion/private.<br /><br /><strong>Забележка:</strong> Пълния път към  public_html/ дерикторията изглежда че е:<br />%s<br /><br /><strong>Още настройки</strong> ви позволява да принуди някой от пътищата. Не е нужно да се редактират тези пътища, системата ще ги определи автоматично.',
+    'system_path_prompt' => 'Въведете пълния път към  glFusion\ <strong>private/</strong> directory.<br /><br />Тази директория съдържа <strong>db-config.php.dist</strong> или <strong>db-config.php</strong> файл.<br /><br />Примери: /home/www/glfusion/private или c:/www/glfusion/private.<br /><br /><strong>Забележка:</strong> Пълния път към  <strong>public_html/</strong> <i>(He <strong>private/</strong>)</i> дерикторията изглежда че е:<br /><br />%s<br /><br /><strong>Още настройки</strong> ви позволява да принуди някой от пътищата. Не е нужно да се редактират тези пътища, системата ще ги определи автоматично.',
     'advanced_settings' => 'Още настройки',
     'log_path' => 'път към logs',
     'lang_path' => 'път към езиците',
     'backup_path' => 'път към бакъпите',
     'data_path' => 'път към дата',
     'language_support' => 'Помощ за езиците',
-    'language_pack' => 'glFusion е на Английски, но след инсталацията можете да свалите и инсталирате <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Езиков пакет</a> който съдържа всички езикови файлове подържани от нас.'
+    'language_pack' => 'glFusion е на Английски, но след инсталацията можете да свалите и инсталирате <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=1" target="_blank">Езиков пакет</a> който съдържа всички езикови файлове подържани от нас.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

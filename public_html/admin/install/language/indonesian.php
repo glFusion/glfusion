@@ -89,12 +89,12 @@ $LANG_INSTALL = array(
     'filesystem_check' => 'Pemeriksaan File System',
     'forum' => 'Muat Plugin Forum?',
     'forum_desc' => 'Sebuah sistem forum komunitas online. Menyediakan wadah kolaborasi dan interaksi dalam komunitas.',
-    'geeklog_migrate' => 'Migrasi Geeklog v1.5+ Site',
+    'geeklog_migrate' => 'Migrasi Geeklog v1.4.1+ Site',
     'hosting_env' => 'Pemeriksaan kondisi Hosting',
     'install' => 'Install',
     'install_heading' => 'Instalasi glFusion',
     'install_steps' => 'LANGKAH-LANGKAH INSTALASI',
-    'invalid_geeklog_version' => 'Installer tidak bisa menemukan file siteconfig.php. Apakah anda yakin akan migrasi dari Geeklog v1.5.0 atau versi yang lebih tinggi? Jika anda sudah menginstal Geeklog  versi yang lama, silahkan meng-upgrade dulu ke, paling tidak, Geeklog v1.5.0 dan cobalah untuk melakukan proses migrasi lagi.',
+    'invalid_geeklog_version' => 'Installer tidak bisa menemukan file siteconfig.php. Apakah anda yakin akan migrasi dari Geeklog v1.4.1 atau versi yang lebih tinggi? Jika anda sudah menginstal Geeklog  versi yang lama, silahkan meng-upgrade dulu ke, paling tidak, Geeklog v1.4.1 dan cobalah untuk melakukan proses migrasi lagi.',
     'language' => 'Bahasa',
     'language_task' => 'Bahasa dan Task',
     'libcustom_not_writable' => 'lib-custom.php tidak bisa dimodifikasi.',
@@ -171,16 +171,17 @@ $LANG_INSTALL = array(
     'upgrade_steps' => 'LANGLAH-LANGKAH UPGRADE',
     'upload_max_filesize' => 'glFusion memungkinkan anda untuk mengupload plugin, gambar, dan file. Anda harus mengijinkan pengupload-an paling tidak 8 M.',
     'use_utf8' => 'Gunakan UTF-8',
-    'welcome_help' => 'Selamat datang di proses instalasi glFusion. Anda bisa melakukan instalasi baru atau meng-upgrade dari versi glFusion yang lama, atau migrasi dari instalasi Geeklog v1.5 yang telah terinstall.<br /><br />Silahkan memilih bahasa untuk instalasi, dan hal-hal yang harus dilakukan, Kemudian tekan <strong>Selanjutnya</strong>.',
+    'welcome_help' => 'Selamat datang di proses instalasi glFusion. Anda bisa melakukan instalasi baru atau meng-upgrade dari versi glFusion yang lama, atau migrasi dari instalasi Geeklog v1.4.1 yang telah terinstall.<br /><br />Silahkan memilih bahasa untuk instalasi, dan hal-hal yang harus dilakukan, Kemudian tekan <strong>Selanjutnya</strong>.',
     'wizard_version' => 'v1.1.3.svn Proses Instalasi',
-    'system_path_prompt' => 'Masukkan path lengkap di server anda untuk direktori <strong>private/</strong> glFusion.<br /><br />Direitori ini memiliki file <strong>db-config.php.dist</strong> atau <strong>db-config.php</strong>.<br /><br />Contoh: /home/www/glfuison/private atau c:/www/glfusion/private.<br /><br /><strong>Petunjuk:</strong> Path yang tepat untuk direktori public_html/ anda adalah:<br />%s<br /><br /><strong>Advanced Settings</strong> memungkinkan anda untuk menimpa path default.  Biasanya anda tidak perlu mengubah path-path ini, system akan menentukannya secara otomatis.',
+    'system_path_prompt' => 'Masukkan path lengkap di server anda untuk direktori <strong>private/</strong> glFusion.<br /><br />Direitori ini memiliki file <strong>db-config.php.dist</strong> atau <strong>db-config.php</strong>.<br /><br />Contoh: /home/www/glfusion/private atau c:/www/glfusion/private.<br /><br /><strong>Petunjuk:</strong> Path yang tepat untuk direktori <strong>public_html/</strong> <i>(tidak <strong>private/</strong>)</i> anda adalah:<br /><br />%s<br /><br /><strong>Advanced Settings</strong> memungkinkan anda untuk menimpa path default.  Biasanya anda tidak perlu mengubah path-path ini, system akan menentukannya secara otomatis.',
     'advanced_settings' => 'Advanced Settings',
     'log_path' => 'Path Log',
     'lang_path' => 'Path Bahasa',
     'backup_path' => 'Path Backup',
     'data_path' => 'Path Data',
     'language_support' => 'Language Support',
-    'language_pack' => 'glFusion di download dalam bahasa Inggris, tapi, setelah instalasi, anda bisa mendownload dan menginstal <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Language Pack (Paket Bahasa)</a> yang berisikan semua file bahasa yang sudah diterjemahkan glFusion.'
+    'language_pack' => 'glFusion di download dalam bahasa Inggris, tapi, setelah instalasi, anda bisa mendownload dan menginstal <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Language Pack (Paket Bahasa)</a> yang berisikan semua file bahasa yang sudah diterjemahkan glFusion.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

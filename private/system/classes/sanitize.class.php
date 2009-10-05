@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -115,7 +115,7 @@ class sanitize
 	 * if it doesn't already exist.
 	 *
 	 * This method must be invoked as:
-	 * 		<pre>$inputHandle =& sanitize::getInstance();</pre>
+	 * 		<pre>$inputHandle =& sanitizer::getInstance();</pre>
 	 *
 	 * @static
 	 * @return	object	The sanitizer object.
@@ -252,7 +252,7 @@ class sanitize
             case 'TEXT'  :
             case 'PLAINTEXT' :
                 $data = strip_tags($data);
-                return @htmlspecialchars ($data,ENT_QUOTES, COM_getEncodingt());
+                return @htmlspecialchars ($data,ENT_QUOTES, COM_getCharset());
                 break;
             case 'HTML' :
                 $htmlFilter =& htmlFilter::getInstance();
@@ -289,7 +289,7 @@ class sanitize
                 return $this->_sanitizeFilename($data,false);
                 break;
             default :
-                return (@htmlspecialchars ($data,ENT_QUOTES, COM_getEncodingt()));
+                return (@htmlspecialchars ($data,ENT_QUOTES, COM_getCharset()));
                 break;
         }
     }
@@ -569,11 +569,14 @@ class sanitize
 
         $EditedMessage = $Message;
 
-        if( $_CONF['censormode'] != 0 ) {
-            if( is_array( $_CONF['censorlist'] )) {
+        if( $_CONF['censormode'] != 0 )
+        {
+            if( is_array( $_CONF['censorlist'] ))
+            {
                 $Replacement = $_CONF['censorreplace'];
 
-                switch( $_CONF['censormode']) {
+                switch( $_CONF['censormode'])
+                {
                     case 1: # Exact match
                         $RegExPrefix = '(\s*)';
                         $RegExSuffix = '(\W*)';
@@ -641,35 +644,5 @@ class sanitize
         }
         return array();
     }
-
-
-    function _getEncodingt() {
-    	global $_CONF, $LANG_CHARSET;
-
-    	static $encoding = null;
-
-        $valid_charsets = array('iso-8859-1','iso-8859-15','utf-8','cp866','cp1251','cp1252','koi8-r','big5','gb2312','big5-hkscs','shift_jis sjis','euc-jp');
-
-    	if ($encoding === null) {
-    		if (isset($LANG_CHARSET)) {
-    			$encoding = $LANG_CHARSET;
-    		} else if (isset($_CONF['default_charset'])) {
-    			$encoding = $_CONF['default_charset'];
-    		} else {
-    			$encoding = 'iso-8859-1';
-    		}
-    	}
-
-    	$encoding = strtolower($encoding);
-
-    	if ( in_array($encoding,$valid_charsets) ) {
-    	    return $encoding;
-    	} else {
-    	    return 'iso-8859-1';
-    	}
-
-    	return $encoding;
-    }
-
 }
 ?>

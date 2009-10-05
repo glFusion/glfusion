@@ -1,5 +1,8 @@
 {# begin {templatelocation} #}
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
+<script type="text/javascript">
+	Window.onDomReady(function(){ new Accordion($$('.moofx-toggler'), $$('div.moofx-slider'), {onActive: function(toggler, i) { toggler.addClass('moofx-toggler-down'); },onBackground: function(toggler, i) { toggler.removeClass('moofx-toggler-down'); },duration: 300,opacity: false, alwaysHide:true, show: 0}); });
+</script>
 <div id="configuration">
 <form method="post" action="configuration.php" name="group">
 <input type="hidden" value="{open_group}" name="conf_group"{xhtml}>
@@ -22,7 +25,7 @@
             <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
             <div id="ce_{subgroup_name}">
             <!-- BEGIN fieldset -->
-            <fieldset style="margin-top:10px;"><legend>{fs_display}</legend>
+            <fieldset style="margin-top:10px;"><legend class="title moofx-toggler">{fs_display}</legend>
             <!-- BEGIN notes -->
             <div class="notes">
              <h4>{fs_display}</h4>
@@ -30,9 +33,11 @@
              <span class="warningsmall">{fs_warning}</span>
             </div>
             <!-- END notes -->
+			<div class="moofx-slider">
             <table class="inputTable" style="width:100%;">
             {fs_contents}
             </table>
+			</div>
             </fieldset>
             <!-- END fieldset -->
             </div>

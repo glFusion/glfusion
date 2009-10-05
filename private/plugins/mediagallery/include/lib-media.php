@@ -213,7 +213,7 @@ function MG_displayASF( $aid, $I, $full ) {
             return array($u_image,'',$resolution_x,$resolution_y,'');
             break;
         case 3: // use mms links
-            $mms_path = ereg_replace('http','mms',$_MG_CONF['mediaobjects_url']);
+            $mms_path = preg_replace("/http/i",'mms',$_MG_CONF['mediaobjects_url']);
             $u_pic = $mms_path . '/orig/'.  $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
             $raw_link_url = $mms_path . '/orig/'.  $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
             if ( $I['media_tn_attached'] == 1 ) {
@@ -898,6 +898,9 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $playback_options['height'] = 50;
                 $playback_options['width']  = 300;
             }
+            $win_width = $playback_options['width'];
+            $win_height = $playback_options['height'];
+
             $V = new Template( MG_getTemplatePath($aid) );
 
             $tfile = 'view_mp3_swf.thtml';
@@ -970,7 +973,7 @@ function MG_displayMP3( $aid, $I, $full ) {
             return array($u_image,'',$win_width,$win_height,'');
             break;
         case 3: // use mms links
-            $mms_path = ereg_replace('http','mms',$_MG_CONF['mediaobjects_url']);
+            $mms_path = preg_replace("/http/i",'mms',$_MG_CONF['mediaobjects_url']);
             $u_pic = $mms_path . '/orig/'.  $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
 
             if ( $I['media_tn_attached'] == 1 ) {
@@ -1275,7 +1278,22 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
 
     $retval = '';
     $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
-    if ( $media_size_disp == false ) {
+
+// Modified by Jon Deliz
+    if ($I['remote_media'] == 1 ) {
+        if ( $I['media_resolution_x'] != 0 && $I['media_resolution_y'] != 0 ) {
+    	    $media_size_disp[0] = $I['media_resolution_x'];
+            $media_size_disp[1] = $I['media_resolution_y'];
+        } else {
+            $media_size_disp = @getimagesize($I['remote_url']);
+            if ( $media_size_disp = false ) {
+                $media_size_disp[0] = 0;
+                $media_size_disp[1] = 0;
+            }
+        }
+    }
+
+    if ( $media_size_disp == false && $I['remote_media'] == 0) {
         $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg');
     }
     $media_size_orig = @getimagesize($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
@@ -1306,18 +1324,27 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
     if ( $full == 1 ) {
         $u_image    = $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
     } else {
-        if ( $media_size_disp == false ) {
+        if ( $media_size_disp == false && !$I['remote_media']) {
             $u_image = $_MG_CONF['mediaobjects_url'] . '/missing.png';
             $media_size_disp[0] = 200;
-            $media_size_orig[1] = 150;
+            $media_size_disp[1] = 150;
         } else {
-            $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
-            if ( !file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'])) {
-                $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
+//Modified by Jon Deliz
+            if ($I['remote_media'] == 1 ) {
+		        $u_image = $I['remote_url'];
             } else {
-                $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
+                $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
+                if ( !file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'])) {
+                    $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg';
+                } else {
+                    $u_image    = $_MG_CONF['mediaobjects_url'] . '/disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
+                }
             }
         }
+    }
+    if ( $media_size_orig == false ) {
+        $media_size_orig[0] = 200;
+        $media_size_orig[1] = 150;
     }
 
     $imageWidth  = $full ? $media_size_orig[0] : $media_size_disp[0];
@@ -1330,17 +1357,22 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
         'media_link_start'  =>  $media_link_start,
         'media_link_end'    =>  $media_link_end,
         'media_thumbnail'   =>  $u_image,
-        'media_size'        =>  'width="' . $imageWidth . '" height="' . $imageHeight . '"',
+        'media_size'        =>  ($imageWidth != 0 && $imageHeight != 0 ) ? 'width="' . $imageWidth . '" height="' . $imageHeight . '"' : '',
         'media_height'      =>  $imageHeight,
         'media_width'       =>  $imageWidth,
-        'border_width'      =>  $imageWidth + 15,
-        'border_height'     =>  $imageHeight + 15,
+
         'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title']) : '',
         'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
         'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
         'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
         'xhtml'             =>  XHTML,
     ));
+    if ( $imageWidth > 0 && $imageHeight > 0 ) {
+        $F->set_var(array(
+            'border_width'      =>  $imageWidth + 15,
+            'border_height'     =>  $imageHeight + 15,
+        ));
+    }
     $F->parse('media','media_frame');
     $retval = $F->finish($F->get_var('media'));
     return array($retval,$u_image,$imageWidth,$imageHeight,$raw_link_url);
@@ -1355,7 +1387,11 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     $aid  = DB_getItem($_TABLES['mg_media_albums'], 'album_id','media_id="' . addslashes($mediaObject) . '"');
 
-    $pid = $MG_albums[$aid]->pid;
+    if ( isset($MG_albums[$aid]->pid) ) {
+        $pid = $MG_albums[$aid]->pid;
+    } else {
+        $pid = 0;
+    }
     if ( method_exists($MG_albums[$aid],'getOffset') ) {
         $aOffset = $MG_albums[$aid]->getOffset();
     } else {
@@ -1695,7 +1731,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         }
     }
 
-    if ($MG_albums[$aid]->access == 3 ) {
+    if ($MG_albums[$aid]->access == 3 || ($_MG_CONF['allow_user_edit'] == true && isset($_USER['uid']) && $media[$mediaObject]['media_user_id'] == $_USER['uid'])) {
         $edit_item = '<a href="' . $_MG_CONF['site_url'] . '/admin.php?mode=mediaedit&amp;s=1&amp;album_id=' . $aid . '&amp;mid=' . $mid . '">' . $LANG_MG01['edit'] . '</a>';
     } else {
         $edit_item = '';
@@ -1917,9 +1953,21 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             }
             if ( DB_count($_TABLES['comments'],'sid',$mid) > 0  || $_MG_CONF['commentbar'] ) {
                 $cid        = $mid;
-                $page       = 0;
-                $comorder   = isset($_POST['order']) ? COM_applyFilter($_POST['order']) : 'ASC';
-                $commode    = isset($_POST['mode']) ? COM_applyFilter($_POST['mode']) : '';
+                $page       = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+                if ( isset($_POST['order']) ) {
+                    $comorder  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+                } elseif (isset($_GET['order']) ) {
+                    $comorder =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+                } else {
+                    $comorder = 'DESC';
+                }
+                if ( isset($_POST['mode']) ) {
+                    $commode = COM_applyFilter($_POST['mode']);
+                } elseif ( isset($_GET['mode']) ) {
+                    $commode = COM_applyFilter($_GET['mode']);
+                } else {
+                    $commode = 'flat';
+                }
                 $commentbar = CMT_userComments ($cid,$media[$mediaObject]['media_title'],
                               'mediagallery',$comorder,$commode,0,$page,false,$delete_option);
                 $retval    .= $commentbar;

@@ -13,7 +13,7 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2006-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Michael Jervis, mike AT fuckingbrit DOT com                     |
 // +--------------------------------------------------------------------------+
@@ -134,7 +134,6 @@ class Story
     var $_expire;
     var $_advanced_editor_mode;
     var $_frontpage;
-    var $_in_transit;
     var $_owner_id;
     var $_group_id;
     var $_perm_owner;
@@ -202,7 +201,6 @@ class Story
            'postmode' => 1,
            'advanced_editor_mode' => 1,
            'frontpage' => 1,
-           'in_transit' => 1,
            'owner_id' => 1,
            'group_id' => 1,
            'perm_owner' => 1,
@@ -422,14 +420,8 @@ class Story
         $sid = addslashes(COM_applyFilter($sid));
 
         if (!empty($sid) && (($mode == 'edit') || ($mode == 'view') || ($mode == 'clone'))) {
-            $sql = array();
-
-            $sql['mysql']
-            = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, UNIX_TIMESTAMP(s.expire) as expireunix, UNIX_TIMESTAMP(s.comment_expire) as cmt_expire_unix, "
+            $sql = "SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, UNIX_TIMESTAMP(s.expire) as expireunix, UNIX_TIMESTAMP(s.comment_expire) as cmt_expire_unix, "
                 . "u.username, u.fullname, u.photo, u.email, t.topic, t.imageurl " . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, {$_TABLES['topics']} AS t " . "WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND (sid = '$sid')";
-
-            $sql['mssql'] =
-                "SELECT STRAIGHT_JOIN s.sid, s.uid, s.draft_flag, s.tid, s.date, s.title, CAST(s.introtext AS text) AS introtext, CAST(s.bodytext AS text) AS bodytext, s.hits, s.numemails, s.comments, s.trackbacks, s.related, s.featured, s.show_topic_icon, s.commentcode, s.trackbackcode, s.statuscode, s.expire, s.postmode, s.frontpage, s.in_transit, s.owner_id, s.group_id, s.perm_owner, s.perm_group, s.perm_members, s.perm_anon, s.advanced_editor_mode, " . " UNIX_TIMESTAMP(s.date) AS unixdate, UNIX_TIMESTAMP(s.expire) as expireunix, UNIX_TIMESTAMP(s.comment_expire) as cmt_expire_unix, " . "u.username, u.fullname, u.photo, u.email, t.topic, t.imageurl " . "FROM {$_TABLES['stories']} AS s, {$_TABLES['users']} AS u, {$_TABLES['topics']} AS t " . "WHERE (s.uid = u.uid) AND (s.tid = t.tid) AND (sid = '$sid')";
         } elseif (!empty($sid) && ($mode == 'editsubmission')) {
             $sql = 'SELECT STRAIGHT_JOIN s.*, UNIX_TIMESTAMP(s.date) AS unixdate, '
                 . 'u.username, u.fullname, u.photo, u.email, t.topic, t.imageurl, t.group_id, ' . 't.perm_owner, t.perm_group, t.perm_members, t.perm_anon ' . 'FROM ' . $_TABLES['storysubmission'] . ' AS s, ' . $_TABLES['users'] . ' AS u, ' . $_TABLES['topics'] . ' AS t WHERE (s.uid = u.uid) AND' . ' (s.tid = t.tid) AND (sid = \'' . $sid . '\')';
@@ -689,7 +681,6 @@ class Story
 
         // Get the related URLs
         $this->_related = implode("\n", STORY_extractLinks("{$this->_introtext} {$this->_bodytext}"));
-        $this->_in_transit = 1;
         $sql = 'REPLACE INTO ' . $_TABLES['stories'] . ' (';
         $values = ' VALUES (';
         $fields = '';
@@ -894,7 +885,11 @@ class Story
             $array[$key] = COM_stripslashes($value);
         }
 
-        $this->_postmode = COM_applyFilter($array['postmode']);
+        if ( isset($array['postmode']) ) {
+            $this->_postmode = COM_applyFilter($array['postmode']);
+        } else {
+            $this->_postmode = 'html';
+        }
         $this->_sid = COM_applyFilter($array['sid']);
         $this->_uid = COM_applyFilter($array['uid'], true);
         $this->_unixdate = COM_applyFilter($array['date'], true);
@@ -1009,6 +1004,7 @@ class Story
             $this->_perm_anon = $T['perm_anon'];
 
             $this->saveToDatabase();
+            PLG_itemSaved($this->_sid, 'article');
 
             COM_rdfUpToDateCheck();
             COM_olderStuff();

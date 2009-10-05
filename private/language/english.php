@@ -179,7 +179,7 @@ $LANG01 = array(
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
     503 => 'Maintenance Mode - Non-admin logins disabled',
-    'ctl' => 'Clear Template Cache',
+    'ctl' => 'Clear Cache',
     'logview' => 'Logview'
 );
 
@@ -265,7 +265,7 @@ $LANG04 = array(
     29 => 'logged out from',
     30 => 'logged in from',
     31 => 'The function you have selected requires you to be logged in',
-    32 => 'Signature',
+    32 => 'Tag Line',
     33 => 'Never publicly displayed',
     34 => 'This is your real name',
     35 => 'Enter password to change it',
@@ -382,7 +382,7 @@ $LANG04 = array(
     146 => 'Password and email',
     147 => 'Edit your account password, autologin setting, and email. You will need to enter the same password or email address twice as a confirmation.',
     148 => 'User Information',
-    149 => 'Modify your user information that will be shown to other users.<ul><li>The signature will be added to any comments or forum posts you made</li><li>The About block is a brief summary of yourself to share</li><li>Share your PGP Key</li></ul>',
+    149 => 'Modify your user information that will be shown to other users.<ul><li>The Tag Line will be added to any comments or forum posts you make.</li><li>The About block is a brief summary of yourself to share.</li><li>Share your PGP Key.</li><li>The Forum Signature will be added to any forum posts you make, overriding your Tag Line.</li></ul>',
     150 => 'Warning: Javascript recommended for enhanced functionality',
     156 => 'Delete Account',
     157 => 'Delete Option',
@@ -457,7 +457,10 @@ $LANG08 = array(
     32 => 'Date',
     33 => 'Read the full article at',
     34 => 'End of Message',
-    35 => 'Sorry, this user prefers not to receive any emails.'
+    35 => 'Sorry, this user prefers not to receive any emails.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.',
+
 );
 
 ###############################################################################
@@ -951,7 +954,9 @@ $LANG28 = array(
     82 => "Your account on {$_CONF['site_name']} has not been accesssed since %s and will be disabled if not accessed in the next 30 days.",
     83 => "Your account on {$_CONF['site_name']} has not been used since it was created and will be deleted soon if not accessed.",
     84 => "Your login name is: %s  for our site: {$_CONF['site_url']}",
-    85 => 'If you have forgotten the password use the following link: %s'
+    85 => 'If you have forgotten the password use the following link: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1301,10 +1306,10 @@ $LANG_ACCESS = array(
     'coregroup' => 'Core Group',
     'yes' => 'Yes',
     'no' => 'No',
-    'corerightsdescr' => "This group is a core {$_CONF['site_name']} Group.  Therefore the rights for this group cannot be edited.  Below is a read-only list of the rights this group has access to.",
+    'corerightsdescr' => "This group is a core {$_CONF['site_name']} Group.  Please ensure you understand any changes you are making.  Below is a list of the rights this group has access to.",
     'groupmsg' => 'Security Groups on this site are hierarchical.  By adding this group to any of the groups below you will be giving this group the same rights that those groups have.  Where possible it is encouraged you use the groups below to give rights to a group.  If you need this group to have custom rights then you can select the rights to various site features in the section below called \'Rights\'.  To add this group to any of the ones below simply check the box next to the group(s) that you want.',
-    'coregroupmsg' => "This group is a core {$_CONF['site_name']} Group.  Therefore the groups that this group belongs to cannot be edited.  Below is a read-only list of the groups this group belongs to.",
-    'rightsdescr' => 'A group\'s access to a certain right below can be given directly to the group OR to a different group that this group is a part of.  The ones you see below without a checkbox are the rights that have been given to this group because it belongs to another group with that right.  The rights with checkboxes below are rights that can be given directly to this group.',
+    'coregroupmsg' => "This group is a core {$_CONF['site_name']} Group.  Please be very careful editing core groups.  Below is a list of the groups this group belongs to.",
+    'rightsdescr' => 'A group\'s access to a certain right below can be given directly to the group OR to a different group that this group is a part of.  The ones you see below with a disabled checkbox are the rights that have been given to this group because it belongs to another group with that right.  The rights with checkboxes below are rights that can be given directly to this group.',
     'lock' => 'Lock',
     'members' => 'Members',
     'anonymous' => 'Anonymous',
@@ -1340,7 +1345,8 @@ $LANG_ACCESS = array(
     'group_id' => 'Group ID',
     'plugin_access_denied_msg' => 'You are illegally trying access a plugin administration page.  Please note that all attempts to illegally access this page are logged.',
     'groupexists' => 'Group name already exists',
-    'groupexistsmsg' => 'There is already a group with this name. Group names must be unique.'
+    'groupexistsmsg' => 'There is already a group with this name. Group names must be unique.',
+    'copy' => 'Copy',
 );
 
 ###############################################################################
@@ -1709,6 +1715,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'Allow Account Deletion',
     'hide_author_exclusion' => 'Allow Hide Author',
     'show_fullname' => 'Show Fullname',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'Show Service Name',
     'custom_registration' => 'Enable Custom Registration',
     'user_login_method' => 'User Login Method',
@@ -1905,6 +1912,7 @@ $LANG_confignames['Core'] = array(
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Include Template Comments in Page Source',
     'hidestorydate' => 'Hide Story Date',
+    'maintenance_mode' => 'Enable Maintenance Mode',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1986,7 +1994,9 @@ $LANG_configselects['Core'] = array(
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3),
+
 );
 
 ?>

@@ -44,6 +44,8 @@ if (!SEC_inGroup('Root')) {
     exit;
 }
 
+$retval = '';
+
 function glfusion_110() {
     global $_TABLES, $_CONF;
 
@@ -188,8 +190,6 @@ function glfusion_113()
     $c->add('cache_templates',TRUE,'select',2,12,0,1375,TRUE);
     $c->add('template_comments',FALSE,'select',2,11,0,1373,TRUE);
     $c->del('instance_cache', 'Core');
-
-    return 'glFusion v1.1.3svn updates successfully applied.<br />';
 }
 
 function glfusion_114()
@@ -210,23 +210,76 @@ function glfusion_114()
     $c = config::get_instance();
 }
 
-function glfusion_120()
+function glfusion_115()
 {
     global $_TABLES, $_CONF;
 
-    COM_errorLog("glFusion: Running code update for glFusion v1.2.0svn");
-    return 'glFusion v1.2.0.svn - No updates necessary.<br />';
+    $_SQL = array();
+
+    $_SQL[] = "ALTER TABLE {$_TABLES['users']} CHANGE username username varchar (48) NOT NULL default ''";
+    $_SQL[] = "ALTER TABLE {$_TABLES['topics']} CHANGE sortnum sortnum mediumint(8) default NULL";
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("glFusion 1.1.5 Development update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),1);
+        next($_SQL);
+    }
+
+    DB_query("ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_in_transit",1);
+    DB_query("ALTER TABLE {$_TABLES['stories']} DROP COLUMN in_transit",1);
+    DB_query("ALTER TABLE {$_TABLES['userprefs']} ADD search_result_format VARCHAR( 48 ) NOT NULL DEFAULT 'google'",1);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET type='text' WHERE name='mail_smtp_host'",1);
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.5',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.5' WHERE name='glfusion'",1);
+    DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
+    DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray='23' WHERE name='censormode'",1);
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+    $c->add('hide_exclude_content',0,'select',4,16,0,295,TRUE);
+    $c->add('maintenance_mode',0,'select',0,0,0,511,TRUE);
+    $c->del('search_show_limit', 'Core');
+    $c->del('search_show_sort', 'Core');
+
+    // Forum plugin
+    $c->add('enable_user_rating_system',FALSE, 'select', 0,0,0,22, TRUE, 'forum');
+    $c->add('bbcode_signature', TRUE, 'select',0, 0, 0, 37, true, 'forum');
+    $c->add('use_wysiwyg_editor', false, 'select', 0, 2, 0, 85, true, 'forum');
+    DB_query("ALTER TABLE {$_TABLES['gf_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
+    DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD `rating` INT( 8 ) NOT NULL ",1);
+    DB_query("ALTER TABLE {$_TABLES['gf_userinfo']} ADD signature MEDIUMTEXT NOT NULL",1 );
+    DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD notify_full tinyint(1) NOT NULL DEFAULT '0' AFTER alwaysnotify",1);
+    $sql = "CREATE TABLE IF NOT EXISTS {$_TABLES['gf_rating_assoc']} ( "
+            . "`user_id` mediumint( 9 ) NOT NULL , "
+            . "`voter_id` mediumint( 9 ) NOT NULL , "
+            . "`grade` smallint( 6 ) NOT NULL  , "
+            . "`topic_id` int( 11 ) NOT NULL , "
+            . " KEY `user_id` (`user_id`), "
+            . " KEY `voter_id` (`voter_id`) );";
+    DB_query($sql);
+    DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} ADD topic_id int(11) NOT NULL AFTER grade",1);
+    // add forum.html feature
+    DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('forum.html','Can post using HTML',0)",1);
+    $ft_id = DB_insertId();
+    $grp_id = intval(DB_getItem($_TABLES['groups'],'grp_id',"grp_name = 'forum Admin'"));
+    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ($ft_id, $grp_id)", 1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.4',pi_gl_version='1.1.5' WHERE pi_name = 'forum'");
 }
+
+function glfusion_116()
+{
+    global $_TABLES, $_CONF;
+
+    $_SQL = array();
+
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.6',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.6' WHERE name='glfusion'",1);
+}
+
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-$retval .= 'Performing glFusion v1.1.4 updates...<br />';
-
-$retval .= glfusion_114();
-
-$retval .= 'Performing glFusion v1.2.0.svn updates...<br />';
-
-$retval .= glfusion_120();
+glfusion_116();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();

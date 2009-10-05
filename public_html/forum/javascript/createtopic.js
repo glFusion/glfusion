@@ -19,10 +19,10 @@ var is_moz = 0;
 
 var is_win = ((clientPC.indexOf("win")!=-1) || (clientPC.indexOf("16bit") != -1));
 var is_mac = (clientPC.indexOf("mac")!=-1);
-
+var baseHeight;
 // Define the bbCode tags
 bbcode = new Array();
-bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[olist]','[/olist]','[img]','[/img]','[url]','[/url]','[file]','[/file]');
+bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=1]','[/list]','[*]','[img]','[/img]','[url]','[/url]','[file]','[/file]');
 imageTag = false;
 
 // Shows the help messages in the helpline window
@@ -76,119 +76,134 @@ function checkForm() {
 }
 
 function emoticon(text) {
-    var txtarea = document.forumpost.comment;
-    text = ' ' + text + ' ';
-    if (txtarea.createTextRange && txtarea.caretPos) {
-        var caretPos = txtarea.caretPos;
-        caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? caretPos.text + text + ' ' : caretPos.text + text;
-        txtarea.focus();
-    } else {
-        txtarea.value  += text;
-        txtarea.focus();
-    }
+
+    bbfontstyle(text,'');
 }
 
-function bbfontstyle(bbopen, bbclose) {
-    var txtarea = document.forumpost.comment;
-
-    if ((clientVer >= 4) && is_ie && is_win) {
-        theSelection = document.selection.createRange().text;
-        if (!theSelection) {
-            txtarea.value += bbopen + bbclose;
-            txtarea.focus();
-            return;
-        }
-        document.selection.createRange().text = bbopen + theSelection + bbclose;
-        txtarea.focus();
-        return;
-    }
-    else if (txtarea.selectionEnd && (txtarea.selectionEnd - txtarea.selectionStart > 0))
-    {
-        mozWrap(txtarea, bbopen, bbclose);
-        return;
-    }
-    else
-    {
-        txtarea.value += bbopen + bbclose;
-        txtarea.focus();
-    }
-    storeCaret(txtarea);
+/**
+* bbstyle
+*/
+function bbstyle(bbnumber)
+{
+	if (bbnumber != -1)
+	{
+		bbfontstyle(bbtags[bbnumber], bbtags[bbnumber+1]);
+	}
+	else
+	{
+		insert_text('[*]');
+		document.forms['forumpost'].elements['comment'].focus();
+	}
 }
 
+/**
+* Apply bbcodes
+*/
+function bbfontstyle(bbopen, bbclose)
+{
+	theSelection = false;
 
-function bbstyle(bbnumber) {
-    var txtarea = document.forumpost.comment;
+	var textarea = document.forms['forumpost'].elements['comment'];
 
-    txtarea.focus();
-    donotinsert = false;
-    theSelection = false;
-    bblast = 0;
+	textarea.focus();
 
-    if (bbnumber == -1) { // Close all open tags & default button names
-        while (bbcode[0]) {
-            butnumber = arraypop(bbcode) - 1;
-            txtarea.value += bbtags[butnumber + 1];
-            buttext = eval('document.forumpost.addbbcode' + butnumber + '.value');
-            eval('document.forumpost.addbbcode' + butnumber + '.value ="' + buttext.substr(0,(buttext.length - 1)) + '"');
-        }
-        imageTag = false; // All tags are closed including image tags :D
-        txtarea.focus();
-        return;
-    }
+	if ((clientVer >= 4) && is_ie && is_win)
+	{
+		// Get text selection
+		theSelection = document.selection.createRange().text;
 
-    if ((clientVer >= 4) && is_ie && is_win)
-    {
-        theSelection = document.selection.createRange().text; // Get text selection
-        if (theSelection) {
-            // Add tags around selection
-            document.selection.createRange().text = bbtags[bbnumber] + theSelection + bbtags[bbnumber+1];
-            txtarea.focus();
-            theSelection = '';
-            return;
-        }
-    }
-    else if (txtarea.selectionEnd && (txtarea.selectionEnd - txtarea.selectionStart > 0))
-    {
-        mozWrap(txtarea, bbtags[bbnumber], bbtags[bbnumber+1]);
-        return;
-    }
+		if (theSelection)
+		{
+			// Add tags around selection
+			document.selection.createRange().text = bbopen + theSelection + bbclose;
+			document.forms['forumpost'].elements['comment'].focus();
+			theSelection = '';
+			return;
+		}
+	}
+	else if (document.forms['forumpost'].elements['comment'].selectionEnd && (document.forms['forumpost'].elements['comment'].selectionEnd - document.forms['forumpost'].elements['comment'].selectionStart > 0))
+	{
+		mozWrap(document.forms['forumpost'].elements['comment'], bbopen, bbclose);
+		document.forms['forumpost'].elements['comment'].focus();
+		theSelection = '';
+		return;
+	}
 
-    // Find last occurance of an open tag the same as the one just clicked
-    for (i = 0; i < bbcode.length; i++) {
-        if (bbcode[i] == bbnumber+1) {
-            bblast = i;
-            donotinsert = true;
-        }
-    }
+	//The new position for the cursor after adding the bbcode
+	var caret_pos = getCaretPosition(textarea).start;
+	var new_pos = caret_pos + bbopen.length;
 
-    if (donotinsert) {        // Close all open tags up to the one just clicked & default button names
-        while (bbcode[bblast]) {
-                butnumber = arraypop(bbcode) - 1;
-                txtarea.value += bbtags[butnumber + 1];
-                buttext = eval('document.forumpost.addbbcode' + butnumber + '.value');
-                eval('document.forumpost.addbbcode' + butnumber + '.value ="' + buttext.substr(0,(buttext.length - 1)) + '"');
-                imageTag = false;
-            }
-            txtarea.focus();
-            return;
-    } else { // Open tags
+	// Open tag
+	insert_text(bbopen + bbclose);
 
-        if (imageTag && (bbnumber != 14)) {        // Close image tag before adding another
-            txtarea.value += bbtags[15];
-            lastValue = arraypop(bbcode) - 1;    // Remove the close image tag from the list
-            document.forumpost.addbbcode14.value = "Img";    // Return button back to normal state
-            imageTag = false;
-        }
+	// Center the cursor when we don't have a selection
+	// Gecko and proper browsers
+	if (!isNaN(textarea.selectionStart))
+	{
+		textarea.selectionStart = new_pos;
+		textarea.selectionEnd = new_pos;
+	}
+	// IE
+	else if (document.selection)
+	{
+		var range = textarea.createTextRange();
+		range.move("character", new_pos);
+		range.select();
+		storeCaret(textarea);
+	}
 
-        // Open tag
-        txtarea.value += bbtags[bbnumber];
-        if ((bbnumber == 14) && (imageTag == false)) imageTag = 1; // Check to stop additional tags after an unclosed image tag
-        arraypush(bbcode,bbnumber+1);
-        eval('document.forumpost.addbbcode'+bbnumber+'.value += "*"');
-        txtarea.focus();
-        return;
-    }
-    storeCaret(txtarea);
+	textarea.focus();
+	return;
+}
+
+/**
+* Insert text at position
+*/
+function insert_text(text, spaces, popup)
+{
+	var textarea;
+
+	if (!popup)
+	{
+		textarea = document.forms['forumpost'].elements['comment'];
+	}
+	else
+	{
+		textarea = opener.document.forms['forumpost'].elements['comment'];
+	}
+	if (spaces)
+	{
+		text = ' ' + text + ' ';
+	}
+
+	if (!isNaN(textarea.selectionStart))
+	{
+		var sel_start = textarea.selectionStart;
+		var sel_end = textarea.selectionEnd;
+
+		mozWrap(textarea, text, '')
+		textarea.selectionStart = sel_start + text.length;
+		textarea.selectionEnd = sel_end + text.length;
+	}
+	else if (textarea.createTextRange && textarea.caretPos)
+	{
+		if (baseHeight != textarea.caretPos.boundingHeight)
+		{
+			textarea.focus();
+			storeCaret(textarea);
+		}
+
+		var caret_pos = textarea.caretPos;
+		caret_pos.text = caret_pos.text.charAt(caret_pos.text.length - 1) == ' ' ? caret_pos.text + text + ' ' : caret_pos.text + text;
+	}
+	else
+	{
+		textarea.value = textarea.value + text;
+	}
+	if (!popup)
+	{
+		textarea.focus();
+	}
 }
 
 // From http://www.massless.org/mozedit/
@@ -211,6 +226,57 @@ function mozWrap(txtarea, open, close)
 // http://www.faqts.com/knowledge_base/view.phtml/aid/1052/fid/130
 function storeCaret(textEl) {
     if (textEl.createTextRange) textEl.caretPos = document.selection.createRange().duplicate();
+}
+
+/**
+* Caret Position object
+*/
+function caretPosition()
+{
+	var start = null;
+	var end = null;
+}
+
+
+/**
+* Get the caret position in an textarea
+*/
+function getCaretPosition(txtarea)
+{
+	var caretPos = new caretPosition();
+
+	// simple Gecko/Opera way
+	if(txtarea.selectionStart || txtarea.selectionStart == 0)
+	{
+		caretPos.start = txtarea.selectionStart;
+		caretPos.end = txtarea.selectionEnd;
+	}
+	// dirty and slow IE way
+	else if(document.selection)
+	{
+
+		// get current selection
+		var range = document.selection.createRange();
+
+		// a new selection of the whole textarea
+		var range_all = document.body.createTextRange();
+		range_all.moveToElementText(txtarea);
+
+		// calculate selection start point by moving beginning of range_all to beginning of range
+		var sel_start;
+		for (sel_start = 0; range_all.compareEndPoints('StartToStart', range) < 0; sel_start++)
+		{
+			range_all.moveStart('character', 1);
+		}
+
+		txtarea.sel_start = sel_start;
+
+		// we ignore the end value for IE, this is already dirty enough and we don't need it
+		caretPos.start = txtarea.sel_start;
+		caretPos.end = txtarea.sel_start;
+	}
+
+	return caretPos;
 }
 
 var newwindow;

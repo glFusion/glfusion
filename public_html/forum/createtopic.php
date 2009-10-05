@@ -44,7 +44,6 @@ if (!in_array('forum', $_PLUGINS)) {
     exit;
 }
 
-require_once $_CONF['path'] . 'plugins/forum/include/include_html.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_showtopic.php';
 require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/include/lib-uploadfiles.php';
@@ -52,6 +51,10 @@ require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 $retval = '';
 $forumfiles = array();
+
+$wysiwyg = 0;
+
+$subject = '';
 
 gf_siteHeader();
 
@@ -84,6 +87,20 @@ if(empty($_USER['uid']) || $_USER['uid'] == 1 ) {
     $uid = 1;
 } else {
     $uid = $_USER['uid'];
+}
+
+if ( intval($forum) == 0 && intval($id) != 0 ) {
+    $forum = DB_getItem($_TABLES['gf_topic'],'forum','id='.intval($id));
+}
+
+// final permission check....
+$result = DB_query("SELECT forum_id AS forum,is_readonly,grp_id,rating_post FROM {$_TABLES['gf_forums']} WHERE forum_id=".intval($forum));
+$forumArray = DB_fetchArray($result);
+if ( !forum_canPost($forumArray) ) {
+    echo '<br' . XHTML . '>';
+    BlockMessage($LANG_GF01['ACCESSERROR'],$LANG_GF02['msg03'],false);
+    echo COM_siteFooter();
+    exit;
 }
 
 // ADD EDITED TOPIC
@@ -136,9 +153,9 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
             // If user has moderator edit rights only
             $locked = 0;
             $sticky = 0;
-            if ($_POST['modedit'] == 1) {
-                if ($_POST['locked_switch'] == 1)  $locked = 1;
-                if ($_POST['sticky_switch'] == 1)  $sticky = 1;
+            if (isset($_POST['modedit']) && $_POST['modedit'] == 1) {
+                if (isset($_POST['locked_switch']) && $_POST['locked_switch'] == 1)  $locked = 1;
+                if (isset($_POST['sticky_switch']) && $_POST['sticky_switch'] == 1)  $sticky = 1;
             }
             $sql = "UPDATE {$_TABLES['gf_topic']} SET subject='$subject',comment='$comment',postmode='$postmode', ";
             $sql .= "mood='".addslashes($mood)."', sticky='$sticky', locked='$locked' WHERE (id='".addslashes($editid)."')";
@@ -242,7 +259,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                     $subject = COM_truncate($subject,100);
                     $subject = gf_preparefordb(strip_tags($_POST['subject']),'text');
 
-//                    $subject = COM_truncate($subject,100);
                     $comment = gf_preparefordb($_POST['comment'],$postmode);
                     $mood = COM_applyFilter($_POST['mood']);
                     $locked = 0;
@@ -433,7 +449,6 @@ if ($id > 0) {
     $sql .= "WHERE a.forum_id=$forum";
     $newtopic = DB_fetchArray(DB_query($sql),false);
 }
-
 if ($method == 'edit') {
     $editAllowed = false;
     if (forum_modPermission($edittopic['forum'],$_USER['uid'],'mod_edit')) {
@@ -476,9 +491,15 @@ $numAttachments = 0;
 
 if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']) {
     $previewitem = array();
+    $previewitem['forum'] = $forum;
+    $previewitem['pid']     = COM_applyFilter($_POST['editpid'],true);
+    $previewitem['id']      = COM_applyFilter($_POST['id'],true);
+    $previewitem['locked']  = 0;
+    $previewitem['views']   = 0;
     if ($method == 'edit') {
         $previewitem['uid']  = $edittopic['uid'];
         $previewitem['name'] = $edittopic['name'];
+
         /* Check for any uploaded files */
         $editpost = COM_applyfilter($_POST['id'],true);
         $previewitem['id'] = $editpost;
@@ -487,7 +508,8 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
 
     } else {
         if ($uid > 1) {
-            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes($_POST['aname']))));
+//            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes($_POST['aname']))));
+            $previewitem['name'] = $_USER['username'];
             $previewitem['uid'] = $_USER['uid'];
         } else {
             $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes(urldecode($_POST['aname'])))));
@@ -530,6 +552,7 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
     echo '<br' . XHTML . '>';
 
     // If Moderator and editing the parent topic - see if form has skicky or locked checkbox on
+    $editmoderator = FALSE;
     if ($editmoderator AND $editpid == 0) {
         if($method == 'edit') {
             if($_POST['locked_switch'] == 1 ) {
@@ -644,6 +667,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $topicnavbar->set_var ('LANG_fhelp', $LANG_GF01['f_help']);
     $topicnavbar->set_var ('LANG_hhelp', $LANG_GF01['h_help']);
     $topicnavbar->set_var ('LANG_thelp', $LANG_GF01['t_help']);
+    $topicnavbar->set_var ('LANG_ehelp', $LANG_GF01['e_help']);
 
     if ( !isset($_USER['uid']) ) {
         $_USER['uid'] = 1;
@@ -869,15 +893,8 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             $submissionform_code->set_var('hide_attbutton_end','-->');
         }
     }
-
     $submissionform_code->parse ('output', 'submissionform_code');
-    echo $submissionform_code->finish($submissionform_code->get_var('output'));
-
-    if(!$CONF_FORUM['allow_smilies']) {
-        $smilies = '';
-    } else {
-        $smilies =  forumPLG_showsmilies();
-    }
+    $bbcode_buttons = $submissionform_code->finish($submissionform_code->get_var('output'));
 
     // if this is the first time showing the new submission form - then check if notify option should be on
     if (!isset($_POST['preview'])) {
@@ -951,16 +968,41 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     if($postmode == 'html' || $postmode == 'HTML') {
         $postmode_msg = $LANG_GF01['TEXTMODE'];
+        $postmode = 'html';
     } else {
          $postmode_msg = $LANG_GF01['HTMLMODE'];
     }
-    if($CONF_FORUM['allow_html'] || SEC_inGroup( 'Root' )) {
-        $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
+    if($CONF_FORUM['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) {
+        if ( $method == 'edit' ) {
+            if ( $postmode == 'html' && $CONF_FORUM['use_wysiwyg_editor'] == 1 ) {
+                $mode_prompt = '<input type="hidden" name="postmode" value="html" />';
+                $wysiwyg = 1;
+            } else {
+                $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
+            }
+        } elseif ( $CONF_FORUM['use_wysiwyg_editor'] && $CONF_FORUM['post_htmlmode']) {
+            $mode_prompt = '<input type="hidden" name="postmode" value="html" />';
+            $wysiwyg = 1;
+        } else {
+            $mode_prompt = $postmode_msg. '<br' . XHTML . '><input type="checkbox" name="postmode_switch" value="1"' . XHTML . '><input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
+        }
     }
 
     $submissionform_main = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main.thtml'));
-
+    if ( $method == 'edit' ) {
+        if ( $postmode == 'html' && $CONF_FORUM['use_wysiwyg_editor'] == 1 ) {
+            $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main_advanced.thtml'));
+            $wysiwyg = 1;
+        } else {
+            $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main.thtml'));
+        }
+    } elseif (($CONF_FORUM['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) && $CONF_FORUM['use_wysiwyg_editor'] && $CONF_FORUM['post_htmlmode']) {
+        $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main_advanced.thtml'));
+        $wysiwyg = 1;
+    } else {
+        $submissionform_main->set_file (array ('submissionform_main'=>'submissionform_main.thtml'));
+    }
+    $submissionform_main->set_var('bbcode_buttons',$bbcode_buttons);
     if($method == 'edit') {
         if ($CONF_FORUM['pre2.5_mode']) {
             /* Reformat code blocks - version 2.3.3 and prior */
@@ -969,7 +1011,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             $comment = str_replace( '</pre>', '[/code]', $comment );
         }
         $edit_prompt = $LANG_GF02['msg190'] . '<br' . XHTML . '><input type="checkbox" name="silentedit" ';
-        if ($_POST['silentedit'] == 1 OR ( !isset($_POST['modedit']) AND $CONF_FORUM['silent_edit_default'])) {
+        if ((isset($_POST['silentedit']) && $_POST['silentedit'] == 1) OR ( !isset($_POST['modedit']) AND $CONF_FORUM['silent_edit_default'])) {
              $edit_prompt .= 'checked="checked" ';
         }
         $edit_prompt .= 'value="1"' . XHTML . '>';
@@ -988,6 +1030,12 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     }
 
     $subject = str_replace('"', '&quot;',$subject);
+
+    if(!$CONF_FORUM['allow_smilies']) {
+        $smilies = '';
+    } else {
+        $smilies =  forumPLG_showsmilies($wysiwyg);
+    }
 
     $submissionform_main->set_var ('LANG_SUBJECT', $LANG_GF01['SUBJECT']);
     $submissionform_main->set_var ('LANG_OPTIONS', $LANG_GF01['OPTIONS']);
@@ -1040,7 +1088,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 
     if($method == 'edit') {
         if($CONF_FORUM['allow_smilies']) {
-            if (function_exists(msg_restoreEmoticons) AND $CONF_FORUM['use_smilies_plugin']) {
+            if (function_exists('msg_restoreEmoticons') AND $CONF_FORUM['use_smilies_plugin']) {
                 $comment = msg_restoreEmoticons($comment);
             } else {
                 $comment = forum_xchsmilies($comment,true);
@@ -1076,16 +1124,12 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
 gf_siteFooter();
 
 
-/*
-* Function is called to check for notifications that may be setup by forum users
-* A record in the forum_watch table is created for each users's subsctribed notifications
-* Users can subscribe to a complete forum or individual topics.
-* If they have both selected - we only want to send one notification - hense the SQL LIMIT 1
-*
-* This function needs to be called when there is a new topic or a reply
-*/
 function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
     global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$CONF_FORUM;
+
+    if (!$CONF_FORUM['allow_notification']) {
+        return;
+    }
 
     $pid = DB_getItem($_TABLES['gf_topic'],'pid',"id='$topicid'");
     if ($pid == 0) {
@@ -1097,14 +1141,42 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
     $postername = COM_getDisplayName($userid);
     $nrows = DB_numRows($sqlresult);
 
+    $messageBody = '';
+    if ( $nrows > 0 ) {
+        $topicrec = DB_query("SELECT subject,name,forum,last_reply_rec FROM {$_TABLES['gf_topic']} WHERE id='$pid'");
+        $A = DB_fetchArray($topicrec);
+        $forum_name = DB_getItem($_TABLES['gf_forums'],'forum_name',"forum_id=".intval($forumid));
+        if ($type=='forum') {
+            $digestSubject = $forum_name;
+            $digestSubject .= ": ";
+            $digestSubject .= $A['subject'];
+            $messageBody .= sprintf($LANG_GF02['msg23b'],$A['subject'],$A['name'],$forum_name, $_CONF['site_name'],$_CONF['site_url'],$pid);
+            $last_reply_rec = DB_getItem($_TABLES['gf_forums'],'last_post_rec',"forum_id=".intval($forumid));
+        } else {
+            if ( $A['last_reply_rec'] != '' && $A['last_reply_rec'] != 0 ) {
+                $last_reply_rec = $A['last_reply_rec'];
+            } else {
+                $last_reply_rec = $topicid;
+            }
+            $digestSubject = $forum_name;
+            $digestSubject .= ": RE: ";
+            $digestSubject .= $A['subject'];
+            $messageBody .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
+            $messageBody .= sprintf($LANG_GF02['msg23c'],$_CONF['site_url'],$pid,$last_reply_rec);
+        }
+        $messageBody .= $LANG_GF02['msg26'];
+        $messageBody .= sprintf($LANG_GF02['msg27'],"{$_CONF['site_url']}/forum/notify.php");
+        $messageBody .= "{$LANG_GF02['msg25']}{$_CONF['site_name']} {$LANG_GF01['ADMIN']}\n";
+        list($digestMessage,$digestMessageText) = gfm_getoutput($last_reply_rec);
+    } else {
+        return;
+    }
     for ($i =1; $i <= $nrows; $i++) {
         $N = DB_fetchArray($sqlresult);
         // Don't need to send a notification to the user that posted this message and users with NOTIFY disabled
         if ($N['uid'] > 1 AND $N['uid'] != $userid AND $CONF_FORUM['allow_notification'] == '1' ) {
-
             // if the topic_id is 0 for this record - user has subscribed to complete forum. Check if they have opted out of this forum topic.
             if (DB_count($_TABLES['gf_watch'],array('uid','forum_id','topic_id'),array($N['uid'],$forumid,-$topicid)) == 0) {
-
                 // Check if user does not want to receive multiple notifications for same topic and already has been notified
                 $userNotifyOnceOption = DB_getItem($_TABLES['gf_userprefs'],'notify_once',"uid='{$N['uid']}'");
                 // Retrieve the log record for this user if it exists then check if user has viewed this topic yet
@@ -1119,36 +1191,21 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
                 }
 
                 if  ($userNotifyOnceOption == 0 OR ($userNotifyOnceOption == 1 AND ($nologRecord OR $logtime != 0)) ) {
-                    $topicrec = DB_query("SELECT subject,name,forum,last_reply_rec FROM {$_TABLES['gf_topic']} WHERE id='$pid'");
-                    $A = DB_fetchArray($topicrec);
                     $userrec = DB_query("SELECT username,email,status FROM {$_TABLES['users']} WHERE uid='{$N['uid']}'");
                     $B = DB_fetchArray($userrec);
                     if ($B['status'] == USER_ACCOUNT_ACTIVE) {
                         $subjectline = "{$_CONF['site_name']} {$LANG_GF02['msg22']}";
-                        $message  = "{$LANG_GF01['HELLO']} {$B['username']},\n\n";
-                        if ($type=='forum') {
-                            $forum_name = DB_getItem($_TABLES['gf_forums'],forum_name, "forum_id='$forumid'");
-                            $message .= sprintf($LANG_GF02['msg23b'],$A['subject'],$A['name'],$forum_name, $_CONF['site_name'],$_CONF['site_url'],$pid);
-                        } else {
-                            if ( $A['last_reply_rec'] != '' && $A['last_reply_rec'] != 0 ) {
-                                $last_reply_rec = $A['last_reply_rec'];
-                            } else {
-                                $last_reply_rec = $topicid;
-                            }
-                            $message .= sprintf($LANG_GF02['msg23a'],$A['subject'],$postername, $A['name'],$_CONF['site_name']);
-                            $message .= sprintf($LANG_GF02['msg23c'],$_CONF['site_url'],$pid,$last_reply_rec);
+                        $message  = "{$LANG_GF01['HELLO']} {$B['username']},\n\n" . $messageBody;
+                        if ($nologRecord and $userNotifyOnceOption == 1 ) {
+                            DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('{$N['uid']}', '$forumid', '$topicid','0') ");
                         }
-                        $message .= $LANG_GF02['msg26'];
-                        $message .= sprintf($LANG_GF02['msg27'],"{$_CONF['site_url']}/forum/notify.php");
-                        $message .= "{$LANG_GF02['msg25']}{$_CONF['site_name']} {$LANG_GF01['ADMIN']}\n";
-                        // Check and see if Site admin has enabled email notifications
-                        if ($CONF_FORUM['allow_notification']) {
-                            if ($nologRecord and $userNotifyOnceOption == 1 ) {
-                                DB_query("INSERT INTO {$_TABLES['gf_log']} (uid,forum,topic,time) VALUES ('{$N['uid']}', '$forumid', '$topicid','0') ");
-                            }
-                            $to = array();
-                            $to = COM_formatEmailAddress('',$B['email']);
-                            COM_mail($to,$subjectline,$message);
+                        $to = array();
+                        $to = COM_formatEmailAddress('',$B['email']);
+                        $notifyfull = DB_getItem($_TABLES['gf_userprefs'],'notify_full',"uid={$N['uid']}");
+                        if ( $notifyfull ) {
+                            COM_mail($to,$digestSubject, $digestMessage,'',true,0,'',$digestMessageText);
+                        } else {
+                            COM_mail($to,$subjectline,$message,false);
                         }
                     }
                 }
@@ -1156,5 +1213,4 @@ function gf_chknotifications($forumid,$topicid,$userid,$type='topic') {
         }
     }
 }
-
 ?>

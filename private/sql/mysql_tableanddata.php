@@ -329,7 +329,6 @@ CREATE TABLE {$_TABLES['stories']} (
   postmode varchar(10) NOT NULL default 'html',
   advanced_editor_mode tinyint(1) unsigned default '0',
   frontpage tinyint(3) unsigned default '1',
-  in_transit tinyint(1) unsigned default '0',
   owner_id mediumint(8) NOT NULL default '1',
   group_id mediumint(8) NOT NULL default '2',
   perm_owner tinyint(1) unsigned NOT NULL default '3',
@@ -344,7 +343,6 @@ CREATE TABLE {$_TABLES['stories']} (
   INDEX stories_expire(expire),
   INDEX stories_date(date),
   INDEX stories_frontpage(frontpage),
-  INDEX stories_in_transit(in_transit),
   PRIMARY KEY  (sid)
 ) TYPE=MyISAM
 ";
@@ -405,7 +403,7 @@ CREATE TABLE {$_TABLES['topics']} (
   tid varchar(20) NOT NULL default '',
   topic varchar(48) default NULL,
   imageurl varchar(255) default NULL,
-  sortnum tinyint(3) default NULL,
+  sortnum mediumint(8) default NULL,
   limitnews tinyint(3) default NULL,
   is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
   archive_flag tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -497,6 +495,7 @@ CREATE TABLE {$_TABLES['userprefs']} (
   emailfromadmin tinyint(1) NOT NULL default '1',
   emailfromuser tinyint(1) NOT NULL default '1',
   showonline tinyint(1) NOT NULL default '1',
+  search_result_format varchar( 48 ) NOT NULL DEFAULT 'google',
   PRIMARY KEY  (uid)
 ) TYPE=MyISAM
 ";
@@ -504,7 +503,7 @@ CREATE TABLE {$_TABLES['userprefs']} (
 $_SQL[] = "
 CREATE TABLE {$_TABLES['users']} (
   uid mediumint(8) NOT NULL auto_increment,
-  username varchar(16) NOT NULL default '',
+  username varchar(48) NOT NULL default '',
   remoteusername varchar(60) NULL,
   remoteservice varchar(60) NULL,
   fullname varchar(80) default NULL,

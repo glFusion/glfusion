@@ -100,7 +100,7 @@ function toggleFields() {
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
-            $('glfunctions').style.display='';
+            $('glfunctions').style.display='none';
             $('phpdiv').style.display='none';
             break;
     }

@@ -74,23 +74,9 @@ $INSTALL_plugin['polls'] = array(
   array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'edit_feature_id',
         'log' => 'Adding feature to the admin group'),
 
-  array('type' => 'sql', 'sql' => $_SQL['d1']),
-  array('type' => 'sql', 'sql' => $_SQL['d2']),
-  array('type' => 'sql', 'sql' => $_SQL['d3']),
-  array('type' => 'sql', 'sql' => $_SQL['d4']),
-  array('type' => 'sql', 'sql' => $_SQL['d5']),
-  array('type' => 'sql', 'sql' => $_SQL['d6']),
-  array('type' => 'sql', 'sql' => $_SQL['d7']),
-  array('type' => 'sql', 'sql' => $_SQL['d8']),
-  array('type' => 'sql', 'sql' => $_SQL['d9']),
-  array('type' => 'sql', 'sql' => $_SQL['d10']),
-  array('type' => 'sql', 'sql' => $_SQL['d11']),
-  array('type' => 'sql', 'sql' => $_SQL['d12']),
-
   array('type' => 'block', 'name' => 'polls_block', 'title' => 'Poll',
           'phpblockfn' => 'phpblock_polls', 'block_type' => 'phpblock',
           'group_id' => 'admin_group_id'),
-
 );
 
 

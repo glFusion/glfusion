@@ -50,7 +50,9 @@ function install_config($site_url)
     $c->add('site_name','','text',0,0,NULL,60,TRUE);
     $c->add('site_slogan','','text',0,0,NULL,70,TRUE);
     $c->add('microsummary_short','GL: ','text',0,0,NULL,80,TRUE);
-    $c->add('site_disabled_msg','glFusion Site is down. Please come back soon.','text',0,0,NULL,510,TRUE);
+    $site_disabled_msg = urldecode($site_url) . '/sitedown.html';
+    $c->add('site_disabled_msg',$site_disabled_msg,'text',0,0,NULL,510,TRUE);
+    $c->add('maintenance_mode',0,'select',0,0,0,520,TRUE);
     $c->add('copyrightyear','2009','text',0,0,NULL,1440,FALSE);
     $c->add('url_rewrite',FALSE,'select',0,0,1,1800,TRUE);
 
@@ -60,7 +62,7 @@ function install_config($site_url)
     $c->add('mail_backend','mail','select',0,1,20,60,TRUE);
     $c->add('mail_sendmail_path','','text',0,1,NULL,70,TRUE);
     $c->add('mail_sendmail_args','','text',0,1,NULL,80,TRUE);
-    $c->add('mail_smtp_host','','passwd',0,1,NULL,90,TRUE);
+    $c->add('mail_smtp_host','','text',0,1,NULL,90,TRUE);
     $c->add('mail_smtp_port','25','text',0,1,NULL,100,TRUE);
     $c->add('mail_smtp_auth',FALSE,'select',0,1,0,110,TRUE);
     $c->add('mail_smtp_username','','text',0,1,NULL,120,TRUE);
@@ -97,8 +99,8 @@ function install_config($site_url)
     $c->add('search_style','google','select',0,6,18,650,TRUE);
     $c->add('search_limits','10,15,25,30','text',0,6,NULL,660,TRUE);
     $c->add('num_search_results',25,'text',0,6,NULL,670,TRUE);
-    $c->add('search_show_limit',TRUE,'select',0,6,1,680,TRUE);
-    $c->add('search_show_sort',TRUE,'select',0,6,1,690,TRUE);
+//    $c->add('search_show_limit',TRUE,'select',0,6,1,680,TRUE);
+//    $c->add('search_show_sort',TRUE,'select',0,6,1,690,TRUE);
     $c->add('search_show_num',TRUE,'select',0,6,1,700,TRUE);
     $c->add('search_show_type',TRUE,'select',0,6,1,710,TRUE);
     $c->add('search_show_user',TRUE,'select',0,6,1,720,TRUE);
@@ -203,6 +205,7 @@ function install_config($site_url)
     $c->add('allow_account_delete',0,'select',4,16,0,270,TRUE);
     $c->add('hide_author_exclusion',0,'select',4,16,0,280,TRUE);
     $c->add('show_fullname',0,'select',4,16,0,290,TRUE);
+    $c->add('hide_exclude_content',1,'select',4,16,0,295,TRUE);
     $c->add('show_servicename',TRUE,'select',4,16,1,300,TRUE);
     $c->add('custom_registration',FALSE,'select',4,16,1,310,TRUE);
     $c->add('user_login_method',array('standard' => true, 'openid' => false, '3rdparty' => false),'@select',4,16,1,320,TRUE);
@@ -351,7 +354,7 @@ function install_config($site_url)
     $c->add('skip_html_filter_for_root',0,'select',7,34,0,1730,TRUE);
 
     $c->add('fs_censoring', NULL, 'fieldset', 7, 35, NULL, 0, TRUE);
-    $c->add('censormode',1,'select',7,35,0,1760,TRUE);
+    $c->add('censormode',1,'select',7,35,23,1760,TRUE);
     $c->add('censorreplace','*censored*','text',7,35,NULL,1770,TRUE);
     $c->add('censorlist', array('fuck','cunt','fucker','fucking','pussy','cock','c0ck',' cum ','twat','clit','bitch','fuk','fuking','motherfucker'),'%text',7,35,NULL,1780,TRUE);
 

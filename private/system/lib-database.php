@@ -228,12 +228,12 @@ function DB_query ($sql, $ignore_errors = 0)
 */
 function DB_save($table,$fields,$values,$return_page='')
 {
-    global $_DB,$_TABLES,$_CONF, $pageHandle;
+    global $_DB,$_TABLES,$_CONF;
 
     $_DB->dbSave($table,$fields,$values);
 
     if (!empty($return_page)) {
-       $pageHandle->redirect("$return_page");
+       print COM_refresh("$return_page");
     }
 
 }
@@ -251,12 +251,12 @@ function DB_save($table,$fields,$values,$return_page='')
 */
 function DB_delete($table,$id,$value,$return_page='')
 {
-    global $_DB,$_TABLES,$_CONF,$pageHandle;
+    global $_DB,$_TABLES,$_CONF;
 
     $_DB->dbDelete($table,$id,$value);
 
     if (!empty($return_page)) {
-        $pageHandle->redirect("$return_page");
+        print COM_refresh("$return_page");
     }
 
 }
@@ -298,12 +298,12 @@ function DB_getItem($table,$what,$selection='')
 */
 function DB_change($table,$item_to_set,$value_to_set,$id='',$value='',$return_page='',$supress_quotes=false)
 {
-    global $_DB,$_TABLES,$_CONF,$pageHandle;
+    global $_DB,$_TABLES,$_CONF;
 
     $_DB->dbChange($table,$item_to_set,$value_to_set,$id,$value,$supress_quotes);
 
     if (!empty($return_page)) {
-        $pageHandle->redirect("$return_page");
+        print COM_refresh("$return_page");
     }
 }
 
@@ -343,12 +343,12 @@ function DB_count($table,$id='',$value='')
 */
 function DB_copy($table,$fields,$values,$tablefrom,$id,$value,$return_page='')
 {
-    global $_DB,$_TABLES,$_CONF,$pageHandle;
+    global $_DB,$_TABLES,$_CONF;
 
     $_DB->dbCopy($table,$fields,$values,$tablefrom,$id,$value);
 
     if (!empty($return_page)) {
-        $pageHandle->redirect("$return_page");
+        print COM_refresh("$return_page");
     }
 }
 

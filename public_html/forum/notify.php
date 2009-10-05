@@ -227,6 +227,10 @@ while (list($notify_recid,$forum_id,$topic_id,$date_added) = DB_fetchARRAY($noti
         $topic_link = '<a href="' .$_CONF['site_url']. '/forum/index.php?forum=' .$forum_id. '" title="' .$subject. '">' .$subject. '</a>';
         $A['name'] = '';
         $A['uid'] = '';
+        $A['subject'] = '';
+        $A['replies'] = '';
+        $A['views'] = '';
+        $A['id'] = '';
     } else {
         if ($topic_id < 0) {
             $neg_subscription = true;
@@ -259,7 +263,7 @@ while (list($notify_recid,$forum_id,$topic_id,$date_added) = DB_fetchARRAY($noti
     $report->set_var ('uid', $A['uid']);
     $report->set_var ('views', $A['views']);
     $report->set_var ('replies', $A['replies']);
-    $report->set_var ('topic_id', $topicid);
+//    $report->set_var ('topic_id', $topicid);
     $report->set_var ('notify_id', $notify_recid);
     $report->set_var ('LANG_REMOVE', $LANG_GF01['REMOVE']);
     $report->parse ('notification_records', 'records',true);

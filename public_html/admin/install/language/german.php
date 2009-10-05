@@ -85,12 +85,12 @@ $LANG_INSTALL = array(
     'filesystem_check' => 'Überprüfe Dateisystem',
     'forum' => 'Forum-Plugin installieren?',
     'forum_desc' => 'Ein Community-Forum-System für gemeinschaftliche Zusammenarbeit und Austausch.',
-    'geeklog_migrate' => 'Einen Geeklog v1.5+ Auftritt importieren',
+    'geeklog_migrate' => 'Einen Geeklog v1.4.1+ Auftritt importieren',
     'hosting_env' => 'Hosting-Umgebung prüfen',
     'install' => 'Installieren',
     'install_heading' => 'glFusion Installation',
     'install_steps' => 'INSTALLATIONS-Schritte',
-    'invalid_geeklog_version' => 'Das Installationsprogramm kann die Datei siteconfig.php nicht finden. Wird tatsächlich ein Geeklog v1.5.0 oder höherer Auftritt importiert? Wenn es eine ältere Geeklog-Installation ist, dann bitte erst auf Geeklog v1.5.0 updaten und dann den Import noch mal versuchen.',
+    'invalid_geeklog_version' => 'Das Installationsprogramm kann die Datei siteconfig.php nicht finden. Wird tatsächlich ein Geeklog v1.4.1 oder höherer Auftritt importiert? Wenn es eine ältere Geeklog-Installation ist, dann bitte erst auf Geeklog v1.4.1 updaten und dann den Import noch mal versuchen.',
     'language' => 'Sprache',
     'language_task' => 'Sprache & Aufgabe',
     'libcustom_not_writable' => 'lib-custom.php nicht schreibbar.',
@@ -167,16 +167,17 @@ $LANG_INSTALL = array(
     'upgrade_steps' => 'UPGRADE-SCHRITTE',
     'upload_max_filesize' => 'glFusion ermöglicht das Hochladen von Plugins, Bildern und Dateien. Es sollten mindestens 8MB für das Hochladen eingestellt sein.',
     'use_utf8' => '<br />Zeichensatz benutzen UTF-8 ',
-    'welcome_help' => 'Willkommen beim glFusion-CMS Installations-Zauberer. Einen neuen glFusion-Auftritt installieren, auf den neusten Stand bringen, oder einen existierenden Geeklog v1.5 Auftritt importieren.<br /><br />Bitte die Sprache für den Zauberer auswählen, die gestellte Aufgabe und dann <strong>nächstes</strong> drücken.',
+    'welcome_help' => 'Willkommen beim glFusion-CMS Installations-Zauberer. Einen neuen glFusion-Auftritt installieren, auf den neusten Stand bringen, oder einen existierenden Geeklog v1.4.1 Auftritt importieren.<br /><br />Bitte die Sprache für den Zauberer auswählen, die gestellte Aufgabe und dann <strong>nächstes</strong> drücken.',
     'wizard_version' => 'v1.1.3.svn Installations-Zauberer',
-    'system_path_prompt' => 'Den vollen, absoluten Pfad auf dem Server zum glFusion <strong>private/</strong>-Verzeichnis.<br /><br />Dies Verzeichnis enthält die <strong>db-config.php.dist</strong> oder <strong>db-config.php</strong>-Datei.<br /><br />Beispiel: /home/www/glfuison/private oder c:/www/glfusion/private.<br /><br /><strong>Hinweis:</strong> Der absolute Pfad zum public_html/ -Verzeichnis scheint:<br />%s zu sein.<br /><br /><strong>Bei weitere Einstellungen</strong> kann man einige der Standardpfade verändern.  Im allgemeinen muss man diese Pfade nicht angeben oder ändern. Das System legt sie automatsich fest.',
+    'system_path_prompt' => 'Den vollen, absoluten Pfad auf dem Server zum glFusion <strong>private/</strong>-Verzeichnis.<br /><br />Dies Verzeichnis enthält die <strong>db-config.php.dist</strong> oder <strong>db-config.php</strong>-Datei.<br /><br />Beispiel: /home/www/glfusion/private oder c:/www/glfusion/private.<br /><br /><strong>Hinweis:</strong> Der absolute Pfad zum <strong>public_html/</strong> <i>(nicht <strong>private/</strong>)</i> -Verzeichnis scheint:<br /><br />%s zu sein.<br /><br /><strong>Bei weitere Einstellungen</strong> kann man einige der Standardpfade verändern.  Im allgemeinen muss man diese Pfade nicht angeben oder ändern. Das System legt sie automatsich fest.',
     'advanced_settings' => 'Weitere Einstellungen',
     'log_path' => 'Pfad zu Logs',
     'lang_path' => 'Pfad zu Language',
     'backup_path' => 'Pfad zu Backups',
     'data_path' => 'Pfad zu Data',
     'language_support' => 'Sprachunterstützung',
-    'language_pack' => 'glFusion kommt zunächst mit englischer Sprachunterstützung. Nach der Installation kann man das <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Sprachpaket</a> runterladen und installieren, dass alle unterstützten Sprachen enthält.'
+    'language_pack' => 'glFusion kommt zunächst mit englischer Sprachunterstützung. Nach der Installation kann man das <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Sprachpaket</a> runterladen und installieren, dass alle unterstützten Sprachen enthält.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

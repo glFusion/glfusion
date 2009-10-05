@@ -13,7 +13,7 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2004-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
 // +--------------------------------------------------------------------------+
@@ -34,7 +34,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('lib-common.php');
+require_once 'lib-common.php';
 
 // configuration option:
 // List stories for the current month on top of the overview page
@@ -48,9 +48,9 @@ $display = '';
 
 if (empty ($_USER['username']) && (($_CONF['loginrequired'] == 1) ||
                                    ($_CONF['directoryloginrequired'] == 1))) {
-    $pageHandle->setPageTitle($LANG_DIR['title']);
-    $pageHandle->addContent(COM_startBlock ($LANG_LOGIN[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header')));
+    $display = COM_siteHeader ('menu', $LANG_DIR['title']);
+    $display .= COM_startBlock ($LANG_LOGIN[1], '',
+                                COM_getBlockTemplate ('_msg_block', 'header'));
     $login = new Template ($_CONF['path_layout'] . 'submit');
     $login->set_file (array ('login' => 'submitloginrequired.thtml'));
     $login->set_var ( 'xhtml', XHTML );
@@ -60,9 +60,10 @@ if (empty ($_USER['username']) && (($_CONF['loginrequired'] == 1) ||
     $login->set_var ('lang_login', $LANG_LOGIN[3]);
     $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
     $login->parse ('output', 'login');
-    $pageHandle->addContent($login->finish ($login->get_var ('output')));
-    $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));
-    $pageHandle->displayPage();
+    $display .= $login->finish ($login->get_var ('output'));
+    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_siteFooter ();
+    echo $display;
     exit;
 }
 
@@ -72,7 +73,7 @@ if (empty ($_USER['username']) && (($_CONF['loginrequired'] == 1) ||
 * @param    int     $month  Month
 * @param    int     $year   Year
 * @return   int             Number of days in that month
-* @bugs     Will fail from 2038 onwards ...
+* @todo     Bug: Will fail from 2038 onwards ...
 *
 * "The last day of any given month can be expressed as the "0" day
 * of the next month", http://www.php.net/manual/en/function.mktime.php
@@ -97,7 +98,7 @@ function DIR_lastDayOfMonth ($month, $year)
 * @param    string  $topic          current topic
 * @param    int     $year           current year
 * @param    int     $month          current month
-* @param    bool    $standalone     true: don't display form inline
+* @param    boolean $standalone     true: don't display form inline
 *
 */
 function DIR_topicList ($topic = 'all', $year = 0, $month = 0, $standalone = false)
@@ -139,12 +140,12 @@ function DIR_topicList ($topic = 'all', $year = 0, $month = 0, $standalone = fal
 */
 function DIR_monthLink ($topic, $year, $month, $count)
 {
-    global $_CONF, $LANG_MONTH, $pageHandle;
+    global $_CONF, $LANG_MONTH;
 
     $retval = $LANG_MONTH[$month] . ' (' . COM_numberFormat ($count) . ')' . LB;
 
     if ($count > 0) {
-        $month_url = $pageHandle->buildUrl ($_CONF['site_url'] . '/'
+        $month_url = COM_buildUrl ($_CONF['site_url'] . '/'
             . THIS_SCRIPT . '?topic=' . urlencode ($topic) . '&amp;year='
             . $year . '&amp;month=' . $month);
         $retval =  COM_createLink ($retval, $month_url);
@@ -166,7 +167,7 @@ function DIR_monthLink ($topic, $year, $month, $count)
 */
 function DIR_navBar ($topic, $year, $month = 0)
 {
-    global $_CONF, $_TABLES, $LANG05, $LANG_DIR, $pageHandle;
+    global $_CONF, $_TABLES, $LANG05, $LANG_DIR;
 
     $retval = '';
 
@@ -207,7 +208,7 @@ function DIR_navBar ($topic, $year, $month = 0)
         if ($month > 0) {
             $url .= '&amp;month=' . $prevmonth;
         }
-        $retval .= COM_createLink($LANG05[6], $pageHandle->buildUrl ($url));
+        $retval .= COM_createLink($LANG05[6], COM_buildUrl ($url));
     } else {
         $retval .= $LANG05[6];
     }
@@ -216,7 +217,7 @@ function DIR_navBar ($topic, $year, $month = 0)
 
     $url = $_CONF['site_url'] . '/' . THIS_SCRIPT;
     if ($topic != 'all') {
-        $url = $pageHandle->buildUrl ($url . '?topic=' . urlencode ($topic));
+        $url = COM_buildUrl ($url . '?topic=' . urlencode ($topic));
     }
 
     $retval .= COM_createLink($LANG_DIR['nav_top'] , $url);
@@ -229,7 +230,7 @@ function DIR_navBar ($topic, $year, $month = 0)
         if ($month > 0) {
             $url .= '&amp;month=' . $nextmonth;
         }
-        $retval .= COM_createLink($LANG05[5], $pageHandle->buildUrl ($url));
+        $retval .= COM_createLink($LANG05[5], COM_buildUrl ($url));
     } else {
         $retval .= $LANG05[5];
     }
@@ -245,13 +246,13 @@ function DIR_navBar ($topic, $year, $month = 0)
 * @param    string  $topic  current topic
 * @param    int     $year   year to display
 * @param    int     $month  month to display
-* @param    bool    $main   true: display view on its own page
+* @param    boolean $main   true: display view on its own page
 * @return   string          list of articles for the given month
 *
 */
 function DIR_displayMonth ($topic, $year, $month, $main = false)
 {
-    global $_CONF, $_TABLES, $LANG_MONTH, $LANG_DIR, $pageHandle;
+    global $_CONF, $_TABLES, $LANG_MONTH, $LANG_DIR;
 
     $retval = '';
 
@@ -297,7 +298,7 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
                 $mday = $A['mday'];
             }
 
-            $url = $pageHandle->buildUrl ($_CONF['site_url'] . '/article.php?story='
+            $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='
                                  . $A['sid']);
             $entries[] = COM_createLink(stripslashes ($A['title']), $url);
         }
@@ -320,7 +321,7 @@ function DIR_displayMonth ($topic, $year, $month, $main = false)
 *
 * @param    string  $topic  current topic
 * @param    int     $year   year to display
-* @param    bool    $main   true: display view on its own page
+* @param    boolean $main   true: display view on its own page
 * @return   string          list of months (+ number of stories) for given year
 *
 */
@@ -409,7 +410,7 @@ function DIR_displayYear ($topic, $year, $main = false)
 * the stories for the current month at the top of the page.
 *
 * @param    string  $topic                  current topic
-* @param    bool    $list_current_month     true = list stories f. current month
+* @param    boolean $list_current_month     true = list stories f. current month
 * @return   string                          list of all the years in the db
 *
 */
@@ -450,13 +451,48 @@ function DIR_displayAll ($topic, $list_current_month = false)
     return $retval;
 }
 
+/**
+* Return a canonical link
+*
+* @param    string  $topic  current topic or 'all'
+* @param    int     $year   current year
+* @param    int     $month  current month
+* @return   string          <link rel="canonical" ...> tag
+*
+*/
+function DIR_canonicalLink($topic, $year = 0, $month = 0)
+{
+    global $_CONF;
+
+    $script = $_CONF['site_url'].'/'.THIS_SCRIPT;
+
+    $tp = '?topic=' . urlencode($topic);
+    $parts = '';
+    if (($year != 0) && ($month != 0)) {
+        $parts .= "&amp;year=$year&amp;month=$month";
+    } elseif ($year != 0) {
+        $parts .= "&amp;year=$year";
+    } elseif ($topic == 'all') {
+        $tp = '';
+    }
+    $url = COM_buildUrl($script . $tp . $parts);
+
+    return '<link rel="canonical" href="'.$url.'"'.XHTML.'>' . LB;
+}
+
 // MAIN
 $display = '';
 
-$inputHandler->setArgNames (array ('topic', 'year', 'month'));
-$topic = $inputHandler->getVar('strict','topic',array('post','get'),'all');
-$year  = $inputHandler->getVar('integer','year',array('post','get'),0);
-$month = $inputHandler->getVar('integer','month',array('post','get'),0);
+if (isset ($_POST['topic']) && isset ($_POST['year']) && isset ($_POST['month'])) {
+    $topic = $_POST['topic'];
+    $year = $_POST['year'];
+    $month = $_POST['month'];
+} else {
+    COM_setArgNames (array ('topic', 'year', 'month'));
+    $topic = COM_getArgument ('topic');
+    $year = COM_getArgument ('year');
+    $month = COM_getArgument ('month');
+}
 
 $topic = COM_applyFilter ($topic);
 if (empty ($topic)) {
@@ -471,20 +507,39 @@ if (($month < 1) || ($month > 12)) {
     $month = 0;
 }
 
+$topicName = '';
+if ($topic != 'all') {
+    $topicName = DB_getItem($_TABLES['topics'], 'topic',
+                            "tid = '" . addslashes($topic) . "'");
+}
 if (($year != 0) && ($month != 0)) {
     $title = sprintf ($LANG_DIR['title_month_year'],
                       $LANG_MONTH[$month], $year);
-    $pageHandle->setPageTitle($title);
-    $pageHandle->addContent(DIR_displayMonth ($topic, $year, $month, true));
-    $pageHandle->addContent(DIR_navBar ($topic, $year, $month));
+    if ($topic != 'all') {
+        $title .= ': ' . $topicName;
+    }
+    $display .= COM_siteHeader('menu', $title,DIR_canonicalLink($topic,$year,$month));
+    $display .= DIR_displayMonth ($topic, $year, $month, true);
+    $display .= DIR_navBar ($topic, $year, $month);
 } else if ($year != 0) {
     $title = sprintf ($LANG_DIR['title_year'], $year);
-    $pageHandle->setPageTitle($title);
-    $pageHandle->addContent(DIR_displayYear ($topic, $year, true));
-    $pageHandle->addContent(DIR_navBar ($topic, $year));
+    if ($topic != 'all') {
+        $title .= ': ' . $topicName;
+    }
+    $display .= COM_siteHeader('menu', $title, DIR_canonicalLink($topic,$year));
+    $display .= DIR_displayYear($topic, $year, true);
+    $display .= DIR_navBar($topic, $year);
 } else {
-    $pageHandle->setPageTitle($LANG_DIR['title']);
-    $pageHandle->addContent(DIR_displayAll ($topic, $conf_list_current_month));
+    $title = $LANG_DIR['title'];
+    if ($topic != 'all') {
+        $title .= ': ' . $topicName;
+    }
+    $display .= COM_siteHeader('menu', $title, DIR_canonicalLink($topic));
+    $display .= DIR_displayAll($topic, $conf_list_current_month);
 }
-$pageHandle->displayPage();
+
+$display .= COM_siteFooter (true);
+
+echo $display;
+
 ?>

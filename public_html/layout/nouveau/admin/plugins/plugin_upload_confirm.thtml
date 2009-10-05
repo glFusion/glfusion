@@ -10,7 +10,7 @@
 </tr>
 
 <tr>
-    <td class="alignright"><b>{$LANG32[28]}:</b></td>
+    <td class="alignright"><b>{$LANG32[33]}:</b></td>
     <td>{pi_version}</td>
 </tr>
 
@@ -21,7 +21,7 @@
 
 {!if upgrade}
 <tr>
-    <td class="alignright"><b>{$LANG32[33]}:</b></td>
+    <td class="alignright"><b>{$LANG32[28]}:</b></td>
     <td>{plugin_old_version}</td>
 </tr>
 {!endif}

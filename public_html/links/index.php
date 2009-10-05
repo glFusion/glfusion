@@ -351,7 +351,7 @@ function prepare_link_item ($A, &$template)
     $template->set_var ('link_name', stripslashes ($A['title']));
     $template->set_var ('link_hits', COM_numberFormat ($A['hits']));
     $template->set_var ('link_description',
-                        nl2br (stripslashes ($A['description'])));
+                        nl2br (PLG_replaceTags(stripslashes ($A['description']))));
     $content = stripslashes ($A['title']);
 
     if ( $_LI_CONF['target_blank'] == 1 ) {
@@ -408,7 +408,22 @@ $message = array();
 if ( $mode == 'submit' ) {
     if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
-        echo COM_refresh ($_CONF['site_url'] . '/links/index.php');
+        $display .= COM_siteHeader ('menu', $LANG_LINKS[114]);
+        $display .= COM_startBlock ($LANG_LOGIN[1], '',
+                                    COM_getBlockTemplate ('_msg_blockx', 'header'));
+        $login = new Template ($_CONF['path_layout'] . 'submit');
+        $login->set_file (array ('login' => 'submitloginrequired.thtml'));
+        $login->set_var ( 'xhtml', XHTML );
+        $login->set_var ('login_message', $LANG_LOGIN[2]);
+        $login->set_var ('site_url', $_CONF['site_url']);
+        $login->set_var ('lang_login', $LANG_LOGIN[3]);
+        $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
+        $login->parse ('output', 'login');
+        $display .= $login->finish ($login->get_var ('output'));
+        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_blockx', 'footer'));
+        $display .= COM_siteFooter ();
+
+        echo $display;
         exit;
     }
 

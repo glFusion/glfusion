@@ -13,7 +13,7 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
 // |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
@@ -42,82 +42,23 @@ $_USER_VERBOSE = false;
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-
 USES_lib_user();
+
+$display = '';
 
 // Make sure user has access to this page
 if (!SEC_hasRights('user.edit')) {
-    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[37],'the user administration screen.');
+    $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $retval .= COM_startBlock ($MESSAGE[30], '',
+               COM_getBlockTemplate ('_msg_block', 'header'));
+    $retval .= $MESSAGE[37];
+    $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $retval .= COM_siteFooter ();
+    COM_accessLog("User {$_USER['username']} tried to illegally access the user administration screen.");
+    echo $retval;
+    exit;
 }
 
-/**
-* Display a list of checkboxes for the user's group assignments
-*
-* @param    string  $table      DB Table to pull data from
-* @param    string  $selection  Comma delimited list of fields to pull from table
-* @param    string  $where      Where clause of SQL statement
-* @param    string  $selected   Value to set to CHECKED
-* @return   string              HTML with Checkbox code
-* @see function COM_checkList
-*
-*/
-function GROUP_checkList($table, $selection, $where='', $selected='', $orderby='')
-{
-    global $_TABLES, $LANG_ACCESS;
-
-    $retval = '';
-
-    $sql = "SELECT $selection FROM $table";
-    if (!empty($where)) {
-        $sql .= " WHERE $where";
-    }
-    if (!empty($orderby)) {
-        $sql .= " ORDER BY $orderby";
-    }
-    $result = DB_query($sql);
-    $nrows = DB_numRows($result);
-
-    if (empty($selected)) {
-        $S = array();
-    } else {
-        $S = explode(' ', $selected);
-    }
-    $num_selected = count($S);
-
-    for ($i = 0; $i < $nrows; $i++) {
-        $A = DB_fetchArray($result, true);
-
-        $readonly = false;
-        $input = '<input type="checkbox"';
-
-        for ($x = 0; $x < $num_selected; $x++) {
-            if ($A[0] == $S[$x]) {
-                $input .= ' checked="checked"';
-
-                if (($A[1] == 'All Users') || ($A[1] == 'Logged-in Users')) {
-                    $readonly = true;
-                }
-            }
-        }
-        if ($A[1] == 'Remote Users') {
-            $readonly = true;
-        }
-
-        if ($readonly) {
-            $input .= ' disabled="disabled"' . XHTML . '>'
-                   . '<input type="hidden" name="' . $table . '[]" value="'
-                   . $A[0] . '" checked="checked"' . XHTML . '>';
-            $retval .= '<span title="' . $LANG_ACCESS['readonly'] . '">'
-                    . $input . stripslashes($A[1]) . '</span><br' . XHTML . '>' . LB;
-        } else {
-            $input .= ' name="' . $table . '[]" value="' . $A[0] . '"';
-            $retval .= $input . XHTML . '>' . stripslashes($A[1])
-                    . '<br' . XHTML . '>' . LB;
-        }
-    }
-
-    return $retval;
-}
 
 /**
 * Shows the user edit form
@@ -130,7 +71,9 @@ function GROUP_checkList($table, $selection, $where='', $selected='', $orderby='
 function edituser($uid = '', $msg = '')
 {
     global $_CONF, $_TABLES, $_USER, $LANG28, $LANG_ACCESS, $LANG_ADMIN,
-           $MESSAGE, $pageHandle;
+           $MESSAGE;
+
+    USES_lib_admin();
 
     $retval = '';
     $newuser = 0;
@@ -155,7 +98,7 @@ function edituser($uid = '', $msg = '')
         $result = DB_query("SELECT * FROM {$_TABLES['users']} WHERE uid = '$uid'");
         $A = DB_fetchArray($result);
         if (empty ($A['uid'])) {
-            $pageHandle->redirect ($_CONF['site_admin_url'] . '/user.php');
+            return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
         }
 
         if (SEC_inGroup('Root',$uid) AND !SEC_inGroup('Root')) {
@@ -340,9 +283,39 @@ function edituser($uid = '', $msg = '')
             $thisUsersGroups[] = $remoteGroup;
         }
         $where = 'grp_id IN (' . implode (',', $thisUsersGroups) . ')';
-        $user_templates->set_var ('group_options',
-                GROUP_checkList ($_TABLES['groups'], 'grp_id,grp_name',
-                                 $where, $selected, 'grp_name'));
+
+        $header_arr = array(
+                        array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false),
+                        array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
+                        array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
+        );
+        $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
+
+        $text_arr = array('has_menu' => false,
+                          'title' => '', 'instructions' => '',
+                          'icon' => '', 'form_url' => $form_url,
+                          'inline' => true
+        );
+
+        $sql = "SELECT grp_id, grp_name, grp_descr FROM {$_TABLES['groups']} WHERE " . $where;
+        $query_arr = array('table' => 'groups',
+                           'sql' => $sql,
+                           'query_fields' => array('grp_name'),
+                           'default_filter' => '',
+                           'query' => '',
+                           'query_limit' => 0
+        );
+
+        $selArray = explode(' ',$selected);
+        $al_selected[0] = $uid;
+        $al_selected[1] = $selArray;
+
+        $groupoptions = ADMIN_list('usergroups',
+                                   'ADMIN_getListField_usergroups',
+                                   $header_arr, $text_arr, $query_arr,
+                                   $defsort_arr, '', $al_selected);
+        $user_templates->set_var('group_options', $groupoptions);
+
         $user_templates->parse('group_edit', 'groupedit', true);
     } else {
         // user doesn't have the rights to edit a user's groups so set to -1
@@ -459,7 +432,7 @@ function listusers()
 */
 function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $regdate, $homepage, $groups, $delete_photo = '', $userstatus=3, $oldstatus=3)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG28, $_USER_VERBOSE, $pageHandle;
+    global $_CONF, $_TABLES, $_USER, $LANG28, $_USER_VERBOSE;
 
     $retval = '';
     $userChanged = false;
@@ -467,16 +440,31 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
     if ($_USER_VERBOSE) COM_errorLog("**** entering saveusers****",1);
     if ($_USER_VERBOSE) COM_errorLog("group size at beginning = " . sizeof($groups),1);
 
+    if ( $uid == 1 ) {
+        return listusers();
+    }
+
     if ($passwd != $passwd_conf) { // passwords don't match
         return edituser ($uid, 67);
     }
 
-    if (!empty ($username) && !empty ($email)) {
-
-        if (!COM_isEmail ($email)) {
-            return edituser ($uid, 52);
+    $validEmail = true;
+    if (empty($username)) {
+        $validEmail = false;
+    } elseif (empty($email)) {
+        if (empty($uid)) {
+            $validEmail = false;
+        } else {
+            $ws_user = DB_getItem($_TABLES['users'], 'remoteservice',"uid = ".intval($uid));
+            if (empty($ws_user)) {
+                $validEmail = false;
+            }
         }
-
+    }
+    if ( $validEmail ) {
+        if (!empty($email) && !COM_isEmail($email)) {
+           return edituser ($uid, 52);
+        }
         $uname = addslashes ($username);
         if (empty ($uid)) {
             $ucount = DB_getItem ($_TABLES['users'], 'COUNT(*)',
@@ -516,6 +504,17 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
         if ($ucount > 0) {
             // Admin just changed a user's email to one that already exists
             return edituser($uid, 56);
+        }
+
+        if ($_CONF['custom_registration'] && function_exists('CUSTOM_userCheck')) {
+            $ret = CUSTOM_userCheck($username, $email);
+            if (! empty($ret)) {
+                // need a numeric return value - otherwise use default message
+                if (! is_numeric($ret['number'])) {
+                    $ret['number'] = 97;
+                }
+                return edituser($uid, $ret['number']);
+            }
         }
 
         if (empty ($uid) || !empty ($passwd)) {
@@ -558,10 +557,11 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
                     $imgpath = $_CONF['path_images'] . 'userphotos/';
                     if (rename ($imgpath . $curphoto,
                                 $imgpath . $newphoto) === false) {
-                        $pageHandle->setPageTitle($LANG28[22]);
-                        $pageHandle->addContent(COM_errorLog ('Could not rename userphoto "'
-                                        . $curphoto . '" to "' . $newphoto . '".'));
-                        $pageHandle->displayPage();
+                        $display = COM_siteHeader ('menu', $LANG28[22]);
+                        $display .= COM_errorLog ('Could not rename userphoto "'
+                                        . $curphoto . '" to "' . $newphoto . '".');
+                        $display .= COM_siteFooter ();
+                        return $display;
                     }
                     $curphoto = $newphoto;
                 }
@@ -590,7 +590,7 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
                                        "grp_name = 'Root'");
                 if (in_array ($rootgrp, $groups)) {
                     COM_accessLog ("User {$_USER['username']} ({$_USER['uid']}) just tried to give Root permissions to user $username.");
-                    $pageHandle->redirect ($_CONF['site_admin_url'] . '/index.php');
+                    echo COM_refresh ($_CONF['site_admin_url'] . '/index.php');
                     exit;
                 }
             }
@@ -641,7 +641,7 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
         if ($userChanged) {
             PLG_userInfoChanged ($uid);
         }
-
+        CACHE_remove_instance('stmenu');
         $errors = DB_error();
         if (empty($errors)) {
             echo PLG_afterSaveSwitch (
@@ -651,21 +651,23 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
                 21
             );
         } else {
-            $pageHandle->setPageTitle($LANG28[22]);
-            $pageHandle->addContent(COM_errorLog ('Error in saveusers in '
-                                     . $_CONF['site_admin_url'] . '/user.php'));
-            $pageHandle->displayPage();
+            $retval .= COM_siteHeader ('menu', $LANG28[22]);
+            $retval .= COM_errorLog ('Error in saveusers in '
+                                     . $_CONF['site_admin_url'] . '/user.php');
+            $retval .= COM_siteFooter ();
+            echo $retval;
             exit;
         }
     } else {
-        $pageHandle->setPageTitle($LANG28[1]);
-        $pageHandle->addContent(COM_errorLog($LANG28[10]));
+        $retval = COM_siteHeader('menu', $LANG28[1]);
+        $retval .= COM_errorLog($LANG28[10]);
         if (DB_count($_TABLES['users'],'uid',$uid) > 0) {
-            $pageHandle->addContent(edituser($uid));
+            $retval .= edituser($uid);
         } else {
-            $pageHandle->addContent(edituser());
+            $retval .= edituser();
         }
-        $pageHandle->displayPage();
+        $retval .= COM_siteFooter();
+        echo $retval;
         exit;
     }
 
@@ -682,7 +684,7 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
 */
 function batchdelete()
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG01, $LANG28, $_IMAGE_TYPE,$inputHandler, $pageHandle;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG01, $LANG28, $_IMAGE_TYPE;
 
     $display = '';
     if (!$_CONF['lastlogin']) {
@@ -690,15 +692,19 @@ function batchdelete()
         return $retval;
     }
 
-    USES_lib_admin();
+    require_once $_CONF['path_system'] . 'lib-admin.php';
 
-    $usr_type = $inputHandler->getVar('strict','usr_type','request','phantom');
+    $usr_type = '';
+    if (isset($_REQUEST['usr_type'])) {
+        $usr_type = COM_applyFilter($_REQUEST['usr_type']);
+    } else {
+        $usr_type = 'phantom';
+    }
     $usr_time_arr = array();
-    $usr_time = $inputHandler->getVar('raw','usr_time','request','');
-    if ( $usr_time == '' ) {
-//    if (isset($_REQUEST['usr_time'])) {
-//        $usr_time_arr = $_REQUEST['usr_time'];
-//    } else {
+    $usr_time = '';
+    if (isset($_REQUEST['usr_time'])) {
+        $usr_time_arr = $_REQUEST['usr_time'];
+    } else {
         $usr_time_arr['phantom'] = 2;
         $usr_time_arr['short'] = 6;
         $usr_time_arr['old'] = 24;
@@ -804,7 +810,7 @@ function batchdelete()
                       'has_extras'   => true,
                       'title'        => $LANG28[54],
                       'instructions' => "$desc",
-                      'icon'         => $pageHandle->getImage('/icons/user.png'),
+                      'icon'         => $_CONF['layout_url'] . '/images/icons/user.' . $_IMAGE_TYPE,
                       'form_url'     => $_CONF['site_admin_url'] . "/user.php?mode=batchdelete&amp;usr_type=$usr_type&amp;usr_time=$usr_time",
                       'help_url'     => ''
     );
@@ -853,6 +859,8 @@ function batchdelete()
                            $text_arr, $query_arr, $defsort_arr, '', '',
                            $listoptions, $form_arr);
 
+    // $display .= "<input type=\"hidden\" name=\"mode\" value=\"batchdeleteexec\"" . XHTML . "></form>" . LB;
+
     return $display;
 }
 
@@ -864,7 +872,7 @@ function batchdelete()
 */
 function batchdeleteexec()
 {
-    global $_CONF, $LANG28, $inputHandler;
+    global $_CONF, $LANG28;
 
     $msg = '';
     $user_list = array();
@@ -879,7 +887,7 @@ function batchdeleteexec()
 
     if (isset($user_list) AND is_array($user_list)) {
         foreach($user_list as $delitem) {
-            $delitem = $inputHandler->filterVar('strict',$delitem,'');
+            $delitem = COM_applyFilter($delitem);
             if (!USER_deleteAccount ($delitem)) {
                 $msg .= "<strong>{$LANG28[2]} $delitem {$LANG28[70]}</strong><br" . XHTML . ">\n";
             } else {
@@ -887,7 +895,7 @@ function batchdeleteexec()
             }
         }
     }
-
+    CACHE_remove_instance('stmenu');
     // Since this function is used for deletion only, it's necessary to say that
     // zero were deleted instead of just leaving this message away.
     COM_numberFormat($c); // just in case we have more than 999 ...
@@ -905,7 +913,7 @@ function batchdeleteexec()
 */
 function batchreminders()
 {
-    global $_CONF, $_TABLES, $LANG04, $LANG28, $inputHandler;
+    global $_CONF, $_TABLES, $LANG04, $LANG28;
 
     $msg = '';
     $user_list = array();
@@ -920,7 +928,7 @@ function batchreminders()
 
     if (isset($_POST['delitem']) AND is_array($_POST['delitem'])) {
         foreach($_POST['delitem'] as $delitem) {
-            $userid = $inputHandler->filterVar('strict',$delitem,'');
+            $userid = COM_applyFilter($delitem);
             $useremail = DB_getItem ($_TABLES['users'], 'email', "uid = '$userid'");
             $username = DB_getItem ($_TABLES['users'], 'username', "uid = '$userid'");
             $lastlogin = DB_getItem ($_TABLES['userinfo'], 'lastlogin', "uid = '$userid'");
@@ -995,7 +1003,7 @@ function batchreminders()
 */
 function importusers()
 {
-    global $_CONF, $_TABLES, $LANG04, $LANG28, $inputHandler, $pageHandle;
+    global $_CONF, $_TABLES, $LANG04, $LANG28;
 
     // Setting this to true will cause import to print processing status to
     // webpage and to the error.log file
@@ -1018,24 +1026,26 @@ function importusers()
         // Good, file got uploaded, now install everything
         $filename = $_CONF['path_data'] . 'user_import_file.txt';
         if (!file_exists($filename)) { // empty upload form
-            $pageHandle->redirect($_CONF['site_admin_url']
+            $retval = COM_refresh($_CONF['site_admin_url']
                                   . '/user.php?mode=importform');
+            return $retval;
         }
     } else {
         // A problem occurred, print debug information
-        $pageHandle->setPageTitle($LANG28[22]);
-        $pageHandle->addContent(COM_startBlock ($LANG28[24], '',
-                                    COM_getBlockTemplate ('_msg_block', 'header')));
-        $pageHandle->addContent($upload->printErrors(false));
-        $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));
-        $pageHandle->displayPage();
+        $retval = COM_siteHeader ('menu', $LANG28[22]);
+        $retval .= COM_startBlock ($LANG28[24], '',
+                COM_getBlockTemplate ('_msg_block', 'header'));
+        $retval .= $upload->printErrors(false);
+        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_siteFooter();
+        return $retval;
     }
 
     $users = file ($filename);
 
-    $pageHandle->setPageTitle($LANG28[24]);
-    $pageHandle->addContent(COM_startBlock ($LANG28[31], '',
-            COM_getBlockTemplate ('_admin_block', 'header')));
+    $retval .= COM_siteHeader ('menu', $LANG28[24]);
+    $retval .= COM_startBlock ($LANG28[31], '',
+            COM_getBlockTemplate ('_admin_block', 'header'));
 
     // Following variables track import processing statistics
     $successes = 0;
@@ -1049,8 +1059,8 @@ function importusers()
         list ($full_name, $u_name, $email) = explode ("\t", $line);
 
         $full_name = strip_tags ($full_name);
-        $u_name = $inputHandler->filterVar('strict',$u_name,'');
-        $email  = $inputHandler->filterVar('strict',$email,'');
+        $u_name = COM_applyFilter ($u_name);
+        $email = COM_applyFilter ($email);
 
         if ($verbose_import) {
             $retval .="<br" . XHTML . "><b>Working on username=$u_name, fullname=$full_name, and email=$email</b><br" . XHTML . ">\n";
@@ -1103,11 +1113,13 @@ function importusers()
     } // end foreach
 
     unlink ($filename);
+    CACHE_remove_instance('stmenu');
+    $retval .= '<p>' . sprintf ($LANG28[32], $successes, $failures);
 
-    $pageHandle->addContent($retval);
-    $pageHandle->addContent('<p>' . sprintf ($LANG28[32], $successes, $failures));
-    $pageHandle->addContent(COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer')));
-    $pageHandle->displayPage();
+    $retval .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
+    $retval .= COM_siteFooter ();
+
+    return $retval;
 }
 
 /**
@@ -1143,115 +1155,130 @@ function display_batchAddform()
 */
 function deleteUser ($uid)
 {
-    global $_CONF,$pageHandle;
+    global $_CONF;
 
     if (!USER_deleteAccount ($uid)) {
-        $pageHandle->redirect($_CONF['site_admin_url'] . '/user.php');
+        return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
     }
-
-    $pageHandle->redirect($_CONF['site_admin_url'] . '/user.php?msg=22');
+    CACHE_remove_instance('stmenu');
+    return COM_refresh ($_CONF['site_admin_url'] . '/user.php?msg=22');
 }
 
 // MAIN
+$mode = '';
+if (isset($_REQUEST['mode'])) {
+    $mode = $_REQUEST['mode'];
+}
 
-$pageHandle->setShowExtraBlocks(false);
-
-$mode = $inputHandler->getVar('strict','mode','request','');
-$delbutton = $inputHandler->getVar('strict','delbutton_x','post','');
-if ( $delbutton != '' ) {
+if (isset($_POST['delbutton_x'])) {
     $mode = 'batchdeleteexec';
 }
-$order = $inputHandler->getVar('integer','order','request',0);
-$direction = $inputHandler->getVar('strict','direction','get','');
+
+if (isset ($_REQUEST['order'])) {
+    $order =  COM_applyFilter ($_REQUEST['order'],true);
+}
+
+if (isset ($_GET['direction'])) {
+    $direction =  COM_applyFilter ($_GET['direction']);
+}
 
 if (isset ($_POST['passwd']) && isset ($_POST['passwd_conf']) &&
         ($_POST['passwd'] != $_POST['passwd_conf'])) {
     // entered passwords were different
-    $uid = $inputHandler->getVar('integer','uid','post',0);
+    $uid = COM_applyFilter ($_POST['uid'], true);
     if ($uid > 1) {
-        $pageHandle->redirect ($_CONF['site_admin_url']
+        $display .= COM_refresh ($_CONF['site_admin_url']
                                  . '/user.php?mode=edit&amp;msg=67&amp;uid=' . $uid);
     } else {
-        $pageHandle->redirect ($_CONF['site_admin_url'] . '/user.php?msg=67');
+        $display .= COM_refresh ($_CONF['site_admin_url'] . '/user.php?msg=67');
     }
 } elseif (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) { // delete
-    $uid = $inputHandler->getVar('integer','uid','post',0);
+    $uid = COM_applyFilter($_POST['uid'], true);
     if ($uid <= 1) {
         COM_errorLog('Attempted to delete user uid=' . $uid);
-        $pageHandle->redirect($_CONF['site_admin_url'] . '/user.php');
+        $display = COM_refresh($_CONF['site_admin_url'] . '/user.php');
     } elseif (SEC_checkToken()) {
         $display .= deleteUser($uid);
     } else {
         COM_accessLog("User {$_USER['username']} tried to illegally delete user $uid and failed CSRF checks.");
-        $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
+        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
     }
-} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) { // save
-
-    $uid         = $inputHandler->getVar('integer','uid','post',0);
-    $username    = $inputHandler->getVar('strict','username','post','');
-    $fullname    = $inputHandler->getVar('text','fullname','post','');
-    $passwd      = $inputHandler->getVar('strict','passwd','post','');
-    $passwd_conf = $inputHandler->getVar('strict','passwd_conf','post','');
-    $email       = $inputHandler->getVar('strict','email','post','');
-    $regdate     = $inputHandler->getVar('strict','regdate','post','');
-    $homepage    = $inputHandler->getVar('url','homepage','post','');
-    $groups      = $inputHandler->getVar('integer',$_TABLES['groups'],'post',0);
-    $userstatus  = $inputHandler->getVar('integer','userstatus','post',USER_ACCOUNT_ACTIVE);
-    $oldstatus   = $inputHandler->getVar('integer','oldstatus','post',USER_ACCOUNT_ACTIVE);
-    $delphoto    = $inputHandler->getVar('integer','delete_photo','post',0);
-
-    $display = saveusers ($uid,$username,$fullname,$passwd,$passwd_conf,
-                          $email,$regdate,$homepage,$groups,$delphoto,
-                          $userstatus,$oldstatus);
-
+} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
+    $delphoto = '';
+    if (isset ($_POST['delete_photo'])) {
+        $delphoto = $_POST['delete_photo'];
+    }
+    if (!isset ($_POST['oldstatus'])) {
+        $_POST['oldstatus'] = USER_ACCOUNT_ACTIVE;
+    }
+    if (!isset ($_POST['userstatus'])) {
+        $_POST['userstatus'] = USER_ACCOUNT_ACTIVE;
+    }
+    $display = saveusers (COM_applyFilter ($_POST['uid'], true),
+            trim(COM_stripslashes($_POST['username'])), COM_stripslashes($_POST['fullname']),
+            trim(COM_stripslashes($_POST['passwd'])), trim(COM_stripslashes($_POST['passwd_conf'])),
+            trim(COM_stripslashes($_POST['email'])),
+            $_POST['regdate'], COM_stripSlashes($_POST['homepage']),
+            $_POST['groups'],
+            $delphoto, $_POST['userstatus'], $_POST['oldstatus']);
     if (!empty($display)) {
-        $pageHandle->setPageTitle($LANG28[22]);
-        $pageHandle->addContent($display);
+        $tmp = COM_siteHeader('menu', $LANG28[22]);
+        $tmp .= $display;
+        $tmp .= COM_siteFooter();
+        $display = $tmp;
     }
 } elseif ($mode == 'edit') {
-    $pageHandle->setPageTitle($LANG28[1]);
-    $msg = $inputHandler->getVar('integer','msg','get',0);
-
-    $uid = $inputHandler->getVar('integer','uid','get',0);
-
-    $pageHandle->addContent(edituser ($uid, $msg));
+    $display .= COM_siteHeader('menu', $LANG28[1]);
+    $msg = '';
+    if (isset ($_GET['msg'])) {
+        $msg = COM_applyFilter ($_GET['msg'], true);
+    }
+    $uid = '';
+    if (isset ($_GET['uid'])) {
+        $uid = COM_applyFilter ($_GET['uid'], true);
+    }
+    if ( $uid == 1 ) {
+        $display .= COM_siteHeader('menu', $LANG28[11]);
+        $display .= COM_showMessageFromParameter();
+        $display .= listusers();
+        $display .= COM_siteFooter();
+    } else {
+        $display .= edituser ($uid, $msg);
+        $display .= COM_siteFooter();
+    }
 } elseif (($mode == 'import') && SEC_checkToken()) {
-    $pageHandle->addContent(importusers());
+    $display .= importusers();
 } elseif ($mode == 'importform') {
-    $pageHandle->setPageTitle($LANG28[24]);
-
-    $display = COM_startBlock ($LANG28[24], '',
+    $display .= COM_siteHeader('menu', $LANG28[24]);
+    $display .= COM_startBlock ($LANG28[24], '',
                         COM_getBlockTemplate ('_admin_block', 'header'));
     $display .= $LANG28[25] . '<br' . XHTML . '><br' . XHTML . '>';
     $display .= display_batchAddform();
     $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
-
-    $pageHandle->addContent($display);
-
+    $display .= COM_siteFooter();
 } elseif ($mode == 'batchdelete') {
-    $pageHandle->setPageTitle($LANG28[54]);
-    $pageHandle->addContent(batchdelete());
+    $display .= COM_siteHeader ('menu', $LANG28[54]);
+    $display .= batchdelete();
+    $display .= COM_siteFooter();
 } elseif (($mode == $LANG28[78]) && !empty($LANG28[78]) && SEC_checkToken()) {
     $msg = batchreminders();
-    $pageHandle->setPageTitle($LANG28[11]);
-    $pageHandle->addMessage($msg);
-    $pageHandle->addContent(batchdelete());
-
+    $display .= COM_siteHeader ('menu', $LANG28[11])
+        . COM_showMessage($msg)
+        . batchdelete()
+        . COM_siteFooter();
 } elseif (($mode == 'batchdeleteexec') && SEC_checkToken()) {
     $msg = batchdeleteexec();
-    $pageHandle->setPageTitle($LANG28[11]);
-    $pageHandle->addMessage($msg);
-    $pageHandle->addContent(batchdelete());
-
+    $display .= COM_siteHeader ('menu', $LANG28[11])
+        . COM_showMessage($msg)
+        . batchdelete()
+        . COM_siteFooter();
 } else { // 'cancel' or no mode at all
-    $pageHandle->setPageTitle($LANG28[11]);
-    $msg = $inputHandler->getVar('integer','msg','request',0);
-    if ( $msg > 0 ) {
-        $pageHandle->addMessage($msg);
-    }
-    $pageHandle->addContent(listusers());
+    $display .= COM_siteHeader('menu', $LANG28[11]);
+    $display .= COM_showMessageFromParameter();
+    $display .= listusers();
+    $display .= COM_siteFooter();
 }
 
-$pageHandle->displayPage();
+echo $display;
 
 ?>

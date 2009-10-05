@@ -91,10 +91,13 @@ function MG_getItems ($mode='sv')
         				    $viewURL   = $_MG_CONF['site_url']  . "/media.php?s=" . $row['media_id'];
         				}
 			            $imgsize   = @getimagesize($PhotoPath);
-        				if ( $imgsize == false ) {
+        				if ( $imgsize == false && $row['remote_media'] != 1) {
             				continue;
         				}
-					    $retval .= '<slide src="' . $PhotoURL . '" caption="' . htmlentities(strip_tags($row['media_title'])) . '"/>' . "\n";
+        				if ( $row['remote_media'] == 1 ) {
+        				    $PhotoURL = $row['remote_url'];
+        				}
+					    $retval .= '<slide src="' . $PhotoURL . '" caption="' . htmlentities(strip_tags($row['media_title']), ENT_QUOTES, COM_getEncodingt()) . '"/>' . "\n";
 			    	}
 			    }
 			}

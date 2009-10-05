@@ -97,20 +97,4 @@ CREATE TABLE {$_TABLES['pollvoters']} (
 ) TYPE=MyISAM
 ";
 
-// Note: The 'pollquestion' entry for the above answers is in the install script
-
-$_SQL['d1'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 0, 1, 'MS SQL support', 0, '');";
-$_SQL['d2'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 0, 2, 'Multi-language support', 0, '');";
-$_SQL['d3'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 0, 3, 'Calendar as a plugin', 0, '');";
-$_SQL['d4'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 0, 4, 'SLV spam protection', 0, '');";
-$_SQL['d5'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 0, 5, 'Mass-delete users', 0, '');";
-$_SQL['d6'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 0, 6, 'Other', 0, '');";
-$_SQL['d7'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 1, 1, 'Story-Images', 0, '');";
-$_SQL['d8'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 1, 2, 'User-Rights handling', 0, '');";
-$_SQL['d9'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 1, 3, 'The Support', 0, '');";
-$_SQL['d10'] = "INSERT INTO {$_TABLES['pollanswers']} (pid, qid, aid, answer, votes, remark) VALUES ('glfusionfeaturepoll', 1, 4, 'Plugin Availability', 0, '');";
-
-$_SQL['d11'] = "INSERT INTO {$_TABLES['pollquestions']} (qid, pid, question) VALUES (0, 'glfusionfeaturepoll', 'What is the best new feature of glFusion?');";
-$_SQL['d12'] = "INSERT INTO {$_TABLES['pollquestions']} (qid, pid, question) VALUES (1, 'glfusionfeaturepoll', 'What is the all-time best feature of glFusion?');";
-
 ?>

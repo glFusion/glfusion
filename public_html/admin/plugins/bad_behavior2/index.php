@@ -251,7 +251,11 @@ function viewEntry ($id, $page = 1)
 $rightblocks = false;
 $display .= COM_siteHeader ('menu', $LANG_BAD_BEHAVIOR['page_title']);
 
-$mode = COM_applyFilter ($_GET['mode']);
+if ( isset($_GET['mode']) ) {
+    $mode = COM_applyFilter ($_GET['mode']);
+} else {
+    $mode = '';
+}
 if ($mode == 'list') {
     $page = isset($_GET['page']) ? COM_applyFilter ($_GET['page'], true) : 0;
     $display .= listEntries ($page);

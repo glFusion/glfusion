@@ -40,9 +40,14 @@ $_SYSTEM['site_enabled'] = true;
 // |                                                                          |
 // | You _MUST_ login to your site as an admin user _BEFORE_ enabling         |
 // | this option since it will disable all non-admin users.                   |
+// |                                                                          |
 // +--------------------------------------------------------------------------+
 
 $_SYSTEM['maintenance_mode'] = false;
+
+// uncomment the line below if you accidentally log out of your site
+// while in maintenance mode.
+// $_SYSTEM['maintenance_mode'] = -1;
 
 
 // +--------------------------------------------------------------------------+
@@ -98,6 +103,40 @@ $_SYSTEM['swedish_date_hack'] = false;
 // +--------------------------------------------------------------------------+
 
 $_SYSTEM['skip_ip_check'] = false;
+
+// +--------------------------------------------------------------------------+
+// | Token IP - use IP address to validate tokens instead of referring URL    |
+// |                                                                          |
+// | by default, glFusion will use the referrer URL to validate security      |
+// | tokens. In some cases, the browser may not send this data, so you can    |
+// |use the remote IP as the check                                            |
+// |                                                                          |
+// | If this value is set to true, the IP address will be checked instead.    |
+// | of the referring URL.                                                    |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['token_ip'] = false;
+
+// +--------------------------------------------------------------------------+
+// | Use direct style / js - Directly call the style / jss cache files        |
+// |                                                                          |
+// | If loading the PHP processor on your site adds additional load to your   |
+// | site you can skip that process and load the cache files directly from    |
+// | htmlheader.thtml                                                         |
+// +--------------------------------------------------------------------------+
+
+$_SYSTEM['use_direct_style_js'] = false;
+
+// +--------------------------------------------------------------------------+
+// | glFusion cache filenames - You generally do not need to adjust these.    |
+// |                                                                          |
+// | When running multiple sites off the same code base, having the ability   |
+// | to define unique cache file names per site can be beneficial.            |
+// +--------------------------------------------------------------------------+
+
+define('CONFIG_CACHE_FILE_NAME','$$$config$$$.cache');
+$_CONF['css_cache_filename'] = 'stylecache_';
+$_CONF['js_cache_filename'] = 'jscache_';
 
 // +--------------------------------------------------------------------------+
 // | You should not need to change any settings below this line,              |

@@ -8,9 +8,10 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
+// | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
 // |                                                                          |
 // | Based on the Forum Plugin for Geeklog CMS                                |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -47,11 +48,13 @@ if ( !function_exists('plugin_getmenuitems_forum') ) {
     exit;
 }
 
+USES_lib_html2text();
+
 if (!class_exists('StringParser') ) {
     require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 }
 
-function gf_siteHeader($subject = '') {
+function gf_siteHeader($subject = '',$headercode='') {
     global $CONF_FORUM;
 
     // Display Common headers
@@ -59,15 +62,15 @@ function gf_siteHeader($subject = '') {
     if (!isset($CONF_FORUM['usermenu'])) $CONF_FORUM['usermenu'] = 'blockmenu';
 
     if ($CONF_FORUM['showblocks'] == 'noblocks' OR $CONF_FORUM['showblocks'] == 'rightblocks') {
-        echo COM_siteHeader('none', $subject);
+        echo COM_siteHeader('none', $subject,$headercode);
     } elseif ($CONF_FORUM['showblocks'] == 'leftblocks' OR $CONF_FORUM['showblocks'] == 'allblocks' ) {
         if ($CONF_FORUM['usermenu'] == 'blockmenu') {
-            echo COM_siteHeader( array('forum_showBlocks',$CONF_FORUM['leftblocks']), $subject );
+            echo COM_siteHeader( array('forum_showBlocks',$CONF_FORUM['leftblocks']), $subject,$headercode );
         } else {
-            echo COM_siteHeader('menu', $subject);
+            echo COM_siteHeader('menu', $subject,$headercode);
         }
     } else {
-        echo COM_siteHeader('menu', $subject);
+        echo COM_siteHeader('menu', $subject,$headercode);
     }
 }
 
@@ -295,6 +298,12 @@ function do_bbcode_code($action, $attributes, $content, $params, $node_object) {
     $codeblock = str_replace('{','&#123;',$codeblock);
     $codeblock = str_replace('}','&#125;',$codeblock);
 
+    if ( $CONF_FORUM['use_wysiwyg_editor'] == 1 ) {
+        $codeblock = str_replace('&lt;','<',$codeblock);
+        $codeblock = str_replace('&gt;','>',$codeblock);
+        $codeblock = str_replace('&amp;','&',$codeblock);
+    }
+
     return $codeblock;
 }
 
@@ -305,13 +314,12 @@ function forumNavbarMenu($current='') {
 
     $navmenu = new navbar;
     $navmenu->add_menuitem($LANG_GF01['INDEXPAGE'],"{$_CONF['site_url']}/forum/index.php");
-    if (isset($_USER['uid']) && $_USER['uid'] > 1) {
-        $navmenu->add_menuitem($LANG_GF01['USERPREFS'],"{$_CONF['site_url']}/forum/userprefs.php");
+    if ( !COM_isAnonUser() ) {
         $navmenu->add_menuitem($LANG_GF01['SUBSCRIPTIONS'],"{$_CONF['site_url']}/forum/notify.php");
         $navmenu->add_menuitem($LANG_GF01['BOOKMARKS'],"{$_CONF['site_url']}/forum/index.php?op=bookmarks");
         $navmenu->add_menuitem($LANG_GF02['new_posts'],"{$_CONF['site_url']}/forum/index.php?op=newposts");
     }
-    if ( $CONF_FORUM['allow_memberlist'] && $_USER['uid'] > 1 ) {
+    if ( $CONF_FORUM['allow_memberlist'] && !COM_isAnonUser() ) {
         $navmenu->add_menuitem($LANG_GF02['msg88'],"{$_CONF['site_url']}/forum/memberlist.php");
     }
     $navmenu->add_menuitem($LANG_GF01['LASTX'],"{$_CONF['site_url']}/forum/index.php?op=lastx");
@@ -320,7 +328,6 @@ function forumNavbarMenu($current='') {
         $navmenu->set_selected($current);
     }
     return $navmenu->generate();
-
 }
 
 function ForumHeader($forum,$showtopic) {
@@ -490,6 +497,8 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
     }
     if ( $CONF_FORUM['use_glfilter'] == 1 && ($postmode == 'html' || $postmode == 'HTML')) {
         $bbcode->addParser(array('block','inline','link','listitem'), 'gf_checkHTML');      // calls GL's checkHTML on all text blocks
+        $str = str_replace('<pre>','[code]',$str);
+        $str = str_replace('</pre>','[/code]',$str);
     }
     if ( $postmode != 'html' && $postmode != 'HTML') {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
@@ -517,8 +526,10 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
                       'list', array ('inline','block', 'listitem'), array ());
     $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
                       'listitem', array ('list'), array ());
-    $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>', 'end_tag' => '</div><p>'),
-                      'inline', array('listitem','block','inline','link'), array());
+    if ($mode != 'noquote' ) {
+        $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>', 'end_tag' => '</div><p>'),
+                          'inline', array('listitem','block','inline','link'), array());
+    }
     $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
     $bbcode->addCode ('link', 'callback_replace_single', 'do_bbcode_url', array (),
@@ -785,6 +796,7 @@ function gf_getImage($image,$directory='') {
         'top'               =>    'top.gif',
         'topic_markread'    =>    'topic_markread.png',
         'topic_viewnew'     =>    'topic_viewnew.png',
+        'viewnew'           =>    'topic_viewnew.png',
         'trash'             =>    'trash.gif',
         'viewallnew'        =>    'viewallnew.gif',
         'view_last_reply'   =>    'view_last_reply.gif',
@@ -1168,7 +1180,9 @@ function gf_makeFilemgmtCatSelect($uid) {
 function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG04, $LANG28, $_IMAGE_TYPE;
-    global $CONF_FORUM,$_SYSTEM;
+    global $CONF_FORUM,$_SYSTEM,$LANG_GF02;
+
+    USES_lib_html2text();
 
     $retval = '';
 
@@ -1188,6 +1202,8 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
         case 'subject':
             $testText        = gf_formatTextBlock($A['comment'],'text','text');
             $testText        = strip_tags($testText);
+            $html2txt        = new html2text($testText,false);
+            $testText        = trim($html2txt->get_text());
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
             $retval = '<a class="gf_mootip" style="text-decoration:none;" href="' . $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' . ($A['pid'] == 0 ? $A['id'] : $A['pid']) . '&amp;topic='.$A['id'].'#'.$A['id'].'" title="' . $A['subject'] . '::' . $lastpostinfogll . '" rel="nofollow">' . $fieldvalue . '</a>';
             break;
@@ -1230,4 +1246,113 @@ function forum_showBlocks($showblocks)
     return $retval;
 }
 
+function GF_getSignature( $tagline, $signature, $postmode = 'html'  )
+{
+    global $_CONF, $CONF_FORUM, $_TABLES;
+
+    USES_lib_bbcode();
+
+    $retval = '';
+    $sig    = '';
+
+    if ( $CONF_FORUM['bbcode_signature'] && $signature != '') {
+        $retval = '<div class="signature">'.BBC_formatTextBlock( $signature, 'text').'</div><div style="clear:both;"></div>';
+    } else {
+        if (!empty ($tagline)) {
+            if ( $postmode == 'html' ) {
+                $retval = nl2br($tagline);
+            } else {
+                $retval = nl2br($tagline);
+            }
+            $retval = '<strong>'.$retval.'</strong>';
+        }
+    }
+
+    return $retval;
+}
+
+function gf_FormatForEmail( $str, $postmode='html' ) {
+    global $_CONF, $CONF_FORUM;
+
+     // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function
+    if ($CONF_FORUM['pre2.5_mode']) {
+        if ( stristr($showtopic['comment'],'[code') == false ) {
+            $showtopic['comment'] = str_replace('<pre>','[code]',$showtopic['comment']);
+            $showtopic['comment'] = str_replace('</pre>','[/code]',$showtopic['comment']);
+        }
+        $showtopic['comment'] = str_replace(array("<br />\r\n","<br />\n\r","<br />\r","<br />\n"), '<br />', $showtopic['comment'] );
+        $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=\s(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
+        /* Reformat code blocks - version 2.3.3 and prior */
+        $showtopic['comment'] = str_replace( '<pre class="forumCode">', '[code]', $showtopic['comment'] );
+        $showtopic['comment'] = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$showtopic['comment']);
+    }
+    $CONF_FORUM['use_geshi']     = true;
+    $CONF_FORUM['allow_smilies'] = false;
+    $str = gf_formatTextBlock($str,$postmode,'text');
+
+    $str = str_replace('<img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>','',$str);
+
+    // we don't have a stylesheet for email, so replace our div with the style...
+    $str = str_replace('<div class="quotemain">','<div style="border: 1px dotted #000;border-left: 4px solid #8394B2;color:#465584;  padding: 4px;  margin: 5px auto 8px auto;">',$str);
+    return $str;
+}
+
+function gfm_getoutput( $id ) {
+    global $_TABLES,$LANG_GF01,$LANG_GF02,$_CONF,$CONF_FORUM;
+
+    $id = COM_applyFilter($id,true);
+    $result = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE id={$id}");
+    $A = DB_fetchArray($result);
+    $A['name'] = COM_checkWords($A['name']);
+    $A['name'] = @htmlspecialchars($A['name'],ENT_QUOTES, COM_getEncodingt());
+    $A['subject'] = COM_checkWords($A['subject']);
+    $A['subject'] = @htmlspecialchars($A["subject"],ENT_QUOTES, COM_getEncodingt());
+    $A['comment'] = gf_FormatForEmail( $A['comment'], $A['postmode'] );
+    $notifymsg = sprintf($LANG_GF02['msg27'],"<a href=\"$_CONF[site_url]/forum/notify.php\">$_CONF[site_url]/forum/notify.php</a>");
+    $date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
+    if ($A[pid] == '0') {
+        $postid = $A['id'];
+    } else {
+        $postid = $A['pid'];
+    }
+
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates');
+    $T->set_file ('email', 'notifymessage.thtml');
+
+    $T->set_var(array(
+        'post_id'       => $postid,
+        'topic_id'      => $A['id'],
+        'post_subject'  => $A['subject'],
+        'post_date'     => $date,
+        'post_name'     => $A['name'],
+        'post_comment'  => $A['comment'],
+        'notify_msg'    => $notifymsg,
+        'site_name'     => $_CONF['site_name'],
+        'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$topic_id),
+    ));
+    $T->parse('output','email');
+    $message = $T->finish($T->get_var('output'));
+
+    $T = new Template($_CONF['path'] . 'plugins/forum/templates');
+    $T->set_file ('email', 'notifymessage_text.thtml');
+
+    $T->set_var(array(
+        'post_id'       => $postid,
+        'topic_id'      => $A['id'],
+        'post_subject'  => $A['subject'],
+        'post_date'     => $date,
+        'post_name'     => $A['name'],
+        'post_comment'  => $A['comment'],
+        'notify_msg'    => $notifymsg,
+        'site_name'     => $_CONF['site_name'],
+        'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$topic_id),
+    ));
+    $T->parse('output','email');
+    $msgText = $T->finish($T->get_var('output'));
+
+    $html2txt = new html2text($msgText,false);
+
+    $messageText = $html2txt->get_text();
+    return array($message,$messageText);
+}
 ?>

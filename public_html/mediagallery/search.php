@@ -245,7 +245,7 @@ function MG_search($id,$page) {
         'page_number'           => sprintf("%s %d %s %d",$LANG_MG03['page'], $current_print_page, $LANG_MG03['of'], $total_print_pages),
         'lang_search_results'   => $LANG_MG03['search_results'],
         'lang_return_to_index'  => $LANG_MG03['return_to_index'],
-        'return_url'            => $S['referer'] == '' ? $_MG_CONF['site_url'] : htmlentities($S['referer']),
+        'return_url'            => $S['referer'] == '' ? $_MG_CONF['site_url'] : htmlentities($S['referer'], ENT_QUOTES, COM_getEncodingt()),
         'search_keywords'       => $S['keywords'],
         'lang_search'           => $LANG_MG01['search'],
         'xhtml'                 => XHTML,
@@ -763,6 +763,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         'artist'			=> (isset($M['artist']) && $M['artist'] != ' ') ? $M['artist'] : '',
         'musicalbum'		=> (isset($M['album']) && $M['album'] != ' ') ? $M['album'] : '',
         'genre'				=> (isset($M['genre']) && $M['genre'] != ' ') ? $M['genre'] : '',
+        'search_album'      => $LANG_MG01['album'] . ': <a href="'.$_MG_CONF['site_url'].'/album.php?aid='.$M['album_id'].'">'.$MG_albums[$M['album_id']]->title.'</a>',
     ));
 
     // frame template variables
@@ -781,6 +782,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
         'frWidth'           =>  $newwidth  - $frWidth,
         'frHeight'          =>  $newheight - $frHeight,
         'media_tag'         =>  strip_tags($M['media_desc']),
+        'search_album'      => $LANG_MG01['album'] . ': <a href="'.$_MG_CONF['site_url'].'/album.php?aid='.$M['album_id'].'">'.$MG_albums[$M['album_id']]->title.'</a>',
 
     ));
     $F->parse('media','media_frame');

@@ -99,10 +99,11 @@ class SearchCriteria {
         global $_DB_dbms;
 
         // When only one SQL statment is set we assume it is for MySQL
-        if ($this->_ftsql != '' && (is_string($this->_ftsql) && $_DB_dbms == 'mysql') || is_array($this->_ftsql))
+        if ($this->_ftsql != '' && (is_string($this->_ftsql) && $_DB_dbms == 'mysql') || is_array($this->_ftsql)) {
             return $this->_ftsql;
-        else
+        } else {
             return '';
+        }
     }
 
     function getName()
@@ -127,34 +128,31 @@ class SearchCriteria {
 
     function buildSearchSQL($keyType, $query, $columns, $sql = '')
     {
-        if ($keyType == 'all')
-        {
+        if ($keyType == 'all') {
             // must contain ALL of the keywords
             $words = explode(' ', $query);
             $sep = 'AND';
 
             $ftwords['mysql'] = '+' . str_replace(' ', ' +', $query);
             $ftwords['mssql'] = '"' . str_replace(' ', '" AND "', $query) . '"';
-        }
-        else if ($keyType == 'any')
-        {
+        } else if ($keyType == 'any') {
             // must contain ANY of the keywords
             $words = explode(' ', $query);
             $sep = 'OR ';
             $ftwords['mysql'] = $query;
             $ftwords['mssql'] = '"' . str_replace(' ', '" OR "', $query) . '"';
-        }
-        else
-        {
+        } else {
             // do an exact phrase search (default)
             $words = array($query);
             $sep = '   ';
 
             // Puttings quotes around a single word in mysql really slows things down
-            if (strpos($query, ' ') !== false)
+            if (strpos($query, ' ') !== false) {
                 $ftwords['mysql'] = '"' . $query . '"';
-            else
+            } else {
                 $ftwords['mysql'] = $query;
+            }
+
             $ftwords['mssql'] = '"' . $query . '"';
         }
 
@@ -163,12 +161,12 @@ class SearchCriteria {
         $ftsql['mssql'] = $sql . "AND CONTAINS(($strcol), '{$ftwords['mssql']}')";
 
         $tmp = 'AND (';
-        foreach ($words AS $word)
-        {
+        foreach ($words AS $word) {
             $word = trim($word);
             $tmp .= '(';
-            foreach ($columns AS $col)
+            foreach ($columns AS $col) {
                 $tmp .= "$col LIKE '%$word%' OR ";
+            }
 
             $tmp = substr($tmp,0,-4) . ") $sep ";
         }
@@ -176,6 +174,24 @@ class SearchCriteria {
 
         return array($sql,$ftsql);
     }
-}
 
+
+    function getDateRangeSQL( $type = 'WHERE', $column, $datestart, $dateend )
+    {
+        $retval = '';
+
+        if (!empty($datestart) && !empty($dateend)) {
+            $delim = substr($datestart, 4, 1);
+            if (!empty($delim)) {
+                $DS = explode($delim, $datestart);
+                $DE = explode($delim, $dateend);
+                $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
+                $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
+                $retval =  " $type ($column BETWEEN '$startdate' AND '$enddate') ";
+            }
+        }
+
+        return $retval;
+    }
+}
 ?>

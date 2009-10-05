@@ -1,4 +1,4 @@
 {# begin {templatelocation} #}
 {# {LANG_reply} #}
-<a href="{replytopiclink}">{replytopiclinkimg}</a>
+<a href="{replytopiclink}" rel="nofollow">{replytopiclinkimg}</a>
 {# end {templatelocation} #}

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -39,12 +39,24 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
-
-USES_lib_story();
+require_once $_CONF['path_system'] . 'lib-story.php';
 
 if (!SEC_hasRights('topic.edit')) {
-    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[32],'the topic administration screen.');
+    $display = COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_startBlock ($MESSAGE[30], '',
+                                COM_getBlockTemplate ('_msg_block', 'header'));
+    $display .= $MESSAGE[32];
+    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_siteFooter ();
+    COM_accessLog("User {$_USER['username']} tried to illegally access the topic administration screen.");
+    echo $display;
+    exit;
 }
+
+// Uncomment the line below if you need to debug the HTTP variables being passed
+// to the script.  This will sometimes cause errors but it will allow you to see
+// the data being passed in a POST operation
+// echo COM_debug($_POST);
 
 /**
 * Show topic administration form
@@ -124,6 +136,8 @@ function edittopic ($tid = '')
     $topic_templates->set_var('lang_donotusespaces', $LANG27[5]);
     $topic_templates->set_var('lang_accessrights',$LANG_ACCESS['accessrights']);
     $topic_templates->set_var('lang_owner', $LANG_ACCESS['owner']);
+
+
     $ownername = COM_getDisplayName ($A['owner_id']);
     $topic_templates->set_var('owner_username', DB_getItem ($_TABLES['users'],
                               'username', "uid = {$A['owner_id']}"));
@@ -222,7 +236,7 @@ function edittopic ($tid = '')
 */
 function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon,$is_default,$is_archive)
 {
-    global $_CONF, $_TABLES, $LANG27, $MESSAGE, $pageHandle,$inputHandler;
+    global $_CONF, $_TABLES, $LANG27, $MESSAGE;
 
     $retval = '';
 
@@ -251,12 +265,18 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id
         }
     }
     if (($access < 3) || !SEC_inGroup ($group_id)) {
-        $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[32],'create or edit topic $tid.');
+        $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
+        $retval .= COM_startBlock ($MESSAGE[30], '',
+                            COM_getBlockTemplate ('_msg_block', 'header'));
+        $retval .= $MESSAGE[32];
+        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_siteFooter ();
+        COM_accessLog("User {$_USER['username']} tried to illegally create or edit topic $tid.");
     } elseif (!empty($tid) && !empty($topic)) {
         if ($imageurl == '/images/topics/') {
             $imageurl = '';
         }
-        $topic = $inputHandler->prepareForDB($topic);
+        $topic = addslashes ($topic);
 
         if ($is_default == 'on') {
             $is_default = 1;
@@ -290,9 +310,11 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id
         COM_rdfUpToDateCheck ('article', $tid);
         COM_olderStuff ();
         CACHE_remove_instance('stmenu');
-        $pageHandle->redirect($_CONF['site_admin_url'] . '/topic.php?msg=13');
+        $retval = COM_refresh ($_CONF['site_admin_url'] . '/topic.php?msg=13');
     } else {
-        $pageHandle->addContent(COM_errorLog($LANG27[7], 2));
+        $retval .= COM_siteHeader('menu', $LANG27[1]);
+        $retval .= COM_errorLog($LANG27[7], 2);
+        $retval .= COM_siteFooter();
     }
 
     return $retval;
@@ -308,10 +330,9 @@ function savetopic($tid,$topic,$imageurl,$sortnum,$limitnews,$owner_id,$group_id
 */
 function listtopics()
 {
-    global $_CONF, $_TABLES, $LANG27, $LANG_ACCESS, $LANG_ADMIN,
-           $pageHandle;
+    global $_CONF, $_TABLES, $LANG27, $LANG_ACCESS, $LANG_ADMIN;
 
-    USES_lib_admin();
+    require_once( $_CONF['path_system'] . 'lib-admin.php' );
 
     $retval = '';
 
@@ -320,6 +341,9 @@ function listtopics()
 
     $topic_templates = new Template($_CONF['path_layout'] . 'admin/topic');
     $topic_templates->set_file(array('list'=>'topiclist.thtml', 'item'=>'listitem.thtml'));
+    $topic_templates->set_var( 'xhtml', XHTML );
+    $topic_templates->set_var('site_url', $_CONF['site_url']);
+    $topic_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
     $topic_templates->set_var('layout_url', $_CONF['layout_url']);
     $topic_templates->set_var('lang_newtopic', $LANG_ADMIN['create_new']);
     $topic_templates->set_var('lang_adminhome', $LANG27[18]);
@@ -338,7 +362,7 @@ function listtopics()
     $menu = ADMIN_createMenu(
         $menu_arr,
         $LANG27[9],
-        $pageHandle->getImage('/icons/topic.png')
+        $_CONF['layout_url'] . "/images/icons/topic.png"
     );
     $topic_templates->set_var('top_menu', $menu);
 
@@ -367,7 +391,9 @@ function listtopics()
                 $topic_templates->set_var ('default_topic', '');
             }
             if (empty ($A['imageurl'])) {
-                $topic_templates->set_var ('image_tag', '');
+                $topic_templates->set_var ('image_tag', '<img src="' . $_CONF['site_url'].'/images/topics/topic_gl.png'
+                                           . '" alt=""' . XHTML . '>');
+//                $topic_templates->set_var ('image_tag', '');
             } else {
                 $imageurl = COM_getTopicImageUrl ($A['imageurl']);
                 $topic_templates->set_var ('image_tag', '<img src="' . $imageurl
@@ -407,7 +433,7 @@ function listtopics()
 */
 function deleteTopic ($tid)
 {
-    global $_CONF, $_TABLES, $_USER, $pageHandle;
+    global $_CONF, $_TABLES, $_USER;
 
     $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['topics']} WHERE tid ='$tid'");
     $A = DB_fetchArray ($result);
@@ -419,7 +445,7 @@ function deleteTopic ($tid)
     }
     if ($access < 3) {
         COM_accessLog ("User {$_USER['username']} tried to illegally delete topic $tid.");
-        $pageHandle->redirect($_CONF['site_admin_url'] . '/topic.php');
+        return COM_refresh ($_CONF['site_admin_url'] . '/topic.php');
     }
 
     // don't delete topic blocks - assign them to 'all' and disable them
@@ -447,7 +473,7 @@ function deleteTopic ($tid)
     COM_rdfUpToDateCheck ('article');
     COM_olderStuff ();
     CACHE_remove_instance('stmenu');
-    $pageHandle->redirect ($_CONF['site_admin_url'] . '/topic.php?msg=14');
+    return COM_refresh ($_CONF['site_admin_url'] . '/topic.php?msg=14');
 }
 
 /**
@@ -459,9 +485,9 @@ function deleteTopic ($tid)
 */
 function handleIconUpload($tid)
 {
-    global $_CONF, $_TABLES, $LANG27, $pageHandle;
+    global $_CONF, $_TABLES, $LANG27;
 
-    USES_class_upload();
+    require_once $_CONF['path_system'] . 'classes/upload.class.php';
 
     $upload = new upload();
     if (!empty ($_CONF['image_lib'])) {
@@ -480,15 +506,14 @@ function handleIconUpload($tid)
                                          'image/png'   => '.png'
                                  )      );
     if (!$upload->setPath ($_CONF['path_images'] . 'topics')) {
-        $pageHandle->setPageTitle($LANG27[29]);
-
-        $display = COM_startBlock ($LANG27[29], '',
+        $display = COM_siteHeader ('menu', $LANG27[29]);
+        $display .= COM_startBlock ($LANG27[29], '',
                 COM_getBlockTemplate ('_msg_block', 'header'));
         $display .= $upload->printErrors (false);
         $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
                                                         'footer'));
-        $pageHandle->addContent($display);
-        $pageHandle->displayPage();
+        $display .= COM_siteFooter ();
+        echo $display;
         exit; // don't return
     }
     $upload->setFieldName('newicon');
@@ -524,15 +549,14 @@ function handleIconUpload($tid)
         $upload->uploadFiles ();
 
         if ($upload->areErrors ()) {
-            $pageHandle->setPageTitle($LANG27[29]);
-
-            $display = COM_startBlock ($LANG27[29], '',
+            $display = COM_siteHeader ('menu', $LANG27[29]);
+            $display .= COM_startBlock ($LANG27[29], '',
                     COM_getBlockTemplate ('_msg_block', 'header'));
             $display .= $upload->printErrors (false);
             $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block',
                                                             'footer'));
-            $pageHandle->addContent($display);
-            $pageHandle->displayPage();
+            $display .= COM_siteFooter ();
+            echo $display;
             exit; // don't return
         }
         $filename = '/images/topics/' . $filename;
@@ -543,72 +567,67 @@ function handleIconUpload($tid)
 
 
 // MAIN
+$display = '';
 
-$mode = $inputHandler->getVar('strict','mode','request','');
-
-$tid = $inputHandler->getVar('strict','tid','post','');
-
+$mode = '';
+if (isset ($_REQUEST['mode'])) {
+    $mode = $_REQUEST['mode'];
+}
 
 if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
-    if (!isset ($tid) || empty ($tid) || $tid == '') {
+    $tid = COM_applyFilter ($_POST['tid']);
+    if (!isset ($tid) || empty ($tid)) {
         COM_errorLog ('Attempted to delete topic tid=' . $tid);
-        $pageHandle->redirect($_CONF['site_admin_url'] . '/topic.php');
+        $display .= COM_refresh ($_CONF['site_admin_url'] . '/topic.php');
     } elseif (SEC_checkToken()) {
-        $pageHandle->addContent(deleteTopic($tid));
+        $display .= deleteTopic($tid);
     } else {
         COM_accessLog("User {$_USER['username']} tried to illegally delete topic $tid and failed CSRF checks.");
-        $pageHandle->redirect($_CONF['site_admin_url'] . '/index.php');
+        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
     }
 } elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
     if (empty ($_FILES['newicon']['name'])){
-        $imageurl = $inputHandler->getVar('strict','imageurl','post','');
+        $imageurl = COM_applyFilter ($_POST['imageurl']);
     } else {
-        $imageurl = handleIconUpload($tid);
-        $imageurl = $inputHandler->filterVar('strict',$imageurl,'');
+        $imageurl = handleIconUpload($_POST['tid']);
+        $imageurl = COM_applyFilter ($imageurl);
     }
-    $is_default = $inputHandler->getVar('strict','is_default','post','');
-    $is_archive = $inputHandler->getVar('strict','is_archive','post','');
-
-    $topic = $inputHandler->getVar('strict','topic','post','');
-    $sortnum = $inputHandler->getVar('integer','sortnum','post',0);
-    $limitnews = $inputHandler->getVar('integer','limitnews','post',0);
-    $owner_id  = $inputHandler->getVar('integer','owner_id','post',0);
-    $group_id  = $inputHandler->getVar('integer','group_id','post',0);
-
-    $perm_owner = array();
-    $perm_owner = $inputHandler->getVar('integer','perm_owner','post');
-    $perm_group = array();
-    $perm_group = $inputHandler->getVar('integer','perm_group','post');
-    $perm_members = array();
-    $perm_members = $inputHandler->getVar('integer','perm_members','post');
-    $perm_anon = array();
-    $perm_anon = $inputHandler->getVar('integer','perm_anon','post');
-
-    $display .= savetopic ($tid, $topic,
+    $is_default = '';
+    if (isset($_POST['is_default'])) {
+        $is_default = $_POST['is_default'];
+    }
+    $is_archive = '';
+    if (isset($_POST['is_archive'])) {
+        $is_archive = $_POST['is_archive'];
+    }
+    $display .= savetopic (COM_applyFilter ($_POST['tid']), $_POST['topic'],
                            $imageurl,
-                           $sortnum,
-                           $limitnews,
-                           $owner_id,
-                           $group_id,
-                           $perm_owner, $perm_group,
-                           $perm_members, $perm_anon,
+                           COM_applyFilter ($_POST['sortnum'], true),
+                           COM_applyFilter ($_POST['limitnews'], true),
+                           COM_applyFilter ($_POST['owner_id'], true),
+                           COM_applyFilter ($_POST['group_id'], true),
+                           $_POST['perm_owner'], $_POST['perm_group'],
+                           $_POST['perm_members'], $_POST['perm_anon'],
                            $is_default, $is_archive);
     CACHE_remove_instance('story');
 
 } else if ($mode == 'edit') {
-    $pageHandle->setPageTitle($LANG27[1]);
-    $tid = $inputHandler->getVar('strict','tid','get','');
-    $pageHandle->addContent(edittopic($tid));
-
-} else { // 'cancel' or no mode at all
-    $pageHandle->setPageTitle($LANG27[8]);
-    $msg = $inputHandler->getVar('integer','msg','get',0);
-    if ($msg > 0) {
-        $pageHandle->addMessage($msg);
+    $display .= COM_siteHeader('menu', $LANG27[1]);
+    $tid = '';
+    if (isset($_GET['tid'])) {
+        $tid = COM_applyFilter($_GET['tid']);
     }
-    $pageHandle->addContent(listtopics());
+    $display .= edittopic($tid);
+    $display .= COM_siteFooter();
+} else { // 'cancel' or no mode at all
+    $display .= COM_siteHeader('menu', $LANG27[8]);
+    if (isset ($_GET['msg'])) {
+        $display .= COM_showMessage (COM_applyFilter ($_GET['msg'], true));
+    }
+    $display .= listtopics();
+    $display .= COM_siteFooter();
 }
 
-$pageHandle->displayPage();
+echo $display;
 
 ?>

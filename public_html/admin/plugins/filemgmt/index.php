@@ -588,7 +588,7 @@ function modDownloadS() {
         $fileurl    = COM_applyFilter($_POST['url']);
         $url = rawurlencode($myts->makeTboxData4Save($_POST['url']));
     }
-    $silentEdit = COM_applyFilter($_POST['silentedit'],true);
+    $silentEdit = isset($_POST['silentedit']) ? COM_applyFilter($_POST['silentedit'],true) : 0;
     $submitter  = intval(COM_applyFilter($_POST['owner_id'],true));
 
     $currentfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'url', "lid=".intval($_POST['lid']));
@@ -701,6 +701,7 @@ function modDownloadS() {
    		DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, date=".time().", comments='$commentoption', submitter=$submitter WHERE lid=".intval($_POST['lid']));
 	}
     DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' WHERE lid=".intval($_POST['lid']));
+    PLG_itemSaved(intval($_POST['lid']),'filemgmt');
     CACHE_remove_instance('whatsnew');
     redirect_header("{$_CONF['site_url']}/filemgmt/index.php",2,_MD_DBUPDATED);
     exit();
@@ -723,6 +724,8 @@ function delDownload() {
     DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedesc']}    WHERE lid='$lid'");
     DB_query("DELETE FROM {$_FM_TABLES['filemgmt_votedata']}    WHERE lid='$lid'");
     DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid'");
+
+    PLG_itemDeleted($lid,'filemgmt');
 
     // Check for duplicate files of the same filename (actual filename in repository)
     // We don't want to delete actual file if there are more then 1 record linking to it.
@@ -939,6 +942,8 @@ function delCat() {
        DB_query("DELETE FROM {$_FM_TABLES['filemgmt_filedesc']} WHERE lid='$lid'");
        DB_query("DELETE FROM {$_FM_TABLES['filemgmt_brokenlinks']} WHERE lid='$lid'");
 
+       PLG_itemDeleted($lid,'filemgmt');
+
        $name = rawurldecode($url);
             $fullname  = $filemgmt_FileStore . $name;
             if ($fullname !="" && file_exists($fullname) && (!is_dir($fullname))) {
@@ -1044,12 +1049,8 @@ function addCat() {
 
 function addDownload() {
     global $_CONF,$_USER,$_FM_TABLES,$filemgmt_FileStoreURL,$filemgmt_FileSnapURL,$filemgmt_FileStore,$filemgmt_SnapStore;
-    global $myts,$eh,$_FMDOWNLOAD;
+    global $myts,$eh,$_FMDOWNLOAD,$filemgmtFilePermissions;
 
-//    $filename = $myts->makeTboxData4Save($_FILES['newfile']['name']);
-//    $url = $myts->makeTboxData4Save(rawurlencode($filename));
-//    $snapfilename = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
-//    $logourl = $myts->makeTboxData4Save(rawurlencode($snapfilename));
     $title = $myts->makeTboxData4Save($_POST['title']);
     $homepage = $myts->makeTboxData4Save($_POST['homepage']);
     $version = $myts->makeTboxData4Save($_POST['version']);
@@ -1059,10 +1060,6 @@ function addDownload() {
 
     $submitter = $_USER['uid'];
 
-//    $size = $myts->makeTboxData4Save(intval($_FILES['newfile']['size']));
-
-    $result = DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE url='$url'");
-    list($numrows) = DB_fetchARRAY($result);
     $errormsg = "";
 
     // Check if Title blank
@@ -1162,21 +1159,16 @@ function addDownload() {
             $AddNewFile = true;
         }
     }
-/*
-    if (uploadNewFile($_FILES["newfile"],$filemgmt_FileStore)) {
-        $AddNewFile = true;
-    }
-    if (uploadNewFile($_FILES["newfileshot"],$filemgmt_SnapStore)) {
-        $AddNewFile = true;
-    }
-*/
+
     if ($AddNewFile){
+        $chown = @chmod ($filemgmt_FileStore.$filename,$filemgmtFilePermissions);
         $fields = 'cid, title, url, homepage, version, size, logourl, submitter, status, date, hits, rating, votes, comments';
         $sql = "INSERT INTO {$_FM_TABLES['filemgmt_filedetail']} ($fields) VALUES ";
         $sql .= "('$cid','$title','$url','$homepage','$version','$size','$logourl','$submitter',1,UNIX_TIMESTAMP(),0,0,0,'$commentoption')";
         DB_query($sql);
         $newid = DB_insertID();
         DB_query("INSERT INTO {$_FM_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')");
+        PLG_itemSaved($newid,'filemgmt');
         CACHE_remove_instance('whatsnew');
         if (isset($duplicatefile) && $duplicatefile) {
             redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_NEWDLADDED_DUPFILE);
@@ -1276,6 +1268,7 @@ function approve(){
     if ($AddNewFile) {
         DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', logourl='$logourl', status=1, date=".time() .", comments='$commentoption' where lid='$lid'");
         DB_query("UPDATE {$_FM_TABLES['filemgmt_filedesc']} SET description='$description' where lid='$lid'");
+        PLG_itemSaved($lid,'filemgmt');
         CACHE_remove_instance('whatsnew');
         // Send a email to submitter notifying them that file was approved
         if ($filemgmt_Emailoption) {

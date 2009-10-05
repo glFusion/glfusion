@@ -108,7 +108,9 @@ function CALENDAR_editEvent ($mode, $A, $msg = '')
             return $retval;
         }
     } else {
-        $A['owner_id'] = $_USER['uid'];
+        if ( $A['owner_id'] == '' ) {
+            $A['owner_id'] = $_USER['uid'];
+        }
         if (isset ($_GROUPS['Calendar Admin'])) {
             $A['group_id'] = $_GROUPS['Calendar Admin'];
         } else {
@@ -541,6 +543,7 @@ function CALENDAR_saveEvent ($eid, $title, $event_type, $url, $allday,
                        ."$perm_anon,{$P['uid']},'$location','$timestart','$timeend'");
             }
         }
+        PLG_itemSaved($eid, 'calendar');
         COM_rdfUpToDateCheck('calendar', $event_type, $eid);
 
         return PLG_afterSaveSwitch (

@@ -58,7 +58,10 @@ $LANG_LINKS = array(
     124 => '表示',
     125 => 'カテゴリ',
     126 => '現在の位置：',
-    'root' => 'トップ'
+    'root' => 'トップ',
+    'error_header' => 'Link Submission Error',
+    'verification_failed' => 'The URL specified does not appear to be a valid URL',
+    'category_not_found' => 'The Category does not appear to be valid'
 );
 
 ###############################################################################

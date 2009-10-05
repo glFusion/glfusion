@@ -2,7 +2,7 @@
 // +--------------------------------------------------------------------------+
 // | Bad Behavior Plugin - glFusion CMS                                       |
 // +--------------------------------------------------------------------------+
-// | german.php                                                               |
+// | german_utf-8.php                                                               |
 // |                                                                          |
 // | German language file                                                     |
 // +--------------------------------------------------------------------------+
@@ -11,11 +11,15 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2008 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2008-2009 by the following authors:                        |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
+// | Modifiziert: August 09 Tony Kluever       |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -38,27 +42,25 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-###############################################################################
-
 $LANG_BAD_BEHAVIOR = array(
     'plugin_display_name' => 'Bad Behavior2',
     'page_title' => 'Bad Behavior2',
     'block_title_admin' => 'Bad Behavior2-Administration',
-    'block_title_list' => 'Logfile-Einträge',
+    'block_title_list' => 'Logdatei-Einträge',
     'block_title_entry' => 'Detailansicht',
     'block_title_donate' => 'Spende',
-    'list_entries' => 'Logfile-Einträge anzeigen (%d)',
-    'list_no_entries' => 'Keine Logfile-Einträge',
+    'list_entries' => 'Logdatei-Einträge anzeigen (%d)',
+    'list_no_entries' => 'Keine Logdatei-Einträge',
     'row_ip' => 'IP-Addresse',
     'row_user_agent' => 'User Agent',
     'row_referer' => 'Referrer',
     'row_response' => 'Response',
     'row_method' => 'Methode',
-    'row_protocol' => 'Protokol',
+    'row_protocol' => 'Protokoll',
     'row_date' => 'Datum',
     'row_reason' => 'Grund',
     'self_test' => 'Bad Behavior-Selbsttest',
-    'link_back' => 'Zurück zur Liste der Logfile-Einträge',
+    'link_back' => 'Zurück zur Liste der Logdatei-Einträge',
     'title_show_headers' => 'HTTP-Header zeigen',
     'title_lookup_ip' => 'Informationen zur IP-Adresse',
     'error' => 'Fehler',
@@ -68,7 +70,7 @@ $LANG_BAD_BEHAVIOR = array(
     'denied_reason' => 'Grund',
     'results' => 'Bad Behavior2-Einträge',
     'search' => 'Suchen',
-    'stats_headline' => 'Bad Behavior2-Statistik',
+    'stats_headline' => 'Bad Behavior2 - Statistiken',
     'stats_reason' => 'Grund',
     'stats_blocked' => 'Gesperrt',
     'stats_no_hits' => 'Keine Einträge.',
@@ -77,9 +79,9 @@ $LANG_BAD_BEHAVIOR = array(
 );
 
 $LANG_BB2_RESPONSE = array(
-    00000000 => 'Request Passed - No User Agent Specified',
+    '00000000' => 'Request Passed - No User Agent Specified',
     '136673cd' => 'IP address found on external blacklist',
-    17566707 => 'Required header \'Accept\' missing',
+    '17566707' => 'Required header \'Accept\' missing',
     '17f4e8c8' => 'User-Agent was found on blacklist',
     '21f11d3f' => 'User-Agent claimed to be AvantGo, claim appears false',
     '2b021b1f' => 'IP address found on http:BL blacklist',
@@ -88,7 +90,7 @@ $LANG_BB2_RESPONSE = array(
     '408d7e72' => 'POST comes too quickly after GET',
     '41feed15' => 'Header \'Pragma\' without \'Cache-Control\' prohibited for HTTP/1.1 requests',
     '45b35e30' => 'Header \'Referer\' is corrupt',
-    57796684 => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
+    '57796684' => 'Prohibited header \'X-Aaaaaaaaaa\' or \'X-Aaaaaaaaaaaa\' present',
     '582ec5e4' => '"Header \'TE\' present but TE not specified in \'Connection\' header',
     '69920ee5' => 'Header \'Referer\' present but blank',
     '6c502ff1' => 'Bot not fully compliant with RFC 2965',
@@ -107,6 +109,7 @@ $LANG_BB2_RESPONSE = array(
     'c1fa729b' => 'Use of rotating proxy servers detected',
     'cd361abb' => 'Referer did not point to a form on this site',
     'd60b87c7' => 'Trackback received via proxy server',
+    'e3990b47' => 'Obviously fake trackback received',
     'dfd9b1ad' => 'Request contained a malicious JavaScript or SQL injection attack',
     'e4de0453' => 'User-Agent claimed to be msnbot, claim appears to be false',
     'e87553e1' => 'I know you and I don\'t like you, dirty spammer.',
@@ -115,8 +118,11 @@ $LANG_BB2_RESPONSE = array(
     'f9f2b8b9' => 'A User-Agent is required but none was provided.'
 );
 
+
 $PLG_bad_behavior_MESSAGE1 = 'Wenn Du diesen Hinweis siehst, dann ist Bad Behavior <b>nicht</b> korrekt installiert. Bitte lies Dir die Installationsanleitung noch einmal sorgfältig durch.';
 $PLG_bad_behavior_MESSAGE100 = 'Die IP-Adresse wurde wieder freigegeben.';
 $PLG_bad_behavior_MESSAGE101 = 'Es gab ein Problem beim Freigeben der IP-Adresse.';
+
+
 
 ?>

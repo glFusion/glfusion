@@ -77,7 +77,13 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
         return 0;
     }
 
-    if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
+    if (COM_isAnonUser() ) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+
+    if ( ($_CP_CONF['anonymous_only'] && $uid < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
         $str = COM_applyFilter($_POST['captcha']);
         list( $rc, $msg )  = CAPTCHA_checkInput( 'comment',$str );
         if ( $rc == 1 )

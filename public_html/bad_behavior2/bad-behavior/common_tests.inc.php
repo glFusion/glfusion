@@ -25,7 +25,7 @@ function bb2_cookies($settings, $package)
 	// Enforce RFC 2965 sec 3.3.5 and 9.1
 	// Bots wanting new-style cookies should send Cookie2
 	// FIXME: Amazon Kindle is broken; Amazon has been notified 9/24/08
-	if (strpos($package['headers_mixed']['Cookie'], '$Version=0') !== FALSE && !array_key_exists('Cookie2', $package['headers_mixed']) && strpos($package['headers_mixed']['User-Agent'], "Kindle/") === FALSE) {
+	if (@strpos($package['headers_mixed']['Cookie'], '$Version=0') !== FALSE && !array_key_exists('Cookie2', $package['headers_mixed']) && strpos($package['headers_mixed']['User-Agent'], "Kindle/") === FALSE) {
 		return '6c502ff1';
 	}
 	return false;
@@ -51,7 +51,7 @@ function bb2_misc_headers($settings, $package)
 	// NOTE: this blocks the whois.sc bot. No big loss.
 	// Exceptions: MT (not fixable); LJ (refuses to fix; may be
 	// blocked again in the future)
-	if (array_key_exists('Range', $package['headers_mixed']) && strpos($package['headers_mixed']['Range'], "=0-") !== FALSE) {
+	if ($settings['strict'] && array_key_exists('Range', $package['headers_mixed']) && strpos($package['headers_mixed']['Range'], "=0-") !== FALSE) {
 		if (strncmp($ua, "MovableType", 11) && strncmp($ua, "URI::Fetch", 10) && strncmp($ua, "php-openid/", 11)) {
 			return "7ad04a8a";
 		}
@@ -114,7 +114,7 @@ function bb2_misc_headers($settings, $package)
 
 	if (array_key_exists('Referer', $package['headers_mixed'])) {
 		// Referer, if it exists, must not be blank
-		if (empty($package['headers_mixed'])) {
+		if (empty($package['headers_mixed']['Referer'])) {
 			return "69920ee5";
 		}
 

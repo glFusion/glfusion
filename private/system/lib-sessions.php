@@ -8,6 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -78,7 +81,7 @@ $_USER = SESS_sessionCheck();
 */
 function SESS_sessionCheck()
 {
-    global $_CONF, $_TABLES, $_USER, $_SYSTEM, $_SESS_VERBOSE, $inputHandler;
+    global $_CONF, $_TABLES, $_USER, $_SESS_VERBOSE, $_SYSTEM;
 
     if ($_SESS_VERBOSE) {
         COM_errorLog("***Inside SESS_sessionCheck***",1);
@@ -93,8 +96,8 @@ function SESS_sessionCheck()
     // Check for a cookie on the users's machine.  If the cookie exists, build
     // an array of the users info and setup the theme.
 
-    $sessid = $inputHandler->getVar('strict',$_CONF['cookie_session'],'cookie','');
-    if ( $sessid != '' ) {
+    if (isset ($_COOKIE[$_CONF['cookie_session']])) {
+        $sessid = COM_applyFilter ($_COOKIE[$_CONF['cookie_session']]);
         if ($_SESS_VERBOSE) {
             COM_errorLog("got $sessid as the session id from lib-sessions.php",1);
         }
@@ -155,9 +158,9 @@ function SESS_sessionCheck()
                     }
                     if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($ipmatch == false)) {
                         // User may have modified their UID in cookie, ignore them
-                        setcookie ($_CONF['cookie_name'], '', time() - 10000,
-                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                                   $_CONF['cookiesecure']);
+                        SEC_setCookie ($_CONF['cookie_name'], '', time() - 10000,
+                                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                                       $_CONF['cookiesecure'],true);
                     } else if ($userid > 1) {
                         // Check user status
                         $status = SEC_checkUserStatus ($userid);
@@ -189,17 +192,14 @@ function SESS_sessionCheck()
                 COM_errorLog('perm cookie found from lib-sessions.php',1);
             }
 
-            $userid = $inputHandler->getVar('strict',$_CONF['cookie_name'],'cookie','');
+            $userid = $_COOKIE[$_CONF['cookie_name']];
             if (empty ($userid) || ($userid == 'deleted')) {
                 unset ($userid);
             } else {
-                $userid = $inputHandler->filterVar('integer',$userid,'',0);
-                    $cookie_password = '';
+                $userid = intval(COM_applyFilter ($userid, true));
+                $cookie_password = '';
                 $userpass = '';
                 if ($userid > 1) {
-                    if (array_key_exists('cookie_password', $_CONF)) {
-                        $cookie_password = $_COOKIE[$_CONF['cookie_password']];
-                    }
                     $userpass = DB_getItem ($_TABLES['users'], 'passwd',
                                             "uid = $userid");
                     $result = DB_query("SELECT remote_ip FROM {$_TABLES['users']} WHERE uid=$userid",1);
@@ -221,16 +221,17 @@ function SESS_sessionCheck()
                 }
                 if (empty ($cookie_password) || ($cookie_password <> $userpass) || ($ipmatch == false)) {
                     // User could have modified UID in cookie, don't do shit
-                    setcookie ($_CONF['cookie_name'], '', time() - 10000,
-                               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                               $_CONF['cookiesecure']);
+                    SEC_setcookie ($_CONF['cookie_name'], '', time() - 10000,
+                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                                   $_CONF['cookiesecure'],true);
                 } else if ($userid > 1) {
                     // Check user status
-                    $status = SEC_checkUserStatus ($userid);
+                    $status = SEC_checkUserStatus($userid);
                     if (($status == USER_ACCOUNT_ACTIVE) ||
                             ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
                         $user_logged_in = 1;
 
+                        // Create new session and write cookie
                         $sessid = SESS_newSession($userid, $_SERVER['REMOTE_ADDR'], $_CONF['session_cookie_timeout'], $_CONF['cookie_ip']);
                         SESS_setSessionCookie($sessid, $_CONF['session_cookie_timeout'], $_CONF['cookie_session'], $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure']);
                         $userdata = SESS_getUserDataFromId($userid);
@@ -370,8 +371,7 @@ function SESS_setSessionCookie($sessid, $cookietime, $cookiename, $cookiepath, $
         COM_errorLog ("Setting session cookie: setcookie($cookiename, $sessid, 0, $cookiepath, $cookiedomain, $cookiesecure);", 1);
     }
 
-    if (setcookie ($cookiename, $sessid, 0, $cookiepath, $cookiedomain,
-                   $cookiesecure) === false) {
+    if (SEC_setCookie ($cookiename, $sessid, 0, $cookiepath, $cookiedomain, $cookiesecure,true) === false) {
         COM_errorLog ('Failed to set session cookie.', 1);
     }
 }

@@ -462,7 +462,7 @@ function MG_genericError( $errorMessage ) {
 }
 
 function MG_replace_accents($str) {
-    $str = htmlentities($str);
+    $str = htmlentities($str, ENT_QUOTES, COM_getEncodingt());
     $str = preg_replace('/&([a-zA-Z])(uml|acute|grave|circ|tilde);/','$1',$str);
     return html_entity_decode($str);
 }
@@ -579,6 +579,25 @@ function MG_getFeedPath( $feedfile = '' )
     $feed .= $feedfile;
 
     return $feed;
+}
+
+/**
+* Get the URL of the feed directory or a specific feed file
+*
+* @param    string  $feedfile   (option) feed file name
+* @return   string              URL of feed directory or file
+*
+*/
+function MG_getFeedUrl( $feedfile = '' )
+{
+    global $_CONF;
+
+    $feedpath = SYND_getFeedPath();
+    $url = substr_replace ($feedpath, $_CONF['site_url'], 0,
+                           strlen ($_CONF['path_html']) - 1);
+    $url .= $feedfile;
+
+    return $url;
 }
 
 ?>

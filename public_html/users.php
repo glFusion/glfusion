@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -50,9 +47,7 @@
 * glFusion common function library
 */
 require_once 'lib-common.php';
-
-USES_lib_user();
-
+require_once $_CONF['path_system'] . 'lib-user.php';
 $VERBOSE = false;
 
 /**
@@ -68,19 +63,35 @@ $VERBOSE = false;
 */
 function userprofile($user, $msg = 0, $plugin = '')
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09,
-           $LANG28, $LANG_LOGIN, $pageHandle;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09, $LANG28, $LANG_LOGIN;
 
     $retval = '';
     if (empty ($_USER['username']) &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['profileloginrequired'] == 1))) {
-        $pageHandle->displayLoginRequired();
+        $retval .= COM_siteHeader ('menu', $LANG_LOGIN[1]);
+        $retval .= COM_startBlock ($LANG_LOGIN[1], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'));
+        $login = new Template($_CONF['path_layout'] . 'submit');
+        $login->set_file (array ('login'=>'submitloginrequired.thtml'));
+        $login->set_var ( 'xhtml', XHTML );
+        $login->set_var ('login_message', $LANG_LOGIN[2]);
+        $login->set_var ('site_url', $_CONF['site_url']);
+        $login->set_var ('site_admin_url', $_CONF['site_admin_url']);
+        $login->set_var ('layout_url', $_CONF['layout_url']);
+        $login->set_var ('lang_login', $LANG_LOGIN[3]);
+        $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
+        $login->parse ('output', 'login');
+        $retval .= $login->finish ($login->get_var('output'));
+        $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $retval .= COM_siteFooter ();
+
+        return $retval;
     }
 
     $result = DB_query ("SELECT {$_TABLES['users']}.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,emailfromadmin,emailfromuser,showonline FROM {$_TABLES['userinfo']},{$_TABLES['userprefs']},{$_TABLES['users']} WHERE {$_TABLES['userinfo']}.uid = {$_TABLES['users']}.uid AND {$_TABLES['userinfo']}.uid = {$_TABLES['userprefs']}.uid AND {$_TABLES['users']}.uid = ".intval($user));
     $nrows = DB_numRows ($result);
     if ($nrows == 0) { // no such user
-        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+        return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
     $A = DB_fetchArray ($result);
 
@@ -91,9 +102,9 @@ function userprofile($user, $msg = 0, $plugin = '')
     $display_name = htmlspecialchars(COM_getDisplayName($user, $A['username'],
                                                         $A['fullname']));
 
-    $pageHandle->setPageTitle($LANG04[1] . ' ' . $display_name);
+    $retval .= COM_siteHeader ('menu', $LANG04[1] . ' ' . $display_name);
     if ($msg > 0) {
-        $pageHandle->addMessage($msg,$plugin);
+        $retval .= COM_showMessage($msg, $plugin);
     }
 
     // format date/time to user preference
@@ -104,6 +115,9 @@ function userprofile($user, $msg = 0, $plugin = '')
     $user_templates->set_file (array ('profile' => 'profile.thtml',
                                       'row'     => 'commentrow.thtml',
                                       'strow'   => 'storyrow.thtml'));
+    $user_templates->set_var ('xhtml', XHTML);
+    $user_templates->set_var ('site_url', $_CONF['site_url']);
+    $user_templates->set_var ('layout_url', $_CONF['layout_url']);
     $user_templates->set_var ('start_block_userprofile',
             COM_startBlock ($LANG04[1] . ' ' . $display_name));
     $user_templates->set_var ('end_block', COM_endBlock ());
@@ -134,7 +148,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     $user_templates->set_var ('username', $username);
     $user_templates->set_var ('user_fullname', $fullname);
 
-    if (SEC_hasRights('user.edit') || $_USER['uid'] == $A['uid']) {
+    if (SEC_hasRights('user.edit') || (isset($_USER['uid']) && $_USER['uid'] == $A['uid'])) {
         global $_IMAGE_TYPE, $LANG_ADMIN;
 
         $edit_icon = '<img src="' . $_CONF['layout_url'] . '/images/edit.'
@@ -333,7 +347,7 @@ function userprofile($user, $msg = 0, $plugin = '')
     if ( is_array($profileIcons) && count($profileIcons) > 0 ) {
 	    $user_templates->set_block('profile', 'profileicon', 'pi');
         for ($x=0;$x<count($profileIcons);$x++) {
-            if ( $profileIcons[$x]['url'] != '' && $profileIcons[$x]['icon'] != '' ) {
+            if ( isset($profileIcons[$x]['url']) && $profileIcons[$x]['url'] != '' && isset($profileIcons[$x]['icon']) && $profileIcons[$x]['icon'] != '' ) {
                 $user_templates->set_var('profile_icon_url',$profileIcons[$x]['url']);
                 $user_templates->set_var('profile_icon_icon',$profileIcons[$x]['icon']);
                 $user_templates->set_var('profile_icon_text',$profileIcons[$x]['text']);
@@ -349,10 +363,12 @@ function userprofile($user, $msg = 0, $plugin = '')
     PLG_profileVariablesDisplay ($user, $user_templates);
 
     $user_templates->parse ('output', 'profile');
-    $pageHandle->addContent($user_templates->finish ($user_templates->get_var ('output')));
+    $retval .= $user_templates->finish ($user_templates->get_var ('output'));
 
-    $pageHandle->addContent(PLG_profileBlocksDisplay ($user));
-    $pageHandle->displayPage();
+    $retval .= PLG_profileBlocksDisplay ($user);
+    $retval .= COM_siteFooter ();
+
+    return $retval;
 }
 
 /**
@@ -367,9 +383,11 @@ function userprofile($user, $msg = 0, $plugin = '')
 */
 function emailpassword ($username, $msg = 0)
 {
-    global $_CONF, $_TABLES, $LANG04, $pageHandle, $inputHandler;
+    global $_CONF, $_TABLES, $LANG04;
 
-    $username = $inputHandler->prepareForDB($username);
+    $retval = '';
+
+    $username = addslashes ($username);
     // don't retrieve any remote users!
     $result = DB_query ("SELECT uid,email,status FROM {$_TABLES['users']} WHERE username = '$username' AND ((remoteservice is null) OR (remoteservice = ''))");
     $nrows = DB_numRows ($result);
@@ -377,22 +395,25 @@ function emailpassword ($username, $msg = 0)
         $A = DB_fetchArray ($result);
         if (($_CONF['usersubmission'] == 1) && ($A['status'] == USER_ACCOUNT_AWAITING_APPROVAL))
         {
-            $pageHandle->redirect($_CONF['site_url'] . '/index.php?msg=48');
+            return COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
 
         $mailresult = USER_createAndSendPassword ($username, $A['email'], $A['uid']);
 
         if ($mailresult == false) {
-            $pageHandle->redirect("{$_CONF['site_url']}/index.php?msg=85");
+            $retval = COM_refresh ("{$_CONF['site_url']}/index.php?msg=85");
         } else if ($msg) {
-            $pageHandle->redirect("{$_CONF['site_url']}/index.php?msg=$msg");
+            $retval = COM_refresh ("{$_CONF['site_url']}/index.php?msg=$msg");
         } else {
-            $pageHandle->redirect($_CONF['site_url'] . "/index.php?msg=1");
+            $retval = COM_refresh ("{$_CONF['site_url']}/index.php?msg=1");
         }
     } else {
-        $pageHandle->addContent(defaultform(''));
-        $pageHandle->displayPage();
+        $retval = COM_siteHeader ('menu','')
+                . defaultform ('')
+                . COM_siteFooter ();
     }
+
+    return $retval;
 }
 
 /**
@@ -405,7 +426,7 @@ function emailpassword ($username, $msg = 0)
 */
 function requestpassword ($username, $msg = 0)
 {
-    global $_CONF, $_TABLES, $LANG04, $pageHandle;
+    global $_CONF, $_TABLES, $LANG04;
 
     $retval = '';
 
@@ -416,7 +437,7 @@ function requestpassword ($username, $msg = 0)
     if ($nrows == 1) {
         $A = DB_fetchArray ($result);
         if (($_CONF['usersubmission'] == 1) && ($A['status'] == USER_ACCOUNT_AWAITING_APPROVAL)) {
-            $pageHandle->redirect($_CONF['site_url'] . '/index.php?msg=48');
+            return COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
         }
         $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
         DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",
@@ -443,15 +464,19 @@ function requestpassword ($username, $msg = 0)
         COM_mail ($to, $subject, $mailtext, $from);
 
         if ($msg) {
-            $pageHandle->redirect($_CONF['site_url'] . "/index.php?msg=$msg");
+            $retval .= COM_refresh ($_CONF['site_url'] . "/index.php?msg=$msg");
         } else {
-            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+            $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
         }
         COM_updateSpeedlimit ('password');
     } else {
-        $pageHandle->addContent(defaultform(''));
-        $pageHandle->displayPage();
+        COM_updateSpeedlimit ('password');
+        echo COM_refresh ($_CONF['site_url']
+                                . '/users.php?mode=getpassword');
+        exit;
     }
+
+    return $retval;
 }
 
 /**
@@ -464,10 +489,13 @@ function requestpassword ($username, $msg = 0)
 */
 function newpasswordform ($uid, $requestid)
 {
-    global $_CONF, $_TABLES, $LANG04, $pageHandle;
+    global $_CONF, $_TABLES, $LANG04;
 
     $pwform = new Template ($_CONF['path_layout'] . 'users');
     $pwform->set_file (array ('newpw' => 'newpassword.thtml'));
+    $pwform->set_var ( 'xhtml', XHTML );
+    $pwform->set_var ('site_url', $_CONF['site_url']);
+    $pwform->set_var ('layout_url', $_CONF['layout_url']);
 
     $pwform->set_var ('user_id', $uid);
     $pwform->set_var ('user_name', DB_getItem ($_TABLES['users'], 'username',
@@ -500,7 +528,7 @@ function newpasswordform ($uid, $requestid)
 */
 function createuser ($username, $email, $email_conf)
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG04,$pageHandle;
+    global $_CONF, $_TABLES, $LANG01, $LANG04;
 
     $retval = '';
 
@@ -529,21 +557,26 @@ function createuser ($username, $email, $email_conf)
                 $msg = CUSTOM_userCheck ($username, $email);
                 if (!empty ($msg)) {
                     // no, it's not okay with the custom userform
-                    $pageHandle->addContent(CUSTOM_userForm ($msg));
-                    $pageHandle->displayPage();
+                    $retval = COM_siteHeader ('menu')
+                            . CUSTOM_userForm ($msg)
+                            . COM_siteFooter ();
+
+                    return $retval;
                 }
             }
 
             // Let plugins have a chance to decide what to do before creating the user, return errors.
             $msg = PLG_itemPreSave ('registration', $username);
             if (!empty ($msg)) {
-                $pageHandle->setPageTitle($LANG04[22]);
+                $retval .= COM_siteHeader ('menu', $LANG04[22]);
                 if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userForm')) {
-                    $pageHandle->addContent(CUSTOM_userForm ($msg));
+                    $retval .= CUSTOM_userForm ($msg);
                 } else {
-                    $pageHandle->addContent(newuserform ($msg));
+                    $retval .= newuserform ($msg);
                 }
-                $pageHandle->displayPage();
+                $retval .= COM_siteFooter();
+
+                return $retval;
             }
 
             $uid = USER_createAccount ($username, $email);
@@ -551,7 +584,7 @@ function createuser ($username, $email, $email_conf)
             if ($_CONF['usersubmission'] == 1) {
                 if (DB_getItem ($_TABLES['users'], 'status', "uid = ".intval($uid))
                         == USER_ACCOUNT_AWAITING_APPROVAL) {
-                    $pageHandle->redirect($_CONF['site_url']
+                    $retval = COM_refresh ($_CONF['site_url']
                                            . '/index.php?msg=48');
                 } else {
                     $retval = emailpassword ($username, 1);
@@ -562,24 +595,24 @@ function createuser ($username, $email, $email_conf)
 
             return $retval;
         } else {
-            $pageHandle->setPageTitle($LANG04[22]);
+            $retval .= COM_siteHeader ('menu', $LANG04[22]);
             if ($_CONF['custom_registration'] &&
                     function_exists ('CUSTOM_userForm')) {
-                $pageHandle->addContent(CUSTOM_userForm ($LANG04[19]));
+                $retval .= CUSTOM_userForm ($LANG04[19]);
             } else {
-                $pageHandle->addContent(newuserform ($LANG04[19]));
+                $retval .= newuserform ($LANG04[19]);
             }
-            $pageHandle->displayPage();
+            $retval .= COM_siteFooter ();
         }
     } else if ($email !== $email_conf) {
         $msg = $LANG04[125];
-        $pageHandle->setPageTitle($LANG04[22]);
+        $retval .= COM_siteHeader ('menu', $LANG04[22]);
         if ($_CONF['custom_registration'] && function_exists('CUSTOM_userForm')) {
-            $pageHandle->addContent(CUSTOM_userForm ($msg));
+            $retval .= CUSTOM_userForm ($msg);
         } else {
-            $pageHandle->addContent(newuserform ($msg));
+            $retval .= newuserform ($msg);
         }
-        $pageHandle->displayPage();
+        $retval .= COM_siteFooter();
     } else { // invalid username or email address
 
         if ((empty ($username)) || (strlen($username) > 16)) {
@@ -587,14 +620,16 @@ function createuser ($username, $email, $email_conf)
         } else {
             $msg = $LANG04[18]; // invalid email address
         }
-        $pageHandle->setPageTitle($LANG04[22]);
+        $retval .= COM_siteHeader ('menu', $LANG04[22]);
         if ($_CONF['custom_registration'] && function_exists('CUSTOM_userForm')) {
-            $pageHandle->addContent(CUSTOM_userForm ($msg));
+            $retval .= CUSTOM_userForm ($msg);
         } else {
-            $pageHandle->addContent(newuserform ($msg));
+            $retval .= newuserform ($msg);
         }
-        $pageHandle->displayPage();
+        $retval .= COM_siteFooter();
     }
+
+    return $retval;
 }
 
 /**
@@ -612,12 +647,17 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
 
     $user_templates = new Template ($_CONF['path_layout'] . 'users');
     $user_templates->set_file('login', 'loginform.thtml');
+    $user_templates->set_var( 'xhtml', XHTML );
+    $user_templates->set_var('site_url', $_CONF['site_url']);
     if ($statusmode == 0) {
         $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[114]));
         $user_templates->set_var('lang_message', $LANG04[115]);
     } elseif ($statusmode == 2) {
         $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[116]));
         $user_templates->set_var('lang_message', $LANG04[117]);
+    } elseif ($statusmode == -1) {
+        $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[65]));
+        $user_templates->set_var('lang_message', $LANG04[113]);
     } else {
         $user_templates->set_var('start_block_loginagain', COM_startBlock($LANG04[65]));
         if ($_CONF['disable_new_user_registration']) {
@@ -704,7 +744,7 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
 */
 function newuserform ($msg = '')
 {
-    global $_CONF, $LANG04, $inputHandler;
+    global $_CONF, $LANG04;
 
     $retval = '';
 
@@ -730,14 +770,24 @@ function newuserform ($msg = '')
     PLG_templateSetVars ('registration', $user_templates);
     $user_templates->set_var('end_block', COM_endBlock());
 
-    $username = $inputHandler->getVar('strict','username','post','');
+    $username = '';
+    if (!empty ($_POST['username'])) {
+        $username = COM_applyFilter ($_POST['username']);
+    }
     $user_templates->set_var ('username', $username);
 
-    $email = $inputHandler->getVar('strict','email','post','');
+    $email = '';
+    if (!empty ($_POST['email'])) {
+        $email = COM_applyFilter ($_POST['email']);
+    }
     $user_templates->set_var ('email', $email);
 
-    $email_conf = $inputHandler->getVar('strict','email_conf','post','');
+    $email_conf = '';
+    if (!empty ($_POST['email_conf'])) {
+        $email_conf = COM_applyFilter ($_POST['email_conf']);
+    }
     $user_templates->set_var ('email_conf', $email_conf);
+
 
     $user_templates->parse('output', 'regform');
     $retval .= $user_templates->finish($user_templates->get_var('output'));
@@ -759,6 +809,9 @@ function getpasswordform()
 
     $user_templates = new Template($_CONF['path_layout'] . 'users');
     $user_templates->set_file('form', 'getpasswordform.thtml');
+    $user_templates->set_var( 'xhtml', XHTML );
+    $user_templates->set_var('site_url', $_CONF['site_url']);
+    $user_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
     $user_templates->set_var('layout_url', $_CONF['layout_url']);
     $user_templates->set_var('start_block_forgetpassword', COM_startBlock($LANG04[25]));
     $user_templates->set_var('lang_instructions', $LANG04[26]);
@@ -815,7 +868,7 @@ function defaultform ($msg)
 */
 function displayLoginErrorAndAbort($msg, $message_title, $message_text)
 {
-    global $_CONF, $pageHandle;
+    global $_CONF;
 
     if ($_CONF['custom_registration'] &&
             function_exists('CUSTOM_loginErrorHandler')) {
@@ -823,22 +876,36 @@ function displayLoginErrorAndAbort($msg, $message_title, $message_text)
         // and need to control the login process
         CUSTOM_loginErrorHandler($msg);
     } else {
-        $pageHandle->setPageTitle($message_title);
-        $pageHandle->addContent(COM_startBlock($message_title, '',
+        $retval = COM_siteHeader('menu', $message_title)
+                . COM_startBlock($message_title, '',
                                  COM_getBlockTemplate('_msg_block', 'header'))
                 . $message_text
-                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer')));
-        $pageHandle->displayPage();
+                . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
+                . COM_siteFooter();
+    /*
+     * some themes may have already called COM_siteHeader(), so we can
+     * send the 403 code.
+     */
+//        header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+//        header('Status: 403 Forbidden');
+        echo $retval;
     }
+
     // don't return
     exit();
 }
 
+
 // MAIN
+if ( isset($_POST['mode']) ) {
+    $mode = $_POST['mode'];
+} elseif (isset($_GET['mode']) ) {
+    $mode = $_GET['mode'];
+} else {
+    $mode = '';
+}
 
-$pageHandle->setShowExtraBlocks(false);
-
-$mode = $inputHandler->getVar('strict','mode','request','');
+$display = '';
 
 switch ($mode) {
 case 'logout':
@@ -847,60 +914,62 @@ case 'logout':
         SESS_endUserSession ($_USER['uid']);
         PLG_logoutUser ($_USER['uid']);
     }
-    setcookie ($_CONF['cookie_session'], '', time() - 10000,
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
-    setcookie ($_CONF['cookie_password'], '', time() - 10000,
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
-    setcookie ($_CONF['cookie_name'], '', time() - 10000,
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
-    $pageHandle->redirect($_CONF['site_url'] . '/index.php?msg=8');
+    SEC_setCookie ($_CONF['cookie_session'], '', time() - 10000,
+                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                   $_CONF['cookiesecure'],true);
+    SEC_setCookie ($_CONF['cookie_password'], '', time() - 10000,
+                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                   $_CONF['cookiesecure'],true);
+    SEC_setCookie ($_CONF['cookie_name'], '', time() - 10000,
+                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                   $_CONF['cookiesecure'],true);
+    $display = COM_refresh($_CONF['site_url'] . '/index.php?msg=8');
     break;
 
 case 'profile':
-    $uid = $inputHandler->getVar('integer','uid','get',0);
+    $uid = COM_applyFilter ($_GET['uid'], true);
     if (is_numeric ($uid) && ($uid > 1)) {
         $msg = 0;
         if (isset ($_GET['msg'])) {
-            $msg = $inputHandler->getVar('integer','msg','get','');
+            $msg = COM_applyFilter ($_GET['msg'], true);
         }
-        userprofile ($uid, $msg);
+        $plugin = '';
+        if (($msg > 0) && isset($_GET['plugin'])) {
+            $plugin = COM_applyFilter($_GET['plugin']);
+        }
+        $display .= userprofile($uid, $msg, $plugin);
     } else {
-        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+        $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
     break;
 
 case 'user':
-    $username = $inputHandler->getVar('strict','username','get','');
+    $username = COM_applyFilter ($_GET['username']);
     if (!empty ($username)) {
-        $username = $inputHandler->prepareForDB($username);
+        $username = addslashes ($username);
         $uid = DB_getItem ($_TABLES['users'], 'uid', "username = '$username'");
         if ($uid > 1) {
-            userprofile ($uid);
+            $display .= userprofile ($uid);
         } else {
-            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+            $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
         }
     } else {
-        $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+        $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
     break;
 
 case 'create':
     if ($_CONF['disable_new_user_registration']) {
-        $pageHandle->setPageTitle($LANG04[22]);
-
-        $pageHandle->addContent(COM_startBlock ($LANG04[22], '',
+        $display .= COM_siteHeader ('menu', $LANG04[22]);
+        $display .= COM_startBlock ($LANG04[22], '',
                             COM_getBlockTemplate ('_msg_block', 'header'))
                  . $LANG04[122]
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));
-        $pageHandle->displayPage();
+                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        $display .= COM_siteFooter ();
     } else {
-        $email = $inputHandler->getVar('strict','email','post','');
-        $email_conf = $inputHandler->getVar('strict','email_conf','post','');
-        $username = $inputHandler->getVar('strict','username','post','');
-        createuser($username, $email, $email_conf);
+        $email = COM_applyFilter ($_POST['email']);
+        $email_conf = COM_applyFilter ($_POST['email_conf']);
+        $display .= createuser(COM_applyFilter ($_POST['username']), $email, $email_conf);
     }
     break;
 
@@ -912,20 +981,19 @@ case 'getpassword':
     COM_clearSpeedlimit ($_CONF['passwordspeedlimit'], 'password');
     $last = COM_checkSpeedlimit ('password',4);
     if ($last > 0) {
-        $pageHandle->addContent(COM_startBlock ($LANG12[26], '',
+        $display .= COM_startBlock ($LANG12[26], '',
                             COM_getBlockTemplate ('_msg_block', 'header'))
                  . sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit'])
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));
-        $pageHandle->displayPage();
+                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     } else {
-        $pageHandle->addContent(getpasswordform ());
+        $display .= getpasswordform ();
     }
-    $pageHandle->displayPage();
+    $display .= COM_siteFooter ();
     break;
 
 case 'newpwd':
-    $uid = $inputHandler->getVar('integer','uid','get',0);
-    $reqid = $inputHandler->getVar('integer','rid','get',0);
+    $uid = COM_applyFilter ($_GET['uid'], true);
+    $reqid = COM_applyFilter ($_GET['rid']);
     if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
             !empty ($reqid) && (strlen ($reqid) == 16)) {
         $uid = intval($uid);
@@ -933,33 +1001,30 @@ case 'newpwd':
         $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
                            array ($uid, $safereqid));
         if ($valid == 1) {
-            $pageHandle->setPageTitle($LANG04[92]);
-            $pageHandle->addContent(newpasswordform ($uid, $reqid));
-            $pageHandle->displayPage();
+            $display .= COM_siteHeader ('menu', $LANG04[92]);
+            $display .= newpasswordform ($uid, $reqid);
+            $display .= COM_siteFooter ();
         } else { // request invalid or expired
-            $pageHandle->setPageTitle($LANG04[25]);
-            $pageHandle->addMessage(54);
-            $pageHandle->addContent(getpasswordform ());
-            $pageHandle->displayPage();
+            $display .= COM_siteHeader ('menu', $LANG04[25]);
+            $display .= COM_showMessage (54);
+            $display .= getpasswordform ();
+            $display .= COM_siteFooter ();
         }
     } else {
         // this request doesn't make sense - ignore it
-        $pageHandle->redirect($_CONF['site_url']);
+        $display = COM_refresh ($_CONF['site_url']);
     }
     break;
 
 case 'setnewpwd':
-    $passwd = $inputHandler->getVar('strict','passwd','post','');
-    $passwd_conf = $inputHandler->getVar('strict','passwd_conf','post','');
-    $uid = $inputHandler->getVar('integer','uid','post',0);
-    $reqid = $inputHandler->getVar('strict','rid','post','');
-
-    if ( (empty ($passwd))
-            or ($passwd != $passwd_conf) ) {
-        $pageHandle->redirect($_CONF['site_url']
-                 . '/users.php?mode=newpwd&amp;uid=' . $uid
-                 . '&amp;rid=' . $reqid);
+    if ( (empty ($_POST['passwd']))
+            or ($_POST['passwd'] != $_POST['passwd_conf']) ) {
+        $display = COM_refresh ($_CONF['site_url']
+                 . '/users.php?mode=newpwd&amp;uid=' . $_POST['uid']
+                 . '&amp;rid=' . $_POST['rid']);
     } else {
+        $uid = COM_applyFilter ($_POST['uid'], true);
+        $reqid = COM_applyFilter ($_POST['rid']);
         if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) &&
                 !empty ($reqid) && (strlen ($reqid) == 16)) {
             $uid = intval($uid);
@@ -967,22 +1032,22 @@ case 'setnewpwd':
             $valid = DB_count ($_TABLES['users'], array ('uid', 'pwrequestid'),
                                array ($uid, $safereqid));
             if ($valid == 1) {
-                $passwd = SEC_encryptPassword($passwd);
+                $passwd = SEC_encryptPassword($_POST['passwd']);
                 DB_change ($_TABLES['users'], 'passwd', addslashes($passwd),
                            "uid", $uid);
                 DB_delete ($_TABLES['sessions'], 'uid', $uid);
                 DB_change ($_TABLES['users'], 'pwrequestid', "NULL",
                            'uid', $uid);
-                $pageHandle->redirect($_CONF['site_url'] . '/users.php?msg=53');
+                $display = COM_refresh ($_CONF['site_url'] . '/users.php?msg=53');
             } else { // request invalid or expired
-                $pageHandle->setPageTitle($LANG04[25]);
-                $pageHandle->addMessage(54);
-                $pageHandle->addContent(getpasswordform ());
-                $pageHandle->displayPage();
+                $display .= COM_siteHeader ('menu', $LANG04[25]);
+                $display .= COM_showMessage (54);
+                $display .= getpasswordform ();
+                $display .= COM_siteFooter ();
             }
         } else {
             // this request doesn't make sense - ignore it
-            $pageHandle->redirect($_CONF['site_url']);
+            $display = COM_refresh ($_CONF['site_url']);
         }
     }
     break;
@@ -994,73 +1059,88 @@ case 'emailpasswd':
     COM_clearSpeedlimit ($_CONF['passwordspeedlimit'], 'password');
     $last = COM_checkSpeedlimit ('password');
     if ($last > 0) {
-        $pageHandle->displayAccessError( $LANG12[26],sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit']), 'item before speedlimit expired' );
+        $display .= COM_siteHeader ('menu', $LANG12[26])
+                 . COM_startBlock ($LANG12[26], '',
+                           COM_getBlockTemplate ('_msg_block', 'header'))
+                 . sprintf ($LANG04[93], $last, $_CONF['passwordspeedlimit'])
+                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'))
+                 . COM_siteFooter ();
     } else {
-        $username = $inputHandler->getVar('strict','username','post','');
-        $email    = $inputHandler->getVar('strict','email','post','');
+        $username = COM_applyFilter ($_POST['username']);
+        $email = COM_applyFilter ($_POST['email']);
         if (empty ($username) && !empty ($email)) {
-
             $username = DB_getItem ($_TABLES['users'], 'username',
                                     "email = '".addslashes($email)."' AND ((remoteservice IS NULL) OR (remoteservice = ''))");
         }
         if (!empty ($username)) {
-            $pageHandle->addContent(requestpassword ($username, 55));
+            $display .= requestpassword ($username, 55);
         } else {
-            $pageHandle->redirect($_CONF['site_url']
+
+            echo COM_refresh ($_CONF['site_url']
                                     . '/users.php?mode=getpassword');
+            exit;
         }
     }
     break;
 
 case 'new':
-    $pageHandle->setPageTitle($LANG04[22]);
+    $display .= COM_siteHeader ('menu', $LANG04[22]);
     if ($_CONF['disable_new_user_registration']) {
-        $pageHandle->addContent(COM_startBlock ($LANG04[22], '',
+        $display .= COM_startBlock ($LANG04[22], '',
                             COM_getBlockTemplate ('_msg_block', 'header'))
                  . $LANG04[122]
-                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')));
+                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     } else {
         // Call custom registration and account record create function
         // if enabled and exists
         if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userForm'))) {
-            $pageHandle->addContent(CUSTOM_userForm());
+            $display .= CUSTOM_userForm();
         } else {
-            $pageHandle->addContent(newuserform());
+            $display .= newuserform();
         }
     }
-    $pageHandle->displayPage();
+    $display .= COM_siteFooter();
     break;
 
 default:
-
+    $status = -2;
     // prevent dictionary attacks on passwords
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
     if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
         displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
     }
 
-    $loginname = $inputHandler->getVar('strict','loginname','post','');
-    $passwd    = $inputHandler->getVar('strict','passwd','post','');
-    $service   = $inputHandler->getVar('strict','service','post','');
-    $openid_login = $inputHandler->getVar('strict','openid_login','get','');
-
+    $loginname = '';
+    if (isset ($_POST['loginname'])) {
+        $loginname = COM_applyFilter ($_POST['loginname']);
+    }
+    $passwd = '';
+    if (isset ($_POST['passwd'])) {
+        $passwd = $_POST['passwd'];
+    }
+    $service = '';
+    if (isset ($_POST['service'])) {
+        $service = COM_applyFilter($_POST['service']);
+    }
     $uid = '';
     if (!empty($loginname) && !empty($passwd) && empty($service)) {
         if (empty($service) && $_CONF['user_login_method']['standard']) {
+            COM_updateSpeedlimit('login');
             $status = SEC_authenticate($loginname, $passwd, $uid);
         } else {
-            $status = -1;
+            $status = -2;
         }
 
     } elseif (( $_CONF['usersubmission'] == 0) && $_CONF['user_login_method']['3rdparty'] && ($service != '')) {
         /* Distributed Authentication */
         //pass $loginname by ref so we can change it ;-)
+        COM_updateSpeedlimit('login');
         $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
 
     } elseif ($_CONF['user_login_method']['openid'] &&
             ($_CONF['usersubmission'] == 0) &&
             !$_CONF['disable_new_user_registration'] &&
-            $openid_login == '1') {
+            (isset($_GET['openid_login']) && ($_GET['openid_login'] == '1'))) {
         // Here we go with the handling of OpenID authentification.
 
         $query = array_merge($_GET, $_POST);
@@ -1088,7 +1168,7 @@ default:
                 $property = sprintf('%x', crc32($query['identity_url']));
                 COM_updateSpeedlimit('openid', $property);
                 COM_errorLog('Unable to find an OpenID server for the identity URL ' . $identity_url);
-                $pageHandle->redirect($_CONF['site_url'] . '/users.php?msg=89');
+                echo COM_refresh($_CONF['site_url'] . '/users.php?msg=89');
                 exit;
             } else {
                 // Found identity server info.
@@ -1115,7 +1195,7 @@ default:
             }
             if ($openid_mode == 'cancel') {
                 COM_updateSpeedlimit('login');
-                $pageHandle->redirect($_CONF['site_url'] . '/users.php?msg=90');
+                echo COM_refresh($_CONF['site_url'] . '/users.php?msg=90');
                 exit;
             } else {
                $openid = $handler->getOpenID();
@@ -1125,11 +1205,11 @@ default:
             }
         } else {
             COM_updateSpeedlimit('login');
-            $pageHandle->redirect($_CONF['site_url'] . '/users.php?msg=91');
+            echo COM_refresh($_CONF['site_url'] . '/users.php?msg=91');
             exit;
         }
     } else {
-        $status = -1;
+        $status = -2;
     }
 
     if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
@@ -1152,13 +1232,13 @@ default:
                 if ($VERBOSE) {
                     COM_errorLog('Trying to set permanent cookie',1);
                 }
-                setcookie ($_CONF['cookie_name'], $_USER['uid'],
-                           time() + $cooktime, $_CONF['cookie_path'],
-                           $_CONF['cookiedomain'], $_CONF['cookiesecure']);
-                setcookie ($_CONF['cookie_password'],
-                           SEC_encryptPassword($passwd), time() + $cooktime,
-                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                           $_CONF['cookiesecure']);
+                SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'],
+                               time() + $cooktime, $_CONF['cookie_path'],
+                               $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
+                SEC_setCookie ($_CONF['cookie_password'],
+                               SEC_encryptPassword($passwd), time() + $cooktime,
+                               $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                               $_CONF['cookiesecure'],true);
                 DB_query("UPDATE {$_TABLES['users']} set remote_ip='".addslashes($_SERVER['REMOTE_ADDR'])."' WHERE uid=".$_USER['uid'],1);
             }
         } else {
@@ -1166,7 +1246,7 @@ default:
             if (empty ($userid) || ($userid == 'deleted')) {
                 unset ($userid);
             } else {
-                $userid = $inputHandler->filterVar('integer',$userid,'',0);
+                $userid = COM_applyFilter ($userid, true);
                 if ($userid > 1) {
                     if ($VERBOSE) {
                         COM_errorLog ('NOW trying to set permanent cookie',1);
@@ -1184,9 +1264,9 @@ default:
 
         // Now that we have users data see if their theme cookie is set.
         // If not set it
-        setcookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
-                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                   $_CONF['cookiesecure']);
+        SEC_setcookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
+                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                       $_CONF['cookiesecure'],true);
 
         if (!empty($_SERVER['HTTP_REFERER'])
                 && (strstr($_SERVER['HTTP_REFERER'], '/users.php') === false)
@@ -1194,25 +1274,30 @@ default:
                         strlen($_CONF['site_url'])) == $_CONF['site_url'])) {
             $indexMsg = $_CONF['site_url'] . '/index.php?msg=';
             if (substr ($_SERVER['HTTP_REFERER'], 0, strlen ($indexMsg)) == $indexMsg) {
-                $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+                $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
             } else {
                 // If user is trying to login - force redirect to index.php
                 if (strstr ($_SERVER['HTTP_REFERER'], 'mode=login') === false) {
-                    $pageHandle->redirect($_SERVER['HTTP_REFERER']);
+                    $display .= COM_refresh ($_SERVER['HTTP_REFERER']);
                 } else {
-                    $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+                    $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
                 }
             }
         } else {
-            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+            $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
         }
     } else {
-        // On failed login attempt, update speed limit
-        COM_updateSpeedlimit('login');
+        $display .= COM_siteHeader('menu');
 
-        $msg = $inputHandler->getVar('integer','msg','request','');
+        if ( isset($_POST['msg']) ) {
+            $msg = COM_applyFilter($_POST['msg'],true);
+        } elseif (isset($_GET['msg']) ) {
+            $msg = COM_applyFilter($_GET['msg'],true);
+        } else {
+            $msg = 0;
+        }
         if ($msg > 0) {
-            $pageHandle->addMessage($msg);
+            $display .= COM_showMessage($msg);
         }
 
         switch ($mode) {
@@ -1220,9 +1305,9 @@ default:
             // Got bad account info from registration process, show error
             // message and display form again
             if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userForm'))) {
-                $pageHandle->addContent(CUSTOM_userForm ());
+                $display .= CUSTOM_userForm ();
             } else {
-                $pageHandle->addContent(newuserform ());
+                $display .= newuserform ();
             }
             break;
         default:
@@ -1231,19 +1316,22 @@ default:
                 displayLoginErrorAndAbort(82, $LANG04[113], $LANG04[112]);
             } else { // Show login form
                 if(($msg != 69) && ($msg != 70)) {
-                    if ($_CONF['custom_registration'] AND function_exists('CUSTOM_loginErrorHandler')) {
+                    if ($_CONF['custom_registration'] AND function_exists('CUSTOM_loginErrorHandler') && $msg != 0) {
                         // Typically this will be used if you have a custom main site page and need to control the login process
-                        $pageHandle->addContent(CUSTOM_loginErrorHandler($msg));
+                        $display .= CUSTOM_loginErrorHandler($msg);
                     } else {
-                        $pageHandle->addContent(loginform(false, $status));
+                        $display .= loginform(false, $status);
                     }
                 }
             }
             break;
         }
 
-        $pageHandle->displayPage();
+        $display .= COM_siteFooter();
     }
     break;
 }
+
+echo $display;
+
 ?>

@@ -360,7 +360,7 @@ function plugin_moderationvalues_calendar()
     return array (
         'eid',
         $_TABLES['events'],
-        "eid,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url",
+        "eid,title,description,location,address1,address2,city,state,zipcode,datestart,timestart,dateend,timeend,url,owner_id",
         $_TABLES['eventsubmission']
     );
 }
@@ -392,7 +392,11 @@ function plugin_moderationapprove_calendar ($id)
     } else {
         $group_id = SEC_getFeatureGroup ('calendar.moderate');
     }
-    DB_query ("UPDATE {$_TABLES['events']} SET owner_id = {$_USER['uid']},"
+/*    DB_query ("UPDATE {$_TABLES['events']} SET owner_id = {$_USER['uid']},"
+             ."group_id = '$group_id',perm_owner = {$A['perm_owner']}, "
+             ."perm_group = {$A['perm_group']}, perm_members = {$A['perm_members']},"
+             ."perm_anon = {$A['perm_anon']} WHERE eid = '".addslashes($id)."'"); */
+    DB_query ("UPDATE {$_TABLES['events']} SET "
              ."group_id = '$group_id',perm_owner = {$A['perm_owner']}, "
              ."perm_group = {$A['perm_group']}, perm_members = {$A['perm_members']},"
              ."perm_anon = {$A['perm_anon']} WHERE eid = '".addslashes($id)."'");
@@ -585,14 +589,21 @@ function plugin_savesubmission_calendar($A)
     }
     $A['timestart'] = $A['start_hour'] . ':' . $A['start_minute'] . ':00';
     $A['timeend'] = $A['end_hour'] . ':' . $A['end_minute'] . ':00';
+
+    if (COM_isAnonUser()) {
+        $owner_id = 1; // anonymous user
+    } else {
+        $owner_id = $_USER['uid'];
+    }
+
     if ($A['calendar_type'] == 'master') { // add to site calendar
 
         if (($_CA_CONF['eventsubmission'] == 1) &&
                 !SEC_hasRights('calendar.submit')) {
 
             DB_save ($_TABLES['eventsubmission'],
-                     'eid,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
-                     "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
+                     'eid,title,event_type,url,owner_id,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description',
+                     "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}',$owner_id,'{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}'");
 
             if (isset ($_CA_CONF['notification']) &&
                     ($_CA_CONF['notification'] == 1)) {
@@ -619,6 +630,8 @@ function plugin_savesubmission_calendar($A)
             DB_save ($_TABLES['events'],
                      'eid,title,event_type,url,datestart,timestart,dateend,timeend,allday,location,address1,address2,city,state,zipcode,description,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon',
                      "'{$A['eid']}','{$A['title']}','{$A['event_type']}','{$A['url']}','{$A['datestart']}','{$A['timestart']}','{$A['dateend']}','{$A['timeend']}',{$A['allday']},'{$A['location']}','{$A['address1']}','{$A['address2']}','{$A['city']}','{$A['state']}','{$A['zipcode']}','{$A['description']}',$owner_id,{$A['group_id']},{$A['perm_owner']},{$A['perm_group']},{$A['perm_members']},{$A['perm_anon']}");
+
+            PLG_itemSaved($A['eid'], 'calendar');
 
             if (isset($_CA_CONF['notification']) &&
                     ($_CA_CONF['notification'] == 1)) {
@@ -698,6 +711,8 @@ function plugin_submit_calendar($mode = 'master',$A = array())
         $mode = $_POST['calendar_type'];
     } else if (isset($_REQUEST['mode']) && ($_REQUEST['mode'] == 'personal')) {
         $mode = 'personal';
+    } else {
+        $mode = 'master';
     }
 
     if (($_CA_CONF['personalcalendars'] == 1) && ($mode == 'quickadd')) {
@@ -950,13 +965,13 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     $eventform->set_var('event_type',$event_type);
     $eventform->set_var('url',$url);
     $eventform->set_var('allday',$allday);
-    $eventform->set_var('location',$location);
+    $eventform->set_var('location',htmlspecialchars($location));
     $eventform->set_var('address1',$address1);
     $eventform->set_var('address2',$address2);
     $eventform->set_var('city',$city);
     $eventform->set_var('state',$state);
     $eventform->set_var('zipcode',$zipcode);
-    $eventform->set_var('description',$description);
+    $eventform->set_var('description',htmlspecialchars($description));
     $eventform->set_var('postmode',$postmode);
     $eventform->parse('theform', 'eventform');
     $retval .= $eventform->finish($eventform->get_var('theform'));
@@ -990,6 +1005,7 @@ function CALENDAR_deleteEvent($eid, $type = '')
 
         DB_delete($_TABLES['events'], 'eid', addslashes($eid));
         DB_delete($_TABLES['personal_events'], 'eid', addslashes($eid));
+        PLG_itemDeleted($eid, 'calendar');
         COM_rdfUpToDateCheck('calendar', $A['event_type'], $A['eid']);
         COM_rdfUpToDateCheck('article', 'calendar', $eid);
 
@@ -1570,6 +1586,9 @@ function plugin_user_delete_calendar ($uid)
                                  "grp_name = 'Root'");
         $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $rootgroup ORDER BY ug_uid LIMIT 1");
         list($rootuser) = DB_fetchArray ($result);
+        if (intval($rootuser) < 2 ) {
+            $rootuser = 2;
+        }
         DB_query ("UPDATE {$_TABLES['events']} SET owner_id = $rootuser WHERE owner_id = ".intval($uid));
     }
 }
@@ -1701,7 +1720,14 @@ function plugin_searchtypes_calendar()
 */
 function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
 {
-    global $_TABLES, $LANG_CAL_1;
+    global $_TABLES, $LANG_CAL_1, $_USER;
+
+    if ( COM_isAnonUser() ) {
+        $uid = 1;
+    } else {
+        $uid = $_USER['uid'];
+    }
+
 
     // Make sure the query is SQL safe
     $query = addslashes(trim(htmlspecialchars($query)));
@@ -1709,37 +1735,32 @@ function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $t
     $sql_e = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, hits, CONCAT('/calendar/event.php?eid=',eid) AS url ";
     $sql_e .= "FROM {$_TABLES['events']} WHERE 1=1 ";
 
-    $sql_p = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, '0' AS hits, CONCAT('/calendar/event.php?eid=',eid) AS url ";
-    $sql_p .= "FROM {$_TABLES['personal_events']} WHERE 1=1 ";
+    $sql_p = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, ";
+    $sql_p .= "CONCAT('/calendar/event.php?mode=personal&eid=',eid) AS url ";
+    $sql_p .= "FROM {$_TABLES['personal_events']} WHERE (uid = $uid) ";
 
     $sql = COM_getPermSQL('AND') . ' ';
 
-    if (!empty($datestart) && !empty($dateend))
-    {
-        $delim = substr($datestart, 4, 1);
-        if (!empty($delim))
-        {
-            $DS = explode($delim, $datestart);
-            $DE = explode($delim, $dateend);
-            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-            $sql .= "AND (UNIX_TIMESTAMP(datestart) BETWEEN '$startdate' AND '$enddate') ";
-        }
-    }
     if (!empty ($author))
         $sql .= "AND (owner_id = '".addslashes($author)."') ";
 
     // Search the public events
     $search_e = new SearchCriteria('calendar', array($LANG_CAL_1[16],$LANG_CAL_1[24]));
     $columns = array('location','description','title');
+    $sql .= $search_e->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(datestart)', $datestart, $dateend);
     list($sql_tmp,$ftsql_tmp) = $search_e->buildSearchSQL($keyType, $query, $columns, $sql_e . $sql);
     $search_e->setSQL($sql_tmp);
     $search_e->setFTSQL($ftsql_tmp);
     $search_e->setRank(2);
 
+    if ( COM_isAnonUser() ) {
+        return $search_e;
+    }
+
     // Search personal events
     $search_p = new SearchCriteria('calendar', array($LANG_CAL_1[16],$LANG_CAL_1[23]));
     $columns = array('location','description','title');
+    $sql_tmp .= $search_p->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(datestart)', $datestart, $dateend);
     list($sql_tmp,$ftsql_tmp) = $search_p->buildSearchSQL($keyType, $query, $columns, $sql_p . $sql);
     $search_p->setSQL($sql_tmp);
     $search_p->setFTSQL($ftsql_tmp);

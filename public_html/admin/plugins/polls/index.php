@@ -124,6 +124,7 @@ function listpolls()
 * Saves a poll topic and potential answers to the database
 *
 * @param    string  $pid            Poll topic ID
+* @param    string  $old_pid        Previous poll topic ID
 * @param    array   $Q              Array of poll questions
 * @param    string  $mainpage       Checkbox: poll appears on homepage
 * @param    string  $topic          The text for the topic
@@ -143,7 +144,7 @@ function listpolls()
 * @return   string                  HTML redirect or error message
 *
 */
-function savepoll($pid, $Q, $mainpage, $topic, $statuscode, $open, $hideresults,
+function savepoll($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $hideresults,
                   $commentcode, $A, $V, $R, $owner_id, $group_id, $perm_owner,
                   $perm_group, $perm_members, $perm_anon)
 
@@ -158,6 +159,14 @@ function savepoll($pid, $Q, $mainpage, $topic, $statuscode, $open, $hideresults,
 
     $pid = COM_sanitizeID($pid);
     $topic = COM_stripslashes($topic);
+    $old_pid = COM_sanitizeID($old_pid);
+    if (empty($pid)) {
+        if (empty($old_pid)) {
+            $pid = COM_makeSid();
+        } else {
+            $pid = $old_pid;
+        }
+    }
 
     // check if any question was entered
     if (empty($topic) or (sizeof($Q) == 0) or (strlen($Q[0]) == 0) or
@@ -175,6 +184,14 @@ function savepoll($pid, $Q, $mainpage, $topic, $statuscode, $open, $hideresults,
         COM_accessLog("User {$_USER['username']} tried to save poll $pid and failed CSRF checks.");
         return COM_refresh($_CONF['site_admin_url']
                            . '/plugins/polls/index.php');
+    }
+    // check for poll id change
+    if (!empty($old_pid) && ($pid != $old_pid)) {
+        // check if new pid is already in use
+        if (DB_count($_TABLES['polltopics'], 'pid', $pid) > 0) {
+            // TBD: abort, display editor with all content intact again
+            $pid = $old_pid; // for now ...
+        }
     }
 
     // start processing the poll topic
@@ -218,9 +235,13 @@ function savepoll($pid, $Q, $mainpage, $topic, $statuscode, $open, $hideresults,
         COM_errorLog('anonymous permissions: ' . $perm_anon, 1);
     }
     // we delete everything and re-create it with the input from the form
-    DB_delete ($_TABLES['polltopics'], 'pid', $pid);
-    DB_delete ($_TABLES['pollanswers'], 'pid', $pid);
-    DB_delete ($_TABLES['pollquestions'], 'pid', $pid);
+    $del_pid = $pid;
+    if (!empty($old_pid) && ($pid != $old_pid)) {
+        $del_pid = $old_pid; // delete by old pid, create using new pid below
+    }
+    DB_delete($_TABLES['polltopics'], 'pid', $del_pid);
+    DB_delete($_TABLES['pollanswers'], 'pid', $del_pid);
+    DB_delete($_TABLES['pollquestions'], 'pid', $del_pid);
 
     $topic = addslashes ($topic);
 
@@ -279,6 +300,14 @@ function savepoll($pid, $Q, $mainpage, $topic, $statuscode, $open, $hideresults,
     DB_save($_TABLES['polltopics'],"pid, topic, voters, questions, date, display, "
            . "is_open, hideresults, statuscode, commentcode, owner_id, group_id, "
            . "perm_owner, perm_group, perm_members, perm_anon",$sql);
+
+    if (empty($old_pid) || ($old_pid == $pid)) {
+        PLG_itemSaved($pid, 'polls');
+    } else {
+        DB_change($_TABLES['comments'], 'sid', addslashes($pid),
+                  array('sid', 'type'), array(addslashes($old_pid), 'polls'));
+        PLG_itemSaved($pid, 'polls', $old_pid);
+    }
 
     if ($_POLL_VERBOSE) {
         COM_errorLog ('**** Leaving savepoll() in '
@@ -464,7 +493,9 @@ function editpoll ($pid = '')
                 $poll_templates->set_var ('answer_text',
                                           htmlspecialchars ($A['answer']));
                 $poll_templates->set_var ('answer_votes', $A['votes']);
-                $poll_templates->set_var ('remark_text', $A['remark']);
+                $poll_templates->set_var ('remark_text',
+                                        htmlspecialchars($A['remark']));
+
             } else {
                 $poll_templates->set_var ('answer_text', '');
                 $poll_templates->set_var ('answer_votes', '');
@@ -514,6 +545,7 @@ function deletePoll ($pid)
     DB_delete ($_TABLES['pollanswers'], 'pid', $pid);
     DB_delete ($_TABLES['pollquestions'], 'pid', $pid);
     DB_query ("DELETE FROM {$_TABLES['comments']} WHERE sid = '$pid' AND type = 'polls'");
+    PLG_itemDeleted($pid, 'polls');
 
     return COM_refresh ($_CONF['site_admin_url'] . '/plugins/polls/index.php?msg=20');
 }
@@ -537,6 +569,16 @@ if ($mode == 'edit') {
     $display .= COM_siteFooter ();
 } elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save'])) {
     $pid = COM_applyFilter ($_POST['pid']);
+    $old_pid = '';
+    if (isset($_POST['old_pid'])) {
+        $old_pid = COM_applyFilter($_POST['old_pid']);
+    }
+    if (empty($pid) && !empty($old_pid)) {
+        $pid = $old_pid;
+    }
+    if (empty($old_pid) && (! empty($pid))) {
+        $old_pid = $pid;
+    }
     if (!empty ($pid)) {
         $statuscode = 0;
         if (isset ($_POST['statuscode'])) {
@@ -554,7 +596,7 @@ if ($mode == 'edit') {
         if (isset ($_POST['hideresults'])) {
             $hideresults = COM_applyFilter ($_POST['hideresults']);
         }
-        $display .= savepoll ($pid, $_POST['question'], $mainpage, $_POST['topic'],
+        $display .= savepoll ($pid, $old_pid,$_POST['question'], $mainpage, $_POST['topic'],
                         $statuscode, $open, $hideresults,
                         COM_applyFilter ($_POST['commentcode'], true),
                         $_POST['answer'], $_POST['votes'], $_POST['remark'],

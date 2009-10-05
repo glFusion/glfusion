@@ -38,71 +38,70 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-$LANG_FM00 = array (
-    'access_denied'     => 'Adgang nægtet',
+###############################################################################
+
+$LANG_FM00 = array(
+    'access_denied' => 'Adgang nægtet',
     'access_denied_msg' => 'Kun Root brugern har adgang til denne side.  Dit brugernavn og IP er blevet gemt.',
-    'admin'             => 'Plugin Admin',
-    'install_header'    => 'Installere/Afinstalleret Plugin',
-    'installed'         => 'Plugin og Block er nu installere,<p><i>God fornøjelse,<br><a href="MAILTO:support@glfusion.org">glFusion Team</a></i>',
-    'uninstalled'       => 'Plugin er ikke installeret',
-    'install_success'   => 'Installation Vellykket<p><b>Næste trin</b>:
-        <ol><li>Brug Filemgmt Admin for at fuldføre plugin konfiguration</ol>
-        <p>Gennemgå <a href="%s">Install Noter</a> for flere oplysninger.',
-    'install_failed'    => 'Installation Fejlede - Se din fejllog for at finde ud af hvorfor.',
-    'uninstall_msg'     => 'Plugin Vellykket Afinstalleret',
-    'install'           => 'Installre',
-    'uninstall'         => 'Afinstallere',
-    'editor'            => 'Plugin Editor',
-    'warning'           => 'Af-Installre Advarsel',
-    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin er installeret og aktiveret.<br>Deaktiver første, hvis du vil af-Installere det.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
-    'WhatsNewLabel'    => 'Filer',
-    'WhatsNewPeriod'   => ' sidst %s days',
-    'new_upload'        => 'New File submitted at ',
-    'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
-    'details'           => 'File Details',
-    'filename'          => 'Filename',
-    'uploaded_by'       => 'Uploaded By',
+    'admin' => 'Plugin Admin',
+    'install_header' => 'Installere/Afinstalleret Plugin',
+    'installed' => 'Plugin og Block er nu installere,<p><i>God fornøjelse,<br' . XHTML . '><a href="MAILTO:support@glfusion.org">glFusion Team</a></i>',
+    'uninstalled' => 'Plugin er ikke installeret',
+    'install_success' => "Installation Vellykket<p><b>Næste trin</b>:\n        <ol><li>Brug Filemgmt Admin for at fuldføre plugin konfiguration</ol>\n        <p>Gennemgå <a href=\"%s\">Install Noter</a> for flere oplysninger.",
+    'install_failed' => 'Installation Fejlede - Se din fejllog for at finde ud af hvorfor.',
+    'uninstall_msg' => 'Plugin Vellykket Afinstalleret',
+    'install' => 'Installre',
+    'uninstall' => 'Afinstallere',
+    'editor' => 'Plugin Editor',
+    'warning' => 'Af-Installre Advarsel',
+    'enabled' => "<p style=\"padding: 15px 0px 5px 25px;\">Plugin er installeret og aktiveret.<br" . XHTML . ">Deaktiver første, hvis du vil af-Installere det.</p><div style=\"padding:5px 0px 5px 25px;\"><a href=\"{$_CONF['site_admin_url']}/plugins.php\">Plugin Editor</a></div",
+    'WhatsNewLabel' => 'Filer',
+    'WhatsNewPeriod' => ' sidst %s days',
+    'new_upload' => 'New File submitted at ',
+    'new_upload_body' => 'A new file has been submitted to the upload queue at ',
+    'details' => 'File Details',
+    'filename' => 'Filename',
+    'uploaded_by' => 'Uploaded By'
 );
 
-// Admin Navbar
 $LANG_FM02 = array(
-    'nav1'  => 'Indstillinger',
-    'nav2'  => 'Kategorier',
-    'nav3'  => 'Tilføj Fil',
-    'nav4'  => 'Downloads (%s)',
-    'nav5'  => 'Fejl På Filer (%s)'
+    'nav1' => 'Indstillinger',
+    'nav2' => 'Kategorier',
+    'nav3' => 'Tilføj Fil',
+    'nav4' => 'Downloads (%s)',
+    'nav5' => 'Fejl På Filer (%s)'
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "Ny side",
-    'adminhome' => "Admin Hjem",
-    'plugin_name' => "Fil Ledelse",
-    'Søglabel' => "Fil Liste",
-    'Søglabel_results' => "Fil Liste Resultater",
-    'downloads' => "Downloads",
-    'report' => "Top Downloads",
-    'usermenu1' => "Downloads",
-    'usermenu2' => "&nbsp;&nbsp;Topkarakter",
-    'usermenu3' => "Upload en fil",
-    'admin_menu' => "Filemgmt Admin",
-    'writtenby' => "Skrevet af",
-    'date' => "Sidst opdateret",
-    'title' => "Titel",
-    'content' => "Indhold",
-    'hits' => "Hits",
-    'Filelisting' => "Fil Liste",
-    'DownloadReport' => "Overførselsoversigt for enkelt fil",
-    'StatsMsg1' => "Top Ti Adgang til filer i downloads",
-    'StatsMsg2' => "Det ser ud til der ikke er nogen filer defineret for filemgmt plugin på dette websted eller ingen nogensinde har haft adgang til dem.",
-    'usealtheader' => "Brug Alt. Header",
-    'url' => "URL",
-    'edit' => "Rediger",
-    'lastupdated' => "Sidst opdateret",
-    'pageformat' => "Side Format",
-    'leftrightblocks' => "Venstre & Højre Blokke",
-    'blankpage' => "Blank Side",
-    'noblocks' => "Ingen Blokke",
-    'leftblocks' => "Venstre Blokke",
+    'newpage' => 'Ny side',
+    'adminhome' => 'Admin Hjem',
+    'plugin_name' => 'Fil Ledelse',
+    'searchlabel' => 'File Listing',
+    'searchlabel_results' => 'File Listing Results',
+    'downloads' => 'Downloads',
+    'report' => 'Top Downloads',
+    'usermenu1' => 'Downloads',
+    'usermenu2' => '&nbsp;&nbsp;Topkarakter',
+    'usermenu3' => 'Upload en fil',
+    'admin_menu' => 'Filemgmt Admin',
+    'writtenby' => 'Skrevet af',
+    'date' => 'Sidst opdateret',
+    'title' => 'Titel',
+    'content' => 'Indhold',
+    'hits' => 'Hits',
+    'Filelisting' => 'Fil Liste',
+    'DownloadReport' => 'Overførselsoversigt for enkelt fil',
+    'StatsMsg1' => 'Top Ti Adgang til filer i downloads',
+    'StatsMsg2' => 'Det ser ud til der ikke er nogen filer defineret for filemgmt plugin på dette websted eller ingen nogensinde har haft adgang til dem.',
+    'usealtheader' => 'Brug Alt. Header',
+    'url' => 'URL',
+    'edit' => 'Rediger',
+    'lastupdated' => 'Sidst opdateret',
+    'pageformat' => 'Side Format',
+    'leftrightblocks' => 'Venstre & Højre Blokke',
+    'blankpage' => 'Blank Side',
+    'noblocks' => 'Ingen Blokke',
+    'leftblocks' => 'Venstre Blokke',
     'addtomenu' => 'Tilføj til Menu',
     'label' => 'Label',
     'nofiles' => 'Antallet af filer i vores Downloads',
@@ -121,75 +120,75 @@ $LANG_FILEMGMT = array(
     'installation_failed' => 'Installationen mislykkedes',
     'installation_failed_msg' => 'Installationen af filen Mgmt plugin mislykkedes. Se venligst din glFusion error.log filen for diagnosticeringsoplysninger',
     'system_locked' => 'System Låst',
-    'system_locked_msg' => '
-Filer Mgmt plugin allerede er installeret og er låst. Hvis du prøver at afinstallere denne plugin, bedes du læse README-dokument, der leveres med denne plugin',
+    'system_locked_msg' => "\nFiler Mgmt plugin allerede er installeret og er låst. Hvis du prøver at afinstallere denne plugin, bedes du læse README-dokument, der leveres med denne plugin",
     'uninstall_complete' => 'Afinstallation Komplet',
-    'uninstall_complete_msg' => 'Den datastrukturer for Filer Mgmt plugin med succes er blevet fjernet fra din glFusion database<br><br>Du skal manuelt fjerne alle filer i din fil downloads mappe.',
+    'uninstall_complete_msg' => 'Den datastrukturer for Filer Mgmt plugin med succes er blevet fjernet fra din glFusion database<br' . XHTML . '><br' . XHTML . '>Du skal manuelt fjerne alle filer i din fil downloads mappe.',
     'uninstall_failed' => 'Afinstaller Mislykket.',
     'uninstall_failed_msg' => 'Afinstallationen af filen Mgmt plugin mislykkedes. Se venligst din glFusion error.log filen for diagnosticeringsoplysninger',
     'install_noop' => 'Plugin Installe',
-    'install_noop_msg' => 'Den filemgmt plugin er installere og der var intet at gøre.<br><br>Tjek din install.cfg file.',
+    'install_noop_msg' => 'Den filemgmt plugin er installere og der var intet at gøre.<br' . XHTML . '><br' . XHTML . '>Tjek din install.cfg file.',
     'all_html_allowed' => 'Alt HTML er tilladt',
-    'no_new_files'  => 'Ingen nye filer',
-    'no_comments'   => 'Ingen nye kommentarer',
-    'more'          => '<em>mere ...</em>'
+    'no_new_files' => 'Ingen nye filer',
+    'no_comments' => 'Ingen nye kommentarer',
+    'more' => '<em>mere ...</em>'
 );
 
+$PLG_filemgmt_MESSAGE1 = 'Filemgmt Plugin Installation Afbrudt<br' . XHTML . '>File: plugins/filemgmt/filemgmt.php is not writeable';
+$PLG_filemgmt_MESSAGE3 = 'Denne plugin kræver glFusion Version 1.0 eller højere, du skal opgradere. Installation afbrudt.';
+$PLG_filemgmt_MESSAGE4 = 'Plugin version 1.5-kode ikke fundet - opgradering afbrudt.';
+$PLG_filemgmt_MESSAGE5 = 'Filemgmt Plugin opgradering afbrudt<br' . XHTML . '>Nuværende plugin-version er ikke 1.3';
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(
-    'label'                 => 'FileMgmt',
-    'title'                 => 'FileMgmt Konfiguration'
+    'label' => 'FileMgmt',
+    'title' => 'FileMgmt Konfiguration'
 );
+
 $LANG_confignames['filemgmt'] = array(
-    'whatsnew'              => 'Aktiver WhatsNew Liste?',
-    'perpage'               => 'Vist downloads pr Side',
-    'popular_download'      => 'Hits for at være populære',
-    'newdownloads'          => 'Antal downloads som Ny på Top Side',
-    'trimdesc'              => 'Trim File Beskrivelser i Liste',
-    'dlreport'              => 'Begrænse adgangen til Download rapport',
-    'selectpriv'            => 'Begrænse adgangen til gruppe \'Logged-In Users\' kun',
-    'uploadselect'          => 'Tillade Logged-In uploads',
-    'uploadpublic'          => 'Tillade Anonym uploads',
-    'useshots'              => 'Vis Kategori Billeder',
-    'shotwidth'             => 'Miniature Billed Bredde',
-    'Emailoption'           => 'E-mail indsender hvis filen godkendes',
-    'FileStore'             => 'Bibliotek til at gemme filer',
-    'SnapStore'             => 'Bibliotek til at gemme miniature billeder',
-    'SnapCat'               => 'Bibliotek til at gemme miniature kategorier',
-    'FileStoreURL'          => 'URL til filer',
-    'FileSnapURL'           => 'URL til file miniature billeder',
-    'SnapCatURL'            => 'URL til miniature kategorier',
-    'whatsnewperioddays'    => 'WhatsNew blok antal dage',
-    'whatsnewtitlelength'   => 'WhatsNew blok titel Længde',
-    'showwhatsnewcomments'  => 'Vis Kommentar i WhatsNew blok?',
-    'numcategoriesperrow'   => 'Kategorier pr række',
+    'whatsnew' => 'Aktiver WhatsNew Liste?',
+    'perpage' => 'Vist downloads pr Side',
+    'popular_download' => 'Hits for at være populære',
+    'newdownloads' => 'Antal downloads som Ny på Top Side',
+    'trimdesc' => 'Trim File Beskrivelser i Liste',
+    'dlreport' => 'Begrænse adgangen til Download rapport',
+    'selectpriv' => 'Begrænse adgangen til gruppe \'Logged-In Users\' kun',
+    'uploadselect' => 'Tillade Logged-In uploads',
+    'uploadpublic' => 'Tillade Anonym uploads',
+    'useshots' => 'Vis Kategori Billeder',
+    'shotwidth' => 'Miniature Billed Bredde',
+    'Emailoption' => 'E-mail indsender hvis filen godkendes',
+    'FileStore' => 'Bibliotek til at gemme filer',
+    'SnapStore' => 'Bibliotek til at gemme miniature billeder',
+    'SnapCat' => 'Bibliotek til at gemme miniature kategorier',
+    'FileStoreURL' => 'URL til filer',
+    'FileSnapURL' => 'URL til file miniature billeder',
+    'SnapCatURL' => 'URL til miniature kategorier',
+    'whatsnewperioddays' => 'WhatsNew blok antal dage',
+    'whatsnewtitlelength' => 'WhatsNew blok titel Længde',
+    'showwhatsnewcomments' => 'Vis Kommentar i WhatsNew blok?',
+    'numcategoriesperrow' => 'Kategorier pr række',
     'numsubcategories2show' => 'Under Kategorier pr række',
-    'outside_webroot'       => 'Store Files Outside Web Root',
+    'outside_webroot' => 'Store Files Outside Web Root'
 );
+
 $LANG_configsubgroups['filemgmt'] = array(
-    'sg_main'               => 'Main Settings'
+    'sg_main' => 'Main Settings'
 );
+
 $LANG_fs['filemgmt'] = array(
-    'fs_public'             => 'Offentlige FileMgmt Indstillinger',
-    'fs_admin'              => 'FileMgmt Admin Indstillinger',
-    'fs_permissions'        => 'Standard Tilladelser',
-    'fm_access'             => 'FileMgmt Adgang Kontrol',
-    'fm_general'            => 'FileMgmt Almindelige Indstillinger',
+    'fs_public' => 'Offentlige FileMgmt Indstillinger',
+    'fs_admin' => 'FileMgmt Admin Indstillinger',
+    'fs_permissions' => 'Standard Tilladelser',
+    'fm_access' => 'FileMgmt Adgang Kontrol',
+    'fm_general' => 'FileMgmt Almindelige Indstillinger'
 );
+
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['filemgmt'] = array(
     0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => TRUE, 'False' => FALSE),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
+    1 => array('True' => true, 'False' => false),
+    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25, '30' => 30, '50' => 50)
 );
-
-
-
-$PLG_filemgmt_MESSAGE1 = 'Filemgmt Plugin Installation Afbrudt<br>File: plugins/filemgmt/filemgmt.php is not writeable';
-$PLG_filemgmt_MESSAGE3 = 'Denne plugin kræver glFusion Version 1.0 eller højere, du skal opgradere. Installation afbrudt.';
-$PLG_filemgmt_MESSAGE4 = 'Plugin version 1.5-kode ikke fundet - opgradering afbrudt.';
-$PLG_filemgmt_MESSAGE5 = 'Filemgmt Plugin opgradering afbrudt<br>Nuværende plugin-version er ikke 1.3';
 
 
 // Language variables used by the plugin - general users access code.

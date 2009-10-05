@@ -1,12 +1,376 @@
 glFusion ChangeLog
 
-v1.2.0
+v1.1.6
 ------
-- Set height of logview window to facilitate easier horizontal scrolling (Eric)
-- Set width for text formatted code blocks in forum when using a fixed width layout (Eric)
-- Updated sanitize class (Mark)
-- Added new HTML filtering class (Mark)
-- Added new output handling class (Mark)
+- Added min-height property to #gl_wrapper in style.css (Eric)
+- Added accordion style toggles to configuration screens for "progressive disclosure" (Eric)
+- New showblock auto tag
+- Added CUSTOM_css() hook
+- Spruced up the search results - for comments show type of comment
+  (i.e.; Story > Comment or FileMgmt > Comment)
+- Search using date range did not always work properly across all plugins
+- Ensure topic selection is presistent when viewing admin story list
+- Allow plugin comments to be included in search results
+- Tweaks to contact user / author templates; consistent widths and display
+- Allow custom/functions.php in theme directory
+- Ensure enabling / removing configuration options clears the config
+  cache file
+- Moved documentation into language directories
+- Added PLG_getConfigElementHelp API call
+- Full support for PLG_itemSaved() and PLG_itemDeleted() APIs
+- Add author to RSS 2.0 syndication feeds for articles
+- Do not error when trying to upgrade a disabled bundled plugin
+- Security enhancements to the installation scripts
+- Better support for legacy plugins
+- Ensure template class if available when logging errors
+- Ensure character encoding is properly passed to all htmlentities calls
+- Add custom_registration field to allowed fields in fusionrescue.php
+- Replaced ereg functions for improved PHP 5.3.0 support
+- Accessibility updates
+- Updated German Language files
+- Added the ability to pass additional parsers and code handlers to
+  lib-bbcode.
+
+Bad Behavior2 Plugin
+--------------------
+- Updated to v2.0.29
+    - Users authenticating to a Bad Behavior-protected site using a
+      third party OpenID were blocked with a message stating that:
+      “Data may not be posted from offsite forms.”
+    - A few specialized web crawlers use an unusual form of the Range:
+      HTTP header in their requests, requesting a range starting with 0.
+      This behavior, while technically permitted by the HTTP specification,
+      is most often seen with malicious crawlers; web browsers and major
+      search engines do not use it. Bad Behavior will now block these
+      requests only when strict mode is enabled.
+
+Calendar Plugin
+---------------
+- Maintain the owner of events placed in the submission queue
+
+FileMgmt Plugin
+---------------
+- FileMgmt did not honor the comment setting for each file and always
+  displayed the comment bar.
+- Do not display the upload form for anonymous users if upload public
+  set to false.
+
+Forum Plugin
+------------
+- Finally resolved the issue with the Active Forum icon would not always
+  display when there were new posts in a forum.  Thanks to LeeG for providing
+  me enough details to resolve this bug.
+- Fixed issue where the index page would incorrectly display Today
+  as the last post date when in fact that wasn't true.
+- Fixed invalid index on rating_assoc table (bumped version to 3.1.5)
+- Fix to allow Smiley plugin to work with WYSIWYG editor
+- Ensure the profile edit functions return the proper value
+- Filter memberslist to ensure only registered users are shown
+
+Links Plugin
+------------
+- If login is required and user is not logged in, display a message that
+  login is required instead of simply redirecting to the index page.
+- Improved error messages displayed when there is a problem submitting
+  a link.
+- Loosened up the URL checking routines
+
+Media Gallery Plugin
+--------------------
+- Increased z-index of lightbox to compensate for z-index fix with
+  Site Tailor menu auto tags
+- RSS feeds were not being referenced in the correct directory
+- When using the destination block on auto tags, the auto tag counter
+  was not properly initialized.
+- Expand auto tags in title when used in Random Image block
+
+Site Tailor Plugin
+------------------
+- Fixed issue where quotes were not properly filtered when magic_quotes_gpc
+  is enabled in PHP.
+- New element type - Label - allows you to have a non-link label
+  as a menu element
+- Made field order consistent between create element & edit element
+- Properly delete menu config entries when deleting a menu (fix provided
+  by Mark Howard)
+- Fixed z-index issue when multiple menus are on the same page (fix
+  provided by Mark Howard)
+- Fixed a bug with the vmenu auto tag where it did not properly trim
+  whitespaces from the menu name, thus it didn't actually work.
+- Menu builder did not always honor the URL rewrite setting when building
+  links for static pages
+
+Static Pages Plugin
+-------------------
+- 'Last updated' date does not use same format as other dates
+
+Language File Updates
+---------------------
+German Translation updates to:
+ - Bad Behavior
+ - Media Gallery
+ - Site Tailor
+ - Links
+ - Captcha
+ - FileMmgt
+ - Calendar
+ - Forum
+ - Spamx
+ - Polls
+
+
+v1.1.5.pl3
+----------
+- Fixed issue when daily digest is enabled and user changes their password,
+  all topics are marked as no-access
+- Ensure root user is properly set when deleting a user
+
+Forum Plugin
+------------
+- Fixed issue where moderators were unable to edit forum posts.
+- Updated the topic-left.thtml with community moderation variables.
+
+v1.1.5.pl2
+----------
+- Missing install template for importing CMS paths from Geeklog (Mark)
+
+SiteTailor Plugin
+-----------------
+- When using the [hmenu] auto tag, cascading menus did not render
+  properly (Mark)
+
+v1.1.5.pl1
+----------
+- Fixed a crash in html2text when [b]$ combinations existed in the forum post
+  or the story. (Mark).
+- Upgrading to v1.1.5 did not always created the search_result_format field
+  in the database (Mark).
+
+Forum Plugin
+------------
+- Fixed story migration to set postmode to 'html' instead of 'HTML' which
+  caused problems when using the WYSIWYG editor. (Mark)
+
+v1.1.5
+------
+- Fixed issue where the advanced editor did not pickup the style sheet
+  if use_direct_css_js was set to true in siteconfig.php (Mark)
+- Fix 1px right margin gap in rightblocks in webkit only browsers (Eric)
+- Moved maintenance_mode to the online configuration (Mark)
+- Added default sitedown.html page (Eric)
+- Fixed typo in install script example path and clarified help text (Eric)
+- Comments did not properly retain the post mode setting (Mark)
+- Fixed issue with URL rewrite that appears on some hosting services where
+  the parameter array is not properly recognized (Mark)
+- Reworked daily digest code to support both HTML and text messages.  It is
+  now template driven (Mark)
+- Rename signature (in user profile) to Tag Line (Mark)
+- Email did not honor the priority flag (Mark)
+- Ability to use remote IP instead of referring URL for security tokens (Mark)
+- Fixed censor mode select (Mark)
+- Add option for user to select search result format (Mark)
+- Add block name to the admin list of blocks (Mark)
+- Updated htmLawed to v1.1.8.1 (Mark)
+- Implemented new profile APIs (Mark)
+- New configuration option to hide the 'Content' tab in the Account
+  Settings (Mark)
+- Fixed incorrect field type for SMTP host (Mark)
+- Updated FCKeditor to v2.6.4.1 (Mark)
+- Search dates were not properly validated prior to use (Mark)
+- Fixed several E_ALL errors (Mark)
+- Multi-page comment support was broken for plugins (Mark)
+- Support usernames upto 32 characters in length (Mark)
+- Installation - Now support migrating Geeklog v1.4.1+ sites,
+  including 1.6.0 (Mark)
+- Improved SEO support throughout the system (Mark)
+- Core groups can now be edited. (Mark)
+- Plugin auto installer did not display correct installed version
+  number (Mark)
+- Display default glFusion topic icon if no icon is specified (Mark)
+- Allow user edit for remote users (Mark)
+
+Bad Behaviour2 Plugin
+---------------------
+- Updated code base to v2.0.28 (Mark)
+
+Calendar Plugin
+---------------
+- Improved data validation to ensure values are properly set before
+  attempting to use them. (Mark)
+- Fixed potential XSS issue when invalid data is presented during
+  add / edit event (Mark)
+- Fixed issue where calendar submissions were not placed on the
+  proper calendar (Mark)
+
+FileMgmt Plugin
+---------------
+- Improved page titles (Mark)
+- Implemented multi-page comment support (Mark)
+
+Forum Plugin v3.1.4
+-------------------
+- Added Permlink feature to icon_minipost.gif in forum posts (Eric)
+- Implemented WYSIWYG editor (Mark)
+- Fixed bug where deleting a category did not delete all the forum posts
+  associated with the forums in that category (Mark)
+- Moved BBcode signature to the About You profile panel (Mark)
+- Streamlined the BBcode editor bar (Mark)
+- Implemented Eric Kingsley's forum notification mod - option to include full
+  post in notification email (Mark)
+- Implemented a hook for Eric Kingsley's Medals plugin (Mark)
+- Query optimization on topic list page - reduced server load and
+  overall performance improvement (Mark)
+- Implemented BBcode signature support (Mark)
+- Moved user preferences to user profile (Mark)
+- Implemented Community Moderation System (Mark)
+- Added forum.html feature (auto assigned to Forum Admin group) - allows
+  owners to use HTML in forum posts. (Mark)
+- Added phpBB3 migration utility (Mark)
+- Improved page titles (Mark)
+
+Links Plugin
+------------
+- Fixed a potential XSS issue when invalid data is entered during link
+  add / edit (Mark)
+- Fixed issue where children categories would become orphaned if the
+  parent category changed category id (Mark)
+
+Media Gallery
+-------------
+- Implemented Jon Deliz's modifications to allow remote JPG/GIF images (Mark)
+- Implemented the PLG_itemSaved() API (Mark)
+- Fixed issue where the default album theme was not being used on new
+  albums (Mark)
+- Fixed issue where the parent album's group ownership was not always
+  properly inherited by new child albums (Mark)
+- Added {search_album} template variable to the search output, allowing
+  the album an item resides to be included in the search results display (Mark)
+- Renamed the 'Graphics Package' tab in the MG admin screen to
+  'Host Environment' to better reflect the real meaning of the tab (Mark)
+- Added new command line interface for batch imports into Media Gallery (Mark)
+- Added new option to allow media owner to edit media item (Mark)
+- Added new feature to allow mediagallery.admin to edit media owner (Mark)
+- Moved user preferences to user profile (Mark)
+- Fixed comment handling - multi-page comments did not work and
+  user could not select comment order. (Mark)
+
+Polls
+-----
+- Fixed comment handling - multi-page comments did not work and
+  user could not select comment order. (Mark)
+
+SiteTailor
+----------
+- Fixed issue where hmenu auto tag assumed horizontal-cascading
+  menu type (Mark)
+
+StaticPages
+----------
+- Implemented PLG_itemSaved() API (Mark)
+- Fixed comment handling - allow multi-page comments (Mark)
+
+Translations
+------------
+- Updated German translations from Tony Kluever
+
+v1.1.4.pl4
+----------
+- Fixed bug where you could not use the image insert in the advanced
+  editor in the mail user form (Mark)
+- Fixed another XML issue with the web services routines (Mark)
+- Added width:100% in submitstory_advanced.thtml template to ensure the
+  WYSIWYG editor uses the full width of the page (Mark)
+- Removed the maxlength for the admin password prompt (Mark)
+- Ensure extra whitespace is properly removed in search strings (Mark)
+- Leap year fix in calendar.class.php (Mark)
+- Uploads fails to upload files when 1 file in the bunch errors (Mark)
+- Webservices did not properly escape all HTML entities (Mark)
+
+Calendar Plugin
+---------------
+- Improved searching of personal calendars (Mark)
+
+FileMgmt Plugin
+---------------
+- Apply file permissions for admin uploads too (Mark)
+
+Forum Plugin
+------------
+- Added support for new PM plugin (Mark)
+
+Links Plugin
+------------
+- Added support for auto tags in the link descriptions (Mark)
+- Improved SQL security (Mark)
+
+Media Gallery Plugin
+--------------------
+- Fixed issue where the media item date/time did not use local time when
+  editing (Mark)
+- Fix issue processing large FLV files (Mark)
+- Modify album create to use the parent's group if no user specified
+  group available (Mark)
+-
+
+Polls Plugin
+------------
+- Fixed division by zero errors (Mark)
+- Special characters are not preserved in the remarks field (Mark)
+
+v1.1.4.pl3
+----------
+- Fix install issue on servers with \\path\to\glfusion directory
+  notation (Mark)
+- Trim spaces from username and email when creating a new user (Mark)
+- When custom registration is enabled, the user cannot select a login link
+  to display the login screen (Mark)
+- Added cache_templates field to fusionrescue.php (Mark)
+- Added [story_introtext:##storyid##] Auto tag (Mark)
+- Adding groups to user in user edit could fail under certain conditions (Mark)
+- New PLG_getwhatsnewcomment() API to allow plugins to list new comments
+  in the What's New block (Mark)
+- Installation - ensure siteconfig.php was successfully created (Mark)
+
+FileMgmt Plugin
+---------------
+- Fixed issue where new files did not always show up in the What's New
+  list (Mark)
+
+Forum Plugin
+------------
+- Clear the centerblock cache after importing story (Mark)
+
+Media Gallery
+-------------
+- Media Gallery does not always honor 'parent' album permissions when going
+  directly to a sub-album. (Mark)
+- Coppermine import now pulls the user who uploaded the image from the
+  Coppermine database and imports into Media Gallery (Mark)
+
+StaticPages
+-----------
+- Fixed issues where comments were not properly deleted, did not change
+  when the static page id changed, and did not show up in the what's new
+  block. (Mark)
+
+Polls
+-----
+- Fixed issues where comments were not properly deleted, did not change
+  when the polls id changed, and did not show up in the what's new
+  block. (Mark)
+
+v1.1.4.pl2
+----------
+- Small change to config.class.php to allow for easier multi-site
+  implementations (Mark)
+- Fix to allow direct calling of style/js cache files to help reduce
+  server load on sites that must reload the PHP processor each time (Mark)
+- Added path_rdf to fusionrecue.php set of fields to edit (Mark)
+
+Media Gallery
+-------------
+- Fixed issue where the image rotate option was not available in the media
+  edit screen (Mark)
 
 v1.1.4.pl1
 ------
@@ -76,6 +440,9 @@ FileMgmt
 
 Forum
 -----
+- Root users could not post to read only forums (Mark)
+- Set width for text formatted code blocks in forum when using a fixed width
+  layout (Eric)
 - Fixed issue where duplicate forum names (different categories) did not show
   in the forum selection list for moderation functions. (Mark)
 

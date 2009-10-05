@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2005-2008 by the following authors:                        |
 // |                                                                          |
 // | Author: Dirk Haun - dirk AT haun-online DOT de                           |
 // +--------------------------------------------------------------------------+
@@ -31,10 +31,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once 'lib-common.php';
-
-USES_lib_trackbacks();
-
+require_once ('lib-common.php');
+require_once ($_CONF['path_system'] . 'lib-trackback.php');
 
 // Note: Error messages are hard-coded in English since there is no way of
 // knowing which language the sender of the trackback ping may prefer.
@@ -57,9 +55,9 @@ if (isset ($_SERVER['REQUEST_METHOD'])) {
     }
 }
 
-$inputHandler->setArgNames(array('id','type'));
-$id = $inputHandler->getVar('strict','id','get','');
-$type = $inputHandler->getVar('strict','type','get','article');
+COM_setArgNames (array ('id', 'type'));
+$id = COM_applyFilter (COM_getArgument ('id'));
+$type = COM_applyFilter (COM_getArgument ('type'));
 
 if (empty ($id)) {
     TRB_sendTrackbackResponse (1, $TRB_ERROR['illegal_request']);
@@ -72,7 +70,7 @@ if (empty ($type)) {
 
 if ($type == 'article') {
     // check if they have access to this story
-    $sid = $inputHandler->prepareForDB($id);
+    $sid = addslashes ($id);
     $result = DB_query("SELECT trackbackcode FROM {$_TABLES['stories']} WHERE (sid = '$sid') AND (date <= NOW()) AND (draft_flag = 0)" . COM_getPermSql ('AND') . COM_getTopicSql ('AND'));
     if (DB_numRows ($result) == 1) {
         $A = DB_fetchArray ($result);

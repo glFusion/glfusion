@@ -1,0 +1,29 @@
+<form id="welcome" name="welcome" method="post" action="index.php">
+  <input type="hidden" name="task" value="" />
+  {hiddenfields}
+  <div class="step floatleft">
+    <div class="stepheading">
+      <span class="floatright buttons">
+        <button type="submit" name="prev" onclick="submitForm( welcome, '' );">
+          <img src="layout/arrow-back.gif" alt=""/>
+          {lang_prev}
+        </button>
+        <button type="submit" name="submit" onclick="submitForm( welcome, 'gotgeeklogpathsetting' );">
+          {lang_next}
+          <img src="layout/arrow-next.gif" alt=""/>
+        </button>
+      </span>
+      {step_heading}
+    </div>
+    <div class="stepfields">
+      <span>
+        <label>{lang_path_prompt}:</label><br />
+        <input type="text" name="private_path" value="{dbconfig_path}" size="46" onkeypress="return check(event)"/>
+        {lang_sys_path_exp}
+      </span>
+    </div>
+    <div class="stephelp">
+      {lang_sys_path_help}
+    </div>
+  </div>
+</form>

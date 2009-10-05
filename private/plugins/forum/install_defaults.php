@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -48,6 +48,7 @@ global $_FF_DEFAULT;
 
 $_FF_DEFAULT = array();
 $_FF_DEFAULT['registration_required']  = false;
+$_FF_DEFAULT['enable_rating_system']   = false;
 $_FF_DEFAULT['registered_to_post']     = true;
 $_FF_DEFAULT['allow_html']             = false;
 $_FF_DEFAULT['post_htmlmode']          = false;
@@ -129,6 +130,7 @@ $_FF_DEFAULT['max_uploadimage_height']  = '1600';
 $_FF_DEFAULT['max_uploadfile_size']     = '6553600';     // 6.400 MB
 $_FF_DEFAULT['inlineimage_width']       = '300';
 $_FF_DEFAULT['inlineimage_height']      = '300';
+$_FF_DEFAULT['bbcode_signature']        = true;
 
 $_FF_DEFAULT['allowablefiletypes']    = array(
         'application/x-gzip-compressed'     => '.tgz',
@@ -223,6 +225,7 @@ if ( isset($_TABLES['gf_settings']) ) {
             $_FF_CONF['allow_smilies']          = $A['allowsmilies'];
         if ( isset($A['allow_notify']) )
             $_FF_CONF['allow_notification']     = $A['allow_notify'];
+
         if ( isset($A['allow_userdatefmt'] ) )
             $_FF_CONF['allow_user_dateformat']  = $A['allow_userdatefmt'];
         if ( isset($A['showiframe']) )
@@ -327,16 +330,20 @@ function plugin_initconfig_forum()
                 0, 0, 0, 10, true, 'forum');
         $c->add('registered_to_post', $_FF_DEFAULT['registered_to_post'], 'select',
                 0, 0, 0, 20, true, 'forum');
-        $c->add('allow_memberlist', $_FF_DEFAULT['allow_memberlist'], 'select',
+        $c->add('enable_user_rating_system', $_FF_DEFAULT['enable_rating_system'], 'select',
                 0, 0, 0, 25, true, 'forum');
-        $c->add('allow_notification', $_FF_DEFAULT['allow_notification'], 'select',
+        $c->add('allow_memberlist', $_FF_DEFAULT['allow_memberlist'], 'select',
                 0, 0, 0, 30, true, 'forum');
-        $c->add('show_topicreview', $_FF_DEFAULT['show_topicreview'], 'select',
+        $c->add('allow_notification', $_FF_DEFAULT['allow_notification'], 'select',
+                0, 0, 0, 35, true, 'forum');
+        $c->add('bbcode_signature', $_FF_DEFAULT['bbcode_signature'], 'select',
                 0, 0, 0, 40, true, 'forum');
+        $c->add('show_topicreview', $_FF_DEFAULT['show_topicreview'], 'select',
+                0, 0, 0, 45, true, 'forum');
         $c->add('showtopic_review_order', $_FF_DEFAULT['showtopic_review_order'], 'select',
-                0, 0, 5, 45, true, 'forum');
+                0, 0, 5, 50, true, 'forum');
         $c->add('allow_user_dateformat', $_FF_DEFAULT['allow_user_dateformat'], 'select',
-                0, 0, 0, 50, true, 'forum');
+                0, 0, 0, 55, true, 'forum');
         $c->add('use_pm_plugin', $_FF_DEFAULT['use_pm_plugin'], 'select',
                 0, 0, 0, 60, true, 'forum');
         $c->add('use_autorefresh', $_FF_DEFAULT['use_autorefresh'], 'select',
@@ -428,6 +435,8 @@ function plugin_initconfig_forum()
                 0, 2, 0, 70, true, 'forum');
         $c->add('allow_html', $_FF_DEFAULT['allow_html'], 'select',
                 0, 2, 0, 80, true, 'forum');
+        $c->add('use_wysiwyg_editor', false, 'select',
+                0, 2, 0, 85, true, 'forum');
         $c->add('post_htmlmode', $_FF_DEFAULT['post_htmlmode'], 'select',
                 0, 2, 0, 90, true, 'forum');
         $c->add('use_censor', $_FF_DEFAULT['use_censor'], 'select',

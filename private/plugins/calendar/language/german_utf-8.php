@@ -6,6 +6,7 @@
 #
 # Authors: Dirk Haun <dirk AT haun-online DOT de>
 #          Markus Wollschläger
+# Modifiziert: August 09 Tony Kluever
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -63,8 +64,8 @@ $LANG_CAL_1 = array(
     23 => 'Meine Termine',
     24 => 'Allgemeine Termine',
     25 => 'Es stehen keine Termine an',
-    26 => 'Einen Termin einreichen',
-    27 => "Wenn Du einen Termin bei {$_CONF['site_name']} einreichst, wird er in den Kalender aufgenommen, von wo aus ihn andere User in ihren persönlichen Kalender übernehmen können. Dies ist <b>NICHT</b> dazu gedacht, private Termine und Ereignisse wie etwa Geburtstage zu verwalten.<br" . XHTML . "><br" . XHTML . ">Wenn Du einen Termin einreichst, wird er an die Administratoren weitergeleitet und sobald er von diesen akzeptiert wird, wird er im Kalender erscheinen.",
+    26 => 'Einen Termin einsenden',
+    27 => "Wenn Du einen Termin bei {$_CONF['site_name']} einsendest, wird er in den Kalender aufgenommen, von wo aus ihn andere Benutzer in ihren persönlichen Kalender übernehmen können. Dies ist <b>NICHT</b> dazu gedacht, private Termine und Ereignisse wie etwa Geburtstage zu verwalten.<br" . XHTML . "><br" . XHTML . ">Wenn Du einen Termin einsendest, wird er an die Administratoren weitergeleitet und sobald er von diesen akzeptiert wird, wird er im Kalender erscheinen.",
     28 => 'Titel',
     29 => 'Endzeit',
     30 => 'Startzeit',
@@ -75,14 +76,14 @@ $LANG_CAL_1 = array(
     35 => 'Bundesland',
     36 => 'Postleitzahl',
     37 => 'Art des Termins',
-    38 => 'Termin-Arten ändern',
+    38 => 'Terminarten ',
     39 => 'Ort',
     40 => 'Termin hinzufügen zu',
     41 => 'Kalender',
     42 => 'Persönlicher Kalender',
     43 => 'Link',
     44 => 'HTML ist nicht erlaubt',
-    45 => 'Abschicken',
+    45 => 'Absenden',
     46 => 'Anzahl Termine',
     47 => 'Top Ten der Termine',
     48 => 'Angezeigt',
@@ -119,14 +120,14 @@ $LANG_CAL_2 = array(
     33 => 'Datum',
     34 => 'Uhrzeit',
     35 => 'Neuer Termin',
-    36 => 'Abschicken',
-    37 => 'Der persönliche Kalender ist auf dieser Website nicht verfügbar.',
+    36 => 'Absenden',
+    37 => 'Der persönliche Kalender ist auf dieser Webseite nicht verfügbar.',
     38 => 'Persönlicher Termin-Editor',
     39 => 'Tag',
     40 => 'Woche',
     41 => 'Monat',
     42 => 'Neuer Termin',
-    43 => 'Beiträge: Termine'
+    43 => 'Beiträge - Termine'
 );
 
 ###############################################################################
@@ -144,12 +145,12 @@ $LANG_CAL_ADMIN = array(
     9 => '(mit http://)',
     10 => 'Es müssen mindestens Datum und Uhrzeit, Titel und Beschreibung eingegeben werden!',
     11 => 'Kalender-Manager',
-    12 => 'Auf das Ändern-Icon klicken, um einen Termin zu ändern oder zu löschen. Mit Neu anlegen (s.o.) wird ein neuer Termin angelegt. Das Kopie-Icon erzeugt eine Kopie eines vorhandenen Termins.',
+    12 => 'Auf das Bearbeiten-Icon klicken, um einen Termin zu bearbeiten oder zu löschen. Mit Neu anlegen (s.o.) wird ein neuer Termin angelegt. Das Kopie-Icon erzeugt eine Kopie eines vorhandenen Termins.',
     13 => 'Autor',
     14 => 'Startdatum',
     15 => 'Enddatum',
     16 => '',
-    17 => "Keine Zugriffsrechte für diesen Termin. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/plugins/calendar/index.php\">Zurück zum Administrator-Menü</a>.",
+    17 => "Keine Berechtigungen für diesen Termin. Dieser Zugriffsversuch wurde protokolliert. <a href=\"{$_CONF['site_admin_url']}/plugins/calendar/index.php\">Zurück zum Administrator-Menü</a>.",
     18 => '',
     19 => '',
     20 => 'Speichern',
@@ -163,7 +164,7 @@ $LANG_CAL_ADMIN = array(
     28 => ' Monate. Bite auf das Mülleimer-Icon klicken, um sie zu entfernen, oder eine andere Zeitspanne auswählen:<br' . XHTML . '>Suche alle Einträge älter als ',
     29 => ' Monate.',
     30 => 'Liste aktualisieren',
-    31 => 'Sind Sie sicher, dass Sie alle ausgewählten User permanent löschen möchten?',
+    31 => 'Sind Sie sicher, dass Sie alle ausgewählten Benutzer permanent löschen möchten?',
     32 => 'Alle auflisten',
     33 => 'Keine Termine zum Löschen ausgewählt',
     34 => 'Termin ID',
@@ -177,7 +178,7 @@ $LANG_CAL_MESSAGE = array(
     'private' => 'Der Termin wurde in Deinen Kalender eingetragen.',
     'login' => 'Du musst angemeldet sein, um auf Deinen persönlichen Kalender zugreifen zu können.',
     'removed' => 'Der Termin wurde aus Deinem persönlichen Kalender entfernt',
-    'noprivate' => 'Sorry, persönliche Kalender sind auf dieser Site nicht verfügbar.',
+    'noprivate' => 'Sorry, persönliche Kalender sind auf dieser Seite nicht verfügbar.',
     'unauth' => 'Du hast keinen Zugriff auf die Termin-Administrationsseite. Alle Versuche, auf Bereiche ohne entsprechende Berechtigung zuzugreifen, werden protokolliert.'
 );
 
@@ -188,7 +189,7 @@ $PLG_calendar_MESSAGE24 = 'Der Termin wurde in Deinen Kalender eingetragen.';
 $PLG_calendar_MESSAGE26 = 'Der Termin wurde gelöscht.';
 
 // Messages for the plugin upgrade
-$PLG_calendar_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_calendar_MESSAGE3001 = 'Plugin-Upgrade nicht unterstützt.';
 $PLG_calendar_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
@@ -198,7 +199,7 @@ $LANG_configsections['calendar'] = array(
 );
 
 $LANG_confignames['calendar'] = array(
-    'calendarloginrequired' => 'Zur Einsicht einloggen nötig?',
+    'calendarloginrequired' => 'Zur Einsicht anmelden nötig?',
     'hidecalendarmenu' => 'Menüeintrag ausblenden?',
     'personalcalendars' => 'Persönliche Kalender?',
     'eventsubmission' => 'Einträge moderieren?',
@@ -206,20 +207,20 @@ $LANG_confignames['calendar'] = array(
     'upcomingeventsrange' => 'Zeitraum zukünftige Termine',
     'event_types' => 'Art der Termine',
     'hour_mode' => 'Stunden-Modus',
-    'notification' => 'Benachrichtigungs-eMail?',
-    'delete_event' => 'Termine mit User löschen?',
+    'notification' => 'Benachrichtigungs-E-Mail?',
+    'delete_event' => 'Termine mit Benutzer löschen?',
     'aftersave' => 'Nach Speichern des Termins',
-    'default_permissions' => 'Grundeinstellungen Termine',
-    'only_admin_submit' => 'Only Allow Admins to Submit'
+    'default_permissions' => 'Standardberechtigungen - Termine',
+    'only_admin_submit' => 'Nur Admins das Eintragen erlauben'
 );
 
 $LANG_configsubgroups['calendar'] = array(
-    'sg_main' => 'Hauptbereich'
+    'sg_main' => 'Haupteinstellungen'
 );
 
 $LANG_fs['calendar'] = array(
     'fs_main' => 'Allgemeine Kalendereinstellungen',
-    'fs_permissions' => 'Grundeinstellungen Rechte'
+    'fs_permissions' => 'Standardeinstellungen - Berechtigungen'
 );
 
 // Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']

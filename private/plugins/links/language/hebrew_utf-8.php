@@ -54,7 +54,10 @@ $LANG_LINKS = array(
     124 => 'עיברו',
     125 => 'קטגוריות',
     126 => 'אתם כאן:',
-    'root' => 'ראשי'
+    'root' => 'ראשי',
+    'error_header' => 'Link Submission Error',
+    'verification_failed' => 'The URL specified does not appear to be a valid URL',
+    'category_not_found' => 'The Category does not appear to be valid'
 );
 
 ###############################################################################

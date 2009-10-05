@@ -2,6 +2,6 @@
 <div id="commentarea">
 {commentbar}
 {comments}
-<p class="aligncenter">{pagenav}</p>
+<div class="aligncenter">{pagenav}</div>
 </div>
 {# end {templatelocation} #}

@@ -89,6 +89,11 @@ if ($type == "category") {
     } elseif ($mode == $LANG_GF01['DELETE']) {
         if ($confirm == 1) {
             DB_query("DELETE FROM {$_TABLES['gf_categories']} WHERE id='$id'");
+            $result = DB_query("SELECT * FROM {$_TABLES['gf_forums']} WHERE forum_cat='$id'");
+            while ($A = DB_fetchArray($result) ) {
+                $fid = $A['forum_id'];
+                forum_deleteForum($fid);
+            }
             DB_query("DELETE FROM {$_TABLES['gf_forums']} WHERE forum_cat='$id'");
             forum_statusMessage($LANG_GF93['catdeleted'],$_CONF['site_admin_url'] .'/plugins/forum/boards.php',$LANG_GF93['catdeleted']);
             echo COM_endBlock();
@@ -97,7 +102,6 @@ if ($type == "category") {
             exit();
         } else {
             $catname = DB_getItem($_TABLES['gf_categories'], "cat_name","id=$id");
-//            $boards_delcategory = new Template($_CONF['path_layout'] . 'forum/layout/admin');
             $boards_delcategory = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
             $boards_delcategory->set_file (array ('boards_delcategory'=>'boards_delete.thtml'));
             $boards_delcategory->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
@@ -127,7 +131,6 @@ if ($type == "category") {
     } elseif ($mode == $LANG_GF01['EDIT']) {
         $esql = DB_query("SELECT * FROM {$_TABLES['gf_categories']} WHERE (id='$id')");
         $E = DB_fetchArray($esql);
-//        $boards_edtcategory = new Template($_CONF['path_layout'] . 'forum/layout/admin');
         $boards_edtcategory = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
         $boards_edtcategory->set_file (array ('boards_edtcategory'=>'boards_edtcategory.thtml'));
         $boards_edtcategory->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
@@ -246,7 +249,6 @@ if ($type == "forum") {
             echo COM_siteFooter();
             exit();
         } else {
-//            $boards_delforum = new Template($_CONF['path_layout'] . 'forum/layout/admin');
             $boards_delforum = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
             $boards_delforum->set_file (array ('boards_delforum'=>'boards_delete.thtml'));
             $boards_delforum->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');
@@ -368,7 +370,6 @@ if ($type == "forum") {
 
 // MAIN CODE
 
-//$boards = new Template($_CONF['path_layout'] . 'forum/layout/admin');
 $boards = new Template($_CONF['path'] . 'plugins/forum/templates/admin/');
 $boards->set_file (array ('boards'=>'boards.thtml','categories' => 'board_categories.thtml','forums' => 'board_forums.thtml'));
 $boards->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/boards.php');

@@ -92,6 +92,7 @@ function USER_deleteAccount ($uid)
     PLG_deleteUser ($uid);
 
     if ( function_exists('CUSTOM_userDeleteHook')) {
+        COM_errorLog("WARNING: Use of depreciated CUSTOM_userDeleteHook() - use CUSTOM_user_delete()");
         CUSTOM_userDeleteHook($uid);
     }
 
@@ -129,6 +130,9 @@ function USER_deleteAccount ($uid)
     $result = DB_query ("SELECT DISTINCT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = '$rootgroup' ORDER BY ug_uid LIMIT 1");
     $A = DB_fetchArray ($result);
     $rootuser = $A['ug_uid'];
+    if ( $rootuser == '' || $rootuser < 2 ) {
+        $rootuser = 2;
+    }
 
     DB_query ("UPDATE {$_TABLES['blocks']} SET owner_id = $rootuser WHERE owner_id = $uid");
     DB_query ("UPDATE {$_TABLES['topics']} SET owner_id = $rootuser WHERE owner_id = $uid");
@@ -347,6 +351,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         CUSTOM_userCreate ($uid,$batchimport);
     }
     if ( function_exists('CUSTOM_userCreateHook') ) {
+        COM_errorLog("WARNING: Use of depreciated CUSTOM_userCreateHook() - use CUSTOM_user_create()");
         CUSTOM_userCreateHook($uid);
     }
     PLG_createUser ($uid);
@@ -515,16 +520,17 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
 */
 function USER_deletePhoto ($photo, $abortonerror = true)
 {
-    global $_CONF, $LANG04, $pageHandle;
+    global $_CONF, $LANG04;
 
     if (!empty ($photo)) {
         $filetodelete = $_CONF['path_images'] . 'userphotos/' . $photo;
         if (file_exists ($filetodelete)) {
             if (!@unlink ($filetodelete)) {
                 if ($abortonerror) {
-                    $pageHandle->setPageTitle($LANG04[21]);
-                    $pageHandle->addContent(COM_errorLog ("Unable to remove file $photo"));
-                    $pageHandle->displayPage();
+                    $display = COM_siteHeader ('menu', $LANG04[21])
+                             . COM_errorLog ("Unable to remove file $photo")
+                             . COM_siteFooter ();
+                    echo $display;
                     exit;
                 } else {
                     // just log the problem, but don't abort

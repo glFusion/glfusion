@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -106,6 +106,12 @@ if (!SEC_inGroup($groupname) AND $grp_id != 2) {
         exit;
 }
 
+if (!can_view_forum($forum)) {
+        echo COM_siteHeader();
+        alertMessage($LANG_GF02['msg02'],$LANG_GF02['msg171']);
+        echo COM_siteFooter();
+        exit;
+}
 
 $result = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE (id=$id)");
 $A = DB_fetchArray($result);

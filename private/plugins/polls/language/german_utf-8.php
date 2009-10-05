@@ -7,6 +7,7 @@
 #
 # Authors: Dirk Haun <dirk AT haun-online DOT de>
 #          Markus Wollschläger
+# Modifiziert: August 09 Tony Kluever
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,17 +31,11 @@ if (!defined ('GVERSION')) {
 
 global $LANG32;
 
-###############################################################################
-# Array Format:
-# $LANGXX[YY]:  $LANG - variable name
-#               XX    - file id number
-#               YY    - phrase id number
-###############################################################################
 
 $LANG_POLLS = array(
     'polls' => 'Umfragen',
     'results' => 'Ergebnisse',
-    'pollresults' => 'Umfrage-Ergebnisse',
+    'pollresults' => 'Umfrageergebnisse',
     'votes' => 'Stimmen',
     'vote' => 'Abstimmen',
     'pastpolls' => 'Ältere Umfragen',
@@ -59,7 +54,7 @@ $LANG_POLLS = array(
     'upgrade1' => 'Neue Version des Umfrage-Plugins installiert. Bitte',
     'upgrade2' => 'upgraden',
     'editinstructions' => 'Bitte für die Umfrage-ID mindestens eine Frage und zwei Antworten eintragen.',
-    'start_poll' => 'Start Poll'
+    'start_poll' => 'Umfrage starten'
 );
 
 ###############################################################################
@@ -70,36 +65,36 @@ $LANG25 = array(
     2 => 'Bitte eine Kategorie, mindestens eine Frage und eine Antwort für die Frage eintragen.',
     3 => 'Umfrage erstellt',
     4 => 'Umfrage %s gespeichert',
-    5 => 'Umfrage editieren',
+    5 => 'Umfrage bearbeiten',
     6 => 'Umfrage-ID',
     7 => '(keine Leerzeichen benutzen)',
     8 => 'Erscheint im Umfrageblock',
     9 => 'Kategorie',
     10 => 'Antworten / Abstimmungen / Bemerkungen',
-    11 => 'There was an error getting Umfrage answer data about the poll %s',
-    12 => 'There was an error getting Umfrage question data about the poll %s',
+    11 => 'Es trat ein Fehler auf beim Holen der Antwortdaten für Umfrage %s',
+    12 => 'Es trat ein Fehler auf beim Holen der Fragedaten für Umfrage %s',
     13 => 'Umfrage erstellen',
-    14 => 'speichern',
-    15 => 'abbrechen',
-    16 => 'löschen',
+    14 => 'Speichern',
+    15 => 'Abbrechen',
+    16 => 'Löschen',
     17 => 'Bitte Umfrage-ID eingeben',
     18 => 'Liste der Umfragen',
-    19 => 'Um eine Umfrage zu editieren oder zu löschen, auf das Edit-Icon klicken.  Um eine neue Umfrage zu eröffnen, bitte auf "Neu anlegen" oben klicken.',
-    20 => 'Abstimmende',
+    19 => 'Um eine Umfrage zu bearbeiten oder zu löschen, auf das Bearbeiten-Icon klicken.  Um eine neue Umfrage zu eröffnen, bitte auf "Neu anlegen" oben klicken.',
+    20 => 'Umfrageende',
     21 => 'Kein Zugang',
-    22 => "You are trying to access a poll that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/poll.php\">go back to the poll administration screen</a>.",
+    22 => "Du versuchst auf eine Umfrage zuzugreifen, für die Du keine Rechte hast. Dieser Versuch wurde aufgezeichnet. Bitte <a href=\"{$_CONF['site_admin_url']}/poll.php\">gehe zurück zur Umfrage-Administration</a>.",
     23 => 'Neue Umfrage',
     24 => 'Kommandozentrale',
     25 => 'Ja',
     26 => 'Nein',
-    27 => 'Editieren',
+    27 => 'Bearbeiten',
     28 => 'Senden',
     29 => 'Suchen',
     30 => 'Ergebnisse eingrenzen',
     31 => 'Frage',
     32 => 'Um diese Frage aus der Umfrage zu entfernen, den Fragetext löschen.',
     33 => 'Umfrage läuft',
-    34 => 'Umfrage-Kategorie:',
+    34 => 'Umfragekategorie:',
     35 => 'Diese Umfrage hat noch ',
     36 => 'Fragen.',
     37 => 'Ergebnisse ausblenden wenn Umfrage läuft',
@@ -112,8 +107,9 @@ $PLG_polls_MESSAGE19 = 'Umfrage wurde gespeichert.';
 $PLG_polls_MESSAGE20 = 'Umfrage wurde gelöscht.';
 
 // Messages for the plugin upgrade
-$PLG_polls_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_polls_MESSAGE3001 = 'Plugin-Upgrade nicht unterstützt.';
 $PLG_polls_MESSAGE3002 = $LANG32[9];
+
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['polls'] = array(
@@ -122,32 +118,32 @@ $LANG_configsections['polls'] = array(
 );
 
 $LANG_confignames['polls'] = array(
-    'pollsloginrequired' => 'Zur Einsicht einloggen nötig?',
+    'pollsloginrequired' => 'Zur Einsicht anmelden nötig?',
     'hidepollsmenu' => 'Menüeintrag ausblenden?',
     'maxquestions' => 'Max. Fragen pro Umfrage',
     'maxanswers' => 'Max. Möglichkeiten pro Frage',
     'answerorder' => 'Ergebnisse sortieren ...',
     'pollcookietime' => 'Voter Cookie gültig für',
     'polladdresstime' => 'Voter IP-Adresse gültig für',
-    'delete_polls' => 'Umfragen mit User löschen?',
+    'delete_polls' => 'Umfragen mit Benutzer löschen?',
     'aftersave' => 'Nach speichern der Umfrage',
-    'default_permissions' => 'Grundeinstellungen Umfragen'
+    'default_permissions' => 'Standardeinstellungen Umfragen'
 );
 
 $LANG_configsubgroups['polls'] = array(
-    'sg_main' => 'Hauptbereich'
+    'sg_main' => 'Haupteinstellungen'
 );
 
 $LANG_fs['polls'] = array(
     'fs_main' => 'Allgemeine Umfrageeinstellungen',
-    'fs_permissions' => 'Grundeinstellungen Rechte'
+    'fs_permissions' => 'Standardberechtigeungen - Umfragen'
 );
 
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['polls'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => true, 'Nein' => false),
-    2 => array('Wie eingereicht' => 'submitorder', 'Nach Abstimmung' => 'voteorder'),
+    2 => array('Wie eingesendet' => 'submitorder', 'Nach Abstimmung' => 'voteorder'),
     9 => array('Zur Umfrage weiterleiten' => 'item', 'Admin Liste anzeigen' => 'list', 'Öffentliche Liste anzeigen' => 'plugin', 'Startseite anzeigen' => 'home', 'Kommandozentrale' => 'admin'),
     12 => array('Kein Zugang' => 0, 'Nur lesen' => 2, 'Lesen-Schreiben' => 3)
 );

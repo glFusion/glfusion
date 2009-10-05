@@ -458,7 +458,9 @@ $LANG08 = array(
     32 => 'Date',
     33 => 'Lire l\'article complet &agrave;',
     34 => 'Fin du message',
-    35 => 'D&eacute;sol&eacute;, ce membre ne d&eacute;sire pas recevoir de messages.'
+    35 => 'D&eacute;sol&eacute;, ce membre ne d&eacute;sire pas recevoir de messages.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################
@@ -952,7 +954,9 @@ $LANG28 = array(
     82 => "Your account on {$_CONF['site_name']} has not been accesssed since %s and will be disabled if not accessed in the 30 days.",
     83 => "Your account on {$_CONF['site_name']} has not been used since it was created and will deleted soon if not accessed.",
     84 => "Your login name is: %s  for our site: {$_CONF['site_url']}",
-    85 => 'If you have forgotten the password use the following link: %s'
+    85 => 'If you have forgotten the password use the following link: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1341,7 +1345,8 @@ $LANG_ACCESS = array(
     'group_id' => 'Groupe ID',
     'plugin_access_denied_msg' => 'Tentative ill&eacute;gale d\'acc&egrave;s aux donn&eacute;es!  Toutes les tentatives sont prise en note.',
     'groupexists' => 'Nom de groupe d&eacute;j&agrave; existant',
-    'groupexistsmsg' => 'Il y a d&eacute;j&agrave; un groupe portant ce nom. Merci d\'en choisir un autre.'
+    'groupexistsmsg' => 'Il y a d&eacute;j&agrave; un groupe portant ce nom. Merci d\'en choisir un autre.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################
@@ -1710,6 +1715,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'Allow Account Deletion',
     'hide_author_exclusion' => 'Allow Hide Author',
     'show_fullname' => 'Show Fullname',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'Show Service Name',
     'custom_registration' => 'Enable Custom Registration',
     'user_login_method' => 'User Login Method',
@@ -1905,7 +1911,8 @@ $LANG_confignames['Core'] = array(
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Enable Template Comments',
-    'hidestorydate' => 'Hide Story Date'
+    'hidestorydate' => 'Hide Story Date',
+    'maintenance_mode' => 'Enable Maintenance Mode'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1987,7 +1994,8 @@ $LANG_configselects['Core'] = array(
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
 );
 
 ?>

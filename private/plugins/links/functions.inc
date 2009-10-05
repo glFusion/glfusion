@@ -357,23 +357,12 @@ function plugin_dopluginsearch_links($query, $datestart, $dateend, $topic, $type
     $sql .= "FROM {$_TABLES['links']} WHERE date <> 1 ";
     $sql .= COM_getPermSQL('AND') . ' ';
 
-    if (!empty($datestart) && !empty($dateend))
-    {
-        $delim = substr($datestart, 4, 1);
-        if (!empty($delim))
-        {
-            $DS = explode($delim, $datestart);
-            $DE = explode($delim, $dateend);
-            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-            $sql .= "AND (UNIX_TIMESTAMP(date) BETWEEN '$startdate' AND '$enddate') ";
-        }
-    }
     if (!empty ($author))
         $sql .= "AND (owner_id = '$author') ";
 
     $search = new SearchCriteria('links', $LANG_LINKS[14]);
     $columns = array('description','title');
+    $sql .= $search->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(date)', $datestart, $dateend);
     list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
     $search->setSQL($sql);
     $search->setFTSQL($ftsql);
@@ -841,10 +830,10 @@ function plugin_submit_links($A = array())
     $linkform->set_var('xhtml', XHTML);
 
     if ( isset($A['title']) ) {
-        $linkform->set_var('title',$A['title']);
+        $linkform->set_var('title',strip_tags($A['title']));
     }
     if ( isset($A['description'] ) ) {
-        $linkform->set_var('description',$A['description']);
+        $linkform->set_var('description',htmlspecialchars($A['description']));
     }
     if ( isset($A['url']) ) {
         $linkform->set_var('url',$A['url']);
@@ -869,7 +858,7 @@ function plugin_submit_links($A = array())
 */
 function plugin_save_submit_links($A)
 {
-    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG12;
+    global $_CONF, $_TABLES, $_USER, $_LI_CONF, $LANG12, $LANG_LINKS;
 
     $retval = '';
     /* check CAPTCHA */
@@ -905,11 +894,13 @@ function plugin_save_submit_links($A)
             $validcat = true;
         }
     }
-    // check link
-    if (!preg_match("/^(http(s?):\\/\\/|ftp:\\/\\/{1})((\w+\.)+)\w{2,}(\/?)$/i", $A['url'])) {
-        $retval .= COM_startBlock($LANG12[22], '',
+
+    $urlregex2 = "/^(https?|ftp)\:\/\//i";
+    if ( !preg_match($urlregex2,$A['url']) ) {
+//    if (!preg_match("/^(http(s?):\\/\\/|ftp:\\/\\/{1})((\w+\.)+)\w{2,}(\/?)$/i", $A['url'])) {
+        $retval .= COM_startBlock($LANG_LINKS['error_header'], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
-                . $LANG12[23]
+                . $LANG_LINKS['verification_failed']
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
                 . plugin_submit_links($A);
 
@@ -918,9 +909,9 @@ function plugin_save_submit_links($A)
 
 
     if (!$validcat) {
-        $retval = COM_startBlock($LANG12[22], '',
+        $retval = COM_startBlock($LANG_LINKS['error_header'], '',
                        COM_getBlockTemplate('_msg_block', 'header'))
-                . $LANG12[23]
+                . $LANG_LINKS['category_not_found']
                 . COM_endBlock(COM_getBlockTemplate('_msg_block', 'footer'))
                 . plugin_submit_links($A);
 
@@ -944,6 +935,8 @@ function plugin_save_submit_links($A)
         $result = DB_save($_TABLES['linksubmission'],
                     'lid,cid,url,description,title,date,owner_id',
                     "{$A['lid']},'{$A['cid']}','{$A['url']}','{$A['description']}','{$A['title']}',NOW(),$owner_id");
+
+        PLG_itemSaved($A['lid'], 'links');
 
         if ($_LI_CONF['notification'] == 1) {
             LINKS_sendNotification($_TABLES['linksubmission'], $A);

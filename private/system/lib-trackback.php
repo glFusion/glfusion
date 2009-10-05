@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2005-2008 by the following authors:                        |
 // |                                                                          |
 // | Author: Dirk Haun - dirk AT haun-online DOT de                           |
 // +--------------------------------------------------------------------------+
@@ -144,14 +144,14 @@ function TRB_trackbackRdf ($article_url, $title, $trackback_url)
 */
 function TRB_makeTrackbackUrl ($id, $type = 'article')
 {
-    global $_CONF,$pageHandle;
+    global $_CONF;
 
     $url = $_CONF['site_url'] . '/trackback.php?id=' . $id;
     if (!empty ($type) && ($type != 'article')) {
         $url .= '&amp;type=' . $type;
     }
 
-    return $pageHandle->buildUrl ($url);
+    return COM_buildUrl ($url);
 }
 
 /**
@@ -163,10 +163,7 @@ function TRB_makeTrackbackUrl ($id, $type = 'article')
 */
 function TRB_filterTitle ($title)
 {
-    global $inputHandler;
-    return $inputHandler->censor($title);
-
-//    return htmlspecialchars (COM_checkWords (strip_tags ($title)));
+    return htmlspecialchars (COM_checkWords (strip_tags (COM_stripslashes ($title))));
 }
 
 /**
@@ -178,10 +175,7 @@ function TRB_filterTitle ($title)
 */
 function TRB_filterBlogname ($blogname)
 {
-    global $inputHandler;
-    return $inputHandnler->censor($blogname);
-
-//    return htmlspecialchars (COM_checkWords (strip_tags ($blogname)));
+    return htmlspecialchars (COM_checkWords (strip_tags (COM_stripslashes ($blogname))));
 }
 
 /**
@@ -195,10 +189,7 @@ function TRB_filterBlogname ($blogname)
 */
 function TRB_filterExcerpt ($excerpt)
 {
-    global $inputHandler;
-    return $inputHandler->censor($excerpt);
-
-//    return COM_checkWords (strip_tags ($excerpt));
+    return COM_checkWords (strip_tags (COM_stripslashes ($excerpt)));
 }
 
 /**
@@ -211,12 +202,12 @@ function TRB_filterExcerpt ($excerpt)
 */
 function TRB_allowDelete ($sid, $type)
 {
-    global $_TABLES,$inputHandler;
+    global $_TABLES;
 
     $allowed = false;
 
     if ($type == 'article') {
-        $sid = $inputHandler->prepareForDB ($sid);
+        $sid = addslashes ($sid);
         $result = DB_query ("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid = '$sid'" . COM_getPermSql ('AND', 0, 3) . COM_getTopicSql ('AND'));
         $A = DB_fetchArray ($result);
 
@@ -276,13 +267,12 @@ function TRB_checkForSpam ($url, $title = '', $blog = '', $excerpt = '')
 */
 function TRB_saveTrackbackComment ($sid, $type, $url, $title = '', $blog = '', $excerpt = '')
 {
-    global $_CONF, $_TABLES,$inputHandler;
+    global $_CONF, $_TABLES;
 
-    $url = $inputHandler->filterVar('strict',$url,'');
-
-    $title      = TRB_filterTitle ($title);
-    $blog       = TRB_filterBlogname ($blog);
-    $excerpt    = TRB_filterExcerpt ($excerpt);
+    $url = COM_applyFilter ($url);
+    $title = TRB_filterTitle ($title);
+    $blog = TRB_filterBlogname ($blog);
+    $excerpt = TRB_filterExcerpt ($excerpt);
 
     // MT does that, so follow its example ...
     if (MBYTE_strlen ($excerpt) > 255) {
@@ -296,10 +286,10 @@ function TRB_saveTrackbackComment ($sid, $type, $url, $title = '', $blog = '', $
     $blog    = str_replace (array ('$',     '{',      '}'),
                             array ('&#36;', '&#123;', '&#126;'), $blog);
 
-    $url     = $inputHandler->prepareForDB($url);
-    $title   = $inputHandler->prepareForDB($title);
-    $blog    = $inputHandler->prepareForDB($blog);
-    $excerpt = $inputHandler->prepareForDB($excerpt);
+    $url     = addslashes ($url);
+    $title   = addslashes ($title);
+    $blog    = addslashes ($blog);
+    $excerpt = addslashes ($excerpt);
 
     if ($_CONF['multiple_trackbacks'] == 0) {
         // multiple trackbacks not allowed - check if we have this one already
@@ -337,9 +327,9 @@ function TRB_saveTrackbackComment ($sid, $type, $url, $title = '', $blog = '', $
 */
 function TRB_deleteTrackbackComment ($cid)
 {
-    global $_TABLES,$inputHandler;
+    global $_TABLES;
 
-    $cid = $inputHandler->prepareForDB($cid);
+    $cid = addslashes ($cid);
     DB_delete ($_TABLES['trackback'], 'cid', $cid);
     CACHE_remove_instance('whatsnew');
 }
@@ -488,7 +478,7 @@ function TRB_containsBacklink ($body, $urlToCheck)
 */
 function TRB_linksToUs ($sid, $type, $urlToGet)
 {
-    global $_CONF,$pageHandle;
+    global $_CONF;
 
     if (!isset ($_CONF['check_trackback_link'])) {
         $_CONF['check_trackback_link'] = 2;
@@ -506,7 +496,7 @@ function TRB_linksToUs ($sid, $type, $urlToGet)
     if ($_CONF['check_trackback_link'] & 2) {
         // build the URL of the pinged page on our site
         if ($type == 'article') {
-            $urlToCheck = $pageHandle->buildUrl ($_CONF['site_url']
+            $urlToCheck = COM_buildUrl ($_CONF['site_url']
                                         . '/article.php?story=' . $sid);
         } else {
             $urlToCheck = PLG_getItemInfo ($type, $sid, 'url');
@@ -647,16 +637,8 @@ function TRB_handleTrackbackPing ($sid, $type = 'article')
             }
         }
 
-        $url       = $inputHandler->getVar('url','url','post','');
-        $title     = $inputHandler->getVar('text','title','post','');
-        $blog_name = $inputHandler->getVar('text','blog_name','post','');
-        $excerpt   = $inputHandler->getVar('html','excerpt','post','');
-
-        $saved = TRB_saveTrackbackComment ($sid, $type, $url,
-                    $title, $blog_name, $excerpt);
-
-//        $saved = TRB_saveTrackbackComment ($sid, $type, $_POST['url'],
-//                    $_POST['title'], $_POST['blog_name'], $_POST['excerpt']);
+        $saved = TRB_saveTrackbackComment ($sid, $type, $_POST['url'],
+                    $_POST['title'], $_POST['blog_name'], $_POST['excerpt']);
 
         if ($saved == TRB_SAVE_REJECT) {
             TRB_sendTrackbackResponse (1, $TRB_ERROR['rejected'],
@@ -911,10 +893,9 @@ function TRB_detectTrackbackUrl ($url)
 */
 function TRB_sendNotificationEmail ($cid, $what = 'trackback')
 {
-    global $_CONF, $_TABLES, $LANG03, $LANG08, $LANG09, $LANG29, $LANG_TRB,
-           $pageHandle, $inputHandler;
+    global $_CONF, $_TABLES, $LANG03, $LANG08, $LANG09, $LANG29, $LANG_TRB;
 
-    $cid = $inputHandler->prepareForDB($cid);
+    $cid = addslashes ($cid);
     $result = DB_query ("SELECT sid,type,title,excerpt,url,blog,ipaddress FROM {$_TABLES['trackback']} WHERE (cid = '".addslashes($cid)."')");
     $A = DB_fetchArray ($result);
     $type = $A['type'];
@@ -942,7 +923,7 @@ function TRB_sendNotificationEmail ($cid, $what = 'trackback')
     }
 
     if ($type == 'article') {
-        $commenturl = $pageHandnle->buildUrl ($_CONF['site_url'] . '/article.php?story='
+        $commenturl = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='
                                     . $id) . '#trackback';
     } else {
         $commenturl = PLG_getItemInfo ($type, $id, 'url');

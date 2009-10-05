@@ -140,6 +140,12 @@ if ( !isset($MG_albums[$album_id]->id) ) {
 if ( $MG_albums[$album_id]->access == 0 || ($MG_albums[$album_id]->hidden == 1 && $MG_albums[$album_id]->access !=3 )) {
 	$errorMessage = $LANG_MG02['albumaccessdeny'];
 }
+
+$aOffset = $MG_albums[$album_id]->getOffset();
+if ( $aOffset == -1 ) {
+    $errorMessage = $LANG_MG02['albumaccessdeny'];
+}
+
 if ( $errorMessage != '' ) {
     $display = MG_siteHeader();
     COM_errorLog("Media Gallery Error - User attempted to view an album that does not exist.");
@@ -358,7 +364,7 @@ if ( $total_print_pages == 0 ) {
     $total_print_pages = 1;
 }
 
-$aOffset = $MG_albums[$album_id]->getOffset();
+//$aOffset = $MG_albums[$album_id]->getOffset();
 if ( $aOffset > 0 ) {
     $aPage = intval(($aOffset)  / ($_MG_CONF['album_display_columns'] * $_MG_CONF['album_display_rows'])) + 1;
 } else {
@@ -541,8 +547,8 @@ $T->set_var(array(
 
 if ( $MG_albums[$album_id]->enable_rss ) {
     $rssfeedname = sprintf($_MG_CONF['rss_feed_name'] . "%06d", $album_id);
-//    $rsslink = '<a href="' . $_MG_CONF['site_url'] . '/rss/' . $rssfeedname . '.rss"' . ' type="application/rss+xml">';
-    $rsslink = '<a href="' . $_CONF['site_url'] . '/backend/' . $rssfeedname . '.rss"' . ' type="application/rss+xml">';
+    $feedUrl = MG_getFeedUrl($rssfeedname.'.rss');
+    $rsslink = '<a href="' . $feedUrl . '"' . ' type="application/rss+xml">';
     $rsslink .= '<img src="' . MG_getImageFile('feed.png')  . '" style="border:none;" alt=""' . XHTML . '></a>';
     $T->set_var('rsslink', $rsslink);
 } else {

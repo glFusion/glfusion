@@ -457,7 +457,9 @@ $LANG08 = array(
     32 => 'תאריך',
     33 => 'קיראו את המאמר המלא ב:',
     34 => 'סוף ההודעה',
-    35 => 'מצטערים, משתמש זה מעדיף לא לקבל כלל הודעות אימייל.'
+    35 => 'מצטערים, משתמש זה מעדיף לא לקבל כלל הודעות אימייל.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################
@@ -951,7 +953,9 @@ $LANG28 = array(
     82 => "חשבונך ב- {$_CONF['site_name']} לא זכה לגישה מאז %s ויתבטל אם לא יזכה לגישה במשך 30 הימים.",
     83 => "חשבונך ב {$_CONF['site_name']} לא היה בשימוש מאז שנוצר ויימחק בקרוב אם לא יזכה לגישה",
     84 => "שם המשתמש שלך הוא: %s  בשביל האתר: {$_CONF['site_url']}",
-    85 => 'אם שכחתם את הסיסמה, השתמשו בקישור הבא: %s'
+    85 => 'אם שכחתם את הסיסמה, השתמשו בקישור הבא: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1340,7 +1344,8 @@ $LANG_ACCESS = array(
     'group_id' => 'קוד זיהוי הקבוצה',
     'plugin_access_denied_msg' => 'הנכם מנסים באופן לא חוקי לגשת לעמוד ניהול ה-plugins. אנא שימו לב שכל הנסיונות לגשת לעמוד זה באופן לא חוקי נרשמות ביומן.',
     'groupexists' => 'שם הקבוצה כבר קיים',
-    'groupexistsmsg' => 'כבר יש קבוצה בשם זה. שמות קבוצות חייבים להיות ייחודיים.'
+    'groupexistsmsg' => 'כבר יש קבוצה בשם זה. שמות קבוצות חייבים להיות ייחודיים.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################
@@ -1709,6 +1714,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'איפשור מחיקות משתמשים',
     'hide_author_exclusion' => 'איפשור החבאת המחבר',
     'show_fullname' => 'הציגו שם מלא',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'הציגו שם שירות',
     'custom_registration' => 'איפשור הרשמה מותאמת אישית',
     'user_login_method' => 'שיטת הזדהות במערכת',
@@ -1904,7 +1910,8 @@ $LANG_confignames['Core'] = array(
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Enable Template Comments',
-    'hidestorydate' => 'Hide Story Date'
+    'hidestorydate' => 'Hide Story Date',
+    'maintenance_mode' => 'Enable Maintenance Mode'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1986,7 +1993,8 @@ $LANG_configselects['Core'] = array(
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
 );
 
 ?>

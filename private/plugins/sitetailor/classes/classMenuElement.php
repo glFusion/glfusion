@@ -622,7 +622,13 @@ class mbElement {
                                 }
 
                                 if( $_CONF['link_documentation'] == 1 ) {
-                                    $url = $_CONF['site_url'] . '/docs/index.html';
+                                    $doclang = COM_getLanguageName();
+                                    if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/index.html') ) {
+                                        $docUrl = $_CONF['site_url'].'/docs/'.$doclang.'/index.html';
+                                    } else {
+                                        $docUrl = $_CONF['site_url'].'/docs/english/index.html';
+                                    }
+                                    $url = $docUrl;
                                     $label = $LANG01[113] . ' (N/A)';
                                     $link_array[$LANG01[113]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
@@ -823,7 +829,7 @@ class mbElement {
                 }
                 break;
             case '5' : // static page
-                $this->url = $_CONF['site_url'] . '/staticpages/index.php?page=' . $this->subtype;
+                $this->url = COM_buildURL ($_CONF['site_url'] . '/staticpages/index.php?page=' . $this->subtype);
                 break;
             case '6' : // external URL
                 /*
@@ -865,7 +871,11 @@ class mbElement {
                 if ( $this->type == 1 && $parentaclass != '' ) {
                     $retval .= "<li".$lastClass.">" . '<a class="' . $parentaclass . '" name="'.$parentaclass.'" href="' . ($this->url == '' ? '#' : $this->url) . '">' . strip_tags($this->label) . '</a>' . LB;
                 } else {
-                    $retval .= "<li".$lastClass.">" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a></li>' . LB;
+                    if ($this->type == 8 ) {
+                        $retval .= "<li".$lastClass.'><a><strong>' . strip_tags($this->label) . '</strong></a></li>' . LB;
+                    } else {
+                        $retval .= "<li".$lastClass.">" . '<a href="' . $this->url . '"' . ($this->target != '' ? ' target="' . $this->target . '"' : '') . '>' . strip_tags($this->label) . '</a></li>' . LB;
+                    }
                 }
             }
         }

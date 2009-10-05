@@ -4,7 +4,7 @@
 	Extracts EXIF information from digital photos.
 
 	Originally created by:
-	Copyright Â© 2005 Jake Olefsky
+	Copyright © 2005 Jake Olefsky
 	http:// www.offsky.com/software/exif/index.php
 	jake@olefsky.com
 
@@ -154,18 +154,27 @@ if ( !function_exists('gettext_glf') ) {
     }
 }
 
-
 //================================================================================================
 // Converts from Intel to Motorola endien.  Just reverses the bytes (assumes hex is passed in)
 //================================================================================================
 
 function intel2Moto($intel) {
-	$len  = strlen($intel);
-	$moto = '';
-	for($i = 0; $i <= $len; $i += 2) {
-		$moto .= substr($intel, $len-$i, 2);
+	static $cache = array();
+	if (isset($cache[$intel])) {
+		return $cache[$intel];
 	}
-	return $moto;
+
+	$cache[$intel] = '';
+	$len  = strlen($intel);
+	if ($len > 1000) {
+		debugLogBacktrace('intel2Moto called with unreasonable data string: length='.$len);
+		trigger_error(sprintf('intel2Moto called with unreasonable data string: length=%s. See debug log for details. (Setting DEBUG_EXIF to true might help locate problem images.)',$len));
+	} else {
+		for($i = 0; $i <= $len; $i += 2) {
+			$cache[$intel] .= substr($intel, $len-$i, 2);
+		}
+	}
+	return $cache[$intel];
 }
 
 
@@ -198,9 +207,9 @@ function lookup_tag($tag) {
 		case '0214': $tag = 'ReferenceBlackWhite'; break;      // six positive rational numbers
 		case '8298': $tag = 'Copyright'; break;                // text string up to 999 bytes long
 		case '8649': $tag = 'PhotoshopSettings'; break;        // ??
+		case '8769': $tag = 'ExifOffset'; break;               // positive integer
 		case '8825': $tag = 'GPSInfoOffset'; break;
 		case '9286': $tag = 'UserCommentOld'; break;           // ??
-		case '8769': $tag = 'ExifOffset'; break;               // positive integer
 		// used by Exif SubIFD 'Image Tags'
 		case '829a': $tag = 'ExposureTime'; break;             // seconds or fraction of seconds 1/x
 		case '829d': $tag = 'FNumber'; break;                  // positive rational number
@@ -249,6 +258,7 @@ function lookup_tag($tag) {
 		case 'a402': $tag = 'ExposureMode'; break;             // values 0-2
 		case 'a403': $tag = 'WhiteBalance'; break;             // values 0 or 1
 		case 'a404': $tag = 'DigitalZoomRatio'; break;         // positive rational number
+		case 'a405': $tag = 'FocalLengthIn35mmFilm'; break;
 		case 'a406': $tag = 'SceneCaptureMode'; break;         // values 0-3
 		case 'a407': $tag = 'GainControl'; break;              // values 0-4
 		case 'a408': $tag = 'Contrast'; break;                 // values 0-2
@@ -435,7 +445,7 @@ function formatData($type,$tag,$intel,$data) {
 		} else if ($tag == '0213') { // YCbCrPositioning
 			if($data==1) $data = $LANG_MG04['center_of_pixel_array'];
 			if($data==2) $data = $LANG_MG04['datum_point'];
-		} else if($tag=="8822") { //ExposureProgram
+		} else if ($tag == '8822') { // ExposureProgram
 			if($data==1) $data = $LANG_MG04['manual'];
 			else if($data==2) $data = $LANG_MG04['program'];
 			else if($data==3) $data = $LANG_MG04['aperature_priority'];
@@ -445,7 +455,6 @@ function formatData($type,$tag,$intel,$data) {
 			else if($data==7) $data = $LANG_MG04['portrait'];
 			else if($data==8) $data = $LANG_MG04['landscape'];
 			else $data = "Unknown: ".$data;
-
 		} else if ($tag == '9207') { // MeteringMode
 			if($data==0) $data = $LANG_MG04['unknown'];
 			else if($data==1) $data = $LANG_MG04['average'];
@@ -456,20 +465,32 @@ function formatData($type,$tag,$intel,$data) {
 			else if($data==6) $data = $LANG_MG04['partial'];
 			else if($data==255) $data = $LANG_MG04['other'];
 			else $data = "Unknown: ".$data;
+
 		} else if ($tag == '9208') { // LightSource
 			if($data==0) $data = $LANG_MG04['unknown_or_auto'];
 			else if($data==1) $data = $LANG_MG04['daylight'];
 			else if($data==2) $data = $LANG_MG04['flourescent'];
 			else if($data==3) $data = $LANG_MG04['tungsten'];
-			else if($data==10) $data = $LANG_MG04['flash'];
+										// 4 Flash
+										// 9 Fine Weather
+			else if($data==10) $data = $LANG_MG04['flash'];	// 10 Cloudy Weather
+										// 11 Shade
+										// 12 Daylight Fluorescent (D 5700 - 7100K)
+										// 13 Day White Fluorescent (N 4600 - 5400K)
+										// 14 Cool White Fluorescent (W 3900 -4500K)
+										// 15 White Fluorescent (WW 3200 - 3700K)
+										// 10 Flash
 			else if($data==17) $data = $LANG_MG04['standard_a'];
 			else if($data==18) $data = $LANG_MG04['standard_b'];
 			else if($data==19) $data = $LANG_MG04['standard_c'];
 			else if($data==20) $data = $LANG_MG04['d55'];
 			else if($data==21) $data = $LANG_MG04['d65'];
 			else if($data==22) $data = $LANG_MG04['d75'];
+			else if ($data == 23)   $data = 'D50';
+			else if ($data == 24)   $data = 'ISO Studio Tungsten';
 			else if($data==255) $data = $LANG_MG04['other'];
-			else $data = "Unknown: ".$data;
+			else                    $data = 'Unknown'.': '.$data;
+
 		} else if ($tag == '9209') { // Flash
 			if($data==0) $data = $LANG_MG04['flash_00'];
 			else if($data==1) $data = $LANG_MG04['flash_01'];
@@ -494,9 +515,11 @@ function formatData($type,$tag,$intel,$data) {
 			else if($data==93) $data = $LANG_MG04['flash_93'];
 			else if($data==95) $data = $LANG_MG04['flash_95'];
 			else $data = $LANG_MG04['unknown'] . ": ".$data;
+
 		} else if ($tag == 'a001') { // ColorSpace
 			if($data==1) $data = $LANG_MG04['srgb'];
 			else $data = $LANG_MG04['uncalibrated'];
+
 		} else if ($tag == 'a002' || $tag == 'a003') { // ExifImageWidth/Height
 			$data = $data. $LANG_MG04['pixels'];
 
@@ -504,6 +527,7 @@ function formatData($type,$tag,$intel,$data) {
 			if($data==1) $data = $LANG_MG04['no_compression'];
 			else if($data==6) $data = $LANG_MG04['jpeg_compression'];
 			else $data = $LANG_MG04['unknown'] . ": ".$data;
+
 		} else if ($tag == 'a217') { // SensingMethod
 			if($data==1) $data = $LANG_MG04['not_defined'];
 			if($data==2) $data = $LANG_MG04['one_chip_color_area_sensor'];
@@ -513,12 +537,34 @@ function formatData($type,$tag,$intel,$data) {
 			if($data==7) $data = $LANG_MG04['trilinear_sensor'];
 			if($data==8) $data = $LANG_MG04['color_sequential_linear_sensor'];
 			else $data = $LANG_MG04['unknown'] . ": ".$data;
+
 		} else if ($tag == '0106') { // PhotometricInterpretation
 			if($data==1) $data = $LANG_MG04['monochrome'];
 			else if($data==2) $data = $LANG_MG04['rgb'];
 			else if($data==6) $data = $LANG_MG04['ycbcr'];
 			else $data = $LANG_MG04['unknown'] . ": ".$data;
 		}
+		//} else if($tag=="a408" || $tag=="a40a") { // Contrast, Sharpness
+		//	switch($data) {
+		//		case 0: $data="Normal"; break;
+		//		case 1: $data="Soft"; break;
+		//		case 2: $data="Hard"; break;
+		//		default: $data="Unknown"; break;
+		//	}
+		//} else if($tag=="a409") { // Saturation
+		//	switch($data) {
+		//		case 0: $data="Normal"; break;
+		//		case 1: $data="Low saturation"; break;
+		//		case 2: $data="High saturation"; break;
+		//		default: $data="Unknown"; break;
+		//	}
+		//} else if($tag=="a402") { // Exposure Mode
+		//	switch($data) {
+		//		case 0: $data="Auto exposure"; break;
+		//		case 1: $data="Manual exposure"; break;
+		//		case 2: $data="Auto bracket"; break;
+		//		default: $data="Unknown"; break;
+		//	}
 
 	} else if ($type == 'UNDEFINED') {
 
@@ -532,7 +578,7 @@ function formatData($type,$tag,$intel,$data) {
 		}
 		if ($tag == 'a301') { // SceneType
 			$data = bin2hex($data);
-			$data	= str_replace("00","",$data);
+			$data = str_replace('00','',$data);
 			$data	= str_replace("01",$LANG_MG04['directly_photographed'],$data);
 		}
 		if ($tag == '9101') {  // ComponentsConfiguration
@@ -545,6 +591,10 @@ function formatData($type,$tag,$intel,$data) {
 			$data = str_replace('06','B',$data);
 			$data = str_replace('00','',$data);
 		}
+		//if($tag=="9286") { //UserComment
+		//	$encoding	= rtrim(substr($data, 0, 8));
+		//	$data		= rtrim(substr($data, 8));
+		//}
 	} else {
 		$data = bin2hex($data);
 		if ($intel == 1) $data = intel2Moto($data);
@@ -587,6 +637,11 @@ function read_entry(&$result,$in,$seek,$intel,$ifd_name,$globalOffset) {
 	if ($intel == 1) $type = intel2Moto($type);
 	lookup_type($type, $size);
 
+	if (strpos($tag_name, 'unknown:') !== false && strpos($type, 'error:') !== false) { // we have an error
+		$result['Errors'] = $result['Errors']+1;
+		return;
+	}
+
 	// 4 byte number of elements
 	$count = bin2hex(fread($in, 4));
 	if ($intel == 1) $count = intel2Moto($count);
@@ -616,35 +671,41 @@ function read_entry(&$result,$in,$seek,$intel,$ifd_name,$globalOffset) {
 		if ($result['VerboseOutput'] == 1) {
 			$result[$ifd_name]['MakerNote']['RawData'] = $data;
 		}
-		if (eregi('NIKON',$make)) {
-			require_once('makers/nikon.php');
+		if ( preg_match("/NIKON/i",$make) ) {
+//		if (eregi('NIKON',$make)) {
+			require_once(dirname(__FILE__).'/makers/nikon.php');
 			parseNikon($data,$result);
 			$result[$ifd_name]['KnownMaker'] = 1;
-		} else if (eregi('OLYMPUS',$make)) {
-			require_once('makers/olympus.php');
+//		} else if (eregi('OLYMPUS',$make)) {
+	    } else if (preg_match("/OLYMPUS/i",$make)) {
+			require_once(dirname(__FILE__).'/makers/olympus.php');
 			parseOlympus($data,$result,$seek,$globalOffset);
 			$result[$ifd_name]['KnownMaker'] = 1;
-		} else if (eregi('Canon',$make)) {
-			require_once('makers/canon.php');
+//		} else if (eregi('Canon',$make)) {
+		} else if (preg_match("/Canon/i",$make)) {
+			require_once(dirname(__FILE__).'/makers/canon.php');
 			parseCanon($data,$result,$seek,$globalOffset);
 			$result[$ifd_name]['KnownMaker'] = 1;
-		} else if (eregi('FUJIFILM',$make)) {
-			require_once('makers/fujifilm.php');
+//		} else if (eregi('FUJIFILM',$make)) {
+		} else if (preg_match("/FUJIFILM/i",$make)) {
+			require_once(dirname(__FILE__).'/makers/fujifilm.php');
 			parseFujifilm($data,$result);
 			$result[$ifd_name]['KnownMaker'] = 1;
-		} else if (eregi('SANYO',$make)) {
-			require_once('makers/sanyo.php');
+//		} else if (eregi('SANYO',$make)) {
+		} else if (preg_match("/SANYO/i",$make)) {
+			require_once(dirname(__FILE__).'/makers/sanyo.php');
 			parseSanyo($data,$result,$seek,$globalOffset);
 			$result[$ifd_name]['KnownMaker'] = 1;
-	} else if (eregi('Panasonic',$make)) {
-		require_once('makers/panasonic.php');
+//	} else if (eregi('Panasonic',$make)) {
+	} else if (preg_match("/Panasonic/i",$make)) {
+		require_once(dirname(__FILE__).'/makers/panasonic.php');
 		parsePanasonic($data,$result,$seek,$globalOffset);
 		$result[$ifd_name]['KnownMaker'] = 1;
 		} else {
 			$result[$ifd_name]['KnownMaker'] = 0;
 		}
 	} else if ($tag_name == 'GPSInfoOffset') {
-		require_once('makers/gps.php');
+		require_once(dirname(__FILE__).'/makers/gps.php');
 		$formated_data = formatData($type,$tag,$intel,$data);
 		$result[$ifd_name]['GPSInfo'] = $formated_data;
 		parseGPS($data,$result,$formated_data,$seek,$globalOffset);
@@ -699,15 +760,15 @@ function read_exif_data_raw($path,$verbose) {
 		return $result;
 	}
 
+	$GLOBALS['exiferFileSize'] = filesize($path);
+
 	// First 2 bytes of JPEG are 0xFFD8
 	$data = bin2hex(fread( $in, 2 ));
 	if ($data == 'ffd8') {
 		$result['ValidJpeg'] = 1;
 	} else {
 		$result['ValidJpeg'] = 0;
-		fclose($in);
-		fclose($seek);
-		return $result;
+		fseek($in, 0);
 	}
 
 	$result['ValidIPTCData'] = 0;
@@ -716,12 +777,14 @@ function read_exif_data_raw($path,$verbose) {
 	$result['ValidAPP2Data'] = 0;
 	$result['ValidCOMData'] = 0;
 
+if ($result['ValidJpeg'] == 1) {
 	// Next 2 bytes are MARKER tag (0xFFE#)
 	$data = bin2hex(fread( $in, 2 ));
 	$size = bin2hex(fread( $in, 2 ));
 
 	// LOOP THROUGH MARKERS TILL YOU GET TO FFE1  (exif marker)
-	while(!feof($in) && $data!='ffe1' && $data!='ffc0' && $data!='ffd9') {
+	$abortCount = 0;
+	while(!feof($in) && $data!='ffe1' && $data!='ffc0' && $data!='ffd9' && ++$abortCount < 200) {
 		if ($data == 'ffe0') { // JFIF Marker
 			$result['ValidJFIFData'] = 1;
 			$result['JFIF']['Size'] = hexdec($size);
@@ -789,6 +852,8 @@ function read_exif_data_raw($path,$verbose) {
 	// Start of APP1 block starts with 'Exif' header (6 bytes)
 	$header = fread( $in, 6 );
 
+} // END IF ValidJpeg
+
 	// Then theres a TIFF header with 2 bytes of endieness (II or MM)
 	$header = fread( $in, 2 );
 	if ($header==='II') {
@@ -820,7 +885,9 @@ function read_exif_data_raw($path,$verbose) {
 	if (hexdec($offset)>8) $unknown = fread( $in, hexdec($offset)-8); // fixed this bug in 1.3
 
 	// add 12 to the offset to account for TIFF header
-	$globalOffset+=12;
+	if ($result['ValidJpeg'] == 1) {
+		$globalOffset+=12;
+	}
 
 
 	//===========================================================
@@ -951,40 +1018,19 @@ function read_exif_data_raw($path,$verbose) {
 	return $result;
 }
 
-//================================================================================================
-// Converts a floating point number into a fraction.  Many thanks to Matthieu Froment for this code
-//================================================================================================
-function ConvertToFraction($v, &$n, &$d)
-{
-	$MaxTerms = 15;         // Limit to prevent infinite loop
-	$MinDivisor = 0.000001; // Limit to prevent divide by zero
-	$MaxError = 0.00000001; // How close is enough
-
-	$f = $v; // Initialize fraction being converted
-
-	$n_un = 1; // Initialize fractions with 1/0, 0/1
-	$d_un = 0;
-	$n_deux = 0;
-	$d_deux = 1;
-
-	for ($i = 0; $i<$MaxTerms; $i++)
-	{
-		$a = floor($f); // Get next term
-		$f = $f - $a; // Get new divisor
-		$n = $n_un * $a + $n_deux; // Calculate new fraction
-		$d = $d_un * $a + $d_deux;
-		$n_deux = $n_un; // Save last two fractions
-		$d_deux = $d_un;
-		$n_un = $n;
-		$d_un = $d;
-
-		if ($f < $MinDivisor) // Quit if dividing by zero
-			break;
-
-		if (abs($v - $n / $d) < $MaxError)
-			break;
-
-		$f = 1 / $f; // Take reciprocal
+//=========================================================
+// Converts a floating point number into a simple fraction.
+//=========================================================
+function ConvertToFraction($v, &$n, &$d) {
+	if ($v == 0) {
+		$n = 0;
+		$d = 1;
+		return;
+	}
+	for ($n=1; $n<100; $n++) {
+		$v1 = 1/$v*$n;
+		$d = round($v1, 0);
+		if (abs($d - $v1) < 0.02) return; // within tolarance
 	}
 }
 
@@ -1026,6 +1072,12 @@ function get35mmEquivFocalLength(&$result) {
 		return $equivfl;
 	}
 	return null;
+}
+
+if (!function_exists('debugLogBacktrace')) {
+	// define this function for stand-alone uses if exifier
+	function debugLogBacktrace($msg) {
+	}
 }
 
 ?>

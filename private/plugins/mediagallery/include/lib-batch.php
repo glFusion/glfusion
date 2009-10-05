@@ -476,20 +476,18 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
                 $srcFile        = $row['data'];     // full path
                 $album_id       = $row['aid'];
-                $views          = $row['mid'];
+                $sdata          = unserialize($row['mid']);
+                $views          = $sdata[0];
+                $uid            = $sdata[1];
                 $purgefiles     = 0;
                 $file    = basename($row['data']);
-
                 $baseSrcFile = stripslashes($file);
                 $baseSrcFile = MG_replace_accents($baseSrcFile);
                 $baseSrcFile = preg_replace("#[ ]#","_",$baseSrcFile);  // change spaces to underscore
                 $baseSrcFile = preg_replace('#[^()\.\-,\w]#','_',$baseSrcFile);  //only parenthesis, underscore, letters, numbers, comma, hyphen, period - others to underscore
                 $baseSrcFile = preg_replace('#(_)+#','_',$baseSrcFile);  //eliminate duplicate underscore
-
-                $views          = $row['mid'];
                 $caption        = $row['data3'];
                 $description    = $row['data2'];
-
                 $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
@@ -519,34 +517,44 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         $filetype="application/force-download";
                 }
                 list($rc,$msg) = MG_getFile( $srcFile, $baseSrcFile, $album_id, $caption, $description, 0, $purgefiles, $filetype,0,'','',0,0,0 );
-                DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . ",media_user_id='" . $MG_albums[$album_id]->owner_id . "' WHERE media_id='" . $new_media_id . "'");
-
-                $sql = "SELECT * FROM {$_TABLES['mg_session_items2']} WHERE id=" . $row['id'];
-                $gcmtResult2 = DB_query($sql);
-                $cRows = DB_numRows($gcmtResult2);
-                for ($z = 0; $z < $cRows; $z++) {
-                    $row2 = DB_fetchArray($gcmtResult2);
-                    $row2['sid']  = $new_media_id;
-                    $row2['type'] = 'mediagallery';
-                    $cmtTitle = 'Coppermine Comment';
-                    $cmtText = $row2['data3'];
-                    $cmtDate = (int) $row2['data4'];
-                    $cmtIP = $row2['data5'];
-                    $cmtUid = 1;
-                    if ( $row2['data1'] != '' && $row2['data1'] != 'everyone' ) {
-                        $sql = "SELECT uid FROM {$_TABLES['users']} WHERE username='" . addslashes(trim($row2['data1'])) . "'";
-                        $uResult = DB_query($sql);
-                        $uRows = DB_numRows($uResult);
-                        if ( $uRows > 0 ) {
-                            $uRow = DB_fetchArray($uResult);
-                            $cmtUid = $uRow['uid'];
-                        }
+                if ( $rc == true ) {
+                    $sql = "SELECT uid FROM {$_TABLES['users']} WHERE username='" . addslashes(trim(strtolower($uid))) . "'";
+                    $userResult = DB_query($sql);
+                    $userRows = DB_numRows($userResult);
+                    if ( $userRows > 0 ) {
+                        $userRow = DB_fetchArray($userResult);
+                        $glUid = $userRow['uid'];
+                    } else {
+                        $glUid = 1;
                     }
-                    $cmtDate = gmdate("Y-m-d H:i:s", $row2['data4']);
-                    MG_saveComment($cmtTitle,$cmtText,$row2['sid'],0,$row2['type'],'plain', $cmtUid, $cmtDate,$cmtIP);
+                    DB_query("UPDATE {$_TABLES['mg_media']} SET media_views=" . $views . ",media_user_id='" . $glUid . "' WHERE media_id='" . $new_media_id . "'");
+                    $sql = "SELECT * FROM {$_TABLES['mg_session_items2']} WHERE id=" . $row['id'];
+                    $gcmtResult2 = DB_query($sql);
+                    $cRows = DB_numRows($gcmtResult2);
+                    for ($z = 0; $z < $cRows; $z++) {
+                        $row2 = DB_fetchArray($gcmtResult2);
+                        $row2['sid']  = $new_media_id;
+                        $row2['type'] = 'mediagallery';
+                        $cmtTitle = 'Coppermine Comment';
+                        $cmtText = $row2['data3'];
+                        $cmtDate = (int) $row2['data4'];
+                        $cmtIP = $row2['data5'];
+                        $cmtUid = 1;
+                        if ( $row2['data1'] != '' && $row2['data1'] != 'everyone' ) {
+                            $sql = "SELECT uid FROM {$_TABLES['users']} WHERE username='" . addslashes(trim(strtolower($row2['data1']))) . "'";
+                            $uResult = DB_query($sql);
+                            $uRows = DB_numRows($uResult);
+                            if ( $uRows > 0 ) {
+                                $uRow = DB_fetchArray($uResult);
+                                $cmtUid = $uRow['uid'];
+                            }
+                        }
+                        $cmtDate = $row2['data4']; // gmdate("Y-m-d H:i:s", $row2['data4']);
+                        MG_saveComment($cmtTitle,$cmtText,$row2['sid'],0,$row2['type'],'plain', $cmtUid, $cmtDate,$cmtIP);
+                    }
+                    $comments = DB_count ($_TABLES['comments'], array('sid','type'), array($new_media_id, 'mediagallery'));
+                    DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',$new_media_id);
                 }
-                $comments = DB_count ($_TABLES['comments'], array('sid','type'), array($new_media_id, 'mediagallery'));
-                DB_change($_TABLES['mg_media'],'media_comments', $comments, 'media_id',$new_media_id);
                 DB_query("DELETE FROM {$_TABLES['mg_session_items2']} WHERE id=" . $row['id']);
 
                 $statusMsg = addslashes($baseSrcFile . " " . $msg);
@@ -1064,6 +1072,8 @@ function _mg_create_percent_box($box, $percent_color, $percent_width) {
 
 function MG_saveComment ($title, $comment, $sid, $pid, $type, $postmode, $uid, $cmtdate,$ipaddress='') {
     global $_CONF, $_TABLES, $_USER, $_SERVER, $LANG03;
+
+    USES_lib_comments();
 
     $ret = 0;
     // Sanity check

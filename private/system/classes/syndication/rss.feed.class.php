@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2004-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Michael Jervis     - mike AT fuckingbrit DOT com                |
 // +--------------------------------------------------------------------------+
@@ -313,6 +313,13 @@ if (!defined ('GVERSION')) {
       if( array_key_exists( 'commenturl', $article ) )
       {
         $xml .= '<comments>'.$this->_safeXML( $article['commenturl'] )."</comments>\n";
+      }
+      if( array_key_exists( 'author', $article ) )
+      {
+        if( $article['author'] != '' )
+        {
+          $xml .= '<dc:creator>'.$this->_safeXML( $article['author'] )."</dc:creator>\n";
+        }
       }
       if( array_key_exists( 'topic', $article ) )
       {

@@ -13,10 +13,10 @@
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2009 by the following authors:                        |
 // |                                                                          |
-// | Authors: Tony Bibbs       - tony@tonybibbs.com                           |
-// |          Dirk Haun        - dirk@haun-online.de                          |
+// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
+// |          Dirk Haun        - dirk AT haun-online DOT de                   |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -44,7 +44,7 @@ if (!defined ('GVERSION')) {
 * submitted via POST method.  Please read documentation as there are a number of
 * security related features that will come in handy for you.
 *
-* @author       Tony Bibbs <tony@tonybibbs.com>
+* @author       Tony Bibbs, tony AT tonybibbs DOT com
 *
 */
 class upload
@@ -101,6 +101,10 @@ class upload
     * @access private
     */
     var $_maxFileSize = 1048576;          // Long, in bytes
+    /**
+    * @access private
+    */
+    var $_jpegQuality = 0;                // compatibility only - not used
     /**
     * @access private
     */
@@ -824,7 +828,7 @@ class upload
     }
 
     /**
-    * This function will print any debmug messages out.
+    * This function will print any debug messages out.
     *
     */
     function printDebugMsgs()
@@ -1085,6 +1089,7 @@ class upload
                     $this->_currentFile['type'] = $this->_filesToUpload["type"][$key];
                     $this->_currentFile['size'] = $this->_filesToUpload["size"][$key];
                     $this->_currentFile['error'] = $this->_filesToUpload["error"][$key];
+                    $this->_currentFile['localerror'] = array();
 
                     $metaData = IMG_getMediaMetaData( $this->_currentFile['tmp_name'] );
                     if ( $metaData['mime_type'] != '' ) {
@@ -1097,10 +1102,11 @@ class upload
                         // Verify file meets size limitations
                         if (!$this->_fileSizeOk()) {
                             $this->_addError('File, ' . $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit');
+                            $this->_currentFile['localerror'][] = $this->_currentFile['name'] . ', is bigger than the ' . $this->_maxFileSize . ' byte limit';
                         }
 
                         // If all systems check, do the upload
-                        if ($this->checkMimeType() AND $this->_imageSizeOK() AND !$this->areErrors()) {
+                        if ($this->checkMimeType() AND $this->_imageSizeOK() AND empty($this->_currentFile['localerror'])) {
                             if ($this->_copyFile()) {
                                 $this->_uploadedFiles[] = $this->_fileUploadDirectory . '/' . $this->_getDestinationName();
                             }
@@ -1163,6 +1169,69 @@ class upload
         } else {
             return true;
         }
+    }
+
+    // kept for comapatibility...
+
+    /**
+    * Sets the path to where the mogrify ImageMagick function is
+    *
+    * @param     string    $path_to_mogrify    Absolute path to mogrify
+    * @return    boolean   True if set, false otherwise
+    *
+    */
+    function setMogrifyPath($path_to_mogrify)
+    {
+        return true;
+    }
+
+    /**
+    * Sets the path to where the netpbm utilities are
+    *
+    * @param     string    $path_to_netpbm    Absolute path to netpbm dir
+    * @return    boolean   True if set, false otherwise
+    *
+    */
+    function setNetPBM($path_to_netpbm)
+    {
+        return true;
+    }
+
+    /**
+    * Configure upload to use GD library
+    *
+    * @return    boolean   True if set, false otherwise
+    *
+    */
+    function setGDLib()
+    {
+        return true;
+    }
+
+    /**
+    * If enabled will ignore the MIME checks on file uploads
+    *
+    * @param    boolean     $switch     flag, true or false
+    *
+    */
+    function setIgnoreMimeCheck($switch)
+    {
+    }
+
+
+    /**
+    * Set JPEG quality
+    *
+    * NOTE:     The 'quality' is an arbitrary value used by the IJG library.
+    *           It is not a percent value! The default (and a good value) is 75.
+    *
+    * @param    int       $quality  JPEG quality (0-100)
+    * @return   boolean   true if we set values OK, otherwise false
+    *
+    */
+    function setJpegQuality($quality)
+    {
+        return true;
     }
 }
 

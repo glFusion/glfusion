@@ -92,7 +92,7 @@ function toggleFields() {
             $('glcorediv').style.display='none';
             $('plugin').style.display='none';
             $('staticpage').style.display='none';
-            $('glfunc').style.display='';
+            $('glfunc').style.display='none';
             $('phpdiv').style.display='none';
             break;
 
@@ -116,14 +116,13 @@ function toggleFields() {
         <label for="menulabel">{$LANG_ST01[elementlabel]}:</label>
         <input type="text" id="menulabel" name="menulabel" size="48" value="{menulabel}"{xhtml}>
       </div>
-
-      <div class="required">
-        <label for="menutype">{$LANG_ST01[type]}:</label>
-        {type_select}
-      </div>
       <div id="displayafter" class="required">
         <label for="menuorder">{$LANG_ST01[display_after]}:</label>
         {order_select}
+      </div>
+      <div class="required">
+        <label for="menutype">{$LANG_ST01[type]}:</label>
+        {type_select}
       </div>
       <div id="urldiv" class="required">
         <label for="menuurl">{$LANG_ST01[url]}:</label>

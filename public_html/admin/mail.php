@@ -8,12 +8,9 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2001-2008 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs - tony AT tonybibbs DOT com                          |
 // |          Dirk Haun  - dirk AT haun-online DOT de                         |
@@ -38,9 +35,18 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+$display = '';
+
 // Make sure user has access to this page
 if (!SEC_inGroup ('Mail Admin') && !SEC_hasrights ('user.mail')) {
-    $pageHandle->displayAccessError($MESSAGE[30],$MESSAGE[39],'mail administration.');
+    $retval .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $retval .= COM_startBlock ($MESSAGE[30], '',
+                               COM_getBlockTemplate ('_msg_block', 'header'));
+    $retval .= $MESSAGE[39];
+    $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $retval .= COM_siteFooter ();
+    COM_accessLog ("User {$_USER['username']} tried to illegally access the mail administration screen.");
+    echo $retval;
     exit;
 }
 
@@ -84,8 +90,6 @@ function display_mailform ()
     $mail_templates->set_var('lang_postmode', $LANG03[2]);
     $mail_templates->set_var('postmode_options', COM_optionList($_TABLES['postmodes'],'code,name',$postmode));
 
-
-
     $mail_templates->set_var ('site_url', $_CONF['site_url']);
     $mail_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
     $mail_templates->set_var ('layout_url', $_CONF['layout_url']);
@@ -105,12 +109,7 @@ function display_mailform ()
         $groups[$A['grp_id']] = ucwords ($A['grp_name']);
     }
     asort ($groups);
-/* --------
-    foreach ($groups as $groupID => $groupName) {
-        $group_options .= '<option value="' . $groupID . '">' . $groupName
-                       . '</option>';
-    }
----------- */
+
     foreach ($groups as $groupID => $groupName) {
         if (SEC_inGroup('Root') || (SEC_inGroup($groupName) && ($groupName <> 'Logged-in Users') && ($groupName <> 'Mail Admin'))) {
             $group_options .= '<option value="' . $groupID . '">' . $groupName . '</option>';
@@ -140,6 +139,10 @@ function display_mailform ()
     $mail_templates->parse ('output', 'form');
     $retval = $mail_templates->finish ($mail_templates->get_var ('output'));
 
+    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                   time() + 1200, $_CONF['cookie_path'],
+                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
+
     return $retval;
 }
 
@@ -152,34 +155,28 @@ function display_mailform ()
 */
 function send_messages ($vars)
 {
-    global $_CONF, $_TABLES, $inputHandler,$LANG31;
+    global $_CONF, $_TABLES, $LANG31;
 
-    USES_lib_user();
+    require_once $_CONF['path_system'] . 'lib-user.php';
 
     $retval = '';
 
     $html = 0;
-
     if (($_CONF['advanced_editor'] == 1)) {
         if ( $vars['postmode'] == 'html' ) {
-            $message = $inputHandler->getVar('html','message_html','post','');
+            $message = COM_stripslashes($vars['message_html']);
             $html = true;
         } else if ( $vars['postmode'] == 'text' ) {
-            $message = $inputHandler->getVar('text','message_text','post','');
+            $message = COM_stripslashes($vars['message_text']);
             $html = false;
         }
     } else {
-        $message = $inputHandler->getVar('text','message','post','');
+        $message = COM_stripslashes($vars['message']);
     }
 
-    $fra      = $inputHandler->getVar('strict','fra','post','');
-    $fraepost = $inputHandler->getVar('strict','fraepost','post','');
-    $subject  = $inputHandler->getVar('text','subject','post','');
-    $to_group = $inputHandler->getVar('strict','to_group','post','');
-
-    if (empty ($fra) OR empty ($fraepost) OR
-            empty ($subject) OR empty ($message) OR
-            empty ($to_group)) {
+    if (empty ($vars['fra']) OR empty ($vars['fraepost']) OR
+            empty ($vars['subject']) OR empty ($message) OR
+            empty ($vars['to_group'])) {
         $retval .= COM_startBlock ($LANG31[1], '',
                         COM_getBlockTemplate ('_msg_block', 'header'));
         $retval .= $LANG31[26];
@@ -188,9 +185,14 @@ function send_messages ($vars)
         return $retval;
     }
 
-    $priority = $inputHandler->getVar('bool','priority','post',0);
+    // Urgent message!
+    if (isset ($vars['priority'])) {
+        $priority = 1;
+    } else {
+        $priority = 0;
+    }
 
-    $groupList = implode (',', USER_getChildGroups($to_group));
+    $groupList = implode (',', USER_getChildGroups($vars['to_group']));
 
     // and now mail it
     if (isset ($vars['overstyr'])) {
@@ -207,7 +209,8 @@ function send_messages ($vars)
     $result = DB_query ($sql);
     $nrows = DB_numRows ($result);
     $from = array();
-    $from = COM_formatEmailAddress ($fra, $fraepost);
+    $from = COM_formatEmailAddress ($vars['fra'], $vars['fraepost']);
+    $subject = COM_stripslashes ($vars['subject']);
 
     // Loop through and send the messages!
     $successes = array ();
@@ -264,16 +267,16 @@ function send_messages ($vars)
 
 // MAIN
 
-$pageHandle->setPageTitle($LANG31[1]);
-$pageHandle->setShowExtraBlocks(false);
+$display .= COM_siteHeader ('menu', $LANG31[1]);
 
-$mail = $inputHandler->getVar('strict','mail','post','');
-
-if ($mail == 'mail' && SEC_checkToken()) {
-    $pageHandle->addContent(send_messages ($_POST));
+if (isset($_POST['mail']) && ($_POST['mail'] == 'mail') && SEC_checkToken()) {
+    $display .= send_messages ($_POST);
 } else {
-    $pageHandle->addContent(display_mailform ());
+    $display .= display_mailform ();
 }
 
-$pageHandle->displayPage();
+$display .= COM_siteFooter ();
+
+echo $display;
+
 ?>

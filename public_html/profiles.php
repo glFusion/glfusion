@@ -95,8 +95,8 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
                 }
             }
 
-            $subject = COM_stripslashes ($subject);
-            $message = COM_stripslashes ($message);
+            $subject = COM_filterHTML(COM_stripslashes ($subject));
+            $message = COM_filterHTML(COM_stripslashes ($message));
 
             // do a spam check with the unfiltered message text and subject
             $mailtext = $subject . "\n" . $message . $sig;
@@ -227,7 +227,11 @@ function contactform ($uid, $subject = '', $message = '')
 
             if (($_CONF['advanced_editor'] == 1)) {
                 $mail_template->set_file('form','contactuserform_advanced.thtml');
-                $ae_uid = intval(COM_applyFilter($_USER['uid'],true));
+                if ( isset($_USER['uid']) ) {
+                    $ae_uid = intval(COM_applyFilter($_USER['uid'],true));
+                } else {
+                    $ae_uid = 1;
+                }
                 $sql = "DELETE FROM {$_TABLES['tokens']} WHERE owner_id=$ae_uid AND urlfor='advancededitor'";
                 DB_Query($sql,1);
             } else {
@@ -280,9 +284,9 @@ function contactform ($uid, $subject = '', $message = '')
             $mail_template->set_var ('lang_subject', $LANG08[13]);
             $mail_template->set_var ('subject', $subject);
             $mail_template->set_var ('lang_message', $LANG08[14]);
-            $mail_template->set_var ('message', $message);
-            $mail_template->set_var ('message_text',$message);
-            $mail_template->set_var ('message_html',$message);
+            $mail_template->set_var ('message', htmlspecialchars($message));
+            $mail_template->set_var ('message_text',htmlspecialchars($message));
+            $mail_template->set_var ('message_html',htmlspecialchars($message));
             $mail_template->set_var ('lang_nohtml', $LANG08[15]);
             $mail_template->set_var ('lang_submit', $LANG08[16]);
             $mail_template->set_var ('uid', $uid);
@@ -325,7 +329,7 @@ function contactform ($uid, $subject = '', $message = '')
 */
 function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG08,$pageHandle;
+    global $_CONF, $_TABLES, $_USER, $LANG01, $LANG08;
 
     $storyurl = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $sid);
     if ($_CONF['url_rewrite']) {
@@ -350,12 +354,19 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
         return $retval;
     }
 
-    $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'";
-    $result = DB_query ($sql);
-    $A = DB_fetchArray ($result);
+    $sql = "SELECT uid,title,introtext,bodytext,commentcode,UNIX_TIMESTAMP(date) AS day,postmode FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND');
+    $result = DB_query($sql);
+    if (DB_numRows($result) == 0) {
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+    $A = DB_fetchArray($result);
+
     $shortmsg = COM_stripslashes ($shortmsg);
     $mailtext = sprintf ($LANG08[23], $from, $fromemail) . LB;
     if (strlen ($shortmsg) > 0) {
+        if ( $html ) {
+            $shortmsg = COM_filterHTML($shortmsg);
+        }
         $mailtext .= LB . sprintf ($LANG08[28], $from) . $shortmsg . LB;
     }
 
@@ -426,7 +437,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
             $retval = COM_refresh($storyurl . '&amp;msg=26');
         }
     }
-    $pageHandle->redirect($redirectURL);
+    return $retval;
 }
 
 /**
@@ -439,7 +450,7 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
 function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
                         $fromemail = '', $shortmsg = '', $msg = 0)
 {
-    global $_CONF, $_TABLES, $_USER, $pageHandle, $LANG03,$LANG08, $LANG_LOGIN;
+    global $_CONF, $_TABLES, $_USER, $LANG03,$LANG08, $LANG_LOGIN;
 
     $retval = '';
 
@@ -463,8 +474,14 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
         return $retval;
     }
 
+    $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'" . COM_getTopicSql('AND') . COM_getPermSql('AND'));
+    $A = DB_fetchArray($result);
+    if ($A['count'] == 0) {
+        return COM_refresh($_CONF['site_url'] . '/index.php');
+    }
+
     if ($msg > 0) {
-        $pageHandle->addMessage($msg);
+        $retval .= COM_showMessage ($msg);
     }
 
     if (empty ($from) && empty ($fromemail)) {
@@ -521,9 +538,9 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
     $mail_template->set_var('lang_toemailaddress', $LANG08[19]);
     $mail_template->set_var('toemail', $toemail);
     $mail_template->set_var('lang_shortmessage', $LANG08[27]);
-    $mail_template->set_var('shortmsg', $shortmsg);
-    $mail_template->set_var('message_text', $shortmsg);
-    $mail_template->set_var('message_html', $shortmsg);
+    $mail_template->set_var('shortmsg', htmlspecialchars($shortmsg));
+    $mail_template->set_var('message_text', htmlspecialchars($shortmsg));
+    $mail_template->set_var('message_html', htmlspecialchars($shortmsg));
     $mail_template->set_var('lang_warning', $LANG08[22]);
     $mail_template->set_var('lang_sendmessage', $LANG08[16]);
     $mail_template->set_var('story_id',$sid);
@@ -539,123 +556,128 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
 // MAIN
 $display = '';
 
-$pageHandle->setShowExtraBlocks(false);
-
-$what = $inputHandler->getVar('strict','what',array('post','get'),'');
+if (isset ($_POST['what'])) {
+    $what = COM_applyFilter ($_POST['what']);
+} else if (isset ($_GET['what'])) {
+    $what = COM_applyFilter ($_GET['what']);
+} else {
+    $what = '';
+}
 
 switch ($what) {
     case 'contact':
-        $uid = $inputHandler->getVar('integer','uid','post',0);
+        $uid = COM_applyFilter ($_POST['uid'], true);
         if ($uid > 1) {
             $html = 0;
             if (($_CONF['advanced_editor'] == 1)) {
                 if ( $_POST['postmode'] == 'html' ) {
-                    $message = $inputHandler->getVar('html','message_html','post','');
+                    $message = $_POST['message_html'];
                     $html = 1;
                 } else if ( $_POST['postmode'] == 'plaintext' ) {
-                    $message = $inputHandler->getVar('text','message_text','post','');
+                    $message = $_POST['message_text'];
                     $html = 0;
                 }
             } else {
-                $message = $inputHandler->getVar('text','message','post','');
+                $message = $_POST['message'];
             }
-            $author = $inputHandler->getVar('text','author','post','');
-            $authoremail = $inputHandler->getVar('text','authoremail','post','');
-            $subject = $inputHandler->getVar('text','subject','post','');
-
-            $pageHandle->addContent(contactemail ($uid, $author,
-                    $authoremail, $subject,
-                    $message,$html));
-            $pageHandle->displayPage();
+            $display .= contactemail ($uid, $_POST['author'],
+                    $_POST['authoremail'], $_POST['subject'],
+                    $message,$html);
+            echo $display;
+            exit;
         } else {
-            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+            $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
+            echo $display;
+            exit;
         }
         break;
 
     case 'emailstory':
-        $sid = $inputHandler->getVar('strict','sid','get','');
+        $sid = COM_applyFilter ($_GET['sid']);
         if (empty ($sid)) {
-            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+            $display = COM_refresh ($_CONF['site_url'] . '/index.php');
         } else if ($_CONF['hideemailicon'] == 1) {
-            $pageHandle->redirect($pageHandle->buildUrl ($_CONF['site_url']
+            $display = COM_refresh (COM_buildUrl ($_CONF['site_url']
                                     . '/article.php?story=' . $sid));
         } else {
-            $pageHandle->setPageTitle($LANG08[17]);
-            $pageHandle->addContent(mailstoryform ($sid));
-            $pageHandle->displayPage();
+            $display .= COM_siteHeader ('menu', $LANG08[17])
+                     . mailstoryform ($sid)
+                     . COM_siteFooter ();
         }
         break;
 
     case 'sendstory':
-        $sid = $inputHandler->getVar('strict','sid','post','');
+        $sid = COM_applyFilter ($_POST['sid']);
         if (empty ($sid)) {
-            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+            $display = COM_refresh ($_CONF['site_url'] . '/index.php');
         } else {
             $html = 0;
             if (($_CONF['advanced_editor'] == 1)) {
                 if ( $_POST['postmode'] == 'html' ) {
-                    $shortmessage = $inputHandler->getVar('html','message_html','post','');
+                    $shortmessage = $_POST['message_html'];
                     $html = 1;
                 } else if ( $_POST['postmode'] == 'plaintext' ) {
-                    $shortmessage = $inputHandler->getVar('text','message_text','post','');
+                    $shortmessage = $_POST['message_text'];
                     $html = 0;
                 }
             } else {
-                $shortmessage = $inputHandler->getVar('text','shortmsg','post','');
+                $shortmessage = $_POST['shortmsg'];
             }
-            $toemail   = $inputHandler->getVar('text','toemail','post','');
-            $fromemail = $inputHandler->getVar('text','fromemail','post','');
-            $to        = $inputHandler->getVar('text','to','post','');
-            $from      = $inputHandler->getVar('text','from','post','');
-
-
-            if (empty ($toemail) || empty ($fromemail)
-                    || !COM_isEmail ($toemail)
-                    || !COM_isEmail ($fromemail)) {
-                $pageHandle->setPageTitle($LANG08[17]);
-                $pageHandle->addContent(mailstoryform ($sid, $to, $toemail,
-                                          $from, $fromemail,
-                                          $shortmessage, 52));
-                $pageHandle->displayPage();
-            } else if (empty ($to) || empty ($from) ||
+            if (empty ($_POST['toemail']) || empty ($_POST['fromemail'])
+                    || !COM_isEmail ($_POST['toemail'])
+                    || !COM_isEmail ($_POST['fromemail'])) {
+                $display .= COM_siteHeader ('menu', $LANG08[17])
+                         . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
+                                          COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
+                                          $shortmessage, 52)
+                         . COM_siteFooter ();
+            } else if (empty ($_POST['to']) || empty ($_POST['from']) ||
                     empty ($shortmessage)) {
-                $pagehandle->setPageTitle($LANG08[17]);
-                $pageHandle->addContent(mailstoryform ($sid, $to, $toemail,
-                                          $from, $fromemail,
-                                          $shortmessage, 52));
-                $pageHandle->displayPage();
+                $display .= COM_siteHeader ('menu', $LANG08[17])
+                         . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
+                                          COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
+                                          $shortmessage)
+                         . COM_siteFooter ();
             } else {
                 $msg = PLG_itemPreSave ('emailstory', $shortmessage);
                 if (!empty ($msg)) {
-                    $pageHandle->setPageTitle('');
-                    $pageHandle->addContent(COM_errorLog ($msg, 2)
-                             . mailstoryform ($sid, $to, $toemail,
-                                              $from, $fromemail,
-                                              $shortmessage));
-                    $pageHandle->displayPage();
+                    $display .= COM_siteHeader ('menu', '')
+                             . COM_errorLog ($msg, 2)
+                             . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
+                                              COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
+                                              $shortmessage)
+                             . COM_siteFooter ();
                 } else {
-                    $pageHandle->addContent( mailstory ($sid, $to, $toemail,
-                        $from, $fromemail, $shortmessage,$html));
+
+                    $display .= mailstory ($sid, $_POST['to'], $_POST['toemail'],
+                        $_POST['from'], $_POST['fromemail'], $shortmessage,$html);
                 }
             }
         }
         break;
 
     default:
-        $uid = $inputHandler->getVar('integer','uid','get',0);
-
+        if (isset ($_GET['uid'])) {
+            $uid = COM_applyFilter ($_GET['uid'], true);
+        } else {
+            $uid = 0;
+        }
         if ($uid > 1) {
             $subject = '';
-            $subject = $inputHandler->getVar('text','subject','get','');
-            $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-            $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
-
-            $pageHandle->setPageTitle($LANG04[81]);
-            $pageHandle->addContent(contactform ($uid, $subject));
-            $pageHandle->displayPage();
+            if (isset ($_GET['subject'])) {
+                $subject = strip_tags ($_GET['subject']);
+                $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
+                $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
+            }
+            $display .= COM_siteHeader ('menu', $LANG04[81])
+                     . contactform ($uid, $subject)
+                     . COM_siteFooter ();
         } else {
-            $pageHandle->redirect($_CONF['site_url'] . '/index.php');
+            $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
         }
         break;
 }
+
+echo $display;
+
 ?>

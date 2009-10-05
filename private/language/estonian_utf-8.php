@@ -456,7 +456,9 @@ $LANG08 = array(
     32 => 'Päev',
     33 => 'Loe kogu artiklit aadressil',
     34 => 'Sõnumi lõpp',
-    35 => 'Kahjuks see kasutaja ei soovi kirju saada.'
+    35 => 'Kahjuks see kasutaja ei soovi kirju saada.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################
@@ -950,7 +952,9 @@ $LANG28 = array(
     82 => "Sinu kontot {$_CONF['site_name']}  lehel pole kasutatud %s alates ning see suletakse , kui seda ei kasutata ka järgmise 30 päeva jooksul.",
     83 => "Sinu kontot {$_CONF['site_name']} lehel pole selle tegemisest alates kasutatud ja see kustutatakse peatselt, kui seda kohe ei kasutata.",
     84 => "Meie lehel: {$_CONF['site_url']} on sinu kasutajanimi  : %s",
-    85 => 'Kui unustasid oma salasõna, kasuta järgmist linki: %s'
+    85 => 'Kui unustasid oma salasõna, kasuta järgmist linki: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1339,7 +1343,8 @@ $LANG_ACCESS = array(
     'group_id' => 'Grupi ID',
     'plugin_access_denied_msg' => 'Sa üritasid ligi pääseda pluginate administreerimislehele, milleks polnud sul õigust. Pane tähele, et kõik õigustamata katsed sellele lehele ligi pääseda logitakse.',
     'groupexists' => 'Grupi nimi on juba olemas',
-    'groupexistsmsg' => 'Sama nimega grupp on juba olemas. Grupi nimed peavad olema üksteisest erinevad.'
+    'groupexistsmsg' => 'Sama nimega grupp on juba olemas. Grupi nimed peavad olema üksteisest erinevad.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################
@@ -1708,6 +1713,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'Luba konto kustutamine',
     'hide_author_exclusion' => 'Luba autori peitmine',
     'show_fullname' => 'Näita täisnimi',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'Näita teenusenimi',
     'custom_registration' => 'Luba kohandatud registreerimine',
     'user_login_method' => 'Kasutaja sisselogimise meetod',
@@ -1903,7 +1909,8 @@ $LANG_confignames['Core'] = array(
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Enable Template Comments',
-    'hidestorydate' => 'Hide Story Date'
+    'hidestorydate' => 'Hide Story Date',
+    'maintenance_mode' => 'Enable Maintenance Mode'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1985,7 +1992,8 @@ $LANG_configselects['Core'] = array(
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
 );
 
 ?>

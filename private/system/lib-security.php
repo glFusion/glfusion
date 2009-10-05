@@ -8,14 +8,18 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
+// | Copyright (C) 2009 by the following authors:                             |
+// |                                                                          |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2000-2008 by the following authors:                        |
+// | Copyright (C) 2000-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
 // |          Mark Limburg     - mlimburg AT users DOT sourceforge DOT net    |
 // |          Vincent Furia    - vmf AT abtech DOT org                        |
 // |          Michael Jervis   - mike AT fuckingbrit DOT com                  |
+// |          Dirk Haun          - dirk AT haun-online DOT de                 |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -233,7 +237,7 @@ function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
         }
     }
 
-    if ((empty ($_USER['uid']) && ($uid == 1)) || ($uid == $_USER['uid'])) {
+    if ( (COM_isAnonUser() ) || (isset($_USER['uid']) && $uid == $_USER['uid'])) {
         if (empty ($_GROUPS)) {
             $_GROUPS = SEC_getUserGroups ($uid);
         }
@@ -402,7 +406,7 @@ function SEC_hasRights($features,$operator='AND')
                 COM_errorLog('SECURITY: user does not have access to ' . $features[$i],1);
             }
             return false;
-                } else {
+        } else {
             if ($_SEC_VERBOSE) {
                 COM_errorLog('SECURITY: user has access to ' . $features[$i],1);
             }
@@ -750,7 +754,7 @@ function SEC_authenticate($username, $password, &$uid)
 */
 function SEC_checkUserStatus($userid)
 {
-    global $_CONF, $_TABLES, $pageHandle;
+    global $_CONF, $_TABLES;
 
     // Check user status
     $status = DB_getItem($_TABLES['users'], 'status', "uid=".intval($userid));
@@ -772,13 +776,13 @@ function SEC_checkUserStatus($userid)
         // If we aren't on users.php with a default action then go to it
         if ($redirect) {
             COM_accessLog("SECURITY: Attempted Cookie Session login from user awaiting approval $userid.");
-            $pageHandle->redirect($_CONF['site_url'] . '/users.php?msg=70');
+            echo COM_refresh($_CONF['site_url'] . '/users.php?msg=70');
             exit;
         }
     } elseif ($status == USER_ACCOUNT_DISABLED) {
         if ($redirect) {
             COM_accessLog("SECURITY: Attempted Cookie Session login from banned user $userid.");
-            $pageHandle->redirect($_CONF['site_url'] . '/users.php?msg=69');
+            echo COM_refresh($_CONF['site_url'] . '/users.php?msg=69');
             exit;
         }
     }
@@ -804,7 +808,7 @@ function SEC_checkUserStatus($userid)
   */
 function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
 {
-    global $_CONF, $_TABLES,$inputHandler;
+    global $_CONF, $_TABLES;
 
     /* First try a local cached login */
     $remoteusername = addslashes($loginname);
@@ -822,8 +826,7 @@ function SEC_remoteAuthentication(&$loginname, $passwd, $service, &$uid)
         }
     }
 
-    $service = $inputHandler->filterVar('filename',$service,'');
-//    $service = COM_sanitizeFilename($service);
+    $service = COM_sanitizeFilename($service);
     $servicefile = $_CONF['path_system'] . 'classes/authentication/' . $service
                  . '.auth.class.php';
     if (file_exists($servicefile)) {
@@ -1091,7 +1094,7 @@ function SEC_encryptPassword($password)
   */
 function SEC_createToken($ttl = 1200)
 {
-    global $_USER, $_TABLES, $_DB_dbms;
+    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
     static $last_token;
 
@@ -1099,8 +1102,14 @@ function SEC_createToken($ttl = 1200)
         return $last_token;
     }
 
+    if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
+        $pageURL  = $_SERVER['REMOTE_ADDR'];
+    } else {
+        $pageURL = COM_getCurrentURL();
+    }
+
     /* Figure out the full url to the current page */
-    $pageURL = COM_getCurrentURL();
+//    $pageURL = COM_getCurrentURL();
 
     /* Generate the token */
     $token = md5($_USER['uid'].$pageURL.uniqid (rand (), 1));
@@ -1123,7 +1132,7 @@ function SEC_createToken($ttl = 1200)
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
-           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".addslashes($pageURL)."', '".intval($ttl)."')";
+           . "VALUES ('$token', NOW(), {$_USER['uid']}, '".$pageURL."', '".intval($ttl)."')";
     DB_query($sql);
 
     $last_token = $token;
@@ -1142,20 +1151,22 @@ function SEC_createToken($ttl = 1200)
   */
 function SEC_checkToken()
 {
-    global $_USER, $_TABLES, $_DB_dbms,$inputHandler;
+    global $_CONF, $_SYSTEM, $_USER, $_TABLES, $_DB_dbms;
 
     $token = ''; // Default to no token.
     $return = false; // Default to fail.
 
-//    if(array_key_exists(CSRF_TOKEN, $_GET)) {
-    $token = $inputHandler->getVar('strict',CSRF_TOKEN,array('get','post'),'');
-/*
+    if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
+        $referCheck  = $_SERVER['REMOTE_ADDR'];
+    } else {
+        $referCheck = $_SERVER['HTTP_REFERER'];
+    }
+
+    if(array_key_exists(CSRF_TOKEN, $_GET)) {
         $token = COM_applyFilter($_GET[CSRF_TOKEN]);
     } else if(array_key_exists(CSRF_TOKEN, $_POST)) {
         $token = COM_applyFilter($_POST[CSRF_TOKEN]);
     }
-*/
-    $token = $inputHandler->prepareForDB($token);
 
     if(trim($token) != '') {
         if($_DB_dbms != 'mssql') {
@@ -1184,8 +1195,9 @@ function SEC_checkToken()
             if( $_USER['uid'] != $tokendata['owner_id'] ) {
                 COM_errorLog("CheckToken: Token failed - userid does not match token owner id");
                 $return = false;
-            } else if($tokendata['urlfor'] != $_SERVER['HTTP_REFERER']) {
-                COM_errorLog("CheckToken: Token failed - token URL does not match referer URL.");
+            } else if($tokendata['urlfor'] != $referCheck) {
+                COM_errorLog("CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
+                COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
                 $return = false;
             } else if($tokendata['expired']) {
                 COM_errorLog("CheckToken: Token failed - token has expired.");
@@ -1196,10 +1208,9 @@ function SEC_checkToken()
 
             // It's a one time token. So eat it.
             $sql = "DELETE FROM {$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
-            DB_Query($sql);
+            DB_query($sql);
         }
     } else {
-        COM_errorLog("CheckToken: Token Failure - no token found");
         $return = false; // no token.
     }
 
@@ -1239,7 +1250,7 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
 
     $sql = "INSERT INTO {$_TABLES['tokens']} (token, created, owner_id, urlfor, ttl) "
            . "VALUES ('$token', NOW(), {$_USER['uid']}, '".addslashes($action)."', '$ttl')";
-    DB_Query($sql);
+    DB_query($sql);
 
     /* And return the token to the user */
     return $token;
@@ -1249,22 +1260,18 @@ function SEC_createTokenGeneral($action='general',$ttl = 1200)
 
 function SEC_checkTokenGeneral($token,$action='general')
 {
-    global $_USER, $_TABLES, $_DB_dbms,$inputHandler;
+    global $_USER, $_TABLES, $_DB_dbms;
 
     $return = false; // Default to fail.
 
     if(trim($token) != '') {
-//        $token = COM_applyFilter($token);
-        $token = $inputHandler->filterVar('strict',$token,'');
-        $token = $inputHandler->prepareForDB($token);
-
+        $token = COM_applyFilter($token);
         $sql = "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < NOW()) AND ttl > 0) as expired, owner_id, urlfor FROM "
            . "{$_TABLES['tokens']} WHERE token='".addslashes($token)."'";
 
         $tokens = DB_Query($sql);
         $numberOfTokens = DB_numRows($tokens);
         if($numberOfTokens != 1) {
-            COM_errorLog("CheckToken: Token Failure - no token or multiple tokens found");
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
             $tokendata = DB_fetchArray($tokens);
@@ -1280,16 +1287,61 @@ function SEC_checkTokenGeneral($token,$action='general')
                 $return = false;
             } else if($tokendata['urlfor'] != $action) {
                 COM_errorLog("CheckToken: Token failed - token URL does not match referer URL.");
+                COM_errorLog("Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $action);
                 $return = false;
             } else {
                 $return = true; // Everything is OK
             }
         }
     } else {
-        COM_errorLog("CheckToken: Token Failure - no token found");
         $return = false; // no token.
     }
     return $return;
 }
 
+
+/**
+* Send a cookie
+*
+* Use this function to set browser cookies
+*
+* @param string $name   the name of the cookie
+* @param string $value  the value of the cookie
+* @param int    $expire the time the cookie expires - this is a Unix timestamp
+* @param string $path   the path on the server in which the cookie will be available - defaults to $_CONF['cookie_path']
+* @param string $domain the domain that the cookie is available - defaults to $_CONF['cookiedomain']
+* @param bool   $secure indicates that the cookie shoul only be transmitted over secure HTTPS connection - defaults to $_CONF['cookiesecure']
+* @param bool   $httponly when true the cookie will be made accessible only through the HTTP protocol
+*
+*/
+function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = false)
+{
+    global $_CONF;
+
+    $retval = false;
+
+    if ($path == '') {
+        $path = $_CONF['cookie_path'];
+    }
+
+    if ($domain == '') {
+        $domain = $_CONF['cookiedomain'];
+    }
+
+    if ($secure == '') {
+        $secure = $_CONF['cookiesecure'];
+    }
+
+    if ( $httponly ) {
+        if (version_compare(PHP_VERSION, '5.2.0', '>=')) {
+            $retval = @setcookie($name, $value, $expire, $path, $domain, $secure, true);
+        } else {
+            $retval = @setcookie($name, $value, $expire, $path, $domain . '; httponly', $secure);
+        }
+    } else {
+        $retval = @setcookie($name, $value, $expire, $path, $domain, $secure);
+    }
+
+    return $retval;
+}
 ?>

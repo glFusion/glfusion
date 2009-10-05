@@ -458,7 +458,9 @@ $LANG08 = array(
     32 => 'Datum',
     33 => 'Preberi celotno besedilo na povezavi ',
     34 => 'Konec sporoèila',
-    35 => 'Žal ta uporabnik ne želi prejemati e-pošte.'
+    35 => 'Žal ta uporabnik ne želi prejemati e-pošte.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################
@@ -952,7 +954,9 @@ $LANG28 = array(
     82 => "Vaš raèun na {$_CONF['site_name']} ni bil uporabljen od %s in bo onemogoèen, èe ga ne uporabite v 30 dneh.",
     83 => "Vaš raèun na {$_CONF['site_name']} ni bil uporabljen odkar je bil ustvarjen in bo pobrisak kmalu, èe ga ne uporabite.",
     84 => "Vaše uporabniško ime je: %s  za internetno stran: {$_CONF['site_url']}",
-    85 => 'èe ste pozabili geslo, uporabite tole povezavo: %s'
+    85 => 'èe ste pozabili geslo, uporabite tole povezavo: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1341,7 +1345,8 @@ $LANG_ACCESS = array(
     'group_id' => 'ID skupine',
     'plugin_access_denied_msg' => 'Nedovoljeno poskušaš dostopiti do strani za skrbništvo vtiènikov. Vedi, da se vsi nedovoljeni poskusi dostopa do te strani beležijo.',
     'groupexists' => 'Ime skupine že obstaja',
-    'groupexistsmsg' => 'Skupina s tem imenom že obstaja. Imena skupin morajo biti razlièna.'
+    'groupexistsmsg' => 'Skupina s tem imenom že obstaja. Imena skupin morajo biti razlièna.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################
@@ -1710,6 +1715,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'Dovoli brisanje raèuna',
     'hide_author_exclusion' => 'Dovoli skrivanje avtorja',
     'show_fullname' => 'Prikaži polno ime',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'Prikaži ime servisa',
     'custom_registration' => 'Omogoèi registracijo po meri',
     'user_login_method' => 'Naèin prijave uporabnika',
@@ -1905,7 +1911,8 @@ $LANG_confignames['Core'] = array(
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Enable Template Comments',
-    'hidestorydate' => 'Hide Story Date'
+    'hidestorydate' => 'Hide Story Date',
+    'maintenance_mode' => 'Enable Maintenance Mode'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1987,7 +1994,8 @@ $LANG_configselects['Core'] = array(
     19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits')
+    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
 );
 
 ?>

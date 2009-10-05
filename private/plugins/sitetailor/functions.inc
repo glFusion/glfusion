@@ -75,15 +75,20 @@ function plugin_getheadercss_sitetailor() {
                     $st_header[] = CACHE_instance_filename($cacheInstance,0);
                 } else {
                     $ms = new Template( $_CONF['path'].'plugins/sitetailor/templates/' );
+                    $under = 0;
+                    $over = 0;
                     switch ($menu['menu_type']) {
                         case 1 :    // horizontal with multi-level
                             $stylefile = 'gl_horizontal-cascading.thtml';
+                            $under = 50;
+                            $over = 51;
                             break;
                         case 2 :    // horizontal with no cascading menus
                             $stylefile = 'gl_horizontal-simple.thtml';
                             break;
                         case 3 :
                             $stylefile = 'gl_vertical-cascading.thtml';
+                            $under = 40;
                             break;
                         case 4 :
                             $stylefile = 'gl_vertical-simple.thtml';
@@ -117,6 +122,21 @@ function plugin_getheadercss_sitetailor() {
                     if ( $themeStyle == 'table' ) {
                         $ms->set_var('themeapi','1');
                     }
+                    if ( $menu['menu_id'] < 4 ) {
+                        $under *= 10;
+                        $over *= 10;
+                    }
+                    if ( $under > 0 ) {
+                        $ms->set_var('under', $under);
+                    } else {
+                        $ms->set_var('under',50);
+                    }
+                    if ( $over > 0 ) {
+                        $ms->set_var('over', $over);
+                    } else {
+                        $ms->set_var('over',50);
+                    }
+
                     $ms->parse ('output', 'style');
                     $fCSS = $ms->finish ($ms->get_var('output'));
                     CACHE_create_instance($cacheInstance, $fCSS, 0);
@@ -292,7 +312,8 @@ function plugin_upgrade_sitetailor() {
 }
 
 function plugin_autotags_sitetailor($op,$content='',$autotag='') {
-    global $_CONF;
+
+    global $stMenu, $_TABLES, $_CONF;
 
     if ($op == 'tagname' ) {
         return array('hmenu','vmenu');
@@ -305,11 +326,22 @@ function plugin_autotags_sitetailor($op,$content='',$autotag='') {
         }
         switch( $autotag['tag'] ) {
             case 'hmenu' :
-                $menu = st_getMenu($autotag['parm1'],"gl_moomenu","gl_moomenu",'',"parent");
-                $content = str_replace($autotag['tagstr'],$menu,$content);
+                $menu = '';
+                $menuID = trim($autotag['parm1']);
+                $id = DB_getItem($_TABLES['st_menus'],'id','menu_name="'.addslashes($menuID).'"');
+                if ( $id > 0 ) {
+                    if ( $stMenu[$id]['menu_type'] == 1 ) {
+                        $menu = st_getMenu($menuID,"gl_moomenu","gl_moomenu",'',"parent");
+                    } else {
+                        $menu = st_getMenu($menuID,'st-fmenu','','','','st-f-last');
+                    }
+                    $content = str_replace($autotag['tagstr'],$menu,$content);
+                } else {
+                    $content = str_replace($autotag['tagstr'],$menu,$content);
+                }
                 break;
             case 'vmenu' :
-                $menu = phpblock_getMenu('',$autotag['parm1']);
+                $menu = phpblock_getMenu('',trim($autotag['parm1']));
                 $content = str_replace($autotag['tagstr'],$menu,$content);
                 break;
         }
@@ -445,7 +477,6 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
     }
     if ( $menuID == '' ) {
         $cacheInstance = 'stmenu_' . $name . '_' . CACHE_security_hash() . '_' . $optionHash . '__' . $_CONF['theme'];
-
         $retval = CACHE_check_instance($cacheInstance, 0);
         if ( $retval && $noid == 0) {
             return $retval;
@@ -454,14 +485,13 @@ function st_getMenu($name='navigation',$wrapper='',$ulclass='',$liclass='',$pare
         $menuID = '';
         if ( is_array($stMenu) ) {
             foreach($stMenu AS $id) {
-                if ( $id['menu_name'] == $name ) {
+                if ( strcasecmp(trim($id['menu_name']), trim($name)) == 0 ) {
                     $menuID = $id['menu_id'];
                     break;
                 }
             }
         }
     }
-
     if ( $menuID != '' && $stMenu[$menuID]['active'] == 1 && $stMenu[$menuID]['menu_perm'] == 3) {
         if ( $stMenu[$menuID]['menu_type'] == 1 ) {
             $retval .= '<div id="gl_moomenu'.($noid == 0 ? $menuID : '').'">'. LB;

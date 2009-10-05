@@ -85,12 +85,12 @@ $LANG_INSTALL = array(
     'filesystem_check' => 'Sprawdzanie Plików Systemowych',
     'forum' => 'Załadować plugin Forum?',
     'forum_desc' => 'System prowadzenia forum internetowego.',
-    'geeklog_migrate' => 'Migracja ze strony Geeklog v1.5+',
+    'geeklog_migrate' => 'Migracja ze strony Geeklog v1.4.1+',
     'hosting_env' => 'Sprawdzanie środowiska hostingu',
     'install' => 'Zainstaluj',
     'install_heading' => 'Instalacja glFusion',
     'install_steps' => 'KROKI INSTALACJI',
-    'invalid_geeklog_version' => 'Instalator nie może znaleźć pliku siteconfig.php. Czy jesteś pewny migracji z Geeklog v1.5.0 lub wyższej wersji?  Jeżeli masz starszą instalację systemu Geeklog, zaktualizuj ją co najmniej do wersji v1.5.0 i spróbuj ponownie.',
+    'invalid_geeklog_version' => 'Instalator nie może znaleźć pliku siteconfig.php. Czy jesteś pewny migracji z Geeklog v1.4.1 lub wyższej wersji?  Jeżeli masz starszą instalację systemu Geeklog, zaktualizuj ją co najmniej do wersji v1.4.1 i spróbuj ponownie.',
     'language' => 'Język',
     'language_task' => 'Język & Zadania',
     'libcustom_not_writable' => 'lib-custom.php nie jest zapisywalny.',
@@ -167,16 +167,17 @@ $LANG_INSTALL = array(
     'upgrade_steps' => 'KROKI AKTUALIZACJI',
     'upload_max_filesize' => 'glFusion daje ci możliwość wgrywania pluginów, zdjęć/obrazków, oraz plików. Powinieneś mieć co najmniej 8M pamięci dla wgrywania plików.',
     'use_utf8' => 'Użyj kodowania UTF-8',
-    'welcome_help' => 'Witaj w kreatorze instalacji CMS glFusion. Możesz zainstalować nową stronę opartą na glFusion, zaktualizować istniejącą stronę opartą na glFusion, lub migrować ze strony opartej na Geeklog v1.5.<br /><br />Wybierz język kreatora instalacji, oraz zadanie do wykonania, następnie przyciśnij <strong>Następny</strong>.',
+    'welcome_help' => 'Witaj w kreatorze instalacji CMS glFusion. Możesz zainstalować nową stronę opartą na glFusion, zaktualizować istniejącą stronę opartą na glFusion, lub migrować ze strony opartej na Geeklog v1.4.1.<br /><br />Wybierz język kreatora instalacji, oraz zadanie do wykonania, następnie przyciśnij <strong>Następny</strong>.',
     'wizard_version' => 'v1.1.3.svn Kreator Instalacji',
-    'system_path_prompt' => 'Wpisz pełną, absolutną ścieżkę do serwera glFusion wskazując katalog <strong>private/</strong>.<br /><br />Ten katalog zawiera plik <strong>db-config.php.dist</strong> lub <strong>db-config.php</strong>.<br /><br />Przykłady: /home/www/glfuison/private lub c:/www/glfusion/private.<br /><br /><strong>Wskazówka:</strong> Abslotutna ścieżka do twojego katalogu public_html/ to prawdopodobnie:<br />%s<br /><br /><strong>Zaawansowane ustawienia</strong> pozwalają ci ominąć niektóre domyślne ścieżki. Generalnie nie powinna być potrzeba modyfikowania tych specificznych ścieżek, system powinien je wykryć i ustawić automatycznie.',
+    'system_path_prompt' => 'Wpisz pełną, absolutną ścieżkę do serwera glFusion wskazując katalog <strong>private/</strong>.<br /><br />Ten katalog zawiera plik <strong>db-config.php.dist</strong> lub <strong>db-config.php</strong>.<br /><br />Przykłady: /home/www/glfusion/private lub c:/www/glfusion/private.<br /><br /><strong>Wskazówka:</strong> Abslotutna ścieżka do twojego katalogu <strong>public_html/</strong> <i>(nie <strong>private/</strong>)</i> to prawdopodobnie:<br /><br />%s<br /><br /><strong>Zaawansowane ustawienia</strong> pozwalają ci ominąć niektóre domyślne ścieżki. Generalnie nie powinna być potrzeba modyfikowania tych specificznych ścieżek, system powinien je wykryć i ustawić automatycznie.',
     'advanced_settings' => 'Zaawanasowane ustawienia',
     'log_path' => 'Ścieżka logów',
     'lang_path' => 'Ścieżka języków',
     'backup_path' => 'Ścieżka kopi zapasowej',
     'data_path' => 'Ścieżka plików',
     'language_support' => 'Pliki językowe',
-    'language_pack' => 'glFusion oparty jest o język Angielski, po instalacji możesz pobrać i zainstalować <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paczkę Językową (Language Pack)</a> który zawiera obsługiwane pliki językowe.'
+    'language_pack' => 'glFusion oparty jest o język Angielski, po instalacji możesz pobrać i zainstalować <a href="http://www.glfusion.org/filemgmt/viewcat.php?cid=18" target="_blank">Paczkę Językową (Language Pack)</a> który zawiera obsługiwane pliki językowe.',
+    'libcustom_not_found' => 'Unable to located lib-custom.php.dist.'
 );
 
 // +---------------------------------------------------------------------------+

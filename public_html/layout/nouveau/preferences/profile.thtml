@@ -7,7 +7,7 @@
 {navbar}
 </div>
 <div class="clearboth" style="min-width:600px;">
-<form action="{site_url}/usersettings.php" method="post" {enctype}>
+<form id="profileform" name="profileform" action="{site_url}/usersettings.php" method="post" {enctype}>
     <div id="pe_preview" class="jsenabled_hide" style="display:none;">
         <fieldset style="margin-top:10px;">
             <legend>{lang_preview_title}</legend>
@@ -22,6 +22,7 @@
                     <td style="width:150px;"><label for="fullname">{lang_fullname}:</label></td>
                     <td><input type="text" id="fullname" name="fullname" size="60" maxlength="80" value="{fullname_value}"{xhtml}></td>
                 </tr>
+                {plugin_namepass_name}
             </table>
         </fieldset>
         <fieldset style="margin-top:10px;"><legend>{lang_password_email_legend}</legend>
@@ -66,9 +67,11 @@
                     <td><label for="email_conf">{lang_email_conf}:</label></td>
                     <td><input type="text" id="email_conf" name="email_conf" size="50" maxlength="96" value="{email_value}"{xhtml}></td>
                 </tr>
+                {plugin_namepass_pwdemail}
             </table>
             {delete_account_option}
         </fieldset>
+        {plugin_namepass}
     </div>
     <div id="pe_userinfo" class="jsenabled_hide">
         <fieldset style="margin-top:10px;"><legend>{lang_personal_info_legend}</legend>
@@ -99,11 +102,16 @@
                     <td style="width:100px;"><label for="pgpkey">{lang_pgpkey}:</label></td>
                     <td><textarea id="pgpkey" name="pgpkey" style="width:100%" cols="18" rows="4">{pgpkey_value}</textarea></td>
                 </tr>
+                {plugin_userinfo_personalinfo}
             </table>
         </fieldset>
+        {plugin_userinfo}
     </div>
 
     {prefs}
+
+    {plugin_panel}
+
     <p class="aligncenter" id="save_button">
         <input type="hidden" name="uid" value="{uid_value}"{xhtml}>
         <input type="hidden" name="mode" value="saveuser"{xhtml}>

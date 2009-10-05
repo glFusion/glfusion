@@ -90,8 +90,6 @@ function INST_header($currentAction='',$nextAction='',$prevAction='')
         'progress_bar'      =>  _buildProgressBar($currentStep),
     ));
 
-//    $pb = _buildProgressBar($currentStep,&$header);
-
     $header->parse('output','header');
     return $header->finish($header->get_var('output'));
 }
@@ -126,7 +124,7 @@ function php_v()
 }
 
 /**
- * Check if the user's PHP version is supported by Geeklog
+ * Check if the user's PHP version is supported by glFusion
  *
  * @return bool True if supported, falsed if not supported
  *
@@ -149,7 +147,7 @@ function INST_phpOutOfDate()
  */
 function mysql_v($_DB_host, $_DB_user, $_DB_pass)
 {
-    if (@mysql_connect($_DB_host, $_DB_user, $_DB_pass) === false) {
+    if (($res = @mysql_connect($_DB_host, $_DB_user, $_DB_pass)) === false) {
         return false;
     }
 
@@ -165,13 +163,13 @@ function mysql_v($_DB_host, $_DB_user, $_DB_pass)
         $mysqlminorv = 0;
         $mysqlrev = 0;
     }
-    @mysql_close();
+    @mysql_close($res);
 
     return array($mysqlmajorv, $mysqlminorv, $mysqlrev);
 }
 
 /**
- * Check if the user's MySQL version is supported by Geeklog
+ * Check if the user's MySQL version is supported by glFusion
  *
  * @param   array   $db     Database information
  * @return  bool    True if supported, falsed if not supported
@@ -275,7 +273,7 @@ function INST_dbConnect($db)
 }
 
 /**
- * Check if a Geeklog database exists
+ * Check if a glFusion database exists
  *
  * @param   array   $db Array containing connection info
  * @return  bool        True if a database exists, false if not
@@ -331,7 +329,7 @@ function INST_checkPlugins()
 * This is somewhat speculative but should provide the user with a working
 * site even if, for example, a site backup was installed elsewhere.
 *
-* @param    string  $path           proper /path/to/Geeklog
+* @param    string  $path           proper /path/to/glfusion
 * @param    string  $path_html      path to public_html
 * @param    string  $site_url       The site's URL
 * @param    string  $site_admin_url URL to the admin directory
@@ -341,6 +339,10 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
 {
     // no "global $_CONF" here!
 
+    if ( !@file_exists($path . 'system/classes/config.class.php') ) {
+        echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        exit;
+    }
     require_once $path . 'system/classes/config.class.php';
 
     $config = config::get_instance();
@@ -383,7 +385,7 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
     }
     if (substr($_CONF['rdf_file'], strlen($path_html)) != $path_html) {
         // this may not be correct but neither was the old value apparently ...
-        $config->set('rdf_file', $path_html . 'backend/geeklog.rss');
+        $config->set('rdf_file', $path_html . 'backend/glfusion.rss');
     }
 
     if (! empty($site_url) && ($_CONF['site_url'] != $site_url)) {
@@ -407,13 +409,22 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
 function INST_getHtmlPath()
 {
     $path = str_replace('\\', '/', __FILE__);
+    if ( $path[1] == '/' ) {
+        $double = true;
+    } else {
+        $double = false;
+    }
     $path = str_replace('//', '/', $path);
     $parts = explode('/', $path);
     $num_parts = count($parts);
     if (($num_parts < 3) || ($parts[$num_parts - 1] != 'install.lib.php')) {
         die('Fatal error - can not figure out my own path');
     }
-    return implode('/', array_slice($parts, 0, $num_parts - 4)) . '/';
+    $returnPath = implode('/', array_slice($parts, 0, $num_parts - 4)) . '/';
+    if ( $double ) {
+        $returnPath = '/'.$returnPath;
+    }
+    return $returnPath;
 }
 
 /**
@@ -423,14 +434,22 @@ function INST_getHtmlPath()
 function INST_getAdminPath()
 {
     $path = str_replace('\\', '/', __FILE__);
+    if ( $path[1] == '/' ) {
+        $double = true;
+    } else {
+        $double = false;
+    }
     $path = str_replace('//', '/', $path);
     $parts = explode('/', $path);
     $num_parts = count($parts);
     if (($num_parts < 3) || ($parts[$num_parts - 1] != 'install.lib.php')) {
         die('Fatal error - can not figure out my own path');
     }
-
-    return implode('/', array_slice($parts, 0, $num_parts - 3)) . '/';
+    $returnPath = implode('/', array_slice($parts, 0, $num_parts - 3)) . '/';
+    if ( $double ) {
+        $returnPath = '/'.$returnPath;
+    }
+    return $returnPath;
 }
 
 /**
@@ -513,6 +532,10 @@ function INST_createDatabaseStructures ($use_innodb = false)
     // postgresql.class.php, etc)
 
     // Get DBMS-specific create table array and data array
+    if ( !@file_exists($_CONF['path'] . 'sql/' . $_DB_dbms . '_tableanddata.php') ) {
+        echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        exit;
+    }
     require_once $_CONF['path'] . 'sql/' . $_DB_dbms . '_tableanddata.php';
 
     $progress = '';
@@ -630,6 +653,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.0.1':
         case '1.0.2':
             $_SQL = array();
+            if ( !@file_exists($_CONF['path'] . 'sql/updates/mysql_1.0.1_to_1.1.0.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path'] . 'sql/updates/mysql_1.0.1_to_1.1.0.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
@@ -650,6 +677,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 DB_query($sqli,1);
             }
             $_SQLi = array();
+            if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
 
@@ -705,6 +736,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL = array();
         case '1.1.0' :
         case '1.1.1' :
+            if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
             $c->add('story_submit_by_perm_only',0,'select',4,20,0,780,TRUE);
@@ -715,10 +750,18 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.1.2';
         case '1.1.2' :
             $_SQL = array();
+            if ( !@file_exists($_CONF['path'] . 'sql/updates/mysql_1.1.2_to_1.1.3.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path'] . 'sql/updates/mysql_1.1.2_to_1.1.3.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
                 return array($rc,$errors);
+            }
+            if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
             }
             require_once $_CONF['path_system'].'classes/config.class.php';
             $c = config::get_instance();
@@ -734,6 +777,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.1.3';
         case '1.1.3' :
             $_SQL = array();
+            if ( !@file_exists($_CONF['path'] . 'sql/updates/mysql_1.1.3_to_1.1.4.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
             require_once $_CONF['path'] . 'sql/updates/mysql_1.1.3_to_1.1.4.php';
             list($rc,$errors) = INST_updateDB($_SQL);
             if ( $rc === false ) {
@@ -743,10 +790,48 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.4' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.4';
+        case '1.1.4' :
+            DB_query("ALTER TABLE {$_TABLES['stories']} DROP INDEX stories_in_transit",1);
+            DB_query("ALTER TABLE {$_TABLES['stories']} DROP COLUMN in_transit",1);
+            DB_query("ALTER TABLE {$_TABLES['userprefs']} ADD search_result_format VARCHAR( 48 ) NOT NULL DEFAULT 'google'",1);
+            DB_query("UPDATE {$_TABLES['conf_values']} SET type='text' WHERE name='mail_smtp_host'",1);
+            DB_query("UPDATE {$_TABLES['conf_values']} SET selectionArray='23' WHERE name='censormode'",1);
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.5',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.5' WHERE name='glfusion'",1);
+            DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
+
+            if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('hide_exclude_content',0,'select',4,16,0,295,TRUE);
+            $c->add('maintenance_mode',0,'select',0,0,0,520,TRUE);
+            $c->del('search_show_limit', 'Core');
+            $c->del('search_show_sort', 'Core');
+
+            $_SQL = array();
+            if ( !@file_exists($_CONF['path'] . 'sql/updates/mysql_1.1.4_to_1.1.5.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
+            require_once $_CONF['path'] . 'sql/updates/mysql_1.1.4_to_1.1.5.php';
+            list($rc,$errors) = INST_updateDB($_SQL);
+            if ( $rc === false ) {
+                return array($rc,$errors);
+            }
+            $current_fusion_version = '1.1.5';
+        case '1.1.5' :
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.6',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.6' WHERE name='glfusion'",1);
+            DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
+            $current_fusion_version = '1.1.6';
         default:
             break;
     }
 
+    DB_query("ALTER TABLE {$_TABLES['userprefs']} ADD search_result_format VARCHAR( 48 ) NOT NULL DEFAULT 'google'",1);
 
     // delete the security check flag on every update to force the user
     // to run admin/sectest.php again
@@ -786,10 +871,14 @@ function INST_innodbSupported()
 function INST_pluginAutoInstall( $plugin )
 {
     global $_CONF, $_TABLES, $_DB_table_prefix;
-    global $_DB_dbms, $inputHandler;
+    global $_DB_dbms;
 
     $ret = false;
 
+    if ( !@file_exists($_CONF['path'] . '/system/lib-install.php') ) {
+        echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+        exit;
+    }
     require_once $_CONF['path'] . '/system/lib-install.php';
 
     if ( file_exists($_CONF['path'].'/plugins/'.$plugin.'/autoinstall.php') ) {
@@ -885,7 +974,15 @@ function INST_pluginAutoUpgrade( $plugin, $forceInstall = 0 )
             }
         } else {
             if ( !$active && $forceInstall == 1 ) {
-                $rc = INST_pluginAutoInstall($plugin);
+                // don't force install if already installed but marked inactive...
+                $pcount = DB_count($_TABLES['plugins'],'pi_name',$plugin);
+                if ( $pcount < 1 ) {
+                    $rc = INST_pluginAutoInstall($plugin);
+                } else {
+                    $rc = true;
+                }
+            } else {
+                $rc = true;
             }
         }
     } else {
@@ -1026,6 +1123,92 @@ function INST_identifyglFusionVersion ()
     return $version;
 }
 
+function INST_identifyGeeklogVersion()
+{
+    global $_TABLES, $_DB, $_DB_dbms;
+
+    $_DB->setDisplayError(true);
+
+    $version = '';
+
+    /**
+    * First check for 'database_version' in gl_vars. If that exists, assume
+    * it's the correct version. Else, try some heuristics (below).
+    * Note: Need to handle 'sr1' etc. appendices.
+    */
+    $db_v = DB_getItem($_TABLES['vars'], 'value', "name = 'database_version'");
+    if (! empty($db_v)) {
+        $v = explode('.', $db_v);
+        if (count($v) == 3) {
+            $v[2] = (int) $v[2];
+            $version = implode('.', $v);
+
+            return $version;
+        }
+    }
+
+    // simple tests for the version of the database:
+    // "DESCRIBE sometable somefield", ''
+    //  => just test that the field exists
+    // "DESCRIBE sometable somefield", 'somefield,sometype'
+    //  => test that the field exists and is of the given type
+    //
+    // Should always include a test for the current version so that we can
+    // warn the user if they try to run the update again.
+
+    $test = array(
+        // as of 1.5.1, we should have the 'database_version' entry
+        '1.5.0'  => array("DESCRIBE {$_TABLES['storysubmission']} bodytext",''),
+        '1.4.1'  => array("SELECT ft_name FROM {$_TABLES['features']} WHERE ft_name = 'syndication.edit'", 'syndication.edit'),
+        '1.4.0'  => array("DESCRIBE {$_TABLES['users']} remoteusername",''),
+        '1.3.11' => array("DESCRIBE {$_TABLES['comments']} sid", 'sid,varchar(40)'),
+        '1.3.10' => array("DESCRIBE {$_TABLES['comments']} lft",''),
+        '1.3.9'  => array("DESCRIBE {$_TABLES['syndication']} fid",''),
+        '1.3.8'  => array("DESCRIBE {$_TABLES['userprefs']} showonline",'')
+        // It's hard to (reliably) test for 1.3.7 - let's just hope
+        // nobody uses such an old version any more ...
+        );
+    $firstCheck = "DESCRIBE {$_TABLES['access']} acc_ft_id";
+    $result = DB_query($firstCheck, 1);
+    if ($result === false) {
+        // A check for the first field in the first table failed?
+        // Sounds suspiciously like an empty table ...
+        return 'empty';
+    }
+
+    foreach ($test as $v => $qarray) {
+        $result = DB_query($qarray[0], 1);
+        if ($result === false) {
+            // error - continue with next test
+
+        } else if (DB_numRows($result) > 0) {
+            $A = DB_fetchArray($result);
+            if (empty($qarray[1])) {
+                // test only for existence of field - succeeded
+                $version = $v;
+                break;
+            } else {
+                if (substr($qarray[0], 0, 6) == 'SELECT') {
+                    // text for a certain value
+                    if ($A[0] == $qarray[1]) {
+                        $version = $v;
+                        break;
+                    }
+                } else {
+                    // test for certain type of field
+                    $tst = explode(',', $qarray[1]);
+                    if (($A['Field'] == $tst[0]) && ($A['Type'] == $tst[1])) {
+                        $version = $v;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return $version;
+}
+
 function INST_checkCacheDir($path,$template,$classCounter)
 {
     $permError = 0;
@@ -1091,6 +1274,15 @@ function INST_return_bytes($val) {
     }
 
     return $val;
+}
+
+function INST_sanitizePath($path)
+{
+    $path = strip_tags($path);
+    $path = str_replace(array('"', "'"), '', $path);
+    $path = str_replace('..', '', $path);
+
+    return $path;
 }
 
 ?>

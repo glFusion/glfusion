@@ -419,9 +419,11 @@ function MG_file_exists( $potential_file ) {
 
     $image_path = $_MG_CONF['path_mediaobjects'] . 'disp/' . $potential_file[0];
 
+    $potential_file_regex = "/".$potential_file."/i";
+
     if ( $dir = opendir($image_path) )  {
         while ($file = readdir($dir)) {
-            if (  eregi($potential_file , $file )  ) {
+            if (  preg_match($potential_file_regex , $file )  ) {
                 closedir($dir);
                 return true;
             }
@@ -432,7 +434,7 @@ function MG_file_exists( $potential_file ) {
     $image_path = $_MG_CONF['path_mediaobjects'] . 'orig/' . $potential_file[0];
     if ( $dir = opendir($image_path) )  {
         while ($file = readdir($dir)) {
-            if (  eregi($potential_file , $file )  ) {
+            if (  preg_match($potential_file_regex , $file )  ) {
                 closedir($dir);
                 return true;
             }
@@ -1036,7 +1038,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         // Now we need to process an uploaded thumbnail
 
         if ( $gotTN == 1 ) {
-	        $mp3TNFilename = $_MG_CONF['path_tmp'] . '/mp3tn' . time() . '.jpg';
+	        $mp3TNFilename = $_MG_CONF['tmp_path'] . '/mp3tn' . time() . '.jpg';
 	        $fn = fopen( $mp3TNFilename,"w");
 	        fwrite($fn,$mp3AttachdedThumbnail);
 	        fclose($fn);
@@ -1186,6 +1188,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	            DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$new_media_id','width',       '$resolution_x'");
 	            DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$new_media_id','height',      '$resolution_y'");
 	        }
+            PLG_itemSaved($new_media_id,'mediagallery');
 
 	        // update the media count for the album, only if no moderation...
 	        if ( $queue == 0 ) {

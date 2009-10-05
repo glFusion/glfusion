@@ -8,9 +8,6 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
 // | Copyright (C) 2000-2008 by the following authors:                        |
@@ -39,10 +36,14 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+require_once $_CONF['path_system'] . 'lib-user.php';
+require_once $_CONF['path_system'] . 'lib-story.php';
+require_once $_CONF['path_system'] . 'lib-admin.php';
 
-USES_lib_user();
-USES_lib_story();
-USES_lib_admin();
+// Uncomment the line below if you need to debug the HTTP variables being passed
+// to the script.  This will sometimes cause errors but it will allow you to see
+// the data being passed in a POST operation
+// echo COM_debug($_POST);
 
 function all_submissions($token)
 {
@@ -97,11 +98,8 @@ function itemlist($type, $token)
     if ((strlen ($type) > 0) && ($type <> 'story')) {
         $function = 'plugin_itemlist_' . $type;
         if (function_exists ($function)) {
-            // Great, we found the plugin, now call its itemlist method
             $plugin = new Plugin();
-//            $plugin = $function();
-//            if (isset ($plugin)) {
-            $plugin = $function($token);   // http://project.geeklog.net/tracking/view.php?id=619
+            $plugin = $function($token);
             if (is_string($plugin)) {
                 return '<div class="block-box">'.$plugin.'</div>';
             } elseif (is_object($plugin)) {
@@ -118,6 +116,15 @@ function itemlist($type, $token)
         $H =  array($LANG29[10],$LANG29[14],$LANG29[15]);
         $section_title = $LANG29[35];
         $section_help = 'ccstorysubmission.html';
+    }
+    if ( !isset($H[0]) || empty($H[0]) ) {
+        $H[0] = $LANG29[10];
+    }
+    if ( !isset($H[1]) || empty($H[0]) ) {
+        $H[1] = $LANG29[14];
+    }
+    if ( !isset($H[2]) || empty($H[2]) ) {
+        $H[2] = $LANG29[15];
     }
 
     // run SQL but this time ignore any errors
@@ -330,6 +337,7 @@ function moderation ($mid, $action, $type, $count)
         break;
     default:
         if (strlen($type) <= 0) {
+            // something is terribly wrong, bail
             $retval .= COM_errorLog("Unable to find type of $type in moderation() in moderation.php");
             return $retval;
         }
@@ -385,7 +393,7 @@ function moderation ($mid, $action, $type, $count)
                 DB_save ($_TABLES['stories'],'sid,uid,tid,title,introtext,bodytext,related,date,show_topic_icon,commentcode,trackbackcode,postmode,frontpage,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon',
                 "'{$A['sid']}',{$A['uid']},'{$A['tid']}','{$A['title']}','{$A['introtext']}','{$A['bodytext']}','{$A['related']}','{$A['date']}','{$_CONF['show_topic_icon']}','{$_CONF['comment_code']}','{$_CONF['trackback_code']}','{$A['postmode']}',$frontpage,{$A['owner_id']},{$T['group_id']},{$T['perm_owner']},{$T['perm_group']},{$T['perm_members']},{$T['perm_anon']}");
                 DB_delete($_TABLES['storysubmission'],"$id",$mid[$i]);
-
+                PLG_itemSaved($A['sid'], 'article');
                 COM_rdfUpToDateCheck ();
                 COM_olderStuff ();
             } else if ($type == 'draft') {
@@ -468,7 +476,7 @@ function moderateusers ($uid, $action, $count)
                 if ($nrows == 1) {
                     $A = DB_fetchArray($result);
                     $sql = "UPDATE {$_TABLES['users']} SET status=3 WHERE uid={$A['uid']}";
-                    DB_query($sql);
+                    DB_Query($sql);
                     USER_createAndSendPassword ($A['username'], $A['email'], $A['uid']);
                 }
                 break;
@@ -492,31 +500,37 @@ function moderateusers ($uid, $action, $count)
 }
 
 $display = '';
-$pageHandle->setPageTitle($LANG01[10]);
-$msg = $inputHandler->getVar('integer','msg','get',0);
-$plugin = $inputHandler->getVar('strict','plugin','get','');
-$mode   = $inputHandler->getVar('strict','mode','post','');
-
+$display .= COM_siteHeader ('menu', $LANG01[10]);
+$msg = 0;
+if (isset($_GET['msg'])) {
+    $msg = COM_applyFilter($_GET['msg'], true);
+}
 if ($msg > 0) {
-    $pageHandle->addMessage($msg,$plugin);
+    $plugin = '';
+    if (isset($_GET['plugin'])) {
+        $plugin = COM_applyFilter($_GET['plugin']);
+    }
+    $display .= COM_showMessage($msg, $plugin);
 }
 
-if ($mode == 'moderation' && SEC_checkToken()) {
+if (isset ($_POST['mode']) && ($_POST['mode'] == 'moderation') && SEC_checkToken()) {
     $action = array();
-
-    $action = $inputHandler->getVar('strict','action','post','');
-    $type   = $inputHandler->getVar('strict','type','post','');
-    $id     = $inputHandler->getVar('strict','id','post','');
-    $count  = $inputHandler->getVar('strict','count','post','');
-
-    if ($type == 'user') {
-        $pageHandle->addContent(moderateusers($id, $action,$count));
+    if (isset($_POST['action'])) {
+        $action = $_POST['action'];
+    }
+    if ($_POST['type'] == 'user') {
+        $display .= moderateusers($_POST['id'], $action,
+                                  COM_applyFilter($_POST['count'], true));
     } else {
-        $pageHandle->addContent(moderation($id, $action, $type,$count));
+        $display .= moderation($_POST['id'], $action, $_POST['type'],
+                               COM_applyFilter ($_POST['count'], true));
     }
 } else {
-    $pageHandle->addContent(all_submissions(SEC_createToken()));
+    $display .= all_submissions(SEC_createToken());
 }
 
-$pageHandle->displayPage();
+$display .= COM_siteFooter();
+
+echo $display;
+
 ?>

@@ -6,5 +6,6 @@
         {lang_emailedtopics}
        </div>
     <div>{email_topic_checklist}</div>
+    {plugin_content_digest}
 </fieldset>
 {# end {templatelocation} #}

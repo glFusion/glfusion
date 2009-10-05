@@ -326,6 +326,13 @@ function savelink ($lid, $old_lid, $cid, $categorydd, $url, $description, $title
         DB_delete ($_TABLES['links'], 'lid', $old_lid);
 
         DB_save ($_TABLES['links'], 'lid,cid,url,description,title,date,hits,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon', "'$lid','$cid','$url','$description','$title',NOW(),'$hits',$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon");
+
+        if (empty($old_lid) || ($old_lid == $lid)) {
+            PLG_itemSaved($lid, 'links');
+        } else {
+            PLG_itemSaved($lid, 'links', $old_lid);
+        }
+
         // Get category for rdf check
         $category = DB_getItem ($_TABLES['linkcategories'],"category","cid='{$cid}'");
         COM_rdfUpToDateCheck ('links', $category, $lid);
@@ -467,6 +474,7 @@ function deleteLink($lid, $type = '')
         }
 
         DB_delete($_TABLES['links'], 'lid', $lid);
+        PLG_itemDeleted($lid, 'links');
         CACHE_remove_instance('whatsnew');
         return COM_refresh($_CONF['site_admin_url']
                            . '/plugins/links/index.php?msg=3');

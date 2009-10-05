@@ -58,6 +58,10 @@ $lng = preg_replace('/[^a-z0-9\-_]/', '', $lng);
 if (!empty($lng) && is_file('language/' . $lng . '.php')) {
     $language = $lng;
 }
+if ( !@file_exists('language/' . $language . '.php') ) {
+    die();
+    exit;
+}
 require_once 'language/' . $language . '.php';
 
 // $display holds all the outputted HTML and content

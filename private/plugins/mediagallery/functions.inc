@@ -160,6 +160,7 @@ function plugin_getcommenturlid_mediagallery( ) {
     $retval = array();
     $retval[] = $_MG_CONF['site_url'] . '/media.php';
     $retval[] = 's';
+    $retval[] = 'page=';
     return $retval;
 }
 
@@ -369,7 +370,7 @@ function plugin_getwhatsnew_mediagallery() {
         $retval .= $LANG_MG03['no_new_items'] . '<br' . XHTML . '>' . LB;
     }
     if ( $_MG_CONF['disable_whatsnew_comments'] == 0 ) {
-         $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB(NOW(), INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
+        $sql = "SELECT * FROM {$_TABLES['comments']} AS c LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id WHERE c.date >=  DATE_SUB(NOW(), INTERVAL " . $_MG_CONF['whatsnew_time'] . " DAY ) AND c.type='mediagallery' GROUP BY c.sid ORDER BY c.date DESC LIMIT 15";
 
         $result = DB_query( $sql,1);
         $nrows2 = DB_numRows( $result );
@@ -592,6 +593,11 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
     if ($op == 'tagname' ) {
         return array('album','media','img','slideshow','fslideshow','video','audio','download','image','oimage','mlink','alink','playall');
     } else if ($op == 'parse') {
+
+        if (!isset($mgAutoTagArray['count']) || empty($mgAutoTagArray['count'])) {
+            $mgAutoTagArray['count'] = 0;
+        }
+
         /*
          * Process the auto tag to remove any embedded &nbsp;
          */
@@ -2189,7 +2195,7 @@ function plugin_searchtypes_mediagallery()
 *
 */
 function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage) {
-    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01;
+    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01,$LANG09;
 
     if ( $_MG_CONF['disable_search_integration'] == 1) {
         return '';
@@ -2209,30 +2215,64 @@ function plugin_dopluginsearch_mediagallery($query, $datestart, $dateend, $topic
         $sql .= ' AND hidden=0 ';
     }
 
-    if (!empty($datestart) && !empty($dateend))
-    {
-        $delim = substr($datestart, 4, 1);
-        if (!empty($delim))
-        {
-            $DS = explode($delim, $datestart);
-            $DE = explode($delim, $dateend);
-            $startdate = mktime(0,0,0,$DS[1],$DS[2],$DS[0]);
-            $enddate = mktime(23,59,59,$DE[1],$DE[2],$DE[0]);
-            $sql .= "AND (m.media_time BETWEEN '$startdate' AND '$enddate') ";
-        }
-    }
     if (!empty ($author))
         $sql .= "AND (m.media_user_id = '$author') ";
 
     $search = new SearchCriteria('mediagallery', 'Media Gallery');
     $columns = array('m.media_desc','m.media_title');
+    $sql .= $search->getDateRangeSQL('AND', 'm.media_time', $datestart, $dateend);
     list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
     $search->setSQL($sql);
     $search->setFTSQL($ftsql);
     $search->setRank(3);
 
     return $search;
+}
 
+/**
+* this searches the plugins comments matching the user query and returns an array of
+* for the header and table rows back to search.php where it will be formated and
+* printed
+*
+* @query            string          Keywords user is looking for
+* @datestart        date/time       Start date to get results for
+* @dateend          date/time       End date to get results for
+* @topic            string          The topic they were searching in
+* @type             string          Type of items they are searching
+* @author           string          Get all results by this author
+*
+*/
+function plugin_dopluginsearch_comment_mediagallery($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
+{
+    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF, $LANG_MG00, $LANG_MG01,$LANG09;
+
+    if ( $_MG_CONF['disable_search_integration'] == 1) {
+        return '';
+    }
+
+    $query = trim(addslashes(htmlspecialchars($query)));
+
+    $sql =  "SELECT c.cid AS id1, ma.media_id AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+    $sql .= "CONCAT('/mediagallery/media.php?s=',ma.media_id,'#comments') AS url ";
+    $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
+    $sql .= "LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON c.sid=ma.media_id ";
+    $sql .= "LEFT JOIN {$_TABLES['mg_albums']} AS a ON ma.album_id=a.album_id ";
+    $sql .= "WHERE (c.type='mediagallery') AND (u.uid = c.uid) ";
+    $sql .= COM_getPermSQL('AND') . ' ';
+
+    if (!empty($author)) {
+        $sql .= "AND (c.uid = '$author') ";
+    }
+
+    $search_c = new SearchCriteria('comments', 'Media Gallery > '.$LANG09[66]);
+    $columns = array('comment','c.title');
+    $sql .= $search_c->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(c.date)', $datestart, $dateend);
+    list($sql,$ftsql) = $search_c->buildSearchSQL($keyType, $query, $columns, $sql);
+    $search_c->setSQL($sql);
+    $search_c->setFTSQL($ftsql);
+    $search_c->setRank(2);
+
+    return $search_c;
 }
 
 /**
@@ -2265,13 +2305,15 @@ function plugin_getuseroption_mediagallery() {
         if ( $numRows > 0 ) {
             $A = DB_fetchArray($result);
             $album_id = $A['album_id'];
-            $title .= '</a> <a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id . '">' . $LANG_MG03['your_member_album'];
+            return array($LANG_MG03['your_member_album'],$_MG_CONF['site_url'] . '/album.php?aid=' . $album_id,0);
+//            $title .= '</a> <a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id . '">' . $LANG_MG03['your_member_album'];
         }
     }
 
-    if ( isset($_USER['uid']) && $_USER['uid'] > 1) {
-        return array($title, $_MG_CONF['site_url'] . '/userprefs.php', 0);
-    }
+//    if ( isset($_USER['uid']) && $_USER['uid'] > 1) {
+//        return array($title, $_MG_CONF['site_url'] . '/userprefs.php', 0);
+//    }
+    return '';
 }
 
 function phpblock_mg_randommedia($parm1=array(),$parm2=''){
@@ -2300,6 +2342,7 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
         $row    = DB_fetchArray( $result );
         $gotit = true;
     } else {
+
         $gotit = false;
     }
 
@@ -2383,7 +2426,7 @@ function phpblock_mg_randommedia($parm1=array(),$parm2=''){
             'media_height'      =>  $height,
             'media_width'       =>  $width,
             'border_width'      =>  $width + 14,
-            'media_title'       =>  strip_tags($row['media_title']),
+            'media_title'       =>  PLG_replaceTags(strip_tags($row['media_title'])),
             'lang_browse_album' =>  $LANG_MG03['browse_album'],
             'xhtml'             =>  XHTML,
             'framecss'          =>  '', //$fCSS,
@@ -2645,18 +2688,6 @@ function plugin_centerblock_mediagallery($where=1,$page=1,$topic =''){
             $cbenable = 0;
         } else
             $cbenable = 1;
-
-        // Check if there are no featured articles in this topic and if so then place it at the top of the page
-        if ($topic != "") {
-            $wheresql = "WHERE tid='".addslashes($topic)."' AND featured > 0";
-        } else {
-            $wheresql = "WHERE featured = 1";
-        }
-        $query = DB_query("SELECT count(*) as count FROM {$_TABLES['stories']} " . $wheresql);
-        $result = DB_fetchArray($query);
-        if ($result['count'] == 0 && $cbpos == 2) {
-            $cbpos = 1;//top of page
-        }
 
         if ($cbenable AND $cbpos == $where) {
             $T = new Template( MG_getTemplatePath(0) );
@@ -3305,6 +3336,7 @@ function MG_exec($cmd) {
 
     if (PHP_OS == "WINNT") {
         $cmd .= ">NUL 2>&1";
+//        exec("cmd.exe /c " . $cmd, $results, $status);
         exec('"' . $cmd . '"',$results,$status);
     } else {
         exec($cmd, $results, $status);
@@ -3364,5 +3396,180 @@ function MG_convertImageFormat ( $srcImage, $destImage, $destFormat, $deleteOrig
 
 function MG_watermarkImage( $origImage, $watermarkImage, $opacity, $location ) {
     return IMG_watermarkImage( $origImage, $watermarkImage, $opacity, $location );
+}
+
+if ( $_MG_CONF['up_display_rows_enabled'] == 1 ||
+     $_MG_CONF['up_display_columns_enabled'] == 1 ||
+     $_MG_CONF['up_mp3_player_enabled'] == 1 ||
+     $_MG_CONF['up_av_playback_enabled'] == 1 ||
+     $_MG_CONF['up_thumbnail_size_enabled'] == 1) {
+    $LANG_MYACCOUNT['pe_mgprefs'] = "MG Prefs";
+}
+
+function plugin_profileedit_mediagallery($uid,$panel,$fieldset)
+{
+    global $_CONF, $_MG_USERPREFS, $_MG_CONF, $_TABLES, $_USER, $LANG_MG01;
+
+    if ( COM_isAnonUser() ) {
+        return;
+    }
+
+    if ($panel != '' || $fieldset != '' ) {
+        return;
+    }
+
+    if ( $_MG_CONF['up_display_rows_enabled'] == 0 &&
+         $_MG_CONF['up_display_columns_enabled'] == 0 &&
+         $_MG_CONF['up_mp3_player_enabled'] == 0 &&
+         $_MG_CONF['up_av_playback_enabled'] == 0 &&
+         $_MG_CONF['up_thumbnail_size_enabled'] == 0) {
+        return;
+    }
+
+    $retval = '';
+    $x = 0;
+
+    // let's see if anything is actually set...
+    if ( !isset($_MG_USERPREFS['mp3_player']) ) {
+        $_MG_USERPREFS['mp3_player']    = -1;
+        $_MG_USERPREFS['playback_mode'] = 1;
+        $_MG_USERPREFS['tn_size']       = -1;
+        $_MG_USERPREFS['display_rows']  = 0;
+        $_MG_USERPREFS['display_columns'] = 0;
+    }
+
+    $T = new Template( MG_getTemplatePath(0) );
+    $T->set_file (array ('admin' => 'profile_userprefs.thtml'));
+    $T->set_block('admin', 'prefRow', 'pRow');
+
+    // build select boxes
+
+    $mp3_select  = '<select name="mp3_player">';
+    $mp3_select .= '<option value="-1"' . ($_MG_USERPREFS['mp3_player']== -1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['system_default'] . '</option>';
+    $mp3_select .= '<option value="0"'  . ($_MG_USERPREFS['mp3_player'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['windows_media_player'] . '</option>';
+    $mp3_select .= '<option value="1"'  . ($_MG_USERPREFS['mp3_player'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['quicktime_player'] . '</option>';
+    $mp3_select .= '<option value="2"'  . ($_MG_USERPREFS['mp3_player'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['flashplayer'] . '</option>';
+    $mp3_select .= '</select>';
+
+    $playback_select  = '<select name="playback_mode">';
+    $playback_select .= '<option value="-1"' . ($_MG_USERPREFS['playback_mode'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['system_default'] . '</option>';
+    $playback_select .= '<option value="0"' . ($_MG_USERPREFS['playback_mode'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['play_in_popup'] . '</option>';
+    $playback_select .= '<option value="2"' . ($_MG_USERPREFS['playback_mode'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['play_inline'] . '</option>';
+    $playback_select .= '<option value="3"' . ($_MG_USERPREFS['playback_mode'] == 3 ? ' selected="selected"' : '') . '>' . $LANG_MG01['use_mms'] . '</option>';
+    $playback_select .= '</select>';
+
+    $tn_select  = '<select name="tn_size">';
+    $tn_select .= '<option value="-1"' . ($_MG_USERPREFS['tn_size'] == -1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['system_default'] . '</option>';
+    $tn_select .= '<option value="0"' . ($_MG_USERPREFS['tn_size'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['small'] . '</option>';
+    $tn_select .= '<option value="1"' . ($_MG_USERPREFS['tn_size'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['medium'] . '</option>';
+    $tn_select .= '<option value="2"' . ($_MG_USERPREFS['tn_size'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['large'] . '</option>';
+    $tn_select .= '</select>';
+
+    $helpText = '<ul>';
+    if ( $_MG_CONF['up_display_rows_enabled'] ) {
+        $T->set_var(array(
+            'lang_prompt'   => $LANG_MG01['display_rows_prompt'],
+            'input_field'   => '<input type="text" size="3" name="display_rows" value="' . $_MG_USERPREFS['display_rows'] . '"' . XHTML . '>',
+            'lang_help'     => $LANG_MG01['display_rows_help'],
+            'rowcounter' => $x++ % 2,
+        ));
+        $T->parse('pRow', 'prefRow',true);
+        $helpText .= '<li>'.$LANG_MG01['display_rows_help'].'</li>';
+    }
+    if ( $_MG_CONF['up_display_columns_enabled'] ) {
+        $T->set_var(array(
+            'lang_prompt'   => $LANG_MG01['display_columns_prompt'],
+            'input_field'   => '<input type="text" size="3" name="display_columns" value="' . $_MG_USERPREFS['display_columns'] . '"' . XHTML . '>',
+            'lang_help'     => $LANG_MG01['display_columns_help'],
+        ));
+        $T->parse('pRow', 'prefRow',true);
+        $helpText .= '<li>'.$LANG_MG01['display_columns_help'].'</li>';
+    }
+    if ( $_MG_CONF['up_mp3_player_enabled'] ) {
+        $T->set_var(array(
+            'lang_prompt'   => $LANG_MG01['mp3_player'],
+            'input_field'   => $mp3_select,
+            'lang_help'     => $LANG_MG01['mp3_player_help'],
+        ));
+        $T->parse('pRow', 'prefRow',true);
+        $helpText .= '<li>'.$LANG_MG01['mp3_player_help'].'</li>';
+    }
+    if ( $_MG_CONF['up_av_playback_enabled'] ) {
+        $T->set_var(array(
+            'lang_prompt'   => $LANG_MG01['av_play_options'],
+            'input_field'   => $playback_select,
+            'lang_help'     => $LANG_MG01['av_play_options_help'],
+        ));
+        $T->parse('pRow', 'prefRow',true);
+        $helpText .= '<li>'.$LANG_MG01['av_play_options_help'].'</li>';
+    }
+    if ( $_MG_CONF['up_thumbnail_size_enabled'] ) {
+        $T->set_var(array(
+            'lang_prompt'   => $LANG_MG01['tn_size'],
+            'input_field'   => $tn_select,
+            'lang_help'     => $LANG_MG01['tn_size_help'],
+        ));
+        $T->parse('pRow', 'prefRow',true);
+        $helpText .= '<li>'.$LANG_MG01['tn_size_help'].'</li>';
+    }
+    $helpText .= '</ul>';
+
+    $T->set_var('lang_mgprefs_help_title',$LANG_MG01['user_prefs_title']);
+    $T->set_var('lang_mgprefs_help',$helpText);
+    $T->set_var('lang_mg_prefs',$LANG_MG01['user_prefs_title']);
+
+    $T->parse('output', 'admin');
+    $retval .= $T->finish($T->get_var('output'));
+
+    return $retval;
+}
+
+function plugin_profilesave_mediagallery()
+{
+    global $_CONF, $_MG_CONF, $_TABLES, $_USER;
+
+    if ( COM_isAnonUser() ) {
+        return;
+    }
+
+    if ( $_MG_CONF['up_display_rows_enabled'] == 0 &&
+         $_MG_CONF['up_display_columns_enabled'] == 0 &&
+         $_MG_CONF['up_mp3_player_enabled'] == 0 &&
+         $_MG_CONF['up_av_playback_enabled'] == 0 &&
+         $_MG_CONF['up_thumbnail_size_enabled'] == 0) {
+        return;
+    }
+
+    $display_rows    = intval(COM_applyFilter($_POST['display_rows'],true));
+    $display_columns = intval(COM_applyFilter($_POST['display_columns'],true));
+    $mp3_player      = isset($_POST['mp3_player']) ? intval(COM_applyFilter($_POST['mp3_player'],true)) : 0;
+    $playback_mode   = intval(COM_applyFilter($_POST['playback_mode'],true));
+    $tn_size         = intval(COM_applyFilter($_POST['tn_size'],true));
+    $uid             = intval($_USER['uid']);
+
+    if ( $display_columns < 0 || $display_columns > 5 ) {
+        $display_columns = 3;
+    }
+    if ( $display_rows < 0 || $display_rows > 99 ) {
+        $display_rows = 4;
+    }
+
+    if ( $_MG_CONF['up_display_rows_enabled'] == 0 ) {
+        $display_rows = 0;
+    }
+    if ( $_MG_CONF['up_display_columns_enabled'] == 0 ) {
+        $display_columns = 0;
+    }
+    if ( $_MG_CONF['up_mp3_player_enabled'] == 0 ) {
+        $mp3_player = -1;
+    }
+    if ( $_MG_CONF['up_av_playback_enabled'] == 0 ) {
+        $playback_mode = -1;
+    }
+    if ( $_MG_CONF['up_thumbnail_size_enabled'] == 0 ) {
+        $tn_size = -1;
+    }
+
+    DB_save($_TABLES['mg_userprefs'],'uid,display_rows,display_columns,mp3_player,playback_mode,tn_size',"$uid,$display_rows,$display_columns,$mp3_player,$playback_mode,$tn_size");
 }
 ?>

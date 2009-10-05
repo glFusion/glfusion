@@ -50,14 +50,22 @@ $display_mode = COM_applyFilter(COM_getArgument('disp_mode'));
 if (isset($_POST['order'])) {
     $comment_order = COM_applyFilter($_POST['order']);
     $comment_mode  = COM_applyFilter($_POST['mode']);
-    $page = COM_applyFilter($_POST['id']);
+    $page = COM_applyFilter($_POST['page']);
     if ((strcasecmp($comment_order, 'ASC') != 0) &&
             (strcasecmp($comment_order, 'DESC') != 0)) {
         $comment_order = '';
     }
 } else {
-    $comment_order = '';
-    $comment_mode  = '';
+    if (isset($_GET['order']) ) {
+        $comment_order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+    } else {
+        $comment_order = 'DESC';
+    }
+    if ( isset($_GET['mode']) ) {
+        $comment_mode = COM_applyFilter($_GET['mode']);
+    } else {
+        $comment_mode = '';
+    }
 }
 
 if ($display_mode != 'print') {

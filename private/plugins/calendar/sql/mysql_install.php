@@ -84,6 +84,7 @@ CREATE TABLE {$_TABLES['eventsubmission']} (
   datestart date default NULL,
   dateend date default NULL,
   url varchar(255) default NULL,
+  owner_id mediumint(8) unsigned NOT NULL default '1',
   allday tinyint(1) NOT NULL default '0',
   zipcode varchar(5) default NULL,
   state varchar(40) default NULL,

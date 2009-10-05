@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,7 +37,6 @@
 // +--------------------------------------------------------------------------+
 
 require_once 'gf_functions.php';
-require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 
 if (isset($_POST['migrate']) && $_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] AND $_POST['selforum'] != "select" AND !empty( $_POST['cb_chkentry']) ) {
     $num_stories = 0;
@@ -68,6 +67,7 @@ if (isset($_POST['migrate']) && $_POST['migrate'] == $LANG_GF01['MIGRATE_NOW'] A
        }
     }
     gf_resyncforum($forum);
+    CTL_clearCache();
     echo COM_refresh($_CONF['site_admin_url'] . "/plugins/forum/migrate.php?num_stories=". $num_stories. "&num_posts=".$num_posts);
     exit;
 }
@@ -77,7 +77,7 @@ function migratetopic($forum,$sid,$tid,$storydate,$uid,$subject,$introtext,$body
     $comment = $introtext . $bodytext;
     $comment = prepareStringForDB($comment);
     $subject = prepareStringForDB($subject);
-    $postmode = "HTML";
+    $postmode = "html";
     $name = DB_getITEM($_TABLES['users'],'username',"uid=$uid");
     $email = DB_getITEM($_TABLES['users'],'email',"uid=$uid");
     $website = DB_getITEM($_TABLES['users'],'homepage',"uid=$uid");
@@ -98,9 +98,10 @@ function migratetopic($forum,$sid,$tid,$storydate,$uid,$subject,$introtext,$body
     $i++;
     $comments = 0;
     if($_POST['seltopic'] != 'submissions') {
-    $comments = migrateComments($forum,$sid, $parent);
+        $comments = migrateComments($forum,$sid, $parent);
     }
     $num_posts = $num_posts + $comments;
+
     return $num_posts;
 }
 
@@ -120,7 +121,7 @@ function migrateComments($forum,$sid, $parent) {
 
         $comment = prepareStringForDB($comment);
         $subject = prepareStringForDB($subject);
-        $postmode = "HTML";
+        $postmode = "html";
         $name = DB_getITEM($_TABLES['users'],'username',"uid=$uid");
         $email = DB_getITEM($_TABLES['users'],'email',"uid=$uid");
         $website = DB_getITEM($_TABLES['users'],'homepage',"uid=$uid");

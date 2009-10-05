@@ -460,7 +460,9 @@ $LANG08 = array(
     32 => 'Datum',
     33 => 'Kompletter Artikel unter',
     34 => 'Ende dieser Nachricht',
-    35 => 'Sorry, dieser User möchte keine E-Mails bekommen.'
+    35 => 'Sorry, dieser User möchte keine E-Mails bekommen.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################
@@ -954,7 +956,9 @@ $LANG28 = array(
     82 => "Ihr Account auf der Seite {$_CONF['site_name']} wurde nicht benutzt seit %s und wird innerhalb  30 .",
     83 => "Ihr Account auf der Seite {$_CONF['site_name']} wurde seit der Einrichtung nicht benutzt \und wird gelöscht, wenn Sie nicht in Kürze einloggen.",
     84 => "Ihr Einlogname ist: %s  auf der Site: {$_CONF['site_url']}",
-    85 => 'Wenn Sie Ihr Passwort vergessen haben, benutzen Sie folgenden Link: %s'
+    85 => 'Wenn Sie Ihr Passwort vergessen haben, benutzen Sie folgenden Link: %s',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1343,7 +1347,8 @@ $LANG_ACCESS = array(
     'group_id' => 'Gruppen-ID',
     'plugin_access_denied_msg' => 'Sie versuchen ohne Berechtigung auf die Plugin-Verwaltungsseite zuzugreifen.  Bitte beachten Sie, dass alle Versuche, ohne Berechtigung auf diese Seite zuzugreifen, aufgezeichnet werden.',
     'groupexists' => 'Gruppenname existiert schon',
-    'groupexistsmsg' => 'Es existiert bereits eine Gruppe mit diesem Namen. Gruppennamen müssen eindeutig sein.'
+    'groupexistsmsg' => 'Es existiert bereits eine Gruppe mit diesem Namen. Gruppennamen müssen eindeutig sein.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################
@@ -1712,6 +1717,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'User können Account löschen',
     'hide_author_exclusion' => 'Beim Artikel steht kein Autor',
     'show_fullname' => 'Fullname wird angezeigt',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'Name des Service wird angezeigt',
     'custom_registration' => '"Custom Registration" aktivieren',
     'user_login_method' => 'User Login-Methode ',
@@ -1907,7 +1913,8 @@ $LANG_confignames['Core'] = array(
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Enable Template Comments',
-    'hidestorydate' => 'Hide Story Date'
+    'hidestorydate' => 'Hide Story Date',
+    'maintenance_mode' => 'Enable Maintenance Mode'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1989,7 +1996,8 @@ $LANG_configselects['Core'] = array(
     19 => array('Exakter Ausdruck' => 'phrase', 'Alle Worte' => 'all', 'Irgendeines der Worte' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('nichts' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Datum' => 'date', 'Titel' => 'title', 'Author' => 'uid', 'Treffer' => 'hits')
+    22 => array('Datum' => 'date', 'Titel' => 'title', 'Author' => 'uid', 'Treffer' => 'hits'),
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
 );
 
 ?>

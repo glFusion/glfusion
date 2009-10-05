@@ -1,0 +1,61 @@
+body
+{
+  background: #8cb2fd; /* #f7f8fd; */
+  color:#000000;
+  font:.8em arial,sans-serif,verdana,tahoma,helvetica;
+  margin:10px;
+  text-align:left;
+}
+
+form
+{
+	margin: 0;
+	padding: 0;
+}
+
+h1
+{
+    padding:1px;
+    margin:1px;
+}
+
+.Frame
+{
+	background-color: #8cb2fd;
+	border: thin inset #8cb2fd;
+}
+
+body.FileArea
+{
+	background-color: #ffffff;
+	margin: 10px;
+}
+
+body, td, input, select
+{
+	font-size: 11px;
+	font-family: 'Microsoft Sans Serif' , Arial, Helvetica, Verdana;
+}
+
+.ActualFolder
+{
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.PopupButtons
+{
+	border-top: #d5d59d 1px solid;
+	background-color: #e3e3c7;
+	padding: 7px 10px 7px 10px;
+}
+
+.Button, button
+{
+	color: #3b3b1f;
+	border: #737357 1px solid;
+	background-color: #c7c78f;
+}
+.fullHeight {
+	height: 100%;
+}

@@ -22,7 +22,7 @@
  * Configuration file for the File Manager Connector for PHP.
  */
 
-require ('../../../../../lib-common.php');
+require '../../../../../lib-common.php';
 global $Config ;
 
 // SECURITY: You must explicitly enable this "connector". (Set it to "true").
@@ -38,7 +38,7 @@ if ( isset($_COOKIE[$cookiename]) ) {
     $token = '';
 }
 
-if (SEC_checkTokenGeneral($token,'advancededitor')) {
+if (SEC_checkTokenGeneral($token,'advancededitor')  && !COM_isAnonUser()) {
     $Config['Enabled'] = true;
 } else {
     $Config['Enabled'] = false;
@@ -161,7 +161,7 @@ $Config['QuickUploadAbsolutePath']['Media']= ($Config['UserFilesAbsolutePath'] =
 
 if ( $Config['Enabled'] == true && isset($_USER['username']) && $_USER['username'] != '') {
     $uid    = $_USER['username'];
-    $uid = ereg_replace('[^A-Za-z0-9.]','-',$_USER['username']);
+    $uid = preg_replace("/[^A-Za-z0-9.]/",'-',$_USER['username']);
     $uid = str_replace(' ','_',$uid);
 
     $inRoot = SEC_inGroup('Story Admin');
