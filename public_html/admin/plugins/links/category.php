@@ -421,10 +421,9 @@ function links_save_category($cid, $old_cid, $pid, $category, $description, $tid
         }
     }
     if (($update == 'existing') && ($cid != $old_cid)) {
-            PLG_itemSaved($cid, 'links.category', $old_cid);
-        } else {
-            PLG_itemSaved($cid, 'links.category');
-        }
+        PLG_itemSaved($cid, 'links.category', $old_cid);
+    } else {
+        PLG_itemSaved($cid, 'links.category');
     }
     return 10; // success message
 }
