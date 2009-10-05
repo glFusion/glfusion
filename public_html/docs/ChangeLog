@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.6
 ------
+- Added min-height property to #gl_wrapper in style.css (Eric)
+- Added accordion style toggles to configuration screens for "progressive disclosure" (Eric)
 - New showblock auto tag
 - Added CUSTOM_css() hook
 - Spruced up the search results - for comments show type of comment
