@@ -1,5 +1,21 @@
 glFusion ChangeLog
 
+v1.1.6.pl3
+----------
+- Static Pages plugin would error with a SQL error when searching if when
+  multi-language support is enabled.
+- FCKeditor translates latin characters in HTML entities
+- Search results do not always display UTF characters properly
+
+v1.1.6.pl2
+----------
+- Static Pages plugin did not call PLG_itemSaved() and PLG_itemDeleted()
+  with the proper parameters.
+
+v1.1.6.pl1
+----------
+- Links Plugin - when saving a category edit, a SQL error is generated.
+
 v1.1.6
 ------
 - Added min-height property to #gl_wrapper in style.css (Eric)
