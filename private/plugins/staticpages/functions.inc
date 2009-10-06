@@ -683,7 +683,7 @@ function plugin_dopluginsearch_comment_staticpages($query, $datestart, $dateend,
     $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
     $sql .= "LEFT JOIN {$_TABLES['staticpage']} s ON c.cid=s.sp_id ";
     $sql .= "WHERE (c.type='staticpages') AND (u.uid = c.uid) ";
-    $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 'sp') . ' ';
+    $sql .= COM_getPermSQL('AND') . COM_getLangSQL('sp_id', 'AND', 's') . ' ';
 
     if (!empty($author)) {
         $sql .= "AND (c.uid = '$author') ";
