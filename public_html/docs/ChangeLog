@@ -1,5 +1,12 @@
 glFusion ChangeLog
 
+v1.1.6.pl4
+----------
+- Static Pages did not support 'all' as location of centerblock
+- Plugin installer would return wrong error message when no file
+  was actually uploaded.
+- Updated default links entry to point to glFusio Wiki
+
 v1.1.6.pl3
 ----------
 - Static Pages plugin would error with a SQL error when searching if when
