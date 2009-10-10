@@ -802,30 +802,12 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
     global $_CONF, $_TABLES, $_SP_CONF, $LANG_STATIC, $_IMAGE_TYPE, $LANG01;
 
     $retval = '';
-
-    if ($page > 1) {
-        return $retval; // we only support page 1 at the moment ...
-    }
-
-    $moresql = "(sp_where = $where) AND ";
-    $displayFeatured = false;
-
-    // If there are no featured stories, we won't be called with $where == 2.
-    // So, if asked to display pages for the top of the page, check if we
-    // have pages to be displayed after the featured story and if there is
-    // no featured story, display those pages as well.
-    if (($where == 1) && ($_CONF['showfirstasfeatured'] == 0)) {
-        if (DB_count ($_TABLES['stories'], 'featured', 1) == 0) {
-            // no featured story found - redefine $moresql
-            $moresql = "(sp_where = 1 OR sp_where = 2) AND ";
-            $displayFeatured = true;
-        }
-    }
+    $moresql = "(sp_where = " . (int) $where . ") AND ";
 
     if (empty ($topic)) {
         $moresql .= "((sp_tid = 'none') OR (sp_tid = 'all'))";
     } else {
-        $moresql .= "((sp_tid = '{$topic}') OR (sp_tid = 'all'))";
+        $moresql .= "((sp_tid = '".addslashes($topic)."') OR (sp_tid = 'all'))";
     }
 
     if ($_SP_CONF['sort_by'] == 'date') {
@@ -835,22 +817,24 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
     } else { // default to "sort by id"
         $sort = 'sp_id';
     }
-    if ($displayFeatured) {
-        $sort = 'sp_where,' . $sort;
-    }
+    $sort = 'sp_where,' . $sort;
 
     $perms = SP_getPerms ();
     if (!empty ($perms)) {
         $perms = ' AND ' . $perms;
     }
-    $spsql = "SELECT sp_id,sp_title,sp_content,sp_format,sp_date,sp_hits,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon,sp_php,sp_inblock,sp_help FROM {$_TABLES['staticpage']} WHERE (sp_centerblock = 1)" . COM_getLangSql ('sp_id', 'AND') . ' AND ' . $moresql . $perms . " ORDER BY " . $sort;
+    $spsql = "SELECT sp_id,sp_title,sp_content,sp_format,sp_date,sp_hits,sp_tid,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon,sp_php,sp_inblock,sp_help FROM {$_TABLES['staticpage']} WHERE (sp_centerblock = 1)" . COM_getLangSql ('sp_id', 'AND') . ' AND ' . $moresql . $perms . " ORDER BY " . $sort;
     $result = DB_query ($spsql);
 
     $pages = DB_numRows ($result);
     if ($pages > 0) {
         for ($i = 0; $i < $pages; $i++) {
             $S = DB_fetchArray ($result);
-
+            if ( $page > 1 ) {
+                if ( $S['sp_tid'] != 'all' ) {
+                    return;
+                }
+            }
             if ($where == 0) {
                 switch ($S['sp_format']) {
                     case 'noblocks':
@@ -913,7 +897,6 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
             if ($_SP_CONF['show_date'] == 1) {
                 $curtime = COM_getUserDateTimeFormat($S['sp_date']);
                 $lastupdate = $LANG_STATIC['lastupdated']. ' ' . strftime( $_CONF['daytime'], $curtime[1] );
-//                $lastupdate = $LANG_STATIC['lastupdated']. ' ' . $curtime[0];
                 $spage->set_var('lastupdate', $lastupdate);
             }
 
@@ -941,7 +924,6 @@ function plugin_centerblock_staticpages ($where = 1, $page = 1, $topic ='')
                     $retval .= COM_siteFooter ();
                 }
             }
-
             // increment hit counter for page
             DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '{$S['sp_id']}'");
         }
