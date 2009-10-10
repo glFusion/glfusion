@@ -65,6 +65,7 @@ class Search {
     var $_url_rewrite = array();
     var $_searchURL = '';
     var $_wordlength;
+    var $_charset = 'iso-8859-1';
 
     /**
      * Constructor
@@ -145,6 +146,8 @@ class Search {
         } else {
             $this->_keyType = $_CONF['search_def_keytype'];
         }
+
+        $this->_charset = COM_getCharset();
     }
 
     /**
@@ -810,7 +813,12 @@ class Search {
         $text = strip_tags($text);
         $text = str_replace(array("\011", "\012", "\015"), ' ', trim($text));
         $text = str_replace('&nbsp;', ' ', $text);
-        $text = preg_replace('/\s\s+/', ' ', $text);
+        if ( $this->_charset == 'utf-8' ) {
+            $text = preg_replace('/\s\s+/u', ' ', $text);
+        } else {
+            $text = preg_replace('/\s\s+/', ' ', $text);
+        }
+
         $words = explode(' ', $text);
         $word_count = count($words);
         if ($word_count <= $num_words) {
@@ -832,7 +840,7 @@ class Search {
             }
             else
             {
-                $str = substr($text, $pos, $pos_space - $pos);
+                $str = MBYTE_substr($text, $pos, $pos_space - $pos);
                 $m = (int) (($num_words - 1) / 2);
                 $key = $this->_arraySearch($keyword, $words);
                 if ($key === false) {
@@ -995,7 +1003,11 @@ class Search {
             if( !empty( $searchword ))
             {
                 $searchword = preg_quote( str_replace( "'", "\'", $searchword ));
-                $text = @preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+                if ( $this->_charset == 'utf-8' ) {
+                    $text = @preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/uie', "preg_replace('/(?>$searchword+)/ui','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+                } else {
+                    $text = @preg_replace( '/(\>(((?>[^><]+)|(?R))*)\<)/ie', "preg_replace('/(?>$searchword+)/i','<span class=\"$class\">\\\\0</span>','\\0')", '<!-- x -->' . $text . '<!-- x -->' );
+                }
             }
         }
 
@@ -1006,6 +1018,16 @@ class Search {
 
     function _stripos($haystack, $needle)
     {
+
+        if ( $this->_charset == 'utf-8' ) {
+            if ( MBYTE_strlen($needle) > 0 ) {
+                $haystack = MBYTE_strtolower($haystack);
+                return MBYTE_strpos($haystack,$needle);
+            } else {
+                return false;
+            }
+        }
+
         if (function_exists('stripos')) {
             return stripos($haystack, $needle);
         } else {
