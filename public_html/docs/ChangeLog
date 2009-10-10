@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.6.pl4
 ----------
+- Setting Admin attribute in group editor did not work.
 - Static Pages did not support 'all' as location of centerblock
 - Plugin installer would return wrong error message when no file
   was actually uploaded.
