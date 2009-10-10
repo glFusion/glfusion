@@ -300,7 +300,7 @@ function processPluginUpload()
     $retval = '';
     $upgrade = false;
 
-    if (count($_FILES) > 0 ) {
+    if (count($_FILES) > 0 && $_FILES['pluginfile']['error'] != UPLOAD_ERR_NO_FILE) {
         require_once($_CONF['path_system'] . 'classes/upload.class.php');
         $upload = new upload();
 
@@ -1137,14 +1137,14 @@ function _pi_errorBox( $errMsg )
     global $_CONF,$LANG32;
 
     $retval = '';
-
-    $retval .= '<h1>'.$LANG32[56].'</h2>';
+/*
+    $retval .= '<h1>'.$LANG32[56].'</h1>';
     $retval .= $errMsg;
     $retval .= '<form action="'.$_CONF['site_admin_url'] . '/plugins.php" method="get">';
     $retval .= '&nbsp;&nbsp;&nbsp;<input type="submit" name="cont" value="Continue" />';
     $retval .= '</form>';
     return $retval;
-
+*/
     $retval .= '<div id="msgbox" style="width:95%;margin:10px;border:1px solid black;">';
     $retval .= '<div style="padding:5px;font-weight:bold;color:#FFFFFF;background:url('.$_CONF['layout_url'].'/images/header-bg.png) #1A3955;">';
     $retval .= $LANG32[56];
@@ -1154,7 +1154,7 @@ function _pi_errorBox( $errMsg )
     $retval .= '</div>';
     $retval .= '</div>';
     $retval .= '<form action="'.$_CONF['site_admin_url'] . '/plugins.php" method="get">';
-    $retval .= '&nbsp;&nbsp;&nbsp;<input type="submit" name="cont" value="Continue" />';
+    $retval .= '&nbsp;&nbsp;&nbsp;<input type="submit" name="cont" value="'.$LANG32[71].'" />';
     $retval .= '</form>';
 
     return $retval;
