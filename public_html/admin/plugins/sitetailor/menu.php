@@ -1065,47 +1065,6 @@ function ST_menuConfig( $mid ) {
         }
     }
 
-
-    $main_menu_bg_colorRGB         = '[' . ST_hexrgb($menuConfig['main_menu_bg_color'],'r') .
-                                      ',' . ST_hexrgb($menuConfig['main_menu_bg_color'],'g') .
-                                      ',' . ST_hexrgb($menuConfig['main_menu_bg_color'],'b') . ']';
-
-    $main_menu_hover_bg_colorRGB   = '[' . ST_hexrgb($menuConfig['main_menu_hover_bg_color'],'r')  .
-                                      ',' . ST_hexrgb($menuConfig['main_menu_hover_bg_color'],'g')  .
-                                      ',' . ST_hexrgb($menuConfig['main_menu_hover_bg_color'],'b')  . ']';
-
-    $main_menu_text_colorRGB       = '[' . ST_hexrgb($menuConfig['main_menu_text_color'],'r')  .
-                                      ',' . ST_hexrgb($menuConfig['main_menu_text_color'],'g')  .
-                                      ',' . ST_hexrgb($menuConfig['main_menu_text_color'],'b')  . ']';
-
-    $main_menu_hover_text_colorRGB = '[' . ST_hexrgb($menuConfig['main_menu_hover_text_color'],'r') .
-                                      ',' . ST_hexrgb($menuConfig['main_menu_hover_text_color'],'g') .
-                                      ',' . ST_hexrgb($menuConfig['main_menu_hover_text_color'],'b') . ']';
-
-    $submenu_text_colorRGB         = '[' .  ST_hexrgb($menuConfig['submenu_text_color'],'r')  .
-                                      ',' . ST_hexrgb($menuConfig['submenu_text_color'],'g')  .
-                                      ',' . ST_hexrgb($menuConfig['submenu_text_color'],'b')  . ']';
-
-    $submenu_hover_text_colorRGB   = '[' . ST_hexrgb($menuConfig['submenu_hover_text_color'],'r') .
-                                      ',' . ST_hexrgb($menuConfig['submenu_hover_text_color'],'g') .
-                                      ',' . ST_hexrgb($menuConfig['submenu_hover_text_color'],'b') . ']';
-
-    $submenu_hover_bg_colorRGB     = '[' . ST_hexrgb($menuConfig['submenu_hover_bg_color'],'r') .
-                                      ',' . ST_hexrgb($menuConfig['submenu_hover_bg_color'],'g') .
-                                      ',' . ST_hexrgb($menuConfig['submenu_hover_bg_color'],'b') . ']';
-
-    $submenu_background_colorRGB   = '[' . ST_hexrgb($menuConfig['submenu_background_color'],'r') .
-                                      ',' . ST_hexrgb($menuConfig['submenu_background_color'],'g') .
-                                      ',' . ST_hexrgb($menuConfig['submenu_background_color'],'b') . ']';
-
-    $submenu_highlight_colorRGB    = '[' . ST_hexrgb($menuConfig['submenu_highlight_color'],'r')  .
-                                      ',' . ST_hexrgb($menuConfig['submenu_highlight_color'],'g')  .
-                                      ',' . ST_hexrgb($menuConfig['submenu_highlight_color'],'b')  . ']';
-
-    $submenu_shadow_colorRGB       = '[' . ST_hexrgb($menuConfig['submenu_shadow_color'],'r')  .
-                                      ',' . ST_hexrgb($menuConfig['submenu_shadow_color'],'g')  .
-                                      ',' . ST_hexrgb($menuConfig['submenu_shadow_color'],'b')  . ']';
-
     $menu_active_check = ($stMenu[$mid]['active'] == 1  ? ' checked="checked"' : '');
 
     $menu_align_left_checked  = ($menuConfig['menu_alignment'] == 1 ? 'checked="checked"' : '');
@@ -1158,26 +1117,16 @@ function ST_menuConfig( $mid ) {
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/plugins/sitetailor/menu.php">Menu List</a> :: '.$stMenu[$mid]['menu_name'].' :: Configuration',
         'menu_id'           => $mid,
         'menu_name'         => $stMenu[$mid]['menu_name'],
-        'tmbgcolor'         => $menuConfig['main_menu_bg_color'],
-        'tmbgcolorrgb'      => $main_menu_bg_colorRGB,
-        'tmhcolor'          => $menuConfig['main_menu_hover_bg_color'],
-        'tmhcolorrgb'       => $main_menu_hover_bg_colorRGB,
-        'tmtcolor'          => $menuConfig['main_menu_text_color'],
-        'tmtcolorrgb'       => $main_menu_text_colorRGB,
-        'tmthcolor'         => $menuConfig['main_menu_hover_text_color'],
-        'tmthcolorrgb'      => $main_menu_hover_text_colorRGB,
-        'smtcolor'          => $menuConfig['submenu_text_color'],
-        'smtcolorrgb'       => $submenu_text_colorRGB,
-        'smthcolor'         => $menuConfig['submenu_hover_text_color'],
-        'smthcolorrgb'      => $submenu_hover_text_colorRGB,
-        'smbgcolor'         => $menuConfig['submenu_background_color'],
-        'smbgcolorrgb'      => $submenu_background_colorRGB,
-        'smhbgcolor'         => $menuConfig['submenu_hover_bg_color'],
-        'smhbgcolorrgb'      => $submenu_hover_bg_colorRGB,
-        'smhcolor'          => $menuConfig['submenu_highlight_color'],
-        'smhcolorrgb'       => $submenu_highlight_colorRGB,
-        'smscolor'          => $menuConfig['submenu_shadow_color'],
-        'smscolorrgb'       => $submenu_shadow_colorRGB,
+        'tmbgcolor'         => str_replace('#','',$menuConfig['main_menu_bg_color']),
+        'tmhcolor'          => str_replace('#','',$menuConfig['main_menu_hover_bg_color']),
+        'tmtcolor'          => str_replace('#','',$menuConfig['main_menu_text_color']),
+        'tmthcolor'         => str_replace('#','',$menuConfig['main_menu_hover_text_color']),
+        'smtcolor'          => str_replace('#','',$menuConfig['submenu_text_color']),
+        'smthcolor'         => str_replace('#','',$menuConfig['submenu_hover_text_color']),
+        'smbgcolor'         => str_replace('#','',$menuConfig['submenu_background_color']),
+        'smhbgcolor'        => str_replace('#','',$menuConfig['submenu_hover_bg_color']),
+        'smhcolor'          => str_replace('#','',$menuConfig['submenu_highlight_color']),
+        'smscolor'          => str_replace('#','',$menuConfig['submenu_shadow_color']),
         'enabled'           => $menu_active_check,
         'graphics_selected' => $use_images_checked,
         'colors_selected'   => $use_colors_checked,
@@ -1243,16 +1192,16 @@ function ST_saveMenuConfig($menu_id=0) {
     global $_CONF, $_TABLES, $_ST_CONF, $stMenu;
 
     $menu_id                          = COM_applyFilter($_POST['menu_id'],true);
-    $mc['main_menu_bg_color']         = COM_applyFilter($_POST['tmbg_sample']);
-    $mc['main_menu_hover_bg_color']   = COM_applyFilter($_POST['tmh_sample']);
-    $mc['main_menu_text_color']       = COM_applyFilter($_POST['tmt_sample']);
-    $mc['main_menu_hover_text_color'] = COM_applyFilter($_POST['tmth_sample']);
-    $mc['submenu_text_color']         = COM_applyFilter($_POST['smt_sample']);
-    $mc['submenu_hover_text_color']   = COM_applyFilter($_POST['smth_sample']);
-    $mc['submenu_background_color']   = COM_applyFilter($_POST['smbg_sample']);
-    $mc['submenu_hover_bg_color']     = COM_applyFilter($_POST['smhbg_sample']);
-    $mc['submenu_highlight_color']    = COM_applyFilter($_POST['smh_sample']);
-    $mc['submenu_shadow_color']       = COM_applyFilter($_POST['sms_sample']);
+    $mc['main_menu_bg_color']         = '#'.COM_applyFilter($_POST['tmbgcolor']);
+    $mc['main_menu_hover_bg_color']   = '#'.COM_applyFilter($_POST['tmhcolor']);
+    $mc['main_menu_text_color']       = '#'.COM_applyFilter($_POST['tmtcolor']);
+    $mc['main_menu_hover_text_color'] = '#'.COM_applyFilter($_POST['tmthcolor']);
+    $mc['submenu_text_color']         = '#'.COM_applyFilter($_POST['smtcolor']);
+    $mc['submenu_hover_text_color']   = '#'.COM_applyFilter($_POST['smthcolor']);
+    $mc['submenu_background_color']   = '#'.COM_applyFilter($_POST['smbgcolor']);
+    $mc['submenu_hover_bg_color']     = '#'.COM_applyFilter($_POST['smhbgcolor']);
+    $mc['submenu_highlight_color']    = '#'.COM_applyFilter($_POST['smhcolor']);
+    $mc['submenu_shadow_color']       = '#'.COM_applyFilter($_POST['smscolor']);
     $mc['menu_alignment']             = isset($_POST['malign']) ? COM_applyFilter($_POST['malign'],true) : 0;
     $mc['use_images']                 = isset($_POST['gorc']) ? COM_applyFilter($_POST['gorc'],true) : 0;
 

@@ -1,566 +1,8 @@
 {# begin {templatelocation} #}
-<script type="text/javascript" src="{site_admin_url}/plugins/sitetailor/js/mooRainbow.js?ver=1"></script>
+<script type="text/javascript" src="{site_admin_url}/plugins/sitetailor/js/jscolor.js?ver=1"></script>
 {# Hide the menu builder as Javascript is required. If JS is enabled then the JS below will un-hide it #}
 <script type="text/javascript">
     document.getElementById('sitetailor').style.display=''
-</script>
-<script type="text/javascript">
-<!--
-window.addEvent('domready', function() {
-
-	var tmbg = new MooRainbow('tmbgrb', {
-		'startColor': {tmbgcolorrgb},
-		'onChange': function(color) {
-			$('tmbgcolor').value = color.hex;
-			$('tmbg_sample').value = color.hex;
-            $('tmbg_sample').setStyle('background-color',color.hex);
-            $('tmbg_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('tmbg_sample').fireEvent('focus');
-		}
-
-	});
-
-	var tmh = new MooRainbow('tmhrb', {
-	    'id' : 'mooRainbow2',
-		'startColor': {tmhcolorrgb},
-		'onChange': function(color) {
-			$('tmhcolor').value = color.hex;
-			$('tmh_sample').value = color.hex;
-            $('tmh_sample').setStyle('background-color',color.hex);
-            $('tmh_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('tmh_sample').fireEvent('focus');
-		}
-	});
-
-	var tmt = new MooRainbow('tmtrb', {
-	    'id' : 'mooRainbow3',
-		'startColor': {tmtcolorrgb},
-		'onChange': function(color) {
-			$('tmtcolor').value = color.hex;
-			$('tmt_sample').value = color.hex;
-            $('tmt_sample').setStyle('background-color',color.hex);
-            $('tmt_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('tmt_sample').fireEvent('focus');
-		}
-	});
-	var tmth = new MooRainbow('tmthrb', {
-	    'id' : 'mooRainbow4',
-		'startColor': {tmthcolorrgb},
-		'onChange': function(color) {
-			$('tmthcolor').value = color.hex;
-			$('tmth_sample').value = color.hex;
-            $('tmth_sample').setStyle('background-color',color.hex);
-            $('tmth_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('tmth_sample').fireEvent('focus');
-		}
-	});
-	var smt = new MooRainbow('smtrb', {
-	    'id' : 'mooRainbow5',
-		'startColor': {smtcolorrgb},
-		'onChange': function(color) {
-			$('smtcolor').value = color.hex;
-			$('smt_sample').value = color.hex;
-            $('smt_sample').setStyle('background-color',color.hex);
-            $('smt_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('smt_sample').fireEvent('focus');
-		}
-	});
-	var smth = new MooRainbow('smthrb', {
-	    'id' : 'mooRainbow6',
-		'startColor': {smthcolorrgb},
-		'onChange': function(color) {
-			$('smthcolor').value = color.hex;
-			$('smth_sample').value = color.hex;
-            $('smth_sample').setStyle('background-color',color.hex);
-            $('smth_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('smth_sample').fireEvent('focus');
-		}
-	});
-	var smbg = new MooRainbow('smbgrb', {
-	    'id' : 'mooRainbow7',
-		'startColor': {smbgcolorrgb},
-		'onChange': function(color) {
-			$('smbgcolor').value = color.hex;
-			$('smbg_sample').value = color.hex;
-            $('smbg_sample').setStyle('background-color',color.hex);
-            $('smbg_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('smbg_sample').fireEvent('focus');
-		}
-	});
-	var smhbg = new MooRainbow('smhbgrb', {
-	    'id' : 'mooRainbowA',
-		'startColor': {smhbgcolorrgb},
-		'onChange': function(color) {
-			$('smhbgcolor').value = color.hex;
-			$('smhbg_sample').value = color.hex;
-            $('smhbg_sample').setStyle('background-color',color.hex);
-            $('smhbg_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('smhbg_sample').fireEvent('focus');
-		}
-	});
-	var smh = new MooRainbow('smhrb', {
-	    'id' : 'mooRainbow8',
-		'startColor': {smhcolorrgb},
-		'onChange': function(color) {
-			$('smhcolor').value = color.hex;
-			$('smh_sample').value = color.hex;
-            $('smh_sample').setStyle('background-color',color.hex);
-            $('smh_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('smh_sample').fireEvent('focus');
-		}
-	});
-	var sms = new MooRainbow('smsrb', {
-	    'id' : 'mooRainbow9',
-		'startColor': {smscolorrgb},
-		'onChange': function(color) {
-			$('smscolor').value = color.hex;
-			$('sms_sample').value = color.hex;
-            $('sms_sample').setStyle('background-color',color.hex);
-            $('sms_sample').fireEvent('focus');
-		},
-		'onComplete': function() {
-		    $('sms_sample').fireEvent('focus');
-		}
-	});
-
-    var v = $('tmbg_sample').value;
-    var l = $('tmbg_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('tmbg_sample').setStyle('color','#fff');
-        else $('tmbg_sample').setStyle('color','#000');
-    }
-
-	$('tmbg_sample').addEvent('focus',function(){
-	    var l = $('tmbg_sample').value.length;
-	    var v = $('tmbg_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('tmbg_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('tmbg_sample').setStyle('color','#fff');
-            else $('tmbg_sample').setStyle('color','#000');
-	    }
-	 });
-	$('tmbg_sample').addEvent('keyup',function(){
-	    if ( $('tmbg_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('tmbg_sample').fireEvent('focus');
-	    }
-
-	 });
-	$('tmbg_sample').addEvent('change',function(){
-	    var l = $('tmbg_sample').value.length;
-	    var v = $('tmbg_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        tmbg.manualSet(x,'hex');
-	    }
-	 });
-
-	$('tmt_sample').addEvent('change',function(){
-	    var l = $('tmt_sample').value.length;
-	    var v = $('tmt_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        tmt.manualSet(x,'hex');
-	    }
-	 });
-	$('tmth_sample').addEvent('change',function(){
-	    var l = $('tmth_sample').value.length;
-	    var v = $('tmth_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        tmth.manualSet(x,'hex');
-	    }
-	 });
-	$('smt_sample').addEvent('change',function(){
-	    var l = $('smt_sample').value.length;
-	    var v = $('smt_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        smt.manualSet(x,'hex');
-	    }
-	 });
-	$('smth_sample').addEvent('change',function(){
-	    var l = $('smth_sample').value.length;
-	    var v = $('smth_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        smth.manualSet(x,'hex');
-	    }
-	 });
-	$('smbg_sample').addEvent('change',function(){
-	    var l = $('smbg_sample').value.length;
-	    var v = $('smbg_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        smbg.manualSet(x,'hex');
-	    }
-	 });
-	$('smhbg_sample').addEvent('change',function(){
-	    var l = $('smhbg_sample').value.length;
-	    var v = $('smhbg_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        smhbg.manualSet(x,'hex');
-	    }
-	 });
-	$('smh_sample').addEvent('change',function(){
-	    var l = $('smh_sample').value.length;
-	    var v = $('smh_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        smh.manualSet(x,'hex');
-	    }
-	 });
-	$('sms_sample').addEvent('change',function(){
-	    var l = $('sms_sample').value.length;
-	    var v = $('sms_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        sms.manualSet(x,'hex');
-	    }
-	 });
-
-    var v = $('tmh_sample').value;
-    var l = $('tmh_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('tmh_sample').setStyle('color','#fff');
-        else $('tmh_sample').setStyle('color','#000');
-    }
-	$('tmh_sample').addEvent('focus',function(){
-	    var l = $('tmh_sample').value.length;
-	    var v = $('tmh_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('tmh_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('tmh_sample').setStyle('color','#fff');
-            else $('tmh_sample').setStyle('color','#000');
-	    }
-	 });
-	$('tmh_sample').addEvent('keyup',function(){
-	    if ( $('tmh_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('tmh_sample').fireEvent('focus');
-	    }
-
-	 });
-	$('tmh_sample').addEvent('change',function(){
-	    var l = $('tmh_sample').value.length;
-	    var v = $('tmh_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        tmh.manualSet(x,'hex');
-	    }
-	 });
-
-    var v = $('tmt_sample').value;
-    var l = $('tmt_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('tmt_sample').setStyle('color','#fff');
-        else $('tmt_sample').setStyle('color','#000');
-    }
-
-	$('tmt_sample').addEvent('focus',function(){
-	    var l = $('tmt_sample').value.length;
-	    var v = $('tmt_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('tmt_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('tmt_sample').setStyle('color','#fff');
-            else $('tmt_sample').setStyle('color','#000');
-	    }
-	 });
-	$('tmt_sample').addEvent('keyup',function(){
-	    if ( $('tmt_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('tmt_sample').fireEvent('focus');
-	    }
-
-	 });
-
-    var v = $('tmth_sample').value;
-    var l = $('tmth_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('tmth_sample').setStyle('color','#fff');
-        else $('tmth_sample').setStyle('color','#000');
-    }
-	$('tmth_sample').addEvent('focus',function(){
-	    var l = $('tmth_sample').value.length;
-	    var v = $('tmth_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('tmth_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('tmth_sample').setStyle('color','#fff');
-            else $('tmth_sample').setStyle('color','#000');
-	    }
-	 });
-	$('tmth_sample').addEvent('keyup',function(){
-	    if ( $('tmth_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('tmth_sample').fireEvent('focus');
-	    }
-
-	 });
-
-    var v = $('smt_sample').value;
-    var l = $('smt_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('smt_sample').setStyle('color','#fff');
-        else $('smt_sample').setStyle('color','#000');
-    }
-	$('smt_sample').addEvent('focus',function(){
-	    var l = $('smt_sample').value.length;
-	    var v = $('smt_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('smt_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('smt_sample').setStyle('color','#fff');
-            else $('smt_sample').setStyle('color','#000');
-	    }
-	 });
-	$('smt_sample').addEvent('keyup',function(){
-	    if ( $('smt_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('smt_sample').fireEvent('focus');
-	    }
-
-	 });
-
-
-    var v = $('smth_sample').value;
-    var l = $('smth_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('smth_sample').setStyle('color','#fff');
-        else $('smth_sample').setStyle('color','#000');
-    }
-	$('smth_sample').addEvent('focus',function(){
-	    var l = $('smth_sample').value.length;
-	    var v = $('smth_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('smth_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('smth_sample').setStyle('color','#fff');
-            else $('smth_sample').setStyle('color','#000');
-	    }
-	 });
-	$('smth_sample').addEvent('keyup',function(){
-	    if ( $('smth_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('smth_sample').fireEvent('focus');
-	    }
-
-	 });
-
-    var v = $('smbg_sample').value;
-    var l = $('smbg_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('smbg_sample').setStyle('color','#fff');
-        else $('smbg_sample').setStyle('color','#000');
-    }
-	$('smbg_sample').addEvent('focus',function(){
-	    var l = $('smbg_sample').value.length;
-	    var v = $('smbg_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('smbg_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('smbg_sample').setStyle('color','#fff');
-            else $('smbg_sample').setStyle('color','#000');
-	    }
-	 });
-	$('smbg_sample').addEvent('keyup',function(){
-	    if ( $('smbg_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('smbg_sample').fireEvent('focus');
-	    }
-
-	 });
-
-    var v = $('smhbg_sample').value;
-    var l = $('smhbg_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('smhbg_sample').setStyle('color','#fff');
-        else $('smhbg_sample').setStyle('color','#000');
-    }
-	$('smhbg_sample').addEvent('focus',function(){
-	    var l = $('smhbg_sample').value.length;
-	    var v = $('smhbg_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('smhbg_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('smhbg_sample').setStyle('color','#fff');
-            else $('smhbg_sample').setStyle('color','#000');
-	    }
-	 });
-	$('smhbg_sample').addEvent('keyup',function(){
-	    if ( $('smhbg_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('smhbg_sample').fireEvent('focus');
-	    }
-
-	 });
-
-    var v = $('smh_sample').value;
-    var l = $('smh_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('smh_sample').setStyle('color','#fff');
-        else $('smh_sample').setStyle('color','#000');
-    }
-	$('smh_sample').addEvent('focus',function(){
-	    var l = $('smh_sample').value.length;
-	    var v = $('smh_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('smh_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('smh_sample').setStyle('color','#fff');
-            else $('smh_sample').setStyle('color','#000');
-	    }
-	 });
-	$('smh_sample').addEvent('keyup',function(){
-	    if ( $('smh_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('smh_sample').fireEvent('focus');
-	    }
-
-	 });
-
-    var v = $('sms_sample').value;
-    var l = $('sms_sample').value.length;
-    if ( l > 3 ) {
-        var c = new Color(v);
-        var x = c.hex;
-        var z=c.hex.hexToRgb(true);
-        var d=hsv(z);
-        if(d[2]<127) $('sms_sample').setStyle('color','#fff');
-        else $('sms_sample').setStyle('color','#000');
-    }
-	$('sms_sample').addEvent('focus',function(){
-	    var l = $('sms_sample').value.length;
-	    var v = $('sms_sample').value;
-	    var c = new Color(v);
-	    var x = c.hex;
-	    if ( l > 3 ) {
-	        $('sms_sample').setStyle('background-color',x);
-	        var z=c.hex.hexToRgb(true);
-            var d=hsv(z);
-            if(d[2]<127) $('sms_sample').setStyle('color','#fff');
-            else $('sms_sample').setStyle('color','#000');
-	    }
-	 });
-	$('sms_sample').addEvent('keyup',function(){
-	    if ( $('sms_sample').value.test(/^#[0-9a-f]{3,6}$/i) ) {
-	        $('sms_sample').fireEvent('focus');
-	    }
-
-	 });
-
-
-});
-
-function hsv(a){
-		var r=a[0],
-		g=a[1],
-		b=a[2],
-		H,S,V;
-		var c=Math.min(r,g,b);
-		var d=Math.max(r,g,b);
-		var e=d-c;
-		V=d;
-		if(!e){H=0;S=0}
-		else{
-			S=e/d;
-			deltaR=(((d-r)/6)+(e/2))/e;
-			deltaG=(((d-g)/6)+(e/2))/e;
-			deltaB=(((d-b)/6)+(e/2))/e;
-			if(r==d)H=deltaB-deltaG;
-			else if(g==d)H=(1/3)+deltaR-deltaB;
-			else if(b==d)H=(2/3)+deltaG-deltaR;
-			if(H<0)H+=1;if(H>1)H-=1
-		};
-		return[H,S,V]
-	}
--->
 </script>
 
     <div class="glfform">
@@ -568,7 +10,7 @@ function hsv(a){
     <form method="post" action="{form_action}" id="mbconfig" enctype="multipart/form-data" >
     <input type="hidden" name="menu_id" id="menu_id" value="{menu_id}"{xhtml}>
     <input type="hidden" name="menutype" id="menutype" value="{menutype}"{xhtml}>
-     <h1 style="margin:9px;">{$LANG_ST01[menu_properties]} {menu_name}</h1>
+     <h2 style="margin:9px;">{$LANG_ST01[menu_properties]}: {menu_name}</h2>
       <div>
         <label for="menuactive">{$LANG_ST01[active]}:</label>
         <input type="checkbox" id="menuactive" name="menuactive" value="1"{menuactive}{xhtml}>
@@ -578,19 +20,19 @@ function hsv(a){
         {group_select}
       </div>
 
-	  <h1 style="margin:9px;display:{menu_alignment_show};">{$LANG_ST01[menu_alignment]}</h1>
+	  <h2 style="margin:9px;display:{menu_alignment_show};">{$LANG_ST01[menu_alignment]}</h2>
       <div style="display:{menu_alignment_show};">
         <label>{$LANG_ST01[alignment_question]}:</label>
         &nbsp;&nbsp;&nbsp;{$LANG_ST01[align_left]}:&nbsp;<input type="radio" name="malign" value="1" {alignment_left_checked}{xhtml}>&nbsp;&nbsp;&nbsp;
         {$LANG_ST01[align_right]}:&nbsp;<input type="radio" name="malign" value="0" {alignment_right_checked}{xhtml}>
       </div>
 
-      <h1 style="margin:9px;">{$LANG_ST01[menu_color_options]}</h1>
+      <h2 style="margin:9px;">{$LANG_ST01[menu_color_options]}</h2>
 
       <div style="display:{main_menu_bg_color_show};">
+	
         <label>{lang_main_menu_bg_color}:</label>
-        <input id="tmbgcolor" name="tmbgcolor" type="hidden" size="7" value="{tmbgcolor}" {xhtml}>&nbsp;
-        <input type="text" name="tmbg_sample" id="tmbg_sample" size="7" maxlength="7" value="{tmbgcolor}" style="vertical-align:middle;background-color:{tmbgcolor};"{xhtml}>
+        <input id="tmbgcolor" name="tmbgcolor" class="color" style="width:50px;text-align:center" value="{tmbgcolor}" {xhtml}>&nbsp;
         <img id="tmbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
         {!if show_warning}
         &nbsp;&nbsp;<span style="font-style:italic">{$LANG_ST01[not_used]}</span>
@@ -599,8 +41,7 @@ function hsv(a){
 
       <div style="display:{main_menu_hover_bg_color_show};">
         <label>{lang_main_menu_hover_bg_color}:</label>
-        <input id="tmhcolor" name="tmhcolor" type="hidden" size="7" value="{tmhcolor}"{xhtml}>&nbsp;
-        <input type="text" name="tmh_sample" id="tmh_sample" size="7" maxlength="7" value="{tmhcolor}" style="vertical-align:middle;background-color:{tmhcolor};"{xhtml}>
+        <input id="tmhcolor" name="tmhcolor" class="color" style="width:50px;text-align:center" value="{tmhcolor}"{xhtml}>&nbsp;
         <img id="tmhrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
         {!if show_warning}
         &nbsp;&nbsp;<span style="font-style:italic">{$LANG_ST01[not_used]}</span>
@@ -609,61 +50,53 @@ function hsv(a){
 
       <div style="display:{main_menu_text_color_show};">
         <label>{lang_main_menu_text_color}:</label>
-        <input id="tmtcolor" name="tmtcolor" type="hidden" size="7" value="{tmtcolor}" {xhtml}>&nbsp;
-        <input type="text" name="tmt_sample" id="tmt_sample" size="7" maxlength="7" value="{tmtcolor}" style="vertical-align:middle;background-color:{tmtcolor};"{xhtml}>
+        <input id="tmtcolor" name="tmtcolor" class="color" style="width:50px;text-align:center" value="{tmtcolor}" {xhtml}>&nbsp;
         <img id="tmtrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{main_menu_hover_text_color_show};">
         <label>{lang_main_menu_hover_text_color}:</label>
-        <input id="tmthcolor" name="tmthcolor" type="hidden" size="7" value="{tmthcolor}" {xhtml}>&nbsp;
-        <input type="text" name="tmth_sample" id="tmth_sample" size="7" maxlength="7" value="{tmthcolor}" style="vertical-align:middle;background-color:{tmthcolor};"{xhtml}>
+        <input id="tmthcolor" name="tmthcolor" class="color" style="width:50px;text-align:center" value="{tmthcolor}" {xhtml}>&nbsp;
         <img id="tmthrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_text_color_show};">
         <label>{lang_submenu_text_color}:</label>
-        <input id="smtcolor" name="smtcolor" type="hidden" size="7" value="{smtcolor}" {xhtml}>&nbsp;
-        <input type="text" name="smt_sample" id="smt_sample" size="7" maxlength="7" value="{smtcolor}" style="vertical-align:middle;background-color:{smtcolor};"{xhtml}>
+        <input id="smtcolor" name="smtcolor" class="color" style="width:50px;text-align:center" value="{smtcolor}" {xhtml}>&nbsp;
         <img id="smtrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_hover_text_color_show};">
         <label>{lang_submenu_hover_text_color}:</label>
-        <input id="smthcolor" name="smthcolor" type="hidden" size="7" value="{smthcolor}" {xhtml}>&nbsp;
-        <input type="text" name="smth_sample" id="smth_sample" size="7" maxlength="7" value="{smthcolor}" style="vertical-align:middle;background-color:{smthcolor};"{xhtml}>
+        <input id="smthcolor" name="smthcolor" class="color" style="width:50px;text-align:center" value="{smthcolor}" {xhtml}>&nbsp;
         <img id="smthrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_background_color_show};">
         <label>{lang_submenu_background_color}:</label>
-        <input id="smbgcolor" name="smbgcolor" type="hidden" size="7" value="{smbgcolor}" {xhtml}>&nbsp;
-        <input type="text" name="smbg_sample" id="smbg_sample" size="7" maxlength="7" value="{smbgcolor}" style="vertical-align:middle;background-color:{smbgcolor};"{xhtml}>
+        <input id="smbgcolor" name="smbgcolor" class="color" style="width:50px;text-align:center" value="{smbgcolor}" {xhtml}>&nbsp;
         <img id="smbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_hover_bg_color_show};">
         <label>{lang_submenu_hover_bg_color}:</label>
-        <input id="smhbgcolor" name="smhbgcolor" type="hidden" size="7" value="{smhbgcolor}" {xhtml}>&nbsp;
-        <input type="text" name="smhbg_sample" id="smhbg_sample" size="7" maxlength="7" value="{smhbgcolor}" style="vertical-align:middle;background-color:{smhbgcolor};"{xhtml}>
+        <input id="smhbgcolor" name="smhbgcolor" class="color" style="width:50px;text-align:center" value="{smhbgcolor}" {xhtml}>&nbsp;
         <img id="smhbgrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
      </div>
 
       <div style="display:{submenu_highlight_color_show};">
         <label>{lang_submenu_highlight_color}:</label>
-        <input id="smhcolor" name="smhcolor" type="hidden" size="7" value="{smhcolor}" {xhtml}>&nbsp;
-        <input type="text" name="smh_sample" id="smh_sample" size="7" maxlength="7" value="{smhcolor}" style="vertical-align:middle;background-color:{smhcolor};"{xhtml}>
+        <input id="smhcolor" name="smhcolor" class="color" style="width:50px;text-align:center" value="{smhcolor}" {xhtml}>&nbsp;
         <img id="smhrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
 
       <div style="display:{submenu_shadow_color_show};">
         <label>{lang_submenu_shadow_color}:</label>
-        <input id="smscolor" name="smscolor" type="hidden" size="7" value="{smscolor}" {xhtml}>&nbsp;
-        <input type="text" name="sms_sample" id="sms_sample" size="7" maxlength="7" value="{smscolor}" style="vertical-align:middle;background-color:{smscolor};"{xhtml}>
+        <input id="smscolor" name="smscolor" class="color" style="width:50px;text-align:center" value="{smscolor}" {xhtml}>&nbsp;
         <img id="smsrb" src="{site_admin_url}/plugins/sitetailor/images/rainbow.png" alt="{$LANG_ST01[select_color]}" title="{$LANG_st01[select_color]}" width="16" height="16" style="vertical-align:middle;"{xhtml}>
       </div>
-
-     <h1 style="margin:9px;display:{use_images_show};">{$LANG_ST01[menu_graphics]}</h1>
+      
+     <h2 style="margin:9px;display:{use_images_show};">{$LANG_ST01[menu_graphics]}</h2>
 
       <div style="display:{use_images_show};">
         <label>{$LANG_ST01[graphics_or_colors]}</label>
