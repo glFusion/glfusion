@@ -348,7 +348,8 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
         }
     }
 
-    $headercode = '<script type="text/javascript" src="'.$_CONF['site_url'].'/javascript/mootools/mootools-release-1.11.packed.js"></script>' . $headercode;
+    $headercode = '<script type="text/javascript" src="'.$_CONF['site_url'].'/javascript/mootools/mootools-1.2.3.1-more.js"></script>' . $headercode;
+    $headercode = '<script type="text/javascript" src="'.$_CONF['site_url'].'/javascript/mootools/mootools-1.2.3-core.js"></script>' . $headercode;
 
     // Call any plugin that may want to include extra Meta tags
     // or Javascript functions
