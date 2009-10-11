@@ -70,7 +70,7 @@
                                         <td colspan="2"><hr{xhtml}></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="warning">{warning_msg}</td>
+                                        <td colspan="2" class="glf-warning">{warning_msg}</td>
                                     </tr>
                                     <tr><td>&nbsp;</td></tr>
                                     <tr>

@@ -341,7 +341,7 @@ if (!empty ($url)) {
 }
 
 if ($failed_tests > 0) {
-    $display .= '<p class="warningsmall"><strong>Please fix the above issues before using your site!</strong></p>';
+    $display .= '<p class="glf-warning-small"><strong>Please fix the above issues before using your site!</strong></p>';
 
     DB_save ($_TABLES['vars'], 'name,value', "'security_check','0'");
 } else {

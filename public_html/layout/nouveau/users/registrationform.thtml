@@ -2,7 +2,7 @@
 <script type="text/javascript">
 <!--
 window.addEvent('domready',function() {
-    var myValidator = new fValidator("registration");
+    var myValidator = new FormValidator.Inline("registration", { scrollToErrorsOnSubmit:false });
 });
 -->
 </script>
@@ -12,17 +12,17 @@ window.addEvent('domready',function() {
   <div style="margin-bottom:10px;">{lang_instructions}</div>
   <div>
     <label for="username">{lang_username}:</label>
-    <input class="fValidate['required']" type="text" size="16" maxlength="32" id="username" name="username" value="{username}"{xhtml}>
+    <input class="required" type="text" size="16" maxlength="32" id="username" name="username" value="{username}"{xhtml}>
   </div>
   <div>
     <label for="email">{lang_email}:</label>
-    <input class="fValidate['required','email']" type="text" size="32" maxlength="96" id="email" name="email" value="{email}"{xhtml}>
+    <input class="required validate-email" type="text" size="32" maxlength="96" id="email" name="email" value="{email}"{xhtml}>
   </div>
   <div>
     <label for="email_conf">{lang_email_conf}:</label>
-    <input class="fValidate['required','email']" type="text" size="32" maxlength="96" id="email_conf" name="email_conf" value="{email_conf}"{xhtml}>
+    <input class="required validate-email']" type="text" size="32" maxlength="96" id="email_conf" name="email_conf" value="{email_conf}"{xhtml}>
   </div>
-  <div class="warning">{lang_warning}</div>
+  <div class="glf-warning">{lang_warning}</div>
   <div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
   <input type="hidden" name="mode" value="create"{xhtml}><br{xhtml}>
   <input type="submit" value="{lang_register}"{xhtml}><br{xhtml}>

@@ -30,7 +30,7 @@
             <td class="alignright" style="vertical-align:top;">{lang_excerpt}:</td>
             <td>
                 <textarea name="excerpt" style="width:100%" rows="8">{excerpt}</textarea><br{xhtml}>
-                <p class="warningsmall">{lang_excerpt_truncated}</p>
+                <p class="glf-warning-small">{lang_excerpt_truncated}</p>
             </td>
         </tr>
         <tr>

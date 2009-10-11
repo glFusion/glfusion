@@ -4089,7 +4089,7 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
     {
         if( !$list_only )
         {
-            $retval .= '<span class="warningsmall">' . $LANG01[123] . '</span>, ';
+            $retval .= '<span class="glf-warning-small">' . $LANG01[123] . '</span>, ';
         }
 
     }
@@ -4097,12 +4097,12 @@ function COM_allowedHTML( $permissions = 'story.edit', $list_only = false )
     {
         if( !$list_only )
         {
-            $retval .= '<span class="warningsmall">' . $LANG01[31] . ' ';
+            $retval .= '<span class="glf-warning-small">' . $LANG01[31] . ' ';
         }
 
         $allow_page_break = true;
     }
-    $retval = '<span class="warningsmall">' . $LANG01[31] . ' ';
+    $retval = '<span class="glf-warning-small">' . $LANG01[31] . ' ';
 
     $retval .= '[code], [raw]';
 
@@ -7674,7 +7674,6 @@ function js_out(){
         $_CONF['path_html'] . 'javascript/mootools/mootools-1.2.3.1-more.js',
         $_CONF['path_html'] . 'fckeditor/fckeditor.js',
         $_CONF['path_html'] . 'javascript/common.js',
-//      $_CONF['path_html'] . 'javascript/fValidator.js',
 //      $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js',
         $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js',
 

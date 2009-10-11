@@ -29,13 +29,13 @@
             <div class="notes">
                 <h4>{lang_password_help_title}</h4>
                 <p class="last">
-                    <span class="warningsmall">{lang_enter_current_password}</span><br{xhtml}><br{xhtml}>
+                    <span class="glf-warning-small">{lang_enter_current_password}</span><br{xhtml}><br{xhtml}>
                     {lang_password_help}
                 </p>
             </div>
             <table class="inputTable" border="0">
                 <tr>
-                    <td><label for="old_passwd" class="warningsmall">{lang_old_password}:</label></td>
+                    <td><label for="old_passwd" class="glf-warning-small">{lang_old_password}:</label></td>
                     <td><input type="password" id="old_passwd" name="old_passwd" size="32" maxlength="32" value=""{xhtml}></td>
                 </tr>
                 <tr>

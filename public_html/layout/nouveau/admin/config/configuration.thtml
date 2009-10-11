@@ -44,7 +44,7 @@ window.addEvent('domready', function() {
             <div class="notes">
              <h4>{fs_display}</h4>
              <p class="last">{fs_help}</p>
-             <span class="warningsmall">{fs_warning}</span>
+             <span class="glf-warning-small">{fs_warning}</span>
             </div>
             <!-- END notes -->
 			<div class="moofx-slider">

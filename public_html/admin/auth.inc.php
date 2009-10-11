@@ -118,7 +118,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
             .'<td><input type="password" name="passwd" size="16" ' . XHTML . '></td>'
             .'</tr>'.LB
             .'<tr>'.LB
-            .'<td colspan="2" align="center" class="warning">'.$LANG20[6].'<input type="hidden" name="warn" value="1"' . XHTML . '>'
+            .'<td colspan="2" align="center" class="glf-warning">'.$LANG20[6].'<input type="hidden" name="warn" value="1"' . XHTML . '>'
             .'<br' . XHTML . '><input type="submit" name="mode" value="'.$LANG20[7].'"' . XHTML . '></td>'.LB
             .'</tr>'.LB
             .'</table></form>';

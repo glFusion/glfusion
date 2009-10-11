@@ -3442,7 +3442,6 @@ $glfusionFiles['public_html/javascript/advanced_editor.js']=1;
 $glfusionFiles['public_html/javascript/blocks_fckeditor.js']=1;
 $glfusionFiles['public_html/javascript/common.js']=1;
 $glfusionFiles['public_html/javascript/configmanager.js']=1;
-$glfusionFiles['public_html/javascript/fValidator.js']=1;
 $glfusionFiles['public_html/javascript/index.html']=1;
 $glfusionFiles['public_html/javascript/pwd_strength.js']=1;
 $glfusionFiles['public_html/javascript/mootools/gl_moochronometer.js']=1;

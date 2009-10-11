@@ -18,6 +18,6 @@
     </table>
     {hidden_input_fields}
     <input type="hidden" name="{gltoken_name}" value="{gltoken}"{xhtml}>
-    <p class="warningsmall aligncenter">{lang_may_take_a_while}</p>
+    <p class="glf-warning-small aligncenter">{lang_may_take_a_while}</p>
 </form>
 {# end {templatelocation} #}

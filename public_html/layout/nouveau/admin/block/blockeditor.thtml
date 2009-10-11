@@ -87,7 +87,7 @@
                                         <tr>
                                             <td class="alignright" style="vertical-align:top">{lang_blockcontent}:</td>
                                             <td><textarea name="content" cols="45" rows="12" style="width:100%;">{block_content}</textarea><br{xhtml}>
-                                                <span class="warningsmall">{lang_allowed_html}</span></td>
+                                                <span class="glf-warning-small">{lang_allowed_html}</span></td>
                                         </tr>
                                         <tr>
                                             <td class="alignright">{lang_autotags}:</td>

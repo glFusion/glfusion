@@ -277,8 +277,8 @@ div.glfform form div.error {
 
 div.glfform form div.error p.error,
 a:active,
-.warning,
-.warningsmall {
+.glf-warning,
+.glf-warning-small {
 	color:#ff0000;
 }
 /***************************************************** BEGIN #DAE0ED ***************/
