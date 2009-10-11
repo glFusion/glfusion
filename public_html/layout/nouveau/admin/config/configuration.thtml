@@ -1,7 +1,21 @@
 {# begin {templatelocation} #}
 <script type="text/javascript" src="{site_url}/javascript/configmanager.js"></script>
 <script type="text/javascript">
-	Window.onDomReady(function(){ new Accordion($$('.moofx-toggler'), $$('div.moofx-slider'), {onActive: function(toggler, i) { toggler.addClass('moofx-toggler-down'); },onBackground: function(toggler, i) { toggler.removeClass('moofx-toggler-down'); },duration: 300,opacity: false, alwaysHide:true, show: 0}); });
+window.addEvent('domready', function() {
+	new Accordion($$('.moofx-toggler'), $$('div.moofx-slider'), {
+		onActive: function(toggler, i) {
+			toggler.addClass('moofx-toggler-down');
+		},
+		
+		onBackground: function(toggler, i) {
+			toggler.removeClass('moofx-toggler-down');
+		},
+		duration: 300,
+		opacity: false,
+		alwaysHide:true,
+		show: 0
+	});
+});
 </script>
 <div id="configuration">
 <form method="post" action="configuration.php" name="group">

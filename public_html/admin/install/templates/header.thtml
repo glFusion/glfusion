@@ -5,7 +5,20 @@
 <link rel="stylesheet" type="text/css" href="layout/style.css?ver=20090304" />
 <script type="text/javascript" src="layout/mootools-release-1.11.packed.js"></script>
 <script type="text/javascript">
-	Window.onDomReady(function(){ new Accordion($$('h1.moofx-toggler'), $$('div.moofx-slider'), {onActive: function(toggler, i) { toggler.addClass('moofx-toggler-down'); },onBackground: function(toggler, i) { toggler.removeClass('moofx-toggler-down'); },duration: 300,opacity: false, alwaysHide:true, show: 1}); });
+window.addEvent('domready', function() {
+        new Accordion($$('h1.moofx-toggler'), $$('div.moofx-slider'), {
+                onActive: function(toggler, i) {
+                        toggler.addClass('moofx-toggler-down');
+                },
+                onBackground: function(toggler, i) {
+                        toggler.removeClass('moofx-toggler-down');
+                },
+                duration: 300,
+                opacity: false,
+                alwaysHide:true,
+                show: 1
+        });
+});
 </script>
 <meta name="robots" content="noindex,nofollow" />
 <title>{page_title}</title>
