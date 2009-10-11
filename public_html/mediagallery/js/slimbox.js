@@ -82,7 +82,8 @@ var Lightbox = {
 				this.anchors.push(el);
 			}
 		}, this);
-		this.eventKeyDown = this.keyboardListener.bindAsEventListener(this);
+
+// 1.11 this.eventKeyDown = this.keyboardListener.bindAsEventlistener(this);
 		this.eventPosition = this.position.bind(this);
 
 		this.overlay = new Element('div', {'id': 'lbOverlay'}).injectInside(document.body);
@@ -103,10 +104,14 @@ var Lightbox = {
 
 		var nextEffect = this.nextEffect.bind(this);
 		this.fx = {
-			overlay: this.overlay.effect('opacity', {duration: 500}).hide(),
-			resize: this.center.effects($extend({duration: this.options.resizeDuration, onComplete: nextEffect}, this.options.resizeTransition ? {transition: this.options.resizeTransition} : {})),
-			image: this.image.effect('opacity', {duration: 500, onComplete: nextEffect}),
-			bottom: this.bottom.effect('margin-top', {duration: 400, onComplete: nextEffect})
+// 1.11		overlay: this.overlay.effect('opacity', {duration: 500}).hide(),
+            overlay: new Fx.Tween(this.overlay,{property : 'opacity', duration: 500}),
+// 1.11		resize: this.center.effects($extend({duration: this.options.resizeDuration, onComplete: nextEffect}, this.options.resizeTransition ? {transition: this.options.resizeTransition} : {})),
+            resize: new Fx.Morph(this.center,$extend({duration: this.options.resizeDuration, onComplete: nextEffect }, this.options.resizeTransition ? {transition: this.options.resizeTransition} : {})),
+// 1.11		image: this.image.effect('opacity', {duration: 500, onComplete: nextEffect}),
+            image: new Fx.Tween(this.image,{property: 'opacity', duration: 500, transition: Fx.Transitions.Linear, onComplete: nextEffect }),
+// 1.11		bottom: this.bottom.effect('margin-top', {duration: 400, onComplete: nextEffect})
+            bottom: new Fx.Tween(this.bottom,{property: 'margin-top', duration: 400, onComplete: nextEffect})
 		};
 
 		this.preloadPrev = new Image();
@@ -196,17 +201,26 @@ var Lightbox = {
 		});
 		var fn = open ? 'addEvent' : 'removeEvent';
 		window[fn]('scroll', this.eventPosition)[fn]('resize', this.eventPosition);
-		document[fn]('keydown', this.eventKeyDown);
+// 1.1
+//      document[fn]('keydown', this.eventKeyDown);
+// 1.1
+// 1.2
+		$(window.document)[fn]('keydown',function(e){
+			if(e.key == 'right' || e.key == 'space'){ this.next(e); }
+			else if(e.key == 'left'){ this.previous(e); }
+			else if(e.key == 'esc'){ this.close(e); }
+		}.bindWithEvent(this));
+//1.2
 		this.step = 0;
 	},
 
-	keyboardListener: function(event){
-		switch (event.keyCode){
-			case 27: case 88: case 67: this.close(); break;
-			case 37: case 80: this.previous(); break;
-			case 39: case 78: this.next();
-		}
-	},
+//	keyboardListener: function(event){
+//		switch (event.keyCode){
+//			case 27: case 88: case 67: this.close(); break;
+//			case 37: case 80: this.previous(); break;
+//			case 39: case 78: this.next();
+//		}
+//	},
 
 	previous: function(){
 	    //#malaa
@@ -230,7 +244,8 @@ var Lightbox = {
 		this.activeImage = imageNum;
 
 		this.bottomContainer.style.display = this.prevLink.style.display = this.nextLink.style.display = 'none';
-		this.fx.image.hide();
+//		this.fx.image.hide();
+        this.fx.image.set(0);
 		this.center.className = 'lbLoading';
 
 		this.preload = new Image();
@@ -250,8 +265,10 @@ var Lightbox = {
 			this.image.style.width = this.bottom.style.width = this.preload.width+'px';
 			this.image.style.height = this.prevLink.style.height = this.nextLink.style.height = this.preload.height+'px';
 
-			this.caption.setHTML(this.images[this.activeImage][1] || '');
-			this.number.setHTML((!this.options.showCounter || (this.images.length == 1)) ? '' : 'Image '+(this.activeImage+1)+' of '+this.images.length);
+//1.11      this.caption.setHTML(this.images[this.activeImage][1] || '');
+			this.caption.set('html', this.images[this.activeImage][1] || '');
+//1.11      this.number.setHTML((!this.options.showCounter || (this.images.length == 1)) ? '' : 'Image '+(this.activeImage+1)+' of '+this.images.length);
+			this.number.set('html', (!this.options.showCounter || (this.images.length == 1)) ? '' : 'Image '+(this.activeImage+1)+' of '+this.images.length);
 
 			if (this.activeImage) this.preloadPrev.src = this.images[this.activeImage-1][0];
 			if (this.activeImage != (this.images.length - 1)) this.preloadNext.src = this.images[this.activeImage+1][0];
@@ -289,10 +306,12 @@ var Lightbox = {
 		if (this.step < 0) return;
 		this.step = -1;
 		if (this.preload){
-			this.preload.onload = Class.empty;
+// 1.11     this.preload.onload = Class.empty;
+			this.preload.onload = $empty;
 			this.preload = null;
 		}
-		for (var f in this.fx) this.fx[f].stop();
+    	for (var f in this.fx) this.fx[f].stop;
+
 		this.center.style.display = this.bottomContainer.style.display = 'none';
 		this.fx.overlay.chain(this.setup.pass(false, this)).start(0);
 		//#malaa: clear timer
