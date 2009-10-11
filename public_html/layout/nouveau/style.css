@@ -2536,26 +2536,38 @@ display:block;
 position:absolute;
 }
 
-/* start gl_mootip css */
-.tool-tip {
-color:#fff;
-width:139px;
-z-index:13000;
+/* gl_mootip css */
+
+.tip-top {              /* top of the tip */
+    color: #fff;
+    width: 139px;
+    z-index: 13000;
+}
+.tip-title {            /* title of tip */
+    width: 123px;
+    font-weight: 700;
+    font-size: 11px;
+    margin: 0;
+    color: #679EF1;
+    padding: 8px 8px 4px;
+    background: url(layout/nouveau/images/gl_mootip_bg.png) top left;
 }
 
-.tool-title {
-font-weight:700;
-font-size:11px;
-color:#679EF1;
-background:url(layout/nouveau/images/gl_mootip_bg.png) top left;
-margin:0;
-padding:8px 8px 4px;
+.tip-text {             /* text in tip */
+    width: 123px;
+    font-size: 11px;
+    padding: 4px 8px 8px;
+    background: url(layout/nouveau/images/gl_mootip_bg.png) bottom right;
+    color:#fff;
 }
-
-.tool-text {
-font-size:11px;
-background:url(layout/nouveau/images/gl_mootip_bg.png) bottom right;
-padding:4px 8px 8px;
+.tip-text A {           /* link text in tip */
+    color:#069;
+}
+.tip-loading {          /* loading animation */
+    background: url(/layout/nouveau/images/ajax_load.gif) center center no-repeat;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
 }
 
 /* mootools FormValidator css */
