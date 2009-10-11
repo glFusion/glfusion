@@ -7674,7 +7674,7 @@ function js_out(){
         $_CONF['path_html'] . 'javascript/mootools/mootools-1.2.3.1-more.js',
         $_CONF['path_html'] . 'fckeditor/fckeditor.js',
         $_CONF['path_html'] . 'javascript/common.js',
-//      $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js',
+        $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js',
         $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js',
 
     );
