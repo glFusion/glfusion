@@ -511,11 +511,7 @@ $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, 
 		</p>
 	</div>
 </div>
-<script type=\"text/javascript\">
-	var fx = new Fx.Styles(\'msgbox\', { duration: 3000 });
-	fx.addEvent(\'onComplete\',function () { $(\'msgbox\').setStyle(\'display\', \'none\'); });
-	fx.start.delay(5000, fx, { \'opacity\' : 0 });
-</script>', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 0, 0, 0, 'html', 0) ";
+<script type=\"text/javascript\" src=\"/javascript/mootools/gl_moomorph.js\"></script>', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 0, 0, 0, 'html', 0) ";
 
 // Blocks Default Data
 $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (19,1,'moorotator','normal','Visit glFusion','all',0,'<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moorotator-block.js\"></script>
