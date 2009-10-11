@@ -280,8 +280,8 @@ function plugin_getheaderjs_mediagallery() {
     if ( $_MG_CONF['disable_lightbox'] != true ) {
         $js[] = $_MG_CONF['path_html'] . 'js/slimbox.js';
     }
-    $js[] = $_MG_CONF['path_html'] . 'js/rating.js';
-    $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
+//  $js[] = $_MG_CONF['path_html'] . 'js/rating.js';
+//  $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
 
 	return ($js);
 }
