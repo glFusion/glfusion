@@ -1,5 +1,9 @@
 glFusion ChangeLog
 
+v1.2
+----------
+- Fixed issue where gl_moomorph wasn't consistently called (Eric)
+
 v1.1.6.pl4
 ----------
 - Setting Admin attribute in group editor did not work.
