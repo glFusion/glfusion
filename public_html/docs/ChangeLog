@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2
 ----------
+- Added Mootools core and more files to install directory (Eric)
 - Changed sizingMethod to properly scale pngfix images (Eric)
 - Fixed Windows site link in gl_mooie6warning script (Eric)
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
