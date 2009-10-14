@@ -62,7 +62,7 @@ class outputHandler {
     private $_errorlog_fn = NULL;
     private $_what = '';
     private $_custom = array();
-    private $_charset = 'iso-8859-1';
+    private $_charset = 'utf-8';
     private $_topic = '';
     private $_headercode = '';
     private $_navigationBlocks = '';
@@ -185,7 +185,7 @@ class outputHandler {
 	 */
     public function addLink($rel, $href, $type = '', $priority = HEADER_PRIO_NORMAL, $attrs = array())
     {
-        $link = '<link rel="' . $rel .'" href="' . htmlspecialchars($href) . '"';
+        $link = '<link rel="' . $rel .'" href="' . htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
         if (!empty($type)) {
             $link .= ' type="' . $type . '"';
         }
@@ -217,7 +217,7 @@ class outputHandler {
 	 */
     public function addLinkStyle($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/css', $attrs = array())
     {
-        $link = '<link rel="stylesheet" type="' . $mime . '" href="' . htmlspecialchars($href) . '"';
+        $link = '<link rel="stylesheet" type="' . $mime . '" href="' . htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
         if (is_array($attrs)) {
             foreach ($attrs as $k => $v) {
                 $link .= ' ' . $k . '="' . $v . '"';
@@ -245,7 +245,7 @@ class outputHandler {
 	 */
     public function addLinkScript($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript')
     {
-        $link = '<script type="' . $mime . '" src="' . htmlspecialchars($href) . '"';
+        $link = '<script type="' . $mime . '" src="' . htmlspecialchars($href,ENT_QUOTES, COM_getEncodingt()) . '"';
         $link .= "></script>" . LB;
 
         $this->_header['script'][$priority][] = $link;
@@ -636,8 +636,8 @@ class outputHandler {
     /*
      * renders and displays the full HTML output to the browser
      */
-    public function displayPage() {
-        global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_DIRECTION,$_PAGE_TIMER,
+    public function displayPage($buffer = 0) {
+        global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG01, $LANG_DIRECTION,$_PAGE_TIMER,
                $_ST_CONF, $LANG12;
 
         $this->pageTemplate->set_file( array(
@@ -671,6 +671,14 @@ class outputHandler {
             'rel_links' => $this->_renderHeader('raw'),
         ));
 
+        if ( $_SYSTEM['use_direct_style_js'] ) {
+            $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
+            $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js?t='.$_CONF['theme'];
+        } else {
+            $style_cache_url = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
+            $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
+        }
+
         $this->pageTemplate->set_var(array(
             'site_name'         => $_CONF['site_name'],
             'background_image'  => $this->getImage('bg.png'),
@@ -679,6 +687,8 @@ class outputHandler {
             'datetime'          => $this->_curtime[0],
             'theme'             => $_CONF['theme'],
             'charset'           => $this->_charset,
+            'style_cache_url'   => $style_cache_url,
+            'js_cache_url'      => $js_cache_url,
             'plg_headercode'    => $this->_headercode . PLG_getHeaderCode(),
             'num_search_results'=> $_CONF['num_search_results'],
             'lang_login'        => $LANG01[58],
@@ -702,6 +712,29 @@ class outputHandler {
 
         $this->pageTemplate->set_var( 'execution_time', $exectime );
         $this->pageTemplate->set_var( 'execution_textandtime', $exectext );
+
+// build general / error messages content
+
+        $messageHandle =& messageHandler::getInstance();
+
+        if ( $messageHandle->errorMessageCount() > 0 ) {
+            $errorMessages = array();
+            $errorMessage = $messageHandle->getErrorMessages();
+            foreach ($errorMessage AS $type => $msg ) {
+                $errorString .= '<strong>'.$type.'</strong>: ' . $msg . '<br />';
+            }
+            $this->pageTemplate->set_var('error_message',$errorString);
+        }
+
+        if ( $messageHandle->generalMessageCount() > 0 ) {
+            $generalMessages = array();
+            $generalMessages = $messageHandle->getGeneralMessages();
+            foreach ($generalMessages AS $type => $msg ) {
+                $generalString .= '<strong>'.$type.'</strong>: ' . $msg . '<br />';
+            }
+            $this->pageTemplate->set_var('general_message',$generalString);
+        }
+
 
 // builds the content
 
@@ -790,6 +823,34 @@ class outputHandler {
         return str_replace('?' . $query_string,$newArgs,$url);
     }
 
+
+
+    public function page404()
+    {
+        global $LANG_404;
+
+        $this->setPageTitle($LANG_404[1]);
+
+        $this->addContent(COM_startBlock ($LANG_404[1]));
+
+        if (isset ($_SERVER['SCRIPT_URI'])) {
+            $url = strip_tags ($_SERVER['SCRIPT_URI']);
+        } else {
+            $pos = strpos ($_SERVER['REQUEST_URI'], '?');
+            if ($pos === false) {
+                $request = $_SERVER['REQUEST_URI'];
+            } else {
+                $request = substr ($_SERVER['REQUEST_URI'], 0, $pos);
+            }
+            $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
+        }
+        $this->addContent(sprintf ($LANG_404[2], $url));
+        $this->addContent($LANG_404[3]);
+        $this->addContent(COM_endBlock ());
+        $this->displayPage();
+    }
+
+
     private function _generateHeader()
     {
         global $_CONF, $_TABLES, $_USER, $LANG01, $LANG_DIRECTION,$_PAGE_TIMER,
@@ -806,11 +867,11 @@ class outputHandler {
         if( empty($topic) ) {
             if( empty( $sid ) && $_CONF['url_rewrite'] &&
                     ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
-                COM_setArgNames( array( 'story', 'mode' ));
-                $sid = COM_applyFilter( COM_getArgument( 'story' ));
+                $inputHandler->setArgNames( array( 'story', 'mode' ));
+                $sid = $inputHandler->getVar('strict','story','get','');
             }
             if( !empty( $sid )) {
-                $this->_topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='$sid'" );
+                $this->_topic = DB_getItem( $_TABLES['stories'], 'tid', "sid='".$inputHandler->prepareForDB($sid)."'" );
             }
         } else {
             $this->_topic = $topic;
@@ -822,7 +883,7 @@ class outputHandler {
             $sql = 'SELECT format, filename, title, language FROM '
                  . $_TABLES['syndication'] . " WHERE (header_tid = 'all')";
             if( !empty( $this->_topic )) {
-                $sql .= " OR (header_tid = '" . addslashes( $this->_topic ) . "')";
+                $sql .= " OR (header_tid = '" . $inputHandler->prepareForDB( $this->_topic ) . "')";
             }
             $result = DB_query( $sql );
             $numRows = DB_numRows( $result );
@@ -871,8 +932,7 @@ class outputHandler {
             if( empty( $this->_topic )) {
                 $this->_pagetitle = $_CONF['site_slogan'];
             } else {
-                $this->_pagetitle = stripslashes(DB_getItem( $_TABLES['topics'], 'topic',
-                                                       "tid = '$this->_topic'" ));
+                $this->_pagetitle = DB_getItem( $_TABLES['topics'], 'topic',"tid = '".$inputHandler->prepareForDB($this->_topic)."'" );
             }
         }
         if( !empty( $this->_pagetitle )) {
@@ -949,8 +1009,6 @@ class outputHandler {
             $imgInfo = @getimagesize($_CONF['path_html'] . '/images/' . $_ST_CONF['logo_name']);
             $dimension = $imgInfo[3];
 
-            $L->set_var( 'xhtml', XHTML);
-            $L->set_var( 'site_url', $_CONF['site_url'] );
             $L->set_var( 'layout_url', $_CONF['layout_url'] );
             $L->set_var( 'site_name', $_CONF['site_name'] );
             $site_logo = $_CONF['site_url'] . '/images/' . $_ST_CONF['logo_name'];
@@ -973,10 +1031,7 @@ class outputHandler {
             $L->set_file( array(
                 'logo'          => 'logo-text.thtml',
             ));
-            $L->set_var( 'xhtml',XHTML);
             $L->set_var( 'site_name', $_CONF['site_name'] );
-            $L->set_var( 'site_url', $_CONF['site_url'] );
-            $L->set_var( 'layout_url', $_CONF['layout_url'] );
             if ($_ST_CONF['display_site_slogan']) {
                 $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
             }

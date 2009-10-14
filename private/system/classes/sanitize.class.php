@@ -251,8 +251,8 @@ class sanitize
             case 'PLAIN' :
             case 'TEXT'  :
             case 'PLAINTEXT' :
-                $data = strip_tags($data);
-                return @htmlspecialchars ($data,ENT_QUOTES, COM_getCharset());
+//                $data = strip_tags($data);
+                return @htmlspecialchars ($data,ENT_QUOTES, COM_getEncodingt());
                 break;
             case 'HTML' :
                 $htmlFilter =& htmlFilter::getInstance();
@@ -289,7 +289,7 @@ class sanitize
                 return $this->_sanitizeFilename($data,false);
                 break;
             default :
-                return (@htmlspecialchars ($data,ENT_QUOTES, COM_getCharset()));
+                return (@htmlspecialchars ($data,ENT_QUOTES, COM_getEncodingt()));
                 break;
         }
     }
