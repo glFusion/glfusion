@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.6.pl4
 ----------
+- Documentation URL not set properly if glFusion installed in a sub-directory
+- Search results for comments did not honor URL_rewrite setting
 - Setting Admin attribute in group editor did not work.
 - Static Pages did not support 'all' as location of centerblock
 - Plugin installer would return wrong error message when no file
