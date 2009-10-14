@@ -35,7 +35,7 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('lib-common.php');
+require_once 'lib-common.php';
 
 /**
 * Mails the contents of the contact form to that user
@@ -57,7 +57,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
                              ($_CONF['emailuserloginrequired'] == 1))
                          && ($uid != 2)) {
-        return COM_refresh($_CONF['site_url'] . '/index.php?msg=85');
+        IO_redirect($_CONF['site_url'] . '/index.php?msg=85');
     }
 
     // check for correct 'to' user preferences
@@ -70,13 +70,13 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
     }
     if ((($P['emailfromadmin'] != 1) && $isAdmin) ||
         (($P['emailfromuser'] != 1) && !$isAdmin)) {
-        return COM_refresh ($_CONF['site_url'] . '/index.php?msg=85');
+        IO_redirect ($_CONF['site_url'] . '/index.php?msg=85');
     }
 
     // check mail speedlimit
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'mail');
     if (COM_checkSpeedlimit ('mail') > 0) {
-        return COM_refresh ($_CONF['site_url'] . '/index.php?msg=85');
+        IO_redirect ($_CONF['site_url'] . '/index.php?msg=85');
     }
 
     if (!empty($author) && !empty($subject) && !empty($message)) {
@@ -108,12 +108,17 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 
             $msg = PLG_itemPreSave ('contact', $message);
             if (!empty ($msg)) {
+                IO_addMessageText( 'ERROR', 'contact', $msg );
+                IO_addContent(contactform($uid,$subject,$message));
+/*
                 $retval .= COM_siteHeader ('menu', '')
                         . COM_errorLog ($msg, 2)
                         . contactform ($uid, $subject, $message)
                         . COM_siteFooter ();
 
                 return $retval;
+*/
+                IO_displayPage();
             }
 
             $subject = strip_tags ($subject);

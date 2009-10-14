@@ -35,8 +35,8 @@ require_once 'lib-common.php';
 
 // once received, we're handling pingbacks like trackbacks,
 // so we use the trackback library even when trackback may be disabled
-require_once $_CONF['path_system'] . 'lib-pingback.php';
-require_once $_CONF['path_system'] . 'lib-trackback.php';
+USES_lib_pingback();
+USES_lib_trackback();
 
 // PEAR class to handle XML-RPC
 require_once 'XML/RPC/Server.php';
@@ -236,7 +236,7 @@ function PNB_getType ($url)
     } else {
         $parts = explode ('/', $part);
         if (strpos ($parts[0], '?') === false) {
-            $plugin = addslashes ($parts[0]);
+            $plugin = IO_prepareForDB ($parts[0]);
             if (DB_getItem ($_TABLES['plugins'], 'pi_enabled',
                             "pi_name = '$plugin'") == 1) {
                 $retval = $parts[0];

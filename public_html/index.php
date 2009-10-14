@@ -48,14 +48,15 @@ USES_lib_story();
 $newstories = false;
 $displayall = false;
 $microsummary = false;
-if (isset ($_GET['display'])) {
-    if (($_GET['display'] == 'new') && (empty ($topic))) {
-        $newstories = true;
-    } else if (($_GET['display'] == 'all') && (empty ($topic))) {
-        $displayall = true;
-    } else if ($_GET['display'] == 'microsummary') {
-        $microsummary = true;
-    }
+
+$mDisplay = IO_getVar('strict','display','get');
+
+if (($mDisplay == 'new') && (empty ($topic))) {
+    $newstories = true;
+} else if (($mDisplay  == 'all') && (empty ($topic))) {
+    $displayall = true;
+} else if ($mDisplay  == 'microsummary') {
+    $microsummary = true;
 }
 
 // Retrieve the archive topic - currently only one supported
@@ -119,16 +120,10 @@ if( $microsummary )
     die($pagetitle);
 }
 
-
-$page = 1;
-if (isset ($_GET['page'])) {
-    $page = intval(COM_applyFilter ($_GET['page'], true));
-    if ($page == 0) {
-        $page = 1;
-    }
+$page = IO_getVar('int','page','get',1);
+if ($page == 0) {
+    $page = 1;
 }
-
-$display = '';
 
 if (!$newstories && !$displayall) {
     // give plugins a chance to replace this page entirely
@@ -139,25 +134,18 @@ if (!$newstories && !$displayall) {
     }
 }
 
-if($topic)
-{
-    $header = '<link rel="microsummary" href="' . $_CONF['site_url']
-            . '/index.php?display=microsummary&amp;topic=' . urlencode($topic)
-            . '" title="Microsummary"' . XHTML . '>';
+if ( $topic ) {
+    IO_addLink('microsummary',$_CONF['site_url'].'/index.php?display=microsummary&amp;topic=' . urlencode($topic),'','',array('title'=>'Microsummary'));
 } else {
-    $header = '<link rel="microsummary" href="' . $_CONF['site_url']
-            . '/index.php?display=microsummary" title="Microsummary"' . XHTML . '>';
+    IO_addLink('microsummary',$_CONF['site_url'].'/index.php?display=microsummary','','',array('title'=>'Microsummary'));
 }
-$display .= COM_siteHeader('menu', '', $header);
 
-$display .= glfusion_SecurityCheck();
+IO_addContent(glfusion_SecurityCheck());
 
-if (isset ($_GET['msg'])) {
-    $plugin = '';
-    if (isset ($_GET['plugin'])) {
-        $plugin = COM_applyFilter ($_GET['plugin']);
-    }
-    $display .= COM_showMessage (COM_applyFilter ($_GET['msg'], true), $plugin);
+$msg    = IO_getVar('integer','msg','get','');
+$plugin = IO_getVar('strict','plugin','get','');
+if ($msg !== '') {
+    IO_addMessage($msg, $plugin);
 }
 
 
@@ -165,7 +153,7 @@ if (isset ($_GET['msg'])) {
 // Requires a plugin to have a function called plugin_centerblock_<plugin_name>
 $displayBlock = PLG_showCenterblock (1, $page, $topic); // top blocks
 if (!empty ($displayBlock)) {
-    $display .= $displayBlock;
+    IO_addContent($displayBlock);
     // Check if theme has added the template which allows the centerblock
     // to span the top over the rightblocks
     if (file_exists($_CONF['path_layout'] . 'topcenterblock-span.thtml')) {
@@ -176,7 +164,7 @@ if (!empty ($displayBlock)) {
             $topspan->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
             $topspan->set_var( 'layout_url', $_CONF['layout_url'] );
             $topspan->parse ('output', 'topspan');
-            $display .= $topspan->finish ($topspan->get_var('output'));
+            IO_addContent($topspan->finish ($topspan->get_var('output')));
             $GLOBALS['centerspan'] = true;
     }
 }
@@ -334,22 +322,22 @@ if ( $A = DB_fetchArray( $result ) ) {
 
     // display first article
     if ($story->DisplayElements('featured') == 1) {
-        $display .= STORY_renderArticle ($story, 'y');
-        $display .= PLG_showCenterblock (2, $page, $topic);
+        IO_addContent(STORY_renderArticle ($story, 'y'));
+        IO_addContent(PLG_showCenterblock (2, $page, $topic));
     } else {
-        $display .= PLG_showCenterblock (2, $page, $topic);
-        $display .= STORY_renderArticle ($story, 'y');
+        IO_addContent(PLG_showCenterblock (2, $page, $topic));
+        IO_addContent(STORY_renderArticle ($story, 'y'));
     }
 
     // get remaining stories
     while ($A = DB_fetchArray ($result)) {
         $story = new Story();
         $story->loadFromArray($A);
-        $display .= STORY_renderArticle ($story, 'y');
+        IO_addContent( STORY_renderArticle ($story, 'y') );
     }
 
     // get plugin center blocks that follow articles
-    $display .= PLG_showCenterblock (3, $page, $topic); // bottom blocks
+    IO_addContent( PLG_showCenterblock (3, $page, $topic) ); // bottom blocks
 
     // Print Google-like paging navigation
     if (!isset ($_CONF['hide_main_page_navigation']) ||
@@ -362,28 +350,24 @@ if ( $A = DB_fetchArray( $result ) ) {
         } else {
             $base_url = $_CONF['site_url'] . '/index.php?topic=' . $topic;
         }
-        $display .= COM_printPageNavigation ($base_url, $page, $num_pages);
+        IO_addContent(COM_printPageNavigation ($base_url, $page, $num_pages));
     }
 } else { // no stories to display
-    $display .= PLG_showCenterblock (2, $page, $topic);
+    IO_addContent(PLG_showCenterblock (2, $page, $topic));
     if (!isset ($_CONF['hide_no_news_msg']) ||
             ($_CONF['hide_no_news_msg'] == 0)) {
-        $display .= COM_startBlock ($LANG05[1], '',
-                    COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2];
+        IO_addContent( COM_startBlock ($LANG05[1], '',
+                    COM_getBlockTemplate ('_msg_block', 'header')) . $LANG05[2]);
         if (!empty ($topic)) {
             $topicname = DB_getItem ($_TABLES['topics'], 'topic',
                                      "tid = '".addslashes($topic)."'");
-            $display .= sprintf ($LANG05[3], $topicname);
+            IO_addContent( sprintf ($LANG05[3], $topicname) );
         }
-        $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        IO_addContent( COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer')) );
     }
 
-    $display .= PLG_showCenterblock (3, $page, $topic); // bottom blocks
+    IO_addContent( PLG_showCenterblock (3, $page, $topic)); // bottom blocks
 }
 
-$display .= COM_siteFooter (true); // The true value enables right hand blocks.
-
-// Output page
-echo $display;
-
+IO_displayPage();
 ?>

@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.2.0.svn');
 }
 
-define('PATCHLEVEL','.pl0');
+define('PATCHLEVEL','');
 
 //define('DEMO_MODE',true);
 
@@ -82,18 +82,8 @@ $_COM_VERBOSE = false;
   * Must make sure that the function hasn't been disabled before calling it.
   *
   */
-if( function_exists('set_error_handler') )
-{
-    if( PHP_VERSION >= 5 )
-    {
-        /* Tell the error handler to use the default error reporting options.
-         * you may like to change this to use it in more/less cases, if so,
-         * just use the syntax used in the call to error_reporting() above.
-         */
-        $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
-    } else {
-        $defaultErrorHandler = set_error_handler('COM_handleError');
-    }
+if( function_exists('set_error_handler') ) {
+    $defaultErrorHandler = set_error_handler('COM_handleError', error_reporting());
 }
 
 /**
@@ -125,6 +115,9 @@ $config->initConfig();
 
 $_CONF = $config->get_config('Core');
 
+require_once $_CONF['path_system'].'classes/message.class.php';
+$messageHandle =& messageHandler::getInstance();
+
 // Before we do anything else, check to ensure site is enabled
 
 if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
@@ -145,7 +138,14 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
     }
     exit;
 }
+/*
+ * Setup the input handler
+ */
+require_once $_CONF['path_system'] . 'classes/htmlfilter.class.php';
+require_once $_CONF['path_system'] . 'classes/sanitize.class.php';
+$inputHandler =& sanitize::getInstance();
 
+require_once $_CONF['path_system'] . 'lib-io.php';
 
 // timezone hack - set the webserver's timezone
 if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
@@ -177,20 +177,6 @@ if( !$_CONF['have_pear'] ) {
         COM_errorLog( 'set_include_path failed - there may be problems using the PEAR classes.', 1);
     }
 }
-
-
-if( !function_exists( 'file_put_contents' )) {
-    require_once 'PHP/Compat.php';
-
-    PHP_Compat::loadFunction( 'file_put_contents' );
-}
-
-if( !function_exists( 'stripos' )) {
-    require_once 'PHP/Compat.php';
-
-    PHP_Compat::loadFunction( 'stripos' );
-}
-
 
 /**
 * Include page time -- used to time how fast each page was created
@@ -371,6 +357,13 @@ elseif (file_exists($_CONF['path_layout'] . 'functions.php')) {
 if (!isset($themeAPI) ) {
     $themeAPI = 1;
 }
+
+/**
+* Initialize the output Handler
+*/
+require_once $_CONF['path_system'] . 'classes/output.class.php';
+$pageHandle = new outputHandler();
+$pageHandle->setRewriteEnabled($_CONF['url_rewrite']);
 
 // ensure XHTML constant is defined to avoid problems elsewhere
 
@@ -1060,6 +1053,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG01, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $theme_what, $theme_pagetitle,
            $theme_headercode, $theme_layout,$stMenu,$themeAPI;
+
 
     if ( $themeAPI == 1 ) {
         require_once $_CONF['path_system'] . 'lib-compatibility.php';
@@ -5558,6 +5552,25 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
     DB_delete($_TABLES['speedlimit'], array('type', 'ipaddress'), array($type, $property));
 }
 
+function COM_SpeedLimitError($type,$seconds,$wait)
+{
+    global $_CONF;
+
+    $template = new Template( $_CONF['path_layout'] );
+    $template->set_file( array(
+        'warning'        => 'speedlimit_warning.thtml',
+    ));
+    $template->set_var('type',$type);
+    $template->set_var('seconds',$seconds);
+    $template->set_var('wait',$wait);
+
+    $template->parse ('output', 'warning');
+    $retval = $template->finish ($template->get_var ('output'));
+
+    IO_displayError($retval);
+}
+
+
 /**
 * Wrapper function for URL class so as to not confuse people as this will
 * eventually get used all over the place
@@ -5570,9 +5583,9 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
 
 function COM_buildURL( $url )
 {
-    global $_URL;
+    global $pageHandle;
 
-    return $_URL->buildURL( $url );
+    return $pageHandle->buildURL($url);
 }
 
 /**
@@ -7395,9 +7408,9 @@ function USES_lib_story() {
     global $_CONF;
     require_once $_CONF['path_system'] . 'lib-story.php';
 }
-function USES_lib_trackbacks() {
+function USES_lib_trackback() {
     global $_CONF;
-    require_once $_CONF['path_system'] . 'lib-trackbacks.php';
+    require_once $_CONF['path_system'] . 'lib-trackback.php';
 }
 function USES_lib_user() {
     global $_CONF;

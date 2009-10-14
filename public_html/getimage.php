@@ -59,14 +59,9 @@ $downloader->setAllowedExtensions(array('gif' => 'image/gif',
                                        )
                                  );
 
-$mode = '';
-if (isset($_GET['mode'])) {
-    $mode = $_GET['mode'];
-}
-$image = '';
-if (isset($_GET['image'])) {
-    $image = COM_applyFilter ($_GET['image']);
-}
+$mode = IO_getVar('strict','mode',array('get'),'');
+$image = IO_getVar('strict','image','get','');
+
 if (strstr($image, '..')) {
     // Can you believe this, some jackass tried to relative pathing to access
     // files they shouldn't have access to?
