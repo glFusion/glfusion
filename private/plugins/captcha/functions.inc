@@ -88,8 +88,10 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
         list( $rc, $msg )  = CAPTCHA_checkInput( 'comment',$str );
         if ( $rc == 1 )
             return 0;
-        else
+        else {
+            IO_addMessageText(ERROR,'CAPTCHA','The CAPTCHA test failed - please try again...');
             return 1;
+        }
     }
     return 0;
 }
