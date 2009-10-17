@@ -104,7 +104,7 @@ function plugin_autouninstall_bad_behavior2 ()
         /* give the full name of the block, including 'phpblock_', etc */
         'php_blocks' => array(),
         /* give all vars with their name */
-        'vars'=> array()
+        'vars'=> array('bb2_installed')
     );
     return $out;
 }

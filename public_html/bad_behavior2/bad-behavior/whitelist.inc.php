@@ -40,6 +40,21 @@ function bb2_whitelist($package)
 
 	// DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER!
 
+	// Inappropriate whitelisting WILL expose you to spam, or cause Bad
+	// Behavior to stop functioning entirely!  DO NOT WHITELIST unless you
+	// are 100% CERTAIN that you should.
+
+	// URLs are matched from the first / after the server name up to,
+	// but not including, the ? (if any).
+
+	// Includes two examples of whitelisting by URL.
+	$bb2_whitelist_urls = array(
+	//	"/example.php",
+	//	"/openid/server",
+	);
+
+	// DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER! DANGER!
+
 	// Do not edit below this line
 
 	if (!empty($bb2_whitelist_ip_ranges)) {
@@ -50,6 +65,12 @@ function bb2_whitelist($package)
 	if (!empty($bb2_whitelist_user_agents)) {
 		foreach ($bb2_whitelist_user_agents as $user_agent) {
 			if (!strcmp($package['headers_mixed']['User-Agent'], $user_agent)) return true;
+		}
+	}
+	if (!empty($bb2_whitelist_urls)) {
+		$request_uri = substr($settings['request_uri'], 0, strpos($settings['request_uri'], "?"));
+		foreach ($bb2_whitelist_urls as $url) {
+			if (!strcmp($package['headers_mixed']['User-Agent'], $url)) return true;
 		}
 	}
 	return false;

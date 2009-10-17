@@ -15,8 +15,10 @@ function bb2_trackback($package)
 
 	// Fake WordPress trackbacks
 	// Real ones do not contain Accept:, and have a charset defined
+	// Real WP trackbacks may contain Accept: depending on the HTTP
+	// transport being used by the sending host
 	if (strpos($package['headers_mixed']['User-Agent'], "WordPress/") !== FALSE) {
-		if (array_key_exists('Accept', $package['headers_mixed']) || strpos($package['^headers_mixed']['Content-Type'], "charset=") === FALSE) {
+		if (strpos($package['headers_mixed']['Content-Type'], "charset=") === FALSE) {
 			return 'e3990b47';
 		}
 	}
