@@ -4,7 +4,7 @@ Contributors: error, MarkJaquith, Firas, skeltoac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=error%40ioerror%2eus&item_name=Bad%20Behavior%20%28From%20WordPress%20Page%29&no_shipping=1&cn=Comments%20about%20Bad%20Behavior&tax=0&currency_code=USD&bn=PP%2dDonationsBF&charset=UTF%2d8
 Requires at least: 1.2
 Tested up to: 2.8.4
-Stable tag: 2.0.30
+Stable tag: 2.0.31
 
 Welcome to a whole new way of keeping your blog, forum, guestbook, wiki or
 content management system free of link spam. Bad Behavior is a PHP-based
