@@ -7,6 +7,7 @@ v1.2
 - Changed sizingMethod to properly scale pngfix images (Eric)
 - Fixed Windows site link in gl_mooie6warning script (Eric)
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
+- Merge layout custom CSS files rather than uniquely select (Mark H.)
 
 v1.1.6.pl4
 ----------

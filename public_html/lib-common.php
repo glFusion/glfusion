@@ -7532,16 +7532,15 @@ function css_out(){
 
     $files   = array();
 
-    // Let's look in the custom directory first...
+    // Merge the default CSS with whatever is in custom ...
+    $files[] = $_CONF['path_layout'] . 'style.css';
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
         $files[] = $_CONF['path_layout'] . 'custom/style.css';
-    } else {
-        $files[] = $_CONF['path_layout'] . 'style.css';
     }
+
+    $files[] = $_CONF['path_layout'] . 'style-colors.css';
     if ( file_exists($_CONF['path_layout'] .'custom/style-colors.css') ) {
         $files[] = $_CONF['path_layout'] . 'custom/style-colors.css';
-    } else {
-        $files[] = $_CONF['path_layout'] . 'style-colors.css';
     }
 
     /*
