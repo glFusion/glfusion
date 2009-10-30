@@ -292,7 +292,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
                                 COM_getBlockTemplate ('_msg_block', 'header'));
         $display .= $LANG24[41];
         $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-        $display .= STORY_renderArticle ($A, 'p');
+        $display .= STORY_renderArticle ($story, 'p');
         COM_accessLog("User {$_USER['username']} tried to illegally edit story $sid. - STORY_EDIT_DENIED or STORY_EXISTING_NO_EDIT_PERMISSION");
         return $display;
     } elseif( $result == STORY_INVALID_SID ) {
