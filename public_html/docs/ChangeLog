@@ -1,5 +1,24 @@
 glFusion ChangeLog
 
+v1.1.7 svn
+----------
+- Media Gallery: Updated MP3 players to latest releases
+- Media Gallery: Fixed MP3 jukebox to auto play full playlist
+- Added necessary hooks to allow plugins to fully tap into the user profile
+  and registration system - provides direct support for Lee Garner's
+  Custom Profile plugin.
+- Consistent use of CUSTOM_user*() and PLG_user*() functions
+- Media Gallery: Fixed error when user tries to access an album they do not
+  have permission to view.
+- Forum Plugin: Fixed issue where slashes were removed from mootip pop-up text
+- Forum Plugin: Fixed error in phpbb3_import
+- Forum Plugin: Fixed error when creating new user when MySQL in strict mode
+- Fixed URL rewrite to support IIS 7 FastCGI PHP mode.
+- Fixed error when user does not have edit permissions to story.
+- Fixed special character handling in story editor
+- Fixed backslash removal in story editor
+- Upgrade Bad Behavior2 to v2.0.31
+
 v1.1.6.pl4
 ----------
 - Documentation URL not set properly if glFusion installed in a sub-directory
@@ -8,7 +27,7 @@ v1.1.6.pl4
 - Static Pages did not support 'all' as location of centerblock
 - Plugin installer would return wrong error message when no file
   was actually uploaded.
-- Updated default links entry to point to glFusio Wiki
+- Updated default links entry to point to glFusion Wiki
 
 v1.1.6.pl3
 ----------
