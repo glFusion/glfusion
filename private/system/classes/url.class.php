@@ -105,6 +105,13 @@ class url {
             }
         } elseif (isset($_SERVER['ORIG_PATH_INFO'])) {
             $this->_arguments = explode('/', substr($_SERVER['ORIG_PATH_INFO'], 1));
+/* -- added for IIS 7 to work in FastCGI mode -- */
+            array_shift ($this->_arguments);
+            if ( $this->_arguments[0] == substr($_SERVER['SCRIPT_NAME'],1) ) {
+                array_shift($this->_arguments);
+            }
+/* -- end of add -- */
+
         } else {
             $this->_arguments = array ();
         }
@@ -159,7 +166,8 @@ class url {
     function setArgNames($names = array())
     {
         if (count($names) < count($this->_arguments)) {
-            print "URL Class: number of names passed to setArgNames must be equal or greater than number of arguments found in URL";
+            print "URL Class: number of names passed to setArgNames must be equal or greater than number of arguments found in URL (" . count($this->_arguments) . ")";
+            print_r($this->_arguments);
             exit;
         }
         if (is_array($names)) {
