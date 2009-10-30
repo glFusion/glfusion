@@ -136,14 +136,13 @@ if ( $album_id == 0 ) {
 }
 if ( !isset($MG_albums[$album_id]->id) ) {
 	$errorMessage = $LANG_MG02['albumaccessdeny'];
-}
-if ( $MG_albums[$album_id]->access == 0 || ($MG_albums[$album_id]->hidden == 1 && $MG_albums[$album_id]->access !=3 )) {
+} else if ( $MG_albums[$album_id]->access == 0 || ($MG_albums[$album_id]->hidden == 1 && $MG_albums[$album_id]->access !=3 )) {
 	$errorMessage = $LANG_MG02['albumaccessdeny'];
-}
-
-$aOffset = $MG_albums[$album_id]->getOffset();
-if ( $aOffset == -1 ) {
-    $errorMessage = $LANG_MG02['albumaccessdeny'];
+} else {
+    $aOffset = $MG_albums[$album_id]->getOffset();
+    if ( $aOffset == -1 ) {
+        $errorMessage = $LANG_MG02['albumaccessdeny'];
+    }
 }
 
 if ( $errorMessage != '' ) {
