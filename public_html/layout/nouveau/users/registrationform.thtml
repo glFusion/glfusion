@@ -22,6 +22,9 @@ window.addEvent('domready',function() {
     <label for="email_conf">{lang_email_conf}:</label>
     <input class="fValidate['required','email']" type="text" size="32" maxlength="96" id="email_conf" name="email_conf" value="{email_conf}"{xhtml}>
   </div>
+
+  {plugin_fields}
+
   <div class="warning">{lang_warning}</div>
   <div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
   <input type="hidden" name="mode" value="create"{xhtml}><br{xhtml}>

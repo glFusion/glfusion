@@ -46,6 +46,13 @@
     <td class="alignright">{lang_user_status}:</td>
     <td>{user_status}</td>
 </tr>
+
+{# allow the CUSTOM_ interface to set vars #}
+{customfields}
+
+{# allow plugins to set vars #}
+{plugin_fields}
+
 {!if newuser}
 <tr>
     <td class="alignright">{$LANG04[28]}:</td>
