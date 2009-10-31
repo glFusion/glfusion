@@ -79,7 +79,7 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
 
     // establish whether we are offering the challenge for this content type
     // and if so, initially clear the 'captcha' template var
-    
+
     switch( $ctype ) {
         case 'comment' :
             if ( $_CP_CONF['enable_comment'] != 1 ) {
@@ -141,15 +141,15 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
                 return;
             }
             break;
-        
+
         // for the 'general' content type case, there is no template var, and we are returning raw CAPTCHA_html
-        
+
         case 'general' :
             break;
 
         // the content type was null, or unrecognizable, so therefore there can be no plugin config
         // option controlling it, and we should just clear the 'captcha' template var
-        
+
         default :
             $template->set_var('captcha', '');
             return;
@@ -160,27 +160,27 @@ function plugin_templatesetvars_captcha($ctype, &$template) {
     }
 
     if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        
+
         // expire stale CAPTCHA sessions
         CAPTCHA_expireSessions();
-        
+
         // create a CAPTCHA session, or use the existing session if user entry failed
         $csid = CAPTCHA_getSession();
-        
+
         // retrieve the CAPTCHA challenge in HTML form.  pass the CAPTCHA session id (csid)
         // and the format of the challenge is controlled by template selected by content type (ctype)
         $captcha = CAPTCHA_getHTML($csid, $ctype);
-        
+
         // if our content type (ctype) was specified as 'general'
         if ( $ctype == 'general' ) {
             return $captcha;
         }
-        
+
         $template->set_var('captcha', $captcha);
     } else {
         $template->set_var('captcha', '');
     }
-    
+
     return '';
 }
 
@@ -200,14 +200,12 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
     }
 
     if ( ($_CP_CONF['anonymous_only'] && $uid < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        $response = COM_applyFilter($_POST['captcha']);
-        list( $rc, $msg )  = CAPTCHA_checkInput( $response, 'comment' );
+        $str = COM_applyFilter($_POST['captcha']);
+        list( $rc, $msg )  = CAPTCHA_checkInput( 'comment',$str );
         if ( $rc == 1 )
             return 0;
-        else {
-            IO_addMessageText(ERROR,'CAPTCHA','The CAPTCHA test failed - please try again...');
+        else
             return 1;
-        }
     }
     return 0;
 }
@@ -310,23 +308,23 @@ function CAPTCHA_sid() {
 
 function CAPTCHA_getSession() {
     global $_TABLES;
-    
+
     // if (csid) is in POST array, this is a reuse of an old session, else create a new one
     if ( isset($_POST['csid']) ) {
         $csid = COM_applyFilter($_POST['csid']);
     } else {
         $csid    = CAPTCHA_sid();
     }
-    
+
     // set the current time
     $time    = time();
-    
+
     // reset the number of tries
     $counter = 0;
-    
+
     // this will be filled in by the CAPTCHA
     $validation = '';
-    
+
     // update the session table
     DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter","'".addslashes($csid)."','$time','','0'");
 
