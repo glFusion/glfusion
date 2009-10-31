@@ -263,7 +263,7 @@ function phpbb3_import( ) {
 
     // Get max id from existing glFusion Forum
     $order_result = mysql_query("SELECT MAX(cat_order) + 10 AS corder FROM {$_TABLES['gf_categories']}", $DB_glFusion);
-    $order_row = mysql_fetch_array($order_result, $DB_glFusion);
+    $order_row = mysql_fetch_array($order_result);
     $order = $order_row['corder'];
 
     // Create the Forum Categories

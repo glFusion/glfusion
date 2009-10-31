@@ -34,38 +34,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-
-function IO_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
-{
-    global $pageHandle;
-
-    $pageHandle->setNavigationBlocksFunction($what);
-    $pageHandle->setPageTitle($pagetitle);
-    $pageHandle->addRaw($headercode);
-
-    // start caching all the output...
-    ob_start();
-
-}
-
-function IO_siteFooter( $rightblock = -1, $custom = '' )
-{
-    global $pageHandle;
-
-    $pageHandle->setExtraBlocksFunction($rightblock);
-
-    $content = ob_get_contents();
-    ob_end_clean();
-
-    $pageHandle->addContent($content);
-
-    return $pageHandle->displayPage(1);
-
-}
-
-
-
-
 /**
  * Add CSS to a page
  *
@@ -75,14 +43,13 @@ function IO_siteFooter( $rightblock = -1, $custom = '' )
  * @param  int      $priority Load priority
  * @param  string   $mime The mime type of the CSS, 'text/css' used if no
  *                  other type passed.
- * @access public
  * @return nothing
  */
 function IO_addStyle($code, $priority = HEADER_PRIO_NORMAL, $mime = 'text/css')
 {
     global $pageHandle;
 
-    return $pageHandle->addStyle($code, $priority, $mime);
+    $pageHandle->addStyle($code, $priority, $mime);
 }
 
 /**
@@ -94,14 +61,13 @@ function IO_addStyle($code, $priority = HEADER_PRIO_NORMAL, $mime = 'text/css')
  * @param  int      $priority   Load priority
  * @param  string   $mime       The mime type of the JS, 'text/javascript'
  *                              used if no other type passed.
- * @access public
  * @return nothing
  */
 function IO_addScript($code, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript')
 {
     global $pageHandle;
 
-    return $pageHandle->addScript($code, $priority, $mime);
+    $pageHandle->addScript($code, $priority, $mime);
 }
 
 /**
@@ -115,14 +81,13 @@ function IO_addScript($code, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javas
  * @param  int      $priority   Load priority
  * @param  array    $attr       Attributes array
  *
- * @access public
  * @return nothing
  */
 function IO_addLink($rel, $href, $type = '', $priority = HEADER_PRIO_NORMAL, $attrs = array())
 {
     global $pageHandle;
 
-    return $pageHandle->addLink($rel,$href,$type,$priority,$attrs);
+    $pageHandle->addLink($rel,$href,$type,$priority,$attrs);
 }
 
 /**
@@ -137,14 +102,13 @@ function IO_addLink($rel, $href, $type = '', $priority = HEADER_PRIO_NORMAL, $at
  *                              used if no other type passed.
  * @param  array    $attr       Attributes array
  *
- * @access public
  * @return nothing
  */
 function IO_addLinkStyle($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/css', $attrs = array())
 {
     global $pageHandle;
 
-    return $pageHandle->addLinkStyle($href,$priority,$mime,$attrs);
+    $pageHandle->addLinkStyle($href,$priority,$mime,$attrs);
 }
 
 
@@ -159,14 +123,13 @@ function IO_addLinkStyle($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/cs
  * @param  string   $mime       The mime type of the stylesheet, 'text/css'
  *                              used if no other type passed.
  *
- * @access public
  * @return nothing
  */
 function IO_addLinkScript($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/javascript')
 {
     global $pageHandle;
 
-    return $pageHandle->addLinkScript($href,$priority,$mime);
+    $pageHandle->addLinkScript($href,$priority,$mime);
 }
 
 
@@ -178,14 +141,13 @@ function IO_addLinkScript($href, $priority = HEADER_PRIO_NORMAL, $mime = 'text/j
  * @param  string   $name       Name of the meta attribute
  * @param  string   $cotent     Content of the attribute
  *
- * @access public
  * @return nothing
  */
 function IO_addMetaName($name, $content)
 {
     global $pageHandle;
 
-    return $pageHandle->addMetaName($name,$content);
+    $pageHandle->addMetaName($name,$content);
 }
 
 
@@ -197,7 +159,6 @@ function IO_addMetaName($name, $content)
  * @param  string   $header     header name
  * @param  string   $cotent     Content of the attribute
  *
- * @access public
  * @return nothing
  */
 function IO_addMetaHttpEquiv($header, $content)
@@ -217,14 +178,13 @@ function IO_addMetaHttpEquiv($header, $content)
  * @param  string   $code       Fully formed code to add
  * @param  int      $priority   Load priority
  *
- * @access public
  * @return nothing
  */
 function IO_addRaw($code, $priority = HEADER_PRIO_NORMAL)
 {
     global $pageHandle;
 
-    return $pageHandle->addRaw($code,$priority);
+    $pageHandle->addRaw($code,$priority);
 }
 
 
@@ -236,14 +196,13 @@ function IO_addRaw($code, $priority = HEADER_PRIO_NORMAL)
  *
  * @param  string   $text       direct text to send to browser.
  *
- * @access public
  * @return nothing
  */
 function IO_addDirectHeader($text)
 {
     global $pageHandle;
 
-    return $pageHandle->addDirectHeader($text);
+    $pageHandle->addDirectHeader($text);
 }
 
 
@@ -254,15 +213,23 @@ function IO_addDirectHeader($text)
  *
  * @param  string   $content    content to place in page.
  *
- * @access public
  * @return nothing
  */
 function IO_addContent( $content ) {
     global $pageHandle;
 
-    return $pageHandle->addContent($content);
+    $pageHandle->addContent($content);
 }
 
+
+/**
+ * Renders (displays) the current page
+ *
+ * Builds the full page for display
+ *
+ *
+ * @return nothing
+ */
 function IO_displayPage()
 {
     global $pageHandle;
@@ -280,9 +247,11 @@ function IO_displayPage()
  * @access public
  * @return nothing
  */
-function IO_redirect($url) {
-    echo "<html><head><meta http-equiv=\"refresh\" content=\"0; URL=$url\"" . XHTML . "></head></html>" . LB;
-    exit;
+function IO_redirect($url)
+{
+    header("Location: " . $url);
+//    echo "<html><head><meta http-equiv=\"refresh\" content=\"0; URL=$url\"" . XHTML . "></head></html>" . LB;
+//    exit;
 }
 
 /**
@@ -292,7 +261,6 @@ function IO_redirect($url) {
  *
  * @param  string   $title  The page title
  *
- * @access public
  * @return nothing
  */
 function IO_setPageTitle($title) {
@@ -301,6 +269,53 @@ function IO_setPageTitle($title) {
     $pageHandle->setPageTitle($title);
 }
 
+
+/**
+ * Set Show Extra Blocks
+ *
+ * This function will set whether the extra blocks should be displayed.
+ *
+ * @param  bool     $bool   True or False
+ *
+ * @access public
+ * @return nothing
+ */
+function IO_setShowExtraBlocks( $bool )
+{
+    global $pageHandle;
+
+    $pageHandle->setShowExtraBlocks($bool);
+}
+
+
+/**
+ * Set Show Navigation Blocks
+ *
+ * This function will set whether the navigation blocks should be displayed.
+ *
+ * @param  bool     $bool   True or False
+ *
+ * @access public
+ * @return nothing
+ */
+function IO_setShowNavigationBlocks( $bool )
+{
+    global $pageHandle;
+
+    $pageHandle->setShowNavigationBlocks($bool);
+}
+
+
+/**
+ * Display Error
+ *
+ * Displays an error message, ignoring any content already added
+ * via the addContent() call.  This function terminates the running script.
+ *
+ * @param  string   $content    The error message to display
+ *
+ * @return nothing
+ */
 function IO_displayError($text)
 {
     global $pageHandle;
@@ -324,6 +339,82 @@ function IO_buildURL($url)
 
     return $pageHandle->buildURL($url);
 }
+
+
+
+/**
+ * Display Login Required
+ *
+ * Displays an error message, ignoring any content already added
+ * via the addContent() call.  This function terminates the running script.
+ *
+ * @param  string   $content    The error message to display
+ *
+ * @return nothing
+ */
+
+function IO_displayLoginRequired()
+{
+    global $pageHandle;
+
+    $pageHandle->displayLoginRequired();
+}
+
+
+/*
+ * Message handler (message.class.php) APIs
+ */
+
+/**
+ * Adds a message block to the top of the page
+ *
+ * This function takes a message number and optional plugin name
+ * It will format the message text in the standard system message
+ * box and ensure it is displayed at the top of the page.
+ *
+ * @param  int      $msg    The message number
+ * @param  string   $plugin Optional plugin name
+ *
+ * @access public
+ * @return nothing
+ */
+function IO_addMessage( $msg, $plugin = '')
+{
+    global $MESSAGE, $_CONF;
+
+    if ($msg > 0) {
+        $timestamp = strftime($_CONF['daytime']);
+        if (!empty($plugin)) {
+            $var = 'PLG_' . $plugin . '_MESSAGE' . $msg;
+            global $$var;
+            if (isset($$var)) {
+                $message = $$var;
+            } else {
+                $message = sprintf($MESSAGE[61], $plugin);
+                COM_errorLog($MESSAGE[61] . ": " . $var, 1);
+            }
+        } else {
+            $message = $MESSAGE[$msg];
+        }
+    }
+
+    if ( $plugin == '' ) {
+        $plugin = 'glFusion';
+    }
+
+    $messageHandle =& messageHandler::getInstance();
+    $messageHandle->addMessage(GENERAL,$plugin,$message);
+}
+
+function IO_addMessageText( $class, $type, $text )
+{
+    $messageHandle =& messageHandler::getInstance();
+    $messageHandle->addMessage($class,$type,$text);
+}
+
+/*
+ * This section contains the input filtering APIs
+ */
 
 /**
  * Retrieves a $_POST, $_GET, $_REQUEST, $_ENV, or $_COOKIE variable.
@@ -365,7 +456,7 @@ function IO_getVar( $type, $key, $mode=array('post'), $default='' )
  *
  * @note Pass only $key to filter a single variable
  */
-function IO_filterVar( $type, $key, $A, $default='' )
+function IO_filterVar( $type, $key, $A='', $default='' )
 {
     global $inputHandler;
 
@@ -415,44 +506,10 @@ function IO_prepareForDB($str) {
     return mysql_real_escape_string ($str);
 }
 
-function IO_displayLoginRequired()
+function IO_getImage($image, $namespace='')
 {
     global $pageHandle;
 
-    return $pageHandle->displayLoginRequired();
+    return $pageHandle->getImage($image,$namespace);
 }
-
-function IO_addMessage( $msg, $plugin = '')
-{
-    global $MESSAGE, $_CONF;
-
-    if ($msg > 0) {
-        $timestamp = strftime($_CONF['daytime']);
-        if (!empty($plugin)) {
-            $var = 'PLG_' . $plugin . '_MESSAGE' . $msg;
-            global $$var;
-            if (isset($$var)) {
-                $message = $$var;
-            } else {
-                $message = sprintf($MESSAGE[61], $plugin);
-                COM_errorLog($MESSAGE[61] . ": " . $var, 1);
-            }
-        } else {
-            $message = $MESSAGE[$msg];
-        }
-    }
-
-    if ( $plugin == '' ) {
-        $plugin = 'glFusion';
-    }
-
-    $messageHandle =& messageHandler::getInstance();
-    $messageHandle->addMessage(GENERAL,$plugin,$message);
-}
-
-function IO_addMessageText( $class, $type, $text ) {
-    $messageHandle =& messageHandler::getInstance();
-    $messageHandle->addMessage($class,$type,$text);
-}
-
 ?>

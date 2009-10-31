@@ -75,7 +75,6 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     $commentbar = new Template( $_CONF['path_layout'] . 'comment' );
     $commentbar->set_file( array( 'commentbar' => 'commentbar.thtml' ));
-    $commentbar->set_var( 'layout_url', $_CONF['layout_url'] );
     $commentbar->set_var( 'lang_comments', $LANG01[3] );
     $commentbar->set_var( 'lang_refresh', $LANG01[39] );
     $commentbar->set_var( 'lang_reply', $LANG01[60] );
@@ -94,7 +93,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var('story_title', $cmt_title);
 
     if( $type == 'article' ) {
-        $articleUrl = COM_buildUrl( $_CONF['site_url']
+        $articleUrl = IO_buildUrl( $_CONF['site_url']
                                     . "/article.php?story=$sid" );
         $commentbar->set_var( 'story_link', $articleUrl );
         $commentbar->set_var( 'article_url', $articleUrl );
@@ -152,25 +151,25 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
                               $_CONF['site_url'] . '/comment.php' );
         $hidden = '';
         if( $_REQUEST['mode'] == 'view' ) {
-            $hidden .= '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>';
-            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>';
+            $hidden .= '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '" />';
+            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '" />';
         }
         else if( $_REQUEST['mode'] == 'display' ) {
-            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['pid'])) . '"' . XHTML . '>';
+            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['pid'])) . '" />';
         }
         $commentbar->set_var( 'hidden_field', $hidden .
-                '<input type="hidden" name="mode" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['mode'])) . '"' . XHTML . '>' );
+                '<input type="hidden" name="mode" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['mode'])) . '"/>' );
     } else if( $type == 'article' ) {
         $commentbar->set_var( 'parent_url',
                               $_CONF['site_url'] . '/article.php' );
         $commentbar->set_var( 'hidden_field',
-                '<input type="hidden" name="story" value="' . $sid . '"' . XHTML . '>' );
+                '<input type="hidden" name="story" value="' . $sid . '" />' );
     } else { // plugin
         // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
         list($plgurl, $plgid) = PLG_getCommentUrlId($type);
         $commentbar->set_var( 'parent_url', $plgurl );
         $commentbar->set_var( 'hidden_field',
-                '<input type="hidden" name="' . $plgid . '" value="' . $sid . '"' . XHTML . '>' );
+                '<input type="hidden" name="' . $plgid . '" value="' . $sid . '" />' );
     }
 
     // Order
@@ -221,7 +220,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                                 'thread'  => 'thread.thtml'  ));
 
     // generic template variables
-    $template->set_var( 'layout_url', $_CONF['layout_url'] );
     $template->set_var( 'lang_authoredby', $LANG01[42] );
     $template->set_var( 'lang_on', $LANG01[36] );
     $template->set_var( 'lang_permlink', $LANG01[120] );
@@ -322,8 +320,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             }
             if( !empty( $photo )) {
                 $template->set_var( 'author_photo', $photo );
-                $camera_icon = '<img src="' . $_CONF['layout_url']
-                    . '/images/smallcamera.' . $_IMAGE_TYPE . '" alt=""' . XHTML . '>';
+                $camera_icon = '<img src="' . IO_getImage('smallcamera.png')
+                    . '" alt="" />';
                 $template->set_var( 'camera_icon',
                     COM_createLink(
                         $camera_icon,
@@ -582,7 +580,6 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 
     $template = new Template( $_CONF['path_layout'] . 'comment' );
     $template->set_file( array( 'commentarea' => 'startcomment.thtml' ));
-    $template->set_var( 'layout_url', $_CONF['layout_url'] );
     $template->set_var( 'commentbar',
             CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode ));
     $template->set_var( 'sid', $sid );
@@ -794,7 +791,6 @@ $commenttext = $comment;
             if (($mode == 'preview' || $mode == 'previewchanges') && !empty($title) && !empty($comment) ) {
                 $start = new Template( $_CONF['path_layout'] . 'comment' );
                 $start->set_file( array( 'comment' => 'startcomment.thtml' ));
-                $start->set_var( 'layout_url', $_CONF['layout_url'] );
                 $start->set_var( 'hide_if_preview', 'style="display:none"' );
 
                 // Clean up all the vars
@@ -853,7 +849,6 @@ $commenttext = $comment;
             } else {
                 $comment_template->set_var('glfusionStyleBasePath',$_CONF['site_url'] . '/fckeditor');
             }
-            $comment_template->set_var('layout_url', $_CONF['layout_url']);
             $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
             if ($_CONF['show_fullname'] == 1) {
                 $comment_template->set_var('lang_username', $LANG_ACCESS['name']);
@@ -866,7 +861,7 @@ $commenttext = $comment;
 
             if ($mode == 'edit' || $mode == 'previewchanges') { //edit modes
             	$comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[41]));
-            	$comment_template->set_var('cid', '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>');
+            	$comment_template->set_var('cid', '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '" />');
             } else {
                 $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
             	$comment_template->set_var('cid', '');
@@ -888,7 +883,7 @@ $commenttext = $comment;
                     $name = $LANG03[24]; //anonymous user
                 }
                 $usernameblock = '<input type="text" na me="username" size="16" value="' .
-                                 $name . '" maxlength="32"' . XHTML . '>';
+                                 $name . '" maxlength="32" />';
                 $comment_template->set_var('username', $usernameblock);
 
                 $comment_template->set_var('action_url', $_CONF['site_url'] . '/users.php?mode=new');
@@ -976,6 +971,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 
     // Sanity check
     if (empty ($sid) || empty ($title) || empty ($comment) || empty ($type) ) {
+        IO_addMessageText( ERROR,'comment', $LANG03[12] );
         COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with one or more missing values.');
         return $ret = 1;
@@ -984,6 +980,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     // Check that anonymous comments are allowed
     if (($uid == 1) && (($_CONF['loginrequired'] == 1)
             || ($_CONF['commentsloginrequired'] == 1))) {
+        IO_addMessageText( ERROR,'comment', $LANG03[6] );
         COM_errorLog("CMT_saveComment: IP address {$_SERVER['REMOTE_ADDR']} "
                    . 'attempted to save a comment with anonymous comments disabled for site.');
         return $ret = 2;
@@ -1047,6 +1044,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             } else { //replying to non-existent comment or comment in wrong article
                 COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                            . 'to reply to a non-existent comment or the pid/sid did not match');
+                IO_addMessageText( ERROR,'comment', $LANG03[42] );
                 $ret = 4; // Cannot return here, tables locked!
             }
         } else {
@@ -1077,11 +1075,12 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
                               $type, $cid);
         }
     } else {
+        IO_addMessageText( ERROR,'comment', $LANG03[12] );
         COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to submit a comment with invalid $title and/or $comment.');
         return $ret = 5;
     }
-
+    COM_updateSpeedlimit('comment');
     return $ret;
 }
 
@@ -1229,9 +1228,6 @@ function CMT_reportAbusiveComment ($cid, $type)
 
     $start = new Template($_CONF['path_layout'] . 'comment');
     $start->set_file(array('report' => 'reportcomment.thtml'));
-    $start->set_var('xhtml', XHTML);
-    $start->set_var('site_url', $_CONF['site_url']);
-    $start->set_var('layout_url', $_CONF['layout_url']);
     $start->set_var('lang_report_this', $LANG03[25]);
     $start->set_var('lang_send_report', $LANG03[10]);
     $start->set_var('cid', $cid);

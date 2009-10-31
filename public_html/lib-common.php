@@ -677,7 +677,7 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
         $templates = explode( ',', $_BLOCK_TEMPLATE[$blockname] );
         if( $which == 'header' )
         {
-            if( !empty( $templates[0] )  && file_exists($_CONF['path_layout'].$templates[0]) )
+            if( !empty( $templates[0] )  )
             {
                 $template = $templates[0];
             }
@@ -688,7 +688,7 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
         }
         else
         {
-            if( !empty( $templates[1] ) && file_exists($_CONF['path_layout'].$templates[1] ) )
+            if( !empty( $templates[1] )  )
             {
                 $template = $templates[1];
             }
@@ -3157,7 +3157,7 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
     global $_CONF;
 
     // replace any \ with &#092; (HTML equiv)
-    $str = str_replace('\\', '&#092;', COM_stripslashes($str) );
+    $str = str_replace('\\', '&#092;', $str );
 
     // Get rid of any newline characters
     $str = preg_replace( "/\n/", '', $str );
@@ -5554,20 +5554,15 @@ function COM_resetSpeedlimit($type = 'submit', $property = '')
 
 function COM_SpeedLimitError($type,$seconds,$wait)
 {
-    global $_CONF;
+    global $_CONF, $pageHandle;
 
-    $template = new Template( $_CONF['path_layout'] );
-    $template->set_file( array(
-        'warning'        => 'speedlimit_warning.thtml',
-    ));
-    $template->set_var('type',$type);
-    $template->set_var('seconds',$seconds);
-    $template->set_var('wait',$wait);
+    $pageHandle->pageTemplate->set_var('speedlimit','true');
+    $pageHandle->pageTemplate->set_var('type',$type);
+    $pageHandle->pageTemplate->set_var('seconds',$seconds);
+    $pageHandle->pageTemplate->set_var('wait',$wait);
+    $pageHandle->flushContentBuffer();
 
-    $template->parse ('output', 'warning');
-    $retval = $template->finish ($template->get_var ('output'));
-
-    IO_displayError($retval);
+    IO_displayPage();
 }
 
 
@@ -7105,30 +7100,6 @@ function COM_isAnonUser($uid = '')
     }
 }
 
-/**
-* Convert wiki-formatted text to (X)HTML
-*
-* @param    string  $wikitext   wiki-formatted text
-* @return   string              XHTML formatted text
-*
-*/
-function COM_renderWikiText($wikitext)
-{
-    global $_CONF;
-
-    if (!$_CONF['wikitext_editor']) {
-        return $wikitext;
-    }
-
-    require_once 'Text/Wiki.php';
-
-    $wiki = new Text_Wiki();
-    $wiki->disableRule('wikilink');
-    $wiki->disableRule('freelink');
-    $wiki->disableRule('interwiki');
-
-    return $wiki->transform($wikitext, 'Xhtml');
-}
 
 /**
 * Set the {lang_id} and {lang_attribute} variables for a template

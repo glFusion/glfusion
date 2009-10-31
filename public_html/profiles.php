@@ -75,8 +75,9 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 
     // check mail speedlimit
     COM_clearSpeedlimit ($_CONF['speedlimit'], 'mail');
-    if (COM_checkSpeedlimit ('mail') > 0) {
-        IO_redirect ($_CONF['site_url'] . '/index.php?msg=85');
+    $last = COM_checkSpeedlimit('mail');
+    if ($last > 0) {
+        COM_SpeedLimitError('mail',$last,$_CONF['speedlimit']);
     }
 
     if (!empty($author) && !empty($subject) && !empty($message)) {
@@ -90,13 +91,17 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
                 $sig = DB_getItem($_TABLES['users'], 'sig',
                                   "uid={$_USER['uid']}");
                 if (!empty ($sig)) {
-                    $sig = strip_tags (COM_stripslashes ($sig));
+                    $sig = strip_tags ($sig);
                     $sig = "\n\n-- \n" . $sig;
                 }
             }
+            $subject = IO_filterVar( 'TEXT', $subject);
 
-            $subject = COM_filterHTML(COM_stripslashes ($subject));
-            $message = COM_filterHTML(COM_stripslashes ($message));
+            if ( $html ) {
+                $message = IO_filterVar( 'HTML', $message);
+            } else {
+                $message = IO_filterVar('TEXT',$message);
+            }
 
             // do a spam check with the unfiltered message text and subject
             $mailtext = $subject . "\n" . $message . $sig;
@@ -108,70 +113,52 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
 
             $msg = PLG_itemPreSave ('contact', $message);
             if (!empty ($msg)) {
+
                 IO_addMessageText( 'ERROR', 'contact', $msg );
-                IO_addContent(contactform($uid,$subject,$message));
-/*
-                $retval .= COM_siteHeader ('menu', '')
-                        . COM_errorLog ($msg, 2)
-                        . contactform ($uid, $subject, $message)
-                        . COM_siteFooter ();
-
-                return $retval;
-*/
-                IO_displayPage();
-            }
-
-            $subject = strip_tags ($subject);
-            $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-            if ( $html ) {
+            } else {
+                $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
                 $message = $message . $sig;
-            } else {
-                $message = strip_tags ($message) . $sig;
-            }
-            $to = array();
-            $from = array();
 
-            if (!empty ($A['fullname'])) {
-                $to = COM_formatEmailAddress ($A['fullname'], $A['email']);
-            } else {
-                $to = COM_formatEmailAddress ($A['username'], $A['email']);
-            }
-            $from = COM_formatEmailAddress ($author, $authoremail);
+                $to = array();
+                $from = array();
 
-            $rc = COM_mail ($to, $subject, $message, $from,$html);
-            COM_updateSpeedlimit ('mail');
+                if (!empty ($A['fullname'])) {
+                    $to = COM_formatEmailAddress ($A['fullname'], $A['email']);
+                } else {
+                    $to = COM_formatEmailAddress ($A['username'], $A['email']);
+                }
+                $from = COM_formatEmailAddress ($author, $authoremail);
 
-            if ( COM_isAnonUser() && $_CONF['profileloginrequired'] == true) {
-                $redirectURL = $_CONF['site_url'] . '/index.php?msg=';
-            } else {
-                $redirectURL = $_CONF['site_url']
-                                . '/users.php?mode=profile&amp;uid=' . $uid
-                                . '&amp;msg=';
-            }
+                $rc = COM_mail ($to, $subject, $message, $from,$html);
+                COM_updateSpeedlimit ('mail');
 
-            if ( $rc === false ) {
-                $retval .= COM_refresh($redirectURL . '26');
-            } else {
-                $retval .= COM_refresh($redirectURL . '27');
+                if ( COM_isAnonUser() && $_CONF['profileloginrequired'] == true) {
+                    $redirectURL = $_CONF['site_url'] . '/index.php?msg=';
+                } else {
+                    $redirectURL = $_CONF['site_url']
+                                    . '/users.php?mode=profile&amp;uid=' . $uid
+                                    . '&amp;msg=';
+                }
+
+                if ( $rc === false ) {
+                    IO_redirect($redirectURL . '26');
+                } else {
+                    IO_redirect($redirectURL . '27');
+                }
+
             }
-        } else {
-            $subject = strip_tags ($subject);
-            $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-            $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
-            $retval .= COM_siteHeader ('menu', $LANG04[81])
-                    . COM_errorLog ($LANG08[3], 2)
-                    . contactform ($uid, $subject, $message)
-                    . COM_siteFooter ();
         }
-    } else {
-        $subject = strip_tags ($subject);
-        $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
-        $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
-        $retval .= COM_siteHeader ('menu', $LANG04[81])
-                . COM_errorLog ($LANG08[4], 2)
-                . contactform ($uid, $subject, $message)
-                . COM_siteFooter ();
     }
+
+    $subject = strip_tags ($subject);
+    $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
+    $subject = htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
+
+
+    $retval .= COM_siteHeader ('menu', $LANG04[81])
+            . COM_errorLog ($LANG08[4], 2)
+            . contactform ($uid, $subject, $message)
+            . COM_siteFooter ();
 
     return $retval;
 }

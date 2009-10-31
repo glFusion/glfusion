@@ -963,12 +963,21 @@ function saveuser($A)
             $ret = CUSTOM_userCheck ($A['username'], $A['email']);
             // Need a numeric return for the default message hander - if not numeric use default message
             // - if not numeric use default message
-            if ( $msg != '' ) {
+            if ( $ret != '' ) {
                 if (!is_numeric($ret)) {
                     $ret = 97;
                 }
                 return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
             }
+        }
+        // Let plugins have a chance to decide what to do before saving the user, return errors.
+        $msg = PLG_itemPreSave ('useredit', $A['username']);
+        if (!empty ($msg)) {
+            // need a numeric return value - otherwise use default message
+            if (! is_numeric($msg)) {
+                $msg = 97;
+            }
+            return COM_refresh("{$_CONF['site_url']}/usersettings.php?msg={$ret}");
         }
     }
 

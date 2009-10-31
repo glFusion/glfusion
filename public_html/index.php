@@ -369,5 +369,6 @@ if ( $A = DB_fetchArray( $result ) ) {
     IO_addContent( PLG_showCenterblock (3, $page, $topic)); // bottom blocks
 }
 
+IO_setShowExtraBlocks( true );
 IO_displayPage();
 ?>

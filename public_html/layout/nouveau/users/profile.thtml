@@ -134,4 +134,9 @@ function popitup(url)
 		</div>
 {end_block}
 <div style="clear:both;"></div>
+
+{customfields}
+{plugin_fields}
+
+
 {# end {templatelocation} #}

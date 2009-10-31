@@ -31,8 +31,8 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once ('lib-common.php');
-require_once ($_CONF['path_system'] . 'lib-trackback.php');
+require_once 'lib-common.php';
+USES_lib_trackback();
 
 // Note: Error messages are hard-coded in English since there is no way of
 // knowing which language the sender of the trackback ping may prefer.

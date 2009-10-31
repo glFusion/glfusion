@@ -326,6 +326,7 @@ if ($A['count'] > 0) {
     IO_redirect($_CONF['site_url'] . '/index.php');
 }
 
+
 IO_displayPage();
 
 ?>

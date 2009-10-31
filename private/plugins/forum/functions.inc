@@ -202,7 +202,7 @@ function plugin_user_create_forum ($uid)
 {
     global $_TABLES;
 
-    DB_query ("INSERT INTO {$_TABLES['gf_userinfo']} (uid) VALUES ('{$uid}')");
+    DB_query ("INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('{$uid}',0,'')");
 }
 
 /**
@@ -1090,7 +1090,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         }
         $cssid = 0;
         while ($A = DB_fetchArray ($result)) {
-            $A['subject'] = @htmlspecialchars($A['subject'],ENT_COMPAT,$CONF_FORUM['charset']);
+            $A['subject'] = @htmlspecialchars($A['subject'],ENT_COMPAT,COM_getEncodingt());
             if ($CONF_FORUM['use_censor']) {
                 $A['subject'] = COM_checkWords($A['subject']);
                 $A['comment'] = COM_checkWords($A['comment']);
@@ -1124,7 +1124,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
 
                 $testText = gf_formatTextBlock($A['comment'],'text','noquote');
                 $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
+                $html2txt = new html2text(addslashes($testText),false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1140,7 +1140,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)));
+                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
             } else {
                 $qlreply = DB_query("SELECT id,uid,name,comment FROM {$_TABLES['gf_topic']} WHERE id={$A['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
@@ -1153,7 +1153,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 }
                 $testText = gf_formatTextBlock($B['comment'],'text','noquote');
                 $testText = strip_tags($testText);
-                $html2txt = new html2text($testText,false);
+                $html2txt = new html2text(addslashes($testText),false);
                 $testText = trim($html2txt->get_text());
                 $shortComment = '';
                 $commentArray = explode(' ',$testText);
@@ -1169,7 +1169,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                     }
                 }
                 $shortComment = trim($shortComment).$tailString;
-                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)));
+                $lastpostinfo = htmlspecialchars(preg_replace('#\r?\n#','<br />',strip_tags($shortComment)),ENT_COMPAT,COM_getEncodingt());
             }
 
             $cssid = ($cssid ==1) ? 2: 1;
@@ -1606,7 +1606,7 @@ function plugin_profilesave_forum( )
         $nrows = DB_numRows($result);
         if ($nrows == 0) {
             // Insert a new blank record. Defaults are set in SQL Defintion for table.
-            DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid) VALUES ('{$_USER['uid']}')");
+            DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('{$_USER['uid']}',0,'')");
         }
         $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".addslashes($signature)."' WHERE uid=".$_USER['uid'];
         DB_query($sql);

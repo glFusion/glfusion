@@ -1,9 +1,0 @@
-<div style="width:95%;margin:5px;border:1px solid #CCC;">
-  &nbsp;
-</div>
-<div class="pluginCellText" style="padding:15px 20px 0px 20px;text-align:center;">
-  SpeedLimit Error - Your last {type} was {seconds} seconds ago.  This site requires at least {wait} seconds between entries.
- <div style="padding:10px;">
-    Click <a href="javascript:history.back()">HERE</a> to return
-  </div>
-</div>

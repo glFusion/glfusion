@@ -1032,6 +1032,7 @@ class config {
                     $retval = '<a href="#" onclick="popupWindow(\'' . $doc_url . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
                 }
             } else if ( @file_exists($_CONF['path_html'] . 'docs/' . $doclang . '/'. $group . '.html') ) {
+                $baseUrl = $GLOBALS['_CONF']['site_url'];
                 $descUrl = $baseUrl . '/docs/' . $doclang . '/'. $group . '.html#desc_' . $option;
                 $retval = '<a href="#" onclick="popupWindow(\'' . $descUrl . '\', \'Help\', 640, 480, 1)" class="toolbar"><img src="' . $_CONF['layout_url'] . '/images/button_help.png" alt=""'.XHTML.'></a>';
             } else {

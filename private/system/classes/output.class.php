@@ -56,7 +56,7 @@ class outputHandler {
     private $_buffer = '';
     private $_msg = '';
     private $_displayNavigationBlocks = true;
-    private $_displayExtraBlocks = true;
+    private $_displayExtraBlocks = false;
     private $_pagetitle = '';
     private $_frontPage = false;
     private $_errorlog_fn = NULL;
@@ -106,6 +106,7 @@ class outputHandler {
         $this->pageTemplate     = new Template ($_CONF['path_layout']);
         $this->_curtime         =  COM_getUserDateTimeFormat();
         $this->_rewriteEnabled  = $_CONF['url_rewrite'];
+        $this->_displayExtraBlocks = $_CONF['show_right_blocks'];
     }
 
 	/**
@@ -345,6 +346,19 @@ class outputHandler {
 	 */
     public function getContent( ) {
         return $this->_buffer;
+    }
+
+	/**
+	 * Flushes output buffer
+	 *
+	 * Flushes (throws away) any content in the content buffer
+	 *
+     *
+	 * @access public
+	 * @return nothing
+	 */
+    public function flushContentBuffer( ) {
+        $this->_buffer = '';
     }
 
 
@@ -636,7 +650,7 @@ class outputHandler {
     /*
      * renders and displays the full HTML output to the browser
      */
-    public function displayPage($buffer = 0) {
+    public function displayPage() {
         global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG01, $LANG_DIRECTION,$_PAGE_TIMER,
                $_ST_CONF, $LANG12;
 

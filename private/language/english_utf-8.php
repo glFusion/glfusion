@@ -228,6 +228,7 @@ $LANG03 = array(
     39 => 'You may view the comment thread at the following address: ',
     40 => 'If you wish to recieve no further notifications of replies, visit the following link: ',
     41 => 'Edit a Comment',
+    42 => 'Internal processing error',
 );
 
 ###############################################################################

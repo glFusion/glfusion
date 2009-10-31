@@ -38,7 +38,8 @@
 // +--------------------------------------------------------------------------+
 
 require_once 'lib-common.php';
-require_once $_CONF['path_system'] . 'lib-story.php';
+
+USES_lib_story();
 
 // Uncomment the line below if you need to debug the HTTP variables being passed
 // to the script.  This will sometimes cause errors but it will allow you to see
@@ -69,30 +70,11 @@ function submissionform($type='story', $mode = '', $topic = '')
     $last = COM_checkSpeedlimit ('submit');
 
     if ($last > 0) {
-        $retval .= COM_startBlock ($LANG12[26], '',
-                           COM_getBlockTemplate ('_msg_block', 'header'))
-            . $LANG12[30]
-            . $last
-            . $LANG12[31]
-            . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+        COM_speedLimitError($last,$_CONF['speedlimit']);
     } else {
         if (empty ($_USER['username']) &&
             (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
-            $retval .= COM_startBlock ($LANG_LOGIN[1], '',
-                               COM_getBlockTemplate ('_msg_block', 'header'));
-            $loginreq = new Template($_CONF['path_layout'] . 'submit');
-            $loginreq->set_file('loginreq', 'submitloginrequired.thtml');
-            $loginreq->set_var('xhtml', XHTML);
-            $loginreq->set_var('site_url', $_CONF['site_url']);
-            $loginreq->set_var('site_admin_url', $_CONF['site_admin_url']);
-            $loginreq->set_var('layout_url', $_CONF['layout_url']);
-            $loginreq->set_var('login_message', $LANG_LOGIN[2]);
-            $loginreq->set_var('lang_login', $LANG_LOGIN[3]);
-            $loginreq->set_var('lang_newuser', $LANG_LOGIN[4]);
-            $loginreq->parse('errormsg', 'loginreq');
-            $retval .= $loginreq->finish($loginreq->get_var('errormsg'));
-            $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-            return $retval;
+                IO_displayLoginRequired();
         } else {
             $retval .= COM_startBlock($LANG12[19])
                     . $LANG12[9]

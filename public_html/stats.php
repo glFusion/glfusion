@@ -41,29 +41,13 @@ $display = '';
 
 if (empty ($_USER['username']) &&
     (($_CONF['loginrequired'] == 1) || ($_CONF['statsloginrequired'] == 1))) {
-    $display = COM_siteHeader ('menu', $LANG_LOGIN[1]);
-    $display .= COM_startBlock ($LANG_LOGIN[1], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $login = new Template($_CONF['path_layout'] . 'submit');
-    $login->set_file (array ('login'=>'submitloginrequired.thtml'));
-    $login->set_var ( 'xhtml', XHTML );
-    $login->set_var ('site_url', $_CONF['site_url']);
-    $login->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $login->set_var ('layout_url', $_CONF['layout_url']);
-    $login->set_var ('login_message', $LANG_LOGIN[2]);
-    $login->set_var ('lang_login', $LANG_LOGIN[3]);
-    $login->set_var ('lang_newuser', $LANG_LOGIN[4]);
-    $login->parse ('output', 'login');
-    $display .= $login->finish ($login->get_var('output'));
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter();
-    echo $display;
-    exit;
+        IO_displayLoginRequired();
 }
 
 // MAIN
 
-$display .= COM_siteHeader ('menu', $LANG10[1]);
+IO_setPageTitle($LANG10[1]);
+IO_setShowNavigationBlocks(true);
 
 // Overall Site Statistics
 
@@ -119,7 +103,7 @@ if (count ($plg_stats) > 0) {
     }
 }
 
-$display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 
 // Detailed story statistics
 
@@ -145,11 +129,11 @@ if ($nrows > 0) {
         $data_arr[$i] = $A;
 
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 } else {
-    $display .= COM_startBlock($LANG10[7]);
-    $display .= $LANG10[10];
-    $display .= COM_endBlock();
+    IO_addContent(COM_startBlock($LANG10[7]));
+    IO_addContent($LANG10[10]);
+    IO_addContent(COM_endBlock());
 }
 
 // Top Ten Commented Stories
@@ -173,12 +157,12 @@ if ($nrows > 0) {
         $A['comments'] = COM_NumberFormat ($A['comments']);
         $data_arr[$i] = $A;
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 
 } else {
-    $display .= COM_startBlock($LANG10[11]);
-    $display .= $LANG10[13];
-    $display .= COM_endBlock();
+    IO_addContent(COM_startBlock($LANG10[11]));
+    IO_addContent($LANG10[13]);
+    IO_addContent(COM_endBlock());
 }
 
 // Top Ten Trackback Comments
@@ -203,12 +187,12 @@ if ($_CONF['trackback_enabled'] || $_CONF['pingback_enabled']) {
             $A['count'] = COM_NumberFormat ($A['count']);
             $data_arr[$i] = $A;
         }
-        $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+        IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 
     } else {
-        $display .= COM_startBlock ($LANG10[25]);
-        $display .= $LANG10[26];
-        $display .= COM_endBlock ();
+        IO_addContent(COM_startBlock ($LANG10[25]));
+        IO_addContent($LANG10[26]);
+        IO_addContent(COM_endBlock ());
     }
 }
 
@@ -235,11 +219,11 @@ if ($nrows > 0) {
         $data_arr[$i] = $A;
 
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 } else {
-    $display .= COM_startBlock($LANG10[22]);
-    $display .= $LANG10[24];
-    $display .= COM_endBlock();
+    IO_addContent(COM_startBlock($LANG10[22]));
+    IO_addContent($LANG10[24]);
+    IO_addContent(COM_endBlock());
 }
 
 // Last 10 Logins
@@ -273,17 +257,16 @@ if ($nrows > 0) {
         }
         $data_arr[$i] = $A;
     }
-    $display .= ADMIN_simpleList("", $header_arr, $text_arr, $data_arr);
+    IO_addContent(ADMIN_simpleList("", $header_arr, $text_arr, $data_arr));
 } else {
-    $display .= COM_startBlock($LANG10[6]);
-    $display .= $LANG10[28];
-    $display .= COM_endBlock();
+    IO_addContent(COM_startBlock($LANG10[6]));
+    IO_addContent($LANG10[28]);
+    IO_addContent(COM_endBlock());
 }
 
 // Now show stats for any plugins that want to be included
-$display .= PLG_getPluginStats(2);
-$display .= COM_siteFooter();
+IO_addContent(PLG_getPluginStats(2));
 
-echo $display;
+IO_displayPage();
 
 ?>

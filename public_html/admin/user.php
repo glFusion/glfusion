@@ -260,6 +260,7 @@ function edituser($uid = '', $msg = '')
             $user_templates->set_var('customfields', CUSTOM_userEdit($A['uid']) );
         }
     }
+    $user_templates->set_var('plugin_fields',PLG_profileEdit($A['uid'],'useredit'));
 
     if (SEC_hasRights('group.edit')) {
         $user_templates->set_var('lang_securitygroups', $LANG_ACCESS['securitygroups']);
@@ -515,6 +516,16 @@ function saveusers ($uid, $username, $fullname, $passwd, $passwd_conf, $email, $
                 }
                 return edituser($uid, $ret['number']);
             }
+        }
+
+        // Let plugins have a chance to decide what to do before saving the user, return errors.
+        $msg = PLG_itemPreSave ('useredit', $username);
+        if (!empty ($msg)) {
+            // need a numeric return value - otherwise use default message
+            if (! is_numeric($msg)) {
+                $msg = 97;
+            }
+            return edituser($uid, $msg);
         }
 
         if (empty ($uid) || !empty ($passwd)) {

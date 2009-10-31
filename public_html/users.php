@@ -1213,6 +1213,7 @@ default:
     }
 
     if ($status == USER_ACCOUNT_ACTIVE) { // logged in AOK.
+        COM_resetSpeedLimit('login');
         DB_change($_TABLES['users'],'pwrequestid',"NULL",'uid',intval($uid));
         $userdata = SESS_getUserDataFromId($uid);
         $_USER = $userdata;

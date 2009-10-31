@@ -92,6 +92,21 @@
 {# START OF CONTENT AREA #}
         <a name="content-start" id="content-start"></a> {# for screenreaders #}
 
+{# SpeedLimit Warning #}
+{# this will only display when the speedlimit variable is set #}
+
+{!if speedlimit}
+  <p style="width:100%;text-align:center;">
+    <span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">
+  SpeedLimit Error - Your last {type} was {seconds} seconds ago.  This site requires at least {wait} seconds between entries.
+  <br />
+  Click <a href="javascript:history.back()">HERE</a> to return
+  </span>
+  </p>
+{!endif}
+{# end of SpeedLimit Warning #}
+
+
 {# Error Handler output #}
 
 {!if error_message}
@@ -113,6 +128,13 @@
 {# General Message Handler output #}
 
 {!if general_message}
+
+<script>
+window.addEvent('domready',function() {
+    alert('{general_message}');
+});
+</script>
+
 <div id="msgbox" style="font-weight:bold;width:95%;margin:10px;border:1px solid black;">
     <div style="padding:5px;color:#FFFFFF;background:url({layout_url}/images/header-bg.png) #1A3955;">
         <span class="floatright">{block_help}</span>

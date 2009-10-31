@@ -22,6 +22,7 @@
     	flashvars.playlist="{site_url}/xspf.php%3Faid%3D{aid}";
     	flashvars.folder="{site_url}/players/";
     	flashvars.lma="yes";
+    	flashvars.loop="playlist";
     	flashvars.display="1@. = @0@ - @";
         swfobject.embedSWF("{site_url}/players/XSPF_EV.swf", "mp3audio2", "500", "375", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
     </script>
