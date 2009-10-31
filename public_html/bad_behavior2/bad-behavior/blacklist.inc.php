@@ -48,6 +48,7 @@ function bb2_blacklist($package) {
 		"user",			// suspicious harvester
 		"User Agent: ",		// spam harvester
 		"User-Agent: ",		// spam harvester
+		"WebSite-X Suite",	// misc comment spam
 		"Winnie Poh",		// Automated Coppermine hacks
 		"Wordpress",		// malicious software
 		"\"",			// malicious software
@@ -87,7 +88,8 @@ function bb2_blacklist($package) {
 	// These are regular expression matches.
 	$bb2_spambots_regex = array(
 		"/^[A-Z]{10}$/",	// misc email spam
-		"/^Mozilla...[05]$/i",	// fake user agent/email spam
+// msnbot is using this fake user agent string now
+//		"/^Mozilla...[05]$/i",	// fake user agent/email spam
 		"/[bcdfghjklmnpqrstvwxz ]{8,}/",
 //		"/(;\){1,2}$/",		// misc spammers/harvesters
 //		"/MSIE.*Windows XP/",	// misc comment spam
