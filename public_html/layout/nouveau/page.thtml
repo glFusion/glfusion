@@ -188,3 +188,4 @@ fx.start.delay(4000, fx, ['opacity',0]);
   </div> {# end of gl_container #}
 </body>
 </html>
+{# end {templatelocation} #}
