@@ -18,7 +18,7 @@ v1.1.7 svn
 - Fixed error when user does not have edit permissions to story.
 - Fixed special character handling in story editor
 - Fixed backslash removal in story editor
-- Upgrade Bad Behavior2 to v2.0.31
+- Upgrade Bad Behavior2 to v2.0.32
 
 v1.1.6.pl4
 ----------
