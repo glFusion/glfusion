@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2
 ----------
+- Added wrapper static page widget (Eric)
 - Update all MooTools-dependent javascript to MooTools 1.2.3 (Mark H.) 
 - Added Mootools core and more files to install directory (Eric)
 - Changed sizingMethod to properly scale pngfix images (Eric)

@@ -108,3 +108,7 @@
     };
     // a counter used to create unique IDs
     adddwEvent.guid = 1;
+
+	//widget wrapper iframe buster (load links to parent site in parent window)
+	if (top.location != location) {
+	top.location.href = document.location.href; }
