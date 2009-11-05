@@ -82,7 +82,8 @@ $_ST_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['st_menu_elements']} (`id`, `pid`, 
 (12, 7, 1, 'mooslide', 5, 'gl_mooslide', 50, 1, '', '', 2),
 (13, 7, 1, 'moospring', 5, 'gl_moospring', 60, 1, '', '', 2),
 (14, 7, 1, 'mootickerRSS', 5, 'gl_mootickerRSS', 70, 1, '', '', 2),
-(15, 0, 1, 'Typography', 5, 'typography', 80, 1, '', '', 2);
+(15, 7, 1, 'wrapper', 5, 'wrapper', 80, 1, '', '', 2),
+(16, 0, 1, 'Typography', 5, 'typography', 90, 1, '', '', 2);
 ";
 
 // Spamx Default Data
@@ -512,6 +513,39 @@ $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, 
 	</div>
 </div>
 <script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moomorph.js\"></script>', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 0, 0, 0, 'html', 0) ";
+
+$_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('wrapper', 2, 'wrapper', '// this staticpage needs to have PHP set to execute PHP (return) below
+// use lib-widgets.php
+USES_lib_widgets();
+
+//call the WIDGET_wrapper function from lib-widgets.php
+//see lib-widgets.php for advanced options
+echo WIDGET_wrapper();
+?>
+
+<!--
+enter the URL to be wrapped below in the src field below.
+THIS URL MUST RESIDE ON THE SAME PHYSICAL SERVER
+AS YOUR GLFUSION SITE TO WORK PROPERLY! 
+You can also use link(s) on your main page to show an iframe by using the code below
+<a href=\"javascript:loadintoIframe('myframe', 'external.htm')\">Link</a>
+-->
+
+<!-- notice to Opera users only that this script will NOT automatically re-size the iframe height in that browser -->
+<div id=\"noOpera\" style=\"width:100%; text-align:center; margin:10px auto;\"></div>
+
+<iframe
+	src=\"http://enter-your-other-site-url-here\"
+	id=\"myframe\"
+	scrolling=\"no\"
+	marginwidth=\"0\"
+	marginheight=\"0\"
+	frameborder=\"0\"
+	style=\"
+	        overflow:visible;
+			width:100%;
+			display:none;
+\"></iframe>', 1, NOW(), 'noblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
 
 // Blocks Default Data
 $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (19,1,'moorotator','normal','Visit glFusion','all',0,'<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moorotator-block.js\"></script>
