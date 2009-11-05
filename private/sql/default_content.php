@@ -514,38 +514,9 @@ $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, 
 </div>
 <script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moomorph.js\"></script>', 1, NOW(), 'allblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 2, 0, 0, 0, 'html', 0) ";
 
-$_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES ('wrapper', 2, 'wrapper', '// this staticpage needs to have PHP set to execute PHP (return) below
-// use lib-widgets.php
-USES_lib_widgets();
-
-//call the WIDGET_wrapper function from lib-widgets.php
-//see lib-widgets.php for advanced options
-echo WIDGET_wrapper();
-?>
-
-<!--
-enter the URL to be wrapped below in the src field below.
-THIS URL MUST RESIDE ON THE SAME PHYSICAL SERVER
-AS YOUR GLFUSION SITE TO WORK PROPERLY! 
-You can also use link(s) on your main page to show an iframe by using the code below
-<a href=\"javascript:loadintoIframe('myframe', 'external.htm')\">Link</a>
--->
-
-<!-- notice to Opera users only that this script will NOT automatically re-size the iframe height in that browser -->
-<div id=\"noOpera\" style=\"width:100%; text-align:center; margin:10px auto;\"></div>
-
-<iframe
-	src=\"http://enter-your-other-site-url-here\"
-	id=\"myframe\"
-	scrolling=\"no\"
-	marginwidth=\"0\"
-	marginheight=\"0\"
-	frameborder=\"0\"
-	style=\"
-	        overflow:visible;
-			width:100%;
-			display:none;
-\"></iframe>', 1, NOW(), 'noblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 1, '', 'none', 3, 1, 0, 0, 'html', 0) ";
+$_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['staticpage']} (`sp_id`, `sp_uid`, `sp_title`, `sp_content`, `sp_hits`, `sp_date`, `sp_format`, `sp_onmenu`, `sp_label`, `commentcode`, `owner_id`, `group_id`, `perm_owner`, `perm_group`, `perm_members`, `perm_anon`, `sp_centerblock`, `sp_help`, `sp_tid`, `sp_where`, `sp_php`, `sp_nf`, `sp_inblock`, `postmode`, `sp_search`) VALUES (
+'wrapper', 2, 'wrapper', '// this staticpage needs to have PHP set to execute PHP below\r\n// use lib-widgets.php\r\nUSES_lib_widgets();\r\n\r\n//call the WIDGET_wrapper function from lib-widgets.php\r\n//see lib-widgets.php for advanced options\r\necho WIDGET_wrapper();\r\n?>\r\n\r\n<!--\r\nenter the URL to be wrapped below in the src field below.\r\nTHIS URL MUST RESIDE ON THE SAME PHYSICAL SERVER\r\nAS YOUR GLFUSION SITE TO WORK PROPERLY! \r\nYou can also use link(s) on your main page to show an iframe by using the code below\r\n<a href=\"javascript:loadintoIframe(''myframe'', ''external.htm'')\">Link</a>\r\n-->\r\n\r\n<!-- notice to Opera users only that this script will NOT automatically re-size the iframe height in that browser -->\r\n<div id=\"noOpera\" style=\"width:100%; text-align:center; margin:10px auto;\"></div>\r\n\r\n<iframe\r\n	src=\"http://enter-your-other-site-url-here\"\r\n	id=\"myframe\"\r\n	scrolling=\"no\"\r\n	marginwidth=\"0\"\r\n	marginheight=\"0\"\r\n	frameborder=\"0\"\r\n	style=\"\r\n	        overflow:visible;\r\n		width:100%;\r\n		display:none;\r\n\"></iframe>\r\n
+', 1, NOW(), 'noblocks', 0, '', -1, 2, 14, 3, 2, 2, 2, 0, '', 'none', 1, 2, 0, 0, 'html', 0) ";
 
 // Blocks Default Data
 $_SP_DEFAULT_DATA[] = "INSERT INTO {$_TABLES['blocks']} (bid, is_enabled, name, type, title, tid, blockorder, content, rdfurl, rdfupdated, onleft, phpblockfn, group_id, owner_id, perm_owner, perm_group, perm_members, perm_anon) VALUES (19,1,'moorotator','normal','Visit glFusion','all',0,'<script type=\"text/javascript\" src=\"xxxSITEURLxxx/javascript/mootools/gl_moorotator-block.js\"></script>
