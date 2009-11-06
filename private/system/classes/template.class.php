@@ -1459,7 +1459,7 @@ class Template
     {
         if (strpos($tmplt, '!}') !== false || strpos($tmplt, '$}') !== false) {
             $tmplt = preg_replace_callback(
-                      array('/\{\!\!(if|elseif|while|echo|global|) (([^\\\']|\\\\|\\\')+?) \!\!\}/',
+                      array('/\{\!\!(if|elseif|while|echo|global|autotag) (([^\\\']|\\\\|\\\')+?) \!\!\}/',
                             '/\{\!\!(set) ([-\w\d_\[\]]+) (([^\\\']|\\\\|\\\')+?) \!\!\}/',       // sets a variable
                             '/\{(\$LANG[\w\d_]+)\[(\')?([\w\d_]+)(?(2)\')\] (([^\\\']|\\\\|\\\')+?) \$\}/',       // Substitutable language independence
                            ),
@@ -1499,7 +1499,13 @@ class Template
     {
         global $TEMPLATE_OPTIONS;
 
-        if ($matches[1] == 'set') {
+        $cond    = '';
+        $prefix  = '';
+        $postfix = '';
+
+        if ( $matches[1] == 'autotag' ) {
+            $cond = "echo PLG_replaceTags('[".$matches[2]."]');";
+        } else if ($matches[1] == 'set') {
             $cond = $matches[3];
             $prefix = '$this->set_var(\'' . addslashes($matches[2]) . '\', ';
             $postfix = ');';
