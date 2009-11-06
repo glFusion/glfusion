@@ -45,6 +45,10 @@ function bb2_misc_headers($settings, $package)
 	if (strpos($package['request_uri'], "#") !== FALSE) {
 		return "dfd9b1ad";
 	}
+	// A pretty nasty SQL injection attack on IIS servers
+	if (strpos($package['request_uri'], ";DECLARE%20@") !== FALSE) {
+		return "dfd9b1ad";
+	}
 
 	// Range: field exists and begins with 0
 	// Real user-agents do not start ranges at 0

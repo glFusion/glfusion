@@ -45,7 +45,7 @@ function bb2_blackhole($package) {
 
 function bb2_httpbl($settings, $package) {
 	// Can't use IPv6 addresses yet
-	if (@is_ipv6($package['ip'])) return;
+	if (@is_ipv6($package['ip'])) return false;
 
 	if (@!$settings['httpbl_key']) return false;
 
