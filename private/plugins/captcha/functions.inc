@@ -41,10 +41,11 @@ if (file_exists ($langfile)) {
 } else {
     include_once $_CONF['path'].'plugins/captcha/language/english.php';
 }
+
 require_once $_CONF['path'].'plugins/captcha/captcha.php';
-/*
-* Check and see if we need to load the plugin configuration
-*/
+
+// load the plugin configuration, but only if needed
+
 if (!isset($_CP_CONF['gfxDriver'])) {
     require_once $_CONF['path_system'].'classes/config.class.php';
 
@@ -57,6 +58,8 @@ if (!isset($_CP_CONF['gfxDriver'])) {
     unset($_CP_CFG);
 }
 
+// glFusion plugin API functions for CAPTCHA plugin
+
 function plugin_enablestatechange_captcha($enable) {
 
     if ( defined('DEMO_MODE') && $enable == false ) {
@@ -65,10 +68,123 @@ function plugin_enablestatechange_captcha($enable) {
     return true;
 }
 
+// this plugin uses the 'templatesetvars' hook to insert the CAPTCHA challenge in user-accessible scripts
+// that allow users to create or edit content of type specified (ctype).  the template handle relating to the
+// input/edit form for the content type is passed to allow the corresponding 'captcha' template var to be set.
+// the plugin configuration allows the challenge to be presented only for certain content types, and/or based
+// upon whether this is an anonymous user
 
-function CAPTCHA_sid() {
-    return dechex(time()).dechex(mt_rand(1,65535));
+function plugin_templatesetvars_captcha($ctype, &$template) {
+    global $_CP_CONF, $_USER, $_TABLES;
+
+    // establish whether we are offering the challenge for this content type
+    // and if so, initially clear the 'captcha' template var
+
+    switch( $ctype ) {
+        case 'comment' :
+            if ( $_CP_CONF['enable_comment'] != 1 ) {
+                $template->set_var('captcha', '');
+                return;
+            }
+            break;
+        case 'story' :
+            if ( $_CP_CONF['enable_story'] != 1 ) {
+                $template->set_var('captcha', '');
+                return;
+            }
+            break;
+        case 'registration' :
+            if ( $_CP_CONF['enable_registration'] != 1 ) {
+                $template->set_var('captcha', '');
+                return;
+            }
+            break;
+        case 'contact' :
+            if ( $_CP_CONF['enable_contact'] != 1 ) {
+                $template->set_var('captcha', '');
+                return;
+            }
+            break;
+        case 'emailstory' :
+            if ( $_CP_CONF['enable_emailstory'] != 1 ) {
+                $template->set_var('captcha', '');
+                return;
+            }
+            break;
+        case 'forum' :
+            if ( $_CP_CONF['enable_forum'] != 1 ) {
+                $template->set_var('captcha', '');
+                return;
+            }
+            break;
+        case 'mediagallery' :
+            if ( $_CP_CONF['enable_mediagallery'] != 1 ) {
+                $template->set_var('captcha', '');
+                return;
+            }
+            break;
+        case 'rating' :
+            if ( $_CP_CONF['enable_rating'] != 1 ) {
+                $template->set_var('captcha','');
+                return;
+            }
+            break;
+        case 'links' :
+            if ( $_CP_CONF['enable_links'] != 1 ) {
+                $template->set_var('captcha','');
+                return;
+            }
+            break;
+        case 'calendar' :
+            if ( $_CP_CONF['enable_calendar'] != 1 ) {
+                $template->set_var('captcha','');
+                return;
+            }
+            break;
+
+        // for the 'general' content type case, there is no template var, and we are returning raw CAPTCHA_html
+
+        case 'general' :
+            break;
+
+        // the content type was null, or unrecognizable, so therefore there can be no plugin config
+        // option controlling it, and we should just clear the 'captcha' template var
+
+        default :
+            $template->set_var('captcha', '');
+            return;
+            break;
+    }
+    if ( !isset($_USER['uid']) ) {
+        $_USER['uid'] = 1;
+    }
+
+    if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
+
+        // expire stale CAPTCHA sessions
+        CAPTCHA_expireSessions();
+
+        // create a CAPTCHA session, or use the existing session if user entry failed
+        $csid = CAPTCHA_getSession();
+
+        // retrieve the CAPTCHA challenge in HTML form.  pass the CAPTCHA session id (csid)
+        // and the format of the challenge is controlled by template selected by content type (ctype)
+        $captcha = CAPTCHA_getHTML($csid, $ctype);
+
+        // if our content type (ctype) was specified as 'general'
+        if ( $ctype == 'general' ) {
+            return $captcha;
+        }
+
+        $template->set_var('captcha', $captcha);
+    } else {
+        $template->set_var('captcha', '');
+    }
+
+    return '';
 }
+
+// this plugin hooks the content 'presave' hooks to check the user response to the CAPTCHA challenge
 
 function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type, $postmode) {
     global $_CP_CONF, $_USER;
@@ -85,23 +201,21 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
 
     if ( ($_CP_CONF['anonymous_only'] && $uid < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
         $str = COM_applyFilter($_POST['captcha']);
-        list( $rc, $msg )  = CAPTCHA_checkInput( 'comment',$str );
+        list( $rc, $msg) = CAPTCHA_checkInput( $str, 'comment' );
         if ( $rc == 1 )
             return 0;
-        else {
-            IO_addMessageText(ERROR,'CAPTCHA','The CAPTCHA test failed - please try again...');
+        else
             return 1;
-        }
     }
     return 0;
 }
 
-function plugin_itemPreSave_captcha( $type='registration', $content='' ) {
+function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
     global $_CP_CONF, $_USER, $_POST;
 
     $msg = '';
 
-    switch( $type ) {
+    switch( $ctype ) {
         case 'comment' :
             if ( $_CP_CONF['enable_comment'] != 1 ) {
                 return '';
@@ -161,127 +275,81 @@ function plugin_itemPreSave_captcha( $type='registration', $content='' ) {
         $_USER['uid'] = 1;
     }
     if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        $str = COM_applyFilter($_POST['captcha']);
-        list( $rc, $msg )  = CAPTCHA_checkInput( $type, $str );
+        $response = COM_applyFilter($_POST['captcha']);
+        list( $rc, $msg )  = CAPTCHA_checkInput( $response, $ctype );
         return $msg;
     }
     return '';
 }
 
-function plugin_templatesetvars_captcha($name, &$template) {
-    global $_CP_CONF, $_USER, $_TABLES;
+function plugin_chkVersion_captcha() {
+    global $_CP_CONF;
 
-    switch( $name ) {
-        case 'comment' :
-            if ( $_CP_CONF['enable_comment'] != 1 ) {
-                $template->set_var('captcha', '');
-                return;
-            }
-            break;
-        case 'story' :
-            if ( $_CP_CONF['enable_story'] != 1 ) {
-                $template->set_var('captcha', '');
-                return;
-            }
-            break;
-        case 'registration' :
-            if ( $_CP_CONF['enable_registration'] != 1 ) {
-                $template->set_var('captcha', '');
-                return;
-            }
-            break;
-        case 'contact' :
-            if ( $_CP_CONF['enable_contact'] != 1 ) {
-                $template->set_var('captcha', '');
-                return;
-            }
-            break;
-        case 'emailstory' :
-            if ( $_CP_CONF['enable_emailstory'] != 1 ) {
-                $template->set_var('captcha', '');
-                return;
-            }
-            break;
-        case 'forum' :
-            if ( $_CP_CONF['enable_forum'] != 1 ) {
-                $template->set_var('captcha', '');
-                return;
-            }
-            break;
-        case 'mediagallery' :
-            if ( $_CP_CONF['enable_mediagallery'] != 1 ) {
-                $template->set_var('captcha', '');
-                return;
-            }
-            break;
-        case 'rating' :
-            if ( $_CP_CONF['enable_rating'] != 1 ) {
-                $template->set_var('captcha','');
-                return;
-            }
-            break;
-        case 'links' :
-            if ( $_CP_CONF['enable_links'] != 1 ) {
-                $template->set_var('captcha','');
-                return;
-            }
-            break;
-        case 'calendar' :
-            if ( $_CP_CONF['enable_calendar'] != 1 ) {
-                $template->set_var('captcha','');
-                return;
-            }
-            break;
-        case 'general' :
-            break;
-        default :
-            $template->set_var('captcha', '');
-            return;
-            break;
-    }
-    if ( !isset($_USER['uid']) ) {
-        $_USER['uid'] = 1;
-    }
-
-    if ( ($_CP_CONF['anonymous_only'] && $_USER['uid'] < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
-        // housekeeping, delete old captcha sessions
-        $oldSessions = time() - ($_CP_CONF['expire']+900);
-        DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE cptime < " . $oldSessions,1);
-
-        // OK, we need to insert the CAPTCHA, so now we need to setup the session_id:
-
-        // check to see if a failed entry happened...
-        if ( isset($_POST['csid']) ) {
-            $csid = COM_applyFilter($_POST['csid']);
-        } else {
-            $csid    = CAPTCHA_sid();
-        }
-        $time    = time();
-        $counter = 0;
-        $validation = '';  // this will be filled in by the CAPTCHA
-
-        DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter","'".addslashes($csid)."','$time','','0'");
-
-        $captcha = CAPTCHA_getHTML($csid,$name);
-        if ( $name == 'general' ) {
-            return $captcha;
-        }
-        $template->set_var('captcha', $captcha);
-    } else {
-        $template->set_var('captcha', '');
-    }
-    return '';
+    return $_CP_CONF['pi_version'];
 }
 
-// Internal CAPTCHA functions...
+function plugin_upgrade_captcha() {
+    global $_CONF, $_TABLES;
 
-function CAPTCHA_getHTML($csid, $type='general' ) {
+    require_once $_CONF['path'].'plugins/captcha/upgrade.php';
+
+    return captcha_upgrade();
+}
+
+// CAPTCHA functions...
+
+// create a unique but random CAPTCHA session identifer
+
+function CAPTCHA_sid() {
+    return dechex(time()).dechex(mt_rand(1,65535));
+}
+
+// creates a new (or refreshes existing) CAPTCHA session, the session identifier (csid) is returned
+
+function CAPTCHA_getSession() {
+    global $_TABLES;
+
+    // if (csid) is in POST array, this is a reuse of an old session, else create a new one
+    if ( isset($_POST['csid']) ) {
+        $csid = COM_applyFilter($_POST['csid']);
+    } else {
+        $csid    = CAPTCHA_sid();
+    }
+
+    // set the current time
+    $time    = time();
+
+    // reset the number of tries
+    $counter = 0;
+
+    // this will be filled in by the CAPTCHA
+    $validation = '';
+
+    // update the session table
+    DB_save($_TABLES['cp_sessions'],"session_id,cptime,validation,counter","'".addslashes($csid)."','$time','','0'");
+
+    // return the CAPTCHA session identifier
+    return $csid;
+}
+
+// prune the CAPTCHA session table by expiring stale sessions
+
+function CAPTCHA_expireSessions() {
+    global $_CP_CONF, $_TABLES;
+    $oldSessions = time() - ($_CP_CONF['expire']+900);
+    DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE cptime < " . $oldSessions,1);
+    return;
+}
+
+// create the HTML to be inserted based upon the current CAPTCHA session id (csid) and content type (ctype)
+
+function CAPTCHA_getHTML($csid, $ctype='general' ) {
     global $_CONF, $_CP_CONF, $LANG_CP00;
 
     $retval = '';
 
     $T = new Template($_CONF['path'] . 'plugins/captcha/templates');
-    switch ( $type ) {
+    switch ( $ctype ) {
         case 'comment' :
             $T->set_file('page', 'captcha_comment.thtml');
             break;
@@ -337,21 +405,27 @@ function CAPTCHA_getHTML($csid, $type='general' ) {
     return $retval;
 }
 
-function CAPTCHA_checkInput( $type, $str ) {
-    global $_CONF, $_CP_CONF, $_TABLES, $LANG_CP00, $_SERVER;
+// check the user entry (response) to see if it matches the challenge inserted for the current CAPTCHA session
+// the current content type (ctype) is passed only as a clue to be used in the error message.  note that the order of
+// the arguments to this function was reversed in v3.2.4, however this should not have broken anything in the core or
+// bundled plugins.  this was done to improve usability, eg. to allow a simpler form of the function to be used in
+// external staticpage, block, or other user custom code
 
+function CAPTCHA_checkInput( $response, $ctype='general' ) {
+    global $_CP_CONF, $_TABLES, $LANG_CP00, $_SERVER;
+
+    // if rc=0 on return, this is failure, and msg will contain detail
     $msg = '';
     $rc = 0;
 
-    // housekeeping, delete old captcha sessions
-    $oldSessions = time() - ($_CP_CONF['expire']+900);
-    DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE cptime < " . $oldSessions,1);
+    // expire stale CAPTCHA sessions
+    CAPTCHA_expireSessions();
 
-    if ( !isset($_POST['csid']) || $str == '' ) {
+    if ( !isset($_POST['csid']) || $response == '' ) {
         if ( !isset($_POST['csid']) ) {
-            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (no session id) in " . $type . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (no session id) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
         } else {
-            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (blank input string) in " . $type . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (blank input string) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
         }
         $msg = $LANG_CP00['bypass_error_blank'];
         $rc = 0;
@@ -361,7 +435,7 @@ function CAPTCHA_checkInput( $type, $str ) {
         $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . addslashes($csid) . "'");
         $now = time();
         if ( $cTime == '' || $cTime+$_CP_CONF['expire'] < $now ) {
-            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use an expired CAPTCHA in " . $type . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use an expired CAPTCHA in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             $msg = $LANG_CP00['session_expired'];
             $rc = 0;
             return ( array( $rc, $msg ) );
@@ -369,18 +443,18 @@ function CAPTCHA_checkInput( $type, $str ) {
         $validationString = DB_getItem($_TABLES['cp_sessions'],'validation',"session_id='" . addslashes($csid) . "'");
         if ( $validationString == '' ) {
            // no active session was found
-            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use old CAPTCHA Session in " . $type . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use old CAPTCHA Session in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             $msg = $LANG_CP00['bypass_error_blank'];
             $rc = 0;
             return ( array( $rc, $msg ) );
         }
-        if ( $validationString != $str ) {
+        if ( $validationString != $response ) {
             $msg = $LANG_CP00['entry_error'];
-            CAPTCHA_errorLog("CAPTCHA: An invalid CAPTCHA string was entered in " . $type . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_errorLog("CAPTCHA: An invalid CAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
             $rc = 0;
             return ( array( $rc, $msg ) );
         }
-        if ( $validationString == $str && $str != '' ) {
+        if ( $validationString == $response && $response != '' ) {
             // we got it, so delete the record to keep others from using it
             DB_query("DELETE FROM {$_TABLES['cp_sessions']} WHERE session_id='" . addslashes($csid) . "'",1);
             $rc = 1;
@@ -388,6 +462,8 @@ function CAPTCHA_checkInput( $type, $str ) {
     }
     return ( array( $rc, $msg ) );
 }
+
+// CAPTCHA likes it's own log, however someday we're going to unify these things i hope
 
 function CAPTCHA_errorLog( $logentry, $override = 0) {
     global $_CONF, $_CP_CONF;
@@ -411,20 +487,5 @@ function CAPTCHA_errorLog( $logentry, $override = 0) {
     }
 }
 
-function plugin_chkVersion_captcha() {
-    global $_CP_CONF;
 
-    return $_CP_CONF['pi_version'];
-}
-
-/**
-* Called by the plugin Editor to run the SQL Update for a plugin update
-*/
-function plugin_upgrade_captcha() {
-    global $_CONF, $_TABLES;
-
-    require_once $_CONF['path'].'plugins/captcha/upgrade.php';
-
-    return captcha_upgrade();
-}
 ?>
