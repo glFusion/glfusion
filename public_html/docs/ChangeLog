@@ -2,8 +2,10 @@ glFusion ChangeLog
 
 v1.2
 ----------
+- Update BB2 to v2.0.32 (Mark)
+- Update CAPTCHA to v3.2.4 (Mark/Mark)
 - Added wrapper static page widget (Eric)
-- Update all MooTools-dependent javascript to MooTools 1.2.3 (Mark H.) 
+- Update all MooTools-dependent javascript to MooTools 1.2.3 (Mark H.)
 - Added Mootools core and more files to install directory (Eric)
 - Changed sizingMethod to properly scale pngfix images (Eric)
 - Fixed Windows site link in gl_mooie6warning script (Eric)
