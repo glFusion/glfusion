@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2
 ----------
+- Added {!!autotag ..} feature to template class (Mark)
 - Update BB2 to v2.0.32 (Mark)
 - Update CAPTCHA to v3.2.4 (Mark/Mark)
 - Added wrapper static page widget (Eric)
