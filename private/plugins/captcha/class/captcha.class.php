@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -202,7 +202,7 @@ class captcha {
         if ( $this->driver == 2 ) { // static images
             header('Content-type: image/jpeg');
             $filename = $cString[$this->CaptchaString] . '.jpg';
-            $fp = fopen($_CONF['path'] . 'plugins/captcha/images/static/' . $this->imageset . '/' . $filename, 'r');
+            $fp = fopen($_CONF['path'] . 'plugins/captcha/images/static/' . $this->imageset . '/' . $filename, 'rb');
             if ( $fp != NULL ) {
                 while (!feof($fp)) {
                     $buf = fgets($fp, 8192);
