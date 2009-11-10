@@ -2,7 +2,14 @@ glFusion ChangeLog
 
 v1.1.7 svn
 ----------
-- CAPTCHA: Updated to 3.2.4 - exposes additional CAPTCHA functions to core/plugins (Mark H.)
+- Added ICS (calendar export) to syndication library (Mark)
+- Added autotag logic to template library (Mark)
+- Upgrade Geshi to v1.0.8.4 (Mark)
+- BBcode handler - fixed issue where some posts would show as blank (Mark)
+- Upgrade FCKeditor to 2.6.5 (Mark)
+- CAPTCHA: Force static image open to use binary mode (Mark)
+- CAPTCHA: Updated to 3.2.4 - exposes additional CAPTCHA functions to
+  core/plugins (Mark H.)
 - Media Gallery: Updated MP3 players to latest releases
 - Media Gallery: Fixed MP3 jukebox to auto play full playlist
 - Added necessary hooks to allow plugins to fully tap into the user profile
