@@ -162,6 +162,9 @@ if (!defined ('GVERSION')) {
             }
           }
           break;
+        case 'ics' :
+          return new ICS();
+          break;
         default:
           return false;
           break;
@@ -184,6 +187,7 @@ if (!defined ('GVERSION')) {
       $types[] = array('name'=>'RDF','version'=>'1.0');
       $types[] = array('name'=>'Atom','version'=>'0.3');
       $types[] = array('name'=>'Atom','version'=>'1.0');
+      $types[] = array('name'=>'ICS','version'=>'1.0');
       return $types;
     }
 

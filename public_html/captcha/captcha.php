@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -32,10 +32,10 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-require_once('../lib-common.php');
+require_once '../lib-common.php';
 
 //Load the Class
-require($_CONF['path'] . 'plugins/captcha/class/captcha.class.php');
+require $_CONF['path'] . 'plugins/captcha/class/captcha.class.php';
 
 // see if an existing session_id is passed
 if (isset($_GET['csid']) ) {

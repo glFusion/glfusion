@@ -1321,65 +1321,115 @@ function plugin_getfeedcontent_calendar( $feed, &$link, &$update, $feedType, $fe
 {
     global $_CONF, $_TABLES;
 
-    $limit = DB_getItem($_TABLES['syndication'], 'limits', "fid = '".addslashes($feed)."'");
+    if ( $feedType == 'ICS' ) {
+        $sql = "SELECT * FROM {$_TABLES['events']} "
+              ."WHERE perm_anon > 0 "
+              ."ORDER BY datestart,timestart";
+        $result = DB_query($sql);
 
-    $where = '';
-    if( !empty( $limit )) {
-        if( substr( $limit, -1 ) == 'h' ) {// next xx hours
-            $limitsql = '';
-            $hours = substr( $limit, 0, -1 );
-            $where = " AND (datestart <= DATE_ADD(NOW(), INTERVAL $hours HOUR))";
+        $content = array();
+        $eids = array();
+        $nrows = DB_numRows( $result );
+
+        for( $i = 1; $i <= $nrows; $i++ ) {
+            $row = DB_fetchArray( $result );
+            $eids[] = $row['eid'];
+
+            $eventtitle = $row['title'];
+
+            $eventtext = SYND_truncateSummary( $row['description'], MBYTE_strlen($row['description']));
+            $eventlink  = $_CONF['site_url'] . '/calendar/event.php?eid='
+                        . $row['eid'];
+
+            // Need to reparse the date from the event id
+            $myyear = substr( $row['eid'], 0, 4 );
+            $mymonth = substr( $row['eid'], 4, 2 );
+            $myday = substr( $row['eid'], 6, 2 );
+            $myhour = substr( $row['eid'], 8, 2 );
+            $mymin = substr( $row['eid'], 10, 2 );
+            $mysec = substr( $row['eid'], 12, 2 );
+            $newtime = "{$mymonth}/{$myday}/{$myyear} {$myhour}:{$mymin}:{$mysec}";
+            $creationtime = strtotime( $newtime );
+            $extensionTags = array(); // PLG_getFeedElementExtensions('calendar', $row['eid'], $feedType, $feedVersion, $eventtitle, );
+            $content[] = array( 'title'      => $eventtitle,
+                                'summary'    => $eventtext,
+                                'link'       => $eventlink,
+                                'uid'        => $row['owner_id'],
+                                'author'     => COM_getDisplayName( $row['owner_id'] ),
+                                'date'       => $creationtime,
+                                'dtstart'    => date("Ymd\THi00",strtotime($row['datestart'] . $row['timestart'])),
+                                'dtend'      => date("Ymd\THi00",strtotime($row['dateend'] . $row['timeend'])),
+                                'location'   => $row['location'],
+                                'categories' => $row['event_type'],
+                                'format'     => 'plaintext',
+                                'extensions' => $extensionTags
+                              );
+        }
+
+        $link = $_CONF['site_url'] . '/calendar/index.php';
+        $update = implode( ',', $eids );
+
+    } else {
+        $limit = DB_getItem($_TABLES['syndication'], 'limits', "fid = '".addslashes($feed)."'");
+
+        $where = '';
+        if( !empty( $limit )) {
+            if( substr( $limit, -1 ) == 'h' ) {// next xx hours
+                $limitsql = '';
+                $hours = substr( $limit, 0, -1 );
+                $where = " AND (datestart <= DATE_ADD(NOW(), INTERVAL $hours HOUR))";
+            }
+            else {
+                $limitsql = ' LIMIT ' . $limit;
+            }
         }
         else {
-            $limitsql = ' LIMIT ' . $limit;
+            $limitsql = ' LIMIT 10';
         }
+
+        $sql = "SELECT eid,owner_id,title,description FROM {$_TABLES['events']} "
+              ."WHERE perm_anon > 0 AND dateend >= NOW() $where "
+              ."ORDER BY datestart,timestart $limitsql";
+        $result = DB_query($sql);
+
+        $content = array();
+        $eids = array();
+        $nrows = DB_numRows( $result );
+
+        for( $i = 1; $i <= $nrows; $i++ )
+        {
+            $row = DB_fetchArray( $result );
+            $eids[] = $row['eid'];
+
+            $eventtitle = stripslashes( $row['title'] );
+            $eventtext = SYND_truncateSummary( $row['description'], MBYTE_strlen($row['description']));
+            $eventlink  = $_CONF['site_url'] . '/calendar/event.php?eid='
+                        . $row['eid'];
+
+            // Need to reparse the date from the event id
+            $myyear = substr( $row['eid'], 0, 4 );
+            $mymonth = substr( $row['eid'], 4, 2 );
+            $myday = substr( $row['eid'], 6, 2 );
+            $myhour = substr( $row['eid'], 8, 2 );
+            $mymin = substr( $row['eid'], 10, 2 );
+            $mysec = substr( $row['eid'], 12, 2 );
+            $newtime = "{$mymonth}/{$myday}/{$myyear} {$myhour}:{$mymin}:{$mysec}";
+            $creationtime = strtotime( $newtime );
+            $extensionTags = array(); // PLG_getFeedElementExtensions('calendar', $row['eid'], $feedType, $feedVersion, $eventtitle, );
+            $content[] = array( 'title'  => $eventtitle,
+                                'summary'   => $eventtext,
+                                'link'   => $eventlink,
+                                'uid'    => $row['owner_id'],
+                                'author' => COM_getDisplayName( $row['owner_id'] ),
+                                'date'   => $creationtime,
+                                'format' => 'plaintext',
+                                'extensions' => $extensionTags
+                              );
+        }
+
+        $link = $_CONF['site_url'] . '/calendar/index.php';
+        $update = implode( ',', $eids );
     }
-    else {
-        $limitsql = ' LIMIT 10';
-    }
-
-    $sql = "SELECT eid,owner_id,title,description FROM {$_TABLES['events']} "
-          ."WHERE perm_anon > 0 AND dateend >= NOW() $where "
-          ."ORDER BY datestart,timestart $limitsql";
-    $result = DB_query($sql);
-
-    $content = array();
-    $eids = array();
-    $nrows = DB_numRows( $result );
-
-    for( $i = 1; $i <= $nrows; $i++ )
-    {
-        $row = DB_fetchArray( $result );
-        $eids[] = $row['eid'];
-
-        $eventtitle = stripslashes( $row['title'] );
-        $eventtext = SYND_truncateSummary( $row['description'], MBYTE_strlen($row['description']));
-        $eventlink  = $_CONF['site_url'] . '/calendar/event.php?eid='
-                    . $row['eid'];
-
-        // Need to reparse the date from the event id
-        $myyear = substr( $row['eid'], 0, 4 );
-        $mymonth = substr( $row['eid'], 4, 2 );
-        $myday = substr( $row['eid'], 6, 2 );
-        $myhour = substr( $row['eid'], 8, 2 );
-        $mymin = substr( $row['eid'], 10, 2 );
-        $mysec = substr( $row['eid'], 12, 2 );
-        $newtime = "{$mymonth}/{$myday}/{$myyear} {$myhour}:{$mymin}:{$mysec}";
-        $creationtime = strtotime( $newtime );
-        $extensionTags = array(); // PLG_getFeedElementExtensions('calendar', $row['eid'], $feedType, $feedVersion, $eventtitle, );
-        $content[] = array( 'title'  => $eventtitle,
-                            'summary'   => $eventtext,
-                            'link'   => $eventlink,
-                            'uid'    => $row['owner_id'],
-                            'author' => COM_getDisplayName( $row['owner_id'] ),
-                            'date'   => $creationtime,
-                            'format' => 'plaintext',
-                            'extensions' => $extensionTags
-                          );
-    }
-
-    $link = $_CONF['site_url'] . '/calendar/index.php';
-    $update = implode( ',', $eids );
 
     return $content;
 }
