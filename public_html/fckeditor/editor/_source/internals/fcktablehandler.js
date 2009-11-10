@@ -846,6 +846,10 @@ FCKTableHandler.GetMergeDownTarget = function()
 	if ( ! nextCell )
 		return null ;
 
+	// Check if the selected cells are both in the same table section (thead, tfoot or tbody).
+	if ( refCell.parentNode.parentNode != nextCell.parentNode.parentNode )
+		return null ;
+
 	// The two cells must have the same horizontal geometry, otherwise merging does not makes sense.
 	this._MarkCells( [refCell, nextCell], '_SizeTest' ) ;
 	var refGeometry = this._GetMarkerGeometry( tableMap, rowIdx, colIdx, '_SizeTest' ) ;
