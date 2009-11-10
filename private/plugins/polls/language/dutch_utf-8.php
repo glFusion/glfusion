@@ -38,28 +38,28 @@ global $LANG32;
 ###############################################################################
 
 $LANG_POLLS = array(
-    'polls' => 'Peilingen',
+    'polls' => 'Enquetes',
     'results' => 'Resultaten',
-    'pollresults' => 'Peiling Resultaten',
+    'pollresults' => 'Enquete Resultaten',
     'votes' => 'stemmen',
     'vote' => 'Stem',
-    'pastpolls' => 'Oudere peilingen',
+    'pastpolls' => 'Oudere enquetes',
     'savedvotetitle' => 'Stem opgeslagen',
-    'savedvotemsg' => 'Uw stem is in de peling opgenomen',
-    'pollstitle' => 'Peilingen in systeem',
-    'polltopics' => 'Other polls',
-    'stats_top10' => 'Top Tien Peilingen',
-    'stats_topics' => 'Poll Topic',
+    'savedvotemsg' => 'Uw stem is in de peiling opgenomen',
+    'pollstitle' => 'Enquetes in systeem',
+    'polltopics' => 'Andere Enquetes',
+    'stats_top10' => 'Top Tien Enquetes',
+    'stats_topics' => 'Enquete Onderwerpen',
     'stats_votes' => 'Stemmen',
-    'stats_none' => 'Er zijn geen peilingen aanwezig of er is nog niet op gestemd.',
-    'stats_summary' => 'Peilingen (resultaten) in het systeem',
+    'stats_none' => 'Er zijn geen Enquetes aanwezig of er is nog niet op gestemd.',
+    'stats_summary' => 'Enquetes (resultaten) in het systeem',
     'open_poll' => 'Open voor stemmen',
-    'answer_all' => 'Please answer all remaining questions',
-    'not_saved' => 'Result not saved',
+    'answer_all' => 'Beantwoord a.u.b. de overige vragen',
+    'not_saved' => 'Resultaat is niet opgeslagen',
     'upgrade1' => 'You installed a new version of the Polls plugin. Please',
     'upgrade2' => 'upgrade',
-    'editinstructions' => 'Please fill in the Poll ID, at least one question and two answers for it.',
-    'start_poll' => 'Start Poll'
+    'editinstructions' => 'Vul a.u.b. de Enquete ID in en minimaal 1 vraag met twee ogelijke antwoorden.',
+    'start_poll' => 'Vul Enquete in'
 );
 
 ###############################################################################
@@ -67,49 +67,49 @@ $LANG_POLLS = array(
 
 $LANG25 = array(
     1 => 'Mode',
-    2 => 'Please enter a topic, at least one question and at least one answer for that question.',
-    3 => 'Poll Created',
-    4 => 'Poll %s saved',
-    5 => 'Edit Poll',
-    6 => 'Poll ID',
-    7 => '(do not use spaces)',
-    8 => 'Appears on Pollblock',
-    9 => 'Topic',
-    10 => 'Answers / Votes / Remark',
+    2 => 'Vul a.u.b. en onderwerp, min. 1 vraag met min. 2 bijbehorende antwoorden.',
+    3 => 'Enquete Aangemaakt',
+    4 => 'Enquete %s is opgeslagen',
+    5 => 'Wijzig Enquete',
+    6 => 'Enquete ID',
+    7 => '(gebruik geen spaties)',
+    8 => 'Wordt op Enquete Blok getoond',
+    9 => 'Onderwerp',
+    10 => 'Antwoorden / Stemmen / Opmerking',
     11 => 'There was an error getting poll answer data about the poll %s',
     12 => 'There was an error getting poll question data about the poll %s',
-    13 => 'Create Poll',
-    14 => 'save',
-    15 => 'cancel',
-    16 => 'delete',
-    17 => 'Please enter a Poll ID',
-    18 => 'Poll List',
+    13 => 'Maak nieuwe Enquete',
+    14 => 'opslaan',
+    15 => 'annuleren',
+    16 => 'verwijderen',
+    17 => 'Vul a.u.b. een Enquete ID in',
+    18 => 'Enquete Overzicht',
     19 => 'To modify or delete a poll, click on the edit icon of the poll.  To create a new poll, click on "Create New" above.',
-    20 => 'Voters',
-    21 => 'Access Denied',
+    20 => 'Deelnemers',
+    21 => 'Toegang Verboden',
     22 => "You are trying to access a poll that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/poll.php\">go back to the poll administration screen</a>.",
-    23 => 'New Poll',
-    24 => 'Admin Home',
-    25 => 'Yes',
-    26 => 'No',
-    27 => 'Edit',
-    28 => 'Submit',
-    29 => 'Search',
-    30 => 'Limit Results',
-    31 => 'Question',
-    32 => 'To remove this question from the poll, remove its question text',
-    33 => 'Open for voting',
-    34 => 'Poll Topic:',
-    35 => 'This poll has',
-    36 => 'more questions.',
-    37 => 'Hide results while poll is open',
-    38 => 'While the poll is open, only the owner &amp; root can see the results',
-    39 => 'The topic will be only displayed if there are more than 1 questions.',
-    40 => 'See all answers to this poll'
+    23 => 'Nieuwe Enquete',
+    24 => 'Beheerpagina',
+    25 => 'Ja',
+    26 => 'Nee',
+    27 => 'Wijzig',
+    28 => 'Bewaar',
+    29 => 'Zoek',
+    30 => 'Beperk Resultaten',
+    31 => 'Vraag',
+    32 => 'Verwijder de vraag tekst om deze vraag te verwijderen',
+    33 => 'Er kan gestemd worden',
+    34 => 'Enquete Onderwerp:',
+    35 => 'Er zijn',
+    36 => 'extra vragen.',
+    37 => 'Verberg de resultaten zolang er gestemd kan worden op een enquete',
+    38 => 'Alleen de eigenaar &amp; root kan de resultaten zien zolang er op de enquete kan worden gestemd',
+    39 => 'Het onderwerp wordt alleen getoond als er meer dan 1 vraag is.',
+    40 => 'Bekijk alle antwoorden'
 );
 
-$PLG_polls_MESSAGE19 = 'Your poll has been successfully saved.';
-$PLG_polls_MESSAGE20 = 'Your poll has been successfully deleted.';
+$PLG_polls_MESSAGE19 = 'Uw Enquete is met succes opgeslagen.';
+$PLG_polls_MESSAGE20 = 'Uw Enquete is met succes verwijderd.';
 
 // Messages for the plugin upgrade
 $PLG_polls_MESSAGE3001 = 'Plugin upgrade not supported.';
@@ -117,39 +117,39 @@ $PLG_polls_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['polls'] = array(
-    'label' => 'Polls',
-    'title' => 'Polls Configuration'
+    'label' => 'Enquetes',
+    'title' => 'Enquete Instellingen'
 );
 
 $LANG_confignames['polls'] = array(
-    'pollsloginrequired' => 'Polls Login Required?',
-    'hidepollsmenu' => 'Hide Polls Menu Entry?',
-    'maxquestions' => 'Max. Questions per Poll',
-    'maxanswers' => 'Max. Options per Question',
-    'answerorder' => 'Sort Results ...',
-    'pollcookietime' => 'Voter Cookie valid for',
-    'polladdresstime' => 'Voter IP Address valid for',
-    'delete_polls' => 'Delete Polls with Owner?',
-    'aftersave' => 'After Saving Poll',
-    'default_permissions' => 'Poll Default Permissions'
+    'pollsloginrequired' => 'Aanmelding Vereist voor Enquetes?',
+    'hidepollsmenu' => 'Enquete Menu Item Verbergen?',
+    'maxquestions' => 'Max. aantal vragen per Enquete',
+    'maxanswers' => 'Max. aantal antwoorden per Vraag',
+    'answerorder' => 'Sorteer Resultaten ...',
+    'pollcookietime' => 'Deelnemer\'s Cookie geldig voor',
+    'polladdresstime' => 'Deelnemer\'s IP Adres geldig voor',
+    'delete_polls' => 'Verwijder enquetes als de eigenaar ervan wordt verwijderd?',
+    'aftersave' => 'Na opslaan Enquete',
+    'default_permissions' => 'Standaard Enquete Rechten'
 );
 
 $LANG_configsubgroups['polls'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Hoofd Instellingen'
 );
 
 $LANG_fs['polls'] = array(
-    'fs_main' => 'General Polls Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_main' => 'Algemene Enquete Instellingen',
+    'fs_permissions' => 'Standaard Rechten'
 );
 
 // Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['polls'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    2 => array('As Submitted' => 'submitorder', 'By Votes' => 'voteorder'),
-    9 => array('Forward to Poll' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    0 => array('Ja' => 1, 'Nee' => 0),
+    1 => array('Ja' => true, 'Nee' => false),
+    2 => array('Zoals Ingezonden' => 'submitorder', 'Op basis van Stemmen' => 'voteorder'),
+    9 => array('Ga naar Enquete' => 'item', 'Toon Beheer Overizcht' => 'list', 'Toon Publieke Overzicht' => 'plugin', 'Toon Startpagina' => 'home', 'Toon Beheerpagina' => 'admin'),
+    12 => array('Geen Toegang' => 0, 'Alleen Lezen' => 2, 'Lezen en Schrijven' => 3)
 );
 
 ?>

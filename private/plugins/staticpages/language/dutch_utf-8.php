@@ -39,15 +39,15 @@ global $LANG32;
 
 $LANG_STATIC = array(
     'newpage' => 'Nieuwe Pagina',
-    'adminhome' => 'Beheerder Home',
-    'staticpages' => 'Static Pages',
-    'staticpageeditor' => 'Static Page Editor',
-    'writtenby' => 'Geschreven door',
+    'adminhome' => 'Beheerpagina',
+    'staticpages' => 'Statische Pagina\'s',
+    'staticpageeditor' => 'Statische Pagina Editor',
+    'writtenby' => 'Auteur',
     'date' => 'Laatst bijgewerkt',
     'title' => 'Titel',
     'content' => 'Inhoud',
     'hits' => 'Treffers',
-    'staticpagelist' => 'Static Page Lijst',
+    'staticpagelist' => 'Overzicht Statische Pagina\'s',
     'url' => 'URL',
     'edit' => 'Wijzigen',
     'lastupdated' => 'Laatst bijgewerkt',
@@ -58,37 +58,37 @@ $LANG_STATIC = array(
     'leftblocks' => 'Linker Blokken',
     'addtomenu' => 'Aan menu toevoegen',
     'label' => 'Label',
-    'nopages' => 'Er zijn nog geen static pages.',
+    'nopages' => 'Er zijn nog geen statische pagina\'s.',
     'save' => 'opslaan',
-    'preview' => 'preview',
+    'preview' => 'voorbeeld',
     'delete' => 'verwijderen',
     'cancel' => 'annuleren',
     'access_denied' => 'Geen toegang',
-    'access_denied_msg' => 'U heeft ongeautoriseerd geprobeerd een van de Static Pages op te roepen. Deze poging is vastgelegd.',
+    'access_denied_msg' => 'U heeft ongeautoriseerd geprobeerd een van de Statische Pagina\'s op te roepen. Deze poging is vastgelegd.',
     'all_html_allowed' => 'HTML is toegestaan',
-    'results' => 'Static Pages Resultaten',
+    'results' => 'Statische Pagina\'s Resultaten',
     'author' => 'Auteur',
     'no_title_or_content' => 'Gelieve de <b>Titel</b> en <b>Content</b> op te geven.',
     'no_such_page_anon' => 'Gelieve eerst in te loggen...',
-    'no_page_access_msg' => "Dit kan optreden omdat u niet ingelogd bent, of geen lid bent van {$_CONF['site_name']}. <a href=\"{$_CONF['site_url']}/users.php?mode=new\">Meldt u aann</a> op {$_CONF['site_name']} om alle faciliteiten te verkrijgen",
+    'no_page_access_msg' => "Dit kan optreden omdat u niet ingelogd bent, of geen lid bent van {$_CONF['site_name']}. <a href=\"{$_CONF['site_url']}/users.php?mode=new\">Meldt u aan</a> op {$_CONF['site_name']} om alle faciliteiten te verkrijgen.",
     'php_msg' => 'PHP: ',
     'php_warn' => 'Pas op !!  PHP code in uw pagina wordt uitgevoerd indien de optie geactiveerd is. Wees hiermee voorzichtig !!',
     'exit_msg' => 'Exit Type: ',
     'exit_info' => 'Activeer het Portaal bericht "Login Required". Niet aanvinken voor normale beveiligingsfunkties en berichtgevingen.',
     'deny_msg' => 'De toegang naar deze pagina is geweigerd. De pagina is verwijderd of verplaatst, of u bent hiervoor niet geautoriseerd.',
-    'stats_headline' => 'Top Tien Static Pages',
+    'stats_headline' => 'Top Tien Statische Pagina\'s',
     'stats_page_title' => 'Pagina Titel',
     'stats_hits' => 'Treffers',
-    'stats_no_hits' => 'Het lijkt er op dat er geen static pages aanwezig zijn, of dat niemand ze ooit opgevraagd heeft.',
+    'stats_no_hits' => 'Het lijkt er op dat er geen statische pagina\'s aanwezig zijn, of dat niemand ze ooit opgevraagd heeft.',
     'id' => 'ID',
     'duplicate_id' => 'De ID die u opgeeft voor deze static page is reeds in gebruik. Kies een andere ID.',
-    'instructions' => 'Om een static page te wijzigen of te vewijderen, klik op het nummer van de betreffende pagina hieronder. Om een static page in te zien, klik op de titel van de betreffende pagina. Om een nieuwe static page aan te leggen klik op "Nieuwe Pagina" hierboven. Klik op [C] om een kopie te maken.',
+    'instructions' => 'Om een statische pagina te wijzigen of te verwijderen, klik op het nummer van de betreffende pagina hieronder. Om een statische pagina in te zien, klik op de titel van de betreffende pagina. Om een nieuwe statische pagina aan te leggen klik op "Nieuwe Pagina" hierboven. Klik op [C] om een kopie te maken.',
     'centerblock' => 'Centerblok: ',
-    'centerblock_msg' => 'Indien aangevinkt, wordt deze Static Page weergegeven in het midden van de index pagina.',
+    'centerblock_msg' => 'Indien aangevinkt, wordt deze Statische Pagina weergegeven in het midden van de index pagina.',
     'topic' => 'Thema: ',
     'position' => 'Positie: ',
     'all_topics' => 'All',
-    'no_topic' => 'Alleen Homepage',
+    'no_topic' => 'Alleen Startpagina',
     'position_top' => 'Bovenaan',
     'position_feat' => 'Na HoofdArtikel',
     'position_bottom' => 'Onderaan',
@@ -100,20 +100,20 @@ $LANG_STATIC = array(
     'centerblock_bottom' => 'Onderaan',
     'centerblock_entire' => 'Gehele pagina',
     'inblock_msg' => 'In een blok: ',
-    'inblock_info' => 'Geef de Static Page weer als een blok.',
+    'inblock_info' => 'Geef de Statische Pagina weer als een blok.',
     'title_edit' => 'Wijzig pagina',
-    'title_copy' => 'Maak een copy van deze pagina',
+    'title_copy' => 'Maak een kopie van deze pagina',
     'title_display' => 'Laat de pagina zien',
     'select_php_none' => 'maak het uitvoeren van PHP onmogelijk',
     'select_php_return' => 'uitvoeren van PHP (return)',
     'select_php_free' => 'voer PHP uit',
-    'php_not_activated' => "Het gebruik van PHP in Static Pages is niet geactiveerd. Bekijk de <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentatie</a> voor meer bijzonderheden.",
-    'printable_format' => 'Printbare versie',
-    'copy' => 'Copy',
-    'limit_results' => 'Limit Results',
-    'search' => 'Search',
-    'submit' => 'Submit',
-    'delete_confirm' => 'Are you sure you want to delete this page?'
+    'php_not_activated' => "Het gebruik van PHP in Statische Pagina\'s is niet geactiveerd. Bekijk de <a href=\"{$_CONF['site_url']}/docs/staticpages.html#php\">documentatie</a> voor meer bijzonderheden.",
+    'printable_format' => 'Afdruk versie',
+    'copy' => 'Kopieer',
+    'limit_results' => 'Beperk Resultaten',
+    'search' => 'Zoek',
+    'submit' => 'Opslaan',
+    'delete_confirm' => 'Weet u zeker dat u deze pagina wilt verwijderen?'
 );
 
 $PLG_staticpages_MESSAGE19 = '';
@@ -125,42 +125,42 @@ $PLG_staticpages_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['staticpages'] = array(
-    'label' => 'Static Pages',
-    'title' => 'Static Pages Configuration'
+    'label' => 'Statische Pagina\'s',
+    'title' => 'Instellingen Statische Pagina\'s'
 );
 
 $LANG_confignames['staticpages'] = array(
-    'allow_php' => 'Allow PHP?',
-    'sort_by' => 'Sort Centerblocks by',
-    'sort_menu_by' => 'Sort Menu Entries by',
-    'delete_pages' => 'Delete Pages with Owner?',
+    'allow_php' => 'PHP Toestaan?',
+    'sort_by' => 'Sorteer Centerblokken op',
+    'sort_menu_by' => 'Sorteer Menu Items op',
+    'delete_pages' => 'Verwijder pagina\'s tegelijk met de Eigenaar?',
     'in_block' => 'Wrap Pages in Block?',
-    'show_hits' => 'Show Hits?',
-    'show_date' => 'Show Date?',
+    'show_hits' => 'Toon Treffers?',
+    'show_date' => 'Toon Datum?',
     'filter_html' => 'Filter HTML?',
-    'censor' => 'Censor Content?',
-    'default_permissions' => 'Page Default Permissions',
-    'aftersave' => 'After Saving Page',
-    'atom_max_items' => 'Max. Pages in Webservices Feed'
+    'censor' => 'Gecensureerde Inhoud?',
+    'default_permissions' => 'Standaard Pagina Rechten',
+    'aftersave' => 'na het opslaan van de pagina',
+    'atom_max_items' => 'Max. aantal pagina\'s in Webservice Feed'
 );
 
 $LANG_configsubgroups['staticpages'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Hoofd Instellingen'
 );
 
 $LANG_fs['staticpages'] = array(
-    'fs_main' => 'Static Pages Main Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_main' => 'Hoofd Instellingen Statische Pagina\'s',
+    'fs_permissions' => 'Standaard Rechten'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['staticpages'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    2 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title'),
-    3 => array('Date' => 'date', 'Page ID' => 'id', 'Title' => 'title', 'Label' => 'label'),
-    9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    0 => array('Ja' => 1, 'Nee' => 0),
+    1 => array('Ja' => true, 'Nee' => false),
+    2 => array('Datum' => 'date', 'Pagina ID' => 'id', 'Titel' => 'title'),
+    3 => array('Datum' => 'date', 'Pagina ID' => 'id', 'Titel' => 'title', 'Label' => 'label'),
+    9 => array('Ga naar pagina' => 'item', 'Toon Overzicht' => 'list', 'Toon Startpagina' => 'home', 'Toon Beheer' => 'admin'),
+    12 => array('Geen toegang' => 0, 'Alleen-Lezen' => 2, 'Lezen-Schrijven' => 3)
 );
 
 ?>

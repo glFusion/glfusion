@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 ###############################################################################
 # dutch.php
 #
@@ -120,7 +120,7 @@ $LANG_CAL_2 = array(
     34 => 'Tijd',
     35 => 'Nieuwe gebeurtenis',
     36 => 'Versturen',
-    37 => 'Sorry, persoonlijke kalenders zijn op deze webpagina niet beschikbaar.',
+    37 => 'Sorrie, persoonlijke kalenders zijn op deze webpagina niet beschikbaar.',
     38 => 'Persoonlijke gebeurtenis-Editor',
     39 => 'Vandaag',
     40 => 'Week',
@@ -145,7 +145,7 @@ $LANG_CAL_ADMIN = array(
     10 => 'Er moet minstens een Datum, Tijd, Titel en Beschrijving worden ingegeven!',
     11 => 'Kalender-Manager',
     12 => 'Op het andere Icoon klikken, om een gebeurtenis te veranderen of te verwijderen. Met Nieuw aanmaken (s.o.) word een nieuwe gebeurtenis aangemaakt. De kopie-knop maakt een kopie van een komende gebeurtenis.',
-    13 => 'Schrijver',
+    13 => 'Auteur',
     14 => 'Startdatum',
     15 => 'Einddatum',
     16 => '',
@@ -158,17 +158,17 @@ $LANG_CAL_ADMIN = array(
     23 => 'Ongeldige Startdatum.',
     24 => 'Ongeldige Einddatum.',
     25 => 'Einddatum is voor de Startdatum.',
-    26 => 'Delete old entries',
-    27 => 'These are the events that are older than ',
-    28 => ' months. Please click on the trashcan Icon on the bottom to delete them, or select a different timespan:<br' . XHTML . '>Find all entries that are older than ',
-    29 => ' months.',
-    30 => 'Update List',
-    31 => 'Are You sure you want to permanently delete ALL selected users?',
-    32 => 'List all',
-    33 => 'No events selected for deletion',
-    34 => 'Event ID',
-    35 => 'could not be deleted',
-    36 => 'Sucessfully deleted'
+    26 => 'Verwijder oude items',
+    27 => 'Dit zijn de evenementen die ouder zijn dan ',
+    28 => ' maanden. Klik a.u.b. op de prullebak onderaan om ze te verwijderen, of selecteer een andere tijdsspanne:<br' . XHTML . '>Vind alle items die ouder zijn dan ',
+    29 => ' maanden.',
+    30 => 'Overzicht bijwerken',
+    31 => 'Weet u zeker dat u ALLE geselecteerde gebruikers permanent wilt verwijderen?',
+    32 => 'Toon alles',
+    33 => 'Er zijn geen evenementen geselecteerd om te verwijderen',
+    34 => 'Evenement ID',
+    35 => 'kon niet worden verwijderd',
+    36 => 'Succesvol verwijderd'
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -177,7 +177,7 @@ $LANG_CAL_MESSAGE = array(
     'private' => 'De gebeurtenis is in uw kalender opgenomen.',
     'login' => 'U moet aangemeld zijn om uw persoonlijke kalender te bewerken.',
     'removed' => 'De gebeurtenis is van uw persoonlijke kalender verwijderd',
-    'noprivate' => 'Sorry, persoonlijke kalenders zijn op deze webpagina niet beschikbaar.',
+    'noprivate' => 'Sorrie, persoonlijke kalenders zijn op deze webpagina niet beschikbaar.',
     'unauth' => 'U heeft geen toegang tot het gebeurtenis-beheerdersgedeelte. Alle toegangspogingen worden opgeslagen.'
 );
 
@@ -193,42 +193,42 @@ $PLG_calendar_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['calendar'] = array(
-    'label' => 'Calendar',
-    'title' => 'Calendar Configuration'
+    'label' => 'Kalender',
+    'title' => 'Kalender Instellingen'
 );
 
 $LANG_confignames['calendar'] = array(
-    'calendarloginrequired' => 'Calendar Login Required?',
-    'hidecalendarmenu' => 'Hide Calendar Menu Entry?',
-    'personalcalendars' => 'Enable Personal Calendars?',
-    'eventsubmission' => 'Enable Submission Queue?',
-    'showupcomingevents' => 'Show upcoming Events?',
-    'upcomingeventsrange' => 'Upcoming Events Range',
-    'event_types' => 'Event Types',
-    'hour_mode' => 'Hour Mode',
-    'notification' => 'Notification Email?',
-    'delete_event' => 'Delete Events with Owner?',
-    'aftersave' => 'After Saving Event',
-    'default_permissions' => 'Event Default Permissions',
-    'only_admin_submit' => 'Only Allow Admins to Submit'
+    'calendarloginrequired' => 'Kalender Aanmelding Verplicht?',
+    'hidecalendarmenu' => 'Kalender in Menu verbergen?',
+    'personalcalendars' => 'Persoonlijke Kalenders Inschakelen?',
+    'eventsubmission' => 'Wachtrij Inschakelen?',
+    'showupcomingevents' => 'Aankomende Evenementen Tonen?',
+    'upcomingeventsrange' => 'Aankomende Evenementen Bereik',
+    'event_types' => 'Evenement Types',
+    'hour_mode' => 'Uur Mode',
+    'notification' => 'Waarschuwings Email?',
+    'delete_event' => 'Verwijder evenementen met de Eigenaar?',
+    'aftersave' => 'Na het opslaan van het evenement',
+    'default_permissions' => 'Evenement Standaard Rechten',
+    'only_admin_submit' => 'Alleen Beheerders toestaan om in te sturen?'
 );
 
 $LANG_configsubgroups['calendar'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Hoofd Instellingen'
 );
 
 $LANG_fs['calendar'] = array(
-    'fs_main' => 'General Calendar Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_main' => 'Algemene Kalender Instellingen',
+    'fs_permissions' => 'Standaard Rechten'
 );
 
 // Note: entries 0, 1, 6, 9, 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['calendar'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
+    0 => array('Ja' => 1, 'Nee' => 0),
+    1 => array('Ja' => true, 'Nee' => false),
     6 => array('12' => 12, '24' => 24),
-    9 => array('Forward to Event' => 'item', 'Display Admin List' => 'list', 'Display Calendar' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    9 => array('Spring naar Evenement' => 'item', 'Toon Beheerders Overzicht' => 'list', 'Toon Kalender' => 'plugin', 'Toon Startpagina' => 'home', 'Toon Beheerpagina' => 'admin'),
+    12 => array('Geen toegang' => 0, 'Alleen-Lezen' => 2, 'Lezen-Schrijven' => 3)
 );
 
 ?>
