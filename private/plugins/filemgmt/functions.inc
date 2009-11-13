@@ -780,7 +780,7 @@ function plugin_getwhatsnew_filemgmt() {
 
 
 /**
-* Implements the [file:] autotag.
+* Implements the [file:] and [file_download:]  autotags.
 *
 */
 function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
@@ -792,21 +792,69 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
     }
 
     if ($op == 'tagname' ) {
-        return 'file';
+        return array('file', 'file_download');
     } else if ($op == 'parse') {
         if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
             return $content;
         }
+
+        $target = '';
+        $target_window = '';
+        $caption = $autotag['parm2'];
+        $skip = 0;
+
         $file_id = COM_applyFilter ($autotag['parm1']);
-        $url = COM_buildUrl ($_CONF['site_url'] . '/filemgmt/index.php?id='
-                             . $file_id);
-        if (empty ($autotag['parm2'])) {
-            $linktext = stripslashes (DB_getItem ($_FM_TABLES['filemgmt_filedetail'],
-                                      'title', "lid = '".addslashes($file_id)."'"));
+
+		// check for target window specification, and user-defined caption, if any
+        $px = explode (' ', trim ($autotag['parm2']));
+        if (is_array ($px)) {
+            foreach ($px as $part) {
+                if (substr ($part, 0, 7) == 'target:') {
+                    $a = explode (':', $part);
+                    $target_window = $a[1];
+                    $skip++;
+                } else {
+                    break;
+                }
+            }
+
+            if ($skip != 0) {
+                if (count ($px) > $skip) {
+                    for ($i = 0; $i < $skip; $i++) {
+                        array_shift ($px);
+                    }
+                    $caption = trim (implode (' ', $px));
+                } else {
+                    $caption = '';
+                }
+            }
         } else {
-            $linktext = $autotag['parm2'];
+            $caption = trim ($autotag['parm2']);
         }
-        $link = '<a href="' . $url . '">' . $linktext . '</a>';
+
+        switch( $autotag['tag'] ) {
+            case 'file' :
+                $url = COM_buildUrl ($_CONF['site_url'] . '/filemgmt/index.php?id='
+                                 . $file_id);
+                break;
+            case 'file_download' :
+                if ( $target_window != '' ) {
+                    $url = COM_buildUrl ($_CONF['site_url'] . '/filemgmt/visit.php?lid='
+                                     . $file_id);
+                    $target = 'target="'.$target_window.'"';
+                } else {
+                    $url = COM_buildUrl ($_CONF['site_url'] . '/filemgmt/visit.php?lid='
+                                     . $file_id);
+                }
+                break;
+        }
+        if ($caption == '' ) {
+            $linktext = DB_getItem ($_FM_TABLES['filemgmt_filedetail'],
+                                      'title', "lid = '".addslashes($file_id)."'");
+        } else {
+            $linktext = $caption;
+        }
+        $link = '<a href="' . $url . '" ' . $target . ' >' . $linktext . '</a>';
         $content = str_replace ($autotag['tagstr'], $link, $content);
 
         return $content;
