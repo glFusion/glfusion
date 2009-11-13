@@ -260,6 +260,13 @@ class mbElement {
         return false;
     }
 
+    function replace_macros() {
+        global $_CONF;
+        $this->url = str_replace( "%version%", GVERSION, $this->url );
+        $this->url = str_replace( "%site_url%", $_CONF['site_url'], $this->url );
+        $this->url = str_replace( "%site_admin_url%", $_CONF['site_admin_url'], $this->url );
+        return;
+    }
 
     function showTree( $depth,$ulclass='',$liclass='',$parentaclass='',$lastclass,$selected='' ) {
         global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG29, $_CONF,$meLevel,
@@ -310,8 +317,7 @@ class mbElement {
         // need to build the URL
         switch ( $this->type ) {
             case '1' : // subtype - do nothing
-                $this->url = str_replace("%site_url%", $_CONF['site_url'],$this->url);
-                $this->url = str_replace("%site_admin_url%", $_CONF['site_admin_url'], $this->url);
+                $this->replace_macros();
                 break;
             case '2' : // glfusion action
                 switch ($this->subtype) {
@@ -835,9 +841,7 @@ class mbElement {
                 /*
                  * Check to see if any internal macros
                  */
-                $this->url = str_replace("%site_url%", $_CONF['site_url'],$this->url);
-                $this->url = str_replace("%site_admin_url%", $_CONF['site_admin_url'], $this->url);
-
+                $this->replace_macros();
                 break;
             case '7' : // php function
                 $functionName = $this->subtype;
