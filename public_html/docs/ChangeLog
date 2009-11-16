@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.7 svn
 ----------
+- FileMgmt: Added file_download autotag (Mark H.)
 - Added ICS (calendar export) to syndication library (Mark)
 - Added autotag logic to template library (Mark)
 - Upgrade Geshi to v1.0.8.4 (Mark)
