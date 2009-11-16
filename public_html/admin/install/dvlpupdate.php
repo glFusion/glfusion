@@ -344,7 +344,7 @@ function glfusion_117()
 
     // convert the existing filemgmt ratings to new rating system...
 
-    $fm_version = DB_getItem($_TABLS['plugins'],'pi_version','pi_name="filemgmt"');
+    $fm_version = DB_getItem($_TABLES['plugins'],'pi_version','pi_name="filemgmt"');
 
     if ( $fm_version != '1.7.5' ) {
         DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} set rating = rating / 2",1);
@@ -369,7 +369,7 @@ function glfusion_117()
 
     // convert the existing Media Gallery ratings to new rating system...
 
-    $mg_version = DB_getItem($_TABLS['plugins'],'pi_version','pi_name="mediagallery"');
+    $mg_version = DB_getItem($_TABLES['plugins'],'pi_version','pi_name="mediagallery"');
     if ( $fm_version != '1.6.8' ) {
 
         DB_query("UPDATE {$_TABLES['mg_media']} set media_rating = media_rating / 2",1);
