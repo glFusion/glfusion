@@ -121,6 +121,8 @@ class Story
     var $_tid;
     var $_date;
     var $_hits;
+    var $_rating;
+    var $_votes;
     var $_numemails;
     var $_comment_expire;
     var $_comments;
@@ -187,6 +189,8 @@ class Story
            'introtext' => 1,
            'bodytext' => 1,
            'hits' => 1,
+           'rating' => 1,
+           'votes' => 1,
            'numemails' => 1,
            'comments' => 1,
            'trackbacks' => 1,
@@ -280,6 +284,16 @@ class Story
                 STORY_AL_NUMERIC,
                 '_hits'
               ),
+           'story_rating' => array
+              (
+                STORY_AL_NUMERIC,
+                '_rating'
+              ),
+           'story_vptes' => array
+              (
+                STORY_AL_NUMERIC,
+                '_votes'
+              ),
            'story_comments' => array
               (
                 STORY_AL_NUMERIC,
@@ -314,6 +328,16 @@ class Story
               (
                 STORY_AL_NUMERIC,
                 '_hits'
+              ),
+           'rating' => array
+              (
+                STORY_AL_NUMERIC,
+                '_rating'
+              ),
+           'votes' => array
+              (
+                STORY_AL_NUMERIC,
+                '_votes'
               ),
            'comments' => array
               (
@@ -457,6 +481,8 @@ class Story
             }
 
             $this->_hits = 0;
+            $this->_rating = 0.00;
+            $this->_votes = 0;
             $this->_comments = 0;
             $this->_trackbacks = 0;
             $this->_numemails = 0;
@@ -566,6 +592,8 @@ class Story
             $this->_commentcode = $_CONF['comment_code'];
             $this->_trackbackcode = $_CONF['trackback_code'];
             $this->_hits = 0;
+            $this->_rating = 0.00;
+            $this->_votes = 0;
             $this->_comments = 0;
             $this->_trackbacks = 0;
             $this->_numemails = 0;
@@ -1549,7 +1577,15 @@ class Story
             $return = COM_NumberFormat($this->_hits);
 
             break;
+        case 'rating':
+            $return = @number_format($this->_rating,2);
 
+            break;
+
+        case 'votes':
+            $return = COM_NumberFormat($this->_votes);
+
+            break;
         case 'topic':
             $return = htmlspecialchars($this->_topic);
 
@@ -1993,6 +2029,14 @@ class Story
     {
         if (empty($this->_hits)) {
             $this->_hits = 0;
+        }
+
+        if (empty($this->_rating)) {
+            $this->_rating = 0.00;
+        }
+
+        if ( empty($this->_votes)) {
+            $this->_votes = 0;
         }
 
         if (empty($this->_commentcount)) {

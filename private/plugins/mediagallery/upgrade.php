@@ -187,6 +187,12 @@ function mediagallery_upgrade()
             if ( MG_upgrade_165() == 0 ) {
                 DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.5' WHERE pi_name='mediagallery' LIMIT 1");
             }
+        case "1.6.5" :
+        case "1.6.6" :
+        case "1.6.7" :
+            if ( MG_upgrade_168() == 0 ) {
+                DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.8' WHERE pi_name='mediagallery' LIMIT 1");
+            }
         default :
             if ( $_DB_dbms != 'mssql' ) {
                 // we missed media_keywords field somewhere along the way...
@@ -1694,6 +1700,32 @@ function MG_upgrade_165() {
 
     MG_buildFullRSS();
     MGUPG_rebuildAllAlbumsRSS(0);
+
+    return 0;
+}
+
+function MG_upgrade_168() {
+    global $_TABLES, $_CONF, $_MG_CONF;
+
+    // convert the existing Media Gallery ratings to new rating system...
+
+    DB_query("UPDATE {$_TABLES['mg_media']} set media_rating = media_rating / 2",1);
+    $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} WHERE media_votes > 0");
+    while ( $F = DB_fetchArray($result) ) {
+        $item_id = $F['media_id'];
+        $votes   = $F['media_votes'];
+        $rating  = $F['media_rating'];
+        DB_query("INSERT INTO {$_TABLES['rating']} (type,item_id,votes,rating) VALUES ('mediagallery','".$item_id."',$votes,$rating);",1);
+    }
+
+    $result = DB_query("SELECT * FROM {$_TABLES['mg_rating']}");
+    while ( $H = DB_fetchArray($result) ) {
+        $item_id = $H['media_id'];
+        $user_id = $H['uid'];
+        $ip      = $H['ip_address'];
+        $time    = $H['ratingdate'];
+        DB_query("INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) VALUES ('mediagallery','".$item_id."',$user_id,'".$ip."',$time);");
+    }
 
     return 0;
 }

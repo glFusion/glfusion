@@ -1652,29 +1652,19 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 
     // build the rating bar if rating is enabled.
     if ( $MG_albums[$aid]->enable_rating > 0 ) {
-        require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-rating.php';
-
-        $ip     = $_SERVER['REMOTE_ADDR'];
         $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
-
+        $static = false;
+        $voted  = 0;
         // check to see if we are the owner, if so, no rating for us...
         if (isset($_USER['uid']) && $_USER['uid'] == $media[$mediaObject]['media_user_id'] ) {
-            $static = 'static';
+            $static = true;
             $voted = 0;
-        } else {
-            if (in_array($media[$mediaObject]['media_id'], $ratedIds)) {
-                $static = 'static';
-                $voted  = 1;
-            } else {
-                $static = '';
-                $voted = 0;
-            }
         }
         if ( $MG_albums[$aid]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
             $static = 'static';
             $voted = 0;
         }
-        $rating_box = mgRating_bar($media[$mediaObject]['media_id'], $media[$mediaObject]['media_votes'], ($media[$mediaObject]['media_rating']*$media[$mediaObject]['media_votes'])/2, $voted, 5, $static, '');
+        $rating_box = ratingBar('mediagallery',$media[$mediaObject]['media_id'], $media[$mediaObject]['media_votes'], $media[$mediaObject]['media_rating'], $voted, 5, $static, '');
     } else {
         $rating_box = '';
     }

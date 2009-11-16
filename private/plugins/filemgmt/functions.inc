@@ -860,4 +860,36 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
         return $content;
     }
 }
+
+function plugin_itemrated_filemgmt($lid, $rating, $votes)
+{
+    global $_FM_TABLES;
+
+    $sql = "UPDATE {$_FM_TABLES['filemgmt_filedetail']} SET rating = ".$rating. ", votes=".$votes . " WHERE lid=".$lid;
+    DB_query($sql);
+    return true;
+}
+
+function plugin_canuserrate_filemgmt($item_id, $uid)
+{
+    global $_FM_TABLES, $FilemgmtUser;
+
+    $retval = false;
+
+    if (!$FilemgmtUser){
+        $ratinguser = 0;
+    } else {
+        $ratinguser = $uid;
+    }
+    // Check if Download POSTER is voting (UNLESS Anonymous users allowed to post)
+    if ($ratinguser != 0) {
+        $result=DB_query("SELECT submitter FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE lid='".addslashes($item_id)."'");
+        while(list($ratinguserDB)=DB_fetchARRAY($result)) {
+            if ($ratinguserDB==$ratinguser) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 ?>

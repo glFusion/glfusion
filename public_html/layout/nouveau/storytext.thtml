@@ -33,9 +33,18 @@ digg_window = 'new'; {# open Digg.com window in a new window, if left blank will
         <p>{plugin_itemdisplay}
         {!if comments_count}
             {comments_with_count}
-        {!endif} 
+        {!endif}
         {!if trackbacks_count}
             {trackbacks_with_count}
+        {!endif}
+        {!if rating_bar}
+          <table style="width:100%;padding:0;margin:0">
+          <tr>
+          <td align="center">
+          {rating_bar}
+          </td>
+          </tr>
+          </table>
         {!endif}
         </p>
     </div>

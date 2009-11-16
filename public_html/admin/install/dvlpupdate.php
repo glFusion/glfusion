@@ -276,10 +276,127 @@ function glfusion_116()
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.6' WHERE name='glfusion'",1);
 }
 
+function glfusion_117()
+{
+    global $_TABLES, $_FM_TABLES, $_CONF;
+
+    $_SQL = array();
+
+    // new tables for ratings
+
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating']} (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `type` varchar(254) NOT NULL DEFAULT '',
+                `item_id` varchar(40) NOT NULL,
+                `votes` int(11) NOT NULL,
+                `rating` decimal(4,2) NOT NULL,
+                KEY `id` (`id`)
+              ) Type=MyISAM;";
+
+    $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating_votes']} (
+                 `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                 `type` varchar(254) NOT NULL DEFAULT '',
+                 `item_id` varchar(40) NOT NULL,
+                 `uid` mediumint(8) NOT NULL,
+                 `ip_address` varchar(14) NOT NULL,
+                 `ratingdate` int(11) NOT NULL,
+                 PRIMARY KEY (`id`),
+                 KEY `uid` (`uid`),
+                 KEY `ip_address` (`ip_address`),
+                 KEY `type` (`type`)
+               ) TYPE=MyISAM;";
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("glFusion 1.1.7 Development update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),1);
+        next($_SQL);
+    }
+
+    // new config options
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    $c->add('rating_enabled',1,'select',1,7,24,1237,TRUE);
+
+    // - new CAPTCHA settings
+    $c->add('publickey', '','text',0, 0, 0, 42, true, 'captcha');
+    $c->add('privatekey', '','text',0, 0, 0, 44, true, 'captcha');
+    $c->add('recaptcha_theme', 'white','select',0, 0, 6, 46, true, 'captcha');
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='3.2.4' WHERE pi_name='captcha'");
+    // -- *** NEED TO ADD RATING SPEED LIMIT ***
+
+    // - option to turn on rating in filemgmt
+
+    // new fields in story table to hold rating / votes
+
+    $_SQL = array();
+
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `rating` float NOT NULL DEFAULT '0' AFTER hits";
+    $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `votes` int(11) NOT NULL DEFAULT '0' AFTER rating";
+
+    /* Execute SQL now to perform the upgrade */
+    for ($i = 1; $i <= count($_SQL); $i++) {
+        COM_errorLOG("glFusion 1.1.7 Development update: Executing SQL => " . current($_SQL));
+        DB_query(current($_SQL),1);
+        next($_SQL);
+    }
+
+    // convert the existing filemgmt ratings to new rating system...
+
+    $fm_version = DB_getItem($_TABLS['plugins'],'pi_version','pi_name="filemgmt"');
+
+    if ( $fm_version != '1.7.5' ) {
+        DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} set rating = rating / 2",1);
+        $result = DB_query("SELECT * FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE votes > 0");
+        while ( $F = DB_fetchArray($result) ) {
+            $item_id = $F['lid'];
+            $votes   = $F['votes'];
+            $rating  = $F['rating'];
+            DB_query("INSERT INTO {$_TABLES['rating']} (type,item_id,votes,rating) VALUES ('filemgmt','".$item_id."',$votes,$rating);",1);
+        }
+
+        $result = DB_query("SELECT * FROM {$_FM_TABLES['filemgmt_votedata']}");
+        while ( $H = DB_fetchArray($result) ) {
+            $item_id = $H['lid'];
+            $user_id = $H['ratinguser'];
+            $ip      = $H['ratinghostname'];
+            $time    = $H['ratingtimestamp'];
+            DB_query("INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) VALUES ('filemgmt','".$item_id."',$user_id,'".$ip."',$time);");
+        }
+        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.7.5' WHERE pi_name='filemgmt'");
+    }
+
+    // convert the existing Media Gallery ratings to new rating system...
+
+    $mg_version = DB_getItem($_TABLS['plugins'],'pi_version','pi_name="mediagallery"');
+    if ( $fm_version != '1.6.8' ) {
+
+        DB_query("UPDATE {$_TABLES['mg_media']} set media_rating = media_rating / 2",1);
+        $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} WHERE media_votes > 0");
+        while ( $F = DB_fetchArray($result) ) {
+            $item_id = $F['media_id'];
+            $votes   = $F['media_votes'];
+            $rating  = $F['media_rating'];
+            DB_query("INSERT INTO {$_TABLES['rating']} (type,item_id,votes,rating) VALUES ('mediagallery','".$item_id."',$votes,$rating);",1);
+        }
+
+        $result = DB_query("SELECT * FROM {$_TABLES['mg_rating']}");
+        while ( $H = DB_fetchArray($result) ) {
+            $item_id = $H['media_id'];
+            $user_id = $H['uid'];
+            $ip      = $H['ip_address'];
+            $time    = $H['ratingdate'];
+            DB_query("INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) VALUES ('mediagallery','".$item_id."',$user_id,'".$ip."',$time);");
+        }
+        DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.8' WHERE pi_name='mediagallery'");
+    }
+}
+
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_116();
+glfusion_117();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();

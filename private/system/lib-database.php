@@ -52,6 +52,9 @@ if (!defined ('GVERSION')) {
 // | glFusion code                                                             |
 // +---------------------------------------------------------------------------+
 
+$_TABLES['rating'] = $_DB_table_prefix . 'rating';
+$_TABLES['rating_votes'] = $_DB_table_prefix . 'rating_votes';
+
 $_TABLES['access']              = $_DB_table_prefix . 'access';
 $_TABLES['article_images']      = $_DB_table_prefix . 'article_images';
 $_TABLES['blocks']              = $_DB_table_prefix . 'blocks';

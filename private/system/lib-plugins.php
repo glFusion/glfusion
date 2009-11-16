@@ -2754,8 +2754,8 @@ function PLG_afterSaveSwitch($target, $item_url, $plugin, $message = '')
 */
 function PLG_getConfigElementHelp($type, $option, $doclang = 'english' )
 {
-    $args[0] = $option;
-    $args[1] = $doclang;
+    $args[1] = $option;
+    $args[2] = $doclang;
     $function = 'plugin_getconfigelementhelp_' . $type;
 
     $retval = array();
@@ -2766,7 +2766,82 @@ function PLG_getConfigElementHelp($type, $option, $doclang = 'english' )
     } else {
         return $retval;
     }
-//    return PLG_callFunctionForOnePlugin($function, $args);
 }
 
+/**
+* An item has been rated, allow plugin to update their records
+*
+* @param    string  $plugin  plugin name
+* @param    string  $id_sent the id of the item rated
+* @param    float   $new_rating  the rating value for the item
+* @param    int     $votes       The number of votes
+* @return   void
+* @since    glFusion v1.1.7
+*
+*/
+function PLG_itemRated( $plugin, $id_sent, $new_rating, $added )
+{
+    global $_CONF, $_TABLES;
+
+    $retval = true;
+
+    if ( $plugin == 'article' ) {
+        $sql = "UPDATE {$_TABLES['stories']} SET rating = ".(float) $new_rating. ", votes=".(int) $added . " WHERE sid='".addslashes($id_sent)."'";
+        DB_query($sql);
+    } else {
+        $args[1] = $id_sent;
+        $args[2] = $new_rating;
+        $args[3] = $added;
+        $function = 'plugin_itemrated_' . $plugin;
+
+        $retval = PLG_callFunctionForOnePlugin($function,$args);
+    }
+
+    return $retval;
+}
+
+function PLG_canUserRate( $type, $item_id, $uid )
+{
+   global $_CONF, $_TABLES;
+
+    $retval = false;
+
+    if ( $type == 'article' ) {
+        // check to see if we own it...
+        // check to see if we have permission to vote
+        // check to see if we have already voted (Handled by library)...
+
+        if ( $_CONF['rating_enabled'] != 0 ) {
+            if ( $_CONF['rating_enabled'] == 2 ) {
+                $retval = true;
+            } else if ( !COM_isAnonUser() ) {
+                $retval = true;
+            } else {
+                $retval = false;
+            }
+        }
+
+        if ( $retval == true ) {
+            $perm_sql = COM_getPermSQL( 'AND', $uid, 2);
+            $sql = "SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['stories']} WHERE sid='".$item_id."' " . $perm_sql;
+            $result = DB_query($sql);
+            if ( DB_numRows($result) > 0 ) {
+                list ($owner_id, $group_id,$perm_owner,$perm_group,$perm_members,$perm_anon) = DB_fetchArray($result);
+                if ( $owner_id != $uid ) {
+                    $retval = true;
+                }
+            } else {
+                $retval = false;
+            }
+        }
+    } else {
+        $args[1] = $item_id;
+        $args[2] = $uid;
+        $function = 'plugin_canuserrate_' . $type;
+
+        $retval = PLG_callFunctionForOnePlugin($function,$args);
+    }
+
+    return $retval;
+}
 ?>

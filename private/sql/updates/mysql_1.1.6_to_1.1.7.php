@@ -1,21 +1,16 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
+// | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | calendar.php                                                             |
+// | mysql_1.1.6_to_1.1.7.php                                                 |
 // |                                                                          |
-// | Plugin system integration options                                        |
+// | glFusion Upgrade SQL                                                     |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Based on the FileMgmt Plugin for Geeklog                                 |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -34,33 +29,33 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+// this file can't be used on its own
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file can not be used on its own!');
 }
 
-global $_DB_table_prefix, $_TABLES;
+$_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating']} (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(254) NOT NULL DEFAULT '',
+  `item_id` varchar(40) NOT NULL,
+  `votes` int(11) NOT NULL,
+  `rating` decimal(4,2) NOT NULL,
+  KEY `id` (`id`)
+) Type=MyISAM;";
 
-// Plugin info
+$_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating_votes']} (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(254) NOT NULL DEFAULT '',
+  `item_id` varchar(40) NOT NULL,
+  `uid` mediumint(8) NOT NULL,
+  `ip_address` varchar(14) NOT NULL,
+  `ratingdate` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`),
+  KEY `ip_address` (`ip_address`),
+  KEY `type` (`type`)
+) TYPE=MyISAM;";
 
-$CONF_FM['pi_name']            = 'filemgmt';
-$CONF_FM['pi_display_name']    = 'FileMgmt';
-$CONF_FM['pi_version']         = '1.7.5';
-$CONF_FM['gl_version']         = '1.1.7';
-$CONF_FM['pi_url']             = 'http://www.glfusion.org/';
-
-// Database Tables
-
-$_FM_TABLES['filemgmt_cat']         = $_DB_table_prefix . 'filemgmt_category';
-$_FM_TABLES['filemgmt_filedetail']  = $_DB_table_prefix . 'filemgmt_filedetail';
-$_FM_TABLES['filemgmt_filedesc']    = $_DB_table_prefix . 'filemgmt_filedesc';
-$_FM_TABLES['filemgmt_brokenlinks'] = $_DB_table_prefix . 'filemgmt_broken';
-$_FM_TABLES['filemgmt_votedata']    = $_DB_table_prefix . 'filemgmt_votedata';
-$_FM_TABLES['filemgmt_history']     = $_DB_table_prefix . 'filemgmt_downloadhistory';
-
-$_TABLES['filemgmt_cat']         = $_DB_table_prefix . 'filemgmt_category';
-$_TABLES['filemgmt_filedetail']  = $_DB_table_prefix . 'filemgmt_filedetail';
-$_TABLES['filemgmt_filedesc']    = $_DB_table_prefix . 'filemgmt_filedesc';
-$_TABLES['filemgmt_brokenlinks'] = $_DB_table_prefix . 'filemgmt_broken';
-$_TABLES['filemgmt_votedata']    = $_DB_table_prefix . 'filemgmt_votedata';
-$_TABLES['filemgmt_history']     = $_DB_table_prefix . 'filemgmt_downloadhistory';
+$_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `rating` float NOT NULL DEFAULT '0' AFTER hits";
+$_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `votes` int(11) NOT NULL DEFAULT '0' AFTER rating";
 ?>
