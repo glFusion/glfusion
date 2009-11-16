@@ -31,7 +31,7 @@
 ###############################################################################
 
 if (!defined ('GVERSION')) {
-    die ('Dit bestand kan niet zelfstandig worden gebruikt.');
+    die ('This file can not be used on its own.');
 }
 
 $LANG_CHARSET = 'utf-8';
@@ -462,7 +462,9 @@ $LANG08 = array(
     32 => 'Datum',
     33 => 'Lees het volledige artikel bij',
     34 => 'Eind van het Bericht',
-    35 => 'Helaas, deze gebruiker accepteert geen email.'
+    35 => 'Helaas, deze gebruiker accepteert geen email.',
+    36 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your <strong>Daily Digest</strong> preferences in the <a href="%s/usersettings.php?mode=edit">My Account</a> - Content section.',
+    37 => 'You are receiving this message because you have subscribed to the %s daily digest. To remove or change your preferences, please change your Daily Digest preferences in the %s/usersettings.php?mode=edit My Account - Content section.'
 );
 
 ###############################################################################
@@ -546,9 +548,9 @@ $LANG10 = array(
     1 => 'Website statistieken',
     2 => 'Totaal aantal treffers op de website',
     3 => 'Aantal Artikelen (Reacties) op de website',
-    4 => '',
-    5 => '',
-    6 => '',
+    4 => 'User',
+    5 => 'Logged On',
+    6 => 'Last Ten Users Logged On',
     7 => 'Top Tien opgevraagde artikelen',
     8 => 'Artikel titel',
     9 => 'Opgevraagd',
@@ -570,8 +572,8 @@ $LANG10 = array(
     25 => 'Top Tien trackback reacties op artikelen',
     26 => 'Geen trackback reacties gevonden.',
     27 => 'Aantal actieve gebruikers',
-    28 => '',
-    29 => '',
+    28 => 'No users have logged in.',
+    29 => 'Last %d users logged on:',
     30 => 'Treffers',
     31 => ''
 );
@@ -646,6 +648,21 @@ $LANG12 = array(
     53 => 'Maak een Profiel aan',
     54 => 'Artikel Inleiding',
     55 => 'Artikel Body'
+);
+
+###############################################################################
+# lib-rating.php
+
+$LANG13 = array(
+    'vote' => 'vote',
+    'votes' => 'votes',
+    'currently' => 'Currently',
+    'rating' => 'Rating',
+    'cast' => 'cast',
+    'rate_speedlimit' => 'You last rated an item %s seconds ago. This site requires at least %s seconds between ratings',
+    'ip_rated' => 'Your IP address has already rated this item.',
+    'uid_rated' => 'Your User ID has already rated this item.',
+    'thanks_for_vote' => 'Thanks for voting!'
 );
 
 ###############################################################################
@@ -956,7 +973,9 @@ $LANG28 = array(
     82 => "Uw {$_CONF['site_name']} profiel is sinds %s niet gebruikt en wordt binnen 30 dagen gedeactiveerd als deze binnen deze 30 dagen niet wordt gebruikt.",
     83 => "Uw profiel bij {$_CONF['site_name']} is sinds de registratie niet meer gebruikt en wordt op korte termijn verwijderd als er geen gebruik van wordt gemaakt.",
     84 => "Uw Gebruikersnaam is: %s  voor de website: {$_CONF['site_url']}",
-    85 => 'Volg deze link: %s als u uw wachtwoord bent vergeten'
+    85 => 'Volg deze link: %s als u uw wachtwoord bent vergeten',
+    86 => 'Include',
+    87 => 'Reminders'
 );
 
 ###############################################################################
@@ -1159,18 +1178,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Bekijk Logbestanden',
-    'info' => 'glFusion Logbestanden Beheer',
-    'logs' => 'Logbestanden',
-    'view' => 'Bekijk Logbestand',
-    'clear' => 'Maak Logbestand leeg',
-    'log_file' => 'Logbestand'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1281,6 +1288,18 @@ $MESSAGE = array(
 );
 
 ###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Bekijk Logbestanden',
+    'info' => 'glFusion Logbestanden Beheer',
+    'logs' => 'Logbestanden',
+    'view' => 'Bekijk Logbestand',
+    'clear' => 'Maak Logbestand leeg',
+    'log_file' => 'Logbestand'
+);
+
+###############################################################################
 
 $LANG_ACCESS = array(
     'access' => 'Rechten',
@@ -1345,7 +1364,8 @@ $LANG_ACCESS = array(
     'group_id' => 'GroepID',
     'plugin_access_denied_msg' => 'U probeert illegaal toegang te krijgen tot een plugin beheerpagina. Onthoudt dat alle pogingen tot het illegaal verkrijgen van toegang tot deze pagina worden geregistreerd.',
     'groupexists' => 'Groepsnaam bestaat al',
-    'groupexistsmsg' => 'Er bestaat al een groep met deze naam. De groepsnaam moet uniek zijn.'
+    'groupexistsmsg' => 'Er bestaat al een groep met deze naam. De groepsnaam moet uniek zijn.',
+    'copy' => 'Copy'
 );
 
 ###############################################################################
@@ -1679,7 +1699,7 @@ $LANG_CONFIG = array(
 );
 
 $LANG_configsections['Core'] = array(
-    'label' => 'glFusion',  
+    'label' => 'glFusion',
     'title' => 'Instellingen glFusion'
 );
 
@@ -1714,6 +1734,7 @@ $LANG_confignames['Core'] = array(
     'allow_account_delete' => 'Gebruiker kan Profiel Verwijderen',
     'hide_author_exclusion' => 'Verbergen Auteur Toestaan',
     'show_fullname' => 'Toon Volledige Naam',
+    'hide_exclude_content' => 'Hide Content Tab in User Preferences',
     'show_servicename' => 'Toon Service Naam',
     'custom_registration' => 'Aangepaste Registratie Inschakelen',
     'user_login_method' => 'Aanmeldingsprocedure',
@@ -1909,7 +1930,8 @@ $LANG_confignames['Core'] = array(
     'use_from_site_mail' => 'Force email from address to be site email',
     'cache_templates' => 'Template Caching Toestaan',
     'template_comments' => 'Reacties op Template Toestaan',
-    'hidestorydate' => 'Verberg Artikeldatum'
+    'hidestorydate' => 'Verberg Artikeldatum',
+    'maintenance_mode' => 'Enable Maintenance Mode'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -1965,12 +1987,12 @@ $LANG_fs['Core'] = array(
     'fs_perm_topic' => 'Standaard Rubriekrechten',
     'fs_perm_block' => 'Standaard Blokrechten',
     'fs_webservices' => 'Webservices',
-    'fs_caching' => 'Caching',
+    'fs_caching' => 'Caching'
 );
 
 $LANG_configselects['Core'] = array(
     0 => array('Ja' => 1, 'Nee' => 0),
-    1 => array('Ja' => True, 'Nee' => False),
+    1 => array('Ja' => true, 'Nee' => false),
     2 => array('Afwijzen' => 0, 'Bewaar alleen Laatste' => 1, 'Meerdere Posts Toestaan' => 2),
     3 => array('Trackback Ingeschakeld' => 0, 'Trackback Uitgeschakeld' => -1),
     4 => array('Niets controleren' => 0, 'Controleer URL website' => 1, 'Controleer Volledige URL' => 2, 'Controleer website URL en Volledige URL' => 3, 'Controleer IP met IP website' => 4, 'Controleer IP en URL website' => 5, 'Controleer IP en volledige URL' => 6, 'Controleer IP, Volledige URL en URL wbsite' => 7),
@@ -1992,6 +2014,7 @@ $LANG_configselects['Core'] = array(
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('geen' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
     22 => array('Datum' => 'date', 'Titel' => 'title', 'Auteur' => 'uid', 'Treffers' => 'hits'),
-	23 => array('Uitgeschakeld' => 0, 'Ingeschakeld (Exacte Match)' => 1, 'Ingeschakeld (Begin van Woord)' => 2, 'Ingeschakeld (Woord Fragment)' => 3),
+    23 => array('Uitgeschakeld' => 0, 'Ingeschakeld (Exacte Match)' => 1, 'Ingeschakeld (Begin van Woord)' => 2, 'Ingeschakeld (Woord Fragment)' => 3)
 );
+
 ?>

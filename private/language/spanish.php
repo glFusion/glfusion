@@ -642,6 +642,21 @@ $LANG12 = array(
 );
 
 ###############################################################################
+# lib-rating.php
+
+$LANG13 = array(
+    'vote' => 'vote',
+    'votes' => 'votes',
+    'currently' => 'Currently',
+    'rating' => 'Rating',
+    'cast' => 'cast',
+    'rate_speedlimit' => 'You last rated an item %s seconds ago. This site requires at least %s seconds between ratings',
+    'ip_rated' => 'Your IP address has already rated this item.',
+    'uid_rated' => 'Your User ID has already rated this item.',
+    'thanks_for_vote' => 'Thanks for voting!'
+);
+
+###############################################################################
 # ADMIN PHRASES - These are file phrases used in admin scripts
 ###############################################################################
 
