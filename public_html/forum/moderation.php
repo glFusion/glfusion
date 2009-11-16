@@ -47,15 +47,6 @@ if (!in_array('forum', $_PLUGINS)) {
     exit;
 }
 
-// Display Common headers
-gf_siteHeader();
-
-// Check for access privilege and pass true to check that user is signed in.
-forum_chkUsercanAccess(true);
-$forum       = intval(COM_applyFilter($_REQUEST['forum'],true));
-$showtopic   = intval(COM_applyFilter($_REQUEST['showtopic'],true));
-ForumHeader($forum,$showtopic);
-
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
 $fortopicid  = intval(COM_applyFilter($_REQUEST['fortopicid'],true));
 $moveid      = intval(COM_applyFilter($_REQUEST['moveid'],true));
@@ -66,6 +57,28 @@ $msgpid      = intval(COM_applyFilter($_REQUEST['msgpid'],true));
 $fortopicid  = intval(COM_applyFilter($_REQUEST['fortopicid'],true));
 $modfunction = COM_applyFilter($_REQUEST['modfunction']);
 $submit      = $_POST['submit'];
+
+if ($submit == $LANG_GF01['CANCEL']) {
+    if($_POST['modconfirmdelete'] == 1 && $msgid != '') {
+        echo COM_refresh($_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$msgpid);
+    } else if ($_POST['confirmbanip'] == '1') {
+        echo COM_refresh($_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$fortopicid);
+    } else if ($_POST['confirm_move'] == '1' AND forum_modPermission($forum,$_USER['uid'],'mod_move') AND $moveid != 0) {
+        echo COM_refresh($_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$moveid);
+    } else {
+        echo COM_refresh($_CONF['site_url'].'/forum/index.php');
+    }
+    exit;
+}
+
+// Display Common headers
+gf_siteHeader();
+
+// Check for access privilege and pass true to check that user is signed in.
+forum_chkUsercanAccess(true);
+$forum       = intval(COM_applyFilter($_REQUEST['forum'],true));
+$showtopic   = intval(COM_applyFilter($_REQUEST['showtopic'],true));
+ForumHeader($forum,$showtopic);
 
 if ($forum == 0) {
     alertMessage($LANG_GF02['msg71']);
