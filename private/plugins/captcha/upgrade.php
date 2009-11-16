@@ -79,7 +79,17 @@ function captcha_upgrade()
         case "3.2.0" :
             $c = config::get_instance();
             $c->add('expire', '900','text',
-                    0, 0, 0, 70, true, 'captcha');
+                   0, 0, 0, 70, true, 'captcha');
+        case '3.2.1' :
+        case '3.2.2' :
+        case '3.2.3' :
+            $c = config::get_instance();
+            $c->add('publickey', '','text',
+                    0, 0, 0, 42, true, 'captcha');
+            $c->add('privatekey', '','text',
+                    0, 0, 0, 44, true, 'captcha');
+            $c->add('recaptcha_theme', 'white','select',
+                    0, 0, 6, 46, true, 'captcha');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CP_CONF['pi_version']."',pi_gl_version='".$_CP_CONF['gl_version']."' WHERE pi_name='captcha' LIMIT 1");
             break;

@@ -62,6 +62,7 @@ class captcha {
     var $gfxformat;
     var $debug;
     var $session_id;
+    var $publickey;
 
     function captcha ($csid,$length = 6) {
         global $_CONF, $_CP_CONF;
@@ -82,6 +83,11 @@ class captcha {
         $this->wavemin      = "1";
         $this->wavemax      = "5";
         $this->session_id   = $csid;
+        $this->publickey    = $_CP_CONF['publickey'];
+
+        if ( $this->driver == 3 ) {
+            $this->makeCaptcha ();
+        }
 
         if ($this->driver == 2 ) { // static images
             $this->stringGen();
@@ -190,6 +196,11 @@ class captcha {
 
     function makeCaptcha () {
         global $cString, $_CONF, $_TABLES;
+
+        if ( $this->driver == 3 ) {
+            echo recaptcha_get_html($this->publickey, NULL);
+            exit;
+        }
 
         if ( $this->session_id != 0 ) {
             $sql = "UPDATE {$_TABLES['cp_sessions']} SET validation='" . $this->getCaptchaString() . "' WHERE session_id='" . addslashes($this->session_id) . "'";
