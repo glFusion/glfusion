@@ -44,4 +44,5 @@ e_help = "{LANG_ehelp}";
     <input type="hidden" name="editid" value="{hidden_editid}"{xhtml}>
     <input type="hidden" name="page" value="{page}"{xhtml}>
     <input type="hidden" name="uniqueid" value="{uniqueid}"{xhtml}>
+    <input type="hidden" name="referer" value="{referer}" />
 {# end {templatelocation} #}

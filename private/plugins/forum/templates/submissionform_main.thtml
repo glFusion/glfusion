@@ -77,6 +77,9 @@
                         <td style="padding-left:6px;padding-right:6px;">
                           <input type="submit" name="submit" value="{LANG_SUBMIT}" tabindex="8"{xhtml}>
                         </td>
+                        <td style="padding-left:6px;padding-right:6px;">
+                          <input type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="8"{xhtml}>
+                        </td>
                     </tr>
                 </table>
             </td>
