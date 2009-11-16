@@ -56,6 +56,21 @@ $wysiwyg = 0;
 
 $subject = '';
 
+if (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == $LANG_GF01['CANCEL']) {
+    if ( isset($_POST['referer']) ) {
+        $referer = $_POST['referer'];
+        $sLength = strlen($_CONF['site_url']);
+        if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
+            $referer = $_CONF['site_url'].'/forum/index.php';
+        }
+    } else {
+        $referer = $_CONF['site_url'].'/forum/index.php';
+    }
+    echo COM_refresh($referer);
+    exit;
+}
+
+
 gf_siteHeader();
 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
@@ -82,6 +97,14 @@ ForumHeader($forum,$showtopic);
 
 //Check is anonymous users can post
 forum_chkUsercanPost();
+
+
+
+$referer = $_SERVER['HTTP_REFERER'];
+$sLength = strlen($_CONF['site_url']);
+if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
+    $referer = $_CONF['site_url'].'/forum/index.php';
+}
 
 if(empty($_USER['uid']) || $_USER['uid'] == 1 ) {
     $uid = 1;
@@ -616,6 +639,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     $topicnavbar->set_var ('site_url', $_CONF['site_url']);
     $topicnavbar->set_var ('layout_url', $_CONF['layout_url']);
     $topicnavbar->set_var ('phpself', $_CONF['site_url'] .'/forum/createtopic.php');
+    $topicnavbar->set_var ('referer', $referer);
 
     if(empty($subject)) {
         $topicnavbar->set_var('show_subject','none');
