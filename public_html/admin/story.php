@@ -145,7 +145,7 @@ function liststories()
                 if ($current_topic == "{$T['tid']}") {
                     $seltopics .= ' selected="selected"';
                 }
-                $seltopics .= '>' . $T['topic'] . '</option>' . LB;
+                $seltopics .= '>' . $T['topic'] . ' (' . $T['tid'] . ')' . '</option>' . LB;
             }
             $excludetopics .= ') ';
         }
