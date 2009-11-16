@@ -36,7 +36,7 @@
 // +---------------------------------------------------------------------------+
 //
 
-window.addEvent('load',function() {
+window.addEvent('domready',function() {
     $$('.rater').addEvent('click',function(e) {
         e = new Event(e).stop();
 
@@ -56,14 +56,14 @@ window.addEvent('load',function() {
 		var theuserIP   = parameterList['t'];
 		var theunits    = parameterList['c'];
 		var thesize     = parameterList['s'];
+    	var url         = glfusionSiteUrl+'/rater_rpc.php?p='+thePlugin+'&j='+theVote+'&q='+theratingID+'&t='+theuserIP+'&c='+theunits+'&s='+thesize;
 
-        new Ajax(glfusionSiteUrl+'/rater_rpc.php?p='+thePlugin+'&j='+theVote+'&q='+theratingID+'&t='+theuserIP+'&c='+theunits+'&s='+thesize,
-            {
+        new Request({
                 method: 'get',
-                data: this,
+                url: url,
                 evalScripts: true,
-                update: $('unit_long'+theratingID)
-            }).request();
+                onComplete: function(response) { $('unit_long'+theratingID).set('html',response); }
+            }).send();
         return false;
     });
 });
