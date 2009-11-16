@@ -38,7 +38,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.1.6');
+    define('GVERSION', '1.1.7');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -86,7 +86,6 @@ $glFusionVars = array('language','method','migrate','expire','dbconfig_path','lo
 if ( is_array($_POST) ) {
     foreach ($_POST AS $name => $value) {
         if ( in_array($name,$glFusionVars)) {
-//            $_GLFUSION[$name] = INST_stripslashes($value);
             switch ($name) {
                 case 'dbconfig_path' :
                 case 'log_path' :
