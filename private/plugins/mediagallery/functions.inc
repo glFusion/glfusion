@@ -360,7 +360,7 @@ function plugin_getwhatsnew_mediagallery() {
             } else {
                 $dTitle = $title;
             }
-            $items[] = '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $aid . '">' . $dTitle . '</a>';
+            $items[] = '<a href="' . $_MG_CONF['site_url'] . '/album.php?aid=' . $aid . '" title="'.htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()).'">' . $dTitle . '</a>';
             $newMediaCount++;
         }
 
