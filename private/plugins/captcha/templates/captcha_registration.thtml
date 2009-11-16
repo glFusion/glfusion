@@ -1,4 +1,16 @@
 {# begin {templatelocation} #}
+{!if recaptcha}
+<script type="text/javascript">
+//<![CDATA[
+var RecaptchaOptions = {
+   theme : '{recaptcha_theme}'
+};
+//]]>
+</script>
+<div style="margin-left:130px;">
+  {recaptcha}
+</div>
+{!else}
 <script type="text/javascript">
 //<![CDATA[
 var counter = 0;
@@ -28,10 +40,12 @@ function new_captcha()
 </label>
 
 <img src="{captcha_image}" id="captchaimage" border="0" alt="{lang_alt}" title="{lang_alt}"{xhtml}>
+
 <div style="clear:both;"></div>
 <label for="captcha">{$LANG_CP00[characters]}:</label>
 
 <input type="text" id="captcha" name="captcha" size="25" maxlength="40" value="{captchastring}"{xhtml}>
 <input type="hidden" name="csid" value="{csid}"{xhtml}><br{xhtml}>
 <div style="margin-left: 95px;">{lang_captcha_help}</div>
+{!endif}
 {# end {templatelocation} #}

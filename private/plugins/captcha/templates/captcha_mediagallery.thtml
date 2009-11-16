@@ -1,4 +1,20 @@
 {# begin {templatelocation} #}
+{!if recaptcha}
+<table width="100%">
+<tr><td>&nbsp;</td>
+<td>
+<script type="text/javascript">
+//<![CDATA[
+var RecaptchaOptions = {
+   theme : '{recaptcha_theme}'
+};
+//]]>
+</script>
+  {recaptcha}
+</td>
+</tr>
+</table>
+{!else}
 <table width="100%">
 <tr>
   <td align="right">
@@ -36,4 +52,5 @@
   </td>
 </tr>
 </table>
+{!endif}
 {# end {templatelocation} #}

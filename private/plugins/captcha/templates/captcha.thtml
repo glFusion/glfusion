@@ -1,5 +1,23 @@
 {# begin {templatelocation} #}
-{# <table width="100%" border="1"> #}
+{!if recaptcha}
+<tr>
+  <td colspan="2">
+    <hr>
+  </td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>
+<script type="text/javascript">
+//<![CDATA[
+var RecaptchaOptions = {
+   theme : '{recaptcha_theme}'
+};
+//]]>
+</script>
+  {recaptcha}
+</td>
+</tr>
+{!else}
   <tr>
     <td {colone}>
 <script type="text/javascript">
@@ -35,4 +53,5 @@ function new_captcha()
       <br{xhtml}>{lang_captcha_help}
     </td>
   </tr>
-  {# end {templatelocation} #}
+{!endif}
+{# end {templatelocation} #}

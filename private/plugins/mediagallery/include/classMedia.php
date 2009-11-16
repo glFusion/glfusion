@@ -503,39 +503,30 @@ class Media {
     	 *
     	 */
         if ( $MG_albums[$this->album_id]->enable_rating > 0 ) {
-            require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-rating.php';
-
-            $ip     = $_SERVER['REMOTE_ADDR'];
             $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
+            $static = false;
+
             // check to see if we are the owner, if so, no rating for us...
             if (isset($_USER['uid']) && $_USER['uid'] == $this->owner_id ) {
-                $static = 'static';
+                $static = true;
                 $voted = 0;
-            } else {
-                if (in_array($this->id, $ratedIds)) {
-                    $static = 'static';
-                    $voted = 1;
-                } else {
-                    $static = '';
-                    $voted = 0;
-                }
             }
             if ( $MG_albums[$this->album_id]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
-                $static = 'static';
+                $static = true;
             }
             if ( $_MG_CONF['use_large_stars'] == 1 ) {
                 $starSize = '';
             } else {
                 $starSize = 'sm';
             }
-            $rating_box = mgRating_bar($this->id, $this->votes,
-                                       ($this->rating*$this->votes)/2, $voted,
+            $rating_box = ratingBar('mediagallery',$this->id, $this->votes,
+                                                   $this->rating, 0,
                                        5,$static,$starSize);
         } else {
             $rating_box = '';
         }
 
-        $T->set_var('rating_box',$rating_box);
+        $T->set_var('rating_box','<center>'.$rating_box.'</center>');
 
         $fs_bytes = @filesize( $_MG_CONF['path_mediaobjects'] . 'orig/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext);
         $fileSize = MG_get_size($fs_bytes);

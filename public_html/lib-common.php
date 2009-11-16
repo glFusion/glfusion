@@ -290,6 +290,13 @@ require_once $_CONF['path_system'].'lib-mbyte.php';
 
 require_once $_CONF['path_system'].'imglib/lib-image.php';
 
+/**
+* Rating library
+*
+*/
+
+require_once $_CONF['path_system'].'lib-rating.php';
+
 // Set theme
 // Need to modify this code to check if theme was cached in user cookie.  That
 // way if user logged in and set theme and then logged out we would still know
@@ -7659,6 +7666,7 @@ function js_out(){
         $_CONF['path_html'] . 'javascript/common.js',
         $_CONF['path_html'] . 'javascript/mootools/gl_mooreflection.js',
         $_CONF['path_html'] . 'javascript/mootools/gl_moomenu.js',
+        $_CONF['path_html'] . 'javascript/mootools/moorating.js',
 
     );
 
@@ -7737,6 +7745,7 @@ function js_out(){
     ob_start();
 
     // add some global variables
+    print "var glfusionSiteUrl = '".$_CONF['site_url']."';" . LB;
     print "var glfusionEditorBaseUrl = '".$_CONF['site_url']."';" . LB;
     print "var glfusionLayoutUrl     = '".$_CONF['layout_url']."';" . LB;
 

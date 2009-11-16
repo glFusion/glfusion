@@ -1,4 +1,18 @@
 {# begin {templatelocation} #}
+{!if recaptcha}
+<tr><td>{lang_captcha_help}</td>
+<td>
+<script type="text/javascript">
+//<![CDATA[
+var RecaptchaOptions = {
+   theme : '{recaptcha_theme}'
+};
+//]]>
+</script>
+  {recaptcha}
+</td>
+</tr>
+{!else}
   <tr>
     <td>&nbsp;</td>
     <td>
@@ -41,4 +55,5 @@ function new_captcha()
       </table>
     </td>
   </tr>
+{!endif}
 {# end {templatelocation} #}

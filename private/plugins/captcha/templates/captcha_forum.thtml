@@ -1,4 +1,19 @@
 {# begin {templatelocation} #}
+{!if recaptcha}
+<tr><td class="pluginCellSubTitle">&nbsp;</td>
+<td class="pluginCellText pluginCellFill">
+<script type="text/javascript">
+//<![CDATA[
+var RecaptchaOptions = {
+   theme : '{recaptcha_theme}'
+};
+//]]>
+</script>
+  {recaptcha}
+</td>
+</tr>
+{!else}
+
   <tr>
     <td class="pluginCellSubTitle">
 <script type="text/javascript">
@@ -34,4 +49,5 @@ function new_captcha()
       <br{xhtml}>{lang_captcha_help}
     </td>
   </tr>
+{!endif}
 {# end {templatelocation} #}

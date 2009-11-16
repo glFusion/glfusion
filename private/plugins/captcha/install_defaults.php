@@ -66,6 +66,10 @@ $_CP_DEFAULT['gfxFormat'] = 'jpg';
 $_CP_DEFAULT['imageset'] = 'default';
 $_CP_DEFAULT['logging'] = 0;
 $_CP_DEFAULT['gfxPath'] = '';
+$_CP_DEFAULT['publickey']  = '';
+$_CP_DEFAULT['privatekey'] = '';
+$_CP_DEFAULT['recaptcha_theme'] = 'white';
+
 
 /**
 * the captcha plugin's config array
@@ -104,6 +108,15 @@ function plugin_initconfig_captcha()
                 0, 0, 5, 30, true, 'captcha');
         $c->add('gfxPath', $_CP_DEFAULT['gfxPath'],'text',
                 0, 0, 0, 40, true, 'captcha');
+
+        $c->add('publickey', $_CP_DEFAULT['publickey'],'text',
+                0, 0, 0, 42, true, 'captcha');
+        $c->add('privatekey', $_CP_DEFAULT['privatekey'],'text',
+                0, 0, 0, 44, true, 'captcha');
+        $c->add('recaptcha_theme', $_CP_DEFAULT['recaptcha_theme'],'select',
+                0, 0, 6, 46, true, 'captcha');
+
+
         $c->add('debug', $_CP_DEFAULT['debug'], 'select',
                 0, 0, 0, 50, true, 'captcha');
         $c->add('logging', $_CP_DEFAULT['logging'],'select',

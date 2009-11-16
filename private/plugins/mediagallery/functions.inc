@@ -3572,4 +3572,40 @@ function plugin_profilesave_mediagallery()
 
     DB_save($_TABLES['mg_userprefs'],'uid,display_rows,display_columns,mp3_player,playback_mode,tn_size',"$uid,$display_rows,$display_columns,$mp3_player,$playback_mode,$tn_size");
 }
+
+function plugin_itemrated_mediagallery($media_id, $rating, $votes)
+{
+    global $_TABLES;
+
+    $sql = "UPDATE {$_TABLES['mg_media']} SET media_votes = $votes, media_rating = '$rating'
+                    WHERE media_id='" . addslashes($media_id) . "'";
+    DB_query($sql);
+    return true;
+}
+
+function plugin_canuserrate_mediagallery($item_id, $uid)
+{
+    global $MG_albums, $_TABLES, $_CONF, $_MG_CONF;
+
+    $retval = false;
+
+    $result = DB_query("SELECT * FROM {$_TABLES['mg_media']} AS m LEFT JOIN {$_TABLES['mg_media_albums']} AS ma ON m.media_id=ma.media_id WHERE m.media_id='".addslashes($item_id)."'");
+    if ( DB_numRows($result) > 0 ) {
+        $row = DB_fetchArray($result);
+        if ($MG_albums[$row['album_id']]->enable_rating > 0 ) {
+            if ($uid == $row['owner_id'] ) {
+                return false;
+            }
+            if ( $MG_albums[$row['album_id']]->enable_rating == 1 && COM_isAnonUser() ) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    return true;
+}
+
 ?>

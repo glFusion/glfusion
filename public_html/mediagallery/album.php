@@ -556,6 +556,8 @@ if ( $MG_albums[$album_id]->enable_rss ) {
 
 // completed setting header / footer vars, parse them
 
+PLG_templateSetVars('mediagallery',$T);
+
 $T->parse('album_header', 'header');
 $T->parse('album_footer', 'footer');
 

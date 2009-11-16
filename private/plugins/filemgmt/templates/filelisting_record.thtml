@@ -38,6 +38,7 @@
                             #}
 
                             <td width="15%" style="display:{show_snapshoticon_na};">{LANG_MD_SCREENSHOT_NA}</td>
+
                             <td colspan="2" width="85%" align="right"><b>{LANG_VERSION}:</b>&nbsp;
                                 {version}&nbsp;&nbsp;<b>{LANG_SUBMITDATE}:</b>&nbsp;{datetime}&nbsp;&nbsp;&nbsp;<b>{LANG_RATING}</b>{rating}{votestring}&nbsp;
                                 {begin_dlreport_link}<img src="{site_url}/filemgmt/images/counter.gif" width="14" height="14" border="0" align="middle" title="{download_times}" alt="{download_times}"{xhtml}>{end_dlreport_link}&nbsp;{download_count}&nbsp;&nbsp;
@@ -45,16 +46,19 @@
                                 {file_size}&nbsp;&nbsp;<a href="{homepage_url}" target="_blank"><img src="{site_url}/filemgmt/images/home.gif" width="14" height="14" border="0" align="middle" title="{LANG_HOMEPAGE}:{homepage}" alt="{LANG_HOMEPAGE}:{homepage}"{xhtml}></a>
                             </td>
                         </tr>
+
                         <tr>
-                            <td colspan="3" align="center">
+                            <td width="35%">{rating_bar}</td>
+                            <td colspan="2" align="right">
                                 <span style="display:{show_comments};">{comment_link}&nbsp;|&nbsp;</span>
                                     <a href="{site_url}/filemgmt/visit.php?lid={lid}">{LANG_DOWNLOAD}</a>&nbsp;|&nbsp;
                                     <a href="{site_url}/filemgmt/index.php?id={lid}">{LANG_FILELINK}</a>&nbsp;|&nbsp;
-                                    <a href="{site_url}/filemgmt/ratefile.php?lid={lid}">{LANG_RATETHISFILE}</a>&nbsp;|&nbsp;
+{#                                    <a href="{site_url}/filemgmt/ratefile.php?lid={lid}">{LANG_RATETHISFILE}</a>&nbsp;|&nbsp; #}
                                     <a href="{site_url}/filemgmt/brokenfile.php?lid={lid}">{LANG_REPORTBROKEN}</a>
                                     <span style="display:{show_editlink};">&nbsp;|&nbsp;<a href="{site_admin_url}/plugins/filemgmt/index.php?lid={lid}&amp;op=modDownload">{LANG_EDIT}</a></span>
                             </td>
                         </tr>
+
                      </table>
                  </td>
             </tr>

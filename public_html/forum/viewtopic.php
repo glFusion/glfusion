@@ -146,6 +146,7 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     } else {
         $offset = 0;
     }
+
     $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
 } else {
     if ( $topic != '' ) {
@@ -156,8 +157,10 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
             $ids[] = $I['id'];
         }
         $key = array_search($topic,$ids);
+        $key = $key + 1;
         $page = intval($key / $show) + 1;
     }
+
     if ($page == 0) {
         $page = 1;
     }
@@ -166,6 +169,7 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     } else {
         $offset = 0;
     }
+
     $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
 
     if (isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {

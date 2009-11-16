@@ -263,6 +263,30 @@ CREATE TABLE {$_TABLES['postmodes']} (
 ) TYPE=MyISAM
 ";
 
+$_SQL[] = "CREATE TABLE {$_TABLES['rating']} (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(254) NOT NULL DEFAULT '',
+  `item_id` varchar(40) NOT NULL,
+  `votes` int(11) NOT NULL,
+  `rating` decimal(4,2) NOT NULL,
+  KEY `id` (`id`)
+) Type=MyISAM
+";
+
+$_SQL[] = "CREATE TABLE {$_TABLES['rating_votes']} (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(254) NOT NULL DEFAULT '',
+  `item_id` varchar(40) NOT NULL,
+  `uid` mediumint(8) NOT NULL,
+  `ip_address` varchar(14) NOT NULL,
+  `ratingdate` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`),
+  KEY `ip_address` (`ip_address`),
+  KEY `type` (`type`)
+) TYPE=MyISAM
+";
+
 $_SQL[] = "
 CREATE TABLE {$_TABLES['sessions']} (
   sess_id int(10) unsigned NOT NULL default '0',

@@ -1,10 +1,10 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | CAPTCHA Plugin - glFusion CMS                                            |
+// | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | captcha.php                                                              |
+// | mysql_1.1.6_to_1.1.7.php                                                 |
 // |                                                                          |
-// | Plugin system integration options                                        |
+// | glFusion Upgrade SQL                                                     |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
@@ -29,21 +29,33 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+// this file can't be used on its own
 if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+    die ('This file can not be used on its own!');
 }
 
-global $_DB_table_prefix, $_TABLES;
+$_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating']} (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(254) NOT NULL DEFAULT '',
+  `item_id` varchar(40) NOT NULL,
+  `votes` int(11) NOT NULL,
+  `rating` decimal(4,2) NOT NULL,
+  KEY `id` (`id`)
+) Type=MyISAM;";
 
-// Plugin info
+$_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating_votes']} (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(254) NOT NULL DEFAULT '',
+  `item_id` varchar(40) NOT NULL,
+  `uid` mediumint(8) NOT NULL,
+  `ip_address` varchar(14) NOT NULL,
+  `ratingdate` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uid` (`uid`),
+  KEY `ip_address` (`ip_address`),
+  KEY `type` (`type`)
+) TYPE=MyISAM;";
 
-$_CP_CONF['pi_name']            = 'captcha';
-$_CP_CONF['pi_display_name']    = 'CAPTCHA';
-$_CP_CONF['pi_version']         = '3.2.4';
-$_CP_CONF['gl_version']         = '1.1.7';
-$_CP_CONF['pi_url']             = 'http://www.glfusion.org/';
-
-// Database table definitions
-
-$_TABLES['cp_sessions']         = $_DB_table_prefix . 'cp_sessions';
+$_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `rating` float NOT NULL DEFAULT '0' AFTER hits";
+$_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `votes` int(11) NOT NULL DEFAULT '0' AFTER rating";
 ?>

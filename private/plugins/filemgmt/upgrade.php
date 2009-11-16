@@ -82,6 +82,28 @@ function filemgmt_upgrade()
         case '1.7.0.fusion' :
             $c = config::get_instance();
             $c->add('outside_webroot', 0, 'select', 0, 2, 0, 100, true, 'filemgmt');
+        case '1.7.0' :
+        case '1.7.1' :
+        case '1.7.2' :
+        case '1.7.3' :
+        case '1.7.4' :
+            DB_query("UPDATE {$_FM_TABLES['filemgmt_filedetail']} set rating = rating / 2",1);
+            $result = DB_query("SELECT * FROM {$_FM_TABLES['filemgmt_filedetail']} WHERE votes > 0");
+            while ( $F = DB_fetchArray($result) ) {
+                $item_id = $F['lid'];
+                $votes   = $F['votes'];
+                $rating  = $F['rating'];
+                DB_query("INSERT INTO {$_TABLES['rating']} (type,item_id,votes,rating) VALUES ('filemgmt','".$item_id."',$votes,$rating);",1);
+            }
+
+            $result = DB_query("SELECT * FROM {$_FM_TABLES['filemgmt_votedata']}");
+            while ( $H = DB_fetchArray($result) ) {
+                $item_id = $H['lid'];
+                $user_id = $H['ratinguser'];
+                $ip      = $H['ratinghostname'];
+                $time    = $H['ratingtimestamp'];
+                DB_query("INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) VALUES ('filemgmt','".$item_id."',$user_id,'".$ip."',$time);",1);
+            }
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$CONF_FM['pi_version']."',pi_gl_version = '".$CONF_FM['gl_version']."' WHERE pi_name = 'filemgmt'");
             return true;

@@ -827,6 +827,30 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.6' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.6';
+        case '1.1.6' :
+            $_SQL = array();
+            if ( !@file_exists($_CONF['path'] . 'sql/updates/mysql_1.1.6_to_1.1.7.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
+            require_once $_CONF['path'] . 'sql/updates/mysql_1.1.6_to_1.1.7.php';
+            list($rc,$errors) = INST_updateDB($_SQL);
+            if ( $rc === false ) {
+                return array($rc,$errors);
+            }
+
+            if ( !@file_exists($_CONF['path_system'].'classes/config.class.php') ) {
+                echo _displayError(FILE_INCLUDE_ERROR,'pathsetting');
+                exit;
+            }
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('rating_enabled',1,'select',1,7,24,1237,TRUE);
+
+            DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.7',name='glfusion'",1);
+            DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.7' WHERE name='glfusion'",1);
+            DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
+            $current_fusion_version = '1.1.7';
         default:
             break;
     }

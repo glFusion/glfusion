@@ -15,6 +15,18 @@ v1.2
 
 v1.1.7 svn
 ----------
+- FileMgmt: Added file_download autotag (Mark H.)
+- Moved rating code out of Media Gallery into core (Mark)
+  - implemented rating for articles
+  - updated FileMgmt / Media Gallery to use new rating system
+- Media Gallery - Updated SWFObject to v2.2 (Mark)
+- Fixed bug in PLG_getConfigElementHelp() where it did not pass the proper
+  arguments (Mark)
+- CAPTCHA - Added reCAPTCHA support (Mark)
+- Fourm plugin - Improved handling of the cancel request (Mark)
+- Forum plugin - Add cancel button to create topic (Mark)
+- Forum plugin - Fixed paging issue when going to a specific topic (Mark)
+- Media Gallery: Added PLG_setTemplateVars() call to the album view (Mark)
 - Added ICS (calendar export) to syndication library (Mark)
 - Added autotag logic to template library (Mark)
 - Upgrade Geshi to v1.0.8.4 (Mark)

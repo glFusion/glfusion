@@ -58,6 +58,24 @@ if (!isset($_CP_CONF['gfxDriver'])) {
     unset($_CP_CFG);
 }
 
+if ( $_CP_CONF['gfxDriver'] == 3 ) {
+    require_once $_CONF['path'] . 'plugins/captcha/class/recaptchalib.php';
+}
+
+
+/**
+* Returns the URL of the plugin's icon
+*
+* @return   string      URL of the icon
+*
+*/
+function plugin_geticon_captcha ()
+{
+    global $_CONF;
+
+    return $_CONF['site_url'] . '/captcha/captcha.png';
+}
+
 // glFusion plugin API functions for CAPTCHA plugin
 
 function plugin_enablestatechange_captcha($enable) {
@@ -399,6 +417,11 @@ function CAPTCHA_getHTML($csid, $ctype='general' ) {
         'csid'                  => $csid,
     ));
 
+    if ( $_CP_CONF['gfxDriver'] == 3 ) {
+        $T->set_var('recaptcha', recaptcha_get_html($_CP_CONF['publickey'], NULL));
+        $T->set_var('recaptcha_theme',$_CP_CONF['recaptcha_theme']);
+    }
+
     $T->parse('output', 'page');
     $retval .= $T->finish($T->get_var('output'));
 
@@ -417,6 +440,20 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     // if rc=0 on return, this is failure, and msg will contain detail
     $msg = '';
     $rc = 0;
+
+    if ( $_CP_CONF['gfxDriver'] == 3 ) {
+        $resp = recaptcha_check_answer ($_CP_CONF['privatekey'],
+                                        $_SERVER["REMOTE_ADDR"],
+                                        $_POST["recaptcha_challenge_field"],
+                                        $_POST["recaptcha_response_field"]);
+
+        if ($resp->is_valid) {
+            return array(1,'');
+        } else {
+            # set the error code so that we can display it
+            return array(0,$resp->error);
+        }
+    }
 
     // expire stale CAPTCHA sessions
     CAPTCHA_expireSessions();
