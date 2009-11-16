@@ -289,7 +289,7 @@ class Story
                 STORY_AL_NUMERIC,
                 '_rating'
               ),
-           'story_vptes' => array
+           'story_votes' => array
               (
                 STORY_AL_NUMERIC,
                 '_votes'
