@@ -460,8 +460,8 @@ $LANG08 = array(
     33 => 'Kompletter Artikel unter',
     34 => 'Ende dieser Nachricht',
     35 => 'Sorry, dieser Benutzer möchte keine E-Mails bekommen.',
-	36 => 'Du erhältst diese Nachricht, weil Du den %s Daily-Digest abonniert hast. Um ihn zu entfernen oder Deine Präferenzen zu ändern, bearbeite die <strong>Daily-Digest</strong> Präferenzen in <a href="%s/usersettings.php?mode=edit">Mein Account</a> - Inhaltssektion.',
-    37 => 'Du erhältst diese Nachricht, weil Du den %s Daily-Digest abonniert hast. Um ihn zu entfernen oder Deine Präferenzen zu ändern, bearbeite bitte Deine Präferenzen für Daily-Digest in der %s/usersettings.php?mode=edit Mein Account - Inhaltssektion.',
+    36 => 'Du erhältst diese Nachricht, weil Du den %s Daily-Digest abonniert hast. Um ihn zu entfernen oder Deine Präferenzen zu ändern, bearbeite die <strong>Daily-Digest</strong> Präferenzen in <a href="%s/usersettings.php?mode=edit">Mein Account</a> - Inhaltssektion.',
+    37 => 'Du erhältst diese Nachricht, weil Du den %s Daily-Digest abonniert hast. Um ihn zu entfernen oder Deine Präferenzen zu ändern, bearbeite bitte Deine Präferenzen für Daily-Digest in der %s/usersettings.php?mode=edit Mein Account - Inhaltssektion.'
 );
 
 ###############################################################################
@@ -645,6 +645,21 @@ $LANG12 = array(
     53 => 'Account anlegen',
     54 => 'Artikeleinleitung',
     55 => 'Artikeltext'
+);
+
+###############################################################################
+# lib-rating.php
+
+$LANG13 = array(
+    'vote' => 'vote',
+    'votes' => 'votes',
+    'currently' => 'Currently',
+    'rating' => 'Rating',
+    'cast' => 'cast',
+    'rate_speedlimit' => 'You last rated an item %s seconds ago. This site requires at least %s seconds between ratings',
+    'ip_rated' => 'Your IP address has already rated this item.',
+    'uid_rated' => 'Your User ID has already rated this item.',
+    'thanks_for_vote' => 'Thanks for voting!'
 );
 
 ###############################################################################
@@ -1160,18 +1175,6 @@ $LANG33 = array(
 );
 
 ###############################################################################
-# admin/logview.php
-
-$LANG_LOGVIEW = array(
-    'logview' => 'Log-Ansicht',
-    'info' => 'glFusion Logdatei-Administration',
-    'logs' => 'Logs',
-    'view' => 'Logatei anzeigen',
-    'clear' => 'Logdatei löschen',
-    'log_file' => 'Logdatei'
-);
-
-###############################################################################
 # confirmation and error messages
 
 $MESSAGE = array(
@@ -1279,6 +1282,18 @@ $MESSAGE = array(
     501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
     502 => 'Das Plugin wurde erfolgreich kopiert. Bitte Install aus der Liste unten auswählen',
     503 => 'Die Plugin-Installation ist im Demomodus ausgeschaltet.'
+);
+
+###############################################################################
+# admin/logview.php
+
+$LANG_LOGVIEW = array(
+    'logview' => 'Log-Ansicht',
+    'info' => 'glFusion Logdatei-Administration',
+    'logs' => 'Logs',
+    'view' => 'Logatei anzeigen',
+    'clear' => 'Logdatei löschen',
+    'log_file' => 'Logdatei'
 );
 
 ###############################################################################
@@ -1913,7 +1928,7 @@ $LANG_confignames['Core'] = array(
     'cache_templates' => 'Template-Caching aktivieren',
     'template_comments' => 'Template-Kommentare aktivieren',
     'hidestorydate' => 'Artikeldatum verstecken',
-	'maintenance_mode' => 'Wartungsmodus aktivieren',
+    'maintenance_mode' => 'Wartungsmodus aktivieren'
 );
 
 $LANG_configsubgroups['Core'] = array(

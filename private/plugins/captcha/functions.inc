@@ -59,6 +59,12 @@ if (!isset($_CP_CONF['gfxDriver'])) {
 }
 
 if ( $_CP_CONF['gfxDriver'] == 3 ) {
+    if ( $_CP_CONF['publickey'] == '' || $_CP_CONF['privatekey'] == '' ) {
+        $_CP_CONF['gfxDriver'] = 2;
+    }
+}
+
+if ( $_CP_CONF['gfxDriver'] == 3 ) {
     require_once $_CONF['path'] . 'plugins/captcha/class/recaptchalib.php';
 }
 
