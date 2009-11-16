@@ -45,6 +45,8 @@ if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
 }
 
 $uid = '';
+$status = '';
+
 if (!empty($_POST['loginname']) && !empty($_POST['passwd'])) {
     if ($_CONF['user_login_method']['standard']) {
         $status = SEC_authenticate(COM_applyFilter($_POST['loginname']),
@@ -129,5 +131,4 @@ if ($status == USER_ACCOUNT_ACTIVE) {
     echo $display;
     exit;
 }
-
 ?>
