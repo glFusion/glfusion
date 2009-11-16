@@ -64,7 +64,13 @@ function popitup(url)
     {!endif}
     </map>
     {!if rating_box}
-      {rating_box}
+      <table style="width:100%;border:none;">
+      <tr>
+       <td align="center">
+         {rating_box}
+       </td>
+       </tr>
+       </table>
     {!endif}
     {!if edit_item}
       <div>{edit_item}</div>
