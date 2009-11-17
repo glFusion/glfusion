@@ -313,6 +313,8 @@ function glfusion_117()
         next($_SQL);
     }
 
+    DB_query("ALTER TABLE {$_TABLES['rating_votes']} ADD rating INT NOT NULL DEFAULT '0' AFTER item_id ",1);
+
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();
@@ -362,7 +364,8 @@ function glfusion_117()
             $user_id = $H['ratinguser'];
             $ip      = $H['ratinghostname'];
             $time    = $H['ratingtimestamp'];
-            DB_query("INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) VALUES ('filemgmt','".$item_id."',$user_id,'".$ip."',$time);");
+            $rating  = $H['rating'] / 2;
+            DB_query("INSERT INTO {$_TABLES['rating_votes']} (type,item_id,rating,uid,ip_address,ratingdate) VALUES ('filemgmt','".$item_id."',$rating,$user_id,'".$ip."',$time);");
         }
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.7.5' WHERE pi_name='filemgmt'");
     }

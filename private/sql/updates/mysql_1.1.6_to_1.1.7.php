@@ -47,6 +47,7 @@ $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['rating_votes']} (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(254) NOT NULL DEFAULT '',
   `item_id` varchar(40) NOT NULL,
+  `rating` int(11) unsigned NOT NULL DEFAULT '0',
   `uid` mediumint(8) NOT NULL,
   `ip_address` varchar(14) NOT NULL,
   `ratingdate` int(11) NOT NULL,

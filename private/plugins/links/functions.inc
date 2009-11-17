@@ -146,11 +146,12 @@ function plugin_getwhatsnew_links()
             $attr = array();
             if ( $_LI_CONF['target_blank'] == 1 ) {
                 $attr = array(
-                    'title' => $A['title'],
+                    'title' => htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt()),
                     'target' => '_blank');
             } else {
                 $attr = array(
-                    'title' => $A['title']);
+                    'title' => htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt())
+                    );
             }
 
             $newlinks[] = COM_createLink($title, $lcount, $attr) . LB;

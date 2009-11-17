@@ -1871,7 +1871,11 @@ function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = 
             if ($tid == $selected) {
                 $retval .= ' selected="selected"';
             }
-            $retval .= '>' . $topic . '</option>' . LB;
+            $retval .= '>' . $topic;
+            if ( isset($tid) ) {
+                $retval .= ' (' . $tid . ')';
+            }
+            $retval .=  '</option>' . LB;
         }
     }
 
@@ -4496,7 +4500,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 $retval .= '<ul>';
                 while ($A=DB_fetchArray($result)) {
                     $retval .= '<li>' . COM_createLink(COM_truncate($A['title'],$_CONF['title_trim_length'] ,'...'),
-                        COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid'])) . '</li>';
+                        COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']),array('title' => $A['title'])) . '</li>';
                 }
                 $retval .= '</ul>';
             }
@@ -4563,7 +4567,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
                                             '...' );
                 if( $title != $titletouse ) {
-                    $attr = array('title' => htmlspecialchars($title));
+                    $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
                 } else {
                     $attr = array();
                 }
@@ -4617,7 +4621,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
                 if( $title != $titletouse )
                 {
-                    $attr = array('title' => htmlspecialchars($title));
+                    $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
                 }
                 else
                 {
@@ -6941,7 +6945,7 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
             echo('<pre>');
             ob_start();
             var_dump($errcontext);
-            $errcontext = htmlspecialchars(ob_get_contents());
+            $errcontext = htmlspecialchars(ob_get_contents(),ENT_COMPAT,COM_getEncodingt());
             ob_end_clean();
             echo("$errcontext</pre></body></html>");
             exit;

@@ -79,31 +79,10 @@ $canRate = PLG_canUserRate( $plugin, $id_sent, $uid );
 if ( $canRate ) {
     // look up the item in our database....
 
-    $sql = "SELECT * FROM {$_TABLES['rating']} WHERE type='".addslashes($plugin)."' AND item_id='".addslashes($id_sent)."'";
-    $result = DB_query($sql);
-    if ( DB_numRows($result) > 0 ) {
-        $row            = DB_fetchArray($result);
-        $count          = $row['votes'];
-        $current_rating = $row['rating'];
-        $rating_id      = $row['id'];
-    } else {
-        $count          = 0;
-        $current_rating = 0;
-        $rating_id      = 0;
-    }
+    list($rating_id, $current_rating, $current_votes) = RATING_getRating( $plugin, $id_sent );
 
-    if ( $uid == 1 ) {
-        $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE ip_address='".addslashes($ip)."' AND item_id='".addslashes($id_sent)."'";
-    } else {
-        $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE (uid=$uid OR ip_address='".addslashes($ip)."') AND item_id='".addslashes($id_sent)."'";
-    }
-    $checkResult = DB_query($sql);
-    if ( DB_numRows($checkResult) > 0 ) {
-        $voted = 1;
-        $status = 1;
-    } else {
-        $voted = 0;
-    }
+    $voted = RATING_hasVoted( $plugin, $id_sent, $uid, $ip );
+    $status = $voted;
 
     COM_clearSpeedlimit($_CONF['rating_speedlimit'],'rate');
     $last = COM_checkSpeedlimit ('rate');
@@ -113,56 +92,17 @@ if ( $canRate ) {
     } else {
         $speedlimiterror = 0;
     }
-
     if(!$voted && !$speedlimiterror) {     //if the user hasn't yet voted, then vote normally...
-        $sum = $vote_sent  + ( $current_rating * $count ); // add together the current vote value and the total vote value
-        $tense = ($count==1) ? $LANG13['vote'] : $LANG13['votes']; //plural form votes/vote
-
-        // checking to see if the first vote has been tallied
-        // or increment the current number of votes
-        ($sum==0 ? $added=0 : $added=$count+1);
-
-        $new_rating = $sum / $added;
-
-    	if (($vote_sent >= 1 && $vote_sent <= $units) && ($ip == $ip_num)) { // keep votes within range, make sure IP matches - no monkey business!
-    	    if ( $rating_id != 0 ) {
-                $sql = "UPDATE {$_TABLES['rating']} SET votes=".$added.", rating=".$new_rating." WHERE id = ".$rating_id;
-                DB_query($sql);
-            } else {
-                $sql = "SELECT MAX(id) + 1 AS newid FROM " . $_TABLES['rating'];
-                $result = DB_query( $sql );
-                $row = DB_fetchArray( $result );
-                $newid = $row['newid'];
-                if ( $newid < 1 ) {
-                    $newid = 1;
-                }
-                $sql = "INSERT INTO {$_TABLES['rating']} (id,type,item_id,votes,rating) VALUES (" . $newid . ", '". $plugin . "','" . addslashes($id_sent). "'," . $added . "," . $new_rating . " )";
-                DB_query($sql);
-            }
-            $sql = "INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) " .
-                   "VALUES ('".addslashes($plugin)."','".addslashes($id_sent)."',".$uid.",'".addslashes($ip)."',".$ratingdate.");";
-            DB_query($sql);
-            PLG_itemRated( $plugin, $id_sent, $new_rating, $added );
+       	if (($vote_sent >= 1 && $vote_sent <= $units) && ($ip == $ip_num)) { // keep votes within range, make sure IP matches - no monkey business!
+            list($new_rating,$added) = RATING_addVote( $plugin, $id_sent, $vote_sent, $uid, $ip );
             COM_updateSpeedlimit ('rate');
     	}
     } else {
-        $added = $count;
+        $added = $current_votes;
         $new_rating = $current_rating;
     }
 } else {
-    $sql = "SELECT * FROM {$_TABLES['rating']} WHERE type='".addslashes($plugin)."' AND item_id='".addslashes($id_sent)."'";
-    $result = DB_query($sql);
-    if ( DB_numRows($result) > 0 ) {
-        $row            = DB_fetchArray($result);
-        $count          = $row['votes'];
-        $current_rating = $row['rating'];
-        $rating_id      = $row['id'];
-    } else {
-        $count          = 0;
-        $current_rating = 0;
-        $rating_id      = 0;
-    }
-
+    list($rating_id, $current_rating, $cout) = RATING_getRating( $plugin, $id_sent );
     $added = $count;
     $new_rating = $current_rating;
     $status = 3;

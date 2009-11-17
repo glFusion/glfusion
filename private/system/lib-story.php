@@ -118,18 +118,7 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article->set_var( 'story_date', $story->DisplayElements('date'), false, true); // make sure date format is in user's preferred format
     }
 
-    if ( $_CONF['rating_enabled'] != 0 ) {
-        $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
-        if ( $_CONF['rating_enabled'] == 2 && $uid != $story->DisplayElements('owner_id')) {
-            $article->set_var('rating_bar',ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,0,'sm'));
-        } else if ( !COM_isAnonUser() && $uid != $story->DisplayElements('owner_id')) {
-            $article->set_var('rating_bar',ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,0,'sm'));
-        } else {
-            $article->set_var('rating_bar',ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,TRUE,'sm'));
-        }
-    } else {
-        $article->set_var('rating_bar','');
-    }
+
 
     // begin instance caching...
     if( $story->DisplayElements('featured') == 1 )
@@ -594,6 +583,20 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->create_instance($instance_id,$article_filevar);
         }
     } // end of if cached
+
+    if ( $_CONF['rating_enabled'] != 0 ) {
+        $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
+        if ( $_CONF['rating_enabled'] == 2 && $uid != $story->DisplayElements('owner_id')) {
+            $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,0,'sm'));
+        } else if ( !COM_isAnonUser() && $uid != $story->DisplayElements('owner_id')) {
+            $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,0,'sm'));
+        } else {
+            $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,TRUE,'sm'));
+        }
+    } else {
+        $article->set_var('rating_bar','');
+    }
+
     $article->parse('finalstory',$article_filevar);
 
     return $article->finish( $article->get_var( 'finalstory' ));

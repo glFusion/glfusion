@@ -102,7 +102,8 @@ function filemgmt_upgrade()
                 $user_id = $H['ratinguser'];
                 $ip      = $H['ratinghostname'];
                 $time    = $H['ratingtimestamp'];
-                DB_query("INSERT INTO {$_TABLES['rating_votes']} (type,item_id,uid,ip_address,ratingdate) VALUES ('filemgmt','".$item_id."',$user_id,'".$ip."',$time);",1);
+                $rating  = $H['rating'] / 2;
+                DB_query("INSERT INTO {$_TABLES['rating_votes']} (type,item_id,rating,uid,ip_address,ratingdate) VALUES ('filemgmt','".$item_id."',$rating,$user_id,'".$ip."',$time);",1);
             }
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$CONF_FM['pi_version']."',pi_gl_version = '".$CONF_FM['gl_version']."' WHERE pi_name = 'filemgmt'");

@@ -1664,7 +1664,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             $static = 'static';
             $voted = 0;
         }
-        $rating_box = ratingBar('mediagallery',$media[$mediaObject]['media_id'], $media[$mediaObject]['media_votes'], $media[$mediaObject]['media_rating'], $voted, 5, $static, '');
+        $rating_box = RATING_ratingBar('mediagallery',$media[$mediaObject]['media_id'], $media[$mediaObject]['media_votes'], $media[$mediaObject]['media_rating'], $voted, 5, $static, '');
     } else {
         $rating_box = '';
     }

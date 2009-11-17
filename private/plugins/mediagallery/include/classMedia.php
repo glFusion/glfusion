@@ -519,9 +519,8 @@ class Media {
             } else {
                 $starSize = 'sm';
             }
-            $rating_box = ratingBar('mediagallery',$this->id, $this->votes,
-                                                   $this->rating, 0,
-                                       5,$static,$starSize);
+            $rating_box = RATING_ratingBar('mediagallery',$this->id, $this->votes,$this->rating, 0,
+                                            5,$static,$starSize);
         } else {
             $rating_box = '';
         }
