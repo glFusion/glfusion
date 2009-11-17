@@ -400,9 +400,6 @@ function modDownload() {
 
 
     /* Display File Voting Information */
-    $result5 = DB_query("SELECT COUNT(*) FROM {$_FM_TABLES['filemgmt_votedata']}");
-    list ($totalvotes) = DB_fetchARRAY($result5);
-
     $display .= '<form method="post" action="index.php">';
     $display .= '<input type="hidden" name="op" value=""' . XHTML . '>';
     $display .= '<input type="hidden" name="rid" value=""' . XHTML . '>';
@@ -411,35 +408,30 @@ function modDownload() {
     $display .= '<tr><th colspan="7">';
     if ($totalvotes == '')
        $totalvotes = 0;
-    $display .= sprintf(_MD_DLRATINGS,$totalvotes);
+    $display .= sprintf(_MD_DLRATINGS,0);
     $display .= '</th></tr>';
     // Show Registered Users Votes
-    $result5 = DB_query("SELECT ratingid, ratinguser, rating, ratinghostname, ratingtimestamp FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='".addslashes($lid)."' AND ratinguser != 0 ORDER BY ratingtimestamp DESC");
-    $votes = DB_numROWS($result5);
+    $ratingData = array();
+    $ratingData = RATING_getVoteData( 'filemgmt', $lid, 'ratingdate', 'desc', array("AND" => "u.uid > 1" ) );
+    $votes = count($ratingData);
     $display .= '<tr><td colspan="7">';
     $display .= sprintf(_MD_REGUSERVOTES,$votes);
     $display .= '</td></tr>';
-    $display .= '<tr><th>'._MD_USER.'</th><th>'._MD_IP.'</th><th>'._MD_RATING.'</th><th>'._MD_USERAVG.'</th><th>'._MD_TOTALRATE.'</th><th>'._MD_DATE.'</th><th align="center">'._MD_DELETE.'</th></tr>';
+    $display .= '<tr><th>'._MD_USER.'</th><th>'._MD_IP.'</th><th>'._MD_RATING.'</th><th>'._MD_DATE.'</th><th align="center">'._MD_DELETE.'</th></tr>';
     if ($votes == 0){
-          $display .= '<tr><td align="center" colspan="7">'._MD_NOREGVOTES.'<br' . XHTML . '></td></tr>';
+          $display .= '<tr><td align="center" colspan="5">'._MD_NOREGVOTES.'<br' . XHTML . '></td></tr>';
     }
     $x=0;
     $cssid = 1;
-    while(list($ratingid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp)=DB_fetchARRAY($result5)) {
-        $formatted_date = formatTimestamp($ratingtimestamp);
+    foreach( $ratingData AS $data ) {
+        $formatted_date = formatTimestamp($data['ratingdate']);
+        $ratinguname = $data['username'];
+        $ratinghostname = $data['ip_address'];
+        $rating = $data['rating'];
+        $ratingid = $data['id'];
 
-        //Individual user information
-        $result2 = DB_query("SELECT rating FROM {$_FM_TABLES['filemgmt_votedata']} WHERE ratinguser='$ratinguser'");
-        $uservotes = DB_numROWS($result2);
-        $useravgrating = 0;
-        while(list($rating2) = DB_fetchARRAY($result2)){
-             $useravgrating = $useravgrating + $rating2;
-        }
-        $useravgrating = $useravgrating / $uservotes;
-        $useravgrating = number_format($useravgrating, 1);
-        $ratinguname = $_USER['username'];
         $display .= "<tr class=\"pluginRow{$cssid}\"><td>$ratinguname</td><td>$ratinghostname</td><td>$rating</td>";
-        $display .= "<td>$useravgrating</td><td>$uservotes</td><td>$formatted_date</td><td style=\"text-align:right;padding-right:20px;\">";
+        $display .= "<td>$formatted_date</td><td style=\"text-align:right;padding-right:20px;\">";
         $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.gif" ';
         $display .= 'onclick=\'if (confirm("Delete this record")) {this.form.op.value="delVote";this.form.lid.value="'.$lid.'";this.form.rid.value="'.$ratingid.'";return true};return false;\' value="Delete"' . XHTML . '>';
         $display .= "</td></tr>\n";
@@ -449,8 +441,11 @@ function modDownload() {
     }
     $display .= '</table></form>' .LB;
     // Show Unregistered Users Votes
-    $result5 = DB_query("SELECT ratingid, rating, ratinghostname, ratingtimestamp FROM {$_FM_TABLES['filemgmt_votedata']} WHERE lid='".addslashes($lid)."' AND ratinguser=0 ORDER BY ratingtimestamp DESC");
-    $votes = DB_numROWS($result5);
+
+    $ratingData = array();
+    $ratingData = RATING_getVoteData( 'filemgmt', $lid, 'ratingdate', 'desc', array('AND' => 'u.uid = 1' ) );
+    $votes = count($ratingData);
+
     $display .= '<form method="post" action="index.php" onsubmit="alert(this.form.op.value)">';
     $display .= '<input type="hidden" name="op" value=""' . XHTML . '>';
     $display .= '<input type="hidden" name="rid" value=""' . XHTML . '>';
@@ -465,8 +460,13 @@ function modDownload() {
     }
     $x=0;
     $cssid = 1;
-    while(list($ratingid, $rating, $ratinghostname, $ratingtimestamp)=DB_fetchARRAY($result5)) {
-        $formatted_date = formatTimestamp($ratingtimestamp);
+
+    foreach( $ratingData AS $data ) {
+        $formatted_date = formatTimestamp($data['ratingdate']);
+        $ratinghostname = $data['ip_address'];
+        $rating = $data['rating'];
+        $ratingid = $data['id'];
+
         $display .= "<tr class=\"pluginRow{$cssid}\" style=\"vertical-align:bottom;\"><td colspan=\"2\">$ratinghostname</td><td colspan=\"3\">$rating</td>";
         $display .= "<td>$formatted_date</td><td style=\"text-align:right;padding-right:20px;\">";
         $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.gif" ';
@@ -572,8 +572,8 @@ function delVote() {
 
    $rid = intval($_POST['rid']);
    $lid = intval($_POST['lid']);
-   DB_query("DELETE FROM {$_FM_TABLES['filemgmt_votedata']} WHERE ratingid='".addslashes($rid)."'");
-   updaterating($lid);
+
+   RATING_deleteVote( $rid );
    redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?lid=$lid&amp;op=modDownload",2,_MD_VOTEDELETED);
    exit();
 }

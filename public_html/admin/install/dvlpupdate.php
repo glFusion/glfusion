@@ -313,6 +313,8 @@ function glfusion_117()
         next($_SQL);
     }
 
+    DB_query("ALTER TABLE {$_TABLES['rating_votes']} ADD rating INT NOT NULL DEFAULT '0' AFTER item_id ",1);
+
     // new config options
     require_once $_CONF['path_system'].'classes/config.class.php';
     $c = config::get_instance();

@@ -72,7 +72,7 @@ if (!defined ('GVERSION')) {
  *
  */
 
-function ratingBar($type, $id, $total_votes, $total_value, $voted=0, $units='', $static='',$size='') {
+function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $units='', $static='',$size='') {
     global $_USER, $_TABLES, $_CONF, $LANG13;
 
     if ( $size == 'sm') {
@@ -153,5 +153,234 @@ function ratingBar($type, $id, $total_votes, $total_value, $voted=0, $units='', 
         $rater.='</div>';
         return $rater;
     }
+}
+
+/**
+* Return an array of all voting records
+*
+* Returns an array of all voting records for either a $type or an $item_id.
+* standard set of glFusion permissions.
+*
+* @param        string      $type     plugin name
+* @param        string      $item_id  item id (optional)
+* @param        string      $sort     column to sort data by
+* @param        string      $sortdir  asc or desc
+* @param        array       $filterArray An array of fields => values for where clause
+* @return       array       an array of all voting records that match the search criteria
+*
+*/
+function RATING_getVoteData( $type, $item_id='', $sort='ratingdate', $sortdir = 'desc', $filterArray = '' )
+{
+    global $_TABLES;
+
+    $whereClause = '';
+    $retval = array();
+
+    $validFields    = array('id','type','item_id','uid','vote','ip_address','ratingdate');
+    $validDirection = array('asc','desc');
+
+    if ( !in_array($sort,$validFields) ) {
+        $sort = 'ratingdate';
+    }
+    if ( !in_array($sortdir,$validDirection) ) {
+        $sortdir = 'desc';
+    }
+    if ( $item_id != '' ) {
+        $whereClause = " AND item_id='" . $item_id . "' ";
+    }
+    if ( is_array($filterArray) ) {
+        foreach ( $filterArray AS $bType => $filter ) {
+            $whereClause .= ' ' . $bType . ' ' . $filter;
+        }
+    }
+
+    $sql = "SELECT * FROM {$_TABLES['rating_votes']} AS r LEFT JOIN {$_TABLES['users']} AS u ON r.uid=u.uid WHERE type='".$type."'" . $whereClause . ' ORDER BY ' . $sort . ' ' . $sortdir;
+
+    $result = DB_query($sql);
+
+    while ( $row = DB_fetchArray($result) ) {
+        $retval[] = $row;
+    }
+    return $retval;
+}
+
+/**
+* Returns the rating data for an item.
+*
+* Returns an array consisting of the rating_id, votes and rating of a specific
+* item.
+*
+* @param        string      $type     plugin name
+* @param        string      $item_id  item id
+* @return       array       an array of rating_id, rating, votes
+*
+*/
+function RATING_getRating( $type, $item_id )
+{
+    global $_TABLES;
+
+    $sql = "SELECT * FROM {$_TABLES['rating']} WHERE type='".addslashes($type)."' AND item_id='".addslashes($item_id)."'";
+    $result = DB_query($sql);
+    if ( DB_numRows($result) > 0 ) {
+        $row            = DB_fetchArray($result);
+        $votes          = $row['votes'];
+        $rating         = $row['rating'];
+        $rating_id      = $row['id'];
+    } else {
+        $votes          = 0;
+        $rating         = 0;
+        $rating_id      = 0;
+    }
+
+    return array($rating_id, $rating, $votes);
+}
+
+
+/**
+* Check if user has already rated for an item
+*
+* Determines if user or IP has already rated the item.
+*
+* @param        string      $type     plugin name
+* @param        string      $item_id  item id
+* @param        int         $uid      user id
+* @param        string      $ip       IP address of user
+* @return       bool        true if user or ip has already rated, false if not
+*
+*/
+function RATING_hasVoted( $type, $item_id, $uid, $ip )
+{
+    global $_TABLES;
+
+    $voted = 0;
+
+    if ( $uid == 1 ) {
+        $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE ip_address='".addslashes($ip)."' AND item_id='".addslashes($item_id)."'";
+    } else {
+        $sql = "SELECT id FROM {$_TABLES['rating_votes']} WHERE (uid=$uid OR ip_address='".addslashes($ip)."') AND item_id='".addslashes($item_id)."'";
+    }
+    $checkResult = DB_query($sql);
+    if ( DB_numRows($checkResult) > 0 ) {
+        $voted = 1;
+    } else {
+        $voted = 0;
+    }
+
+    return $voted;
+
+}
+
+/**
+* Removes all rating data for an item
+*
+* Removes all rating data for an item
+*
+* @param        string      $type     plugin name
+* @param        string      $item_id  item id
+* @return       none
+*
+*/
+function RATING_resetRating( $type, $item_id )
+{
+    global $_TABLES;
+
+    DB_delete($_TABLES['rating'],array('type','item_id'),array($type,$item_id));
+    DB_delete($_TABLES['rating_votes'],array('type','item_id'),array($type,$item_id));
+
+    PLG_itemRated( $type, $item_id, 0, 0 );
+}
+
+/**
+* Deletes a specific rating entry
+*
+* Deletes a specific rating entry and recalculates the new rating
+*
+* @param        string      $voteID   The ID of the rating_votes record
+* @return       array       true if successful otherwise false
+*
+*/
+function RATING_deleteVote( $voteID )
+{
+    global $_TABLES;
+
+    $retval = false;
+
+    $result = DB_query("SELECT * FROM {$_TABLES['rating_votes']} WHERE id=".$voteID);
+    if ( DB_numRows($result) > 0 ) {
+        $row = DB_fetchArray($result);
+        $item_id = $row['item_id'];
+        $type = $row['type'];
+        $user_rating = $row['rating'];
+
+        list($rating_id, $current_rating, $current_votes) = RATING_getRating( $type, $item_id );
+
+        if ( $current_votes > 0 ) {
+            $totalRating = $current_votes * $current_rating;
+            $sum = $totalRating - $user_rating;
+            $votes = $current_votes - 1;
+            if ( $sum > 0 && $votes > 0 ) {
+                $new_rating = $sum / $votes;
+            } else {
+                $new_rating = 0;
+            }
+            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating=".$new_rating." WHERE id = ".$rating_id;
+            DB_query($sql);
+            DB_delete($_TABLES['rating_votes'],'id',$voteID);
+            PLG_itemRated( $type, $item_id, $new_rating, $votes );
+            $retval = true;
+        }
+    }
+    return $retval;
+}
+
+/**
+* Add a new rating to an item
+*
+* Adds a new rating for an item. This will calculate the new overall
+* rating, update the vote table with the user / ip info and ask the
+* plugin to update its records.
+*
+* @param        string      $type     plugin name
+* @param        string      $item_id  item id
+* @param        int         $rating   rating sent by user
+* @param        int         $uid      user id of rater
+* @param        string      $ip       IP address of rater
+* @return       array       an array with the new overall rating and total number
+*                           of votes.
+*
+*/
+function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
+{
+    global $_TABLES;
+
+    $ratingdate = time();
+
+    list($rating_id, $current_rating, $current_votes) = RATING_getRating( $type, $item_id );
+
+    $sum = $rating  + ( $current_rating * $current_votes ); // add together the current vote value and the total vote value
+    ($sum==0 ? $votes=0 : $votes=$current_votes+1);
+    $new_rating = $sum / $votes;
+
+    if ( $rating_id != 0 ) {
+        $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating=".$new_rating." WHERE id = ".$rating_id;
+        DB_query($sql);
+    } else {
+        $sql = "SELECT MAX(id) + 1 AS newid FROM " . $_TABLES['rating'];
+        $result = DB_query( $sql );
+        $row = DB_fetchArray( $result );
+        $newid = $row['newid'];
+        if ( $newid < 1 ) {
+            $newid = 1;
+        }
+        $sql = "INSERT INTO {$_TABLES['rating']} (id,type,item_id,votes,rating) VALUES (" . $newid . ", '". $type . "','" . addslashes($item_id). "'," . $votes . "," . $new_rating . " )";
+        DB_query($sql);
+    }
+    $sql = "INSERT INTO {$_TABLES['rating_votes']} (type,item_id,rating,uid,ip_address,ratingdate) " .
+           "VALUES ('".addslashes($type)."','".addslashes($item_id)."',".$rating.",".$uid.",'".addslashes($ip)."',".$ratingdate.");";
+    DB_query($sql);
+    PLG_itemRated( $type, $item_id, $new_rating, $votes );
+
+    return array($new_rating, $votes);
+
 }
 ?>

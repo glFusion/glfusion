@@ -1171,10 +1171,8 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 function MG_mediaResetRating( $album_id, $media_id, $mqueue ) {
     global $_MG_CONF, $_TABLES;
 
-    $sql = "UPDATE {$_TABLES['mg_media']} SET media_rating=0,media_votes=0 WHERE media_id='" . addslashes($media_id) . "'";
-    DB_query($sql);
-    $sql = "DELETE FROM {$_TABLES['mg_rating']} WHERE media_id='" . addslashes($media_id) . "'";
-    DB_query($sql);
+    RATING_resetRating( 'mediagallery', $media_id );
+
     $retval = MG_mediaEdit( $album_id, $media_id, $_MG_CONF['site_url'] . '/admin.php?mode=media&amp;album_id=' . $album_id, $mqueue );
     return $retval;
 }

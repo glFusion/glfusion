@@ -156,9 +156,9 @@ if ($FilemgmtAdmin) {
 $ruid = isset($_USER['uid']) ? $_USER['uid'] : 1;
 
 if ( $submitter == $ruid ) {
-    $rating_box = ratingBar( 'filemgmt',$lid, $votes,$rating, 0,5,true,'sm');
+    $rating_box = RATING_ratingBar( 'filemgmt',$lid, $votes,$rating, 0,5,true,'sm');
 } else {
-    $rating_box = ratingBar( 'filemgmt',$lid, $votes,$rating, 0,5,0,'sm');
+    $rating_box = RATING_ratingBar( 'filemgmt',$lid, $votes,$rating, 0,5,0,'sm');
 }
 
 $p->set_var('rating_bar',$rating_box);
