@@ -48,15 +48,9 @@ digg_window = 'new'; {# open Digg.com window in a new window, if left blank will
           <div>{plugin_footer_vars}</div>
         {!endif}
         {!if rating_bar}
-          <table style="width:100%;padding:0;margin:0">
-          <tr>
-          <td align="center">
+          </p>
           {rating_bar}
-          </td>
-          </tr>
-          </table>
         {!endif}
-        </p>
     </div>
 </div>
 <div class="block-divider"> </div>

@@ -47,16 +47,10 @@ digg_window = 'new'; //open's Digg.com window in a new window, if left blank wil
         {!if plugin_footer_vars}
           <div>{plugin_footer_vars}</div>
         {!endif}
-          {!if rating_bar}
-            <table style="width:100%;padding:0;margin:0">
-            <tr>
-            <td align="center">
-            {rating_bar}
-            </td>
-            </tr>
-            </table>
-          {!endif}
-        </p>
+        {!if rating_bar}
+          </p>
+          {rating_bar}
+        {!endif}
     </div>
 </div>
 <div class="block-divider"> </div>
