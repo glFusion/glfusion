@@ -134,8 +134,6 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         $article_filevar = 'article';
     }
 
-    PLG_templateSetVars($article_filevar,$article);
-
     $hash = CACHE_security_hash();
     $instance_id = 'story_'.$story->getSid().'_'.$index.$mode.'_'.$article_filevar.'_'.$hash.'_'.$_CONF['theme'];
 
@@ -583,6 +581,8 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
             $article->create_instance($instance_id,$article_filevar);
         }
     } // end of if cached
+
+    PLG_templateSetVars($article_filevar,$article);
 
     if ( $_CONF['rating_enabled'] != 0 ) {
         $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
