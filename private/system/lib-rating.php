@@ -113,9 +113,9 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
     	$static_rater[] .= "\n".'<div class="ratingbar">';
     	$static_rater[] .= '<div id="unit_long'.$id.'">';
     	if ( $size == 'sm' ) {
-    	    $static_rater[] .= '<ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
+    	    $static_rater[] .= '<ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;margin:0px auto;">';
     	} else {
-    	    $static_rater[] .= '<ul id="unit_ul'.$id.'" class="rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
+    	    $static_rater[] .= '<ul id="unit_ul'.$id.'" class="rating-unit" style="width:'.$rating_unitwidth*$units.'px;margin:0px auto;">';
     	}
     	$static_rater[] .= '<li class="current-rating" style="width:'.$rating_width.'px;">'.$LANG13['currently'].' '.$rating2.'/'.$units.'</li>';
     	$static_rater[] .= '</ul>';
@@ -128,9 +128,9 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
         $rater.='<div class="ratingblock">';
         $rater.='<div id="unit_long'.$id.'">';
         if ( $size == 'sm' ) {
-            $rater.='  <ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
+            $rater.='  <ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;margin:0px auto;">';
         } else {
-            $rater.='  <ul id="unit_ul'.$id.'" class="rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
+            $rater.='  <ul id="unit_ul'.$id.'" class="rating-unit" style="width:'.$rating_unitwidth*$units.'px;margin:0px auto;">';
         }
         $rater.='     <li class="current-rating" style="width:'.$rating_width.'px;">'.$LANG13['currently'].' '.$rating2.'/'.$units.'</li>';
 
