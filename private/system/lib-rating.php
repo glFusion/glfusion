@@ -108,29 +108,29 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
     $rating1        = @number_format($current_rating,1);
     $rating2        = @number_format($current_rating,2);
 
-    if ($static ) {
-        $static_rater = array();
-    	$static_rater[] .= "\n".'<div class="ratingbar">';
-    	$static_rater[] .= '<div id="unit_long'.$id.'">';
+    if ( $static ) {
+        $static_rater = '';
+    	$static_rater .= '<div class="'.$type.'-ratingbar">';
+    	$static_rater .= '<div id="unit_long'.$id.'">';
     	if ( $size == 'sm' ) {
-    	    $static_rater[] .= '<ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;margin:0px auto;">';
+    	    $static_rater .= '<ul id="unit_ul'.$id.'" class="'.$type.'-small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
     	} else {
-    	    $static_rater[] .= '<ul id="unit_ul'.$id.'" class="rating-unit" style="width:'.$rating_unitwidth*$units.'px;margin:0px auto;">';
+    	    $static_rater .= '<ul id="unit_ul'.$id.'" class="'.$type.'-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
     	}
-    	$static_rater[] .= '<li class="current-rating" style="width:'.$rating_width.'px;">'.$LANG13['currently'].' '.$rating2.'/'.$units.'</li>';
-    	$static_rater[] .= '</ul>';
-    	$static_rater[] .= '<span class="static">' . $LANG13['rating'] . ': <strong> '.$rating1.'</strong>/'.$units.' ('.$count.' '.$tense.' '.$LANG13['cast'] . ')</span>';
-    	$static_rater[] .= '</div>';
-    	$static_rater[] .= '</div>';
-    	return join("\n", $static_rater);
+    	$static_rater .= '<li class="current-rating" style="width:'.$rating_width.'px;">'.$LANG13['currently'].' '.$rating2.'/'.$units.'</li>';
+    	$static_rater .= '</ul>';
+    	$static_rater .= '<span class="static">' . $LANG13['rating'] . ': <strong> '.$rating1.'</strong>/'.$units.' ('.$count.' '.$tense.' '.$LANG13['cast'] . ')</span>';
+    	$static_rater .= '</div>';
+    	$static_rater .= '</div>';
+    	return $static_rater;
     } else {
         $rater ='';
-        $rater.='<div class="ratingblock">';
+        $rater.='<div class="'.$type.'-ratingbar">';
         $rater.='<div id="unit_long'.$id.'">';
         if ( $size == 'sm' ) {
-            $rater.='  <ul id="unit_ul'.$id.'" class="small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;margin:0px auto;">';
+            $rater.='  <ul id="unit_ul'.$id.'" class="'.$type.'-small-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
         } else {
-            $rater.='  <ul id="unit_ul'.$id.'" class="rating-unit" style="width:'.$rating_unitwidth*$units.'px;margin:0px auto;">';
+            $rater.='  <ul id="unit_ul'.$id.'" class="'.$type.'-rating-unit" style="width:'.$rating_unitwidth*$units.'px;">';
         }
         $rater.='     <li class="current-rating" style="width:'.$rating_width.'px;">'.$LANG13['currently'].' '.$rating2.'/'.$units.'</li>';
 
@@ -143,7 +143,7 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 
         $rater.='  </ul>';
         $rater.='  <span';
-        if($voted){
+        if ( $voted ){
             $rater.=' class="voted"';
         }
         $rater.='>' . $LANG13['rating'] . ': <strong> ' . $rating1 . '</strong>/'.$units.' ('.$count.' '.$tense.' '.$LANG13['cast'].')';
@@ -382,5 +382,35 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
 
     return array($new_rating, $votes);
 
+}
+
+/**
+* Retrieve an array of item_id's the current user has rated
+*
+* This function will return an array of all the items the user
+* has rated for the specific type.
+*
+* @param        string      $type     plugin name
+* @return       array       array of item id's
+*
+*/
+function RATING_getRatedIds($type)
+{
+    global $_TABLES, $_USER;
+
+    $ip     = addslashes($_SERVER['REMOTE_ADDR']);
+    $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
+
+    $ratedIds = array();
+    if ( $uid == 1 ) {
+        $sql = "SELECT item_id FROM {$_TABLES['rating_votes']} WHERE type='".$type."' AND (ip_address='$ip')";
+    } else {
+        $sql = "SELECT item_id FROM {$_TABLES['rating_votes']} WHERE type='".$type."' AND (uid='$uid' OR ip_address='$ip')";
+    }
+    $result = DB_query($sql,1);
+    while ( $row = DB_fetchArray($result) ) {
+        $ratedIds[] = $row['item_id'];
+    }
+    return $ratedIds;
 }
 ?>
