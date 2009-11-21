@@ -81,7 +81,7 @@ if (!defined ('STORY_ARCHIVE_ON_EXPIRE')) {
 function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $query='')
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG05, $LANG11, $LANG_TRB,
-           $_IMAGE_TYPE, $mode, $_GROUPS;
+           $_IMAGE_TYPE, $mode, $_GROUPS, $ratedIds;
 
     static $storycounter = 0;
 
@@ -528,13 +528,20 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         PLG_templateSetVars($article_filevar,$article);
 
         if ( $_CONF['rating_enabled'] != 0 ) {
+            if ( @in_array($story->getSid(),$ratedIds)) {
+                $static = true;
+                $voted = 1;
+            } else {
+                $static = 0;
+                $voted = 0;
+            }
             $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
             if ( $_CONF['rating_enabled'] == 2 && $uid != $story->DisplayElements('owner_id')) {
-                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,0,'sm'),false,true );
+                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), $voted,5,$static,'sm'),false,true );
             } else if ( !COM_isAnonUser() && $uid != $story->DisplayElements('owner_id')) {
-                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,0,'sm'),false,true );
+                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), $voted,5,$static,'sm'),false,true );
             } else {
-                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,TRUE,'sm'),false,true );
+                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 1,5,TRUE,'sm'),false,true );
             }
         } else {
             $article->set_var('rating_bar','',false,true );
@@ -555,13 +562,20 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
         PLG_templateSetVars($article_filevar,$article);
 
         if ( $_CONF['rating_enabled'] != 0 ) {
+            if ( @in_array($story->getSid(),$ratedIds)) {
+                $static = true;
+                $voted = 1;
+            } else {
+                $static = 0;
+                $voted = 0;
+            }
             $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
             if ( $_CONF['rating_enabled'] == 2 && $uid != $story->DisplayElements('owner_id')) {
-                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,0,'sm'),false,true );
+                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), $voted,5,$static,'sm'),false,true );
             } else if ( !COM_isAnonUser() && $uid != $story->DisplayElements('owner_id')) {
-                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,0,'sm'),false,true );
+                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), $voted,5,$static,'sm'),false,true );
             } else {
-                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), 0,5,TRUE,'sm'),false,true );
+                $article->set_var('rating_bar',RATING_ratingBar( 'article',$story->getSid(), $story->DisplayElements('votes'),$story->DisplayElements('rating'), $voted,5,TRUE,'sm'),false,true );
             }
         } else {
             $article->set_var('rating_bar','',false,true );

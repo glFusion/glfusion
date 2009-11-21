@@ -101,6 +101,11 @@ $result = DB_query("SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE si
 $A = DB_fetchArray($result);
 if ($A['count'] > 0) {
 
+    $ratedIds = array();
+    if ( $_CONF['rating_enabled'] != 0 ) {
+        $ratedIds = RATING_getRatedIds('article');
+    }
+
     $story = new Story();
 
     $args = array (

@@ -139,6 +139,11 @@ if (!$newstories && !$displayall) {
     }
 }
 
+$ratedIds = array();
+if ( $_CONF['rating_enabled'] != 0 ) {
+    $ratedIds = RATING_getRatedIds('article');
+}
+
 if($topic)
 {
     $header = '<link rel="microsummary" href="' . $_CONF['site_url']

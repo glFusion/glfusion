@@ -121,9 +121,9 @@ if ( $status == 1 ) {
 $new_back = array();
 
 if ( $size == 'sm' ) {
-    $new_back[] .= '<ul class="small-rating-unit" style="width:'.$units*$rating_unitwidth.'px;margin:0 auto;">';
+    $new_back[] .= '<ul class="'.$plugin.'-small-rating-unit" style="width:'.$units*$rating_unitwidth.'px;">';
 } else {
-    $new_back[] .= '<ul class="rating-unit" style="width:'.$units*$rating_unitwidth.'px;margin:0 auto;">';
+    $new_back[] .= '<ul class="'.$plugin.'-rating-unit" style="width:'.$units*$rating_unitwidth.'px;">';
 }
 $new_back[] .= '<li class="current-rating" style="width:'.@number_format($current_rating,2)*$rating_unitwidth.'px;">'.$LANG13['currently']. '</li>';
 $new_back[] .= '</ul>';

@@ -64,6 +64,10 @@ if ($cid == 0 OR $category_rows == 0) {
     exit;
 }
 
+$FM_ratedIds = array();
+$FM_ratedIds = RATING_getRatedIds('filemgmt');
+
+
 $display = COM_siteHeader('menu',$LANG_FILEMGMT['usermenu1']);
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
