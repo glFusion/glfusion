@@ -697,16 +697,15 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
     	 */
 
         if ( $MG_albums[$M['album_id']]->enable_rating > 0 ) {
-            require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-rating.php';
-
             $ip     = $_SERVER['REMOTE_ADDR'];
             $uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
+            $static = false;
             // check to see if we are the owner, if so, no rating for us...
             if (isset($_USER['uid']) && $_USER['uid'] == $M['owner_id'] ) {
-                $static = 'static';
+                $static = true;
             } else {
                 if (in_array($M['media_id'], $ratedIds)) {
-                    $static = 'static';
+                    $static = true;
                 } else {
                     $static = '';
                 }
@@ -714,7 +713,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
             if ( $MG_albums[$M['album_id']]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
                 $static = 'static';
             }
-            $rating_box = mgRating_bar($M['media_id'], $M['media_votes'], ($M['media_rating']*$M['media_votes'])/2, $static, 5,'','sm');
+            $rating_box = RATING_ratingBar('mediagallery',$M['media_id'], $M['media_votes'], ($M['media_rating']*$M['media_votes'])/2, $static, 5,'','sm');
         } else {
             $rating_box = '';
         }

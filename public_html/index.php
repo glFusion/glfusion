@@ -134,6 +134,10 @@ if (!$newstories && !$displayall) {
     }
 }
 
+$ratedIds = array();
+if ( $_CONF['rating_enabled'] != 0 ) {
+    $ratedIds = RATING_getRatedIds('article');
+}
 if ( $topic ) {
     IO_addLink('microsummary',$_CONF['site_url'].'/index.php?display=microsummary&amp;topic=' . urlencode($topic),'','',array('title'=>'Microsummary'));
 } else {

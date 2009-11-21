@@ -1659,9 +1659,19 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
         if (isset($_USER['uid']) && $_USER['uid'] == $media[$mediaObject]['media_user_id'] ) {
             $static = true;
             $voted = 0;
+        } else {
+            if ( in_array($media[$mediaObject]['media_id'],$ratedIds)) {
+                $static = true;
+                $voted = 1;
+            } else {
+                $static = 0;
+                $voted = 0;
+            }
         }
+
+
         if ( $MG_albums[$aid]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
-            $static = 'static';
+            $static = true;
             $voted = 0;
         }
         $rating_box = RATING_ratingBar('mediagallery',$media[$mediaObject]['media_id'], $media[$mediaObject]['media_votes'], $media[$mediaObject]['media_rating'], $voted, 5, $static, '');

@@ -510,7 +510,16 @@ class Media {
             if (isset($_USER['uid']) && $_USER['uid'] == $this->owner_id ) {
                 $static = true;
                 $voted = 0;
+            } else {
+                if ( in_array($this->id,$ratedIds)) {
+                    $static = true;
+                    $voted = 1;
+                } else {
+                    $static = 0;
+                    $voted = 0;
+                }
             }
+
             if ( $MG_albums[$this->album_id]->enable_rating == 1 && (!isset($_USER['uid']) || $_USER['uid'] < 2) ) {
                 $static = true;
             }
@@ -519,7 +528,7 @@ class Media {
             } else {
                 $starSize = 'sm';
             }
-            $rating_box = RATING_ratingBar('mediagallery',$this->id, $this->votes,$this->rating, 0,
+            $rating_box = RATING_ratingBar('mediagallery',$this->id, $this->votes,$this->rating, $voted,
                                             5,$static,$starSize);
         } else {
             $rating_box = '';

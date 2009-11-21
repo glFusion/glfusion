@@ -153,13 +153,21 @@ if ($FilemgmtAdmin) {
     $p->set_var('show_editlink','none');
 }
 
-$ruid = isset($_USER['uid']) ? $_USER['uid'] : 1;
-
-if ( $submitter == $ruid ) {
-    $rating_box = RATING_ratingBar( 'filemgmt',$lid, $votes,$rating, 0,5,true,'sm');
+$static = false;
+$voted  = 0;
+if (isset($_USER['uid']) && $_USER['uid'] == $submitter ) {
+    $static = true;
+    $voted = 0;
 } else {
-    $rating_box = RATING_ratingBar( 'filemgmt',$lid, $votes,$rating, 0,5,0,'sm');
+    if ( in_array($lid,$FM_ratedIds)) {
+        $static = true;
+        $voted = 1;
+    } else {
+        $static = 0;
+        $voted = 0;
+    }
 }
+$rating_box = RATING_ratingBar( 'filemgmt',$lid, $votes,$rating, $voted ,5,$static,'sm');
 
 $p->set_var('rating_bar',$rating_box);
 

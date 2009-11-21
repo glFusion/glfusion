@@ -431,9 +431,9 @@ function modDownload() {
         $ratingid = $data['id'];
 
         $display .= "<tr class=\"pluginRow{$cssid}\"><td>$ratinguname</td><td>$ratinghostname</td><td>$rating</td>";
-        $display .= "<td>$formatted_date</td><td style=\"text-align:right;padding-right:20px;\">";
-        $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.gif" ';
-        $display .= 'onclick=\'if (confirm("Delete this record")) {this.form.op.value="delVote";this.form.lid.value="'.$lid.'";this.form.rid.value="'.$ratingid.'";return true};return false;\' value="Delete"' . XHTML . '>';
+        $display .= "<td>$formatted_date</td><td style=\"text-align:center;padding-right:20px;\">";
+        $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.png" ';
+        $display .= 'onclick=\'if (confirm("Delete this rating entry?")) {this.form.op.value="delVote";this.form.lid.value="'.$lid.'";this.form.rid.value="'.$ratingid.'";return true};return false;\' value="Delete"' . XHTML . '>';
         $display .= "</td></tr>\n";
         $x++;
         $cssid = ($cssid == 1) ? 2 : 1;
@@ -468,8 +468,8 @@ function modDownload() {
         $ratingid = $data['id'];
 
         $display .= "<tr class=\"pluginRow{$cssid}\" style=\"vertical-align:bottom;\"><td colspan=\"2\">$ratinghostname</td><td colspan=\"3\">$rating</td>";
-        $display .= "<td>$formatted_date</td><td style=\"text-align:right;padding-right:20px;\">";
-        $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.gif" ';
+        $display .= "<td>$formatted_date</td><td style=\"text-align:center;padding-right:20px;\">";
+        $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.png" ';
         $display .= 'onclick=\'if (confirm("Delete this record")) {this.form.op.value="delVote";this.form.lid.value="'.$lid.'";this.form.rid.value="'.$ratingid.'";return true};return false;\' value="Delete"' . XHTML . '>';
         $display .= "</td></tr>";
         $x++;
@@ -529,12 +529,12 @@ function listBrokenDownloads() {
                 $display .= "<td><a href=mailto:$owneremail>$ownername</a>";
             }
             $display .= "</td><td style='text-align:center'>";
-            $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.gif" ';
+            $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.png" ';
             $display .= 'onClick=\'if (confirm("Delete this broken file report?")) {this.form.op.value="ignoreBrokenDownloads";';
             $display .= 'this.form.lid.value="'.$lid.'";return true};return false;\'">';
             $display .= "</td>";
             $display .= "<td style='text-align:center'>";
-            $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.gif" ';
+            $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.png" ';
             $display .= 'onClick=\'if (confirm("Delete the file from your repository?")) {this.form.op.value="delBrokenDownloads";';
             $display .= 'this.form.lid.value="'.$lid.'";return true};return false;\'">';
             $display .= "</td></tr>\n";

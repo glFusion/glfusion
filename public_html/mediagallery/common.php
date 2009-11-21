@@ -114,18 +114,9 @@ $mg_installed_version = $row[0];
 /*
  * Pull all rated media
  */
-$ip     = addslashes($_SERVER['REMOTE_ADDR']);
-$uid    = isset($_USER['uid']) ? $_USER['uid'] : 1;
+
 $ratedIds = array();
-if ( $uid == 1 ) {
-    $sql = "SELECT media_id FROM {$_TABLES['mg_rating']} WHERE (ip_address='$ip')";
-} else {
-    $sql = "SELECT media_id FROM {$_TABLES['mg_rating']} WHERE (uid='$uid' OR ip_address='$ip')";
-}
-$result = DB_query($sql,1);
-while ( $row = DB_fetchArray($result) ) {
-    $ratedIds[] = $row['media_id'];
-}
+$ratedIds = RATING_getRatedIds('mediagallery');
 
 function MG_initAlbums() {
     global $_GROUPS, $_MG_CONF, $MG_albums, $_TABLES, $_USER, $_DB_dbms;

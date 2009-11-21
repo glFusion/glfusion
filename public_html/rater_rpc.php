@@ -1,6 +1,6 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
+// | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
 // | rater_rpc.php                                                            |
 // |                                                                          |
@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2006-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -25,17 +25,6 @@
 // |                                                                          |
 // | Homepage for this script:                                                |
 // |http://www.masugadesign.com/the-lab/scripts/unobtrusive-ajax-star-rating-bar/
-// +--------------------------------------------------------------------------+
-// | This (Unobtusive) AJAX Rating Bar script is licensed under the           |
-// | Creative Commons Attribution 3.0 License                                 |
-// |  http://creativecommons.org/licenses/by/3.0/                             |
-// |                                                                          |
-// | What that means is: Use these files however you want, but don't          |
-// | redistribute without the proper credits, please. I'd appreciate hearing  |
-// | from you if you're using this script.                                    |
-// |                                                                          |
-// | Suggestions or improvements welcome - they only serve to make the script |
-// | better.                                                                  |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Licensed under a Creative Commons Attribution 3.0 License.               |
@@ -55,7 +44,7 @@ $rating_unitwidth     = 30;
 $status = 0;
 
 $vote_sent  = preg_replace("/[^0-9]/","",$_GET['j']);
-$id_sent    = preg_replace("/[^0-9a-zA-Z]/","",$_GET['q']);
+$id_sent    = COM_applyFilter($_GET['q']);
 $ip_num     = preg_replace("/[^0-9\.]/","",$_GET['t']);
 $units      = preg_replace("/[^0-9]/","",$_GET['c']);
 $size       = preg_replace("/[^0-9a-zA-Z]/","",$_GET['s']);
@@ -117,12 +106,12 @@ $tense = ($count==1) ? $LANG13['vote'] : $LANG13['votes'];
 
 if ( $status == 1 ) {
     // either IP or UID has already voted
-    $message = '<span class="thanks">&nbsp;' . $LANG13['ip_rated'] . '</span>';
+    $message = "<script>alert('". $LANG13['ip_rated'] . "');</script>";
 } elseif ( $status == 2 ) {
-    $message = '<span class="thanks">&nbsp;' . sprintf($LANG13['rate_speedlimit'],$last,$_CONF['rating_speedlimit']) . '</span>';
+    $message = "<script>alert('".sprintf($LANG13['rate_speedlimit'],$last,$_CONF['rating_speedlimit'])."');</script>";
 } elseif ( $status == 3 ) {
     // no permission to vote or your already own the item
-    $message = '<span class="thanks">&nbsp;' . 'Either you own the item or do not have permission to rate it.' . '</span>';
+    $message = "<script>alert('".$LANG13['own_rated']."');</script>";
 } else {
     $message = '<span class="thanks">&nbsp;' . $LANG13['thanks_for_vote'] . '</span>';
 }
@@ -132,16 +121,13 @@ if ( $status == 1 ) {
 $new_back = array();
 
 if ( $size == 'sm' ) {
-    $new_back[] .= '<ul class="small-rating-unit" style="width:'.$units*$rating_unitwidth.'px;">';
+    $new_back[] .= '<ul class="'.$plugin.'-small-rating-unit" style="width:'.$units*$rating_unitwidth.'px;">';
 } else {
-    $new_back[] .= '<ul class="rating-unit" style="width:'.$units*$rating_unitwidth.'px;">';
+    $new_back[] .= '<ul class="'.$plugin.'-rating-unit" style="width:'.$units*$rating_unitwidth.'px;">';
 }
 $new_back[] .= '<li class="current-rating" style="width:'.@number_format($current_rating,2)*$rating_unitwidth.'px;">'.$LANG13['currently']. '</li>';
-
 $new_back[] .= '</ul>';
-
 $new_back[] .= '<span class="voted">' . $LANG13['rating'] . ': <strong> ' . $current_rating . '</strong>/'.$units.' ('.$count.' '.$tense.' '.$LANG13['cast'].')</span>';
-
 $new_back[] .= $message;
 
 $allnewback = join("\n", $new_back);

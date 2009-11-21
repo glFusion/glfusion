@@ -1,0 +1,153 @@
+/* Star Rating System */
+.filemgmt-ratingbar {
+	display:block;
+	padding-bottom:0px;
+	margin-bottom:0px;
+	padding-top:2px;
+	margin-top:2px;
+	text-align:left;
+}
+.rater_loading {
+	height: 30px;
+	background: url('images/working.gif') 50% 50% no-repeat;
+}
+.rater_loadingsm {
+	height: 10px;
+	line-height:10px;
+	padding:0;
+	margin:0;
+	background: url('images/working.gif') 50% 50% no-repeat;
+}
+.filemgmt-rating-unit { /* the UL */
+	list-style:none;
+	margin: 0px;
+	padding:0px;
+	height: 30px;
+	position: relative;
+	background: url('images/starrating.png') top left repeat-x;
+}
+.filemgmt-rating-unit li{
+    text-indent: -90000px;
+	padding:0px;
+	margin:0px;
+	/*\*/
+	float: left;
+	/* */
+}
+.filemgmt-rating-unit li a {
+	outline: none;
+	display:block;
+	width:30px;
+	height: 30px;
+	text-decoration: none;
+	text-indent: -9000px;
+ 	z-index: 20;
+	position: absolute;
+	padding: 0px;
+}
+.filemgmt-rating-unit li a:hover{
+	background: url('images/starrating.png') left center;
+	z-index: 2;
+	left: 0px;
+}
+.filemgmt-rating-unit a.r1-unit{left: 0px;}
+.filemgmt-rating-unit a.r1-unit:hover{width:30px;}
+.filemgmt-rating-unit a.r2-unit{left:30px;}
+.filemgmt-rating-unit a.r2-unit:hover{width: 60px;}
+.filemgmt-rating-unit a.r3-unit{left: 60px;}
+.filemgmt-rating-unit a.r3-unit:hover{width: 90px;}
+.filemgmt-rating-unit a.r4-unit{left: 90px;}
+.filemgmt-rating-unit a.r4-unit:hover{width: 120px;}
+.filemgmt-rating-unit a.r5-unit{left: 120px;}
+.filemgmt-rating-unit a.r5-unit:hover{width: 150px;}
+.filemgmt-rating-unit a.r6-unit{left: 150px;}
+.filemgmt-rating-unit a.r6-unit:hover{width: 180px;}
+.filemgmt-rating-unit a.r7-unit{left: 180px;}
+.filemgmt-rating-unit a.r7-unit:hover{width: 210px;}
+.filemgmt-rating-unit a.r8-unit{left: 210px;}
+.filemgmt-rating-unit a.r8-unit:hover{width: 240px;}
+.filemgmt-rating-unit a.r9-unit{left: 240px;}
+.filemgmt-rating-unit a.r9-unit:hover{width: 270px;}
+.filemgmt-rating-unit a.r10-unit{left: 270px;}
+.filemgmt-rating-unit a.r10-unit:hover{width: 300px;}
+.filemgmt-rating-unit li.current-rating {
+	background: url('images/starrating.png') left bottom;
+	position: absolute;
+	height: 30px;
+	display: block;
+	text-indent: -9000px;
+	z-index: 1;
+	left:0px;
+}
+
+/* small star rater */
+.filemgmt-small-rating-unit { /* the UL */
+	list-style:none;
+	padding:0px;
+	height: 15px;
+	position: relative;
+	background: url('images/star_small.png') top left repeat-x;
+}
+.filemgmt-small-rating-unit li{
+    text-indent: -30000px;
+	padding:0px;
+	margin:0px;
+	/*\*/
+	float: left;
+	/* */
+}
+.filemgmt-small-rating-unit li a {
+	outline: none;
+	display:block;
+	width:15px;
+	height: 15px;
+	text-decoration: none;
+	text-indent: -3000px;
+	z-index: 20;
+	position: absolute;
+	padding: 0px;
+}
+.filemgmt-small-rating-unit li a:hover{
+	background: url('images/star_small.png') left center;
+	z-index: 2;
+	left: 0px;
+	line-height:15px
+}
+.filemgmt-small-rating-unit a.r1-unit{left: 0px;}
+.filemgmt-small-rating-unit a.r1-unit:hover{width:15px;}
+.filemgmt-small-rating-unit a.r2-unit{left:15px;}
+.filemgmt-small-rating-unit a.r2-unit:hover{width: 30px;}
+.filemgmt-small-rating-unit a.r3-unit{left: 30px;}
+.filemgmt-small-rating-unit a.r3-unit:hover{width: 45px;}
+.filemgmt-small-rating-unit a.r4-unit{left: 45px;}
+.filemgmt-small-rating-unit a.r4-unit:hover{width: 60px;}
+.filemgmt-small-rating-unit a.r5-unit{left: 60px;}
+.filemgmt-small-rating-unit a.r5-unit:hover{width: 75px;}
+.filemgmt-small-rating-unit a.r6-unit{left: 75px;}
+.filemgmt-small-rating-unit a.r6-unit:hover{width: 90px;}
+.filemgmt-small-rating-unit a.r7-unit{left: 90px;}
+.filemgmt-small-rating-unit a.r7-unit:hover{width: 105px;}
+.filemgmt-small-rating-unit a.r8-unit{left: 105px;}
+.filemgmt-small-rating-unit a.r8-unit:hover{width: 123px;}
+.filemgmt-small-rating-unit a.r9-unit{left: 120px;}
+.filemgmt-small-rating-unit a.r9-unit:hover{width: 135px;}
+.filemgmt-small-rating-unit a.r10-unit{left: 135px;}
+.filemgmt-small-rating-unit a.r10-unit:hover{width: 150px;}
+.filemgmt-small-rating-unit li.current-rating {
+	background: url('images/star_small.png') left bottom;
+	position: absolute;
+	height: 15px;
+	display: block;
+	text-indent: -3000px;
+	z-index: 1;
+	left:0px;
+	padding:0;
+	line-height:15px;
+}
+/* end of small stuff */
+
+.voted {color:#000;}
+.thanks {color:#36AA3D;}
+.static {color:#5D3126;}
+
+/* end of Star rating system */

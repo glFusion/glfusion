@@ -15,6 +15,19 @@ v1.2
 
 v1.1.7 svn
 ----------
+- Implemented 4 new template vars for articles to allow plugins additional
+  integration opportunities: (Mark)
+    - plugin_icon_vars
+    - plugin_meta_vars
+    - plugin_body_vars
+    - plugin_footer_vars
+- Add topic id to topic lists to help multi-linqual sites (Mark)
+- Add title attribute to What's New (Mark)
+    - Stories
+    - Comments - already supported
+    - FileMgmt
+    - Links - already supported
+    - Media Gallery
 - FileMgmt: Added file_download autotag (Mark H.)
 - Moved rating code out of Media Gallery into core (Mark)
   - implemented rating for articles

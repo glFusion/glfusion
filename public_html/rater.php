@@ -1,14 +1,14 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
+// | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
 // | rater.php                                                                |
 // |                                                                          |
-// | non AJAX based rating script                                             |
+// | Non AJAX rating script                                                   |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2006-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -25,22 +25,12 @@
 // | Homepage for this script:                                                |
 // |http://www.masugadesign.com/the-lab/scripts/unobtrusive-ajax-star-rating-bar/
 // +--------------------------------------------------------------------------+
-// | This (Unobtusive) AJAX Rating Bar script is licensed under the           |
-// | Creative Commons Attribution 3.0 License                                 |
-// |  http://creativecommons.org/licenses/by/3.0/                             |
-// |                                                                          |
-// | What that means is: Use these files however you want, but don't          |
-// | redistribute without the proper credits, please. I'd appreciate hearing  |
-// | from you if you're using this script.                                    |
-// |                                                                          |
-// | Suggestions or improvements welcome - they only serve to make the script |
-// | better.                                                                  |
-// +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Licensed under a Creative Commons Attribution 3.0 License.               |
 // | http://creativecommons.org/licenses/by/3.0/                              |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
+
 
 require_once 'lib-common.php';
 
@@ -48,7 +38,7 @@ $_CONF['rating_speedlimit'] = 15;
 
 //getting the values
 $vote_sent  = preg_replace("/[^0-9]/","",$_REQUEST['j']);
-$id_sent    = preg_replace("/[^0-9a-zA-Z]/","",$_REQUEST['q']);
+$id_sent    = COM_applyFilter($_GET['q']);
 $ip_num     = preg_replace("/[^0-9\.]/","",$_REQUEST['t']);
 $units      = preg_replace("/[^0-9]/","",$_REQUEST['c']);
 $size       = preg_replace("/[^0-9a-zA-Z]/","",$_REQUEST['s']);

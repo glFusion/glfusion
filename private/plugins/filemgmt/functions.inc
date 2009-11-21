@@ -135,6 +135,19 @@ function plugin_upgrade_filemgmt() {
     return filemgmt_upgrade();
 }
 
+function plugin_getheadercss_filemgmt() {
+    global $_CONF;
+
+    $styles = array();
+
+    if ( @file_exists($_CONF['path_layout'].'plugins/filemgmt/style.css') ) {
+        $styles[] = $_CONF['path_layout'].'plugins/filemgmt/style.css';
+    } else {
+        $styles[] = $_CONF['path_html'] . '/filemgmt/style.css';
+    }
+    return($styles);
+}
+
 
 /**
  * Include if plugin will be supporting comments

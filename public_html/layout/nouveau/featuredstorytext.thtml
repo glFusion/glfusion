@@ -13,6 +13,7 @@ digg_window = 'new'; //open's Digg.com window in a new window, if left blank wil
 		</span>
 		{!endif}
 {# end Digg.com icon code #}
+        {plugin_icon_vars}
         {email_icon}
         {print_icon}
         {feed_icon}
@@ -23,9 +24,15 @@ digg_window = 'new'; //open's Digg.com window in a new window, if left blank wil
         <p>{story_date}</p>
         <p>{lang_contributed_by} {start_contributedby_anchortag}{contributedby_author}{end_contributedby_anchortag}</p>
         <p>{lang_views} {story_hits}</p>
+        {!if plugin_meta_vars}
+          <p>{plugin_meta_vars}</p>
+        {!endif}
     </div>
     <div class="story-body">
         {story_anchortag_and_image}{story_introtext}{story_bodytext}
+        {!if plugin_body_vars}
+          {plugin_body_vars}
+        {!endif}
     </div>
     <div class="story-footer">
         <p>{page_selector}</p>
@@ -37,16 +44,13 @@ digg_window = 'new'; //open's Digg.com window in a new window, if left blank wil
            {!if trackbacks_count}
             {trackbacks_with_count}
            {!endif}
-          {!if rating_bar}
-            <table style="width:100%;padding:0;margin:0">
-            <tr>
-            <td align="center">
-            {rating_bar}
-            </td>
-            </tr>
-            </table>
-          {!endif}
-        </p>
+        {!if plugin_footer_vars}
+          <div>{plugin_footer_vars}</div>
+        {!endif}
+        {!if rating_bar}
+          </p>
+          {rating_bar}
+        {!endif}
     </div>
 </div>
 <div class="block-divider"> </div>
