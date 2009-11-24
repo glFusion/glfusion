@@ -1927,6 +1927,7 @@ $glfusionFiles['private/system/classes/syndication/rdf.feed.class.php']=1;
 $glfusionFiles['private/system/classes/syndication/rss.feed.class.php']=1;
 $glfusionFiles['private/system/classes/syndication/ics.feed.class.php']=1;
 $glfusionFiles['private/system/classes/template.class.php']=1;
+$glfusionFiles['private/system/classes/timezoneconfig.class.php']=1;
 $glfusionFiles['private/system/classes/timer.class.php']=1;
 $glfusionFiles['private/system/classes/upload.class.php']=1;
 $glfusionFiles['private/system/classes/url.class.php']=1;
