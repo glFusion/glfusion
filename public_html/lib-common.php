@@ -73,6 +73,11 @@ define('PATCHLEVEL','.pl0');
 $_COM_VERBOSE = false;
 
 /**
+* Override the $_REQUEST setting...
+*/
+$_REQUEST = array_merge($_GET, $_POST);
+
+/**
   * Here, we shall establish an error handler. This will mean that whenever a
   * php level error is encountered, our own code handles it. This will hopefuly
   * go someway towards preventing nasties like path exposures from ever being
@@ -146,13 +151,6 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
     exit;
 }
 
-
-// timezone hack - set the webserver's timezone
-if( !empty( $_CONF['timezone'] ) && !ini_get( 'safe_mode' ) &&
-        function_exists( 'putenv' )) {
-    putenv( 'TZ=' . $_CONF['timezone'] );
-}
-
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
 // +--------------------------------------------------------------------------+
@@ -205,8 +203,6 @@ $_PAGE_TIMER->startTimer();
 * Include URL class
 *
 * This provides optional URL rewriting functionality.
-* Please note this code is still experimental and is only currently used by the
-* staticpages plugin.
 */
 
 require_once $_CONF['path_system'].'classes/url.class.php';
@@ -269,6 +265,9 @@ require_once $_CONF['path_system'].'lib-glfusion.php';
 
 require_once $_CONF['path_system'].'lib-custom.php';
 
+require_once $_CONF['path_system'] . 'classes/timezoneconfig.class.php';
+TimeZoneConfig::setSystemTimeZone();
+
 /**
 * Include plugin class.
 *
@@ -283,13 +282,7 @@ require_once $_CONF['path_system'].'lib-plugins.php';
 
 require_once $_CONF['path_system'].'lib-sessions.php';
 
-/* --------------------------------------------------------------------
-// timezone hack - set the webserver's timezone per user's preference
-if( !empty( $_USER['tzid'] ) && !ini_get( 'safe_mode' ) &&
-        function_exists( 'putenv' )) {
-    putenv( 'TZ=' . $_USER['tzid'] );
-}
------------------------------------------------------------------------ */
+TimeZoneConfig::setUserTimeZone();
 
 /**
 * Multibyte functions
@@ -753,7 +746,7 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
 * Returns a list of all the directory names in $_CONF['path_themes'], i.e.
 * a list of all the theme names.
 *
-* @param    bool    $all    if true, return all themes even if users aren't allowed to change their default themes
+* @param    boolean $all    if true, return all themes even if users aren't allowed to change their default themes
 * @return   array           All installed themes
 *
 */
@@ -800,7 +793,7 @@ function COM_getThemes( $all = false )
 * Create the menu, i.e. replace {menu_elements} in the site header with the
 * actual menu entries.
 *
-* @param    Template    $header     reference to the header template
+* @param    Template    &$header        reference to the header template
 * @param    array       $plugin_menu    array of plugin menu entries, if any
 *
 */
@@ -819,7 +812,7 @@ function COM_renderMenu( &$header, $plugin_menu )
     $allowedCounter = 0;
     $counter = 0;
 
-    $num_plugins = sizeof( $plugin_menu );
+    $num_plugins = count( $plugin_menu );
     if( ( $num_plugins == 0 ) && in_array( 'plugins', $_CONF['menu_elements'] ))
     {
         $key = array_search( 'plugins', $_CONF['menu_elements'] );
@@ -833,14 +826,14 @@ function COM_renderMenu( &$header, $plugin_menu )
         {
             $custom_entries = CUSTOM_menuEntries();
         }
-        if( sizeof( $custom_entries ) == 0 )
+        if( count( $custom_entries ) == 0 )
         {
             $key = array_search( 'custom', $_CONF['menu_elements'] );
             unset( $_CONF['menu_elements'][$key] );
         }
     }
 
-    $num_elements = sizeof( $_CONF['menu_elements'] );
+    $num_elements = count( $_CONF['menu_elements'] );
 
     foreach( $_CONF['menu_elements'] as $item )
     {
@@ -872,7 +865,7 @@ function COM_renderMenu( &$header, $plugin_menu )
 
             case 'custom':
                 $custom_count = 0;
-                $custom_size = sizeof( $custom_entries );
+                    $custom_size = count($custom_entries);
                 foreach( $custom_entries as $entry )
                 {
                     $custom_count++;
@@ -1028,7 +1021,7 @@ function COM_renderMenu( &$header, $plugin_menu )
 * and the footer.  You use them like a sandwich.  Thus the following code will
 * display a glFusion page with both right and left blocks displayed.
 *
-* -------------------------------------------------------------------------------------
+* <code>
 * <?php
 * require_once('lib-common.php');
 * $display .= COM_siteHeader(); //Change to COM_siteHeader('none') to not display left blocks
@@ -1036,13 +1029,13 @@ function COM_renderMenu( &$header, $plugin_menu )
 * $display .= COM_siteFooter(true);  // Change to COM_siteFooter() to not display right blocks
 * echo $display;
 * ? >
-* ---------------------------------------------------------------------------------------
+* </code>
 *
 * Note that the default for the header is to display the left blocks and the
 * default of the footer is to not display the right blocks.
 *
 * This sandwich produces code like this (greatly simplified)
-*
+* <code>
 * // COM_siteHeader
 * <table><tr><td colspan="3">Header</td></tr>
 * <tr><td>Left Blocks</td><td>
@@ -1053,6 +1046,7 @@ function COM_renderMenu( &$header, $plugin_menu )
 * // COM_siteFooter
 * </td><td>Right Blocks</td></tr>
 * <tr><td colspan="3">Footer</td></table>
+* </code>
 *
 * @param    string  $what       If 'none' then no left blocks are returned, if 'menu' (default) then right blocks are returned
 * @param    string  $pagetitle  optional content for the page's <title>
@@ -1294,7 +1288,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     }
 
     $curtime =  COM_getUserDateTimeFormat();
-
+//print $curtime[0];exit;
     $header->set_var( 'welcome_msg', $msg );
     $header->set_var( 'datetime', $curtime[0] );
     $header->set_var( 'site_logo', $_CONF['layout_url']
@@ -1997,7 +1991,7 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
         if( $access ) {
             $retval .= '<li><input type="checkbox" name="' . $fieldname . '[]" value="' . $A[0] . '"';
 
-            $sizeS = sizeof( $S );
+            $sizeS = count( $S );
             for( $x = 0; $x < $sizeS; $x++ ) {
                 if( $A[0] == $S[$x] ) {
                     $retval .= ' checked="checked"';
@@ -2562,7 +2556,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         $usermenu->set_var( 'option_label', $LANG01[19] );
         $usermenu->set_var( 'option_count', '' );
         $usermenu->set_var( 'option_url', $url );
-        $retval .= $usermenu->parse( 'item', 'option' );
+        $retval .= $usermenu->finish($usermenu->parse('item', 'option'));
         $retval .= '</ul>';
         $retval .=  COM_endBlock( COM_getBlockTemplate( 'user_block', 'footer' ));
     }
@@ -2637,7 +2631,7 @@ function COM_userMenu( $help='', $title='', $position='' )
             $login->set_var('openid_login', '');
         }
 
-        $retval .= $login->parse( 'output', 'form' );
+        $retval .= $login->finish($login->parse('output', 'form'));
         $retval .= COM_endBlock( COM_getBlockTemplate( 'user_block', 'footer', $position ));
     }
 
@@ -2722,7 +2716,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
                     $T = DB_fetchArray( $tresult );
                     $tids[] = $T['tid'];
                 }
-                if( sizeof( $tids ) > 0 )
+                if( count( $tids ) > 0 )
                 {
                     $topicsql = " (tid IN ('" . implode( "','", $tids ) . "'))";
                 }
@@ -2794,7 +2788,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             }
             else
             {
-                $nresult = DB_query( "SELECT COUNT(*) AS count from {$_TABLES['stories']} WHERE" . $topicsql . COM_getPermSql( 'AND' ));
+                $nresult = DB_query( "SELECT COUNT(*) AS count FROM {$_TABLES['stories']} WHERE" . $topicsql . COM_getPermSql( 'AND' ));
                 $N = DB_fetchArray( $nresult );
                 $numstories = $N['count'];
             }
@@ -2916,13 +2910,13 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
             $link_array[$LANG01[116]] = $menu_item;
         }
 
-        if( SEC_hasRights( 'plugin.edit' ))
-        {
+        if (SEC_hasRights('plugin.edit')) {
             $url = $_CONF['site_admin_url'] . '/plugins.php';
-            $adminmenu->set_var( 'option_url', $url );
-            $adminmenu->set_var( 'option_label', $LANG01[77] );
-            $adminmenu->set_var( 'option_count',
-                    COM_numberFormat( DB_count( $_TABLES['plugins'] )));
+            $adminmenu->set_var('option_url', $url);
+            $adminmenu->set_var('option_label', $LANG01[77]);
+            $adminmenu->set_var('option_count',
+                    COM_numberFormat(DB_count($_TABLES['plugins'],
+                                              'pi_enabled', 1)));
 
             $menu_item = $adminmenu->parse( 'item',
                     ( $thisUrl == $url ) ? 'current' : 'option' );
@@ -2931,21 +2925,20 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
 
         // This will show the admin options for all installed plugins (if any)
 
-        for( $i = 0; $i < $num_plugins; $i++ )
-        {
-            $plg = current( $plugin_options );
+        for ($i = 0; $i < $num_plugins; $i++) {
+            $plg = current($plugin_options);
 
             $adminmenu->set_var( 'option_url', $plg->adminurl );
             $adminmenu->set_var( 'option_label', $plg->adminlabel );
 
-            if( empty( $plg->numsubmissions ))
-            {
-                $adminmenu->set_var( 'option_count', $LANG_ADMIN['na'] );
-            }
-            else
-            {
-                $adminmenu->set_var( 'option_count',
-                                     COM_numberFormat( $plg->numsubmissions ));
+            if (isset($plg->numsubmissions) &&
+                    is_numeric($plg->numsubmissions)) {
+                $adminmenu->set_var('option_count',
+                                    COM_numberFormat($plg->numsubmissions));
+            } elseif (! empty($plg->numsubmissions)) {
+                $adminmenu->set_var('option_count', $plg->numsubmissions);
+            } else {
+                $adminmenu->set_var('option_count', $LANG_ADMIN['na']);
             }
 
             $menu_item = $adminmenu->parse( 'item',
@@ -3676,7 +3669,7 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
 * Shows glFusion blocks
 *
 * Returns HTML for blocks on a given side and, potentially, for
-* a given topic. Currentlly only used by static pages.
+* a given topic. Currently only used by static pages.
 *
 * @param        string      $side       Side to get blocks for (right or left for now)
 * @param        string      $topic      Only get blocks for this topic
@@ -3769,7 +3762,7 @@ function COM_showBlocks( $side, $topic='', $name='all' )
     // sort the resulting array by block order
     $column = 'blockorder';
     $sortedBlocks = $blocks;
-    $num_sortedBlocks = sizeof( $sortedBlocks );
+    $num_sortedBlocks = count( $sortedBlocks );
     for( $i = 0; $i < $num_sortedBlocks - 1; $i++ )
     {
         for( $j = 0; $j < $num_sortedBlocks - 1 - $i; $j++ )
@@ -4176,10 +4169,11 @@ function COM_getPassword( $loginname )
 * Allows the siteAdmin to determine if loginname (username) or fullname
 * should be displayed.
 *
-* @param    int  $uid  site member id
+* @param    int     $uid        site member id
 * @param    string  $username   Username, if this is set no lookup is done.
 * @param    string  $fullname   Users full name.
-* @param    string  $service    Remote login service.
+* @param    string  $remoteusername  Username on remote service
+* @param    string  $remoteservice   Remote login service.
 * @return   string  Username, fullname or username@Service
 *
 */
@@ -4659,7 +4653,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
     if( $_CONF['hidenewplugins'] == 0 )
     {
         list( $headlines, $smallheadlines, $content ) = PLG_getWhatsNew();
-        $plugins = sizeof( $headlines );
+        $plugins = count( $headlines );
         if( $plugins > 0 )
         {
             for( $i = 0; $i < $plugins; $i++ )
@@ -4805,7 +4799,7 @@ function COM_showMessage($msg, $plugin = '')
                 $message = $$var;
             } else {
                 $message = sprintf($MESSAGE[61], $plugin);
-                COM_errorLog($MESSAGE[61] . ": " . $var, 1);
+                COM_errorLog($message . ": " . $var, 1);
             }
         } else {
             $message = $MESSAGE[$msg];
@@ -4855,7 +4849,7 @@ function COM_showMessageFromParameter()
 * @param        int         $curpage        current page we are on
 * @param        int         $num_pages      Total number of pages
 * @param        string      $page_str       page-variable name AND '='
-* @param        bool        $do_rewrite     if true, url-rewriting is respected
+* @param        boolean     $do_rewrite     if true, url-rewriting is respected
 * @param        string      $msg            to be displayed with the navigation
 * @param        string      $open_ended     replace next/last links with this
 * @return   string   HTML formatted widget
@@ -4976,42 +4970,30 @@ function COM_getUserDateTimeFormat( $date='' )
 
     // Get display format for time
 
-    if( !COM_isAnonUser() )
-    {
+    if( !COM_isAnonUser() ) {
         if( empty( $_USER['format'] ))
         {
             $dateformat = $_CONF['date'];
-        }
-        else
-        {
+        } else {
             $dateformat = $_USER['format'];
         }
-    }
-    else
-    {
+    } else {
         $dateformat = $_CONF['date'];
     }
 
-    if( empty( $date ))
-    {
+    if( empty( $date )) {
         // Date is empty, get current date/time
         $stamp = time();
-    }
-    else if( is_numeric( $date ))
-    {
+    } else if( is_numeric( $date )) {
         // This is a timestamp
         $stamp = $date;
-    }
-    else
-    {
+    } else {
         // This is a string representation of a date/time
         $stamp = strtotime( $date );
     }
 
     // Format the date
-
     $date = strftime( $dateformat, $stamp );
-
     if ( $_SYSTEM['swedish_date_hack'] == true && function_exists('iconv') ) {
         $date = iconv('ISO-8859-1','UTF-8',$date);
     }
@@ -5124,7 +5106,8 @@ function phpblock_whosonline()
         // note that we're overwriting the contents of $retval here
         if( $num_reg > 0 )
         {
-            $retval = $LANG01[112] . ': ' . $num_reg . '<br' . XHTML . '>';
+            $retval = $LANG01[112] . ': ' . COM_numberFormat($num_reg)
+                    . '<br' . XHTML . '>';
         }
         else
         {
@@ -5134,7 +5117,8 @@ function phpblock_whosonline()
 
     if( $num_anon > 0 )
     {
-        $retval .= $LANG01[41] . ': ' . $num_anon . '<br' . XHTML . '>';
+        $retval .= $LANG01[41] . ': ' . COM_numberFormat($num_anon)
+                . '<br' . XHTML . '>';
     }
 
     return $retval;
@@ -5336,7 +5320,7 @@ function COM_getHourFormOptions( $selected = '', $mode = 12 )
 * Gets the <option> values for clock minutes
 *
 * @param    string      $selected   Selected minutes
-* @param    integer     $step       number of minutes between options, e.g. 15
+* @param    int         $step       number of minutes between options, e.g. 15
 * @see function COM_getMonthFormOptions
 * @see function COM_getDayFormOptions
 * @see function COM_getHourFormOptions
@@ -5435,6 +5419,7 @@ function COM_getAmPmFormSelection( $name, $selected = '' )
 * and listitem.thtml templates.
 *
 * @param    array   $listofitems    Items to list out
+* @param    string  $classname      optional CSS class name for the list
 * @return   string                  HTML unordered list of array items
 */
 function COM_makeList($listofitems, $classname = '')
@@ -6092,7 +6077,7 @@ function COM_highlightQuery( $text, $query, $class = 'highlight')
 * automatically do the date diff on the more recent of the two dates (e.g. the
 * order of the two dates given doesn't matter).
 *
-* @author Tony Bibbs <tony.bibbs@iowa.gov
+* @author Tony Bibbs, tony DOT bibbs AT iowa DOT gov
 * @access public
 * @param string $interval Can be:
 * y = year
@@ -6264,7 +6249,7 @@ function COM_getCurrentURL()
 *
 * See if we're on the main index page (first page, no topics selected).
 *
-* @return   bool    true = we're on the frontpage, false = we're not
+* @return   boolean     true = we're on the frontpage, false = we're not
 *
 */
 function COM_onFrontpage()
@@ -7173,7 +7158,7 @@ function COM_setLangIdAndAttribute(&$template)
     $template->set_var('lang_id', $langId);
 
     if (!empty($_CONF['languages']) && !empty($_CONF['language_files'])) {
-        $template->set_var('lang_attribute', $langAttr);
+        $template->set_var('lang_attribute', ' ' . $langAttr);
     } else {
         $template->set_var('lang_attribute', '');
     }

@@ -553,42 +553,15 @@ function editpreferences()
         $preferences->set_var ('theme_selection', '');
     }
 
-    if ( $_CONF['have_pear'] == false ) {
-        require_once $_CONF['path_system'] . 'pear/Date/TimeZone.php';
-    } else {
-        require_once 'Date/TimeZone.php';
-    }
     // Timezone
-    if (empty($_USER['tzid']) && isset($_CONF['timezone'])) {
-        $timezone = $_CONF['timezone'];
-    } else if (!empty($_USER['tzid'])) {
-        $timezone = $_USER['tzid'];
-    } else {
-        $tz_obj = Date_TimeZone::getDefault();
-        $timezone = $tz_obj->id;
-    }
-    $selection = '<select id="tzid" name="tzid">' . LB;
+    require_once $_CONF['path_system'] . 'classes/timezoneconfig.class.php';
 
-    $T = $GLOBALS['_DATE_TIMEZONE_DATA'];
+    $timezone = TimeZoneConfig::getUserTimeZone();
+    $selection = TimeZoneConfig::getTimeZoneDropDown($timezone,
+            array('id' => 'tzid', 'name' => 'tzid'));
 
-    while ($tDetails = current($T)) {
-        $tzcode = htmlspecialchars(key($T));
-        $selection .= '<option value="' . $tzcode . '"';
-        if ($timezone == $tzcode) {
-                $selection .= ' selected="selected"';
-        } else {
-                $selection .= '';
-        }
-        $hours = $tDetails['offset'] / (3600 * 1000);
-        if ($hours > 0) {
-            $hours = "+$hours";
-        }
-        $selection .= ">$hours, {$tDetails['shortname']} ($tzcode)</option>" . LB;
-        next($T);
-    }
-    $selection .= '</select>';
-    $preferences->set_var ('timezone_selector', $selection);
-    $preferences->set_var ('lang_timezone', $LANG04[158]);
+    $preferences->set_var('timezone_selector', $selection);
+    $preferences->set_var('lang_timezone', $LANG04[158]);
 
     if ($A['noicons'] == '1') {
         $preferences->set_var ('noicons_checked', 'checked="checked"');
