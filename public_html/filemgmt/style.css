@@ -87,6 +87,7 @@
 	height: 15px;
 	position: relative;
 	background: url('images/star_small.png') top left repeat-x;
+	margin:0;
 }
 .filemgmt-small-rating-unit li{
     text-indent: -30000px;
