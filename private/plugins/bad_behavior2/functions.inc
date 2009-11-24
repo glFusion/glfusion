@@ -45,7 +45,7 @@ if (!defined ('BAD_BEHAVIOR_PLUGIN')) {
     define('BAD_BEHAVIOR_PLUGIN', 'bad_behavior2');
 }
 if (!defined ('BAD_BEHAVIOR_VERSION')) {
-    define ('BAD_BEHAVIOR_VERSION', '2.0.32');
+    define ('BAD_BEHAVIOR_VERSION', '2.0.33');
 }
 
 define('WP_BB_LOG', $_DB_table_prefix . 'bad_behavior2');
@@ -205,6 +205,65 @@ function plugin_statssummary_bad_behavior2 ()
     } else {
         return false;
     }
+}
+
+function plugin_searchtypes_bad_behavior2 ()
+{
+    global $LANG_BAD_BEHAVIOR;
+
+    if (SEC_inGroup('Bad Behavior2 Admin') &&
+            function_exists('bb2_insert_head')) {
+        $tmp['bad_behavior2'] = $LANG_BAD_BEHAVIOR['plugin_display_name'];
+
+        return $tmp;
+    }
+
+    return array();
+}
+
+function plugin_dopluginsearch_bad_behavior2($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page = -1, $perpage = -1)
+{
+    global $_CONF, $_TABLES, $LANG_BAD_BEHAVIOR, $LANG_BB2_RESPONSE;
+
+    $query = addslashes(trim($query));
+
+    if (empty($type)) {
+        $type = 'all';
+    }
+
+    if (!SEC_inGroup('Bad Behavior2 Admin') ||
+            (($type != 'all') && ($type != 'bad_behavior2'))) {
+        return;
+    }
+
+    // do empty queries (i.e. return everything) only when explicitly
+    // searching for Bad Behavior
+    if (empty($query) && ($type != 'bad_behavior2')) {
+        return;
+    }
+
+    // Build search SQL
+    $sql = 'SELECT id, ip AS title, UNIX_TIMESTAMP(date) AS date, http_headers AS description, `key`, ';
+    $sql .= "CONCAT('{$_CONF['site_admin_url']}/plugins/bad_behavior2/index.php?mode=view&amp;id=',id) AS url ";
+    $sql .= 'FROM ' . WP_BB_LOG . ' WHERE 1=1 ';
+
+    // Create a SearchCriteria instance with the name of the plugin
+    $search = new SearchCriteria('bad_behavior2', $LANG_BAD_BEHAVIOR['results']);
+
+    // These are the columns in the table that need searching
+    $columns = array('title' => 'ip', 'http_headers');
+
+    $sql .= $search->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(date)', $datestart, $dateend);
+
+    // Get back the completed SQL query
+    list($sql, $ftsql) = $search->buildSearchSQL($keyType, $query, $columns,
+                                                 $sql);
+
+    // Set the Std. SQL Query
+    $search->setSQL($sql);
+    $search->setRank(2);
+
+    return $search;
 }
 
 function plugin_templatesetvars_bad_behavior2($name, &$template) {
