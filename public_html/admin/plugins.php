@@ -254,7 +254,7 @@ function saveplugin($pi_name, $pi_version, $pi_gl_version, $enabled, $pi_homepag
         $retval .= plugineditor ($pi_name);
         $retval .= COM_siteFooter ();
     }
-    CACHE_remove_instance('stmenu');
+    CTL_clearCache();
     return $retval;
 }
 
@@ -361,7 +361,7 @@ function do_update ($pi_name)
     } else {  // Plugin function returned a false
         $retval .= COM_showMessage(95);
     }
-    CACHE_remove_instance('stmenu');
+    CTL_clearCache();
     return $retval;
 }
 
@@ -405,8 +405,7 @@ function do_uninstall ($pi_name)
         $msg = 95;
         $retval .= COM_showMessage (95);
     }
-    CACHE_remove_instance('stmenu');
-    CACHE_remove_instance('whatsnew');
+    CTL_clearCache();
 
     if ( $msg != '' ) {
         $refreshURL = $_CONF['site_admin_url'].'/plugins.php?msg='.$msg;
