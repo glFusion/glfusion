@@ -61,6 +61,8 @@ $LANG_POLLS = array(
     'upgrade1' => 'Installeerisid küsitluste plugina uue versiooni. Palun ',
     'upgrade2' => 'uuenda',
     'editinstructions' => 'Palun sisesta küsitluse ID, vähemalt üks küsitluse küsimus ning sellele küsimusele vähemalt kaks vastusevarianti',
+    'pollclosed' => 'This poll is closed for voting.',
+    'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
     'start_poll' => 'Start Poll'
 );
 

@@ -60,6 +60,8 @@ $LANG_POLLS = array(
     'upgrade1' => 'התקנתם גרסה חדשה של plugins הסקרים. אנא',
     'upgrade2' => 'שדרגו',
     'editinstructions' => 'אנא מלאו את קוד הזיהוי של הסקר, לפחות שאלה אחת ושתי תשובות לה.',
+    'pollclosed' => 'This poll is closed for voting.',
+    'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
     'start_poll' => 'Start Poll'
 );
 

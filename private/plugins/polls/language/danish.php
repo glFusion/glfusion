@@ -60,6 +60,8 @@ $LANG_POLLS = array(
     'upgrade1' => 'Du har installeret en ny version af Polls plugin',
     'upgrade2' => 'upgradere',
     'editinstructions' => 'Udfyld Poll ID, mindst et spørgsmål og to svar til det.',
+    'pollclosed' => 'This poll is closed for voting.',
+    'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
     'start_poll' => 'Start Afstemning'
 );
 

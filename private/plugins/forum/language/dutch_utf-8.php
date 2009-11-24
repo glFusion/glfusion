@@ -1,5 +1,4 @@
 <?php
-
 // +--------------------------------------------------------------------------+
 // | Forum Plugin for glFusion CMS                                            |
 // +--------------------------------------------------------------------------+
@@ -7,9 +6,9 @@
 // |                                                                          |
 // | Dutch language file                                                      |
 // +--------------------------------------------------------------------------+
-// | $Id:: english.php 4356 2009-04-06 13:37:10Z mevans0263                  $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2009 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -37,7 +36,6 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
-
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -90,7 +88,7 @@ $LANG_GF01 = array(
     'CLOSE' => 'Sluiten',
     'ON' => 'Op: ',
     'ON2' => '&nbsp;&nbsp;<b>Op: </b>',
-	'ON3' => 'on',
+    'ON3' => 'on',
     'IN' => 'In: ',
     'BY' => 'Door: ',
     'RE' => 'Re: ',
@@ -185,7 +183,7 @@ $LANG_GF01 = array(
     'category' => 'Categorie: ',
     'loginreqview' => '<B>Sorrie u moet zich bij %s register</A> of bij %s aanmelden </A> om deze forums te gebruiken</B>',
     'loginreqpost' => '<B>Sorrie u moet zich registreren of aanmelden om berichten te plaatsen in de forums</B>',
-    'searchresults' => '<b>»</b> Uw zoektocht naar <b>%s</b> %s auteur resulteerde in <b>%s</b> resultaten:</b><br' . XHTML . '><br' . XHTML . '>',
+    'searchresults' => '<b>Â»</b> Uw zoektocht naar <b>%s</b> %s auteur resulteerde in <b>%s</b> resultaten:</b><br' . XHTML . '><br' . XHTML . '>',
     'feature_not_on' => 'Feature niet actief',
     'nolastpostmsg' => 'N/A',
     'no_one' => 'Niemand.',
@@ -277,7 +275,7 @@ $LANG_GF01 = array(
     'VIOLET' => 'Violet',
     'WHITE' => 'Wit',
     'BLACK' => 'Zwart',
-    'ID'    => 'ID',
+    'ID' => 'ID',
     'b_help' => 'Vetgedrukte tekst: [b]tekst[/b]',
     'i_help' => 'Schuingedrukte tekst: [i]tekst[/i]',
     'u_help' => 'Onderstreepte tekst: [u]tekst[/u]',
@@ -293,17 +291,15 @@ $LANG_GF01 = array(
     'h_help' => 'Klik om uitgebreide help te bekijken',
     't_help' => 'Gebruik [file]#[/file] om een bijlage aan een bericht toe te voegen',
     'e_help' => 'List item: [*]tekst',
-    /* --- Community moderation tags --- */
-    'grade'         => '<br /><b>Groep Comfort<br />Niveau:</b>',
-    'grade_user'    => '<br /><b>Beoordeel Gebruiker</b>',
+    'grade' => '<br /><b>Groep Comfort<br />Niveau:</b>',
+    'grade_user' => '<br /><b>Beoordeel Gebruiker</b>',
     'retract_grade' => '<br /><b>Verwijder Beoordeling</b>',
-    'rate_too_low'  => 'Your rating level is too low for posting to this forum',
+    'rate_too_low' => 'Your rating level is too low for posting to this forum',
     'rate_too_low_forum' => 'Your rating level is not high enough to view this forum',
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
-    /* --- bbcode signature --- */
     'signature' => 'Forum Ondertekening',
     'edit_signature' => 'Wijzig BBcode Ondertekening',
-    'signature_preview' => 'Bekijk Ondertekening',
+    'signature_preview' => 'Bekijk Ondertekening'
 );
 
 $LANG_GF02 = array(
@@ -507,8 +503,8 @@ $LANG_GF02 = array(
     'PostTopic' => 'Nieuw Onderwerp',
     'EditTopic' => 'Wijzig Onderwerp',
     'quietforum' => 'Forum heeft geen nieuwe onderwerpen',
-	'notify_full' => 'Include full post in notification',
-	'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.',
+    'notify_full' => 'Include full post in notification',
+    'view_online' => 'If this email doesn\'t display correctly, <a href="%s">view the online version</a>.'
 );
 
 $LANG_GF03 = array(
@@ -557,7 +553,6 @@ $LANG_GF05 = array(
     'yim_alttext' => 'YIM:&nbsp;'
 );
 
-// Admin Navbar
 $LANG_GF06 = array(
     1 => 'Statistieken',
     2 => 'Instellingen',
@@ -567,10 +562,9 @@ $LANG_GF06 = array(
     6 => 'Berichten',
     7 => 'IP Mgmt',
     8 => 'Community Moderation',
-    9 => 'Import',
+    9 => 'Import'
 );
 
-// User Functions Navbar
 $LANG_GF07 = array(
     1 => 'Bekijk de Forums',
     2 => 'Voorkeuren',
@@ -579,14 +573,12 @@ $LANG_GF07 = array(
     5 => 'Leden'
 );
 
-// Forum User Features
 $LANG_GF08 = array(
     1 => 'Topic Notifications',
     2 => 'Track Forum Notifications',
     3 => 'Topic Exception Notifications'
 );
 
-// Attachment support feature
 $LANG_GF10 = array(
     'attachments' => 'Bijlagen',
     'maxattachments' => 'Max %s toegestaan',
@@ -622,7 +614,6 @@ $LANG_GF91 = array(
     'avgvmsg' => 'Average views per:'
 );
 
-// Settings.php
 $LANG_GF92 = array(
     'gfsettings' => 'Discussion Forum Settings',
     'gensettings' => 'General Settings',
@@ -730,10 +721,9 @@ $LANG_GF92 = array(
     'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts',
     'forum_prefs' => 'Forum Voorkeur',
     'forumprefs_help_title' => 'Forum Voorkeur Help',
-    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
+    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>'
 );
 
-// Board Admin
 $LANG_GF93 = array(
     'gfboard' => 'Discussie Forum Administratie',
     'vieworder' => 'Kijk volgorde',
@@ -859,12 +849,12 @@ $LANG_GF97 = array(
 );
 
 $LANG_GF98 = array(
-    'user_ratings'  => 'Gebruiker Waarderingen',
+    'user_ratings' => 'Gebruiker Waarderingen',
     'forum_settings' => 'Community Moderation Forum Settings.  Define the minimum user rating to view and post in the forums.',
     'board_ratings' => 'Board Rating Settings',
     'user_ratings_desc' => 'Community Moderation user ratings.  You can modify the user settings or view who a user has rated or see a user\'s rating',
-    'rating'    => 'Waardering',
-    'uid'       => 'UID',
+    'rating' => 'Waardering',
+    'uid' => 'UID',
     'user_rating_title' => 'Community Moderation User Ratings',
     'no_subject_defined' => 'Geen onderwerp opgegeven',
     'admin_set_value' => 'Administrator set new user rating',
@@ -875,10 +865,9 @@ $LANG_GF98 = array(
     'user_votes_desc' => 'This screen shows how the user has voted (rated) other users.',
     'user_rating_details' => 'User Rating Details for: ',
     'user_voting_details' => 'User Voting Details for: ',
-    'save_changes'  => 'Wijzigingen Opslaan',
+    'save_changes' => 'Wijzigingen Opslaan'
 );
 
-###############################################################################
 $PLG_forum_MESSAGE1 = 'Forum Plugin Upgrade completed - no errors';
 $PLG_forum_MESSAGE2 = 'Forum Plugin upgrade: We are unable to update this version automatically. Refer to the plugin documentation.';
 $PLG_forum_MESSAGE5 = 'Forum Plugin Upgrade failed - check error.log';
@@ -969,7 +958,7 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Max Grootte van Bijlagen (bytes)',
     'enable_user_rating_system' => 'Gebruiker Waarderingsysteem Inschakelen',
     'bbcode_signature' => 'BBcode Ondertekening Inschakelen',
-    'use_wysiwyg_editor' => 'WYSIWYG HTML Editor Inschakelen',
+    'use_wysiwyg_editor' => 'WYSIWYG HTML Editor Inschakelen'
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -985,6 +974,7 @@ $LANG_fs['forum'] = array(
     'ff_attachments_settings' => 'Bijlage Instellingen'
 );
 
+// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configselects['forum'] = array(
     0 => array('Ja' => 1, 'Nee' => 0),
     1 => array('Ja' => true, 'Nee' => false),
