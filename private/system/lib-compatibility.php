@@ -288,7 +288,7 @@ function COM_siteHeaderv1( $what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var( 'datetime', $curtime[0] );
     $header->set_var( 'site_logo', $_CONF['layout_url']
                                    . '/images/logo.' . $_IMAGE_TYPE );
-    $header->set_var( 'css_url', $_CONF['layout_url'] . '/style.css' );
+    $header->set_var( 'css_url', $_CONF['site_url'].'/css.php?t='.$_CONF['theme'].'&amp;i='.$cacheID);
     $header->set_var( 'theme', $_CONF['theme'] );
 
     $header->set_var( 'charset', COM_getCharset());
