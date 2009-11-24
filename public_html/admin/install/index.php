@@ -1615,6 +1615,7 @@ function INST_doSiteUpgrade()
             case '1.5.2sr2' :
             case '1.5.2sr3' :
             case '1.5.2sr4' :
+            case '1.5.2sr5' :
                 // setup the environment to match glFusion 1.0.0
                 DB_query("ALTER TABLE {$_TABLES['syndication']} CHANGE `type` type varchar(30) NOT NULL default 'article'",1);
                 DB_query("UPDATE {$_TABLES['syndication']} SET type = 'article' WHERE type = 'geeklog'",1);
@@ -1625,7 +1626,58 @@ function INST_doSiteUpgrade()
                 DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.5.0' WHERE pi_name = 'staticpages'",1);
                 DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.0.0', name='glfusion'",1);
                 break;
+            case '1.6.1' :
+                require_once $_CONF['path_system'].'classes/config.class.php';
+                $c = config::get_instance();
+                $_SQLi = array();
+                $_SQLi[] = "ALTER TABLE {$_TABLES['stories']} DROP meta_description";
+                $_SQLi[] = "ALTER TABLE {$_TABLES['topics']} DROP meta_description";
+                foreach ($_SQLi as $sqli) {
+                    DB_query($sqli,1);
+                }
+                DB_delete($_TABLES['conf_values'], array('name','group_name'), array('meta_tags','Core'));
+                DB_delete($_TABLES['conf_values'], array('name','group_name'), array('meta_description','Core'));
+                DB_delete($_TABLES['conf_values'], array('name','group_name'), array('meta_keywords','Core'));
+                DB_delete($_TABLES['conf_values'], array('name','group_name'), array('article_comment_close_enabled','Core'));
+                // calendar - should do this for 1.6.0 too
+                $_SQLi = array();
+                $_SQLi[] = "ALTER TABLE {$_TABLES['eventsubmission']} DROP owner_id";
+                foreach ($_SQLi as $sqli) {
+                    DB_query($sqli,1);
+                }
+                // links
+                $c->del('new_window','links');
+                $c->del('fs_cpermissions','links');
+                $c->del('category_permissions', 'links');
+                // polls
+                $_SQLi = array();
+                $_SQLi[] = "ALTER TABLE {$_TABLES['polltopics']} DROP meta_description";
+                foreach ($_SQLi as $sqli) {
+                    DB_query($sqli,1);
+                }
+                $c->del('meta_tags','polls');
+                // static page
+                $_SQLi = array();
+                $_SQLi[] = "ALTER TABLE {$_TABLES['staticpage']} DROP meta_description";
+                $_SQLi[] = "ALTER TABLE {$_TABLES['staticpage']} DROP meta_keywords";
+                foreach ($_SQLi as $sqli) {
+                    DB_query($sqli,1);
+                }
+                $c->del('meta_tags', 'staticpages');
+                $c->del('fs_whatsnew','staticpages');
+                $c->del('newstaticpagesinterval','staticpages');
+                $c->del('hidenewstaticpages','staticpages');
+                $c->del('title_trim_length','staticpages');
+                $c->del('includecenterblocks','staticpages');
+                $c->del('includephp','staticpages');
+                $c->del('fs_search','staticpages');
+                $c->del('includesearch','staticpages');
+                $c->del('includesearchcenterblocks','staticpages');
+                $c->del('includesearchphp','staticpages');
+                // fall through...
             case '1.6.0' :
+            case '1.6.0sr1' :
+            case '1.6.0sr2' :
                 // setup the environment to match glFusion 1.1.0
                 DB_delete($_TABLES['conf_values'], 'name', 'advanced_html');
                 DB_delete($_TABLES['conf_values'], 'name', 'mysqldump_filename_mask');
