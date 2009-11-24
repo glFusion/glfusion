@@ -159,7 +159,6 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 * Return an array of all voting records
 *
 * Returns an array of all voting records for either a $type or an $item_id.
-* standard set of glFusion permissions.
 *
 * @param        string      $type     plugin name
 * @param        string      $item_id  item id (optional)
@@ -296,7 +295,7 @@ function RATING_resetRating( $type, $item_id )
 * Deletes a specific rating entry and recalculates the new rating
 *
 * @param        string      $voteID   The ID of the rating_votes record
-* @return       array       true if successful otherwise false
+* @return       bool        true if successful otherwise false
 *
 */
 function RATING_deleteVote( $voteID )
@@ -384,54 +383,6 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
 
 }
 
-/**
-* Delete an existing vote
-*
-* Removes an existing vote on an item. This will calculate the new overall
-* rating, remove the vote record from the table and ask plugins to update
-* its records.
-*
-* @param        string      $type     plugin name
-* @param        string      $item_id  item id
-* @param        int         $uid      user id of rater
-* @return       array       an array with the new overall rating and total number
-*                           of votes.
-*
-*/
-function RATING_delVote( $type, $item_id, $uid )
-{
-    global $_TABLES;
-
-    list($rating_id, $current_rating, $current_votes) = RATING_getRating( $type, $item_id );
-
-    $result = DB_query("SELECT * FROM {$_TABLES['rating_votes']} WHERE item_id='".addslashes($item_id)."' AND uid=".$uid." AND type='".addslashes($type)."'");
-    if ( DB_numRows($result) > 0 ) {
-        $row = DB_fetchArray($result);
-        $vote_id = $row['id'];
-
-        $sum = ( $current_rating * $current_votes );
-        ($sum==0 ? $votes=0 : $votes=$current_votes-1);
-        if ( $sum > 0 && $votes > 0 ) {
-            $new_rating = $sum / $votes;
-        } else {
-            $new_rating = 0;
-            $votes      = 0;
-        }
-
-        if ( $rating_id != 0 ) {
-            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating=".$new_rating." WHERE id = ".$rating_id;
-            DB_query($sql);
-        }
-        DB_query("DELETE FROM {$_TABLES['rating_votes']} WHERE id=".$vote_id);
-        PLG_itemRated( $type, $item_id, $new_rating, $votes );
-    } else {
-        $new_rating = $current_rating;
-        $votes      = $current_votes;
-    }
-
-    return array($new_rating, $votes);
-
-}
 
 /**
 * Retrieve an array of item_id's the current user has rated
@@ -440,7 +391,7 @@ function RATING_delVote( $type, $item_id, $uid )
 * has rated for the specific type.
 *
 * @param        string      $type     plugin name
-* @return       array       array of item id's
+* @return       array       array of item ids
 *
 */
 function RATING_getRatedIds($type)
