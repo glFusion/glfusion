@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.7 svn
 ----------
+- Implemented timerconfigclass.class.php (ported from Geeklog v1.6.1)
+- Implemented polls auto tags (ported from Geeklog v1.6.1)
 - Implemented 4 new template vars for articles to allow plugins additional
   integration opportunities: (Mark)
     - plugin_icon_vars
