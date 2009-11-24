@@ -1297,11 +1297,11 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     $header->set_var( 'theme', $_CONF['theme'] );
 
     if ( $_SYSTEM['use_direct_style_js'] ) {
-        $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
-        $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js?t='.$_CONF['theme'];
+        $style_cache_url = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'].'&amp;i='.$cacheID;
+        $js_cache_url    = $_CONF['site_url'].'/'.$_CONF['js_cache_filename'].$_CONF['theme'].'.js?t='.$_CONF['theme'].'&amp;i='.$cacheID;
     } else {
-        $style_cache_url = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'];
-        $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'];
+        $style_cache_url = $_CONF['site_url'].'/css.php?t='.$_CONF['theme'].'&amp;i='.$cacheID;
+        $js_cache_url    = $_CONF['site_url'].'/js.php?t='.$_CONF['theme'].'&amp;i='.$cacheID;
     }
 
     $header->set_var('style_cache_url',$style_cache_url);
@@ -7499,10 +7499,6 @@ function css_out(){
         $_CONF['css_cache_filename'] = 'stylecache_';
     }
 
-    $tpl = $_CONF['theme'];
-
-    $cacheID = 'css_' . $tpl;
-
     if ( $_SYSTEM['use_direct_style_js'] ) {
         $cacheFile = $_CONF['path_html'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css';
         $cacheURL  = $_CONF['site_url'].'/'.$_CONF['css_cache_filename'].$_CONF['theme'].'.css?t='.$_CONF['theme'];
@@ -7558,6 +7554,10 @@ function css_out(){
     if(css_cacheok($cacheFile,$files)){
         return $cacheURL;
     }
+
+    $cacheID = 'css_' . md5( time() );
+
+    DB_query("REPLACE INTO {$_TABLES['vars']} (name, value) VALUES ('cacheid','".$cacheID."')");
 
     // start output buffering and build the stylesheet
     ob_start();
@@ -7646,8 +7646,6 @@ function css_comment_cb($matches){
 
 function js_out(){
     global $_CONF, $_SYSTEM, $_PLUGINS, $themeAPI;
-
-    $tpl = $_CONF['theme'];
 
     if ( !isset($_CONF['js_cache_filename']) ) {
         $_CONF['js_cache_filename'] = 'jscache_';
