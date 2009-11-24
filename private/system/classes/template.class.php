@@ -1197,9 +1197,7 @@ class Template
             $this->haltmsg($msg);
         }
 
-        if ($this->halt_on_error == "yes") {
-            die("<b>Halted.</b>");
-        } elseif ($this->halt_on_error == "log") {
+        if ($this->halt_on_error == "log") {
             COM_errorLog($msg);
         }
 
@@ -1221,10 +1219,12 @@ class Template
     */
     function haltmsg($msg)
     {
-        printf("<b>Template Error:</b> %s<br>\n", $msg);
+        if ($this->halt_on_error == 'yes') {
+            trigger_error(sprintf("Template Error: %s", $msg));
+        } else {
+            printf("<b>Template Error:</b> %s<br />\n", $msg);
+        }
     }
-
-
 
    /******************************************************************************
     * These functions are called from the cached php file to fetch data into the template.
@@ -2128,13 +2128,16 @@ function CACHE_instance_filename($iid,$bypass_lang = false)
  */
 function CACHE_security_hash()
 {
-    global $_GROUPS;
+    global $_GROUPS, $_USER;
 
     static $hash = NULL;
 
     if (empty($hash)) {
         $groups = implode(',',$_GROUPS);
         $hash = strtolower(md5($groups));
+        if ( !empty($_USER['tzid']) ) {
+            $hash .= 'tz'.md5($_USER['tzid']);
+        }
     }
     return $hash;
 
