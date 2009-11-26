@@ -3583,10 +3583,10 @@ function COM_olderStuff()
                 $oldnews = array();
                 $day = $daycheck;
             }
+            $oldnews_url = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='. $A['sid'] );
 
-            $oldnews_url = COM_buildUrl( $_CONF['site_url'] . '/article.php?story='
-                . $A['sid'] );
-            $oldnews[] = COM_createLink($A['title'], $oldnews_url)
+            $oldnews[] = COM_createLink(COM_truncate($A['title'],$_CONF['title_trim_length'] ,'...'),
+                         $oldnews_url,array('title' => htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt())))
                 .' (' . COM_numberFormat( $A['comments'] ) . ')';
         }
 
