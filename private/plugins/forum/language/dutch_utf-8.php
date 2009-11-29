@@ -299,7 +299,8 @@ $LANG_GF01 = array(
     'rate_too_low_thread' => 'Your rating level is not high enough to view this thread',
     'signature' => 'Forum Ondertekening',
     'edit_signature' => 'Wijzig BBcode Ondertekening',
-    'signature_preview' => 'Bekijk Ondertekening'
+    'signature_preview' => 'Bekijk Ondertekening',
+    'cancel_confirm' => 'Are you sure you want to cancel this post?',
 );
 
 $LANG_GF02 = array(

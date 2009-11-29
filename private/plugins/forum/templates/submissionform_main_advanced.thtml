@@ -83,6 +83,9 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
               <td style="padding-left:6px;padding-right:6px;">
                 <input type="submit" name="submit" value="{LANG_SUBMIT}" tabindex="8"{xhtml}>
               </td>
+               <td style="padding-left:6px;padding-right:6px;">
+                 <input type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9" onclick="return confirm('{$LANG_GF01[cancel_confirm]}');"{xhtml}>
+               </td>
           </tr>
       </table>
   </td>

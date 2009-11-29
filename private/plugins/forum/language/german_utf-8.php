@@ -300,7 +300,8 @@ $LANG_GF01 = array(
     'rate_too_low_thread' => 'Dein Bewertungslevel ist nicht hoch genug, um dieses Thema zu lesen',
     'signature' => 'Signatur',
     'edit_signature' => 'Bearbeite BBcode-Signatur',
-    'signature_preview' => 'Signatur-Vorschau'
+    'signature_preview' => 'Signatur-Vorschau',
+    'cancel_confirm' => 'Are you sure you want to cancel this post?',
 );
 
 $LANG_GF02 = array(
