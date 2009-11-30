@@ -457,9 +457,15 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     $errors                     = 0;
     $errMsg                     = '';
 
+    $sizeofalbums = sizeof($MG_albums);
     if ($_MG_CONF['verbose']) {
         COM_errorLog("MG Upload: *********** Beginning media upload process...");
-        COM_errorLog("MG Upload: Filename to process: " . $filename);
+        COM_errorLog("Filename to process: " . $filename);
+        COM_errorLog("Size of MG_albums()=" . $sizeofalbums );
+        COM_errorLog("UID=" . $_USER['uid']);
+        COM_errorLog("album access=" . $MG_albums[$albums]->access );
+        COM_errorLog("album owner_id=" . $MG_albums[0]->owner_id );
+        COM_errorLog("member_uploads=" . $MG_albums[$albums]->member_uploads );
     }
 
     clearstatcache();
@@ -650,6 +656,9 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                         $mimeExt = $file_extension;
                         break;
                 }
+        }
+        if ($_MG_CONF['verbose']) {
+            COM_errorLog("MG Upload: override mime type to: " . $mimeInfo['type'] . ' based upon file extension of: ' . $filetype );
         }
     }
 

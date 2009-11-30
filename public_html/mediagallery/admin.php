@@ -70,14 +70,13 @@ function MG_navbar($selected='',$album_id) {
     $retval = $T->finish($T->get_var('output'));
 
     $navbar = new navbar;
-    $navbar->add_menuitem($LANG_MG01['browser_upload'],$_MG_CONF['site_url'] .'/admin.php?mode=upload&amp;album_id='  . $album_id);
+    $navbar->add_menuitem($LANG_MG01['swfupload_media'],$_MG_CONF['site_url'] .'/admin.php?mode=upload&amp;album_id=' . $album_id);
+    $navbar->add_menuitem($LANG_MG01['browser_upload'],$_MG_CONF['site_url'] .'/admin.php?mode=browser&amp;album_id='  . $album_id);
+    $navbar->add_menuitem($LANG_MG01['gallery_remote'],$_MG_CONF['site_url'] .'/admin.php?mode=gremote&amp;album_id=' . $album_id);
+    $navbar->add_menuitem($LANG_MG01['xp_pub'],$_MG_CONF['site_url'] .'/admin.php?mode=xppub&amp;album_id='   . $album_id);
     if (SEC_hasRights('mediagallery.admin') ) {
         $navbar->add_menuitem($LANG_MG01['ftp_media'],$_MG_CONF['site_url'] .'/admin.php?mode=import&amp;album_id='  . $album_id);
     }
-    $navbar->add_menuitem($LANG_MG01['xp_pub'],$_MG_CONF['site_url'] .'/admin.php?mode=xppub&amp;album_id='   . $album_id);
-    $navbar->add_menuitem($LANG_MG01['jupload_media'],$_MG_CONF['site_url'] .'/admin.php?mode=jupload&amp;album_id=' . $album_id);
-    $navbar->add_menuitem($LANG_MG01['gallery_remote'],$_MG_CONF['site_url'] .'/admin.php?mode=gremote&amp;album_id=' . $album_id);
-    $navbar->add_menuitem($LANG_MG01['remote_media'],$_MG_CONF['site_url'] . '/admin.php?mode=remote&amp;album_id=' . $album_id);
 
     $navbar->set_selected($selected);
     $retval .= $navbar->generate();
@@ -132,15 +131,28 @@ if (($mode == 'edit') ) {
     }
     $display .= MG_siteFooter();
     echo $display;
-} else if ( $mode == 'jupload' ) {
+} else if ( $mode == 'browser' ) {
     if ( isset($_GET['album_id']) ) {
         if ( !function_exists('MG_userUpload')) {
             require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         }
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display  = MG_siteHeader();
-        $display .= MG_navbar($LANG_MG01['jupload_media'],$album_id);
-        $display .= MG_jupload( $album_id );
+        $display .= MG_navbar($LANG_MG01['browser_upload'],$album_id);
+        $display .= MG_userUpload( $album_id );
+    } else {
+        $display = MG_siteHeader();
+        $display .= MG_invalidRequest();
+    }
+    $display .= MG_siteFooter();
+    echo $display;
+} else if ( $mode == 'gremote' ) {
+    if ( isset($_GET['album_id']) ) {
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
+        $album_id = COM_applyFilter($_GET['album_id'],true);
+        $display  = MG_siteHeader();
+        $display .= MG_navbar($LANG_MG01['gallery_remote'],$album_id);
+        $display .= MG_galleryRemote( $album_id );
     } else {
         $display = MG_siteHeader();
         $display .= MG_invalidRequest();
@@ -160,13 +172,13 @@ if (($mode == 'edit') ) {
     }
     $display .= MG_siteFooter();
     echo $display;
-} else if ( $mode == 'gremote' ) {
+} else if ( $mode == 'import' ) {
     if ( isset($_GET['album_id']) ) {
-        require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
+        require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display  = MG_siteHeader();
-        $display .= MG_navbar($LANG_MG01['gallery_remote'],$album_id);
-        $display .= MG_galleryRemote( $album_id );
+        $display .= MG_navbar($LANG_MG01['ftp_media'],$album_id);
+        $display .= MG_ftpUpload( $album_id );
     } else {
         $display = MG_siteHeader();
         $display .= MG_invalidRequest();
@@ -466,21 +478,8 @@ if (($mode == 'edit') ) {
         require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $display  = MG_siteHeader();
-        $display .= MG_navbar($LANG_MG01['browser_upload'],$album_id);
-        $display .= MG_userUpload( $album_id );
-    } else {
-        $display = MG_siteHeader();
-        $display .= MG_invalidRequest();
-    }
-    $display .= MG_siteFooter();
-    echo $display;
-} else if ( $mode == 'import' ) {
-    if ( isset($_GET['album_id']) ) {
-        require_once $_CONF['path'] . 'plugins/mediagallery/include/ftpmedia.php';
-        $album_id = COM_applyFilter($_GET['album_id'],true);
-        $display  = MG_siteHeader();
-        $display .= MG_navbar($LANG_MG01['ftp_media'],$album_id);
-        $display .= MG_ftpUpload( $album_id );
+        $display .= MG_navbar($LANG_MG01['swfupload_media'],$album_id);
+        $display .= MG_SWFUpload( $album_id );
     } else {
         $display = MG_siteHeader();
         $display .= MG_invalidRequest();

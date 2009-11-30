@@ -275,7 +275,11 @@ function plugin_getheaderjs_mediagallery() {
 
     $js = array();
 
+    // the order is important here.  swfobject must be 'sandwiched' between
+    // swfupload.js and swupload.swfobject.js.
+    $js[] = $_MG_CONF['path_html'] . 'swfupload/swfupload.js';
     $js[] = $_MG_CONF['path_html'] . 'js/swfobject.js';
+    $js[] = $_MG_CONF['path_html'] . 'swfupload/swfupload.swfobject.js';
     $js[] = $_MG_CONF['path_html'] . 'js/mediagallery.js';
     if ( $_MG_CONF['disable_lightbox'] != true ) {
         $js[] = $_MG_CONF['path_html'] . 'js/slimbox.js';
