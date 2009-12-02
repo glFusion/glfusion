@@ -1,1 +1,113 @@
 *** dummy entry ***
+12/02/09 13:13:59 - ***Inside MG_SWFUpload()*** 
+12/02/09 13:13:59 - file_size_limit=2097152 B 
+12/02/09 13:13:59 - allowed_file_types=*.jpg;*.jpeg;*.png;*.tif;*.tiff;*.gif;*.bmp;*.dib;*.tga;*.tpic;*.psd;*.pdd 
+12/02/09 13:13:59 - album_rpc.php: invocation ------------------------ 
+12/02/09 13:13:59 - album_id=18 
+12/02/09 13:13:59 - initialized 19 albums 
+12/02/09 13:13:59 - size_limit=2097152 
+12/02/09 13:13:59 - valid_types=*.jpg;*.jpeg;*.png;*.tif;*.tiff;*.gif;*.bmp;*.dib;*.tga;*.tpic;*.psd;*.pdd 
+12/02/09 13:13:59 - album_rpc.php: normal termination ---------------- 
+12/02/09 19:14:04 - ***Inside SWFUpload main()*** 
+12/02/09 19:14:04 - received uid=4 
+12/02/09 19:14:04 - received sid=ca08418283ffba7de7a9231c7d69505a 
+12/02/09 19:14:04 - received aid=18 
+12/02/09 19:14:05 - The upload is authentic 
+12/02/09 19:14:05 - Retrieved 28 user data values 
+12/02/09 19:14:05 - ***Leaving SWFUpload main()*** 
+12/02/09 19:14:05 - *** Inside MG_saveSWFUpload()*** 
+12/02/09 19:14:05 - uploading to album_id=18 
+12/02/09 19:14:05 - album owner_id= 
+12/02/09 19:14:05 - filename=nattreasure2.jpg 
+12/02/09 19:14:05 - filesize=49815 
+12/02/09 19:14:05 - filetype=application/octet-stream 
+12/02/09 19:14:05 - filetmp=C:\Windows\Temp\php4F8C.tmp 
+12/02/09 19:14:05 - error=0 
+12/02/09 19:14:05 - MG Upload: *********** Beginning media upload process... 
+12/02/09 19:14:05 - Filename to process: C:\Windows\Temp\php4F8C.tmp 
+12/02/09 19:14:05 - Size of MG_albums()=17 
+12/02/09 19:14:05 - UID=4 
+12/02/09 19:14:05 - album access=3 
+12/02/09 19:14:05 - album owner_id= 
+12/02/09 19:14:05 - member_uploads=0 
+12/02/09 19:14:06 - IMG_getMediaMetaData: getID3 analyzing file: w:/www/stable.ecsnet.org/private/plugins/mediagallery/tmp//Mark20091202191406492.tmp 
+12/02/09 19:14:06 - IMG_getMediaMetaData: getID3 found mime_type: image/jpeg 
+12/02/09 19:14:06 - MG Upload: found mime type of jpg 
+12/02/09 19:14:06 - MG Upload: PHP detected mime type is : application/octet-stream 
+12/02/09 19:14:06 - MG Upload: Stored filename is : 4_nattreasure2.jpg 
+12/02/09 19:14:06 - MG Upload: Mime Type: image/jpeg 
+12/02/09 19:14:06 - MG Upload: About to move/copy file 
+12/02/09 19:14:06 - MG Upload: Calling MG_convertImage() 
+12/02/09 19:14:06 - MG Upload: Entering MG_convertImage() 
+12/02/09 19:14:06 - MG Upload: Creating thumbnail image 
+12/02/09 19:14:06 - UTL_exec: Executing: C:/usr/ImageMagick/identify 
+12/02/09 19:14:06 - _img_resizeImage: Resizing using ImageMagick src = w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/orig/4/4_nattreasure2.jpg mimetype = image/jpeg 
+12/02/09 19:14:06 - UTL_exec: Executing: "C:/usr/ImageMagick/convert" -verbose -flatten -quality 85 -size 200x115 w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/orig/4/4_nattreasure2.jpg -geometry 200x115 w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/tn/4/4_nattreasure2.jpg 
+12/02/09 19:14:06 - IMG_resizeImage: Original (w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/orig/4/4_nattreasure2.jpg) is smaller than target, original copied to target image (w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/disp/4/4_nattreasure2.jpg. 
+12/02/09 19:14:06 - MG Upload: Entering MG_processOriginal() 
+12/02/09 19:14:06 - MG Upload: Building SQL and preparing to enter database 
+12/02/09 19:14:06 - MG Upload: Inserting media record into mg_media 
+12/02/09 19:14:06 - MG Upload: Updating Album information 
+12/02/09 19:14:06 - MG Upload: Setting album cover filename to 4_nattreasure2 
+12/02/09 19:14:06 - MG Upload: Successfully uploaded a media object 
+12/02/09 19:14:51 - ***Inside SWFUpload main()*** 
+12/02/09 19:14:51 - received uid=4 
+12/02/09 19:14:51 - received sid=ca08418283ffba7de7a9231c7d69505a 
+12/02/09 19:14:51 - received aid=18 
+12/02/09 19:14:51 - The upload is authentic 
+12/02/09 19:14:51 - Retrieved 28 user data values 
+12/02/09 19:14:51 - ***Leaving SWFUpload main()*** 
+12/02/09 19:14:51 - *** Inside MG_saveSWFUpload()*** 
+12/02/09 19:14:51 - uploading to album_id=18 
+12/02/09 19:14:51 - album owner_id= 
+12/02/09 19:14:51 - filename=acover.jpg 
+12/02/09 19:14:51 - filesize=103511 
+12/02/09 19:14:51 - filetype=application/octet-stream 
+12/02/09 19:14:51 - filetmp=C:\Windows\Temp\php5B2.tmp 
+12/02/09 19:14:51 - error=0 
+12/02/09 19:14:51 - MG Upload: *********** Beginning media upload process... 
+12/02/09 19:14:51 - Filename to process: C:\Windows\Temp\php5B2.tmp 
+12/02/09 19:14:51 - Size of MG_albums()=17 
+12/02/09 19:14:51 - UID=4 
+12/02/09 19:14:51 - album access=3 
+12/02/09 19:14:51 - album owner_id= 
+12/02/09 19:14:51 - member_uploads=0 
+12/02/09 19:14:52 - IMG_getMediaMetaData: getID3 analyzing file: w:/www/stable.ecsnet.org/private/plugins/mediagallery/tmp//Mark20091202191452272.tmp 
+12/02/09 19:14:52 - IMG_getMediaMetaData: getID3 found mime_type: image/jpeg 
+12/02/09 19:14:52 - MG Upload: found mime type of jpg 
+12/02/09 19:14:52 - MG Upload: PHP detected mime type is : application/octet-stream 
+12/02/09 19:14:52 - MG Upload: Stored filename is : 4_acover.jpg 
+12/02/09 19:14:52 - MG Upload: Mime Type: image/jpeg 
+12/02/09 19:14:52 - MG Upload: About to move/copy file 
+12/02/09 19:14:52 - MG Upload: Calling MG_convertImage() 
+12/02/09 19:14:52 - MG Upload: Entering MG_convertImage() 
+12/02/09 19:14:52 - MG Upload: Creating thumbnail image 
+12/02/09 19:14:52 - UTL_exec: Executing: C:/usr/ImageMagick/identify 
+12/02/09 19:14:52 - _img_resizeImage: Resizing using ImageMagick src = w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/orig/4/4_acover.jpg mimetype = image/jpeg 
+12/02/09 19:14:52 - UTL_exec: Executing: "C:/usr/ImageMagick/convert" -verbose -flatten -quality 85 -size 200x130 w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/orig/4/4_acover.jpg -geometry 200x130 w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/tn/4/4_acover.jpg 
+12/02/09 19:14:53 - UTL_exec: Executing: C:/usr/ImageMagick/identify 
+12/02/09 19:14:53 - _img_resizeImage: Resizing using ImageMagick src = w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/orig/4/4_acover.jpg mimetype = image/jpeg 
+12/02/09 19:14:53 - UTL_exec: Executing: "C:/usr/ImageMagick/convert" -verbose -flatten -quality 85 -size 620x404 w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/orig/4/4_acover.jpg -geometry 620x404 w:/www/stable.ecsnet.org/public_html/mediagallery/mediaobjects/disp/4/4_acover.jpg 
+12/02/09 19:14:53 - MG Upload: Entering MG_processOriginal() 
+12/02/09 19:14:53 - MG Upload: Building SQL and preparing to enter database 
+12/02/09 19:14:53 - MG Upload: Inserting media record into mg_media 
+12/02/09 19:14:53 - MG Upload: Updating Album information 
+12/02/09 19:14:53 - MG Upload: Setting album cover filename to 4_acover 
+12/02/09 19:14:53 - MG Upload: Successfully uploaded a media object 
+12/02/09 19:14:58 - ***Inside SWFUpload main()*** 
+12/02/09 19:14:58 - received uid=4 
+12/02/09 19:14:58 - received sid=ca08418283ffba7de7a9231c7d69505a 
+12/02/09 19:14:58 - received aid=18 
+12/02/09 19:14:58 - The upload is authentic 
+12/02/09 19:14:58 - Retrieved 28 user data values 
+12/02/09 19:14:58 - ***Leaving SWFUpload main()*** 
+12/02/09 19:14:58 - *** Inside MG_saveSWFUpload()*** 
+12/02/09 19:14:58 - uploading to album_id=18 
+12/02/09 19:14:58 - album owner_id= 
+12/02/09 19:14:58 - filename=capital.tif 
+12/02/09 19:14:58 - filesize=2373940 
+12/02/09 19:14:58 - filetype=application/octet-stream 
+12/02/09 19:14:58 - filetmp=C:\Windows\Temp\php2130.tmp 
+12/02/09 19:14:58 - error=0 
+12/02/09 19:14:58 - MediaGallery: File capital.tif exceeds maximum allowed filesize for this album 
+12/02/09 19:14:58 - MediaGallery: Max filesize for this album=2097152 

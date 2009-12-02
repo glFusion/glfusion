@@ -249,7 +249,12 @@ if (($mode == 'edit') ) {
         $album_id = COM_applyFilter($_GET['album_id'],true);
         $start    = COM_applyFilter($_GET['start'],true);
         $display = MG_siteHeader();
-        $display .= MG_batchCaptionSave( $album_id,$start,$_MG_CONF['site_url'] . '/album.php?aid=' . $album_id);
+        if ( $album_id == 0 ) {
+            $actionURL = $_MG_CONF['site_url'] . '/index.php';
+        } else {
+            $actionURL = $_MG_CONF['site_url'] . '/album.php?aid=' . $album_id;
+        }
+        $display .= MG_batchCaptionSave( $album_id,$start,$actionURL);
     } else {
         $display = MG_siteHeader();
         $display .= MG_invalidRequest();

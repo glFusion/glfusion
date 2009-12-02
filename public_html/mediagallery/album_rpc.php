@@ -4,13 +4,14 @@
 // +--------------------------------------------------------------------------+
 // | album_rpc.php                                                            |
 // |                                                                          |
-// | Server-side Ajax album data provider for SWFUpload                       |
+// | AJAX component to retrieve album attributes                              |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                    $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
+// | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -43,12 +44,16 @@ if( isset( $_REQUEST['aid'] ) ) {
 
     // retrieve the album_id passed
     $album_id = COM_applyFilter( $_REQUEST['aid'], true );
-    if( $_MG_CONF['verbose'] ) COM_errorLog( 'album_id=' . $album_id );
+    if( $_MG_CONF['verbose'] ) {
+        COM_errorLog( 'album_id=' . $album_id );
+    }
 
     // initialize the $MG_albums array
     MG_initAlbums();
     $albums = sizeof( $MG_albums );
-    if( $_MG_CONF['verbose'] ) COM_errorLog( 'initialized ' . $albums . ' albums' );
+    if( $_MG_CONF['verbose'] ) {
+        COM_errorLog( 'initialized ' . $albums . ' albums' );
+    }
 
     // check to ensure we have a valid album_id
     if( ( $album_id <= $albums ) && ( !empty( $album_id ) ) ) {
@@ -73,9 +78,7 @@ if( isset( $_REQUEST['aid'] ) ) {
     }
 
 } else {
-
     COM_errorLog( 'album_rpc.php: invocation with no album parameter' );
-
 }
-
+exit(0);
 ?>

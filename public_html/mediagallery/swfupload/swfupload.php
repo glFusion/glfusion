@@ -37,14 +37,14 @@ require_once '../../lib-common.php';
 // main
 
 if (!in_array('mediagallery', $_PLUGINS)) {
-    COM_404();
     COM_errorLog( 'SWFUpload: MediaGallery not found in $_PLUGINS', 1 );
+    COM_404();
     exit;
 }
 
-$uid = (isset($_POST['uid'])) ? COM_applyFilter( $_POST['uid'], 1 ) : '';
-$sid = (isset($_POST['sid'])) ? COM_applyFilter( $_POST['sid'], 0 ) : '';
-$aid = (isset($_POST['aid'])) ? COM_applyFilter( $_POST['aid'], 1 ) : '';
+$uid = (isset($_POST['uid'])) ? COM_applyFilter( $_POST['uid'], true ) : '';
+$sid = (isset($_POST['sid'])) ? COM_applyFilter( $_POST['sid'], false ) : '';
+$aid = (isset($_POST['aid'])) ? COM_applyFilter( $_POST['aid'], true ) : '';
 
 if( $_MG_CONF['verbose'] ) {
     COM_errorLog( '***Inside SWFUpload main()***', 1 );
@@ -67,6 +67,7 @@ if( $_USER['error'] == '1' ) {
 // return the user to the swfupload page.
 if( !(SEC_checkTokenGeneral( $sid, 'swfupload' )) ) {
     COM_errorLog( 'SWFUpload: Invalid token=' . $sid . ' for uid=' . $uid, 1 );
+    echo "Session has expired, please reload the page";
     exit(0);
 }
 
@@ -84,5 +85,7 @@ require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
 
 MG_initAlbums();
-MG_saveSWFUpload( $aid );
+$rc = MG_saveSWFUpload( $aid );
+echo $rc;
+exit(0);
 ?>

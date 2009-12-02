@@ -201,7 +201,7 @@ function MG_SWFUpload( $album_id ) {
 * @return   string              HTML
 *
 */function MG_saveSWFUpload( $album_id ) {
-    global $MG_albums, $_FILES, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $_POST;
+    global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $new_media_id;
 
     $statusMsg = '';
     $file = array();
@@ -216,7 +216,7 @@ function MG_SWFUpload( $album_id ) {
 
     if ( !isset( $MG_albums[$albums]->id ) || $albums == 0 ) {
         COM_errorLog( 'MediaGallery: SWFUpload was unable to determine album id' );
-        return;
+        return $LANG_MG01['swfupload_err_album_id'];
     }
 
     $successfull_upload = 0;
@@ -245,8 +245,7 @@ function MG_SWFUpload( $album_id ) {
             COM_errorLog('MediaGallery: File ' . $filename . ' exceeds maximum allowed filesize for this album');
             COM_errorLog('MediaGallery: Max filesize for this album=' . $MG_albums[$album_id]->max_filesize );
             $tmpmsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'], $filename);
-            $statusMsg .= $tmpmsg . '<br' . XHTML . '>';
-            continue;
+            return $tmpmsg;
         }
 
         $attach_tn = 0;
@@ -260,6 +259,7 @@ function MG_SWFUpload( $album_id ) {
             $successfull_upload++;
         } else {
             COM_errorLog( 'MG_saveSWFUpload error: ' . $msg, 1 );
+            return $msg;
         }
     }
 
@@ -280,7 +280,7 @@ function MG_SWFUpload( $album_id ) {
     }
     MG_SortMedia( $album_id );
 
-    return;
+    return 'FILEID:'.$new_media_id;
 }
 /**
 * Browser upload form

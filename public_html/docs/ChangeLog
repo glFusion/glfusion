@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.7 svn
 ----------
+- Tweak SWFUploader to now allow display of thumbnails and allow adding
+  title and description (Mark)
+- Ensure multiple header() calls are not made when site error occurs (Mark)
 - Media Gallery: Remove jUpload and replace with Flash-based uploader (Mark H.)
 - Media Gallery: Batch caption edit did not call PLG_itemSaved()
 - Added cancel confirmation to forum post cancel.
