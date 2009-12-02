@@ -79,12 +79,16 @@ if ( $_MG_CONF['verbose'] ) {
     COM_errorLog( '***Leaving SWFUpload main()***', 1 );
 }
 
+$_GROUPS = SEC_getUserGroups( $_USER['uid'] );
+$_RIGHTS = explode( ',', SEC_getUserPermissions() );
+
+MG_initAlbums();
+
 // now that we're sure we have the right user
 
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/newmedia.php';
 
-MG_initAlbums();
 $rc = MG_saveSWFUpload( $aid );
 echo $rc;
 exit(0);
