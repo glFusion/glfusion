@@ -6888,10 +6888,6 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
     if ((is_array($_USER) && function_exists('SEC_inGroup'))
             || (isset($_SYSTEM['rootdebug']) && $_SYSTEM['rootdebug'])) {
         if ($_SYSTEM['rootdebug'] || SEC_inGroup('Root')) {
-
-            header('HTTP/1.1 500 Internal Server Error');
-            header('Status: 500 Internal Server Error');
-
             $title = 'An Error Occurred';
             if (!empty($_CONF['site_name'])) {
                 $title = $_CONF['site_name'] . ' - ' . $title;
@@ -6946,9 +6942,6 @@ function COM_handleError($errno, $errstr, $errfile='', $errline=0, $errcontext='
 
     // if we do not throw the error back to an admin, still log it in the error.log
     COM_errorLog("$errno - $errstr @ $errfile line $errline", 1);
-
-    header('HTTP/1.1 500 Internal Server Error');
-    header('Status: 500 Internal Server Error');
 
     // Does the theme implement an error message html file?
     if (!empty($_CONF['path_layout']) &&
@@ -7223,7 +7216,7 @@ function COM_404()
         }
         $url = 'http://' . $_SERVER['HTTP_HOST'] . strip_tags ($request);
     }
-    header("HTTP/1.0 404 Not Found");
+//    header("HTTP/1.0 404 Not Found");
     echo '
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
