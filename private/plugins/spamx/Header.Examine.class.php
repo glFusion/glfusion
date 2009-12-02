@@ -21,7 +21,7 @@ if (!defined ('GVERSION')) {
 /**
 * Include Abstract Examine Class
 */
-require_once($_CONF['path'] . 'plugins/spamx/' . 'BaseCommand.class.php');
+require_once $_CONF['path'].'plugins/spamx/'.'BaseCommand.class.php';
 
 /**
 * Examines Post according to HTTP Headers
@@ -75,7 +75,7 @@ class Header extends BaseCommand {
 
             foreach ($headers as $key => $content) {
                 if (strcasecmp ($name, $key) == 0) {
-                    if (preg_match ("#$value#i", $content)) {
+                    if (@preg_match ("#$value#i", $content)) {
                         $ans = 1; // quit on first positive match
                         SPAMX_log ($LANG_SX00['foundspam'] . $entry .
                                    $LANG_SX00['foundspam2'] . $uid .
