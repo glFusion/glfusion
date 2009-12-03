@@ -59,7 +59,7 @@ echo $display;
     $display = <<<EOJ
 <script type="text/javascript" src="{$_CONF['site_url']}/javascript/mootools/gl_mooslide.js"></script>
 <script type="text/javascript">
-    window.addEvent('domready', function() {
+    window.addEvent('load', function() {
         var myFilm = new gl_Slide(\$('$id'), {
             fx: {
                 wait: true,
@@ -78,6 +78,7 @@ echo $display;
 
 <div id="$id" class="gl_slide">
 EOJ;
+
     $sql = "SELECT sp_id, sp_content, sp_php, sp_title FROM {$_TABLES['staticpage']} WHERE sp_id in ("
          . implode(', ', array_map(create_function('$a','return "\'" . htmlspecialchars($a) . "\'";'), $page_ids))
          . ')' . COM_getPermSQL('AND');
@@ -144,8 +145,10 @@ function WIDGET_mootickerRSS($block = 'gl_mootickerRSS', $id = 'gl_mooticker') {
     $B = DB_fetchArray($result);
     if ( $B['is_enabled'] == 0 ) {
         COM_formatBlock($B, true);
-        $retval = '<script type="text/javascript">' . LB . file_get_contents($_CONF['path_html'] . 'javascript/mootools/gl_mooticker.js') . LB . '</script>' . LB;
-        $retval .= <<<EOT
+        $retval = <<<EOT
+<script type="text/javascript">
+var MooTicker=new Class({options:{controls:true,delay:2000,duration:800,blankimage:'{site_url}/images/speck.gif'},initialize:function(b,c){this.setOptions(c);this.element=$(b)||null;this.element.addEvents({'mouseenter':this.stop.bind(this),'mouseleave':this.play.bind(this)});this.news=this.element.getElements('ul li');this.current=0;this.fx=[];this.news.getParent().setStyle('position','relative');var d=this;this.news.each(function(a,i){a.setStyle('position','absolute');this.fx[i]=new Fx.Style(a,'opacity',{duration:this.options.duration,onStart:function(){d.transitioning=true},onComplete:function(){d.transitioning=false}}).set(1);if(!i)return;a.setStyle('opacity',0)},this);if(this.options.controls)this.addControls();this.status='stop';window.addEvent('load',this.play.bind(this));return this},addControls:function(){var a=new Element('span',{'class':'controls'}).injectTop(this.element);this.arrowPrev=new Element('img',{'class':'control-prev','title':'{prev}','alt':'{prev}','src':this.options.blankimage}).inject(a);this.arrowNext=new Element('img',{'class':'control-next','title':'{next}','alt':'{next}','src':this.options.blankimage}).inject(a);this.arrowPrev.addEvent('click',this.previous.bind(this));this.arrowNext.addEvent('click',this.next.bind(this));return this},previous:function(){if(this.transitioning)return this;var a=(!this.current)?this.news.length-1:this.current-1;this.fx[this.current].start(0);this.fx[a].start(1);this.current=a;return this},next:function(){if(this.transitioning)return this;var a=(this.current==this.news.length-1)?0:this.current+1;this.fx[this.current].start(0);this.fx[a].start(1);this.current=a;return this},play:function(){if(this.status=='play')return this;this.status='play';this.timer=this.next.periodical(this.options.delay+this.options.duration,this);return this},stop:function(){this.status='stop';\$clear(this.timer);return this}});MooTicker.implement(new Options,new Events);
+</script>
 <script type="text/javascript">
          window.addEvent('domready', function() {
                  var x = new MooTicker('$id', {
@@ -206,27 +209,25 @@ function WIDGET_autotranslations($header=0) {
                  'zh-TW' => 'Chinese Traditional',
             );
     asort($isoLang); //comment out this line to sort results by 2 digit language code instead of language names above
-	$retval = '';
-	if ($header) {
-	    $retval = '<h2>' . $LANG_WIDGETS['translate'] . '</h2>';
-	}
-	$retval .= '<div class="autotranslations"><ul>';
+    $retval = '';
+    if ($header) {
+        $retval = '<h2>' . $LANG_WIDGETS['translate'] . '</h2>';
+    }
+    $retval .= '<ul class="autotranslations">';
 
     foreach ($isoLang AS $key => $language ) {
-		$randID = rand();
+        $randID = rand();
         if ($key != $_CONF['iso_lang']) {
-        	$retval .= '<li><a href="http://translate.google.com/translate?';
-        	$retval .= 'hl=' . $key; // 2 character language code of google header bar (usually the same as tl below)
-        	$retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
-        	$retval .= '&amp;tl=' . $key; // 2 character language code to translate site into (usually should be the same as hl above)
-        	$retval .= '&amp;u=' . urlencode($_CONF['site_url'] . '?r=' . $randID); // address of your site appends a random string so Google won't cache the translated page
-        	$retval .= '">';
-        	$retval .= '<img src="' . $_CONF['site_url'] . '/images/translations/';
-        	$retval .= $key.'.png" alt="'.$language.'" title="'.$language.'"' . XHTML . '></a></li>';
+            $retval .= '<li class="sprite-' . $key . '"><a href="http://translate.google.com/translate?';
+            $retval .= 'hl=' . $key; // 2 character language code of google header bar (usually the same as tl below)
+            $retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
+            $retval .= '&amp;tl=' . $key; // 2 character language code to translate site into (usually should be the same as hl above)
+            $retval .= '&amp;u=' . urlencode($_CONF['site_url'] . '?r=' . $randID); // address of your site appends a random string so Google won't cache the translated page
+            $retval .= '"><img src="' . $_CONF['site_url'] . '/images/speck.gif" alt="'.$language.'" title="'.$language.'"' . XHTML . '></a></li>';
         }
     }
-    $retval .= '</ul></div><div style="clear:left;"></div>';
-	return $retval;
+    $retval .= '</ul><div style="clear:left;"></div>';
+    return $retval;
 }
 
 // inserts the call to the javascript file, referencing the full path to gl_moospring.js
@@ -237,101 +238,20 @@ function WIDGET_moospring() {
     return $retval;
 }
 
-//gl_moorotator widget: inserts absolute references to the site url, as well as localizing the prev/playpause/next strings
+//Powers the gl_moorotator. It is here so that the blankimage reference can be built with the full site url
 function WIDGET_moorotator() {
-	global $_CONF, $LANG_WIDGETS;
-	$retval = '<script type="text/javascript">' . LB . file_get_contents( $_CONF['path_html'] . 'javascript/mootools/gl_moorotator.js' ) . LB . '</script>' . LB;
-	$retval = str_replace('{site_url}',$_CONF['site_url'] , $retval);
+    global $_CONF, $LANG_WIDGETS;
+
+    $retval = '';
+    $retval = <<<EOR
+<script type="text/javascript">
+var gl_mooRotator=new Class({options:{controls:true,duration:1000,delay:5000,autoplay:false,blankimage:'{site_url}/images/speck.gif'},initialize:function(a,b){this.container=$(a);this.setOptions(b);this.images=this.container.getElements('.gl_moorotatorimage > img');this.content=this.container.getElements('.gl_moorotatortext');this.current=0;this.build();this.attachEvents();this.status='pause';if(this.options.autoplay)window.addEvent('load',this.play.bind(this));return this},build:function(){var b=this;$$(this.content,this.images).setStyle('position','absolute');var c=this.images.slice(1);var d=this.content.slice(1);c.each(function(a){a.injectAfter(this.images[0]).setStyle('opacity',0)},this);d.each(function(a){a.injectAfter(this.content[0]).setStyle('opacity',0)},this);var e=$$('.gl_moorotator').slice(1);e.each(function(a){a.empty().remove()});if(this.options.controls == 1){var f=new Element('div',{'class':'controls'}).inject(this.container);} else {var f=new Element('div',{'class':''}).inject(this.container);}this.arrowPrev=new Element('img',{'class':'control-prev','title':'{prev}','alt':'{prev}','src':this.options.blankimage}).inject(f);this.arrowPlay=new Element('img',{'id':'play-pause','class':'control-pause','title':'{playpause}','alt':'{playpause}','src':this.options.blankimage}).inject(f);this.arrowNext=new Element('img',{'class':'control-next','title':'{next}','alt':'{next}','src':this.options.blankimage}).inject(f);if(this.options.corners){(this.images.length).times(function(i){(2).times(function(j){new Element('div',{'class':'i'+(j+1)}).inject(this.images[i])}.bind(this))}.bind(this))}(4).times(function(i){new Element('div',{'class':'corner c'+(i+1)}).inject(this.content[0].getParent())}.bind(this));this.fx=[];(this.content.length).times(function(i){this.fx[i]=[new Fx.Style(this.images[i],'opacity',{duration:this.options.duration,onStart:function(){b.transitioning=true},onComplete:function(){b.transitioning=false}}),new Fx.Style(this.content[i],'opacity',{duration:this.options.duration})]}.bind(this));return this},attachEvents:function(){var a=this,playstop=$('play-pause');this.arrowPrev.addEvent('click',this.previous.bind(this));this.arrowNext.addEvent('click',this.next.bind(this));this.arrowPlay.addEvent('click',function(){if(a.status=='play'){a.stop();playstop.className='control-play'}else{a.play();playstop.className='control-pause'}});return this},previous:function(){if(this.transitioning)return this;var b=(!this.current)?this.content.length-1:this.current-1;this.fx[this.current].each(function(a){a.start(0)});this.fx[b].each(function(a){a.start(1)});this.current=b;return this},next:function(){if(this.transitioning)return this;var b=(this.current==this.content.length-1)?0:this.current+1;this.fx[this.current].each(function(a){a.start(0)});this.fx[b].each(function(a){a.start(1)});this.current=b;return this},play:function(){if(this.status=='play')return this;this.status='play';this.timer=this.next.periodical(this.options.delay+this.options.duration,this);return this},stop:function(){this.status='pause';\$clear(this.timer);return this}});gl_mooRotator.implement(new Events,new Options);</script>
+EOR;
+    $retval = str_replace('{site_url}',$_CONF['site_url'] , $retval);
     $retval = str_replace('{prev}',$LANG_WIDGETS['prev'] , $retval);
     $retval = str_replace('{next}',$LANG_WIDGETS['next'] , $retval);
     $retval = str_replace('{playpause}',$LANG_WIDGETS['playpause'] , $retval);
-	return $retval;
+    return $retval;
 }
 
-//wrapper widget: wraps a page outside of glFusion (but on the same server)
-//and auto adjusts the height of the iframe to whatever page is loaded
-//also, load links to parent site in parent window (see public_html/javascript/common.js)
-//this script borks in Opera 
-function WIDGET_wrapper() {
-//add the javascript to take care of dynamic iframe
-	$display = <<<EOW
-	<script type="text/javascript">
-
-/***********************************************
-* IFrame SSI script II- © Dynamic Drive DHTML code library (http://www.dynamicdrive.com)
-* Visit DynamicDrive.com for hundreds of original DHTML scripts
-* This notice must stay intact for legal use
-***********************************************/
-
-//Input the IDs of the IFRAMES you wish to dynamically resize to match its content height:
-//Separate each ID with a comma. Examples: ["myframe1", "myframe2"] or ["myframe"] or [] for none:
-var iframeids=["myframe"]
-
-//Should script hide iframe from browsers that don't support this script (non IE5+/NS6+ browsers)
-//This script is tested to work in FF, IE, Safari, Chrome, but borks in Opera
-var iframehide="no"
-
-var getFFVersion=navigator.userAgent.substring(navigator.userAgent.indexOf("Firefox")).split("/")[1]
-var FFextraHeight=parseFloat(getFFVersion)>=0.1? 16 : 0 //extra height in px to add to iframe in FireFox 1.0+ browsers
-
-function resizeCaller() {
-var dyniframe=new Array()
-for (i=0; i<iframeids.length; i++){
-if (document.getElementById)
-resizeIframe(iframeids[i])
-//reveal iframe for lower end browsers? (see var above):
-if ((document.all || document.getElementById) && iframehide=="no"){
-var tempobj=document.all? document.all[iframeids[i]] : document.getElementById(iframeids[i])
-tempobj.style.display="block"
-}
-}
-}
-
-function resizeIframe(frameid){
-var currentfr=document.getElementById(frameid)
-if (currentfr && !window.opera){
-currentfr.style.display="block"
-if (currentfr.contentDocument && currentfr.contentDocument.body.offsetHeight) //ns6 syntax
-currentfr.height = currentfr.contentDocument.body.offsetHeight+FFextraHeight; 
-else if (currentfr.Document && currentfr.Document.body.scrollHeight) //ie5+ syntax
-currentfr.height = currentfr.Document.body.scrollHeight;
-if (currentfr.addEventListener)
-currentfr.addEventListener("load", readjustIframe, false)
-else if (currentfr.attachEvent){
-currentfr.detachEvent("onload", readjustIframe) // Bug fix line
-currentfr.attachEvent("onload", readjustIframe)
-}
-}
-}
-
-function readjustIframe(loadevt) {
-var crossevt=(window.event)? event : loadevt
-var iframeroot=(crossevt.currentTarget)? crossevt.currentTarget : crossevt.srcElement
-if (iframeroot)
-resizeIframe(iframeroot.id);
-}
-
-function loadintoIframe(iframeid, url){
-if (document.getElementById)
-document.getElementById(iframeid).src=url
-}
-
-if (window.addEventListener)
-window.addEventListener("load", resizeCaller, false)
-else if (window.attachEvent)
-window.attachEvent("onload", resizeCaller)
-else
-window.onload=resizeCaller
-
-if (Browser.Engine.presto) { //mootools 1.2 code to display Opera only message
-window.addEvent('domready', function(){
-$('noOpera').appendText('This script does not automatically resize the iframe in the Opera browser.');
-});
-};
-
-</script>
-EOW;
-
-    return $display;
-}
 ?>
