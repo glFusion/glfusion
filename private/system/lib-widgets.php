@@ -209,27 +209,25 @@ function WIDGET_autotranslations($header=0) {
                  'zh-TW' => 'Chinese Traditional',
             );
     asort($isoLang); //comment out this line to sort results by 2 digit language code instead of language names above
-	$retval = '';
-	if ($header) {
-	    $retval = '<h2>' . $LANG_WIDGETS['translate'] . '</h2>';
-	}
-	$retval .= '<div class="autotranslations"><ul>';
+    $retval = '';
+    if ($header) {
+        $retval = '<h2>' . $LANG_WIDGETS['translate'] . '</h2>';
+    }
+    $retval .= '<ul class="autotranslations">';
 
     foreach ($isoLang AS $key => $language ) {
-		$randID = rand();
+        $randID = rand();
         if ($key != $_CONF['iso_lang']) {
-        	$retval .= '<li><a href="http://translate.google.com/translate?';
-        	$retval .= 'hl=' . $key; // 2 character language code of google header bar (usually the same as tl below)
-        	$retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
-        	$retval .= '&amp;tl=' . $key; // 2 character language code to translate site into (usually should be the same as hl above)
-        	$retval .= '&amp;u=' . urlencode($_CONF['site_url'] . '?r=' . $randID); // address of your site appends a random string so Google won't cache the translated page
-        	$retval .= '">';
-        	$retval .= '<img src="' . $_CONF['site_url'] . '/images/translations/';
-        	$retval .= $key.'.png" alt="'.$language.'" title="'.$language.'"' . XHTML . '></a></li>';
+            $retval .= '<li class="sprite-' . $key . '"><a href="http://translate.google.com/translate?';
+            $retval .= 'hl=' . $key; // 2 character language code of google header bar (usually the same as tl below)
+            $retval .= '&amp;sl=' . $_CONF['rdf_language']; // default language of your site
+            $retval .= '&amp;tl=' . $key; // 2 character language code to translate site into (usually should be the same as hl above)
+            $retval .= '&amp;u=' . urlencode($_CONF['site_url'] . '?r=' . $randID); // address of your site appends a random string so Google won't cache the translated page
+            $retval .= '"><img src="' . $_CONF['site_url'] . '/images/speck.gif" alt="'.$language.'" title="'.$language.'"' . XHTML . '></a></li>';
         }
     }
-    $retval .= '</ul></div><div style="clear:left;"></div>';
-	return $retval;
+    $retval .= '</ul><div style="clear:left;"></div>';
+    return $retval;
 }
 
 // inserts the call to the javascript file, referencing the full path to gl_moospring.js
@@ -242,18 +240,18 @@ function WIDGET_moospring() {
 
 //Powers the gl_moorotator. It is here so that the blankimage reference can be built with the full site url
 function WIDGET_moorotator() {
-	global $_CONF, $LANG_WIDGETS;
+    global $_CONF, $LANG_WIDGETS;
 
-	$retval = '';
-	$retval = <<<EOR
+    $retval = '';
+    $retval = <<<EOR
 <script type="text/javascript">
 var gl_mooRotator=new Class({options:{controls:true,duration:1000,delay:5000,autoplay:false,blankimage:'{site_url}/images/speck.gif'},initialize:function(a,b){this.container=$(a);this.setOptions(b);this.images=this.container.getElements('.gl_moorotatorimage > img');this.content=this.container.getElements('.gl_moorotatortext');this.current=0;this.build();this.attachEvents();this.status='pause';if(this.options.autoplay)window.addEvent('load',this.play.bind(this));return this},build:function(){var b=this;$$(this.content,this.images).setStyle('position','absolute');var c=this.images.slice(1);var d=this.content.slice(1);c.each(function(a){a.injectAfter(this.images[0]).setStyle('opacity',0)},this);d.each(function(a){a.injectAfter(this.content[0]).setStyle('opacity',0)},this);var e=$$('.gl_moorotator').slice(1);e.each(function(a){a.empty().remove()});if(this.options.controls == 1){var f=new Element('div',{'class':'controls'}).inject(this.container);} else {var f=new Element('div',{'class':''}).inject(this.container);}this.arrowPrev=new Element('img',{'class':'control-prev','title':'{prev}','alt':'{prev}','src':this.options.blankimage}).inject(f);this.arrowPlay=new Element('img',{'id':'play-pause','class':'control-pause','title':'{playpause}','alt':'{playpause}','src':this.options.blankimage}).inject(f);this.arrowNext=new Element('img',{'class':'control-next','title':'{next}','alt':'{next}','src':this.options.blankimage}).inject(f);if(this.options.corners){(this.images.length).times(function(i){(2).times(function(j){new Element('div',{'class':'i'+(j+1)}).inject(this.images[i])}.bind(this))}.bind(this))}(4).times(function(i){new Element('div',{'class':'corner c'+(i+1)}).inject(this.content[0].getParent())}.bind(this));this.fx=[];(this.content.length).times(function(i){this.fx[i]=[new Fx.Style(this.images[i],'opacity',{duration:this.options.duration,onStart:function(){b.transitioning=true},onComplete:function(){b.transitioning=false}}),new Fx.Style(this.content[i],'opacity',{duration:this.options.duration})]}.bind(this));return this},attachEvents:function(){var a=this,playstop=$('play-pause');this.arrowPrev.addEvent('click',this.previous.bind(this));this.arrowNext.addEvent('click',this.next.bind(this));this.arrowPlay.addEvent('click',function(){if(a.status=='play'){a.stop();playstop.className='control-play'}else{a.play();playstop.className='control-pause'}});return this},previous:function(){if(this.transitioning)return this;var b=(!this.current)?this.content.length-1:this.current-1;this.fx[this.current].each(function(a){a.start(0)});this.fx[b].each(function(a){a.start(1)});this.current=b;return this},next:function(){if(this.transitioning)return this;var b=(this.current==this.content.length-1)?0:this.current+1;this.fx[this.current].each(function(a){a.start(0)});this.fx[b].each(function(a){a.start(1)});this.current=b;return this},play:function(){if(this.status=='play')return this;this.status='play';this.timer=this.next.periodical(this.options.delay+this.options.duration,this);return this},stop:function(){this.status='pause';\$clear(this.timer);return this}});gl_mooRotator.implement(new Events,new Options);</script>
 EOR;
-	$retval = str_replace('{site_url}',$_CONF['site_url'] , $retval);
+    $retval = str_replace('{site_url}',$_CONF['site_url'] , $retval);
     $retval = str_replace('{prev}',$LANG_WIDGETS['prev'] , $retval);
     $retval = str_replace('{next}',$LANG_WIDGETS['next'] , $retval);
     $retval = str_replace('{playpause}',$LANG_WIDGETS['playpause'] , $retval);
-	return $retval;
+    return $retval;
 }
 
 ?>
