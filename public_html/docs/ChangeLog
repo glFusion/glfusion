@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.7 svn
 ----------
+- autotranslations block now uses an image sprite (Eric)
 - Tweak SWFUploader to now allow display of thumbnails and allow adding
   title and description (Mark)
 - Ensure multiple header() calls are not made when site error occurs (Mark)

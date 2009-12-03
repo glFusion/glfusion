@@ -2564,20 +2564,59 @@ padding:4px 8px 8px;
 }
 
 /* Auto Translations css */
-.autotranslations ul {
+.autotranslations {
 list-style-image:none;
 list-style-position:outside;
 list-style-type:none;
-margin-left:-7px;
 padding:0;
 width:160px;
 display:block;
 }
-.autotranslations ul li {
+.autotranslations li {
 float:left;
-padding:3px 3px 0;
+margin:0 5px 5px 0;
+background:url(images/translations/sprite-flags.png) no-repeat top left;
+width:16px;
+height:11px;
 }
-
+.autotranslations li.sprite-ar { background-position: 0 0; }
+.autotranslations li.sprite-bg { background-position: 0 -12px; }
+.autotranslations li.sprite-ca { background-position: 0 -24px; }
+.autotranslations li.sprite-cs { background-position: 0 -36px; }
+.autotranslations li.sprite-da { background-position: 0 -48px; }
+.autotranslations li.sprite-de { background-position: 0 -60px; }
+.autotranslations li.sprite-el { background-position: 0 -72px; }
+.autotranslations li.sprite-en { background-position: 0 -84px; }
+.autotranslations li.sprite-es { background-position: 0 -96px; }
+.autotranslations li.sprite-fi { background-position: 0 -108px; }
+.autotranslations li.sprite-fr { background-position: 0 -120px; }
+.autotranslations li.sprite-hi { background-position: 0 -132px; }
+.autotranslations li.sprite-hr { background-position: 0 -144px; }
+.autotranslations li.sprite-id { background-position: 0 -156px; }
+.autotranslations li.sprite-it { background-position: 0 -168px; }
+.autotranslations li.sprite-iw { background-position: 0 -180px; }
+.autotranslations li.sprite-ja { background-position: 0 -192px; }
+.autotranslations li.sprite-ko { background-position: 0 -204px; }
+.autotranslations li.sprite-lt { background-position: 0 -216px; }
+.autotranslations li.sprite-lv { background-position: 0 -228px; }
+.autotranslations li.sprite-nl { background-position: 0 -240px; }
+.autotranslations li.sprite-no { background-position: 0 -252px; }
+.autotranslations li.sprite-pl { background-position: 0 -264px; }
+.autotranslations li.sprite-pt { background-position: 0 -276px; }
+.autotranslations li.sprite-ro { background-position: 0 -288px; }
+.autotranslations li.sprite-ru { background-position: 0 -300px; }
+.autotranslations li.sprite-sk { background-position: 0 -312px; }
+.autotranslations li.sprite-sl { background-position: 0 -324px; }
+.autotranslations li.sprite-sr { background-position: 0 -336px; }
+.autotranslations li.sprite-sv { background-position: 0 -348px; }
+.autotranslations li.sprite-tl { background-position: 0 -360px; }
+.autotranslations li.sprite-uk { background-position: 0 -372px; }
+.autotranslations li.sprite-vi { background-position: 0 -384px; }
+.autotranslations li.sprite-zh-CN, .autotranslations li.sprite-zh-TW { background-position: 0 -396px; }
+.autotranslations img {
+height:11px;
+width:16px;
+}
 .signature {
   overflow:hidden;
   width: 500px;
