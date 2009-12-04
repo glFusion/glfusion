@@ -85,7 +85,8 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
     $commentbar->set_var( 'lang_reply', $LANG01[60] );
     $commentbar->set_var( 'lang_disclaimer', $LANG01[26] );
 
-    if( $ccode == 0 ) {
+    if( $ccode == 0 &&
+     ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
         $commentbar->set_var( 'reply_hidden_or_submit', 'submit' );
     } else {
         $commentbar->set_var( 'reply_hidden_or_submit', 'hidden' );
@@ -234,7 +235,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
     $template->set_var( 'lang_permlink', $LANG01[120] );
     $template->set_var( 'order', $order );
 
-    if( $ccode == 0 ) {
+    if( $ccode == 0 &&
+     ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
+//    if( $ccode == 0 ) {
         $template->set_var( 'lang_replytothis', $LANG01[43] );
         $template->set_var( 'lang_reply', $LANG01[25] );
     } else {
@@ -409,9 +412,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                     $ccode == 0 &&
                     DB_getItem($_TABLES['comments'], 'COUNT(*)', "pid = ".intval($A['cid'])) == 0) {
                 $edit_option = true;
-                if ( empty($token)) {
-                    $token = SEC_createToken();
-                }
             } else if (SEC_inGroup('Root') ) {
                 $edit_option = true;
             } else {
@@ -423,6 +423,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         //edit link
         if ($edit_option) {
+            if ( empty($token)) {
+                $token = SEC_createToken();
+            }
             $editlink = $_CONF['site_url'] . '/comment.php?mode=edit&amp;cid='
                 . $A['cid'] . '&amp;sid=' . $A['sid'] . '&amp;type=' . $type
                 . '&amp;' . CSRF_TOKEN . '=' . $token;
@@ -490,7 +493,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         // create a reply to link
         $reply_link = '';
-        if( $ccode == 0 ) {
+        if( $ccode == 0 &&
+         ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
+//        if( $ccode == 0 ) {
             $reply_link = $_CONF['site_url'] . '/comment.php?sid=' . $A['sid']
                         . '&amp;pid=' . $A['cid'] . '&amp;title='
                         . urlencode($A['title']) . '&amp;type=' . $A['type'];
