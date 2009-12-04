@@ -52,9 +52,6 @@ if (!defined ('GVERSION')) {
 // | glFusion code                                                             |
 // +---------------------------------------------------------------------------+
 
-$_TABLES['rating'] = $_DB_table_prefix . 'rating';
-$_TABLES['rating_votes'] = $_DB_table_prefix . 'rating_votes';
-
 $_TABLES['access']              = $_DB_table_prefix . 'access';
 $_TABLES['article_images']      = $_DB_table_prefix . 'article_images';
 $_TABLES['blocks']              = $_DB_table_prefix . 'blocks';
@@ -74,6 +71,8 @@ $_TABLES['maillist']            = $_DB_table_prefix . 'maillist';
 $_TABLES['pingservice']         = $_DB_table_prefix . 'pingservice';
 $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 $_TABLES['postmodes']           = $_DB_table_prefix . 'postmodes';
+$_TABLES['rating']              = $_DB_table_prefix . 'rating';
+$_TABLES['rating_votes']        = $_DB_table_prefix . 'rating_votes';
 $_TABLES['sessions']            = $_DB_table_prefix . 'sessions';
 $_TABLES['sortcodes']           = $_DB_table_prefix . 'sortcodes';
 $_TABLES['speedlimit']          = $_DB_table_prefix . 'speedlimit';
