@@ -57,9 +57,11 @@ if( $_MG_CONF['verbose'] ) {
 $_USER = SESS_getUserDataFromId( $uid );
 if( $_USER['error'] == '1' ) {
     COM_errorLog( 'SWFUpload: User identified by uid=' . $uid . ' not found.', 1 );
+    echo $LANG_MG01['swfupload_err_session'];
     exit (0);
 } elseif(!isset($_USER['uid']) || $_USER['uid'] < 2 ) {
     COM_errorLog( 'SWFUpload: Anonymous upload rejection.', 1 );
+    echo 'Anonymous upload rejected';
     exit(0);
 }
 
