@@ -304,6 +304,15 @@ function PLG_uninstall ($type)
         }
         COM_errorLog ('...success', 1);
 
+        // remove any rating data for the plugin
+
+        COM_errorLog ("Attempting to remove rating table records for type: $type", 1);
+
+        DB_query("DELETE FROM {$_TABLES['rating']} WHERE type='".$type."'");
+        DB_query("DELETE FROM {$_TABLES['rating_votes']} WHERE type='".$type."'");
+
+        COM_errorLog ('...success', 1);
+
         // uninstall the plugin
         COM_errorLog ("Attempting to unregister the $type plugin from glFusion", 1);
         DB_delete($_TABLES['plugins'], 'pi_name', $type);
