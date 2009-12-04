@@ -464,7 +464,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         COM_errorLog("Size of MG_albums()=" . $sizeofalbums );
         COM_errorLog("UID=" . $_USER['uid']);
         COM_errorLog("album access=" . $MG_albums[$albums]->access );
-        COM_errorLog("album owner_id=" . $MG_albums[0]->owner_id );
+        COM_errorLog("album owner_id=" . $MG_albums[$albums]->owner_id );
         COM_errorLog("member_uploads=" . $MG_albums[$albums]->member_uploads );
     }
 
