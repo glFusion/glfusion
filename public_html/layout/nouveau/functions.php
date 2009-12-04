@@ -82,4 +82,18 @@ function theme_themeJS() {
 
     return($js);
 }
+
+
+function theme_themeCSS() {
+    global $_CONF;
+
+    $css = array();
+// uncomment the line below to add additional css files to the theme's css blob
+// NOTE: order here is order added to the blob, and files below come before theme's base style.css
+// MAKE SURE TO CLEAR BROWSER & C.T.L. CACHE when activating/deactivating
+//    $css[] = $_CONF['path_layout'] .'foo.css';
+//    $css[] = $_CONF['path_layout'] .'more-foo.css';
+
+    return($css);
+}
 ?>

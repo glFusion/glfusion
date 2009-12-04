@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2
 ----------
+- Added ability for theme to add to css blob (Eric)
 - Added {!!autotag ..} feature to template class (Mark)
 - Update BB2 to v2.0.32 (Mark)
 - Update CAPTCHA to v3.2.4 (Mark/Mark)
@@ -15,6 +16,15 @@ v1.2
 
 v1.1.7 svn
 ----------
+- autotranslations block now uses an image sprite (Eric)
+- Tweak SWFUploader to now allow display of thumbnails and allow adding
+  title and description (Mark)
+- Ensure multiple header() calls are not made when site error occurs (Mark)
+- Media Gallery: Remove jUpload and replace with Flash-based uploader (Mark H.)
+- Media Gallery: Batch caption edit did not call PLG_itemSaved()
+- Added cancel confirmation to forum post cancel.
+- Implemented timerconfigclass.class.php (ported from Geeklog v1.6.1)
+- Implemented polls auto tags (ported from Geeklog v1.6.1)
 - Implemented 4 new template vars for articles to allow plugins additional
   integration opportunities: (Mark)
     - plugin_icon_vars

@@ -7514,6 +7514,21 @@ function css_out(){
 
     $files   = array();
 
+    /*
+     * Check to see if the theme has any css to include...
+     */
+
+    $function = 'theme_themeCSS';
+
+    if( function_exists( $function )) {
+        $cssTheme = $function( );
+        if ( is_array($cssTheme) ) {
+            foreach($cssTheme AS $item => $file) {
+                $files[] = $file;
+            }
+        }
+    }
+
     // Merge the default CSS with whatever is in custom ...
     $files[] = $_CONF['path_layout'] . 'style.css';
     if ( file_exists($_CONF['path_layout'] .'custom/style.css') ) {
