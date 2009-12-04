@@ -402,6 +402,7 @@ $LANG_MG01 = array (
     'swfupload_err_filetype'    => 'File is invalid type',
     'swfupload_err_general'     => 'File upload error',
     'swfupload_err_album_id'    => 'Unable to determine destination album',
+    'swfupload_err_session'     => 'Session information unavailable - Please reload the page',
     'swfupload_uploading'       => 'Uploading..',
     'swfupload_complete'        => 'Complete',
     'swfupload_error'           => 'Upload Error:',
