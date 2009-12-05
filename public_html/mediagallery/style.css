@@ -391,6 +391,11 @@
   margin: 10px 0 10px 5px;
   display: none;
 }
+#divSWFThumbnails {
+  border-top: 1px solid;
+  border-top-color: #D9E4FF;
+  display: none;
+}
 
 #fsUploadProgress.fieldset {
   border:  1px solid #afe14c;

@@ -441,7 +441,7 @@ function uploadSuccess(file, serverData) {
         var progress = new FileProgress(file, this.customSettings.progressTarget);
         progress.setComplete();
         if (serverData.substring(0, 7) === "FILEID:") {
-    	    addImage("{site_url}/mediagallery/thumbnail.php?id=" + serverData.substring(7),serverData.substring(7));
+    	    addImage("{site_url}/mediagallery/thumbnail.php?id=" + serverData.substring(7),serverData.substring(7), file.name );
     	    progress.setStatus("{swfupload_complete}.");
     	    progress.toggleCancel(false);
     	} else {
@@ -454,30 +454,29 @@ function uploadSuccess(file, serverData) {
     }
 }
 
-function addImage(src, id) {
-	var newImg   = document.createElement("img");
+function addImage(src, id, filename ) {
+    var newImg   = document.createElement("img");
     var imgDiv   = document.createElement("div");
     var newDiv   = document.createElement("div");
     var inputDiv = document.createElement("div");
     var clrDiv   = document.createElement("div");
 
-	imgDiv.style.float = "left";
 
-	newImg.style.margin = "5px";
-	newImg.style.align = "center";
+    newImg.style.margin = "auto";
+    newImg.style.display = "block";
 
-	imgDiv.appendChild(newImg);
 
-    imgDiv.setAttribute('style','float:left;width:210px');
+    imgDiv.setAttribute('style','float:left;width:210px;height:220px;text-align:center;margin-right:5px;');
     inputDiv.setAttribute('style','float:left');
 
+    imgDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">' + filename + '</span>';
     inputDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[title]}</span><br /><textarea rows="2" cols="60" name="media_title[]" style="width:80%;"></textarea><br /><span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[description]}</span><br /><textarea rows="2" cols="60" name="media_desc[]" style="width:80%;"></textarea><input type="hidden" name="media_id[]" value="' + id + '" />';
 
-    clrDiv.setAttribute('style','clear:both');
-    clrDiv.innerHTML = '<hr />';
+    clrDiv.setAttribute('style','clear:both;border-bottom:1px solid;border-bottom-color:#D9E4FF;margin-bottom:5px;');
 
 	newDiv.appendChild(imgDiv);
 	newDiv.appendChild(inputDiv);
+	imgDiv.appendChild(newImg);
 
 	document.getElementById("thumbnails").appendChild(newDiv);
 	document.getElementById("thumbnails").appendChild(clrDiv);
@@ -591,21 +590,19 @@ function uploadComplete(file) {
 
 // This event comes from the Queue Plugin
 function queueComplete(numFilesUploaded) {
-/* --------
+
     var status = document.getElementById("divSWFUploadStatus");
-	var files = document.getElementById("divSWFUploadStatusFiles");
-	var buttons = document.getElementById("divSWFUploadButtons");
+    var files = document.getElementById("divSWFUploadStatusFiles");
+    var thumbnails = document.getElementById("divSWFThumbnails");
 
     files.innerHTML = numFilesUploaded + (numFilesUploaded === 1 ? " {swfupload_file}" : " {swfupload_files}") + " {swfupload_uploaded}.";
 	if (numFilesUploaded > 0) {
         status.style.display = "block";
-		buttons.style.display = "none";
+        thumbnails.style.display="block";
 	} else {
 		status.style.display = "none";
-		buttons.style.display = "block";
+                thumbnails.style.display = "none";
 	}
---------- */
-
 }
 
 /* this is where all of the exciting things happen */
@@ -727,9 +724,6 @@ function onAlbumChange() {
       </div>
       <div id="divSWFUploadStatus">
         <span id="divSWFUploadStatusFiles">0 {sfwupload_files} {swfupload_uploaded}</span>
-        <span id="continueButtonPlaceHolder">
-          <input id="btnContinue" type="button" value="{swfupload_continue}" style="margin-left: 2px; height: 22px; font-size: 8pt; border-width: 1px; margin-bottom: 10px; padding: 2px 3px;" onclick="forms['jumpbox'].submit()" />
-        </span>
       </div>
       <div id="divSWFUploadButtons">
         <span id="spanButtonPlaceholder"></span>
@@ -756,19 +750,20 @@ function onAlbumChange() {
       {swfupload_didnt_load}
     </div>
 
-  </form>
-
-    <form name="captions" method="post" action="{site_url}/mediagallery/admin.php?album_id=0">
-
-	<div id="thumbnails" style="vertical-align:middle;"></div>
-
-    <div style="clear:both;"></div>
-
-    <input type="hidden" name="action" value="batchcaptionsave" />
-    <input type="submit" name="mode"   value="{$LANG_MG01[save_exit]}" />
-
     </form>
 
+    <div id="divSWFThumbnails">
+      <form name="captions" method="post" action="{site_url}/mediagallery/admin.php?album_id=0">
+
+    	<div id="thumbnails" style="vertical-align:middle;"></div>
+
+        <div style="clear:both;"></div>
+
+        <input type="hidden" name="action" value="batchcaptionsave" />
+        <input type="submit" name="mode"   value="{$LANG_MG01[save_exit]}" />
+
+      </form>
+    </div>
 </div>
 <hr />
 <div style="float:right;">{jumpbox}</div>
