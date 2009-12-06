@@ -340,6 +340,8 @@ CREATE TABLE {$_TABLES['stories']} (
   introtext text,
   bodytext text,
   hits mediumint(8) unsigned NOT NULL default '0',
+  rating float NOT NULL DEFAULT '0',
+  votes int(11) NOT NULL DEFAULT '0',
   numemails mediumint(8) unsigned NOT NULL default '0',
   comments mediumint(8) unsigned NOT NULL default '0',
   comment_expire datetime NOT NULL default '0000-00-00 00:00:00',
