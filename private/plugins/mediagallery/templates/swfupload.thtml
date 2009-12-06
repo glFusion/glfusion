@@ -583,6 +583,7 @@ function uploadError(file, errorCode, message) {
 }
 
 function uploadComplete(file) {
+        document.getElementById("divSWFThumbnails").style.display = "block";
         if (this.getStats().files_queued === 0) {
                 document.getElementById(this.customSettings.cancelButtonId).disabled = true;
         }
@@ -593,15 +594,12 @@ function queueComplete(numFilesUploaded) {
 
     var status = document.getElementById("divSWFUploadStatus");
     var files = document.getElementById("divSWFUploadStatusFiles");
-    var thumbnails = document.getElementById("divSWFThumbnails");
 
     files.innerHTML = numFilesUploaded + (numFilesUploaded === 1 ? " {swfupload_file}" : " {swfupload_files}") + " {swfupload_uploaded}.";
 	if (numFilesUploaded > 0) {
         status.style.display = "block";
-        thumbnails.style.display="block";
 	} else {
 		status.style.display = "none";
-                thumbnails.style.display = "none";
 	}
 }
 
