@@ -6,7 +6,7 @@
         {services}
         <label for="passwd">{lang_password}:</label><br{xhtml}>
         <input type="password" size="10" name="passwd" id="passwd"{xhtml}><br{xhtml}>
-        <input type="submit" value="{lang_login}"{xhtml}>
+        <input style="margin-top:.5em;" type="submit" value="{lang_login}"{xhtml}>
     </div>
 </form>
 <p>{lang_signup}<br{xhtml}>
