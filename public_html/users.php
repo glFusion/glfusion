@@ -532,7 +532,7 @@ function createuser ($username, $email, $email_conf)
 
     $retval = '';
 
-    $username   = COM_truncate(trim ($username),16);
+    $username   = COM_truncate(trim ($username),48);
     $email      = COM_truncate(trim ($email),96);
     $email_conf = trim ($email_conf);
 
@@ -542,7 +542,7 @@ function createuser ($username, $email, $email_conf)
 
     if (COM_isEmail ($email) && !empty ($username) && ($email === $email_conf)
             && !USER_emailMatches ($email, $_CONF['disallow_domains'])
-            && (strlen ($username) <= 16)) {
+            && (strlen ($username) <= 48)) {
 
         $ucount = DB_count ($_TABLES['users'], 'username',
                             addslashes ($username));
@@ -615,7 +615,7 @@ function createuser ($username, $email, $email_conf)
         $retval .= COM_siteFooter();
     } else { // invalid username or email address
 
-        if ((empty ($username)) || (strlen($username) > 16)) {
+        if ((empty ($username)) || (strlen($username) > 48)) {
             $msg = $LANG01[32]; // invalid username
         } else {
             $msg = $LANG04[18]; // invalid email address
