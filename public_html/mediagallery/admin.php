@@ -77,6 +77,7 @@ function MG_navbar($selected='',$album_id) {
     if (SEC_hasRights('mediagallery.admin') ) {
         $navbar->add_menuitem($LANG_MG01['ftp_media'],$_MG_CONF['site_url'] .'/admin.php?mode=import&amp;album_id='  . $album_id);
     }
+    $navbar->add_menuitem($LANG_MG01['remote_media'],$_MG_CONF['site_url'] . '/admin.php?mode=remote&amp;album_id=' . $album_id);
 
     $navbar->set_selected($selected);
     $retval .= $navbar->generate();
