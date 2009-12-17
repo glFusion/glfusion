@@ -150,6 +150,7 @@ require_once $_CONF['path_system'] . 'classes/htmlfilter.class.php';
 require_once $_CONF['path_system'] . 'classes/sanitize.class.php';
 $inputHandler =& sanitize::getInstance();
 
+require_once $_CONF['path_system'] . 'lib-io.php';
 // +--------------------------------------------------------------------------+
 // | Library Includes                                                         |
 // +--------------------------------------------------------------------------+
