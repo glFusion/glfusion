@@ -63,6 +63,8 @@ $LANG_POLLS = array(
     'upgrade1' => 'アンケートプラグインの新しいバージョンがインストールされました。',
     'upgrade2' => 'アップグレードしてください。',
     'editinstructions' => 'アンケートIDを入力してください。少なくとも1つの質問と2つの回答を用意してください。',
+    'pollclosed' => 'This poll is closed for voting.',
+    'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
     'start_poll' => 'Start Poll'
 );
 

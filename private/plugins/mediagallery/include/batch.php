@@ -563,8 +563,8 @@ function MG_deleteChildAlbums( $album_id ){
             $row = DB_fetchArray( $result );
             if ( $row['count'] <= 1 ) {
                 foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                    @unlink($_MG_CONF['path_mediaobjects'] . 'tn/'   . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
-                    @unlink($_MG_CONF['path_mediaobjects'] . 'disp/' . $row['media_filename'][0] .'/' . $row['media_filename'] . $ext);
+                    @unlink($_MG_CONF['path_mediaobjects'] . 'tn/'   . $mediarow[$i]['media_filename'][0] .'/' . $mediarow[$i]['media_filename'] . $ext);
+                    @unlink($_MG_CONF['path_mediaobjects'] . 'disp/' . $mediarow[$i]['media_filename'][0] .'/' . $mediarow[$i]['media_filename'] . $ext);
                 }
                 @unlink($_MG_CONF['path_mediaobjects'] . 'orig/' . $mediarow[$i]['media_filename'][0] .'/' . $mediarow[$i]['media_filename'] . '.' . $mediarow[$i]['media_mime_ext']);
                 $sql = "DELETE FROM " . $_TABLES['mg_media'] . "  WHERE media_id = '" . $mediarow[$i]['media_id'] . "'";

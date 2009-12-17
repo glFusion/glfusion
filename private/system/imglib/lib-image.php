@@ -118,6 +118,15 @@ function IMG_getMediaMetaData( $filename ) {
         COM_errorLog("IMG_getMediaMetaData: getID3 analyzing file: " . $filename);
         COM_errorLog("IMG_getMediaMetaData: getID3 found mime_type: " . $ThisFileInfo['mime_type']);
     }
+
+    if ( isset($ThisFileInfo['error']) ) {
+        if ( is_array($ThisFileInfo['error']) ) {
+            foreach ($ThisFileInfo['error'] AS $error ) {
+                COM_errorLog("IMG_getMediaMetaData: " . $error);
+            }
+        }
+    }
+
     /*
      * Check to see if we failed on getting the mime type and do the additional checks here
      */

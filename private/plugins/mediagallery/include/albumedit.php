@@ -119,7 +119,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         // If edit, pull up the existing album information...
 
         if ($MG_albums[$album_id]->access != 3 ) {
-            COM_errorLog("MediaGallery: Someone has tried to illegally edit a Medig Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+            COM_errorLog("MediaGallery: Someone has tried to illegally edit a Media Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         }
     } else if ($album_id==0 && $mode == 'create') {

@@ -38,7 +38,252 @@ require_once $_CONF['path'].'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/sort.php';
 
 /**
-* User upload form
+* Set content type based upon file extension
+*
+* @param    string      filename    filename to check
+* @param    string      default     default type to set
+* @return   string      filetype    mime type of content based upon extension
+*
+* if the type cannot be determined from the extension because the extension is
+* not known, then the default value is returned (even if null)
+*
+*/
+function MG_getFileTypeFromExt( $filename, $default='' ) {
+        $file_ext = strtolower(substr(strrchr($filename,'.'),1));
+        //This will set the Content-Type to the appropriate setting for the file
+        switch( $file_ext ) {
+            case 'exe':
+                $filetype='application/octet-stream';
+                break;
+            case 'zip':
+                $filetype='application/zip';
+                break;
+            case 'mp3':
+                $filetype='audio/mpeg';
+                break;
+            case 'mpg':
+                $filetype='video/mpeg';
+                break;
+            case 'avi':
+                $filetype='video/x-msvideo';
+                break;
+            case 'tga' :
+                $filetype='image/tga';
+                break;
+            case 'psd' :
+                $filetype='image/psd';
+                break;
+            default :
+                $filetype='';
+                break;
+        }
+        if( !empty($filetype) ) {
+            return $filetype;
+        } else {
+            return $default;
+        }
+}
+
+/**
+* Flash upload form
+*
+* @param    int     album_id    album_id upload media
+* @return   string              HTML
+*
+*/
+function MG_SWFUpload( $album_id ) {
+    global $album_jumpbox, $album_selectbox, $MG_albums, $_FILES, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $_POST;
+
+    $retval = '';
+    $valid_albums = 0;
+
+    $level = 0;
+    $select = $album_id;
+
+    if( $_MG_CONF['verbose'] ) {
+        COM_errorLog( '***Inside MG_SWFUpload()***' );
+    }
+
+    // construct the album selectbox ...
+    $album_selectbox  = '<select name="album_id" onChange="onAlbumChange()">';
+    $valid_albums += $MG_albums[0]->buildAlbumBox($select,3,-1,'upload');
+    $album_selectbox .= '</select>';
+
+    // construct the album jumpbox...
+    $level = 0;
+    $album_jumpbox = '<form name="jumpbox" action="' . $_MG_CONF['site_url'] . '/album.php' . '" method="get" style="margin:0;padding:0">';
+    $album_jumpbox .= $LANG_MG03['jump_to'] . ':&nbsp;<select name="aid" onChange="forms[\'jumpbox\'].submit()">';
+    $MG_albums[0]->buildJumpBox($album_id);
+    $album_jumpbox .= '</select>';
+    $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"' . XHTML . '>';
+    $album_jumpbox .= '<input type="hidden" name="page" value="1">';
+    $album_jumpbox .= '</form>';
+
+    // tell the flash uploader what the maximum file size can be.
+    $file_size_limit = MG_getUploadLimit( $album_id ) . ' B';
+    if( $_MG_CONF['verbose'] ) COM_errorLog( 'file_size_limit=' . $file_size_limit );
+
+    // determine the valid filetypes for the current album
+    $allowed_file_types = MG_getValidFileTypes( $album_id );
+    if ( $_MG_CONF['verbose'] ) COM_errorLog( 'allowed_file_types=' . $allowed_file_types );
+
+    // the flash uploader does not play nice with cookies, therefore we need to pass the uid
+    // and a token to use as a second authentication factor.  let's make the token good for 4 hours
+    // if the token expires, then the user will have to visit the swfupload page again, but
+    // unfortunately because the upload handler runs in the background, there is really no way
+    // to inform the users that the upload(s) failed (yet).
+
+    $user_id = $_USER['uid'];
+    $user_token = SEC_createTokenGeneral( 'swfupload', 14400 );
+
+    $T = new Template( MG_getTemplatePath($album_id) );
+    $T->set_file ('mupload','swfupload.thtml');
+    $T->set_var(array(
+        'site_url'                  => $_CONF['site_url'],
+        'album_id'                  => $album_id,
+        'album_select'              => $album_selectbox,
+        'jumpbox'                   => $album_jumpbox,
+        'lang_destination'          => $LANG_MG01['destination_album'],
+        'upload_url'                => 'swfupload/swfupload.php',
+        'flash_url'                 => 'swfupload/swfupload.swf',
+        'user_id'                   => $user_id,
+        'user_token'                => $user_token,
+        'swfupload_usage'           => $LANG_MG01['swfupload_usage'],
+        'swfupload_allowed_types'   => $LANG_MG01['swfupload_allowed_types'],
+        'swfupload_file_types'      => $allowed_file_types,
+        'swfupload_file_size_limit' => $LANG_MG01['swfupload_file_size_limit'],
+        'swfupload_size_limit'      => $file_size_limit,
+        'swfupload_pending'         => $LANG_MG01['swfupload_pending'],
+        'swfupload_q_too_many'      => $LANG_MG01['swfupload_q_too_many'],
+        'sfwupload_q_limit'         => $LANG_MG01['swfupload_q_limit'],
+        'swfupload_q_select'        => $LANG_MG01['swfupload_q_select'],
+        'swfupload_q_up_to'         => $LANG_MG01['swfupload_q_up_to'],
+        'swfupload_files'           => $LANG_MG01['swfupload_files'],
+        'swfupload_one_file'        => $LANG_MG01['swfupload_one_file'],
+        'swfupload_err_filesize'    => $LANG_MG01['swfupload_err_filesize'],
+        'swfupload_err_zerosize'    => $LANG_MG01['swfupload_err_zerosize'],
+        'swfupload_err_filetype'    => $LANG_MG01['swfupload_err_filetype'],
+        'swfupload_err_general'     => $LANG_MG01['swfupload_err_general'],
+        'swfupload_uploading'       => $LANG_MG01['swfupload_uploading'],
+        'swfupload_complete'        => $LANG_MG01['swfupload_complete'],
+        'swfupload_error'           => $LANG_MG01['swfupload_error'],
+        'swfupload_failed'          => $LANG_MG01['swfupload_failed'],
+        'swfupload_io_error'        => $LANG_MG01['swfupload_io_error'],
+        'swfupload_sec_error'       => $LANG_MG01['swfupload_sec_error'],
+        'swfupload_limit_exceeded'  => $LANG_MG01['swfupload_limit_exceeded'],
+        'swfupload_fail_validation' => $LANG_MG01['swfupload_fail_validation'],
+        'swfupload_cancelled'       => $LANG_MG01['swfupload_cancelled'],
+        'swfupload_stopped'         => $LANG_MG01['swfupload_stopped'],
+        'swfupload_unhandled'       => $LANG_MG01['swfupload_unhandled'],
+        'swfupload_file'            => $LANG_MG01['swfupload_file'],
+        'swfupload_uploaded'        => $LANG_MG01['swfupload_uploaded'],
+        'swfupload_types_desc'      => $LANG_MG01['swfupload_types_desc'],
+        'swfupload_queue'           => $LANG_MG01['swfupload_queue'],
+        'swfupload_continue'        => $LANG_MG01['swfupload_continue'],
+        'swfupload_cancel_all'      => $LANG_MG01['swfupload_cancel_all'],
+        'swfupload_noscript'        => $LANG_MG01['swfupload_noscript'],
+        'swfupload_is_loading'      => $LANG_MG01['swfupload_is_loading'],
+        'swfupload_not_loading'     => $LANG_MG01['swfupload_not_loading'],
+        'swfupload_didnt_load'      => $LANG_MG01['swfupload_didnt_load'],
+
+    ));
+
+    $T->parse('output', 'mupload');
+    $retval .= $T->finish($T->get_var('output'));
+    return $retval;
+
+}
+
+/**
+* Save flash upload(s)
+*
+* @param    int     album_id    album_id save uploaded media
+* @return   string              HTML
+*
+*/function MG_saveSWFUpload( $album_id ) {
+    global $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $new_media_id;
+
+    $statusMsg = '';
+    $file = array();
+    $file = $_FILES;
+    $albums = $album_id;
+
+    if( $_MG_CONF['verbose'] ) {
+        COM_errorLog( '*** Inside MG_saveSWFUpload()***' );
+        COM_errorLog( 'uploading to album_id=' . $albums );
+        COM_errorLog("album owner_id=" . $MG_albums[0]->owner_id );
+    }
+
+    if ( !isset( $MG_albums[$albums]->id ) || $albums == 0 ) {
+        COM_errorLog( 'MediaGallery: SWFUpload was unable to determine album id' );
+        return $LANG_MG01['swfupload_err_album_id'];
+    }
+
+    $successfull_upload = 0;
+
+    foreach ($file as $tagname=>$object) {
+        $filename   = $object['name'];
+        $filetype   = $object['type'];
+        $filesize   = $object['size'];
+        $filetmp    = $object['tmp_name'];
+        $error      = $object['error'];
+        $caption     = '';
+        $description = '';
+        $attachtn    = '';
+        $thumbnail   = '';
+
+        if( $_MG_CONF['verbose'] ) {
+            COM_errorLog( 'filename=' . $filename, 1 );
+            COM_errorLog( 'filesize=' . $filesize, 1 );
+            COM_errorLog( 'filetype=' . $filetype, 1 );
+            COM_errorLog( 'filetmp=' . $filetmp, 1 );
+            COM_errorLog( 'error=' . $error, 1 );
+        }
+
+        // we need to move the max filesize stuff to the flash uploader
+        if ( $MG_albums[$album_id]->max_filesize != 0 && $filesize > $MG_albums[$album_id]->max_filesize ) {
+            COM_errorLog('MediaGallery: File ' . $filename . ' exceeds maximum allowed filesize for this album');
+            COM_errorLog('MediaGallery: Max filesize for this album=' . $MG_albums[$album_id]->max_filesize );
+            $tmpmsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'], $filename);
+            return $tmpmsg;
+        }
+
+        $attach_tn = 0;
+
+        // override the determination for some filetypes
+        $filetype = MG_getFileTypeFromExt( $filename, $filetype );
+
+        // process the uploaded file(s)
+        list($rc,$msg) = MG_getFile( $filetmp, $filename, $albums, $caption, $description, 1, 0, $filetype, $attach_tn, $thumbnail,'',0,0,0 );
+        if ( $rc == true ) {
+            $successfull_upload++;
+        } else {
+            COM_errorLog( 'MG_saveSWFUpload error: ' . $msg, 1 );
+            return $msg;
+        }
+    }
+
+    if ( $successfull_upload ) {
+        MG_notifyModerators($albums);
+    }
+
+    // failsafe check - after all the uploading is done, double check that the database counts
+    // equal the actual count of items shown in the database, if not, fix the counts and log
+    // the error
+
+    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',intval($album_id));
+    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".intval($album_id));
+    if ( $dbCount != $aCount) {
+        DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .
+                 " WHERE album_id=" . intval($album_id) );
+        COM_errorLog("MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
+    }
+    MG_SortMedia( $album_id );
+
+    return 'FILEID:'.$new_media_id;
+}
+/**
+* Browser upload form
 *
 * @param    int     album_id    album_id upload media
 * @return   string              HTML
@@ -136,7 +381,7 @@ function MG_userUpload( $album_id ) {
 }
 
 /**
-* Save user uploads
+* Save browser upload(s)
 *
 * @param    int     album_id    album_id save uploaded media
 * @return   string              HTML
@@ -240,33 +485,10 @@ function MG_saveUserUpload( $album_id ) {
             }
         }
 
-       $file_extension = strtolower(substr(strrchr($filename,"."),1));
-        //This will set the Content-Type to the appropriate setting for the file
-        switch( $file_extension ) {
-            case "exe":
-                $filetype="application/octet-stream";
-                break;
-            case "zip":
-                $filetype="application/zip";
-                break;
-            case "mp3":
-                $filetype="audio/mpeg";
-                break;
-            case "mpg":
-                $filetype="video/mpeg";
-                break;
-            case "avi":
-                $filetype="video/x-msvideo";
-                break;
-            case "tga" :
-                $filetype="image/tga";
-                break;
-            case "psd" :
-                $filetype="image/psd";
-                break;
-            default :
-                break;
-        }
+        // override the determination for some filetypes
+        $filetype = MG_getFileTypeFromExt( $filename, $filetype );
+
+        // process the uploaded files
         list($rc,$msg) = MG_getFile( $filetmp, $filename, $albums, $caption, $description, 1, 0, $filetype, $attach_tn, $thumbnail, $keywords, $category, $dnc,0 );
         $statusMsg .= $filename . " " . $msg . '<br' . XHTML . '>';
         if ( $rc == true ) {
@@ -304,192 +526,7 @@ function MG_saveUserUpload( $album_id ) {
     return $retval;
 }
 
-function MG_return_bytes($val) {
-   $val  = trim($val);
-   $last = strtolower($val{strlen($val)-1});
-   switch($last) {
-       // The 'G' modifier is available since PHP 5.1.0
-       case 'g':
-           $val *= 1024;
-       case 'm':
-           $val *= 1024;
-       case 'k':
-           $val *= 1024;
-   }
-   return $val;
-}
 
-
-function MG_jupload( $album_id ) {
-    global $album_jumpbox, $album_selectbox, $MG_albums, $_FILES, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $_POST;
-
-    $retval = '';
-    $valid_albums = 0;
-
-    $level = 0;
-    $select = $album_id;
-    $album_selectbox  = '<select name="album_id" onChange="onAlbumChange()">';
-    $valid_albums += $MG_albums[0]->buildAlbumBox($select,3,-1,'upload');
-    $album_selectbox .= '</select>';
-
-    $album_select = $album_selectbox;
-
-    // construct the album jumpbox...
-    $level = 0;
-    $album_jumpbox = '<form name="jumpbox" action="' . $_MG_CONF['site_url'] . '/album.php' . '" method="get" style="margin:0;padding:0">';
-    $album_jumpbox .= $LANG_MG03['jump_to'] . ':&nbsp;<select name="aid" onChange="forms[\'jumpbox\'].submit()">';
-    $MG_albums[0]->buildJumpBox($album_id);
-    $album_jumpbox .= '</select>';
-    $album_jumpbox .= '&nbsp;<input type="submit" value="' . $LANG_MG03['go'] . '"' . XHTML . '>';
-    $album_jumpbox .= '<input type="hidden" name="page" value="1">';
-    $album_jumpbox .= '</form>';
-
-
-    $T = new Template( MG_getTemplatePath($album_id) );
-    $T->set_file ('mupload','jupload.thtml');
-    $T->set_var(array(
-        'site_url'        => $_MG_CONF['site_url'],
-        'header'          => $LANG_MG01['upload_media'] . ' - JUPLOAD',
-        'album_id'        => $album_id,
-        'album_select'    => $album_select,
-        'jumpbox'         => $album_jumpbox,
-        's_form_action'   => $_MG_CONF['site_url'] . '/jupload/jupload.php',
-        'jupload_archive' => $_MG_CONF['site_url'] . '/jupload/wjhk.jupload.jar',
-        'message'         => $LANG_MG01['jupload_message'],
-        'no_applet'       => $LANG_MG01['no_applet'],
-        'lang_destination' => $LANG_MG01['destination_album'],
-    ));
-
-    $T->parse('output', 'mupload');
-    $retval .= $T->finish($T->get_var('output'));
-    return $retval;
-}
-
-
-function MG_saveJuploadUpload( $album_id ) {
-    global $MG_albums, $_FILES, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $LANG_MG02, $LANG_MG03, $_POST;
-
-    $statusMsg = '';
-    $file = array();
-    $file = $_FILES;
-
-    $albums = $album_id;
-    if ( !isset( $MG_albums[$albums]->id ) || $albums == 0 ) {
-        COM_errorLog("MediaGallery: JUPLOAD was unable to determine album id");
-        return;
-    }
-
-    $successfull_upload = 0;
-
-    foreach ($file as $tagname=>$object) {
-        $filename   = $object['name'];
-        $filetype   = $object['type'];
-        $filesize   = $object['size'];
-        $filetmp    = $object['tmp_name'];
-        $error      = $object['error'];
-        $caption     = '';
-        $description = '';
-        $attachtn    = '';
-        $thumbnail   = '';
-        $thumbnail   = '';
-
-        if ( $MG_albums[$album_id]->max_filesize != 0 && $filesize > $MG_albums[$album_id]->max_filesize ) {
-            COM_errorLog("MediaGallery: File " . $filename . " exceeds maximum allowed filesize for this album");
-            $tmpmsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'], $filename);
-            $statusMsg .= $tmpmsg . '<br' . XHTML . '>';
-            continue;
-        }
-
-        $attach_tn = 0;
-
-        if ($error != UPLOAD_ERR_OK) {
-            switch( $error ) {
-                case 1 :
-                    $tmpmsg = "ERROR: " . sprintf($LANG_MG02['upload_too_big'],$filename);
-                    $statusMsg .= $tmpmsg;
-                    COM_errorLog('MediaGallery: Error - ' .$tmpmsg);
-                    break;
-                case 2 :
-                    $tmpmsg = "ERROR: " . sprintf($LANG_MG02['upload_too_big_html'], $filename);
-                    $statusMsg .= $tmpmsg;
-                    COM_errorLog('MediaGallery: Error - ' .$tmpmsg);
-                    break;
-                case 3 :
-                    $tmpmsg = "ERROR: " . sprintf($LANG_MG02['partial_upload'], $filename);
-                    $statusMsg .= $tmpmsg;
-                    COM_errorLog('MediaGallery: Error - ' .$tmpmsg);
-                    break;
-                case 4 :
-                    break;
-                case 6 :
-                    $statusMsg .= "ERROR: " . $LANG_MG02['missing_tmp'];
-                    break;
-                case 7 :
-                    $statusMsg .= "ERROR: " . $LANG_MG02['disk_fail'];
-                    break;
-                default :
-                    $statusMsg .= "ERROR: " . $LANG_MG02['unknown_err'];
-                    break;
-            }
-            continue;
-        }
-
-       $file_extension = strtolower(substr(strrchr($filename,"."),1));
-        //This will set the Content-Type to the appropriate setting for the file
-        switch( $file_extension ) {
-            case "exe":
-                $filetype="application/octet-stream";
-                break;
-            case "zip":
-                $filetype="application/zip";
-                break;
-            case "mp3":
-                $filetype="audio/mpeg";
-                break;
-            case "mpg":
-                $filetype="video/mpeg";
-                break;
-            case "avi":
-                $filetype="video/x-msvideo";
-                break;
-            case "tga" :
-                $filetype="image/tga";
-                break;
-            case "psd" :
-                $filetype="image/psd";
-                break;
-
-        }
-
-        list($rc,$msg) = MG_getFile( $filetmp, $filename, $albums, $caption, $description, 1, 0, $filetype, $attach_tn, $thumbnail,'',0,0,0 );
-        $statusMsg = $filename . " " . $msg;
-        if ( $rc == true ) {
-            $successfull_upload++;
-        } else {
-	        $statusMsg = "ERROR: " . $statusMsg;
-        }
-        echo $statusMsg;
-        flush();
-    }
-
-    if ( $successfull_upload ) {
-        MG_notifyModerators($albums);
-    }
-
-    // failsafe check - after all the uploading is done, double check that the database counts
-    // equal the actual count of items shown in the database, if not, fix the counts and log
-    // the error
-
-    $dbCount = DB_count($_TABLES['mg_media_albums'],'album_id',intval($album_id));
-    $aCount  = DB_getItem($_TABLES['mg_albums'],'media_count',"album_id=".intval($album_id));
-    if ( $dbCount != $aCount) {
-        DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .
-                 " WHERE album_id=" . intval($album_id) );
-        COM_errorLog("MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
-    }
-    MG_SortMedia( $album_id );
-    return;
-}
 
 function MG_xppub($album_id) {
     global $_MG_CONF, $_CONF, $LANG_MG03;

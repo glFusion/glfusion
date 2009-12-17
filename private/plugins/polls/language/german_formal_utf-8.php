@@ -59,6 +59,8 @@ $LANG_POLLS = array(
     'upgrade1' => 'Neue Version des Umfrage-Plugins installiert. Bitte',
     'upgrade2' => 'upgraden',
     'editinstructions' => 'Bitte für die Umfrage-ID mindestens eine Frage und zwei Antworten eintragen.',
+    'pollclosed' => 'This poll is closed for voting.',
+    'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
     'start_poll' => 'Start Poll'
 );
 

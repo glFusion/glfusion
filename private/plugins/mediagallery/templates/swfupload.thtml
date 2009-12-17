@@ -1,0 +1,768 @@
+{# begin {templatelocation} #}
+<script language="javascript" type="text/javascript">
+
+/* this is the upload queue plugin */
+
+/*
+  Features:
+          *Adds a cancelQueue() method for cancelling the entire queue.
+          *All queued files are uploaded when startUpload() is called.
+          *If false is returned from uploadComplete then the queue upload is stopped.
+           If false is not returned (strict comparison) then the queue upload is continued.
+          *Adds a QueueComplete event that is fired when all the queued files have finished uploading.
+           Set the event handler with the queue_complete_handler setting.
+*/
+
+var SWFUpload;
+if (typeof(SWFUpload) === "function") {
+    SWFUpload.queue = {};
+
+    SWFUpload.prototype.initSettings = (function (oldInitSettings) {
+        return function (userSettings) {
+            if (typeof(oldInitSettings) === "function") {
+                oldInitSettings.call(this, userSettings);
+            }
+
+            this.queueSettings = {};
+
+            this.queueSettings.queue_cancelled_flag = false;
+            this.queueSettings.queue_upload_count = 0;
+
+            this.queueSettings.user_upload_complete_handler = this.settings.upload_complete_handler;
+            this.queueSettings.user_upload_start_handler = this.settings.upload_start_handler;
+            this.settings.upload_complete_handler = SWFUpload.queue.uploadCompleteHandler;
+            this.settings.upload_start_handler = SWFUpload.queue.uploadStartHandler;
+
+            this.settings.queue_complete_handler = userSettings.queue_complete_handler || null;
+    };
+})(SWFUpload.prototype.initSettings);
+
+    SWFUpload.prototype.startUpload = function (fileID) {
+            this.queueSettings.queue_cancelled_flag = false;
+            this.callFlash("StartUpload", [fileID]);
+    };
+
+    SWFUpload.prototype.cancelQueue = function () {
+            this.queueSettings.queue_cancelled_flag = true;
+            this.stopUpload();
+
+            var stats = this.getStats();
+            while (stats.files_queued > 0) {
+                    this.cancelUpload();
+                    stats = this.getStats();
+            }
+    };
+
+    SWFUpload.queue.uploadStartHandler = function (file) {
+            var returnValue;
+            if (typeof(this.queueSettings.user_upload_start_handler) === "function") {
+                    returnValue = this.queueSettings.user_upload_start_handler.call(this, file);
+            }
+
+            // To prevent upload a real "FALSE" value must be returned, otherwise default to a real "TRUE" value.
+            returnValue = (returnValue === false) ? false : true;
+
+            this.queueSettings.queue_cancelled_flag = !returnValue;
+
+            return returnValue;
+    };
+
+    SWFUpload.queue.uploadCompleteHandler = function (file) {
+            var user_upload_complete_handler = this.queueSettings.user_upload_complete_handler;
+            var continueUpload;
+
+            if (file.filestatus === SWFUpload.FILE_STATUS.COMPLETE) {
+                    this.queueSettings.queue_upload_count++;
+            }
+
+            if (typeof(user_upload_complete_handler) === "function") {
+                    continueUpload = (user_upload_complete_handler.call(this, file) === false) ? false : true;
+            } else if (file.filestatus === SWFUpload.FILE_STATUS.QUEUED) {
+                    // If the file was stopped and re-queued don't restart the upload
+                    continueUpload = false;
+            } else {
+                    continueUpload = true;
+            }
+
+            if (continueUpload) {
+                    var stats = this.getStats();
+                    if (stats.files_queued > 0 && this.queueSettings.queue_cancelled_flag === false) {
+                            this.startUpload();
+                    } else if (this.queueSettings.queue_cancelled_flag === false) {
+                            this.queueEvent("queue_complete_handler", [this.queueSettings.queue_upload_count]);
+                            this.queueSettings.queue_upload_count = 0;
+                    } else {
+                            this.queueSettings.queue_cancelled_flag = false;
+                            this.queueSettings.queue_upload_count = 0;
+                    }
+            }
+    };
+}
+
+/* this is the class for displaying file information and progress */
+
+// Constructor
+// file is a SWFUpload file object
+// targetID is the HTML element id attribute that the FileProgress HTML structure will be added to.
+// Instantiating a new FileProgress object with an existing file will reuse/update the existing DOM elements
+
+function FileProgress(file, targetID) {
+        this.fileProgressID = file.id;
+
+        this.opacity = 100;
+        this.height = 0;
+
+
+        this.fileProgressWrapper = document.getElementById(this.fileProgressID);
+        if (!this.fileProgressWrapper) {
+                this.fileProgressWrapper = document.createElement("div");
+                this.fileProgressWrapper.className = "SWFUProgressWrapper";
+                this.fileProgressWrapper.id = this.fileProgressID;
+
+                this.fileProgressElement = document.createElement("div");
+                this.fileProgressElement.className = "SWFUProgressContainer";
+
+                var progressCancel = document.createElement("a");
+                progressCancel.className = "SWFUProgressCancel";
+                progressCancel.href = "#";
+                progressCancel.style.visibility = "hidden";
+                progressCancel.appendChild(document.createTextNode(" "));
+
+                var progressText = document.createElement("div");
+                progressText.className = "SWFUProgressName";
+                progressText.appendChild(document.createTextNode(file.name));
+
+                var progressBar = document.createElement("div");
+                progressBar.className = "SWFUProgressBarInProgress";
+
+                var progressStatus = document.createElement("div");
+                progressStatus.className = "SWFUProgressBarStatus";
+                progressStatus.innerHTML = "&nbsp;";
+
+                this.fileProgressElement.appendChild(progressCancel);
+                this.fileProgressElement.appendChild(progressText);
+                this.fileProgressElement.appendChild(progressStatus);
+                this.fileProgressElement.appendChild(progressBar);
+
+                this.fileProgressWrapper.appendChild(this.fileProgressElement);
+
+                document.getElementById(targetID).appendChild(this.fileProgressWrapper);
+        } else {
+                this.fileProgressElement = this.fileProgressWrapper.firstChild;
+                this.reset();
+        }
+
+        this.height = this.fileProgressWrapper.offsetHeight;
+        this.setTimer(null);
+}
+
+FileProgress.prototype.setTimer = function (timer) {
+        this.fileProgressElement["FP_TIMER"] = timer;
+};
+FileProgress.prototype.getTimer = function (timer) {
+        return this.fileProgressElement["FP_TIMER"] || null;
+};
+
+FileProgress.prototype.reset = function () {
+        this.fileProgressElement.className = "SWFUProgressContainer";
+
+        this.fileProgressElement.childNodes[2].innerHTML = "&nbsp;";
+        this.fileProgressElement.childNodes[2].className = "SWFUProgressBarStatus";
+
+        this.fileProgressElement.childNodes[3].className = "SWFUProgressBarInProgress";
+        this.fileProgressElement.childNodes[3].style.width = "0%";
+
+        this.appear();
+};
+
+FileProgress.prototype.setProgress = function (percentage) {
+        this.fileProgressElement.className = "SWFUProgressContainer SWFUgreen";
+        this.fileProgressElement.childNodes[3].className = "SWFUProgressBarInProgress";
+        this.fileProgressElement.childNodes[3].style.width = percentage + "%";
+
+        this.appear();
+};
+FileProgress.prototype.setComplete = function () {
+        this.fileProgressElement.className = "SWFUProgressContainer SWFUblue";
+        this.fileProgressElement.childNodes[3].className = "SWFUProgressBarComplete";
+        this.fileProgressElement.childNodes[3].style.width = "";
+
+        var oSelf = this;
+        this.setTimer(setTimeout(function () {
+                oSelf.disappear();
+        }, 10000));
+};
+FileProgress.prototype.setError = function () {
+        this.fileProgressElement.className = "SWFUProgressContainer SWFUred";
+        this.fileProgressElement.childNodes[3].className = "SWFUProgressBarError";
+        this.fileProgressElement.childNodes[3].style.width = "";
+
+        var oSelf = this;
+        this.setTimer(setTimeout(function () {
+                oSelf.disappear();
+        }, 5000));
+};
+FileProgress.prototype.setCancelled = function () {
+        this.fileProgressElement.className = "SWFUProgressContainer";
+        this.fileProgressElement.childNodes[3].className = "SWFUProgressBarError";
+        this.fileProgressElement.childNodes[3].style.width = "";
+
+        var oSelf = this;
+        this.setTimer(setTimeout(function () {
+                oSelf.disappear();
+        }, 2000));
+};
+FileProgress.prototype.setStatus = function (status) {
+        this.fileProgressElement.childNodes[2].innerHTML = status;
+};
+
+// show/Hide the cancel button
+
+FileProgress.prototype.toggleCancel = function (show, swfUploadInstance) {
+        this.fileProgressElement.childNodes[0].style.visibility = show ? "visible" : "hidden";
+        if (swfUploadInstance) {
+                var fileID = this.fileProgressID;
+                this.fileProgressElement.childNodes[0].onclick = function () {
+                        swfUploadInstance.cancelUpload(fileID);
+                        return false;
+                };
+        }
+};
+
+FileProgress.prototype.appear = function () {
+        if (this.getTimer() !== null) {
+                clearTimeout(this.getTimer());
+                this.setTimer(null);
+        }
+
+        if (this.fileProgressWrapper.filters) {
+                try {
+                        this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 100;
+                } catch (e) {
+                        // If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+                        this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=100)";
+                }
+        } else {
+                this.fileProgressWrapper.style.opacity = 1;
+        }
+
+        this.fileProgressWrapper.style.height = "";
+
+        this.height = this.fileProgressWrapper.offsetHeight;
+        this.opacity = 100;
+        this.fileProgressWrapper.style.display = "";
+
+};
+
+// fades out and clips away the FileProgress box
+
+FileProgress.prototype.disappear = function () {
+
+        var reduceOpacityBy = 15;
+        var reduceHeightBy = 4;
+        var rate = 30;  // 15 fps
+
+        if (this.opacity > 0) {
+                this.opacity -= reduceOpacityBy;
+                if (this.opacity < 0) {
+                        this.opacity = 0;
+                }
+
+                if (this.fileProgressWrapper.filters) {
+                        try {
+                                this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = this.opacity;
+                        } catch (e) {
+                                // If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+                                this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + this.opacity + ")";
+                        }
+                } else {
+                        this.fileProgressWrapper.style.opacity = this.opacity / 100;
+                }
+        }
+
+        if (this.height > 0) {
+                this.height -= reduceHeightBy;
+                if (this.height < 0) {
+                        this.height = 0;
+                }
+
+                this.fileProgressWrapper.style.height = this.height + "px";
+        }
+
+        if (this.height > 0 || this.opacity > 0) {
+                var oSelf = this;
+                this.setTimer(setTimeout(function () {
+                        oSelf.disappear();
+                }, rate));
+        } else {
+                this.fileProgressWrapper.style.display = "none";
+                this.setTimer(null);
+        }
+};
+
+/* these are the event handlers */
+
+function swfUploadPreLoad() {
+        var self = this;
+        var loading = function () {
+                //document.getElementById("divSWFUploadUI").style.display = "none";
+                document.getElementById("divLoadingContent").style.display = "";
+
+                var longLoad = function () {
+                        document.getElementById("divLoadingContent").style.display = "none";
+                        document.getElementById("divLongLoading").style.display = "";
+                };
+                this.customSettings.loadingTimeout = setTimeout(function () {
+                                longLoad.call(self)
+                        },
+                        15 * 1000
+                );
+        };
+
+        this.customSettings.loadingTimeout = setTimeout(function () {
+                        loading.call(self);
+                },
+                1*1000
+        );
+}
+function swfUploadLoaded() {
+        var self = this;
+        clearTimeout(this.customSettings.loadingTimeout);
+        //document.getElementById("divSWFUploadUI").style.visibility = "visible";
+        //document.getElementById("divSWFUploadUI").style.display = "block";
+        document.getElementById("divLoadingContent").style.display = "none";
+        document.getElementById("divLongLoading").style.display = "none";
+        document.getElementById("divAlternateContent").style.display = "none";
+
+        //document.getElementById("btnBrowse").onclick = function () { self.selectFiles(); };
+        document.getElementById("btnCancel").onclick = function () { self.cancelQueue(); };
+}
+
+function swfUploadLoadFailed() {
+        clearTimeout(this.customSettings.loadingTimeout);
+        //document.getElementById("divSWFUploadUI").style.display = "none";
+        document.getElementById("divLoadingContent").style.display = "none";
+        document.getElementById("divLongLoading").style.display = "none";
+        document.getElementById("divAlternateContent").style.display = "";
+}
+
+
+function fileQueued(file) {
+        try {
+                var progress = new FileProgress(file, this.customSettings.progressTarget);
+                progress.setStatus("{swfupload_pending}");
+                progress.toggleCancel(true, this);
+
+        } catch (ex) {
+                this.debug(ex);
+        }
+
+}
+
+function fileQueueError(file, errorCode, message) {
+        try {
+                if (errorCode === SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
+                        alert("{swfupload_q_too_many}" + (message === 0 ? "{swfupload_q_limit}" : "{swfupload_q_select} " + (message > 1 ? "{sfwupload_q_up_to} " + message + " {swfupload_files}." : "{swfupload_one_file}.")));
+                        return;
+                }
+
+                var progress = new FileProgress(file, this.customSettings.progressTarget);
+                progress.setError();
+                progress.toggleCancel(false);
+
+                switch (errorCode) {
+                case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
+                        progress.setStatus("{swfupload_err_filesize}.");
+                        this.debug("Error Code: File Size Limit Exceeded, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+                        break;
+                case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
+                        progress.setStatus("{swfupload_err_zerosize}.");
+                        this.debug("Error Code: Zero Byte Length, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+                        break;
+                case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
+                        progress.setStatus("{swfupload_err_filetype}.");
+                        this.debug("Error Code: Invalid Type, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+                        break;
+                default:
+                        if (file !== null) {
+                                progress.setStatus("{swfupload_err_general}.");
+                        }
+                        this.debug("Error Code: " + errorCode + ", File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+                        break;
+                }
+        } catch (ex) {
+        this.debug(ex);
+    }
+}
+
+function fileDialogComplete(numFilesSelected, numFilesQueued) {
+        try {
+                if (numFilesSelected > 0) {
+                        document.getElementById(this.customSettings.cancelButtonId).disabled = false;
+                }
+
+                /* I want auto start the upload and I can do that here */
+                this.startUpload();
+        } catch (ex)  {
+        this.debug(ex);
+        }
+}
+
+function uploadStart(file) {
+        try {
+                /* I don't want to do any file validation or anything,  I'll just update the UI and
+                return true to indicate that the upload should start.
+                It's important to update the UI here because in Linux no uploadProgress events are called. The best
+                we can do is say we are uploading.
+                 */
+                var progress = new FileProgress(file, this.customSettings.progressTarget);
+                progress.setStatus("{swfupload_uploading}.");
+                progress.toggleCancel(true, this);
+        }
+        catch (ex) {}
+
+        return true;
+}
+
+function uploadProgress(file, bytesLoaded, bytesTotal) {
+        try {
+                var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
+
+                var progress = new FileProgress(file, this.customSettings.progressTarget);
+                progress.setProgress(percent);
+                progress.setStatus("{swfupload_uploading}.");
+        } catch (ex) {
+                this.debug(ex);
+        }
+}
+
+function uploadSuccess(file, serverData) {
+    try {
+        var progress = new FileProgress(file, this.customSettings.progressTarget);
+        progress.setComplete();
+        if (serverData.substring(0, 7) === "FILEID:") {
+    	    addImage("{site_url}/mediagallery/thumbnail.php?id=" + serverData.substring(7),serverData.substring(7), file.name );
+    	    progress.setStatus("{swfupload_complete}.");
+    	    progress.toggleCancel(false);
+    	} else {
+    	    progress.setStatus("Error:");
+    	    progress.toggleCancel(false);
+    	    progress.setStatus(serverData);
+    	}
+    } catch (ex) {
+        this.debug(ex);
+    }
+}
+
+function addImage(src, id, filename ) {
+    var newImg   = document.createElement("img");
+    var imgDiv   = document.createElement("div");
+    var newDiv   = document.createElement("div");
+    var inputDiv = document.createElement("div");
+    var clrDiv   = document.createElement("div");
+
+
+    newImg.style.margin = "auto";
+    newImg.style.display = "block";
+
+
+    imgDiv.setAttribute('style','float:left;width:210px;height:220px;text-align:center;margin-right:5px;');
+    inputDiv.setAttribute('style','float:left');
+
+    imgDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">' + filename + '</span>';
+    inputDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[title]}</span><br /><textarea rows="2" cols="60" name="media_title[]" style="width:80%;"></textarea><br /><span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[description]}</span><br /><textarea rows="2" cols="60" name="media_desc[]" style="width:80%;"></textarea><input type="hidden" name="media_id[]" value="' + id + '" />';
+
+    clrDiv.setAttribute('style','clear:both;border-bottom:1px solid;border-bottom-color:#D9E4FF;margin-bottom:5px;');
+
+	newDiv.appendChild(imgDiv);
+	newDiv.appendChild(inputDiv);
+	imgDiv.appendChild(newImg);
+
+	document.getElementById("thumbnails").appendChild(newDiv);
+	document.getElementById("thumbnails").appendChild(clrDiv);
+
+	if (newImg.filters) {
+		try {
+			newImg.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 0;
+		} catch (e) {
+			// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+			newImg.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + 0 + ')';
+		}
+	} else {
+		newImg.style.opacity = 0;
+	}
+	newImg.onload = function () {
+		fadeIn(newImg, 0);
+	};
+
+	newImg.src = src;
+}
+
+
+function fadeIn(element, opacity) {
+	var reduceOpacityBy = 5;
+	var rate = 30;	// 15 fps
+
+
+	if (opacity < 100) {
+		opacity += reduceOpacityBy;
+		if (opacity > 100) {
+			opacity = 100;
+		}
+
+		if (element.filters) {
+			try {
+				element.filters.item("DXImageTransform.Microsoft.Alpha").opacity = opacity;
+			} catch (e) {
+				// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+				element.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + opacity + ')';
+			}
+		} else {
+			element.style.opacity = opacity / 100;
+		}
+	}
+
+	if (opacity < 100) {
+		setTimeout(function () {
+			fadeIn(element, opacity);
+		}, rate);
+	}
+}
+
+
+function uploadError(file, errorCode, message) {
+        try {
+                var progress = new FileProgress(file, this.customSettings.progressTarget);
+                progress.setError();
+                progress.toggleCancel(false);
+
+                switch (errorCode) {
+                case SWFUpload.UPLOAD_ERROR.HTTP_ERROR:
+                        progress.setStatus("{swfupload_error} " + message);
+                        this.debug("Error Code: HTTP Error, File name: " + file.name + ", Message: " + message);
+                        break;
+                case SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED:
+                        progress.setStatus("{swfupload_failed}");
+                        this.debug("Error Code: Upload Failed, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+                        break;
+                case SWFUpload.UPLOAD_ERROR.IO_ERROR:
+                        progress.setStatus("{swfupload_io_error}");
+                        this.debug("Error Code: IO Error, File name: " + file.name + ", Message: " + message);
+                        break;
+                case SWFUpload.UPLOAD_ERROR.SECURITY_ERROR:
+                        progress.setStatus("{swfupload_sec_error}");
+                        this.debug("Error Code: Security Error, File name: " + file.name + ", Message: " + message);
+                        break;
+                case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
+                        progress.setStatus("{swfupload_limit_exceeded}");
+                        this.debug("Error Code: Upload Limit Exceeded, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+                        break;
+                case SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED:
+                        progress.setStatus("{swfupload_fail_validation}");
+                        this.debug("Error Code: File Validation Failed, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+                        break;
+                case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:
+                        // If there aren't any files left (they were all cancelled) disable the cancel button
+                        if (this.getStats().files_queued === 0) {
+                                document.getElementById(this.customSettings.cancelButtonId).disabled = true;
+                        }
+                        progress.setStatus("{swfupload_cancelled}");
+                        progress.setCancelled();
+                        break;
+                case SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED:
+                        progress.setStatus("{swfupload_stopped}");
+                        break;
+                default:
+                        progress.setStatus("{swfupload_unhandled} " + errorCode);
+                        this.debug("Error Code: " + errorCode + ", File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
+                        break;
+                }
+        } catch (ex) {
+        this.debug(ex);
+    }
+}
+
+function uploadComplete(file) {
+        document.getElementById("divSWFThumbnails").style.display = "block";
+        if (this.getStats().files_queued === 0) {
+                document.getElementById(this.customSettings.cancelButtonId).disabled = true;
+        }
+}
+
+// This event comes from the Queue Plugin
+function queueComplete(numFilesUploaded) {
+
+    var status = document.getElementById("divSWFUploadStatus");
+    var files = document.getElementById("divSWFUploadStatusFiles");
+
+    files.innerHTML = numFilesUploaded + (numFilesUploaded === 1 ? " {swfupload_file}" : " {swfupload_files}") + " {swfupload_uploaded}.";
+	if (numFilesUploaded > 0) {
+        status.style.display = "block";
+	} else {
+		status.style.display = "none";
+	}
+}
+
+/* this is where all of the exciting things happen */
+
+var swfu;
+
+SWFUpload.onload = function () {
+    var settings = {
+        flash_url : "{flash_url}",
+        upload_url: "{upload_url}",
+/* ------------------------------
+        post_params: {
+            "uid" : "{user_id}",
+            "sid" : "{user_token}",
+            "aid" : "{album_id}"
+        },
+        file_types : "{swfupload_file_types}",
+        file_types_description : "{swfupload_types_desc}",
+        file_size_limit : "{swfupload_size_limit} M",
+----------------------------------- */
+        file_upload_limit : 100,
+        file_queue_limit : 0,
+        custom_settings : {
+            progressTarget : "fsUploadProgress",
+            cancelButtonId : "btnCancel"
+        },
+        debug: false,
+
+        // Button Settings
+        button_image_url : "images/SWFUploadButton.png",
+        button_placeholder_id : "spanButtonPlaceholder",
+        button_width: 61,
+        button_height: 22,
+
+        // The event handler functions are defined in handlers.js
+        swfupload_loaded_handler : swfUploadLoaded,
+        file_queued_handler : fileQueued,
+        file_queue_error_handler : fileQueueError,
+        file_dialog_complete_handler : fileDialogComplete,
+        upload_start_handler : uploadStart,
+        upload_progress_handler : uploadProgress,
+        upload_error_handler : uploadError,
+        upload_success_handler : uploadSuccess,
+        upload_complete_handler : uploadComplete,
+        queue_complete_handler : queueComplete, // Queue plugin event
+
+        // SWFObject settings
+        minimum_flash_version : "9.0.28",
+        swfupload_pre_load_handler : swfUploadPreLoad,
+        swfupload_load_failed_handler : swfUploadLoadFailed
+    };
+
+    swfu = new SWFUpload(settings);
+
+    // set the user_id, user_token, dest_album & allowed_file_types
+    onAlbumChange();
+}
+
+function onAlbumChange() {
+  var aid_index = document.form_album.album_id.selectedIndex;
+  var aid = document.form_album.album_id.value;
+  var uid = "{user_id}";
+  var sid = "{user_token}";
+  var file_types = "{swfupload_file_types}";
+  var file_types_desc = "{swfupload_types_desc}";
+  var file_types_span = document.getElementById("swfu_file_types");
+  var size_limit_span = document.getElementById("swfu_size_limit");
+  var size_limit = "{swfupload_size_limit}";
+  var post_params = { "uid" : uid, "sid" : sid, "aid": aid };
+  var url = "{site_url}/mediagallery/album_rpc.php";
+  var query = "aid=" + aid;
+
+  if (aid_index >= 0) {
+
+    /* retrieve the parameters that change on a per-album basis */
+
+    /* this is the mootools 1.1 XHR method */
+
+    var myXHR = new XHR( {
+      onSuccess: function() {
+        var responsetext = myXHR.response.text;
+        var response = responsetext.split( "%" );
+        size_limit_display = (response[0] / 1024 ) / 1024 + " M";
+        size_limit = response[0];
+        file_types = response[1];
+        swfu.setPostParams( post_params );
+        file_types_span.innerHTML = file_types;
+        swfu.setFileTypes( file_types, file_types_desc );
+        size_limit_span.innerHTML = size_limit_display;
+        swfu.setFileSizeLimit( size_limit );
+      }
+    }).send( url, query );
+
+  }
+  return;
+}
+
+</script>
+<div id="divSWFUploadMessage">
+  {swfupload_usage}
+</div>
+<div id="divSWFUploadAlbumSelect">
+  <form method="post" name="form_album">
+    <span style="font-weight:bold;">{lang_destination}:</span> {album_select}
+  </form>
+</div>
+<div id="divSWFUploadAllowedTypes">
+  {swfupload_allowed_types}<span id="swfu_file_types">{swfupload_file_types}</span>
+</div>
+<div id="divSWFUploadSizeLimit">
+  {swfupload_file_size_limit}<span id="swfu_size_limit">{swfupload_size_limit}</span>
+</div>
+
+<div id="swfupload-form">
+  <form id="form1" action="admin.php" method="post" enctype="multipart/form-data">
+    <div id="divSWFUploadUI">
+      <div class="fieldset  flash" id="fsUploadProgress">
+      <span class="legend">{swfupload_queue}</span>
+      </div>
+      <div id="divSWFUploadStatus">
+        <span id="divSWFUploadStatusFiles">0 {sfwupload_files} {swfupload_uploaded}</span>
+      </div>
+      <div id="divSWFUploadButtons">
+        <span id="spanButtonPlaceholder"></span>
+        <input id="btnCancel" type="button" value="{swfupload_cancel_all}" disabled="disabled" style="margin-left: 2px; height: 22px; font-size: 8pt; border-width: 1px; margin-bottom: 10px; padding: 2px 3px; vertical-align: top;" />
+        <br />
+      </div>
+    </div>
+
+    <noscript>
+      <div style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px;">
+        {swfupload_noscript}
+      </div>
+    </noscript>
+
+    <div id="divLoadingContent" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
+      {swfupload_is_loading}
+    </div>
+
+    <div id="divLongLoading" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
+      {swfupload_not_loading}
+    </div>
+
+    <div id="divAlternateContent" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
+      {swfupload_didnt_load}
+    </div>
+
+    </form>
+
+    <div id="divSWFThumbnails">
+      <form name="captions" method="post" action="{site_url}/mediagallery/admin.php?album_id=0">
+
+    	<div id="thumbnails" style="vertical-align:middle;"></div>
+
+        <div style="clear:both;"></div>
+
+        <input type="hidden" name="action" value="batchcaptionsave" />
+        <input type="submit" name="mode"   value="{$LANG_MG01[save_exit]}" />
+
+      </form>
+    </div>
+</div>
+<hr />
+<div style="float:right;">{jumpbox}</div>
+{# end {templatelocation} #}

@@ -385,7 +385,9 @@ function STORY_renderArticle( &$story, $index='', $storytpl='storytext.thtml', $
                         $_CONF['site_url'] . '/comment.php?sid=' . $story->getsid()
                             . '&amp;pid=0&amp;type=article');
                 }
-                if( $story->DisplayElements( 'commentcode' ) == 0 ) {
+                if( $story->DisplayElements( 'commentcode' ) == 0 &&
+                 ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
+//                if( $story->DisplayElements( 'commentcode' ) == 0 ) {
                     $postCommentUrl = $_CONF['site_url'] . '/comment.php?sid='
                                 . $story->getSid() . '&amp;pid=0&amp;type=article';
                     $article->set_var( 'post_comment_link',

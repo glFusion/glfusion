@@ -1,11 +1,9 @@
 glFusion ChangeLog
 
-v1.2
+v1.2.0 svn
 ----------
 - Added ability for theme to add to css blob (Eric)
 - Added {!!autotag ..} feature to template class (Mark)
-- Update BB2 to v2.0.32 (Mark)
-- Update CAPTCHA to v3.2.4 (Mark/Mark)
 - Added wrapper static page widget (Eric)
 - Update all MooTools-dependent javascript to MooTools 1.2.3 (Mark H.)
 - Added Mootools core and more files to install directory (Eric)
@@ -14,8 +12,17 @@ v1.2
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
 - Merge layout custom CSS files rather than uniquely select (Mark H.)
 
-v1.1.7 svn
+v1.1.7.pl1
 ----------
+- Media Gallery: Add space between file types to allow wrapping long
+  lists (Mark)
+- Media Gallery: The Remote Media tab is missing from the Media Gallery upload
+  options (Mark)
+- Username was cut-off at 16 characters (Mark)
+- add padding to loginform Submit button. (Eric)
+
+v1.1.7
+------
 - autotranslations block now uses an image sprite (Eric)
 - Tweak SWFUploader to now allow display of thumbnails and allow adding
   title and description (Mark)
@@ -73,7 +80,7 @@ v1.1.7 svn
 - Fixed error when user does not have edit permissions to story.
 - Fixed special character handling in story editor
 - Fixed backslash removal in story editor
-- Upgrade Bad Behavior2 to v2.0.31
+- Upgrade Bad Behavior2 to v2.0.32
 
 v1.1.6.pl4
 ----------

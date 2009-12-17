@@ -316,7 +316,7 @@ function install_config($site_url)
     $c->add('thousand_separator',",",'text',6,29,NULL,440,TRUE);
     $c->add('decimal_separator',".",'text',6,29,NULL,450,TRUE);
     $c->add('decimal_count',"2",'text',6,29,NULL,460,TRUE);
-    $c->add('timezone','US/Central','select',6,29,NULL,490,TRUE);
+    $c->add('timezone','America/Chicago','select',6,29,NULL,490,TRUE);
 
     // Subgroup: Miscellaneous
     $c->add('sg_misc', NULL, 'subgroup', 7, 0, NULL, 0, TRUE);
@@ -336,7 +336,6 @@ function install_config($site_url)
     $c->add('cookiesecure',FALSE,'select',7,30,1,630,TRUE);
 
     $c->add('fs_misc', NULL, 'fieldset', 7, 31, NULL, 0, TRUE);
-//    $c->add('pdf_enabled',0,'select',7,31,0,660,TRUE);
     $c->add('notification',array(),'%text',7,31,NULL,800,TRUE);
     $c->add('cron_schedule_interval',86400,'text',7,31,NULL,860,TRUE);
     $c->add('disable_autolinks',0,'select',7,31,0,1750,TRUE);

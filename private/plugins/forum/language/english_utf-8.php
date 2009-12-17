@@ -303,6 +303,7 @@ $LANG_GF01 = array(
     'signature' => 'Forum Signature',
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Signature Preview',
+    'cancel_confirm' => 'Are you sure you want to cancel this post?',
 );
 
 $LANG_GF02 = array(

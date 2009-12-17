@@ -169,7 +169,7 @@ function savepoll($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $hi
     }
 
     // check if any question was entered
-    if (empty($topic) or (sizeof($Q) == 0) or (strlen($Q[0]) == 0) or
+    if (empty($topic) or (count($Q) == 0) or (strlen($Q[0]) == 0) or
             (strlen($A[0][0]) == 0)) {
         $retval .= COM_siteHeader ('menu', $LANG25[5]);
         $retval .= COM_startBlock ($LANG21[32], '',
@@ -248,7 +248,7 @@ function savepoll($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $hi
     $k = 0; // set up a counter to make sure we do assign a straight line of question id's
     $v = 0; // re-count votes sine they might have been changed
     // first dimension of array are the questions
-    $num_questions = sizeof($Q);
+    $num_questions = count($Q);
     for ($i = 0; $i < $num_questions; $i++) {
         $Q[$i] = COM_stripslashes($Q[$i]);
         if (strlen($Q[$i]) > 0) { // only insert questions that exist
@@ -257,7 +257,7 @@ function savepoll($pid, $old_pid, $Q, $mainpage, $topic, $statuscode, $open, $hi
                                                "'$k', '$pid', '$Q[$i]'");
             // within the questions, we have another dimensions with answers,
             // votes and remarks
-            $num_answers = sizeof($A[$i]);
+            $num_answers = count($A[$i]);
             for ($j = 0; $j < $num_answers; $j++) {
                 $A[$i][$j] = COM_stripslashes($A[$i][$j]);
                 if (strlen($A[$i][$j]) > 0) { // only insert answers etc that exist
@@ -541,10 +541,12 @@ function deletePoll ($pid)
         return COM_refresh ($_CONF['site_admin_url'] . '/plugins/polls/index.php');
     }
 
-    DB_delete ($_TABLES['polltopics'], 'pid', $pid);
-    DB_delete ($_TABLES['pollanswers'], 'pid', $pid);
-    DB_delete ($_TABLES['pollquestions'], 'pid', $pid);
-    DB_query ("DELETE FROM {$_TABLES['comments']} WHERE sid = '$pid' AND type = 'polls'");
+    DB_delete($_TABLES['polltopics'], 'pid', $pid);
+    DB_delete($_TABLES['pollanswers'], 'pid', $pid);
+    DB_delete($_TABLES['pollquestions'], 'pid', $pid);
+    DB_delete($_TABLES['comments'], array('sid', 'type'),
+                                    array($pid,  'polls'));
+
     PLG_itemDeleted($pid, 'polls');
 
     return COM_refresh ($_CONF['site_admin_url'] . '/plugins/polls/index.php?msg=20');

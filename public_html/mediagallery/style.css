@@ -373,3 +373,141 @@
 .static {color:#5D3126;}
 
 /* end of Star rating system */
+
+/* SWF-based multiple file upload */
+#divSWFUploadMessage {
+  margin-left: 5px;
+}
+#divSWFUploadAlbumSelect, #divSWFUploadAllowedTypes {
+  margin: 10px 0px 10px 5px;
+}
+#divSWFUploadSizeLimit {
+  margin: 10px 0px 20px 5px;
+}
+#divSWFUploadButtons {
+  margin: 10px 0 10px 5px;
+}
+#divSWFUploadStatus {
+  margin: 10px 0 10px 5px;
+  display: none;
+}
+#divSWFThumbnails {
+  border-top: 1px solid;
+  border-top-color: #D9E4FF;
+  display: none;
+}
+
+#fsUploadProgress.fieldset {
+  border:  1px solid #afe14c;
+  margin: 10px 0;
+  padding: 20px 10px;
+}
+
+#fsUploadProgress.fieldset span.legend {
+	position: relative;
+	background-color: #FFF;
+	padding: 3px;
+	top: -30px;
+	font: 700 14px Arial, Helvetica, sans-serif;
+	color: #4d77cc;
+}
+
+#fsUploadProgress.flash {
+    width: 375px;
+    margin: 10px 5px;
+    border-color: #D9E4FF;
+
+    -moz-border-radius-topleft : 5px;
+    -webkit-border-top-left-radius : 5px;
+    -moz-border-radius-topright : 5px;
+    -webkit-border-top-right-radius : 5px;
+    -moz-border-radius-bottomleft : 5px;
+    -webkit-border-bottom-left-radius : 5px;
+    -moz-border-radius-bottomright : 5px;
+    -webkit-border-bottom-right-radius : 5px;
+}
+
+.SWFUProgressWrapper {
+	width: 357px;
+	overflow: hidden;
+}
+
+.SWFUProgressContainer {
+	margin: 5px;
+	padding: 4px;
+	border: solid 1px #E8E8E8;
+	background-color: #F7F7F7;
+	overflow: hidden;
+}
+/* Message */
+.SWFUmessage {
+	margin: 1em 0;
+	padding: 10px 20px;
+	border: solid 1px #FFDD99;
+	background-color: #FFFFCC;
+	overflow: hidden;
+}
+/* Error */
+.SWFUred {
+	border: solid 1px #B50000;
+	background-color: #FFEBEB;
+}
+
+/* Current */
+.SWFUgreen {
+	border: solid 1px #DDF0DD;
+	background-color: #EBFFEB;
+}
+
+/* Complete */
+.SWFUblue {
+	border: solid 1px #CEE2F2;
+	background-color: #F0F5FF;
+}
+
+.SWFUProgressName {
+	font-size: 8pt;
+	font-weight: 700;
+	color: #555;
+	width: 323px;
+	height: 14px;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.SWFUProgressBarInProgress,
+.SWFUProgressBarComplete,
+.SWFUProgressBarError {
+	font-size: 0;
+	width: 0%;
+	height: 2px;
+	background-color: blue;
+	margin-top: 2px;
+}
+
+.SWFUProgressBarStatus {
+	margin-top: 2px;
+	width: 337px;
+	font-size: 7pt;
+	font-family: Arial;
+	text-align: left;
+	white-space: nowrap;
+}
+
+a.SWFUProgressCancel {
+	font-size: 0;
+	display: block;
+	height: 14px;
+	width: 14px;
+	background-image: url(../images/cancelbutton.gif);
+	background-repeat: no-repeat;
+	background-position: -14px 0px;
+	float: right;
+}
+
+a.SWFUProgressCancel:hover {
+	background-position: 0px 0px;
+}
+
+/* end of SWF-based multiple file upload */

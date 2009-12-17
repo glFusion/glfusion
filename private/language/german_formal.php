@@ -660,6 +660,7 @@ $LANG13 = array(
     'rate_speedlimit' => 'You last rated an item %s seconds ago. This site requires at least %s seconds between ratings',
     'ip_rated' => 'Your IP address has already rated this item.',
     'uid_rated' => 'Your User ID has already rated this item.',
+    'own_rated' => 'Either you own the item or do not have permission to rate it.',
     'thanks_for_vote' => 'Thanks for voting!'
 );
 

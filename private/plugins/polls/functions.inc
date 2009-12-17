@@ -74,6 +74,7 @@ require_once $_CONF['path'].'plugins/polls/polls.php';
 * NOTE: this MUST return the url/value pairs in the following format
 * $<arrayname>[<label>] = <url>
 *
+* @return   mixed   menu entry, or boolean false if disabled / hidden
 */
 function plugin_getmenuitems_polls ()
 {
@@ -116,7 +117,6 @@ function plugin_getcommenturlid_polls( ) {
 /**
  * Poll saves a comment
  *
- * @param   string  $type   Plugin to save comment
  * @param   string  $title  comment title
  * @param   string  $comment comment text
  * @param   string  $id     Item id to which $cid belongs
@@ -229,6 +229,48 @@ function plugin_getwhatsnewcomment_polls()
         }
     }
     return $commentrow;
+}
+
+
+/**
+* this searches the plugins comments matching the user query and returns an array of
+* for the header and table rows back to search.php where it will be formated and
+* printed
+*
+* @query            string          Keywords user is looking for
+* @datestart        date/time       Start date to get results for
+* @dateend          date/time       End date to get results for
+* @topic            string          The topic they were searching in
+* @type             string          Type of items they are searching
+* @author           string          Get all results by this author
+*
+*/
+function plugin_dopluginsearch_comment_polls($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
+{
+    global $_USER, $_TABLES, $_CONF, $LANG09;
+
+    $query = trim(addslashes(htmlspecialchars($query)));
+
+    $sql =  "SELECT c.cid AS id1, a.pid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
+    $sql .= "CONCAT('/polls/index.php?pid=',a.pid,'#comments') AS url ";
+    $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
+    $sql .= "LEFT JOIN {$_TABLES['polltopics']} a ON c.sid=a.pid ";
+    $sql .= "WHERE (c.type='polls') AND (u.uid = c.uid) ";
+    $sql .= COM_getPermSQL ('AND');
+
+    if (!empty($author)) {
+        $sql .= "AND (c.uid = '$author') ";
+    }
+
+    $search_c = new SearchCriteria('comments', 'Polls > '.$LANG09[66]);
+    $columns = array('comment','c.title');
+    $sql .= $search_c->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(c.date)', $datestart, $dateend);
+    list($sql,$ftsql) = $search_c->buildSearchSQL($keyType, $query, $columns, $sql);
+    $search_c->setSQL($sql);
+    $search_c->setFTSQL($ftsql);
+    $search_c->setRank(2);
+
+    return $search_c;
 }
 
 /**
@@ -480,13 +522,14 @@ function polls_templatePath ($path = '')
 *
 * @param      string      $pid      ID for poll topic
 * @param      boolean     $showall  Show only the first question in the poll or all?
+* @param        int        $displaytype       Possible values 0 = Normal, 1 = In Block, 2 = autotag
 * @see function COM_pollResults
 * @see function COM_showPoll
 * @return       string  HTML Formatted Poll
 *
 */
 
-function POLLS_pollVote($pid, $showall=true)
+function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
 {
     global $_CONF, $_TABLES, $LANG_POLLS, $LANG01, $_USER, $LANG25, $_IMAGE_TYPE;
     $retval = '';
@@ -621,7 +664,7 @@ function POLLS_pollVote($pid, $showall=true)
                 }
                 $retval =  $poll->finish($poll->parse('output', 'block')) . LB;
 
-                if($showall == true && $P['commentcode'] >= 0 ) {
+                if ($showall && ($P['commentcode'] >= 0 AND $displaytype != 2)) {
                     $delete_option = (SEC_hasRights('polls.edit') &&
                         SEC_hasAccess($P['owner_id'], $P['group_id'],
                         $P['perm_owner'], $P['perm_group'], $P['perm_members'],
@@ -651,7 +694,7 @@ function POLLS_pollVote($pid, $showall=true)
             }
         }
     } else {
-        $retval .= POLLS_pollResults($pid);
+        $retval .= POLLS_pollResults($pid, 0, '', '', $displaytype);
     }
 
     return $retval;
@@ -660,29 +703,52 @@ function POLLS_pollVote($pid, $showall=true)
 /**
 * This shows a poll
 *
-* This will determine if a user needs to see the poll form OR the poll
-* result.
+* This will determine if a user needs to see the poll form OR the poll result.
 *
-* @param        int        $sise       Size in pixels of poll results
-* @param        string     $pid        topic ID to show (optional)
+* @param        int     $size           Size in pixels of poll results
+* @param        string  $pid            Poll topic ID to show (optional)
+* @param        bool    $showall        Show only the first question or all
+* @param        int     $displaytype    Possible values 0 = Normal, 1 = In Block, 2 = autotag
+* @return       string  HTML formatted string of poll
 * @see function COM_pollVote
 * @see function COM_pollResults
-* @return    String  HTML Formated string of Poll
 *
 */
-
-function POLLS_showPoll($size, $pid='', $showall=false )
+function POLLS_showPoll($size, $pid = '', $showall = false, $displaytype = 0)
 {
-    global $_CONF, $_PO_CONF, $_TABLES;
+    global $_CONF, $_PO_CONF, $_TABLES, $LANG_POLLS;
+
     $retval = '';
+    $is_open = 0;
 
     DB_query("DELETE FROM {$_TABLES['pollvoters']} WHERE date < unix_timestamp() - {$_PO_CONF['polladdresstime']}");
 
     if(!empty($pid)) {
-        if(!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($Q['is_open'] == 1)) {
-            $retval .= POLLS_pollVote($pid);
+        $sql = "SELECT * FROM {$_TABLES['polltopics']} WHERE pid='".$pid."'";
+        $result = DB_query($sql);
+        if ( DB_numRows($result) > 0 ) {
+            $row = DB_fetchArray($result);
+            $is_open = $row['is_open'];
+
+            if (($displaytype == 2) && ($is_open == 0)) {
+                $retval = '<div class="poll-autotag-message">'
+                        . $LANG_POLLS['pollclosed'] . '</div>';
+            }
+            if(!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($is_open == 1)) {
+                $retval .= POLLS_pollVote($pid,$showall,$displaytype);
+            } else {
+                $retval .= POLLS_pollResults($pid, $size,'','',$displaytype);
+            }
         } else {
-            $retval .= POLLS_pollResults($pid, $size);
+            if ( $displaytype == 2 ) {
+                $retval = '';
+            } else {
+                if(!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($is_open == 1)) {
+                    $retval .= POLLS_pollVote($pid,$showall,$displaytype);
+                } else {
+                    $retval .= POLLS_pollResults($pid, $size,'','',$displaytype);
+                }
+            }
         }
     } else {
         $result = DB_query("SELECT pid,topic,is_open from {$_TABLES['polltopics']} WHERE display = 1 ORDER BY date DESC");
@@ -694,22 +760,24 @@ function POLLS_showPoll($size, $pid='', $showall=false )
             for ($i = 1; $i <= $nrows; $i++) {
                 $Q = DB_fetchArray($result);
                 $pid = $Q['pid'];
-                if ($size < 120) {// assume we're in the poll block
+                if ($displaytype == 1) { // in the poll block
                     $showall = false;
                 } else { // assume we're in polls/index.php
                     $retval .= COM_startBlock($title);
                     $showall = true;
                 }
 
-                if (!isset($_COOKIE["poll-".$pid]) && !POLLS_ipAlreadyVoted($pid) && ($Q['is_open'] == 1)) {
-                    $retval .= POLLS_pollVote($pid, $showall);
+                if (!isset($_COOKIE['poll-' . $pid]) &&
+                        !POLLS_ipAlreadyVoted($pid) && ($Q['is_open'] == 1)) {
+                    $retval .= POLLS_pollVote($pid, $showall, $displaytype);
                 } else {
-                    $retval .= POLLS_pollResults($pid, $size);
+                    $retval .= POLLS_pollResults($pid, $size, '', '',
+                                                 $displaytype);
                 }
 
-                if ($size < 120) {
-                    if ($i < $nrows){
-                        $retval .= "<div class=\"poll-divider\"></div>";
+                if ($displaytype == 1) { // in the poll block
+                    if (($i < $nrows) && !empty($retval)) {
+                        $retval .= '<div class="poll-divider"></div>';
                     }
                 } else {
                     $retval .= COM_endBlock();
@@ -778,12 +846,13 @@ function POLLS_pollsave($pid, $aid)
 * @param        int         $scale      Size in pixels to scale formatted results to
 * @param        string      $order      'ASC' or 'DESC' for Comment ordering (SQL statment ordering)
 * @param        string      $mode       Comment Mode possible values 'nocomment', 'flat', 'nested', 'threaded'
+* @param        int        $displaytype       Possible values 0 = Normal, 1 = In Block, 2 = autotag
 * @see POLLS_pollVote
 * @see POLLS_showPoll
 * @return     string   HTML Formated Poll Results
 *
 */
-function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
+function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype = 0)
 {
     global $_CONF, $_TABLES, $_USER, $_IMAGE_TYPE,
            $_PO_CONF, $LANG01, $LANG_POLLS, $_COM_VERBOSE, $LANG25;
@@ -811,6 +880,10 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
     ) {
         $retval = '';
     } else {
+        if ($displaytype == 2) {
+            $retval = '<div class="poll-autotag-message">' . $LANG_POLLS['pollhidden']. "</div>";
+        }
+
         return $retval;
     }
 
@@ -936,7 +1009,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='')
 
             $retval .= $poll->finish($poll->parse('output', 'result' ));
 
-            if($scale > 399 && $P['commentcode'] >= 0 ) {
+            if($scale > 399 && $P['commentcode'] >= 0 && $displaytype != 2) {
                 $delete_option = (SEC_hasRights('polls.edit') &&
                     SEC_hasAccess($P['owner_id'], $P['group_id'],
                     $P['perm_owner'], $P['perm_group'], $P['perm_members'],
@@ -996,9 +1069,15 @@ function POLLS_ipAlreadyVoted($pid, $ip = '' )
     return $retval;
 }
 
+/**
+* Display the current poll(s) in a side block
+*
+* @return   string  HTML for the poll(s) to be displayed (or an empty string)
+*
+*/
 function phpblock_polls()
 {
-    $retval = POLLS_showPoll(60);
+    $retval = POLLS_showPoll(60,'',false,1);
     return $retval;
 }
 
@@ -1181,4 +1260,116 @@ function plugin_upgrade_polls()
     }
 }
 
+/**
+* Poll Autotags
+* [poll: pid] - Displays a link to a poll using the Poll Topic as the title.
+*               A alternate title may be specified.
+* [poll_vote: pid pid class:poll-autotag showall:1] - Class and showall not
+*             required. Class specifies the css class and Showall if set to 1, shows all questions
+* [poll_result: pid class:poll-autotag] - Class not required. Class specifies
+*                                         the css class
+*
+*/
+function plugin_autotags_polls($op, $content = '', $autotag = '')
+{
+    global $_CONF, $_TABLES;
+
+    if ($op == 'tagname' ) {
+        return array('poll_vote', 'poll_result', 'poll');
+    } elseif ($op == 'parse') {
+        $tag = str_replace('&nbsp;',' ',$autotag['tagstr']);
+        $parms = explode (' ', $tag);
+        // Extra test to see if autotag was entered with a space
+        // after the module name
+        if (substr ($parms[0], -1) == ':') {
+            $startpos = strlen ($parms[0]) + strlen ($parms[1]) + 2;
+            $label = str_replace (']', '', substr ($tag, $startpos));
+            $tagid = $parms[1];
+        } else {
+            $label = str_replace (']', '',
+                     substr ($tag, strlen ($parms[0]) + 1));
+            $parms = explode (':', $parms[0]);
+            if (count ($parms) > 2) {
+                // whoops, there was a ':' in the tag id ...
+                array_shift ($parms);
+                $tagid = implode (':', $parms);
+            } else {
+                $tagid = $parms[1];
+            }
+        }
+        $autotag['parm1'] = str_replace(']','',$tagid);
+        $autotag['parm2'] = $label;
+
+        $class = 'poll-autotag';
+        $showall = false;
+
+        $px = explode (' ', trim ($autotag['parm2']));
+        if (is_array ($px)) {
+            foreach ($px as $part) {
+                if (substr ($part, 0, 6) == 'class:') {
+                    $a = explode (':', $part);
+                    $class = $a[1];
+                    $skip++;
+                } elseif (substr ($part, 0, 8) == 'showall:') {
+                    $a = explode (':', $part);
+                    $val = (int) $a[1];
+                    if ( $val == 1 ) {
+                        $showall = true;
+                    }
+                    $skip++;
+                } else {
+                    break;
+                }
+            }
+
+            if ($skip != 0) {
+                if (count ($px) > $skip) {
+                    for ($i = 0; $i < $skip; $i++) {
+                        array_shift ($px);
+                    }
+                    $caption = trim (implode (' ', $px));
+                } else {
+                    $caption = '';
+                }
+            }
+        } else {
+            $caption = trim ($autotag['parm2']);
+        }
+
+        $pid = COM_applyFilter($autotag['parm1']);
+
+        switch ($autotag['tag']) {
+            case 'poll':
+                if (!empty($autotag['parm2'])) {
+                    $title = COM_applyFilter($autotag['parm2']);
+                } else {
+                    $title = DB_getItem($_TABLES['polltopics'], 'topic',
+                                       "pid = '$pid'");
+                }
+                if ( $title == '' ) {
+                    $retval = '';
+                } else {
+                    $retval = COM_createLink($title, $_CONF['site_url']
+                                . '/polls/index.php?pid=' . $pid . '&amp;aid=-1');
+                }
+                break;
+        case 'poll_vote':
+        case 'poll_result':
+            if ($autotag['tag'] == 'poll_vote') {
+                $retval = POLLS_showPoll(0, $pid, $showall, 2);
+            } else {
+                $retval = POLLS_pollResults($pid, 0,'', false, 2);
+            }
+
+            if ( $retval != '' ) {
+                $retval = '<div class="' . $class . '">' . $retval . '</div>';
+            }
+            break;
+        }
+
+        $content = str_replace($autotag['tagstr'], $retval, $content);
+    }
+
+    return $content;
+}
 ?>

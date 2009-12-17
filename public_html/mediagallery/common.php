@@ -591,4 +591,94 @@ function MG_getFeedUrl( $feedfile = '' )
     return $url;
 }
 
+/**
+* Convert k/m/g size string to number of bytes
+*
+* @param    string      val    a string expressing size in K, M or G
+* @return   int                 the resultant value in bytes
+*
+*/
+function MG_return_bytes($val) {
+   $val  = trim($val);
+   $last = strtolower($val{strlen($val)-1});
+   switch($last) {
+       // The 'G' modifier is available since PHP 5.1.0
+       case 'g':
+           $val *= 1024;
+       case 'm':
+           $val *= 1024;
+       case 'k':
+           $val *= 1024;
+   }
+   return $val;
+}
+
+/**
+* Return the max upload file size for the specified album
+*
+* @param    intval      album_id        the album_id to return the max upload file size for
+* @return   intval      upload_limit    the upload size imit, in bytes
+*
+* if the type cannot be determined from the extension because the extension is
+* not known, then the default value is returned (even if null)
+*
+* NOTE: the album array must be pre-initialized via MG_AlbumsInit()
+*
+*/
+function MG_getUploadLimit( $album_id ) {
+
+    global $MG_albums;
+
+    $post_max = MG_return_bytes( ini_get( 'post_max_size' ) );
+    $album_max = $MG_albums[$album_id]->max_filesize;
+    if( $album_max > 0 && $album_max < $post_max ) {
+        return $album_max;
+    } else {
+        return $post_max;
+    }
+}
+
+/**
+* Return a string of valid upload filetypes for the specified album
+*
+* @param    intval      album_id        the album_id to return the max upload file size for
+* @return   string      valid_types     string of filetypes allowed, delimited by semicolons
+*
+* if the type cannot be determined from the extension because the extension is
+* not known, then the default value is returned (even if null)
+*
+* NOTE: the album array must be pre-initialized via MG_AlbumsInit()
+*
+*/
+function MG_getValidFileTypes( $album_id ) {
+
+    global $MG_albums;
+
+    $valid_formats = $MG_albums[$album_id]->valid_formats;
+    if( $valid_formats & MG_OTHER ) {
+        $valid_types = '*.*';
+    } else {
+        $valid_types = '';
+        $valid_types .= ( $valid_formats & MG_JPG ) ? '*.jpg; ' : '';
+        $valid_types .= ( $valid_formats & MG_PNG ) ? '*.png; ' : '';
+        $valid_types .= ( $valid_formats & MG_TIF ) ? '*.tif; ' : '';
+        $valid_types .= ( $valid_formats & MG_GIF ) ? '*.gif; ' : '';
+        $valid_types .= ( $valid_formats & MG_BMP ) ? '*.bmp; ' : '';
+        $valid_types .= ( $valid_formats & MG_TGA ) ? '*.tga; ' : '';
+        $valid_types .= ( $valid_formats & MG_PSD ) ? '*.psd; ' : '';
+        $valid_types .= ( $valid_formats & MG_MP3 ) ? '*.mp3; ' : '';
+        $valid_types .= ( $valid_formats & MG_OGG ) ? '*.ogg; ' : '';
+        $valid_types .= ( $valid_formats & MG_ASF ) ? '*.asf; *.wma; *.wmv; ' : '';
+        $valid_types .= ( $valid_formats & MG_SWF ) ? '*.swf; ' : '';
+        $valid_types .= ( $valid_formats & MG_MOV ) ? '*.mov; *.qt; ' : '';
+        $valid_types .= ( $valid_formats & MG_MP4 ) ? '*.mp4; ' : '';
+        $valid_types .= ( $valid_formats & MG_MPG ) ? '*.mpg; ' : '';
+        $valid_types .= ( $valid_formats & MG_FLV ) ? '*.flv; ' : '';
+        $valid_types .= ( $valid_formats & MG_ZIP ) ? '*.zip; ' : '';
+        $valid_types .= ( $valid_formats & MG_PDF ) ? '*.pdf; ' : '';
+        $valid_types = substr( $valid_types, 0, strlen($valid_types)-1 );
+    }
+    return $valid_types;
+}
+
 ?>

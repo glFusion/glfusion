@@ -159,7 +159,6 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 * Return an array of all voting records
 *
 * Returns an array of all voting records for either a $type or an $item_id.
-* standard set of glFusion permissions.
 *
 * @param        string      $type     plugin name
 * @param        string      $item_id  item id (optional)
@@ -296,7 +295,7 @@ function RATING_resetRating( $type, $item_id )
 * Deletes a specific rating entry and recalculates the new rating
 *
 * @param        string      $voteID   The ID of the rating_votes record
-* @return       array       true if successful otherwise false
+* @return       bool        true if successful otherwise false
 *
 */
 function RATING_deleteVote( $voteID )
@@ -384,6 +383,7 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
 
 }
 
+
 /**
 * Retrieve an array of item_id's the current user has rated
 *
@@ -391,7 +391,7 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
 * has rated for the specific type.
 *
 * @param        string      $type     plugin name
-* @return       array       array of item id's
+* @return       array       array of item ids
 *
 */
 function RATING_getRatedIds($type)

@@ -59,6 +59,8 @@ $LANG_POLLS = array(
     'upgrade1' => 'You installed a new version of the Polls plugin. Please',
     'upgrade2' => 'upgrade',
     'editinstructions' => 'Vul a.u.b. de Enquete ID in en minimaal 1 vraag met twee ogelijke antwoorden.',
+    'pollclosed' => 'This poll is closed for voting.',
+    'pollhidden' => 'You have already voted. This poll results will only be shown when voting is closed.',
     'start_poll' => 'Vul Enquete in'
 );
 

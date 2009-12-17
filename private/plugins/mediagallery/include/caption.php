@@ -290,6 +290,7 @@ function MG_batchCaptionSave( $album_id, $start, $actionURL ) {
 
         $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_title='" . $title . "', `media_desc` ='" . $desc  . "' WHERE media_id='" . addslashes(COM_applyFilter($media_id[$i])) ."'";
         DB_query($sql);
+        PLG_itemSaved($media_id[$i],'mediagallery');
 
     }
     require_once $_CONF['path'] . 'plugins/mediagallery/include/rssfeed.php';
