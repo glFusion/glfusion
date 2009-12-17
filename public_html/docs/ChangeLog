@@ -1,7 +1,17 @@
 glFusion ChangeLog
 
-v1.1.7 svn
+
+v1.1.7.pl1
 ----------
+- Media Gallery: Add space between file types to allow wrapping long
+  lists (Mark)
+- Media Gallery: The Remote Media tab is missing from the Media Gallery upload
+  options (Mark)
+- Username was cut-off at 16 characters (Mark)
+- add padding to loginform Submit button. (Eric)
+
+v1.1.7
+------
 - autotranslations block now uses an image sprite (Eric)
 - Tweak SWFUploader to now allow display of thumbnails and allow adding
   title and description (Mark)
