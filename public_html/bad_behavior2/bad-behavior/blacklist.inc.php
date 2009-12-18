@@ -32,6 +32,7 @@ function bb2_blacklist($package) {
 		"MJ12bot/v1.0.8",	// malicious botnet
 		"Movable Type",		// customised spambots
 		"Mozilla ",		// malicious software
+		"Mozilla/2",		// malicious software
 		"Mozilla/4.0(",		// from honeypot
 		"Mozilla/4.0+(",	// suspicious harvester
 		"MSIE",			// malicious software
