@@ -56,16 +56,16 @@ if( isset( $_REQUEST['aid'] ) ) {
     }
 
     // check to ensure we have a valid album_id
-    if( ( $album_id <= $albums ) && ( !empty( $album_id ) ) ) {
-
+    if ( isset($MG_albums[$album_id]->id) && $MG_albums[$album_id]->id == $album_id ) {
         // retrieve the upload filesize limit
         $size_limit = MG_getUploadLimit( $album_id );
 
         // retrieve the valid filetypes
         $valid_types = MG_getValidFileTypes( $album_id );
-
     } else {
         COM_errorLog( 'album_rpc.php: invalid album id' );
+        $size_limit = 0;
+        $valid_types = '';
     }
 
     // return the album-specific data
