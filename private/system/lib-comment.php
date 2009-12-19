@@ -120,7 +120,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
         list($plgurl, $plgid) = PLG_getCommentUrlId($type);
         $commentbar->set_var( 'story_link', "$plgurl?$plgid=$sid" );
-        $cmt_title = htmlspecialchars($cmt_title);
+        $cmt_title = htmlspecialchars($cmt_title,ENT_COMPAT,COM_getEncodingt());
     }
     $commentbar->set_var('comment_title', $cmt_title);
     if( !empty( $_USER['uid'] ) && ( $_USER['uid'] > 1 )) {
@@ -157,14 +157,14 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
                               $_CONF['site_url'] . '/comment.php' );
         $hidden = '';
         if( $_REQUEST['mode'] == 'view' ) {
-            $hidden .= '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>';
-            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>';
+            $hidden .= '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid']),ENT_COMPAT,COM_getEncodingt()) . '"' . XHTML . '>';
+            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid']),ENT_COMPAT,COM_getEncodingt()) . '"' . XHTML . '>';
         }
         else if( $_REQUEST['mode'] == 'display' ) {
-            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['pid'])) . '"' . XHTML . '>';
+            $hidden .= '<input type="hidden" name="pid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['pid']),ENT_COMPAT,COM_getEncodingt()) . '"' . XHTML . '>';
         }
         $commentbar->set_var( 'hidden_field', $hidden .
-                '<input type="hidden" name="mode" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['mode'])) . '"' . XHTML . '>' );
+                '<input type="hidden" name="mode" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['mode']),ENT_COMPAT,COM_getEncodingt()) . '"' . XHTML . '>' );
     } else if( $type == 'article' ) {
         $commentbar->set_var( 'parent_url',
                               $_CONF['site_url'] . '/article.php' );
@@ -237,7 +237,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
     if( $ccode == 0 &&
      ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
-//    if( $ccode == 0 ) {
         $template->set_var( 'lang_replytothis', $LANG01[43] );
         $template->set_var( 'lang_reply', $LANG01[25] );
     } else {
@@ -386,12 +385,12 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $P = DB_fetchArray( $result );
             if( $P['pid'] != 0 ) {
                 $plink = $_CONF['site_url'] . '/comment.php?mode=display&amp;sid='
-                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'] ))
+                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'] ),ENT_COMPAT,COM_getEncodingt())
                        . '&amp;type=' . $type . '&amp;order=' . $order . '&amp;pid='
                        . $P['pid'] . '&amp;format=threaded';
             } else {
                 $plink = $_CONF['site_url'] . '/comment.php?mode=view&amp;sid='
-                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'] ))
+                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'] ),ENT_COMPAT,COM_getEncodingt())
                        . '&amp;type=' . $type . '&amp;order=' . $order . '&amp;cid='
                        . $A['pid'] . '&amp;format=threaded';
             }
@@ -484,10 +483,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                                                 strip_tags($_REQUEST['query']) );
         }
 
-        $A['comment'] = str_replace( '$', '&#36;',  $A['comment'] );
-        $A['comment'] = str_replace( '{', '&#123;', $A['comment'] );
-        $A['comment'] = str_replace( '}', '&#125;', $A['comment'] );
-
         // Replace any plugin autolink tags
         $A['comment'] = PLG_replaceTags( $A['comment'] );
 
@@ -495,7 +490,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $reply_link = '';
         if( $ccode == 0 &&
          ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
-//        if( $ccode == 0 ) {
             $reply_link = $_CONF['site_url'] . '/comment.php?sid=' . $A['sid']
                         . '&amp;pid=' . $A['cid'] . '&amp;title='
                         . urlencode($A['title']) . '&amp;type=' . $A['type'];
@@ -508,8 +502,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->set_var( 'reply_link', $reply_link );
 
         // format title for display, must happen after reply_link is created
-        $A['title'] = htmlspecialchars( $A['title'] );
-        $A['title'] = str_replace( '$', '&#36;', $A['title'] );
+        $A['title'] = htmlspecialchars( $A['title'],ENT_COMPAT,COM_getEncodingt() );
 
         $template->set_var( 'title', $A['title'] );
         $template->set_var( 'comments', $A['comment'] );
@@ -796,26 +789,20 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             // $commenttext is what the user entered and goes back into the
             // <textarea> -> don't strip HTML
 
-            $commenttext = htmlspecialchars (COM_stripslashes ($comment));
+            $commenttext = htmlspecialchars (COM_stripslashes ($comment),ENT_COMPAT,COM_getEncodingt());
 
             $fakepostmode = $postmode;
             if ($postmode == 'html') {
                 $comment = COM_checkWords (COM_checkHTML  (COM_stripslashes ($comment)));
             } else {
-                $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)));
+                $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)),ENT_COMPAT,COM_getEncodingt());
                 $newcomment = COM_makeClickableLinks ($comment);
                 if (strcmp ($comment, $newcomment) != 0) {
                     $comment = nl2br ($newcomment);
                     $fakepostmode = 'html';
                 }
             }
-            // Replace $, {, and } with special HTML equivalents
-            $commenttext = str_replace('$','&#36;',$commenttext);
-            $commenttext = str_replace('{','&#123;',$commenttext);
-            $commenttext = str_replace('}','&#125;',$commenttext);
-
             $title = COM_checkWords (strip_tags (COM_stripslashes ($title)));
-            // $title = str_replace('$','&#36;',$title); done in CMT_getComment
 
             $_POST['title'] = $title;
             $newcomment = $comment;
@@ -907,7 +894,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 
             if ($mode == 'edit' || $mode == $LANG03[28]) { //edit modes
             	$comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[41]));
-            	$comment_template->set_var('cid', '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid'])) . '"' . XHTML . '>');
+            	$comment_template->set_var('cid', '<input type="hidden" name="cid" value="' . htmlspecialchars(COM_applyFilter($_REQUEST['cid']),ENT_COMPAT,COM_getEncodingt()) . '"' . XHTML . '>');
             }
             else {
                 $comment_template->set_var('start_block_postacomment', COM_startBlock($LANG03[1]));
@@ -946,7 +933,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             }
 
             $comment_template->set_var('lang_title', $LANG03[16]);
-            $comment_template->set_var('title', htmlspecialchars($title));
+            $comment_template->set_var('title', htmlspecialchars($title),ENT_COMPAT,COM_getEncodingt());
             $comment_template->set_var('lang_comment', $LANG03[9]);
             $comment_template->set_var('comment', $commenttext);
             $comment_template->set_var('lang_postmode', $LANG03[2]);
@@ -1430,7 +1417,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
         $comment = COM_checkWords (COM_checkHTML (COM_stripslashes ($comment)));
     } else {
     	//plaintext
-        $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)));
+        $comment = htmlspecialchars (COM_checkWords (COM_stripslashes ($comment)),ENT_COMPAT,COM_getEncodingt());
         $newcomment = COM_makeClickableLinks ($comment);
         if (strcmp ($comment, $newcomment) != 0) {
             $comment = nl2br ($newcomment);

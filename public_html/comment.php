@@ -544,7 +544,6 @@ default:  // New Comment
                                     "sid = '".addslashes($sid)."'" . COM_getPermSQL('AND')
                                     . COM_getTopicSQL('AND'));
             }
-            $title = str_replace ('$', '&#36;', $title);
             // CMT_commentForm expects non-htmlspecial chars for title...
             $title = str_replace ( '&amp;', '&', $title );
             $title = str_replace ( '&quot;', '"', $title );

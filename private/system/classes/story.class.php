@@ -399,7 +399,7 @@ class Story
             $varname = '_' . $fieldname;
 
             if (array_key_exists($fieldname, $story)) {
-                $this->{$varname}= stripslashes($story[$fieldname]);
+                $this->{$varname}= $story[$fieldname];
             }
         }
         if (array_key_exists('username', $story)) {
@@ -1664,6 +1664,7 @@ class Story
      */
     function _displayEscape($in)
     {
+        return $in;
         $return = str_replace('$', '&#36;', $in);
         $return = str_replace('{', '&#123;', $return);
         $return = str_replace('}', '&#125;', $return);

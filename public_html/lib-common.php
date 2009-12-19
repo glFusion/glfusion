@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.1.7');
 }
 
-define('PATCHLEVEL','.pl0');
+define('PATCHLEVEL','.pl1');
 
 //define('DEMO_MODE',true);
 
@@ -3143,6 +3143,8 @@ function COM_killJS( $Message )
 */
 function COM_handleCode( $str )
 {
+return $str;
+
     $search  = array( '&',     '\\',    '<',    '>',    '[',     ']'     );
     $replace = array( '&amp;', '&#92;', '&lt;', '&gt;', '&#91;', '&#93;' );
 
@@ -3167,16 +3169,13 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
     global $_CONF;
 
     // replace any \ with &#092; (HTML equiv)
-    $str = str_replace('\\', '&#092;', $str );
+//    $str = str_replace('\\', '&#092;', $str );
 
     // Get rid of any newline characters
     $str = preg_replace( "/\n/", '', $str );
 
-    // Replace any $ with &#36; (HTML equiv)
-    $str = str_replace( '$', '&#36;', $str );
     // handle [code] ... [/code]
-    do
-    {
+    do {
         $start_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[code]' );
         if( $start_pos !== false )
         {
@@ -4562,6 +4561,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         if( $nrows > 0 ) {
             $newcomments = array();
             for( $x = 0; $x < $nrows; $x++ ) {
+                $titletouse = '';
                 $url = $commentrow[$x]['url'];
                 $title = COM_undoSpecialChars( stripslashes( $commentrow[$x]['title'] ));
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
@@ -4571,14 +4571,12 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 } else {
                     $attr = array();
                 }
-                $acomment = str_replace( '$', '&#36;', $titletouse );
-                $acomment = str_replace( ' ', '&nbsp;', $acomment );
 
                 if( $commentrow[$x]['dups'] > 1 ) {
-                    $acomment .= ' [+' . $commentrow[$x]['dups'] . ']';
+                    $titletouse .= ' [+' . $commentrow[$x]['dups'] . ']';
                 }
 
-                $newcomments[] = COM_createLink($acomment, $url, $attr);
+                $newcomments[] = COM_createLink($titletouse, $url, $attr);
             }
 
             $retval .= COM_makeList( $newcomments, 'list-new-comments' );
@@ -4610,6 +4608,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
             for( $i = 0; $i < $nrows; $i++ )
             {
+                $titletouse = '';
                 $A = DB_fetchArray( $result );
 
                 $url = COM_buildUrl( $_CONF['site_url']
@@ -4627,15 +4626,12 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 {
                     $attr = array();
                 }
-                $acomment = str_replace( '$', '&#36;', $titletouse );
-                $acomment = str_replace( ' ', '&nbsp;', $acomment );
-
                 if( $A['count'] > 1 )
                 {
-                    $acomment .= ' [+' . $A['count'] . ']';
+                    $titletouse .= ' [+' . $A['count'] . ']';
                 }
 
-                $newcomments[] = COM_createLink($acomment, $url, $attr);
+                $newcomments[] = COM_createLink($titletouse, $url, $attr);
             }
 
             $retval .= COM_makeList( $newcomments, 'list-new-trackbacks' );
