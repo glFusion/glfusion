@@ -1,7 +1,8 @@
 glFusion ChangeLog
 
-v1.1.7.pl1
+v1.1.7.pl2
 ----------
+- Fixed error in lib-comment.php (Mark)
 - Removed an annoying warning message from upload class (Mark)
 - Ensure What's New comment / trackback listings properly wrap (Mark)
 - Media Gallery: Fixed issue where album_rpc could return invalid album_id
