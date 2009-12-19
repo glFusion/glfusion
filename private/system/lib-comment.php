@@ -390,7 +390,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                        . $P['pid'] . '&amp;format=threaded';
             } else {
                 $plink = $_CONF['site_url'] . '/comment.php?mode=view&amp;sid='
-                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'] ),ENT_COMPAT,COM_getEncodingt())
+                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'],ENT_COMPAT,COM_getEncodingt() ))
                        . '&amp;type=' . $type . '&amp;order=' . $order . '&amp;cid='
                        . $A['pid'] . '&amp;format=threaded';
             }
