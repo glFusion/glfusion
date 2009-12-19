@@ -1,8 +1,15 @@
 glFusion ChangeLog
 
-
 v1.1.7.pl1
 ----------
+- Removed an annoying warning message from upload class (Mark)
+- Ensure What's New comment / trackback listings properly wrap (Mark)
+- Media Gallery: Fixed issue where album_rpc could return invalid album_id
+  when the album_id is actually valid. (Mark)
+- Media Gallery: Fixed SWFupload so the browse button has proper transparency
+  (Mark)
+- Fixed issue where [link] auto tag did not work in forum posts (Mark)
+- Update Bad Behavior to v2.0.35 (Mark)
 - Media Gallery: Add space between file types to allow wrapping long
   lists (Mark)
 - Media Gallery: The Remote Media tab is missing from the Media Gallery upload
