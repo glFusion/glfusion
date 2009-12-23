@@ -159,7 +159,7 @@ if (isset($_USER['uid']) && $_USER['uid'] == $submitter ) {
     $static = true;
     $voted = 0;
 } else {
-    if ( in_array($lid,$FM_ratedIds)) {
+    if ( @in_array($lid,$FM_ratedIds)) {
         $static = true;
         $voted = 1;
     } else {
