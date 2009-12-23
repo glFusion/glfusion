@@ -1,7 +1,9 @@
 glFusion ChangeLog
 
-v1.1.7.pl2
+v1.1.7.pl3
 ----------
+- Fixed error that could cause glFusion to crash when viewing FileMgmt
+  comments (Mark)
 - Fixed error in lib-comment.php (Mark)
 - Removed an annoying warning message from upload class (Mark)
 - Ensure What's New comment / trackback listings properly wrap (Mark)
