@@ -385,7 +385,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $P = DB_fetchArray( $result );
             if( $P['pid'] != 0 ) {
                 $plink = $_CONF['site_url'] . '/comment.php?mode=display&amp;sid='
-                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'] ),ENT_COMPAT,COM_getEncodingt())
+                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'], ENT_COMPAT,COM_getEncodingt()))
                        . '&amp;type=' . $type . '&amp;order=' . $order . '&amp;pid='
                        . $P['pid'] . '&amp;format=threaded';
             } else {
@@ -933,7 +933,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             }
 
             $comment_template->set_var('lang_title', $LANG03[16]);
-            $comment_template->set_var('title', htmlspecialchars($title),ENT_COMPAT,COM_getEncodingt());
+            $comment_template->set_var('title', htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
             $comment_template->set_var('lang_comment', $LANG03[9]);
             $comment_template->set_var('comment', $commenttext);
             $comment_template->set_var('lang_postmode', $LANG03[2]);
