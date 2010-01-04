@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.1.7');
 }
 
-define('PATCHLEVEL','.pl3');
+define('PATCHLEVEL','.pl4');
 
 //define('DEMO_MODE',true);
 
