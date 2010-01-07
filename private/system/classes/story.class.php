@@ -589,16 +589,12 @@ class Story
             $this->_uid = $_USER['uid'];
             $this->_date = time();
             $this->_expire = time();
-            $this->_commentcode = $_CONF['comment_code'];
-            $this->_trackbackcode = $_CONF['trackback_code'];
             $this->_hits = 0;
             $this->_rating = 0.00;
             $this->_votes = 0;
             $this->_comments = 0;
             $this->_trackbacks = 0;
             $this->_numemails = 0;
-            $this->_statuscode = 0;
-            $this->_featured = 0;
             $this->_owner_id = $_USER['uid'];
         }
 
