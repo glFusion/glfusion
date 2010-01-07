@@ -12,8 +12,27 @@ v1.2.0 svn
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
 - Merge layout custom CSS files rather than uniquely select (Mark H.)
 
-v1.1.7.pl1
+v1.1.7.pl5
 ----------
+- Story clone did not clone all attributes properly (Mark)
+- Forum plugin: Consistent use of min_min_username_length setting (Mark)
+- Removed all file_exists() checks on template files (Lee)
+- Tweaks to rating library to ensure only valid votes are processed (Mark)
+- Editing a story would reset ratings to 0 (Mark)
+
+- Media Gallery: Fixed date issues in Manage Media screen where year was
+  limited to less than 2010. (Mark)
+- Fixed error that could cause glFusion to crash when viewing FileMgmt
+  comments (Mark)
+- Fixed error in lib-comment.php (Mark)
+- Removed an annoying warning message from upload class (Mark)
+- Ensure What's New comment / trackback listings properly wrap (Mark)
+- Media Gallery: Fixed issue where album_rpc could return invalid album_id
+  when the album_id is actually valid. (Mark)
+- Media Gallery: Fixed SWFupload so the browse button has proper transparency
+  (Mark)
+- Fixed issue where [link] auto tag did not work in forum posts (Mark)
+- Update Bad Behavior to v2.0.35 (Mark)
 - Media Gallery: Add space between file types to allow wrapping long
   lists (Mark)
 - Media Gallery: The Remote Media tab is missing from the Media Gallery upload

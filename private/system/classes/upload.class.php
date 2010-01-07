@@ -1117,12 +1117,7 @@ class upload
                         if ($this->areErrors() AND !$this->_continueOnError) {
                             return false;
                         }
-                    } else {
-                        // No file name specified...send as warning.
-                        $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
                     }
-                } else {
-                    $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
                 }
                 $this->_imageIndex++;
             }
@@ -1155,12 +1150,7 @@ class upload
                     if ($this->areErrors() AND !$this->_continueOnError) {
                         return false;
                     }
-                } else {
-                    // No file name specified...send as warning.
-                    $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
                 }
-            } else {
-                $this->_addWarning('File #' . $this->_imageIndex . ' on the HTML form was empty...ignoring it and continuing');
             }
         }
         // This function returns false if any errors were encountered

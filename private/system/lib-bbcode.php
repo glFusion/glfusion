@@ -90,8 +90,6 @@ function BBC_formatTextBlock( $str, $postmode='html', $parser = array(), $code =
                       'inline', array('listitem','block','inline','link'), array());
     $bbcode->addCode ('url', 'usecontent?', '_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
-    $bbcode->addCode ('link', 'callback_replace_single', '_bbcode_url', array (),
-                      'link', array ('listitem', 'block', 'inline'), array ('link'));
     $bbcode->addCode ('img', 'usecontent', '_bbcode_img', array (),
                       'image', array ('listitem', 'block', 'inline', 'link'), array ());
     $bbcode->addCode ('code', 'usecontent', '_bbcode_code', array ('usecontent_param' => 'default'),

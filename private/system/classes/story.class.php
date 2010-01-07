@@ -399,7 +399,7 @@ class Story
             $varname = '_' . $fieldname;
 
             if (array_key_exists($fieldname, $story)) {
-                $this->{$varname}= stripslashes($story[$fieldname]);
+                $this->{$varname}= $story[$fieldname];
             }
         }
         if (array_key_exists('username', $story)) {
@@ -589,16 +589,12 @@ class Story
             $this->_uid = $_USER['uid'];
             $this->_date = time();
             $this->_expire = time();
-            $this->_commentcode = $_CONF['comment_code'];
-            $this->_trackbackcode = $_CONF['trackback_code'];
             $this->_hits = 0;
             $this->_rating = 0.00;
             $this->_votes = 0;
             $this->_comments = 0;
             $this->_trackbacks = 0;
             $this->_numemails = 0;
-            $this->_statuscode = 0;
-            $this->_featured = 0;
             $this->_owner_id = $_USER['uid'];
         }
 
@@ -696,7 +692,12 @@ class Story
             $this->_comments = 0;
         }
 
-        /* Format dates for storage: */
+        /* Acquire Rating / Votes */
+        list($rating_id, $rating, $votes) = RATING_getRating( 'article', $this->_sid );
+        $this->_rating = $rating;
+        $this->_votes = $votes;
+
+       /* Format dates for storage: */
         /*
          * Doing this here would use the webserver's timezone, but we need
          * to use the DB server's timezone so that ye olde timezone hack
@@ -1664,6 +1665,7 @@ class Story
      */
     function _displayEscape($in)
     {
+        return $in;
         $return = str_replace('$', '&#36;', $in);
         $return = str_replace('{', '&#123;', $return);
         $return = str_replace('}', '&#125;', $return);

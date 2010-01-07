@@ -554,8 +554,11 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     }
     $day_select .= '</select>';
 
+    $current_year = (int) date("Y");
+    $end_year = $current_year + 10;
+
     $year_select = '<select name="media_year">';
-    for ($i = 1998; $i < 2010; $i++) {
+    for ($i = 1998; $i < $end_year; $i++) {
             $year_select .= '<option value="' . $i . '"' . ($media_time_year == $i ? 'selected="selected"' : "") . '>' . $i . '</option>';
     }
     $year_select .= '</select>';

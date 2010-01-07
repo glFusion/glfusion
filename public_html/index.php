@@ -288,10 +288,10 @@ if ( isset( $_SYSTEM['sort_story_by'] ) ) {
             $orderBy = ' date DESC ';
             break;
         case 1 : // title
-            $orderBy = ' title DESC ';
+            $orderBy = ' title ASC ';
             break;
         case 2 : // ID
-            $orderBy = ' sid DESC ';
+            $orderBy = ' sid ASC ';
             break;
         default :
             $orderBy = ' date DESC ';

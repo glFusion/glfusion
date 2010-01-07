@@ -7,9 +7,13 @@ function is_ipv6($address) {
 
 // Look up address on various blackhole lists.
 // These should not be used for GET requests under any circumstances!
+// FIXME: Note that this code is no longer in use
 function bb2_blackhole($package) {
 	// Can't use IPv6 addresses yet
 	if (@is_ipv6($package['ip'])) return false;
+
+	// Workaround for "MySQL server has gone away"
+	bb2_db_query("SET @@session.wait_timeout = 90");
 
 	// Only conservative lists
 	$bb2_blackhole_lists = array(
@@ -48,6 +52,9 @@ function bb2_httpbl($settings, $package) {
 	if (@is_ipv6($package['ip'])) return false;
 
 	if (@!$settings['httpbl_key']) return false;
+
+	// Workaround for "MySQL server has gone away"
+	bb2_db_query("SET @@session.wait_timeout = 90");
 
 	$find = implode('.', array_reverse(explode('.', $package['ip'])));
 	$result = gethostbynamel($settings['httpbl_key'].".${find}.dnsbl.httpbl.org.");

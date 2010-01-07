@@ -115,7 +115,7 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
         // Link to plugin defined link or lacking that a generic link that the plugin should support (hopefully)
         list($plgurl, $plgid) = PLG_getCommentUrlId($type);
         $commentbar->set_var( 'story_link', "$plgurl?$plgid=$sid" );
-        $cmt_title = htmlspecialchars($cmt_title);
+        $cmt_title = htmlspecialchars($cmt_title,ENT_COMPAT,COM_getEncodingt());
     }
     $commentbar->set_var('comment_title', $cmt_title);
     if( !empty( $_USER['uid'] ) && ( $_USER['uid'] > 1 )) {
@@ -228,7 +228,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
     if( $ccode == 0 &&
      ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
-//    if( $ccode == 0 ) {
         $template->set_var( 'lang_replytothis', $LANG01[43] );
         $template->set_var( 'lang_reply', $LANG01[25] );
     } else {
@@ -377,12 +376,12 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             $P = DB_fetchArray( $result );
             if( $P['pid'] != 0 ) {
                 $plink = $_CONF['site_url'] . '/comment.php?mode=display&amp;sid='
-                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'] ))
+                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'], ENT_COMPAT,COM_getEncodingt()))
                        . '&amp;type=' . $type . '&amp;order=' . $order . '&amp;pid='
                        . $P['pid'] . '&amp;format=threaded';
             } else {
                 $plink = $_CONF['site_url'] . '/comment.php?mode=view&amp;sid='
-                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'] ))
+                       . $A['sid'] . '&amp;title=' . urlencode( htmlspecialchars( $P['title'],ENT_COMPAT,COM_getEncodingt() ))
                        . '&amp;type=' . $type . '&amp;order=' . $order . '&amp;cid='
                        . $A['pid'] . '&amp;format=threaded';
             }
@@ -474,10 +473,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
                                                 strip_tags($_REQUEST['query']) );
         }
 
-        $A['comment'] = str_replace( '$', '&#36;',  $A['comment'] );
-        $A['comment'] = str_replace( '{', '&#123;', $A['comment'] );
-        $A['comment'] = str_replace( '}', '&#125;', $A['comment'] );
-
         // Replace any plugin autolink tags
         $A['comment'] = PLG_replaceTags( $A['comment'] );
 
@@ -485,7 +480,6 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $reply_link = '';
         if( $ccode == 0 &&
          ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
-//        if( $ccode == 0 ) {
             $reply_link = $_CONF['site_url'] . '/comment.php?sid=' . $A['sid']
                         . '&amp;pid=' . $A['cid'] . '&amp;title='
                         . urlencode($A['title']) . '&amp;type=' . $A['type'];
@@ -498,8 +492,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         $template->set_var( 'reply_link', $reply_link );
 
         // format title for display, must happen after reply_link is created
-        $A['title'] = htmlspecialchars( $A['title'] );
-        $A['title'] = str_replace( '$', '&#36;', $A['title'] );
+        $A['title'] = htmlspecialchars( $A['title'],ENT_COMPAT,COM_getEncodingt() );
 
         $template->set_var( 'title', $A['title'] );
         $template->set_var( 'comments', $A['comment'] );
@@ -779,13 +772,7 @@ $commenttext = $comment;
                     $fakepostmode = 'html';
                 }
             }
-            // Replace $, {, and } with special HTML equivalents
-            $commenttext = str_replace('$','&#36;',$commenttext);
-            $commenttext = str_replace('{','&#123;',$commenttext);
-            $commenttext = str_replace('}','&#125;',$commenttext);
-
             $title = COM_checkWords (strip_tags ($title));
-            // $title = str_replace('$','&#36;',$title); done in CMT_getComment
 
             $_POST['title'] = $title;
             $newcomment = $comment;
@@ -904,7 +891,7 @@ $commenttext = $comment;
             }
 
             $comment_template->set_var('lang_title', $LANG03[16]);
-            $comment_template->set_var('title', htmlspecialchars($title));
+            $comment_template->set_var('title', htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
             $comment_template->set_var('lang_comment', $LANG03[9]);
             $comment_template->set_var('comment', $commenttext);
             $comment_template->set_var('lang_postmode', $LANG03[2]);

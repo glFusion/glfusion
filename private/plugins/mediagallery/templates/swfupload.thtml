@@ -611,16 +611,6 @@ SWFUpload.onload = function () {
     var settings = {
         flash_url : "{flash_url}",
         upload_url: "{upload_url}",
-/* ------------------------------
-        post_params: {
-            "uid" : "{user_id}",
-            "sid" : "{user_token}",
-            "aid" : "{album_id}"
-        },
-        file_types : "{swfupload_file_types}",
-        file_types_description : "{swfupload_types_desc}",
-        file_size_limit : "{swfupload_size_limit} M",
------------------------------------ */
         file_upload_limit : 100,
         file_queue_limit : 0,
         custom_settings : {
@@ -634,6 +624,7 @@ SWFUpload.onload = function () {
         button_placeholder_id : "spanButtonPlaceholder",
         button_width: 61,
         button_height: 22,
+        button_window_mode : SWFUpload.WINDOW_MODE.TRANSPARENT,
 
         // The event handler functions are defined in handlers.js
         swfupload_loaded_handler : swfUploadLoaded,
@@ -656,6 +647,7 @@ SWFUpload.onload = function () {
     swfu = new SWFUpload(settings);
 
     // set the user_id, user_token, dest_album & allowed_file_types
+    onAlbumChange();
     onAlbumChange();
 }
 

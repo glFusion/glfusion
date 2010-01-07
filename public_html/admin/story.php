@@ -331,8 +331,7 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
 
     // Load HTML templates
     $story_templates = new Template($_CONF['path_layout'] . 'admin/story');
-    if ( isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1 )
-        && file_exists ($_CONF['path_layout'] . 'admin/story/storyeditor_advanced.thtml')) {
+    if ( isset ($_CONF['advanced_editor']) && ($_CONF['advanced_editor'] == 1 )) {
         $advanced_editormode = true;
         $story_templates->set_file(array('editor'=>'storyeditor_advanced.thtml'));
         if ( file_exists($_CONF['path_layout'] . '/fckstyles.xml') ) {

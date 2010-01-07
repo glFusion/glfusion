@@ -532,8 +532,6 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
     }
     $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
                       'link', array ('listitem', 'block', 'inline'), array ('link'));
-    $bbcode->addCode ('link', 'callback_replace_single', 'do_bbcode_url', array (),
-                      'link', array ('listitem', 'block', 'inline'), array ('link'));
     $bbcode->addCode ('img', 'usecontent', 'do_bbcode_img', array (),
                       'image', array ('listitem', 'block', 'inline', 'link'), array ());
     $bbcode->addCode ('file', 'usecontent', 'do_bbcode_file', array (),
