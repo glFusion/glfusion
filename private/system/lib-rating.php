@@ -105,7 +105,7 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 
     // now draw the rating bar
     $rating_width   = @number_format($current_rating,2)*$rating_unitwidth;
-    $rating1        = @number_format($current_rating,1);
+    $rating1        = @number_format($current_rating,2);
     $rating2        = @number_format($current_rating,2);
 
     if ( $static ) {
@@ -321,6 +321,7 @@ function RATING_deleteVote( $voteID )
                 $new_rating = $sum / $votes;
             } else {
                 $new_rating = 0;
+                $votes      = 0;
             }
             $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating=".$new_rating." WHERE id = ".$rating_id;
             DB_query($sql);
@@ -356,9 +357,15 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
 
     list($rating_id, $current_rating, $current_votes) = RATING_getRating( $type, $item_id );
 
+    if ( $rating < 1 ) {
+        return array($current_rating, $current_votes);
+    }
+
     $sum = $rating  + ( $current_rating * $current_votes ); // add together the current vote value and the total vote value
     ($sum==0 ? $votes=0 : $votes=$current_votes+1);
     $new_rating = $sum / $votes;
+
+    $new_rating = sprintf("%2.2f",$new_rating);
 
     if ( $rating_id != 0 ) {
         $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating=".$new_rating." WHERE id = ".$rating_id;
