@@ -697,17 +697,9 @@ class Story
         }
 
         /* Acquire Rating / Votes */
-        $sql = "SELECT votes, rating FROM {$_TABLES['rating']} WHERE type='article' and item_id='".addslashes($this->_sid)."'";
-        $result = DB_query($sql);
-
-        if ($result && (DB_numRows($result) == 1)) {
-            list($votes, $rating) = DB_fetchArray($result);
-            $this->_rating = $rating;
-            $this->_votes = $votes;
-        } else {
-            $this->_rating = 0;
-            $this->_votes  = 0;
-        }
+        list($rating_id, $rating, $votes) = RATING_getRating( 'article', $this->_sid );
+        $this->_rating = $rating;
+        $this->_votes = $votes;
 
        /* Format dates for storage: */
         /*
