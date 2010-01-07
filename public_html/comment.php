@@ -88,7 +88,7 @@ function handleSubmit()
             if (!isset($commentcode) || ($commentcode != 0)) {
                 return COM_refresh($_CONF['site_url'] . '/index.php');
             }
-            if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
+            if ($_CONF['advanced_editor'] == 1) {
                 if ( $_POST['postmode'] == 'html' ) {
                     $comment = $_POST['comment_html'];
                 } else if ( $_POST['postmode'] == 'plaintext' ) {
@@ -117,7 +117,7 @@ function handleSubmit()
             break;
         default: // assume plugin
             $comment = '';
-            if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
+            if ($_CONF['advanced_editor'] == 1) {
                 if ( $_POST['postmode'] == 'html' ) {
                     $comment = $_POST['comment_html'];
                 } else if ( $_POST['postmode'] == 'plaintext' ) {
@@ -383,7 +383,7 @@ function handleEditSubmit()
         $uid = $_USER['uid'];
     }
 
-    if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
+    if ($_CONF['advanced_editor'] == 1) {
         if ( $_POST['postmode'] == 'html' ) {
             $comment = $_POST['comment_html'];
         } else if ( $_POST['postmode'] == 'plaintext' ) {
@@ -454,7 +454,7 @@ case $LANG03[28]: //Preview Changes (for edit)
 
 case $LANG03[14]: // Preview
     $comment = '';
-    if (($_CONF['advanced_editor'] == 1) && file_exists ($_CONF['path_layout'] . 'comment/commentform_advanced.thtml')) {
+    if ($_CONF['advanced_editor'] == 1)) {
         if ( $_POST['postmode'] == 'html' ) {
             $comment = $_POST['comment_html'];
         } else if ( $_POST['postmode'] == 'plaintext' ) {
