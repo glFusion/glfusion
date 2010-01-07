@@ -154,7 +154,7 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
         $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$id}";
         alertMessage('',$LANG_GF02['msg189'], sprintf($LANG_GF02['msg187'],$link));
     } else {
-        if(strlen(trim($_POST['name'])) > $CONF_FORUM['min_username_length'] && strlen(trim($_POST['comment'])) > $CONF_FORUM['min_comment_length']) {
+        if(strlen(trim($_POST['name'])) >= $CONF_FORUM['min_username_length'] && strlen(trim($_POST['comment'])) >= $CONF_FORUM['min_comment_length']) {
             if ($CONF_FORUM['use_spamx_filter'] == 1) {
                 // Check for SPAM
                 $spamcheck = '<h1>' . $_POST['subject'] . '</h1><p>' . $_POST['comment'] . '</p>';
@@ -255,9 +255,9 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
             }
         }
         if ( $msg == '' ) {
-            if(strlen(trim($name)) > $CONF_FORUM['min_username_length'] AND
-                strlen(trim($_POST['subject'])) > $CONF_FORUM['min_subject_length'] AND
-                strlen(trim($_POST['comment'])) > $CONF_FORUM['min_comment_length']) {
+            if(strlen(trim($name)) >= $CONF_FORUM['min_username_length'] AND
+                strlen(trim($_POST['subject'])) >= $CONF_FORUM['min_subject_length'] AND
+                strlen(trim($_POST['comment'])) >= $CONF_FORUM['min_comment_length']) {
 
                 COM_clearSpeedlimit ($CONF_FORUM['post_speedlimit'], 'forum');
                 $last = COM_checkSpeedlimit ('forum');
@@ -363,7 +363,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                 $name = gf_preparefordb(gf_checkHTML(strip_tags(COM_checkWords($_POST['name']))),'text');
             }
             $name = urldecode($name);
-            if($name != '' && strlen(trim($_POST['comment'])) > $CONF_FORUM['min_comment_length']) {
+            if($name != '' && strlen(trim($_POST['comment'])) >= $CONF_FORUM['min_comment_length']) {
 
                 COM_clearSpeedlimit ($CONF_FORUM['post_speedlimit'], 'forum');
                 $last = COM_checkSpeedlimit ('forum');
