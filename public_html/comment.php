@@ -454,7 +454,7 @@ case $LANG03[28]: //Preview Changes (for edit)
 
 case $LANG03[14]: // Preview
     $comment = '';
-    if ($_CONF['advanced_editor'] == 1)) {
+    if ($_CONF['advanced_editor'] == 1) {
         if ( $_POST['postmode'] == 'html' ) {
             $comment = $_POST['comment_html'];
         } else if ( $_POST['postmode'] == 'plaintext' ) {
