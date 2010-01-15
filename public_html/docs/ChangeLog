@@ -2,6 +2,9 @@ glFusion ChangeLog
 
 v1.1.7.pl5
 ----------
+- Fixed issue where magic_quotes and PHP < 5.2 would cause images to
+  be stripped from articles (Mark)
+- Ensure story / comment titles properly wrap in What's New block (Mark)
 - Story clone did not clone all attributes properly (Mark)
 - Forum plugin: Consistent use of min_min_username_length setting (Mark)
 - Removed all file_exists() checks on template files (Lee)
