@@ -1,7 +1,13 @@
 glFusion ChangeLog
 
-v1.1.7.pl5
+v1.1.7.pl6
 ----------
+- FileMgmt: Fixed issue where old FM rating code could corrupt data. (Mark)
+- Media Gallery: Fixed issue where images did not properly embed in
+  Thunderbird when sending postcards. (Mark)
+- Media Gallery: Fixed issue when an empty album could cause crash  when
+  building album RSS feed. (Mark)
+
 - Fixed issue where magic_quotes and PHP < 5.2 would cause images to
   be stripped from articles (Mark)
 - Ensure story / comment titles properly wrap in What's New block (Mark)
