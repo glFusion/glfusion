@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -455,11 +455,16 @@ function MG_sendPostCard() {
 
     $mail->WordWrap = 76;
     $mail->IsHTML(true);
-    $mail->AddEmbeddedImage($_MG_CONF['path_mediaobjects'] . 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . '.jpg',"pc-image");
-    $mail->AddEmbeddedImage(MG_getImageFilePath('stamp.gif'),"stamp");
 
+    foreach ($_MG_CONF['validExtensions'] as $tnext ) {
+        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $tnext) ) {
+            $mail->AddEmbeddedImage($_MG_CONF['path_mediaobjects'] . 'disp/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $tnext,"pc-image",$M['media_original_filename'],'base64',$M['mime_type']);
+            break;
+        }
+    }
+    $mail->AddEmbeddedImage(MG_getImageFilePath('stamp.gif'),"stamp",'stamp.gif','base64','image/gif');
 
-    $mail->Subject = stripslashes($subject);
+    $mail->Subject = htmlspecialchars($subject);
     $mail->Body    = $retval;
     $mail->AltBody = sprintf($LANG_MG03['text_body_email'], $fromname, $alternate_link);
 
@@ -529,15 +534,12 @@ $mode = COM_applyFilter ($_REQUEST['mode']);
 $display = '';
 
 if ($mode == $LANG_MG03['send'] && !empty ($LANG_MG03['send'])) {
-//    $display  = MG_siteHeader();
     $display .= MG_sendPostCard();
 } elseif ( $mode == 'edit' ) {
     $mid = COM_applyFilter($_GET['mid']);
-//    $display  = MG_siteHeader();
     $display .= MG_editPostCard('create',$mid);
 } elseif ($mode == $LANG_MG03['preview']) {
     $mid = COM_applyFilter($_POST['mid']);
-//    $display  = MG_siteHeader();
     $display .= MG_previewPostCard();
     $display .= '<br' . XHTML . '><br' . XHTML . '><br' . XHTML . '>';
     $display .= MG_editPostCard('edit',$mid);
