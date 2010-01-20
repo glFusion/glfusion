@@ -1,5 +1,9 @@
 glFusion ChangeLog
 
+v1.1.8
+------
+- Made header site name easier to style. (Eric)
+
 v1.1.7.pl6
 ----------
 - FileMgmt: Fixed issue where old FM rating code could corrupt data. (Mark)
