@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -64,8 +64,7 @@ $archivetid = DB_getItem ($_TABLES['topics'], 'tid', "archive_flag=1");
 
 // Microsummary support:
 // see: http://wiki.mozilla.org/Microsummaries
-if( $microsummary )
-{
+if( $microsummary ) {
     $sql = " (UNIX_TIMESTAMP(s.date) <= NOW()) AND (draft_flag <> 1)";
 
     if (empty ($topic)) {
@@ -99,18 +98,13 @@ if( $microsummary )
     if ( $A = DB_fetchArray( $result ) ) {
         $pagetitle = $_CONF['microsummary_short'].$A['title'];
     } else {
-        if(isset( $_CONF['pagetitle'] ))
-        {
+        if(isset( $_CONF['pagetitle'] )) {
             $pagetitle = $_CONF['pagetitle'];
         }
-        if( empty( $pagetitle ))
-        {
-            if( empty( $topic ))
-            {
+        if( empty( $pagetitle )) {
+            if( empty( $topic )) {
                 $pagetitle = $_CONF['site_slogan'];
-            }
-            else
-            {
+            } else {
                 $pagetitle = stripslashes( DB_getItem( $_TABLES['topics'], 'topic',
                                                        "tid = '".addslashes($topic)."'" ));
             }
@@ -163,10 +157,6 @@ if (!empty ($displayBlock)) {
     if (file_exists($_CONF['path_layout'] . 'topcenterblock-span.thtml')) {
             $topspan = new Template($_CONF['path_layout']);
             $topspan->set_file (array ('topspan'=>'topcenterblock-span.thtml'));
-            $topspan->set_var( 'xhtml', XHTML );
-            $topspan->set_var( 'site_url', $_CONF['site_url'] );
-            $topspan->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
-            $topspan->set_var( 'layout_url', $_CONF['layout_url'] );
             $topspan->parse ('output', 'topspan');
             IO_addContent($topspan->finish ($topspan->get_var('output')));
             $GLOBALS['centerspan'] = true;

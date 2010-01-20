@@ -1752,8 +1752,10 @@ class RSSCreatorPodcast extends RSSCreator20 {
 		$this->podcast->getElements($this->additionalElements);
 
 		foreach ($this->items as $k=>$item) {
-			$this->items[$k]->podcast->getElements($this->items[$k]->additionalElements);
-			$this->items[$k]->additionalMarkup .= $this->items[$k]->podcast->getMarkup();
+		    if ( method_exists($this->items[$k]->podcast,'getElements') ) {
+    			$this->items[$k]->podcast->getElements($this->items[$k]->additionalElements);
+    			$this->items[$k]->additionalMarkup .= $this->items[$k]->podcast->getMarkup();
+    		}
 		}
 
 		return parent::createFeed();

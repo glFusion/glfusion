@@ -1786,7 +1786,7 @@ class Story
             $out = str_replace('<!--raw--><span class="raw">', '[raw]', $out);
             $out = str_replace('</span><!--/raw-->', '[/raw]', $out);
             $out = $this->_editUnescape($out);
-//            $out = $this->_displayEscape(htmlspecialchars($out));
+            $out = $this->_displayEscape(htmlspecialchars($out));
         }
 
         return $out;

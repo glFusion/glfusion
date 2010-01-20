@@ -46,7 +46,7 @@ define ('THIS_SCRIPT', 'directory.php');
 
 $display = '';
 
-if (empty ($_USER['username']) && (($_CONF['loginrequired'] == 1) ||
+if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
                                    ($_CONF['directoryloginrequired'] == 1))) {
     IO_displayLoginRequired();
 }

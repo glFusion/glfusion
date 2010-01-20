@@ -3162,8 +3162,10 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 {
     global $_CONF;
 
-    // replace any \ with &#092; (HTML equiv)
+    if ( get_magic_quotes_gpc() == 1 && version_compare(PHP_VERSION,'5.2.0','<') ) {
 //    $str = str_replace('\\', '&#092;', $str );
+        $str = COM_stripslashes($str);
+    }
 
     // Get rid of any newline characters
     $str = preg_replace( "/\n/", '', $str );
@@ -3171,19 +3173,15 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
     // handle [code] ... [/code]
     do {
         $start_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[code]' );
-        if( $start_pos !== false )
-        {
+        if( $start_pos !== false ) {
             $end_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[/code]' );
-            if( $end_pos !== false )
-            {
+            if( $end_pos !== false ) {
                 $encoded = COM_handleCode( MBYTE_substr( $str, $start_pos + 6,
                         $end_pos - ( $start_pos + 6 )));
                 $encoded = '<pre><code>' . $encoded . '</code></pre>';
                 $str = MBYTE_substr( $str, 0, $start_pos ) . $encoded
                      . MBYTE_substr( $str, $end_pos + 7 );
-            }
-            else // missing [/code]
-            {
+            } else { // missing [/code]
                 // Treat the rest of the text as code (so as not to lose any
                 // special characters). However, the calling entity should
                 // better be checking for missing [/code] before calling this
@@ -3197,14 +3195,11 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
     while( $start_pos !== false );
 
     // handle [raw] ... [/raw]
-    do
-    {
+    do {
         $start_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[raw]' );
-        if( $start_pos !== false )
-        {
+        if( $start_pos !== false ) {
             $end_pos = MBYTE_strpos( MBYTE_strtolower( $str ), '[/raw]' );
-            if( $end_pos !== false )
-            {
+            if( $end_pos !== false ) {
                 $encoded = COM_handleCode( MBYTE_substr( $str, $start_pos + 5,
                         $end_pos - ( $start_pos + 5 )));
                 // [raw2] to avoid infinite loop. Not HTML comment as we strip
@@ -3212,9 +3207,7 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
                 $encoded = '[raw2]' . $encoded . '[/raw2]';
                 $str = MBYTE_substr( $str, 0, $start_pos ) . $encoded
                      . MBYTE_substr( $str, $end_pos + 6 );
-            }
-            else // missing [/raw]
-            {
+            } else { // missing [/raw]
                 // Treat the rest of the text as raw (so as not to lose any
                 // special characters). However, the calling entity should
                 // better be checking for missing [/raw] before calling this
@@ -3231,8 +3224,7 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 
     if( isset( $_CONF['skip_html_filter_for_root'] ) &&
              ( $_CONF['skip_html_filter_for_root'] == 1 ) &&
-            SEC_inGroup( 'Root' ))
-    {
+            SEC_inGroup( 'Root' )) {
         return $str;
     }
 
@@ -4558,6 +4550,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 $titletouse = '';
                 $url = $commentrow[$x]['url'];
                 $title = COM_undoSpecialChars( stripslashes( $commentrow[$x]['title'] ));
+                $title = str_replace('&nbsp;',' ',$title);
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
                                             '...' );
                 if( $title != $titletouse ) {
@@ -4609,6 +4602,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                     . '/article.php?story=' . $A['sid'] ) . '#trackback';
 
                 $title = COM_undoSpecialChars( stripslashes( $A['title'] ));
+                $title = str_replace('&nbsp;',' ',$title);
                 $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
                                             '...' );
 
