@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 					<a href="{site_url}">
-						<img src="{site_logo}" alt="{site_name}" title="{site_name}" id="header-site-logo"{xhtml}>
+						<img id="header-site-logo" src="{site_logo}" alt="{site_name}" title="{site_name}"{xhtml}>
 					</a>
 					<div id="header-site-slogan">{site_slogan}</div>
 {# end {templatelocation} #}

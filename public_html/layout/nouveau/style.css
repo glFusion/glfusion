@@ -930,6 +930,17 @@ z-index:90;
 margin:0 0 -25px 5px;
 }
 
+#header-site-name {
+padding:25px 0 15px 20px;
+}
+#header-site-name a {
+font-style:italic;
+font-weight:bold;
+font-size:xx-large;
+color:#FFF;
+text-decoration:none;
+}
+
 #header-site-slogan {
 color:#FFF;
 margin-left:65px;
