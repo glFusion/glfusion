@@ -539,11 +539,6 @@ div.glfform form div small {
   height: expression('1%');
 }
 
-div.glfform form div.fValidator-msg {
-margin-left: 235px;
-color: #DF3737;
-}
-
 .top-r-corner {
 background:transparent url(layout/nouveau/images/top-r-corner.png) 100% 0 no-repeat;
 height:100px;
@@ -1203,13 +1198,13 @@ margin-right:10px;
 vertical-align:middle;
 }
 
-.warning {
+.glf-warning {
 background:transparent;
 color:red;
 font-weight:700;
 }
 
-.warningsmall {
+.glf-warning-small {
 background:transparent;
 color:red;
 }
@@ -2552,26 +2547,60 @@ display:block;
 position:absolute;
 }
 
-/* start gl_mootip css */
-.tool-tip {
-color:#fff;
-width:139px;
-z-index:13000;
+/* gl_mootip css */
+
+.tip-top {              /* top of the tip */
+    color: #fff;
+    width: 139px;
+    z-index: 13000;
+}
+.tip-title {            /* title of tip */
+    width: 123px;
+    font-weight: 700;
+    font-size: 11px;
+    margin: 0;
+    color: #679EF1;
+    padding: 8px 8px 4px;
+    background: url(layout/nouveau/images/gl_mootip_bg.png) top left;
 }
 
-.tool-title {
-font-weight:700;
-font-size:11px;
-color:#679EF1;
-background:url(layout/nouveau/images/gl_mootip_bg.png) top left;
-margin:0;
-padding:8px 8px 4px;
+.tip-text {             /* text in tip */
+    width: 123px;
+    font-size: 11px;
+    padding: 4px 8px 8px;
+    background: url(layout/nouveau/images/gl_mootip_bg.png) bottom right;
+    color:#fff;
+}
+.tip-text A {           /* link text in tip */
+    color:#069;
+}
+.tip-loading {          /* loading animation */
+    background: url(/layout/nouveau/images/ajax_load.gif) center center no-repeat;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
 }
 
-.tool-text {
-font-size:11px;
-background:url(layout/nouveau/images/gl_mootip_bg.png) bottom right;
-padding:4px 8px 8px;
+/* mootools FormValidator css */
+
+.validation-passed {    /* style of input field that passed */
+  border: 1px solid green; */
+}
+.validation-failed {    /* style of input field that failed */
+  border: 1px solid red;
+}
+.validation-advice {    /* style of inline error advice msg */
+  margin: 2px;          /* displayed below the .validation- */
+  color: red;           /* failed styled input box above    */
+  font-size: 90%;
+}
+.warning {              /* style of input field with warning */
+	border: 1px solid #FF8C00;
+}
+.warning-advice {       /* style of inline warning advice    */
+	margin: 2px;        /* msg displayed just below the      */
+	color:#FF8C00;      /* .warning styled input box above   */
+    font-size: 90%;
 }
 
 /* Auto Translations css */
@@ -2628,6 +2657,7 @@ height:11px;
 height:11px;
 width:16px;
 }
+
 .signature {
   overflow:hidden;
   width: 500px;
