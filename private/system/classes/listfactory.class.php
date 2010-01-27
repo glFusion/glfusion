@@ -622,11 +622,6 @@ class ListFactory {
             'field' => 'item_field.thtml'
         ));
 
-        // insert std. values into the template
-        $list_templates->set_var('xhtml', XHTML);
-        $list_templates->set_var('site_url', $_CONF['site_url']);
-        $list_templates->set_var('layout_url', $_CONF['layout_url']);
-
         $search_helper = '';
 
         $string_offsets = '';
@@ -645,8 +640,7 @@ class ListFactory {
         $offset_encode = urlencode(base64_encode($string_offsets));
         $pp_encode = urlencode(base64_encode($string_pp));
 
-        if (count($rows_arr) == 0)
-        {
+        if (count($rows_arr) == 0) {
             $list_templates->set_var('show_sort', 'display:none;');
             $list_templates->set_var('show_limit', 'display:none;');
             $list_templates->set_var('message', $LANG_ADMIN['no_results']);
@@ -669,10 +663,8 @@ class ListFactory {
                     " onclick=\"window.location.href='{$this->_page_url}";
 
         // Draw the page limit select box
-        if ($show_limit)
-        {
-            foreach ($this->_page_limits as $key => $val)
-            {
+        if ($show_limit) {
+            foreach ($this->_page_limits as $key => $val) {
                 $text = is_numeric($key) ? sprintf($LANG09[67], $val) : $key;
                 $subtags = $subtag."results=$val';\"";
                 $selected = $this->_per_page == $val ? ' selected="selected"' : '';
@@ -687,15 +679,12 @@ class ListFactory {
             $list_templates->set_var('show_limit', 'display:none;');
 
         // Create how to display the sort field
-        if ($this->_style == 'table')
-        {
+        if ($this->_style == 'table') {
             $arrow = $this->_sort_arr['direction'] == 'asc' ? 'bararrowdown' : 'bararrowup';
             $sort_selected = "{$_CONF['layout_url']}/images/$arrow.$_IMAGE_TYPE";
             $sort_selected = ' &nbsp;' . COM_createImage($sort_selected, $arrow);
             $sort_text = '';
-        }
-        else
-        {
+        } else {
             $sort_selected = ' selected="selected"';
             $sort_text = $LANG09[68].' ';
             if (!$show_sort)
@@ -704,28 +693,13 @@ class ListFactory {
 
         // Draw the sorting select box/table headings
 
-        foreach ($this->_fields as $field)
-        {
+        foreach ($this->_fields as $field) {
             if ($field['display'] == true && $field['title'] != '')
             {
                 $text = $sort_text . $field['title'];
                 $subtags = '';
                 $selected = '';
-/* ----------------------------------------------------------------
-                if ($show_sort && $field['sort'] != false)
-                {
-                    $direction = $this->_def_sort_arr['direction'];
 
-                    // Show the sort arrow
-                    if ($this->_sort_arr['field'] === $field['name'])
-                    {
-                        $selected = $sort_selected;
-                        $direction = $this->_sort_arr['direction'] == 'asc' ? 'desc' : 'asc';
-                    }
-
-                    $subtags = $subtag."order={$field['name']}&amp;direction=$direction';\"";
-                }
------------------------------------------------------------------- */
                 // Write field
                 $list_templates->set_var('sort_text', $text);
                 $list_templates->set_var('sort_subtags', $subtags);
@@ -740,17 +714,13 @@ class ListFactory {
 
         // Run through all the results
         $r = 1;
-        foreach ($rows_arr as $row)
-        {
-            if (is_callable($this->_function))
-            {
+        foreach ($rows_arr as $row) {
+            if (is_callable($this->_function)) {
                 $row = call_user_func($this->_function, false, $row);
             }
 
-            foreach ($this->_fields as $field)
-            {
-                if ($field['display'] == true)
-                {
+            foreach ($this->_fields as $field) {
+                if ($field['display'] == true) {
                     $fieldvalue = '';
                     if ($field['name'] == ROW_NUMBER)
                         $fieldvalue = $r + $offset;
