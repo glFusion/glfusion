@@ -1929,6 +1929,8 @@ $LANG_confignames['Core'] = array(
     'template_comments' => 'Include Template Comments in Page Source',
     'hidestorydate' => 'Hide Story Date',
     'maintenance_mode' => 'Enable Maintenance Mode',
+    'rating_enabled' => 'Enable Rating',
+    'user_reg_fullname' => 'Full Name option on registration form?',
 );
 
 $LANG_configsubgroups['Core'] = array(
