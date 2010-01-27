@@ -89,7 +89,7 @@ function MG_getItems ()
 	if ( $src != 'disp' && $src != 'orig' ) {
 		$src = 'tn';
 	}
-	if ( $type != 'full' || $type != 'mini' ) {
+	if ( $type != 'full' && $type != 'mini' ) {
 	    $type = 'mini';
 	}
 
