@@ -6,7 +6,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -58,10 +58,10 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.1.7');
+    define('GVERSION', '1.1.8');
 }
 
-define('PATCHLEVEL','.pl5');
+define('PATCHLEVEL','');
 
 //define('DEMO_MODE',true);
 
@@ -3168,10 +3168,7 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 {
     global $_CONF;
 
-    if ( get_magic_quotes_gpc() == 1 && version_compare(PHP_VERSION,'5.2.0','<') ) {
-//    $str = str_replace('\\', '&#092;', $str );
-        $str = COM_stripslashes($str);
-    }
+    $str = COM_stripslashes($str);
 
     // Get rid of any newline characters
     $str = preg_replace( "/\n/", '', $str );
@@ -3268,6 +3265,7 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
                                     'elements'=>'*+embed+object',
                                     'balance'=>1,
                                     'valid_xhtml'=>0
+
                                     )
                         );
     } else {

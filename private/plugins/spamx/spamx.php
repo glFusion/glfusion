@@ -44,6 +44,6 @@ if (!defined ('GVERSION')) {
 $_SPX_CONF['pi_name']            = 'spamx';
 $_SPX_CONF['pi_display_name']    = 'SpamX';
 $_SPX_CONF['pi_version']         = '1.1.2';
-$_SPX_CONF['gl_version']         = '1.1.6';
+$_SPX_CONF['gl_version']         = '1.1.8';
 $_SPX_CONF['pi_url']             = 'http://www.glfusion.org/';
 ?>
