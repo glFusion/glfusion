@@ -535,6 +535,12 @@ function createuser ($username, $email, $email_conf)
     $username   = COM_truncate(trim ($username),48);
     $email      = COM_truncate(trim ($email),96);
     $email_conf = trim ($email_conf);
+    $passwd     = '';   // placeholder for future user-entered password
+
+    $fullname = '';
+    if (!empty ($_POST['fullname'])) {
+        $fullname   = COM_truncate(trim(COM_applyFilter($_POST['fullname'])),80);
+    }
 
     if (!isset ($_CONF['disallow_domains'])) {
         $_CONF['disallow_domains'] = '';
@@ -579,7 +585,7 @@ function createuser ($username, $email, $email_conf)
                 return $retval;
             }
 
-            $uid = USER_createAccount ($username, $email);
+            $uid = USER_createAccount ($username, $email, $passwd, $fullname);
 
             if ($_CONF['usersubmission'] == 1) {
                 if (DB_getItem ($_TABLES['users'], 'status', "uid = ".intval($uid))
@@ -763,6 +769,7 @@ function newuserform ($msg = '')
     $user_templates->set_var('start_block', COM_startBlock($LANG04[22]));
     $user_templates->set_var('lang_instructions', $LANG04[23]);
     $user_templates->set_var('lang_username', $LANG04[2]);
+    $user_templates->set_var('lang_fullname', $LANG04[3]);
     $user_templates->set_var('lang_email', $LANG04[5]);
     $user_templates->set_var('lang_email_conf', $LANG04[124]);
     $user_templates->set_var('lang_warning', $LANG04[24]);
@@ -775,6 +782,18 @@ function newuserform ($msg = '')
         $username = COM_applyFilter ($_POST['username']);
     }
     $user_templates->set_var ('username', $username);
+
+    $fullname = '';
+    if (!empty ($_POST['fullname'])) {
+        $fullname = COM_applyFilter ($_POST['fullname']);
+    }
+    $user_templates->set_var ('fullname', $fullname);
+    switch ($_CONF['user_reg_fullname']) {
+    case 2:
+        $user_templates->set_var('require_fullname', 'true');
+    case 1:
+        $user_templates->set_var('show_fullname', 'true');
+    }
 
     $email = '';
     if (!empty ($_POST['email'])) {

@@ -2,7 +2,6 @@ glFusion ChangeLog
 
 v1.2.0 svn
 ----------
-- Made header site name easier to style. (Eric)
 - Added ability for theme to add to css blob (Eric)
 - Added {!!autotag ..} feature to template class (Mark)
 - Added wrapper static page widget (Eric)
@@ -12,10 +11,6 @@ v1.2.0 svn
 - Fixed Windows site link in gl_mooie6warning script (Eric)
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
 - Merge layout custom CSS files rather than uniquely select (Mark H.)
-
-v1.1.8.pl2
-----------
-- Display GVERSION and PATCHLEVEL in footer (patch by Mark H.)
 
 v1.1.8.pl1
 ----------
@@ -83,43 +78,6 @@ Media Gallery Plugin
   lists (Mark)
 - Media Gallery: The Remote Media tab is missing from the Media Gallery upload
   options (Mark)
-
-v1.1.7.pl6
-----------
-- FileMgmt: Fixed issue where old FM rating code could corrupt data. (Mark)
-- Media Gallery: Fixed issue where images did not properly embed in
-  Thunderbird when sending postcards. (Mark)
-- Media Gallery: Fixed issue when an empty album could cause crash  when
-  building album RSS feed. (Mark)
-
-- Fixed issue where magic_quotes and PHP < 5.2 would cause images to
-  be stripped from articles (Mark)
-- Ensure story / comment titles properly wrap in What's New block (Mark)
-- Story clone did not clone all attributes properly (Mark)
-- Forum plugin: Consistent use of min_min_username_length setting (Mark)
-- Removed all file_exists() checks on template files (Lee)
-- Tweaks to rating library to ensure only valid votes are processed (Mark)
-- Editing a story would reset ratings to 0 (Mark)
-
-- Media Gallery: Fixed date issues in Manage Media screen where year was
-  limited to less than 2010. (Mark)
-- Fixed error that could cause glFusion to crash when viewing FileMgmt
-  comments (Mark)
-- Fixed error in lib-comment.php (Mark)
-- Removed an annoying warning message from upload class (Mark)
-- Ensure What's New comment / trackback listings properly wrap (Mark)
-- Media Gallery: Fixed issue where album_rpc could return invalid album_id
-  when the album_id is actually valid. (Mark)
-- Media Gallery: Fixed SWFupload so the browse button has proper transparency
-  (Mark)
-- Fixed issue where [link] auto tag did not work in forum posts (Mark)
-- Update Bad Behavior to v2.0.35 (Mark)
-- Media Gallery: Add space between file types to allow wrapping long
-  lists (Mark)
-- Media Gallery: The Remote Media tab is missing from the Media Gallery upload
-  options (Mark)
-- Username was cut-off at 16 characters (Mark)
-- add padding to loginform Submit button. (Eric)
 
 v1.1.7
 ------

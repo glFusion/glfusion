@@ -33,7 +33,7 @@ bb2_addLoadEvent(function() {
 			var myElement = document.createElement('input');
 			myElement.setAttribute('type', 'hidden');
 			myElement.name = '$cookie_name';
-			myElement.value = '$cookie_value';
+			myElement.value = '".urlencode($cookie_value)."';
 			document.forms[i].appendChild(myElement);
 		}
 	}

@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.2.0.svn');
 }
 
-define('PATCHLEVEL','');
+define('PATCHLEVEL','.pl1');
 
 //define('DEMO_MODE',true);
 
@@ -3162,10 +3162,7 @@ function COM_checkHTML( $str, $permissions = 'story.edit' )
 {
     global $_CONF;
 
-    if ( get_magic_quotes_gpc() == 1 && version_compare(PHP_VERSION,'5.2.0','<') ) {
-//    $str = str_replace('\\', '&#092;', $str );
-        $str = COM_stripslashes($str);
-    }
+    $str = COM_stripslashes($str);
 
     // Get rid of any newline characters
     $str = preg_replace( "/\n/", '', $str );
@@ -3262,6 +3259,7 @@ function COM_filterHTML( $str, $permissions = 'story.edit' )
                                     'elements'=>'*+embed+object',
                                     'balance'=>1,
                                     'valid_xhtml'=>0
+
                                     )
                         );
     } else {

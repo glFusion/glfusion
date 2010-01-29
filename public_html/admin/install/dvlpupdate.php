@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -394,12 +394,31 @@ function glfusion_117()
         }
         DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='1.6.8' WHERE pi_name='mediagallery'");
     }
+
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.7',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.7' WHERE name='glfusion'",1);
 }
 
+function glfusion_118()
+{
+    global $_TABLES, $_FM_TABLES, $_CONF;
+
+    $_SQL = array();
+
+    // new config options
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // new full name support at registration
+    $c->add('user_reg_fullname',1,'select',4,19,25,980,TRUE);
+
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.8',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.8' WHERE name='glfusion'",1);
+}
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_117();
+glfusion_118();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();

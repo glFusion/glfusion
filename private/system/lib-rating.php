@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -365,10 +365,10 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
     ($sum==0 ? $votes=0 : $votes=$current_votes+1);
     $new_rating = $sum / $votes;
 
-    $new_rating = sprintf("%2.2f",$new_rating);
+    $new_rating = @number_format($new_rating,2);
 
     if ( $rating_id != 0 ) {
-        $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating=".$new_rating." WHERE id = ".$rating_id;
+        $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating='".addslashes($new_rating)."' WHERE id = ".$rating_id;
         DB_query($sql);
     } else {
         $sql = "SELECT MAX(id) + 1 AS newid FROM " . $_TABLES['rating'];
@@ -378,7 +378,7 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
         if ( $newid < 1 ) {
             $newid = 1;
         }
-        $sql = "INSERT INTO {$_TABLES['rating']} (id,type,item_id,votes,rating) VALUES (" . $newid . ", '". $type . "','" . addslashes($item_id). "'," . $votes . "," . $new_rating . " )";
+        $sql = "INSERT INTO {$_TABLES['rating']} (id,type,item_id,votes,rating) VALUES (" . $newid . ", '". $type . "','" . addslashes($item_id). "'," . $votes . ",'" . addslashes($new_rating) . "' )";
         DB_query($sql);
     }
     $sql = "INSERT INTO {$_TABLES['rating_votes']} (type,item_id,rating,uid,ip_address,ratingdate) " .

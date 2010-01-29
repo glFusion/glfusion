@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -114,7 +114,7 @@ if ( isset($_POST['clearlog']) ) {
 }
 if ( isset($_POST['viewlog']) ) {
     $retval .= '<p><strong>'.$LANG_LOGVIEW['log_file'].': ' . $log . '</strong></p><hr'.XHTML.'><div style="overflow:scroll; height:500px;"><pre>';
-    $retval .= htmlentities(implode('', file($_CONF['path_log'] . $log)));
+    $retval .= htmlentities(implode('', file($_CONF['path_log'] . $log)),ENT_NOQUOTES,COM_getEncodingt());
     $retval .= "</pre></div>";
 }
 

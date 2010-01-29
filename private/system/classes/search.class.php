@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -90,9 +90,9 @@ class Search {
         }
         $this->_query = preg_replace('/\s\s+/', ' ', $this->_query);
         if ( isset($_GET['topic']) ){
-            $this->_topic = strip_tags (COM_stripslashes ($_GET['topic']));
+            $this->_topic = COM_applyFilter (COM_stripslashes ($_GET['topic']));
         } else if ( isset($_POST['topic']) ) {
-            $this->_topic = strip_tags (COM_stripslashes ($_POST['topic']));
+            $this->_topic = COM_applyFilter (COM_stripslashes ($_POST['topic']));
         } else {
             $this->_topic = '';
         }
@@ -513,11 +513,11 @@ class Search {
 
         // Build the URL strings
         $this->_searchURL = $_CONF['site_url'] . '/search.php?query=' . urlencode($this->_query) .
-            ((!empty($this->_keyType))    ? '&amp;keyType=' . $this->_keyType : '' ) .
-            ((!empty($this->_dateStart))  ? '&amp;datestart=' . $this->_dateStart : '' ) .
-            ((!empty($this->_dateEnd))    ? '&amp;dateend=' . $this->_dateEnd : '' ) .
-            ((!empty($this->_topic))      ? '&amp;topic=' . $this->_topic : '' ) .
-            ((!empty($this->_author))     ? '&amp;author=' . $this->_author : '' );
+            ((!empty($this->_keyType))    ? '&amp;keyType=' . urlencode($this->_keyType) : '' ) .
+            ((!empty($this->_dateStart))  ? '&amp;datestart=' . urlencode($this->_dateStart) : '' ) .
+            ((!empty($this->_dateEnd))    ? '&amp;dateend=' . urlencode($this->_dateEnd) : '' ) .
+            ((!empty($this->_topic))      ? '&amp;topic=' . urlencode($this->_topic) : '' ) .
+            ((!empty($this->_author))     ? '&amp;author=' . urlencode($this->_author) : '' );
 
         $url = "{$this->_searchURL}&amp;type={$this->_type}&amp;mode=";
         $obj = new ListFactory($url.'search', $_CONF['search_limits'], $_CONF['num_search_results']);
@@ -682,7 +682,6 @@ class Search {
                         $counter++;
                     }
                 }
-//                $num_results += $counter;
                 $old_api++;
             }
         }
@@ -696,36 +695,28 @@ class Search {
         $searchtime = $searchtimer->stopTimer();
 
         $escquery = htmlspecialchars($this->_query);
-        if ($this->_keyType == 'any')
-        {
+        if ($this->_keyType == 'any') {
             $searchQuery = str_replace(' ', "</b>' " . $LANG09[57] . " '<b>", $escquery);
             $searchQuery = "<b>'$searchQuery'</b>";
-        }
-        else if ($this->_keyType == 'all')
-        {
+        } else if ($this->_keyType == 'all') {
             $searchQuery = str_replace(' ', "</b>' " . $LANG09[56] . " '<b>", $escquery);
             $searchQuery = "<b>'$searchQuery'</b>";
-        }
-        else
+        } else
             $searchQuery = $LANG09[55] . " '<b>$escquery</b>'";
         // Clean the query string so that sprintf works as expected
         $searchQuery = str_replace("%", "%%", $searchQuery);
 
         $retval = "{$LANG09[25]} $searchQuery. ";
-        if (count($results) == 0)
-        {
+        if (count($results) == 0) {
             $retval .= sprintf($LANG09[24], 0);
             $retval = '<p>' . $retval . '</p>' . LB;
             $retval .= '<p>' . $LANG09[13] . '</p>' . LB;
             $retval .= $this->showForm();
-        }
-        else
-        {
+        } else {
             $retval .= " ($searchtime {$LANG09[27]}). <br />" . COM_createLink($LANG09[61], $url.'refine');
             $retval = $obj->getFormattedOutput($results, $LANG09[11], $retval, '');
         }
 
-//        echo '<pre>'.$debug_info.'</pre>';
         return $retval;
     }
 

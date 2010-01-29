@@ -851,6 +851,11 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.7' WHERE name='glfusion'",1);
             DB_query("DELETE FROM {$_TABLES['vars']} WHERE name='database_version'",1);
             $current_fusion_version = '1.1.7';
+        case '1.1.7' :
+            require_once $_CONF['path_system'].'classes/config.class.php';
+            $c = config::get_instance();
+            $c->add('user_reg_fullname',1,'select',4,19,25,980,TRUE);
+            $current_fusion_version = '1.1.8';
         default:
             break;
     }

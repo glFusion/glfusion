@@ -1932,7 +1932,9 @@ $LANG_confignames['Core'] = array(
     'cache_templates' => 'Enable Template Caching',
     'template_comments' => 'Enable Template Comments',
     'hidestorydate' => 'Hide Story Date',
-    'maintenance_mode' => 'Enable Maintenance Mode'
+    'maintenance_mode' => 'Enable Maintenance Mode',
+    'rating_enabled' => 'Enable Rating',
+    'user_reg_fullname' => 'Full Name option on registration form?'
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2015,7 +2017,9 @@ $LANG_configselects['Core'] = array(
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
     21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
     22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
-    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3)
+    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3),
+    24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
+    25 => array('No' => 0, 'Optional' => 1, 'Required' => 2)
 );
 
 ?>

@@ -70,18 +70,18 @@ function MG_getItems ()
 
     $retval = '';
 
-    if ( isset($_REQUEST['aid']) ) {
-	    $aid = COM_applyFilter($_REQUEST['aid'],true);
+    if ( isset($_GET['aid']) ) {
+	    $aid = COM_applyFilter($_GET['aid'],true);
 	} else {
 	    $aid = 0;
 	}
-	if ( isset($_REQUEST['src']) ) {
-	    $src = COM_applyFilter($_REQUEST['src']);
+	if ( isset($_GET['src']) ) {
+	    $src = COM_applyFilter($_GET['src']);
 	} else {
 	    $src = 'tn';
 	}
-	if ( isset($_REQUEST['type']) ) {
-	    $type = COM_applyFilter($_REQUEST['type']);
+	if ( isset($_GET['type']) ) {
+	    $type = COM_applyFilter($_GET['type']);
 	} else {
 	    $type = 'mini';
 	}
