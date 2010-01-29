@@ -75,7 +75,7 @@ $_COM_VERBOSE = false;
 /**
 * Override the $_REQUEST setting...
 */
-//$_REQUEST = array_merge($_GET, $_POST);
+$_REQUEST = array_merge($_GET, $_POST);
 
 /**
   * Here, we shall establish an error handler. This will mean that whenever a
