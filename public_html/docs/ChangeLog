@@ -1,5 +1,13 @@
 glFusion ChangeLog
 
+v1.1.8.pl1
+----------
+- Media Gallery: Flash slideshow incorrectly used lower resolution
+  images (Mark)
+- Forum Plugin: Fixed bug where reply count was not properly decremented
+  when a post was deleted. (mark)
+- Forum Plugin: Fixed paging to show last page number on index view (Mark)
+
 v1.1.8
 ------
 - Made header site name easier to style. (Eric)

@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.1.8');
 }
 
-define('PATCHLEVEL','');
+define('PATCHLEVEL','.pl1');
 
 //define('DEMO_MODE',true);
 
@@ -75,7 +75,7 @@ $_COM_VERBOSE = false;
 /**
 * Override the $_REQUEST setting...
 */
-$_REQUEST = array_merge($_GET, $_POST);
+//$_REQUEST = array_merge($_GET, $_POST);
 
 /**
   * Here, we shall establish an error handler. This will mean that whenever a

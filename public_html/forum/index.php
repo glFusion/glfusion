@@ -1057,12 +1057,15 @@ if ($forum > 0) {
             for ($p=1; $p <= $pages; $p++) {
                 $displaypageslink .= "<a href=\"{$_CONF['site_url']}/forum/viewtopic.php?forum=$forum";
                 $displaypageslink .= "&amp;showtopic={$record['id']}&amp;show={$CONF_FORUM['show_posts_perpage']}&amp;page=$p\">";
-                if ($p > 9) {
-                    $displaypageslink .= '...</a>&nbsp;';
+                $displaypageslink .= "$p</a>";
+                if ( $p > 9 ) {
+                    $displaypageslink .= '...';
+                    $displaypageslink .= "<a href=\"{$_CONF['site_url']}/forum/viewtopic.php?forum=$forum";
+                    $displaypageslink .= "&amp;showtopic={$record['id']}&amp;show={$CONF_FORUM['show_posts_perpage']}&amp;page=$pages\">".$pages;
+                    $displaypageslink .= '</a>';
                     break;
-                } else {
-                    $displaypageslink .= "$p</a>&nbsp;";
                 }
+                $displaypageslink .= '&nbsp';
             }
         }
 

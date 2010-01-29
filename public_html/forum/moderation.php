@@ -94,7 +94,7 @@ if (forum_modPermission($forum,$_USER['uid'])) {
             exit();
         } else {
             $topicparent = DB_getITEM($_TABLES['gf_topic'],"pid","id='$msgid'");
-            if ($top == 'yes') {
+            if ($topicparent == 0) {
                 // Need to check for any attachments and delete if required
                 $q1 = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=$msgid OR id=$msgid");
                 while($A = DB_fetchArray($q1)) {
@@ -129,7 +129,6 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                         forum_delAttachment($B['id']);
                     }
                 }
-
                 DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=replies-1 WHERE (id=$topicparent)");
                 DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id='$msgid')");
                 $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum);
