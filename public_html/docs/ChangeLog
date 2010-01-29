@@ -13,6 +13,77 @@ v1.2.0 svn
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
 - Merge layout custom CSS files rather than uniquely select (Mark H.)
 
+v1.1.8.pl2
+----------
+- Display GVERSION and PATCHLEVEL in footer (patch by Mark H.)
+
+v1.1.8.pl1
+----------
+- Media Gallery: Flash slideshow incorrectly used lower resolution
+  images (Mark)
+- Forum Plugin: Fixed bug where reply count was not properly decremented
+  when a post was deleted. (mark)
+- Forum Plugin: Fixed paging to show last page number on index view (Mark)
+
+v1.1.8
+------
+- Made header site name easier to style. (Eric)
+- Added Full Name to user registration (Lee)
+- Fixed a potential XSS in search (Mark)
+- Added Character Set to the htmlentities call in LogView (Mark)
+- Fixed problem where locales using comma instead of decimal would
+  cause SQL error in rating (Mark)
+- Fixed issue when magic_quotes_gpc is enabled it would remove info
+  between quotes in HTML edit mode. (Mark)
+- Fixed issue where magic_quotes and PHP < 5.2 would cause images to
+  be stripped from articles (Mark)
+- Ensure story / comment titles properly wrap in What's New block (Mark)
+- Story clone did not clone all attributes properly (Mark)
+- Forum plugin: Consistent use of min_min_username_length setting (Mark)
+- Removed all file_exists() checks on template files (Lee)
+- Tweaks to rating library to ensure only valid votes are processed (Mark)
+- Editing a story would reset ratings to 0 (Mark)
+- Fixed error that could cause glFusion to crash when viewing FileMgmt
+  comments (Mark)
+- Fixed error in lib-comment.php (Mark)
+- Removed an annoying warning message from upload class (Mark)
+- Ensure What's New comment / trackback listings properly wrap (Mark)
+- Fixed issue where [link] auto tag did not work in forum posts (Mark)
+- Username was cut-off at 16 characters (Mark)
+- add padding to loginform Submit button. (Eric)
+
+Bad Behavior2 Plugin
+--------------------
+- Updated to release 3.0.26
+
+FileMgmt Plugin
+---------------
+- FileMgmt: Fixed issue where old FM rating code could corrupt data. (Mark)
+- Fixed error that could cause glFusion to crash when viewing FileMgmt
+  comments (Mark)
+
+Forum Plugin
+------------
+- Forum plugin: Consistent use of min_min_username_length setting (Mark)
+- Fixed issue where [link] auto tag did not work in forum posts (Mark)
+
+Media Gallery Plugin
+--------------------
+- Media Gallery: Fixed issue where images did not properly embed in
+  Thunderbird when sending postcards. (Mark)
+- Media Gallery: Fixed issue when an empty album could cause crash  when
+  building album RSS feed. (Mark)
+- Media Gallery: Fixed date issues in Manage Media screen where year was
+  limited to less than 2010. (Mark)
+- Media Gallery: Fixed issue where album_rpc could return invalid album_id
+  when the album_id is actually valid. (Mark)
+- Media Gallery: Fixed SWFupload so the browse button has proper transparency
+  (Mark)
+- Media Gallery: Add space between file types to allow wrapping long
+  lists (Mark)
+- Media Gallery: The Remote Media tab is missing from the Media Gallery upload
+  options (Mark)
+
 v1.1.7.pl6
 ----------
 - FileMgmt: Fixed issue where old FM rating code could corrupt data. (Mark)
