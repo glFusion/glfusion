@@ -1,5 +1,9 @@
 glFusion ChangeLog
 
+v1.1.8.pl2
+----------
+- Display GVERSION and PATCHLEVEL in footer (patch by Mark H.)
+
 v1.1.8.pl1
 ----------
 - Media Gallery: Flash slideshow incorrectly used lower resolution
