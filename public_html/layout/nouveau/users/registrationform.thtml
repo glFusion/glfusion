@@ -18,9 +18,9 @@ window.addEvent('domready',function() {
   {!if show_fullname}
   <div>
     <label for="fullname">{lang_fullname}:</label>
-    <input 
+    <input
       {!if require_fullname}
-      class="fValidate['required']" 
+      class="required"
       {!endif}
       type="text" size="32" maxlength="80" id="fullname" name="fullname" value="{fullname}"{xhtml}>
   </div>
@@ -37,7 +37,7 @@ window.addEvent('domready',function() {
 
   {plugin_fields}
 
-  <div class="warning">{lang_warning}</div>
+  <div class="glf-warning aligncenter">{lang_warning}</div>
   <div style="margin-top:10px;margin-bottom:10px;">{captcha}</div>
   <input type="hidden" name="mode" value="create"{xhtml}><br{xhtml}>
   <input type="submit" value="{lang_register}"{xhtml}><br{xhtml}>
