@@ -1202,7 +1202,7 @@ function ADMIN_getListField_trackback($fieldname, $fieldvalue, $A, $icon_arr, $t
             } else if ($A['method'] == 'weblogUpdates.extendedPing') {
                 $retval = $LANG_TRB['ping_extended'];
             } else {
-                $retval = '<span class="warningsmall">' .
+                $retval = '<span class="glf-warning-small">' .
                         $LANG_TRB['ping_unknown'] .  '</span>';
             }
             break;
