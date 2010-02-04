@@ -61,7 +61,7 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.1.8');
 }
 
-define('PATCHLEVEL','.pl1');
+define('PATCHLEVEL','.pl2');
 
 //define('DEMO_MODE',true);
 
@@ -3085,8 +3085,8 @@ function COM_checkWords( $Message )
             switch( $_CONF['censormode'])
             {
                 case 1: # Exact match
-                    $RegExPrefix = '(\s*)';
-                    $RegExSuffix = '(\W*)';
+                    $RegExPrefix = '(\s)';
+                    $RegExSuffix = '(\W)';
                     break;
 
                 case 2: # Word beginning

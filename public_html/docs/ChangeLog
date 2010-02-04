@@ -2,7 +2,10 @@ glFusion ChangeLog
 
 v1.1.8.pl2
 ----------
-- Display GVERSION and PATCHLEVEL in footer (patch by Mark H.)
+- Fixed issue printable Story Format does not display comments (Olaf)
+- Fixed bug where db version was not properly incremented (Mark)
+- Fixed bug where censor did not actually honor 'exact match' settings (Mark)
+- Display GVERSION and PATCHLEVEL in footer (patch by Mark H.) (Eric)
 
 v1.1.8.pl1
 ----------
