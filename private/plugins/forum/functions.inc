@@ -815,9 +815,9 @@ function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
 function forum_addForum($name,$category,$dscp="",$order="",$grp_id=2,$is_readonly=0,$is_hidden=0,$no_newposts=0,$attachmentgroup=1) {
     global $_TABLES, $_USER;
 
-    $fields = 'forum_order,forum_name,forum_dscp,forum_cat,grp_id,is_readonly,is_hidden,no_newposts,use_attachment_grpid';
+    $fields = 'forum_order,forum_name,forum_dscp,forum_cat,grp_id,is_readonly,is_hidden,no_newposts,use_attachment_grpid,rating_view,rating_post';
     DB_query("INSERT INTO {$_TABLES['gf_forums']} ($fields)
-        VALUES ('$order','$name','$dscp','$category','$grp_id','$is_readonly','$is_hidden','$no_newposts',$attachmentgroup)");
+        VALUES ('$order','$name','$dscp','$category','$grp_id','$is_readonly','$is_hidden','$no_newposts',$attachmentgroup,0,0)");
 
     $query = DB_query("SELECT max(forum_id) FROM {$_TABLES['gf_forums']} ");
     list ($forumid) = DB_fetchArray($query);
@@ -1208,12 +1208,17 @@ function forum_modPermission($forum,$uid='',$permission='') {
         $uid = 1;
     }
 
-    if ($uid <=1) {
-        return FALSE;  // Invalid ID or anonymous user
+    if ( COM_isAnonUser() ) {
+        return FALSE;
     }
 
-    if ((isset($_USER['uid']) && $uid == $_USER['uid']) && (SEC_inGroup('Root') || SEC_hasRights('forum.edit'))) {
-        return true;
+    if ( isset($_USER['uid']) && $uid == $_USER['uid'] ) {
+        if ( SEC_inGroup('Root') ) {
+            return true;
+        }
+        if ( SEC_hasRights('forum.edit') ) {
+            return true;
+        }
     }
 
     /* Retrieve all moderator records for this forum */

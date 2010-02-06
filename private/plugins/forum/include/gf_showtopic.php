@@ -65,15 +65,15 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         require_once ($_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php');
     }
 
-    $topictemplate = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $topictemplate = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'] . 'plugins/forum/templates/links/'));
     $topictemplate->set_file (array (
             'topictemplate' =>  'topic.thtml',
-            'profile'       =>  'links/profile.thtml',
-            'pm'            =>  'links/pm.thtml',
-            'email'         =>  'links/email.thtml',
-            'website'       =>  'links/website.thtml',
-            'quote'         =>  'links/quotetopic.thtml',
-            'edit'          =>  'links/edittopic.thtml'));
+            'profile'       =>  'profile.thtml',
+            'pm'            =>  'pm.thtml',
+            'email'         =>  'email.thtml',
+            'website'       =>  'website.thtml',
+            'quote'         =>  'quotetopic.thtml',
+            'edit'          =>  'edittopic.thtml'));
     $topictemplate->set_var('xhtml',XHTML);
     // if preview, only stripslashes is gpc=on, else assume from db so strip
     if ( $mode == 'preview' ) {
@@ -97,6 +97,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         if ( isset($cacheUserArray[$showtopic['uid']]) ) {
             $userarray = $cacheUserArray[$showtopic['uid']];
             $username = $userarray['display_name'];
+            $location = $userarray['location'];
             $posts = $userarray['posts'];
             $user_level = $userarray['user_level'];
             $user_levelname = $userarray['user_levelname'];
@@ -107,7 +108,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             $numposts = $userarray['numposts'];
             $foundUser = 1;
         } else {
-            $sql = "SELECT * FROM {$_TABLES['users']} users LEFT JOIN {$_TABLES['userprefs']} userprefs ON users.uid=userprefs.uid LEFT JOIN {$_TABLES['userinfo']} userinfo ON users.uid=userinfo.uid LEFT JOIN {$_TABLES['gf_userinfo']} gf_userinfo ON users.uid=gf_userinfo.uid WHERE users.uid=".intval($showtopic['uid']);
+            $sql = "SELECT users.*,userprefs.*,userinfo.*,gf_userinfo.rating,gf_userinfo.signature FROM {$_TABLES['users']} users LEFT JOIN {$_TABLES['userprefs']} userprefs ON users.uid=userprefs.uid LEFT JOIN {$_TABLES['userinfo']} userinfo ON users.uid=userinfo.uid LEFT JOIN {$_TABLES['gf_userinfo']} gf_userinfo ON users.uid=gf_userinfo.uid WHERE users.uid=".intval($showtopic['uid']);
             $userQuery = DB_query($sql);
             if ( DB_numRows($userQuery) == 1 ) {
                 $userarray = DB_fetchArray($userQuery);
@@ -175,7 +176,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
                 $userarray['min_height'] = $min_height;
                 $userarray['regdate']    = $regdate;
                 $userarray['numposts']   = $numposts;
-
+                $location = $userarray['location'];
                 $cacheUserArray[$showtopic['uid']] = $userarray;
                 $foundUser = 1;
             }
@@ -471,7 +472,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     $topictemplate->set_var ('onlinestatus',isset($onlinestatus) ? $onlinestatus : '');
     $topictemplate->set_var ('regdate', isset($regdate) ? $regdate : '');
     $topictemplate->set_var ('numposts', isset($numposts) ? $numposts : '');
-    $topictemplate->set_var ('location', isset($location) ? $location  : '');
+    $topictemplate->set_var ('location', isset($location) ? wordwrap(COM_truncate($location,100),20,'<br />')  : '');
     $topictemplate->set_var ('site_url', $_CONF['site_url']);
     $topictemplate->set_var ('topic_subject', $showtopic['subject']);
     $topictemplate->set_var ('LANG_ON2', $LANG_GF01['ON2']);
@@ -487,6 +488,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
     }
     $topictemplate->set_var ('forumid', $showtopic['forum']);
     $topictemplate->set_var ('topic_id', $showtopic['id']);
+    $topictemplate->set_var ('parent_id',$replytopicid);
     $topictemplate->set_var ('back_link', isset($backlink) ? $backlink : '');
     $topictemplate->set_var ('member_badge',forumPLG_getMemberBadge($showtopic['uid']));
     $topictemplate->parse ('output', 'topictemplate');

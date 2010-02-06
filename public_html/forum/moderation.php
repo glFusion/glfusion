@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -103,7 +103,6 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                         forum_delAttachment($B['id']);
                     }
                 }
-
                 DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id=$msgid)");
                 DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (pid=$msgid)");
                 DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE (id=$msgid)");
@@ -111,15 +110,8 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 $topicsQuery = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=$forum and pid=0");
                 $topicCount = DB_numRows($topicsQuery);
                 DB_query("UPDATE {$_TABLES['gf_forums']} SET topic_count=$topicCount,post_count=$postCount WHERE forum_id=$forum");
-
-                $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE forum=$forum");
-                list($last_topic) = DB_fetchArray($query);
-                if ($last_topic > 0) {
-                    DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=$last_topic WHERE forum_id=$forum");
-                } else {
-                    DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=0 WHERE forum_id=$forum");
-                }
-                CACHE_remove_instance('forumcb');
+                // Remove any lastviewed records in the log so that the new updated topic indicator will appear
+                DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic=$topicparent");
             } else {
                 // Need to check for any attachments and delete if required
                 $q1 = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE id=$msgid");
@@ -133,32 +125,14 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 DB_query("DELETE FROM {$_TABLES['gf_topic']} WHERE (id='$msgid')");
                 $postCount = DB_Count($_TABLES['gf_topic'],'forum',$forum);
                 DB_query("UPDATE {$_TABLES['gf_forums']} SET post_count=$postCount WHERE forum_id=$forum");
-                // Get the post id for the last post in this topic
-                $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE forum=$forum");
-                list($last_topic) = DB_fetchArray($query);
-                if ($last_topic > 0) {
-                    DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=$last_topic WHERE forum_id=$forum");
-                }
-                CACHE_remove_instance('forumcb');
             }
-
-            if ($topicparent == 0) {
+            if ( $topicparent == 0 ) {
                 $topicparent = $msgid;
+                gf_updateLastPost($forum);
             } else {
-                $lsql = DB_query("SELECT MAX(id) FROM {$_TABLES['gf_topic']} WHERE pid=$topicparent ");
-                list($lastrecid) = DB_fetchArray($lsql);
-                if ($lastrecid == NULL) {
-                    $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$topicparent");
-                    DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$topicparent, lastupdated='$topicdatecreated' WHERE id=$topicparent");
-                } else {
-                    $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=$lastrecid");
-                    DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=$lastrecid, lastupdated=$topicdatecreated WHERE id=$topicparent");
-                }
-                CACHE_remove_instance('forumcb');
+                gf_updateLastPost($forum,$msgid);
             }
-
-            // Remove any lastviewed records in the log so that the new updated topic indicator will appear
-            DB_query("DELETE FROM {$_TABLES['gf_log']} WHERE topic=$topicparent");
+            CACHE_remove_instance('forumcb');
 
             if ($top == 'yes') {
                 $link = "{$_CONF['site_url']}/forum/index.php?forum=$forum";
@@ -167,7 +141,6 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$msgpid";
                 forum_statusMessage($LANG_GF02['msg55'],$link,$LANG_GF02['msg55'],true,$forum);
             }
-            CACHE_remove_instance('forumcb');
             gf_siteFooter();
             exit();
         }
@@ -199,7 +172,11 @@ if (forum_modPermission($forum,$_USER['uid'])) {
 
             if (isset($_POST['splittype'])) {  // - Yes
                 $curpostpid = DB_getItem($_TABLES['gf_topic'],"pid","id=$moveid");
-                if ($_POST['splittype'] == 'single') {  // Move only the single post - create a new topic
+                if ( $curpostpid == '' || $curpostpid == 0 ) {
+                    echo COM_refresh("viewtopic.php?showtopic=$moveid");
+                    exit();
+                }
+                if ($_POST['splittype'] == 'single' ) {  // Move only the single post - create a new topic
                     $topicdate = DB_getItem($_TABLES['gf_topic'],"date","id=$moveid");
                     $sql  = "UPDATE {$_TABLES['gf_topic']} SET forum=$newforumid, pid=0,lastupdated='$topicdate', ";
                     $sql .= "subject='$movetitle', replies = '0' WHERE id=$moveid ";
@@ -338,9 +315,13 @@ if (forum_modPermission($forum,$_USER['uid'])) {
               $modgroups .= ",$key";
           }
         }
+        if ( SEC_inGroup('Root') ) {
+            $sql = "SELECT DISTINCT forum_id,forum_name,forum_dscp FROM {$_TABLES['gf_forums']}";
+        } else {
         /* Check and see if user had moderation rights to another forum to complete the topic move */
-        $sql = "SELECT DISTINCT forum_id,forum_name,forum_dscp FROM {$_TABLES['gf_moderators']} a , {$_TABLES['gf_forums']} b ";
-        $sql .= "where a.mod_forum = b.forum_id AND ( a.mod_uid='{$_USER['uid']}' OR a.mod_groupid in ($modgroups))";
+            $sql = "SELECT DISTINCT forum_id,forum_name,forum_dscp FROM {$_TABLES['gf_moderators']} a , {$_TABLES['gf_forums']} b ";
+            $sql .= "where a.mod_forum = b.forum_id AND ( a.mod_uid='{$_USER['uid']}' OR a.mod_groupid in ($modgroups))";
+        }
         $query = DB_query($sql);
 
         if (DB_numRows($query) == 0) {

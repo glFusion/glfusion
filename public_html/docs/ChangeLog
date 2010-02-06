@@ -13,6 +13,36 @@ v1.2.0 svn
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
 - Merge layout custom CSS files rather than uniquely select (Mark H.)
 
+v1.1.8.pl2
+----------
+- Forum Plugin: Using the custom/ directory for templates in a sub-directory
+  did not work properly (Mark)
+- Forum Plugin: Process topic records in date order...
+- Forum Plugin: Do not reset read counters when deleting topic (Mark)
+- Forum Plugin: Fixed bug when moving / spliting topics - last reply
+  dates / reply counts were not always properly maintained (Mark)
+- Forum Plugin: Fixed error where creating a new forum on sites using
+  MySQL 5 strict settings would crash with SQL error (Mark)
+- Forum Plugin: Members of the Root group could not move topics to forums
+  unless they were also listed as a moderator (Mark)
+- Forum Plugin: The user's location display was broken (displays in the user
+  block to the right) (Mark)
+- Forum Plugin: Expose breadcrumb template variables in view topic (Mark)
+        {forum_home} - Forum Index text
+        {cat_name} - Current category name
+        {cat_id} - Current category ID
+        {forum_id} - Current forum ID
+        {forum_name} - Current forum name
+- Forum Plugin: Fixed permalink on topics (Mark)
+- Forum Plugin: Fixed issue where smileys in quoted area would 'pile' up
+  on the right - **NOTE** Required changed to style.css (Mark)
+- Forum Plugin: Fixed smiley insert so it does not scroll back to the top
+  on large posts (Mark)
+- Fixed issue printable Story Format does not display comments (Olaf)
+- Fixed bug where db version was not properly incremented (Mark)
+- Fixed bug where censor did not actually honor 'exact match' settings (Mark)
+- Display GVERSION and PATCHLEVEL in footer (patch by Mark H.) (Eric)
+
 v1.1.8.pl1
 ----------
 - Media Gallery: Flash slideshow incorrectly used lower resolution

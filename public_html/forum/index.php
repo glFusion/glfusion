@@ -245,12 +245,12 @@ if ($op == 'search') {
 
     echo gf_siteHeader($LANG_GF02['msg45']);
 
-    $report = new Template($_CONF['path'] . 'plugins/forum/templates/');
-    $report->set_file (array ('report' => 'reports/report_results.thtml',
-                    'records' => 'reports/report_record.thtml',
+    $report = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'] . 'plugins/forum/templates/reports/',$_CONF['path'] . 'plugins/forum/templates/links/'));
+    $report->set_file (array ('report' => 'report_results.thtml',
+                    'records' => 'report_record.thtml',
                     'outline_header'=>'forum_outline_header.thtml',
                     'outline_footer' => 'forum_outline_footer.thtml',
-                    'return' => 'links/return.thtml'));
+                    'return' => 'return.thtml'));
 
     $report->set_var('xhtml',XHTML);
     switch($order) {
@@ -689,13 +689,13 @@ if ($forum == 0) {
     }
     $numCategories = DB_numRows($categoryQuery);
 
-    $forumlisting = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $forumlisting = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'] . 'plugins/forum/templates/links/'));
 
     $forumlisting->set_file (array ('forumlisting' => 'homepage.thtml',
             'forum_outline_header'=>'forum_outline_header.thtml',
             'forum_outline_footer'=>'forum_outline_footer.thtml',
-            'newposts' => 'links/newposts.thtml',
-            'markread' => 'links/markread.thtml',
+            'newposts' => 'newposts.thtml',
+            'markread' => 'markread.thtml',
             'forum_record'=>'forumlisting_record.thtml',
             'category_record'=>$catList ));
 
@@ -893,12 +893,12 @@ if ($forum > 0) {
 
     $displaypostpages = '';
 
-    $topiclisting = new Template($_CONF['path'] . 'plugins/forum/templates/');
+    $topiclisting = new Template(array($_CONF['path'] . 'plugins/forum/templates/',$_CONF['path'] . 'plugins/forum/templates/links/'));
     $topiclisting->set_file (array ('topiclisting' => 'topiclisting.thtml',
             'forum_outline_header'=>'forum_outline_header.thtml',
             'forum_outline_footer'=>'forum_outline_footer.thtml',
-            'subscribe' => 'links/subscribe_forum.thtml',
-            'new' => 'links/newtopic.thtml',
+            'subscribe' => 'subscribe_forum.thtml',
+            'new' => 'newtopic.thtml',
             'topic_record'=>'topiclist_record.thtml' ));
 
     $topiclisting->set_var ('xhtml',XHTML);

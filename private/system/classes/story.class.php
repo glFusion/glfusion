@@ -2041,7 +2041,7 @@ class Story
             $this->_votes = 0;
         }
 
-        if (empty($this->_commentcount)) {
+        if (empty($this->_comments)) {
             $this->_comments = 0;
         }
 
