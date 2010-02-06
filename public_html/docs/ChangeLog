@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.2.0 svn
 ----------
+- Bumped up size of .pluginTinyText for readability (Eric)
 - Added ability for theme to add to css blob (Eric)
 - Added {!!autotag ..} feature to template class (Mark)
 - Added wrapper static page widget (Eric)
