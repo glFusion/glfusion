@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -227,7 +227,7 @@ if ($mode != 'preview') {
     }
 
 
-    $prev_sql = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE (forum='$forum') AND (pid=0) AND (id < '$showtopic') ORDER BY id DESC LIMIT 1");
+    $prev_sql = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE (forum='$forum') AND (pid=0) AND (id < '$showtopic') ORDER BY date DESC LIMIT 1");
     $P = DB_fetchArray($prev_sql);
     if ($P['id'] != "") {
         $prevlink = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$P['id']}";
@@ -238,7 +238,7 @@ if ($mode != 'preview') {
         $topicnavbar->parse ('prevtopic_link', 'prev');
     }
 
-    $next_sql = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE (forum='$forum') AND (pid=0) AND (id > '$showtopic') ORDER BY id ASC LIMIT 1");
+    $next_sql = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE (forum='$forum') AND (pid=0) AND (id > '$showtopic') ORDER BY date ASC LIMIT 1");
     $N = DB_fetchArray($next_sql);
     if ($N['id'] > 0) {
         $nextlink = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$N['id']}";
@@ -292,10 +292,12 @@ if ($mode != 'preview') {
     $topicnavbar->set_var ('LANG_print', $LANG_GF01['PRINTABLE']);
     $topicnavbar->parse ('print_link', 'print');
 
+    $cat_name = DB_getItem($_TABLES['gf_categories'],"cat_name","id={$viewtopic['forum_cat']}");
+
     $topicnavbar->set_var ('navbreadcrumbsimg','<img src="'.gf_getImage('nav_breadcrumbs').'" style="border:none;vertical-align:middle;" alt=""' . XHTML . '>');
     $topicnavbar->set_var ('navtopicimg','<img src="'.gf_getImage('nav_topic').'" style="border:none;vertical-align:middle;" alt=""' . XHTML . '>');
     $topicnavbar->set_var('forum_home',$LANG_GF01['INDEXPAGE']);
-    $topicnavbar->set_var ('cat_name', DB_getItem($_TABLES['gf_categories'],"cat_name","id={$viewtopic['forum_cat']}"));
+    $topicnavbar->set_var ('cat_name', $cat_name);
     $topicnavbar->set_var ('cat_id',$viewtopic['forum_cat']);
     $topicnavbar->set_var ('forum_id', $forum);
     $topicnavbar->set_var ('forum_name', $viewtopic['forum_name']);
@@ -340,7 +342,7 @@ if(isset($_USER['uid']) && $_USER['uid'] > 1 ) {
     }
 }
 
-$sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$showtopic' OR pid='$showtopic' ORDER BY id $order LIMIT $offset, $show";
+$sql = "SELECT * FROM {$_TABLES['gf_topic']} WHERE id='$showtopic' OR pid='$showtopic' ORDER BY date $order LIMIT $offset, $show";
 $result  = DB_query($sql);
 
 // Display each post in this topic
@@ -395,6 +397,12 @@ if ($mode != 'preview') {
     $topic_footer->set_file (array ('topicfooter'=>'topicfooter_preview.thtml'));
     $topic_footer->set_var('xhtml',XHTML);
 }
+
+$topic_footer->set_var('forum_home',$LANG_GF01['INDEXPAGE']);
+$topic_footer->set_var ('cat_name', $cat_name); // DB_getItem($_TABLES['gf_categories'],"cat_name","id={$viewtopic['forum_cat']}"));
+$topic_footer->set_var ('cat_id',$viewtopic['forum_cat']);
+$topic_footer->set_var ('forum_id', $forum);
+$topic_footer->set_var ('forum_name', $viewtopic['forum_name']);
 
 $topic_footer->set_var ('pagenavigation', COM_printPageNavigation($base_url,$page, $numpages));
 $topic_footer->set_var ('forum_id', $forum);

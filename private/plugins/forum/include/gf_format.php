@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
@@ -527,7 +527,7 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
     $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
                       'listitem', array ('list'), array ());
     if ($mode != 'noquote' ) {
-        $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>', 'end_tag' => '</div><p>'),
+        $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt="" class="forum-quote-img"/>', 'end_tag' => '</div><p>'),
                           'inline', array('listitem','block','inline','link'), array());
     }
     $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
@@ -1089,30 +1089,34 @@ function f_forumrules() {
 function gf_updateLastPost($forumid,$topicparent=0) {
     global $_TABLES;
 
-    if ($topicparent == 0) {
-        // Get the last topic in this forum
-        $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE forum=".intval($forumid));
-        list($topicparent) = DB_fetchArray($query);
-        if ($topicparent > 0) {
-            $lastrecid = $topicparent;
-            DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=".intval($lastrecid)." WHERE forum_id=".intval($forumid));
-        }
-    } else {
-        $query = DB_query("SELECT MAX(id)as maxid FROM {$_TABLES['gf_topic']} WHERE pid=".intval($topicparent));
-        list($lastrecid) = DB_fetchArray($query);
-    }
+    // update the latest post record in the forum table...
+    $query = DB_query("SELECT id FROM {$_TABLES['gf_topic']} WHERE forum=".intval($forumid)." ORDER BY date DESC LIMIT 1" );
+    list($lastrecid) = DB_fetchArray($query);
+    DB_query("UPDATE {$_TABLES['gf_forums']} SET last_post_rec=".intval($lastrecid)." WHERE forum_id=".intval($forumid));
 
-    if ($lastrecid == NULL AND $topicparent > 0) {
-        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=".intval($topicparent));
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET last_reply_rec=".intval($topicparent).", lastupdated='".addslashes($topicdatecreated)."' WHERE id=".intval($topicparent));
-    } elseif ($topicparent > 0) {
-        $topicdatecreated = DB_getITEM($_TABLES['gf_topic'],date,"id=".intval($lastrecid));
-        DB_query("UPDATE {$_TABLES['gf_topic']}  SET last_reply_rec=".intval($lastrecid).", lastupdated='".addslashes($topicdatecreated)."' WHERE id=".intval($topicparent));
-    }
-    if ($topicparent > 0) {
-        // Recalculate and Update the number of replies
-        $numreplies = DB_Count($_TABLES['gf_topic'], "pid", intval($topicparent));
-        DB_query("UPDATE {$_TABLES['gf_topic']} SET replies = '".intval($numreplies)."' WHERE id=".intval($topicparent));
+    if ( $topicparent > 0 ) {  // if 0, we are just setting the forum record...
+        // Update the topic record with lastupdated and last_reply_rec
+        $sql = "SELECT pid FROM {$_TABLES['gf_topic']} WHERE id=".intval($topicparent)." AND forum=".intval($forumid);
+        $query = DB_query($sql);
+        list ($parent_id) = DB_fetchArray($query);
+        $parent_id = COM_applyFilter($parent_id,true);
+
+        if ( $parent_id == 0 ) {
+            $parent_id = $topicparent;
+        }
+        $countQuery = "SELECT COUNT(*) AS numreplies FROM {$_TABLES['gf_topic']} WHERE forum=".intval($forumid). " AND pid=".$parent_id;
+        $query = DB_query($countQuery);
+        list($numreplies) = DB_fetchArray($query);
+
+        if ( $numreplies == 0 ) {
+            $last_reply_rec = 0;
+            $lastupdated = DB_getItem($_TABLES['gf_topic'],'date','id='.intval($parent_id));
+            DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=0,last_reply_rec=".$last_reply_rec.", lastupdated='".$lastupdated."' WHERE id=".intval($parent_id));
+        } else {
+            $query = DB_query("SELECT id,date FROM {$_TABLES['gf_topic']} WHERE forum=".intval($forumid)." AND pid=".$parent_id ." ORDER BY date DESC LIMIT 1");
+            list($last_reply_rec,$lastupdated) = DB_fetchArray($query);
+            DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=".$numreplies.",last_reply_rec=".$last_reply_rec.", lastupdated='".$lastupdated."' WHERE id=".$parent_id);
+        }
     }
 }
 

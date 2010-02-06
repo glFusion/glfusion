@@ -20,14 +20,50 @@ var is_moz = 0;
 var is_win = ((clientPC.indexOf("win")!=-1) || (clientPC.indexOf("16bit") != -1));
 var is_mac = (clientPC.indexOf("mac")!=-1);
 var baseHeight;
+
 // Define the bbCode tags
 bbcode = new Array();
 bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=1]','[/list]','[*]','[img]','[/img]','[url]','[/url]','[file]','[/file]');
 imageTag = false;
 
+window.onload('initInsertions()');
+
+
 // Shows the help messages in the helpline window
 function helpline(help) {
     document.forumpost.helpbox.value = eval(help + "_help");
+}
+
+
+/**
+* Fix a bug involving the TextRange object. From
+* http://www.frostjedi.com/terra/scripts/demo/caretBug.html
+*/
+function initInsertions()
+{
+	var doc;
+
+	if (document.forms['forumpost'])
+	{
+		doc = document;
+	}
+	else
+	{
+		doc = opener.document;
+	}
+
+	var textarea = doc.forms['forumpost'].elements['comment'];
+
+	if (is_ie && typeof(baseHeight) != 'number')
+	{
+		textarea.focus();
+		baseHeight = doc.selection.createRange().duplicate().boundingHeight;
+
+		if (!document.forms['forumpost'])
+		{
+			document.body.focus();
+		}
+	}
 }
 
 
@@ -209,18 +245,29 @@ function insert_text(text, spaces, popup)
 // From http://www.massless.org/mozedit/
 function mozWrap(txtarea, open, close)
 {
-    var selLength = txtarea.textLength;
-    var selStart = txtarea.selectionStart;
-    var selEnd = txtarea.selectionEnd;
-    if (selEnd == 1 || selEnd == 2)
-        selEnd = selLength;
+	var selLength = txtarea.textLength;
+	var selStart = txtarea.selectionStart;
+	var selEnd = txtarea.selectionEnd;
+	var scrollTop = txtarea.scrollTop;
 
-    var s1 = (txtarea.value).substring(0,selStart);
-    var s2 = (txtarea.value).substring(selStart, selEnd)
-    var s3 = (txtarea.value).substring(selEnd, selLength);
-    txtarea.value = s1 + open + s2 + close + s3;
-    return;
+	if (selEnd == 1 || selEnd == 2)
+	{
+		selEnd = selLength;
+	}
+
+	var s1 = (txtarea.value).substring(0,selStart);
+	var s2 = (txtarea.value).substring(selStart, selEnd)
+	var s3 = (txtarea.value).substring(selEnd, selLength);
+
+	txtarea.value = s1 + open + s2 + close + s3;
+	txtarea.selectionStart = selEnd + open.length + close.length;
+	txtarea.selectionEnd = txtarea.selectionStart;
+	txtarea.focus();
+	txtarea.scrollTop = scrollTop;
+
+	return;
 }
+
 
 // Insert at Claret position. Code from
 // http://www.faqts.com/knowledge_base/view.phtml/aid/1052/fid/130
