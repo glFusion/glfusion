@@ -260,8 +260,10 @@ EOR;
 //this script borks in Opera 
 function WIDGET_wrapper() {
 //add the javascript to take care of dynamic iframe
-	$display = <<<EOW
-	<script type="text/javascript">
+    global $LANG_WIDGETS;
+
+    $display = <<<EOW
+    <script type="text/javascript">
 
 /***********************************************
 * IFrame SSI script II - Dynamic Drive DHTML code library (http://www.dynamicdrive.com)
@@ -331,13 +333,14 @@ window.onload=resizeCaller
 
 if (Browser.Engine.presto) { //mootools 1.2 code to display Opera only message
 window.addEvent('domready', function(){
-$('noOpera').appendText('This script does not automatically resize the iframe in the Opera browser.');
+$('noOpera').appendText('{noOpera}');
 });
 };
 
 </script>
 EOW;
 
+    $display = str_replace('{noOpera}',$LANG_WIDGETS['noOpera'] , $display);
     return $display;
 }
 
