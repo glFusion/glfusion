@@ -228,6 +228,7 @@ $LANG03 = array(
     39 => 'You may view the comment thread at the following address: ',
     40 => 'If you wish to recieve no further notifications of replies, visit the following link: ',
     41 => 'Edit a Comment',
+    42 => 'Internal processing error',
 );
 
 ###############################################################################
@@ -661,6 +662,7 @@ $LANG13 = array(
     'own_rated'         => 'Either you own the item or do not have permission to rate it.',
     'thanks_for_vote'   => 'Thanks for voting!',
 );
+
 
 ###############################################################################
 # ADMIN PHRASES - These are file phrases used in admin scripts
@@ -1618,7 +1620,8 @@ $LANG_WIDGETS = array(
     'translate' => 'Click on a flag to automatically translate this site into that country\'s language',
     'prev' => 'Previous',
     'next' => 'Next',
-    'playpause' => 'Play/Pause'
+    'playpause' => 'Play/Pause',
+    'noOpera' => 'This script does not automatically resize the iframe in the Opera browser.'
 );
 
 # Localisation of the texts for the various drop-down menus that are actually
