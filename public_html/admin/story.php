@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -461,8 +461,8 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('lang_permissions', $LANG_ACCESS['permissions']);
     $story_templates->set_var('lang_perm_key', $LANG_ACCESS['permissionskey']);
     $story_templates->set_var('permissions_editor', SEC_getPermissionsHTML(
-        $story->EditElements('perm_owner'),$story->EditElements('perm_group'),
-        $story->EditElements('perm_members'),$story->EditElements('perm_anon')));
+    $story->EditElements('perm_owner'),$story->EditElements('perm_group'),
+    $story->EditElements('perm_members'),$story->EditElements('perm_anon')));
     $story_templates->set_var('permissions_msg', $LANG_ACCESS['permmsg']);
     $curtime = COM_getUserDateTimeFormat($story->EditElements('date'));
     $story_templates->set_var('lang_date', $LANG24[15]);
@@ -724,6 +724,14 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $story_templates->set_var('story_trackbacks', $story->EditElements('trackbacks'));
     $story_templates->set_var('lang_emails', $LANG24[39]);
     $story_templates->set_var('story_emails', $story->EditElements('numemails'));
+
+    if ( $_CONF['rating_enabled'] ) {
+        $rating = @number_format($story->EditElements('rating'),2);
+        $votes  = $story->EditElements('votes');
+        $story_templates->set_var('rating',$rating);
+        $story_templates->set_var('votes',$votes);
+    }
+
     $story_templates->set_var('story_id', $story->getSid());
     $story_templates->set_var('old_story_id', $story->EditElements('originalSid'));
     $story_templates->set_var('lang_sid', $LANG24[12]);
@@ -736,10 +744,6 @@ function storyeditor($sid = '', $mode = '', $errormsg = '', $currenttopic = '')
     $story_templates->parse('output','editor');
     $display .= $story_templates->finish($story_templates->get_var('output'));
     $display .= COM_endBlock (COM_getBlockTemplate ('_admin_block', 'footer'));
-
-
-
-
 
     return $display;
 }

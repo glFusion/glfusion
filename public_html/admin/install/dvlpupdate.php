@@ -416,9 +416,29 @@ function glfusion_118()
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.8' WHERE name='glfusion'",1);
 }
 
+function glfusion_119()
+{
+    global $_TABLES, $_FM_TABLES, $_CONF;
+
+    $_SQL = array();
+
+    // new config options
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // FileMgmt enable rating config setting
+    $c->add('enable_rating', 1,'select',0, 2, 0, 35, true, 'filemgmt');
+
+    // Forum user pref for topic order
+    DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD topic_order varchar(10) NOT NULL DEFAULT 'ASC' AFTER notify_once",1);
+
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.9',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.9' WHERE name='glfusion'",1);
+}
+
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_118();
+glfusion_119();
 
 // probably need to clear the template cache so do it here
 CTL_clearCache();

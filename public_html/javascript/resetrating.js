@@ -1,21 +1,15 @@
-<?php
 // +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
+// | glFusion CMS                                                             |
 // +--------------------------------------------------------------------------+
-// | calendar.php                                                             |
+// | resetrating.js                                                           |
 // |                                                                          |
-// | Plugin system integration options                                        |
+// | AJAX handler for rating reset                                            |
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Based on the FileMgmt Plugin for Geeklog                                 |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -34,33 +28,38 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+var xmlhttp = null;
+
+function ajax_resetrating(type,id) {
+
+    xmlhttp = new XMLHttpRequest();
+
+    var qs = '';
+
+    if (id != '') {
+        qs =  '?id=' + id + '&t=' + type;
+    }
+
+    xmlhttp.open('GET', site_admin_url + '/resetrating_rpc.php' + qs, true);
+    xmlhttp.onreadystatechange = function() {
+       if (xmlhttp.readyState == 4) {
+            receiveResetRating(xmlhttp.responseXML);
+          }
+   };
+    xmlhttp.send(null);
 }
 
-global $_DB_table_prefix, $_TABLES;
+function receiveResetRating(dom) {
 
-// Plugin info
+    var html = '';
 
-$CONF_FM['pi_name']            = 'filemgmt';
-$CONF_FM['pi_display_name']    = 'FileMgmt';
-$CONF_FM['pi_version']         = '1.7.7';
-$CONF_FM['gl_version']         = '1.1.9';
-$CONF_FM['pi_url']             = 'http://www.glfusion.org/';
+    try{
+        var oxml = dom.getElementsByTagName('html');
+        html = oxml[0].childNodes[0].nodeValue;
+    }catch(e){}
 
-// Database Tables
-
-$_FM_TABLES['filemgmt_cat']         = $_DB_table_prefix . 'filemgmt_category';
-$_FM_TABLES['filemgmt_filedetail']  = $_DB_table_prefix . 'filemgmt_filedetail';
-$_FM_TABLES['filemgmt_filedesc']    = $_DB_table_prefix . 'filemgmt_filedesc';
-$_FM_TABLES['filemgmt_brokenlinks'] = $_DB_table_prefix . 'filemgmt_broken';
-$_FM_TABLES['filemgmt_votedata']    = $_DB_table_prefix . 'filemgmt_votedata';
-$_FM_TABLES['filemgmt_history']     = $_DB_table_prefix . 'filemgmt_downloadhistory';
-
-$_TABLES['filemgmt_cat']         = $_DB_table_prefix . 'filemgmt_category';
-$_TABLES['filemgmt_filedetail']  = $_DB_table_prefix . 'filemgmt_filedetail';
-$_TABLES['filemgmt_filedesc']    = $_DB_table_prefix . 'filemgmt_filedesc';
-$_TABLES['filemgmt_brokenlinks'] = $_DB_table_prefix . 'filemgmt_broken';
-$_TABLES['filemgmt_votedata']    = $_DB_table_prefix . 'filemgmt_votedata';
-$_TABLES['filemgmt_history']     = $_DB_table_prefix . 'filemgmt_downloadhistory';
-?>
+    if (html != '') {
+        var obj = document.getElementById('rating');
+        obj.innerHTML = html;
+    }
+}

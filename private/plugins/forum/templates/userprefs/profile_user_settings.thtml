@@ -46,6 +46,10 @@
         <td style="width:100px;"><label for="xshowiframe">{LANG_GF92[showiframe]}:</label></td>
         <td><input type="checkbox" id="xshowiframe" name="xshowiframe" {showiframe_checked}{xhtml}></td>
       </tr>
+      <tr>
+        <td style="width:100px;"><label for="topic_order">Topic View Order:</label></td>
+        <td>{topic_order_select}</td>
+      </tr>
     </table>
   </fieldset>
 </div>

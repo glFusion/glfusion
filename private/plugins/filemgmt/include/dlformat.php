@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: dlformat.php 3155 2008-09-16 02:13:18Z mevans0263                 $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -69,13 +69,15 @@ $p->set_var('download_title', _MD_CLICK2DL . urldecode($url));
 $p->set_var('url',$url);
 $p->set_var('file_description',$description);
 
-if ( $rating!="0" || $rating!="0.00" ) {
-    $votestring = sprintf(_MD_NUMVOTES,$votes);
-    $p->set_var('rating',$rating);
-    $p->set_var('votestring', $votestring);
-} else {
-    $p->set_var('rating',$rating);
-    $p->set_var('votestring', '');
+if ( $_FM_CONF['enable_rating'] ) {
+    if ( $rating!="0" || $rating!="0.00" ) {
+        $votestring = sprintf(_MD_NUMVOTES,$votes);
+        $p->set_var('rating',$rating);
+        $p->set_var('votestring', $votestring);
+    } else {
+        $p->set_var('rating',$rating);
+        $p->set_var('votestring', '');
+    }
 }
 if ($logourl != '') {
     $p->set_var('snapshot_icon','<img src="'.$_CONF['site_url'] .'/filemgmt/images/screenshoticon.gif" width="14" height="14" alt="" border="0"' . XHTML . '>');
@@ -93,7 +95,9 @@ if ($logourl != '') {
 
 $p->set_var('LANG_MD_SCREENSHOT_NA', _MD_SCREENSHOT_NA);
 $p->set_var('LANG_VERSION', _MD_VERSION);
-$p->set_var('LANG_RATING', _MD_RATINGC);
+if ( $_FM_CONF['enable_rating'] ) {
+    $p->set_var('LANG_RATING', _MD_RATINGC);
+}
 $p->set_var('LANG_SUBMITDATE', _MD_SUBMITDATE);
 $p->set_var('datetime',$datetime);
 $p->set_var('version',$version);
@@ -167,9 +171,8 @@ if (isset($_USER['uid']) && $_USER['uid'] == $submitter ) {
         $voted = 0;
     }
 }
-$rating_box = RATING_ratingBar( 'filemgmt',$lid, $votes,$rating, $voted ,5,$static,'sm');
-
-$p->set_var('rating_bar',$rating_box);
-
-
+if ( $_FM_CONF['enable_rating'] ) {
+    $rating_box = RATING_ratingBar( 'filemgmt',$lid, $votes,$rating, $voted ,5,$static,'sm');
+    $p->set_var('rating_bar',$rating_box);
+}
 ?>

@@ -13,6 +13,12 @@ v1.2.0 svn
 - Fixed issue where gl_moomorph wasn't consistently called (Eric)
 - Merge layout custom CSS files rather than uniquely select (Mark H.)
 
+v1.1.9
+------
+- Forum: Implemented user preference to specify view topic sort order (Mark)
+- FileMgmt: Implemented configuration option to turn on / off ratings (Mark)
+- Implemented reset rating for stories (Mark)
+
 v1.1.8.pl2
 ----------
 - Forum Plugin: Using the custom/ directory for templates in a sub-directory

@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: english_utf-8.php 4753 2009-08-05 14:39:39Z mevans0263            $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -165,6 +165,7 @@ $LANG_confignames['filemgmt'] = array(
     'numcategoriesperrow'   => 'Categories per Row',
     'numsubcategories2show' => 'Sub Categories per Row',
     'outside_webroot'       => 'Store Files Outside Web Root',
+    'enable_rating'         => 'Enable Ratings',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Main Settings'

@@ -165,6 +165,7 @@ $LANG_confignames['filemgmt'] = array(
     'numcategoriesperrow'   => 'Categorieen per Rij',
     'numsubcategories2show' => 'Sub Categorieen per Rij',
     'outside_webroot'       => 'Sla bestanden op buiten de Web Root',
+    'enable_rating'         => 'Enable Ratings',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Hoofd Instellingen'
