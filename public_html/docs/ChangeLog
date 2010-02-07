@@ -1,5 +1,11 @@
 glFusion ChangeLog
 
+v1.1.9
+------
+- Forum: Implemented user preference to specify view topic sort order (Mark)
+- FileMgmt: Implemented configuration option to turn on / off ratings (Mark)
+- Implemented reset rating for stories (Mark)
+
 v1.1.8.pl2
 ----------
 - Forum Plugin: Using the custom/ directory for templates in a sub-directory
