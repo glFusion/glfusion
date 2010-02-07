@@ -9,7 +9,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -81,6 +81,8 @@ if ( !isset($CONF_FORUM['enable_user_rating_system']) ) {
     $CONF_FORUM['enable_user_rating_system'] = 0;
 }
 
+$CONF_FORUM['topic_order'] = 'ASC';
+
 if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
     $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
     if ( DB_numRows($result) > 0 ) {
@@ -93,6 +95,7 @@ if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
         $CONF_FORUM['show_topicreview']           = $userprefs['showiframe'];
         $CONF_FORUM['show_anonymous_posts']       = $userprefs['viewanonposts'];
         $CONF_FORUM['notify_once']                = $userprefs['notify_once'];
+        $CONF_FORUM['topic_order']                = $userprefs['topic_order'];
     }
 }
 $CONF_FORUM['use_glfilter'] = 1; // always use the filter...
@@ -102,6 +105,10 @@ $CONF_FORUM['leftblocks'] = glfGetUserBlocks($CONF_FORUM['leftblocks']);
 
 if ( !isset($CONF_FORUM['showtopic_review_order']) ) {
     $CONF_FORUM['showtopic_review_order'] = 'DESC';
+}
+
+if ( $CONF_FORUM['topic_order'] != 'ASC' && $CONF_FORUM['topic_order'] != 'DESC' ) {
+    $CONF_FORUM['topic_order'] = 'ASC';
 }
 
 if( empty( $LANG_CHARSET )) {
@@ -1564,6 +1571,13 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     $usersettings->set_var('lang_forumprefs_help_title',$LANG_GF92['forumprefs_help_title']);
     $usersettings->set_var('lang_forumprefs_help', $LANG_GF92['forumprefs_help']);
 
+    $usersettings->set_var('lang_topic_order','Topic Order');
+    $to_select =  '<select name="topic_order">';
+    $to_select .= '<option value="ASC" '.($A['topic_order'] == 'ASC' ? ' selected="selected"' : '').'>'.'Ascending'.'</option>';
+    $to_select .= '<option value="DESC" '.($A['topic_order'] == 'DESC' ? ' selected="selected"' : '').'>'.'Descending'.'</option>';
+    $to_select .= '</select>';
+    $usersettings->set_var('topic_order_select',$to_select);
+
     $usersettings->parse ('output', 'usersettings');
     $retval .= $usersettings->finish($usersettings->get_var('output'));
 
@@ -1591,6 +1605,11 @@ function plugin_profilesave_forum( )
     $xnotifyonce        = isset($_POST['xnotifyonce']) && $_POST['xnotifyonce'] == 'on' ? 1 : 0;
     $notifyfull         = isset($_POST['notifyfull']) && $_POST['notifyfull'] == 'on' ? 1 : 0;
     $xshowiframe        = isset($_POST['xshowiframe']) && $_POST['xshowiframe'] == 'on' ? 1 : 0;
+    $topic_order        = isset($_POST['topic_order']) ? COM_applyFilter($_POST['topic_order']) : 'ASC';
+
+    if ( $topic_order != 'ASC' && $topic_order != 'DESC' ) {
+        $topic_order = 'ASC';
+    }
 
     DB_query("UPDATE {$_TABLES['gf_userprefs']} SET
         topicsperpage='$xtopicsperpage',
@@ -1603,7 +1622,8 @@ function plugin_profilesave_forum( )
         alwaysnotify='$xalwaysnotify',
         notify_once='$xnotifyonce',
         notify_full='$notifyfull',
-        showiframe='$xshowiframe'
+        showiframe='$xshowiframe',
+        topic_order='$topic_order'
      WHERE uid='{$_USER['uid']}'");
 
 

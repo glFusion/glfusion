@@ -139,7 +139,7 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
         $order = $CONF_FORUM['showtopic_review_order'];
         $page = 1;
     } else {
-        $order = 'ASC';
+        $order = $CONF_FORUM['topic_order']; //'ASC';
     }
     if ($page > 1) {
         $offset = ($page - 1) * $show;
@@ -175,7 +175,7 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
     if (isset($_REQUEST['onlytopic']) && $_REQUEST['onlytopic'] == 1) {
         $order = $CONF_FORUM['showtopic_review_order'];
     } else {
-        $order = 'ASC';
+        $order = $CONF_FORUM['topic_order']; // 'ASC';
     }
 }
 

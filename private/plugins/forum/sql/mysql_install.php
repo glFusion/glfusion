@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -160,6 +160,7 @@ $_SQL['gf_userprefs'] = "CREATE TABLE {$_TABLES['gf_userprefs']} (
   membersperpage int(3) NOT NULL default '20',
   showiframe tinyint(1) NOT NULL default '1',
   notify_once tinyint(1) NOT NULL default '0',
+  topic_order varchar(10) NOT NULL default 'ASC',
   PRIMARY KEY  (uid)
 ) TYPE=MyISAM;";
 # --------------------------------------------------------

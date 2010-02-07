@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -120,8 +120,11 @@ function forum_upgrade() {
         case '3.1.4' :
             DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} DROP PRIMARY KEY",1);
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.1.5',pi_gl_version='1.1.6' WHERE pi_name = 'forum'");
-        case '3.1.5 ' :
-            // no db changes needed
+        case '3.1.5' :
+        case '3.1.6' :
+        case '3.1.7' :
+            DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD topic_order varchar(10) NOT NULL DEFAULT 'ASC' AFTER notify_once");
+
         default :
             DB_query("ALTER TABLE {$_TABLES['gf_forums']} DROP INDEX forum_id",1);
             DB_query("ALTER TABLE {$_TABLES['gf_rating_assoc']} DROP PRIMARY KEY",1);
