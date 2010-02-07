@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -169,6 +169,8 @@ function plugin_initconfig_filemgmt()
                 0, 2, 0, 20, true, 'filemgmt');
         $c->add('Emailoption', $_FM_DEFAULT['Emailoption'],'select',
                 0, 2, 0, 30, true, 'filemgmt');
+        $c->add('enable_rating', 1,'select',
+                0, 2, 0, 35, true, 'filemgmt');
 
         $c->add('FileStore', $_FM_DEFAULT['FileStore'], 'text',
                 0, 2, 0, 40, true, 'filemgmt');

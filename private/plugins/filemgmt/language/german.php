@@ -164,6 +164,7 @@ $LANG_confignames['filemgmt'] = array(
     'numcategoriesperrow'   => 'Kategorie je Reihe',
     'numsubcategories2show' => 'Unterkategorie je Reihe',
     'outside_webroot'       => 'Datei außerhalb Web-Root speichern',
+    'enable_rating'         => 'Enable Ratings',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Haupteinstellungen'
