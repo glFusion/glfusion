@@ -58,10 +58,23 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td style="width:20%;white-space:nowrap;padding-right:5px;display:{hide_notify};">{notify_prompt}</td>
-                    <td style="width:20%;">{mode_prompt}</td>
                     <td style="width:20%;">{locked_prompt}</td>
                     <td style="width:20%;">{sticky_prompt}</td>
                     <td style="width:20%;">{edit_prompt}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td class="pluginCellSubTitle">&nbsp;{$LANG_GF01[features]}</td>
+        <td class="pluginCellText pluginCellFill">
+            <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                <tr>
+                    <td style="vertical-align:middle;text-align:left;">{bbcode_prompt}</td>
+{!if smilies_prompt}
+                    <td style="vertical-align:middle;text-align:left;">{smilies_prompt}</td>
+{!endif}
+                    <td style="vertical-align:middle;text-align:left;">{urlparse_prompt}</td>
                 </tr>
             </table>
         </td>

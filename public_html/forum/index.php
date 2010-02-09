@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -191,13 +191,13 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
 
             if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
                 $lastid = $P['id'];
-                $testText = gf_formatTextBlock($P['comment'],'text','text');
+                $testText = gf_formatTextBlock($P['comment'],'text','text',$P['status']);
                 $testText = strip_tags($testText);
                 $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
                 $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
             } else {
-                $qlreply = DB_query("SELECT id,uid,name,comment,date FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
+                $qlreply = DB_query("SELECT id,uid,name,comment,date,status FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
                 $B = DB_fetchArray($qlreply);
                 $lastid = $B['id'];
                 $lastcomment = $B['comment'];
@@ -207,7 +207,7 @@ if ($op == 'newposts' AND $_USER['uid'] > 1) {
                 } else {
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
                 }
-                $testText = gf_formatTextBlock($B['comment'],'text','text');
+                $testText = gf_formatTextBlock($B['comment'],'text','text',$B['status']);
                 $testText = strip_tags($testText);
                 $html2txt = new html2text($testText,false);
                 $testText = trim($html2txt->get_text());
@@ -573,13 +573,13 @@ if ($op == 'lastx') {
 
         if (empty ($P['last_reply_rec']) || $P['last_reply_rec'] < 1) {
             $lastid = $P['id'];
-            $testText = gf_formatTextBlock($P['comment'],'text','text');
+            $testText = gf_formatTextBlock($P['comment'],'text','text',$P['status']);
             $testText = strip_tags($testText);
             $html2txt = new html2text($testText,false);
             $testText = trim($html2txt->get_text());
             $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')));
         } else {
-            $qlreply = DB_query("SELECT id,uid,name,comment,date FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
+            $qlreply = DB_query("SELECT id,uid,name,comment,date,status FROM {$_TABLES['gf_topic']} WHERE id={$P['last_reply_rec']}");
             $B = DB_fetchArray($qlreply);
             $lastid = $B['id'];
             $lastcomment = $B['comment'];
@@ -589,7 +589,7 @@ if ($op == 'lastx') {
             } else {
                 $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
             }
-            $testText = gf_formatTextBlock($B['comment'],'text','text');
+            $testText = gf_formatTextBlock($B['comment'],'text','text',$B['status']);
             $testText = strip_tags($testText);
             $html2txt = new html2text($testText,false);
             $testText = trim($html2txt->get_text());

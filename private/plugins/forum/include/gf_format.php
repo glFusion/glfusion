@@ -48,6 +48,16 @@ if ( !function_exists('plugin_getmenuitems_forum') ) {
     exit;
 }
 
+// Magic url types
+define('MAGIC_URL_EMAIL', 1);
+define('MAGIC_URL_FULL', 2);
+define('MAGIC_URL_LOCAL', 3);
+define('MAGIC_URL_WWW', 4);
+
+define('DISABLE_BBCODE',1);
+define('DISABLE_SMILIES',2);
+define('DISABLE_URLPARSE',4);
+
 USES_lib_html2text();
 
 if (!class_exists('StringParser') ) {
@@ -486,7 +496,7 @@ function gf_checkHTML($str) {
 }
 
 
-function gf_formatTextBlock($str,$postmode='html',$mode='') {
+function gf_formatTextBlock($str,$postmode='html',$mode='',$status = 0) {
     global $_CONF, $CONF_FORUM;
 
     $bbcode = new StringParser_BBCode ();
@@ -503,46 +513,51 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
     if ( $postmode != 'html' && $postmode != 'HTML') {
         $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
     }
-    $bbcode->addParser(array('block','inline','link','listitem'), 'gf_replacesmilie');      // calls replacesmilie on all text blocks
+    if ( ! ($status & DISABLE_SMILIES ) ) {
+        $bbcode->addParser(array('block','inline','link','listitem'), 'gf_replacesmilie');      // calls replacesmilie on all text blocks
+    }
     $bbcode->addParser(array('block','inline','link','listitem'), 'gf_fixtemplate');
     $bbcode->addParser(array('block','inline','link','listitem'), 'PLG_replacetags');
 
-    $bbcode->addParser ('list', 'bbcode_stripcontents');
-    $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '<b>', 'end_tag' => '</b>'),
-                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->addCode ('i', 'simple_replace', null, array ('start_tag' => '<i>', 'end_tag' => '</i>'),
-                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->addCode ('u', 'simple_replace', null, array ('start_tag' => '<span style="text-decoration: underline;">', 'end_tag' => '</span>'),
-                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->addCode ('p', 'simple_replace', null, array ('start_tag' => '<p>', 'end_tag' => '</p>'),
-                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->addCode ('s', 'simple_replace', null, array ('start_tag' => '<del>', 'end_tag' => '</del>'),
-                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->addCode ('size', 'callback_replace', 'do_bbcode_size', array('usecontent_param' => 'default'),
-                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->addCode ('color', 'callback_replace', 'do_bbcode_color', array ('usercontent_param' => 'default'),
-                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->addCode ('list', 'callback_replace', 'do_bbcode_list', array ('usecontent_param' => 'default'),
-                      'list', array ('inline','block', 'listitem'), array ());
-    $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
-                      'listitem', array ('list'), array ());
-    if ($mode != 'noquote' ) {
-        $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt="" class="forum-quote-img"/>', 'end_tag' => '</div><p>'),
-                          'inline', array('listitem','block','inline','link'), array());
+    if ( ! ($status & DISABLE_BBCODE ) ) {
+
+        $bbcode->addParser ('list', 'bbcode_stripcontents');
+        $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '<b>', 'end_tag' => '</b>'),
+                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('i', 'simple_replace', null, array ('start_tag' => '<i>', 'end_tag' => '</i>'),
+                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('u', 'simple_replace', null, array ('start_tag' => '<span style="text-decoration: underline;">', 'end_tag' => '</span>'),
+                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('p', 'simple_replace', null, array ('start_tag' => '<p>', 'end_tag' => '</p>'),
+                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('s', 'simple_replace', null, array ('start_tag' => '<del>', 'end_tag' => '</del>'),
+                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('size', 'callback_replace', 'do_bbcode_size', array('usecontent_param' => 'default'),
+                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('color', 'callback_replace', 'do_bbcode_color', array ('usercontent_param' => 'default'),
+                          'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('list', 'callback_replace', 'do_bbcode_list', array ('usecontent_param' => 'default'),
+                          'list', array ('inline','block', 'listitem'), array ());
+        $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
+                          'listitem', array ('list'), array ());
+        if ($mode != 'noquote' ) {
+            $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><div class="quotemain"><img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt="" class="forum-quote-img"/>', 'end_tag' => '</div><p>'),
+                              'inline', array('listitem','block','inline','link'), array());
+        }
+        $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
+                          'link', array ('listitem', 'block', 'inline'), array ('link'));
+        $bbcode->addCode ('img', 'usecontent', 'do_bbcode_img', array (),
+                          'image', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('file', 'usecontent', 'do_bbcode_file', array (),
+                          'image', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->addCode ('code', 'usecontent', 'do_bbcode_code', array ('usecontent_param' => 'default'),
+                          'code', array ('listitem', 'block', 'inline', 'link'), array ());
+        $bbcode->setCodeFlag ('quote', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);
+        $bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
+        $bbcode->setCodeFlag ('*', 'paragraphs', true);
+        $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
+        $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
     }
-    $bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),
-                      'link', array ('listitem', 'block', 'inline'), array ('link'));
-    $bbcode->addCode ('img', 'usecontent', 'do_bbcode_img', array (),
-                      'image', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->addCode ('file', 'usecontent', 'do_bbcode_file', array (),
-                      'image', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->addCode ('code', 'usecontent', 'do_bbcode_code', array ('usecontent_param' => 'default'),
-                      'code', array ('listitem', 'block', 'inline', 'link'), array ());
-    $bbcode->setCodeFlag ('quote', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);
-    $bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
-    $bbcode->setCodeFlag ('*', 'paragraphs', true);
-    $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
-    $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
 
     $bbcode->setRootParagraphHandling (true);
 
@@ -550,6 +565,10 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
         $str = COM_checkWords($str);
     }
     $str = $bbcode->parse ($str);
+
+    if ( ! ($status & DISABLE_URLPARSE ) ) {
+        $str = make_clickable($str);
+    }
 
     return $str;
 }
@@ -1202,7 +1221,7 @@ function ADMIN_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
             }
             break;
         case 'subject':
-            $testText        = gf_formatTextBlock($A['comment'],'text','text');
+            $testText        = gf_formatTextBlock($A['comment'],'text','text',$A['status']);
             $testText        = strip_tags($testText);
             $html2txt        = new html2text($testText,false);
             $testText        = trim($html2txt->get_text());
@@ -1290,7 +1309,7 @@ function gf_FormatForEmail( $str, $postmode='html' ) {
     }
     $CONF_FORUM['use_geshi']     = true;
     $CONF_FORUM['allow_smilies'] = false;
-    $str = gf_formatTextBlock($str,$postmode,'text');
+    $str = gf_formatTextBlock($str,$postmode,'text',$A['status']);
 
     $str = str_replace('<img src="' . $_CONF['site_url'] . '/forum/images/img_quote.gif" alt=""/>','',$str);
 
@@ -1356,5 +1375,230 @@ function gfm_getoutput( $id ) {
 
     $messageText = $html2txt->get_text();
     return array($message,$messageText);
+}
+
+
+// +--------------------------------------------------------------------------+
+// | The following functions are from the phpBB3 Open Source Project          |
+// | Copyright (C) 2005-2010 by the phpBB Group                               |
+// +--------------------------------------------------------------------------+
+
+/**
+* A subroutine of make_clickable used with preg_replace
+* It places correct HTML around an url, shortens the displayed text
+* and makes sure no entities are inside URLs
+*/
+function make_clickable_callback($type, $whitespace, $url, $relative_url, $class)
+{
+    $orig_url       = $url;
+    $orig_relative  = $relative_url;
+    $append         = '';
+    $url            = htmlspecialchars_decode($url);
+    $relative_url   = htmlspecialchars_decode($relative_url);
+
+    // make sure no HTML entities were matched
+    $chars = array('<', '>', '"');
+    $split = false;
+
+    foreach ($chars as $char) {
+        $next_split = strpos($url, $char);
+        if ($next_split !== false) {
+            $split = ($split !== false) ? min($split, $next_split) : $next_split;
+        }
+    }
+
+    if ($split !== false) {
+        // an HTML entity was found, so the URL has to end before it
+        $append         = substr($url, $split) . $relative_url;
+        $url            = substr($url, 0, $split);
+        $relative_url   = '';
+    } else if ($relative_url) {
+        // same for $relative_url
+        $split = false;
+        foreach ($chars as $char) {
+            $next_split = strpos($relative_url, $char);
+            if ($next_split !== false) {
+                $split = ($split !== false) ? min($split, $next_split) : $next_split;
+            }
+        }
+
+        if ($split !== false) {
+            $append         = substr($relative_url, $split);
+            $relative_url   = substr($relative_url, 0, $split);
+        }
+    }
+
+    // if the last character of the url is a punctuation mark, exclude it from the url
+    $last_char = ($relative_url) ? $relative_url[strlen($relative_url) - 1] : $url[strlen($url) - 1];
+
+    switch ($last_char) {
+        case '.':
+        case '?':
+        case '!':
+        case ':':
+        case ',':
+            $append = $last_char;
+            if ($relative_url) {
+                $relative_url = substr($relative_url, 0, -1);
+            } else {
+                $url = substr($url, 0, -1);
+            }
+        break;
+
+        // set last_char to empty here, so the variable can be used later to
+        // check whether a character was removed
+        default:
+            $last_char = '';
+        break;
+    }
+
+    $short_url = (strlen($url) > 55) ? substr($url, 0, 39) . ' ... ' . substr($url, -10) : $url;
+
+    switch ($type) {
+        case MAGIC_URL_LOCAL:
+            $tag            = 'l';
+            $relative_url   = preg_replace('/[&?]sid=[0-9a-f]{32}$/', '', preg_replace('/([&?])sid=[0-9a-f]{32}&/', '$1', $relative_url));
+            $url            = $url . '/' . $relative_url;
+            $text           = $relative_url;
+
+            // this url goes to http://domain.tld/path/to/board/ which
+            // would result in an empty link if treated as local so
+            // don't touch it and let MAGIC_URL_FULL take care of it.
+            if (!$relative_url) {
+                return $whitespace . $orig_url . '/' . $orig_relative; // slash is taken away by relative url pattern
+            }
+        break;
+
+        case MAGIC_URL_FULL:
+            $tag    = 'm';
+            $text   = $short_url;
+        break;
+
+        case MAGIC_URL_WWW:
+            $tag    = 'w';
+            $url    = 'http://' . $url;
+            $text   = $short_url;
+        break;
+
+        case MAGIC_URL_EMAIL:
+            $tag    = 'e';
+            $text   = $short_url;
+            $url    = 'mailto:' . $url;
+        break;
+    }
+
+    $url    = htmlspecialchars($url);
+    $text   = htmlspecialchars($text);
+    $append = htmlspecialchars($append);
+
+    $html   = "$whitespace<!-- $tag --><a$class href=\"$url\">$text</a><!-- $tag -->$append";
+
+    return $html;
+}
+
+/**
+* make_clickable function
+*
+* Replace magic urls of form http://xxx.xxx., www.xxx. and xxx@xxx.xxx.
+* Cuts down displayed size of link if over 50 chars, turns absolute links
+* into relative versions when the server/script path matches the link
+*/
+function make_clickable($text, $server_url = false, $class = 'postlink')
+{
+    global $_CONF;
+
+    if ($server_url === false) {
+        $server_url = $_CONF['site_url'];;
+    }
+
+    static $magic_url_match;
+    static $magic_url_replace;
+    static $static_class;
+
+    if (!is_array($magic_url_match) || $static_class != $class) {
+        $static_class = $class;
+        $class = ($static_class) ? ' class="' . $static_class . '"' : '';
+        $local_class = ($static_class) ? ' class="' . $static_class . '-local"' : '';
+
+        $magic_url_match = $magic_url_replace = array();
+        // Be sure to not let the matches cross over. ;)
+
+        // relative urls for this board
+        $magic_url_match[] = '#(^|[\n\t (>.])(' . preg_quote($server_url, '#') . ')/(' . get_preg_expression('relative_url_inline') . ')#ie';
+        $magic_url_replace[] = "make_clickable_callback(MAGIC_URL_LOCAL, '\$1', '\$2', '\$3', '$local_class')";
+
+        // matches a xxxx://aaaaa.bbb.cccc. ...
+        $magic_url_match[] = '#(^|[\n\t (>.])(' . get_preg_expression('url_inline') . ')#ie';
+        $magic_url_replace[] = "make_clickable_callback(MAGIC_URL_FULL, '\$1', '\$2', '', '$class')";
+
+        // matches a "www.xxxx.yyyy[/zzzz]" kinda lazy URL thing
+        $magic_url_match[] = '#(^|[\n\t (>])(' . get_preg_expression('www_url_inline') . ')#ie';
+        $magic_url_replace[] = "make_clickable_callback(MAGIC_URL_WWW, '\$1', '\$2', '', '$class')";
+
+        // matches an email@domain type address at the start of a line, or after a space or after what might be a BBCode.
+        $magic_url_match[] = '/(^|[\n\t (>])(' . get_preg_expression('email') . ')/ie';
+        $magic_url_replace[] = "make_clickable_callback(MAGIC_URL_EMAIL, '\$1', '\$2', '', '')";
+    }
+
+    return preg_replace($magic_url_match, $magic_url_replace, $text);
+}
+
+/**
+* This function returns a regular expression pattern for commonly used expressions
+* Use with / as delimiter for email mode and # for url modes
+* mode can be: email|bbcode_htm|url|url_inline|www_url|www_url_inline|relative_url|relative_url_inline|ipv4|ipv6
+*/
+function get_preg_expression($mode)
+{
+	switch ($mode)
+	{
+		case 'email':
+			return '(?:[a-z0-9\'\.\-_\+\|]++|&amp;)+@[a-z0-9\-]+\.(?:[a-z0-9\-]+\.)*[a-z]+';
+		break;
+
+		case 'bbcode_htm':
+			return array(
+				'#<!\-\- e \-\-><a href="mailto:(.*?)">.*?</a><!\-\- e \-\->#',
+				'#<!\-\- l \-\-><a (?:class="[\w-]+" )?href="(.*?)(?:(&amp;|\?)sid=[0-9a-f]{32})?">.*?</a><!\-\- l \-\->#',
+				'#<!\-\- ([mw]) \-\-><a (?:class="[\w-]+" )?href="(.*?)">.*?</a><!\-\- \1 \-\->#',
+				'#<!\-\- s(.*?) \-\-><img src="\{SMILIES_PATH\}\/.*? \/><!\-\- s\1 \-\->#',
+				'#<!\-\- .*? \-\->#s',
+				'#<.*?>#s',
+			);
+		break;
+
+		// Whoa these look impressive!
+		// The code to generate the following two regular expressions which match valid IPv4/IPv6 addresses
+		// can be found in the develop directory
+		case 'ipv4':
+			return '#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#';
+		break;
+
+		case 'ipv6':
+			return '#^(?:(?:(?:[\dA-F]{1,4}:){6}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:::(?:[\dA-F]{1,4}:){5}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:):(?:[\dA-F]{1,4}:){4}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,2}:(?:[\dA-F]{1,4}:){3}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,3}:(?:[\dA-F]{1,4}:){2}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,4}:(?:[\dA-F]{1,4}:)(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,5}:(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,6}:[\dA-F]{1,4})|(?:(?:[\dA-F]{1,4}:){1,7}:))$#i';
+		break;
+
+		case 'url':
+		case 'url_inline':
+			$inline = ($mode == 'url') ? ')' : '';
+			$scheme = ($mode == 'url') ? '[a-z\d+\-.]' : '[a-z\d+]'; // avoid automatic parsing of "word" in "last word.http://..."
+			// generated with regex generation file in the develop folder
+			return "[a-z]$scheme*:/{2}(?:(?:[a-z0-9\-._~!$&'($inline*+,;=:@|]+|%[\dA-F]{2})+|[0-9.]+|\[[a-z0-9.]+:[a-z0-9.]+:[a-z0-9.:]+\])(?::\d*)?(?:/(?:[a-z0-9\-._~!$&'($inline*+,;=:@|]+|%[\dA-F]{2})*)*(?:\?(?:[a-z0-9\-._~!$&'($inline*+,;=:@/?|]+|%[\dA-F]{2})*)?(?:\#(?:[a-z0-9\-._~!$&'($inline*+,;=:@/?|]+|%[\dA-F]{2})*)?";
+		break;
+
+		case 'www_url':
+		case 'www_url_inline':
+			$inline = ($mode == 'www_url') ? ')' : '';
+			return "www\.(?:[a-z0-9\-._~!$&'($inline*+,;=:@|]+|%[\dA-F]{2})+(?::\d*)?(?:/(?:[a-z0-9\-._~!$&'($inline*+,;=:@|]+|%[\dA-F]{2})*)*(?:\?(?:[a-z0-9\-._~!$&'($inline*+,;=:@/?|]+|%[\dA-F]{2})*)?(?:\#(?:[a-z0-9\-._~!$&'($inline*+,;=:@/?|]+|%[\dA-F]{2})*)?";
+		break;
+
+		case 'relative_url':
+		case 'relative_url_inline':
+			$inline = ($mode == 'relative_url') ? ')' : '';
+			return "(?:[a-z0-9\-._~!$&'($inline*+,;=:@|]+|%[\dA-F]{2})*(?:/(?:[a-z0-9\-._~!$&'($inline*+,;=:@|]+|%[\dA-F]{2})*)*(?:\?(?:[a-z0-9\-._~!$&'($inline*+,;=:@/?|]+|%[\dA-F]{2})*)?(?:\#(?:[a-z0-9\-._~!$&'($inline*+,;=:@/?|]+|%[\dA-F]{2})*)?";
+		break;
+	}
+
+	return '';
 }
 ?>

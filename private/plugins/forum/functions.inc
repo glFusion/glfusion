@@ -608,7 +608,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
             $comment = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$comment);
         }
 
-        $comment = gf_formatTextBlock($comment,$A['postmode'],'preview');
+        $comment = gf_formatTextBlock($comment,$A['postmode'],'preview',$A['status']);
 
         // we don't have a stylesheet in the news feed, so replace our div with the style...
         $comment = str_replace('<div class="quotemain">','<div style="border: 1px dotted #000;border-left: 4px solid #8394B2;color:#465584;  padding: 4px;  margin: 5px auto 8px auto;">',$comment);
@@ -1134,7 +1134,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             if (empty ($A['last_reply_rec']) || $A['last_reply_rec'] < 1) {
                 $lastid = $A['id'];
 
-                $testText = gf_formatTextBlock($A['comment'],'text','noquote');
+                $testText = gf_formatTextBlock($A['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
                 $html2txt = new html2text(addslashes($testText),false);
                 $testText = trim($html2txt->get_text());
@@ -1163,7 +1163,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 } else {
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
                 }
-                $testText = gf_formatTextBlock($B['comment'],'text','noquote');
+                $testText = gf_formatTextBlock($B['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
                 $html2txt = new html2text(addslashes($testText),false);
                 $testText = trim($html2txt->get_text());

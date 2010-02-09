@@ -364,8 +364,72 @@ if (forum_modPermission($forum,$_USER['uid'])) {
                 alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
             }
         }
+    // **** MERGE TOPIC CODE
+    } elseif($modfunction == 'mergetopic' AND forum_modPermission($forum,$_USER['uid'],'mod_move') AND $fortopicid != 0) {
+        //
+        // challenges with merging ...
+        // if we 'merge' an pid record, then the first reply must become the pid...
+        // for any other post, we are simply removing it from the chain, so delete would apply
+        //
 
+        $SECgroups = SEC_getUserGroups();  // Returns an Associative Array - need to parse out the group id's
+        $modgroups = '';
+        foreach ($SECgroups as $key) {
+          if ($modgroups == '') {
+             $modgroups = $key;
+          } else {
+              $modgroups .= ",$key";
+          }
+        }
+        if ( SEC_inGroup('Root') ) {
+            $sql = "SELECT DISTINCT forum_id,forum_name,forum_dscp FROM {$_TABLES['gf_forums']}";
+        } else {
+        /* Check and see if user had moderation rights to another forum to complete the topic move */
+            $sql = "SELECT DISTINCT forum_id,forum_name,forum_dscp FROM {$_TABLES['gf_moderators']} a , {$_TABLES['gf_forums']} b ";
+            $sql .= "where a.mod_forum = b.forum_id AND ( a.mod_uid='{$_USER['uid']}' OR a.mod_groupid in ($modgroups))";
+        }
+        $query = DB_query($sql);
 
+        if (DB_numRows($query) == 0) {
+            alertMessage($LANG_GF02['msg181'],$LANG_GF01['WARNING']);
+        } else {
+            $topictitle = DB_getItem($_TABLES['gf_topic'],"subject","id='$fortopicid'");
+            $promptform  =  '<div style="padding:10 0 5 0px;">';
+            $promptform .= '<form action="' .$_CONF['site_url'] . '/forum/moderation.php" method="post">';
+            $promptform  .= '<input type="hidden" name="moveid" value="' .$fortopicid. '"' . XHTML . '>';
+            $promptform  .= '<input type="hidden" name="confirm_merge" value="1"' . XHTML . '>';
+            $promptform  .= '<input type="hidden" name="forum" value="' .$forum. '"' . XHTML . '>';
+            $promptform .= '<div style="padding:5px;">'.$LANG_GF03['selectforum'];
+            $promptform .= '&nbsp;<select name="movetoforum">';
+            while($showforums = DB_fetchArray($query)){
+                $promptform .= '<option value="'.$showforums['forum_id'].'">'.$showforums['forum_name']. '('.COM_truncate($showforums['forum_dscp'],15,'...').')</option>';
+            }
+            $promptform  .= '</select>';
+            $promptform .= '</div><div style="padding:10 0 5 0px;">'.$LANG_GF02['msg186'].':&nbsp;';
+            $promptform .= '<input type="text" size="60" name="movetitle" value="' .$topictitle. '"' . XHTML . '>';
+
+            /* Check and see request to move complete topic or split the topic */
+            if (DB_getItem($_TABLES['gf_topic'],"pid","id='$fortopicid'") == 0) {
+                $promptform .= '</div><div style="padding:20 0 5 20px;">';
+                $promptform .= '<input type="submit" name="submit" value="' .$LANG_GF03['movetopic']. '"' . XHTML . '>';
+                $promptform .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '></div>';
+                $promptform .= '</form></div>';
+                $alertmessage = sprintf($LANG_GF03['mergetopicmsg'],$topictitle);
+                alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
+            } else {
+                $poster   = DB_getItem($_TABLES['gf_topic'],"name","id='$fortopicid'");
+                $postdate = COM_getUserDateTimeFormat(DB_getItem($_TABLES['gf_topic'],"date","id='$fortopicid'"));
+                $promptform .= '<div style="padding-top:10px;">'.$LANG_GF03['splitheading'] .'<br' . XHTML . '>';
+                $promptform .= '<input type="radio" name="splittype" value="remaining" checked="checked">'.$LANG_GF03['splitopt1'] .'<br' . XHTML . '>';
+                $promptform .= '<input type="radio" name="splittype" value="single"' . XHTML . '>'.$LANG_GF03['splitopt2'] .'</div>';
+                $promptform .= '</div><div style="padding:20 0 5 20px;">';
+                $promptform .= '<input type="submit" name="submit" value="' .$LANG_GF03['movetopic']. '"' . XHTML . '>';
+                $promptform .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['CANCEL']. '"' . XHTML . '></div>';
+                $promptform .= '</form></div>';
+                $alertmessage = sprintf($LANG_GF03['mergetopicmsg'],$topictitle,$poster,$postdate[0]);
+                alertMessage($alertmessage,$LANG_GF02['msg182'],$promptform);
+            }
+        }
     } elseif($modfunction == 'banip' AND forum_modPermission($forum,$_USER['uid'],'mod_ban') AND $fortopicid != 0) {
 
         $iptobansql = DB_query("SELECT ip FROM {$_TABLES['gf_topic']} WHERE id='$fortopicid'");

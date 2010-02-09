@@ -302,6 +302,11 @@ $LANG_GF01 = array(
     'edit_signature' => 'Bearbeite BBcode-Signatur',
     'signature_preview' => 'Signatur-Vorschau',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
+    /* --- topic features --- */
+    'disable_bbcode' => 'Disable BBCode:',
+    'disable_smilies' => 'Disable Smilies:',
+    'disable_urlparse' => 'Do not parse URLs:',
+    'features' => 'Features:',
 );
 
 $LANG_GF02 = array(
@@ -960,7 +965,10 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Max. Größe für Anhänge (Bytes)',
     'enable_user_rating_system' => 'Aktiviere Benutzer-Bewertungssystem',
     'bbcode_signature' => 'Aktiviere BBcode-Signatur',
-    'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor aktivieren'
+    'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor aktivieren',
+    'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
+    'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -983,7 +991,8 @@ $LANG_configselects['forum'] = array(
     2 => array('Auf Seite oben' => 1, 'Nach Hauptartikel' => 2, 'Auf Seite unten' => 3),
     3 => array('Keine Blöcke' => 'noblocks', 'Linke Blöcke' => 'leftblocks', 'Rechte Blöcke' => 'rightblocks'),
     4 => array('Blockmenü' => 'blockmenu', 'Navigation' => 'navbar', 'Keine' => 'none'),
-    5 => array('Absteigend' => 'DESC', 'Aufsteigend' => 'ASC')
+    5 => array('Absteigend' => 'DESC', 'Aufsteigend' => 'ASC'),
+    6 => array('Checked' => 1, 'Unchecked' => 0)
 );
 
 ?>

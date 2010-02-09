@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Josh Pendergrass       cendent AT syndicate-gaming DOT com               |
@@ -67,9 +67,9 @@ function ADMIN_getListField_ratings($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case 'topic_id' :
             if ( intval($A['topic_id']) > 0 ) {
-                $res = DB_query("SELECT id,pid,forum,subject,comment FROM {$_TABLES['gf_topic']} WHERE id=".$A['topic_id']);
-                list($id,$pid,$forum,$subject,$comment) = DB_fetchArray($res);
-                $testText        = gf_formatTextBlock($comment,'text','text');
+                $res = DB_query("SELECT id,pid,forum,subject,comment,status FROM {$_TABLES['gf_topic']} WHERE id=".$A['topic_id']);
+                list($id,$pid,$forum,$subject,$comment,$status) = DB_fetchArray($res);
+                $testText        = gf_formatTextBlock($comment,'text','text',$status);
                 $testText        = strip_tags($testText);
                 $lastpostinfogll = htmlspecialchars(preg_replace('#\r?\n#','<br>',strip_tags(substr($testText,0,$CONF_FORUM['contentinfo_numchars']). '...')),ENT_QUOTES,COM_getEncodingt());
                 if ( $subject == '' ) {

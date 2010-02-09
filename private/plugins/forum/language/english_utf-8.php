@@ -304,6 +304,11 @@ $LANG_GF01 = array(
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Signature Preview',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
+    /* --- topic features --- */
+    'disable_bbcode' => 'Disable BBCode:',
+    'disable_smilies' => 'Disable Smilies:',
+    'disable_urlparse' => 'Do not parse URLs:',
+    'features' => 'Features:',
 );
 
 $LANG_GF02 = array(
@@ -528,7 +533,9 @@ $LANG_GF03 = array(
     'lockedpost' => 'Add Reply Post',
     'splitheading' => 'Split thread option:',
     'splitopt1' => 'Move all posts from this point',
-    'splitopt2' => 'Move only this one post'
+    'splitopt2' => 'Move only this one post',
+    'merge'     => 'Merge Topic',
+    'mergetopicmsg' => '<br />Topic to be <strong>merged</strong> into an existing topic:',
 );
 
 $LANG_GF04 = array(
@@ -970,6 +977,9 @@ $LANG_confignames['forum'] = array(
     'enable_user_rating_system' => 'Enable User Rating System',
     'bbcode_signature' => 'Enable BBcode Signature',
     'use_wysiwyg_editor' => 'Enable WYSIWYG HTML Editor',
+    'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
+    'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -991,7 +1001,8 @@ $LANG_configselects['forum'] = array(
     2 => array('Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
     3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks'),
     4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
-    5 => array('Descending' => 'DESC', 'Ascending' => 'ASC')
+    5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
+    6 => array('Checked' => 1, 'Unchecked' => 0)
 );
 
 ?>

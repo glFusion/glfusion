@@ -301,6 +301,11 @@ $LANG_GF01 = array(
     'edit_signature' => 'Wijzig BBcode Ondertekening',
     'signature_preview' => 'Bekijk Ondertekening',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
+    /* --- topic features --- */
+    'disable_bbcode' => 'Disable BBCode:',
+    'disable_smilies' => 'Disable Smilies:',
+    'disable_urlparse' => 'Do not parse URLs:',
+    'features' => 'Features:',
 );
 
 $LANG_GF02 = array(
@@ -959,7 +964,10 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Max Grootte van Bijlagen (bytes)',
     'enable_user_rating_system' => 'Gebruiker Waarderingsysteem Inschakelen',
     'bbcode_signature' => 'BBcode Ondertekening Inschakelen',
-    'use_wysiwyg_editor' => 'WYSIWYG HTML Editor Inschakelen'
+    'use_wysiwyg_editor' => 'WYSIWYG HTML Editor Inschakelen',
+    'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
+    'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -982,7 +990,8 @@ $LANG_configselects['forum'] = array(
     2 => array('Bovenaan de Pagina' => 1, 'Na het Featured Artikel' => 2, 'Onderaan de Pagina' => 3),
     3 => array('Geen Blokken' => 'noblocks', 'Linker Blokken' => 'leftblocks', 'Rechter Blokken' => 'rightblocks'),
     4 => array('Blok Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'Geen' => 'none'),
-    5 => array('Aflopend' => 'DESC', 'Oplopend' => 'ASC')
+    5 => array('Aflopend' => 'DESC', 'Oplopend' => 'ASC'),
+    6 => array('Checked' => 1, 'Unchecked' => 0)
 );
 
 ?>

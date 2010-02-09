@@ -99,6 +99,7 @@ $_SQL['gf_topic'] = "CREATE TABLE {$_TABLES['gf_topic']} (
   sticky tinyint(1) NOT NULL default '0',
   moved tinyint(1) NOT NULL default '0',
   locked tinyint(1) NOT NULL default '0',
+  status int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (id),
   KEY `forum_idx` (`forum`),
   KEY `idxtopicuid` (`uid`),

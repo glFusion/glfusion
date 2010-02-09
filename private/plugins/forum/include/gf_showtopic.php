@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -243,8 +243,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         DB_query($usql);
     }
 
-    $showtopic['comment'] = gf_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode);
-    $showtopic['subject'] = gf_formatTextBlock($showtopic['subject'],'text',$mode);
+    $showtopic['comment'] = gf_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status']);
+    $showtopic['subject'] = gf_formatTextBlock($showtopic['subject'],'text',$mode,$showtopic['status']);
 
     $showtopic['subject'] = COM_truncate($showtopic['subject'],$CONF_FORUM['show_subject_length'],'...');
 
@@ -523,6 +523,9 @@ function forum_getmodFunctions($showtopic) {
         }
     } elseif (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_move')) {
         $options .= '<option value="movetopic">' .$LANG_GF03['split'] . '</option>';
+    }
+    if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_move')) {
+        $options .= '<option value="mergetopic">' .$LANG_GF03['merge'] . '</option>';
     }
 
     if ($options != '') {
