@@ -2,6 +2,12 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Forum: Site Members report did not honor Forum Activity checkbox (Mark)
+- Forum: Implemented per topic options (Disable BBCode, Disable Smilies,
+  Disable URL Parse) (Mark)
+   - 3 new Forum configuration options to set the default value for each
+     of the new features
+- Forum: Implemented automatic URL parsing for topics (Mark)
 - Forum: Implemented user preference to specify view topic sort order (Mark)
 - FileMgmt: Implemented configuration option to turn on / off ratings (Mark)
 - Implemented reset rating for stories (Mark)
