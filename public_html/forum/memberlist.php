@@ -92,8 +92,10 @@ if ( isset($_GET['op'] ) ) {
 } else {
     $op = '';
 }
-if ( isset($_GET['chkactivity'] ) ) {
-    $chkactivity = COM_applyFilter($_REQUEST['chkactivity'],true);
+if ( isset($_GET['chkactivity']) ) {
+    $chkactivity = COM_applyFilter($_GET['chkactivity'],true);
+} elseif ( isset($_POST['chkactivity'] ) ) {
+    $chkactivity = COM_applyFilter($_POST['chkactivity'],true);
 } else {
     $chkactivity = 0;
 }
