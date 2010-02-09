@@ -524,9 +524,6 @@ function forum_getmodFunctions($showtopic) {
     } elseif (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_move')) {
         $options .= '<option value="movetopic">' .$LANG_GF03['split'] . '</option>';
     }
-    if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_move')) {
-        $options .= '<option value="mergetopic">' .$LANG_GF03['merge'] . '</option>';
-    }
 
     if ($options != '') {
         $retval .= '<form action="moderation.php" method="post" style="margin:0px;"><div><select name="modfunction">';
