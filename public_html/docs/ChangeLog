@@ -2,6 +2,10 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Complete implementation of PLG_getItemInfo for each bundled plugin. (Mark)
+- Forum: Implemented merge topic feature (Mark)
+- Forum: Rewrote the moderation system to be more procedural. This will
+  help with future enhancements to moderatoin features (Mark)
 - Forum: Site Members report did not honor Forum Activity checkbox (Mark)
 - Forum: Implemented per topic options (Disable BBCode, Disable Smilies,
   Disable URL Parse) (Mark)
@@ -14,6 +18,8 @@ v1.1.9
 
 v1.1.8.pl2
 ----------
+- Media Gallery: Fixed issue where PLG_itemSaved() was not called properly
+  when doing mass media edit (Mark)
 - Forum Plugin: Using the custom/ directory for templates in a sub-directory
   did not work properly (Mark)
 - Forum Plugin: Process topic records in date order...
