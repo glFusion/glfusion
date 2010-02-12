@@ -1372,4 +1372,126 @@ function plugin_autotags_polls($op, $content = '', $autotag = '')
 
     return $content;
 }
+
+/**
+* Return information for a poll
+*
+* @param    string  $id         poll ID or '*'
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES, $LANG_POLLS;
+
+    $properties = explode(',', $what);
+    $fields = array();
+    foreach ($properties as $p) {
+        switch ($p) {
+            case 'date-modified':
+                $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
+                break;
+            case 'id':
+                $fields[] = 'pid';
+                break;
+            case 'title':
+                $fields[] = 'topic';
+                break;
+            case 'url':
+            case 'label':
+                $fields[] = 'pid';
+                break;
+            default:
+                break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+
+        return $retval;
+    }
+
+    if ($id == '*') {
+        $where = '';
+        $permOp = 'WHERE';
+    } else {
+        $where = " WHERE pid = '" . addslashes($id) . "'";
+        $permOp = 'AND';
+    }
+    if ($uid > 0) {
+        $permSql = COM_getPermSql($permOp, $uid);
+    } else {
+        $permSql = COM_getPermSql($permOp);
+    }
+    $sql = "SELECT " . implode(',', $fields) . " FROM {$_TABLES['polltopics']}" . $where . $permSql;
+    if ($id != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+                case 'date-modified':
+                    $props['date-modified'] = $A['unixdate'];
+                    break;
+                case 'id':
+                    $props['id'] = $A['pid'];
+                    break;
+                case 'title':
+                    $props['title'] = $A['topic'];
+                    break;
+                case 'url':
+                    if (empty($A['pid'])) {
+                        $props['url'] = $_CONF['site_url'].'/polls/index.php?pid='.$pid.'&amp;aid=-1';
+                    } else {
+                        $props['url'] = $_CONF['site_url'].'/polls/index.php?pid='.$A['pid'].'&amp;aid=-1';
+                    }
+                    break;
+                case 'label':
+                    $props['label'] = $LANG_POLLS['polls'];
+                    break;
+                default:
+                    $props[$p] = '';
+                    break;
+            }
+        }
+
+        $mapped = array();
+        foreach ($props as $key => $value) {
+            if ($id == '*') {
+                if ($value != '') {
+                    $mapped[$key] = $value;
+                }
+            } else {
+                $mapped[$key] = $value;
+            }
+        }
+
+        if ($id == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($id != '*') && (count($retval) == 1)) {
+        $retval = $retval[0];
+    }
+
+    return $retval;
+}
 ?>

@@ -1893,6 +1893,139 @@ function plugin_getListField_calendar($fieldname, $fieldvalue, $A, $icon_arr)
     return $retval;
 }
 
+
+/**
+* Return information for an event
+*
+* @param    string  $eid        event ID or '*'
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES, $LANG_CAL_1;
+
+    $properties = explode(',', $what);
+    $fields = array();
+    foreach ($properties as $p) {
+        switch ($p) {
+        case 'description':
+        case 'excerpt':
+            $fields[] = 'description';
+            break;
+        case 'raw-description' :
+            $fields[] = 'description';
+            break;
+        case 'id':
+            $fields[] = 'eid';
+            break;
+        case 'title':
+            $fields[] = 'title';
+            break;
+        case 'url':
+            // used whe $eid == * or when only requesting URL (so $fields is not empty)
+            $fields[] = 'eid';
+            break;
+        case 'label':
+            $fields[] = 'eid';
+            break;
+        default:
+            break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+        return $retval;
+    }
+
+    if ($eid == '*') {
+        $where = '';
+        $permOp = 'WHERE';
+    } else {
+        $where = " WHERE eid = '" . addslashes($eid) . "'";
+        $permOp = 'AND';
+    }
+    if ($uid > 0) {
+        $permSql = COM_getPermSql($permOp, $uid);
+    } else {
+        $permSql = COM_getPermSql($permOp);
+    }
+    $sql = "SELECT " . implode(',', $fields) . " FROM {$_TABLES['events']}" . $where . $permSql;
+    if ($eid != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+            case 'description':
+            case 'excerpt':
+                $props[$p] = PLG_replaceTags($A['description']);
+                break;
+            case 'raw-description' :
+                $props[$p] = $A['description'];
+                break;
+            case 'id':
+                $props['id'] = $A['eid'];
+                break;
+            case 'title':
+                $props['title'] = stripslashes($A['title']);
+                break;
+            case 'url':
+                if (empty($A['eid'])) {
+                    $props['url'] = $_CONF['site_url'] . '/calendar/event.php?eid=' . $eid;
+                } else {
+                    $props['url'] = $_CONF['site_url'] . '/calendar/event.php?eid=' . $A['eid'];
+                }
+                break;
+            case 'label' :
+                $props['label'] = $LANG_CAL_1[16];
+                break;
+            default:
+                $props[$p] = '';
+                break;
+            }
+        }
+
+        $mapped = array();
+        foreach ($props as $key => $value) {
+            if ($eid == '*') {
+                if ($value != '') {
+                    $mapped[$key] = $value;
+                }
+            } else {
+                $mapped[$key] = $value;
+            }
+        }
+
+        if ($eid == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($eid != '*') && (count($retval) == 1)) {
+        $retval = $retval[0];
+    }
+
+    return $retval;
+}
+
 /**
 * Creates a dropdown list of all the event types
 *

@@ -1134,6 +1134,142 @@ function plugin_getListField_staticpages($fieldname, $fieldvalue, $A, $icon_arr)
 }
 
 /**
+* Return information for a static page
+*
+* @param    string  $id         static page ID or '*'
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES, $LANG_STATIC;
+
+    // parse $what to see what we need to pull from the database
+    $properties = explode(',', $what);
+    $fields = array();
+    foreach ($properties as $p) {
+        switch ($p) {
+        case 'date-modified':
+            $fields[] = 'UNIX_TIMESTAMP(sp_date) AS unixdate';
+            break;
+        case 'description':
+        case 'excerpt':
+        case 'raw-description':
+            $fields[] = 'sp_content';
+            $fields[] = 'sp_php';
+            break;
+        case 'id':
+            $fields[] = 'sp_id';
+            break;
+        case 'title':
+            $fields[] = 'sp_title';
+            break;
+        case 'url':
+        case 'label':
+            $fields[] = 'sp_id';
+            break;
+        default:
+            break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+
+        return $retval;
+    }
+
+    if ($sp_id == '*') {
+        $where = '';
+        $permOp = 'WHERE';
+    } else {
+        $where = " WHERE sp_id = '" . addslashes($id) . "'";
+        $permOp = 'AND';
+    }
+    if ($uid > 0) {
+        $permSql = COM_getPermSql($permOp, $uid);
+    } else {
+        $permSql = COM_getPermSql($permOp);
+    }
+    $sql = "SELECT " . implode(',', $fields) . " FROM {$_TABLES['staticpage']}" . $where . $permSql;
+    if ($id != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+                case 'date-modified':
+                    $props['date-modified'] = $A['unixdate'];
+                    break;
+                case 'description':
+                case 'excerpt':
+                    $props[$p] = SP_render_content($A['sp_content'],$A['sp_php']);
+                    break;
+                case 'raw-description':
+                    $props[$p] = $A['sp_content'];
+                    break;
+                case 'id':
+                    $props['id'] = $A['sp_id'];
+                    break;
+                case 'title':
+                    $props['title'] = $A['sp_title'];
+                    break;
+                case 'url':
+                    if (empty($A['sp_id'])) {
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/staticpages/index.php?page=' . $id);
+                    } else {
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/staticpages/index.php?page='.$A['sp_id']);
+                    }
+                    break;
+                case 'label':
+                    $props['label'] = $LANG_STATIC['staticpages'];
+                    break;
+                default:
+                    $props[$p] = '';
+                break;
+            }
+        }
+
+        $mapped = array();
+        foreach ($props as $key => $value) {
+            if ($id == '*') {
+                if ($value != '') {
+                    $mapped[$key] = $value;
+                }
+            } else {
+                $mapped[$key] = $value;
+            }
+        }
+
+        if ($id == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($id != '*') && (count($retval) == 1)) {
+        $retval = $retval[0];
+    }
+
+    return $retval;
+}
+
+/**
 * Render the actual content of a static page (without any surrounding blocks)
 *
 * @param    string  $sp_content the content (HTML or PHP source)

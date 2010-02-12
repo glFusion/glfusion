@@ -737,103 +737,154 @@ function STORY_deleteImages ($sid)
 * @param    string  $sid        story ID or '*'
 * @param    string  $what       comma-separated list of story properties
 * @param    int     $uid        user ID or 0 = current user
-* @return   mixed           string or array of strings with the information
+* @return   mixed               string or array of strings with the information
 *
 */
-function STORY_getItemInfo ($sid, $what)
+function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
 {
-    global $_CONF, $_TABLES;
+    global $_CONF, $_TABLES, $LANG09;
 
-    $properties = explode (',', $what);
-    $fields = array ();
+    $properties = explode(',', $what);
+
+    $fields = array();
     foreach ($properties as $p) {
         switch ($p) {
-        case 'date-created':
-            $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
-            break;
-        case 'description':
-            $fields[] = 'introtext';
-            $fields[] = 'bodytext';
-            break;
-        case 'excerpt':
-            $fields[] = 'introtext';
-            break;
-        case 'feed':
-            $fields[] = 'tid';
-            break;
-        case 'id':
-            $fields[] = 'sid';
-            break;
-        case 'title':
-            $fields[] = 'title';
-            break;
-        case 'url':
-            if ($sid == '*') {
-                // in this case, we need the sid to build the URL
+            case 'date-created':
+                $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
+                break;
+            case 'description':
+            case 'raw-description':
+                $fields[] = 'introtext';
+                $fields[] = 'bodytext';
+                break;
+            case 'excerpt':
+                $fields[] = 'introtext';
+                break;
+            case 'feed':
+                $fields[] = 'tid';
+                break;
+            case 'id':
                 $fields[] = 'sid';
-            }
-            break;
-        default:
-            // nothing to do
-            break;
+                break;
+            case 'title':
+                $fields[] = 'title';
+                break;
+            case 'url':
+            case 'label':
+                $fields[] = 'sid';
+                break;
+            default:
+                break;
         }
     }
 
     $fields = array_unique($fields);
-    if (count ($fields) > 0) {
-         $result = DB_query ("SELECT " . implode (',', $fields)
-                     . " FROM {$_TABLES['stories']} WHERE sid = '".addslashes($sid)."'"
-                     . ' AND (draft_flag = 0) AND (date <= NOW())'
-                     . COM_getPermSql ('AND') . COM_getTopicSql ('AND'));
-        $A = DB_fetchArray ($result);
-    } else {
-        $A = array ();
+
+    if (count($fields) == 0) {
+        $retval = array();
+
+        return $retval;
     }
 
-    $retval = array ();
-    foreach ($properties as $p) {
-        switch ($p) {
-            case 'description':
-                $retval[] = trim (PLG_replaceTags (stripslashes ($A['introtext']) . ' ' . stripslashes ($A['bodytext'])));
-                break;
-            case 'excerpt':
-                $excerpt = stripslashes ($A['introtext']);
-                if (!empty ($A['bodytext'])) {
-                    $excerpt .= "\n\n" . stripslashes ($A['bodytext']);
-                }
-                $retval[] = trim (PLG_replaceTags ($excerpt));
-                break;
-            case 'feed':
-                $feedfile = DB_getItem ($_TABLES['syndication'], 'filename',
-                                        "topic = '::all'");
-                if (empty($feedfile)) {
+    if ($sid == '*') {
+        $where = ' WHERE';
+    } else {
+        $where = " WHERE (sid = '" . addslashes($sid) . "') AND";
+    }
+    $where .= ' (draft_flag = 0) AND (date <= NOW())';
+    if ($uid > 0) {
+        $permSql = COM_getPermSql('AND', $uid)
+                 . COM_getTopicSql('AND', $uid);
+    } else {
+        $permSql = COM_getPermSql('AND') . COM_getTopicSql('AND');
+    }
+    $sql = "SELECT " . implode(',', $fields) . " FROM {$_TABLES['stories']}" . $where . $permSql;
+    if ($sid != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+                case 'date-created':
+                    $props['date-created'] = $A['unixdate'];
+                    break;
+                case 'description':
+                    $props['description'] = trim(PLG_replaceTags(stripslashes($A['introtext']) . ' ' . stripslashes($A['bodytext'])));
+                    break;
+                case 'raw-description':
+                    $props['raw-description'] = trim(stripslashes($A['introtext']) . ' ' . stripslashes($A['bodytext']));
+                    break;
+                case 'excerpt':
+                    $excerpt = stripslashes($A['introtext']);
+                    $props['excerpt'] = trim(PLG_replaceTags($excerpt));
+                    break;
+                case 'feed':
                     $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
-                                           "topic = '::frontpage'");
+                                           "topic = '::all'");
+                    if (empty($feedfile)) {
+                        $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
+                                               "topic = '::frontpage'");
+                    }
+                    if (empty($feedfile)) {
+                        $feedfile = DB_getItem($_TABLES['syndication'], 'filename',
+                                               "topic = '{$A['tid']}'");
+                    }
+                    if (empty($feedfile)) {
+                        $props['feed'] = '';
+                    } else {
+                        $props['feed'] = SYND_getFeedUrl($feedfile);
+                    }
+                    break;
+                case 'id':
+                    $props['id'] = $A['sid'];
+                    break;
+                case 'title':
+                    $props['title'] = stripslashes($A['title']);
+                    break;
+                case 'url':
+                    if (empty($A['sid'])) {
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/article.php?story=' . $sid);
+                    } else {
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/article.php?story=' . $A['sid']);
+                    }
+                    break;
+                case 'label':
+                    $props['label'] = $LANG09[65];
+                    break;
+                default:
+                    $props[$p] = '';
+                    break;
+            }
+        }
+
+        $mapped = array();
+        foreach ($props as $key => $value) {
+            if ($sid == '*') {
+                if ($value != '') {
+                    $mapped[$key] = $value;
                 }
-                if (empty ($feedfile)) {
-                    $feedfile = DB_getItem ($_TABLES['syndication'], 'filename',
-                                            "topic = '".addslashes($A['tid'])."'");
-                }
-                if (empty ($feedfile)) {
-                    $retval[] = '';
-                } else {
-                    $retval[] = SYND_getFeedUrl ($feedfile);
-                }
-                break;
-            case 'title':
-                $retval[] = stripslashes ($A['title']);
-                break;
-            case 'url':
-                $retval[] = COM_buildUrl ($_CONF['site_url']
-                                          . '/article.php?story=' . $sid);
-                break;
-            default:
-                $retval[] = ''; // return empty string for unknown properties
-                break;
+            } else {
+                $mapped[$key] = $value;
+            }
+        }
+
+        if ($sid == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
         }
     }
 
-    if (count ($retval) == 1) {
+    if (($sid != '*') && (count($retval) == 1)) {
         $retval = $retval[0];
     }
 

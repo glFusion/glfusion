@@ -1182,6 +1182,140 @@ function plugin_templatesetvars_links ($templatename, &$template)
 }
 
 
+/**
+* Return information for a link
+*
+* @param    string  $lid        link ID or '*'
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES, $LANG_LINKS;
+
+    $properties = explode(',', $what);
+    $fields = array();
+    foreach ($properties as $p) {
+        switch ($p) {
+            case 'date-modified':
+                $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
+                break;
+            case 'description':
+            case 'excerpt':
+            case 'raw-description' :
+                $fields[] = 'description';
+                break;
+            case 'id':
+                $fields[] = 'lid';
+                break;
+            case 'title':
+                $fields[] = 'title';
+                break;
+            case 'label':
+            case 'url':
+                $fields[] = 'lid';
+                break;
+            default:
+                // nothing to do
+                break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+
+        return $retval;
+    }
+
+    if ($lid == '*') {
+        $where = '';
+        $permOp = 'WHERE';
+    } else {
+        $where = " WHERE lid = '" . addslashes($lid) . "'";
+        $permOp = 'AND';
+    }
+    if ($uid > 0) {
+        $permSql = COM_getPermSql($permOp, $uid) . LINKS_getCategorySQL('AND', $uid);
+    } else {
+        $permSql = COM_getPermSql($permOp) . LINKS_getCategorySQL('AND');
+    }
+    $sql = "SELECT " . implode(',', $fields) . " FROM {$_TABLES['links']}" . $where . $permSql;
+    if ($lid != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+                case 'date-modified':
+                    $props['date-modified'] = $A['unixdate'];
+                    break;
+                case 'description':
+                case 'excerpt':
+                case 'raw-description' :
+                    $props[$p] = stripslashes($A['description']);
+                    break;
+                case 'id':
+                    $props['id'] = $A['lid'];
+                    break;
+                case 'title':
+                    $props['title'] = stripslashes($A['title']);
+                    break;
+                case 'url':
+                    if (empty($A['lid'])) {
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/links/portal.php?what=link&amp;item='.$lid);
+                    } else {
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/links/portal.php?what=link&amp;item='.$A['lid']);
+                    }
+                    break;
+                case 'label':
+                    $props['label'] = $LANG_LINKS[14];
+                    break;
+                default:
+                    $props[$p] = '';
+                    break;
+            }
+        }
+
+        $mapped = array();
+        foreach ($props as $key => $value) {
+            if ($lid == '*') {
+                if ($value != '') {
+                    $mapped[$key] = $value;
+                }
+            } else {
+                $mapped[$key] = $value;
+            }
+        }
+
+        if ($lid == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($lid != '*') && (count($retval) == 1)) {
+        $retval = $retval[0];
+    }
+
+    return $retval;
+}
+
+
 // +--------------------------------------------------------------------------+
 // | Category HTML functions                                                  |
 // | Functions for building select boxes and breadcrumb trails etc.           |
@@ -1354,6 +1488,79 @@ function phpblock_topic_categories()
     }
 
     return $retval;
+}
+
+/**
+* Return SQL expression to check for allowed categories.
+*
+* Creates part of an SQL expression that can be used to only request links
+* from categories to which the user has access to.
+*
+* Note that this function does SQL requests, so you should cache
+* the resulting SQL expression if you need it more than once.
+*
+* @param    string  $type   part of the SQL expr. e.g. 'WHERE', 'AND'
+* @param    int     $u_id   user id or 0 = current user
+* @param    string  $table  table name if ambiguous (e.g. in JOINs)
+* @return   string          SQL expression string (may be empty)
+* @see      COM_getTopicSQL
+*
+*/
+function LINKS_getCategorySQL($type = 'WHERE', $u_id = 0, $table = '')
+{
+    global $_TABLES, $_USER, $_GROUPS;
+
+    $categorysql = ' ' . $type . ' ';
+
+    if (!empty($table)) {
+        $table .= '.';
+    }
+
+    $UserGroups = array();
+    if (($u_id <= 0) || (isset($_USER['uid']) && ($u_id == $_USER['uid']))) {
+        if (!COM_isAnonUser()) {
+            $uid = $_USER['uid'];
+        } else {
+            $uid = 1;
+        }
+        $UserGroups = $_GROUPS;
+    } else {
+        $uid = $u_id;
+        $UserGroups = SEC_getUserGroups($uid);
+    }
+
+    if (empty($UserGroups)) {
+        // this shouldn't really happen, but if it does, handle user
+        // like an anonymous user
+        $uid = 1;
+    }
+
+    if (SEC_inGroup('Root', $uid)) {
+        return '';
+    }
+
+    $parents = array('root');
+    $cids = array();
+
+    do {
+        $result = DB_query("SELECT cid FROM {$_TABLES['linkcategories']}"
+                           . COM_getPermSQL('WHERE', $uid) . " AND pid IN ('"
+                           . implode("','", $parents) . "')");
+
+        $parents = array();
+        while ($C = DB_fetchArray($result)) {
+            $parents[] = $C['cid'];
+            $cids[] = $C['cid'];
+        }
+    } while (count($parents) > 0);
+
+    if (count($cids) > 0) {
+        $categorysql .= "({$table}cid IN ('" . implode("','", $cids) . "'))";
+    } else {
+        $categorysql .= '0';
+    }
+
+    return $categorysql;
 }
 
 ?>
