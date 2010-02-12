@@ -855,7 +855,7 @@ function BlockMessage($title,$message='',$sitefooter=true){
     return;
 }
 
-function alertMessage($message,$title='',$prompt='') {
+function alertMessage($message,$title='',$prompt='',$noprint = 0) {
     global $_CONF, $CONF_FORUM,$LANG_GF02;
 
     $alertmsg = new Template($_CONF['path'] . 'plugins/forum/templates/');
@@ -877,7 +877,12 @@ function alertMessage($message,$title='',$prompt='') {
     $alertmsg->parse ('alert_header', 'outline_header');
     $alertmsg->parse ('alert_footer', 'outline_footer');
     $alertmsg->parse ('output', 'alertmsg');
-    echo $alertmsg->finish ($alertmsg->get_var('output'));
+    $retval = $alertmsg->finish ($alertmsg->get_var('output'));
+    if ( $noprint ) {
+        return $retval;
+    }
+    echo $retval;
+
     return;
 }
 
@@ -1134,6 +1139,11 @@ function gf_updateLastPost($forumid,$topicparent=0) {
         } else {
             $query = DB_query("SELECT id,date FROM {$_TABLES['gf_topic']} WHERE forum=".intval($forumid)." AND pid=".$parent_id ." ORDER BY date DESC LIMIT 1");
             list($last_reply_rec,$lastupdated) = DB_fetchArray($query);
+            $parent_date = DB_getItem($_TABLES['gf_topic'],'date','id='.$parent_id);
+
+            if ( $parent_date > $lastupdated ) {
+                $lastupdated = $parent_date;
+            }
             DB_query("UPDATE {$_TABLES['gf_topic']} SET replies=".$numreplies.",last_reply_rec=".$last_reply_rec.", lastupdated='".$lastupdated."' WHERE id=".$parent_id);
         }
     }

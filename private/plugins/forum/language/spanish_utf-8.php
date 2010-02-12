@@ -535,7 +535,14 @@ $LANG_GF03 = array(
     'lockedpost' => 'Añadir respuesta',
     'splitheading' => 'Opción de dividir tema:',
     'splitopt1' => 'Mover todos los Posts desde este punto',
-    'splitopt2' => 'Mover únicamente este Post'
+    'splitopt2' => 'Mover únicamente este Post',
+    'merge_post'  => 'Merge Post',
+    'merge_topic' => 'Merge Topic',
+    'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
+    'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
+    'select'    => 'Select',
+    'select_forum' => 'Select Forum Topic',
+    'destination_topic' => 'Destination Topic ID:',
 );
 
 $LANG_GF04 = array(

@@ -224,6 +224,7 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
             if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
             DB_query($sql);
 
+            PLG_itemSaved($editid,'forum');
             CACHE_remove_instance('forumcb');
 
             $topicparent = DB_getITEM($_TABLES['gf_topic'],"pid","id='".addslashes($editid)."'");
@@ -365,6 +366,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='$forum' and topic_id = '".addslashes($nlastid)."'");
                         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".addslashes($forum)."','".addslashes($nlastid)."','".addslashes($uid)."',now() )");
                     }
+                    PLG_itemSaved($lastid,'forum');
                     CACHE_remove_instance('forumcb');
 
                     COM_updateSpeedlimit ('forum');
@@ -473,6 +475,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".addslashes($forum)."' and topic_id = '".addslashes($nid)."'");
                         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".addslashes($forum)."','".addslashes($nid)."','$uid',now() )");
                     }
+                    PLG_itemSaved($lastid,'forum');
                     CACHE_remove_instance('forumcb');
 
                     COM_updateSpeedlimit ('forum');

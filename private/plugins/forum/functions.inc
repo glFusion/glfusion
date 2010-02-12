@@ -780,7 +780,7 @@ function forum_xchsmilies($message,$reverse=false) {
 }
 
 
-function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
+function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='',$noprint = 0) {
     global $_CONF,$_TABLES,$_USER,$LANG_GF02,$CONF_FORUM;
 
     if ($prompt=="") {
@@ -806,8 +806,13 @@ function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
         $statusmsg->set_var ('prompt',$prompt);
     }
     $statusmsg->parse ('output', 'statusmsg');
-    echo $statusmsg->finish ($statusmsg->get_var('output'));
 
+    $retval = $statusmsg->finish ($statusmsg->get_var('output'));
+
+    if ( $noprint ) {
+        return $retval;
+    }
+    echo $retval;
     return;
 }
 
@@ -1209,6 +1214,154 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
     return $retval;
 }
 
+
+/**
+* Return information for a forum topic
+*
+* @param    string  $id         topic id or *
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES, $LANG_GF00;
+
+    $properties = explode(',', $what);
+    $fields = array();
+    foreach ($properties as $p) {
+        switch ($p) {
+            case 'date-modified':
+                $fields[] = 'UNIX_TIMESTAMP(a.date) AS unixdate';
+                break;
+            case 'description':
+            case 'excerpt':
+            case 'raw-description' :
+                $fields[] = 'a.comment';
+                break;
+            case 'id':
+                $fields[] = 'a.id';
+                break;
+            case 'title':
+                $fields[] = 'a.subject';
+                break;
+            case 'label':
+            case 'url':
+                $fields[] = 'a.id';
+                break;
+            default:
+                break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+        return $retval;
+    }
+
+    require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+
+    if ($id == '*') {
+        $where = '';
+        $permOp = '';
+    } else {
+        $where = " WHERE id = '" . addslashes($id) . "'";
+        $permOp = ' AND ';
+    }
+
+    $groups = array ();
+    $usergroups = SEC_getUserGroups();
+    foreach ($usergroups as $group) {
+        $groups[] = $group;
+    }
+    $grouplist = implode(',',$groups);
+
+    $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status ";
+    $sql .= "FROM {$_TABLES['gf_topic']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
+    $sql .= $where . $permOp . "b.grp_id IN ($grouplist)";
+
+    if ($id != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+                case 'date-modified':
+                    $props['date-modified'] = $A['unixdate'];
+                    break;
+                case 'description':
+                case 'excerpt':
+                    $prop[$p] = gf_formatTextBlock($A['comment'],$A['postmode'],'noquote',$A['status']);
+                    break;
+                case 'raw-description' :
+                    $props[$p] = $A['comment'];
+                    break;
+                case 'id':
+                    $props['id'] = $A['id'];
+                    break;
+                case 'title':
+                    $props['title'] = strip_tags($A['subject']);
+                    break;
+                case 'url':
+                    if ( !empty($A['id']) ) {
+                        $id = $A['id'];
+                    }
+                    if ( $A['pid'] == 0 ) {
+                        $props['url'] = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$id;
+                    } else {
+                        $props['url'] = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$A['pid'].'&amp;topic='.$id.'#'.$id;
+                    }
+                    break;
+                case 'label':
+                    $props['label'] = $LANG_GF00['pluginlabel'];
+                    break;
+                default:
+                    $props[$p] = '';
+                    break;
+            }
+        }
+
+        $mapped = array();
+        if ( is_array($props) ) {
+            foreach ($props as $key => $value) {
+                if ($id == '*') {
+                    if ($value != '') {
+                        $mapped[$key] = $value;
+                    }
+                } else {
+                    $mapped[$key] = $value;
+                }
+            }
+        }
+
+        if ($id == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($id != '*') && (count($retval) == 1)) {
+        $retval = $retval[0];
+    }
+
+    return $retval;
+}
+
 // +---------------------------------------------------------------------------+
 // | Commmon Forum Functions                                                   |
 // +---------------------------------------------------------------------------+
@@ -1383,11 +1536,22 @@ function forumPLG_restoreEmoticons($str) {
     }
 }
 
-function forumPLG_getPMlink($member) {
+function forumPLG_getPMlink($member,$uid=0) {
     global $_TABLES,$_CONF, $_PLUGINS;
 
+    static $blockArray = array();
+
     if (in_array('pm', $_PLUGINS)) {
-        return "{$_CONF['site_url']}/pm/compose.php?mode=new&amp;username={$member};";
+        if ( !isset($blockArray[$member]) ) {
+            if ( $uid == 0 ) {
+                $uid = DB_getItem($_TABLES['users'],'uid','username="'.addslashes($member).'"');
+            }
+            $block = DB_getItem($_TABLES['pm_userprefs'],'block','uid='.$uid);
+            $blockArray[$member] = intval($block);
+        }
+        if ( $blockArray[$member] == 0 ) {
+            return "{$_CONF['site_url']}/pm/compose.php?mode=new&amp;username={$member};";
+        }
     }
     if (DB_getItem($_TABLES['plugins'],'pi_enabled',"pi_name='messenger'") == 1) {
         return "{$_CONF['site_url']}/messenger/index.php?action=newpm&amp;toname={$member};";
