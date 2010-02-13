@@ -594,7 +594,7 @@ function modDownloadS() {
     $currentfile = DB_getITEM($_FM_TABLES['filemgmt_filedetail'], 'url', "lid=".intval($_POST['lid']));
     $currentfileFQN = $filemgmt_FileStore . $myts->makeTboxData4Save(rawurldecode($currentfile));
     $newfile = rawurlencode($myts->makeTboxData4Save($_FILES['newfile']['name']));
-    COM_errorLOG("Currentfilename is:'$currentfile' and new file is:'$newfile'");
+//    COM_errorLOG("Currentfilename is:'$currentfile' and new file is:'$newfile'");
     if ( $newfile != '' ) {
         require_once $_CONF['path_system'] . 'classes/upload.class.php';
         $upload = new upload();
