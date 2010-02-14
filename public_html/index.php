@@ -155,6 +155,8 @@ if($topic)
 }
 $display .= COM_siteHeader('menu', '', $header);
 
+$display .= glfusion_UpgradeCheck();
+
 $display .= glfusion_SecurityCheck();
 
 if (isset ($_GET['msg'])) {

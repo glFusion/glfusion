@@ -5,7 +5,7 @@ v1.1.9
 - Complete implementation of PLG_getItemInfo for each bundled plugin. (Mark)
 - Forum: Implemented merge topic feature (Mark)
 - Forum: Rewrote the moderation system to be more procedural. This will
-  help with future enhancements to moderatoin features (Mark)
+  help with future enhancements to moderation features (Mark)
 - Forum: Site Members report did not honor Forum Activity checkbox (Mark)
 - Forum: Implemented per topic options (Disable BBCode, Disable Smilies,
   Disable URL Parse) (Mark)
@@ -15,6 +15,7 @@ v1.1.9
 - Forum: Implemented user preference to specify view topic sort order (Mark)
 - FileMgmt: Implemented configuration option to turn on / off ratings (Mark)
 - Implemented reset rating for stories (Mark)
+- Implemented site upgrade check/reminder (Mark H.)
 
 v1.1.8.pl2
 ----------

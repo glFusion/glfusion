@@ -175,10 +175,12 @@ $LANG01 = array(
     128 => 'Login with OpenID:',
     129 => 'Configuration',
     130 => 'Webservices',
-    500 => 'Please remove the admin/install/ directory!',
+    500 => 'Please remember to remove the admin/install/ directory after installing or upgrading your site!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
     503 => 'Maintenance Mode - Non-admin logins disabled',
+    504 => 'The database version is: %s<br />The glFusion script version is: %s<br />Please run the <a href="%s">installation script</a> to upgrade the database!',
+    505 => 'Your database version is: %s<br />The glFusion script version is: %s<br />Please check the integrity of your site!',
     'ctl' => 'Clear Cache',
     'logview' => 'Logview'
 );
@@ -660,7 +662,6 @@ $LANG13 = array(
     'uid_rated'         => 'Your User ID has already rated this item.',
     'own_rated'         => 'Either you own the item or do not have permission to rate it.',
     'thanks_for_vote'   => 'Thanks for voting!',
-    'reset_rating'      => 'Reset Rating',
 );
 
 ###############################################################################
