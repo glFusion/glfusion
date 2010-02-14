@@ -662,6 +662,7 @@ $LANG13 = array(
     'uid_rated'         => 'Your User ID has already rated this item.',
     'own_rated'         => 'Either you own the item or do not have permission to rate it.',
     'thanks_for_vote'   => 'Thanks for voting!',
+    'reset_rating'      => 'Reset Rating',
 );
 
 ###############################################################################
