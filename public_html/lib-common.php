@@ -1688,13 +1688,14 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 * @param    string  $title      Value to set block title to
 * @param    string  $helpfile   Help file, if one exists
 * @param    string  $template   HTML template file to use to format the block
+* @param    string  $name       ID of block, customarily the name of the block
 * @return   string              Formatted HTML containing block header
 * @see COM_endBlock
 * @see COM_siteHeader
 *
 */
 
-function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml' )
+function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml', $name='' )
 {
     global $_CONF, $LANG01, $_IMAGE_TYPE;
 
@@ -1706,6 +1707,9 @@ function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml' 
     $block->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $block->set_var( 'layout_url', $_CONF['layout_url'] );
     $block->set_var( 'block_title', stripslashes( $title ));
+    if( !empty( $name ) ) {
+        $block->set_var( 'block_id', 'id="' . $name . '" ' );
+    }
 
     if( !empty( $helpfile ))
     {
@@ -2490,7 +2494,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         $thisUrl = COM_getCurrentURL();
 
         $retval .= COM_startBlock( $title, $help,
-                           COM_getBlockTemplate( 'user_block', 'header', $position ));
+                           COM_getBlockTemplate( 'user_block', 'header', $position ), 'user_block' );
         $retval .= '<ul>';
 
         $plugin_options = PLG_getAdminOptions();
@@ -2563,7 +2567,7 @@ function COM_userMenu( $help='', $title='', $position='' )
     else
     {
         $retval .= COM_startBlock( $LANG01[47], $help,
-                           COM_getBlockTemplate( 'user_block', 'header', $position ));
+                           COM_getBlockTemplate( 'user_block', 'header', $position ), 'user_block' );
         $login = new Template( $_CONF['path_layout'] );
         $login->set_file( 'form', 'loginform.thtml' );
         $login->set_var( 'xhtml', XHTML );
@@ -2700,7 +2704,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         }
 
         $retval .= COM_startBlock( $title, $help,
-                           COM_getBlockTemplate( 'admin_block', 'header', $position ));
+                           COM_getBlockTemplate( 'admin_block', 'header', $position ), 'admin_block' );
 
         $topicsql = '';
         if( SEC_isModerator() || SEC_hasRights( 'story.edit' ))
@@ -3637,7 +3641,7 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
 
         case 'section_block':
             $retval .= COM_startBlock( $title, $help,
-                               COM_getBlockTemplate( $name, 'header', $position ))
+                               COM_getBlockTemplate( $name, 'header', $position ), $name )
                 . COM_showTopics( $topic )
                 . COM_endBlock( COM_getBlockTemplate( $name, 'footer', $position ));
             break;
@@ -3856,7 +3860,7 @@ function COM_formatBlock( $A, $noboxes = false )
                 $args = $matches[2];
             }
             $blkheader = COM_startBlock( $A['title'], $A['help'],
-                    COM_getBlockTemplate( $A['name'], 'header', $position ));
+                    COM_getBlockTemplate( $A['name'], 'header', $position ), $A['name'] );
             $blkfooter = COM_endBlock( COM_getBlockTemplate( $A['name'],
                     'footer', $position ));
 
@@ -3906,7 +3910,7 @@ function COM_formatBlock( $A, $noboxes = false )
         $blockcontent = str_replace( array( '<?', '?>' ), '', $blockcontent );
 
         $retval .= COM_startBlock( $A['title'], $A['help'],
-                       COM_getBlockTemplate( $A['name'], 'header', $position ))
+                       COM_getBlockTemplate( $A['name'], 'header', $position ), $A['name'] )
                 . $blockcontent . LB
                 . COM_endBlock( COM_getBlockTemplate( $A['name'], 'footer', $position ));
     }
@@ -4442,7 +4446,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         }
     }
     $retval = COM_startBlock( $title, $help,
-                       COM_getBlockTemplate( 'whats_new_block', 'header', $position ));
+                       COM_getBlockTemplate( 'whats_new_block', 'header', $position ), 'whats_new_block' );
 
     $topicsql = '';
     if(( $_CONF['hidenewstories'] == 0 ) || ( $_CONF['hidenewcomments'] == 0 )
