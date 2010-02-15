@@ -16,6 +16,7 @@ v1.1.9
 - FileMgmt: Implemented configuration option to turn on / off ratings (Mark)
 - Implemented reset rating for stories (Mark)
 - Implemented site upgrade check/reminder (Mark H.)
+- Implemented block-specific styling, eg. block div id=block_name (Mark H.)
 
 v1.1.8.pl2
 ----------
