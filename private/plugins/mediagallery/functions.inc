@@ -1702,7 +1702,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                     $newwidth = $width;
                     $newheight = $height;
                 }
-                $album_image = '<img src="' . $tnImage . '" ' . $alttag . 'style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;"' . XHTML . '>';
+                $album_image = '<img src="' . $tnImage . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;"' . XHTML . '>';
 
                 $tagtext = $album_image;
                 if ( $linkID == 0 ) {
