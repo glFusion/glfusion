@@ -10,10 +10,10 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2007-2009 by the following authors:                         |
+// | Copyright (C) 2007-2009 by the following authors:                        |
 // |                                                                          |
 // | Authors: Ramnath R Iyer        - rri AT silentyak DOT com                |
-// |          Dirk Haun             - dirk AT haun-online DOT de               |
+// |          Dirk Haun             - dirk AT haun-online DOT de              |
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | This program is free software; you can redistribute it and/or            |
@@ -262,6 +262,7 @@ function WS_get()
 {
     global $_CONF, $WS_PLUGIN, $WS_INTROSPECTION, $WS_VERBOSE, $_PLUGINS;
 
+
     if ($WS_VERBOSE) {
         COM_errorLog("WS: GET request received");
     }
@@ -269,6 +270,7 @@ function WS_get()
     WS_dissectURI($args);
 
     if ($WS_INTROSPECTION) {
+//ob_get_clean();
 
         header('Content-type: application/atomsvc+xml; charset=UTF-8');
 
@@ -327,12 +329,11 @@ function WS_get()
             if ($ret == PLG_RET_OK) {
                 foreach ($topics as $t) {
                     $topic = $atom_doc->createElement('atom:category');
-                    $topic->setAttribute('term', htmlentities($t, ENT_QUOTES, COM_getEncodingt()));
+                    $topic->setAttribute('term', xmlentities($t));
                     $categories->appendChild($topic);
                 }
             }
         }
-
         WS_write($atom_doc->saveXML());
 
         return;
@@ -392,14 +393,14 @@ function WS_get()
             $feed_link = $atom_doc->createElement('atom:link');
             $feed_link->setAttribute('rel', 'self');
             $feed_link->setAttribute('type', 'application/atom+xml');
-            $feed_link->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . htmlentities($WS_PLUGIN, ENT_QUOTES, COM_getEncodingt()));
+            $feed_link->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . xmlentities($WS_PLUGIN));
             $feed_elem->appendChild($feed_link);
 
             if (!empty($svc_msg['offset'])) {
                 $next_link = $atom_doc->createElement('atom:link');
                 $next_link->setAttribute('rel', 'next');
                 $next_link->setAttribute('type', 'application/atom+xml');
-                $next_link->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . htmlentities($WS_PLUGIN, ENT_QUOTES, COM_getEncodingt()) . '&offset=' . $svc_msg['offset']);
+                $next_link->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . xmlentities($WS_PLUGIN) . '&offset=' . $svc_msg['offset']);
                 $feed_elem->appendChild($next_link);
             }
 
@@ -694,11 +695,11 @@ function WS_arrayToEntryXML($arr, $extn_elements, &$entry_elem, &$atom_doc)
         $link_self = $atom_doc->createElement('atom:link');
         $link_self->setAttribute('rel', 'edit');
         $link_self->setAttribute('type', 'application/atom+xml');
-        $link_self->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . htmlentities($WS_PLUGIN, ENT_QUOTES, COM_getEncodingt()) . '&id=' . htmlentities($arr['id'], ENT_QUOTES, COM_getEncodingt()));
+        $link_self->setAttribute('href', $_CONF['site_url'] . '/webservices/atom/?plugin=' . xmlentities($WS_PLUGIN) . '&id=' . xmlentities($arr['id']));
         $entry_elem->appendChild($link_self);
     }
 
-    $content = $atom_doc->createElement('atom:content', htmlentities($arr['content'], ENT_QUOTES, COM_getEncodingt()));
+    $content = $atom_doc->createElement('atom:content', xmlentities($arr['content']));
     $content->setAttribute('type', $arr['content_type']);
     $entry_elem->appendChild($content);
 
@@ -964,4 +965,9 @@ function WS_makeId($slug = '', $max_length = 40)
     return substr(COM_sanitizeID($id), 0, $max_length);
 }
 
+// XML Entity Mandatory Escape Characters
+function xmlentities ( $string )
+{
+    return str_replace ( array ( '&', '"', "'", '<', '>' ), array ( '&amp;' , '&quot;', '&apos;' , '&lt;' , '&gt;' ), $string );
+}
 ?>
