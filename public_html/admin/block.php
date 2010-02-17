@@ -764,22 +764,24 @@ function moveBlock()
 /**
 * Enable and Disable block
 */
-function changeBlockStatus($side, $bid_arr)
+function changeBlockStatus($side, $bid_arr, $bidarray)
 {
     global $_CONF, $_TABLES;
 
-    // first, disable all on the requested side
-    $side = COM_applyFilter($side, true);
-    $sql = "UPDATE {$_TABLES['blocks']} SET is_enabled = '0' WHERE onleft='$side';";
-    DB_query($sql);
-    if (isset($bid_arr)) {
-        foreach ($bid_arr as $bid => $side) {
-            $bid = COM_applyFilter($bid, true);
-            // the enable those in the array
-            $sql = "UPDATE {$_TABLES['blocks']} SET is_enabled = '1' WHERE bid='$bid' AND onleft='$side'";
-            DB_query($sql);
+    if (isset($bidarray) ) {
+        foreach ($bidarray AS $bid => $side ) {
+            $bid = intval($bid);
+            $side = intval($side);
+            if ( isset($bid_arr[$bid]) ) {
+                $sql = "UPDATE {$_TABLES['blocks']} SET is_enabled = '1' WHERE bid=$bid AND onleft=$side";
+                DB_query($sql);
+            } else {
+                $sql = "UPDATE {$_TABLES['blocks']} SET is_enabled = '0' WHERE bid=$bid AND onleft=$side";
+                DB_query($sql);
+            }
         }
     }
+
     return;
 }
 
@@ -824,7 +826,11 @@ if (isset($_POST['blockenabler']) && SEC_checkToken()) {
     if (isset($_POST['enabledblocks'])) {
         $enabledblocks = $_POST['enabledblocks'];
     }
-    changeBlockStatus($_POST['blockenabler'], $enabledblocks);
+    $bidarray = array();
+    if ( isset($_POST['bidarray']) ) {
+        $bidarray = $_POST['bidarray'];
+    }
+    changeBlockStatus($_POST['blockenabler'], $enabledblocks,$bidarray);
 }
 
 if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {

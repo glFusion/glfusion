@@ -657,6 +657,7 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
                     }
                     $retval = "<input type=\"checkbox\" name=\"enabledblocks[{$A['bid']}]\" "
                         . "onclick=\"submit()\" value=\"{$A['onleft']}\"$switch" . XHTML . ">";
+                    $retval .= '<input type="hidden" name="bidarray['.$A['bid'].']" value="'.$A['onleft'].'" />';
                     $retval .= "<input type=\"hidden\" name=\"" . CSRF_TOKEN . "\" value=\"{$token}\"" . XHTML . ">";
                 }
                 break;
