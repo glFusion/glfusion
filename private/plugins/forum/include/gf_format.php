@@ -1334,6 +1334,13 @@ function gfm_getoutput( $id ) {
     $id = COM_applyFilter($id,true);
     $result = DB_query("SELECT * FROM {$_TABLES['gf_topic']} WHERE id={$id}");
     $A = DB_fetchArray($result);
+
+    if ( $A['pid'] == 0 ) {
+        $pid = $id;
+    } else {
+        $pid = $A['pid'];
+    }
+    $permalink = $_CONF['site_url'].'/forum/viewtopic.php?topic='.$id.'#'.$id;
     $A['name'] = COM_checkWords($A['name']);
     $A['name'] = @htmlspecialchars($A['name'],ENT_QUOTES, COM_getEncodingt());
     $A['subject'] = COM_checkWords($A['subject']);
@@ -1346,7 +1353,6 @@ function gfm_getoutput( $id ) {
     } else {
         $postid = $A['pid'];
     }
-
     $T = new Template($_CONF['path'] . 'plugins/forum/templates');
     $T->set_file ('email', 'notifymessage.thtml');
 
@@ -1359,7 +1365,8 @@ function gfm_getoutput( $id ) {
         'post_comment'  => $A['comment'],
         'notify_msg'    => $notifymsg,
         'site_name'     => $_CONF['site_name'],
-        'online_version' => sprintf($LANG_GF02['view_online'],$_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$postid.'&lastpost=true#'.$topic_id),
+        'online_version' => sprintf($LANG_GF02['view_online'],$permalink),
+        'permalink'     => $permalink,
     ));
     $T->parse('output','email');
     $message = $T->finish($T->get_var('output'));

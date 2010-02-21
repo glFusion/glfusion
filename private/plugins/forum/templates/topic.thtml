@@ -6,7 +6,7 @@
   <td style="padding-left:6px; padding-right:6px;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td style="width:8px;" class="aligncenter"><a href="{site_url}/forum/viewtopic.php?showtopic={parent_id}&amp;topic={topic_id}#{topic_id}"><img src="{site_url}/forum/images/icon_minipost.gif" alt="{$LANG_GF01[PERMLINK]}" title="{$LANG_GF01[PERMLINK]}"{xhtml}></a></td>
+        <td style="width:8px;" class="aligncenter"><a href="{site_url}/forum/viewtopic.php?topic={topic_id}#{topic_id}"><img src="{site_url}/forum/images/icon_minipost.gif" alt="{$LANG_GF01[PERMLINK]}" title="{$LANG_GF01[PERMLINK]}"{xhtml}></a></td>
         {# <td nowrap>&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon} #}
         <td>
           {$LANG_GF01[BY]} {userlink} ({onlinestatus})&nbsp;{$LANG_GF01[ON3]}&nbsp;{posted_date}{preview_topic_subject}&nbsp;{read_msg}&nbsp;{locked_icon}
