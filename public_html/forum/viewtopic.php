@@ -62,7 +62,20 @@ $show      = isset($_REQUEST['show']) ? intval(COM_applyFilter($_REQUEST['show']
 $page      = isset($_REQUEST['page']) ? intval(COM_applyFilter($_REQUEST['page'],true)) : 0;
 $mode      = isset($_REQUEST['mode']) ? COM_applyFilter($_REQUEST['mode']) : '';
 $highlight = isset($_REQUEST['query']) ? COM_applyFilter($_REQUEST['query']) : '';
-$topic     = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic']) : '';
+$topic     = isset($_REQUEST['topic']) ? COM_applyFilter($_REQUEST['topic'],true) : 0;
+
+if ( $showtopic == 0 ) {
+    $showtopic = $topic;
+}
+
+if ( $showtopic == 0 ) {
+    echo COM_siteHeader();
+    echo COM_startBlock();
+    alertMessage($LANG_GF02['msg172'],$LANG_GF02['msg171']);
+    echo COM_endBlock();
+    echo COM_siteFooter();
+    exit;
+}
 
 $result = DB_query("SELECT forum, pid, subject FROM {$_TABLES['gf_topic']} WHERE id=$showtopic");
 list($forum, $topic_pid, $subject) = DB_fetchArray($result);
@@ -149,7 +162,7 @@ if (isset($_REQUEST['lastpost']) && $_REQUEST['lastpost']) {
 
     $base_url = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$showtopic&amp;mode=$mode&amp;show=$show";
 } else {
-    if ( $topic != '' ) {
+    if ( $topic != 0 ) {
         $sql = "SELECT id FROM {$_TABLES['gf_topic']} WHERE pid=".$showtopic."";
         $idResult = DB_query($sql);
         $ids = array();
