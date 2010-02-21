@@ -12,16 +12,18 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
   </td>
 </tr>
 <tr>
-  {!if smilies}
-  <td class="pluginCellSubTitle" style="vertical-align:top;padding-top:10px;">{smilies}</td>
-  <td class="pluginCellText pluginCellFill" style="padding-left: 5px;">
-    <textarea name="comment" id="input2" rows="50" cols="80" tabindex="6" class="post" style="width:100%">{post_message}</textarea>
-  </td>
-  {!else}
   <td colspan="2" class="pluginCellText pluginCellFill" style="padding-left: 5px;">
-    <textarea name="comment" id="input2" rows="50" cols="80" tabindex="6" class="post" style="width:100%">{post_message}</textarea>
+    <textarea name="comment" id="input2" rows="50" cols="80" tabindex="6" class="post" style="width:99%">{post_message}</textarea>
+
+    {!if smilies}
+    <input class="button2" type="button" title="Smileys" style="text-decoration: none; width: 60px;" value="Smileys" name="toggleV" id="toggleV" />
+    <div style="width:90%; padding:10px; clear:both;" id="smileys">
+    {smilies}
+    </div>
+    {!endif}
+
+
   </td>
-  {!endif}
 </tr>
 
 <tr style="display:{use_attachments};">
@@ -74,6 +76,21 @@ glfusionStyleBasePath  = "{glfusionStyleBasePath}/";
       </table>
   </td>
 </tr>
+
+    <tr>
+        <td class="pluginCellSubTitle">&nbsp;{$LANG_GF01[features]}</td>
+        <td class="pluginCellText pluginCellFill">
+            <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                <tr>
+{!if smilies_prompt}
+                    <td style="vertical-align:middle;text-align:left;">{smilies_prompt}</td>
+{!endif}
+                    <td style="vertical-align:middle;text-align:left;">{urlparse_prompt}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
 <tr>
   <td class="pluginCellSubTitle" style="padding:15px 5px 15px 10px; vertical-align:center;">{LANG_SUBMIT}</td>
   <td class="pluginCellText pluginCellFill alignright">

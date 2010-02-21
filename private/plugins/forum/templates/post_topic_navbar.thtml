@@ -31,6 +31,17 @@ e_help = "{LANG_ehelp}";
 <script type="text/javascript" src="{site_url}/forum/javascript/createtopic.js"></script>
 <script type="text/javascript">
     var site_url = '{site_url}';
+
+window.addEvent('domready', function() {
+	var mySlideV = new Fx.Slide('smileys').hide();
+		$('toggleV').addEvent('click', function(e){
+			e = new Event(e);
+			mySlideV.toggle();
+			e.stop();
+        });
+});
+
+
 </script>
 <script type="text/javascript" src="{site_url}/forum/javascript/ajax_deletefile.js"></script>
 <div class="pluginAlert" style="display:{show_alert}">{error_msg}</div>
