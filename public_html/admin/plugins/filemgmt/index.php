@@ -1124,7 +1124,7 @@ function addDownload() {
 
     if ( $upload->numFiles() == 0 && !$upload->areErrors() && !empty($fileurl) ) {
         $url = $fileurl;
-        $size = 'n/a';
+        $size = 0;
         $AddNewFile = true;
     }
 
