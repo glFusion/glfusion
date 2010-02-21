@@ -162,6 +162,7 @@ $_SQL['gf_userprefs'] = "CREATE TABLE {$_TABLES['gf_userprefs']} (
   showiframe tinyint(1) NOT NULL default '1',
   notify_once tinyint(1) NOT NULL default '0',
   topic_order varchar(10) NOT NULL default 'ASC',
+  use_wysiwyg_editor tinyint(3) NOT NULL DEFAULT '1',
   PRIMARY KEY  (uid)
 ) TYPE=MyISAM;";
 # --------------------------------------------------------

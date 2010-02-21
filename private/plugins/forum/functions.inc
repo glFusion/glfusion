@@ -82,6 +82,7 @@ if ( !isset($CONF_FORUM['enable_user_rating_system']) ) {
 }
 
 $CONF_FORUM['topic_order'] = 'ASC';
+$CONF_FORUM['allow_wysiwyg_editor'] = $CONF_FORUM['use_wysiwyg_editor'];
 
 if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
     $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
@@ -96,6 +97,9 @@ if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
         $CONF_FORUM['show_anonymous_posts']       = $userprefs['viewanonposts'];
         $CONF_FORUM['notify_once']                = $userprefs['notify_once'];
         $CONF_FORUM['topic_order']                = $userprefs['topic_order'];
+        if ( $CONF_FORUM['use_wysiwyg_editor'] == 1 && isset($userprefs['use_wysiwyg_editor'])) {
+            $CONF_FORUM['use_wysiwyg_editor'] = $userprefs['use_wysiwyg_editor'];
+        }
     }
 }
 $CONF_FORUM['use_glfilter'] = 1; // always use the filter...
@@ -1661,7 +1665,7 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     }
 
     if ( $panel == 'userinfo' && $fieldset == 'personalinfo' && $CONF_FORUM['bbcode_signature'] ) {
-        $signature = DB_getItem($_TABLES['gf_userinfo'],'signature','uid='.$_USER['uid']);
+        $signature = DB_getItem($_TABLES['gf_userinfo'],'signature','uid='.$uid);
         return GF_sigEditorProfile($signature);
     }
 
@@ -1670,13 +1674,13 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     }
 
     // Get user specific settings from database
-    $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid='{$_USER['uid']}'");
+    $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid=$uid");
     $nrows = DB_numRows($result);
 
     if ($nrows == 0) {
         // Insert a new blank record. Defaults are set in SQL Defintion for table.
-        DB_query("INSERT INTO {$_TABLES['gf_userprefs']} (uid) VALUES ('{$_USER['uid']}')");
-        $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid='{$_USER['uid']}'");
+        DB_query("INSERT INTO {$_TABLES['gf_userprefs']} (uid) VALUES ($uid)");
+        $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid=$uid");
     }
 
     $A = DB_fetchArray($result);
@@ -1735,12 +1739,23 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     $usersettings->set_var('lang_forumprefs_help_title',$LANG_GF92['forumprefs_help_title']);
     $usersettings->set_var('lang_forumprefs_help', $LANG_GF92['forumprefs_help']);
 
-    $usersettings->set_var('lang_topic_order','Topic Order');
+    $usersettings->set_var('lang_topic_order',$LANG_GF92['topic_order']);
     $to_select =  '<select name="topic_order">';
-    $to_select .= '<option value="ASC" '.($A['topic_order'] == 'ASC' ? ' selected="selected"' : '').'>'.'Ascending'.'</option>';
-    $to_select .= '<option value="DESC" '.($A['topic_order'] == 'DESC' ? ' selected="selected"' : '').'>'.'Descending'.'</option>';
+    $to_select .= '<option value="ASC" '.($A['topic_order'] == 'ASC' ? ' selected="selected"' : '').'>'.$LANG_GF92['ascending'].'</option>';
+    $to_select .= '<option value="DESC" '.($A['topic_order'] == 'DESC' ? ' selected="selected"' : '').'>'.$LANG_GF92['descending'].'</option>';
     $to_select .= '</select>';
     $usersettings->set_var('topic_order_select',$to_select);
+
+    if ( $CONF_FORUM['allow_wysiwyg_editor'] && $CONF_FORUM['post_htmlmode']) {
+        $usersettings->set_var('lang_use_wysiwyg',$LANG_GF92['editor_type']);
+        $wysiwyg_select = '<select name="use_wysiwyg_editor">';
+        $wysiwyg_select .= '<option value="0" '.($A['use_wysiwyg_editor'] == 0 ? ' selected="selected"' : '').'>'.$LANG_GF92['bbcode'].'</option>';
+        $wysiwyg_select .= '<option value="1" '.($A['use_wysiwyg_editor'] == 1 ? ' selected="selected"' : '').'>'.$LANG_GF92['wysiwyg'].'</option>';
+        $wysiwyg_select .= '</select>';
+        $usersettings->set_var('wysiwyg_select',$wysiwyg_select);
+    } else {
+        $usersettings->set_var('wysiwyg_select','');
+    }
 
     $usersettings->parse ('output', 'usersettings');
     $retval .= $usersettings->finish($usersettings->get_var('output'));
@@ -1748,13 +1763,20 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     return $retval;
 }
 
-function plugin_profilesave_forum( )
+function plugin_profilesave_forum($uid = 0 )
 {
     global $_CONF, $_TABLES, $CONF_FORUM, $_USER;
 
     if ( COM_isAnonUser() ) {
         return;
     }
+
+    if ( $uid == 0 ) {
+        $uid = $_USER['uid'];
+    } else {
+        $uid = intval($uid);
+    }
+
 
     $xtopicsperpage     = intval(COM_applyFilter($_POST['xtopicsperpage'],true));
     $xpostsperpage      = intval(COM_applyFilter($_POST['xpostsperpage'],true));
@@ -1770,6 +1792,7 @@ function plugin_profilesave_forum( )
     $notifyfull         = isset($_POST['notifyfull']) && $_POST['notifyfull'] == 'on' ? 1 : 0;
     $xshowiframe        = isset($_POST['xshowiframe']) && $_POST['xshowiframe'] == 'on' ? 1 : 0;
     $topic_order        = isset($_POST['topic_order']) ? COM_applyFilter($_POST['topic_order']) : 'ASC';
+    $wysiwyg_editor     = isset($_POST['use_wysiwyg_editor']) ? COM_applyFilter($_POST['use_wysiwyg_editor'],true) : 0;
 
     if ( $topic_order != 'ASC' && $topic_order != 'DESC' ) {
         $topic_order = 'ASC';
@@ -1787,8 +1810,8 @@ function plugin_profilesave_forum( )
         notify_once='$xnotifyonce',
         notify_full='$notifyfull',
         showiframe='$xshowiframe',
-        topic_order='$topic_order'
-     WHERE uid='{$_USER['uid']}'");
+        topic_order='$topic_order',
+        use_wysiwyg_editor=$wysiwyg_editor WHERE uid=$uid");
 
 
     if ( isset($_POST['signature'] ) ){
@@ -1796,13 +1819,13 @@ function plugin_profilesave_forum( )
 
         // see if user already has a preference record...
         // Get user specific settings from database
-        $result = DB_query("SELECT * FROM {$_TABLES['gf_userinfo']} WHERE uid={$_USER['uid']}");
+        $result = DB_query("SELECT * FROM {$_TABLES['gf_userinfo']} WHERE uid=$uid");
         $nrows = DB_numRows($result);
         if ($nrows == 0) {
             // Insert a new blank record. Defaults are set in SQL Defintion for table.
-            DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('{$_USER['uid']}',0,'')");
+            DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('$uid',0,'')");
         }
-        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".addslashes($signature)."' WHERE uid=".$_USER['uid'];
+        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".addslashes($signature)."' WHERE uid=".$uid;
         DB_query($sql);
     }
 }

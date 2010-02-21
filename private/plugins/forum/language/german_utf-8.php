@@ -735,7 +735,13 @@ $LANG_GF92 = array(
     'edit_timewindowdscp' => 'Erlaubte Zeit (Min.), um Mitgliedern das Bearbeiten ihrer Beiträge zu ermöglichen',
     'forum_prefs' => 'Forum-Präferenzen',
     'forumprefs_help_title' => 'Forum-Präferenzen: Hilfe',
-    'forumprefs_help' => 'Forum-Plugin: Benutzerpräferenzen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>'
+    'forumprefs_help' => 'Forum-Plugin: Benutzerpräferenzen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>',
+    'topic_order' => 'Topic Order',
+    'editor_type' => 'Editor Type',
+    'bbcode'    => 'BBCode',
+    'wysiwyg'   => 'WYSIWYG',
+    'ascending' => 'Ascending',
+    'descending' => 'Descending',
 );
 
 $LANG_GF93 = array(

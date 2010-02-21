@@ -744,6 +744,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Forum Preferences',
     'forumprefs_help_title' => 'Forum Prefs Help',
     'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
+    'topic_order' => 'Topic Order',
+    'editor_type' => 'Editor Type',
+    'bbcode'    => 'BBCode',
+    'wysiwyg'   => 'WYSIWYG',
+    'ascending' => 'Ascending',
+    'descending' => 'Descending',
 );
 
 // Board Admin

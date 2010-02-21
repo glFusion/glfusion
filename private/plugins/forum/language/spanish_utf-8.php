@@ -745,6 +745,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Preferencias de los Foros',
     'forumprefs_help_title' => 'Ayuda para las preferencias de los Foros',
     'forumprefs_help' => 'Modificar las preferencias del modulo de Foros.<ul><li>Número de temas a mostrar en el índice de los foros.</li><li>Número de Posts a mostrar por página.</li><li>Número de Post para considerar un tema como popular.</li><li>Número de lineas a mostrar en los resultados de la búsqueda.</li><li>En la pantalla de listado de miembros</li><li>Ocultar Posts anónimos.</li><li>Activar notificaciones automáticas.</li><li>Enviar solo una notificación.</li><li>Mostrar la revisión del tema (iframe) al final de la página al responder.</li></ul>',
+    'topic_order' => 'Topic Order',
+    'editor_type' => 'Editor Type',
+    'bbcode'    => 'BBCode',
+    'wysiwyg'   => 'WYSIWYG',
+    'ascending' => 'Ascending',
+    'descending' => 'Descending',
 );
 
 // Board Admin
