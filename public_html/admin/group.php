@@ -79,12 +79,20 @@ if (!SEC_hasRights ('group.edit')) {
 function editgroup($grp_id = '')
 {
     global $_TABLES, $_CONF, $_USER, $LANG_ACCESS, $LANG_ADMIN, $MESSAGE,
-           $LANG28, $VERBOSE;
+           $LANG28, $VERBOSE, $_IMAGE_TYPE;
 
     USES_lib_admin();
 
     $retval = '';
     $form_url = '';
+
+
+    $menu_arr = array (
+        array('url' => $_CONF['site_admin_url'] . '/group.php',
+              'text' => $LANG28[38]),
+        array('url' => $_CONF['site_admin_url'],
+              'text' => $LANG_ADMIN['admin_home'])
+    );
 
     $thisUsersGroups = SEC_getUserGroups ();
     if (!empty ($grp_id) &&
@@ -105,8 +113,40 @@ function editgroup($grp_id = '')
         return $retval;
     }
 
+    $retval .= COM_startBlock ($LANG_ACCESS['groupeditor'], '',
+                               COM_getBlockTemplate ('_admin_block', 'header'));
+
+
+    $retval .= ADMIN_createMenu(
+        $menu_arr,
+        '',
+        $_CONF['layout_url'] . '/images/icons/group.' . $_IMAGE_TYPE
+    );
+
     $group_templates = new Template($_CONF['path_layout'] . 'admin/group');
     $group_templates->set_file('editor','groupeditor.thtml');
+
+    if (!empty ($grp_id)) {
+        $result = DB_query("SELECT grp_id,grp_name,grp_descr,grp_gl_core,grp_default FROM {$_TABLES['groups']} WHERE grp_id ='$grp_id'");
+        $A = DB_fetchArray ($result);
+        if ($A['grp_gl_core'] > 0) {
+            $group_templates->set_var ('chk_adminuse', 'checked="checked"');
+        }
+        if ($A['grp_default'] != 0) {
+            $group_templates->set_var('chk_defaultuse', 'checked="checked"');
+        }
+    } else {
+        // new group, so it's obviously not a core group
+        $A['grp_gl_core'] = 0;
+        $A['grp_default'] = 0;
+    }
+
+    if ( $A['grp_name'] == 'Logged-in Users' || $A['grp_name'] == 'All Users' || $A['grp_name'] == 'Root' ) {
+        $disable_edits = 1;
+    } else {
+        $disable_edit = 0;
+    }
+
     $group_templates->set_var('site_url', $_CONF['site_url']);
     $group_templates->set_var('site_admin_url', $_CONF['site_admin_url']);
     $group_templates->set_var('layout_url', $_CONF['layout_url']);
@@ -114,26 +154,20 @@ function editgroup($grp_id = '')
     $group_templates->set_var('lang_cancel', $LANG_ADMIN['cancel']);
     $group_templates->set_var('lang_admingroup',$LANG28[49]);
     $group_templates->set_var('lang_admingrp_msg', $LANG28[50]);
-    $group_templates->set_var( 'xhtml', XHTML );
+    $group_templates->set_var('lang_defaultgroup', $LANG28[88]);
+    $group_templates->set_var('lang_defaultgrp_msg', $LANG28[89]);
+    $group_templates->set_var('lang_applydefault_msg', $LANG28[90]);
+    $group_templates->set_var('lang_groupname', $LANG_ACCESS['groupname']);
+    $group_templates->set_var('lang_description', $LANG_ACCESS['description']);
+    $group_templates->set_var('lang_securitygroups',$LANG_ACCESS['securitygroups']);
+    $group_templates->set_var('lang_rights', $LANG_ACCESS['rights']);
+
     $showall = 0;
     if (isset ($_GET['chk_showall'])) {
         $showall =  COM_applyFilter ($_GET['chk_showall'], true);
     }
     $group_templates->set_var('show_all', $showall);
 
-    if (!empty ($grp_id)) {
-        $result = DB_query ("SELECT grp_id,grp_name,grp_descr,grp_gl_core FROM {$_TABLES['groups']} WHERE grp_id ='$grp_id'");
-        $A = DB_fetchArray ($result);
-        if ($A['grp_gl_core'] > 0) {
-            $group_templates->set_var ('chk_adminuse', 'checked="checked"');
-        }
-    } else {
-        // new group, so it's obviously not a core group
-        $A['grp_gl_core'] = 0;
-    }
-
-    $retval .= COM_startBlock ($LANG_ACCESS['groupeditor'], '',
-                               COM_getBlockTemplate ('_admin_block', 'header'));
 
     if (!empty($grp_id)) {
         // Groups tied to glFusion's functionality shouldn't be deleted
@@ -156,23 +190,33 @@ function editgroup($grp_id = '')
     }
 
     $group_templates->set_var('lang_groupname', $LANG_ACCESS['groupname']);
+    // do not allow the group name to change...
+    $group_templates->set_var('groupname_inputtype', 'hidden');
+    $group_templates->set_var('groupname_static', $A['grp_name']);
 
-    $group_templates->set_var('groupname_inputtype', 'text');
-    $group_templates->set_var('groupname_static', '');
-
-    if (isset ($A['grp_name'])) {
+    if (isset($A['grp_name'])) {
         $group_templates->set_var('group_name', $A['grp_name']);
+
+        switch ($A['grp_name']) {
+            case 'All Users':
+            case 'Logged-in Users':
+            case 'Remote Users':
+            case 'Root':
+                $group_templates->set_var('hide_defaultoption',' style="display:none;"');
+                break;
+            default:
+                $group_templates->set_var('hide_defaultoption', '');
+                break;
+        }
     } else {
-        $group_templates->set_var('group_name', '');
+       $group_templates->set_var('group_name', '');
     }
 
-    $group_templates->set_var('lang_description', $LANG_ACCESS['description']);
-    if (isset ($A['grp_descr'])) {
+    if (isset($A['grp_descr'])) {
         $group_templates->set_var('group_description', $A['grp_descr']);
     } else {
         $group_templates->set_var('group_description', '');
     }
-    $group_templates->set_var('lang_securitygroups', $LANG_ACCESS['securitygroups']);
 
     $selected = '';
     if (!empty($grp_id)) {
@@ -210,6 +254,8 @@ function editgroup($grp_id = '')
         );
 
         $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
+
+        $form_url = $_CONF['site_admin_url'].'/group.php?mode=edit&amp;grp_id=' . $grp_id;
 
         $text_arr = array('has_menu' => false,
                           'title' => '', 'instructions' => '',
@@ -283,7 +329,7 @@ function getIndirectFeatures ($grp_id)
             }
         }
     }
-    while (sizeof ($tocheck) > 0);
+    while (count($tocheck) > 0);
 
     // get features for all groups in $checked
     $glist = join (',', $checked);
@@ -346,7 +392,7 @@ function printrights ($grp_id = '', $core = 0)
         $indirectfeatures = explode (',', $indirectfeatures);
 
         // Build an array of indirect features
-        for ($i = 0; $i < sizeof($indirectfeatures); $i++) {
+        for ($i = 0; $i < count($indirectfeatures); $i++) {
             $grpftarray[current($indirectfeatures)] = 'indirect';
             next($indirectfeatures);
         }
@@ -363,7 +409,7 @@ function printrights ($grp_id = '', $core = 0)
         $grpftarray = array_merge ($grpftarray, $grpftarray1);
         if ($VERBOSE) {
             // this is for debugging purposes
-            for ($i = 1; $i < sizeof($grpftarray); $i++) {
+            for ($i = 1; $i < count($grpftarray); $i++) {
                 COM_errorLog("element $i is feature " . key($grpftarray) . " and is " . current($grpftarray),1);
                 next($grpftarray);
             }
@@ -396,7 +442,7 @@ function printrights ($grp_id = '', $core = 0)
                     . $A['ft_name'] . '</span></td>';
         } else {
             // either this is an indirect right OR this is a core feature
-            if ((($core == 1) AND (isset($grpftarray[$A['ft_name']]) AND (($grpftarray[$A['ft_name']] == 'indirect') OR ($grpftarray[$A['ft_name']] == 'direct')))) OR ($core != 2)) {
+            if ((($core == 1) AND (isset($grpftarray[$A['ft_name']]) AND (($grpftarray[$A['ft_name']] == 'indirect') OR ($grpftarray[$A['ft_name']] == 'direct')))) OR ($core != 1)) {
                 if (($ftcount > 0) && ($ftcount % 3 == 0)) {
                     $retval .= '</tr>' . LB . '<tr>';
                 }
@@ -423,6 +469,52 @@ function printrights ($grp_id = '', $core = 0)
 }
 
 /**
+* Add or remove a default group to/from all existing accounts
+*
+* @param    int     $grp_id     ID of default group
+* @param    boolean $add        true: add, false: remove
+* @return   void
+*
+*/
+function applydefaultgroup($grp_id, $add = true)
+{
+    global $_TABLES, $_GROUP_VERBOSE;
+
+    /**
+    * In the "add" case, we have to insert one record for each user. Pack this
+    * many values into one INSERT statement to save some time and bandwidth.
+    */
+    $_values_per_insert = 25;
+
+    if ($_GROUP_VERBOSE) {
+        if ($add) {
+            COM_errorLog("Adding group '$grp_id' to all user accounts");
+        } else {
+            COM_errorLog("Removing group '$grp_id' from all user accounts");
+        }
+    }
+
+    if ($add) {
+        $result = DB_query("SELECT uid FROM {$_TABLES['users']} WHERE uid > 1");
+        $num_users = DB_numRows($result);
+        for ($i = 0; $i < $num_users; $i += $_values_per_insert) {
+            $u = array();
+            for ($j = 0; $j < $_values_per_insert; $j++) {
+                list($uid) = DB_fetchArray($result);
+                $u[] = $uid;
+                if ($i + $j + 1 >= $num_users) {
+                    break;
+                }
+            }
+            $v = "($grp_id," . implode("), ($grp_id,", $u) . ')';
+            DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES " . $v);
+        }
+    } else {
+        DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE (ug_main_grp_id = $grp_id) AND (ug_grp_id IS NULL)");
+    }
+}
+
+/**
 * Save a group to the database
 *
 * @param    string  $grp_id         ID of group to save
@@ -430,12 +522,14 @@ function printrights ($grp_id = '', $core = 0)
 * @param    string  $grp_descr      Description of group
 * @param    boolean $grp_admin      Flag that indicates this is an admin use group
 * @param    boolean $grp_gl_core    Flag that indicates if this is a core glFusion group
+* @param    boolean $grp_default    Flag that indicates if this is a default group
+* @param    boolean $grp_applydefault  Flag that indicates whether to apply a change in $grp_default to all existing user accounts
 * @param    array   $features       Features the group has access to
 * @param    array   $groups         Groups this group will belong to
 * @return   string                  HTML refresh or error message
 *
 */
-function savegroup ($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $features, $groups)
+function savegroup($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $grp_default, $grp_applydefault, $features, $groups)
 {
     global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $VERBOSE;
 
@@ -478,16 +572,30 @@ function savegroup ($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $f
         $grp_descr = COM_stripslashes ($grp_descr);
         $grp_descr = addslashes ($grp_descr);
 
-        if (empty ($grp_id)) {
-            DB_save ($_TABLES['groups'], 'grp_name,grp_descr,grp_gl_core',
-                     "'$grp_name','$grp_descr',$grp_gl_core");
-            $grp_id = DB_getItem ($_TABLES['groups'], 'grp_id',
-                                  "grp_name = '$grp_name'");
+        $grp_applydefault_add = true;
+        if (empty($grp_id)) {
+            DB_save($_TABLES['groups'],
+                    'grp_name,grp_descr,grp_gl_core,grp_default',
+                    "'$grp_name','$grp_descr',$grp_gl_core,$grp_default");
+            $grp_id = DB_getItem($_TABLES['groups'], 'grp_id',
+                                 "grp_name = '$grp_name'");
             $new_group = true;
         } else {
-            DB_save ($_TABLES['groups'],
-                     'grp_id,grp_name,grp_descr,grp_gl_core',
-                     "$grp_id,'$grp_name','$grp_descr',$grp_gl_core");
+            if ($grp_applydefault == 1) {
+                // check if $grp_default changed
+                $old_default = DB_getItem($_TABLES['groups'], 'grp_default',
+                                          "grp_id = $grp_id");
+                if ($old_default == $grp_default) {
+                    // no change required
+                    $grp_applydefault = 0;
+                } elseif ($old_default == 1) {
+                    $grp_applydefault_add = false;
+                }
+            }
+
+            DB_save($_TABLES['groups'],
+                    'grp_id,grp_name,grp_descr,grp_gl_core,grp_default',
+                    "$grp_id,'$grp_name','$grp_descr',$grp_gl_core,$grp_default");
             $new_group = false;
         }
 
@@ -558,6 +666,10 @@ function savegroup ($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $f
             }
         }
 
+        if ($grp_applydefault == 1) {
+            applydefaultgroup($grp_id, $grp_applydefault_add);
+        }
+
         if ($new_group) {
             PLG_groupChanged ($grp_id, 'new');
         } else {
@@ -597,7 +709,7 @@ function getGroupList($basegroup)
 
     $checked = array ();
 
-    while (sizeof ($to_check) > 0) {
+    while (count($to_check) > 0) {
         $thisgroup = array_pop ($to_check);
         if ($thisgroup > 0) {
             $result = DB_query ("SELECT ug_grp_id FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $thisgroup");
@@ -749,6 +861,7 @@ function listgroups($show_all_groups = false)
         array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
         array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true),
         array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true),
+        array('text' => $LANG28[88], 'field' => 'grp_default', 'sort' => true),
         array('text' => $LANG_ACCESS['listusers'], 'field' => 'list', 'sort' => false)
     );
 
@@ -973,13 +1086,44 @@ function savegroupusers($groupid, $groupmembers)
 
     $retval = '';
 
-    // Delete all the current buddy records for this user and add all the selected ones
-    $sql = "DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id={$groupid} AND ug_uid IS NOT NULL";
-    DB_query($sql);
-    $adduser = explode('|', $groupmembers);
-    for ($i = 0; $i < count($adduser); $i++) {
-        $adduser[$i] = COM_applyFilter($adduser[$i], true);
-        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ('$groupid', '".addslashes($adduser[$i])."')");
+    $updateUsers = explode("|", $groupmembers);
+    $updateCount = count($updateUsers);
+    if ($updateCount > 0) {
+
+        // Retrieve all existing users in group so we can determine if changes
+        // are needed
+        $activeUsers = array();
+        $query = DB_query("SELECT ug_uid FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $groupid");
+        if (DB_numRows($query) > 0) {
+            while ($A = DB_fetchArray($query, false)) {
+                array_push($activeUsers, $A['ug_uid']);
+            }
+            $deleteGroupUsers = array_diff($activeUsers, $updateUsers);
+            $addGroupUsers = array_diff($updateUsers, $activeUsers);
+            if (is_array($deleteGroupUsers) AND count($deleteGroupUsers) > 0) {
+                foreach ($deleteGroupUsers as $uid) {
+                    $uid = COM_applyFilter($uid, true);
+                    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id = $groupid AND ug_uid = $uid");
+                }
+            }
+            if (is_array($addGroupUsers) AND count($addGroupUsers) > 0) {
+                foreach ($addGroupUsers as $uid) {
+                    $uid = COM_applyFilter($uid, true);
+                    DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ('$groupid', $uid)");
+                }
+            }
+
+        } else {
+
+            // No active users which should never occur as Root users
+            // are always members
+            for ($i = 0; $i < $updateCount; $i++) {
+                $updateUsers[$i] = COM_applyFilter($updateUsers[$i], true);
+                DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ('$groupid', '$updateUsers[$i]')");
+            }
+
+        }
+
     }
 
     if (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1)) {
@@ -1048,6 +1192,14 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     }
 } elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
     $grp_gl_core = COM_applyFilter($_POST['grp_gl_core'], true);
+    $grp_default = 0;
+    if (isset($_POST['chk_grpdefault'])) {
+        $grp_default = 1;
+    }
+    $grp_applydefault = 0;
+    if (isset($_POST['chk_applydefault'])) {
+        $grp_applydefault = 1;
+    }
     $chk_grpadmin = '';
     if (isset($_POST['chk_grpadmin'])) {
         $chk_grpadmin = COM_applyFilter($_POST['chk_grpadmin']);
@@ -1063,11 +1215,11 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     $display .= savegroup(COM_applyFilter($_POST['grp_id'], true),
                           COM_applyFilter($_POST['grp_name']),
                           $_POST['grp_descr'], $chk_grpadmin, $grp_gl_core,
-                          $features, $groups);
-} else if (($mode == 'savegroupusers') && SEC_checkToken()) {
-    $grp_id = COM_applyFilter ($_REQUEST['grp_id'], true);
-    $display .= savegroupusers ($grp_id, $_POST['groupmembers']);
-} else if ($mode == 'edit') {
+                          $grp_default, $grp_applydefault, $features, $groups);
+} elseif (($mode == 'savegroupusers') && SEC_checkToken()) {
+    $grp_id = COM_applyFilter($_REQUEST['grp_id'], true);
+    $display .= savegroupusers($grp_id, $_POST['groupmembers']);
+} elseif ($mode == 'edit') {
     $grp_id = 0;
     if (isset ($_REQUEST['grp_id'])) {
         $grp_id = COM_applyFilter ($_REQUEST['grp_id'], true);
