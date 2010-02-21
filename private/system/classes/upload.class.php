@@ -1154,7 +1154,9 @@ class upload
                         }
                     }
                 } else {
-                    $this->_uploadError($error);
+                    if ( $error != UPLOAD_ERR_NO_FILE ) {
+                        $this->_uploadError($error);
+                    }
                 }
                 $this->_imageIndex++;
             }
