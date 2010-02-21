@@ -2,6 +2,14 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Admin user editor now supports editing all user attributes (Mark)
+- Feature to allow groups be applied for all new users (Mark)
+- Media Gallery: Updated Polish translations (Mark)
+- Forum: Implemented user option to enable / disable WYSIWYG editor (Mark)
+- Yet another fix to the ATOM webservices publishing code (Mark)
+- Improved error detection on file uploads - ensure proper errors are
+  reported (Mark)
+- Fixed namespace conflicts with DokuWiki 2.0 plugin (Mark)
 - Complete implementation of PLG_getItemInfo for each bundled plugin. (Mark)
 - Forum: Implemented merge topic feature (Mark)
 - Forum: Rewrote the moderation system to be more procedural. This will
@@ -17,6 +25,22 @@ v1.1.9
 - Implemented reset rating for stories (Mark)
 - Implemented site upgrade check/reminder (Mark H.)
 - Implemented block-specific styling, eg. block div id=block_name (Mark H.)
+
+v1.1.8.pl3
+----------
+- Forum: Fixed bug where referer URL was not properly set after previewing
+  a forum post. (Mark)
+- Forum: The 'online version' link in full text nofications did not work
+  if more than 1 page of forum posts (Mark)
+- Fixed bug where anonymous user name did not appear with comments (Mark)
+- Polls: Fixed bug where poll topic always displayed, when it should only
+  display when questions > 1 (Mark)
+- FileMgmt: Fixed SQL error when add remote files (Mark)
+- Fixed bug where enabling / disabling blocks, plugins, ping services could
+  disable other items when viewing subset list (Mark)
+- Forum: Fixed issue where duplicate watch records could happen. (Mark)
+- Media Gallery: The album auto tag was missing a space between the alt and
+  style tags (Mark)
 
 v1.1.8.pl2
 ----------
