@@ -57,18 +57,17 @@ if (!SEC_hasRights ('syndication.edit')) {
 * @return   void
 *
 */
-function changeFeedStatus($fid_arr)
+function changeFeedStatus($fid_arr, $feedarray)
 {
     global $_TABLES;
 
-    // first disable all
-    DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '0'");
-    if (isset($fid_arr)) {
-        foreach ($fid_arr as $fid) {
-            $feed_id = addslashes (COM_applyFilter ($fid, true));
-            if (!empty ($fid)) {
-                // now enable those in the array
-                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '1' WHERE fid = '$fid'");
+    if (isset($feedarray) && is_array($feedarray) ) {
+        foreach ($feedarray AS $feed => $junk ) {
+            $feed = intval($feed);
+            if ( isset($fid_arr[$feed]) ) {
+                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '1' WHERE fid = $feed");
+            } else {
+                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '0' WHERE fid = $feed");
             }
         }
         CACHE_remove_instance('story');
@@ -177,7 +176,10 @@ function listfeeds()
                        'default_filter' => '');
     // this is a dummy variable so we know the form has been used if all feeds
     // should be disabled in order to disable the last one.
-    $form_arr = array('bottom' => '<input type="hidden" name="feedenabler" value="true"' . XHTML . '>');
+    $form_arr = array(
+        'top'    => '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.$token.'"/>',
+        'bottom' => '<input type="hidden" name="feedenabler" value="true"/>'
+    );
 
     $retval .= ADMIN_list('syndication', 'ADMIN_getListField_syndication',
                           $header_arr, $text_arr, $query_arr, $defsort_arr, '',
@@ -557,7 +559,11 @@ if ($_CONF['backend'] && isset($_POST['feedenabler']) && SEC_checkToken()) {
     if (isset($_POST['enabledfeeds'])) {
         $enabledfeeds = $_POST['enabledfeeds'];
     }
-    changeFeedStatus($enabledfeeds);
+    $feedarray = array();
+    if ( isset($_POST['feedarray']) ) {
+        $feedarray = $_POST['feedarray'];
+    }
+    changeFeedStatus($enabledfeeds,$feedarray);
 }
 $mode = '';
 if (isset($_REQUEST['mode'])) {

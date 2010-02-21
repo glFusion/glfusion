@@ -658,7 +658,6 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
                     $retval = "<input type=\"checkbox\" name=\"enabledblocks[{$A['bid']}]\" "
                         . "onclick=\"submit()\" value=\"{$A['onleft']}\"$switch" . XHTML . ">";
                     $retval .= '<input type="hidden" name="bidarray['.$A['bid'].']" value="'.$A['onleft'].'" />';
-                    $retval .= "<input type=\"hidden\" name=\"" . CSRF_TOKEN . "\" value=\"{$token}\"" . XHTML . ">";
                 }
                 break;
             case 'move':
@@ -722,6 +721,14 @@ function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr, $sele
 
         case 'grp_gl_core':
             if ($A['grp_gl_core'] == 1) {
+                $retval = $LANG_ACCESS['yes'];
+            } else {
+                $retval = $LANG_ACCESS['no'];
+            }
+            break;
+
+        case 'grp_default':
+            if ($A['grp_default'] != 0) {
                 $retval = $LANG_ACCESS['yes'];
             } else {
                 $retval = $LANG_ACCESS['no'];
@@ -1021,9 +1028,9 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
             } else {
                 $switch = '';
             }
-            $retval = "<input type=\"checkbox\" name=\"enabledfeeds[]\" "
+            $retval = "<input type=\"checkbox\" name=\"enabledfeeds[{$A['fid']}]\" "
                 . "onclick=\"submit()\" value=\"{$A['fid']}\"$switch" . XHTML . ">";
-            $retval .= "<input type=\"hidden\" name=\"" . CSRF_TOKEN . "\" value=\"{$token}\"" . XHTML . ">";
+            $retval .= '<input type="hidden" name="feedarray['.$A['fid'].']" value="1" />';
             break;
         case 'header_tid':
             if ($A['header_tid'] == 'all') {
@@ -1093,7 +1100,7 @@ function ADMIN_getListField_plugins($fieldname, $fieldvalue, $A, $icon_arr, $tok
             }
             $retval = "<input type=\"checkbox\" name=\"enabledplugins[{$A['pi_name']}]\" "
                 . "onclick=\"submit()\" value=\"1\"$switch" . XHTML . ">";
-            $retval .= "<input type=\"hidden\" name=\"".CSRF_TOKEN."\" value=\"{$token}\"".XHTML.">";
+            $retval .= '<input type="hidden" name="pluginarray['.$A['pi_name'].']" value="1" />';
             break;
         default:
             $retval = $fieldvalue;
@@ -1213,10 +1220,9 @@ function ADMIN_getListField_trackback($fieldname, $fieldvalue, $A, $icon_arr, $t
             } else {
                 $switch = '';
             }
-            $retval = "<input type=\"checkbox\" name=\"changedservices[]\" "
+            $retval = "<input type=\"checkbox\" name=\"changedservices[{$A['pid']}]\" "
                 . "onclick=\"submit()\" value=\"{$A['pid']}\"$switch" . XHTML . ">";
-            $retval .= "<input type=\"hidden\" name=\"" . CSRF_TOKEN
-                    . "\" value=\"{$token}\"" . XHTML . ">";
+            $retval .= '<input type="hidden" name="tbarray['.$A['pid'].']" value="1" />';
             break;
         default:
             $retval = $fieldvalue;
