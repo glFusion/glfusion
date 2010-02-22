@@ -180,12 +180,12 @@ function editPreferences()
     $T->set_var('gltoken_name', CSRF_TOKEN);
     $T->set_var('gltoken', SEC_createToken());
 
+    $retval .= COM_startBlock($LANG28[95], '',COM_getBlockTemplate('_admin_block', 'header'));
     $retval .= ADMIN_createMenu(
         $menu_arr,
         $LANG28[96],
         $_CONF['layout_url'] . '/images/icons/user.' . $_IMAGE_TYPE
     );
-    $retval .= COM_startBlock($LANG28[95], '',COM_getBlockTemplate('_admin_block', 'header'));
     $retval .= $T->finish ($T->parse ('output', 'editor'));
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 

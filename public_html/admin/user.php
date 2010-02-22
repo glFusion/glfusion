@@ -1465,7 +1465,7 @@ function batchdelete()
         return $retval;
     }
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $usr_type = '';
     if (isset($_REQUEST['usr_type'])) {
@@ -1570,24 +1570,10 @@ function batchdelete()
 
     $header_arr[] = array('text' => $LANG28[7], 'field' => 'email', 'sort' => true);
     $header_arr[] = array('text' => 'Reminders', 'field' => 'num_reminders', 'sort' => true);
-/*
-    $menu_arr = array (
-                    array('url' => $_CONF['site_admin_url'] . '/user.php',
-                          'text' => $LANG28[11]),
-                    array('url' => $_CONF['site_admin_url'] . '/user.php?mode=importform',
-                          'text' => $LANG28[23]),
-                    array('url' => $_CONF['site_admin_url'] . '/user.php?mode=edit',
-                          'text' => $LANG_ADMIN['create_new']),
-                    array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
-                          'text' => $LANG28[95]),
 
-                    array('url' => $_CONF['site_admin_url'],
-                          'text' => $LANG_ADMIN['admin_home'])
-    );
-*/
     $text_arr = array('has_menu'     => true,
                       'has_extras'   => true,
-                      'title'        => $LANG28[54],
+                      'title'        => '',//$LANG28[54],
                       'instructions' => "$desc",
                       'icon'         => $_CONF['layout_url'] . '/images/icons/user.' . $_IMAGE_TYPE,
                       'form_url'     => $_CONF['site_admin_url'] . "/user.php?mode=batchdelete&amp;usr_type=$usr_type&amp;usr_time=$usr_time",
@@ -1624,6 +1610,9 @@ function batchdelete()
               'text' => $LANG_ADMIN['admin_home'])
     );
 
+    $display .= COM_startBlock($LANG28[54], '',
+                              COM_getBlockTemplate('_admin_block', 'header'));
+
     $display .= ADMIN_createMenu(
         $menu_arr,
         $desc,
@@ -1642,7 +1631,7 @@ function batchdelete()
                            $text_arr, $query_arr, $defsort_arr, '', '',
                            $listoptions, $form_arr);
 
-    // $display .= "<input type=\"hidden\" name=\"mode\" value=\"batchdeleteexec\"" . XHTML . "></form>" . LB;
+    $display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
     return $display;
 }
