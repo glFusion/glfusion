@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -130,7 +130,8 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
         } else {
-            $admin_templates->set_var('class', "admin-list-headerfield");
+            $class = ($header_arr[$i]['center'] == true) ? 'admin-list-headerfield-centered' : 'admin-list-headerfield';
+            $admin_templates->set_var('class', $class);
         }
         $admin_templates->parse('header_row', 'header', true);
     }
@@ -166,7 +167,8 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                 if (!empty($header_arr[$j]['field_class'])) {
                     $admin_templates->set_var('class', $header_arr[$j]['field_class']);
                 } else {
-                      $admin_templates->set_var('class', "admin-list-field");
+                    $class = ($header_arr[$i]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
+                    $admin_templates->set_var('class', $class);
                 }
                 if ($fieldvalue !== false) {
                     $admin_templates->set_var('itemtext', $fieldvalue);
@@ -412,7 +414,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         if (!empty($header_arr[$i]['header_class'])) {
             $admin_templates->set_var('class', $header_arr[$i]['header_class']);
         } else {
-            $admin_templates->set_var('class', "admin-list-headerfield");
+            $class = ($header_arr[$i]['center'] == true) ? 'admin-list-headerfield-centered' : 'admin-list-headerfield';
+            $admin_templates->set_var('class', $class);
         }
         if (isset($header_arr[$i]['nowrap'])) {
             $admin_templates->set_var('header_column_style','style="white-space:nowrap;"');
@@ -501,12 +504,13 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             if ($fieldvalue !== false) { # return was there, so write line
                 $this_row = true;
             } else {
-                $fieldvalue = ''; // dont give emtpy fields
+                $fieldvalue = ''; // dont give empty fields
             }
             if (!empty($header_arr[$j]['field_class'])) {
                 $admin_templates->set_var('class', $header_arr[$j]['field_class']);
             } else {
-                $admin_templates->set_var('class', "admin-list-field");
+                $class = ($header_arr[$j]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
+                $admin_templates->set_var('class', $class);
             }
             if (!empty($header_arr[$j]['nowrap'])) {
                 $admin_templates->set_var('column_style',' style="white-space:nowrap;"');
@@ -630,6 +634,7 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
     $retval = false;
 
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
+    $enabled = ($A['is_enabled'] == 1) ? true : false;
 
     if (($access > 0) && (hasBlockTopicAccess ($A['tid']) > 0)) {
         switch($fieldname) {
@@ -640,13 +645,15 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 }
                 break;
             case 'title':
-                $retval = stripslashes ($A['title']);
-                if (empty ($retval)) {
-                    $retval = '(' . $A['name'] . ')';
+                $title = stripslashes ($A['title']);
+                if (empty ($title)) {
+                    $title = '(' . $A['name'] . ')';
                 }
+                $retval = ($enabled) ? $title : '<span style="color:#8f8f8f;">' . $title . '</span>';
                 break;
             case 'blockorder':
-                $retval .= $A['blockorder'];
+                $order .= $A['blockorder'];
+                $retval = ($enabled) ? $order : '<span style="color:#8f8f8f;">' . $order . '</span>';
                 break;
             case 'is_enabled':
                 if ($access == 3) {
@@ -681,7 +688,7 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 }
                 break;
             default:
-                $retval = $fieldvalue;
+                $retval = ($enabled) ? $fieldvalue : '<span style="color:#8f8f8f;">' . $fieldvalue . '</span>';
                 break;
         }
     }
@@ -1003,6 +1010,7 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
 
     $retval = '';
+    $enabled = ($A['is_enabled'] == 1) ? true : false;
 
     switch($fieldname) {
         case 'edit':
@@ -1011,16 +1019,19 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
             break;
         case 'type':
             if ($A['type'] == 'article') {
-                $retval = $LANG33[55];
+                $type = $LANG33[55];
             } else {
-                $retval = ucwords($A['type']);
+                $type = ucwords($A['type']);
             }
+            $retval = ($enabled) ? $type : '<span style="color:#8f8f8f;">' . $type . '</span>';
             break;
         case 'format':
-            $retval = str_replace ('-' , ' ', ucwords ($A['format']));
+            $format = str_replace ('-' , ' ', ucwords ($A['format']));
+            $retval = ($enabled) ? $format : '<span style="color:#8f8f8f;">' . $format . '</span>';
             break;
         case 'updated':
-            $retval = strftime ($_CONF['daytime'], $A['date']);
+            $datetime = strftime ($_CONF['daytime'], $A['date']);
+            $retval = ($enabled) ? $datetime : '<span style="color:#8f8f8f;">' . $datetime . '</span>';
             break;
         case 'is_enabled':
             if ($A['is_enabled'] == 1) {
@@ -1034,20 +1045,22 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
             break;
         case 'header_tid':
             if ($A['header_tid'] == 'all') {
-                $retval = $LANG33[43];
+                $tid = $LANG33[43];
             } elseif ($A['header_tid'] == 'none') {
-                $retval = $LANG33[44];
+                $tid = $LANG33[44];
             } else {
-                $retval = DB_getItem ($_TABLES['topics'], 'topic',
+                $tid = DB_getItem ($_TABLES['topics'], 'topic',
                                       "tid = '".addslashes($A['header_tid'])."'");
             }
+            $retval = ($enabled) ? $tid : '<span style="color:#8f8f8f;">' . $tid . '</span>';
             break;
         case 'filename':
             $url = SYND_getFeedUrl ();
-            $retval = COM_createLink($A['filename'], $url . $A['filename']);
+            $filename = COM_createLink($A['filename'], $url . $A['filename']);
+            $retval = ($enabled) ? $filename : '<span style="color:#8f8f8f;">' . $filename . '</span>';
             break;
         default:
-            $retval = $fieldvalue;
+            $retval = ($enabled) ? $fieldvalue : '<span style="color:#8f8f8f;">' . $fieldvalue . '</span>';
             break;
     }
     return $retval;

@@ -139,14 +139,14 @@ function listfeeds()
     $token = SEC_createToken();
 
     $header_arr = array(      # display 'text' and use table field 'field'
-                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
+                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'center' => true),
                     array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
-                    array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true),
-                    array('text' => $LANG33[17], 'field' => 'format', 'sort' => true),
+                    array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true, 'center' => true),
+                    array('text' => $LANG33[17], 'field' => 'format', 'sort' => true, 'center' => true),
                     array('text' => $LANG33[16], 'field' => 'filename', 'sort' => true),
-                    array('text' => $LANG_ADMIN['topic'], 'field' => 'header_tid', 'sort' => true),
-                    array('text' => $LANG33[18], 'field' => 'updated', 'sort' => true),
-                    array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true)
+                    array('text' => $LANG_ADMIN['topic'], 'field' => 'header_tid', 'sort' => true, 'center' => true),
+                    array('text' => $LANG33[18], 'field' => 'updated', 'sort' => true, 'center' => true),
+                    array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'center' => true)
     );
 
     $defsort_arr = array('field' => 'title', 'direction' => 'asc');

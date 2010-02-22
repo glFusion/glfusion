@@ -722,15 +722,29 @@ margin-top:5px;
 text-align:center;
 }
 
-.admin-list-field {
+.admin-list-field, .admin-list-field-centered {
 padding-left:5px;
 padding-right:5px;
+}
+
+.admin-list-field {
 text-align:left;
 }
 
-.admin-list-headerfield {
+.admin-list-field-centered {
+text-align:center;
+}
+
+.admin-list-headerfield, .admin-list-headerfield-centered {
 padding:3px 5px;
+}
+
+.admin-list-headerfield {
 text-align:left;
+}
+
+.admin-list-headerfield-centered {
+text-align:center;
 }
 
 .gl_user-menu-right {
