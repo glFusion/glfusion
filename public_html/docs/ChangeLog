@@ -2,6 +2,8 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- New Admin Global User Preference Editor - allows admin to change some
+  preferences for all users (Mark)
 - Admin user editor now supports editing all user attributes (Mark)
 - Feature to allow groups be applied for all new users (Mark)
 - Media Gallery: Updated Polish translations (Mark)

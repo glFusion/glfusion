@@ -100,6 +100,12 @@ function edituser($uid = '', $msg = '')
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
               'text' => $LANG28[11]),
+        array('url' => $_CONF['site_admin_url'] . '/user.php?mode=importform',
+              'text' => $LANG28[23]),
+        array('url' => $_CONF['site_admin_url'] . '/user.php?mode=batchdelete',
+              'text' => $LANG28[54]),
+        array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
+              'text' => $LANG28[95]),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -974,6 +980,8 @@ function listusers()
               'text' => $LANG28[23]),
         array('url' => $_CONF['site_admin_url'] . '/user.php?mode=batchdelete',
               'text' => $LANG28[54]),
+        array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
+              'text' => $LANG28[95]),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );
@@ -1562,15 +1570,21 @@ function batchdelete()
 
     $header_arr[] = array('text' => $LANG28[7], 'field' => 'email', 'sort' => true);
     $header_arr[] = array('text' => 'Reminders', 'field' => 'num_reminders', 'sort' => true);
+/*
     $menu_arr = array (
                     array('url' => $_CONF['site_admin_url'] . '/user.php',
                           'text' => $LANG28[11]),
                     array('url' => $_CONF['site_admin_url'] . '/user.php?mode=importform',
                           'text' => $LANG28[23]),
+                    array('url' => $_CONF['site_admin_url'] . '/user.php?mode=edit',
+                          'text' => $LANG_ADMIN['create_new']),
+                    array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
+                          'text' => $LANG28[95]),
+
                     array('url' => $_CONF['site_admin_url'],
                           'text' => $LANG_ADMIN['admin_home'])
     );
-
+*/
     $text_arr = array('has_menu'     => true,
                       'has_extras'   => true,
                       'title'        => $LANG28[54],
@@ -1600,8 +1614,12 @@ function batchdelete()
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/user.php',
               'text' => $LANG28[11]),
+        array('url' => $_CONF['site_admin_url'] . '/user.php?mode=edit',
+              'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/user.php?mode=importform',
               'text' => $LANG28[23]),
+        array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
+                          'text' => $LANG28[95]),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
     );

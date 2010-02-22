@@ -979,6 +979,14 @@ $LANG28 = array(
     88 => 'Default Group',
     89 => 'Check to make this a default group for new users',
     90 => 'Apply "Default Group" change to existing user accounts',
+    91 => 'Do you really want to apply these settings to all users?',
+    92 => 'Attribute',
+    93 => 'Value',
+    94 => 'Selected',
+    95 => 'Global Preference Editor',
+    96 => 'Using the <strong>Selected</strong> column, select the items you wish to change for <strong>all</strong> users.  Set the attribute to the desired setting and press Save.',
+    97 => 'Comment Display Mode',
+    98 => 'Comment Sort Order',
 );
 
 ###############################################################################
@@ -1306,6 +1314,7 @@ $MESSAGE = array(
     507 => 'Email cannot be blank.',
     508 => 'Email address does not match the confirmation email address.',
     509 => 'Error creating new user account - please check the error log for details.',
+    510 => 'Default settings have been applied to all users.',
 );
 
 ###############################################################################
