@@ -649,11 +649,11 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 if (empty ($title)) {
                     $title = '(' . $A['name'] . ')';
                 }
-                $retval = ($enabled) ? $title : '<span style="color:#8f8f8f;">' . $title . '</span>';
+                $retval = ($enabled) ? $title : '<span class="disabledfield">' . $title . '</span>';
                 break;
             case 'blockorder':
                 $order .= $A['blockorder'];
-                $retval = ($enabled) ? $order : '<span style="color:#8f8f8f;">' . $order . '</span>';
+                $retval = ($enabled) ? $order : '<span class="disabledfield">' . $order . '</span>';
                 break;
             case 'is_enabled':
                 if ($access == 3) {
@@ -688,7 +688,7 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 }
                 break;
             default:
-                $retval = ($enabled) ? $fieldvalue : '<span style="color:#8f8f8f;">' . $fieldvalue . '</span>';
+                $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
                 break;
         }
     }
@@ -1023,15 +1023,15 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
             } else {
                 $type = ucwords($A['type']);
             }
-            $retval = ($enabled) ? $type : '<span style="color:#8f8f8f;">' . $type . '</span>';
+            $retval = ($enabled) ? $type : '<span class="disabledfield">' . $type . '</span>';
             break;
         case 'format':
             $format = str_replace ('-' , ' ', ucwords ($A['format']));
-            $retval = ($enabled) ? $format : '<span style="color:#8f8f8f;">' . $format . '</span>';
+            $retval = ($enabled) ? $format : '<span class="disabledfield">' . $format . '</span>';
             break;
         case 'updated':
             $datetime = strftime ($_CONF['daytime'], $A['date']);
-            $retval = ($enabled) ? $datetime : '<span style="color:#8f8f8f;">' . $datetime . '</span>';
+            $retval = ($enabled) ? $datetime : '<span class="disabledfield">' . $datetime . '</span>';
             break;
         case 'is_enabled':
             if ($A['is_enabled'] == 1) {
@@ -1052,15 +1052,15 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
                 $tid = DB_getItem ($_TABLES['topics'], 'topic',
                                       "tid = '".addslashes($A['header_tid'])."'");
             }
-            $retval = ($enabled) ? $tid : '<span style="color:#8f8f8f;">' . $tid . '</span>';
+            $retval = ($enabled) ? $tid : '<span class="disabledfield">' . $tid . '</span>';
             break;
         case 'filename':
             $url = SYND_getFeedUrl ();
             $filename = COM_createLink($A['filename'], $url . $A['filename']);
-            $retval = ($enabled) ? $filename : '<span style="color:#8f8f8f;">' . $filename . '</span>';
+            $retval = ($enabled) ? $filename : '<span class="disabledfield">' . $filename . '</span>';
             break;
         default:
-            $retval = ($enabled) ? $fieldvalue : '<span style="color:#8f8f8f;">' . $fieldvalue . '</span>';
+            $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
             break;
     }
     return $retval;

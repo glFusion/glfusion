@@ -174,7 +174,7 @@ form fieldset div.notes p,
 #gl_slide-tabs li.current,
 .fieldhelp,
 .ng-close-link,
-.ng-clear-link, 
+.ng-clear-link,
 q,
 .pluginCellText,
 .story-footer,
@@ -311,7 +311,8 @@ h3,
 .ng-weekend,
 .ng-dayOff,
 .ng-dateOff,
-.ng-outOfRange {
+.ng-outOfRange,
+.disabledfield {
 	color:#999;
 }
 /***************************************************** BEGIN #B7C1DC ***************/
