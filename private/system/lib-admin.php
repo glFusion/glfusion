@@ -167,7 +167,7 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
                 if (!empty($header_arr[$j]['field_class'])) {
                     $admin_templates->set_var('class', $header_arr[$j]['field_class']);
                 } else {
-                    $class = ($header_arr[$i]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
+                    $class = ($header_arr[$j]['center'] == true) ? 'admin-list-field-centered' : 'admin-list-field';
                     $admin_templates->set_var('class', $class);
                 }
                 if ($fieldvalue !== false) {
