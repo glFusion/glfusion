@@ -853,12 +853,10 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
                 break;
             case 'file_download' :
                 if ( $target_window != '' ) {
-                    $url = COM_buildUrl ($_CONF['site_url'] . '/filemgmt/visit.php?lid='
-                                     . $file_id);
+                    $url = $_CONF['site_url'] . '/filemgmt/visit.php?lid='. $file_id;
                     $target = 'target="'.$target_window.'"';
                 } else {
-                    $url = COM_buildUrl ($_CONF['site_url'] . '/filemgmt/visit.php?lid='
-                                     . $file_id);
+                    $url = $_CONF['site_url'] . '/filemgmt/visit.php?lid='.$file_id;
                 }
                 break;
         }

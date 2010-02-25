@@ -30,6 +30,10 @@ v1.1.9
 
 v1.1.8.pl3
 ----------
+- FileMgmt: file_download auto tag did not work properly when URL rewrite
+  is enabled in the site configuration (Mark)
+- Site Tailor: Moved hard-coded language string to language files. (Eric)
+- Site Tailor: Fixed language string mismatch for block menu config. (Eric)
 - Forum: Fixed bug where referer URL was not properly set after previewing
   a forum post. (Mark)
 - Forum: The 'online version' link in full text nofications did not work

@@ -58,7 +58,7 @@ function ST_logoEdit() {
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_ST01['logo_options'],'', COM_getBlockTemplate('_admin_block', 'header'));
-    $retval  .= ADMIN_createMenu($menu_arr, 'Site Tailor allows you to easily customize your site logo and control the display of the site slogan.',
+    $retval  .= ADMIN_createMenu($menu_arr, $LANG_ST01['instructions'],
                                 $_CONF['site_admin_url'] . '/plugins/sitetailor/images/sitetailor.png');
 
 

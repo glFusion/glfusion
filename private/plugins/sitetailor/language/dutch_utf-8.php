@@ -76,6 +76,7 @@ $LANG_ST00 = array(
 );
 
 $LANG_ST01 = array(
+    'instructions' => 'Site Tailor allows you to easily customize your site logo and control the display of the site slogan.',
     'javascript_required' => 'Site Tailor Requires that you have JavaScript enabled.',
     'logo_options' => 'Site Tailor Logo Opties',
     'use_graphic_logo' => 'Gebruik Grafisch Logo',
@@ -201,9 +202,9 @@ $LANG_VC = array(
     'main_menu_bg_color' => 'Menu BG',
     'main_menu_hover_bg_color' => 'Menu BG Hover',
     'main_menu_text_color' => 'Menu Tekst',
-    'main_menu_hover_text_color' => 'Tekst Hover',
-    'submenu_text_color' => 'Sub Menu Tekst Hover',
-    'submenu_hover_text_color' => 'Sub Menu Tekst Color',
+    'main_menu_hover_text_color' => 'Menu Tekst Hover',
+    'submenu_text_color' => 'Sub Menu Tekst',
+    'submenu_hover_text_color' => 'Sub Menu Tekst Hover',
     'submenu_highlight_color' => 'Rand'
 );
 
