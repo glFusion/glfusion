@@ -429,7 +429,7 @@ function listblocks()
 
     // writing the list
     $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'center' => true),
+        array('text' => $LANG_ADMIN['action'], 'field' => 'action', 'sort' => false, 'center' => true),
         array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true, 'center' => true),
         array('text' => $LANG21[46], 'field' => 'move', 'sort' => false, 'center' => true),
         array('text' => $LANG21[48], 'field' => 'name', 'sort' => true),
@@ -458,7 +458,7 @@ function listblocks()
     // The value is the onleft var
 
     $form_arr = array(
-        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'.$token.'"/>',
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
         'bottom' => '<input type="hidden" name="blockenabler" value="1"/>'
     );
 
@@ -827,8 +827,9 @@ $bid = '';
 if (!empty($_REQUEST['bid'])) {
     $bid = COM_applyFilter ($_REQUEST['bid']);
 }
+$validtoken = SEC_checkToken();
 
-if (isset($_POST['blockenabler']) && SEC_checkToken()) {
+if (isset($_POST['blockenabler']) && $validtoken) {
     $enabledblocks = array();
     if (isset($_POST['enabledblocks'])) {
         $enabledblocks = $_POST['enabledblocks'];
@@ -837,21 +838,20 @@ if (isset($_POST['blockenabler']) && SEC_checkToken()) {
     if ( isset($_POST['bidarray']) ) {
         $bidarray = $_POST['bidarray'];
     }
-
-    changeBlockStatus($_POST['blockenabler'], $enabledblocks,$bidarray);
+    changeBlockStatus($_POST['blockenabler'], $enabledblocks, $bidarray);
 }
 
 if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     if (!isset ($bid) || empty ($bid) || ($bid == 0)) {
         COM_errorLog ('Attempted to delete block, bid empty or null, value =' . $bid);
         $display .= COM_refresh ($_CONF['site_admin_url'] . '/block.php');
-    } elseif (SEC_checkToken()) {
+    } elseif ($validtoken) {
         $display .= deleteBlock ($bid);
     } else {
         COM_accessLog("User {$_USER['username']} tried to illegally delete block $bid and failed CSRF checks.");
         echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
     }
-} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
+} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && $validtoken) {
     $help = '';
     if (isset ($_POST['help'])) {
         $help = COM_sanitizeUrl ($_POST['help'], array ('http', 'https'));
@@ -914,7 +914,7 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
              . COM_siteFooter ();
 } else if ($mode == 'move') {
     $display .= COM_siteHeader('menu', $LANG21[19]);
-    if(SEC_checkToken()) {
+    if($validtoken) {
         $display .= moveBlock();
     }
     $display .= listblocks();

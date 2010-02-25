@@ -665,7 +665,6 @@ $LANG13 = array(
     'reset_rating'      => 'Reset Rating',
 );
 
-
 ###############################################################################
 # ADMIN PHRASES - These are file phrases used in admin scripts
 ###############################################################################
@@ -711,7 +710,7 @@ $LANG21 = array(
     22 => '',
     23 => 'Block Order',
     24 => '',
-    25 => 'To modify or delete a block, click on that block\'s edit icon below.  To create a new block, click on "Create New" above. To move a block, click on the arrows or [R] and [L] boxes.',
+    25 => 'To edit or delete a block, click on the action icon below.  To create a new block, click on "Create New" above. To move a block, click on the arrows or [R] and [L] boxes.',
     26 => 'Layout Block',
     27 => 'PHP Block',
     28 => 'PHP Block Options',
@@ -754,7 +753,8 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
+    69 => 'Are you sure you want to delete this block?'
 );
 
 ###############################################################################
@@ -1316,6 +1316,7 @@ $MESSAGE = array(
     508 => 'Email address does not match the confirmation email address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
+    511 => 'Are you sure you want to delete this group?'
 );
 
 ###############################################################################
@@ -1346,6 +1347,7 @@ $LANG_ACCESS = array(
     'no' => 'No',
     'corerightsdescr' => "This group is a core {$_CONF['site_name']} Group.  Please ensure you understand any changes you are making.  Below is a list of the rights this group has access to.",
     'groupmsg' => 'Security Groups on this site are hierarchical.  By adding this group to any of the groups below you will be giving this group the same rights that those groups have.  Where possible it is encouraged you use the groups below to give rights to a group.  If you need this group to have custom rights then you can select the rights to various site features in the section below called \'Rights\'.  To add this group to any of the ones below simply check the box next to the group(s) that you want.',
+    'groupeditmsg' => 'Use this panel to create a new group or edit an existing group.  Note that presently you cannot change the name of a group that already exists.<br />If you are creating a new group, you must enter as a minimum the Group Name and Group Description.',
     'coregroupmsg' => "This group is a core {$_CONF['site_name']} Group.  Please be very careful editing core groups.  Below is a list of the groups this group belongs to.",
     'rightsdescr' => 'A group\'s access to a certain right below can be given directly to the group OR to a different group that this group is a part of.  The ones you see below with a disabled checkbox are the rights that have been given to this group because it belongs to another group with that right.  The rights with checkboxes below are rights that can be given directly to this group.',
     'lock' => 'Lock',
@@ -1630,9 +1632,10 @@ $LANG_ADMIN = array(
     'preview' => 'Preview',
     'records_found' => 'Records found',
     'addchild' => 'Add child',
-    'list' => 'list',
+    'list' => 'List',
     'list_all' => 'List all',
-    'na' => '-'
+    'na' => '-',
+    'action' => 'Action'
 );
 
 ###############################################################################

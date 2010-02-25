@@ -86,7 +86,6 @@ function editgroup($grp_id = '')
     $retval = '';
     $form_url = '';
 
-
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/group.php',
               'text' => $LANG28[38]),
@@ -94,7 +93,7 @@ function editgroup($grp_id = '')
               'text' => $LANG_ADMIN['admin_home'])
     );
 
-    $thisUsersGroups = SEC_getUserGroups ();
+    $thisUsersGroups = SEC_getUserGroups();
     if (!empty ($grp_id) &&
         ($grp_id > 0) &&
         !in_array ($grp_id, $thisUsersGroups) &&
@@ -119,7 +118,7 @@ function editgroup($grp_id = '')
 
     $retval .= ADMIN_createMenu(
         $menu_arr,
-        '',
+        $LANG_ACCESS['groupeditmsg'],
         $_CONF['layout_url'] . '/images/icons/group.' . $_IMAGE_TYPE
     );
 
@@ -174,7 +173,7 @@ function editgroup($grp_id = '')
         if ($A['grp_gl_core'] != 1) {
             $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                        . '" name="mode"%s' . XHTML . '>';
-            $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
+            $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[511] . '\');"';
             $group_templates->set_var ('delete_option',
                                        sprintf ($delbutton, $jsconfirm));
             $group_templates->set_var ('delete_option_no_confirmation',
@@ -191,8 +190,6 @@ function editgroup($grp_id = '')
 
     $group_templates->set_var('lang_groupname', $LANG_ACCESS['groupname']);
     // do not allow the group name to change...
-    $group_templates->set_var('groupname_inputtype', 'hidden');
-    $group_templates->set_var('groupname_static', $A['grp_name']);
 
     if (isset($A['grp_name'])) {
         $group_templates->set_var('group_name', $A['grp_name']);
@@ -208,8 +205,11 @@ function editgroup($grp_id = '')
                 $group_templates->set_var('hide_defaultoption', '');
                 break;
         }
+        $group_templates->set_var('groupname_inputtype', 'hidden');
+        $group_templates->set_var('groupname_static', $A['grp_name']);
     } else {
-       $group_templates->set_var('group_name', '');
+        $group_templates->set_var('groupname_inputtype', 'text');
+        $group_templates->set_var('group_name', '');
     }
 
     if (isset($A['grp_descr'])) {
@@ -248,7 +248,7 @@ function editgroup($grp_id = '')
         $whereGroups = '(grp_id IN (' . implode (',', $thisUsersGroups) . '))';
 
         $header_arr = array(
-                        array('text' => $LANG28[86], 'field' => ($A['grp_gl_core'] == 1 ? 'checkbox' : 'checkbox'), 'sort' => false),
+                        array('text' => $LANG28[86], 'field' => ($A['grp_gl_core'] == 1 ? 'checkbox' : 'checkbox'), 'sort' => false, 'center' => true),
                         array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
                         array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
         );
@@ -766,11 +766,11 @@ function listusers ($grp_id)
     }
 
     $header_arr = array (
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
-        array('text' => $LANG28[37], 'field' => 'uid', 'sort' => true),
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'center' => true),
+        array('text' => $LANG28[37], 'field' => 'uid', 'sort' => true, 'center' => true),
         array('text' => $LANG28[3], 'field' => 'username', 'sort' => true),
         array('text' => $LANG28[4], 'field' => 'fullname', 'sort' => true),
-        array('text' => $login_text, 'field' => $login_field, 'sort' => true),
+        array('text' => $login_text, 'field' => $login_field, 'sort' => true, 'center' => true),
         array('text' => $LANG28[7], 'field' => 'email', 'sort' => true)
     );
 
@@ -856,14 +856,27 @@ function listgroups($show_all_groups = false)
 
     $retval = '';
 
-    $header_arr = array(      // display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
-        array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
-        array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true),
-        array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true),
-        array('text' => $LANG28[88], 'field' => 'grp_default', 'sort' => true),
-        array('text' => $LANG_ACCESS['listusers'], 'field' => 'list', 'sort' => false)
-    );
+    $header_arr = '';
+    if ($show_all_groups) {
+        $header_arr = array(      // display 'text' and use table field 'field'
+            array('text' => $LANG_ADMIN['action'], 'field' => 'action', 'sort' => false, 'center' => true),
+            array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
+            array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true),
+            array('text' => $LANG28[49], 'field' => 'grp_admin', 'sort' => false, 'center' => true),
+            array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true, 'center' => true),
+            array('text' => $LANG28[88], 'field' => 'grp_default', 'sort' => true, 'center' => true),
+            array('text' => $LANG_ACCESS['listusers'], 'field' => 'list', 'sort' => false, 'center' => true)
+        );
+    } else {
+        $header_arr = array(      // display 'text' and use table field 'field'
+            array('text' => $LANG_ADMIN['action'], 'field' => 'action', 'sort' => false, 'center' => true),
+            array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
+            array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true),
+            array('text' => $LANG_ACCESS['coregroup'], 'field' => 'grp_gl_core', 'sort' => true, 'center' => true),
+            array('text' => $LANG28[88], 'field' => 'grp_default', 'sort' => true, 'center' => true),
+            array('text' => $LANG_ACCESS['listusers'], 'field' => 'list', 'sort' => false, 'center' => true)
+        );
+    }
 
     $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
 
@@ -909,14 +922,14 @@ function listgroups($show_all_groups = false)
     }
 
     if ($show_all_groups) {
-        $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1" checked="checked"' . XHTML . '>';
+        $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();" checked="checked"' . XHTML . '>';
         $query_arr = array(
             'table' => 'groups',
             'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE 1=1",
             'query_fields' => array('grp_name', 'grp_descr'),
             'default_filter' => $grpFilter);
     } else {
-        $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1"' . $checked . XHTML . '>';
+        $filter .= '<label for="chk_showall"><input id="chk_showall" type="checkbox" name="chk_showall" value="1" onclick="this.form.submit();"' . $checked . XHTML . '>';
         $query_arr = array(
             'table' => 'groups',
             'sql' => "SELECT * FROM {$_TABLES['groups']} WHERE (grp_gl_core = 0 OR grp_name IN ('All Users','Logged-in Users'))",

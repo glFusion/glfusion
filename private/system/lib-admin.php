@@ -102,10 +102,10 @@ function ADMIN_simpleList($fieldfunction, $header_arr, $text_arr,
     }
 
     # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'list', 'addchild');
+    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
-        $icon_url = "{$_CONF['layout_url']}/images/$icon_type.$_IMAGE_TYPE";
+        $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
         $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
     }
 
@@ -314,10 +314,10 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     # define icon paths. Those will be transmitted to $fieldfunction.
-    $icons_type_arr = array('edit', 'copy', 'list', 'addchild');
+    $icons_type_arr = array('edit', 'copy', 'delete', 'list', 'addchild', 'blank');
     $icon_arr = array();
     foreach ($icons_type_arr as $icon_type) {
-        $icon_url = "{$_CONF['layout_url']}/images/$icon_type.$_IMAGE_TYPE";
+        $icon_url = "{$_CONF['layout_url']}/images/admin/$icon_type.$_IMAGE_TYPE";
         $icon_arr[$icon_type] = COM_createImage($icon_url, $LANG_ADMIN[$icon_type]);
     }
 
@@ -638,10 +638,18 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
 
     if (($access > 0) && (hasBlockTopicAccess ($A['tid']) > 0)) {
         switch($fieldname) {
-            case 'edit':
-                if ($access == 3) {
-                    $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/block.php?mode=edit&amp;bid={$A['bid']}");
+            case 'action':
+                $retval = '';
+                if ($access ==3) {
+                    $attr['title'] = $LANG_ADMIN['edit'];
+                    $retval .= COM_createLink($icon_arr['edit'],
+                        $_CONF['site_admin_url'] . '/block.php?mode=edit&amp;bid=' . $A['bid'], $attr);
+                    $retval .= '&nbsp;&nbsp;';
+                    $attr['title'] = $LANG_ADMIN['delete'];
+                    $attr['onclick'] = "return confirm('" . $LANG21[69] . "');";
+                    $retval .= COM_createLink($icon_arr['delete'],
+                        $_CONF['site_admin_url'] . '/block.php'
+                        . '?mode=' . $LANG_ADMIN['delete'] . '&amp;bid=' . $A['bid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
                 }
                 break;
             case 'title':
@@ -701,7 +709,7 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
  */
 function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr, $selected = '')
 {
-    global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $thisUsersGroups;
+    global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $MESSAGE, $thisUsersGroups;
 
     $retval = false;
 
@@ -717,13 +725,26 @@ function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr, $sele
     if (in_array ($A['grp_id'], $thisUsersGroups ) ||
         SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
         switch($fieldname) {
-        case 'edit':
+        case 'action':
+            $coregroup = ($A['grp_gl_core'] == 1) ? true : false;
             $url = $_CONF['site_admin_url'] . '/group.php?mode=edit&amp;grp_id='
                  . $A['grp_id'];
             if ($show_all_groups) {
                 $url .= '&amp;chk_showall=1';
             }
-            $retval = COM_createLink($icon_arr['edit'], $url);
+            $attr['title'] = $LANG_ADMIN['edit'];
+            $retval = COM_createLink($icon_arr['edit'], $url, $attr);
+            $retval .= '&nbsp;&nbsp;';
+            if($coregroup) {
+                $retval .= $icon_arr['blank'];
+            } else {
+                $attr['title'] = $LANG_ADMIN['delete'];
+                $attr['onclick'] = "return confirm('" . $MESSAGE[511] . "');";
+                $retval .= COM_createLink($icon_arr['delete'],
+                        $_CONF['site_admin_url'] . '/group.php'
+                        . '?mode=' . $LANG_ADMIN['delete'] . '&amp;grp_id=' . $A['grp_id'] . '&amp;' . CSRF_TOKEN . '=' . SEC_createToken(), $attr);
+
+            }
             break;
 
         case 'grp_gl_core':
@@ -742,6 +763,14 @@ function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr, $sele
             }
             break;
 
+        case 'grp_admin':
+            if ($A['grp_gl_core'] == 1 && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users') {
+                $retval = $LANG_ACCESS['yes'];
+            } else {
+                $retval = $LANG_ACCESS['no'];
+            }
+            break;
+
         case 'list':
             $url = $_CONF['site_admin_url'] . '/group.php?mode=';
             if ($show_all_groups) {
@@ -749,13 +778,17 @@ function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr, $sele
             } else {
                 $param = '&amp;grp_id=' . $A['grp_id'];
             }
-
-            $retval = COM_createLink($icon_arr['list'],
-                                     $url . 'listusers' . $param);
+            $attr['title'] = $LANG_ADMIN['list'];
+            $retval .= COM_createLink($icon_arr['list'],
+                                     $url . 'listusers' . $param, $attr);
+            $retval .= '&nbsp;&nbsp;';
             if (($A['grp_name'] != 'All Users') &&
                     ($A['grp_name'] != 'Logged-in Users')) {
-                $retval .= '&nbsp;&nbsp;' . COM_createLink($icon_arr['edit'],
-                                                $url . 'editusers' . $param);
+                $attr['title'] = $LANG_ADMIN['edit'];
+                $retval .= COM_createLink($icon_arr['edit'],
+                                                $url . 'editusers' . $param, $attr);
+            } else {
+                $retval .= $icon_arr['blank'];
             }
             break;
 
