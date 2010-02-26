@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- New Environment Check option in Command & Control Screen (Mark)
 - New Admin Global User Preference Editor - allows admin to change some
   preferences for all users (Mark)
 - Admin user editor now supports editing all user attributes (Mark)

@@ -2826,3 +2826,23 @@ pre {
 .static {color:#5D3126;}
 
 /* end of Star rating system */
+
+/* env check */
+.pathtext {
+  font-size:11px;
+  color:#666;
+}
+
+.pathtext-status {
+  text-align:right;
+  white-space:nowrap;
+}
+
+.yes, .Writeable {
+  font-weight: bold;
+  color: #46882b;
+}
+.no, .Unwriteable {
+  font-weight: bold;
+  color: #cc0000;
+}

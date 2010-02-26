@@ -570,6 +570,12 @@ class mbElement {
                                     $link_array[$LANG01[96]] = '<li><a href="' . $url . '">' . $label . '</a></li>' . LB;
                                 }
 
+                                if ( SEC_inGroup('Root') ) {
+                                    $url = $_CONF['site_admin_url'].'/envcheck.php';
+                                    $label = $LANG01['env_check'];
+                                    $link_array[$LANG01['env_check']] = '<li><a href="'.$url.'">'.$label.'</a></li>'.LB;
+                                }
+
                                 if( SEC_hasRights( 'user.mail' )) {
                                     $url = $_CONF['site_admin_url'] . '/mail.php';
                                     $label = $LANG01[105] . ' (N/A)';
