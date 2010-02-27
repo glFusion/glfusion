@@ -283,7 +283,7 @@ function editblock ($bid = '')
 
     if (!empty($bid) && SEC_hasrights('block.delete')) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="mode"%s' . XHTML . '>';
+                   . '" name="delete"' . XHTML . '>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $block_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
@@ -411,7 +411,7 @@ function listblocks()
 
     // writing the menu on top
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/block.php?mode=edit',
+        array('url' => $_CONF['site_admin_url'] . '/block.php?edit=1',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
@@ -429,13 +429,14 @@ function listblocks()
 
     // writing the list
     $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['action'], 'field' => 'action', 'sort' => false, 'center' => true),
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'center' => true),
         array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true, 'center' => true),
         array('text' => $LANG21[46], 'field' => 'move', 'sort' => false, 'center' => true),
         array('text' => $LANG21[48], 'field' => 'name', 'sort' => true),
         array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
         array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true, 'center' => true),
         array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true, 'center' => true),
+        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'center' => true),
         array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'center' => true)
     );
 
@@ -721,6 +722,7 @@ function reorderblocks()
         $blockOrd += $stepNumber;
         $lastside = $A['onleft'];       // save variable for next round
     }
+    return true;
 }
 
 
@@ -763,7 +765,7 @@ function moveBlock()
         COM_errorLOG("block admin error: Attempt to move an non existing block id: $bid");
     }
     echo COM_refresh($_CONF['site_admin_url'] . "/block.php");
-    exit;
+//    exit;
     return $retval;
 }
 
@@ -818,18 +820,28 @@ function deleteBlock ($bid)
 }
 
 // MAIN
+
 $mode = '';
-if (!empty($_REQUEST['mode'])) {
-    $mode = $_REQUEST['mode'];
+$validmodes = array('edit','save','cancel','delete','move');
+foreach($validmodes as $action) {
+    if (isset($_POST[$action])) {
+        $mode = $action;
+    } elseif (isset($_GET[$action])) {
+		$mode = $action;
+    }
 }
 
 $bid = '';
-if (!empty($_REQUEST['bid'])) {
-    $bid = COM_applyFilter ($_REQUEST['bid']);
+if (isset($_POST['bid'])) {
+    $bid = COM_applyFilter($_POST['bid'], true);
+} elseif (isset($_GET['bid'])) {
+    $bid = COM_applyFilter($_GET['bid'], true);
 }
+
 $validtoken = SEC_checkToken();
 
 if (isset($_POST['blockenabler']) && $validtoken) {
+    $side = COM_applyFilter($_POST['blockenabler'], true);
     $enabledblocks = array();
     if (isset($_POST['enabledblocks'])) {
         $enabledblocks = $_POST['enabledblocks'];
@@ -838,27 +850,27 @@ if (isset($_POST['blockenabler']) && $validtoken) {
     if ( isset($_POST['bidarray']) ) {
         $bidarray = $_POST['bidarray'];
     }
-    changeBlockStatus($_POST['blockenabler'], $enabledblocks, $bidarray);
+    changeBlockStatus($side, $enabledblocks, $bidarray);
 }
 
-if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
+if ($mode == 'delete') {
     if (!isset ($bid) || empty ($bid) || ($bid == 0)) {
-        COM_errorLog ('Attempted to delete block, bid empty or null, value =' . $bid);
-        $display .= COM_refresh ($_CONF['site_admin_url'] . '/block.php');
+        COM_errorLog('Attempted to delete block, bid empty or null, value =' . $bid);
+        $display .= COM_refresh($_CONF['site_admin_url'] . '/block.php');
     } elseif ($validtoken) {
-        $display .= deleteBlock ($bid);
+        $display .= deleteBlock($bid);
     } else {
         COM_accessLog("User {$_USER['username']} tried to illegally delete block $bid and failed CSRF checks.");
         echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
     }
-} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && $validtoken) {
+
+} elseif (($mode =='save') && $validtoken) {
     $help = '';
     if (isset ($_POST['help'])) {
         $help = COM_sanitizeUrl ($_POST['help'], array ('http', 'https'));
     }
 
     $content = '';
-
     if (($_CONF['advanced_editor'] == 1)) {
         if ( $_POST['postmode'] == 'adveditor' ) {
             $content = COM_stripslashes($_POST['block_html']);
@@ -905,13 +917,15 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
                     $_POST['perm_owner'], $_POST['perm_group'],
                     $_POST['perm_members'], $_POST['perm_anon'],
                     $is_enabled, $allow_autotags);
+
 } else if ($mode == 'edit') {
-    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+    SEC_setCookie($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                    time() + 1200, $_CONF['cookie_path'],
                    $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-    $display .= COM_siteHeader ('menu', $LANG21[3])
+    $display .= COM_siteHeader('menu', $LANG21[3])
              . editblock ($bid)
-             . COM_siteFooter ();
+             . COM_siteFooter();
+
 } else if ($mode == 'move') {
     $display .= COM_siteHeader('menu', $LANG21[19]);
     if($validtoken) {
@@ -919,7 +933,8 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
     }
     $display .= listblocks();
     $display .= COM_siteFooter();
-} else {  // 'cancel' or no mode at all
+
+} else {
     $display .= COM_siteHeader ('menu', $LANG21[19]);
     $msg = 0;
     if (isset ($_POST['msg'])) {
@@ -931,7 +946,6 @@ if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
         $display .= COM_showMessage ($msg);
     }
     $display .= listblocks();
-
     $display .= COM_siteFooter();
 }
 
