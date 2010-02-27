@@ -283,7 +283,7 @@ function editblock ($bid = '')
 
     if (!empty($bid) && SEC_hasrights('block.delete')) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="delete"' . XHTML . '>';
+                   . '" name="delete"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $block_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
