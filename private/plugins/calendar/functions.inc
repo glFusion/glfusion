@@ -1932,6 +1932,9 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
         case 'label':
             $fields[] = 'eid';
             break;
+//      case 'status':
+//          $fields[] = 'status';
+            break;
         default:
             break;
         }
@@ -1993,6 +1996,10 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
                 break;
             case 'label' :
                 $props['label'] = $LANG_CAL_1[16];
+                break;
+            case 'status':
+//              $props['status'] = $A['status'];
+                $props['status'] = 1; // stub - default
                 break;
             default:
                 $props[$p] = '';

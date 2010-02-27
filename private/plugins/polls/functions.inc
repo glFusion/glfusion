@@ -1463,6 +1463,9 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
                 case 'label':
                     $props['label'] = $LANG_POLLS['polls'];
                     break;
+                case 'status':
+                    $props['status'] = 1; // stub - default
+                    break;
                 default:
                     $props[$p] = '';
                     break;

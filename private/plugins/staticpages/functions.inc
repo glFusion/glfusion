@@ -1171,6 +1171,9 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
         case 'label':
             $fields[] = 'sp_id';
             break;
+//      case 'status':
+//          $fields[] = 'sp_status';
+//          break;
         default:
             break;
         }
@@ -1236,6 +1239,10 @@ function plugin_getiteminfo_staticpages($id, $what, $uid = 0, $options = array()
                     break;
                 case 'label':
                     $props['label'] = $LANG_STATIC['staticpages'];
+                    break;
+                case 'status':
+//                  $props['status'] = $A['sp_status'];
+                    $props['status'] = 1; // stub - default
                     break;
                 default:
                     $props[$p] = '';

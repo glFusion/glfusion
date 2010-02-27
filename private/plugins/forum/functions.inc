@@ -1332,6 +1332,9 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 case 'label':
                     $props['label'] = $LANG_GF00['pluginlabel'];
                     break;
+                case 'status':
+                    $props['status'] = 1; // stub - default
+                    break;
                 default:
                     $props[$p] = '';
                     break;

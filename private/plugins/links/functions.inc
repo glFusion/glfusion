@@ -1283,6 +1283,9 @@ function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
                 case 'label':
                     $props['label'] = $LANG_LINKS[14];
                     break;
+                case 'status':
+                    $props['status'] = 1; // stub - default status
+                    break;
                 default:
                     $props[$p] = '';
                     break;
