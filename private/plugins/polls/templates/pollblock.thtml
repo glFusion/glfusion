@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <span class="floatright">{edit_icon}</span><div class="poll-topic">{poll_topic}</div>
-<form action="{poll_vote_url}" id="Vote" method="post">
+<form action="{poll_vote_url}" id="Vote{poll_id}" method="post">
     <div>
     <input type="hidden" name="pid" value="{poll_id}"{xhtml}>
             {poll_questions}
