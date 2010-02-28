@@ -35,16 +35,15 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+// glFusion common function library
 require_once '../lib-common.php';
-require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'lib-security.php';
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
+// glFusion authentication module
+require_once 'auth.inc.php';
 
 $display = '';
+
+// Make sure user has rights to access this page
 if (!SEC_hasRights ('block.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_startBlock ($MESSAGE[30], '',
@@ -404,7 +403,7 @@ function listblocks()
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG21, $_IMAGE_TYPE;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
     $token = SEC_createToken();
@@ -819,19 +818,19 @@ function deleteBlock ($bid)
     return COM_refresh ($_CONF['site_admin_url'] . '/block.php?msg=12');
 }
 
-// MAIN
+// MAIN ========================================================================
 
-$mode = '';
-$validmodes = array('edit','save','cancel','delete','move');
-foreach($validmodes as $action) {
-    if (isset($_POST[$action])) {
-        $mode = $action;
-    } elseif (isset($_GET[$action])) {
-		$mode = $action;
+$action = '';
+$expected = array('edit','save','move','delete','cancel');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
     }
 }
 
-$bid = '';
+$bid = 0;
 if (isset($_POST['bid'])) {
     $bid = COM_applyFilter($_POST['bid'], true);
 } elseif (isset($_GET['bid'])) {
@@ -853,101 +852,97 @@ if (isset($_POST['blockenabler']) && $validtoken) {
     changeBlockStatus($side, $enabledblocks, $bidarray);
 }
 
-if ($mode == 'delete') {
-    if (!isset ($bid) || empty ($bid) || ($bid == 0)) {
-        COM_errorLog('Attempted to delete block, bid empty or null, value =' . $bid);
-        $display .= COM_refresh($_CONF['site_admin_url'] . '/block.php');
-    } elseif ($validtoken) {
-        $display .= deleteBlock($bid);
-    } else {
-        COM_accessLog("User {$_USER['username']} tried to illegally delete block $bid and failed CSRF checks.");
-        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
-    }
+switch ($action) {
+    case 'edit':
+        SEC_setCookie($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                       time() + 1200, $_CONF['cookie_path'],
+                       $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
+        $display .= COM_siteHeader('menu', $LANG21[3])
+                 . editblock ($bid)
+                 . COM_siteFooter();
+        break;
 
-} elseif (($mode =='save') && $validtoken) {
-    $help = '';
-    if (isset ($_POST['help'])) {
-        $help = COM_sanitizeUrl ($_POST['help'], array ('http', 'https'));
-    }
+    case 'save':
+        if ($validtoken) {
+            $help = '';
+            if (isset ($_POST['help'])) {
+                $help = COM_sanitizeUrl ($_POST['help'], array ('http', 'https'));
+            }
 
-    $content = '';
-    if (($_CONF['advanced_editor'] == 1)) {
-        if ( $_POST['postmode'] == 'adveditor' ) {
-            $content = COM_stripslashes($_POST['block_html']);
-            $html = true;
-        } else if ( $_POST['postmode'] == 'html' ) {
-            $content = COM_stripslashes($_POST['block_text']);
-            $html = false;
+            $content = '';
+            if (($_CONF['advanced_editor'] == 1)) {
+                if ( $_POST['postmode'] == 'adveditor' ) {
+                    $content = COM_stripslashes($_POST['block_html']);
+                    $html = true;
+                } else if ( $_POST['postmode'] == 'html' ) {
+                    $content = COM_stripslashes($_POST['block_text']);
+                    $html = false;
+                }
+            } else {
+                $content = COM_stripslashes($_POST['content']);
+            }
+
+            $rdfurl = (isset ($_POST['rdfurl'])) ? $_POST['rdfurl'] : ''; // to be sanitized later
+            $rdfupdated = (isset ($_POST['rdfupdated'])) ? $_POST['rdfupdated'] : '';
+            $rdflimit = (isset ($_POST['rdflimit'])) ? COM_applyFilter ($_POST['rdflimit'], true) : 0;
+            $phpblockfn = (isset ($_POST['phpblockfn'])) ? $_POST['phpblockfn'] : '';
+            $is_enabled = (isset ($_POST['is_enabled'])) ? $_POST['is_enabled'] : '';
+            $allow_autotags = (isset ($_POST['allow_autotags'])) ? $_POST['allow_autotags'] : '';
+
+            $display .= saveblock ($bid, $_POST['name'], $_POST['title'],
+                            $help, $_POST['type'], $_POST['blockorder'], $content,
+                            COM_applyFilter ($_POST['tid']), $rdfurl, $rdfupdated,
+                            $rdflimit, $phpblockfn, $_POST['onleft'],
+                            COM_applyFilter ($_POST['owner_id'], true),
+                            COM_applyFilter ($_POST['group_id'], true),
+                            $_POST['perm_owner'], $_POST['perm_group'],
+                            $_POST['perm_members'], $_POST['perm_anon'],
+                            $is_enabled, $allow_autotags);
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally edit block $bid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
-    } else {
-        $content = COM_stripslashes($_POST['content']);
-    }
+        break;
 
-    $rdfurl = '';
-    if (isset ($_POST['rdfurl'])) {
-        $rdfurl = $_POST['rdfurl']; // to be sanitized later
-    }
-    $rdfupdated = '';
-    if (isset ($_POST['rdfupdated'])) {
-        $rdfupdated = $_POST['rdfupdated'];
-    }
-    $rdflimit = 0;
-    if (isset ($_POST['rdflimit'])) {
-        $rdflimit = COM_applyFilter ($_POST['rdflimit'], true);
-    }
-    $phpblockfn = '';
-    if (isset ($_POST['phpblockfn'])) {
-        $phpblockfn = $_POST['phpblockfn'];
-    }
-    $is_enabled = '';
-    if (isset ($_POST['is_enabled'])) {
-        $is_enabled = $_POST['is_enabled'];
-    }
-    $allow_autotags = '';
-    if (isset ($_POST['allow_autotags'])) {
-        $allow_autotags = $_POST['allow_autotags'];
-    }
+    case 'move':
+        $display .= COM_siteHeader('menu', $LANG21[19]);
+        if($validtoken) {
+            $display .= moveBlock();
+        }
+        $display .= listblocks();
+        $display .= COM_siteFooter();
+        break;
 
-    $display .= saveblock ($bid, $_POST['name'], $_POST['title'],
-                    $help, $_POST['type'], $_POST['blockorder'], $content,
-                    COM_applyFilter ($_POST['tid']), $rdfurl, $rdfupdated,
-                    $rdflimit, $phpblockfn, $_POST['onleft'],
-                    COM_applyFilter ($_POST['owner_id'], true),
-                    COM_applyFilter ($_POST['group_id'], true),
-                    $_POST['perm_owner'], $_POST['perm_group'],
-                    $_POST['perm_members'], $_POST['perm_anon'],
-                    $is_enabled, $allow_autotags);
+    case 'delete':
+        if (!isset ($bid) || empty ($bid) || ($bid == 0)) {
+            COM_errorLog('Attempted to delete block, bid empty or null, value =' . $bid);
+            $display .= COM_refresh($_CONF['site_admin_url'] . '/block.php');
+        } elseif ($validtoken) {
+            $display .= deleteBlock($bid);
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete block $bid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
 
-} else if ($mode == 'edit') {
-    SEC_setCookie($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                   time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-    $display .= COM_siteHeader('menu', $LANG21[3])
-             . editblock ($bid)
-             . COM_siteFooter();
+    default:
+        $display .= COM_siteHeader ('menu', $LANG21[19]);
+        $msg = 0;
+        if (isset ($_POST['msg'])) {
+            $msg = COM_applyFilter ($_POST['msg'], true);
+        } else if (isset ($_GET['msg'])) {
+            $msg = COM_applyFilter ($_GET['msg'], true);
+        }
+        if ($msg > 0) {
+            $display .= COM_showMessage ($msg);
+        }
+        $display .= listblocks();
+        $display .= COM_siteFooter();
+        break;
 
-} else if ($mode == 'move') {
-    $display .= COM_siteHeader('menu', $LANG21[19]);
-    if($validtoken) {
-        $display .= moveBlock();
-    }
-    $display .= listblocks();
-    $display .= COM_siteFooter();
-
-} else {
-    $display .= COM_siteHeader ('menu', $LANG21[19]);
-    $msg = 0;
-    if (isset ($_POST['msg'])) {
-        $msg = COM_applyFilter ($_POST['msg'], true);
-    } else if (isset ($_GET['msg'])) {
-        $msg = COM_applyFilter ($_GET['msg'], true);
-    }
-    if ($msg > 0) {
-        $display .= COM_showMessage ($msg);
-    }
-    $display .= listblocks();
-    $display .= COM_siteFooter();
 }
 
 echo $display;
+
 ?>
+

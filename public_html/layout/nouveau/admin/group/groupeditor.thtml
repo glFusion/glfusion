@@ -56,8 +56,8 @@
                                     <tr><td>&nbsp;</td></tr>
                                     <tr>
                                         <td colspan="2">
-                                            <input type="submit" value="{lang_save}" name="mode"{xhtml}>
-                                            <input type="submit" value="{lang_cancel}" name="mode"{xhtml}>
+                                            <input type="submit" value="{lang_save}" name="save"{xhtml}>
+                                            <input type="submit" value="{lang_cancel}" name="cancel"{xhtml}>
                                             {delete_option}
                                             <input type="hidden" name="grp_gl_core" value="{group_core}"{xhtml}>
                                             <input type="hidden" name="grp_id" value="{group_id}"{xhtml}>

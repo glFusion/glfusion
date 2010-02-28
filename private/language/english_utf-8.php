@@ -1434,7 +1434,8 @@ $LANG_ACCESS = array(
     'pe_userinfo' => 'Information',
     'pe_layout'   => 'Layout &amp; Language',
     'pe_content'  => 'Content',
-    'pe_privacy'  => 'Privacy'
+    'pe_privacy'  => 'Privacy',
+    'editusers' => 'Manage'
 );
 
 ###############################################################################

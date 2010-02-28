@@ -723,84 +723,49 @@ function ADMIN_getListField_groups($fieldname, $fieldvalue, $A, $icon_arr, $sele
         $thisUsersGroups = SEC_getUserGroups();
     }
 
-    $show_all_groups = false;
-    if (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1)) {
-        $show_all_groups = true;
-    }
+    $showall = (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1));
 
     if (in_array ($A['grp_id'], $thisUsersGroups ) ||
         SEC_groupIsRemoteUserAndHaveAccess( $A['grp_id'], $thisUsersGroups )) {
         switch($fieldname) {
-        case 'action':
-            $coregroup = ($A['grp_gl_core'] == 1) ? true : false;
-            $url = $_CONF['site_admin_url'] . '/group.php?mode=edit&amp;grp_id='
-                 . $A['grp_id'];
-            if ($show_all_groups) {
-                $url .= '&amp;chk_showall=1';
-            }
+        case 'edit':
+            $url = $_CONF['site_admin_url'] . '/group.php?edit=1&amp;grp_id=' . $A['grp_id'];
+            $url .= ($showall) ? '&amp;chk_showall=1' : '';
             $attr['title'] = $LANG_ADMIN['edit'];
             $retval = COM_createLink($icon_arr['edit'], $url, $attr);
-            $retval .= '&nbsp;&nbsp;';
-            if($coregroup) {
-                $retval .= $icon_arr['blank'];
-            } else {
-                $attr['title'] = $LANG_ADMIN['delete'];
-                $attr['onclick'] = "return confirm('" . $MESSAGE[511] . "');";
-                $retval .= COM_createLink($icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/group.php'
-                        . '?mode=' . $LANG_ADMIN['delete'] . '&amp;grp_id=' . $A['grp_id'] . '&amp;' . CSRF_TOKEN . '=' . SEC_createToken(), $attr);
-
-            }
             break;
 
         case 'grp_gl_core':
-            if ($A['grp_gl_core'] == 1) {
-                $retval = $LANG_ACCESS['yes'];
-            } else {
-                $retval = $LANG_ACCESS['no'];
-            }
+            $retval = ($A['grp_gl_core'] == 1) ? $LANG_ACCESS['yes'] : $LANG_ACCESS['no'];
             break;
 
         case 'grp_default':
-            if ($A['grp_default'] != 0) {
-                $retval = $LANG_ACCESS['yes'];
-            } else {
-                $retval = $LANG_ACCESS['no'];
-            }
+            $retval = ($A['grp_default'] != 0) ? $LANG_ACCESS['yes'] : $LANG_ACCESS['no'];
             break;
 
         case 'grp_admin':
-            if ($A['grp_gl_core'] == 1 && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users') {
-                $retval = $LANG_ACCESS['yes'];
-            } else {
-                $retval = $LANG_ACCESS['no'];
-            }
+            $retval = ($A['grp_gl_core'] == 1 && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users') ? $LANG_ACCESS['yes'] : $LANG_ACCESS['no'];
             break;
 
-        case 'list':
-            $url = $_CONF['site_admin_url'] . '/group.php?mode=';
-            if ($show_all_groups) {
-                $param = '&amp;grp_id=' . $A['grp_id'] . '&amp;chk_showall=1';
-            } else {
-                $param = '&amp;grp_id=' . $A['grp_id'];
-            }
-            $attr['title'] = $LANG_ADMIN['list'];
-            $retval .= COM_createLink($icon_arr['list'],
-                                     $url . 'listusers' . $param, $attr);
-            $retval .= '&nbsp;&nbsp;';
-            if (($A['grp_name'] != 'All Users') &&
-                    ($A['grp_name'] != 'Logged-in Users')) {
-                $attr['title'] = $LANG_ADMIN['edit'];
-                $retval .= COM_createLink($icon_arr['edit'],
-                                                $url . 'editusers' . $param, $attr);
-            } else {
-                $retval .= $icon_arr['blank'];
+        case 'listusers':
+            $url = $_CONF['site_admin_url'] . '/group.php?listusers=1&amp;grp_id=' . $A['grp_id'];
+            $url .= ($showall) ? '&amp;chk_showall=1' : '';
+            $attr['title'] = $LANG_ACCESS['listusers'];
+            $retval = COM_createLink($icon_arr['list'], $url, $attr);
+            break;
+
+        case 'editusers':
+            $retval = '';
+            if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users')) {
+                $url = $_CONF['site_admin_url'] . '/group.php?editusers=1&amp;grp_id=' . $A['grp_id'];
+                $url .= ($showall) ? '&amp;chk_showall=1' : '';
+                $attr['title'] = $LANG_ACCESS['editusers'];
+                $retval .= COM_createLink($icon_arr['edit'], $url, $attr);
             }
             break;
 
         case 'checkbox':
-            $retval = '<input type="checkbox" name="groups[]" value="'
-                    . $A['grp_id'] . '"';
+            $retval = '<input type="checkbox" name="groups[]" value="' . $A['grp_id'] . '"';
             if (is_array($selected) && in_array($A['grp_id'], $selected)) {
                 $retval .= ' checked="checked"';
             }
