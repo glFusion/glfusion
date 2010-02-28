@@ -2,7 +2,8 @@ glFusion ChangeLog
 
 v1.1.9
 ------
-- New Environment Check option in Command & Control Screen (Mark)
+- New Environment Check option in Command & Control Screen. Removed PHP info
+  link from MG admin screen (Mark)
 - New Admin Global User Preference Editor - allows admin to change some
   preferences for all users (Mark)
 - Admin user editor now supports editing all user attributes (Mark)
@@ -28,6 +29,11 @@ v1.1.9
 - Implemented reset rating for stories (Mark)
 - Implemented site upgrade check/reminder (Mark H.)
 - Implemented block-specific styling, eg. block div id=block_name (Mark H.)
+
+v1.1.8.pl4
+----------
+- SpamX: Fixed preg compilation error in SpamX plugin (Mark)
+- Media Gallery: Fixed keywords so they now wrap properly (Mark)
 
 v1.1.8.pl3
 ----------
