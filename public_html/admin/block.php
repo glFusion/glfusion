@@ -406,7 +406,6 @@ function listblocks()
     USES_lib_admin();
 
     $retval = '';
-    $token = SEC_createToken();
 
     // writing the menu on top
     $menu_arr = array (
@@ -453,9 +452,13 @@ function listblocks()
         'default_filter' => COM_getPermSql ('AND')
     );
 
-    // this is a dummy variable so we know the form has been used if all blocks
-    // should be disabled on one side in order to disable the last one.
-    // The value is the onleft var
+    // embed a CSRF token as a hidden var at the top of each of the lists
+    // this is used to validate block enable/disable
+
+    $token = SEC_createToken();
+
+    // blockenabler is a hidden field which if set, indicates that one of the
+    // blocks has been enabled or disabled - the value is the onleft var
 
     $form_arr = array(
         'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
@@ -482,10 +485,11 @@ function listblocks()
         'form_url'   => $_CONF['site_admin_url'] . '/block.php'
     );
 
-    // this is a dummy-variable so we know the form has been used if all blocks should be disabled
-    // on one side in order to disable the last one. The value is the onleft var
+    // blockenabler is a hidden field which if set, indicates that one of the
+    // blocks has been enabled or disabled - the value is the onleft var
+
     $form_arr = array(
-        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'.$token.'"/>',
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
         'bottom' => '<input type="hidden" name="blockenabler" value="0"/>'
     );
 
@@ -820,6 +824,8 @@ function deleteBlock ($bid)
 
 // MAIN ========================================================================
 
+$display = '';
+
 $action = '';
 $expected = array('edit','save','move','delete','cancel');
 foreach($expected as $provided) {
@@ -853,6 +859,7 @@ if (isset($_POST['blockenabler']) && $validtoken) {
 }
 
 switch ($action) {
+
     case 'edit':
         SEC_setCookie($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
                        time() + 1200, $_CONF['cookie_path'],
@@ -933,9 +940,7 @@ switch ($action) {
         } else if (isset ($_GET['msg'])) {
             $msg = COM_applyFilter ($_GET['msg'], true);
         }
-        if ($msg > 0) {
-            $display .= COM_showMessage ($msg);
-        }
+        $display .= ($msg > 0) ? COM_showMessage($msg) : '';
         $display .= listblocks();
         $display .= COM_siteFooter();
         break;
@@ -945,4 +950,3 @@ switch ($action) {
 echo $display;
 
 ?>
-

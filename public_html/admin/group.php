@@ -725,7 +725,7 @@ function listusers ($grp_id)
 {
     global $_CONF, $_TABLES, $LANG28, $LANG_ACCESS, $LANG_ADMIN, $_IMAGE_TYPE;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
 
@@ -1161,6 +1161,8 @@ function deleteGroup ($grp_id)
 
 // MAIN ========================================================================
 
+$display = '';
+
 $action = '';
 $expected = array('edit','save','savegroupusers','listusers','editusers','delete');
 foreach($expected as $provided) {
@@ -1242,15 +1244,15 @@ switch ($action) {
         break;
 
     default:
-	    $showall = false;
-	    if (isset($_POST['q'])) {
-	        if (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) {
-	            $showall = true;
-                    $_REQUEST['chk_showall'] = '';
-	        }
-	    } elseif (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1)) {
-	        $showall = true;
-	    }
+        $showall = false;
+        if (isset($_POST['q'])) {
+            if (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) {
+                $showall = true;
+                $_REQUEST['chk_showall'] = '';
+            }
+        } elseif (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1)) {
+            $showall = true;
+        }
         $display .= COM_siteHeader('menu', $LANG28[38]);
         $display .= COM_showMessageFromParameter();
         $display .= listgroups($showall);

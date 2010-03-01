@@ -1186,7 +1186,7 @@ $LANG32 = array(
 # admin/syndication.php
 
 $LANG33 = array(
-    1 => 'create feed',
+    1 => 'Create Feed',
     2 => 'save',
     3 => 'delete',
     4 => 'cancel',
@@ -1235,7 +1235,8 @@ $LANG33 = array(
     52 => 'Error: existing Filename',
     53 => 'All Frontpage Stories',
     54 => 'Please select the type of feed to create.',
-    55 => 'Articles'
+    55 => 'Articles',
+    56 => 'Do you really want to delete this feed?'
 );
 
 ###############################################################################

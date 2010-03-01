@@ -669,7 +669,7 @@ function ADMIN_getListField_blocks($fieldname, $fieldvalue, $A, $icon_arr, $toke
                 break;
             case 'is_enabled':
                 if ($access == 3) {
-                    if ($A['is_enabled'] == 1) {
+                    if ($enabled) {
                         $switch = ' checked="checked"';
                         $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
                     } else {
@@ -1017,10 +1017,21 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
     $enabled = ($A['is_enabled'] == 1) ? true : false;
 
     switch($fieldname) {
+
         case 'edit':
+            $attr['title'] = $LANG_ADMIN['edit'];
             $retval = COM_createLink($icon_arr['edit'],
-                "{$_CONF['site_admin_url']}/syndication.php?mode=edit&amp;fid={$A['fid']}");
+                $_CONF['site_admin_url'] . '/syndication.php?edit=1&amp;fid=' . $A['fid'], $attr );
             break;
+
+        case 'delete':
+            $attr['title'] = $LANG_ADMIN['delete'];
+            $attr['onclick'] = 'return confirm(\'' . $LANG33[56] . '\');"';
+            $retval = COM_createLink($icon_arr['delete'],
+                $_CONF['site_admin_url'] . '/syndication.php?delete=1&amp;fid=' . $A['fid']
+                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr );
+            break;
+
         case 'type':
             if ($A['type'] == 'article') {
                 $type = $LANG33[55];
@@ -1029,24 +1040,31 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
             }
             $retval = ($enabled) ? $type : '<span class="disabledfield">' . $type . '</span>';
             break;
+
         case 'format':
             $format = str_replace ('-' , ' ', ucwords ($A['format']));
             $retval = ($enabled) ? $format : '<span class="disabledfield">' . $format . '</span>';
             break;
+
         case 'updated':
             $datetime = strftime ($_CONF['daytime'], $A['date']);
             $retval = ($enabled) ? $datetime : '<span class="disabledfield">' . $datetime . '</span>';
             break;
+
         case 'is_enabled':
-            if ($A['is_enabled'] == 1) {
+            if ($enabled) {
                 $switch = ' checked="checked"';
+                $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
             } else {
+                $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
                 $switch = '';
             }
-            $retval = "<input type=\"checkbox\" name=\"enabledfeeds[{$A['fid']}]\" "
-                . "onclick=\"submit()\" value=\"{$A['fid']}\"$switch" . XHTML . ">";
-            $retval .= '<input type="hidden" name="feedarray['.$A['fid'].']" value="1" />';
+            $switch = ($enabled) ? ' checked="checked"' : '';
+            $retval = '<input type="checkbox" name="enabledfeeds[' . $A['fid'] . ']" ' . $title
+                . 'onclick="submit()" value="' . $A['fid'] . '"' . $switch . XHTML . '>';
+            $retval .= '<input type="hidden" name="feedarray[' . $A['fid'] . ']" value="1" ' . XHTML . '>';
             break;
+
         case 'header_tid':
             if ($A['header_tid'] == 'all') {
                 $tid = $LANG33[43];
@@ -1058,11 +1076,17 @@ function ADMIN_getListField_syndication($fieldname, $fieldvalue, $A, $icon_arr, 
             }
             $retval = ($enabled) ? $tid : '<span class="disabledfield">' . $tid . '</span>';
             break;
+
         case 'filename':
-            $url = SYND_getFeedUrl ();
-            $filename = COM_createLink($A['filename'], $url . $A['filename']);
-            $retval = ($enabled) ? $filename : '<span class="disabledfield">' . $filename . '</span>';
+            if ($enabled) {
+                $url = SYND_getFeedUrl ();
+                $attr['title'] = $A['description'];
+                $retval = COM_createLink($A['filename'], $url . $A['filename'], $attr);
+            } else {
+                $retval = '<span class="disabledfield">' . $A['filename'] . '</span>';
+            }
             break;
+
         default:
             $retval = ($enabled) ? $fieldvalue : '<span class="disabledfield">' . $fieldvalue . '</span>';
             break;
