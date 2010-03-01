@@ -629,7 +629,7 @@ class Media {
                     $keyWords[$i] = str_replace('"',' ',$keyWords[$i]);
                     $searchKeyword = $keyWords[$i];
                     $keyWords[$i] = str_replace('_',' ',$keyWords[$i]);
-                    $kwText .= '<a href="' . $_MG_CONF['site_url'] . '/search.php?mode=search&amp;swhere=1&amp;keywords=' . $searchKeyword . '&amp;keyType=any">' . $keyWords[$i] . '</a>&nbsp;';
+                    $kwText .= '<a href="' . $_MG_CONF['site_url'] . '/search.php?mode=search&amp;swhere=1&amp;keywords=' . $searchKeyword . '&amp;keyType=any">' . $keyWords[$i] . '</a> ';
                 }
                 $T->set_var(array(
                     'media_keywords'  =>  $kwText,
