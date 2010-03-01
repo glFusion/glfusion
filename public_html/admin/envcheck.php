@@ -246,6 +246,59 @@ function _checkEnvironment()
                 }
                 break;
         }
+        $T->set_var('rowclass',($classCounter % 2)+1);
+        $T->parse('lib','libs',true);
+        $classCounter++;
+        if ( $_CONF['jhead_enabled'] ) {
+            if (PHP_OS == "WINNT") {
+                $binary = "/jhead.exe";
+            } else {
+                $binary = "/jhead";
+            }
+            clearstatcache();
+            if (! @file_exists( $_CONF['path_to_jhead'] . $binary ) ) {
+                $T->set_var(array(
+                    'item'      => $LANG01['jhead'],
+                    'status'    => '<span class="no">' .  $LANG01['not_found'] . '</span>',
+                    'notes'     => $LANG01['jhead_not_found'],
+                ));
+            } else {
+                $T->set_var(array(
+                    'item'      => $LANG01['jhead'],
+                    'status'    => '<span class="yes">' . $LANG01['ok'] . '</span>',
+                    'notes'     => $LANG01['jhead_ok'],
+                ));
+            }
+            $T->set_var('rowclass',($classCounter % 2)+1);
+            $T->parse('lib','libs',true);
+            $classCounter++;
+        }
+
+        if ( $_CONF['jpegtrans_enabled'] ) {
+            if (PHP_OS == "WINNT") {
+                $binary = "/jpegtran.exe";
+            } else {
+                $binary = "/jpegtran";
+            }
+            clearstatcache();
+            if (! @file_exists( $_CONF['path_to_jpegtrans'] . $binary ) ) {
+                $T->set_var(array(
+                    'item'   => $LANG01['jpegtran'],
+                    'status' => '<span class="no">' .  $LANG01['not_found'] . '</span>',
+                    'notes'  => $LANG01['jpegtran_not_found'],
+                ));
+            } else {
+                $T->set_var(array(
+                    'item'   => $LANG01['jpegtran'],
+                    'status' => '<span class="yes">' . $LANG01['ok'] . '</span>',
+                    'notes'  => $LANG01['jpegtran_ok'],
+                ));
+            }
+            $T->set_var('rowclass',($classCounter % 2)+1);
+            $T->parse('lib','libs',true);
+            $classCounter++;
+        }
+
     } else {
         $T->set_var(array(
             'item'   => $LANG01['graphics'],
@@ -253,9 +306,6 @@ function _checkEnvironment()
             'notes'  => $LANG01['bypass_note'],
         ));
     }
-    $T->set_var('rowclass',($classCounter % 2)+1);
-    $T->parse('lib','libs',true);
-    $classCounter++;
 
     // extract syndication storage path
     $feedpath = $_CONF['rdf_file'];
@@ -461,6 +511,15 @@ function _checkEnvironment()
         'lang_graphics'     => $LANG01['graphics'],
         'phpinfo'           => _phpinfo(),
     ));
+
+    if ( !defined('DEMO_MODE') ) {
+        $T->set_var(array(
+            'phpinfo'       => _phpinfo(),
+        ));
+    } else {
+        $T->set_var('phpinfo','');
+    }
+
     $T->parse('output','page');
     $retval .= $T->finish($T->get_var('output'));
 

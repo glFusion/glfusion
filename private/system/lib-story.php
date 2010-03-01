@@ -931,12 +931,16 @@ function STORY_featuredCheck()
 
     $curdate = date( "Y-m-d H:i:s", time() );
 
-    if( DB_getItem( $_TABLES['stories'], 'count(*)', "featured = 1 AND draft_flag = 0 AND date <= '$curdate'" ) > 1 )
-    {
-        // OK, we have two featured stories, fix that
-
-        $sid = DB_getItem( $_TABLES['stories'], 'sid', "featured = 1 AND draft_flag = 0 ORDER BY date LIMIT 1" );
-        DB_query( "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE sid = '".addslashes($sid)."'" );
+    // Loop through each topic
+    $sql = "SELECT tid FROM {$_TABLES['topics']}";
+    $result = DB_query( $sql );
+    $num = DB_numRows( $result );
+    for( $i = 0; $i < $num; $i++) {
+        $A = DB_fetchArray( $result );
+        if( DB_getItem( $_TABLES['stories'], 'COUNT(*)', "featured = 1 AND draft_flag = 0 AND tid = '{$A['tid']}' AND date <= '$curdate'" ) > 1 ) {
+            $sid = DB_getItem( $_TABLES['stories'], 'sid', "featured = 1 AND draft_flag = 0 ORDER BY date LIMIT 1" );
+            DB_query( "UPDATE {$_TABLES['stories']} SET featured = 0 WHERE sid = '$sid'" );
+        }
     }
 }
 

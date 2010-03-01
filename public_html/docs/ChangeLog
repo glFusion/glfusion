@@ -2,6 +2,7 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- New BBCode editor API (Mark)
 - New Environment Check option in Command & Control Screen. Removed PHP info
   link from MG admin screen (Mark)
 - New Admin Global User Preference Editor - allows admin to change some

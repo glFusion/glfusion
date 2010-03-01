@@ -375,9 +375,17 @@ class Story
      */
     function hasContent()
     {
-        $test = $this->_title . $this->_introtext . $this->_bodytext;
-        $test = trim($test);
-        return ($test != '');
+        if (trim($this->_title) != '') {
+            return true;
+        }
+        if (trim($this->_introtext) != '') {
+            return true;
+        }
+        if (trim($this->_bodytext) != '') {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -465,9 +473,19 @@ class Story
                 $this->_show_topic_icon = 1;
             }
 
-            $this->_uid = $_USER['uid'];
+            if (COM_isAnonUser()) {
+                $this->_uid = 1;
+            } else {
+                $this->_uid = $_USER['uid'];
+            }
             $this->_date = time();
             $this->_expire = time();
+            if ($_CONF['article_comment_close_enabled']) {
+                $this->_comment_expire = time() +
+                    ($_CONF['article_comment_close_days'] * 86400);
+            } else {
+                $this->_comment_expire = 0;
+            }
             $this->_commentcode = $_CONF['comment_code'];
             $this->_trackbackcode = $_CONF['trackback_code'];
             $this->_title = '';
@@ -497,7 +515,11 @@ class Story
 
             $this->_statuscode = 0;
             $this->_featured = 0;
-            $this->_owner_id = $_USER['uid'];
+            if (COM_isAnonUser()) {
+                $this->_owner_id = 1;
+            } else {
+                $this->_owner_id = $_USER['uid'];
+            }
 
             if (isset($_GROUPS['Story Admin'])) {
                 $this->_group_id = $_GROUPS['Story Admin'];
@@ -528,7 +550,7 @@ class Story
                 if (!isset($story['owner_id'])) {
                     $story['owner_id'] = 1;
                 }
-                if ( SEC_inGroup('Story Admin') ) {
+                if ( SEC_hasRights('story.edit') ) {
                     $this->_access = 3;
                 } else {
                     $access = SEC_hasAccess($story['owner_id'], $story['group_id'],
@@ -567,7 +589,12 @@ class Story
             $this->_trackbackcode = $_CONF['trackback_code'];
             $this->_featured = 0;
             $this->_expire = time();
-            $this->_expiredate = 0;
+            if ($_CONF['article_comment_close_enabled']) {
+                $this->_comment_expire = time() +
+                    ($_CONF['article_comment_close_days'] * 86400);
+            } else {
+                $this->_comment_expire = 0;
+            }
 
             if (DB_getItem($_TABLES['topics'], 'archive_flag', "tid = '".addslashes($this->_tid)."'") == 1) {
                 $this->_frontpage = 0;
@@ -586,9 +613,21 @@ class Story
             $this->_sid = COM_makesid();
             $this->_old_sid = $this->_sid;
             $this->_originalSid = '';
-            $this->_uid = $_USER['uid'];
+            if ( COM_isAnonUser() ) {
+	        $this->_uid = 1;
+	    } else {
+                $this->_uid = $_USER['uid'];
+	    }
             $this->_date = time();
             $this->_expire = time();
+
+            // if the original story uses comment expire, update the time
+            if ($this->_comment_expire != 0) {
+                $this->_comment_expire = time() +
+                    ($_CONF['article_comment_close_days'] * 86400);
+            }
+
+            // reset counters
             $this->_hits = 0;
             $this->_rating = 0.00;
             $this->_votes = 0;
@@ -629,16 +668,19 @@ class Story
         }
 
         /* if a featured, non-draft, that goes live straight away, unfeature
-         * other stories:
+         * other stories in same topic:
          */
         if ($this->_featured == '1') {
             // there can only be one non-draft featured story
             if ($this->_draft_flag == 0 AND $this->_date <= time()) {
-                $id[1] = 'featured';
-                $values[1] = 1;
-                $id[2] = 'draft_flag';
-                $values[2] = 0;
-                DB_change($_TABLES['stories'], 'featured', '0', $id, $values);
+
+                if ($this->_frontpage == 1) {
+                    // un-feature any featured frontpage story
+                    DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND frontpage = 1 AND date <= NOW()");
+                }
+
+                // un-feature any featured story in the same topic
+                DB_query("UPDATE {$_TABLES['stories']} SET featured = 0 WHERE featured = 1 AND draft_flag = 0 AND tid = '{$this->_tid}' AND date <= NOW()");
             }
         }
 
@@ -797,7 +839,7 @@ class Story
                 $article = DB_fetchArray($result);
                 /* Check Security */
 
-                if ( SEC_inGroup('Story Admin') ) {
+                if ( SEC_hasRights('story.edit') ) {
                     $access = 3;
                 } else {
                     $access = SEC_hasAccess($article['owner_id'], $article['group_id'], $article['perm_owner'], $article['perm_group'],
@@ -815,7 +857,7 @@ class Story
             }
         }
 
-        if ( SEC_inGroup('Story Admin') ) {
+        if ( SEC_hasRights('story.edit') ) {
             $access = 3;
         } else {
             $access = SEC_hasAccess($this->_owner_id, $this->_group_id, $this->_perm_owner, $this->_perm_group,
@@ -864,10 +906,10 @@ class Story
     {
         global $_USER, $_CONF, $_TABLES;
 
-        if (isset($_USER['uid']) && ($_USER['uid'] > 1)) {
-            $this->_uid = $_USER['uid'];
-        } else {
+        if (COM_isAnonUser()) {
             $this->_uid = 1;
+        } else {
+            $this->_uid = $_USER['uid'];
         }
 
         $this->_postmode = $_CONF['postmode'];
@@ -902,11 +944,18 @@ class Story
      */
     function loadSubmission()
     {
+        global $_CONF;
+
         $array = $_POST;
 
         $this->_expire = time();
         $this->_date = time();
-        $this->_expiredate = 0;
+        if ($_CONF['article_comment_close_enabled']) {
+            $this->_comment_expire = time() +
+                ($_CONF['article_comment_close_days'] * 86400);
+        } else {
+            $this->_comment_expire = 0;
+        }
 
         // Handle Magic GPC Garbage:
         while (list($key, $value) = each($array))
@@ -921,6 +970,9 @@ class Story
         }
         $this->_sid = COM_applyFilter($array['sid']);
         $this->_uid = COM_applyFilter($array['uid'], true);
+        if ($this->_uid < 1) {
+            $this->_uid = 1;
+        }
         $this->_unixdate = COM_applyFilter($array['date'], true);
 
         if (!isset($array['bodytext'])) {
@@ -971,10 +1023,10 @@ class Story
         global $_USER, $_CONF, $_TABLES;
         $this->_sid = COM_makeSid();
 
-        if (isset($_USER['uid']) && ($_USER['uid'] > 1)) {
-            $this->_uid = $_USER['uid'];
-        } else {
+        if (COM_isAnonUser()) {
             $this->_uid = 1;
+        } else {
+            $this->_uid = $_USER['uid'];
         }
 
         $tmptid = addslashes(COM_sanitizeID($this->_tid));
@@ -1025,7 +1077,11 @@ class Story
             $this->_trackbackcode = $_CONF['trackback_code'];
             $this->_statuscode = 0;
             $this->_show_topic_icon = $_CONF['show_topic_icon'];
-            $this->_owner_id = $_USER['uid'];
+            if (COM_isAnonUser()) {
+                $this->_owner_id = 1;
+            } else {
+                $this->_owner_id = $_USER['uid'];
+            }
             $this->_group_id = $T['group_id'];
             $this->_perm_owner = $T['perm_owner'];
             $this->_perm_group = $T['perm_group'];
@@ -1334,7 +1390,7 @@ class Story
     /**
      * Provide access to story elements. For the editor.
      *
-     * This is a peudo-property, implementing a getter for story
+     * This is a pseudo-property, implementing a getter for story
      * details as if as an associative array. Personally, I'd
      * rather be able to assign getters and setters to actual
      * properties to mask controlled access to private member
@@ -1435,32 +1491,62 @@ class Story
             break;
 
         case 'cmt_close_second':
-            $return = date('s', $this->_comment_expire);
+            if ($this->_comment_expire == 0) {
+                $return = date('s', time() +
+                               ($_CONF['article_comment_close_days'] * 86400));
+            } else {
+                $return = date('s', $this->_comment_expire);
+            }
 
             break;
 
         case 'cmt_close_minute':
-            $return = date('i', $this->_comment_expire);
+            if ($this->_comment_expire == 0) {
+                $return = date('i', time() +
+                               ($_CONF['article_comment_close_days'] * 86400));
+            } else {
+                $return = date('i', $this->_comment_expire);
+            }
 
             break;
 
         case 'cmt_close_hour':
-            $return = date('H', $this->_comment_expire);
+            if ($this->_comment_expire == 0) {
+                $return = date('H', time() +
+                               ($_CONF['article_comment_close_days'] * 86400));
+            } else {
+                $return = date('H', $this->_comment_expire);
+            }
 
             break;
 
         case 'cmt_close_day':
-            $return = date('d', $this->_comment_expire);
+            if ($this->_comment_expire == 0) {
+                $return = date('d', time() +
+                               ($_CONF['article_comment_close_days'] * 86400));
+            } else {
+                $return = date('d', $this->_comment_expire);
+            }
 
             break;
 
         case 'cmt_close_month':
-            $return = date('m', $this->_comment_expire);
+            if ($this->_comment_expire == 0) {
+                $return = date('m', time() +
+                               ($_CONF['article_comment_close_days'] * 86400));
+            } else {
+                $return = date('m', $this->_comment_expire);
+            }
 
             break;
 
         case 'cmt_close_year':
-            $return = date('Y', $this->_comment_expire);
+            if ($this->_comment_expire == 0) {
+                $return = date('Y', time() +
+                               ($_CONF['article_comment_close_days'] * 86400));
+            } else {
+                $return = date('Y', $this->_comment_expire);
+            }
 
             break;
 
@@ -1604,7 +1690,7 @@ class Story
             break;
 
         case 'commentcode':
-            //check to see if comment_time has past
+            // check to see if comment_time has passed
             if ($this->_comment_expire != 0 && (time() > $this->_comment_expire) && $this->_commentcode == 0 ) {
                 $return = 1;
                 //if comment code is not 1, change it to 1
@@ -1949,6 +2035,8 @@ class Story
             = strtotime("$cmt_close_month/$cmt_close_day/$cmt_close_year $cmt_close_hour:$cmt_close_minute:$cmt_close_second");
 
             $this->_comment_expire = $cmt_close_date;
+        } else {
+            $this->_comment_expire = 0;
         }
 
 
