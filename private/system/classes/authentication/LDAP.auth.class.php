@@ -87,7 +87,8 @@ class LDAP
             }
         }
 
-        $filter = "uid=$username";
+        $filter = $_LDAP_CONF['filter_var']."=".$username;
+
         $search_result = ldap_search($link_identifier, $_LDAP_CONF['branch'],
                                      $filter);
         $A = ldap_get_entries($link_identifier, $search_result);

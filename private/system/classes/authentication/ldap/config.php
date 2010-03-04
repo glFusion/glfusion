@@ -41,20 +41,22 @@ global $_LDAP_CONF;
 
 $_LDAP_CONF['version']            = '1.0.0'; // Module Version
 
-
-// LDAP Settings
-
-// Basic LDAP variables
-$_LDAP_CONF['user_ou'] = "People";
-$_LDAP_CONF['group_ou'] = "Group";
-$_LDAP_CONF['branch'] = "dc=mydc,dc=com";
-$_LDAP_CONF['user_branch'] = "ou={$_LDAP_CONF['user_ou']}," . $_LDAP_CONF['branch'];
-$_LDAP_CONF['user_attributes'] = array("uid","cn","ou","objectClass","shadowLastChange","loginShell","uidnumber","gidNumber","homeDirectory","gecos","userPassword","givenName","sn","mail");
+/**
+ * To use LDAP you must configure the server information, including the
+ * user to bind to LDAP to perform searches.
+ */
 
 // LDAP server configuration
 $_LDAP_CONF['servers'][0]['bind_dn'] = "cn=mycn,ou=LDAPusers,dc=mydc,dc=com";
 $_LDAP_CONF['servers'][0]['password'] = "mypassword";
 $_LDAP_CONF['servers'][0]['host'] = "localhost";
+
+/**
+ * The following settings are used to search for the user
+ */
+
+$_LDAP_CONF['filter_var'] = 'uid';
+$_LDAP_CONF['branch']     = "dc=mydc,dc=com";
 
 // (put additional servers here; example given below)
 // $_LDAP_CONF['servers'][1]['bind_dn'] = 'cn=foo,ou=people,dc=corp,dc=com';
