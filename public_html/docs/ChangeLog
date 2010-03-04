@@ -2,6 +2,17 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- What's New block now uses <ul> class list-new-articles for stories (Mark)
+- Modified LDAP class so filter variable is now a configuration option (Mark)
+- Media Gallery: Enable full screen playback with FlowPlayer by default (Mark)
+- Modified My Account block to use blockheader-list templates. Removed
+  the hard coded <ul> / </ul> in code.  (Mark)
+- Added new block option: login_block, admin can now specify custom block
+  template for login block (see theme's functions.php) (Mark)
+- Calendar: Add configuration option to select which blocks display (Mark)
+- FileMgmt: Add configuration option to select which blocks display (Mark)
+- Links: Add configuration option to select which blocks display (Mark)
+- Polls: Add configuration option to select which blocks display (Mark)
 - New BBCode editor API (Mark)
 - New Environment Check option in Command & Control Screen. Removed PHP info
   link from MG admin screen (Mark)

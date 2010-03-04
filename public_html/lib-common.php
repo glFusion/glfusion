@@ -4424,17 +4424,14 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
     $topicsql = '';
     if(( $_CONF['hidenewstories'] == 0 ) || ( $_CONF['hidenewcomments'] == 0 )
             || ( $_CONF['trackback_enabled']
-            && ( $_CONF['hidenewtrackbacks'] == 0 )))
-    {
+            && ( $_CONF['hidenewtrackbacks'] == 0 ))) {
         $topicsql = COM_getTopicSql ('AND', 0, $_TABLES['stories']);
     }
 
-    if( $_CONF['hidenewstories'] == 0 )
-    {
+    if( $_CONF['hidenewstories'] == 0 ) {
         $archsql = '';
         $archivetid = DB_getItem( $_TABLES['topics'], 'tid', "archive_flag=1" );
-        if( !empty( $archivetid ))
-        {
+        if( !empty( $archivetid )) {
             $archsql = " AND (tid <> '" . addslashes( $archivetid ) . "')";
         }
 
@@ -4444,42 +4441,42 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $result = DB_query( $sql );
         $nrows  = DB_numRows( $result );
 
-        if( empty( $title ))
-        {
+        if( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title', "name='whats_new_block'" );
         }
 
         // Any late breaking news stories?
         $retval .= '<h3>' . $LANG01[99] . '</h3>';
 
-        if( $nrows > 0 )
-        {
+        if( $nrows > 0 ) {
             $newmsg = COM_formatTimeString( $LANG_WHATSNEW['new_string'],
                         $_CONF['newstoriesinterval'], $LANG01[11], $nrows);
 
-            if( $newstories && ( $page < 2 ))
-            {
+            if( $newstories && ( $page < 2 )) {
                 $retval .= $newmsg . '<br' . XHTML . '>';
-            }
-            else
-            {
-                $retval .= '<ul>';
+            } else {
+                $newstories = array();
                 while ($A=DB_fetchArray($result)) {
-                    $retval .= '<li>' . COM_createLink(COM_truncate($A['title'],$_CONF['title_trim_length'] ,'...'),
-                        COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']),array('title' => htmlspecialchars($A['title'],ENT_COMPAT,COM_getEncodingt()))) . '</li>';
+                    $title = COM_undoSpecialChars( $A['title'] );
+                    $title = str_replace('&nbsp;',' ',$title);
+                    $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
+                    if( $title != $titletouse ) {
+                        $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
+                    } else {
+                        $attr = array();
+                    }
+                    $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
+                    $newstories[] = COM_createLink($titletouse,$url,$attr);
                 }
-                $retval .= '</ul>';
+                $retval .= COM_makeList( $newstories, 'list-new-articles' );
             }
-        }
-        else
-        {
+        } else {
             $retval .= $LANG01[100] . '<br' . XHTML . '>';
         }
 
         if(( $_CONF['hidenewcomments'] == 0 ) || ( $_CONF['trackback_enabled']
                 && ( $_CONF['hidenewtrackbacks'] == 0 ))
-                || ( $_CONF['hidenewplugins'] == 0 ))
-        {
+                || ( $_CONF['hidenewplugins'] == 0 )) {
             $retval .= '<br' . XHTML . '>';
         }
     }
@@ -4551,16 +4548,15 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         } else {
             $retval .= $LANG01[86] . '<br' . XHTML . '>' . LB;
         }
-        if(( $_CONF['hidenewplugins'] == 0 )
+
+        if (( $_CONF['hidenewplugins'] == 0 )
                 || ( $_CONF['trackback_enabled']
-                && ( $_CONF['hidenewtrackbacks'] == 0 )))
-        {
+                && ( $_CONF['hidenewtrackbacks'] == 0 ))) {
             $retval .= '<br' . XHTML . '>';
         }
     }
 
-    if( $_CONF['trackback_enabled'] && ( $_CONF['hidenewtrackbacks'] == 0 ))
-    {
+    if( $_CONF['trackback_enabled'] && ( $_CONF['hidenewtrackbacks'] == 0 )) {
         $retval .= '<h3>' . $LANG01[114] . ' <small>'
                 . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
                                         $_CONF['newtrackbackinterval'] )
@@ -4570,12 +4566,10 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $result = DB_query( $sql );
 
         $nrows = DB_numRows( $result );
-        if( $nrows > 0 )
-        {
+        if( $nrows > 0 ) {
             $newcomments = array();
 
-            for( $i = 0; $i < $nrows; $i++ )
-            {
+            for( $i = 0; $i < $nrows; $i++ ) {
                 $titletouse = '';
                 $A = DB_fetchArray( $result );
 
@@ -4584,19 +4578,14 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
                 $title = COM_undoSpecialChars( stripslashes( $A['title'] ));
                 $title = str_replace('&nbsp;',' ',$title);
-                $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
-                                            '...' );
+                $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
 
-                if( $title != $titletouse )
-                {
+                if( $title != $titletouse ) {
                     $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                }
-                else
-                {
+                } else {
                     $attr = array();
                 }
-                if( $A['count'] > 1 )
-                {
+                if( $A['count'] > 1 ) {
                     $titletouse .= ' [+' . $A['count'] . ']';
                 }
 
@@ -4604,38 +4593,29 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             }
 
             $retval .= COM_makeList( $newcomments, 'list-new-trackbacks' );
-        }
-        else
-        {
+        } else {
             $retval .= $LANG01[115] . '<br' . XHTML . '>' . LB;
         }
-        if( $_CONF['hidenewplugins'] == 0 )
-        {
+
+        if( $_CONF['hidenewplugins'] == 0 ) {
             $retval .= '<br' . XHTML . '>';
         }
     }
 
-    if( $_CONF['hidenewplugins'] == 0 )
-    {
+    if( $_CONF['hidenewplugins'] == 0 ) {
         list( $headlines, $smallheadlines, $content ) = PLG_getWhatsNew();
         $plugins = count( $headlines );
-        if( $plugins > 0 )
-        {
-            for( $i = 0; $i < $plugins; $i++ )
-            {
+        if( $plugins > 0 ) {
+            for( $i = 0; $i < $plugins; $i++ ) {
                 $retval .= '<h3>' . $headlines[$i] . ' <small>'
                         . $smallheadlines[$i] . '</small></h3>';
-                if( is_array( $content[$i] ))
-                {
+                if( is_array( $content[$i] )) {
                     $retval .= COM_makeList( $content[$i], 'list-new-plugins' );
-                }
-                else
-                {
+                } else {
                     $retval .= $content[$i];
                 }
 
-                if( $i + 1 < $plugins )
-                {
+                if( $i + 1 < $plugins ) {
                     $retval .= '<br' . XHTML . '>';
                 }
             }
