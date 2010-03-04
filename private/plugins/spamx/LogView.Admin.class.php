@@ -9,15 +9,25 @@
  *
  * Licensed under GNU General Public License
  *
- * $Id$
+ * @package Spam-X
+ * @subpackage Modules
  */
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-require_once($_CONF['path'] . 'plugins/spamx/BaseAdmin.class.php');
+/**
+* Include Abstract Base Class
+*/
+require_once $_CONF['path'] . 'plugins/spamx/BaseAdmin.class.php';
 
+/**
+* LogView class
+*
+* @package Spam-X
+*
+*/
 class LogView extends BaseAdmin {
     /**
      * Constructor

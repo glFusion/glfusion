@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -48,7 +48,7 @@ require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
 require_once $_CONF['path'] . 'plugins/forum/debug.php';  // Common Debug Code
 require_once $_CONF['path'] . 'lib/bbcode/stringparser_bbcode.class.php';
 
-function gf_FormatForPrint( $str, $postmode='html' ) {
+function gf_FormatForPrint( $str, $postmode='html', $status ) {
     global $CONF_FORUM;
 
     // Handle Pre ver 2.5 quoting and New Line Formatting - consider adding this to a migrate function
@@ -64,7 +64,7 @@ function gf_FormatForPrint( $str, $postmode='html' ) {
         $str = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$str);
     }
 
-    $str = gf_formatTextBlock($str,$postmode,'preview');
+    $str = gf_formatTextBlock($str,$postmode,'preview',$status);
 
     $str = str_replace('{','&#123;',$str);
     $str = str_replace('}','&#125;',$str);
@@ -127,7 +127,7 @@ $A["name"] = @htmlspecialchars($A["name"],ENT_QUOTES,COM_getEncodingt());
 $A["subject"] = COM_checkWords($A["subject"]);
 $A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,COM_getEncodingt()));
 
-$A['comment'] = gf_FormatForPrint( $A['comment'], $A['postmode'] );
+$A['comment'] = gf_FormatForPrint( $A['comment'], $A['postmode'],'',$A['status'] );
 
 $date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
 echo"

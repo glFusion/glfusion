@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // |                                                                          |
 // | Based on the Geeklog CMS                                                 |
-// | Copyright (C) 2004-2008 by the following authors:                        |
+// | Copyright (C) 2004-2010 by the following authors:                        |
 // |                                                                          |
 // | Authors      Tom Willett     tomw AT pigstye DOT net                     |
 // |              Dirk Haun       dirk AT haun-online DOT de                  |
@@ -48,7 +48,7 @@ if (file_exists($langfile)) {
     include_once $plugin_path . 'language/english.php';
 }
 
-/*
+/**
 * Check and see if we need to load the plugin configuration
 */
 if (!isset($_SPX_CONF['timeout'])) {
@@ -65,13 +65,15 @@ require_once $_CONF['path'].'plugins/spamx/spamx.php';
 // +---------------------------------------------------------------------------+
 
 /**
- * Shows the statistics for the plugin on stats.php.  If
- * $showsitestats is 1 then we are to only print the overall stats in the 'site
- * statistics' box otherwise we show the detailed stats for the plugin
- *
- * @param   int     $showsitestats  Flag to let us know which stats to get
- * @return  string  returns formatted HTML to insert in stats page
- */
+* Shows the statistics for the plugin on stats.php.  If $showsitestats is 1
+* then we are to only print the overall stats in the 'site statistics' box
+* otherwise we show the detailed stats for the plugin
+*
+* @param    int     $showsitestats  Flag to let us know which stats to get
+* @return   string  returns formatted HTML to insert in stats page
+* @see      plugin_statssummary_spamx
+*
+*/
 function plugin_showstats_spamx($showsitestats)
 {
     global $_CONF, $_TABLES, $LANG_SX00;
@@ -111,6 +113,7 @@ function plugin_showstats_spamx($showsitestats)
 * New stats plugin API function for proper integration with the site stats
 *
 * @return   array(item text, item count);
+* @see      plugin_showstats_spamx
 *
 */
 function plugin_statssummary_spamx ()

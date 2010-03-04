@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -239,6 +239,41 @@ class upload
         $this->_debugMessages[$nmsgs] = $debugText;
         if ($this->loggingEnabled()) {
             $this->_logItem('Debug',$debugText);
+        }
+    }
+
+
+    /**
+    * Adds PHP upload error
+    *
+    * @access   private
+    * @param    int       $error      PHP returned error code
+    *
+    */
+    function _uploadError($error)
+    {
+        switch ( $error ) {
+            case UPLOAD_ERR_INI_SIZE :
+                $this->_addError('The uploaded file exceeds the upload_max_filesize directive in php.ini.');
+                break;
+            case UPLOAD_ERR_FORM_SIZE :
+                $this->_addError('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.');
+                break;
+            case UPLOAD_ERR_PARTIAL :
+                $this->_addError('The uploaded file was only partially uploaded.');
+                break;
+            case UPLOAD_ERR_NO_FILE :
+                $this->_addError('No file was uploaded.');
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR :
+                $this->_addError('Missing a temporary folder.');
+                break;
+            case UPLOAD_ERR_CANT_WRITE :
+                $this->_addError('Failed to write file to disk.');
+                break;
+            default :
+                $this->_addError('Unknown error uploading file.');
+                break;
         }
     }
 
@@ -1118,11 +1153,15 @@ class upload
                             return false;
                         }
                     }
+                } else {
+                    if ( $error != UPLOAD_ERR_NO_FILE ) {
+                        $this->_uploadError($error);
+                    }
                 }
                 $this->_imageIndex++;
             }
         } else {
-            if ( $this->_filesToUpload['name'] != '' ) {
+            if ( $this->_filesToUpload['name'] != '' && $this->_filesToUpload['error'] == UPLOAD_ERR_OK ) {
                 $this->_currentFile['name'] = $this->_filesToUpload["name"];
                 $this->_currentFile['tmp_name'] = $this->_filesToUpload["tmp_name"];
                 $this->_currentFile['type'] = $this->_filesToUpload["type"];
@@ -1151,7 +1190,10 @@ class upload
                         return false;
                     }
                 }
+            } else {
+                $this->_uploadError($this->_filesToUpload['error']);
             }
+
         }
         // This function returns false if any errors were encountered
         if ($this->areErrors()) {

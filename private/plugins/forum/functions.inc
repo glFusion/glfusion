@@ -82,6 +82,7 @@ if ( !isset($CONF_FORUM['enable_user_rating_system']) ) {
 }
 
 $CONF_FORUM['topic_order'] = 'ASC';
+$CONF_FORUM['allow_wysiwyg_editor'] = $CONF_FORUM['use_wysiwyg_editor'];
 
 if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
     $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} where uid = '{$_USER['uid']}'",1);
@@ -96,6 +97,9 @@ if ( !empty($_USER['uid']) && $_USER['uid'] > 1 ) {
         $CONF_FORUM['show_anonymous_posts']       = $userprefs['viewanonposts'];
         $CONF_FORUM['notify_once']                = $userprefs['notify_once'];
         $CONF_FORUM['topic_order']                = $userprefs['topic_order'];
+        if ( $CONF_FORUM['use_wysiwyg_editor'] == 1 && isset($userprefs['use_wysiwyg_editor'])) {
+            $CONF_FORUM['use_wysiwyg_editor'] = $userprefs['use_wysiwyg_editor'];
+        }
     }
 }
 $CONF_FORUM['use_glfilter'] = 1; // always use the filter...
@@ -603,7 +607,7 @@ function plugin_getfeedcontent_forum ($feed, &$link, &$update)
             $comment = preg_replace("/\[QUOTE\sBY=(.+?)\]/i","[QUOTE] Quote by $1:",$comment);
         }
 
-        $comment = gf_formatTextBlock($comment,$A['postmode'],'preview');
+        $comment = gf_formatTextBlock($comment,$A['postmode'],'preview',$A['status']);
 
         // we don't have a stylesheet in the news feed, so replace our div with the style...
         $comment = str_replace('<div class="quotemain">','<div style="border: 1px dotted #000;border-left: 4px solid #8394B2;color:#465584;  padding: 4px;  margin: 5px auto 8px auto;">',$comment);
@@ -775,7 +779,7 @@ function forum_xchsmilies($message,$reverse=false) {
 }
 
 
-function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
+function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='',$noprint = 0) {
     global $_CONF,$_TABLES,$_USER,$LANG_GF02,$CONF_FORUM;
 
     if ($prompt=="") {
@@ -801,8 +805,13 @@ function forum_statusMessage($message='',$url,$prompt,$post=false,$forum='') {
         $statusmsg->set_var ('prompt',$prompt);
     }
     $statusmsg->parse ('output', 'statusmsg');
-    echo $statusmsg->finish ($statusmsg->get_var('output'));
 
+    $retval = $statusmsg->finish ($statusmsg->get_var('output'));
+
+    if ( $noprint ) {
+        return $retval;
+    }
+    echo $retval;
     return;
 }
 
@@ -1129,7 +1138,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             if (empty ($A['last_reply_rec']) || $A['last_reply_rec'] < 1) {
                 $lastid = $A['id'];
 
-                $testText = gf_formatTextBlock($A['comment'],'text','noquote');
+                $testText = gf_formatTextBlock($A['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
                 $html2txt = new html2text(addslashes($testText),false);
                 $testText = trim($html2txt->get_text());
@@ -1158,7 +1167,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
                 } else {
                     $topicinfo .= sprintf($LANG_GF01['LASTREPLYBY'],$B['name']);
                 }
-                $testText = gf_formatTextBlock($B['comment'],'text','noquote');
+                $testText = gf_formatTextBlock($B['comment'],'text','noquote',$A['status']);
                 $testText = strip_tags($testText);
                 $html2txt = new html2text(addslashes($testText),false);
                 $testText = trim($html2txt->get_text());
@@ -1199,6 +1208,157 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $block->parse ('output', 'block');
         $retval .= $block->finish ($block->get_var ('output'));
         CACHE_create_instance($cacheInstance, $retval, 0);
+    }
+
+    return $retval;
+}
+
+
+/**
+* Return information for a forum topic
+*
+* @param    string  $id         topic id or *
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES, $LANG_GF00;
+
+    $properties = explode(',', $what);
+    $fields = array();
+    foreach ($properties as $p) {
+        switch ($p) {
+            case 'date-modified':
+                $fields[] = 'UNIX_TIMESTAMP(a.date) AS unixdate';
+                break;
+            case 'description':
+            case 'excerpt':
+            case 'raw-description' :
+                $fields[] = 'a.comment';
+                break;
+            case 'id':
+                $fields[] = 'a.id';
+                break;
+            case 'title':
+                $fields[] = 'a.subject';
+                break;
+            case 'label':
+            case 'url':
+                $fields[] = 'a.id';
+                break;
+            default:
+                break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+        return $retval;
+    }
+
+    require_once $_CONF['path'] . 'plugins/forum/include/gf_format.php';
+
+    if ($id == '*') {
+        $where = '';
+        $permOp = '';
+    } else {
+        $where = " WHERE id = '" . addslashes($id) . "'";
+        $permOp = ' AND ';
+    }
+
+    $groups = array ();
+    $usergroups = SEC_getUserGroups();
+    foreach ($usergroups as $group) {
+        $groups[] = $group;
+    }
+    $grouplist = implode(',',$groups);
+
+    $sql  = "SELECT " . implode(',', $fields) . ",a.pid,a.postmode, a.status ";
+    $sql .= "FROM {$_TABLES['gf_topic']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON a.forum=b.forum_id ";
+    $sql .= $where . $permOp . "b.grp_id IN ($grouplist)";
+
+    if ($id != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+                case 'date-modified':
+                    $props['date-modified'] = $A['unixdate'];
+                    break;
+                case 'description':
+                case 'excerpt':
+                    $prop[$p] = gf_formatTextBlock($A['comment'],$A['postmode'],'noquote',$A['status']);
+                    break;
+                case 'raw-description' :
+                    $props[$p] = $A['comment'];
+                    break;
+                case 'id':
+                    $props['id'] = $A['id'];
+                    break;
+                case 'title':
+                    $props['title'] = strip_tags($A['subject']);
+                    break;
+                case 'url':
+                    if ( !empty($A['id']) ) {
+                        $id = $A['id'];
+                    }
+                    if ( $A['pid'] == 0 ) {
+                        $props['url'] = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$id;
+                    } else {
+                        $props['url'] = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$A['pid'].'&amp;topic='.$id.'#'.$id;
+                    }
+                    break;
+                case 'label':
+                    $props['label'] = $LANG_GF00['pluginlabel'];
+                    break;
+                case 'status':
+                    $props['status'] = 1; // stub - default
+                    break;
+                default:
+                    $props[$p] = '';
+                    break;
+            }
+        }
+
+        $mapped = array();
+        if ( is_array($props) ) {
+            foreach ($props as $key => $value) {
+                if ($id == '*') {
+                    if ($value != '') {
+                        $mapped[$key] = $value;
+                    }
+                } else {
+                    $mapped[$key] = $value;
+                }
+            }
+        }
+
+        if ($id == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($id != '*') && (count($retval) == 1)) {
+        $retval = $retval[0];
     }
 
     return $retval;
@@ -1378,11 +1538,22 @@ function forumPLG_restoreEmoticons($str) {
     }
 }
 
-function forumPLG_getPMlink($member) {
+function forumPLG_getPMlink($member,$uid=0) {
     global $_TABLES,$_CONF, $_PLUGINS;
 
+    static $blockArray = array();
+
     if (in_array('pm', $_PLUGINS)) {
-        return "{$_CONF['site_url']}/pm/compose.php?mode=new&amp;username={$member};";
+        if ( !isset($blockArray[$member]) ) {
+            if ( $uid == 0 ) {
+                $uid = DB_getItem($_TABLES['users'],'uid','username="'.addslashes($member).'"');
+            }
+            $block = DB_getItem($_TABLES['pm_userprefs'],'block','uid='.$uid);
+            $blockArray[$member] = intval($block);
+        }
+        if ( $blockArray[$member] == 0 ) {
+            return "{$_CONF['site_url']}/pm/compose.php?mode=new&amp;username={$member};";
+        }
     }
     if (DB_getItem($_TABLES['plugins'],'pi_enabled',"pi_name='messenger'") == 1) {
         return "{$_CONF['site_url']}/messenger/index.php?action=newpm&amp;toname={$member};";
@@ -1492,7 +1663,7 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     }
 
     if ( $panel == 'userinfo' && $fieldset == 'personalinfo' && $CONF_FORUM['bbcode_signature'] ) {
-        $signature = DB_getItem($_TABLES['gf_userinfo'],'signature','uid='.$_USER['uid']);
+        $signature = DB_getItem($_TABLES['gf_userinfo'],'signature','uid='.$uid);
         return GF_sigEditorProfile($signature);
     }
 
@@ -1501,13 +1672,13 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     }
 
     // Get user specific settings from database
-    $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid='{$_USER['uid']}'");
+    $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid=$uid");
     $nrows = DB_numRows($result);
 
     if ($nrows == 0) {
         // Insert a new blank record. Defaults are set in SQL Defintion for table.
-        DB_query("INSERT INTO {$_TABLES['gf_userprefs']} (uid) VALUES ('{$_USER['uid']}')");
-        $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid='{$_USER['uid']}'");
+        DB_query("INSERT INTO {$_TABLES['gf_userprefs']} (uid) VALUES ($uid)");
+        $result = DB_query("SELECT * FROM {$_TABLES['gf_userprefs']} WHERE uid=$uid");
     }
 
     $A = DB_fetchArray($result);
@@ -1566,12 +1737,23 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     $usersettings->set_var('lang_forumprefs_help_title',$LANG_GF92['forumprefs_help_title']);
     $usersettings->set_var('lang_forumprefs_help', $LANG_GF92['forumprefs_help']);
 
-    $usersettings->set_var('lang_topic_order','Topic Order');
+    $usersettings->set_var('lang_topic_order',$LANG_GF92['topic_order']);
     $to_select =  '<select name="topic_order">';
-    $to_select .= '<option value="ASC" '.($A['topic_order'] == 'ASC' ? ' selected="selected"' : '').'>'.'Ascending'.'</option>';
-    $to_select .= '<option value="DESC" '.($A['topic_order'] == 'DESC' ? ' selected="selected"' : '').'>'.'Descending'.'</option>';
+    $to_select .= '<option value="ASC" '.($A['topic_order'] == 'ASC' ? ' selected="selected"' : '').'>'.$LANG_GF92['ascending'].'</option>';
+    $to_select .= '<option value="DESC" '.($A['topic_order'] == 'DESC' ? ' selected="selected"' : '').'>'.$LANG_GF92['descending'].'</option>';
     $to_select .= '</select>';
     $usersettings->set_var('topic_order_select',$to_select);
+
+    if ( $CONF_FORUM['allow_wysiwyg_editor'] && $CONF_FORUM['post_htmlmode']) {
+        $usersettings->set_var('lang_use_wysiwyg',$LANG_GF92['editor_type']);
+        $wysiwyg_select = '<select name="use_wysiwyg_editor">';
+        $wysiwyg_select .= '<option value="0" '.($A['use_wysiwyg_editor'] == 0 ? ' selected="selected"' : '').'>'.$LANG_GF92['bbcode'].'</option>';
+        $wysiwyg_select .= '<option value="1" '.($A['use_wysiwyg_editor'] == 1 ? ' selected="selected"' : '').'>'.$LANG_GF92['wysiwyg'].'</option>';
+        $wysiwyg_select .= '</select>';
+        $usersettings->set_var('wysiwyg_select',$wysiwyg_select);
+    } else {
+        $usersettings->set_var('wysiwyg_select','');
+    }
 
     $usersettings->parse ('output', 'usersettings');
     $retval .= $usersettings->finish($usersettings->get_var('output'));
@@ -1579,13 +1761,20 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
     return $retval;
 }
 
-function plugin_profilesave_forum( )
+function plugin_profilesave_forum($uid = 0 )
 {
     global $_CONF, $_TABLES, $CONF_FORUM, $_USER;
 
     if ( COM_isAnonUser() ) {
         return;
     }
+
+    if ( $uid == 0 ) {
+        $uid = $_USER['uid'];
+    } else {
+        $uid = intval($uid);
+    }
+
 
     $xtopicsperpage     = intval(COM_applyFilter($_POST['xtopicsperpage'],true));
     $xpostsperpage      = intval(COM_applyFilter($_POST['xpostsperpage'],true));
@@ -1601,6 +1790,7 @@ function plugin_profilesave_forum( )
     $notifyfull         = isset($_POST['notifyfull']) && $_POST['notifyfull'] == 'on' ? 1 : 0;
     $xshowiframe        = isset($_POST['xshowiframe']) && $_POST['xshowiframe'] == 'on' ? 1 : 0;
     $topic_order        = isset($_POST['topic_order']) ? COM_applyFilter($_POST['topic_order']) : 'ASC';
+    $wysiwyg_editor     = isset($_POST['use_wysiwyg_editor']) ? COM_applyFilter($_POST['use_wysiwyg_editor'],true) : 0;
 
     if ( $topic_order != 'ASC' && $topic_order != 'DESC' ) {
         $topic_order = 'ASC';
@@ -1618,8 +1808,8 @@ function plugin_profilesave_forum( )
         notify_once='$xnotifyonce',
         notify_full='$notifyfull',
         showiframe='$xshowiframe',
-        topic_order='$topic_order'
-     WHERE uid='{$_USER['uid']}'");
+        topic_order='$topic_order',
+        use_wysiwyg_editor=$wysiwyg_editor WHERE uid=$uid");
 
 
     if ( isset($_POST['signature'] ) ){
@@ -1627,13 +1817,13 @@ function plugin_profilesave_forum( )
 
         // see if user already has a preference record...
         // Get user specific settings from database
-        $result = DB_query("SELECT * FROM {$_TABLES['gf_userinfo']} WHERE uid={$_USER['uid']}");
+        $result = DB_query("SELECT * FROM {$_TABLES['gf_userinfo']} WHERE uid=$uid");
         $nrows = DB_numRows($result);
         if ($nrows == 0) {
             // Insert a new blank record. Defaults are set in SQL Defintion for table.
-            DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('{$_USER['uid']}',0,'')");
+            DB_query("INSERT INTO {$_TABLES['gf_userinfo']} (uid,rating,signature) VALUES ('$uid',0,'')");
         }
-        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".addslashes($signature)."' WHERE uid=".$_USER['uid'];
+        $sql = "UPDATE {$_TABLES['gf_userinfo']} SET signature='".addslashes($signature)."' WHERE uid=".$uid;
         DB_query($sql);
     }
 }

@@ -166,6 +166,7 @@ $LANG_confignames['filemgmt'] = array(
     'numsubcategories2show' => 'Sub Categories per Row',
     'outside_webroot'       => 'Store Files Outside Web Root',
     'enable_rating'         => 'Enable Ratings',
+    'displayblocks'         => 'Display glFusion Blocks',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Main Settings'
@@ -177,11 +178,12 @@ $LANG_fs['filemgmt'] = array(
     'fm_access'             => 'FileMgmt Access Control',
     'fm_general'            => 'FileMgmt General Settings',
 );
-// Note: entries 0, 1, and 12 are the same as in $LANG_configselects['Core']
+// Note: entries 0, 1 are the same as in $LANG_configselects['Core']
 $LANG_configselects['filemgmt'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
     2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
+    3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 

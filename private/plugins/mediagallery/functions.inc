@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2009 by the following authors:                        |
+// | Copyright (C) 2002-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -1703,7 +1703,7 @@ function plugin_autotags_mediagallery ($op, $content = '', $autotag = '') {
                     $newwidth = $width;
                     $newheight = $height;
                 }
-                $album_image = '<img src="' . $tnImage . '" ' . $alttag . 'style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;"' . XHTML . '>';
+                $album_image = '<img src="' . $tnImage . '" ' . $alttag . ' style="width:' . $newwidth . 'px;height:' . $newheight . 'px;border:none;"' . XHTML . '>';
 
                 $tagtext = $album_image;
                 if ( $linkID == 0 ) {
@@ -3610,6 +3610,144 @@ function plugin_canuserrate_mediagallery($item_id, $uid)
         return false;
     }
     return true;
+}
+
+
+/**
+* Return information for a media item
+*
+* @param    string  $id         media id or *
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES, $MG_albums, $_MG_CONF, $LANG_MG00;
+
+    $properties = explode(',', $what);
+    $fields = array();
+    foreach ($properties as $p) {
+        switch ($p) {
+            case 'date-modified':
+                $fields[] = 'UNIX_TIMESTAMP(media_upload_time) AS unixdate';
+                break;
+            case 'description':
+            case 'excerpt':
+            case 'raw-description' :
+                $fields[] = 'media_desc';
+                break;
+            case 'id':
+                $fields[] = 'a.media_id';
+                break;
+            case 'title':
+                $fields[] = 'media_title';
+                break;
+            case 'label':
+            case 'url':
+                $fields[] = 'a.media_id';
+                break;
+            default:
+                break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+
+        return $retval;
+    }
+
+    if ($id == '*') {
+        $where = '';
+        $permOp = '';
+    } else {
+        $where = " WHERE a.media_id = '" . addslashes($id) . "'";
+        $permOp = '';
+    }
+    $sql = "SELECT " . implode(',', $fields)
+            . ",album_id FROM {$_TABLES['mg_media']} a LEFT JOIN {$_TABLES['mg_media_albums']} b ON a.media_id=b.media_id " . $where;
+    if ($id != '*') {
+        $sql .= ' LIMIT 1';
+    }
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $aid = $A['album_id'];
+        if ( $MG_albums[$aid]->access > 0 ) {
+            $props = array();
+            foreach ($properties as $p) {
+                switch ($p) {
+                    case 'date-modified':
+                        $props['date-modified'] = $A['unixdate'];
+                        break;
+                    case 'description':
+                    case 'excerpt':
+                        $prop[$p] = PLG_replaceTags($A['media_desc']);
+                        break;
+                    case 'raw-description' :
+                        $props[$p] = $A['media_desc'];
+                        break;
+                    case 'id':
+                        $props['id'] = $A['media_id'];
+                        break;
+                    case 'title':
+                        $props['title'] = stripslashes($A['media_title']);
+                        break;
+                    case 'url':
+                        if (empty($A['id'])) {
+                            $props['url'] = COM_buildUrl($_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$id);
+                        } else {
+                            $props['url'] = COM_buildUrl($_MG_CONF['site_url'].'/media.php?f=0&amp;sort=0&amp;s='.$A['media_id']);
+                        }
+                        break;
+                    case 'label':
+                        $props['label'] = $LANG_MG00['menulabel'];
+                        break;
+                    case 'status':
+                        $props['status'] = 1; // stub - default
+                        break;
+                    default:
+                        $props[$p] = '';
+                        break;
+                }
+            }
+        }
+
+        $mapped = array();
+        if ( is_array($props) ) {
+            foreach ($props as $key => $value) {
+                if ($id == '*') {
+                    if ($value != '') {
+                        $mapped[$key] = $value;
+                    }
+                } else {
+                    $mapped[$key] = $value;
+                }
+            }
+        }
+
+        if ($id == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($id != '*') && (count($retval) == 1)) {
+        $retval = $retval[0];
+    }
+
+    return $retval;
 }
 
 ?>

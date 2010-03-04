@@ -2,8 +2,8 @@
     <id>polls</id>
     <name>Polls</name>
     <description>Online Poll System</description>
-    <version>2.1.0</version>
-    <glfusionversion>1.1.8</glfusionversion>
+    <version>2.1.1</version>
+    <glfusionversion>1.1.9</glfusionversion>
     <phpversion>4.3.0</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>

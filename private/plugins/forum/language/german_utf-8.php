@@ -302,6 +302,11 @@ $LANG_GF01 = array(
     'edit_signature' => 'Bearbeite BBcode-Signatur',
     'signature_preview' => 'Signatur-Vorschau',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
+    /* --- topic features --- */
+    'disable_bbcode' => 'Disable BBCode:',
+    'disable_smilies' => 'Disable Smilies:',
+    'disable_urlparse' => 'Do not parse URLs:',
+    'features' => 'Features:',
 );
 
 $LANG_GF02 = array(
@@ -526,7 +531,14 @@ $LANG_GF03 = array(
     'lockedpost' => 'Antwortbeitrag hinzufügen',
     'splitheading' => 'Aufteilen-Option:',
     'splitopt1' => 'Alle Beiträge von diesem Punkt an verschieben',
-    'splitopt2' => 'Nur diesen Beitrag verschieben'
+    'splitopt2' => 'Nur diesen Beitrag verschieben',
+    'merge_post'  => 'Merge Post',
+    'merge_topic' => 'Merge Topic',
+    'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
+    'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
+    'select'    => 'Select',
+    'select_forum' => 'Select Forum Topic',
+    'destination_topic' => 'Destination Topic ID:',
 );
 
 $LANG_GF04 = array(
@@ -723,7 +735,13 @@ $LANG_GF92 = array(
     'edit_timewindowdscp' => 'Erlaubte Zeit (Min.), um Mitgliedern das Bearbeiten ihrer Beiträge zu ermöglichen',
     'forum_prefs' => 'Forum-Präferenzen',
     'forumprefs_help_title' => 'Forum-Präferenzen: Hilfe',
-    'forumprefs_help' => 'Forum-Plugin: Benutzerpräferenzen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>'
+    'forumprefs_help' => 'Forum-Plugin: Benutzerpräferenzen ändern.<ul><li>Anzahl der Themen beim Anzeigen des Forenindex.</li><li>Anzahl der Beiträge die je Seite angezeigt werden.</li><li>Anzahl der Beiträge, bevor ein Thema als beliebt eingestuft wird.</li><li>Anzahl der Zeilen, die in den Suchergebnissen angezeigt werdens.</li><li>Für die Mitgliederliste</li><li>Verstecke Beiträge von Gästen.</li><li>Auto-Benachrichtigungen aktivieren.</li><li>Nur eine Benachrichtigung senden.</li><li>Beim Antworten, zeige Themenvorschau (iframe) unten.</li></ul>',
+    'topic_order' => 'Topic Order',
+    'editor_type' => 'Editor Type',
+    'bbcode'    => 'BBCode',
+    'wysiwyg'   => 'WYSIWYG',
+    'ascending' => 'Ascending',
+    'descending' => 'Descending',
 );
 
 $LANG_GF93 = array(
@@ -960,7 +978,10 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Max. Größe für Anhänge (Bytes)',
     'enable_user_rating_system' => 'Aktiviere Benutzer-Bewertungssystem',
     'bbcode_signature' => 'Aktiviere BBcode-Signatur',
-    'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor aktivieren'
+    'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor aktivieren',
+    'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
+    'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -983,7 +1004,8 @@ $LANG_configselects['forum'] = array(
     2 => array('Auf Seite oben' => 1, 'Nach Hauptartikel' => 2, 'Auf Seite unten' => 3),
     3 => array('Keine Blöcke' => 'noblocks', 'Linke Blöcke' => 'leftblocks', 'Rechte Blöcke' => 'rightblocks'),
     4 => array('Blockmenü' => 'blockmenu', 'Navigation' => 'navbar', 'Keine' => 'none'),
-    5 => array('Absteigend' => 'DESC', 'Aufsteigend' => 'ASC')
+    5 => array('Absteigend' => 'DESC', 'Aufsteigend' => 'ASC'),
+    6 => array('Checked' => 1, 'Unchecked' => 0)
 );
 
 ?>

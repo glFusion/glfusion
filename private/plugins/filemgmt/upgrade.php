@@ -109,6 +109,7 @@ function filemgmt_upgrade()
         case '1.7.6' :
             $c = config::get_instance();
             $c->add('enable_rating', 1,'select',0, 2, 0, 35, true, 'filemgmt');
+            $c->add('displayblocks', 0,'select', 0, 0, 3, 115, true, 'filemgmt');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$CONF_FM['pi_version']."',pi_gl_version = '".$CONF_FM['gl_version']."' WHERE pi_name = 'filemgmt'");
             return true;

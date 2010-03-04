@@ -340,7 +340,7 @@ function processPluginUpload()
     if ( function_exists('set_time_limit') ) {
         @set_time_limit( 60 );
     }
-    if (!($tmp = io_mktmpdir())) {
+    if (!($tmp = _io_mktmpdir())) {
         return _pi_errorBox($LANG32[47]);
     }
 
@@ -576,7 +576,7 @@ function post_uploadProcess() {
         // determine where to copy them, first check to see if layout was defined in xml
         if ( isset($pluginData['layout']) && $pluginData['layout'] != '') {
             $destinationDir = $_CONF['path_html'] . 'layout/' . $pluginData['layout'] .'/';
-            io_mkdir_p($destinationDir);
+            fusion_io_mkdir_p($destinationDir);
         } else {
             $destinationDir = $_CONF['path_html'] . 'layout/nouveau/'.$pluginData['id'].'/';
         }
@@ -800,15 +800,14 @@ function pi_update ($pi_name)
 * @return   bool              True on success, false on fail
 *
 */
-function io_mktmpdir() {
+function _io_mktmpdir() {
     global $_CONF;
 
     $base = $_CONF['path_data'];
     $dir  = md5(uniqid(mt_rand(), true));
     $tmpdir = $base.$dir;
 
-    if(io_mkdir_p($tmpdir)) {
-//        return($tmpdir);
+    if(fusion_io_mkdir_p($tmpdir)) {
         return($dir);
     } else {
         return false;
@@ -822,14 +821,14 @@ function io_mktmpdir() {
 * @return   bool              True on success, false on fail
 *
 */
-function io_mkdir_p($target){
+function fusion_io_mkdir_p($target){
     global $_CONF;
 
     if (@is_dir($target)||empty($target)) return 1; // best case check first
 
     if (@file_exists($target) && !@is_dir($target)) return 0;
-    //recursion
-    if (io_mkdir_p(substr($target,0,strrpos($target,'/')))){
+
+    if (fusion_io_mkdir_p(substr($target,0,strrpos($target,'/')))){
         $ret = @mkdir($target,0755);
         @chmod($target, 0755);
         return $ret;
@@ -1040,7 +1039,7 @@ function _pi_dir_copy($srcdir, $dstdir )
     $fail = 0;
     $sizetotal = 0;
     $fifail = '';
-    if (!@is_dir($dstdir)) io_mkdir_p($dstdir);
+    if (!@is_dir($dstdir)) fusion_io_mkdir_p($dstdir);
     if ($curdir = @opendir($srcdir)) {
         while ($file = readdir($curdir)) {
             if ($file != '.' && $file != '..') {
@@ -1089,7 +1088,7 @@ function _pi_test_copy($srcdir, $dstdir)
     $failedFiles = array();
 
     if(!@is_dir($dstdir)) {
-        $rc = io_mkdir_p($dstdir);
+        $rc = fusion_io_mkdir_p($dstdir);
         if ($rc == false ) {
             $failedFiles[] = $dstdir;
             COM_errorLog("PLG-INSTALL: Error: Unable to create directory " . $dstdir);

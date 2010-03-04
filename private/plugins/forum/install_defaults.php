@@ -10,7 +10,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -451,6 +451,9 @@ function plugin_initconfig_forum()
                 0, 2, 0, 150, true, 'forum');
         $c->add('use_smilies_plugin', $_FF_DEFAULT['use_smilies_plugin'], 'select',
                 0, 2, 0, 160, true, 'forum');
+        $c->add('bbcode_disabled', 0, 'select', 0, 2, 6, 165, true, 'forum');
+        $c->add('smilies_disabled', 0, 'select', 0, 2, 6, 170, true, 'forum');
+        $c->add('urlparse_disabled', 0, 'select', 0, 2, 6, 175, true, 'forum');
 
         $c->add('ff_centerblock', NULL, 'fieldset', 0, 3, NULL, 0, true,
                 'forum');

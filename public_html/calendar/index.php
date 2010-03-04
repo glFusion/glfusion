@@ -50,7 +50,7 @@ $display = '';
 
 if (empty ($_USER['username']) &&
     (($_CONF['loginrequired'] == 1) || ($_CA_CONF['calendarloginrequired'] == 1))) {
-    $display .= COM_siteHeader('');
+    $display .= CALENDAR_siteHeader('');
     $display .= COM_startBlock ($LANG_LOGIN[1], '',
                                 COM_getBlockTemplate ('_msg_block', 'header'));
     $login = new Template($_CONF['path_layout'] . 'submit');
@@ -65,7 +65,7 @@ if (empty ($_USER['username']) &&
     $login->parse ('output', 'login');
     $display .= $login->finish ($login->get_var('output'));
     $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter();
+    $display .= CALENDAR_siteFooter();
     echo $display;
     exit;
 }
@@ -412,7 +412,7 @@ if ( isset($_POST['addevent']) || isset($_POST['addpersonalevent']) ) {
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     }
 
-    echo COM_siteHeader();
+    echo CALENDAR_siteHeader();
     if ( $slerror != '' ) {
         echo $slerror;
     } else {
@@ -422,14 +422,14 @@ if ( isset($_POST['addevent']) || isset($_POST['addpersonalevent']) ) {
             echo plugin_submit_calendar($mode);
         }
     }
-    echo COM_siteFooter();
+    echo CALENDAR_siteFooter();
     exit;
 }
 
 if ( isset($_POST['savecal']) ) {
-    echo COM_siteHeader();
+    echo CALENDAR_siteHeader();
     echo plugin_savesubmission_calendar($_POST);
-    echo COM_siteFooter();
+    echo CALENDAR_siteFooter();
     exit;
 }
 
@@ -438,9 +438,9 @@ if ($mode != 'personal' && $mode != 'quickadd') {
 }
 
 if ($mode == 'personal') {
-    $display .= COM_siteHeader ('menu', $LANG_CAL_1[42]);
+    $display .= CALENDAR_siteHeader ( $LANG_CAL_1[42]);
 } else {
-    $display .= COM_siteHeader ('menu', $LANG_CAL_1[41]);
+    $display .= CALENDAR_siteHeader ( $LANG_CAL_1[41]);
 }
 
 // Set mode back to master if user refreshes screen after their session expires
@@ -452,7 +452,7 @@ if ($mode == 'personal' AND $_CA_CONF['personalcalendars'] == 0) {
     // User is trying to use the personal calendar feature even though it isn't
     // turned on.
     $display .= $LANG_CAL_2[37];
-    $display .= COM_siteFooter();
+    $display .= CALENDAR_siteFooter();
     echo $display;
     exit;
 }
@@ -700,7 +700,7 @@ case 'day':
         $cal_templates->set_var('quickadd_form','');
     }
     $display .= $cal_templates->parse('output', 'dayview');
-    $display .= COM_siteFooter();
+    $display .= CALENDAR_siteFooter();
     break;
 
 case 'week':
@@ -883,7 +883,7 @@ case 'week':
     }
 
     $display .= $cal_templates->parse('output','week');
-    $display .= COM_siteFooter();
+    $display .= CALENDAR_siteFooter();
     break;
 
 default: // month view
@@ -1162,7 +1162,7 @@ $cal_templates->parse('add_event_option','addevent',true);
 $cal_templates->parse('output','calendar');
 $display .= $cal_templates->finish($cal_templates->get_var('output'));
 
-$display .= COM_siteFooter();
+$display .= CALENDAR_siteFooter();
 break;
 
 } // end switch

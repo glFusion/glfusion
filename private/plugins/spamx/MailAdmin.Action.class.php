@@ -9,7 +9,8 @@
  *
  * Licensed under GNU General Public License
  *
- * $Id$
+ * @package Spam-X
+ * @subpackage Modules
  */
 
 if (!defined ('GVERSION')) {
@@ -19,12 +20,15 @@ if (!defined ('GVERSION')) {
 /**
  * Include Abstract Action Class
  */
-require_once($_CONF['path'] . 'plugins/spamx/' . 'BaseCommand.class.php');
+require_once $_CONF['path'] . 'plugins/spamx/' . 'BaseCommand.class.php';
 
 /**
  * Action Class which emails the spam post to the site admin
+ * 
+ * @author Tom Willett  tomw@pigstye.net 
  *
- * @author Tom Willett  tomw@pigstye.net
+ * @package Spam-X
+ *
  */
 class MailAdmin extends BaseCommand {
     /**

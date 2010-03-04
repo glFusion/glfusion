@@ -853,12 +853,10 @@ function plugin_autotags_filemgmt ($op, $content = '', $autotag = '')
                 break;
             case 'file_download' :
                 if ( $target_window != '' ) {
-                    $url = COM_buildUrl ($_CONF['site_url'] . '/filemgmt/visit.php?lid='
-                                     . $file_id);
+                    $url = $_CONF['site_url'] . '/filemgmt/visit.php?lid='. $file_id;
                     $target = 'target="'.$target_window.'"';
                 } else {
-                    $url = COM_buildUrl ($_CONF['site_url'] . '/filemgmt/visit.php?lid='
-                                     . $file_id);
+                    $url = $_CONF['site_url'] . '/filemgmt/visit.php?lid='.$file_id;
                 }
                 break;
         }
@@ -905,5 +903,145 @@ function plugin_canuserrate_filemgmt($item_id, $uid)
         }
     }
     return true;
+}
+
+/**
+* Return information for a download
+*
+* @param    string  $id         file ID or '*'
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES, $LANG_FILEMGMT;
+
+    $properties = explode(',', $what);
+    $fields = array();
+    foreach ($properties as $p) {
+        switch ($p) {
+            case 'date-modified':
+                $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
+                break;
+            case 'description':
+            case 'excerpt':
+                $fields[] = 'description.description';
+                break;
+            case 'raw-description' :
+                $fields[] = 'description.description';
+                break;
+            case 'id':
+                $fields[] = 'detail.lid';
+                break;
+            case 'title':
+                $fields[] = 'detail.title';
+                break;
+            case 'label':
+            case 'url':
+            case 'status' :
+                $fields[] = 'detail.lid';
+                break;
+            default:
+                break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+
+        return $retval;
+    }
+
+    if ($id == '*') {
+        $where = '';
+        $permOp = 'WHERE ';
+    } else {
+        $where = " WHERE detail.lid = '" . addslashes($id) . "' ";
+        $permOp = 'AND';
+    }
+
+    $groupsql = filemgmt_buildAccessSql();
+
+    $sql = "SELECT " . implode(',', $fields)
+            . " FROM {$_TABLES['filemgmt_filedetail']} AS detail LEFT JOIN {$_TABLES['filemgmt_filedesc']} AS description "
+            . " ON detail.lid=description.lid LEFT JOIN {$_TABLES['filemgmt_cat']} b ON detail.cid=b.cid " . $where . $groupsql;
+    if ($id != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+                case 'date-modified':
+                    $props['date-modified'] = $A['unixdate'];
+                    break;
+                case 'description':
+                case 'excerpt':
+                    $props[$p] = PLG_replaceTags($A['description']);
+                    break;
+                case 'raw-description':
+                    $props[$p] = $A['description'];
+                    break;
+                case 'id':
+                    $props['id'] = $A['lid'];
+                    break;
+                case 'title':
+                    $props['title'] = $A['title'];
+                    break;
+                case 'url':
+                    if (empty($A['id'])) {
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/filemgmt/index.php?id=' . $id);
+                    } else {
+                        $props['url'] = COM_buildUrl($_CONF['site_url'].'/filemgmt/index.php?id=' . $A['lid']);
+                    }
+                    break;
+                case 'label':
+                    $props['label'] = $LANG_FILEMGMT['usermenu1'];
+                    break;
+                case 'status':
+                    $props['status'] = 1; // stub - default
+                    break;
+                default:
+                    $props[$p] = '';
+                    break;
+            }
+        }
+
+        $mapped = array();
+        foreach ($props as $key => $value) {
+            if ($sp_id == '*') {
+                if ($value != '') {
+                    $mapped[$key] = $value;
+                }
+            } else {
+                $mapped[$key] = $value;
+            }
+        }
+
+        if ($id == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($id != '*') && (count($retval) == 1)) {
+        $retval = $retval[0];
+    }
+
+    return $retval;
 }
 ?>

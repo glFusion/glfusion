@@ -82,14 +82,47 @@ while ($A = DB_fetchArray($result)) {
 * @todo     only supports functions without any parameters
 *
 */
-function PLG_callFunctionForAllPlugins($function_name)
+function PLG_callFunctionForAllPlugins($function_name, $args='')
 {
     global $_PLUGINS;
+
+    if (empty ($args)) {
+        $args = array ();
+    }
 
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_' . $function_name . '_' . $pi_name;
         if (function_exists($function)) {
-            $function();
+            // great, function exists, run it
+            switch (count($args)) {
+            case 0:
+                return $function();
+                break;
+            case 1:
+                return $function($args[1]);
+                break;
+            case 2:
+                return $function($args[1], $args[2]);
+                break;
+            case 3:
+                return $function($args[1], $args[2], $args[3]);
+                break;
+            case 4:
+                return $function($args[1], $args[2], $args[3], $args[4]);
+                break;
+            case 5:
+                return $function($args[1], $args[2], $args[3], $args[4], $args[5]);
+                break;
+            case 6:
+                return $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
+                break;
+            case 7:
+                return $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7]);
+                break;
+            default:
+                return $function($args);
+                break;
+            }
         }
     }
     $function = 'CUSTOM_' . $function_name;
@@ -1380,12 +1413,16 @@ function PLG_profileEdit ($uid, $panel = '', $fieldset='')
 * @return   void
 *
 */
-function PLG_profileSave ($plugin = '')
+function PLG_profileSave ($plugin = '', $uid = 0)
 {
+
+    $args[1] = $uid;
+
     if (empty ($plugin)) {
         PLG_callFunctionForAllPlugins ('profilesave');
     } else {
-        PLG_callFunctionForOnePlugin ('plugin_profilesave_' . $plugin);
+        $function = 'plugin_profilesave_' . $plugin;
+        return PLG_callFunctionForOnePlugin($function, $args);
     }
 }
 
@@ -2289,20 +2326,21 @@ function PLG_spamAction($content, $action = -1)
 }
 
 /**
-* Ask plugin for information about one of its items
+* Ask plugin for information about a specific item
 *
 * Item properties that can be requested:
-* 'date-created'  - creation date, if available
-* 'date-modified' - date of last modification, if available
-* 'description'   - full description of the item
-* 'excerpt'       - short description of the item
-* 'id'            - ID of the item, e.g. sid for articles
-* 'title'         - title of the item
-* 'url'           - URL of the item
+* - 'date-created'    - creation date, if available
+* - 'date-modified'   - date of last modification, if available
+* - 'description'     - full description of the item (formatted)
+* - 'raw-description' - full raw description (no parsing of tags, etc.)
+* - 'excerpt'         - short description of the item
+* - 'id'              - ID of the item, e.g. sid for articles
+* - 'title'           - title of the item
+* - 'url'             - URL of the item
+* - 'label'           - Plugin label
 *
-* 'excerpt' and 'description' may return the same value. Properties should be
-* returned in the order they are listed in $what. Properties that are not
-* available should return an empty string.
+* 'excerpt' and 'description' may return the same value. Properties that are
+* not available should return an empty string.
 * Return false for errors (e.g. access denied, item does not exist, etc.).
 *
 * @param    string  $type       plugin type (incl. 'article' for stories)
@@ -2315,23 +2353,18 @@ function PLG_spamAction($content, $action = -1)
 */
 function PLG_getItemInfo($type, $id, $what, $uid = 0, $options = array())
 {
+    global $_CONF;
+
     if ($type == 'article') {
-
-        global $_CONF;
-
-        require_once $_CONF['path_system'] . 'lib-story.php';
-
+        USES_lib_story();
         return STORY_getItemInfo($id, $what, $uid, $options);
-
     } else {
-
         $args[1] = $id;
         $args[2] = $what;
         $args[3] = $uid;
         $args[4] = $options;
 
         $function = 'plugin_getiteminfo_' . $type;
-
         return PLG_callFunctionForOnePlugin($function, $args);
     }
 }

@@ -800,7 +800,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
             $keyWords[$i] = str_replace('"',' ',$keyWords[$i]);
             $searchKeyword = $keyWords[$i];
             $keyWords[$i] = str_replace('_',' ',$keyWords[$i]);
-            $kwText .= $keyWords[$i] . '&nbsp;';
+            $kwText .= $keyWords[$i] . ' ';
         }
 
         $T->set_var(array(

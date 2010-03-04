@@ -347,9 +347,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             );
 
         } else {
-            $template->set_var( 'author', strip_tags(COM_applyFilter($A['username'] )));
-            $template->set_var( 'author_fullname', strip_tags(COM_applyFilter($A['username'] )));
-            $template->set_var( 'author_link', strip_tags(COM_applyFilter($A['username'] )));
+            $template->set_var( 'author', strip_tags(COM_applyFilter($A['name'] )));
+            $template->set_var( 'author_fullname', strip_tags(COM_applyFilter($A['name'] )));
+            $template->set_var( 'author_link', htmlspecialchars(strip_tags(COM_applyFilter($A['name'] )),ENT_COMPAT,COM_getEncodingt() ));
             $template->set_var( 'author_photo', '' );
             $template->set_var( 'camera_icon', '' );
             $template->set_var( 'start_author_anchortag', '' );

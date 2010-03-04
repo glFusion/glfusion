@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -243,8 +243,8 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
         DB_query($usql);
     }
 
-    $showtopic['comment'] = gf_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode);
-    $showtopic['subject'] = gf_formatTextBlock($showtopic['subject'],'text',$mode);
+    $showtopic['comment'] = gf_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode,$showtopic['status']);
+    $showtopic['subject'] = gf_formatTextBlock($showtopic['subject'],'text',$mode,$showtopic['status']);
 
     $showtopic['subject'] = COM_truncate($showtopic['subject'],$CONF_FORUM['show_subject_length'],'...');
 
@@ -336,7 +336,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
             $topictemplate->parse ('profile_link', 'profile');
             if ($CONF_FORUM['use_pm_plugin']) {
                 $pmusernmame = COM_getDisplayName($showtopic['uid']);
-                $pmplugin_link = forumPLG_getPMlink($pmusernmame);
+                $pmplugin_link = forumPLG_getPMlink($pmusernmame,$showtopic['uid']);
                 if ($pmplugin_link != '') {
                     $pm_link = $pmplugin_link;
                     $pm_linkimg = '<img src="'.gf_getImage('pm_button').'" border="0" align="middle" alt="'.$LANG_GF01['PMLink'].'" title="'.$LANG_GF01['PMLink'].'"' . XHTML . '>';
@@ -498,7 +498,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1) {
 }
 
 function forum_getmodFunctions($showtopic) {
-    global $_USER,$_TABLES,$LANG_GF03,$LANG_GF01,$page;
+    global $_CONF, $_USER,$_TABLES,$LANG_GF03,$LANG_GF01,$page;
 
     $retval = '';
     $options = '';
@@ -507,9 +507,9 @@ function forum_getmodFunctions($showtopic) {
     }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_edit')) {
         $options .= '<option value="editpost">' .$LANG_GF03['edit'] . '</option>';
-        if ($showtopic['locked'] == 1) {
-            $options .= '<option value="lockedpost">' .$LANG_GF03['lockedpost'] . '</option>';
-        }
+//        if ($showtopic['locked'] == 1) {
+//            $options .= '<option value="lockedpost">' .$LANG_GF03['lockedpost'] . '</option>';
+//        }
     }
     if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_delete')) {
         $options .= '<option value="deletepost">' .$LANG_GF03['delete'] . '</option>';
@@ -520,13 +520,15 @@ function forum_getmodFunctions($showtopic) {
     if ($showtopic['pid'] == 0) {
         if (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_move')) {
             $options .= '<option value="movetopic">' .$LANG_GF03['move'] . '</option>';
+            $options .= '<option value="mergetopic">' .$LANG_GF03['merge_topic'] . '</option>';
         }
     } elseif (forum_modPermission($showtopic['forum'],$_USER['uid'],'mod_move')) {
         $options .= '<option value="movetopic">' .$LANG_GF03['split'] . '</option>';
+        $options .= '<option value="mergetopic">' .$LANG_GF03['merge_post'] . '</option>';
     }
 
     if ($options != '') {
-        $retval .= '<form action="moderation.php" method="post" style="margin:0px;"><div><select name="modfunction">';
+        $retval .= '<form action="'.$_CONF['site_url'].'/forum/moderation.php" method="post" style="margin:0px;"><div><select name="modfunction">';
         $retval .= $options;
 
         if ($showtopic['pid'] == 0) {
@@ -536,9 +538,9 @@ function forum_getmodFunctions($showtopic) {
             $msgpid = $showtopic['pid'];
             $top = "no";
         }
-        $retval .= '</select><input type="hidden" name="fortopicid" value="' .$showtopic['id']. '"' . XHTML . '>';
-        $retval .= '<input type="hidden" name="forum" value="' .$showtopic['forum']. '"' . XHTML . '>';
-        $retval .= '<input type="hidden" name="msgpid" value="' .$msgpid. '"'  . XHTML . '>';
+        $retval .= '</select><input type="hidden" name="topic_id" value="' .$showtopic['id']. '"' . XHTML . '>';
+        $retval .= '<input type="hidden" name="forum_id" value="' .$showtopic['forum']. '"' . XHTML . '>';
+        $retval .= '<input type="hidden" name="topic_parent_id" value="' .$msgpid. '"'  . XHTML . '>';
         $retval .= '<input type="hidden" name="top" value="' .$top. '"'  . XHTML . '>';
         $retval .= '<input type="hidden" name="page" value="' .$page. '"' . XHTML . '>';
         $retval .= '&nbsp;&nbsp;<input type="submit" name="submit" value="' .$LANG_GF01['GO'].'!"' . XHTML . '>';

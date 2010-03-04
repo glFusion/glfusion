@@ -11,7 +11,7 @@
 <tr><td colspan="2"><hr></td></tr>
 <tr>
 <td width="20%"><strong>{$LANG_GF01[SUBJECT]}:</strong></td>
-<td><a href="{site_url}/forum/viewtopic.php?showtopic={post_id}&lastpost=true#{topic_id}">{post_subject}</a>
+<td><a href="{permalink}">{post_subject}</a>
 </tr>
 <tr>
 <td width="20%"><strong>{$LANG_GF01[BY]}</strong></td>

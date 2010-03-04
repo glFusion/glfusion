@@ -48,7 +48,14 @@ require_once( 'language/' . $language . '.php' );
 $_SYSTEM['rootdebug'] = true;
 
 $display  = COM_siteHeader( 'menu', $LANG_SUCCESS[0] );
-$display .= COM_startBlock( $LANG_SUCCESS[1] . GVERSION . $LANG_SUCCESS[2] );
+
+$success_msg = $LANG_SUCCESS[1] . 'v' . GVERSION;
+if ( (PATCHLEVEL <> '') && (PATCHLEVEL <> '.pl0') ) {
+	$success_msg .= PATCHLEVEL;
+}
+$success_msg .= $LANG_SUCCESS[2];
+
+$display .= COM_startBlock( $success_msg );
 
 $display .= '<p>' . $LANG_SUCCESS[3] . (($type == 'install') ? $LANG_SUCCESS[20] : $LANG_SUCCESS[21]) . $LANG_SUCCESS[4] . '</p>' ;
 

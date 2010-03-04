@@ -717,15 +717,29 @@ margin-top:5px;
 text-align:center;
 }
 
-.admin-list-field {
+.admin-list-field, .admin-list-field-centered {
 padding-left:5px;
 padding-right:5px;
+}
+
+.admin-list-field {
 text-align:left;
 }
 
-.admin-list-headerfield {
+.admin-list-field-centered {
+text-align:center;
+}
+
+.admin-list-headerfield, .admin-list-headerfield-centered {
 padding:3px 5px;
+}
+
+.admin-list-headerfield {
 text-align:left;
+}
+
+.admin-list-headerfield-centered {
+text-align:center;
 }
 
 .gl_user-menu-right {
@@ -2842,3 +2856,50 @@ pre {
 .static {color:#5D3126;}
 
 /* end of Star rating system */
+
+/* env check */
+.pathtext {
+  font-size:11px;
+  color:#666;
+}
+
+.pathtext-status {
+  text-align:right;
+  white-space:nowrap;
+}
+
+.yes, .iswriteable {
+  font-weight: bold;
+  color: #46882b;
+}
+.notok, .notwriteable {
+  font-weight: bold;
+  color: #cc0000;
+}
+/* BBCode Editor */
+
+.bbceditor textarea, .bbceditor input, .bbceditor select {
+font-size: 1em;
+font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+}
+.bbc-buttons {
+padding:5px;
+}
+.bbc-buttons input.button1, .bbc-buttons input.button2 {
+font-size: 1em;
+}
+.bbc-buttons a.button1, .bbc-buttons input.button1, .bbc-buttons a.button2, .bbc-buttons input.button2 {
+width: auto !important;
+padding-top: 1px;
+padding-bottom: 1px;
+font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+color: #000;
+background: #E1EBF2 none repeat-x top;
+}
+.bbceditor a.button1, .bbceditor input.button1 {
+font-weight: bold;
+border: 1px solid #666666;
+}
+.bbc-buttons a.button2, .bbc-buttons input.button2 {
+border: 1px solid #666666;
+}

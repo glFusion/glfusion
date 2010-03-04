@@ -428,12 +428,33 @@ function glfusion_119()
 
     // FileMgmt enable rating config setting
     $c->add('enable_rating', 1,'select',0, 2, 0, 35, true, 'filemgmt');
+    $c->add('displayblocks', 0,'select',0, 0, 3, 115, true, 'filemgmt');
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '1.7.7',pi_gl_version='1.1.9' WHERE pi_name = 'filemgmt'");
+
+    // Forum configuration options (for new features option)
+    $c->add('bbcode_disabled', 0, 'select', 0, 2, 6, 165, true, 'forum');
+    $c->add('smilies_disabled', 0, 'select', 0, 2, 6, 170, true, 'forum');
+    $c->add('urlparse_disabled', 0, 'select', 0, 2, 6, 175, true, 'forum');
+    $c->add('displayblocks', 0,'select', 0, 0, 13, 115, true, 'calendar');
+
+    // links plugin configuration optoins
+    $c->add('displayblocks',0,'select',0, 0, 13, 60, true, 'links');
+
+    // polls plugin configuration options
+    $c->add('displayblocks',0, 'select', 0, 0, 13, 85, true, 'polls');
 
     // Forum user pref for topic order
     DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD topic_order varchar(10) NOT NULL DEFAULT 'ASC' AFTER notify_once",1);
+    DB_query("ALTER TABLE {$_TABLES['gf_userprefs']} ADD use_wysiwyg_editor tinyint(3) NOT NULL DEFAULT '1' AFTER topic_order",1);
+    DB_query("ALTER TABLE {$_TABLES['gf_topic']} ADD `status` int(10) unsigned NOT NULL DEFAULT '0' AFTER locked",1);
+
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '3.2.0',pi_gl_version='1.1.9' WHERE pi_name = 'forum'");
+
+    DB_query("ALTER TABLE {$_TABLES['groups']} ADD grp_default tinyint(1) unsigned NOT NULL default '0' AFTER grp_gl_core",1);
 
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.1.9',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='1.1.9' WHERE name='glfusion'",1);
+
 }
 
 $retval .= 'Performing database upgrades if necessary...<br />';

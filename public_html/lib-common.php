@@ -1682,13 +1682,14 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 * @param    string  $title      Value to set block title to
 * @param    string  $helpfile   Help file, if one exists
 * @param    string  $template   HTML template file to use to format the block
+* @param    string  $name       ID of block, customarily the name of the block
 * @return   string              Formatted HTML containing block header
 * @see COM_endBlock
 * @see COM_siteHeader
 *
 */
 
-function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml' )
+function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml', $name='' )
 {
     global $_CONF, $LANG01, $_IMAGE_TYPE;
 
@@ -1700,6 +1701,9 @@ function COM_startBlock( $title='', $helpfile='', $template='blockheader.thtml' 
     $block->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
     $block->set_var( 'layout_url', $_CONF['layout_url'] );
     $block->set_var( 'block_title', stripslashes( $title ));
+    if( !empty( $name ) ) {
+        $block->set_var( 'block_id', 'id="' . $name . '" ' );
+    }
 
     if( !empty( $helpfile ))
     {
@@ -2454,28 +2458,21 @@ function COM_userMenu( $help='', $title='', $position='' )
 
     $retval = '';
 
-    if( !COM_isAnonUser() )
-    {
+    if( !COM_isAnonUser() ) {
         $usermenu = new Template( $_CONF['path_layout'] );
         if( isset( $_BLOCK_TEMPLATE['useroption'] ))
         {
             $templates = explode( ',', $_BLOCK_TEMPLATE['useroption'] );
             $usermenu->set_file( array( 'option' => $templates[0],
                                         'current' => $templates[1] ));
-        }
-        else
-        {
+        } else {
            $usermenu->set_file( array( 'option' => 'useroption.thtml',
                                        'current' => 'useroption_off.thtml' ));
         }
-        $usermenu->set_var( 'xhtml', XHTML );
-        $usermenu->set_var( 'site_url', $_CONF['site_url'] );
-        $usermenu->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
         $usermenu->set_var( 'layout_url', $_CONF['layout_url'] );
         $usermenu->set_var( 'block_name', str_replace( '_', '-', 'user_block' ));
 
-        if( empty( $title ))
-        {
+        if( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title',
                                  "name='user_block'" );
         }
@@ -2484,8 +2481,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         $thisUrl = COM_getCurrentURL();
 
         $retval .= COM_startBlock( $title, $help,
-                           COM_getBlockTemplate( 'user_block', 'header', $position ));
-        $retval .= '<ul>';
+                           COM_getBlockTemplate( 'user_block', 'header', $position ), 'user_block' );
 
         $plugin_options = PLG_getAdminOptions();
         $num_plugins = count($plugin_options);
@@ -2507,27 +2503,20 @@ function COM_userMenu( $help='', $title='', $position='' )
         $plugin_options = PLG_getUserOptions();
         $nrows = count( $plugin_options );
 
-        for( $i = 0; $i < $nrows; $i++ )
-        {
+        for( $i = 0; $i < $nrows; $i++ ) {
             $plg = current( $plugin_options );
             $usermenu->set_var( 'option_label', $plg->adminlabel );
 
-            if( !empty( $plg->numsubmissions ))
-            {
+            if( !empty( $plg->numsubmissions )) {
                 $usermenu->set_var( 'option_count', '(' . $plg->numsubmissions . ')' );
-            }
-            else
-            {
+            } else {
                 $usermenu->set_var( 'option_count', '' );
             }
 
             $usermenu->set_var( 'option_url', $plg->adminurl );
-            if( $thisUrl == $plg->adminurl )
-            {
+            if( $thisUrl == $plg->adminurl ) {
                 $retval .= $usermenu->parse( 'item', 'current' );
-            }
-            else
-            {
+            } else {
                 $retval .= $usermenu->parse( 'item', 'option' );
             }
             next( $plugin_options );
@@ -2537,12 +2526,9 @@ function COM_userMenu( $help='', $title='', $position='' )
         $usermenu->set_var( 'option_label', $LANG01[48] );
         $usermenu->set_var( 'option_count', '' );
         $usermenu->set_var( 'option_url', $url );
-        if( $thisUrl == $url )
-        {
+        if( $thisUrl == $url ) {
             $retval .= $usermenu->parse( 'item', 'current' );
-        }
-        else
-        {
+        } else {
             $retval .= $usermenu->parse( 'item', 'option' );
         }
 
@@ -2551,29 +2537,20 @@ function COM_userMenu( $help='', $title='', $position='' )
         $usermenu->set_var( 'option_count', '' );
         $usermenu->set_var( 'option_url', $url );
         $retval .= $usermenu->finish($usermenu->parse('item', 'option'));
-        $retval .= '</ul>';
         $retval .=  COM_endBlock( COM_getBlockTemplate( 'user_block', 'footer' ));
-    }
-    else
-    {
+    } else {
         $retval .= COM_startBlock( $LANG01[47], $help,
-                           COM_getBlockTemplate( 'user_block', 'header', $position ));
+                           COM_getBlockTemplate( 'login_block', 'header', $position ), 'login_block' );
         $login = new Template( $_CONF['path_layout'] );
         $login->set_file( 'form', 'loginform.thtml' );
-        $login->set_var( 'xhtml', XHTML );
-        $login->set_var( 'site_url', $_CONF['site_url'] );
-        $login->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
         $login->set_var( 'layout_url', $_CONF['layout_url'] );
         $login->set_var( 'lang_username', $LANG01[21] );
         $login->set_var( 'lang_password', $LANG01[57] );
         $login->set_var( 'lang_forgetpassword', $LANG01[119] );
         $login->set_var( 'lang_login', $LANG01[58] );
-        if( $_CONF['disable_new_user_registration'] == 1 )
-        {
+        if( $_CONF['disable_new_user_registration'] == 1 ) {
             $login->set_var( 'lang_signup', '' );
-        }
-        else
-        {
+        } else {
             $login->set_var( 'lang_signup', $LANG01[59] );
         }
 
@@ -2626,7 +2603,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         }
 
         $retval .= $login->finish($login->parse('output', 'form'));
-        $retval .= COM_endBlock( COM_getBlockTemplate( 'user_block', 'footer', $position ));
+        $retval .= COM_endBlock( COM_getBlockTemplate( 'login_block', 'footer', $position ));
     }
 
     return $retval;
@@ -2694,7 +2671,7 @@ function COM_adminMenu( $help = '', $title = '', $position = '' )
         }
 
         $retval .= COM_startBlock( $title, $help,
-                           COM_getBlockTemplate( 'admin_block', 'header', $position ));
+                           COM_getBlockTemplate( 'admin_block', 'header', $position ), 'admin_block' );
 
         $topicsql = '';
         if( SEC_isModerator() || SEC_hasRights( 'story.edit' ))
@@ -3631,7 +3608,7 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
 
         case 'section_block':
             $retval .= COM_startBlock( $title, $help,
-                               COM_getBlockTemplate( $name, 'header', $position ))
+                               COM_getBlockTemplate( $name, 'header', $position ), $name )
                 . COM_showTopics( $topic )
                 . COM_endBlock( COM_getBlockTemplate( $name, 'footer', $position ));
             break;
@@ -3850,7 +3827,7 @@ function COM_formatBlock( $A, $noboxes = false )
                 $args = $matches[2];
             }
             $blkheader = COM_startBlock( $A['title'], $A['help'],
-                    COM_getBlockTemplate( $A['name'], 'header', $position ));
+                    COM_getBlockTemplate( $A['name'], 'header', $position ), $A['name'] );
             $blkfooter = COM_endBlock( COM_getBlockTemplate( $A['name'],
                     'footer', $position ));
 
@@ -3900,7 +3877,7 @@ function COM_formatBlock( $A, $noboxes = false )
         $blockcontent = str_replace( array( '<?', '?>' ), '', $blockcontent );
 
         $retval .= COM_startBlock( $A['title'], $A['help'],
-                       COM_getBlockTemplate( $A['name'], 'header', $position ))
+                       COM_getBlockTemplate( $A['name'], 'header', $position ), $A['name'] )
                 . $blockcontent . LB
                 . COM_endBlock( COM_getBlockTemplate( $A['name'], 'footer', $position ));
     }
@@ -4436,22 +4413,19 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         }
     }
     $retval = COM_startBlock( $title, $help,
-                       COM_getBlockTemplate( 'whats_new_block', 'header', $position ));
+                       COM_getBlockTemplate( 'whats_new_block', 'header', $position ), 'whats_new_block' );
 
     $topicsql = '';
     if(( $_CONF['hidenewstories'] == 0 ) || ( $_CONF['hidenewcomments'] == 0 )
             || ( $_CONF['trackback_enabled']
-            && ( $_CONF['hidenewtrackbacks'] == 0 )))
-    {
+            && ( $_CONF['hidenewtrackbacks'] == 0 ))) {
         $topicsql = COM_getTopicSql ('AND', 0, $_TABLES['stories']);
     }
 
-    if( $_CONF['hidenewstories'] == 0 )
-    {
+    if( $_CONF['hidenewstories'] == 0 ) {
         $archsql = '';
         $archivetid = DB_getItem( $_TABLES['topics'], 'tid', "archive_flag=1" );
-        if( !empty( $archivetid ))
-        {
+        if( !empty( $archivetid )) {
             $archsql = " AND (tid <> '" . addslashes( $archivetid ) . "')";
         }
 
@@ -4461,42 +4435,42 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $result = DB_query( $sql );
         $nrows  = DB_numRows( $result );
 
-        if( empty( $title ))
-        {
+        if( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title', "name='whats_new_block'" );
         }
 
         // Any late breaking news stories?
         $retval .= '<h3>' . $LANG01[99] . '</h3>';
 
-        if( $nrows > 0 )
-        {
+        if( $nrows > 0 ) {
             $newmsg = COM_formatTimeString( $LANG_WHATSNEW['new_string'],
                         $_CONF['newstoriesinterval'], $LANG01[11], $nrows);
 
-            if( $newstories && ( $page < 2 ))
-            {
+            if( $newstories && ( $page < 2 )) {
                 $retval .= $newmsg . '<br' . XHTML . '>';
-            }
-            else
-            {
-                $retval .= '<ul>';
+            } else {
+                $newstories = array();
                 while ($A=DB_fetchArray($result)) {
-                    $retval .= '<li>' . COM_createLink(COM_truncate($A['title'],$_CONF['title_trim_length'] ,'...'),
-                        COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']),array('title' => $A['title'])) . '</li>';
+                    $title = COM_undoSpecialChars( $A['title'] );
+                    $title = str_replace('&nbsp;',' ',$title);
+                    $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
+                    if( $title != $titletouse ) {
+                        $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
+                    } else {
+                        $attr = array();
+                    }
+                    $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
+                    $newstories[] = COM_createLink($titletouse,$url,$attr);
                 }
-                $retval .= '</ul>';
+                $retval .= COM_makeList( $newstories, 'list-new-articles' );
             }
-        }
-        else
-        {
+        } else {
             $retval .= $LANG01[100] . '<br' . XHTML . '>';
         }
 
         if(( $_CONF['hidenewcomments'] == 0 ) || ( $_CONF['trackback_enabled']
                 && ( $_CONF['hidenewtrackbacks'] == 0 ))
-                || ( $_CONF['hidenewplugins'] == 0 ))
-        {
+                || ( $_CONF['hidenewplugins'] == 0 )) {
             $retval .= '<br' . XHTML . '>';
         }
     }
@@ -4568,16 +4542,15 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         } else {
             $retval .= $LANG01[86] . '<br' . XHTML . '>' . LB;
         }
-        if(( $_CONF['hidenewplugins'] == 0 )
+
+        if (( $_CONF['hidenewplugins'] == 0 )
                 || ( $_CONF['trackback_enabled']
-                && ( $_CONF['hidenewtrackbacks'] == 0 )))
-        {
+                && ( $_CONF['hidenewtrackbacks'] == 0 ))) {
             $retval .= '<br' . XHTML . '>';
         }
     }
 
-    if( $_CONF['trackback_enabled'] && ( $_CONF['hidenewtrackbacks'] == 0 ))
-    {
+    if( $_CONF['trackback_enabled'] && ( $_CONF['hidenewtrackbacks'] == 0 )) {
         $retval .= '<h3>' . $LANG01[114] . ' <small>'
                 . COM_formatTimeString( $LANG_WHATSNEW['new_last'],
                                         $_CONF['newtrackbackinterval'] )
@@ -4587,12 +4560,10 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $result = DB_query( $sql );
 
         $nrows = DB_numRows( $result );
-        if( $nrows > 0 )
-        {
+        if( $nrows > 0 ) {
             $newcomments = array();
 
-            for( $i = 0; $i < $nrows; $i++ )
-            {
+            for( $i = 0; $i < $nrows; $i++ ) {
                 $titletouse = '';
                 $A = DB_fetchArray( $result );
 
@@ -4601,19 +4572,14 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
                 $title = COM_undoSpecialChars( stripslashes( $A['title'] ));
                 $title = str_replace('&nbsp;',' ',$title);
-                $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],
-                                            '...' );
+                $titletouse = COM_truncate( $title, $_CONF['title_trim_length'],'...' );
 
-                if( $title != $titletouse )
-                {
+                if( $title != $titletouse ) {
                     $attr = array('title' => htmlspecialchars($title,ENT_COMPAT,COM_getEncodingt()));
-                }
-                else
-                {
+                } else {
                     $attr = array();
                 }
-                if( $A['count'] > 1 )
-                {
+                if( $A['count'] > 1 ) {
                     $titletouse .= ' [+' . $A['count'] . ']';
                 }
 
@@ -4621,38 +4587,29 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
             }
 
             $retval .= COM_makeList( $newcomments, 'list-new-trackbacks' );
-        }
-        else
-        {
+        } else {
             $retval .= $LANG01[115] . '<br' . XHTML . '>' . LB;
         }
-        if( $_CONF['hidenewplugins'] == 0 )
-        {
+
+        if( $_CONF['hidenewplugins'] == 0 ) {
             $retval .= '<br' . XHTML . '>';
         }
     }
 
-    if( $_CONF['hidenewplugins'] == 0 )
-    {
+    if( $_CONF['hidenewplugins'] == 0 ) {
         list( $headlines, $smallheadlines, $content ) = PLG_getWhatsNew();
         $plugins = count( $headlines );
-        if( $plugins > 0 )
-        {
-            for( $i = 0; $i < $plugins; $i++ )
-            {
+        if( $plugins > 0 ) {
+            for( $i = 0; $i < $plugins; $i++ ) {
                 $retval .= '<h3>' . $headlines[$i] . ' <small>'
                         . $smallheadlines[$i] . '</small></h3>';
-                if( is_array( $content[$i] ))
-                {
+                if( is_array( $content[$i] )) {
                     $retval .= COM_makeList( $content[$i], 'list-new-plugins' );
-                }
-                else
-                {
+                } else {
                     $retval .= $content[$i];
                 }
 
-                if( $i + 1 < $plugins )
-                {
+                if( $i + 1 < $plugins ) {
                     $retval .= '<br' . XHTML . '>';
                 }
             }

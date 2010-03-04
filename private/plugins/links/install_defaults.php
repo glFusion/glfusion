@@ -141,6 +141,14 @@ $_LI_DEFAULT['show_category_descriptions'] = true;
  */
 $_LI_DEFAULT['root'] = 'site';
 
+/** Which glFusion blocks to display when viewing the links plugin
+ *   0 -> Left Blocks
+ *   1 -> Right Blocks
+ *   2 -> Left and Right Blocks
+ *   3 -> None
+ */
+$_LI_DEFAULT['displayblocks'] = 0;
+
 /**
  * Define default permissions for new links created from the Admin panel.
  * Permissions are perm_owner, perm_group, perm_members, perm_anon (in that
@@ -184,7 +192,10 @@ function plugin_initconfig_links()
                 0, 0, 0, 30, true, 'links');
         $c->add('show_top10', $_LI_DEFAULT['show_top10'], 'select',
                 0, 0, 1, 40, true, 'links');
-        $c->add('show_category_descriptions', $_LI_DEFAULT['show_category_descriptions'], 'select', 0, 0, 1, 50, true, 'links');
+        $c->add('show_category_descriptions', $_LI_DEFAULT['show_category_descriptions'], 'select',
+                0, 0, 1, 50, true, 'links');
+        $c->add('displayblocks', $_LI_DEFAULT['displayblocks'], 'select',
+                0, 0, 13, 60, true, 'links');
 
         $c->add('fs_admin', NULL, 'fieldset', 0, 1, NULL, 0, true, 'links');
 

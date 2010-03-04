@@ -26,46 +26,10 @@ bbcode = new Array();
 bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=1]','[/list]','[*]','[img]','[/img]','[url]','[/url]','[file]','[/file]');
 imageTag = false;
 
-window.onload('initInsertions()');
-
-
 // Shows the help messages in the helpline window
 function helpline(help) {
     document.forumpost.helpbox.value = eval(help + "_help");
 }
-
-
-/**
-* Fix a bug involving the TextRange object. From
-* http://www.frostjedi.com/terra/scripts/demo/caretBug.html
-*/
-function initInsertions()
-{
-	var doc;
-
-	if (document.forms['forumpost'])
-	{
-		doc = document;
-	}
-	else
-	{
-		doc = opener.document;
-	}
-
-	var textarea = doc.forms['forumpost'].elements['comment'];
-
-	if (is_ie && typeof(baseHeight) != 'number')
-	{
-		textarea.focus();
-		baseHeight = doc.selection.createRange().duplicate().boundingHeight;
-
-		if (!document.forms['forumpost'])
-		{
-			document.body.focus();
-		}
-	}
-}
-
 
 // Replacement for arrayname.length property
 function getarraysize(thearray) {

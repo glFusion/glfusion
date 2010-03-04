@@ -82,6 +82,7 @@ $method     = isset($_REQUEST['method']) ? COM_applyFilter($_REQUEST['method']) 
 $page       = isset($_REQUEST['page']) ? COM_applyFilter($_REQUEST['page'],true) : 0;
 $notify     = isset($_POST['notify']) ? COM_applyFilter($_POST['notify']) : '';
 $preview    = isset($_REQUEST['preview']) ? COM_applyFilter($_REQUEST['preview']) : '';
+
 if (isset($_REQUEST['postmode'])) {
     $postmode = COM_applyFilter($_REQUEST['postmode']);
 } else {
@@ -93,20 +94,46 @@ if (isset($_REQUEST['postmode'])) {
 }
 $postmode_switch = isset($_REQUEST['postmode_switch']) ? COM_applyFilter($_REQUEST['postmode_switch'],true) : 0;
 
+// initial topic option settings
+
+if ( $CONF_FORUM['bbcode_disabled'] ) {
+    $disable_bbcode_val = ' checked="checked"';
+} else {
+    $disable_bbcode_val = '';
+}
+if ( $CONF_FORUM['smilies_disabled'] ) {
+    $disable_smilies_val = ' checked="checked"';
+} else {
+    $disable_smilies_val = '';
+}
+if ( $CONF_FORUM['urlparse_disabled'] ) {
+    $disable_urlparse_val = ' checked="checked"';
+} else {
+    $disable_urlparse_val = '';
+}
+
 ForumHeader($forum,$showtopic);
 
 //Check is anonymous users can post
 forum_chkUsercanPost();
 
+if ( isset($_POST['referer']) ) {
+    $referer = $_POST['referer'];
+    $sLength = strlen($_CONF['site_url']);
+    if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
+        $referer = $_CONF['site_url'].'/forum/index.php';
+    }
+} else {
+    $referer = $_SERVER['HTTP_REFERER'];
+}
 
-
-$referer = $_SERVER['HTTP_REFERER'];
 $sLength = strlen($_CONF['site_url']);
 if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
     $referer = $_CONF['site_url'].'/forum/index.php';
 }
+$referer = htmlentities($referer,ENT_COMPAT, COM_getEncodingt());
 
-if(empty($_USER['uid']) || $_USER['uid'] == 1 ) {
+if ( COM_isAnonUser() ) {
     $uid = 1;
 } else {
     $uid = $_USER['uid'];
@@ -173,6 +200,18 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
             $comment    = gf_preparefordb($_POST['comment'],$postmode);
             $mood       = COM_applyFilter($_POST['mood']);
 
+            // topic options
+            $status = 0;
+            if ( isset($_POST['disable_bbcode']) && $_POST['disable_bbcode'] == 1 ) {
+                $status += DISABLE_BBCODE;
+            }
+            if ( isset($_POST['disable_smilies']) && $_POST['disable_smilies'] == 1 ) {
+                $status += DISABLE_SMILIES;
+            }
+            if ( isset($_POST['disable_urlparse']) && $_POST['disable_urlparse'] == 1 ) {
+                $status += DISABLE_URLPARSE;
+            }
+
             // If user has moderator edit rights only
             $locked = 0;
             $sticky = 0;
@@ -181,7 +220,7 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
                 if (isset($_POST['sticky_switch']) && $_POST['sticky_switch'] == 1)  $sticky = 1;
             }
             $sql = "UPDATE {$_TABLES['gf_topic']} SET subject='$subject',comment='$comment',postmode='$postmode', ";
-            $sql .= "mood='".addslashes($mood)."', sticky='$sticky', locked='$locked' WHERE (id='".addslashes($editid)."')";
+            $sql .= "mood='".addslashes($mood)."', sticky='$sticky', locked='$locked', status=$status WHERE (id='".addslashes($editid)."')";
             DB_query($sql);
 
             /* Check for any uploaded files  - during save of edit */
@@ -195,6 +234,7 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
             if ($imagerecs != '') $sql .= "AND id NOT IN ($imagerecs)";
             DB_query($sql);
 
+            PLG_itemSaved($editid,'forum');
             CACHE_remove_instance('forumcb');
 
             $topicparent = DB_getITEM($_TABLES['gf_topic'],"pid","id='".addslashes($editid)."'");
@@ -202,12 +242,24 @@ if ((isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) && ($_
                 $topicparent = $editid;
             }
 
-            //NOTIFY - Checkbox variable in form set to "on" when checked and they have not already subscribed to forum
-            $notifyRecID = DB_getItem($_TABLES['gf_watch'],'id', "forum_id='".addslashes($forum)."' AND topic_id='".addslashes($topicparent)."' AND uid='".addslashes($uid)."'");
-            if ($notify == 'on' AND $notifyRecID < 1) {
-                DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".addslashes($forum)."','".addslashes($topicparent)."','$_USER[uid]',now() )");
-            } elseif ($notify == '' AND $notifyRecID > 1) {
-                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$notifyRecID");
+            //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
+            $nid = -$topicparent;  // Negative Topic ID Value
+            $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=0 AND uid='".addslashes($uid)."'");
+            $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$topicparent AND uid='".addslashes($uid)."'");
+            $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$nid AND uid='".addslashes($uid)."'");
+
+            if ($notify == 'on' AND ($currentForumNotifyRecID < 1 AND $currentTopicNotifyRecID < 1 ) ) {
+                $sql = "INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) ";
+                $sql .= "VALUES ('".addslashes($forum)."','".addslashes($topicparent)."','$_USER[uid]',now() )";
+                DB_query($sql);
+            } elseif ($notify == 'on' AND $currentTopicUnNotifyRecID > 1) { // Had un-subcribed to topic and now wants to subscribe
+                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$currentTopicUnNotifyRecID");
+            } elseif ($notify == '' AND $currentTopicNotifyRecID > 1) { // Subscribed to topic - but does not want to be notified anymore
+                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".addslashes($forum)."' and topic_id = '".addslashes($topicparent)."'");
+            } elseif ($notify == '' AND $currentForumNotifyRecID > 1) { // Subscribed to forum - but does not want to be notified about this topic
+                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".addslashes($forum)."' and topic_id = '".addslashes($topicparent)."'");
+                DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".addslashes($forum)."' and topic_id = '".addslashes($nid)."'");
+                DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".addslashes($forum)."','".addslashes($nid)."','$uid',now() )");
             }
 
             // if user has un-checked the Silent option then they want to have user alerted of the edit and update the topic timestamp
@@ -291,10 +343,20 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         if ($_POST['sticky_switch'] == 1)  $sticky = 1;
                     }
 
-                    $fields = "forum,name,date,lastupdated,subject,comment,postmode,ip,mood,uid,pid,sticky,locked";
+                    $status = 0;
+                    if ( isset($_POST['disable_bbcode']) && $_POST['disable_bbcode'] == 1 ) {
+                        $status += DISABLE_BBCODE;
+                    }
+                    if ( isset($_POST['disable_smilies']) && $_POST['disable_smilies'] == 1 ) {
+                        $status += DISABLE_SMILIES;
+                    }
+                    if ( isset($_POST['disable_urlparse']) && $_POST['disable_urlparse'] == 1 ) {
+                        $status += DISABLE_URLPARSE;
+                    }
+                    $fields = "forum,name,date,lastupdated,subject,comment,postmode,ip,mood,uid,pid,sticky,locked,status";
                     $sql  = "INSERT INTO {$_TABLES['gf_topic']} ($fields) ";
                     $sql .= "VALUES ('".addslashes($forum)."','$name','$date',$date,'$subject','$comment', ";
-                    $sql .= "'".addslashes($postmode)."','".addslashes($REMOTE_ADDR)."','".addslashes($mood)."','".addslashes($uid)."','0','$sticky','$locked')";
+                    $sql .= "'".addslashes($postmode)."','".addslashes($REMOTE_ADDR)."','".addslashes($mood)."','".addslashes($uid)."','0','$sticky','$locked',$status)";
                     DB_query($sql);
 
                     // Find the id of the last inserted topic
@@ -316,16 +378,27 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
                     // Check for any users subscribed notifications - would only be for users subscribed to the forum
                     gf_chknotifications($forum,$lastid,$uid,"forum");
-                    //NOTIFY - Checkbox variable in form set to "on" when checked and they have not already subscribed to forum
-                    $currentNotifyRecID = DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=0 AND uid='".addslashes($uid)."'");
-                    if ($notify == 'on' AND $currentNotifyRecID < 1) {
-                        DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".addslashes($forum)."','".addslashes($lastid)."','$_USER[uid]',now() )");
-                    } elseif ($notify == '' AND $currentNotifyRecID > 1) { // Subscribed to forum - but does not want to be notified about this topic
-                        $nlastid = -$lastid;  // Negative Value
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='$forum' and topic_id = '".addslashes($lastid)."'");
-                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='$forum' and topic_id = '".addslashes($nlastid)."'");
-                        DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".addslashes($forum)."','".addslashes($nlastid)."','".addslashes($uid)."',now() )");
+
+                    //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
+                    $nid = -$lastid;  // Negative Topic ID Value
+                    $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=0 AND uid='".addslashes($uid)."'");
+                    $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$lastid AND uid='".addslashes($uid)."'");
+                    $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$nid AND uid='".addslashes($uid)."'");
+
+                    if ($notify == 'on' AND ($currentForumNotifyRecID < 1 AND $currentTopicNotifyRecID < 1 ) ) {
+                        $sql = "INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) ";
+                        $sql .= "VALUES ('".addslashes($forum)."','".addslashes($lastid)."','$_USER[uid]',now() )";
+                        DB_query($sql);
+                    } elseif ($notify == 'on' AND $currentTopicUnNotifyRecID > 1) { // Had un-subcribed to topic and now wants to subscribe
+                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE id=$currentTopicUnNotifyRecID");
+                    } elseif ($notify == '' AND $currentTopicNotifyRecID > 1) { // Subscribed to topic - but does not want to be notified anymore
+                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".addslashes($forum)."' and topic_id = '".addslashes($lastid)."'");
+                    } elseif ($notify == '' AND $currentForumNotifyRecID > 1) { // Subscribed to forum - but does not want to be notified about this topic
+                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".addslashes($forum)."' and topic_id = '".addslashes($lastid)."'");
+                        DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".addslashes($forum)."' and topic_id = '".addslashes($nid)."'");
+                        DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".addslashes($forum)."','".addslashes($nid)."','$uid',now() )");
                     }
+                    PLG_itemSaved($lastid,'forum');
                     CACHE_remove_instance('forumcb');
 
                     COM_updateSpeedlimit ('forum');
@@ -418,10 +491,10 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 
                     //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
                     $nid = -$id;  // Negative Topic ID Value
-                    $currentForumNotifyRecID = DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=0 AND uid='".addslashes($uid)."'");
-                    $currentTopicNotifyRecID = DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$id AND uid='".addslashes($uid)."'");
-                    $currentTopicUnNotifyRecID = DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$nid AND uid='".addslashes($uid)."'");
-                    if ($notify == 'on' AND $currentForumNotifyRecID < 1) {
+                    $currentForumNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=0 AND uid='".addslashes($uid)."'");
+                    $currentTopicNotifyRecID   = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$id AND uid='".addslashes($uid)."'");
+                    $currentTopicUnNotifyRecID = (int) DB_getItem($_TABLES['gf_watch'],'id', "forum_id='$forum' AND topic_id=$nid AND uid='".addslashes($uid)."'");
+                    if ($notify == 'on' AND ($currentForumNotifyRecID < 1 AND $currentTopicNotifyRecID < 1 ) ) {
                         $sql = "INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) ";
                         $sql .= "VALUES ('".addslashes($forum)."','".addslashes($id)."','$_USER[uid]',now() )";
                         DB_query($sql);
@@ -434,6 +507,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
                         DB_query("DELETE FROM {$_TABLES['gf_watch']} WHERE uid='$uid' AND forum_id='".addslashes($forum)."' and topic_id = '".addslashes($nid)."'");
                         DB_query("INSERT INTO {$_TABLES['gf_watch']} (forum_id,topic_id,uid,date_added) VALUES ('".addslashes($forum)."','".addslashes($nid)."','$uid',now() )");
                     }
+                    PLG_itemSaved($lastid,'forum');
                     CACHE_remove_instance('forumcb');
 
                     COM_updateSpeedlimit ('forum');
@@ -458,7 +532,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == $LANG_GF01['SUBMIT']) {
 $comment = isset($_POST['comment']) ? COM_stripslashes( $_POST['comment'] ) : '';
 
 if ($id > 0) {
-    $sql  = "SELECT a.forum,a.pid,a.comment,a.date,a.locked,a.subject,a.mood,a.sticky,a.uid,a.name,a.postmode,b.forum_cat,b.forum_name,b.is_readonly,c.cat_name,";
+    $sql  = "SELECT a.forum,a.pid,a.comment,a.date,a.locked,a.subject,a.mood,a.sticky,a.uid,a.name,a.postmode,a.status,b.forum_cat,b.forum_name,b.is_readonly,c.cat_name,";
     $sql .= "b.forum_cat,b.forum_name,b.is_readonly,b.use_attachment_grpid,c.cat_name ";
     $sql .= "FROM {$_TABLES['gf_topic']} a ";
     $sql .= "LEFT JOIN {$_TABLES['gf_forums']} b ON b.forum_id=a.forum ";
@@ -507,6 +581,23 @@ if ($method == 'edit') {
         gf_siteFooter();
         exit;
     }
+    // set our options for edit..
+    if ( $edittopic['status'] & DISABLE_BBCODE ) {
+        $disable_bbcode_val = ' checked="checked"';
+    } else {
+        $disable_bbcode_val = '';
+    }
+    if ( $edittopic['status'] & DISABLE_SMILIES ) {
+        $disable_smilies_val = ' checked="checked"';
+    } else {
+        $disable_smilies_val = '';
+    }
+    if ( $edittopic['status'] & DISABLE_URLPARSE ) {
+        $disable_urlparse_val = ' checked="checked"';
+    } else {
+        $disable_urlparse_val = '';
+    }
+
 }
 
 // PREVIEW TOPIC
@@ -519,6 +610,9 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
     $previewitem['id']      = COM_applyFilter($_POST['id'],true);
     $previewitem['locked']  = 0;
     $previewitem['views']   = 0;
+
+
+
     if ($method == 'edit') {
         $previewitem['uid']  = $edittopic['uid'];
         $previewitem['name'] = $edittopic['name'];
@@ -531,7 +625,6 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
 
     } else {
         if ($uid > 1) {
-//            $previewitem['name'] = gf_checkHTML(strip_tags(COM_checkWords(COM_stripslashes($_POST['aname']))));
             $previewitem['name'] = $_USER['username'];
             $previewitem['uid'] = $_USER['uid'];
         } else {
@@ -542,6 +635,30 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
         gf_check4files($_POST['uniqueid'],true);
         $numAttachments = DB_count($_TABLES['gf_attachments'],array('topic_id','tempfile'),array(intval($_POST['uniqueid']),1));
     }
+
+    $status = 0;
+    // get our options...
+    if ( isset($_POST['disable_bbcode']) && $_POST['disable_bbcode'] == 1 ) {
+        $disable_bbcode_val = ' checked="checked"';
+        $status += DISABLE_BBCODE;
+    } else {
+        $disable_bbcode_val = '';
+    }
+    if ( isset($_POST['disable_smilies']) && $_POST['disable_smilies'] == 1 ) {
+        $disable_smilies_val = ' checked="checked"';
+        $status += DISABLE_SMILIES;
+    } else {
+        $disable_smilies_val = '';
+    }
+    if ( isset($_POST['disable_urlparse']) && $_POST['disable_urlparse'] == 1 ) {
+        $disable_urlparse_val = ' checked="checked"';
+        $status += DISABLE_URLPARSE;
+    } else {
+        $disable_urlparse_val = '';
+    }
+
+    $previewitem['status'] = $status;
+
     $previewitem['date'] = time();
     $subject = $_POST['subject'];
     $previewitem['subject'] = gf_checkHTML($subject);
@@ -586,6 +703,8 @@ if (isset($_REQUEST['preview']) && $_REQUEST['preview'] == $LANG_GF01['PREVIEW']
             }
         }
     }
+
+
 }
 
 // NEW TOPIC OR REPLY
@@ -864,6 +983,11 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     }
     $submissionform_code = new Template($_CONF['path'] . 'plugins/forum/templates/');
     $submissionform_code->set_file (array ('submissionform_code'=>'submissionform_code.thtml'));
+    if ($CONF_FORUM['allow_smilies']) {
+        $submissionform_code->set_var('smiley_enabled','yes');
+    } else {
+        $submissionform_code->set_var('smiley_enabled','');
+    }
     $submissionform_code->set_var ('site_url', $_CONF['site_url']);
     $submissionform_code->set_var ('LANG_code', $LANG_GF01['CODE']);
     $submissionform_code->set_var ('LANG_fontcolor', $LANG_GF01['FONTCOLOR']);
@@ -945,7 +1069,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
             // check and see if user has un-subscribed to this topic
             $nid = -$notifyTopicid;
             if ($notifyTopicid > 0 AND DB_getItem($_TABLES['gf_watch'],'id', "forum_id='{$edittopic['forum']}' AND topic_id=$nid AND uid='$uid'") > 1) {
-                $notigy = '';
+                $notify = '';
             }
         } else {
             $notify = '';
@@ -996,6 +1120,7 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     } else {
          $postmode_msg = $LANG_GF01['HTMLMODE'];
     }
+
     if($CONF_FORUM['allow_html'] || SEC_inGroup( 'Root' ) || SEC_hasRights('forum.html')) {
         if ( $method == 'edit' ) {
             if ( $postmode == 'html' && $CONF_FORUM['use_wysiwyg_editor'] == 1 ) {
@@ -1060,6 +1185,19 @@ if(($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($p
     } else {
         $smilies =  forumPLG_showsmilies($wysiwyg);
     }
+
+    $disable_bbcode_prompt   = $LANG_GF01['disable_bbcode'].'&nbsp;<input type="checkbox" name="disable_bbcode" value="1" '.$disable_bbcode_val . '/>';
+    if($CONF_FORUM['allow_smilies']) {
+        $disable_smilies_prompt  = $LANG_GF01['disable_smilies'].'&nbsp;<input type="checkbox" name="disable_smilies" value="1"'.$disable_smilies_val. ' />';
+    } else {
+        $disable_smilies_prompt = '';
+    }
+    $disable_urlparse_prompt = $LANG_GF01['disable_urlparse'].'&nbsp;<input type="checkbox" name="disable_urlparse" value="1"'.$disable_urlparse_val.' />';
+
+    $submissionform_main->set_var(array(
+        'bbcode_prompt' => $disable_bbcode_prompt,
+        'smilies_prompt' => $disable_smilies_prompt,
+        'urlparse_prompt' => $disable_urlparse_prompt));
 
     $submissionform_main->set_var ('LANG_SUBJECT', $LANG_GF01['SUBJECT']);
     $submissionform_main->set_var ('LANG_OPTIONS', $LANG_GF01['OPTIONS']);

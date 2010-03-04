@@ -65,6 +65,35 @@ function glf_template_set_root($root) {
     return $retval;
 }
 
+function glfusion_UpgradeCheck() {
+    global $_CONF,$_SYSTEM,$_TABLES,$LANG01;
+
+    if (!SEC_inGroup ('Root')) {
+        return;
+    }
+
+    $retval = '';
+    $msg = '';
+
+    $dbversion = DB_getItem($_TABLES['vars'],'value','name="glfusion"');
+    $comparison = version_compare( GVERSION, $dbversion );
+    $install_url = $_CONF['site_url'] . '/admin/install/index.php';
+
+    switch ($comparison) {
+        case 1:
+            $msg .= sprintf($LANG01[504], $dbversion, GVERSION, $install_url ) . '<br />';
+            break;
+        case -1:
+            $msg .= sprintf($LANG01[505], $dbversion, GVERSION ) . '<br />';
+            break;
+    }
+
+    if ( $msg != '' ) {
+        $retval = '<p style="width:100%;text-align:center;"><span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">' . $msg . '</span></p>';
+    }
+    return $retval;
+}
+
 function glfusion_SecurityCheck() {
     global $_CONF,$_SYSTEM,$LANG01;
 

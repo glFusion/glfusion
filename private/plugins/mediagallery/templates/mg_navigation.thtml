@@ -93,16 +93,6 @@
      </td>
    </tr>
   <tr>
-     <td class="pluginCellTitle">{lang_utilities}</td>
-   </tr>
-   <tr>
-     <td>
-       <ul>
-         <li><a href="{site_url}/phpinfo.php" rel="external">{lang_php_info}</a></li>
-       </ul>
-     </td>
-   </tr>
-  <tr>
     <td class="pluginCellTitle">{lang_import_wizards}</td>
   </tr>
   <tr>

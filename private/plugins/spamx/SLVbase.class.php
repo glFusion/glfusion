@@ -9,7 +9,8 @@
 *
 * Licensed under the GNU General Public License
 *
-* $Id$
+* @package Spam-X
+* @subpackage Modules
 */
 
 if (!defined ('GVERSION')) {
@@ -20,10 +21,10 @@ if (!defined ('GVERSION')) {
 * Sends posts to SLV (linksleeve.org) for examination
 *
 * @author Dirk Haun     dirk AT haun-online DOT de
-*
 * based on the works of Tom Willet (Spam-X) and Russ Jones (SLV)
+* @package Spam-X
+*
 */
-
 class SLVbase {
 
     var $_debug = false;
@@ -129,7 +130,7 @@ class SLVbase {
 
             foreach ($links as $key => $link) {
                 if (!empty ($link)) {
-                    if (preg_match ("#$val#i", $link)) {
+                    if (@preg_match ("#$val#i", $link)) {
                         $links[$key] = '';
                     }
                 }
@@ -152,7 +153,7 @@ class SLVbase {
 
         $links = array();
 
-        preg_match_all( "/<a[^>]*href=[\"']([^\"']*)[\"'][^>]*>(.*?)<\/a>/i",
+        @preg_match_all( "/<a[^>]*href=[\"']([^\"']*)[\"'][^>]*>(.*?)<\/a>/i",
                         $comment, $matches );
         for ($i = 0; $i < count ($matches[0]); $i++) {
             $url = $matches[1][$i];
@@ -191,7 +192,7 @@ class SLVbase {
 
         // some spammers have yet to realize that we're not supporting BBcode
         // but since we want the URLs, convert it here ...
-        $comment = preg_replace ('/\[url=([^\]]*)\]/i', '<a href="\1">',
+        $comment = @preg_replace ('/\[url=([^\]]*)\]/i', '<a href="\1">',
                                  $comment);
         $comment = str_replace (array ('[/url]', '[/URL]'),
                                 array ('</a>',   '</a>'  ), $comment);

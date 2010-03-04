@@ -382,8 +382,8 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
         DB_query($sql);
         $sql = "UPDATE {$_TABLES['mg_media_albums']} SET media_order=" . intval($media[$i]['seq']) . " WHERE album_id=" . intval($album_id) . " AND media_id='" . addslashes($media[$i]['mid']) . "'";
         DB_query($sql);
+        PLG_itemSaved($media[$i]['mid'],'mediagallery');
     }
-    PLG_itemSaved($media[$i]['mid'],'mediagallery');
     MG_reorderMedia($album_id);
 
     // Now do the album cover...

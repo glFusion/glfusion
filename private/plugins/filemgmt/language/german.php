@@ -7,7 +7,7 @@
 // | German language file                                                     |
 // | Modifiziert: August 09 Tony Kluever									  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -165,6 +165,7 @@ $LANG_confignames['filemgmt'] = array(
     'numsubcategories2show' => 'Unterkategorie je Reihe',
     'outside_webroot'       => 'Datei außerhalb Web-Root speichern',
     'enable_rating'         => 'Enable Ratings',
+    'displayblocks'         => 'Display glFusion Blocks',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Haupteinstellungen'
@@ -181,6 +182,7 @@ $LANG_configselects['filemgmt'] = array(
     0 => array('Ja' => 1, 'Nein' => 0),
     1 => array('Ja' => TRUE, 'Nein' => FALSE),
     2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
+    3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 

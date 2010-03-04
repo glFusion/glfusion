@@ -8,12 +8,16 @@
     <input class="button2" type="button" title="{$LANG_GF01[q_help]}" onclick="bbstyle(6)" style="width: 50px;" value="Quote" name="addbbcode6" accesskey="q"/>
     <input class="button2" type="button" title="{$LANG_GF01[c_help]}" onclick="bbstyle(8)" style="width: 40px;" value="Code" name="addbbcode8" accesskey="c"/>
     <input class="button2" type="button" title="{$LANG_GF01[l_help]}" onclick="bbstyle(10)" style="width: 40px;" value="List" name="addbbcode10" accesskey="l"/>
-    <input class="button2" type="button" title="Ordered list: [list=]text[/list]" onclick="bbstyle(12)" style="width: 40px;" value="List=" name="addbbcode12" accesskey="o"/>
+    <input class="button2" type="button" title="{$LANG_GF01[o_help]}" onclick="bbstyle(12)" style="width: 40px;" value="List=" name="addbbcode12" accesskey="o"/>
     <input class="button2" type="button" title="{$LANG_GF01[e_help]}" onclick="bbstyle(-1)" style="width: 40px;" value="[*]" name="addlitsitem" accesskey="t"/>
     <input class="button2" type="button" title="{$LANG_GF01[p_help]}" onclick="bbstyle(15)" style="width: 40px;" value="Img" name="addbbcode15" accesskey="p"/>
     <input class="button2" type="button" title="{$LANG_GF01[t_help]}" onclick="bbstyle(19)" style="width: 40px;"  value="File" name="addbbcode19"  accesskey="t"/>
     <input class="button2" type="button" title="{$LANG_GF01[w_help]}" onclick="bbstyle(17)" style="width: 40px;" value="URL" name="addbbcode17" accesskey="w"/>
+{!if smiley_enabled}
+    <input class="button2" type="button" title="{$LANG_GF01[smiley]}" style="text-decoration: underline; width: 60px;" value="{$LANG_GF01[smiley]}" name="toggleV" id="toggleV" />
+{!endif}
     <input class="button2" type="button" title="{$LANG_GF01[h_help]}" name="help" value="Help?" style="text-align:center; width:5em;" onclick="poptastic('{site_url}/forum/bbcode.html');"{xhtml}>
+
     <div style="padding-top:8px;padding-left:5px;">{LANG_fontsize}:&nbsp;
     <select title="{LANG_fontsize}:: [size=9]small text[/size]" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.form.addbbcode20.selectedIndex = 2;" name="addbbcode20">
       <option value="7">{LANG_tiny}</option>

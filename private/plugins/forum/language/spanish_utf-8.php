@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Spanish language file                                                    |
 // | Translated by - Alberto Borja                                            |
-// | Finished at 2010-feb-06 20:30                                            | 
+// | Finished at 2010-feb-06 20:30                                            |
 // +--------------------------------------------------------------------------+
 // | $Id:: english_utf-8.php 5180 2009-11-29 02:50:18Z mevans0263            $|
 // +--------------------------------------------------------------------------+
@@ -306,6 +306,11 @@ $LANG_GF01 = array(
     'edit_signature' => 'Edit BBcode Signature',
     'signature_preview' => 'Signature Preview',
     'cancel_confirm' => 'Seguro que deseas cancelar este Post?',
+    /* --- topic features --- */
+    'disable_bbcode' => 'Disable BBCode:',
+    'disable_smilies' => 'Disable Smilies:',
+    'disable_urlparse' => 'Do not parse URLs:',
+    'features' => 'Features:',
 );
 
 $LANG_GF02 = array(
@@ -530,7 +535,14 @@ $LANG_GF03 = array(
     'lockedpost' => 'Añadir respuesta',
     'splitheading' => 'Opción de dividir tema:',
     'splitopt1' => 'Mover todos los Posts desde este punto',
-    'splitopt2' => 'Mover únicamente este Post'
+    'splitopt2' => 'Mover únicamente este Post',
+    'merge_post'  => 'Merge Post',
+    'merge_topic' => 'Merge Topic',
+    'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
+    'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
+    'select'    => 'Select',
+    'select_forum' => 'Select Forum Topic',
+    'destination_topic' => 'Destination Topic ID:',
 );
 
 $LANG_GF04 = array(
@@ -733,6 +745,12 @@ $LANG_GF92 = array(
     'forum_prefs' => 'Preferencias de los Foros',
     'forumprefs_help_title' => 'Ayuda para las preferencias de los Foros',
     'forumprefs_help' => 'Modificar las preferencias del modulo de Foros.<ul><li>Número de temas a mostrar en el índice de los foros.</li><li>Número de Posts a mostrar por página.</li><li>Número de Post para considerar un tema como popular.</li><li>Número de lineas a mostrar en los resultados de la búsqueda.</li><li>En la pantalla de listado de miembros</li><li>Ocultar Posts anónimos.</li><li>Activar notificaciones automáticas.</li><li>Enviar solo una notificación.</li><li>Mostrar la revisión del tema (iframe) al final de la página al responder.</li></ul>',
+    'topic_order' => 'Topic Order',
+    'editor_type' => 'Editor Type',
+    'bbcode'    => 'BBCode',
+    'wysiwyg'   => 'WYSIWYG',
+    'ascending' => 'Ascending',
+    'descending' => 'Descending',
 );
 
 // Board Admin
@@ -972,6 +990,9 @@ $LANG_confignames['forum'] = array(
     'enable_user_rating_system' => 'Activar sistema de evaluación de usuarios',
     'bbcode_signature' => 'Activar firma BBcode',
     'use_wysiwyg_editor' => 'Activar Editor WYSIWYG HTML',
+    'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
+    'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -992,8 +1013,9 @@ $LANG_configselects['forum'] = array(
     2 => array('Top of Page' => 1, 'After Featured Story' => 2, 'Bottom of Page' => 3),
     3 => array('No Blocks' => 'noblocks', 'Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks'),
     4 => array('Block Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'None' => 'none'),
-    5 => array('Descending' => 'DESC', 'Ascending' => 'ASC')
-	
+    5 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
+    6 => array('Checked' => 1, 'Unchecked' => 0)
+
 //$LANG_configselects['foro'] = array(
 //    0 => array('Verdadero' => 1, 'Falso' => 0),
 //    1 => array('Verdadero' => true, 'Falso' => false),

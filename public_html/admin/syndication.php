@@ -35,9 +35,13 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+// glFusion common function library
 require_once '../lib-common.php';
+
+// glFusion authentication module
 require_once 'auth.inc.php';
 
+// Make sure user has rights to access this page
 if (!SEC_hasRights ('syndication.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_startBlock ($MESSAGE[30], '',
@@ -57,22 +61,22 @@ if (!SEC_hasRights ('syndication.edit')) {
 * @return   void
 *
 */
-function changeFeedStatus($fid_arr)
+function changeFeedStatus($fid_arr, $feedarray)
 {
     global $_TABLES;
 
-    // first disable all
-    DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '0'");
-    if (isset($fid_arr)) {
-        foreach ($fid_arr as $fid) {
-            $feed_id = addslashes (COM_applyFilter ($fid, true));
-            if (!empty ($fid)) {
-                // now enable those in the array
-                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '1' WHERE fid = '$fid'");
+    if (isset($feedarray) && is_array($feedarray) ) {
+        foreach ($feedarray AS $feed => $junk ) {
+            $feed = intval($feed);
+            if ( isset($fid_arr[$feed]) ) {
+                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '1' WHERE fid = $feed");
+            } else {
+                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '0' WHERE fid = $feed");
             }
         }
         CACHE_remove_instance('story');
     }
+    return;
 }
 
 /**
@@ -81,7 +85,7 @@ function changeFeedStatus($fid_arr)
 * @return   array   array of names of feed formats (and versions)
 *
 */
-function find_feedFormats ()
+function find_feedFormats()
 {
     global $_CONF;
 
@@ -134,26 +138,26 @@ function listfeeds()
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
-    $token = SEC_createToken();
 
     $header_arr = array(      # display 'text' and use table field 'field'
-                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
+                    array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'center' => true),
                     array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
-                    array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true),
-                    array('text' => $LANG33[17], 'field' => 'format', 'sort' => true),
+                    array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true, 'center' => true),
+                    array('text' => $LANG33[17], 'field' => 'format', 'sort' => true, 'center' => true),
                     array('text' => $LANG33[16], 'field' => 'filename', 'sort' => true),
-                    array('text' => $LANG_ADMIN['topic'], 'field' => 'header_tid', 'sort' => true),
-                    array('text' => $LANG33[18], 'field' => 'updated', 'sort' => true),
-                    array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true)
+                    array('text' => $LANG_ADMIN['topic'], 'field' => 'header_tid', 'sort' => true, 'center' => true),
+                    array('text' => $LANG33[18], 'field' => 'updated', 'sort' => true, 'center' => true),
+                    array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'center' => true),
+                    array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'center' => true)
     );
 
     $defsort_arr = array('field' => 'title', 'direction' => 'asc');
 
     $menu_arr = array (
-                    array('url' => $_CONF['site_admin_url'] . '/syndication.php?mode=edit',
+                    array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=1',
                           'text' => $LANG_ADMIN['create_new']),
                     array('url' => $_CONF['site_admin_url'],
                           'text' => $LANG_ADMIN['admin_home'])
@@ -175,13 +179,23 @@ function listfeeds()
                        'sql' => "SELECT *,UNIX_TIMESTAMP(updated) AS date FROM {$_TABLES['syndication']} WHERE 1=1",
                        'query_fields' => array('title', 'filename'),
                        'default_filter' => '');
-    // this is a dummy variable so we know the form has been used if all feeds
-    // should be disabled in order to disable the last one.
-    $form_arr = array('bottom' => '<input type="hidden" name="feedenabler" value="true"' . XHTML . '>');
+
+    // embed a CSRF token as a hidden var at the top of each of the lists
+    // this is used to validate block enable/disable
+
+    $token = SEC_createToken();
+
+    // feedenabler is a hidden field which if set, indicates that one of the
+    // feeds has been enabled or disabled
+
+    $form_arr = array(
+        'top'    => '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.$token.'"/>',
+        'bottom' => '<input type="hidden" name="feedenabler" value="true"/>'
+    );
 
     $retval .= ADMIN_list('syndication', 'ADMIN_getListField_syndication',
-                          $header_arr, $text_arr, $query_arr, $defsort_arr, '',
-                          $token, '', $form_arr);
+                          $header_arr, $text_arr, $query_arr, $defsort_arr,
+                          '', $token, '', $form_arr);
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
     return $retval;
 }
@@ -194,7 +208,7 @@ function listfeeds()
 * @return   string           HTML for the feed editor
 *
 */
-function editfeed ($fid = 0, $type = '')
+function editfeed($fid = 0, $type = '')
 {
     global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $MESSAGE;
 
@@ -274,7 +288,7 @@ function editfeed ($fid = 0, $type = '')
     if ($A['fid'] > 0) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
                    . '" name="mode"%s' . XHTML . '>';
-        $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
+        $jsconfirm = ' onclick="return confirm(\'' . $LANG33[56] . '\');"';
         $feed_template->set_var ('delete_option',
                                  sprintf ($delbutton, $jsconfirm));
         $feed_template->set_var ('delete_option_no_confirmation',
@@ -382,7 +396,7 @@ function editfeed ($fid = 0, $type = '')
 * @return   string   HTML for the complete page (selection or feed editor)
 *
 */
-function newfeed ()
+function newfeed()
 {
     global $_CONF, $LANG33;
 
@@ -549,54 +563,92 @@ function deletefeed ($fid)
 }
 
 
-// MAIN
+// MAIN ========================================================================
+
 $display = '';
 
-if ($_CONF['backend'] && isset($_POST['feedenabler']) && SEC_checkToken()) {
+
+
+$action = '';
+$expected = array('create', 'edit', 'save', 'delete', 'cancel');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
+    }
+}
+
+$fid = 0;
+if (isset($_POST['fid'])) {
+    $fid = COM_applyFilter($_POST['fid'], true);
+} elseif (isset($_GET['fid'])) {
+    $fid = COM_applyFilter($_GET['fid'], true);
+}
+
+$validtoken = SEC_checkToken();
+
+if ($_CONF['backend'] && isset($_POST['feedenabler']) && $validtoken) {
     $enabledfeeds = array();
     if (isset($_POST['enabledfeeds'])) {
         $enabledfeeds = $_POST['enabledfeeds'];
     }
-    changeFeedStatus($enabledfeeds);
+    $feedarray = array();
+    if ( isset($_POST['feedarray']) ) {
+        $feedarray = $_POST['feedarray'];
+    }
+    changeFeedStatus($enabledfeeds, $feedarray);
 }
-$mode = '';
-if (isset($_REQUEST['mode'])) {
-    $mode = $_REQUEST['mode'];
-}
-if ($mode == 'edit') {
-    if (empty ($_REQUEST['fid'])) {
-        $display .= newfeed ();
-    } else {
+
+switch ($action) {
+
+    case 'create':
         $display .= COM_siteHeader ('menu', $LANG33[24])
-                 . editfeed (COM_applyFilter($_REQUEST['fid']))
+                 . editfeed (0, COM_applyFilter($_REQUEST['type']))
                  . COM_siteFooter ();
-    }
-}
-else if (($mode == $LANG33[1]) && !empty ($LANG33[1]))
-{
-    $display .= COM_siteHeader ('menu', $LANG33[24])
-             . editfeed (0, COM_applyFilter($_REQUEST['type']))
-             . COM_siteFooter ();
-}
-elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken())
-{
-    $display .= savefeed($_POST);
-} elseif (($mode == $LANG_ADMIN['delete']) && !empty($LANG_ADMIN['delete']) && SEC_checkToken()) {
-    $fid = 0;
-    if (isset($_POST['fid'])) {
-        $fid = COM_applyFilter($_POST['fid'], true);
-    }
-    $display .= deletefeed($fid);
-}
-else
-{
-    $display .= COM_siteHeader ('menu', $LANG33[10]);
-    if (isset ($_REQUEST['msg'])) {
-        $display .= COM_showMessage (COM_applyFilter($_REQUEST['msg']));
-    }
-    $display .= listfeeds();
-    $display .= COM_siteFooter ();
+        break;
+
+    case 'edit':
+        if ($fid == 0) {
+            $display .= newfeed ();
+        } else {
+            $display .= COM_siteHeader ('menu', $LANG33[24])
+                     . editfeed ($fid)
+                     . COM_siteFooter ();
+        }
+        break;
+
+    case 'save':
+        if ($validtoken) {
+            $display .= savefeed($_POST);
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally edit feed $fid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
+
+    case 'delete':
+        if ($validtoken) {
+            $display .= deletefeed($fid);
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete feed $fid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
+
+    default:
+        $display .= COM_siteHeader ('menu', $LANG33[10]);
+        if (isset ($_POST['msg'])) {
+            $msg = COM_applyFilter ($_POST['msg'], true);
+        } elseif (isset ($_GET['msg'])) {
+            $msg = COM_applyFilter ($_GET['msg'], true);
+        }
+        $display .= ($msg > 0) ? COM_showMessage($msg) : '';
+        $display .= listfeeds();
+        $display .= COM_siteFooter ();
+        break;
 }
 
 echo $display;
+
 ?>

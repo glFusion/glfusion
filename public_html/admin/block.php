@@ -35,16 +35,15 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
+// glFusion common function library
 require_once '../lib-common.php';
-require_once 'auth.inc.php';
-require_once $_CONF['path_system'] . 'lib-security.php';
 
-// Uncomment the line below if you need to debug the HTTP variables being passed
-// to the script.  This will sometimes cause errors but it will allow you to see
-// the data being passed in a POST operation
-// echo COM_debug($_POST);
+// glFusion authentication module
+require_once 'auth.inc.php';
 
 $display = '';
+
+// Make sure user has rights to access this page
 if (!SEC_hasRights ('block.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_startBlock ($MESSAGE[30], '',
@@ -283,7 +282,7 @@ function editblock ($bid = '')
 
     if (!empty($bid) && SEC_hasrights('block.delete')) {
         $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete']
-                   . '" name="mode"%s' . XHTML . '>';
+                   . '" name="delete"%s' . XHTML . '>';
         $jsconfirm = ' onclick="return confirm(\'' . $MESSAGE[76] . '\');"';
         $block_templates->set_var ('delete_option',
                                    sprintf ($delbutton, $jsconfirm));
@@ -404,14 +403,13 @@ function listblocks()
 {
     global $_CONF, $_TABLES, $LANG_ADMIN, $LANG21, $_IMAGE_TYPE;
 
-    require_once $_CONF['path_system'] . 'lib-admin.php';
+    USES_lib_admin();
 
     $retval = '';
-    $token = SEC_createToken();
 
     // writing the menu on top
     $menu_arr = array (
-        array('url' => $_CONF['site_admin_url'] . '/block.php?mode=edit',
+        array('url' => $_CONF['site_admin_url'] . '/block.php?edit=1',
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'],
               'text' => $LANG_ADMIN['admin_home'])
@@ -429,14 +427,15 @@ function listblocks()
 
     // writing the list
     $header_arr = array(      # display 'text' and use table field 'field'
-        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false),
-        array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true),
-        array('text' => $LANG21[46], 'field' => 'move', 'sort' => false),
+        array('text' => $LANG_ADMIN['edit'], 'field' => 'edit', 'sort' => false, 'center' => true),
+        array('text' => $LANG21[65], 'field' => 'blockorder', 'sort' => true, 'center' => true),
+        array('text' => $LANG21[46], 'field' => 'move', 'sort' => false, 'center' => true),
         array('text' => $LANG21[48], 'field' => 'name', 'sort' => true),
         array('text' => $LANG_ADMIN['title'], 'field' => 'title', 'sort' => true),
-        array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true),
-        array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true),
-        array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true)
+        array('text' => $LANG_ADMIN['type'], 'field' => 'type', 'sort' => true, 'center' => true),
+        array('text' => $LANG_ADMIN['topic'], 'field' => 'tid', 'sort' => true, 'center' => true),
+        array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'center' => true),
+        array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'center' => true)
     );
 
     $defsort_arr = array('field' => 'blockorder', 'direction' => 'asc');
@@ -453,10 +452,18 @@ function listblocks()
         'default_filter' => COM_getPermSql ('AND')
     );
 
-    // this is a dummy variable so we know the form has been used if all blocks
-    // should be disabled on one side in order to disable the last one.
-    // The value is the onleft var
-    $form_arr = array('bottom' => '<input type="hidden" name="blockenabler" value="1"' . XHTML . '>');
+    // embed a CSRF token as a hidden var at the top of each of the lists
+    // this is used to validate block enable/disable
+
+    $token = SEC_createToken();
+
+    // blockenabler is a hidden field which if set, indicates that one of the
+    // blocks has been enabled or disabled - the value is the onleft var
+
+    $form_arr = array(
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
+        'bottom' => '<input type="hidden" name="blockenabler" value="1"/>'
+    );
 
     $retval .= ADMIN_list(
         'blocks', 'ADMIN_getListField_blocks', $header_arr, $text_arr,
@@ -478,9 +485,13 @@ function listblocks()
         'form_url'   => $_CONF['site_admin_url'] . '/block.php'
     );
 
-    // this is a dummy-variable so we know the form has been used if all blocks should be disabled
-    // on one side in order to disable the last one. The value is the onleft var
-    $form_arr = array('bottom' => '<input type="hidden" name="blockenabler" value="0"' . XHTML . '>');
+    // blockenabler is a hidden field which if set, indicates that one of the
+    // blocks has been enabled or disabled - the value is the onleft var
+
+    $form_arr = array(
+        'top'    => '<input type="hidden" name="' . CSRF_TOKEN . '" value="'. $token .'"/>',
+        'bottom' => '<input type="hidden" name="blockenabler" value="0"/>'
+    );
 
     $retval .= ADMIN_list (
         'blocks', 'ADMIN_getListField_blocks', $header_arr, $text_arr,
@@ -714,6 +725,7 @@ function reorderblocks()
         $blockOrd += $stepNumber;
         $lastside = $A['onleft'];       // save variable for next round
     }
+    return true;
 }
 
 
@@ -756,7 +768,7 @@ function moveBlock()
         COM_errorLOG("block admin error: Attempt to move an non existing block id: $bid");
     }
     echo COM_refresh($_CONF['site_admin_url'] . "/block.php");
-    exit;
+//    exit;
     return $retval;
 }
 
@@ -764,22 +776,24 @@ function moveBlock()
 /**
 * Enable and Disable block
 */
-function changeBlockStatus($side, $bid_arr)
+function changeBlockStatus($side, $bid_arr, $bidarray)
 {
     global $_CONF, $_TABLES;
 
-    // first, disable all on the requested side
-    $side = COM_applyFilter($side, true);
-    $sql = "UPDATE {$_TABLES['blocks']} SET is_enabled = '0' WHERE onleft='$side';";
-    DB_query($sql);
-    if (isset($bid_arr)) {
-        foreach ($bid_arr as $bid => $side) {
-            $bid = COM_applyFilter($bid, true);
-            // the enable those in the array
-            $sql = "UPDATE {$_TABLES['blocks']} SET is_enabled = '1' WHERE bid='$bid' AND onleft='$side'";
-            DB_query($sql);
+    if (isset($bidarray) ) {
+        foreach ($bidarray AS $bid => $side ) {
+            $bid = intval($bid);
+            $side = intval($side);
+            if ( isset($bid_arr[$bid]) ) {
+                $sql = "UPDATE {$_TABLES['blocks']} SET is_enabled = '1' WHERE bid=$bid AND onleft=$side";
+                DB_query($sql);
+            } else {
+                $sql = "UPDATE {$_TABLES['blocks']} SET is_enabled = '0' WHERE bid=$bid AND onleft=$side";
+                DB_query($sql);
+            }
         }
     }
+
     return;
 }
 
@@ -808,118 +822,131 @@ function deleteBlock ($bid)
     return COM_refresh ($_CONF['site_admin_url'] . '/block.php?msg=12');
 }
 
-// MAIN
-$mode = '';
-if (!empty($_REQUEST['mode'])) {
-    $mode = $_REQUEST['mode'];
+// MAIN ========================================================================
+
+$display = '';
+
+$action = '';
+$expected = array('edit','save','move','delete','cancel');
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    } elseif (isset($_GET[$provided])) {
+	$action = $provided;
+    }
 }
 
-$bid = '';
-if (!empty($_REQUEST['bid'])) {
-    $bid = COM_applyFilter ($_REQUEST['bid']);
+$bid = 0;
+if (isset($_POST['bid'])) {
+    $bid = COM_applyFilter($_POST['bid'], true);
+} elseif (isset($_GET['bid'])) {
+    $bid = COM_applyFilter($_GET['bid'], true);
 }
 
-if (isset($_POST['blockenabler']) && SEC_checkToken()) {
+$validtoken = SEC_checkToken();
+
+if (isset($_POST['blockenabler']) && $validtoken) {
+    $side = COM_applyFilter($_POST['blockenabler'], true);
     $enabledblocks = array();
     if (isset($_POST['enabledblocks'])) {
         $enabledblocks = $_POST['enabledblocks'];
     }
-    changeBlockStatus($_POST['blockenabler'], $enabledblocks);
+    $bidarray = array();
+    if ( isset($_POST['bidarray']) ) {
+        $bidarray = $_POST['bidarray'];
+    }
+    changeBlockStatus($side, $enabledblocks, $bidarray);
 }
 
-if (($mode == $LANG_ADMIN['delete']) && !empty ($LANG_ADMIN['delete'])) {
-    if (!isset ($bid) || empty ($bid) || ($bid == 0)) {
-        COM_errorLog ('Attempted to delete block, bid empty or null, value =' . $bid);
-        $display .= COM_refresh ($_CONF['site_admin_url'] . '/block.php');
-    } elseif (SEC_checkToken()) {
-        $display .= deleteBlock ($bid);
-    } else {
-        COM_accessLog("User {$_USER['username']} tried to illegally delete block $bid and failed CSRF checks.");
-        echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
-    }
-} elseif (($mode == $LANG_ADMIN['save']) && !empty($LANG_ADMIN['save']) && SEC_checkToken()) {
-    $help = '';
-    if (isset ($_POST['help'])) {
-        $help = COM_sanitizeUrl ($_POST['help'], array ('http', 'https'));
-    }
+switch ($action) {
 
-    $content = '';
+    case 'edit':
+        SEC_setCookie($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
+                       time() + 1200, $_CONF['cookie_path'],
+                       $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
+        $display .= COM_siteHeader('menu', $LANG21[3])
+                 . editblock ($bid)
+                 . COM_siteFooter();
+        break;
 
-    if (($_CONF['advanced_editor'] == 1)) {
-        if ( $_POST['postmode'] == 'adveditor' ) {
-            $content = COM_stripslashes($_POST['block_html']);
-            $html = true;
-        } else if ( $_POST['postmode'] == 'html' ) {
-            $content = COM_stripslashes($_POST['block_text']);
-            $html = false;
+    case 'save':
+        if ($validtoken) {
+            $help = '';
+            if (isset ($_POST['help'])) {
+                $help = COM_sanitizeUrl ($_POST['help'], array ('http', 'https'));
+            }
+
+            $content = '';
+            if (($_CONF['advanced_editor'] == 1)) {
+                if ( $_POST['postmode'] == 'adveditor' ) {
+                    $content = COM_stripslashes($_POST['block_html']);
+                    $html = true;
+                } else if ( $_POST['postmode'] == 'html' ) {
+                    $content = COM_stripslashes($_POST['block_text']);
+                    $html = false;
+                }
+            } else {
+                $content = COM_stripslashes($_POST['content']);
+            }
+
+            $rdfurl = (isset ($_POST['rdfurl'])) ? $_POST['rdfurl'] : ''; // to be sanitized later
+            $rdfupdated = (isset ($_POST['rdfupdated'])) ? $_POST['rdfupdated'] : '';
+            $rdflimit = (isset ($_POST['rdflimit'])) ? COM_applyFilter ($_POST['rdflimit'], true) : 0;
+            $phpblockfn = (isset ($_POST['phpblockfn'])) ? $_POST['phpblockfn'] : '';
+            $is_enabled = (isset ($_POST['is_enabled'])) ? $_POST['is_enabled'] : '';
+            $allow_autotags = (isset ($_POST['allow_autotags'])) ? $_POST['allow_autotags'] : '';
+
+            $display .= saveblock ($bid, $_POST['name'], $_POST['title'],
+                            $help, $_POST['type'], $_POST['blockorder'], $content,
+                            COM_applyFilter ($_POST['tid']), $rdfurl, $rdfupdated,
+                            $rdflimit, $phpblockfn, $_POST['onleft'],
+                            COM_applyFilter ($_POST['owner_id'], true),
+                            COM_applyFilter ($_POST['group_id'], true),
+                            $_POST['perm_owner'], $_POST['perm_group'],
+                            $_POST['perm_members'], $_POST['perm_anon'],
+                            $is_enabled, $allow_autotags);
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally edit block $bid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
-    } else {
-        $content = COM_stripslashes($_POST['content']);
-    }
+        break;
 
-    $rdfurl = '';
-    if (isset ($_POST['rdfurl'])) {
-        $rdfurl = $_POST['rdfurl']; // to be sanitized later
-    }
-    $rdfupdated = '';
-    if (isset ($_POST['rdfupdated'])) {
-        $rdfupdated = $_POST['rdfupdated'];
-    }
-    $rdflimit = 0;
-    if (isset ($_POST['rdflimit'])) {
-        $rdflimit = COM_applyFilter ($_POST['rdflimit'], true);
-    }
-    $phpblockfn = '';
-    if (isset ($_POST['phpblockfn'])) {
-        $phpblockfn = $_POST['phpblockfn'];
-    }
-    $is_enabled = '';
-    if (isset ($_POST['is_enabled'])) {
-        $is_enabled = $_POST['is_enabled'];
-    }
-    $allow_autotags = '';
-    if (isset ($_POST['allow_autotags'])) {
-        $allow_autotags = $_POST['allow_autotags'];
-    }
+    case 'move':
+        $display .= COM_siteHeader('menu', $LANG21[19]);
+        if($validtoken) {
+            $display .= moveBlock();
+        }
+        $display .= listblocks();
+        $display .= COM_siteFooter();
+        break;
 
-    $display .= saveblock ($bid, $_POST['name'], $_POST['title'],
-                    $help, $_POST['type'], $_POST['blockorder'], $content,
-                    COM_applyFilter ($_POST['tid']), $rdfurl, $rdfupdated,
-                    $rdflimit, $phpblockfn, $_POST['onleft'],
-                    COM_applyFilter ($_POST['owner_id'], true),
-                    COM_applyFilter ($_POST['group_id'], true),
-                    $_POST['perm_owner'], $_POST['perm_group'],
-                    $_POST['perm_members'], $_POST['perm_anon'],
-                    $is_enabled, $allow_autotags);
-} else if ($mode == 'edit') {
-    SEC_setCookie ($_CONF['cookie_name'].'fckeditor', SEC_createTokenGeneral('advancededitor'),
-                   time() + 1200, $_CONF['cookie_path'],
-                   $_CONF['cookiedomain'], $_CONF['cookiesecure'],false);
-    $display .= COM_siteHeader ('menu', $LANG21[3])
-             . editblock ($bid)
-             . COM_siteFooter ();
-} else if ($mode == 'move') {
-    $display .= COM_siteHeader('menu', $LANG21[19]);
-    if(SEC_checkToken()) {
-        $display .= moveBlock();
-    }
-    $display .= listblocks();
-    $display .= COM_siteFooter();
-} else {  // 'cancel' or no mode at all
-    $display .= COM_siteHeader ('menu', $LANG21[19]);
-    $msg = 0;
-    if (isset ($_POST['msg'])) {
-        $msg = COM_applyFilter ($_POST['msg'], true);
-    } else if (isset ($_GET['msg'])) {
-        $msg = COM_applyFilter ($_GET['msg'], true);
-    }
-    if ($msg > 0) {
-        $display .= COM_showMessage ($msg);
-    }
-    $display .= listblocks();
+    case 'delete':
+        if (!isset ($bid) || empty ($bid) || ($bid == 0)) {
+            COM_errorLog('Attempted to delete block, bid empty or null, value =' . $bid);
+            $display .= COM_refresh($_CONF['site_admin_url'] . '/block.php');
+        } elseif ($validtoken) {
+            $display .= deleteBlock($bid);
+        } else {
+            COM_accessLog("User {$_USER['username']} tried to illegally delete block $bid and failed CSRF checks.");
+            echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
+        }
+        break;
 
-    $display .= COM_siteFooter();
+    default:
+        $display .= COM_siteHeader ('menu', $LANG21[19]);
+        $msg = 0;
+        if (isset ($_POST['msg'])) {
+            $msg = COM_applyFilter ($_POST['msg'], true);
+        } else if (isset ($_GET['msg'])) {
+            $msg = COM_applyFilter ($_GET['msg'], true);
+        }
+        $display .= ($msg > 0) ? COM_showMessage($msg) : '';
+        $display .= listblocks();
+        $display .= COM_siteFooter();
+        break;
+
 }
 
 echo $display;
+
 ?>

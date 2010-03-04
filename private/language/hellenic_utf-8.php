@@ -185,8 +185,59 @@ $LANG01 = array(
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
     503 => 'Maintenance Mode - Non-admin logins disabled',
+    504 => 'The database version is: %s<br />The glFusion script version is: %s<br />Please run the <a href="%s">installation script</a> to upgrade the database!',
+    505 => 'Your database version is: %s<br />The glFusion script version is: %s<br />Please check the integrity of your site!',
     'ctl' => 'Clear Template Cache',
-    'logview' => 'Logview'
+    'logview' => 'Logview',
+    'correct_perms' => 'Please correct the issues identified below. Once they have been corrected, use the <b>Recheck</b> button to validate the environment.',
+    'current' => 'Current',
+    'current_php_settings' => 'Current PHP Settings',
+    'directory_permissions' => 'Directory Permissions',
+    'enabled' => 'Enabled',
+    'env_check' => 'Environment Check',
+    'file_permissions' => 'File Permissions',
+    'file_uploads' => 'Many features of glFusion require the ability to upload files, this should be enabled.',
+    'filesystem_check' => 'Directory / File Permissions',
+    'gd_lib' => 'GD Libraries',
+    'gd_not_found' => 'Unable to locate the GD library functions.  Please ensure that the GD libraries were compiled into PHP or select an alternate graphics library.',
+    'gd_ok' => 'GD Libraries v2 are installed.',
+    'gd_v1' => 'GD Libraries v1 is installed - This version does not fully support JPG image processing so there may be some quality issues.',
+    'graphics' => 'Graphics Library',
+    'hosting_env' => 'Hosting Environment Check',
+    'imagemagick' => 'ImageMagick Programs',
+    'im_not_found' => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
+    'im_ok' => 'The <strong>convert</strong> executable appears to be valid.',
+    'memory_limit' => 'It is recommended that you have at least 48M of memory enabled on your site.',
+    'not_writable' => 'NOT WRITABLE',
+    'notes' => 'Notes',
+    'not_found' => 'Not Found',
+    'netpbm' => 'NetPBM Library',
+    'np_ok' => 'The NetPBM library is installed',
+    'np_not_found' => 'The NetPBM executables were not found.',
+    'off' => 'Off',
+    'ok' => 'OK',
+    'on' => 'On',
+    'open_basedir' => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
+    'php_req_version' => 'glFusion requires PHP version 4.3.0 or newer.',
+    'php_settings' => 'PHP Settings',
+    'php_version' => 'PHP Version',
+    'php_warning' => 'If any of the items below are marked in <span class="no">red</span>, you may encounter problems with your glFusion site.  Check with your hosting provider for information on changing any of these PHP settings.',
+    'post_max_size' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the maximum post size.',
+    'recheck' => 'Recheck Environment',
+    'recommended' => 'Recommended',
+    'register_globals' => 'If PHP\'s <strong>register_globals</strong> is enabled, it can create security issues.',
+    'safe_mode' => 'If PHP\'s <strong>safe_mode</strong> is enabled, some functions of glFusion may not work correctly. Specifically the Media Gallery plugin.',
+    'setting' => 'Setting',
+    'unable_mkdir' => 'Unable to create directory',
+    'upload_max_filesize' => 'glFusion allows you to upload plugins, images, and files. You should allow at least 8M for the upload size.',
+    'not_checked' => 'Skipped',
+    'bypass_note' => 'Since either Safe Mode or open_basedir restrictions were detected, the check for graphic libraries were skipped.',
+    'jhead' => 'jhead Program',
+    'jhead_not_found' => 'Unable to locate the jhead executable.',
+    'jhead_ok' => 'The jhead executable is installed.',
+    'jpegtran' => 'jpegtran Program',
+    'jpegtran_not_found' => 'Unable to locate the jpegtran executable.',
+    'jpegtran_ok' => 'The jpegtran executable is installed.'
 );
 
 ###############################################################################
@@ -664,7 +715,8 @@ $LANG13 = array(
     'ip_rated' => 'Your IP address has already rated this item.',
     'uid_rated' => 'Your User ID has already rated this item.',
     'own_rated' => 'Either you own the item or do not have permission to rate it.',
-    'thanks_for_vote' => 'Thanks for voting!'
+    'thanks_for_vote' => 'Thanks for voting!',
+    'reset_rating' => 'Reset Rating'
 );
 
 ###############################################################################
@@ -755,7 +807,8 @@ $LANG21 = array(
     65 => 'Order',
     66 => 'Autotags',
     67 => 'Check to allow autotags',
-    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.'
+    68 => 'The feed for this portal block is too long to display. Please set a maximum number of articles to import for the block in the block setup screen, or a global maximum in glFusion Configuration.',
+    69 => 'Are you sure you want to delete this block?'
 );
 
 ###############################################################################
@@ -905,7 +958,7 @@ $LANG28 = array(
     12 => ' Για να μετατρέψετε η να διαγράψετε έναν χρήστη διαλέξτε τον από την παρακάτω λίστα. Για να δημιουργήσετε έναν χρήστη επιλέξτε Νέος χρήστης από το μενού αριστερά.  Μπορείτε να αναζητήσετε ένα μέρος από ονόματα χρηστών, ηλεκτρονικών διευθύνσεων ή τα πλήρη τους ονόματα ( για παράδειγμα *υιός* ή *.gr) στην φόρμα παρακάτω ',
     13 => 'Επίπεδο ασφαλείας',
     14 => 'Ημερομηνία εγγραφής.',
-    15 => '',
+    15 => 'New User',
     16 => '',
     17 => '',
     18 => '',
@@ -977,7 +1030,18 @@ $LANG28 = array(
     84 => "Your login name is: %s  for our site: {$_CONF['site_url']}",
     85 => 'If you have forgotten the password use the following link: %s',
     86 => 'Include',
-    87 => 'Reminders'
+    87 => 'Reminders',
+    88 => 'Default Group',
+    89 => 'Check to make this a default group for new users',
+    90 => 'Apply "Default Group" change to existing user accounts',
+    91 => 'Do you really want to apply these settings to all users?',
+    92 => 'Attribute',
+    93 => 'Value',
+    94 => 'Selected',
+    95 => 'Global Preference Editor',
+    96 => 'Using the <strong>Selected</strong> column, select the items you wish to change for <strong>all</strong> users.  Set the attribute to the desired setting and press Save.',
+    97 => 'Comment Display Mode',
+    98 => 'Comment Sort Order'
 );
 
 ###############################################################################
@@ -1286,7 +1350,15 @@ $MESSAGE = array(
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
     502 => 'Plugin successfully copied, please select Install from the New Plugin list below',
-    503 => 'Plugin installation is disabled in demo mode.'
+    503 => 'Plugin installation is disabled in demo mode.',
+    504 => 'Please enter a password for the user account.',
+    505 => 'Please enter an email for the user account.',
+    506 => 'Username cannot be blank.',
+    507 => 'Email cannot be blank.',
+    508 => 'Email address does not match the confirmation email address.',
+    509 => 'Error creating new user account - please check the error log for details.',
+    510 => 'Default settings have been applied to all users.',
+    511 => 'Are you sure you want to delete this group?'
 );
 
 ###############################################################################
@@ -1299,6 +1371,59 @@ $LANG_LOGVIEW = array(
     'view' => 'View Log File',
     'clear' => 'Clear Log File',
     'log_file' => 'Log File'
+);
+
+###############################################################################
+# lib-bbcode.php
+
+$LANG_BBCODE = array(
+    'bold_label' => 'B',
+    'italic_label' => 'i',
+    'underline_label' => 'u',
+    'quote_label' => 'Quote',
+    'code_label' => 'Code',
+    'list_label' => 'List',
+    'olist_label' => 'List=',
+    'listitem_label' => '[*]',
+    'img_label' => 'Img',
+    'url_label' => 'URL',
+    'smiley_label' => 'Smileys',
+    'size_label' => 'Font Size',
+    'color_label' => 'Font Color',
+    'bold_help' => 'Bold text: [b]text[/b]',
+    'italic_help' => 'Italic text: [i]text[/i]',
+    'underline_help' => 'Underline text: [u]text[/u]',
+    'quote_help' => 'Quote text: [quote]text[/quote]',
+    'code_help' => 'Code display: [code]code[/code]',
+    'list_help' => 'List: [list]text[/list]',
+    'olist_help' => 'List: [list=]text[/list]',
+    'listitem_help' => 'List item: [*]text[/*]',
+    'img_help' => 'Insert image: [img]http://image_url[/img]',
+    'url_help' => 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
+    'smiley_help' => 'Open Smiley Window',
+    'size_help' => 'Font size: [size=9]small text[/size]',
+    'color_help' => 'Text Color: [color=red]red text[/color]',
+    'size_tiny' => 'Tiny',
+    'size_small' => 'Small',
+    'size_normal' => 'Normal',
+    'size_large' => 'Large',
+    'size_huge' => 'Huge',
+    'color_default' => 'Default',
+    'color_darkred' => 'Dark Red',
+    'color_red' => 'Red',
+    'color_orange' => 'Orange',
+    'color_brown' => 'Brown',
+    'color_yellow' => 'Yellow',
+    'color_green' => 'Green',
+    'color_olive' => 'Olive',
+    'color_cyan' => 'Cyan',
+    'color_blue' => 'Blue',
+    'color_darkblue' => 'Dark Blue',
+    'color_indigo' => 'Indigo',
+    'color_violet' => 'Violet',
+    'color_white' => 'White',
+    'color_black' => 'Black',
+    'formatted_code' => 'Formatted Code'
 );
 
 ###############################################################################
@@ -1329,6 +1454,7 @@ $LANG_ACCESS = array(
     'no' => 'Όχι',
     'corerightsdescr' => "Αυτό το σύνολο είναι καίριο για το {$_CONF['site_name']}.  Τα δικαιώματα για αυτό το σύνολο δεν μπορούν να επεξεργαστούν. Παρακάτω βρίσκετε η λίστα με τα μόνο-ανάγνωσης δικαιώματα που έχει πρόσβαση αυτό το σύνολο.",
     'groupmsg' => 'Τα σύνολα ασφάλειας σε αυτήν την ιστοσελίδα είναι ιεραρχικά. Η πρόσθεση ενός συνόλου σε άλλα σύνολα παρακάτω δίνει την δυνατότητα σε αυτό το σύνολο να μοιράζεται τα δικαιώματα με τα άλλα σύνολα. Όπου είναι εφικτό, είναι καλό να παραχωρείτε τέτοιου είδους δικαιώματα. Εάν χρειάζεστε ένα σύνολο να έχει διαφορετικά δικαιώματα μπορείτε να τα επιλέξετε στο τμήμα Δικαιώματα. Για να προσθέσετε το σύνολο σε οποιοδήποτε άλλο παρακάτω απλά επιλέξτε το κουτί δίπλα από το σύνολο που επιθυμείτε.',
+    'groupeditmsg' => 'Use this panel to create a new group or edit an existing group.  Note that presently you cannot change the name of a group that already exists.<br />If you are creating a new group, you must enter as a minimum the Group Name and Group Description.',
     'coregroupmsg' => "Το σύνολο {$_CONF['site_name']} είναι καίριο.  Τα σύνολα που συμπεριλαμβάνουν το σύνολο αυτό δεν μπορούν να υποστούν επεξεργασία. Παρακάτω είναι μία λίστα με τα μόνο-ανάγνωσης σύνολα που συμπεριλαμβάνουν το παρόν σύνολο.",
     'rightsdescr' => 'Η πρόσβαση ενός συνόλου σε συγκεκριμένα δικαιώματα μπορεί να πραγματοποιηθεί απευθείας στο σύνολο Ή σε ένα διαφορετικό σύνολο που το παρόν σύνολο είναι μέλος. Τα σύνολα παρακάτω χωρίς κουτιά επιλογής είναι τα δικαιώματα που δόθηκαν σε αυτό το σύνολο επειδή ανήκει σε άλλο σύνολο που έχει αυτά τα δικαιώματα. Τα δικαιώματα με κουτιά επιλογής είναι δικαιώματα που μπορούν να δοθούν απευθείας στο σύνολο',
     'lock' => 'Κλείδωμα',
@@ -1367,7 +1493,13 @@ $LANG_ACCESS = array(
     'plugin_access_denied_msg' => 'You are illegally trying access a plugin administration page.  Please note that all attempts to illegally access this page are logged.',
     'groupexists' => 'Group name already exists',
     'groupexistsmsg' => 'There is already a group with this name. Group names must be unique.',
-    'copy' => 'Copy'
+    'copy' => 'Copy',
+    'pe_namepass' => 'Account',
+    'pe_userinfo' => 'Information',
+    'pe_layout' => 'Layout &amp; Language',
+    'pe_content' => 'Content',
+    'pe_privacy' => 'Privacy',
+    'editusers' => 'Manage'
 );
 
 ###############################################################################
@@ -1610,7 +1742,10 @@ $LANG_ADMIN = array(
     'addchild' => 'Add child',
     'list' => 'list',
     'list_all' => 'List all',
-    'na' => '-'
+    'na' => '-',
+    'action' => 'Action',
+    'enable' => 'Enable',
+    'disable' => 'Disable'
 );
 
 ###############################################################################

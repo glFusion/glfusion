@@ -56,6 +56,9 @@ function calendar_upgrade()
         case '1.0.4':
         case '1.0.5':
             DB_query("ALTER TABLE {$_TABLES['eventsubmission']} ADD  owner_id MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '1' AFTER url");
+        case '1.0.6' :
+            $c = config::get_instance();
+            $c->add('displayblocks', 0,'select', 0, 0, 13, 115, true, 'calendar');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_CA_CONF['pi_version']."',pi_gl_version='".$_CA_CONF['gl_version']."' WHERE pi_name='calendar' LIMIT 1");
             break;

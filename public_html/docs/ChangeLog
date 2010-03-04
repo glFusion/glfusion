@@ -15,12 +15,75 @@ v1.2.0 svn
 
 v1.1.9
 ------
+- What's New block now uses <ul> class list-new-articles for stories (Mark)
+- Modified LDAP class so filter variable is now a configuration option (Mark)
+- Media Gallery: Enable full screen playback with FlowPlayer by default (Mark)
+- Modified My Account block to use blockheader-list templates. Removed
+  the hard coded <ul> / </ul> in code.  (Mark)
+- Added new block option: login_block, admin can now specify custom block
+  template for login block (see theme's functions.php) (Mark)
+- Calendar: Add configuration option to select which blocks display (Mark)
+- FileMgmt: Add configuration option to select which blocks display (Mark)
+- Links: Add configuration option to select which blocks display (Mark)
+- Polls: Add configuration option to select which blocks display (Mark)
+- New BBCode editor API (Mark)
+- New Environment Check option in Command & Control Screen. Removed PHP info
+  link from MG admin screen (Mark)
+- New Admin Global User Preference Editor - allows admin to change some
+  preferences for all users (Mark)
+- Admin user editor now supports editing all user attributes (Mark)
+- Feature to allow groups be applied for all new users (Mark)
+- Media Gallery: Updated Polish translations (Mark)
+- Forum: Implemented user option to enable / disable WYSIWYG editor (Mark)
+- Yet another fix to the ATOM webservices publishing code (Mark)
+- Improved error detection on file uploads - ensure proper errors are
+  reported (Mark)
+- Fixed namespace conflicts with DokuWiki 2.0 plugin (Mark)
+- Complete implementation of PLG_getItemInfo for each bundled plugin. (Mark)
+- Forum: Implemented merge topic feature (Mark)
+- Forum: Rewrote the moderation system to be more procedural. This will
+  help with future enhancements to moderation features (Mark)
+- Forum: Site Members report did not honor Forum Activity checkbox (Mark)
+- Forum: Implemented per topic options (Disable BBCode, Disable Smilies,
+  Disable URL Parse) (Mark)
+   - 3 new Forum configuration options to set the default value for each
+     of the new features
+- Forum: Implemented automatic URL parsing for topics (Mark)
 - Forum: Implemented user preference to specify view topic sort order (Mark)
 - FileMgmt: Implemented configuration option to turn on / off ratings (Mark)
 - Implemented reset rating for stories (Mark)
+- Implemented site upgrade check/reminder (Mark H.)
+- Implemented block-specific styling, eg. block div id=block_name (Mark H.)
+
+v1.1.8.pl4
+----------
+- SpamX: Fixed preg compilation error in SpamX plugin (Mark)
+- Media Gallery: Fixed keywords so they now wrap properly (Mark)
+
+v1.1.8.pl3
+----------
+- FileMgmt: file_download auto tag did not work properly when URL rewrite
+  is enabled in the site configuration (Mark)
+- Site Tailor: Moved hard-coded language string to language files. (Eric)
+- Site Tailor: Fixed language string mismatch for block menu config. (Eric)
+- Forum: Fixed bug where referer URL was not properly set after previewing
+  a forum post. (Mark)
+- Forum: The 'online version' link in full text nofications did not work
+  if more than 1 page of forum posts (Mark)
+- Fixed bug where anonymous user name did not appear with comments (Mark)
+- Polls: Fixed bug where poll topic always displayed, when it should only
+  display when questions > 1 (Mark)
+- FileMgmt: Fixed SQL error when add remote files (Mark)
+- Fixed bug where enabling / disabling blocks, plugins, ping services could
+  disable other items when viewing subset list (Mark)
+- Forum: Fixed issue where duplicate watch records could happen. (Mark)
+- Media Gallery: The album auto tag was missing a space between the alt and
+  style tags (Mark)
 
 v1.1.8.pl2
 ----------
+- Media Gallery: Fixed issue where PLG_itemSaved() was not called properly
+  when doing mass media edit (Mark)
 - Forum Plugin: Using the custom/ directory for templates in a sub-directory
   did not work properly (Mark)
 - Forum Plugin: Process topic records in date order...

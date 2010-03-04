@@ -1,0 +1,81 @@
+{# begin username & password panel #}
+    <div id="pe_namepass" class="jsenabled_show">
+      <fieldset style="margin-top:10px;"><legend>{lang_name_legend}</legend>
+        <table class="inputTable">
+
+          <tr>
+            <td class="alignright" style="font-weight:bold;">{lang_userid}:</td>
+            <td>{user_id}<input type="hidden" name="uid" value="{user_id}"{xhtml}></td>
+          </tr>
+          <tr>
+            <td class="alignright" style="font-weight:bold;">{lang_regdate}:</td>
+            <td>
+              <input type="hidden" name="regdate" value="{regdate_timestamp}"{xhtml}>{user_regdate}
+            </td>
+          </tr>
+          <tr>
+            <td class="alignright" style="font-weight:bold;">{lang_lastlogin}:</td>
+            <td>{user_lastlogin}</td>
+          </tr>
+          <tr>
+            <td><label for="new_username">{lang_username}:</label></td>
+            <td>
+              <input type="text" size="16" maxlength="32" name="new_username" value="{user_name}"/>
+            </td>
+          </tr>
+          <tr>
+            <td style="width:150px;"><label for="fullname">{lang_fullname}:</label></td>
+            <td><input type="text" id="fullname" name="fullname" size="60" maxlength="80" value="{fullname_value}"{xhtml}></td>
+          </tr>
+          <tr>
+            <td><label for="userstatus">{lang_user_status}:</label></td>
+            <td>{user_status}</td>
+          </tr>
+          {!if lang_email_password}
+          <tr>
+            <td><label for="emailuser">{lang_email_password}:</label></td>
+            <td><input type="checkbox" name="emailuser" value="1"></td>
+          </tr>
+          {!endif}
+          {plugin_namepass_name}
+        </table>
+      </fieldset>
+      <fieldset style="margin-top:10px;"><legend>{lang_password_email_legend}</legend>
+        <table class="inputTable" border="0">
+          <tr>
+            <td style="width:150px;"><label for="passwd">{lang_password}:</label></td>
+            <td><input type="password" id="passwd" name="passwd" size="32" maxlength="32" value="{password_value}" onkeyup="runPassword(this.value, 'mypassword');"{xhtml}></td>
+          </tr>
+          <tr>
+            <td><label for="passwd_conf">{lang_password_conf}:</label></td>
+            <td><input type="password" id="passwd_conf" name="passwd_conf" size="32" maxlength="32" value="{password_value}"{xhtml}></td>
+          </tr>
+          <tr>
+            <td style="width:150px;">
+              <label>{$LANG04[161]}:</label>
+            </td>
+            <td>
+              <div id="mypassword_text" style="font-size:normal;"></div>
+              <div id="mypassword_bar"  style="display:none;"></div>
+            </td>
+          </tr>
+          <tr>
+            <td><label for="cooktime">{lang_cooktime}:</label></td>
+            <td>{cooktime_selector}</td>
+          </tr>
+          <tr>
+            <td><label for="email">{lang_email}:</label></td>
+            <td><input type="text" id="email" name="email" size="50" maxlength="96" value="{email_value}"{xhtml}></td>
+          </tr>
+          <tr>
+            <td><label for="email_conf">{lang_email_conf}:</label></td>
+            <td><input type="text" id="email_conf" name="email_conf" size="50" maxlength="96" value="{email_value}"{xhtml}></td>
+          </tr>
+          {plugin_namepass_pwdemail}
+        </table>
+
+      </fieldset>
+
+      {plugin_namepass}
+    </div>
+{# end username & password panel #}

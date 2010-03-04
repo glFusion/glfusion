@@ -186,21 +186,21 @@ function plugineditor ($pi_name, $confirmed = 0)
 * @return   void
 *
 */
-function changePluginStatus ($pi_name_arr)
+function changePluginStatus ($plugin_name_arr, $pluginarray)
 {
     global $_TABLES, $_DB_table_prefix;
-    // first, get a list of all plugins
-    $rst = DB_query ("SELECT pi_name, pi_enabled FROM {$_TABLES['plugins']}");
-    $plg_count = DB_numRows($rst);
-    for ($i=0; $i<$plg_count; $i++) { // iterate and check/change match with array
-        $P = DB_fetchArray($rst);
-        if (isset($pi_name_arr[$P['pi_name']]) && $P['pi_enabled'] == 0) { // enable it
-            PLG_enableStateChange ($P['pi_name'], true);
-            DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '{$P['pi_name']}'");
-        } else if (!isset($pi_name_arr[$P['pi_name']]) && $P['pi_enabled'] == 1) {  // disable it
-            $rc = PLG_enableStateChange ($P['pi_name'], false);
-            if ( $rc !== -2 ) {
-                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '{$P['pi_name']}'");
+
+    if (isset($pluginarray) && is_array($pluginarray) ) {
+        foreach ($pluginarray AS $plugin => $junk ) {
+            $plugin = COM_applyFilter($plugin);
+            if ( isset($plugin_name_arr[$plugin]) ) {
+                DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '1' WHERE pi_name = '".addslashes($plugin)."'");
+                PLG_enableStateChange ($plugin, true);
+            } else {
+                $rc = PLG_enableStateChange ($plugin, false);
+                if ( $rc != -2 ) {
+                    DB_query ("UPDATE {$_TABLES['plugins']} SET pi_enabled = '0' WHERE pi_name = '".addslashes($plugin)."'");
+                }
             }
         }
     }
@@ -469,7 +469,10 @@ function listplugins ($token)
 
     // this is a dummy variable so we know the form has been used if all plugins
     //  should be disabled in order to disable the last one.
-    $form_arr = array('bottom' => '<input type="hidden" name="pluginenabler" value="true"' . XHTML . '>');
+    $form_arr = array(
+        'top'    => '<input type="hidden" name="'.CSRF_TOKEN.'" value="'.$token.'"/>',
+        'bottom' => '<input type="hidden" name="pluginenabler" value="true"/>'
+    );
 
     $retval .= ADMIN_list('plugins', 'ADMIN_getListField_plugins', $header_arr,
                 $text_arr, $query_arr, $defsort_arr, '', $token, '', $form_arr);
@@ -481,7 +484,15 @@ function listplugins ($token)
 // MAIN
 $display = '';
 if (isset ($_POST['pluginenabler']) && SEC_checkToken()) {
-    changePluginStatus ($_POST['enabledplugins']);
+    $enabledplugins = array();
+    if (isset($_POST['enabledplugins'])) {
+        $enabledplugins = $_POST['enabledplugins'];
+    }
+    $pluginarray = array();
+    if ( isset($_POST['pluginarray']) ) {
+        $pluginarray = $_POST['pluginarray'];
+    }
+    changePluginStatus($enabledplugins,$pluginarray);
 
     // force a refresh so that the information of the plugin that was just
     // enabled / disabled (menu entries, etc.) is displayed properly

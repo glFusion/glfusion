@@ -1,56 +1,24 @@
 {# begin {templatelocation} #}
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td style="white-space:nowrap;">
-    <a href="javascript:{emoticon}(':D')"><img align="middle" src="{site_url}/forum/images/smilies/biggrin.gif" alt="Big Grin" title="Big Grin" border="0" {xhtml}></a> |
-    <a href="javascript:{emoticon}(':)')"><img align="middle" src="{site_url}/forum/images/smilies/smile.gif" alt="Smile" title="Smile" border="0" {xhtml}></a> |
-    <a href="javascript:{emoticon}(':(')"><img align="middle" src="{site_url}/forum/images/smilies/frown.gif" alt="Frown" title="Frown" border="0" {xhtml}></a> |
-    <a href="javascript:{emoticon}('8O')"><img align="middle" src="{site_url}/forum/images/smilies/eek.gif" alt="Eek!" title="Eek" border="0"{xhtml}></a>
-</td>
-<td height="2px"></td>
-</tr>
-<tr>
-<td style="white-space:nowrap;">
-    <a href="javascript:{emoticon}(':?')"><img align="middle" src="{site_url}/forum/images/smilies/confused.gif" alt="Confused" title="Confused" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}('B)')"><img align="middle" src="{site_url}/forum/images/smilies/cool.gif" alt="Cool" title="Cool" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':lol:')"><img align="middle" src="{site_url}/forum/images/smilies/lol.gif" alt="Laughing Out Loud" title="Laughing Out Loud" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':x')"><img align="middle" src="{site_url}/forum/images/smilies/mad.gif" alt="Angry" title="Angry" border="0"{xhtml}></a>
-</td>
-<td height="2"></td>
-</tr>
-<tr>
-<td style="white-space:nowrap;">
-    <a href="javascript:{emoticon}(':P')"><img align="middle" src="{site_url}/forum/images/smilies/razz.gif" alt="Razz" title="Razz" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':oops:')"><img align="middle" src="{site_url}/forum/images/smilies/redface.gif" alt="Oops!" title="Oops!" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':o')"><img align="middle" src="{site_url}/forum/images/smilies/surprised.gif" alt="Surprised!" title="Surprised!" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':cry:')"><img align="middle" src="{site_url}/forum/images/smilies/cry.gif" alt="Cry" title="Cry" border="0"{xhtml}></a>
-</td>
-<td height="2"></td>
-</tr>
-<tr>
-<td style="white-space:nowrap;">
-    <a href="javascript:{emoticon}(':evil:')"><img align="middle" src="{site_url}/forum/images/smilies/evil.gif" alt="Evil" title="Evil" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':twisted:')"><img align="middle" src="{site_url}/forum/images/smilies/twisted.gif" alt="Twisted Evil" title="Twisted Evil" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':roll:')"><img align="middle" src="{site_url}/forum/images/smilies/rolleyes.gif" alt="Rolling Eyes" title="Rolling Eyes" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(';)')"><img align="middle" src="{site_url}/forum/images/smilies/wink.gif" alt="Wink" title="Wink" border="0"{xhtml}></a>
-</td>
-<td height="2"></td>
-</tr>
-<tr>
-<td style="white-space:nowrap;">
-    <a href="javascript:{emoticon}(':!:')"><img align="middle" src="{site_url}/forum/images/smilies/exclaim.gif" alt="Exclaimation" title="Exclaimation" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':question:')"><img align="middle" src="{site_url}/forum/images/smilies/question.gif" alt="Question" title="Question" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':idea:')"><img align="middle" src="{site_url}/forum/images/smilies/idea.gif" alt="Idea" title="Idea" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':arrow:')"><img align="middle" src="{site_url}/forum/images/smilies/arrow.gif" alt="Arrow" title="Arrow" border="0"{xhtml}></a>
-</td>
-<td height="2"></td>
-</tr>
-<tr>
-<td style="white-space:nowrap;">
-    <a href="javascript:{emoticon}(':|')"><img align="middle" src="{site_url}/forum/images/smilies/neutral.gif" alt="Neutral" title="Neutral" border="0"{xhtml}></a> |
-    <a href="javascript:{emoticon}(':mrgreen:')"><img align="middle" src="{site_url}/forum/images/smilies/mrgreen.gif" alt="Mr. Green" title="Mr. Green" border="0"{xhtml}></a>
-</td>
-<td height="2"></td>
-</tr>
-</table>
+    <a href="javascript:{emoticon}(':D')"><img vspace="1" src="{site_url}/forum/images/smilies/biggrin.gif" alt="Big Grin" title="Big Grin" border="0"  /></a>
+    <a href="javascript:{emoticon}(':)')"><img vspace="1" src="{site_url}/forum/images/smilies/smile.gif" alt="Smile" title="Smile" border="0"  /></a>
+    <a href="javascript:{emoticon}(':(')"><img vspace="1" src="{site_url}/forum/images/smilies/frown.gif" alt="Frown" title="Frown" border="0"  /></a>
+    <a href="javascript:{emoticon}('8O')"><img vspace="1" src="{site_url}/forum/images/smilies/eek.gif" alt="Eek!" title="Eek" border="0" /></a>
+    <a href="javascript:{emoticon}(':?')"><img vspace="1" src="{site_url}/forum/images/smilies/confused.gif" alt="Confused" title="Confused" border="0" /></a>
+    <a href="javascript:{emoticon}('B)')"><img vspace="1" src="{site_url}/forum/images/smilies/cool.gif" alt="Cool" title="Cool" border="0" /></a>
+    <a href="javascript:{emoticon}(':lol:')"><img vspace="1" src="{site_url}/forum/images/smilies/lol.gif" alt="Laughing Out Loud" title="Laughing Out Loud" border="0" /></a>
+    <a href="javascript:{emoticon}(':x')"><img vspace="1" src="{site_url}/forum/images/smilies/mad.gif" alt="Angry" title="Angry" border="0" /></a>
+    <a href="javascript:{emoticon}(':P')"><img vspace="1" src="{site_url}/forum/images/smilies/razz.gif" alt="Razz" title="Razz" border="0" /></a>
+    <a href="javascript:{emoticon}(':oops:')"><img vspace="1" src="{site_url}/forum/images/smilies/redface.gif" alt="Oops!" title="Oops!" border="0" /></a>
+    <a href="javascript:{emoticon}(':o')"><img vspace="1" src="{site_url}/forum/images/smilies/surprised.gif" alt="Surprised!" title="Surprised!" border="0" /></a>
+    <a href="javascript:{emoticon}(':cry:')"><img vspace="1" src="{site_url}/forum/images/smilies/cry.gif" alt="Cry" title="Cry" border="0" /></a>
+    <a href="javascript:{emoticon}(':evil:')"><img vspace="1" src="{site_url}/forum/images/smilies/evil.gif" alt="Evil" title="Evil" border="0" /></a>
+    <a href="javascript:{emoticon}(':twisted:')"><img vspace="1" src="{site_url}/forum/images/smilies/twisted.gif" alt="Twisted Evil" title="Twisted Evil" border="0" /></a>
+    <a href="javascript:{emoticon}(':roll:')"><img vspace="1" src="{site_url}/forum/images/smilies/rolleyes.gif" alt="Rolling Eyes" title="Rolling Eyes" border="0" /></a>
+    <a href="javascript:{emoticon}(';)')"><img vspace="1" src="{site_url}/forum/images/smilies/wink.gif" alt="Wink" title="Wink" border="0" /></a>
+    <a href="javascript:{emoticon}(':!:')"><img vspace="1" src="{site_url}/forum/images/smilies/exclaim.gif" alt="Exclaimation" title="Exclaimation" border="0" /></a>
+    <a href="javascript:{emoticon}(':question:')"><img vspace="1" src="{site_url}/forum/images/smilies/question.gif" alt="Question" title="Question" border="0" /></a>
+    <a href="javascript:{emoticon}(':idea:')"><img vspace="1" src="{site_url}/forum/images/smilies/idea.gif" alt="Idea" title="Idea" border="0" /></a>
+    <a href="javascript:{emoticon}(':arrow:')"><img vspace="1" src="{site_url}/forum/images/smilies/arrow.gif" alt="Arrow" title="Arrow" border="0" /></a>
+    <a href="javascript:{emoticon}(':|')"><img vspace="1" src="{site_url}/forum/images/smilies/neutral.gif" alt="Neutral" title="Neutral" border="0" /></a>
+    <a href="javascript:{emoticon}(':mrgreen:')"><img vspace="1" src="{site_url}/forum/images/smilies/mrgreen.gif" alt="Mr. Green" title="Mr. Green" border="0" /></a>
 {# end {templatelocation} #}

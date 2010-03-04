@@ -138,6 +138,7 @@ if ( $topic ) {
     IO_addLink('microsummary',$_CONF['site_url'].'/index.php?display=microsummary','','',array('title'=>'Microsummary'));
 }
 
+IO_addContent(glfusion_UpgradeCheck());
 IO_addContent(glfusion_SecurityCheck());
 
 $msg    = IO_getVar('integer','msg','get','');

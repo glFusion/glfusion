@@ -355,7 +355,7 @@ if (isset ($_REQUEST['action'])) {
 switch ($action) {
 case 'addevent':
     if (($_CA_CONF['personalcalendars'] == 1) && !COM_isAnonUser()) {
-        $display .= COM_siteHeader ();
+        $display .= CALENDAR_siteHeader ();
 
         $eid = COM_applyFilter ($_GET['eid']);
         if (!empty ($eid)) {
@@ -364,7 +364,7 @@ case 'addevent':
             $display .= COM_showMessage (23);
         }
 
-        $display .= COM_siteFooter ();
+        $display .= CALENDAR_siteFooter ();
     } else {
         $display = COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -376,9 +376,9 @@ case 'saveuserevent':
         if (!empty ($eid)) {
             $display .= saveuserevent ($eid);
         } else {
-            $display .= COM_siteHeader ();
+            $display .= CALENDAR_siteHeader ();
             $display .= COM_showMessage (23);
-            $display .= COM_siteFooter ();
+            $display .= CALENDAR_siteFooter ();
         }
     } else {
         $display = COM_refresh ($_CONF['site_url'] . '/index.php');
@@ -419,11 +419,11 @@ case 'edit':
             $result = DB_query ("SELECT * FROM {$_TABLES['personal_events']} WHERE (eid = '".addslashes($eid)."') AND (uid = {$_USER['uid']})");
             if (DB_numRows ($result) == 1) {
                 $A = DB_fetchArray ($result);
-                $display .= COM_siteHeader ('menu', $LANG_CAL_2[38])
+                $display .= CALENDAR_siteHeader ($LANG_CAL_2[38])
                          . COM_startBlock ($LANG_CAL_2[38])
                          . editpersonalevent ($A)
                          . COM_endBlock ()
-                         . COM_siteFooter ();
+                         . CALENDAR_siteFooter ();
             } else {
                 $display = COM_refresh ($_CONF['site_url'] . '/index.php');
             }
@@ -464,7 +464,7 @@ default:
             DB_query ("UPDATE {$_TABLES['events']} SET hits = hits + 1 WHERE eid = '".addslashes($eid)."'");
         }
 
-        $display .= COM_siteHeader('menu', $pagetitle);
+        $display .= CALENDAR_siteHeader( $pagetitle);
         if (isset($_GET['msg'])) {
             $msg = COM_applyFilter($_GET['msg'], true);
             if ($msg > 0) {
@@ -494,7 +494,7 @@ default:
 
         $pagetitle = $LANG_CAL_2[10] . ' ' . strftime ($_CONF['shortdate'],
                                          mktime (0, 0, 0, $month, $day, $year));
-        $display .= COM_siteHeader ('menu', $pagetitle);
+        $display .= CALENDAR_siteHeader ( $pagetitle);
         $display .= COM_startBlock ($pagetitle);
 
         $thedate = sprintf ('%4d-%02d-%02d', $year, $month, $day);
@@ -730,7 +730,7 @@ default:
         $display .= $cal_templates->finish ($cal_templates->get_var ('output'));
     }
 
-    $display .= COM_endBlock() . COM_siteFooter();
+    $display .= COM_endBlock() . CALENDAR_siteFooter();
 
 } // end switch
 

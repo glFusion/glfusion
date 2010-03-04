@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -170,6 +170,7 @@ $LANG_confignames['filemgmt'] = array(
     'numsubcategories2show' => 'Under Kategorier pr række',
     'outside_webroot' => 'Store Files Outside Web Root',
     'enable_rating'         => 'Enable Ratings',
+    'displayblocks'         => 'Display glFusion Blocks',
 );
 
 $LANG_configsubgroups['filemgmt'] = array(
@@ -188,7 +189,8 @@ $LANG_fs['filemgmt'] = array(
 $LANG_configselects['filemgmt'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => true, 'False' => false),
-    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25, '30' => 30, '50' => 50)
+    2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25, '30' => 30, '50' => 50),
+    3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 

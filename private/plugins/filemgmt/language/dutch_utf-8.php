@@ -2,13 +2,13 @@
 // +--------------------------------------------------------------------------+
 // | FileMgmt Plugin - glFusion CMS                                           |
 // +--------------------------------------------------------------------------+
-// | english.php                                                              |
+// | dutch_utf-8.php                                                          |
 // |                                                                          |
-// | Dutch language file                                                    |
+// | Dutch language file                                                      |
 // +--------------------------------------------------------------------------+
 // | $Id:: english.php 4122 2009-03-11 05:41:34Z mevans0263                  $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -166,6 +166,7 @@ $LANG_confignames['filemgmt'] = array(
     'numsubcategories2show' => 'Sub Categorieen per Rij',
     'outside_webroot'       => 'Sla bestanden op buiten de Web Root',
     'enable_rating'         => 'Enable Ratings',
+    'displayblocks'         => 'Display glFusion Blocks',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Hoofd Instellingen'
@@ -182,6 +183,7 @@ $LANG_configselects['filemgmt'] = array(
     0 => array('Ja' => 1, 'Nee' => 0),
     1 => array('Ja' => TRUE, 'Nee' => FALSE),
     2 => array(' 5' => 5, '10' => 10, '15' => 15, '20' => 20, '25' => 25,'30' => 30,'50' => 50),
+    3 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 

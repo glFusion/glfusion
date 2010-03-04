@@ -6,7 +6,7 @@
 // |                                                                          |
 // | General purpose media display / manipulation interface                   |
 // +--------------------------------------------------------------------------+
-// | $Id:: lib-media.php 3093 2008-09-10 23:53:51Z mevans0263                $|
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2002-2008 by the following authors:                        |
 // |                                                                          |
@@ -1848,10 +1848,10 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             $keyWords[$i] = str_replace('"',' ',$keyWords[$i]);
             $searchKeyword = $keyWords[$i];
             $keyWords[$i] = str_replace('_',' ',$keyWords[$i]);
-            $kwText .= '<a href="' . $_MG_CONF['site_url'] . '/search.php?mode=search&amp;swhere=1&amp;keywords=' . $searchKeyword . '&amp;keyType=any">' . $keyWords[$i] . '</a>&nbsp;';
+            $kwText .= '<a href="' . $_MG_CONF['site_url'] . '/search.php?mode=search&amp;swhere=1&amp;keywords=' . $searchKeyword . '&amp;keyType=any">' . $keyWords[$i] . '</a> ';
         }
         $T->set_var(array(
-            'media_keywords'    => $kwText, // $media[$mediaObject]['media_keywords'],
+            'media_keywords'    => $kwText,
             'lang_keywords'     => $LANG_MG01['keywords']
         ));
     } else {

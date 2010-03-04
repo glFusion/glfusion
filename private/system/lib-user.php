@@ -336,6 +336,13 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
     DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ($normal_grp, $uid)");
     DB_query ("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id,ug_uid) VALUES ($all_grp, $uid)");
 
+    // any default groups?
+    $result = DB_query("SELECT grp_id FROM {$_TABLES['groups']} WHERE grp_default = 1");
+    $num_groups = DB_numRows($result);
+    for ($i = 0; $i < $num_groups; $i++) {
+        list($def_grp) = DB_fetchArray($result);
+        DB_query("INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($def_grp, $uid)");
+    }
     DB_query ("INSERT INTO {$_TABLES['userprefs']} (uid) VALUES ($uid)");
     if ($_CONF['emailstoriesperdefault'] == 1) {
         DB_query ("INSERT INTO {$_TABLES['userindex']} (uid,etids) VALUES ($uid,'')");

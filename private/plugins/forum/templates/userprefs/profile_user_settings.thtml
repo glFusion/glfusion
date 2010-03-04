@@ -47,9 +47,15 @@
         <td><input type="checkbox" id="xshowiframe" name="xshowiframe" {showiframe_checked}{xhtml}></td>
       </tr>
       <tr>
-        <td style="width:100px;"><label for="topic_order">Topic View Order:</label></td>
+        <td style="width:100px;"><label for="topic_order">{lang_topic_order}:</label></td>
         <td>{topic_order_select}</td>
       </tr>
+      {!if lang_use_wysiwyg}
+      <tr>
+        <td style="width:100px;"><label for="use_wysiwyg_editor">{lang_use_wysiwyg}:</label></td>
+        <td>{wysiwyg_select}</td>
+      </tr>
+      {!endif}
     </table>
   </fieldset>
 </div>

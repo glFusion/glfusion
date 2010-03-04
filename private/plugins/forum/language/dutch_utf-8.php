@@ -183,7 +183,7 @@ $LANG_GF01 = array(
     'category' => 'Categorie: ',
     'loginreqview' => '<B>Sorrie u moet zich bij %s register</A> of bij %s aanmelden </A> om deze forums te gebruiken</B>',
     'loginreqpost' => '<B>Sorrie u moet zich registreren of aanmelden om berichten te plaatsen in de forums</B>',
-    'searchresults' => '<b>»</b> Uw zoektocht naar <b>%s</b> %s auteur resulteerde in <b>%s</b> resultaten:</b><br' . XHTML . '><br' . XHTML . '>',
+    'searchresults' => '<b>Â»</b> Uw zoektocht naar <b>%s</b> %s auteur resulteerde in <b>%s</b> resultaten:</b><br' . XHTML . '><br' . XHTML . '>',
     'feature_not_on' => 'Feature niet actief',
     'nolastpostmsg' => 'N/A',
     'no_one' => 'Niemand.',
@@ -301,6 +301,11 @@ $LANG_GF01 = array(
     'edit_signature' => 'Wijzig BBcode Ondertekening',
     'signature_preview' => 'Bekijk Ondertekening',
     'cancel_confirm' => 'Are you sure you want to cancel this post?',
+    /* --- topic features --- */
+    'disable_bbcode' => 'Disable BBCode:',
+    'disable_smilies' => 'Disable Smilies:',
+    'disable_urlparse' => 'Do not parse URLs:',
+    'features' => 'Features:',
 );
 
 $LANG_GF02 = array(
@@ -525,7 +530,14 @@ $LANG_GF03 = array(
     'lockedpost' => 'Add Reply Post',
     'splitheading' => 'Splits draad optie:',
     'splitopt1' => 'Move all posts from this point',
-    'splitopt2' => 'Move only this one post'
+    'splitopt2' => 'Move only this one post',
+    'merge_post'  => 'Merge Post',
+    'merge_topic' => 'Merge Topic',
+    'mergetopicmsg' => 'You can merge selected post(s) into another topic. These posts will not be reordered and will appear as if the users posted them to the new topic. Please enter the destination topic id or click on "Select topic" to search for one.',
+    'mergeparent' => 'You have selected the option to merge <strong>all</strong> posts in this topic into another topic.',
+    'select'    => 'Select',
+    'select_forum' => 'Select Forum Topic',
+    'destination_topic' => 'Destination Topic ID:',
 );
 
 $LANG_GF04 = array(
@@ -722,7 +734,13 @@ $LANG_GF92 = array(
     'edit_timewindowdscp' => 'Allowed time (min) to allow members to edit their posts',
     'forum_prefs' => 'Forum Voorkeur',
     'forumprefs_help_title' => 'Forum Voorkeur Help',
-    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>'
+    'forumprefs_help' => 'Modify the Forum Plugin user preferences.<ul><li>Number of topics to display when viewing the forum index.</li><li>Number of posts to show per page.</li><li>Number of posts before calling a topic popular.</li><li>Number of lines to display in search results.</li><li>For the Members listing screen</li><li>Hide posts from anonymous users.</li><li>Enable auto notifications.</li><li>Only send one notification.</li><li>Show topic review (iframe) at bottom when replying.</li></ul>',
+    'topic_order' => 'Topic Order',
+    'editor_type' => 'Editor Type',
+    'bbcode'    => 'BBCode',
+    'wysiwyg'   => 'WYSIWYG',
+    'ascending' => 'Ascending',
+    'descending' => 'Descending',
 );
 
 $LANG_GF93 = array(
@@ -959,7 +977,10 @@ $LANG_confignames['forum'] = array(
     'max_uploadfile_size' => 'Max Grootte van Bijlagen (bytes)',
     'enable_user_rating_system' => 'Gebruiker Waarderingsysteem Inschakelen',
     'bbcode_signature' => 'BBcode Ondertekening Inschakelen',
-    'use_wysiwyg_editor' => 'WYSIWYG HTML Editor Inschakelen'
+    'use_wysiwyg_editor' => 'WYSIWYG HTML Editor Inschakelen',
+    'bbcode_disabled' => 'Default Setting for BBCode Disabled Box',
+    'smilies_disabled' => 'Default Setting for Smilies Disabled Box',
+    'urlparse_disabled' => 'Default Setting for URL Parse Disabled Box',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -982,7 +1003,8 @@ $LANG_configselects['forum'] = array(
     2 => array('Bovenaan de Pagina' => 1, 'Na het Featured Artikel' => 2, 'Onderaan de Pagina' => 3),
     3 => array('Geen Blokken' => 'noblocks', 'Linker Blokken' => 'leftblocks', 'Rechter Blokken' => 'rightblocks'),
     4 => array('Blok Menu' => 'blockmenu', 'Nav Bar' => 'navbar', 'Geen' => 'none'),
-    5 => array('Aflopend' => 'DESC', 'Oplopend' => 'ASC')
+    5 => array('Aflopend' => 'DESC', 'Oplopend' => 'ASC'),
+    6 => array('Checked' => 1, 'Unchecked' => 0)
 );
 
 ?>

@@ -71,6 +71,14 @@ $_PO_DEFAULT['polladdresstime']    = 604800; // seconds (= 7 days)
 // deleted (= 1).
 $_PO_DEFAULT['delete_polls'] = 0;
 
+/** Which glFusion blocks to display when viewing the links plugin
+ *   0 -> Left Blocks
+ *   1 -> Right Blocks
+ *   2 -> Left and Right Blocks
+ *   3 -> None
+ */
+$_PO_DEFAULT['displayblocks'] = 0;
+
 /** What to show after a poll has been saved? Possible choices:
  * 'item' -> forward to the poll
  * 'list' -> display the admin-list of poll
@@ -129,6 +137,8 @@ function plugin_initconfig_polls()
                 0, 0, 0, 70, true, 'polls');
         $c->add('delete_polls', $_PO_DEFAULT['delete_polls'], 'select',
                 0, 0, 0, 80, true, 'polls');
+        $c->add('displayblocks', $_PO_DEFAULT['displayblocks'], 'select',
+                0, 0, 13, 85, true, 'polls');
         $c->add('aftersave', $_PO_DEFAULT['aftersave'], 'select',
                 0, 0, 9, 90, true, 'polls');
 

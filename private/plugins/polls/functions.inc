@@ -563,7 +563,10 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                 $poll->set_var('layout_url', $_CONF['layout_url']);
                 $poll->set_var('site_admin_url', $_CONF['site_admin_url']);
                 $poll->set_var('poll_id', $pid );
-                $poll->set_var('poll_topic', htmlspecialchars($P['topic']) );
+                if ($nquestions > 1) {
+                    $poll->set_var('poll_topic', $LANG25['34'] . " " . htmlspecialchars($P['topic']));
+                    $poll->set_var('lang_question', $LANG25[31].':');
+                }
                 $poll->set_var('num_votes', COM_numberFormat($P['voters']));
                 $poll->set_var('poll_vote_url', $_CONF['site_url']
                                                 . '/polls/index.php');
@@ -642,10 +645,6 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                     }
                     $poll->parse('poll_questions', 'pquestions', true);
                     $poll->clear_var('poll_answers');
-                }
-                if ($nquestions > 1) {
-                    $poll->set_var('poll_topic', $LANG25['34'] . " " . htmlspecialchars($P['topic']));
-                    $poll->set_var('lang_question', $LANG25[31]);
                 }
                 $poll->set_var('lang_polltopics', $LANG_POLLS['polltopics']);
                 $poll->set_var('poll_notification', $notification);
@@ -912,6 +911,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
             $poll->set_var('site_admin_url', $_CONF['site_admin_url']);
             $poll->set_var('layout_url', $_CONF['layout_url']);
             $poll->set_var('poll_topic', htmlspecialchars($P['topic']));
+
             $poll->set_var('poll_id', $pid);
             $poll->set_var('num_votes', COM_numberFormat($P['voters']));
             $poll->set_var('lang_votes', $LANG_POLLS['votes']);
@@ -1371,5 +1371,173 @@ function plugin_autotags_polls($op, $content = '', $autotag = '')
     }
 
     return $content;
+}
+
+/**
+* Return information for a poll
+*
+* @param    string  $id         poll ID or '*'
+* @param    string  $what       comma-separated list of properties
+* @param    int     $uid        user ID or 0 = current user
+* @param    array   $options    (reserved for future extensions)
+* @return   mixed               string or array of strings with the information
+*
+*/
+function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
+{
+    global $_CONF, $_TABLES, $LANG_POLLS;
+
+    $properties = explode(',', $what);
+    $fields = array();
+    foreach ($properties as $p) {
+        switch ($p) {
+            case 'date-modified':
+                $fields[] = 'UNIX_TIMESTAMP(date) AS unixdate';
+                break;
+            case 'id':
+                $fields[] = 'pid';
+                break;
+            case 'title':
+                $fields[] = 'topic';
+                break;
+            case 'url':
+            case 'label':
+                $fields[] = 'pid';
+                break;
+            default:
+                break;
+        }
+    }
+
+    $fields = array_unique($fields);
+
+    if (count($fields) == 0) {
+        $retval = array();
+
+        return $retval;
+    }
+
+    if ($id == '*') {
+        $where = '';
+        $permOp = 'WHERE';
+    } else {
+        $where = " WHERE pid = '" . addslashes($id) . "'";
+        $permOp = 'AND';
+    }
+    if ($uid > 0) {
+        $permSql = COM_getPermSql($permOp, $uid);
+    } else {
+        $permSql = COM_getPermSql($permOp);
+    }
+    $sql = "SELECT " . implode(',', $fields) . " FROM {$_TABLES['polltopics']}" . $where . $permSql;
+    if ($id != '*') {
+        $sql .= ' LIMIT 1';
+    }
+
+    $result = DB_query($sql);
+    $numRows = DB_numRows($result);
+
+    $retval = array();
+    for ($i = 0; $i < $numRows; $i++) {
+        $A = DB_fetchArray($result);
+
+        $props = array();
+        foreach ($properties as $p) {
+            switch ($p) {
+                case 'date-modified':
+                    $props['date-modified'] = $A['unixdate'];
+                    break;
+                case 'id':
+                    $props['id'] = $A['pid'];
+                    break;
+                case 'title':
+                    $props['title'] = $A['topic'];
+                    break;
+                case 'url':
+                    if (empty($A['pid'])) {
+                        $props['url'] = $_CONF['site_url'].'/polls/index.php?pid='.$pid.'&amp;aid=-1';
+                    } else {
+                        $props['url'] = $_CONF['site_url'].'/polls/index.php?pid='.$A['pid'].'&amp;aid=-1';
+                    }
+                    break;
+                case 'label':
+                    $props['label'] = $LANG_POLLS['polls'];
+                    break;
+                case 'status':
+                    $props['status'] = 1; // stub - default
+                    break;
+                default:
+                    $props[$p] = '';
+                    break;
+            }
+        }
+
+        $mapped = array();
+        foreach ($props as $key => $value) {
+            if ($id == '*') {
+                if ($value != '') {
+                    $mapped[$key] = $value;
+                }
+            } else {
+                $mapped[$key] = $value;
+            }
+        }
+
+        if ($id == '*') {
+            $retval[] = $mapped;
+        } else {
+            $retval = $mapped;
+            break;
+        }
+    }
+
+    if (($id != '*') && (count($retval) == 1)) {
+        $retval = $retval[0];
+    }
+
+    return $retval;
+}
+
+function POLLS_siteHeader($title='', $meta='')
+{
+    global $_PO_CONF;
+
+    $retval = '';
+
+    switch( $_PO_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 2 :
+            $retval .= COM_siteHeader('menu',$title,$meta);
+            break;
+        case 1 : // right only
+        case 3 :
+            $retval .= COM_siteHeader('none',$title,$meta);
+            break;
+        default :
+            $retval .= COM_siteHeader('menu',$title,$meta);
+            break;
+    }
+    return $retval;
+}
+
+function POLLS_siteFooter() {
+    global $_CONF, $_PO_CONF;
+
+    $retval = '';
+
+    switch( $_PO_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 3 : // none
+            $retval .= COM_siteFooter();
+            break;
+        case 1 : // right only
+        case 2 : // left and right
+            $retval .= COM_siteFooter( true );
+            break;
+        default :
+            $retval .= COM_siteFooter();
+            break;
+    }
+    return $retval;
 }
 ?>

@@ -68,7 +68,7 @@ $FM_ratedIds = array();
 $FM_ratedIds = RATING_getRatedIds('filemgmt');
 
 
-$display = COM_siteHeader('menu',$LANG_FILEMGMT['usermenu1']);
+$display = FM_siteHeader($LANG_FILEMGMT['usermenu1']);
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
@@ -213,7 +213,7 @@ if($maxrows > 0) {
     $display .= $p->finish ($p->get_var('output'));
 }
 
-$display .= COM_siteFooter();
+$display .= FM_siteFooter();
 echo $display;
 
 ?>
