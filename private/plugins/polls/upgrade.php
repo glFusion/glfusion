@@ -48,6 +48,19 @@ function polls_upgrade()
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='polls'");
 
     switch( $currentVersion ) {
+        case '2.0.0' :
+        case '2.0.1' :
+        case '2.0.2' :
+        case '2.0.3' :
+        case '2.0.4' :
+        case '2.0.5' :
+        case '2.0.6' :
+        case '2.0.7' :
+        case '2.0.8' :
+        case '2.0.9' :
+        case '2.1.0' :
+            $c = config::get_instance();
+            $c->add('displayblocks',0, 'select', 0, 0, 13, 85, true, 'polls');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_PO_CONF['pi_version']."',pi_gl_version='".$_PO_CONF['gl_version']."' WHERE pi_name='polls' LIMIT 1");
             break;

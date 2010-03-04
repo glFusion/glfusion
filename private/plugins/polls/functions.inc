@@ -1497,4 +1497,47 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
 
     return $retval;
 }
+
+function POLLS_siteHeader($title='', $meta='')
+{
+    global $_PO_CONF;
+
+    $retval = '';
+
+    switch( $_PO_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 2 :
+            $retval .= COM_siteHeader('menu',$title,$meta);
+            break;
+        case 1 : // right only
+        case 3 :
+            $retval .= COM_siteHeader('none',$title,$meta);
+            break;
+        default :
+            $retval .= COM_siteHeader('menu',$title,$meta);
+            break;
+    }
+    return $retval;
+}
+
+function POLLS_siteFooter() {
+    global $_CONF, $_PO_CONF;
+
+    $retval = '';
+
+    switch( $_PO_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 3 : // none
+            $retval .= COM_siteFooter();
+            break;
+        case 1 : // right only
+        case 2 : // left and right
+            $retval .= COM_siteFooter( true );
+            break;
+        default :
+            $retval .= COM_siteFooter();
+            break;
+    }
+    return $retval;
+}
 ?>

@@ -54,8 +54,8 @@ $LANG_POLLS = array(
     'upgrade1'          => 'You installed a new version of the Polls plugin. Please',
     'upgrade2'          => 'upgrade',
     'editinstructions'  => 'Please fill in the Poll ID, at least one question and two answers for it.',
-    'pollclosed'        => 'This poll is closed for voting.', 
-    'pollhidden'        => 'You have already voted. This poll results will only be shown when voting is closed.', 
+    'pollclosed'        => 'This poll is closed for voting.',
+    'pollhidden'        => 'You have already voted. This poll results will only be shown when voting is closed.',
     'start_poll'        => 'Start Poll'
 );
 
@@ -129,7 +129,8 @@ $LANG_confignames['polls'] = array(
     'polladdresstime' => 'Voter IP Address Valid For',
     'delete_polls' => 'Delete Polls with Owner',
     'aftersave' => 'After Saving Poll',
-    'default_permissions' => 'Poll Default Permissions'
+    'default_permissions' => 'Poll Default Permissions',
+    'displayblocks' => 'Display glFusion Blocks',
 );
 
 $LANG_configsubgroups['polls'] = array(
@@ -147,7 +148,8 @@ $LANG_configselects['polls'] = array(
     1 => array('True' => TRUE, 'False' => FALSE),
     2 => array('As Submitted' => 'submitorder', 'By Votes' => 'voteorder'),
     9 => array('Forward to Poll' => 'item', 'Display Admin List' => 'list', 'Display Public List' => 'plugin', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3)
+    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
+    13 => array('Left Blocks' => 0, 'Right Blocks' => 1, 'Left & Right Blocks' => 2, 'None' => 3)
 );
 
 ?>
