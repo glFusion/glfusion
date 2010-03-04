@@ -2838,11 +2838,11 @@ pre {
   white-space:nowrap;
 }
 
-.yes, .Writeable {
+.yes, .iswriteable {
   font-weight: bold;
   color: #46882b;
 }
-.no, .Unwriteable {
+.notok, .notwriteable {
   font-weight: bold;
   color: #cc0000;
 }

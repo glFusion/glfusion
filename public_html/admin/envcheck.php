@@ -90,7 +90,7 @@ function _checkEnvironment()
     $classCounter = 0;
 
     if ( _phpOutOfDate() ) {
-        $T->set_var('status','<span class="no">'.phpversion().'</span>');
+        $T->set_var('status','<span class="notok">'.phpversion().'</span>');
     } else {
         $T->set_var('status','<span class="yes">'.phpversion().'</span>');
     }
@@ -106,7 +106,7 @@ function _checkEnvironment()
 
     $rg = ini_get('register_globals');
     $T->set_var('item','register_globals');
-    $T->set_var('status',$rg == 1 ? '<span class="no">'.$LANG01['on'].'</span>' : '<span class="yes">'.$LANG01['off'].'</span>');
+    $T->set_var('status',$rg == 1 ? '<span class="notok">'.$LANG01['on'].'</span>' : '<span class="yes">'.$LANG01['off'].'</span>');
     $T->set_var('recommended',$LANG01['off']);
     $T->set_var('notes',$LANG01['register_globals']);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -115,7 +115,7 @@ function _checkEnvironment()
 
     $sm = ini_get('safe_mode');
     $T->set_var('item','safe_mode');
-    $T->set_var('status',$sm == 1 ? '<span class="no">'.$LANG01['on'].'</span>' : '<span class="yes">'.$LANG01['off'].'</span>');
+    $T->set_var('status',$sm == 1 ? '<span class="notok">'.$LANG01['on'].'</span>' : '<span class="yes">'.$LANG01['off'].'</span>');
     $T->set_var('recommended',$LANG01['off']);
     $T->set_var('notes',$LANG01['safe_mode']);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -130,7 +130,7 @@ function _checkEnvironment()
         $open_basedir_directories = $ob;
     }
     $T->set_var('item','open_basedir');
-    $T->set_var('status',$ob == '' ? '<span class="yes">'.$LANG01['off'].'</span>' : '<span class="no">'.$LANG01['enabled'].'</span>');
+    $T->set_var('status',$ob == '' ? '<span class="yes">'.$LANG01['off'].'</span>' : '<span class="notok">'.$LANG01['enabled'].'</span>');
     $T->set_var('notes',$LANG01['open_basedir']);
     $T->set_var('rowclass',($classCounter % 2)+1);
     $T->parse('env','envs',true);
@@ -139,7 +139,7 @@ function _checkEnvironment()
     $memory_limit = _return_bytes(ini_get('memory_limit'));
     $memory_limit_print = ($memory_limit / 1024) / 1024;
     $T->set_var('item','memory_limit');
-    $T->set_var('status',$memory_limit < 50331648 ? '<span class="no">'.$memory_limit_print.'M</span>' : '<span class="yes">'.$memory_limit_print.'M</span>');
+    $T->set_var('status',$memory_limit < 50331648 ? '<span class="notok">'.$memory_limit_print.'M</span>' : '<span class="yes">'.$memory_limit_print.'M</span>');
     $T->set_var('recommended','48M');
     $T->set_var('notes',$LANG01['memory_limit']);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -148,7 +148,7 @@ function _checkEnvironment()
 
     $fu = ini_get('file_uploads');
     $T->set_var('item','file_uploads');
-    $T->set_var('status',$fu == 1 ? '<span class="yes">'.$LANG01['on'].'</span>' : '<span class="no">'.$LANG01['off'].'</span>');
+    $T->set_var('status',$fu == 1 ? '<span class="yes">'.$LANG01['on'].'</span>' : '<span class="notok">'.$LANG01['off'].'</span>');
     $T->set_var('recommended',$LANG01['on']);
     $T->set_var('notes',$LANG01['file_uploads']);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -158,7 +158,7 @@ function _checkEnvironment()
     $upload_limit = _return_bytes(ini_get('upload_max_filesize'));
     $upload_limit_print = ($upload_limit / 1024) / 1024;
     $T->set_var('item','upload_max_filesize');
-    $T->set_var('status',$upload_limit < 8388608 ? '<span class="no">'.$upload_limit_print.'M</span>' : '<span class="yes">'.$upload_limit_print.'M</span>');
+    $T->set_var('status',$upload_limit < 8388608 ? '<span class="notok">'.$upload_limit_print.'M</span>' : '<span class="yes">'.$upload_limit_print.'M</span>');
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG01['upload_max_filesize']);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -168,7 +168,7 @@ function _checkEnvironment()
     $post_limit = _return_bytes(ini_get('post_max_size'));
     $post_limit_print = ($post_limit / 1024) / 1024;
     $T->set_var('item','post_max_size');
-    $T->set_var('status',$post_limit < 8388608 ? '<span class="no">'.$post_limit_print.'M</span>' : '<span class="yes">'.$post_limit_print.'M</span>');
+    $T->set_var('status',$post_limit < 8388608 ? '<span class="notok">'.$post_limit_print.'M</span>' : '<span class="yes">'.$post_limit_print.'M</span>');
     $T->set_var('recommended','8M');
     $T->set_var('notes',$LANG01['post_max_size']);
     $T->set_var('rowclass',($classCounter % 2)+1);
@@ -189,7 +189,7 @@ function _checkEnvironment()
                 if (! @file_exists( $_CONF['path_to_mogrify'] . $binary ) ) {
                     $T->set_var(array(
                         'item'   =>  $LANG01['imagemagick'],
-                        'status' =>  '<span class="no">' .  $LANG01['not_found'] . '</span>',
+                        'status' =>  '<span class="notok">' .  $LANG01['not_found'] . '</span>',
                         'notes'  => $LANG01['im_not_found'],
                     ));
                 } else {
@@ -219,7 +219,7 @@ function _checkEnvironment()
                 } else {
                     $T->set_var(array(
                         'item'   =>  $LANG01['gd_lib'],
-                        'status' =>  '<span class="no">' . $LANG01['not_found'] . '</span>',
+                        'status' =>  '<span class="notok">' . $LANG01['not_found'] . '</span>',
                         'notes' =>   $LANG01['gd_not_found'],
                     ));
                 }
@@ -234,7 +234,7 @@ function _checkEnvironment()
                 if (! @file_exists( $_CONF['path_to_netpbm'] . $binary ) ) {
                     $T->set_var(array(
                         'item'   => $LANG01['netpbm'],
-                        'status' => '<span class="no">' . $LANG01['not_found'] . '</span>',
+                        'status' => '<span class="notok">' . $LANG01['not_found'] . '</span>',
                         'notes'  => $LANG01['np_not_found'],
                     ));
                 } else {
@@ -259,7 +259,7 @@ function _checkEnvironment()
             if (! @file_exists( $_CONF['path_to_jhead'] . $binary ) ) {
                 $T->set_var(array(
                     'item'      => $LANG01['jhead'],
-                    'status'    => '<span class="no">' .  $LANG01['not_found'] . '</span>',
+                    'status'    => '<span class="notok">' .  $LANG01['not_found'] . '</span>',
                     'notes'     => $LANG01['jhead_not_found'],
                 ));
             } else {
@@ -284,7 +284,7 @@ function _checkEnvironment()
             if (! @file_exists( $_CONF['path_to_jpegtrans'] . $binary ) ) {
                 $T->set_var(array(
                     'item'   => $LANG01['jpegtran'],
-                    'status' => '<span class="no">' .  $LANG01['not_found'] . '</span>',
+                    'status' => '<span class="notok">' .  $LANG01['not_found'] . '</span>',
                     'notes'  => $LANG01['jpegtran_not_found'],
                 ));
             } else {
@@ -423,7 +423,7 @@ function _checkEnvironment()
         $ok = _isWritable($path);
         if ( !$ok ) {
             $T->set_var('location',$path);
-            $T->set_var('status', $ok ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="Unwriteable">'.$LANG01['not_writable'].'</span>');
+            $T->set_var('status', $ok ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
@@ -434,7 +434,7 @@ function _checkEnvironment()
 /* --- debug code ---
         else {
             $T->set_var('location',$path);
-            $T->set_var('status', $ok ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="Unwriteable">'.$LANG01['not_writable'].'</span>');
+            $T->set_var('status', $ok ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
@@ -445,7 +445,7 @@ function _checkEnvironment()
     $rc = mkdir($_CONF['path_data'].'layout_cache/test/');
     if (!$rc) {
         $T->set_var('location',$_CONF['path_data'].'layout_cache/<br /><strong>'.$_GLFUSION['errstr'].'</strong>');
-        $T->set_var('status', '<span class="Unwriteable">'.$LANG01['unable_mkdir'].'</span>');
+        $T->set_var('status', '<span class="notwriteable">'.$LANG01['unable_mkdir'].'</span>');
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
@@ -455,7 +455,7 @@ function _checkEnvironment()
         $ok = _isWritable($_CONF['path_data'].'layout_cache/test/');
         if ( !$ok ) {
             $T->set_var('location',$path);
-            $T->set_var('status', $ok ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="Unwriteable">'.$LANG01['not_writable'].'</span>');
+            $T->set_var('status', $ok ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
@@ -486,13 +486,13 @@ function _checkEnvironment()
         $classCounter = 0;
         $recheck = '';
         $T->set_var('location',$LANG01['directory_permissions']);
-        $T->set_var('status', 1 ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="Unwriteable">'.$LANG01['not_writable'].'</span>');
+        $T->set_var('status', 1 ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
 
         $T->set_var('location',$LANG01['file_permissions']);
-        $T->set_var('status', 1 ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="Unwriteable">'.$LANG01['not_writable'].'</span>');
+        $T->set_var('status', 1 ? '<span class="yes">'.$LANG01['ok'].'</span>' : '<span class="notwriteable">'.$LANG01['not_writable'].'</span>');
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
@@ -610,7 +610,7 @@ function _checkCacheDir($path,$template,$classCounter)
                 $ok = _isWritable($path.$file);
                 if ( !$ok ) {
                     $template->set_var('location',$path.$file);
-                    $template->set_var('status', $ok ? '<span class="yes">OK</span>' : '<span class="Unwriteable">NOT WRITABLE</span>');
+                    $template->set_var('status', $ok ? '<span class="yes">OK</span>' : '<span class="notwriteable">NOT WRITABLE</span>');
                     $template->set_var('rowclass',($classCounter % 2)+1);
                     $classCounter++;
                     $template->parse('perm','perms',true);
