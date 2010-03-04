@@ -96,6 +96,14 @@ $_CA_DEFAULT['delete_event'] = 0;
  */
 $_CA_DEFAULT['aftersave'] = 'list';
 
+/** Which glFusion blocks to display when viewing the calendar.
+ *   0 -> Left Blocks
+ *   1 -> Right Blocks
+ *   2 -> Left and Right Blocks
+ *   3 -> None
+ */
+$_CA_DEFAULT['displayblocks'] = 0;
+
 // Define default permissions for new events created from the Admin panel.
 // Permissions are perm_owner, perm_group, perm_members, perm_anon (in that
 // order). Possible values:
@@ -168,6 +176,8 @@ function plugin_initconfig_calendar()
                 'select', 0, 0, 0, 100, true, 'calendar');
         $c->add('aftersave', $_CA_DEFAULT['aftersave'],
                 'select', 0, 0, 9, 110, true, 'calendar');
+        $c->add('displayblocks', $_CA_DEFAULT['displayblocks'],
+                'select', 0, 0, 13, 115, true, 'calendar');
 
         $c->add('fs_permissions', NULL, 'fieldset', 0, 1, NULL, 0, true,
                 'calendar');

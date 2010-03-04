@@ -1930,10 +1930,8 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
             $fields[] = 'eid';
             break;
         case 'label':
+        case 'status' :
             $fields[] = 'eid';
-            break;
-//      case 'status':
-//          $fields[] = 'status';
             break;
         default:
             break;
@@ -1998,8 +1996,7 @@ function plugin_getiteminfo_calendar($eid, $what, $uid = 0, $options = array())
                 $props['label'] = $LANG_CAL_1[16];
                 break;
             case 'status':
-//              $props['status'] = $A['status'];
-                $props['status'] = 1; // stub - default
+                $props['status'] = 1;
                 break;
             default:
                 $props[$p] = '';
@@ -2065,4 +2062,41 @@ function CALENDAR_eventTypeList ($currtype = '')
     return $retval;
 }
 
+function CALENDAR_siteHeader($title='', $meta='')
+{
+    global $_CA_CONF;
+
+    switch( $_CA_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 2 :
+            return( COM_siteHeader('menu',$title,$meta) );
+            break;
+        case 1 : // right only
+        case 3 :
+            return ( COM_siteHeader('none',$title,$meta) );
+            break;
+        default :
+            return ( COM_siteHeader('menu',$title,$meta) );
+            break;
+    }
+}
+
+function CALENDAR_siteFooter() {
+    global $_CONF, $_CA_CONF;
+
+    switch( $_CA_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 3 : // none
+            $retval .= COM_siteFooter();
+            break;
+        case 1 : // right only
+        case 2 : // left and right
+            $retval .= COM_siteFooter( true );
+            break;
+        default :
+            $retval .= COM_siteFooter();
+            break;
+    }
+    return $retval;
+}
 ?>
