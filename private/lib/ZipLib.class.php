@@ -173,7 +173,7 @@ class ZipLib
  function Extract ( $zn, $to, $index = Array(-1) )
  {
    $rc = 0;
-   if(!@is_dir($to)) $this->_mkdir($to);
+   if(!@is_dir($to)) $this->fusion_mkdir($to);
    $ok = 0; $zip = @fopen($zn,'rb');
    if(!$zip) return(-1);
    $cdir = $this->ReadCentralDir($zip,$zn);
@@ -300,11 +300,11 @@ class ZipLib
    if(substr($to,-1)!="/") $to.="/";
    if(substr($header['filename'],-1)=="/")
    {
-    $this->_mkdir($to.$header['filename']);
+    $this->fusion_mkdir($to.$header['filename']);
     return +2;
    }
 
-  if (!$this->_mkdir($to.dirname($header['filename']))) return (-1);
+  if (!$this->fusion_mkdir($to.dirname($header['filename']))) return (-1);
 
   if (!array_key_exists("external", $header) || (!($header['external']==0x41FF0010)&&!($header['external']==16)))
   {
@@ -326,7 +326,7 @@ class ZipLib
     touch($to.$header['filename'], $header['mtime']);
 
   }else{
-   if (!is_dir(dirname($to.$header['filename']))) $this->_mkdir(dirname($to.$header['filename']));  //-CS
+   if (!is_dir(dirname($to.$header['filename']))) $this->fusion_mkdir(dirname($to.$header['filename']));  //-CS
    $fp = fopen($to.$header['filename'].'.gz','wb');
    if(!$fp) return(-1);
    $binary_data = pack('va1a1Va1a1', 0x8b1f, Chr($header['compression']),
@@ -375,8 +375,8 @@ class ZipLib
 
  //--CS start
  // centralize mkdir calls and use dokuwiki io functions
- function _mkdir($d) {
-    return io_mkdir_p($d);
+ function fusion_mkdir($d) {
+    return fusion_io_mkdir_p($d);
  }
  //--CS end
 
