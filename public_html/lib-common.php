@@ -2464,28 +2464,21 @@ function COM_userMenu( $help='', $title='', $position='' )
 
     $retval = '';
 
-    if( !COM_isAnonUser() )
-    {
+    if( !COM_isAnonUser() ) {
         $usermenu = new Template( $_CONF['path_layout'] );
         if( isset( $_BLOCK_TEMPLATE['useroption'] ))
         {
             $templates = explode( ',', $_BLOCK_TEMPLATE['useroption'] );
             $usermenu->set_file( array( 'option' => $templates[0],
                                         'current' => $templates[1] ));
-        }
-        else
-        {
+        } else {
            $usermenu->set_file( array( 'option' => 'useroption.thtml',
                                        'current' => 'useroption_off.thtml' ));
         }
-        $usermenu->set_var( 'xhtml', XHTML );
-        $usermenu->set_var( 'site_url', $_CONF['site_url'] );
-        $usermenu->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
         $usermenu->set_var( 'layout_url', $_CONF['layout_url'] );
         $usermenu->set_var( 'block_name', str_replace( '_', '-', 'user_block' ));
 
-        if( empty( $title ))
-        {
+        if( empty( $title )) {
             $title = DB_getItem( $_TABLES['blocks'], 'title',
                                  "name='user_block'" );
         }
@@ -2495,7 +2488,6 @@ function COM_userMenu( $help='', $title='', $position='' )
 
         $retval .= COM_startBlock( $title, $help,
                            COM_getBlockTemplate( 'user_block', 'header', $position ), 'user_block' );
-        $retval .= '<ul>';
 
         $plugin_options = PLG_getAdminOptions();
         $num_plugins = count($plugin_options);
@@ -2517,27 +2509,20 @@ function COM_userMenu( $help='', $title='', $position='' )
         $plugin_options = PLG_getUserOptions();
         $nrows = count( $plugin_options );
 
-        for( $i = 0; $i < $nrows; $i++ )
-        {
+        for( $i = 0; $i < $nrows; $i++ ) {
             $plg = current( $plugin_options );
             $usermenu->set_var( 'option_label', $plg->adminlabel );
 
-            if( !empty( $plg->numsubmissions ))
-            {
+            if( !empty( $plg->numsubmissions )) {
                 $usermenu->set_var( 'option_count', '(' . $plg->numsubmissions . ')' );
-            }
-            else
-            {
+            } else {
                 $usermenu->set_var( 'option_count', '' );
             }
 
             $usermenu->set_var( 'option_url', $plg->adminurl );
-            if( $thisUrl == $plg->adminurl )
-            {
+            if( $thisUrl == $plg->adminurl ) {
                 $retval .= $usermenu->parse( 'item', 'current' );
-            }
-            else
-            {
+            } else {
                 $retval .= $usermenu->parse( 'item', 'option' );
             }
             next( $plugin_options );
@@ -2547,12 +2532,9 @@ function COM_userMenu( $help='', $title='', $position='' )
         $usermenu->set_var( 'option_label', $LANG01[48] );
         $usermenu->set_var( 'option_count', '' );
         $usermenu->set_var( 'option_url', $url );
-        if( $thisUrl == $url )
-        {
+        if( $thisUrl == $url ) {
             $retval .= $usermenu->parse( 'item', 'current' );
-        }
-        else
-        {
+        } else {
             $retval .= $usermenu->parse( 'item', 'option' );
         }
 
@@ -2561,29 +2543,20 @@ function COM_userMenu( $help='', $title='', $position='' )
         $usermenu->set_var( 'option_count', '' );
         $usermenu->set_var( 'option_url', $url );
         $retval .= $usermenu->finish($usermenu->parse('item', 'option'));
-        $retval .= '</ul>';
         $retval .=  COM_endBlock( COM_getBlockTemplate( 'user_block', 'footer' ));
-    }
-    else
-    {
+    } else {
         $retval .= COM_startBlock( $LANG01[47], $help,
-                           COM_getBlockTemplate( 'user_block', 'header', $position ), 'user_block' );
+                           COM_getBlockTemplate( 'login_block', 'header', $position ), 'login_block' );
         $login = new Template( $_CONF['path_layout'] );
         $login->set_file( 'form', 'loginform.thtml' );
-        $login->set_var( 'xhtml', XHTML );
-        $login->set_var( 'site_url', $_CONF['site_url'] );
-        $login->set_var( 'site_admin_url', $_CONF['site_admin_url'] );
         $login->set_var( 'layout_url', $_CONF['layout_url'] );
         $login->set_var( 'lang_username', $LANG01[21] );
         $login->set_var( 'lang_password', $LANG01[57] );
         $login->set_var( 'lang_forgetpassword', $LANG01[119] );
         $login->set_var( 'lang_login', $LANG01[58] );
-        if( $_CONF['disable_new_user_registration'] == 1 )
-        {
+        if( $_CONF['disable_new_user_registration'] == 1 ) {
             $login->set_var( 'lang_signup', '' );
-        }
-        else
-        {
+        } else {
             $login->set_var( 'lang_signup', $LANG01[59] );
         }
 
@@ -2636,7 +2609,7 @@ function COM_userMenu( $help='', $title='', $position='' )
         }
 
         $retval .= $login->finish($login->parse('output', 'form'));
-        $retval .= COM_endBlock( COM_getBlockTemplate( 'user_block', 'footer', $position ));
+        $retval .= COM_endBlock( COM_getBlockTemplate( 'login_block', 'footer', $position ));
     }
 
     return $retval;
