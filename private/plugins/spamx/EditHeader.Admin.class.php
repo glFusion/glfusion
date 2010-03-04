@@ -4,14 +4,15 @@
 * File: EditHeader.Admin.class.php
 * This is the Edit HTTP Header Module for the glFusion Spam-X plugin
 *
-* Copyright (C) 2005-2008 by the following authors:
+* Copyright (C) 2005-2009 by the following authors:
 * Author    Dirk Haun <dirk AT haun-online DOT de>
 *
 * based on the works of Tom Willett <tomw AT pigstye DOT net>
 *
 * Licensed under GNU General Public License
 *
-* $Id$
+* @package Spam-X
+* @subpackage Modules
 */
 
 if (!defined ('GVERSION')) {
@@ -19,11 +20,16 @@ if (!defined ('GVERSION')) {
 }
 
 /**
-* HTTP Header Editor
+* Include Abstract Base Class
 */
-
 require_once $_CONF['path'] . 'plugins/spamx/BaseAdmin.class.php';
 
+/**
+* HTTP Header Editor
+*
+* @package Spam-X
+*
+*/
 class EditHeader extends BaseAdmin {
     /**
      * Constructor
@@ -43,7 +49,8 @@ class EditHeader extends BaseAdmin {
             $entry = $_GET['entry'];
             if (!empty($entry)) {
                 $dbentry = addslashes($entry);
-                $result = DB_query("DELETE FROM {$_TABLES['spamx']} WHERE name='HTTPHeader' AND value='$dbentry'");
+                DB_delete($_TABLES['spamx'], array('name', 'value'),
+                                             array('HTTPHeader', $dbentry));
             }
         } elseif (($action == $LANG_SX00['addentry']) && SEC_checkToken()) {
             $entry = '';

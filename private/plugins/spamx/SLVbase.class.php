@@ -9,7 +9,8 @@
 *
 * Licensed under the GNU General Public License
 *
-* $Id$
+* @package Spam-X
+* @subpackage Modules
 */
 
 if (!defined ('GVERSION')) {
@@ -20,10 +21,10 @@ if (!defined ('GVERSION')) {
 * Sends posts to SLV (linksleeve.org) for examination
 *
 * @author Dirk Haun     dirk AT haun-online DOT de
-*
 * based on the works of Tom Willet (Spam-X) and Russ Jones (SLV)
+* @package Spam-X
+*
 */
-
 class SLVbase {
 
     var $_debug = false;

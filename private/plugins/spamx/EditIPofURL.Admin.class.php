@@ -4,13 +4,14 @@
 * File: EditIPofURL.Admin.class.php
 * This is the Edit IPofURL Module for the glFusion Spam-X plugin
 *
-* Copyright (C) 2004-2008 by the following authors:
+* Copyright (C) 2004-2009 by the following authors:
 * Author    Tom Willett     tomw AT pigstye DOT net
 *           Dirk Haun       dirk AT haun-online DOT de
 *
 * Licensed under GNU General Public License
 *
-* $Id$
+* @package Spam-X
+* @subpackage Modules
 */
 
 if (!defined ('GVERSION')) {
@@ -18,11 +19,16 @@ if (!defined ('GVERSION')) {
 }
 
 /**
-* IP of URL Black List Editor
+* Include Abstract Base Class
 */
-
 require_once $_CONF['path'] . 'plugins/spamx/BaseAdmin.class.php';
 
+/**
+* IP of URL Black List Editor
+*
+* @package Spam-X
+*
+*/
 class EditIPofUrl extends BaseAdmin {
     /**
      * Constructor
@@ -47,7 +53,8 @@ class EditIPofUrl extends BaseAdmin {
 
         if (($action == 'delete') && SEC_checkToken()) {
             $entry = addslashes($entry);
-            $result = DB_query("DELETE FROM {$_TABLES['spamx']} WHERE name = 'IPofUrl' AND value = '$entry'");
+            DB_delete($_TABLES['spamx'], array('name', 'value'),
+                                         array('IPofUrl', $entry));
         } elseif (($action == $LANG_SX00['addentry']) && SEC_checkToken()) {
             if (!empty($entry)) {
                 $entry = addslashes($entry);

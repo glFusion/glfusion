@@ -4,13 +4,14 @@
 * File: SLVwhitelist.Admin.class.php
 * This is the SLV Whitelist Module for the glFusion Spam-X plugin
 *
-* Copyright (C) 2004-2008 by the following authors:
+* Copyright (C) 2004-2010 by the following authors:
 * Author   Tom Willett     tomw AT pigstye DOT net
 *          Dirk Haun       dirk AT haun-online DOT de
 *
 * Licensed under GNU General Public License
 *
-* $Id$
+* @package Spam-X
+* @subpackage Modules
 */
 
 if (!defined ('GVERSION')) {
@@ -18,11 +19,16 @@ if (!defined ('GVERSION')) {
 }
 
 /**
-* SLV Whitelist Editor
+* Include Abstract Base Class
 */
-
 require_once $_CONF['path'] . 'plugins/spamx/BaseAdmin.class.php';
 
+/**
+* SLV Whitelist Editor
+*
+* @package Spam-X
+*
+*/
 class SLVwhitelist extends BaseAdmin {
     /**
      * Constructor
@@ -47,7 +53,8 @@ class SLVwhitelist extends BaseAdmin {
 
         if (($action == 'delete') && SEC_checkToken()) {
             $entry = addslashes($entry);
-            $result = DB_query("DELETE FROM {$_TABLES['spamx']} WHERE name = 'SLVwhitelist' AND value = '$entry'");
+            DB_delete($_TABLES['spamx'], array('name', 'value'),
+                                         array('SLVwhitelist', $entry));
         } elseif (($action == $LANG_SX00['addentry']) && SEC_checkToken()) {
             if (!empty($entry)) {
                 $entry = addslashes($entry);
@@ -59,6 +66,7 @@ class SLVwhitelist extends BaseAdmin {
         $display = '<hr' . XHTML . '>' . LB . '<p><b>';
         $display .= $LANG_SX00['slvwhitelist'];
         $display .= '</b></p>' . LB . '<ul>' . LB;
+        $display .= '<li>' . $_CONF['site_url'] . '</li>' . LB;
         $result = DB_query("SELECT value FROM {$_TABLES['spamx']} WHERE name = 'SLVwhitelist'");
         $nrows = DB_numRows($result);
         for ($i = 0; $i < $nrows; $i++) {

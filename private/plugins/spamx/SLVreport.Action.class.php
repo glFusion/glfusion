@@ -9,7 +9,8 @@
 *
 * Licensed under the GNU General Public License
 *
-* $Id$
+* @package Spam-X
+* @subpackage Modules
 */
 
 if (!defined ('GVERSION')) {
@@ -19,8 +20,8 @@ if (!defined ('GVERSION')) {
 /**
 * Include Base Classes
 */
-require_once ($_CONF['path'] . 'plugins/spamx/' . 'BaseCommand.class.php');
-require_once ($_CONF['path'] . 'plugins/spamx/' . 'SLVbase.class.php');
+require_once $_CONF['path'] . 'plugins/spamx/' . 'BaseCommand.class.php';
+require_once $_CONF['path'] . 'plugins/spamx/' . 'SLVbase.class.php';
 
 /**
 * Sends posts to SLV (linksleeve.org)
@@ -31,8 +32,9 @@ require_once ($_CONF['path'] . 'plugins/spamx/' . 'SLVbase.class.php');
 * this class ensures that SLV sees spam detected by other Spam-X modules, too.
 *
 * @author Dirk Haun     dirk AT haun-online DOT de
-*
 * based on the works of Tom Willet (Spam-X) and Russ Jones (SLV)
+* @package Spam-X
+*
 */
 class SLVreport extends BaseCommand {
     /**

@@ -5,7 +5,10 @@
  * 
  * @author Tom Willett	tomw AT pigstye DOT net 
  *
- * $Id$
+ * @package Spam-X
+ * @subpackage Modules
+ * @abstract
+ *
  */
 
 class BaseAdmin {

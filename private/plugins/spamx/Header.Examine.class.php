@@ -4,14 +4,15 @@
 * File: Header.Examine.class.php
 * This is the HTTP Header Examine class for the glFusion Spam-X plugin
 *
-* Copyright (C) 2005-2006 by the following authors:
+* Copyright (C) 2005-2009 by the following authors:
 * Author    Dirk Haun <dirk AT haun-online DOT de>
 *
 * based on the works of Tom Willett <tomw AT pigstye DOT net>
 *
 * Licensed under the GNU General Public License
 *
-* $Id$
+* @package Spam-X
+* @subpackage Modules
 */
 
 if (!defined ('GVERSION')) {
@@ -21,14 +22,16 @@ if (!defined ('GVERSION')) {
 /**
 * Include Abstract Examine Class
 */
-require_once $_CONF['path'].'plugins/spamx/'.'BaseCommand.class.php';
+require_once $_CONF['path'] . 'plugins/spamx/' . 'BaseCommand.class.php';
 
 /**
 * Examines Post according to HTTP Headers
 *
-* @author Dirk Haun <dirk AT haun-online DOT de>
+* @author Dirk Haun, dirk AT haun-online DOT de
+*
+* @package Spam-X
+*
 */
-
 class Header extends BaseCommand {
     /**
      * No Constructor Use BaseCommand constructor

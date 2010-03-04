@@ -9,7 +9,8 @@
 *
 * Licensed under GNU General Public License
 *
-* $Id$
+* @package Spam-X
+* @subpackage Modules
 */
 
 if (!defined ('GVERSION')) {
@@ -19,7 +20,7 @@ if (!defined ('GVERSION')) {
 /**
 * Include Abstract Examine Class
 */
-require_once($_CONF['path'] . 'plugins/spamx/' . 'BaseCommand.class.php');
+require_once $_CONF['path'] . 'plugins/spamx/' . 'BaseCommand.class.php';
 
 /**
 * html_entity_decode is only available as of PHP 4.3.0
@@ -34,6 +35,9 @@ if (!function_exists ('html_entity_decode')) {
 * Examines Comment according to Personal BLacklist
 *
 * @author Tom Willett tomw AT pigstye DOT net
+*
+* @package Spam-X
+*
 */
 
 class IPofUrl extends BaseCommand {
