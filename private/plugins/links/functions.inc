@@ -1566,4 +1566,47 @@ function LINKS_getCategorySQL($type = 'WHERE', $u_id = 0, $table = '')
     return $categorysql;
 }
 
+function LINKS_siteHeader($title='', $meta='')
+{
+    global $_LI_CONF;
+
+    $retval = '';
+
+    switch( $_LI_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 2 :
+            $retval .= COM_siteHeader('menu',$title,$meta);
+            break;
+        case 1 : // right only
+        case 3 :
+            $retval .= COM_siteHeader('none',$title,$meta);
+            break;
+        default :
+            $retval .= COM_siteHeader('menu',$title,$meta);
+            break;
+    }
+    return $retval;
+}
+
+function LINKS_siteFooter() {
+    global $_CONF, $_LI_CONF;
+
+    $retval = '';
+
+    switch( $_LI_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 3 : // none
+            $retval .= COM_siteFooter();
+            break;
+        case 1 : // right only
+        case 2 : // left and right
+            $retval .= COM_siteFooter( true );
+            break;
+        default :
+            $retval .= COM_siteFooter();
+            break;
+    }
+    return $retval;
+}
+
 ?>

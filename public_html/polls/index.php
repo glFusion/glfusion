@@ -155,7 +155,7 @@ if (isset($pid)) {
     $nquestions = DB_numRows($questions);
 }
 if (empty($pid)) {
-    $display .= COM_siteHeader ('menu', $LANG_POLLS['pollstitle']);
+    $display .= POLLS_siteHeader ( $LANG_POLLS['pollstitle']);
     if ($msg > 0) {
         $display .= COM_showMessage($msg, 'polls');
     }
@@ -164,9 +164,9 @@ if (empty($pid)) {
     setcookie ('poll-'.$pid, implode('-',$aid), time() + $_PO_CONF['pollcookietime'],
                $_CONF['cookie_path'], $_CONF['cookiedomain'],
                $_CONF['cookiesecure']);
-    $display .= COM_siteHeader() . POLLS_pollsave($pid, $aid);
+    $display .= POLLS_siteHeader() . POLLS_pollsave($pid, $aid);
 } else if (isset($pid)) {
-    $display .= COM_siteHeader();
+    $display .= POLLS_siteHeader();
     if ($msg > 0) {
         $display .= COM_showMessage($msg, 'polls');
     }
@@ -193,14 +193,14 @@ if (empty($pid)) {
     $poll_topic = DB_query ("SELECT topic FROM {$_TABLES['polltopics']} WHERE pid='".addslashes($pid)."'" . COM_getPermSql ('AND'));
     $Q = DB_fetchArray ($poll_topic);
     if (empty ($Q['topic'])) {
-        $display .= COM_siteHeader ('menu', $LANG_POLLS['pollstitle'])
+        $display .= POLLS_siteHeader ($LANG_POLLS['pollstitle'])
                  . polllist ();
     } else {
-        $display .= COM_siteHeader ('menu', $Q['topic'])
+        $display .= POLLS_siteHeader ($Q['topic'])
                  . POLLS_pollResults ($pid, 400, $order, $mode);
     }
 }
-$display .= COM_siteFooter();
+$display .= POLLS_siteFooter();
 
 echo $display;
 

@@ -55,7 +55,19 @@ function links_upgrade()
         case '2.0.1' :
             $c = config::get_instance();
             $c->add('target_blank',FALSE,'select',0, 1, 0, 55, true, 'links');
-
+        case '2.0.2' :
+        case '2.0.3' :
+        case '2.0.4' :
+        case '2.0.5' :
+        case '2.0.6' :
+        case '2.0.7' :
+        case '2.0.8' :
+        case '2.0.9' :
+        case '2.1.0' :
+        case '2.1.1' :
+        case '2.1.2' :
+            $c = config::get_instance();
+            $c->add('displayblocks',0,'select',0, 0, 13, 60, true, 'links');
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_LI_CONF['pi_version']."',pi_gl_version='".$_LI_CONF['gl_version']."' WHERE pi_name='links' LIMIT 1");
             break;

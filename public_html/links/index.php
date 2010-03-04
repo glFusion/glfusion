@@ -116,15 +116,15 @@ function links_list($message)
         $result = DB_query("SELECT owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['linkcategories']} WHERE cid='{$cat}'");
         $A = DB_fetchArray($result);
         if (SEC_hasAccess ($A['owner_id'], $A['group_id'], $A['perm_owner'], $A['perm_group'], $A['perm_members'], $A['perm_anon']) < 2) {
-            $display .= COM_siteHeader ('menu', $page_title);
+            $display .= LINKS_siteHeader ('menu', $page_title);
             $display .= COM_showMessage (5, 'links');
-            $display .= COM_siteFooter ();
+            $display .= LINKS_siteFooter ();
             echo $display;
             exit;
         }
     }
 
-    $display .= COM_siteHeader ('menu', $page_title);
+    $display .= LINKS_siteHeader ('menu', $page_title);
 
     if (is_array($message) && !empty($message[0])) {
         $display .= COM_startBlock($message[0], '',
@@ -408,7 +408,7 @@ $message = array();
 if ( $mode == 'submit' ) {
     if (COM_isAnonUser() &&
         (($_CONF['loginrequired'] == 1) || ($_CONF['submitloginrequired'] == 1))) {
-        $display .= COM_siteHeader ('menu', $LANG_LINKS[114]);
+        $display .= LINKS_siteHeader ('menu', $LANG_LINKS[114]);
         $display .= COM_startBlock ($LANG_LOGIN[1], '',
                                     COM_getBlockTemplate ('_msg_blockx', 'header'));
         $login = new Template ($_CONF['path_layout'] . 'submit');
@@ -421,7 +421,7 @@ if ( $mode == 'submit' ) {
         $login->parse ('output', 'login');
         $display .= $login->finish ($login->get_var ('output'));
         $display .= COM_endBlock (COM_getBlockTemplate ('_msg_blockx', 'footer'));
-        $display .= COM_siteFooter ();
+        $display .= LINKS_siteFooter ();
 
         echo $display;
         exit;
@@ -446,13 +446,13 @@ if ( $mode == 'submit' ) {
             . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     }
 
-    echo COM_siteHeader();
+    echo LINKS_siteHeader();
     if ( $slerror != '' ) {
         echo $slerror;
     } else {
         echo plugin_submit_links();
     }
-    echo COM_siteFooter();
+    echo LINKS_siteFooter();
     exit;
 }
 
@@ -470,9 +470,9 @@ if ( $mode == $LANG12[8] && !empty($LANG12[8]) ) {
     if ( isset($_POST['categorydd']) ) {
         $A['categorydd'] = $_POST['categorydd'];
     }
-    echo COM_siteHeader();
+    echo LINKS_siteHeader();
     echo plugin_savesubmission_links($A);
-    echo COM_siteFooter();
+    echo LINKS_siteFooter();
     exit;
 }
 
@@ -501,7 +501,7 @@ if (($mode == 'report') && (isset($_USER['uid']) && ($_USER['uid'] > 1))) {
 
 if (COM_isAnonUser() &&
     (($_CONF['loginrequired'] == 1) || ($_LI_CONF['linksloginrequired'] == 1))) {
-    $display .= COM_siteHeader ('menu', $LANG_LINKS[114]);
+    $display .= LINKS_siteHeader ('menu', $LANG_LINKS[114]);
     $display .= COM_startBlock ($LANG_LOGIN[1], '',
                                 COM_getBlockTemplate ('_msg_block', 'header'));
     $login = new Template ($_CONF['path_layout'] . 'submit');
@@ -518,7 +518,7 @@ if (COM_isAnonUser() &&
     $display .= links_list($message);
 }
 
-$display .= COM_siteFooter ();
+$display .= LINKS_siteFooter ();
 
 echo $display;
 
