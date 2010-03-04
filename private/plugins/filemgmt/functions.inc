@@ -941,6 +941,7 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
                 break;
             case 'label':
             case 'url':
+            case 'status' :
                 $fields[] = 'detail.lid';
                 break;
             default:

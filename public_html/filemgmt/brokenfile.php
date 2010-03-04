@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -78,7 +78,7 @@ if ( isset($_POST['submit']) ) {
     exit();
 
 } else {
-    $display = COM_siteHeader('menu');
+    $display = FM_siteHeader();
     $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
     $display .= "<form action=\"brokenfile.php\" method=\"post\">";
     $display .= '<input type="hidden" name="lid" value="'.$lid.'"' . XHTML . '>';
@@ -92,7 +92,7 @@ if ( isset($_POST['submit']) ) {
     $display .= '&nbsp;<input type="button" value="'._MD_CANCEL.'" onclick="javascript:history.go(-1)"' . XHTML . '>';
     $display .= "</td></tr></table></form>";
     $display .= COM_endBlock();
-    $display .= COM_siteFooter();
+    $display .= FM_siteFooter();
     echo $display;
 }
 

@@ -40,9 +40,10 @@ if (!in_array('filemgmt', $_PLUGINS)) {
 }
 
 if (isset ($_GET['lid'])) {
-    echo COM_refresh ($_CONF['site_url'] . '/filemgmt/index.php?id=' . $_GET['lid']);
+    $lid = COM_applyFilter($_GET['lid'],true);
+    echo COM_refresh ($_CONF['site_url'] . '/filemgmt/index.php?id=' . $lid);
 } else {
     echo COM_refresh ($_CONF['site_url'] . '/filemgmt/index.php');
 }
-
+exit;
 ?>

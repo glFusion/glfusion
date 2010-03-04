@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -390,7 +390,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
 
     } else {
 
-        $display .= COM_siteHeader('menu');
+        $display .= FM_siteHeader();
         $display .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
         $display .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"8\" class=\"plugin\"><tr><td style=\"padding-top:10px;padding-left:50px;\">\n";
         $display .= "<ul><li>"._MD_SUBMITONCE."</li>\n";
@@ -465,7 +465,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
         $display .= "</form>\n";
         $display .= "</td></tr></table>";
         $display .= COM_endBlock();
-        $display .= COM_siteFooter();
+        $display .= FM_siteFooter();
         echo $display;
 
     }

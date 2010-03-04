@@ -99,7 +99,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
 
         $result = DB_query($sql);
         list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $logourl, $submitter, $status, $time, $hits, $rating, $votes, $comments, $description) = DB_fetchArray($result);
-        $display = COM_siteHeader('menu',$dtitle);
+        $display = FM_siteHeader($dtitle);
         $pathstring = "<a href='{$_CONF['site_url']}/filemgmt/index.php'>"._MD_MAIN."</a>&nbsp;:&nbsp;";
         $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_CONF['site_url']}/filemgmt/viewcat.php");
         $pathstring .= $nicepath;
@@ -160,7 +160,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         $display .= $p->finish ($p->get_var('output'));
 
     } else {
-        $display = COM_siteHeader('menu',$LANG_FILEMGMT['usermenu1']);
+        $display = FM_siteHeader($LANG_FILEMGMT['usermenu1']);
         $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $p->set_file (array (
             'page'             =>     'filelisting.thtml',
@@ -309,7 +309,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
         $display .= $p->finish ($p->get_var('output'));
     }
 
-    $display .= COM_siteFooter();
+    $display .= FM_siteFooter();
     echo $display;
 
 }

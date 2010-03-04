@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id:: header.php 3155 2008-09-16 02:13:18Z mevans0263                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2008 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -63,10 +63,12 @@ if (SEC_hasRights("filemgmt.edit")) {
 if (isset($_USER['uid'])) {
     $uid=$_USER['uid'];
 } else {
-    $uid=1;    // Set to annonymous GL User ID
+    $uid=1;    // Set to annonymous User ID
 }
 
 if ((!$FilemgmtUser) && (!$FilemgmtAdmin)) {
+    echo COM_refresh($_CONF['site_url'].'/users.php?mode=login');
+    exit;
     $display .= COM_siteHeader('menu');
     $display .= COM_startBlock(_GL_ERRORNOACCESS);
     $display .= _MD_USER." ".$_USER['username']. " " ._GL_NOUSERACCESS;
@@ -89,5 +91,48 @@ function OpenTable($width="99%") {
 function CloseTable() {
  $retval = "</td></tr></table></td></tr></table>\n";
  return $retval;
+}
+
+function FM_siteHeader($title='', $meta='')
+{
+    global $_FM_CONF;
+
+    $retval = '';
+
+    switch( $_FM_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 2 :
+            $retval .= COM_siteHeader('menu',$title,$meta);
+            break;
+        case 1 : // right only
+        case 3 :
+            $retval .= COM_siteHeader('none',$title,$meta);
+            break;
+        default :
+            $retval .= COM_siteHeader('menu',$title,$meta);
+            break;
+    }
+    return $retval;
+}
+
+function FM_siteFooter() {
+    global $_CONF, $_FM_CONF;
+
+    $retval = '';
+
+    switch( $_FM_CONF['displayblocks'] ) {
+        case 0 : // left only
+        case 3 : // none
+            $retval .= COM_siteFooter();
+            break;
+        case 1 : // right only
+        case 2 : // left and right
+            $retval .= COM_siteFooter( true );
+            break;
+        default :
+            $retval .= COM_siteFooter();
+            break;
+    }
+    return $retval;
 }
 ?>
