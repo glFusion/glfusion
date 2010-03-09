@@ -95,12 +95,12 @@ function plugin_getmenuitems_links()
 /**
 * Return headlines for New Links section in the What's New block, if enabled
 *
-* @return   mixed       array(headline, byline), or boolean false is disabled
+* @return   mixed       array(headline, byline), or boolean false if disabled
 *
 */
 function plugin_whatsnewsupported_links()
 {
-    global $_TABLES, $_LI_CONF, $LANG_LINKS, $LANG_WHATSNEW;
+    global $_LI_CONF, $LANG_LINKS, $LANG_WHATSNEW;
 
     if ( $_LI_CONF['hidenewlinks'] == 0 ) {
         $retval = array( $LANG_LINKS[84],
@@ -227,8 +227,8 @@ function LINKS_countLinksAndClicks ()
 {
     global $_TABLES;
 
-    $result = DB_query ("SELECT COUNT(*) AS count,SUM(hits) AS clicks FROM {$_TABLES['links']}" . COM_getPermSQL ());
-    $A = DB_fetchArray ($result);
+    $result = DB_query("SELECT COUNT(*) AS count,SUM(hits) AS clicks FROM {$_TABLES['links']}" . COM_getPermSQL() . LINKS_getCategorySQL('AND'));
+    $A = DB_fetchArray($result);
     $total_links = $A['count'];
     $total_clicks = $A['clicks'];
     if (empty ($total_clicks)) {
@@ -255,7 +255,7 @@ function plugin_showstats_links ($showsitestats)
 
     $retval = '';
 
-    $result = DB_query ("SELECT lid,url,title,hits FROM {$_TABLES['links']} WHERE (hits > 0)" . COM_getPermSQL ('AND') . " ORDER BY hits DESC LIMIT 10");
+    $result = DB_query("SELECT lid,url,title,hits FROM {$_TABLES['links']} WHERE (hits > 0)" . COM_getPermSQL('AND') . LINKS_getCategorySQL('AND') . " ORDER BY hits DESC LIMIT 10");
     $nrows  = DB_numRows ($result);
     if ($nrows > 0) {
         $header_arr = array(
@@ -431,7 +431,7 @@ function plugin_user_delete_links ($uid)
 
     if ($_LI_CONF['delete_links'] == 1) {
         // delete the links
-        DB_query ("DELETE FROM {$_TABLES['links']} WHERE owner_id = $uid");
+        DB_delete($_TABLES['links'], 'owner_id', $uid);
     } else {
         // assign ownership to a user from the Root group
         $rootgroup = DB_getItem ($_TABLES['groups'], 'grp_id',
@@ -1062,7 +1062,6 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr)
                         "{$_CONF['site_url']}/links/index.php?category="
                         . urlencode($A['cid']));
                 $retval = "<span style=\"padding-left:{$indent}px;\">$cat</span>";
-                break;
                 break;
             default:
                 $retval = $fieldvalue;
