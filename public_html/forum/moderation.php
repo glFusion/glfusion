@@ -109,7 +109,7 @@ function moderator_deletePost($topic_id,$topic_parent_id,$forum_id)
         $topicparent = $topic_id;
         gf_updateLastPost($forum_id);
     } else {
-        gf_updateLastPost($forum_id,$topic_id);
+        gf_updateLastPost($forum_id,$topicparent);
     }
 
     CACHE_remove_instance('forumcb');
