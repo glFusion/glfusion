@@ -146,7 +146,7 @@ function phpblock_calendar( $help='', $title='' )
         $oldDate1 = 'no_day';  // Invalid Date!
         $oldDate2 = 'last_d';  // Invalid Date!
 
-        if( $_CA_CONF['personalcalendars'] == 1 AND !empty( $_USER['uid'] )) {
+        if (($_CA_CONF['personalcalendars'] == 1) AND !COM_isAnonUser()) {
             $iterations = 2;
         } else {
             $iterations = 1;
@@ -324,6 +324,9 @@ function plugin_ismoderator_calendar()
 
 /**
 * Returns SQL & Language texts to moderation.php
+*
+* @return   mixed   Plugin object or void if not allowed
+*
 */
 function plugin_itemlist_calendar()
 {
@@ -501,12 +504,23 @@ function plugin_savesubmission_calendar($A)
     $A['description'] = (isset($A['description']) ? $A['description'] : '');
     $A['event_type']  = (isset($A['event_type']) ? $A['event_type'] : '');
 
+    if ($A['url'] == 'http://') {
+        // remove default entry now to avoid false spam reports
+        $A['url'] = '';
+    }
+
     // pseudo-formatted event description for the spam check
-    $spamcheck = COM_createLink($A['title'], $A['url']) . '<br' . XHTML . '>'
-               . $A['location'] . '<br' . XHTML . '>' . $A['address1'] . '<br' . XHTML . '>'
-               . $A['address2'] . '<br' . XHTML . '>' . $A['city'] . ', ' . $A['zipcode']
+    $spamcheck = '';
+    if (empty($A['url'])) {
+        $spamcheck .= $A['title'];
+    } else {
+        $spamcheck .= COM_createLink($A['title'], $A['url']);
+    }
+    $spamcheck .= '<br' . XHTML . '>' . $A['location'] . '<br' . XHTML . '>'
+               . $A['address1'] . '<br' . XHTML . '>' . $A['address2']
+               . '<br' . XHTML . '>' . $A['city'] . ', ' . $A['zipcode']
                . '<br' . XHTML . '>' . $A['description'] . '</p>';
-    $result = PLG_checkforSpam ($spamcheck, $_CONF['spamx']);
+    $result = PLG_checkforSpam($spamcheck, $_CONF['spamx']);
     if ($result > 0) {
         COM_updateSpeedlimit ('submit');
         COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
@@ -522,10 +536,7 @@ function plugin_savesubmission_calendar($A)
     $A['event_type'] = addslashes (strip_tags (COM_checkWords ($A['event_type'])));
     $A['title'] = addslashes ($A['title']);
 
-    $A['url'] = addslashes (COM_sanitizeUrl ($A['url']));
-    if ($A['url'] == 'http://') {
-        $A['url'] = '';
-    }
+    $A['url'] = addslashes(COM_sanitizeUrl($A['url']));
 
     if (!empty ($A['eid'])) {
         $A['eid'] = addslashes (COM_applyFilter ($A['eid']));
@@ -821,9 +832,6 @@ function plugin_submit_calendar($mode = 'master',$A = array())
     } else {
         $eventform->set_var ('hour_mode', 12);
     }
-    $eventform->set_var ('site_url', $_CONF['site_url']);
-    $eventform->set_var ('site_admin_url', $_CONF['site_admin_url']);
-    $eventform->set_var ('layout_url', $_CONF['layout_url']);
     $eventform->set_var ('lang_title', $LANG_CAL_1[28]);
 
     $eventform->set_var('lang_eventtype', $LANG_CAL_1[37]);
@@ -1007,7 +1015,6 @@ function CALENDAR_deleteEvent($eid, $type = '')
         DB_delete($_TABLES['personal_events'], 'eid', addslashes($eid));
         PLG_itemDeleted($eid, 'calendar');
         COM_rdfUpToDateCheck('calendar', $A['event_type'], $A['eid']);
-        COM_rdfUpToDateCheck('article', 'calendar', $eid);
 
         return COM_refresh($_CONF['site_admin_url'] . '/plugins/calendar/index.php?msg=18');
     } elseif ($type == 'submission') {
@@ -1063,13 +1070,12 @@ function CALENDAR_listOld()
     $cal_templates->set_var ('site_admin_url', $_CONF['site_admin_url']);
     $cal_templates->set_var ('site_url', $_CONF['site_url']);
     $cal_templates->set_var('layout_url', $_CONF['layout_url']);
-    $cal_templates->set_var('xhtml', XHTML);
-    $cal_templates->set_var ('usr_time', $usr_time);
-    $cal_templates->set_var ('lang_text_start', $LANG_CAL_ADMIN[28]);
-    $cal_templates->set_var ('lang_text_end', $LANG_CAL_ADMIN[29]);
-    $cal_templates->set_var ('lang_updatelist', $LANG_CAL_ADMIN[30]);
-    $cal_templates->set_var ('lang_delete_sel', $LANG_ADMIN['delete_sel']);
-    $cal_templates->set_var ('lang_delconfirm', $LANG_CAL_ADMIN[31]);
+    $cal_templates->set_var('usr_time', $usr_time);
+    $cal_templates->set_var('lang_text_start', $LANG_CAL_ADMIN[28]);
+    $cal_templates->set_var('lang_text_end', $LANG_CAL_ADMIN[29]);
+    $cal_templates->set_var('lang_updatelist', $LANG_CAL_ADMIN[30]);
+    $cal_templates->set_var('lang_delete_sel', $LANG_ADMIN['delete_sel']);
+    $cal_templates->set_var('lang_delconfirm', $LANG_CAL_ADMIN[31]);
     $cal_templates->parse('form', 'form');
     $desc = $cal_templates->finish($cal_templates->get_var('form'));
 
@@ -1279,15 +1285,17 @@ function plugin_autotags_calendar ($op, $content = '', $autotag = '')
         return 'event';
     } else if ($op == 'parse') {
         $eid = COM_applyFilter ($autotag['parm1']);
-        $url = $_CONF['site_url'] . '/calendar/event.php?eid=' . $eid;
-        if (empty ($autotag['parm2'])) {
-            $linktext = stripslashes (DB_getItem ($_TABLES['events'],
-                                      'title', "eid = '".addslashes($eid)."'"));
-        } else {
-            $linktext = $autotag['parm2'];
+        if (! empty($eid)) {
+        	$url = $_CONF['site_url'] . '/calendar/event.php?eid=' . $eid;
+        	if (empty ($autotag['parm2'])) {
+            	$linktext = stripslashes (DB_getItem ($_TABLES['events'],
+                	                      'title', "eid = '".addslashes($eid)."'"));
+        	} else {
+            	$linktext = $autotag['parm2'];
+        	}
+        	$link = COM_createLink($linktext, $url);
+        	$content = str_replace ($autotag['tagstr'], $link, $content);
         }
-        $link = COM_createLink($linktext, $url);
-        $content = str_replace ($autotag['tagstr'], $link, $content);
 
         return $content;
     }
@@ -1851,10 +1859,10 @@ function plugin_getListField_calendar($fieldname, $fieldvalue, $A, $icon_arr)
                             $A['perm_group'],$A['perm_members'],$A['perm_anon']);
 
     switch($fieldname) {
-        case "delete":
+        case 'delete':
             $retval = "<input type=\"checkbox\" name=\"delitem[{$A['eid']}]\" checked=\"checked\"" . XHTML . ">";
             break;
-        case "edit":
+    	case 'edit':
             if ($access == 3) {
                 $retval = COM_createLink(
                     $icon_arr['edit'],
@@ -1862,7 +1870,7 @@ function plugin_getListField_calendar($fieldname, $fieldvalue, $A, $icon_arr)
                     . "?mode=edit&amp;eid={$A['eid']}");
             }
             break;
-        case "copy":
+        case 'copy':
             if ($access == 3) {
                 $retval = COM_createLink(
                     $icon_arr['copy'],
