@@ -183,7 +183,6 @@ function plugin_displaycomment_staticpages ($id, $cid, $title, $order, $format, 
 /**
  * Static Page saves a comment
  *
- * @param   string  $type   Plugin to save comment
  * @param   string  $title  comment title
  * @param   string  $comment comment text
  * @param   string  $id     Item id to which $cid belongs
@@ -210,8 +209,11 @@ function plugin_savecomment_staticpages($title, $comment, $id, $pid, $postmode)
                                    $LANG03[14], $postmode)
                 . COM_siteFooter();
     } else { // success
-        $retval = COM_refresh ($_CONF['site_url']
-                                . "/staticpages/index.php?page=$id");
+        $url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='
+                            . $id);
+		CACHE_remove_instance('whatsnew_');							
+		echo COM_refresh($url);
+		exit;
     }
     CACHE_remove_instance('whatsnew_');
     return $retval;
@@ -239,15 +241,17 @@ function plugin_deletecomment_staticpages($cid, $id)
             $A['group_id'], $A['perm_owner'], $A['perm_group'],
             $A['perm_members'], $A['perm_anon']) == 3) {
         CMT_deleteComment($cid, $id, 'staticpages');
-        $retval .= COM_refresh ($_CONF['site_url']
-                                 . "/staticpages/index.php?page=$id");
+        $url = COM_buildUrl($_CONF['site_url'] . '/staticpages/index.php?page='
+                            . $id);
+        $retval .= COM_refresh($url);
     } else {
         COM_errorLog ("User {$_USER['username']} (IP: {$_SERVER['REMOTE_ADDR']}) "
                     . "tried to illegally delete comment $cid from staticpage $id");
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
     CACHE_remove_instance('whatsnew_');
-    return $retval;
+    echo $retval;
+    exit;
 }
 
 function plugin_getwhatsnewcomment_staticpages()
