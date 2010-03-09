@@ -533,13 +533,26 @@ function createuser ($username, $email, $email_conf)
     $retval = '';
 
     $username   = COM_truncate(trim ($username),48);
+
+    if ( !USER_validateUsername($username)) {
+        $retval .= COM_siteHeader ('menu', $LANG04[22]);
+        if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userForm')) {
+            $retval .= CUSTOM_userForm ($msg);
+        } else {
+            $retval .= newuserform ('Invalid Characters in username');
+        }
+        $retval .= COM_siteFooter();
+
+        return $retval;
+    }
+
     $email      = COM_truncate(trim ($email),96);
     $email_conf = trim ($email_conf);
     $passwd     = '';   // placeholder for future user-entered password
 
     $fullname = '';
     if (!empty ($_POST['fullname'])) {
-        $fullname   = COM_truncate(trim(COM_applyFilter($_POST['fullname'])),80);
+        $fullname   = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($_POST['fullname']))),80);
     }
 
     if (!isset ($_CONF['disallow_domains'])) {
@@ -779,14 +792,18 @@ function newuserform ($msg = '')
 
     $username = '';
     if (!empty ($_POST['username'])) {
-        $username = COM_applyFilter ($_POST['username']);
+//        $username = strip_tags($_POST['username']);
+        $username = trim ( $_POST['username'] );
+//        $username = COM_applyFilter ($_POST['username']);
     }
-    $user_templates->set_var ('username', $username);
+//print $username;
+    $user_templates->set_var ('username', htmlentities($username));
 
     $fullname = '';
     if (!empty ($_POST['fullname'])) {
         $fullname = COM_applyFilter ($_POST['fullname']);
     }
+//print '<br/>'.$fullname;exit;
     $user_templates->set_var ('fullname', $fullname);
     switch ($_CONF['user_reg_fullname']) {
     case 2:
@@ -988,7 +1005,7 @@ case 'create':
     } else {
         $email = COM_applyFilter ($_POST['email']);
         $email_conf = COM_applyFilter ($_POST['email_conf']);
-        $display .= createuser(COM_applyFilter ($_POST['username']), $email, $email_conf);
+        $display .= createuser(COM_stripslashes($_POST['username']), $email, $email_conf);
     }
     break;
 

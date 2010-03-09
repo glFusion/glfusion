@@ -310,7 +310,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 
         // comment variables
         $template->set_var( 'indent', $indent );
-        $template->set_var( 'author_name', strip_tags(COM_applyFilter($A['username'] )));
+        $template->set_var( 'author_name', strip_tags(USER_sanitizeName($A['username'] )));
         $template->set_var( 'author_id', $A['uid'] );
         $template->set_var( 'cid', $A['cid'] );
         $template->set_var( 'cssid', $row % 2 );
@@ -356,9 +356,9 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
             );
 
         } else {
-            $template->set_var( 'author', strip_tags(COM_applyFilter($A['name'] )));
-            $template->set_var( 'author_fullname', strip_tags(COM_applyFilter($A['name'] )));
-            $template->set_var( 'author_link', htmlspecialchars(strip_tags(COM_applyFilter($A['name'] )),ENT_COMPAT,COM_getEncodingt() ));
+            $template->set_var( 'author', strip_tags(USER_sanitizeName($A['name'] )));
+            $template->set_var( 'author_fullname', strip_tags(USER_sanitizeName($A['name'] )));
+            $template->set_var( 'author_link', htmlspecialchars(strip_tags(USER_sanitizeName($A['name'] )),ENT_COMPAT,COM_getEncodingt() ));
             $template->set_var( 'author_photo', '' );
             $template->set_var( 'camera_icon', '' );
             $template->set_var( 'start_author_anchortag', '' );
@@ -912,7 +912,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                 //Anonymous user
                 $comment_template->set_var('uid', 1);
                 if ( isset($_POST['username']) ) {
-                    $name = strip_tags(COM_applyFilter($_POST['username'])); //for preview
+                    $name = strip_tags(USER_sanitizeName(COM_stripslashes($_POST['username']))); //for preview
                 } else {
                     $name = $LANG03[24]; //anonymous user
                 }
@@ -1085,7 +1085,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         $cid = DB_insertId();
         //set Anonymous user name if present
         if (isset($_POST['username']) && strcmp($_POST['username'],$LANG03[24]) != 0) {
-            $name = strip_tags(COM_applyFilter ($_POST['username']));
+            $name = strip_tags(USER_sanitizeName (COM_stripslashes($_POST['username'])));
             DB_change($_TABLES['comments'],'name',addslashes($name),'cid',intval($cid));
         }
         DB_unlockTable ($_TABLES['comments']);

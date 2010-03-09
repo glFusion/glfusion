@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
+// | Copyright (C) 2009-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -695,6 +695,50 @@ function USER_uniqueUsername($username)
     } while (!empty($uid));
 
     return $try;
+}
+
+
+/**
+* Check to see if the username has been taken, or if it is disallowed.
+* Also checks if it includes the " character, which we don't allow in usernames.
+* Used for registering, changing names, and posting anonymously with a username
+*
+* @param string $username The username to check
+*
+* @return	boolean     true if OK, false if not
+*/
+function USER_validateUsername($username)
+{
+	global $_CONF, $_TABLES, $_USER;
+
+    $regex = '[\x00-\x1F\x7F<>"%&*\/\\\\]';
+
+	// ... fast checks first.
+	if (strpos($username, '&quot;') !== false || strpos($username, '"') !== false ) {
+		return false;
+	}
+
+	if (preg_match('/' . $regex . '/u', $username)) {
+    	return false;
+	}
+	return true;
+}
+
+
+/**
+* Check to see if the username has been taken, or if it is disallowed.
+* Also checks if it includes the " character, which we don't allow in usernames.
+* Used for registering, changing names, and posting anonymously with a username
+*
+* @param string $text The text to sanitize
+*
+* @return	string the santized name (username / fullname )
+*/
+function USER_sanitizeName($text)
+{
+    $result = (string) preg_replace( '/[\x00-\x1F\x7F<>"%&*\/\\\\]/', '', $text );
+
+    return $result;
 }
 
 

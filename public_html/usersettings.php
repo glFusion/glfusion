@@ -8,7 +8,7 @@
 // +--------------------------------------------------------------------------+
 // | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2009 by the following authors:                        |
+// | Copyright (C) 2008-2010 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -833,7 +833,8 @@ function handlePhotoUpload ($delete_photo = '')
     if (!empty ($newphoto['name'])) {
         $pos = strrpos ($newphoto['name'], '.') + 1;
         $fextension = substr ($newphoto['name'], $pos);
-        $filename = $_USER['username'] . '.' . $fextension;
+//        $filename = $_USER['username'] . '.' . $fextension;
+        $filename = $_USER['uid'] . '.' . $fextension;
 
         if (!empty ($curphoto) && ($filename != $curphoto)) {
             $delete_photo = true;
@@ -1005,7 +1006,7 @@ function saveuser($A)
     $A['homepage'] = COM_applyFilter ($A['homepage']);
 
     // basic filtering only
-    $A['fullname'] = strip_tags (COM_stripslashes ($A['fullname']));
+    $A['fullname'] = COM_truncate(trim(USER_sanitizeName(COM_stripslashes($A['fullname']))),80);
     $A['location'] = strip_tags (COM_stripslashes ($A['location']));
     $A['sig'] = strip_tags (COM_stripslashes ($A['sig']));
     $A['about'] = strip_tags (COM_stripslashes ($A['about']));

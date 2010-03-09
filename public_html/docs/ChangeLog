@@ -2,6 +2,13 @@ glFusion ChangeLog
 
 v1.1.9
 ------
+- Calendar: If auto tag is not given event id, return original conten (Mark)
+- Forum: Fixed issue where deleting a post did not update last post
+  info for the topic properly (Mark)
+- Reworked username standards " < > $ % & * are not allowed in username (Mark)
+- FileMgmt: Do not allow users access to the upload form if they do not
+  have permission to upload to any categories. (Mark)
+- Polls: Fixed coding error where permissions were not properly checked (Mark)
 - What's New block now uses <ul> class list-new-articles for stories (Mark)
 - Modified LDAP class so filter variable is now a configuration option (Mark)
 - Media Gallery: Enable full screen playback with FlowPlayer by default (Mark)
