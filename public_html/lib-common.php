@@ -3051,7 +3051,7 @@ function COM_checkWords( $Message )
 {
     global $_CONF;
 
-    $EditedMessage = $Message;
+    $EditedMessage = ' '. $Message . ' ';
 
     if( $_CONF['censormode'] != 0 )
     {
@@ -3086,7 +3086,7 @@ function COM_checkWords( $Message )
         }
     }
 
-    return $EditedMessage;
+    return trim($EditedMessage);
 }
 
 
@@ -7756,6 +7756,40 @@ function js_cacheok($cache,$files){
         }
     }
     return true;
+}
+
+/**
+* Turn a piece of HTML into continuous(!) plain text
+*
+* This function removes HTML tags, line breaks, etc. and returns one long
+* line of text. This is useful for word counts (do an explode() on the result)
+* and for text excerpts.
+*
+* @param    string  $text   original text, including HTML and line breaks
+* @return   string          continuous plain text
+*
+*/
+function COM_getTextContent($text)
+{
+    // replace <br> with spaces so that Text<br>Text becomes two words
+    $text = preg_replace('/\<br(\s*)?\/?\>/i', ' ', $text);
+
+    // add extra space between tags, e.g. <p>Text</p><p>Text</p>
+    $text = str_replace('><', '> <', $text);
+
+    // only now remove all HTML tags
+    $text = strip_tags($text);
+
+    // replace all tabs, newlines, and carrriage returns with spaces
+    $text = str_replace(array("\011", "\012", "\015"), ' ', $text);
+
+    // replace entities with plain spaces
+    $text = str_replace(array('&#20;', '&#160;', '&nbsp;'), ' ', $text);
+
+    // collapse whitespace
+    $text = preg_replace('/\s\s+/', ' ', $text);
+
+    return trim($text);
 }
 css_out();
 js_out();
