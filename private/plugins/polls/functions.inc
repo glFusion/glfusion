@@ -324,7 +324,7 @@ function plugin_showstats_polls ($showsitestats)
 
     $retval = '';
 
-    $result = DB_query ("SELECT pid,topic,voters from {$_TABLES['polltopics']} WHERE (voters > 0)" . COM_getPermSQL ('AND') . " ORDER BY voters DESC LIMIT 10");
+    $result = DB_query ("SELECT pid,topic,voters FROM {$_TABLES['polltopics']} WHERE (voters > 0)" . COM_getPermSQL ('AND') . " ORDER BY voters DESC LIMIT 10");
     $nrows  = DB_numRows ($result);
 
     if ($nrows > 0) {
@@ -443,7 +443,8 @@ function plugin_user_delete_polls ($uid)
             list($pid) = DB_fetchArray ($result);
             DB_delete ($_TABLES['pollanswers'], 'pid', $pid);
             DB_delete ($_TABLES['pollvoters'], 'pid', $pid);
-            DB_query ("DELETE FROM {$_TABLES['comments']} WHERE sid = '".addslashes($pid)."' AND type = 'polls'");
+            DB_delete($_TABLES['comments'], array('sid', 'type'),
+                                            array(addslashes($pid), 'polls'));
         }
         DB_delete ($_TABLES['polltopics'], 'owner_id', intval($uid));
     } else {
@@ -537,12 +538,12 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
     $topic = DB_query("SELECT topic,voters,commentcode,is_open,hideresults,owner_id "
         . ",group_id,perm_owner,perm_group,perm_anon,perm_members "
         . "FROM {$_TABLES['polltopics']} WHERE pid='".addslashes($pid)."'" . COM_getPermSql('AND'));
-    $ntopics = DB_numRows($topic);
+    $ntopics = DB_numRows($result);
 
     if($ntopics == 0 ) {
         return $retval;
     }
-    $P = DB_fetchArray($topic);
+    $P = DB_fetchArray($result);
     if ((!isset($_COOKIE[$pid]) && !POLLS_ipAlreadyVoted($pid)) or ($P['is_open'] == 1)) {
         if ($ntopics == 1) {
             $questions_sql = "SELECT question,qid "
@@ -591,10 +592,10 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
                 }
                 $poll->set_var('poll_results', $results);
 
-                $access = SEC_hasAccess($topic['owner_id'], $topic['group_id'],
-                                $topic['perm_owner'], $topic['perm_group'],
-                                $topic['perm_members'], $topic['perm_anon']);
-                if ($access == 3) {
+                $access = SEC_hasAccess($P['owner_id'], $P['group_id'],
+                                $P['perm_owner'], $P['perm_group'],
+                                $P['perm_members'], $P['perm_anon']);
+                if (($access == 3) && SEC_hasRights('polls.edit')) {
                     $editlink = COM_createLink($LANG25[27], $_CONF['site_admin_url']
                         . '/plugins/polls/index.php?mode=edit&amp;pid=' . $pid);
                     $poll->set_var('edit_link', $editlink);
@@ -706,8 +707,8 @@ function POLLS_pollVote($pid, $showall = true, $displaytype = 0)
 *
 * @param        int     $size           Size in pixels of poll results
 * @param        string  $pid            Poll topic ID to show (optional)
-* @param        bool    $showall        Show only the first question or all
-* @param        int     $displaytype    Possible values 0 = Normal, 1 = In Block, 2 = autotag
+* @param        boolean $showall        Show only the first question or all
+* @param        int     $displaytype    Possible values 0 = Normal, 1 = In Block, 2 = autotag 
 * @return       string  HTML formatted string of poll
 * @see function COM_pollVote
 * @see function COM_pollResults
@@ -860,8 +861,8 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
     $topic_sql = "SELECT topic,voters,is_open,hideresults,commentcode,owner_id,group_id,"
         . "perm_owner,perm_group,perm_members,perm_anon "
         . "FROM {$_TABLES['polltopics']} WHERE pid='".addslashes($pid)."'";
-    $topic = DB_query($topic_sql);
-    $P = DB_fetchArray($topic);
+    $result = DB_query($topic_sql);
+    $P = DB_fetchArray($result);
 
     if(SEC_hasAccess($P['owner_id'], $P['group_id'], $P['perm_owner'],
         $P['perm_group'], $P['perm_members'], $P['perm_anon']) == 0 ) {
@@ -886,7 +887,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
         return $retval;
     }
 
-    $ntopic = DB_numRows($topic );
+    $ntopic = DB_numRows($result);
     if ($ntopic == 1) {
         $questions_sql = "SELECT qid,pid,question "
             . "FROM {$_TABLES['pollquestions']} "
@@ -977,7 +978,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                     if ($scale < 120) {
                         $poll->parse('poll_votes', 'votes_num', true );
                     } else {
-                        $width = intval($percent * $scale);
+                        $width = (int)($percent * $scale);
                         $poll->set_var('bar_width', $width);
                         $poll->parse('poll_votes', 'votes_bar', true);
                     }
@@ -1132,7 +1133,7 @@ function plugin_displaycomment_polls ($id, $cid, $title, $order, $format, $page,
     } else {
         $retval .= COM_startBlock ($LANG_ACCESS['accessdenied'], '',
                         COM_getBlockTemplate ('_msg_block', 'header'))
-                . $LANG_ACCESS['storydenialmsg']
+                . $LANG_POLLS['deny_msg']
                 . COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     }
 
