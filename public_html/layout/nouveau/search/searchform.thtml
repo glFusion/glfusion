@@ -1,53 +1,63 @@
 {# begin {templatelocation} #}
-                            {search_intro}
-                            <form action="{site_url}/search.php" method="get">
-                                <table cellspacing="0" cellpadding="3">
-                                    <tr>
-                                        <td class="alignright">{lang_keywords}:</td>
-                                        <td><input type="text" name="query" size="35" maxlength="255" value="{query}"{xhtml}>
-                                        <select name="keyType">
-                                            <option value="phrase" {key_phrase_selected}>{lang_exact_phrase}</option>
-                                            <option value="all" {key_all_selected}>{lang_all_words}</option>
-                                            <option value="any" {key_any_selected}>{lang_any_word}</option>
-                                        </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="alignright">{lang_date}:</td>
-                                        <td>
-                                            <input type="text" name="datestart" size="10" maxlength="10" value="{datestart}"{xhtml}> {lang_to} <input type="text" name="dateend" size="10" maxlength="10" value="{dateend}"{xhtml}> {date_format}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="alignright">{lang_topic}:</td>
-                                        <td>
-                                            <select name="topic">
-                                                <option selected="selected" value="0">{lang_all}</option>
-                                                {topic_option_list}
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="alignright">{lang_type}:</td>
-                                        <td>
-                                            <select name="type">
-                                                {plugin_types}
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    {author_form_element}
-                                    <tr>
-                                        <td class="alignright">{lang_results}:</td>
-                                        <td>
-                                        <select name="results">
-                                            {search_limits}
-                                        </select>&nbsp; {lang_per_page}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <input type="submit" value="{lang_search}"{xhtml}>
-                                            <input type="hidden" name="mode" value="search"{xhtml}>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
+<h1>{$LANG09[1]}</h1>
+<form method="get" action="{site_url}/search.php">
+  <input type="hidden" name="mode" value="search"/>
+  <strong>{$LANG09[2]}</strong><br/>
+  <input type="text" name="query" id="query" size="60" value="{query}"/>&nbsp;
+  <input type="submit" name="submit" value="{$LANG09[10]}" />
+  <br /><br />
+  <table style="width:80%;">
+    <tr>
+
+      <td align="center">
+        <strong>{$LANG09[70]}</strong>
+      </td>
+      <td align="center">
+        <strong>{$LANG09[71]}</strong>
+      </td>
+      <td align="center">
+        <strong>{$LANG09[72]}</strong>
+      </td>
+    {!if author_option_list}
+      <td align="center">
+       <strong>{$LANG09[69]}</strong>
+      </td>
+    {!endif}
+      <td align="center">
+        <strong>{$LANG09[73]}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <select name="type">
+        {plugin_types}
+        </select>
+      </td>
+      <td align="center">
+        <select name="st">
+        {search_time}
+        </select>
+      </td>
+      <td align="center">
+        <select name="keyType">
+          <option value="any" {key_any_selected}>{$LANG09[45]}</option>
+          <option value="all" {key_all_selected}>{$LANG09[44]}</option>
+          <option value="phrase" {key_phrase_selected}>{$LANG09[43]}</option>
+        </select>
+      </td>
+      {!if author_option_list}
+      <td align="center">
+        <select name="author">
+          {author_option_list}
+        </select>
+      </td>
+      {!endif}
+      <td align="center">
+        <select name="results">
+          {search_limits}
+        </select>
+      </td>
+    </tr>
+  </table>
+</form>
 {# end {templatelocation} #}
