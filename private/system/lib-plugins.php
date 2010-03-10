@@ -390,11 +390,13 @@ function PLG_enableStateChange ($type, $enable)
     // IF we are enabling the plugin
     // THEN we must include its functions.inc so we have access to the function
     if ($enable) {
-        require_once ($_CONF['path'] . 'plugins/' . $type . '/functions.inc');
+        if (@file_exists($_CONF['path'] . 'plugins/' . $type . '/functions.inc') ) {
+            require_once $_CONF['path'] . 'plugins/' . $type . '/functions.inc';
+            return PLG_callFunctionForOnePlugin ('plugin_enablestatechange_' . $type,$args);
+        }
+    } else {
+        return PLG_callFunctionForOnePlugin ('plugin_enablestatechange_' . $type,$args);
     }
-
-    return PLG_callFunctionForOnePlugin ('plugin_enablestatechange_' . $type,
-                                         $args);
 }
 
 /**
